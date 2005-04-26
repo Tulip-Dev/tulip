@@ -1,0 +1,114 @@
+if ! WIN32
+ADD_LIB = -lqui -lXext -lXi
+MWINDOWS = -mwindows
+endif
+
+bin_PROGRAMS = tulip
+
+Tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
+
+INCLUDES = -I$(srcdir)/../include -I../include \
+	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
+
+AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @LIB_IMAGES_LDFLAGS@
+
+Tulip_LDFLAGS = -L.
+Tulip_LDADD = @LIB_QT@ @QT_LDFLAGS@ -lpthread -lxml2 ${ADD_LIB}
+
+if !WIN32
+UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
+else
+UIC_MAKE = PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
+endif
+
+MOC = @MOC@
+
+BUILT_SOURCES = \
+	QtProgressData.cpp \
+	moc_QtProgressData.cpp \
+	TulipData.cpp\
+	moc_TulipData.cpp\
+	OverviewData.cpp\
+	moc_OverviewData.cpp\
+	TabWidgetData.cpp \
+	moc_TabWidgetData.cpp \
+	NavigateGlGraphData.cpp \
+	InfoDialogData.cpp \
+	AppStartUpData.cpp \
+	ToolBarData.cpp \
+	PropertyDialogData.cpp \
+	moc_Overview.cpp \
+	moc_AppStartUp.cpp \
+	moc_AppStartUpData.cpp \
+	moc_InfoDialogData.cpp \
+	moc_InfoDialog.cpp \
+	moc_viewGl.cpp \
+	moc_ToolBar.cpp \
+	moc_ToolBarData.cpp \
+	moc_NavigateGlGraph.cpp \
+	moc_NavigateGlGraphData.cpp \
+	moc_PropertyDialog.cpp \
+	moc_PropertyDialogData.cpp \
+	moc_NavigateButton.cpp \
+	moc_QtProgress.cpp
+
+nodist_Tulip_SOURCES =  \
+	QtProgressData.cpp \
+	moc_QtProgressData.cpp \
+	moc_Overview.cpp \
+	TulipData.cpp\
+	moc_TulipData.cpp\
+	OverviewData.cpp\
+	moc_OverviewData.cpp\
+	TabWidgetData.cpp \
+	moc_TabWidgetData.cpp \
+	NavigateGlGraphData.cpp \
+	moc_NavigateGlGraph.cpp \
+	InfoDialogData.cpp \
+	AppStartUpData.cpp \
+	ToolBarData.cpp \
+	PropertyDialogData.cpp \
+	moc_AppStartUp.cpp \
+	moc_AppStartUpData.cpp \
+	moc_InfoDialogData.cpp \
+	moc_InfoDialog.cpp \
+	moc_viewGl.cpp \
+	moc_ToolBar.cpp \
+	moc_ToolBarData.cpp \
+	moc_NavigateGlGraphData.cpp \
+	moc_PropertyDialog.cpp \
+	moc_PropertyDialogData.cpp \
+	moc_NavigateButton.cpp \
+	moc_QtProgress.cpp
+
+
+dist_Tulip_SOURCES = \
+	Overview.cpp \
+	ElementInfoToolTip.cpp \
+	viewGl.cpp \
+	Application.cpp \
+	geometrie2D.cpp \
+	NavigateGlGraph.cpp \
+	NavigateButton.cpp \
+	InfoDialog.cpp \
+	AppStartUp.cpp \
+	ToolBar.cpp \
+	PropertyDialog.cpp \
+	MouseMoveSelection.cpp \
+	MouseAddNode.cpp \
+	MouseAddEdge.cpp \
+	MouseSelection.cpp \
+	MouseMagicSelection.cpp \
+	QtProgress.cpp \
+	main.cpp
+
+CLEANFILES = $(BUILT_SOURCES)
+
+moc_%.cpp: ../include/%.h 
+	$(MOC) -o $@ $<
+
+%Data.cpp: ../designer/%.ui ../include/%Data.h
+	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<
+
+../include/%Data.h: ../designer/%.ui
+	$(UIC_MAKE) -o $@ $<

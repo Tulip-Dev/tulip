@@ -1,0 +1,26 @@
+nobase_include_HEADERS = \
+	tulip/ObservableGlGraph.h\
+	tulip/TLPPixmapFont.h\
+	tulip/TLPPixmapGlyph.h\
+	tulip/OcclusionTest.h\
+	tulip/Camera.h\
+	tulip/GlGraph.h\
+	tulip/GlGraphStrategy.h\
+	tulip/GlLines.h\
+	tulip/GlRenderer.h\
+	tulip/EpsFunction.h\
+	tulip/Glyph.h \
+	tulip/Bezier.h \
+	tulip/GlDrawable.h \
+	tulip/Spline.h \
+	tulip/Fonts.h \
+	tulip/Document.h \
+	tulip/Context.h \
+	tulip/TextRenderer.h \
+	tulip/Hline.h \
+	tulip/Table.h \
+	tulip/Parser.h \
+	tulip/Paragraph.h \
+	tulip/FLayout.h \
+	tulip/Frame.h \
+	tulip/Renderer.h

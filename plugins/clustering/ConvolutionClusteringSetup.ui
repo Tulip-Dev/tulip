@@ -1,0 +1,168 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ConvolutionClusteringSetupData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ConvolutionClusteringSetupData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>396</width>
+            <height>259</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Convolution Clustering Parameters</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Width</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QFrame" row="0" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>Frame3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Histogram of value</string>
+            </property>
+        </widget>
+        <widget class="QSlider" row="1" column="2">
+            <property name="name">
+                <cstring>widthSlider</cstring>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLCDNumber" row="1" column="1">
+            <property name="name">
+                <cstring>LCDNumber1</cstring>
+            </property>
+        </widget>
+        <widget class="QSlider" row="2" column="2">
+            <property name="name">
+                <cstring>discretizationSlider</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel1_3</cstring>
+            </property>
+            <property name="text">
+                <string>Discretization</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QLCDNumber" row="2" column="1">
+            <property name="name">
+                <cstring>LCDNumber1_3</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>cancelButton</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="3">
+            <property name="name">
+                <cstring>CheckBox1</cstring>
+            </property>
+            <property name="text">
+                <string>log</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="3">
+            <property name="name">
+                <cstring>okButton</cstring>
+            </property>
+            <property name="text">
+                <string>Ok</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>widthSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ConvolutionClusteringSetupData</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>okButton</sender>
+        <signal>pressed()</signal>
+        <receiver>ConvolutionClusteringSetupData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>pressed()</signal>
+        <receiver>ConvolutionClusteringSetupData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>discretizationSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ConvolutionClusteringSetupData</receiver>
+        <slot>update()</slot>
+    </connection>
+    <connection>
+        <sender>discretizationSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>LCDNumber1_3</receiver>
+        <slot>display(int)</slot>
+    </connection>
+    <connection>
+        <sender>CheckBox1</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ConvolutionClusteringSetupData</receiver>
+        <slot>setlog(bool)</slot>
+    </connection>
+    <connection>
+        <sender>widthSlider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>LCDNumber1</receiver>
+        <slot>display(int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>setlog(bool)</slot>
+    <slot>update()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
