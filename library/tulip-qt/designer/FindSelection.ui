@@ -1,0 +1,322 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>FindSelection</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>FindSelection</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>503</width>
+            <height>192</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Find Selection</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Input property :</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Filter :</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>inputProp</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <spacer row="1" column="3">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>50</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="3" column="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="0" column="4">
+            <property name="name">
+                <cstring>findButton</cstring>
+            </property>
+            <property name="text">
+                <string>Find</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="4">
+            <property name="name">
+                <cstring>cancelButton</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>valueComment</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property name="text">
+                <string>( enter a value)</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <item>
+                <property name="text">
+                    <string>&lt;</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>&lt;=</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>==</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>&gt;=</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>&gt;</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>!=</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>filterOp</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>106</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="currentItem">
+                <number>2</number>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="2">
+            <property name="name">
+                <cstring>filterValue</cstring>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="4" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>buttonGroup2</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>44</height>
+                </size>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>setToSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>60</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Copy</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>addToSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>80</x>
+                        <y>20</y>
+                        <width>65</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Add</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>rmvFromSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>145</x>
+                        <y>20</y>
+                        <width>85</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Remove</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>keepSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>235</x>
+                        <y>20</y>
+                        <width>105</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Intersection</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>On nodes</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>On edges</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>On both</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>srcOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>360</x>
+                        <y>15</y>
+                        <width>110</width>
+                        <height>27</height>
+                    </rect>
+                </property>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancelButton</sender>
+        <signal>clicked()</signal>
+        <receiver>FindSelection</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>findButton</sender>
+        <signal>clicked()</signal>
+        <receiver>FindSelection</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>inputProp</sender>
+        <signal>activated(int)</signal>
+        <receiver>FindSelection</receiver>
+        <slot>propertyChanged(int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot access="protected">propertyChanged( int )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

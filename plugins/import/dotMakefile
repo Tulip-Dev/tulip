@@ -1,0 +1,12 @@
+
+
+build:
+	flex -odotImportLexer.h dotImportLexer.l
+	bison -odotImportParser.h dotImportParser.y
+	make -ks all
+	cp .libs/dot.* ~/lib/tlp/plugins/import
+
+install:
+	cp .libs/dot.* ~/lib/tlp/plugins/import
+
+

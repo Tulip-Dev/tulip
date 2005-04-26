@@ -1,0 +1,137 @@
+%define name	@PACKAGE@
+%define version	@VERSION@
+%define tulip_version @TULIP_VERSION@
+%define release 1
+%define serial  1
+%define prefix	@prefix@
+## expansion @pkgdatadir@ are not working
+%define datadir %{prefix}/share
+%define pkgdatadir %{prefix}/share/@PACKAGE@
+
+Summary:	A program that allows visualization of huge graphs
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Vendor:		David Auber <david.auber@labri.fr>
+URL:		http://www.tulip-software.org
+Source:		%{name}-%{version}.tar.gz
+License:	GPL
+Group:		Applications/Engineering
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+Requires:	qt >= 3.0
+
+%description
+Tulip software is a system dedicated to the visualization of huge graphs. It manages graphs with a number of elements(node and edges) up to 500.000 on a personal computer(PIII 600, with 256mo). Its SuperGraph technology architecture enables to do the following things :
+
+  * 3D visualizations
+  * 3D modifications
+  * Plug-in support for easy evolution
+  * Building of clusters and navigation into it
+  * Automatic drawing of graphs
+  * Automatic clustering of graphs
+  * Automatic selection of elements
+  * Automatic Metric coloration of graphs
+
+%package -n     lib%{name}
+Summary:        A library for handling large graphs
+Group:		Applications/Engineering
+%description -n lib%{name}
+
+%package -n     lib%{name}-ogl
+Summary:        A library for displaying graph in a GL context
+Group:		Applications/Engineering
+Requires:       lib%{name}, Mesa
+%description -n lib%{name}-ogl
+
+%package -n     lib%{name}-qt
+Summary:        A set of Qt Widgets for Tulip/Tulip-ogl
+Group:          Applications/Engineering
+Requires:       lib%{name}, lib%{name}-ogl, qt >= 3.0
+%description -n lib%{name}-qt
+
+##############################
+%prep
+%setup -q
+CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix}
+
+%build
+make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+
+%install
+make DESTDIR="$RPM_BUILD_ROOT" install
+
+%clean
+make clean
+rm -rf $RPM_BUILD_ROOT
+
+##############################
+%files
+%defattr(-,root,root)
+%{prefix}/bin/Tulip
+#%{prefix}/bin/tlprender
+%{prefix}/lib/tlp/bitmaps/but1.xpm
+%{prefix}/lib/tlp/bitmaps/but2.xpm
+%{prefix}/lib/tlp/bitmaps/but3.xpm
+%{prefix}/lib/tlp/bitmaps/logo32x32.bmp
+%{prefix}/lib/tlp/bitmaps/logo.bmp
+%{prefix}/lib/tlp/bitmaps/logo32x32.ico
+%{prefix}/include
+
+#%{prefix}/lib/tlp/samples
+
+%files -n lib%{name}
+%defattr(-,root,root)
+%{prefix}/bin/tulip-config
+%{prefix}/lib/libtulip.a
+%{prefix}/lib/libtulip.la
+%{prefix}/lib/libtulip.so
+%{prefix}/lib/libtulip-%{tulip_version}.so*
+%dir %{prefix}/lib/tlp
+%{prefix}/lib/tlp/plugins/clustering
+%{prefix}/lib/tlp/plugins/colors
+%{prefix}/lib/tlp/plugins/export
+%{prefix}/lib/tlp/plugins/import
+%{prefix}/lib/tlp/plugins/layout
+%{prefix}/lib/tlp/plugins/metric
+%{prefix}/lib/tlp/plugins/selection
+%{prefix}/lib/tlp/plugins/sizes
+%{prefix}/lib/tlp/plugins/string
+%{datadir}/aclocal/tulip.m4
+
+%files -n lib%{name}-ogl
+%defattr(-,root,root)
+%{prefix}/lib/libtulip-ogl.a
+%{prefix}/lib/libtulip-ogl.la
+%{prefix}/lib/libtulip-ogl.so
+%{prefix}/lib/libtulip-ogl-%{tulip_version}.so.*
+%{prefix}/lib/tlp/bitmaps/fontb.ttf
+%{prefix}/lib/tlp/bitmaps/font.ttf
+%{prefix}/lib/tlp/plugins/glyph
+
+%files -n lib%{name}-qt
+%defattr(-,root,root)
+%{prefix}/lib/libtulip-qt.a
+%{prefix}/lib/libtulip-qt.la
+%{prefix}/lib/libtulip-qt.so
+%{prefix}/lib/libtulip-qt-%{tulip_version}.so.*
+%{prefix}/lib/tlp/plugins/designer/libTulipWidgets.*
+
+%changelog
+* Wed Jul 23 2003 Bertrand Mathieu <mathieu@labri.fr>
+- put "Fonts.bmp" with libtulip-ogl instead of tulip
+
+* Tue Mar 11 2003 Bertrand Mathieu <mathieu@labri.fr>
+- removed -j 2 from 'make' parameters: caused an error in libtulip-qt compilation (to be fixed)
+- added tulip.m4 and Qt designer's plugin into %files
+
+* Wed Mar  5 2003 Bertrand Mathieu <mathieu@labri.fr>
+- added package libtulip-qt
+
+* Wed Oct 30 2002 Bertrand Mathieu <mathieu@.labri.fr>
+- multiples packages
+
+* Wed Sep 11 2002 Bertrand Mathieu <mathieu@labri.fr>
+- corrected RPM generation
+
+* Fri Jul 26 2002 Bertrand Mathieu <mathieu@labri.fr>
+- Initial build.

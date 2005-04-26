@@ -1,0 +1,20 @@
+Release 1.2.2 Tulip
+
+View module :
+ 	- Mouse navigation interactor
+	- Glyphs Support
+	- Texture support
+
+Plug-ins :
+	- Small World Graph
+
+Layout :
+	- Lot of enhancements
+	- Alpha version of sugiyama
+
+Import :
+	- TlpImport of dispalying properties
+
+
+Export :
+	- TlpExport of dispalying properties

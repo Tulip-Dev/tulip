@@ -1,0 +1,145 @@
+/**
+ Author: David Auber
+ Email : auber@labri.fr
+ Last modification : 20/08/2001
+ This program is free software; you can redistribute it and/or modify  *
+ it under the terms of the GNU General Public License as published by  
+ the Free Software Foundation; either version 2 of the License, or     
+ (at your option) any later version.
+*/
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include "tulip/PropertyManager.h"
+#include "tulip/SuperGraph.h"
+#include "tulip/PropertyProxy.h"
+
+using namespace std;
+
+//==============================================================
+PropertyManagerImpl::PropertyManagerImpl(SuperGraph *spGr) {
+  superGraph=spGr;
+}
+//==============================================================
+PropertyManagerImpl::~PropertyManagerImpl() {
+  map<string,PProxy*>::iterator itP;
+  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+    delete (*itP).second;
+  }
+}
+//==============================================================
+bool PropertyManagerImpl::existProperty(const string &str) {
+  if (existLocalProperty(str)) 
+    return true;
+  else {
+    if (superGraph->getFather()==superGraph)
+        return false;
+    else 
+      return (superGraph->getFather()->existProperty(str));
+  }
+}
+//==============================================================
+bool PropertyManagerImpl::existLocalProperty(const string &str) {
+  return (propertyProxyMap.find(str)!=propertyProxyMap.end());
+}
+//==============================================================
+void PropertyManagerImpl::setLocalProxy(const string &str, PProxy *p) {
+  if (existLocalProperty(str))
+    delete propertyProxyMap[str];
+  propertyProxyMap[str]=p;
+}
+//==============================================================
+PProxy* PropertyManagerImpl::getProperty(const string &str) {
+  assert(existProperty(str));
+  //  cerr << "Get Proxy :" << str << endl;
+  if (existLocalProperty(str))
+    return this->getLocalProperty(str);
+  else {
+      return (superGraph->getFather()->getProperty(str));
+    }
+  return 0;
+}
+//==============================================================
+PProxy* PropertyManagerImpl::getLocalProperty(const string &str) {
+  assert(existLocalProperty(str));
+  return (propertyProxyMap[str]);
+}
+//==============================================================
+void PropertyManagerImpl::delLocalProperty(const string &str) {
+  PProxy *tmpM;
+  map<string,PProxy *>::iterator it;
+  it=propertyProxyMap.find(str);
+  if (it!=propertyProxyMap.end()) {
+    tmpM=(*it).second;
+    propertyProxyMap.erase(it);
+    delete tmpM;
+  }
+}
+Iterator<string>*  PropertyManagerImpl::getLocalProperties() {
+  return (new LocalPropertiesIterator(this));
+}
+Iterator<string>*  PropertyManagerImpl::getInheritedProperties() {
+  return (new InheritedPropertiesIterator(this));
+}
+//==============================================================
+LocalPropertiesIterator::LocalPropertiesIterator(PropertyManagerImpl *ppc) {
+  this->ppc=ppc;
+  it=ppc->propertyProxyMap.begin();
+  itEnd=ppc->propertyProxyMap.end();
+}
+string LocalPropertiesIterator::next() {
+  string tmp=(*it).first;
+  ++it;
+  return tmp;
+}
+bool LocalPropertiesIterator::hasNext() {
+  return (it!=itEnd);
+}
+//===============================================================
+InheritedPropertiesIterator::InheritedPropertiesIterator(PropertyManager *ppc) {
+  this->ppc=ppc; 
+  if (ppc->superGraph->getFather()!=ppc->superGraph) {
+    //Récupération des propriétées locale du père.
+    Iterator<string> *itS=ppc->superGraph->getFather()->getLocalProperties();
+    for (;itS->hasNext();) {
+      string tmp=itS->next();
+      if (!ppc->existLocalProperty(tmp)) {
+	inhList.insert(tmp);
+      }
+    } delete itS;
+    //Récupération des propriétées héritées du père.
+    itS=ppc->superGraph->getFather()->getInheritedProperties();
+    for (;itS->hasNext();) {
+      string tmp=itS->next();
+      if (!ppc->existLocalProperty(tmp)) {
+	inhList.insert(tmp);
+      }
+    }
+    delete itS;  
+  }
+  it=inhList.begin();
+  itEnd=inhList.end();
+}
+string InheritedPropertiesIterator::next() {
+  string tmp=(*it);
+  ++it;
+  return tmp;
+}
+bool InheritedPropertiesIterator::hasNext() {
+  return (it!=itEnd);
+}
+//===============================================================
+void PropertyManagerImpl::erase(const node n) {
+  map<string,PProxy*>::iterator itP;
+  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+    itP->second->erase(n);
+  }
+}
+//===============================================================
+void PropertyManagerImpl::erase(const edge e) {
+  map<string,PProxy*>::iterator itP;
+  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+    itP->second->erase(e);
+  }
+}

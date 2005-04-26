@@ -1,0 +1,419 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>PropertyDialogData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>PropertyDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>339</width>
+            <height>379</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>32767</width>
+            <height>32767</height>
+        </size>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>12</pointsize>
+            <bold>0</bold>
+        </font>
+    </property>
+    <property name="caption">
+        <string>Property Editor</string>
+    </property>
+    <property name="layoutMargin" stdset="0">
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>1</number>
+        </property>
+        <property name="spacing">
+            <number>1</number>
+        </property>
+        <widget class="QCheckBox" row="2" column="0">
+            <property name="name">
+                <cstring>CheckBox1</cstring>
+            </property>
+            <property name="text">
+                <string>Filter</string>
+            </property>
+        </widget>
+        <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>tabWidget</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>2</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>200</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Nodes</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="TulipPropertyTable" row="0" column="0">
+                        <property name="name">
+                            <cstring>tableNodes</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="vScrollBarMode">
+                            <enum>AlwaysOn</enum>
+                        </property>
+                        <property name="numRows">
+                            <number>10</number>
+                        </property>
+                        <property name="numCols">
+                            <number>2</number>
+                        </property>
+                        <property name="showGrid">
+                            <bool>true</bool>
+                        </property>
+                        <property name="focusStyle">
+                            <enum>SpreadSheet</enum>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Edges</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="TulipPropertyTable" row="0" column="0">
+                        <property name="name">
+                            <cstring>tableEdges</cstring>
+                        </property>
+                        <property name="vScrollBarMode">
+                            <enum>AlwaysOn</enum>
+                        </property>
+                        <property name="numRows">
+                            <number>10</number>
+                        </property>
+                        <property name="numCols">
+                            <number>2</number>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+        <spacer row="0" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer1_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>60</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>propertyName</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="font">
+                <font>
+                    <pointsize>16</pointsize>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Property Name</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QFrame" row="3" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>frame3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <widget class="QListView" row="0" column="0">
+                    <column>
+                        <property name="text">
+                            <string>Local</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>localProperties</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QListView" row="0" column="1">
+                    <column>
+                        <property name="text">
+                            <string>Inherited</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>inheritedProperties</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QPushButton" row="4" column="0">
+            <property name="name">
+                <cstring>removeButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>90</width>
+                    <height>28</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Remove</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="2">
+            <property name="name">
+                <cstring>cloneButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>70</width>
+                    <height>28</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Clone</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="3">
+            <property name="name">
+                <cstring>newButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>70</width>
+                    <height>28</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>New</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>setAllButton</cstring>
+            </property>
+            <property name="text">
+                <string>Set all</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>removeButton_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32000</width>
+                    <height>32000</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>To labels</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>CheckBox1</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>PropertyDialogData</receiver>
+        <slot>filterSelection(bool)</slot>
+    </connection>
+    <connection>
+        <sender>removeButton_2</sender>
+        <signal>clicked()</signal>
+        <receiver>PropertyDialogData</receiver>
+        <slot>toStringProperty()</slot>
+    </connection>
+    <connection>
+        <sender>setAllButton</sender>
+        <signal>clicked()</signal>
+        <receiver>PropertyDialogData</receiver>
+        <slot>setAllValue()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>localProperties</tabstop>
+    <tabstop>removeButton</tabstop>
+    <tabstop>cloneButton</tabstop>
+    <tabstop>newButton</tabstop>
+    <tabstop>inheritedProperties</tabstop>
+    <tabstop>tabWidget</tabstop>
+    <tabstop>CheckBox1</tabstop>
+</tabstops>
+<slots>
+    <slot>filterSelection(bool)</slot>
+    <slot>setEdgeValue()</slot>
+    <slot>setNodeValue()</slot>
+    <slot>toStringProperty()</slot>
+    <slot>setAllValue()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>tulip/PropertyWidgets.h</includehint>
+    <includehint>tulip/PropertyWidgets.h</includehint>
+</includehints>
+</UI>

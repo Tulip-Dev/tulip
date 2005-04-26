@@ -1,0 +1,83 @@
+//-*-c++-*-
+#ifndef _TreeReingoldAndTilfordExtended_H
+#define _TreeReingoldAndTilfordExtended_H
+#include <string>
+#include <math.h> 
+#include <tulip/TulipPlugin.h>
+
+struct LR {
+  double L;
+  double R;
+  int size;
+};
+/** \addtogroup layout */
+/*@{*/
+/// TreeReingoldAndTilfordExtended.h - An implementation of a hierarchical tree layout.
+/** This plugin is an implementation of the hierarchical tree layout
+ *  algorithm first published as:
+ *
+ *  E.M. Reingold and J.S. Tilford,
+ *  "Tidier Drawings of Trees",
+ *  "IEEE Transactions on Software Engineering"
+ *  pages "223--228"
+ *  1981
+ *
+ *  HISTORY:
+ *
+ *  21/02/2000 Verson 0.0.1: Initial release
+ *
+ *  06/11/2002 Verson 0.0.2: Documentation and code clean up
+ *
+ *  NOTES:
+ *
+ *  This algorithm only works on trees.
+ *  Let n be the number of nodes, the algorithm complexity is in O(n).
+ *  It extends the original Reingold and Tilford by providing managment
+ *  of different node size and different edge length.
+ *
+ *  The algortihm use the (Size)"viewSize" property for element size and the
+ *  (int)"treeEdgeLength" for the edge length. The property (int)"treeOrder"
+ *  can be used to change the embedding of the tree.
+ *
+ *  AUTHOR:
+ *
+ *  David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *
+ *  LICENCE:
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by  
+ *  the Free Software Foundation; either version 2 of the License, or     
+ *  (at your option) any later version.
+ *
+ */
+class TreeReingoldAndTilfordExtended:public Layout { 
+public:
+  TreeReingoldAndTilfordExtended(const PropertyContext &);
+  ~TreeReingoldAndTilfordExtended();
+  bool run();
+  bool check(std::string &);
+  void reset();
+
+
+private:
+  void calcLayout(node, stdext::hash_map<node,double> *,double, double, int ,std::map<int,double> &);
+  double  calcDecal(const std::list<LR>& , const std::list<LR>&);
+  std::list<LR>* mergeLRList(std::list<LR>*,std::list<LR>*,double decal);
+  std::list<LR>* TreePlace(node, stdext::hash_map<node,double>*);
+  void TreeLevelSizing(node ,std::map<int,double> &,int );
+  SizesProxy *sizesProxy;
+  IntProxy *lengthMetric;
+};
+/*@}*/
+#endif
+
+
+
+
+
+
+
+
+
+

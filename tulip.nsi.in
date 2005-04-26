@@ -1,0 +1,177 @@
+!include "MUI.nsh"
+!include "WriteEnvStr.nsh"
+
+
+Name "Tulip"
+OutFile "TulipSetup.exe"
+ComponentText "Installation de Tulip"
+DirText "Repertoire d'instalation"
+InstallDir "c:\Program Files\Tulip\"
+
+!define MUI_HEADERIMAGE
+!define MUI_WELCOMEFINISHPAGE_BITMAP "@prefix@\lib\tlp\bitmaps\logo.bmp"
+!insertmacro MUI_PAGE_WELCOME
+
+
+!insertmacro MUI_PAGE_LICENSE "COPYING"
+
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+!insertmacro MUI_LANGUAGE "English" 
+
+Function .onInit
+InitPluginsDir ;on initialise le répertoire de démarrage des plugins
+File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie l'image dans l'exe final et on on la met dans le dossier temporaire.
+advsplash::show 1800 350 187 2 $PLUGINSDIR\splash
+Pop $R0 ;on récupère la valeur de retour : 1, si l'utilisateur a fermé l'écran, 0 si tout s'est bien passé, et -1 si un problème est survenu
+Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
+FunctionEnd
+
+Section "-Programme (requis)"
+Push TULIP_PLUGINS_PATH
+ReadEnvStr $R0 "TULIP_PLUGINS_PATH" 
+StrCpy $R0 "$R0:$INSTDIR\lib\tlp\plugins"
+Push $R0
+Call WriteEnvStr
+SetOutPath $INSTDIR
+FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
+FILE "${NSISDIR}\source\exehead\uninst.ico"
+File @prefix@\bin\Tulip.exe
+SectionEnd
+
+Section "-Install Plugins"
+setOutPath $SYSDIR
+File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-qt-@WIN_VERSION@.dll" 
+File "@MINDIR@\bin\iconv.dll"
+File "@MINDIR@\bin\zlib1.dll" 
+File "@MINDIR@\bin\freetype*.dll"
+File "@MINDIR@\bin\libxml*.dll"
+File "@MINDIR@\bin\libjpeg*.dll"
+File "@MINDIR@\bin\libpng*.dll"
+File "@MINDIR@\bin\mgwz.dll"
+File "@MINDIR@\bin\mingwm*.dll"
+File "@qt_libraries@\qt-mt*.dll" 
+setOutPath $INSTDIR\lib
+File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-qt-@WIN_VERSION@.dll" 
+setOutPath $INSTDIR\lib\tlp\bitmaps
+File @prefix@\lib\tlp\bitmaps\*
+setOutPath $INSTDIR\lib\tlp\plugins\clustering
+File @prefix@\lib\tlp\plugins\clustering\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\colors
+File @prefix@\lib\tlp\plugins\colors\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\designer
+File @prefix@\lib\tlp\plugins\designer\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\export
+File @prefix@\lib\tlp\plugins\export\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\glyph
+File @prefix@\lib\tlp\plugins\glyph\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\import
+File @prefix@\lib\tlp\plugins\import\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\layout
+File @prefix@\lib\tlp\plugins\layout\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\metric
+File @prefix@\lib\tlp\plugins\metric\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\selection
+File @prefix@\lib\tlp\plugins\selection\*.dll
+setOutPath $INSTDIR\lib\tlp\plugins\sizes
+File @prefix@\lib\tlp\plugins\sizes\*.dll
+SectionEnd
+
+
+Section "Shortcuts" raccourcis
+SetOutPath "$SMPROGRAMS\Tulip"
+CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
+CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\uninst-Tulip.exe" "" "$INSTDIR\uninst.ico"
+SetOutPath "$DESKTOP\Tulip"
+CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
+SectionEnd
+
+Section "SDK" sdk
+setOutPath $INSTDIR\include\tulip
+File @prefix@\include\tulip\*.h
+setOutPath $INSTDIR\include\tulip\cxx
+File @prefix@\include\tulip\cxx\*.cxx
+SectionEnd
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+	!insertmacro MUI_DESCRIPTION_TEXT ${raccourcis} "Create a shortcut on the Desktop, and in the start menu"
+	!insertmacro MUI_DESCRIPTION_TEXT ${sdk} "Install the sdk version, install the include files in the Tulip directory"
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Section -PostInstall
+WriteRegStr HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip DisplayName "Tulip (désinstallation)"
+WriteRegStr HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip UninstallString '"$INSTDIR\uninst-Tulip.exe"'
+WriteUninstaller "uninst-Tulip.exe"
+WriteRegStr HKLM "Software\Tulip" "Repertoire" '"$INSTDIR"'
+SectionEnd
+
+UninstallText "Voulez-vous vraiment enlever Tulip de votre système ?"
+
+Section "Uninstall"
+DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
+DeleteRegKey HKLM "Software\Tulip"
+Delete "$INSTDIR\Tulip.exe"
+;Delete "$INSTDIR\Tulip.txt"
+Delete "$INSTDIR\uninst-Tulip.exe"
+Delete "$INSTDIR\logo32x32.ico"
+Delete "$INSTDIR\uninst.ico"
+Delete "$DESKTOP\Tulip.lnk"
+Delete "$SMPROGRAMS\Tulip\*.*"
+RMDir "$SMPROGRAMS\Tulip"
+Delete $SYSDIR\libtulip-@WIN_VERSION@.dll
+Delete $SYSDIR\libtulip-qt-@WIN_VERSION@.dll
+Delete $SYSDIR\libtulip-ogl-@WIN_VERSION@.dll
+Delete $SYSDIR\qt-mt*.dll
+Delete $SYSDIR\zlib1.dll
+Delete $SYSDIR\freetype*.dll
+Delete $SYSDIR\libxml*.dll
+Delete $SYSDIR\libjpeg*.dll
+Delete $SYSDIR\libpng*.dll
+Delete $SYSDIR\iconv.dll
+Delete $SYSDIR\mgwz.dll
+Delete $SYSDIR\mingwm*.dll
+Delete "$INSTDIR\lib\tlp\bitmaps\*"
+RMDir "$INSTDIR\lib\tlp\bitmaps"
+Delete "$INSTDIR\lib\tlp\plugins\clustering\*"
+RMDir "$INSTDIR\lib\tlp\plugins\clustering"
+Delete "$INSTDIR\lib\tlp\plugins\colors\*"
+RMDir "$INSTDIR\lib\tlp\plugins\colors"
+Delete "$INSTDIR\lib\tlp\plugins\designer\*"
+RMDir "$INSTDIR\lib\tlp\plugins\designer"
+Delete "$INSTDIR\lib\tlp\plugins\export\*"
+RMDir "$INSTDIR\lib\tlp\plugins\export"
+Delete "$INSTDIR\lib\tlp\plugins\glyph\*"
+RMDir "$INSTDIR\lib\tlp\plugins\glyph"
+Delete "$INSTDIR\lib\tlp\plugins\import\*"
+RMDir "$INSTDIR\lib\tlp\plugins\import"
+Delete "$INSTDIR\lib\tlp\plugins\layout\*"
+RMDir "$INSTDIR\lib\tlp\plugins\layout"
+Delete "$INSTDIR\lib\tlp\plugins\metric\*"
+RMDir "$INSTDIR\lib\tlp\plugins\metric"
+Delete "$INSTDIR\lib\tlp\plugins\selection\*"
+RMDir "$INSTDIR\lib\tlp\plugins\selection"
+Delete "$INSTDIR\lib\tlp\plugins\sizes\*"
+RMDir "$INSTDIR\lib\tlp\plugins\sizes"
+RMDir "$INSTDIR\lib\tlp\plugins"
+Delete "$INSTDIR\lib\tlp\*"
+RMDir "$INSTDIR\lib\tlp"
+Delete "$INSTDIR\lib\*"
+RMDir "$INSTDIR\lib"
+Delete "$INSTDIR\include\tulip\cxx\*"
+RMDir "$INSTDIR\include\tulip\cxx"
+Delete "$INSTDIR\include\tulip\*"
+RMDir "$INSTDIR\include\tulip"
+RMDir "$INSTDIR\include"
+RMDir $INSTDIR
+SectionEnd

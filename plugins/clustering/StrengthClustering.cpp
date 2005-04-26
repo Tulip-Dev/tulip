@@ -1,0 +1,289 @@
+#include <math.h>
+#include <stdio.h>
+#include <sstream>
+#include <string>
+#include <list>
+#include <map>
+#include <iostream>
+#include <tulip/SuperGraph.h>
+#include <tulip/SelectionProxy.h>
+#include <tulip/MetaGraphProxy.h>
+#include <tulip/TlpTools.h>
+#include <tulip/GraphMeasure.h>
+#include <tulip/StableIterator.h>
+#include "StrengthClustering.h"
+
+CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
+
+using namespace std;
+
+//================================================================================
+StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {}
+//================================================================================
+StrengthClustering::~StrengthClustering() {}
+//================================================================================
+double StrengthClustering::e(set<node> &U,set<node> &V) {
+  set<node>::const_iterator itU;
+  double result=0;
+  for (itU=U.begin();itU!=U.end();++itU) {
+    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    for (;itN->hasNext();) {
+      node itn=itN->next();
+      if (V.find(itn)!=V.end()) result+=1;
+    }delete itN;
+  }
+  return result;
+}
+//==============================================================================
+double StrengthClustering::e(set<node> &U) {
+  set<node>::const_iterator itU;
+  double result=0;
+  for (itU=U.begin();itU!=U.end();++itU) {
+    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    for (;itN->hasNext();) {
+      node itn=itN->next();
+      if (U.find(itn)!=U.end()) result+=1;
+    }delete itN;
+  }
+  return result/2.0;
+}
+//==============================================================================
+double StrengthClustering::s(set<node> &U,set<node> &V) {
+  if ((U.size()==0) || (V.size()==0)) return 0;
+  return (e(U,V) / double(U.size()*V.size()));
+}
+//==============================================================================
+double StrengthClustering::s(set<node> &U) {
+  if (U.size()<2) return 0;
+  return  (e(U)) * 2.0 / double(U.size()*(U.size()-1.0));
+}
+//==============================================================================
+double StrengthClustering::computeMQValue(vector<set<node> > partition) {
+  double positive=0;
+  for (unsigned int i=0;i<partition.size();++i) {
+    positive+=s(partition[i]);
+  }
+  positive/=double(partition.size());
+  double negative=0;
+  for (unsigned int i=0;i<partition.size()-1;++i)
+    for (unsigned int j=i+1;j<partition.size();++j) {
+      negative+=s(partition[i],partition[j]);
+    }
+  if (partition.size()>1)
+    negative/=double(partition.size()*(partition.size()-1)/2.0);
+  return positive-negative;
+}
+//==============================================================================
+vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
+  //cerr << __PRETTY_FUNCTION__ << endl;
+  string errMsg;
+  SuperGraph *tmpGraph=tlp::newCloneSubGraph(superGraph);
+  StableIterator<edge> itE(superGraph->getEdges());
+  while (itE.hasNext()) {
+    edge ite=itE.next();
+    if (values->getEdgeValue(ite)<threshold) {
+      if (superGraph->deg(superGraph->source(ite))>1 && superGraph->deg(superGraph->target(ite))>1)
+	tmpGraph->delEdge(ite);
+    }
+  }
+
+  // Select SubGraph singleton in superGraph
+  set<node> singleton;
+  StableIterator<node> itN(tmpGraph->getNodes());
+  while (itN.hasNext()) {
+    node itn=itN.next();
+    if (tmpGraph->deg(itn)==0) singleton.insert(itn);
+  }
+  
+  // restore edges to reconnect singleton by computing induced subgraph 
+  StableIterator<edge> itE2(superGraph->getEdges());
+  while (itE2.hasNext()) {
+    edge ite=itE2.next();
+    if (singleton.find(superGraph->source(ite))!=singleton.end() && 
+	singleton.find(superGraph->target(ite))!=singleton.end()) {
+      tmpGraph->addEdge(ite);
+    }
+  }
+
+  //Extract connected componnent
+  MetricProxy *connected= new MetricProxy(tmpGraph); 
+  tmpGraph->computeProperty("Connected Component", connected, errMsg);
+
+  //Put isolated nodes in the same cluster
+  double val=-1;
+  Iterator<node> *itN2 = tmpGraph->getNodes();
+  while (itN2->hasNext()) {
+    node itn=itN2->next();
+    if (tmpGraph->deg(itn)==0) {
+      if (val==-1) val=connected->getNodeValue(itn);
+      else
+	connected->setNodeValue(itn,val);
+    }
+  } delete itN2;
+
+  //Compute the node partition
+  vector< set<node > > result;
+  int index=0;
+  map<double,int> resultIndex;
+  itN2=tmpGraph->getNodes();
+  while (itN2->hasNext()) {
+    node itn=itN2->next();
+    double val=connected->getNodeValue(itn);
+    if (resultIndex.find(val)!=resultIndex.end())
+      result[resultIndex[val]].insert(itn);
+    else {
+      set<node> tmp;
+      result.push_back(tmp);
+      resultIndex[val]=index;
+      result[index].insert(itn);
+      ++index;
+    }
+  }delete itN2;
+
+  delete connected;
+  superGraph->delAllSubGraphs(tmpGraph);
+  return result;
+}
+//==============================================================================
+void drawGraph(SuperGraph *tmpg) {
+  //  cerr << __PRETTY_FUNCTION__ << endl;
+  string errMsg;
+  string layoutName;
+  if (tmpg->numberOfNodes() > 300)
+    layoutName = "Circular";
+  else
+    layoutName = "GEM (Frick)";
+  string sizesName="Auto_sizing";
+  tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProxy>("viewLayout"),errMsg);
+  if (tmpg->numberOfNodes() < 300)
+    tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizesProxy>("viewSize"),errMsg);
+}
+//==============================================================================
+double StrengthClustering::findBestThreshold(int numberOfSteps){
+  double maxMQ=-2;
+  double threshold=values->getEdgeMin(superGraph);
+  double deltaThreshold=(values->getEdgeMax(superGraph)-values->getEdgeMin(superGraph))/double(numberOfSteps);
+  for (double i=values->getEdgeMin(superGraph);i<values->getEdgeMax(superGraph);i+=deltaThreshold) {
+    vector< set<node > > tmp;
+    tmp=computeNodePartition(i);
+    double mq=computeMQValue(tmp);
+    if (mq>maxMQ) {
+      threshold=i;
+      maxMQ=mq;
+    }
+  }
+  cout << __PRETTY_FUNCTION__ << endl;
+  cout << "\t" <<" Nb try : " << numberOfSteps << endl;
+  cout << "\t" <<" Max MQ : " << maxMQ << endl << flush;
+  cout << "\t" <<" Best threshold : " << threshold << endl << flush;
+  return threshold;
+}
+//==============================================================================
+SuperGraph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition){
+  if (partition.size()<2) return superGraph;
+  SuperGraph *tmpGraph=tlp::newCloneSubGraph(superGraph);
+  for (unsigned int i=0;i<partition.size();++i) {
+    tlp::inducedSubGraph(tmpGraph,partition[i]);
+  }
+  return tmpGraph;
+}
+//==============================================================================
+void StrengthClustering::recursiveCall(SuperGraph *rootGraph, map<SuperGraph *,SuperGraph *> &mapGraph) {
+  Iterator<SuperGraph*> *itS = rootGraph->getSubGraphs();
+  while(itS->hasNext()){
+    SuperGraph *graph=itS->next();
+    double avPath=tlp::averagePathLength(graph);
+    double avCluster=tlp::averageCluster(graph);
+    /*
+      cout << "Average Path Length :" << avPath << endl;
+      cout << "Average clustering  :" <<  avCluster << endl; 
+      cout << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl; 
+      cout << "Number of edges     :" <<  tmpg->numberOfEdges() << endl; 
+    */
+    SuperGraph *tmpGr=graph;
+    if ( avPath>1 && avPath<4 && avCluster>0.25 && graph->numberOfNodes()>10) {
+      DataSet tmpData;
+      string errMsg;
+      tlp::clusterizeGraph(graph,errMsg,&tmpData,"Strength");
+      tmpData.get("strengthGraph",tmpGr);
+    }
+    mapGraph[graph]=tmpGr;
+    if (graph==tmpGr) {
+      drawGraph(graph);
+    }
+  } delete itS;
+}
+//==============================================================================
+SuperGraph* StrengthClustering::buildQuotientGraph(SuperGraph *graph) {
+  DataSet tmpData;
+  string errMsg;
+  tlp::clusterizeGraph(graph,errMsg,&tmpData,"QuotientClustering");
+  SuperGraph *quotientGraph;
+  tmpData.get<SuperGraph *>("quotientGraph",quotientGraph);
+  drawGraph(quotientGraph);
+  return quotientGraph;
+}
+//==============================================================================
+/**
+  Create a new metagraph property in order to have in the "viewMetagraph" the result
+  of recursive clustering, and in "strengthMetaGraph" the graphs before without recursive clustering.
+*/
+void StrengthClustering::adjustMetaGraphProtperty(SuperGraph *quotientGraph, map<SuperGraph *,SuperGraph *> &mapGraph) {
+  if (quotientGraph != superGraph) {
+    SuperGraph *rootGraph = superGraph->getRoot();
+    MetaGraphProxy *meta = rootGraph->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
+    MetaGraphProxy *meta2 = rootGraph->getLocalProperty<MetaGraphProxy>("strengthMetaGraph");
+    Iterator<node> *itN = quotientGraph->getNodes();
+    while (itN->hasNext()) {
+      node itn=itN->next();
+      meta2->setNodeValue(itn,meta->getNodeValue(itn));
+      meta->setNodeValue(itn,mapGraph[meta->getNodeValue(itn)]);
+    } delete itN;
+  }
+}
+//==============================================================================
+bool StrengthClustering::run() {
+  bool result;
+  string errMsg;
+  values = new MetricProxy(superGraph);
+  result = superGraph->computeProperty("Strength", values, errMsg);
+  const unsigned int NB_TEST = 10;
+  double threshold = findBestThreshold(NB_TEST);
+
+  vector< set<node > > tmp;
+  tmp = computeNodePartition(threshold);
+  if (tmp.size()==1) {
+    drawGraph(superGraph);
+    if (dataSet!=0) {
+      dataSet->set("strengthGraph",superGraph);
+    }
+    return true;
+  }
+
+  map<SuperGraph *,SuperGraph *> mapGraph;
+  SuperGraph *tmpGraph, *quotientGraph;
+
+  tmpGraph = buildSubGraphs(tmp);
+  recursiveCall(tmpGraph, mapGraph);
+  quotientGraph = buildQuotientGraph(tmpGraph);
+  adjustMetaGraphProtperty(quotientGraph, mapGraph);
+
+  if (dataSet!=0) {
+    dataSet->set("strengthGraph",quotientGraph);
+  }
+  delete values;
+  return true;
+}
+//================================================================================
+bool StrengthClustering::check(string &erreurMsg) {
+  erreurMsg="";
+  return true;
+}
+//================================================================================
+void StrengthClustering::reset() {
+}
+//================================================================================
+
+
+
+

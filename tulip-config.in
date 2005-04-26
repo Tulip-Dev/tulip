@@ -1,0 +1,51 @@
+#!/bin/sh
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+libdir=@libdir@
+
+usage()
+{
+    cat <<EOF
+Usage: tulip-config [OPTIONS]
+Options:
+	--version
+	--libs
+	--cxxflags
+        --pluginpath
+EOF
+    exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --version)
+      echo @VERSION@
+      ;;
+    --cxxflags)
+      echo -I${includedir}
+      ;;
+    --libs)
+      echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt
+      ;;
+    --pluginpath)
+      echo ${libdir}/tlp/plugins
+      ;;
+    *)
+      usage
+      ;;
+  esac
+  shift
+done
+
+exit 0

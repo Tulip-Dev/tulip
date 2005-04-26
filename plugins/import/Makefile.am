@@ -1,0 +1,41 @@
+if WIN32
+DLL_FLAGS = -no-undefined
+endif
+
+if CYGWIN
+DLL_FLAGS = -no-undefined
+endif
+
+plugins_LTLIBRARIES = \
+	libgrid.la \
+	libdot.la \
+	libtlp.la \
+	libgml.la \
+	 libfilesystem.la \
+	librandomgraph.la \
+	librandomsimplegraph.la \
+	libadjacencymatrix.la \
+	libcompletegraph.la \
+	librandomtree.la \
+	librandomtreegeneral.la \
+	libcompletetree.la \
+	libsmallworld.la 
+
+pluginsdir = $(libdir)/tlp/plugins/import
+
+libdot_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
+libgrid_la_SOURCES = Grid.cpp
+libtlp_la_SOURCES = TLPImport.cpp TLPParser.h
+libgml_la_SOURCES = GMLImport.cpp GMLParser.h
+librandomgraph_la_SOURCES = RandomGraph.cpp
+librandomsimplegraph_la_SOURCES = RandomSimpleGraph.cpp
+libadjacencymatrix_la_SOURCES = AdjacencyMatrixImport.cpp
+libcompletegraph_la_SOURCES = CompleteGraph.cpp
+librandomtree_la_SOURCES = RandomTree.cpp
+librandomtreegeneral_la_SOURCES = RandomTreeGeneral.cpp
+libcompletetree_la_SOURCES = CompleteTree.cpp
+libsmallworld_la_SOURCES = SmallWorldGraph.cpp
+libfilesystem_la_SOURCES = FileSystem.cpp
+
+AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
