@@ -1,2 +1,2 @@
-SUBDIRS = Tulip tlprender
-DIST_SUBDIRS = Tulip tlprender
+SUBDIRS = tulip tlprender
+DIST_SUBDIRS = tulip tlprender
