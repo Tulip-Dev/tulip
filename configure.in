@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.1.1.1 $)
+AC_REVISION($Revision: 1.2 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.2)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -207,38 +207,30 @@ ${PACKAGE}-${VERSION}.nsi:tulip.nsi.in
 tulip-config
 Makefile
 library/Makefile
-
 library/tulip/Makefile
 library/tulip/include/Makefile
 library/tulip/src/Makefile
-
 library/tulip-ogl/Makefile
 library/tulip-ogl/bitmaps/Makefile
 library/tulip-ogl/include/Makefile
 library/tulip-ogl/src/Makefile
-
 library/tulip-qt/Makefile
 library/tulip-qt/designer/Makefile
 library/tulip-qt/include/Makefile
 library/tulip-qt/src/Makefile
-
 thirdparty/Makefile
 thirdparty/gzstream/Makefile
 thirdparty/ftgl/Makefile
 thirdparty/gle/Makefile
-
 software/Makefile
-
 software/tulip/Makefile
 software/tulip/include/Makefile
 software/tulip/src/Makefile
 software/tulip/bitmaps/Makefile
 software/tulip/designer/Makefile
-
 software/tlprender/Makefile
 software/tlprender/include/Makefile
 software/tlprender/src/Makefile
-
 plugins/Makefile
 plugins/layout/Makefile
 plugins/metric/Makefile
@@ -251,11 +243,9 @@ plugins/colors/Makefile
 plugins/int/Makefile
 plugins/string/Makefile
 plugins/glyph/Makefile
-
 samples/Makefile
 samples/gml/Makefile
 samples/tlp/Makefile
 samples/matrix/Makefile,
-
 [chmod +x tulip-config]
 )

@@ -5,15 +5,15 @@ endif
 
 bin_PROGRAMS = tulip
 
-Tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
+tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 
 INCLUDES = -I$(srcdir)/../include -I../include \
 	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
 
 AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @LIB_IMAGES_LDFLAGS@
 
-Tulip_LDFLAGS = -L.
-Tulip_LDADD = @LIB_QT@ @QT_LDFLAGS@ -lpthread -lxml2 ${ADD_LIB}
+tulip_LDFLAGS = -L.
+tulip_LDADD = @LIB_QT@ @QT_LDFLAGS@ -lpthread -lxml2 ${ADD_LIB}
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
@@ -52,7 +52,7 @@ BUILT_SOURCES = \
 	moc_NavigateButton.cpp \
 	moc_QtProgress.cpp
 
-nodist_Tulip_SOURCES =  \
+nodist_tulip_SOURCES =  \
 	QtProgressData.cpp \
 	moc_QtProgressData.cpp \
 	moc_Overview.cpp \
@@ -82,7 +82,7 @@ nodist_Tulip_SOURCES =  \
 	moc_QtProgress.cpp
 
 
-dist_Tulip_SOURCES = \
+dist_tulip_SOURCES = \
 	Overview.cpp \
 	ElementInfoToolTip.cpp \
 	viewGl.cpp \
