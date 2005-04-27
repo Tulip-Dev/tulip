@@ -11,9 +11,12 @@
  * AUTHOR:
  * written by Linas Vepstas August/September 1991
  * added polycone, February 1993
+ *
+ * Copyright (C) 1991,1993,2003 Linas Vepstas <linas@linas.org>
  */
 
 
+#include <malloc.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>	/* for the memcpy() subroutine */
@@ -26,6 +29,7 @@
 #include "intersect.h"
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 /* The routine below  determines the type of join style that will be
  * used for tubing. */
 
@@ -41,6 +45,7 @@ int gleGetJoinStyle (void)
    return (extrusion_join_style);
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 /*
  * draw a general purpose extrusion 
@@ -52,7 +57,7 @@ void gleSuperExtrusion (int ncp,               /* number of contour points */
                 gleDouble up[3],           /* up vector for contour */
                 int npoints,           /* numpoints in poly-line */
                 gleDouble point_array[][3],        /* polyline */
-                float color_array[][3],        /* color of polyline */
+                gleColor color_array[],        /* color of polyline */
                 gleDouble xform_array[][2][3])   /* 2D contour xforms */
 {   
    INIT_GC();
@@ -102,7 +107,7 @@ void gleExtrusion (int ncp,               /* number of contour points */
                 gleDouble up[3],           /* up vector for contour */
                 int npoints,           /* numpoints in poly-line */
                 gleDouble point_array[][3],        /* polyline */
-                float color_array[][3])        /* color of polyline */
+                gleColor color_array[])        /* color of polyline */
 {   
    gleSuperExtrusion (ncp, contour, cont_normal, up,
                     npoints,
@@ -117,7 +122,7 @@ void gleExtrusion (int ncp,               /* number of contour points */
 static void 
 gen_polycone (int npoints,
                gleDouble point_array[][3],
-               float color_array[][3],
+               gleColor color_array[],
                gleDouble radius,
                gleDouble xform_array[][2][3])
 {
@@ -181,7 +186,7 @@ gen_polycone (int npoints,
 
 void glePolyCylinder (int npoints,
                    gleDouble point_array[][3],
-                   float color_array[][3],
+                   gleColor color_array[],
                    gleDouble radius)
 {
    gen_polycone (npoints, point_array, color_array, radius, NULL);
@@ -191,7 +196,7 @@ void glePolyCylinder (int npoints,
 
 void glePolyCone (int npoints,
                gleDouble point_array[][3],
-               float color_array[][3],
+               gleColor color_array[],
                gleDouble radius_array[])
 {
    gleAffine * xforms;
@@ -221,7 +226,7 @@ void gleTwistExtrusion (int ncp,         /* number of contour points */
                 gleDouble up[3],           /* up vector for contour */
                 int npoints,           /* numpoints in poly-line */
                 gleDouble point_array[][3],        /* polyline */
-                float color_array[][3],        /* color of polyline */
+                gleColor color_array[],        /* color of polyline */
                 gleDouble twist_array[])   /* countour twists (in degrees) */
 
 {
@@ -259,6 +264,7 @@ void gleTwistExtrusion (int ncp,         /* number of contour points */
 }
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 /* 
  * The spiral primitive forms the basis for the helicoid primitive.
  *
@@ -756,4 +762,5 @@ void gleScrew (int ncp,
    free (twarr);
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */

@@ -13,9 +13,12 @@
  * added normal vectors Linas, October 1991
  * "code complete" (that is, I'm done), Linas Vepstas, October 1991
  * work around OpenGL's lack of support for concave polys, June 1994
+ *
+ * Copyright (C) 1991,1994,2003 Linas Vepstas <linas@linas.org>
  */
 
 
+#include <malloc.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,6 +71,8 @@
  *
  * Linas Vepstas March 1993
  */
+
+#ifndef COLOR_SIGNATURE
 
 /* ============================================================ */
 
@@ -222,6 +227,8 @@ void draw_angle_style_back_cap (int ncp,	/* number of contour points */
 #endif /* OPENGL_10 */
 }
 
+#endif /* COLOR_SIGNATURE */
+
 /* ============================================================ */
 
 void extrusion_angle_join (int ncp,		/* number of contour points */
@@ -230,7 +237,7 @@ void extrusion_angle_join (int ncp,		/* number of contour points */
                            gleDouble up[3],	/* up vector for contour */
                            int npoints,		/* numpoints in poly-line */
                            gleDouble point_array[][3],	/* polyline */
-                           float color_array[][3],	/* color of polyline */
+                           gleColor color_array[],	/* color of polyline */
                            gleDouble xform_array[][2][3])  /* 2D contour xforms */
 {
    int i, j;

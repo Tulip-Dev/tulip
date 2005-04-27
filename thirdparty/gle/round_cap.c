@@ -12,6 +12,7 @@
  */
 
 
+#include <malloc.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>	/* for the memcpy() subroutine */
@@ -40,7 +41,7 @@
 
 void draw_round_style_cap_callback (int ncp,
                                   double cap[][3],
-                                  float face_color[3],
+                                  gleColor face_color,
                                   gleDouble cut[3],
                                   gleDouble bi[3],
                                   double norms[][3],

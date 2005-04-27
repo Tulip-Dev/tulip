@@ -11,7 +11,7 @@
 
 /* Package name and version number */
 #define PACKAGE "gle"
-#define VERSION "3.0.7"
+#define VERSION "3.1.0"
 
 /* Standard C headers present */
 #define STDC_HEADERS 1
@@ -94,7 +94,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "3.0.7"
+#define VERSION "3.1.0"
 
 /* Define to 1 if the X Window System is missing or not being used. */
 /* #undef X_DISPLAY_MISSING */

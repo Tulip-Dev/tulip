@@ -12,8 +12,11 @@
  * split into multiple compile units, Linas, October 1991
  * added normal vectors Linas, October 1991
  * consoldated from other modules,  Linas Vepstas, March 1993
+ *
+ * Copyright (c) 1991,1993,2003 Linas Vepstas <linas@linas.org>
  */
 
+#include <malloc.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>	/* for the memcpy() subroutine */
@@ -25,6 +28,7 @@
 #include "segment.h"
 
 
+#ifndef COLOR_SIGNATURE
 /* ============================================================ */
 
 void draw_segment_plain (int ncp,	/* number of contour points */
@@ -49,13 +53,14 @@ void draw_segment_plain (int ncp,	/* number of contour points */
    ENDTMESH ();
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 
 void draw_segment_color (int ncp,	/* number of contour points */
                          gleDouble front_contour[][3],	
                          gleDouble back_contour[][3],	
-                         float color_last[3],
-                         float color_next[3],
+                         gleColor color_last,
+                         gleColor color_next,
                          int inext, double len)
 {
    int j;
@@ -83,6 +88,7 @@ void draw_segment_color (int ncp,	/* number of contour points */
 }
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 
 void draw_segment_edge_n (int ncp,	/* number of contour points */
                            gleDouble front_contour[][3],	
@@ -109,14 +115,15 @@ void draw_segment_edge_n (int ncp,	/* number of contour points */
    ENDTMESH ();
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 
 void draw_segment_c_and_edge_n (int ncp,	/* number of contour points */
                            gleDouble front_contour[][3],	
                            gleDouble back_contour[][3],	
                            double norm_cont[][3],
-                           float color_last[3],
-                           float color_next[3],
+                           gleColor color_last,
+                           gleColor color_next,
                            int inext, double len)
 {
    int j;
@@ -147,6 +154,7 @@ void draw_segment_c_and_edge_n (int ncp,	/* number of contour points */
 }
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 
 void draw_segment_facet_n (int ncp,	/* number of contour points */
                            gleDouble front_contour[][3],	
@@ -178,14 +186,15 @@ void draw_segment_facet_n (int ncp,	/* number of contour points */
    ENDTMESH ();
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 
 void draw_segment_c_and_facet_n (int ncp,	/* number of contour points */
                            gleDouble front_contour[][3],	
                            gleDouble back_contour[][3],	
                            double norm_cont[][3],
-                           float color_last[3],
-                           float color_next[3],
+                           gleColor color_last,
+                           gleColor color_next,
                            int inext, double len)
 {
    int j;
@@ -244,6 +253,7 @@ void draw_segment_c_and_facet_n (int ncp,	/* number of contour points */
 
 /* ============================================================ */
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 /* 
  * This routine draws a segment with normals specified at each end.
  */
@@ -277,6 +287,7 @@ void draw_binorm_segment_edge_n (int ncp,      /* number of contour points */
 
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 
 void draw_binorm_segment_c_and_edge_n (int ncp,	/* number of contour points */
@@ -284,8 +295,8 @@ void draw_binorm_segment_c_and_edge_n (int ncp,	/* number of contour points */
                            double back_contour[][3],	
                            double front_norm[][3],
                            double back_norm[][3],
-                           float color_last[3],
-                           float color_next[3],
+                           gleColor color_last,
+                           gleColor color_next,
                            int inext, double len)
 {
    int j;
@@ -316,6 +327,7 @@ void draw_binorm_segment_c_and_edge_n (int ncp,	/* number of contour points */
 }
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 /* 
  * This routine draws a piece of the round segment with psuedo-facet
  * normals.  I say "psuedo-facet" because the resulting object looks 
@@ -365,6 +377,7 @@ void draw_binorm_segment_facet_n (int ncp,      /* number of contour points */
    ENDTMESH ();
 }
 
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 
 void draw_binorm_segment_c_and_facet_n (int ncp,
@@ -372,8 +385,8 @@ void draw_binorm_segment_c_and_facet_n (int ncp,
                            double back_contour[][3],	
                            double front_norm[][3],
                            double back_norm[][3],
-                           float color_last[3],
-                           float color_next[3],
+                           gleColor color_last,
+                           gleColor color_next,
                            int inext, double len)
 {
    int j;

@@ -12,9 +12,12 @@
  * added normal vectors Linas, October 1991
  * "code complete" (that is, I'm done), Linas Vepstas, October 1991
  * work around OpenGL's lack of support for concave polys, June 1994
+ *
+ * Copyright (C) 1991,1994,2003 Linas Vepstas <linas@linas.org>
  */
 
 
+#include <malloc.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>	/* for the memcpy() subroutine */
@@ -30,6 +33,7 @@
 #include "segment.h"
 
 /* ============================================================ */
+#ifndef COLOR_SIGNATURE
 /* 
  * The following routine is, in principle, very simple:
  * all that it does is normalize the up vector, and makes
@@ -175,7 +179,7 @@ void draw_raw_style_end_cap (int ncp,		/* number of contour points */
 #endif /* OPENGL_10 */
 }
 
-
+#endif /* COLOR_SIGNATURE */
 /* ============================================================ */
 /* This routine does what it says: It draws a counter-clockwise cap 
  * from a 3D contour loop list
@@ -318,7 +322,6 @@ draw_raw_segment_plain (int ncp,		/* number of contour points */
       /* draw the back cap */
       draw_raw_style_end_cap (ncp, contour, -len, FALSE);
    }
-
 }
 
 /* ============================================================ */
@@ -331,7 +334,7 @@ draw_raw_segment_plain (int ncp,		/* number of contour points */
 static void 
 draw_raw_segment_color (int ncp,		/* number of contour points */
                              gleDouble contour[][2],	/* 2D contour */
-                             float color_array[][3],	/* color of polyline */
+                             gleColor color_array[],	/* color of polyline */
                              int inext,
                              gleDouble len)
 
@@ -464,7 +467,7 @@ draw_raw_segment_edge_n (int ncp,	/* number of contour points */
 static void 
 draw_raw_segment_c_and_edge_n (int ncp,	/* number of contour points */
                              gleDouble contour[][2],	/* 2D contour */
-                             float color_array[][3],	/* color of polyline */
+                             gleColor color_array[],	/* color of polyline */
                              gleDouble cont_normal[][2],/* 2D normal vecs */
                              int inext,
                              gleDouble len)
@@ -637,7 +640,7 @@ draw_raw_segment_facet_n (int ncp,	/* number of contour points */
 static void 
 draw_raw_segment_c_and_facet_n (int ncp,	/* number of contour points */
                              gleDouble contour[][2],	/* 2D contour */
-                             float color_array[][3],	/* color of polyline */
+                             gleColor color_array[],	/* color of polyline */
                              gleDouble cont_normal[][2],/* 2D normal vecs */
                              int inext,
                              gleDouble len)
@@ -758,7 +761,7 @@ void extrusion_raw_join (int ncp,		/* number of contour points */
                          gleDouble up[3],	/* up vector for contour */
                          int npoints,		/* numpoints in poly-line */
                          gleDouble point_array[][3],	/* polyline */
-                         float color_array[][3],	/* color of polyline */
+                         gleColor color_array[],	/* color of polyline */
                          gleDouble xform_array[][2][3])   /* 2D contour xforms */
 {
    int i, j;

@@ -9,9 +9,13 @@
  * HISTORY:
  * Created by Linas Vepstas April 1994
  * general cleanup December 1995
+ *
+ * Copyright (c) 1994,1995 Linas Vepstas <linas@linas.org>
  */
 
+#include <malloc.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "gle.h"
 #include "port.h"
@@ -61,6 +65,19 @@ gleCreateGC (void)
    retval -> prev_y = 0.0;
 
    return retval;
+}
+
+
+void 
+gleDestroyGC (void) 
+{
+   if (_gle_gc) 
+   {
+      if (_gle_gc->circle) free (_gle_gc->circle);
+      _gle_gc->circle = 0x0;
+      free (_gle_gc);
+   }
+   _gle_gc = 0x0;
 }
 
 /* ======================================================= */

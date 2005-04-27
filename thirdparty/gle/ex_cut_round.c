@@ -15,9 +15,12 @@
  * Modified to handle round joins as well (based on common code),
  *                           Linas, March 1993
  * work around OpenGL's lack of support for concave polys, June 1994
+ *
+ * Copyright (C) 1991,1993,1994,2003 Linas Vepstas <linas@linas.org>
  */
 
 
+#include <malloc.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +41,8 @@ typedef void (*gleCapCallback) (int iloop,
                                 gleDouble bisect_vector[3],
                                 double norms[][3], 
                                 int frontwards);
+
+#define INVALID_BUG_NEEDS_FIXING 0
 
 #ifdef NONCONCAVE_CAPS
 
@@ -301,13 +306,13 @@ draw_fillet_triangle_plain
    if (front_color != NULL) C3F (front_color);
    BGNTMESH (-5, 0.0);
    if (face) {
-      V3F (va, -1, FILLET);
-      V3F (vb, -1, FILLET);
+      V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
+      V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
    } else {
-      V3F (vb, -1, FILLET);
-      V3F (va, -1, FILLET);
+      V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
+      V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
    }
-   V3F (vc, -1, FILLET);
+   V3F (vc, INVALID_BUG_NEEDS_FIXING, FILLET);
    ENDTMESH ();
 
 }
@@ -346,27 +351,27 @@ static void draw_fillet_triangle_n_norms
    if (__TUBE_DRAW_FACET_NORMALS) {
       N3F_D (na);
       if (face) {
-         V3F (va, -1, FILLET);
-         V3F (vb, -1, FILLET);
+         V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
+         V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
       } else {
-         V3F (vb, -1, FILLET);
-         V3F (va, -1, FILLET);
+         V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
+         V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
       }
-      V3F (vc, -1, FILLET);
+      V3F (vc, INVALID_BUG_NEEDS_FIXING, FILLET);
    } else {
       if (face) {
          N3F_D (na);
-         V3F (va, -1, FILLET);
+         V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
          N3F_D (nb);
-         V3F (vb, -1, FILLET);
+         V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
       } else {
          N3F_D (nb);
-         V3F (vb, -1, FILLET);
+         V3F (vb, INVALID_BUG_NEEDS_FIXING, FILLET);
          N3F_D (na);
-         V3F (va, -1, FILLET);
+         V3F (va, INVALID_BUG_NEEDS_FIXING, FILLET);
          N3F_D (nb);
       }
-      V3F (vc, -1, FILLET);
+      V3F (vc, INVALID_BUG_NEEDS_FIXING, FILLET);
    }
    ENDTMESH ();
 
@@ -836,7 +841,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
                            gleDouble up[3],	/* up vector for contour */
                            int npoints,		/* numpoints in poly-line */
                            gleDouble point_array[][3],	/* polyline */
-                           float color_array[][3],	/* color of polyline */
+                           gleColor color_array[],	/* color of polyline */
                            gleDouble xform_array[][2][3])   /* 2D contour xforms */
 {
    int i, j;
@@ -1240,7 +1245,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
          if (__TUBE_DRAW_CAP) {
             if (color_array != NULL) C3F (color_array[inext-1]);
             draw_angle_style_front_cap (ncp, bisector_0, 
-                                       (gleDouble (*)[3]) front_loop);
+                                       (gleVector *) front_loop);
          }
       }
       /* v^v^v^v^v^v^v^v^v  END END CAPS v^v^v^v^v^v^v^v^v^v^v^v */
@@ -1283,7 +1288,7 @@ extrusion_round_or_cut_join (int ncp,	/* number of contour points */
             if (__TUBE_DRAW_CAP) {
                if (color_array != NULL) C3F (color_array[inext]);
                draw_angle_style_back_cap (ncp, bisector_1, 
-                                           (gleDouble (*)[3]) back_loop);
+                                           (gleVector *) back_loop);
                cap_callback = null_cap_callback;
             }
          } else {

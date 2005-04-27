@@ -1,19 +1,21 @@
 
 /*
+ * FILE:
  * gle.h
  *
  * FUNCTION:
- * Tubing and Extrusion header file.
- * This file provides protypes and defines for the extrusion 
- * and tubing primitives.
+ * GLE Tubing and Extrusion top-level API header file.
+ * This file provides the protypes and defines for the extrusion 
+ * and tubing public API.  Applications that wish to use GLE must
+ * include this header file.
  *
  * HISTORY:
- * Copyright (c) Linas Vepstas 1990, 1991
+ * Copyright (c) 1990, 1991, 2003 Linas Vepstas <linas@linas.org>
  */
 
 
-#ifndef __GLE_H__
-#define __GLE_H__
+#ifndef GLE_H__
+#define GLE_H__
 
 #if defined(__cplusplus) || defined(c_plusplus)
 extern "C" {
@@ -26,11 +28,14 @@ typedef double gleDouble;
 #else 
 typedef float gleDouble;
 #endif
+
 typedef gleDouble gleAffine[2][3];
+typedef float gleColor[3];
+typedef float gleColor4f[4];
 
 /* ====================================================== */
 
-/* defines for tubing join styles */
+/* Defines for tubing join styles */
 #define TUBE_JN_RAW          0x1
 #define TUBE_JN_ANGLE        0x2
 #define TUBE_JN_CUT          0x3
@@ -38,13 +43,13 @@ typedef gleDouble gleAffine[2][3];
 #define TUBE_JN_MASK         0xf    /* mask bits */
 #define TUBE_JN_CAP          0x10
 
-/* determine how normal vectors are to be handled */
+/* Determine how normal vectors are to be handled */
 #define TUBE_NORM_FACET      0x100
 #define TUBE_NORM_EDGE       0x200
 #define TUBE_NORM_PATH_EDGE  0x400 /* for spiral, lathe, helix primitives */
 #define TUBE_NORM_MASK       0xf00    /* mask bits */
 
-/* closed or open countours */
+/* Closed or open countours */
 #define TUBE_CONTOUR_CLOSED	0x1000
 
 #define GLE_TEXTURE_ENABLE	0x10000
@@ -110,6 +115,9 @@ extern void uviewpoint ();
 
 #else /* _NO_PROTO */		/* ANSI C PROTOTYPING */
 
+/* clean up global memory usage */
+extern void gleDestroyGC (void);
+
 /* control join style of the tubes */
 extern int gleGetJoinStyle (void);
 extern void gleSetJoinStyle (int style);	/* bitwise OR of flags */
@@ -119,44 +127,90 @@ extern int gleGetNumSides(void);
 extern void gleSetNumSides(int slices); 
 
 /* draw polyclinder, specified as a polyline */
-extern void glePolyCylinder (int npoints,	/* num points in polyline */
+extern void 
+glePolyCylinder (int npoints,	/* num points in polyline */
                    gleDouble point_array[][3],	/* polyline vertces */
-                   float color_array[][3],	/* colors at polyline verts */
+                   gleColor color_array[],	/* colors at polyline verts */
+                   gleDouble radius);		/* radius of polycylinder */
+
+extern void 
+glePolyCylinder_c4f (int npoints,	/* num points in polyline */
+                   gleDouble point_array[][3],	/* polyline vertces */
+                   gleColor4f color_array[],	/* colors at polyline verts */
                    gleDouble radius);		/* radius of polycylinder */
 
 /* draw polycone, specified as a polyline with radii */
-extern void glePolyCone (int npoints,	 /* numpoints in poly-line */
+extern void 
+glePolyCone (int npoints,	 /* numpoints in poly-line */
                    gleDouble point_array[][3],	/* polyline vertices */
-                   float color_array[][3],	/* colors at polyline verts */
+                   gleColor color_array[],	/* colors at polyline verts */
+                   gleDouble radius_array[]); /* cone radii at polyline verts */
+
+extern void 
+glePolyCone_c4f (int npoints,	 /* numpoints in poly-line */
+                   gleDouble point_array[][3],	/* polyline vertices */
+                   gleColor4f color_array[],	/* colors at polyline verts */
                    gleDouble radius_array[]); /* cone radii at polyline verts */
 
 /* extrude arbitrary 2D contour along arbitrary 3D path */
-extern void gleExtrusion (int ncp,         /* number of contour points */
+extern void 
+gleExtrusion (int ncp,         /* number of contour points */
                 gleDouble contour[][2],     /* 2D contour */
                 gleDouble cont_normal[][2], /* 2D contour normals */
                 gleDouble up[3],            /* up vector for contour */
                 int npoints,            /* numpoints in poly-line */
                 gleDouble point_array[][3], /* polyline vertices */
-                float color_array[][3]); /* colors at polyline verts */
+                gleColor color_array[]); /* colors at polyline verts */
+
+extern void 
+gleExtrusion_c4f (int ncp,         /* number of contour points */
+                gleDouble contour[][2],     /* 2D contour */
+                gleDouble cont_normal[][2], /* 2D contour normals */
+                gleDouble up[3],            /* up vector for contour */
+                int npoints,            /* numpoints in poly-line */
+                gleDouble point_array[][3], /* polyline vertices */
+                gleColor4f color_array[]); /* colors at polyline verts */
 
 /* extrude 2D contour, specifying local rotations (twists) */
-extern void gleTwistExtrusion (int ncp,         /* number of contour points */
+extern void 
+gleTwistExtrusion (int ncp,         /* number of contour points */
                 gleDouble contour[][2],    /* 2D contour */
                 gleDouble cont_normal[][2], /* 2D contour normals */
                 gleDouble up[3],           /* up vector for contour */
                 int npoints,           /* numpoints in poly-line */
                 gleDouble point_array[][3],        /* polyline vertices */
-                float color_array[][3],        /* color at polyline verts */
+                gleColor color_array[],        /* color at polyline verts */
+                gleDouble twist_array[]);   /* countour twists (in degrees) */
+
+extern void 
+gleTwistExtrusion_c4f (int ncp,         /* number of contour points */
+                gleDouble contour[][2],    /* 2D contour */
+                gleDouble cont_normal[][2], /* 2D contour normals */
+                gleDouble up[3],           /* up vector for contour */
+                int npoints,           /* numpoints in poly-line */
+                gleDouble point_array[][3],        /* polyline vertices */
+                gleColor4f color_array[],        /* color at polyline verts */
                 gleDouble twist_array[]);   /* countour twists (in degrees) */
 
 /* extrude 2D contour, specifying local affine tranformations */
-extern void gleSuperExtrusion (int ncp,  /* number of contour points */
+extern void 
+gleSuperExtrusion (int ncp,  /* number of contour points */
                 gleDouble contour[][2],    /* 2D contour */
                 gleDouble cont_normal[][2], /* 2D contour normals */
                 gleDouble up[3],           /* up vector for contour */
                 int npoints,           /* numpoints in poly-line */
                 gleDouble point_array[][3],        /* polyline vertices */
-                float color_array[][3],        /* color at polyline verts */
+                gleColor color_array[],        /* color at polyline verts */
+                gleDouble xform_array[][2][3]);   /* 2D contour xforms */
+
+extern void 
+gleSuperExtrusion_c4f (int ncp,  /* number of contour points */
+                gleDouble contour[][2],    /* 2D contour */
+                gleDouble cont_normal[][2], /* 2D contour normals */
+                gleDouble up[3],           /* up vector for contour */
+                int npoints,           /* numpoints in poly-line */
+                gleDouble point_array[][3],        /* polyline vertices */
+                gleColor4f color_array[],        /* color at polyline verts */
                 gleDouble xform_array[][2][3]);   /* 2D contour xforms */
 
 /* spiral moves contour along helical path by parallel transport */
@@ -246,5 +300,5 @@ extern void uviewpoint (gleDouble m[4][4],	/* returned */
 };
 #endif
 
-#endif /* __GLE_H__ */
+#endif /* GLE_H__ */
 /* ================== END OF FILE ======================= */

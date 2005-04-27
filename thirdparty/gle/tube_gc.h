@@ -1,5 +1,6 @@
 
 /*
+ * FILE:
  * tube_gc.h
  *
  * FUNCTION:
@@ -14,9 +15,13 @@
  * HISTORY:
  * Linas Vepstas <linas@linas.org> --- February 1993
  * Added auto texture coord generation hooks, Linas April 1994
+ *
+ * Copyright (C) 1993,1994 Linas Vepstas <linas@linas.org>
  */
 
-typedef float gleColor[3];
+#ifndef GLE_TUBE_GC_H_
+#define GLE_TUBE_GC_H_
+
 typedef double gleTwoVec[2];
 
 typedef struct {
@@ -70,7 +75,7 @@ typedef struct {
 extern gleGC *_gle_gc;
 extern gleGC * gleCreateGC (void);
 
-#define INIT_GC() {if (!_gle_gc) _gle_gc = gleCreateGC(); }
+#define INIT_GC() {if (!_gle_gc) { _gle_gc = gleCreateGC(); atexit (gleDestroyGC);} }
 #define extrusion_join_style (_gle_gc->join_style)
 
 #define __TESS_SLICES (_gle_gc->slices)
@@ -87,5 +92,7 @@ extern gleGC * gleCreateGC (void);
 #define __TUBE_CUT_JOIN (extrusion_join_style & TUBE_JN_CUT)
 #define __TUBE_ANGLE_JOIN (extrusion_join_style & TUBE_JN_ANGLE)
 #define __TUBE_ROUND_JOIN (extrusion_join_style & TUBE_JN_ROUND)
+
+#endif /* GLE_TUBE_GC_H_ */
 
 /* ======================= END OF FILE ========================== */
