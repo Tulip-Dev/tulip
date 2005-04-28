@@ -23,7 +23,53 @@ public:
   float getY() const {return (*this)[1];}
   float getZ() const {return (*this)[2];}
   inline void get(float &, float &, float &) const;
+
+  inline Coord operator+(const  tlp::Vector<float,3> &) const;
+  inline Coord operator+(const float &) const;
+  inline Coord operator-(const  tlp::Vector<float,3> &) const;
+  inline Coord operator-(const float &) const;
+  inline Coord operator*(const  tlp::Vector<float,3> &) const;
+  inline Coord operator*(const float &) const ;
+  inline Coord operator/(const  tlp::Vector<float,3> &) const;
+  inline Coord operator/(const float &) const;
+  inline Coord operator^(const  tlp::Vector<float,3> &) const;
 };
+
+Coord Coord::operator+(const  tlp::Vector<float,3> &v) const {
+  return Coord(*this)+=v;
+}
+//======================================================
+Coord Coord::operator+(const float& scalaire) const {
+  return Coord(*this)+=scalaire;
+}
+//======================================================
+Coord Coord::operator-(const  tlp::Vector<float,3> &v) const { 
+  return Coord(*this)-=v;
+}
+//======================================================
+Coord Coord::operator-(const float& scalaire) const {
+  return Coord(*this)-=scalaire;
+}
+//======================================================
+Coord Coord::operator*(const  tlp::Vector<float,3> &v) const { 
+  return Coord(*this)*=v;
+}
+//======================================================
+Coord  Coord::operator*(const float& scalaire) const {
+  return Coord(*this)*=scalaire;
+}
+//======================================================
+Coord Coord::operator/(const  tlp::Vector<float,3> &v) const { 
+  return Coord(*this)/=v;
+}
+//======================================================
+Coord Coord::operator/(const float& scalaire) const {
+  return Coord(*this)/=scalaire;
+}
+//======================================================
+Coord Coord::operator^(const  tlp::Vector<float,3> &v) const {
+  return Coord(*this) ^= v;
+}
 
 Coord::Coord(const float xx, const float yy, const float zz){(*this)[0]=xx;(*this)[1]=yy,(*this)[2]=zz;}
 Coord::Coord(const tlp::Vector<float,3> &v) : tlp::Vector<float,3>(v) {}

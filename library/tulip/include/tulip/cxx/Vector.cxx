@@ -63,6 +63,22 @@ VECTORTLP & VECTORTLP::operator-=(const VECTORTLP &vecto) {
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
+VECTORTLP & VECTORTLP::operator^=(const VECTORTLP &v) { 
+  VECTORTLP tmp(*this);
+  switch(SIZE){
+  case 3:  
+    (*this)[0] = tmp[1]*v[2] - tmp[2]*v[1];
+    (*this)[1] = tmp[2]*v[0] - tmp[0]*v[2];
+    (*this)[2] = tmp[0]*v[1] - tmp[1]*v[0];
+    break;
+  default :
+    std::cerr << "cross product not implemented for dimension :" << SIZE << std::endl;
+    break;
+  }
+  return (*this);
+}
+//======================================================
+template <typename Obj,unsigned int SIZE>
 VECTORTLP VECTORTLP::operator+(const VECTORTLP &v) const { 
   return VECTORTLP(*this)+=v;
 }
@@ -103,19 +119,8 @@ VECTORTLP VECTORTLP::operator/(const Obj& scalaire) const {
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator^(const VECTORTLP &v) const { 
-  VECTORTLP result;
-  switch(SIZE){
-  case 3:  
-    result[0]=VECTORTLP::array[1]*v[2]-VECTORTLP::array[2]*v[1];
-    result[1]=VECTORTLP::array[2]*v[0]-VECTORTLP::array[0]*v[2];
-    result[2]=VECTORTLP::array[0]*v[1]-VECTORTLP::array[1]*v[0];
-    return result;
-    break;
-  default :
-    std::cerr << "cross product not implemented for dimension :" << SIZE << std::endl;
-    break;
-  }
+VECTORTLP VECTORTLP::operator^(const VECTORTLP &v) const {
+  return VECTORTLP(*this) ^= v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>

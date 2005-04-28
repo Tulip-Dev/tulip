@@ -41,6 +41,8 @@ namespace tlp {
     inline VECTOR & operator+=(const VECTOR &);
     inline VECTOR & operator-=(const Obj &);
     inline VECTOR & operator-=(const VECTOR &);
+    inline VECTOR & operator^=(const VECTOR &);
+    
     inline VECTOR operator+(const VECTOR &) const;
     inline VECTOR operator+(const Obj &) const;
     inline VECTOR operator-(const VECTOR &) const;
@@ -50,6 +52,7 @@ namespace tlp {
     inline VECTOR operator/(const VECTOR &) const;
     inline VECTOR operator/(const Obj &) const;
     inline VECTOR operator^(const VECTOR &) const;
+
     inline bool operator!=(const VECTOR &) const;
     inline bool operator==(const VECTOR &) const;
     inline VECTOR & fill(const Obj &obj);

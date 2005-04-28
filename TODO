@@ -39,8 +39,8 @@
 - (OK) TLPImport/GMLImport/TLPExport/TLPImport : Regarder bug dans le parser sur les comentaires dans les chaines de caractères
 --------------------------------------------------------------------------------------------------
 **Tulip OGL :
-- Enelever le ralentissement (incremental rendering) lorsque l'on utilise les teapots.
-- Afficher les labels dans les méthagraphes (OUI / NON ?) à étudier.
+- (~OK) Enelever le ralentissement (incremental rendering) lorsque l'on utilise les teapots.
+- (OK) Afficher les labels dans les méthagraphes (OUI / NON ?) à étudier.
 - (OK) Remettre ou pas les labels texture etc en fait bien mettre au point l'affaichage des labels.
 - (OK) affichage des labels Bitmaps.
 - (OK) Afficher les labels en utilisant des "FONT" outline (en noir entouré de blanc) ca marche très bien.

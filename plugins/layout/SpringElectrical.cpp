@@ -93,7 +93,7 @@ bool SpringElectrical::run() {
 
   k = 5.0;
   k2 = 2.0*k;
-  double maxforce = log(superGraph->numberOfNodes());
+  double maxforce = log(double(superGraph->numberOfNodes()));
   double deltaForce = maxforce / iterations;
 
   for (int count = 0; count < iterations; ++count) {
