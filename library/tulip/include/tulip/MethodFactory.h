@@ -71,7 +71,7 @@ extern "C" {                                            \
     C##T##Factory *tmp= new C##T##Factory();            \
     return ((PropertyFactory< T > *)tmp);                         \
   }                                                     \
-};
+}
 
 #define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
 #define STRINGPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R)
@@ -128,7 +128,7 @@ extern "C" {                                            \
     C##T##Factory *tmp= new C##T##Factory();            \
     return ((T##Factory *)tmp);                         \
   }                                                     \
-};
+}
 
 #define EXPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R)
 #define IMPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R)

@@ -20,6 +20,7 @@ template<typename T> void StructDef::add(std::string str, const char * inHelp, s
 //DataSet implementation
 template<typename T> bool DataSet::get(const std::string str,T& value) const {
   if (data.find(str)!=data.end()) {
+    //     Do not work if T do not contain a virtual function
     //     DataType dt = (*(data.find(str))).second;
     //     std::cerr << __PRETTY_FUNCTION__ << ": data.find.typeName=" << dt.typeName;
     //     std::cerr << "; typeid(T).name()=" << typeid(T).name() << std::endl;
@@ -41,7 +42,7 @@ template<typename T> bool DataSet::getAndFree(const std::string &str,T& value) {
 }
 template<typename T> void DataSet::set(const std::string &str,const T& value) {
   if (data.find(str)!=data.end()) {
-    assert(data[str].typeName==typeid(T).name());
+    //    assert(data[str].typeName==typeid(T).name()); Do not work if T do not contain a virtual function
     delete (T*)(data[str].value);
   }
   T* tmp=new T(value);

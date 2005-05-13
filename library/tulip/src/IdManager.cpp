@@ -18,7 +18,7 @@ IdManager::IdManager():
   minId(UINT_MAX) {
 }
 //-----------------------------------------------------------
-bool IdManager::is_free(const unsigned int id) {
+bool IdManager::is_free(const unsigned int id) const {
   if (id < minId) return true;
   if (id > maxId) return true;
   if (freeIds.find(id)!=freeIds.end()) return true;

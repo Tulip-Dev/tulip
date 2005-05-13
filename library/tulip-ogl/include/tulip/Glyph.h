@@ -105,7 +105,7 @@ extern "C" {                                     \
       C##T##Factory *tmp = new C##T##Factory();  \
       return ((T##Factory *) tmp);               \
     }                                            \
-};                                               \
+}                                                \
 
 #define GLYPHPLUGIN(C,N,A,D,I,V,R,ID) GPLUGINFACTORY(Glyph,C,N,A,D,I,V,R,ID)
 

@@ -48,11 +48,11 @@ private:
 template<class itType> class FactorIterator:public Iterator<itType> {
  protected:
   SuperGraph *_parentGraph;
-  const MutableContainer<bool>& _selectionProxy;
+  const MutableContainer<bool>& _filter;
  public:
   FactorIterator(const SuperGraph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getFather()),
-    _selectionProxy(filter)
+    _filter(filter)
   {}
 };
 //============================================================
@@ -74,6 +74,9 @@ class SGraphNodeIterator:public FactorIterator<node> {
 class OutNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
+  #ifndef NDEBUG
+  const SuperGraph *graph;
+  #endif
  public:
   OutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n);
   ~OutNodesIterator();
@@ -85,6 +88,9 @@ class OutNodesIterator:public FactorIterator<node> {
 class InNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
+  #ifndef NDEBUG
+  const SuperGraph *graph;
+  #endif
  public:
   InNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter ,node n);
   ~InNodesIterator();
@@ -97,7 +103,9 @@ class InOutNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
   node n;
-
+  #ifndef NDEBUG
+  const SuperGraph *graph;
+  #endif
  public:
   InOutNodesIterator(const SuperGraph *sG,const MutableContainer<bool>& filter,node n);
   ~InOutNodesIterator();

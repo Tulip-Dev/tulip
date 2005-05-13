@@ -20,7 +20,7 @@ class IdManagerIterator;
 class IdManager {
 public:
   IdManager();
-  bool is_free(unsigned int);
+  bool is_free(unsigned int) const;
   /**
      Free the id given in parameter. This id
      will be accessible by a the get function.

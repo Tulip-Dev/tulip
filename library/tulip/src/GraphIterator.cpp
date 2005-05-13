@@ -13,11 +13,11 @@ SGraphNodeIterator::SGraphNodeIterator(const SuperGraph *sG, const MutableContai
   _hasnext=false;
   if (it->hasNext()) {
     curNode=it->next();
-    while (_selectionProxy.get(curNode.id)!=true) {
+    while (_filter.get(curNode.id)!=true) {
       if (!it->hasNext()) break;
       curNode=it->next();
     }
-    if (_selectionProxy.get(curNode.id)) _hasnext=true;
+    if (_filter.get(curNode.id)) _hasnext=true;
   }
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
@@ -28,11 +28,11 @@ node SGraphNodeIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curNode=it->next();
-    while (_selectionProxy.get(curNode.id)!=true) {
+    while (_filter.get(curNode.id)!=true) {
       if (!it->hasNext()) break;
       curNode=it->next();
     }
-    if (_selectionProxy.get(curNode.id)) _hasnext=true;
+    if (_filter.get(curNode.id)) _hasnext=true;
   }
   return tmp;
 }
@@ -41,15 +41,21 @@ bool SGraphNodeIterator::hasNext(){
 }
 //===================================================================
 OutNodesIterator::OutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter) {
-  it=new OutEdgesIterator(sG,filter,n);
+  it = new OutEdgesIterator(sG,filter,n);
+#ifndef NDEBUG
+  graph = sG;
+#endif
 }
 OutNodesIterator::~OutNodesIterator() {
   delete it;
 }
 node OutNodesIterator::next() {
-  node tmp=(_parentGraph->target(it->next()));
-  assert(_selectionProxy->getNodeValue(tmp)==true);
+#ifndef NDEBUG
+  node tmp = _parentGraph->target(it->next());
+  assert(graph->isElement(tmp));
   return tmp;
+#endif
+  return _parentGraph->target(it->next());
 }
 bool OutNodesIterator::hasNext() {
   return (it->hasNext());
@@ -57,14 +63,20 @@ bool OutNodesIterator::hasNext() {
 //===================================================================
 InNodesIterator::InNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<node>(sG,filter),
 										   it(new InEdgesIterator(sG,filter,n)) {
+#ifndef NDEBUG
+  graph = sG;
+#endif
 }
 InNodesIterator::~InNodesIterator() { 
   delete it; 
 }
 node InNodesIterator:: next() {
-  node tmp=(_parentGraph->source(it->next()));
-  assert(_selectionProxy->getNodeValue(tmp)==true);
+#ifndef NDEBUG
+  node tmp = _parentGraph->source(it->next());
+  assert(graph->isElement(tmp));
   return tmp;
+#endif
+  return _parentGraph->source(it->next());
 }
 bool InNodesIterator::hasNext() {
   return (it->hasNext());
@@ -73,12 +85,21 @@ bool InNodesIterator::hasNext() {
 InOutNodesIterator::InOutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter),
 											 it(new InOutEdgesIterator(sG,filter,n)),
 											 n(n) {
+#ifndef NDEBUG
+  graph = sG;
+#endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
   delete it;
 }
 node InOutNodesIterator::next() {
+#ifndef NDEBUG
+  node tmp = _parentGraph->opposite(it->next(),n);
+  assert(graph->isElement(tmp));
+  return tmp;
+#else
   return _parentGraph->opposite(it->next(),n);
+#endif
 }
 bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
@@ -89,11 +110,11 @@ SGraphEdgeIterator::SGraphEdgeIterator(const SuperGraph *sG, const MutableContai
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
@@ -104,11 +125,11 @@ edge SGraphEdgeIterator::next() {
   _hasnext=false;
   if (it->hasNext()){
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
   return tmp;
 }
@@ -117,16 +138,16 @@ bool SGraphEdgeIterator::hasNext() {
 }
 //===================================================================
 OutEdgesIterator::OutEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<edge>(sG,filter) {
-  assert(_selectionProxy->getNodeValue(n)==true);
+  assert(sG->isElement(n));
   it=_parentGraph->getOutEdges(n);
   _hasnext=false;
   if (it->hasNext()){
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id))	_hasnext=true;
+    if (_filter.get(curEdge.id))	_hasnext=true;
   }
 }
 OutEdgesIterator::~OutEdgesIterator() {
@@ -137,11 +158,11 @@ edge OutEdgesIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
       curEdge=it->next();
-      while (_selectionProxy.get(curEdge.id)!=true) {
+      while (_filter.get(curEdge.id)!=true) {
 	  if (!it->hasNext()) break;
 	  curEdge=it->next();
 	}
-      if (_selectionProxy.get(curEdge.id))
+      if (_filter.get(curEdge.id))
 	_hasnext=true;
     }
   return tmp;
@@ -151,16 +172,16 @@ bool OutEdgesIterator::hasNext() {
 }
 //===================================================================
 InEdgesIterator::InEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
-  assert(_selectionProxy->getNodeValue(n)==true);
+  assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
   _hasnext=false;
   if (it->hasNext()){
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true){
+    while (_filter.get(curEdge.id)!=true){
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
 }
 InEdgesIterator::~InEdgesIterator() {
@@ -171,11 +192,11 @@ edge InEdgesIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }  
   return tmp;
 }
@@ -184,16 +205,16 @@ bool InEdgesIterator::hasNext() {
 }
 //===================================================================
 InOutEdgesIterator::InOutEdgesIterator(const SuperGraph *sG,const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
-  assert(_selectionProxy->getNodeValue(n)==true);
+  assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
@@ -204,11 +225,11 @@ edge InOutEdgesIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_selectionProxy.get(curEdge.id)!=true) {
+    while (_filter.get(curEdge.id)!=true) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_selectionProxy.get(curEdge.id)) _hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
   return tmp;
 }
