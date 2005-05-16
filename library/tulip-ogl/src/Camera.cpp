@@ -12,8 +12,8 @@ Camera::Camera(Coord center,Coord eyes, Coord up, double zoomFactor, double scen
 void Camera::move(float speed) {
   Coord move = eyes - center;
   move *= speed/move.norm();
-  eyes+=move;
-  center+=move;
+  eyes += move;
+  center += move;
 }
 
 /// This rotates the camera's eyes around the center depending on the values passed in.
