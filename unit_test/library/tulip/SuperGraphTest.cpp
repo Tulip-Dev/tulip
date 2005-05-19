@@ -99,22 +99,45 @@ void SuperGraphTest::testDegree() {
 }
 //==========================================================
 void SuperGraphTest::testAddDel() {
+  //  cerr << __PRETTY_FUNCTION__ << endl;
   vector<node> nodes;
   vector<edge> edges;
   unsigned int NB_ADD = 1000;
   unsigned int EDGE_RATIO = 100;
-  for (unsigned int i=0; i<NB_ADD; ++i)
-    nodes.push_back(graph->addNode());
-  CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
-  for (unsigned int i=0; i< NB_EDGES; ++i)
+  vector<bool> edgePresent(NB_EDGES);
+  vector<bool> nodePresent(NB_ADD);
+
+  for (unsigned int i=0; i<NB_ADD; ++i) {
+    nodes.push_back(graph->addNode());
+    CPPUNIT_ASSERT(graph->isElement(nodes[i]));
+    nodePresent[i] = true;
+  }
+  CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
+
+
+  for (unsigned int i=0; i< NB_EDGES; ++i) {
     edges.push_back(graph->addEdge(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
+    CPPUNIT_ASSERT(graph->isElement(edges[i]));
+    edgePresent[i] = true;
+  }
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
-  for (unsigned int i=0; i < NB_EDGES / 2; ++i)
+
+  for (unsigned int i=0; i < NB_EDGES / 2; ++i) {
     graph->delEdge(edges[i]);
+    CPPUNIT_ASSERT(!graph->isElement(edges[i]));
+  }
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES - NB_EDGES/2);
-  for (unsigned int i=0; i<NB_ADD; ++i)
+
+  for (unsigned int i=0; i<NB_ADD; ++i) {
+    Iterator<edge> *itE = graph->getInOutEdges(nodes[i]);
+    while (itE->hasNext())
+      CPPUNIT_ASSERT(graph->isElement(itE->next()));
+    delete itE;
     graph->delNode(nodes[i]);
+    CPPUNIT_ASSERT(!graph->isElement(nodes[i]));
+  }
   CPPUNIT_ASSERT(graph->numberOfNodes() == 0);
   CPPUNIT_ASSERT(graph->numberOfEdges() == 0);
 }
@@ -265,7 +288,7 @@ void SuperGraphTest::testSubgraph() {
   
   edge e = g2->addEdge(n1,n2);
   CPPUNIT_ASSERT(!g3->isElement(e) && !g4->isElement(e) && !g1->isElement(e));
-  CPPUNIT_ASSERT(g2->isElement(e) && graph->isElement(e));
+  CPPUNIT_ASSERT(g2->isElement(e) && graph->isElement(e) && g2->isElement(n2));
   g2->delNode(n2);
   CPPUNIT_ASSERT(!g2->isElement(n2) && !g2->isElement(e));
   CPPUNIT_ASSERT(graph->isElement(n2) && graph->isElement(e));

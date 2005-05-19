@@ -264,20 +264,20 @@ void tlp::openMetaNode(SuperGraph *graph, node n) {
 }
 //=========================================================
 SuperGraph * tlp::inducedSubGraph(SuperGraph *sg, const std::set<node> &nodes, string name) {
-  hash_set<node> setNode(nodes.begin(), nodes.end());
   SuperGraph *result = sg->addSubGraph();
-  Iterator<node> *itN=sg->getNodes();
+  set<node>::const_iterator itNodeSet = nodes.begin();
+  for(;itNodeSet!=nodes.end(); ++itNodeSet) {
+    result->addNode(*itNodeSet);
+  }
+  Iterator<node> *itN=result->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    if (setNode.find(itn)!=setNode.end()) {
-      result->addNode(itn);
-      Iterator<edge> *itE=sg->getOutEdges(itn);
-      while (itE->hasNext()) {
-	edge ite=itE->next();
-	if (setNode.find(sg->target(ite))!=setNode.end())
-	  result->addEdge(ite);
-      } delete itE;
-    }
+    Iterator<edge> *itE=sg->getOutEdges(itn);
+    while (itE->hasNext()) {
+      edge ite = itE->next();
+      if (result->isElement(sg->target(ite)))
+	result->addEdge(ite);
+    } delete itE;
   } delete itN;
   return result;
 }
