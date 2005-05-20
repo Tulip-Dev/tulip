@@ -147,7 +147,7 @@ OutEdgesIterator::OutEdgesIterator(const SuperGraph *sG, const MutableContainer<
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id))	_hasnext=true;
+    if (_filter.get(curEdge.id)) _hasnext=true;
   }
 }
 OutEdgesIterator::~OutEdgesIterator() {

@@ -29,10 +29,17 @@ void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
 //==========================================================
 void SuperGraphTest::testIterators() {
   graph->clear();
+
   vector<node> nodes;
-  const unsigned int NB_NODES = 100;
-  for (unsigned int j=0; j<NB_NODES; ++j)
+  vector<edge> edges;
+  unsigned int NB_NODES  = 100;
+  unsigned int EDGE_RATIO = 100;
+  for (unsigned int i=0; i<NB_NODES; ++i)
     nodes.push_back(graph->addNode());
+  unsigned int NB_EDGES = EDGE_RATIO * NB_NODES;
+  for (unsigned int i=0; i< NB_EDGES; ++i)
+    edges.push_back(graph->addEdge(nodes[rand()%NB_NODES], nodes[rand()%NB_NODES]));
+  {
   Iterator<node> *itN = graph->getNodes();
   unsigned int i = 0;
   while(itN->hasNext()){
@@ -40,6 +47,68 @@ void SuperGraphTest::testIterators() {
     ++i;
   }delete itN;
   CPPUNIT_ASSERT_EQUAL( i , NB_NODES );
+  }
+  {
+  Iterator<edge> *itE = graph->getEdges();
+  unsigned int i = 0;
+  while(itE->hasNext()){
+    CPPUNIT_ASSERT_EQUAL( edges[i].id , itE->next().id );
+    ++i;
+  }delete itE;
+  CPPUNIT_ASSERT_EQUAL( i , NB_EDGES );
+  }
+  graph->clear();
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+  node n3 = graph->addNode();
+  edge e1 = graph->addEdge(n1, n1); //loop
+  edge e2 = graph->addEdge(n1, n2); 
+  edge e3 = graph->addEdge(n2, n1);//parallel edge
+  edge e4 = graph->addEdge(n1, n3);
+
+  Iterator<node> *it1 = graph->getOutNodes(n1);
+  CPPUNIT_ASSERT_EQUAL(n1.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(n2.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(n3.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it1->hasNext());
+  delete it1;
+  Iterator<node> *it2 = graph->getInNodes(n1);
+  CPPUNIT_ASSERT_EQUAL(n1.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(n2.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it2->hasNext());
+  delete it2;
+  Iterator<node> *it3 = graph->getInOutNodes(n1);
+  CPPUNIT_ASSERT_EQUAL(n1.id, it3->next().id);
+  CPPUNIT_ASSERT_EQUAL(n1.id, it3->next().id);
+  CPPUNIT_ASSERT_EQUAL(n2.id, it3->next().id);
+  CPPUNIT_ASSERT_EQUAL(n2.id, it3->next().id);
+  CPPUNIT_ASSERT_EQUAL(n3.id, it3->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it3->hasNext());
+  delete it3;
+
+  Iterator<edge> *it4 = graph->getOutEdges(n1);
+  CPPUNIT_ASSERT_EQUAL(e1.id, it4->next().id);
+  CPPUNIT_ASSERT_EQUAL(e2.id, it4->next().id);
+  CPPUNIT_ASSERT_EQUAL(e4.id, it4->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it4->hasNext());
+  delete it4;
+  Iterator<edge> *it5 = graph->getInEdges(n1);
+  CPPUNIT_ASSERT_EQUAL(e1.id, it5->next().id);
+  CPPUNIT_ASSERT_EQUAL(e3.id, it5->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it5->hasNext());
+  delete it5;
+  Iterator<edge> *it6 = graph->getInOutEdges(n1);
+  CPPUNIT_ASSERT_EQUAL(e1.id, it6->next().id);
+  CPPUNIT_ASSERT_EQUAL(e1.id, it6->next().id);
+  CPPUNIT_ASSERT_EQUAL(e2.id, it6->next().id);
+  CPPUNIT_ASSERT_EQUAL(e3.id, it6->next().id);
+  CPPUNIT_ASSERT_EQUAL(e4.id, it6->next().id);
+  CPPUNIT_ASSERT_EQUAL(false, it6->hasNext());
+  delete it6;
+
+
+
+
 }
 //==========================================================
 void degreeCheck(SuperGraph *graph) {
@@ -70,7 +139,7 @@ void degreeCheck(SuperGraph *graph) {
 //==========================================================
 void SuperGraphTest::testDegree() {
   graph->clear();
-  build(1000, 100);
+  build(100, 100);
   degreeCheck(graph);
   SuperGraph *gr = tlp::newCloneSubGraph(graph);
   SuperGraph *gr1 = tlp::newCloneSubGraph(graph);
@@ -102,7 +171,7 @@ void SuperGraphTest::testAddDel() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   vector<node> nodes;
   vector<edge> edges;
-  unsigned int NB_ADD = 1000;
+  unsigned int NB_ADD = 100;
   unsigned int EDGE_RATIO = 100;
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
@@ -143,7 +212,7 @@ void SuperGraphTest::testAddDel() {
 }
 //==========================================================
 void SuperGraphTest::testClear() {
-  build(100, 1000);
+  build(100, 100);
   graph->clear();
   CPPUNIT_ASSERT(graph->numberOfNodes() == 0);
   CPPUNIT_ASSERT(graph->numberOfEdges() == 0);
@@ -306,6 +375,7 @@ void SuperGraphTest::testSubgraph() {
   testAddDel();
   testClear();
   testOrderEdgeAndSwap();
+  testIterators();
   graph = g2;
   graph->clear();
 }
@@ -438,13 +508,13 @@ CppUnit::Test * SuperGraphTest::suite() {
 								  &SuperGraphTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)", 
 								  &SuperGraphTest::testClear) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Iteration nodes/edges", 
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Graph Iterators (nodes,edges, in-(edges/nodes), out-(edges/nodes), inout-(edges/nodes))", 
 								  &SuperGraphTest::testIterators) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Edge ordering and swap(Simple Graph)", 
 								  &SuperGraphTest::testOrderEdgeAndSwap) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Outdeg, indeg, deg on graph and sub-graph", 
 								  &SuperGraphTest::testDegree) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean)", 
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean/iteration)", 
 								  &SuperGraphTest::testSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test Sub Graph delete", 
 								  &SuperGraphTest::testDeleteSubgraph) );
