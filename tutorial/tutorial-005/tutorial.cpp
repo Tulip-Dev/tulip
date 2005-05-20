@@ -55,6 +55,7 @@ int main() {
   while (it->hasNext()) {
     cout << it->next() << endl;
   } delete it;
+
   cout << "List of inherited properties present in the subgraph1:" << endl;
   it=subgraph1->getInheritedProperties();
   while (it->hasNext()) {
@@ -66,6 +67,7 @@ int main() {
   while (it->hasNext()) {
     cout << it->next() << endl;
   } delete it;
+
   cout << "List of inherited properties present in the subgraph2:" << endl;
   it=subgraph2->getInheritedProperties();
   while (it->hasNext()) {

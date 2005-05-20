@@ -7,7 +7,6 @@
  *
  * Create a graph
  * Order the edge around the nodes
- * Display the inherited and local properties in each graph
  */
 
 using namespace std;
@@ -22,7 +21,7 @@ void buildGraph(SuperGraph *graph) {
   graph->addEdge(n3,n1);
 }
 
-void displayAdjacency(node n,SuperGraph *graph) {
+void displayAdjacency(node n, SuperGraph *graph) {
   Iterator<edge>*ite=graph->getInOutEdges(n);
   while(ite->hasNext())
     cout << ite->next().id << " ";
