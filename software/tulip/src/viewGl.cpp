@@ -189,6 +189,7 @@ static const string viewed_properties[8]= {"viewLabel",
 					   "viewSize",
 					   "viewTexture",
 					   "viewLayout" };
+//**********************************************************************
 void viewGl::initObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
@@ -198,6 +199,7 @@ void viewGl::initObservers() {
     graph->getProperty(viewed_properties[i])->addObserver(this);
   }
 }
+//**********************************************************************
 void viewGl::clearObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (glWidget == 0) return;
@@ -215,7 +217,7 @@ viewGl::~viewGl() {
 }
 //**********************************************************************
 void viewGl::changeSuperGraph(SuperGraph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+  //  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
   clearObservers();
   clusterTreeWidget->setSuperGraph(graph);
   propertiesWidget->setSuperGraph(graph);
@@ -521,8 +523,7 @@ namespace {
       outSel->setNodeValue( inNodeA[n], true );
   }
 }
-
-
+//**********************************************************************
 void viewGl::editCut() {
   if( !glWidget ) return;
   SuperGraph * g = glWidget->getSuperGraph();
@@ -546,7 +547,7 @@ void viewGl::editCut() {
   tlp::removeFromGraph( g, selP );
   Observable::unholdObservers();
 }
-
+//**********************************************************************
 void viewGl::editCopy() {
   if( !glWidget ) return;
   SuperGraph * g = glWidget->getSuperGraph();
@@ -563,7 +564,7 @@ void viewGl::editCopy() {
   tlp::copyToGraph( copyCutPasteGraph, g, selP );
   Observable::unholdObservers();
 }
-
+//**********************************************************************
 void viewGl::editPaste() {
   if( !glWidget ) return;
   SuperGraph * g = glWidget->getSuperGraph();
@@ -574,9 +575,7 @@ void viewGl::editPaste() {
   tlp::copyToGraph( g, copyCutPasteGraph, 0, selP );
   Observable::unholdObservers();
 }
-
-
-
+//**********************************************************************
 void viewGl::editFind() {
   if(!glWidget) return;
   SuperGraph * g = glWidget->getSuperGraph();
@@ -588,7 +587,6 @@ void viewGl::editFind() {
   Observable::unholdObservers();
   delete sel;
 }
-
 //**********************************************************************
 void viewGl::setParameters(const DataSet data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -894,162 +892,163 @@ void viewGl::showDialog(int id){
     overviewDock->raise();
   }
 }
-  //======================================================================
-  //Fonction du Menu de vue
-  //======================================================================
-  ///Redraw the view of the graph
-  void  viewGl::redrawView() {
-    if (!glWidget) return;
-    glWidget->UpdateGL();
+//======================================================================
+//Fonction du Menu de vue
+//======================================================================
+///Redraw the view of the graph
+void  viewGl::redrawView() {
+  if (!glWidget) return;
+  glWidget->UpdateGL();
+}
+//**********************************************************************
+///Reccenter the layout of the graph
+void viewGl::centerView() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  glWidget->getGlGraph()->centerScene();
+  redrawView();
+  Observable::unholdObservers();
+}
+//**********************************************************************
+///Restore the view of the graph
+void viewGl::restoreView() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  glWidget->getGlGraph()->centerScene();
+  redrawView();
+  overviewWidget->setObservedView(glWidget->getGlGraph());
+  updateSatutBar();
+  Observable::unholdObservers();
+}
+//===========================================================
+//Menu Edit : functions
+//===========================================================
+///Deselect all entries in the glGraph current selection Proxy
+void viewGl::deselectALL() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  graph->getProperty<SelectionProxy>("viewSelection")->setAllNodeValue(false);
+  graph->getProperty<SelectionProxy>("viewSelection")->setAllEdgeValue(false);
+  Observable::unholdObservers();
+}
+//**********************************************************************
+void viewGl::delSelection() {
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  SelectionProxy *elementSelected=graph->getProperty<SelectionProxy>("viewSelection");
+  StableIterator<node> itN(graph->getNodes());
+  while(itN.hasNext()) {
+    node itv = itN.next();
+    if (elementSelected->getNodeValue(itv)==true)
+      graph->delNode(itv);
   }
-  //**********************************************************************
-  ///Reccenter the layout of the graph
-  void viewGl::centerView() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    glWidget->getGlGraph()->centerScene();
-    redrawView();
-    Observable::unholdObservers();
+  StableIterator<edge> itE(graph->getEdges());
+  while(itE.hasNext()) {
+    edge ite=itE.next();
+    if (elementSelected->getEdgeValue(ite)==true)   
+      graph->delEdge(ite);
   }
-  //**********************************************************************
-  ///Restore the view of the graph
-  void viewGl::restoreView() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    glWidget->getGlGraph()->centerScene();
-    redrawView();
-    overviewWidget->setObservedView(glWidget->getGlGraph());
-    updateSatutBar();
-    Observable::unholdObservers();
-  }
-  //===========================================================
-  //Menu Edit : functions
-  //===========================================================
-  ///Deselect all entries in the glGraph current selection Proxy
-  void viewGl::deselectALL() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    graph->getProperty<SelectionProxy>("viewSelection")->setAllNodeValue(false);
-    graph->getProperty<SelectionProxy>("viewSelection")->setAllEdgeValue(false);
-    Observable::unholdObservers();
-  }
-  void viewGl::delSelection() {
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    SelectionProxy *elementSelected=graph->getProperty<SelectionProxy>("viewSelection");
-    StableIterator<node> itN(graph->getNodes());
-    while(itN.hasNext()) {
-      node itv = itN.next();
-      if (elementSelected->getNodeValue(itv)==true)
-	graph->delNode(itv);
+  Observable::unholdObservers();
+}
+//==============================================================
+///Reverse all entries in the glGraph current selection Proxy
+void viewGl::reverseSelection() {
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  graph->getProperty<SelectionProxy>("viewSelection")->reverse();
+  Observable::unholdObservers();
+}
+//==============================================================
+void viewGl::newSubgraph() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  bool ok = FALSE;
+  string tmp;
+  bool verifGraph = true;
+  SelectionProxy *sel1 = graph->getProperty<SelectionProxy>("viewSelection");  
+  Observable::holdObservers();
+  Iterator<edge>*itE = graph->getEdges();
+  while (itE->hasNext()) {
+    edge ite= itE->next();
+    if (sel1->getEdgeValue(ite)) {
+      if (!sel1->getNodeValue(graph->source(ite))) {sel1->setNodeValue(graph->source(ite),true); verifGraph=false;}
+      if (!sel1->getNodeValue(graph->target(ite))) {sel1->setNodeValue(graph->target(ite),true); verifGraph=false;}
     }
-    StableIterator<edge> itE(graph->getEdges());
-    while(itE.hasNext()) {
-      edge ite=itE.next();
-      if (elementSelected->getEdgeValue(ite)==true)   
-	graph->delEdge(ite);
-    }
-    Observable::unholdObservers();
-  }
-  //==============================================================
-  ///Reverse all entries in the glGraph current selection Proxy
-  void viewGl::reverseSelection() {
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    graph->getProperty<SelectionProxy>("viewSelection")->reverse();
-    Observable::unholdObservers();
-  }
-  //==============================================================
-  void viewGl::newSubgraph() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    bool ok = FALSE;
-    string tmp;
-    bool verifGraph = true;
-    SelectionProxy *sel1 = graph->getProperty<SelectionProxy>("viewSelection");  
-    Observable::holdObservers();
-    Iterator<edge>*itE = graph->getEdges();
-    while (itE->hasNext()) {
-      edge ite= itE->next();
-      if (sel1->getEdgeValue(ite)) {
-	if (!sel1->getNodeValue(graph->source(ite))) {sel1->setNodeValue(graph->source(ite),true); verifGraph=false;}
-	if (!sel1->getNodeValue(graph->target(ite))) {sel1->setNodeValue(graph->target(ite),true); verifGraph=false;}
-      }
-    } delete itE;
-    Observable::unholdObservers();
+  } delete itE;
+  Observable::unholdObservers();
   
-    if(!verifGraph) 
-      QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
-    QString text = QInputDialog::getText( "View building" ,  "Please enter view name" , QLineEdit::Normal,QString::null, &ok, this );
-    if (ok && !text.isEmpty()) {
-      sel1 = graph->getProperty<SelectionProxy>("viewSelection");
-      SuperGraph *tmp = graph->addSubGraph(sel1);
-      tmp->setAttribute("name",string(text.latin1()));
-      clusterTreeWidget->update();
-    }
-    else if (ok) {
-      sel1 = graph->getProperty<SelectionProxy>("viewSelection");
-      SuperGraph *tmp=graph->addSubGraph(sel1);
-      tmp->setAttribute("name",string("unnamed"));
-      clusterTreeWidget->update();
-    }
+  if(!verifGraph) 
+    QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
+  QString text = QInputDialog::getText( "View building" ,  "Please enter view name" , QLineEdit::Normal,QString::null, &ok, this );
+  if (ok && !text.isEmpty()) {
+    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
+    SuperGraph *tmp = graph->addSubGraph(sel1);
+    tmp->setAttribute("name",string(text.latin1()));
+    clusterTreeWidget->update();
   }
-  //==============================================================
-  void viewGl::reverseSelectedEdgeDirection() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
-    Observable::holdObservers();
-    graph->getProperty<SelectionProxy>("viewSelection")->reverseEdgeDirection();  
-    Observable::unholdObservers();
+  else if (ok) {
+    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
+    SuperGraph *tmp=graph->addSubGraph(sel1);
+    tmp->setAttribute("name",string("unnamed"));
+    clusterTreeWidget->update();
   }
-  //==============================================================
-  void viewGl::superGraphAboutToBeRemoved(SuperGraph *sg) {
-    cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
-    glWidget->setSuperGraph(0);
-  }
-  //==============================================================
-  void viewGl::helpAbout() {
-    if (aboutWidget==0)
-      aboutWidget = new InfoDialog(this);
-    aboutWidget->show();
-  }
-  //==============================================================
-  void viewGl::fileExit(){
-    closeWin();
-  }
-  //==============================================================
-  void viewGl::filePrint() {
-    if (!glWidget) return;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    if (graph==0) return;
+}
+//==============================================================
+void viewGl::reverseSelectedEdgeDirection() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  graph->getProperty<SelectionProxy>("viewSelection")->reverseEdgeDirection();  
+  Observable::unholdObservers();
+}
+//==============================================================
+void viewGl::superGraphAboutToBeRemoved(SuperGraph *sg) {
+  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
+  glWidget->setSuperGraph(0);
+}
+//==============================================================
+void viewGl::helpAbout() {
+  if (aboutWidget==0)
+    aboutWidget = new InfoDialog(this);
+  aboutWidget->show();
+}
+//==============================================================
+void viewGl::fileExit() {
+  closeWin();
+}
+//==============================================================
+void viewGl::filePrint() {
+  if (!glWidget) return;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  if (graph==0) return;
   
-    QPrinter printer;
-    if (!printer.setup(this)) 
-      return;
-    int width,height;
-    unsigned char* image = glWidget->getGlGraph()->getImage(width,height);
-    QPainter painter(&printer);
-    for (int y=0; y<height; y++)
-      for (int x=0; x<width; x++) {
-	painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-			      image[(height-y-1)*width*3+(x)*3+1],
-			      image[(height-y-1)*width*3+(x)*3+2]));
-	painter.drawPoint(x,y);
-      }
-    painter.end();
-    delete image;
-  }
-  //==============================================================
+  QPrinter printer;
+  if (!printer.setup(this)) 
+    return;
+  int width,height;
+  unsigned char* image = glWidget->getGlGraph()->getImage(width,height);
+  QPainter painter(&printer);
+  for (int y=0; y<height; y++)
+    for (int x=0; x<width; x++) {
+      painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
+			    image[(height-y-1)*width*3+(x)*3+1],
+			    image[(height-y-1)*width*3+(x)*3+2]));
+      painter.drawPoint(x,y);
+    }
+  painter.end();
+  delete image;
+}
+//==============================================================
 void viewGl::navigateWidgetClosed(NavigateGlGraph *navigate) {
   GlGraphWidget *w = navigate->getGlGraphWidget();
   SuperGraph *root = w->getSuperGraph()->getRoot();
@@ -1092,207 +1091,193 @@ void viewGl::navigateWidgetClosed(NavigateGlGraph *navigate) {
   
   if(windows.count() == 1)
     enableElements(false);
+} 
+//**********************************************************************
+///Make a new clustering of the view graph
+void viewGl::makeClustering(int id) {
+  clearObservers();
+  if (glWidget==0) return;
+  Observable::holdObservers();
+  string name(clusteringMenu->text(id).ascii());
+  string erreurMsg;
+  DataSet dataSet;
+  SuperGraph *graph=glWidget->getSuperGraph();
+  StructDef parameter = tlp::clusteringFactory.getParam(name);
+  parameter.buildDefaultDataSet( dataSet, graph );
+  tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
+  MyProgress myProgress(this,name);
+  myProgress.hide();
+  if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
+    QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+  }
+  clusterTreeWidget->update();
+  clusterTreeWidget->setSuperGraph(graph);
+  Observable::unholdObservers();
+  initObservers();
 }
-
-  //==============================================================
- 
-  //**********************************************************************
-  ///Make a new clustering of the view graph
-  void viewGl::makeClustering(int id) {
-    clearObservers();
-    if (glWidget==0) return;
-    Observable::holdObservers();
-    string name(clusteringMenu->text(id).ascii());
-    string erreurMsg;
-    DataSet dataSet;
-    SuperGraph *graph=glWidget->getSuperGraph();
-    StructDef parameter = tlp::clusteringFactory.getParam(name);
-    parameter.buildDefaultDataSet( dataSet, graph );
-    tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
-    MyProgress myProgress(this,name);
-    myProgress.hide();
-
-    if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
-    }
-    cerr << "Start => Update cluster Tree" << endl;
-    clusterTreeWidget->update();
-    cerr << "End => Update cluster Tree" << endl;
-    clusterTreeWidget->setSuperGraph(graph);
-    Observable::unholdObservers();
-    initObservers();
+//**********************************************************************
+//Management of properties
+//**********************************************************************
+template<typename PROPERTY>
+bool viewGl::changeProperty(string name, string destination, bool query, bool redraw) {
+  if( !glWidget ) return false;
+  SuperGraph *graph = clusterTreeWidget->getSuperGraph();
+  if(graph == 0) return false;
+  Observable::holdObservers();
+  overviewWidget->setObservedView(0);    
+  MyProgress myProgress(this, name, redraw ? glWidget : 0);
+  string erreurMsg;
+  bool   resultBool=true;  
+  DataSet *dataSet =0;
+  if (query) {
+    dataSet = new DataSet();
+    StructDef parameter = PROPERTY::factory.getParam(name);
+    parameter.buildDefaultDataSet( *dataSet, graph );
+    resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
   }
-  
-  //**********************************************************************
-  //Management of properties
-  //**********************************************************************
-  template<typename PROPERTY>
-    bool viewGl::changeProperty(string name, string destination, bool query, bool redraw) {
-   if( !glWidget ) return false;
-    SuperGraph *graph = clusterTreeWidget->getSuperGraph();
-    if(graph == 0) return false;
+  if (resultBool) {
+    PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
+    resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
+    if (!resultBool) {
+      QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
+    }
+    else 
+      switch(myProgress.state()){
+      case TLP_CONTINUE:
+      case TLP_STOP:
+	*graph->template getLocalProperty<PROPERTY>(destination) = *dest;
+	break;
+      case TLP_CANCEL:
+	resultBool=false;
+      };
+  }
+  Observable::unholdObservers();
+  if (dataSet!=0) delete dataSet;
+  graph->delLocalProperty(name);
+  propertiesWidget->setSuperGraph(graph);
+  overviewWidget->setObservedView(glWidget->getGlGraph());
+  return resultBool;
+}
+//**********************************************************************
+void viewGl::changeString(int id) {
+  clearObservers();
+  string name(stringMenu.text(id).ascii());
+  changeProperty<StringProxy>(name,"viewLabel");
+  initObservers();
+}
+//**********************************************************************
+void viewGl::changeSelection(int id) {
+  clearObservers();
+  string name(selectMenu.text(id).ascii());
+  changeProperty<SelectionProxy>(name,"viewSelection");
+  initObservers();
+}
+//**********************************************************************
+void viewGl::changeMetric(int id) {
+  clearObservers();
+  string name(metricMenu.text(id).ascii());
+  bool result = changeProperty<MetricProxy>(name,"viewMetric");
+  if (result && map_metric->isOn()) {
+    changeProperty<ColorsProxy>("Metric Mapping","viewColor", false);
+  }
+  initObservers();
+}
+//**********************************************************************
+void viewGl::changeLayout(int id) {
+  clearObservers();
+  string name(layoutMenu.text(id).ascii());
+  GraphState * g0 = 0;
+  if( enable_morphing->isOn() ) 
+    g0 = new GraphState(glWidget);
+  Camera cam = glWidget->getGlGraph()->getCamera();
+  Coord scTrans = glWidget->getGlGraph()->getSceneTranslation();
+  Coord scRot = glWidget->getGlGraph()->getSceneRotation();
+  glWidget->getGlGraph()->setInputLayout(name);
+  bool result = changeProperty<LayoutProxy>(name,"viewLayout", true, true);
+  glWidget->getGlGraph()->setInputLayout("viewLayout");
+  glWidget->getGlGraph()->setCamera(cam);
+  glWidget->getGlGraph()->setSceneTranslation(scTrans);
+  glWidget->getGlGraph()->setSceneRotation(scRot);
+  if (result) {
+    if( force_ratio->isOn() )
+      glWidget->getSuperGraph()->getLocalProperty<LayoutProxy>("viewLayout")->perfectAspectRatio();
+    //SuperGraph *graph=glWidget->getSuperGraph();
     Observable::holdObservers();
-    overviewWidget->setObservedView(0);    
-    MyProgress myProgress(this, name, redraw ? glWidget : 0);
-    string erreurMsg;
-    bool   resultBool=true;  
-    DataSet *dataSet =0;
-    if (query) {
-      dataSet = new DataSet();
-      StructDef parameter = PROPERTY::factory.getParam(name);
-      parameter.buildDefaultDataSet( *dataSet, graph );
-      resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
-    }
-    if (resultBool) {
-      PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
-      resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
-      if (!resultBool) {
-	QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
-      }
-      else 
-	switch(myProgress.state()){
-	case TLP_CONTINUE:
-	case TLP_STOP:
-	  *graph->template getLocalProperty<PROPERTY>(destination) = *dest;
-	  break;
-	case TLP_CANCEL:
-	  resultBool=false;
-	};
-    }
-    Observable::unholdObservers();
-    if (dataSet!=0) delete dataSet;
-    graph->delLocalProperty(name);
-    propertiesWidget->setSuperGraph(graph);
+    glWidget->getGlGraph()->centerScene();
     overviewWidget->setObservedView(glWidget->getGlGraph());
-    return resultBool;
-  }
-  //**********************************************************************
-  void viewGl::changeString(int id) {
-    clearObservers();
-    string name(stringMenu.text(id).ascii());
-    changeProperty<StringProxy>(name,"viewLabel");
-    initObservers();
-  }
-  //**********************************************************************
-  void viewGl::changeSelection(int id) {
-    clearObservers();
-    string name(selectMenu.text(id).ascii());
-    changeProperty<SelectionProxy>(name,"viewSelection");
-    initObservers();
-  }
-  //**********************************************************************
-  void viewGl::changeMetric(int id) {
-    clearObservers();
-    string name(metricMenu.text(id).ascii());
-    bool result = changeProperty<MetricProxy>(name,"viewMetric");
-    if (result && map_metric->isOn()) {
-      changeProperty<ColorsProxy>("Metric Mapping","viewColor", false);
-    }
-    initObservers();
-  }
-  //**********************************************************************
-  void viewGl::changeLayout(int id) {
-    clearObservers();
-    string name(layoutMenu.text(id).ascii());
-    GraphState * g0 = 0;
-    if( enable_morphing->isOn() ) 
-      g0 = new GraphState(glWidget);
-    Camera cam = glWidget->getGlGraph()->getCamera();
-    Coord scTrans = glWidget->getGlGraph()->getSceneTranslation();
-    Coord scRot = glWidget->getGlGraph()->getSceneRotation();
-    glWidget->getGlGraph()->setInputLayout(name);
-    bool result = changeProperty<LayoutProxy>(name,"viewLayout", true, true);
-    glWidget->getGlGraph()->setInputLayout("viewLayout");
-    glWidget->getGlGraph()->setCamera(cam);
-    glWidget->getGlGraph()->setSceneTranslation(scTrans);
-    glWidget->getGlGraph()->setSceneRotation(scRot);
-    if (result) {
-      if( force_ratio->isOn() )
-	glWidget->getSuperGraph()->getLocalProperty<LayoutProxy>("viewLayout")->perfectAspectRatio();
-      //SuperGraph *graph=glWidget->getSuperGraph();
-      Observable::holdObservers();
-      glWidget->getGlGraph()->centerScene();
-      overviewWidget->setObservedView(glWidget->getGlGraph());
-      updateSatutBar();
-      Observable::unholdObservers();
-      if( enable_morphing->isOn() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->start( glWidget, g0, g1);
-	if( !morphable ) {
-	  delete g1;
-	  g1 = 0;
-	} else {
+    updateSatutBar();
+    Observable::unholdObservers();
+    if( enable_morphing->isOn() ) {
+      GraphState * g1 = new GraphState( glWidget );
+      bool morphable = morph->start( glWidget, g0, g1);
+      if( !morphable ) {
+	delete g1;
+	g1 = 0;
+      } else {
 	g0 = 0;	// state remains in morph data ...
-	}
+      }
+    }
+  }
+  redrawView();
+  if( g0 )
+    delete g0;
+  initObservers();
+}
+  //**********************************************************************
+void viewGl::changeInt(int id) {
+  clearObservers();
+  string name(intMenu.text(id).ascii());
+  changeProperty<IntProxy>(name,"viewInt");
+  initObservers();
+}
+  //**********************************************************************
+void viewGl::changeColors(int id) {
+  clearObservers();
+  GraphState * g0 = 0;
+  if( enable_morphing->isOn() )
+    g0 = new GraphState( glWidget );
+  string name(colorsMenu.text(id).ascii());
+  bool result = changeProperty<ColorsProxy>(name,"viewColor");
+  if( result ) {
+    if( enable_morphing->isOn() ) {
+      GraphState * g1 = new GraphState( glWidget );
+      bool morphable = morph->start( glWidget, g0, g1);
+      if( !morphable ) {
+	delete g1;
+	g1 = 0;
+      } else {
+	g0 = 0;	// state remains in morph data ...
       }
     }
     redrawView();
-    if( g0 )
-      delete g0;
-    initObservers();
   }
-  //**********************************************************************
-  void viewGl::changeInt(int id) {
-    clearObservers();
-    string name(intMenu.text(id).ascii());
-    changeProperty<IntProxy>(name,"viewInt");
-    initObservers();
-  }
-  //**********************************************************************
-  void viewGl::changeColors(int id) {
-    clearObservers();
-
-    GraphState * g0 = 0;
-    if( enable_morphing->isOn() )
-      g0 = new GraphState( glWidget );
-
-    string name(colorsMenu.text(id).ascii());
-    bool result = changeProperty<ColorsProxy>(name,"viewColor");
-    if( result ) {
-      if( enable_morphing->isOn() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->start( glWidget, g0, g1);
-	if( !morphable ) {
-	  delete g1;
-	  g1 = 0;
-	} else {
-	  g0 = 0;	// state remains in morph data ...
-	}
+  if( g0 )
+    delete g0;
+  initObservers();
+}
+//**********************************************************************
+void viewGl::changeSizes(int id) {
+  clearObservers();
+  GraphState * g0 = 0;
+  if( enable_morphing->isOn() )
+    g0 = new GraphState( glWidget );
+  string name(sizesMenu.text(id).ascii());
+  bool result = changeProperty<SizesProxy>(name,"viewSize");
+  if( result ) {
+    if( enable_morphing->isOn() ) {
+      GraphState * g1 = new GraphState( glWidget );
+      bool morphable = morph->start( glWidget, g0, g1);
+      if( !morphable ) {
+	delete g1;
+	g1 = 0;
+      } else {
+	g0 = 0;	// state remains in morph data ...
       }
-      redrawView();
     }
-
-    if( g0 )
-      delete g0;
-
-    initObservers();
+    redrawView();
   }
-  //**********************************************************************
-  void viewGl::changeSizes(int id) {
-    clearObservers();
-
-    GraphState * g0 = 0;
-    if( enable_morphing->isOn() )
-      g0 = new GraphState( glWidget );
-
-    string name(sizesMenu.text(id).ascii());
-    bool result = changeProperty<SizesProxy>(name,"viewSize");
-    if( result ) {
-      if( enable_morphing->isOn() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->start( glWidget, g0, g1);
-	if( !morphable ) {
-	  delete g1;
-	  g1 = 0;
-	} else {
-	  g0 = 0;	// state remains in morph data ...
-	}
-      }
-      redrawView();
-    }
-
-    if( g0 )
-      delete g0;
-
-    initObservers();
-  }
+  if( g0 )
+    delete g0;
+  initObservers();
+}
+//**********************************************************************
