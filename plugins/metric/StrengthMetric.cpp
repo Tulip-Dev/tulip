@@ -8,7 +8,7 @@ using namespace stdext;
 StrengthMetric::StrengthMetric(const PropertyContext &context):Metric(context) {}
 
 StrengthMetric::~StrengthMetric() {}
-
+//=============================================================
 double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
   hash_set<node>::const_iterator itU;
   double result=0;
@@ -28,7 +28,7 @@ double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
   }
   return result;
 }
-
+//=============================================================
 double StrengthMetric::e(const hash_set<node> &U) {
   hash_set<node>::const_iterator itU;
   double result=0.0;
@@ -41,20 +41,20 @@ double StrengthMetric::e(const hash_set<node> &U) {
   }
   return result/2.0;
 }
-
+//=============================================================
 double StrengthMetric::s(hash_set<node> &U, hash_set<node> &V) {
   if ((U.size()==0) || (V.size()==0)) return 0;
   return (e(U,V) / double(U.size()*V.size()));
 }
-
+//=============================================================
 double StrengthMetric::s(const hash_set<node> &U) {
   if (U.size()<2) return 0.0;
   return  (e(U)) * 2.0 / double(U.size()*(U.size()-1));
 }
-
-double StrengthMetric::getEdgeValue(const edge e ) {
-  node u=superGraph->source(e);
-  node v=superGraph->target(e);
+//=============================================================
+double StrengthMetric::getEdgeValue(const edge ee ) {
+  node u=superGraph->source(ee);
+  node v=superGraph->target(ee);
   hash_set<node> Nu,Nv,Wuv;
 
   //Compute Nu
@@ -64,6 +64,7 @@ double StrengthMetric::getEdgeValue(const edge e ) {
     if (n!=v) Nu.insert(n);
   }delete itN;
   if (Nu.size()==0) return 0;
+
   //Compute Nv
   itN=superGraph->getInOutNodes(v);
   while (itN->hasNext()) {
@@ -71,7 +72,6 @@ double StrengthMetric::getEdgeValue(const edge e ) {
     if (n!=u) Nv.insert(n);
   }delete itN;
   if (Nv.size()==0) return 0;
-
 
   //Compute Wuv, choose the minimum set to minimize operation
   hash_set<node> *A, *B;
@@ -97,16 +97,33 @@ double StrengthMetric::getEdgeValue(const edge e ) {
   }
 
   //compute strength metric
-  double gamma4,gamma3;
+  double norm3, norm4;
+  double gamma3, gamma4;
+
+  norm3  = double((Wuv.size()+Mv.size()+Mu.size()));
+  gamma3 = double(Wuv.size());
+
+
+  norm4  = (double(Mu.size() * Wuv.size() + 
+		  Mv.size() * Wuv.size() + 
+		  Mu.size() * Mv.size() ) + 
+	   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
+  gamma4 = (e(Mu,Wuv) +  e(Mv,Wuv) +  e(Mu,Mv) +  e(Wuv));
+
+  double norm = norm4 + norm3;
+  if (norm > 0.00001)
+    return (gamma3 + gamma4) / norm;
+  else
+    return 0;
+  /* old version
   if ( (Mu.size() == 0) && (Mv.size()==0) && Wuv.size()==0) 
     gamma3=0;
   else
     gamma3=double(Wuv.size())/double((Wuv.size()+Mv.size()+Mu.size()));
   gamma4=s(Mu,Wuv)+s(Mv,Wuv)+s(Mu,Mv)+s(Wuv);
-  
-  return gamma3+gamma4;
+  */
 }
-
+//=============================================================
 double StrengthMetric::getNodeValue(const node n ) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (superGraph->deg(n)==0) return 0;
@@ -118,7 +135,8 @@ double StrengthMetric::getNodeValue(const node n ) {
   } delete itE;
   return result/double(superGraph->deg(n));
 }
-
+//=============================================================
 bool StrengthMetric::run() {
   return true;
 }
+//=============================================================
