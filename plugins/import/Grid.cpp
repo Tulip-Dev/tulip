@@ -30,10 +30,13 @@ struct Grid:public ImportModule {
   }
   ~Grid(){}
 
-  void buildRow(vector<node> &row){
+  void buildRow(vector<node> &row, double height){
+    LayoutProxy *layout = superGraph->getProperty<LayoutProxy>("viewLayout");
     int width=row.size();
-    for (int i=0;i<width;++i)
+    for (int i=0;i<width;++i) {
       row[i]=superGraph->addNode();
+      layout->setNodeValue(row[i], Coord(i*2.0, height*2.0, 0));
+    }
     for (int i=0;i<width-1;++i)
       superGraph->addEdge(row[i],row[i+1]);
   }
@@ -46,6 +49,7 @@ struct Grid:public ImportModule {
   }
 
   bool import(const string &name) {
+    superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
     bool ok=true;
     int width = 10;
     int height = 10;
@@ -56,11 +60,11 @@ struct Grid:public ImportModule {
     vector<node> row[2];
     row[0].resize(width);
     row[1].resize(width);
-    buildRow(row[0]);
+    buildRow(row[0], height);
     int curRow=0;
     while(height>1) {
       int newRow=(curRow+1)%2;
-      buildRow(row[newRow]);
+      buildRow(row[newRow], height - 1);
       connectRow(row[curRow],row[newRow]);
       curRow=newRow;
       --height;
