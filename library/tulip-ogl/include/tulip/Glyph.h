@@ -11,7 +11,7 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include "GlGraph.h"
+#include <tulip/GlGraph.h>
 
 class SuperGraph;
 struct node;
@@ -30,8 +30,8 @@ public:
   ~GlyphContext(){};
 };
 
-class TLP_GL_SCOPE Glyph : public WithParameter
-{
+
+class TLP_GL_SCOPE Glyph : public WithParameter {
 protected:
   SuperGraph **superGraph;
   GlGraph *glGraph;
@@ -52,7 +52,7 @@ public:
    * by default, the point will be on the surface of the largest sphere contained
    * inside the unit cube (before scaling).
    */
-  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale) const;
+  virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const;
 
   void setLOF(int);
   int getLOF();

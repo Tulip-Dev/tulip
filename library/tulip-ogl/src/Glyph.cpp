@@ -3,8 +3,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 
-Glyph::Glyph(GlyphContext *gc)
-{
+Glyph::Glyph(GlyphContext *gc) {
   if (gc!=NULL) {
     superGraph=gc->superGraph;
     glGraph=gc->glGraph;
@@ -18,8 +17,7 @@ Glyph::Glyph(GlyphContext *gc)
   }
 }
 
-Glyph::~Glyph()
-{
+Glyph::~Glyph() {
 }
 
 void Glyph::setLOF(int n) {
@@ -32,7 +30,9 @@ void Glyph::setLOD(int n) {
   LOD = ((n<0) ? 0 : ((n > 10) ? 10 : n));
 }
 
-int Glyph::getLOD() {return LOD;}
+int Glyph::getLOD() {
+  return LOD;
+}
 
 void Glyph::setMaterial(const Color &C) {
   float color[4] = { 0.0, 0.0, 0.0, 1.0 };
@@ -42,27 +42,41 @@ void Glyph::setMaterial(const Color &C) {
   glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, color);
 }
 
-Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale) const
-{
-   Coord anchor = from - nodeCenter;
-   if( anchor.getX() == 0.0f && anchor.getY() == 0.0f && anchor.getZ() == 0.0f )
-		return nodeCenter;
-   if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
-		return nodeCenter;
+Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const {
+  Coord anchor = from - nodeCenter;
+  if( anchor.getX() == 0.0f && anchor.getY() == 0.0f && anchor.getZ() == 0.0f )
+    return nodeCenter;
+  if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
+    return nodeCenter;
 
-   // unscale
-   anchor.setX( anchor.getX() / scale.getW() );
-   anchor.setY( anchor.getY() / scale.getH() );
-   anchor.setZ( anchor.getZ() / scale.getD() );
 
-   anchor = getAnchor( anchor );
+  //unrotate
+  Coord saveAnchor(anchor);
+  double zRot =  - 2.0*M_PI * zRotation / 360.0;
+  anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
+  anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
 
-   // rescale
-   anchor.setX( anchor.getX() * scale.getW() );
-   anchor.setY( anchor.getY() * scale.getH() );
-   anchor.setZ( anchor.getZ() * scale.getD() );
+  // unscale
+  anchor.setX( anchor.getX() / scale.getW() );
+  anchor.setY( anchor.getY() / scale.getH() );
+  anchor.setZ( anchor.getZ() / scale.getD() );
+  
+  anchor = getAnchor( anchor );
+  
 
-   return nodeCenter + anchor;
+
+  // rescale
+  anchor.setX( anchor.getX() * scale.getW() );
+  anchor.setY( anchor.getY() * scale.getH() );
+  anchor.setZ( anchor.getZ() * scale.getD() );
+
+  //rerotate
+  saveAnchor = anchor;
+  zRot = -zRot;
+  anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
+  anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
+
+  return nodeCenter + anchor;
 }
 
 Coord Glyph::getAnchor(const Coord &vector) const
