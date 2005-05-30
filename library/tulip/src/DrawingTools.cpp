@@ -2,41 +2,66 @@
 #include "tulip/SuperGraph.h"
 #include "tulip/LayoutProxy.h"
 #include "tulip/SizesProxy.h"
+#include "tulip/MetricProxy.h"
+#include <climits>
 
 using namespace std;
+namespace {
+  Coord maxCoord(const Coord &a, const Coord &b) {
+    return Coord(std::max(a[0], b[0]),
+		 std::max(a[1], b[1]),
+		 std::max(a[2], b[2]));
+  }
 
+  Coord minCoord(const Coord &a, const Coord &b) {
+    return Coord(std::min(a[0], b[0]),
+		 std::min(a[1], b[1]),
+		 std::min(a[2], b[2]));
+  }
 
-pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size) {
+  void rotate(Coord &vec, double alpha) {
+    Coord backupVec(vec);
+    double zRot =  - 2.0*M_PI * alpha / 360.0;
+    float cosz = cos(zRot);
+    float sinz = sin(zRot);
+    vec[0] = backupVec[0]*cosz - backupVec[1]*sinz;
+    vec[1] = backupVec[0]*sinz + backupVec[1]*cosz;
+  }
+
+  Coord computePoint(pair<Coord, Coord> &boundingbox, const Coord &point, const Size & size, const double & rot) {
+    //rotate size
+    vector<Coord> points(4);
+    points[0].set(size[0], size[1], size[2]);
+    points[1].set(-size[0], -size[1], -size[2]);
+    points[2].set(+size[0], -size[1], -size[2]);
+    points[3].set(-size[0], +size[1], size[2]);
+    for (unsigned int i=0; i<4; ++i) {
+      rotate(points[i], rot);
+      points[i] += point;
+      boundingbox.first = maxCoord(boundingbox.first, points[i]);
+      boundingbox.second =minCoord(boundingbox.second, points[i]);
+    }
+  }
+}
+pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation) {
   Coord curCoord;
   Size  curSize;
-  double maxX=0;
-  double minX=0;
-  double maxY=0;
-  double minY=0;
-  double maxZ=0;
-  double minZ=0;
-  Iterator<node> *itN=graph->getNodes();
-  if  (itN->hasNext()) {
-    node itn=itN->next();
-    curCoord = layout->getNodeValue(itn);
-    curSize  = size->getNodeValue(itn) / 2.0;
-    maxX = curCoord[0] + curSize[0];
-    minX = curCoord[0] - curSize[0];
-    maxY = curCoord[1] + curSize[1];
-    minY = curCoord[1] - curSize[1];
-    maxZ = curCoord[2] + curSize[2];
-    minZ = curCoord[2] - curSize[2];
+  double curRot;
+  pair<Coord, Coord> result;
+  if (graph->numberOfNodes()==0) {
+    result.first.set(0, 0, 0);
+    result.second.set(0, 0, 0);
+    return result;
   }
+  result.first.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+  result.second.set(FLT_MAX, FLT_MAX, FLT_MAX);
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     curCoord = layout->getNodeValue(itn);
     curSize  = size->getNodeValue(itn) / 2.0;
-    maxX >?= curCoord[0] + curSize[0];
-    minX <?= curCoord[0] - curSize[0];
-    maxY >?= curCoord[1] + curSize[1];
-    minY <?= curCoord[1] - curSize[1];
-    maxZ >?= curCoord[2] + curSize[2];
-    minZ <?= curCoord[2] - curSize[2];
+    curRot = rotation->getNodeValue(itn);
+    computePoint(result, curCoord, curSize, curRot);
   } delete itN;
   Iterator<edge> *itE=graph->getEdges();
   while (itE->hasNext()) {
@@ -44,16 +69,9 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layou
     LineType::RealType::const_iterator itCoord;
     const LineType::RealType &bends = layout->getEdgeValue(ite);
     for (itCoord = bends.begin(); itCoord!=bends.end();++itCoord) {
-      curCoord = *itCoord;
-      maxX >?= curCoord[0];
-      minX <?= curCoord[0];
-      maxY >?= curCoord[1];
-      minY <?= curCoord[1];
-      maxZ >?= curCoord[2];
-      minZ <?= curCoord[2];
+      result.first = maxCoord(result.first, *itCoord);
+      result.second = minCoord(result.second, *itCoord);
     }
   } delete itE;
-  Coord maxi(maxX, maxY, maxZ);
-  Coord mini(minX, minY, minZ);
-  return pair<Coord, Coord>(maxi, mini);
+  return result;
 }
