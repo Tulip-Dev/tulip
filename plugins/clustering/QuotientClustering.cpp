@@ -91,7 +91,8 @@ bool QuotientClustering::run() {
     SuperGraph * graph = meta->getNodeValue(n);
     LayoutProxy * graphlayout = graph->getProperty<LayoutProxy>("viewLayout");
     SizesProxy * graphsize = graph->getProperty<SizesProxy>("viewSize");
-    pair<Coord, Coord> bboxe = tlp::computeBoundingBox(graph, graphlayout, graphsize);
+    MetricProxy * graphrot = graph->getProperty<MetricProxy>("viewRotation");
+    pair<Coord, Coord> bboxe = tlp::computeBoundingBox(graph, graphlayout, graphsize, graphrot);
     Coord max = bboxe.first;
     Coord min = bboxe.second;
     Coord center = (max + min) / 2.0;
