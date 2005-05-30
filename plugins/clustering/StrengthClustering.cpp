@@ -5,6 +5,7 @@
 #include <list>
 #include <map>
 #include <iostream>
+#include <ext/hash_map>
 #include <tulip/SuperGraph.h>
 #include <tulip/SelectionProxy.h>
 #include <tulip/MetaGraphProxy.h>
@@ -16,62 +17,78 @@
 CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
 
 using namespace std;
+using namespace stdext;
 
 //================================================================================
 StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {}
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
-//================================================================================
-double StrengthClustering::e(set<node> &U,set<node> &V) {
-  set<node>::const_iterator itU;
-  double result=0;
-  for (itU=U.begin();itU!=U.end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
-    for (;itN->hasNext();) {
-      node itn=itN->next();
-      if (V.find(itn)!=V.end()) result+=1;
-    }delete itN;
-  }
-  return result;
-}
 //==============================================================================
-double StrengthClustering::e(set<node> &U) {
-  set<node>::const_iterator itU;
-  double result=0;
-  for (itU=U.begin();itU!=U.end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
-    for (;itN->hasNext();) {
-      node itn=itN->next();
-      if (U.find(itn)!=U.end()) result+=1;
-    }delete itN;
-  }
-  return result/2.0;
-}
-//==============================================================================
-double StrengthClustering::s(set<node> &U,set<node> &V) {
-  if ((U.size()==0) || (V.size()==0)) return 0;
-  return (e(U,V) / double(U.size()*V.size()));
-}
-//==============================================================================
-double StrengthClustering::s(set<node> &U) {
-  if (U.size()<2) return 0;
-  return  (e(U)) * 2.0 / double(U.size()*(U.size()-1.0));
-}
-//==============================================================================
-double StrengthClustering::computeMQValue(vector<set<node> > partition) {
-  double positive=0;
-  for (unsigned int i=0;i<partition.size();++i) {
-    positive+=s(partition[i]);
-  }
-  positive/=double(partition.size());
-  double negative=0;
-  for (unsigned int i=0;i<partition.size()-1;++i)
-    for (unsigned int j=i+1;j<partition.size();++j) {
-      negative+=s(partition[i],partition[j]);
+double StrengthClustering::computeMQValue(const vector<set<node> > & partition, SuperGraph *graph) {
+
+  vector<unsigned int> nbIntraEdges(partition.size());
+  for (unsigned int i = 0; i<partition.size(); ++i)
+    nbIntraEdges[i] = 0;
+
+  map<pair<unsigned int, unsigned int>, unsigned int > nbExtraEdges;
+
+  MutableContainer<unsigned int> clusterId;  
+  vector< set<node> >::const_iterator itPart = partition.begin();
+  for (unsigned int i=0; itPart!=partition.end(); ++itPart, ++i) {
+    set<node>::const_iterator itSet = itPart->begin();
+    for (; itSet!=itPart->end(); ++itSet) {
+      clusterId.set(itSet->id, i);
     }
+  }
+  
+  Iterator<edge> *itE = graph->getEdges();
+  while(itE->hasNext()) {
+    edge e = itE->next();
+    node n1; 
+    node n2;
+    if (graph->source(e).id < graph->target(e).id) {
+      n1 = graph->source(e);
+      n2 = graph->target(e);
+    }
+    else {
+      n1 = graph->target(e);
+      n2 = graph->source(e);
+    }
+
+    unsigned int n1ClustId = clusterId.get(n1.id);
+    unsigned int n2ClustId = clusterId.get(n2.id);
+    if ( n1ClustId == n2ClustId)
+      nbIntraEdges[n1ClustId] += 1;
+    else {
+      pair<unsigned int, unsigned int> pp(n1ClustId, n2ClustId);
+      if (nbExtraEdges.find(pp) != nbExtraEdges.end()) {
+	nbExtraEdges[pp] += 1;
+      }
+      else {
+	nbExtraEdges[pp] = 1;
+      }
+    }
+  } delete itE;
+  
+  double positive = 0;
+  for (unsigned int i=0; i<partition.size(); ++i) {
+    if (partition[i].size() > 1)
+      positive += 2.0 * double(nbIntraEdges[i]) / double(partition[i].size() * (partition[i].size() - 1));
+  }
+  positive /= double(partition.size());
+  
+  double negative=0;
+  map<pair<unsigned int, unsigned int>, unsigned int >::const_iterator itMap = nbExtraEdges.begin();
+  for (; itMap != nbExtraEdges.end(); ++itMap) {
+    pair<unsigned int, unsigned int> pp = itMap->first;
+    unsigned int val = itMap->second;
+    if ( (partition[pp.first].size()!=0) && (partition[pp.second].size()!=0))
+      negative += double(val) / double(partition[pp.first].size() * partition[pp.second].size());
+  }
   if (partition.size()>1)
-    negative/=double(partition.size()*(partition.size()-1)/2.0);
-  return positive-negative;
+    negative /= double(partition.size()*(partition.size()-1)) / 2.0;
+  double result = positive - negative;
+  return result;
 }
 //==============================================================================
 vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
@@ -166,7 +183,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps){
   for (double i=values->getEdgeMin(superGraph);i<values->getEdgeMax(superGraph);i+=deltaThreshold) {
     vector< set<node > > tmp;
     tmp=computeNodePartition(i);
-    double mq=computeMQValue(tmp);
+    double mq=computeMQValue(tmp, superGraph);
     if (mq>maxMQ) {
       threshold=i;
       maxMQ=mq;
@@ -247,7 +264,7 @@ bool StrengthClustering::run() {
   string errMsg;
   values = new MetricProxy(superGraph);
   result = superGraph->computeProperty("Strength", values, errMsg);
-  const unsigned int NB_TEST = 10;
+  const unsigned int NB_TEST = 100;
   double threshold = findBestThreshold(NB_TEST);
 
   vector< set<node > > tmp;

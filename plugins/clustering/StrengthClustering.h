@@ -20,12 +20,8 @@ public:
   bool check(std::string &);
   void reset();
 private:
-  double e(std::set<node> &U);
-  double e(std::set<node> &U,std::set<node> &V);
-  double s(std::set<node> &U,std::set<node> &V);
-  double s(std::set<node> &U);
   std::vector< std::set<node> > computeNodePartition(double threshold);
-  double computeMQValue(std::vector< std::set<node> > partition);
+  double computeMQValue(const std::vector< std::set<node> > & partition, SuperGraph *);
   double findBestThreshold(int numberOfSteps);
   SuperGraph* buildSubGraphs(const std::vector< std::set<node > > &);
   void recursiveCall(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
