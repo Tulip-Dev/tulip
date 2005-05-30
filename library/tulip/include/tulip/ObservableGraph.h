@@ -45,7 +45,7 @@ class ObservableGraph {
   /**
    * Register a new observer
    */
-  void addObserver(GraphObserver *);
+  void addObserver(GraphObserver *) const;
   /**
    * Return the number of observers
    */
@@ -53,7 +53,7 @@ class ObservableGraph {
   /**
    * Remove an observer
    */
-  void removeObserver(GraphObserver *);
+  void removeObserver(GraphObserver *) const;
   /**
    * Remove all observers
    */
@@ -66,11 +66,11 @@ class ObservableGraph {
   void notifyDelEdge(SuperGraph *,const edge e);
   void notifyReverseEdge(SuperGraph *,const edge e);
   void notifyDestroy(SuperGraph *);
-  std::set<GraphObserver*> observers;
+  mutable std::set<GraphObserver*> observers;
 };
 /*@}*/
 
-inline void ObservableGraph::addObserver(GraphObserver *obs) {
+inline void ObservableGraph::addObserver(GraphObserver *obs) const {
   observers.insert(obs); 
 }
 
@@ -78,7 +78,7 @@ inline unsigned int ObservableGraph::countObservers() {
   return observers.size(); 
 }
 
-inline void ObservableGraph::removeObserver(GraphObserver *item) {  
+inline void ObservableGraph::removeObserver(GraphObserver *item) const{  
   observers.erase(item);
 }
 
