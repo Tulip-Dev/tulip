@@ -119,9 +119,9 @@ static void Key(unsigned char key, int x, int y) {
     glgraph->setViewStrahler(!glgraph->isViewStrahler());
     printMessage("StrahlerMode",glgraph->isViewStrahler());
     break;
-  case 'f':
-    //    glgraph->setViewKey(!glgraph->isViewKey());
-    //    printMessage("Fan renderring",glgraph->isViewKey());
+  case 'E':
+    glgraph->setDisplayEdges(!glgraph->isDisplayEdges());
+    printMessage("Edge displaying", glgraph->isDisplayEdges());
     break;
   case 'b':
     frameRateDisplaying=!frameRateDisplaying;
@@ -208,7 +208,7 @@ int main (int argc, char **argv) {
 
   glutInitWindowPosition(0, 0); 
   glutInitWindowSize( width, height);
-  glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH);
+  glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL);
   if ((win=glutCreateWindow("Tulip Glut Viewer")) == GL_FALSE) {
     exit(1);
   }
