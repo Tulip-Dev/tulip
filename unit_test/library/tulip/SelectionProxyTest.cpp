@@ -76,6 +76,47 @@ void SelectionProxyTest::testSetGet(bool value) {
   }
 }
 //==========================================================
+void SelectionProxyTest::testCopy() {
+  vector<node> nodes(graph->numberOfNodes());
+  vector<edge> edges(graph->numberOfEdges());
+  unsigned int i=0;
+  Iterator<node> *itN=graph->getNodes();
+  while(itN->hasNext()) {
+    nodes[i++]=itN->next();
+  } delete itN;
+  Iterator<edge> *itE=graph->getEdges();
+  i=0;
+  while(itE->hasNext()) {
+    edges[i++]=itE->next();
+  } delete itE;
+  bool value = true;
+  selection->setAllNodeValue(value);
+  selection->setAllEdgeValue(value);
+  for (unsigned int i=0;i<graph->numberOfNodes()*10;++i) {
+    unsigned int rando=rand()%graph->numberOfNodes();
+    selection->setNodeValue(nodes[rando],!value);
+    CPPUNIT_ASSERT( selection->getNodeValue(nodes[rando]) == !value );
+  }
+  for (unsigned int i=0;i<graph->numberOfEdges()*10;++i) {
+    unsigned int rando=rand()%graph->numberOfEdges();
+    selection->setEdgeValue(edges[rando],!value);
+    CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
+  }
+
+  SelectionProxy tmp(graph);
+  tmp = *selection;
+  itN=graph->getNodes();
+  while(itN->hasNext()) {
+    node n  = itN->next();
+    CPPUNIT_ASSERT_EQUAL( selection->getNodeValue(n), tmp.getNodeValue(n) );
+  } delete itN;
+  itE=graph->getEdges();
+  while(itE->hasNext()) {
+    edge e = itE->next();
+    CPPUNIT_ASSERT_EQUAL( selection->getEdgeValue(e), tmp.getEdgeValue(e) );
+  } delete itE;
+}
+//==========================================================
 void SelectionProxyTest::testSetGet() {
   testSetGet(false);
   testSetGet(true);
@@ -83,11 +124,11 @@ void SelectionProxyTest::testSetGet() {
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip Selection Proxy Test Suite" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( 
-								       "test setAll", 
-								       &SelectionProxyTest::testSetAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( 
-								       "test set/get", 
-								       &SelectionProxyTest::testSetGet ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 
+								      &SelectionProxyTest::testSetAll ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test set/get", 
+								      &SelectionProxyTest::testSetGet ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test copy operator", 
+								      &SelectionProxyTest::testCopy ) );
   return suiteOfTests;
 }

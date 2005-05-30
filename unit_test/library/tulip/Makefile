@@ -5,6 +5,7 @@ SRCS=   tuliplibtest.cpp \
 	MatrixTest.cpp \
 	MutableContainerTest.cpp \
 	SelectionProxyTest.cpp \
+	MetaGraphProxyTest.cpp \
 	SuperGraphTest.cpp \
 	PluginsTest.cpp \
 	ExtendedClusterOperationTest.cpp \

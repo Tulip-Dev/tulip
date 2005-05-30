@@ -19,6 +19,7 @@ public:
   void testSetAll(bool);
   void testSetGet();
   void testSetGet(bool);
+  void testCopy();
   static CppUnit::Test *suite();
 };
 
