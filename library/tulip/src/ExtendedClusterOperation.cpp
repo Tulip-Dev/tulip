@@ -10,6 +10,7 @@
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/LayoutProxy.h>
 #include <tulip/SizesProxy.h>
+#include <tulip/MetricProxy.h>
 #include <tulip/SelectionProxy.h>
 #include <tulip/DrawingTools.h>
 
@@ -19,6 +20,7 @@ using namespace stdext;
 const string metagraphProperty = "viewMetaGraph";
 const string layoutProperty = "viewLayout";
 const string sizeProperty = "viewSize";
+const string rotationProperty = "viewRotation";
 
 
 /*
@@ -73,7 +75,8 @@ void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, MetaGraph
 void updateGroupLayout(SuperGraph *graph, SuperGraph *cluster, node metanode) {
   LayoutProxy *graphLayout = graph->getProperty<LayoutProxy>(layoutProperty);
   SizesProxy *graphSize = graph->getProperty<SizesProxy>(sizeProperty);
-  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, graphLayout, graphSize);
+  MetricProxy *graphRotation = graph->getProperty<MetricProxy>(rotationProperty);
+  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, graphLayout, graphSize, graphRotation);
   Coord maxL = box.first;
   Coord minL = box.second;
   graphLayout->setNodeValue(metanode, (maxL + minL) / 2.0 );
@@ -162,12 +165,15 @@ void updateLayoutUngroup(SuperGraph *graph, node metanode) {
   if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
   LayoutProxy *graphLayout = graph->getProperty<LayoutProxy>(layoutProperty);
   SizesProxy *graphSize = graph->getProperty<SizesProxy>(sizeProperty);
+  MetricProxy *graphRot = graph->getProperty<MetricProxy>(rotationProperty);
   Size size = graphSize->getNodeValue(metanode);
   Coord pos = graphLayout->getNodeValue(metanode);
+  double rot = graphRot->getNodeValue(metanode);
   SuperGraph  *cluster = clusterInfo->getNodeValue(metanode);
   LayoutProxy *clusterLayout = cluster->getProperty<LayoutProxy>(layoutProperty);
   SizesProxy  *clusterSize   = cluster->getProperty<SizesProxy>(sizeProperty);
-  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize);
+  MetricProxy *clusterRot = cluster->getProperty<MetricProxy>(rotationProperty);
+  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   Coord maxL = box.first;
   Coord minL = box.second;
   double width  = maxL[0] - minL[0];
@@ -178,15 +184,17 @@ void updateLayoutUngroup(SuperGraph *graph, node metanode) {
   if (depth<0.0001) depth=1.0;
   Coord center = (maxL + minL) / -2.0;
   clusterLayout->translate(center, cluster);
+  clusterLayout->rotateZ(-graphRot->getNodeValue(metanode), cluster);
   clusterLayout->scale(Coord(size[0]/width, size[1]/height, size[2]/depth), cluster);
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(size[0]/width, size[1]/height, size[2]/depth), cluster);
-
+  
   Iterator<node> *itN = cluster->getNodes();
   while(itN->hasNext()) { 
     node itn = itN->next();
     graphLayout->setNodeValue(itn, clusterLayout->getNodeValue(itn));
     graphSize->setNodeValue(itn, clusterSize->getNodeValue(itn));
+    graphRot->setNodeValue(itn, clusterRot->getNodeValue(itn) + rot);
   } delete itN;
  Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
