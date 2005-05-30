@@ -58,20 +58,18 @@ Cube::draw(node n) {
 }
 
 
-Coord Cube::getAnchor(const Coord & vector ) const
-{
-	float x,y,z, fmax;
-	vector.get(x,y,z);
-	fmax = ( fabsf(x) >? fabsf(y) ) >? fabsf(z);
-	if( fmax > 0.0f )
-		return vector * (0.5f/fmax);
-	else
-		return vector;
+Coord Cube::getAnchor(const Coord & vector ) const {
+  float x,y,z, fmax;
+  vector.get(x,y,z);
+  fmax = ( fabsf(x) >? fabsf(y) ) >? fabsf(z);
+  if( fmax > 0.0f )
+    return vector * (0.5f/fmax);
+  else
+    return vector;
 }
 
 
-void Cube::drawCube()
-{
+void Cube::drawCube() {
   glBegin(GL_QUADS);
   /* front face */
   glNormal3f(0.0f, 0.0f, 1.0f);

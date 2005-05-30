@@ -28,6 +28,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   tmpSizeFather[2] = 0; //remove z-coordiantes because the drawing is 2D
   double sizeFather= tmpSizeFather.norm() / 2.0;
   double sizeVirtualNode=1.0;
+  if (superGraph->indeg(n) == 0) sizeVirtualNode = 0.0;
   /*
    * Iniatilize node position
    */  
