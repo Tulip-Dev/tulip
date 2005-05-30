@@ -18,10 +18,11 @@ struct FileSystem:public ImportModule {
   MetricProxy *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
   IntProxy *type;
   StringProxy *label;
+  LayoutProxy *layout;
   int progress;
 
 
-  ProgressState readDir(node n,string directory) {
+  ProgressState readDir(node n, string directory, unsigned int &x, unsigned int y) {
     if (pluginProgress->progress(progress,100)!=TLP_CONTINUE) { 
       return pluginProgress->state();
     }
@@ -77,19 +78,32 @@ struct FileSystem:public ImportModule {
       lastchange->setNodeValue(newNode,infoEntry.st_ctime);
       
       if ((infoEntry.st_mode & S_IFMT) == S_IFDIR) {
-	type->setNodeValue(newNode,1);
-	if (readDir(newNode,pathEntry+"/") == TLP_CANCEL)
+	x += 2;
+	if (readDir(newNode,pathEntry+"/", x , x ) == TLP_CANCEL)
 	  superGraph->delNode(newNode);
 	else {
 	  double newSize=0;
+	  Coord tmp(0,0,0);
 	  Iterator<node> *itN=superGraph->getOutNodes(newNode);
 	  for (;itN->hasNext();) {
 	    node itn=itN->next();
 	    newSize+=size->getNodeValue(itn);
+	    tmp += layout->getNodeValue(itn);
 	  }
 	  delete itN;
 	  size->setNodeValue(newNode,newSize/1024.0);
+	  if (superGraph->outdeg(newNode) == 0) {
+	    layout->setNodeValue(newNode, Coord(x, y, 0));
+	    x += 2;
+	  } else {
+	    tmp[0] /= superGraph->outdeg(newNode);
+	    tmp[1] = y;
+	    layout->setNodeValue(newNode, tmp);
+	  }
 	}
+      } else {
+	layout->setNodeValue(newNode, Coord(x, y, 0));
+	x += 2;
       }
        #ifdef _WIN32
       endOfDirectory = !(FindNextFile (hFind, &FindData));
@@ -112,8 +126,10 @@ struct FileSystem:public ImportModule {
     lastmodif=superGraph->getProperty<MetricProxy>("lastmodif");
     lastchange=superGraph->getProperty<MetricProxy>("lastchange");
     type=superGraph->getProperty<IntProxy>("viewShape");
+    layout=superGraph->getProperty<LayoutProxy>("viewLayout");
     label=superGraph->getProperty<StringProxy>("name");
     type->setAllNodeValue(0);
+    layout->setAllNodeValue(Coord(0,0,0));
     node newNode=superGraph->addNode();
     QString dirName=QFileDialog::getExistingDirectory ();
     if (dirName.isNull()) return false;
@@ -136,15 +152,21 @@ struct FileSystem:public ImportModule {
       lastmodif->setNodeValue(newNode,infoEntry.st_mtime);
       lastchange->setNodeValue(newNode,infoEntry.st_ctime);
     }
-    readDir(newNode,string(dirName.ascii())+"/");
+    unsigned int x = 0, y = 2;
+    readDir(newNode,string(dirName.ascii())+"/", x , y);
     double newSize=0;
+    Coord tmp(0,0,0);
     if (pluginProgress->state()!=TLP_CANCEL) {
       Iterator<node> *itN=superGraph->getOutNodes(newNode);
       while (itN->hasNext()) {
 	node itn=itN->next();
 	newSize+=size->getNodeValue(itn);
+	tmp += layout->getNodeValue(itn);
       } delete itN;
       size->setNodeValue(newNode,newSize);
+      tmp /= superGraph->outdeg(newNode);
+      tmp[1] = 0;
+      layout->setNodeValue(newNode, tmp);
     }
     return pluginProgress->state()!=TLP_CANCEL;
   }
