@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>274</width>
-            <height>72</height>
+            <height>68</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,23 +25,7 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>pushButton1</cstring>
-            </property>
-            <property name="text">
-                <string>Stop</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="QProgressBar" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QProgressBar" row="0" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>progressBar</cstring>
             </property>
@@ -52,12 +36,45 @@
                 <enum>Raised</enum>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="2">
+        <widget class="QPushButton" row="1" column="3">
             <property name="name">
                 <cstring>pushButton2</cstring>
             </property>
             <property name="text">
                 <string>Cancel</string>
+            </property>
+        </widget>
+        <spacer row="1" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>pushButton1</cstring>
+            </property>
+            <property name="text">
+                <string>Stop</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="0">
+            <property name="name">
+                <cstring>preview</cstring>
+            </property>
+            <property name="text">
+                <string>preview</string>
             </property>
         </widget>
     </grid>
@@ -75,10 +92,17 @@
         <receiver>QtProgressData</receiver>
         <slot>stopCompute()</slot>
     </connection>
+    <connection>
+        <sender>preview</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>QtProgressData</receiver>
+        <slot>changePreview(bool)</slot>
+    </connection>
 </connections>
 <slots>
     <slot>stopCompute()</slot>
     <slot>cancelCompute()</slot>
+    <slot>changePreview(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -52,7 +52,7 @@
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
 
-#include "NavigateGlGraph.h"
+//#include "NavigateGlGraph.h"
 #include "PropertyDialog.h"
 #include "viewGl.h"
 #include "Application.h"
@@ -62,6 +62,7 @@
 #include "Overview.h"
 #include "ToolBar.h"
 #include "InfoDialog.h"
+#include "AppStartUp.h"
           
 #define WITHQT3
 #define UNNAMED "unnamed"
@@ -79,7 +80,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) {
   copyCutPasteGraph = 0;
   elementsDisabled = false;
   //=======================================
-  buildMenus();
+
   //MDI
   workspace->setScrollBarsEnabled( TRUE );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
@@ -180,15 +181,16 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   initObservers();
 }
 //**********************************************************************
-static const unsigned int NB_VIEWED_PROPERTIES=8;
-static const string viewed_properties[8]= {"viewLabel",
+static const unsigned int NB_VIEWED_PROPERTIES=9;
+static const string viewed_properties[NB_VIEWED_PROPERTIES]= {"viewLabel",
 					   "viewColor",
 					   "viewSelection",
 					   "viewMetaGraph",
 					   "viewShape",
 					   "viewSize",
 					   "viewTexture",
-					   "viewLayout" };
+					   "viewLayout",
+					   "viewRotation" };
 //**********************************************************************
 void viewGl::initObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -214,6 +216,25 @@ void viewGl::clearObservers() {
 viewGl::~viewGl() {
   delete morph;
   //  cerr << __PRETTY_FUNCTION__ << endl;
+}
+//**********************************************************************
+void viewGl::startTulip() {
+  AppStartUp *appStart=new AppStartUp(this);
+  appStart->show();
+  appStart->initTulip();
+  delete appStart;
+  buildMenus();
+  overviewWidget->view->getGlGraph()->initializeGL();
+  this->show();
+  int argc = ((QApplication *)qApp)->argc();
+  if (argc>1) {
+    char ** argv = ((QApplication *)qApp)->argv();
+    for (int i=1;i<argc;++i) {
+      QFileInfo info(argv[i]);
+      QString s = info.absFilePath();
+      fileOpen(0, s);
+    }
+  }
 }
 //**********************************************************************
 void viewGl::changeSuperGraph(SuperGraph *graph) {
@@ -246,39 +267,45 @@ void viewGl::windowActivated(QWidget *w) {
     glWidget = 0;
     return;
   }
-  if (typeid(*w)==typeid(NavigateGlGraph)) {
-    glWidget=((NavigateGlGraph *)w)->getGlGraphWidget();
+  if (typeid(*w)==typeid(GlGraphWidget)) {
+    glWidget=((GlGraphWidget *)w);
     changeSuperGraph(glWidget->getSuperGraph());
   }
 }
 //**********************************************************************
-GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph,const QString &name) {
+GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   //Create 3D graph view
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View",graph);
-  glWidget1->move(0,0);
-  glWidget1->setCaption(name);
-  glWidget1->show();
-  GlGraphWidget *glWidget = glWidget1->getGlGraphWidget();
-  glWidget1->setMinimumSize(0, 0);
-  glWidget1->setMaximumSize(32767, 32767);
-  glWidget1->setFocusPolicy(QWidget::NoFocus);
-  glWidget1->setBackgroundMode(QWidget::PaletteBackground);  
-  glWidget ->installEventFilter(this);
-  glWidget ->setMouse(mouseToolBar->getCurrentMouse());
+  //  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View", graph);
+  //  glWidget1->move(0,0);
+  //  glWidget1->setCaption(name);
+  //  glWidget1->show();
+  GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
+  glWidget->setSuperGraph(graph);
+  glWidget->move(0,0);
+  glWidget->setCaption(name);
+  glWidget->show();
+  glWidget->setMinimumSize(0, 0);
+  glWidget->resize(500,500);
+  glWidget->setMaximumSize(32767, 32767);
+  glWidget->setFocusPolicy(QWidget::NoFocus);
+  glWidget->setBackgroundMode(QWidget::PaletteBackground);  
+  glWidget->installEventFilter(this);
+  glWidget->setMouse(mouseToolBar->getCurrentMouse());
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
   connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
 	  nodeProperties, SLOT(setCurrentEdge(SuperGraph*, const edge &)));
-  connect(glWidget1, SIGNAL(closed(NavigateGlGraph *)), this, SLOT(navigateWidgetClosed(NavigateGlGraph *)));
-  
+  connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
+ 
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
   QToolTip::setWakeUpDelay(2500);
   changeSuperGraph(graph);
   if(elementsDisabled)
     enableElements(true);
   //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
+  qApp->processEvents();
   return glWidget;
 }
 //**********************************************************************
@@ -307,9 +334,9 @@ void viewGl::setNavigateCaption(string newCaption) {
    QWidgetList windows = workspace->windowList();
    for( int i = 0; i < int(windows.count()); ++i ) {
      QWidget *win = windows.at(i);
-     if (typeid(*win)==typeid(NavigateGlGraph)) {
-       NavigateGlGraph *tmpNavigate = dynamic_cast<NavigateGlGraph *>(win);
-       if(tmpNavigate->getGlGraphWidget() == glWidget) {
+     if (typeid(*win)==typeid(GlGraphWidget)) {
+       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
+       if(tmpNavigate == glWidget) {
 	 tmpNavigate->setCaption(newCaption.c_str());
 	 return;
        }
@@ -426,9 +453,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       QWidgetList windows = workspace->windowList();
       for( int i = 0; i < int(windows.count()); ++i ) {
 	QWidget *win = windows.at(i);
-	if (typeid(*win)==typeid(NavigateGlGraph)) {
-	  NavigateGlGraph *tmpNavigate = dynamic_cast<NavigateGlGraph *>(win);
-	  if(openFiles[((unsigned int)tmpNavigate->getGlGraphWidget())] == s.latin1()) {
+	if (typeid(*win)==typeid(GlGraphWidget)) {
+	  GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
+	  if(openFiles[((unsigned int)tmpNavigate)] == s.latin1()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -443,9 +470,15 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     SuperGraph *newGraph = tlp::newSuperGraph();
     initializeGraph(newGraph);
     bool result=true;
-    MyProgress progressBar(this,string("Loading : ")+ s.section('/',-1).ascii() );
+    GlGraphWidget *glW = newOpenGlView(newGraph, s);
+    GlGraph *glGraph = glW->getGlGraph();
+    initializeGlGraph(glGraph);
+    glGraph->setSuperGraph(newGraph);
+    QtProgress progressBar(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
     result = tlp::importGraph(*plugin, dataSet, &progressBar ,newGraph);
     if (progressBar.state()==TLP_CANCEL || !result ) {
+      changeSuperGraph(0);
+      delete glW;
       delete newGraph;
       QApplication::restoreOverrideCursor();
       qWarning("Canceled import/Open");
@@ -458,16 +491,17 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       cleanName=cleanName.section('.',-fields.count(), -2);
       newGraph->setAttribute("name", string(cleanName.latin1()));
     }
-    GlGraphWidget *glW=newOpenGlView(newGraph,s);
-    GlGraph *glGraph = glW->getGlGraph();
-    initializeGlGraph(glGraph);
-    DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
-      glW->getGlGraph()->setParameters(glGraphData);
+
+
     if(noPlugin)
       openFiles[((unsigned int)glW)]=s.latin1();
     QApplication::restoreOverrideCursor();
+    changeSuperGraph(0);
+    changeSuperGraph(newGraph);
     restoreView();
+    DataSet glGraphData;
+    if (dataSet.get<DataSet>("displaying", glGraphData))
+      glW->getGlGraph()->setParameters(glGraphData);
   }
   else {
     qWarning("Canceled  Open/import");
@@ -760,9 +794,9 @@ int viewGl::closeWin() {
   QWidgetList windows = workspace->windowList();
   for(int i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
-    if (typeid(*win)==typeid(NavigateGlGraph)) {
-      NavigateGlGraph *tmpNavigate = dynamic_cast<NavigateGlGraph *>(win);
-      SuperGraph *superGraph = tmpNavigate->getGlGraphWidget()->getSuperGraph()->getRoot();
+    if (typeid(*win)==typeid(GlGraphWidget)) {
+      GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
+      SuperGraph *superGraph = tmpNavigate->getSuperGraph()->getRoot();
       if(!alreadyTreated(treatedGraph, superGraph)) {
 	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + "?";
 	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
@@ -770,7 +804,7 @@ int viewGl::closeWin() {
 	if(answer == QMessageBox::Cancel)
 	  return true;
 	if(answer == QMessageBox::Yes) {
-	  glWidget = tmpNavigate->getGlGraphWidget();
+	  glWidget = tmpNavigate;
 	  fileSave();
 	}
 	treatedGraph.insert((unsigned int)superGraph);
@@ -1013,7 +1047,7 @@ void viewGl::reverseSelectedEdgeDirection() {
 }
 //==============================================================
 void viewGl::superGraphAboutToBeRemoved(SuperGraph *sg) {
-  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
+  //  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
   glWidget->setSuperGraph(0);
 }
 //==============================================================
@@ -1049,17 +1083,17 @@ void viewGl::filePrint() {
   delete image;
 }
 //==============================================================
-void viewGl::navigateWidgetClosed(NavigateGlGraph *navigate) {
-  GlGraphWidget *w = navigate->getGlGraphWidget();
+void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
+  GlGraphWidget *w = navigate;
   SuperGraph *root = w->getSuperGraph()->getRoot();
   QWidgetList windows = workspace->windowList();
   int i;
   for( i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
-    if (typeid(*win)==typeid(NavigateGlGraph)) {
-      NavigateGlGraph *tmpNavigate = dynamic_cast<NavigateGlGraph *>(win);
+    if (typeid(*win)==typeid(GlGraphWidget)) {
+      GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
       int superGraph1 = w->getSuperGraph()->getRoot()->getId();
-      int superGraph2 = tmpNavigate->getGlGraphWidget()->getSuperGraph()->getRoot()->getId();
+      int superGraph2 = tmpNavigate->getSuperGraph()->getRoot()->getId();
       if((tmpNavigate != navigate) && (superGraph1 == superGraph2))
 	break;
     }
@@ -1076,8 +1110,8 @@ void viewGl::navigateWidgetClosed(NavigateGlGraph *navigate) {
     propertiesWidget->setSuperGraph(0);
     propertiesWidget->setGlGraphWidget(0);
     nodeProperties->setSuperGraph(0);
-    delete root;
     w->setSuperGraph(0);
+    delete root;
   }
   
   if (openFiles.find((unsigned int)w) != openFiles.end())   
@@ -1105,7 +1139,7 @@ void viewGl::makeClustering(int id) {
   StructDef parameter = tlp::clusteringFactory.getParam(name);
   parameter.buildDefaultDataSet( dataSet, graph );
   tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
-  MyProgress myProgress(this,name);
+  QtProgress myProgress(this,name);
   myProgress.hide();
   if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
     QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
@@ -1125,7 +1159,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   if(graph == 0) return false;
   Observable::holdObservers();
   overviewWidget->setObservedView(0);    
-  MyProgress myProgress(this, name, redraw ? glWidget : 0);
+  QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
   bool   resultBool=true;  
   DataSet *dataSet =0;
@@ -1176,9 +1210,9 @@ void viewGl::changeSelection(int id) {
 void viewGl::changeMetric(int id) {
   clearObservers();
   string name(metricMenu.text(id).ascii());
-  bool result = changeProperty<MetricProxy>(name,"viewMetric");
+  bool result = changeProperty<MetricProxy>(name,"viewMetric",false);
   if (result && map_metric->isOn()) {
-    changeProperty<ColorsProxy>("Metric Mapping","viewColor", false);
+    changeProperty<ColorsProxy>("Metric Mapping","viewColor", true);
   }
   initObservers();
 }

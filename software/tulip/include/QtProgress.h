@@ -6,17 +6,18 @@
 
 class GlGraphWidget;
 
-class MyProgress:public QtProgressData, public PluginProgress {
+class QtProgress:public QtProgressData, public PluginProgress {
 
   Q_OBJECT
 
 public:
-  MyProgress(QWidget* parent,std::string text, GlGraphWidget * =0);
-  virtual ~MyProgress();
+  QtProgress(QWidget* parent,std::string text, GlGraphWidget * =0);
+  virtual ~QtProgress();
   void progress_handler(int i,int j);
 public slots:
   void stopCompute();
   void cancelCompute();
+  void changePreview(bool);
 
 public:
   bool firstCall;

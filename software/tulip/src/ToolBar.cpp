@@ -34,7 +34,7 @@
 ToolBar::ToolBar( QWidget* parent,  const char* name, WFlags fl )
   : ToolBarData(parent, name, fl)
 {
-  currentMouse = new MouseSelect;
+  currentMouse = new MouseGraphNavigate();
 }
 
 /*  

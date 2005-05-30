@@ -55,7 +55,7 @@ void AppStartUp::initTulip() {
   myAppStartUp->setTotalSteps(0);
   myAppStartUp->setProgress(0);
   myAppStartUp->setLabel("Tulip");
-  myAppStartUp->show();
+  //  myAppStartUp->show();
 
 #ifndef NDEBUG
   PluginLoaderTxt plug;
@@ -63,11 +63,11 @@ void AppStartUp::initTulip() {
   PluginLoaderQt plug;
   plug.appStartUp=myAppStartUp;
 #endif
-
+  
   tlp::loadPlugins(&plug);   // library side plugins
   GlGraph::loadPlugins(&plug);   // software side plugins, i.e. glyphs
   //
-  delete myAppStartUp;
+  //  delete myAppStartUp;
 }
 
 /* 

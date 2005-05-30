@@ -29,7 +29,7 @@ class QWorkspace;
 class QProgressDialog;
 class QEvent;
 class PropertyDialog;
-class NavigateGlGraph;
+//class NavigateGlGraph;
 class GlGraphWidget;
 class GlGraph;
 class View3DSetup;
@@ -94,6 +94,7 @@ protected:
   void initializeGlGraph(GlGraph *);
 
 public slots:
+  void startTulip();
   void fileOpen(std::string *,QString &);
   void closeEvent(QCloseEvent *e); 
   
@@ -140,7 +141,7 @@ protected slots:
   void goInside();
   void changeSuperGraph(SuperGraph *);
   void superGraphAboutToBeRemoved(SuperGraph *);
-  void navigateWidgetClosed(NavigateGlGraph *);
+  void glGraphWidgetClosed(GlGraphWidget *);
   void ungroup();  
   void group();  
 
