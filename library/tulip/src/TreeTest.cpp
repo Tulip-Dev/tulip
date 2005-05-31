@@ -22,7 +22,9 @@ bool TreeTest::isTree(SuperGraph *graph) {
 
 
 bool TreeTest::compute(SuperGraph *graph) { 
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) return resultsBuffer[(unsigned int)graph];
+  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) {
+    return resultsBuffer[(unsigned int)graph];
+  }
   if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
     resultsBuffer[(unsigned int)graph]=false;
     graph->addObserver(this);
