@@ -1155,7 +1155,7 @@ void viewGl::makeClustering(int id) {
 template<typename PROPERTY>
 bool viewGl::changeProperty(string name, string destination, bool query, bool redraw) {
   if( !glWidget ) return false;
-  SuperGraph *graph = clusterTreeWidget->getSuperGraph();
+  SuperGraph *graph = glWidget->getSuperGraph();
   if(graph == 0) return false;
   Observable::holdObservers();
   overviewWidget->setObservedView(0);    
@@ -1185,34 +1185,39 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	resultBool=false;
       };
   }
-  Observable::unholdObservers();
   if (dataSet!=0) delete dataSet;
   graph->delLocalProperty(name);
   propertiesWidget->setSuperGraph(graph);
   overviewWidget->setObservedView(glWidget->getGlGraph());
+  //  clusterTreeWidget->update();
+  //  clusterTreeWidget->setSuperGraph(graph);
+  Observable::unholdObservers();
   return resultBool;
 }
 //**********************************************************************
 void viewGl::changeString(int id) {
   clearObservers();
   string name(stringMenu.text(id).ascii());
-  changeProperty<StringProxy>(name,"viewLabel");
+  if (changeProperty<StringProxy>(name,"viewLabel"))
+    redrawView();
   initObservers();
 }
 //**********************************************************************
 void viewGl::changeSelection(int id) {
   clearObservers();
   string name(selectMenu.text(id).ascii());
-  changeProperty<SelectionProxy>(name,"viewSelection");
+  if (changeProperty<SelectionProxy>(name,"viewSelection"))
+    redrawView();
   initObservers();
 }
 //**********************************************************************
 void viewGl::changeMetric(int id) {
   clearObservers();
   string name(metricMenu.text(id).ascii());
-  bool result = changeProperty<MetricProxy>(name,"viewMetric",false);
+  bool result = changeProperty<MetricProxy>(name,"viewMetric", true);
   if (result && map_metric->isOn()) {
-    changeProperty<ColorsProxy>("Metric Mapping","viewColor", true);
+    if (changeProperty<ColorsProxy>("Metric Mapping","viewColor", false))
+      redrawView();
   }
   initObservers();
 }
