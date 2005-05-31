@@ -26,8 +26,8 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0; //remove z-coordiantes because the drawing is 2D
-  double sizeFather= tmpSizeFather.norm() / 2.0;
-  double sizeVirtualNode=1.0;
+  double sizeFather = tmpSizeFather.norm() / 2.0;
+  double sizeVirtualNode = 1.0;
   if (superGraph->indeg(n) == 0) sizeVirtualNode = 0.0;
   /*
    * Iniatilize node position
@@ -57,9 +57,9 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   double sumRadius = sizeVirtualNode;
 
   Iterator<node> *itN=superGraph->getOutNodes(n);
-  for (unsigned int i=1;itN->hasNext();++i)  {
+  for (unsigned int i=1; itN->hasNext(); ++i)  {
     node itn = itN->next();
-    realCircleRadius[i]= computeRelativePosition(itn,relativePosition);
+    realCircleRadius[i] = computeRelativePosition(itn, relativePosition);
     sumRadius += realCircleRadius[i];
   } delete itN;
 
@@ -79,7 +79,11 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
       }
     }
     if ( maxRadius > (sumRadius/2.0)) {
-      double ratio = (maxRadius/(sumRadius - maxRadius));
+      double ratio;
+      if (sumRadius - maxRadius > 1E-5)
+	ratio = (maxRadius/(sumRadius - maxRadius));
+      else
+	ratio = 1;
       for (unsigned int i=0; i<Nc; ++i) {
 	if (i!=maxRadiusIndex) 
 	  subCircleRadius[i] *= ratio;
@@ -123,9 +127,9 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   for (unsigned int i=0; i<Nc; ++i) {
     tlp::Vector<double,2> point;
     double packRadius= realCircleRadius[i]/sin(angularSector[i]/2.0);
-    packRadius >?= sizeFather+realCircleRadius[i];
+    packRadius >?= sizeFather + realCircleRadius[i];
     if (i>0)
-      angle+=(angularSector[i-1]+angularSector[i])/2.0+resolution;
+      angle += (angularSector[i-1]+angularSector[i])/2.0+resolution;
     circles[i][0] = packRadius*cos(angle);
     circles[i][1] = packRadius*sin(angle);
     circles[i].radius = realCircleRadius[i];
