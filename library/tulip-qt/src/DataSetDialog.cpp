@@ -256,17 +256,27 @@ namespace {
 	if (ip.typeName == TN(float)
 	    || ip.typeName == TN(double)) {
 	  QValidator* fpValidator = new QDoubleValidator( this );
+	  
 	  QLineEdit * le = new QLineEdit( "0", this );
 	  le->setValidator( fpValidator );
 	  ip.wA.push_back( le );
 	  if( inSet ) {
-	    float v;
-	    if( inSet->get
-		(ip.name,v) )
-	      le->setText( QString("%1").arg(v) );
+	    stringstream tmp;
+	    if (ip.typeName == TN(float)) {
+	      float v;
+	      if( inSet->get(ip.name,v) ) {
+		tmp << v;
+		le->setText( tmp.str().c_str() );
+	      }
+	    } else {
+	      double d;
+	      if (inSet->get(ip.name, d)){
+		tmp << d;
+		le->setText( tmp.str().c_str()  );
+	      }
+	    }
 	  }
 	}
-
 	// string
 	else if( ip.typeName == TN(string) ) {
 	  QLineEdit * le = new QLineEdit( "", this );
