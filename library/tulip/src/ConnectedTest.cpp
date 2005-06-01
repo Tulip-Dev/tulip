@@ -39,6 +39,7 @@ bool ConnectedTest::compute(SuperGraph *graph) {
   if (graph->numberOfNodes()==0) return true;
   graph->addObserver(this);
   MutableContainer<bool> visited;
+  visited.setAll(false);
   unsigned int count = 0;
   connectedTest(graph, graph->getOneNode(), visited, count);
   bool result = (count == graph->numberOfNodes());
