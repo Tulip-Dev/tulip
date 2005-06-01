@@ -25,7 +25,8 @@ libtulip_la_SOURCES = \
 	Types.cpp \
 	PropertyProxy.cpp \
 	GraphTools.cpp \
-	Biconnex.cpp \
+	BiconnectedTest.cpp \
+	ConnectedTest.cpp   \
 	TreeTest.cpp   \
 	AcyclicTest.cpp   \
 	SimpleTest.cpp \

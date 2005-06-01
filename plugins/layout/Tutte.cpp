@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <set>
-#include <tulip/Biconnex.h>
+#include <tulip/BiconnectedTest.h>
 #include "Tutte.h"
 
 
@@ -135,7 +135,7 @@ bool Tutte::run() {
 
 bool Tutte::check(string &erreurMsg) {
   bool result=true;
-  if (!BiconnexTest::isBiconnex(superGraph))
+  if (!BiconnectedTest::isBiconnected(superGraph))
     result=false;
   else {
     Iterator<node> *it=superGraph->getNodes();

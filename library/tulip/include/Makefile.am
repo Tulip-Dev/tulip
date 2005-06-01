@@ -14,7 +14,8 @@ nobase_include_HEADERS = \
 	tulip/SimpleTest.h \
 	tulip/TreeTest.h \
 	tulip/AcyclicTest.h \
-	tulip/Biconnex.h \
+	tulip/BiconnectedTest.h \
+	tulip/ConnectedTest.h \
 	tulip/cxx/PropertyProxy.cxx \
 	tulip/cxx/TemplateFactory.cxx \
 	tulip/cxx/Reflect.cxx \

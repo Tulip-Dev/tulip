@@ -165,6 +165,24 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr);
   degreeCheck(gr1);
   degreeCheck(gr2);
+
+  graph->clear();
+  graph->clear();
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+  node n3 = graph->addNode();
+  graph->addEdge(n1, n2);
+  graph->addEdge(n1, n3);
+  graph->delNode(n3);
+  CPPUNIT_ASSERT_EQUAL(2u, graph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(1u, graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(0u, graph->indeg(n1));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->indeg(n2));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->outdeg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, graph->outdeg(n2));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->deg(n1));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->deg(n2));
+
 }
 //==========================================================
 void SuperGraphTest::testAddDel() {
