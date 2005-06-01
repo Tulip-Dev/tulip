@@ -28,7 +28,7 @@ namespace {
     vec[1] = backupVec[0]*sinz + backupVec[1]*cosz;
   }
 
-  Coord computePoint(pair<Coord, Coord> &boundingbox, const Coord &point, const Size & size, const double & rot) {
+  void computePoint(pair<Coord, Coord> &boundingbox, const Coord &point, const Size & size, const double & rot) {
     //rotate size
     vector<Coord> points(4);
     points[0].set(size[0], size[1], size[2]);

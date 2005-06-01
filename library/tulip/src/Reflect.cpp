@@ -94,6 +94,13 @@ bool StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
       ioDataSet.set( name, v );
     }
     // fp
+    else if( tname == TN(double) ) {
+      double v;
+      bool res = DoubleType::fromString( v, defv );
+      assert( res );
+      if( res )
+	ioDataSet.set( name, (double)v );
+    }
     else if( tname == TN(float) ) {
       double v;
       bool res = DoubleType::fromString( v, defv );
