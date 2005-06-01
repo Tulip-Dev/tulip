@@ -3,14 +3,14 @@ TARGET= libtulip_test
 SRCS=   tuliplibtest.cpp \
 	VectorTest.cpp \
 	MatrixTest.cpp \
+	TestAlgorithmTest.cpp \
 	MutableContainerTest.cpp \
 	SelectionProxyTest.cpp \
 	MetaGraphProxyTest.cpp \
 	SuperGraphTest.cpp \
 	PluginsTest.cpp \
 	ExtendedClusterOperationTest.cpp \
-	TreeTestTest.cpp \
-	BiconnexTestTest.cpp
+
 
 CXXFLAGS =  -g -Wall `tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
 #CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG
