@@ -1,18 +1,18 @@
 #include <assert.h>
 #include <set>
-#include <tulip/BiconnectedTest.h>
+#include <tulip/TriconnectedTest.h>
 #include "Tutte.h"
 
 
 LAYOUTPLUGIN(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2");
 
 using namespace std;
-
+//====================================================
 Tutte::Tutte(const PropertyContext &context):Layout(context) 
 {}
-
+//====================================================
 Tutte::~Tutte() {}
-
+//====================================================
 list<node> findCycle(SuperGraph *sg) {
   stdext::hash_map<node,node> father;
   stdext::hash_map<node,bool> visited;
@@ -52,7 +52,6 @@ list<node> findCycle(SuperGraph *sg) {
       }
     }delete itN;
   }
-  
   std::list<node> result;
   result.push_back(n1);
   result.push_back(n2);
@@ -82,7 +81,7 @@ list<node> findCycle(SuperGraph *sg) {
   result.push_back(n1);
   return result;  
 }
-
+//====================================================
 bool Tutte::run() {
   layoutProxy->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
@@ -95,10 +94,9 @@ bool Tutte::run() {
   int rayon=100;
   gamma=2*M_PI/tmp.size();
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
-      layoutProxy->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
-      i++;
-    }
-
+    layoutProxy->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
+    i++;
+  }
   std::list<node> toMove;
   Iterator<node> *itN=superGraph->getNodes();
   while (itN->hasNext()) {
@@ -107,10 +105,7 @@ bool Tutte::run() {
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
     toMove.remove(*itL);
   }
-  
-
   std::list<node>::iterator itn;
-
   bool ok=true;
   while (ok) {
     ok=false;
@@ -132,10 +127,10 @@ bool Tutte::run() {
   }
   return true;
 }
-
+//====================================================
 bool Tutte::check(string &erreurMsg) {
   bool result=true;
-  if (!BiconnectedTest::isBiconnected(superGraph))
+  if (!TriconnectedTest::isTriconnected(superGraph))
     result=false;
   else {
     Iterator<node> *it=superGraph->getNodes();
@@ -147,11 +142,11 @@ bool Tutte::check(string &erreurMsg) {
     } delete it;
   }
   if (!result)
-    erreurMsg="Graph must be Three Connected";
+    erreurMsg="Graph must be Triconnected";
   else
     erreurMsg="";
   return result;
 }
-
-void Tutte::reset()
-{}
+//====================================================
+void Tutte::reset() {
+}
