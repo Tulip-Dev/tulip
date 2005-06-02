@@ -1,4 +1,6 @@
 nobase_include_HEADERS = \
+	tulip/Delaunay.h \
+	tulip/DelaunayImpl.h \
 	tulip/tulipconf.h \
 	tulip/GraphTools.h \
 	tulip/hash_string.h \

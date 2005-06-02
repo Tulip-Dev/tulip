@@ -1,6 +1,6 @@
 //@TLPGEOLICENCE#
-#ifndef TLP_GEO_CIRCLE_H
-#define TLP_GEO_CIRCLE_H
+#ifndef TLP_GEO_RECTANGLE_H
+#define TLP_GEO_RECTANGLE_H
 #include <tulip/Vector.h>
 namespace tlp {
   /**

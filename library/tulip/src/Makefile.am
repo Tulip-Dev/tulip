@@ -18,6 +18,8 @@ AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
 
 libtulip_la_SOURCES = \
+	Delaunay.cpp \
+	DelaunayImpl.cpp \
 	DrawingTools.cpp \
 	StringCollection.cpp \
 	ExtendedClusterOperation.cpp \
