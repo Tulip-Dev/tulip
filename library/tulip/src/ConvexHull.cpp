@@ -37,7 +37,23 @@ inline unsigned int findP0(const vector<Coord> &points) {
 //==============================================================
 void tlp::convexHull (const vector<Coord> &points, 
 		      vector <unsigned int> &convexHull) {
-  
+
+  //if we have less than three points, the convex hull consists of
+  //all zero, one, or two points.
+  if (points.size() < 3) {
+    for (unsigned int i = 0; i < points.size(); i++) 
+      convexHull.push_back (i);
+    if (points.size() == 2) {
+      if ((points[1].getX() > points[0].getX()) ||
+	  (!(points[1].getX() < points[0].getX()) &&
+	   (points[1].getY() > points[0].getY()))) {
+	convexHull[0] = 1;
+	convexHull[1] = 0;
+      }//end if
+    }//end if
+    return;
+  }//end if
+
   //get the starting point of the convex hull computation
   unsigned int p0Index = findP0(points);
   
