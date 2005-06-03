@@ -19,7 +19,8 @@ namespace tlp {
      */
   /**
    * Compute the convex hull and return a list of indexes for the
-   * points on the convex hull in counterclockwise order.
+   * points on the convex hull in counterclockwise order.  The convexHull
+   * vector is automatically cleared.
    */
   void convexHull (const std::vector<Coord> &points, 
 		   std::vector<unsigned int> &convexHull);

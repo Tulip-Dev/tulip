@@ -36,7 +36,10 @@ inline unsigned int findP0(const vector<Coord> &points) {
 
 //==============================================================
 void tlp::convexHull (const vector<Coord> &points, 
-		      vector <unsigned int> &convexHull) {
+		      std::vector<unsigned int> &convexHull) {
+
+  //clear the input vector
+  convexHull.clear();
 
   //if we have less than three points, the convex hull consists of
   //all zero, one, or two points.
