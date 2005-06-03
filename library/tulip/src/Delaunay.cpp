@@ -9,6 +9,7 @@ using namespace std;
 using namespace delaunayImpl;
 
 //==============================================================
+namespace {
 void triangulationImpl (const std::vector<Coord> &points,
 			vertexSet &pointSet,
 			map<vertex, unsigned int> &vertexToIndex,
@@ -24,8 +25,9 @@ void triangulationImpl (const std::vector<Coord> &points,
   }//end for
   triangulation.Triangulate(pointSet, triangles);
 }
+}
 //==============================================================
-void delaunayTriangulation (const std::vector<Coord> &points, 
+void tlp::delaunayTriangulation (const std::vector<Coord> &points, 
 			   std::vector<std::pair<unsigned int, unsigned int> > &edges) {
   vertexSet pointSet;
   map<vertex, unsigned int> vertexToIndex;
@@ -43,7 +45,7 @@ void delaunayTriangulation (const std::vector<Coord> &points,
   }//end for
 }
 //==============================================================
-void delaunayTriangulation (const std::vector<Coord> &points, 
+void tlp::delaunayTriangulation (const std::vector<Coord> &points, 
 			    std::vector< tlp::Array<unsigned int, 3> > &triangles) {
   vertexSet pointSet;
   map<vertex, unsigned int> vertexToIndex;
@@ -63,7 +65,8 @@ void delaunayTriangulation (const std::vector<Coord> &points,
   }//end for
 }
 //==============================================================
-SuperGraph *delaunayTriangulation (SuperGraph *inputGraph, LayoutProxy *inputCoord, 
+SuperGraph *tlp::delaunayTriangulation (SuperGraph *inputGraph, LayoutProxy *inputCoord, 
 				   MutableContainer<node> &nodeMapping){
   cerr << __PRETTY_FUNCTION__ << " : NOT IMPLEMENTED." << endl;
+  return 0;
 }
