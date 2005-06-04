@@ -15,12 +15,11 @@ endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
-AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ ../../../thirdparty/triangle/libtriangle.la -release ${RELEASE}
 
 libtulip_la_SOURCES = \
 	ConvexHull.cpp \
 	Delaunay.cpp \
-	DelaunayImpl.cpp \
 	DrawingTools.cpp \
 	StringCollection.cpp \
 	ExtendedClusterOperation.cpp \
