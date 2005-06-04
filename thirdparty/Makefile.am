@@ -1,2 +1,2 @@
-SUBDIRS = gle gzstream ftgl
-DIST_SUBDIRS = gle gzstream ftgl
+SUBDIRS = gle gzstream ftgl triangle
+DIST_SUBDIRS = gle gzstream ftgl triangle
