@@ -86,8 +86,18 @@ public:
   ~MutableContainer();
   void setAll(const TYPE &value);
   void set(const unsigned int i,const TYPE &value);  
-  typename ReturnType<TYPE>::Value get(const unsigned int i) const;
+  /**
+   * This function return a reference instead of a copy in order to minimize the
+   * the number copy of objects, user must be awer that calling the set function can 
+   * devalidate this reference.
+   */
+  const typename ReturnType<TYPE>::Value get(const unsigned int i) const;
   Iterator<unsigned int>* findAll(const TYPE &value) const throw (ImpossibleOperation) ;
+  /**
+   * This function is available only for optimisation purpose, one must be sure the 
+   * the referenced element is not the default value. Use this function extremely carefully
+   */
+  TYPE & getReference(const unsigned int i);
 private:
   MutableContainer(const MutableContainer<TYPE> &){}
   void operator=(const MutableContainer<TYPE> &){}
@@ -253,7 +263,7 @@ void MutableContainer<TYPE>::set(const unsigned int i,const TYPE &value) {
 //===================================================================
 //const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
 template <typename TYPE>   
-typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int i) const {
+const typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) return defaultValue;
   typename stdext::hash_map<unsigned int,TYPE>::iterator it;
@@ -275,6 +285,12 @@ typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int 
     return defaultValue;
     break;
   }
+}
+//===================================================================
+//const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
+template <typename TYPE>   
+TYPE & MutableContainer<TYPE>::getReference(const unsigned int i) {
+  return (TYPE &) get(i);
 }
 //===================================================================
 template <typename TYPE> 
