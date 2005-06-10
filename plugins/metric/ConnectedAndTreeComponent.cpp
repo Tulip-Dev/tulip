@@ -1,9 +1,7 @@
-#include <iostream>
 #include <tulip/MetaGraphProxy.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
-#include <stack>
-#include <map>
+#include <iostream>
 using namespace std;
 
 #include <tulip/TulipPlugin.h>
@@ -43,7 +41,6 @@ public:
     MutableContainer<bool> visited;
     visited.setAll(false);
     set<node> deleted;
-    
     StableIterator<node> it(graph->getNodes());
     while(it.hasNext()) { 
       node n = it.next();
@@ -55,7 +52,8 @@ public:
     StableIterator<node> it2(graph->getNodes());
     while(it2.hasNext()) { 
       node n = it2.next();
-      startChainErase(n, graph, deleted);
+      if (graph->isElement(n))
+	startChainErase(n, graph, deleted);
     }
     
     MetricProxy connectedcomponent(graph);
