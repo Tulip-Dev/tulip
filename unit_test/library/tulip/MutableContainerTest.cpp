@@ -205,7 +205,7 @@ void MutableContainerTest::testSetGet() {
 }
 //==========================================================
 CppUnit::Test * MutableContainerTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip MutableContainer Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MutableContainer" );
   suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>( 
 								       "test setAll", 
 								       &MutableContainerTest::testSetAll ) );

@@ -98,7 +98,7 @@ void MetaGraphProxyTest::testSetAll() {
 }
 //==========================================================
 CppUnit::Test * MetaGraphProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip MetaGraph Proxy Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MetaGraphProxy" );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test graph destruction", 
 								      &MetaGraphProxyTest::testDestroyGraph ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set/get", 

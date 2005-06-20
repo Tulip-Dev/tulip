@@ -38,7 +38,7 @@ void VectorTest::testInternalOperation() {
 }
 //==========================================================
 CppUnit::Test * VectorTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip test : Vector" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Vector" );
   suiteOfTests->addTest( new CppUnit::TestCaller<VectorTest>( "Internal functions", 
 							      &VectorTest::testInternalOperation ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<VectorTest>( "External functions", 

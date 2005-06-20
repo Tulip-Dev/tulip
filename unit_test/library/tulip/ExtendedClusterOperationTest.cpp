@@ -87,7 +87,7 @@ void ExtendedClusterOperationTest::testOpenMetaNode() {
 }
 //==========================================================
 CppUnit::Test * ExtendedClusterOperationTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip : Group Ungroup test" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : ExtendedClusterOperation" );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Group a set of nodes", 
 								    &ExtendedClusterOperationTest::testCreateMetaNode ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup a MetaNode", 

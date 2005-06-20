@@ -521,18 +521,18 @@ void SuperGraphTest::testPropertiesIteration() {
 }
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip SuperGraph function Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SuperGraph" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Add/Del operations (Simple Graph)", 
 								  &SuperGraphTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)", 
 								  &SuperGraphTest::testClear) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Graph Iterators (nodes,edges, in-(edges/nodes), out-(edges/nodes), inout-(edges/nodes))", 
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Graph structure Iterators", 
 								  &SuperGraphTest::testIterators) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Edge ordering and swap(Simple Graph)", 
 								  &SuperGraphTest::testOrderEdgeAndSwap) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Outdeg, indeg, deg on graph and sub-graph", 
 								  &SuperGraphTest::testDegree) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean/iteration)", 
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Sub Graph operations (add/del/clean/iterators)", 
 								  &SuperGraphTest::testSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test Sub Graph delete", 
 								  &SuperGraphTest::testDeleteSubgraph) );
@@ -540,7 +540,6 @@ CppUnit::Test * SuperGraphTest::suite() {
 								  &SuperGraphTest::testInheritance) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Iteration of properties", 
 								  &SuperGraphTest::testPropertiesIteration) );
-
   return suiteOfTests;
 }
 //==========================================================

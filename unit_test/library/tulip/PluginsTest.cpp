@@ -6,12 +6,12 @@
 #include "PluginsTest.h"
 using namespace std;
 
+#include <cppunit/extensions/HelperMacros.h>
+CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
 //==========================================================
 void PluginsTest::setUp() {
   graph = tlp::newSuperGraph();
-  //.superGraph = graph;
-  //.propertyProxy = new SelectionProxy(graph);
 }
 //==========================================================
 void PluginsTest::tearDown() {
@@ -27,8 +27,8 @@ void PluginsTest::testloadPlugin() {
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
-  SelectionProxy *sel = new SelectionProxy(graph);
-  graph->computeProperty(name, sel, err);  
+  SelectionProxy sel(graph);
+  CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
@@ -38,25 +38,22 @@ void PluginsTest::testAncestorGraph() {
   SuperGraph *child = graph->addSubGraph();
   SuperGraph *child2 = graph->addSubGraph();
   SuperGraph *child3 = child->addSubGraph();
-  SelectionProxy *sel = new SelectionProxy(child);
-  CPPUNIT_ASSERT(!graph->computeProperty(name, sel, err));  
-  CPPUNIT_ASSERT(!child2->computeProperty(name, sel, err));  
-  CPPUNIT_ASSERT(child3->computeProperty(name, sel, err));  
+  SelectionProxy sel(child);
+  CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
+  CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
+  CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));
 }
 //==========================================================
 CppUnit::Test * PluginsTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip Plugins Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Plugins mechanism" );
   suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>( 
-								       "test loadPlugin", 
-								       &PluginsTest::testloadPlugin ) );
+							      "loadPlugin", 
+							      &PluginsTest::testloadPlugin ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>( 
-								       "test loadCircularPlugin", 
-								       &PluginsTest::testCircularPlugin ) );
+							      "Circular call", 
+							      &PluginsTest::testCircularPlugin ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>( 
-								       "test AcestorGraph", 
-								       &PluginsTest::testAncestorGraph) );
-  //  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>( 
-  //							       "test set/get", 
-  //							       &SelectionProxyTest::testSetGet ) );
+							      "Graph validity", 
+							      &PluginsTest::testAncestorGraph) );
   return suiteOfTests;
 }

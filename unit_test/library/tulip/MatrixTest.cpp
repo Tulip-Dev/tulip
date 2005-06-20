@@ -121,7 +121,7 @@ void MatrixTest::testInternalOperation() {
 }
 //==========================================================
 CppUnit::Test * MatrixTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip test : Matrix" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Matrix" );
   suiteOfTests->addTest( new CppUnit::TestCaller<MatrixTest>( "Internal functions", 
 							      &MatrixTest::testInternalOperation ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<MatrixTest>( "External functions", 

@@ -10,6 +10,7 @@ SRCS=   tuliplibtest.cpp \
 	SuperGraphTest.cpp \
 	PluginsTest.cpp \
 	ExtendedClusterOperationTest.cpp \
+	IdManagerTest.cpp 
 
 
 CXXFLAGS =  -g -Wall `tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/

@@ -123,7 +123,7 @@ void SelectionProxyTest::testSetGet() {
 }
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip Selection Proxy Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SelectionProxy" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 
 								      &SelectionProxyTest::testSetAll ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test set/get", 

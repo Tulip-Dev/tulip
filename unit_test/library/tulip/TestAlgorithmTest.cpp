@@ -138,7 +138,7 @@ void TestAlgorithmTest::testTriconnected() {
 }
 //==========================================================
 CppUnit::Test * TestAlgorithmTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip Graph Test function Test Suite" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph Test" );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Simple test", 
 								     &TestAlgorithmTest::testSimple ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Tree test", 
