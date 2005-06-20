@@ -8,7 +8,7 @@
 #else
 #    define _DEPRECATED __attribute__ ((deprecated))
 #    define stdext __gnu_cxx
-#  if  (__GNUC_MINOR__ < 4)
+#  if  (__GNUC_MINOR__ < 4 && __GNUC__ < 4)
 #    include <ext/stl_hash_fun.h>
 #  else
 #    include <ext/hash_fun.h>
