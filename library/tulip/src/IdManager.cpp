@@ -36,40 +36,42 @@ void IdManager::free(const unsigned int id) {
     return;
   }
   //remove all free id
-  if (id==maxId) {
+  if (id == maxId) {
     set<unsigned int>::reverse_iterator it;
-    it=freeIds.rbegin();
+    it = freeIds.rbegin();
     unsigned int lastId = maxId;
     bool eraseOk = false;
     while (it!=freeIds.rend() && (lastId-(*it))==1){
-      lastId--;++it;
+      --lastId;
+      ++it;
       eraseOk=true;
     }
     if (eraseOk) {
-      maxId=lastId-1;
+      maxId = lastId-1;
       if (it==freeIds.rend()) freeIds.clear();
       else {
 	set<unsigned int>::const_iterator it1,it2;
-	it1=freeIds.end();
-	it2=freeIds.find(lastId);
+	it1 = freeIds.end();
+	it2 = freeIds.find(lastId);
 	freeIds.erase(it2,it1);
       }
     }
     else
-      maxId--;
+      --maxId;
   }
   else
-    if(id==minId) {
+    if (id == minId) {
       set<unsigned int>::const_iterator it;
-      it=freeIds.begin();
-      unsigned int lastId=minId;
-      bool eraseOk=false;
-      while (it!=freeIds.end() && ((*it)-lastId)==1){
-	lastId++;++it;
-	eraseOk=true;
+      it = freeIds.begin();
+      unsigned int lastId = minId;
+      bool eraseOk = false;
+      while (it!=freeIds.end() && ((*it)-lastId) == 1 ) {
+	++lastId; 
+	++it;
+	eraseOk = true;
       }
       if (eraseOk) {
-	minId=lastId+1;
+	minId = lastId + 1;
 	if (it==freeIds.end()) freeIds.clear();
 	else {
 	  set<unsigned int>::const_iterator it1,it2;
@@ -79,7 +81,7 @@ void IdManager::free(const unsigned int id) {
 	}
       }
       else
-	minId++;
+	++minId;
     }
     else
       freeIds.insert(id);
@@ -138,19 +140,22 @@ ostream& operator<<(ostream &os,const IdManager &idM) {
 //-----------------------------------------------------------
 IdManagerIterator::IdManagerIterator(const IdManager &idMan):
     index(idMan.minId),it(idMan.freeIds.begin()),idMan(idMan)
-  {}
-
+{}
+//-----------------------------------------------------------
 IdManagerIterator::~IdManagerIterator(){};
-
+//-----------------------------------------------------------
 unsigned  int IdManagerIterator:: next() {
   unsigned int tmp(index);
-  index++;
-  while(it!=idMan.freeIds.end()) {
+  ++index;
+  while( it != idMan.freeIds.end()) {
     if (index<*it) return tmp;
-    index+=1;
+    ++index;
     ++it;
   }
   return tmp;
 }
-
-bool IdManagerIterator::hasNext(){return (index!=UINT_MAX && index<=idMan.maxId);}
+//-----------------------------------------------------------
+bool IdManagerIterator::hasNext() {
+  return (index!=UINT_MAX && index<=idMan.maxId);
+}
+//-----------------------------------------------------------

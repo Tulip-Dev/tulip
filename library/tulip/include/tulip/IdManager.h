@@ -18,24 +18,33 @@
 class IdManagerIterator;
 
 class IdManager {
+
 public:
   IdManager();
+  /**
+   * Return true if the id is not used else false.
+   */
   bool is_free(unsigned int) const;
   /**
-     Free the id given in parameter. This id
-     will be accessible by a the get function.
-  */
+   * Free the id given in parameter.
+   */
   void free(const unsigned int);
   /**
-     Return a new id, the returned id is choosen to minimize
-     the memory space of the free list, and the fragmetation
-     of the ids.
-  */
+   * Return a new id, the returned id is choosen to minimize
+   * the memory space of the free list, and the fragmetation
+   * of the ids.
+   */
   unsigned int get();
+  /**
+   * Return an iterator on all the used id. Warning, if
+   * the idManager is modified (free, get) this iterator 
+   * will be invalidate.
+   */
   Iterator<unsigned int>* getUsedId() const;
   
   friend std::ostream& operator<<(std::ostream &,const IdManager &);
   friend class IdManagerIterator;
+  friend class IdManagerTest;
 
 private:
   std::set<unsigned int> freeIds;  
@@ -47,14 +56,14 @@ class IdManagerIterator:public Iterator<unsigned int>  {
 public:
   IdManagerIterator(const IdManager &idMan);
   ~IdManagerIterator();
-  unsigned  int  next();
+  unsigned int next();
   bool hasNext();
 private:
   unsigned int index;
   std::set<unsigned int>::const_iterator it;
   const IdManager &idMan;
 };
-
+//======================================================
 std::ostream& operator<<(std::ostream &,const IdManager &);
 
 #endif
