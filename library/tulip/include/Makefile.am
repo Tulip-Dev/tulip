@@ -85,6 +85,16 @@ nobase_include_HEADERS = \
 	tulip/StlFunctions.h \
 	tulip/ExtendedClusterOperation.h \
 	tulip/StringCollection.h \
-	tulip/DrawingTools.h
+	tulip/DrawingTools.h \
+	tulip/BmdLink.h \
+	tulip/BmdList.h \
+	tulip/Face.h \
+	tulip/FaceIterator.h \
+	tulip/PlanarityTest.h \
+	tulip/SuperGraphDeco.h \
+	tulip/SuperGraphMap.h \
+	tulip/cxx/BmdLink.cxx \
+	tulip/cxx/BmdList.cxx \
+	tulip/cxx/SuperGraphDeco.cxx
 
 
