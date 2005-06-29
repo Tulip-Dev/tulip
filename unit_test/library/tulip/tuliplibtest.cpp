@@ -32,6 +32,8 @@ int main( int argc, char **argv) {
   runner.addTest( BiconnexTestTest::suite() );
   //  runner.addTest( PluginsTest::suite() );
   runner.addTest( ExtendedClusterOperationTest::suite() );
+  runner.addTest( SuperGraphMapTest::suite());
+  runner.addTest( FaceIteratorTest::suite());
   runner.run();
   return EXIT_SUCCESS;
 }
