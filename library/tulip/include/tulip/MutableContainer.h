@@ -196,7 +196,7 @@ void MutableContainer<TYPE>::set(const unsigned int i,const TYPE &value) {
   //Test if after insertion we need to resize
   if (!compressing && value != defaultValue) {
     compressing = true;
-    compress (i<?minIndex, i>?maxIndex, elementInserted);
+    compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
     compressing = false;
   }
   
@@ -256,8 +256,8 @@ void MutableContainer<TYPE>::set(const unsigned int i,const TYPE &value) {
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break; 
     }
-    maxIndex >?= i;
-    minIndex <?= i;
+    maxIndex = std::max(maxIndex, i);
+    minIndex = std::min(minIndex, i);
   }
 }
 //===================================================================
@@ -304,8 +304,8 @@ void MutableContainer<TYPE>::vecttohash() {
   for (unsigned int i=minIndex; i<=maxIndex; ++i) {
     if ((*vData)[i - minIndex] != defaultValue) {
       (*hData)[i] = (*vData)[i - minIndex];
-      newMaxIndex >?= i;
-      newMinIndex <?= i;
+      newMaxIndex = std::max(newMaxIndex, i);
+      newMinIndex = std::min(newMinIndex, i);
       ++elementInserted;
     }
   }
