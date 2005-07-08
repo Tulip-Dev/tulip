@@ -1,0 +1,9 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN"
+	"../common/tulip-dtd.dtd">
+<book><bookinfo><title>Tulip User Manual</title></bookinfo>
+
+<chapter id="introduction"><title>Introduction</title><para></para></chapter>
+<chapter id="interface"><title>Graphic Interface</title><para></para></chapter>
+<chapter id="functions"><title>Functionalities</title><para></para></chapter>
+</book>

@@ -1,0 +1,227 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN"
+	"../common/tulip-dtd.dtd">
+<book><bookinfo><title>Tulip Developer Handbook</title></bookinfo>
+
+<chapter id="introduction"><title>Introduction</title><para></para></chapter>
+<chapter id="installation"><title>Installation</title><para></para></chapter>
+<chapter id="data-structure"><title>Data Structure</title>
+<para>Efficient visualization of graphs implies to manipulate the structure of 
+the graph but also to extract part of this structure. Moreover, if one 
+wants to visualize graphs and to use graphs for data analysis, one must
+take into account the values associated to the element (node or edge) of the 
+graph. One other central point in a visualization system is to provide a 
+way to compute parameters based on the intrinsic (or extrinsic) parameters
+of a given graph. We call intrinsic parameters those calculated by using the
+structure of the graph and extrinsic parameters those calculated using external
+information. For instance, if we consider a file system, the size of a file is
+an extrinsic parameter and the number of file in a directory is an intrinsic parameter 
+because in can be computed by analyzing the structure of the tree representing the file system.  
+</para>
+<para>
+This chapter describes the Tulip data structure that takes into account all the requirement
+of a graph visualization system. For each part we describe precisely the general principle and
+then we give several examples explaining how it can be done using the Tulip library.
+</para>
+
+<sect1 id="graphs"><title>Graphs</title>
+    <para>The core of the Tulip library provides an interface for the manipulation of graphs. This interface enables
+to access and to modify the structure of a graph. The objective of this library is to be the more general 
+as possible and thus this interface enables to manipulate a general class of graphs called directed pseudo-graph. 
+In a pseudo graph, it can exists several edges between two nodes and it can exists several loops. A loop is an
+edge that links a node to itself. Furthermore, the link are directed, thus an edge linking a node u to a node v is
+different from an edge linking a node v to a node u. 
+    </para>
+    <para>
+    Using of pseudo-graph implies that it can exist two edge between a node u and a node v. Thus, it is not possible to
+distinguish an edge using only its source and its target (u,v). To enable such a distinction, all the element in Tulip
+are entities (objects). Thus, even if two edges have the same source and the same target they are different.    
+    </para>
+    <para>
+Another important point to consider is that it is not possible to access to the structure of a graph through elements 
+(node or edge). Thus, all operations on the graph structure must be done by querying the graph. For instance, if one
+wants to know the source of an edge e of graph G, one must ask to G what is the source of e. This characteristic makes
+the use of the library a little bit less intuitive but, it enables to store entities using the minimum space and to 
+share them between sub-graphs. When using the Tulip data structure one must always keep in mind that building a container 
+of elements corresponds to store a container of integers in memory. For instance, a std::vector&lt;node&gt; is 
+equivalent to a std::vector&lt;unsigned int&gt;. 
+    </para>
+    <para>
+The library support access and modification of the graph structure. The access to the structure are made by using iterators,
+one very important point is that the iterator are not persistent. Thus, if one modify the graph structure all the iterators
+on the graph structure can be invalid. This property enables to prevent from cloning the data structure and thus enables 
+better access to it. For ease of use, Tulip includes mechanism that enables to transform an iterator into stable iterator,
+one must keep in mind that it corresponds to clone the data structure and thus, it should be use only if it is necessary.
+    </para>
+    <para>
+If one use Tulip only for the manipulation of one graph (no hierarchy), the list of available operations on the 
+graph is given afterward. In the next section we will enhance the set of operations and the actions that they perform 
+in order to manage a hierarchy of sub graphs
+    <itemizedlist>
+    <title>List of available modification operations</title>
+    <listitem><para><methodname>node addNode()</methodname> : it enables to create a new node in the graph.</para></listitem>
+    <listitem><para>    
+        <methodname>edge addEdge(node,node)</methodname> : it enables to create a new edge in the graph. </para></listitem>
+    <listitem><para><methodname>void delNode(node)</methodname> : it enables to delete a node in the graph.</para></listitem>
+    <listitem><para><methodname>void delEdge(edge)</methodname> : it enables to delete an edge in the graph.</para></listitem>
+    <listitem><para><methodname>void reverse(edge)</methodname> : it enables to reverse an edge (swap source and target).</para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+    <title>List of available access operations</title>
+    <listitem><para><methodname>unsigned int deg(node)</methodname> : returns the degree of a node.</para></listitem>
+    <listitem><para><methodname>unsigned int indeg(node)</methodname> : returns the in degree of a node.</para></listitem>
+    <listitem><para><methodname>unsigned int outdeg(node)</methodname> : returns the out degree of a node.</para></listitem>
+    <listitem><para><methodname>node source(edge)</methodname> : it returns the source of an edge.</para></listitem>
+    <listitem><para><methodname>node target(edge)</methodname> : it returns the target of an edge.</para></listitem>
+    <listitem><para><methodname>void opposite(edge,node)</methodname> : it enables to obtain the opposite of a node of an edge.</para></listitem>
+    <listitem><para><methodname>Iterator * getInNodes(node)</methodname> : returns an iterator on the ancestors of a node.</para></listitem>
+    <listitem><para><methodname>Iterator * getOutNodes(node)</methodname> : returns an iterator on the successors of a node.</para></listitem>
+    <listitem><para><methodname>Iterator * getInOutNodes(node)</methodname> : returns an iterator on the neighborhood of a node.</para></listitem>
+    <listitem><para><methodname>Iterator * getInEdges(node)</methodname> : returns an iterator on the ancestors of a node.</para></listitem>
+    <listitem><para><methodname>Iterator * getOutEdges(node)</methodname> : returns an iterator on the successors of a node.</para></listitem>
+    <listitem><para><methodname>Iterator * getInOutEdges(node)</methodname> : returns an iterator on the neighborhood of a node.</para></listitem>
+    </itemizedlist>
+    </para>
+</sect1>
+
+<sect1 id="hierarchy-graphs"><title>Hierarchy of graphs</title>
+    <para> The Tulip library integrates the management of sub graphs. By definition a sub graph G' of a graph G is part of 
+the elements of G such that G' is a graph. This implies that all sources and target of the edges of G' are in G'. 
+Thus a sub graph can be manipulated exactly like a graph and so in Tulip one will only manipulates graphs that
+we call SuperGraph because they could be or not sub graphs. As a sub graph is a graph one can need to obtain 
+a sub graph of this sub graph and so on. Such an operation consists in building of a hierarchy of graphs. In this 
+hierarchy if a graph G" is a descendant of a graph G, G" is a sub graph of G.
+    </para>
+    <para> One of the strong point of Tulip is to ensure efficiently that all elements are shared between graphs in a hierarchy
+of graph. Thus, if a node n is element of a graph G and of a graph G' the entity n is the same in both graphs. Off course,
+the information about the entity can changed between graphs. For instance, the degree of n can be different according to
+the graph that we manipulate.
+    </para>
+    <para> One of the other feature in Tulip is that the sub graph relation in the hierarchy is preserved when one
+makes modification of a graph. This requirement implies some change on the modification operations described above.
+If one add a node in a graph, this node is automatically added to all the ancestor of this graph. If one delete a
+node, this node is automatically deleted in all the descendant of the graph. If one reverse an edge, this edge is 
+automatically reversed in all the hierarchy of graphs.
+    </para>
+    <para> In order to manipulate a hierarchy of graphs, a set of functions have been added to graph function introduced
+above. This function enables to navigate in the hierarchy and also to modify the hierarchy of graphs. As for the
+graph structure the access to the hierarchy structure is done by using iterators. One should remember that iterators
+are not persistent and thus, if the hierarchy is modified, the iterators are invalid.
+    <itemizedlist>
+    <title>List of available modification operations</title>
+    <listitem><para><methodname>SuperGraph *addSubGraph()</methodname> : return an empty sub graph of this graph.</para></listitem>
+    <listitem><para><methodname>SuperGraph *delSubGraph(SuperGraph *)</methodname> : delete a sub graph, the descendant of this sub graph 
+    continue to be sub graphs of the graph.</para></listitem>
+    <listitem><para><methodname>SuperGraph *delAllSubGraph(SuperGraph *)</methodname> : delete a sub graph and all its descendant.</para></listitem>
+    <listitem><para><methodname>edge addEdge(edge)</methodname> : add an edge element of another graph in the hierarchy.</para></listitem>
+    <listitem><para><methodname>void addNode(node)</methodname> : add a node element of another graph in the hierarchy.</para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+    <title>List of available access operations</title>
+    <listitem><para><methodname>Iterator * getSubGraphs()</methodname> : returns an iterator on the sub graphs.</para></listitem>
+    <listitem><para><methodname>SuperGraph * getFather()</methodname> : returns the ancestor of the graph if the graph haven't got
+    ancestor, it returns itself.</para></listitem>
+    </itemizedlist>
+    </para>
+</sect1>
+
+<sect1 id="attributes"><title>Attributes</title><para></para></sect1>
+
+<sect1 id="properties"><title>Properties</title>
+    <para> The Tulip property enables to store attribute on the elements of a graph. In Tulip we call it Property in 
+order to prevent confusion with the graph attribute. Thus, the properties are for the elements and attributes are
+for the graphs. The main idea in Tulip is that a property is always define for all kind (node and edge) of elements
+in the graph. Thus we can always query for the value of an edge or a node to a property.
+    </para>
+    <para> As for the graph structure, to access the value of an elements one must query a property. This characteristic makes
+the use of the library a little bit less intuitive but, it enables to store efficiently the properties. 
+    </para>
+    <para>
+In general properties
+can be seen as an associative table where you can set or get the value of an element. In order to prevent having a lot of cast 
+in the code all the properties have type and thus there is no need to cast your result when you query a property. The standard
+operation of a property are given below :
+    <itemizedlist>
+    <title>List of available modification operations</title>
+    <listitem><para><methodname>void setNodeValue(node,TYPE)</methodname> : set the value of a node.</para></listitem>
+    <listitem><para><methodname>void setAllNodeValue(TYPE)</methodname> : set the value of all nodes.</para></listitem>
+    <listitem><para><methodname>void setEdgeValue(edge,TYPE)</methodname> : set the value of an edge.</para></listitem>
+    <listitem><para><methodname>void setAllEdgeValue(TYPE)</methodname> : set the value of all edges.</para></listitem>
+    </itemizedlist>
+    <itemizedlist>
+    <title>List of available access operations</title>
+    <listitem><para><methodname>TYPE getNodeValue(node)</methodname> : return the value of a node.</para></listitem>
+    <listitem><para><methodname>TYPE getEdgeValue(edge)</methodname> : return the value of an edge.</para></listitem>
+    </itemizedlist>
+    </para>
+    <para> For each kind of properties it exists a specific implementation (inheritance) that enables to obtain
+    specific operations (see developer documentation) depending of the Type. For instance, it is possible to obtain 
+    the maximum value of a property if it a double. 
+    </para>
+    <para> One of the most important things is to know how to create a property or to access to an existing property
+in the graph. To do this a graph includes a set of functions that enables to obtain/create/delete a Property. Because
+the C++ signature of function does not include the TYPE of the returned argument, the syntax for this call is not 
+very simple. For instance, if one wants to obtain a property containing double (called MetricProxy in Tulip) one must use
+the following syntax : <methodname> MetricProxy *metric=graph->getProperty&lt;MetricProxy&gt;("name of the property");</methodname>
+In the graph each properties are identified by their name which a std::string, when one ask for a property the type of this 
+property is checked using the run time type interrogation mechanism of the C++. Warning, this test is only done when one 
+compile its sources in DEBUG mode (default mode). In order to facilitate the navigation/edition of the set of properties, a
+set of function is accessible through the graph interface.
+    <itemizedlist>
+    <title>List of available operations</title>
+    <listitem><para><methodname>Iterators * getLocalProperties()</methodname> : return an iterator on all existing properties.</para></listitem>
+    <listitem><para><methodname>void delLocalProperty(std::string)</methodname> : delete a property.</para></listitem>
+    <listitem><para><methodname>bool existLocalProperty(std::string)</methodname> : return true if the property exists.</para></listitem>
+    <listitem><para><methodname>Proxytype * getLocalProperty (std::string)</methodname> : return the property or if it does not exist create 
+    a new one and return it </para></listitem>
+    </itemizedlist>
+    </para>
+    <para> The mechanism described above works well for graphs. However, in Tulip we are working with a hierarchy of graphs. 
+Thus a special mechanism have been added in order to enable to share easily properties between graphs. This mechanism use
+the fact that if a property exists in an ancestor of a graph, it can be use on the graph. This looks like an inheritance 
+mechanism of properties between graphs. As in object oriented language, in Tulip, it is possible to inherit a property
+or to have it defined locally. In order to facilitate the navigation/edition of the set of properties, a
+set of function is accessible through the graph interface.
+    <itemizedlist>
+    <title>List of available operations</title>
+    <listitem><para><methodname>Iterators * getInheritedProperties()</methodname> : return an iterator on all the inherited properties.</para></listitem>
+    <listitem><para><methodname>bool existProperty(std::string)</methodname> : return true if the property exists (inherited or locally).</para></listitem>
+    <listitem><para><methodname>Proxytype * getProperty(std::string)</methodname> : return the property (inherited or local) or if it does not exist create 
+    a new one (locally) and return it </para></listitem>
+    </itemizedlist>
+    </para>
+</sect1>
+
+<sect1 id="code-exemples"><title>Examples of code</title>
+    <sect2 id="code-exemples-graphs"><title>Graphs</title>
+        <para></para>
+    </sect2>
+
+    <sect2 id="code-exemples-properties"><title>Properties</title>
+        <para></para>
+    </sect2>
+</sect1>
+</chapter>
+
+<chapter id="opengl-library"><title>Tulip Open GL Library</title><para></para></chapter>
+
+<chapter id="qt-library"><title>Tulip QT Library</title><para></para></chapter>
+
+<chapter id="plugins-mechanism"><title>Plug-ins mechanism</title>
+<para>Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set-up. It enables
+to directly add new functionalities into the Tulip kernel. One must keep in mind that a plug-in have access to 
+all the part of Tulip. Thus, one must write plug-ins very carefully to prevent memory leak and also 
+errors. A bug in plug-in can result in a "core dump" in the software that uses it. To
+enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function
+parse all the Tulip plug-ins directory and load dynamically all the plug-ins and register them into 
+a factory that will enables to access to it directly.</para>
+
+<sect1 id="available-plugin"><title>Available plug-ins</title><para></para>
+</sect1>
+
+</chapter>
+
+<chapter id="graph_format"><title>Tulip graph format</title><para></para>
+</chapter>
+
+</book>

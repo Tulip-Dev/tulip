@@ -1,0 +1,195 @@
+/*******************************************************************************
+
+        Style sheet for Tulip doxygen documentation.
+
+        This script is made available under the terms of the General Public License.
+        You should have received a copy of the GNU General Public License
+        along with this software; see the file COPYING.  If not, write to
+        the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+        Boston, MA 02111-1307, USA.
+
+********************************************************************************/
+ 
+body {
+        margin: 0px;
+        color: black;
+        background-color: white;
+        font-family: sans-serif ;
+        font-size: 10pt
+}
+
+
+/* decorative header */
+div{
+    font-family:sans-serif;
+    font-size: 10pt;
+    color: #E5E5E5
+}
+div.header {
+        background-color: #0855C5;
+}
+div.header table {
+        padding: 0px;
+        margin: 0px
+}
+div.header table tr td h1 {
+        color: white;
+        font: bold 20pt courier;
+        padding-top: 0.5em;
+}
+
+/* little gradient below decorative/navigation header */
+div#hgrad {
+        height: 12px;
+}
+
+/* contents part of page */
+div.text {
+        margin: 12px
+}
+
+/* contents, mostly equivalent to the default doxugen style sheet */
+H1 { text-align: center; color:#4b4b4b ;}
+H3 { text-align: center; color:#4b4b4b ;}
+CAPTION { font-weight: bold }
+
+
+a { color: #41597A; text-align: center}
+A.qindex { color: #5f82b2; text-align: center}
+A.qindexRef {color: #5f82b2; text-align: center}
+A.el { text-decoration: none; font-weight: bold ; color:#5f82b2 ; font-size: 11pt}
+A.elRef { }
+A.code { text-decoration: none; font-weight: normal; color: #5f82cf }
+A.codeRef { font-weight: normal; color: #5f82cf }
+A:hover { text-decoration: none; background-color: #ffffff }
+A.anchor { text-align: left }
+
+DL.el { margin-left: -1cm }
+
+DIV.fragment { width: 100%; border: none; background-color: #ffffff; padding: 12px ;color: #000000}
+DIV.ah { background-color: #1c3b65; font-weight: bold; color: #ffffff; margin-bottom: 3px; margin-top: 3px }
+
+
+TD.mdRow { padding: 8px 20px; }
+TD.md { font-weight: bold; }
+TD.mdname1 { font-weight: bold; color: #602020; }
+TD.mdname { font-weight: bold; color: #602020; width: 600px; }
+DIV.groupHeader { margin-left: 16px; margin-top: 12px; margin-bottom: 6px; font-weight: bold }
+DIV.groupText { margin-left: 16px; font-style: italic; font-size: smaller }
+
+div.qindex{color: #41597A; text-align: center}
+
+TABLE.mdTable { background-color: #f8f8f8; border: .1em solid #d7d7d7; }
+/* global lind buttons at bottom of decorative header */
+table.links {
+        float: right;
+        border:0;
+        padding-left:1px
+}
+table.links td a {
+        color: white
+}
+table.links td:hover {
+        background-color:#0C4293;
+}
+table.links td a:hover {
+        color: white;
+        background-color:#0C4293
+}
+table.links td {
+        border-left: 1px solid #4A81D5;
+        padding: 0px 12px 0px 12px;
+        background-color:#0E4EAF;
+        font-size:9pt;
+        font-family : sans-serif;
+}
+
+TD.memItemLeft {
+   padding: 1px 0px 0px 8px;
+   margin: 4px;
+   border: solid .1em white;
+   border-right-style: none;
+   border-bottom-style: none;
+   border-left-style: none;
+   background-color: #f8f8f8;
+   font-size: 10pt
+}
+TD.memItemRight {
+   padding: 1px 0px 0px 8px;
+   margin: 4px;
+   border: solid .1em white;
+   border-right-style: none;
+   border-bottom-style: none;
+   border-left-style: none;
+   background-color: #f8f8f8;
+   font-size: 10pt
+}
+
+TD.memTemplParams{
+    font-size: 10pt
+}
+
+TD.memTemplItemLeft{ font-size: 10pt}
+TD.memTemplItemRight{ font-size: 10pt}
+
+TD.indexkey {
+   background-color: #f0f0f0;
+   font-weight: bold;
+   padding-right  : 10px;
+   padding-top    : 2px;
+   padding-left   : 10px;
+   padding-bottom : 2px;
+   margin-left    : 0px;
+   margin-right   : 0px;
+   margin-top     : 2px;
+   margin-bottom  : 2px
+}
+TD.indexvalue {
+   background-color: #f0f0f0;
+   font-style: normal;
+   padding-right  : 10px;
+   padding-top    : 2px;
+   padding-left   : 10px;
+   padding-bottom : 2px;
+   margin-left    : 0px;
+   margin-right   : 0px;
+   margin-top     : 2px;
+   margin-bottom  : 2px
+}
+
+SPAN.keyword       { color: #008000 }
+SPAN.keywordtype   { color: #604020 }
+SPAN.keywordflow   { color: #e08000 }
+SPAN.comment       { color: #800000 }
+SPAN.preprocessor  { color: #806020 }
+SPAN.stringliteral { color: #002080 }
+SPAN.charliteral   { color: #008080 }
+
+
+
+/* kde decoration at bottom */
+div#bottom-nav {
+        position : relative;
+        background-color: transparent;
+        /*width : 100%;*/
+        /*top: 0px;
+        left: 0px;
+        right: 0px;
+        margin-left: 0px;
+        margin-right:0px;*/
+        margin-top: 12px;
+        height: 50px;
+        background-image : url('bottom1.png');
+        background-repeat : repeat-x;
+}
+
+/* copyright etc at bottom */
+div.bottom {
+        margin: 12px;
+        font-size: 9pt;
+        text-align: right;
+}
+div.bottom a {
+        color: #aaaaaa
+}
+
