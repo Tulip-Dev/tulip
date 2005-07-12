@@ -191,15 +191,6 @@ table.screen {
   color: rgb(0,0,0); /* should be inherit */
 }
 
-/* Same as previous block, but more general (previous is HTML only)
-   Not all browsers understand this yet.
-   TABLE[class~=programlisting]
-   TABLE[class~=screen] { border-style: none;
-          background-color: rgb(224,224,224);
-          table-layout: auto;
-          color: inherit;
-}
-*/
 
 p { 
   text-align: justify; 
