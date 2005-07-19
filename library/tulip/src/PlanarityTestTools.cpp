@@ -1,20 +1,11 @@
 /*
- * Authors: Jérémy Compostella, Jean Darracq, Benjamin Muller,
- *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
- * 
- * Email : jcompost@etu.u-bordeaux1.fr, jdarracq@etu.u-bordeaux1.fr,
- *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
- *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
- *
- * $Id: PlanarityTestTools.cpp,v 1.1 2005-06-29 20:03:55 bardet Exp $
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
  * the Free Software Foundation; either version 2 of the License, or     
  * (at your option) any later version.
  */
 
-#include <tulip/PlanarityTest.h>
+#include <tulip/PlanarityTestImpl.h>
 #include <tulip/StableIterator.h>
 using namespace std;
 using namespace tlp;
@@ -29,7 +20,7 @@ std::ostream& operator <<(std::ostream &os , edge e) {
   }*/
 
 // //=================================================================
-edge PlanarityTest::edgeReversal( edge e) {
+edge PlanarityTestImpl::edgeReversal( edge e) {
   return reversalEdge[e];
 }
 //=================================================================
@@ -69,7 +60,7 @@ list<edge> posDFS(SuperGraph *sG,
   return dfsEdges;
 }
 //=================================================================
-void PlanarityTest::makeBidirected(SuperGraph *sG) {
+void PlanarityTestImpl::makeBidirected(SuperGraph *sG) {
   StableIterator<edge> stIte(sG->getEdges());
   while(stIte.hasNext()) {
     edge e = stIte.next();
@@ -86,7 +77,7 @@ void PlanarityTest::makeBidirected(SuperGraph *sG) {
  * Returns true for all edges e in T_0,
  *         false otherwise.
  */
-bool PlanarityTest::isT0Edge(SuperGraph *g, edge e) {
+bool PlanarityTestImpl::isT0Edge(SuperGraph *g, edge e) {
   edge e1 = T0EdgeIn.get((g->target(e)).id);
   //test à revoir je pense qu'en testant juste e == e1 ça suffit !
   if (e1 != NULL_EDGE && g->source(e1) == g->source(e) && g->target(e1) == g->target(e))
@@ -99,7 +90,7 @@ bool PlanarityTest::isT0Edge(SuperGraph *g, edge e) {
  * Returns true for all edges e in g - T_0,
  *         false otherwise.
  */
-bool PlanarityTest::isBackEdge(SuperGraph *g, edge e) {
+bool PlanarityTestImpl::isBackEdge(SuperGraph *g, edge e) {
   if (e == NULL_EDGE) return false;
   return (!isT0Edge(g, e));
 }
@@ -112,7 +103,7 @@ bool PlanarityTest::isBackEdge(SuperGraph *g, edge e) {
  * the number of 
  * nodes in g
  */
-void PlanarityTest::sortNodesIncreasingOrder(SuperGraph *g, MutableContainer<int> &value,
+void PlanarityTestImpl::sortNodesIncreasingOrder(SuperGraph *g, MutableContainer<int> &value,
 					     vector<node> &sortedNodes) {
 
   // Counting sort;
@@ -163,7 +154,7 @@ void PlanarityTest::sortNodesIncreasingOrder(SuperGraph *g, MutableContainer<int
  * in decreasing
  *   order by labelB -- needed by updateLabelB);
  */
-void PlanarityTest::preProcessing(SuperGraph *g) {
+void PlanarityTestImpl::preProcessing(SuperGraph *g) {
   int numberOfNodes = g->numberOfNodes();
   list<edge> edgeInT0; // list of edges in T_0;
   edgeInT0 = posDFS(g, dfsPosNum);
@@ -271,18 +262,18 @@ void PlanarityTest::preProcessing(SuperGraph *g) {
     }
 }
 //=================================================================
-void PlanarityTest::swapNode(node &n1, node &n2){
+void PlanarityTestImpl::swapNode(node &n1, node &n2){
   node tmp = n1;
   n1 = n2;
   n2 = tmp;
 }
 //=================================================================
-bool PlanarityTest::isCNode(node n) {
+bool PlanarityTestImpl::isCNode(node n) {
   if (n == NULL_NODE) return false;
   return (dfsPosNum.get(n.id) < 0);
 }
 //=================================================================
-node PlanarityTest::activeCNodeOf(bool calculatingObstruction, node n) {
+node PlanarityTestImpl::activeCNodeOf(bool calculatingObstruction, node n) {
   node cNode = n;
   if (!isCNode(n))
     cNode = parent.get(n.id);
@@ -298,7 +289,7 @@ node PlanarityTest::activeCNodeOf(bool calculatingObstruction, node n) {
   return cNode;
 }
 //=================================================================
-void PlanarityTest::addOldCNodeRBCToNewRBC(node oldCNode,
+void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 					   node newcnode,
 					   node n,
 					   node n1,
@@ -366,7 +357,7 @@ void PlanarityTest::addOldCNodeRBCToNewRBC(node oldCNode,
   nodeList.conc(RBC[oldCNode]);
 }
 //=================================================================
-void PlanarityTest::updateLabelB(node n) {
+void PlanarityTestImpl::updateLabelB(node n) {
   if (n.id == UINT_MAX)
     return;
   labelB.set(n.id, largestNeighbor.get(n.id));
@@ -401,7 +392,7 @@ void PlanarityTest::updateLabelB(node n) {
   }
 }
 //=================================================================
-void PlanarityTest::calcNewRBCFromTerminalNode(node newCNode,
+void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
 					       node n,
 					       node n1,
 					       node n2,
@@ -443,7 +434,7 @@ void PlanarityTest::calcNewRBCFromTerminalNode(node newCNode,
   }
 }
 //=================================================================
-node PlanarityTest::lastPNode(node n1, node n2) {
+node PlanarityTestImpl::lastPNode(node n1, node n2) {
   if (n1 == n2) {
     if (!isCNode(n1))
       return n1;
@@ -471,7 +462,7 @@ node PlanarityTest::lastPNode(node n1, node n2) {
   return n;
 }
 //=================================================================
-node PlanarityTest::lcaBetween(node n1,
+node PlanarityTestImpl::lcaBetween(node n1,
 			       node n2,
 			       const MutableContainer<node> &p) {
   if (isCNode(n1)) {
@@ -504,7 +495,7 @@ node PlanarityTest::lcaBetween(node n1,
   return nl.front();
 }
 //=================================================================
-node PlanarityTest::lcaBetweenTermNodes(node n1,
+node PlanarityTestImpl::lcaBetweenTermNodes(node n1,
 					node n2) {
   node lca = lastVisited.get(n1.id);
   if (dfsPosNum.get((lastVisited.get(n2.id)).id) < dfsPosNum.get(lca.id))
@@ -517,7 +508,7 @@ node PlanarityTest::lcaBetweenTermNodes(node n1,
   return lca;
 }
 //=================================================================
-void PlanarityTest::calculateNewRBC(SuperGraph* sG,
+void PlanarityTestImpl::calculateNewRBC(SuperGraph* sG,
 				    node newCNode,
 				    node n,
 				    list<node>& terminalNodes) {
@@ -590,7 +581,7 @@ void PlanarityTest::calculateNewRBC(SuperGraph* sG,
   }
 }
 //=================================================================
-node PlanarityTest::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTraversed,
+node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTraversed,
 						      SuperGraph *sG,
 						      node n,
 						      node t) {
@@ -661,7 +652,7 @@ node PlanarityTest::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTraversed
   return NULL_NODE;
 }
 //=================================================================
-void PlanarityTest::setPossibleK33Obstruction(node cNode,
+void PlanarityTestImpl::setPossibleK33Obstruction(node cNode,
 					      node n,
 					      node nl,
 					      node nr) {
@@ -674,7 +665,7 @@ void PlanarityTest::setPossibleK33Obstruction(node cNode,
   cNodeOfPossibleK33Obstruction = cNode;
 } 
 //=================================================================
-bool PlanarityTest::testCNodeCounter(SuperGraph* sG,
+bool PlanarityTestImpl::testCNodeCounter(SuperGraph* sG,
 				     node cNode,
 				     node n,
 				     node n1,
@@ -750,7 +741,7 @@ bool PlanarityTest::testCNodeCounter(SuperGraph* sG,
   return false;
 }
 //=================================================================
-bool PlanarityTest::testObstructionFromTerminalNode(SuperGraph *sG,
+bool PlanarityTestImpl::testObstructionFromTerminalNode(SuperGraph *sG,
 						    node w,
 						    node terminal,
 						    node u) {
@@ -778,7 +769,7 @@ bool PlanarityTest::testObstructionFromTerminalNode(SuperGraph *sG,
 }
 
 //=================================================================
-BmdLink<node>*  PlanarityTest::searchRBC(int dir, BmdLink<node>* it, node n,
+BmdLink<node>*  PlanarityTestImpl::searchRBC(int dir, BmdLink<node>* it, node n,
 				    list<node>& traversedNodesInRBC)
 {
   if (it != 0 && (it->prev() == 0 || it->succ() == 0)) // 1st or last item in RBC;
@@ -830,7 +821,7 @@ BmdLink<node>*  PlanarityTest::searchRBC(int dir, BmdLink<node>* it, node n,
  * - state[v] == NOT_VISITED for each node v in RBC list that was not
  *   traversed.
  */
-node PlanarityTest::findActiveCNode(node u, node w, list<node>& nl) {
+node PlanarityTestImpl::findActiveCNode(node u, node w, list<node>& nl) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   list<node> traversedNodesInRBC;
   assert(isCNode(parent.get(u.id)));

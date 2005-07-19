@@ -72,6 +72,7 @@ libtulip_la_SOURCES = \
 	Face.cpp \
 	FaceIterator.cpp \
 	PlanarityTest.cpp \
+	PlanarityTestImpl.cpp \
 	PlanarityTestEmbed.cpp \
 	PlanarityTestObstr.cpp \
 	PlanarityTestTools.cpp

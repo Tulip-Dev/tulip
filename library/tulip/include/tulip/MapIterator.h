@@ -12,6 +12,7 @@
 #include <tulip/SuperGraph.h>
 #include <tulip/tulipconf.h>
 #include <list>
+#include <vector>
 
 #ifndef TULIP_NODEMAPITERATOR_H
 #define TULIP_NODEMAPITERATOR_H

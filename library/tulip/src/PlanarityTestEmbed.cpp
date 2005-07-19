@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestEmbed.cpp,v 1.1 2005-06-29 20:03:55 bardet Exp $
+ * $Id: PlanarityTestEmbed.cpp,v 1.2 2005-07-19 10:01:54 auber Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -14,9 +14,10 @@
  * (at your option) any later version.
  */
 
-#include <tulip/PlanarityTest.h>
+#include <tulip/PlanarityTestImpl.h>
 #include <tulip/MapIterator.h>
 #include <tulip/StableIterator.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -42,7 +43,7 @@ void sortEdges(SuperGraph *graph, const vector<edge> &order, map<edge,edge>& rev
  * - G is a graph with n nodes;
  * - G is biconnected.
 */
-void PlanarityTest::embedRoot(SuperGraph *sG, int n) {
+void PlanarityTestImpl::embedRoot(SuperGraph *sG, int n) {
   if (n <= 2)
     return;
   list<node> traversedNodes;
@@ -169,7 +170,7 @@ void PlanarityTest::embedRoot(SuperGraph *sG, int n) {
  * - for all nodes u in T_w, has_back_edge[u] == false;
  * - T_w is biconnected.
 */
-void PlanarityTest::calculatePartialEmbedding(SuperGraph *sG,
+void PlanarityTestImpl::calculatePartialEmbedding(SuperGraph *sG,
 					      node w,
 					      node newCNode,
 					      list<edge>& listBackEdges,
@@ -291,7 +292,7 @@ void PlanarityTest::calculatePartialEmbedding(SuperGraph *sG,
  * initializes backedge_representant[u] = u,
  * marks u as VISITED and appends u to list traversed_nodes.
 */
-void PlanarityTest::markPathInT(node t, node w,
+void PlanarityTestImpl::markPathInT(node t, node w,
 				map<node, node>& backEdgeRepresentant,
 				list<node>& traversedNodes) {
   state.set(w.id, VISITED);
@@ -315,7 +316,7 @@ void PlanarityTest::markPathInT(node t, node w,
  * Precondition:
  * - for all nodes u in T_w, has_back_edge[u] == false.
 */
-map< node,list<edge> > PlanarityTest::groupBackEdgesByRepr(SuperGraph *sG,
+map< node,list<edge> > PlanarityTestImpl::groupBackEdgesByRepr(SuperGraph *sG,
 						    list<edge>& listBackEdges,
 						    map<node, node>& backEdgeRepresentant,
 						    list<node>& traversedNodes,
@@ -394,7 +395,7 @@ map< node,list<edge> > PlanarityTest::groupBackEdgesByRepr(SuperGraph *sG,
  * - if u is a node in P' and e is a back-edge with representant u then e is in list
  *   b_edges_repres[u].
  */
-list<node> PlanarityTest::embedUpwardT(bool embBackEdgesOutW,
+list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW,
 				       node t1,
 				       node t2,
 				       SuperGraph *sG,
@@ -449,7 +450,7 @@ list<node> PlanarityTest::embedUpwardT(bool embBackEdgesOutW,
  *   and there exists a path from u to w that doesn't contain any node in the
  *   2-connected component represented by oldCNode, except u.
  */
-void PlanarityTest::addOldCNodeToEmbedding(bool embBackEdgesOutW,
+void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 					   SuperGraph *sG,
 					   node w,
 					   node oldCNode,
@@ -526,7 +527,7 @@ void PlanarityTest::addOldCNodeToEmbedding(bool embBackEdgesOutW,
  * emb_back_edges_out_w is false only in case of 2 terminal
  * nodes, for one of the two terminals (see calculate_partial_embedding).
  */
-void PlanarityTest::embedBackEdges(bool embBackEdgesOutW,
+void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
 				   SuperGraph *sG,
 				   node repr,
 				   list<node>& traversedNodes,
@@ -585,7 +586,7 @@ void PlanarityTest::embedBackEdges(bool embBackEdgesOutW,
  * (T_repr - P), denoted as T_v^*.
 */
 #include <tulip/SuperGraphImpl.h>
-int PlanarityTest::sortBackEdgesByDfs(SuperGraph *sG,
+int PlanarityTestImpl::sortBackEdgesByDfs(SuperGraph *sG,
 				      node w,
 				      node repr,
 				      list<edge>& listBackEdges,
@@ -687,7 +688,7 @@ int PlanarityTest::sortBackEdgesByDfs(SuperGraph *sG,
 /*
  * Algebric criteria to check the plane map...
  */
-void PlanarityTest::checkEmbedding(SuperGraph *sG) {
+void PlanarityTestImpl::checkEmbedding(SuperGraph *sG) {
   unsigned int count = 0;
   MutableContainer<char> considered;
   MutableContainer<bool> sens;
@@ -730,3 +731,4 @@ void PlanarityTest::checkEmbedding(SuperGraph *sG) {
     cerr << __PRETTY_FUNCTION__ << " : not ok :( nb faces :" << fc << "!=" << m - n +2 << endl;
   }
 }
+//=================================================================

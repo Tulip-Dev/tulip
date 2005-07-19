@@ -14,10 +14,9 @@
 #include <vector>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-
 #include <cassert>
 
-class Face : private std::vector<edge>{
+class Face : protected std::vector<edge>{
 
   friend class NodeFaceIterator;
   friend class EdgeFaceIterator;

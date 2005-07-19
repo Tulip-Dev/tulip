@@ -35,7 +35,8 @@ class SuperGraph;
 class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
   static bool isSimple(SuperGraph *graph);
-
+  //static list<edge> simpleEdgeObstruction(SuperGraph *graph);
+  
  private:
   SimpleTest();
   bool compute(SuperGraph *graph);
