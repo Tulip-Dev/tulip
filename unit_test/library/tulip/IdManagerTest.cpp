@@ -50,7 +50,7 @@ void IdManagerTest::testGetFree() {
 //==========================================================
 void IdManagerTest::testIsFree() {
   for (unsigned int i = 0; i <1000; ++i) {
-    unsigned int id = idManager->get();
+     idManager->get();
   }
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);

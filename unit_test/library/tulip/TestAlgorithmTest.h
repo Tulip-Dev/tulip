@@ -1,5 +1,5 @@
-#ifndef TLPBICONNEXTESTTEST
-#define TLPBICONNEXTESTTEST
+#ifndef TLPTESTALGORITHMTEST
+#define TLPTESTALGORITHMTEST
 
 
 #include <cppunit/TestFixture.h>

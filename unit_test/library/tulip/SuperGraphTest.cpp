@@ -29,7 +29,6 @@ void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
 //==========================================================
 void SuperGraphTest::testIterators() {
   graph->clear();
-
   vector<node> nodes;
   vector<edge> edges;
   unsigned int NB_NODES  = 100;
@@ -105,10 +104,6 @@ void SuperGraphTest::testIterators() {
   CPPUNIT_ASSERT_EQUAL(e4.id, it6->next().id);
   CPPUNIT_ASSERT_EQUAL(false, it6->hasNext());
   delete it6;
-
-
-
-
 }
 //==========================================================
 void degreeCheck(SuperGraph *graph) {

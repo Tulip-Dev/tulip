@@ -12,6 +12,7 @@ SRCS=   tuliplibtest.cpp \
 	ExtendedClusterOperationTest.cpp \
 	IdManagerTest.cpp \
 	FaceIteratorTest.cpp \
+	PlanarityTestTest.cpp \
 	SuperGraphMapTest.cpp
 
 
