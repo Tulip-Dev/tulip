@@ -25,9 +25,11 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
   glBegin(GL_LINES);
-  glColor4ub(startColor.getR(),startColor.getG(),startColor.getB(), 255);//startColor.getA());
+  //  glColor4ub(startColor.getR(),startColor.getG(),startColor.getB(), 255);//startColor.getA());
+  glColor3ub(startColor.getR(),startColor.getG(),startColor.getB());
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
-  glColor4ub(endColor.getR(),endColor.getG(),endColor.getB(), 255); //endColor.getA());
+  glColor3ub(endColor.getR(),endColor.getG(),endColor.getB()); //endColor.getA());
+  //  glColor4ub(endColor.getR(),endColor.getG(),endColor.getB(), 255); //endColor.getA());
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
   GlLines::glDisableLineStipple(stippleType);
