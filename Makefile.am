@@ -1,5 +1,5 @@
-SUBDIRS = thirdparty library plugins software
-DIST_SUBDIRS =  thirdparty library plugins software samples
+SUBDIRS = thirdparty library plugins software docs
+DIST_SUBDIRS =  thirdparty library plugins software samples docs
 EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     $(PACKAGE)-$(VERSION).spec \
 	     $(PACKAGE)-$(VERSION).nsi \
