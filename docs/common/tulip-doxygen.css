@@ -16,6 +16,7 @@ body {
         background-color: white;
         font-family: sans-serif ;
         font-size: 10pt
+        
 }
 
 
@@ -71,9 +72,9 @@ DIV.ah { background-color: #1c3b65; font-weight: bold; color: #ffffff; margin-bo
 
 
 TD.mdRow { padding: 8px 20px; }
-TD.md { font-weight: bold; }
-TD.mdname1 { font-weight: bold; color: #602020; }
-TD.mdname { font-weight: bold; color: #602020; width: 600px; }
+TD.md {width:%}
+TD.mdname1 {color: #602020;}
+TD.mdname { color: #602020;}
 DIV.groupHeader { margin-left: 16px; margin-top: 12px; margin-bottom: 6px; font-weight: bold }
 DIV.groupText { margin-left: 16px; font-style: italic; font-size: smaller }
 
@@ -156,6 +157,8 @@ TD.indexvalue {
    margin-top     : 2px;
    margin-bottom  : 2px
 }
+
+P{ font-size:10pt}
 
 SPAN.keyword       { color: #008000 }
 SPAN.keywordtype   { color: #604020 }
