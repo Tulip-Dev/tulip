@@ -2,13 +2,20 @@
 <!--<?xml-stylesheet href="../common/tulip-default.css" type="text/css"?>-->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "/usr/share/sgml/docbook/xml-dtd-4.4-1.0-27/docbookx.dtd">
 
-<!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.1.2//EN"
-	"../common/tulip-dtd.dtd">-->
-
 <book><bookinfo><title>Tulip Developer Handbook</title></bookinfo>
 
-<chapter id="introduction"><title>Introduction</title><para></para></chapter>
-<chapter id="installation"><title>Installation</title><para></para></chapter>
+<chapter id="introduction"><title>Introduction</title>
+    <para></para>
+</chapter>
+<chapter id="installation"><title>Installation</title>
+    <para></para>
+    <sect1 id="environment"><title>Environment variables</title>
+        <para></para>
+    </sect1>
+    <sect1 id="options"><title>Options</title>
+        <para></para>
+    </sect1>
+</chapter>
 <chapter id="data-structure"><title>Data Structure</title>
 <para>Efficient visualization of graphs implies to manipulate the structure of 
 the graph but also to extract part of this structure. Moreover, if one 
@@ -225,7 +232,8 @@ a factory that will enables to access to it directly.</para>
 
 </chapter>
 
-<chapter id="graph-format"><title>Tulip graph format</title><para></para>
+<chapter id="graph-format"><title>Tulip graph format</title>
+    <para></para>
 </chapter>
 
 <chapter id="prog-guidelines"><title>Programming Guidelines</title>
@@ -269,7 +277,7 @@ a factory that will enables to access to it directly.</para>
     <!--===================================================================================    -->
 
     <!--======= INTEGRATION ================================================================    -->
-    <sect1 id="integration"><title>Code Integration</title>
+    <sect1 id="integration"><title>Integration in Tulip project</title>
 	<para> To integrate a new module, set of types, in the Tulip project. you must to know which library is concerned : General library, OpenGl library, QT library, ... For each case, the procedure is the same. <filename>tulip/library/tulip-ogl/</filename> is the directory to intergate a library attached to the Opengl library. All of the <filename>cpp</filename> files are pasted in the <filename>src</filename> subdirectory, <filename>h</filename> files in <filename>include/tulip</filename> and <filename>cxx</filename> files in <filename>include/tulip/cxx</filename>. Some modifiactions of your code shoud be necessary. The inclusion of files of Tulip project (included your work) is made with &lt; and &gt; because the compiler knows the path. For Tulip, the header files is in a special directory : <programlisting>#include &lt;tulip/TheFile.h></programlisting>
 	Tulip uses automatically generation of <filename>Makefile</filename>. So, you have to modify two files in the directory of your library. <filename>include/Makefile.am</filename> is the first. You have to complete a variable containing all <filename>.h</filename> and <filename>.cxx</filename> files with your header files. The second one is <filename>src/Makefile.am</filename> and so, you complete the variable containing all <filename>.cpp</filename> files with your source files. The next compilation include your work.
     </para>
@@ -280,40 +288,43 @@ a factory that will enables to access to it directly.</para>
 
 <chapter id="doc-guidelines"><title>Documentation Guidelines</title>
     <sect1 id="definitions"><title>Definitions</title>
+        <para></para>
 	<orderedlist>
-	<listitem id="docbook"><para>DocBook is a collection of standards and tools for technical publishing. A DocBook file is composed of SGML(<xref linkend="sgml"/>) tags and is also a DTD(<xref linkend="dtd"/>). See <ulink url="http://www.oreilly.com/catalog/docbook/chapter/book/docbook.html">the Duck book</ulink> for valid tags and all of the informations about docbook.</para></listitem>
-
-	<listitem id="dxsl"><para><ulink url="http://www.sagehill.net/docbookxsl/index.html"> DocBook XSL : the complete Guide</ulink></para></listitem>
+	<listitem id="docbook"><para>DocBook is a collection of standards and tools for technical publishing. A DocBook file is composed of SGML(<xref linkend="sgml"/>) tags and is also dependant of a DTD(<xref linkend="dtd"/>).</para></listitem>
 
 	<listitem id="dtd"><para>DTD : Document Type Definition. The DTD defines the vocabulary of content elements that an author can use and how they relate to each other. For example, a book element can contain a title element, any number of para elements for paragraphs, and any number of chapter elements. </para></listitem>
 
-	<listitem id="meinproc"><para>meinproc is the KDE translator for XML</para></listitem>
+	<!--<listitem id="meinproc"><para>meinproc is the KDE translator for XML</para></listitem>-->
 
-        <listitem id="nsgmls"><para>nsgmls, a SGML parser</para></listitem>
+        <!--<listitem id="nsgmls"><para>nsgmls, a SGML parser</para></listitem>-->
 
-	<listitem id="saxon"><para>Saxon is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter.</para></listitem>
+	<!--<listitem id="saxon"><para>Saxon is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter.</para></listitem>-->
 
 	<listitem id="sgml"><para>SGML : Standard Generalized Markup Language</para></listitem>
 
-	<listitem id="xalan"><para>Xalan is XSLT stylesheet processor, in Java and C++ from Apach XML Project.</para></listitem>
+	<!--<listitem id="xalan"><para>Xalan is XSLT stylesheet processor, in Java and C++ from Apach XML Project.</para></listitem>-->
     
-	<listitem id="xsl"><para>XSL (Extensible Stylesheet Language) processor is the software that transforms an XML file into formatted output : xlstproc, saxon, xalan</para></listitem>
+        <listitem id="xsl"><para>XSL (Extensible Stylesheet Language) is a language of description used for the transformation of the sgml file into formatted ouput: XSL processors like xsltproc, saxon or xalan, ... do that.</para></listitem>
 
-	<listitem id="xsl-fo"><para>XSL-FO processors are really typesetting engines. It generates a PDF or PostScript file.</para></listitem>
+	<!--<listitem id="xsl-fo"><para>XSL-FO processors are really typesetting engines. It generates a PDF or PostScript file.</para></listitem>-->
 
-	<listitem id="xslt"><para>XSLT (XSL Transformations) is a language used to transform XML document into other XML documents. For reference information, see the W3C Recommendation <ulink url="http://www.w3.org/TR/xslt.html">http://www.w3.org/TR/xslt.html.</ulink></para></listitem>
+	<!--<listitem id="xslt"><para>XSLT (XSL Transformations) is a language used to transform XML document into other XML documents. For reference information, see the W3C Recommendation <ulink url="http://www.w3.org/TR/xslt.html">http://www.w3.org/TR/xslt.html.</ulink></para></listitem>-->
 
-	<listitem id="xsltproc"><para>xsltproc is the xslt c library for gnome. this program is a way to use the library <emphasis>libxslt</emphasis> with a commande line tool for applying XSLT stylesheets to XML documents. </para></listitem>
+	<!--<listitem id="xsltproc"><para>xsltproc is the xslt c library for gnome. this program is a way to use the library <emphasis>libxslt</emphasis> with a commande line tool for applying XSLT stylesheets to XML documents. </para></listitem> -->
 	</orderedlist>
     </sect1>
-    <sect1 id="written"><title>Handwriting of a handbook's part</title>
-	<para>Some works on the Tulip project lead to make an part of a handbook for developer or users. We use the docbook utilities to create them. 
+    <sect1 id="tools-install"><title>Tools installation</title>
+        <para></para>
+    </sect1>
+    <sect1 id="written"><title>Handwriting for the manuals</title>
+    <para>Some works on the Tulip project lead to make an part of a handbook for developer or users. We use the docbook utilities to create them. 
 	DocBook is an SGML document type definition (DTD). An XML version is available now. SGML is an standard that describes how markup languages are defined. SGML does not consist of particular tags or the rules for their usage. HTML is an example of a markup language defined in SGML. On the other hand, XML is intended to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. 
 	</para>
-
 	<para>For each document, an .docbook file is created. To help the editing of the handbook, it is possible to use general editor like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> DocBook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. Then, the common files for generating documentations are in a directory named <filename>common</filename>. It locates in <filename>docs</filename> of the Tulip directory.</para>
 
-	<sect2 id="elements"><title>Some elements to make easily a .docbook file</title>
+       <para>To find all of the xml elements, you can use : http://www.docbook.org/tdg/en/html/part2.html</para>
+
+	<sect2 id="tricks"><title>Tricks for the beginning</title>
 	    <para>
 	    <programlistingco>
 	    <areaspec>
@@ -360,87 +371,96 @@ a factory that will enables to access to it directly.</para>
     &lt;index> ... &lt;/index>
 &lt;/book>
 </programlisting>
-        A validating parser is a program that can read the DTD and determine whether the exact order of elements in the document is valid according to the DTD. To determinate if the XML code is valid, the programm <emphasis>meinproc</emphasis> is used in <filename>Makefile</filename> with the option --check. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg></cmdsynopsis>
+        A validating parser is a program that can read the DTD and determine whether the exact order of elements in the document is valid according to the DTD. To determinate if the XML code is valid, the programm <emphasis>meinproc</emphasis> is used in <filename>Makefile</filename> with the option --check. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg> <arg>-o /dev/null</arg></cmdsynopsis>
         </para>
 
         <para>It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). </para>
 
-        <para></para>
+        <sect3 id="duck-compil"><title>DocBook Compilation</title><para></para></sect3>
 	</sect2>
+        <sect2 id="how-contribute"><title>How to contribute</title><para></para></sect2>
     </sect1>
-    <sect1 id="doxygen"><title>Doxygen</title>
-	<para>Doxygen is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages and/or an off-line reference manual (in LaTeX) or other from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how is it imagined but which possibilities you have. See the web site of Doxygen : <ulink url="http://www.doxygen.org">http://www.doxygen.org</ulink>. It is available for several distributions like Fedora Core, Debian, Gentoo and others,..  Windows, MacOs and Sun Solaris too.
+    <sect1 id="doxygen"><title>Code documentation</title>
+        <sect2 id="presentation_dox"><title>Presentation</title>
+	<para><application>Doxygen</application> is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how is it imagined but which possibilities you have. It is available for several distributions like Fedora Core, Debian, Gentoo and others,..  Windows, MacOs and Sun Solaris too. See the web site of <application>Doxygen</application> : <ulink url="http://www.doxygen.org">http://www.doxygen.org</ulink>.
 	</para>
-	<para>To create your first doxygen documentation, you need a config file .cfg or .doxygen. To generate it :
+	<para>To create your first <application>Doxygen</application> documentation, you need a config file .cfg or .doxygen. To generate it :
 	<cmdsynopsis><command>doxygen</command><arg><option>-g</option> myfile.doxygen</arg></cmdsynopsis>
-	Several comments indicates how to use variables of the config file. this variables is useful to specify informations about your project and what you want to obtain. The INPUT tag contains the files or directories that contains your sources files. When you have set all tags with good values, you can generate the documentations.
+        The file contains the options you can choose for the documentation generation. Comments indicates how to use this variables. The INPUT variable contains the files or directories to find the source files. When you have set all tags with good values, you can generate the documentations. <application>Doxygen</application> checks the source files to extract the informations in special comments and tags. See this page for the informations about the variables : <ulink url="http://www.stack.nl/~dimitri/doxygen/config.html">http://www.stack.nl/~dimitri/doxygen/config.html</ulink>. To create it :
 	<cmdsynopsis><command>doxygen</command><arg>myfile.doxygen</arg></cmdsynopsis>
-	it creates directories containing the documentations.
+        By default, it creates directories : html, latex, and/or man, ...
 	</para>
-        <para>For the Tulip project, the configuration files are still created and are located in the subdirectory of the special library, for example in <filename>(tulip)/docs/doxygen/tulip-lib</filename>.</para>
-	<sect2 id="contributions"><title>Developer contributions</title>
-	    <para>This part of the documentation depends completely of the developer comments. It is important that developers lead the grammar rules of doxygen. On the web site of Doxygen, you can find the important informations to comment the code correctly.</para>
-	    <para>So the documentation's blocks in the sources files are the C++ comment blocks. For each code item there are two types of descriptions, which together form the documentation: a brief description and detailed description
+        <para>For the <application>Tulip</application> project, the configuration files are still created and are located in the subdirectory of the special library, for example in <filename>(tulip)/docs/doxygen/tulip-lib</filename>.</para>
+        </sect2>
+	<sect2 id="dx-comments"><title>Developer comments</title>
+	    <para>The code documentation, generated by <application>Doxygen</application> is completely dependant of the developer comments. It is important that developers follow the grammar rules. </para>
+	    <para>So the blocks of documentation in the sources files are the C++ comment blocks. For each item of code, there are two types of descriptions, which together form the documentation: a brief description and detailed description. A detail description is used to explain generously the existence of an item.
 	    <screen>
 /**
-* <emphasis>detailed description</emphasis>
+* detailed description
 */
 
 or 
 
 /*!
-* <emphasis>detailed description</emphasis>
+* detailed description
 */
 
 or 
 
 /*!
-<emphasis>detailed description</emphasis>
+ detailed description
 */
 
 or others ....
 		</screen>
 	    To make a brief description, you can use the command <methodname>\brief</methodname>. This command ends at the end of a paragraph, so the detailed description follows after an empty line. An other option is to use a special C++ style comment which does not span more than one line.
 <screen>
-/*! \brief <emphasis>Brief description.............
-*         ......... continued ......</emphasis>
+/*! \brief Brief description.............
+*         ...............
 *
 *  Detailed description
 */
 
 or 
 
-/// <emphasis>Brief description </emphasis>
-/** <emphasis>Detailed description. </emphasis>*/
+/// Brief description 
+/** Detailed description. */
 
 or 
 
-//! <emphasis>Brief descripion.</emphasis>
+//! Brief descripion.
 
-//! <emphasis>Detailed description </emphasis>
-//! <emphasis>starts here.</emphasis>
+//! Detailed description 
+//! starts here.
 
 or others ....
 	    </screen>
 	    For more details, the web site of <ulink url="http://www.doxygen.org/docblocks.html">Doxygen</ulink> explains it. 
-	    In general, the comments must be before the declaration or definition of a type, a function or a member. If you want to putting the documention after, you add a marker &lt;. Note that you can place your comment at other places using some tags like \class, \union, \fn, \var, ... or @class, @union, @fn, @var, ...
+	    In general, the comments must be before the declaration or definition of a type, a function or a member. If you want to putting the documention after, you have to add a marker &lt;. Note that you can place your comment at other places using some tags like \class, \union, \fn, \var, ... or @class, @union, @fn, @var, ...
 	    </para>
 	    <para>
-	    It exists several tags to help you for commenting and writing a description : 
+	    It exists several tags to help you for commenting and writing a description : all of it begin with a backflash <symbol>\</symbol> or an at-sign<symbol>@</symbol>.
 	    <itemizedlist>
-		<listitem><para>@author, name of the author. </para></listitem>
-		<listitem><para>@param, to write a special comment on a parameter of a method or function. </para></listitem>
-		<listitem><para>@see, to make a reference to an other object or function. </para></listitem>
-		<listitem><para>@return, to indicate the exit of a function. </para></listitem>
-		<listitem><para>@date, date of creation</para></listitem>
-		<listitem><para>@note, desribe a role</para></listitem>
-		<listitem><para>@attention, write a caution</para></listitem>
+		<listitem><para>@author, <emphasis>name of the author</emphasis>. </para></listitem>
+		<listitem><para>@param, <emphasis>to write a special comment on a parameter of a method or function</emphasis> </para></listitem>
+		<listitem><para>@see, <emphasis>to make a reference to an other object or function</emphasis></para></listitem>
+		<listitem><para>@return, <emphasis>to indicate the exit of a function</emphasis></para></listitem>
+		<listitem><para>@date, <emphasis>date of creation</emphasis></para></listitem>
+		<listitem><para>@note, <emphasis>desribe a role</emphasis></para></listitem>
+		<listitem><para>@attention, <emphasis>write a caution</emphasis></para></listitem>
 		<listitem><para>@warning</para></listitem>
-		<listitem><para>@pre, write a prerequisite</para></listitem>
+		<listitem><para>@pre, <emphasis>write a prerequisite</emphasis></para></listitem>
 		<listitem><para>@remark</para></listitem>
 	    </itemizedlist>
+            The complete list is on this <ulink url="http://www.stack.nl/~dimitri/doxygen/commands.html">page</ulink> in the <application>Doxygen</application> web site.
 	    </para>
 	</sect2>
+    </sect1>
+    <sect1 id="docs-ref"><title>References</title>
+        <para>DocBook XSL : the complete Guide <ulink url="http://www.sagehill.net/docbookxsl/index.html">http://www.sagehill.net/docbookxsl/index.html</ulink></para>
+
+        <para>The Duck Book - <ulink url="http://www.oreilly.com/catalog/docbook/chapter/book/docbook.html">Docbook : the Definitive Guide </ulink></para>
     </sect1>
 </chapter>
 </book>

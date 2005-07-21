@@ -1,12 +1,5 @@
 all : doc
 
-
-REP_COMMON=`pwd`/../common
-HEAD_FILE=tulipdoc.html
-HEADER=header.html
-FOOTER=footer.html
-
-
 doc :
 	sh gen-index.sh
 

@@ -4,6 +4,48 @@
 <book><bookinfo><title>Tulip User Manual</title></bookinfo>
 
 <chapter id="introduction"><title>Introduction</title><para></para></chapter>
-<chapter id="interface"><title>Graphic Interface</title><para></para></chapter>
-<chapter id="functions"><title>Functionalities</title><para></para></chapter>
+<chapter id="interface"><title>Graphic Interface</title>
+    <sect1 id="mouse"><title>Mouse Toolbar</title>
+        <para></para>
+    </sect1>
+    <sect1 id="overview"><title>3D Overview</title>
+        <para></para>
+    </sect1>
+    <sect1 id="infoeditor"><title>Info Editor</title>
+        <para></para>
+    </sect1>
+    <sect1 id="view"><title>View window</title>
+        <para></para>
+    </sect1>
+
+</chapter>
+<chapter id="functions"><title>Functionalities</title>
+    <sect1 id="import"><title>Creation and Importation of Graphs</title>
+        <para></para>
+    </sect1>
+    <sect1 id="algo"><title>Algorithms</title>
+        <para></para>
+    </sect1>
+    <sect1 id="graph-properties"><title>Properties of graphs</title>
+        <para></para>
+    </sect1>
+    <sect1 id="stats"><title>Statistics</title>
+        <para></para>
+    </sect1>
+    <sect1 id="hierarchy"><title>Hierarchy</title>
+        <para></para>
+    </sect1>
+    <sect1 id="text-rend"><title>Text Rendering</title>
+        <para></para>
+    </sect1>
+    
+</chapter>
+<chapter id="tutorial"><title>Tutorials</title>
+    <sect1 id="first-step"><title>First Step</title><para></para></sect1>
+    <sect1 id="properties"><title>Properties</title><para></para></sect1>
+    <sect1 id="subgraphs"><title>SubGraphs and Groups</title><para></para></sect1>
+    <sect1 id="labels"><title>Labels Formatted</title><para></para></sect1>
+    <sect1 id="statistics"><title>Statistics</title><para></para></sect1>
+</chapter>
+
 </book>

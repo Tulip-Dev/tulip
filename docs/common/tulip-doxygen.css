@@ -1,3 +1,4 @@
+
 /*******************************************************************************
 
         Style sheet for Tulip doxygen documentation.
@@ -15,15 +16,14 @@ body {
         color: black;
         background-color: white;
         font-family: sans-serif ;
-        font-size: 10pt
-        
+        font-size: 11pt        
 }
 
 
 /* decorative header */
 div{
     font-family:sans-serif;
-    font-size: 10pt;
+    font-size: 11pt;
     color: #E5E5E5
 }
 div.header {
@@ -58,21 +58,23 @@ CAPTION { font-weight: bold }
 a { color: #41597A; text-align: center}
 A.qindex { color: #5f82b2; text-align: center}
 A.qindexRef {color: #5f82b2; text-align: center}
-A.el { text-decoration: none; font-weight: bold ; color:#5f82b2 ; font-size: 11pt}
+A.el { text-decoration: none; font-weight: bold ; color:#3b516e ; font-size: 11pt}
 A.elRef { }
-A.code { text-decoration: none; font-weight: normal; color: #5f82cf }
+A.code { text-decoration: none; font-weight: normal; color: #5f82cf;}
 A.codeRef { font-weight: normal; color: #5f82cf }
-A:hover { text-decoration: none; background-color: #ffffff }
+A:hover { text-decoration: none }
 A.anchor { text-align: left }
+
+code{font-size:10pt}
 
 DL.el { margin-left: -1cm }
 
 DIV.fragment { width: 100%; border: none; background-color: #ffffff; padding: 12px ;color: #000000}
 DIV.ah { background-color: #1c3b65; font-weight: bold; color: #ffffff; margin-bottom: 3px; margin-top: 3px }
 
+hr{ border:0; background-color:#597ba8; height:1px}
 
 TD.mdRow { padding: 8px 20px; }
-TD.md {width:%}
 TD.mdname1 {color: #602020;}
 TD.mdname { color: #602020;}
 DIV.groupHeader { margin-left: 16px; margin-top: 12px; margin-bottom: 6px; font-weight: bold }
@@ -80,7 +82,7 @@ DIV.groupText { margin-left: 16px; font-style: italic; font-size: smaller }
 
 div.qindex{color: #41597A; text-align: center}
 
-TABLE.mdTable { background-color: #f8f8f8; border: .1em solid #d7d7d7; }
+TABLE.mdTable { background-color: #f8f8f8; border: 1px solid #d7d7d7; }
 /* global lind buttons at bottom of decorative header */
 table.links {
         float: right;
@@ -105,37 +107,38 @@ table.links td {
         font-family : sans-serif;
 }
 
+TD{font-size: 10pt}
+
 TD.memItemLeft {
-   padding: 1px 0px 0px 8px;
+   padding: 7px 0px 0px 8px;
    margin: 4px;
-   border: solid .1em white;
+   border: solid .1em #E0E0E0;
    border-right-style: none;
    border-bottom-style: none;
    border-left-style: none;
-   background-color: #f8f8f8;
-   font-size: 10pt
+   background-color: white;
+   font-size: 11pt
 }
 TD.memItemRight {
-   padding: 1px 0px 0px 8px;
+   padding: 7px 0px 0px 8px;
    margin: 4px;
-   border: solid .1em white;
+   border: solid .1em #E0E0E0;
    border-right-style: none;
    border-bottom-style: none;
    border-left-style: none;
-   background-color: #f8f8f8;
-   font-size: 10pt
+   background-color: white;
+   font-size: 11pt
 }
 
 TD.memTemplParams{
-    font-size: 10pt
+    font-size: 11pt
 }
 
-TD.memTemplItemLeft{ font-size: 10pt}
-TD.memTemplItemRight{ font-size: 10pt}
+TD.memTemplItemLeft{ font-size: 11pt}
+TD.memTemplItemRight{ font-size: 11pt}
 
 TD.indexkey {
-   background-color: #f0f0f0;
-   font-weight: bold;
+   background-color: #F2F2F2;
    padding-right  : 10px;
    padding-top    : 2px;
    padding-left   : 10px;
@@ -143,10 +146,12 @@ TD.indexkey {
    margin-left    : 0px;
    margin-right   : 0px;
    margin-top     : 2px;
-   margin-bottom  : 2px
+   margin-bottom  : 2px;
+   font-style: normal;	
+   border: 1px solid #d7d7d7;
 }
 TD.indexvalue {
-   background-color: #f0f0f0;
+   background-color: #F2F2F2;
    font-style: normal;
    padding-right  : 10px;
    padding-top    : 2px;
@@ -155,10 +160,10 @@ TD.indexvalue {
    margin-left    : 0px;
    margin-right   : 0px;
    margin-top     : 2px;
-   margin-bottom  : 2px
+   margin-bottom  : 2px;
 }
 
-P{ font-size:10pt}
+P{ font-size:11pt}
 
 SPAN.keyword       { color: #008000 }
 SPAN.keywordtype   { color: #604020 }
@@ -182,7 +187,6 @@ div#bottom-nav {
         margin-right:0px;*/
         margin-top: 12px;
         height: 50px;
-        background-image : url('bottom1.png');
         background-repeat : repeat-x;
 }
 
