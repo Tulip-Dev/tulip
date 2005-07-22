@@ -3,7 +3,6 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "/usr/share/sgml/docbook/xml-dtd-4.4-1.0-27/docbookx.dtd">
 
 <book><bookinfo><title>Tulip Developer Handbook</title></bookinfo>
-
 <chapter id="introduction"><title>Introduction</title>
     <para></para>
 </chapter>
@@ -278,9 +277,14 @@ a factory that will enables to access to it directly.</para>
 
     <!--======= INTEGRATION ================================================================    -->
     <sect1 id="integration"><title>Integration in Tulip project</title>
-	<para> To integrate a new module, set of types, in the Tulip project. you must to know which library is concerned : General library, OpenGl library, QT library, ... For each case, the procedure is the same. <filename>tulip/library/tulip-ogl/</filename> is the directory to intergate a library attached to the Opengl library. All of the <filename>cpp</filename> files are pasted in the <filename>src</filename> subdirectory, <filename>h</filename> files in <filename>include/tulip</filename> and <filename>cxx</filename> files in <filename>include/tulip/cxx</filename>. Some modifiactions of your code shoud be necessary. The inclusion of files of Tulip project (included your work) is made with &lt; and &gt; because the compiler knows the path. For Tulip, the header files is in a special directory : <programlisting>#include &lt;tulip/TheFile.h></programlisting>
-	Tulip uses automatically generation of <filename>Makefile</filename>. So, you have to modify two files in the directory of your library. <filename>include/Makefile.am</filename> is the first. You have to complete a variable containing all <filename>.h</filename> and <filename>.cxx</filename> files with your header files. The second one is <filename>src/Makefile.am</filename> and so, you complete the variable containing all <filename>.cpp</filename> files with your source files. The next compilation include your work.
-    </para>
+        <sect2 id="files-adds"><title>Files adds</title>
+	   <para> To integrate a new module, set of types, in the Tulip project. you must to know which library is concerned : General library, OpenGl library, QT library, ... For each case, the procedure is the same. <filename>tulip/library/tulip-ogl/</filename> is the directory to intergate a library attached to the Opengl library. All of the <filename>cpp</filename> files are pasted in the <filename>src</filename> subdirectory, <filename>h</filename> files in <filename>include/tulip</filename> and <filename>cxx</filename> files in <filename>include/tulip/cxx</filename>. Some modifiactions of your code shoud be necessary. The inclusion of files of Tulip project (included your work) is made with &lt; and &gt; because the compiler knows the path. For Tulip, the header files is in a special directory : <programlisting>#include &lt;tulip/TheFile.h></programlisting>
+	   Tulip uses automatically generation of <filename>Makefile</filename>. So, you have to modify two files in the directory of your library. <filename>include/Makefile.am</filename> is the first. You have to complete a variable containing all <filename>.h</filename> and <filename>.cxx</filename> files with your header files. The second one is <filename>src/Makefile.am</filename> and so, you complete the variable containing all <filename>.cpp</filename> files with your source files. The next compilation include your work.
+           </para>
+        </sect2>
+        <sect2 id="gene-make"><title>Generation of Makefile modifications </title>
+            <para><ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual.html#SEC30">See Developing software with GNU : the GNU build system</ulink></para>
+        </sect2>
     </sect1>
     <!--===================================================================================    -->
 </chapter>
@@ -288,50 +292,41 @@ a factory that will enables to access to it directly.</para>
 
 <chapter id="doc-guidelines"><title>Documentation Guidelines</title>
     <sect1 id="definitions"><title>Definitions</title>
-        <para></para>
 	<orderedlist>
 	<listitem id="docbook"><para>DocBook is a collection of standards and tools for technical publishing. A DocBook file is composed of SGML(<xref linkend="sgml"/>) tags and is also dependant of a DTD(<xref linkend="dtd"/>).</para></listitem>
 
 	<listitem id="dtd"><para>DTD : Document Type Definition. The DTD defines the vocabulary of content elements that an author can use and how they relate to each other. For example, a book element can contain a title element, any number of para elements for paragraphs, and any number of chapter elements. </para></listitem>
 
-	<!--<listitem id="meinproc"><para>meinproc is the KDE translator for XML</para></listitem>-->
-
-        <!--<listitem id="nsgmls"><para>nsgmls, a SGML parser</para></listitem>-->
-
-	<!--<listitem id="saxon"><para>Saxon is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter.</para></listitem>-->
-
 	<listitem id="sgml"><para>SGML : Standard Generalized Markup Language</para></listitem>
-
-	<!--<listitem id="xalan"><para>Xalan is XSLT stylesheet processor, in Java and C++ from Apach XML Project.</para></listitem>-->
     
         <listitem id="xsl"><para>XSL (Extensible Stylesheet Language) is a language of description used for the transformation of the sgml file into formatted ouput: XSL processors like xsltproc, saxon or xalan, ... do that.</para></listitem>
 
-	<!--<listitem id="xsl-fo"><para>XSL-FO processors are really typesetting engines. It generates a PDF or PostScript file.</para></listitem>-->
-
-	<!--<listitem id="xslt"><para>XSLT (XSL Transformations) is a language used to transform XML document into other XML documents. For reference information, see the W3C Recommendation <ulink url="http://www.w3.org/TR/xslt.html">http://www.w3.org/TR/xslt.html.</ulink></para></listitem>-->
-
-	<!--<listitem id="xsltproc"><para>xsltproc is the xslt c library for gnome. this program is a way to use the library <emphasis>libxslt</emphasis> with a commande line tool for applying XSLT stylesheets to XML documents. </para></listitem> -->
 	</orderedlist>
     </sect1>
     <sect1 id="tools-install"><title>Tools installation</title>
-        <para></para>
+        <sect2><title>Docbook XSL Stylesheet</title>
+            <para> There is a great reference for installing tools : <ulink url="http://www.sagehill.net/docbookxsl/ToolsSetup.html#InstallDTD">Docbook XSL : the guide</ulink>.</para>
+            <para>To write a manual using Docbook and the XSL stylesheets, we need three tools : Docbook DTD, DocBook XSL stylesheets, and an XSL processor. There are RPM (docbook-utils, docbook-style-xsl) and Debian (docbook-utils, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. If you need another solution, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink>, a <filename>.zip</filename> file. The DocBook XML DTD consists of a main file docbookx.dtd and several module files. You only need to reference the main file, and it will pull in the other module files to make up the complete DTD.</para>
+            <para> To install a compatible processor, show <xref linkend="duck-compil"/>. It explains how to use it too.</para>
+        </sect2>
+        <sect2><title>Doxygen</title>
+            <para>It can already be in your distribution. If not, you can download it on the official web site. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>
+        </sect2>
     </sect1>
     <sect1 id="written"><title>Handwriting for the manuals</title>
-    <para>Some works on the Tulip project lead to make an part of a handbook for developer or users. We use the docbook utilities to create them. 
-	DocBook is an SGML document type definition (DTD). An XML version is available now. SGML is an standard that describes how markup languages are defined. SGML does not consist of particular tags or the rules for their usage. HTML is an example of a markup language defined in SGML. On the other hand, XML is intended to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. 
+    <para>Some works on the Tulip project lead to make a part of a handbook for developer or users. Docbook utilitiesare used to create them. 
+	DocBook is an SGML document type definition (DTD). It is an standard that describes how markup languages are defined. SGML does not consist of particular tags or the rules for their usage. HTML is an example of a markup language defined in SGML. On the other hand, XML is intended to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. Docbook define special tag to create your document.
 	</para>
-	<para>For each document, an .docbook file is created. To help the editing of the handbook, it is possible to use general editor like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> DocBook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. Then, the common files for generating documentations are in a directory named <filename>common</filename>. It locates in <filename>docs</filename> of the Tulip directory.</para>
+	<para>For each document, a set of SGML files is created. To help the editing of the handbook, it is possible to use general editors like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> DocBook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. Then, the common files used for compilation are in a directory named <filename>common</filename>. It locates in <filename>docs</filename> of the Tulip directory.</para>
 
-       <para>To find all of the xml elements, you can use : http://www.docbook.org/tdg/en/html/part2.html</para>
+       <para>To find all of the xml elements, you can see : <ulink url="http://www.docbook.org/tdg/en/html/part2.html">http://www.docbook.org/tdg/en/html/part2.html</ulink></para>
 
 	<sect2 id="tricks"><title>Tricks for the beginning</title>
 	    <para>
 	    <programlistingco>
 	    <areaspec>
-		<area id="xml" coords='2'/> 
-		<area id="comments" coords='3'/>
-		<area id="doctype" coords='4'/>
-	    </areaspec>
+		<area id="xml" coords='2'/> <area id="comments" coords='3'/><area id="doctype" coords='4'/>
+            </areaspec>
 <programlisting>
 &lt;?xml version='1.0'?&gt;
 <emphasis>&lt;!-- My first DocBook file --></emphasis>
@@ -339,17 +334,9 @@ a factory that will enables to access to it directly.</para>
     "/usr/share/sgml/docbook/xml-dtd-4.4-1.0-27/docbookx.dtd"&gt;
 	    </programlisting>
 	    <calloutlist>
-		<callout arearefs="xml">
-		    <para>defined that it is a xml document version 1.0</para>
-		</callout>
-
-		<callout arearefs="comments">
-		<para>the comments are writing between this two tags</para>
-		</callout>
-
-		<callout arearefs="doctype">
-		<para>DTD, Document Type Declaration</para>
-		</callout>
+		<callout arearefs="xml"> <para>defined that it is a xml document version 1.0</para></callout>
+		<callout arearefs="comments"> <para>the comments are writing between this two tags</para></callout>
+		<callout arearefs="doctype"> <para>DTD, Document Type Declaration</para> </callout>
 	    </calloutlist>
 	    </programlistingco>
             The identification of the DTD is used by the document to know which root element is. Here, <quote>OASIS</quote> is the owner, the declaration is <quote>DTD XML V4.4</quote> and the language is English <quote>EN</quote>. the keyword <quote>book</quote> specifies that the root element is <emphasis>book</emphasis>. An example of the structure of a Docbook file is like followed.
@@ -370,19 +357,83 @@ a factory that will enables to access to it directly.</para>
     &lt;appendix> ... &lt;/appendix>
     &lt;index> ... &lt;/index>
 &lt;/book>
-</programlisting>
-        A validating parser is a program that can read the DTD and determine whether the exact order of elements in the document is valid according to the DTD. To determinate if the XML code is valid, the programm <emphasis>meinproc</emphasis> is used in <filename>Makefile</filename> with the option --check. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg> <arg>-o /dev/null</arg></cmdsynopsis>
+</programlisting></para>
+        <sect3 id="valid"><title>Docbook Validation</title><para>
+        The validity of a document is very difficult to detect. A validating parser is a program that can read the DTD and determine whether the exact order of elements in the document is valid according to the DTD. </para>
+        <para>To determinate if the XML code is valid, the programm <application>meinproc</application> is used by the <filename>Makefile</filename> with the option --check. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg></cmdsynopsis>
+        When there are errors in the document, <application> meinproc </application> detect the number line and display the form that it should be.
+<screen>
+index.docbook:485: element sect2: validity error : Element sect2 content does not follow the DTD, 
+expecting (sect2info? , (title , subtitle? , titleabbrev?) , (toc | lot | index | glossary | 
+bibliography)* , (((calloutlist | glosslist | bibliolist | itemizedlist | orderedlist | 
+segmentedlist | simplelist | variablelist | caution | important | note | tip | warning | 
+literallayout | programlisting | programlistingco | screen | screenco | screenshot | synopsis |
+cmdsynopsis | funcsynopsis | classsynopsis | fieldsynopsis | constructorsynopsis |
+destructorsynopsis | methodsynopsis | formalpara | para | simpara | address | blockquote |
+graphic | graphicco | mediaobject | mediaobjectco | informalequation | informalexample | 
+informalfigure | informaltable | equation | example | figure | table | msgset | procedure | sidebar | 
+qandaset | task | anchor | bridgehead | remark | highlights | abstract | authorblurb | epigraph | 
+indexterm | beginpage)+ , (refentry* | sect3* | simplesect*)) | refentry+ | sect3+ | simplesect+) ,
+ (toc | lot | index | glossary | bibliography)*), got (refentry)
+&lt;/sect2>
+                   ^
+make: *** [check] Erreur 1
+</screen>
+        An other solution to validate an XML and specialy a SGML document is the program <application>nsgmls</application>
         </para>
 
-        <para>It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). </para>
+        <para>It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). DSSSL is an other possibility, but we use the XSL stylesheet for the Tulip project. This stylesheet is specified at tha compilation with an XSL processor for the XSL transformations.</para>
+        </sect3>
+        <sect3 id="duck-compil"><title>DocBook Compilation</title>
+            <para>
+                To transform an docbook file to an HTML formatted output, we need a stylesheet file. An XSL stylesheet describes the formatting that can be applied to XML files using an XSL processor. Currently, there are three to do XSL Transform processing with the recommendations of XSL : saxon (<ulink url="http://saxon.sourceforge.net/"/>), xalan (<ulink url="http://xml.apache.org/xalan-j/"/>), and xsltproc (<ulink url="http://xmlsoft.org/XSLT/xsltproc2.html"/>).</para>
 
-        <sect3 id="duck-compil"><title>DocBook Compilation</title><para></para></sect3>
+                <para><application>Saxon</application> is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter. To install it, you have to download on sourceforge the last release 6.5.4. this is the full version that implements the XSLT 1.0 standard. It runs on Java system and provides opportunities for extensions. For Windows, it exists the <application>Instant Saxon</application> a precompiled version that runs only on Microsoft Windows. Saxon is distributed as a zip package. You have to unzip it into a suitable location. It gives three <filename>.jar</filename> files ; <filename>saxon.jar</filename> contains the XSLT processor. In according to the location, you should have to update your CLASSPATH. You need to include the full path to the necessary .jar files in the CLASSPATH environment variable. To update it :
+<screen>
+CLASSPATH=$CLASSPATH:/usr/saxon/saxon.jar:\
+/usr/docbook-xsl/extensions/saxon653.jar
+export CLASSPATH
+</screen>
+                If your CLASSPATH is incorrect, you get an error message about <methodname>NoClassDefFoundError</methodname>. To generalize it, you have to change your <filename>.bashrc</filename> or <filename>.bash_profile</filename>. In this example, a second package is included : <filename>/usr/docbook-xsl/extensions/saxon653.jar</filename>, in Fedora Core 4, it is located in <filename>/usr/share/sgml/docbook/xsl-stylesheets/extensions/</filename>. It contains the implementation of the extensions of XSL Transformations. This extensions are necessary for the manage of certain tags and are included in the docbook tools. The general syntaxe for compilation is like followed : 
+<screen>
+java  com.icl.saxon.StyleSheet \
+    <emphasis>options</emphasis>  \
+    <emphasis>docbook-file</emphasis>  \
+    <emphasis>stylesheet-file</emphasis> \
+    param=value
+</screen>
+
+                However, <application>Xalan</application> is XSLT stylesheet processor, in Java and C++ from Apach XML Project. It is an another solution to compile the docbook files. Then, <application>Xsltproc</application> is the xslt c library for gnome. This program is a way to use the library <emphasis>libxslt</emphasis> with a command line tool for applying XSLT stylesheets to XML documents. This application runs quickly but does not included the implementation of the extensions.</para>
+        </sect3>
 	</sect2>
-        <sect2 id="how-contribute"><title>How to contribute</title><para></para></sect2>
+        <sect2 id="how-contribute"><title>How to contribute</title>
+            <para> The first solution to write a part of a handbook is to complete the main document. To avoid that several persons work on the same file, it exists a solution to cut the docbook file. You can write a section or a chapter, you just have to include your part in the main file. To create a valid file for the compiler, you shoud modify the head of a docbook file and specify the kind of document you do. For a chapter, your file is like followed :
+<programlisting>
+&lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN">
+&lt;chapter> 
+	&lt;title>My personal Chapter&lt;/title>
+        &lt;sect1> ... &lt;/sect1>
+&lt;/chapter>
+</programlisting>
+           The identification gives the kind of file you write. For including your work, you just have to insert a declaration of your file and a special tag located at the place that you want the inclusion. Don't forget to erase the declaration of your work. The file must begin with the markup <quote>chapter</quote>.
+<programlisting>
+&lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.4//EN [
+  &lt;!ENTITY myPersonalFile SYSTEM "myFile.xml">
+]>
+
+...
+&lt;/chapter>
+&#038;myPersonalFile;
+&lt;chapter>
+...
+</programlisting>
+
+            </para>
+        </sect2>
     </sect1>
     <sect1 id="doxygen"><title>Code documentation</title>
         <sect2 id="presentation_dox"><title>Presentation</title>
-	<para><application>Doxygen</application> is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how is it imagined but which possibilities you have. It is available for several distributions like Fedora Core, Debian, Gentoo and others,..  Windows, MacOs and Sun Solaris too. See the web site of <application>Doxygen</application> : <ulink url="http://www.doxygen.org">http://www.doxygen.org</ulink>.
+	<para><application>Doxygen</application> is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how is it imagined but which possibilities you have. It is available for several distributions like Fedora Core, Debian, Gentoo and others,..  Windows, MacOs and Sun Solaris too.
 	</para>
 	<para>To create your first <application>Doxygen</application> documentation, you need a config file .cfg or .doxygen. To generate it :
 	<cmdsynopsis><command>doxygen</command><arg><option>-g</option> myfile.doxygen</arg></cmdsynopsis>
@@ -390,7 +441,7 @@ a factory that will enables to access to it directly.</para>
 	<cmdsynopsis><command>doxygen</command><arg>myfile.doxygen</arg></cmdsynopsis>
         By default, it creates directories : html, latex, and/or man, ...
 	</para>
-        <para>For the <application>Tulip</application> project, the configuration files are still created and are located in the subdirectory of the special library, for example in <filename>(tulip)/docs/doxygen/tulip-lib</filename>.</para>
+        <para>For the <application>Tulip</application> project, the configuration files are still created and are located in the subdirectory of the special library, for example in <filename>$TULIPDIR/docs/doxygen/tulip-lib</filename>.</para>
         </sect2>
 	<sect2 id="dx-comments"><title>Developer comments</title>
 	    <para>The code documentation, generated by <application>Doxygen</application> is completely dependant of the developer comments. It is important that developers follow the grammar rules. </para>
@@ -455,12 +506,18 @@ or others ....
 	    </itemizedlist>
             The complete list is on this <ulink url="http://www.stack.nl/~dimitri/doxygen/commands.html">page</ulink> in the <application>Doxygen</application> web site.
 	    </para>
+
+            <para>To update the Documentation of Tulip, you just have to use the makefile and so write : <filename>make</filename>.</para>
 	</sect2>
     </sect1>
     <sect1 id="docs-ref"><title>References</title>
         <para>DocBook XSL : the complete Guide <ulink url="http://www.sagehill.net/docbookxsl/index.html">http://www.sagehill.net/docbookxsl/index.html</ulink></para>
 
         <para>The Duck Book - <ulink url="http://www.oreilly.com/catalog/docbook/chapter/book/docbook.html">Docbook : the Definitive Guide </ulink></para>
+
+        <para>The KDE documentation primer : recommandations to write correctly in Docbook - <ulink  url="http://i18n.kde.org/doc/doc-primer/index.html">http://i18n.kde.org/doc/doc-primer/index.html</ulink></para>
+
+         <para>Doxygen web site - <ulink url="http://www.docbook.org/tdg/en/html/part2.html">http://www.docbook.org/tdg/en/html/part2.html </ulink></para>
     </sect1>
 </chapter>
 </book>
