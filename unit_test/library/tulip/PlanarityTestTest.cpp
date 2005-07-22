@@ -46,9 +46,9 @@ void PlanarityTestTest::notPlanarGraphs() {
   graph = tlp::load(GRAPHPATH + "notplanar/k33k55.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
   delete graph;  
-  //  graph = tlp::load(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
-  //  CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
-  //  delete graph;
+  graph = tlp::load(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
+  CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
+  delete graph;
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
@@ -62,8 +62,8 @@ CppUnit::Test * PlanarityTestTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Planarity Test" );
   suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph", 
 								     &PlanarityTestTest::planarGraphs ) );
-  //  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "not planar graph", 
-  //								     &PlanarityTestTest::notPlanarGraphs ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "not planar graph", 
+								     &PlanarityTestTest::notPlanarGraphs ) );
   //  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
   //								     &PlanarityTestTest::planarGraphsEmbedding ) );
 
