@@ -435,6 +435,7 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
 }
 //=================================================================
 node PlanarityTestImpl::lastPNode(node n1, node n2) {
+  cerr << __PRETTY_FUNCTION__ << endl;
   if (n1 == n2) {
     if (!isCNode(n1))
       return n1;

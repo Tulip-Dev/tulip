@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <tulip/SuperGraph.h>
 #include <tulip/PlanarityTestImpl.h>
 #include <tulip/MutableContainer.h>
@@ -6,8 +10,16 @@
 using namespace std;
 using namespace tlp;
 
+
 //=================================================================
-bool PlanarityTestImpl::isPlanar() {
+PlanarityTestImpl::PlanarityTestImpl(SuperGraph *graph):graph(graph) {
+}
+//=================================================================
+bool PlanarityTestImpl::isPlanar(bool embedgraph) {
+  if (embedgraph) 
+    embed=true;
+  else
+    embed = false;
   init();
   int nbOfNodes = graph->numberOfNodes();
   preProcessing(graph);
@@ -26,11 +38,11 @@ bool PlanarityTestImpl::isPlanar() {
 	//	cerr << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
 	//	cerr << "    in component (" << dfsPosNum.get(comp.id) << "): ";
 	//	for (list<node>::iterator it2= terminalNodes[comp].begin(); it2!=terminalNodes[comp].end(); ++it2)
-	  //	  cerr << dfsPosNum.get(it2->id) << ",";
-	  //	cerr << endl;
+	//	  cerr << dfsPosNum.get(it2->id) << ",";
+	//	cerr << endl;
 	node newCNode = graph->addNode();
 	dfsPosNum.set(newCNode.id, -(++totalCNodes)); // marks as c-node;
-
+	
 	// does comp contain an obstruction?
 	if (findObstruction(graph, n1, terminalNodes[comp])) {
 	  planar = false;
@@ -42,7 +54,6 @@ bool PlanarityTestImpl::isPlanar() {
 	  calculatePartialEmbedding(graph, n1, newCNode, listBackEdges[comp],
 				    terminalNodes[comp]);
 	}
-	
 	// calculates RBC, label_b, etc, for new c-node;
 	//	cout << "setInfoForNewCNode call " << endl;
 	setInfoForNewCNode(graph, n1, newCNode, terminalNodes[comp]);
@@ -51,8 +62,8 @@ bool PlanarityTestImpl::isPlanar() {
   }
   //  cerr << __PRETTY_FUNCTION__ << "Embed Root" << endl;
   // embeds root with all back-edges to root;
-  //  if (planar && embed)
-  //    embedRoot(graph, nbOfNodes);
+  if (planar && embedgraph)
+    embedRoot(graph, nbOfNodes);
   // restores G;
   //forall_nodes(u, G)
   StableIterator<node> it(graph->getNodes());
@@ -64,12 +75,18 @@ bool PlanarityTestImpl::isPlanar() {
   //  cout << "Le graphe est " << (planar ? "planaire" : "non planaire") << endl;
   restore();
   //  displayMap(graph);
-  //  if (embed && planar)
-  //    checkEmbedding(graph);
+#ifndef DNDEBUG
+  if (planar && embedgraph)
+    checkEmbedding(graph);
+#endif
   return planar;
 }
 //=================================================================
-void PlanarityTestImpl::restore(){
+std::list<edge> PlanarityTestImpl::getObstructions() {
+  return obstructionEdges;
+}
+//=================================================================
+void PlanarityTestImpl::restore() {
   //update obstruction edges to select only original edges
   list<edge>::iterator it;
   for (it = obstructionEdges.begin(); it!=obstructionEdges.end(); ++it) {
@@ -396,3 +413,4 @@ void PlanarityTestImpl::setInfoForNewCNode(SuperGraph *sG,
   activeCNode[first] = newCNode;
   activeCNode[last]  = newCNode;
 }
+//=================================================================

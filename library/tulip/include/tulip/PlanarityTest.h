@@ -14,7 +14,7 @@
 
 #include <tulip/tulipconf.h>
 #include <ext/hash_map>
-
+#include <list>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h> 
 
@@ -25,8 +25,8 @@ class SuperGraph;
 class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
   static bool isPlanar(SuperGraph *graph);
-  //static bool planarEmbedding(SuperGraph *graph);
-  //static list<edge> getObstructionsEdges(SuperGraph *graph);
+  static bool planarEmbedding(SuperGraph *graph);
+  static std::list<edge> getObstructionsEdges(SuperGraph *graph);
   
 private:
   void addEdge(SuperGraph *,const edge);

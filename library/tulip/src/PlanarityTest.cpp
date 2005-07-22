@@ -15,8 +15,24 @@ PlanarityTest * PlanarityTest::instance=0;
 //=================================================================
 bool PlanarityTest::isPlanar(SuperGraph *graph){
   if(instance==0)
-    instance=new PlanarityTest();
+    instance = new PlanarityTest();
   return instance->compute(graph);
+}
+//=================================================================
+bool PlanarityTest::planarEmbedding(SuperGraph *graph) {
+  if (!PlanarityTest::isPlanar(graph))
+    return false;
+  PlanarityTestImpl planarTest(graph);
+  planarTest.isPlanar(true);
+  return true;
+}
+//=================================================================
+list<edge> PlanarityTest::getObstructionsEdges(SuperGraph *graph) {
+  if (PlanarityTest::isPlanar(graph))
+    return list<edge>();
+  PlanarityTestImpl planarTest(graph);
+  planarTest.isPlanar();
+  return planarTest.getObstructions();
 }
 //=================================================================
 bool PlanarityTest::compute(SuperGraph *graph) { 

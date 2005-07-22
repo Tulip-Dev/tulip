@@ -29,8 +29,8 @@ class SuperGraph;
 
 namespace tlp {
   enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
-  static const node NULL_NODE = node(UINT_MAX); 
-  static const edge NULL_EDGE = edge(UINT_MAX);
+  static const node NULL_NODE = node(); 
+  static const edge NULL_EDGE = edge();
 }
 
 /** \addtogroup graph_test */ 
@@ -38,12 +38,9 @@ namespace tlp {
 class TLP_SCOPE PlanarityTestImpl {
 
 public:
-  PlanarityTestImpl(SuperGraph *graph):graph(graph){};
-  bool isPlanar();
-  void embedGraph();
-  std::list<edge> getObstructions() {
-    return obstructionEdges;
-  }
+  PlanarityTestImpl(SuperGraph *graph);
+  bool isPlanar(bool embedgraph = false);
+  std::list<edge> getObstructions();
 
 private:
   bool compute(SuperGraph *);
