@@ -91,6 +91,7 @@ nobase_include_HEADERS = \
 	tulip/Face.h \
 	tulip/FaceIterator.h \
 	tulip/PlanarityTest.h \
+	tulip/PlanarityTestImpl.h \
 	tulip/SuperGraphDeco.h \
 	tulip/SuperGraphMap.h \
 	tulip/cxx/BmdLink.cxx \
