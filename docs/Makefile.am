@@ -1,3 +1,3 @@
-SUBDIRS = doxygen # developerHandbook userHandbook
+SUBDIRS = doxygen developerHandbook userHandbook
 EXTRA_SUBDIRS = common
 
