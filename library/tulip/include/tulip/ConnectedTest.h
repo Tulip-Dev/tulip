@@ -30,9 +30,19 @@ class SelectionProxy;
 /*@{*/
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
+  /**
+   * Return true if the graph is connected (ie. it exists an undirected path 
+   * between each pair of nodes) else false.
+   */
   static bool isConnected(SuperGraph *graph);
+  /**
+   * If the graph is not connected, add edges in order to make the graph
+   * connected. The new edges are added in addedEdges.
+   */
+  static void makeConnected(SuperGraph *graph, std::vector<edge>& addedEdges);
 
 private:
+  void connect(SuperGraph *, std::vector<edge>& addedEdges);
   bool compute(SuperGraph *);
   void addEdge(SuperGraph *,const edge);
   void delEdge(SuperGraph *,const edge);

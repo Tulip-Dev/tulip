@@ -12,6 +12,20 @@ ConnectedTest * ConnectedTest::instance=0;
 ConnectedTest * ConnectedTest::instance=0;
 #endif
 //=================================================================
+bool ConnectedTest::isConnected(SuperGraph *graph) {
+  if (instance==0)
+    instance=new ConnectedTest();
+  return instance->compute(graph);
+}
+//=================================================================
+void ConnectedTest::makeConnected(SuperGraph *graph, vector<edge> &addedEdges) {
+  if (instance==0)
+    instance=new ConnectedTest();
+  return instance->connect(graph, addedEdges);
+}
+//=================================================================
+ConnectedTest::ConnectedTest(){}
+//=================================================================
 void connectedTest(SuperGraph *graph, node n, 
 		   MutableContainer<bool> &visited,
 		   unsigned int &count) {
@@ -22,15 +36,6 @@ void connectedTest(SuperGraph *graph, node n,
   while (it->hasNext()) {
     connectedTest(graph, it->next(), visited, count);
   } delete it;
-}
-//=================================================================
-ConnectedTest::ConnectedTest(){
-}
-//=================================================================
-bool ConnectedTest::isConnected(SuperGraph *graph) {
-  if (instance==0)
-    instance=new ConnectedTest();
-  return instance->compute(graph);
 }
 //=================================================================
 bool ConnectedTest::compute(SuperGraph *graph) {
@@ -45,6 +50,32 @@ bool ConnectedTest::compute(SuperGraph *graph) {
   bool result = (count == graph->numberOfNodes());
   resultsBuffer[(unsigned int)graph]=result;
   return result;
+}
+//=================================================================
+void ConnectedTest::connect(SuperGraph *graph, vector<edge> &addedEdges) {
+  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) {
+    if (resultsBuffer[(unsigned int)graph])
+      return;
+    else
+      graph->removeObserver(this);  
+  }
+  if (graph->numberOfNodes()==0) return;
+  MutableContainer<bool> visited;
+  visited.setAll(false);
+  unsigned int count = 0;
+  vector<node> toLink;
+  Iterator<node> *itN = graph->getNodes();
+  while(itN->hasNext()) {
+    node n = itN->next();
+    if (!visited.get(n.id)) {
+      toLink.push_back(n);
+      connectedTest(graph, n, visited, count);
+    }
+  }
+  resultsBuffer[(unsigned int)graph] = true;
+  for (unsigned int i = 1; i < toLink.size(); ++i)
+    addedEdges.push_back(graph->addEdge(toLink[0], toLink[i]));
+  graph->addObserver(this);  
 }
 //=================================================================
 void ConnectedTest::addEdge(SuperGraph *graph,const edge) {

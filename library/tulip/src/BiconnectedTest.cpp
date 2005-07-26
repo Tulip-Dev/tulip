@@ -1,5 +1,7 @@
 #include "tulip/SuperGraph.h"
+#include "tulip/StableIterator.h"
 #include "tulip/BiconnectedTest.h"
+#include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
 
 using namespace std;
@@ -11,13 +13,59 @@ BiconnectedTest * BiconnectedTest::instance=0;
 #else
 BiconnectedTest * BiconnectedTest::instance=0;
 #endif
+
+//=================================================================
+bool BiconnectedTest::isBiconnected(SuperGraph *graph) {
+  if (instance==0)
+    instance=new BiconnectedTest();
+  return instance->compute(graph);
+}
+//=================================================================
+void BiconnectedTest::makeBiconnected(SuperGraph *graph, vector<edge> &addedEdges) {
+  if (instance==0)
+    instance=new BiconnectedTest();
+  return instance->connect(graph, addedEdges);
+}
+//=================================================================
+BiconnectedTest::BiconnectedTest(){
+}
+//=================================================================
+void makeBiconnectedDFS(SuperGraph *graph, node from, 
+			MutableContainer<int> &low,
+			MutableContainer<int> &dfsNumber,
+			MutableContainer<node> &father,
+			unsigned int &count,
+			vector<edge> &addedEdges) {
+  node u;
+  dfsNumber.set(from.id, count++);
+  low.set(from.id, dfsNumber.get(from.id));
+  StableIterator<node> itN(graph->getInOutNodes(from));
+  while (itN.hasNext()) {
+    node w = itN.next();
+    if (from == w) continue;
+    if (!u.isValid()) u = w;
+    if (dfsNumber.get(w.id) == -1) {
+      father.set(w.id, from);
+      makeBiconnectedDFS(graph, w, low, dfsNumber, father, count, addedEdges);
+      if (low.get(w.id) == dfsNumber.get(from.id)) {
+	if (w == u && father.get(from.id).isValid())
+	  addedEdges.push_back(graph->addEdge(w, father.get(from.id)));
+	if (w != u) 
+	  addedEdges.push_back(graph->addEdge(u, w));
+      }
+      low.set(from.id, std::min(low.get(from.id), low.get(w.id)));
+    }
+    else
+      low.set(from.id, std::min(low.get(from.id), dfsNumber.get(w.id)));
+  } 
+}
 //=================================================================
 bool biconnectedTest(SuperGraph *graph, node v, 
-		  MutableContainer<bool> &mark,
-		  MutableContainer<unsigned int> &low,
-		  MutableContainer<unsigned int> &dfsNumber,
-		  MutableContainer<node> &father,
-		  unsigned int &count) {
+		     MutableContainer<bool> &mark,
+		     MutableContainer<unsigned int> &low,
+		     MutableContainer<unsigned int> &dfsNumber,
+		     MutableContainer<node> &father,
+		     unsigned int &count) {
   mark.set(v.id,true);
   dfsNumber.set(v.id,count);
   low.set(v.id,count);
@@ -45,24 +93,34 @@ bool biconnectedTest(SuperGraph *graph, node v,
 	  return false;
 	}
 	else
-	  low.set(v.id, low.get(v.id) <? low.get(w.id));
+	  low.set(v.id, std::min(low.get(v.id), low.get(w.id)));
       }
     }
     else
       if (father.get(v.id)!=w) {
-	low.set(v.id, low.get(v.id) <? dfsNumber.get(w.id));
+	low.set(v.id, std::min(low.get(v.id), dfsNumber.get(w.id)));
       }
   } delete it;
   return true;
 }
 //=================================================================
-BiconnectedTest::BiconnectedTest(){
-}
-//=================================================================
-bool BiconnectedTest::isBiconnected(SuperGraph *graph) {
-  if (instance==0)
-    instance=new BiconnectedTest();
-  return instance->compute(graph);
+void BiconnectedTest::connect(SuperGraph *graph, vector<edge> &addedEdges) {
+  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) {
+    if (resultsBuffer[(unsigned int)graph])
+      return;
+    else
+      graph->removeObserver(this);  
+  }
+  ConnectedTest::makeConnected(graph, addedEdges);
+  MutableContainer<int> low;
+  MutableContainer<int> dfsNumber;
+  dfsNumber.setAll(-1);
+  MutableContainer<node> father;
+  father.setAll(node());
+  unsigned int count = 0;
+  makeBiconnectedDFS(graph, graph->getOneNode(), low, dfsNumber, father, count, addedEdges);
+  resultsBuffer[(unsigned int)graph] = true;
+  graph->addObserver(this);  
 }
 //=================================================================
 bool BiconnectedTest::compute(SuperGraph *graph) { 

@@ -29,9 +29,19 @@ class SuperGraph;
 /*@{*/
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
+  /**
+   * Return true if the graph is biconnected (ie. one must remove at least two nodes in order
+   * to disconnect the graph) else false.
+   */
   static bool isBiconnected(SuperGraph *graph);
+  /**
+   * If the graph is not biconnected, add edges in order to make the graph
+   * biconnected. The new edges are added in addedEdges.
+   */
+  static void makeBiconnected(SuperGraph *graph, std::vector<edge>& addedEdges);
 
 private:
+  void connect(SuperGraph *, std::vector<edge>& addedEdges);
   bool compute(SuperGraph *);
   void addEdge(SuperGraph *,const edge);
   void delEdge(SuperGraph *,const edge);
@@ -39,7 +49,7 @@ private:
   void addNode(SuperGraph *,const node);
   void delNode(SuperGraph *,const node);
   void destroy(SuperGraph *);
-  BiconnectedTest();
+  BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
   stdext::hash_map<unsigned int,bool> resultsBuffer;
 };
