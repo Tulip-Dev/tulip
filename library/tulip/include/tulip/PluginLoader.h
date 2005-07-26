@@ -1,8 +1,8 @@
 #ifndef TLP_PLUGINLOADER
 #define TLP_PLUGINLOADER
 #include <string>
-struct PluginLoader
-{
+struct PluginLoader {
+  virtual ~PluginLoader(){}
   virtual void start(const std::string &path,const std::string &type)=0;
   virtual void numberOfFile(int nbFile)=0;
   virtual void loading(const std::string &filename)=0;

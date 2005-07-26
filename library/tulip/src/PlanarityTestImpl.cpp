@@ -317,8 +317,8 @@ bool PlanarityTestImpl::findObstruction(SuperGraph *sG, node n, list<node>& term
 		v = parent.get(m.id);
 	      }
 	      int min = labelB.get(t1.id);
-	      min <?= labelB.get(t2.id);
-	      min <?= labelB.get(v.id);
+	      min = std::min(min, labelB.get(t2.id));
+	      min = std::min(min, labelB.get(v.id) );
 	      if (min == labelB.get(t1.id)) countMin++;
 	      if (min == labelB.get(t2.id)) countMin++;
 	      if (min == labelB.get(v.id))  countMin++;

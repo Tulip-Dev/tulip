@@ -12,6 +12,7 @@ enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
 class TLP_SCOPE PluginProgress {
  public:
   PluginProgress();
+  virtual ~PluginProgress();
   ProgressState progress(int step, int max_step);
   void cancel();
   void stop();

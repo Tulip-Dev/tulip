@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestEmbed.cpp,v 1.2 2005-07-19 10:01:54 auber Exp $
+ * $Id: PlanarityTestEmbed.cpp,v 1.3 2005-07-26 08:38:42 auber Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -24,7 +24,7 @@ using namespace tlp;
 void sortEdges(SuperGraph *graph, const vector<edge> &order, map<edge,edge>& rev) {
   map<node, vector<edge> > graphMap;
   vector<edge>::const_iterator it = order.begin();
-  for(;it!=order.end();++it) {
+  for(;it!=order.end(); ++it) {
     graphMap[graph->source(*it)].push_back(*it);
     graphMap[graph->source(*it)].push_back(rev[*it]);
   }
@@ -585,7 +585,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
  * Sorts all back-edges with representant repr by depth first search traversal in
  * (T_repr - P), denoted as T_v^*.
 */
-#include <tulip/SuperGraphImpl.h>
+//#include <tulip/SuperGraphImpl.h>
 int PlanarityTestImpl::sortBackEdgesByDfs(SuperGraph *sG,
 				      node w,
 				      node repr,

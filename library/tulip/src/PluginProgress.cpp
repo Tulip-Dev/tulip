@@ -1,6 +1,7 @@
 #include "tulip/PluginProgress.h"
 
 PluginProgress::PluginProgress():_state(TLP_CONTINUE){}
+PluginProgress::~PluginProgress(){}
 ProgressState PluginProgress::progress(int step, int max_step) {
   progress_handler(step,max_step);
   return _state;

@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestObstr.cpp,v 1.2 2005-07-19 10:01:54 auber Exp $
+ * $Id: PlanarityTestObstr.cpp,v 1.3 2005-07-26 08:38:42 auber Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -138,8 +138,8 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3,
 				       node &cNode, node &q) {
   countMin = countF = 0;
   int min = labelB.get(t1.id);
-  min <?= labelB.get(t2.id);
-  min <?= labelB.get(t3.id);
+  min = std::min(min, labelB.get(t2.id));
+  min = std::min(min, labelB.get(t3.id));
   
   if (min == labelB.get(t1.id)) countMin++;
   if (min == labelB.get(t2.id)) countMin++;
@@ -199,8 +199,8 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3,
     assert(dfsPosNum.get(k1.id)==min);
     cNode = activeCNodeOf(true, k1); // dfspos_num[k1] == min;
     int max = dfsPosNum.get(q1.id);
-    max >?= dfsPosNum.get(q2.id);
-    max >?= dfsPosNum.get(q3.id);
+    max = std::max(max, dfsPosNum.get(q2.id));
+    max = std::max(max, dfsPosNum.get(q3.id));
 
     if (max >= dfsPosNum.get(parent.get(cNode.id).id))
       q = parent.get(cNode.id);
@@ -256,8 +256,8 @@ void PlanarityTestImpl::obstructionEdgesT0(SuperGraph *sG, node w, node t1,
   //  if (dfsPosNum.get(m2.id) > max) max = dfsPosNum.get(m2.id);
   //  if (dfsPosNum.get(m3.id) > max) max = dfsPosNum.get(m3.id);
   
-  max >?= dfsPosNum.get(m2.id);
-  max >?= dfsPosNum.get(m3.id);
+  max = std::max(max, dfsPosNum.get(m2.id));
+  max = std::max(max, dfsPosNum.get(m3.id));
 
   obstrEdgesTerminal(sG, w, t1, nodeWithDfsPos.get(max));
 
@@ -384,8 +384,8 @@ void PlanarityTestImpl::obstructionEdgesK5(SuperGraph *sG,
   if (t3 == NULL_NODE)
     t3 = parent.get(cNode.id);
   int max = labelB.get(t1.id);
-  max >?= labelB.get(t2.id);
-  max >?= labelB.get(t3.id);
+  max = std::max(max, labelB.get(t2.id));
+  max = std::max(max, labelB.get(t3.id));
   //  if (max < labelB.get(t2.id))
   //    max = labelB.get(t2.id);
   //  if (max < labelB.get(t3.id))

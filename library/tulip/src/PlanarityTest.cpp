@@ -1,6 +1,7 @@
 #include <tulip/SuperGraph.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarityTestImpl.h>
+#include <tulip/BiconnectedTest.h>
 
 using namespace std;
 using namespace tlp;
@@ -23,7 +24,12 @@ bool PlanarityTest::planarEmbedding(SuperGraph *graph) {
   if (!PlanarityTest::isPlanar(graph))
     return false;
   PlanarityTestImpl planarTest(graph);
+  vector<edge> addedEdges;
+  BiconnectedTest::makeBiconnected(graph, addedEdges);
   planarTest.isPlanar(true);
+  vector<edge>::const_iterator it = addedEdges.begin();
+  for (; it!=addedEdges.end(); ++it)
+    graph ->delAllEdge(*it);
   return true;
 }
 //=================================================================

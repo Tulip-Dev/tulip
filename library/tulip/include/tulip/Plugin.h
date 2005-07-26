@@ -15,6 +15,7 @@
 /**Common interface for plug-ins.*/
 class Plugin {
 public:
+  virtual ~Plugin(){}
   /**Return the name of the plug-in, be careful, 
      this name must be unique, if two plug-ins have the same name
      only the latest loaded will be available*/
