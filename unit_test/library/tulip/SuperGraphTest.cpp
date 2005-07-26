@@ -72,8 +72,8 @@ void SuperGraphTest::testIterators() {
   CPPUNIT_ASSERT_EQUAL(false, it1->hasNext());
   delete it1;
   Iterator<node> *it2 = graph->getInNodes(n1);
-  CPPUNIT_ASSERT_EQUAL(n1.id, it1->next().id);
-  CPPUNIT_ASSERT_EQUAL(n2.id, it1->next().id);
+  CPPUNIT_ASSERT_EQUAL(n1.id, it2->next().id);
+  CPPUNIT_ASSERT_EQUAL(n2.id, it2->next().id);
   CPPUNIT_ASSERT_EQUAL(false, it2->hasNext());
   delete it2;
   Iterator<node> *it3 = graph->getInOutNodes(n1);

@@ -10,6 +10,7 @@
 #include <cppunit/TestCaller.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PlanarityTest.h>
+#include <tulip/SuperGraphMap.h>
 #include "PlanarityTestTest.h"
 
 using namespace std;
@@ -52,6 +53,25 @@ void PlanarityTestTest::notPlanarGraphs() {
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
+  graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
+  SuperGraphMap *graphMap = new SuperGraphMap(graph);
+  graphMap->makePlanar();
+  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  delete graphMap;
+  delete graph;
+  graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
+  graphMap = new SuperGraphMap(graph);
+  graphMap->makePlanar();
+  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  delete graphMap;
+  delete graph;
+  cerr << "unbiconnected" << endl;
+  graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+  graphMap = new SuperGraphMap(graph);
+  graphMap->makePlanar();
+  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  delete graphMap;
+  delete graph;
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphsObstruction() {
@@ -64,8 +84,8 @@ CppUnit::Test * PlanarityTestTest::suite() {
 								     &PlanarityTestTest::planarGraphs ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "not planar graph", 
 								     &PlanarityTestTest::notPlanarGraphs ) );
-  //  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
-  //								     &PlanarityTestTest::planarGraphsEmbedding ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
+  								     &PlanarityTestTest::planarGraphsEmbedding ) );
 
   return suiteOfTests;
 }
