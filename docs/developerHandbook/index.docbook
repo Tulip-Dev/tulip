@@ -584,6 +584,8 @@ or others ....
             The complete list is on this <ulink url="http://www.stack.nl/~dimitri/doxygen/commands.html">page</ulink> in the <application>Doxygen</application> web site.
 	    </para>
 
+            <para><example><title>A simple Source file</title><para> in construction</para></example></para>
+
             <para>To update the Documentation of Tulip, you just have to use the makefile and so write : <filename>make</filename>.</para>
 	</sect2>
     </sect1>
