@@ -483,8 +483,12 @@ export CLASSPATH
                 However, <application>Xalan</application> is XSLT stylesheet processor, in Java and C++ from Apach XML Project. It is an another solution to compile the docbook files. Then, <application>Xsltproc</application> is the xslt c library for gnome. This program is a way to use the library <emphasis>libxslt</emphasis> with a command line tool for applying XSLT stylesheets to XML documents. This application runs quickly but does not include the implementation of the extensions.</para>
         </sect3>
 	</sect2>
-        <sect2 id="how-contribute"><title>How to contribute</title>
-            <para> The first solution to write a part of a handbook is to complete the main document. To avoid that several persons work on the same file, it exists a solution to cut the docbook file. You can write a section or a chapter and you just have to include your part in the main file. To create a valid file for the compiler, you shoud modify the head of a docbook file and specify the kind of document you do. For a chapter, your file is like followed :
+        <sect2 id="duck-faq"><title>Docbook FAQ</title>
+            <qandaset>
+                <qandaentry>
+                    <question><para>how to separate the work in several files ?</para></question>
+                    <answer><para>
+                    The first solution to write a part of a handbook is to complete the main document. To avoid that several persons work on the same file, it exists a solution to cut the docbook file. You can write a section or a chapter and you just have to include your part in the main file. To create a valid file for the compiler, you shoud modify the head of a docbook file and specify the kind of document you do. For a chapter, your file is like followed :
 <programlisting>
 &lt;!DOCTYPE chapter PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN">
 &lt;chapter> 
@@ -504,8 +508,23 @@ export CLASSPATH
 &lt;chapter>
 ...
 </programlisting>
-
-            </para>
+                      </para></answer>
+                </qandaentry>
+                <qandaentry>
+                    <question><para>How to insert a figure ?</para></question>
+                    <answer><para>the element uses for the insert of a figure is <quote>&lt;figure></quote>. It enable the numerotation of the figures. Warning, the width of the figures should not exceed a certain value to avoid that it is truncated in the pdf transform. You can specify a title and other parameter in the limits of the DTD. 
+<programlisting>
+&lt;figure> &lt;title>Screenshot of the result&lt;/title>&lt;graphic fileref="doxygen-ex.png"/>&lt;/figure></programlisting></para></answer>
+                </qandaentry>
+                <qandaentry>
+                    <question><para>How to insert a program listing ?</para></question>
+                    <answer><para></para></answer>
+                </qandaentry>
+                <qandaentry>
+                    <question><para>How to make annontation in a program listing ?</para></question>
+                    <answer><para></para></answer>
+                </qandaentry>
+            </qandaset>
         </sect2>
     </sect1>
     <sect1 id="doxygen"><title>Code documentation</title>
@@ -584,10 +603,79 @@ or others ....
             The complete list is on this <ulink url="http://www.stack.nl/~dimitri/doxygen/commands.html">page</ulink> in the <application>Doxygen</application> web site.
 	    </para>
 
-            <para><example><title>A simple Source file</title><para> in construction</para></example></para>
+            <para><example><title>Doxygen : A simple source file</title>
+<para><programlisting>
+// ... comments not include  ...
+///  A example of class : MyClass. 
+/**
+    a more detail class description :
+    \author Me
+    \date 29/07/2005
+*/
+#include &lt;string>
+class MyClass
+{
 
-            <para>To update the Documentation of Tulip, you just have to use the makefile and so write : <filename>make</filename>.</para>
+
+    /* ... comments not include ... */
+    public:
+        /** the constructor of the class */
+
+        /**  the detail description of the constructor. */
+        MyClass(){i=0;}
+ 
+        //! A destructor.
+        ~MyClass(){}
+
+        /// drawing of a string
+        /**
+            \param s the string to display
+            \return there is no return
+            @sa MyClass(), ~MyClass()
+        */
+        void draw(const char *s="Hello World");
+
+        /* exemple of doc comments not before the declaration */
+        unsigned int getI(){return i;} /**&lt;@return the number the value of i */
+    private:
+        unsigned int i;
+
+
+    /** @var i
+        @brief, you can put the comments where you want with the special tags */
+};
+</programlisting>
+
+</para></example></para>
+
+            <para>To update the Documentation of Tulip, you just have to use the makefile and so write : <filename>make docs</filename>.</para>
 	</sect2>
+
+        <sect2 id="dow-faqs"><title>Doxygen FAQ</title>
+	<qandaset>
+	    <qandaentry>
+		<question><para>How to insert a block of code ?</para></question>
+		<answer><para> To illustrate your documentation, you can insert a block of code in a description between <quote>\code</quote> and <quote>\endcode</quote>. This code is written in the documentation with highlighting syntax. </para></answer>
+	    </qandaentry>
+            <qandaentry>
+		<question><para>How to force an end of line ?</para></question>
+		<answer><para>Use the tag <methodname>\n</methodname>.</para></answer>
+	    </qandaentry>
+            <qandaentry>
+		<question><para>How to make doxygen ignore code fragment ?</para></question>
+		<answer><para>It exists two ways to resolve this questions. The first one is to use the tags <quote>\cond</quote> and <quote>\endcond</quote> to skip the internal code. The second way is to use the preprocessor of Doxygen. In the configuration file, you specify the MACRO and you verify if the value of PREPROCESSING is to yes. Then, you set PREDEFINED to DOXYGEN_SHOULD_SKIP_THIS.
+
+<programlisting>
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+ /* code that must be skipped by Doxygen */
+
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+</programlisting>
+</para></answer>
+	    </qandaentry>
+	</qandaset>
+        </sect2>
     </sect1>
     <sect1 id="docs-ref"><title>References</title>
         <para>Docbook XSL : the complete Guide <ulink url="http://www.sagehill.net/docbookxsl/index.html">http://www.sagehill.net/docbookxsl/index.html</ulink></para>
