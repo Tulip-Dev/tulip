@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<!--<?xml-stylesheet href="../common/tulip-default.css" type="text/css"?>-->
+<!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "../common/dtd/docbookx.dtd">
 
 <book><bookinfo><title>Tulip Developer Handbook</title></bookinfo>
@@ -7,13 +7,70 @@
     <para></para>
 </chapter>
 <chapter id="installation"><title>Installation</title>
-    <para></para>
+
+   <para>The <quote>configure</quote> shell script attempts to guess correct values for
+various system-dependent variables used during compilation.  It uses
+those values to create a <quote>Makefile</quote> in each directory of the package.
+It may also create one or more <quote>.h</quote> files containing system-dependent
+definitions.  Finally, it creates a shell script <quote>config.status</quote> that
+you can run in the future to recreate the current configuration, a file
+<quote>config.cache</quote> that saves the results of its tests to speed up
+reconfiguring, and a file <quote>config.log</quote> containing compiler output
+(useful mainly for debugging <quote>configure</quote>).</para>
+
+   <para>If you need to do unusual things to compile the package, please try
+to figure out how <quote>configure</quote> could check whether to do them, and mail
+diffs or instructions to the address given in the <quote>README</quote> so they can
+be considered for the next release.  If at some point <quote>config.cache</quote>
+contains results you don't want to keep, you may remove or edit it.</para>
+
+   <para>The file <quote>configure.in</quote> is used to create <quote>configure</quote> by a program
+called <quote>autoconf</quote>.  You only need <quote>configure.in</quote> if you want to change
+it or regenerate <quote>configure</quote> using a newer version of <quote>autoconf</quote>.</para>
+
+<para><orderedlist><title>The simplest way to compile this package is:</title>
+
+  <listitem><para><quote>cd</quote> to the directory containing the package's source code and type
+     <quote>./configure</quote> to configure the package for your system.  If you're
+     using <quote>csh</quote> on an old version of System V, you might need to type
+     <quote>sh ./configure</quote> instead to prevent <quote>csh</quote> from trying to execute
+     <quote>configure</quote> itself.</para>
+
+     <para>Running <quote>configure</quote> takes awhile.  While running, it prints some
+     messages telling which features it is checking for.</para></listitem>
+
+  <listitem><para>Type <quote>make</quote> to compile the package.</para></listitem>
+
+  <listitem><para>Optionally, type <quote>make check</quote> to run any self-tests that come with
+     the package.</para></listitem>
+
+  <listitem><para>Type <quote>make install</quote> to install the programs and any data files and
+     documentation.</para></listitem>
+
+  <listitem><para>You can remove the program binaries and object files from the
+     source code directory by typing <quote>make clean</quote>.  To also remove the
+     files that <quote>configure</quote> created (so you can compile the package for
+     a different kind of computer), type <quote>make distclean</quote>.  There is
+     also a <quote>make maintainer-clean</quote> target, but that is intended mainly
+     for the package's developers.  If you use it, you may have to get
+     all sorts of other programs in order to regenerate files that came
+     with the distribution.</para></listitem></orderedlist>
+</para>
+
+<para>If you don't find the <quote>configure</quote> shell, you have to generate it with "gen-conf.sh". The processing using the GNU build sytem gives a <quote>configure</quote> shell.</para>
+
     <sect1 id="environment"><title>Environment variables</title>
-        <para></para>
+        <para>QTDIR, LD_LIBRARY_PATH</para>
     </sect1>
     <sect1 id="options"><title>Options</title>
-        <para></para>
+
+        <itemizedlist>
+            <listitem><para>--prefix=<emphasis>value</emphasis>, The <emphasis>value</emphasis> is the path where you want to install Tulip. <filename>bin, include, lib</filename> directories was created in this location. By default, it is <filename>/usr/local/</filename></para></listitem>
+            <listitem><para>--enable-debug</para></listitem>
+        </itemizedlist>
+        <para> To modify the compilation or installation processing, you have to use the GNU build system, see <xref linkend="build-sys"/> which explain how to make some modifications and the reference you can use. </para>
     </sect1>
+
 </chapter>
 <chapter id="data-structure"><title>Data Structure</title>
 <para>Efficient visualization of graphs implies to manipulate the structure of 
@@ -285,9 +342,14 @@ a factory that will enables to access to it directly.</para>
 	   Tulip uses automatically generation of <filename>Makefile</filename>. So, you have to modify two files in the directory of your library. <filename>include/Makefile.am</filename> is the first. You have to complete a variable containing all <filename>.h</filename> and <filename>.cxx</filename> files with your header files. The second one is <filename>src/Makefile.am</filename> and so, you complete the variable containing all <filename>.cpp</filename> files with your source files. After a new generation of an update of the makefiles, the next compilation include your work. The update of the makefiles is made with the command <methodname>./configure</methodname> with the options that you prefer.
            </para>
         </sect2>
-        <sect2 id="gene-make"><title>Generation of Makefile modifications </title>
-            <para>The first and simple modification of the makefile is the one explained in the previous section : included new source files in your project.</para>
-            <para><ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual.html#SEC30">See Developing software with GNU : the GNU build system</ulink></para>
+        <sect2 id="build-sys"><title>Build system modifications </title>
+            <sect3 id="presentation"><title>Presentation</title>
+                <para> GNU has several tools used for the configuration of Tulip package. It modifies the makefile to adapt their to the distribution you have : the most important tools are <application>autoconf</application>, <application>automake</application> and <application>libtool</application>.</para>
+                <para><application>Autoconf</application> is a tool of GNU producing shell scripts that automtically configure software packages to adapt to many kinds of UNIX systems. It is not the unique tool, it runs with others to solve all problems to making portable software. It generates configurations scripts. It checks for the presence of each feature that the software need. Autoconf requires <application>GNU M4</application> in order to generate the scripts. </para>
+                <para>To this end, GNU has developed a set of integrated utilities to finish the job of <application>Autoconf</application>. Automake is the next in run. </para>
+            </sect3>
+            <sect3 id="some-rules"><title>Some Rules</title><para>The first and simple modification of the makefile is the one explained in the previous section : included new source files in your project.</para>
+            <para><ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual.html#SEC30">See Developing software with GNU : the GNU build system</ulink></para></sect3>
         </sect2>
     </sect1>
     <!--===================================================================================    -->
@@ -372,23 +434,28 @@ a factory that will enables to access to it directly.</para>
         <para>To determinate if the XML code is valid, the program <application>meinproc</application> can be used with the option --check. It is the KDE-specific tools. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg></cmdsynopsis>
         When there are errors in the document, <application> meinproc </application> detect the number line and display the form that it should be.
 <screen>
-index.docbook:485: element sect2: validity error : Element sect2 content does not follow the DTD, 
-expecting (sect2info? , (title , subtitle? , titleabbrev?) , (toc | lot | index | glossary | 
-bibliography)* , (((calloutlist | glosslist | bibliolist | itemizedlist | orderedlist | 
-segmentedlist | simplelist | variablelist | caution | important | note | tip | warning | 
-literallayout | programlisting | programlistingco | screen | screenco | screenshot | synopsis |
-cmdsynopsis | funcsynopsis | classsynopsis | fieldsynopsis | constructorsynopsis |
-destructorsynopsis | methodsynopsis | formalpara | para | simpara | address | blockquote |
-graphic | graphicco | mediaobject | mediaobjectco | informalequation | informalexample | 
-informalfigure | informaltable | equation | example | figure | table | msgset | procedure | sidebar | 
-qandaset | task | anchor | bridgehead | remark | highlights | abstract | authorblurb | epigraph | 
-indexterm | beginpage)+ , (refentry* | sect3* | simplesect*)) | refentry+ | sect3+ | simplesect+) ,
- (toc | lot | index | glossary | bibliography)*), got (refentry)
+index.docbook:485: element sect2: validity error : Element sect2 
+content does not follow the DTD, expecting (sect2info? , (title , 
+subtitle? , titleabbrev?) , (toc | lot | index | glossary | 
+bibliography)* , (((calloutlist | glosslist | bibliolist | itemizedlist
+| orderedlist | segmentedlist | simplelist | variablelist | caution |
+important | note | tip | warning | literallayout | programlisting |
+programlistingco | screen | screenco | screenshot | synopsis |
+cmdsynopsis | funcsynopsis | classsynopsis | fieldsynopsis | 
+constructorsynopsis | destructorsynopsis | methodsynopsis | formalpara
+| para | simpara | address | blockquote | graphic | graphicco | 
+mediaobject | mediaobjectco | informalequation | informalexample | 
+informalfigure | informaltable | equation | example | figure | table |
+msgset | procedure | sidebar | qandaset | task | anchor | bridgehead |
+ remark | highlights | abstract | authorblurb | epigraph |indexterm | 
+beginpage)+ , (refentry* | sect3* | simplesect*)) | refentry+ | sect3+ |
+ simplesect+) , (toc | lot | index | glossary | bibliography)*), got (
+refentry)
 &lt;/sect2>
                    ^
 make: *** [check] Erreur 1
 </screen>
-        An other solution to validate an XML and specialy a SGML document is the program <application>xmllint</application>. This program is a parser dependent of the library <emphasis>libxml</emphasis>.
+        An other solution to validate an XML and specialy a SGML document is the program <application>xmllint</application>. This program is a parser dependent of the library <emphasis>libxml2</emphasis>.
         <cmdsynopsis><command>xmllint</command><arg><option>--valid  --noout</option> myfile.docbook</arg></cmdsynopsis>
         The description of the errors has the same display.</para>
 
