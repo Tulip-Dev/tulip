@@ -40,9 +40,13 @@ public:
    * connected. The new edges are added in addedEdges.
    */
   static void makeConnected(SuperGraph *graph, std::vector<edge>& addedEdges);
+  /**
+   * Return the number of connected componnents in the graph;
+   */
+  static unsigned int numberOfConnectedComponnents(SuperGraph *graph);
 
 private:
-  void connect(SuperGraph *, std::vector<edge>& addedEdges);
+  void connect(SuperGraph *, std::vector<node>& toLink);
   bool compute(SuperGraph *);
   void addEdge(SuperGraph *,const edge);
   void delEdge(SuperGraph *,const edge);

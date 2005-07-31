@@ -33,8 +33,6 @@ namespace tlp {
   static const edge NULL_EDGE = edge();
 }
 
-/** \addtogroup graph_test */ 
-/*@{*/
 class TLP_SCOPE PlanarityTestImpl {
 
 public:
@@ -230,5 +228,5 @@ private:
 //std::ostream& operator <<(std::ostream &os , node n);
 //std::ostream& operator <<(std::ostream &os , edge e);
 std::list<edge> posDFS(SuperGraph *sG, MutableContainer<int> &dfsPos);
-/*@}*/
+
 #endif
