@@ -11,6 +11,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/SuperGraphMap.h>
+#include <tulip/ConnectedTest.h>
 #include "PlanarityTestTest.h"
 
 using namespace std;
@@ -52,24 +53,33 @@ void PlanarityTestTest::notPlanarGraphs() {
   delete graph;
 }
 //==========================================================
+unsigned int eulerIdentity(SuperGraph *graph) {
+  return graph->numberOfEdges() - graph->numberOfNodes() 
+    + 1u + ConnectedTest::numberOfConnectedComponnents(graph);
+}
+//==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
   graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
   SuperGraphMap *graphMap = new SuperGraphMap(graph);
   graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
   delete graph;
   graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
   graphMap = new SuperGraphMap(graph);
   graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  /* 
+   * The number of faces must be adapted because the Planarity Test split the 
+   * external face into several faces (one by connected componnent).
+   */
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));  
   delete graphMap;
   delete graph;
   cerr << "unbiconnected" << endl;
   graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
   graphMap = new SuperGraphMap(graph);
   graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(graph->numberOfEdges() - graph->numberOfNodes() + 2, graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
   delete graph;
 }

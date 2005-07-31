@@ -93,6 +93,12 @@ void TestAlgorithmTest::testConnected() {
   CPPUNIT_ASSERT(ConnectedTest::isConnected(graph));
   graph->delEdge(e);
   CPPUNIT_ASSERT(!ConnectedTest::isConnected(graph));
+  vector<edge> addedEdge;
+  ConnectedTest::makeConnected(graph, addedEdge);
+  CPPUNIT_ASSERT(ConnectedTest::isConnected(graph));
+  CPPUNIT_ASSERT(addedEdge.size() == 1u);
+  graph->delEdge(addedEdge[0]);
+  CPPUNIT_ASSERT(ConnectedTest::numberOfConnectedComponnents(graph) == 2u);
 }
 //==========================================================
 void TestAlgorithmTest::testBiconnected() {
