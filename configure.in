@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.8 $)
+AC_REVISION($Revision: 1.9 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -36,6 +36,14 @@ AC_LANG(C++)    dnl uses C++ compiler and preprocessor for tests
 AC_PROG_CXX
 AC_PROG_CXXCPP
 ##AC_PROG_JAVA
+
+dnl check for java
+AC_PATH_PROG(JAVA, java, not_found)
+if test "$JAVA" = "not_found"; then
+AC_MSG_WARN([
+                Unable to find java in PATH. Need for the documentation build. Reference guide will not
+                be generated])
+fi
 
 dnl check for doxygen
 AC_PATH_PROG(DOXYGEN, doxygen, not_found)
