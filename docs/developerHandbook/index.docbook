@@ -372,13 +372,16 @@ a factory that will enables to access to it directly.</para>
     <sect1 id="tools-install"><title>Tools installation</title>
         <sect2 id="duck-install"><title>Docbook XSL Stylesheet</title>
             <para> There is a great reference for installing tools : <ulink url="http://www.sagehill.net/docbookxsl/ToolsSetup.html#InstallDTD">Docbook XSL : the guide</ulink>.</para>
-            <para>To write a manual using Docbook and the XSL stylesheets, we need three tools : Docbook DTD, Docbook XSL stylesheets, and an XSL processor. There are RPM (docbook-utils, docbook-style-xsl) and Debian (docbook-utils, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. If you need another solution, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink>, a <filename>.zip</filename> file. The Docbook XML DTD consists of a main file docbookx.dtd and several module files. You only need to reference the main file, and it will pull in the other module files to make up the complete DTD.</para>
+            <para>To write a manual using Docbook and the XSL stylesheets, we need three tools : 
+            <itemizedlist>
+            <listitem>
+                <para>Docbook DTD</para>
+            </listitem>
+            <listitem><para>Docbook XSL stylesheets</para></listitem>
+            <listitem><para>XSL processor</para></listitem>
+            </itemizedlist>
+            There are RPM (docbook-utils, docbook-style-xsl) and Debian (docbook-utils, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. If you need another solution, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink>, a <filename>.zip</filename> file. The Docbook XML DTD consists of a main file <filename>docbookx.dtd</filename> and several module files. You only need to reference the main file, and it will pull in the other module files to make up the complete DTD. The XSL files are cutted in several files too. <filename>chunk.xsl</filename> is used to generate a documentation with several pages and included a system of links <quote>HOME, UP, NEXT, PREV</quote>, <filename>docbook.xsl</filename> to make a unique page. The path of the xsl files is automatically found with catalog system. Docbook creates a file, <filename>/etc/xml/catalog</filename>, which contains all catalog references to resolving the path. For an URL adress of the DTD or the XSL file, it correspond to a located file for your file system.</para>
             <para> To install a compatible processor, show <xref linkend="duck-compil"/>. It explains how to use it too.</para>
-            <sect3 id="err-install"><title>Installation errors</title>
-                <para>Not found  : DTD file</para>
-                <para>Not found : XSL file</para>
-                <para>Not found : CLASSPATH </para>
-            </sect3>
         </sect2>
         <sect2 id="dox-install"><title>Doxygen</title>
             <para>It can already be in your distribution. If not, you can download it on the official web site. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>
@@ -517,12 +520,8 @@ export CLASSPATH
 &lt;figure> &lt;title>Screenshot of the result&lt;/title>&lt;graphic fileref="doxygen-ex.png"/>&lt;/figure></programlisting></para></answer>
                 </qandaentry>
                 <qandaentry>
-                    <question><para>How to insert a program listing ?</para></question>
-                    <answer><para></para></answer>
-                </qandaentry>
-                <qandaentry>
                     <question><para>How to make annontation in a program listing ?</para></question>
-                    <answer><para></para></answer>
+                    <answer><para>See <ulink url="http://www.sagehill.net/docbookxsl/AnnotateListing.html#Callouts">DocBook XSL : the complete guide</ulink></para></answer>
                 </qandaentry>
             </qandaset>
         </sect2>
@@ -674,6 +673,15 @@ class MyClass
 </programlisting>
 </para></answer>
 	    </qandaentry>
+            <qandaentry>
+                    <question><para>How to insert a equation ?</para></question>
+                    <answer><para>See the <ulink url="http://www.stack.nl/~dimitri/doxygen/formulas.html">Doxygen web site</ulink></para><para>Doxygen allos you to put Latex formulas in the ouput (just for HTML and latex format). Three ways are avaible. If you want to include formulas in-text, you have to put formulas between a pair of <quote>\f$</quote>
+                    <screen>
+\f$ AB = \sqrt{BC^2 + CA^2} \f$
+                    </screen> 
+                    The second way is for a centerd display on a seperate line. These formulas should be put between <quote>\f[</quote> and <quote>\f]</quote> commands.</para>
+                    <para>The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using \f{<emphasis>environment</emphasis>}, where <emphasis>environment</emphasis> is the latex environment, the corresponding end commands is <quote>\f}</quote></para></answer>
+                </qandaentry>
 	</qandaset>
         </sect2>
     </sect1>
