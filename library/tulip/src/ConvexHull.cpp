@@ -31,7 +31,7 @@ inline unsigned int findP0(const vector<Coord> &points) {
 }//end findP0
 
 //==============================================================
-typedef struct vector<unsigned int>::const_iterator constUintIt;
+typedef vector<unsigned int>::const_iterator constUintIt;
 //A function that returns the index of a point on the convex hull
 //(the point of minimum x-coordinate) given a list of indexes
 //in the integer array index.  The index returned is a index of the
