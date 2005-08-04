@@ -1,3 +1,4 @@
+#include <float.h>
 #include <tulip/Delaunay.h>
 #define ANSI_DECLARATORS //ansi style declarations for triangle.h
 #include "thirdparty/triangle/triangle.h"
@@ -111,12 +112,25 @@ void initTriToRay (int *triToRay, const vector<Coord> &points,
     const int a = triangleOutput.trianglelist[3*rayit->p];
     const int b = triangleOutput.trianglelist[3*rayit->p + 1];
     const int c = triangleOutput.trianglelist[3*rayit->p + 2];
+    const int bc = triangleOutput.neighborlist[3*rayit->p];
+    const int ca = triangleOutput.neighborlist[3*rayit->p + 1];
+    const int ab = triangleOutput.neighborlist[3*rayit->p + 2];
     
     //look for the edge of the triangle that is perpendicular to the ray
     unsigned int offset = 0;
-    if (fabs (dot (rayit->v, points[a] - points[c])) < FLOAT_ERROR)
+    double minDot = DBL_MAX;
+    if ((bc == TRIANGLE_NULL) && 
+	(fabs (dot (rayit->v, points[c] - points[b])) < minDot)) {
+      offset = 0;
+      minDot = fabs (dot (rayit->v, points[c] - points[b]));
+    }//end if
+    if ((ca == TRIANGLE_NULL) && 
+	(fabs (dot (rayit->v, points[a] - points[c])) < minDot)) {
       offset = 1;
-    else if (fabs (dot (rayit->v, points[b] - points[a])) < FLOAT_ERROR)
+      minDot = fabs (dot (rayit->v, points[a] - points[c]));
+    }//end else if
+    if ((ab == TRIANGLE_NULL) && 
+	(fabs (dot (rayit->v, points[b] - points[a])) < minDot))
       offset = 2;
     triToRay[3*rayit->p + offset] = rayCounter;
   }//end for  
@@ -150,7 +164,6 @@ void setInfiniteEdges (const int voronoiCentre,
 		       int curVoronoiVertex,
 		       const triangulateio &triangleOutput, 
 		       tlp::VoronoiDiagram::Cell &voronoiCell,
-		       const vector<Coord> &voronoiCentres,
 		       const int *triToRay,
 		       tlp::VoronoiDiagram *voronoiDiagram) {
   const int a = triangleOutput.trianglelist[3*curVoronoiVertex];
@@ -237,7 +250,6 @@ void traceCell (const int voronoiCentre,
 		const int startingNextVoronoiVertex,
 		const triangulateio &triangleOutput,
 		tlp::VoronoiDiagram::Cell &voronoiCell,
-		const vector<Coord> &voronoiCentres,
 		const int *triToRay,
 		tlp::VoronoiDiagram *voronoiDiagram) {
   bool counterclockwise;
@@ -255,7 +267,7 @@ void traceCell (const int voronoiCentre,
   if (nextVoronoiVertex == TRIANGLE_NULL) {
     //record the first ray we have detected
     setInfiniteEdges (voronoiCentre, curVoronoiVertex, triangleOutput, 
-		      voronoiCell, voronoiCentres, triToRay, voronoiDiagram);
+		      voronoiCell, triToRay, voronoiDiagram);
     curVoronoiVertex = startingVoronoiVertex;
     nextVoronoiVertex =
       getUnvisited (voronoiCentre, startingNextVoronoiVertex, 
@@ -273,7 +285,7 @@ void traceCell (const int voronoiCentre,
     //if we have not recorded the other ray of this unbounded cell
     if (voronoiCell.rays.size() == 1)
       setInfiniteEdges (voronoiCentre, curVoronoiVertex, triangleOutput, 
-			voronoiCell, voronoiCentres, triToRay, voronoiDiagram);
+			voronoiCell, triToRay, voronoiDiagram);
     vector<unsigned int> cellBackup = voronoiCell.vertices;
     voronoiCell.vertices = reverse;
     reverseCellOrder (voronoiCell);
@@ -319,14 +331,14 @@ void computeVoronoiCells (const vector<Coord> &points,
 
     if (!cellDone[a])
       traceCell (a, tri, ca, triangleOutput, 
-		 voronoiDiagram->cells[a], points, triToRay, voronoiDiagram);
+		 voronoiDiagram->cells[a], triToRay, voronoiDiagram);
     if (!cellDone[b])
       traceCell (b, tri, ab, triangleOutput, 
-		 voronoiDiagram->cells[b], points, triToRay, voronoiDiagram);
+		 voronoiDiagram->cells[b], triToRay, voronoiDiagram);
     
     if (!cellDone[c])
       traceCell (c, tri, bc, triangleOutput,
-		 voronoiDiagram->cells[c], points, triToRay, voronoiDiagram);
+		 voronoiDiagram->cells[c], triToRay, voronoiDiagram);
     cellDone[a] = cellDone[b] = cellDone[c] = true;
   }//end for
 }//end computeVoronoiCells
