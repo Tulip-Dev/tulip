@@ -17,6 +17,7 @@
 #include <qpopupmenu.h>
 #include <qstring.h>
 #include <qmainwindow.h>
+#include <qassistantclient.h>
 #include <pthread.h>
 #include <string>
 #include <tulip/Reflect.h>
@@ -99,6 +100,8 @@ public slots:
   void closeEvent(QCloseEvent *e); 
   
 protected slots:
+  void helpIndex();
+  void helpContents();
   void helpAbout();
   void fileExit();
   void fileSave();
@@ -154,6 +157,8 @@ private:
   int alreadyTreated(std::set<unsigned int>, SuperGraph *);
   unsigned int mouseClicX,mouseClicY;
   Morphing *morph;
+
+  QAssistantClient* assistant;
 };
 
 #endif // viewGl_included

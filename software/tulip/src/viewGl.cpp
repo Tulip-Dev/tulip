@@ -143,6 +143,10 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) {
   morph = new Morphing();
   //  cerr << "Finished" << endl << flush;
   enableElements(false);
+
+  // initialisaton of Qt Assistant, the path should be in $PATH
+  assistant = new QAssistantClient("", this);
+
 }
 //**********************************************************************
 void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
@@ -1055,6 +1059,26 @@ void viewGl::helpAbout() {
   if (aboutWidget==0)
     aboutWidget = new InfoDialog(this);
   aboutWidget->show();
+}
+//==============================================================
+void viewGl::helpIndex() {
+  QStringList cmdList;
+  cmdList << "-profile" 
+	  << QString( (tlp::TulipLibDir + "../share/tulip/profile.adp").c_str());
+  
+  assistant->setArguments(cmdList);
+  if ( !assistant->isOpen() )
+    assistant->openAssistant();
+}
+//==============================================================
+void viewGl::helpContents() {
+  QStringList cmdList;
+  cmdList << "-profile" 
+	  << QString( (tlp::TulipLibDir + "../share/tulip/profile.adp").c_str());
+  
+  assistant->setArguments(cmdList);
+  if ( !assistant->isOpen() )
+    assistant->openAssistant();
 }
 //==============================================================
 void viewGl::fileExit() {
