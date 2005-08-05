@@ -23,11 +23,7 @@ nobase_pkgdata_DATA = common/1.png \
 	common/tulip-doxygen.css \
 	profile.adp
 
-
-
-
-
-all : 
+all : html
 
 html-am : profile.adp
 

@@ -1,19 +1,13 @@
+EXTRA_DIST = index.docbook images/*.png
 
-EXTRA_DIST = index.docbook \
-	images/*.png
+install-data-am :
+	cp -r images *.html $(pkgdatadir)/userHandbook
 
-pkgdatadir=$(datadir)/tulip/userHandbook
+uninstall :
+	rm -rf $(pkgdatadir)/userHandbook/images
+	rm -f $(pkgdatadir)/userHandbook/*.html
 
-nobase_pkgdata_DATA = images/3d-view.png \
-	images/doxygen-ex.png \
-	images/element.png \
-	images/info-editor.png \
-	images/mouse-tool.png \
-	images/overview-more.png \
-	images/overview.png \
-	*.html
-
-all : 
+all :
 
 check :
 	$(XMLLINT) --valid -noout index.docbook
