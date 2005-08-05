@@ -13,7 +13,7 @@ INCLUDES = -I$(srcdir)/../include -I../include \
 AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @LIB_IMAGES_LDFLAGS@
 
 tulip_LDFLAGS = -L.
-tulip_LDADD = @LIB_QT@ @QT_LDFLAGS@ -lpthread -lxml2 ${ADD_LIB}
+tulip_LDADD = @LIB_QT@ @QT_LDFLAGS@ -lpthread -lxml2 ${ADD_LIB} -lqassistantclient
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
