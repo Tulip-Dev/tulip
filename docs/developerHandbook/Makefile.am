@@ -2,12 +2,12 @@ EXTRA_DIST = index.docbook \
 	images/*.png
 
 install-data-am :
+	mkdir -p $(pkgdatadir)/developerHandbook
 	cp -r images $(pkgdatadir)/developerHandbook
 	cp -r *.html $(pkgdatadir)/developerHandbook
 
 uninstall :
-	rm -rf $(pkgdatadir)/developerHandbook/images	
-	rm -f $(pkgdatadir)/developerHandbook/*.html
+	rm -rf $(pkgdatadir)/developerHandbook
 
 
 all :

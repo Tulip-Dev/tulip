@@ -17,6 +17,6 @@ profile.adp : gen-profile.sh
 	sh gen-profile.sh
 
 uninstall-am:
-	rm -rf $(pkgdatadir)/common $(pkgdadtadir)/profile.adp
+	rm -rf $(pkgdatadir)/common $(pkgdatadir)/profile.adp
 
 
