@@ -2,7 +2,7 @@
 <!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
 <!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
-<book><bookinfo><title>Tulip Developer Handbook</title></bookinfo>
+<book><title>Tulip Developer Handbook</title>
 <chapter id="introduction"><title>Introduction</title>
     <para></para>
 </chapter>
@@ -382,6 +382,8 @@ a factory that will enables to access to it directly.</para>
             </itemizedlist>
             There are RPM (docbook-utils, docbook-style-xsl) and Debian (docbook-utils, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. If you need another solution, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink>, a <filename>.zip</filename> file. The Docbook XML DTD consists of a main file <filename>docbookx.dtd</filename> and several module files. You only need to reference the main file, and it will pull in the other module files to make up the complete DTD. The XSL files are cutted in several files too. <filename>chunk.xsl</filename> is used to generate a documentation with several pages and included a system of links <quote>HOME, UP, NEXT, PREV</quote>, <filename>docbook.xsl</filename> to make a unique page. The path of the xsl files is automatically found with catalog system. Docbook creates a file, <filename>/etc/xml/catalog</filename>, which contains all catalog references to resolving the path. For an URL adress of the DTD or the XSL file, it correspond to a located file for your file system.</para>
             <para> To install a compatible processor, show <xref linkend="duck-compil"/>. It explains how to use it too.</para>
+            <para>To got pdf documentation, you have to install <application>passivetex</application>. Fedora and Debian includes this package, but you can download and install it with its web site, <ulink url="http://www.tei-c.org.uk/Software/passivetex/"/>. It exists a program named pdfxmltex giving tex macros.</para>
+            <warning><para>It possibles that you need the last version of docbook-xsl >=1.69 to resolve some problems about XSL stylesheet and the catalog resolving.</para></warning>
         </sect2>
         <sect2 id="dox-install"><title>Doxygen</title>
             <para>It can already be in your distribution. If not, you can download it on the official web site. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>

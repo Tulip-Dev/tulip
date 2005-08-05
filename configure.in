@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.9 $)
+AC_REVISION($Revision: 1.10 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -41,7 +41,8 @@ dnl check for java
 AC_PATH_PROG(JAVA, java, not_found)
 if test "$JAVA" = "not_found"; then
 AC_MSG_WARN([
-                Unable to find java in PATH. Need for the documentation build. Reference guide will not
+                Unable to find java in PATH. 
+		Need for the documentation build. Reference guide will not
                 be generated])
 fi
 
@@ -49,7 +50,9 @@ dnl check for doxygen
 AC_PATH_PROG(DOXYGEN, doxygen, not_found)
 if test "$DOXYGEN" = "not_found"; then
 AC_MSG_WARN([
-                Unable to find doxygen in PATH. Reference guide will not
+                Unable to find doxygen in PATH. 
+		Need for the Code Documentation build.
+		Reference guide will not
                 be generated])
 fi
 
@@ -57,7 +60,9 @@ dnl check for dot
 AC_PATH_PROG(DOT, dot, not_found)
 if test "$DOT" = "not_found"; then
 AC_MSG_WARN([
-                Unable to find dot in PATH. Reference guide will not
+                Unable to find dot in PATH. 
+		Need for the Code Documentation build (optional).
+		Reference guide will not
                 be generated])
 fi
 
@@ -65,9 +70,24 @@ dnl check for xmllint
 AC_PATH_PROG(XMLLINT, xmllint, not_found)
 if test "$XMLLINT" = "not_found"; then
 AC_MSG_WARN([
-                Unable to find xmllint in PATH. Reference guide will not
+                Unable to find xmllint in PATH.
+		Need for checking the XML validation (for Docbook Documentation).
+		Available in libxml2 package.
+		Reference guide will not
                 be generated])
 fi
+
+dnl check for xmllint
+AC_PATH_PROG(PDFXMLTEX, pdfxmltex, not_found)
+if test "$PDFXMLTEX" = "not_found"; then
+AC_MSG_WARN([
+                Unable to find pdfmltex in PATH.
+                Need for Documentation in PDF format (optional).
+		Available in passivetex package.
+                Reference guide will not
+                be generated])
+fi
+
 
 dnl lex/yacc needed by thirdparty/lp_solve
 dnl AC_PROG_YACC

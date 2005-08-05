@@ -1,14 +1,27 @@
-all : 
 
-docs : html
+EXTRA_DIST = index.docbook \
+	images/*.png
+
+pkgdatadir=$(datadir)/tulip/userHandbook
+
+nobase_pkgdata_DATA = images/3d-view.png \
+	images/doxygen-ex.png \
+	images/element.png \
+	images/info-editor.png \
+	images/mouse-tool.png \
+	images/overview-more.png \
+	images/overview.png \
+	*.html
+
+all : 
 
 check :
 	$(XMLLINT) --valid -noout index.docbook
 
 clean :
-	rm -f *.html *.out *.log *.out *.fo *.aux *.dvi *.pdf
+	rm -f *~ *.html *.out *.log *.out *.fo *.aux *.dvi *.pdf profile.dcf
 
-html : index.html
+html : index.html profile.dcf
 
 index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) --classpath "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
@@ -28,5 +41,9 @@ userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.p
 
 userManual.pdf : userManual.fo
 	pdfxmltex userManual.fo && pdfxmltex userManual.fo
+
+profile.dcf : ../common/tulip-profile.xsl index.docbook
+	$(JAVA) --classpath "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar"\
+	com.icl.saxon.StyleSheet -o profile.dcf index.docbook  ../common/tulip-profile.xsl path="userHandbook/"
 
 

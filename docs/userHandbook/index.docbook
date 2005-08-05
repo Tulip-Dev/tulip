@@ -2,7 +2,7 @@
 <!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN"
 	"../common/dtd/docbookx.dtd">-->
 <!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<book><bookinfo><title>Tulip User Manual</title></bookinfo>
+<book><title>Tulip User Manual</title>
 
 <chapter id="introduction"><title>Introduction</title>
         <para>The research by the information visualization community show clearly that using a visual representation of data-sets enables faster analysis by the end users. Tulip, imagined by David AUBER, is a contribution of the area of information visualization, <quote>InfoViz</quote>. Even if the Tulip framework enables the visualization, the drawing and the edition of small graphs, all the parts of the framework have been built in order to be able to visualize graphs having to 1.000.000 elements. A visualization system must draw and display huge graphs, enable to navigate through geometric operations as well as extract subgraphs of the data and allow to change the representation of the results obtained by filtering. 
@@ -66,7 +66,7 @@
     <sect1 id="overview"><title>3D Overview</title>
         <para>  All action on this subwindow is just done for the current view window.
             <figure>
-                <title>3D Overview Tollbar</title>
+                <title>3D Overview Toolbar</title>
                 <graphic fileref="images/overview.png"/>
             </figure>
             The 3D overview panel enables to configure the rendering of the graph. The available option are the following: 
@@ -78,7 +78,7 @@
             </itemizedlist>
         </para>
         <para><figure>
-                <title>3D More Tollbar</title>
+                <title>3D More Toolbar</title>
                 <graphic fileref="images/overview-more.png"/>
             </figure>
             <itemizedlist>
