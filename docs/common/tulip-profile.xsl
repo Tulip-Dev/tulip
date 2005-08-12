@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
 <xsl:output method="text"/>
-<xsl:param name="path"/>
+<xsl:param name="install.path"/>
 <xsl:template match="book">
-    &lt;dcf ref="<xsl:value-of select="concat($path,'index.html')"/>" title="<xsl:value-of select="title"/>">
+    &lt;dcf ref="<xsl:value-of select="concat($install.path,'index.html')"/>" title="<xsl:value-of select="title"/>">
     	<xsl:apply-templates select="chapter">
-            <xsl:with-param name="path"><xsl:value-of select="$path"/></xsl:with-param> 
+            <xsl:with-param name="path"><xsl:value-of select="$install.path"/></xsl:with-param> 
         </xsl:apply-templates>
     &lt;/dcf>
 </xsl:template>

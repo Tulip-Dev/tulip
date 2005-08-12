@@ -14,12 +14,12 @@
     <xsl:param name="ulink.footnotes" select="1"/>
     <xsl:param name="passivetex.extensions" select="1"/>
     
-    <xsl:template match="itemizedlist/listitem/para|orderedlist/listitem/para">
+    <!--<xsl:template match="itemizedlist/listitem/para|orderedlist/listitem/para">
 	<xsl:apply-templates/>
     </xsl:template>
     <xsl:template match="calloutlist/callout/para">
 	<xsl:apply-templates/>
-    </xsl:template>
+    </xsl:template>-->
 </xsl:stylesheet>
 
 
