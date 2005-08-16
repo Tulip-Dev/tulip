@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
-<!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN"
-	"../common/dtd/docbookx.dtd">-->
-<!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN"
+	"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<!--<!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
 <book><title>Tulip User Manual</title>
 
 <chapter id="introduction"><title>Introduction</title>

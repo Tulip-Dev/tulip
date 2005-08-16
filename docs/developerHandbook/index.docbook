@@ -1,5 +1,4 @@
 <?xml version='1.0'?>
-<!--<!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
 <!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <book><title>Tulip Developer Handbook</title>
@@ -7,68 +6,78 @@
     <para></para>
 </chapter>
 <chapter id="installation"><title>Installation</title>
-
    <para>The <quote>configure</quote> shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses
-those values to create a <quote>Makefile</quote> in each directory of the package.
-It may also create one or more <quote>.h</quote> files containing system-dependent
-definitions.  Finally, it creates a shell script <quote>config.status</quote> that
+those values to create a <filename>Makefile</filename> in each directory of the package.
+It may also create one or more <filename>.h</filename> files containing system-dependent
+definitions.  Finally, it creates a shell script <filename>config.status</filename> that
 you can run in the future to recreate the current configuration, a file
-<quote>config.cache</quote> that saves the results of its tests to speed up
-reconfiguring, and a file <quote>config.log</quote> containing compiler output
-(useful mainly for debugging <quote>configure</quote>).</para>
+<filename>config.cache</filename> that saves the results of its tests to speed up
+reconfiguring, and a file <filename>config.log</filename> containing compiler output
+(useful mainly for debugging <code>configure</code>).</para>
 
    <para>If you need to do unusual things to compile the package, please try
-to figure out how <quote>configure</quote> could check whether to do them, and mail
-diffs or instructions to the address given in the <quote>README</quote> so they can
-be considered for the next release.  If at some point <quote>config.cache</quote>
+to figure out how <code>configure</code> could check whether to do them, and mail
+diffs or instructions to the address given in the <code>README</code> so they can
+be considered for the next release.  If at some point <code>config.cache</code>
 contains results you don't want to keep, you may remove or edit it.</para>
 
-   <para>The file <quote>configure.in</quote> is used to create <quote>configure</quote> by a program
-called <quote>autoconf</quote>.  You only need <quote>configure.in</quote> if you want to change
-it or regenerate <quote>configure</quote> using a newer version of <quote>autoconf</quote>.</para>
+   <para>The file <filename>configure.in</filename> is used to create <filename>configure</filename> by a program
+called <code>autoconf</code>.  You only need <quote>configure.in</quote> if you want to change
+it or regenerate <code>configure</code> using a newer version of <code>autoconf</code>.</para>
 
 <para><orderedlist><title>The simplest way to compile this package is:</title>
 
-  <listitem><para><quote>cd</quote> to the directory containing the package's source code and type
-     <quote>./configure</quote> to configure the package for your system.  If you're
-     using <quote>csh</quote> on an old version of System V, you might need to type
-     <quote>sh ./configure</quote> instead to prevent <quote>csh</quote> from trying to execute
-     <quote>configure</quote> itself.</para>
+  <listitem><para><code>cd</code> to the directory containing the package's source code and type
+     <code>./configure</code> to configure the package for your system.  If you're
+     using <code>csh</code> on an old version of System V, you might need to type
+     <code>sh ./configure</code> instead to prevent <code>csh</code> from trying to execute
+     <code>configure</code> itself.</para>
 
-     <para>Running <quote>configure</quote> takes awhile.  While running, it prints some
+     <para>Running <code>configure</code> takes awhile.  While running, it prints some
      messages telling which features it is checking for.</para></listitem>
 
-  <listitem><para>Type <quote>make</quote> to compile the package.</para></listitem>
+  <listitem><para>Type <code>make</code> to compile the package.</para></listitem>
 
-  <listitem><para>Optionally, type <quote>make check</quote> to run any self-tests that come with
+  <listitem><para>Optionally, type <code>make check</code> to run any self-tests that come with
      the package.</para></listitem>
 
-  <listitem><para>Type <quote>make install</quote> to install the programs and any data files and
+  <listitem><para>Type <code>make install</code> to install the programs and any data files and
      documentation.</para></listitem>
 
   <listitem><para>You can remove the program binaries and object files from the
-     source code directory by typing <quote>make clean</quote>.  To also remove the
-     files that <quote>configure</quote> created (so you can compile the package for
-     a different kind of computer), type <quote>make distclean</quote>.  There is
-     also a <quote>make maintainer-clean</quote> target, but that is intended mainly
+     source code directory by typing <code>make clean</code>.  To also remove the
+     files that <filename>configure</filename> created (so you can compile the package for
+     a different kind of computer), type <code>make distclean</code>.  There is
+     also a <code>make maintainer-clean</code> target, but that is intended mainly
      for the package's developers.  If you use it, you may have to get
      all sorts of other programs in order to regenerate files that came
      with the distribution.</para></listitem></orderedlist>
 </para>
 
-<para>If you don't find the <quote>configure</quote> shell, you have to generate it with "gen-conf.sh". The processing using the GNU build sytem gives a <quote>configure</quote> shell.</para>
+<para>If you don't find the <filename>configure</filename> shell, you have to generate it with <filename>gen-conf.sh</filename>. The processing using the GNU build sytem gives a <filename>configure</filename> shell.</para>
 
-    <sect1 id="environment"><title>Environment variables</title>
-        <para>QTDIR, LD_LIBRARY_PATH</para>
-    </sect1>
+    <caution><para>Verify <code>QTDIR</code> is properly set : <code>QTDIR/bin</code> should contain moc, qtconfig... , <code>QTDIR/lib</code> the libs and <code>QTDIR/include</code> the Qt headers ...</para></caution>
     <sect1 id="options"><title>Options</title>
-
-        <itemizedlist>
-            <listitem><para>--prefix=<emphasis>value</emphasis>, The <emphasis>value</emphasis> is the path where you want to install Tulip. <filename>bin, include, lib</filename> directories was created in this location. By default, it is <filename>/usr/local/</filename></para></listitem>
-            <listitem><para>--enable-debug</para></listitem>
-        </itemizedlist>
-        <para> To modify the compilation or installation processing, you have to use the GNU build system, see <xref linkend="build-sys"/> which explain how to make some modifications and the reference you can use. </para>
+        <para>In this section, you can find the most used options. To know all of the possible options, type <code>./configure --help</code></para>
+        <variablelist>
+            <varlistentry>
+                <term><code>--prefix</code> = <emphasis>value</emphasis></term>
+                <listitem><para>The <emphasis>value</emphasis> is the path where you want to install Tulip. <filename>bin, include, lib</filename> directories was created in this location. By default, it is <filename>/usr/local/</filename>.</para></listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term><code>--enable-debug</code></term>
+                <listitem><para>Add compilation flags to allow debugging.</para></listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term><code>--enable-maintainer-mode</code></term>
+                <listitem><para>Enable make rules and dependencies not useful (and sometimes confusing) to the casual installer. For example, if you modify a <filename>Makefile.am</filename> file, it is detected and the <filename>Makefile</filename> is updated.</para></listitem>
+            </varlistentry>
+        </variablelist>
     </sect1>
 
 </chapter>
@@ -289,7 +298,161 @@ a factory that will enables to access to it directly.</para>
 </chapter>
 
 <chapter id="graph-format"><title>Tulip graph format</title>
-    <para></para>
+    <sect1 id="nodes-def"><title>Nodes</title>
+        <para>The nodes are stored with a list of index. The index must be integers (Greater than 0).</para>
+        <para>Syntax<programlisting>(nodes id_node1 id_node2 ...)</programlisting>
+           Sample :<programlisting>(nodes 1 2 3 4 5 )</programlisting>
+        </para>
+    </sect1>
+    <sect1 id="edges-def"><title>Edges</title>
+        <para>An edge is defined by providing three integers (greater than 0). The first is the id of the edge, the second is the id of source node of the edge and the third is the id of target node of the edge.</para>
+        <para>Syntax<programlisting>(edge id id_source id_target)</programlisting>
+        Sample<programlisting>(edge 2 2 1)</programlisting>It defines one edge with the node that has the id 2 as source and the node that has the id 1 as target.
+        </para>
+    </sect1>
+    <sect1 id="clusters-def"><title>Clusters</title>
+        <para>A cluster is defined by on integer which represent the cluster id, one string which is the name of the cluster(Two cluster can have the same name). Then it is define with a list of nodes and a list of edges. To define a subcluster we use the same method. One important point is that the id zero is reserved for the root graph (this it cannot be used).</para>
+        <para>Syntax<programlisting>
+(cluster id name
+  (nodes id_node1 id_node2 ...)
+  (edges id_edge1 id_edge2 ...)
+  (cluster id name
+    (nodes id_node1 id_node2 ...)
+    (edges id_edge1 id_edge2 ...)
+  )
+)
+            </programlisting>Sample<programlisting>
+(cluster 3 "cluster"
+  (nodes 1 2 3 )
+  (edges 2 8 )
+  (cluster 4 "Sub Cluster"
+    (nodes 1 2 )
+    (edges 2 )
+  )
+)       </programlisting>
+        </para>
+    </sect1>
+    <sect1 id="pro-def"><title>Definitions of properties</title>
+        <para>The defintion of properties is the following:</para>
+        <para>Syntax <programlisting>
+(property cluster_id property_type "property_name"
+  (default "default_node_value" "default_edge_value" )
+  (node id value)
+  ...
+  (edge id value)
+  ...
+)        
+</programlisting>Sample<programlisting>
+(property  0 bool "viewSelection"
+  (default "false" "false" )
+  (node 1 "true")
+  (node 2 "true")
+  (node 3 "true")
+  (edge 2 "true")
+  (edge 8 "true")
+)
+</programlisting>
+        </para>
+        <sect2 id="type-pro"><title>Property Type</title>
+        <para>  
+        <itemizedlist>
+            <listitem><para>layout : This type enables to strore nodes position in 3D. The position of nodes is defined by a set of 3 doubles <code>(x_coord,y_coord,z_coord)</code>. The position of edges is a list of 3D points. These points are the bends of edges. <code>((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))</code></para></listitem>
+            <listitem><para>size : This type enables to store the size of elements. The size is defined with a sequence of three double. <code>(width,heigth,depth)</code>"</para></listitem>
+            <listitem><para>color : This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. <code>(red,green,blue,alpha)</code></para></listitem>
+            <listitem><para>string : This enables to store text on elements.</para></listitem>
+            <listitem><para>metric : This enables to store real on elements.</para></listitem>
+            <listitem><para>bool : This type enabes to store boolean on elements.</para></listitem>
+            <listitem><para>int : This type enabes to store integers on elements.</para></listitem>  
+        </itemizedlist>
+        </para>
+        </sect2>
+    </sect1>
+    <sect1 id="pro-tlp"><title>Properties of Tulip</title>
+        <para>
+        <variablelist>
+            <varlistentry>
+                <term><code>viewSelection</code></term>
+                <listitem><para>type : bool, this property is the one used for selected elements in Tulip.<programlisting>
+(property  0 bool "viewSelection"
+  (default "false" "false" )
+  (node 1 "true")
+  (node 2 "true")
+  (node 3 "true")
+  (edge 2 "true")
+  (edge 8 "true")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewLayout</code></term>
+                <listitem><para>type : layout, this property is the one used for displaying graph in Tulip.<programlisting>
+(property  0 layout "viewLayout"
+  (default "(0,0,0)" "()" )
+  (node 1 "(10,10,10)")
+  (node 2 "(20,20,20)")
+  (edge 1 "(15,15,15)(25,25,25)")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewColor</code></term>
+                <listitem><para>type : color, this property is the one used for coloring graphs in Tulip.<programlisting>
+(property  0 color "viewColor"
+  (default "(235,0,23,255)" "(0,0,0,0)" )
+  (node 1 "(200,0,200,255)")
+  (node 2 "(100,100,0,255)")
+  (node 3 "(100,100,0,255)")
+  (edge 2 "(200,100,100)")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewLabel</code></term>
+                <listitem><para>type : string, this property is the one used for labeling the graphs in Tulip(in label mode).<programlisting>
+(property  0 string "viewLabel"
+  (default "" "" )
+  (node 1 "Hello")
+  (node 2 "Bonjour")
+  (node 3 "Bye")
+  (edge 2 "Aurevoir")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewSize</code></term>
+                <listitem><para>type : size, this property is the one used for the size of elements displayed.<programlisting>
+(property  0 size "viewSize"
+  (default "(0,0,0)" "(1,1,1)" )
+  (node 1 "(10,10,10)")
+  (node 2 "(20,20,20)")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewShape</code></term>
+                <listitem><para>type : int, this property is used for defining the shape of elements.<programlisting>
+(property  0 int "viewShape"
+  (default "0" "0" )
+  (node 1 "1")
+  (node 2 "2")
+)
+</programlisting></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewTexture</code></term>
+                <listitem><para></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewMetaGraph</code></term>
+                <listitem><para></para></listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><code>viewRotation</code></term>
+                <listitem><para></para></listitem>
+            </varlistentry>
+        </variablelist>
+        </para>
+    </sect1>
 </chapter>
 
 <chapter id="prog-guidelines"><title>Programming Guidelines</title>
@@ -396,13 +559,13 @@ void MyClasse::draw(){
                 <para>To create a <filename>configure</filename> script with autoconf, you need so to write an autoconf input file <filename>configure.ac</filename> (or <filename>configure.in</filename>, use in previous versions of <application>Autoconf</application>). In this example, it is created a <filename>configure.ac</filename> file but Tulip contains <filename>configure.in</filename>. The both files are correct.
 <programlistingco>
 <areaspec>
-    <area id="programs" coords='9'/>
-    <area id="sources" coords='10'/>
-    <area id="acinit" coords='13'/>
-    <area id="acsrcdir" coords='14'/> 
-    <area id="acinitmake" coords='15'/>
-    <area id="progcc" coords='16'/>
-    <area id="output" coords='17'/>
+    <area id="programs" coords='9 30'/>
+    <area id="sources" coords='10 30' />
+    <area id="acinit" coords='13 30'/>
+    <area id="acsrcdir" coords='14 30'/> 
+    <area id="acinitmake" coords='15 30'/>
+    <area id="progcc" coords='16 30'/>
+    <area id="output" coords='17 30'/>
 </areaspec>
 <programlisting>
 `hello.c` 
@@ -606,7 +769,7 @@ $ make dist
         <sect2 id="prefix"><title>Variable prefix</title>
             <variablelist>
                 <varlistentry><term><code>nobase_</code></term>
-                <listitem><para>e.g. <code>nobase_include_HEADERS</code>, mentionned that all the headers files will not be installed in the same place. It is possible to make a subdirectories. <code>nobase_</code> should be specified first when used in conjunction with either <code>dist_</code> or <code>nodist_</code>.</para></listitem>
+                <listitem><para>e.g. <code>nobase_include_HEADERS</code>, mentionned that all the headers files will not be installed in the same place. It is possible to make subdirectories. <code>nobase_</code> should be specified first when used in conjunction with either <code>dist_</code> or <code>nodist_</code>.</para></listitem>
                 </varlistentry>
             </variablelist>
             <variablelist>
@@ -621,13 +784,9 @@ $ make dist
             </variablelist>
         </sect2>
         <sect2 id="gnu-ref"><title>References</title>
-            <para><itemizedlist>
-                    <listitem><para>Developing software with GNU : the GNU build system - <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual.html#SEC30"/></para>
-                    </listitem>
-                    <listitem><para>Autoconf Manual - <ulink url="http://www.gnu.org/software/autoconf/manual/"/></para></listitem>
-                    <listitem><para>Automake Manual - <ulink url="http://www.gnu.org/software/automake/manual/"/></para></listitem>
-                </itemizedlist>
-            </para>
+            <para>Developing software with GNU : the GNU build system - <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual.html#SEC30"/></para>
+            <para>Autoconf Manual - <ulink url="http://www.gnu.org/software/autoconf/manual/"/></para>
+            <para>Automake Manual - <ulink url="http://www.gnu.org/software/automake/manual/"/></para>
         </sect2>
     </sect1>
     <!--===================================================================================    -->
@@ -635,6 +794,7 @@ $ make dist
 
 
 <chapter id="doc-guidelines"><title>Documentation Guidelines</title>
+    <!--======  DEFINITIONS   ========================================================    -->
     <sect1 id="definitions"><title>Definitions</title>
 	<orderedlist>
 	<listitem id="docbook"><para>Docbook is a collection of standards and tools for technical publishing. A Docbook file is composed of SGML(<xref linkend="sgml"/>) tags and is also dependant of a Document Type Definition(<xref linkend="dtd"/>). Docbook has defined standard DTD that you can find in the docbook tools.</para></listitem>
@@ -644,38 +804,93 @@ $ make dist
 	<listitem id="sgml"><para>SGML : Standard Generalized Markup Language, XML : Extensible Markup Language</para></listitem>
     
         <listitem id="xsl"><para>XSL (Extensible Stylesheet Language) is a language of description used for the transformation of the sgml file into formatted ouput: XSL processors like xsltproc, saxon or xalan, ... do that.</para></listitem>
-
+        <listitem id="cata"><para>Catalog : In XML, it provides a mapping from generic addresses to specific local directories on a given machine. A catalog can be used to locate the DocBook DTD, system entity files, and stylesheet files during processing.</para></listitem>
 	</orderedlist>
     </sect1>
+    <!--==============================================================================    -->
+
+    <!--======= Tools installation  ==================================================    -->
     <sect1 id="tools-install"><title>Tools installation</title>
         <sect2 id="duck-install"><title>Docbook XSL Stylesheet</title>
-            <para> There is a great reference for installing tools : <ulink url="http://www.sagehill.net/docbookxsl/ToolsSetup.html#InstallDTD">Docbook XSL : the guide</ulink>.</para>
-            <para>To write a manual using Docbook and the XSL stylesheets, we need three tools : 
+            <para> There is a great reference for installing tools : <ulink url="http://www.sagehill.net/docbookxsl/ToolsSetup.html">Docbook XSL : the guide</ulink>.</para>
+            <para>To write a manual using Docbook and the XSL stylesheets, we need four tools : 
             <itemizedlist>
             <listitem>
                 <para>Docbook DTD</para>
             </listitem>
             <listitem><para>Docbook XSL stylesheets</para></listitem>
             <listitem><para>XSL processor</para></listitem>
+            <listitem><para>XSL-FO processor (optional)</para></listitem>
             </itemizedlist>
-            There are RPM (docbook-utils, docbook-style-xsl) and Debian (docbook-utils, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. If you need another solution, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink>, a <filename>.zip</filename> file. The Docbook XML DTD consists of a main file <filename>docbookx.dtd</filename> and several module files. You only need to reference the main file, and it will pull in the other module files to make up the complete DTD. The XSL files are cutted in several files too. <filename>chunk.xsl</filename> is used to generate a documentation with several pages and included a system of links <quote>HOME, UP, NEXT, PREV</quote>, <filename>docbook.xsl</filename> to make a unique page. The path of the xsl files is automatically found with catalog system. Docbook creates a file, <filename>/etc/xml/catalog</filename>, which contains all catalog references to resolving the path. For an URL adress of the DTD or the XSL file, it correspond to a located file for your file system.</para>
-            <para> To install a compatible processor, show <xref linkend="duck-compil"/>. It explains how to use it too.</para>
-            <para>To got pdf documentation, you have to install <application>passivetex</application>. Fedora and Debian includes this package, but you can download and install it with its web site, <ulink url="http://www.tei-c.org.uk/Software/passivetex/"/>. It exists a program named pdfxmltex giving tex macros.</para>
-            <warning><para>It possibles that you need the last version of docbook-xsl >=1.69 to resolve some problems about XSL stylesheet and the catalog resolving.</para></warning>
+            There are RPM (docbook-dtds, docbook-style-xsl), Debian (docbook-xml, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. The installation of Docbook and the XSL stylesheet create a file named <filename>/etc/xml/catalog</filename>. It contains the informations about all others catalogs to resole the path of the DTDs and the stylsheets from the URI.</para>
+            <sect3 id="xsl-install"><title>Manual Installation : Docdoob XSL stylesheet</title>
+                <para>As we have some problems with the DTD providing by the distributions, Tulip gives the DTD 4.4 of Docbook XML and is located in <filename>$TULIPDIR/docs/common/dtd</filename>. So, this section is for informations. The XSL packages seem to have great catalog resolutions, but if you have problems, this section can help you.</para>
+                <para>If you need another solution or you have problems for the compilation, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink> for Docbook and on the <ulink url="http://sourceforge.net/projects/docbook/">SourceForge page</ulink> of XSL stylesheets. The Docbook sources are in a <code>zip</code> file. Unzip your package in a directory in the place you prefer. The Docbook XML DTD consists of a main file <filename>docbookx.dtd</filename>, several module files and a catalog file, named <filename>catalog.xml</filename>. To update the changes of location of your DTD, edit the file <filename>CatalogManager.properties</filename> in <filename>$TULIPDIR/docs/common/</filename>. Add the catalog file with its asbolute path to the <code>catalogs</code> variable.
+<programlisting>
+CatalogManager.properties :
+
+catalogs=/etc/xml/catalog<emphasis>;/home/bardet/docbook-4.4/catalog.xml</emphasis>
+relative-catalogs=false
+static-catalog=yes
+catalog-class-name=org.apache.xml.resolver.Resolver
+verbosity=1
+</programlisting>
+
+                Concerning the XSL stylesheet package, you just have to do the same thing. You can execute the script of intallation. You have to add the reference of the catalog too. Edit the file <filename>catalog.xml</filename> and complete the <code>catalogs</code> variable with the reference of the catalog of your XSL stylesheet.
+                This catalog resolution make sure that the path, the differences could be find in all Operation Systems. </para>
+                </sect3>
+
+
+                <sect3 id="xsl-proc"><title>XSL processor</title>
+                <para>Currently, there are three to do XSL Transform processing with the recommendations of XSL : saxon (<ulink url="http://saxon.sourceforge.net/"/>), xalan (<ulink url="http://xml.apache.org/xalan-j/"/>), and xsltproc (<ulink url="http://xmlsoft.org/XSLT/xsltproc2.html"/>). For the Tulip project, we have decides to use <application>Saxon</application> for the XSL processor. <application>Xsltproc</application> is the xslt c library for gnome. This program is a way to use the library <emphasis>libxslt</emphasis> with a command line tool for applying XSLT stylesheets to XML documents. This application runs quickly but does not include the implementation of the extensions. <application>Xalan</application> is an other solution but <application>Saxon</application> is the most recommanded.</para>
+
+                <para><application>Saxon</application> is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter. To install it, you have to download on sourceforge the last release 6.5.4. for debian, it exists a deb package. This is the full version that implements the XSLT 1.0 standard. It runs on Java system and provides opportunities for extensions. For Windows, it exists the <application>Instant Saxon</application> a precompiled version that runs only on Microsoft Windows. Saxon is distributed as a zip package. You have to unzip it into a suitable location. It gives three <filename>.jar</filename> files ; <filename>saxon.jar</filename> contains the XSLT processor. In according to the location, you have to update your CLASSPATH. You need to include the full path to the necessary .jar files in the CLASSPATH environment variable. To update it :
+<screen>
+CLASSPATH=$CLASSPATH:/usr/saxon/saxon.jar:\
+/usr/docbook-xsl/extensions/saxon653.jar
+export CLASSPATH
+</screen>
+                If your CLASSPATH is incorrect, you get an error message about <methodname>NoClassDefFoundError</methodname>. To generalize it, you have to change your <filename>.bashrc</filename> or <filename>.bash_profile</filename>. In this example, a second package is included : <filename>/usr/docbook-xsl/extensions/saxon653.jar</filename>, in Fedora Core 4, it is located in <filename>/usr/share/sgml/docbook/xsl-stylesheets/extensions/</filename>. It contains the implementation of the extensions of XSL Transformations. This extensions are necessary for the manage of certain tags and are included in the docbook tools. The general syntax for compilation is like followed :
+
+                <cmdsynopsis><command>java com.icl.saxon.StyleSheet </command>
+                        <arg><option>options</option></arg>
+                        <arg>file.docbook</arg>
+                        <arg>file.xsl</arg>
+                        <arg><option>param=value</option></arg>
+                </cmdsynopsis>
+               
+               However, Tulip provides the sources of saxon and you do not worry to this installation to avoid the complicated installation.</para>
+               <warning><para> This system of catalog resolution is made for finding located files. With the packages of Fedora and perhaps with others distribution, the catalogs include a declaration with URL adresses. So the catalog resolving processor try to connect on the Net.  
+<programlisting>
+&lt;!DOCTYPE catalog PUBLIC "-//OASIS//DTD XML Catalogs V1.0//EN"
+"http://www.oasis-open.org/commitees/entity/release/1.0/catalog.dtd">
+</programlisting>
+                It should be erased in all catalog files which blocks the offline compilation (/etc/xml/catalog, /usr/shar/sgml/docbook/xmlcatalog, ...).</para>
+            </warning>
+               </sect3>
+                <sect3 id="xsl-fo"><title>XSL-FO processor for PDF output</title>
+                <para>To transform the docbook sources in pdf documents, we need to use an other format FO. It is running with a stylsheet in docbook-xsl package. The role of the XSF-Fo processor is to transform FO files in printable files, like pdf. You have to install <application>passivetex</application>. Fedora and Debian includes this package, but you can download and install it with its web site, <ulink url="http://www.tei-c.org.uk/Software/passivetex/"/>. It exists a program named <code>pdfxmltex</code> giving tex macros for the XSL-Fo processing.</para>
+            </sect3>
         </sect2>
         <sect2 id="dox-install"><title>Doxygen</title>
-            <para>It can already be in your distribution. If not, you can download it on the official web site. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>
+            <para>It can already be in your distribution. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>
         </sect2>
     </sect1>
+    <!--==============================================================================    -->
+
+    <!--======= Handwriting for the manuals  =========================================    -->
     <sect1 id="written"><title>Handwriting for the manuals</title>
-    <para>Some works on the Tulip project lead to make a part of a handbook for developer or users. Docbook utilities are used to create them. 
-	Docbook is an SGML document type definition (DTD). It is an standard that describes how markup languages are defined. SGML does not consist of particular tags or the rules for their usage. HTML is an example of a markup language defined in SGML. On the other hand, XML leads to take the place of SGML to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. To find all of the xml elements, you can see : <ulink url="http://www.oasis-open.org/docbook/documentation/reference/html/docbook.html">http://www.oasis-open.org/docbook/documentation/reference/html/docbook.html</ulink></para>
+        <para>Some works on the Tulip project lead to make a part of a handbook for developer or users. Docbook utilities are used to create them. </para>
 
-	<para>For each document, a set of SGML files is created. To help the editing of the handbook, it is possible to use general editors like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> Docbook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. </para>
+        <para>Docbook is a DTD (Document Type Definition) for XML or SGML document that define elements. It is a kind of grammar of the source document. This is in relation with stylesheets (DSSSL or XSL) which allow you to publish on the Web ( in HTML, XHTML) on a printable documentation (PS, PDF, RTF...) with your Docbook documents. The principal advantages of the dobook format is the possibility to seperate the contents of the forms. The tools which can transform the source documents are generic and can pratically run on all Operation Systems. Docbook is the successor of LinuxDoc.</para>
+
+        <para>For Tulip documentation, the source documents are in XML, because XML leads to take the place of SGML to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. To find all of the xml elements to composed your own document, you can see : <ulink url="http://www.docbook.org/tdg5/en/html/pt02.html">http://www.docbook.org/tdg5/en/html/pt02.html</ulink></para>
+
+	<para>For each document, a set of XML files should be created. To help the editing of the handbook, it is possible to use general editors like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> Docbook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. </para>
     
-        <para>The common files used for compilation are in a directory named <filename>common</filename>. It locates in <filename>docs</filename> of the Tulip directory.</para>
+        <para>To compile the handbooks, you just have to type <code>make html</code>. If you want to test the validation of the sources of the handbooks, type <code>make check</code>. The lsat command is <code>make pdf</code>, it produces the printable output.</para>
 
-	<sect2 id="tricks"><title>Tricks for the beginning</title>
+        <sect2 id="tricks"><title>Some Tricks</title>
 	    <para>
 	    <programlistingco>
 	    <areaspec>
@@ -685,39 +900,45 @@ $ make dist
 &lt;?xml version='1.0'?&gt;
 <emphasis>&lt;!-- My first Docbook file --></emphasis>
 &lt;!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook XML V4.4//EN"
-    "/usr/share/sgml/docbook/xml-dtd-4.4-1.0-27/docbookx.dtd"&gt;
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"&gt;
 	    </programlisting>
 	    <calloutlist>
-		<callout arearefs="xml"> <para>defined that it is a xml document version 1.0</para></callout>
+		<callout arearefs="xml"> <para>defined that it is a XML document</para></callout>
 		<callout arearefs="comments"> <para>the comments are writing between &lt;!-- and --&gt;</para></callout>
-		<callout arearefs="doctype"> <para>DTD, Document Type Declaration</para> </callout>
+		<callout arearefs="doctype"> <para>DTD, Document Type Declaration with pulic identifier</para> </callout>
 	    </calloutlist>
 	    </programlistingco>
-            The identification of the DTD is used by the document to know which root element is. Here, <quote>OASIS</quote> is the owner, the declaration is <quote>DTD XML V4.4</quote> and the language is English <quote>EN</quote>. The keyword <quote>book</quote> specifies that the root element is <emphasis>book</emphasis>. An example of the structure of a Docbook file is like followed.
+            The identification of the DTD is used by the document to know which root element is. The declaration could have a different aspect if you use the system identifier : <code>&lt;!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"></code> Here, <quote>OASIS</quote> is the owner, the declaration is <quote>DTD Docbook XML V4.4</quote> and the language is English <quote>EN</quote>. The keyword <quote>book</quote> specifies that the root element is <emphasis>book</emphasis>. An example of the structure of a Docbook file is like followed.
 <programlisting>  <!--    84 caracters max   -->
-&lt;!DOCTYPE book PUBLIC "-//OASIS//DTD Docbook V4.4//EN">
+&lt;!DOCTYPE book SYSTEM 
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 &lt;book> 
     &lt;bookinfo> 
     &lt;title>My First Book&lt;/title>
 
         &lt;author>&lt;firstname>Jean-Pierre&lt;/firstname>&lt;surname>DUPONT
-&lt;/surname>&lt;/author>
-        &lt;copyright>&lt;year>2005&lt;/year>&lt;holder>Jean-Pierre DUPONT&lt;/holder>
-&lt;/copyright>
+                    &lt;/surname>&lt;/author>
+        &lt;copyright>&lt;year>2005&lt;/year>
+                      &lt;holder>Jean-Pierre DUPONT&lt;/holder>
+          &lt;/copyright>
     &lt;/bookinfo>
     &lt;preface> ... &lt;/preface>
     &lt;chapter> ... &lt;/chapter>
+        &lt;sect1> &lt;title>..&lt;/title>
+            &lt;para> ...&lt;/para>
+        &lt;/sect1>
     &lt;chapter> ... &lt;/chapter>
     &lt;chapter> ... &lt;/chapter>
     &lt;appendix> ... &lt;/appendix>
     &lt;appendix> ... &lt;/appendix>
     &lt;index> ... &lt;/index>
 &lt;/book>
-</programlisting></para>
-        <sect3 id="valid"><title>Validation</title><para>
+</programlisting> Each blocks of text is in a <emphasis>para</emphasis> element.</para>
+        <sect3 id="valid"><title>Validation</title>
+        <para>
         The validity of a document is very difficult to detect, so we use a program to do that. A validating parser is a program that can read the DTD and determine whether the exact order of elements in the document is valid according to the DTD. </para>
-        <para>To determinate if the XML code is valid, the program <application>meinproc</application> can be used with the option --check. It is the KDE-specific tools. <cmdsynopsis><command>meinproc</command><arg><option>--check</option> myfile.docbook</arg></cmdsynopsis>
-        When there are errors in the document, <application> meinproc </application> detect the number line and display the form that it should be.
+        <para>To determinate if the XML code is valid, the program <application>xmllint</application> can be used with the option --valid. This program is a parser dependent of the library <emphasis>libxml2</emphasis>.<cmdsynopsis><command>xmllint</command><arg><option>--valid  --noout</option> myfile.docbook</arg></cmdsynopsis> 
+        When there are errors in the document, <application> xmllint </application> detects the number line and displays the form that it should be.
 <screen>
 index.docbook:485: element sect2: validity error : Element sect2 
 content does not follow the DTD, expecting (sect2info? , (title , 
@@ -740,32 +961,8 @@ refentry)
                    ^
 make: *** [check] Erreur 1
 </screen>
-        An other solution to validate an XML and specialy a SGML document is the program <application>xmllint</application>. This program is a parser dependent of the library <emphasis>libxml2</emphasis>.
-        <cmdsynopsis><command>xmllint</command><arg><option>--valid  --noout</option> myfile.docbook</arg></cmdsynopsis>
-        The description of the errors has the same display.</para>
 
-        <para>It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). DSSSL is an other possibility, but we use the XSL stylesheet for the Tulip project. This stylesheet is specified at that compilation with an XSL processor for the XSL transformations.</para>
-        </sect3>
-        <sect3 id="duck-compil"><title>Compilation</title>
-            <para>
-                To transform an docbook file to an HTML formatted output, we need a stylesheet file. An XSL stylesheet describes the formatting that can be applied to XML files using an XSL processor. Currently, there are three to do XSL Transform processing with the recommendations of XSL : saxon (<ulink url="http://saxon.sourceforge.net/"/>), xalan (<ulink url="http://xml.apache.org/xalan-j/"/>), and xsltproc (<ulink url="http://xmlsoft.org/XSLT/xsltproc2.html"/>).</para>
-
-                <para><application>Saxon</application> is a free processor written in Java, so it can be run on any operating system with a modern Java interpreter. To install it, you have to download on sourceforge the last release 6.5.4. for debian, it exists a deb package. This is the full version that implements the XSLT 1.0 standard. It runs on Java system and provides opportunities for extensions. For Windows, it exists the <application>Instant Saxon</application> a precompiled version that runs only on Microsoft Windows. Saxon is distributed as a zip package. You have to unzip it into a suitable location. It gives three <filename>.jar</filename> files ; <filename>saxon.jar</filename> contains the XSLT processor. In according to the location, you have to update your CLASSPATH. You need to include the full path to the necessary .jar files in the CLASSPATH environment variable. To update it :
-<screen>
-CLASSPATH=$CLASSPATH:/usr/saxon/saxon.jar:\
-/usr/docbook-xsl/extensions/saxon653.jar
-export CLASSPATH
-</screen>
-                If your CLASSPATH is incorrect, you get an error message about <methodname>NoClassDefFoundError</methodname>. To generalize it, you have to change your <filename>.bashrc</filename> or <filename>.bash_profile</filename>. In this example, a second package is included : <filename>/usr/docbook-xsl/extensions/saxon653.jar</filename>, in Fedora Core 4, it is located in <filename>/usr/share/sgml/docbook/xsl-stylesheets/extensions/</filename>. It contains the implementation of the extensions of XSL Transformations. This extensions are necessary for the manage of certain tags and are included in the docbook tools. The general syntax for compilation is like followed :
-
-                <cmdsynopsis><command>java com.icl.saxon.StyleSheet </command>
-                        <arg><option>options</option></arg>
-                        <arg>file.docbook</arg>
-                        <arg>file.xsl</arg>
-                        <arg><option>param=value</option></arg>
-                </cmdsynopsis>
-
-                However, <application>Xalan</application> is XSLT stylesheet processor, in Java and C++ from Apach XML Project. It is an another solution to compile the docbook files. Then, <application>Xsltproc</application> is the xslt c library for gnome. This program is a way to use the library <emphasis>libxslt</emphasis> with a command line tool for applying XSLT stylesheets to XML documents. This application runs quickly but does not include the implementation of the extensions.</para>
+        It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). It provides s set of stylesheet able to transform the Docbook documents. DSSSL is an other possibility, but we use the XSL stylesheet for the Tulip project. This stylesheet is an argument for the compilation with an XSL processor for the XSL transformations.</para>
         </sect3>
 	</sect2>
         <sect2 id="duck-faq"><title>Docbook FAQ</title>
@@ -803,12 +1000,38 @@ export CLASSPATH
 fileref="doxygen-ex.png"/>&lt;/figure></programlisting></para></answer>
                 </qandaentry>
                 <qandaentry>
-                    <question><para>How to make annontation in a program listing ?</para></question>
-                    <answer><para>See <ulink url="http://www.sagehill.net/docbookxsl/AnnotateListing.html#Callouts">DocBook XSL : the complete guide</ulink></para></answer>
+                    <question><para>How to make annontation in a program listing (or in a console listing) ?</para></question>
+                    <answer><para>See <ulink url="http://www.sagehill.net/docbookxsl/AnnotateListing.html#Callouts">DocBook XSL : the complete guide</ulink></para>
+                    <para>To do that, you use the set of tags <code>programlisting, co, calloutlist, callout</code>.
+<programlisting>
+&lt;programlisting>
+class MyClasse{ &lt;co id="myid" linkends="mylink"/>
+};    
+&lt;/programlisting>
+&lt;calloutlist>
+    &lt;callout arearefs="myid" id="mylink">
+        &lt;para>... comments ...&lt;/para>
+    &lt;/callout>
+&lt;/calloutlist>
+</programlisting>
+                The <code>programlisting</code> contains the program that you want to display. It is a verbatim mode. Warning, special caracters could be not allow : &lt;, for example. The <code>code</code> element represents the callout you want to place. The location of the insertion is important because it is the location on display. Two attributes are essential : <code>id</code> for the identification and <code>linkends</code> for indicate which comments is linked with the callout. After the <code>programlisting</code> element, we use a <code>calloutlist</code> element to define a list of comments. each comment is contained in a <code>callout</code> element. It has attributes whose <code>arearefs</code> to make a reference to callouts and id for the identification.</para>
+                
+                <para>It exists an other solution but it is more difficult. You have to specify coordinates of place where you want a callout. This solution is a esay and quicky way to comment your program listing.
+<programlisting>
+class MyClasse{ <co id="myid" linkends="mylink"/>
+};    
+</programlisting>
+<calloutlist>
+    <callout arearefs="myid" id="mylink"><para>... comments ...</para></callout>
+</calloutlist>
+                To adapt the case to the console listing, you should use the <code>screenco, screen, callout, ...</code> elements.</para></answer>
                 </qandaentry>
             </qandaset>
         </sect2>
     </sect1>
+    <!--==============================================================================    -->
+
+    <!--======= Code documentation  ==================================================    -->
     <sect1 id="doxygen"><title>Code documentation</title>
         <sect2 id="presentation_dox"><title>Presentation</title>
 	<para><application>Doxygen</application> is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how it is imagined but which possibilities you have. It is available for several distributions like Fedora Core, Debian, Gentoo and others,..  Windows, MacOs and Sun Solaris too.
@@ -981,3 +1204,5 @@ class MyClass
     </sect1>
 </chapter>
 </book>
+
+

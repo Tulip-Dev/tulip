@@ -18,7 +18,7 @@ clean :
 html : index.html profile.dcf
 
 index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
-	$(JAVA) --classpath "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -29,15 +29,20 @@ index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.pro
 pdf :   userManual.fo userManual.pdf
 
 userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
-	$(JAVA) -classpath "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:../common:/usr/share/java/xml-commons-resolver.jar"\
-	com.icl.saxon.StyleSheet -r org.apache.xml.resolver.tools.CatalogResolver -o userManual.fo \
+	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-r org.apache.xml.resolver.tools.CatalogResolver -u -o userManual.fo \
 	index.docbook  ../common/tulip-pdf.xsl
 
 userManual.pdf : userManual.fo
 	pdfxmltex userManual.fo && pdfxmltex userManual.fo
 
-profile.dcf : ../common/tulip-profile.xsl index.docbook
-	$(JAVA) --classpath "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar"\
-	com.icl.saxon.StyleSheet -o profile.dcf index.docbook  ../common/tulip-profile.xsl path="userHandbook/"
+profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	com.icl.saxon.StyleSheet \
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf index.docbook  ../common/tulip-profile.xsl install.path="userHandbook/"
 
 
