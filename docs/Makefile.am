@@ -13,7 +13,7 @@ html-am : profile.adp
 install-data-am:
 	cp -r common profile.adp $(pkgdatadir)/.
 
-profile.adp : gen-profile.sh
+profile.adp : gen-profile.sh developerHandbook/profile.dcf userHandbook/profile.dcf
 	sh gen-profile.sh
 
 uninstall-am:
