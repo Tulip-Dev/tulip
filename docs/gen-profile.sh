@@ -22,7 +22,7 @@ echo "<property name=\"assistantdocs\">$QTDOCDIR</property> </profile>" >> profi
 cat developerHandbook/profile.dcf >> profile.adp
 cat userHandbook/profile.dcf >> profile.adp
 
-echo "<dcf ref=\"developerHandbook/index.cache\" title=\"Tulip Library\">" >> profile.adp
-echo "</dcf>" >> profile.adp
+#echo "<dcf ref=\"developerHandbook/index.cache\" title=\"Tulip Library\">" >> profile.adp
+#echo "</dcf>" >> profile.adp
 echo "</assistantconfig>" >> profile.adp
 
