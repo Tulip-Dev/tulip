@@ -14,7 +14,8 @@ plugins_LTLIBRARIES = \
 	libaritysegment.la \
 	libconvol.la \
 	libequalvalues.la \
-	libquotientclustering.la 
+	libquotientclustering.la  \
+	libplaneclustering.la
 
 pluginsdir = $(libdir)/tlp/plugins/clustering
 
@@ -39,6 +40,7 @@ nodist_libconvol_la_SOURCES = \
 			moc_ConvolutionClusteringSetup.cpp
 libequalvalues_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
 libquotientclustering_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
+libplaneclustering_la_SOURCES = PlaneClustering.h PlaneClustering.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

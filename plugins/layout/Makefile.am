@@ -24,7 +24,8 @@ plugins_LTLIBRARIES = \
 	libtreeortho.la \
 	libbubbletree.la \
 	libembedder.la \
-	libtutte.la
+	libtutte.la \
+	libscatter.la
 
 pluginsdir = $(libdir)/tlp/plugins/layout
 
@@ -47,6 +48,7 @@ libhierarchicalgraph_la_SOURCES = HierarchicalGraph.h HierarchicalGraph.cpp
 libgeneralgraph3d_la_SOURCES = GeneralGraph3D.cpp GeneralGraph3D.h 
 libtutte_la_SOURCES = Tutte.h Tutte.cpp
 libembedder_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.cpp EmbedderDijkstra.cpp EmbedderBfs.cpp EmbedderParameters.cpp EmbedderPowerIterationDense.cpp EmbedderBfs.h EmbedderDefs.h EmbedderDijkstra.h EmbedderEmbedGraph.h EmbedderParameters.h
+libscatter_la_SOURCES = ScatterPlot.h ScatterPlot.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ et @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
