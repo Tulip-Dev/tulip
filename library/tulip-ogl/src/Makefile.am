@@ -1,11 +1,11 @@
 if WIN32
 DLL_FLAGS = -no-undefined
 DLL_TULIP_GL = -DDLL_TULIP_GL
-ADDLDFLAGS = -lfreetype -lxml2
+ADDLDFLAGS = -lfreetype -lxml2 
 ADD_INCLUDES = -I/mingw/include/freetype2
 RELEASE = ${VERSION}
 else
-ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
+ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs` -lGLEW
 ADD_INCLUDES = `freetype-config --cflags` `xml2-config --cflags` 
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 endif
@@ -45,11 +45,23 @@ libtulip_ogl_la_SOURCES = \
         GlGraphSetGet.cpp \
         GlGraphNavigate.cpp \
         GlGraphInit.cpp \
+	GlAugmentedDisplay.cpp \
+	GlADPoint.cpp \
+	GlADAxisPoint.cpp \
+	GlADLine.cpp \
+	GlADQuad.cpp \
+	GlADBox.cpp \
+	GlADGrid.cpp \
+	GlADRenderOptions.cpp \
+	GlADComposite.cpp \
+	GlHud.cpp \
+	GlHudLine.cpp \
+	GlHudRect.cpp \
+	GlHudCircle.cpp \
 	Bezier.cpp \
 	Spline.cpp \
         GlLines.cpp \
 	TLPPixmapFont.cpp \
 	TLPPixmapGlyph.cpp \
-	GlDrawable.cpp \
-        EpsFunction.cpp 
+        EpsFunction.cpp
 

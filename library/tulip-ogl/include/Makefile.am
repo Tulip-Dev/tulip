@@ -11,7 +11,6 @@ nobase_include_HEADERS = \
 	tulip/EpsFunction.h\
 	tulip/Glyph.h \
 	tulip/Bezier.h \
-	tulip/GlDrawable.h \
 	tulip/Spline.h \
 	tulip/Fonts.h \
 	tulip/Document.h \
@@ -23,4 +22,5 @@ nobase_include_HEADERS = \
 	tulip/Paragraph.h \
 	tulip/FLayout.h \
 	tulip/Frame.h \
-	tulip/Renderer.h
+	tulip/Renderer.h \
+	tulip/tlp-ogl-log.h
