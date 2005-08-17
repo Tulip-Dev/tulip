@@ -22,5 +22,4 @@ nobase_include_HEADERS = \
 	tulip/Paragraph.h \
 	tulip/FLayout.h \
 	tulip/Frame.h \
-	tulip/Renderer.h \
-	tulip/tlp-ogl-log.h
+	tulip/Renderer.h
