@@ -1,8 +1,10 @@
 //**********************************************************************
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
+#include "TulipStatsWidget.h"
 #include <string>
 #include <map>
 #include <vector>
@@ -59,6 +61,7 @@
 #include "QtProgress.h"
 #include "ElementInfoToolTip.h"
 #include "TabWidgetData.h"
+#include "GridOptionsWidget.h"
 #include "Overview.h"
 #include "ToolBar.h"
 #include "InfoDialog.h"
@@ -72,13 +75,15 @@ using namespace tlp;
 
 //**********************************************************************
 ///Constructor of ViewGl
-viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) {
+viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) 
+{
   //  cerr << __PRETTY_FUNCTION__ << endl;
   Observable::holdObservers();
   glWidget=0;
   aboutWidget=0;
   copyCutPasteGraph = 0;
   elementsDisabled = false;
+
   //=======================================
 
   //MDI
@@ -117,6 +122,10 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) {
   propertiesWidget=tabWidget->propertyDialog;
   //Init Element info widget
   nodeProperties = tabWidget->elementInfo;
+  //Init Statistics panel
+  statsWidget = tabWidget->tulipStats;
+  statsWidget->setClusterTreeWidget(clusterTreeWidget);
+
   ((Application*)qApp)->nodeProperties = nodeProperties;
   //connect signals related to supergraph replacement
   connect(clusterTreeWidget, SIGNAL(supergraphChanged(SuperGraph *)), 
@@ -172,7 +181,10 @@ void viewGl::enableElements(bool enabled) {
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
+  grid_option->setEnabled(enabled);
+
   elementsDisabled = !elementsDisabled;
+  
 }
 //**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
@@ -250,6 +262,7 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   if(glWidget != 0) {
     propertiesWidget->setGlGraphWidget(glWidget->getGlGraph());
     overviewWidget->setObservedView(glWidget->getGlGraph());
+    statsWidget->setGlGraphWidget(glWidget);
   }
   updateSatutBar();
   redrawView();
@@ -279,6 +292,26 @@ void viewGl::windowActivated(QWidget *w) {
 //**********************************************************************
 GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   //Create 3D graph view
+  /*<<<<<<< viewGl.cpp
+  cerr << __PRETTY_FUNCTION__ << endl;
+
+  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View", graph);
+
+  glWidget1->move(0,0);
+  glWidget1->setCaption(name);
+  glWidget1->show();
+
+  GlGraphWidget *glWidget = glWidget1->getGlGraphWidget();
+
+  glWidget1->setMinimumSize(0, 0);
+  glWidget1->setMaximumSize(32767, 32767);
+  glWidget1->setFocusPolicy(QWidget::NoFocus);
+  glWidget1->setBackgroundMode(QWidget::PaletteBackground);  
+
+  glWidget ->installEventFilter(this);
+  glWidget ->setMouse(mouseToolBar->getCurrentMouse());
+
+  =======*/
   //  cerr << __PRETTY_FUNCTION__ << endl;
   //  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View", graph);
   //  glWidget1->move(0,0);
@@ -296,6 +329,7 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setBackgroundMode(QWidget::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
+  //>>>>>>> 1.4
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
   connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
@@ -304,10 +338,14 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
  
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
+
   QToolTip::setWakeUpDelay(2500);
+
   changeSuperGraph(graph);
+
   if(elementsDisabled)
     enableElements(true);
+
   //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
   qApp->processEvents();
   return glWidget;
@@ -1134,7 +1172,9 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     propertiesWidget->setSuperGraph(0);
     propertiesWidget->setGlGraphWidget(0);
     nodeProperties->setSuperGraph(0);
+    statsWidget->setGlGraphWidget(0);
     w->setSuperGraph(0);
+
     delete root;
   }
   
@@ -1344,3 +1384,12 @@ void viewGl::changeSizes(int id) {
   initObservers();
 }
 //**********************************************************************
+void viewGl::gridOptions()
+{
+  if (gridOptionsWidget == 0)
+    gridOptionsWidget = new GridOptionsWidget(this);
+
+  gridOptionsWidget->setCurrentGraphWidget(glWidget);
+
+  gridOptionsWidget->show();
+}

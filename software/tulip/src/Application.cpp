@@ -9,7 +9,8 @@
 
 using namespace std;
 //**********************************************************************
-Application::Application(int argc, char ** argv):QApplication(argc,argv) {
+Application::Application(int argc, char ** argv): QApplication(argc,argv) 
+{
   tlp::initTulipLib();
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;

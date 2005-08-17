@@ -36,9 +36,11 @@ class GlGraph;
 class View3DSetup;
 class ClusterTree;
 class TulipElementProperties;
+class TulipStats;
 class ToolBar;
 class Overview;
 class Morphing;
+class GridOptionsWidget;
 
 ///Widget for manipulation and visualization of a graph
 class viewGl : public TulipData, Observer {
@@ -51,7 +53,9 @@ public:
   bool eventFilter(QObject *, QEvent *);
 
 protected:
+  GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
+  TulipStats *statsWidget;
   ToolBar *mouseToolBar;
   Overview *overviewWidget;
   QWidget *aboutWidget;
@@ -147,6 +151,7 @@ protected slots:
   void glGraphWidgetClosed(GlGraphWidget *);
   void ungroup();  
   void group();  
+  void gridOptions();
 
 private:
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );

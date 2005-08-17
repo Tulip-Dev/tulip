@@ -37,6 +37,10 @@ BUILT_SOURCES = \
 	AppStartUpData.cpp \
 	ToolBarData.cpp \
 	PropertyDialogData.cpp \
+	TulipStatsData.cpp \
+	GridOptionsData.cpp \
+	moc_TulipStatsData.cpp \
+	moc_GridOptionsData.cpp \
 	moc_Overview.cpp \
 	moc_AppStartUp.cpp \
 	moc_AppStartUpData.cpp \
@@ -50,7 +54,9 @@ BUILT_SOURCES = \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_NavigateButton.cpp \
-	moc_QtProgress.cpp
+	moc_QtProgress.cpp \
+	moc_TulipStatsWidget.cpp \
+	moc_GridOptionsWidget.cpp
 
 nodist_tulip_SOURCES =  \
 	QtProgressData.cpp \
@@ -68,6 +74,10 @@ nodist_tulip_SOURCES =  \
 	AppStartUpData.cpp \
 	ToolBarData.cpp \
 	PropertyDialogData.cpp \
+	TulipStatsData.cpp \
+	GridOptionsData.cpp \
+	moc_TulipStatsData.cpp \
+	moc_GridOptionsData.cpp \
 	moc_AppStartUp.cpp \
 	moc_AppStartUpData.cpp \
 	moc_InfoDialogData.cpp \
@@ -79,7 +89,9 @@ nodist_tulip_SOURCES =  \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_NavigateButton.cpp \
-	moc_QtProgress.cpp
+	moc_QtProgress.cpp \
+	moc_TulipStatsWidget.cpp \
+	moc_GridOptionsWidget.cpp
 
 
 dist_tulip_SOURCES = \
@@ -100,7 +112,9 @@ dist_tulip_SOURCES = \
 	MouseSelection.cpp \
 	MouseMagicSelection.cpp \
 	QtProgress.cpp \
-	main.cpp
+	TulipStatsWidget.cpp \
+	GridOptionsWidget.cpp \
+	main.cpp 
 
 CLEANFILES = $(BUILT_SOURCES)
 

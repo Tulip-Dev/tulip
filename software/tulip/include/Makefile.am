@@ -10,7 +10,9 @@ BUILT_SOURCES = \
 	NavigateGlGraphData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
-	View3DSetupData.h
+	View3DSetupData.h\
+	TulipStatsData.h\
+	GridOptionsData.h
 
 nodist_noinst_HEADERS = \
 	QtProgressData.h \
@@ -22,7 +24,9 @@ nodist_noinst_HEADERS = \
 	NavigateGlGraphData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
-	View3DSetupData.h
+	View3DSetupData.h\
+	TulipStatsData.h\
+	GridOptionsData.h
 
 noinst_HEADERS = \
 	Overview.h\
@@ -44,7 +48,9 @@ noinst_HEADERS = \
 	ToolBar.h\
 	View3DSetup.h\
 	QtProgress.h\
-	viewGl.h
+	viewGl.h \
+	TulipStatsWidget.h\
+	GridOptionsWidget.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
