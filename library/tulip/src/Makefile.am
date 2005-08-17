@@ -68,6 +68,9 @@ libtulip_la_SOURCES = \
 	GraphMeasure.cpp \
 	PluginsCreation.cpp \
 	StlFunctions.cpp \
+	StatisticsNodeModule.cpp \
+	Polynome.cpp \
+	Plane.cpp \
 	SuperGraphMap.cpp \
 	Face.cpp \
 	FaceIterator.cpp \
@@ -76,3 +79,4 @@ libtulip_la_SOURCES = \
 	PlanarityTestEmbed.cpp \
 	PlanarityTestObstr.cpp \
 	PlanarityTestTools.cpp
+	StlFunctions.cpp 

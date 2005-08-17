@@ -10,6 +10,7 @@
 #include <cassert>
 #include <iostream>
 #include <tulip/Vector.h>
+#include <tulip/Polynome.h>
 
 #define MATRIX Matrix<Obj,SIZE>
 
@@ -27,13 +28,19 @@ namespace tlp {
      * operators must be defined for Obj. 
      *
      * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
-     * Version 0.0.1 24/01/2003 
+     * 
+     * Contributor : Maxime Delorme
+     * Version 0.0.2 27/04/2005 
      */
     template<typename Obj,unsigned int SIZE>
     class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
     public:
       Matrix(){}
       Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a):Vector< Vector<Obj,SIZE> , SIZE >(a){};
+
+      // Builds a correlation matrix from a covariance matrix !
+      Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix);
+
       /**
        * Fill the matrix with the value of obj
        */
@@ -95,6 +102,35 @@ namespace tlp {
        * a vector"
        */
       inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec) const;
+
+      /**
+       * Return a new vector equal to the most influent eigenvector of the
+       * matrix
+       */
+      inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;
+
+      /**
+       * Returns a Polynome representing the caracteristic polynome of the matrix.
+       * For the moment, this function only computes a 3x3 matrix caracteristic polynome.
+       */
+      inline void caracteristicPolynome(Polynome &result) const;
+
+      /**
+       * Simplifies a 3x3 matrix in 2x2 matrix to be used with computeEigenVector
+       */
+      inline bool simplify(Matrix<Obj, 2> &simplifiedMatrix) const;
+
+      /**
+       * Returns the EigenVector of the matrix corresponding to the EigenValue passed, with a base x
+       *           /!\ This can only be used with a 2x2 matrix !!! /!\
+       */
+      inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
+
+      /**
+       * Returns every EigenVectors of a 3x3 matrix !
+       * To be used only on symmetric matrices
+       */
+      inline bool computeEigenVectors(Matrix<Obj, 3> &eigenVectors) const;
     };
     /*@}*/
 }
