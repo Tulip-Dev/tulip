@@ -1,6 +1,4 @@
 #!/bin/sh
-REP_COMMON="$(abs_top_builddir)/docs/common"
-HEAD_FILE=tulipdoc.html
 HEADER=header.html
 FOOTER=footer.html
 
@@ -8,8 +6,8 @@ all :
 
 docs :  
 	echo "<HTML><HEAD>" > $(HEADER)
-	echo "<LINK HREF=\"$(REP_COMMON)/tulip-doxygen.css\" REL=\"stylesheet\" TYPE=\"text/css\">" >> $(HEADER)
-	echo "<LINK href=\"$(REP_COMMON)/favicon.ico\" rel=\"SHORTCUT ICON\">" >> $(HEADER)
+	echo "<LINK HREF=\"../../../common/tulip-doxygen.css\" REL=\"stylesheet\" TYPE=\"text/css\">" >> $(HEADER)
+	echo "<LINK href=\"../../../favicon.ico\" rel=\"SHORTCUT ICON\">" >> $(HEADER)
 	echo "<TITLE>Tulip Software Documentation</TITLE> ">> $(HEADER)
 	echo "<META NAME=\"Keywords\" CONTENT=\"tulip,graph,drawing,information,visualization,tree,dag,opengl,3D,clustering,software,navigation,gpl,free,library\">" >> $(HEADER)
 	echo "<META NAME=\"title\" content=\"Tulip Software home page\">" >> $(HEADER)
@@ -26,8 +24,6 @@ docs :
 	cd tulip-libqt && $(DOXYGEN) tulip-libqt.doxygen
 	cd tulip-soft && $(DOXYGEN) tulip-soft.doxygen
 	cd tulip-plugins && $(DOXYGEN) tulip-plugins.doxygen
-
-	cat $(HEADER) > $(HEAD_FILE)
 
 	sh gen-index.sh
 
