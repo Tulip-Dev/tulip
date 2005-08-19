@@ -1,13 +1,15 @@
 EXTRA_DIST = index.docbook images/*.png
 
 install-data-am :
-	mkdir -p $(pkgdatadir)/userHandbook
-	cp -r images *.html $(pkgdatadir)/userHandbook
+	if test -f index.html ; then \
+		mkdir -p $(pkgdatadir)/userHandbook ;\
+		cp -r images *.html $(pkgdatadir)/userHandbook ;\
+	fi;
 
-uninstall :
+uninstall-am :
 	rm -rf $(pkgdatadir)/userHandbook
 
-all :
+all : html
 
 check :
 	$(XMLLINT) --valid -noout index.docbook
@@ -36,7 +38,7 @@ userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.p
 	index.docbook  ../common/tulip-pdf.xsl
 
 userManual.pdf : userManual.fo
-	pdfxmltex userManual.fo && pdfxmltex userManual.fo
+	$(PDFXMLTEX) userManual.fo && $(PDFXMLTEX) userManual.fo
 
 profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\

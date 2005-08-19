@@ -18,9 +18,12 @@ echo "<property name=\"startpage\">userHandbook/index.html</property>" >> profil
 echo "<property name=\"aboutmenutext\">About Manuals</property>" >> profile.adp
 #echo "<property name=\"abouturl\"></property>" >> profile.adp
 echo "<property name=\"assistantdocs\">$QTDOCDIR</property> </profile>" >> profile.adp
-
-cat developerHandbook/profile.dcf >> profile.adp
-cat userHandbook/profile.dcf >> profile.adp
+if test -f developerHandbook/profile.dcf ; then
+	cat developerHandbook/profile.dcf >> profile.adp ;
+fi;
+if test -f userHandbook/profile.dcf ; then
+	cat userHandbook/profile.dcf >> profile.adp ;
+fi;
 
 #echo "<dcf ref=\"developerHandbook/index.cache\" title=\"Tulip Library\">" >> profile.adp
 #echo "</dcf>" >> profile.adp

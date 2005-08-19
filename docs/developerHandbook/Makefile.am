@@ -2,14 +2,16 @@ EXTRA_DIST = index.docbook \
 	images/*.png
 
 install-data-am :
-	mkdir -p $(pkgdatadir)/developerHandbook
-	cp -r images $(pkgdatadir)/developerHandbook
-	cp -r *.html $(pkgdatadir)/developerHandbook
+	if test -f index.html ; then \
+		mkdir -p $(pkgdatadir)/developerHandbook ;\
+		cp -r images $(pkgdatadir)/developerHandbook ;\
+		cp -r *.html $(pkgdatadir)/developerHandbook ;\
+	fi;
 
-uninstall :
+uninstall-am :
 	rm -rf $(pkgdatadir)/developerHandbook
 
-all :
+all : html
 
 check :
 	$(XMLLINT) --valid -noout index.docbook
@@ -38,7 +40,7 @@ devHandbook.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.
 	-o  devHandbook.fo index.docbook  ../common/tulip-pdf.xsl
 
 devHandbook.pdf : devHandbook.fo
-	pdfxmltex devHandbook.fo && pdfxmltex devHandbook.fo
+	$(PDFXMLTEX) devHandbook.fo && $(PDFXMLTEX) devHandbook.fo
 
 
 profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
