@@ -101,6 +101,8 @@ void TestAlgorithmTest::testConnected() {
   CPPUNIT_ASSERT(ConnectedTest::numberOfConnectedComponnents(graph) == 2u);
 }
 //==========================================================
+const std::string GRAPHPATH = "./DATA/graphs/";
+
 void TestAlgorithmTest::testBiconnected() {
   node n[10];
   edge e[10];
@@ -137,6 +139,30 @@ void TestAlgorithmTest::testBiconnected() {
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
   e[6]=graph->addEdge(n[2],n[4]);
   CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
+  //Test makeBiconnected
+  graph->delEdge(e[6]);
+  CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
+  vector<edge> addedEdges;
+  BiconnectedTest::makeBiconnected(graph, addedEdges);
+  CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
+  CPPUNIT_ASSERT(addedEdges.size() == 1);
+  graph->delEdge(addedEdges[0]);
+  CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
+
+  SuperGraph *tmpGraph;
+  for (unsigned int i = 0; i<5; ++i) {
+    tmpGraph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+    CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
+    vector<edge> vEdges;
+    BiconnectedTest::makeBiconnected(tmpGraph, vEdges);
+    CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(tmpGraph));
+    for (vector<edge>::iterator it = vEdges.begin(); it != vEdges.end(); ++it) {
+      tmpGraph->delAllEdge(*it);
+    }
+    CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
+    delete tmpGraph;
+  }
+
 }
 //==========================================================
 void TestAlgorithmTest::testTriconnected() {

@@ -59,14 +59,18 @@ unsigned int eulerIdentity(SuperGraph *graph) {
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
+  cerr << "==================================" << endl;
   graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
   SuperGraphMap *graphMap = new SuperGraphMap(graph);
   graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
   delete graph;
+  cerr << "==================================" << endl;
   graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
+  graph->setAttribute("name", string("unconnected"));
   graphMap = new SuperGraphMap(graph);
+  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
   graphMap->makePlanar();
   /* 
    * The number of faces must be adapted because the Planarity Test split the 
@@ -75,13 +79,18 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));  
   delete graphMap;
   delete graph;
+  cerr << "==================================" << endl;
   cerr << "unbiconnected" << endl;
   graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+
   graphMap = new SuperGraphMap(graph);
+
   graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
+
   delete graphMap;
   delete graph;
+  cerr << "==================================" << endl;
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphsObstruction() {
