@@ -161,7 +161,7 @@ private:
   std::list<node> obstructionNodes;
 
 //   // list of edges in an obstruction found int G if G is not planar;
-   std::list<edge> obstructionEdges;
+  std::list<edge> obstructionEdges;
 
   
 //   //node_array<edge> backEdgeOut; NON UTILISE
