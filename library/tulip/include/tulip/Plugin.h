@@ -12,7 +12,8 @@
 #ifndef TULIPPLUGIN_H
 #define TULIPPLUGIN_H
 #include <string>
-/**Common interface for plug-ins.*/
+
+/** Common interface for plug-ins.*/
 class Plugin {
 public:
   virtual ~Plugin(){}

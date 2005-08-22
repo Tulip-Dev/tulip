@@ -12,6 +12,7 @@
 #include <tulip/SuperGraphMap.h>
 
 //============================================================
+/// Face iterator for SuperGraphMap
 class FaceIterator : public Iterator<Face*>{
 public:
   FaceIterator(SuperGraphMap*);
@@ -28,6 +29,7 @@ private:
 }; 
 
 //============================================================
+/// Adjacente Face iterator for SuperGraphMap
 class FaceAdjIterator : public Iterator<Face*>{
 public:
   /** compute the adjacent faces of the node n */
@@ -46,6 +48,7 @@ private:
 }; 
 
 //============================================================
+/// Node of face iterator for SuperGraphMap
 class NodeFaceIterator : public Iterator<node>{
 public :
   /** compute the node of the face */
@@ -65,6 +68,7 @@ private :
 
 
 //============================================================
+/// Edge of face iterator for SuperGraphMap
 class EdgeFaceIterator : public Iterator<edge>{
 public :
   EdgeFaceIterator(const Face*);

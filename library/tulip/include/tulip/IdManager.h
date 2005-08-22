@@ -17,6 +17,7 @@
 
 class IdManagerIterator;
 
+/// class for the management of the identifiers : node, edge
 class IdManager {
 
 public:
@@ -52,6 +53,7 @@ private:
   unsigned int minId;
 };
 //======================================================
+/// Iterator for id managers
 class IdManagerIterator:public Iterator<unsigned int>  {
 public:
   IdManagerIterator(const IdManager &idMan);

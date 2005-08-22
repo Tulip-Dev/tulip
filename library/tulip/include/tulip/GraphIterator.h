@@ -142,7 +142,7 @@ class OutEdgesIterator:public FactorIterator<edge> {
   bool hasNext();
 };
 //============================================================
-///In edge iterator for SuperGraphViwe
+///In edge iterator for SuperGraphView
 class InEdgesIterator:public FactorIterator<edge> {
  private:
   Iterator<edge> *it;

@@ -28,6 +28,7 @@ class SelectionProxy;
 
 /** \addtogroup graph_test */ 
 /*@{*/
+/// Class for testing if the graph is a tree
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
   static bool isTree(SuperGraph *graph);

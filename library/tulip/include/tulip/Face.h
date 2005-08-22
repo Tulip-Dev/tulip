@@ -16,6 +16,7 @@
 #include <tulip/Edge.h>
 #include <cassert>
 
+/// class Face for a map
 class Face : protected std::vector<edge>{
 
   friend class NodeFaceIterator;

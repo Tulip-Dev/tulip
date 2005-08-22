@@ -12,6 +12,7 @@
  * \defgroup graphs
  */ 
 /*@{*/
+/// class node
 struct node { 
   unsigned int id;
   node():id(UINT_MAX){}

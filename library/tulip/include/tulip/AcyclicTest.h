@@ -28,6 +28,7 @@ class SelectionProxy;
 
 /** \addtogroup graph_test */ 
 /*@{*/
+/// Class for testing if the graph is acyclic
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
   static bool isAcyclic(SuperGraph *graph);

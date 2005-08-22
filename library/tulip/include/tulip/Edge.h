@@ -10,6 +10,7 @@
  * \defgroup graphs
  */ 
 /*@{*/
+/// class edge
 struct edge { 
   unsigned int id;
   edge():id(UINT_MAX){}

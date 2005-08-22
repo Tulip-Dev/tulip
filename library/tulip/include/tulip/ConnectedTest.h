@@ -28,6 +28,7 @@ class SelectionProxy;
 
 /** \addtogroup graph_test */ 
 /*@{*/
+/// class for testing if the graph is connected
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**

@@ -27,6 +27,7 @@ class SuperGraph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
+/// class for testing if the graph is biconnected
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
   /**

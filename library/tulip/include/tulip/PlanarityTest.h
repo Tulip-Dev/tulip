@@ -22,6 +22,7 @@ class SuperGraph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
+/// class for testing the planarity of a graph
 class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
   static bool isPlanar(SuperGraph *graph);

@@ -8,6 +8,7 @@ struct SuperGraph;
 
 /** \addtogroup graphs */ 
 /*@{*/
+/// Observer for Graph
 /**
  * The Observer pattern is described in the lecture notes and pp293-304 
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a 
@@ -39,6 +40,7 @@ namespace std {
 /*@{*/
 /**
  */
+/// Observable object for graph
 class ObservableGraph {
  public:
   virtual ~ObservableGraph() {}
