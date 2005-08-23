@@ -167,7 +167,12 @@ class TulipStats : public TulipStatsData, public GraphObserver
   /**
    * Accessor in writing to the glGraphWidget.
    */
-  void setGlGraphWidget(GlGraphWidget *, bool destroy = false);
+  void setGlGraphWidget(GlGraphWidget *);
+
+  /**
+   * Overriden function used to notify when the supergraph is going to be destroyed :
+   */
+  void destroy(SuperGraph *);
 
  private slots:
 
@@ -265,19 +270,6 @@ class TulipStats : public TulipStatsData, public GraphObserver
    * Enables the usage of the "Remove Metric" button.
    */
   void enableRemoveMetricBtn();
-
-  // GRID_REGION
-  /*
-
-  void chGridSubdivisions();
-
-  void chGridSize();
-
-  void chHollowGrid();
-
-  void chDisplayGrid();
-
-  void computeGrid();*/
 };
 
 #endif

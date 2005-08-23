@@ -9,10 +9,6 @@
 #include <config.h>
 #endif
 
-// A VIRERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-#include <tulip/GlHudCircle.h>
-#include <tulip/GlHudRect.h>
-
 #include "TulipStatsWidget.h"
 #include <tulip/PropertyManager.h> 
 #include <tulip/MetricProxy.h> 
@@ -130,7 +126,7 @@ namespace tlp
     return glGraphWidget;
   }
 
-  void TulipStats::setGlGraphWidget(GlGraphWidget *g, bool destroy)
+  void TulipStats::setGlGraphWidget(GlGraphWidget *g)
   {
     // cout << "[START]..." << __PRETTY_FUNCTION__ ;
     if (supergraph != 0)
@@ -143,8 +139,8 @@ namespace tlp
     if (g == 0)
       return;
 
-    if (!destroy && supergraph != 0)
-      supergraph->removeObserver(this); 
+    /*    if (supergraph != 0)
+	  supergraph->removeObserver(this); */
 
     supergraph = g->getSuperGraph();
 
@@ -156,6 +152,12 @@ namespace tlp
 
     // cout << " ...[END]" << endl;
   } 
+
+  void TulipStats::destroy(SuperGraph *superGraph)
+  {
+    if (superGraph == supergraph)
+      supergraph->removeObserver(this);
+  }
 
   //************************************************************
   //** TulipStats : private function
