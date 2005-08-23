@@ -11,6 +11,7 @@ nobase_include_HEADERS = \
 	tulip/Matrix.h\
 	tulip/cxx/Matrix.cxx\
 	tulip/Rectangle.h\
+	tulip/Polynome.h\
 	tulip/Circle.h\
 	tulip/cxx/Circle.cxx \
 	tulip/SimpleTest.h \

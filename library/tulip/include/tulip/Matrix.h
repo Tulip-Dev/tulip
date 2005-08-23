@@ -11,6 +11,7 @@
 #include <iostream>
 #include <tulip/Vector.h>
 #include <tulip/Polynome.h>
+#include <vector>
 
 #define MATRIX Matrix<Obj,SIZE>
 
