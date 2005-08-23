@@ -24,6 +24,7 @@ bool BiconnectedTest::isBiconnected(SuperGraph *graph) {
 void BiconnectedTest::makeBiconnected(SuperGraph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   //  if (BiconnectedTest::isBiconnected(graph)) return;
+  if (instance==0) instance=new BiconnectedTest();
   graph->removeObserver(instance);
   instance->resultsBuffer.erase((unsigned int)graph);  
   instance->connect(graph, addedEdges);
