@@ -27,5 +27,6 @@ fi;
 
 #echo "<dcf ref=\"developerHandbook/index.cache\" title=\"Tulip Library\">" >> profile.adp
 #echo "</dcf>" >> profile.adp
+
 echo "</assistantconfig>" >> profile.adp
 

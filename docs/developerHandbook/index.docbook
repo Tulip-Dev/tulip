@@ -351,15 +351,19 @@ Coord endPos(1, 1, 1);
 Color startCol(0, 0, 255, 255);
 Color endCol(255, 0, 0, 0);
 
-// We create the line, the last parameter is the thickness of the line (note : you can't exceed 10)
+// We create the line, the last parameter is the thickness of the line
+ (note : you can't exceed 10)
 GlADLine* line = new GlADLine(startPos, endPos, startCol, endCol, 1);
 
-// We set 2 render states : Firstly we activate Alpha-Blending so that transparency can we computed, 
-// and then we deactivate the z buffer, in order to see the line even if it crosses a node.
+// We set 2 render states : Firstly we activate Alpha-Blending so that
+ transparency can we computed, 
+// and then we deactivate the z buffer, in order to see the line even if
+ it crosses a node.
 line->setRenderState(GlAD_AlphaBlending, true);
 line->setRenderState(GlAD_ZEnable, false);
 
-// Finally we add the line to the GlGraphWidget, naming it "The famous tutorial line"
+// Finally we add the line to the GlGraphWidget, naming it "The famous
+ tutorial line"
 glGraphWidget->addGlAugmentedDisplay(line, "The famous tutorial Line");	
 		</programlisting>
 	
@@ -373,14 +377,17 @@ glGraphWidget->addGlAugmentedDisplay(line, "The famous tutorial Line");
 Coord bottomRight(1.5, 1.5, 1.5);
 Color boxColor(220, 220, 255, 80);
 
-// We create the box by giving to the constructor the bounding box (topLeft and bottomRight) and the color of the box.
+// We create the box by giving to the constructor the bounding box 
+(topLeft and bottomRight) and the color of the box.
 GlADBox *box = new GlADBox(topLeft, bottomRight, boxColor);
 
-// We activate Alpha-Blending so that transparency can be computed and we deactivate culling in order to avoid backface removal.
+// We activate Alpha-Blending so that transparency can be computed and
+ we deactivate culling in order to avoid backface removal.
 box->setRenderState(GlAD_AlphaBlending, true);
 box->setRenderState(GlAD_Culling, false);
 
-// Finally we add the box to the GlGraphWidget, naming it "GlAD Tutorial 2 : Box"
+// Finally we add the box to the GlGraphWidget, naming it 
+"GlAD Tutorial 2 : Box"
 glGraphWidget->addGlAugmentedDisplay(box, "GlAD Tutorial 2 : Box");
 		</programlisting>
 	
@@ -395,12 +402,15 @@ glGraphWidget->addGlAugmentedDisplay(box, "GlAD Tutorial 2 : Box");
 int viewport[4];
 glGetIntegerv(GL_VIEWPORT, viewport);
 
-// This is the position of the center of the circle (ScreenWidth / 2, ScreenHeight / 2, 1)
+// This is the position of the center of the circle 
+(ScreenWidth / 2, ScreenHeight / 2, 1)
 Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
 Color circleColor(220, 220, 255, 255);
 
-// We create the circle giving it's center position, it's color, it's radius and the number of segments
-GlHudCircle* circle = new GlHudCircle(circleCenter, circleColor, 256, 50);
+// We create the circle giving it's center position, it's color,
+ it's radius and the number of segments
+GlHudCircle* circle = new GlHudCircle(circleCenter, circleColor,
+ 256, 50);
 
 // Then we deactivate Z buffer : this is very important for GlHud classes !
 circle->setRenderState(GlAD_ZEnable, false);
@@ -429,7 +439,8 @@ Color hudColor(128, 128, 128, 255);
 int viewport[4];
 glGetIntegerv(GL_VIEWPORT, viewport);
 
-// This is the position of the center of the circle (ScreenWidth / 2, ScreenHeight / 2, 1)
+// This is the position of the center of the circle 
+ (ScreenWidth / 2, ScreenHeight / 2, 1)
 Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
 
 // We create the circle. It still have 50 segments
@@ -561,7 +572,7 @@ a factory that will enables to access to it directly.</para>
         <para>  
         <itemizedlist>
             <listitem><para>layout : This type enables to strore nodes position in 3D. The position of nodes is defined by a set of 3 doubles <code>(x_coord,y_coord,z_coord)</code>. The position of edges is a list of 3D points. These points are the bends of edges. <code>((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))</code></para></listitem>
-            <listitem><para>size : This type enables to store the size of elements. The size is defined with a sequence of three double. <code>(width,heigth,depth)</code>"</para></listitem>
+            <listitem><para>size : This type enables to store the size of elements. The size is defined with a sequence of three double. <code>(width,heigth,depth)</code></para></listitem>
             <listitem><para>color : This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. <code>(red,green,blue,alpha)</code></para></listitem>
             <listitem><para>string : This enables to store text on elements.</para></listitem>
             <listitem><para>metric : This enables to store real on elements.</para></listitem>
@@ -975,13 +986,9 @@ $ make dist
                 <varlistentry><term><code>nobase_</code></term>
                 <listitem><para>e.g. <code>nobase_include_HEADERS</code>, mentionned that all the headers files will not be installed in the same place. It is possible to make subdirectories. <code>nobase_</code> should be specified first when used in conjunction with either <code>dist_</code> or <code>nodist_</code>.</para></listitem>
                 </varlistentry>
-            </variablelist>
-            <variablelist>
                 <varlistentry><term><code>noinst_</code></term>
                 <listitem><para>denotes data which do not need to be installed.</para></listitem>
                 </varlistentry>
-            </variablelist>
-            <variablelist>
                 <varlistentry><term><code>dist_ /nodist_</code></term>
                 <listitem><para>denotes files or data that will be included to the distribution (or not with <code>nodist_</code>).</para></listitem>
                 </varlistentry>
@@ -1001,7 +1008,8 @@ $ make dist
     <!--======  DEFINITIONS   ========================================================    -->
     <sect1 id="definitions"><title>Definitions</title>
 	<orderedlist>
-	<listitem id="docbook"><para>Docbook is a collection of standards and tools for technical publishing. A Docbook file is composed of SGML(<xref linkend="sgml"/>) tags and is also dependant of a Document Type Definition(<xref linkend="dtd"/>). Docbook has defined standard DTD that you can find in the docbook tools.</para></listitem>
+	<listitem id="docbook"><para>Docbook is a collection of standards and tools for technical publishing. A Docbook file is composed of SGML(<xref linkend="sgml"/>) tags and is also dependant of a Document Type Definition(<xref linkend="dtd"/>). Docbook has defined standard DTD that you can find in the docbook tools.
+       </para></listitem>
 
 	<listitem id="dtd"><para>DTD : Document Type Definition. The DTD defines the vocabulary of content elements that an author can use and how they relate to each other. For example, a book element can contain a title element, any number of para elements for paragraphs, and any number of chapter elements. </para></listitem>
 
@@ -1200,8 +1208,9 @@ make: *** [check] Erreur 1
                     <question><para>How to insert a figure ?</para></question>
                     <answer><para>the element uses for the insert of a figure is <quote>&lt;figure></quote>. It enable the numerotation of the figures. Warning, the width of the figures should not exceed a certain value to avoid that it is truncated in the pdf transform. You can specify a title and other parameter in the limits of the DTD. 
 <programlisting>
-&lt;figure> &lt;title>Screenshot of the result&lt;/title>&lt;graphic
-fileref="doxygen-ex.png"/>&lt;/figure></programlisting></para></answer>
+&lt;figure> &lt;title>Screenshot of the result&lt;/title>
+&lt;graphic fileref="doxygen-ex.png"/>&lt;/figure></programlisting>
+			In order to insert a figure as <quote>inline</quote>, use the tag <code>inlinegraphics</code></para></answer>
                 </qandaentry>
                 <qandaentry>
                     <question><para>How to make annontation in a program listing (or in a console listing) ?</para></question>
@@ -1293,21 +1302,21 @@ or
 or others ....
 	    </screen>
 	    For more details, the web site of <ulink url="http://www.doxygen.org/docblocks.html">Doxygen</ulink> explains it. 
-	    In general, the comments must be before the declaration or definition of a type, a function or a member. If you want to putting the documention after, you have to add a marker &lt;. Note that you can place your comment at other places using some tags like \class, \union, \fn, \var, ... or @class, @union, @fn, @var, ...
+	    In general, the comments must be before the declaration or definition of a type, a function or a member. If you want to putting the documention after, you have to add a marker &lt;. Note that you can place your comment at other places using some tags like <code>\class, \union, \fn, \var,</code> ... or <code>@class, @union, @fn, @var, </code>...
 	    </para>
 	    <para>
-	    It exists several tags to help you for commenting and writing a description : all of it begin with a backflash <symbol>\</symbol> or an at-sign<symbol>@</symbol>.
+	    It exists several tags to help you for commenting and writing a description : all of it begin with a backflash <code>\</code> or an at-sign <code>@</code>.
 	    <itemizedlist>
-		<listitem><para>@author, <emphasis>name of the author</emphasis>. </para></listitem>
-		<listitem><para>@param, <emphasis>to write a special comment on a parameter of a method or function</emphasis> </para></listitem>
-		<listitem><para>@see, <emphasis>to make a reference to an other object or function</emphasis></para></listitem>
-		<listitem><para>@return, <emphasis>to indicate the exit of a function</emphasis></para></listitem>
-		<listitem><para>@date, <emphasis>date of creation</emphasis></para></listitem>
-		<listitem><para>@note, <emphasis>desribe a role</emphasis></para></listitem>
-		<listitem><para>@attention, <emphasis>write a caution</emphasis></para></listitem>
-		<listitem><para>@warning</para></listitem>
-		<listitem><para>@pre, <emphasis>write a prerequisite</emphasis></para></listitem>
-		<listitem><para>@remark</para></listitem>
+		<listitem><para><code>@author</code>, name of the author. </para></listitem>
+		<listitem><para><code>@param</code>, to write a special comment on a parameter of a method or function</para></listitem>
+		<listitem><para><code>@see</code>, to make a reference to an other object or function</para></listitem>
+		<listitem><para><code>@return</code>, to indicate the exit of a function</para></listitem>
+		<listitem><para><code>@date</code>, date of creation</para></listitem>
+		<listitem><para><code>@note</code>, desribe a role</para></listitem>
+		<listitem><para><code>@attention</code>, write a caution</para></listitem>
+		<listitem><para><code>@warning</code></para></listitem>
+		<listitem><para><code>@pre</code>, write a prerequisite</para></listitem>
+		<listitem><para><code>@remark</code></para></listitem>
 	    </itemizedlist>
             The complete list is on this <ulink url="http://www.stack.nl/~dimitri/doxygen/commands.html">page</ulink> in the <application>Doxygen</application> web site.
 	    </para>
@@ -1366,7 +1375,7 @@ class MyClass
 	<qandaset>
 	    <qandaentry>
 		<question><para>How to insert a block of code ?</para></question>
-		<answer><para> To illustrate your documentation, you can insert a block of code in a description between <quote>\code</quote> and <quote>\endcode</quote>. This code is written in the documentation with highlighting syntax. </para></answer>
+		<answer><para> To illustrate your documentation, you can insert a block of code in a description between <code>\code</code> and <code>\endcode</code>. This code is written in the documentation with highlighting syntax. </para></answer>
 	    </qandaentry>
             <qandaentry>
 		<question><para>How to force an end of line ?</para></question>
@@ -1374,7 +1383,7 @@ class MyClass
 	    </qandaentry>
             <qandaentry>
 		<question><para>How to make doxygen ignore code fragment ?</para></question>
-		<answer><para>It exists two ways to resolve this questions. The first one is to use the tags <quote>\cond</quote> and <quote>\endcond</quote> to skip the internal code. The second way is to use the preprocessor of Doxygen. In the configuration file, you specify the MACRO and you verify if the value of PREPROCESSING is to yes. Then, you set PREDEFINED to DOXYGEN_SHOULD_SKIP_THIS.
+		<answer><para>It exists two ways to resolve this questions. The first one is to use the tags <code>\cond</code> and <code>\endcond</code> to skip the internal code. The second way is to use the preprocessor of Doxygen. In the configuration file, you specify the macros and you verify if the value of <code>PREPROCESSING</code> is to yes. Then, you set <code>PREDEFINED</code> to <code>DOXYGEN_SHOULD_SKIP_THIS</code>.
 
 <programlisting>
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -1391,8 +1400,8 @@ class MyClass
                     <screen>
 \f$ AB = \sqrt{BC^2 + CA^2} \f$
                     </screen> 
-                    The second way is for a centerd display on a seperate line. These formulas should be put between <quote>\f[</quote> and <quote>\f]</quote> commands.</para>
-                    <para>The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using \f{<emphasis>environment</emphasis>}, where <emphasis>environment</emphasis> is the latex environment, the corresponding end commands is <quote>\f}</quote></para></answer>
+                    The second way is for a centerd display on a seperate line. These formulas should be put between <code>\f[</code> and <code>\f]</code> commands.</para>
+                    <para>The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using <code>\f{</code><emphasis>environment</emphasis><code>}</code>, where <emphasis>environment</emphasis> is the latex environment, the corresponding end commands is <code>\f}</code></para></answer>
                 </qandaentry>
 	</qandaset>
         </sect2>

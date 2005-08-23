@@ -57,7 +57,7 @@ body {
 
 .chapter .sect1, .chapter .titlepage, .sect1 .titlepage, .article .titlepage {
   padding: 0em;
-  color:#4b4b4b
+  color:#000000
 }
 
 .titlepage {
@@ -141,6 +141,7 @@ body {
 
 hr{ border:0; background-color:#597ba8; height:1px}
 /* A little bit of padding makes the tables for keybindings etc much easier to read */
+.application{font-style: italic}
 
 table { 
   padding: 5px; 
@@ -155,8 +156,9 @@ dt {
   margin-top: 1em; 
 }
 
-code{
-    font-size: 10pt
+.code, .filename, .methodname{
+    font-size: 10pt;
+    color: rgb(0,96,160)
 }
 
 div.toc dt { 
@@ -191,16 +193,9 @@ p {
   text-align: justify; 
 }
 
-/* More specific settings */
-/* Temporary patch: browsers break on bad HTML */
-/* P, H1, H2, H3, H4, H5, TD, TH { font-family: Helvetica, Arial, sans-serif;
-    } */
-
 p, h1, h2, h3, h4, h5, h6, td, th { 
   font-family: sans-serif;
 }
-
-/* Visual cues for GUI elements etc in the text */
 
 .guimenu, .guimenuitem, .guisubmenu { 
   background-color: rgb(250,250,250);
@@ -240,7 +235,7 @@ p, h1, h2, h3, h4, h5, h6, td, th {
 }
 
 h1, h2, h3, h4, h5, h6 { 
-  color: #4b4b4b;
+  color: #000000;
 }
 
 .arg, .parameter, .replaceable { 
