@@ -1,7 +1,7 @@
 EXTRA_DIST = index.docbook images/*.png
 
 install-data-am :
-	if test -f html/index.html ; then \
+	if test -d html ; then \
 		mkdir -p $(pkgdatadir)/userHandbook ;\
 		cp -r images html/*.html $(pkgdatadir)/userHandbook/. ;\
 	fi;
