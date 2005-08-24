@@ -1,0 +1,57 @@
+<chapter id="functions"><title>Functionalities</title>
+    <sect1 id="manag-graphs"><title>Management of Graphs</title>
+        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you obtain. Tulip support diferent formats : BMP, JPEG, PBM, PGM, PNG, PPM, XBM, XPM, EPS. </para>
+        <para>
+        Tulip could generate a graph from data : importation.
+        <itemizedlist><title>Examples of importation</title>
+        <listitem><para>Adjacency Matrix : a form of representation of graphs.</para></listitem>
+        <listitem><para>File System : make a graph with your file system ; the root is the directory you have selected.</para></listitem>
+        <listitem><para>GML import : create a graph from this other format.</para></listitem>
+        <listitem><para>dot : create a graph from this other format, <emphasis>graphviz</emphasis>.</para></listitem>
+        </itemizedlist>
+        The second possibilty of using is to generate different kinds of graph : Graph, Tree, Grid which could be complete, simple, uniform, ...
+        <itemizedlist><title>Examples of generation</title>
+        <listitem><para>Complete General Graph</para></listitem>
+        <listitem><para>Complete Tree</para></listitem>
+        <listitem><para>Grid</para></listitem>
+        <listitem><para>Grid approximation</para></listitem>
+        <listitem><para>Random General Graph</para></listitem>
+        <listitem><para>Random Simple Graph</para></listitem>
+        <listitem><para>Uniform Random Binary Tree</para></listitem>
+        </itemizedlist>
+        </para>
+
+        <para>As lots of software, It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected objects from a view. When you paste an object, there are in the same place of the oldest of the view. Then, you have an access by the menus and the mouse-toolbar for the operations about the selection.</para>
+    </sect1>
+    <sect1 id="algo"><title>Algorithms</title>
+        <para>Each graph can be modified with algorithms for the layout, the set of selected objects, the size of nodes, the value attributed to an object (node or edge) named metric, the colors. An other advantage of Tulip platform is that it is easy to insert a new algorithm to the structure; this way, it was able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Property</code> menu. Several categories are in there : Selection, Layout, Metric, Colors, Sizes. They modify the properties of the object in the graph.
+        </para>
+    </sect1>
+    <sect1 id="graph-properties"><title>Properties of graph</title>
+        <para>under construction</para>
+    </sect1>
+    <sect1 id="hierarchy"><title>Hierarchy</title>
+        <para>under construction</para>
+    </sect1>
+    <sect1 id="stats-panels"><title>Statistics Panel</title>
+        <para>under construction</para>
+    </sect1>
+    <sect1 id="text-rend"><title>Text Rendering</title>
+        <para>It is possible to affect a label for each object of the graph. Tulip can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
+        <figure>
+            <title>Bitmap Rendering</title>
+            <graphic fileref="images/bitmap-label.png"/>
+        </figure>
+        <figure>
+            <title>3D Rendering</title>
+            <graphic fileref="images/3d-label.png"/>
+        </figure>
+        <figure>
+            <title>Texture Rendering</title>
+            <graphic fileref="images/text-label.png"/>
+        </figure>
+        </para>
+        <para>Not accessible for the moment, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to ornagize the content of the labels as you want.</para>
+    </sect1>
+    
+</chapter>

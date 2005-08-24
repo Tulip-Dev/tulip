@@ -1,0 +1,92 @@
+<!--<!DOCTYPE chapter SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
+<chapter id="tutorial"><title>Tutorials</title>
+    <sect1 id="first-step"><title>First Step</title>
+        <para> In this part, the goal is to help you to make a graph simply and save your work.</para>
+        <sect2 id="first-dis"><title>First display</title>
+            <sect3 id="import"><title>Importation of a graph</title>
+                <para>
+		<itemizedlist>
+		    <listitem><para>Select the <code>File</code> -> <code>Import</code> item.</para>
+		    </listitem>
+		    <listitem><para>Select a method of importation : <code>Grid approximation</code>, for example.</para></listitem>
+		</itemizedlist>
+		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the roller of the mouse, you can zoom on the graph to see a node in particular. In clicking, you can translate the graph in the plane of the view, adding the key <keycap>MAJ</keycap> for rotation and the key <keycap>CTRL</keycap> to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View</code> -> <code>Center view</code> of the menu bar.
+		<itemizedlist>
+		    <listitem><para>Select <code>Property</code> -> <code>Metric</code> -> <code>Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
+		</itemizedlist>
+		The graph is now displayed with colors depended of the metric. You can change the colors with the menu : <code>Property</code> -> <code>Colors</code>. The choice of <code>Distribution</code> computes the color on the entire palette. The second choice, <code>Metric mapping</code>, compute an interpolation between the two selected colors.
+                </para>
+            </sect3>
+            <sect3 id="create"><title>Creation of a graph</title>
+                <para>In this section, we learn how to create its own graph, object by object.
+                <itemizedlist>
+                    <listitem>
+                        <para>Select the <code>File</code> -> <code>New</code> item to create a new view for the graph.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Create a graph adding nodes and edges. For a node, select the icon <inlinegraphic fileref="images/i_addnode.png"/> and clic on the position you have chosen. To insert an edge, select the icon <inlinegraphic fileref="images/i_addedge.png"/>. Clic on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox on the <code>Overview</code> sub-window. In the same way, you can display or hide the arrows checking <code>Arrows</code> on the subwindow <code>Overview</code> too.</para>
+                    </listitem>
+                    <listitem>
+                        <para>Destroy elements of the graph. Use the icon <inlinegraphic fileref="images/i_del.png"/>. Clic on the element, you want to destroy.</para>
+                    </listitem>
+                </itemizedlist>
+                </para>
+            </sect3>
+        </sect2>
+	<sect2 id="save"><title>Save options</title>
+	    <para>To save your work, you jsut have to select <code>File</code> -> <code>Save</code> or <code>Save as</code>, type the name of the file and choose the path.</para>
+            <para>The second way to make a save is to export in a special format : GML or tlp. Select <code>File</code> -> <code>Export</code> and your choice, then choose a name of your file.</para>
+	</sect2>
+        <sect2 id="algos"><title>Algorithms</title>
+	    <para>This part explains how to apply an algorithm to a graph. Then, you have make or import a graph. Select <code>Property</code> -> <code>Layout</code> and an algorithm : <code>Hierarchical Graph</code> for example. </para>
+            <para>In this case, it is used an algorithm about the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. But, It is possible that you can apply <emphasis>layout</emphasis> algorithm for your graph, if it do not a right kind of graphs. With the <emphasis>Tree</emphasis> layout, you can not display a grid. If it is not valid, a box is displayed and tells why it is not ok.</para>
+	</sect2>
+    </sect1>
+    <sect1 id="properties"><title>Properties</title>
+        <para>As it is explained in the last section, it is possble to modify the properties with algorithms. An other solutin is to change the values in the <code>Info Editor</code> sub-window in the <code>properties</code> tab.</para>
+        <para>To give an example, create a graph :
+        <itemizedlist>
+            <listitem><para>Select the properties you want to change, <code>viewSize</code> in the <code>local</code> array for example to manage the size of the nodes. Now, you can change all values or the value of one node.
+                <orderedlist>
+                    <listitem><para>Clic on <code>Set all</code>, and write the new coordinates : <code>(2.0, 2.0, 2.0)</code></para></listitem>
+                    <listitem><para>Clic on the line and the second column of the concerned node in the array. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
+                </orderedlist>
+            </para></listitem>
+        </itemizedlist>
+
+         If you want to change properties of selected objects, use the check box <code>Filter</code> of the <code>Property</code> tab.
+        <itemizedlist>
+            <listitem><para>Select elements with the icon <inlinegraphic fileref="images/i_selection.png"/> or using the Add/Remove Selection item of the <emphasis>clic-right</emphasis>.
+            </para></listitem>
+            <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
+            </para></listitem>
+            <listitem><para>Clic on the checkbox named <code>Filter</code>. The selected object just appears in the top array.
+            </para></listitem>
+            <listitem><para>Clic on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
+            </para></listitem>
+        </itemizedlist>
+         If you uncheck <code>Filter</code>, all nodes are in the array. It is possible to make the same thing with the values of edges. You just have to clic on the tab named <code>Edges</code>.
+
+        <itemizedlist>
+            <title>Set of properties available :</title>
+            <listitem><para><code>viewColor</code> : It is chosen with a palette of colors.</para></listitem>
+            <listitem><para><code>viewLabel</code> : It is a string, you ust have to write text.</para></listitem>
+            <listitem><para><code>viewLayout</code> : This represents the position of the object in the tree dimension. X, Y and Z coordinates must be indicates. (e.g. <code>(-1.0,0,1.0)</code>)</para></listitem>
+            <listitem><para><code>viewMetaGraph</code> :</para></listitem>
+            <listitem><para><code>viewRotation</code> : Type a value in degree. The rotation is made around the Z axis and in the counter-clockwise.</para></listitem>
+            <listitem><para><code>viewSelection</code> :  This property can take two values : <code>true</code> or <code>false</code>. If you just change a value, you have to check/uncheck the case in the array of elements.</para></listitem>
+            <listitem><para><code>viewShape</code> : For the nodes, it determines the shape. To change it, select an item in the listbox. For the edges, it determines the kind of lines : plain, dash. It is represented by a number.</para></listitem>
+            <listitem><para><code>viewSize</code> : For nodes, the properties is represented by tree values : width, height, and depth. For edges, the values correspond to the size of the arrows.</para></listitem>
+            <listitem><para><code>viewTexture</code> : </para></listitem>
+        </itemizedlist>
+     An other solution to modify the value of one node or one edge :
+        <itemizedlist>
+            <listitem><para>Select the node or edge, you want to modify with the icon <inlinegraphic fileref="images/i_select.png"/>.</para></listitem>
+            <listitem><para>Clic on the second tab named <code>Element</code> of the <code>Info Editor</code> sub-window. It displays the informations of the selected elements. Note that the object is not really selected but just for this tab.</para></listitem>
+        </itemizedlist>
+        </para>
+    </sect1>
+    <sect1 id="subgraphs"><title>SubGraphs and Groups</title><para>under construction</para></sect1>
+    <sect1 id="labels"><title>Labels Formatted</title><para>under construction</para></sect1>
+    <sect1 id="statistics"><title>Statistics Panel</title><para>under construction</para></sect1>
+</chapter>

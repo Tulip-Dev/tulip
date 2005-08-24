@@ -1,9 +1,9 @@
 EXTRA_DIST = index.docbook images/*.png
 
 install-data-am :
-	if test -f index.html ; then \
+	if test -f html/index.html ; then \
 		mkdir -p $(pkgdatadir)/userHandbook ;\
-		cp -r images *.html $(pkgdatadir)/userHandbook ;\
+		cp -r images html/*.html $(pkgdatadir)/userHandbook/. ;\
 	fi;
 
 uninstall-am :
@@ -15,11 +15,11 @@ check :
 	$(XMLLINT) --valid -noout index.docbook
 
 clean :
-	rm -f *~ *.html *.out *.log *.out *.fo *.aux *.dvi *.pdf profile.dcf
+	rm -rf html pdf profile.dcf *~
 
-html : index.html profile.dcf
+html : html/index.html profile.dcf
 
-index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
+html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -28,17 +28,17 @@ index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.pro
 	index.docbook  ../common/tulip-html.xsl
 
 
-pdf :   userManual.fo userManual.pdf
+pdf :   pdf/userManual.fo pdf/userManual.pdf
 
-userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
+pdf/userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
-	-r org.apache.xml.resolver.tools.CatalogResolver -u -o userManual.fo \
+	-r org.apache.xml.resolver.tools.CatalogResolver -u -o pdf/userManual.fo \
 	index.docbook  ../common/tulip-pdf.xsl
 
-userManual.pdf : userManual.fo
-	$(PDFXMLTEX) userManual.fo && $(PDFXMLTEX) userManual.fo
+pdf/userManual.pdf : pdf/userManual.fo
+	$(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo && $(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo
 
 profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
