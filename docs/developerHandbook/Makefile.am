@@ -1,6 +1,16 @@
 EXTRA_DIST = index.docbook \
 	images/*.png
 
+DOCBOOK_SRC = index.docbook \
+	data_structure.docbook \
+	doc_guides.docbook \
+	prog_guides.docbook \
+	intro_install.docbook \
+	tulip_libogl.docbook \
+	tulip_libqt.docbook \
+	graph_format.docbook \
+	plugins.docbook
+
 install-data-am :
 	if test -d html ; then \
 		mkdir -p $(pkgdatadir)/developerHandbook ;\
@@ -21,7 +31,7 @@ clean :
 
 html : html/index.html profile.dcf
 
-html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
+html/index.html : $(DOCBOOK_SRC) ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -31,7 +41,7 @@ html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManage
 
 pdf :   pdf/devHandbook.fo pdf/devHandbook.pdf
 
-pdf/devHandbook.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
+pdf/devHandbook.fo : $(DOCBOOK_SRC) ../common/tulip-pdf.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -43,7 +53,7 @@ pdf/devHandbook.pdf : pdf/devHandbook.fo
 	$(PDFXMLTEX) --output-directory="pdf/" pdf/devHandbook.fo
 
 
-profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
+profile.dcf : ../common/tulip-profile.xsl $(DOCBOOK_SRC) ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\

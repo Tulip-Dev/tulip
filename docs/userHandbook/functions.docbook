@@ -51,7 +51,7 @@
             <graphic fileref="images/text-label.png"/>
         </figure>
         </para>
-        <para>Not accessible for the moment, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to ornagize the content of the labels as you want.</para>
+        <para>Not available for the moment, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to ornagize the content of the labels as you want.</para>
     </sect1>
     
 </chapter>

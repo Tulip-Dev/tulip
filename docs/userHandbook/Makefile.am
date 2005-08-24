@@ -1,5 +1,7 @@
 EXTRA_DIST = index.docbook images/*.png
 
+DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook tutorials.docbook
+
 install-data-am :
 	if test -d html ; then \
 		mkdir -p $(pkgdatadir)/userHandbook ;\
@@ -19,7 +21,7 @@ clean :
 
 html : html/index.html profile.dcf
 
-html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
+html/index.html : $(DOCBOOK_SRC) ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -30,7 +32,7 @@ html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManage
 
 pdf :   pdf/userManual.fo pdf/userManual.pdf
 
-pdf/userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
+pdf/userManual.fo : $(DOCBOOK_SRC) ../common/tulip-pdf.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -40,7 +42,7 @@ pdf/userManual.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManag
 pdf/userManual.pdf : pdf/userManual.fo
 	$(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo && $(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo
 
-profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
+profile.dcf : ../common/tulip-profile.xsl $(DOCBOOK_SRC) ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
