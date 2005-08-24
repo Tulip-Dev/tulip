@@ -11,7 +11,6 @@ nobase_include_HEADERS = \
 	tulip/Matrix.h\
 	tulip/cxx/Matrix.cxx\
 	tulip/Rectangle.h\
-	tulip/Polynome.h\
 	tulip/Circle.h\
 	tulip/cxx/Circle.cxx \
 	tulip/SimpleTest.h \
@@ -43,13 +42,11 @@ nobase_include_HEADERS = \
 	tulip/MethodFactory.h \
 	tulip/PluginLoaderTxt.h \
 	tulip/Sizes.h \
-	tulip/SuperGraphImpl.h \
 	tulip/Colors.h \
 	tulip/ImportModule.h \
 	tulip/Metric.h \
 	tulip/Property.h \
 	tulip/SizesProxy.h \
-	tulip/SuperGraphView.h \
 	tulip/ColorsProxy.h \
 	tulip/Int.h \
 	tulip/MetricProxy.h \
@@ -81,22 +78,23 @@ nobase_include_HEADERS = \
 	tulip/ConcatIterator.h \
 	tulip/ReturnType.h \
 	tulip/MutableContainer.h \
-	tulip/ReturnType.h \
 	tulip/PluginsCreation.h \
 	tulip/StlFunctions.h \
 	tulip/ExtendedClusterOperation.h \
 	tulip/StringCollection.h \
 	tulip/DrawingTools.h \
-	tulip/BmdLink.h \
-	tulip/BmdList.h \
 	tulip/Face.h \
 	tulip/FaceIterator.h \
 	tulip/PlanarityTest.h \
-	tulip/PlanarityTestImpl.h \
 	tulip/SuperGraphDeco.h \
 	tulip/SuperGraphMap.h \
-	tulip/cxx/BmdLink.cxx \
-	tulip/cxx/BmdList.cxx \
 	tulip/cxx/SuperGraphDeco.cxx
 
 
+noinst_HEADERS = tulip/cxx/BmdLink.cxx \
+	tulip/cxx/BmdList.cxx \
+	tulip/PlanarityTestImpl.h \
+	tulip/BmdLink.h \
+	tulip/BmdList.h \
+	tulip/SuperGraphView.h \
+	tulip/SuperGraphImpl.h
