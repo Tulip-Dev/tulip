@@ -1,0 +1,78 @@
+<chapter id="introduction"><title>Introduction</title>
+    <para></para>
+</chapter>
+<chapter id="installation"><title>Installation</title>
+   <para>The <quote>configure</quote> shell script attempts to guess correct values for
+various system-dependent variables used during compilation.  It uses
+those values to create a <filename>Makefile</filename> in each directory of the package.
+It may also create one or more <filename>.h</filename> files containing system-dependent
+definitions.  Finally, it creates a shell script <filename>config.status</filename> that
+you can run in the future to recreate the current configuration, a file
+<filename>config.cache</filename> that saves the results of its tests to speed up
+reconfiguring, and a file <filename>config.log</filename> containing compiler output
+(useful mainly for debugging <code>configure</code>).</para>
+
+   <para>If you need to do unusual things to compile the package, please try
+to figure out how <code>configure</code> could check whether to do them, and mail
+diffs or instructions to the address given in the <code>README</code> so they can
+be considered for the next release.  If at some point <code>config.cache</code>
+contains results you don't want to keep, you may remove or edit it.</para>
+
+   <para>The file <filename>configure.in</filename> is used to create <filename>configure</filename> by a program
+called <code>autoconf</code>.  You only need <quote>configure.in</quote> if you want to change
+it or regenerate <code>configure</code> using a newer version of <code>autoconf</code>.</para>
+
+<para><orderedlist><title>The simplest way to compile this package is:</title>
+
+  <listitem><para><code>cd</code> to the directory containing the package's source code and type
+     <code>./configure</code> to configure the package for your system.  If you're
+     using <code>csh</code> on an old version of System V, you might need to type
+     <code>sh ./configure</code> instead to prevent <code>csh</code> from trying to execute
+     <code>configure</code> itself.</para>
+
+     <para>Running <code>configure</code> takes awhile.  While running, it prints some
+     messages telling which features it is checking for.</para></listitem>
+
+  <listitem><para>Type <code>make</code> to compile the package.</para></listitem>
+
+  <listitem><para>Optionally, type <code>make check</code> to run any self-tests that come with
+     the package.</para></listitem>
+
+  <listitem><para>Type <code>make install</code> to install the programs and any data files and
+     documentation.</para></listitem>
+
+  <listitem><para>You can remove the program binaries and object files from the
+     source code directory by typing <code>make clean</code>.  To also remove the
+     files that <filename>configure</filename> created (so you can compile the package for
+     a different kind of computer), type <code>make distclean</code>.  There is
+     also a <code>make maintainer-clean</code> target, but that is intended mainly
+     for the package's developers.  If you use it, you may have to get
+     all sorts of other programs in order to regenerate files that came
+     with the distribution.</para></listitem></orderedlist>
+</para>
+
+<para>If you don't find the <filename>configure</filename> shell, you have to generate it with <filename>gen-conf.sh</filename>. The processing using the GNU build sytem gives a <filename>configure</filename> shell.</para>
+
+    <caution><para>Verify <code>QTDIR</code> is properly set : <code>QTDIR/bin</code> should contain moc, qtconfig... , <code>QTDIR/lib</code> the libs and <code>QTDIR/include</code> the Qt headers ...</para></caution>
+    <sect1 id="options"><title>Options</title>
+        <para>In this section, you can find the most used options. To know all of the possible options, type <code>./configure --help</code></para>
+        <variablelist>
+            <varlistentry>
+                <term><code>--prefix</code> = <emphasis>value</emphasis></term>
+                <listitem><para>The <emphasis>value</emphasis> is the path where you want to install Tulip. <filename>bin, include, lib</filename> directories was created in this location. By default, it is <filename>/usr/local/</filename>.</para></listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term><code>--enable-debug</code></term>
+                <listitem><para>Add compilation flags to allow debugging.</para></listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term><code>--enable-maintainer-mode</code></term>
+                <listitem><para>Enable make rules and dependencies not useful (and sometimes confusing) to the casual installer. For example, if you modify a <filename>Makefile.am</filename> file, it is detected and the <filename>Makefile</filename> is updated.</para></listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+</chapter>

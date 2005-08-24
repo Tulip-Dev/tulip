@@ -2,10 +2,10 @@ EXTRA_DIST = index.docbook \
 	images/*.png
 
 install-data-am :
-	if test -f index.html ; then \
+	if test -d html ; then \
 		mkdir -p $(pkgdatadir)/developerHandbook ;\
 		cp -r images $(pkgdatadir)/developerHandbook ;\
-		cp -r *.html $(pkgdatadir)/developerHandbook ;\
+		cp -r html/*.html $(pkgdatadir)/developerHandbook/. ;\
 	fi;
 
 uninstall-am :
@@ -17,11 +17,11 @@ check :
 	$(XMLLINT) --valid -noout index.docbook
 
 clean :
-	rm -f *~ *.html *.out *.log *.out *.fo *.aux *.dvi *.pdf profile.dcf
+	rm -rf html pdf profile.dcf *~
 
-html : index.html profile.dcf
+html : html/index.html profile.dcf
 
-index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
+html/index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -29,18 +29,18 @@ index.html : index.docbook ../common/tulip-html.xsl ../common/CatalogManager.pro
 	-r org.apache.xml.resolver.tools.CatalogResolver -u \
 	index.docbook  ../common/tulip-html.xsl
 
+pdf :   pdf/devHandbook.fo pdf/devHandbook.pdf
 
-pdf :   devHandbook.fo devHandbook.pdf
-
-devHandbook.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
+pdf/devHandbook.fo : index.docbook ../common/tulip-pdf.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -u\
-	-o  devHandbook.fo index.docbook  ../common/tulip-pdf.xsl
+	-o pdf/devHandbook.fo index.docbook  ../common/tulip-pdf.xsl
 
-devHandbook.pdf : devHandbook.fo
-	$(PDFXMLTEX) devHandbook.fo && $(PDFXMLTEX) devHandbook.fo
+pdf/devHandbook.pdf : pdf/devHandbook.fo
+	$(PDFXMLTEX) --output-directory="pdf/" pdf/devHandbook.fo && \
+	$(PDFXMLTEX) --output-directory="pdf/" pdf/devHandbook.fo
 
 
 profile.dcf : ../common/tulip-profile.xsl index.docbook ../common/CatalogManager.properties
