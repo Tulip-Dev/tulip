@@ -5,7 +5,7 @@ DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook tutorials.
 install-data-am :
 	if test -d html ; then \
 		mkdir -p $(pkgdatadir)/userHandbook ;\
-		cp -r images html/*.html $(pkgdatadir)/userHandbook/. ;\
+		cp -r images html/* $(pkgdatadir)/userHandbook/. ;\
 	fi;
 
 uninstall-am :

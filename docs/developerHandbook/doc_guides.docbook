@@ -377,15 +377,21 @@ class MyClass
 	    </qandaentry>
             <qandaentry>
 		<question><para>How to make doxygen ignore code fragment ?</para></question>
-		<answer><para>It exists two ways to resolve this questions. The first one is to use the tags <code>\cond</code> and <code>\endcond</code> to skip the internal code. The second way is to use the preprocessor of Doxygen. In the configuration file, you specify the macros and you verify if the value of <code>PREPROCESSING</code> is to yes. Then, you set <code>PREDEFINED</code> to <code>DOXYGEN_SHOULD_SKIP_THIS</code>.
+		<answer><para>It exists two ways to resolve this questions. The first one is to use the tags <code>\cond</code> and <code>\endcond</code> to skip the internal code. The second way is to use the preprocessor of Doxygen. In the configuration file, you specify the macros and you verify if the value of <code>PREPROCESSING</code> is to yes. Then, you set <code>MACROS_NAME</code> to <code>PREDEFINED</code>.
 
 <programlisting>
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#ifndef MACROS_NAME
 
  /* code that must be skipped by Doxygen */
 
-#endif /* DOXYGEN_SHOULD_SKIP_THIS */
+#endif /* MACROS_NAME */
 </programlisting>
+
+            Two macros are defines for <emphasis>Tulip</emphasis> documentations.
+            <itemizedlist>
+                <listitem><para><code>DOXYGEN_NOTFOR_DEVEL</code> : use to skip the code for Developer and User documentations.</para></listitem>
+                <listitem><para><code>DOXYGEN_NOTFOR_USER</code> : use just for the User documentation.</para></listitem>
+            </itemizedlist>
 </para></answer>
 	    </qandaentry>
             <qandaentry>
