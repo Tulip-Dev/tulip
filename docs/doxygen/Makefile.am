@@ -2,7 +2,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : html man
 
-html: tulip-lib tulip-libogl tulip-libqt tulipdoc.html
+html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -15,7 +15,6 @@ tulip-lib.doxygen: general general-html
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip " >> $@
-	echo "FILE_PATTERNS =  $(TULIP_LIB)" >> $@
 	echo "HTML_OUTPUT = tulip-lib">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
@@ -28,7 +27,6 @@ tulip-libogl.doxygen: general general-html
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl " >> $@
-	echo "FILE_PATTERNS =  $(TULIP_OGL)" >> $@
 	echo "HTML_OUTPUT = tulip-libogl" >> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
@@ -41,13 +39,25 @@ tulip-libqt.doxygen: general general-html
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt " >> $@
-	echo "FILe_PATTERNS = $(TULIP_QT)">> $@
 	echo "HTML_OUTPUT = tulip-libqt">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
-man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen
-	$(DOXYGEN) man-lib.doxygen && $(DOXYGEN) man-ogl.doxygen && $(DOXYGEN) man-qt.doxygen
+tulip-plugins: tulip-plugins.doxygen header.html footer.html
+	$(DOXYGEN) tulip-plugins.doxygen
+
+tulip-plugins.doxygen: general general-html
+	echo "PROJECT_NAME = \"Tulip Plugins\"" > $@
+	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	cat general >> $@
+	echo "INPUT = $(top_srcdir)/plugins " >> $@
+	echo "HTML_OUTPUT = tulip-plugins">> $@
+	cat general-html >> $@
+	echo "DOT_PATH = "`dirname $(DOT)`>> $@
+
+
+man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxygen
+	$(DOXYGEN) man-lib.doxygen && $(DOXYGEN) man-ogl.doxygen && $(DOXYGEN) man-qt.doxygen && $(DOXYGEN) man-plugins.doxygen
 	gzip -f man/man3/*.3
 
 man-lib.doxygen: general general-man 
@@ -56,9 +66,7 @@ man-lib.doxygen: general general-man
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip">> $@
 	echo "MAN_OUTPUT = man" >> $@
-	echo "FILE_PATTERNS = $(TULIP_LIB)" >> $@
 	cat general-man >> $@
-	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
 man-ogl.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
@@ -66,9 +74,7 @@ man-ogl.doxygen: general general-man
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl">> $@
 	echo "MAN_OUTPUT = man" >> $@
-	echo "FILE_PATTERNS = $(TULIP_OGL)" >> $@
 	cat general-man >> $@
-	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
 man-qt.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
@@ -76,12 +82,17 @@ man-qt.doxygen: general general-man
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt">> $@
 	echo "MAN_OUTPUT = man" >> $@
-	echo "FILE_PATTERNS = $(TULIP_QT)" >> $@
 	cat general-man >> $@
-	echo "DOT_PATH = "`dirname $(DOT)`>> $@
+
+man-plugins.doxygen: general general-man 
+	echo "PROJECT_NAME = \"Tulip Plugins Library\"" > $@
+	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	cat general >> $@
+	echo "INPUT = $(top_srcdir)/plugins/">> $@
+	echo "MAN_OUTPUT = man" >> $@
+	cat general-man >> $@
 
 clean:
-	echo "DOT_PATH = "`dirname $(DOT)`
 	rm -rf man man-lib.doxygen man-ogl.doxygen man-qt.doxygen
 	rm -rf tulipdoc.html *~
 	rm -rf tulip-libogl tulip-libogl.doxygen
@@ -105,6 +116,9 @@ install-data-am :
 	if test -d tulip-libqt ; then\
 		cp -r tulip-libqt $(pkgdatadir)/doxygen/. ;\
 	fi ;
+	if test -d tulip-plugins ; then\
+                cp -r tulip-plugins $(pkgdatadir)/doxygen/. ;\
+        fi ;
 	if test -d man ; then\
 		cp -r man $(pkgdatadir)/. ;\
 	fi ;
@@ -113,4 +127,3 @@ uninstall-am :
 	rm -rf $(pkgdatadir)/doxygen
 	rm -rf $(pkgdatadir)/man
 
-include Headers.am

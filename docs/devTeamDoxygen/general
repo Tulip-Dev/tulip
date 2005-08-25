@@ -60,9 +60,10 @@ WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           = 
 RECURSIVE              = YES
 
-FILE_PATTERNS          = *.h *.cpp *.cxx
+FILE_PATTERNS          = *.h *.cpp *.cxx mainpage.dox
 
 EXCLUDE_SYMLINKS       = NO
+EXCLUDE_PATTERNS = *Data.h *Data.cpp moc_*
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
@@ -88,7 +89,7 @@ EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = 
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = DOXYGEN_SHOULD_SKIP_THIS
+PREDEFINED             = DOXYGEN_NOTFOR_DEVEL
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 
