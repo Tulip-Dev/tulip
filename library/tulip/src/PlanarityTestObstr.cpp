@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestObstr.cpp,v 1.3 2005-07-26 08:38:42 auber Exp $
+ * $Id: PlanarityTestObstr.cpp,v 1.4 2005-08-25 15:24:42 bardet Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -492,7 +492,7 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(SuperGraph *sG, node cNode,
   //     cout<<"\n  jr="<<dfsPosNum.get(jr.id)<<",b="<<labelB.get(jr.id)<<",nl="<<dfsPosNum.get(nodeLabelB.get(jr.id).id);
   //     cout<<"\n";
   //   }
-  ///#endif
+  //#endif
 
   node w1 = nodeWithDfsPos.get(labelB.get(jl.id));
   node w2 = nodeWithDfsPos.get(labelB.get(jr.id));
