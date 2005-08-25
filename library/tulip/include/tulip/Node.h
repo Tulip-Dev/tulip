@@ -23,7 +23,7 @@ struct node {
 };
 /*@}*/
 
-#ifndef DOXYGEN_NOTFOR_USER 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 namespace stdext {
   template<> struct hash<node> {
@@ -39,6 +39,6 @@ namespace std {
     size_t operator()(const node n,const node n2) const {return n.id<n2.id;}
   };
 }
-#endif // DOXYGEN_NOTFOR_USER
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
