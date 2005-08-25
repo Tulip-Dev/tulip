@@ -17,6 +17,8 @@
 #ifndef BMDLIST_H
 #define BMDLIST_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #include <tulip/BmdLink.h>
 
 template <typename TYPE>
@@ -97,4 +99,5 @@ struct BmdListRevIt : public Iterator<TYPE> {
   BmdList<TYPE> &bmdList;
 };
 
+#endif
 #endif

@@ -17,6 +17,8 @@
 #ifndef BMDLINK_H
 #define BMDLINK_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #include <tulip/TlpTools.h>
 
 template <typename TYPE> struct BmdList;
@@ -46,4 +48,6 @@ namespace tlp {
   };
 }
 #include <tulip/cxx/BmdLink.cxx>
+
+#endif
 #endif

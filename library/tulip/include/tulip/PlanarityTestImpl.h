@@ -10,6 +10,8 @@
 #ifndef TULIP_PLANARITYIMPL_H
 #define TULIP_PLANARITYIMPL_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -229,4 +231,5 @@ private:
 //std::ostream& operator <<(std::ostream &os , edge e);
 std::list<edge> posDFS(SuperGraph *sG, MutableContainer<int> &dfsPos);
 
+#endif
 #endif

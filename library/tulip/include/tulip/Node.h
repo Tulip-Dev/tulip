@@ -22,6 +22,9 @@ struct node {
   bool isValid() const {return id!=UINT_MAX;}
 };
 /*@}*/
+
+#ifndef DOXYGEN_NOTFOR_USER 
+
 namespace stdext {
   template<> struct hash<node> {
     size_t operator()(const node n) const {return n.id;}
@@ -36,5 +39,6 @@ namespace std {
     size_t operator()(const node n,const node n2) const {return n.id<n2.id;}
   };
 }
+#endif // DOXYGEN_NOTFOR_USER
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef HASH_STRING_H
 #define HASH_STRING_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <string>
 
 namespace stdext {
@@ -24,4 +25,5 @@ namespace stdext {
    /*@}*/
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif //HASH_STRING_H

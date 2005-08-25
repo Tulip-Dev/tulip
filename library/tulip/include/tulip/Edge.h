@@ -22,6 +22,8 @@ struct edge {
 
 /*@}*/
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 namespace stdext {
   template<>
   struct hash<edge>{
@@ -39,5 +41,5 @@ namespace std {
     return e.id<e2.id;}
   };
 }
-
+#endif
 #endif
