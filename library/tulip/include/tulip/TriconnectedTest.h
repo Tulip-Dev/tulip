@@ -28,7 +28,7 @@ class SelectionProxy;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing if a graph is triconnectec
+/// class for testing if a graph is triconnected
 class TLP_SCOPE TriconnectedTest : private GraphObserver {
 public:
   static bool isTriconnected(SuperGraph *graph);
