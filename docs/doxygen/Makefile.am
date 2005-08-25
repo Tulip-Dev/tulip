@@ -97,7 +97,6 @@ clean:
 	rm -rf tulipdoc.html *~
 	rm -rf tulip-libogl tulip-libogl.doxygen
 	rm -rf tulip-libqt tulip-libqt.doxygen
-	rm -rf tulip-soft tulip-soft.doxygen
 	rm -rf tulip-lib tulip-lib.doxygen
 	rm -rf tulip-plugins tulip-plugins.doxygen
 
