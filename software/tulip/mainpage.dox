@@ -1,6 +1,6 @@
 /*!
 \mainpage Tulip Developpement Software
-f DEV
+\if DEV
         <h2><left>Developer Team Documentation</left></h2>
 \endif
 \if USER
