@@ -59,5 +59,5 @@ profile.dcf : ../common/tulip-profile.xsl $(DOCBOOK_SRC) ../common/CatalogManage
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -u\
-	-o profile.dcf index.docbook  ../common/tulip-profile.xsl install.path="developerHandbook/"
+	-o profile.dcf index.docbook  ../common/tulip-profile.xsl install.path="developerHandbook/html/"
 

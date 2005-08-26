@@ -2,7 +2,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : html man
 
-html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html
+html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html profile.dcf
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -54,7 +54,7 @@ tulip-plugins.doxygen: general general-html
 	echo "HTML_OUTPUT = tulip-plugins">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
-
+	echo "GENERATE_TAGFILE = tulip-plugins.tag" >> $@
 
 man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxygen
 	$(DOXYGEN) man-lib.doxygen && $(DOXYGEN) man-ogl.doxygen && $(DOXYGEN) man-qt.doxygen && $(DOXYGEN) man-plugins.doxygen
@@ -91,6 +91,16 @@ man-plugins.doxygen: general general-man
 	echo "INPUT = $(top_srcdir)/plugins/">> $@
 	echo "MAN_OUTPUT = man" >> $@
 	cat general-man >> $@
+
+profile.dcf: tulip-plugins/index.html ../common/CatalogManager.properties dox-profile.xsl
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	com.icl.saxon.StyleSheet \
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf tulip-plugins.tag  dox-profile.xsl
+
+	
+	
 
 clean:
 	rm -rf man man-lib.doxygen man-ogl.doxygen man-qt.doxygen

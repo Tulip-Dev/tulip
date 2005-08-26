@@ -47,6 +47,6 @@ profile.dcf : ../common/tulip-profile.xsl $(DOCBOOK_SRC) ../common/CatalogManage
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
-	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf index.docbook  ../common/tulip-profile.xsl install.path="userHandbook/"
+	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf index.docbook  ../common/tulip-profile.xsl install.path="userHandbook/html/"
 
 
