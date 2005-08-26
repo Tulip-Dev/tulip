@@ -25,8 +25,8 @@ namespace tlp {
    * Fixed size and provide Mathematical operation. Mathematical 
    * operators must be defined for Obj. 
    *
-   * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
-   * Version 0.0.1 24/01/2003 
+   * \author : David Auber auber@tulip-software.org
+   * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTOR
     class TLP_SCOPE Vector:public Array<Obj,SIZE> {

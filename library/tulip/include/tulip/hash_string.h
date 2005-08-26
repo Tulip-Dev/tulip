@@ -13,8 +13,8 @@ namespace stdext {
    * \brief provides string hash method 
    *
    *
-   * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
-   * Version 0.0.1 24/01/2003 
+   * \author : David Auber auber@tulip-software.org
+   * \version 0.0.1 24/01/2003 
    */
   template<> struct hash<const std::string>{
     size_t operator()(const std::string &s) const {return hash<const char *>()(s.c_str()); }

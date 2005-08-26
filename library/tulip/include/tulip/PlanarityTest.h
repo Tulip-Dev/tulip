@@ -1,5 +1,5 @@
 //-*-c++-*-
-/**
+/*
  Author: Sophie BARDET & Alexandre BURNETT
  Email : sophie.bardet@gmail.com, aburnett397@gmail.com
  Last modification : 19/06/2005

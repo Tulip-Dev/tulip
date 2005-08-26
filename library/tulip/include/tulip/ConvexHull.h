@@ -13,9 +13,9 @@ namespace tlp {
      *
      * Used to compute the convex hull of a set of points in the plane
      *
-     * Author : <a href="mailto:auber@tulip-software.org>David Auber/Daniel Archambault</A>
+     * \author : David Auber/Daniel Archambault auber@tulip-software.org 
      * 
-     * Version 0.0.1 03/06/2005
+     * \version 0.0.1 03/06/2005
      */
   /**
    * Compute the convex hull and return a list of indexes for the

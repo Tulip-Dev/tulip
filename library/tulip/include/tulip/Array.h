@@ -22,8 +22,8 @@ namespace tlp {
    * Fixed size, limit of the array are checked only
    * in debug mode.
    * 
-   * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
-   * Version 0.0.1 24/01/2003 
+   * \author : David Auber auber@tulip-software.org
+   * \version 0.0.1 24/01/2003 
    */
   template <typename Obj,unsigned int SIZE>
   struct TLP_SCOPE Array {

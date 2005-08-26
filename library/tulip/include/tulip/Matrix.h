@@ -28,10 +28,10 @@ namespace tlp {
      * Fixed size and provide Mathematical operation. Mathematical 
      * operators must be defined for Obj. 
      *
-     * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
+     * \author : David Auber auber@tulip-software.org
      * 
-     * Contributor : Maxime Delorme
-     * Version 0.0.2 27/04/2005 
+     * \author Contributor : Maxime Delorme
+     * \version 0.0.2 27/04/2005 
      */
     template<typename Obj,unsigned int SIZE>
     class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {

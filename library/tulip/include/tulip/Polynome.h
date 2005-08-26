@@ -18,8 +18,10 @@
  *
  * This class represents a Polynome up to the 3rd degree.
  * It follows the equation : \f$ax^{3} + bx^{2} + cx + d = 0\f$
- * 
- */
+ *
+ * \author Maxime Delorme maxime.delorme@gmail.com
+ *
+*/
 class Polynome
 {
  public:

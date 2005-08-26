@@ -45,7 +45,7 @@ private:
   typename std::map<KEY,VALUE>::const_iterator it, itEnd;
 };
 //=================================================
-//StlMapIterator implemetation
+///  StlMapIterator implemetation
 template<typename KEY, typename VALUE>
 std::pair<KEY,VALUE> StlMapIterator<KEY,VALUE>::next(){
   std::pair<KEY,VALUE> tmp=*it;

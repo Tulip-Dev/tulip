@@ -1,5 +1,5 @@
 //-*-C++-*
-/**
+/*
  Author: David Auber
  Email : auber@labri.fr
  Last modification : 31/07/2001

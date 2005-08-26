@@ -47,12 +47,12 @@ namespace tlp {
   void loadPlugin(std::string filename) {
   }
   */
-  /*
+  /**
    * Load a graph in the tlp format
    * Warning : this function use "tlp" import plugin (must be laoded)
    */
   TLP_SCOPE SuperGraph * load(const std::string &filename);
-  /*
+  /**
    * Save a graph in tlp format
    * Warning : this function use "tlp" export plugin (must be laoded)
    */

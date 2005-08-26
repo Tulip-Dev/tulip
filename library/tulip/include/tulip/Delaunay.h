@@ -19,9 +19,9 @@ namespace tlp {
      *
      * Used to triangulate a set of points in the plane
      *
-     * Author : <a href="mailto:auber@tulip-software.org>David Auber/Daniel Archambault</A>
+     * \author : David Auber/Daniel Archambault : auber@tulip-software.org
      * 
-     * Version 0.0.1 02/06/2005
+     * \version 0.0.1 02/06/2005
      */
   /**
    * Compute the delaunay triangulation and return the set of edges of the 

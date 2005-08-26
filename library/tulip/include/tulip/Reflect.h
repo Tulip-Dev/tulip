@@ -23,21 +23,21 @@ struct TLP_SIMPLE_SCOPE DataType {
 };
 
 
-/**  A container which allows insertion of different type.
+/*!  A container which allows insertion of different type.
      The inserted data must have a copy-constructor well done */
 struct TLP_SIMPLE_SCOPE DataSet {
-  /**Return a copy of the value of the variable with name str.
+  /** Return a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true. */
   template<typename T> bool get(const std::string str, T& value) const;
-  /**Return a copy of the value of the variable with name str.
+  /** Return a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true.
      The data is removed after the call. */
   template<typename T> bool getAndFree(const std::string &str, T& value);
   /** Set the value of the variable str.*/
   template<typename T> void set(const std::string &str,const T& value);
-  /**return true if str exists else false.*/
+  /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
   /**Return an iterator on all values*/
   Iterator< std::pair<std::string,DataType> > *getValues() const;
@@ -47,25 +47,25 @@ private:
 
 
 
-//This class enables to define a structure
+///This class enables to define a structure
 struct TLP_SIMPLE_SCOPE StructDef {
-  //Add the variable of type T and name str in the structure.
+  ///Add the variable of type T and name str in the structure.
   template<typename T> void add(	std::string str,
   									const char * inHelp = 0,
   									std::string inDefValue = std::string() );
 
-  //Get iterator on structure fields
+  ///Get iterator on structure fields
   Iterator< std::pair<std::string,std::string> >* getField() const;
 
-  //Get field help & default string-value (see also XXXType in Types.h)
+  ///Get field help & default string-value (see also XXXType in Types.h)
   std::string									  getHelp( std::string str ) const;
   std::string									  getDefValue( std::string str ) const;
 
-  //Remove the variable which have str has name in the structure.
+  ///Remove the variable which have str has name in the structure.
   void		erase(std::string str);
 
-  //Build a default dataSet according to fields
-  //The optional SuperGraph is needed to create properties (PProxy*)
+  ///Build a default dataSet according to fields
+  ///The optional SuperGraph is needed to create properties (PProxy*)
   bool		buildDefaultDataSet( DataSet & ioDataSet, SuperGraph * inG = 0 );
 private:
   std::map<std::string,std::string> data;
