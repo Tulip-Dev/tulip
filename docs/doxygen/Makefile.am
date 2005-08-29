@@ -103,7 +103,7 @@ profile.dcf: tulip-plugins/index.html ../common/CatalogManager.properties dox-pr
 	
 
 clean:
-	rm -rf man man-lib.doxygen man-ogl.doxygen man-qt.doxygen
+	rm -rf man man-lib.doxygen man-ogl.doxygen man-qt.doxygen man-plugins.doxygen profile.dcf
 	rm -rf tulipdoc.html *~
 	rm -rf tulip-libogl tulip-libogl.doxygen
 	rm -rf tulip-libqt tulip-libqt.doxygen

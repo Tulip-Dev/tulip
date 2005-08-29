@@ -5,7 +5,7 @@ USE_WINDOWS_ENCODING   = NO
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 ALWAYS_DETAILED_SEC    = YES
-INLINE_INHERITED_MEMB  = NO
+INLINE_INHERITED_MEMB  = YES
 
 FULL_PATH_NAMES        = NO
 STRIP_FROM_PATH        =
@@ -98,13 +98,12 @@ EXTERNAL_GROUPS        = NO
 PERL_PATH              = /usr/bin/perl
 
 CLASS_DIAGRAMS         = NO
-HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
 UML_LOOK               = NO
-TEMPLATE_RELATIONS     = NO
+TEMPLATE_RELATIONS     = YES  # display just in the class of the template 
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
 CALL_GRAPH             = NO
