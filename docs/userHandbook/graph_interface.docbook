@@ -138,7 +138,19 @@
             </para>
         </sect2>
         <sect2 id="stats"><title>Statistics</title>
-            <para></para>
+    	    <para>The statistic panel is composed of 3 main parts : Computation, Display and Clustering. It allows the user to compute an histogram or a scatter plot from a graph and one up to three metrics. The display part of the panel is used to display on screen the statistics main values (as Average point, Standard deviation, Bounding box, Linear Regression and Eigenvectors). The clustering part is used to display a clustering plane from a statistical value (previously computed) and to separate the graph into two new clusters : what is above the clustering plane (sup) and what is under the clustering plane (inf)</para>
+	    <figure>
+		<title>Computation Tab</title>
+		<graphic fileref="images/Computation.png"/>
+	    </figure>
+	    <figure>
+		<title>Display Tab</title>
+		<graphic fileref="images/Display.png"/>
+	    </figure>
+	    <figure>
+		<title>ClusteringTab</title>
+		<graphic fileref="images/Clustering.png"/>
+	    </figure>
         </sect2>
     </sect1>
     <sect1 id="view-window"><title>View window</title>

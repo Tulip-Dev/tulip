@@ -34,7 +34,7 @@
         <para>under construction</para>
     </sect1>
     <sect1 id="stats-panels"><title>Statistics Panel</title>
-        <para>under construction</para>
+        <para>Tulip-Software also provides the user a simple statistics interface which ables him to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). The display of the statistics values computed on the graph is done with the help of the GlAD system (GlAugmentedDisplay). Finally, the clustering is done from a clustering plane, specified by the user from a plane equation.</para>
     </sect1>
     <sect1 id="text-rend"><title>Text Rendering</title>
         <para>It is possible to affect a label for each object of the graph. Tulip can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
