@@ -2,7 +2,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : html man
 
-html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html profile.dcf
+html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html profile.dcf allPlugins.html
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -55,17 +55,21 @@ tulip-plugins.doxygen: general general-html
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 	echo "GENERATE_TAGFILE = tulip-plugins.tag" >> $@
+	echo "XML_OUTPUT = xml" >> $@
+	echo "GENERATE_XML = YES" >> $@
 
-man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxygen
+man: tulip-man
+
+tulip-man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxygen
 	$(DOXYGEN) man-lib.doxygen && $(DOXYGEN) man-ogl.doxygen && $(DOXYGEN) man-qt.doxygen && $(DOXYGEN) man-plugins.doxygen
-	gzip -f man/man3/*.3
+	gzip -f tulip-man/man3/*.3
 
 man-lib.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip">> $@
-	echo "MAN_OUTPUT = man" >> $@
+	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
 man-ogl.doxygen: general general-man 
@@ -73,7 +77,7 @@ man-ogl.doxygen: general general-man
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl">> $@
-	echo "MAN_OUTPUT = man" >> $@
+	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
 man-qt.doxygen: general general-man 
@@ -81,7 +85,7 @@ man-qt.doxygen: general general-man
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt">> $@
-	echo "MAN_OUTPUT = man" >> $@
+	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
 man-plugins.doxygen: general general-man 
@@ -89,7 +93,7 @@ man-plugins.doxygen: general general-man
 	echo "PROJECT_NUMBER = 2.0.1" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/plugins/">> $@
-	echo "MAN_OUTPUT = man" >> $@
+	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
 profile.dcf: tulip-plugins/index.html ../common/CatalogManager.properties dox-profile.xsl
@@ -99,19 +103,22 @@ profile.dcf: tulip-plugins/index.html ../common/CatalogManager.properties dox-pr
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf tulip-plugins.tag  dox-profile.xsl
 
-	
-	
+allPlugins.html: tulip-plugins/index.html ../common/CatalogManager.properties dox-html.xsl
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	 com.icl.saxon.StyleSheet \
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-r org.apache.xml.resolver.tools.CatalogResolver \
+	-o allPlugins.html tulip-plugins.tag dox-html.xsl
 
 clean:
-	rm -rf man man-lib.doxygen man-ogl.doxygen man-qt.doxygen man-plugins.doxygen profile.dcf
-	rm -rf tulipdoc.html *~
-	rm -rf tulip-libogl tulip-libogl.doxygen
-	rm -rf tulip-libqt tulip-libqt.doxygen
-	rm -rf tulip-lib tulip-lib.doxygen
-	rm -rf tulip-plugins tulip-plugins.doxygen
+	rm -rf tulip-man profile.dcf xml allPlugins.html
+	rm -rf tulipdoc.html *~ tulip-plugins.tag *.doxygen
+	rm -rf tulip-libogl tulip-libqt tulip-lib tulip-plugins
 
 install-data-am :
 	mkdir -p $(pkgdatadir)/doxygen
+	mkdir -p $(pkgdatadir)/man
 	cp tulip.html $(pkgdatadir)/doxygen/.
 	if test -f tulipdoc.html ; then \
 		cp tulipdoc.html $(pkgdatadir)/doxygen/. ;\
@@ -128,10 +135,12 @@ install-data-am :
 	if test -d tulip-plugins ; then\
                 cp -r tulip-plugins $(pkgdatadir)/doxygen/. ;\
         fi ;
-	if test -d man ; then\
-		cp -r man $(pkgdatadir)/. ;\
+	if test -d tulip-man ; then\
+		cp -r tulip-man/* $(pkgdatadir)/man/. ;\
 	fi ;
-
+	if test -f allPlugins.html ; then \
+		cp allPlugins.html $(pkgdatadir)/doxygen/. ;\
+	fi ;
 uninstall-am :
 	rm -rf $(pkgdatadir)/doxygen
 	rm -rf $(pkgdatadir)/man
