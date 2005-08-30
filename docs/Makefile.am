@@ -15,7 +15,7 @@ install-data-am:
 	cp -r common/*.png common/*.css common/favicon.ico $(pkgdatadir)/common/.
 	cp profile.adp $(pkgdatadir)/.
 
-profile.adp : gen-profile.sh
+profile.adp :
 	sh gen-profile.sh
 
 uninstall-am:

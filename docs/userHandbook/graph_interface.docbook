@@ -97,7 +97,7 @@
                     <para><code>Metanode labels</code> : Enables/disables the displaying of metanode(group) labels.</para>
                 </listitem>
                 <listitem>
-                    <para><code>Orthogonal projection</code> : Enables/Disables the orthogonal projection, if disable, perpsective projection is used.</para>
+                    <para><code>Orthogonal projection</code> : Enables/disables the orthogonal projection, if disable, perpsective projection is used.</para>
                 </listitem>
                 <listitem>
                     <para><code>3D edges</code> : Enables/disables the displaying of edges in 3D.</para>

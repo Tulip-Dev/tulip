@@ -43,7 +43,7 @@
 	</sect2>
     </sect1>
     <sect1 id="properties"><title>Properties</title>
-        <para>As it is explained in the last section, it is possble to modify the properties with algorithms. An other solutin is to change the values in the <code>Info Editor</code> sub-window in the <code>properties</code> tab.</para>
+        <para>As it is explained in the last section, it is possble to modify the properties with algorithms. An other solution is to change the values in the <code>Info Editor</code> sub-window in the <code>properties</code> tab.</para>
         <para>To give an example, create a graph :
         <itemizedlist>
             <listitem><para>Select the properties you want to change, <code>viewSize</code> in the <code>local</code> array for example to manage the size of the nodes. Now, you can change all values or the value of one node.
@@ -65,19 +65,19 @@
             <listitem><para>Clic on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
             </para></listitem>
         </itemizedlist>
-         If you uncheck <code>Filter</code>, all nodes are in the array. It is possible to make the same thing with the values of edges. You just have to clic on the tab named <code>Edges</code>.
+        If you uncheck <code>Filter</code>, all nodes are in the array. It is possible to make the same thing with the values of edges. You just have to clic on the tab named <code>Edges</code>.
 
         <itemizedlist>
             <title>Set of properties available :</title>
             <listitem><para><code>viewColor</code> : It is chosen with a palette of colors.</para></listitem>
             <listitem><para><code>viewLabel</code> : It is a string, you ust have to write text.</para></listitem>
             <listitem><para><code>viewLayout</code> : This represents the position of the object in the tree dimension. X, Y and Z coordinates must be indicates. (e.g. <code>(-1.0,0,1.0)</code>)</para></listitem>
-            <listitem><para><code>viewMetaGraph</code> :</para></listitem>
+            <listitem><para><code>viewMetaGraph</code> : contains un link on an other graph. A node can contain a graph. It is not esay to modify the value (identifier of graph). </para></listitem>
             <listitem><para><code>viewRotation</code> : Type a value in degree. The rotation is made around the Z axis and in the counter-clockwise.</para></listitem>
             <listitem><para><code>viewSelection</code> :  This property can take two values : <code>true</code> or <code>false</code>. If you just change a value, you have to check/uncheck the case in the array of elements.</para></listitem>
             <listitem><para><code>viewShape</code> : For the nodes, it determines the shape. To change it, select an item in the listbox. For the edges, it determines the kind of lines : plain, dash. It is represented by a number.</para></listitem>
             <listitem><para><code>viewSize</code> : For nodes, the properties is represented by tree values : width, height, and depth. For edges, the values correspond to the size of the arrows.</para></listitem>
-            <listitem><para><code>viewTexture</code> : </para></listitem>
+            <listitem><para><code>viewTexture</code> : This property contains the name of the file of the texture you want to apply. The dimensions must be 64x64. It is possible to go through thefile system with a double clic.</para></listitem>
         </itemizedlist>
      An other solution to modify the value of one node or one edge :
         <itemizedlist>
@@ -85,8 +85,22 @@
             <listitem><para>Clic on the second tab named <code>Element</code> of the <code>Info Editor</code> sub-window. It displays the informations of the selected elements. Note that the object is not really selected but just for this tab.</para></listitem>
         </itemizedlist>
         </para>
+        <sect2 id="mana-inst"><title>Management of instances</title>
+            <para>The bottom of the <code>Property</code> sub-window enables to manage the properties. For each graph, As explain before, it is already created a set of properties used for the display.
+                <itemizedlist>
+                    <listitem><para>Clic on the button named <code>New</code>.</para></listitem>
+                    <listitem><para>Select the kind of property, <code>String</code>. (other possibilities : Metric, Selection, Layout, String, Integer, Sizes, Color)</para></listitem>
+                    <listitem><para>Type the named of the new Property (e.g. <code>mylabel</code>).</para></listitem>
+                </itemizedlist>
+
+            For removing a property, you just have to select the property and clic on the button named <code>Remove</code>. If you delete properties useful for the renderer engine, they are defined again. Note that it not possible to remove <code>inherited</code> properties.
+            </para>
+            <para>The last functionnality is to clone properties. Select the concerned property and clic on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
+        </sect2>
     </sect1>
-    <sect1 id="subgraphs"><title>SubGraphs and Groups</title><para>under construction</para></sect1>
+    <sect1 id="subgraphs"><title>SubGraphs and Groups</title>
+        <para></para>
+    </sect1>
     <sect1 id="labels"><title>Labels Formatted</title><para>under construction</para></sect1>
     <sect1 id="statistics"><title>Statistics Panel</title>
 	<sect2 id="stats-tut-intro"><title>Introduction</title>

@@ -1105,8 +1105,12 @@ void viewGl::helpIndex() {
 	  << QString( (tlp::TulipLibDir + "../share/tulip/profile.adp").c_str());
   
   assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() )
+  if ( !assistant->isOpen() ){
+    assistant->showPage(QString( (tlp::TulipLibDir + "../share/tulip/userHandbook/html/index.html").c_str()));
     assistant->openAssistant();
+  }
+  else	
+    assistant->showPage(QString( (tlp::TulipLibDir + "../share/tulip/userHandbook/html/index.html").c_str()));
 }
 //==============================================================
 void viewGl::helpContents() {
@@ -1115,8 +1119,12 @@ void viewGl::helpContents() {
 	  << QString( (tlp::TulipLibDir + "../share/tulip/profile.adp").c_str());
   
   assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() )
+  if ( !assistant->isOpen() ){
+    assistant->showPage(QString( (tlp::TulipLibDir + "../share/tulip/userHandbook/html/index.html").c_str()));
     assistant->openAssistant();
+  }
+  else	
+    assistant->showPage(QString( (tlp::TulipLibDir + "../share/tulip/userHandbook/html/index.html").c_str()));
 }
 //==============================================================
 void viewGl::fileExit() {
