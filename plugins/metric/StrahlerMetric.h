@@ -16,39 +16,37 @@ struct Strahler {
 /** This plugin is an implementation of the Strahler Parameter.
  *  algorithm first published as:
  *
- *  A.N. Strahler,
- *  "Hypsomic analysis of erosional topography",
- *  "Bulletin Geological Society of America 63,pages 1117-1142.",
- *   1952.
+ *  A.N. Strahler, \n
+ *  "Hypsomic analysis of erosional topography",\n
+ *  "Bulletin Geological Society of America 63,pages 1117-1142.",\n
+ *   1952.\n
  *
  *  Extended to graphs in :
  *
- *  D. Auber,
- *  "Using Strahler numbers for real time visual exploration of huge graphs,
- *  ICCVG, International Conference on Computer Vision and Graphics,
- *  pages 56-69,
+ *  D. Auber, \n
+ *  "Using Strahler numbers for real time visual exploration of huge graphs, \n
+ *  ICCVG, International Conference on Computer Vision and Graphics, \n
+ *  pages 56-69, \n
  *  2002, September.
  *
- *  HISTORY:
+ *  <b> HISTORY</b>
  *
- *  01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/12/1999 Verson 0.0.1: Initial release
  *
- *  06/11/2002 Verson 0.0.2: Documentation and code clean up
+ *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
  *
- *  NOTES:
  *
- *  This algorithm works on general graphs, if no node is selected,
+ *  \note This algorithm works on general graphs, if no node is selected,
  *  the algorithm automatically choose the nodes with higher outdegree as
  *  starting nodes.
  *
  *  The algorithm use the (bool)"viewSelection" property to determine
  *  the starting nodes.
  *
- *  AUTHOR:
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

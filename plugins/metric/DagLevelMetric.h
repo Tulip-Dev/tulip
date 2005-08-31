@@ -8,21 +8,19 @@
 /// DagLevelMeric.h - An implementation of DAG layer decomposition.
 /** This plugin is an implementation of a DAG layer decomposition
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/12/1999 Verson 0.0.1: Initial release
  *
- *  06/11/2003 Verson 0.0.2: Documentation and code clean up and optimization
+ *  - 06/11/2003 Verson 0.0.2: Documentation and code clean up and optimization
  *
- *  NOTES:
  *
- *  This algorithm works on general DAG, the complexity is in O(|E|+|V|);
+ *  \note This algorithm works on general DAG, the complexity is in O(|E|+|V|);
  *
- *  AUTHOR:
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

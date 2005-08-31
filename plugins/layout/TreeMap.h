@@ -20,27 +20,24 @@ class SizesProxy;
 /** This plugin is an implementation of the tree map layout
  *  algorithm first published as:
  *
- *  Shneiderman, B. (March 1991)
- *  Tree visualization with treemaps: a 2-d space-filling approach
- *  ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99.
- *  HCIL-91-03, CS-TR-2645, CAR-TR-548 
+ *  Shneiderman, B. (March 1991) \n
+ *  Tree visualization with treemaps: a 2-d space-filling approach \n
+ *  ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99. \n
+ *  HCIL-91-03, CS-TR-2645, CAR-TR-548  
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  01/04/99 Verson 0.0.1: Initial release
+ *  - 01/04/99 Verson 0.0.1: Initial release
  *
- *  NOTES:
- *
- *  This algorithm only work on trees.
+ *  \note This algorithm only work on trees.
  *  This version use the "viewMetric" property to determine
- *  The size of elements.
+ *  The size of elements. \n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  AUTHOR:
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

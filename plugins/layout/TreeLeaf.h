@@ -14,18 +14,16 @@
  * tree. The node the other nodes are placed at the center of their children
  * (x-coordinates), and the y-coordinate is their depth in the tree.
  *
- * HISTORY:
+ * <b>HISTORY</b>
  *
- * 01/12/99 Verson 0.0.1: Initial release
+ * - 01/12/99 Verson 0.0.1: Initial release
  *
- * NOTES:
  *
- * This work on tree.
+ * \note This work on tree. \n
  * Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- * AUTHOR:
  *
- * David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ * \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  */
 class TreeLeaf:public Layout { 
 public:

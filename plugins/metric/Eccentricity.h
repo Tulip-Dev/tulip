@@ -10,25 +10,23 @@
 /** This plugin compute the eccentricity of each node, more information 
  * about the use of eccentricity metric can be found in :
  *
- * Visone: Analysis and visualization of social networks.
- * "Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel",
- * Authors : Ulrik Brandes and Dorothea Wagner.
- * "2004",
+ * Visone: Analysis and visualization of social networks. \n
+ * "Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel", \n
+ * Authors : Ulrik Brandes and Dorothea Wagner. \n
+ * "2004", \n
  * pages 321-340.
  *  
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
  *  18/06/2004 Verson 0.0.1: Initial release
  *
- *  NOTE :
- *  The complexity of the algorithm is O(|V|+|E|) time and O(|V|) space.  
+ *  \note The complexity of the algorithm is O(|V|+|E|) time and O(|V|) space.  
  *
- *  AUTHOR:
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  *  Tamara Munzner, University of British Columbia Canada. Email: tmm@cs.ubc.ca
  *  
- *  LICENCE:
+ * <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

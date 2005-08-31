@@ -30,25 +30,21 @@ public:
 /** This plugin is an implementation of hierarchical layout
  *  algorithm first published as:
  *
- *  D. Auber,
- *  "Tulip - A Huge Graph Visualization Framework",
- *  "Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel",
- *  "2004",
+ *  D. Auber, \n
+ *  "Tulip - A Huge Graph Visualization Framework", \n
+ *  "Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel", \n
+ *  "2004", \n
  *  pages 105 - 126.
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/12/1999 Verson 0.0.1: Initial release
  *
- *  NOTES:
+ *  \note This algorithm oimplements a O(n+m) space hierarchical layout 
  *
- *  This algorithm oimplements a O(n+m) space hierarchical layout 
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
  *
- *  AUTHOR:
- *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
- *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

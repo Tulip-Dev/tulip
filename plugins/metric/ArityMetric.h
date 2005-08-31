@@ -10,20 +10,16 @@
 /// ArityMetric.h - Compute the degree of each node.
 /** This plugin compute the degree of each node
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  04/10/2001 Verson 0.0.1: Initial release
+ *  - 04/10/2001 Verson 0.0.1: Initial release
  *
- *  NOTES:
- *
- *  This plug-ins exists to obtain a uniform interface in the 
+ *  \note This plug-ins exists to obtain a uniform interface in the 
  *  Tulip graph viusalization software. To access to the degree
  *  of a node it is recommended to use directly the degree function
  *  available in each SuperGraph.
  *
- *  AUTHOR:
- *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
  *
  *  LICENCE:
  *

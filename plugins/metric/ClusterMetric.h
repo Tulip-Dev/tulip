@@ -10,31 +10,29 @@
 /** This plugin is an implementation of the Clustering Parameter.
  *  algorithm published in :
  *
- *  Y. Chiricota. F.Jourdan, an G.Melançon
- *  "Software component capture using graph clustering",
- *  "IWPC",
+ *  Y. Chiricota. F.Jourdan, an G.Melançon \n
+ *  "Software component capture using graph clustering",\n
+ *  "IWPC", \n
  *   2002.
  *
  *  Extended to unbounded depth (for the neigbors) :
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  01/12/2001 Verson 0.0.1: Initial release
+ *  - 01/12/2001 Verson 0.0.1: Initial release
  *
- *  25/02/2003 Verson 0.0.2: Documentation, code clean up and checking
+ *  - 25/02/2003 Verson 0.0.2: Documentation, code clean up and checking
  *
- *  NOTES:
  *
- *  This algorithm works on general graphs. The algorithm use the parameter 
+ *  \note This algorithm works on general graphs. The algorithm use the parameter 
  *  <int>depth in order to determine the depth of the neigbors. If no depth 
  *  is given, the plugins automatically popup a qt windows to ask the user for this
  *  parameter.
  *
- *  AUTHOR:
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

@@ -1,5 +1,5 @@
 //-*-c++-*-
-/**
+/*
  Author: David Auber
  Email : auber@labri.fr
  Last modification : 20/08/2001
@@ -22,21 +22,17 @@ struct NodeInfo{
 /// StrongComponent.h - An implementation of the Stongly connected component algorithm.
 /** This plugin is an implementation of the Stongly connected algorithm.
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/12/1999 Verson 0.0.1: Initial release
  *
- *  NOTES:
- *
- *  This algorithm assigns to each node a value defined as following : If two nodes are in the same
+ *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
  *  strongly connected component they have the same value else they have a 
  *  different value.
  *
- *  AUTHOR:
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
- *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

@@ -10,23 +10,20 @@
 /** This plugin is an implementation of the Strength Parameter.
  *  algorithm first published in :
  *
- *  Y. Chiricota. F.Jourdan, an G.Melançon
- *  "Software component capture using graph clustering",
- *  "IWPC",
+ *  Y. Chiricota. F.Jourdan, an G.Melançon \n
+ *  "Software component capture using graph clustering", \n
+ *  "IWPC", \n
  *   2002.
- *  HISTORY:
  *
- *  26/02/2002 Verson 0.0.1: First implementation.
+ *  <b>HISTORY</b>
  *
- *  NOTES:
+ *  - 26/02/2002 Verson 0.0.1: First implementation.
  *
- *  This algorithm works on general graphs. 
+ *  \note This algorithm works on general graphs. 
  *
- *  AUTHOR:
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.org
- *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

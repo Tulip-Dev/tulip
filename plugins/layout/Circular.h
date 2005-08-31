@@ -11,18 +11,16 @@
  * This plugin is an implementation of a circular layout
  * All nodes are palced arbitrary on circle. 
  *
- * HISTORY:
+ * <b>HISTORY</b>
  *
- * 01/12/99 Verson 0.0.1: Initial release
+ * - 01/12/99 Verson 0.0.1: Initial release
  *
- * NOTES:
  *
- * This work on general graphs.
+ * \note This work on general graphs.
  * Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- * AUTHOR:
  *
- * David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ * \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  */
 class Circular:public Layout { 
 public:

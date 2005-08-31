@@ -11,13 +11,13 @@
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
  *
- *  Bubble Tree Drawing Algorithm :
- *  S. Grivet and D. Auber and J-P Domenger and Guy Melançon,
- *  International conference in computer vision and graphics,
+ *  Bubble Tree Drawing Algorithm : \n
+ *  S. Grivet and D. Auber and J-P Domenger and Guy Melançon, \n
+ *  International conference in computer vision and graphics, \n
  *  september 2004.
  *
- *  Bubble Tree Drawing Algorithm :
- *  D. Auber and S. Grivet and J-P Domenger and Guy Melançon,
+ *  Bubble Tree Drawing Algorithm : \n
+ *  D. Auber and S. Grivet and J-P Domenger and Guy Melançon, \n
  *  Technical report : RR-1323-04, LaBRI university Bordeaux I.
  *
  *  <b>HISTORY</b> 

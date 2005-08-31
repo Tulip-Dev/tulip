@@ -16,34 +16,28 @@ struct LR {
 /** This plugin is an implementation of the hierarchical tree layout
  *  algorithm first published as:
  *
- *  E.M. Reingold and J.S. Tilford,
- *  "Tidier Drawings of Trees",
- *  "IEEE Transactions on Software Engineering"
- *  pages "223--228"
- *  1981
+ *  E.M. Reingold and J.S. Tilford, \n
+ *  "Tidier Drawings of Trees", \n
+ *  "IEEE Transactions on Software Engineering" \n
+ *  pages "223--228" \n
+ *  1981 \n
  *
- *  HISTORY:
+ *  <b>HISTORY</b>
  *
- *  21/02/2000 Verson 0.0.1: Initial release
+ *  - 21/02/2000 Verson 0.0.1: Initial release
+ *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
  *
- *  06/11/2002 Verson 0.0.2: Documentation and code clean up
- *
- *  NOTES:
- *
- *  This algorithm only works on trees.
- *  Let n be the number of nodes, the algorithm complexity is in O(n).
+ *  \note This algorithm only works on trees.\n
+ *  Let n be the number of nodes, the algorithm complexity is in O(n).\n
  *  It extends the original Reingold and Tilford by providing managment
- *  of different node size and different edge length.
- *
+ *  of different node size and different edge length. \n \n
  *  The algortihm use the (Size)"viewSize" property for element size and the
  *  (int)"treeEdgeLength" for the edge length. The property (int)"treeOrder"
  *  can be used to change the embedding of the tree.
  *
- *  AUTHOR:
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.org
- *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  

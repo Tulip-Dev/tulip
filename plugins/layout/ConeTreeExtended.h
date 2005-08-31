@@ -9,8 +9,10 @@
 /** This plugin is an extension of the Cone tree layout
  *  algorithm first published as:
  *
- *  A. FJ. Carriere and R. Kazman, "Interacting with Huge Hierarchies: Beyond Cone Trees",
- *  In Proceedings of InfoViz'95, IEEE Symposium on Information Visualization
+ *  A. FJ. Carriere and R. Kazman, \n
+ *  "Interacting with Huge Hierarchies: Beyond Cone Trees", \n
+ *  In Proceedings of InfoViz'95, \n
+ *  IEEE Symposium on Information Visualization \n
  *  pages 74-78, 1995,
  *
  *  Information about the extension can be found in :
@@ -18,18 +20,14 @@
  *  D.Auber, PhD Thesis, "Outils de visualisation de larges structures de données",
  *  University Bordeaux, december 2002.
  *
- *  HISTORY:
+ *  <b> HISTORY</b>
  *
- *  01/04/99 Verson 0.0.1: Initial release
+ *  - 01/04/99 Verson 0.0.1: Initial release
  *
- *  NOTES:
- *
- *  This algorithm only work on trees.
+ *  \note This algorithm only work on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  AUTHOR:
- *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
  */
 class ConeTreeExtended:public Layout { 
 public:

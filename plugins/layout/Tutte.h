@@ -16,21 +16,16 @@
  *  "1963",
  *  pages 743-768.
  *
- *  HISTORY:
+ *  <b> HISTORY </b>
  *
- *  01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/12/1999 Verson 0.0.1: Initial release
+ *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
  *
- *  06/11/2002 Verson 0.0.2: Documentation and code clean up
+ *  \note This algorithm only works on 3 connected graphs.
  *
- *  NOTES:
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
  *
- *  This algorithm only works on 3 connected graphs.
- *
- *  AUTHOR:
- *
- *  David Auber University Bordeaux I France: Email:auber@tulip-software.com
- *
- *  LICENCE:
+ *  <b> LICENCE </b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  
