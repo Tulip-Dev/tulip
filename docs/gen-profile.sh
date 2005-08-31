@@ -1,15 +1,27 @@
-#!/bin/sh
-QTDOCDIR=""
-for A in `find /usr -name "assistant.html"`
-do
-	QTDOCDIR=`dirname $A` 
-done
+#!/bin/bash
 
-if [ -z "$QTDOCDIR" ]
+if [ -d "$QTDIR/doc/html" ]
 then
-	QTDOCDIR=$QTDIR/doc/html 
+    QTDOCDIR=$QTDIR/doc/html;
+elif [ -d "/usr/share/doc/qt-devel-3.3.4/html" ]
+then
+    QTDOCDIR=/usr/share/doc/qt-devel-3.3.4/html
+elif [ -n "$QTDOC" ]
+then
+	QTDOCDIR=$QTDOC 
+else
+    echo 
+    echo "**************************************************"
+    echo "  WARNING : "
+    echo "  We can not locate the documentations of Qt, "
+    echo "  please set the environment variable QTDOC to "
+    echo "  specify it. Refer the directory where you can"
+    echo "  find \"assistant.html\" "
+    echo "**************************************************"
+    echo
+    QTDOCDIR=""
 fi
-
+:
 echo "<assistantconfig version=\"3.2.0\"><profile>" > profile.adp
 echo "<property name=\"name\">Help</property>" >> profile.adp
 echo "<property name=\"title\">Help Tulip software</property>" >> profile.adp

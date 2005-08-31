@@ -1,6 +1,6 @@
 EXTRA_DIST = general general-html header.html footer.html tulip.html
 
-all : html
+all : 
 
 html: tulip-lib/index.html tulip-libogl/index.html tulip-libqt/index.html tulip-soft/index.html tulip-plugins/index.html tulipdoc.html
 

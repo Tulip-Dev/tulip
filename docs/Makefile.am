@@ -3,20 +3,19 @@ DIST_SUBDIRS = developerHandbook userHandbook doxygen devTeamDoxygen
 
 EXTRA_DIST = gen-profile.sh common	
 
-all : html
+all :
 
 clean-am :
 	rm -f profile.adp *~ common/*~
 
-html-am : profile.adp
-
+html-am :
+	sh gen-profile.sh
 install-data-am:
 	mkdir -p $(pkgdatadir)/common
 	cp -r common/*.png common/*.css common/favicon.ico $(pkgdatadir)/common/.
-	cp profile.adp $(pkgdatadir)/.
-
-profile.adp :
-	sh gen-profile.sh
+	if test -f profile.adp ; then \
+		cp profile.adp $(pkgdatadir)/.; \
+	fi;
 
 uninstall-am:
 	rm -rf $(pkgdatadir)/common $(pkgdatadir)/profile.adp

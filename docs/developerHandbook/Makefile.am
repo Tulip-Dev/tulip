@@ -21,7 +21,7 @@ install-data-am :
 uninstall-am :
 	rm -rf $(pkgdatadir)/developerHandbook
 
-all : html
+all :
 
 check :
 	$(XMLLINT) --valid -noout index.docbook

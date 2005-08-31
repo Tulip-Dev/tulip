@@ -1,8 +1,8 @@
 EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
-all : html man
+all : 
 
-html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html profile.dcf allPlugins.html
+html: tulip-lib tulip-libogl tulip-libqt tulip-plugins tulipdoc.html profile.dcf allPlugins.html man
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
