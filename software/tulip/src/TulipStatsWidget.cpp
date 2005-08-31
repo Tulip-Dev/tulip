@@ -982,7 +982,7 @@ namespace tlp
 	    char key[13] = "EigenVector0";
 	    key[11] = n;
 
-	    glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);
+	    glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
 	  }
       }
     else 
@@ -990,7 +990,6 @@ namespace tlp
 	for(int i=0; i < 3; i++)
 	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
       }
-
     glGraphWidget->UpdateGL();
 
     // cout << " ...[END]" << endl;

@@ -66,6 +66,7 @@
 #include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
+#include "MouseMoveSelection.h"
           
 #define WITHQT3
 #define UNNAMED "unnamed"
@@ -259,11 +260,13 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   clusterTreeWidget->setSuperGraph(graph);
   propertiesWidget->setSuperGraph(graph);
   nodeProperties->setSuperGraph(graph);
+
   if(glWidget != 0) {
     propertiesWidget->setGlGraphWidget(glWidget->getGlGraph());
     overviewWidget->setObservedView(glWidget->getGlGraph());
     statsWidget->setGlGraphWidget(glWidget);
   }
+
   updateSatutBar();
   redrawView();
   initObservers();
@@ -331,6 +334,8 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
   //>>>>>>> 1.4
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
+  connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
+
   connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
@@ -1400,4 +1405,17 @@ void viewGl::gridOptions()
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
 
   gridOptionsWidget->show();
+}
+
+ 
+void viewGl::mouseChanged(MouseInterface *m) {
+  if (dynamic_cast<MouseMoveSelection*>(m)) {
+    // Active le tracking de la souris sans l'appui de bouton => colorisation des carrés du FFD
+    glWidget->setMouseTracking(true);
+
+    //    m->mPaint(glWidget);
+    glWidget->UpdateGL();
+  }
+  else
+    glWidget->setMouseTracking(false);
 }
