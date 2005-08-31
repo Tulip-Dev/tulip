@@ -23,6 +23,7 @@
 #include <tulip/Reflect.h>
 #include <tulip/SuperGraph.h>
 #include <tulip/Observable.h>
+#include <tulip/MouseInterface.h>
 #include "TulipData.h"
 
 class Cluster;
@@ -152,6 +153,7 @@ protected slots:
   void ungroup();  
   void group();  
   void gridOptions();
+  void mouseChanged(MouseInterface *);
 
 private:
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
