@@ -3,6 +3,7 @@
 #include "tulip/LayoutProxy.h"
 #include "tulip/SizesProxy.h"
 #include "tulip/MetricProxy.h"
+#include "tulip/SelectionProxy.h"
 #include <climits>
 
 using namespace std;
@@ -43,7 +44,8 @@ namespace {
     }
   }
 }
-pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation) {
+
+pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;
@@ -58,20 +60,31 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layou
   Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    curCoord = layout->getNodeValue(itn);
-    curSize  = size->getNodeValue(itn) / 2.0;
-    curRot = rotation->getNodeValue(itn);
-    computePoint(result, curCoord, curSize, curRot);
+
+    if (selection == 0 || selection->getNodeValue(itn)) {
+	curCoord = layout->getNodeValue(itn);
+	curSize  = size->getNodeValue(itn) / 2.0;
+	curRot = rotation->getNodeValue(itn);
+	computePoint(result, curCoord, curSize, curRot);
+      }
   } delete itN;
+
   Iterator<edge> *itE=graph->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
-    LineType::RealType::const_iterator itCoord;
-    const LineType::RealType &bends = layout->getEdgeValue(ite);
-    for (itCoord = bends.begin(); itCoord!=bends.end();++itCoord) {
-      result.first = maxCoord(result.first, *itCoord);
-      result.second = minCoord(result.second, *itCoord);
+
+    if (selection == 0 || selection->getEdgeValue(ite)) {
+	LineType::RealType::const_iterator itCoord;
+	const LineType::RealType &bends = layout->getEdgeValue(ite);
+	for (itCoord = bends.begin(); itCoord!=bends.end();++itCoord) {
+	  result.first = maxCoord(result.first, *itCoord);
+	  result.second = minCoord(result.second, *itCoord);
+	}
     }
   } delete itE;
   return result;
 }
+
+
+
+

@@ -12,9 +12,10 @@ class SuperGraph;
 class LayoutProxy;
 class SizesProxy;
 class MetricProxy;
+class SelectionProxy;
 
 namespace tlp {
-    TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation);
+  TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection = 0);
 };
 
 
