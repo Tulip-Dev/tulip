@@ -94,6 +94,11 @@ class GlHudRect : public GlHud
    * Accessor in writing to the Bottom Right Corner Color of the rectangle
    */
   virtual void setBottomRightColor(const Color &bottomRightCol);
+
+  /**
+   * Is the point in the rectangle ?
+   */
+  bool inRect(double x, double y);
 };
 
 #endif

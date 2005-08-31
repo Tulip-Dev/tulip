@@ -58,6 +58,7 @@ libtulip_ogl_la_SOURCES = \
 	GlHudLine.cpp \
 	GlHudRect.cpp \
 	GlHudCircle.cpp \
+	GlHudRect4.cpp \
 	Bezier.cpp \
 	Spline.cpp \
         GlLines.cpp \
