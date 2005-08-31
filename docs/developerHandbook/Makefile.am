@@ -1,4 +1,4 @@
-EXTRA_DIST = index.docbook \
+EXTRA_DIST = *.docbook \
 	images/*.png
 
 DOCBOOK_SRC = index.docbook \

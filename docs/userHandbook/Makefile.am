@@ -1,4 +1,4 @@
-EXTRA_DIST = index.docbook images/*.png
+EXTRA_DIST = *.docbook images/*.png
 
 DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook tutorials.docbook
 
@@ -20,6 +20,7 @@ clean :
 	rm -rf html pdf profile.dcf *~
 
 html : html/index.html profile.dcf
+
 
 html/index.html : $(DOCBOOK_SRC) ../common/tulip-html.xsl ../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\

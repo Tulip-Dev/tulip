@@ -1,4 +1,4 @@
-EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
+EXTRA_DIST = header.html footer.html general general-html general-man tulip.html dox-html.xsl dox-profile.xsl
 
 all : 
 
