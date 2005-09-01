@@ -1,0 +1,33 @@
+Tulip documentation version 0.1 Readme file.
+
+This part is under GPL licence,(see COPYING file in Tulip directory).
+
+To compile the documentation :
+
+	make html
+	make pdf (optional, just for a pdf version of the Handbooks)
+	make install
+
+
+- Tulip Developer Handbook
+- Tulip User Manual
+
+   Requirements : 
+     - java (for using Saxon class packages)
+     - docbook is not necessary, Tulip provides the DTD
+     - XSL stylesheets
+     - xmllint (optional, for checking XML Validation), libxml2 package
+
+   for PDF output : 
+     - pdfxmltex : passivetex package, available in Fedora and Debian
+
+- Code documentation 
+
+  Caution : 
+It exists two directories : devTeamDoxygen for the complete documentation and doxygen just for the libraries' Documentation.
+
+
+   Requirements :
+     - doxygen
+     - dot (optional) : graphiz package, available in Fedora and Debian	
+
