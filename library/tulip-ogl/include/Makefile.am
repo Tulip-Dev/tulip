@@ -22,4 +22,20 @@ nobase_include_HEADERS = \
 	tulip/Paragraph.h \
 	tulip/FLayout.h \
 	tulip/Frame.h \
-	tulip/Renderer.h
+	tulip/Renderer.h \
+	tulip/GlADAxisPoint.h \
+	tulip/GlADBox.h \
+	tulip/GlADComposite.h \
+	tulip/GlADGrid.h \
+	tulip/GlADLine.h \
+	tulip/GlADPoint.h \
+	tulip/GlADQuad.h \
+	tulip/GlADRenderOptions.h \
+	tulip/GlAugmentedDisplay.h \
+	tulip/GlDrawable.h \
+	tulip/GlHudCircle.h \
+	tulip/GlHud.h \
+	tulip/GlHudLine.h \
+	tulip/GlHudRect4.h \
+	tulip/GlHudRect.h
+

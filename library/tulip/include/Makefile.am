@@ -88,7 +88,10 @@ nobase_include_HEADERS = \
 	tulip/PlanarityTest.h \
 	tulip/SuperGraphDeco.h \
 	tulip/SuperGraphMap.h \
-	tulip/cxx/SuperGraphDeco.cxx
+	tulip/cxx/SuperGraphDeco.cxx \
+	tulip/Plane.h \
+	tulip/Polynome.h \
+	tulip/StatisticsNodeModule.h
 
 
 noinst_HEADERS = tulip/cxx/BmdLink.cxx \
