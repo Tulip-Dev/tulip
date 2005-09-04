@@ -64,6 +64,11 @@ dist_libtulip_qt_la_SOURCES = \
 	Morphing.cpp \
 	ClusterTree.cpp \
 	GraphState.cpp \
+	MouseMoveSelection.cpp \
+	MouseAddNode.cpp \
+	MouseAddEdge.cpp \
+	MouseSelection.cpp \
+	MouseMagicSelection.cpp \
 	DataSetDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES)

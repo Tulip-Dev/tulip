@@ -11,6 +11,11 @@ nobase_include_HEADERS = \
 	tulip/FindSelectionData.h \
 	tulip/ClusterTreeData.h \
 	tulip/ClusterTree.h \
+	tulip/MouseAddEdge.h\
+	tulip/MouseAddNode.h\
+	tulip/MouseMoveSelection.h\
+	tulip/MouseSelection.h\
+	tulip/MouseMagicSelection.h\
 	tulip/Morphing.h \
 	tulip/TlpQtTools.h
 

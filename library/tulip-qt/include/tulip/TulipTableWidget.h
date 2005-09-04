@@ -175,7 +175,8 @@ public:
 
   QString text() const;
 };
-
+/** \addtogroup Tulip_Widgets */ 
+/*@{*/
 /* this table handle displaying and editing node or edge properties */
 class TulipTableWidget : public QTable {
   Q_OBJECT;
@@ -209,4 +210,5 @@ public slots:
   void resetBackColor2();
   void setUpdateColumnTitle(const bool);
 };
+/*@}*/
 #endif //PROPERTYWIDGETS_H

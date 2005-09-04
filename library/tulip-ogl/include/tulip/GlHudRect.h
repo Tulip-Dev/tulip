@@ -33,13 +33,14 @@ class GlHudRect : public GlHud
   Color* topLeftCol; /**< Top Left color of the rectangle */
   Color* bottomRightCol; /**< Bottom Right color of the rectangle */
 
-  /**
-   * Default constructor : forbidden
-   */
-  GlHudRect();
+
 
  public:
 
+  /**
+   * Default constructor 
+   */
+  GlHudRect();
   /**
    * Constructor
    */
