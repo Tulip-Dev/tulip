@@ -66,7 +66,7 @@
 #include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
-#include "MouseMoveSelection.h"
+#include <tulip/MouseMoveSelection.h>
           
 #define WITHQT3
 #define UNNAMED "unnamed"

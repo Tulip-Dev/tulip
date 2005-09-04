@@ -106,11 +106,6 @@ dist_tulip_SOURCES = \
 	AppStartUp.cpp \
 	ToolBar.cpp \
 	PropertyDialog.cpp \
-	MouseMoveSelection.cpp \
-	MouseAddNode.cpp \
-	MouseAddEdge.cpp \
-	MouseSelection.cpp \
-	MouseMagicSelection.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \

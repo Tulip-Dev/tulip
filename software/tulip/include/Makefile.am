@@ -30,18 +30,12 @@ nodist_noinst_HEADERS = \
 
 noinst_HEADERS = \
 	Overview.h\
-	MouseTreeFishEyes.h \
 	ElementInfoToolTip.h \
 	AppDialog.h\
 	Application.h\
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
-	MouseAddEdge.h\
-	MouseAddNode.h\
-	MouseMoveSelection.h\
-	MouseSelection.h\
-	MouseMagicSelection.h\
 	NavigateButton.h\
 	NavigateGlGraph.h\
 	PropertyDialog.h\

@@ -13,15 +13,14 @@
 #endif
 
 #include <tulip/MouseObject.h>
-
-#include "ToolBar.h"
-#include "MouseMoveSelection.h"
-#include "MouseAddNode.h"
-#include "MouseAddEdge.h"
-#include "MouseSelection.h"
-#include "MouseMagicSelection.h"
-#include "MouseTreeFishEyes.h"
+#include <tulip/MouseMoveSelection.h>
+#include <tulip/MouseAddNode.h>
+#include <tulip/MouseAddEdge.h>
+#include <tulip/MouseSelection.h>
+#include <tulip/MouseMagicSelection.h>
+#include <tulip/MouseTreeFishEyes.h>
 #include <tulip/MouseZoomBox.h>
+#include "ToolBar.h"
 #include "Application.h"
 
 /* 
