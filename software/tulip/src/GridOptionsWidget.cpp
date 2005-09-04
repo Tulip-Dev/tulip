@@ -17,8 +17,7 @@ using namespace std;
 
 namespace tlp
 {
-  GridOptionsWidget::GridOptionsWidget(QWidget *parent, const char *name, WFlags fl) : GridOptionsData(parent, name, fl), glGraphWidget(0)
-  {
+  GridOptionsWidget::GridOptionsWidget(QWidget *parent, const char *name, WFlags fl) : GridOptionsData(parent, name, fl), glGraphWidget(0) {
     connect(CancelBtn, SIGNAL(clicked()), SLOT(close()));
     connect(OkBtn, SIGNAL(clicked()), SLOT(validateGrid()));
 
@@ -44,101 +43,82 @@ namespace tlp
     GridSizeY->setValidator(doubleValidator);
     GridSizeZ->setValidator(doubleValidator);
   }
-  
-  GridOptionsWidget::~GridOptionsWidget()
-  {
-    
+  //==============================================
+  GridOptionsWidget::~GridOptionsWidget() {
   }
-
-  void GridOptionsWidget::setCurrentGraphWidget(GlGraphWidget *graphWidget)
-  {
+  //==============================================
+  void GridOptionsWidget::setCurrentGraphWidget(GlGraphWidget *graphWidget) {
     this->glGraphWidget = graphWidget;
 
     if (glGraphWidget != NULL && glGraphWidget != 0)
       grid = (GlADGrid*)glGraphWidget->findGlAugmentedDisplay("Layout Grid");
   }
+  //==============================================
+  void GridOptionsWidget::validateGrid() {
+    if (glGraphWidget != 0) {
+      if (ActivatedCB->isChecked()) {
+	if (grid != NULL) {
+	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  grid = NULL;
+	}
+	    
+	bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
+	    
+	Coord min, max;
+	    
+	// We get the min and the max of the Layout to display the grid
+	LayoutProxy* layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+	    
+	min = layout->getMin(glGraphWidget->getSuperGraph());
+	max = layout->getMax(glGraphWidget->getSuperGraph());
 
-
-  void GridOptionsWidget::validateGrid()
-  {
-    if (glGraphWidget != 0)
-      {
-	if (ActivatedCB->isChecked())
-	  {
-	    if (grid != NULL)
-	      {
-		glGraphWidget->removeGlAugmentedDisplay(grid);
-		grid = NULL;
-	      }
+	for(int i=0; i < 3; i++) {
+	  min[i] = min[i] - 0.5f;
+	  max[i] = max[i] + 0.5f;
+	}
 	    
-	    bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
-	    
-	    Coord min, max;
-	    
-	    // We get the min and the max of the Layout to display the grid
-	    LayoutProxy* layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-	    
-	    min = layout->getMin(glGraphWidget->getSuperGraph());
-	    max = layout->getMax(glGraphWidget->getSuperGraph());
-
-	    for(int i=0; i < 3; i++)
-	      {
-		min[i] = min[i] - 0.5f;
-		max[i] = max[i] + 0.5f;
-	      }
-	    
-	    // Building of the cell :
-	    Size cell;
-	    if (SubdivisionsRB->isChecked())
-	      {
-		double sub[3] = {GridSubX->text().toDouble(), GridSubY->text().toDouble(), GridSubZ->text().toDouble()};
+	// Building of the cell :
+	Size cell;
+	if (SubdivisionsRB->isChecked()) {
+	  double sub[3] = {GridSubX->text().toDouble(), GridSubY->text().toDouble(), GridSubZ->text().toDouble()};
 		
-		if (GridSubX->text() == "")
-		  sub[0] = 0;
+	  if (GridSubX->text() == "")
+	    sub[0] = 0;
 		
-		if (GridSubY->text() == "")
-		  sub[1] = 0;
+	  if (GridSubY->text() == "")
+	    sub[1] = 0;
 		
-		if (GridSubZ->text() == "")
-		  sub[2] = 0;
+	  if (GridSubZ->text() == "")
+	    sub[2] = 0;
 		
-		for(int i=0; i < 3; i++)
-		  {
-		    if (sub[i] == 0)
-		      cell[i] = 0;
-		    else
-		      cell[i] = fabs(max[i] - min[i]) / sub[i];
-		  }
-	      }
+	  for(int i=0; i < 3; i++)  {
+	    if (sub[i] == 0)
+	      cell[i] = 0;
 	    else
-	      {
-		double cellsize[3] = {GridSizeX->text().toDouble(), GridSizeY->text().toDouble(), GridSizeZ->text().toDouble()};
-		
-		for(int i=0; i < 3; i++)
-		  cell[i] = cellsize[i];
-	      }
-	    
-	    grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display, HollowGridCB->isChecked());
-	    
-	    glGraphWidget->addGlAugmentedDisplay(grid, "Layout Grid");
-	    
+	      cell[i] = fabs(max[i] - min[i]) / sub[i];
 	  }
-	else
-	  {
-	    if (grid != NULL)
-	      {
-		glGraphWidget->removeGlAugmentedDisplay(grid);
-		grid = NULL;
-	      }
-	  }
-	glGraphWidget->UpdateGL();   
-	
-	close();
+	}
+	else {
+	  double cellsize[3] = {GridSizeX->text().toDouble(), GridSizeY->text().toDouble(), GridSizeZ->text().toDouble()};
+	  for(int i=0; i < 3; i++)
+	    cell[i] = cellsize[i];
+	}
+	grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display, HollowGridCB->isChecked());
+	glGraphWidget->addGlAugmentedDisplay(grid, "Layout Grid");
+	    
       }
+      else {
+	if (grid != NULL) {
+	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  grid = NULL;
+	}
+      }
+      glGraphWidget->UpdateGL();   
+      close();
+    }
   }
-  
-void GridOptionsWidget::chGridSubdivisions()
-  {
+  //==============================================
+  void GridOptionsWidget::chGridSubdivisions() {
     SubdivisionsRB->setChecked(true);
     SizeRB->setChecked(false);
     
@@ -149,9 +129,8 @@ void GridOptionsWidget::chGridSubdivisions()
     GridSubY->setEnabled(true);
     GridSubZ->setEnabled(true);
   }
-  
-  void GridOptionsWidget::chGridSize()
-  {
+  //==============================================
+  void GridOptionsWidget::chGridSize() {
     SubdivisionsRB->setChecked(false);
     SizeRB->setChecked(true);
     
@@ -162,8 +141,7 @@ void GridOptionsWidget::chGridSubdivisions()
     GridSizeY->setEnabled(true);
     GridSizeZ->setEnabled(true);
   }
-
-  
+  //==============================================
   void GridOptionsWidget::chHollowGrid()
   {
     if (grid == NULL || !ActivatedCB->isChecked())
@@ -173,9 +151,8 @@ void GridOptionsWidget::chGridSubdivisions()
 
     glGraphWidget->UpdateGL();
   }
-
-  void GridOptionsWidget::chDisplayGrid()
-  {
+  //==============================================
+  void GridOptionsWidget::chDisplayGrid() {
     if (grid == NULL || !ActivatedCB->isChecked())
       return;
 
@@ -185,5 +162,5 @@ void GridOptionsWidget::chGridSubdivisions()
 
     glGraphWidget->UpdateGL();
   }
-
+  //==============================================
 }
