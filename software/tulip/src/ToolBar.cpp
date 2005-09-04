@@ -32,24 +32,28 @@
  *  TRUE to construct a modal dialog.
  */
 ToolBar::ToolBar( QWidget* parent,  const char* name, WFlags fl )
-  : ToolBarData(parent, name, fl)
-{
+  : ToolBarData(parent, name, fl) {
   currentMouse = new MouseGraphNavigate();
 }
 
 /*  
  *  Destroys the object and frees any allocated resources
  */
-ToolBar::~ToolBar()
-{
+ToolBar::~ToolBar() {
   if (currentMouse != NULL) delete currentMouse;
 }
 
 MouseInterface *ToolBar::getCurrentMouse() const {return currentMouse;}
 
-void ToolBar::setCurrentMouse(MouseInterface *m)
-{
-  if (currentMouse != NULL) delete currentMouse;
+void ToolBar::setCurrentMouse(MouseInterface *m) {
+  if (currentMouse != NULL) {
+    if (typeid(*currentMouse) == typeid(*m)) {
+      delete m;
+      return;
+    }
+    else
+      delete currentMouse;
+  }
   currentMouse = m;
   emit mouseChanged(currentMouse);
 }

@@ -225,7 +225,7 @@ void viewGl::clearObservers() {
   SuperGraph *graph = glWidget->getSuperGraph();
   if (graph == 0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    graph->getProperty(viewed_properties[i])->deleteObservers();
+    graph->getProperty(viewed_properties[i])->deleteObserver(this);
   }
 }
 //**********************************************************************
@@ -1412,7 +1412,6 @@ void viewGl::mouseChanged(MouseInterface *m) {
   if (dynamic_cast<MouseMoveSelection*>(m)) {
     // Active le tracking de la souris sans l'appui de bouton => colorisation des carrés du FFD
     glWidget->setMouseTracking(true);
-
     //    m->mPaint(glWidget);
     glWidget->UpdateGL();
   }
