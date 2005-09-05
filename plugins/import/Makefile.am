@@ -7,11 +7,12 @@ DLL_FLAGS = -no-undefined
 endif
 
 plugins_LTLIBRARIES = \
+	libplanar.la \
 	libgrid.la \
 	libdot.la \
 	libtlp.la \
 	libgml.la \
-	 libfilesystem.la \
+	libfilesystem.la \
 	librandomgraph.la \
 	librandomsimplegraph.la \
 	libadjacencymatrix.la \
@@ -23,6 +24,7 @@ plugins_LTLIBRARIES = \
 
 pluginsdir = $(libdir)/tlp/plugins/import
 
+libplanar_la_SOURCES = PlanarGraph.cpp
 libdot_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
 libgrid_la_SOURCES = Grid.cpp
 libtlp_la_SOURCES = TLPImport.cpp TLPParser.h
