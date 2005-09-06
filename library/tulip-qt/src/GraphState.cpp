@@ -41,11 +41,9 @@ GraphState::GraphState( GlGraphWidget * glgw ) {
   color = new ColorsProxy( g );
   *color = *( g->getProperty<ColorsProxy>("viewColor") );
   
-  GlGraph * glg = glgw->getGlGraph();
-  assert( glg );
-  camera = glg->getCamera();
-  sceneT = glg->getSceneTranslation();
-  sceneR = glg->getSceneRotation();
+  camera = glgw->getCamera();
+  sceneT = glgw->getSceneTranslation();
+  sceneR = glgw->getSceneRotation();
 }
 
 GraphState::~GraphState() {

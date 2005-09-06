@@ -1,6 +1,6 @@
 <chapter id="functions"><title>Functionalities</title>
     <sect1 id="manag-graphs"><title>Management of Graphs</title>
-        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you obtain. Tulip support diferent formats : BMP, JPEG, PBM, PGM, PNG, PPM, XBM, XPM, EPS. </para>
+        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you had. Tulip supports different formats : BMP, JPEG, PBM, PGM, PNG, PPM, XBM, XPM, EPS. </para>
         <para>
         Tulip could generate a graph from data : importation.
         <itemizedlist><title>Examples of importation</title>
@@ -22,6 +22,9 @@
         </para>
 
         <para>As lots of software, It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected objects from a view. When you paste an object, there are in the same place of the oldest of the view. Then, you have an access by the menus and the mouse-toolbar for the operations about the selection.</para>
+        <sect2 id="find"><title>The <quote>Find</quote> tool</title>
+            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item enabling to make researches in the current graph. The tool gives a way to choose the concerned property and the action you can do : Make copies of the fund elements, Add to the selection, Remove to the selection and Intersect with the current selection.</para>
+        </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
         <para>Each graph can be modified with algorithms for the layout, the set of selected objects, the size of nodes, the value attributed to an object (node or edge) named metric, the colors. An other advantage of Tulip platform is that it is easy to insert a new algorithm to the structure; this way, it was able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Property</code> menu. Several categories are in there : Selection, Layout, Metric, Colors, Sizes. They modify the properties of the object in the graph.
@@ -30,16 +33,16 @@
     <sect1 id="graph-properties"><title>Properties of graph</title>
         <para>In <application>Tulip</application> software, There is a way to affect properties for each node or edge of the graph. It defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to affect values to the nodes or the edges independed of the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph ; this kind of property is extrinsic.</para>
 
-        <para>For each graph, <emphasis>Tulip</emphasis> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention. They are named the intrinsic properties : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture because they are used for the compute of plug-ins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
+        <para>For each graph, <emphasis>Tulip</emphasis> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are used for the compute of plug-ins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
     </sect1>
     <sect1 id="hierarchy"><title>Hierarchy</title>
-        <para><emphasis>Tulip</emphasis> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the hierarchy of graph, the user can change the current view of the graph by clicking directly on the tree. By clicking the right button mouse, it is possible to manage the instances of cluster : remove, clone, create subgraph.</para>
+        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relations, the user can change the current view of the graph by clicking directly on the tree. By clicking the right button mouse, it is possible to manage the instances of cluster : remove, clone, create subgraph.</para>
         <sect2 id="subgraph"><title>SubGraphs</title>
          <para>A graph can have several parts of itself : this are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph have the same object, it just is a part of the graph. It is possible to add properties just for the subgraph or use the inherited properties.</para>
         </sect2>
         <sect2 id="group"><title>Groups</title>
-            <para></para>
+            <para>Some graph can be graph of other graph. This kind of hierarchy enables to affect a graph to a node. Then, you can go inside the node to show the metagraph. </para>
         </sect2>
     </sect1>
     <sect1 id="stats-panels"><title>Statistics Panel</title>

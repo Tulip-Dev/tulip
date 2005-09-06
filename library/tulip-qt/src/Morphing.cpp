@@ -133,8 +133,7 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   assert( outGlgw );
   SuperGraph * g = outGlgw->getSuperGraph();
   assert( g );
-  GlGraph * glg = outGlgw->getGlGraph();
-  assert( glg );
+  //assert( glg );
   
   inT = inT >? 0.0f;
   inT = inT <? 1.0f;
@@ -231,12 +230,12 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   float radius     = g0->camera.sceneRadius + (g1->camera.sceneRadius - g0->camera.sceneRadius) * inT;
   Camera c;
   c = g0->camera;
-  glg->setCamera( Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
+  outGlgw->setCamera( Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
   // Scene
   Coord scn_t      = g0->sceneT + (g1->sceneT - g0->sceneT) * inT;
   Coord scn_r      = g0->sceneR + (g1->sceneR - g0->sceneR) * inT;
-  glg->setSceneTranslation( scn_t );
-  glg->setSceneRotation( scn_r );
+  outGlgw->setSceneTranslation( scn_t );
+  outGlgw->setSceneRotation( scn_r );
 }
 
   void Morphing::timerEvent( QTimerEvent * te ) {
@@ -259,7 +258,7 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
 	interpolate(glWidget, t);
       Observable::unholdObservers();
       if(glWidget)
-	glWidget->UpdateGL();
+	glWidget->updateGL();
       if( t >= 1.0f ) {
 	killTimer( te->timerId() );
 	stop();

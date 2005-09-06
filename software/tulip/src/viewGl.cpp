@@ -97,7 +97,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )
   overviewWidget = new Overview(overviewDock);
   overviewDock->boxLayout()->add(overviewWidget);
   this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
-  overviewWidget->view->getGlGraph()->setBackgroundColor(Color(255,255,255));
+  overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
   overviewWidget->show();
   overviewDock->show();
  //Create Data information editor (Hierarchy, Element info, Property Info)
@@ -238,7 +238,7 @@ void viewGl::startTulip() {
   appStart->initTulip();
   delete appStart;
   buildMenus();
-  overviewWidget->view->getGlGraph()->initializeGL();
+  overviewWidget->view->initializeGL();
   this->show();
   enableElements(false);
   int argc = ((QApplication *)qApp)->argc();
@@ -260,8 +260,8 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   nodeProperties->setSuperGraph(graph);
 
   if(glWidget != 0) {
-    propertiesWidget->setGlGraphWidget(glWidget->getGlGraph());
-    overviewWidget->setObservedView(glWidget->getGlGraph());
+    propertiesWidget->setGlGraphWidget(glWidget);
+    overviewWidget->setObservedView(glWidget);
     statsWidget->setGlGraphWidget(glWidget);
   }
 
@@ -330,11 +330,11 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
 //**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  DataSet param=glWidget->getGlGraph()->getParameters();
+  DataSet param=glWidget->getParameters();
   QString name(glWidget->name());
   newOpenGlView(glWidget->getSuperGraph(),glWidget->parentWidget()->caption());
-  glWidget->getGlGraph()->setParameters(param);
-  glWidget->getGlGraph()->setFontsPath(((Application *)qApp)->bitmapPath);
+  glWidget->setParameters(param);
+  glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
@@ -342,7 +342,7 @@ void viewGl::fileNew() {
   Observable::holdObservers();
   SuperGraph *newSuperGraph=tlp::newSuperGraph();
   initializeGraph(newSuperGraph);
-  GlGraph *glW = newOpenGlView(newSuperGraph,string(UNNAMED).c_str())->getGlGraph();
+  GlGraph *glW = newOpenGlView(newSuperGraph,string(UNNAMED).c_str());
   initializeGlGraph(glW);
   overviewWidget->syncFromView();
   redrawView();
@@ -381,7 +381,7 @@ bool viewGl::fileSave(string plugin, string filename) {
   else
     os = new ofstream(filename.c_str());
   DataSet dataSet;
-  dataSet.set("displaying", glWidget->getGlGraph()->getParameters());
+  dataSet.set("displaying", glWidget->getParameters());
   bool result;
   if (!(result=tlp::exportGraph(glWidget->getSuperGraph(), *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
@@ -489,9 +489,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     initializeGraph(newGraph);
     bool result=true;
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
-    GlGraph *glGraph = glW->getGlGraph();
-    initializeGlGraph(glGraph);
-    glGraph->setSuperGraph(newGraph);
+    initializeGlGraph(glW);
+    glW->setSuperGraph(newGraph);
     QtProgress progressBar(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
     result = tlp::importGraph(*plugin, dataSet, &progressBar ,newGraph);
     if (progressBar.state()==TLP_CANCEL || !result ) {
@@ -519,7 +518,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     restoreView();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
-      glW->getGlGraph()->setParameters(glGraphData);
+      glW->setParameters(glGraphData);
   }
   else {
     qWarning("Canceled  Open/import");
@@ -642,7 +641,7 @@ void viewGl::editFind() {
 //**********************************************************************
 void viewGl::setParameters(const DataSet data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  glWidget->getGlGraph()->setParameters(data);
+  glWidget->setParameters(data);
   clusterTreeWidget->setSuperGraph(glWidget->getSuperGraph());
   nodeProperties->setSuperGraph(glWidget->getSuperGraph());
   propertiesWidget->setSuperGraph(glWidget->getSuperGraph());
@@ -742,7 +741,7 @@ void viewGl::outputEPS() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    glWidget->getGlGraph()->outputEPS(64000000,true,s.ascii());
+    glWidget->outputEPS(64000000,true,s.ascii());
   }
 }
 //**********************************************************************
@@ -756,7 +755,7 @@ void viewGl::exportImage(int id) {
   QString s(QFileDialog::getSaveFileName());
   if (s.isNull()) return;    
   int width,height;
-  unsigned char* image = glWidget->getGlGraph()->getImage(width,height);
+  unsigned char* image = glWidget->getImage(width,height);
   QPixmap pm(width,height);
   QPainter painter;
   painter.begin(&pm);
@@ -853,7 +852,7 @@ void viewGl::goInside() {
   node tmpNode;
   edge tmpEdge;
   tlp::ElementType type;
-  if (glWidget->getGlGraph()->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
+  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
     if (type==NODE) {
       SuperGraph *supergraph=glWidget->getSuperGraph();
       MetaGraphProxy *meta=supergraph->getProperty<MetaGraphProxy>("viewMetaGraph");
@@ -868,7 +867,7 @@ void viewGl::ungroup() {
   node tmpNode;
   edge tmpEdge;
   tlp::ElementType type;
-  if (glWidget->getGlGraph()->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
+  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
     if (type==NODE) {
       SuperGraph *supergraph=glWidget->getSuperGraph();
       tlp::openMetaNode(supergraph, tmpNode);
@@ -950,7 +949,7 @@ void viewGl::showDialog(int id){
 ///Redraw the view of the graph
 void  viewGl::redrawView() {
   if (!glWidget) return;
-  glWidget->UpdateGL();
+  glWidget->updateGL();
 }
 //**********************************************************************
 ///Reccenter the layout of the graph
@@ -959,7 +958,7 @@ void viewGl::centerView() {
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  glWidget->getGlGraph()->centerScene();
+  glWidget->centerScene();
   redrawView();
   Observable::unholdObservers();
 }
@@ -970,9 +969,9 @@ void viewGl::restoreView() {
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  glWidget->getGlGraph()->centerScene();
+  glWidget->centerScene();
   redrawView();
-  overviewWidget->setObservedView(glWidget->getGlGraph());
+  overviewWidget->setObservedView(glWidget);
   updateSatutBar();
   Observable::unholdObservers();
 }
@@ -1116,7 +1115,7 @@ void viewGl::filePrint() {
   if (!printer.setup(this)) 
     return;
   int width,height;
-  unsigned char* image = glWidget->getGlGraph()->getImage(width,height);
+  unsigned char* image = glWidget->getImage(width,height);
   QPainter painter(&printer);
   for (int y=0; y<height; y++)
     for (int x=0; x<width; x++) {
@@ -1234,7 +1233,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   if (dataSet!=0) delete dataSet;
   graph->delLocalProperty(name);
   propertiesWidget->setSuperGraph(graph);
-  overviewWidget->setObservedView(glWidget->getGlGraph());
+  overviewWidget->setObservedView(glWidget);
   //  clusterTreeWidget->update();
   //  clusterTreeWidget->setSuperGraph(graph);
   Observable::unholdObservers();
@@ -1274,22 +1273,22 @@ void viewGl::changeLayout(int id) {
   GraphState * g0 = 0;
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
-  Camera cam = glWidget->getGlGraph()->getCamera();
-  Coord scTrans = glWidget->getGlGraph()->getSceneTranslation();
-  Coord scRot = glWidget->getGlGraph()->getSceneRotation();
-  glWidget->getGlGraph()->setInputLayout(name);
+  Camera cam = glWidget->getCamera();
+  Coord scTrans = glWidget->getSceneTranslation();
+  Coord scRot = glWidget->getSceneRotation();
+  glWidget->setInputLayout(name);
   bool result = changeProperty<LayoutProxy>(name,"viewLayout", true, true);
-  glWidget->getGlGraph()->setInputLayout("viewLayout");
-  glWidget->getGlGraph()->setCamera(cam);
-  glWidget->getGlGraph()->setSceneTranslation(scTrans);
-  glWidget->getGlGraph()->setSceneRotation(scRot);
+  glWidget->setInputLayout("viewLayout");
+  glWidget->setCamera(cam);
+  glWidget->setSceneTranslation(scTrans);
+  glWidget->setSceneRotation(scRot);
   if (result) {
     if( force_ratio->isOn() )
       glWidget->getSuperGraph()->getLocalProperty<LayoutProxy>("viewLayout")->perfectAspectRatio();
     //SuperGraph *graph=glWidget->getSuperGraph();
     Observable::holdObservers();
-    glWidget->getGlGraph()->centerScene();
-    overviewWidget->setObservedView(glWidget->getGlGraph());
+    glWidget->centerScene();
+    overviewWidget->setObservedView(glWidget);
     updateSatutBar();
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
@@ -1378,7 +1377,7 @@ void viewGl::mouseChanged(MouseInterface *m) {
     // Active le tracking de la souris sans l'appui de bouton => colorisation des carrés du FFD
     glWidget->setMouseTracking(true);
     //    m->mPaint(glWidget);
-    glWidget->UpdateGL();
+    glWidget->updateGL();
   }
   else
     glWidget->setMouseTracking(false);

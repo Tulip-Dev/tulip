@@ -11,22 +11,22 @@
             </listitem>
 
             <listitem>
-                <para><code>Property</code> : This one is divided in several parts to make a difference between the kind of algorithls you can apply. There are : Selection, Layout, Metric, Colors and Sizes.</para>
+                <para><code>Property</code> : This one is divided in several parts to make a difference between the kind of algorithms you can apply. There are : Selection, Layout, Metric, Colors and Sizes.</para>
             </listitem>
             <listitem>
-                <para><code>Clustering</code> : This menu contains algorihtms for computing subgraphs from your graph. It build an hierarchy of the graph.</para>
+                <para><code>Clustering</code> : This menu contains algorihtms for computing subgraphs from your graph. It builds a hierarchy of the graph.</para>
             </listitem>
             <listitem>
                 <para><code>View</code> : This is composed of the operations about a view. It is possible to redraw, center or restore a view. It provides an access to the dialogs boxes in order to display it again.</para>
             </listitem>
             <listitem>
-                <para><code>Windows</code> : This menu contains two options for the managemen of the views in the workspace : cascade or tile mode.</para>
+                <para><code>Windows</code> : This menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
             </listitem>
             <listitem>
-                <para><code>Options</code> : This enables the use to chack or not options about the display : Force ratio, Map metric, Morphing and Grid.</para>
+                <para><code>Options</code> : This enables the use to check or not options about the display : Force ratio, Map metric, Morphing and Grid.</para>
             </listitem>
             <listitem>
-                <para><code>Help</code> : In this menu, you can find informations about the software and the may to make your fisrt steps with this software.</para>
+                <para><code>Help</code> : In this menu, you can find informations about the software and the way to make your fisrt steps with this software.</para>
             </listitem>
         </itemizedlist>
         </para>
@@ -49,7 +49,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para> <code>Navigation</code> : in this mode, you can deplace, move and turn around the graph in the View window. It is the default mode actived on a view. To differentiate the three motions, you have :
+                <para> <code>Navigation</code> : In this mode, you can move and turn around the graph in the View window. It is the default mode actived on a view. To differentiate the three motions, you have :
                 <keycap>CTRL</keycap> for the <quote>zoom</quote> and rotation around the z axis, <keycap>MAJ</keycap> for the rotation centered by the scene, without keycap the lateral motion on the plan formed with the view of the camera.
                 </para>
             </listitem>
@@ -97,7 +97,7 @@
                     <para><code>Metanode labels</code> : Enables/disables the displaying of metanode(group) labels.</para>
                 </listitem>
                 <listitem>
-                    <para><code>Orthogonal projection</code> : Enables/disables the orthogonal projection, if disable, perpsective projection is used.</para>
+                    <para><code>Orthogonal projection</code> : Enables/disables the orthogonal projection, if disabled, perpsective projection is used.</para>
                 </listitem>
                 <listitem>
                     <para><code>3D edges</code> : Enables/disables the displaying of edges in 3D.</para>
@@ -120,25 +120,25 @@
         </para>
         <sect2 id="property"><title>Property</title>
 	    <para>
-		This window enables to display properties of nodes and edges as array. It is composed of three parts, the first one displays all the values of all nodes or edges in text format using spreed sheets. It is possible to display only the values of selected elements by using the filter option. The user can modify directly a value by clicking on the value in the array. It is possible to set all the nodes or edges value with the <quote>Set all</quote> buttons. If the user is in filter mode, this button will only affect the selected values. An other possibility is to set to the labels the property values by pushing the <quote>To labels</quote> button. The second part is a list of all local and inherited properties of a graph. An inherited properties is a property which belongs to a graph upper in the hierarchy of graph, an other tab. 
+		This window enables to display properties of nodes and edges as array. It is composed of two parts, the first one displays all the values of nodes or edges in text format using spreed sheets. It is possible to display only the values of selected elements by using the filter option. The user can modify directly a value by clicking on the value in the array. It is possible to set all the nodes or edges value with the <quote>Set all</quote> buttons. If the user is in filter mode, this button will only affect the selected values. An other possibility is to set to the labels the property values by pushing the <quote>To labels</quote> button. The second part is a list of all local and inherited properties of a graph. An inherited properties is a property which belongs to a graph upper in the hierarchy of graph, an other tab. 
                 <graphic fileref="images/info-editor.png"/>
 	    </para>
         </sect2>
         <sect2 id="element"><title>Element</title>
             <para>
-                This tab shows informations about an element of the graph : node or edge. At the top, you can found the type of the element and its <quote>id</quote>. to follow, thers is an array for displaying the properties of this elements and the values. It is possible to change the properties with this array.
+                This tab shows informations about an element of the graph : node or edge. At the top, you can found the type of the element and its <quote>id</quote>. To follow, there is an array for displaying the properties of this elements and the values. It is possible to change the properties with this array.
                 <graphic fileref="images/element.png"/>
             </para>
         </sect2>
         <sect2 id="hierar"><title>Hierarchy</title>
             <para>
-                This tab shows the arborescence of the different existing subgraphs and groups. All of them could be created with the tools of Tulip. This hierachy of graphs gives the results of computing from the algorithms of clustering for exemple. 
+                This tab shows the arborescence of the different existing subgraphs and groups for a graph. All of them could be created with the tools of Tulip. This hierachy of graphs gives the results of computing from the algorithms of clustering too. 
                 <graphic fileref="images/hierachy.png"/>
                 By a <quote>clic-right</quote> in the hierarchy display, you can remove, clone, rename, a graph (subgraph or group).
             </para>
         </sect2>
         <sect2 id="stats"><title>Statistics</title>
-    	    <para>The statistic panel is composed of 3 main parts : Computation, Display and Clustering. It allows the user to compute an histogram or a scatter plot from a graph and one up to three metrics. The display part of the panel is used to display on screen the statistics main values (as Average point, Standard deviation, Bounding box, Linear Regression and Eigenvectors). The clustering part is used to display a clustering plane from a statistical value (previously computed) and to separate the graph into two new clusters : what is above the clustering plane (sup) and what is under the clustering plane (inf)</para>
+    	    <para>The statistic panel is composed of three main parts : Computation, Display and Clustering. It allows the user to compute a histogram or a scatter plot from a graph and one up to three metrics. The display part of the panel is used to display on screen the statistics main values (as Average point, Standard deviation, Bounding box, Linear Regression and Eigenvectors). The clustering part is used to display a clustering plane from a statistical value (previously computed) and to separate the graph into two new clusters : what is above the clustering plane (sup) and what is under the clustering plane (inf)</para>
 	    <figure>
 		<title>Computation Tab</title>
 		<graphic fileref="images/Computation.png"/>
@@ -157,7 +157,7 @@
         <para>
             <graphic fileref="images/3d-view.png"/>
 
-            The 3D graph view sub-window is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operation selected in the tool bar by directly clicking on the drawing of the graph. If the user let the mouse during few seconds on a node, a pop-up window displays informations about it. When the drawed graph is huge, the displaying is splitted in parts, so Tulip only draw thousand nodes and edges each times. This enables to navigate in real time in the graph even if the graphics hardware is slow.
+            The 3D graph view sub-window is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node, a pop-up window displays informations about it. When the drawed graph is huge, the displaying is splitted in parts, so Tulip only draw thousand nodes and edges each times. This enables to navigate in real time in the graph even if the graphics hardware is slow.
         </para>
         <sect2 id="pop-up"><title>Pop-up Window of graph view</title>
             <para>This pop-up menu contains quickly access to make simple operations : go inside (for Metagraphs), New 3D View, Delete (the object under the pointer) , Select (the object under the pointer) , Add/Remove selection. </para>

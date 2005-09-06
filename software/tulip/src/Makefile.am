@@ -32,7 +32,6 @@ BUILT_SOURCES = \
 	moc_OverviewData.cpp\
 	TabWidgetData.cpp \
 	moc_TabWidgetData.cpp \
-	NavigateGlGraphData.cpp \
 	InfoDialogData.cpp \
 	AppStartUpData.cpp \
 	ToolBarData.cpp \
@@ -49,8 +48,6 @@ BUILT_SOURCES = \
 	moc_viewGl.cpp \
 	moc_ToolBar.cpp \
 	moc_ToolBarData.cpp \
-	moc_NavigateGlGraph.cpp \
-	moc_NavigateGlGraphData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_NavigateButton.cpp \
@@ -68,8 +65,6 @@ nodist_tulip_SOURCES =  \
 	moc_OverviewData.cpp\
 	TabWidgetData.cpp \
 	moc_TabWidgetData.cpp \
-	NavigateGlGraphData.cpp \
-	moc_NavigateGlGraph.cpp \
 	InfoDialogData.cpp \
 	AppStartUpData.cpp \
 	ToolBarData.cpp \
@@ -85,7 +80,6 @@ nodist_tulip_SOURCES =  \
 	moc_viewGl.cpp \
 	moc_ToolBar.cpp \
 	moc_ToolBarData.cpp \
-	moc_NavigateGlGraphData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_NavigateButton.cpp \
@@ -100,7 +94,6 @@ dist_tulip_SOURCES = \
 	viewGl.cpp \
 	Application.cpp \
 	geometrie2D.cpp \
-	NavigateGlGraph.cpp \
 	NavigateButton.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \

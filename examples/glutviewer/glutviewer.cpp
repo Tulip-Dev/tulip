@@ -12,18 +12,21 @@ using namespace std;
 static int win;
 
 //==============================================================================
-class GLGlutStrategy: public GlGraphStrategy {
+class GLGlut: public GlGraph {
 public:
-  GlGraph *glgraph;
-  GLGlutStrategy(string name, const int width=640, const int height=480) {
+  GLGlut(string name, const int width=640, const int height=480) {
     drawing=false;
+    makeCurrent();
   }
-  virtual ~GLGlutStrategy(){}
-  void MakeCurrent() {glutSetWindow(win);}
-  void UpdateGL(){
-    glgraph->draw();
+  virtual ~GLGlut(){}
+  void makeCurrent() {glutSetWindow(win);}
+
+  void updateGL(){
+    draw();
   }
+
   void setDoubleBuffering(bool b) {}
+
   bool timerIsActive() {return drawing;}
   int timerStart(int msec, bool sshot=false) {
     drawing=true;
@@ -32,15 +35,14 @@ public:
   void timerStop() {
     drawing=false;
   }
-  void mPaint(GlGraph *g) {}
+  void mPaint() {}
   bool drawing;
 private:
   int width,height;
 };
 //=============================================
 static int width(640), height(480);
-static GLGlutStrategy *glGlutScreen;
-static GlGraph *glgraph;
+static GLGlut *glGlutScreen;
 static int frame=0;
 static GLint timer;
 static int rx=0,ry=0,rz=0;
@@ -52,11 +54,11 @@ using namespace tlp;
 //=============================================
 void idle(void) {  
   if (glGlutScreen->drawing) {
-    glGlutScreen->drawing = !glgraph->drawPart();
+    glGlutScreen->drawing = !glGlutScreen->drawPart();
     glutSwapBuffers();
   }
   else {
-    glgraph->rotateScene(rx*2,ry*2,rz*2);
+    glGlutScreen->rotateScene(rx*2,ry*2,rz*2);
     if (frameRateDisplaying) {
       if (frame%20==0) {
 	GLint t = glutGet(GLUT_ELAPSED_TIME);
@@ -84,10 +86,10 @@ static void Key(unsigned char key, int x, int y) {
   case 27:
     exit(1);
   case '+':
-    glgraph->zoom(2);
+    glGlutScreen->zoom(2);
     break;
   case '-':
-    glgraph->zoom(-2);
+    glGlutScreen->zoom(-2);
     break;
   case 'x':
     rx=(rx+1)%2;
@@ -99,29 +101,29 @@ static void Key(unsigned char key, int x, int y) {
     rz=(rz+1)%2;
     break;
   case 'e':
-    glgraph->setEdge3D(!glgraph->isEdged3D());
-    printMessage("3D edges",glgraph->isEdged3D());
+    glGlutScreen->setEdge3D(!glGlutScreen->isEdged3D());
+    printMessage("3D edges",glGlutScreen->isEdged3D());
     break;
   case 'a':
-    glgraph->setViewArrow(!glgraph->isViewArrow());
-    printMessage("Arrow ",glgraph->isViewArrow());
+    glGlutScreen->setViewArrow(!glGlutScreen->isViewArrow());
+    printMessage("Arrow ",glGlutScreen->isViewArrow());
     break;
   case 'o':
-    glgraph->setViewOrtho(!glgraph->isViewOrtho());
-    printMessage("Projection orthogonal",glgraph->isViewOrtho());
+    glGlutScreen->setViewOrtho(!glGlutScreen->isViewOrtho());
+    printMessage("Projection orthogonal",glGlutScreen->isViewOrtho());
     break;
   case 'l':
-    glgraph->setViewLabel(!glgraph->isViewLabel());
-    printMessage("Labels",glgraph->isViewLabel());
-    glgraph->setFontsType(1);
+    glGlutScreen->setViewLabel(!glGlutScreen->isViewLabel());
+    printMessage("Labels",glGlutScreen->isViewLabel());
+    glGlutScreen->setFontsType(1);
     break;
   case 's':
-    glgraph->setViewStrahler(!glgraph->isViewStrahler());
-    printMessage("StrahlerMode",glgraph->isViewStrahler());
+    glGlutScreen->setViewStrahler(!glGlutScreen->isViewStrahler());
+    printMessage("StrahlerMode",glGlutScreen->isViewStrahler());
     break;
   case 'E':
-    glgraph->setDisplayEdges(!glgraph->isDisplayEdges());
-    printMessage("Edge displaying", glgraph->isDisplayEdges());
+    glGlutScreen->setDisplayEdges(!glGlutScreen->isDisplayEdges());
+    printMessage("Edge displaying", glGlutScreen->isDisplayEdges());
     break;
   case 'b':
     frameRateDisplaying=!frameRateDisplaying;
@@ -132,7 +134,7 @@ static void Key(unsigned char key, int x, int y) {
     break;
   case 'I':
     incremental=!incremental;
-    glgraph->setIncrementalRendering(incremental);
+    glGlutScreen->setIncrementalRendering(incremental);
     printMessage("Incremental rendering",incremental);
     break;
   default:
@@ -156,12 +158,12 @@ void importGraph(const string &filename, GlGraph &glGraph) {
 void Reshape(int widt, int heigh) {
   width=widt;
   height=heigh;
-  glgraph->changeViewport(0,0,width,height);
+  glGlutScreen->changeViewport(0,0,width,height);
 }
 //=============================================
 void Draw(void) {
-  glgraph->draw();
-  if (!glgraph->isIncrementalRendering()) 
+  glGlutScreen->draw();
+  if (!glGlutScreen->isIncrementalRendering()) 
     glutSwapBuffers();
   else
     idle();
@@ -213,15 +215,13 @@ int main (int argc, char **argv) {
     exit(1);
   }
 
-  glGlutScreen = new GLGlutStrategy("", width, height);
-  glgraph = new GlGraph(*glGlutScreen);
-  glGlutScreen->glgraph = glgraph;
-  glgraph->initializeGL();
+  glGlutScreen = new GLGlut("", width, height);
+  glGlutScreen->initializeGL();
   glutIdleFunc(idle);
-  importGraph(argv[1], *glgraph);
-  glgraph->centerScene();
+  importGraph(argv[1], *glGlutScreen);
+  glGlutScreen->centerScene();
   timer = glutGet(GLUT_ELAPSED_TIME);
-  glgraph->setIncrementalRendering(false);
+  glGlutScreen->setIncrementalRendering(false);
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);

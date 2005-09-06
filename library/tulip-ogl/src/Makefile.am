@@ -40,10 +40,10 @@ libtulip_ogl_la_SOURCES = \
         GlGraphSelection.cpp \
         GlGraphDrawGraph.cpp \
         GlGraphMouse.cpp \
+	GlGraphNavigate.cpp \
         GlGraphMakeObject.cpp \
 	GlGraphTextureProxy.cpp \
         GlGraphSetGet.cpp \
-        GlGraphNavigate.cpp \
         GlGraphInit.cpp \
 	GlAugmentedDisplay.cpp \
 	GlADPoint.cpp \

@@ -681,8 +681,8 @@ namespace tlp
 	supergraph->delLocalProperty("Scatter Plot");
       }
 
-    glGraphWidget->getGlGraph()->setDisplayEdges(false);
-    glGraphWidget->getGlGraph()->goodScale();
+    glGraphWidget->setDisplayEdges(false);
+    glGraphWidget->goodScale();
 
     if (dataSet != 0) 
       delete dataSet;
@@ -801,7 +801,7 @@ namespace tlp
       glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
 
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     //  cout << " ...[END]" << endl;
   }
@@ -855,7 +855,7 @@ namespace tlp
       glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
 
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     // cout << " ...[END]" << endl;
   }
@@ -909,7 +909,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(AABB);
 
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     // cout << " ...[END]" << endl;
   }
@@ -939,7 +939,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(linearRegression);
 
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     // cout << " ...[END]" << endl;
   }
@@ -990,7 +990,7 @@ namespace tlp
 	for(int i=0; i < 3; i++)
 	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
       }
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     // cout << " ...[END]" << endl;
   }
@@ -1075,7 +1075,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
 
-    glGraphWidget->UpdateGL();
+    glGraphWidget->updateGL();
 
     // cout << " ...[END]" << endl;
   }

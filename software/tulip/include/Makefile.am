@@ -7,7 +7,6 @@ BUILT_SOURCES = \
 	TabWidgetData.h\
 	AppStartUpData.h\
 	InfoDialogData.h\
-	NavigateGlGraphData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
 	View3DSetupData.h\
@@ -21,7 +20,6 @@ nodist_noinst_HEADERS = \
 	TabWidgetData.h\
 	AppStartUpData.h\
 	InfoDialogData.h\
-	NavigateGlGraphData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
 	View3DSetupData.h\
@@ -37,7 +35,6 @@ noinst_HEADERS = \
 	geometrie2D.h\
 	InfoDialog.h\
 	NavigateButton.h\
-	NavigateGlGraph.h\
 	PropertyDialog.h\
 	ToolBar.h\
 	View3DSetup.h\
