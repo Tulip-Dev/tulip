@@ -152,8 +152,6 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )
   Observable::unholdObservers();
   morph = new Morphing();
   //  cerr << "Finished" << endl << flush;
-  enableElements(false);
-
   // initialisaton of Qt Assistant, the path should be in $PATH
   assistant = new QAssistantClient("", this);
 
@@ -184,8 +182,7 @@ void viewGl::enableElements(bool enabled) {
   filePrintAction->setEnabled(enabled);
   grid_option->setEnabled(enabled);
 
-  elementsDisabled = !elementsDisabled;
-  
+  elementsDisabled = !enabled;
 }
 //**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
@@ -243,6 +240,7 @@ void viewGl::startTulip() {
   buildMenus();
   overviewWidget->view->getGlGraph()->initializeGL();
   this->show();
+  enableElements(false);
   int argc = ((QApplication *)qApp)->argc();
   if (argc>1) {
     char ** argv = ((QApplication *)qApp)->argv();
@@ -295,31 +293,6 @@ void viewGl::windowActivated(QWidget *w) {
 //**********************************************************************
 GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   //Create 3D graph view
-  /*<<<<<<< viewGl.cpp
-  cerr << __PRETTY_FUNCTION__ << endl;
-
-  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View", graph);
-
-  glWidget1->move(0,0);
-  glWidget1->setCaption(name);
-  glWidget1->show();
-
-  GlGraphWidget *glWidget = glWidget1->getGlGraphWidget();
-
-  glWidget1->setMinimumSize(0, 0);
-  glWidget1->setMaximumSize(32767, 32767);
-  glWidget1->setFocusPolicy(QWidget::NoFocus);
-  glWidget1->setBackgroundMode(QWidget::PaletteBackground);  
-
-  glWidget ->installEventFilter(this);
-  glWidget ->setMouse(mouseToolBar->getCurrentMouse());
-
-  =======*/
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  //  NavigateGlGraph *glWidget1 = new NavigateGlGraph(workspace, "3D Graph View", graph);
-  //  glWidget1->move(0,0);
-  //  glWidget1->setCaption(name);
-  //  glWidget1->show();
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
   glWidget->setSuperGraph(graph);
   glWidget->move(0,0);
@@ -332,7 +305,6 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setBackgroundMode(QWidget::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
-  //>>>>>>> 1.4
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
 
@@ -395,7 +367,6 @@ void viewGl::fileSave() {
   if (!glWidget) return;
   if (openFiles.find((unsigned int)glWidget)==openFiles.end() || 
       (openFiles[(unsigned int)glWidget] == "")) {
-    SuperGraph *graph = glWidget->getSuperGraph()->getRoot();
     fileSaveAs();
     return;
   }
@@ -932,15 +903,15 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
     QMouseEvent *me = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) obj;
     if (me->button()==RightButton) {
-      glw->setContextCoord(me->x(), me->y());
+      //      glw->setContextCoord(me->x(), me->y());
       mouseClicX = me->x();
       mouseClicY = me->y();
       QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
       contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
       contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
-      contextMenu->insertItem(tr("Delete"), glw, SLOT(contextDel()));
-      contextMenu->insertItem(tr("Select"), glw, SLOT(contextSelect()));
-      contextMenu->insertItem(tr("Add/Remove selection"), glw, SLOT(contextAddRemoveSelection()));
+      //      contextMenu->insertItem(tr("Delete"), glw, SLOT(contextDel()));
+      //      contextMenu->insertItem(tr("Select"), glw, SLOT(contextSelect()));
+      //      contextMenu->insertItem(tr("Add/Remove selection"), glw, SLOT(contextAddRemoveSelection()));
       SuperGraph *supergraph=glWidget->getSuperGraph();
       if (supergraph != supergraph->getRoot())
 	contextMenu->insertItem(tr("ungroup"), this, SLOT(ungroup()));
@@ -957,7 +928,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 //**********************************************************************
 void viewGl::focusInEvent ( QFocusEvent * ) {
 }
-
+//**********************************************************************
 void viewGl::showDialog(int id){
   string name(dialogMenu.text(id).ascii());
   if (name=="Mouse Tool Bar") {
@@ -1173,7 +1144,6 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
 	break;
     }
   }
-  
   if(i == int(windows.count())) {
     int answer = QMessageBox::question(this, "Save", "Do you want to save this graph?",  QMessageBox::Yes,  QMessageBox::No, 
 				       QMessageBox::Cancel);
@@ -1187,7 +1157,6 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     nodeProperties->setSuperGraph(0);
     statsWidget->setGlGraphWidget(0);
     w->setSuperGraph(0);
-
     delete root;
   }
   
@@ -1397,17 +1366,13 @@ void viewGl::changeSizes(int id) {
   initObservers();
 }
 //**********************************************************************
-void viewGl::gridOptions()
-{
+void viewGl::gridOptions() {
   if (gridOptionsWidget == 0)
     gridOptionsWidget = new GridOptionsWidget(this);
-
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
-
   gridOptionsWidget->show();
 }
-
- 
+//**********************************************************************
 void viewGl::mouseChanged(MouseInterface *m) {
   if (dynamic_cast<MouseMoveSelection*>(m)) {
     // Active le tracking de la souris sans l'appui de bouton => colorisation des carrés du FFD
@@ -1418,3 +1383,4 @@ void viewGl::mouseChanged(MouseInterface *m) {
   else
     glWidget->setMouseTracking(false);
 }
+//**********************************************************************
