@@ -5,7 +5,6 @@ nobase_include_HEADERS = \
 	tulip/OcclusionTest.h\
 	tulip/Camera.h\
 	tulip/GlGraph.h\
-	tulip/GlGraphStrategy.h\
 	tulip/GlLines.h\
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
