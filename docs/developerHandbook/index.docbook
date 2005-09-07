@@ -18,6 +18,24 @@
 &Graph_Format;
 &Prog_Guides;
 &Doc_Guides;
+<!--<bibliography><title>Bibliographical References</title>
+    <biblioentry xreflabel="Kites75">
+  <authorgroup>
+    <author><firstname>Andrea</firstname><surname>Bahadur</surname></author>
+    <author><firstname>Mark</firstname><surname>Shwarek</surname></author>
+  </authorgroup>
+  <copyright><year>1974</year><year>1975</year>
+     <holder>Product Development International Holding N. V.</holder>
+     </copyright>
+  <isbn>0-88459-021-6</isbn>
+  <publisher>
+    <publishername>Plenary Publications International, Inc.</publishername>
+  </publisher>
+  <title>Kites</title>
+  <subtitle>Ancient Craft to Modern Sport</subtitle>
+  <pagenums>988-999</pagenums>
+    </biblioentry>
+</bibliography>-->
 </book>
 
 

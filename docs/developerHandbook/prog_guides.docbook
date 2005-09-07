@@ -2,7 +2,7 @@
     <!--======  GENERALITES   ========================================================    -->
     <sect1 id="generalites"><title>Generalities</title>
         <para>The presentation of a program indicates the quality of programming. This section relates to the common recommendations for the Tulip project. Each new programmer has to follow the expressed rules.</para>
-        <para>In the header files, the programmer should write a headline containing : his name with personal  email adress (for students), the date of the last modifications, a reminder of the licence <acronym>GPL</acronym> and the references of the code (for example, an algorithm). Header files must include a construction that prevents multiple inclusions. The convention is an all uppercase construction of the file name, the h suffix and prefixed by <quote>Tulip</quote>, separated by an underscore.
+        <para>In the header files, the programmer should write a headline containing : his name with personal  email adress (for students), the date of the last modifications, a reminder of the licence <acronym>GPL</acronym><footnote><para>General Public License</para></footnote> and the references of the code (for example, an algorithm). Header files must include a construction that prevents multiple inclusions. The convention is an all uppercase construction of the file name, the h suffix and prefixed by <quote>Tulip</quote>, separated by an underscore.
 <programlisting>
 #ifndef Tulip_MYTYPE_H
 #define Tulip_MYTYPE_H
@@ -25,7 +25,7 @@ namespace tlp{
 </programlisting>
 </para>
 
-        <para>Tulip is dependent of the Standard Template Library, <acronym>STL</acronym>. It provides a set of performing objects that you should use : vector, map, string, ... It exists two ways to use it. In the <filename>.h</filename> or <filename>.cxx</filename> files, you should preface them with the <code>std</code> namespace (e.g. <code>std::string s;</code>). You will refer them with the fullname : namespace and class name. For the <filename>.cpp</filename> files, you can use the short name if you insert the line at the top of your document <code>using namespace std;</code>.</para>
+        <para>Tulip is dependent of the <acronym>STL</acronym><footnote><para>Standard Template Library</para></footnote>. It provides a set of performing objects that you should use : vector, map, string, ... It exists two ways to use it. In the <filename>.h</filename> or <filename>.cxx</filename> files, you should preface them with the <code>std</code> namespace (e.g. <code>std::string s;</code>). You will refer them with the fullname : namespace and class name. For the <filename>.cpp</filename> files, you can use the short name if you insert the line at the top of your document <code>using namespace std;</code>.</para>
 <para>
 In a header file (<filename>.h</filename> or <filename>.cxx</filename>) :
 <programlisting>

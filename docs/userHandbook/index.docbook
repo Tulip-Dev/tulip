@@ -12,6 +12,19 @@
         <para>The research by the information visualization community show clearly that using a visual representation of data-sets enables faster analysis by the end users. Tulip, imagined by David AUBER, is a contribution of the area of information visualization, <quote>InfoViz</quote>. Even if the Tulip framework enables the visualization, the drawing and the edition of small graphs, all the parts of the framework have been built in order to be able to visualize graphs having to 1.000.000 elements. A visualization system must draw and display huge graphs, enables to navigate through geometric operations as well as extracts subgraphs of the data and allows to change the representation of the results obtained by filtering. 
         <graphic fileref="images/tulip-screen.png"/>
         </para>
+
+<!--It manages graphs with up to 1,000,000 elements (node and edges). It provides a rich set of basic services for operations on graphs: metric computation, node and edge, layout, selection, extraction of view and subgraphs, and labeling of nodes and edges with arbitrary sets of attributes. Further operations related to the application domain are provided by means of a software plugins. Any program using Tulip can add to the core features by providing its own domain-speciﬁc plugins.
+
+The Tulip framework ... The main relevant features in this software are:
+     - a powerful kernel in terms of time and memory complexity, other.
+     - extensibility by plugins without recompiling,
+     - possibility to map texture without loosing “performance”,
+     - easy management of clusters.
+
+Managing the colors of nodes in the interface is done by mapping attribute values on RGB or HSV values or size values. Two methods are proposed :
+     - linear mapping,
+     - distribution mapping.
+1 Introduction-->
 </chapter>
 &Graph_Interface;
 &Functions;

@@ -76,10 +76,11 @@ A.elRef { font-weight: bold }
 A.code { text-decoration: none; font-weight: normal; color: #4444ee }
 A.codeRef { font-weight: normal; color: #4444ee }
 A:hover { text-decoration: underline}
-DL.el { margin-left: -1cm }
+DL.el { margin-left: -1cm}
 DIV.fragment { width: 100%; border: none; background-color: #ffffee; padding: 12px }
 DIV.ah { background-color: #41597A; font-weight: bold; color: #ffffff; margin-bottom: 3px; margin-top: 3px }
 TABLE.mdTable { background-color: #f8f8f8; border: 1px solid #d7d7d7; }
+TD{font-size: 11pt}
 TD.mdRow { padding: 8px 20px; }
 TD.md { font-weight: bold; font-size:12pt}
 TD.mdname1 { font-weight: bold; color: #602020; font-size:12pt}

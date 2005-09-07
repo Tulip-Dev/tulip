@@ -96,14 +96,14 @@ man-plugins.doxygen: general general-man
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
-profile.dcf: tulip-plugins/index.html ../common/CatalogManager.properties dox-profile.xsl
+profile.dcf: tulip-plugins ../common/CatalogManager.properties dox-profile.xsl
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf tulip-plugins.tag  dox-profile.xsl
 
-allPlugins.html: tulip-plugins/index.html ../common/CatalogManager.properties dox-html.xsl
+allPlugins.html: tulip-plugins ../common/CatalogManager.properties dox-html.xsl
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	 com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\

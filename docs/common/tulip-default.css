@@ -40,7 +40,7 @@ body {
   padding-left: 1em;
 }
 
-.sect1, .chapter, .synopsis, .appendix, .preface, .article, .refsect1, .index, .glossary, .section {
+.sect1, .chapter, .synopsis, .appendix, .preface, .article, .refsect1, .index, .glossary, .section, .biblioentry {
   padding: 1em;
 }
 
