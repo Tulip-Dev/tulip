@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.12 $)
+AC_REVISION($Revision: 1.13 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -77,7 +77,7 @@ AC_MSG_WARN([
                 be generated])
 fi
 
-dnl check for xmllint
+dnl check for pdfxmltex
 AC_PATH_PROG(PDFXMLTEX, pdfxmltex, not_found)
 if test "$PDFXMLTEX" = "not_found"; then
 AC_MSG_WARN([
@@ -178,7 +178,7 @@ AM_CONDITIONAL(LIBXML2, test x$XML_LIBS != x)
 dnl debug flag
 AC_ARG_ENABLE(debug,
 [  --enable-debug          Compilation flags to allow debugging],
-  CXXFLAGS="-O0 -Wall -g -pipe ",  CXXFLAGS="-DNDEBUG -O3 -funroll-all-loops -pipe " 
+  CXXFLAGS="-O0 -Wall -g -pipe ",  CXXFLAGS="-DNDEBUG -O3 -funroll-loops -pipe " 
 )
 
 dnl check if we build tlprender, option and presence of OSMesa
