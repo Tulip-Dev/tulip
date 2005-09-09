@@ -8,6 +8,15 @@ To compile the documentation :
 	make pdf (optional, just for a pdf version of the Handbooks)
 	make install
 
+==============================================================================================
+!!! Note that it is possible to compile without the Internet. 
+If you have a problem and the compilation failed, it is probably because some files try it. 
+To resolve it, you can comment the line 
+	<!DOCTYPE catalog PUBLIC "-//OASIS//DTD XML Catalogs V1.0//EN"
+            "http://www.oasis-open.org/commitees/entity/release/1.0/catalog.dtd">
+
+So for Fedora Core 4, change the files /etc/xml/catalog and /usr/share/sgml/docbook/xmlcatalog
+==============================================================================================
 
 - Tulip Developer Handbook
 - Tulip User Manual
@@ -31,3 +40,5 @@ It exists two directories : devTeamDoxygen for the complete documentation and do
      - doxygen
      - dot (optional) : graphiz package, available in Fedora and Debian	
 
+
+written by Sophie BARDET, sophie.bardet@gmail.com

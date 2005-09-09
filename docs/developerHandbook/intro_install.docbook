@@ -83,18 +83,19 @@ it or regenerate <code>configure</code> using a newer version of <code>autoconf<
                 <term><code>--prefix</code> = <emphasis>value</emphasis></term>
                 <listitem><para>The <emphasis>value</emphasis> is the path where you want to install Tulip. <filename>bin, include, lib</filename> directories was created in this location. By default, it is <filename>/usr/local/</filename>.</para></listitem>
             </varlistentry>
-        </variablelist>
-        <variablelist>
             <varlistentry>
                 <term><code>--enable-debug</code></term>
                 <listitem><para>Add compilation flags to allow debugging.</para></listitem>
             </varlistentry>
-        </variablelist>
-        <variablelist>
             <varlistentry>
-                <term><code>--enable-maintainer-mode</code></term>
+                <term><code>--enable-maintainer-mode</code> = value</term>
                 <listitem><para>Enable make rules and dependencies not useful (and sometimes confusing) to the casual installer. For example, if you modify a <filename>Makefile.am</filename> file, it is detected and the <filename>Makefile</filename> is updated.</para></listitem>
             </varlistentry>
+            <varlistentry>
+                <term><code>--CXXFLAGS</code></term>
+                <listitem><para>Enable to specify special tags for the g++ compiler. It is an important part to have great performings. For example, you can specify the architecture of your PC : --CXXFLAGS="-DNDEBUG -O3 --funroll-loops <code>-mtune=pentium4 -narch=pentium4</code> -pipe". For more informations about the options of compilations for g++, see the web site of gcc, <ulink url="http://gcc.gnu.org/onlinedocs/gcc-4.0.1/gcc/Submodel-Options.html#Submodel-Options">here</ulink>.</para></listitem>
+            </varlistentry>
         </variablelist>
+        
     </sect1>
 </chapter>
