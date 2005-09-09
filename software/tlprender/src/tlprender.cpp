@@ -61,17 +61,16 @@ static void parseCommandLine(int, char **);
 static void help() __attribute__ ((noreturn));
 
 //==============================================================================
-class GLOffscreenStrategy: public GlGraphStrategy {
+class GLOffscreen: public GlGraph {
 private:
   int width,height;
   OSMesaContext osContext;
   GLubyte *buffer;
 public:
-  GlGraph *glgraph;
-  GLOffscreenStrategy(const int width=640, const int height=480):
-    GlGraphStrategy(),
-    width(width), height(height),
-    glgraph(NULL)
+  //GlGraph *glgraph;
+  GLOffscreen(const int width=640, const int height=480):
+    GlGraph(),
+    width(width), height(height)
   {
     buffer = new GLubyte [width * height * 4];
     osContext = OSMesaCreateContext(OSMESA_RGBA, NULL);
@@ -86,16 +85,16 @@ public:
     }
   }
   
-  virtual ~GLOffscreenStrategy(){
+  virtual ~GLOffscreen(){
     OSMesaDestroyContext(osContext);
     delete [] buffer;
   }
-  void MakeCurrent() {
+  void makeCurrent() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     OSMesaMakeCurrent(osContext, buffer, GL_UNSIGNED_BYTE, width, height);
   }
   
-  void UpdateGL() {
+  void updateGL() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     glDrawBuffer(GL_FRONT_LEFT);
     glFlush();
@@ -107,7 +106,7 @@ public:
   int timerStart(int msec, bool sshot=false) {return 0;}
   void timerStop() {}
 
-  void mPaint(GlGraph *g) {}
+  void mPaint() {}
   void outputSetText(const string &s) {}
   const string outputGetText() {return string("");}
 
@@ -326,19 +325,16 @@ int main (int argc, char **argv) {
   tlp::loadPlugins(&plug);   // library side plugins
   loadPlugins(&plug);   // software side plugins, i.e. glyphs
 
-  GLOffscreenStrategy glOffscreen(width, height);
-  GlGraph glGraph(glOffscreen);
-  glOffscreen.glgraph = &glGraph;
+  GLOffscreen glOffscreen(width, height);
 
-  //  glGraph.initializeGL();
-  importGraph(graphFile, importPluginName, glGraph);
+  importGraph(graphFile, importPluginName, glOffscreen);
   
   if (layoutSpecified) {
     bool resultBool=false, cached=false;
     string errorMsg;
     if (LayoutProxy::factory.exists(layoutName)) {
-      LayoutProxy *myLayout = glGraph.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-      resultBool = glGraph.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
+      LayoutProxy *myLayout = glOffscreen.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+      resultBool = glOffscreen.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;
         exit(LAYOUT_ERROR);
@@ -347,7 +343,7 @@ int main (int argc, char **argv) {
         myLayout->resetBoundingBox();
         myLayout->center();
         myLayout->notifyObservers();
-        glGraph.centerScene();
+        glOffscreen.centerScene();
       }
     }
     else {
@@ -356,8 +352,8 @@ int main (int argc, char **argv) {
     }
   }
   
-  glGraph.setIncrementalRendering(false);
-  glGraph.draw();
+  glOffscreen.setIncrementalRendering(false);
+  glOffscreen.draw();
 
   //write image
   imageWriter = tlprender::ImageWriter::getImageWriter(imageFormat, glOffscreen.getImageBuffer(), width, height);
@@ -381,14 +377,14 @@ int main (int argc, char **argv) {
     buffer = new GLfloat[BUFFERSIZE];
     glFeedbackBuffer(BUFFERSIZE, GL_3D, buffer);
     glRenderMode(GL_FEEDBACK);
-    glGraph.draw();
+    glOffscreen.draw();
 
     int size = glRenderMode(GL_RENDER);
     if (size < 0) {
       cerr << programName << ": Problem during Feedback mode. Cannot compute HTML page" << endl;
       exit(HTML_ERROR);
     }
-    else  outputPolygons(size, glGraph);
+    else  outputPolygons(size, glOffscreen);
     
     delete[] buffer;
   }
@@ -398,9 +394,9 @@ int main (int argc, char **argv) {
     ostream *os = new ofstream(saveTLPFile.c_str());
     StructDef parameter = tlp::exportFactory.getParam("tlp");
 
-    dataSet.set("displaying", glGraph.getParameters());
+    dataSet.set("displaying", glOffscreen.getParameters());
 
-    if (!tlp::exportGraph(glGraph.getSuperGraph(), *os, "tlp", dataSet, NULL)) {
+    if (!tlp::exportGraph(glOffscreen.getSuperGraph(), *os, "tlp", dataSet, NULL)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }
