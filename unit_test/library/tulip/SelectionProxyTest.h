@@ -20,6 +20,7 @@ public:
   void testSetGet();
   void testSetGet(bool);
   void testCopy();
+  void testIterators();
   static CppUnit::Test *suite();
 };
 

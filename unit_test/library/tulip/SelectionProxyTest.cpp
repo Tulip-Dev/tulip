@@ -30,6 +30,32 @@ void SelectionProxyTest::tearDown() {
   delete graph;
 }
 //==========================================================
+void SelectionProxyTest::testIterators() {
+  selection->setAllNodeValue(true);
+  selection->setAllEdgeValue(true);
+  {
+    Iterator<node> *itSG = graph->getNodes();
+    Iterator<node> *itSE = selection->getNodesEqualTo(true);
+    while (itSG->hasNext() && itSE->hasNext()) {
+      CPPUNIT_ASSERT(itSG->next()==itSE->next());
+    }
+    CPPUNIT_ASSERT(!itSG->hasNext());
+    CPPUNIT_ASSERT(!itSE->hasNext());
+    delete itSG; delete itSE;
+  }
+  {
+    Iterator<edge> *itSG = graph->getEdges();
+    Iterator<edge> *itSE = selection->getEdgesEqualTo(true);
+    while (itSG->hasNext() && itSE->hasNext()) {
+      CPPUNIT_ASSERT(itSG->next()==itSE->next());
+    }
+    CPPUNIT_ASSERT(!itSG->hasNext());
+    CPPUNIT_ASSERT(!itSE->hasNext());
+    delete itSG; delete itSE;
+  }
+  
+}
+//==========================================================
 void SelectionProxyTest::testSetAll(bool value) {
   selection->setAllNodeValue(value);
   selection->setAllEdgeValue(value);
@@ -124,6 +150,8 @@ void SelectionProxyTest::testSetGet() {
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SelectionProxy" );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators", 
+								      &SelectionProxyTest::testIterators ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 
 								      &SelectionProxyTest::testSetAll ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test set/get", 

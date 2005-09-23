@@ -212,6 +212,7 @@ int main (int argc, char **argv) {
   glutInitWindowSize( width, height);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL);
   if ((win=glutCreateWindow("Tulip Glut Viewer")) == GL_FALSE) {
+    cerr << "Impossible to create the new window" << endl;
     exit(1);
   }
 
