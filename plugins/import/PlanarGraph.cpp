@@ -17,23 +17,7 @@ namespace {
     HTML_HELP_DEF( "type", "int" ) \
     HTML_HELP_DEF( "default", "100" ) \
     HTML_HELP_BODY() \
-    "This parameter defines the amount of node used to build the planr graph graph." \
-    HTML_HELP_CLOSE(),
-
-    // degree
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
-    HTML_HELP_DEF( "default", "10" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the number of edges used to build the planar graph." \
-    HTML_HELP_CLOSE(),
-
-    // degree
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "false" ) \
-    HTML_HELP_BODY() \
-    "If true the graph will be connected." \
+    "This parameter defines the number of nodes used to build the planr graph graph." \
     HTML_HELP_CLOSE(),
   };
 }
@@ -41,22 +25,16 @@ namespace {
 //=============================================================
 struct PlanarGraph:public ImportModule {
   PlanarGraph(ClusterContext context):ImportModule(context) {
-    addParameter<int>("nodes",paramHelp[0],"200");
-    addParameter<int>("edges",paramHelp[1],"10");
-    addParameter<bool>("connected",paramHelp[2],"false");
+    addParameter<int>("nodes", paramHelp[0], "20");
   }
   ~PlanarGraph(){}
   
   bool import(const string &name) {
-    int nbNodes  = 200;
-    int nbEdges  = 10;
-    bool enableLongEdge = false;
+    int nbNodes  = 20;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
-      dataSet->get("edges", nbEdges);
-      dataSet->get("connected", enableLongEdge);
     }
-    
+    if (nbNodes < 3) nbNodes = 3;
     srand(clock()); 
     LayoutProxy *newLayout = superGraph->getLocalProperty<LayoutProxy>("viewLayout");
     SizesProxy  *newSize   = superGraph->getLocalProperty<SizesProxy>("viewSize");
@@ -69,10 +47,17 @@ struct PlanarGraph:public ImportModule {
     for (int i=0; i<nbNodes; ++i) {
       unsigned int x;
       unsigned int y;
+      bool ok = false;
       do {
 	x = rand()%nbNodes;
 	y = rand()%nbNodes;
-      } while ( !(matrix.find(x) == matrix.end() || matrix[x].find(y)==matrix[x].end()) ); 
+	if (matrix.find(x) == matrix.end())
+	  ok = true;
+	else 
+	  if (matrix[x].find(y)==matrix[x].end())
+	    ok = true;
+	
+      } while ( !ok);
       matrix[x][y]=true;
       graph[i] = superGraph->addNode();
       coords[i] = Coord(x + 1, y + 1, 0);
@@ -80,9 +65,7 @@ struct PlanarGraph:public ImportModule {
       newLayout->setNodeValue(graph[i], coords[i]);
     }
     vector<pair<unsigned int, unsigned int> > edges;
-    cerr << "*****************" << endl;
     tlp::delaunayTriangulation(coords, edges);
-    cerr << "*****************" << endl;
     vector<pair<unsigned int, unsigned int> >::const_iterator it;
     for (it = edges.begin(); it != edges.end(); ++it) {
       superGraph->addEdge(graph[it->first], graph[it->second]);
