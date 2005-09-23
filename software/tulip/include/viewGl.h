@@ -91,6 +91,7 @@ protected:
   void focusInEvent ( QFocusEvent * );
   typedef std::set< Observable * >::iterator ObserverIterator;
   void update ( ObserverIterator begin, ObserverIterator end);
+  void observableDestroyed(Observable *);
   void initObservers();
   void clearObservers();
   void enableQPopupMenu(QPopupMenu *, bool);
@@ -154,8 +155,12 @@ protected slots:
   void group();  
   void gridOptions();
   void mouseChanged(MouseInterface *);
-
+  void deleteElement();
+  void selectElement();
+  void addRemoveElement();
 private:
+  void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
+  void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
   GlGraphWidget *newOpenGlView(SuperGraph *graph,const QString &);
   stdext::hash_map<unsigned int, std::string> openFiles;

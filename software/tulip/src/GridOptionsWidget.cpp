@@ -11,6 +11,9 @@
 #include <qvalidator.h>
 
 #include <tulip/LayoutProxy.h>
+#include <tulip/SizesProxy.h>
+#include <tulip/MetricProxy.h>
+#include <tulip/DrawingTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -67,10 +70,14 @@ namespace tlp
 	Coord min, max;
 	    
 	// We get the min and the max of the Layout to display the grid
-	LayoutProxy* layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-	    
-	min = layout->getMin(glGraphWidget->getSuperGraph());
-	max = layout->getMax(glGraphWidget->getSuperGraph());
+	LayoutProxy *layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+	SizesProxy *sizes = glGraphWidget->getSuperGraph()->getProperty<SizesProxy>("viewSize");
+	MetricProxy *rotation = glGraphWidget->getSuperGraph()->getProperty<MetricProxy>("viewRotation");
+	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getSuperGraph(), layout, 
+							    sizes, rotation);
+	max = bboxes.first;	
+	min = bboxes.second;
+
 
 	for(int i=0; i < 3; i++) {
 	  min[i] = min[i] - 0.5f;
@@ -142,8 +149,7 @@ namespace tlp
     GridSizeZ->setEnabled(true);
   }
   //==============================================
-  void GridOptionsWidget::chHollowGrid()
-  {
+  void GridOptionsWidget::chHollowGrid() {
     if (grid == NULL || !ActivatedCB->isChecked())
       return;
 
@@ -155,11 +161,8 @@ namespace tlp
   void GridOptionsWidget::chDisplayGrid() {
     if (grid == NULL || !ActivatedCB->isChecked())
       return;
-
     bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
-
     grid->setDisplayDim(display);
-
     glGraphWidget->updateGL();
   }
   //==============================================

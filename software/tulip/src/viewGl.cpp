@@ -185,11 +185,17 @@ void viewGl::enableElements(bool enabled) {
   elementsDisabled = !enabled;
 }
 //**********************************************************************
+void viewGl::observableDestroyed(Observable *) {
+  cerr << "[WARNING]" << __PRETTY_FUNCTION__ << endl;
+}
+//**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   Observable::holdObservers();
   clearObservers();
   nodeProperties->updateTable();
   propertiesWidget->update();
+  if (gridOptionsWidget !=0 )
+    gridOptionsWidget->validateGrid();
   redrawView();
   Observable::unholdObservers();
   initObservers();
@@ -896,21 +902,68 @@ void viewGl::group() {
   changeSuperGraph(supergraph);
 }
 //**********************************************************************
+void viewGl::deleteElement(unsigned int x, unsigned int y, GlGraphWidget *glW){
+  bool result;
+  ElementType type;
+  node tmpNode;
+  edge tmpEdge;
+  Observable::holdObservers();
+  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
+  if(result==true) {
+    switch(type) {
+    case NODE: glW->getSuperGraph()->delNode(tmpNode); break;
+    case EDGE: glW->getSuperGraph()->delEdge(tmpEdge); break;
+    }
+  }
+  Observable::unholdObservers();
+}
+//**********************************************************************
+void viewGl::selectElement() {
+  selectElement(mouseClicX, mouseClicY, glWidget, true);
+}
+//**********************************************************************
+void viewGl::addRemoveElement() {
+  selectElement(mouseClicX, mouseClicY, glWidget, false);
+}
+//**********************************************************************
+void viewGl::deleteElement() {
+  deleteElement(mouseClicX, mouseClicY, glWidget);
+}
+//**********************************************************************
+void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, bool reset) {
+  Observable::holdObservers();
+  bool result;
+  ElementType type;
+  node tmpNode;
+  edge tmpEdge;
+  SelectionProxy *elementSelected = glW->getSuperGraph()->getProperty<SelectionProxy>("viewSelection");
+  if (reset) {
+    elementSelected->setAllNodeValue(false);
+    elementSelected->setAllEdgeValue(false);
+  }
+  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
+  if (result==true) {
+    switch(type) {
+    case NODE: elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode)); break;
+    case EDGE: elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge)); break;
+    }
+  }
+  Observable::unholdObservers();
+}
+//**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
   if ( obj->inherits("GlGraphWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
-    GlGraphWidget *glw = (GlGraphWidget *) obj;
     if (me->button()==RightButton) {
-      //      glw->setContextCoord(me->x(), me->y());
       mouseClicX = me->x();
       mouseClicY = me->y();
       QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
       contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
       contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
-      //      contextMenu->insertItem(tr("Delete"), glw, SLOT(contextDel()));
-      //      contextMenu->insertItem(tr("Select"), glw, SLOT(contextSelect()));
-      //      contextMenu->insertItem(tr("Add/Remove selection"), glw, SLOT(contextAddRemoveSelection()));
+      contextMenu->insertItem(tr("Delete"), this, SLOT(deleteElement()));
+      contextMenu->insertItem(tr("Select"), this, SLOT(selectElement()));
+      contextMenu->insertItem(tr("Add/Remove selection"), this, SLOT(addRemoveElement()));
       SuperGraph *supergraph=glWidget->getSuperGraph();
       if (supergraph != supergraph->getRoot())
 	contextMenu->insertItem(tr("ungroup"), this, SLOT(ungroup()));
@@ -1373,13 +1426,5 @@ void viewGl::gridOptions() {
 }
 //**********************************************************************
 void viewGl::mouseChanged(MouseInterface *m) {
-  if (dynamic_cast<MouseMoveSelection*>(m)) {
-    // Active le tracking de la souris sans l'appui de bouton => colorisation des carrés du FFD
-    glWidget->setMouseTracking(true);
-    //    m->mPaint(glWidget);
-    glWidget->updateGL();
-  }
-  else
-    glWidget->setMouseTracking(false);
 }
 //**********************************************************************
