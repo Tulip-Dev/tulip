@@ -30,6 +30,12 @@ class Observer {
    * enable to iterate all these objects.
    */
   virtual void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end)=0;
+
+  /**
+   * Methods called when an observable has been deleted. holdObservers and unHoldObservers function
+   * have no effects on this function.
+   */
+  virtual void observableDestroyed(Observable *) = 0;
 };
 
 typedef std::map<Observer *,std::set<Observable *> > ObserverMap;
@@ -62,6 +68,11 @@ class TLP_SCOPE Observable {
    * Notify all the observers
    */
   void notifyObservers();
+  /**
+   * Notify all the observers that the object will be destroyed. 
+   * Need to be call into the dstructor of the observable.
+   */
+  void notifyDestroy();
   /**
    * Queue notifications
    */

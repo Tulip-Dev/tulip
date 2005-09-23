@@ -17,6 +17,15 @@ ObserverMap Observable::holdMap;
 
 static bool unholdLock=false;
 
+//===============================================================
+void Observable::notifyDestroy() {
+  //  cerr << "Observable::notifyObservers" << endl;
+  std::list<Observer*> tmpList(observersList);
+  list<Observer*>::iterator itlObs;
+  for (itlObs=tmpList.begin(); itlObs!=tmpList.end(); ++itlObs)
+    (*itlObs)->observableDestroyed(this);
+}
+//===============================================================
 void Observable::notifyObservers() {
   if (unholdLock) {
     cerr << "Cannot notifyObservers during unholdings" << endl;
@@ -36,13 +45,13 @@ void Observable::notifyObservers() {
       (*itlObs)->update(tmpSet.begin(),tmpSet.end());
   }
 }
-
+//===============================================================
 void Observable::holdObservers() {
   //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
   assert(holdCounter>=0);
   holdCounter++;
 }
-
+//===============================================================
 void Observable::unholdObservers() {
   assert(holdCounter>=0);
   //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
@@ -59,3 +68,4 @@ void Observable::unholdObservers() {
   }
   unholdLock=false;
 }
+//===============================================================
