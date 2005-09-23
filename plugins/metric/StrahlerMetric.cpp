@@ -14,7 +14,7 @@
 #include "StrahlerMetric.h"
 #include <tulip/StringProxy.h>
 
-METRICPLUGIN(StrahlerMetric,"StrahlerGeneral","David Auber","06/04/2000","Alpha","0","1");
+METRICPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
 
 using namespace std;
 
@@ -162,45 +162,76 @@ Strahler StrahlerMetric::topSortStrahler(node n, int &curPref,
   return result;
 }
 
-
-StrahlerMetric::StrahlerMetric(const PropertyContext &context):Metric(context) 
-{}
-
+namespace {
+  const char * paramHelp[] = {
+    // property
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "true, false" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "If true the strahler number will be computed for each node, it means that a spanning tree will be recomputed for each nodes complexity o(n^2)." \
+    HTML_HELP_CLOSE(),
+  };
+}
+//==============================================================================
+StrahlerMetric::StrahlerMetric(const PropertyContext &context):Metric(context) {
+   addParameter<bool>("allNodes", paramHelp[0], "false");
+}
+//==============================================================================
 StrahlerMetric::~StrahlerMetric()
 {}
-
+//==============================================================================
 bool StrahlerMetric::run() {
+  allNodes = false;
+  if (dataSet!=0) dataSet->get("allNodes", allNodes);
   stdext::hash_map<node,bool> visited;
   stdext::hash_map<node,bool> finished;
   stdext::hash_map<node,int> prefix;
   stdext::hash_map<node,int> tofree;
   stdext::hash_map<node,Strahler> cachedValues;
   int curPref=0;
-  SelectionProxy *parameter=superGraph->getProperty<SelectionProxy>("viewSelection");
-  Iterator<node> *it=superGraph->getNodes();
-  for (;it->hasNext();) {
+  /*
+    SelectionProxy *parameter=superGraph->getProperty<SelectionProxy>("viewSelection");
+    Iterator<node> *it=superGraph->getNodes();
+    for (;it->hasNext();) {
     node curNode=it->next();
     if ((!visited[curNode]) && (parameter->getNodeValue(curNode)) ) {
-      tofree[curNode]=0;
-      topSortStrahler(curNode,curPref,tofree,prefix,visited,finished,cachedValues);
+    tofree[curNode]=0;
+    topSortStrahler(curNode,curPref,tofree,prefix,visited,finished,cachedValues);
     }
-  } delete it;
+    } delete it;
+  */
   Iterator<node> *itN=superGraph->getNodes();
-  for (;itN->hasNext();) {
-    node itn=itN->next();
-    tofree[itn]=0;
-    if (!finished[itn]) {topSortStrahler(itn,curPref,tofree,prefix,visited,finished,cachedValues);}
+  unsigned int i = 0;
+  while (itN->hasNext()) {
+    node itn = itN->next();
+    tofree[itn] = 0;
+    if (!finished[itn]) { 
+      topSortStrahler(itn,curPref,tofree,prefix,visited,finished,cachedValues);
+    }
+    if (allNodes) {
+      if (pluginProgress->progress(i++, superGraph->numberOfNodes())!=TLP_CONTINUE) break;
+      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+      visited.clear();
+      finished.clear();
+      prefix.clear();
+      tofree.clear();
+      cachedValues.clear();
+      curPref=0;
+    }
   }  delete itN;
-  map<couple,int> matrix;
-  map<int,int> histoReg;
-  map<int,int> histoStack;
-  itN=superGraph->getNodes();
-  for (;itN->hasNext();) {
-    node itn=itN->next();
-    metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-				       +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));//
-  } delete itN;
-  return true;
+
+  if (!allNodes) {
+    itN = superGraph->getNodes();
+    while (itN->hasNext()) {
+      node itn=itN->next();
+      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+    } delete itN;
+  }
+  return pluginProgress->state()!=TLP_CANCEL;
 }
 
 bool StrahlerMetric::check(string &erreurMsg) {

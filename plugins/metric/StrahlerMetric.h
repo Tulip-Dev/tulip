@@ -66,6 +66,7 @@ private:
   Strahler topSortStrahler(node n,int &curPref, stdext::hash_map<node,int> &tofree, stdext::hash_map<node,int> &prefix,
 			   stdext::hash_map<node,bool> &visited, stdext::hash_map<node,bool> &finished,
 			   stdext::hash_map<node,Strahler> &cachedValues);
+  bool allNodes;
 };
 /*@}*/
 #endif
