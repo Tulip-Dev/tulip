@@ -6,8 +6,7 @@
 #include "tulip/Bezier.h"
 
 void Bezier3(double (&p)[3], const double p1[3], const double p2[3],
-		    const double p3[3], double mu)
-{
+		    const double p3[3], double mu) {
   double mum1,mum12,mu2;
   mu2 = mu * mu;
   mum1 = 1 - mu;
@@ -19,8 +18,7 @@ void Bezier3(double (&p)[3], const double p1[3], const double p2[3],
 }
 
 void Bezier4(double (&p)[3], const double p1[3], const double p2[3],
-		    const double p3[3], const double p4[3], double mu)
-{
+		    const double p3[3], const double p4[3], double mu) {
  double mum1,mum13,mu3;
  mum1 = 1 - mu;
  mum13 = mum1 * mum1 * mum1;
@@ -34,8 +32,7 @@ void Bezier4(double (&p)[3], const double p1[3], const double p2[3],
 /*
  * IMPORTANT: the LAST point is NOT computed
  */
-void Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu)
-{
+void Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu) {
   int n=size-1;
   if (n==2) {
     return Bezier3(p, points[0], points[1], points[2], mu);
@@ -47,9 +44,9 @@ void Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double
   int k,kn,nn,nkn;
   double blend,muk,munk;
 
-  p[0]=p[1]=p[2]=0;
+  p[0] = p[1] = p[2] = 0;
   muk = 1;
-  munk = pow(1-mu,(double)n);
+  munk = pow(1.-mu, (double)n);
 
   for (k=0;k<=n;k++) {
     nn = n;
