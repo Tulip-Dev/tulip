@@ -7,15 +7,13 @@
 
 using namespace std;
 using namespace stdext;
-static const int WIDTH = 1024;
-static const int HEIGHT = 1024;
 
 namespace {
   const char * paramHelp[] = {
     // nodes
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "int" ) \
-    HTML_HELP_DEF( "default", "100" ) \
+    HTML_HELP_DEF( "default", "30" ) \
     HTML_HELP_BODY() \
     "This parameter defines the number of nodes used to build the planr graph graph." \
     HTML_HELP_CLOSE(),
@@ -25,7 +23,7 @@ namespace {
 //=============================================================
 struct PlanarGraph:public ImportModule {
   PlanarGraph(ClusterContext context):ImportModule(context) {
-    addParameter<int>("nodes", paramHelp[0], "20");
+    addParameter<int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph(){}
   
@@ -61,7 +59,6 @@ struct PlanarGraph:public ImportModule {
       matrix[x][y]=true;
       graph[i] = superGraph->addNode();
       coords[i] = Coord(x + 1, y + 1, 0);
-      cerr << coords[i] << endl;
       newLayout->setNodeValue(graph[i], coords[i]);
     }
     vector<pair<unsigned int, unsigned int> > edges;
