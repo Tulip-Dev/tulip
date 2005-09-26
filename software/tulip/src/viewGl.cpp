@@ -54,7 +54,6 @@
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
 
-//#include "NavigateGlGraph.h"
 #include "PropertyDialog.h"
 #include "viewGl.h"
 #include "Application.h"
@@ -76,8 +75,7 @@ using namespace tlp;
 
 //**********************************************************************
 ///Constructor of ViewGl
-viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name ) 
-{
+viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   Observable::holdObservers();
   glWidget=0;
@@ -151,7 +149,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )
   connect(windowsMenu, SIGNAL( aboutToShow() ), this, SLOT( windowsMenuAboutToShow() ) );
   Observable::unholdObservers();
   morph = new Morphing();
-  //  cerr << "Finished" << endl << flush;
+
   // initialisaton of Qt Assistant, the path should be in $PATH
   assistant = new QAssistantClient("", this);
 
@@ -264,13 +262,11 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   clusterTreeWidget->setSuperGraph(graph);
   propertiesWidget->setSuperGraph(graph);
   nodeProperties->setSuperGraph(graph);
-
   if(glWidget != 0) {
     propertiesWidget->setGlGraphWidget(glWidget);
     overviewWidget->setObservedView(glWidget);
     statsWidget->setGlGraphWidget(glWidget);
   }
-
   updateSatutBar();
   redrawView();
   initObservers();
@@ -313,7 +309,6 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
-
   connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
@@ -972,7 +967,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       return true;
     }
     else {
-	   return false;
+      return false;
     }
   }
   return false;
@@ -1426,5 +1421,112 @@ void viewGl::gridOptions() {
 }
 //**********************************************************************
 void viewGl::mouseChanged(MouseInterface *m) {
+}
+//**********************************************************************
+#include <tulip/AcyclicTest.h>
+void viewGl::isAcyclic() {
+  if (glWidget == 0) return;
+  if (AcyclicTest::isAcyclic(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is acyclic"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not acyclic"
+			   );
+}
+//**********************************************************************
+#include <tulip/SimpleTest.h>
+void viewGl::isSimple() {
+  if (glWidget == 0) return;
+  if (SimpleTest::isSimple(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is simple"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not simple"
+			   );
+}
+//**********************************************************************
+#include <tulip/ConnectedTest.h>
+void viewGl::isConnected() {
+  if (glWidget == 0) return;
+  if (ConnectedTest::isConnected(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is connected"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not connected"
+			   );
+}
+void viewGl::makeConnected() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  vector<edge> tmp;
+  ConnectedTest::makeConnected(glWidget->getSuperGraph(), tmp);
+  Observable::unholdObservers();
+}
+//**********************************************************************
+#include <tulip/BiconnectedTest.h>
+void viewGl::isBiconnected() {
+  if (glWidget == 0) return;
+  if (BiconnectedTest::isBiconnected(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is biconnected"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not biconnected"
+			   );
+}
+void viewGl::makeBiconnected() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  vector<edge> tmp;
+  BiconnectedTest::makeBiconnected(glWidget->getSuperGraph(), tmp);
+  Observable::unholdObservers();
+}
+//**********************************************************************
+#include <tulip/TriconnectedTest.h>
+void viewGl::isTriconnected() {
+  if (glWidget == 0) return;
+  if (TriconnectedTest::isTriconnected(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is triconnected"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not triconnected"
+			   );
+}
+//**********************************************************************
+#include <tulip/TreeTest.h>
+void viewGl::isTree() {
+  if (glWidget == 0) return;
+  if (TreeTest::isTree(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is a tree"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not a tree"
+			   );
+}
+//**********************************************************************
+#include <tulip/PlanarityTest.h>
+void viewGl::isPlanar() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  if (PlanarityTest::isPlanar(glWidget->getSuperGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is planar"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not planar"
+			   );
+  Observable::unholdObservers();
 }
 //**********************************************************************

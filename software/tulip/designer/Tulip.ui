@@ -64,22 +64,24 @@
     </item>
     <item text="&amp;Clustering" name="clusteringMenu">
     </item>
-    <item text="&amp;Graph" name="graphMenu">
+    <item text="&amp;Graph" name="Graph">
         <action name="Action"/>
-        <item text="tests" name="popupMenu_15" accel="">
-            <action name="Action_2"/>
-            <action name="new_itemAction"/>
-            <action name="new_itemAction_2"/>
-            <action name="new_itemAction_3"/>
-            <action name="new_itemAction_4"/>
-            <action name="new_itemAction_5"/>
+        <item text="Tests" name="popupMenu_15" accel="">
+            <action name="is_simple"/>
+            <action name="is_directed_tree"/>
+            <action name="is_acyclic"/>
+            <action name="is_connected"/>
+            <action name="is_biconnected"/>
+            <action name="is_triconnected"/>
+            <action name="is_planar"/>
         </item>
         <action name="menunew_itemAction"/>
-        <item text="&amp;Modify" name="popupMenu_22" accel="">
-            <action name="menunew_itemnew_itemAction"/>
-            <action name="menunew_itemnew_itemAction_2"/>
-            <action name="menunew_itemnew_itemAction_3"/>
-            <action name="menunew_itemnew_itemAction_4"/>
+        <item text="&amp;Modify" name="popupMenu_23" accel="">
+            <action name="make_simple"/>
+            <action name="make_acyclic"/>
+            <action name="make_connected"/>
+            <action name="make_biconnected"/>
+            <action name="triangulate"/>
         </item>
     </item>
     <item text="&amp;View" name="viewMenu">
@@ -438,12 +440,12 @@
             <string>Unnamed</string>
         </property>
         <property name="menuText">
-            <string>tests</string>
+            <string>Tests</string>
         </property>
     </action>
     <action>
         <property name="name">
-            <cstring>Action_2</cstring>
+            <cstring>is_acyclic</cstring>
         </property>
         <property name="text">
             <string>Acyclicity</string>
@@ -454,7 +456,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>new_itemAction</cstring>
+            <cstring>is_biconnected</cstring>
         </property>
         <property name="text">
             <string>Biconnected</string>
@@ -465,7 +467,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>new_itemAction_2</cstring>
+            <cstring>is_triconnected</cstring>
         </property>
         <property name="text">
             <string>Triconnected</string>
@@ -476,7 +478,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>new_itemAction_3</cstring>
+            <cstring>is_planar</cstring>
         </property>
         <property name="text">
             <string>Planarity</string>
@@ -487,7 +489,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>new_itemAction_4</cstring>
+            <cstring>is_simple</cstring>
         </property>
         <property name="text">
             <string>Simple</string>
@@ -498,7 +500,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>new_itemAction_5</cstring>
+            <cstring>is_directed_tree</cstring>
         </property>
         <property name="text">
             <string>Directed Tree</string>
@@ -520,7 +522,10 @@
     </action>
     <action>
         <property name="name">
-            <cstring>menunew_itemnew_itemAction</cstring>
+            <cstring>make_acyclic</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
         </property>
         <property name="text">
             <string>Make acyclic</string>
@@ -531,7 +536,10 @@
     </action>
     <action>
         <property name="name">
-            <cstring>menunew_itemnew_itemAction_2</cstring>
+            <cstring>make_simple</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
         </property>
         <property name="text">
             <string>Make simple</string>
@@ -542,7 +550,7 @@
     </action>
     <action>
         <property name="name">
-            <cstring>menunew_itemnew_itemAction_3</cstring>
+            <cstring>make_biconnected</cstring>
         </property>
         <property name="text">
             <string>Make biconnected</string>
@@ -553,13 +561,49 @@
     </action>
     <action>
         <property name="name">
-            <cstring>menunew_itemnew_itemAction_4</cstring>
+            <cstring>triangulate</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
         </property>
         <property name="text">
             <string>Triangulate</string>
         </property>
         <property name="menuText">
             <string>Triangulate</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_3</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>make_connected</cstring>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>Make connected</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>is_connected</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset></iconset>
+        </property>
+        <property name="text">
+            <string>new item</string>
+        </property>
+        <property name="menuText">
+            <string>Connected</string>
         </property>
     </action>
 </actions>
@@ -689,6 +733,78 @@
         <receiver>TulipData</receiver>
         <slot>gridOptions()</slot>
     </connection>
+    <connection>
+        <sender>make_acyclic</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeAcyclic()</slot>
+    </connection>
+    <connection>
+        <sender>make_simple</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeSimple()</slot>
+    </connection>
+    <connection>
+        <sender>make_biconnected</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeBiconnected()</slot>
+    </connection>
+    <connection>
+        <sender>triangulate</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeTriangulated()</slot>
+    </connection>
+    <connection>
+        <sender>is_biconnected</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isBiconnected()</slot>
+    </connection>
+    <connection>
+        <sender>is_triconnected</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isTriconnected()</slot>
+    </connection>
+    <connection>
+        <sender>is_planar</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isPlanar()</slot>
+    </connection>
+    <connection>
+        <sender>is_simple</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isSimple()</slot>
+    </connection>
+    <connection>
+        <sender>is_directed_tree</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isTree()</slot>
+    </connection>
+    <connection>
+        <sender>is_acyclic</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isAcyclic()</slot>
+    </connection>
+    <connection>
+        <sender>make_connected</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeConnected()</slot>
+    </connection>
+    <connection>
+        <sender>is_connected</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isConnected()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>fileNew()</slot>
@@ -705,6 +821,18 @@
     <slot>helpContents()</slot>
     <slot>helpAbout()</slot>
     <slot>gridOptions()</slot>
+    <slot>makeAcyclic()</slot>
+    <slot>makeSimple()</slot>
+    <slot>makeBiconnected()</slot>
+    <slot>makeTriangulated()</slot>
+    <slot>isBiconnected()</slot>
+    <slot>isPlanar()</slot>
+    <slot>isSimple()</slot>
+    <slot>isTree()</slot>
+    <slot>isTriconnected()</slot>
+    <slot>isAcyclic()</slot>
+    <slot>makeConnected()</slot>
+    <slot>isConnected()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

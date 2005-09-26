@@ -31,7 +31,6 @@ class QWorkspace;
 class QProgressDialog;
 class QEvent;
 class PropertyDialog;
-//class NavigateGlGraph;
 class GlGraphWidget;
 class GlGraph;
 class View3DSetup;
@@ -69,7 +68,6 @@ protected:
   SuperGraph * copyCutPasteGraph;
   bool elementsDisabled;
 
-  //  QPopupMenu propertyMenu;
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
   QPopupMenu colorsMenu;
@@ -78,12 +76,8 @@ protected:
   QPopupMenu stringMenu;
   QPopupMenu importGraphMenu;
   QPopupMenu exportGraphMenu;
-  QPopupMenu graphMenu;
-  //  QPopupMenu clusteringMenu;
   QPopupMenu optionMenu;
-  //QPopupMenu viewMenu;
   QPopupMenu selectMenu;
-  //QPopupMenu editMenu;
   QPopupMenu exportImageMenu;
   QPopupMenu dialogMenu;
 
@@ -158,6 +152,20 @@ protected slots:
   void deleteElement();
   void selectElement();
   void addRemoveElement();
+  void isAcyclic();
+  void isSimple();
+  void isConnected();
+  void isBiconnected();
+  void isTriconnected();
+  void isTree();
+  void isPlanar();
+  //  void makeAcyclic();
+  void makeBiconnected();
+  //  void makeTriangulated();
+  //  void makeSimple();
+  void makeConnected();
+
+
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
