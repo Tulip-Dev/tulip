@@ -33,7 +33,7 @@ public:
 
 void HierarchicalGraph::buildGrid(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
-  bool cached,resultBool;
+  bool resultBool;
   string erreurMsg;
   MetricProxy *dagLevel = new MetricProxy(graph);
   //  graph->getLocalProperty<MetricProxy>("DagLevel",cached,resultBool,erreurMsg);
@@ -51,14 +51,14 @@ void HierarchicalGraph::buildGrid(SuperGraph *graph){
   delete dagLevel;
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
-
+//================================================================================
 unsigned int HierarchicalGraph::degree(SuperGraph *superGraph,node n,bool sense) {
   if (sense)
     return (superGraph->outdeg(n));
   else
     return (superGraph->indeg(n));
 }
-
+//================================================================================
 //If sense==true fixed_layer is freeLayer+1 else freeLayer-1
 //Compute barycenter heuristique
 void HierarchicalGraph::twoLayerCrossReduction(SuperGraph *superGraph,unsigned int freeLayer,bool sense){
@@ -86,7 +86,7 @@ void HierarchicalGraph::twoLayerCrossReduction(SuperGraph *superGraph,unsigned i
     j++;
   }
 }
-
+//================================================================================
 //Set initial position using a DFS
 void HierarchicalGraph::initCross(SuperGraph *superGraph,node n, stdext::hash_map<node,bool> &visited,int &id) {
   if (visited[n]) return;
@@ -99,7 +99,7 @@ void HierarchicalGraph::initCross(SuperGraph *superGraph,node n, stdext::hash_ma
     initCross(superGraph,itn,visited,id);
   } delete itN;
 }
-
+//================================================================================
 // Do layer by layer sweep to reduce crossings in K-Layer graph
 void HierarchicalGraph::crossReduction(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
@@ -124,7 +124,7 @@ void HierarchicalGraph::crossReduction(SuperGraph *graph){
   }
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
-
+//================================================================================
 void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
   //  cerr << __PRETTY_FUNCTION__  << endl;
   assert(AcyclicTest::isAcyclic(superGraph));
@@ -150,14 +150,6 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
 	if (toKeep!=0) toDelete.push(*it);
 	toKeep--;
       }
-      /*
-      itE=superGraph->getInEdges(itn);
-      while (itE->hasNext()) {
-	edge ite=itE->next();
-	if (toKeep!=0) toDelete.push(ite);
-	toKeep--;
-      } delete itE;
-      */
     }
   } delete itN;
   while (!toDelete.empty()) {
@@ -167,73 +159,31 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
   assert(TreeTest::isTree(superGraph));
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
-
-bool HierarchicalGraph::run() {
-  //=======================================================================
-  // Build a clone of this graph
-  SuperGraph *mySGraph=tlp::newCloneSubGraph(superGraph,"tmp clone");
-
-  //========================================================================
-  //if the graph is not acyclic we reverse edges to make it acyclic
-  list<tlp::SelfLoops> listSelfLoops;
-  set<edge> reversedEdges;
-  tlp::makeAcyclic(mySGraph,reversedEdges,listSelfLoops);
-
-  //========================================================================
-  //We add a node and edges to force the dag to have only one source.
-  node startNode=tlp::makeSimpleSource(mySGraph);
-  
-  //========================================================================
-  list<node> properAddedNodes;
-  stdext::hash_map<edge,edge> replacedEdges;
-  
-  if (!TreeTest::isTree(mySGraph)) {
-    //We transform the dag in a proper dag
-    IntProxy *edgeLength=mySGraph->getLocalProperty<IntProxy>("treeEdgeLength");
-    tlp::makeProperDag(mySGraph,properAddedNodes,replacedEdges,edgeLength);
-    //we compute metric for cross reduction
-    embedding = mySGraph->getLocalProperty<MetricProxy>("treeOrder");
-    lessNode.metric = embedding;
-    buildGrid(mySGraph);
-    crossReduction(mySGraph);
-    //We extract a spanning tree from the proper dag.
-    DagLevelSpanningTree(mySGraph,startNode);
-  }
-  //We draw the tree using a tree drawing algorithm
-  bool cached,resultBool;
-  string erreurMsg;
-  //  LayoutProxy *tmpLayout=mySGraph->getLocalProperty<LayoutProxy>("Hierarchical Tree (R-T Extended)",cached,resultBool,erreurMsg);
-  LayoutProxy *tmpLayout = new LayoutProxy(superGraph);
-  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", tmpLayout, erreurMsg);
-  assert(resultBool);
-  //LayoutProxy *tmpLayout=mySGraph->getLocalProperty<LayoutProxy>("HierarchicalGraph Tree (Orthogonal)",cached,resultBool,erreurMsg);
-  Iterator<node> *itN=superGraph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    layoutProxy->setNodeValue(itn,tmpLayout->getNodeValue(itn));
-  } delete itN;
+//==============================================================================================================
+void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
+					 const stdext::hash_map<edge,edge> &replacedEdges, const set<edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
-  for (stdext::hash_map<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it) {
+  for (stdext::hash_map<edge,edge>::const_iterator it = replacedEdges.begin();it!=replacedEdges.end();++it) {
     edge toUpdate=(*it).first;
     edge start=(*it).second;
     edge end=start;
     Coord p1,p2;
     //we take the first and last point of the replaced edges
-    while (superGraph->target(end)!=superGraph->target(toUpdate)) {
-      Iterator<edge> *itE=mySGraph->getOutEdges(superGraph->target(end));
-      end=itE->next();
+    while (superGraph->target(end) != superGraph->target(toUpdate)) {
+      Iterator<edge> *itE = mySGraph->getOutEdges(superGraph->target(end));
+      end = itE->next();
       delete itE;
     }
     node firstN=superGraph->target(start);
     node endN=superGraph->source(end);
     LineType::RealType edgeLine;
-    if (reversedEdges.find(toUpdate)!=reversedEdges.end()) {
-      p1=tmpLayout->getNodeValue(endN);
-      p2=tmpLayout->getNodeValue(firstN);
+    if (reversedEdges.find(toUpdate) != reversedEdges.end()) {
+      p1 = tmpLayout.getNodeValue(endN);
+      p2 = tmpLayout.getNodeValue(firstN);
     }
     else {
-      p1=tmpLayout->getNodeValue(firstN);
-      p2=tmpLayout->getNodeValue(endN);
+      p1 = tmpLayout.getNodeValue(firstN);
+      p2 = tmpLayout.getNodeValue(endN);
     }
     if (p1==p2) 
       edgeLine.push_back(p1); 
@@ -243,33 +193,84 @@ bool HierarchicalGraph::run() {
     }
     layoutProxy->setEdgeValue(toUpdate,edgeLine);
   }
+}
+//=======================================================================
+void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::list<tlp::SelfLoops> &listSelfLoops) {
   //cerr << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
-    tlp::SelfLoops tmp=listSelfLoops.back();
+    tlp::SelfLoops tmp = listSelfLoops.back();
     listSelfLoops.pop_back();
     LineType::RealType tmpLCoord;
-    const LineType::RealType &edge1=tmpLayout->getEdgeValue(tmp.e1);
-    const LineType::RealType &edge2=tmpLayout->getEdgeValue(tmp.e2);
-    const LineType::RealType &edge3=tmpLayout->getEdgeValue(tmp.e3);
+    const LineType::RealType &edge1 = tmpLayout.getEdgeValue(tmp.e1);
+    const LineType::RealType &edge2 = tmpLayout.getEdgeValue(tmp.e2);
+    const LineType::RealType &edge3 = tmpLayout.getEdgeValue(tmp.e3);
     LineType::RealType::const_iterator it;
-    for (it=edge1.begin();it!=edge1.end();++it)
+    for (it = edge1.begin(); it!=edge1.end(); ++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n1));
-    for (it=edge2.begin();it!=edge2.end();++it)
+    tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n1));
+    for (it = edge2.begin(); it!=edge2.end(); ++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n2));
-    for (it=edge3.begin();it!=edge3.end();++it)
+    tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n2));
+    for (it = edge3.begin(); it!=edge3.end(); ++it)
       tmpLCoord.push_back(*it);
     layoutProxy->setEdgeValue(tmp.old,tmpLCoord);
     mySGraph->delAllNode(tmp.n1);
     mySGraph->delAllNode(tmp.n2);
   }  
   //  cerr << "we clean every added nodes and edges" << endl;
+}
+  //=======================================================================
+bool HierarchicalGraph::run() {
+  //=======================================================================
+  // Build a clone of this graph
+  SuperGraph *mySGraph = tlp::newCloneSubGraph(superGraph,"tmp clone");
+
+  //========================================================================
+  //if the graph is not acyclic we reverse edges to make it acyclic
+  list<tlp::SelfLoops> listSelfLoops;
+  set<edge> reversedEdges;
+  tlp::makeAcyclic(mySGraph,reversedEdges,listSelfLoops);
+
+  //========================================================================
+  //We add a node and edges to force the dag to have only one source.
+  node startNode = tlp::makeSimpleSource(mySGraph);
+  
+  //========================================================================
+  list<node> properAddedNodes;
+  stdext::hash_map<edge,edge> replacedEdges;
+  
+  if (!TreeTest::isTree(mySGraph)) {
+    //We transform the dag in a proper dag
+    IntProxy *edgeLength = mySGraph->getLocalProperty<IntProxy>("treeEdgeLength");
+    tlp::makeProperDag(mySGraph,properAddedNodes,replacedEdges,edgeLength);
+    //we compute metric for cross reduction
+    embedding = mySGraph->getLocalProperty<MetricProxy>("treeOrder");
+    lessNode.metric = embedding;
+    buildGrid(mySGraph);
+    crossReduction(mySGraph);
+    //We extract a spanning tree from the proper dag.
+    DagLevelSpanningTree(mySGraph,startNode);
+  }
+
+  //We draw the tree using a tree drawing algorithm
+  bool resultBool;
+  string erreurMsg;
+  LayoutProxy tmpLayout(superGraph);
+  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg);
+  assert(resultBool);
+  Iterator<node> *itN = superGraph->getNodes();
+  while (itN->hasNext()) {
+    node itn=itN->next();
+    layoutProxy->setNodeValue(itn, tmpLayout.getNodeValue(itn));
+  } delete itN;
+
+  computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
+  computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
+
   mySGraph->delLocalProperty("treeEdgeLength");
   mySGraph->delLocalProperty("treeOrder");
-  delete tmpLayout;//mySGraph->delLocalProperty("Hierarchical Tree (R-T Extended)");
   mySGraph->delLocalProperty("viewSize");
-  for (set<edge>::const_iterator it=reversedEdges.begin();it!=reversedEdges.end();++it) {
+  for (set<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     superGraph->reverse(*it);
   }
   mySGraph->delAllNode(startNode);

@@ -65,6 +65,9 @@ private:
   MetricProxy *embedding;
   void twoLayerCrossReduction(SuperGraph*,unsigned int freeLayer,bool sense);
   void crossReduction(SuperGraph*);
+  void computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
+			const stdext::hash_map<edge,edge> &replacedEdges, const std::set<edge> &reversedEdges);
+  void computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::list<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(SuperGraph*);
   unsigned int degree(SuperGraph*,node,bool);
   void initCross(SuperGraph*superGraph,node n, stdext::hash_map<node,bool> &visited,int &id);

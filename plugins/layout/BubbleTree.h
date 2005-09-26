@@ -7,7 +7,7 @@
 /** \addtogroup layout */
 /*@{*/
 
-/// BubbleTree.h - An implementation of the so-called bubble tree algorithm.
+/// BubbleTree.h - An implementation of the bubble tree algorithm.
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
  *
@@ -37,7 +37,7 @@
  *  
  *
  *  \author David Auber, S. Grivet  University Bordeaux I France: 
- *   auber@tulip-software.com, grivet@labri.fr
+ *   auber@tulip-software.org, grivet@labri.fr
  */
 class BubbleTree:public Layout { 
 public:

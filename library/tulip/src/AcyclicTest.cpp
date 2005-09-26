@@ -11,15 +11,16 @@ AcyclicTest * AcyclicTest::instance=0;
 #else
 AcyclicTest * AcyclicTest::instance=0;
 #endif
+//**********************************************************************
 AcyclicTest::AcyclicTest(){
 }
-
+//**********************************************************************
 bool AcyclicTest::isAcyclic(SuperGraph *graph) {
   if (instance==0)
     instance=new AcyclicTest();
   return instance->compute(graph);
 }
-
+//**********************************************************************
 bool AcyclicTest::acyclicTest(SuperGraph *graph,node n,SelectionProxy *visited,SelectionProxy *finished) {
   bool result=true;
   visited->setNodeValue(n,true);
@@ -43,22 +44,20 @@ bool AcyclicTest::acyclicTest(SuperGraph *graph,node n,SelectionProxy *visited,S
   finished->setNodeValue(n,true);
   return true;
 }
-
+//**********************************************************************
 bool AcyclicTest::compute(SuperGraph *graph) {
   if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) return resultsBuffer[(unsigned int)graph];
-  SelectionProxy *visited=graph->getLocalProperty<SelectionProxy>("AcyclicTestVisited");
-  SelectionProxy *finished=graph->getLocalProperty<SelectionProxy>("AcyclicTestFinished");
-  visited->setAllNodeValue(false);
-  finished->setAllNodeValue(false);
+  SelectionProxy visited(graph);
+  SelectionProxy finished(graph);
+  visited.setAllNodeValue(false);
+  finished.setAllNodeValue(false);
   bool result=true;
   Iterator<node> *it=graph->getNodes();
   while (it->hasNext()) {
     node curNode=it->next();
-    if (!visited->getNodeValue(curNode)) {
-      result = result && acyclicTest(graph,curNode,visited,finished);
+    if (!visited.getNodeValue(curNode)) {
+      result = result && acyclicTest(graph,curNode,&visited,&finished);
       if (!result) {
-	graph->delLocalProperty("AcyclicTestVisited");
-	graph->delLocalProperty("AcyclicTestFinished");
 	delete it;
 	resultsBuffer[(unsigned int)graph]=false;
 	graph->addObserver(this);
@@ -66,33 +65,32 @@ bool AcyclicTest::compute(SuperGraph *graph) {
       }
     }
   } delete it;
-  graph->delLocalProperty("AcyclicTestVisited");
-  graph->delLocalProperty("AcyclicTestFinished");
   if (result==true) {
     resultsBuffer[(unsigned int)graph]=true;
     graph->addObserver(this);
   }
   return true;
 }
-
+//**********************************************************************
 void AcyclicTest::destroy(SuperGraph *graph) {
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned int)graph);
 }
-
+//**********************************************************************
 void AcyclicTest::reverseEdge(SuperGraph *graph,const edge e) {
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned int)graph);
 }
-
+//**********************************************************************
 void AcyclicTest::addEdge(SuperGraph *graph,const edge e) {
   if (resultsBuffer[(unsigned int)graph]==false) return;
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned int)graph);
 }
-
+//**********************************************************************
 void AcyclicTest::delEdge(SuperGraph *graph,const edge e) {
   if (resultsBuffer[(unsigned int)graph]==true) return;
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned int)graph);
 }
+//**********************************************************************

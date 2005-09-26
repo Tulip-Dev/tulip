@@ -32,7 +32,9 @@ class SuperGraph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing if the graph is simple
+/**
+ * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)
+ */
 class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
   static bool isSimple(SuperGraph *graph);

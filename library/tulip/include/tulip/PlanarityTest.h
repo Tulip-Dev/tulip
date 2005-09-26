@@ -1,6 +1,6 @@
 //-*-c++-*-
 /*
- Author: Sophie BARDET & Alexandre BURNETT
+ Author: Sophie BARDET & Alexandre BURNETT & David Auber
  Email : sophie.bardet@gmail.com, aburnett397@gmail.com
  Last modification : 19/06/2005
  This program is free software; you can redistribute it and/or modify
