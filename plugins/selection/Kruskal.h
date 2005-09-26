@@ -8,8 +8,13 @@
 #include <map>
 #include <iostream>
 
-class Kruskal:public Selection
-{ 
+class Kruskal:public Selection { 
+  
+public:
+  Kruskal(const PropertyContext &);
+  ~Kruskal();
+  bool run();
+
 private:
 
   struct ltEdge {
@@ -23,18 +28,9 @@ private:
 
   std::map<int,int> *classes;
   int numClasses;
-  const PropertyContext & context;
   int getClass(const int i);
   int makeUnion(const int p, const int q);
   bool edgeOk(const edge &e);
-  
-public:
-  ///
-  Kruskal(const PropertyContext &);
-  ///
-  ~Kruskal();
-  ///
-  bool run();
 };
 
 #endif

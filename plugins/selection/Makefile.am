@@ -11,6 +11,7 @@ plugins_LTLIBRARIES = 	libspanningdag.la \
 			libreachable.la \
 			libspanningtree.la \
 			libloopselection.la \
+			libkruskal.la \
 			libmultipleselection.la
 
 pluginsdir = $(libdir)/tlp/plugins/selection
@@ -20,6 +21,7 @@ libspanningtree_la_SOURCES = SpanningTreeSelection.cpp SpanningTreeSelection.h
 libinducedsubgraph_la_SOURCES = InducedSubGraphSelection.cpp InducedSubGraphSelection.h
 libloopselection_la_SOURCES = LoopSelection.cpp LoopSelection.h
 libmultipleselection_la_SOURCES = MultipleEdgeSelection.cpp MultipleEdgeSelection.h
+libkruskal_la_SOURCES = Kruskal.cpp Kruskal.h
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 

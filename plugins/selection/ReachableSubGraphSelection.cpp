@@ -51,20 +51,18 @@ namespace {
 ReachableSubGraphSelection::ReachableSubGraphSelection(const PropertyContext &context):Selection(context) {
   addParameter<int> ("direction",paramHelp[0],"0");
   addParameter<SelectionProxy> ("startingnodes",paramHelp[1],"viewSelection");
-  addParameter<int> ("depth",paramHelp[2],"5");
+  addParameter<int> ("distance",paramHelp[2],"5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
-
-  bool ok=true;
   int maxDepth = 5;
   int direction = 0;
   SelectionProxy * startNodes=superGraph->getProperty<SelectionProxy>("viewSelection");
   if ( dataSet!=0) {
-    dataSet->get("depth", maxDepth);
+    dataSet->get("distance", maxDepth);
     dataSet->get("direction", direction);
     dataSet->get("startingnodes", startNodes);
   }
