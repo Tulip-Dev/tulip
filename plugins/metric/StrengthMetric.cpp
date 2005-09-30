@@ -97,31 +97,25 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
   }
 
   //compute strength metric
-  double norm3, norm4;
-  double gamma3, gamma4;
+  double gamma3 = double(Wuv.size());
+  double norm3  = double((Wuv.size()+Mv.size()+Mu.size()));
 
-  norm3  = double((Wuv.size()+Mv.size()+Mu.size()));
-  gamma3 = double(Wuv.size());
+  double gamma4 = (e(Mu,Wuv) +  e(Mv,Wuv) +  e(Mu,Mv) +  e(Wuv));
+  double norm4  = (double(Mu.size() * Wuv.size() + 
+			  Mv.size() * Wuv.size() + 
+			  Mu.size() * Mv.size() ) + 
+		   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
 
-
-  norm4  = (double(Mu.size() * Wuv.size() + 
-		  Mv.size() * Wuv.size() + 
-		  Mu.size() * Mv.size() ) + 
-	   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
-  gamma4 = (e(Mu,Wuv) +  e(Mv,Wuv) +  e(Mu,Mv) +  e(Wuv));
-
-  double norm = norm4 + norm3;
-  if (norm > 0.00001)
-    return (gamma3 + gamma4) / norm;
+  if (norm3 > 1E-5)
+    gamma3 /= norm3;
   else
-    return 0;
-  /* old version
-  if ( (Mu.size() == 0) && (Mv.size()==0) && Wuv.size()==0) 
-    gamma3=0;
+    gamma3 = 0;
+  if (norm4 > 1E-5)
+    gamma4 /= norm3;
   else
-    gamma3=double(Wuv.size())/double((Wuv.size()+Mv.size()+Mu.size()));
-  gamma4=s(Mu,Wuv)+s(Mv,Wuv)+s(Mu,Mv)+s(Wuv);
-  */
+    gamma4 = 0;
+
+  return gamma3 + gamma4;
 }
 //=============================================================
 double StrengthMetric::getNodeValue(const node n ) {

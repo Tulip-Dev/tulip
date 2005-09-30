@@ -25,7 +25,7 @@
 
 class SelectionProxy;
 //template<class C>class Iterator;
-
+#ifndef DOXYGEN_NOTFOR_DEVEL
 template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
 public:
   UINTIterator(Iterator<unsigned int> *it):it(it) {
@@ -272,6 +272,7 @@ public:
   bool hasNext();
 };
 //=============================================================
+#endif // DOXYGEN_NOTFOR_DEVEL
 #endif
 
 

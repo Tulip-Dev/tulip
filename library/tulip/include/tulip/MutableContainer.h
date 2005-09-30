@@ -19,7 +19,7 @@ enum State { VECT=0, HASH=1 };
 
 class ImpossibleOperation : public std::exception {
 };
-
+#ifndef DOXYGEN_NOTFOR_DEVEL
 //===================================================================
 template <typename TYPE> 
 class IteratorVector : public Iterator<unsigned int> {
@@ -77,6 +77,7 @@ class IteratorHash : public Iterator<unsigned int> {
   stdext::hash_map<unsigned int,TYPE> *hData;
   typename stdext::hash_map<unsigned int,TYPE>::const_iterator it;
 };
+#endif
 //===================================================================
 template <typename TYPE> 
 class MutableContainer {

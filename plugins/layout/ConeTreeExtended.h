@@ -27,7 +27,7 @@
  *  \note This algorithm only work on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
 class ConeTreeExtended:public Layout { 
 public:

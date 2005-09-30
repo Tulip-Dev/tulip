@@ -26,6 +26,7 @@ plugins_LTLIBRARIES = \
 	libtreearitymax.la \
         libviennot.la \
 	libeccentricity.la \
+	libetweennesscentrality.la \
         librandom.la	
 
 pluginsdir = $(libdir)/tlp/plugins/metric
@@ -50,6 +51,7 @@ libstrahler_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
 libtreearitymax_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
 libviennot_la_SOURCES = Viennot.cpp  Viennot.h
 librandom_la_SOURCES = Random.cpp  Random.h
+libetweennesscentrality_la_SOURCES = BetweennessCentrality.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

@@ -19,7 +19,7 @@
  *  of a node it is recommended to use directly the degree function
  *  available in each SuperGraph.
  *
- *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
  *  LICENCE:
  *

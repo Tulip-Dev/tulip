@@ -21,16 +21,15 @@
  *
  * This class is used as a 2D HUD for the rendering of 2D circles.
  */
-class GlHudCircle : public GlHud
-{
- protected:
-  Coord* center; /**< The center position of the circle */
-  Color* color; /**< The color of the circle */
+class GlHudCircle : public GlHud {
 
+ protected:
+  Coord center; /**< The center position of the circle */
+  Color color; /**< The color of the circle */
   int radius; /**< The radius of the circle */
   int segments; /**< The number of segments of the circle. Higher values imply a smoother circle */
 
-  vector<Coord*> points; /**< The control points of the circle*/
+  vector<Coord> points; /**< The control points of the circle*/
 
   /**
    * Default constructor : forbidden

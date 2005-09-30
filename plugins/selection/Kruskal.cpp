@@ -30,6 +30,7 @@ int Kruskal::makeUnion(const int p, const int q) {
       (*classes)[n.id] = x;
   } delete itN;
   numClasses--;
+  
 }
 //======================================================
 bool Kruskal::edgeOk(const edge &e) {
@@ -37,10 +38,22 @@ bool Kruskal::edgeOk(const edge &e) {
 }
 //======================================================
 Kruskal::Kruskal(const PropertyContext &context):Selection(context) {
-  addParameter<MetricProxy> ("Edge weight", paramHelp[1], "viewMetric");
+  addParameter<MetricProxy> ("Edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
+}
+//======================================================
+#include <tulip/ConnectedTest.h>
+bool Kruskal::check(string &erreurMsg) {
+  if (ConnectedTest::isConnected(superGraph)) {
+    erreurMsg = "";
+    return true;
+  }
+  else {
+    erreurMsg = "The Graph must be connected";
+    return false;
+  }
 }
 //======================================================
 ///Calcul l'arbre couvrant minimal
@@ -90,3 +103,4 @@ bool Kruskal::run(){
   delete classes;
   return true;
 }
+//=======================================================================

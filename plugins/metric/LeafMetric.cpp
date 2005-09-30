@@ -5,9 +5,9 @@ METRICPLUGIN(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","0","1");
 
 using namespace std;
 
+//=======================================================================
 LeafMetric::LeafMetric(const PropertyContext &context):Metric(context) {}
-LeafMetric::~LeafMetric() {}
-
+//=======================================================================
 double LeafMetric::getNodeValue(const node n) {
   double result=0;
   Iterator<node> *itN=superGraph->getOutNodes(n);
@@ -17,7 +17,7 @@ double LeafMetric::getNodeValue(const node n) {
   if (result==0) result=1.0;
   return result;
 }
-
+//=======================================================================
 bool LeafMetric::check(string &erreurMsg) {
   if (AcyclicTest::isAcyclic(superGraph))
     return true;
@@ -26,7 +26,7 @@ bool LeafMetric::check(string &erreurMsg) {
     return false;
   }
 }
-
+//=======================================================================
 
 
 

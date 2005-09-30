@@ -5,21 +5,20 @@ METRICPLUGIN(NodeMetric,"Node","David Auber","20/12/1999","Alpha","0","1");
 
 using namespace std;
 
+//====================================================================
 NodeMetric::NodeMetric(const PropertyContext &context):Metric(context) 
 {}
-
-NodeMetric::~NodeMetric() {}
-
+//====================================================================
 double NodeMetric::getNodeValue(const node n) {
-  double result=1;
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  double result = 1;
+  Iterator<node> *itN = superGraph->getOutNodes(n);
   while (itN->hasNext()) {
     node itn=itN->next();
-    result+=metricProxy->getNodeValue(itn);
-  } delete itN;
+    result += metricProxy->getNodeValue(itn);
+  } delete itN; 
   return result;
 }
-
+//====================================================================
 bool NodeMetric::check(string &erreurMsg) {
   if (AcyclicTest::isAcyclic(superGraph)) {
     erreurMsg="";
@@ -30,4 +29,4 @@ bool NodeMetric::check(string &erreurMsg) {
     return false;
   }
 }
-
+//====================================================================

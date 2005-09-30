@@ -19,11 +19,9 @@
 /** \brief General class for the rendering of 2D augmented displays
  *
  */
-class GlHud : public GlAugmentedDisplay
-{
- protected:
+class GlHud : public GlAugmentedDisplay {
   
- public:
+public:
   
   /**
    * Constructor

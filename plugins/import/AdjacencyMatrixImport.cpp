@@ -9,6 +9,17 @@ using namespace std;
 const unsigned int MAX_SIZE = 10000;
 
 enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3 };
+namespace {
+  const char * paramHelp[] = {
+    // filename
+    HTML_HELP_OPEN()				    \
+    HTML_HELP_DEF( "type", "pathname" )		    \
+    HTML_HELP_BODY()						      \
+    "This parameter defines the file pathname to import."	      \
+    HTML_HELP_CLOSE(),
+  };
+}
+
 /** \addtogroup import */
 /*@{*/
 /// AdjacencyMatrixImport.cpp - Import a graph coded with matrix.
@@ -66,24 +77,6 @@ enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3 };
  *  (at your option) any later version.
  *
  */
- 
-
-namespace
-{
-
-	const char * paramHelp[] =
-	{
-		// filename
-		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "pathname" ) \
-		HTML_HELP_BODY() \
-		"This parameter defines the file pathname to import." \
-		HTML_HELP_CLOSE(),
-	};
-
-}
-
-
 struct AdjacencyMatrixImport:public ImportModule {
   AdjacencyMatrixImport(ClusterContext context):ImportModule(context){
     addParameter<string>("filename",paramHelp[0]);

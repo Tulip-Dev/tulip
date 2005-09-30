@@ -19,6 +19,8 @@
  *
  *  - 26/02/2002 Verson 0.0.1: First implementation.
  *
+ *  - 27/09/2005 Version 0.0.2: Fix bar normalisation of the parameter (error in the paper).
+ *
  *  \note This algorithm works on general graphs. 
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org

@@ -4,7 +4,7 @@
 #include "Node.h"
 #include "Edge.h"
 
-
+#ifndef DOXYGEN_NOTFOR_DEVEL
 template <typename TYPE> 
 struct ReturnType {
   typedef const TYPE &Value;
@@ -24,4 +24,5 @@ template <>
 struct ReturnType<edge> {
   typedef edge Value;
 };
+#endif
 #endif

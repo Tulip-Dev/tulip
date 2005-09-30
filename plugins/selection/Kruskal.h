@@ -8,12 +8,29 @@
 #include <map>
 #include <iostream>
 
+/** \addtogroup selection */
+/*@{*/
+
+/// This selection plugins implements the so called Kruskal algorithm. This algorithm enables to find a minimum spanning tree in a connected graph.
+/**
+ * This selection plugins implements the so called Kruskal algorithm. This algorithm enables to find 
+ * a minimum spanning tree in a connected graph.This selection plugins enables to find all nodes and 
+ * edges at a fixed distance of a set of nodes.
+ *
+ * This working work on undirected graphs, (ie. the orientation of edges is ommitted).
+ *
+ * It takes one parameter :
+ * - <MetricProxy> edge weight, thif parameter defines the weight of each edge in the graph. 
+ *
+ *  \author Anthony Don, LaBRI University Bordeaux I France: 
+ */
 class Kruskal:public Selection { 
   
 public:
   Kruskal(const PropertyContext &);
   ~Kruskal();
   bool run();
+  bool check(std::string &);
 
 private:
 
@@ -32,5 +49,5 @@ private:
   int makeUnion(const int p, const int q);
   bool edgeOk(const edge &e);
 };
-
+/*@}*/
 #endif

@@ -73,33 +73,3 @@ node tlp::makeSimpleSource(SuperGraph* superGraph) {
 
 
 
-void tlp::makeAcyclic(SuperGraph* graph,set<edge> &reversed,list<SelfLoops> &selfLoops) {
-   if (AcyclicTest::isAcyclic(graph)) return;
-  string erreurMsg;
-  SelectionProxy *spanningDag= new SelectionProxy(graph);
-  graph->computeProperty("SpanningDag", spanningDag, erreurMsg);
-  StableIterator<edge> itE(graph->getEdges());
-  //We replace self loops by three edges an two nodes.
-  while (itE.hasNext()) {
-    edge ite=itE.next();
-    if ((spanningDag->getEdgeValue(ite))==false) {
-      if (graph->source(ite)==graph->target(ite)) {
-	node n1=graph->addNode();
-	node n2=graph->addNode();
-	selfLoops.push_back(SelfLoops(n1 ,
-				      n2 , 
-				      graph->addEdge(graph->source(ite),n1) , 
-				      graph->addEdge(n1,n2) , 
-				      graph->addEdge(graph->source(ite),n2) , 
-				      ite ));
-	graph->delEdge(ite);
-      }
-      else {
-	reversed.insert(ite);
-	graph->reverse(ite);
-      }
-    }
-  }
-  graph->delLocalProperty("SpanningDag");      
-  assert(AcyclicTest::isAcyclic(graph));
- }

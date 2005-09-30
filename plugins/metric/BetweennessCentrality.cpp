@@ -1,0 +1,93 @@
+#include <iostream>
+#include <tulip/MetaGraphProxy.h>
+#include <tulip/TlpTools.h>
+#include <stack>
+#include <queue>
+#include <ext/hash_map>
+#include <tulip/TulipPlugin.h>
+
+
+
+using namespace std;
+using namespace stdext;
+
+
+/** \addtogroup metric */
+/*@{*/
+/// Betweeness centrality - An implementation of the betweeness centrality parameter.
+/** This plugin is an implementation of betweeness centrality Parameter.
+ *  algorithm published by:
+ *
+ *  U. Brandes,
+ *
+ *  HISTORY:
+ *
+ *  10/02/2005 Verson 0.0.1: Initial release
+ *
+ *  AUTHOR:
+ *
+ *  David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *
+ *  LICENCE:
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by  
+ *  the Free Software Foundation; either version 2 of the License, or     
+ *  (at your option) any later version.
+ *
+ */
+class BetweennessCentrality:public Metric { 
+public:
+  BetweennessCentrality(const PropertyContext &context):Metric(context){};
+  bool run() {
+    metricProxy->setAllNodeValue(0.0);
+    Iterator<node> *it = superGraph->getNodes();
+    unsigned int count = 0;
+    while(it->hasNext()) {
+      if (pluginProgress->progress(count++,superGraph->numberOfNodes())!=TLP_CONTINUE) break;
+      node s = it->next();
+      stack<node> S;
+      hash_map<node, list<node> > P;
+      MutableContainer<int> sigma;
+      sigma.setAll(0);
+      sigma.set(s.id,1);
+      MutableContainer<int> d;
+      d.setAll(-1);
+      d.set(s.id, 0);
+      queue<node> Q;
+      Q.push(s);
+      while(!Q.empty()) {
+	node v = Q.front();
+	Q.pop();
+	S.push(v);
+	Iterator<node> *it2 = superGraph->getInOutNodes(v);
+	while (it2->hasNext()) {
+	  node w = it2->next();
+	  if (d.get(w.id)<0) {
+	    Q.push(w);
+	    d.set(w.id, d.get(v.id)+1);
+	  }
+	  if (d.get(w.id) == d.get(v.id)+1) {
+	    sigma.set(w.id, sigma.get(w.id) + sigma.get(v.id));
+	    P[w].push_back(v);
+	  }
+	} delete it2;
+      }
+      MutableContainer<double> delta;
+      delta.setAll(0.0);
+      while(!S.empty()) {
+	node w = S.top();
+	S.pop();
+	list<node>::const_iterator itn = P[w].begin();
+	for (;itn!=P[w].end();++itn){
+	  node v = *itn;
+	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+	}
+	if (w != s) metricProxy->setNodeValue(w, metricProxy->getNodeValue(w) + delta.get(w.id)); 
+      }
+    } delete it;
+    return pluginProgress->state()!=TLP_CANCEL;
+  }
+};
+/*@}*/
+METRICPLUGIN(BetweennessCentrality,"BetweennessCentrality","David Auber","03/01/2005","Alpha","0","1");

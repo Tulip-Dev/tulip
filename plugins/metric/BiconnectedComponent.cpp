@@ -4,7 +4,7 @@
 #include <stack>
 
 using namespace std;
-
+//=============================================================================================
 static void bicoTestAndLabeling(const SuperGraph & graph,node v, MutableContainer<int>& compnum,
                     MutableContainer<int>& dfsnum, MutableContainer<int>& lowpt,
                     MutableContainer<node>& father,stack<node>& current,
@@ -39,7 +39,7 @@ static void bicoTestAndLabeling(const SuperGraph & graph,node v, MutableContaine
     count2++;
   }
 }
-
+//=============================================================================================
 int biconnectedComponents(const SuperGraph& graph, MutableContainer<int>& compnum) {
   stack<node> current;
   MutableContainer<int> dfsnum;
@@ -78,10 +78,36 @@ int biconnectedComponents(const SuperGraph& graph, MutableContainer<int>& compnu
   } delete it;
   return(count2 + num_isolated);
 }
-
+//=============================================================================================
 #include <tulip/TulipPlugin.h>
-
 using namespace std;
+
+/** \addtogroup metric */
+/*@{*/
+/// BicconnectedComponent.h - An implementation of the  biconnected component decompostion algorithm.
+/** This plugin is an implementation of a biconnected component decompostion algorithm. it assigns to 
+ *  to all the edge in the same componnent the same value.
+ *
+ *  <b>HISTORY</b>
+ *
+ *  - 03/01/2005 Verson 0.0.1: Initial release
+ *
+ *
+ *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
+ *  connected component they have the same value else they have a 
+ *  different value.
+ *
+ *
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *
+ *  <b>LICENCE</b>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by  
+ *  the Free Software Foundation; either version 2 of the License, or     
+ *  (at your option) any later version.
+ *
+ */
 class BiconnectedComponnent:public Metric { 
 public:
   BiconnectedComponnent(const PropertyContext &context):Metric(context){};
@@ -99,5 +125,6 @@ public:
     return true;
   }
 };
-
+/*@}*/
+//=============================================================================================
 METRICPLUGIN(BiconnectedComponnent,"Biconnected Componnent","David Auber","03/01/2005","Alpha","0","1");

@@ -23,7 +23,7 @@
  *
  *  \note This algorithm only works on 3 connected graphs.
  *
- *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
  *  <b> LICENCE </b>
  *

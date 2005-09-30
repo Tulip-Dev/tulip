@@ -22,9 +22,21 @@
 #include <ext/hash_set>
 #endif
 #include "tulip/ObservableGraph.h"
+#include <list>
+
 
 class SuperGraph;
 class SelectionProxy;
+
+namespace tlp {
+  struct SelfLoops {
+    SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
+      n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old){
+    }
+    node n1,n2;
+    edge e1,e2,e3,old;  
+  };
+}
 
 /** \addtogroup graph_test */ 
 /*@{*/
@@ -32,6 +44,7 @@ class SelectionProxy;
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
   static bool isAcyclic(SuperGraph *graph);
+  static void makeAcyclic(SuperGraph* graph, std::set<edge> &reversed, std::list<tlp::SelfLoops> &selfLoops);
 
 private:
   bool compute(SuperGraph *);

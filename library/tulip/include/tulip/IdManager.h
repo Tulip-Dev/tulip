@@ -54,6 +54,7 @@ private:
 };
 //======================================================
 /// Iterator for id managers
+#ifndef DOXYGEN_NOTFOR_DEVEL
 class IdManagerIterator:public Iterator<unsigned int>  {
 public:
   IdManagerIterator(const IdManager &idMan);
@@ -65,6 +66,7 @@ private:
   std::set<unsigned int>::const_iterator it;
   const IdManager &idMan;
 };
+#endif
 //======================================================
 std::ostream& operator<<(std::ostream &,const IdManager &);
 

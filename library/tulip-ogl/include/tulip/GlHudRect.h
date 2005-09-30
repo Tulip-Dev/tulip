@@ -23,15 +23,14 @@
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
  */
 
-class GlHudRect : public GlHud
-{
+class GlHudRect : public GlHud {
  protected:
 
-  Coord* topLeftPos; /**< Top Left coordinate of the rectangle */
-  Coord* bottomRightPos; /**< Bottom Right coordinate of the rectangle */
+  Coord topLeftPos; /**< Top Left coordinate of the rectangle */
+  Coord bottomRightPos; /**< Bottom Right coordinate of the rectangle */
 
-  Color* topLeftCol; /**< Top Left color of the rectangle */
-  Color* bottomRightCol; /**< Bottom Right color of the rectangle */
+  Color topLeftCol; /**< Top Left color of the rectangle */
+  Color bottomRightCol; /**< Bottom Right color of the rectangle */
 
 
 

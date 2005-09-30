@@ -7,16 +7,17 @@ using namespace std;
 
 DepthMetric::DepthMetric(const PropertyContext &context):Metric(context) {}
 
+//=================================================
 double DepthMetric::getNodeValue(const node n) {
   if (superGraph->outdeg(n)==0) return 0.0;
-  double max=0;
+  double max = 0;
   Iterator<node> *itN=superGraph->getOutNodes(n);
   while (itN->hasNext()) {
-    max = max >? metricProxy->getNodeValue(itN->next());
+    max = std::max(max, metricProxy->getNodeValue(itN->next()));
   } delete itN;
   return max + 1;
 }
-
+//=================================================
 bool DepthMetric::check(string &erreurMsg) {
   if (AcyclicTest::isAcyclic(superGraph))
       return true;
@@ -25,7 +26,7 @@ bool DepthMetric::check(string &erreurMsg) {
     return false;
   }
 }
-
+//=================================================
 
 
 

@@ -8,9 +8,13 @@
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
+#ifndef FACEITERATOR_TLP
+#define FACEITERATOR_TLP
+
 #include <list>
 #include <tulip/SuperGraphMap.h>
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
 /// Face iterator for SuperGraphMap
 class FaceIterator : public Iterator<Face*>{
@@ -84,3 +88,5 @@ private :
   const Face* f;
   unsigned int i;
 };
+#endif
+#endif

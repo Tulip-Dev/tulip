@@ -11,12 +11,13 @@
 #include <tulip/TulipPlugin.h>
 /** \addtogroup metric */
 /*@{*/
-/// StrongComponent.h - An implementation of the Stongly connected component algorithm.
-/** This plugin is an implementation of the Stongly connected algorithm.
+/// ConnectedComponent.h - An implementation of the connected component algorithm.
+/** This plugin is an implementation of the connected componnent decompostion algorithm. each 
+ *  node and edge that belongs to the same componnent receive the same value.
  *
  *  <b>HISTORY</b>
  *
- *  - 01/12/1999 Verson 0.0.1: Initial release
+ *  - 01/07/2002 Verson 0.0.1: Initial release
  *
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
@@ -24,7 +25,7 @@
  *  different value.
  *
  *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  *
  *  <b>LICENCE</b>
  *

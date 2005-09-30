@@ -33,32 +33,31 @@
     </sect1>
     <sect1 id="mouse"><title>Mouse Toolbar</title>
         <para>
-            <graphic fileref="images/mouse-tool.png"/>
-
+	     <graphic fileref="images/mouse-tool.png"/>
             This tool bar enables to attach operations to the mouse. The current available operations are in the order of the figure :
         <itemizedlist>
             <listitem>
-                <para> <code>Box Selection</code> : This icon gives a way to select a set of object with an rectangular area.
+                <para> <graphicco><graphic fileref="images/mouse-tool.png"/></graphicco><code>Box Selection</code> : It enables to select a set of objects. If CTRL key is pressed, the selection is added to the
+		current selection else it replaces the current selection.
                 </para>
             </listitem>
             <listitem>
-                <para> <code>Get Information</code> : When this operation is selected if you click on an element of a graph (node or edge), Tulip gives you informations about it throw a label information panel.</para>
+                <para> <code>Get Information</code> : When this operation is selected if you click on an element of a graph (node or edge), Tulip display all available properties of that node/edge using the element-information panel.</para>
             </listitem>
             <listitem>
-                <para> <code>Magic Selection</code> : With it, you can select all same kinds of object.
+                <para> <code>Magic Selection</code> : It enables to select all nodes in the graph having the same metric and that are connected. It works like the magic selection in image editing software. The difference is that the topology of the graph.
                 </para>
             </listitem>
             <listitem>
-                <para> <code>Navigation</code> : In this mode, you can move and turn around the graph in the View window. It is the default mode actived on a view. To differentiate the three motions, you have :
-                <keycap>CTRL</keycap> for the <quote>zoom</quote> and rotation around the z axis, <keycap>MAJ</keycap> for the rotation centered by the scene, without keycap the lateral motion on the plan formed with the view of the camera.
+                <para> <code>Navigation</code> : In enables to navigate in the 3D view, the available operation are : translate, rotate, zoom, zoom and pan. Translation is the default mode, Rotation is activated using <keycap>SHIFT</keycap>, zoom is activated using <keycap>CTRL</keycap>, zoom and pan is activated using the wheel of the mouse.
                 </para>
             </listitem>
             <listitem>
-                <para> <code>Zoom Box</code> : you can design a box to go inside. The box becomes the new view of the graph.
+                <para> <code>Zoom Box</code> : It enables to zoom on an area defined by the user.
                 </para>
             </listitem>
             <listitem>
-                <para> <code>Selection move</code> : This operation enables to move the current selection in the plan of the view. The moves are made using the screen coordinates.
+                <para> <code>Selection move</code> : It enables to modify the current selection. Available operation are horizontal strecth, vertical strecth, all axis strecth, z axis rotation. If no key is pressed, coordiantes and sizes are modified. if <keycap>SHIFT</keycap> is pressed, only coordinates are modified.
                 </para>
             </listitem>
             <listitem>

@@ -35,20 +35,19 @@ void HierarchicalGraph::buildGrid(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
   bool resultBool;
   string erreurMsg;
-  MetricProxy *dagLevel = new MetricProxy(graph);
+  MetricProxy dagLevel(graph);
   //  graph->getLocalProperty<MetricProxy>("DagLevel",cached,resultBool,erreurMsg);
-  resultBool = graph->computeProperty("DagLevel",dagLevel,erreurMsg);
+  resultBool = graph->computeProperty("DagLevel", &dagLevel,erreurMsg);
 
   Iterator<node> *itN=graph->getNodes();  
   while(itN->hasNext()){
     node itn=itN->next();
-    unsigned int level=(unsigned int)dagLevel->getNodeValue(itn);
+    unsigned int level=(unsigned int)dagLevel.getNodeValue(itn);
     while (level>=grid.size()) grid.push_back(vector<node>());
     embedding->setNodeValue(itn, grid[level].size());
     grid[level].push_back(itn);
   } delete itN;
 
-  delete dagLevel;
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
@@ -229,7 +228,7 @@ bool HierarchicalGraph::run() {
   //if the graph is not acyclic we reverse edges to make it acyclic
   list<tlp::SelfLoops> listSelfLoops;
   set<edge> reversedEdges;
-  tlp::makeAcyclic(mySGraph,reversedEdges,listSelfLoops);
+  AcyclicTest::makeAcyclic(mySGraph,reversedEdges,listSelfLoops);
 
   //========================================================================
   //We add a node and edges to force the dag to have only one source.

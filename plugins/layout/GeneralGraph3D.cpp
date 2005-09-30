@@ -42,7 +42,7 @@ void GeneralGraph3D::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
 
 void GeneralGraph3D::makeAcyclic(SuperGraph* superGraph,set<edge> &reversed,list<SelfLoops> &selfLoops) {
   if (!AcyclicTest::isAcyclic(superGraph)) {
-    bool cached,resultBool;
+    bool resultBool;
     string erreurMsg;
     SelectionProxy *spanningDag= new SelectionProxy(superGraph);
     resultBool = superGraph->computeProperty("SpanningDag",spanningDag,erreurMsg);

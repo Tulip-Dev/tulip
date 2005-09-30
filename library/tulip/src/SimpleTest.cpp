@@ -14,11 +14,14 @@
  * (at your option) any later version.
  */
 
-
+#include <vector>
 #include "tulip/SuperGraph.h"
 #include "tulip/SimpleTest.h"
 #include "tulip/MutableContainer.h"
+#include "tulip/SelectionProxy.h"
+#include "tulip/StableIterator.h"
 
+using namespace std;
 //=================================================================
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
@@ -36,6 +39,27 @@ bool SimpleTest::isSimple(SuperGraph *graph) {
     instance = new SimpleTest();
   return instance->compute(graph);
 }
+//**********************************************************************
+void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
+  if (SimpleTest::isSimple(graph)) return;
+  string erreurMsg;
+  SelectionProxy multipleEdge(graph);
+  graph->computeProperty("Multiple edge", &multipleEdge, erreurMsg);
+  StableIterator<edge> itE(graph->getEdges());
+  //We replace self loops by three edges an two nodes.
+  while (itE.hasNext()) {
+    edge ite=itE.next();
+    if ((multipleEdge.getEdgeValue(ite))) {
+      removed.push_back(ite);
+      graph->delEdge(ite);
+    } else
+      if (graph->source(ite) == graph->target(ite)) {
+	removed.push_back(ite);
+	graph->delEdge(ite);
+      }
+  }
+  assert(SimpleTest::isSimple(graph));
+}
 //=================================================================
 bool SimpleTest::compute(SuperGraph *graph) {
   if (resultsBuffer.find((unsigned int)graph) != resultsBuffer.end())
@@ -43,15 +67,14 @@ bool SimpleTest::compute(SuperGraph *graph) {
   Iterator<node> *itNode = graph->getNodes();
   while (itNode->hasNext ()) {
     node current = itNode->next ();
-    //Search for loops
-    if (graph->existEdge(current, current).isValid())
-      return setResult(graph, false);
-    //Search for multiple edges
-    Iterator<edge> *itEdge = graph->getOutEdges (current);
+    //Search for multiple edges and loops
+    Iterator<edge> *itEdge = graph->getInOutEdges (current);
     MutableContainer<bool> targeted;
     targeted.setAll(false);
     while (itEdge->hasNext ()) {
-      node target = graph->target (itEdge->next ());
+      node target = graph->opposite(itEdge->next(), current);
+      if (target == current)  //loop
+	return setResult(graph, false);
       if(targeted.get(target.id) == true)
 	return setResult(graph, false);
       else

@@ -20,7 +20,7 @@
  * Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *
- * \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
+ * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
 class Circular:public Layout { 
 public:

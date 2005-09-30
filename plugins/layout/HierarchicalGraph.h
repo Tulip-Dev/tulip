@@ -42,7 +42,7 @@ public:
  *
  *  \note This algorithm oimplements a O(n+m) space hierarchical layout 
  *
- *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
+ *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
  *  <b>LICENCE</b>
  *
