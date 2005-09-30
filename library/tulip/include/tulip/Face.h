@@ -23,7 +23,11 @@ class Face : protected std::vector<edge>{
   friend class EdgeFaceIterator;
 
 public :
- 
+  /* test ajout d un id*/
+  static unsigned int nf;
+  unsigned int ident;
+  /*  */
+
   Face();
   Face(Face*);
 
