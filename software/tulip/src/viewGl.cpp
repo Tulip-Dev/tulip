@@ -79,6 +79,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   Observable::holdObservers();
   glWidget=0;
+  gridOptionsWidget=0;
   aboutWidget=0;
   copyCutPasteGraph = 0;
   elementsDisabled = false;
