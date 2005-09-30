@@ -159,10 +159,10 @@ protected slots:
   void isTriconnected();
   void isTree();
   void isPlanar();
-  //  void makeAcyclic();
+  void makeAcyclic();
   void makeBiconnected();
-  //  void makeTriangulated();
-  //  void makeSimple();
+  //void makeTriangulated();
+  void makeSimple();
   void makeConnected();
 
 

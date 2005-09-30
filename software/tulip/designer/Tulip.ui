@@ -525,7 +525,7 @@
             <cstring>make_acyclic</cstring>
         </property>
         <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
         </property>
         <property name="text">
             <string>Make acyclic</string>
@@ -539,7 +539,7 @@
             <cstring>make_simple</cstring>
         </property>
         <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
         </property>
         <property name="text">
             <string>Make simple</string>

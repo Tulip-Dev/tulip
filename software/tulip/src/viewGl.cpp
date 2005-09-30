@@ -1435,6 +1435,14 @@ void viewGl::isAcyclic() {
 			   "The graph is not acyclic"
 			   );
 }
+void viewGl::makeAcyclic() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  list<tlp::SelfLoops> tmpSelf;
+  set<edge> tmpReversed;
+  AcyclicTest::makeAcyclic(glWidget->getSuperGraph(), tmpReversed, tmpSelf);
+  Observable::unholdObservers();
+}
 //**********************************************************************
 #include <tulip/SimpleTest.h>
 void viewGl::isSimple() {
@@ -1447,6 +1455,13 @@ void viewGl::isSimple() {
     QMessageBox::information( this, "Tulip test",
 			   "The graph is not simple"
 			   );
+}
+void viewGl::makeSimple() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  vector<edge> removed;
+  SimpleTest::makeSimple(glWidget->getSuperGraph(), removed);
+  Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/ConnectedTest.h>
