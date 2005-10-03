@@ -23,6 +23,7 @@
 #endif
 #include "tulip/ObservableGraph.h"
 #include <list>
+#include <tulip/MutableContainer.h>
 
 
 class SuperGraph;
@@ -43,12 +44,19 @@ namespace tlp {
 /// Class for testing if the graph is acyclic
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
-  static bool isAcyclic(SuperGraph *graph);
-  static void makeAcyclic(SuperGraph* graph, std::set<edge> &reversed, std::list<tlp::SelfLoops> &selfLoops);
+  /** return true if the graph is acyclic else false,
+   *  result is cached (ie. the second call is done in O(1) time)
+   */
+  static bool isAcyclic(const SuperGraph *graph);
+  static void makeAcyclic(SuperGraph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+  static bool acyclicTest(const SuperGraph *, std::vector<edge> *obstructionEdges = 0);
 
 private:
-  bool compute(SuperGraph *);
-  bool acyclicTest(SuperGraph *,node ,SelectionProxy *,SelectionProxy *);
+
+  static bool dfsAcyclicTest(const SuperGraph *graph, const node n, 
+			     MutableContainer<bool> &visited, 
+			     MutableContainer<bool> &finished,
+			     std::vector<edge> *obstructionEdges = 0);
   void addEdge(SuperGraph *,const edge);
   void delEdge(SuperGraph *,const edge);
   void reverseEdge(SuperGraph *,const edge);

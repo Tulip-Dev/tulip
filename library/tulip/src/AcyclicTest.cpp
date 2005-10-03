@@ -16,91 +16,102 @@ AcyclicTest * AcyclicTest::instance=0;
 AcyclicTest::AcyclicTest(){
 }
 //**********************************************************************
-bool AcyclicTest::isAcyclic(SuperGraph *graph) {
+bool AcyclicTest::isAcyclic(const SuperGraph *graph) {
   if (instance==0)
-    instance=new AcyclicTest();
-  return instance->compute(graph);
+    instance = new AcyclicTest();
+
+  if (instance->resultsBuffer.find((unsigned int)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned int)graph] = acyclicTest(graph);
+    graph->addObserver(instance);
+  }
+  
+  return instance->resultsBuffer[(unsigned int)graph];
 }
 //**********************************************************************
-void AcyclicTest::makeAcyclic(SuperGraph* graph,set<edge> &reversed, list<tlp::SelfLoops> &selfLoops) {
+void AcyclicTest::makeAcyclic(SuperGraph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
   if (AcyclicTest::isAcyclic(graph)) return;
-  string erreurMsg;
-  SelectionProxy spanningDag(graph);
-  graph->computeProperty("SpanningDag", &spanningDag, erreurMsg);
+
+  //replace self loops by three edges and two nodes.
   StableIterator<edge> itE(graph->getEdges());
-  //We replace self loops by three edges an two nodes.
   while (itE.hasNext()) {
-    edge ite=itE.next();
-    if ((spanningDag.getEdgeValue(ite))==false) {
-      if (graph->source(ite)==graph->target(ite)) {
-	node n1=graph->addNode();
-	node n2=graph->addNode();
-	selfLoops.push_back(tlp::SelfLoops(n1 ,
-				      n2 , 
-				      graph->addEdge(graph->source(ite),n1) , 
-				      graph->addEdge(n1,n2) , 
-				      graph->addEdge(graph->source(ite),n2) , 
-				      ite ));
-	graph->delEdge(ite);
-      }
-      else {
-	reversed.insert(ite);
-	graph->reverse(ite);
-      }
+    edge e = itE.next();
+    if (graph->source(e) == graph->target(e)) {
+      node n1 = graph->addNode();
+      node n2 = graph->addNode();
+      selfLoops.push_back(tlp::SelfLoops(n1 , n2 , 
+					 graph->addEdge(graph->source(e), n1) , 
+					 graph->addEdge(n1,n2) , 
+					 graph->addEdge(graph->source(e), n2) , 
+					 e ));
+      graph->delEdge(e);
     }
   }
+
+  //find obstruction edges
+  reversed.clear();
+  acyclicTest(graph, &reversed);
+  cerr << "reversed : " << reversed.size() << endl;
+  if (reversed.size() > graph->numberOfEdges() / 2) {
+    cerr << "[Warning]: " << __FUNCTION__ << ", is not efficient" << endl;
+  }
+
+  vector<edge>::const_iterator it = reversed.begin();
+  for (; it != reversed.end(); ++it)
+    graph->reverse(*it);
+
   assert(AcyclicTest::isAcyclic(graph));
  }
-//**********************************************************************
-bool AcyclicTest::acyclicTest(SuperGraph *graph,node n,SelectionProxy *visited,SelectionProxy *finished) {
-  bool result=true;
-  visited->setNodeValue(n,true);
-  Iterator<node> *it=graph->getOutNodes(n);
+
+//=================================================================
+bool AcyclicTest::dfsAcyclicTest(const SuperGraph *graph, const node n, 
+				 MutableContainer<bool> &visited, 
+				 MutableContainer<bool> &finished,
+				 vector<edge> *obstructionEdges) {
+  visited.set(n.id,true);
+  bool result = true;
+  Iterator<edge> *it = graph->getOutEdges(n);
   while (it->hasNext()) {
-    node tmp=it->next();
-    if ((visited->getNodeValue(tmp))==true) {
-      if ((finished->getNodeValue(tmp))==false) {
-	delete it;
-	return false;
+    edge tmp = it->next();
+    node nextNode = graph->target(tmp);
+    if (visited.get(nextNode.id)) {
+      if (!finished.get(nextNode.id)) {
+	result = false;
+	if (obstructionEdges != 0)
+	  obstructionEdges->push_back(tmp);
+	else {
+	  break;
+	}
       }
     }
     else {
-      result=result && acyclicTest(graph,tmp,visited,finished);
-      if (result==false) {
-	delete it;
-	return false;
-      }
+      bool tmp = dfsAcyclicTest(graph, nextNode, visited, finished, obstructionEdges);
+      result = tmp && result;
+      if ((!result) && (obstructionEdges==0)) break;
     }
   } delete it;
-  finished->setNodeValue(n,true);
-  return true;
+  finished.set(n.id,true);
+  return result;
 }
 //**********************************************************************
-bool AcyclicTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) return resultsBuffer[(unsigned int)graph];
-  SelectionProxy visited(graph);
-  SelectionProxy finished(graph);
-  visited.setAllNodeValue(false);
-  finished.setAllNodeValue(false);
-  bool result=true;
-  Iterator<node> *it=graph->getNodes();
+bool AcyclicTest::acyclicTest(const SuperGraph *graph, vector<edge> *obstructionEdges) {
+  MutableContainer<bool> visited;
+  MutableContainer<bool> finished;
+  visited.setAll(false);
+  finished.setAll(false);
+  bool result = true;
+  Iterator<node> *it = graph->getNodes();
   while (it->hasNext()) {
     node curNode=it->next();
-    if (!visited.getNodeValue(curNode)) {
-      result = result && acyclicTest(graph,curNode,&visited,&finished);
-      if (!result) {
-	delete it;
-	resultsBuffer[(unsigned int)graph]=false;
-	graph->addObserver(this);
-	return false;
+    if (!visited.get(curNode.id)) {
+      if (!dfsAcyclicTest(graph, curNode, visited, finished, obstructionEdges)) {
+	result = false;
+	if (obstructionEdges == 0) {
+	  break;
+	}
       }
     }
   } delete it;
-  if (result==true) {
-    resultsBuffer[(unsigned int)graph]=true;
-    graph->addObserver(this);
-  }
-  return true;
+  return result;
 }
 //**********************************************************************
 void AcyclicTest::destroy(SuperGraph *graph) {

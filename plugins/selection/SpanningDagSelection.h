@@ -4,6 +4,8 @@
 
 #include <tulip/TulipPlugin.h>
 
+template<typename T>
+class MutableConatainer;
 
 /** \addtogroup selection */
 /*@{*/
@@ -19,13 +21,7 @@ class SpanningDagSelection:public Selection {
 
 public:
   SpanningDagSelection(const PropertyContext &);
-  ~SpanningDagSelection();
   bool run();
-  bool check(std::string &);
-  void reset();
-
-private :
-  void dfsAcyclicTest(const node &,SelectionProxy *,SelectionProxy *);
 };
 /*@}*/
 #endif

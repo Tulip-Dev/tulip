@@ -5,7 +5,33 @@
 using namespace std;
 
 #include <tulip/TulipPlugin.h>
-///
+/** \addtogroup metric */
+/*@{*/
+/// ConnectedAndTreeComponent.h - Conected componnent and tree component decomposition.
+/** This plugin implementation implements a decomposition of the graph into connected component 
+ *  and tree component (ie. subgraph that are tree and subgraph that are connected)  
+ *
+ *  <b>HISTORY</b>
+ *
+ *  - 03/01/2005 Verson 0.0.1: Initial release
+ *
+ *
+ *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
+ *  connected component they have the same value else they have a 
+ *  different value.
+ *
+ *
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *  \author Daniel Archambault University Of British Columbia
+ *
+ *  <b>LICENCE</b>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by  
+ *  the Free Software Foundation; either version 2 of the License, or     
+ *  (at your option) any later version.
+ *
+ */
 class ConnectedAndTreeComponent:public Metric { 
 public:
   ConnectedAndTreeComponent(const PropertyContext &context):Metric(context){};
@@ -83,5 +109,5 @@ public:
     return true;
   }
 };
-
+/*@}*/
 METRICPLUGIN(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","0","1");

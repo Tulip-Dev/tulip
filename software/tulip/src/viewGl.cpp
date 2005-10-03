@@ -1439,8 +1439,8 @@ void viewGl::isAcyclic() {
 void viewGl::makeAcyclic() {
   if (glWidget == 0) return;
   Observable::holdObservers();
-  list<tlp::SelfLoops> tmpSelf;
-  set<edge> tmpReversed;
+  vector<tlp::SelfLoops> tmpSelf;
+  vector<edge> tmpReversed;
   AcyclicTest::makeAcyclic(glWidget->getSuperGraph(), tmpReversed, tmpSelf);
   Observable::unholdObservers();
 }

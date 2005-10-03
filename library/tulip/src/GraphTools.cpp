@@ -17,7 +17,7 @@ void tlp::makeProperDag(SuperGraph* superGraph,list<node> &addedNodes,
   bool resultBool;
   string erreurMsg;
   MetricProxy *dagLevel= new MetricProxy(superGraph);
-  resultBool = superGraph->computeProperty("DagLevel", dagLevel, erreurMsg);//dagLevel.compute("DagLevel", =superGraph->getLocalProperty<MetricProxy>("DagLevel",cached,resultBool,erreurMsg);
+  resultBool = superGraph->computeProperty("DagLevel", dagLevel, erreurMsg);
   assert(resultBool);
   //we now transform the dag in a proper Dag, two linked nodes of a proper dag
   //must have a difference of one of dag level metric.

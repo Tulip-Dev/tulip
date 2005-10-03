@@ -160,12 +160,18 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
 }
 //==============================================================================================================
 void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
-					 const stdext::hash_map<edge,edge> &replacedEdges, const set<edge> &reversedEdges) {
+					 const stdext::hash_map<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
-  for (stdext::hash_map<edge,edge>::const_iterator it = replacedEdges.begin();it!=replacedEdges.end();++it) {
-    edge toUpdate=(*it).first;
-    edge start=(*it).second;
-    edge end=start;
+
+  MutableContainer<bool> isReversed;
+  isReversed.setAll(false);
+  for (vector<edge>::const_iterator it = reversedEdges.begin(); it != reversedEdges.end(); ++it)
+    isReversed.set((*it).id, true);
+  
+  for (stdext::hash_map<edge,edge>::const_iterator it = replacedEdges.begin(); it!=replacedEdges.end(); ++it) {
+    edge toUpdate = (*it).first;
+    edge start = (*it).second;
+    edge end = start;
     Coord p1,p2;
     //we take the first and last point of the replaced edges
     while (superGraph->target(end) != superGraph->target(toUpdate)) {
@@ -173,10 +179,11 @@ void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy
       end = itE->next();
       delete itE;
     }
-    node firstN=superGraph->target(start);
-    node endN=superGraph->source(end);
+    node firstN = superGraph->target(start);
+    node endN = superGraph->source(end);
+
     LineType::RealType edgeLine;
-    if (reversedEdges.find(toUpdate) != reversedEdges.end()) {
+    if (isReversed.get(toUpdate.id)) {
       p1 = tmpLayout.getNodeValue(endN);
       p2 = tmpLayout.getNodeValue(firstN);
     }
@@ -194,7 +201,7 @@ void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy
   }
 }
 //=======================================================================
-void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::list<tlp::SelfLoops> &listSelfLoops) {
+void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
   //cerr << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
@@ -226,9 +233,9 @@ bool HierarchicalGraph::run() {
 
   //========================================================================
   //if the graph is not acyclic we reverse edges to make it acyclic
-  list<tlp::SelfLoops> listSelfLoops;
-  set<edge> reversedEdges;
-  AcyclicTest::makeAcyclic(mySGraph,reversedEdges,listSelfLoops);
+  vector<tlp::SelfLoops> listSelfLoops;
+  vector<edge> reversedEdges;
+  AcyclicTest::makeAcyclic(mySGraph, reversedEdges, listSelfLoops);
 
   //========================================================================
   //We add a node and edges to force the dag to have only one source.
@@ -269,7 +276,7 @@ bool HierarchicalGraph::run() {
   mySGraph->delLocalProperty("treeEdgeLength");
   mySGraph->delLocalProperty("treeOrder");
   mySGraph->delLocalProperty("viewSize");
-  for (set<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
+  for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     superGraph->reverse(*it);
   }
   mySGraph->delAllNode(startNode);

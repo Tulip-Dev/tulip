@@ -109,7 +109,7 @@ node GeneralGraph3D::makeSimpleSource(SuperGraph* superGraph) {
 void GeneralGraph3D::makeProperDag(SuperGraph* superGraph, list<node> &addedNodes, stdext::hash_map<edge,edge> &replacedEdges) {
   assert(AcyclicTest::isAcyclic(superGraph));
   //We compute the dag level metric on resulting graph.
-  bool cached,resultBool;
+  bool resultBool;
   string erreurMsg;
   MetricProxy *dagLevel= new MetricProxy(superGraph);
   resultBool = superGraph->computeProperty("DagLevel",dagLevel,erreurMsg);
@@ -177,10 +177,9 @@ bool GeneralGraph3D::run() {
   DagLevelSpanningTree(mySGraph,startNode);
 
   //We draw the tree using a tree drawing algorithm
-  bool cached,resultBool;
+  bool resultBool;
   string erreurMsg;
   LayoutProxy *tmpLayout= new LayoutProxy(mySGraph);
-  //    mySGraph->getLocalProperty<LayoutProxy>("Cone Tree Extended",cached,resultBool,erreurMsg);
   resultBool = mySGraph->computeProperty("Cone Tree Extended",tmpLayout,erreurMsg);
   assert(resultBool);
   if (!resultBool) {
