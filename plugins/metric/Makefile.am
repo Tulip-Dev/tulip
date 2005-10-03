@@ -24,7 +24,6 @@ plugins_LTLIBRARIES = \
 	libsegment.la \
 	libstrahler.la \
 	libtreearitymax.la \
-        libviennot.la \
 	libeccentricity.la \
 	libetweennesscentrality.la \
         librandom.la	
@@ -49,7 +48,6 @@ libpathsum_la_SOURCES = PathSumMetric.cpp
 libsegment_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
 libstrahler_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
 libtreearitymax_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
-libviennot_la_SOURCES = Viennot.cpp  Viennot.h
 librandom_la_SOURCES = Random.cpp  Random.h
 libetweennesscentrality_la_SOURCES = BetweennessCentrality.cpp
 
