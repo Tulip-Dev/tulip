@@ -633,9 +633,8 @@ namespace tlp
     // cout << " ...[END]" << endl;
   }
 
-  void TulipStats::changeLayoutSlot()
-  {
-    // cout << "[START] ... " << __PRETTY_FUNCTION__;
+  void TulipStats::changeLayoutSlot() {
+    cout << "[START] ... " << __PRETTY_FUNCTION__;
 
     Observable::holdObservers();
 
@@ -670,16 +669,14 @@ namespace tlp
     dataSet->set("nMetrics", nMetrics);
     dataSet->set("shapeConversion", ShapeConversionCB->isChecked());
 
-    LayoutProxy *dest = supergraph->getLocalProperty<LayoutProxy>("Scatter Plot");
-    resultBool = supergraph->computeProperty("Scatter Plot", dest, erreurMsg, NULL, dataSet);
+    LayoutProxy dest(supergraph);
+    resultBool = supergraph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
 
     if (!resultBool) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString(("Scatter Plot::" + erreurMsg).c_str()) );
-    else
-      {
-	*supergraph->getLocalProperty<LayoutProxy>("viewLayout") = *dest;
-	supergraph->delLocalProperty("Scatter Plot");
-      }
+    else {
+      *supergraph->getLocalProperty<LayoutProxy>("viewLayout") = dest;
+    }
 
     glGraphWidget->setDisplayEdges(false);
     glGraphWidget->goodScale();

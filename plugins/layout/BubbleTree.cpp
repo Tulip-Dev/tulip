@@ -27,6 +27,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0; //remove z-coordiantes because the drawing is 2D
   double sizeFather = tmpSizeFather.norm() / 2.0;
+  if (sizeFather < 1E-5) sizeFather = 1.0;
   double sizeVirtualNode = 1.0;
   if (superGraph->indeg(n) == 0) sizeVirtualNode = 0.0;
   /*
@@ -64,7 +65,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   } delete itN;
 
 
-  double resolution=0;
+  double resolution = 0;
 
   if (nAlgo) {
     std::vector<double> subCircleRadius(Nc);
@@ -126,10 +127,15 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   vector<tlp::Circle<double> > circles(Nc);
   for (unsigned int i=0; i<Nc; ++i) {
     tlp::Vector<double,2> point;
-    double packRadius= realCircleRadius[i]/sin(angularSector[i]/2.0);
-    packRadius >?= sizeFather + realCircleRadius[i];
+    double packRadius;
+    if (fabs(sin(angularSector[i])) > 1E-05)
+      packRadius = realCircleRadius[i] / sin(angularSector[i] /2.0);
+    else
+      packRadius = 0;
+
+    packRadius = std::max(packRadius, sizeFather + realCircleRadius[i]);
     if (i>0)
-      angle += (angularSector[i-1]+angularSector[i])/2.0+resolution;
+      angle += (angularSector[i-1]+angularSector[i])/2.0 + resolution;
     circles[i][0] = packRadius*cos(angle);
     circles[i][1] = packRadius*sin(angle);
     circles[i].radius = realCircleRadius[i];
@@ -178,9 +184,9 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   sinAlpha = (vect^vect3)[2];
 
   Vector<double,3> rot1,rot2;
-  rot1[0] = cosAlpha;rot1[1]=-sinAlpha;rot1[2]=0;
-  rot2[0] = sinAlpha;rot2[1]=cosAlpha;rot2[2]=0;
-  zeta = rot1*zeta[0]+rot2*zeta[1];
+  rot1[0] = cosAlpha; rot1[1] = -sinAlpha; rot1[2]=0;
+  rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0;
+  zeta = rot1*zeta[0] + rot2*zeta[1];
   
   layoutProxy->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
 				     enclosingCircleCenter[1]+zeta[1],
@@ -215,18 +221,18 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
     newpos[0] = (*relativePosition)[itn][0];
     newpos[1] = (*relativePosition)[itn][1];
     newpos[2] = 0;
-    newpos = rot1*newpos[0]+rot2*newpos[1];
+    newpos = rot1*newpos[0] + rot2*newpos[1];
     newpos += enclosingCircleCenter;
     calcLayout2(itn, relativePosition, newpos, enclosingCircleCenter+zeta);
   } delete it;
 }
 
-void BubbleTree::calcLayout(node n, hash_map<node,Vector<double, 5 > > *relativePosition) {
+void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
  layoutProxy->setNodeValue(n,Coord(0,0,0));
-  Iterator<node> *it=superGraph->getOutNodes(n);
+  Iterator<node> *it = superGraph->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
     Coord newpos((*relativePosition)[itn][0]-(*relativePosition)[n][2],

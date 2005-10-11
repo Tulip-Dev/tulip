@@ -1,11 +1,7 @@
 /*
- * Authors: Jérémy Compostella, Jean Darracq, Benjamin Muller,
+ * Authors: David Auber, Jérémy Compostella, Jean Darracq, Benjamin Muller,
  *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
  * 
- * Email : jcompost@etu.u-bordeaux1.fr, jdarracq@etu.u-bordeaux1.fr,
- *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
- *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
- *
  * Last modification : $id $
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,57 +33,70 @@ SimpleTest::SimpleTest () {
 bool SimpleTest::isSimple(SuperGraph *graph) {
   if(instance == 0 )
     instance = new SimpleTest();
-  return instance->compute(graph);
+
+  if (instance->resultsBuffer.find((unsigned int)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned int)graph] = simpleTest(graph);
+    graph->addObserver(instance);
+  }
+  
+  return instance->resultsBuffer[(unsigned int)graph];
 }
 //**********************************************************************
 void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
   if (SimpleTest::isSimple(graph)) return;
-  string erreurMsg;
-  SelectionProxy multipleEdge(graph);
-  graph->computeProperty("Multiple edge", &multipleEdge, erreurMsg);
-  StableIterator<edge> itE(graph->getEdges());
-  //We replace self loops by three edges an two nodes.
-  while (itE.hasNext()) {
-    edge ite=itE.next();
-    if ((multipleEdge.getEdgeValue(ite))) {
-      removed.push_back(ite);
-      graph->delEdge(ite);
-    } else
-      if (graph->source(ite) == graph->target(ite)) {
-	removed.push_back(ite);
-	graph->delEdge(ite);
-      }
+  SimpleTest::simpleTest(graph, &removed, &removed);
+  vector<edge>::const_iterator it;
+  for(it = removed.begin(); it!=removed.end(); ++it) {
+    graph->delEdge(*it);
   }
   assert(SimpleTest::isSimple(graph));
 }
 //=================================================================
-bool SimpleTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned int)graph) != resultsBuffer.end())
-    return resultsBuffer[(unsigned int)graph];
-  Iterator<node> *itNode = graph->getNodes();
-  while (itNode->hasNext ()) {
-    node current = itNode->next ();
-    //Search for multiple edges and loops
-    Iterator<edge> *itEdge = graph->getInOutEdges (current);
-    MutableContainer<bool> targeted;
-    targeted.setAll(false);
-    while (itEdge->hasNext ()) {
-      node target = graph->opposite(itEdge->next(), current);
-      if (target == current)  //loop
-	return setResult(graph, false);
-      if(targeted.get(target.id) == true)
-	return setResult(graph, false);
-      else
-	targeted.set(target.id, true);
-    } delete itEdge;
-  } delete itNode;
-  return setResult(graph, true);
-}
-//=================================================================
-bool SimpleTest::setResult(SuperGraph *graph, bool result) {
-  resultsBuffer[(unsigned int)graph] = result;
-  graph->addObserver(this);
-  return result;
+bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
+ bool result = true;
+ bool computeAll = (loops != 0) || (multipleEdges != 0);
+ Iterator<node> *itNode = graph->getNodes();
+ MutableContainer<bool> inserted;
+ inserted.setAll(false);
+ while (itNode->hasNext ()) {
+   node current = itNode->next ();
+   //Search for multiple edges and loops
+   Iterator<edge> *itEdge = graph->getInOutEdges (current);
+   MutableContainer<bool> targeted;
+   targeted.setAll(false);
+   while (itEdge->hasNext ()) {
+     edge e = itEdge->next();
+     node target = graph->opposite(e, current);
+     if (target == current) { //loop 
+       if (!computeAll) {
+	 result = false;
+	 break;
+       }
+       if (loops!=0) {
+	 if (!inserted.get(e.id)) {
+	   loops->push_back(e);
+	   inserted.set(e.id, true);
+	 }
+       }
+     }
+     if (targeted.get(target.id) == true) {
+       if (!computeAll) {
+	 result = false;
+	 break;
+       }
+       if (multipleEdges != 0)  {
+	 if (!inserted.get(e.id)) {
+	   multipleEdges->push_back(e);
+	   inserted.set(e.id, true);
+	 }
+       }
+     }
+     else
+       targeted.set(target.id, true);
+   } delete itEdge;
+   if (!computeAll && !result) break;
+ } delete itNode;
+ return result;
 }
 //=================================================================
 void SimpleTest::deleteResult(SuperGraph *graph) {

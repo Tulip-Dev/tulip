@@ -19,7 +19,6 @@
 class MultipleEdgeSelection:public Selection { 
 public:
   MultipleEdgeSelection(const PropertyContext &);
-  ~MultipleEdgeSelection();
   bool run();
 };
 /*@}*/

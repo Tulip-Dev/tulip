@@ -18,8 +18,6 @@ using namespace std;
 
 LoopSelection::LoopSelection(const PropertyContext &context):Selection(context) {}
 
-LoopSelection::~LoopSelection() {}
-
 bool LoopSelection::getEdgeValue(edge e) {
   return (superGraph->source(e)==superGraph->target(e));
 }

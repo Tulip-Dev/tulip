@@ -39,11 +39,9 @@ class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
   static bool isSimple(SuperGraph *graph);
   static void makeSimple(SuperGraph* graph, std::vector<edge> &removed);
-  
+  static bool simpleTest(SuperGraph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
  private:
   SimpleTest();
-  bool compute(SuperGraph *graph);
-  bool setResult(SuperGraph *graph, bool result);
   void addEdge(SuperGraph *, const edge);
   void delEdge(SuperGraph *, const edge);
   void destroy(SuperGraph *);

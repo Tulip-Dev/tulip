@@ -90,6 +90,8 @@ double StrengthClustering::computeMQValue(const vector<set<node> > & partition, 
   double result = positive - negative;
   return result;
 }
+
+
 //==============================================================================
 vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   //cerr << __PRETTY_FUNCTION__ << endl;

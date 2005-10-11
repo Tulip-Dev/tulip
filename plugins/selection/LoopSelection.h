@@ -18,7 +18,6 @@
 class LoopSelection:public Selection { 
 public:
   LoopSelection(const PropertyContext &);
-  ~LoopSelection();
   bool getEdgeValue(edge e);
 };
 /*@}*/
