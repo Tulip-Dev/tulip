@@ -61,7 +61,7 @@ bool PlanarityTest::compute(SuperGraph *graph) {
   vector<edge> addedEdges;
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
-  resultsBuffer[(unsigned int)graph] = planarTest.isPlanar();
+  resultsBuffer[(unsigned int)graph] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
     graph->delAllEdge(*it);

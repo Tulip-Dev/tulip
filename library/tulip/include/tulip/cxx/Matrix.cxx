@@ -23,8 +23,8 @@ namespace tlp {
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO::Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix)
 {
-  for(int i=0; i < SIZE; i++)
-      for(int j=0; j < SIZE; j++)
+  for(unsigned int i=0; i < SIZE; i++)
+      for(unsigned int j=0; j < SIZE; j++)
 	  (*this)[i][j] = covarianceMatrix[i][j] / (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
 }
 
@@ -49,7 +49,7 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const Obj &obj) {
-  for (int i=0;i<SIZE;++i)
+  for (unsigned int i=0;i<SIZE;++i)
     (*this)[i] *= obj;
   return (*this);
 }
@@ -64,7 +64,7 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const MATRIXTLPGEO &mat) {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const Obj &obj) {
-  for (int i=0;i<SIZE;++i)
+  for (unsigned int i=0;i<SIZE;++i)
     (*this)[i] /= obj;
   return (*this);
 }
@@ -210,10 +210,10 @@ tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const int nIterations) const
 {
   tlp::Vector<Obj, SIZE> iteration;
 
-  for(int i=0; i < SIZE; i++)
+  for(unsigned int i=0; i < SIZE; i++)
     iteration[i] = 1;
   
-  for(int i=0; i < nIterations; i++)
+  for(unsigned int i=0; i < nIterations; i++)
     {
       iteration = (*this) * iteration;
       
