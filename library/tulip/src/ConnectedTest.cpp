@@ -27,7 +27,7 @@ void ConnectedTest::makeConnected(SuperGraph *graph, vector<edge> &addedEdges) {
   vector<node> toLink;  
   instance->connect(graph, toLink);
   for (unsigned int i = 1; i < toLink.size(); ++i)
-    addedEdges.push_back(graph->addEdge(toLink[0], toLink[i]));
+    addedEdges.push_back(graph->addEdge(toLink[i-1], toLink[i]));
   assert(ConnectedTest::isConnected(graph));
 }
 //=================================================================

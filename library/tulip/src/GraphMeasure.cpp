@@ -1,41 +1,44 @@
+#include <deque>
+#include <list>
+
 #include "tulip/GraphMeasure.h"
 #include "tulip/Reflect.h"
 #include "tulip/SuperGraph.h"
 #include "tulip/MetricProxy.h"
 
-#include <deque>
-#include <list>
+
 using namespace std;
-
-Iterator<node> *getIt(SuperGraph *graph, node n, int direction) {
-  switch(direction) {
-  case 0:
-    return graph->getOutNodes(n);
-  case 1:
-    return graph->getInNodes(n);
-  case 2:
-    return graph->getInOutNodes(n);
-  default:
-    cerr << __PRETTY_FUNCTION__ << "serious bug...";
-    return 0;
+namespace {
+  inline Iterator<node> *getIt(SuperGraph *graph, node n, int direction) {
+    switch(direction) {
+    case 0:
+      return graph->getOutNodes(n);
+    case 1:
+      return graph->getInNodes(n);
+    case 2:
+      return graph->getInOutNodes(n);
+    default:
+      cerr << __PRETTY_FUNCTION__ << "serious bug...";
+      return 0;
+    }
+    return NULL;
   }
-  return NULL;
-}
-Iterator<node> *getAncIt(SuperGraph *graph, node n, int direction) {
-  switch(direction) {
-  case 1:
-    return graph->getOutNodes(n);
-  case 0:
-    return graph->getInNodes(n);
-  case 2:
-    return graph->getInOutNodes(n);
-  default:
-    cerr << __PRETTY_FUNCTION__ << "serious bug...";
-    return 0;
+  inline Iterator<node> *getAncIt(SuperGraph *graph, node n, int direction) {
+    switch(direction) {
+    case 1:
+      return graph->getOutNodes(n);
+    case 0:
+      return graph->getInNodes(n);
+    case 2:
+      return graph->getInOutNodes(n);
+    default:
+      cerr << __PRETTY_FUNCTION__ << "serious bug...";
+      return 0;
+    }
+    return NULL;
   }
-  return NULL;
 }
-
+//================================================================
 unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsigned int> &distance, int direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
@@ -55,13 +58,13 @@ unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsign
 	fifo.push_back(itn);
 	visited.set(itn.id,true);
 	distance.set(itn.id, distance.get(current.id) + 1);
-	maxDist = maxDist >? distance.get(current.id) + 1;
+	maxDist = std::max(maxDist, distance.get(current.id) + 1);
       }
     } delete itN;
   }
   return maxDist;
 }
-
+//================================================================
 //Warning the algorithm is not optimal
 double tlp::averagePathLength(SuperGraph *sg) {
   list<node> fifo;
@@ -90,7 +93,7 @@ double tlp::averagePathLength(SuperGraph *sg) {
   delete mark;
   return sumPath/double(sg->numberOfNodes()*(sg->numberOfNodes()-1));
 }
-
+//================================================================
 double tlp::averageCluster(SuperGraph *sg) {
   DataSet data;
   data.set("depth",1);
@@ -98,30 +101,30 @@ double tlp::averageCluster(SuperGraph *sg) {
   string errMsg;
   MetricProxy *cluster = new MetricProxy(sg);
   result = sg->computeProperty("Cluster",cluster,errMsg,0,&data);
-  Iterator<node>*itN=sg->getNodes();
   double sum=0;
+  Iterator<node>*itN=sg->getNodes();
   while (itN->hasNext())
-    sum+=cluster->getNodeValue(itN->next());
+    sum += cluster->getNodeValue(itN->next());
   delete itN;
   delete cluster;
-  return sum/=double(sg->numberOfNodes());
+  return sum /= double(sg->numberOfNodes());
 }
-
+//================================================================
 unsigned int tlp::maxDegree(SuperGraph *sg) {
-  Iterator<node> *itN=sg->getNodes();
   unsigned int maxdeg = 0;
+  Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())
-    maxdeg= maxdeg >? sg->deg(itN->next());
+    maxdeg = std::max(maxdeg , sg->deg(itN->next()));
   delete itN;
   return maxdeg;
 }
-
+//================================================================
 unsigned int tlp::minDegree(SuperGraph *sg) {
-  Iterator<node> *itN=sg->getNodes();
   unsigned int mindeg = sg->numberOfNodes();
+  Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())
-    mindeg = mindeg <? sg->deg(itN->next());
+    mindeg = std::min(mindeg , sg->deg(itN->next()));
   delete itN;
   return mindeg;
 }
-
+//================================================================

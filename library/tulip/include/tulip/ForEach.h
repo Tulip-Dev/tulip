@@ -10,12 +10,12 @@ struct _TLP_IT {
 };
 
 template <typename TYPE>
-void * _tlp_get_it(TYPE &n, Iterator<TYPE> *it) {
+inline void * _tlp_get_it(TYPE &n, Iterator<TYPE> *it) {
   return (void *)new _TLP_IT<TYPE>(n, it);
 }
 
 template<typename TYPE>
-bool _tlp_if_test(TYPE &n, void *_it) {
+inline bool _tlp_if_test(TYPE &n, void *_it) {
   _TLP_IT<TYPE> &cit = *(_TLP_IT<TYPE>*)_it;
   assert(cit.it !=0);
   if(cit.it->hasNext()) {
