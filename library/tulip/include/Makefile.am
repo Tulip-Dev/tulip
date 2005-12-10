@@ -91,6 +91,7 @@ nobase_include_HEADERS = \
 	tulip/cxx/SuperGraphDeco.cxx \
 	tulip/Plane.h \
 	tulip/Polynome.h \
+	tulip/ForEach.h \
 	tulip/StatisticsNodeModule.h
 
 

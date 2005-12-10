@@ -16,9 +16,12 @@ class TLP_SCOPE PluginProgress {
   ProgressState progress(int step, int max_step);
   void cancel();
   void stop();
+  bool isPreviewMode() const ;
+  void setPreviewMode(bool);
   ProgressState state() const;
   virtual void progress_handler(int step, int max_step);
  private:
   ProgressState _state;
+  bool _preview;
 };
 #endif
