@@ -20,13 +20,15 @@
 #include "ExtendedClusterOperation.h"
 
 #ifdef _WIN32
+/*
 TLP_SCOPE TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> PropertyProxy<IntType, IntType, Int>::factory;
-TLP_SCOPE  TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> PropertyProxy<SizeType, SizeType, Sizes>::factory;
+TLP_SCOPE TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> PropertyProxy<SizeType, SizeType, Sizes>::factory;
 TLP_SCOPE TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> PropertyProxy<PointType, LineType, Layout>::factory;
-TLP_SCOPE  TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> PropertyProxy<ColorType, ColorType, Colors>::factory;
+TLP_SCOPE TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> PropertyProxy<ColorType, ColorType, Colors>::factory;
 TLP_SCOPE TemplateFactory<PropertyFactory<String>, String, PropertyContext> PropertyProxy<StringType, StringType, String>::factory;
 TLP_SCOPE TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> PropertyProxy<DoubleType, DoubleType, Metric>::factory;
 TLP_SCOPE TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> PropertyProxy<BooleanType, BooleanType, Selection>::factory;
+*/
 #endif
 
 namespace tlp {
@@ -42,11 +44,6 @@ namespace tlp {
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
   TLP_SCOPE void loadPlugin(const std::string & filename, PluginLoader *plug=0);
 
-  /*<<<<<<< TlpTools.h
-  template<typename PLUGINTYPE>
-  void loadPlugin(std::string filename) {
-  }
-  */
   /**
    * Load a graph in the tlp format
    * Warning : this function use "tlp" import plugin (must be laoded)
