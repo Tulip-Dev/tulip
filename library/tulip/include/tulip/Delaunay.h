@@ -29,7 +29,7 @@ namespace tlp {
    * indexes into the original set
    * of points.
    */
-  void delaunayTriangulation (const std::vector<Coord> &points, 
+  TLP_SCOPE void delaunayTriangulation (const std::vector<Coord> &points, 
 			      std::vector<std::pair<unsigned int, unsigned int> > &edges);
   /**
    * Compute the delaunay triangulation and return the set of triangles of the 

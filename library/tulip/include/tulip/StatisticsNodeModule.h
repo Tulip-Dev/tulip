@@ -67,7 +67,7 @@ struct StatisticResults
  *
  */
 
-class StatsNodeModule
+class TLP_SCOPE StatsNodeModule
 {
  public:
   /**

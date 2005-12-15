@@ -25,7 +25,7 @@
  * \date 23/07/2005
  * \version 1.0
  */
-class Plane
+class TLP_SCOPE Plane
 { 
  public:
 
