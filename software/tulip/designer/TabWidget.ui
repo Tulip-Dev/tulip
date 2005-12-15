@@ -167,6 +167,5 @@
     <includehint>tulip/TulipElementProperties.h</includehint>
     <includehint>tulip/PropertyWidgets.h</includehint>
     <includehint>tulip/ClusterTree.h</includehint>
-    <includehint>tulipstats.h</includehint>
 </includehints>
 </UI>
