@@ -23,7 +23,7 @@
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
  */
 
-class GlHudRect : public GlHud {
+class TLP_GL_SCOPE GlHudRect : public GlHud {
  protected:
 
   Coord topLeftPos; /**< Top Left coordinate of the rectangle */

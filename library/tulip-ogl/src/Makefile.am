@@ -17,7 +17,7 @@ endif
 
 
 lib_LTLIBRARIES = libtulip-ogl.la
-INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ -I../../../thirdparty/ftgl/ ${ADD_INCLUDES}
+INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ -I../../../thirdparty/ftgl ${ADD_INCLUDES}
 AM_LDFLAGS = ${DLL_FLAGS} @LIB_GL@ @GL_LDFLAGS@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ ../../../thirdparty/ftgl/libftgl.la ${ADDLDFLAGS}
 
 libtulip_ogl_la_LDFLAGS = -export-dynamic -release ${RELEASE}
