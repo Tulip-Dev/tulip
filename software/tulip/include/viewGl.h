@@ -18,7 +18,6 @@
 #include <qstring.h>
 #include <qmainwindow.h>
 #include <qassistantclient.h>
-#include <pthread.h>
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/SuperGraph.h>
