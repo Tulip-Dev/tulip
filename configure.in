@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.13 $)
+AC_REVISION($Revision: 1.14 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -244,7 +244,7 @@ AC_SUBST(LIB_IMAGES_LDFLAGS)
 dnl
 dnl configure thirdparty libraries and sets flags
 dnl
-LIBGLE_INCLUDE='-I$(top_srcdir)/thirdparty/gle/'
+LIBGLE_INCLUDE='-I$(top_srcdir)/thirdparty/gle'
 LIBGLE_LDFLAGS='$(top_srcdir)/thirdparty/gle/libgle.la'
 AC_SUBST(LIBGLE_INCLUDE)
 AC_SUBST(LIBGLE_LDFLAGS)
