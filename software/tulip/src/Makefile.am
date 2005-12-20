@@ -1,5 +1,6 @@
 if ! WIN32
 ADD_LIB = -lXext -lXi -lpthread
+else
 MWINDOWS = -mwindows
 endif
 
