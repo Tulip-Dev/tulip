@@ -2,17 +2,28 @@
 !include "WriteEnvStr.nsh"
 
 
+
+;--------------------------------
+;General
+
 Name "Tulip"
 OutFile "TulipSetup.exe"
-ComponentText "Installation de Tulip"
-DirText "Repertoire d'instalation"
-InstallDir "c:\Program Files\Tulip\"
+InstallDir "$PROGRAMFILES\Tulip\"
+
+
+
+;--------------------------------
+;Pages
 
 !define MUI_HEADERIMAGE
-!define MUI_WELCOMEFINISHPAGE_BITMAP "@prefix@\lib\tlp\bitmaps\logo.bmp"
+!define MUI_HEADERIMAGE_BITMAP "@prefix@\lib\tlp\bitmaps\headerlogo.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "@prefix@\lib\tlp\bitmaps\headerlogo.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "@prefix@\lib\tlp\bitmaps\welcomelogo.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "@prefix@\lib\tlp\bitmaps\welcomelogo.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP_NOSTRETCH
+
 !insertmacro MUI_PAGE_WELCOME
-
-
 !insertmacro MUI_PAGE_LICENSE "COPYING"
 
 !insertmacro MUI_PAGE_COMPONENTS
@@ -26,6 +37,7 @@ InstallDir "c:\Program Files\Tulip\"
 !insertmacro MUI_UNPAGE_FINISH
 !insertmacro MUI_LANGUAGE "English" 
 
+; initialization
 Function .onInit
 InitPluginsDir ;on initialise le répertoire de démarrage des plugins
 File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie l'image dans l'exe final et on on la met dans le dossier temporaire.
@@ -35,29 +47,31 @@ Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
 FunctionEnd
 
 Section "-Programme (requis)"
+; Environment variable update
 Push TULIP_PLUGINS_PATH
 ReadEnvStr $R0 "TULIP_PLUGINS_PATH" 
-StrCpy $R0 "$R0:$INSTDIR\lib\tlp\plugins"
+StrCpy $R0 "$R0;$INSTDIR\lib\tlp\plugins"
+Push $R0
+Call WriteEnvStr
+Push PATH
+ReadEnvStr $R0 "PATH" 
+StrCpy $R0 "$R0;$INSTDIR;$INSTDIR\lib"
 Push $R0
 Call WriteEnvStr
 SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
-FILE "${NSISDIR}\source\exehead\uninst.ico"
+FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 File @prefix@\bin\Tulip.exe
 SectionEnd
 
 Section "-Install Plugins"
-setOutPath $SYSDIR
-File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
-File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
-File "@prefix@\bin\libtulip-qt-@WIN_VERSION@.dll" 
+setOutPath $INSTDIR
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
 File "@MINDIR@\bin\freetype*.dll"
 File "@MINDIR@\bin\libxml*.dll"
-File "@MINDIR@\bin\libjpeg*.dll"
+File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
-File "@MINDIR@\bin\mgwz.dll"
 File "@MINDIR@\bin\mingwm*.dll"
 File "@qt_libraries@\qt-mt*.dll" 
 setOutPath $INSTDIR\lib
@@ -92,8 +106,7 @@ SectionEnd
 Section "Shortcuts" raccourcis
 SetOutPath "$SMPROGRAMS\Tulip"
 CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
-CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\uninst-Tulip.exe" "" "$INSTDIR\uninst.ico"
-SetOutPath "$DESKTOP\Tulip"
+CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\uninst-Tulip.exe" "" "$INSTDIR\win-uninstall.ico"
 CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
 SectionEnd
 
@@ -125,22 +138,11 @@ Delete "$INSTDIR\Tulip.exe"
 ;Delete "$INSTDIR\Tulip.txt"
 Delete "$INSTDIR\uninst-Tulip.exe"
 Delete "$INSTDIR\logo32x32.ico"
-Delete "$INSTDIR\uninst.ico"
+Delete "$INSTDIR\win-uninstall.ico"
 Delete "$DESKTOP\Tulip.lnk"
 Delete "$SMPROGRAMS\Tulip\*.*"
 RMDir "$SMPROGRAMS\Tulip"
-Delete $SYSDIR\libtulip-@WIN_VERSION@.dll
-Delete $SYSDIR\libtulip-qt-@WIN_VERSION@.dll
-Delete $SYSDIR\libtulip-ogl-@WIN_VERSION@.dll
-Delete $SYSDIR\qt-mt*.dll
-Delete $SYSDIR\zlib1.dll
-Delete $SYSDIR\freetype*.dll
-Delete $SYSDIR\libxml*.dll
-Delete $SYSDIR\libjpeg*.dll
-Delete $SYSDIR\libpng*.dll
-Delete $SYSDIR\iconv.dll
-Delete $SYSDIR\mgwz.dll
-Delete $SYSDIR\mingwm*.dll
+Delete $INSTDIR\*.dll
 Delete "$INSTDIR\lib\tlp\bitmaps\*"
 RMDir "$INSTDIR\lib\tlp\bitmaps"
 Delete "$INSTDIR\lib\tlp\plugins\clustering\*"
