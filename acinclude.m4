@@ -573,16 +573,49 @@ AC_DEFUN([AC_PATH_QT_UIC],
 
 AC_DEFUN([AC_PATH_MINGW],
 [
-AC_MSG_CHECKING(for MinGW)
-
-libraries="iconv.dll zlib1.dll freetype*.dll libxml*.dll libjpeg*.dll libpng*.dll mgwz.dll mingwm*.dll"
+AC_MSG_CHECKING(for MinGW needed libraries)
+MINGWDIR=${INCLUDE/\\\\include;/}
+GLDIR=${MINGWDIR}/lib
+libraries="iconv.dll freetype*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
 for lib in $libraries; do
 try="ls -1 ${MINGWDIR}/bin/$lib"
 if !(test=`eval $try 2> /dev/null`)
 then 
-AC_MSG_ERROR([Libraries was not found. Put your MINGWDIR environnement variable to the MinGW directory and install : libpng, libjpeg, iconv, zlib, freetype and xml2 libraries ])
+AC_MSG_RESULT($lib not found)
+AC_MSG_ERROR([All the freetype, jpeg, iconv, libpng, xml2, and zlib1 libraries must be installed in ${MINGWDIR}/bin])
 fi
 done
+AC_MSG_RESULT(yes)
+dnl For compilation purpose, we need to copy some libs
+dnl Copy libraries from windows/system32
+dnl in ${GLDIR} if needed
+if !(test -f $GLDIR/libglu32.dll); then
+  cp $SYSTEMROOT/system32/glu32.dll $GLDIR/libglu32.dll
+  cp $SYSTEMROOT/system32/opengl32.dll $GLDIR/libopengl32.dll
+fi
+dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
+if !(test -f $QTDIR/lib/libqt-mt.dll); then
+   library=$(ls -1 ${QTDIR}/bin/qt-mt*.dll)
+   cp ${library} ${QTDIR}/lib/libqt-mt.dll
+fi
+dnl Copy libraries from${MINGWDIR}/bin
+dnl in ${MINGWDIR}/lib if needed
+if !(test -f /mingw/lib/libfreetype.dll); then
+   library=$(ls -1 /mingw/bin/freetype*.dll)
+   cp ${library} /mingw/lib/libfreetype.dll
+fi
+if !(test -f /mingw/lib/libjpeg.dll); then
+   library=$(ls -1 /mingw/bin/jpeg*.dll)
+   cp ${library} /mingw/lib/libjpeg.dll
+fi
+if !(test -f /mingw/lib/libxml2.dll); then
+   library=$(ls -1 /mingw/bin/libxml*.dll)
+   cp ${library} /mingw/lib/libxml2.dll
+fi
+if !(test -f /mingw/lib/libz.dll); then
+   cp /mingw/bin/zlib1.dll /mingw/lib/libz.dll
+fi
+
 MINDIR=${MINGWDIR}
 AC_SUBST(MINDIR)
 ])
