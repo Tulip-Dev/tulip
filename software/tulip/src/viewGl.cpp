@@ -258,7 +258,7 @@ void viewGl::startTulip() {
 }
 //**********************************************************************
 void viewGl::changeSuperGraph(SuperGraph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
   clearObservers();
   clusterTreeWidget->setSuperGraph(graph);
   propertiesWidget->setSuperGraph(graph);
@@ -274,7 +274,7 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
 }
 //**********************************************************************
 void viewGl::hierarchyChangeSuperGraph(SuperGraph *graph) {
-  //  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
   if (glWidget->getSuperGraph() == graph)  return;
   clearObservers();
   glWidget->setSuperGraph(graph);  
@@ -493,6 +493,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
     initializeGlGraph(glW);
     glW->setSuperGraph(newGraph);
+    changeSuperGraph(0);
     QtProgress progressBar(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
     result = tlp::importGraph(*plugin, dataSet, &progressBar ,newGraph);
     if (progressBar.state()==TLP_CANCEL || !result ) {
@@ -510,7 +511,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       cleanName=cleanName.section('.',-fields.count(), -2);
       newGraph->setAttribute("name", string(cleanName.latin1()));
     }
-
 
     if(noPlugin)
       openFiles[((unsigned int)glW)]=s.latin1();

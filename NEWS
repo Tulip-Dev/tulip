@@ -1,20 +1,13 @@
-Release 1.2.2 Tulip
+Release 2.0.3 Tulip
 
-View module :
- 	- Mouse navigation interactor
-	- Glyphs Support
-	- Texture support
+tulip-lib : 
+	- Management of Planar Maps
+	- Several graph test algorithm
 
-Plug-ins :
-	- Small World Graph
+tulip-ogl :
+	
+tulip-qt :
 
-Layout :
-	- Lot of enhancements
-	- Alpha version of sugiyama
+tulip-software :
 
-Import :
-	- TlpImport of dispalying properties
-
-
-Export :
-	- TlpExport of dispalying properties
+plugins :

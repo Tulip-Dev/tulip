@@ -26,10 +26,6 @@ ClusterMetric::ClusterMetric(const PropertyContext &context):Metric(context) {
 
 ClusterMetric::~ClusterMetric() {}
 
-double ClusterMetric::getEdgeValue(const edge e ) {
-  return 0;
-}
-
 void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsigned int depth) {
   deque<node> fifo;
   SuperGraph * graph = superGraph;
@@ -58,6 +54,16 @@ void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsi
   }
 }
 
+double ClusterMetric::getEdgeValue(const edge e ) {
+  node src = superGraph->source(e);
+  node tgt = superGraph->target(e);
+  double v1 = metricProxy->getNodeValue(src);
+  double v2 = metricProxy->getNodeValue(tgt);
+  if (v1*v1 + v2*v2 > 0)
+    return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
+  return 0.;
+}
+
 double ClusterMetric::getNodeValue(const node n ) {
   set<node> reachableNodes;
   buildSubGraph(n,n,reachableNodes,maxDepth);
@@ -77,8 +83,16 @@ double ClusterMetric::getNodeValue(const node n ) {
   }
   
   double nNode= reachableNodes.size(); //$|N_v|$
-  if (reachableNodes.size()>1)
-    return (double)nbEdge/(nNode*(nNode-1)); //$e(N_v)/(\frac{k*(k-1)}{2}}$
+
+  //  cerr << "n:" << nNode << endl;
+  //  cerr << "ne:" << nbEdge << endl;
+
+  if (reachableNodes.size()>1) {
+
+    double result = double(nbEdge)/(nNode*(nNode-1));
+    //    cerr << "res : " << result << endl;
+    return result; //$e(N_v)/(\frac{k*(k-1)}{2}}$
+  }
   else
     return 0;
 }
@@ -86,5 +100,12 @@ double ClusterMetric::getNodeValue(const node n ) {
 bool ClusterMetric::run() {
   maxDepth=1;
   if (dataSet!=0) dataSet->get("depth",maxDepth);
+
+  /*  Iterator<node> *it = superGraph->getNodes();
+  while(it->hasNext()) {
+    node n = it->next();
+    metricProxy->setNodeValue(n, getNodeValue(n));
+  } delete it;
+  */
   return true;
 }

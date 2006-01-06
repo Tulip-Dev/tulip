@@ -44,4 +44,5 @@ void QtProgress::cancelCompute(){
 //=====================================
 void QtProgress::changePreview(bool b){
   // cerr << __PRETTY_FUNCTION__ << endl;
+  PluginProgress::setPreviewMode(b);
 }

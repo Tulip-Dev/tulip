@@ -26,11 +26,10 @@
 - (A TESTER) Attention la recopie d'une propertyproxy du bas vers le haut (ou du haut ver le bas) peut déconner
   exemple : *graph->getProxy("Toto")=*subgraph=getProxy("tata")
 - (OK) Faire les test (GraphTest.h) pour les graphes.
-- (OK)  Finir les graphes observers.
-- Installer uniquement les bon fichier include
+- (OK) Finir les graphes observers.
+- (OK) Installer uniquement les bon fichier include
 - Ajouter test de debug dans la gestion des carte SuperGraphImpl.cpp
 - Refaire le format de fichier tlp en plus propre
-- Faire doc des edges map et des node maps
 - Tout mettre dans le namespace tlp
 - Se pencher sur le problème des plugins progress (soulevé par Bertrand)
 - (OK) Gerer correctement les Mutable container pour accélérer l'accès aux sous-graphes

@@ -56,7 +56,7 @@ unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsign
       node itn = itN->next();
       if (!visited.get(itn.id)) {
 	fifo.push_back(itn);
-	visited.set(itn.id,true);
+	visited.set(itn.id, true);
 	distance.set(itn.id, distance.get(current.id) + 1);
 	maxDist = std::max(maxDist, distance.get(current.id) + 1);
       }

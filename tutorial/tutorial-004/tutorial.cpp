@@ -42,17 +42,17 @@ int main() {
   metric->setAllEdgeValue(0.0);
   select->setAllNodeValue(false);
   select->setAllEdgeValue(false);
-  layout->setAllNodeValue(Coord(0,0,0));
-  layout->setAllEdgeValue(vector<Coord>());
+  layout->setAllNodeValue(Coord(0,0,0)); //coordinates
+  layout->setAllEdgeValue(vector<Coord>());//Vector of bends
   integer->setAllNodeValue(0);
   integer->setAllEdgeValue(0);
-  sizes->setAllNodeValue(Size(0,0,0));
-  sizes->setAllEdgeValue(Size(0,0,0));
-  colors->setAllNodeValue(Color(0,0,0,0));
-  colors->setAllEdgeValue(Color(0,0,0,0));
+  sizes->setAllNodeValue(Size(0,0,0)); //width, height, depth
+  sizes->setAllEdgeValue(Size(0,0,0)); //start_size, end_size, arrow_size
+  colors->setAllNodeValue(Color(0,0,0,0));//Red, green, blue
+  colors->setAllEdgeValue(Color(0,0,0,0));//Red, green, blue
   strings->setAllNodeValue("first");
   strings->setAllEdgeValue("first");
-  meta->setAllNodeValue(graph);
+  meta->setAllNodeValue(graph); //an existing graph
   cout << "List of the properties present in the graph:" << endl;
   Iterator<string> *it=graph->getLocalProperties();
   while (it->hasNext()) {

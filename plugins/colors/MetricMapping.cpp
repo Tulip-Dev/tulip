@@ -153,19 +153,19 @@ public:
       break;
     case 1: //RGB interpolation
       Vector<float,3> tmp(deltaRGB);
-      tmp*=value;
+      tmp *= value;
       return  Color((int)(tmp[0]+color1[0]),
 		    (int)(tmp[1]+color1[1]),
 		    (int)(tmp[2]+color1[2]),
-		    0); 
+		    0);
       break;
     }
   }
   //=========================================================
   void computeEdgeColor() {
     double minE,maxE;
-    minE=entryMetric->getEdgeMin();
-    maxE=entryMetric->getEdgeMax();
+    minE = entryMetric->getEdgeMin(superGraph);
+    maxE = entryMetric->getEdgeMax(superGraph);
     for (int i=0;i<3;++i)
       deltaRGB[i]=double(color2[i]-color1[i]);
     if (maxE!=minE)
@@ -180,8 +180,8 @@ public:
   //=========================================================
   void computeNodeColor() {
     double minN,maxN;
-    minN=entryMetric->getNodeMin();
-    maxN=entryMetric->getNodeMax();
+    minN=entryMetric->getNodeMin(superGraph);
+    maxN=entryMetric->getNodeMax(superGraph);
     for (int i=0;i<3;++i)
       deltaRGB[i]=double(color2[i]-color1[i]);
     if (maxN!=minN)
@@ -209,16 +209,23 @@ public:
     }
     if (mappingType) {
       entryMetric = metricS;
+      /*
+	Iterator<node> *itN = superGraph->getNodes();
+	while(itN->hasNext()) {
+	node n = itN->next();
+	entryMetric->setNodeValue(n, log(1+entryMetric->getNodeValue(n)));
+	} delete itN;
+      */
     }
     else {
-      MetricProxy *tmp=superGraph->getLocalProperty<MetricProxy>("tmpUni");
-      *tmp=*metricS;
+      MetricProxy *tmp= new MetricProxy(superGraph);
+      *tmp = *metricS;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
     computeNodeColor();
     computeEdgeColor();
-    if (!mappingType) superGraph->delLocalProperty("tmpUni");
+    if (!mappingType) delete entryMetric;
     return true;
   }
   //=========================================================
