@@ -15,11 +15,67 @@ LAYOUTPLUGIN(Circular,"Circular","David Auber","06/12/1999","Ok","0","1");
 
 using namespace std;
 
-Circular::Circular(const PropertyContext &context):Layout(context){}
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "values", "An existing size property" ) \
+    HTML_HELP_DEF( "default", "viewSize" ) \
+    HTML_HELP_BODY() \
+    "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+  };
+}
+
+
+Circular::Circular(const PropertyContext &context):Layout(context){
+  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+}
 
 Circular::~Circular() {}
 
+/*
+void radius Circular::computRadius() {
+  Iterator<node> *it=superGraph->getNodes(n);
+  while (it->hasNext())  {
+    node n = itN->next();
+    Coord tmp = nodeSize->getNodeValue(n);
+    tmp[2] = 0; //2D Drawing we don't need z coordinate.
+    radius.set(n, tmp.norm());
+  } delete it;
+}
+*/
+/*
+double Circular::computeCirconf() {
+  double circonf = 0;
+  Iterator<node> *it=superGraph->getNodes(n);
+  while (it->hasNext())  {
+    node n = itN->next();
+    circonf += radius.get(n.id);
+  } delete it;
+  return circonf;
+}
+*/
+//=========================================================
 bool Circular::run() {
+  //  if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
+    if (superGraph->existProperty("viewSize"))
+      SizesProxy *nodeSize = superGraph->getProperty<SizesProxy>("viewSize");    
+    else {
+      SizesProxy *nodeSize = superGraph->getProperty<SizesProxy>("viewSize");  
+      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
+    }
+    //  }
+
+  //compute node radius
+    //  double circonf = computeCirconf();
+  //compute alpha
+  //compute rho
+  //place nodes
+  
+
+
   Size resultSize;
   double gamma=0;
   int i;
@@ -64,6 +120,3 @@ bool Circular::run() {
   } delete itN;
   return true;
 }
-
-
-

@@ -16,15 +16,18 @@
 
 /** \addtogroup layout */
 /*@{*/
-/// Embedder.cpp - An implementation of the ACE algorithm.
+/// Embedder.cpp - An implementation of the HDE algorithm.
 /**
- * This plugin implements ACE:
- * "ACE a fast multiscale eigenvectors computation for drawing huge graphs"
+ * This plugin implements HDE:
+ * "Graph Drawing by High-Dimensional Embedding"
+ * Proceedings of 10th Int. Symp. Graph Drawing (GD'02),
+ * Lecture Notes in Computer Science, Vol. 2528, 
+ * Springer Verlag, pp. 207--219, 2002. 
+ * Authors: D. Harel and Y. Koren,
  *
- * Authors: Y. Koren, L. Carmel and D. Harel
  * From the sources of Embedder (reference implementation of the mentionned article)
  *
- * See http://www.wisdom.weizmann.ac.il/~yehuda/ for both publication and source code
+ * See http://www.research.att.com/~yehuda/ for both publication and source code
  *
  * Integration in Tulip by B.Mathieu
  */
@@ -38,7 +41,7 @@ private:
   hash_map<node, unsigned int> rmap;
 };
 
-LAYOUTPLUGIN(Embedder, "Embedder (ACE)", "Bertrand Mathieu", "27/05/2003", "Ok", "0", "1");
+LAYOUTPLUGIN(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "0", "1");
 
 using namespace std;
 

@@ -10,7 +10,6 @@ plugins_LTLIBRARIES = \
 	librandom.la \
 	libgem.la \
 	libgem3d.la \
-	libtreereingold.la \
 	libtreereingoldextended.la \
 	libtreemap.la \
 	libconetree.la\
@@ -33,7 +32,6 @@ pluginsdir = $(libdir)/tlp/plugins/layout
 librandom_la_SOURCES = Random.cpp Random.h
 libgem_la_SOURCES = GEM.cpp GEM.h
 libgem3d_la_SOURCES = GEM3D.cpp GEM3D.h
-libtreereingold_la_SOURCES = TreeReingoldAndTilford.cpp TreeReingoldAndTilford.h 
 libtreereingoldextended_la_SOURCES = TreeReingoldAndTilfordExtended.cpp TreeReingoldAndTilfordExtended.h 
 libconetree_la_SOURCES = ConeTree.h ConeTree.cpp 
 libconetreeextended_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp

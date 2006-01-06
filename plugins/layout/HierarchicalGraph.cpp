@@ -9,6 +9,8 @@
 #include <tulip/SelectionProxy.h>
 #include <tulip/GraphTools.h>
 #include <tulip/TlpTools.h>
+#include <tulip/ForEach.h>
+#include <tulip/SortIterator.h>
 #include "HierarchicalGraph.h"
 
 
@@ -19,26 +21,23 @@ using namespace std;
 static const int NB_UPDOWN_SWEEP = 10;
 
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {}
-
 HierarchicalGraph::~HierarchicalGraph() {}
-
+//================================================================================
 class LessThanEdge {
 public:
   MetricProxy *metric;
   SuperGraph *sg;
-  bool operator() (edge e1,edge e2) {
+  bool operator() (edge e1, edge e2) {
     return (metric->getNodeValue(sg->source(e1)) < metric->getNodeValue(sg->source(e2)));
   }
 };
-
+//================================================================================
 void HierarchicalGraph::buildGrid(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
   bool resultBool;
   string erreurMsg;
   MetricProxy dagLevel(graph);
-  //  graph->getLocalProperty<MetricProxy>("DagLevel",cached,resultBool,erreurMsg);
   resultBool = graph->computeProperty("DagLevel", &dagLevel,erreurMsg);
-
   Iterator<node> *itN=graph->getNodes();  
   while(itN->hasNext()){
     node itn=itN->next();
@@ -47,7 +46,6 @@ void HierarchicalGraph::buildGrid(SuperGraph *graph){
     embedding->setNodeValue(itn, grid[level].size());
     grid[level].push_back(itn);
   } delete itN;
-
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
@@ -134,7 +132,7 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
     node itn=itN->next();
     if (superGraph->indeg(itn)>1) {
       vector<edge> tmpList;
-      Iterator<edge> *itE=superGraph->getInEdges(itn);
+      Iterator<edge> *itE = superGraph->getInEdges(itn);
       while (itE->hasNext()) {
 	edge ite=itE->next();
 	tmpList.push_back(ite);
@@ -142,7 +140,7 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
       LessThanEdge tmpL;
       tmpL.metric = barycenter;
       tmpL.sg = superGraph;
-      sort(tmpList.begin(),tmpList.end(),tmpL);
+      sort(tmpList.begin(), tmpList.end(), tmpL);
       int toKeep = tmpList.size()/2;
       vector<edge>::const_iterator it;
       for (it=tmpList.begin(); it!=tmpList.end(); ++it) {
@@ -162,7 +160,6 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
 void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
 					 const stdext::hash_map<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
-
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
   for (vector<edge>::const_iterator it = reversedEdges.begin(); it != reversedEdges.end(); ++it)
@@ -250,14 +247,27 @@ bool HierarchicalGraph::run() {
     IntProxy *edgeLength = mySGraph->getLocalProperty<IntProxy>("treeEdgeLength");
     tlp::makeProperDag(mySGraph,properAddedNodes,replacedEdges,edgeLength);
     //we compute metric for cross reduction
-    embedding = mySGraph->getLocalProperty<MetricProxy>("treeOrder");
+    MetricProxy embed(mySGraph);
+    //    embedding = mySGraph->getLocalProperty<MetricProxy>("treeOrder");
+    embedding = &embed;
     lessNode.metric = embedding;
     buildGrid(mySGraph);
     crossReduction(mySGraph);
+    
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      vector<edge> order;
+      edge e;
+      forEach(e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n),mySGraph, embedding)) {
+	order.push_back(e);
+      }
+      mySGraph->setEdgeOrder(n, order);
+    }
+    
     //We extract a spanning tree from the proper dag.
     DagLevelSpanningTree(mySGraph,startNode);
   }
-
+  
   //We draw the tree using a tree drawing algorithm
   bool resultBool;
   string erreurMsg;
@@ -272,9 +282,8 @@ bool HierarchicalGraph::run() {
 
   computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
-
+  
   mySGraph->delLocalProperty("treeEdgeLength");
-  mySGraph->delLocalProperty("treeOrder");
   mySGraph->delLocalProperty("viewSize");
   for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     superGraph->reverse(*it);

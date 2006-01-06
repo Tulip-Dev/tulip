@@ -32,10 +32,9 @@ struct LR {
  *  It extends the original Reingold and Tilford by providing managment
  *  of different node size and different edge length. \n \n
  *  The algortihm use the (Size)"viewSize" property for element size and the
- *  (int)"treeEdgeLength" for the edge length. The property (int)"treeOrder"
- *  can be used to change the embedding of the tree.
+ *  (int)"treeEdgeLength" for the edge length.
  *
- *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
+ *  \author David Auber LaBRI, University Bordeaux I France, Email : auber@tulip-software.org
  *
  *  <b>LICENCE</b>
  *
