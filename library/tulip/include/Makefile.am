@@ -1,4 +1,8 @@
 nobase_include_HEADERS = \
+	tulip/Bfs.h \
+	tulip/FaceIterator2.h \
+	tulip/SuperGraphConMap.h \
+	tulip/CanonicalOrdering.h \
 	tulip/ConvexHull.h \
 	tulip/Delaunay.h \
 	tulip/tulipconf.h \

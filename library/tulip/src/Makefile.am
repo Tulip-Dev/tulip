@@ -18,6 +18,10 @@ AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ ../../../thirdparty/triangle/libtriangle.la -release ${RELEASE}
 
 libtulip_la_SOURCES = \
+	Bfs.cpp \
+	FaceIterator2.cpp \
+	SuperGraphConMap.cpp \
+	CanonicalOrdering.cpp \
 	ConvexHull.cpp \
 	Delaunay.cpp \
 	DrawingTools.cpp \
@@ -72,7 +76,6 @@ libtulip_la_SOURCES = \
 	Polynome.cpp \
 	Plane.cpp \
 	SuperGraphMap.cpp \
-	Face.cpp \
 	FaceIterator.cpp \
 	PlanarityTest.cpp \
 	PlanarityTestImpl.cpp \

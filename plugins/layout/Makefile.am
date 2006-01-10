@@ -7,6 +7,8 @@ DLL_FLAGS = -no-undefined
 endif
 
 plugins_LTLIBRARIES = \
+	libpolyline.la \
+	libconnnecteccomponnentpacking.la \
 	librandom.la \
 	libgem.la \
 	libgem3d.la \
@@ -29,6 +31,8 @@ plugins_LTLIBRARIES = \
 pluginsdir = $(libdir)/tlp/plugins/layout
 
 
+libpolyline_la_SOURCES = Polyline.cpp
+libconnnecteccomponnentpacking_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
 librandom_la_SOURCES = Random.cpp Random.h
 libgem_la_SOURCES = GEM.cpp GEM.h
 libgem3d_la_SOURCES = GEM3D.cpp GEM3D.h

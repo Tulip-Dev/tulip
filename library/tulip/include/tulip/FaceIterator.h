@@ -17,13 +17,13 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
 /// Face iterator for SuperGraphMap
-class FaceIterator : public Iterator<Face*>{
+class FaceIterator : public Iterator<Face>{
 public:
-  FaceIterator(SuperGraphMap*);
+  FaceIterator(SuperGraphMap* m);
   virtual ~FaceIterator(){}
   
   /** return the next element */
-  Face* next();
+  Face next();
   /** test if there's a next element */
   bool hasNext();
 
@@ -34,21 +34,20 @@ private:
 
 //============================================================
 /// Adjacente Face iterator for SuperGraphMap
-class FaceAdjIterator : public Iterator<Face*>{
+class FaceAdjIterator : public Iterator<Face>{
 public:
   /** compute the adjacent faces of the node n */
   FaceAdjIterator(SuperGraphMap* m, const node n);
   virtual ~FaceAdjIterator(){}
   
   /** return the next element */
-  Face* next();
+  Face next();
   /** test if there's a next element */
   bool hasNext();
 
 private:
-  std::list<Face*>::iterator it;
-  /** contain a reference on the adjacent faces */
-  std::list<Face*> lfaces;
+    std::vector<Face> facesAdj;
+    unsigned int i;
 }; 
 
 //============================================================
@@ -56,7 +55,7 @@ private:
 class NodeFaceIterator : public Iterator<node>{
 public :
   /** compute the node of the face */
-  NodeFaceIterator(const SuperGraphMap*, const Face*);
+  NodeFaceIterator(SuperGraphMap *m, const Face );
   virtual ~NodeFaceIterator(){}
   
   /** return the next element */
@@ -75,7 +74,7 @@ private :
 /// Edge of face iterator for SuperGraphMap
 class EdgeFaceIterator : public Iterator<edge>{
 public :
-  EdgeFaceIterator(const Face*);
+  EdgeFaceIterator(SuperGraphMap *m, const Face );
   virtual ~EdgeFaceIterator(){}
   
   /** return the next element */
@@ -85,7 +84,7 @@ public :
 
 private :
   /** reference on the current face */
-  const Face* f;
+  std::vector<edge> ve;
   unsigned int i;
 };
 #endif
