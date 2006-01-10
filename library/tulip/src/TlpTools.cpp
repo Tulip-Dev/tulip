@@ -11,26 +11,50 @@
 using namespace std;
 
 #ifndef _TULIP_LIB_DIR
+#ifdef _WIN32
+#define _TULIP_LIB_DIR "c:\\Program File\\Tulip\\lib\\"
+#else
 #define _TULIP_LIB_DIR "/usr/local/lib/"
 #endif
+#endif
 
-static const char *TULIP_PLUGINS_PATH_VARIABLE="TULIP_PLUGINS_PATH";
+ //static const char *TULIP_PLUGINS_PATH_VARIABLE="TULIP_PLUGINS_PATH";
 
 string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
+string tlp::TulipDocProfile;
+string tlp::TulipUserHandBookIndex;
 const char tlp::PATH_DELIMITER = ':';
 //=========================================================
 void tlp::initTulipLib() {
   char *getEnvTlp;
+  std::string tulipDocDir;
+  string::size_type pos;
+
   getEnvTlp=getenv("TLPDIR");
   if (getEnvTlp==0)
-   	   TulipLibDir=string(_TULIP_LIB_DIR);
+    TulipLibDir=string(_TULIP_LIB_DIR);
   else
     TulipLibDir=string(getEnvTlp);
-  getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
-  if (getEnvTlp!=0)
-    TulipPluginsPath=string(getEnvTlp);
-  TulipPluginsPath=TulipLibDir+"/tlp/plugins"+PATH_DELIMITER+TulipPluginsPath;
+#ifdef _WIN32
+  // ensure it is a unix-style path
+  pos = TulipLibDir.find('\\', 0);
+  while(pos != string::npos) {
+    TulipLibDir[pos] = '/';
+    pos = TulipLibDir.find('\\', pos);
+  }
+ #endif
+  // ensure it is '/' terminated
+  if (TulipLibDir[TulipLibDir.length() - 1] != '/')
+    TulipLibDir+='/';
+  
+  TulipPluginsPath=TulipLibDir+"tlp/plugins";
+  // one dir up to initialize the doc dir
+  pos = TulipLibDir.length() - 2;
+  pos = TulipLibDir.rfind("/", pos);
+  tulipDocDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+  TulipDocProfile=tulipDocDir+"profile.adp";
+  TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 }
 //=========================================================
 istream *tlp::getIgzstream(const char *name, int open_mode) {
@@ -191,6 +215,12 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
   if (deletePluginProgress) delete tmpProgress;
   return result;
 }
+
+// initialize and export the factories needed to manage
+// our different kinds of plugins
+template <class Tnode, class Tedge, class TPROPERTY>
+  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > PropertyProxy<Tnode,Tedge,TPROPERTY>::factory;
+
 //=========================================================
 static void loadPlugins(string dir,PluginLoader *plug) {
   SizesProxy::factory.load(dir + "sizes", "Sizes",plug);
@@ -211,13 +241,13 @@ void tlp::loadPlugins(PluginLoader *plug) {
   while (end!=TulipPluginsPath.end())
     if ((*end)==PATH_DELIMITER) {
       if (begin!=end) 
-	loadPlugins(string(begin,end)+"/",plug);
+	loadPlugins(string(begin,end)+'/',plug);
       ++end;
       begin=end;
     } else
       ++end;
   if (begin!=end) 
-    loadPlugins(string(begin,end)+"/",plug);
+    loadPlugins(string(begin,end)+'/',plug);
 }
 //=========================================================
 void tlp::loadPlugin(const string & filename, PluginLoader *plug) {

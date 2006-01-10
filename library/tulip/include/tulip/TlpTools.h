@@ -19,22 +19,12 @@
 #include "Reflect.h"
 #include "ExtendedClusterOperation.h"
 
-#ifdef _WIN32
-/*
-TLP_SCOPE TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> PropertyProxy<IntType, IntType, Int>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> PropertyProxy<SizeType, SizeType, Sizes>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> PropertyProxy<PointType, LineType, Layout>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> PropertyProxy<ColorType, ColorType, Colors>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<String>, String, PropertyContext> PropertyProxy<StringType, StringType, String>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> PropertyProxy<DoubleType, DoubleType, Metric>::factory;
-TLP_SCOPE TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> PropertyProxy<BooleanType, BooleanType, Selection>::factory;
-*/
-#endif
-
 namespace tlp {
   extern TLP_SCOPE const char PATH_DELIMITER;
   extern TLP_SCOPE std::string TulipLibDir;
   extern TLP_SCOPE std::string TulipPluginsPath;
+  extern TLP_SCOPE std::string TulipDocProfile;
+  extern TLP_SCOPE std::string TulipUserHandBookIndex;
   
   extern TLP_SCOPE void initTulipLib();
     
