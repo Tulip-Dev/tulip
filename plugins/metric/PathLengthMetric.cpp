@@ -15,15 +15,14 @@ double PathLengthMetric::getNodeValue(const node n) {
   string erreurMsg;
   double result=0;
   MetricProxy *leafMetric= new MetricProxy(superGraph);
-  //superGraph->getLocalProperty<MetricProxy>("Leaf",cached,resultBool,erreurMsg);
-  resultBool = superGraph->computeProperty("Leaf",leafMetric,erreurMsg);
+  resultBool = superGraph->computeProperty("Leaf", leafMetric, erreurMsg);
   assert (resultBool);
   Iterator<node> *itN=superGraph->getOutNodes(n);
   while (itN->hasNext()) {
     node child=itN->next();
-    result+=metricProxy->getNodeValue(child);
+    result += metricProxy->getNodeValue(child);
   } delete itN;
-  result+=leafMetric->getNodeValue(n);
+  result += leafMetric->getNodeValue(n);
   delete leafMetric;
   return result;
 }
@@ -36,10 +35,3 @@ bool PathLengthMetric::check(string &erreurMsg) {
     return false;
   }
 }
-
-
-
-
-
-
-

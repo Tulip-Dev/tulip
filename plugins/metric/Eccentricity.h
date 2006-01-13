@@ -7,8 +7,13 @@
 /** \addtogroup metric */
 /*@{*/
 /// EccentricyMetric.h - Compute the eccentricity of each node.
-/** This plugin compute the eccentricity of each node, more information 
- * about the use of eccentricity metric can be found in :
+/** This plugin compute the eccentricity of each node, 
+ *
+ * Eccentricity is the maximum distance to go from a node to all others.
+ * In this version the value is normalized (1 means that a node is in the center 
+ * of the network, 0 means that a node is the more eccentric in the network). 
+ *
+ * More information  about the use of eccentricity metric can be found in :
  *
  * Visone: Analysis and visualization of social networks. \n
  * "Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel", \n
@@ -20,7 +25,7 @@
  *
  *  18/06/2004 Verson 0.0.1: Initial release
  *
- *  \note The complexity of the algorithm is O(|V|+|E|) time and O(|V|) space.  
+ *  \note The complexity of the algorithm is O(|V| * |E|) time and O(1) space.  
  *
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
@@ -39,10 +44,6 @@ public:
   EccentricityMetric(const PropertyContext &);
   ~EccentricityMetric();
   bool run();
-  /*
-    private :
-    double computeValue(const node n);
-  */
 };
 /*@}*/
 #endif

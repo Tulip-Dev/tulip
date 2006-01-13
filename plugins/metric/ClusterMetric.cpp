@@ -100,12 +100,5 @@ double ClusterMetric::getNodeValue(const node n ) {
 bool ClusterMetric::run() {
   maxDepth=1;
   if (dataSet!=0) dataSet->get("depth",maxDepth);
-
-  /*  Iterator<node> *it = superGraph->getNodes();
-  while(it->hasNext()) {
-    node n = it->next();
-    metricProxy->setNodeValue(n, getNodeValue(n));
-  } delete it;
-  */
   return true;
 }

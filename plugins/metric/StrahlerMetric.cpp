@@ -239,12 +239,3 @@ bool StrahlerMetric::check(string &erreurMsg) {
   return true;
 }
 void StrahlerMetric::reset(){}
-
-
-
-
-
-
-
-
-

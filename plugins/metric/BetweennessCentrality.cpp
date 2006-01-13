@@ -90,4 +90,4 @@ public:
   }
 };
 /*@}*/
-METRICPLUGIN(BetweennessCentrality,"BetweennessCentrality","David Auber","03/01/2005","Alpha","0","1");
+METRICPLUGIN(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","0","1");

@@ -110,8 +110,9 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
     gamma3 /= norm3;
   else
     gamma3 = 0;
+
   if (norm4 > 1E-5)
-    gamma4 /= norm3;
+    gamma4 /= norm4;
   else
     gamma4 = 0;
 
