@@ -7,7 +7,7 @@ DLL_FLAGS = -no-undefined
 endif
 
 plugins_LTLIBRARIES = \
-	libhistogrammapping.la \
+	libmetricmapping.la \
 
 pluginsdir = $(libdir)/tlp/plugins/colors
 
