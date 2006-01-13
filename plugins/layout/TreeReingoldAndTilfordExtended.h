@@ -26,6 +26,7 @@ struct LR {
  *
  *  - 21/02/2000 Verson 0.0.1: Initial release
  *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
+ *  - 06/01/2005 Verson 0.0.3: Code refactoring, management of : orienetation, parameters
  *
  *  \note This algorithm only works on trees.\n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).\n
@@ -48,7 +49,7 @@ class TreeReingoldAndTilfordExtended:public Layout {
 public:
   TreeReingoldAndTilfordExtended(const PropertyContext &);
   ~TreeReingoldAndTilfordExtended();
-  bool run();
+                      bool run();
   bool check(std::string &);
   void reset();
 
@@ -58,9 +59,13 @@ private:
   double  calcDecal(const std::list<LR>& , const std::list<LR>&);
   std::list<LR>* mergeLRList(std::list<LR>*,std::list<LR>*,double decal);
   std::list<LR>* TreePlace(node, stdext::hash_map<node,double>*);
-  void TreeLevelSizing(node ,std::map<int,double> &,int );
+  void TreeLevelSizing(node ,std::map<int,double> &,int , std::map<node,int> &levels);
+
   SizesProxy *sizesProxy;
-  IntProxy *lengthMetric;
+  IntProxy   *lengthMetric;
+  bool ortho;
+  bool useLength;
+  std::string orientation;
 };
 /*@}*/
 #endif

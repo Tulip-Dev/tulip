@@ -1,6 +1,8 @@
+#include <tulip/TlpTools.h>
 #include <tulip/LayoutProxy.h>
 #include <tulip/MethodFactory.h>
 #include <tulip/TreeTest.h>
+#include <tulip/ForEach.h>
 #include "TreeReingoldAndTilfordExtended.h"
 
 #define minDecal 1.0
@@ -8,10 +10,51 @@
 LAYOUTPLUGIN(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2");
 using namespace std;
 
+
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "values", "An existing size property" ) \
+    HTML_HELP_DEF( "default", "viewSize" ) \
+    HTML_HELP_BODY() \
+    "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+    //Orientation
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF( "default", "horizontal" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the orientation of the drawing" \
+    HTML_HELP_CLOSE(),
+    //Orthogonal
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "true" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose if the tree tree is drawn orthogonally or not" \
+    HTML_HELP_CLOSE(),
+    //Orthogonal
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "true" )					\
+    HTML_HELP_BODY()							\
+    "This parameter enables to choose if the tree tree is drawn orthogonally or not" \
+    HTML_HELP_CLOSE()
+  };
+}
+//=============================================================================
+const std::string ORIENTATION("vertical;horizontal;");
 //=============================================================================
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
   Layout(context),
   lengthMetric(0) {
+  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<IntProxy>("edgeLength",paramHelp[1]);
+  addParameter<bool>("orthogonal", paramHelp[2], "true" );
+  addParameter<bool>("use length", paramHelp[3], "false" );
+  addParameter<StringCollection> ("orientation", paramHelp[4], ORIENTATION );
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
@@ -133,8 +176,8 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
   if (superGraph->outdeg(n)==0){
     list<LR> *result=new list<LR>();
     LR tmpLR;
-    tmpLR.L = -sizesProxy->getNodeValue(n).getW()/2;
-    tmpLR.R = +sizesProxy->getNodeValue(n).getW()/2;
+    tmpLR.L = -sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.R = +sizesProxy->getNodeValue(n).getW()/2.;
     tmpLR.size = 1;
     (*p)[n] = 0;
     result->push_front(tmpLR);
@@ -150,10 +193,9 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
     list<LR> *leftTree,*rightTree;
     list<double> childPos;
     leftTree=TreePlace(itn,p);
-    childPos.push_back( ( (*(leftTree->begin())).L + (*(leftTree->begin())).R )/2);
-    if (superGraph->existProperty("treeEdgeLength")) {
+    childPos.push_back( ( (*(leftTree->begin())).L + (*(leftTree->begin())).R )/2.);
+    if (useLength) {
       int tmpLength;
-      IntProxy *lengthMetric=superGraph->getProperty<IntProxy>("treeEdgeLength");
       if ((tmpLength=lengthMetric->getEdgeValue(ite))>1) {
 	LR tmpLR;
 	tmpLR.L=leftTree->front().L;
@@ -167,9 +209,8 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
       ite=it->next();
       itn=superGraph->target(ite);
       rightTree=TreePlace(itn,p);
-      if (superGraph->existProperty("treeEdgeLength")) {
+      if (useLength) {
 	int tmpLength;
-	IntProxy *lengthMetric=superGraph->getProperty<IntProxy>("treeEdgeLength");
 	if ((tmpLength=lengthMetric->getEdgeValue(ite))>1) {
 	  LR tmpLR;
 	  tmpLR.L=rightTree->front().L;
@@ -179,7 +220,7 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 	}
       }
       double decal=calcDecal(*leftTree,*rightTree);
-      double tmpL=( (*(rightTree->begin())).L + (*(rightTree->begin())).R )/2;
+      double tmpL=( (*(rightTree->begin())).L + (*(rightTree->begin())).R )/2.;
       if (mergeLRList(leftTree,rightTree,decal)==leftTree) {
 	childPos.push_back(tmpL+decal);
 	delete rightTree;
@@ -192,29 +233,27 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 	leftTree=rightTree;
       }
     }delete it;
-    double posFather=((((*(leftTree->begin())).L+(*(leftTree->begin())).R)/2));
+    double posFather=((((*(leftTree->begin())).L+(*(leftTree->begin())).R)/2.));
     LR tmpLR;
-    tmpLR.L=posFather-sizesProxy->getNodeValue(n).getW()/2;
-    tmpLR.R=posFather+sizesProxy->getNodeValue(n).getW()/2;
+    tmpLR.L=posFather-sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.R=posFather+sizesProxy->getNodeValue(n).getW()/2.;
     tmpLR.size=1;
     leftTree->push_front(tmpLR);
 
     list<double>::const_iterator itI=childPos.begin();
-    it = superGraph->getOutEdges(n);
-      
-    while (it->hasNext()) {
-      ite=it->next();
+    forEach(ite, superGraph->getOutEdges(n)) {
       itn=superGraph->target(ite);
       (*p)[itn]=*itI-posFather;
       ++itI;
-    }delete it;
+    }
     childPos.clear();
     (*p)[n]=0;
     return(leftTree);
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n,map<int,double> &maxSize,int level) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n,map<int,double> &maxSize,int level,map<node,int> &levels) {
+  levels[n] = level;
   if (maxSize.find(level)!=maxSize.end()) {
     if (maxSize[level]<sizesProxy->getNodeValue(n).getH()) {
       maxSize[level]=sizesProxy->getNodeValue(n).getH();
@@ -222,21 +261,19 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n,map<int,double> &max
   }
   else
     maxSize[level]=sizesProxy->getNodeValue(n).getH();
-
-  if (superGraph->existProperty("treeEdgeLength")) {
-    IntProxy *lengthMetric=superGraph->getProperty<IntProxy>("treeEdgeLength");
-    Iterator<edge> *it=superGraph->getOutEdges(n);
-    while (it->hasNext()) {
-      edge ite=it->next();
+  
+  if (useLength) {
+    edge ite;
+    forEach(ite, superGraph->getOutEdges(n)) {
       node itn=superGraph->target(ite);
-      TreeLevelSizing(itn,maxSize,level+(lengthMetric->getEdgeValue(ite)));
-    }delete it;
+      TreeLevelSizing(itn,maxSize,level+(lengthMetric->getEdgeValue(ite)), levels);
+    }
   }
   else {
     Iterator<node> *itN=superGraph->getOutNodes(n);
     for (;itN->hasNext();) {
       node itn=itN->next();
-      TreeLevelSizing(itn,maxSize,level+1);
+      TreeLevelSizing(itn,maxSize,level+1, levels);
     }delete itN;
   }
 }
@@ -246,13 +283,11 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
-  tmpCoord.set(x+(*p)[n],y+maxLevelSize[level]/2,0);
+  tmpCoord.set(x+(*p)[n],y+maxLevelSize[level]/2.,0);
   layoutProxy->setNodeValue(n,tmpCoord);
-  if (superGraph->existProperty("treeEdgeLength")) {
-    IntProxy *lengthMetric=superGraph->getProperty<IntProxy>("treeEdgeLength");
-    Iterator<edge> *it=superGraph->getOutEdges(n);
-    for (;it->hasNext();){
-      edge ite = it->next();
+  if (useLength) {
+    edge ite;
+    forEach(ite, superGraph->getOutEdges(n)) {
       node itn = superGraph->target(ite);
       double decalY = y;
       int decalLevel = level;
@@ -263,47 +298,123 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 	tmp--;
       }
       calcLayout(itn,p,x+(*p)[n], decalY , decalLevel, maxLevelSize);
-    } delete it;
+    }
   }
   else {
-    Iterator<node> *it=superGraph->getOutNodes(n);
-    for (;it->hasNext();){
-      node itn=it->next();
+    node itn;
+    forEach(itn, superGraph->getOutNodes(n)) {
       calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+minDecal, 
 		 level+1, maxLevelSize);
-    } delete it;
+    }
   }
   //cerr << "TreeReingoldAndTilfordExtended::EndCalcLayout" << endl;
 }
 //=============================================================================
 bool TreeReingoldAndTilfordExtended::run() {
   stdext::hash_map<node,double> posRelative;
-  node startNode;
+
   layoutProxy->setAllEdgeValue(vector<Coord>(0));
-  sizesProxy=superGraph->getProperty<SizesProxy>("viewSize");
-  Iterator<node> *it=superGraph->getNodes();
-  node itn;
-  startNode=it->next();
-  while (it->hasNext()) {      
-    itn=it->next();
-    if (superGraph->indeg(itn)==0) {
-      startNode=itn;
-      break;
+  sizesProxy = superGraph->getProperty<SizesProxy>("viewSize");
+  lengthMetric = 0;
+  ortho = true;
+  useLength = false;
+  if (dataSet!=0) {
+    dataSet->get("edgeLength", lengthMetric);
+    dataSet->get("use length", useLength);
+    dataSet->get("nodeSize", sizesProxy);
+    dataSet->get("orthogonal", ortho);
+    StringCollection tmp;
+    if (dataSet->get("orientation", tmp)) {
+      orientation = tmp.getCurrentString();
     }
-  } delete it;
+  }
+
+  //=========================================================
+  //rotate size if necessary
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size tmp = sizesProxy->getNodeValue(n);
+      sizesProxy->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+    }
+  }
+  //===========================================================
+  node startNode;
+  tlp::getSource(superGraph, startNode);
+
   map<int,double> maxSizeLevel;
-  TreeLevelSizing(startNode,maxSizeLevel,0);
+  map<node, int> levels;
+  TreeLevelSizing(startNode, maxSizeLevel,0, levels);
+  
   list<LR> *tmpList = TreePlace(startNode,&posRelative);
   delete tmpList;
+
   calcLayout(startNode,&posRelative, 0, 0, 0, maxSizeLevel);
+
+  if (ortho) {
+    //Edge bends
+    //compute layer value 
+    map<int,double>::reverse_iterator itos = maxSizeLevel.rbegin();
+    //==========================
+    //compute the coordinate of each interval between layer.
+    vector<double> levelCoord(itos->first+1);
+    for (int i=0; i<itos->first; ++i) {
+      levelCoord[i] = 0;
+    }
+    map<int,double>::iterator itas = maxSizeLevel.begin();
+    for (;itas!=maxSizeLevel.end(); ++itas) {
+      levelCoord[itas->first] = itas->second;
+    }
+    for (int i=1; i<itos->first; ++i) {
+      levelCoord[i] += levelCoord[i-1] + minDecal;
+    }
+    //============================
+    edge e;
+    forEach(e, superGraph->getEdges()) {
+      LineType::RealType tmp;
+      node src = superGraph->source(e);
+      node tgt = superGraph->target(e);
+      Coord srcPos = layoutProxy->getNodeValue(src);
+      Coord tgtPos = layoutProxy->getNodeValue(tgt);
+      double y = levelCoord[levels[tgt]-1];
+      tmp.push_back(Coord(srcPos[0], y, 0));
+      tmp.push_back(Coord(tgtPos[0], y, 0));
+      layoutProxy->setEdgeValue(e, tmp);
+    }
+    
+    if (orientation == "horizontal") {
+      forEach(e, superGraph->getEdges()) {
+	LineType::RealType tmp = layoutProxy->getEdgeValue(e);
+	LineType::RealType tmp2;
+	tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
+	tmp2.push_back(Coord(-tmp[1][1], tmp[1][0], tmp[1][2]));
+	layoutProxy->setEdgeValue(e, tmp2);
+      }
+    }
+  }
+
+  //rotate layout and size
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size  tmp = sizesProxy->getNodeValue(n);
+      sizesProxy->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      Coord tmpC = layoutProxy->getNodeValue(n);
+      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+    }
+  }
+  
   return true;
 }
 //=============================================================================
 bool TreeReingoldAndTilfordExtended::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph))
-    {erreurMsg="";return true;}
-  else
-    {erreurMsg="The Graph must be a Tree";return false;}
+  if (TreeTest::isTree(superGraph)) {
+    erreurMsg="";
+    return true;
+  } else {
+    erreurMsg="The Graph must be a Tree";
+    return false;
+  }
 }
 //=============================================================================
 void TreeReingoldAndTilfordExtended::reset() {

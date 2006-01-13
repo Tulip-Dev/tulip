@@ -72,6 +72,10 @@ private:
   unsigned int degree(SuperGraph*,node,bool);
   void initCross(SuperGraph*superGraph,node n, stdext::hash_map<node,bool> &visited,int &id);
   LessThanNode2 lessNode;
+
+  SizesProxy *nodeSize;
+  std::string orientation;
+  
 };
 /*@}*/
 #endif

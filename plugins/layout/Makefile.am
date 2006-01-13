@@ -22,7 +22,6 @@ plugins_LTLIBRARIES = \
 	libtreeleaf.la \
 	libtreeradial.la \
 	libgeneralgraph3d.la \
-	libtreeortho.la \
 	libbubbletree.la \
 	libembedder.la \
 	libtutte.la \
@@ -43,7 +42,6 @@ libtreemap_la_SOURCES = TreeMap.h TreeMap.cpp
 libtreeradial_la_SOURCES = TreeRadial.cpp 
 libtreeleaf_la_SOURCES = TreeLeaf.h TreeLeaf.cpp 
 libbubbletree_la_SOURCES = BubbleTree.h BubbleTree.cpp 
-libtreeortho_la_SOURCES = TreeReingoldOrtho.cpp TreeReingoldOrtho.h
 libcircular_la_SOURCES = Circular.h Circular.cpp
 libspringelectrical_la_SOURCES = SpringElectrical.h SpringElectrical.cpp
 libhierarchicalgraph_la_SOURCES = HierarchicalGraph.h HierarchicalGraph.cpp

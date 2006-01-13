@@ -20,7 +20,32 @@ using namespace std;
 
 static const int NB_UPDOWN_SWEEP = 10;
 
-HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {}
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "values", "An existing size property" ) \
+    HTML_HELP_DEF( "default", "viewSize" ) \
+    HTML_HELP_BODY() \
+    "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+    //Orientation
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF( "default", "horizontal" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the orientation of the drawing"	\
+    HTML_HELP_CLOSE()
+  };
+}
+
+const std::string ORIENTATION("vertical;horizontal;");
+
+HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {
+  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+}
 HierarchicalGraph::~HierarchicalGraph() {}
 //================================================================================
 class LessThanEdge {
@@ -228,6 +253,15 @@ bool HierarchicalGraph::run() {
   // Build a clone of this graph
   SuperGraph *mySGraph = tlp::newCloneSubGraph(superGraph,"tmp clone");
 
+  nodeSize = superGraph->getProperty<SizesProxy>("viewSize");
+  orientation = "vertical";
+  if (dataSet!=0) {
+    dataSet->get("nodeSize", nodeSize);
+    StringCollection tmp;
+    if (dataSet->get("orientation", tmp)) {
+      orientation = tmp.getCurrentString();
+    }
+  }
   //========================================================================
   //if the graph is not acyclic we reverse edges to make it acyclic
   vector<tlp::SelfLoops> listSelfLoops;
@@ -241,19 +275,17 @@ bool HierarchicalGraph::run() {
   //========================================================================
   list<node> properAddedNodes;
   stdext::hash_map<edge,edge> replacedEdges;
-  
+  IntProxy *edgeLength = 0;
   if (!TreeTest::isTree(mySGraph)) {
     //We transform the dag in a proper dag
-    IntProxy *edgeLength = mySGraph->getLocalProperty<IntProxy>("treeEdgeLength");
+    edgeLength = new IntProxy(mySGraph);
     tlp::makeProperDag(mySGraph,properAddedNodes,replacedEdges,edgeLength);
     //we compute metric for cross reduction
     MetricProxy embed(mySGraph);
-    //    embedding = mySGraph->getLocalProperty<MetricProxy>("treeOrder");
     embedding = &embed;
     lessNode.metric = embedding;
     buildGrid(mySGraph);
     crossReduction(mySGraph);
-    
     node n;
     forEach(n, superGraph->getNodes()) {
       vector<edge> order;
@@ -262,8 +294,7 @@ bool HierarchicalGraph::run() {
 	order.push_back(e);
       }
       mySGraph->setEdgeOrder(n, order);
-    }
-    
+    }  
     //We extract a spanning tree from the proper dag.
     DagLevelSpanningTree(mySGraph,startNode);
   }
@@ -272,19 +303,31 @@ bool HierarchicalGraph::run() {
   bool resultBool;
   string erreurMsg;
   LayoutProxy tmpLayout(superGraph);
-  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg);
+  DataSet tmp;
+  tmp.set("nodeSize", nodeSize);
+  tmp.set("edgeLength", edgeLength);
+  if (edgeLength!=0)
+    tmp.set("use length", true);
+  else
+    tmp.set("use length", false);
+  tmp.set("ortogonal", false);
+  StringCollection tmpS;
+  if (dataSet!=0) {
+    dataSet->get("orientation", tmpS);
+  }
+  tmp.set("orientation", tmpS);
+  resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
   assert(resultBool);
-  Iterator<node> *itN = superGraph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    layoutProxy->setNodeValue(itn, tmpLayout.getNodeValue(itn));
-  } delete itN;
+  
+  
+  node n;
+  forEach(n, superGraph->getNodes()) {
+    layoutProxy->setNodeValue(n, tmpLayout.getNodeValue(n));
+  }
 
   computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
   
-  mySGraph->delLocalProperty("treeEdgeLength");
-  mySGraph->delLocalProperty("viewSize");
   for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     superGraph->reverse(*it);
   }
