@@ -7,7 +7,7 @@
 #include <tulip/MutableContainer.h>
 
 
-class Ordering : public std::vector<std::vector<node> >
+class TLP_SCOPE Ordering : public std::vector<std::vector<node> >
 {
   
  public :

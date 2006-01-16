@@ -100,12 +100,9 @@ setOutPath $INSTDIR\lib\tlp\plugins\selection
 File @prefix@\lib\tlp\plugins\selection\*.dll
 setOutPath $INSTDIR\lib\tlp\plugins\sizes
 File @prefix@\lib\tlp\plugins\sizes\*.dll
-setOutPath $INSTDIR\share\tulip
-File @prefix@\share\tulip\profile.adp
-setOutPath $INSTDIR\share\tulip\userHandbook\html
-File @prefix@\share\tulip\userHandbook\html\*
-setOutPath $INSTDIR\share\tulip\userHandbook\images
-File @prefix@\share\tulip\userHandbook\images\*
+setOutPath $INSTDIR\share
+; Try to save doc files if any
+File /nonfatal /r @prefix@\share\*
 SectionEnd
 
 
@@ -181,15 +178,7 @@ RMDir "$INSTDIR\include\tulip\cxx"
 Delete "$INSTDIR\include\tulip\*"
 RMDir "$INSTDIR\include\tulip"
 RMDir "$INSTDIR\include"
-Delete "$INSTDIR\share\tulip\userHandbook\images\*"
-RMDir "$INSTDIR\share\tulip\userHandbook\images\*"
-Delete "$INSTDIR\share\tulip\userHandbook\html\*"
-RMDir "$INSTDIR\share\tulip\userHandbook\html\"
-Delete "$INSTDIR\share\tulip\userHandbook\*"
-RMDir "$INSTDIR\share\tulip\userHandbook\"
-Delete "$INSTDIR\share\tulip\*"
-RMDir "$INSTDIR\share\tulip\"
-Delete "$INSTDIR\share\*"
-RMDir "$INSTDIR\share\"
-RMDir $INSTDIR
+IfFileExists "$INSTDIR\share\*.*" 0 +2
+RMDir /r "$INSTDIR\share"
+Delete "$INSTDIR\assistant.exe"
 SectionEnd

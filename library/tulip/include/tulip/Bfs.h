@@ -14,7 +14,7 @@
 
 #include <tulip/MutableContainer.h>
 
-class Bfs {
+class TLP_SCOPE Bfs {
  public :
   
   Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection);

@@ -11,7 +11,9 @@
 //====================================================================================
 #include <iostream>
 #ifdef _WIN32
-#include <windows.h>
+#include <stdarg.h>
+#include <windef.h>
+#include <winbase.h>
 #else
 #include <dlfcn.h>
 #include <dirent.h>
