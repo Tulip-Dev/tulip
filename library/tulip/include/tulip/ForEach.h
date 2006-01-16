@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <tulip/Iterator.h>
 
 namespace tlp {
