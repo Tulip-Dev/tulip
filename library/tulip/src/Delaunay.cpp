@@ -2,6 +2,12 @@
 #include <tulip/Delaunay.h>
 #define ANSI_DECLARATORS //ansi style declarations for triangle.h
 #include "thirdparty/triangle/triangle.h"
+#ifdef _WIN32
+#include <float.h>
+#else
+#include <fpu_control.h> //assume compiling for linux
+#endif
+
 
 using namespace std;
 using namespace triangle_1_5;
@@ -55,7 +61,7 @@ inline void copyToTriangleList (const int *src, int numberoftriangles,
 //==============================================================
 //a function to copy the vertices of of points to the 
 //voronoi diagram structure
-inline void copyVorVertexToVorDiagram (const REAL *points, int numberofpoints,
+inline void copyVorVertexToVorDiagram (const double *points, int numberofpoints,
 				       tlp::VoronoiDiagram *voronoiDiagram) {
   //load the voronoi vertices of the diagram
   for (int i = 0; i < numberofpoints; ++i) {
@@ -70,7 +76,7 @@ inline void copyVorVertexToVorDiagram (const REAL *points, int numberofpoints,
 //==============================================================
 //A fuction to copy a voronoi edge list src to the voronoi diagram
 inline void  copyVorEdgeAndRaysToVorDiagram (const int *edgelist,
-					     const REAL *normlist,
+					     const double *normlist,
 					     const int numberofedges,
 					     const triangulateio &triangleOutput,
 					     const bool computeVoronoiEdgeList,
@@ -453,12 +459,12 @@ void runTriangle (const vector<Coord> &points,
   }//end if
 
   //set up the input for triangle
-  REAL pointlist [2*points.size()];
+  double pointlist [2*points.size()];
   unsigned int pointCounter = 0;
   vector<Coord>::const_iterator it = points.begin();
   for (; it != points.end(); ++it) {
-    pointlist[pointCounter++] = (*it).getX();
-    pointlist[pointCounter++] = (*it).getY();
+    pointlist[pointCounter++] = it->getX();
+    pointlist[pointCounter++] = it->getY();
   }//end for
   
   //flags for triangle 'z' option allows 0 indexing of arrays and
@@ -472,13 +478,30 @@ void runTriangle (const vector<Coord> &points,
   triangleInput.numberofpoints = points.size();
   triangleInput.pointlist = pointlist;
   string triangleInputFlags ("zQPB");
+
   //e flag generates edge list
   if (edgeList != NULL) triangleInputFlags += string ("e");
   //e for edge list n for neighbour triangles, v for voronoi diagrams
   if (voronoiDiagram != NULL) triangleInputFlags += string ("env");
+
+  //The fpu mode is changed by triangle.  Backup the current fpu mode
+  //If we don't reset, floating point exceptions may occur later on in
+  //Tulip execution (and they are very hard to debug).
+  unsigned int fpu_mode = 0;
+#ifdef _WIN32
+  fpu_mode = _control87 (0, 0);
+#else
+  _FPU_GETCW (fpu_mode);
+#endif
   triangulate (const_cast<char *> (triangleInputFlags.c_str()), 
 	       &triangleInput, &triangleOutput, &voronoiOutput);
-  
+  //reset the fpu mode to what it was before
+#ifdef _WIN32
+  _control87 (fpu_mode, 0x000fffff);
+#else
+  _FPU_SETCW (fpu_mode);
+#endif
+
   //generate the triangle list if required
   if (triangleList != NULL)
     copyToTriangleList (triangleOutput.trianglelist, 
@@ -531,6 +554,6 @@ void tlp::delaunayTriangulation (const vector<Coord> &points,
 //==============================================================
 void tlp::voronoiDiagram (const vector<Coord> &points,
 			  VoronoiDiagram &voronoiDiagram,
-			  bool computeVoronoiEdgeList) {
-  runTriangle (points, NULL, NULL, computeVoronoiEdgeList, &voronoiDiagram);
+			  bool returnVoronoiEdgeList) {
+  runTriangle (points, NULL, NULL, returnVoronoiEdgeList, &voronoiDiagram);
 }//end voronoiDiagram
