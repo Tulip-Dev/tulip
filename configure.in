@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.14 $)
+AC_REVISION($Revision: 1.15 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -180,6 +180,11 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug          Compilation flags to allow debugging],
   CXXFLAGS="-O0 -Wall -g -pipe ",  CXXFLAGS="-DNDEBUG -O3 -funroll-loops -pipe " 
 )
+
+dnl statistics flag
+AC_ARG_ENABLE(stats-gui,
+[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface"],
+   CXXFLAGS="$CXXFLAGS -DSTATS_UI")
 
 dnl check if we build tlprender, option and presence of OSMesa
 AC_ARG_ENABLE(tlprender,

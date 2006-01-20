@@ -4,7 +4,10 @@
 #include <config.h>
 #endif
 
-#include "TulipStatsWidget.h"
+
+#include <fstream>
+#include <iostream>
+#include <unistd.h>
 #include <string>
 #include <map>
 #include <vector>
@@ -33,9 +36,7 @@
 #include <qradiobutton.h>
 #include <qprinter.h>
 #include <qobjectlist.h>
-#include <fstream>
-#include <iostream>
-#include <unistd.h>
+#include <qtabwidget.h>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
@@ -54,6 +55,7 @@
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
 
+#include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
 #include "viewGl.h"
 #include "Application.h"
@@ -104,6 +106,10 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   tabWidgetDock->setCloseMode(QDockWindow::Always);
   tabWidgetDock->setResizeEnabled(true);
   TabWidgetData *tabWidget = new TabWidgetData(tabWidgetDock);
+#ifndef STATS_UI
+  // remove Statistics tab if not needed
+  tabWidget->tabWidget2->removePage(tabWidget->StatsTab);
+#endif
   tabWidgetDock->boxLayout()->add(tabWidget);
   this->addDockWindow(tabWidgetDock,"Data manipulation", Qt::DockLeft);
   tabWidget->show();
