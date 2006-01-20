@@ -76,3 +76,8 @@ CLEANFILES = $(BUILT_SOURCES)
 moc_%.cpp: ../include/tulip/%.h 
 	$(MOC) -o $@ $<
 
+FindSelectionData.cpp: ../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
+	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
+
+../include/tulip/FindSelectionData.h: ../designer/FindSelection.ui
+	$(UIC) -o $@ $<
