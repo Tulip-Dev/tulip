@@ -52,6 +52,5 @@ moc_%.cpp: %.h
 %Data.h: %.ui
 	$(UIC) -o $@ $<
 
-
-clean:
+clean-generic:
 	rm -f moc_*
