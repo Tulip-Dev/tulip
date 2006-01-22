@@ -36,5 +36,5 @@ moc_%.cpp: %.h
 	$(UIC) -o $@ $<
 
 
-clean:
+clean-generic:
 	rm -f moc_*
