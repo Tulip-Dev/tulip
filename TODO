@@ -107,3 +107,22 @@ pas dans un sous graphe par exemple.
 **Plugin Mettric:
 **Plugin Size:
 **Plugin Color:
+
+/==============================================
+
+
+Changer Ctrl => shift pour la selection multiple	
+LEs fenêtre de visu doivent avoir le nom des graphes pas le nom du fichier
+
+//===================================================
+ID
+ne pas faire une interpolation 
+Ajouter groupe dans postcript (si possible).
+
+Virer le clustering d'arbre fait avec Maylis.
+$$Virer color->distribution
+Virer segment, treeArityMax, 
+$$Virer vieux algo dessin arbre RT, RT Ortho
+
+Regarder :
+path length et path sum pour voir ce que cà fait.

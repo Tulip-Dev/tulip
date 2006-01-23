@@ -3,44 +3,74 @@
 #include <climits>
 #include <tulip/Circle.h>
 #include <tulip/TreeTest.h>
+#include <tulip/ForEach.h>
+#include <tulip/Node.h>
+#include <tulip/TlpTools.h>
+
 #include "ConeTreeExtended.h"
 
-LAYOUTPLUGIN(ConeTreeExtended,"Cone Tree Extended","David Auber","01/04/2001","Stable","1","0");
+LAYOUTPLUGIN(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1","0");
 
 using namespace std;
 using namespace stdext;
 
-float sqr(float x) { return x*x;}
-
-float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
-  return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2))+sqr(sin(alpha1)-sin(alpha2)))); 
+//===============================================================
+float sqr(float x) {
+  return x*x;
 }
-
+//===============================================================
+float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
+  return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2)))); 
+}
+//===============================================================
+void ConeTreeExtended::computeLayerSize(node n, int level) {
+  if (levelSize.size() < level+1 )
+    levelSize.push_back(0);
+  levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
+  node i;
+  forEach(i, superGraph->getOutNodes(n)) {
+    computeLayerSize(i, level + 1);
+  }
+}
+//===============================================================
+void ConeTreeExtended::computeYCoodinates(node root) {
+  levelSize.clear();
+  yCoordinates.clear();
+  computeLayerSize(root, 0);
+  yCoordinates.resize(levelSize.size());
+  yCoordinates[0] = 0;
+  for (unsigned int i = 1; i < levelSize.size(); ++i) {
+    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0 + levelSize[i-1] / 2.0;
+  }
+}
+//===============================================================
 double ConeTreeExtended::treePlace3D(node n, 
 				     hash_map<node,double> *posRelX, 
 				     hash_map<node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
-  if (superGraph->outdeg(n)==0) {return 1.0;}
-
+  if (superGraph->outdeg(n)==0) {
+    return nodeSize->getNodeValue(n).norm()/2.;
+  }
+  
   if (superGraph->outdeg(n)==1) {
     Iterator<node> *itN=superGraph->getOutNodes(n);
     node itn=itN->next(); 
     delete itN;
     return treePlace3D(itn,posRelX,posRelY);
   }
-
+  
   double sumRadius=0;
   double maxRadius=0;
-  double newRadius;
+  float newRadius;
 
   vector<double> subCircleRadius(superGraph->outdeg(n));
   Iterator<node> *itN=superGraph->getOutNodes(n);
-  for (int i=0;itN->hasNext();++i)  {
+  for (int i=0; itN->hasNext(); ++i)  {
     node itn = itN->next();
     subCircleRadius[i] = treePlace3D(itn,posRelX,posRelY);
     sumRadius += 2*subCircleRadius[i];
-    maxRadius = maxRadius >? subCircleRadius[i];
+    maxRadius = std::max(maxRadius , subCircleRadius[i]);
   }delete itN;
   
   double radius=sumRadius/(2*M_PI);
@@ -53,11 +83,12 @@ double ConeTreeExtended::treePlace3D(node n,
     angle+=(subCircleRadius[i-1]+subCircleRadius[i])/radius;
     vangles[i]=angle;
   }
+  
   // compute new radius
   newRadius=0;
   for (unsigned int i=0;i<subCircleRadius.size()-1;++i) {
     for (unsigned int j=i+1;j<subCircleRadius.size();++j) {
-      newRadius = newRadius >? minRadius(subCircleRadius[i],vangles[i],subCircleRadius[j],vangles[j]); 
+      newRadius = std::max(newRadius , minRadius(subCircleRadius[i],vangles[i],subCircleRadius[j],vangles[j])); 
     }
   }
   if (newRadius==0) newRadius=radius;
@@ -72,50 +103,71 @@ double ConeTreeExtended::treePlace3D(node n,
   tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
 
   //Place relative position
-  itN=superGraph->getOutNodes(n);
-  for (unsigned int i=0;i<subCircleRadius.size();++i) {
+  itN = superGraph->getOutNodes(n);
+  for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
     node itn = itN->next();
     (*posRelX)[itn]=newRadius*cos(vangles[i])-circleH[0];
     (*posRelY)[itn]=newRadius*sin(vangles[i])-circleH[1];
-  }delete itN;
+  } delete itN;
   return circleH.radius;
 }
-
+//===============================================================
 void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
 			double x, double y, int level) {
-  layoutProxy->setNodeValue(n,Coord(x+(*px)[n],level,y+(*py)[n]));
-  Iterator<node> *it=superGraph->getOutNodes(n);
-  for (;it->hasNext();) {
-    node itn;
-    itn=it->next();
-    calcLayout(itn,px,py,x+(*px)[n],y+(*py)[n] , level+2);
-  } delete it;
+  layoutProxy->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
+  node itn;
+  forEach(itn, superGraph->getOutNodes(n)) {
+    calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
+  }
 }
-
-ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {}
-
+//===============================================================
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "values", "An existing size property" ) \
+    HTML_HELP_DEF( "default", "viewSize" ) \
+    HTML_HELP_BODY() \
+    "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+    //Complexity
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the complexity of the algorithm." \
+    HTML_HELP_CLOSE()
+  };
+}
+//===============================================================
+ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {
+  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+}
+//===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
-
+//===============================================================
 bool ConeTreeExtended::run() {
+  if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
+    if (superGraph->existProperty("viewSize"))
+      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");    
+    else {
+      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");  
+      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
+    }
+  }
   layoutProxy->setAllEdgeValue(vector<Coord>(0));
   hash_map<node,double> posX;
   hash_map<node,double> posY;
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-  node startNode;
-  Iterator<node> *itN=superGraph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    if (superGraph->indeg(itn)==0) {
-      startNode=itn;
-      break;
-    }
-  }delete itN;  
-  treePlace3D(startNode,&posX,&posY);
-  calcLayout(startNode,&posX,&posY,0,0,0);
+  node root;
+  tlp::getSource(superGraph, root);
+  treePlace3D(root,&posX,&posY);
+  computeYCoodinates(root);
+  calcLayout(root,&posX,&posY,0,0,0);
   return true;
 }
-
+//===============================================================
 bool ConeTreeExtended::check(string &erreurMsg) {
   if (TreeTest::isTree(superGraph)) {
     erreurMsg="";
@@ -126,5 +178,7 @@ bool ConeTreeExtended::check(string &erreurMsg) {
     return false;
   }
 }
-
-void ConeTreeExtended::reset() {}
+//===============================================================
+void ConeTreeExtended::reset() {
+}
+//===============================================================

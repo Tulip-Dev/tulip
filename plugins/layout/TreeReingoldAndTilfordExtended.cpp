@@ -211,7 +211,7 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
       rightTree=TreePlace(itn,p);
       if (useLength) {
 	int tmpLength;
-	if ((tmpLength=lengthMetric->getEdgeValue(ite))>1) {
+	if ((tmpLength=lengthMetric->getEdgeValue(ite)) > 1) {
 	  LR tmpLR;
 	  tmpLR.L=rightTree->front().L;
 	  tmpLR.R=rightTree->front().R;
@@ -252,10 +252,10 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n,map<int,double> &maxSize,int level,map<node,int> &levels) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &maxSize,int level, map<node,int> &levels) {
   levels[n] = level;
   if (maxSize.find(level)!=maxSize.end()) {
-    if (maxSize[level]<sizesProxy->getNodeValue(n).getH()) {
+    if (maxSize[level] < sizesProxy->getNodeValue(n).getH()) {
       maxSize[level]=sizesProxy->getNodeValue(n).getH();
     }
   }
@@ -270,11 +270,10 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n,map<int,double> &max
     }
   }
   else {
-    Iterator<node> *itN=superGraph->getOutNodes(n);
-    for (;itN->hasNext();) {
-      node itn=itN->next();
-      TreeLevelSizing(itn,maxSize,level+1, levels);
-    }delete itN;
+    node itn;
+    forEach(itn, superGraph->getOutNodes(n)) {
+      TreeLevelSizing(itn, maxSize, level+1, levels);
+    }
   }
 }
 //=============================================================================
@@ -309,7 +308,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   }
   //cerr << "TreeReingoldAndTilfordExtended::EndCalcLayout" << endl;
 }
-//=============================================================================
+//===============================================================
 bool TreeReingoldAndTilfordExtended::run() {
   stdext::hash_map<node,double> posRelative;
 

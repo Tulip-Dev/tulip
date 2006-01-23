@@ -40,6 +40,12 @@ private:
   double treePlace3D(node n, stdext::hash_map<node,double> *posRelX, stdext::hash_map<node,double> *posRelY);
   void calcLayout(node n, stdext::hash_map<node,double> *px, stdext::hash_map<node,double> *py,
 		  double x, double y, int level);
+  void computeLayerSize(node , int);
+  void computeYCoodinates(node);
+  SizesProxy * nodeSize;
+  std::vector<float> yCoordinates;
+  std::vector<float> levelSize;
+
 };
 /*@}*/
 #endif

@@ -12,6 +12,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
+#include <tulip/ForEach.h>
 #include "StrengthClustering.h"
 
 CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
@@ -19,8 +20,6 @@ CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha
 using namespace std;
 using namespace stdext;
 
-//================================================================================
-StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {}
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
 //==============================================================================
@@ -180,13 +179,13 @@ void drawGraph(SuperGraph *tmpg) {
 //==============================================================================
 double StrengthClustering::findBestThreshold(int numberOfSteps){
   double maxMQ=-2;
-  double threshold=values->getEdgeMin(superGraph);
-  double deltaThreshold=(values->getEdgeMax(superGraph)-values->getEdgeMin(superGraph))/double(numberOfSteps);
-  for (double i=values->getEdgeMin(superGraph);i<values->getEdgeMax(superGraph);i+=deltaThreshold) {
+  double threshold = values->getEdgeMin(superGraph);
+  double deltaThreshold = (values->getEdgeMax(superGraph)-values->getEdgeMin(superGraph))/double(numberOfSteps);
+  for (double i=values->getEdgeMin(superGraph); i<values->getEdgeMax(superGraph); i+=deltaThreshold) {
     vector< set<node > > tmp;
-    tmp=computeNodePartition(i);
-    double mq=computeMQValue(tmp, superGraph);
-    if (mq>maxMQ) {
+    tmp = computeNodePartition(i);
+    double mq = computeMQValue(tmp, superGraph);
+    if ( mq > maxMQ) {
       threshold=i;
       maxMQ=mq;
     }
@@ -261,14 +260,59 @@ void StrengthClustering::adjustMetaGraphProtperty(SuperGraph *quotientGraph, map
   }
 }
 //==============================================================================
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN()							\
+    HTML_HELP_DEF( "type", "MetricProxy" )				\
+    HTML_HELP_DEF( "values", "An existing metric property" )		\
+    HTML_HELP_DEF( "default", "viewSize" )				\
+    HTML_HELP_BODY()							\
+    "This parameter defines the property used in order to multiply strength values." \
+    HTML_HELP_CLOSE(),
+    //Complexity
+    HTML_HELP_OPEN()							\
+    HTML_HELP_DEF( "type", "bool" )					\
+    HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" )	\
+    HTML_HELP_DEF( "default", "false" )					\
+    HTML_HELP_BODY()							\
+    "If true the strength value wiil be multipplied by the metric proxy given in parameter." \
+    HTML_HELP_CLOSE()
+  };
+}
+
+//================================================================================
+StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
+  addParameter<MetricProxy>("metric", paramHelp[0],"viewMetric");
+  addParameter<bool>("multiply",paramHelp[1],"true");
+}
+//==============================================================================
 bool StrengthClustering::run() {
   bool result;
   string errMsg;
   values = new MetricProxy(superGraph);
   result = superGraph->computeProperty("Strength", values, errMsg);
+  
+  bool multi;
+  if ( dataSet==0 || !dataSet->get("multiply",multi)) {
+    multi = false;
+  }
+  
+  if (multi) {
+    MetricProxy *metric;
+    if (!dataSet->get("metric",metric)) 
+      metric = superGraph->getProperty<MetricProxy>("viewMetric");
+    MetricProxy mult(superGraph);
+    mult = *metric;
+    mult.uniformQuantification(100);
+    edge e;
+    forEach (e, superGraph->getEdges()) {
+      values->setEdgeValue(e, values->getEdgeValue(e)*(mult.getEdgeValue(e) + 1));
+    }
+  }
+  
   const unsigned int NB_TEST = 100;
   double threshold = findBestThreshold(NB_TEST);
-
   vector< set<node > > tmp;
   tmp = computeNodePartition(threshold);
   if (tmp.size()==1) {
