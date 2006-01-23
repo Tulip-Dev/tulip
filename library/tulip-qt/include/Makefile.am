@@ -19,3 +19,5 @@ nobase_include_HEADERS = \
 	tulip/Morphing.h \
 	tulip/TlpQtTools.h
 
+tulip/FindSelectionData.h: ../designer/FindSelection.ui
+	$(UIC) -o $@ $<
