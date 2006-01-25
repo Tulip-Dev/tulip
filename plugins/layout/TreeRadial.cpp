@@ -9,7 +9,11 @@ using namespace std;
 /** \addtogroup layout */
 /*@{*/
 /// TreeRadial.cpp - An implementation of radial drawing of trees.
-struct TreeRadial:public Layout {
+/** 
+ *
+ **/
+class TreeRadial:public Layout {
+public:
   MetricProxy *leaves;
 
   TreeRadial(const PropertyContext &context):Layout(context) {
