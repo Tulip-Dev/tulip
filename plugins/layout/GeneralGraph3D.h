@@ -29,7 +29,6 @@ struct LR
 
 /** \addtogroup layout */
 /*@{*/
-/*@{*/
 /// GeneralGraph3D.h - An implementation of a hierarchical graph drawing algorithm in 3D.
 /** This plugin is an implementation of a hierarchical layout in three dimensions.
  *
