@@ -32,7 +32,7 @@ struct LR {
  *  Let n be the number of nodes, the algorithm complexity is in O(n).\n
  *  It extends the original Reingold and Tilford by providing managment
  *  of different node size and different edge length. \n \n
- *  The algortihm use the (Size)"viewSize" property for element size and the
+ *  The algorithm use the (Size)"viewSize" property for element size and the
  *  (int)"treeEdgeLength" for the edge length.
  *
  *  \author David Auber LaBRI, University Bordeaux I France, Email : auber@tulip-software.org

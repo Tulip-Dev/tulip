@@ -29,7 +29,7 @@ class SizesProxy;
  *
  *  - 01/04/99 Verson 0.0.1: Initial release
  *
- *  \note This algorithm only work on trees.
+ *  \note This algorithm only works on trees.
  *  This version use the "viewMetric" property to determine
  *  The size of elements. \n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).

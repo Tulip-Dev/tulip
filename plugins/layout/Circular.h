@@ -6,17 +6,17 @@
 
 /** \addtogroup layout */
 /*@{*/
-/// Circular.h - An implementation of a circurlar layout.
+/// Circular.h - An implementation of a circular layout.
 /** 
  * This plugin is an implementation of a circular layout
- * All nodes are palced arbitrary on circle. 
+ * All nodes are placed arbitrary on circle. 
  *
  * <b>HISTORY</b>
  *
  * - 01/12/99 Verson 0.0.1: Initial release
  *
  *
- * \note This work on general graphs.
+ * \note This works on general graphs.
  * Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *

@@ -22,11 +22,11 @@
  *
  *  <b>HISTORY</b> 
  *
- *  - 07/12/04 Verson 0.0.3: Use new Tulip plugin parameter mechanism
- *  - 16/07/03 Verson 0.0.2: Better management of node size
- *  - 16/05/03 Verson 0.0.1: Initial release
+ *  - 07/12/04 Version 0.0.3: Use new Tulip plugin parameter mechanism
+ *  - 16/07/03 Version 0.0.2: Better management of node size
+ *  - 16/05/03 Version 0.0.1: Initial release
  *
- *  \note  This algorithm only work on trees.
+ *  \note  This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)), 
  *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using 
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).

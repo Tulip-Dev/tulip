@@ -40,7 +40,7 @@ public:
  *
  *  - 01/12/1999 Verson 0.0.1: Initial release
  *
- *  \note This algorithm oimplements a O(n+m) space hierarchical layout 
+ *  \note This algorithm implements a O(n+m) space hierarchical layout 
  *
  *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *

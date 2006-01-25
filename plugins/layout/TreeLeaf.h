@@ -8,10 +8,10 @@
 /*@{*/
 /// TreeLeaf.h - An implementation of a simple tree layout.
 /** 
- * This plugin is an implementation of a simple tree layout
- * All leaves are place at a distance one (x-coordinates) and the order
+ * This plugin is an implementation of a simple tree layout.
+ * All leaves are placed at a distance one (x-coordinates) and the order
  * is the one of a suffix ordering. The y coordinates is the depth in the
- * tree. The node the other nodes are placed at the center of their children
+ * tree. The other nodes are placed at the center of their children
  * (x-coordinates), and the y-coordinate is their depth in the tree.
  *
  * <b>HISTORY</b>
@@ -19,7 +19,7 @@
  * - 01/12/99 Verson 0.0.1: Initial release
  *
  *
- * \note This work on tree. \n
+ * \note This works on tree. \n
  * Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *

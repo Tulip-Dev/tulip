@@ -17,14 +17,14 @@
  *
  *  Information about the extension can be found in :
  *
- *  D.Auber, PhD Thesis, "Outils de visualisation de larges structures de données",
+ *  D.Auber, PhD Thesis, "Outils de visualisation de larges structures de donnees",
  *  University Bordeaux, december 2002.
  *
  *  <b> HISTORY</b>
  *
  *  - 01/04/99 Verson 0.0.1: Initial release
  *
- *  \note This algorithm only work on trees.
+ *  \note This algorithm only works on trees.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
