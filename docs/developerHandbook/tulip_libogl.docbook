@@ -22,7 +22,7 @@
 		<itemizedlist>
 		    <listitem><para><emphasis>GlAD_Wireframe</emphasis> : Enables the rendering with wireframe. This option can be combined with <emphasis>GlAD_Solid</emphasis> in order to render Wired-Solid geometry. <emphasis>At least one of these two options must be activated.</emphasis> Default = off.</para></listitem>
 		    <listitem><para><emphasis>GlAD_Solid</emphasis> : Enables the rendering of solid geometry. This option can be combines with <emphasis>GlAD_Wireframe</emphasis> in order to render Wired-Solid geometry. <emphasis>At least one of these two options must be activated.</emphasis> Default = on.</para></listitem>
-		    <listitem><para><emphasis>GlAD_AlphaBlending</emphasis> : Enables the use of Alpha-Blending. The Blendinf functions are the responsibility of the developer in the draw function of the considered GlAugmentedDisplay. Default = off; Default AlphaBlending : src=<emphasis>GL_SRC_ALPHA</emphasis>; dest=<emphasis>GL_ONE_MINUS_SRC_ALPHA</emphasis></para></listitem>
+		    <listitem><para><emphasis>GlAD_AlphaBlending</emphasis> : Enables the use of Alpha-Blending. The Blending functions are the responsibility of the developer in the draw function of the considered GlAugmentedDisplay. Default = off; Default AlphaBlending : src=<emphasis>GL_SRC_ALPHA</emphasis>; dest=<emphasis>GL_ONE_MINUS_SRC_ALPHA</emphasis></para></listitem>
 		    <listitem><para><emphasis>GlAD_ZEnable</emphasis> : Enables the Depth Test during the rendering. Default = on.</para></listitem>
 		    <listitem><para><emphasis>GlAD_Lighting</emphasis> : Enables the basic OpenGL Per Vertex Lighting (PVL). Default = off.</para></listitem>
 		    <listitem><para><emphasis>GlAD_Culling</emphasis> : Enables the backface culling during the render. Default = on.</para></listitem>
@@ -58,7 +58,7 @@
 	</sect2>
     
 	<sect2 id="glAD-Examples"><title>Examples of GlAD uses</title>
-	    <para>This section contains three small examples of use of the augmented displays with tulip. We admitt the user has a GlGraphWidget already defined in the variable <emphasis>glGraphWidget</emphasis>.</para>
+	    <para>This section contains three small examples of use of the augmented displays with tulip. We admit the user has a GlGraphWidget already defined in the variable <emphasis>glGraphWidget</emphasis>.</para>
 	    <para>In the given screenshots, the scene is composed of two nodes placed at positions (-1, -1, -1) and (1, 1, 1). Their sizes are (1, 1, 1)</para>
 	    <para>Here is the base screenshot of the scene :</para>
 	    <graphic fileref="images/GlADBaseScene.png"/>

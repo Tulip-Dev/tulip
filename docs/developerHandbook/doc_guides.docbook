@@ -79,7 +79,7 @@ export CLASSPATH
             </sect3>
         </sect2>
         <sect2 id="dox-install"><title>Doxygen</title>
-            <para>It can already be in your distribution. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen.</para>
+            <para>It can already be in your distribution. For distributions like Debian or Fedora Core, you can used : <cmdsynopsis><command>yum</command><arg><option>install</option> doxygen</arg></cmdsynopsis><cmdsynopsis><command>apt-get</command><arg><option>install</option> doxygen</arg></cmdsynopsis> For another solution, you can find source files and <application>CVS</application> repository in the web site of Doxygen (<ulink url="http://www.stack.nl/~dimitri/doxygen"/>).</para>
         </sect2>
     </sect1>
     <!--==============================================================================    -->
@@ -88,13 +88,19 @@ export CLASSPATH
     <sect1 id="written"><title>Handwriting for the manuals</title>
         <para>Some works on the Tulip project lead to make a part of a handbook for developer or users. Docbook utilities are used to create them. </para>
 
-        <para>Docbook is a DTD (Document Type Definition) for XML or SGML document that define elements. It is a kind of grammar of the source document. This is in relation with stylesheets (DSSSL or XSL) which allow you to publish on the Web ( in HTML, XHTML) on a printable documentation (PS, PDF, RTF...) with your Docbook documents. The principal advantages of the dobook format is the possibility to seperate the contents of the forms. The tools which can transform the source documents are generic and can pratically run on all Operation Systems. Docbook is the successor of LinuxDoc.</para>
+        <para>Docbook is a DTD (Document Type Definition) for XML or SGML document that define elements. It is a kind of grammar of the source document. This is in relation with stylesheets (DSSSL [<xref linkend="dsssl"/>] or XSL) which allow you to publish on the Web ( in HTML, XHTML) on a printable documentation (PS, PDF, RTF...) with your Docbook documents. The principal advantages of the docbook format is the possibility to seperate the contents of the forms. The tools which can transform the source documents are generic and can pratically run on all Operation Systems. Docbook is the successor of LinuxDoc.</para>
 
         <para>For Tulip documentation, the source documents are in XML, because XML leads to take the place of SGML to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. To find all of the xml elements to composed your own document, you can see : <ulink url="http://www.docbook.org/tdg5/en/html/pt02.html">http://www.docbook.org/tdg5/en/html/pt02.html</ulink></para>
 
 	<para>For each document, a set of XML files should be created. To help the editing of the handbook, it is possible to use general editors like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> Docbook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. </para>
     
         <para>To compile the handbooks, you just have to type <code>make html</code>. If you want to test the validation of the sources of the handbooks, type <code>make check</code>. The lsat command is <code>make pdf</code>, it produces the printable output.</para>
+
+	<orderedlist>
+		<listitem id="dsssl">DSSSL: Document Style Semantics and Specification Language. For more informations, you can visit the web site: <ulink url="http://www.jclark.com/dsssl/"/></listitem>
+	</orderedlist>
+
+
 
         <sect2 id="tricks"><title>Some Tricks</title>
 	    <para>
@@ -168,7 +174,7 @@ refentry)
 make: *** [check] Erreur 1
 </screen>
 
-        It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). It provides s set of stylesheet able to transform the Docbook documents. DSSSL is an other possibility, but we use the XSL stylesheet for the Tulip project. This stylesheet is an argument for the compilation with an XSL processor for the XSL transformations.</para>
+        It exists several attempts to produce an print or web publishing. Recently, the XML workgroup has made a standard Extensible Style Language (XSL). It provides a set of stylesheet able to transform the Docbook documents. DSSSL is an other possibility, but we use the XSL stylesheet for the Tulip project. This stylesheet is an argument for the compilation with an XSL processor for the XSL transformations.</para>
         </sect3>
 	</sect2>
         <sect2 id="duck-faq"><title>Docbook FAQ</title>
@@ -200,7 +206,7 @@ make: *** [check] Erreur 1
                 </qandaentry>
                 <qandaentry>
                     <question><para>How to insert a figure ?</para></question>
-                    <answer><para>the element uses for the insert of a figure is <quote>&lt;figure></quote>. It enable the numerotation of the figures. Warning, the width of the figures should not exceed a certain value to avoid that it is truncated in the pdf transform. You can specify a title and other parameter in the limits of the DTD. 
+                    <answer><para>the element uses for the insert of a figure is <quote>&lt;figure></quote>. It enables the numerotation of the figures. Warning, the width of the figures should not exceed a certain value to avoid that it is truncated in the pdf transform. You can specify a title and other parameter in the limits of the DTD. 
 <programlisting>
 &lt;figure> &lt;title>Screenshot of the result&lt;/title>
 &lt;graphic fileref="doxygen-ex.png"/>&lt;/figure></programlisting>
@@ -223,7 +229,7 @@ class MyClasse{ &lt;co id="myid" linkends="mylink"/>
 </programlisting>
                 The <code>programlisting</code> contains the program that you want to display. It is a verbatim mode. Warning, special caracters could be not allow : &lt;, for example. The <code>code</code> element represents the callout you want to place. The location of the insertion is important because it is the location on display. Two attributes are essential : <code>id</code> for the identification and <code>linkends</code> for indicate which comments is linked with the callout. After the <code>programlisting</code> element, we use a <code>calloutlist</code> element to define a list of comments. each comment is contained in a <code>callout</code> element. It has attributes whose <code>arearefs</code> to make a reference to callouts and id for the identification.</para>
                 
-                <para>It exists an other solution but it is more difficult. You have to specify coordinates of place where you want a callout. This solution is a esay and quicky way to comment your program listing.
+                <para>It exists an other solution but it is more difficult. You have to specify coordinates of place where you want a callout. This solution is an easy and quick way to comment your program listing.
 <programlisting>
 class MyClasse{ <co id="myid" linkends="mylink"/>
 };    
@@ -253,7 +259,7 @@ class MyClasse{ <co id="myid" linkends="mylink"/>
         </sect2>
 	<sect2 id="dx-comments"><title>Developer comments</title>
 	    <para>The code documentation, generated by <application>Doxygen</application> is completely dependant of the developer comments. It is important that developers follow the grammar rules. </para>
-	    <para>So the blocks of documentation in the sources files are the C++ comment blocks. For each item of code, there are two types of descriptions, which together form the documentation : a brief description and detailed description. A detail description is used to explain generously the existence of an item.
+	    <para>So the blocks of documentation in the sources files are the C++ comment blocks. For each item of code, there are two types of descriptions, which together form the documentation : a brief description and detailed description. A detailed description is used to explain generously the existence of an item.
 	    <screen>
 /**
 * detailed description
@@ -299,16 +305,16 @@ or others ....
 	    In general, the comments must be before the declaration or definition of a type, a function or a member. If you want to putting the documention after, you have to add a marker &lt;. Note that you can place your comment at other places using some tags like <code>\class, \union, \fn, \var,</code> ... or <code>@class, @union, @fn, @var, </code>...
 	    </para>
 	    <para>
-	    It exists several tags to help you for commenting and writing a description : all of it begin with a backflash <code>\</code> or an at-sign <code>@</code>.
+	    It exists several tags to help you for commenting and writing a description : all of it begin with a backslash <code>\</code> or an at-sign <code>@</code>.
 	    <itemizedlist>
 		<listitem><para><code>@author</code>, name of the author. </para></listitem>
 		<listitem><para><code>@param</code>, to write a special comment on a parameter of a method or function</para></listitem>
 		<listitem><para><code>@see</code>, to make a reference to an other object or function</para></listitem>
 		<listitem><para><code>@return</code>, to indicate the exit of a function</para></listitem>
 		<listitem><para><code>@date</code>, date of creation</para></listitem>
-		<listitem><para><code>@note</code>, desribe a role</para></listitem>
+		<listitem><para><code>@note</code>, describe a role</para></listitem>
 		<listitem><para><code>@attention</code>, write a caution</para></listitem>
-		<listitem><para><code>@warning</code></para></listitem>
+		<listitem><para><code>@warning</code>, write a warning</para></listitem>
 		<listitem><para><code>@pre</code>, write a prerequisite</para></listitem>
 		<listitem><para><code>@remark</code></para></listitem>
 	    </itemizedlist>
@@ -396,11 +402,11 @@ class MyClass
 	    </qandaentry>
             <qandaentry>
                     <question><para>How to insert a equation ?</para></question>
-                    <answer><para>See the <ulink url="http://www.stack.nl/~dimitri/doxygen/formulas.html">Doxygen web site</ulink></para><para>Doxygen allos you to put Latex formulas in the ouput (just for HTML and latex format). Three ways are avaible. If you want to include formulas in-text, you have to put formulas between a pair of <quote>\f$</quote>
+                    <answer><para>See the <ulink url="http://www.stack.nl/~dimitri/doxygen/formulas.html">Doxygen web site</ulink></para><para>Doxygen allows you to put Latex formulas in the ouput (just for HTML and latex format). Three ways are avaible. If you want to include formulas in-text, you have to put formulas between a pair of <quote>\f$</quote>
                     <screen>
 \f$ AB = \sqrt{BC^2 + CA^2} \f$
                     </screen> 
-                    The second way is for a centerd display on a seperate line. These formulas should be put between <code>\f[</code> and <code>\f]</code> commands.</para>
+                    The second way is for a centered display on a seperate line. These formulas should be put between <code>\f[</code> and <code>\f]</code> commands.</para>
                     <para>The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using <code>\f{</code><emphasis>environment</emphasis><code>}</code>, where <emphasis>environment</emphasis> is the latex environment, the corresponding end commands is <code>\f}</code></para></answer>
                 </qandaentry>
 	</qandaset>

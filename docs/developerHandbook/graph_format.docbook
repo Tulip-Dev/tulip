@@ -12,7 +12,7 @@
         </para>
     </sect1>
     <sect1 id="clusters-def"><title>Clusters</title>
-        <para>A cluster is defined by on integer which represent the cluster id, one string which is the name of the cluster(Two cluster can have the same name). Then it is define with a list of nodes and a list of edges. To define a subcluster we use the same method. One important point is that the id zero is reserved for the root graph (this it cannot be used).</para>
+        <para>A cluster is defined by an integer which represent the cluster id, one string which is the name of the cluster(Two cluster can have the same name). Then it is define with a list of nodes and a list of edges. To define a subcluster we use the same method. One important point is that the id zero is reserved for the root graph (this it cannot be used).</para>
         <para>Syntax<programlisting>
 (cluster id name
   (nodes id_node1 id_node2 ...)
@@ -34,7 +34,7 @@
         </para>
     </sect1>
     <sect1 id="pro-def"><title>Definitions of properties</title>
-        <para>The defintion of properties is the following:</para>
+        <para>The definition of properties is the following:</para>
         <para>Syntax <programlisting>
 (property cluster_id property_type "property_name"
   (default "default_node_value" "default_edge_value" )

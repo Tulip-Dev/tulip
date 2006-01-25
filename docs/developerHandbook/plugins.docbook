@@ -4,8 +4,7 @@
     all the part of Tulip. Thus, one must write plug-ins very carefully to prevent memory leak and also 
     errors. A bug in plug-in can result in a "core dump" in the software that uses it. To
     enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function
-    parse all the Tulip plug-ins directory and load dynamically all the plug-ins and register them into 
-    a factory that will enables to access to it directly.</para>
+    loads dynamically all the plug-ins and register them into a factory that will enables to access to it directly.</para>
     
     <sect1 id="available-plugin"><title>Available plug-ins</title><para></para>
     </sect1>

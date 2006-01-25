@@ -90,11 +90,11 @@ void MyClasse::draw(){
         </para>
         <sect2 id="build-sys"><title>GNU Build system</title>
             <sect3 id="presentation"><title>Presentation</title>
-                <para>The goals of this system is to simplify the development of portable programs and the building of programs thaht are distributed as source code.</para>
+                <para>The goals of this system is to simplify the development of portable programs and the building of programs that are distributed as source code.</para>
                 <para><application>Autoconf</application> is a tool of GNU producing shell scripts that automtically configure software packages to adapt to many kinds of UNIX systems. It is not the unique tool, it runs with others to solve all problems to making portable software. It generates configurations files : specially the <code>configure</code> script from a <filename>configure.in</filename> or <filename>configure.ac</filename> file. Running this script, you produce the customized Makefiles, and other files. It checks for the presence of each feature that the software need. Autoconf requires <application>GNU M4</application> in order to generate the scripts. </para>
                 <para>To this end, GNU has developed a set of integrated utilities to finish the job of <application>Autoconf</application>. <application>Automake</application> is the next in run. It is a tool for generating <filename>Makefile.in</filename> from files called <filename>Makefile.am</filename>. Each <filename>Makefile.am</filename> is basically a series of <code>make</code> variable definitions, with the GNU Makefile standards. <application>Automake</application> requires <application>Autoconf</application> in order to be used properly.
                 </para>
-                <para>The last is <application>Libtool</application>. It makes it possible to compile position indepedent code and build shared libraries in a portable manner. It does not require either Autoconf, or Automake and can be used indepedently. Automake however supports libtool and interoperates with it in a seamless manner.</para>
+                <para>The last is <application>Libtool</application>. It makes it possible to compile position indepedent code and build shared libraries in a portable manner. It does not require either Autoconf, or Automake and can be used indepedently. Automake however supports libtool and operates with it in a seamless manner.</para>
 
             </sect3>
             <sect3 id="simple-example"><title>A simple example</title>
@@ -190,7 +190,7 @@ $ make dist
            </para>
         </sect2>
         <sect2 id="directive"><title>Compilation directives : Makefile.am</title>
-            <para>If you want to change the directive of compilation for a program or a library, then you have to complete or modify the variables attached to the program or library. This section gives the essential variables (with their forms) in order to a customize compilation.</para>
+            <para>If you want to change the directive of compilation for a program or a library, then you have to complete or modify the variables attached to the program or library. This section gives the essential variables (with their forms) for a customized compilation.</para>
             <para> <filename>Makefile.am</filename> can use the same syntax as with ordinary makefiles. General variable can be defined, available for all your building objects.
             <variablelist>
                 <varlistentry><term><code>INCLUDES = -I/dir1 -I/dir2 -I$(top_srcdir)/src...</code></term>
@@ -268,20 +268,20 @@ $ make dist
                 </varlistentry>
 
                 <varlistentry><term><code>prog_LDADD = $(top_builddir)/dir1/lib1.a -lext1 -lext2 ...</code></term>
-                <listitem><para> Lists the libraries that need to be linked with your source code. Installed libraries should be mentioned using `-l' flags. Uninstalled libraries must be mentioned using absolute pathnames. <code>Please use $(top_buiddir) to build a path to a directory. </code></para></listitem>
+                <listitem><para> Lists the libraries that need to be linked with your source code. Installed libraries should be mentioned using '-l' flags. Uninstalled libraries must be mentioned using absolute pathnames. Please use <code>$(top_buiddir)</code> to build a path to a directory.</para></listitem>
                 </varlistentry>
 
                 <varlistentry><term><code>prog_LDFLAGS = -L/dir1 -L/dir2 -L/dir3 ...</code></term>
-                <listitem><para> Adds the `-L' flags that are needed to find the installed libraries that you want to link in <code>prog_LDADD</code>.</para></listitem>
+                <listitem><para> Adds the '-L' flags that are needed to find the installed libraries that you want to link in <code>prog_LDADD</code>.</para></listitem>
                 </varlistentry>
 
                 <varlistentry><term><code>prog_DEPENDENCIES = dep1 dep2 dep3 ...</code></term>
-                <listitem><para>Lists any targets that you want to build before building this program..</para></listitem>
+                <listitem><para>Lists any targets that you want to build before building this program.</para></listitem>
                 </varlistentry>
             </variablelist>
             In the same way, you can specify variable for a specialy library or shared library by prefixing the variable by the name of the library.</para>
             <para>
-            Occasionally it is useful to know which Makefile variables that Automake uses for compilations. For instance you might need to do your own compilation in some special cases. Some variables are inherited from Autoconf; these are CC, CFLAGS, CPPFLAGS, DEFS, LDFLAGS, LIBS, CXX, CXXFLAGS, ... There are some additional variables which Automake itself defines: 
+            Occasionally it is useful to know which Makefile variables that Automake uses for compilations. For instance you might need to do your own compilation in some special cases. Some variables are inherited from Autoconf; these are CC, CFLAGS, CPPFLAGS, DEFS, LDFLAGS, LIBS, CXX, CXXFLAGS, ... There are some additional variables which Automake defines itself: 
             <variablelist>
                 <varlistentry><term><code>AM_CPPFLAGS</code></term>
                 <listitem><para>The contents of this variable are passed to every compilation which invokes the C preprocessor; it is a list of arguments to the preprocessor. For instance, <code>-I</code> and <code>-D</code> options should be listed here. Automake already provides some <code>-I</code> options automatically. <code>AM_CPPFLAGS</code> is ignored in preference to a per-executable (or per-library) <code>_CPPFLAGS</code> variable if it is defined. </para></listitem>

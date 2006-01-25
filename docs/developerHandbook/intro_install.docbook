@@ -13,7 +13,7 @@
         <listitem><para>Extension and reuse without recompilation of the software</para></listitem>
         <listitem><para>Free of use and open source</para></listitem>
     </itemizedlist>
-    To experiment with tools to handle graphs of the size of those induced by the human genome data set, one needs a software solution with all these capabilities. That's why we decided to build our own graph visualization software that meets these requirements. Tulip has been developed in C++, and uses two well-known libraries, OpenGL and Qt. The final program enables visualization, clustering ans automatic drawing of graphs with up to 1.000.000 elements on personal computer.
+    To experiment with tools to handle graphs of the size of those induced by the human genome data set, one needs a software solution with all these capabilities. That's why we decided to build our own graph visualization software that meets these requirements. Tulip has been developed in C++, and uses two well-known libraries, OpenGL and Qt. The final program enables visualization, clustering and automatic drawing of graphs with up to 1.000.000 elements on personal computer.
     </para>
 
     <para>This manual is an help necessary for the developers of an application using <application>Tulip</application> libraries and for the developers of the <application>Tulip</application> Team.
@@ -32,7 +32,7 @@ reconfiguring, and a file <filename>config.log</filename> containing compiler ou
 (useful mainly for debugging <code>configure</code>).</para>
 
    <para>If you need to do unusual things to compile the package, please try
-to figure out how <code>configure</code> could check whether to do them, and mail
+to configure out how <code>configure</code> could check whether to do them, and mail
 diffs or instructions to the address given in the <code>README</code> so they can
 be considered for the next release.  If at some point <code>config.cache</code>
 contains results you don't want to keep, you may remove or edit it.</para>
@@ -47,7 +47,8 @@ it or regenerate <code>configure</code> using a newer version of <code>autoconf<
      <code>./configure</code> to configure the package for your system.  If you're
      using <code>csh</code> on an old version of System V, you might need to type
      <code>sh ./configure</code> instead to prevent <code>csh</code> from trying to execute
-     <code>configure</code> itself.</para>
+     <code>configure</code> itself. To know all of the possible options, type <code>./configure --help</code>
+     or read the next section about options.</para>
 
      <para>Running <code>configure</code> takes awhile.  While running, it prints some
      messages telling which features it is checking for.</para></listitem>
@@ -57,7 +58,7 @@ it or regenerate <code>configure</code> using a newer version of <code>autoconf<
   <listitem><para>Optionally, type <code>make check</code> to run any self-tests that come with
      the package.</para></listitem>
 
-  <listitem><para>Type <code>make install</code> to install the programs and any data files and
+  <listitem><para>Type <code>make install</code> to install the programs, data files and
      documentation.</para></listitem>
 
   <listitem><para>You can remove the program binaries and object files from the
