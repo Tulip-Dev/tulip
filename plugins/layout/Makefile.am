@@ -25,7 +25,10 @@ plugins_LTLIBRARIES = \
 	libbubbletree.la \
 	libembedder.la \
 	libtutte.la \
-	libscatter.la
+	libscatter.la \
+	libextendedbiotree.la \
+	libimprovedwalker.la \
+	libsquarifiedtreemap.la
 
 pluginsdir = $(libdir)/tlp/plugins/layout
 
@@ -49,6 +52,9 @@ libgeneralgraph3d_la_SOURCES = GeneralGraph3D.cpp GeneralGraph3D.h
 libtutte_la_SOURCES = Tutte.h Tutte.cpp
 libembedder_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.cpp EmbedderDijkstra.cpp EmbedderBfs.cpp EmbedderParameters.cpp EmbedderPowerIterationDense.cpp EmbedderBfs.h EmbedderDefs.h EmbedderDijkstra.h EmbedderEmbedGraph.h EmbedderParameters.h
 libscatter_la_SOURCES = ScatterPlot.h ScatterPlot.cpp
+libextendedbiotree_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableConstants.h OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableLayoutInterface.h OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp ExtendedBioTree.h ExtendedBioTree.cpp
+libimprovedwalker_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp
+libsquarifiedtreemap_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp TreeTools.h TreeTools.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ et @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

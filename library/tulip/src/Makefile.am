@@ -81,5 +81,6 @@ libtulip_la_SOURCES = \
 	PlanarityTestImpl.cpp \
 	PlanarityTestEmbed.cpp \
 	PlanarityTestObstr.cpp \
-	PlanarityTestTools.cpp
-	StlFunctions.cpp 
+	PlanarityTestTools.cpp \
+	RectangleArea.cpp \
+	Border.cpp

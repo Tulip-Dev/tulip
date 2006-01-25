@@ -96,6 +96,8 @@ nobase_include_HEADERS = \
 	tulip/Plane.h \
 	tulip/Polynome.h \
 	tulip/ForEach.h \
+	tulip/RectangleArea.h \
+	tulip/Border.h \
 	tulip/StatisticsNodeModule.h
 
 

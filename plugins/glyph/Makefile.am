@@ -15,7 +15,9 @@ plugins_LTLIBRARIES = \
 	libbillboard.la \
 	libteapot.la \
 	libcylinder.la \
-	libhalfcylinder.la 
+	libhalfcylinder.la \
+	libsquareborder.la \
+	libsquarebordertextured.la
 
 pluginsdir = $(libdir)/tlp/plugins/glyph
 
@@ -28,5 +30,7 @@ libcone_la_SOURCES = cone.cpp
 libteapot_la_SOURCES = teapot.cpp 
 libcylinder_la_SOURCES = cylinder.cpp 
 libhalfcylinder_la_SOURCES = halfcylinder.cpp 
+libsquareborder_la_SOURCES = squareborder.cpp
+libsquarebordertextured_la_SOURCES = squarebordertextured.cpp
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @LIB_GL@ @GL_LDFLAGS@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@
