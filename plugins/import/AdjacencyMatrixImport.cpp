@@ -60,16 +60,19 @@ namespace {
  *  <br># @ C
  *  <br>Define a graph with 3 nodes and 3 edges, the edge between A and C has the value 5
  *
- *  TODO :
+ *  <b>HISTORY</b>
+ *
+ *  Version 0.1: 14 February: First version replace old adjacency matrix format
+ *  included in Tulip (no more supported)
+ *
+ *  <b>TODO :</b>
+ *
  *  Add tests in order to prevent bad file format.
  *
- *  AUTHOR:
+ *  \author David Auber University of Bordeaux I (LaBRI) France \n
+ *  Email:auber@tulip-software.org
  *
- *  David Auber University of Bordeaux (LaBRI) France: Email:auber@tulip-software.org
- *  Version 0.1: 14 February: First version replace old adjacency matrix format included in Tulip 
- *  (no more supported)
- *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  
@@ -77,7 +80,8 @@ namespace {
  *  (at your option) any later version.
  *
  */
-struct AdjacencyMatrixImport:public ImportModule {
+class AdjacencyMatrixImport:public ImportModule {
+public:
   AdjacencyMatrixImport(ClusterContext context):ImportModule(context){
     addParameter<string>("filename",paramHelp[0]);
   }

@@ -35,23 +35,23 @@ namespace {
  *     [ http://www.research.att.com/sw/tools/graphviz/ ]
  *
  *	First (quick) support of the AT&T DOT language
- *        o main graph entities are extracted (node/edges)
- *	  o subgraphs are not already supported
- *  	  o several attributes (node & edge) are supported
- *	  o based on a modified grammar file available with the graphviz' softwares
- *	  ç this parser can be largely optimised ...
+ *        - main graph entities are extracted (node/edges)
+ *	  - subgraphs are not already supported
+ *  	  - several attributes (node & edge) are supported
+ *	  - based on a modified grammar file available with the graphviz' softwares
+ *	  - this parser can be largely optimized ...
  *
- *  AUTHOR:
- *    08/02/2004 - Gerald Gainant (aka maGicG)
+ *  \author 08/02/2004 - Gerald Gainant (aka maGicG)
  *
- *  LICENCE:
+ *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by  
  *  the Free Software Foundation; either version 2 of the License, or     
  *  (at your option) any later version.
  */
-struct DotImport:public ImportModule {
+class DotImport:public ImportModule {
+public:
   DotImport(ClusterContext context):ImportModule(context){
     addParameter<string>("filename",paramHelp[0]);
   }
@@ -59,22 +59,22 @@ struct DotImport:public ImportModule {
 
   bool import(const string &name) {
 
-	// Open input stream
-	string fn;
+    // Open input stream
+    string fn;
     dataSet->get( "filename", fn );
-  	FILE * fd = fopen( fn.c_str(), "r" );
-	if( !fd )
-		return false;
+    FILE * fd = fopen( fn.c_str(), "r" );
+    if( !fd )
+      return false;
 
-	// Create & Init YY global data 
+    // Create & Init YY global data 
     DOT_YY _dotyy;
-	_dotyy.sg = superGraph;
+    _dotyy.sg = superGraph;
 
-	dotyy = &_dotyy;
-	yyrestart( fd );
-	yyparse();
+    dotyy = &_dotyy;
+    yyrestart( fd );
+    yyparse();
 
-	fclose( fd );
+    fclose( fd );
 
     return true;
   }
