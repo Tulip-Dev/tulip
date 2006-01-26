@@ -24,9 +24,8 @@
 #include <stdio.h>
 #include <tulip/MutableContainer.h>
 
-
-/*<<<<<<< CanonicalOrdering.h
 #ifndef DOXYGEN_NOTFOR_USER
+/*<<<<<<< CanonicalOrdering.h
 class Ordering : public std::vector<std::vector<node> >
 =======*/
 class TLP_SCOPE Ordering : public std::vector<std::vector<node> >
