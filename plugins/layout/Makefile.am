@@ -14,7 +14,6 @@ plugins_LTLIBRARIES = \
 	libgem3d.la \
 	libtreereingoldextended.la \
 	libtreemap.la \
-	libconetree.la\
 	libconetreeextended.la\
 	libcircular.la \
 	libhierarchicalgraph.la \
@@ -39,7 +38,6 @@ librandom_la_SOURCES = Random.cpp Random.h
 libgem_la_SOURCES = GEM.cpp GEM.h
 libgem3d_la_SOURCES = GEM3D.cpp GEM3D.h
 libtreereingoldextended_la_SOURCES = TreeReingoldAndTilfordExtended.cpp TreeReingoldAndTilfordExtended.h 
-libconetree_la_SOURCES = ConeTree.h ConeTree.cpp 
 libconetreeextended_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp
 libtreemap_la_SOURCES = TreeMap.h TreeMap.cpp 
 libtreeradial_la_SOURCES = TreeRadial.cpp 
