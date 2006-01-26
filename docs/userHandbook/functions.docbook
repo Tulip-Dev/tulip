@@ -21,35 +21,35 @@
         </itemizedlist>
         </para>
 
-        <para>As lots of software, It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected objects from a view. When you paste an object, there are in the same place of the oldest of the view. Then, you have an access by the menus and the mouse-toolbar for the operations about the selection.</para>
+        <para>It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected objects from a view. When you paste an object, there are in the same place of the oldest of the view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
         <sect2 id="find"><title>The <quote>Find</quote> tool</title>
-            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item enabling to make researches in the current graph. The tool gives a way to choose the concerned property and the action you can do : Make copies of the fund elements, Add to the selection, Remove to the selection and Intersect with the current selection.</para>
+            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item enabling to make some requests on the current graph. The tool gives a way to choose the concerned property and the action you can do : Make copy of the found elements, Add to the selection, Remove from the selection or Intersect with the current selection.</para>
         </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
-        <para>Each graph can be modified with algorithms for the layout, the set of selected objects, the size of nodes, the value attributed to an object (node or edge) named metric, the colors. An other advantage of Tulip platform is that it is easy to insert a new algorithm to the structure; this way, it was able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Property</code> menu. Several categories are in there : Selection, Layout, Metric, Colors, Sizes. They modify the properties of the object in the graph.
+        <para>Each graph can be modified with algorithms for the layout, the set of selected objects, the size of nodes, the value attributed to an object (node or edge) named metric, the colors. An other advantage of Tulip platform is that it is easy to insert a new algorithm to the structure; this way, it is able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Property</code> menu. Several categories are in there : Selection, Layout, Metric, Colors, Sizes. They modify the properties of the object in the graph.
         </para>
     </sect1>
     <sect1 id="graph-properties"><title>Properties of graph</title>
-        <para>In <application>Tulip</application> software, There is a way to affect properties for each node or edge of the graph. It defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to affect values to the nodes or the edges independed of the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph ; this kind of property is extrinsic.</para>
+        <para>In <application>Tulip</application> software, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign nodes values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
 
-        <para>For each graph, <emphasis>Tulip</emphasis> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are used for the compute of plug-ins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
+        <para>For each graph, <emphasis>Tulip</emphasis> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are used for the compute of plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
     </sect1>
     <sect1 id="hierarchy"><title>Hierarchy</title>
-        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relations, the user can change the current view of the graph by clicking directly on the tree. By clicking the right button mouse, it is possible to manage the instances of cluster : remove, clone, create subgraph.</para>
+        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relations, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a popup menu is displayed, it allows to manage the instances of cluster : remove, clone, create subgraph.</para>
         <sect2 id="subgraph"><title>SubGraphs</title>
          <para>A graph can have several parts of itself : this are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph have the same object, it just is a part of the graph. It is possible to add properties just for the subgraph or use the inherited properties.</para>
         </sect2>
         <sect2 id="group"><title>Groups</title>
-            <para>Some graph can be graph of other graph. This kind of hierarchy enables to affect a graph to a node. Then, you can go inside the node to show the metagraph. </para>
+            <para>Some graph can be graph of other graph. This kind of hierarchy enables to assign a graph to a node. Then, you can go inside the node to show the metagraph. </para>
         </sect2>
     </sect1>
-    <sect1 id="stats-panels"><title>Statistics Panel</title>
-        <para>Tulip-Software also provides the user a simple statistics interface which ables him to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). The display of the statistics values computed on the graph is done with the help of the GlAD system (GlAugmentedDisplay). Finally, the clustering is done from a clustering plane, specified by the user from a plane equation.</para>
+    <sect1 id="stats-panels"><title>Statistics Panel (available in experimental version)</title>
+        <para><application>Tulip</application> also provides a simple statistics interface which allows the user to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). The display of the statistics values computed on the graph is performed with the help of the GlAD system (GlAugmentedDisplay). Finally, the clustering is performed from a clustering plane, specified by the user with a plane equation.</para>
     </sect1>
     <sect1 id="text-rend"><title>Text Rendering</title>
-        <para>It is possible to affect a label for each object of the graph. Tulip can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
+        <para>It is possible to assign a label to each object of the graph. Tulip can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
         <figure>
             <title>Bitmap Rendering</title>
             <graphic fileref="images/bitmap-label.png"/>
@@ -63,7 +63,7 @@
             <graphic fileref="images/text-label.png"/>
         </figure>
         </para>
-        <para>Not available for the moment, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to ornagize the content of the labels as you want.</para>
+        <para>In a future version of Tulip, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to allow the user to organize the content of the labels.</para>
     </sect1>
     
 </chapter>
