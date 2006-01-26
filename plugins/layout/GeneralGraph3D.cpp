@@ -16,7 +16,31 @@ using namespace std;
 
 LAYOUTPLUGIN(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1")
 
-GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):Layout(context) {}
+namespace {
+  const char * paramHelp[] = {
+    // nodeSize
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "values", "An existing size property" ) \
+    HTML_HELP_DEF( "default", "viewSize" ) \
+    HTML_HELP_BODY() \
+    "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+    //Orientation
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF( "default", "horizontal" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the orientation of the drawing"	\
+    HTML_HELP_CLOSE()
+  };
+}
+const std::string ORIENTATION("vertical;horizontal;");
+
+GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):Layout(context) {
+  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+}
 
 GeneralGraph3D::~GeneralGraph3D() {}
 
@@ -180,7 +204,7 @@ bool GeneralGraph3D::run() {
   bool resultBool;
   string erreurMsg;
   LayoutProxy *tmpLayout= new LayoutProxy(mySGraph);
-  resultBool = mySGraph->computeProperty("Cone Tree Extended",tmpLayout,erreurMsg);
+  resultBool = mySGraph->computeProperty("Cone Tree",tmpLayout,erreurMsg,0, dataSet);
   assert(resultBool);
   if (!resultBool) {
     cerr << __PRETTY_FUNCTION__ << endl;
@@ -244,9 +268,9 @@ bool GeneralGraph3D::run() {
   //  cerr << "we clean every added nodes and edges" << endl;
   //  mySGraph->delLocalProperty("Cone Tree Extended");
   delete tmpLayout;
-  mySGraph->delLocalProperty("viewSize");
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  //  mySGraph->delLocalProperty("viewSize");
+  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
+  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   for (set<edge>::const_iterator it=reversedEdges.begin();it!=reversedEdges.end();++it) {
     superGraph->reverse(*it);
   }

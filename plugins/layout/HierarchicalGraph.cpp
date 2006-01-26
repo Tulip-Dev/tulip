@@ -311,10 +311,8 @@ bool HierarchicalGraph::run() {
   else
     tmp.set("use length", false);
   tmp.set("ortogonal", false);
-  StringCollection tmpS;
-  if (dataSet!=0) {
-    dataSet->get("orientation", tmpS);
-  }
+  StringCollection tmpS("vertical;horizontal;");
+  tmpS.setCurrent(orientation);
   tmp.set("orientation", tmpS);
   resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
   assert(resultBool);

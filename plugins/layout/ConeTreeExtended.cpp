@@ -50,7 +50,8 @@ double ConeTreeExtended::treePlace3D(node n,
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
   if (superGraph->outdeg(n)==0) {
-    return nodeSize->getNodeValue(n).norm()/2.;
+    Coord tmp = nodeSize->getNodeValue(n);
+    return sqrt(tmp[0]*tmp[0] + tmp[1]*tmp[1])/2.0;
   }
   
   if (superGraph->outdeg(n)==1) {
@@ -131,32 +132,44 @@ namespace {
     HTML_HELP_BODY() \
     "This parameter defines the property used for node's sizes." \
     HTML_HELP_CLOSE(),
-    //Complexity
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
-    HTML_HELP_DEF( "default", "true" ) \
+    //Orientation
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF( "default", "horizontal" )	 \
     HTML_HELP_BODY() \
-    "This parameter enables to choose the complexity of the algorithm." \
+    "This parameter enables to choose the orientation of the drawing"	\
     HTML_HELP_CLOSE()
   };
 }
+const std::string ORIENTATION("vertical;horizontal;");
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
-    if (superGraph->existProperty("viewSize"))
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");    
-    else {
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");  
-      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
+  nodeSize = superGraph->getProperty<SizesProxy>("viewSize");
+  string orientation = "vertical";
+  if (dataSet!=0) {
+    dataSet->get("nodeSize", nodeSize);
+    StringCollection tmp;
+    if (dataSet->get("orientation", tmp)) {
+      orientation = tmp.getCurrentString();
     }
   }
+  //=========================================================
+  //rotate size if necessary
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size tmp = nodeSize->getNodeValue(n);
+      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+    }
+  }
+  //===========================================================
   layoutProxy->setAllEdgeValue(vector<Coord>(0));
   hash_map<node,double> posX;
   hash_map<node,double> posY;
@@ -165,6 +178,16 @@ bool ConeTreeExtended::run() {
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);
+  //rotate layout and size
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size  tmp = nodeSize->getNodeValue(n);
+      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      Coord tmpC = layoutProxy->getNodeValue(n);
+      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+    }
+  }
   return true;
 }
 //===============================================================

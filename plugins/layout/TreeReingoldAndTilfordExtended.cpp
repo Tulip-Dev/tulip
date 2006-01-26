@@ -314,6 +314,7 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   layoutProxy->setAllEdgeValue(vector<Coord>(0));
   sizesProxy = superGraph->getProperty<SizesProxy>("viewSize");
+  orientation = "horizontal";
   lengthMetric = 0;
   ortho = true;
   useLength = false;
