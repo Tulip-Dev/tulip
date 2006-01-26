@@ -566,3 +566,7 @@ void TextRenderer::setContext(std::string str, int s, unsigned char r, unsigned 
   c.setSize(s);
   c.setColor(r, v, b);
 }
+//---------------------------------------------------------------------------
+void TextRenderer::setColor(unsigned char r, unsigned char g, unsigned char b){
+  c.setColor(r, g, b);
+}

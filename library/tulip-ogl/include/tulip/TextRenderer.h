@@ -22,6 +22,7 @@ class TextRenderer{
   void getBoundingBox(float w_max, float& h, float& w) const;
   void setString(std::string str, TextMode mode);
   void setContext(std::string str, int s, unsigned char r, unsigned char v, unsigned char b);
+  void setColor(unsigned char r, unsigned char g, unsigned char b);
   void setMode(FontMode  m);
 
  private:  
