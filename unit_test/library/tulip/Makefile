@@ -13,7 +13,8 @@ SRCS=   tuliplibtest.cpp \
 	IdManagerTest.cpp \
 	FaceIteratorTest.cpp \
 	PlanarityTestTest.cpp \
-	SuperGraphMapTest.cpp
+	SuperGraphMapTest.cpp \
+	SuperGraphConMapTest.cpp \
 
 
 #CXXFLAGS =  -g -Wall `tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/

@@ -31,6 +31,10 @@ void FaceIteratorTest::build(){
   edges.push_back(carte->addEdge(nodes[0],nodes[8]));
   edges.push_back(carte->addEdge(nodes[8],nodes[9]));
   edges.push_back(carte->addEdge(nodes[0],nodes[9]));
+
+  edges.push_back(carte->addEdge(nodes[4],nodes[2]));
+  edges.push_back(carte->addEdge(nodes[4],nodes[5]));
+  edges.push_back(carte->addEdge(nodes[7],nodes[9]));
 }
 
 //============================================================
@@ -38,16 +42,16 @@ void FaceIteratorTest::testNodeFaceIterator(){
   build();
   carte->update();
 
-  Iterator<Face*>* itf = carte->getFaces();
+  Iterator<Face>* itf = carte->getFaces();
   while(itf->hasNext()){
-    Face* f = itf->next();
+    Face f = itf->next();
     unsigned int i = 0;
     Iterator<node>* it = carte->getFaceNodes(f);
     while(it->hasNext()){
       node n = it->next();
       i++;
     }
-    CPPUNIT_ASSERT_MESSAGE(" test NodeFaceIterator ",f->nbEdges() == i);
+    CPPUNIT_ASSERT_MESSAGE(" test NodeFaceIterator ",carte->facesEdges[f].size() == i);
     delete it;
   }
   delete itf;
@@ -59,13 +63,13 @@ void FaceIteratorTest::testFaceAdjIterator(){
   carte->update();
 
   unsigned int i = 0;
-  Iterator<Face*>* it = carte->getFacesAdj(nodes[4]);
+  Iterator<Face>* it = carte->getFacesAdj(nodes[4]);
   while(it->hasNext()){
     it->next();
     i++;
   }
   delete it;
-  CPPUNIT_ASSERT_MESSAGE(" test FaceAdjIterator nbFaces ", 1 == i);
+  CPPUNIT_ASSERT_MESSAGE(" test FaceAdjIterator nbFaces ", 3 == i);
 
   i = 0;
   it = carte->getFacesAdj(nodes[1]);
@@ -74,7 +78,7 @@ void FaceIteratorTest::testFaceAdjIterator(){
     i++;
   }
   delete it;
-  CPPUNIT_ASSERT_MESSAGE(" test FaceadjIterator nbFaces ", 2 == i);
+  CPPUNIT_ASSERT_MESSAGE(" test FaceadjIterator nbFaces ", 3 == i);
 
   i = 0;
   it = carte->getFacesAdj(nodes[8]);
