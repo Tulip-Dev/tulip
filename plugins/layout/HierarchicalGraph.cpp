@@ -19,7 +19,7 @@ LAYOUTPLUGIN(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","
 using namespace std;
 
 static const int NB_UPDOWN_SWEEP = 10;
-
+//================================================================================
 namespace {
   const char * paramHelp[] = {
     // nodeSize
@@ -39,13 +39,14 @@ namespace {
     HTML_HELP_CLOSE()
   };
 }
-
+//================================================================================
 const std::string ORIENTATION("vertical;horizontal;");
-
+//================================================================================
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
 }
+//================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}
 //================================================================================
 class LessThanEdge {
@@ -85,7 +86,7 @@ unsigned int HierarchicalGraph::degree(SuperGraph *superGraph,node n,bool sense)
 //Compute barycenter heuristique
 void HierarchicalGraph::twoLayerCrossReduction(SuperGraph *superGraph,unsigned int freeLayer,bool sense){
   vector<node>::const_iterator it;
-  for (it=grid[freeLayer].begin();it!=grid[freeLayer].end();++it) {
+  for (it=grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
     node n=*it;
     if (degree(superGraph,n,sense)>0) {
       double sum=0;
@@ -262,6 +263,17 @@ bool HierarchicalGraph::run() {
       orientation = tmp.getCurrentString();
     }
   }
+  //=========================================================
+  //rotate size if necessary
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size tmp = nodeSize->getNodeValue(n);
+      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+    }
+  }
+  //===========================================================
+
   //========================================================================
   //if the graph is not acyclic we reverse edges to make it acyclic
   vector<tlp::SelfLoops> listSelfLoops;
@@ -312,7 +324,7 @@ bool HierarchicalGraph::run() {
     tmp.set("use length", false);
   tmp.set("ortogonal", false);
   StringCollection tmpS("vertical;horizontal;");
-  tmpS.setCurrent(orientation);
+  tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
   resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
   assert(resultBool);
@@ -335,6 +347,79 @@ bool HierarchicalGraph::run() {
     properAddedNodes.pop_back();
   }
   superGraph->delSubGraph(mySGraph);
+
+  //post processing 
+  //Prevent edge node overlaping
+  std::vector< float > levelMaxSize(grid.size());
+  MutableContainer<int> nodeLevel;
+
+  for (unsigned int i = 0; i<grid.size();++i) {
+    levelMaxSize[i] = 0;
+    for (unsigned int j= 0; j < grid[i].size(); ++ j) {
+      node n = grid[i][j];
+      if(superGraph->isElement(n)) {
+	nodeLevel.set(n.id, i);
+	Size tmp = nodeSize->getNodeValue(n);
+	levelMaxSize[i] = std::max(levelMaxSize[i], tmp[1]);
+      }
+    }
+  }
+  edge e;
+  forEach(e, superGraph->getEdges()) {
+    node src = superGraph->source(e);
+    node tgt = superGraph->target(e);
+    float rev = 1.0;
+    if (nodeLevel.get(src.id)>nodeLevel.get(tgt.id)) {
+      rev = -1.0;
+    }
+    Coord srcPos = layoutProxy->getNodeValue(src);
+    Coord tgtPos = layoutProxy->getNodeValue(tgt);
+    vector<Coord> old = layoutProxy->getEdgeValue(e);
+    float minDecal = 8;
+    if (old.size() == 0) {
+      vector<Coord> pos(2);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + minDecal);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + minDecal);
+      pos[0] = srcPos;
+      pos[1] = tgtPos;
+      layoutProxy->setEdgeValue(e, pos);
+    }
+    else {
+      vector<Coord> pos(4);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + minDecal);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + minDecal);
+      Coord src2Pos = old.front();
+      Coord tgt2Pos = old.back();
+      src2Pos[1] -= rev*(levelMaxSize[nodeLevel.get(src.id) + 1]/2.0 + minDecal);
+      tgt2Pos[1] += rev*(levelMaxSize[nodeLevel.get(tgt.id) - 1]/2.0 + minDecal);
+      pos[0] = srcPos;
+      pos[1] = src2Pos;
+      pos[2] = tgt2Pos;
+      pos[3] = tgtPos;
+      layoutProxy->setEdgeValue(e, pos);
+    }
+  }
+  
+  //rotate layout and size
+  if (orientation == "horizontal") {
+    node n;
+    forEach(n, superGraph->getNodes()) {
+      Size  tmp = nodeSize->getNodeValue(n);
+      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      Coord tmpC = layoutProxy->getNodeValue(n);
+      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+    }
+    edge e;
+    forEach(e, superGraph->getEdges()) {
+      LineType::RealType tmp = layoutProxy->getEdgeValue(e);
+      LineType::RealType tmp2;
+      LineType::RealType::iterator it;
+      for (it = tmp.begin(); it!= tmp.end(); ++it) {
+	tmp2.push_back(Coord(-(*it)[1], (*it)[0], (*it)[2]));
+      }
+      layoutProxy->setEdgeValue(e, tmp2);
+    }
+  }
   return true;
 }
 
