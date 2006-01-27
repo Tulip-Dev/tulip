@@ -117,7 +117,7 @@ void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string plugi
   #else
   struct dirent **namelist;
   if (loader!=0) loader->start(pluginPath.c_str(),type);
-  int n = scandir(pluginPath.c_str(), &namelist, __tulip_selectSO, alphasort);
+  int n = scandir((const char *) pluginPath.c_str(), &namelist, __tulip_selectSO, alphasort);
   if (loader!=0) loader->numberOfFile(n);
   if (n < 0) {
     msg=std::string("Scandir error");//perror("scandir");
