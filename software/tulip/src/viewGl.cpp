@@ -93,6 +93,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
   //Create overview widget
   overviewDock = new QDockWindow(this,"Overview");
+  overviewDock->setCaption("3D Overview");
   overviewDock->setCloseMode(QDockWindow::Always);
   overviewDock->setResizeEnabled(true);
   overviewWidget = new Overview(overviewDock);
@@ -103,6 +104,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewDock->show();
  //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
+  tabWidgetDock->setCaption("Info Editor");
   tabWidgetDock->setCloseMode(QDockWindow::Always);
   tabWidgetDock->setResizeEnabled(true);
   TabWidgetData *tabWidget = new TabWidgetData(tabWidgetDock);
