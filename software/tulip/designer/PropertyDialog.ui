@@ -34,8 +34,6 @@
     </property>
     <property name="font">
         <font>
-            <pointsize>12</pointsize>
-            <bold>0</bold>
         </font>
     </property>
     <property name="caption">
@@ -194,7 +192,7 @@
             </property>
             <property name="font">
                 <font>
-                    <pointsize>16</pointsize>
+                    <pointsize>12</pointsize>
                     <bold>1</bold>
                 </font>
             </property>
