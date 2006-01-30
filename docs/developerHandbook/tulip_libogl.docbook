@@ -4,7 +4,7 @@
     </sect1>
     <sect1 id="augm-disply"><title>Augmented Displays for Tulip</title>
 	<sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlAD</title>
-	    <para>GlAD(GlAugmentedDisplay) is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class was to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays. Based upon the now obsolete GlDrawable system this library offers more efficient services.
+	    <para>GlAD(GlAugmentedDisplay) is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays. Based upon the now obsolete GlDrawable system this library offers more efficient services.
 	    </para>
 	</sect2>
     
@@ -14,7 +14,7 @@
 	</sect2>
     
 	<sect2 id="glADRenderOptions"><title>GlADRenderOptions</title>
-	    <para>GlADRenderOptions is a class used to store the rendering options of every GlAugmentedDisplay instances. It is working on a basis of 32-bits integer where every bit represent a different render state.</para>
+	    <para>GlADRenderOptions is a class used to store the rendering options of every GlAugmentedDisplay instance. It is working on a basis of 32-bits integer where every bit represent a different render state.</para>
 		
 	    <sect3 id="glADRenderOptions-List"><title>List of available render states</title>
 		<para> These are the different available render states you can use with GlADRenderOptions. It is to note that some of these render states are only descriptive and have no use in the <emphasis>setup()</emphasis> function.</para>
@@ -31,7 +31,7 @@
 	</sect2>
     
 	<sect2 id="glAD3D-basic"><title>Basic GlAD 3D classes</title>
-	    <para>There are 3 basic GlAD classes which are displaying in 3D. Each of them represent a different primitive.</para>
+	    <para>There are 3 basic GlAD classes which display in 3D. Each of them represents a different primitive.</para>
 	    <itemizedlist>
 		<listitem><para><emphasis>GlADPoint</emphasis> : Describes a point according to a position and a color.</para></listitem>
 		<listitem><para><emphasis>GlADLine</emphasis> : Describes a line according to a start position, a start color, an end position and an end color.</para></listitem>
@@ -75,7 +75,7 @@ Color endCol(255, 0, 0, 0);
 GlADLine* line = new GlADLine(startPos, endPos, startCol, endCol, 1);
 
 // We set 2 render states : Firstly we activate Alpha-Blending so that
- transparency can we computed, 
+ transparency can be computed, 
 // and then we deactivate the z buffer, in order to see the line even if
  it crosses a node.
 line->setRenderState(GlAD_AlphaBlending, true);
@@ -96,8 +96,8 @@ glGraphWidget->addGlAugmentedDisplay(line, "The famous tutorial Line");
 Coord bottomRight(1.5, 1.5, 1.5);
 Color boxColor(220, 220, 255, 80);
 
-// We create the box by giving to the constructor the bounding box 
-(topLeft and bottomRight) and the color of the box.
+// We create the box by giving the bounding box to the constructor
+// (topLeft and bottomRight) and the color of the box.
 GlADBox *box = new GlADBox(topLeft, bottomRight, boxColor);
 
 // We activate Alpha-Blending so that transparency can be computed and
@@ -122,7 +122,7 @@ int viewport[4];
 glGetIntegerv(GL_VIEWPORT, viewport);
 
 // This is the position of the center of the circle 
-(ScreenWidth / 2, ScreenHeight / 2, 1)
+// (ScreenWidth / 2, ScreenHeight / 2, 1)
 Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
 Color circleColor(220, 220, 255, 255);
 
@@ -143,7 +143,7 @@ glGraphWidget->addGlAugmentedDisplay(circle, "GlAD Tutorial 3 : Circle");
 	    </sect3>
 	
 	    <sect3 id="glAD-Compositing"><title>Compositing with GlAD</title>
-		<para>This example show how to use GlADComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
+		<para>This example shows how to use GlADComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
 	
 		<para>The circle will be positionned at the center of the screen. It will have a radius of 256 pixels and will be of a medium grey (128, 128, 128, 255).</para>
 		<para>The four squares will be positionned every 90° on the circle. They will also be in medium gray, and only wired</para>
@@ -159,7 +159,7 @@ int viewport[4];
 glGetIntegerv(GL_VIEWPORT, viewport);
 
 // This is the position of the center of the circle 
- (ScreenWidth / 2, ScreenHeight / 2, 1)
+// (ScreenWidth / 2, ScreenHeight / 2, 1)
 Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
 
 // We create the circle. It still have 50 segments

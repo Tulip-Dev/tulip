@@ -28,9 +28,9 @@
             <listitem><para>XSL processor</para></listitem>
             <listitem><para>XSL-FO processor (optional)</para></listitem>
             </itemizedlist>
-            There are RPM (docbook-dtds, docbook-style-xsl), Debian (docbook-xml, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. The installation of Docbook and the XSL stylesheet create a file named <filename>/etc/xml/catalog</filename>. It contains the informations about all others catalogs to resole the path of the DTDs and the stylsheets from the URI.</para>
+            There are RPM (docbook-dtds, docbook-style-xsl), Debian (docbook-xml, docbook-xsl) packages for Linux systems, Fink packages for Mac systems, and Cygwin and other packages for Windows systems. The installation of Docbook and the XSL stylesheet create a file named <filename>/etc/xml/catalog</filename>. It contains the informations about all others catalogs to resolve the path of the DTDs and the stylsheets from the URI.</para>
             <sect3 id="xsl-install"><title>Manual Installation : Docbook XSL stylesheet</title>
-                <para>As we have some problems with the DTD providing by the distributions, Tulip gives the DTD 4.4 of Docbook XML and is located in <filename>$TULIPDIR/docs/common/dtd</filename>. So, this section is for informations. The XSL packages seem to have great catalog resolutions, but if you have problems, this section can help you.</para>
+                <para>As we have some problems with the DTD provided by the distributions, Tulip gives the DTD 4.4 of Docbook XML and is located in <filename>$TULIPDIR/docs/common/dtd</filename>. So, this section is for informations. The XSL packages seem to have great catalog resolutions, but if you have problems, this section can help you.</para>
                 <para>If you need another solution or you have problems for the compilation, you can download the source package on oasis <ulink url="http://www.oasis-open.org/docbook/xml/">web site</ulink> for Docbook and on the <ulink url="http://sourceforge.net/projects/docbook/">SourceForge page</ulink> of XSL stylesheets. The Docbook sources are in a <code>zip</code> file. Unzip your package in a directory in the place you prefer. The Docbook XML DTD consists of a main file <filename>docbookx.dtd</filename>, several module files and a catalog file, named <filename>catalog.xml</filename>. To update the changes of location of your DTD, edit the file <filename>CatalogManager.properties</filename> in <filename>$TULIPDIR/docs/common/</filename>. Add the catalog file with its asbolute path to the <code>catalogs</code> variable.
 <programlisting>
 CatalogManager.properties :
@@ -56,7 +56,7 @@ CLASSPATH=$CLASSPATH:/usr/saxon/saxon.jar:\
 /usr/docbook-xsl/extensions/saxon653.jar
 export CLASSPATH
 </screen>
-                If your CLASSPATH is incorrect, you get an error message about <methodname>NoClassDefFoundError</methodname>. To generalize it, you have to change your <filename>.bashrc</filename> or <filename>.bash_profile</filename>. In this example, a second package is included : <filename>/usr/docbook-xsl/extensions/saxon653.jar</filename>, in Fedora Core 4, it is located in <filename>/usr/share/sgml/docbook/xsl-stylesheets/extensions/</filename>. It contains the implementation of the extensions of XSL Transformations. This extensions are necessary for the manage of certain tags and are included in the docbook tools. The general syntax for compilation is like followed :
+                If your CLASSPATH is incorrect, you get an error message about <methodname>NoClassDefFoundError</methodname>. To generalize it, you have to change your <filename>.bashrc</filename> or <filename>.bash_profile</filename>. In this example, a second package is included : <filename>/usr/docbook-xsl/extensions/saxon653.jar</filename>, in Fedora Core 4, it is located in <filename>/usr/share/sgml/docbook/xsl-stylesheets/extensions/</filename>. It contains the implementation of the extensions of XSL Transformations. This extensions are necessary to manage some tags and are included in the docbook tools. The general syntax for compilation is like followed :
 
                 <cmdsynopsis><command>java com.icl.saxon.StyleSheet </command>
                         <arg><option>options</option></arg>
@@ -75,7 +75,7 @@ export CLASSPATH
             </warning>
                </sect3>
                 <sect3 id="xsl-fo"><title>XSL-FO processor for PDF output</title>
-                <para>To transform the docbook sources in pdf documents, we need to use an other format FO. It is running with a stylsheet in docbook-xsl package. The role of the XSF-Fo processor is to transform FO files in printable files, like pdf. You have to install <application>passivetex</application>. Fedora and Debian includes this package, but you can download and install it with its web site, <ulink url="http://www.tei-c.org.uk/Software/passivetex/"/>. It exists a program named <code>pdfxmltex</code> giving tex macros for the XSL-Fo processing.</para>
+                <para>To transform the docbook sources in pdf documents, we need to use an other format FO. It is running with a stylesheet in docbook-xsl package. The role of the XSF-Fo processor is to transform FO files in printable files, like pdf. You have to install <application>passivetex</application>. Fedora and Debian includes this package, but you can download and install it with its web site, <ulink url="http://www.tei-c.org.uk/Software/passivetex/"/>. It exists a program named <code>pdfxmltex</code> giving tex macros for the XSL-Fo processing.</para>
             </sect3>
         </sect2>
         <sect2 id="dox-install"><title>Doxygen</title>
@@ -88,7 +88,7 @@ export CLASSPATH
     <sect1 id="written"><title>Handwriting for the manuals</title>
         <para>Some works on the Tulip project lead to make a part of a handbook for developer or users. Docbook utilities are used to create them. </para>
 
-        <para>Docbook is a DTD (Document Type Definition) for XML or SGML document that define elements. It is a kind of grammar of the source document. This is in relation with stylesheets (DSSSL [<xref linkend="dsssl"/>] or XSL) which allow you to publish on the Web ( in HTML, XHTML) on a printable documentation (PS, PDF, RTF...) with your Docbook documents. The principal advantages of the docbook format is the possibility to seperate the contents of the forms. The tools which can transform the source documents are generic and can pratically run on all Operation Systems. Docbook is the successor of LinuxDoc.</para>
+        <para>Docbook is a DTD (Document Type Definition) for XML or SGML document that define elements. It is a kind of grammar of the source document. This is in relation with stylesheets (DSSSL [<xref linkend="dsssl"/>] or XSL) which allow you to publish on the Web ( in HTML, XHTML) on a printable documentation (PS, PDF, RTF...) with your Docbook documents. The main advantages of the docbook format is the possibility to seperate the contents of the forms. The tools which can transform the source documents are generic and can pratically run on all Operation Systems. Docbook is the successor of LinuxDoc.</para>
 
         <para>For Tulip documentation, the source documents are in XML, because XML leads to take the place of SGML to alleviate compatibility problems with browser software. It's a new, easier version of the standard rules that govern the markup itself. To find all of the xml elements to composed your own document, you can see : <ulink url="http://www.docbook.org/tdg5/en/html/pt02.html">http://www.docbook.org/tdg5/en/html/pt02.html</ulink></para>
 
@@ -213,7 +213,7 @@ make: *** [check] Erreur 1
 			In order to insert a figure as <quote>inline</quote>, use the tag <code>inlinegraphics</code></para></answer>
                 </qandaentry>
                 <qandaentry>
-                    <question><para>How to make annontation in a program listing (or in a console listing) ?</para></question>
+                    <question><para>How to make annotation in a program listing (or in a console listing) ?</para></question>
                     <answer><para>See <ulink url="http://www.sagehill.net/docbookxsl/AnnotateListing.html#Callouts">DocBook XSL : the complete guide</ulink></para>
                     <para>To do that, you use the set of tags <code>programlisting, co, calloutlist, callout</code>.
 <programlisting>

@@ -13,7 +13,7 @@
 </programlisting></para>
         <para>The organisation of files must be comprehensible. New module leads to a new set of files :  a <filename>*.cpp</filename> and a <filename>*.h</filename> named with the name of the type. If the structure implicates that all methods are inline, the creation of a <code>.cxx</code> file is better than a <filename>.cpp</filename> file. The <filename>cxx</filename> should be included at the bottom of the header file. None implementation is in the header file. In the Tulip hiearchy, the cxx files are in a directory <quote>cxx</quote> in the header location. </para>
 
-        <para>The indentation is an important part for a easy reading in a file and a best understanding. Code must be properly indented to show the syntactic structure of the program. It is useless to space out excessively the code. A conventionnal indentation is just necessary. None useless <keycap>TAB</keycap> or spaces. The <keysym>{</keysym> caracter for the opening of a method or a function must be at the end of the line, not in following line. Each new fitted block of program implies a new shift for the indentation.</para>
+        <para>The indentation is an important part for a easy reading in a file and a best understanding. Code must be properly indented to show the syntactic structure of the program. It is useless to space out excessively the code. A conventional indentation is just necessary. None useless <keycap>TAB</keycap> or spaces. The <keysym>{</keysym> caracter for the opening of a method or a function must be at the end of the line, not in following line. Each new fitted block of program implies a new shift for the indentation.</para>
         
         <para>Each new module inserted in the Tulip library must be included in the namespace <code>tlp</code>. It is necessary in order to prevent eventually incompatibilities.
 <programlisting>
@@ -54,15 +54,15 @@ void MyClasse::draw(){
      </sect1>
 <!--=================================================================================    -->
 
-<!--======  NAMMING   ===============================================================    -->
-    <sect1 id="namming"><title>Namming conventions</title>
+<!--======  NAMING   ===============================================================    -->
+    <sect1 id="naming"><title>Naming conventions</title>
 	<para> Programmer of Tulip has to follow some rules for choosing Type, Functions, or Variables names. Each names must be in English and choose to an easy understanding, descriptive and accurate. Each important word must be found in the name.
 	    <itemizedlist><title>List of Rules</title>
 		<listitem><para>Types (struct, class, ...) : Names must be in mixed case starting with upper case. Each word should have first letter in upper case. Don't use underscore to separate words. (e.g. <code>SortedVector, OrientedList, RedBird, ...</code>)</para></listitem>
 		<listitem><para>Functions and Methods : Names must be in mixed case like for Types, but starting with lowercase. After the first one, each important word has first letter in upper case. Don't use underscore to separate words. (e.g <code>drawString(), computeFormulas(), ...</code>)</para></listitem>
 		<listitem><para>Variables : Names must be in lower case. (e.g. <code>instances, nodes, tableofcontents, ...</code>)</para></listitem>
 		<listitem><para>Constants : Names must be in upper case. (e.g. <code>MAXSIZE, BLACKCOLOR, ... </code>)</para></listitem>
-		<listitem><para>Macro and Enumeration constans : Names must be defined in upper case with an underscore between words. (e.g. <code>LAYOUTPLUGIN(C, N, A, D, I, V, R), ...</code>)</para></listitem>
+		<listitem><para>Macro and Enumeration constants : Names must be defined in upper case with an underscore between words. (e.g. <code>LAYOUTPLUGIN(C, N, A, D, I, V, R), ...</code>)</para></listitem>
 		<listitem><para>Namespaces : Names must be in lower case. (e.g. <code>tlp</code>)</para></listitem>
 	    </itemizedlist>
 
@@ -74,7 +74,7 @@ void MyClasse::draw(){
 <!--======= COMMENTAIRES ================================================================    -->
     <sect1 id="commentaires"><title>Code Comments</title>
 	<para>
-	    All of the comments in the source and the header files must be written in the English language. Lots of comments is a simple way to leave a clear code for the next programmer who will receive your work. A part of comments must be written with several rules to help the documentation of your work generating automatically with <emphasis>Doxygen</emphasis>. Choose a part of your comments to describe your work. See <xref linkend="doxygen"/>. It is important that a programmer can understand the using of your work and how to use your work.
+	    All of the comments in the source and the header files must be written in the English language. Adding a lot of comments is a simple way to leave a clear code for the next programmer who will receive your work. A part of comments must be written with several rules to help the documentation of your work generating automatically with <emphasis>Doxygen</emphasis>. Choose a part of your comments to describe your work. See <xref linkend="doxygen"/>. It is important that a programmer can understand the using of your work and how to use your work.
 	</para>
 	<para>
 	    Before a declaration of a class, you should write a little description to explain it. The role, the pre-requisites, the post-requisites, the return values and the parameters should be written before the declaration of the function or method. It is the minimum for an easy comprehension of your work.
@@ -85,7 +85,7 @@ void MyClasse::draw(){
 
     <!--======= INTEGRATION ================================================================    -->
     <sect1 id="integration"><title>Integration in Tulip project</title>
-        <para>The build of Tulip uses a mecanism of the GNU operating system. <acronym>GNU</acronym> has several tools used for the management of the configuration files. It modifies the <filename>makefile</filename> to adapt their to the distribution you have and the tools you need : the most important tools are <application>autoconf</application>, <application>automake</application> and <application>libtool</application>.
+        <para>The build of Tulip uses a mechanism of the GNU operating system. <acronym>GNU</acronym> has several tools used for the management of the configuration files. It modifies the <filename>makefile</filename> to adapt them to the distribution you have and the tools you need : the most important tools are <application>autoconf</application>, <application>automake</application> and <application>libtool</application>.
         <application>Tulip</application> generates three libraries : <filename>libtulip, libtulip-ogl, libtulip-qt</filename>, a software : <filename>tulip</filename> and a script : <filename>tulip-config</filename>. In a thirdparty, <application>Tulip</application> compiles several external libraries needed by the software : ftgl, gle, gzstream, triangle.
         </para>
         <sect2 id="build-sys"><title>GNU Build system</title>
@@ -94,11 +94,11 @@ void MyClasse::draw(){
                 <para><application>Autoconf</application> is a tool of GNU producing shell scripts that automtically configure software packages to adapt to many kinds of UNIX systems. It is not the unique tool, it runs with others to solve all problems to making portable software. It generates configurations files : specially the <code>configure</code> script from a <filename>configure.in</filename> or <filename>configure.ac</filename> file. Running this script, you produce the customized Makefiles, and other files. It checks for the presence of each feature that the software need. Autoconf requires <application>GNU M4</application> in order to generate the scripts. </para>
                 <para>To this end, GNU has developed a set of integrated utilities to finish the job of <application>Autoconf</application>. <application>Automake</application> is the next in run. It is a tool for generating <filename>Makefile.in</filename> from files called <filename>Makefile.am</filename>. Each <filename>Makefile.am</filename> is basically a series of <code>make</code> variable definitions, with the GNU Makefile standards. <application>Automake</application> requires <application>Autoconf</application> in order to be used properly.
                 </para>
-                <para>The last is <application>Libtool</application>. It makes it possible to compile position indepedent code and build shared libraries in a portable manner. It does not require either Autoconf, or Automake and can be used indepedently. Automake however supports libtool and operates with it in a seamless manner.</para>
+                <para>The last is <application>Libtool</application>. It makes it possible to compile position independent code and build shared libraries in a portable manner. It does not require either Autoconf, or Automake and can be used independently. Automake however supports libtool and operates with it in a seamless manner.</para>
 
             </sect3>
             <sect3 id="simple-example"><title>A simple example</title>
-                <para>... to understand the basic mecanism.</para>
+                <para>... to understand the basic mechanism.</para>
                 <para>To create a <filename>configure</filename> script with autoconf, you need so to write an autoconf input file <filename>configure.ac</filename> (or <filename>configure.in</filename>, use in previous versions of <application>Autoconf</application>). In this example, it is created a <filename>configure.ac</filename> file but Tulip contains <filename>configure.in</filename>. The both files are correct.
 <programlistingco>
 <areaspec>
@@ -143,7 +143,7 @@ Create the files and Run :
 $ aclocal
 $ autoconf
 </screen>
-                The <code>aclocal</code> command installs a file called `aclocal.m4'. It contains the knowed <application>Autoconf</application> macros to be in use in <filename>configure.ac</filename>, like <code>AC_PROG_CC</code>. If you want to include your macros, you can create an <filename>acinclude.m4</filename> file. An other cache directory is created to store the traces of the runs of <code>m4</code>. It is called <filename>autom4te.cache</filename>.</para>
+                The <code>aclocal</code> command installs a file called `aclocal.m4'. It contains the knowned <application>Autoconf</application> macros to be in use in <filename>configure.ac</filename>, like <code>AC_PROG_CC</code>. If you want to include your macros, you can create an <filename>acinclude.m4</filename> file. An other cache directory is created to store the traces of the runs of <code>m4</code>. It is called <filename>autom4te.cache</filename>.</para>
                 
                 <para>The <code>autoconf</code> command create the <filename>configure</filename> script. Then, Run :
 <programlisting>
@@ -184,7 +184,7 @@ $ make dist
             </sect3>
         </sect2>
         <sect2 id="files-adds"><title>File adds</title>
-	   <para> To integrate a new module, set of types, in the Tulip project, you must to know which library is concerned : General library, OpenGL library, QT library, ... For each case, the procedure is the same. <filename>tulip/library/tulip-ogl/</filename> is the directory to intergate a library attached to the Opengl library. All of the <filename>.cpp</filename> files are pasted in the <filename>src</filename> subdirectory, the <filename>.h</filename> files in <filename>include/tulip</filename> and <filename>cxx</filename> files in <filename>include/tulip/cxx</filename>. Some modifications of your code shoud be necessary. The inclusion of files of Tulip project (included your work) is made with &lt; and &gt; because the compiler knows the path. For Tulip, the header files is in a special directory : <filename>tulip</filename>.</para>
+	   <para> To integrate a new module, set of types, in the Tulip project, you must to know which library is concerned : General library, OpenGL library, QT library, ... For each case, the procedure is the same. <filename>tulip/library/tulip-ogl/</filename> is the directory to integrate a library attached to the Opengl library. All of the <filename>.cpp</filename> files are pasted in the <filename>src</filename> subdirectory, the <filename>.h</filename> files in <filename>include/tulip</filename> and <filename>cxx</filename> files in <filename>include/tulip/cxx</filename>. Some modifications of your code should be necessary. The inclusion of files of Tulip project (included your work) is made with &lt; and &gt; because the compiler knows the path. For Tulip, the header files is in a special directory : <filename>tulip</filename>.</para>
             <para><code>#include &lt;tulip/TheFile.h></code> is an exemple of the inclusion. </para>
            <para>So, you have to modify two files in the directory of your library to indicate the new files. <filename>include/Makefile.am</filename> is the first. You have to complete a variable containing all <filename>.h</filename> and <filename>.cxx</filename> files with your header files named <code>nobase_include_HEADERS</code>. This name is a choice for the processing of the GNU build system. The second one is <filename>src/Makefile.am</filename> and so, you complete the variable containing all <filename>.cpp</filename> files with your source files : <code>libtulip_ogl_la_SOURCES</code>, <code>libtulip_la_SOURCES</code> or <code>libtulip_qt_la_SOURCES</code> depending of the librairie you complete. You have modified the both <filename>Makefile.am</filename> but the Makefile not. To update it, you have to recreate the <filename>configure</filename> file at the root directory and run it again. To do it, run <code>./gen-conf</code> and <code>./configure</code>. To avoid this procedure at each modification of the <filename>Makefile.am</filename>, you can specify an option when you use <filename>configure</filename> script : <code>--enable-maintainer-mode</code>. See <xref linkend="options"/>, for more details about the options. Now, the next compilation includes your work.
            </para>
@@ -239,7 +239,7 @@ $ make dist
                 </para></listitem>
                 </varlistentry>
            </variablelist>
-                The follownig targets are used for a special directory or for special buildings:
+                The following targets are used for a special directory or for special buildings:
             <variablelist>
                 <varlistentry><term><code>bin_PROGRAMS = prog1 prog2 ...</code></term>
                 <listitem><para> Lists the executable files that will be compiled with <code>make</code> and installed with <code>make install</code> under <code>prefix/bin</code>, where <code>prefix</code> is usually <code>/usr/local</code> but you can specify to an other value.</para></listitem>
@@ -250,7 +250,7 @@ $ make dist
                 </varlistentry>
 
                 <varlistentry><term><code>SUBDIRS = dir1 dir2 ...</code></term>
-                <listitem><para> Lists all the subdirectories that we want to build before building this directory. <code>make</code> will recursively invoke itself in each subdirectory before doing anything on the current directory. If you mention the current directory <quote>.</quote> in <code>SUBDIRS</code> then the current directory will be built first, and the subdirectories will be build afterwords.</para></listitem>
+                <listitem><para> Lists all the subdirectories that we want to build before building this directory. <code>make</code> will recursively invoke itself in each subdirectory before doing anything on the current directory. If you mention the current directory <quote>.</quote> in <code>SUBDIRS</code> then the current directory will be built first, and the subdirectories will be build afterwards.</para></listitem>
                 </varlistentry>
 
                 <varlistentry><term><code>EXTRA_DIST = file1 file2 ...</code></term>

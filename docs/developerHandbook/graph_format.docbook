@@ -12,7 +12,7 @@
         </para>
     </sect1>
     <sect1 id="clusters-def"><title>Clusters</title>
-        <para>A cluster is defined by an integer which represent the cluster id, one string which is the name of the cluster(Two cluster can have the same name). Then it is define with a list of nodes and a list of edges. To define a subcluster we use the same method. One important point is that the id zero is reserved for the root graph (this it cannot be used).</para>
+        <para>A cluster is defined by an integer which represent the cluster id, one string which is the name of the cluster(Two clusters can have the same name). Then it is define with a list of nodes and a list of edges. To define a subcluster we use the same method. One important point is that the id zero is reserved for the root graph (thus it cannot be used).</para>
         <para>Syntax<programlisting>
 (cluster id name
   (nodes id_node1 id_node2 ...)
@@ -57,7 +57,7 @@
         <sect2 id="type-pro"><title>Property Type</title>
         <para>  
         <itemizedlist>
-            <listitem><para>layout : This type enables to strore nodes position in 3D. The position of nodes is defined by a set of 3 doubles <code>(x_coord,y_coord,z_coord)</code>. The position of edges is a list of 3D points. These points are the bends of edges. <code>((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))</code></para></listitem>
+            <listitem><para>layout : This type enables to store nodes position in 3D. The position of nodes is defined by a set of 3 doubles <code>(x_coord,y_coord,z_coord)</code>. The position of edges is a list of 3D points. These points are the bends of edges. <code>((x_coord1,y_coord1,z_coord1)(x_coord2,y_coord2,z_coord2))</code></para></listitem>
             <listitem><para>size : This type enables to store the size of elements. The size is defined with a sequence of three double. <code>(width,heigth,depth)</code></para></listitem>
             <listitem><para>color : This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. <code>(red,green,blue,alpha)</code></para></listitem>
             <listitem><para>string : This enables to store text on elements.</para></listitem>

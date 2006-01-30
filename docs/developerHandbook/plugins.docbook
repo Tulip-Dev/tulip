@@ -1,7 +1,7 @@
 <chapter id="plugins-mechanism"><title>Plug-ins mechanism</title>
     <para>Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set-up. It enables
-    to directly add new functionalities into the Tulip kernel. One must keep in mind that a plug-in have access to 
-    all the part of Tulip. Thus, one must write plug-ins very carefully to prevent memory leak and also 
+    to directly add new functionalities into the Tulip kernel. One must keeps in mind that a plug-in have access to 
+    all the parts of Tulip. Thus, one must write plug-ins very carefully to prevent memory leak and also 
     errors. A bug in plug-in can result in a "core dump" in the software that uses it. To
     enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function
     loads dynamically all the plug-ins and register them into a factory that will enables to access to it directly.</para>
