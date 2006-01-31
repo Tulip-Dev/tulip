@@ -19,9 +19,12 @@ class TLP_SCOPE PluginProgress {
   bool isPreviewMode() const ;
   void setPreviewMode(bool);
   ProgressState state() const;
+  std::string getError() { return _error; }
+  void setError(std::string error) { _error = error; }
   virtual void progress_handler(int step, int max_step);
  private:
   ProgressState _state;
   bool _preview;
+  std::string _error;
 };
 #endif

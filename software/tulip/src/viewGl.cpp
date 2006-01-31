@@ -502,17 +502,23 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     initializeGlGraph(glW);
     glW->setSuperGraph(newGraph);
     changeSuperGraph(0);
-    QtProgress progressBar(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
-    result = tlp::importGraph(*plugin, dataSet, &progressBar ,newGraph);
-    if (progressBar.state()==TLP_CANCEL || !result ) {
+    QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
+    result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
+    if (progressBar->state()==TLP_CANCEL || !result ) {
       changeSuperGraph(0);
       delete glW;
       delete newGraph;
       QApplication::restoreOverrideCursor();
       qWarning("Canceled import/Open");
+      std::string errorTitle("Canceled import/Open: ");
+      errorTitle += s.section('/',-1).ascii();
+      std::string errorMsg = progressBar->getError();
+      delete progressBar;
       Observable::unholdObservers();
+      QMessageBox::critical(this, errorTitle, errorMsg);
       return;
     }
+    delete progressBar;
     if(noPlugin) {
       QString cleanName=s.section('/',-1);
       QStringList fields = QStringList::split('.', cleanName);
