@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <list>
 
@@ -180,39 +181,54 @@ struct TLPParser {
 	    break;
 	  case BOOLTOKEN:
 	    if (!builderStack.front()->addBool(currentValue.boolean))  {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
+	      std::stringstream ess;
+	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      pluginProgress->setError(ess.str());
+	      return false;
+	    }
 	    break;
 	  case INTTOKEN:
 	    if (!builderStack.front()->addInt(currentValue.integer)) {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
+	      std::stringstream ess;
+	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      pluginProgress->setError(ess.str());
+	      return false;
+	    }
 	    break;
 	  case DOUBLETOKEN:
 	    if (!builderStack.front()->addDouble(currentValue.real)) {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
+	      std::stringstream ess;
+	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      pluginProgress->setError(ess.str());
+	      return false;
+	    }
 	    break;
 	  case STRINGTOKEN:
 	    if (!builderStack.front()->addString(currentValue.str)) {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
+	      std::stringstream ess;
+	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      pluginProgress->setError(ess.str());
+	      return false;
+	    }
 	    break;
 	  case CLOSETOKEN:
 	    if (builderStack.front()->close())
 	      delete builderStack.front();
 	    else {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
+	      std::stringstream ess;
+	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      pluginProgress->setError(ess.str());
+	      return false;
+	    }
 	    builderStack.pop_front();
 	    break;
-	  case ERRORINFILE:return false;break;
-	  case ENDOFSTREAM:return true;break;
+	  case ERRORINFILE: {
+	    std::stringstream ess;
+	    ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	    pluginProgress->setError(ess.str());
+	    return false;
+	  }
+	  case ENDOFSTREAM:return true;
 	  case COMMENTTOKEN:if (displayComment) std::cout << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str << std::endl;break;
 	  default:break;
 	  }
