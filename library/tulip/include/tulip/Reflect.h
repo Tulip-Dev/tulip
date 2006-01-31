@@ -66,7 +66,7 @@ struct TLP_SIMPLE_SCOPE StructDef {
 
   ///Build a default dataSet according to fields
   ///The optional SuperGraph is needed to create properties (PProxy*)
-  bool		buildDefaultDataSet( DataSet & ioDataSet, SuperGraph * inG = 0 );
+  void		buildDefaultDataSet( DataSet & ioDataSet, SuperGraph * inG = 0 );
 private:
   std::map<std::string,std::string> data;
   std::map<std::string,std::string> help;

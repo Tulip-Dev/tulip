@@ -56,7 +56,7 @@ string StructDef::getDefValue( string str ) const {
 #undef TN
 #define	TN( T )	typeid(T).name()
 
-bool StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
+void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
   Iterator< pair<string,string> > * defIt;
   defIt = getField();
 
