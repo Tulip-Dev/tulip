@@ -37,35 +37,59 @@ struct GMLGraphBuilder:public GMLTrue {
     return true;
   }
   edge addEdge(int idSource,int idTarget) {
-    return _superGraph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
+    // return and invalid edge if one of the two nodes does not exits
+    if (_superGraph->isElement(nodeIndex[idSource]) && _superGraph->isElement(nodeIndex[idTarget]))
+      return _superGraph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
+    return edge();
   }
-  bool setNodeValue(int nodeId, const string propertyName, string value) { 
-    _superGraph->getLocalProperty<StringProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+  bool setNodeValue(int nodeId, const string propertyName, string value) {
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<StringProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, double value) { 
-    _superGraph->getLocalProperty<MetricProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<MetricProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, int value) { 
-    _superGraph->getLocalProperty<IntProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<IntProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, bool value) { 
-    _superGraph->getLocalProperty<SelectionProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<SelectionProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Coord value) { 
-    _superGraph->getLocalProperty<LayoutProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<LayoutProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Size value) { 
-    _superGraph->getLocalProperty<SizesProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<SizesProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Color value) { 
-    _superGraph->getLocalProperty<ColorsProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
-    return true;
+    if (_superGraph->isElement(nodeIndex[nodeId])) {
+      _superGraph->getLocalProperty<ColorsProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+      return true;
+    }
+    return false;
   }
 
   bool setEdgeValue(edge e, const string &propertyName, string value) {
@@ -225,7 +249,7 @@ struct GMLEdgeBuilder:public GMLTrue {
     if (st==TARGET) target=id;
     if ((!edgeOk) && (source!=-1) && (target!=-1)) {edgeOk=true;curEdge=graphBuilder->addEdge(source,target);}
     if ((st!=SOURCE) && (st!=TARGET))
-      if (edgeOk)
+      if (edgeOk && curEdge.isValid())
 	result=graphBuilder->setEdgeValue(curEdge, st, id);
       else
 	edgeAttributeError();
