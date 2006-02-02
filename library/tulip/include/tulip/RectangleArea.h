@@ -18,7 +18,7 @@ enum directionType {
     VERTICAL_DIRECTION
 };
 
-class RectangleArea {
+class TLP_SCOPE RectangleArea {
 public:
     RectangleArea(float x = 0, float y = 0, float width = 0, float height = 0);
     explicit RectangleArea(const Coord&,const Size&);
