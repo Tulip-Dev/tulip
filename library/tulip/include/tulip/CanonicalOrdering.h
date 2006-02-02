@@ -23,6 +23,7 @@
 #include <map>
 #include <stdio.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/PluginProgress.h>
 
 #ifndef DOXYGEN_NOTFOR_USER
 /*<<<<<<< CanonicalOrdering.h
@@ -42,9 +43,10 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> >
 
   std::vector<edge> getDummyEdges(){ return dummy_edge; }
   
-  Ordering(SuperGraphMap * G);
+  Ordering(SuperGraphMap * G, PluginProgress* pluginProgress = 0,
+	   int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
-  std::vector<std::vector<node> > computeCanonicalOrdering();
+  std::vector<std::vector<node> > computeCanonicalOrdering(PluginProgress* pluginProgress = 0, int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
 
  private :
  
