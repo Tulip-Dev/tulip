@@ -34,14 +34,13 @@ GLYPHPLUGIN(Billboard, "Billboard", "Gerald Gainant", "08/03/2004", "Textured bi
 //===================================================================================
 Billboard::Billboard(GlyphContext *gc): Glyph(gc),listOk(false) {
 }
-
+//========================================================
 Billboard::~Billboard() {
   if (listOk)
     if (glIsList(LList)) glDeleteLists(LList, 1);
 }
-
-void
-Billboard::draw(node n) {
+//========================================================
+void Billboard::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
   if(texFile.size() && texFile != "") {
@@ -58,19 +57,18 @@ Billboard::draw(node n) {
   }
 
   // setup orientation
-
   float mdlM[16];
   glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
   glMatrixMode( GL_MODELVIEW_MATRIX );
   glPushMatrix();
   Size sz(1,1,1);
   if( glGraph->elementSize )
-	sz = glGraph->elementSize->getNodeValue(n);
+    sz = glGraph->elementSize->getNodeValue(n);
   float nx = sz.getW();
   float ny = sz.getH();
   float nz = sz.getD();
-  mdlM[0] = nx;
-  mdlM[5] = ny;
+  mdlM[0]  = nx;
+  mdlM[5]  = ny;
   mdlM[10] = nz;
   mdlM[1] = mdlM[2] = 0.0f;
   mdlM[4] = mdlM[6] = 0.0f;
@@ -79,8 +77,7 @@ Billboard::draw(node n) {
   glCallList(LList);
   glPopMatrix();
 }
-
-
+//========================================================
 Coord Billboard::getAnchor(const Coord & vector ) const {
   Coord v( vector );
   float x,y,z, fmax;
@@ -92,8 +89,7 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
   else
     return v;
 }
-
-
+//========================================================
 void Billboard::drawBillboard() {
   glEnable(GL_ALPHA_TEST);
   glAlphaFunc(GL_GREATER, 0.5);
@@ -110,3 +106,4 @@ void Billboard::drawBillboard() {
   glDisable(GL_ALPHA_TEST);
   glEnd();
 }
+//========================================================
