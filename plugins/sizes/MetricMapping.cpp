@@ -39,7 +39,15 @@ namespace {
   };
 }
 
-///
+
+/** \addtogroup size */
+/*@{*/
+/// MetricMapping.h - Compute size of elements according to a metric.
+/** This plugin enables to set the size of the grapĥ's elements
+ *  according to a metric.
+ *
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ */
 class MetricMapping:public Sizes {
 public:
   MetricMapping(const PropertyContext &context):Sizes(context) {
@@ -109,17 +117,5 @@ private:
   double range;
   double shift;
 };
-
+/*@}*/
 SIZESPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
-
-
-
-
-
-
-
-
-
-
-
-

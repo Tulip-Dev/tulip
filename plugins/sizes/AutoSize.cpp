@@ -1,7 +1,16 @@
 //-*-c++-*-
 #include <tulip/TulipPlugin.h>
 #include <cmath>
-///
+
+/** \addtogroup size */
+/*@{*/
+/// AutoSizes.cpp - Compute size in order to prevent node-node overlapping
+/**
+ * This plug-ins compute size of nodes and edges such that, node-node overlapping do not exists (if it is possible).
+ * and sizes of edges are proportional to size of nodes.
+ *
+ *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ */
 class AutoSizes:public Sizes
 { 
 public:
@@ -53,16 +62,5 @@ public:
   }
 
 };
+/*@}*/
 SIZESPLUGIN(AutoSizes,"Auto_sizing","Auber","04/05/2001","0","0","1")
-
-
-
-
-
-
-
-
-
-
-
-
