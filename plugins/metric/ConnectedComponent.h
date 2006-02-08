@@ -1,14 +1,8 @@
 //-*-c++-*-
 #ifndef _ConnectedComponent_H
 #define _ConnectedComponent_H
-
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <tulip/TulipPlugin.h>
+#include <tulip/MutableContainer.h>
 /** \addtogroup metric */
 /*@{*/
 /// ConnectedComponent.h - An implementation of the connected component algorithm.
@@ -35,15 +29,14 @@
  *  (at your option) any later version.
  *
  */
-class ConnectedComponent:public Metric
-{ 
+class ConnectedComponent:public Metric { 
 public:
   ConnectedComponent(const PropertyContext &);
   ~ConnectedComponent();
   bool run();
 
 private:
-  void dfs(node n, stdext::hash_map<node,bool> &flag,double value);
+  void dfs(node n, MutableContainer<bool> &flag,double value);
 };
 /*@}*/
 #endif
