@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PropertyDialogData</class>
 <widget class="QWidget">
     <property name="name">
@@ -46,10 +46,10 @@
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>1</number>
+            <number>5</number>
         </property>
         <property name="spacing">
-            <number>1</number>
+            <number>5</number>
         </property>
         <widget class="QCheckBox" row="2" column="0">
             <property name="name">
@@ -373,6 +373,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>CheckBox1</sender>
