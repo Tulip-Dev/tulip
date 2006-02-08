@@ -51,7 +51,7 @@ double ConeTreeExtended::treePlace3D(node n,
   (*posRelY)[n]=0;
   if (superGraph->outdeg(n)==0) {
     Coord tmp = nodeSize->getNodeValue(n);
-    return sqrt(tmp[0]*tmp[0] + tmp[1]*tmp[1])/2.0;
+    return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   
   if (superGraph->outdeg(n)==1) {
