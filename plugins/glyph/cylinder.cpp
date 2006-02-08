@@ -83,8 +83,8 @@ Coord Cylinder::getAnchor(const Coord &vector) const
   x *= n;
   y *= n;
   z *= n;
-  z = z >? -0.5f;
-  z = z <? +0.5f;
+  if (z < -0.5f) z = -0.5f; //z = z >? -0.5f;
+  if (z > +0.5f) z = +0.5f; //z = z <? +0.5f;
   return Coord(x,y,z);
 }
 

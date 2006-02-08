@@ -105,16 +105,15 @@ HSVSet(V);
 //=================================================================
 //// static RGB<->HSV conversion functions
 void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v) {
-  int min, max, delta;
-  // "<?" and ">?" are GNU G++ extensions; may not work with other compiler
-  min = r <? g <? b;
-  max = r >? g >? b;
-  v = max;				// v
+  int theMin, theMax, delta;
+  theMin = std::min(std::min(r, g), b); //  r <? g <? b
+  theMax = std::max(std::max(r, g), b); //  r >? g >? b
+  v = theMax;				// v
 
-  delta = max - min;
+  delta = theMax - theMin;
 
-  if((max != 0) && (delta != 0))
-    s = 255 * delta / max;		// s
+  if((theMax != 0) && (delta != 0))
+    s = 255 * delta / theMax;		// s
   else {
     // r=g=b = 0		// s = 0, v is undefined
     s = 0;
@@ -122,9 +121,9 @@ void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s,
     return;
   }
 
-  if(r == max)
+  if(r == theMax)
     h = (int) (60 * (float)(g - b) / (float)delta);		// between yellow & magenta
-  else if(g == max)
+  else if(g == theMax)
     h = (int) (60 * (2.0f + (float)(b - r) / (float)delta));	// between cyan & yellow
   else
     h = (int) (60 * (4.0f + (float)(r - g) / (float)delta));	// between magenta & cyan

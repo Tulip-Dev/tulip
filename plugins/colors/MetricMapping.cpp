@@ -15,22 +15,22 @@ using namespace std;
 using namespace tlp;
 
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
-  float min, max, delta;
-  min = r <? g <? b; //MIN( MIN( r, g) , b );
-  max = r >? g >? b; //MAX( MAX( r, g) , b );
-  *v = max;                               // v
-  delta = max - min;
-  if( max != 0 )
-    *s = delta / max;               // s
+  float theMin, theMax, delta;
+  theMin = std::min(std::min(r, g), b); //MIN( MIN( r, g) , b );
+  theMax = std::max(std::max(r, g), b); //MAX( MAX( r, g) , b );
+  *v = theMax;                               // v
+  delta = theMax - theMin;
+  if( theMax != 0 )
+    *s = delta / theMax;               // s
   else {
     // r = g = b = 0                // s = 0, v is undefined
     *s = 0;
     *h = -1;
     return;
   }
-  if( r == max )
+  if( r == theMax )
     *h = ( g - b ) / delta;         // between yellow & magenta
-  else if( g == max )
+  else if( g == theMax )
     *h = 2 + ( b - r ) / delta;     // between cyan & yellow
   else
     *h = 4 + ( r - g ) / delta;     // between magenta & cyan

@@ -135,8 +135,8 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   assert( g );
   //assert( glg );
   
-  inT = inT >? 0.0f;
-  inT = inT <? 1.0f;
+  if (inT < 0.0f) inT = 0.0f; //inT = inT >? 0.0f;
+  if (inT > 1.0f) inT = 1.0f; //inT = inT <? 1.0f;
   t = inT;
   
   LayoutProxy * outLayout = g->getProperty<LayoutProxy>( "viewLayout" );

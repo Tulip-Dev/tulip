@@ -19,10 +19,10 @@ static void bicoTestAndLabeling(const SuperGraph & graph,node v, MutableContaine
       current.push(w);
       father.set(w.id, v);
       bicoTestAndLabeling(graph,w,compnum,dfsnum,lowpt,father,current,count1,count2);
-      lowpt.set(v.id, lowpt.get(v.id) <? lowpt.get(w.id));
+      lowpt.set(v.id, std::min(lowpt.get(v.id), lowpt.get(w.id)));
     }
     else
-      lowpt.set(v.id, lowpt.get(v.id) <? dfsnum.get(w.id));
+      lowpt.set(v.id, std::min(lowpt.get(v.id), dfsnum.get(w.id)));
   } delete it;
   node w;
   if (father.get(v.id) != node(UINT_MAX) && (lowpt.get(v.id) == dfsnum.get(father.get(v.id).id) ) ) { 

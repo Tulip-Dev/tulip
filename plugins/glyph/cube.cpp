@@ -61,7 +61,7 @@ Cube::draw(node n) {
 Coord Cube::getAnchor(const Coord & vector ) const {
   float x,y,z, fmax;
   vector.get(x,y,z);
-  fmax = ( fabsf(x) >? fabsf(y) ) >? fabsf(z);
+  fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
   if( fmax > 0.0f )
     return vector * (0.5f/fmax);
   else

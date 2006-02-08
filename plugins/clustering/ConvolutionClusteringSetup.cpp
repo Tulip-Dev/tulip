@@ -57,16 +57,16 @@ void ConvolutionClusteringSetup::paintEvent( QPaintEvent * ) {
   vector<double> &histogram = *(convolPlugin->getHistogram());
   if (histogram.size()<1) reject();
   
-  double max,min;
-  max = histogram[0];
-  min = histogram[0];
+  double theMax,theMin;
+  theMax = histogram[0];
+  theMin = histogram[0];
   for (unsigned int i=1; i<histogram.size(); ++i) {
-    max = max >? histogram[i];
-    min = min <? histogram[i];
+    if (theMax < histogram[i]) theMax = histogram[i]; //theMax = theMax >? histogram[i];
+    if (theMin > histogram[i]) theMin = histogram[i]; //theMin = theMin <? histogram[i];
   }
   if (useLogarithmicScale) {
-    max = log10(max + 1.0);
-    min = log10(min + 1.0);
+    theMax = log10(theMax + 1.0);
+    theMin = log10(theMin + 1.0);
   }
 
   //compute axis position
@@ -85,7 +85,7 @@ void ConvolutionClusteringSetup::paintEvent( QPaintEvent * ) {
 	      QBrush(QColor(255,255,255)));
   // draw bars
   QColor c;
-  double histoScale = double(histogram.size()) / max;
+  double histoScale = double(histogram.size()) / theMax;
 
   for (unsigned int i=0; i<histogram.size(); i++ ) {	
     c.setHsv( (int) ((double)i*360.0/(double)histogram.size()) , 255, 255 );
@@ -96,7 +96,7 @@ void ConvolutionClusteringSetup::paintEvent( QPaintEvent * ) {
       height = (int)(log10(1.0 + double(histogram[i])) *histoScale );
     else
       height = (int)(double(histogram[i]) * histoScale);
-    height = height >? 1;
+    if (height < 1) height = 1; // height = height >? 1;
     p->drawRect( borderWidth+i*2, borderWidth  + 1 + histogram.size() - height, 
 		 2, height );
   }

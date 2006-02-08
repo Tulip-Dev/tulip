@@ -440,7 +440,8 @@ namespace {
 
       int labelWidthMax = 0;
       for( uint i = 0 ; i < iparamA.size() ; i++ )
-	labelWidthMax = labelWidthMax >? iparamA[i].label->width();
+	if (labelWidthMax < iparamA[i].label->width())
+	  labelWidthMax = iparamA[i].label->width();
 
       int ix = 5, iy = 5;
       int y  = iy;
@@ -461,7 +462,7 @@ namespace {
 	  ip.wA[j]->move( x, y );
 	  x += ip.wA[j]->width() + ix;
 	}
-	maxx = maxx >? x;
+	if (maxx < x) maxx = x; //maxx = maxx >? x;
 
 	y += ip.label->height() + iy;
       }

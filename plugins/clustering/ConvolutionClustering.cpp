@@ -107,8 +107,8 @@ void ConvolutionClustering::autoSetParameter() {
     lastValue=(*itMap).first;
   }
   histosize=(int)((metric->getNodeMax()-metric->getNodeMin())/deltaXMin);
-  histosize = histosize <? 16384;
-  histosize = histosize >? 64;
+  if (histosize > 16384) histosize = 16384; //histosize = histosize <? 16384;
+  if (histosize < 64) histosize = 64; //histosize = histosize >? 64;
 
   //===============================================================================
   //Find good with for the convolution function

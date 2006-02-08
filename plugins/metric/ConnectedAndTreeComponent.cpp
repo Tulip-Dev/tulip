@@ -89,18 +89,19 @@ public:
     MetricProxy connectedcomponent2(graph2);
     graph2->computeProperty("Connected Component", &connectedcomponent2, errMsg);
     {
-      double max = 0;
+      double theMax = 0;
       Iterator<node> *it = graph->getNodes();
       while(it->hasNext()){
 	node n = it->next();
-	max >?= connectedcomponent.getNodeValue(n);
-	metricProxy->setNodeValue(n, connectedcomponent.getNodeValue(n));
-      }delete it;
-      max += 1.0;
+	double nv = connectedcomponent.getNodeValue(n);
+	if (theMax < nv) theMax = nv;
+	metricProxy->setNodeValue(n, nv);
+      } delete it;
+      theMax += 1.0;
       it = graph2->getNodes();
       while(it->hasNext()){
 	node n = it->next();
-	metricProxy->setNodeValue(n, connectedcomponent2.getNodeValue(n) + max);
+	metricProxy->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
       }delete it;
     }
     superGraph->delAllSubGraphs(graph);

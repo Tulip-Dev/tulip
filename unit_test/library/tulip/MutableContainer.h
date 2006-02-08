@@ -232,7 +232,7 @@ void MutableContainer<TYPE>::set(const unsigned int i,const TYPE &value) {
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break; 
     }
-    maxIndex= maxIndex >? i;
+    if (maxIndex < i) maxIndex = i;// maxIndex= maxIndex >? i;
   }
   
   toCompress++;
@@ -276,8 +276,8 @@ void MutableContainer<TYPE>::vecttohash() {
   for (unsigned int i=minIndex;i<=maxIndex;++i) {
     if ((*vData)[i - minIndex]!=defaultValue) {
       (*hData)[i]=(*vData)[i - minIndex];
-      newMaxIndex = newMaxIndex >? i;
-      newMinIndex = newMinIndex <? i;
+      if (newMaxIndex < i) newMaxIndex = i;// newMaxIndex = newMaxIndex >? i;
+      if (newMinIndex > i) newMinIndex = i;// newMinIndex = newMinIndex <? i;
     }
   }
   maxIndex = newMaxIndex;

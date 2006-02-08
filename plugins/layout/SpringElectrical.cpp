@@ -79,7 +79,7 @@ Coord maxForce(Coord force, double max) {
 //================================================================================  
 bool SpringElectrical::run() {
   int iterations = superGraph->numberOfNodes();
-  iterations = iterations >? 500;
+  if (iterations < 500) iterations = 500;// iterations = iterations >? 500;
   inputSelection = superGraph->getProperty<SelectionProxy>("viewSelection");
   inputSize = superGraph->getProperty<SizesProxy>("viewSize");
   LayoutProxy *inputLayout = superGraph->getProperty<LayoutProxy>("viewLayout");
