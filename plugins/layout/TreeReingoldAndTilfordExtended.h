@@ -66,6 +66,8 @@ private:
   bool ortho;
   bool useLength;
   std::string orientation;
+  float spacing;
+  float nodeSpacing;
 };
 /*@}*/
 #endif

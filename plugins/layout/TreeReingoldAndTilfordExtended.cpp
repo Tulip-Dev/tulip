@@ -5,11 +5,8 @@
 #include <tulip/ForEach.h>
 #include "TreeReingoldAndTilfordExtended.h"
 
-#define minDecal 1.0
-
 LAYOUTPLUGIN(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2");
 using namespace std;
-
 
 namespace {
   const char * paramHelp[] = {
@@ -41,6 +38,20 @@ namespace {
     HTML_HELP_DEF( "default", "true" )					\
     HTML_HELP_BODY()							\
     "This parameter enables to choose if the tree tree is drawn orthogonally or not" \
+    HTML_HELP_CLOSE(),
+    //Spacing
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "float" ) \
+    HTML_HELP_DEF( "default", "64." )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to set up the minimum space between two layers in the drawing" \
+    HTML_HELP_CLOSE(),
+    //Spacing
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "float" ) \
+    HTML_HELP_DEF( "default", "18." )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to set up the minimum space between two nodes in the same layer" \
     HTML_HELP_CLOSE()
   };
 }
@@ -55,18 +66,20 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyCon
   addParameter<bool>("orthogonal", paramHelp[2], "true" );
   addParameter<bool>("use length", paramHelp[3], "false" );
   addParameter<StringCollection> ("orientation", paramHelp[4], ORIENTATION );
+  addParameter<float> ("layer spacing", paramHelp[4], "64." );
+  addParameter<float> ("node spacing", paramHelp[5], "18." );
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
 }
 //=============================================================================
-double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG,const list<LR> &arbreD) {
+double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG, const list<LR> &arbreD) {
   list<LR>::const_iterator itG,itD;
   double decal=0;
   int iG=0,iD=0;
   itG=arbreG.begin();
   itD=arbreD.begin();
-  decal = ((*itG).R-(*itD).L + 1);
+  decal = ((*itG).R-(*itD).L + nodeSpacing);
   iG += std::min((*itG).size, (*itD).size);
   iD += std::min((*itG).size, (*itD).size);
   if (iG==(*itG).size) {
@@ -76,7 +89,7 @@ double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG,const li
     ++itD;iD=0;
   }
   while ((itG!=arbreG.end()) && (itD!=arbreD.end())) {
-    decal = std::max(decal, ((*itG).R-((*itD).L)+1));
+    decal = std::max(decal, ((*itG).R-((*itD).L)+nodeSpacing));
     int min = std::min(((*itG).size-iG), ((*itD).size-iD));
     iG+=min;
     iD+=min;
@@ -90,7 +103,7 @@ double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG,const li
   return decal;
 }
 //=============================================================================
-list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L,list<LR>*R,double decal) {
+list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L, list<LR>*R, double decal) {
   assert (L!=NULL);assert (R!=NULL);
   list<LR>::iterator itL,itR;
   int iL=0,iR=0;
@@ -174,7 +187,7 @@ list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L,list<LR>*R,dou
 list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<node,double> *p) {
   //cerr << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
   if (superGraph->outdeg(n)==0){
-    list<LR> *result=new list<LR>();
+    list<LR> *result = new list<LR>();
     LR tmpLR;
     tmpLR.L = -sizesProxy->getNodeValue(n).getW()/2.;
     tmpLR.R = +sizesProxy->getNodeValue(n).getW()/2.;
@@ -215,12 +228,12 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 	  LR tmpLR;
 	  tmpLR.L=rightTree->front().L;
 	  tmpLR.R=rightTree->front().R;
-	  tmpLR.size=tmpLength-1;
+	  tmpLR.size = tmpLength-1;
 	  rightTree->push_front(tmpLR);
 	}
       }
-      double decal=calcDecal(*leftTree,*rightTree);
-      double tmpL=( (*(rightTree->begin())).L + (*(rightTree->begin())).R )/2.;
+      double decal = calcDecal(*leftTree, *rightTree);
+      double tmpL = ( (*(rightTree->begin())).L + (*(rightTree->begin())).R )/2.;
       if (mergeLRList(leftTree,rightTree,decal)==leftTree) {
 	childPos.push_back(tmpL+decal);
 	delete rightTree;
@@ -232,22 +245,22 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 	delete leftTree;
 	leftTree=rightTree;
       }
-    }delete it;
-    double posFather=((((*(leftTree->begin())).L+(*(leftTree->begin())).R)/2.));
+    } delete it;
+    double posFather=((((*(leftTree->begin())).L + (*(leftTree->begin())).R)/2.));
     LR tmpLR;
-    tmpLR.L=posFather-sizesProxy->getNodeValue(n).getW()/2.;
-    tmpLR.R=posFather+sizesProxy->getNodeValue(n).getW()/2.;
-    tmpLR.size=1;
+    tmpLR.L = posFather - sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.R = posFather + sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.size = 1;
     leftTree->push_front(tmpLR);
 
-    list<double>::const_iterator itI=childPos.begin();
+    list<double>::const_iterator itI = childPos.begin();
     forEach(ite, superGraph->getOutEdges(n)) {
-      itn=superGraph->target(ite);
-      (*p)[itn]=*itI-posFather;
+      itn = superGraph->target(ite);
+      (*p)[itn] = *itI - posFather;
       ++itI;
-    }
+    } 
     childPos.clear();
-    (*p)[n]=0;
+    (*p)[n] = 0;
     return(leftTree);
   }
 }
@@ -282,7 +295,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
-  tmpCoord.set(x+(*p)[n],y+maxLevelSize[level]/2.,0);
+  tmpCoord.set(x+(*p)[n], y+maxLevelSize[level]/2., 0);
   layoutProxy->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
@@ -292,7 +305,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
       int decalLevel = level;
       int tmp = lengthMetric->getEdgeValue(ite);
       while(tmp>0) {
-	decalY += maxLevelSize[decalLevel]+minDecal;
+	decalY += maxLevelSize[decalLevel]+spacing;
 	decalLevel++;
 	tmp--;
       }
@@ -302,7 +315,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   else {
     node itn;
     forEach(itn, superGraph->getOutNodes(n)) {
-      calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+minDecal, 
+      calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+spacing, 
 		 level+1, maxLevelSize);
     }
   }
@@ -316,6 +329,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   sizesProxy = superGraph->getProperty<SizesProxy>("viewSize");
   orientation = "horizontal";
   lengthMetric = 0;
+  spacing = 64.0;
+  nodeSpacing = 18.0;
   ortho = true;
   useLength = false;
   if (dataSet!=0) {
@@ -323,6 +338,8 @@ bool TreeReingoldAndTilfordExtended::run() {
     dataSet->get("use length", useLength);
     dataSet->get("nodeSize", sizesProxy);
     dataSet->get("orthogonal", ortho);
+    dataSet->get("layer spacing", spacing);
+    dataSet->get("node spacing", nodeSpacing);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
@@ -366,7 +383,7 @@ bool TreeReingoldAndTilfordExtended::run() {
       levelCoord[itas->first] = itas->second;
     }
     for (int i=1; i<itos->first; ++i) {
-      levelCoord[i] += levelCoord[i-1] + minDecal;
+      levelCoord[i] += levelCoord[i-1] + spacing;
     }
     //============================
     edge e;
