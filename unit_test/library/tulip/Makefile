@@ -20,7 +20,7 @@ SRCS=   tuliplibtest.cpp \
 #CXXFLAGS =  -g -Wall `tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
 CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
 CXX=g++
-LDFLAGS= `tulip-config --libs` `cppunit-config --libs` -lGL -lGLU -L/usr/X11R6/lib -L$(QTDIR)/lib/ -lqt-mt -lqttestrunner
+LDFLAGS= `tulip-config --libs` `cppunit-config --libs` -lGL -lGLU -L/usr/X11R6/lib -L$(QTDIR)/lib/ -lqt-mt
 
 OBJS=$(SRCS:.cpp=.o)
 
