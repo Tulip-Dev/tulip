@@ -27,20 +27,18 @@ protected:
   bool listOk;
   void drawSquare();
 };
-
+//=====================================================
 GLYPHPLUGIN(Square, "Square", "David Auber", "09/07/2002", "Textured square", "1", "1", 4);
-
 //===================================================================================
 Square::Square(GlyphContext *gc): Glyph(gc),listOk(false) {
 }
-
+//=====================================================
 Square::~Square() {
   if (listOk)
     if (glIsList(LList)) glDeleteLists(LList, 1);
 }
-
-void
-Square::draw(node n) {
+//=====================================================
+void Square::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
   if (texFile != "") {
@@ -56,8 +54,7 @@ Square::draw(node n) {
   }
   glCallList(LList);
 }
-
-
+//=====================================================
 Coord Square::getAnchor(const Coord &vector) const
 {
 	Coord v( vector );
@@ -70,10 +67,8 @@ Coord Square::getAnchor(const Coord &vector) const
 	else
 		return v;
 }
-
-
-void Square::drawSquare()
-{
+//=====================================================
+void Square::drawSquare() {
   glBegin(GL_QUADS);
   /* front face */
   glNormal3f(0.0f, 0.0f, 1.0f);
