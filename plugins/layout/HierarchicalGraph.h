@@ -60,7 +60,7 @@ public:
   bool run();
 
 private:
-  void DagLevelSpanningTree(SuperGraph* ,node n);
+  void DagLevelSpanningTree(SuperGraph* ,MetricProxy *);
   std::vector< std::vector<node> > grid;
   MetricProxy *embedding;
   void twoLayerCrossReduction(SuperGraph*,unsigned int freeLayer,bool sense);
@@ -70,12 +70,13 @@ private:
   void computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(SuperGraph*);
   unsigned int degree(SuperGraph*,node,bool);
-  void initCross(SuperGraph*superGraph,node n, stdext::hash_map<node,bool> &visited,int &id);
-  LessThanNode2 lessNode;
+  void initCross(SuperGraph*superGraph,node n, MutableContainer<bool> &visited,int id);
 
+  LessThanNode2 lessNode;
   SizesProxy *nodeSize;
   std::string orientation;
-  
+  float spacing;
+  float nodeSpacing;
 };
 /*@}*/
 #endif
