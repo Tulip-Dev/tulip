@@ -32,7 +32,14 @@ using namespace std;
 /// FitToLabel.cpp - Compute size of elements according to the size of the displayed label.
 /**
  *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *  AUTHORS : 
+ *  Sebastien Carceles,
+ *  Pascal Niotout,
+ *  Sophie Bardet,
+ *  Julien Mercadal, 
+ *  Bertrand Ng Sing Kwong
+ *
+ *  \author Maintainer : David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
 class FitToLabel: public Sizes { 
 public:
@@ -50,13 +57,14 @@ public:
     node n;
     forEach(n, superGraph->getNodes()) {
       const string &str = entryLabel->getNodeValue(n);
-      textRender.setString(str, VERBATIM);
-      float w_max, h, w;
-      w_max = 256.0;
-      textRender.getBoundingBox(w_max, h, w);
-      sizesProxy->setNodeValue(n, Size(int(w), int(h), 1));
+      if (str != "") {
+	float w_max, h, w;
+	w_max = 256.0;
+	textRender.setString(str, VERBATIM);
+	textRender.getBoundingBox(w_max, h, w);
+	sizesProxy->setNodeValue(n, Size(int(w), int(h), 1));
+      }
     }
-    
     sizesProxy->setAllEdgeValue(Size(1,1,8));
     return true;
   }
@@ -64,15 +72,3 @@ public:
 };
 /*@}*/
 SIZESPLUGIN(FitToLabel,"Fit to label","Carceles,Niotout,Bardet,Mercadal,Ng Sing Kwong","25/01/2006","0","0","1");
-
-
-
-
-
-
-
-
-
-
-
-
