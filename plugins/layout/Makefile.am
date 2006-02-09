@@ -32,7 +32,7 @@ plugins_LTLIBRARIES = \
 pluginsdir = $(libdir)/tlp/plugins/layout
 
 
-libpolyline_la_SOURCES = Polyline.cpp
+libpolyline_la_SOURCES = Polyline.cpp Polyline.h
 libconnnecteccomponnentpacking_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
 librandom_la_SOURCES = Random.cpp Random.h
 libgem_la_SOURCES = GEM.cpp GEM.h

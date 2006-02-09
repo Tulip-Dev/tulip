@@ -67,11 +67,8 @@ rm -rf $RPM_BUILD_ROOT
 ##############################
 %files
 %defattr(-,root,root)
-%{prefix}/bin/Tulip
+%{prefix}/bin/tulip
 #%{prefix}/bin/tlprender
-%{prefix}/lib/tlp/bitmaps/but1.xpm
-%{prefix}/lib/tlp/bitmaps/but2.xpm
-%{prefix}/lib/tlp/bitmaps/but3.xpm
 %{prefix}/lib/tlp/bitmaps/logo32x32.bmp
 %{prefix}/lib/tlp/bitmaps/logo.bmp
 %{prefix}/lib/tlp/bitmaps/logo32x32.ico

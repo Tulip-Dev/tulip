@@ -16,6 +16,7 @@ nobase_include_HEADERS = \
 	tulip/MouseMoveSelection.h\
 	tulip/MouseSelection.h\
 	tulip/MouseMagicSelection.h\
+	tulip/MouseTreeFishEyes.h\
 	tulip/Morphing.h \
 	tulip/TlpQtTools.h
 
