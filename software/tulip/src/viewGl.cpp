@@ -193,7 +193,7 @@ void viewGl::enableElements(bool enabled) {
 }
 //**********************************************************************
 void viewGl::observableDestroyed(Observable *) {
-  cerr << "[WARNING]" << __PRETTY_FUNCTION__ << endl;
+  //cerr << "[WARNING]" << __PRETTY_FUNCTION__ << endl;
 }
 //**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
@@ -266,7 +266,7 @@ void viewGl::startTulip() {
 }
 //**********************************************************************
 void viewGl::changeSuperGraph(SuperGraph *graph) {
-  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+  //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
   clearObservers();
   clusterTreeWidget->setSuperGraph(graph);
   propertiesWidget->setSuperGraph(graph);
@@ -282,7 +282,7 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
 }
 //**********************************************************************
 void viewGl::hierarchyChangeSuperGraph(SuperGraph *graph) {
-  cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+  //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
   if (glWidget->getSuperGraph() == graph)  return;
   clearObservers();
   glWidget->setSuperGraph(graph);  
@@ -320,8 +320,12 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
   connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
+  connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
+	  this, SLOT(showElementProperties()));
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
 	  nodeProperties, SLOT(setCurrentEdge(SuperGraph*, const edge &)));
+  connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
+	  this, SLOT(showElementProperties()));
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
  
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
@@ -1436,6 +1440,13 @@ void viewGl::gridOptions() {
 }
 //**********************************************************************
 void viewGl::mouseChanged(MouseInterface *m) {
+}
+//**********************************************************************
+void viewGl::showElementProperties() {
+  // show 'Element' tab in 'Info Editor'
+  QWidget *tab = nodeProperties->parentWidget();
+  QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
+  tabWidget->showPage(tab);
 }
 //**********************************************************************
 #include <tulip/AcyclicTest.h>

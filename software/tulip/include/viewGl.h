@@ -163,6 +163,7 @@ protected slots:
   //void makeTriangulated();
   void makeSimple();
   void makeConnected();
+  void showElementProperties();
 
 
 private:
