@@ -9,7 +9,6 @@ BUILT_SOURCES = \
 	InfoDialogData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
-	View3DSetupData.h\
 	TulipStatsData.h\
 	GridOptionsData.h
 
@@ -22,7 +21,6 @@ nodist_noinst_HEADERS = \
 	InfoDialogData.h\
 	PropertyDialogData.h\
 	ToolBarData.h\
-	View3DSetupData.h\
 	TulipStatsData.h\
 	GridOptionsData.h
 
@@ -37,7 +35,6 @@ noinst_HEADERS = \
 	NavigateButton.h\
 	PropertyDialog.h\
 	ToolBar.h\
-	View3DSetup.h\
 	QtProgress.h\
 	viewGl.h \
 	TulipStatsWidget.h\
