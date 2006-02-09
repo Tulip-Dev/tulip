@@ -26,12 +26,8 @@
 #include <tulip/PluginProgress.h>
 
 #ifndef DOXYGEN_NOTFOR_USER
-/*<<<<<<< CanonicalOrdering.h
-class Ordering : public std::vector<std::vector<node> >
-=======*/
-class TLP_SCOPE Ordering : public std::vector<std::vector<node> >
-			   /*>>>>>>> 1.2*/
-{
+
+class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
   
  public :
 
