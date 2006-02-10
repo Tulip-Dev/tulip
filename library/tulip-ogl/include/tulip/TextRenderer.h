@@ -3,6 +3,7 @@
 
 #include <string>
 #include <libxml/parser.h>
+#include <tulip/tulipconf.h>
 #include <tulip/Context.h>
 #include <tulip/Fonts.h>
 
@@ -13,7 +14,7 @@ class Document;
 class Parser;
 
 
-class TextRenderer{
+class TLP_GL_SCOPE TextRenderer{
 
  public:
   TextRenderer();
