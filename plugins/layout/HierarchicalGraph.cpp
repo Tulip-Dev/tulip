@@ -61,7 +61,7 @@ HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(cont
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
-  addParameter<float> ("node spacing", paramHelp[5], "18." );
+  addParameter<float> ("node spacing", paramHelp[3], "18." );
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}
