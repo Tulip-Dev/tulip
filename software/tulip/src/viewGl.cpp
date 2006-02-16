@@ -513,7 +513,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       delete glW;
       delete newGraph;
       QApplication::restoreOverrideCursor();
-      qWarning("Canceled import/Open");
+      // qWarning("Canceled import/Open");
       std::string errorTitle("Canceled import/Open: ");
       errorTitle += s.section('/',-1).ascii();
       std::string errorMsg = progressBar->getError();
@@ -540,9 +540,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
   }
-  else {
+  /* else {
     qWarning("Canceled  Open/import");
-  }
+  } */
   Observable::unholdObservers();
 }
 //**********************************************************************

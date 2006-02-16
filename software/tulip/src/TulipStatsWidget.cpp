@@ -634,7 +634,7 @@ namespace tlp
   }
 
   void TulipStats::changeLayoutSlot() {
-    cout << "[START] ... " << __PRETTY_FUNCTION__;
+    // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
     Observable::holdObservers();
 
@@ -758,7 +758,7 @@ namespace tlp
 		float distmin = fabs(statsResults->averagePoint[i] - statsResults->minPoint[i]) / discretizationStep[i];
 		float distmax = fabs(statsResults->averagePoint[i] - statsResults->maxPoint[i]) / discretizationStep[i];
 
-		cout << "Dist[" << i << "] = (" << distmin << "; " << distmax << ")" << endl;
+		// cout << "Dist[" << i << "] = (" << distmin << "; " << distmax << ")" << endl;
 
 		if (distmin > max)
 		  max = distmin;
@@ -899,7 +899,7 @@ namespace tlp
 	AABB->setRenderState(GlAD_Wireframe, true);
 	AABB->changeRenderOptions();
 
-	cout << "Solid ? " << AABB->getRenderState(GlAD_Solid) << endl;
+	// cout << "Solid ? " << AABB->getRenderState(GlAD_Solid) << endl;
 
 	glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
       }

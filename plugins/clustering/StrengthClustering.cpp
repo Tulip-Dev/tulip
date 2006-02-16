@@ -190,10 +190,10 @@ double StrengthClustering::findBestThreshold(int numberOfSteps){
       maxMQ=mq;
     }
   }
-  cout << __PRETTY_FUNCTION__ << endl;
-  cout << "\t" <<" Nb try : " << numberOfSteps << endl;
-  cout << "\t" <<" Max MQ : " << maxMQ << endl << flush;
-  cout << "\t" <<" Best threshold : " << threshold << endl << flush;
+  // cout << __PRETTY_FUNCTION__ << endl;
+  // cout << "\t" <<" Nb try : " << numberOfSteps << endl;
+  // cout << "\t" <<" Max MQ : " << maxMQ << endl << flush;
+  // cout << "\t" <<" Best threshold : " << threshold << endl << flush;
   return threshold;
 }
 //==============================================================================
