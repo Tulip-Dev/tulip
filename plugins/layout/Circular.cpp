@@ -15,6 +15,7 @@
 
 #include <math.h>
 #include <tulip/ForEach.h>
+#include <tulip/TlpTools.h>
 #include "Circular.h"
 
 LAYOUTPLUGIN(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","0","1");
@@ -29,12 +30,13 @@ namespace {
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
     "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
+    HTML_HELP_CLOSE()
   };
 }
 
 Circular::Circular(const PropertyContext &context):Layout(context){
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<SizesProxy>("nodeSize", paramHelp[0], "viewSize");
+  addParameter<bool>("search_cycle", paramHelp[0], "true");
 }
 
 namespace {
@@ -61,7 +63,69 @@ namespace {
     }
   }
   //============================================================================
+//===============================================================================
+  vector<node> extractCycle(node n, deque<node> &st) {
+    // cerr << __PRETTY_FUNCTION__ << endl;
+    vector<node> result;
+    deque<node>::const_reverse_iterator it = st.rbegin();
+    while( (*it) != n ) {
+      result.push_back(*it);
+      ++it;
+    }
+    result.push_back(*it);
+    return result;
+  }
+  //===============================================================================
+  void dfs(node n, const SuperGraph * graph, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag) {
+    if(flag.get(n.id)) {
+      vector<node> cycle(extractCycle(n, st));
+      if(cycle.size() > maxCycle.size())
+	maxCycle = cycle;
+      return;
+    }
+    st.push_back(n);
+    flag.set(n.id,true);
+    node n2;
+    forEach(n2, graph->getInOutNodes(n)){
+      dfs(n2, graph, st, maxCycle, flag);
+    }
+    flag.set(n.id, false);
+    st.pop_back();
+  }
+  
+
+  //=======================================================================
+  vector<node> findMaxCycle(SuperGraph * graph) {
+    SuperGraph * g = tlp::newCloneSubGraph(graph);
+    cerr << __PRETTY_FUNCTION__ << endl;
+    MetricProxy m(g);
+    string err ="";
+    g->computeProperty(string("Connected Component"),&m,err);
+    DataSet tmp;
+    tmp.set("Metric", &m);
+    tlp::clusterizeGraph(g, err, &tmp, "Equal Value");
+    SuperGraph * g_tmp;
+    
+    MutableContainer<bool> flag;
+    deque<node> st;
+    vector<node> res;
+    vector<node> max;
+    forEach(g_tmp,g->getSubGraphs()){
+      if(g_tmp->numberOfNodes() == 1)
+	continue;
+      st.clear();
+      res.clear();
+      flag.setAll(false);
+      dfs(g_tmp->getOneNode( ),g_tmp,st,res,flag);
+      if(max.size() < res.size())
+	max = res;
+    }
+    
+    graph->delAllSubGraphs(g);
+    return max;
+  } 
 }
+
 //this inline function computes the radius size given a size
 inline double computeRadius (const Size &s) {
   return sqrt (s[0]*s[0]/4.0 + s[1]*s[1]/4.0);
@@ -106,23 +170,28 @@ bool Circular::run() {
       xcoord *= -1;
     }
   }//end if
-  
-  //with more nodes, things get a little more complicated...
   else {
     //this is the current angle
     double gamma = 0;
-
     //if the ratio of maxRad/sumOfRad > .5, we need to ajust angles
     bool angleAdjust = false;
     if (maxRad/sumOfRad > 0.5) {
       sumOfRad -= maxRad;
       angleAdjust = true;
     }//end if
-
+    cerr << "*************************" << endl;
+    vector<node> cycleOrdering (findMaxCycle(superGraph));
     vector<node> dfsOrdering;
     buildDfsOrdering(superGraph, dfsOrdering);
-    vector<node>::const_iterator it = dfsOrdering.begin();
-    for(; it!=dfsOrdering.end(); ++it) {
+    MutableContainer<bool> inCir;
+    inCir.setAll(false);
+    for(unsigned int i =0; i < cycleOrdering.size(); ++i) 
+      inCir.set(cycleOrdering[i].id, true);
+    for(unsigned int i =0; i < dfsOrdering.size(); ++i) 
+      if(!inCir.get(dfsOrdering[i].id))
+	 cycleOrdering.push_back(dfsOrdering[i]);
+    vector<node>::const_iterator it = cycleOrdering.begin();
+    for(; it!=cycleOrdering.end(); ++it) {
       node itn = *it;
       //get the node and its size
       Size curNodeSize = nodeSizes->getNodeValue(itn);
