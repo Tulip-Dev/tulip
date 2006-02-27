@@ -25,7 +25,7 @@
  *
  *
  *  \note This algorithm works on general graphs. The algorithm use the parameter 
- *  <int>depth in order to determine the depth of the neighbors. If no depth 
+ *  depth in order to determine the depth of the neighbors. If no depth 
  *  is given, the plugins automatically popup a qt windows to ask the user for this
  *  parameter.
  *
