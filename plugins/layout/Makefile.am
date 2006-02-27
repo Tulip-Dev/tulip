@@ -7,7 +7,7 @@ DLL_FLAGS = -no-undefined
 endif
 
 plugins_LTLIBRARIES = \
-	libpolyline.la \
+	libmixedmodel.la \
 	libconnnecteccomponnentpacking.la \
 	librandom.la \
 	libgem.la \
@@ -25,14 +25,14 @@ plugins_LTLIBRARIES = \
 	libembedder.la \
 	libtutte.la \
 	libscatter.la \
-	libextendedbiotree.la \
+	libdendrogram.la \
 	libimprovedwalker.la \
 	libsquarifiedtreemap.la
 
 pluginsdir = $(libdir)/tlp/plugins/layout
 
 
-libpolyline_la_SOURCES = Polyline.cpp Polyline.h
+libmixedmodel_la_SOURCES = MixedModel.cpp MixedModel.h
 libconnnecteccomponnentpacking_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
 librandom_la_SOURCES = Random.cpp Random.h
 libgem_la_SOURCES = GEM.cpp GEM.h
@@ -50,7 +50,7 @@ libgeneralgraph3d_la_SOURCES = GeneralGraph3D.cpp GeneralGraph3D.h
 libtutte_la_SOURCES = Tutte.h Tutte.cpp
 libembedder_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.cpp EmbedderDijkstra.cpp EmbedderBfs.cpp EmbedderParameters.cpp EmbedderPowerIterationDense.cpp EmbedderBfs.h EmbedderDefs.h EmbedderDijkstra.h EmbedderEmbedGraph.h EmbedderParameters.h
 libscatter_la_SOURCES = ScatterPlot.h ScatterPlot.cpp
-libextendedbiotree_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableConstants.h OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableLayoutInterface.h OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp ExtendedBioTree.h ExtendedBioTree.cpp
+libdendrogram_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableConstants.h OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableLayoutInterface.h OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp Dendrogram.h Dendrogram.cpp
 libimprovedwalker_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp
 libsquarifiedtreemap_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp TreeTools.h TreeTools.cpp
 
