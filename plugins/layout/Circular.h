@@ -9,8 +9,8 @@
 /// Circular.h - An implementation of a circurlar layout.
 /** 
  * This plugin is an implementation of a circular layout that takes
- * node size into account.  It uses a varient of the BubbleTree algorithm
- * developed by S. Grivet, D. Auber, J.P. Domenger, and G. Melancon.
+ * node size into account.  It manages size of nodes and use a standard dfs
+ * for ordering nodes or search the maximum length cycle.
  *
  * HISTORY:
  *
@@ -21,11 +21,12 @@
  * NOTES:
  *
  * This work on general graphs.
- * Let n be the number of nodes, the algorithm complexity is in O(n).
+ * Let n be the number of nodes, the algorithm complexity is in O(n). If the search_cycle is enabled,
+ * the complexity is exponential (NP-Complete problem !).
  *
  * AUTHORS:
  *
- * David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ * David Auber and Romain Bourqui University Bordeaux I France: Email:auber@tulip-software.org
  * Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */

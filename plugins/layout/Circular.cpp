@@ -30,13 +30,20 @@ namespace {
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
     "This parameter defines the property used for node's sizes." \
+    HTML_HELP_CLOSE(),
+    HTML_HELP_OPEN()					   \
+    HTML_HELP_DEF( "type", "bool" )		   \
+    HTML_HELP_DEF( "values", "true/false" ) \
+    HTML_HELP_DEF( "default", "false" )		   \
+    HTML_HELP_BODY()							\
+    "If true search the maximum length cycle. Be careful, this problem is NP-Complete else order the node using a depth first search"	\
     HTML_HELP_CLOSE()
   };
 }
 
 Circular::Circular(const PropertyContext &context):Layout(context){
   addParameter<SizesProxy>("nodeSize", paramHelp[0], "viewSize");
-  addParameter<bool>("search_cycle", paramHelp[0], "true");
+  addParameter<bool>("search_cycle", paramHelp[1], "false");
 }
 
 namespace {
@@ -63,7 +70,7 @@ namespace {
     }
   }
   //============================================================================
-//===============================================================================
+  //===============================================================================
   vector<node> extractCycle(node n, deque<node> &st) {
     // cerr << __PRETTY_FUNCTION__ << endl;
     vector<node> result;
@@ -76,7 +83,17 @@ namespace {
     return result;
   }
   //===============================================================================
-  void dfs(node n, const SuperGraph * graph, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag) {
+  void dfs(node n, const SuperGraph * graph, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
+	   unsigned int &nbCalls, PluginProgress *pluginProgress) {
+    { //to enable stop of the recursion
+      ++nbCalls; 
+      if (nbCalls % 10000 == 0) {
+	pluginProgress->progress(rand()%100, 100);
+	nbCalls = 0;
+      }
+      if (pluginProgress->state()!=TLP_CONTINUE) return;
+    }
+
     if(flag.get(n.id)) {
       vector<node> cycle(extractCycle(n, st));
       if(cycle.size() > maxCycle.size())
@@ -87,7 +104,7 @@ namespace {
     flag.set(n.id,true);
     node n2;
     forEach(n2, graph->getInOutNodes(n)){
-      dfs(n2, graph, st, maxCycle, flag);
+      dfs(n2, graph, st, maxCycle, flag, nbCalls, pluginProgress);
     }
     flag.set(n.id, false);
     st.pop_back();
@@ -95,7 +112,7 @@ namespace {
   
 
   //=======================================================================
-  vector<node> findMaxCycle(SuperGraph * graph) {
+  vector<node> findMaxCycle(SuperGraph * graph, PluginProgress *pluginProgress) {
     SuperGraph * g = tlp::newCloneSubGraph(graph);
     cerr << __PRETTY_FUNCTION__ << endl;
     MetricProxy m(g);
@@ -110,13 +127,14 @@ namespace {
     deque<node> st;
     vector<node> res;
     vector<node> max;
+    unsigned int nbCalls = 0;
     forEach(g_tmp,g->getSubGraphs()){
       if(g_tmp->numberOfNodes() == 1)
 	continue;
       st.clear();
       res.clear();
       flag.setAll(false);
-      dfs(g_tmp->getOneNode( ),g_tmp,st,res,flag);
+      dfs(g_tmp->getOneNode( ),g_tmp,st,res,flag, nbCalls, pluginProgress);
       if(max.size() < res.size())
 	max = res;
     }
@@ -133,7 +151,8 @@ inline double computeRadius (const Size &s) {
 
 bool Circular::run() {
   SizesProxy *nodeSizes;
-
+  bool searchCycle = false;
+  
   if ( dataSet==0 || !dataSet->get("nodeSize", nodeSizes)) {
     if (superGraph->existProperty("viewSize"))
       nodeSizes = superGraph->getProperty<SizesProxy>("viewSize");    
@@ -143,6 +162,9 @@ bool Circular::run() {
     }
   }
 
+  if ( dataSet != 0 )
+    dataSet->get("search_cycle", searchCycle);
+  
   Size resultSize;
   double sizeTm;
 
@@ -180,16 +202,23 @@ bool Circular::run() {
       angleAdjust = true;
     }//end if
     cerr << "*************************" << endl;
-    vector<node> cycleOrdering (findMaxCycle(superGraph));
+
+    vector<node> cycleOrdering;
+    if (searchCycle)
+      cycleOrdering = findMaxCycle(superGraph, pluginProgress);
+    
     vector<node> dfsOrdering;
     buildDfsOrdering(superGraph, dfsOrdering);
+
     MutableContainer<bool> inCir;
     inCir.setAll(false);
     for(unsigned int i =0; i < cycleOrdering.size(); ++i) 
       inCir.set(cycleOrdering[i].id, true);
+
     for(unsigned int i =0; i < dfsOrdering.size(); ++i) 
       if(!inCir.get(dfsOrdering[i].id))
 	 cycleOrdering.push_back(dfsOrdering[i]);
+
     vector<node>::const_iterator it = cycleOrdering.begin();
     for(; it!=cycleOrdering.end(); ++it) {
       node itn = *it;
