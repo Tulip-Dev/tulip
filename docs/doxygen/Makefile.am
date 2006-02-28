@@ -12,7 +12,7 @@ tulip-lib: tulip-lib.doxygen header.html footer.html
 
 tulip-lib.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip " >> $@
 	echo "HTML_OUTPUT = tulip-lib">> $@
@@ -24,7 +24,7 @@ tulip-libogl: tulip-libogl.doxygen header.html footer.html
 
 tulip-libogl.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl " >> $@
 	echo "HTML_OUTPUT = tulip-libogl" >> $@
@@ -36,7 +36,7 @@ tulip-libqt: tulip-libqt.doxygen header.html footer.html
 
 tulip-libqt.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt " >> $@
 	echo "HTML_OUTPUT = tulip-libqt">> $@
@@ -48,7 +48,7 @@ tulip-plugins: tulip-plugins.doxygen header.html footer.html
 
 tulip-plugins.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Plugins\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/plugins " >> $@
 	echo "HTML_OUTPUT = tulip-plugins">> $@
@@ -66,7 +66,7 @@ tulip-man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxyge
 
 man-lib.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
@@ -74,7 +74,7 @@ man-lib.doxygen: general general-man
 
 man-ogl.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
@@ -82,7 +82,7 @@ man-ogl.doxygen: general general-man
 
 man-qt.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
@@ -90,7 +90,7 @@ man-qt.doxygen: general general-man
 
 man-plugins.doxygen: general general-man 
 	echo "PROJECT_NAME = \"Tulip Plugins Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/plugins/">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
