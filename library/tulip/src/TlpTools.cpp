@@ -18,7 +18,7 @@ using namespace std;
 #endif
 #endif
 
- //static const char *TULIP_PLUGINS_PATH_VARIABLE="TULIP_PLUGINS_PATH";
+static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
 
 string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
@@ -35,7 +35,7 @@ void tlp::initTulipLib() {
   std::string tulipDocDir;
   string::size_type pos;
 
-  getEnvTlp=getenv("TLPDIR");
+  getEnvTlp=getenv("TLP_DIR");
   if (getEnvTlp==0)
     TulipLibDir=string(_TULIP_LIB_DIR);
   else
@@ -52,7 +52,22 @@ void tlp::initTulipLib() {
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
     TulipLibDir+='/';
   
-  TulipPluginsPath=TulipLibDir+"tlp/plugins";
+  getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
+  if (getEnvTlp!=0) {
+    TulipPluginsPath=string(getEnvTlp);
+#ifdef _WIN32
+    // ensure it is a unix-style path
+    pos = TulipPluginsPath.find('\\', 0);
+    while(pos != string::npos) {
+      TulipPluginsPath[pos] = '/';
+      pos = TulipPluginsPath.find('\\', pos);
+    }
+#endif
+    TulipPluginsPath= TulipLibDir + "tlp/plugins" + PATH_DELIMITER + TulipPluginsPath;
+  } else
+    TulipPluginsPath= TulipLibDir + "tlp/plugins";
+    
+
   // one dir up to initialize the doc dir
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);

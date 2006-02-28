@@ -47,8 +47,8 @@ Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
 FunctionEnd
 
 Section "-Programme (requis)"
-; Environment variable update
-Push TLPDIR
+; Initialize TLP_DIR
+Push TLP_DIR
 StrCpy $R0 "$INSTDIR\lib"
 Push $R0
 Call WriteEnvStr
@@ -135,8 +135,8 @@ SectionEnd
 UninstallText "Voulez-vous vraiment enlever Tulip de votre système ?"
 
 Section "Uninstall"
-; Delete TLPDIR variable
-Push TLPDIR
+; Delete TLP_DIR variable
+Push TLP_DIR
 Call un.DeleteEnvStr
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
