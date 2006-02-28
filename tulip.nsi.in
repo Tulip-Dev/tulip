@@ -135,6 +135,9 @@ SectionEnd
 UninstallText "Voulez-vous vraiment enlever Tulip de votre système ?"
 
 Section "Uninstall"
+; Delete TLPDIR variable
+Push TLPDIR
+Call un.DeleteEnvStr
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
 Delete "$INSTDIR\Tulip.exe"
