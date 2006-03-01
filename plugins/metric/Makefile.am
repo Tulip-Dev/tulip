@@ -20,7 +20,6 @@ plugins_LTLIBRARIES = \
 	libleaf.la \
 	libnode.la \
 	libpathlength.la \
-	libpathsum.la \
 	libsegment.la \
 	libstrahler.la \
 	libtreearitymax.la \
@@ -44,7 +43,6 @@ libleaf_la_SOURCES = LeafMetric.cpp LeafMetric.h
 libnode_la_SOURCES = NodeMetric.cpp NodeMetric.h
 libdepth_la_SOURCES = DepthMetric.cpp DepthMetric.h
 libpathlength_la_SOURCES = PathLengthMetric.cpp PathLengthMetric.h
-libpathsum_la_SOURCES = PathSumMetric.cpp
 libsegment_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
 libstrahler_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
 libtreearitymax_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
