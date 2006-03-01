@@ -7,7 +7,7 @@
 ;General
 
 Name "Tulip"
-OutFile "TulipSetup.exe"
+OutFile "TulipSetup_@WIN_EXE_VERSION@.exe"
 InstallDir "$PROGRAMFILES\Tulip\"
 
 
