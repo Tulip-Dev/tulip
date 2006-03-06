@@ -171,6 +171,7 @@ private:
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
   GlGraphWidget *newOpenGlView(SuperGraph *graph,const QString &);
+  std::string newName();
   stdext::hash_map<unsigned int, std::string> openFiles;
   void buildMenus();
   bool fileSave(std::string plugin, std::string filename);

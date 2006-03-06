@@ -342,6 +342,17 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   return glWidget;
 }
 //**********************************************************************
+std::string viewGl::newName() {
+  static int idx = 0;
+
+  if (idx++ == 0)
+    return std::string(UNNAMED);
+  
+  stringstream ss;
+  ss << UNNAMED << '_' << idx - 1;
+  return ss.str();
+}    
+//**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   DataSet param=glWidget->getParameters();
@@ -356,7 +367,8 @@ void viewGl::fileNew() {
   Observable::holdObservers();
   SuperGraph *newSuperGraph=tlp::newSuperGraph();
   initializeGraph(newSuperGraph);
-  GlGraph *glW = newOpenGlView(newSuperGraph,string(UNNAMED).c_str());
+  GlGraph *glW = newOpenGlView(newSuperGraph,
+			       newSuperGraph->getAttribute<string>(std::string("name")).c_str());
   initializeGlGraph(glW);
   overviewWidget->syncFromView();
   redrawView();
@@ -428,7 +440,7 @@ void viewGl::fileOpen() {
 }
 //**********************************************************************
 void viewGl::initializeGraph(SuperGraph *superGraph) {
-  superGraph->setAttribute("name",string(UNNAMED));
+  superGraph->setAttribute("name", newName());
   superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
   superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   superGraph->getProperty<ColorsProxy>("viewColor")->setAllNodeValue(Color(255,0,0));
@@ -470,7 +482,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
     else {
       noPlugin = false;
-      s = UNNAMED;
+      s = QString::null;
       StructDef parameter = tlp::importFactory.getParam(*plugin);
       parameter.buildDefaultDataSet( dataSet );
       cancel = !tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter plugin parameter");
@@ -501,6 +513,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     SuperGraph *newGraph = tlp::newSuperGraph();
     initializeGraph(newGraph);
+    if (s == QString::null)
+      s = newGraph->getAttribute<string>("name").c_str();
     bool result=true;
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
     initializeGlGraph(glW);
@@ -835,7 +849,7 @@ int viewGl::closeWin() {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
       SuperGraph *superGraph = tmpNavigate->getSuperGraph()->getRoot();
       if(!alreadyTreated(treatedGraph, superGraph)) {
-	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + "?";
+	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + " ?";
 	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
 					   QMessageBox::Cancel);
 	if(answer == QMessageBox::Cancel)
@@ -1116,7 +1130,7 @@ void viewGl::newSubgraph() {
   else if (ok) {
     sel1 = graph->getProperty<SelectionProxy>("viewSelection");
     SuperGraph *tmp=graph->addSubGraph(sel1);
-    tmp->setAttribute("name",string("unnamed"));
+    tmp->setAttribute("name", newName());
     clusterTreeWidget->update();
   }
 }
@@ -1211,7 +1225,11 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     }
   }
   if(i == int(windows.count())) {
-    int answer = QMessageBox::question(this, "Save", "Do you want to save this graph?",  QMessageBox::Yes,  QMessageBox::No, 
+    string message = "Do you want to save this graph : " +
+      navigate->getSuperGraph()->getAttribute<string>("name") + " ?";
+
+    int answer = QMessageBox::question(this, "Save", message.c_str(), QMessageBox::Yes,
+				       QMessageBox::No, 
 				       QMessageBox::Cancel);
     if(answer == QMessageBox::Cancel)
       return;
