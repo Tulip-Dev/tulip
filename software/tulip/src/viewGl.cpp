@@ -130,9 +130,11 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   propertiesWidget=tabWidget->propertyDialog;
   //Init Element info widget
   nodeProperties = tabWidget->elementInfo;
+#ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
   statsWidget->setClusterTreeWidget(clusterTreeWidget);
+#endif
 
   ((Application*)qApp)->nodeProperties = nodeProperties;
   //connect signals related to supergraph replacement
@@ -274,7 +276,9 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   if(glWidget != 0) {
     propertiesWidget->setGlGraphWidget(glWidget);
     overviewWidget->setObservedView(glWidget);
+#ifdef STATS_UI
     statsWidget->setGlGraphWidget(glWidget);
+#endif
   }
   updateSatutBar();
   redrawView();
@@ -1239,7 +1243,9 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     propertiesWidget->setSuperGraph(0);
     propertiesWidget->setGlGraphWidget(0);
     nodeProperties->setSuperGraph(0);
+#ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
+#endif
     w->setSuperGraph(0);
     delete root;
   }

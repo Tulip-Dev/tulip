@@ -54,7 +54,9 @@ public:
 protected:
   GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
+#ifdef STATS_UI
   TulipStats *statsWidget;
+#endif
   ToolBar *mouseToolBar;
   Overview *overviewWidget;
   QWidget *aboutWidget;
