@@ -42,10 +42,6 @@ MOC = @MOC@
 moc_%.cpp: %.h 
 	$(MOC) -o $@ $<
 
-
-moc_%.cpp: %.h 
-	$(MOC) -o $@ $<
-
 %Data.cpp: %.ui %Data.h
 	$(UIC) -o $@ -impl $*Data.h $<
 
