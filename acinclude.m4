@@ -430,17 +430,7 @@ dnl and $(QT_INCLUDES) will be -Iqt_header_location (if needed)
 dnl ------------------------------------------------------------------------
 AC_DEFUN([AC_PATH_QT],
 [
-if test ${VAR_WIN32} = 1
-then
 LIB_QT="-lqt-mt"
-else 
-if test ${VAR_CYGWIN} = 1
-then 
-LIB_QT="-lqt-mt"
-else
-LIB_QT="-lqui"
-fi
-fi
 AC_MSG_CHECKING([for QT])
 
 ac_qt_includes=NO ac_qt_libraries=NO 
