@@ -3,22 +3,18 @@ TARGET= qtviewer
 SRCS=   qtviewer.cpp
 
 # linux is the default
-QT_DIR=/usr/lib/qt-3.3
-DEP_LDFLAGS=-L/usr/lib/GL -lGL -lGLU -lpthread
+DEP_LDFLAGS=-L/usr/lib/GL -lGL -L/usr/X11R6/lib -lGLU -lpthread
 
 # windows version
-#QT_DIR=/c/Qt/3.3.5
 #DEP_LDFLAGS=-L/mingw/lib -lopengl32
 
-QT_LIBS=-lqui -lqt-mt
-
-CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `../../tulip-config --cxxflags` -I${QT_DIR}/include -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
+CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `../../tulip-config --qtincludes` `../../tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
 
 # for debugging purpose
-#CXXFLAGS =-O0 -g -Wall `tulip-config --cxxflags` -I${QT_DIR}/include -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
+#CXXFLAGS =-O0 -g -Wall `../../tulip-config --qtincludes` `tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
 
 CXX=g++
-LDFLAGS=`../../tulip-config --libs` -L${QT_DIR}/lib ${QT_LIBS} ${DEP_LDFLAGS}
+LDFLAGS=`../../tulip-config --libs` `../../tulip-config --qtlibs` ${DEP_LDFLAGS}
 
 OBJS=$(SRCS:.cpp=.o)
 
