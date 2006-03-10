@@ -19,7 +19,7 @@
  *  <b>HISTORY</b>
  *
  *  - 19/06/2005 Verson 0.0.1: first version by S. BARDET and A. BURNETT
- *  - 06/11/2002 Verson 0.0.2: new version with improvements
+ *  - 06/11/2006 Version 0.0.2: new version with improvements
  *
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n 
@@ -30,7 +30,7 @@
  *  "unplanar" edges in 3D. Finally, it uses the Connected Component Packing plugin 
  *  of Tulip Software to pack the connected components.\n
  *
- *  \author Romain Bourqui LaBRI, University Bordeaux I France, Email : bourqui@labri.fr
+ *  \author S. Bardet, Romain Bourqui LaBRI, University Bordeaux I France, Email : bourqui@labri.fr
  *
  *  <b>LICENCE</b>
  *
