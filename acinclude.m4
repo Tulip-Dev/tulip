@@ -340,10 +340,15 @@ AC_DEFUN([AC_PATH_GL],
 [
 AC_REQUIRE([AC_PATH_X])
 if test ${VAR_WIN32} = 1
-then
-LIB_GL="-lglu32 -lopengl32"
+  then
+  LIB_GL="-lglu32 -lopengl32"
 else
-LIB_GL="-lGLU -lGL -lXi -lXmu"
+  if test ${VAR_MACOSX} = 1
+    then
+    LIB_GL="-lGL -lXi -lXmu"
+  else
+    LIB_GL="-lGLU -lGL -lXi -lXmu"
+  fi
 fi
 AC_MSG_CHECKING([for Open Gl])
 
@@ -408,6 +413,11 @@ else
   GL_LDFLAGS="-L$ac_gl_libraries"
 fi
 
+dnl MAC PORT
+if test ${VAR_MACOSX} = 1
+then
+  GL_INCLUDES="$GL_INCLUDES -I/usr/include/malloc"
+fi
 AC_SUBST(gl_libraries)
 AC_SUBST(gl_includes)
 AC_SUBST(GL_INCLUDES)
@@ -415,9 +425,14 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-LIB_GL="-lglu32 -lopengl32"
+  LIB_GL="-lglu32 -lopengl32"
 else
-LIB_GL="-lGLU -lGL -lXi -lXmu"
+  if test ${VAR_MACOSX} = 1
+  then
+    LIB_GL="-lGL -lXi -lXmu"
+  else
+    LIB_GL="-lGLU -lGL -lXi -lXmu"
+  fi
 fi
 AC_SUBST(LIB_GL)
 ])
@@ -431,12 +446,18 @@ dnl ------------------------------------------------------------------------
 AC_DEFUN([AC_PATH_QT],
 [
 LIB_QT="-lqt-mt"
+
 AC_MSG_CHECKING([for QT])
 
-ac_qt_includes=NO ac_qt_libraries=NO 
+ac_qt_dir=NO ac_qt_includes=NO ac_qt_libraries=NO 
+
+AC_ARG_WITH(qt-dir,
+    [  --with-qt-dir=DIR       where QT is installed. ],
+    [  ac_qt_dir="$withval"
+    ])
 
 AC_ARG_WITH(qt-includes,
-    [  --with-qt-includes=DIR   where the QT includes are. ],
+    [  --with-qt-includes=DIR  where the QT includes are. ],
     [  ac_qt_includes="$withval"
     ])
 
@@ -451,8 +472,8 @@ qt_incdirs="$ac_qt_includes $QTDIR/include $QTDIR/include/qt  /usr/include/qt /u
 AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
 ac_qt_includes="$qt_incdir"
 
-qt_libdirs="$ac_qt_libraries $QTDIR/lib /usr/lib/qt/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
-test -n "$QTDIR" && qt_libdirs="$QTDIR/lib $QTDIR $qt_libdirs"
+qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
+test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib ${QTDIR} $qt_libdirs"
 if test ! "$ac_qt_libraries" = "NO"; then
   qt_libdirs="$ac_qt_libraries $qt_libdirs"
 fi
@@ -467,7 +488,7 @@ ac_qt_libraries="$qt_libdir"
  qt_libraries="$ac_qt_libraries"
  qt_includes="$ac_qt_includes"
  QT_INCLUDES="-I$ac_qt_includes"
- QT_LDFLAGS="-L$ac_qt_libraries"	
+ QT_LDFLAGS="-L$ac_qt_libraries"
 ])
 
 eval "$ac_cv_have_qt"
@@ -480,7 +501,7 @@ else
   qt_libraries="$ac_qt_libraries"
   qt_includes="$ac_qt_includes"
   QT_INCLUDES="-I$qt_includes"
-  QT_LDFLAGS="-L$qt_libraries"	
+  QT_LDFLAGS="-L$qt_libraries"
 fi
 AC_SUBST(qt_libraries)
 AC_SUBST(qt_includes)
@@ -521,7 +542,7 @@ dnl ------------------------------------------------------------------------
 dnl
 AC_DEFUN([AC_PATH_QT_MOC],
 [
-   FIND_PATH(moc, MOC, [$ac_qt_bindir $QTDIR/bin $QTDIR/src/moc \
+   FIND_PATH(moc, MOC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc \
 	    /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
 	    /usr/local/qt/bin], [MOC_ERROR_MESSAGE])
  
@@ -576,7 +597,7 @@ AC_MSG_ERROR([All the freetype, jpeg, iconv, libpng, xml2, and zlib1 libraries m
 fi
 done
 AC_MSG_RESULT(yes)
-dnl For compilation purpose, we need to copy some libs
+dnl For linking purpose, we need to copy some libs
 dnl Copy libraries from windows/system32
 dnl in ${GLDIR} if needed
 if !(test -f $GLDIR/libglu32.dll); then

@@ -11,10 +11,14 @@ tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 INCLUDES = -I$(srcdir)/../include -I../include \
 	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
 
+if MACOSX
+AM_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ $(top_builddir)/library/tulip/src/.libs/libtulip.a @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@
+else
 AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@
+endif
 
 tulip_LDFLAGS = -L.
-tulip_LDADD = -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
+tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/

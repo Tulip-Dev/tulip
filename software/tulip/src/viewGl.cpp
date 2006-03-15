@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
+#include <limits.h>
 #include <string>
 #include <map>
 #include <vector>
@@ -18,7 +19,6 @@
 #include <qfiledialog.h>
 #include <qinputdialog.h>
 #include <qworkspace.h>
-#include <limits.h>
 #include <qmenubar.h>
 #include <qtable.h>
 #include <qvbox.h>
@@ -35,7 +35,6 @@
 #include <qaction.h>
 #include <qradiobutton.h>
 #include <qprinter.h>
-#include <qobjectlist.h>
 #include <qtabwidget.h>
 
 #include <tulip/TlpTools.h>
@@ -69,7 +68,6 @@
 #include "AppStartUp.h"
 #include <tulip/MouseMoveSelection.h>
           
-#define WITHQT3
 #define UNNAMED "unnamed"
 
 using namespace std;
@@ -102,7 +100,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
   overviewWidget->show();
   overviewDock->show();
- //Create Data information editor (Hierarchy, Element info, Property Info)
+  //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
   tabWidgetDock->setCaption("Info Editor");
   tabWidgetDock->setCloseMode(QDockWindow::Always);
@@ -161,7 +159,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   Observable::unholdObservers();
   morph = new Morphing();
 
-  // initialisaton of Qt Assistant, the path should be in $PATH
+  // initialization of Qt Assistant, the path should be in $PATH
   assistant = new QAssistantClient("", this);
 
 }
@@ -248,6 +246,32 @@ viewGl::~viewGl() {
 }
 //**********************************************************************
 void viewGl::startTulip() {
+  // adjust size if needed
+  QRect sRect = QApplication::desktop()->availableGeometry();
+  QRect vRect(this->geometry());
+  int needResize = 0;
+  if (vRect.width() > sRect.width()) {
+    vRect.setWidth(sRect.width());
+    vRect.setHeight(sRect.height());
+    needResize = 1;
+  }
+  if (vRect.right() > sRect.right()) {
+    vRect.moveLeft(sRect.left());
+    needResize = 1;
+  }
+  if (vRect.height() > sRect.height()) {
+    vRect.setHeight(sRect.height());
+    vRect.setWidth(sRect.width());
+    needResize = 1;
+  }
+  if (vRect.bottom() > sRect.bottom()) {
+    vRect.moveTop(sRect.top());
+    needResize = 1;
+  }
+  if (needResize)
+    this->setGeometry(vRect.x(), vRect.y(),
+		      vRect.width(), vRect.height());
+
   AppStartUp *appStart=new AppStartUp(this);
   appStart->show();
   appStart->initTulip();
@@ -360,7 +384,7 @@ std::string viewGl::newName() {
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   DataSet param=glWidget->getParameters();
-  QString name(glWidget->name());
+  //QString name(glWidget->name());
   newOpenGlView(glWidget->getSuperGraph(),glWidget->parentWidget()->caption());
   glWidget->setParameters(param);
   glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
@@ -857,7 +881,7 @@ int viewGl::closeWin() {
 	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
 					   QMessageBox::Cancel);
 	if(answer == QMessageBox::Cancel)
-	  return true;
+	  return false;
 	if(answer == QMessageBox::Yes) {
 	  glWidget = tmpNavigate;
 	  fileSave();
@@ -882,7 +906,10 @@ int viewGl::alreadyTreated(set<unsigned int> treatedGraph, SuperGraph *graph) {
 }
 //**********************************************************************
 void viewGl::closeEvent(QCloseEvent *e) {
-   closeWin();
+  if (closeWin())
+    e->accept();
+  else
+    e->ignore();
 }
 //**********************************************************************
 void viewGl::goInside() {

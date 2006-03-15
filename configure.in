@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.17 $)
+AC_REVISION($Revision: 1.18 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.4dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -99,6 +99,7 @@ dnl AM_PROG_LEX
 
 VAR_WIN32=0
 VAR_CYGWIN=0
+VAR_MACOSX=0
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
@@ -113,10 +114,15 @@ case "`uname -s`" in
 	VAR_CYGWIN=1
 	AC_LIBTOOL_WIN32_DLL
 	;;
+    *darwin* | *Darwin* | *DARWIN*)
+	VAR_MACOSX=1
+        bindir=$bindir/tulip.app/Contents/MacOS
+	;;
 esac
 
 AM_CONDITIONAL(WIN32, test $VAR_WIN32 = 1)
 AM_CONDITIONAL(CYGWIN, test $VAR_CYGWIN = 1)
+AM_CONDITIONAL(MACOSX, test $VAR_MACOSX = 1)
 
 dnl
 AC_LIBTOOL_DLOPEN

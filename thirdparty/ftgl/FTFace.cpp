@@ -3,6 +3,11 @@
 
 #include FT_TRUETYPE_TABLES_H
 
+// MAC PORT
+#ifndef FT_OPEN_MEMORY
+#define FT_OPEN_MEMORY ((FT_Open_Flags) 1)
+#endif
+
 FTFace::FTFace( const char* filename)
 :   numGlyphs(0),
     err(0)

@@ -9,6 +9,8 @@
 #include <config.h>
 #endif
 
+#include <sstream>
+
 #include "TulipStatsWidget.h"
 #include <tulip/PropertyManager.h> 
 #include <tulip/MetricProxy.h> 
@@ -167,18 +169,21 @@ namespace tlp
   std::string TulipStats::vectorfToString(std::vector<float> vec, int nElem)
   {
     std::string result = "( ";
+    // MAC PORT
+    stringstream sstr;
     
     char val[50];
     
     for(int i=0; i < nElem-1; i++)
       {
-	gcvt(vec[i], 4, val);
-	result = result + val + "; ";
+        sstr.seekp(0);
+        sstr << vec[i];
+	result += sstr.str() + "; ";
       }
     
-    gcvt(vec[nElem-1], 4, val);
-    
-    result = result + val + " )";
+    sstr.seekp(0);
+    sstr << vec[nElem - 1];
+    result += sstr.str() + " )";
     
     return result;
   }
@@ -186,18 +191,21 @@ namespace tlp
   std::string TulipStats::vectorfToString(tlp::Vector<float, 3> vec)
   {
     std::string result = "( ";
+    // MAC PORT
+    stringstream sstr;
     
     char val[50];
     
     for(int i=0; i < 2; i++)
       {
-	gcvt(vec[i], 4, val);
-	result = result + val + "; ";
+        sstr.seekp(0);
+	sstr << vec[i];
+	result += sstr.str() + "; ";
       }
     
-    gcvt(vec[2], 4, val);
-    
-    result = result + val + " )";
+    sstr.seekp(0);
+    sstr << vec[2];
+    result += sstr.str() + " )";
     
     return result;
   }
@@ -597,16 +605,19 @@ namespace tlp
       {
 	// 2 metrics ? We can compute the linear regression function
 	char val[50];
+	// MAC PORT
+	stringstream sstr;
       
-	gcvt(statsResults->linearRegressionFunctionb0, 5, val);
+	sstr << statsResults->linearRegressionFunctionb0;
 	output = "Ordinate in the beginning = ";
-	output += val;
-	b0Lbl->setText(output);
+	output += sstr.str();
+	b0Lbl->setText(output.c_str());
 
-	gcvt(statsResults->linearRegressionFunctionb1, 5, val);
+	sstr.seekp(0);
+	sstr << statsResults->linearRegressionFunctionb1;
 	output = "Slope = ";
-	output += val;
-	b1Lbl->setText(output);
+	output += sstr.str();
+	b1Lbl->setText(output.c_str());
 
 	LinearRegressionBox->setEnabled(true);
 	LinearDisplayCB->setEnabled(true);
