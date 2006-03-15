@@ -237,9 +237,18 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
 
 // initialize and export the factories needed to manage
 // our different kinds of plugins
+#if !defined( __APPLE__)
 template <class Tnode, class Tedge, class TPROPERTY>
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > PropertyProxy<Tnode,Tedge,TPROPERTY>::factory;
-
+#else
+TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> PropertyProxy<ColorType, ColorType, Colors>::factory;
+TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> PropertyProxy<IntType, IntType, Int>::factory;
+TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> PropertyProxy<PointType, LineType, Layout>::factory;
+TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> PropertyProxy<DoubleType, DoubleType, Metric>::factory;
+TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> PropertyProxy<BooleanType, BooleanType, Selection>::factory;
+TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> PropertyProxy<SizeType, SizeType, Sizes>::factory;
+TemplateFactory<PropertyFactory<String>, String, PropertyContext> PropertyProxy<StringType, StringType, String>::factory;
+#endif
 //=========================================================
 static void loadPlugins(string dir,PluginLoader *plug) {
   SizesProxy::factory.load(dir + "sizes", "Sizes",plug);
