@@ -468,6 +468,10 @@ AC_ARG_WITH(qt-libraries,
 
 AC_CACHE_VAL(ac_cv_have_qt,
 [
+if test ! "$ac_qt_dir" = "NO"; then
+   QTDIR=$ac_qt_dir
+fi
+
 qt_incdirs="$ac_qt_includes $QTDIR/include $QTDIR/include/qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
 AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
 ac_qt_includes="$qt_incdir"
