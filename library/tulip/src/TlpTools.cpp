@@ -40,7 +40,7 @@ void tlp::initTulipLib(char* appDirPath) {
   if (getEnvTlp==0) {
     if (appDirPath) {
       // one dir up to initialize the lib dir
-      char *last = rindex(appDirPath, '/');
+      char *last = strrchr(appDirPath, '/');
       last[1] = 0;
       TulipLibDir = std::string(appDirPath) + "lib";
     } else
