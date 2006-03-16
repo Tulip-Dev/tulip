@@ -1,4 +1,5 @@
 #include <dirent.h>
+#include <string.h>
 
 #include "thirdparty/gzstream/gzstream.h"
 
@@ -30,14 +31,21 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 //=========================================================
-void tlp::initTulipLib() {
+void tlp::initTulipLib(char* appDirPath) {
   char *getEnvTlp;
   std::string tulipDocDir;
   string::size_type pos;
 
   getEnvTlp=getenv("TLP_DIR");
-  if (getEnvTlp==0)
-    TulipLibDir=string(_TULIP_LIB_DIR);
+  if (getEnvTlp==0) {
+    if (appDirPath) {
+      // one dir up to initialize the lib dir
+      char *last = rindex(appDirPath, '/');
+      last[1] = 0;
+      TulipLibDir = std::string(appDirPath) + "lib";
+    } else
+      TulipLibDir=string(_TULIP_LIB_DIR);
+  }
   else
     TulipLibDir=string(getEnvTlp);
 #ifdef _WIN32

@@ -26,7 +26,7 @@ namespace tlp {
   extern TLP_SCOPE std::string TulipDocProfile;
   extern TLP_SCOPE std::string TulipUserHandBookIndex;
   
-  extern TLP_SCOPE void initTulipLib();
+  extern TLP_SCOPE void initTulipLib(char* appDirPath = 0);
     
   extern TLP_SCOPE TemplateFactory<ClusteringFactory,Clustering,ClusterContext > clusteringFactory;
   extern TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > importFactory;

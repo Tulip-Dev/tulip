@@ -11,7 +11,7 @@ using namespace std;
 //**********************************************************************
 Application::Application(int argc, char ** argv): QApplication(argc,argv) 
 {
-  tlp::initTulipLib();
+  tlp::initTulipLib((char *) QApplication::applicationDirPath().ascii());
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
   while (end!=tlp::TulipPluginsPath.end())
