@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# This script is MAC specific, it intents to create an internet deliverable
+# disk image of a tulip MAC 'bundle' in the current directory
+APP_DIR=Tulip-@PACKAGE_VERSION@.app
+
+if [ -d $APP_DIR ]; then
+  rm -rf $APP_DIR
+fi
+
+BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
+BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
+LIBS_BUNDLE_DIR=$APP_DIR/Contents/lib
+RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
+
+# copy the tulip binary
+echo installing $BIN_BUNDLE
+cp -R @prefix@/bin/tulip.app .
+mv tulip.app $APP_DIR
+# add icons file
+echo installing $RESOURCES_BUNDLE_DIR/tulip.icns
+mkdir -p $RESOURCES_BUNDLE_DIR
+cp tulip_mac.icns $RESOURCES_BUNDLE_DIR/tulip.icns
+# add Info.plist file
+cp Info.plist $APP_DIR/Contents
+
+# create the shared libs bundle directory
+mkdir -p $LIBS_BUNDLE_DIR
+# look for shared libs
+SHARED_LIBS=`otool -L $BIN_BUNDLE | grep dylib | awk '{print $1}'`
+# copy libs in shared libs bundle directory
+for LIB in $SHARED_LIBS
+do
+  if [ "$LIB" = "/usr/lib/libSystem.B.dylib" ]; then
+   continue
+  fi 
+  if [ ! -f $LIB ]; then
+    LIB=/usr/lib/$LIB
+  fi
+  if [ -f $LIB ]; then
+    cp $LIB $LIBS_BUNDLE_DIR
+    LIB=`basename $LIB`
+    echo installing $LIBS_BUNDLE_DIR/$LIB
+    # install the current bundle lib
+    install_name_tool -id @executable_path/../lib/$LIB $LIBS_BUNDLE_DIR/$LIB
+    # install tulip bundle binary with the current bundle lib
+    install_name_tool -change $LIB @executable_path/../lib/$LIB $BIN_BUNDLE
+  else
+    echo `basename $LIB` not found... exiting
+  fi
+done
+
+# copy bitmaps and plugins in lib bundle dir
+echo installing $LIBS_BUNDLE_DIR/tlp
+cp -R @prefix@/lib/tlp $LIBS_BUNDLE_DIR
+
+# create disk image with our bundle
+echo creating Tulip-@PACKAGE_VERSION@.dmg disk image
+hdiutil create -srcdir $APP_DIR -format UDZO -fs HFS+ -volname Tulip-@PACKAGE_VERSION@ -ov Tulip-@PACKAGE_VERSION@.dmg
+# then internet enabled it
+hdiutil internet-enable -yes tulip-@PACKAGE_VERSION@.dmg
