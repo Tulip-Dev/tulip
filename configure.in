@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.19 $)
+AC_REVISION($Revision: 1.20 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.4dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -269,12 +269,20 @@ GZSTREAM_LDFLAGS='$(top_srcdir)/thirdparty/gzstream/libgzstream.la -lz'
 AC_SUBST(GZSTREAM_INCLUDE)
 AC_SUBST(GZSTREAM_LDFLAGS)
 
-dnl **********
+dnl first add platform dependent generated files
+if test ${VAR_WIN32} = 1
+then
+  ac_config_files=${PACKAGE}-${VERSION}.nsi:tulip.nsi.in
+else 
+  if test ${VAR_MACOSX} = 1
+  then
+    ac_config_files="make_${PACKAGE}-${VERSION}_mac_bundle.sh:make_tulip_mac_bundle.sh.in Info.plist:tulip_mac_info.plist.in"
+  else
+    ac_config_files=${PACKAGE}-${VERSION}.spec:tulip.spec.in
+  fi
+fi
+dnl then the platform independent files
 AC_OUTPUT(
-${PACKAGE}-${VERSION}.spec:tulip.spec.in
-${PACKAGE}-${VERSION}.nsi:tulip.nsi.in
-make_${PACKAGE}-${VERSION}_mac_bundle.sh:make_tulip_mac_bundle.sh.in
-Info.plist:tulip_mac_info.plist.in
 tulip-config
 Makefile
 library/Makefile
