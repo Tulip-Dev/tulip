@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIdentifier</key>
+	<string>org.TulipSoftware.tulip</string>
 	<key>CFBundleExecutable</key>
 	<string>tulip</string>
 	<key>CFBundleGetInfoString</key>
@@ -11,7 +13,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>ttxt</string>
+	<string>tlps</string>
+        <key>CFBundleShortVersionString</key>
+        <string>@PACKAGE_VERSION@</string>
 	<key>NOTE</key>
 	<string>Created by Auber from LABRI (France)</string>
 </dict>
