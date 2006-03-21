@@ -26,12 +26,26 @@ clean-am :
 
 html-am :
 	sh gen-profile.sh
+
+if MACOSX
+install-data-am :
+	if test ! -h  $(exec_prefix)/bin/tulip.app/Contents/share/tulip; then \
+		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/share ;\
+		ln -s $(pkgdatadir) $(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
+	fi;
+	mkdir -p $(pkgdatadir)/common
+	cp -r common/*.png common/*.css common/favicon.ico $(pkgdatadir)/common/.
+	if test -f profile.adp ; then \
+		cp profile.adp $(pkgdatadir)/.; \
+	fi;
+else
 install-data-am:
 	mkdir -p $(pkgdatadir)/common
 	cp -r common/*.png common/*.css common/favicon.ico $(pkgdatadir)/common/.
 	if test -f profile.adp ; then \
 		cp profile.adp $(pkgdatadir)/.; \
 	fi;
+endif
 
 uninstall-am:
 	rm -rf $(pkgdatadir)/common $(pkgdatadir)/profile.adp

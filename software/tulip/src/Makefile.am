@@ -119,3 +119,11 @@ moc_%.cpp: ../include/%.h
 
 ../include/%Data.h: ../designer/%.ui
 	$(UIC_MAKE) -o $@ $<
+
+if MACOSX
+install-data-am :
+	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/assistant.app; then \
+		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/ ;\
+		ln -s @QTDIR@/bin/assistant.app $(exec_prefix)/bin/tulip.app/Contents/assistant.app ;\
+	fi;
+endif

@@ -13,6 +13,18 @@ m4datadir = $(datadir)/aclocal
 m4data_DATA = tulip.m4
 endif 
 
+if MACOSX
+install-data-am :
+	if test ! -h  $(exec_prefix)/bin/tulip.app/Contents/Info.plist; then \
+		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/Resources ;\
+		ln -s $(abs_srcdir)/Info.plist $(exec_prefix)/bin/tulip.app/Contents/Info.plist ;\
+		ln -s $(abs_srcdir)/tulip_mac.icns $(exec_prefix)/bin/tulip.app/Contents/Resources/tulip.icns ;\
+	fi;
+
+macinst: install-data-am
+	sh make_tulip-$(VERSION)_mac_bundle.sh
+endif
+
 srcrpm:
 	make dist
 	mkdir -p RPM/BUILD RPM/RPMS RPM/SOURCES RPM/SPECS RPM/SRPMS
@@ -23,8 +35,10 @@ srcrpm:
 	mv RPM/SRPMS/*.src.rpm .
 	rm -rf RPM/ RPMMACROS RPMRC $(top_builddir)/$(PACKAGE)-$(VERSION).tar.gz
 
+if WIN32
 wininst:
 	makensis.exe ${PACKAGE}-${VERSION}.nsi
+endif
 
 dist-hook:
 	rm -rf 	$(PACKAGE)-$(VERSION)/thirdparty/gle/autom4te-2.53.cache
