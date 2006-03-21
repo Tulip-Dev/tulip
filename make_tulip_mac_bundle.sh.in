@@ -10,8 +10,9 @@ fi
 
 BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
 BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
-LIBS_BUNDLE_DIR=$APP_DIR/Contents/lib
+LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
+TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib
 
 # copy the tulip binary
 echo installing $BIN_BUNDLE
@@ -31,6 +32,7 @@ SHARED_LIBS=`otool -L $BIN_BUNDLE | grep dylib | awk '{print $1}'`
 # copy libs in shared libs bundle directory
 for LIB in $SHARED_LIBS
 do
+  OLDLIB=$LIB
   if [ "$LIB" = "/usr/lib/libSystem.B.dylib" ]; then
    continue
   fi 
@@ -42,17 +44,17 @@ do
     LIB=`basename $LIB`
     echo installing $LIBS_BUNDLE_DIR/$LIB
     # install the current bundle lib
-    install_name_tool -id @executable_path/../lib/$LIB $LIBS_BUNDLE_DIR/$LIB
+    install_name_tool -id @executable_path/../Frameworks/$LIB $LIBS_BUNDLE_DIR/$LIB
     # install tulip bundle binary with the current bundle lib
-    install_name_tool -change $LIB @executable_path/../lib/$LIB $BIN_BUNDLE
+    install_name_tool -change $OLDLIB @executable_path/../Frameworks/$LIB $BIN_BUNDLE
   else
     echo `basename $LIB` not found... exiting
   fi
 done
 
 # copy bitmaps and plugins in lib bundle dir
-echo installing $LIBS_BUNDLE_DIR/tlp
-cp -R @prefix@/lib/tlp $LIBS_BUNDLE_DIR
+echo installing $TLP_PLUGINS_BUNDLE_DIR/tlp
+cp -R @prefix@/lib/tlp $TLP_PLUGINS_BUNDLE_DIR
 
 # create disk image with our bundle
 echo creating Tulip-@PACKAGE_VERSION@.dmg disk image
