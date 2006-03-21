@@ -160,8 +160,14 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   morph = new Morphing();
 
   // initialization of Qt Assistant, the path should be in $PATH
+#if defined(__APPLE__)
+  std::string assistantPath(tlp::TulipLibDir);
+  assistantPath += "../assistant";
+  assistant = new QAssistantClient(assistantPath, this);
+#else
   assistant = new QAssistantClient("", this);
-
+#endif
+  connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
 }
 //**********************************************************************
 void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
@@ -1212,6 +1218,10 @@ void viewGl::helpContents() {
   }
   else	
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
+}
+//==============================================================
+void viewGl::helpAssistantError(const QString &msg) {
+  cerr << msg.ascii() << endl;
 }
 //==============================================================
 void viewGl::fileExit() {

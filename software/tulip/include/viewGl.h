@@ -104,6 +104,7 @@ protected slots:
   void helpIndex();
   void helpContents();
   void helpAbout();
+  void helpAssistantError(const QString &msg);
   void fileExit();
   void fileSave();
   void fileSaveAs();
@@ -166,7 +167,6 @@ protected slots:
   void makeSimple();
   void makeConnected();
   void showElementProperties();
-
 
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
