@@ -339,17 +339,6 @@ dnl
 AC_DEFUN([AC_PATH_GL],
 [
 AC_REQUIRE([AC_PATH_X])
-if test ${VAR_WIN32} = 1
-  then
-  LIB_GL="-lglu32 -lopengl32"
-else
-  if test ${VAR_MACOSX} = 1
-    then
-    LIB_GL="-lGL -lXi -lXmu"
-  else
-    LIB_GL="-lGLU -lGL -lXi -lXmu"
-  fi
-fi
 AC_MSG_CHECKING([for Open Gl])
 
 ac_gl_includes="" ac_gl_libraries=""
@@ -395,9 +384,6 @@ fi
   if test=`eval $try 2> /dev/null`; then gl_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 ac_gl_libraries="$gl_libdir"
-
- GL_INCLUDES="-I$ac_gl_includes"
- GL_LDFLAGS="-L$ac_gl_libraries"
 ])
 
 eval "$ac_cv_have_gl"
@@ -409,8 +395,14 @@ else
   AC_MSG_RESULT([ libraries $ac_gl_libraries, headers $ac_gl_includes ])  
   gl_libraries="$ac_gl_libraries"
   gl_includes="$ac_gl_includes"
+if test ${VAR_MACOSX} = 1
+then
+  GL_INCLUDES="-I$ac_gl_includes"
+  GL_LDFLAGS=""
+else
   GL_INCLUDES="-I$ac_gl_includes"	
   GL_LDFLAGS="-L$ac_gl_libraries"
+fi
 fi
 
 dnl MAC PORT
@@ -429,7 +421,7 @@ then
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="-lGL -lXi -lXmu"
+    LIB_GL="-framework OpenGL"
   else
     LIB_GL="-lGLU -lGL -lXi -lXmu"
   fi
