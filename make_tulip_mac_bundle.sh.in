@@ -43,7 +43,7 @@ function make_bundle_lib() {
     else
        slib=`basename $slib`
     fi
-    echo packaging $slib in `basename $bbin`
+    echo renaming $slib in `basename $bbin`
     # package tulip bundle binary with the current bundle lib
     install_name_tool -change $oldlib @executable_path/../Frameworks/$slib $bbin
   else
@@ -89,8 +89,10 @@ package_bundle_libs $LIBS_BUNDLE_DIR "*.dylib"
 
 # clean up the plugins bundle dir
 TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp/plugins
-# first remove lib*.a and lib*.la files
+# remove lib*.a and lib*.la files
 find $TLP_PLUGINS_BUNDLE_DIR -name "lib*.*a" -print | xargs rm
+# remove the plugins designer bundle dir
+rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
 # package the lib*.so files
 package_bundle_libs $TLP_PLUGINS_BUNDLE_DIR "*.so" $LIBS_BUNDLE_DIR
 
