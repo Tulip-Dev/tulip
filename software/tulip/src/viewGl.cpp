@@ -1342,6 +1342,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
     parameter.buildDefaultDataSet( *dataSet, graph );
     resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
   }
+
   if (resultBool) {
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
@@ -1357,13 +1358,12 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       case TLP_CANCEL:
 	resultBool=false;
       };
+    graph->delLocalProperty(name);
   }
   if (dataSet!=0) delete dataSet;
-  graph->delLocalProperty(name);
+
   propertiesWidget->setSuperGraph(graph);
   overviewWidget->setObservedView(glWidget);
-  //  clusterTreeWidget->update();
-  //  clusterTreeWidget->setSuperGraph(graph);
   Observable::unholdObservers();
   return resultBool;
 }
@@ -1405,7 +1405,7 @@ void viewGl::changeLayout(int id) {
   Coord scTrans = glWidget->getSceneTranslation();
   Coord scRot = glWidget->getSceneRotation();
   glWidget->setInputLayout(name);
-  bool result = changeProperty<LayoutProxy>(name,"viewLayout", true, true);
+  bool result = changeProperty<LayoutProxy>(name, "viewLayout", true, true);
   glWidget->setInputLayout("viewLayout");
   glWidget->setCamera(cam);
   glWidget->setSceneTranslation(scTrans);
