@@ -37,7 +37,7 @@
             This toolbar allows to select the mouse operation you want to perform. The current available operations are from top to bottom of the toolbar :
         <itemizedlist>
             <listitem>
-                <para><inlinegraphic fileref="images/i_selection.png"/><code>Box Selection</code> : It enables to select a set of objects. If <keycap>CTRL</keycap> key (<keycap>ALT</keycap> on Mac) key is pressed, the selection is added to the
+                <para><inlinegraphic fileref="images/i_selection.png"/><code>Box Selection</code> : It enables to select a set of objects. If <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selection is added to the
 		current selection else it replaces the current selection.
                 </para>
             </listitem>
