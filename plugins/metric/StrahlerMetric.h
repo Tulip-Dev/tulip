@@ -57,10 +57,8 @@ struct Strahler {
 class StrahlerMetric:public Metric { 
 public:
   StrahlerMetric(const PropertyContext &);
-  ~StrahlerMetric();
   bool run();
   bool check(std::string &);
-  void reset();
 
 private:
   Strahler topSortStrahler(node n,int &curPref, stdext::hash_map<node,int> &tofree, stdext::hash_map<node,int> &prefix,

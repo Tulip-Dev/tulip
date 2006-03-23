@@ -28,8 +28,7 @@
 class RandomMetric:public Metric { 
 public:
   RandomMetric(const PropertyContext &);
-  double getNodeValue(const node n);
-  double getEdgeValue(const edge e);
+  bool run();
 };
 /*@}*/
 #endif

@@ -35,8 +35,10 @@
 class NodeMetric:public Metric { 
 public:
   NodeMetric(const PropertyContext &);
-  double getNodeValue(const node n);
+  bool run();
   bool check(std::string &);
+private:
+  double getNodeValue(const node n);
 };
 /*@}*/
 #endif

@@ -1,5 +1,3 @@
-
-//-*-c++-*-
 #ifndef _ARITYMETRIC_H
 #define _ARITYMETRIC_H
 
@@ -32,8 +30,7 @@
 class ArityMetric:public Metric { 
 public:
   ArityMetric(const PropertyContext &);
-  ~ArityMetric();
-  double getNodeValue(const node n);
+  bool run();
 };
 /*@}*/
 #endif

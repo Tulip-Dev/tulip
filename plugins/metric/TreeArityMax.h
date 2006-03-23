@@ -33,9 +33,11 @@
 class TreeArityMax:public Metric {   
 public:
   TreeArityMax(const PropertyContext &);
-  ~TreeArityMax();
-  double getNodeValue(const node n);
+  bool run();
   bool check(std::string &);
+
+private:
+  double getNodeValue(const node n);
 };
 /*@}*/
 #endif

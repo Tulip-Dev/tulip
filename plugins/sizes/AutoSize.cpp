@@ -1,5 +1,6 @@
 //-*-c++-*-
 #include <tulip/TulipPlugin.h>
+#include <tulip/ForEach.h>
 #include <cmath>
 
 /** \addtogroup size */
@@ -15,7 +16,19 @@ class AutoSizes:public Sizes
 { 
 public:
   AutoSizes(const PropertyContext &context):Sizes(context){}
-  ~AutoSizes(){}
+
+  bool run() {
+    node n;
+    forEach(n,superGraph->getNodes())
+      sizesProxy->setNodeValue(n, getNodeValue(n));
+    edge e;
+    forEach(e,superGraph->getEdges())
+      sizesProxy->setEdgeValue(e, getEdgeValue(e));
+    return true;
+  }
+
+
+private:
   Size getNodeValue(const node n) {
     LayoutProxy *entryLayout=superGraph->getProperty<LayoutProxy>("viewLayout");
 
@@ -52,8 +65,8 @@ public:
   }
 
   Size getEdgeValue(const edge e) {
-    Size s=sizesProxy->getNodeValue(superGraph->source(e));
-    Size t=sizesProxy->getNodeValue(superGraph->target(e));
+    Size s = sizesProxy->getNodeValue(superGraph->source(e));
+    Size t = sizesProxy->getNodeValue(superGraph->target(e));
     Coord tmp(s.getW(),s.getH(),s.getD());
     Coord tmp2(t.getW(),t.getH(),t.getD());
     float sizes=tmp.norm();

@@ -55,18 +55,3 @@ bool DagLevelMetric::check(string &erreurMsg) {
     return false;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

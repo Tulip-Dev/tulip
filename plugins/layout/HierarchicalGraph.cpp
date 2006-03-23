@@ -314,8 +314,48 @@ void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpL
   }  
   //  cerr << "we clean every added nodes and edges" << endl;
 }
-  //=======================================================================
+
+
+namespace {
+  //============================================================================
+  void dfsRecCall(SuperGraph *graph, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
+    nodeVisited.set(n.id, true);
+    vec.push_back(n);
+    node dest;
+    forEach(dest, graph->getInOutNodes(n)) {
+      if (!nodeVisited.get(dest.id)) {
+	dfsRecCall(graph, vec, nodeVisited, dest);
+      }
+    }
+  }
+  //============================================================================
+  void buildDfsOrdering(SuperGraph *graph, vector<node> &vec) {
+    MutableContainer<bool> nodeVisited;
+    nodeVisited.setAll(false);
+    node n;
+    forEach(n, graph->getNodes()) {
+      if (!nodeVisited.get(n.id)) {
+	dfsRecCall(graph, vec, nodeVisited, n);
+      }
+    }
+  }
+}
+//=======================================================================
 bool HierarchicalGraph::run() {
+  //make acyclic
+  vector<node> order;
+  buildDfsOrdering(superGraph, order);
+  MutableContainer<int> orderid;
+  for(unsigned int i=0; i< order.size(); ++i) 
+    orderid.set(order[i].id, i);
+  edge e;
+  forEach(e, superGraph->getEdges()) {
+    node src = superGraph->source(e);
+    node tgt = superGraph->target(e);
+    if(orderid.get(src.id) > orderid.get(tgt.id))
+      superGraph->reverse(e);
+  }
+    
   //=======================================================================
   // Build a clone of this graph
   SuperGraph *mySGraph = tlp::newCloneSubGraph(superGraph,"tmp clone");
@@ -439,7 +479,6 @@ bool HierarchicalGraph::run() {
     }
   }
   
-  edge e;
   forEach(e, superGraph->getEdges()) {
     node src = superGraph->source(e);
     node tgt = superGraph->target(e);

@@ -1,3 +1,4 @@
+#include <tulip/ForEach.h>
 #include "StrengthMetric.h"
 
 METRICPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1");
@@ -132,6 +133,12 @@ double StrengthMetric::getNodeValue(const node n ) {
 }
 //=============================================================
 bool StrengthMetric::run() {
+  edge e;
+  forEach(e, superGraph->getEdges())
+    metricProxy->setEdgeValue(e, getEdgeValue(e));
+  node n;
+  forEach(n, superGraph->getNodes())
+    metricProxy->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=============================================================

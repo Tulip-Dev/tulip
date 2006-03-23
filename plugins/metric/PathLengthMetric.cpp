@@ -1,37 +1,50 @@
 #include <tulip/AcyclicTest.h>
+#include <tulip/ForEach.h>
 #include "PathLengthMetric.h"
 
 METRICPLUGIN(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2");
 
 using namespace std;
 
+//=======================================
 PathLengthMetric::PathLengthMetric(const PropertyContext &context):Metric(context) {
 }
-PathLengthMetric::~PathLengthMetric() {}
-
+//=======================================
 double PathLengthMetric::getNodeValue(const node n) {
   if (superGraph->outdeg(n)==0) return 0.0;
-  bool cached,resultBool;
-  string erreurMsg;
+  if (metricProxy->getNodeValue(n)!=0)
+    return metricProxy->getNodeValue(n);
   double result=0;
-  MetricProxy *leafMetric= new MetricProxy(superGraph);
-  resultBool = superGraph->computeProperty("Leaf", leafMetric, erreurMsg);
-  assert (resultBool);
-  Iterator<node> *itN=superGraph->getOutNodes(n);
-  while (itN->hasNext()) {
-    node child=itN->next();
+  node child;
+  forEach(child, superGraph->getOutNodes(n)) {
     result += metricProxy->getNodeValue(child);
-  } delete itN;
+  }
   result += leafMetric->getNodeValue(n);
-  delete leafMetric;
+  metricProxy->setNodeValue(n, result);
   return result;
 }
-
+//=======================================
+bool PathLengthMetric::run() {
+  metricProxy->setAllNodeValue(0);
+  metricProxy->setAllEdgeValue(0);
+  leafMetric = new MetricProxy(superGraph);
+  string erreurMsg;
+  if (!superGraph->computeProperty("Leaf", leafMetric, erreurMsg)) {
+    cerr << erreurMsg << endl;
+    return false;
+  }
+  node _n;
+  forEach(_n, superGraph->getNodes())
+    getNodeValue(_n);
+  delete leafMetric;
+}
+//=======================================
 bool PathLengthMetric::check(string &erreurMsg) {
   if (AcyclicTest::isAcyclic(superGraph))
-      return true;
+    return true;
   else {
     erreurMsg="The Graph must be acyclic";
     return false;
   }
 }
+//=======================================
