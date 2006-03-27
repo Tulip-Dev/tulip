@@ -92,18 +92,6 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-// accepts only file names ending with ".so"
-int __tulip_selectSO(const struct dirent *ent) {
-  const char *SO = ".so";
-  int idx = strlen(ent->d_name) - 3;
-  if (idx < 0) return 0;
-  
-  for (int i=0; i<3; ++i) {
-    if ((ent->d_name[idx + i]) != SO[i]) return 0;
-  }
-  return 1;
-}
-//=========================================================
 TemplateFactory<ClusteringFactory,Clustering,ClusterContext > tlp::clusteringFactory;
 TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > tlp::importFactory;
 TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > tlp::exportFactory;

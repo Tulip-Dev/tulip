@@ -8,9 +8,17 @@
 #endif
 #include <string>
 
+#if (QT_REL == 3)
 #include <qtable.h>
 #include <qbutton.h>
-#include <qcheckbox.h>
+#include <qpainter.h>
+#else
+#include <Qt3Support/q3button.h>
+#include <Qt/qpainter.h>
+#include <Qt3Support/q3table.h>
+#include "Qt3ForTulip.h"
+#endif
+
 
 #include <tulip/SuperGraph.h>
 #include <tulip/Size.h>
@@ -29,7 +37,7 @@ class ColorButton : public QButton {
 private:
   QColor color;
 public:
-  ColorButton(const QColor &c, QWidget *parent=0, const char *name=0, WFlags f=0);
+  ColorButton(const QColor &c, QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
   ~ColorButton();
 
   QColor getColor() const;

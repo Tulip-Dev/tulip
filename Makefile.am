@@ -36,8 +36,13 @@ srcrpm:
 	rm -rf RPM/ RPMMACROS RPMRC $(top_builddir)/$(PACKAGE)-$(VERSION).tar.gz
 
 if WIN32
+if QT3
+wininst:
+	makensis.exe //DQT3 ${PACKAGE}-${VERSION}.nsi
+else
 wininst:
 	makensis.exe ${PACKAGE}-${VERSION}.nsi
+endif
 endif
 
 dist-hook:

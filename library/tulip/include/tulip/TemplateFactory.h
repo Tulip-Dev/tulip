@@ -28,11 +28,6 @@ public:
   ObjectType *getObject(std::string name,Parameter p);
   StructDef getParam(std::string name);
   void getPluginParameters(PluginLoader *loader);
-  private:
-  #ifdef _WIN32
-  //  void loadWin32plugin(std::string pluginName,PluginLoader *loader);
-  void loadWindows(std::string pluginName, std::string type, PluginLoader *loader);
-  #endif
 };
 
 /*@}*/

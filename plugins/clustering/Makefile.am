@@ -2,10 +2,6 @@ if WIN32
 DLL_FLAGS = -no-undefined
 endif
 
-if CYGWIN
-DLL_FLAGS = -no-undefined
-endif
-
 plugins_LTLIBRARIES = \
 	libstrength.la \
 	libhierarchical.la \
@@ -35,6 +31,7 @@ libequalvalues_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
 libquotientclustering_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 UIC = @UIC@ -L @TULIP_QTDESIGNERPLUGIN@
 MOC = @MOC@

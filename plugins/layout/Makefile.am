@@ -2,10 +2,6 @@ if WIN32
 DLL_FLAGS = -no-undefined
 endif
 
-if CYGWIN
-DLL_FLAGS = -no-undefined
-endif
-
 plugins_LTLIBRARIES = \
 	libmixedmodel.la \
 	libconnnecteccomponnentpacking.la \

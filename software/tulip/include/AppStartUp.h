@@ -8,7 +8,7 @@ class AppStartUp : public AppStartUpForm
     Q_OBJECT
 
 public:
-    AppStartUp( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+  AppStartUp( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~AppStartUp();
 public slots:
     ///Change the label in the widget

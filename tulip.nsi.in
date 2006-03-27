@@ -72,7 +72,17 @@ File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
+!ifdef QT3
 File "@qt_libraries@\qt-mt*.dll"
+!else
+File "@qt_libraries@\Qt3Support4.dll"
+File "@qt_libraries@\QtCore4.dll"
+File "@qt_libraries@\QtGui4.dll"
+File "@qt_libraries@\QtNetWork4.dll"
+File "@qt_libraries@\QtOpenGL4.dll"
+File "@qt_libraries@\QtSql4.dll"
+File "@qt_libraries@\QtXml4.dll"
+!endif
 File  "@qt_libraries@\..\bin\assistant.exe"
 setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 

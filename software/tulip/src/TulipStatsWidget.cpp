@@ -22,9 +22,10 @@
 #include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ClusterTree.h>
- 
+
+#if (QT_REL == 3)
+#include <qlistbox.h>
 #include <qpushbutton.h> 
-#include <qlistbox.h> 
 #include <qlineedit.h> 
 #include <qgroupbox.h> 
 #include <qcheckbox.h> 
@@ -34,6 +35,18 @@
 #include <qtabwidget.h>
 #include <qmessagebox.h>
 #include <qradiobutton.h>
+#else
+#include <QtGui/qpushbutton.h> 
+#include <QtGui/qlineedit.h> 
+#include <QtGui/qgroupbox.h> 
+#include <QtGui/qcheckbox.h> 
+#include <QtGui/qvalidator.h> 
+#include <QtGui/qlabel.h> 
+#include <QtGui/qcombobox.h>
+#include <QtGui/qtabwidget.h>
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qradiobutton.h>
+#endif
 
 //#include "../../../thirdparty/ftgl/FTGLPixmapFont.h"
 
@@ -392,7 +405,7 @@ namespace tlp
 	PProxy* proxy = supergraph->getProperty(proxyName);
 
 	if (dynamic_cast<MetricProxy*>(proxy) != 0)
-	  AvaiMetricsList->insertItem(proxyName);	
+	  AvaiMetricsList->insertItem(proxyName.c_str());	
       }
 
     delete properties;
@@ -452,7 +465,12 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    std::string proxyName = AvaiMetricsList->currentText();
+    std::string proxyName = 
+#if (QT_REL == 3)
+      AvaiMetricsList->currentText();
+#else
+    AvaiMetricsList->currentText().toStdString();
+#endif
 
     // We limit the number of proxy to 3 maximum :
     if (nMetrics == 3) 
@@ -488,7 +506,7 @@ namespace tlp
     if (nMetrics >= 3)
       DiscStep3->setEnabled(true);
 
-    UsedMetricsList->insertItem(proxyName);
+    UsedMetricsList->insertItem(proxyName.c_str());
 
     //  // cout << " ...[END]" << endl;
   }
@@ -576,19 +594,19 @@ namespace tlp
     std::string output;
 
     output = "M = " + vectorfToString(statsResults->averagePoint, nMetrics);
-    AverageLbl->setText(output);
+    AverageLbl->setText(output.c_str());
 
     output = "V = " + vectorfToString(statsResults->variancePoint, nMetrics);
-    VarianceLbl->setText(output);
+    VarianceLbl->setText(output.c_str());
 
     output = "Sigma = " + vectorfToString(statsResults->standardDeviationPoint, nMetrics);
-    StdDeviationLbl->setText(output);
+    StdDeviationLbl->setText(output.c_str());
 
     output = "Min = " + vectorfToString(statsResults->minPoint, nMetrics);
-    MinLbl->setText(output);
+    MinLbl->setText(output.c_str());
 
     output = "Max = " + vectorfToString(statsResults->maxPoint, nMetrics);
-    MaxLbl->setText(output);
+    MaxLbl->setText(output.c_str());
 
     StatsResultsFrame->setEnabled(true);
 
@@ -627,13 +645,13 @@ namespace tlp
       {
 	// 3 metrics ? We can compute eigenvectors
 	output = "v1 = " + vectorfToString(statsResults->eigenVectors[0]);
-	v1Lbl->setText(output);
+	v1Lbl->setText(output.c_str());
 
 	output = "v2 = " + vectorfToString(statsResults->eigenVectors[1]);
-	v2Lbl->setText(output);
+	v2Lbl->setText(output.c_str());
 
 	output = "v3 = " + vectorfToString(statsResults->eigenVectors[2]);
-	v3Lbl->setText(output);
+	v3Lbl->setText(output.c_str());
 
 	EigenBox->setEnabled(true);
 	EigenDisplayCB->setEnabled(true);

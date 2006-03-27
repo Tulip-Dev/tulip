@@ -35,7 +35,7 @@ while test $# -gt 0; do
       echo @VERSION@
       ;;
     --cxxflags)
-      echo -I${includedir}
+      echo -I${includedir} @QT_CPPFLAGS@
       ;;
     --libs)
       echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt

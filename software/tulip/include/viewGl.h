@@ -11,6 +11,7 @@
 #endif
 
 #include <vector>
+#if (QT_REL == 3)
 #include <qlistview.h>
 #include <qtextview.h> 
 #include <qsplitter.h>
@@ -18,6 +19,17 @@
 #include <qstring.h>
 #include <qmainwindow.h>
 #include <qassistantclient.h>
+#else
+#include <Qt3Support/q3listview.h>
+#include <Qt3Support/q3textview.h>
+#include <Qt3Support/q3dockwindow.h>
+#include <Qt3Support/q3popupmenu.h>
+#include <QtGui/qsplitter.h>
+#include <QtCore/qstring.h>
+#include <QtGui/qmainwindow.h>
+#include <QtAssistant/qassistantclient.h>
+#include "tulip/Qt3ForTulip.h"
+#endif
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/SuperGraph.h>
@@ -133,7 +145,7 @@ protected slots:
   void showDialog(int);
   void redrawView();
   void centerView();
-  void updateSatutBar();
+  void updateStatusBar();
   void deselectALL();
   void reverseSelection();
   void delSelection();

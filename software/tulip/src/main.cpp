@@ -13,7 +13,6 @@
 using namespace std;
 int main( int argc, char **argv ) {
   Application tulip( argc, argv );
-  qApp=&tulip;
   /*
     AppStartUp *appStart=new AppStartUp();
     tulip.setMainWidget(appStart);

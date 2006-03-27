@@ -15,7 +15,7 @@ using namespace std;
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-InfoDialog::InfoDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
+InfoDialog::InfoDialog( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
     : InfoDialogForm( parent, name, modal, fl )
 {
   string tmp="Tulip v.";

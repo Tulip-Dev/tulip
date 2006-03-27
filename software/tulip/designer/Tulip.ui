@@ -575,14 +575,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>Action_3</cstring>
-        </property>
-        <property name="text">
-            <string>Unnamed</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>make_connected</cstring>
         </property>
         <property name="text">

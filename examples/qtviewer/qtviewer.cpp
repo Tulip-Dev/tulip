@@ -1,4 +1,8 @@
+#if (QT_REL == 4)
+#include <QtGui/qapplication.h>
+#else
 #include <qapplication.h>
+#endif
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/MouseObject.h>

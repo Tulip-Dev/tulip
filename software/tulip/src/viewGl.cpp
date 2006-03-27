@@ -4,7 +4,6 @@
 #include <config.h>
 #endif
 
-
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -12,6 +11,8 @@
 #include <string>
 #include <map>
 #include <vector>
+
+#if (QT_REL == 3)
 #include <qmessagebox.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
@@ -36,6 +37,39 @@
 #include <qradiobutton.h>
 #include <qprinter.h>
 #include <qtabwidget.h>
+#include <qdesktopwidget.h>
+#else
+#ifdef  _WIN32
+// compilation pb workaround
+#include <windows.h>
+#endif
+#include <QtGui/qmessagebox.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/qfiledialog.h>
+#include <QtGui/qinputdialog.h>
+#include <QtGui/qworkspace.h>
+#include <QtGui/qmenubar.h>
+#include <QtGui/qdesktopwidget.h>
+#include <Qt3Support/q3table.h>
+#include <Qt3Support/q3vbox.h>
+#include <QtGui/qstatusbar.h>
+#include <QtGui/qpixmap.h>
+#include <Qt3Support/q3strlist.h>
+#include <QtGui/qimage.h>
+#include <QtGui/qimagewriter.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qprogressdialog.h>
+#include <Qt3Support/q3dockwindow.h>
+#include <QtGui/qlayout.h>
+#include <QtGui/qcombobox.h>
+#include <QtGui/qcursor.h>
+#include <QtGui/qaction.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qprinter.h>
+#include "tulip/Qt3ForTulip.h"
+#endif
 
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
@@ -77,6 +111,15 @@ using namespace tlp;
 ///Constructor of ViewGl
 viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
+
+#if (QT_REL == 4)
+  // remove strange scories from designer/Tulip.ui
+  Graph->removeAction(Action);
+  Graph->removeAction(menunew_itemAction);
+  // set workspace background
+  workspace->setBackground(QBrush(Ui_TulipData::icon(image1_ID)));
+#endif
+
   Observable::holdObservers();
   glWidget=0;
   gridOptionsWidget=0;
@@ -163,7 +206,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
 #if defined(__APPLE__)
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += "../assistant";
-  assistant = new QAssistantClient(assistantPath, this);
+  assistant = new QAssistantClient(assistantPath.c_str(), this);
 #else
   assistant = new QAssistantClient("", this);
 #endif
@@ -179,7 +222,7 @@ void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
 }
 //**********************************************************************
 void viewGl::enableElements(bool enabled) {
-  enableQPopupMenu(editMenu, enabled);
+  enableQPopupMenu((QPopupMenu *) editMenu, enabled);
   enableQPopupMenu(&stringMenu, enabled);
   enableQPopupMenu(&layoutMenu, enabled);
   enableQPopupMenu(&metricMenu, enabled);
@@ -187,7 +230,7 @@ void viewGl::enableElements(bool enabled) {
   enableQPopupMenu(&intMenu, enabled);
   enableQPopupMenu(&sizesMenu, enabled);
   enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu(clusteringMenu, enabled);
+  enableQPopupMenu((QPopupMenu *) clusteringMenu, enabled);
   enableQPopupMenu(&exportGraphMenu, enabled);
   enableQPopupMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
@@ -286,9 +329,9 @@ void viewGl::startTulip() {
   overviewWidget->view->initializeGL();
   this->show();
   enableElements(false);
-  int argc = ((QApplication *)qApp)->argc();
+  int argc = qApp->argc();
   if (argc>1) {
-    char ** argv = ((QApplication *)qApp)->argv();
+    char ** argv = qApp->argv();
     for (int i=1;i<argc;++i) {
       QFileInfo info(argv[i]);
       QString s = info.absFilePath();
@@ -310,13 +353,14 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
     statsWidget->setGlGraphWidget(glWidget);
 #endif
   }
-  updateSatutBar();
+  updateStatusBar();
   redrawView();
   initObservers();
 }
 //**********************************************************************
 void viewGl::hierarchyChangeSuperGraph(SuperGraph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+  if( !glWidget ) return;
   if (glWidget->getSuperGraph() == graph)  return;
   clearObservers();
   glWidget->setSuperGraph(graph);  
@@ -339,6 +383,9 @@ void viewGl::windowActivated(QWidget *w) {
 GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
+#if (QT_REL == 4)
+  workspace->addWindow(glWidget);
+#endif
   glWidget->setSuperGraph(graph);
   glWidget->move(0,0);
   glWidget->setCaption(name);
@@ -346,8 +393,12 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
+#if (QT_REL == 3)
   glWidget->setFocusPolicy(QWidget::NoFocus);
-  glWidget->setBackgroundMode(QWidget::PaletteBackground);  
+#else
+  glWidget->setFocusPolicy(Qt::NoFocus);
+#endif
+  glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
@@ -361,10 +412,12 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
 	  this, SLOT(showElementProperties()));
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
- 
+
+#if (QT_REL == 3)
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
 
   QToolTip::setWakeUpDelay(2500);
+#endif
 
   changeSuperGraph(graph);
 
@@ -567,7 +620,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       std::string errorMsg = progressBar->getError();
       delete progressBar;
       Observable::unholdObservers();
-      QMessageBox::critical(this, errorTitle, errorMsg);
+      QMessageBox::critical(this, errorTitle.c_str(), errorMsg.c_str());
       return;
     }
     delete progressBar;
@@ -577,6 +630,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       cleanName=cleanName.section('.',-fields.count(), -2);
       newGraph->setAttribute("name", string(cleanName.latin1()));
     }
+
 
     if(noPlugin)
       openFiles[((unsigned int)glW)]=s.latin1();
@@ -715,7 +769,7 @@ void viewGl::setParameters(const DataSet data) {
   propertiesWidget->setSuperGraph(glWidget->getSuperGraph());
 }
 //**********************************************************************
-void viewGl::updateSatutBar() {
+void viewGl::updateStatusBar() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   SuperGraph *graph=clusterTreeWidget->getSuperGraph();
   if (graph==0) return;
@@ -755,12 +809,18 @@ void viewGl::buildMenus(){
     importGraphMenu.insertItem( it4->first.c_str() );
   }
   //Image PopuMenu
+#if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
   char *tmp=listFormat.first();
   while (tmp!=0) {
     exportImageMenu.insertItem(tmp);
     tmp=listFormat.next();
   }
+#else
+  foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
+    exportImageMenu.insertItem(QString(format));
+  }
+#endif
   exportImageMenu.insertItem("EPS");
   //Windows
   dialogMenu.insertItem("Mouse Tool Bar");
@@ -1090,7 +1150,7 @@ void viewGl::restoreView() {
   glWidget->centerScene();
   redrawView();
   overviewWidget->setObservedView(glWidget);
-  updateSatutBar();
+  updateStatusBar();
   Observable::unholdObservers();
 }
 //===========================================================
@@ -1212,7 +1272,7 @@ void viewGl::helpContents() {
 	  << QString( (tlp::TulipDocProfile).c_str());
   
   assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() ){
+  if ( !assistant->isOpen() ){ 
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
     assistant->openAssistant();
   }
@@ -1417,7 +1477,7 @@ void viewGl::changeLayout(int id) {
     Observable::holdObservers();
     glWidget->centerScene();
     overviewWidget->setObservedView(glWidget);
-    updateSatutBar();
+    updateStatusBar();
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );

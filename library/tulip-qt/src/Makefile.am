@@ -7,49 +7,48 @@ else
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 endif
 
-if CYGWIN
-DLL_FLAGS = -no-undefined
-RELEASE = ${VERSION}
-endif
-
 lib_LTLIBRARIES = libtulip-qt.la
+if QT3
 qtplugin_LTLIBRARIES = libTulipWidgets.la
+else
+qtplugin_LTLIBRARIES = libTulipPropertyTablePlugin.la libTulipElementPropertiesPlugin.la libGlGraphWidgetPlugin.la libClusterTreePlugin.la
+endif
 
 INCLUDES = ${DLL_TULIP_QT} @GL_INCLUDES@ @TULIP_QT_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
 AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
+AM_CPPFLAGS= @QT_CPPFLAGS@
 qtplugindir = $(libdir)/tlp/plugins/designer
 
-BUILT_SOURCES = \
-	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
-	moc_PropertyWidgets.cpp \
-	moc_TulipElementPropertiesData.cpp \
-	moc_TulipElementProperties.cpp \
-	moc_FindSelection.cpp \
-	moc_FindSelectionData.cpp \
-	moc_ClusterTreeData.cpp \
-	moc_ClusterTree.cpp
-
+if QT3
 libTulipWidgets_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libTulipWidgets_laINCLUDES = ${DLL_TULIP_QT2}
 
 dist_libTulipWidgets_la_SOURCES = \
 	TulipWidgetsPlugin.cpp
+else
+libTulipPropertyTablePlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libTulipElementPropertiesPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libGlGraphWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libClusterTreePlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+
+libTulipPropertyTablePlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libTulipElementPropertiesPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libGlGraphWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libClusterTreePlugin_laINCLUDES = ${DLL_TULIP_QT2}
+
+dist_libTulipPropertyTablePlugin_la_SOURCES = \
+	TulipPropertyTablePlugin.cpp moc_TulipPropertyTablePlugin.cpp
+dist_libTulipElementPropertiesPlugin_la_SOURCES = \
+	TulipElementPropertiesPlugin.cpp moc_TulipElementPropertiesPlugin.cpp
+dist_libGlGraphWidgetPlugin_la_SOURCES = \
+	GlGraphWidgetPlugin.cpp moc_GlGraphWidgetPlugin.cpp 
+dist_libClusterTreePlugin_la_SOURCES = \
+	ClusterTreePlugin.cpp moc_ClusterTreePlugin.cpp
+endif
 
 libtulip_qt_la_LDFLAGS = -release ${RELEASE}  
 
-nodist_libtulip_qt_la_SOURCES = \
-	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
-	moc_PropertyWidgets.cpp \
-	moc_TulipElementPropertiesData.cpp \
-	moc_TulipElementProperties.cpp \
-	moc_FindSelection.cpp \
-	moc_FindSelectionData.cpp \
-	moc_ClusterTreeData.cpp \
-	FindSelectionData.cpp \
-	moc_ClusterTree.cpp
 
 dist_libtulip_qt_la_SOURCES = \
 	TulipTableWidget.cpp \
@@ -73,8 +72,67 @@ dist_libtulip_qt_la_SOURCES = \
 
 CLEANFILES = $(BUILT_SOURCES)
 
+if QT3
+BUILT_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_PropertyWidgets.cpp \
+	moc_TulipElementPropertiesData.cpp \
+	moc_TulipElementProperties.cpp \
+	moc_FindSelection.cpp \
+	moc_FindSelectionData.cpp \
+	moc_ClusterTreeData.cpp \
+	moc_ClusterTree.cpp
+
+nodist_libtulip_qt_la_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_PropertyWidgets.cpp \
+	moc_TulipElementPropertiesData.cpp \
+	moc_TulipElementProperties.cpp \
+	moc_FindSelection.cpp \
+	moc_FindSelectionData.cpp \
+	moc_ClusterTreeData.cpp \
+	FindSelectionData.cpp \
+	moc_ClusterTree.cpp
+
 moc_%.cpp: ../include/tulip/%.h 
 	$(MOC) -o $@ $<
+else
+BUILT_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_GlGraphWidgetPlugin.cpp \
+	moc_PropertyWidgets.cpp \
+	moc_TulipElementPropertiesData.cpp \
+	moc_TulipElementProperties.cpp \
+	moc_TulipElementPropertiesPlugin.cpp \
+	moc_TulipPropertyTablePlugin.cpp \
+	moc_FindSelection.cpp \
+	moc_FindSelectionData.cpp \
+	moc_ClusterTreeData.cpp \
+	moc_ClusterTree.cpp \
+	moc_ClusterTreePlugin.cpp
+
+nodist_libtulip_qt_la_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_PropertyWidgets.cpp \
+	moc_TulipElementPropertiesData.cpp \
+	moc_TulipElementProperties.cpp \
+	moc_FindSelection.cpp \
+	moc_FindSelectionData.cpp \
+	moc_ClusterTreeData.cpp \
+	FindSelectionData.cpp \
+	moc_ClusterTree.cpp
+
+moc_%.cpp: ../include/tulip/%.h 
+	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
+
+moc_ClusterTree.cpp: ../include/tulip/ClusterTreeQt3.h 
+	$(MOC) ${AM_CPPFLAGS} -o $@ $<
+endif
+
 
 FindSelectionData.cpp: ../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
