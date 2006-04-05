@@ -1,12 +1,11 @@
 #ifndef     __FTFace__
 #define     __FTFace__
 
-#include "FTGL.h"
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include "FTGL.h"
 #include "FTPoint.h"
 #include "FTSize.h"
 
@@ -22,9 +21,9 @@ class FTGL_EXPORT FTFace
         /**
          * Opens and reads a face file. Error is set.
          *
-         * @param filename  font file name.
+         * @param fontFilePath  font file path.
          */
-        FTFace( const char* filename);
+        FTFace( const char* fontFilePath);
 
         /**
          * Read face data from an in-memory buffer. Error is set.
@@ -44,11 +43,11 @@ class FTGL_EXPORT FTFace
         /**
          * Attach auxilliary file to font (e.g., font metrics).
          *
-         * @param filename  auxilliary font file name.
+         * @param fontFilePath  auxilliary font file path.
          * @return          <code>true</code> if file has opened
          *                  successfully.
          */
-        bool Attach( const char* filename);
+        bool Attach( const char* fontFilePath);
 
         /**
          * Attach auxilliary data to font (e.g., font metrics) from memory
@@ -61,10 +60,10 @@ class FTGL_EXPORT FTFace
         bool Attach( const unsigned char *pBufferBytes, size_t bufferSizeInBytes);
 
         /**
-         * Disposes of the face
+         * Get the freetype face object..
+         *
+         * @return pointer to an FT_Face.
          */
-        void Close();
-
         FT_Face* Face() const { return ftFace;}
         
         /**
@@ -79,9 +78,19 @@ class FTGL_EXPORT FTFace
          */
         const FTSize& Size( const unsigned int size, const unsigned int res);
 
-        unsigned int UnitsPerEM() const;
+        /**
+         * Get the number of character maps in this face.
+         *
+         * @return character map count.
+         */
+        unsigned int CharMapCount();
 
-//        FTCharmap* CharMap() const { return charMap;}
+        /**
+         * Get a list of character maps in this face.
+         *
+         * @return pointer to the first encoding.
+         */
+        FT_Encoding* CharMapList();
         
         /**
          * Gets the kerning vector between two glyphs
@@ -91,7 +100,7 @@ class FTGL_EXPORT FTFace
         /**
          * Loads and creates a Freetype glyph.
          */
-        FT_Glyph* Glyph( unsigned int index, FT_Int load_flags);
+        FT_GlyphSlot Glyph( unsigned int index, FT_Int load_flags);
 
         /**
          * Gets the number of glyphs in the current face.
@@ -117,14 +126,16 @@ class FTGL_EXPORT FTFace
         FTSize  charSize;
         
         /**
-         * Temporary variable to hold a glyph
-         */
-        FT_Glyph ftGlyph;
-
-        /**
          * The number of glyphs in this face
          */
         int numGlyphs;
+        
+        FT_Encoding* fontEncodingList;
+
+        /**
+         * This face has kerning tables
+         */
+         bool hasKerningTable;
 
         /**
          * Current error code. Zero means no error.

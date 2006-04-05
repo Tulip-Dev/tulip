@@ -1,7 +1,7 @@
 #include    "FTLibrary.h"
 
 
-FTLibrary&  FTLibrary::Instance()
+const FTLibrary&  FTLibrary::Instance()
 {
     static FTLibrary ftlib;
     return ftlib;

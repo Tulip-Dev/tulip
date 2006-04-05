@@ -21,9 +21,9 @@ class FTGL_EXPORT FTGLPixmapFont : public FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontname  font file name.
+         * @param fontFilePath  font file path.
          */
-        FTGLPixmapFont( const char* fontname);
+        FTGLPixmapFont( const char* fontFilePath);
         
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.

@@ -34,7 +34,7 @@ class FTGL_EXPORT FTLibrary
          * 
          * @return  The global <code>FTLibrary</code> object.
          */
-        static FTLibrary& Instance();
+        static const FTLibrary& Instance();
 
         /**
          * Gets a pointer to the native Freetype library.

@@ -1,9 +1,12 @@
 #include    "FTSize.h"
 
+
 FTSize::FTSize()
 :   ftFace(0),
     ftSize(0),
     size(0),
+    xResolution(0),
+    yResolution(0),
     err(0)
 {}
 
@@ -12,21 +15,30 @@ FTSize::~FTSize()
 {}
 
 
-bool FTSize::CharSize( FT_Face* face, unsigned int point_size, unsigned int x_resolution, unsigned int y_resolution )
+bool FTSize::CharSize( FT_Face* face, unsigned int pointSize, unsigned int xRes, unsigned int yRes )
 {
-	err = FT_Set_Char_Size( *face, 0L, point_size * 64, x_resolution, y_resolution);
-	if( !err)
+    if( size != pointSize || xResolution != xRes || yResolution != yRes)
     {
-        ftFace = face;
-        size = point_size;
-        ftSize = (*ftFace)->size;
+        err = FT_Set_Char_Size( *face, 0L, pointSize * 64, xResolution, yResolution);
+
+        if( !err)
+        {
+            ftFace = face;
+            size = pointSize;
+            xResolution = xRes;
+            yResolution = yRes;
+            ftSize = (*ftFace)->size;
+        }
+        else
+        {
+            ftFace = 0;
+            size = 0;
+            xResolution = 0;
+            yResolution = 0;
+            ftSize = 0;
+        }
     }
-    else
-    {
-        ftFace = 0;
-        size = 0;
-        ftSize = 0;
-    }
+    
     return !err;
 }
 
@@ -88,15 +100,5 @@ float FTSize::Width() const
 float FTSize::Underline() const
 {
     return 0.0f;
-}
-
-unsigned int FTSize::XPixelsPerEm() const
-{
-    return ftSize == 0 ? 0 : ftSize->metrics.x_ppem;
-}
-
-unsigned int FTSize::YPixelsPerEm() const
-{
-    return ftSize == 0 ? 0 : ftSize->metrics.y_ppem;
 }
 

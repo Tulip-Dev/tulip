@@ -27,8 +27,13 @@ class FTGL_EXPORT FTGlyph
     public:
         /**
          * Constructor
+         *
+         * @param glyph The Freetype glyph to be processed
+         * @param useDisplayList Enable or disable the use of Display Lists for this glyph
+         *                       <code>true</code> turns ON display lists.
+         *                       <code>false</code> turns OFF display lists.
          */
-        FTGlyph( FT_Glyph glyph);
+        FTGlyph( FT_GlyphSlot glyph, bool useDisplayList = true);
 
         /**
          * Destructor
@@ -41,14 +46,14 @@ class FTGL_EXPORT FTGlyph
          * @param pen   The current pen position.
          * @return      The advance distance for this glyph.
          */
-        virtual float Render( const FTPoint& pen) = 0;
+        virtual const FTPoint& Render( const FTPoint& pen) = 0;
         
         /**
          * Return the advance width for this glyph.
          *
          * @return  advance width.
          */
-        float Advance() const { return advance;}
+        const FTPoint& Advance() const { return advance;}
         
         /**
          * Return the bounding box for this glyph.
@@ -68,12 +73,19 @@ class FTGL_EXPORT FTGlyph
         /**
          * The advance distance for this glyph
          */
-        float advance;
+        FTPoint advance;
 
         /**
          * The bounding box of this glyph.
          */
         FTBBox bBox;
+        
+        /**
+         * Flag to enable or disable the use of Display Lists inside FTGL
+         * <code>true</code> turns ON display lists.
+         * <code>false</code> turns OFF display lists.
+         */
+        bool useDisplayList;
         
         /**
          * Current error code. Zero means no error.

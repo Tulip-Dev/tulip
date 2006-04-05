@@ -33,7 +33,7 @@ class FTGL_EXPORT FTTextureGlyph : public FTGlyph
          * @param width     The width of the parent texture
          * @param height    The height (number of rows) of the parent texture
          */
-        FTTextureGlyph( FT_Glyph glyph, int id, int xOffset, int yOffset, GLsizei width, GLsizei height);
+        FTTextureGlyph( FT_GlyphSlot glyph, int id, int xOffset, int yOffset, GLsizei width, GLsizei height);
 
         /**
          * Destructor
@@ -46,7 +46,13 @@ class FTGL_EXPORT FTTextureGlyph : public FTGlyph
          * @param pen   The current pen position.
          * @return      The advance distance for this glyph.
          */
-        virtual float Render( const FTPoint& pen);
+        virtual const FTPoint& Render( const FTPoint& pen);
+        
+        /**
+         * Reset the currently active texture to zero to get into a known state before
+         * drawing a string. This is to get round possible threading issues.
+         */
+        static void FTTextureGlyph::ResetActiveTexture(){ activeTextureID = 0;}
         
     private:
         /**
@@ -77,11 +83,10 @@ class FTGL_EXPORT FTTextureGlyph : public FTGlyph
         /**
          * The texture index of the currently active texture
          *
-         * We call glGetIntegerv( GL_TEXTURE_2D_BINDING, activeTextureID);
-         * to get the currently active texture to try to reduce the number
-         * of texture bind operations
+         * We keep track of the currently active texture to try to reduce the number
+         * of texture bind operations.
          */
-        GLint activeTextureID;
+        static GLint activeTextureID;
         
 };
 

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <string> // For memset
 
 #include "FTGLTextureFont.h"
@@ -18,12 +19,11 @@ inline GLuint NextPowerOf2( GLuint in)
 }
 
 
-FTGLTextureFont::FTGLTextureFont( const char* fontname)
-:   FTFont( fontname),
-    maxTextSize(0),
+FTGLTextureFont::FTGLTextureFont( const char* fontFilePath)
+:   FTFont( fontFilePath),
+    maximumGLTextureSize(0),
     textureWidth(0),
     textureHeight(0),
-    numTextures(0),
     glyphHeight(0),
     glyphWidth(0),
     padding(3),
@@ -36,10 +36,9 @@ FTGLTextureFont::FTGLTextureFont( const char* fontname)
 
 FTGLTextureFont::FTGLTextureFont( const unsigned char *pBufferBytes, size_t bufferSizeInBytes)
 :   FTFont( pBufferBytes, bufferSizeInBytes),
-    maxTextSize(0),
+    maximumGLTextureSize(0),
     textureWidth(0),
     textureHeight(0),
-    numTextures(0),
     glyphHeight(0),
     glyphWidth(0),
     padding(3),
@@ -52,24 +51,23 @@ FTGLTextureFont::FTGLTextureFont( const unsigned char *pBufferBytes, size_t buff
 
 FTGLTextureFont::~FTGLTextureFont()
 {
-    glDeleteTextures( numTextures, (const GLuint*)glTextureID);
+    glDeleteTextures( textureIDList.size(), (const GLuint*)&textureIDList[0]);
 }
 
 
 FTGlyph* FTGLTextureFont::MakeGlyph( unsigned int glyphIndex)
 {
-    FT_Glyph* ftGlyph = face.Glyph( glyphIndex, FT_LOAD_NO_HINTING);
+    FT_GlyphSlot ftGlyph = face.Glyph( glyphIndex, FT_LOAD_NO_HINTING);
     
     if( ftGlyph)
     {
         glyphHeight = static_cast<int>( charSize.Height());
         glyphWidth = static_cast<int>( charSize.Width());
         
-        if( numTextures == 0)
+        if( textureIDList.empty())
         {
-            glTextureID[0] = CreateTexture();
+            textureIDList.push_back( CreateTexture());
             xOffset = yOffset = padding;
-            ++numTextures;
         }
         
         if( xOffset > ( textureWidth - glyphWidth))
@@ -79,13 +77,12 @@ FTGlyph* FTGLTextureFont::MakeGlyph( unsigned int glyphIndex)
             
             if( yOffset > ( textureHeight - glyphHeight))
             {
-                glTextureID[numTextures] = CreateTexture();
-                ++numTextures;
+                textureIDList.push_back( CreateTexture());
                 yOffset = padding;
             }
         }
         
-        FTTextureGlyph* tempGlyph = new FTTextureGlyph( *ftGlyph, glTextureID[numTextures - 1],
+        FTTextureGlyph* tempGlyph = new FTTextureGlyph( ftGlyph, textureIDList[textureIDList.size() - 1],
                                                         xOffset, yOffset, textureWidth, textureHeight);
         xOffset += static_cast<int>( tempGlyph->BBox().upperX - tempGlyph->BBox().lowerX + padding);
         
@@ -100,21 +97,19 @@ FTGlyph* FTGLTextureFont::MakeGlyph( unsigned int glyphIndex)
 
 void FTGLTextureFont::CalculateTextureSize()
 {
-    if( !maxTextSize)
+    if( !maximumGLTextureSize)
     {
-        glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*)&maxTextSize);
+        glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*)&maximumGLTextureSize);
+        assert(maximumGLTextureSize); // If you hit this then you have an invalid OpenGL context.
     }
     
     textureWidth = NextPowerOf2( (remGlyphs * glyphWidth) + ( padding * 2));
-    if( textureWidth > maxTextSize)
-    {
-        textureWidth = maxTextSize;
-    }
+    textureWidth = textureWidth > maximumGLTextureSize ? maximumGLTextureSize : textureWidth;
     
     int h = static_cast<int>( (textureWidth - ( padding * 2)) / glyphWidth);
         
     textureHeight = NextPowerOf2( (( numGlyphs / h) + 1) * glyphHeight);
-    textureHeight = textureHeight > maxTextSize ? maxTextSize : textureHeight;
+    textureHeight = textureHeight > maximumGLTextureSize ? maximumGLTextureSize : textureHeight;
 }
 
 
@@ -145,10 +140,10 @@ GLuint FTGLTextureFont::CreateTexture()
 
 bool FTGLTextureFont::FaceSize( const unsigned int size, const unsigned int res)
 {
-    if( numTextures)
+    if( !textureIDList.empty())
     {
-        glDeleteTextures( numTextures, (const GLuint*)glTextureID);
-        numTextures = 0;
+        glDeleteTextures( textureIDList.size(), (const GLuint*)&textureIDList[0]);
+        textureIDList.clear();
         remGlyphs = numGlyphs = face.GlyphCount();
     }
 
@@ -162,6 +157,8 @@ void FTGLTextureFont::Render( const char* string)
     
     glEnable(GL_BLEND);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // GL_ONE
+
+    FTTextureGlyph::ResetActiveTexture();
     
     FTFont::Render( string);
 
@@ -175,6 +172,8 @@ void FTGLTextureFont::Render( const wchar_t* string)
     
     glEnable(GL_BLEND);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // GL_ONE
+    
+    FTTextureGlyph::ResetActiveTexture();
     
     FTFont::Render( string);
     

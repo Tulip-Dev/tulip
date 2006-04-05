@@ -2,12 +2,13 @@
 #include "FTVectoriser.h"
 
 
-FTPolyGlyph::FTPolyGlyph( FT_Glyph glyph)
+FTPolyGlyph::FTPolyGlyph( FT_GlyphSlot glyph, bool useDisplayList)
 :   FTGlyph( glyph),
     glList(0)
 {
     if( ft_glyph_format_outline != glyph->format)
     {
+        err = 0x14; // Invalid_Outline
         return;
     }
 
@@ -17,30 +18,43 @@ FTPolyGlyph::FTPolyGlyph( FT_Glyph glyph)
     {
         return;
     }
-
+    
+    unsigned int horizontalTextureScale = glyph->face->size->metrics.x_ppem * 64;
+    unsigned int verticalTextureScale = glyph->face->size->metrics.y_ppem * 64;        
+        
     vectoriser.MakeMesh( 1.0);
     
-    glList = glGenLists( 1);
-    glNewList( glList, GL_COMPILE);
+    if( useDisplayList)
+    {
+        glList = glGenLists( 1);
+        glNewList( glList, GL_COMPILE);
+    }
 
-        const FTMesh* mesh = vectoriser.GetMesh();
-        for( unsigned int index = 0; index < mesh->TesselationCount(); ++index)
-        {
-            const FTTesselation* subMesh = mesh->Tesselation( index);
-            unsigned int polyonType = subMesh->PolygonType();
+    const FTMesh* mesh = vectoriser.GetMesh();
+    for( unsigned int index = 0; index < mesh->TesselationCount(); ++index)
+    {
+        const FTTesselation* subMesh = mesh->Tesselation( index);
+        unsigned int polyonType = subMesh->PolygonType();
 
-            glBegin( polyonType);
-                for( unsigned int x = 0; x < subMesh->PointCount(); ++x)
-                {
-                    glVertex3f( subMesh->Point(x).x / 64.0f,
-                                subMesh->Point(x).y / 64.0f,
-                                0.0f);
-                }
-            glEnd();
-        }
-    glEndList();
+        glBegin( polyonType);
+            for( unsigned int pointIndex = 0; pointIndex < subMesh->PointCount(); ++pointIndex)
+            {
+                FTPoint point = subMesh->Point(pointIndex);
+                
+                glTexCoord2f( point.X() / horizontalTextureScale,
+                              point.Y() / verticalTextureScale);
+                
+                glVertex3f( point.X() / 64.0f,
+                            point.Y() / 64.0f,
+                            0.0f);
+            }
+        glEnd();
+    }
 
-    FT_Done_Glyph( glyph);
+    if(useDisplayList)
+    {
+        glEndList();
+    }
 }
 
 
@@ -50,13 +64,13 @@ FTPolyGlyph::~FTPolyGlyph()
 }
 
 
-float FTPolyGlyph::Render( const FTPoint& pen)
+const FTPoint& FTPolyGlyph::Render( const FTPoint& pen)
 {
+    glTranslatef(  pen.X(),  pen.Y(), 0.0f);
+
     if( glList)
     {
-        glTranslatef(  pen.x,  pen.y, 0);
         glCallList( glList);    
-        glTranslatef( -pen.x, -pen.y, 0);
     }
     
     return advance;

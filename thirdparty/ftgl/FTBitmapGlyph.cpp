@@ -2,24 +2,23 @@
 
 #include "FTBitmapGlyph.h"
 
-FTBitmapGlyph::FTBitmapGlyph( FT_Glyph glyph)
+FTBitmapGlyph::FTBitmapGlyph( FT_GlyphSlot glyph)
 :   FTGlyph( glyph),
     destWidth(0),
     destHeight(0),
     data(0)
 {
-    err = FT_Glyph_To_Bitmap( &glyph, ft_render_mode_mono, 0, 1);
+    err = FT_Render_Glyph( glyph, FT_RENDER_MODE_MONO);
     if( err || ft_glyph_format_bitmap != glyph->format)
     {
         return;
     }
 
-    FT_BitmapGlyph  bitmap = (FT_BitmapGlyph)glyph;
-    FT_Bitmap*      source = &bitmap->bitmap;
+    FT_Bitmap bitmap = glyph->bitmap;
 
-    unsigned int srcWidth = source->width;
-    unsigned int srcHeight = source->rows;
-    unsigned int srcPitch = source->pitch;
+    unsigned int srcWidth = bitmap.width;
+    unsigned int srcHeight = bitmap.rows;
+    unsigned int srcPitch = bitmap.pitch;
     
     destWidth = srcWidth;
     destHeight = srcHeight;
@@ -30,7 +29,7 @@ FTBitmapGlyph::FTBitmapGlyph( FT_Glyph glyph)
         data = new unsigned char[destPitch * destHeight];
         unsigned char* dest = data + (( destHeight - 1) * destPitch);
 
-        unsigned char* src = source->buffer;
+        unsigned char* src = bitmap.buffer;
 
         for( unsigned int y = 0; y < srcHeight; ++y)
         {
@@ -39,11 +38,8 @@ FTBitmapGlyph::FTBitmapGlyph( FT_Glyph glyph)
             src += srcPitch;
         }
     }
-    
-    pos.x = bitmap->left;
-    pos.y = static_cast<int>(srcHeight) - bitmap->top;
 
-    FT_Done_Glyph( glyph );
+    pos = FTPoint(glyph->bitmap_left, static_cast<int>(srcHeight) - glyph->bitmap_top, 0.0);
 }
 
 
@@ -53,17 +49,17 @@ FTBitmapGlyph::~FTBitmapGlyph()
 }
 
 
-float FTBitmapGlyph::Render( const FTPoint& pen)
+const FTPoint& FTBitmapGlyph::Render( const FTPoint& pen)
 {
+    glBitmap( 0, 0, 0.0f, 0.0f, pen.X() + pos.X(), pen.Y() - pos.Y(), (const GLubyte*)0 );
+    
     if( data)
     {
-        glBitmap( 0, 0, 0.0, 0.0, pen.x + pos.x, pen.y - pos.y, (const GLubyte*)0 );
-
         glPixelStorei( GL_UNPACK_ROW_LENGTH, destPitch * 8);
         glBitmap( destWidth, destHeight, 0.0f, 0.0, 0.0, 0.0, (const GLubyte*)data);
-
-        glBitmap( 0, 0, 0.0, 0.0, -pen.x - pos.x, -pen.y + pos.y, (const GLubyte*)0 );
     }
+    
+    glBitmap( 0, 0, 0.0f, 0.0f, -pos.X(), pos.Y(), (const GLubyte*)0 );
     
     return advance;
 }

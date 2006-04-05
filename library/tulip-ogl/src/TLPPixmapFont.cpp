@@ -1,5 +1,5 @@
-#include    "tulip/TLPPixmapFont.h"
 #include    "tulip/TLPPixmapGlyph.h"
+#include    "tulip/TLPPixmapFont.h"
 
 
 TLPPixmapFont::TLPPixmapFont( const char* fontname)
@@ -17,9 +17,9 @@ TLPPixmapFont::~TLPPixmapFont()
 
 
 FTGlyph* TLPPixmapFont::MakeGlyph( unsigned int g) {
-    FT_Glyph* ftGlyph = face.Glyph( g, FT_LOAD_NO_HINTING);
+    FT_GlyphSlot ftGlyph = face.Glyph( g, FT_LOAD_NO_HINTING);
     if( ftGlyph) {
-        TLPPixmapGlyph* tempGlyph = new TLPPixmapGlyph( *ftGlyph);
+        TLPPixmapGlyph* tempGlyph = new TLPPixmapGlyph(ftGlyph);
         return tempGlyph;
     }
     err = face.Error();

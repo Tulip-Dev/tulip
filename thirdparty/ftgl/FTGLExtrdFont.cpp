@@ -2,8 +2,8 @@
 #include    "FTExtrdGlyph.h"
 
 
-FTGLExtrdFont::FTGLExtrdFont( const char* fontname)
-:   FTFont( fontname),
+FTGLExtrdFont::FTGLExtrdFont( const char* fontFilePath)
+:   FTFont( fontFilePath),
     depth( 0.0f)
 {}
 
@@ -20,11 +20,11 @@ FTGLExtrdFont::~FTGLExtrdFont()
 
 FTGlyph* FTGLExtrdFont::MakeGlyph( unsigned int glyphIndex)
 {
-    FT_Glyph* ftGlyph = face.Glyph( glyphIndex, FT_LOAD_NO_HINTING);
+    FT_GlyphSlot ftGlyph = face.Glyph( glyphIndex, FT_LOAD_NO_HINTING);
 
     if( ftGlyph)
     {
-        FTExtrdGlyph* tempGlyph = new FTExtrdGlyph( *ftGlyph, depth);
+        FTExtrdGlyph* tempGlyph = new FTExtrdGlyph( ftGlyph, depth, useDisplayLists);
         return tempGlyph;
     }
 

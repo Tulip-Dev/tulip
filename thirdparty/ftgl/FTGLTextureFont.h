@@ -2,6 +2,7 @@
 #define     __FTGLTextureFont__
 
 #include "FTFont.h"
+#include "FTVector.h"
 #include "FTGL.h"
 
 class FTTextureGlyph;
@@ -19,9 +20,9 @@ class  FTGL_EXPORT FTGLTextureFont : public FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontname  font file name.
+         * @param fontFilePath  font file path.
          */
-        FTGLTextureFont( const char* fontname);
+        FTGLTextureFont( const char* fontFilePath);
         
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.
@@ -92,7 +93,7 @@ class  FTGL_EXPORT FTGLTextureFont : public FTFont
         /**
          * The maximum texture dimension on this OpenGL implemetation
          */
-        GLsizei maxTextSize;
+        GLsizei maximumGLTextureSize;
         
         /**
          * The minimum texture width required to hold the glyphs
@@ -107,13 +108,8 @@ class  FTGL_EXPORT FTGLTextureFont : public FTFont
         /**
          *An array of texture ids
          */
-        GLuint glTextureID[128];
+         FTVector<GLuint> textureIDList;
         
-        /**
-         * The number of textures required to hold the glyphs
-         */
-        unsigned int numTextures;
-
         /**
          * The max height for glyphs in the current font
          */

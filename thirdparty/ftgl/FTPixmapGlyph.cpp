@@ -1,85 +1,51 @@
 #include    "FTPixmapGlyph.h"
 
-FTPixmapGlyph::FTPixmapGlyph( FT_Glyph glyph)
+FTPixmapGlyph::FTPixmapGlyph( FT_GlyphSlot glyph)
 :   FTGlyph( glyph),
     destWidth(0),
     destHeight(0),
     data(0)
 {
-    // This function will always fail if the glyph's format isn't scalable????
-    err = FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1);
+    err = FT_Render_Glyph( glyph, FT_RENDER_MODE_NORMAL);
     if( err || ft_glyph_format_bitmap != glyph->format)
     {
         return;
     }
 
-    FT_BitmapGlyph  bitmap = (FT_BitmapGlyph)glyph;
-    FT_Bitmap*      source = &bitmap->bitmap;
+    FT_Bitmap bitmap = glyph->bitmap;
 
     //check the pixel mode
     //ft_pixel_mode_grays
         
-    int srcWidth = source->width;
-    int srcHeight = source->rows;
+    int srcWidth = bitmap.width;
+    int srcHeight = bitmap.rows;
     
-   // FIXME What about dest alignment?
     destWidth = srcWidth;
     destHeight = srcHeight;
     
     if( destWidth && destHeight)
     {
-        data = new unsigned char[destWidth * destHeight * 4];
-    
-        // Get the current glColor.
-        float ftglColour[4];
-        glGetFloatv( GL_CURRENT_COLOR, ftglColour);
+        data = new unsigned char[destWidth * destHeight * 2];
+        unsigned char* src = bitmap.buffer;
 
-        unsigned char redComponent =   static_cast<unsigned char>( ftglColour[0] * 255.0f);
-        unsigned char greenComponent = static_cast<unsigned char>( ftglColour[1] * 255.0f);
-        unsigned char blueComponent =  static_cast<unsigned char>( ftglColour[2] * 255.0f);
+        unsigned char* dest = data + ((destHeight - 1) * destWidth * 2);
+        size_t destStep = destWidth * 2 * 2;
 
-        unsigned char* src = source->buffer;
-
-        unsigned char* dest = data + ((destHeight - 1) * destWidth) * 4;
-        size_t destStep = destWidth * 4 * 2;
-
-        if( ftglColour[3] == 1.0f)
+        for( int y = 0; y < srcHeight; ++y)
         {
-            for( int y = 0; y < srcHeight; ++y)
+            for( int x = 0; x < srcWidth; ++x)
             {
-                for( int x = 0; x < srcWidth; ++x)
-                {
-                    *dest++ = redComponent;
-                    *dest++ = greenComponent;
-                    *dest++ = blueComponent;
-                    *dest++ = *src++;
-                }
-                dest -= destStep;
+                *dest++ = static_cast<unsigned char>(255);
+                *dest++ = *src++;
             }
-        }
-        else
-        {
-            for( int y = 0; y < srcHeight; ++y)
-            {
-                for( int x = 0; x < srcWidth; ++x)
-                {
-                    *dest++ = redComponent;
-                    *dest++ = greenComponent;
-                    *dest++ = blueComponent;
-                    *dest++ = static_cast<unsigned char>(ftglColour[3] * *src++);
-                }
-                dest -= destStep;
-            }
+            dest -= destStep;
         }
 
         destHeight = srcHeight;
     }
 
-    pos.x = bitmap->left;
-    pos.y = srcHeight - bitmap->top;
-    
-    // Is this the right place to do this?
-    FT_Done_Glyph( glyph );
+    pos.X(glyph->bitmap_left);
+    pos.Y(srcHeight - glyph->bitmap_top);
 }
 
 
@@ -89,20 +55,19 @@ FTPixmapGlyph::~FTPixmapGlyph()
 }
 
 
-float FTPixmapGlyph::Render( const FTPoint& pen)
+const FTPoint& FTPixmapGlyph::Render( const FTPoint& pen)
 {
+    glBitmap( 0, 0, 0.0f, 0.0f, pen.X() + pos.X(), pen.Y() - pos.Y(), (const GLubyte*)0);
+    
     if( data)
     {
-        // Move the glyph origin
-        glBitmap( 0, 0, 0.0f, 0.0f, pen.x + pos.x, pen.y - pos.y, (const GLubyte*)0);
-
         glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
+        glPixelStorei( GL_UNPACK_ALIGNMENT, 2);
 
-        glDrawPixels( destWidth, destHeight, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid*)data);
-        
-        // Restore the glyph origin
-        glBitmap( 0, 0, 0.0f, 0.0f, -pen.x - pos.x, -pen.y + pos.y, (const GLubyte*)0);
+        glDrawPixels( destWidth, destHeight, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, (const GLvoid*)data);
     }
+        
+    glBitmap( 0, 0, 0.0f, 0.0f, -pos.X(), pos.Y(), (const GLubyte*)0);
 
     return advance;
 }

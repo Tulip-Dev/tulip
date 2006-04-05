@@ -20,9 +20,9 @@ class FTGL_EXPORT FTGLOutlineFont : public FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontname  font file name.
+         * @param fontFilePath  font file path.
          */
-        FTGLOutlineFont( const char* fontname);
+        FTGLOutlineFont( const char* fontFilePath);
         
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.

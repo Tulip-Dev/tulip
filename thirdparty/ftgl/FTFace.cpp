@@ -3,19 +3,15 @@
 
 #include FT_TRUETYPE_TABLES_H
 
-// MAC PORT
-#ifndef FT_OPEN_MEMORY
-#define FT_OPEN_MEMORY ((FT_Open_Flags) 1)
-#endif
-
-FTFace::FTFace( const char* filename)
+FTFace::FTFace( const char* fontFilePath)
 :   numGlyphs(0),
+    fontEncodingList(0),
     err(0)
 {
     const FT_Long DEFAULT_FACE_INDEX = 0;
     ftFace = new FT_Face;
 
-    err = FT_New_Face( *FTLibrary::Instance().GetLibrary(), filename, DEFAULT_FACE_INDEX, ftFace);
+    err = FT_New_Face( *FTLibrary::Instance().GetLibrary(), fontFilePath, DEFAULT_FACE_INDEX, ftFace);
 
     if( err)
     {
@@ -25,6 +21,7 @@ FTFace::FTFace( const char* filename)
     else
     {
         numGlyphs = (*ftFace)->num_glyphs;
+        hasKerningTable = FT_HAS_KERNING((*ftFace));
     }
 }
 
@@ -52,13 +49,18 @@ FTFace::FTFace( const unsigned char *pBufferBytes, size_t bufferSizeInBytes)
 
 FTFace::~FTFace()
 {
-    Close();
+    if( ftFace)
+    {
+        FT_Done_Face( *ftFace);
+        delete ftFace;
+        ftFace = 0;
+    }
 }
 
 
-bool FTFace::Attach( const char* filename)
+bool FTFace::Attach( const char* fontFilePath)
 {
-    err = FT_Attach_File( *ftFace, filename);
+    err = FT_Attach_File( *ftFace, fontFilePath);
     return !err;
 }
 
@@ -76,28 +78,33 @@ bool FTFace::Attach( const unsigned char *pBufferBytes, size_t bufferSizeInBytes
 }
 
 
-void FTFace::Close()
-{
-    if( ftFace)
-    {
-        FT_Done_Face( *ftFace);
-        delete ftFace;
-        ftFace = 0;
-    }
-}
-
-
 const FTSize& FTFace::Size( const unsigned int size, const unsigned int res)
 {
     charSize.CharSize( ftFace, size, res, res);
     err = charSize.Error();
+
     return charSize;
 }
 
 
-unsigned int FTFace::UnitsPerEM() const
+unsigned int FTFace::CharMapCount()
 {
-    return (*ftFace)->units_per_EM;
+    return (*ftFace)->num_charmaps;
+}
+
+
+FT_Encoding* FTFace::CharMapList()
+{
+    if( 0 == fontEncodingList)
+    {
+        fontEncodingList = new FT_Encoding[CharMapCount()];
+        for( size_t encodingIndex = 0; encodingIndex < CharMapCount(); ++encodingIndex)
+        {
+            fontEncodingList[encodingIndex] = (*ftFace)->charmaps[encodingIndex]->encoding;
+        }
+    }
+    
+    return fontEncodingList;
 }
 
 
@@ -106,7 +113,7 @@ FTPoint FTFace::KernAdvance( unsigned int index1, unsigned int index2)
     float x, y;
     x = y = 0.0f;
 
-    if( FT_HAS_KERNING((*ftFace)) && index1 && index2)
+    if( hasKerningTable && index1 && index2)
     {
         FT_Vector kernAdvance;
         kernAdvance.x = kernAdvance.y = 0;
@@ -123,20 +130,14 @@ FTPoint FTFace::KernAdvance( unsigned int index1, unsigned int index2)
 }
 
 
-FT_Glyph* FTFace::Glyph( unsigned int index, FT_Int load_flags)
+FT_GlyphSlot FTFace::Glyph( unsigned int index, FT_Int load_flags)
 {
     err = FT_Load_Glyph( *ftFace, index, load_flags);
     if( err)
     {
         return NULL;
     }
-    
-    err = FT_Get_Glyph( (*ftFace)->glyph, &ftGlyph);
-    if( err)
-    {
-        return NULL;
-    }
 
-    return &ftGlyph;
+    return (*ftFace)->glyph;
 }
 

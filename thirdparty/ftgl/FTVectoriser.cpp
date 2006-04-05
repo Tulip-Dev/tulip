@@ -7,13 +7,12 @@
 
 #ifdef __APPLE_CC__    
     typedef GLvoid (*GLUTesselatorFunction)(...);
-#elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun )
+#elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
     typedef GLvoid (*GLUTesselatorFunction)();
 #elif defined ( WIN32)
     typedef GLvoid (CALLBACK *GLUTesselatorFunction)( );
 #else
-    typedef GLvoid (*GLUTesselatorFunction)();
-//    #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
+    #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
 #endif
 
 
@@ -32,8 +31,8 @@ void CALLBACK ftglVertex( void* data, FTMesh* mesh)
 
 void CALLBACK ftglCombine( FTGL_DOUBLE coords[3], void* vertex_data[4], GLfloat weight[4], void** outData, FTMesh* mesh)
 {
-    FTGL_DOUBLE* vertex = static_cast<FTGL_DOUBLE*>(coords);
-    *outData = mesh->Combine( vertex[0], vertex[1], vertex[2]);
+    const FTGL_DOUBLE* vertex = static_cast<const FTGL_DOUBLE*>(coords);
+    *outData = const_cast<FTGL_DOUBLE*>(mesh->Combine( vertex[0], vertex[1], vertex[2]));
 }
         
 
@@ -74,10 +73,10 @@ void FTMesh::AddPoint( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUB
 }
 
 
-FTGL_DOUBLE* FTMesh::Combine( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z)
+const FTGL_DOUBLE* FTMesh::Combine( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z)
 {
     tempPointList.push_back( FTPoint( x, y,z));
-    return &tempPointList.back().x;
+    return static_cast<const FTGL_DOUBLE*>(tempPointList.back());
 }
 
 
@@ -99,7 +98,7 @@ const FTTesselation* const FTMesh::Tesselation( unsigned int index) const
 }
 
 
-FTVectoriser::FTVectoriser( const FT_Glyph glyph)
+FTVectoriser::FTVectoriser( const FT_GlyphSlot glyph)
 :   contourList(0),
     mesh(0),
     ftContourCount(0),
@@ -107,12 +106,11 @@ FTVectoriser::FTVectoriser( const FT_Glyph glyph)
 {
     if( glyph)
     {
-        FT_OutlineGlyph outline = (FT_OutlineGlyph)glyph;
-        ftOutline = outline->outline;
+        outline = glyph->outline;
         
-        ftContourCount = ftOutline.n_contours;;
+        ftContourCount = outline.n_contours;
         contourList = 0;
-        contourFlag = ftOutline.flags;
+        contourFlag = outline.flags;
         
         ProcessContours();
     }
@@ -141,10 +139,10 @@ void FTVectoriser::ProcessContours()
     
     for( short contourIndex = 0; contourIndex < ftContourCount; ++contourIndex)
     {
-        FT_Vector* pointList = &ftOutline.points[startIndex];
-        char* tagList = &ftOutline.tags[startIndex];
+        FT_Vector* pointList = &outline.points[startIndex];
+        char* tagList = &outline.tags[startIndex];
         
-        endIndex = ftOutline.contours[contourIndex];
+        endIndex = outline.contours[contourIndex];
         contourLength =  ( endIndex - startIndex) + 1;
 
         FTContour* contour = new FTContour( pointList, tagList, contourLength);
@@ -213,8 +211,8 @@ void FTVectoriser::MakeMesh( FTGL_DOUBLE zNormal)
             
                 for( size_t p = 0; p < contour->PointCount(); ++p)
                 {
-                    FTGL_DOUBLE* d = const_cast<FTGL_DOUBLE*>(&contour->Point(p).x);
-                    gluTessVertex( tobj, d, d);
+                    const FTGL_DOUBLE* d = contour->Point(p);
+                    gluTessVertex( tobj, (GLdouble*)d, (GLdouble*)d);
                 }
 
             gluTessEndContour( tobj);

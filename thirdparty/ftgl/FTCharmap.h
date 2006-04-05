@@ -18,7 +18,7 @@
  * It doesn't preprocess all indices, only on an as needed basis. This may
  * seem like a performance penalty but it is quicker than using the 'raw'
  * freetype calls and will save significant amounts of memory when dealing
- * with uncode encoding
+ * with unicode encoding
  *
  * @see "Freetype 2 Documentation" 
  *
@@ -69,7 +69,7 @@ class FTGL_EXPORT FTCharmap
          *                  unavailable it will be set to ft_encoding_none.
          */
         bool CharMap( FT_Encoding encoding);
-
+        
         /**
          * Get the FTGlyphContainer index of the input character.
          *
@@ -78,7 +78,16 @@ class FTGL_EXPORT FTCharmap
          * @return      The FTGlyphContainer index for the character or zero
          *              if it wasn't found
          */
-        unsigned int CharIndex( const unsigned int characterCode);
+        unsigned int GlyphListIndex( const unsigned int characterCode);
+
+        /**
+         * Get the font glyph index of the input character.
+         *
+         * @param characterCode The character code of the requested glyph in
+         *                      the current encoding eg apple roman.
+         * @return      The glyph index for the character.
+         */
+        unsigned int FontIndex( const unsigned int characterCode);
 
         /**
          * Set the FTGlyphContainer index of the character code.
@@ -89,15 +98,6 @@ class FTGL_EXPORT FTCharmap
          *                       character code.
          */
         void InsertIndex( const unsigned int characterCode, const unsigned int containerIndex);
-
-        /**
-         * Get the font glyph index of the input character.
-         *
-         * @param characterCode The character code of the requested glyph in
-         *                      the current encoding eg apple roman.
-         * @return      The glyph index for the character.
-         */
-        unsigned int GlyphIndex( const unsigned int characterCode);
 
         /**
          * Queries for errors.

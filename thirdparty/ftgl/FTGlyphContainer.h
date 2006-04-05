@@ -45,13 +45,13 @@ class FTGL_EXPORT FTGlyphContainer
         bool CharMap( FT_Encoding encoding);
 
         /**
-         * Get the glyph index of the input character.
+         * Get the font index of the input character.
          *
          * @param characterCode The character code of the requested glyph in the
          *                      current encoding eg apple roman.
-         * @return      The glyph index for the character.
+         * @return      The font index for the character.
          */
-        unsigned int GlyphIndex( const unsigned int characterCode ) const;
+        unsigned int FontIndex( const unsigned int characterCode ) const;
         
         /**
          * Adds a glyph to this glyph list.

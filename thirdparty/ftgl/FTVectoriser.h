@@ -94,42 +94,42 @@ class FTGL_EXPORT FTMesh
         ~FTMesh();
         
         /**
-         *
+         * Add a point to the mesh
          */
         void AddPoint( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z);
         
         /**
-         *
+         *  Create a combine point for the gluTesselator
          */
-        FTGL_DOUBLE* Combine( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z);
+        const FTGL_DOUBLE* Combine( const FTGL_DOUBLE x, const FTGL_DOUBLE y, const FTGL_DOUBLE z);
         
         /**
-         *
+         * Begin a new polygon
          */
         void Begin( GLenum meshType);
         
         /**
-         *
+         * End a polygon
          */
         void End();
         
         /**
-         *
+         * Record a gluTesselation error
          */
         void Error( GLenum e) { err = e;}
         
         /**
-         *
+         * The number of tesselations in the mesh
          */
         unsigned int TesselationCount() const { return tesselationList.size();}
 
         /**
-         *
+         * Get a tesselation by index
          */
         const FTTesselation* const Tesselation( unsigned int index) const;
         
         /**
-         *
+         * Return the temporary point list. For testing only.
          */
         const PointList& TempPointList() const { return tempPointList;}
 
@@ -161,7 +161,8 @@ class FTGL_EXPORT FTMesh
 
 };
 
-
+const FTGL_DOUBLE FTGL_FRONT_FACING = 1.0;
+const FTGL_DOUBLE FTGL_BACK_FACING = -1.0;
 
 /**
  * FTVectoriser class is a helper class that converts font outlines into
@@ -182,7 +183,7 @@ class FTGL_EXPORT FTVectoriser
          *
          * @param glyph The freetype glyph to be processed
          */
-        FTVectoriser( const FT_Glyph glyph);
+        FTVectoriser( const FT_GlyphSlot glyph);
 
         /**
          *  Destructor
@@ -195,7 +196,7 @@ class FTGL_EXPORT FTVectoriser
          * @param zNormal   The direction of the z axis of the normal
          *                  for this mesh
          */
-        void MakeMesh( FTGL_DOUBLE zNormal = 1.0);
+        void MakeMesh( FTGL_DOUBLE zNormal = FTGL_FRONT_FACING);
         
         /**
          * Get the current mesh.
@@ -267,7 +268,7 @@ class FTGL_EXPORT FTVectoriser
         /**
          * A Freetype outline
          */
-        FT_Outline ftOutline;
+        FT_Outline outline;
 };
 
 

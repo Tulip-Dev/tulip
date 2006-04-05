@@ -21,7 +21,8 @@ class FTGlyph;
  * appropriate type.
  *
  * It is good practice after using these functions to test the error
- * code returned. <code>FT_Error Error()</code>
+ * code returned. <code>FT_Error Error()</code>. Check the freetype file fterrdef.h
+ * for error definitions.
  *
  * @see     FTFace
  * @see     FTSize
@@ -34,12 +35,14 @@ class FTGL_EXPORT FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontname  font file name.
+         * @param fontFilePath  font file path.
          */
-        FTFont( const char* fontname);
+        FTFont( const char* fontFilePath);
         
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.
+         * The buffer is owned by the client and is NOT copied by FTGL. The
+         * pointer must be valid while using FTGL.
          *
          * @param pBufferBytes  the in-memory buffer
          * @param bufferSizeInBytes  the length of the buffer in bytes
@@ -56,11 +59,11 @@ class FTGL_EXPORT FTFont
          *
          * Note: not all font formats implement this function.
          *
-         * @param filename  auxilliary font file name.
+         * @param fontFilePath  auxilliary font file path.
          * @return          <code>true</code> if file has been attached
          *                  successfully.
          */
-        bool Attach( const char* filename);
+        bool Attach( const char* fontFilePath);
 
         /**
          * Attach auxilliary data to font e.g font metrics, from memory
@@ -82,6 +85,20 @@ class FTGL_EXPORT FTFont
          *                      set correctly
          */
         bool CharMap( FT_Encoding encoding );
+
+        /**
+         * Get the number of character maps in this face.
+         *
+         * @return character map count.
+         */
+        unsigned int CharMapCount();
+
+        /**
+         * Get a list of character maps in this face.
+         *
+         * @return pointer to the first encoding.
+         */
+        FT_Encoding* CharMapList();
         
         /**
          * Set the char size for the current face.
@@ -103,10 +120,18 @@ class FTGL_EXPORT FTFont
          * Set the extrusion distance for the font. Only implemented by
          * FTGLExtrdFont
          *
-         * @param d  The extrusion distance.
+         * @param depth  The extrusion distance.
          */
-        virtual void Depth( float d){}
+        virtual void Depth( float depth){}
 
+        /**
+         * Enable or disable the use of Display Lists inside FTGL
+         *
+         * @param  useList <code>true</code> turns ON display lists.
+         *                 <code>false</code> turns OFF display lists.
+         */
+        void UseDisplayList( bool useList);
+        
         /**
          * Get the global ascender height for the face.
          *
@@ -120,7 +145,14 @@ class FTGL_EXPORT FTFont
          * @return  Descender height
          */
         float Descender() const;
-
+        
+        /**
+         * Gets the line spacing for the font.
+         *
+         * @return  Line height
+         */
+        float LineHeight() const;
+        
         /**
          * Get the bounding box for a string.
          *
@@ -207,26 +239,25 @@ class FTGL_EXPORT FTFont
         FTSize charSize;
 
         /**
+         * Flag to enable or disable the use of Display Lists inside FTGL
+         * <code>true</code> turns ON display lists.
+         * <code>false</code> turns OFF display lists.
+         */
+        bool useDisplayLists;
+
+        /**
          * Current error code. Zero means no error.
          */
         FT_Error err;
         
     private:        
         /**
-         * Render a character
-         * This function does an implicit conversion on it's arguments.
-         * 
-         * @param chr       current character
-         * @param nextChr   next character
-         */
-        inline void DoRender( const unsigned int chr, const unsigned int nextChr);
-        
-        /**
          * Check that the glyph at <code>chr</code> exist. If not load it.
          *
          * @param chr  character index
+         * @return <code>true</code> if the glyph can be created.
          */
-        inline void CheckGlyph( const unsigned int chr);
+        inline bool CheckGlyph( const unsigned int chr);
 
         /**
          * An object that holds a list of glyphs
@@ -237,6 +268,7 @@ class FTGL_EXPORT FTFont
          * Current pen or cursor position;
          */
         FTPoint pen;
+        
 };
 
 
