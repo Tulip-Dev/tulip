@@ -39,6 +39,8 @@ namespace {
   };
 }
 
+// error msg for invalid range value
+static const char* rangeErrorMsg = "max size must be greater than min size";
 
 /** \addtogroup size */
 /*@{*/
@@ -76,15 +78,13 @@ public:
     } delete itN;
   }
 
-  bool run() {
-    string metricS="viewMetric";
-    string sizeS="viewSize";
-    bool mappingType = true;
+  bool check(std::string &errorMsg) {
     xaxis=yaxis=zaxis=true;
     min=1;
     max=10;
     entryMetric=superGraph->getProperty<MetricProxy>("viewMetric");
     entrySize=superGraph->getProperty<SizesProxy>("viewSize");
+    mappingType = true;
     if ( dataSet!=0 ) {
       dataSet->get("property",entryMetric);
       dataSet->get("input",entrySize);
@@ -95,24 +95,37 @@ public:
       dataSet->get("max size",max);
       dataSet->get("type",mappingType);
     }
+    if (min >= max) {
+      /*cerr << rangeErrorMsg << endl;
+	pluginProgress->setError(rangeErrorMsg); */
+      errorMsg = std::string(rangeErrorMsg);
+      return false;
+    }
+  }
+
+  bool run() {
+    string metricS="viewMetric";
+    string sizeS="viewSize";
+
+    MetricProxy *tmp = 0;
     if (!mappingType) {
-      MetricProxy *tmp=superGraph->getLocalProperty<MetricProxy>("tmpUni");
-      *tmp=*entryMetric;
+      tmp = new MetricProxy(superGraph);
+      *tmp = *entryMetric;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
     sizesProxy->setAllEdgeValue(Size(0.25,0.25,0.25));
-    range=entryMetric->getNodeMax(superGraph)-entryMetric->getNodeMin(superGraph);
+    range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
     shift=entryMetric->getNodeMin(superGraph);
     computeNodeSize();
-    if (!mappingType) superGraph->delLocalProperty("tmpUni");
+    if (!mappingType) delete tmp;
     return true;
   }
 
 private:
   MetricProxy *entryMetric;
   SizesProxy *entrySize;
-  bool xaxis,yaxis,zaxis;
+  bool xaxis,yaxis,zaxis,mappingType;
   double min,max;
   double range;
   double shift;
