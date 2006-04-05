@@ -4,6 +4,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
+plugins_builddir=@TULIP_PLUGINS_BUILD_PATH@
 
 usage()
 {
@@ -13,9 +14,13 @@ Options:
 	--version
 	--libs
 	--cxxflags
+	--glincludes
         --pluginpath
         --qtlibs
         --qtincludes
+	--glyph_objs
+	--import_tlp_obj
+	
 EOF
     exit $1
 }
@@ -37,6 +42,12 @@ while test $# -gt 0; do
     --cxxflags)
       echo -I${includedir} @QT_CPPFLAGS@
       ;;
+    --glincludes)
+      echo @GL_INCLUDES@
+      ;;
+    --gllibs)
+      echo @GL_LDFLAGS@ @LIB_GL@
+      ;;
     --libs)
       echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt
       ;;
@@ -48,6 +59,12 @@ while test $# -gt 0; do
       ;;
     --qtincludes)
       echo @QT_INCLUDES@
+      ;;
+    --glyph_objs)
+      echo `ls ${plugins_builddir}/glyph/*.o`
+      ;;
+    --import_tlp_obj)
+      echo ${plugins_builddir}/import/TLPImport.o
       ;;
     *)
       usage

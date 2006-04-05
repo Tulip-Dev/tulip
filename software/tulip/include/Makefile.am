@@ -27,7 +27,6 @@ nodist_noinst_HEADERS = \
 noinst_HEADERS = \
 	Overview.h\
 	ElementInfoToolTip.h \
-	AppDialog.h\
 	Application.h\
 	AppStartUp.h\
 	geometrie2D.h\

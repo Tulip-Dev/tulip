@@ -56,7 +56,7 @@ namespace {
   };
 }
 //=============================================================================
-const std::string ORIENTATION("vertical;horizontal;");
+#define ORIENTATION "vertical;horizontal;"
 //=============================================================================
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
   Layout(context),

@@ -55,7 +55,7 @@ namespace {
   };
 }
 //================================================================================
-const std::string ORIENTATION("horizontal;vertical;");
+#define ORIENTATION "horizontal;vertical;"
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");

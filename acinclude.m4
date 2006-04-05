@@ -423,7 +423,7 @@ else
   then
     LIB_GL="-framework OpenGL"
   else
-    LIB_GL="-lGLU -lGL -lXi -lXmu"
+    LIB_GL="-lGLU -lGL"
   fi
 fi
 AC_SUBST(LIB_GL)

@@ -25,24 +25,20 @@ bool TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::st
 }
 
 template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(PluginLoader *loader) {
-  Plugin *tmpObjectFactory=(Plugin *)createObj();
-  if(dynamic_cast< ObjectFactory* >(tmpObjectFactory) != 0) {
-    ObjectFactory *objectFactory=(ObjectFactory *)tmpObjectFactory;
-    objNames.insert(objectFactory->getName());
-    objMap[objectFactory->getName()]=objectFactory;
-    if (loader!=0) loader->loaded(
-				  objectFactory->getName(),
-				  objectFactory->getAuthor(),
-				  objectFactory->getDate(),
-				  objectFactory->getInfo(),
-				  objectFactory->getRelease(),
-				  objectFactory->getVersion()
-				  );
-    Parameter p = Parameter();
-    WithParameter *withParam=objectFactory->createObject(p);
-    objParam[objectFactory->getName()]=withParam->getParameters();
-  }
+void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
+  objNames.insert(objectFactory->getName());
+  objMap[objectFactory->getName()]=objectFactory;
+  if (currentLoader!=0) currentLoader->loaded(
+				objectFactory->getName(),
+				objectFactory->getAuthor(),
+				objectFactory->getDate(),
+				objectFactory->getInfo(),
+				objectFactory->getRelease(),
+				objectFactory->getVersion()
+				);
+  Parameter p = Parameter();
+  WithParameter *withParam=objectFactory->createObject(p);
+  objParam[objectFactory->getName()]=withParam->getParameters();
 }
 
 template<class ObjectFactory, class ObjectType, class Parameter>
@@ -52,9 +48,9 @@ void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string plugi
 
   PluginIterator iterator(pluginPath, loader);
 
+  currentLoader = loader;
   if (iterator.isValid()) {
-    while(createObj = iterator.nextPluginObj(loader)) {
-      getPluginParameters(loader);
+    while(iterator.nextPlugin(loader)) {
     }
     if (loader)
       loader->finished(true, iterator.msg);
@@ -64,7 +60,7 @@ void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string plugi
   }
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
+/* template<class ObjectFactory, class ObjectType, class Parameter>
 bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file) {
   createObj = getCreationFunc(file);
   if(createObj == NULL)
@@ -77,7 +73,7 @@ bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file)
     objParam[tmpObjectFactory->getName()]=withParam->getParameters();
   }
  return true;
-}
+ } */
 
 template<class ObjectFactory, class ObjectType, class Parameter>
 ObjectType * TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)

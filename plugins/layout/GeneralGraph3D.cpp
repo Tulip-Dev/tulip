@@ -35,7 +35,8 @@ namespace {
     HTML_HELP_CLOSE()
   };
 }
-const std::string ORIENTATION("vertical;horizontal;");
+
+#define ORIENTATION "vertical;horizontal;"
 
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):Layout(context) {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");

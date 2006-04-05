@@ -37,8 +37,8 @@ int main(int argc,char ** argv ){
 
   /****************************************************/
   tlp::initTulipLib();
-  tlp::loadPlugins();   // library side plugins
-  GlGraph::loadPlugins(); //Glyoh plugins
+  /* tlp::loadPlugins();   // library side plugins
+     GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlGraphWidget MainWin;
   

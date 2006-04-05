@@ -1,14 +1,13 @@
 
-
 //=======================================================================
 //Strucdef implementation
-template<typename T> void StructDef::add(std::string str, const char * inHelp, std::string inDefValue) {
+template<typename T> void StructDef::add(const char* str, const char* inHelp, const char* inDefValue) {
   if (data.find(str)==data.end()) {
-    data[str]=typeid(T).name();
-    if( inHelp )
+    data[str]= std::string(typeid(T).name());
+    if (inHelp)
       help[str] = std::string(inHelp);
-    if( inDefValue.c_str() )
-      defValue[str] = inDefValue;
+    if (inDefValue)
+      defValue[str] = std::string(inDefValue);
   }
 #ifndef NDEBUG
   else {

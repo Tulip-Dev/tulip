@@ -92,9 +92,9 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-TemplateFactory<ClusteringFactory,Clustering,ClusterContext > tlp::clusteringFactory;
-TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > tlp::importFactory;
-TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > tlp::exportFactory;
+TemplateFactory<ClusteringFactory,Clustering,ClusterContext > *ClusteringFactory::factory = 0;
+TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleFactory::factory = 0;
+TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
 //=========================================================
 SuperGraph * tlp::newSuperGraph(){
   return new SuperGraphImpl();
@@ -137,7 +137,7 @@ bool tlp::save(SuperGraph *graph, const string &filename) {
 //=========================================================
 SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress,SuperGraph *newSuperGraph){
 
-  if (!tlp::importFactory.exists(alg)) {
+  if (!ImportModuleFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
@@ -159,7 +159,7 @@ SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgres
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=tlp::importFactory.getObject(alg, tmp);
+  ImportModule *newImportModule=ImportModuleFactory::factory->getObject(alg, tmp);
   assert(newImportModule!=0);
   bool result;
   if (!(result=newImportModule->import(""))) {
@@ -176,7 +176,7 @@ SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgres
 //=========================================================
 bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
                            DataSet &dataSet, PluginProgress *plugProgress) {
-  if (!tlp::exportFactory.exists(alg)) {
+  if (!ExportModuleFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -194,7 +194,7 @@ bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=tlp::exportFactory.getObject(alg, tmp);
+  ExportModule *newExportModule=ExportModuleFactory::factory->getObject(alg, tmp);
   assert(newExportModule!=0);
   result=newExportModule->exportGraph(os,sg);
 
@@ -205,7 +205,7 @@ bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
 //=========================================================
 bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
                                const string &alg, PluginProgress *plugProgress) {
-  if (!tlp::clusteringFactory.exists(alg)) {
+  if (!ClusteringFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": cluster plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -223,7 +223,7 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress; 
-  Clustering *newClustering=tlp::clusteringFactory.getObject(alg, tmp);
+  Clustering *newClustering=ClusteringFactory::factory->getObject(alg, tmp);
   if ((result=newClustering->check(errorMsg)))
     newClustering->run();
   delete newClustering;
@@ -235,28 +235,38 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
 // our different kinds of plugins
 #if !defined( __APPLE__)
 template <class Tnode, class Tedge, class TPROPERTY>
-  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > PropertyProxy<Tnode,Tedge,TPROPERTY>::factory;
-#else
-TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> PropertyProxy<ColorType, ColorType, Colors>::factory;
-TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> PropertyProxy<IntType, IntType, Int>::factory;
-TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> PropertyProxy<PointType, LineType, Layout>::factory;
-TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> PropertyProxy<DoubleType, DoubleType, Metric>::factory;
-TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> PropertyProxy<BooleanType, BooleanType, Selection>::factory;
-TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> PropertyProxy<SizeType, SizeType, Sizes>::factory;
-TemplateFactory<PropertyFactory<String>, String, PropertyContext> PropertyProxy<StringType, StringType, String>::factory;
+  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *PropertyProxy<Tnode,Tedge,TPROPERTY>::factory = 0;
+ #else
+TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> *PropertyProxy<ColorType, ColorType, Colors>::factory = 0;
+TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> *PropertyProxy<IntType, IntType, Int>::factory = 0;
+TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> *PropertyProxy<PointType, LineType, Layout>::factory = 0;
+TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> *PropertyProxy<DoubleType, DoubleType, Metric>::factory = 0;
+TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> *PropertyProxy<BooleanType, BooleanType, Selection>::factory = 0;
+TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> *PropertyProxy<SizeType,SizeType, Sizes>::factory = 0;
+TemplateFactory<PropertyFactory<String>, String, PropertyContext> *PropertyProxy<StringType, StringType, String>::factory = 0;
 #endif
 //=========================================================
-static void loadPlugins(string dir,PluginLoader *plug) {
-  SizesProxy::factory.load(dir + "sizes", "Sizes",plug);
-  IntProxy::factory.load(dir + "int", "Int",plug);
-  LayoutProxy::factory.load(dir + "layout" , "Layout",plug);
-  ColorsProxy::factory.load(dir + "colors" , "Colors",plug);
-  MetricProxy::factory.load(dir + "metric" , "Metric",plug);
-  StringProxy::factory.load(dir + "string" , "String",plug);
-  SelectionProxy::factory.load(dir + "selection" , "Selection",plug);
-  tlp::clusteringFactory.load(dir + "clustering" , "Cluster",plug);
-  tlp::importFactory.load(dir + "import" , "Import Module",plug);
-  tlp::exportFactory.load(dir + "export" , "Export Module",plug);
+void loadPlugins(string dir,PluginLoader *plug) {
+  SizesProxy::initFactory();
+  SizesProxy::factory->load(dir + "sizes", "Sizes",plug);
+  IntProxy::initFactory();
+  IntProxy::factory->load(dir + "int", "Int",plug);
+  LayoutProxy::initFactory();
+  LayoutProxy::factory->load(dir + "layout" , "Layout",plug);
+  ColorsProxy::initFactory();
+  ColorsProxy::factory->load(dir + "colors" , "Colors",plug);
+  MetricProxy::initFactory();
+  MetricProxy::factory->load(dir + "metric" , "Metric",plug);
+  StringProxy::initFactory();
+  StringProxy::factory->load(dir + "string" , "String",plug);
+  SelectionProxy::initFactory();
+  SelectionProxy::factory->load(dir + "selection" , "Selection",plug);
+  ClusteringFactory::initFactory();
+  ClusteringFactory::factory->load(dir + "clustering" , "Cluster",plug);
+  ImportModuleFactory::initFactory();
+  ImportModuleFactory::factory->load(dir + "import" , "Import Module",plug);
+  ExportModuleFactory::initFactory();
+  ExportModuleFactory::factory->load(dir + "export" , "Export Module",plug);
 }
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
@@ -274,51 +284,8 @@ void tlp::loadPlugins(PluginLoader *plug) {
     loadPlugins(string(begin,end)+'/',plug);
 }
 //=========================================================
-void tlp::loadPlugin(const string & filename, PluginLoader *plug) {
-  func createObj = getCreationFunc(filename, plug);
-  if(createObj) {
-    Plugin *tmpObjectFactory = (Plugin *)createObj();
-    if(dynamic_cast< PropertyFactory<Selection>* >(tmpObjectFactory) != 0) {  
-      SelectionProxy::factory.createObj = createObj;
-      SelectionProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<Layout>* >(tmpObjectFactory) != 0) {
-      LayoutProxy::factory.createObj = createObj;
-      LayoutProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<Metric>* >(tmpObjectFactory) != 0) {
-      MetricProxy::factory.createObj = createObj;
-      MetricProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<Colors>* >(tmpObjectFactory) != 0) {
-      ColorsProxy::factory.createObj = createObj;
-      ColorsProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<Int>* >(tmpObjectFactory) != 0) {
-      IntProxy::factory.createObj = createObj;
-      IntProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<String>* >(tmpObjectFactory) != 0) {
-      StringProxy::factory.createObj = createObj;
-      StringProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< PropertyFactory<Sizes>* >(tmpObjectFactory) != 0) {
-      SizesProxy::factory.createObj = createObj;
-      SizesProxy::factory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< ClusteringFactory * >(tmpObjectFactory) != 0) {
-      clusteringFactory.createObj =createObj;
-      clusteringFactory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< ImportModuleFactory* >(tmpObjectFactory) != 0) {
-      importFactory.createObj = createObj;
-      importFactory.getPluginParameters(plug);
-    }
-    else if(dynamic_cast< ExportModuleFactory* >(tmpObjectFactory) != 0) {
-      exportFactory.createObj = createObj;
-      exportFactory.getPluginParameters(plug);
-    }
-  }
+bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
+    PluginIterator::loadPlugin(filename, plug);
 }
 //=========================================================
 bool tlp::getSource(SuperGraph *superGraph, node &n) {

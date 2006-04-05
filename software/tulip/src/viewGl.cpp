@@ -570,7 +570,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     else {
       noPlugin = false;
       s = QString::null;
-      StructDef parameter = tlp::importFactory.getParam(*plugin);
+      StructDef parameter = ImportModuleFactory::factory->getParam(*plugin);
       parameter.buildDefaultDataSet( dataSet );
       cancel = !tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter plugin parameter");
     }
@@ -781,8 +781,8 @@ void viewGl::updateStatusBar() {
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
 void buildPropertyMenu(QPopupMenu &menu) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
-  it=PropertyProxy<TYPEN, TYPEE, TPROPERTY>::factory.objMap.begin();
-  for (;it!=PropertyProxy<TYPEN,TYPEE, TPROPERTY>::factory.objMap.end();++it)  
+  it=PropertyProxy<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
+  for (;it!=PropertyProxy<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)  
     menu.insertItem( it->first.c_str() );
 }
 //**********************************************************************
@@ -797,15 +797,15 @@ void viewGl::buildMenus(){
   buildPropertyMenu<BooleanType,BooleanType, Selection>(selectMenu);
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
-  for (it3=tlp::clusteringFactory.objMap.begin();it3!=tlp::clusteringFactory.objMap.end();++it3)
+  for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
     clusteringMenu->insertItem( it3->first.c_str() );
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
-  for (it9=tlp::exportFactory.objMap.begin();it9!=tlp::exportFactory.objMap.end();++it9)
+  for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
     exportGraphMenu.insertItem( it9->first.c_str() );
   //Import PopMenu
   TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
-  for (it4=tlp::importFactory.objMap.begin();it4!=tlp::importFactory.objMap.end();++it4) {
+  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4) {
     importGraphMenu.insertItem( it4->first.c_str() );
   }
   //Image PopuMenu
@@ -1369,7 +1369,7 @@ void viewGl::makeClustering(int id) {
   string erreurMsg;
   DataSet dataSet;
   SuperGraph *graph=glWidget->getSuperGraph();
-  StructDef parameter = tlp::clusteringFactory.getParam(name);
+  StructDef parameter = ClusteringFactory::factory->getParam(name);
   parameter.buildDefaultDataSet( dataSet, graph );
   tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
   QtProgress myProgress(this,name);
@@ -1398,7 +1398,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   DataSet *dataSet =0;
   if (query) {
     dataSet = new DataSet();
-    StructDef parameter = PROPERTY::factory.getParam(name);
+    StructDef parameter = PROPERTY::factory->getParam(name);
     parameter.buildDefaultDataSet( *dataSet, graph );
     resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
   }

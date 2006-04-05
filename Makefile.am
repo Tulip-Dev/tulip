@@ -2,7 +2,11 @@ SUBDIRS = thirdparty library plugins software docs
 DIST_SUBDIRS =  thirdparty library plugins software samples docs
 EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     $(PACKAGE)-$(VERSION).spec \
-	     $(PACKAGE)-$(VERSION).nsi \
+	     make_tulip_mac_bundle.sh.in \
+	     tulip_mac.icns \
+	     tulip_mac_info.plist.in \
+	     tulip.nsi.in \
+	     tulip.spec.in \
 	     tulip-config.in \
 	     tulip.m4
 

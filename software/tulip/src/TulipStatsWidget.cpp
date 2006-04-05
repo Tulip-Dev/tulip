@@ -678,7 +678,7 @@ namespace tlp
 
     // We build the data set :
     dataSet = new DataSet();
-    StructDef parameter = LayoutProxy::factory.getParam("Scatter Plot");
+    StructDef parameter = LayoutProxy::factory->getParam("Scatter Plot");
     parameter.buildDefaultDataSet( *dataSet, supergraph );
     
     char dtxt[20] = "discretizationStep1";
@@ -1211,7 +1211,7 @@ namespace tlp
     string erreurMsg;
     DataSet dataSet;
 
-    StructDef parameter = tlp::clusteringFactory.getParam(name);
+    StructDef parameter = ClusteringFactory::factory->getParam(name);
     parameter.buildDefaultDataSet( dataSet, supergraph );
 
     float a, b, c, d;

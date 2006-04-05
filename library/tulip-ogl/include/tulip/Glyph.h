@@ -82,30 +82,30 @@ public:
   virtual int getId() const=0;
 };
 
-#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID)        \
+#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID)       \
 class C##T##Factory:public T##Factory            \
 {                                                \
 public:                                          \
-string getName() const { return string(N);}      \
-string getAuthor() const {return string(A);}     \
-string getDate() const {return string(D);}       \
-string getInfo() const {return string(I);}       \
-string getRelease() const {return string(R);}    \
-string getVersion() const {return string(V);}    \
-int    getId() const {return ID;}                \
-T * createObject(GlyphContext *gc)               \
-{                                                \
-  C *tmp = new C(gc);                            \
-  return ((T *) tmp);                            \
-}                                                \
+  C##T##Factory(){				 \
+    GlGraph::initFactory();                      \
+    GlGraph::glyphFactory->getPluginParameters(this);\
+  }       					 \
+  string getName() const { return string(N);}	 \
+  string getAuthor() const {return string(A);}	 \
+  string getDate() const {return string(D);}	 \
+  string getInfo() const {return string(I);}	 \
+  string getRelease() const {return string(R);}	 \
+  string getVersion() const {return string(V);}	 \
+  int    getId() const {return ID;}		 \
+  T * createObject(GlyphContext *gc)		 \
+  {						 \
+    C *tmp = new C(gc);				 \
+    return ((T *) tmp);				 \
+  }						 \
 };                                               \
-extern "C" {                                     \
-  T##Factory* _creator()                         \
-    {                                            \
-      C##T##Factory *tmp = new C##T##Factory();  \
-      return ((T##Factory *) tmp);               \
-    }                                            \
-}                                                \
+extern "C" {                                            \
+  C##T##Factory C##T##FactoryInitializer;               \
+}
 
 #define GLYPHPLUGIN(C,N,A,D,I,V,R,ID) GPLUGINFACTORY(Glyph,C,N,A,D,I,V,R,ID)
 

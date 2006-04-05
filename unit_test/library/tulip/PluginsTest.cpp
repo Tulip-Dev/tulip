@@ -19,9 +19,9 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( SelectionProxy::factory.objMap.find("Test") == SelectionProxy::factory.objMap.end());
+  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") == SelectionProxy::factory->objMap.end());
   tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( SelectionProxy::factory.objMap.find("Test") != SelectionProxy::factory.objMap.end());
+  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") != SelectionProxy::factory->objMap.end());
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {

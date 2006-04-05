@@ -2,19 +2,13 @@ SHELL=sh
 TARGET= qtviewer
 SRCS=   qtviewer.cpp
 
-# linux is the default
-DEP_LDFLAGS=-L/usr/lib/GL -lGL -L/usr/X11R6/lib -lGLU -lpthread
-
-# windows version
-#DEP_LDFLAGS=-L/mingw/lib -lopengl32
-
-CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `../../tulip-config --qtincludes` `../../tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
+CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `../../tulip-config --glincludes` `../../tulip-config --qtincludes` `../../tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
 
 # for debugging purpose
 #CXXFLAGS =-O0 -g -Wall `../../tulip-config --qtincludes` `tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
 
 CXX=g++
-LDFLAGS=`../../tulip-config --libs` `../../tulip-config --qtlibs` ${DEP_LDFLAGS}
+LDFLAGS=`../../tulip-config --import_tlp_obj` `../../tulip-config --glyph_objs` `../../tulip-config --libs` `../../tulip-config --qtlibs` `../../tulip-config --gllibs`
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -36,8 +30,3 @@ clean :
 
 
 -include $(DEPS)
-
-
-
-
-

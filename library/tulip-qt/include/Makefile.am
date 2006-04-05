@@ -24,20 +24,16 @@ else
 nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlGraphWidget.h \
-	tulip/glgraphwidget.h \
 	tulip/MouseObject.h \
 	tulip/MouseZoomBox.h \
 	tulip/MouseInterface.h \
 	tulip/PropertyWidgets.h \
-	tulip/tulippropertytable.h \
 	tulip/TulipElementPropertiesData.h \
 	tulip/TulipElementProperties.h \
-	tulip/tulipelementproperties.h \
 	tulip/FindSelection.h \
 	tulip/FindSelectionData.h \
 	tulip/ClusterTreeData.h \
 	tulip/ClusterTree.h \
-	tulip/clustertree.h \
 	tulip/MouseAddEdge.h\
 	tulip/MouseAddNode.h\
 	tulip/MouseMoveSelection.h\

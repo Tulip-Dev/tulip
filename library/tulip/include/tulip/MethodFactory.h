@@ -31,6 +31,7 @@
 #include "Clustering.h"
 #include "ImportModule.h"
 #include "ExportModule.h"
+#include "TlpTools.h"
 
 //===========================================================
 // Declaclartion of Properties plugin mechanism
@@ -38,39 +39,30 @@
 /** \addtogroup plugins */ 
 /*@{*/
 
-template <class T> class TLP_SCOPE PropertyFactory:public Plugin {
-public:
-  PropertyFactory(){}
-  virtual ~PropertyFactory() {}
-  virtual T* createObject(const PropertyContext &context)=0;
-};
-
-
 // Macro for factorization of source code
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R)          \
 class C##T##Factory:public PropertyFactory<T>           \
 {                                                       \
-public:                                                 \
-C##T##Factory(){}                                       \
-~C##T##Factory(){}                                      \
-std::string getName() const { return std::string(N);}   \
-std::string getAuthor() const {return std::string(A);}  \
-std::string getDate() const {return std::string(D);}    \
-std::string getInfo() const {return std::string(I);}    \
-std::string getRelease() const {return std::string(R);} \
-std::string getVersion() const {return std::string(V);} \
-T * createObject(const PropertyContext &context)        \
-{                                                       \
-  C *tmp=new C(context);                                \
-  return ((T *) tmp);                                   \
-}                                                       \
+ public:						\
+  C##T##Factory(){					\
+    T##Proxy::initFactory();				\
+    T##Proxy::factory->getPluginParameters((PropertyFactory< T > *) this); \
+  }							\
+  ~C##T##Factory(){}					\
+  std::string getName() const { return std::string(N);}	\
+  std::string getAuthor() const {return std::string(A);}\
+  std::string getDate() const {return std::string(D);}	\
+  std::string getInfo() const {return std::string(I);}	\
+  std::string getRelease() const {return std::string(R);}\
+  std::string getVersion() const {return std::string(V);}\
+ T * createObject(const PropertyContext &context)	\
+   {							\
+     C *tmp=new C(context);				\
+     return ((T *) tmp);				\
+   }							\
 };                                                      \
 extern "C" {                                            \
-  PropertyFactory< T >* _creator()                                \
-  {                                                     \
-    C##T##Factory *tmp= new C##T##Factory();            \
-    return ((PropertyFactory< T > *)tmp);                         \
-  }                                                     \
+  C##T##Factory C##T##FactoryInitializer;               \
 }
 
 #define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
@@ -86,48 +78,29 @@ extern "C" {                                            \
 // Declaclartion of SuperGraph modification plug-in Mechanism
 //===========================================================
 ///
-class ImportModuleFactory:public Plugin{
-public:
-  virtual ~ImportModuleFactory() {}
-  virtual ImportModule * createObject(ClusterContext)=0;
-};
-
-class ExportModuleFactory:public Plugin{
-public:
-  virtual ~ExportModuleFactory() {}
-  virtual ExportModule * createObject(ClusterContext)=0;
-};
-
-class ClusteringFactory:public Plugin{
-public:
-  virtual ~ClusteringFactory() {}
-  virtual Clustering * createObject(ClusterContext)=0;
-};
-
-#define SUPERGRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)        \
+#define SUPERGRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)	\
 class C##T##Factory:public T##Factory                   \
 {                                                       \
-public:                                                 \
-C##T##Factory(){}                                       \
-~C##T##Factory(){}                                      \
-std::string getName() const { return std::string(N);}   \
-std::string getAuthor() const {return std::string(A);}  \
-std::string getDate() const {return std::string(D);}    \
-std::string getInfo() const {return std::string(I);}    \
-std::string getRelease() const {return std::string(R);} \
-std::string getVersion() const {return std::string(V);} \
-T * createObject(ClusterContext context)                \
-{                                                       \
-  C *tmp=new C(context);                                \
-  return ((T *) tmp);                                   \
-}                                                       \
+ public:						\
+  C##T##Factory(){					\
+    initFactory();					\
+    factory->getPluginParameters(this);			\
+  }							\
+  ~C##T##Factory(){}					\
+  std::string getName() const { return std::string(N);}	\
+  std::string getAuthor() const {return std::string(A);}\
+  std::string getDate() const {return std::string(D);}	\
+  std::string getInfo() const {return std::string(I);}	\
+  std::string getRelease() const {return std::string(R);}\
+  std::string getVersion() const {return std::string(V);}\
+ T * createObject(ClusterContext context)		\
+   {							\
+     C *tmp=new C(context);				\
+     return ((T *) tmp);				\
+   }							\
 };                                                      \
 extern "C" {                                            \
-  T##Factory* _creator()                                \
-  {                                                     \
-    C##T##Factory *tmp= new C##T##Factory();            \
-    return ((T##Factory *)tmp);                         \
-  }                                                     \
+  C##T##Factory C##T##FactoryInitializer;               \
 }
 
 #define EXPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R)

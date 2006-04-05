@@ -14,9 +14,12 @@
 
 #include <iostream>
 #include "SuperGraph.h"
-#include "MethodFactory.h"
 #include "WithParameter.h"
 #include "Reflect.h"
+#include "PluginProgress.h"
+#include "Plugin.h"
+#include "TemplateFactory.h"
+
 
 /** \addtogroup plugins */ 
 /*@{*/
@@ -37,5 +40,19 @@ public:
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
+
+class ExportModuleFactory:public Plugin{
+public:
+  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *factory;
+  static void initFactory() {
+    if (!factory) {
+      factory = new TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext >;
+      factory->currentLoader = 0;
+    }
+  }    
+  virtual ~ExportModuleFactory() {}
+  virtual ExportModule * createObject(ClusterContext)=0;
+};
+
 /*@}*/
 #endif

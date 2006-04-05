@@ -13,8 +13,13 @@
 #define _IMPORTMODULE_H
 
 #include "SuperGraph.h"
-#include "MethodFactory.h"
+#include "WithParameter.h"
 #include "Reflect.h"
+#include "PluginProgress.h"
+#include "Plugin.h"
+#include "TemplateFactory.h"
+
+
 /** \addtogroup plugins */ 
 /*@{*/
 /// Interface for importModule plug-ins
@@ -32,6 +37,19 @@ public:
   SuperGraph *superGraph;
   ///
   PluginProgress *pluginProgress;
+};
+
+class ImportModuleFactory:public Plugin{
+public:
+  static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *factory;
+  static void initFactory() {
+    if (!factory) {
+      factory = new TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext >;
+      factory->currentLoader = 0;
+    }
+  }    
+  virtual ~ImportModuleFactory() {}
+  virtual ImportModule * createObject(ClusterContext)=0;
 };
 /*@}*/
 #endif
