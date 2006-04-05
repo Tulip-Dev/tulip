@@ -343,18 +343,18 @@ namespace {
 //=======================================================================
 bool HierarchicalGraph::run() {
   //make acyclic
-  vector<node> order;
-  buildDfsOrdering(superGraph, order);
-  MutableContainer<int> orderid;
-  for(unsigned int i=0; i< order.size(); ++i) 
-    orderid.set(order[i].id, i);
+  // vector<node> order;
+  // buildDfsOrdering(superGraph, order);
+  // MutableContainer<int> orderid;
+  // for(unsigned int i=0; i< order.size(); ++i) 
+  //   orderid.set(order[i].id, i);
   edge e;
-  forEach(e, superGraph->getEdges()) {
-    node src = superGraph->source(e);
-    node tgt = superGraph->target(e);
-    if(orderid.get(src.id) > orderid.get(tgt.id))
-      superGraph->reverse(e);
-  }
+  // forEach(e, superGraph->getEdges()) {
+  //   node src = superGraph->source(e);
+  //   node tgt = superGraph->target(e);
+  //   if(orderid.get(src.id) > orderid.get(tgt.id))
+  //     superGraph->reverse(e);
+  // }
     
   //=======================================================================
   // Build a clone of this graph
