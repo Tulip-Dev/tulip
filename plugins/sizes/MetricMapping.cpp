@@ -43,7 +43,7 @@ namespace {
 /** \addtogroup size */
 /*@{*/
 /// MetricMapping.h - Compute size of elements according to a metric.
-/** This plugin enables to set the size of the grapĥ's elements
+/** This plugin enables to set the size of the grapĥ&#146;s elements
  *  according to a metric.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
