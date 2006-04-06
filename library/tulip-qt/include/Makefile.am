@@ -42,18 +42,6 @@ nobase_include_HEADERS = \
 	tulip/Morphing.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h
-
-tulip/clustertree.h : tulip/ClusterTree.h
-	cp -f $< $@
-
-tulip/glgraphwidget.h : tulip/GlGraphWidget.h
-	cp -f $< $@
-
-tulip/tulipelementproperties.h : tulip/TulipElementProperties.h
-	cp -f $< $@
-
-tulip/tulippropertytable.h : tulip/PropertyWidgets.h
-	cp -f $< $@
 endif
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui

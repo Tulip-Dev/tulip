@@ -112,7 +112,11 @@ BUILT_SOURCES = \
 	moc_FindSelectionData.cpp \
 	moc_ClusterTreeData.cpp \
 	moc_ClusterTree.cpp \
-	moc_ClusterTreePlugin.cpp
+	moc_ClusterTreePlugin.cpp \
+	../include/tulip/clustertree.h \
+	../include/tulip/glgraphwidget.h \
+	../include/tulip/tulipelementproperties.h \
+	../include/tulip/tulippropertytable.h
 
 nodist_libtulip_qt_la_SOURCES = \
 	moc_TulipTableWidget.cpp \
@@ -124,13 +128,29 @@ nodist_libtulip_qt_la_SOURCES = \
 	moc_FindSelectionData.cpp \
 	moc_ClusterTreeData.cpp \
 	FindSelectionData.cpp \
-	moc_ClusterTree.cpp
+	moc_ClusterTree.cpp \
+	../include/tulip/clustertree.h \
+	../include/tulip/glgraphwidget.h \
+	../include/tulip/tulipelementproperties.h \
+	../include/tulip/tulippropertytable.h
 
 moc_%.cpp: ../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
 moc_ClusterTree.cpp: ../include/tulip/ClusterTreeQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
+
+../include/tulip/clustertree.h : ../include/tulip/ClusterTree.h
+	cp -f $< $@
+
+../include/tulip/glgraphwidget.h : ../include/tulip/GlGraphWidget.h
+	cp -f $< $@
+
+../include/tulip/tulipelementproperties.h : ../include/tulip/TulipElementProperties.h
+	cp -f $< $@
+
+../include/tulip/tulippropertytable.h : ../include/tulip/PropertyWidgets.h
+	cp -f $< $@
 endif
 
 
