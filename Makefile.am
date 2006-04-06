@@ -1,6 +1,7 @@
 SUBDIRS = thirdparty library plugins software docs
 DIST_SUBDIRS =  thirdparty library plugins software samples docs
 EXTRA_DIST = gen-conf.sh gen-doc.sh \
+	     INSTALL.win \
 	     $(PACKAGE)-$(VERSION).spec \
 	     make_tulip_mac_bundle.sh.in \
 	     tulip_mac.icns \
