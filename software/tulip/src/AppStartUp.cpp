@@ -62,7 +62,7 @@ void AppStartUp::initTulip() {
   plug.appStartUp = this;
   #endif
   
-  tlp::initTulipLib();
+  //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(&plug);   // library side plugins
   GlGraph::loadPlugins(&plug);   // software side plugins, i.e. glyphs
 }
