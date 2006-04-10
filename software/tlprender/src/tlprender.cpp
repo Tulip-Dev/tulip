@@ -14,11 +14,6 @@
    * but we are not using it. If dirname comes to be used include libgen.h, #undef basename,
    * include string.h, in this order. It would be ugly but it would work the way we want.
    */
-
-#if defined(__APPLE__)
-#include <libgen.h>
-#endif
-
 #include <string.h>
 #include <GL/gl.h>
 #include <GL/osmesa.h>
@@ -61,7 +56,7 @@ static int width(640), height(480);
 static const int BUFFERSIZE(64 * 1024 * 1024);
 static GLfloat *buffer;
 
-static void exitManager(void);
+static void exitManager(int, void *);
 static void parseCommandLine(int, char **);
 static void help() __attribute__ ((noreturn));
 
@@ -153,7 +148,7 @@ static void loadPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
-  GlGraph::glyphFactory->load(getEnvVar + "glyph", "Glyph", plug);
+  GlGraph::glyphFactory.load(getEnvVar + "glyph", "Glyph", plug);
 }
 
 //==============================================================================
@@ -161,7 +156,7 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
 {
   DataSet dataSet;
 
-  StructDef parameter= ImportModuleFactory::factory->getParam(importPluginName);
+  StructDef parameter=tlp::importFactory.getParam(importPluginName);
   Iterator<pair<string,string> > *itP=parameter.getField();
   
   for (;itP->hasNext();) {
@@ -321,7 +316,7 @@ void outputPolygons(const int size, const GlGraph &glgraph)
 /***************************************************************************************************/
 int main (int argc, char **argv) {
 
-  atexit(exitManager);
+  on_exit(exitManager, NULL);
 
   parseCommandLine(argc, argv);
   
@@ -337,7 +332,7 @@ int main (int argc, char **argv) {
   if (layoutSpecified) {
     bool resultBool=false, cached=false;
     string errorMsg;
-    if (LayoutProxy::factory->exists(layoutName)) {
+    if (LayoutProxy::factory.exists(layoutName)) {
       LayoutProxy *myLayout = glOffscreen.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
       resultBool = glOffscreen.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
@@ -397,7 +392,7 @@ int main (int argc, char **argv) {
   if (saveTLP) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
-    StructDef parameter = ExportModuleFactory::factory->getParam("tlp");
+    StructDef parameter = tlp::exportFactory.getParam("tlp");
 
     dataSet.set("displaying", glOffscreen.getParameters());
 
@@ -413,7 +408,7 @@ int main (int argc, char **argv) {
 /*
  *
  */
-void exitManager()
+void exitManager(int exitStatus, void *arg)
 {
 }
 
