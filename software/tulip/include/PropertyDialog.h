@@ -2,10 +2,6 @@
 #define PROPERTYDIALOG_H
 #include <string>
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
 #include <tulip/SuperGraph.h>
 #include <tulip/Observable.h>
 

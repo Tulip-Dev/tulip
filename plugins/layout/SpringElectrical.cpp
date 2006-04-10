@@ -1,5 +1,4 @@
 #include <tulip/MutableContainer.h>
-#include <tulip/ForEach.h>
 #include <tulip/Rectangle.h>
 #include "SpringElectrical.h"
 
@@ -14,27 +13,32 @@ inline double sqr(double x) {
 SpringElectrical::SpringElectrical(const PropertyContext &context):Layout(context){
 }
 //================================================================================
-Coord SpringElectrical::repulsiveForces(node u) {
+SpringElectrical::~SpringElectrical() {
+}
+//================================================================================
+Coord SpringElectrical::repulsiveForces(node n) {
+  node u = n;
   Coord uCoord = layoutProxy->getNodeValue(u);
   Coord result(0,0,0);
-  node v;
-  forEach(v, superGraph->getNodes()) {
+  Iterator<node> *itN = superGraph->getNodes();
+  while(itN->hasNext()) {
+    node v = itN->next();
     if (u == v) continue;
-    Coord uv = layoutProxy->getNodeValue(v) - uCoord;
+    Coord uv = layoutProxy->getNodeValue(v)-uCoord;
     double dist = uv.norm();
     if (dist > 1.0E-3) {
       uv /= dist;
-      dist -= (1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
-      //      if (dist > 5.0) continue;
+      dist -= (sizeNorm.get(u.id) + sizeNorm.get(v.id));
+      if (dist > 5.0) continue;
       if (dist < 1.E-3)
-	uv *= dist;//-(1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
+	uv *= -(1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
       else
-	uv *=  -sizeNorm.get(u.id) /sqr(dist);
+	uv *= - k2 /sqr(dist);
     } else {
       uv[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
     }
     result += uv;
-  }
+  } delete itN;
   return result;
 }
 //================================================================================
@@ -42,30 +46,27 @@ Coord SpringElectrical::attractiveForces(node n) {
   node nu = n;
   Coord u = layoutProxy->getNodeValue(nu);
   Coord result(0,0,0);
-  node nv;
-  forEach(nv, superGraph->getInOutNodes(n)) {
+  Iterator<node> *itN=superGraph->getInOutNodes(n);
+  while(itN->hasNext()) {
+    node nv = itN->next();
     Coord v = layoutProxy->getNodeValue(nv);
     Coord uv = v-u;
-    double length = 1. +  (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
+    double length = 1.0 + (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
     double dist = uv.norm();
-    if (dist < length) {
-      uv *= dist - length;
+    if (dist < length) continue; //force only attractive force
+    if (dist > 1e-3) {
+      uv /= dist;
+      uv *= 1.0/k * (dist - length); //Hooke's law
+      //uv *= 1.0/k * log( dist / length); //Eades's law
     }
-    else {
-      if (dist > 1e-3) {
-	uv /= dist;
-	uv *= pow((dist - length) , 2.0); //Hooke's law
-	//	uv *= pow((dist - length) , 1.0); //Hooke's law
-	//uv *= length/k * log( dist / length); //Eades's law
-      }
-      else
-	uv[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
-    }
+    else
+      uv[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
     result += uv;
-  }
+  } delete itN;
   return result;
 }
 //================================================================================
+static const double MAXFORCE = .0;
 Coord maxForce(Coord force, double max) {
   Coord result(force);
   float norm = result.norm();
@@ -75,86 +76,58 @@ Coord maxForce(Coord force, double max) {
   }
   return result;
 }
-
-bool SpringElectrical::overlap(node u, Coord &move) {
-  Coord pos = layoutProxy->getNodeValue(u) + move;
-  bool  overlap = false;
-  node v;
-  forEach(v, superGraph->getNodes()) {
-    if (v==u) continue;
-    Coord pos2 = layoutProxy->getNodeValue(v);
-    if ((pos - pos2).norm() < (sizeNorm.get(u.id) + sizeNorm.get(v.id)))
-      overlap = true;
-  }
-  return overlap;
-}
 //================================================================================  
 bool SpringElectrical::run() {
-  
   int iterations = superGraph->numberOfNodes();
-  prevMove.setAll(Coord(0,0,0));
   if (iterations < 500) iterations = 500;// iterations = iterations >? 500;
-
   inputSelection = superGraph->getProperty<SelectionProxy>("viewSelection");
   inputSize = superGraph->getProperty<SizesProxy>("viewSize");
   LayoutProxy *inputLayout = superGraph->getProperty<LayoutProxy>("viewLayout");
   
-  node n;
-  forEach(n, superGraph->getNodes()) {
-    layoutProxy->setNodeValue(n, inputLayout->getNodeValue(n));
-    sizeNorm.set(n.id, inputSize->getNodeValue(n).norm()/2.0);
-  }
+  Iterator<node> *itN = superGraph->getNodes();
+  while(itN->hasNext()){
+    node itn = itN->next();
+    layoutProxy->setNodeValue(itn,inputLayout->getNodeValue(itn));
+    sizeNorm.set(itn.id,inputSize->getNodeValue(itn).norm()/2.0);
+  } delete itN;
 
-  double maxforce   = inputSize->getMax().norm() / 2.0;
-  double deltaForce = 1.0;
-  
+  k = 5.0;
+  k2 = 2.0*k;
+  double maxforce = log(double(superGraph->numberOfNodes()));
+  double deltaForce = maxforce / iterations;
+
   for (int count = 0; count < iterations; ++count) {
-    maxforce = ((layoutProxy->getMax() - layoutProxy->getMin()).norm() + inputSize->getMax().norm()) / 100;
     if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
-    node itn;
-    forEach(itn, superGraph->getNodes()) {
+    itN = superGraph->getNodes();
+    maxforce -= deltaForce;
+    if (maxforce < 0.2) maxforce = 0.2;
+    while(itN->hasNext()) {
+      node itn = itN->next();
       if (inputSelection->getNodeValue(itn)) continue;
-
-      Coord newMove;
-      if (count%3 == 0)
-	newMove = maxForce(repulsiveForces(itn), maxforce); //prevent too big jumps
-      else 
-	newMove = maxForce(attractiveForces(itn) + repulsiveForces(itn), maxforce); //prevent too big jumps
-      
-      Coord move;
-      if (count == 0 || count%3!=0) {
-	move = newMove;
-      } else {
-	Coord prev = prevMove.get(itn.id);
-	Coord cur  = newMove;
-	cur  /= cur.norm();
-	prev /= prev.norm();
-	float r = prev.dotProduct(cur);
-	if (r > 0) {
-	  move = (prevMove.get(itn.id) + newMove) * (r / 2.0 );
-	} else {
-	  move  = newMove;
-	  move /= move.norm();
-	}
-      }
-      
-      //test overlapping
-      int i = 0;
-      while(overlap(itn, move) && i<10) {
-	move /= 4.0;
-	++i;
-      }
-      if (overlap(itn, move)) {
-	move = Coord(0,0,0);
-	move[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
-      }
-      
-      prevMove.set(itn.id, move);
+      Coord move = maxForce(attractiveForces(itn) + repulsiveForces(itn), maxforce); //prevent too big jumps
       Coord tmp  = layoutProxy->getNodeValue(itn);
-      layoutProxy->setNodeValue(itn, tmp + prevMove.get(itn.id));      
-    }
+      layoutProxy->setNodeValue(itn,tmp + move);
+      /* New test to preserve embedding, need more work
+	for (unsigned int i=0; i<10; ++i) {
+	if (!checkEdgeIntersection(itn, move + move * ((1.0+sizeNorm.get(itn.id)) / move.norm()))) {
+	layoutProxy->setNodeValue(itn,tmp + move);
+	break;
+	}
+	move /= 3.0;
+	}
+      */
+      
+    } delete itN;
   }
   return pluginProgress->state()!=TLP_CANCEL;
+}
+//================================================================================
+bool SpringElectrical::check(string &erreurMsg){
+  erreurMsg="";
+  return true;
+}
+//================================================================================
+void SpringElectrical::reset() {
 }
 //================================================================================
 bool intersect2D(const Coord &a, const Coord &b, const Coord &c, const Coord &d) {

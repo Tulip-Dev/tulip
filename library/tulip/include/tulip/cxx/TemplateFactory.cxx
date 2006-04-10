@@ -10,9 +10,23 @@
 */
 //====================================================================================
 #include <iostream>
+#ifdef _WIN32
+#include <stdarg.h>
+#include <windef.h>
+#include <winbase.h>
+#else
+#include <dlfcn.h>
+#include <dirent.h>
+#endif
 #include <tulip/StlIterator.h>
+#ifdef _WIN32
+#define BUFSIZE 70
+#endif
 
 #include <tulip/Plugin.h>
+//implemented in TlpTools.cpp
+int __tulip_selectSO(const struct dirent *ent);
+
 
 template<class ObjectFactory, class ObjectType, class Parameter>
 Iterator<std::string>* TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
@@ -24,43 +38,106 @@ bool TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::st
   return (objMap.find(pluginName) != objMap.end());
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
-  objNames.insert(objectFactory->getName());
-  objMap[objectFactory->getName()]=objectFactory;
-  if (currentLoader!=0) currentLoader->loaded(
-				objectFactory->getName(),
-				objectFactory->getAuthor(),
-				objectFactory->getDate(),
-				objectFactory->getInfo(),
-				objectFactory->getRelease(),
-				objectFactory->getVersion()
-				);
-  Parameter p = Parameter();
-  WithParameter *withParam=objectFactory->createObject(p);
-  objParam[objectFactory->getName()]=withParam->getParameters();
-}
 
 template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,PluginLoader *loader) {
-  if (loader!=0)
-    loader->start(pluginPath.c_str(),type);
-
-  PluginIterator iterator(pluginPath, loader);
-
-  currentLoader = loader;
-  if (iterator.isValid()) {
-    while(iterator.nextPlugin(loader)) {
-    }
-    if (loader)
-      loader->finished(true, iterator.msg);
-  } else {
-    if (loader)
-      loader->finished(false, iterator.msg);
+void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(PluginLoader *loader) {
+  Plugin *tmpObjectFactory=(Plugin *)createObj();
+  if(dynamic_cast< ObjectFactory* >(tmpObjectFactory) != 0) {
+    ObjectFactory *objectFactory=(ObjectFactory *)tmpObjectFactory;
+    objNames.insert(objectFactory->getName());
+    objMap[objectFactory->getName()]=objectFactory;
+    if (loader!=0) loader->loaded(
+				  objectFactory->getName(),
+				  objectFactory->getAuthor(),
+				  objectFactory->getDate(),
+				  objectFactory->getInfo(),
+				  objectFactory->getRelease(),
+				  objectFactory->getVersion()
+				  );
+    Parameter p = Parameter();
+    WithParameter *withParam=objectFactory->createObject(p);
+    objParam[objectFactory->getName()]=withParam->getParameters();
   }
 }
 
-/* template<class ObjectFactory, class ObjectType, class Parameter>
+#ifdef _WIN32
+template<class ObjectFactory, class ObjectType, class Parameter>
+void TemplateFactory<ObjectFactory,ObjectType,Parameter>::loadWindows(std::string pluginPath,std::string type,PluginLoader *loader) {
+	 bool result=true;std::string msg;
+	if (loader!=0) loader->start(pluginPath.c_str(),type);
+  	HANDLE hFind; 
+	WIN32_FIND_DATA FindData; 
+	int n = 0;
+	TCHAR currentDirectory[BUFSIZE];
+	DWORD dwRet;
+    dwRet = GetCurrentDirectory(BUFSIZE, currentDirectory);
+    if(dwRet == 0) {
+   	    msg=std::string("Scandir error");//perror("scandir");
+	  	result=false;
+	  	return;
+   	 }
+	SetCurrentDirectory (pluginPath.c_str()); 
+	hFind=FindFirstFile ("*.dll", &FindData); 
+	if (hFind != INVALID_HANDLE_VALUE) { 
+		n++;	
+		char *error;
+      	std::string tmpStr;
+      	tmpStr= pluginPath +"/"+ FindData.cFileName;
+      	if (loader!=0) loader->loading(FindData.cFileName);
+      	createObj = loadWin32plugin(tmpStr, loader);
+	if(createObj)
+	  this->getPluginParameters(loader);
+      	}
+	while (FindNextFile (hFind, &FindData))	{
+		n++;	
+		char *error;
+      	std::string tmpStr;
+      	tmpStr= pluginPath +"/"+ FindData.cFileName;
+      	if (loader!=0) loader->loading(FindData.cFileName);
+      	createObj = loadWin32plugin(tmpStr, loader);
+	if(createObj)
+	  this->getPluginParameters(loader);
+	}  
+	if(n < 0) {
+		msg=std::string("Scandir error");//perror("scandir");
+		SetCurrentDirectory (currentDirectory); 
+    	result=false;
+		}
+	  if (loader!=0) loader->numberOfFile(n);
+	  if(loader!=0) loader->finished(result,msg);
+	  SetCurrentDirectory (currentDirectory); 
+}
+#endif
+
+template<class ObjectFactory, class ObjectType, class Parameter>
+void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,PluginLoader *loader) {
+  bool result=true;std::string msg;
+  #ifdef _WIN32
+  loadWindows(pluginPath, type, loader);
+  #else
+  struct dirent **namelist;
+  if (loader!=0) loader->start(pluginPath.c_str(),type);
+  int n = scandir((const char *) pluginPath.c_str(), &namelist, __tulip_selectSO, alphasort);
+  if (loader!=0) loader->numberOfFile(n);
+  if (n < 0) {
+    msg=std::string("Scandir error");//perror("scandir");
+    result=false;
+  }
+  else {
+    while(n-->0) {
+      std::string tmpStr;
+      tmpStr= pluginPath +"/"+ std::string(namelist[n]->d_name);
+      if (loader!=0) loader->loading(std::string(namelist[n]->d_name));
+      createObj = loadUnixPlugin(tmpStr, loader);
+      if(createObj != NULL)
+	getPluginParameters(loader);
+    }
+  }
+  if (loader!=0) loader->finished(result,msg);
+  #endif
+}
+
+template<class ObjectFactory, class ObjectType, class Parameter>
 bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file) {
   createObj = getCreationFunc(file);
   if(createObj == NULL)
@@ -73,7 +150,7 @@ bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file)
     objParam[tmpObjectFactory->getName()]=withParam->getParameters();
   }
  return true;
- } */
+}
 
 template<class ObjectFactory, class ObjectType, class Parameter>
 ObjectType * TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)

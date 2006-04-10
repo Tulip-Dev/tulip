@@ -1,8 +1,15 @@
 if WIN32
 ADD_INCLUDES = -I/mingw/include/freetype2
-DLL_FLAGS = -no-undefined
 else
 ADD_INCLUDES = `xml2-config --cflags` 
+endif
+
+if WIN32
+DLL_FLAGS = -no-undefined
+endif
+
+if CYGWIN
+DLL_FLAGS = -no-undefined
 endif
 
 plugins_LTLIBRARIES = \

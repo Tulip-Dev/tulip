@@ -32,10 +32,8 @@
 class LeafMetric:public Metric { 
 public:
   LeafMetric(const PropertyContext &);
-  bool check(std::string &);
-  bool run();
-private:
   double getNodeValue(const node n);
+  bool check(std::string &);
 };
 /*@}*/
 #endif

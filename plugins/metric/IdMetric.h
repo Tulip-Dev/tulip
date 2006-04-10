@@ -38,7 +38,8 @@
 class IdMetric:public Metric { 
 public:
   IdMetric(const PropertyContext &);
-  bool run();
+  double getNodeValue(const node n);
+  double getEdgeValue(const edge n);
 };
 /*@}*/
 

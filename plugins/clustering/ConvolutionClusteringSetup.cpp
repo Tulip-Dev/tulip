@@ -15,7 +15,7 @@ using namespace std;
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
+ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent,  const char* name, bool modal, WFlags fl )
   : ConvolutionClusteringSetupData( parent, name, modal, fl ), 
     convolPlugin(convolPlugin),
     useLogarithmicScale(false)

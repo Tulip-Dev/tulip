@@ -3,8 +3,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-//#include FT_GLYPH_H
-#include FT_OUTLINE_H
+#include FT_GLYPH_H
 
 #include "FTGL.h"
 #include "FTPoint.h"
@@ -46,24 +45,17 @@ class FTGL_EXPORT FTBBox
          *
          * @param glyph A freetype glyph
          */
-        FTBBox( FT_GlyphSlot glyph)
-        :   lowerX(0.0f),
-            lowerY(0.0f),
-            lowerZ(0.0f),
-            upperX(0.0f),
-            upperY(0.0f),
-            upperZ(0.0f)
+        FTBBox( FT_Glyph glyph)
         {
             FT_BBox bbox;
-            FT_Outline_Get_CBox( &(glyph->outline), &bbox);
-
+            FT_Glyph_Get_CBox( glyph, ft_glyph_bbox_subpixels, &bbox );
+            
             lowerX = static_cast<float>( bbox.xMin) / 64.0f;
             lowerY = static_cast<float>( bbox.yMin) / 64.0f;
             lowerZ = 0.0f;
             upperX = static_cast<float>( bbox.xMax) / 64.0f;
             upperY = static_cast<float>( bbox.yMax) / 64.0f;
-            upperZ = 0.0f;
-            
+            upperZ = 0.0f; 
         }       
 
         /**
@@ -80,12 +72,12 @@ class FTGL_EXPORT FTBBox
          */
         FTBBox& Move( FTPoint distance)
         {
-            lowerX += distance.X();
-            lowerY += distance.Y();
-            lowerZ += distance.Z();
-            upperX += distance.X();
-            upperY += distance.Y();
-            upperZ += distance.Z();
+            lowerX += distance.x;
+            lowerY += distance.y;
+            lowerZ += distance.z;
+            upperX += distance.x;
+            upperY += distance.y;
+            upperZ += distance.z;
             return *this;
         }
 
@@ -100,12 +92,6 @@ class FTGL_EXPORT FTBBox
             
             return *this;
         }
-        
-        void SetDepth( float depth)
-        {
-            upperZ = lowerZ + depth;
-        }
-        
         
         /**
          * The bounds of the box

@@ -1,7 +1,5 @@
 if ! WIN32
-if ! MACOSX
 ADD_LIB = -lXext -lXi -lpthread
-endif
 else
 MWINDOWS = -mwindows
 endif
@@ -11,21 +9,12 @@ bin_PROGRAMS = tulip
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 
 INCLUDES = -I$(srcdir)/../include -I../include \
-	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@ @TULIP_QT_INCLUDE@/tulip
+	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
 
-if MACOSX
-AM_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ $(top_builddir)/library/tulip/src/.libs/libtulip.a @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@
-else
 AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@
-endif
-AM_CPPFLAGS= @QT_CPPFLAGS@
 
 tulip_LDFLAGS = -L.
-if QT3
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-else
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lQtAssistantClient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-endif
+tulip_LDADD = -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
@@ -100,7 +89,6 @@ nodist_tulip_SOURCES =  \
 	moc_GridOptionsWidget.cpp
 
 
-if QT3
 dist_tulip_SOURCES = \
 	Overview.cpp \
 	ElementInfoToolTip.cpp \
@@ -115,50 +103,15 @@ dist_tulip_SOURCES = \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \
-	main.cpp
-
-moc_%.cpp: ../include/%.h 
-	$(MOC) -o $@ $<
-
-else
-dist_tulip_SOURCES = \
-	Overview.cpp \
-	viewGl.cpp \
-	Application.cpp \
-	geometrie2D.cpp \
-	NavigateButton.cpp \
-	InfoDialog.cpp \
-	AppStartUp.cpp \
-	ToolBar.cpp \
-	PropertyDialog.cpp \
-	QtProgress.cpp \
-	TulipStatsWidget.cpp \
-	GridOptionsWidget.cpp \
-	main.cpp
-
-moc_%.cpp: ../include/%.h 
-	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
-endif
-
+	main.cpp 
 
 CLEANFILES = $(BUILT_SOURCES)
 
-if !QT3
-moc_PropertyDialog.cpp: ../include/PropertyDialogQt3.h 
-	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-endif
+moc_%.cpp: ../include/%.h 
+	$(MOC) -o $@ $<
 
 %Data.cpp: ../designer/%.ui ../include/%Data.h
 	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<
 
 ../include/%Data.h: ../designer/%.ui
 	$(UIC_MAKE) -o $@ $<
-
-if MACOSX
-install-data-am :
-	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/assistant.app; then \
-		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/ ;\
-		ln -s @QTDIR@/bin/assistant.app $(exec_prefix)/bin/tulip.app/Contents/assistant.app ;\
-	fi;
-endif

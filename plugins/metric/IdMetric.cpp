@@ -1,20 +1,18 @@
-#include <tulip/ForEach.h>
+#include <tulip/MetricProxy.h>
 
 #include "IdMetric.h"
 
 METRICPLUGIN(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1");
 
-//==================================================================
 IdMetric::IdMetric(const PropertyContext &context):Metric(context) {
 }
-//==================================================================
-bool IdMetric::run() {
-  node n;
-  forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, n.id);
-  edge e;
-  forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, e.id);
-  return true;
+double IdMetric::getEdgeValue(const edge e ) {
+  return e.id;
 }
-//=================================================================
+double IdMetric::getNodeValue(const node n ) {
+  return n.id;
+}
+
+
+
+

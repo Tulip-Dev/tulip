@@ -30,7 +30,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-ToolBar::ToolBar( QWidget* parent,  const char* name, Qt::WFlags fl )
+ToolBar::ToolBar( QWidget* parent,  const char* name, WFlags fl )
   : ToolBarData(parent, name, fl) {
   currentMouse = new MouseGraphNavigate();
 }

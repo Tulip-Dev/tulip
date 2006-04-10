@@ -37,7 +37,7 @@
             This toolbar allows to select the mouse operation you want to perform. The current available operations are from top to bottom of the toolbar :
         <itemizedlist>
             <listitem>
-                <para><inlinegraphic fileref="images/i_selection.png"/><code>Box Selection</code> : It enables to select a set of objects. If <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selection is added to the
+                <para><inlinegraphic fileref="images/i_selection.png"/><code>Box Selection</code> : It enables to select a set of objects. If CTRL key is pressed, the selection is added to the
 		current selection else it replaces the current selection.
                 </para>
             </listitem>
@@ -49,7 +49,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>Navigation</code> : In enables to navigate in the 3D view, the available operations are : translate, rotate, zoom, zoom and pan. Translation is the default operation, Rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac).
+                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>Navigation</code> : In enables to navigate in the 3D view, the available operations are : translate, rotate, zoom, zoom and pan. Translation is the default operation, Rotation is activated using <keycap>SHIFT</keycap>, zoom is activated using <keycap>CTRL</keycap>, zoom and pan is activated using the wheel of the mouse.
                 </para>
             </listitem>
             <listitem>
@@ -57,7 +57,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_move.png"/> <code>Selection move</code> : It enables to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, z axis rotation. If no key is pressed, coordinates and sizes are modified. if <keycap>SHIFT</keycap> key is pressed, only coordinates are modified.
+                <para><inlinegraphic fileref="images/i_move.png"/> <code>Selection move</code> : It enables to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, z axis rotation. If no key is pressed, coordinates and sizes are modified. if <keycap>SHIFT</keycap> is pressed, only coordinates are modified.
                 </para>
             </listitem>
             <listitem>
@@ -131,9 +131,9 @@
         </sect2>
         <sect2 id="hierar"><title>Hierarchy</title>
             <para>
-                This tab shows the inclusion relationships betweeen the different existing subgraphs and groups of a graph. All of them could be created with the Tulip tools. This hierarchy of graphs gives the results of computing from the algorithms of clustering too. 
+                This tab shows the inclusion relationships betweeen the different existing subgraphs and groups of a graph. All of them could be created with the tools of Tulip. This hierarchy of graphs gives the results of computing from the algorithms of clustering too. 
                 <graphic fileref="images/hierachy.png"/>
-                By a <quote>right click</quote>(<keycap>CTRL</keycap> click on Mac) in the hierarchy display, you can display a pop-up menu allowing to remove, clone, rename, a graph (subgraph or group).
+                By a <quote>right click</quote> in the hierarchy display, you can display a pop-up menu allowing to remove, clone, rename, a graph (subgraph or group).
             </para>
         </sect2>
         <sect2 id="stats"><title>Statistics (not available in standard version)</title>
@@ -159,7 +159,7 @@
             The 3D graph view sub-window is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node, a tooltip window displays informations about it. When the drawed graph is huge, the display is splitted in parts, so Tulip only draw thousand nodes and edges each time. This enables to navigate in real time in the graph even if the graphics hardware is slow.
         </para>
         <sect2 id="pop-up"><title>Pop-up Window of graph view</title>
-            <para>This pop-up menu is displayed on mouse right click (<keycap>CTRL</keycap> click on Mac) and allows to make simple operations : go inside (for Metagraphs), New 3D View, Delete (the object under the pointer) , Select (the object under the pointer) , Add/Remove selection. </para>
+            <para>This pop-up menu is displayed on mouse right click and allows to make simple operations : go inside (for Metagraphs), New 3D View, Delete (the object under the pointer) , Select (the object under the pointer) , Add/Remove selection. </para>
         </sect2>
     </sect1>
 </chapter>

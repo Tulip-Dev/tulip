@@ -7,7 +7,7 @@ class ConvolutionClusteringSetup : public ConvolutionClusteringSetupData {
     Q_OBJECT
 
 public:
-  ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+    ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ConvolutionClusteringSetup();
 
 public slots:

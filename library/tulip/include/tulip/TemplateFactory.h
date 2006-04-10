@@ -5,7 +5,6 @@
 #include "PluginLoader.h"
 #include "WithParameter.h"
 #include "Iterator.h"
-#include "Plugin.h"
 
 #include "tulip/PluginsCreation.h"
 
@@ -16,7 +15,7 @@ public:
   //typedef void *(*func)();
   typedef std::map< std::string , ObjectFactory * > ObjectCreator;
   void *handle;
-  PluginLoader *currentLoader;
+  func createObj;
 
   ObjectCreator objMap;
   std::map<std::string,StructDef> objParam;
@@ -24,19 +23,16 @@ public:
 
   Iterator<std::string>* availablePlugins();
   bool exists(const std::string &pluginName);
-  void load(std::string pluginPath,std::string type, PluginLoader *loader=0);
-  //bool load(std::string file);
+  void load(std::string pluginPath,std::string type,PluginLoader *loader=0);
+  bool load(std::string file);
   ObjectType *getObject(std::string name,Parameter p);
   StructDef getParam(std::string name);
-  void getPluginParameters(ObjectFactory* objectFactory);
-};
-
-
-template <class T> class TLP_SCOPE PropertyFactory:public Plugin {
-public:
-  PropertyFactory(){}
-  virtual ~PropertyFactory() {}
-  virtual T* createObject(const PropertyContext &context)=0;
+  void getPluginParameters(PluginLoader *loader);
+  private:
+  #ifdef _WIN32
+  //  void loadWin32plugin(std::string pluginName,PluginLoader *loader);
+  void loadWindows(std::string pluginName, std::string type, PluginLoader *loader);
+  #endif
 };
 
 /*@}*/

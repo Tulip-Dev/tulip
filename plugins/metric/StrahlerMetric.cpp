@@ -179,6 +179,9 @@ StrahlerMetric::StrahlerMetric(const PropertyContext &context):Metric(context) {
    addParameter<bool>("allNodes", paramHelp[0], "false");
 }
 //==============================================================================
+StrahlerMetric::~StrahlerMetric()
+{}
+//==============================================================================
 bool StrahlerMetric::run() {
   allNodes = false;
   if (dataSet!=0) dataSet->get("allNodes", allNodes);
@@ -235,3 +238,4 @@ bool StrahlerMetric::check(string &erreurMsg) {
   erreurMsg="";
   return true;
 }
+void StrahlerMetric::reset(){}

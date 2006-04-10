@@ -11,7 +11,6 @@
 #endif
 
 #include <vector>
-#if (QT_REL == 3)
 #include <qlistview.h>
 #include <qtextview.h> 
 #include <qsplitter.h>
@@ -19,17 +18,6 @@
 #include <qstring.h>
 #include <qmainwindow.h>
 #include <qassistantclient.h>
-#else
-#include <Qt3Support/q3listview.h>
-#include <Qt3Support/q3textview.h>
-#include <Qt3Support/q3dockwindow.h>
-#include <Qt3Support/q3popupmenu.h>
-#include <QtGui/qsplitter.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qmainwindow.h>
-#include <QtAssistant/qassistantclient.h>
-#include "tulip/Qt3ForTulip.h"
-#endif
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/SuperGraph.h>
@@ -66,9 +54,7 @@ public:
 protected:
   GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
-#ifdef STATS_UI
   TulipStats *statsWidget;
-#endif
   ToolBar *mouseToolBar;
   Overview *overviewWidget;
   QWidget *aboutWidget;
@@ -116,7 +102,6 @@ protected slots:
   void helpIndex();
   void helpContents();
   void helpAbout();
-  void helpAssistantError(const QString &msg);
   void fileExit();
   void fileSave();
   void fileSaveAs();
@@ -145,7 +130,7 @@ protected slots:
   void showDialog(int);
   void redrawView();
   void centerView();
-  void updateStatusBar();
+  void updateSatutBar();
   void deselectALL();
   void reverseSelection();
   void delSelection();
@@ -180,12 +165,12 @@ protected slots:
   void makeConnected();
   void showElementProperties();
 
+
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
   GlGraphWidget *newOpenGlView(SuperGraph *graph,const QString &);
-  std::string newName();
   stdext::hash_map<unsigned int, std::string> openFiles;
   void buildMenus();
   bool fileSave(std::string plugin, std::string filename);

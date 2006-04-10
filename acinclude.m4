@@ -339,6 +339,12 @@ dnl
 AC_DEFUN([AC_PATH_GL],
 [
 AC_REQUIRE([AC_PATH_X])
+if test ${VAR_WIN32} = 1
+then
+LIB_GL="-lglu32 -lopengl32"
+else
+LIB_GL="-lGLU -lGL -lXi -lXmu"
+fi
 AC_MSG_CHECKING([for Open Gl])
 
 ac_gl_includes="" ac_gl_libraries=""
@@ -384,6 +390,9 @@ fi
   if test=`eval $try 2> /dev/null`; then gl_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 ac_gl_libraries="$gl_libdir"
+
+ GL_INCLUDES="-I$ac_gl_includes"
+ GL_LDFLAGS="-L$ac_gl_libraries"
 ])
 
 eval "$ac_cv_have_gl"
@@ -395,21 +404,10 @@ else
   AC_MSG_RESULT([ libraries $ac_gl_libraries, headers $ac_gl_includes ])  
   gl_libraries="$ac_gl_libraries"
   gl_includes="$ac_gl_includes"
-if test ${VAR_MACOSX} = 1
-then
-  GL_INCLUDES="-I$ac_gl_includes"
-  GL_LDFLAGS=""
-else
   GL_INCLUDES="-I$ac_gl_includes"	
   GL_LDFLAGS="-L$ac_gl_libraries"
 fi
-fi
 
-dnl MAC PORT
-if test ${VAR_MACOSX} = 1
-then
-  GL_INCLUDES="$GL_INCLUDES -I/usr/include/malloc"
-fi
 AC_SUBST(gl_libraries)
 AC_SUBST(gl_includes)
 AC_SUBST(GL_INCLUDES)
@@ -417,14 +415,9 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-  LIB_GL="-lglu32 -lopengl32"
+LIB_GL="-lglu32 -lopengl32"
 else
-  if test ${VAR_MACOSX} = 1
-  then
-    LIB_GL="-framework OpenGL"
-  else
-    LIB_GL="-lGLU -lGL"
-  fi
+LIB_GL="-lGLU -lGL -lXi -lXmu"
 fi
 AC_SUBST(LIB_GL)
 ])
@@ -437,19 +430,23 @@ dnl and $(QT_INCLUDES) will be -Iqt_header_location (if needed)
 dnl ------------------------------------------------------------------------
 AC_DEFUN([AC_PATH_QT],
 [
+if test ${VAR_WIN32} = 1
+then
 LIB_QT="-lqt-mt"
-
+else 
+if test ${VAR_CYGWIN} = 1
+then 
+LIB_QT="-lqt-mt"
+else
+LIB_QT="-lqui"
+fi
+fi
 AC_MSG_CHECKING([for QT])
 
-ac_qt_dir=NO ac_qt_includes=NO ac_qt_libraries=NO 
-
-AC_ARG_WITH(qt-dir,
-    [  --with-qt-dir=DIR       where QT is installed. ],
-    [  ac_qt_dir="$withval"
-    ])
+ac_qt_includes=NO ac_qt_libraries=NO 
 
 AC_ARG_WITH(qt-includes,
-    [  --with-qt-includes=DIR  where the QT includes are. ],
+    [  --with-qt-includes=DIR   where the QT includes are. ],
     [  ac_qt_includes="$withval"
     ])
 
@@ -460,71 +457,19 @@ AC_ARG_WITH(qt-libraries,
 
 AC_CACHE_VAL(ac_cv_have_qt,
 [
-if test ! "$ac_qt_dir" = "NO"; then
-   QTDIR=$ac_qt_dir
-fi
-
-dnl check QT version
-QT_VERSION=3
-qtlib_prefix=libqt
-if test -e ${QTDIR}/bin/qt3to4 ; then
-  QT_VERSION=4
-  qtlib_prefix=libQt
-fi
-
-if test ${VAR_WIN32} = 1; then
-dnl For linking purpose, we need to copy some libs
-  if test ${QT_VERSION} = 3; then
-dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
-    if test ! -f $QTDIR/lib/libqt-mt.dll ; then
-      library=$(ls -1 ${QTDIR}/bin/qt-mt*.dll)
-      cp ${library} ${QTDIR}/lib/libqt-mt.dll
-    fi
-  else
-dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
-    if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
-      cp ${QTDIR}/lib/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
-    fi
-    if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
-      cp ${QTDIR}/lib/QtGui4.dll ${QTDIR}/lib/libQtGui4.dll
-    fi
-    if test ! -f ${QTDIR}/lib/libQt3Support4.dll ; then
-      cp ${QTDIR}/lib/Qt3Support4.dll ${QTDIR}/lib/libQt3Support4.dll
-    fi
-    if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
-      cp ${QTDIR}/lib/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
-    fi
-    if test ! -f ${QTDIR}/lib/libQtNetwork4.dll ; then
-      cp ${QTDIR}/lib/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
-    fi
-    if test ! -f ${QTDIR}/lib/libQtXml4.dll ; then
-      cp ${QTDIR}/lib/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
-    fi
-  fi
-fi
-
-qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
+qt_incdirs="$ac_qt_includes $QTDIR/include $QTDIR/include/qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
 AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
 ac_qt_includes="$qt_incdir"
-dnl add our own flag QT_REL (QT_VERSION is internally used by Qt)
-QT_CPPFLAGS="-DQT_REL=$QT_VERSION"
-if test ${QT_VERSION} -eq 4 && test -d $qt_incdir; then
-  ac_qt_includes="$(dirname $qt_incdir) -I$qt_incdir"
-dnl we add QT3_SUPPORT compilation flag as indicated 
-dnl in http://doc.trolltech.com/4.0/porting4.html
-dnl an QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
-  QT_CPPFLAGS="$QT_CPPFLAGS -DQT3_SUPPORT  -DQT_NO_DEBUG"
-fi
 
-qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
-test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib ${QTDIR} $qt_libdirs"
+qt_libdirs="$ac_qt_libraries $QTDIR/lib /usr/lib/qt/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
+test -n "$QTDIR" && qt_libdirs="$QTDIR/lib $QTDIR $qt_libdirs"
 if test ! "$ac_qt_libraries" = "NO"; then
   qt_libdirs="$ac_qt_libraries $qt_libdirs"
 fi
 test=NONE
 qt_libdir=NONE
 for dir in $qt_libdirs; do
-  try="ls -1 $dir/$qtlib_prefix*"
+  try="ls -1 $dir/libqt*"
   if test=`eval $try 2> /dev/null`; then qt_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 ac_qt_libraries="$qt_libdir"
@@ -532,7 +477,7 @@ ac_qt_libraries="$qt_libdir"
  qt_libraries="$ac_qt_libraries"
  qt_includes="$ac_qt_includes"
  QT_INCLUDES="-I$ac_qt_includes"
- QT_LDFLAGS="-L$ac_qt_libraries"
+ QT_LDFLAGS="-L$ac_qt_libraries"	
 ])
 
 eval "$ac_cv_have_qt"
@@ -541,39 +486,17 @@ if test "$ac_qt_libraries" = NONE; then
 else
   ac_cv_have_qt="have_qt=yes \
   ac_qt_includes=$ac_qt_includes ac_qt_libraries=$ac_qt_libraries"
-  AC_MSG_RESULT([ version ${QT_VERSION}, libraries $ac_qt_libraries, headers $ac_qt_includes ])
+  AC_MSG_RESULT([ libraries $ac_qt_libraries, headers $ac_qt_includes ])
   qt_libraries="$ac_qt_libraries"
   qt_includes="$ac_qt_includes"
   QT_INCLUDES="-I$qt_includes"
-  QT_LDFLAGS="-L$qt_libraries"
+  QT_LDFLAGS="-L$qt_libraries"	
 fi
 AC_SUBST(qt_libraries)
 AC_SUBST(qt_includes)
 AC_SUBST(QT_INCLUDES)
 AC_SUBST(QT_LDFLAGS)
-AC_SUBST(QT_CPPFLAGS)
-if test ${QT_VERSION} -eq 4; then
-dnl With the version 4 of Qt, its features are splitted in many libs
-dnl Qt3Support lib is for Qt 3 compatibility purpose
-  if test ${VAR_WIN32} = 1
-  then
-    LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
-    LIB_QT_DEBUG="-lQtCore4_debug -lQtGui4_debug -lQt3Support4_debug -lQtOpenGL4_debug -lQtNetwork4_debug -lQtXml4_debug"
-  else
-    if test ${VAR_MACOSX} = 1
-    then
-      LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGl -framework QtNetwork"
-      LIB_QT_DEBUG=${LIB_QT}
-    else
-      LIB_QT="-lQtCore -lQtGui -lQt3Support -lQtOpenGL"
-      LIB_QT_DEBUG="-lQtCore_debug -lQtGui_debug -lQt3Support_debug -lQtOpenGL_debug"
-    fi
-  fi
-else
-  LIB_QT_DEBUG=${LIB_QT}
-fi
 AC_SUBST(LIB_QT)
-AC_SUBST(QTDIR)
 ])
 
 AC_DEFUN([MOC_ERROR_MESSAGE],
@@ -608,7 +531,7 @@ dnl ------------------------------------------------------------------------
 dnl
 AC_DEFUN([AC_PATH_QT_MOC],
 [
-   FIND_PATH(moc, MOC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc \
+   FIND_PATH(moc, MOC, [$ac_qt_bindir $QTDIR/bin $QTDIR/src/moc \
 	    /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
 	    /usr/local/qt/bin], [MOC_ERROR_MESSAGE])
  
@@ -629,16 +552,10 @@ AC_DEFUN([AC_PATH_QT_MOC],
 
 AC_DEFUN([AC_PATH_QT_UIC],
 [
-dnl if this is the version 4 of Qt we use uic3
-   if test ${QT_VERSION} -eq 4; then
-     FIND_PATH(uic3, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
-	       /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
-	       /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
-   else
-     FIND_PATH(uic, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
-	       /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
-	       /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
-   fi
+   FIND_PATH(uic, UIC, [$ac_qt_bindir $QTDIR/bin $QTDIR/src/uic \
+	    /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
+	    /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
+ 
    if test -z "$UIC"; then
      if test -n "$ac_cv_path_uic"; then
        output=`eval "$ac_cv_path_uic --help 2>&1 | sed -e '1q' | grep Qt"`
@@ -669,12 +586,17 @@ AC_MSG_ERROR([All the freetype, jpeg, iconv, libpng, xml2, and zlib1 libraries m
 fi
 done
 AC_MSG_RESULT(yes)
-dnl For linking purpose, we need to copy some libs
+dnl For compilation purpose, we need to copy some libs
 dnl Copy libraries from windows/system32
 dnl in ${GLDIR} if needed
 if !(test -f $GLDIR/libglu32.dll); then
   cp $SYSTEMROOT/system32/glu32.dll $GLDIR/libglu32.dll
   cp $SYSTEMROOT/system32/opengl32.dll $GLDIR/libopengl32.dll
+fi
+dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
+if !(test -f $QTDIR/lib/libqt-mt.dll); then
+   library=$(ls -1 ${QTDIR}/bin/qt-mt*.dll)
+   cp ${library} ${QTDIR}/lib/libqt-mt.dll
 fi
 dnl Copy libraries from${MINGWDIR}/bin
 dnl in ${MINGWDIR}/lib if needed

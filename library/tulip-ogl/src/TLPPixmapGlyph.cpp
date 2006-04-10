@@ -25,35 +25,34 @@ unsigned char outlineFont2(unsigned x,unsigned y, unsigned srcWidth,
   return 255;
 }
 
-TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
-  :FTGlyph(glyphSlot),
-   destWidth(0),
-   destHeight(0),
-   data(0) {
-  FT_Glyph glyph;
-  FT_Get_Glyph(glyphSlot, &glyph);
-  // This function will always fail if the glyph's format isn't scalable????
-  err = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-  if( err || ft_glyph_format_bitmap != glyph->format)
+TLPPixmapGlyph::TLPPixmapGlyph( FT_Glyph glyph)
+:   FTGlyph( glyph),
+    destWidth(0),
+    destHeight(0),
+    data(0)
+{
+    // This function will always fail if the glyph's format isn't scalable????
+    err = FT_Glyph_To_Bitmap( &glyph, ft_render_mode_normal, 0, 1);
+    if( err || ft_glyph_format_bitmap != glyph->format)
     {
-      return;
+        return;
     }
 
-  FT_BitmapGlyph  bitmap = (FT_BitmapGlyph)glyph;
-  FT_Bitmap*      source = &bitmap->bitmap;
+    FT_BitmapGlyph  bitmap = (FT_BitmapGlyph)glyph;
+    FT_Bitmap*      source = &bitmap->bitmap;
 
-  //check the pixel mode
-  //ft_pixel_mode_grays
+    //check the pixel mode
+    //ft_pixel_mode_grays
         
-  int srcWidth = source->width;
-  int srcHeight = source->rows;
+    int srcWidth = source->width;
+    int srcHeight = source->rows;
 
-  // FIXME What about dest alignment?
-  //    destWidth = srcWidth;
-  //    destHeight = srcHeight;
+   // FIXME What about dest alignment?
+    //    destWidth = srcWidth;
+    //    destHeight = srcHeight;
 
-  destWidth = srcWidth+4;
-  destHeight = srcHeight+4;    
+    destWidth = srcWidth+4;
+    destHeight = srcHeight+4;    
     
   if( destWidth && destHeight)
     {
@@ -99,18 +98,18 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
 		*dest++ = 255;
 		*dest++ = 255;
 	      } else
-		if (newVal!=0) {
-		  *dest++ = redComponent;
-		  *dest++ = greenComponent;
-		  *dest++ = blueComponent;
-		  *dest++ = 255;
-		} else
-		  {
-		    *dest++ = 255;
-		    *dest++ = 255;
-		    *dest++ = 255;
-		    *dest++ = 0;
-		  }
+	      if (newVal!=0) {
+		*dest++ = redComponent;
+		*dest++ = greenComponent;
+		*dest++ = blueComponent;
+		*dest++ = 255;
+	      } else
+	       {
+		*dest++ = 255;
+		*dest++ = 255;
+		*dest++ = 255;
+		*dest++ = 0;
+	      }
 	    }
 	  dest -= destStep;
 	}
@@ -118,13 +117,13 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
       delete [] src1;
       destHeight = srcHeight;
     }
-  pos.X(bitmap->left - 2);
-  pos.Y(srcHeight - bitmap->top - 2);
+  pos.x = bitmap->left - 2;
+  pos.y = srcHeight - bitmap->top - 2;
   bBox.lowerX-=2;
   bBox.lowerY-=2;
   bBox.upperX+=2;
   bBox.upperY+=2;
-  advance += FTPoint(4, 4, 0); //advance+=4;
+  advance+=4;
   // Is this the right place to do this?
   FT_Done_Glyph( glyph );
 }
@@ -136,19 +135,19 @@ TLPPixmapGlyph::~TLPPixmapGlyph()
 }
 
 
-FTPoint& TLPPixmapGlyph::Render( const FTPoint& pen)
+float TLPPixmapGlyph::Render( const FTPoint& pen)
 {
     if( data)
     {
         // Move the glyph origin
-        glBitmap( 0, 0, 0.0, 0.0, pen.X() + pos.X(), pen.Y() - pos.Y(), (const GLubyte*)0);
+        glBitmap( 0, 0, 0.0, 0.0, pen.x + pos.x, pen.y - pos.y, (const GLubyte*)0);
 
         glPixelStorei( GL_UNPACK_ROW_LENGTH, 0);
 
         glDrawPixels( destWidth, destHeight, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid*)data);
         
         // Restore the glyph origin
-        glBitmap( 0, 0, 0.0, 0.0, -pen.X() - pos.X(), -pen.Y() + pos.Y(), (const GLubyte*)0);
+        glBitmap( 0, 0, 0.0, 0.0, -pen.x - pos.x, -pen.y + pos.y, (const GLubyte*)0);
     }
 
     return advance;

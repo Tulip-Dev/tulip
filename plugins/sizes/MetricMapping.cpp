@@ -39,13 +39,11 @@ namespace {
   };
 }
 
-// error msg for invalid range value
-static const char* rangeErrorMsg = "max size must be greater than min size";
 
 /** \addtogroup size */
 /*@{*/
 /// MetricMapping.h - Compute size of elements according to a metric.
-/** This plugin enables to set the size of the grapĥ&#146;s elements
+/** This plugin enables to set the size of the grapĥ's elements
  *  according to a metric.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
@@ -78,13 +76,15 @@ public:
     } delete itN;
   }
 
-  bool check(std::string &errorMsg) {
+  bool run() {
+    string metricS="viewMetric";
+    string sizeS="viewSize";
+    bool mappingType = true;
     xaxis=yaxis=zaxis=true;
     min=1;
     max=10;
     entryMetric=superGraph->getProperty<MetricProxy>("viewMetric");
     entrySize=superGraph->getProperty<SizesProxy>("viewSize");
-    mappingType = true;
     if ( dataSet!=0 ) {
       dataSet->get("property",entryMetric);
       dataSet->get("input",entrySize);
@@ -95,37 +95,24 @@ public:
       dataSet->get("max size",max);
       dataSet->get("type",mappingType);
     }
-    if (min >= max) {
-      /*cerr << rangeErrorMsg << endl;
-	pluginProgress->setError(rangeErrorMsg); */
-      errorMsg = std::string(rangeErrorMsg);
-      return false;
-    }
-  }
-
-  bool run() {
-    string metricS="viewMetric";
-    string sizeS="viewSize";
-
-    MetricProxy *tmp = 0;
     if (!mappingType) {
-      tmp = new MetricProxy(superGraph);
-      *tmp = *entryMetric;
+      MetricProxy *tmp=superGraph->getLocalProperty<MetricProxy>("tmpUni");
+      *tmp=*entryMetric;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
     sizesProxy->setAllEdgeValue(Size(0.25,0.25,0.25));
-    range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
+    range=entryMetric->getNodeMax(superGraph)-entryMetric->getNodeMin(superGraph);
     shift=entryMetric->getNodeMin(superGraph);
     computeNodeSize();
-    if (!mappingType) delete tmp;
+    if (!mappingType) superGraph->delLocalProperty("tmpUni");
     return true;
   }
 
 private:
   MetricProxy *entryMetric;
   SizesProxy *entrySize;
-  bool xaxis,yaxis,zaxis,mappingType;
+  bool xaxis,yaxis,zaxis;
   double min,max;
   double range;
   double shift;

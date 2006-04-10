@@ -20,35 +20,32 @@ class FTVectoriser;
  */
 class FTGL_EXPORT FTOutlineGlyph : public FTGlyph
 {
-    public:
-        /**
-         * Constructor. Sets the Error to Invalid_Outline if the glyphs isn't an outline.
-         *
-         * @param glyph The Freetype glyph to be processed
-         * @param useDisplayList Enable or disable the use of Display Lists for this glyph
-         *                       <code>true</code> turns ON display lists.
-         *                       <code>false</code> turns OFF display lists.
-         */
-        FTOutlineGlyph( FT_GlyphSlot glyph, bool useDisplayList);
+	public:
+		/**
+		 * Constructor
+		 *
+		 * @param glyph The Freetype glyph to be processed
+		 */
+		FTOutlineGlyph( FT_Glyph glyph);
 
-        /**
-         * Destructor
-         */
-        virtual ~FTOutlineGlyph();
+		/**
+		 * Destructor
+		 */
+		virtual ~FTOutlineGlyph();
 
-        /**
-         * Renders this glyph at the current pen position.
-         *
-         * @param pen	The current pen position.
-         * @return		The advance distance for this glyph.
-         */
-        virtual const FTPoint& Render( const FTPoint& pen);
-        
-    private:		
-        /**
-         * OpenGL display list
-         */
-        GLuint glList;
+		/**
+		 * Renders this glyph at the current pen position.
+		 *
+		 * @param pen	The current pen position.
+		 * @return		The advance distance for this glyph.
+		 */
+		virtual float Render( const FTPoint& pen);
+		
+	private:		
+		/**
+		 * OpenGL display list
+		 */
+		GLuint glList;
 	
 };
 

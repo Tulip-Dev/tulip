@@ -1,5 +1,5 @@
+#include <qinputdialog.h>
 #include <tulip/MetricProxy.h>
-#include <tulip/ForEach.h>
 #include <deque>
 #include "ClusterMetric.h"
 
@@ -16,14 +16,16 @@ namespace {
     HTML_HELP_DEF( "default", "1" ) \
     HTML_HELP_BODY() \
     "This parameter defines the maximal depth of a computed cluster." \
-    HTML_HELP_CLOSE()
+    HTML_HELP_CLOSE(),
   };
 }
-//=================================================
+
 ClusterMetric::ClusterMetric(const PropertyContext &context):Metric(context) {
   addParameter<unsigned int>("depth",paramHelp[0],"1");
 }
-//=================================================
+
+ClusterMetric::~ClusterMetric() {}
+
 void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsigned int depth) {
   deque<node> fifo;
   SuperGraph * graph = superGraph;
@@ -51,7 +53,7 @@ void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsi
     }
   }
 }
-//=================================================
+
 double ClusterMetric::getEdgeValue(const edge e ) {
   node src = superGraph->source(e);
   node tgt = superGraph->target(e);
@@ -61,7 +63,7 @@ double ClusterMetric::getEdgeValue(const edge e ) {
     return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
   return 0.;
 }
-//=================================================
+
 double ClusterMetric::getNodeValue(const node n ) {
   set<node> reachableNodes;
   buildSubGraph(n,n,reachableNodes,maxDepth);
@@ -81,24 +83,22 @@ double ClusterMetric::getNodeValue(const node n ) {
   }
   
   double nNode= reachableNodes.size(); //$|N_v|$
+
+  //  cerr << "n:" << nNode << endl;
+  //  cerr << "ne:" << nbEdge << endl;
+
   if (reachableNodes.size()>1) {
+
     double result = double(nbEdge)/(nNode*(nNode-1));
+    //    cerr << "res : " << result << endl;
     return result; //$e(N_v)/(\frac{k*(k-1)}{2}}$
   }
   else
     return 0;
 }
-//=================================================
+
 bool ClusterMetric::run() {
-  cerr << __PRETTY_FUNCTION__ << endl;
   maxDepth=1;
   if (dataSet!=0) dataSet->get("depth",maxDepth);
-  node n;
-  forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, getNodeValue(n));
-  edge e;
-  forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, getEdgeValue(e));
   return true;
 }
-//=================================================

@@ -7,7 +7,6 @@
 #include <sstream>
 #include <typeinfo>
 
-#if (QT_REL == 3)
 #include <qlistview.h>
 #include <qtable.h>
 #include <qpushbutton.h>
@@ -18,23 +17,6 @@
 #include <qlabel.h>
 #include <qcolordialog.h>
 #include <qtabwidget.h>
-#else
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qlistview.h>
-#include <Qt3Support/q3table.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qinputdialog.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qcolordialog.h>
-#include <QtGui/qtabwidget.h>
-#include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/SuperGraph.h>
 #include <tulip/PropertyManager.h>
@@ -62,22 +44,13 @@ void PropertyDialog::setGlGraphWidget(GlGraph *glwidget) {
   // tableNodes->filterSelection(_filterSelection);
 }
 
-PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-#if (QT_REL == 3)
+PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, WFlags fl)
   : PropertyDialogData(parent, name, modal) {
-#else
-  : PropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
-#endif
   _filterSelection=false;
   glWidget=0;
   supergraph=0;
-#if (QT_REL == 3)
-  connect(localProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-  connect(inheritedProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-#else
-  connect(localProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
-  connect(inheritedProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
-#endif
+  connect(localProperties, SIGNAL(selectionChanged(QListViewItem*)), SLOT(changePropertyName(QListViewItem*)));
+  connect(inheritedProperties, SIGNAL(selectionChanged(QListViewItem*)), SLOT(changePropertyName(QListViewItem*)));
   connect(removeButton , SIGNAL(clicked()) , SLOT(removeProperty()) );
   connect(newButton,SIGNAL(clicked()),SLOT(newProperty()));
   connect(cloneButton,SIGNAL(clicked()),SLOT(cloneProperty()));

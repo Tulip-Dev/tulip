@@ -5,20 +5,6 @@
 typedef double   FTGL_DOUBLE;
 typedef float    FTGL_FLOAT;
 
-// Fixes for deprecated identifiers in 2.1.5
-#ifndef FT_OPEN_MEMORY
-    #define FT_OPEN_MEMORY (FT_Open_Flags)1
-#endif
-
-#ifndef FT_RENDER_MODE_MONO
-    #define FT_RENDER_MODE_MONO ft_render_mode_mono
-#endif
-
-#ifndef FT_RENDER_MODE_NORMAL
-    #define FT_RENDER_MODE_NORMAL ft_render_mode_normal
-#endif
-
-  
 #ifdef WIN32
 
     // Under windows avoid including <windows.h> is overrated. 
@@ -82,5 +68,15 @@ typedef float    FTGL_FLOAT;
     // Ensure that the export symbol is defined (and blank)
     #define FTGL_EXPORT
 #endif  
+
+
+// lifted from glext.h, to remove dependancy on glext.h
+#ifndef GL_EXT_texture_object
+    #define GL_TEXTURE_PRIORITY_EXT           0x8066
+    #define GL_TEXTURE_RESIDENT_EXT           0x8067
+    #define GL_TEXTURE_1D_BINDING_EXT         0x8068
+    #define GL_TEXTURE_2D_BINDING_EXT         0x8069
+    #define GL_TEXTURE_3D_BINDING_EXT         0x806A
+#endif
 
 #endif  //  __FTGL__

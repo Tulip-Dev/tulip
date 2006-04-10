@@ -9,7 +9,6 @@
 */
 #include <assert.h>
 #include "LoopSelection.h"
-#include <tulip/ForEach.h>
 #include <tulip/SelectionProxy.h>
 #include <tulip/MethodFactory.h>
 
@@ -18,14 +17,8 @@ SELECTIONPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha
 using namespace std;
 
 LoopSelection::LoopSelection(const PropertyContext &context):Selection(context) {}
-//============================================
-bool LoopSelection::run() {
-  selectionProxy->setAllNodeValue(false);
-  edge e;
-  forEach(e, superGraph->getEdges())
-    selectionProxy->setEdgeValue(e, 
-				 superGraph->source(e)==superGraph->target(e));
-  return true;
+
+bool LoopSelection::getEdgeValue(edge e) {
+  return (superGraph->source(e)==superGraph->target(e));
 }
-//============================================
 

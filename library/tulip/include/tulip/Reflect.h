@@ -50,9 +50,9 @@ private:
 ///This class enables to define a structure
 struct TLP_SIMPLE_SCOPE StructDef {
   ///Add the variable of type T and name str in the structure.
-  template<typename T> void add(const char* str,
-				const char* inHelp = 0,
-				const char* inDefValue = 0);
+  template<typename T> void add(	std::string str,
+  									const char * inHelp = 0,
+  									std::string inDefValue = std::string() );
 
   ///Get iterator on structure fields
   Iterator< std::pair<std::string,std::string> >* getField() const;

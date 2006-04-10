@@ -2,13 +2,12 @@
 #include    "FTVectoriser.h"
 
 
-FTOutlineGlyph::FTOutlineGlyph( FT_GlyphSlot glyph, bool useDisplayList)
+FTOutlineGlyph::FTOutlineGlyph( FT_Glyph glyph)
 :   FTGlyph( glyph),
     glList(0)
 {
     if( ft_glyph_format_outline != glyph->format)
     {
-        err = 0x14; // Invalid_Outline
         return;
     }
 
@@ -20,29 +19,24 @@ FTOutlineGlyph::FTOutlineGlyph( FT_GlyphSlot glyph, bool useDisplayList)
         return;
     }
 
-    if(useDisplayList)
-    {
-        glList = glGenLists(1);
-        glNewList( glList, GL_COMPILE);
-    }
-    
-    for( unsigned int c = 0; c < numContours; ++c)
-    {
-        const FTContour* contour = vectoriser.Contour(c);
-        
-        glBegin( GL_LINE_LOOP);
-            for( unsigned int pointIndex = 0; pointIndex < contour->PointCount(); ++pointIndex)
-            {
-                FTPoint point = contour->Point(pointIndex);
-                glVertex2f( point.X() / 64.0f, point.Y() / 64.0f);
-            }
-        glEnd();
-    }
+    glList = glGenLists(1);
+    glNewList( glList, GL_COMPILE);
+        for( unsigned int c = 0; c < numContours; ++c)
+        {
+            const FTContour* contour = vectoriser.Contour(c);
+            
+            glBegin( GL_LINE_LOOP);
+                for( unsigned int p = 0; p < contour->PointCount(); ++p)
+                {
+                    glVertex2f( contour->Point(p).x / 64.0f, contour->Point(p).y / 64.0f);
+                }
+            glEnd();
+        }
+    glEndList();
 
-    if(useDisplayList)
-    {
-        glEndList();
-    }
+
+    // discard glyph image (bitmap or not)
+    FT_Done_Glyph( glyph); // Why does this have to be HERE
 }
 
 
@@ -52,13 +46,13 @@ FTOutlineGlyph::~FTOutlineGlyph()
 }
 
 
-const FTPoint& FTOutlineGlyph::Render( const FTPoint& pen)
+float FTOutlineGlyph::Render( const FTPoint& pen)
 {
-    glTranslatef( pen.X(), pen.Y(), 0.0f);
-
     if( glList)
     {
-        glCallList( glList);
+        glTranslatef( pen.x, pen.y, 0);
+            glCallList( glList);
+        glTranslatef( -pen.x, -pen.y, 0);
     }
     
     return advance;

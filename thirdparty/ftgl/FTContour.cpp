@@ -99,11 +99,13 @@ FTContour::FTContour( FT_Vector* contour, char* pointTags, unsigned int numberOf
             
             while( nextPointTag == FT_Curve_Tag_Conic)
             {
-                nextPoint = ( controlPoint + nextPoint) * 0.5f;
+                nextPoint = FTPoint( static_cast<float>( controlPoint.x + nextPoint.x) * 0.5f,
+                                     static_cast<float>( controlPoint.y + nextPoint.y) * 0.5f,
+                                     0);
 
-                controlPoints[0][0] = previousPoint.X(); controlPoints[0][1] = previousPoint.Y();
-                controlPoints[1][0] = controlPoint.X();  controlPoints[1][1] = controlPoint.Y();
-                controlPoints[2][0] = nextPoint.X();     controlPoints[2][1] = nextPoint.Y();
+                controlPoints[0][0] = previousPoint.x; controlPoints[0][1] = previousPoint.y;
+                controlPoints[1][0] = controlPoint.x;  controlPoints[1][1] = controlPoint.y;
+                controlPoints[2][0] = nextPoint.x;     controlPoints[2][1] = nextPoint.y;
                 
                 evaluateQuadraticCurve();
                 ++pointIndex;
@@ -118,9 +120,9 @@ FTContour::FTContour( FT_Vector* contour, char* pointTags, unsigned int numberOf
                                : pointTags[pointIndex + 1];
             }
             
-            controlPoints[0][0] = previousPoint.X(); controlPoints[0][1] = previousPoint.Y();
-            controlPoints[1][0] = controlPoint.X();  controlPoints[1][1] = controlPoint.Y();
-            controlPoints[2][0] = nextPoint.X();     controlPoints[2][1] = nextPoint.Y();
+            controlPoints[0][0] = previousPoint.x; controlPoints[0][1] = previousPoint.y;
+            controlPoints[1][0] = controlPoint.x;  controlPoints[1][1] = controlPoint.y;
+            controlPoints[2][0] = nextPoint.x;     controlPoints[2][1] = nextPoint.y;
             
             evaluateQuadraticCurve();
             continue;
@@ -134,10 +136,10 @@ FTContour::FTContour( FT_Vector* contour, char* pointTags, unsigned int numberOf
                                 ? pointList[0]
                                 : FTPoint( contour[pointIndex + 2]);
             
-            controlPoints[0][0] = previousPoint.X(); controlPoints[0][1] = previousPoint.Y();
-            controlPoints[1][0] = controlPoint.X();  controlPoints[1][1] = controlPoint.Y();
-            controlPoints[2][0] = controlPoint2.X(); controlPoints[2][1] = controlPoint2.Y();
-            controlPoints[3][0] = nextPoint.X();     controlPoints[3][1] = nextPoint.Y();
+            controlPoints[0][0] = previousPoint.x; controlPoints[0][1] = previousPoint.y;
+            controlPoints[1][0] = controlPoint.x;  controlPoints[1][1] = controlPoint.y;
+            controlPoints[2][0] = controlPoint2.x; controlPoints[2][1] = controlPoint2.y;
+            controlPoints[3][0] = nextPoint.x;     controlPoints[3][1] = nextPoint.y;
         
             evaluateCubicCurve();
             ++pointIndex;

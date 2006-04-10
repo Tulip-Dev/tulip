@@ -141,7 +141,7 @@ namespace {
     HTML_HELP_CLOSE()
   };
 }
-#define ORIENTATION "vertical;horizontal;"
+const std::string ORIENTATION("vertical;horizontal;");
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");

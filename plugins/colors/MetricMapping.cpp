@@ -195,18 +195,17 @@ public:
   }
   //=========================================================
   bool run() {
-    //    cerr << __PRETTY_FUNCTION__ << endl;
-    MetricProxy* metricS = superGraph->getProperty<MetricProxy>("viewMetric");
+    MetricProxy* metricS=superGraph->getProperty<MetricProxy>("viewMetric");
     colorModel=1;
     color1.set(255,255,0);
     color2.set(0,0,255);
     bool mappingType = true;
     if ( dataSet!=0 ) {
-      dataSet->get("property", metricS);
-      dataSet->get("colormodel", colorModel);
-      dataSet->get("color1", color1);
-      dataSet->get("color2", color2);
-      dataSet->get("type", mappingType);
+      dataSet->get("property",metricS);
+      dataSet->get("colormodel",colorModel);
+      dataSet->get("color1",color1);
+      dataSet->get("color2",color2);
+      dataSet->get("type",mappingType);
     }
     if (mappingType) {
       entryMetric = metricS;
@@ -231,7 +230,6 @@ public:
   }
   //=========================================================
   bool check(string &err){
-    //    cerr << __PRETTY_FUNCTION__ << endl;
     return true;
   }
 };

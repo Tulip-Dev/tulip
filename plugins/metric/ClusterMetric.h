@@ -43,11 +43,11 @@
 class ClusterMetric:public Metric { 
 public:
   ClusterMetric(const PropertyContext &);
-  bool run();
-
-private:
+  ~ClusterMetric();
   double getNodeValue(const node n);
   double getEdgeValue(const edge n);
+  bool run();
+private:
   void buildSubGraph(node n,node startNode,std::set<node> &selected,unsigned int depth);
   int  maxDepth;
 };

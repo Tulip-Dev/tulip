@@ -20,9 +20,9 @@ class FTGL_EXPORT FTGLPolygonFont : public FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontFilePath  font file path.
+         * @param fontname  font file name.
          */
-        FTGLPolygonFont( const char* fontFilePath);
+        FTGLPolygonFont( const char* fontname);
         
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.

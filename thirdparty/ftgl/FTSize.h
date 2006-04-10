@@ -94,6 +94,10 @@ class FTGL_EXPORT FTSize
          */
         float Underline() const;
 
+        unsigned int XPixelsPerEm() const;
+
+        unsigned int YPixelsPerEm() const;
+
         /**
          * Queries for errors.
          *
@@ -116,17 +120,7 @@ class FTGL_EXPORT FTSize
          *  The size in points.
          */
         unsigned int size;
-
-        /**
-         *  The horizontal resolution.
-         */
-        unsigned int xResolution;
-
-        /**
-         *  The vertical resolution.
-         */
-        unsigned int yResolution;
-
+        
         /**
          * Current error code. Zero means no error.
          */

@@ -4,15 +4,13 @@
 #include <config.h>
 #endif
 
+
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
-#include <limits.h>
 #include <string>
 #include <map>
 #include <vector>
-
-#if (QT_REL == 3)
 #include <qmessagebox.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
@@ -20,6 +18,7 @@
 #include <qfiledialog.h>
 #include <qinputdialog.h>
 #include <qworkspace.h>
+#include <limits.h>
 #include <qmenubar.h>
 #include <qtable.h>
 #include <qvbox.h>
@@ -36,40 +35,8 @@
 #include <qaction.h>
 #include <qradiobutton.h>
 #include <qprinter.h>
+#include <qobjectlist.h>
 #include <qtabwidget.h>
-#include <qdesktopwidget.h>
-#else
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qapplication.h>
-#include <QtGui/qcolordialog.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qinputdialog.h>
-#include <QtGui/qworkspace.h>
-#include <QtGui/qmenubar.h>
-#include <QtGui/qdesktopwidget.h>
-#include <Qt3Support/q3table.h>
-#include <Qt3Support/q3vbox.h>
-#include <QtGui/qstatusbar.h>
-#include <QtGui/qpixmap.h>
-#include <Qt3Support/q3strlist.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qimagewriter.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qprogressdialog.h>
-#include <Qt3Support/q3dockwindow.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qcursor.h>
-#include <QtGui/qaction.h>
-#include <QtGui/qradiobutton.h>
-#include <QtGui/qprinter.h>
-#include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
@@ -102,6 +69,7 @@
 #include "AppStartUp.h"
 #include <tulip/MouseMoveSelection.h>
           
+#define WITHQT3
 #define UNNAMED "unnamed"
 
 using namespace std;
@@ -111,15 +79,6 @@ using namespace tlp;
 ///Constructor of ViewGl
 viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-
-#if (QT_REL == 4)
-  // remove strange scories from designer/Tulip.ui
-  Graph->removeAction(Action);
-  Graph->removeAction(menunew_itemAction);
-  // set workspace background
-  workspace->setBackground(QBrush(Ui_TulipData::icon(image1_ID)));
-#endif
-
   Observable::holdObservers();
   glWidget=0;
   gridOptionsWidget=0;
@@ -143,7 +102,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
   overviewWidget->show();
   overviewDock->show();
-  //Create Data information editor (Hierarchy, Element info, Property Info)
+ //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
   tabWidgetDock->setCaption("Info Editor");
   tabWidgetDock->setCloseMode(QDockWindow::Always);
@@ -171,11 +130,9 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   propertiesWidget=tabWidget->propertyDialog;
   //Init Element info widget
   nodeProperties = tabWidget->elementInfo;
-#ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
   statsWidget->setClusterTreeWidget(clusterTreeWidget);
-#endif
 
   ((Application*)qApp)->nodeProperties = nodeProperties;
   //connect signals related to supergraph replacement
@@ -202,15 +159,9 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   Observable::unholdObservers();
   morph = new Morphing();
 
-  // initialization of Qt Assistant, the path should be in $PATH
-#if defined(__APPLE__)
-  std::string assistantPath(tlp::TulipLibDir);
-  assistantPath += "../assistant";
-  assistant = new QAssistantClient(assistantPath.c_str(), this);
-#else
+  // initialisaton of Qt Assistant, the path should be in $PATH
   assistant = new QAssistantClient("", this);
-#endif
-  connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
+
 }
 //**********************************************************************
 void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
@@ -222,7 +173,7 @@ void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
 }
 //**********************************************************************
 void viewGl::enableElements(bool enabled) {
-  enableQPopupMenu((QPopupMenu *) editMenu, enabled);
+  enableQPopupMenu(editMenu, enabled);
   enableQPopupMenu(&stringMenu, enabled);
   enableQPopupMenu(&layoutMenu, enabled);
   enableQPopupMenu(&metricMenu, enabled);
@@ -230,7 +181,7 @@ void viewGl::enableElements(bool enabled) {
   enableQPopupMenu(&intMenu, enabled);
   enableQPopupMenu(&sizesMenu, enabled);
   enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu((QPopupMenu *) clusteringMenu, enabled);
+  enableQPopupMenu(clusteringMenu, enabled);
   enableQPopupMenu(&exportGraphMenu, enabled);
   enableQPopupMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
@@ -295,32 +246,6 @@ viewGl::~viewGl() {
 }
 //**********************************************************************
 void viewGl::startTulip() {
-  // adjust size if needed
-  QRect sRect = QApplication::desktop()->availableGeometry();
-  QRect vRect(this->geometry());
-  int needResize = 0;
-  if (vRect.width() > sRect.width()) {
-    vRect.setWidth(sRect.width());
-    vRect.setHeight(sRect.height());
-    needResize = 1;
-  }
-  if (vRect.right() > sRect.right()) {
-    vRect.moveLeft(sRect.left());
-    needResize = 1;
-  }
-  if (vRect.height() > sRect.height()) {
-    vRect.setHeight(sRect.height());
-    vRect.setWidth(sRect.width());
-    needResize = 1;
-  }
-  if (vRect.bottom() > sRect.bottom()) {
-    vRect.moveTop(sRect.top());
-    needResize = 1;
-  }
-  if (needResize)
-    this->setGeometry(vRect.x(), vRect.y(),
-		      vRect.width(), vRect.height());
-
   AppStartUp *appStart=new AppStartUp(this);
   appStart->show();
   appStart->initTulip();
@@ -329,9 +254,9 @@ void viewGl::startTulip() {
   overviewWidget->view->initializeGL();
   this->show();
   enableElements(false);
-  int argc = qApp->argc();
+  int argc = ((QApplication *)qApp)->argc();
   if (argc>1) {
-    char ** argv = qApp->argv();
+    char ** argv = ((QApplication *)qApp)->argv();
     for (int i=1;i<argc;++i) {
       QFileInfo info(argv[i]);
       QString s = info.absFilePath();
@@ -349,18 +274,15 @@ void viewGl::changeSuperGraph(SuperGraph *graph) {
   if(glWidget != 0) {
     propertiesWidget->setGlGraphWidget(glWidget);
     overviewWidget->setObservedView(glWidget);
-#ifdef STATS_UI
     statsWidget->setGlGraphWidget(glWidget);
-#endif
   }
-  updateStatusBar();
+  updateSatutBar();
   redrawView();
   initObservers();
 }
 //**********************************************************************
 void viewGl::hierarchyChangeSuperGraph(SuperGraph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
-  if( !glWidget ) return;
   if (glWidget->getSuperGraph() == graph)  return;
   clearObservers();
   glWidget->setSuperGraph(graph);  
@@ -383,9 +305,6 @@ void viewGl::windowActivated(QWidget *w) {
 GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
-#if (QT_REL == 4)
-  workspace->addWindow(glWidget);
-#endif
   glWidget->setSuperGraph(graph);
   glWidget->move(0,0);
   glWidget->setCaption(name);
@@ -393,12 +312,8 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
-#if (QT_REL == 3)
   glWidget->setFocusPolicy(QWidget::NoFocus);
-#else
-  glWidget->setFocusPolicy(Qt::NoFocus);
-#endif
-  glWidget->setBackgroundMode(Qt::PaletteBackground);  
+  glWidget->setBackgroundMode(QWidget::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
   connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
@@ -412,12 +327,10 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
 	  this, SLOT(showElementProperties()));
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
-
-#if (QT_REL == 3)
+ 
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
 
   QToolTip::setWakeUpDelay(2500);
-#endif
 
   changeSuperGraph(graph);
 
@@ -429,21 +342,10 @@ GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
   return glWidget;
 }
 //**********************************************************************
-std::string viewGl::newName() {
-  static int idx = 0;
-
-  if (idx++ == 0)
-    return std::string(UNNAMED);
-  
-  stringstream ss;
-  ss << UNNAMED << '_' << idx - 1;
-  return ss.str();
-}    
-//**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   DataSet param=glWidget->getParameters();
-  //QString name(glWidget->name());
+  QString name(glWidget->name());
   newOpenGlView(glWidget->getSuperGraph(),glWidget->parentWidget()->caption());
   glWidget->setParameters(param);
   glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
@@ -454,8 +356,7 @@ void viewGl::fileNew() {
   Observable::holdObservers();
   SuperGraph *newSuperGraph=tlp::newSuperGraph();
   initializeGraph(newSuperGraph);
-  GlGraph *glW = newOpenGlView(newSuperGraph,
-			       newSuperGraph->getAttribute<string>(std::string("name")).c_str());
+  GlGraph *glW = newOpenGlView(newSuperGraph,string(UNNAMED).c_str());
   initializeGlGraph(glW);
   overviewWidget->syncFromView();
   redrawView();
@@ -527,7 +428,7 @@ void viewGl::fileOpen() {
 }
 //**********************************************************************
 void viewGl::initializeGraph(SuperGraph *superGraph) {
-  superGraph->setAttribute("name", newName());
+  superGraph->setAttribute("name",string(UNNAMED));
   superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
   superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   superGraph->getProperty<ColorsProxy>("viewColor")->setAllNodeValue(Color(255,0,0));
@@ -569,8 +470,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
     else {
       noPlugin = false;
-      s = QString::null;
-      StructDef parameter = ImportModuleFactory::factory->getParam(*plugin);
+      s = UNNAMED;
+      StructDef parameter = tlp::importFactory.getParam(*plugin);
       parameter.buildDefaultDataSet( dataSet );
       cancel = !tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter plugin parameter");
     }
@@ -600,8 +501,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     SuperGraph *newGraph = tlp::newSuperGraph();
     initializeGraph(newGraph);
-    if (s == QString::null)
-      s = newGraph->getAttribute<string>("name").c_str();
     bool result=true;
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
     initializeGlGraph(glW);
@@ -620,7 +519,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       std::string errorMsg = progressBar->getError();
       delete progressBar;
       Observable::unholdObservers();
-      QMessageBox::critical(this, errorTitle.c_str(), errorMsg.c_str());
+      QMessageBox::critical(this, errorTitle, errorMsg);
       return;
     }
     delete progressBar;
@@ -630,7 +529,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       cleanName=cleanName.section('.',-fields.count(), -2);
       newGraph->setAttribute("name", string(cleanName.latin1()));
     }
-
 
     if(noPlugin)
       openFiles[((unsigned int)glW)]=s.latin1();
@@ -769,7 +667,7 @@ void viewGl::setParameters(const DataSet data) {
   propertiesWidget->setSuperGraph(glWidget->getSuperGraph());
 }
 //**********************************************************************
-void viewGl::updateStatusBar() {
+void viewGl::updateSatutBar() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   SuperGraph *graph=clusterTreeWidget->getSuperGraph();
   if (graph==0) return;
@@ -781,8 +679,8 @@ void viewGl::updateStatusBar() {
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
 void buildPropertyMenu(QPopupMenu &menu) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
-  it=PropertyProxy<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
-  for (;it!=PropertyProxy<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)  
+  it=PropertyProxy<TYPEN, TYPEE, TPROPERTY>::factory.objMap.begin();
+  for (;it!=PropertyProxy<TYPEN,TYPEE, TPROPERTY>::factory.objMap.end();++it)  
     menu.insertItem( it->first.c_str() );
 }
 //**********************************************************************
@@ -797,30 +695,24 @@ void viewGl::buildMenus(){
   buildPropertyMenu<BooleanType,BooleanType, Selection>(selectMenu);
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
-  for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
+  for (it3=tlp::clusteringFactory.objMap.begin();it3!=tlp::clusteringFactory.objMap.end();++it3)
     clusteringMenu->insertItem( it3->first.c_str() );
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
-  for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
+  for (it9=tlp::exportFactory.objMap.begin();it9!=tlp::exportFactory.objMap.end();++it9)
     exportGraphMenu.insertItem( it9->first.c_str() );
   //Import PopMenu
   TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
-  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4) {
+  for (it4=tlp::importFactory.objMap.begin();it4!=tlp::importFactory.objMap.end();++it4) {
     importGraphMenu.insertItem( it4->first.c_str() );
   }
   //Image PopuMenu
-#if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
   char *tmp=listFormat.first();
   while (tmp!=0) {
     exportImageMenu.insertItem(tmp);
     tmp=listFormat.next();
   }
-#else
-  foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-    exportImageMenu.insertItem(QString(format));
-  }
-#endif
   exportImageMenu.insertItem("EPS");
   //Windows
   dialogMenu.insertItem("Mouse Tool Bar");
@@ -943,11 +835,11 @@ int viewGl::closeWin() {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
       SuperGraph *superGraph = tmpNavigate->getSuperGraph()->getRoot();
       if(!alreadyTreated(treatedGraph, superGraph)) {
-	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + " ?";
+	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + "?";
 	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
 					   QMessageBox::Cancel);
 	if(answer == QMessageBox::Cancel)
-	  return false;
+	  return true;
 	if(answer == QMessageBox::Yes) {
 	  glWidget = tmpNavigate;
 	  fileSave();
@@ -972,10 +864,7 @@ int viewGl::alreadyTreated(set<unsigned int> treatedGraph, SuperGraph *graph) {
 }
 //**********************************************************************
 void viewGl::closeEvent(QCloseEvent *e) {
-  if (closeWin())
-    e->accept();
-  else
-    e->ignore();
+   closeWin();
 }
 //**********************************************************************
 void viewGl::goInside() {
@@ -1150,7 +1039,7 @@ void viewGl::restoreView() {
   glWidget->centerScene();
   redrawView();
   overviewWidget->setObservedView(glWidget);
-  updateStatusBar();
+  updateSatutBar();
   Observable::unholdObservers();
 }
 //===========================================================
@@ -1227,7 +1116,7 @@ void viewGl::newSubgraph() {
   else if (ok) {
     sel1 = graph->getProperty<SelectionProxy>("viewSelection");
     SuperGraph *tmp=graph->addSubGraph(sel1);
-    tmp->setAttribute("name", newName());
+    tmp->setAttribute("name",string("unnamed"));
     clusterTreeWidget->update();
   }
 }
@@ -1272,16 +1161,12 @@ void viewGl::helpContents() {
 	  << QString( (tlp::TulipDocProfile).c_str());
   
   assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() ){ 
+  if ( !assistant->isOpen() ){
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
     assistant->openAssistant();
   }
   else	
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
-}
-//==============================================================
-void viewGl::helpAssistantError(const QString &msg) {
-  cerr << msg.ascii() << endl;
 }
 //==============================================================
 void viewGl::fileExit() {
@@ -1326,11 +1211,7 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     }
   }
   if(i == int(windows.count())) {
-    string message = "Do you want to save this graph : " +
-      navigate->getSuperGraph()->getAttribute<string>("name") + " ?";
-
-    int answer = QMessageBox::question(this, "Save", message.c_str(), QMessageBox::Yes,
-				       QMessageBox::No, 
+    int answer = QMessageBox::question(this, "Save", "Do you want to save this graph?",  QMessageBox::Yes,  QMessageBox::No, 
 				       QMessageBox::Cancel);
     if(answer == QMessageBox::Cancel)
       return;
@@ -1340,9 +1221,7 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     propertiesWidget->setSuperGraph(0);
     propertiesWidget->setGlGraphWidget(0);
     nodeProperties->setSuperGraph(0);
-#ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
-#endif
     w->setSuperGraph(0);
     delete root;
   }
@@ -1369,7 +1248,7 @@ void viewGl::makeClustering(int id) {
   string erreurMsg;
   DataSet dataSet;
   SuperGraph *graph=glWidget->getSuperGraph();
-  StructDef parameter = ClusteringFactory::factory->getParam(name);
+  StructDef parameter = tlp::clusteringFactory.getParam(name);
   parameter.buildDefaultDataSet( dataSet, graph );
   tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
   QtProgress myProgress(this,name);
@@ -1398,11 +1277,10 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   DataSet *dataSet =0;
   if (query) {
     dataSet = new DataSet();
-    StructDef parameter = PROPERTY::factory->getParam(name);
+    StructDef parameter = PROPERTY::factory.getParam(name);
     parameter.buildDefaultDataSet( *dataSet, graph );
     resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
   }
-
   if (resultBool) {
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
@@ -1418,12 +1296,13 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       case TLP_CANCEL:
 	resultBool=false;
       };
-    graph->delLocalProperty(name);
   }
   if (dataSet!=0) delete dataSet;
-
+  graph->delLocalProperty(name);
   propertiesWidget->setSuperGraph(graph);
   overviewWidget->setObservedView(glWidget);
+  //  clusterTreeWidget->update();
+  //  clusterTreeWidget->setSuperGraph(graph);
   Observable::unholdObservers();
   return resultBool;
 }
@@ -1465,7 +1344,7 @@ void viewGl::changeLayout(int id) {
   Coord scTrans = glWidget->getSceneTranslation();
   Coord scRot = glWidget->getSceneRotation();
   glWidget->setInputLayout(name);
-  bool result = changeProperty<LayoutProxy>(name, "viewLayout", true, true);
+  bool result = changeProperty<LayoutProxy>(name,"viewLayout", true, true);
   glWidget->setInputLayout("viewLayout");
   glWidget->setCamera(cam);
   glWidget->setSceneTranslation(scTrans);
@@ -1477,7 +1356,7 @@ void viewGl::changeLayout(int id) {
     Observable::holdObservers();
     glWidget->centerScene();
     overviewWidget->setObservedView(glWidget);
-    updateStatusBar();
+    updateSatutBar();
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );

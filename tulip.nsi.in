@@ -6,8 +6,8 @@
 ;--------------------------------
 ;General
 
-Name "Tulip @VERSION@"
-OutFile "TulipSetup_@WIN_EXE_VERSION@.exe"
+Name "Tulip"
+OutFile "TulipSetup.exe"
 InstallDir "$PROGRAMFILES\Tulip\"
 
 
@@ -37,15 +37,6 @@ InstallDir "$PROGRAMFILES\Tulip\"
 !insertmacro MUI_UNPAGE_FINISH
 !insertmacro MUI_LANGUAGE "English" 
 
-; check for previous version
-Function CheckPreviousVersion
-  ReadRegStr $R0 HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip UninstallString
-  StrCmp $R0 "" CheckPrev_no
-  MessageBox MB_OK|MB_ICONSTOP "A previous version of Tulip was found.$\n$\nYou have to uninstall it before installing this new one."
-  Abort
-CheckPrev_no: 
-FunctionEnd
-
 ; initialization
 Function .onInit
 InitPluginsDir ;on initialise le répertoire de démarrage des plugins
@@ -53,7 +44,6 @@ File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie
 advsplash::show 1800 350 187 2 $PLUGINSDIR\splash
 Pop $R0 ;on récupère la valeur de retour : 1, si l'utilisateur a fermé l'écran, 0 si tout s'est bien passé, et -1 si un problème est survenu
 Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
-Call CheckPreviousVersion
 FunctionEnd
 
 Section "-Programme (requis)"
@@ -82,17 +72,7 @@ File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
-!ifdef QT3
 File "@qt_libraries@\qt-mt*.dll"
-!else
-File "@qt_libraries@\Qt3Support4.dll"
-File "@qt_libraries@\QtCore4.dll"
-File "@qt_libraries@\QtGui4.dll"
-File "@qt_libraries@\QtNetWork4.dll"
-File "@qt_libraries@\QtOpenGL4.dll"
-File "@qt_libraries@\QtSql4.dll"
-File "@qt_libraries@\QtXml4.dll"
-!endif
 File  "@qt_libraries@\..\bin\assistant.exe"
 setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
@@ -127,10 +107,10 @@ SectionEnd
 
 
 Section "Shortcuts" raccourcis
-SetOutPath "$SMPROGRAMS\Tulip @VERSION@"
-CreateShortCut "$SMPROGRAMS\Tulip @VERSION@\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
-CreateShortCut "$SMPROGRAMS\Tulip @VERSION@\Uninstall.lnk" "$INSTDIR\uninst-Tulip.exe" "" "$INSTDIR\win-uninstall.ico"
-CreateShortCut "$DESKTOP\Tulip @VERSION@.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
+SetOutPath "$SMPROGRAMS\Tulip"
+CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
+CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\uninst-Tulip.exe" "" "$INSTDIR\win-uninstall.ico"
+CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\Tulip.exe" "" "$INSTDIR\logo32x32.ico"
 SectionEnd
 
 Section "SDK" sdk
@@ -146,14 +126,13 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Section -PostInstall
-WriteRegStr HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip DisplayName "Tulip @VERSION@ (uninstall)"
+WriteRegStr HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip DisplayName "Tulip (désinstallation)"
 WriteRegStr HKLM Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip UninstallString '"$INSTDIR\uninst-Tulip.exe"'
 WriteUninstaller "uninst-Tulip.exe"
-WriteRegStr HKLM "Software\Tulip" "Directory" '"$INSTDIR"'
-WriteRegStr HKLM "Software\Tulip" "Version" "@VERSION@"
+WriteRegStr HKLM "Software\Tulip" "Repertoire" '"$INSTDIR"'
 SectionEnd
 
-UninstallText "Do you really want to remove Tulip @VERSION@ from your system ?"
+UninstallText "Voulez-vous vraiment enlever Tulip de votre système ?"
 
 Section "Uninstall"
 ; Delete TLP_DIR variable
@@ -166,9 +145,9 @@ Delete "$INSTDIR\Tulip.exe"
 Delete "$INSTDIR\uninst-Tulip.exe"
 Delete "$INSTDIR\logo32x32.ico"
 Delete "$INSTDIR\win-uninstall.ico"
-Delete "$DESKTOP\Tulip @VERSION@.lnk"
-Delete "$SMPROGRAMS\Tulip @VERSION@\*.*"
-RMDir "$SMPROGRAMS\Tulip @VERSION@"
+Delete "$DESKTOP\Tulip.lnk"
+Delete "$SMPROGRAMS\Tulip\*.*"
+RMDir "$SMPROGRAMS\Tulip"
 Delete $INSTDIR\*.dll
 Delete "$INSTDIR\lib\tlp\bitmaps\*"
 RMDir "$INSTDIR\lib\tlp\bitmaps"

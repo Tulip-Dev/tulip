@@ -18,9 +18,6 @@
 #include "PluginProgress.h"
 #include "Reflect.h"
 #include "ExtendedClusterOperation.h"
-#include "ExportModule.h"
-#include "Clustering.h"
-#include "ImportModule.h"
 
 namespace tlp {
   extern TLP_SCOPE const char PATH_DELIMITER;
@@ -29,10 +26,13 @@ namespace tlp {
   extern TLP_SCOPE std::string TulipDocProfile;
   extern TLP_SCOPE std::string TulipUserHandBookIndex;
   
-  extern TLP_SCOPE void initTulipLib(char* appDirPath = 0);
+  extern TLP_SCOPE void initTulipLib();
     
+  extern TLP_SCOPE TemplateFactory<ClusteringFactory,Clustering,ClusterContext > clusteringFactory;
+  extern TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > importFactory;
+  extern TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > exportFactory;
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
-  TLP_SCOPE bool loadPlugin(const std::string & filename, PluginLoader *plug=0);
+  TLP_SCOPE void loadPlugin(const std::string & filename, PluginLoader *plug=0);
 
   /**
    * Load a graph in the tlp format

@@ -2,6 +2,10 @@ if WIN32
 DLL_FLAGS = -no-undefined
 endif
 
+if CYGWIN
+DLL_FLAGS = -no-undefined
+endif
+
 plugins_LTLIBRARIES = \
 	libplanar.la \
 	libgrid.la \
@@ -36,5 +40,4 @@ libsmallworld_la_SOURCES = SmallWorldGraph.cpp
 libfilesystem_la_SOURCES = FileSystem.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

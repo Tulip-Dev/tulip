@@ -19,9 +19,9 @@ class FTGL_EXPORT FTGLExtrdFont : public FTFont
         /**
          * Open and read a font file. Sets Error flag.
          *
-         * @param fontFilePath  font file path.
+         * @param fontname  font file name.
          */
-        FTGLExtrdFont( const char* fontFilePath);
+        FTGLExtrdFont( const char* fontname);
 
         /**
          * Open and read a font from a buffer in memory. Sets Error flag.
@@ -36,11 +36,6 @@ class FTGL_EXPORT FTGLExtrdFont : public FTFont
          */
         ~FTGLExtrdFont();
 		
-        /**
-         * Set the extrusion distance for the font. 
-         *
-         * @param d  The extrusion distance.
-         */
         void Depth( float d) { depth = d;}
 		
     private:
@@ -52,9 +47,6 @@ class FTGL_EXPORT FTGLExtrdFont : public FTFont
          */
         inline virtual FTGlyph* MakeGlyph( unsigned int glyphIndex);
 		
-        /**
-         * The extrusion distance for the font. 
-         */
         float depth;
 };
 

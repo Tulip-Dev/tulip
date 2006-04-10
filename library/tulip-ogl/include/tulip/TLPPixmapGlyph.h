@@ -25,7 +25,7 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
          *
          * @param glyph The Freetype glyph to be processed
          */
-        TLPPixmapGlyph(FT_GlyphSlot glyph);
+        TLPPixmapGlyph( FT_Glyph glyph);
 
         /**
          * Destructor
@@ -38,7 +38,7 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
          * @param pen   The current pen position.
          * @return      The advance distance for this glyph.
          */
-        virtual FTPoint& Render( const FTPoint& pen);
+        virtual float Render( const FTPoint& pen);
         
         // attributes
 

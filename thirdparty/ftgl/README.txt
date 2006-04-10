@@ -1,5 +1,5 @@
-FTGL 2.1
-5 December 2004
+FTGL 2.04
+12 April 2003
 
 DESCRIPTION:
 
@@ -34,18 +34,18 @@ USAGE:
 This library was inspired by gltt, Copyright (C) 1998-1999 Stephane Rehel
 (http://gltt.sourceforge.net)
 Bezier curve code contributed by Jed Soane.
-Demo, Linux port, extrusion code and gltt maintainance by Gerard Lanois.
-Linux port by Matthias Kretz.
-Windows port by Andrew Ellerton & Max Rheiner.
+Demo, Linux port, extrusion code and gltt maintainance by Gerard Lanois
+Linux port by Matthias Kretz
+Windows port by Andrew Ellerton & Max Rheiner
 Bug fixes by Robert Osfield, Marcelo E. Magallon, Markku Rontu, Mark A. Fox,
-Patrick Rogers, Kai Huettemann.
-Containers and optimisations by Sebastien Barre.
+Patrick Rogers
+Containers and optimisations by Sebastien Barre
 Autoconf Marcelo E. Magallon.
-Pixmap font modifications by Robert Bell.
+
 
 Please contact me if you have any suggestions, feature requests, or problems.
 
 Henry Maddocks
-ftgl@opengl.geek.nz
+henryj@paradise.net.nz
 http://homepages.paradise.net.nz/henryj/
 

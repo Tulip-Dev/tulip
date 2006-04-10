@@ -1,133 +1,103 @@
-#include <iostream>
-
 #include    <math.h>
 
 #include    "FTExtrdGlyph.h"
 #include    "FTVectoriser.h"
 
 
-FTExtrdGlyph::FTExtrdGlyph( FT_GlyphSlot glyph, float depth, bool useDisplayList)
+FTExtrdGlyph::FTExtrdGlyph( FT_Glyph glyph, float d)
 :   FTGlyph( glyph),
-    glList(0)
+    glList(0),
+    depth(d)
 {
-    bBox.SetDepth( -depth);
+    bBox.upperZ = -depth;
         
     if( ft_glyph_format_outline != glyph->format)
     {
-        err = 0x14; // Invalid_Outline
         return;
     }
 
     FTVectoriser vectoriser( glyph);
-    if( ( vectoriser.ContourCount() < 1) || ( vectoriser.PointCount() < 3))
+    if ( ( vectoriser.ContourCount() < 1) || ( vectoriser.PointCount() < 3))
     {
         return;
     }
 
     unsigned int tesselationIndex;
-    
-    if(useDisplayList)
-    {
-        glList = glGenLists(1);
-        glNewList( glList, GL_COMPILE);
-    }
+    glList = glGenLists(1);
+    glNewList( glList, GL_COMPILE);
 
-    vectoriser.MakeMesh( 1.0);
-    glNormal3d(0.0, 0.0, 1.0);
-    
-    unsigned int horizontalTextureScale = glyph->face->size->metrics.x_ppem * 64;
-    unsigned int verticalTextureScale = glyph->face->size->metrics.y_ppem * 64;        
-    
-    const FTMesh* mesh = vectoriser.GetMesh();
-    for( tesselationIndex = 0; tesselationIndex < mesh->TesselationCount(); ++tesselationIndex)
-    {
-        const FTTesselation* subMesh = mesh->Tesselation( tesselationIndex);
-        unsigned int polyonType = subMesh->PolygonType();
-
-        glBegin( polyonType);
-            for( unsigned int pointIndex = 0; pointIndex < subMesh->PointCount(); ++pointIndex)
-            {
-                FTPoint point = subMesh->Point(pointIndex);
-
-                glTexCoord2f( point.X() / horizontalTextureScale,
-                              point.Y() / verticalTextureScale);
-                
-                glVertex3f( point.X() / 64.0f,
-                            point.Y() / 64.0f,
-                            0.0f);
-            }
-        glEnd();
-    }
-    
-    vectoriser.MakeMesh( -1.0);
-    glNormal3d(0.0, 0.0, -1.0);
-    
-    mesh = vectoriser.GetMesh();
-    for( tesselationIndex = 0; tesselationIndex < mesh->TesselationCount(); ++tesselationIndex)
-    {
-        const FTTesselation* subMesh = mesh->Tesselation( tesselationIndex);
-        unsigned int polyonType = subMesh->PolygonType();
-
-        glBegin( polyonType);
-            for( unsigned int pointIndex = 0; pointIndex < subMesh->PointCount(); ++pointIndex)
-            {
-                FTPoint point = subMesh->Point(pointIndex);
-
-                glTexCoord2f( subMesh->Point(pointIndex).X() / horizontalTextureScale,
-                              subMesh->Point(pointIndex).Y() / verticalTextureScale);
-                
-                glVertex3f( subMesh->Point( pointIndex).X() / 64.0f,
-                            subMesh->Point( pointIndex).Y() / 64.0f,
-                            -depth);
-            }
-        glEnd();
-    }
-    
-    int contourFlag = vectoriser.ContourFlag();
-    
-    for( size_t c = 0; c < vectoriser.ContourCount(); ++c)
-    {
-        const FTContour* contour = vectoriser.Contour(c);
-        unsigned int numberOfPoints = contour->PointCount();
+        vectoriser.MakeMesh( 1.0);
+        glNormal3d(0.0, 0.0, 1.0);
         
-        glBegin( GL_QUAD_STRIP);
-            for( unsigned int j = 0; j <= numberOfPoints; ++j)
-            {
-                unsigned int pointIndex = ( j == numberOfPoints) ? 0 : j;
-                unsigned int nextPointIndex = ( pointIndex == numberOfPoints - 1) ? 0 : pointIndex + 1;
-                
-                FTPoint point = contour->Point(pointIndex);
+        const FTMesh* mesh = vectoriser.GetMesh();
+        for( tesselationIndex = 0; tesselationIndex < mesh->TesselationCount(); ++tesselationIndex)
+        {
+            const FTTesselation* subMesh = mesh->Tesselation( tesselationIndex);
+            unsigned int polyonType = subMesh->PolygonType();
 
-                FTPoint normal = GetNormal( point, contour->Point(nextPointIndex));
-                if(normal != FTPoint( 0.0f, 0.0f, 0.0f))
-                {                   
-                    glNormal3dv(static_cast<const FTGL_DOUBLE*>(normal));
-                }
-
-                if( contourFlag & ft_outline_reverse_fill)
+            glBegin( polyonType);
+                for( unsigned int pointIndex = 0; pointIndex < subMesh->PointCount(); ++pointIndex)
                 {
-                    glTexCoord2f( point.X() / horizontalTextureScale,
-                                  point.X() / verticalTextureScale);
-                
-                    glVertex3f( point.X() / 64.0f, point.Y() / 64.0f, 0.0f);
-                    glVertex3f( point.X() / 64.0f, point.Y() / 64.0f, -depth);
+                    glVertex3f( subMesh->Point( pointIndex).x / 64.0f,
+                                subMesh->Point( pointIndex).y / 64.0f,
+                                0.0f);
                 }
-                else
-                {
-                    glTexCoord2f( point.X() / horizontalTextureScale,
-                                  point.Y() / verticalTextureScale);
-                
-                    glVertex3f( point.X() / 64.0f, point.Y() / 64.0f, -depth);
-                    glVertex3f( point.X() / 64.0f, point.Y() / 64.0f, 0.0f);
-                }
-            }
-        glEnd();
-    }
+            glEnd();
+        }
         
-    if(useDisplayList)
-    {
-        glEndList();
-    }
+        vectoriser.MakeMesh( -1.0);
+        glNormal3d(0.0, 0.0, -1.0);
+        
+        mesh = vectoriser.GetMesh();
+        for( tesselationIndex = 0; tesselationIndex < mesh->TesselationCount(); ++tesselationIndex)
+        {
+            const FTTesselation* subMesh = mesh->Tesselation( tesselationIndex);
+            unsigned int polyonType = subMesh->PolygonType();
+
+            glBegin( polyonType);
+                for( unsigned int pointIndex = 0; pointIndex < subMesh->PointCount(); ++pointIndex)
+                {
+                    glVertex3f( subMesh->Point( pointIndex).x / 64.0f,
+                                subMesh->Point( pointIndex).y / 64.0f,
+                                -depth);
+                }
+            glEnd();
+        }
+        
+        int contourFlag = vectoriser.ContourFlag();
+        
+        for( size_t c = 0; c < vectoriser.ContourCount(); ++c)
+        {
+            const FTContour* contour = vectoriser.Contour(c);
+            unsigned int numberOfPoints = contour->PointCount();
+            
+            glBegin( GL_QUAD_STRIP);
+                for( unsigned int j = 0; j <= numberOfPoints; ++j)
+                {
+                    unsigned int index = ( j == numberOfPoints) ? 0 : j;
+                    unsigned int nextIndex = ( index == numberOfPoints - 1) ? 0 : index + 1;
+                    
+                    FTPoint normal = GetNormal( contour->Point(index), contour->Point(nextIndex));
+                    glNormal3f( normal.x, normal.y, 0.0f);
+                    
+                    if( contourFlag & ft_outline_reverse_fill)
+                    {
+                        glVertex3f( contour->Point(index).x / 64.0f, contour->Point(index).y / 64.0f, 0.0f);
+                        glVertex3f( contour->Point(index).x / 64.0f, contour->Point(index).y / 64.0f, -depth);
+                    }
+                    else
+                    {
+                        glVertex3f( contour->Point(index).x / 64.0f, contour->Point(index).y / 64.0f, -depth);
+                        glVertex3f( contour->Point(index).x / 64.0f, contour->Point(index).y / 64.0f, 0.0f);
+                    }
+                }
+            glEnd();
+        }
+        
+    glEndList();
+
+    // discard glyph image (bitmap or not)
+    FT_Done_Glyph( glyph); // Why does this have to be HERE
 }
 
 
@@ -137,13 +107,13 @@ FTExtrdGlyph::~FTExtrdGlyph()
 }
 
 
-const FTPoint& FTExtrdGlyph::Render( const FTPoint& pen)
+float FTExtrdGlyph::Render( const FTPoint& pen)
 {
-    glTranslatef( pen.X(), pen.Y(), 0);
-    
     if( glList)
     {
-        glCallList( glList);    
+        glTranslatef( pen.x, pen.y, 0);
+            glCallList( glList);    
+        glTranslatef( -pen.x, -pen.y, 0);
     }
     
     return advance;
@@ -152,12 +122,12 @@ const FTPoint& FTExtrdGlyph::Render( const FTPoint& pen)
 
 FTPoint FTExtrdGlyph::GetNormal( const FTPoint &a, const FTPoint &b)
 {
-    float vectorX = a.X() - b.X();
-    float vectorY = a.Y() - b.Y();
+    float vectorX = a.x - b.x;
+    float vectorY = a.y - b.y;
                               
     float length = sqrt( vectorX * vectorX + vectorY * vectorY );
     
-    if( length > 0.01f)
+    if( length > 0.0f)
     {
         length = 1 / length;
     }

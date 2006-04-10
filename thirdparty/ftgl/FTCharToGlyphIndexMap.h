@@ -71,7 +71,7 @@ class FTGL_EXPORT FTCharToGlyphIndexMap
             }
         }
 
-        const GlyphIndex find( CharacterCode c)
+        const GlyphIndex* find( CharacterCode c)
         {
             if( !this->Indices)
             {
@@ -92,7 +92,7 @@ class FTGL_EXPORT FTCharToGlyphIndexMap
                 return 0;
             }
         
-            return *ptr;
+            return ptr;
         }
 
         void insert( CharacterCode c, GlyphIndex g)

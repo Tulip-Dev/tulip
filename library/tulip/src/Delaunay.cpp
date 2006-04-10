@@ -4,8 +4,7 @@
 #include "thirdparty/triangle/triangle.h"
 #ifdef _WIN32
 #include <float.h>
-#endif
-#ifdef LINUX
+#else
 #include <fpu_control.h> //assume compiling for linux
 #endif
 
@@ -491,8 +490,7 @@ void runTriangle (const vector<Coord> &points,
   unsigned int fpu_mode = 0;
 #ifdef _WIN32
   fpu_mode = _control87 (0, 0);
-#endif
-#ifdef LINUX
+#else
   _FPU_GETCW (fpu_mode);
 #endif
   triangulate (const_cast<char *> (triangleInputFlags.c_str()), 
@@ -500,8 +498,7 @@ void runTriangle (const vector<Coord> &points,
   //reset the fpu mode to what it was before
 #ifdef _WIN32
   _control87 (fpu_mode, 0x000fffff);
-#endif
-#ifdef LINUX
+#else
   _FPU_SETCW (fpu_mode);
 #endif
 

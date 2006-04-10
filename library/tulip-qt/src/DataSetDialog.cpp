@@ -14,36 +14,31 @@
 #include "tulip/ColorsProxy.h"
 #include "tulip/SizesProxy.h"
 
-#if (QT_REL == 3)
+#include <qapplication.h>
 #include <qvalidator.h>
+#include <qeventloop.h>
 #include <qdialog.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
 #include <qframe.h>
+#include <qpopupmenu.h>
+#include <qbuttongroup.h>
+#include <qhbox.h>
+#include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qcolordialog.h>
 #include <qfiledialog.h>
 #include <qtoolbutton.h>
 #include <qwidget.h>
 #include <qtextbrowser.h>
-#else
-#include <QtGui/qvalidator.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qframe.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qlineedit.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qcolordialog.h>
-#include <QtGui/qfiledialog.h>
-#include <QtGui/qtoolbutton.h>
-#include <QtGui/qwidget.h>
-#include <QtGui/qtextbrowser.h>
-#include "tulip/Qt3ForTulip.h"
-#endif
+
 
 
 using namespace std;
@@ -129,7 +124,7 @@ namespace {
 
   struct QParamDialog : public QDialog {
 
-    QParamDialog( QWidget * parent = 0, const char * name = 0, bool modal = FALSE, Qt::WFlags f = 0 )
+    QParamDialog( QWidget * parent = 0, const char * name = 0, bool modal = FALSE, WFlags f = 0 )
       : QDialog( parent, name, modal, f ) {
       helpBrowser = 0;
       curHelpParam = -1;
@@ -157,11 +152,7 @@ namespace {
 	curHelpParam = ipIdx;
 
 	if( ip->helpText.size() )
-#if (QT_REL == 3)  
 	  helpBrowser->setText( ip->helpText.c_str() );
-#else
-	  helpBrowser->setHtml( ip->helpText.c_str() );
-#endif
 	else
 	  helpBrowser->setText( NO_HELP_AVAILABLE_MSG );
       }

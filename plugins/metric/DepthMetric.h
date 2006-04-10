@@ -30,10 +30,8 @@
 class DepthMetric:public Metric { 
 public:
   DepthMetric(const PropertyContext &);
-  bool run();
-  bool check(std::string &);
-private:
   double getNodeValue(const node n);
+  bool check(std::string &);
 };
 /*@}*/
 #endif

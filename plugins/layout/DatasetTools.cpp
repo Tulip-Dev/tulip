@@ -2,9 +2,9 @@
 #include <tulip/Types.h>
 #include "DatasetTools.h"
 
-#define ORTHOGONAL "Orthogonal"
-#define ORIENTATION "up to down;down to up;right to left;left to right;"
-#define ORIENTATION_ID "Orientation"
+const std::string ORTHOGONAL("Orthogonal");
+const std::string ORIENTATION("up to down;down to up;right to left;left to right;");
+const std::string ORIENTATION_ID("Orientation");
 
 namespace {
 const char* paramHelp[] = {

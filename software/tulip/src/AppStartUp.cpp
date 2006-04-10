@@ -51,20 +51,23 @@ struct PluginLoaderQt:public PluginLoader {
 
 
 void AppStartUp::initTulip() {
-  setTotalSteps(0);
-  setProgress(0);
-  setLabel("Tulip");
+  AppStartUp *myAppStartUp=this;
+  myAppStartUp->setTotalSteps(0);
+  myAppStartUp->setProgress(0);
+  myAppStartUp->setLabel("Tulip");
+  //  myAppStartUp->show();
 
-  #ifndef NDEBUG
+#ifndef NDEBUG
   PluginLoaderTxt plug;
-  #else
+#else
   PluginLoaderQt plug;
-  plug.appStartUp = this;
-  #endif
+  plug.appStartUp=myAppStartUp;
+#endif
   
-  //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(&plug);   // library side plugins
   GlGraph::loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  //
+  //  delete myAppStartUp;
 }
 
 /* 
