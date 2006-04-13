@@ -1,5 +1,5 @@
 #include <tulip/TlpTools.h>
-#include <tulip/LayoutProxy.h>
+#include <tulip/Layout.h>
 #include <tulip/MethodFactory.h>
 #include <tulip/TreeTest.h>
 #include <tulip/ForEach.h>
@@ -12,7 +12,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -59,10 +59,10 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
-  Layout(context),
+  LayoutAlgorithm(context),
   lengthMetric(0) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<IntProxy>("edgeLength",paramHelp[1]);
+  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<Int>("edgeLength",paramHelp[1]);
   addParameter<bool>("orthogonal", paramHelp[2], "true" );
   addParameter<bool>("use length", paramHelp[3], "false" );
   addParameter<StringCollection> ("orientation", paramHelp[4], ORIENTATION );
@@ -189,8 +189,8 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
   if (superGraph->outdeg(n)==0){
     list<LR> *result = new list<LR>();
     LR tmpLR;
-    tmpLR.L = -sizesProxy->getNodeValue(n).getW()/2.;
-    tmpLR.R = +sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.L = -sizes->getNodeValue(n).getW()/2.;
+    tmpLR.R = +sizes->getNodeValue(n).getW()/2.;
     tmpLR.size = 1;
     (*p)[n] = 0;
     result->push_front(tmpLR);
@@ -248,8 +248,8 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
     } delete it;
     double posFather=((((*(leftTree->begin())).L + (*(leftTree->begin())).R)/2.));
     LR tmpLR;
-    tmpLR.L = posFather - sizesProxy->getNodeValue(n).getW()/2.;
-    tmpLR.R = posFather + sizesProxy->getNodeValue(n).getW()/2.;
+    tmpLR.L = posFather - sizes->getNodeValue(n).getW()/2.;
+    tmpLR.R = posFather + sizes->getNodeValue(n).getW()/2.;
     tmpLR.size = 1;
     leftTree->push_front(tmpLR);
 
@@ -268,12 +268,12 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &maxSize,int level, map<node,int> &levels) {
   levels[n] = level;
   if (maxSize.find(level)!=maxSize.end()) {
-    if (maxSize[level] < sizesProxy->getNodeValue(n).getH()) {
-      maxSize[level]=sizesProxy->getNodeValue(n).getH();
+    if (maxSize[level] < sizes->getNodeValue(n).getH()) {
+      maxSize[level]=sizes->getNodeValue(n).getH();
     }
   }
   else
-    maxSize[level]=sizesProxy->getNodeValue(n).getH();
+    maxSize[level]=sizes->getNodeValue(n).getH();
   
   if (useLength) {
     edge ite;
@@ -296,7 +296,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
   tmpCoord.set(x+(*p)[n], y+maxLevelSize[level]/2., 0);
-  layoutProxy->setNodeValue(n,tmpCoord);
+  layoutObj->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
     forEach(ite, superGraph->getOutEdges(n)) {
@@ -325,8 +325,8 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 bool TreeReingoldAndTilfordExtended::run() {
   stdext::hash_map<node,double> posRelative;
 
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
-  sizesProxy = superGraph->getProperty<SizesProxy>("viewSize");
+  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  sizes = superGraph->getProperty<Sizes>("viewSize");
   orientation = "horizontal";
   lengthMetric = 0;
   spacing = 64.0;
@@ -336,7 +336,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (dataSet!=0) {
     dataSet->get("edgeLength", lengthMetric);
     dataSet->get("use length", useLength);
-    dataSet->get("nodeSize", sizesProxy);
+    dataSet->get("nodeSize", sizes);
     dataSet->get("orthogonal", ortho);
     dataSet->get("layer spacing", spacing);
     dataSet->get("node spacing", nodeSpacing);
@@ -351,8 +351,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, superGraph->getNodes()) {
-      Size tmp = sizesProxy->getNodeValue(n);
-      sizesProxy->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      Size tmp = sizes->getNodeValue(n);
+      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
   //===========================================================
@@ -391,21 +391,21 @@ bool TreeReingoldAndTilfordExtended::run() {
       LineType::RealType tmp;
       node src = superGraph->source(e);
       node tgt = superGraph->target(e);
-      Coord srcPos = layoutProxy->getNodeValue(src);
-      Coord tgtPos = layoutProxy->getNodeValue(tgt);
+      Coord srcPos = layoutObj->getNodeValue(src);
+      Coord tgtPos = layoutObj->getNodeValue(tgt);
       double y = levelCoord[levels[tgt]-1];
       tmp.push_back(Coord(srcPos[0], y, 0));
       tmp.push_back(Coord(tgtPos[0], y, 0));
-      layoutProxy->setEdgeValue(e, tmp);
+      layoutObj->setEdgeValue(e, tmp);
     }
     
     if (orientation == "horizontal") {
       forEach(e, superGraph->getEdges()) {
-	LineType::RealType tmp = layoutProxy->getEdgeValue(e);
+	LineType::RealType tmp = layoutObj->getEdgeValue(e);
 	LineType::RealType tmp2;
 	tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
 	tmp2.push_back(Coord(-tmp[1][1], tmp[1][0], tmp[1][2]));
-	layoutProxy->setEdgeValue(e, tmp2);
+	layoutObj->setEdgeValue(e, tmp2);
       }
     }
   }
@@ -414,10 +414,10 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, superGraph->getNodes()) {
-      Size  tmp = sizesProxy->getNodeValue(n);
-      sizesProxy->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutProxy->getNodeValue(n);
-      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Size  tmp = sizes->getNodeValue(n);
+      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      Coord tmpC = layoutObj->getNodeValue(n);
+      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
   

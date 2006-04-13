@@ -4,7 +4,7 @@
 #include <qinputdialog.h>
 #include <tulip/TlpTools.h>
 #include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <fstream>
 
 #include "ConvolutionClustering.h"
@@ -211,7 +211,7 @@ void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
 bool ConvolutionClustering::run() {
   histosize=128;
   string tmp1,tmp2;
-  metric=superGraph->getProperty<MetricProxy>("viewMetric");
+  metric=superGraph->getProperty<Metric>("viewMetric");
   autoSetParameter();
   getHistogram();
   ConvolutionClusteringSetup *mysetup = new ConvolutionClusteringSetup(this);

@@ -1,6 +1,6 @@
 #include <cmath>
 #include "StrongComponent.h"
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 
 METRICPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
 
@@ -37,17 +37,17 @@ int StrongComponent::attachNumerotation(node n,
       renum.pop();
       finished[tmp]=true;
       minAttach[tmp]=result;
-      metricProxy->setNodeValue(tmp,curComponent);
+      metricObj->setNodeValue(tmp,curComponent);
     }
     finished[n]=true;
-    metricProxy->setNodeValue(n,curComponent);
+    metricObj->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
   return result;
 }
 
-StrongComponent::StrongComponent(const PropertyContext &context):Metric(context) {}
+StrongComponent::StrongComponent(const PropertyContext &context):MetricAlgorithm(context) {}
 
 StrongComponent::~StrongComponent() {}
 
@@ -70,8 +70,8 @@ bool StrongComponent::run() {
     edge ite=itE->next();
     node source= superGraph->source(ite);
     node target= superGraph->target(ite);
-    if (metricProxy->getNodeValue(source)==metricProxy->getNodeValue(target))
-      metricProxy->setEdgeValue(ite,metricProxy->getNodeValue(source));
+    if (metricObj->getNodeValue(source)==metricObj->getNodeValue(target))
+      metricObj->setEdgeValue(ite,metricObj->getNodeValue(source));
     else
       metricProxy->setEdgeValue(ite,curComponent);
   } delete itE;

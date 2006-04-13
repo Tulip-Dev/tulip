@@ -1,13 +1,13 @@
 #include <assert.h>
 #include "SpanningTreeSelection.h"
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/MethodFactory.h>
 
 SELECTIONPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","0","1");
 
 using namespace std;
 
-SpanningTreeSelection::SpanningTreeSelection(const PropertyContext &context):Selection(context) 
+SpanningTreeSelection::SpanningTreeSelection(const PropertyContext &context):SelectionAlgorithm(context) 
 {}
 
 SpanningTreeSelection::~SpanningTreeSelection() {}
@@ -18,9 +18,9 @@ bool SpanningTreeSelection::run()
 {
   list<node> fifo;
 
-  SelectionProxy *nodeFlag=superGraph->getLocalProperty<SelectionProxy>("viewSelectionNodeFlag");
+  Selection *nodeFlag=superGraph->getLocalProperty<Selection>("viewSelectionNodeFlag");
   if (superGraph->existProperty("viewSelection")) {
-    SelectionProxy *viewSelection=superGraph->getProperty<SelectionProxy>("viewSelection");
+    Selection *viewSelection=superGraph->getProperty<Selection>("viewSelection");
     Iterator<node> *itN=superGraph->getNodes();
     for (;itN->hasNext();) { 
       node itn=itN->next();
@@ -32,8 +32,8 @@ bool SpanningTreeSelection::run()
   }
 
   
-  selectionProxy->setAllEdgeValue(true);
-  selectionProxy->setAllNodeValue(true);
+  selectionObj->setAllEdgeValue(true);
+  selectionObj->setAllNodeValue(true);
 
   bool ok=true;
   node tmp1;
@@ -49,7 +49,7 @@ bool SpanningTreeSelection::run()
 	  fifo.push_back(superGraph->target(adjit));
 	}
 	else
-	  selectionProxy->setEdgeValue(adjit,false);
+	  selectionObj->setEdgeValue(adjit,false);
       } delete itE;
     }
     ok=false;

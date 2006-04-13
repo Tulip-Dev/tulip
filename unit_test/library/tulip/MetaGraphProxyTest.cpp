@@ -6,6 +6,9 @@
 using namespace std;
 
 #include <cppunit/extensions/HelperMacros.h>
+
+// Warning MetaGraphProxy has been renamed in MetaGraph
+
 CPPUNIT_TEST_SUITE_REGISTRATION( MetaGraphProxyTest );
 
 //==========================================================
@@ -30,8 +33,8 @@ void MetaGraphProxyTest::testDestroyGraph() {
   SuperGraph * g1 = tlp::newCloneSubGraph(graph, "G1");
   SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
   SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy * proxy1 = meta1->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
-  MetaGraphProxy proxy3(meta1);
+  MetaGraph * proxy1 = meta1->getLocalProperty<MetaGraph>("viewMetaGraph");
+  MetaGraph proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -56,8 +59,8 @@ void MetaGraphProxyTest::testSetGet() {
   SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
   SuperGraph * g3 = tlp::newCloneSubGraph(graph, "G3");
   SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy * proxy1 = meta1->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
-  MetaGraphProxy proxy3(meta1);
+  MetaGraph * proxy1 = meta1->getLocalProperty<MetaGraph>("viewMetaGraph");
+  MetaGraph proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -78,7 +81,7 @@ void MetaGraphProxyTest::testSetAll() {
   SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
   SuperGraph * g3 = tlp::newCloneSubGraph(graph, "G3");
   SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy proxy(meta1);
+  MetaGraph proxy(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   node mnode3 = meta1->addNode();
@@ -98,7 +101,7 @@ void MetaGraphProxyTest::testSetAll() {
 }
 //==========================================================
 CppUnit::Test * MetaGraphProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MetaGraphProxy" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MetaGraph" );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test graph destruction", 
 								      &MetaGraphProxyTest::testDestroyGraph ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set/get", 

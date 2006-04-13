@@ -84,6 +84,7 @@ protected:
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
   QPopupMenu colorsMenu;
+  QPopupMenu clusteringMenu;
   QPopupMenu sizesMenu;
   QPopupMenu intMenu;
   QPopupMenu stringMenu;

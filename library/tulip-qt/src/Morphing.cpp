@@ -1,8 +1,8 @@
 #include <tulip/GlGraphWidget.h>
 #include <tulip/SuperGraph.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Sizes.h>
+#include <tulip/Colors.h>
 #include <tulip/Morphing.h>
 
 #define	MORPHING_MIN_DURATION	1.0f		// s
@@ -20,8 +20,8 @@ void InterpolateColors( Color & outc, const Color & c0, const Color & c1, float 
 }
 
 
-bool AssociateEdges( GraphState  * g0, LayoutProxy * e0, GraphState  * g1,
-		     LayoutProxy * e1, edge e ) {
+bool AssociateEdges( GraphState  * g0, Layout * e0, GraphState  * g1,
+		     Layout * e1, edge e ) {
   if( e0->getEdgeStringValue(e) == e1->getEdgeStringValue(e) )
     return false;
   
@@ -81,8 +81,8 @@ Morphing::start( GlGraphWidget * outGlgw, GraphState * inG0, GraphState * inG1) 
   
   // Edges association
   if( g0->layout && g1->layout ) {
-    e0 = new LayoutProxy( g0->g );
-    e1 = new LayoutProxy( g1->g );
+    e0 = new Layout( g0->g );
+    e1 = new Layout( g1->g );
     *e0 = *(g0->layout);
     *e1 = *(g1->layout);
     e0->setAllNodeValue(Coord(0,0,0));
@@ -139,9 +139,9 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   if (inT > 1.0f) inT = 1.0f; //inT = inT <? 1.0f;
   t = inT;
   
-  LayoutProxy * outLayout = g->getProperty<LayoutProxy>( "viewLayout" );
-  SizesProxy  * outSize   = g->getProperty<SizesProxy>( "viewSize" );
-  ColorsProxy * outColor  = g->getProperty<ColorsProxy>( "viewColor" );
+  Layout * outLayout = g->getProperty<Layout>( "viewLayout" );
+  Sizes  * outSize   = g->getProperty<Sizes>( "viewSize" );
+  Colors * outColor  = g->getProperty<Colors>( "viewColor" );
   
   // Nodes interpolation
   Iterator<node> * nodeIt = g->getNodes();

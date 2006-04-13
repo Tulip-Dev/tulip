@@ -5,14 +5,14 @@
 
 METRICPLUGIN(ConnectedComponent,"Connected Component","David Auber","01/07/2002","Alpha","0","1");
 
-ConnectedComponent::ConnectedComponent(const PropertyContext &context):Metric(context) {}
+ConnectedComponent::ConnectedComponent(const PropertyContext &context):MetricAlgorithm(context) {}
 //======================================================
 ConnectedComponent::~ConnectedComponent(){}
 //======================================================
 void ConnectedComponent::dfs(node n, MutableContainer<bool> &flag,double value){
   if (flag.get(n.id)) return;
   flag.set(n.id, true);
-  metricProxy->setNodeValue(n,value);
+  metricObj->setNodeValue(n,value);
   node itn;
   forEach(itn, superGraph->getInOutNodes(n))
     dfs(itn,flag,value);
@@ -34,10 +34,10 @@ bool ConnectedComponent::run() {
     edge ite=itE->next();
     node source= superGraph->source(ite);
     node target= superGraph->target(ite);
-    if (metricProxy->getNodeValue(source)==metricProxy->getNodeValue(target))
-      metricProxy->setEdgeValue(ite,metricProxy->getNodeValue(source));
+    if (metricObj->getNodeValue(source)==metricObj->getNodeValue(target))
+      metricObj->setEdgeValue(ite,metricObj->getNodeValue(source));
     else
-      metricProxy->setEdgeValue(ite,curComponent);
+      metricObj->setEdgeValue(ite,curComponent);
   } delete itE;
 
   return true;

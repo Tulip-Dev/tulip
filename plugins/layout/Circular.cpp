@@ -25,7 +25,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -41,8 +41,8 @@ namespace {
   };
 }
 
-Circular::Circular(const PropertyContext &context):Layout(context){
-  addParameter<SizesProxy>("nodeSize", paramHelp[0], "viewSize");
+Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
+  addParameter<Sizes>("nodeSize", paramHelp[0], "viewSize");
   addParameter<bool>("search_cycle", paramHelp[1], "false");
 }
 
@@ -115,7 +115,7 @@ namespace {
   vector<node> findMaxCycle(SuperGraph * graph, PluginProgress *pluginProgress) {
     SuperGraph * g = tlp::newCloneSubGraph(graph);
     cerr << __PRETTY_FUNCTION__ << endl;
-    MetricProxy m(g);
+    Metric m(g);
     string err ="";
     g->computeProperty(string("Connected Component"),&m,err);
     DataSet tmp;
@@ -150,14 +150,14 @@ inline double computeRadius (const Size &s) {
 }//end computeRad
 
 bool Circular::run() {
-  SizesProxy *nodeSizes;
+  Sizes *nodeSizes;
   bool searchCycle = false;
   
   if ( dataSet==0 || !dataSet->get("nodeSize", nodeSizes)) {
     if (superGraph->existProperty("viewSize"))
-      nodeSizes = superGraph->getProperty<SizesProxy>("viewSize");    
+      nodeSizes = superGraph->getProperty<Sizes>("viewSize");    
     else {
-      nodeSizes = superGraph->getProperty<SizesProxy>("viewSize");  
+      nodeSizes = superGraph->getProperty<Sizes>("viewSize");  
       nodeSizes->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
@@ -188,7 +188,7 @@ bool Circular::run() {
     double xcoord = maxRad/2.0;
     node itn;
     forEach(itn, superGraph->getNodes()) {
-      layoutProxy->setNodeValue (itn, Coord (xcoord, 0, 0));
+      layoutObj->setNodeValue (itn, Coord (xcoord, 0, 0));
       xcoord *= -1;
     }
   }//end if
@@ -240,8 +240,8 @@ bool Circular::run() {
 
       //compute the position of the node.
       gamma += halfAngle;
-      layoutProxy->setNodeValue(itn, Coord(rayon*cos(gamma),
-					   rayon*sin(gamma), 0));
+      layoutObj->setNodeValue(itn, Coord(rayon*cos(gamma),
+				      rayon*sin(gamma), 0));
       gamma += halfAngle;
     }//end while
   }//end else

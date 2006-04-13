@@ -1,6 +1,6 @@
 #include <tulip/StatisticsNodeModule.h>
 #include <tulip/SuperGraph.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 #include <tulip/Coord.h>
 #include <math.h>
 
@@ -8,7 +8,7 @@ using namespace std;
 
 namespace tlp
 {
-  void StatsNodeModule::ComputeAveragePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeAveragePoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
   {
     Iterator<node> *itN = superGraph->getNodes();
     vector<float> average(nDimensions);
@@ -32,7 +32,7 @@ namespace tlp
     result = average;
   }
 
-  float StatsNodeModule::ComputeAverage(SuperGraph *superGraph, MetricProxy *metricProxy)
+  float StatsNodeModule::ComputeAverage(SuperGraph *superGraph, Metric *metric)
   {
     Iterator<node> *itN = superGraph->getNodes();
   
@@ -42,7 +42,7 @@ namespace tlp
       {
 	node n = itN->next();
 
-	average += metricProxy->getNodeValue(n);
+	average += metric->getNodeValue(n);
       }
 
     delete itN;
@@ -52,7 +52,7 @@ namespace tlp
     return average;
   }
 
-  void StatsNodeModule::ComputeVariancePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeVariancePoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -86,7 +86,7 @@ namespace tlp
     result = variance;
   }
 
-  float StatsNodeModule::ComputeVariance(SuperGraph *superGraph, MetricProxy *metricProxy)
+  float StatsNodeModule::ComputeVariance(SuperGraph *superGraph, Metric *metric)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -94,13 +94,13 @@ namespace tlp
     float variance = 0.0f;
     float nodeVal;
 
-    average = StatsNodeModule::ComputeAverage(superGraph, metricProxy);
+    average = StatsNodeModule::ComputeAverage(superGraph, metric);
 
     while (itN->hasNext())
       {
 	node n = itN->next();
 
-	nodeVal = metricProxy->getNodeValue(n);
+	nodeVal = metric->getNodeValue(n);
 
 	variance += (nodeVal - average) * (nodeVal - average);
       }
@@ -112,7 +112,7 @@ namespace tlp
     return variance;
   }
 
-  void StatsNodeModule::ComputeStandardDeviationPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeStandardDeviationPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
   {
     ComputeVariancePoint(superGraph, metrics, nDimensions, result);
 
@@ -128,9 +128,9 @@ namespace tlp
       result[i] = sqrt(variances[i]);
   }
 
-  float StatsNodeModule::ComputeStandardDeviation(SuperGraph *superGraph, MetricProxy *metricProxy)
+  float StatsNodeModule::ComputeStandardDeviation(SuperGraph *superGraph, Metric *metric)
   {
-    float variance = ComputeVariance(superGraph, metricProxy);
+    float variance = ComputeVariance(superGraph, metric);
 
     return sqrt(variance);
   }
@@ -141,7 +141,7 @@ namespace tlp
   }
 
 
-  float StatsNodeModule::ComputeCovariance(SuperGraph *superGraph, MetricProxy* metric1, MetricProxy* metric2)
+  float StatsNodeModule::ComputeCovariance(SuperGraph *superGraph, Metric* metric1, Metric* metric2)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -172,7 +172,7 @@ namespace tlp
     return (ave3) - (ave1 * ave2);
   }
 
-  void StatsNodeModule::ComputeCovariancePoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<std::vector<float> > &result)
+  void StatsNodeModule::ComputeCovariancePoints(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<std::vector<float> > &result)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -219,7 +219,7 @@ namespace tlp
 	result[i][j] = (bigsum[i * nDimensions + j] / nNode) - (ave[i] * ave[j]);
   }
 
-  void StatsNodeModule::ComputeMinPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeMinPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
   {
     Iterator<node> *itN = superGraph->getNodes();
     vector<float> min(nDimensions);
@@ -246,7 +246,7 @@ namespace tlp
     result = min;
   }
 
-  float StatsNodeModule::ComputeMin(SuperGraph *superGraph, MetricProxy *metricProxy)
+  float StatsNodeModule::ComputeMin(SuperGraph *superGraph, Metric *metric)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -256,7 +256,7 @@ namespace tlp
       {
 	node n = itN->next();
 
-	float nodeVal = metricProxy->getNodeValue(n);
+	float nodeVal = metric->getNodeValue(n);
 
 	if (nodeVal < min)
 	  min = nodeVal;
@@ -267,7 +267,7 @@ namespace tlp
     return min;
   }
 
-  void StatsNodeModule::ComputeMaxPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeMaxPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
   {
     Iterator<node> *itN = superGraph->getNodes();
     vector<float> max(nDimensions);
@@ -295,7 +295,7 @@ namespace tlp
   }
 
 
-  float StatsNodeModule::ComputeMax(SuperGraph *superGraph, MetricProxy *metricProxy)
+  float StatsNodeModule::ComputeMax(SuperGraph *superGraph, Metric *metric)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -305,7 +305,7 @@ namespace tlp
       {
 	node n = itN->next();
 
-	float nodeVal = metricProxy->getNodeValue(n);
+	float nodeVal = metric->getNodeValue(n);
 
 	if (nodeVal > max)
 	  max = nodeVal;
@@ -316,7 +316,7 @@ namespace tlp
     return max;
   }
 
-  void StatsNodeModule::ComputeMinMaxPoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax)
+  void StatsNodeModule::ComputeMinMaxPoints(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -353,7 +353,7 @@ namespace tlp
     resMax = max;
   }
 
-  void StatsNodeModule::ComputeMinMax(SuperGraph *superGraph, MetricProxy *metricProxy, float &resMin, float &resMax)
+  void StatsNodeModule::ComputeMinMax(SuperGraph *superGraph, Metric *metric, float &resMin, float &resMax)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -366,7 +366,7 @@ namespace tlp
       {
 	node n = itN->next();
 
-	nodeVal = metricProxy->getNodeValue(n);
+	nodeVal = metric->getNodeValue(n);
       
 	if (nodeVal > max)
 	  max = nodeVal;
@@ -381,7 +381,7 @@ namespace tlp
     resMax = max;
   }
 
-  void StatsNodeModule::ComputeLinearRegressionFunction(SuperGraph *superGraph, MetricProxy *xk, MetricProxy *yk, float &b0, float &b1)
+  void StatsNodeModule::ComputeLinearRegressionFunction(SuperGraph *superGraph, Metric *xk, Metric *yk, float &b0, float &b1)
   {
     Iterator<node> *itN = superGraph->getNodes();
 
@@ -417,7 +417,7 @@ namespace tlp
     b1 = (n * sxkyk - sxk * syk)     / (n * sxkxk - sxk * sxk);
   }
 
-  StatisticResults* StatsNodeModule::ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions)
+  StatisticResults* StatsNodeModule::ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions)
   {
     StatisticResults *res = new StatisticResults;
 

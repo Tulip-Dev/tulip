@@ -4,7 +4,7 @@
 #include <string>
 #include <tulip/TulipPlugin.h>
 
-class LabelSelection:public Selection { 
+class LabelSelection:public SelectionAlgorithm { 
 public:
   LabelSelection(const PropertyContext &);
   ~LabelSelection();
@@ -12,7 +12,7 @@ public:
   bool getNodeValue(node n);
 
 private:
-  StringProxy *stringProxy;
+  String *stringProxy;
   std::vector<std::string> *searchStrings;
   bool searchType;
   std::vector<std::string> searchStringsDefault;

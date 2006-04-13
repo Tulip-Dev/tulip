@@ -4,16 +4,16 @@
 #include <tulip/Node.h>
 
 class SuperGraph;
-class LayoutProxy;
-class SizesProxy;
+class Layout;
+class Sizes;
 
 node    searchRoot(const SuperGraph* tree);
 int     getTreeDepth(const SuperGraph* tree, node root);
 bool    isLeaf (const SuperGraph* tree, node n);
-float   getNodeX(LayoutProxy* pLayout, node current);
-float   getNodeY(LayoutProxy* pLayout, node current);
-float   getNodeHeight(SizesProxy* size, node current);
-float   getNodeWidth(SizesProxy* size, node current);
+float   getNodeX(Layout* pLayout, node current);
+float   getNodeY(Layout* pLayout, node current);
+float   getNodeHeight(Sizes* size, node current);
+float   getNodeWidth(Sizes* size, node current);
 
 #endif
 

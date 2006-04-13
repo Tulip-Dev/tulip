@@ -33,7 +33,7 @@
  *  (at your option) any later version.
  *
  */
-class StrengthMetric:public Metric { 
+class StrengthMetric:public MetricAlgorithm { 
 public:
   StrengthMetric(const PropertyContext &);
   ~StrengthMetric();

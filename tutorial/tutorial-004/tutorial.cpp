@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 
 /**
@@ -28,14 +28,14 @@ int main() {
   buildGraph(graph);
 
   //Get and create several properties
-  MetricProxy *metric=graph->getLocalProperty<MetricProxy>("firstMetric");
-  SelectionProxy *select=graph->getLocalProperty<SelectionProxy>("firstSelection");
-  LayoutProxy *layout=graph->getLocalProperty<LayoutProxy>("firstLayout");
-  IntProxy *integer=graph->getLocalProperty<IntProxy>("firstInteger");
-  ColorsProxy *colors=graph->getLocalProperty<ColorsProxy>("firstColors");
-  SizesProxy *sizes=graph->getLocalProperty<SizesProxy>("firstSizes");
-  MetaGraphProxy *meta=graph->getLocalProperty<MetaGraphProxy>("firstMeta");
-  StringProxy *strings=graph->getLocalProperty<StringProxy>("firstString");
+  Metric *metric=graph->getLocalProperty<Metric>("firstMetric");
+  Selection *select=graph->getLocalProperty<Selection>("firstSelection");
+  Layout *layout=graph->getLocalProperty<Layout>("firstLayout");
+  Int *integer=graph->getLocalProperty<Int>("firstInteger");
+  Colors *colors=graph->getLocalProperty<Colors>("firstColors");
+  Sizes *sizes=graph->getLocalProperty<Sizes>("firstSizes");
+  MetaGraph *meta=graph->getLocalProperty<MetaGraph>("firstMeta");
+  String *strings=graph->getLocalProperty<String>("firstString");
 
   //initialize all the properties
   metric->setAllNodeValue(0.0);

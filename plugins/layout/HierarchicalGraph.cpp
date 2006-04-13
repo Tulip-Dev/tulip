@@ -5,8 +5,8 @@
 #include <tulip/AcyclicTest.h>
 #include <tulip/TreeTest.h>
 #include <tulip/MethodFactory.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Selection.h>
 #include <tulip/GraphTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/ForEach.h>
@@ -25,7 +25,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -57,8 +57,8 @@ namespace {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
-HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
+  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
   addParameter<float> ("node spacing", paramHelp[3], "18." );
@@ -68,7 +68,7 @@ HierarchicalGraph::~HierarchicalGraph() {}
 //================================================================================
 class LessThanEdge {
 public:
-  MetricProxy *metric;
+  Metric *metric;
   SuperGraph *sg;
   bool operator() (edge e1, edge e2) {
     return (metric->getNodeValue(sg->source(e1)) < metric->getNodeValue(sg->source(e2)));
@@ -79,7 +79,7 @@ void HierarchicalGraph::buildGrid(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
   bool resultBool;
   string erreurMsg;
-  MetricProxy dagLevel(graph);
+  Metric dagLevel(graph);
   if(!graph->computeProperty("DagLevel", &dagLevel,erreurMsg)) {
     cerr << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
     return;
@@ -223,7 +223,7 @@ void HierarchicalGraph::crossReduction(SuperGraph *graph){
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
-void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* graph, MetricProxy *embedding) {
+void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* graph, Metric *embedding) {
   //  cerr << __PRETTY_FUNCTION__  << endl;
   assert(AcyclicTest::isAcyclic(graph));
   LessThanEdge tmpL;
@@ -249,7 +249,7 @@ void HierarchicalGraph::DagLevelSpanningTree(SuperGraph* graph, MetricProxy *emb
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //==============================================================================================================
-void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
+void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, Layout &tmpLayout, 
 					 const stdext::hash_map<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
   MutableContainer<bool> isReversed;
@@ -286,11 +286,11 @@ void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy
       edgeLine.push_back(p1); 
       edgeLine.push_back(p2);
     }
-    layoutProxy->setEdgeValue(toUpdate,edgeLine);
+    layoutObj->setEdgeValue(toUpdate,edgeLine);
   }
 }
 //=======================================================================
-void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
+void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, Layout &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
   //cerr << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
@@ -308,7 +308,7 @@ void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpL
     tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n2));
     for (it = edge3.begin(); it!=edge3.end(); ++it)
       tmpLCoord.push_back(*it);
-    layoutProxy->setEdgeValue(tmp.old,tmpLCoord);
+    layoutObj->setEdgeValue(tmp.old,tmpLCoord);
     mySGraph->delAllNode(tmp.n1);
     mySGraph->delAllNode(tmp.n2);
   }  
@@ -360,7 +360,7 @@ bool HierarchicalGraph::run() {
   // Build a clone of this graph
   SuperGraph *mySGraph = tlp::newCloneSubGraph(superGraph,"tmp clone");
 
-  nodeSize = superGraph->getProperty<SizesProxy>("viewSize");
+  nodeSize = superGraph->getProperty<Sizes>("viewSize");
   orientation = "horizontal";
   float spacing = 64.0;
   float nodeSpacing = 18;
@@ -395,13 +395,13 @@ bool HierarchicalGraph::run() {
   //========================================================================
   list<node> properAddedNodes;
   stdext::hash_map<edge,edge> replacedEdges;
-  IntProxy *edgeLength = 0;
+  Int *edgeLength = 0;
   if (!TreeTest::isTree(mySGraph)) {
     //We transform the dag in a proper dag
-    edgeLength = new IntProxy(mySGraph);
+    edgeLength = new Int(mySGraph);
     tlp::makeProperDag(mySGraph,properAddedNodes,replacedEdges,edgeLength);
     //we compute metric for cross reduction
-    MetricProxy embed(mySGraph);
+    Metric embed(mySGraph);
     embedding = &embed;
     lessNode.metric = embedding;
     buildGrid(mySGraph);
@@ -418,7 +418,7 @@ bool HierarchicalGraph::run() {
     //We extract a spanning tree from the proper dag.
     DagLevelSpanningTree(mySGraph, &embed);
   } else {
-    MetricProxy embed(mySGraph);
+    Metric embed(mySGraph);
     embedding = &embed;
     buildGrid(mySGraph);
   }
@@ -426,7 +426,7 @@ bool HierarchicalGraph::run() {
   //We draw the tree using a tree drawing algorithm
   bool resultBool;
   string erreurMsg;
-  LayoutProxy tmpLayout(superGraph);
+  Layout tmpLayout(superGraph);
   DataSet tmp;
   tmp.set("nodeSize", nodeSize);
   tmp.set("edgeLength", edgeLength);
@@ -446,7 +446,7 @@ bool HierarchicalGraph::run() {
   
   node n;
   forEach(n, superGraph->getNodes()) {
-    layoutProxy->setNodeValue(n, tmpLayout.getNodeValue(n));
+    layoutObj->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
   computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
@@ -489,16 +489,16 @@ bool HierarchicalGraph::run() {
     if (nodeLevel.get(src.id)>nodeLevel.get(tgt.id)) {
       rev = -1.0;
     }
-    Coord srcPos = layoutProxy->getNodeValue(src);
-    Coord tgtPos = layoutProxy->getNodeValue(tgt);
-    vector<Coord> old = layoutProxy->getEdgeValue(e);
+    Coord srcPos = layoutObj->getNodeValue(src);
+    Coord tgtPos = layoutObj->getNodeValue(tgt);
+    vector<Coord> old = layoutObj->getEdgeValue(e);
     if (old.size() == 0) {
       vector<Coord> pos(2);
       srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
       tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
       pos[0] = srcPos;
       pos[1] = tgtPos;
-      layoutProxy->setEdgeValue(e, pos);
+      layoutObj->setEdgeValue(e, pos);
     }
     else {
       vector<Coord> pos(4);
@@ -512,16 +512,16 @@ bool HierarchicalGraph::run() {
       pos[1] = src2Pos;
       pos[2] = tgt2Pos;
       pos[3] = tgtPos;
-      layoutProxy->setEdgeValue(e, pos);
+      layoutObj->setEdgeValue(e, pos);
     }
   }
   
   //post processing align nodes
   forEach(n, superGraph->getNodes()) {
-    Coord tmp = layoutProxy->getNodeValue(n);
+    Coord tmp = layoutObj->getNodeValue(n);
     Size tmpS = nodeSize->getNodeValue(n);
     tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.0;
-    layoutProxy->setNodeValue(n, tmp);
+    layoutObj->setNodeValue(n, tmp);
   }
 
   //rotate layout and size
@@ -530,18 +530,18 @@ bool HierarchicalGraph::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutProxy->getNodeValue(n);
-      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutObj->getNodeValue(n);
+      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;
     forEach(e, superGraph->getEdges()) {
-      LineType::RealType tmp = layoutProxy->getEdgeValue(e);
+      LineType::RealType tmp = layoutObj->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;
       for (it = tmp.begin(); it!= tmp.end(); ++it) {
 	tmp2.push_back(Coord(-(*it)[1], (*it)[0], (*it)[2]));
       }
-      layoutProxy->setEdgeValue(e, tmp2);
+      layoutObj->setEdgeValue(e, tmp2);
     }
   }
   return true;

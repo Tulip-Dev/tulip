@@ -9,22 +9,22 @@
 */
 #include <assert.h>
 #include "MultipleEdgeSelection.h"
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/SimpleTest.h>
 
 SELECTIONPLUGIN(MultipleEdgeSelection,"Multiple edge","David Auber","20/01/2003","Alpha","0","1");
 
 using namespace std;
 
-MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):Selection(context) {}
+MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):SelectionAlgorithm(context) {}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
   SimpleTest::simpleTest(superGraph, &multipleEdges);
-  selectionProxy->setAllNodeValue(false);
-  selectionProxy->setAllEdgeValue(false);
+  selectionObj->setAllNodeValue(false);
+  selectionObj->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
   for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) 
-    selectionProxy->setEdgeValue(*it, true);
+    selectionObj->setEdgeValue(*it, true);
   return true;
 }

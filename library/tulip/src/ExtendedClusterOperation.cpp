@@ -5,13 +5,13 @@
 #include <ext/hash_set>
 #include <tulip/SuperGraph.h>
 #include <tulip/Node.h>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ExtendedClusterOperation.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/MetricProxy.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Sizes.h>
+#include <tulip/Metric.h>
+#include <tulip/Selection.h>
 #include <tulip/DrawingTools.h>
 
 using namespace std;
@@ -33,8 +33,8 @@ const string rotationProperty = "viewRotation";
 /*
   void shrink(SuperGraph *graph, node n) {
   Iterator<node> *itN = graph->getNodes();
-  LayoutProxy *layout = graph->getProperty<LayoutProxy>("viewLayout");
-  SizesProxy *size = graph->getProperty<SizesProxy>("viewSize");
+  Layout *layout = graph->getProperty<Layout>("viewLayout");
+  Sizes *size = graph->getProperty<Sizes>("viewSize");
   Coord result(DBL_MAX,DBL_MAX,DBL_MAX);
   Coord nPos  = layout->getNodeValue(n);
   Size  nSize = size->getNodeValue(n)/2.0;
@@ -59,7 +59,7 @@ const string rotationProperty = "viewRotation";
 */
 
 //====================================================================================
-void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, MetaGraphProxy * metaInfo, const node from = node()) {
+void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, MetaGraph * metaInfo, const node from = node()) {
   while(it->hasNext()) {
     node n = it->next();
     if (!from.isValid())
@@ -73,9 +73,9 @@ void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, MetaGraph
 }
 //====================================================================================
 void updateGroupLayout(SuperGraph *graph, SuperGraph *cluster, node metanode) {
-  LayoutProxy *graphLayout = graph->getProperty<LayoutProxy>(layoutProperty);
-  SizesProxy *graphSize = graph->getProperty<SizesProxy>(sizeProperty);
-  MetricProxy *graphRotation = graph->getProperty<MetricProxy>(rotationProperty);
+  Layout *graphLayout = graph->getProperty<Layout>(layoutProperty);
+  Sizes *graphSize = graph->getProperty<Sizes>(sizeProperty);
+  Metric *graphRotation = graph->getProperty<Metric>(rotationProperty);
   pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, graphLayout, graphSize, graphRotation);
   Coord maxL = box.first;
   Coord minL = box.second;
@@ -83,8 +83,8 @@ void updateGroupLayout(SuperGraph *graph, SuperGraph *cluster, node metanode) {
   Coord v = (maxL - minL);
   if (v[2] < 0.0001) v[2] = 0.1;
   graphSize->setNodeValue(metanode, Size(v[0],v[1],v[2]));
-  LayoutProxy *clusterLayout = cluster->getProperty<LayoutProxy>(layoutProperty);
-  SizesProxy  *clusterSize   = cluster->getProperty<SizesProxy>(sizeProperty);
+  Layout *clusterLayout = cluster->getProperty<Layout>(layoutProperty);
+  Sizes  *clusterSize   = cluster->getProperty<Sizes>(sizeProperty);
   Iterator<node> *itN= cluster->getNodes();
   while (itN->hasNext()){
     node itn = itN->next();
@@ -111,7 +111,7 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
-  MetaGraphProxy *metaInfo = graph->getProperty<MetaGraphProxy>(metagraphProperty);
+  MetaGraph *metaInfo = graph->getProperty<MetaGraph>(metagraphProperty);
   SuperGraph *metaGraph = tlp::inducedSubGraph(graph->getFather(), subGraph, "cluster");
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << metaGraph->getId(); 
@@ -161,18 +161,18 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph) {
 }
 //====================================================================================
 void updateLayoutUngroup(SuperGraph *graph, node metanode) {
-  MetaGraphProxy *clusterInfo = graph->getProperty<MetaGraphProxy>(metagraphProperty);
+  MetaGraph *clusterInfo = graph->getProperty<MetaGraph>(metagraphProperty);
   if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
-  LayoutProxy *graphLayout = graph->getProperty<LayoutProxy>(layoutProperty);
-  SizesProxy *graphSize = graph->getProperty<SizesProxy>(sizeProperty);
-  MetricProxy *graphRot = graph->getProperty<MetricProxy>(rotationProperty);
+  Layout *graphLayout = graph->getProperty<Layout>(layoutProperty);
+  Sizes *graphSize = graph->getProperty<Sizes>(sizeProperty);
+  Metric *graphRot = graph->getProperty<Metric>(rotationProperty);
   Size size = graphSize->getNodeValue(metanode);
   Coord pos = graphLayout->getNodeValue(metanode);
   double rot = graphRot->getNodeValue(metanode);
   SuperGraph  *cluster = clusterInfo->getNodeValue(metanode);
-  LayoutProxy *clusterLayout = cluster->getProperty<LayoutProxy>(layoutProperty);
-  SizesProxy  *clusterSize   = cluster->getProperty<SizesProxy>(sizeProperty);
-  MetricProxy *clusterRot = cluster->getProperty<MetricProxy>(rotationProperty);
+  Layout *clusterLayout = cluster->getProperty<Layout>(layoutProperty);
+  Sizes  *clusterSize   = cluster->getProperty<Sizes>(sizeProperty);
+  Metric *clusterRot = cluster->getProperty<Metric>(rotationProperty);
   pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   Coord maxL = box.first;
   Coord minL = box.second;
@@ -216,7 +216,7 @@ void tlp::openMetaNode(SuperGraph *graph, node n) {
   mappingC.setAll(node());
   mappingN.setAll(node());
   SuperGraph *root = graph->getRoot();
-  MetaGraphProxy *metaInfo = root->getProperty<MetaGraphProxy>(metagraphProperty);
+  MetaGraph *metaInfo = root->getProperty<MetaGraph>(metagraphProperty);
   SuperGraph *metaGraph = metaInfo->getNodeValue(n);
   if (metaGraph == 0) return;
   buildMapping(root->getInOutNodes(n), mappingC, metaInfo, node() );

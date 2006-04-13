@@ -28,13 +28,13 @@ nobase_include_HEADERS = \
 	tulip/cxx/Reflect.cxx \
 	tulip/cxx/SuperGraph.cxx \
 	tulip/MetaGraph.h \
-	tulip/MetaGraphProxy.h \
+	tulip/MetaGraphAlgorithm.h \
 	tulip/Layout.h \
 	tulip/Plugin.h \
-	tulip/SelectionProxy.h  \
+	tulip/SelectionAlgorithm.h  \
 	tulip/SuperGraphAbstract.h   \
 	tulip/Clustering.h \
-	tulip/LayoutProxy.h \
+	tulip/LayoutAlgorithm.h \
 	tulip/PluginLoader.h \
 	tulip/Size.h \
 	tulip/Node.h \
@@ -50,19 +50,19 @@ nobase_include_HEADERS = \
 	tulip/ImportModule.h \
 	tulip/Metric.h \
 	tulip/Property.h \
-	tulip/SizesProxy.h \
-	tulip/ColorsProxy.h \
+	tulip/SizesAlgorithm.h \
+	tulip/ColorsAlgorithm.h \
 	tulip/Int.h \
-	tulip/MetricProxy.h \
+	tulip/MetricAlgorithm.h \
 	tulip/PropertyManager.h \
 	tulip/String.h \
 	tulip/TemplateFactory.h \
 	tulip/Coord.h \
-	tulip/IntProxy.h \
+	tulip/IntAlgorithm.h \
 	tulip/Observable.h \
 	tulip/ObservableGraph.h \
 	tulip/PropertyProxy.h \
-	tulip/StringProxy.h \
+	tulip/StringAlgorithm.h \
 	tulip/TlpTools.h \
 	tulip/PluginContext.h \
 	tulip/Selection.h \

@@ -107,7 +107,7 @@ SuperGraph * tlp::newSubGraph(SuperGraph *sg,string name) {
 }
 //=========================================================
 SuperGraph * tlp::newCloneSubGraph(SuperGraph *sg, string name) {
-  SelectionProxy sel1(sg);
+  Selection sel1(sg);
   sel1.setAllNodeValue(true);
   sel1.setAllEdgeValue(true);
   SuperGraph *newGraph = sg->addSubGraph(&sel1);
@@ -204,7 +204,7 @@ bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
 }
 //=========================================================
 bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
-                               const string &alg, PluginProgress *plugProgress) {
+			  const string &alg, PluginProgress *plugProgress) {
   if (!ClusteringFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": cluster plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
@@ -237,30 +237,30 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
 template <class Tnode, class Tedge, class TPROPERTY>
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *PropertyProxy<Tnode,Tedge,TPROPERTY>::factory = 0;
  #else
-TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> *PropertyProxy<ColorType, ColorType, Colors>::factory = 0;
-TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> *PropertyProxy<IntType, IntType, Int>::factory = 0;
-TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> *PropertyProxy<PointType, LineType, Layout>::factory = 0;
-TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> *PropertyProxy<DoubleType, DoubleType, Metric>::factory = 0;
-TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> *PropertyProxy<BooleanType, BooleanType, Selection>::factory = 0;
-TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> *PropertyProxy<SizeType,SizeType, Sizes>::factory = 0;
-TemplateFactory<PropertyFactory<String>, String, PropertyContext> *PropertyProxy<StringType, StringType, String>::factory = 0;
+TemplateFactory<PropertyFactory<ColorsAlgorithm>, ColorsAlgorithm, PropertyContext> *PropertyProxy<ColorType, ColorType, ColorsAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<IntAlgorithm>, IntAlgorithm, PropertyContext> *PropertyProxy<IntType, IntType, IntAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *PropertyProxy<PointType, LineType, LayoutAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<MetricAlgorithm>, MetricAlgorithm, PropertyContext> *PropertyProxy<DoubleType, DoubleType, MetricAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<SelectionAlgorithm>, SelectionAlgorithm, PropertyContext> *PropertyProxy<BooleanType, BooleanType, SelectionAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<SizesAlgorithm>, SizesAlgorithm, PropertyContext> *PropertyProxy<SizeType,SizeType, SizesAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *PropertyProxy<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
 void loadPlugins(string dir,PluginLoader *plug) {
-  SizesProxy::initFactory();
-  SizesProxy::factory->load(dir + "sizes", "Sizes",plug);
-  IntProxy::initFactory();
-  IntProxy::factory->load(dir + "int", "Int",plug);
-  LayoutProxy::initFactory();
-  LayoutProxy::factory->load(dir + "layout" , "Layout",plug);
-  ColorsProxy::initFactory();
-  ColorsProxy::factory->load(dir + "colors" , "Colors",plug);
-  MetricProxy::initFactory();
-  MetricProxy::factory->load(dir + "metric" , "Metric",plug);
-  StringProxy::initFactory();
-  StringProxy::factory->load(dir + "string" , "String",plug);
-  SelectionProxy::initFactory();
-  SelectionProxy::factory->load(dir + "selection" , "Selection",plug);
+  Sizes::initFactory();
+  Sizes::factory->load(dir + "sizes", "Sizes",plug);
+  Int::initFactory();
+  Int::factory->load(dir + "int", "Int",plug);
+  Layout::initFactory();
+  Layout::factory->load(dir + "layout" , "Layout",plug);
+  Colors::initFactory();
+  Colors::factory->load(dir + "colors" , "Colors",plug);
+  Metric::initFactory();
+  Metric::factory->load(dir + "metric" , "Metric",plug);
+  String::initFactory();
+  String::factory->load(dir + "string" , "String",plug);
+  Selection::initFactory();
+  Selection::factory->load(dir + "selection" , "Selection",plug);
   ClusteringFactory::initFactory();
   ClusteringFactory::factory->load(dir + "clustering" , "Cluster",plug);
   ImportModuleFactory::initFactory();
@@ -300,7 +300,7 @@ bool tlp::getSource(SuperGraph *superGraph, node &n) {
   return false;
 }
 //=========================================================
-void tlp::removeFromGraph(SuperGraph *ioG, SelectionProxy *inSel) {
+void tlp::removeFromGraph(SuperGraph *ioG, Selection *inSel) {
   if( !ioG )
     return;
 
@@ -355,7 +355,7 @@ void tlp::removeFromGraph(SuperGraph *ioG, SelectionProxy *inSel) {
     ioG->delNode( nodeA[in] );
 }
 
-void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, SelectionProxy *inSel, SelectionProxy* outSel) {
+void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, Selection *inSel, Selection* outSel) {
   if( outSel ) {
     outSel->setAllNodeValue( false );
     outSel->setAllEdgeValue( false );
@@ -400,7 +400,7 @@ void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, SelectionProxy *inSe
 	while( propIt->hasNext() ) {
 	  std::string n = propIt->next();
 	  PProxy * src = inG->getProperty( n );
-	  if(dynamic_cast<MetaGraphProxy *>(src) == 0) {
+	  if(dynamic_cast<MetaGraph *>(src) == 0) {
 	    PProxy *dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
 	    dst->copy( n1, n0, src );
 	  }

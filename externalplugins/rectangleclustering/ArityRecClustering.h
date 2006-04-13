@@ -39,13 +39,13 @@ public:
   void reset();
 
 private:
-  MetricProxy *arityM;
-  MetricProxy *leafM;
-  MetricProxy *nodeM;
+  Metric *arityM;
+  Metric *leafM;
+  Metric *nodeM;
   int mResult;
   double inter;
-  bool DfsClustering (node ,SelectionProxy *,SelectionProxy *);
-  void getRecurseChild(node,SelectionProxy *,SelectionProxy *);
+  bool DfsClustering (node ,Selection *,Selection *);
+  void getRecurseChild(node,Selection *,Selection *);
 };
 
 #endif

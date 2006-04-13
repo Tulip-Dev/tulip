@@ -4,10 +4,10 @@
 #include <tulip/PluginProgress.h>
 #include <tulip/SuperGraph.h>
 #include <tulip/PropertyManager.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Selection.h>
+#include <tulip/Layout.h>
+#include <tulip/Sizes.h>
+#include <tulip/Metric.h>
 #include <tulip/GlGraphWidget.h>
 
 
@@ -34,8 +34,8 @@ void MouseTreeFishEyes::mPressEvent(GlGraphWidget *glGraphWidget,QMouseEvent *qM
 
   if (tmpSetNode.empty()) return;
 
-  //  SizesProxy *sizes=superGraph->getProperty<SizesProxy>("viewSize");
-  MetricProxy *sizes=superGraph->getProperty<MetricProxy>("viewMetric");
+  //  Sizes *sizes=superGraph->getProperty<Sizes>("viewSize");
+  Metric *sizes=superGraph->getProperty<Metric>("viewMetric");
   set<node>::const_iterator it;
   if (qMouseEv->state()!=QEvent::ControlButton) {
     for (it=tmpSetNode.begin();it!=tmpSetNode.end();++it) {
@@ -51,9 +51,9 @@ void MouseTreeFishEyes::mPressEvent(GlGraphWidget *glGraphWidget,QMouseEvent *qM
   string err;
   DataSet tmpData;
   tmpData.set("complexity",false);
-  LayoutProxy *tree=superGraph->getLocalProperty<LayoutProxy>("Bubble Tree",cached,result,err,0,&tmpData);
+  Layout *tree=superGraph->getLocalProperty<Layout>("Bubble Tree",cached,result,err,0,&tmpData);
   if (cached) tree->recompute(err);
-  *superGraph->getProperty<LayoutProxy>("viewLayout")=*tree;
+  *superGraph->getProperty<Layout>("viewLayout")=*tree;
   superGraph->delLocalProperty("Bubble Tree");
   glGraphWidget->redraw();
   Observable::unholdObservers();

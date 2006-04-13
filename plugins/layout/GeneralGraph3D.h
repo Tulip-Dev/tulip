@@ -46,7 +46,7 @@ struct LR
  *  (at your option) any later version.
  *
 */
-class GeneralGraph3D:public Layout { 
+class GeneralGraph3D:public LayoutAlgorithm { 
 
 public:
   GeneralGraph3D(const PropertyContext &);

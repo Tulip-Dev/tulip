@@ -4,7 +4,7 @@
 #include "tulip/GraphMeasure.h"
 #include "tulip/Reflect.h"
 #include "tulip/SuperGraph.h"
-#include "tulip/MetricProxy.h"
+#include "tulip/Metric.h"
 
 
 using namespace std;
@@ -69,7 +69,7 @@ unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsign
 double tlp::averagePathLength(SuperGraph *sg) {
   list<node> fifo;
   double sumPath=0;
-  MetricProxy *mark = new MetricProxy(sg);
+  Metric *mark = new Metric(sg);
   Iterator<node>*itN=sg->getNodes();
   while (itN->hasNext()) {
     mark->setAllNodeValue(0);
@@ -99,7 +99,7 @@ double tlp::averageCluster(SuperGraph *sg) {
   data.set("depth",1);
   bool result;
   string errMsg;
-  MetricProxy *cluster = new MetricProxy(sg);
+  Metric *cluster = new Metric(sg);
   result = sg->computeProperty("Cluster",cluster,errMsg,0,&data);
   double sum=0;
   Iterator<node>*itN=sg->getNodes();

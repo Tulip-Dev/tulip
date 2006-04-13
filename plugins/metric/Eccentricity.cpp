@@ -20,7 +20,7 @@ namespace {
   };
 }
 
-EccentricityMetric::EccentricityMetric(const PropertyContext &context):Metric(context) {
+EccentricityMetric::EccentricityMetric(const PropertyContext &context):MetricAlgorithm(context) {
   addParameter<bool>("all paths",paramHelp[0],"false");
 }
 
@@ -44,16 +44,16 @@ bool EccentricityMetric::run() {
       forEach(n2, superGraph->getNodes()) 
 	val += double(distance.get(n2.id)) / double(superGraph->numberOfNodes()) ;
     }
-    metricProxy->setNodeValue(n, val);
+    metricObj->setNodeValue(n, val);
     maxV = std::max(maxV, val);
     minV = std::min(minV, val);
   } delete itN;
   if (maxV>0) {
     node n;
     forEach(n, superGraph->getNodes()) {
-      double val = maxV - metricProxy->getNodeValue(n); //shift to zero
+      double val = maxV - metricObj->getNodeValue(n); //shift to zero
       double newMax = maxV - minV;
-      metricProxy->setNodeValue(n, val / newMax);
+      metricObj->setNodeValue(n, val / newMax);
     }
   }
   return pluginProgress->state()!=TLP_CANCEL;

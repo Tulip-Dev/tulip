@@ -188,7 +188,7 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0;
   zeta = rot1*zeta[0] + rot2*zeta[1];
   
-  layoutProxy->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
+  layoutObj->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
 				     enclosingCircleCenter[1]+zeta[1],
 				     0) );
   /*
@@ -208,7 +208,7 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
 	delete itE;
 	vector<Coord>tmp(1);
 	tmp[0]=Coord(bend[0],bend[1],0);
-	layoutProxy->setEdgeValue(ite,tmp);
+	layoutObj->setEdgeValue(ite,tmp);
     }
   }
   /*
@@ -231,7 +231,7 @@ void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativ
   /*
    * Make the recursive call, to place the children of n.
    */
- layoutProxy->setNodeValue(n,Coord(0,0,0));
+ layoutObj->setNodeValue(n,Coord(0,0,0));
   Iterator<node> *it = superGraph->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
@@ -250,7 +250,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -267,8 +267,8 @@ namespace {
   };
 }
 
-BubbleTree::BubbleTree(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) {
+  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
   addParameter<bool>("complexity",paramHelp[1],"true");
 }
 
@@ -277,9 +277,9 @@ BubbleTree::~BubbleTree() {}
 bool BubbleTree::run() {
   if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
     if (superGraph->existProperty("viewSize"))
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");    
+      nodeSize = superGraph->getProperty<Sizes>("viewSize");    
     else {
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");  
+      nodeSize = superGraph->getProperty<Sizes>("viewSize");  
       nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
@@ -287,7 +287,7 @@ bool BubbleTree::run() {
   if (dataSet==0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutObj->setAllEdgeValue(vector<Coord>(0));
   stdext::hash_map<node,Vector<double,5> > relativePosition;
   node startNode;
   tlp::getSource(superGraph, startNode);

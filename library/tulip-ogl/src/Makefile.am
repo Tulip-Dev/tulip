@@ -30,6 +30,7 @@ libtulip_ogl_la_SOURCES = \
 	Document.cpp \
 	ObservableGlGraph.cpp \
 	Glyph.cpp \
+	CubeOutLined.cpp \
 	Camera.cpp \
         GlGraph.cpp \
         GlGraphSelection.cpp \

@@ -38,13 +38,13 @@
 
 #include <tulip/SuperGraph.h>
 #include <tulip/PropertyManager.h>
-#include <tulip/MetricProxy.h>
-#include <tulip/StringProxy.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/IntProxy.h>
-#include <tulip/ColorsProxy.h>
-#include <tulip/SizesProxy.h>
+#include <tulip/Metric.h>
+#include <tulip/String.h>
+#include <tulip/Selection.h>
+#include <tulip/Layout.h>
+#include <tulip/Int.h>
+#include <tulip/Colors.h>
+#include <tulip/Sizes.h>
 #include <tulip/GlGraph.h>
 #include <tulip/PropertyWidgets.h>
 #include <tulip/ClusterTree.h>
@@ -175,13 +175,13 @@ void PropertyDialog::newProperty() {
       QString text = QInputDialog::getText("Property name", "Please enter the property name", QLineEdit::Normal, QString::null, &ok, this );
       if (ok) {
 	string erreurMsg;
-	if (strcmp(res.ascii(),"Selection")==0) supergraph->getLocalProperty<SelectionProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Metric")==0) supergraph->getLocalProperty<MetricProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Layout")==0) supergraph->getLocalProperty<LayoutProxy>(text.ascii());
-	if (strcmp(res.ascii(),"String")==0) supergraph->getLocalProperty<StringProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Integer")==0) supergraph->getLocalProperty<IntProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Sizes")==0) supergraph->getLocalProperty<SizesProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Color")==0) supergraph->getLocalProperty<ColorsProxy>(text.ascii());
+	if (strcmp(res.ascii(),"Selection")==0) supergraph->getLocalProperty<Selection>(text.ascii());
+	if (strcmp(res.ascii(),"Metric")==0) supergraph->getLocalProperty<Metric>(text.ascii());
+	if (strcmp(res.ascii(),"Layout")==0) supergraph->getLocalProperty<Layout>(text.ascii());
+	if (strcmp(res.ascii(),"String")==0) supergraph->getLocalProperty<String>(text.ascii());
+	if (strcmp(res.ascii(),"Integer")==0) supergraph->getLocalProperty<Int>(text.ascii());
+	if (strcmp(res.ascii(),"Sizes")==0) supergraph->getLocalProperty<Sizes>(text.ascii());
+	if (strcmp(res.ascii(),"Color")==0) supergraph->getLocalProperty<Colors>(text.ascii());
 	setSuperGraph(supergraph);
       }
   }
@@ -194,7 +194,7 @@ void PropertyDialog::toStringProperty() {
   Observable::holdObservers();
   SuperGraph *graph=supergraph;
   PProxy *newLabels=graph->getProperty(name);
-  StringProxy *labels=graph->getProperty<StringProxy>("viewLabel");
+  String *labels=graph->getProperty<String>("viewLabel");
   if (tabWidget->currentPageIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
@@ -240,20 +240,20 @@ void PropertyDialog::cloneProperty() {
       }
     }
     string erreurMsg;
-    if (typeid((*editedProperty)) == typeid(MetricProxy))
-      {*supergraph->getLocalProperty<MetricProxy>(text.ascii())=*((MetricProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(LayoutProxy))
-      {*supergraph->getLocalProperty<LayoutProxy>(text.ascii())=*((LayoutProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(StringProxy))
-      {*supergraph->getLocalProperty<StringProxy>(text.ascii())=*((StringProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(SelectionProxy))
-      {*supergraph->getLocalProperty<SelectionProxy>(text.ascii())=*((SelectionProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(IntProxy))
-      {*supergraph->getLocalProperty<IntProxy>(text.ascii())=*((IntProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(ColorsProxy))
-      {*supergraph->getLocalProperty<ColorsProxy>(text.ascii())=*((ColorsProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(SizesProxy))
-      {*supergraph->getLocalProperty<SizesProxy>(text.ascii())=*((SizesProxy*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Metric))
+      {*supergraph->getLocalProperty<Metric>(text.ascii())=*((Metric*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Layout))
+      {*supergraph->getLocalProperty<Layout>(text.ascii())=*((Layout*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(String))
+      {*supergraph->getLocalProperty<String>(text.ascii())=*((String*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Selection))
+      {*supergraph->getLocalProperty<Selection>(text.ascii())=*((Selection*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Int))
+      {*supergraph->getLocalProperty<Int>(text.ascii())=*((Int*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Colors))
+      {*supergraph->getLocalProperty<Colors>(text.ascii())=*((Colors*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(Sizes))
+      {*supergraph->getLocalProperty<Sizes>(text.ascii())=*((Sizes*)editedProperty);}
     setSuperGraph(supergraph);
     Observable::unholdObservers();
   }

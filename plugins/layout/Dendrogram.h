@@ -22,7 +22,7 @@ class OrientableSizeProxy;
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  **/
-class Dendrogram: public Layout {
+class Dendrogram: public LayoutAlgorithm {
 public:
     Dendrogram(const PropertyContext&);
     ~Dendrogram();

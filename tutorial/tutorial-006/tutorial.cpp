@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 
 /**

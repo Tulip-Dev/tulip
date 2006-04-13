@@ -30,7 +30,7 @@ namespace {
 
     // startingNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SelectionProxy" ) \
+    HTML_HELP_DEF( "type", "Selection" ) \
     HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
     HTML_HELP_BODY() \
     "This parameter defines the starting set of nodes used to walk in the graph." \
@@ -48,9 +48,9 @@ namespace {
 }
 
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const PropertyContext &context):Selection(context) {
+ReachableSubGraphSelection::ReachableSubGraphSelection(const PropertyContext &context):SelectionAlgorithm(context) {
   addParameter<int> ("direction",paramHelp[0],"0");
-  addParameter<SelectionProxy> ("startingnodes",paramHelp[1],"viewSelection");
+  addParameter<Selection> ("startingnodes",paramHelp[1],"viewSelection");
   addParameter<int> ("distance",paramHelp[2],"5");
 }
 
@@ -60,15 +60,15 @@ ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 bool ReachableSubGraphSelection::run() {
   int maxDepth = 5;
   int direction = 0;
-  SelectionProxy * startNodes=superGraph->getProperty<SelectionProxy>("viewSelection");
+  Selection * startNodes=superGraph->getProperty<Selection>("viewSelection");
   if ( dataSet!=0) {
     dataSet->get("distance", maxDepth);
     dataSet->get("direction", direction);
     dataSet->get("startingnodes", startNodes);
   }
 
-  selectionProxy->setAllEdgeValue(false);
-  selectionProxy->setAllNodeValue(false);
+  selectionObj->setAllEdgeValue(false);
+  selectionObj->setAllNodeValue(false);
 
   if ( startNodes ) {
     Iterator<node> *itN = superGraph->getNodes();
@@ -81,7 +81,7 @@ bool ReachableSubGraphSelection::run() {
 	while (itN->hasNext()) { 
 	  node itn = itN->next();
 	  if (distance.get(itn.id) <= maxDepth && distance.get(itn.id)<superGraph->numberOfNodes() ) 
-	    selectionProxy->setNodeValue(itn,true);
+	    selectionObj->setNodeValue(itn,true);
 	} delete itN;
       }
     } delete itN;
@@ -91,8 +91,8 @@ bool ReachableSubGraphSelection::run() {
       edge e = itE->next();
       node source = superGraph->source(e);
       node target = superGraph->target(e);
-      if (selectionProxy->getNodeValue(source) && selectionProxy->getNodeValue(target))
-	selectionProxy->setEdgeValue(e,true);
+      if (selectionObj->getNodeValue(source) && selectionObj->getNodeValue(target))
+	selectionObj->setEdgeValue(e,true);
     }delete itE;
   }
  

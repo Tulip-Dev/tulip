@@ -78,10 +78,10 @@
 #include <tulip/PropertyWidgets.h>
 #include <tulip/ClusterTree.h>
 #include <tulip/PropertyProxy.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/ColorsProxy.h>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/Selection.h>
+#include <tulip/Sizes.h>
+#include <tulip/Colors.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/StableIterator.h>
 #include <tulip/FindSelection.h>
@@ -189,7 +189,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(&metricMenu     , SIGNAL(activated(int)), SLOT(changeMetric(int)));
   connect(&layoutMenu     , SIGNAL(activated(int)), SLOT(changeLayout(int)));
   connect(&selectMenu     , SIGNAL(activated(int)), SLOT(changeSelection(int)));
-  connect(clusteringMenu  , SIGNAL(activated(int)), SLOT(makeClustering(int)));
+  connect(&clusteringMenu  , SIGNAL(activated(int)), SLOT(makeClustering(int)));
   connect(&sizesMenu      , SIGNAL(activated(int)), SLOT(changeSizes(int)));
   connect(&intMenu        , SIGNAL(activated(int)), SLOT(changeInt(int)));
   connect(&colorsMenu     , SIGNAL(activated(int)), SLOT(changeColors(int)));
@@ -230,7 +230,7 @@ void viewGl::enableElements(bool enabled) {
   enableQPopupMenu(&intMenu, enabled);
   enableQPopupMenu(&sizesMenu, enabled);
   enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu((QPopupMenu *) clusteringMenu, enabled);
+  enableQPopupMenu(&clusteringMenu, enabled);
   enableQPopupMenu(&exportGraphMenu, enabled);
   enableQPopupMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
@@ -528,12 +528,12 @@ void viewGl::fileOpen() {
 //**********************************************************************
 void viewGl::initializeGraph(SuperGraph *superGraph) {
   superGraph->setAttribute("name", newName());
-  superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-  superGraph->getProperty<ColorsProxy>("viewColor")->setAllNodeValue(Color(255,0,0));
-  superGraph->getProperty<ColorsProxy>("viewColor")->setAllEdgeValue(Color(0,0,0));
-  superGraph->getProperty<IntProxy>("viewShape")->setAllNodeValue(1);
-  superGraph->getProperty<IntProxy>("viewShape")->setAllEdgeValue(0);
+  superGraph->getProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
+  superGraph->getProperty<Sizes>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  superGraph->getProperty<Colors>("viewColor")->setAllNodeValue(Color(255,0,0));
+  superGraph->getProperty<Colors>("viewColor")->setAllEdgeValue(Color(0,0,0));
+  superGraph->getProperty<Int>("viewShape")->setAllNodeValue(1);
+  superGraph->getProperty<Int>("viewShape")->setAllEdgeValue(0);
 }
 //**********************************************************************
 void viewGl::initializeGlGraph(GlGraph *glGraph) {
@@ -661,7 +661,7 @@ namespace {
   typedef std::vector<edge> EdgeA;
 
   void GetSelection(NodeA & outNodeA, EdgeA & outEdgeA,
-		    SuperGraph *inG, SelectionProxy * inSel ) {
+		    SuperGraph *inG, Selection * inSel ) {
     assert( inSel );
     assert( inG );
     outNodeA.clear();
@@ -682,7 +682,7 @@ namespace {
     } delete nodeIt;
   }
 
-  void SetSelection(SelectionProxy * outSel, NodeA & inNodeA,
+  void SetSelection(Selection * outSel, NodeA & inNodeA,
 		    EdgeA & inEdgeA, SuperGraph * inG) {
     assert( outSel );
     assert( inG );
@@ -706,7 +706,7 @@ void viewGl::editCut() {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  Selection * selP = g->getProperty<Selection>("viewSelection");
   if( !selP ) return;
   // Save selection
   NodeA nodeA;
@@ -730,7 +730,7 @@ void viewGl::editCopy() {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  Selection * selP = g->getProperty<Selection>("viewSelection");
   if( !selP ) return;
   Observable::holdObservers();
   copyCutPasteGraph = tlp::newSuperGraph();
@@ -744,7 +744,7 @@ void viewGl::editPaste() {
   if( !g ) return;
   if( !copyCutPasteGraph ) return;
   Observable::holdObservers();
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  Selection * selP = g->getProperty<Selection>("viewSelection");
   tlp::copyToGraph( g, copyCutPasteGraph, 0, selP );
   Observable::unholdObservers();
 }
@@ -788,17 +788,17 @@ void buildPropertyMenu(QPopupMenu &menu) {
 //**********************************************************************
 void viewGl::buildMenus(){
   //Properties PopMenus
-  buildPropertyMenu<IntType, IntType, Int>(intMenu);
-  buildPropertyMenu<StringType, StringType, String>(stringMenu);
-  buildPropertyMenu<SizeType, SizeType, Sizes>(sizesMenu);
-  buildPropertyMenu<ColorType, ColorType, Colors>(colorsMenu);
-  buildPropertyMenu<PointType, LineType, Layout>(layoutMenu);
-  buildPropertyMenu<DoubleType,DoubleType,Metric>(metricMenu);
-  buildPropertyMenu<BooleanType,BooleanType, Selection>(selectMenu);
+  buildPropertyMenu<IntType, IntType, IntAlgorithm>(intMenu);
+  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
+  buildPropertyMenu<SizeType, SizeType, SizesAlgorithm>(sizesMenu);
+  buildPropertyMenu<ColorType, ColorType, ColorsAlgorithm>(colorsMenu);
+  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
+  buildPropertyMenu<DoubleType,DoubleType,MetricAlgorithm>(metricMenu);
+  buildPropertyMenu<BooleanType,BooleanType, SelectionAlgorithm>(selectMenu);
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
   for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
-    clusteringMenu->insertItem( it3->first.c_str() );
+    clusteringMenu.insertItem( it3->first.c_str() );
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
   for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
@@ -849,20 +849,22 @@ void viewGl::buildMenus(){
   editMenu->insertItem( "Reverse selected edges direction", this, SLOT( reverseSelectedEdgeDirection() ));
   editMenu->insertItem( "group", this, SLOT( group() ));
   //Property Menu
-  if (selectMenu.count()>0)
-    propertyMenu->insertItem("&Selection", &selectMenu );
-  if (layoutMenu.count()>0)
-    propertyMenu->insertItem("&Layout", &layoutMenu );
-  if (metricMenu.count()>0)
-    propertyMenu->insertItem("&Metric", &metricMenu );
+  if (clusteringMenu.count()>0)
+    propertyMenu->insertItem("&Clustering ", &clusteringMenu );
   if (colorsMenu.count()>0)
     propertyMenu->insertItem("&Colors", &colorsMenu );
   if (intMenu.count()>0)
     propertyMenu->insertItem("&Integer", &intMenu );
-  if (stringMenu.count()>0)
-    propertyMenu->insertItem("&String", &stringMenu );
+  if (layoutMenu.count()>0)
+    propertyMenu->insertItem("&Layout", &layoutMenu );
+  if (metricMenu.count()>0)
+    propertyMenu->insertItem("&Metric", &metricMenu );
+  if (selectMenu.count()>0)
+    propertyMenu->insertItem("&Selection", &selectMenu );
   if (sizesMenu.count()>0)
     propertyMenu->insertItem("&Sizes", &sizesMenu );
+  if (stringMenu.count()>0)
+    propertyMenu->insertItem("&String", &stringMenu );
 }
 //**********************************************************************
 void viewGl::outputEPS() {
@@ -986,7 +988,7 @@ void viewGl::goInside() {
   if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
     if (type==NODE) {
       SuperGraph *supergraph=glWidget->getSuperGraph();
-      MetaGraphProxy *meta=supergraph->getProperty<MetaGraphProxy>("viewMetaGraph");
+      MetaGraph *meta=supergraph->getProperty<MetaGraph>("viewMetaGraph");
       if (meta->getNodeValue(tmpNode)!=0) {
 	changeSuperGraph(meta->getNodeValue(tmpNode));
       }
@@ -1011,7 +1013,7 @@ void viewGl::group() {
   set<node> tmp;
   SuperGraph *supergraph=glWidget->getSuperGraph();
   Iterator<node> *it=supergraph->getNodes();
-  SelectionProxy *select = supergraph->getProperty<SelectionProxy>("viewSelection");
+  Selection *select = supergraph->getProperty<Selection>("viewSelection");
   while (it->hasNext()) {
     node itn = it->next();
     if (select->getNodeValue(itn))
@@ -1061,7 +1063,7 @@ void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, b
   ElementType type;
   node tmpNode;
   edge tmpEdge;
-  SelectionProxy *elementSelected = glW->getSuperGraph()->getProperty<SelectionProxy>("viewSelection");
+  Selection *elementSelected = glW->getSuperGraph()->getProperty<Selection>("viewSelection");
   if (reset) {
     elementSelected->setAllNodeValue(false);
     elementSelected->setAllEdgeValue(false);
@@ -1156,14 +1158,14 @@ void viewGl::restoreView() {
 //===========================================================
 //Menu Edit : functions
 //===========================================================
-///Deselect all entries in the glGraph current selection Proxy
+///Deselect all entries in the glGraph current selection 
 void viewGl::deselectALL() {
   if (!glWidget) return;
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->setAllNodeValue(false);
-  graph->getProperty<SelectionProxy>("viewSelection")->setAllEdgeValue(false);
+  graph->getProperty<Selection>("viewSelection")->setAllNodeValue(false);
+  graph->getProperty<Selection>("viewSelection")->setAllEdgeValue(false);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -1171,7 +1173,7 @@ void viewGl::delSelection() {
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  SelectionProxy *elementSelected=graph->getProperty<SelectionProxy>("viewSelection");
+  Selection *elementSelected=graph->getProperty<Selection>("viewSelection");
   StableIterator<node> itN(graph->getNodes());
   while(itN.hasNext()) {
     node itv = itN.next();
@@ -1187,12 +1189,12 @@ void viewGl::delSelection() {
   Observable::unholdObservers();
 }
 //==============================================================
-///Reverse all entries in the glGraph current selection Proxy
+///Reverse all entries in the glGraph current selection 
 void viewGl::reverseSelection() {
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->reverse();
+  graph->getProperty<Selection>("viewSelection")->reverse();
   Observable::unholdObservers();
 }
 //==============================================================
@@ -1203,7 +1205,7 @@ void viewGl::newSubgraph() {
   bool ok = FALSE;
   string tmp;
   bool verifGraph = true;
-  SelectionProxy *sel1 = graph->getProperty<SelectionProxy>("viewSelection");  
+  Selection *sel1 = graph->getProperty<Selection>("viewSelection");  
   Observable::holdObservers();
   Iterator<edge>*itE = graph->getEdges();
   while (itE->hasNext()) {
@@ -1219,13 +1221,13 @@ void viewGl::newSubgraph() {
     QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
   QString text = QInputDialog::getText( "View building" ,  "Please enter view name" , QLineEdit::Normal,QString::null, &ok, this );
   if (ok && !text.isEmpty()) {
-    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
+    sel1 = graph->getProperty<Selection>("viewSelection");
     SuperGraph *tmp = graph->addSubGraph(sel1);
     tmp->setAttribute("name",string(text.latin1()));
     clusterTreeWidget->update();
   }
   else if (ok) {
-    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
+    sel1 = graph->getProperty<Selection>("viewSelection");
     SuperGraph *tmp=graph->addSubGraph(sel1);
     tmp->setAttribute("name", newName());
     clusterTreeWidget->update();
@@ -1237,7 +1239,7 @@ void viewGl::reverseSelectedEdgeDirection() {
   SuperGraph *graph=glWidget->getSuperGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->reverseEdgeDirection();  
+  graph->getProperty<Selection>("viewSelection")->reverseEdgeDirection();  
   Observable::unholdObservers();
 }
 //==============================================================
@@ -1365,7 +1367,7 @@ void viewGl::makeClustering(int id) {
   clearObservers();
   if (glWidget==0) return;
   Observable::holdObservers();
-  string name(clusteringMenu->text(id).ascii());
+  string name(clusteringMenu.text(id).ascii());
   string erreurMsg;
   DataSet dataSet;
   SuperGraph *graph=glWidget->getSuperGraph();
@@ -1431,7 +1433,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 void viewGl::changeString(int id) {
   clearObservers();
   string name(stringMenu.text(id).ascii());
-  if (changeProperty<StringProxy>(name,"viewLabel"))
+  if (changeProperty<String>(name,"viewLabel"))
     redrawView();
   initObservers();
 }
@@ -1439,7 +1441,7 @@ void viewGl::changeString(int id) {
 void viewGl::changeSelection(int id) {
   clearObservers();
   string name(selectMenu.text(id).ascii());
-  if (changeProperty<SelectionProxy>(name,"viewSelection"))
+  if (changeProperty<Selection>(name,"viewSelection"))
     redrawView();
   initObservers();
 }
@@ -1447,9 +1449,9 @@ void viewGl::changeSelection(int id) {
 void viewGl::changeMetric(int id) {
   clearObservers();
   string name(metricMenu.text(id).ascii());
-  bool result = changeProperty<MetricProxy>(name,"viewMetric", true);
+  bool result = changeProperty<Metric>(name,"viewMetric", true);
   if (result && map_metric->isOn()) {
-    if (changeProperty<ColorsProxy>("Metric Mapping","viewColor", false))
+    if (changeProperty<Colors>("Metric Mapping","viewColor", false))
       redrawView();
   }
   initObservers();
@@ -1465,14 +1467,14 @@ void viewGl::changeLayout(int id) {
   Coord scTrans = glWidget->getSceneTranslation();
   Coord scRot = glWidget->getSceneRotation();
   glWidget->setInputLayout(name);
-  bool result = changeProperty<LayoutProxy>(name, "viewLayout", true, true);
+  bool result = changeProperty<Layout>(name, "viewLayout", true, true);
   glWidget->setInputLayout("viewLayout");
   glWidget->setCamera(cam);
   glWidget->setSceneTranslation(scTrans);
   glWidget->setSceneRotation(scRot);
   if (result) {
     if( force_ratio->isOn() )
-      glWidget->getSuperGraph()->getLocalProperty<LayoutProxy>("viewLayout")->perfectAspectRatio();
+      glWidget->getSuperGraph()->getLocalProperty<Layout>("viewLayout")->perfectAspectRatio();
     //SuperGraph *graph=glWidget->getSuperGraph();
     Observable::holdObservers();
     glWidget->centerScene();
@@ -1499,7 +1501,7 @@ void viewGl::changeLayout(int id) {
 void viewGl::changeInt(int id) {
   clearObservers();
   string name(intMenu.text(id).ascii());
-  changeProperty<IntProxy>(name,"viewInt");
+  changeProperty<Int>(name,"viewInt");
   initObservers();
 }
   //**********************************************************************
@@ -1509,7 +1511,7 @@ void viewGl::changeColors(int id) {
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
   string name(colorsMenu.text(id).ascii());
-  bool result = changeProperty<ColorsProxy>(name,"viewColor");
+  bool result = changeProperty<Colors>(name,"viewColor");
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
@@ -1534,7 +1536,7 @@ void viewGl::changeSizes(int id) {
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
   string name(sizesMenu.text(id).ascii());
-  bool result = changeProperty<SizesProxy>(name,"viewSize");
+  bool result = changeProperty<Sizes>(name,"viewSize");
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );

@@ -32,7 +32,7 @@
  *  (at your option) any later version.
  *
  */
-class NodeMetric:public Metric { 
+class NodeMetric:public MetricAlgorithm { 
 public:
   NodeMetric(const PropertyContext &);
   bool run();

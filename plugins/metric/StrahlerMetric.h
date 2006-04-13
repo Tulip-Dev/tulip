@@ -54,7 +54,7 @@ struct Strahler {
  *  (at your option) any later version.
  *
  */
-class StrahlerMetric:public Metric { 
+class StrahlerMetric:public MetricAlgorithm { 
 public:
   StrahlerMetric(const PropertyContext &);
   bool run();

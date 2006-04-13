@@ -4,15 +4,15 @@
 #include <iostream>
 #include <qinputdialog.h>
 #include <qstringlist.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 
 
 using namespace std;
-class OnValueSelection:public Selection { 
+class OnValueSelection:public SelectionAlgorithm { 
 private:
 
 public:
-  OnValueSelection(const PropertyContext &context):Selection(context){}
+  OnValueSelection(const PropertyContext &context):SelectionAlgorithm(context){}
   ~OnValueSelection(){}
   bool run() {
     string nameMetric; 
@@ -74,18 +74,18 @@ public:
 	else 
 	  tmpHigh.insert(n);
     }delete itN;
-    selectionProxy->setAllNodeValue(false);
-    selectionProxy->setAllEdgeValue(false);
+    selectionObj->setAllNodeValue(false);
+    selectionObj->setAllEdgeValue(false);
     set<node>::const_iterator iN;
     if (eq) 
       for (iN=tmpEqual.begin();iN!=tmpEqual.end();++iN)
-	selectionProxy->setNodeValue(*iN,true);
+	selectionObj->setNodeValue(*iN,true);
     if (inf)
 	for (iN=tmpSmall.begin();iN!=tmpSmall.end();++iN)
-	  selectionProxy->setNodeValue(*iN,true);
+	  selectionObj->setNodeValue(*iN,true);
     if (sup)
 	for (iN=tmpHigh.begin();iN!=tmpHigh.end();++iN)
-	  selectionProxy->setNodeValue(*iN,true);
+	  selectionObj->setNodeValue(*iN,true);
     return true;
   }
   

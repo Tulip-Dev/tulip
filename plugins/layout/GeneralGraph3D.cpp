@@ -5,8 +5,8 @@
 #include <tulip/AcyclicTest.h>
 #include <tulip/TreeTest.h>
 #include <tulip/MethodFactory.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Selection.h>
 #include <tulip/TlpTools.h>
 
 #include "GeneralGraph3D.h"
@@ -20,7 +20,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -38,8 +38,8 @@ namespace {
 
 #define ORIENTATION "vertical;horizontal;"
 
-GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
+  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
 }
 
@@ -69,7 +69,7 @@ void GeneralGraph3D::makeAcyclic(SuperGraph* superGraph,set<edge> &reversed,list
   if (!AcyclicTest::isAcyclic(superGraph)) {
     bool resultBool;
     string erreurMsg;
-    SelectionProxy *spanningDag= new SelectionProxy(superGraph);
+    Selection *spanningDag= new Selection(superGraph);
     resultBool = superGraph->computeProperty("SpanningDag",spanningDag,erreurMsg);
     if (!resultBool) {
       cerr << __PRETTY_FUNCTION__ << endl;
@@ -136,7 +136,7 @@ void GeneralGraph3D::makeProperDag(SuperGraph* superGraph, list<node> &addedNode
   //We compute the dag level metric on resulting graph.
   bool resultBool;
   string erreurMsg;
-  MetricProxy *dagLevel= new MetricProxy(superGraph);
+  Metric *dagLevel= new Metric(superGraph);
   resultBool = superGraph->computeProperty("DagLevel",dagLevel,erreurMsg);
   assert(resultBool);
   //we now transform the dag in a proper Dag, two linked nodes of a proper dag
@@ -204,7 +204,7 @@ bool GeneralGraph3D::run() {
   //We draw the tree using a tree drawing algorithm
   bool resultBool;
   string erreurMsg;
-  LayoutProxy *tmpLayout= new LayoutProxy(mySGraph);
+  Layout *tmpLayout= new Layout(mySGraph);
   resultBool = mySGraph->computeProperty("Cone Tree",tmpLayout,erreurMsg,0, dataSet);
   assert(resultBool);
   if (!resultBool) {
@@ -215,7 +215,7 @@ bool GeneralGraph3D::run() {
   Iterator<node> *itN=superGraph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    layoutProxy->setNodeValue(itn,tmpLayout->getNodeValue(itn));
+    layoutObj->setNodeValue(itn,tmpLayout->getNodeValue(itn));
   } delete itN;
   
 
@@ -241,7 +241,7 @@ bool GeneralGraph3D::run() {
       p2=tmpLayout->getNodeValue(endN);
     }
     if (p1==p2) edgeLine.push_back(p1); else {edgeLine.push_back(p1); edgeLine.push_back(p2);}
-    layoutProxy->setEdgeValue(toUpdate,edgeLine);
+    layoutObj->setEdgeValue(toUpdate,edgeLine);
   }
   
   //cerr << "We compute self loops" << endl;
@@ -261,7 +261,7 @@ bool GeneralGraph3D::run() {
     tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode2));
     for (it=edge3.begin();it!=edge3.end();++it)
       tmpLCoord.push_back(*it);
-    layoutProxy->setEdgeValue(tmp.oldEdge,tmpLCoord);
+    layoutObj->setEdgeValue(tmp.oldEdge,tmpLCoord);
     mySGraph->delAllNode(tmp.ghostNode1);
     mySGraph->delAllNode(tmp.ghostNode2);
   }
@@ -270,8 +270,8 @@ bool GeneralGraph3D::run() {
   //  mySGraph->delLocalProperty("Cone Tree Extended");
   delete tmpLayout;
   //  mySGraph->delLocalProperty("viewSize");
-  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  //  superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
+  //  superGraph->getLocalProperty<Sizes>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   for (set<edge>::const_iterator it=reversedEdges.begin();it!=reversedEdges.end();++it) {
     superGraph->reverse(*it);
   }

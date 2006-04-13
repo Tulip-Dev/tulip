@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/StableIterator.h>
 
 #include "EqualValueClustering.h"
@@ -16,7 +16,7 @@ namespace {
   const char * paramHelp[] = {
     // selectedNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_BODY() \
     "Define the metric that will be used in order partition to the graph" \
     HTML_HELP_CLOSE(),
@@ -24,7 +24,7 @@ namespace {
 }
 //================================================================================
 EqualValueClustering::EqualValueClustering(ClusterContext context):Clustering(context) {
-  addParameter<MetricProxy>("Metric", paramHelp[0], "viewMetric");
+  addParameter<Metric>("Metric", paramHelp[0], "viewMetric");
 }
 //================================================================================
 namespace stdext {
@@ -36,11 +36,11 @@ namespace stdext {
 //===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
-  MetricProxy *metric=0;
+  Metric *metric=0;
   if (dataSet!=0) 
     dataSet->get("Metric", metric);  
   if (metric == 0)
-    metric = superGraph->getProperty<MetricProxy>("viewMetric");
+    metric = superGraph->getProperty<Metric>("viewMetric");
   
   stdext::hash_map<double,int> partitions;
   int curPart=0;

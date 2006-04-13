@@ -7,7 +7,7 @@
 ///
 using namespace std;
 ///
-class LongestPath:public Selection { 
+class LongestPath:public SelectionAlgorithm { 
 public:
   LongestPath(const PropertyContext &);
   ~LongestPath();
@@ -19,7 +19,7 @@ private:
 
 private:
   double max;
-  MetricProxy *metricLevel;
+  Metric *metricLevel;
 };
 
 #endif

@@ -27,7 +27,7 @@ class ImprovedWalkerIterator;
  *  University Bordeaux I France
  **/
 
-class ImprovedWalker : public Layout {
+class ImprovedWalker : public LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
  public:

@@ -12,25 +12,25 @@
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class AutoSizes:public Sizes
+class AutoSizes:public SizesAlgorithm
 { 
 public:
-  AutoSizes(const PropertyContext &context):Sizes(context){}
+  AutoSizes(const PropertyContext &context):SizesAlgorithm(context){}
 
   bool run() {
     node n;
     forEach(n,superGraph->getNodes())
-      sizesProxy->setNodeValue(n, getNodeValue(n));
+      sizesObj->setNodeValue(n, getNodeValue(n));
     edge e;
     forEach(e,superGraph->getEdges())
-      sizesProxy->setEdgeValue(e, getEdgeValue(e));
+      sizesObj->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 
 
 private:
   Size getNodeValue(const node n) {
-    LayoutProxy *entryLayout=superGraph->getProperty<LayoutProxy>("viewLayout");
+    Layout *entryLayout=superGraph->getProperty<Layout>("viewLayout");
 
     //Compute the minimal distance to one neighbour.
     Iterator<node> *itN=superGraph->getNodes();
@@ -65,8 +65,8 @@ private:
   }
 
   Size getEdgeValue(const edge e) {
-    Size s = sizesProxy->getNodeValue(superGraph->source(e));
-    Size t = sizesProxy->getNodeValue(superGraph->target(e));
+    Size s = sizesObj->getNodeValue(superGraph->source(e));
+    Size t = sizesObj->getNodeValue(superGraph->target(e));
     Coord tmp(s.getW(),s.getH(),s.getD());
     Coord tmp2(t.getW(),t.getH(),t.getD());
     float sizes=tmp.norm();

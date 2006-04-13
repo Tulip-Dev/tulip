@@ -27,7 +27,7 @@
  *  (at your option) any later version.
  *
  */
-class ArityMetric:public Metric { 
+class ArityMetric:public MetricAlgorithm { 
 public:
   ArityMetric(const PropertyContext &);
   bool run();

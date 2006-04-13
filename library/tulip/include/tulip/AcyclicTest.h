@@ -27,7 +27,7 @@
 
 
 class SuperGraph;
-class SelectionProxy;
+class Selection;
 
 namespace tlp {
   struct SelfLoops {

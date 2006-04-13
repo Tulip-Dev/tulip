@@ -19,15 +19,15 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") == SelectionProxy::factory->objMap.end());
+  CPPUNIT_ASSERT( Selection::factory->objMap.find("Test") == Selection::factory->objMap.end());
   tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") != SelectionProxy::factory->objMap.end());
+  CPPUNIT_ASSERT( Selection::factory->objMap.find("Test") != Selection::factory->objMap.end());
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
-  SelectionProxy sel(graph);
+  Selection sel(graph);
   CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
 //==========================================================
@@ -38,7 +38,7 @@ void PluginsTest::testAncestorGraph() {
   SuperGraph *child = graph->addSubGraph();
   SuperGraph *child2 = graph->addSubGraph();
   SuperGraph *child3 = child->addSubGraph();
-  SelectionProxy sel(child);
+  Selection sel(child);
   CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));

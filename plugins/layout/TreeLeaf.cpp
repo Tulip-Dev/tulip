@@ -15,7 +15,7 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
     curPos+=2;
     Coord tmpC;
     tmpC.set(curPos,depth,0);
-    layoutProxy->setNodeValue(n,tmpC);
+    layoutObj->setNodeValue(n,tmpC);
     return curPos;
   }
   Iterator<node> *itN=superGraph->getOutNodes(n);
@@ -35,17 +35,17 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
   }
   delete itN;
   result=(resultMin+resultMax)/2;
-  layoutProxy->setNodeValue(n,Coord(result,depth,0));
+  layoutObj->setNodeValue(n,Coord(result,depth,0));
   return result;
 }
 
-TreeLeaf::TreeLeaf(const PropertyContext &context):Layout(context){}
+TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){}
 
 TreeLeaf::~TreeLeaf() {}
 
 bool TreeLeaf::run() {
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
+  superGraph->getLocalProperty<Sizes>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   Iterator<node> *itN=superGraph->getNodes();
   node tmpNode;
   for (;itN->hasNext();) {

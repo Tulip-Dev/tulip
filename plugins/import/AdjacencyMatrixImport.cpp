@@ -93,8 +93,8 @@ public:
     dataSet->get("filename",name2);
     std::ifstream in(name2.c_str());
     unsigned int curLine=0;
-    MetricProxy *metric = superGraph->getProperty<MetricProxy>("viewMetric");
-    StringProxy *stringP = superGraph->getProperty<StringProxy>("viewLabel");
+    Metric *metric = superGraph->getProperty<Metric>("viewMetric");
+    String *stringP = superGraph->getProperty<String>("viewLabel");
     while (!in.eof()) {
       char line[MAX_SIZE];
       in.getline(line,MAX_SIZE);

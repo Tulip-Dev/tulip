@@ -29,7 +29,7 @@
  *  (at your option) any later version.
  *
  */
-class ConnectedComponent:public Metric { 
+class ConnectedComponent:public MetricAlgorithm { 
 public:
   ConnectedComponent(const PropertyContext &);
   ~ConnectedComponent();

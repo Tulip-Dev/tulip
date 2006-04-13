@@ -34,8 +34,8 @@ struct PlanarGraph:public ImportModule {
     }
     if (nbNodes < 3) nbNodes = 3;
     srand(clock()); 
-    LayoutProxy *newLayout = superGraph->getLocalProperty<LayoutProxy>("viewLayout");
-    SizesProxy  *newSize   = superGraph->getLocalProperty<SizesProxy>("viewSize");
+    Layout *newLayout = superGraph->getLocalProperty<Layout>("viewLayout");
+    Sizes  *newSize   = superGraph->getLocalProperty<Sizes>("viewSize");
     newSize->setAllNodeValue(Size(1.0,1.0,1.0));
 
     vector<node> graph(nbNodes);

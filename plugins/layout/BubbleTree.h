@@ -30,16 +30,16 @@
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)), 
  *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using 
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).
- *  The algorithm can manage nodes of different size. The SizesProxy "viewSize"
+ *  The algorithm can manage nodes of different size. The Sizes "viewSize"
  *  is used by default if no parameters are given to the plug-in. 
- *  The parameter is (SizesProxy*)"nodeSize".
+ *  The parameter is (Sizes*)"nodeSize".
  *
  *  
  *
  *  \author David Auber, S. Grivet  University Bordeaux I France: 
  *   auber@tulip-software.org, grivet@labri.fr
  */
-class BubbleTree:public Layout { 
+class BubbleTree:public LayoutAlgorithm { 
 public:
   BubbleTree(const PropertyContext &);
   ~BubbleTree();
@@ -51,7 +51,7 @@ private:
   void calcLayout(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
   void calcLayout2(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
-  SizesProxy *nodeSize;
+  Sizes *nodeSize;
   bool nAlgo;
 };
 /*@}*/

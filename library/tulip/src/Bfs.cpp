@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::newSubGraph(G)),selectedNodes(), selectedEdges() {
+Bfs::Bfs(SuperGraph * G, Selection * resultatAlgoSelection): graph(tlp::newSubGraph(G)),selectedNodes(), selectedEdges() {
   selectedNodes.setAll(false);    selectedEdges.setAll(false);
   nbNodes = 0;
 
@@ -30,7 +30,7 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
     
  
   delete itn;
-  s_proxy = G->getProperty<SelectionProxy>("viewSelection");
+  s_proxy = G->getProperty<Selection>("viewSelection");
   s_proxy->setAllNodeValue(false);
   s_proxy->setAllEdgeValue(false);
 
@@ -44,7 +44,7 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
   computeBfs(G,resultatAlgoSelection,root);
 }
 
-void Bfs::computeBfs(SuperGraph * G,SelectionProxy * resultatAlgoSelection, node root){
+void Bfs::computeBfs(SuperGraph * G,Selection * resultatAlgoSelection, node root){
   unsigned int taille = G->numberOfNodes();
   unsigned int i = 0;
 

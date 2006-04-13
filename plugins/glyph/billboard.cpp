@@ -3,9 +3,9 @@
 #include <string>
 #include <GL/gl.h>
 
-#include <tulip/StringProxy.h>
-#include <tulip/ColorsProxy.h>
-#include <tulip/SizesProxy.h>
+#include <tulip/String.h>
+#include <tulip/Colors.h>
+#include <tulip/Sizes.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>

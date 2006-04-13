@@ -8,7 +8,7 @@ LAYOUTPLUGIN(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","
 
 using namespace std;
 //====================================================
-Tutte::Tutte(const PropertyContext &context):Layout(context) 
+Tutte::Tutte(const PropertyContext &context):LayoutAlgorithm(context) 
 {}
 //====================================================
 Tutte::~Tutte() {}
@@ -83,7 +83,7 @@ list<node> findCycle(SuperGraph *sg) {
 }
 //====================================================
 bool Tutte::run() {
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutObj->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
   tmp=findCycle(superGraph);
   std::list<node>::iterator itL;
@@ -94,7 +94,7 @@ bool Tutte::run() {
   int rayon=100;
   gamma=2*M_PI/tmp.size();
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
-    layoutProxy->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
+    layoutObj->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
     i++;
   }
   std::list<node> toMove;
@@ -111,16 +111,16 @@ bool Tutte::run() {
     ok=false;
     for (itn=toMove.begin();itn!=toMove.end();++itn) {
       tmpCoord.set(0,0,0);
-      baseCoord=layoutProxy->getNodeValue(*itn);
+      baseCoord=layoutObj->getNodeValue(*itn);
       int i=0;
       itN=superGraph->getInOutNodes(*itn);
       while (itN->hasNext()) {
 	node itAdj=itN->next();
-	tmpCoord2=layoutProxy->getNodeValue(itAdj);
+	tmpCoord2=layoutObj->getNodeValue(itAdj);
 	tmpCoord.set(tmpCoord.getX()+tmpCoord2.getX(),tmpCoord.getY()+tmpCoord2.getY(),0);
 	++i;
       } delete itN;
-      layoutProxy->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
+      layoutObj->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
       if (fabs(baseCoord.getX()-tmpCoord.getX()/i)>0.02) ok=true;
       if (fabs(baseCoord.getY()-tmpCoord.getY()/i)>0.02) ok=true;
     }

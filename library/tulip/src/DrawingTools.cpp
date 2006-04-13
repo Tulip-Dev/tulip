@@ -1,9 +1,9 @@
 #include "tulip/DrawingTools.h"
 #include "tulip/SuperGraph.h"
-#include "tulip/LayoutProxy.h"
-#include "tulip/SizesProxy.h"
-#include "tulip/MetricProxy.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/Layout.h"
+#include "tulip/Sizes.h"
+#include "tulip/Metric.h"
+#include "tulip/Selection.h"
 #include <climits>
 
 using namespace std;
@@ -45,7 +45,7 @@ namespace {
   }
 }
 
-pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection) {
+pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, Layout *layout, Sizes *size, Metric *rotation, Selection *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;

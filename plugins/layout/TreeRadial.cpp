@@ -12,11 +12,11 @@ using namespace std;
 /** 
  *
  **/
-class TreeRadial:public Layout {
+class TreeRadial:public LayoutAlgorithm {
 public:
-  MetricProxy *leaves;
+  Metric *leaves;
 
-  TreeRadial(const PropertyContext &context):Layout(context) {
+  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
   }
 
   void dfsPlacement(node n, int depth, double alphaStart, double alphaEnd) {
@@ -28,7 +28,7 @@ public:
 	alphaEnd=alpha+arcCos;
       }
     } 
-    layoutProxy->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
+    layoutObj->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
     if (superGraph->outdeg(n)==0) return;
     
     double sumM = leaves->getNodeValue(n);
@@ -46,7 +46,7 @@ public:
       counto += leaves->getNodeValue(itn);
       double sizeTmp=(newAlphaEnd-newAlphaStart)/2*(depth+1);
       if (sizeTmp<0.5) {
-	superGraph->getLocalProperty<SizesProxy>("viewSize")->setNodeValue(itn,Size( sizeTmp , sizeTmp , sizeTmp   ));
+	superGraph->getLocalProperty<Sizes>("viewSize")->setNodeValue(itn,Size( sizeTmp , sizeTmp , sizeTmp   ));
       }
       dfsPlacement(itn,depth+1,newAlphaStart,newAlphaEnd);
     } delete itN;
@@ -55,12 +55,12 @@ public:
   bool run() {
     node startNode;
     tlp::getSource(superGraph,startNode);
-    superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
+    superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
   
     bool cached,resultBool;
     string erreurMsg;
-    //    leaves = superGraph->getLocalProperty<MetricProxy>("Leaf",cached,resultBool,erreurMsg);
-    leaves = new MetricProxy(superGraph);
+    //    leaves = superGraph->getLocalProperty<Metric>("Leaf",cached,resultBool,erreurMsg);
+    leaves = new Metric(superGraph);
     resultBool = superGraph->computeProperty("Leaf",leaves,erreurMsg);
     assert(resultBool);
     dfsPlacement(startNode,0,0,6.283);

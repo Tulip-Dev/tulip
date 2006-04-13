@@ -1,4 +1,4 @@
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 #include <tulip/ForEach.h>
 #include <deque>
 #include "ClusterMetric.h"
@@ -20,7 +20,7 @@ namespace {
   };
 }
 //=================================================
-ClusterMetric::ClusterMetric(const PropertyContext &context):Metric(context) {
+ClusterMetric::ClusterMetric(const PropertyContext &context):MetricAlgorithm(context) {
   addParameter<unsigned int>("depth",paramHelp[0],"1");
 }
 //=================================================
@@ -55,8 +55,8 @@ void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsi
 double ClusterMetric::getEdgeValue(const edge e ) {
   node src = superGraph->source(e);
   node tgt = superGraph->target(e);
-  double v1 = metricProxy->getNodeValue(src);
-  double v2 = metricProxy->getNodeValue(tgt);
+  double v1 = metricObj->getNodeValue(src);
+  double v2 = metricObj->getNodeValue(tgt);
   if (v1*v1 + v2*v2 > 0)
     return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
   return 0.;
@@ -95,10 +95,10 @@ bool ClusterMetric::run() {
   if (dataSet!=0) dataSet->get("depth",maxDepth);
   node n;
   forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, getNodeValue(n));
+    metricObj->setNodeValue(n, getNodeValue(n));
   edge e;
   forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, getEdgeValue(e));
+    metricObj->setEdgeValue(e, getEdgeValue(e));
   return true;
 }
 //=================================================

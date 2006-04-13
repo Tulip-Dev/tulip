@@ -39,7 +39,7 @@
  *  (at your option) any later version.
  *
  */
-class EccentricityMetric:public Metric { 
+class EccentricityMetric:public MetricAlgorithm { 
 public:
   EccentricityMetric(const PropertyContext &);
   ~EccentricityMetric();

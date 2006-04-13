@@ -29,7 +29,7 @@
  *  (at your option) any later version.
  *
  */
-class LeafMetric:public Metric { 
+class LeafMetric:public MetricAlgorithm { 
 public:
   LeafMetric(const PropertyContext &);
   bool check(std::string &);

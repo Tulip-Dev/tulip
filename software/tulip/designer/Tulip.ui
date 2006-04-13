@@ -60,9 +60,7 @@
         <separator/>
         <action name="editFindAction"/>
     </item>
-    <item text="&amp;Property" name="propertyMenu">
-    </item>
-    <item text="&amp;Clustering" name="clusteringMenu">
+    <item text="&amp;Algorithm" name="propertyMenu">
     </item>
     <item text="&amp;Graph" name="Graph">
         <action name="Action"/>

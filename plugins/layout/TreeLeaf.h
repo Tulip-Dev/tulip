@@ -25,7 +25,7 @@
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class TreeLeaf:public Layout { 
+class TreeLeaf:public LayoutAlgorithm { 
 public:
   TreeLeaf(const PropertyContext &);
   ~TreeLeaf();

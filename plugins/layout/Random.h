@@ -18,7 +18,7 @@
  *
  *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
  */
-class Random:public Layout
+class Random:public LayoutAlgorithm
 { 
 public:
   Random(const PropertyContext &);

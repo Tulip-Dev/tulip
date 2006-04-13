@@ -14,15 +14,15 @@
 
 class GlGraphWidget;
 class SuperGraph;
-class LayoutProxy;
-class SizesProxy;
-class ColorsProxy;
+class Layout;
+class Sizes;
+class Colors;
 
 struct TLP_QT_SCOPE GraphState {
   SuperGraph *g;
-  LayoutProxy *layout;
-  SizesProxy *size;
-  ColorsProxy *color;
+  Layout *layout;
+  Sizes *size;
+  Colors *color;
   Camera camera;
   Coord sceneT;
   Coord sceneR;
@@ -47,7 +47,7 @@ class TLP_QT_SCOPE Morphing : public QObject{
 
  private: 
   GraphState *g0, *g1;
-  LayoutProxy *e0, *e1;
+  Layout *e0, *e1;
   GlGraphWidget *glWidget;
   QTime qt0;
   int frameCpt; 

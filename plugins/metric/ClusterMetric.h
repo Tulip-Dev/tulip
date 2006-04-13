@@ -40,7 +40,7 @@
  *  (at your option) any later version.
  *
  */
-class ClusterMetric:public Metric { 
+class ClusterMetric:public MetricAlgorithm { 
 public:
   ClusterMetric(const PropertyContext &);
   bool run();

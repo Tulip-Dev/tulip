@@ -28,13 +28,13 @@ HTML_HELP_CLOSE()};
 }                     
 
 //====================================================================	
-void addOrientationParameters(Layout* pLayout) {
-    pLayout->addParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION);
+void addOrientationParameters(LayoutAlgorithm* pLayout) {
+  pLayout->addParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION);
 } 
 
 //====================================================================	
-void addOrthogonalParameters(Layout* pLayout) {
-	pLayout->addParameter<bool>(ORTHOGONAL,paramHelp[1],"false");
+void addOrthogonalParameters(LayoutAlgorithm* pLayout) {
+  pLayout->addParameter<bool>(ORTHOGONAL,paramHelp[1],"false");
 }
 
 //====================================================================

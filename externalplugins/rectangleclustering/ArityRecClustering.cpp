@@ -1,7 +1,7 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/SuperGraph.h>
 #include <tulip/TreeTest.h>
 
@@ -16,7 +16,7 @@ ArityRecClustering::ArityRecClustering(ClusterContext context):Clustering(contex
 //================================================================================
 ArityRecClustering::~ArityRecClustering() {}
 //================================================================================
-void ArityRecClustering::getRecurseChild(node nNode,SelectionProxy *resultGood,SelectionProxy *resultBad) {
+void ArityRecClustering::getRecurseChild(node nNode,Selection *resultGood,Selection *resultBad) {
   resultBad->setNodeValue(nNode,true);
   Iterator<edge> *itE=superGraph->getOutEdges(nNode);
   for (;itE->hasNext();)
@@ -31,7 +31,7 @@ void ArityRecClustering::getRecurseChild(node nNode,SelectionProxy *resultGood,S
 }
 
 //================================================================================
-bool ArityRecClustering::DfsClustering (node currentNode,SelectionProxy *selectGood,SelectionProxy *selectBad) {
+bool ArityRecClustering::DfsClustering (node currentNode,Selection *selectGood,Selection *selectBad) {
   bool result;
   double n,c1,c2;
   double leafMax,leafMin;
@@ -130,22 +130,22 @@ bool ArityRecClustering::run() {
     }
   }
 
-  /*  arityM=superGraph->getLocalProperty<MetricProxy>("TreeArityMax",cached,resultBool,erreurMsg);
-  leafM=superGraph->getLocalProperty<MetricProxy>("Leaf",cached,resultBool,erreurMsg);
-  nodeM=superGraph->getLocalProperty<MetricProxy>("Node",cached,resultBool,erreurMsg);
+  /*  arityM=superGraph->getLocalProperty<Metric>("TreeArityMax",cached,resultBool,erreurMsg);
+  leafM=superGraph->getLocalProperty<Metric>("Leaf",cached,resultBool,erreurMsg);
+  nodeM=superGraph->getLocalProperty<Metric>("Node",cached,resultBool,erreurMsg);
   */
 
-  arityM = new MetricProxy(superGraph);
+  arityM = new Metric(superGraph);
   superGraph->computeProperty("TreeArityMax", arityM, erreurMsg);
-  leafM = new MetricProxy(superGraph);
+  leafM = new Metric(superGraph);
   superGraph->computeProperty("Leaf", leafM, erreurMsg);
-  nodeM = new MetricProxy(superGraph);
+  nodeM = new Metric(superGraph);
   superGraph->computeProperty("Node", nodeM, erreurMsg);
 
   bool result=false;
   while (!result) {
-    SelectionProxy *selectGood= superGraph->getLocalProperty<SelectionProxy>("tmpSelectionGood");
-    SelectionProxy *selectBad= superGraph->getLocalProperty<SelectionProxy>("tmpSelectionBad");
+    Selection *selectGood= superGraph->getLocalProperty<Selection>("tmpSelectionGood");
+    Selection *selectBad= superGraph->getLocalProperty<Selection>("tmpSelectionBad");
     SuperGraph * saveSuper=superGraph;
     selectGood->setAllNodeValue(true);
     selectGood->setAllEdgeValue(true);

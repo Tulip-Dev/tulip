@@ -1,4 +1,4 @@
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
 #include <iostream>
@@ -32,9 +32,9 @@ using namespace std;
  *  (at your option) any later version.
  *
  */
-class ConnectedAndTreeComponent:public Metric { 
+class ConnectedAndTreeComponent:public MetricAlgorithm { 
 public:
-  ConnectedAndTreeComponent(const PropertyContext &context):Metric(context){};
+  ConnectedAndTreeComponent(const PropertyContext &context):MetricAlgorithm(context){};
 
   void dfsErase(node n, SuperGraph * graph, set<node> &deleted, MutableContainer<bool> &visited) {
     if (visited.get(n.id)) return;
@@ -82,11 +82,11 @@ public:
 	startChainErase(n, graph, deleted);
     }
     
-    MetricProxy connectedcomponent(graph);
+    Metric connectedcomponent(graph);
     graph->computeProperty("Connected Component", &connectedcomponent, errMsg);
     
     SuperGraph * graph2 = tlp::inducedSubGraph(superGraph, deleted);
-    MetricProxy connectedcomponent2(graph2);
+    Metric connectedcomponent2(graph2);
     graph2->computeProperty("Connected Component", &connectedcomponent2, errMsg);
     {
       double theMax = 0;
@@ -95,13 +95,13 @@ public:
 	node n = it->next();
 	double nv = connectedcomponent.getNodeValue(n);
 	if (theMax < nv) theMax = nv;
-	metricProxy->setNodeValue(n, nv);
+	metricObj->setNodeValue(n, nv);
       } delete it;
       theMax += 1.0;
       it = graph2->getNodes();
       while(it->hasNext()){
 	node n = it->next();
-	metricProxy->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
+	metricObj->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
       }delete it;
     }
     superGraph->delAllSubGraphs(graph);

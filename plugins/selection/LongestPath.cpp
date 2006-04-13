@@ -5,40 +5,38 @@
 #include <tulip/TreeTest.h>
 #include "PathSelection.h"
 #include "LongestPath.h"
-#include <tulip/SelectionProxy.h>
-#include <tulip/MethodFactory.h>
 
 SELECTIONPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","0","1");
 
 using namespace std;
 
-LongestPath::LongestPath(const PropertyContext &context):Selection(context)  {
+LongestPath::LongestPath(const PropertyContext &context):SelectionAlgorithm(context)  {
 }
 
 LongestPath::~LongestPath() {
 }
 
 void LongestPath::setNodeValue(node n) {
-    selectionProxy->setNodeValue(n,true);
+    selectionObj->setNodeValue(n,true);
     Iterator<edge> *itE=superGraph->getOutEdges(n);
     for (;itE->hasNext();){
       edge e=itE->next();
       node n=superGraph->target(e);
       if (max==metricLevel->getNodeValue(n)) {
-	selectionProxy->setEdgeValue(e,true);
+	selectionObj->setEdgeValue(e,true);
 	setNodeValue(n);
       }
     }delete itE;
 }
 
 bool LongestPath::run() {
-  selectionProxy->setAllNodeValue(false);
-  selectionProxy->setAllEdgeValue(false);
+  selectionObj->setAllNodeValue(false);
+  selectionObj->setAllEdgeValue(false);
   bool cached=false;
   bool result=false;
   string erreur;
-  metricLevel=superGraph->getLocalProperty<MetricProxy>("MaxLength", cached,result,erreur);
-  SelectionProxy *root=superGraph->getProperty<SelectionProxy>("viewSelection");
+  metricLevel=superGraph->getLocalProperty<Metric>("MaxLength", cached,result,erreur);
+  Selection *root=superGraph->getProperty<Selection>("viewSelection");
   Iterator<node> *itN=superGraph->getNodes();
   node startNode;
   for  (; itN->hasNext();){

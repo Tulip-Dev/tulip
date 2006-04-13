@@ -20,7 +20,7 @@ public:
 
 class LessThanNode2 {
 public:
-  MetricProxy *metric;
+  Metric *metric;
   bool operator() (node n1,node n2){return (metric->getNodeValue(n1) < metric->getNodeValue(n2));}
 };
 
@@ -52,7 +52,7 @@ public:
  *  (at your option) any later version.
  *
 */
-class HierarchicalGraph:public Layout { 
+class HierarchicalGraph:public LayoutAlgorithm { 
 
 public:
   HierarchicalGraph(const PropertyContext &);
@@ -60,20 +60,20 @@ public:
   bool run();
 
 private:
-  void DagLevelSpanningTree(SuperGraph* ,MetricProxy *);
+  void DagLevelSpanningTree(SuperGraph* ,Metric *);
   std::vector< std::vector<node> > grid;
-  MetricProxy *embedding;
+  Metric *embedding;
   void twoLayerCrossReduction(SuperGraph*,unsigned int freeLayer,bool sense);
   void crossReduction(SuperGraph*);
-  void computeEdgeBends(const SuperGraph *mySGraph, LayoutProxy &tmpLayout, 
+  void computeEdgeBends(const SuperGraph *mySGraph, Layout &tmpLayout, 
 			const stdext::hash_map<edge,edge> &replacedEdges, const std::vector<edge> &reversedEdges);
-  void computeSelfLoops(SuperGraph *mySGraph, LayoutProxy &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
+  void computeSelfLoops(SuperGraph *mySGraph, Layout &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(SuperGraph*);
   unsigned int degree(SuperGraph*,node,bool);
   void initCross(SuperGraph*superGraph,node n, MutableContainer<bool> &visited,int id);
 
   LessThanNode2 lessNode;
-  SizesProxy *nodeSize;
+  Sizes *nodeSize;
   std::string orientation;
   float spacing;
   float nodeSpacing;

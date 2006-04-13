@@ -2,15 +2,15 @@
 #define __TULIPPLUGININCLUDE_H
 
 #include "PropertyProxy.h"
-#include "MetricProxy.h"
-#include "LayoutProxy.h"
-#include "SelectionProxy.h"
-#include "StringProxy.h"
+#include "Metric.h"
+#include "Layout.h"
+#include "Selection.h"
+#include "String.h"
 #include "Clustering.h"
 #include "ImportModule.h"
-#include "SizesProxy.h"
-#include "ColorsProxy.h"
-#include "IntProxy.h"
+#include "Sizes.h"
+#include "Colors.h"
+#include "Int.h"
 #include "MethodFactory.h"
 
 #endif

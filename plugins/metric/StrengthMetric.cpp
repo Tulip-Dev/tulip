@@ -6,7 +6,7 @@ METRICPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1
 using namespace std;
 using namespace stdext;
 
-StrengthMetric::StrengthMetric(const PropertyContext &context):Metric(context) {}
+StrengthMetric::StrengthMetric(const PropertyContext &context):MetricAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
@@ -127,7 +127,7 @@ double StrengthMetric::getNodeValue(const node n ) {
   Iterator<edge> *itE=superGraph->getInOutEdges(n);
   while (itE->hasNext()) {
     edge ite=itE->next();
-    result+=metricProxy->getEdgeValue(ite);
+    result+=metricObj->getEdgeValue(ite);
   } delete itE;
   return result/double(superGraph->deg(n));
 }
@@ -135,10 +135,10 @@ double StrengthMetric::getNodeValue(const node n ) {
 bool StrengthMetric::run() {
   edge e;
   forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, getEdgeValue(e));
+    metricObj->setEdgeValue(e, getEdgeValue(e));
   node n;
   forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, getNodeValue(n));
+    metricObj->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=============================================================

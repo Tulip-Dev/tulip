@@ -2,21 +2,21 @@
 #include "tulip/AcyclicTest.h"
 #include "tulip/TreeTest.h"
 #include "tulip/SuperGraph.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/Selection.h"
 #include "tulip/StableIterator.h"
-#include "tulip/IntProxy.h"
-#include "tulip/MetricProxy.h"
+#include "tulip/Int.h"
+#include "tulip/Metric.h"
 #include <math.h>
 using namespace std;
 
 void tlp::makeProperDag(SuperGraph* superGraph,list<node> &addedNodes, 
-			stdext::hash_map<edge,edge> &replacedEdges, IntProxy *edgeLength) {
+			stdext::hash_map<edge,edge> &replacedEdges, Int *edgeLength) {
   if (TreeTest::isTree(superGraph)) return;
   assert(AcyclicTest::isAcyclic(superGraph));
   //We compute the dag level metric on resulting graph.
   bool resultBool;
   string erreurMsg;
-  MetricProxy *dagLevel= new MetricProxy(superGraph);
+  Metric *dagLevel= new Metric(superGraph);
   resultBool = superGraph->computeProperty("DagLevel", dagLevel, erreurMsg);
   assert(resultBool);
   //we now transform the dag in a proper Dag, two linked nodes of a proper dag
@@ -30,7 +30,7 @@ void tlp::makeProperDag(SuperGraph* superGraph,list<node> &addedNodes,
   } delete itE;
 
   edgeLength->setAllEdgeValue(1);
-  //  IntProxy *edgeLength=superGraph->getLocalProperty<IntProxy>("treeEdgeLength");
+  //  Int *edgeLength=superGraph->getLocalProperty<Int>("treeEdgeLength");
   for (vector<edge>::const_iterator itEdge=graphEdges.begin();itEdge!=graphEdges.end();++itEdge) {
     edge ite=*itEdge;
     int delta=(int)rint(dagLevel->getNodeValue(superGraph->target(ite))-dagLevel->getNodeValue(superGraph->source(ite)));

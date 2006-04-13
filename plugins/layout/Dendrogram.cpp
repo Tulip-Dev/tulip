@@ -20,7 +20,7 @@ const float Dendrogram::INTER_NODE_DISTANCE_Y = 2.f;
 
 //====================================================================
 Dendrogram::Dendrogram(const PropertyContext& context)
-    :Layout(context){
+    :LayoutAlgorithm(context){
     addOrientationParameters(this);
 }
 
@@ -33,12 +33,11 @@ Dendrogram::~Dendrogram() {
 //====================================================================
 bool Dendrogram::run() {
     orientationType mask 	  = getMask(dataSet);
-    oriLayout                 = new OrientableLayout(layoutProxy, mask);
-    SizesProxy* viewSizeProxy = superGraph->
-                                       getLocalProperty<SizesProxy>("viewSize");
+    oriLayout                 = new OrientableLayout(layoutObj, mask);
+    Sizes* viewSize = superGraph->getLocalProperty<Sizes>("viewSize");
                            
-    oriSize                   = new OrientableSizeProxy(viewSizeProxy, mask);                           
-    root                      = searchRoot(superGraph);
+    oriSize = new OrientableSizeProxy(viewSize, mask);
+    root = searchRoot(superGraph);
 
     setAllNodesCoordX(root,0.f);
     shiftAllNodes(root, 0.f);

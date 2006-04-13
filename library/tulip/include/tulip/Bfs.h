@@ -17,16 +17,16 @@
 class TLP_SCOPE Bfs {
  public :
   
-  Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection);
+  Bfs(SuperGraph * G, Selection* resultatAlgoSelection);
   ~Bfs();
 
   SuperGraph * graph;
 
  private :
 
-  void computeBfs(SuperGraph * G,SelectionProxy * resultatAlgoSelection, node root);  
+  void computeBfs(SuperGraph * G, Selection* resultatAlgoSelection, node root);  
 
-  SelectionProxy * s_proxy;
+  Selection* s_proxy;
   unsigned int nbNodes;
   MutableContainer<bool>::MutableContainer selectedNodes;
   MutableContainer<bool>::MutableContainer selectedEdges;

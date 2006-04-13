@@ -34,29 +34,29 @@ libtulip_la_SOURCES = \
 	SimpleTest.cpp \
 	Color.cpp  \
 	Colors.cpp \
-	ColorsProxy.cpp \
+	ColorsAlgorithm.cpp \
 	Coord.cpp \
 	GraphIterator.cpp \
 	MapIterator.cpp \
 	IdManager.cpp \
 	Int.cpp \
-	IntProxy.cpp \
+	IntAlgorithm.cpp \
 	Layout.cpp \
-	LayoutProxy.cpp \
+	LayoutAlgorithm.cpp \
 	Metric.cpp \
-	MetricProxy.cpp \
+	MetricAlgorithm.cpp \
 	MetaGraph.cpp \
-	MetaGraphProxy.cpp \
+	MetaGraphAlgorithm.cpp \
 	Observable.cpp \
 	ObservableGraph.cpp \
 	PluginLoaderTxt.cpp \
 	PropertyManager.cpp \
 	Selection.cpp \
-	SelectionProxy.cpp \
+	SelectionAlgorithm.cpp \
 	Sizes.cpp \
-	SizesProxy.cpp \
+	SizesAlgorithm.cpp \
 	String.cpp \
-	StringProxy.cpp \
+	StringAlgorithm.cpp \
 	SuperGraph.cpp \
 	SuperGraphAbstract.cpp \
 	SuperGraphImpl.cpp \

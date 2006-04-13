@@ -24,7 +24,7 @@
 #include "tulip/ObservableGraph.h"
 
 class SuperGraph;
-class SelectionProxy;
+class Selection;
 
 /** \addtogroup graph_test */ 
 /*@{*/

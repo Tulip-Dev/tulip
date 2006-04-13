@@ -55,11 +55,11 @@ struct GML:public ExportModule {
     os << "directed 1" << endl;
     os << "version 2" << endl;
 
-    LayoutProxy *layout = currentGraph->getProperty<LayoutProxy>("viewLayout");
-    StringProxy *label = currentGraph->getProperty<StringProxy>("viewLabel");
-    //    IntProxy *shape =getProperty<IntProxy>(currentGraph->getPropertyManager(),"viewShape");
-    ColorsProxy *colors = currentGraph->getProperty<ColorsProxy>("viewColor");    
-    SizesProxy  *sizes = currentGraph->getProperty<SizesProxy>("viewSize");  
+    Layout *layout = currentGraph->getProperty<Layout>("viewLayout");
+    String *label = currentGraph->getProperty<String>("viewLabel");
+    //    Int *shape =getProperty<Int>(currentGraph->getPropertyManager(),"viewShape");
+    Colors *colors = currentGraph->getProperty<Colors>("viewColor");    
+    Sizes  *sizes = currentGraph->getProperty<Sizes>("viewSize");  
     //Save Nodes
     Iterator<node> *itN=currentGraph->getNodes();
     if (itN->hasNext())  {

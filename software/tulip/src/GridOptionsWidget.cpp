@@ -10,9 +10,9 @@
 #include <qlineedit.h>
 #include <qvalidator.h>
 
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Sizes.h>
+#include <tulip/Metric.h>
 #include <tulip/DrawingTools.h>
 
 using namespace tlp;
@@ -70,9 +70,9 @@ namespace tlp
 	Coord min, max;
 	    
 	// We get the min and the max of the Layout to display the grid
-	LayoutProxy *layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-	SizesProxy *sizes = glGraphWidget->getSuperGraph()->getProperty<SizesProxy>("viewSize");
-	MetricProxy *rotation = glGraphWidget->getSuperGraph()->getProperty<MetricProxy>("viewRotation");
+	Layout *layout = glGraphWidget->getSuperGraph()->getProperty<Layout>("viewLayout");
+	Sizes *sizes = glGraphWidget->getSuperGraph()->getProperty<Sizes>("viewSize");
+	Metric *rotation = glGraphWidget->getSuperGraph()->getProperty<Metric>("viewRotation");
 	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getSuperGraph(), layout, 
 							    sizes, rotation);
 	max = bboxes.first;	

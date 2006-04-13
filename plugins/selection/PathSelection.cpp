@@ -11,23 +11,23 @@
 #include <queue>
 
 #include "PathSelection.h"
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/MethodFactory.h>
 
 SELECTIONPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","0","1");
 
 using namespace std;
 
-PathSelection::PathSelection(const PropertyContext &context):Selection(context)  {
+PathSelection::PathSelection(const PropertyContext &context):SelectionAlgorithm(context)  {
 }
 
 PathSelection::~PathSelection() {
 }
 
-void PathSelection::reconnect(node n, IntProxy *values) {
+void PathSelection::reconnect(node n, Int *values) {
   int value=values->getNodeValue(n);
   values->setNodeValue(n,-1);
-  selectionProxy->setNodeValue(n,true);
+  selectionObj->setNodeValue(n,true);
   Iterator<node>*itN=superGraph->getInOutNodes(n);
   for (;itN->hasNext();) {
     node itn=itN->next();
@@ -40,7 +40,7 @@ bool PathSelection::run() {
   node target;//=targetNode();
   node source;//=sourceNode();
   bool sourceOk=false;
-  SelectionProxy *viewSel=superGraph->getProperty<SelectionProxy>("viewSelection");
+  Selection *viewSel=superGraph->getProperty<Selection>("viewSelection");
   Iterator<node> *itN=superGraph->getNodes();
   for (;itN->hasNext();) {
     node itn=itN->next();
@@ -58,7 +58,7 @@ bool PathSelection::run() {
   bool finished=false;
   queue<node> fifo;
   fifo.push(source);
-  IntProxy *values=superGraph->getLocalProperty<IntProxy>("depthValue");
+  Int *values=superGraph->getLocalProperty<Int>("depthValue");
   values->setAllNodeValue(-1);
   values->setNodeValue(source,0);
   while(!fifo.empty()) {
@@ -83,8 +83,8 @@ bool PathSelection::run() {
     Iterator<edge> *itE=superGraph->getEdges();
     for (;itE->hasNext();) {
       edge ite=itE->next();
-      if (selectionProxy->getNodeValue(superGraph->source(ite)) && selectionProxy->getNodeValue(superGraph->target(ite)))
-	selectionProxy->setEdgeValue(ite,true);
+      if (selectionObj->getNodeValue(superGraph->source(ite)) && selectionObj->getNodeValue(superGraph->target(ite)))
+	selectionObj->setEdgeValue(ite,true);
     } delete itE; 
   }
   return true;

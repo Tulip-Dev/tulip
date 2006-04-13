@@ -115,7 +115,7 @@ double ConeTreeExtended::treePlace3D(node n,
 //===============================================================
 void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
 			double x, double y, int level) {
-  layoutProxy->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
+  layoutObj->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
   node itn;
   forEach(itn, superGraph->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
@@ -126,7 +126,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
+    HTML_HELP_DEF( "type", "Size" ) \
     HTML_HELP_DEF( "values", "An existing size property" ) \
     HTML_HELP_DEF( "default", "viewSize" ) \
     HTML_HELP_BODY() \
@@ -143,15 +143,15 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
+ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorithm(context) {
+  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  nodeSize = superGraph->getProperty<SizesProxy>("viewSize");
+  nodeSize = superGraph->getProperty<Sizes>("viewSize");
   string orientation = "vertical";
   if (dataSet!=0) {
     dataSet->get("nodeSize", nodeSize);
@@ -170,7 +170,7 @@ bool ConeTreeExtended::run() {
     }
   }
   //===========================================================
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutObj->setAllEdgeValue(vector<Coord>(0));
   hash_map<node,double> posX;
   hash_map<node,double> posY;
   node root;
@@ -184,8 +184,8 @@ bool ConeTreeExtended::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutProxy->getNodeValue(n);
-      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutObj->getNodeValue(n);
+      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
   return true;

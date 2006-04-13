@@ -2,15 +2,17 @@
 #define TLPSELECTIONPROXYTEST
 
 #include <string>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/SuperGraph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+// Warning SelectionProxy has been renamed in Selection
+
 class SelectionProxyTest : public CppUnit::TestFixture {
 private:
   SuperGraph *graph;
-  SelectionProxy *selection;
+  Selection *selection;
 
 public:
   void setUp();

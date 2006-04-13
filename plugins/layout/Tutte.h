@@ -33,7 +33,7 @@
  *  (at your option) any later version.
  *
 */
-class Tutte:public Layout {
+class Tutte:public LayoutAlgorithm {
 public:
   Tutte(const PropertyContext &);
   ~Tutte();

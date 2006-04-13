@@ -17,7 +17,7 @@ public:
   bool check(std::string &);
   void reset();
 private :
-  bool split (MetricProxy *, std::list<node> &);
+  bool split (Metric*, std::list<node> &);
 };
 /*@}*/
 

@@ -1,8 +1,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <tulip/StringProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/String.h>
+#include <tulip/Colors.h>
 
 #include <tulip/SuperGraph.h>
 #include <tulip/Glyph.h>

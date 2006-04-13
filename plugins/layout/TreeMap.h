@@ -10,8 +10,8 @@
 
 #include <tulip/TulipPlugin.h>
 
-class MetricProxy;
-class SizesProxy;
+class Metric;
+class Sizes;
 
 
 /** \addtogroup layout */
@@ -45,7 +45,7 @@ class SizesProxy;
  *  (at your option) any later version.
  *
 */
-class TreeMap:public Layout { 
+class TreeMap:public LayoutAlgorithm { 
 public:
   TreeMap(const PropertyContext &);
   ~TreeMap();
@@ -58,9 +58,9 @@ private:
   void dfsPlacement(node n, int depth, double x, double y, double width, double height,
 		    bool direction, stdext::hash_map<node,double> &value);
   double initVal(node n, stdext::hash_map<node,double> &value);
-  SizesProxy *size;
-  MetricProxy *metric;
-  ColorsProxy *color;
+  Sizes *size;
+  Metric *metric;
+  Colors *color;
 };
 /*@}*/
 #endif

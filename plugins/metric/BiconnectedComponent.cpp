@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 #include <stack>
 
@@ -108,19 +108,19 @@ using namespace std;
  *  (at your option) any later version.
  *
  */
-class BiconnectedComponnent:public Metric { 
+class BiconnectedComponnent:public MetricAlgorithm { 
 public:
-  BiconnectedComponnent(const PropertyContext &context):Metric(context){};
+  BiconnectedComponnent(const PropertyContext &context):MetricAlgorithm(context){};
   bool run() {
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*superGraph, compo);
-    metricProxy->setAllEdgeValue(-1);
-    metricProxy->setAllNodeValue(-1);
+    metricObj->setAllEdgeValue(-1);
+    metricObj->setAllNodeValue(-1);
     Iterator<edge> *it = superGraph->getEdges();
     while(it->hasNext()) {
       edge e = it->next();
-      metricProxy->setEdgeValue(e, compo.get(e.id));
+      metricObj->setEdgeValue(e, compo.get(e.id));
     } delete it;
     return true;
   }

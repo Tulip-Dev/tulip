@@ -1,9 +1,9 @@
 #include <tulip/Morphing.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/SuperGraph.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/Layout.h>
+#include <tulip/Sizes.h>
+#include <tulip/Colors.h>
 
 static bool 
 HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
@@ -34,12 +34,12 @@ HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
 GraphState::GraphState( GlGraphWidget * glgw ) {
   assert( glgw );
   g = glgw->getSuperGraph();
-  layout = new LayoutProxy( g );
-  *layout = *( g->getProperty<LayoutProxy>("viewLayout") );
-  size = new SizesProxy( g );
-  *size = *( g->getProperty<SizesProxy>("viewSize") );
-  color = new ColorsProxy( g );
-  *color = *( g->getProperty<ColorsProxy>("viewColor") );
+  layout = new Layout( g );
+  *layout = *( g->getProperty<Layout>("viewLayout") );
+  size = new Sizes( g );
+  *size = *( g->getProperty<Sizes>("viewSize") );
+  color = new Colors( g );
+  *color = *( g->getProperty<Colors>("viewColor") );
   
   camera = glgw->getCamera();
   sceneT = glgw->getSceneTranslation();

@@ -41,10 +41,10 @@ using namespace std;
  *
  *  \author Maintainer : David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class FitToLabel: public Sizes { 
+class FitToLabel: public SizesAlgorithm { 
 public:
-  //====================================================
-  FitToLabel(const PropertyContext &context):Sizes(context){}
+  //==============================================Algorithm======
+  FitToLabel(const PropertyContext &context):SizesAlgorithm(context){}
   //====================================================
   ~FitToLabel(){}
   //====================================================
@@ -52,8 +52,8 @@ public:
     TextRenderer textRender;
     textRender.setMode(TLP_POLYGON);
     textRender.setContext(tlp::TulipLibDir + "tlp/bitmaps/font.ttf", 12, 255, 255, 255); // valeur par défault pour l'affichage
-    sizesProxy->setAllNodeValue(Size(18,18,1));
-    StringProxy *entryLabel = superGraph->getProperty<StringProxy>("viewLabel");
+    sizesObj->setAllNodeValue(Size(18,18,1));
+    String *entryLabel = superGraph->getProperty<String>("viewLabel");
     node n;
     forEach(n, superGraph->getNodes()) {
       const string &str = entryLabel->getNodeValue(n);
@@ -62,10 +62,10 @@ public:
 	w_max = 256.0;
 	textRender.setString(str, VERBATIM);
 	textRender.getBoundingBox(w_max, h, w);
-	sizesProxy->setNodeValue(n, Size(int(w), int(h), 1));
+	sizesObj->setNodeValue(n, Size(int(w), int(h), 1));
       }
     }
-    sizesProxy->setAllEdgeValue(Size(1,1,8));
+    sizesObj->setAllEdgeValue(Size(1,1,8));
     return true;
   }
   //====================================================

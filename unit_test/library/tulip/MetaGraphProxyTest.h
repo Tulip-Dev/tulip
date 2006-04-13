@@ -2,15 +2,17 @@
 #define TLPMETAGRAPHPROXYTEST
 
 #include <string>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/SuperGraph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+// Warning MetaGraphProxy has been renamed in MetaGraph
+
 class MetaGraphProxyTest : public CppUnit::TestFixture {
 private:
   SuperGraph *graph;
-  MetaGraphProxy *metaGraph;
+  MetaGraph *metaGraph;
 
 public:
   void setUp();

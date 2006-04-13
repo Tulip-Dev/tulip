@@ -15,10 +15,10 @@ struct FileSystem:public ImportModule {
   FileSystem(ClusterContext context):ImportModule(context) {}
   ~FileSystem(){}
 
-  MetricProxy *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
-  IntProxy *type;
-  StringProxy *label;
-  LayoutProxy *layout;
+  Metric *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
+  Int *type;
+  String *label;
+  Layout *layout;
   int progress;
 
 
@@ -119,15 +119,15 @@ struct FileSystem:public ImportModule {
 
   bool import(const string &name) {
     bool ok;
-    size=superGraph->getProperty<MetricProxy>("size");
-    uid=superGraph->getProperty<MetricProxy>("uid");
-    gid=superGraph->getProperty<MetricProxy>("gid");
-    lastaccess=superGraph->getProperty<MetricProxy>("lastaccess");
-    lastmodif=superGraph->getProperty<MetricProxy>("lastmodif");
-    lastchange=superGraph->getProperty<MetricProxy>("lastchange");
-    type=superGraph->getProperty<IntProxy>("viewShape");
-    layout=superGraph->getProperty<LayoutProxy>("viewLayout");
-    label=superGraph->getProperty<StringProxy>("name");
+    size=superGraph->getProperty<Metric>("size");
+    uid=superGraph->getProperty<Metric>("uid");
+    gid=superGraph->getProperty<Metric>("gid");
+    lastaccess=superGraph->getProperty<Metric>("lastaccess");
+    lastmodif=superGraph->getProperty<Metric>("lastmodif");
+    lastchange=superGraph->getProperty<Metric>("lastchange");
+    type=superGraph->getProperty<Int>("viewShape");
+    layout=superGraph->getProperty<Layout>("viewLayout");
+    label=superGraph->getProperty<String>("name");
     type->setAllNodeValue(0);
     layout->setAllNodeValue(Coord(0,0,0));
     node newNode=superGraph->addNode();

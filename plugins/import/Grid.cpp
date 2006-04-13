@@ -31,7 +31,7 @@ struct Grid:public ImportModule {
   ~Grid(){}
 
   void buildRow(vector<node> &row, double height){
-    LayoutProxy *layout = superGraph->getProperty<LayoutProxy>("viewLayout");
+    Layout *layout = superGraph->getProperty<Layout>("viewLayout");
     int width=row.size();
     for (int i=0;i<width;++i) {
       row[i]=superGraph->addNode();
@@ -49,7 +49,7 @@ struct Grid:public ImportModule {
   }
 
   bool import(const string &name) {
-    superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
+    superGraph->getProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
     bool ok=true;
     int width = 10;
     int height = 10;

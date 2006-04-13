@@ -25,7 +25,7 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
-#include <tulip/LayoutProxy.h>
+#include <tulip/Layout.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
 
@@ -176,7 +176,7 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
   
   if (newSuperGraph!=0) {
     glGraph.setSuperGraph(newSuperGraph);
-    LayoutProxy *layout = glGraph.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+    Layout *layout = glGraph.getSuperGraph()->getProperty<Layout>("viewLayout");
     layout->resetBoundingBox();
     layout->center();
     layout->notifyObservers();
@@ -274,8 +274,8 @@ void outputPolygons(const int size, const GlGraph &glgraph)
   } //end while(count)
 
   /* write HTML AREA MAP */
-  StringProxy *hrefp = glgraph.getSuperGraph()->getProperty<StringProxy>("href");
-  StringProxy *altp = glgraph.getSuperGraph()->getProperty<StringProxy>("alt");
+  String *hrefp = glgraph.getSuperGraph()->getProperty<String>("href");
+  String *altp = glgraph.getSuperGraph()->getProperty<String>("alt");
 
   if (outputHtmlBody) {
     of << "<html><body>" << endl;
@@ -337,8 +337,8 @@ int main (int argc, char **argv) {
   if (layoutSpecified) {
     bool resultBool=false, cached=false;
     string errorMsg;
-    if (LayoutProxy::factory->exists(layoutName)) {
-      LayoutProxy *myLayout = glOffscreen.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+    if (Layout::factory->exists(layoutName)) {
+      Layout *myLayout = glOffscreen.getSuperGraph()->getProperty<Layout>("viewLayout");
       resultBool = glOffscreen.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;

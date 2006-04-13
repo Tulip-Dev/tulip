@@ -35,7 +35,7 @@
  *  (at your option) any later version.
  *
  */
-class IdMetric:public Metric { 
+class IdMetric:public MetricAlgorithm { 
 public:
   IdMetric(const PropertyContext &);
   bool run();

@@ -206,7 +206,7 @@ void SquareBorderTex::draw(node n) {
 
     if (treecache.isTree) {
         Size size = 
-                tree->getLocalProperty<SizesProxy>("viewSize")->getNodeValue(n);
+                tree->getLocalProperty<Sizes>("viewSize")->getNodeValue(n);
         const float borderSize = evaluateBorderSize(treecache.mapNodeLevel[n],
                                                     RectangleArea(size));                                                    
         drawSquare(n, borderSize);
@@ -243,7 +243,7 @@ void SquareBorderTex::setTulipGLState(node n) {
 
 //====================================================================
 void SquareBorderTex::drawSquare(node n, float borderSizePixel) {
-    Size size = tree->getLocalProperty<SizesProxy>("viewSize")->getNodeValue(n);
+    Size size = tree->getLocalProperty<Sizes>("viewSize")->getNodeValue(n);
 
     float widthBorderRatio = borderSizePixel / size.getW();
     const float posX       = min(widthBorderRatio, 0.45f);  

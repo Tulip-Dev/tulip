@@ -12,14 +12,14 @@
 #include <list>
 
 class SuperGraph;
-class IntProxy;
+class Int;
 
 namespace tlp {
 
   TLP_SCOPE node makeSimpleSource(SuperGraph* superGraph);
 
   TLP_SCOPE void makeProperDag(SuperGraph* superGraph,std::list<node> &addedNodes, 
-		     stdext::hash_map<edge,edge> &replacedEdges,IntProxy *edgeLength);
+		     stdext::hash_map<edge,edge> &replacedEdges,Int* edgeLength);
 
 };
 #endif

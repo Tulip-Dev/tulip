@@ -6,13 +6,13 @@
 #include "tulip/Types.h"
 #include "tulip/PropertyProxy.h"
 #include "tulip/Color.h"
-#include "tulip/MetricProxy.h"
-#include "tulip/StringProxy.h"
-#include "tulip/SelectionProxy.h"
-#include "tulip/LayoutProxy.h"
-#include "tulip/IntProxy.h"
-#include "tulip/ColorsProxy.h"
-#include "tulip/SizesProxy.h"
+#include "tulip/Metric.h"
+#include "tulip/String.h"
+#include "tulip/Selection.h"
+#include "tulip/Layout.h"
+#include "tulip/Int.h"
+#include "tulip/Colors.h"
+#include "tulip/Sizes.h"
 
 #include "tulip/Reflect.h"
 
@@ -130,33 +130,33 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
       if( res )
 	ioDataSet.set( name, v );
     }
-    // SelectionProxy
-    else if( inG && tname == TN(SelectionProxy) ) {
-      ioDataSet.set( name, inG->getProperty<SelectionProxy>(defv) );
+    // Selection
+    else if( inG && tname == TN(Selection) ) {
+      ioDataSet.set( name, inG->getProperty<Selection>(defv) );
     }
-    // MetricProxy
-    else if( inG && tname == TN(MetricProxy) ) {
-      ioDataSet.set( name, inG->getProperty<MetricProxy>(defv) );
+    // Metric
+    else if( inG && tname == TN(Metric) ) {
+      ioDataSet.set( name, inG->getProperty<Metric>(defv) );
     }
-    // LayoutProxy
-    else if( inG && tname == TN(LayoutProxy) ) {
-      ioDataSet.set( name, inG->getProperty<LayoutProxy>(defv) );
+    // Layout
+    else if( inG && tname == TN(Layout) ) {
+      ioDataSet.set( name, inG->getProperty<Layout>(defv) );
     }
-    // StringProxy
-    else if( inG && tname == TN(StringProxy) ) {
-      ioDataSet.set( name, inG->getProperty<StringProxy>(defv) );
+    // String
+    else if( inG && tname == TN(String) ) {
+      ioDataSet.set( name, inG->getProperty<String>(defv) );
     }
-    // IntProxy
-    else if( inG && tname == TN(IntProxy) ) {
-      ioDataSet.set( name, inG->getProperty<IntProxy>(defv) );
+    // Int
+    else if( inG && tname == TN(Int) ) {
+      ioDataSet.set( name, inG->getProperty<Int>(defv) );
     }
-    // SizesProxy
-    else if( inG && tname == TN(SizesProxy) ) {
-      ioDataSet.set( name, inG->getProperty<SizesProxy>(defv) );
+    // Sizes
+    else if( inG && tname == TN(Sizes) ) {
+      ioDataSet.set( name, inG->getProperty<Sizes>(defv) );
     }
-    // ColorsProxy
-    else if( inG && tname == TN(ColorsProxy) ) {
-      ioDataSet.set( name, inG->getProperty<ColorsProxy>(defv) );
+    // Colors
+    else if( inG && tname == TN(Colors) ) {
+      ioDataSet.set( name, inG->getProperty<Colors>(defv) );
     }
   }
   delete defIt;

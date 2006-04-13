@@ -40,7 +40,7 @@
  *  (at your option) any later version.
  *
  */
-class MixedModel : public Layout {
+class MixedModel : public LayoutAlgorithm {
  public:
   MixedModel(const PropertyContext &context);
   ~MixedModel();
@@ -86,7 +86,7 @@ class MixedModel : public Layout {
   MutableContainer<Coord>::MutableContainer nodeSize;
   std::vector<edge> unplanar_edges;
   bool planar;
-  SizesProxy *sizeProxy;
+  Sizes *size;
 
 };
 /*@}*/

@@ -42,7 +42,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(true, quotient->existEdge(meta, nodes[2]).isValid());
   CPPUNIT_ASSERT_EQUAL(true, quotient->existEdge(meta, nodes[3]).isValid());
   CPPUNIT_ASSERT_EQUAL(4u, quotient->numberOfEdges());
-  MetaGraphProxy *clusterInfo = quotient->getProperty<MetaGraphProxy>("viewMetaGraph");
+  MetaGraph *clusterInfo = quotient->getProperty<MetaGraph>("viewMetaGraph");
   SuperGraph *cluster = clusterInfo->getNodeValue(meta);
   CPPUNIT_ASSERT(cluster!=0);
   CPPUNIT_ASSERT_EQUAL(true, cluster->isElement(nodes[0]));

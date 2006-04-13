@@ -3,9 +3,9 @@
 #define _SCATTERPlOTLAYOUT_H
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 
-class ScatterPlot : public Layout 
+class ScatterPlot : public LayoutAlgorithm
 { 
  public:
 
@@ -20,7 +20,7 @@ class ScatterPlot : public Layout
   int nMetrics;
   bool shapeConversion;
   double disc[3];
-  MetricProxy* metricProxy[3]; 
+  Metric* metric[3]; 
 };
 #endif
 

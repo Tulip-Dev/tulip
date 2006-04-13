@@ -12,7 +12,7 @@
 #include <cmath>
 #include <stdio.h>
 #include "StrahlerMetric.h"
-#include <tulip/StringProxy.h>
+#include <tulip/String.h>
 
 METRICPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
 
@@ -175,7 +175,7 @@ namespace {
   };
 }
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const PropertyContext &context):Metric(context) {
+StrahlerMetric::StrahlerMetric(const PropertyContext &context):MetricAlgorithm(context) {
    addParameter<bool>("allNodes", paramHelp[0], "false");
 }
 //==============================================================================
@@ -189,7 +189,7 @@ bool StrahlerMetric::run() {
   stdext::hash_map<node,Strahler> cachedValues;
   int curPref=0;
   /*
-    SelectionProxy *parameter=superGraph->getProperty<SelectionProxy>("viewSelection");
+    Selection *parameter=superGraph->getProperty<Selection>("viewSelection");
     Iterator<node> *it=superGraph->getNodes();
     for (;it->hasNext();) {
     node curNode=it->next();
@@ -209,7 +209,7 @@ bool StrahlerMetric::run() {
     }
     if (allNodes) {
       if (pluginProgress->progress(i++, superGraph->numberOfNodes())!=TLP_CONTINUE) break;
-      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      metricObj->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
       visited.clear();
       finished.clear();
@@ -224,7 +224,7 @@ bool StrahlerMetric::run() {
     itN = superGraph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
-      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      metricObj->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
     } delete itN;
   }

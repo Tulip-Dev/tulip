@@ -4,7 +4,7 @@
 #include <cmath>
 #include <tulip/TulipPlugin.h>
 
-class SpringElectrical:public Layout { 
+class SpringElectrical:public LayoutAlgorithm { 
 public:
   SpringElectrical(const PropertyContext &);
   bool run();
@@ -15,9 +15,9 @@ private:
   bool checkEdgeIntersection(const node n, const Coord& move);
   Coord repulsiveForces(node n);
   Coord attractiveForces(node n);
-  SelectionProxy* inputSelection;
-  SizesProxy* inputSize;
-  LayoutProxy* inputLayout;
+  Selection* inputSelection;
+  Sizes* inputSize;
+  Layout* inputLayout;
   MutableContainer<Coord> prevMove;
   double k,k2; 
   Coord t;

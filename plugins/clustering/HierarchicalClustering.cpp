@@ -3,7 +3,7 @@
 #include <list>
 
 #include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 
 #include "HierarchicalClustering.h"
 
@@ -21,13 +21,13 @@ HierarchicalClustering::~HierarchicalClustering()
 
 class LessThan {
 public:
-  MetricProxy *metric;
+  Metric *metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
   }
 };
 
-bool HierarchicalClustering::split(MetricProxy *metric,list<node> &orderedNode) {
+bool HierarchicalClustering::split(Metric *metric,list<node> &orderedNode) {
   Iterator<node> *itN=superGraph->getNodes();
   for (;itN->hasNext();)
     orderedNode.push_back(itN->next());
@@ -64,7 +64,7 @@ bool HierarchicalClustering::split(MetricProxy *metric,list<node> &orderedNode) 
 bool HierarchicalClustering::run() {
 
   string tmp1,tmp2;
-  MetricProxy *metric=superGraph->getProperty<MetricProxy>("viewMetric");
+  Metric *metric=superGraph->getProperty<Metric>("viewMetric");
   tmp1="Hierar Sup";
   tmp2="Hierar Inf";
   bool result=false;
@@ -73,9 +73,9 @@ bool HierarchicalClustering::run() {
     list<node> badNodeList;
     result = split(metric,badNodeList);
     if (!result) {
-      SelectionProxy *sel1 =superGraph->getLocalProperty<SelectionProxy>("good select");
-      SelectionProxy *sel2 =superGraph->getLocalProperty<SelectionProxy>("bad select");
-      SelectionProxy *splitRes =superGraph->getLocalProperty<SelectionProxy>("split result");
+      Selection *sel1 =superGraph->getLocalProperty<Selection>("good select");
+      Selection *sel2 =superGraph->getLocalProperty<Selection>("bad select");
+      Selection *splitRes =superGraph->getLocalProperty<Selection>("split result");
 
       sel1->setAllNodeValue(true);
       sel1->setAllEdgeValue(true);

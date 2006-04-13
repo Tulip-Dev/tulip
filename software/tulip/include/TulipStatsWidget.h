@@ -41,7 +41,7 @@
 #define GLAD_GRID              6
 
 
-class MetricProxy;
+class Metric;
 class GlGraphWidget;
 class ClusterTree;
 
@@ -79,7 +79,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
 
   int histoMax; /**< The value of the biggest column in the case of an histogram. Used to fit correctly the augmented displays */
 
-  std::vector<MetricProxy*> metrics; /**< The metrics used for the computation */
+  std::vector<Metric*> metrics; /**< The metrics used for the computation */
   int nMetrics; /**< The number of metrics used. \f$ 1 \leq nMetrics \leq \f$ 3 */
 
   float discretizationStep[3]; /**< The discretization step used to regroup informations */

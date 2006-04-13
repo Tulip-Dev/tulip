@@ -1,6 +1,6 @@
 #include "tulip/SuperGraph.h"
 #include "tulip/AcyclicTest.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/Selection.h"
 #include "tulip/StableIterator.h"
 
 using namespace std;

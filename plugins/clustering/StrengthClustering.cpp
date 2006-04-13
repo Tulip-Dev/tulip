@@ -7,8 +7,8 @@
 #include <iostream>
 #include <ext/hash_map>
 #include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/Selection.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
@@ -124,7 +124,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   }
 
   //Extract connected componnent
-  MetricProxy *connected= new MetricProxy(tmpGraph); 
+  Metric *connected= new Metric(tmpGraph); 
   tmpGraph->computeProperty("Connected Component", connected, errMsg);
 
   //Put isolated nodes in the same cluster
@@ -172,9 +172,9 @@ void drawGraph(SuperGraph *tmpg) {
   else
     layoutName = "GEM (Frick)";
   string sizesName="Auto_sizing";
-  tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProxy>("viewLayout"),errMsg);
+  tmpg->computeProperty(layoutName,tmpg->getLocalProperty<Layout>("viewLayout"),errMsg);
   if (tmpg->numberOfNodes() < 300)
-    tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizesProxy>("viewSize"),errMsg);
+    tmpg->computeProperty(sizesName,tmpg->getLocalProperty<Sizes>("viewSize"),errMsg);
 }
 //==============================================================================
 double StrengthClustering::findBestThreshold(int numberOfSteps){
@@ -249,8 +249,8 @@ SuperGraph* StrengthClustering::buildQuotientGraph(SuperGraph *graph) {
 void StrengthClustering::adjustMetaGraphProtperty(SuperGraph *quotientGraph, map<SuperGraph *,SuperGraph *> &mapGraph) {
   if (quotientGraph != superGraph) {
     SuperGraph *rootGraph = superGraph->getRoot();
-    MetaGraphProxy *meta = rootGraph->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
-    MetaGraphProxy *meta2 = rootGraph->getLocalProperty<MetaGraphProxy>("strengthMetaGraph");
+    MetaGraph *meta = rootGraph->getLocalProperty<MetaGraph>("viewMetaGraph");
+    MetaGraph *meta2 = rootGraph->getLocalProperty<MetaGraph>("strengthMetaGraph");
     Iterator<node> *itN = quotientGraph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
@@ -264,7 +264,7 @@ namespace {
   const char * paramHelp[] = {
     // nodeSize
     HTML_HELP_OPEN()							\
-    HTML_HELP_DEF( "type", "MetricProxy" )				\
+    HTML_HELP_DEF( "type", "Metric" )				\
     HTML_HELP_DEF( "values", "An existing metric property" )		\
     HTML_HELP_DEF( "default", "viewSize" )				\
     HTML_HELP_BODY()							\
@@ -283,14 +283,14 @@ namespace {
 
 //================================================================================
 StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
-  addParameter<MetricProxy>("metric", paramHelp[0],"viewMetric");
+  addParameter<Metric>("metric", paramHelp[0],"viewMetric");
   addParameter<bool>("multiply",paramHelp[1],"true");
 }
 //==============================================================================
 bool StrengthClustering::run() {
   bool result;
   string errMsg;
-  values = new MetricProxy(superGraph);
+  values = new Metric(superGraph);
   result = superGraph->computeProperty("Strength", values, errMsg);
   
   bool multi;
@@ -299,10 +299,10 @@ bool StrengthClustering::run() {
   }
   
   if (multi) {
-    MetricProxy *metric;
+    Metric *metric;
     if (!dataSet->get("metric",metric)) 
-      metric = superGraph->getProperty<MetricProxy>("viewMetric");
-    MetricProxy mult(superGraph);
+      metric = superGraph->getProperty<Metric>("viewMetric");
+    Metric mult(superGraph);
     mult = *metric;
     mult.uniformQuantification(100);
     edge e;

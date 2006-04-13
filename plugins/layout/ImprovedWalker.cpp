@@ -52,7 +52,7 @@ public:
 };
 //====================================================================
 ImprovedWalker::ImprovedWalker(const PropertyContext& context) :
-    Layout(context) {
+    LayoutAlgorithm(context) {
   addOrientationParameters(this);
     addOrthogonalParameters(this);
 }
@@ -63,9 +63,9 @@ ImprovedWalker::~ImprovedWalker() {
 bool ImprovedWalker::run() {
   node root                 = searchRoot(superGraph);
   orientationType mask      = getMask(dataSet);
-  oriLayout                 = new OrientableLayout(layoutProxy, mask);
-  SizesProxy* viewSizeProxy = superGraph->getLocalProperty<SizesProxy>("viewSize");
-  oriSize                   = new OrientableSizeProxy(viewSizeProxy, mask);
+  oriLayout                 = new OrientableLayout(layoutObj, mask);
+  Sizes* viewSize = superGraph->getLocalProperty<Sizes>("viewSize");
+  oriSize                   = new OrientableSizeProxy(viewSize, mask);
   depthMax                  = initializeAllNodes();    
   order[root]               = 1;
   

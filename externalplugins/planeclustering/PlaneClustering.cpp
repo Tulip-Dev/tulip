@@ -66,7 +66,7 @@ PlaneClustering::~PlaneClustering()
 
 bool PlaneClustering::run() 
 {
-  LayoutProxy *layout = superGraph->getProperty<LayoutProxy>("viewLayout");
+  Layout *layout = superGraph->getProperty<Layout>("viewLayout");
 
   SuperGraph* sup = superGraph->addSubGraph();
   SuperGraph* inf = superGraph->addSubGraph();

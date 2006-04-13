@@ -6,13 +6,13 @@
 #include "tulip/TlpQtTools.h"
 #include "tulip/Reflect.h"
 #include "tulip/Color.h"
-#include "tulip/MetricProxy.h"
-#include "tulip/StringProxy.h"
-#include "tulip/SelectionProxy.h"
-#include "tulip/LayoutProxy.h"
-#include "tulip/IntProxy.h"
-#include "tulip/ColorsProxy.h"
-#include "tulip/SizesProxy.h"
+#include "tulip/Metric.h"
+#include "tulip/String.h"
+#include "tulip/Selection.h"
+#include "tulip/Layout.h"
+#include "tulip/Int.h"
+#include "tulip/Colors.h"
+#include "tulip/Sizes.h"
 
 #if (QT_REL == 3)
 #include <qvalidator.h>
@@ -401,13 +401,13 @@ namespace {
 
 	// Typed Proxy
 	else if( inG &&
-		 ( ip.typeName == TN(SelectionProxy)
-		   || ip.typeName == TN(MetricProxy)
-		   || ip.typeName == TN(LayoutProxy)
-		   || ip.typeName == TN(StringProxy)
-		   || ip.typeName == TN(IntProxy)
-		   || ip.typeName == TN(SizesProxy)
-		   || ip.typeName == TN(ColorsProxy) ) ) {
+		 ( ip.typeName == TN(Selection)
+		   || ip.typeName == TN(Metric)
+		   || ip.typeName == TN(Layout)
+		   || ip.typeName == TN(String)
+		   || ip.typeName == TN(Int)
+		   || ip.typeName == TN(Sizes)
+		   || ip.typeName == TN(Colors) ) ) {
 	  stringA proxyA;
 	  PProxy * curProxy = 0;
 	  if( !inSet || !inSet->get
@@ -589,13 +589,13 @@ namespace {
 
 	// Typed Proxy
 	else if(	inG &&
-			(	ip.typeName == TN(SelectionProxy)
-				||	ip.typeName == TN(MetricProxy)
-				||	ip.typeName == TN(LayoutProxy)
-				||	ip.typeName == TN(StringProxy)
-				||	ip.typeName == TN(IntProxy)
-				||	ip.typeName == TN(SizesProxy)
-				||	ip.typeName == TN(ColorsProxy) )		) {
+			(	ip.typeName == TN(Selection)
+				||	ip.typeName == TN(Metric)
+				||	ip.typeName == TN(Layout)
+				||	ip.typeName == TN(String)
+				||	ip.typeName == TN(Int)
+				||	ip.typeName == TN(Sizes)
+				||	ip.typeName == TN(Colors) )		) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
 	  outSet.set<PProxy*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
 	}

@@ -3,8 +3,8 @@
 #include <string>
 #include <GL/gl.h>
 
-#include <tulip/StringProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/String.h>
+#include <tulip/Colors.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>

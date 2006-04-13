@@ -20,14 +20,14 @@
 
 #include "Plugin.h"
 #include "PluginContext.h"
-#include "Sizes.h"
-#include "Int.h"
-#include "Metric.h"
-#include "Colors.h"
-#include "Layout.h"
-#include "String.h"
-#include "Selection.h"
-#include "MetaGraph.h"
+#include "SizesAlgorithm.h"
+#include "IntAlgorithm.h"
+#include "MetricAlgorithm.h"
+#include "ColorsAlgorithm.h"
+#include "LayoutAlgorithm.h"
+#include "StringAlgorithm.h"
+#include "SelectionAlgorithm.h"
+#include "MetaGraphAlgorithm.h"
 #include "Clustering.h"
 #include "ImportModule.h"
 #include "ExportModule.h"
@@ -41,12 +41,12 @@
 
 // Macro for factorization of source code
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R)          \
-class C##T##Factory:public PropertyFactory<T>           \
+class C##T##Factory:public PropertyFactory<T##Algorithm>\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    T##Proxy::initFactory();				\
-    T##Proxy::factory->getPluginParameters((PropertyFactory< T > *) this); \
+    T::initFactory();				\
+    T::factory->getPluginParameters((PropertyFactory<T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -55,24 +55,24 @@ class C##T##Factory:public PropertyFactory<T>           \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
- T * createObject(const PropertyContext &context)	\
+ T##Algorithm * createObject(const PropertyContext &context)	\
    {							\
      C *tmp=new C(context);				\
-     return ((T *) tmp);				\
+     return ((T##Algorithm *) tmp);				\
    }							\
 };                                                      \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
-#define STRINGPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R)
-#define SELECTIONPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Selection,C,N,A,D,I,V,R)
-#define LAYOUTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R)
-#define COLORSPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Colors,C,N,A,D,I,V,R)
 #define INTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Int,C,N,A,D,I,V,R)
-#define SIZESPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Sizes,C,N,A,D,I,V,R)
+#define COLORSPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Colors,C,N,A,D,I,V,R)
+#define LAYOUTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R)
 #define METAGRAPHPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(MetaGraph,C,N,A,D,I,V,R)
+#define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
+#define SELECTIONPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Selection,C,N,A,D,I,V,R)
+#define SIZESPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Sizes,C,N,A,D,I,V,R)
+#define STRINGPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R)
 
 //===========================================================
 // Declaclartion of SuperGraph modification plug-in Mechanism

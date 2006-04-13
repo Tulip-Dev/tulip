@@ -3,7 +3,7 @@
 #define _TLPSTLFUNCTIONS_H
 //#include "SuperGraph.h"
 //#include "MetricProxy.h"
-class MetricProxy;
+class Metric;
 class node;
 class edge;
 /**
@@ -12,11 +12,11 @@ class edge;
  */
 class LessByMetric {
  public:
-  LessByMetric(MetricProxy *metric):metric(metric){}
+  LessByMetric(Metric *metric):metric(metric){}
   bool operator() (node n1,node n2);
   bool operator() (edge e1,edge e2);
 private:
-  MetricProxy *metric;
+  Metric *metric;
 };
 
 #endif

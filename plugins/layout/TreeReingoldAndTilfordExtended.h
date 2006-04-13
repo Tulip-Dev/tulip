@@ -45,7 +45,7 @@ struct LR {
  *  (at your option) any later version.
  *
  */
-class TreeReingoldAndTilfordExtended:public Layout { 
+class TreeReingoldAndTilfordExtended:public LayoutAlgorithm { 
 public:
   TreeReingoldAndTilfordExtended(const PropertyContext &);
   ~TreeReingoldAndTilfordExtended();
@@ -61,8 +61,8 @@ private:
   std::list<LR>* TreePlace(node, stdext::hash_map<node,double>*);
   void TreeLevelSizing(node ,std::map<int,double> &,int , std::map<node,int> &levels);
 
-  SizesProxy *sizesProxy;
-  IntProxy   *lengthMetric;
+  Sizes *sizes;
+  Int   *lengthMetric;
   bool ortho;
   bool useLength;
   std::string orientation;

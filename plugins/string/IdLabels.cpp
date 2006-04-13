@@ -6,9 +6,9 @@
 
 using namespace std;
 
-class IdLabels:public String { 
+class IdLabels:public StringAlgorithm { 
 public:
-  IdLabels(const PropertyContext &context):String(context){}
+  IdLabels(const PropertyContext &context):StringAlgorithm(context){}
   ~IdLabels(){}
   string getNodeValue(const node n) {
     char tmp[255];

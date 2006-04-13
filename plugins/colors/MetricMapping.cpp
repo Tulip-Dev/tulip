@@ -78,9 +78,9 @@ namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_BODY() \
-    "This metricProxy is used to affect scalar values to superGraph items." \
+    "This metric is used to affect scalar values to superGraph items." \
     "The meaning of theses values depends of the choosen color model." \
     HTML_HELP_CLOSE(),
     // colormodel
@@ -120,17 +120,17 @@ namespace {
   };
 }
 
-class MetricMapping: public Colors { 
+class MetricMapping: public ColorsAlgorithm { 
 private:
-  MetricProxy *entryMetric;
+  Metric *entryMetric;
   int colorModel;
   Color color1;
   Color color2;
   Vector<float,3> deltaRGB;
 
 public:
-  MetricMapping(const PropertyContext &context):Colors(context){
-    addParameter<MetricProxy>("property",paramHelp[0],"viewMetric");
+  MetricMapping(const PropertyContext &context):ColorsAlgorithm(context){
+    addParameter<Metric>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
     addParameter<Color>("color1",paramHelp[2],"(255,255,0,255)");
@@ -174,7 +174,7 @@ public:
     while(itE->hasNext()) {
       edge ite=itE->next();
       double dd=entryMetric->getEdgeValue(ite)-minE;
-      colorsProxy->setEdgeValue(ite, getColor(dd,maxE-minE));
+      colorsObj->setEdgeValue(ite, getColor(dd,maxE-minE));
     } delete itE;
   }
   //=========================================================
@@ -190,13 +190,13 @@ public:
     while(itN->hasNext()) {
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
-      colorsProxy->setNodeValue(itn, getColor(dd,maxN-minN));
+      colorsObj->setNodeValue(itn, getColor(dd,maxN-minN));
     } delete itN;
   }
   //=========================================================
   bool run() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
-    MetricProxy* metricS = superGraph->getProperty<MetricProxy>("viewMetric");
+    Metric* metricS = superGraph->getProperty<Metric>("viewMetric");
     colorModel=1;
     color1.set(255,255,0);
     color2.set(0,0,255);
@@ -219,7 +219,7 @@ public:
       */
     }
     else {
-      MetricProxy *tmp= new MetricProxy(superGraph);
+      Metric *tmp= new Metric(superGraph);
       *tmp = *metricS;
       tmp->uniformQuantification(300);
       entryMetric = tmp;

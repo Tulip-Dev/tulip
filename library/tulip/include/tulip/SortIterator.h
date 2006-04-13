@@ -13,18 +13,18 @@
 #include <vector>
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 #include <tulip/SuperGraph.h>
 
 struct LessThan {
-  MetricProxy *metric;
+  Metric* metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
   } 
 };
 
 struct LessThanEdgeTargetMetric {
-  LessThanEdgeTargetMetric(SuperGraph *graph, MetricProxy * metric):
+  LessThanEdgeTargetMetric(SuperGraph *graph, Metric* metric):
     graph(graph),
     metric(metric) {
   }
@@ -32,7 +32,7 @@ struct LessThanEdgeTargetMetric {
     return (metric->getNodeValue(graph->target(e1)) < metric->getNodeValue(graph->target(e2)));
   }
 private:
-  MetricProxy *metric;
+  Metric* metric;
   SuperGraph *graph;
 };
 
@@ -40,7 +40,7 @@ private:
 ///Interface of Sortiterator,
 struct SortNodeIterator : public StableIterator<node> {
   ///
-  SortNodeIterator(Iterator<node> *itIn, MetricProxy *metric):StableIterator<node>(itIn) {
+  SortNodeIterator(Iterator<node> *itIn, Metric* metric):StableIterator<node>(itIn) {
     LessThan tmp;
     tmp.metric=metric;
     sort(cloneIt.begin(),cloneIt.end(),tmp);
@@ -53,7 +53,7 @@ struct SortNodeIterator : public StableIterator<node> {
 ///Interface of Sortiterator,
 struct SortTargetEdgeIterator : public StableIterator<edge> {
   ///
-  SortTargetEdgeIterator(Iterator<edge> *itIn, SuperGraph* graph, MetricProxy *metric):StableIterator<edge>(itIn) {
+  SortTargetEdgeIterator(Iterator<edge> *itIn, SuperGraph* graph, Metric* metric):StableIterator<edge>(itIn) {
     LessThanEdgeTargetMetric tmp(graph,metric);
     sort(cloneIt.begin(),cloneIt.end(),tmp);
     itStl=cloneIt.begin();

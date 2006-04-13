@@ -7,26 +7,26 @@ METRICPLUGIN(NodeMetric,"Node","David Auber","20/12/1999","Alpha","0","1");
 using namespace std;
 
 //====================================================================
-NodeMetric::NodeMetric(const PropertyContext &context):Metric(context) 
+NodeMetric::NodeMetric(const PropertyContext &context):MetricAlgorithm(context) 
 {}
 //====================================================================
 double NodeMetric::getNodeValue(const node n) {
-  if (metricProxy->getNodeValue(n)!=0)
-    return metricProxy->getNodeValue(n);
+  if (metricObj->getNodeValue(n)!=0)
+    return metricObj->getNodeValue(n);
   double result = 1;
   node _n;
   forEach(_n, superGraph->getOutNodes(n))
     result += getNodeValue(_n);
-  metricProxy->setNodeValue(n, result);
+  metricObj->setNodeValue(n, result);
   return result;
 }
 //====================================================================
 bool NodeMetric::run() {
-  metricProxy->setAllEdgeValue(0);
-  metricProxy->setAllNodeValue(0);
+  metricObj->setAllEdgeValue(0);
+  metricObj->setAllNodeValue(0);
   node _n;
   forEach(_n, superGraph->getNodes())
-    metricProxy->setNodeValue(_n,getNodeValue(_n));
+    metricObj->setNodeValue(_n,getNodeValue(_n));
   return true;
 }
 //====================================================================

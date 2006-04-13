@@ -8,7 +8,7 @@
 #include <map>
 #include <tulip/TulipPlugin.h>
 
-class MetricProxy;
+class Metric;
 
 /** \addtogroup clustering */
 /*@{*/
@@ -27,7 +27,7 @@ private:
   void recursiveCall(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
   SuperGraph* buildQuotientGraph(SuperGraph *graph);
   void adjustMetaGraphProtperty(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
-  MetricProxy * values;
+  Metric* values;
 };
 /*@}*/
 #endif

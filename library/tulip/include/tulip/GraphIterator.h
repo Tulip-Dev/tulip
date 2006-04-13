@@ -23,7 +23,7 @@
 #include "tulipconf.h"
 
 
-class SelectionProxy;
+class Selection;
 //template<class C>class Iterator;
 #ifndef DOXYGEN_NOTFOR_DEVEL
 template<typename TYPE> class UINTIterator : public Iterator<TYPE> {

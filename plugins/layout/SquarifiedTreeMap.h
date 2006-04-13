@@ -35,7 +35,7 @@ typedef pairVector::iterator pairIterator;
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  */
-class SquarifiedTreeMap: public Layout {
+class SquarifiedTreeMap: public LayoutAlgorithm {
    friend class SquarifiedTreeMapUnitTests; 
 
 public:
@@ -47,9 +47,9 @@ public:
     void reset();
 
 private:
-    SizesProxy*     size;   
-    MetricProxy*    metric;
-    IntProxy*       glyph;
+    Sizes*     size;   
+    Metric*    metric;
+    Int*       glyph;
     mapNode         sumChildrenMetric;
     float           aspectRatio;
     

@@ -26,7 +26,7 @@ const int TEXTUREDGLYPHID = 101;
 
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context)
-                                                    :Layout(context){
+                                                    :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
   addParameter<float>("Aspect Ratio", NULL, "1");
   addParameter<bool>("Texture?", NULL, "false");
@@ -38,7 +38,7 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 
 //====================================================================
 bool SquarifiedTreeMap::check(string& errorMsg) {
-  metric = superGraph->getProperty<MetricProxy>("viewMetric"); 
+  metric = superGraph->getProperty<Metric>("viewMetric"); 
   if (dataSet != 0)
     dataSet->get("property", metric);    
   if (!metric) {
@@ -72,8 +72,8 @@ bool SquarifiedTreeMap::run() {
     dataSet->get("Texture?", glyphTextured);
   }
     
-  size  = superGraph->getLocalProperty<SizesProxy>("viewSize");    
-  glyph = superGraph->getLocalProperty<IntProxy>("viewShape"); 
+  size  = superGraph->getLocalProperty<Sizes>("viewSize");    
+  glyph = superGraph->getLocalProperty<Int>("viewShape"); 
     
   if (glyphTextured)
     glyph->setAllNodeValue(TEXTUREDGLYPHID);
@@ -85,7 +85,7 @@ bool SquarifiedTreeMap::run() {
 
   initializeMapSum(root);
   Coord initialSpaceCenterCoord = initialSpace.getCenterCoord();   
-  layoutProxy->setNodeValue(root, initialSpaceCenterCoord);
+  layoutObj->setNodeValue(root, initialSpaceCenterCoord);
   Size initialSpaceSize = initialSpace.getSize();
   size->setNodeValue(root, initialSpaceSize);
   squarify(root, initialSpace, 1);
@@ -142,7 +142,7 @@ void SquarifiedTreeMap::layRow(pairIterator itFirstChildNode,
     Coord centerOfChildArea      = childArea.getCenterCoord();
         
     centerOfChildArea.setZ(depth * SEPARATION_Z);                                     
-    layoutProxy->setNodeValue(itCurrentNode->first, centerOfChildArea);
+    layoutObj->setNodeValue(itCurrentNode->first, centerOfChildArea);
     Size childAreaSize = childArea.getSize();
     size->setNodeValue(itCurrentNode->first, childAreaSize);
 

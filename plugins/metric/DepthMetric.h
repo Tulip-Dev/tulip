@@ -27,7 +27,7 @@
  *  (at your option) any later version.
  *
  */
-class DepthMetric:public Metric { 
+class DepthMetric:public MetricAlgorithm { 
 public:
   DepthMetric(const PropertyContext &);
   bool run();

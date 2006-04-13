@@ -7,7 +7,7 @@ using namespace std;
 namespace {
   const char * paramHelp[] = {
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
     HTML_HELP_BODY() \
     "This parameter defines the metric used for edges weight." \
@@ -37,8 +37,8 @@ bool Kruskal::edgeOk(const edge &e) {
   return (getClass(superGraph->source(e).id) !=  getClass(superGraph->target(e).id));
 }
 //======================================================
-Kruskal::Kruskal(const PropertyContext &context):Selection(context) {
-  addParameter<MetricProxy> ("Edge weight", paramHelp[0], "viewMetric");
+Kruskal::Kruskal(const PropertyContext &context):SelectionAlgorithm(context) {
+  addParameter<Metric> ("Edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
@@ -79,15 +79,15 @@ bool Kruskal::run(){
     sortedEdges.push_back(e);
   } delete itE;
   
-  selectionProxy->setAllNodeValue(true);
-  selectionProxy->setAllEdgeValue(false);
+  selectionObj->setAllNodeValue(true);
+  selectionObj->setAllEdgeValue(false);
 
-  MetricProxy *edgeWeight = 0;
+  Metric *edgeWeight = 0;
   if ( dataSet!=0) {
     dataSet->get("Edge Weight", edgeWeight);
   }
   if (edgeWeight == 0)
-    edgeWeight = superGraph->getProperty<MetricProxy>("viewMetric");
+    edgeWeight = superGraph->getProperty<Metric>("viewMetric");
   /* Calcul */
   sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
   while(numClasses > 1) {
@@ -97,7 +97,7 @@ bool Kruskal::run(){
       sortedEdges.pop_front();
     } while(! edgeOk(cur));
     
-    selectionProxy->setEdgeValue(cur, true);
+    selectionObj->setEdgeValue(cur, true);
     makeUnion(superGraph->source(cur).id, superGraph->target(cur).id);
   }
   delete classes;

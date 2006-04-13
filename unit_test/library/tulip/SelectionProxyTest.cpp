@@ -6,6 +6,9 @@
 using namespace std;
 
 #include <cppunit/extensions/HelperMacros.h>
+
+// Warning SelectionProxy has been renamed in Selection
+
 CPPUNIT_TEST_SUITE_REGISTRATION( SelectionProxyTest );
 
 //==========================================================
@@ -22,7 +25,7 @@ void buildGraph(SuperGraph *graph) {
 //==========================================================
 void SelectionProxyTest::setUp() {
   graph    = tlp::newSuperGraph();
-  selection = graph->getProperty<SelectionProxy>("Select Test");
+  selection = graph->getProperty<Selection>("Select Test");
   buildGraph(graph);
 }
 //==========================================================
@@ -129,7 +132,7 @@ void SelectionProxyTest::testCopy() {
     CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
   }
 
-  SelectionProxy tmp(graph);
+  Selection tmp(graph);
   tmp = *selection;
   itN=graph->getNodes();
   while(itN->hasNext()) {
@@ -149,7 +152,7 @@ void SelectionProxyTest::testSetGet() {
 }
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SelectionProxy" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Selection" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators", 
 								      &SelectionProxyTest::testIterators ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 

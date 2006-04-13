@@ -1,5 +1,5 @@
 #include <tulip/AcyclicTest.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Metric.h>
 #include <tulip/ForEach.h>
 #include "SegmentMetric.h"
 
@@ -9,7 +9,7 @@ METRICPLUGIN(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1")
 using namespace std;
 
 //=============================
-SegmentMetric::SegmentMetric(const PropertyContext &context):Metric(context) {}
+SegmentMetric::SegmentMetric(const PropertyContext &context):MetricAlgorithm(context) {}
 //=============================
 int SegmentMetric::segNode(node n,int &curSeg,int &segMax) {
   curSeg=0;
@@ -39,12 +39,12 @@ double SegmentMetric::getNodeValue(const node n) {
 */
 //=============================
 bool SegmentMetric::run() {
-  metricProxy->setAllNodeValue(0);
-  metricProxy->setAllEdgeValue(0);
+  metricObj->setAllNodeValue(0);
+  metricObj->setAllEdgeValue(0);
   node n;
   forEach(n, superGraph->getNodes()){
     int seg,segMax;
-    metricProxy->setNodeValue(n, segNode(n, seg, segMax));
+    metricObj->setNodeValue(n, segNode(n, seg, segMax));
   }
   return true;
 }

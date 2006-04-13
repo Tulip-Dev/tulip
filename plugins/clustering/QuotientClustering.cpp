@@ -3,7 +3,7 @@
 #include <math.h>
 #include <sstream>
 #include <tulip/SuperGraph.h>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/DrawingTools.h>
 
@@ -37,7 +37,7 @@ QuotientClustering::~QuotientClustering(){}
 //===============================================================================
 bool QuotientClustering::run() {
   SuperGraph *quotientGraph = tlp::newSubGraph(superGraph->getRoot());
-  MetaGraphProxy *meta = quotientGraph->getProperty<MetaGraphProxy>("viewMetaGraph");
+  MetaGraph *meta = quotientGraph->getProperty<MetaGraph>("viewMetaGraph");
   //Create one metanode for each subgraph(cluster) of current graph.
   SuperGraph *graph= superGraph;
   map<SuperGraph*,node> mapping;
@@ -84,14 +84,14 @@ bool QuotientClustering::run() {
   } delete itE;
 
   //compute layout according to the layouts of subgraphs
-  SizesProxy *size  = quotientGraph->getProperty<SizesProxy>("viewSize");
+  Sizes *size  = quotientGraph->getProperty<Sizes>("viewSize");
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
     node n = itN->next();
     SuperGraph * graph = meta->getNodeValue(n);
-    LayoutProxy * graphlayout = graph->getProperty<LayoutProxy>("viewLayout");
-    SizesProxy * graphsize = graph->getProperty<SizesProxy>("viewSize");
-    MetricProxy * graphrot = graph->getProperty<MetricProxy>("viewRotation");
+    Layout * graphlayout = graph->getProperty<Layout>("viewLayout");
+    Sizes * graphsize = graph->getProperty<Sizes>("viewSize");
+    Metric * graphrot = graph->getProperty<Metric>("viewRotation");
     pair<Coord, Coord> bboxe = tlp::computeBoundingBox(graph, graphlayout, graphsize, graphrot);
     Coord max = bboxe.first;
     Coord min = bboxe.second;

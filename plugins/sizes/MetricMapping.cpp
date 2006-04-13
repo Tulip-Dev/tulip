@@ -9,15 +9,15 @@ namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_BODY() \
-    "This metricProxy is used to affect scalar values to superGraph items." \
+    "This metric is used to affect scalar values to superGraph items." \
     HTML_HELP_CLOSE(),
     // input
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizesProxy" ) \
+    HTML_HELP_DEF( "type", "Sizes" ) \
     HTML_HELP_BODY() \
-    "This sizesProxy is used to affect values to unselected dimensions (width, height, depth)." \
+    "This sizes is used to affect values to unselected dimensions (width, height, depth)." \
     HTML_HELP_CLOSE(),
     // colormodel
     HTML_HELP_OPEN() \
@@ -25,7 +25,7 @@ namespace {
     HTML_HELP_DEF( "values", "true/false" ) \
     HTML_HELP_DEF( "default", "true" ) \
     HTML_HELP_BODY() \
-    "This value defines if this parameter will be computed or taken from the input sizesProxy" \
+    "This value defines if this parameter will be computed or taken from the input sizes" \
     HTML_HELP_CLOSE(),
     // Mapping type
     HTML_HELP_OPEN() \
@@ -50,11 +50,11 @@ static const char* rangeErrorMsg = "max size must be greater than min size";
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class MetricMapping:public Sizes {
+class MetricMapping:public SizesAlgorithm {
 public:
-  MetricMapping(const PropertyContext &context):Sizes(context) {
-    addParameter<MetricProxy>("property", paramHelp[0]);
-    addParameter<SizesProxy>("input", paramHelp[1]);
+  MetricMapping(const PropertyContext &context):SizesAlgorithm(context) {
+    addParameter<Metric>("property", paramHelp[0]);
+    addParameter<Sizes>("input", paramHelp[1]);
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
     addParameter<bool>("depth", paramHelp[2],"true");
@@ -74,7 +74,7 @@ public:
       if (xaxis) result[0]=sizos;
       if (yaxis) result[1]=sizos;
       if (zaxis) result[2]=sizos;
-      sizesProxy->setNodeValue(itn, result);
+      sizesObj->setNodeValue(itn, result);
     } delete itN;
   }
 
@@ -82,8 +82,8 @@ public:
     xaxis=yaxis=zaxis=true;
     min=1;
     max=10;
-    entryMetric=superGraph->getProperty<MetricProxy>("viewMetric");
-    entrySize=superGraph->getProperty<SizesProxy>("viewSize");
+    entryMetric=superGraph->getProperty<Metric>("viewMetric");
+    entrySize=superGraph->getProperty<Sizes>("viewSize");
     mappingType = true;
     if ( dataSet!=0 ) {
       dataSet->get("property",entryMetric);
@@ -107,14 +107,14 @@ public:
     string metricS="viewMetric";
     string sizeS="viewSize";
 
-    MetricProxy *tmp = 0;
+    Metric *tmp = 0;
     if (!mappingType) {
-      tmp = new MetricProxy(superGraph);
+      tmp = new Metric(superGraph);
       *tmp = *entryMetric;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
-    sizesProxy->setAllEdgeValue(Size(0.25,0.25,0.25));
+    sizesObj->setAllEdgeValue(Size(0.25,0.25,0.25));
     range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
     shift=entryMetric->getNodeMin(superGraph);
     computeNodeSize();
@@ -123,8 +123,8 @@ public:
   }
 
 private:
-  MetricProxy *entryMetric;
-  SizesProxy *entrySize;
+  Metric *entryMetric;
+  Sizes *entrySize;
   bool xaxis,yaxis,zaxis,mappingType;
   double min,max;
   double range;

@@ -29,7 +29,7 @@
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class ConeTreeExtended:public Layout { 
+class ConeTreeExtended:public LayoutAlgorithm { 
 public:
   ConeTreeExtended(const PropertyContext &);
   ~ConeTreeExtended();
@@ -42,7 +42,7 @@ private:
 		  double x, double y, int level);
   void computeLayerSize(node , int);
   void computeYCoodinates(node);
-  SizesProxy * nodeSize;
+  Sizes * nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;
 

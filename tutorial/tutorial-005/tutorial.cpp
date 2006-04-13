@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 
 /**
@@ -29,9 +29,9 @@ int main() {
   buildGraph(graph);
 
   //Get and create several properties
-  SelectionProxy *select=graph->getLocalProperty<SelectionProxy>("firstSelection");
-  graph->getLocalProperty<ColorsProxy>("firstColors");
-  graph->getLocalProperty<MetricProxy>("firstMetric");
+  Selection *select=graph->getLocalProperty<Selection>("firstSelection");
+  graph->getLocalProperty<Colors>("firstColors");
+  graph->getLocalProperty<Metric>("firstMetric");
 
   //init the selection in order to use it for building clone subgraph
   select->setAllNodeValue(true);
@@ -42,13 +42,13 @@ int main() {
   SuperGraph *subgraph2=subgraph1->addSubGraph(select);
 
   //create a property in subgraph1 (redefinition of the one defined in graph)
-  subgraph1->getLocalProperty<MetricProxy>("firstMetric");
+  subgraph1->getLocalProperty<Metric>("firstMetric");
 
   //create a new property in subgraph1
-  subgraph1->getLocalProperty<MetricProxy>("secondMetric");
+  subgraph1->getLocalProperty<Metric>("secondMetric");
 
   //create a new property in subgraph3
-  subgraph2->getLocalProperty<MetricProxy>("thirdMetric");
+  subgraph2->getLocalProperty<Metric>("thirdMetric");
 
   cout << "List of the local properties present in the subgraph1:" << endl;
   Iterator<string> *it=subgraph1->getLocalProperties();

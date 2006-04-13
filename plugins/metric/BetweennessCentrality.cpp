@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/MetaGraph.h>
 #include <tulip/TlpTools.h>
 #include <stack>
 #include <queue>
@@ -36,11 +36,11 @@ using namespace stdext;
  *  (at your option) any later version.
  *
  */
-class BetweennessCentrality:public Metric { 
+class BetweennessCentrality:public MetricAlgorithm { 
 public:
-  BetweennessCentrality(const PropertyContext &context):Metric(context){};
+  BetweennessCentrality(const PropertyContext &context):MetricAlgorithm(context){};
   bool run() {
-    metricProxy->setAllNodeValue(0.0);
+    metricObj->setAllNodeValue(0.0);
     Iterator<node> *it = superGraph->getNodes();
     unsigned int count = 0;
     while(it->hasNext()) {
@@ -83,7 +83,7 @@ public:
 	  node v = *itn;
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
-	if (w != s) metricProxy->setNodeValue(w, metricProxy->getNodeValue(w) + delta.get(w.id)); 
+	if (w != s) metricObj->setNodeValue(w, metricObj->getNodeValue(w) + delta.get(w.id)); 
       }
     } delete it;
     return pluginProgress->state()!=TLP_CANCEL;

@@ -5,7 +5,7 @@
 
 #include <cassert>
 #include "tulip/GraphIterator.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/Selection.h"
 
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const SuperGraph *sG, const MutableContainer<bool>& filter):FactorIterator<node>(sG,filter) {

@@ -14,14 +14,14 @@
 
 #include <tulip/TulipPlugin.h>
 
-class PathLengthMetric:public Metric { 
+class PathLengthMetric:public MetricAlgorithm { 
 public:
   PathLengthMetric(const PropertyContext &);
   bool run();
   bool check(std::string &);
 private:
   double getNodeValue(const node n);
-  MetricProxy *leafMetric;
+  Metric* leafMetric;
 };
 
 #endif

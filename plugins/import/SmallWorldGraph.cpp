@@ -60,8 +60,8 @@ struct SmallWorldGraph:public ImportModule {
     double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
 			      / (double (nbNodes) * M_PI));
     srand(clock()); 
-    LayoutProxy *newLayout=superGraph->getLocalProperty<LayoutProxy>("viewLayout");
-    SizesProxy *newSize=superGraph->getLocalProperty<SizesProxy>("viewSize");
+    Layout *newLayout=superGraph->getLocalProperty<Layout>("viewLayout");
+    Sizes *newSize=superGraph->getLocalProperty<Sizes>("viewSize");
 
     vector<node> graph(nbNodes);
     for (int i=0; i<nbNodes;++i) {

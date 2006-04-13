@@ -9,7 +9,7 @@ using namespace std;
 void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, double height,
 			   bool direction, stdext::hash_map<node,double> &value) {
   //Affecte la valeur du noeud courant
-  layoutProxy->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
+  layoutObj->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
   size->setNodeValue(n,Size(width,height,1));
   if (superGraph->outdeg(n)==0) return;
   
@@ -46,7 +46,7 @@ void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, 
   }delete itN;
 }
 
-TreeMap::TreeMap(const PropertyContext &context):Layout(context){}
+TreeMap::TreeMap(const PropertyContext &context):LayoutAlgorithm(context){}
 
 TreeMap::~TreeMap() {}
 
@@ -66,8 +66,8 @@ double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
 }
 
 bool TreeMap::run() {
-  metric=superGraph->getProperty<MetricProxy>("viewMetric");
-  size=superGraph->getLocalProperty<SizesProxy>("viewSize");
+  metric=superGraph->getProperty<Metric>("viewMetric");
+  size=superGraph->getLocalProperty<Sizes>("viewSize");
   stdext::hash_map<node,double> value(superGraph->numberOfNodes());
 
   Iterator<node> *itN=superGraph->getNodes();

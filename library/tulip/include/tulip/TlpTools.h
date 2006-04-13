@@ -7,14 +7,14 @@
 #endif
 
 #include "SuperGraph.h"
-#include "LayoutProxy.h"
-#include "MetricProxy.h"
-#include "StringProxy.h"
-#include "SelectionProxy.h"
-#include "ColorsProxy.h"
-#include "IntProxy.h"
-#include "SizesProxy.h"
-#include "MetaGraphProxy.h"
+#include "Layout.h"
+#include "Metric.h"
+#include "String.h"
+#include "Selection.h"
+#include "Colors.h"
+#include "Int.h"
+#include "Sizes.h"
+#include "MetaGraph.h"
 #include "PluginProgress.h"
 #include "Reflect.h"
 #include "ExtendedClusterOperation.h"
@@ -81,13 +81,13 @@ namespace tlp {
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void copyToGraph( SuperGraph * outG, SuperGraph *	inG, SelectionProxy* inSelection=0, SelectionProxy* outSelection=0 );
+  TLP_SCOPE void copyToGraph( SuperGraph * outG, SuperGraph *	inG, Selection* inSelection=0, Selection* outSelection=0 );
   /**
    * Remove the selected part of the graph ioG (properties, nodes & edges).
    * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
    * \warning The selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void removeFromGraph(	SuperGraph * ioG, SelectionProxy* inSelection = 0 );
+  TLP_SCOPE void removeFromGraph(SuperGraph * ioG, Selection* inSelection = 0 );
   
 };
 

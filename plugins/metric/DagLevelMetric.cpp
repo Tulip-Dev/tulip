@@ -7,7 +7,7 @@ METRICPLUGIN(DagLevelMetric,"DagLevel","David Auber","10/03/2000","Alpha","0","1
 
 using namespace std;
 
-DagLevelMetric::DagLevelMetric(const PropertyContext &context):Metric(context) {}
+DagLevelMetric::DagLevelMetric(const PropertyContext &context):MetricAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //====================================================== 
@@ -21,7 +21,7 @@ bool DagLevelMetric::run() {
     unsigned int indegree = superGraph->indeg(itn);
     if (indegree==0) {
       fifo.push_back(itn);
-      metricProxy->setNodeValue(itn,0);
+      metricObj->setNodeValue(itn,0);
     }
     else
       totreat.set(itn.id, indegree - 1);
@@ -36,7 +36,7 @@ bool DagLevelMetric::run() {
       if (totreat.get(child.id)>0)
 	totreat.set(child.id,totreat.get(child.id)-1);
       else {
-	metricProxy->setNodeValue(child,metricProxy->getNodeValue(current)+1);
+	metricObj->setNodeValue(child,metricObj->getNodeValue(current)+1);
 	fifo.push_back(child);
       }
     } delete itN;

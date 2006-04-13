@@ -5,16 +5,16 @@
 METRICPLUGIN(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1");
 
 //==================================================================
-IdMetric::IdMetric(const PropertyContext &context):Metric(context) {
+IdMetric::IdMetric(const PropertyContext &context):MetricAlgorithm(context) {
 }
 //==================================================================
 bool IdMetric::run() {
   node n;
   forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, n.id);
+    metricObj->setNodeValue(n, n.id);
   edge e;
   forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, e.id);
+    metricObj->setEdgeValue(e, e.id);
   return true;
 }
 //=================================================================

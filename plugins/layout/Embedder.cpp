@@ -31,7 +31,7 @@
  *
  * Integration in Tulip by B.Mathieu
  */
-class Embedder : public Layout {
+class Embedder : public LayoutAlgorithm {
 public:
   Embedder(const PropertyContext &);
   ~Embedder();
@@ -46,7 +46,7 @@ LAYOUTPLUGIN(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok",
 using namespace std;
 
 
-Embedder::Embedder(const PropertyContext &context) : Layout(context) {
+Embedder::Embedder(const PropertyContext &context) : LayoutAlgorithm(context) {
 }
 
 Embedder::~Embedder() {}
@@ -104,7 +104,7 @@ bool Embedder::run() {
 
   for (hash_map<node, unsigned int>::const_iterator it = rmap.begin(); it != rmap.end(); ++it) {
     unsigned int index = it->second;
-    layoutProxy->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
+    layoutObj->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
   }
 
   delete [] dcoords[0];

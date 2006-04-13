@@ -13,10 +13,10 @@
 
 #include "TulipStatsWidget.h"
 #include <tulip/PropertyManager.h> 
-#include <tulip/MetricProxy.h> 
-#include <tulip/SizesProxy.h> 
-#include <tulip/LayoutProxy.h> 
-#include <tulip/IntProxy.h> 
+#include <tulip/Metric.h> 
+#include <tulip/Sizes.h> 
+#include <tulip/Layout.h> 
+#include <tulip/Int.h> 
 #include <tulip/Iterator.h> 
 #include <tulip/GlGraph.h> 
 #include <tulip/TlpTools.h>
@@ -404,7 +404,7 @@ namespace tlp
 
 	PProxy* proxy = supergraph->getProperty(proxyName);
 
-	if (dynamic_cast<MetricProxy*>(proxy) != 0)
+	if (dynamic_cast<Metric*>(proxy) != 0)
 	  AvaiMetricsList->insertItem(proxyName.c_str());	
       }
 
@@ -480,9 +480,9 @@ namespace tlp
 	return;
       }
   
-    MetricProxy* metric;
+    Metric* metric;
 
-    metric = supergraph->getProperty<MetricProxy>(proxyName);
+    metric = supergraph->getProperty<Metric>(proxyName);
 
     metrics.push_back(metric); 
     nMetrics++; 
@@ -678,7 +678,7 @@ namespace tlp
 
     // We build the data set :
     dataSet = new DataSet();
-    StructDef parameter = LayoutProxy::factory->getParam("Scatter Plot");
+    StructDef parameter = Layout::factory->getParam("Scatter Plot");
     parameter.buildDefaultDataSet( *dataSet, supergraph );
     
     char dtxt[20] = "discretizationStep1";
@@ -698,13 +698,13 @@ namespace tlp
     dataSet->set("nMetrics", nMetrics);
     dataSet->set("shapeConversion", ShapeConversionCB->isChecked());
 
-    LayoutProxy dest(supergraph);
+    Layout dest(supergraph);
     resultBool = supergraph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
 
     if (!resultBool) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString(("Scatter Plot::" + erreurMsg).c_str()) );
     else {
-      *supergraph->getLocalProperty<LayoutProxy>("viewLayout") = dest;
+      *supergraph->getLocalProperty<Layout>("viewLayout") = dest;
     }
 
     glGraphWidget->setDisplayEdges(false);

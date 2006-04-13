@@ -25,7 +25,7 @@
  *  (at your option) any later version.
  *
  */
-class RandomMetric:public Metric { 
+class RandomMetric:public MetricAlgorithm { 
 public:
   RandomMetric(const PropertyContext &);
   bool run();

@@ -1,5 +1,5 @@
 #include "tulip/StlFunctions.h"
-#include "tulip/MetricProxy.h"
+#include "tulip/Metric.h"
 
 bool LessByMetric::operator() (node n1,node n2) {
   return (metric->getNodeValue(n1) < metric->getNodeValue(n2));

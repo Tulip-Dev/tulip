@@ -5,7 +5,7 @@
 #include <tulip/Node.h>
 
 class SuperGraph;
-class LayoutProxy;
+class Layout;
 template<typename TYPE>
 class  MutableContainer;
 

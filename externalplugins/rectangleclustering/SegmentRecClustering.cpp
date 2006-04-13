@@ -1,7 +1,7 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/SelectionProxy.h>
+#include <tulip/Selection.h>
 #include <tulip/SuperGraph.h>
 #include <tulip/TreeTest.h>
 
@@ -18,7 +18,7 @@ SegmentRecClustering::SegmentRecClustering(ClusterContext context):Clustering(co
 SegmentRecClustering::~SegmentRecClustering()
 {}
 //================================================================================
-void SegmentRecClustering::getRecurseChild(node nNode,SelectionProxy *resultGood,SelectionProxy *resultBad) {
+void SegmentRecClustering::getRecurseChild(node nNode,Selection *resultGood,Selection *resultBad) {
   resultBad->setNodeValue(nNode,true);
   Iterator<edge> *itE=superGraph->getOutEdges(nNode);
   while (itE->hasNext()) {
@@ -30,7 +30,7 @@ void SegmentRecClustering::getRecurseChild(node nNode,SelectionProxy *resultGood
   } delete itE;
 }
 //================================================================================
-bool SegmentRecClustering::DfsClustering (node currentNode,SelectionProxy *selectGood,SelectionProxy *selectBad) {
+bool SegmentRecClustering::DfsClustering (node currentNode,Selection *selectGood,Selection *selectBad) {
   double n,c1,c2;
   double leafMax,leafMin;
   int se;
@@ -113,9 +113,9 @@ bool SegmentRecClustering::run() {
   string tmpString;
   //=================================================
   //initialisation des metrics necessaires
-  leafM = new MetricProxy(superGraph);
+  leafM = new Metric(superGraph);
   resultBool = superGraph->computeProperty("Leaf",leafM,erreurMsg);
-  nodeM = new MetricProxy(superGraph);
+  nodeM = new Metric(superGraph);
   resultBool = superGraph->computeProperty("Node",nodeM,erreurMsg);
 
   //Creation de la liste des sommets OK
@@ -130,15 +130,15 @@ bool SegmentRecClustering::run() {
 
   bool result=false;
   while (!result) {
-    SelectionProxy *selectGood= superGraph->getLocalProperty<SelectionProxy>("tmpSelectionGood");
-    SelectionProxy *selectBad = superGraph->getLocalProperty<SelectionProxy>("tmpSelectionBad");
+    Selection *selectGood= superGraph->getLocalProperty<Selection>("tmpSelectionGood");
+    Selection *selectBad = superGraph->getLocalProperty<Selection>("tmpSelectionBad");
     SuperGraph * saveSuper=superGraph;
     selectGood->setAllNodeValue(true);
     selectGood->setAllEdgeValue(true);
     selectBad->setAllNodeValue(false);
     selectBad->setAllEdgeValue(false);
     
-    segmentM = new MetricProxy(superGraph);
+    segmentM = new Metric(superGraph);
     resultBool = superGraph->computeProperty("Segment", segmentM, erreurMsg);
     
     result = DfsClustering(rootNode,selectGood,selectBad);
