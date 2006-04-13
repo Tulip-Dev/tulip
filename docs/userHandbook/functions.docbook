@@ -37,12 +37,12 @@
         </para>
     </sect1>
     <sect1 id="hierarchy"><title>Hierarchy</title>
-        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relations, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a popup menu is displayed, it allows to manage the instances of cluster : remove, clone, create subgraph.</para>
+        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relationships, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a popup menu is displayed, it allows to manage the instances of cluster : remove, clone, create subgraph.</para>
         <sect2 id="subgraph"><title>SubGraphs</title>
-         <para>A graph can have several parts of itself : this are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph have the same object, it just is a part of the graph. It is possible to add properties just for the subgraph or use the inherited properties.</para>
+         <para>A graph can have several parts of itself : these are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph have the same object, it is just a part of the graph. It is possible to add properties for the subgraph only or to use the inherited properties.</para>
         </sect2>
         <sect2 id="group"><title>Groups</title>
-            <para>Some graph can be graph of other graph. This kind of hierarchy enables to assign a graph to a node. Then, you can go inside the node to show the metagraph. </para>
+            <para>Some graph can be a subgraph of an other graph. This kind of hierarchy enables to assign a graph to a node. Then, you can go inside the node to show the metagraph.</para>
         </sect2>
     </sect1>
     <sect1 id="stats-panels"><title>Statistics Panel (available in experimental version)</title>
