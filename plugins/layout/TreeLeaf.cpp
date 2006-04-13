@@ -15,7 +15,7 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
     curPos+=2;
     Coord tmpC;
     tmpC.set(curPos,depth,0);
-    layoutObj->setNodeValue(n,tmpC);
+    layoutResult->setNodeValue(n,tmpC);
     return curPos;
   }
   Iterator<node> *itN=superGraph->getOutNodes(n);
@@ -35,7 +35,7 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
   }
   delete itN;
   result=(resultMin+resultMax)/2;
-  layoutObj->setNodeValue(n,Coord(result,depth,0));
+  layoutResult->setNodeValue(n,Coord(result,depth,0));
   return result;
 }
 

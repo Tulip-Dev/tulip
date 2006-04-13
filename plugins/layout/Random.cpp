@@ -10,12 +10,12 @@ Random::Random(const PropertyContext &context):LayoutAlgorithm(context){}
 Random::~Random() {}
 
 bool Random::run() {
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=superGraph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    layoutObj->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+    layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
   } delete itN;
   return true;
 }

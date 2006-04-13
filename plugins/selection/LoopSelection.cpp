@@ -20,10 +20,10 @@ using namespace std;
 LoopSelection::LoopSelection(const PropertyContext &context):SelectionAlgorithm(context) {}
 //============================================
 bool LoopSelection::run() {
-  selectionObj->setAllNodeValue(false);
+  selectionResult->setAllNodeValue(false);
   edge e;
   forEach(e, superGraph->getEdges())
-    selectionObj->setEdgeValue(e, 
+    selectionResult->setEdgeValue(e, 
 			       superGraph->source(e)==superGraph->target(e));
   return true;
 }

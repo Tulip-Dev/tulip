@@ -286,7 +286,7 @@ void HierarchicalGraph::computeEdgeBends(const SuperGraph *mySGraph, Layout &tmp
       edgeLine.push_back(p1); 
       edgeLine.push_back(p2);
     }
-    layoutObj->setEdgeValue(toUpdate,edgeLine);
+    layoutResult->setEdgeValue(toUpdate,edgeLine);
   }
 }
 //=======================================================================
@@ -308,7 +308,7 @@ void HierarchicalGraph::computeSelfLoops(SuperGraph *mySGraph, Layout &tmpLayout
     tmpLCoord.push_back(tmpLayout.getNodeValue(tmp.n2));
     for (it = edge3.begin(); it!=edge3.end(); ++it)
       tmpLCoord.push_back(*it);
-    layoutObj->setEdgeValue(tmp.old,tmpLCoord);
+    layoutResult->setEdgeValue(tmp.old,tmpLCoord);
     mySGraph->delAllNode(tmp.n1);
     mySGraph->delAllNode(tmp.n2);
   }  
@@ -446,7 +446,7 @@ bool HierarchicalGraph::run() {
   
   node n;
   forEach(n, superGraph->getNodes()) {
-    layoutObj->setNodeValue(n, tmpLayout.getNodeValue(n));
+    layoutResult->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
   computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
@@ -489,16 +489,16 @@ bool HierarchicalGraph::run() {
     if (nodeLevel.get(src.id)>nodeLevel.get(tgt.id)) {
       rev = -1.0;
     }
-    Coord srcPos = layoutObj->getNodeValue(src);
-    Coord tgtPos = layoutObj->getNodeValue(tgt);
-    vector<Coord> old = layoutObj->getEdgeValue(e);
+    Coord srcPos = layoutResult->getNodeValue(src);
+    Coord tgtPos = layoutResult->getNodeValue(tgt);
+    vector<Coord> old = layoutResult->getEdgeValue(e);
     if (old.size() == 0) {
       vector<Coord> pos(2);
       srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
       tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
       pos[0] = srcPos;
       pos[1] = tgtPos;
-      layoutObj->setEdgeValue(e, pos);
+      layoutResult->setEdgeValue(e, pos);
     }
     else {
       vector<Coord> pos(4);
@@ -512,16 +512,16 @@ bool HierarchicalGraph::run() {
       pos[1] = src2Pos;
       pos[2] = tgt2Pos;
       pos[3] = tgtPos;
-      layoutObj->setEdgeValue(e, pos);
+      layoutResult->setEdgeValue(e, pos);
     }
   }
   
   //post processing align nodes
   forEach(n, superGraph->getNodes()) {
-    Coord tmp = layoutObj->getNodeValue(n);
+    Coord tmp = layoutResult->getNodeValue(n);
     Size tmpS = nodeSize->getNodeValue(n);
     tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.0;
-    layoutObj->setNodeValue(n, tmp);
+    layoutResult->setNodeValue(n, tmp);
   }
 
   //rotate layout and size
@@ -530,18 +530,18 @@ bool HierarchicalGraph::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutObj->getNodeValue(n);
-      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutResult->getNodeValue(n);
+      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;
     forEach(e, superGraph->getEdges()) {
-      LineType::RealType tmp = layoutObj->getEdgeValue(e);
+      LineType::RealType tmp = layoutResult->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;
       for (it = tmp.begin(); it!= tmp.end(); ++it) {
 	tmp2.push_back(Coord(-(*it)[1], (*it)[0], (*it)[2]));
       }
-      layoutObj->setEdgeValue(e, tmp2);
+      layoutResult->setEdgeValue(e, tmp2);
     }
   }
   return true;

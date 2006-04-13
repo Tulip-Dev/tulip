@@ -85,7 +85,7 @@ bool SquarifiedTreeMap::run() {
 
   initializeMapSum(root);
   Coord initialSpaceCenterCoord = initialSpace.getCenterCoord();   
-  layoutObj->setNodeValue(root, initialSpaceCenterCoord);
+  layoutResult->setNodeValue(root, initialSpaceCenterCoord);
   Size initialSpaceSize = initialSpace.getSize();
   size->setNodeValue(root, initialSpaceSize);
   squarify(root, initialSpace, 1);
@@ -142,7 +142,7 @@ void SquarifiedTreeMap::layRow(pairIterator itFirstChildNode,
     Coord centerOfChildArea      = childArea.getCenterCoord();
         
     centerOfChildArea.setZ(depth * SEPARATION_Z);                                     
-    layoutObj->setNodeValue(itCurrentNode->first, centerOfChildArea);
+    layoutResult->setNodeValue(itCurrentNode->first, centerOfChildArea);
     Size childAreaSize = childArea.getSize();
     size->setNodeValue(itCurrentNode->first, childAreaSize);
 

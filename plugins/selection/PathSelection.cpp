@@ -27,7 +27,7 @@ PathSelection::~PathSelection() {
 void PathSelection::reconnect(node n, Int *values) {
   int value=values->getNodeValue(n);
   values->setNodeValue(n,-1);
-  selectionObj->setNodeValue(n,true);
+  selectionResult->setNodeValue(n,true);
   Iterator<node>*itN=superGraph->getInOutNodes(n);
   for (;itN->hasNext();) {
     node itn=itN->next();
@@ -83,8 +83,8 @@ bool PathSelection::run() {
     Iterator<edge> *itE=superGraph->getEdges();
     for (;itE->hasNext();) {
       edge ite=itE->next();
-      if (selectionObj->getNodeValue(superGraph->source(ite)) && selectionObj->getNodeValue(superGraph->target(ite)))
-	selectionObj->setEdgeValue(ite,true);
+      if (selectionResult->getNodeValue(superGraph->source(ite)) && selectionResult->getNodeValue(superGraph->target(ite)))
+	selectionResult->setEdgeValue(ite,true);
     } delete itE; 
   }
   return true;

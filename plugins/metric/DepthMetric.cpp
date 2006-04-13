@@ -11,19 +11,19 @@ DepthMetric::DepthMetric(const PropertyContext &context):MetricAlgorithm(context
 //=================================================
 double DepthMetric::getNodeValue(const node n) {
   if (superGraph->outdeg(n)==0) return 0.0;
-  if (metricObj->getNodeValue(n) != 0)
-    return metricObj->getNodeValue(n);
+  if (metricResult->getNodeValue(n) != 0)
+    return metricResult->getNodeValue(n);
   double max = 0;
   node _n;
   forEach(_n, superGraph->getOutNodes(n))
     max = std::max(max, getNodeValue(_n));
-  metricObj->setNodeValue(_n, max + 1);
+  metricResult->setNodeValue(_n, max + 1);
   return max + 1;
 }
 //====================================================================
 bool DepthMetric::run() {
-  metricObj->setAllEdgeValue(0);
-  metricObj->setAllNodeValue(0);
+  metricResult->setAllEdgeValue(0);
+  metricResult->setAllNodeValue(0);
   node _n;
   forEach(_n, superGraph->getNodes())
     getNodeValue(_n);

@@ -12,21 +12,21 @@ PathLengthMetric::PathLengthMetric(const PropertyContext &context):MetricAlgorit
 //=======================================
 double PathLengthMetric::getNodeValue(const node n) {
   if (superGraph->outdeg(n)==0) return 0.0;
-  if (metricObj->getNodeValue(n)!=0)
-    return metricObj->getNodeValue(n);
+  if (metricResult->getNodeValue(n)!=0)
+    return metricResult->getNodeValue(n);
   double result=0;
   node child;
   forEach(child, superGraph->getOutNodes(n)) {
-    result += metricObj->getNodeValue(child);
+    result += metricResult->getNodeValue(child);
   }
   result += leafMetric->getNodeValue(n);
-  metricObj->setNodeValue(n, result);
+  metricResult->setNodeValue(n, result);
   return result;
 }
 //=======================================
 bool PathLengthMetric::run() {
-  metricObj->setAllNodeValue(0);
-  metricObj->setAllEdgeValue(0);
+  metricResult->setAllNodeValue(0);
+  metricResult->setAllEdgeValue(0);
   leafMetric = new Metric(superGraph);
   string erreurMsg;
   if (!superGraph->computeProperty("Leaf", leafMetric, erreurMsg)) {

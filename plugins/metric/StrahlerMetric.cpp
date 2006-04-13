@@ -209,7 +209,7 @@ bool StrahlerMetric::run() {
     }
     if (allNodes) {
       if (pluginProgress->progress(i++, superGraph->numberOfNodes())!=TLP_CONTINUE) break;
-      metricObj->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      metricResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
       visited.clear();
       finished.clear();
@@ -224,7 +224,7 @@ bool StrahlerMetric::run() {
     itN = superGraph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
-      metricObj->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      metricResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
     } delete itN;
   }

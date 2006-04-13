@@ -9,7 +9,7 @@ using namespace std;
 void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, double height,
 			   bool direction, stdext::hash_map<node,double> &value) {
   //Affecte la valeur du noeud courant
-  layoutObj->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
+  layoutResult->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
   size->setNodeValue(n,Size(width,height,1));
   if (superGraph->outdeg(n)==0) return;
   

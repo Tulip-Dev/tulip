@@ -12,7 +12,7 @@ ConnectedComponent::~ConnectedComponent(){}
 void ConnectedComponent::dfs(node n, MutableContainer<bool> &flag,double value){
   if (flag.get(n.id)) return;
   flag.set(n.id, true);
-  metricObj->setNodeValue(n,value);
+  metricResult->setNodeValue(n,value);
   node itn;
   forEach(itn, superGraph->getInOutNodes(n))
     dfs(itn,flag,value);
@@ -34,10 +34,10 @@ bool ConnectedComponent::run() {
     edge ite=itE->next();
     node source= superGraph->source(ite);
     node target= superGraph->target(ite);
-    if (metricObj->getNodeValue(source)==metricObj->getNodeValue(target))
-      metricObj->setEdgeValue(ite,metricObj->getNodeValue(source));
+    if (metricResult->getNodeValue(source)==metricResult->getNodeValue(target))
+      metricResult->setEdgeValue(ite,metricResult->getNodeValue(source));
     else
-      metricObj->setEdgeValue(ite,curComponent);
+      metricResult->setEdgeValue(ite,curComponent);
   } delete itE;
 
   return true;

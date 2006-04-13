@@ -32,8 +32,8 @@ InducedSubGraphSelection::InducedSubGraphSelection(const PropertyContext &contex
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  selectionObj->setAllNodeValue(false);
-  selectionObj->setAllEdgeValue(false);
+  selectionResult->setAllNodeValue(false);
+  selectionResult->setAllEdgeValue(false);
   Selection *entrySelection = 0;
   if (dataSet!=0) 
     dataSet->get("Nodes", entrySelection);  
@@ -44,13 +44,13 @@ bool InducedSubGraphSelection::run() {
   while (itN->hasNext()) {
     node itn=itN->next() ;
     if (entrySelection->getNodeValue(itn)) {
-      selectionObj->setNodeValue(itn, true);
+      selectionResult->setNodeValue(itn, true);
       Iterator<edge> *itE = superGraph->getOutEdges(itn);
       while (itE->hasNext()) {
 	edge e = itE->next();
 	node target = superGraph->target(e);
 	if (entrySelection->getNodeValue(target))
-	  selectionObj->setEdgeValue(e, true);
+	  selectionResult->setEdgeValue(e, true);
       } delete itE;
     }
   } delete itN;

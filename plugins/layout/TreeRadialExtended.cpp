@@ -88,21 +88,21 @@ struct TreeRadialExtended:public LayoutAlgorithm {
       counto++;
       if (index<nbChild) {
 	if (leaves.empty()) {
-	  layoutObj->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	  layoutResult->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	  dfsPlacement(angles[index].n,depth+2,angles[index].start,angles[index].end);
 	  ++index;
 	}
 	else {
 	  double midle2=alphaStart+((double)counto)*deltaAlpha;
 	  if (fabs(midle-angles[index].midle)<fabs(midle2-angles[index].midle)){
-	    layoutObj->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	    layoutResult->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	    dfsPlacement(angles[index].n,depth+2,angles[index].start,angles[index].end);
 	    ++index;
 	  }
 	  else {
 	    node no=leaves.top();
 	    leaves.pop();
-	    layoutObj->setNodeValue(no,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	    layoutResult->setNodeValue(no,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	  }
 	}
       }
@@ -110,8 +110,8 @@ struct TreeRadialExtended:public LayoutAlgorithm {
 	node no=leaves.top();
 	leaves.pop();
 	Coord tmp(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0);
-	layoutObj->setNodeValue(no,tmp);
-	tmp=layoutObj->getNodeValue(no);
+	layoutResult->setNodeValue(no,tmp);
+	tmp=layoutResult->getNodeValue(no);
       }
     }
     
@@ -129,7 +129,7 @@ struct TreeRadialExtended:public LayoutAlgorithm {
       if (superGraph->indeg(startNode)==0) break;
     } delete itN;
     getLocalProperty<Sizes>(superGraph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
-    layoutObj->setAllNodeValue(Coord(0,0,0));
+    layoutResult->setAllNodeValue(Coord(0,0,0));
     dfsPlacement(startNode,0,0,6.283);
     superGraph->getPropertyManager()->delLocalProperty("Leaf");
     return true;

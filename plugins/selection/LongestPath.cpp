@@ -17,21 +17,21 @@ LongestPath::~LongestPath() {
 }
 
 void LongestPath::setNodeValue(node n) {
-    selectionObj->setNodeValue(n,true);
+    selectionResult->setNodeValue(n,true);
     Iterator<edge> *itE=superGraph->getOutEdges(n);
     for (;itE->hasNext();){
       edge e=itE->next();
       node n=superGraph->target(e);
       if (max==metricLevel->getNodeValue(n)) {
-	selectionObj->setEdgeValue(e,true);
+	selectionResult->setEdgeValue(e,true);
 	setNodeValue(n);
       }
     }delete itE;
 }
 
 bool LongestPath::run() {
-  selectionObj->setAllNodeValue(false);
-  selectionObj->setAllEdgeValue(false);
+  selectionResult->setAllNodeValue(false);
+  selectionResult->setAllEdgeValue(false);
   bool cached=false;
   bool result=false;
   string erreur;

@@ -21,10 +21,10 @@ MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):Sel
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
   SimpleTest::simpleTest(superGraph, &multipleEdges);
-  selectionObj->setAllNodeValue(false);
-  selectionObj->setAllEdgeValue(false);
+  selectionResult->setAllNodeValue(false);
+  selectionResult->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
   for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) 
-    selectionObj->setEdgeValue(*it, true);
+    selectionResult->setEdgeValue(*it, true);
   return true;
 }

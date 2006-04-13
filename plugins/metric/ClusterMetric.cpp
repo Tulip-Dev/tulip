@@ -55,8 +55,8 @@ void ClusterMetric::buildSubGraph(node n,node startNode,set<node> &selected,unsi
 double ClusterMetric::getEdgeValue(const edge e ) {
   node src = superGraph->source(e);
   node tgt = superGraph->target(e);
-  double v1 = metricObj->getNodeValue(src);
-  double v2 = metricObj->getNodeValue(tgt);
+  double v1 = metricResult->getNodeValue(src);
+  double v2 = metricResult->getNodeValue(tgt);
   if (v1*v1 + v2*v2 > 0)
     return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
   return 0.;
@@ -95,10 +95,10 @@ bool ClusterMetric::run() {
   if (dataSet!=0) dataSet->get("depth",maxDepth);
   node n;
   forEach(n, superGraph->getNodes())
-    metricObj->setNodeValue(n, getNodeValue(n));
+    metricResult->setNodeValue(n, getNodeValue(n));
   edge e;
   forEach(e, superGraph->getEdges())
-    metricObj->setEdgeValue(e, getEdgeValue(e));
+    metricResult->setEdgeValue(e, getEdgeValue(e));
   return true;
 }
 //=================================================

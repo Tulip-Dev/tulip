@@ -39,12 +39,12 @@ double SegmentMetric::getNodeValue(const node n) {
 */
 //=============================
 bool SegmentMetric::run() {
-  metricObj->setAllNodeValue(0);
-  metricObj->setAllEdgeValue(0);
+  metricResult->setAllNodeValue(0);
+  metricResult->setAllEdgeValue(0);
   node n;
   forEach(n, superGraph->getNodes()){
     int seg,segMax;
-    metricObj->setNodeValue(n, segNode(n, seg, segMax));
+    metricResult->setNodeValue(n, segNode(n, seg, segMax));
   }
   return true;
 }

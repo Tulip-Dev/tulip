@@ -21,7 +21,7 @@ bool DagLevelMetric::run() {
     unsigned int indegree = superGraph->indeg(itn);
     if (indegree==0) {
       fifo.push_back(itn);
-      metricObj->setNodeValue(itn,0);
+      metricResult->setNodeValue(itn,0);
     }
     else
       totreat.set(itn.id, indegree - 1);
@@ -36,7 +36,7 @@ bool DagLevelMetric::run() {
       if (totreat.get(child.id)>0)
 	totreat.set(child.id,totreat.get(child.id)-1);
       else {
-	metricObj->setNodeValue(child,metricObj->getNodeValue(current)+1);
+	metricResult->setNodeValue(child,metricResult->getNodeValue(current)+1);
 	fifo.push_back(child);
       }
     } delete itN;

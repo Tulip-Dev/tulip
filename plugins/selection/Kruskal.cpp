@@ -79,8 +79,8 @@ bool Kruskal::run(){
     sortedEdges.push_back(e);
   } delete itE;
   
-  selectionObj->setAllNodeValue(true);
-  selectionObj->setAllEdgeValue(false);
+  selectionResult->setAllNodeValue(true);
+  selectionResult->setAllEdgeValue(false);
 
   Metric *edgeWeight = 0;
   if ( dataSet!=0) {
@@ -97,7 +97,7 @@ bool Kruskal::run(){
       sortedEdges.pop_front();
     } while(! edgeOk(cur));
     
-    selectionObj->setEdgeValue(cur, true);
+    selectionResult->setEdgeValue(cur, true);
     makeUnion(superGraph->source(cur).id, superGraph->target(cur).id);
   }
   delete classes;

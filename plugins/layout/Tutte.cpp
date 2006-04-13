@@ -83,7 +83,7 @@ list<node> findCycle(SuperGraph *sg) {
 }
 //====================================================
 bool Tutte::run() {
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
   tmp=findCycle(superGraph);
   std::list<node>::iterator itL;
@@ -94,7 +94,7 @@ bool Tutte::run() {
   int rayon=100;
   gamma=2*M_PI/tmp.size();
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
-    layoutObj->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
+    layoutResult->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
     i++;
   }
   std::list<node> toMove;
@@ -111,16 +111,16 @@ bool Tutte::run() {
     ok=false;
     for (itn=toMove.begin();itn!=toMove.end();++itn) {
       tmpCoord.set(0,0,0);
-      baseCoord=layoutObj->getNodeValue(*itn);
+      baseCoord=layoutResult->getNodeValue(*itn);
       int i=0;
       itN=superGraph->getInOutNodes(*itn);
       while (itN->hasNext()) {
 	node itAdj=itN->next();
-	tmpCoord2=layoutObj->getNodeValue(itAdj);
+	tmpCoord2=layoutResult->getNodeValue(itAdj);
 	tmpCoord.set(tmpCoord.getX()+tmpCoord2.getX(),tmpCoord.getY()+tmpCoord2.getY(),0);
 	++i;
       } delete itN;
-      layoutObj->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
+      layoutResult->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
       if (fabs(baseCoord.getX()-tmpCoord.getX()/i)>0.02) ok=true;
       if (fabs(baseCoord.getY()-tmpCoord.getY()/i)>0.02) ok=true;
     }

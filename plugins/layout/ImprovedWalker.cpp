@@ -63,7 +63,7 @@ ImprovedWalker::~ImprovedWalker() {
 bool ImprovedWalker::run() {
   node root                 = searchRoot(superGraph);
   orientationType mask      = getMask(dataSet);
-  oriLayout                 = new OrientableLayout(layoutObj, mask);
+  oriLayout                 = new OrientableLayout(layoutResult, mask);
   Sizes* viewSize = superGraph->getLocalProperty<Sizes>("viewSize");
   oriSize                   = new OrientableSizeProxy(viewSize, mask);
   depthMax                  = initializeAllNodes();    

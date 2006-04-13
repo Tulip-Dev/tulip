@@ -115,12 +115,12 @@ public:
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*superGraph, compo);
-    metricObj->setAllEdgeValue(-1);
-    metricObj->setAllNodeValue(-1);
+    metricResult->setAllEdgeValue(-1);
+    metricResult->setAllNodeValue(-1);
     Iterator<edge> *it = superGraph->getEdges();
     while(it->hasNext()) {
       edge e = it->next();
-      metricObj->setEdgeValue(e, compo.get(e.id));
+      metricResult->setEdgeValue(e, compo.get(e.id));
     } delete it;
     return true;
   }

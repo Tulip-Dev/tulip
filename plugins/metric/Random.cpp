@@ -10,10 +10,10 @@ RandomMetric::RandomMetric(const PropertyContext &context):MetricAlgorithm(conte
 bool RandomMetric::run() {
   node n;
   forEach(n, superGraph->getNodes())
-    metricObj->setNodeValue(n, (double)rand() / double(RAND_MAX));
+    metricResult->setNodeValue(n, (double)rand() / double(RAND_MAX));
   edge e;
   forEach(e, superGraph->getEdges())
-    metricObj->setEdgeValue(e, (double)rand() / double(RAND_MAX));
+    metricResult->setEdgeValue(e, (double)rand() / double(RAND_MAX));
   return true;
 }
 //===========================================

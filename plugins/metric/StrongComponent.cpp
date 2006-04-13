@@ -37,10 +37,10 @@ int StrongComponent::attachNumerotation(node n,
       renum.pop();
       finished[tmp]=true;
       minAttach[tmp]=result;
-      metricObj->setNodeValue(tmp,curComponent);
+      metricResult->setNodeValue(tmp,curComponent);
     }
     finished[n]=true;
-    metricObj->setNodeValue(n,curComponent);
+    metricResult->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
@@ -70,10 +70,10 @@ bool StrongComponent::run() {
     edge ite=itE->next();
     node source= superGraph->source(ite);
     node target= superGraph->target(ite);
-    if (metricObj->getNodeValue(source)==metricObj->getNodeValue(target))
-      metricObj->setEdgeValue(ite,metricObj->getNodeValue(source));
+    if (metricResult->getNodeValue(source)==metricResult->getNodeValue(target))
+      metricResult->setEdgeValue(ite,metricResult->getNodeValue(source));
     else
-      metricProxy->setEdgeValue(ite,curComponent);
+      metricResult->setEdgeValue(ite,curComponent);
   } delete itE;
 
 

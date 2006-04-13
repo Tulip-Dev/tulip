@@ -215,7 +215,7 @@ bool GeneralGraph3D::run() {
   Iterator<node> *itN=superGraph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    layoutObj->setNodeValue(itn,tmpLayout->getNodeValue(itn));
+    layoutResult->setNodeValue(itn,tmpLayout->getNodeValue(itn));
   } delete itN;
   
 
@@ -241,7 +241,7 @@ bool GeneralGraph3D::run() {
       p2=tmpLayout->getNodeValue(endN);
     }
     if (p1==p2) edgeLine.push_back(p1); else {edgeLine.push_back(p1); edgeLine.push_back(p2);}
-    layoutObj->setEdgeValue(toUpdate,edgeLine);
+    layoutResult->setEdgeValue(toUpdate,edgeLine);
   }
   
   //cerr << "We compute self loops" << endl;
@@ -261,7 +261,7 @@ bool GeneralGraph3D::run() {
     tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode2));
     for (it=edge3.begin();it!=edge3.end();++it)
       tmpLCoord.push_back(*it);
-    layoutObj->setEdgeValue(tmp.oldEdge,tmpLCoord);
+    layoutResult->setEdgeValue(tmp.oldEdge,tmpLCoord);
     mySGraph->delAllNode(tmp.ghostNode1);
     mySGraph->delAllNode(tmp.ghostNode2);
   }

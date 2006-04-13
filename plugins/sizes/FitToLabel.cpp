@@ -52,7 +52,7 @@ public:
     TextRenderer textRender;
     textRender.setMode(TLP_POLYGON);
     textRender.setContext(tlp::TulipLibDir + "tlp/bitmaps/font.ttf", 12, 255, 255, 255); // valeur par défault pour l'affichage
-    sizesObj->setAllNodeValue(Size(18,18,1));
+    sizesResult->setAllNodeValue(Size(18,18,1));
     String *entryLabel = superGraph->getProperty<String>("viewLabel");
     node n;
     forEach(n, superGraph->getNodes()) {
@@ -62,10 +62,10 @@ public:
 	w_max = 256.0;
 	textRender.setString(str, VERBATIM);
 	textRender.getBoundingBox(w_max, h, w);
-	sizesObj->setNodeValue(n, Size(int(w), int(h), 1));
+	sizesResult->setNodeValue(n, Size(int(w), int(h), 1));
       }
     }
-    sizesObj->setAllEdgeValue(Size(1,1,8));
+    sizesResult->setAllEdgeValue(Size(1,1,8));
     return true;
   }
   //====================================================

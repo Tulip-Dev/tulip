@@ -95,13 +95,13 @@ public:
 	node n = it->next();
 	double nv = connectedcomponent.getNodeValue(n);
 	if (theMax < nv) theMax = nv;
-	metricObj->setNodeValue(n, nv);
+	metricResult->setNodeValue(n, nv);
       } delete it;
       theMax += 1.0;
       it = graph2->getNodes();
       while(it->hasNext()){
 	node n = it->next();
-	metricObj->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
+	metricResult->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
       }delete it;
     }
     superGraph->delAllSubGraphs(graph);

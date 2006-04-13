@@ -74,18 +74,18 @@ public:
 	else 
 	  tmpHigh.insert(n);
     }delete itN;
-    selectionObj->setAllNodeValue(false);
-    selectionObj->setAllEdgeValue(false);
+    selectionResult->setAllNodeValue(false);
+    selectionResult->setAllEdgeValue(false);
     set<node>::const_iterator iN;
     if (eq) 
       for (iN=tmpEqual.begin();iN!=tmpEqual.end();++iN)
-	selectionObj->setNodeValue(*iN,true);
+	selectionResult->setNodeValue(*iN,true);
     if (inf)
 	for (iN=tmpSmall.begin();iN!=tmpSmall.end();++iN)
-	  selectionObj->setNodeValue(*iN,true);
+	  selectionResult->setNodeValue(*iN,true);
     if (sup)
 	for (iN=tmpHigh.begin();iN!=tmpHigh.end();++iN)
-	  selectionObj->setNodeValue(*iN,true);
+	  selectionResult->setNodeValue(*iN,true);
     return true;
   }
   

@@ -44,16 +44,16 @@ bool EccentricityMetric::run() {
       forEach(n2, superGraph->getNodes()) 
 	val += double(distance.get(n2.id)) / double(superGraph->numberOfNodes()) ;
     }
-    metricObj->setNodeValue(n, val);
+    metricResult->setNodeValue(n, val);
     maxV = std::max(maxV, val);
     minV = std::min(minV, val);
   } delete itN;
   if (maxV>0) {
     node n;
     forEach(n, superGraph->getNodes()) {
-      double val = maxV - metricObj->getNodeValue(n); //shift to zero
+      double val = maxV - metricResult->getNodeValue(n); //shift to zero
       double newMax = maxV - minV;
-      metricObj->setNodeValue(n, val / newMax);
+      metricResult->setNodeValue(n, val / newMax);
     }
   }
   return pluginProgress->state()!=TLP_CANCEL;

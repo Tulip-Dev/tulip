@@ -296,7 +296,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
   tmpCoord.set(x+(*p)[n], y+maxLevelSize[level]/2., 0);
-  layoutObj->setNodeValue(n,tmpCoord);
+  layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
     forEach(ite, superGraph->getOutEdges(n)) {
@@ -325,7 +325,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 bool TreeReingoldAndTilfordExtended::run() {
   stdext::hash_map<node,double> posRelative;
 
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   sizes = superGraph->getProperty<Sizes>("viewSize");
   orientation = "horizontal";
   lengthMetric = 0;
@@ -391,21 +391,21 @@ bool TreeReingoldAndTilfordExtended::run() {
       LineType::RealType tmp;
       node src = superGraph->source(e);
       node tgt = superGraph->target(e);
-      Coord srcPos = layoutObj->getNodeValue(src);
-      Coord tgtPos = layoutObj->getNodeValue(tgt);
+      Coord srcPos = layoutResult->getNodeValue(src);
+      Coord tgtPos = layoutResult->getNodeValue(tgt);
       double y = levelCoord[levels[tgt]-1];
       tmp.push_back(Coord(srcPos[0], y, 0));
       tmp.push_back(Coord(tgtPos[0], y, 0));
-      layoutObj->setEdgeValue(e, tmp);
+      layoutResult->setEdgeValue(e, tmp);
     }
     
     if (orientation == "horizontal") {
       forEach(e, superGraph->getEdges()) {
-	LineType::RealType tmp = layoutObj->getEdgeValue(e);
+	LineType::RealType tmp = layoutResult->getEdgeValue(e);
 	LineType::RealType tmp2;
 	tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
 	tmp2.push_back(Coord(-tmp[1][1], tmp[1][0], tmp[1][2]));
-	layoutObj->setEdgeValue(e, tmp2);
+	layoutResult->setEdgeValue(e, tmp2);
       }
     }
   }
@@ -416,8 +416,8 @@ bool TreeReingoldAndTilfordExtended::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = sizes->getNodeValue(n);
       sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutObj->getNodeValue(n);
-      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutResult->getNodeValue(n);
+      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
   

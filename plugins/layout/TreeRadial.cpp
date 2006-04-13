@@ -28,7 +28,7 @@ public:
 	alphaEnd=alpha+arcCos;
       }
     } 
-    layoutObj->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
+    layoutResult->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
     if (superGraph->outdeg(n)==0) return;
     
     double sumM = leaves->getNodeValue(n);

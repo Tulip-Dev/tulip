@@ -67,8 +67,8 @@ bool ReachableSubGraphSelection::run() {
     dataSet->get("startingnodes", startNodes);
   }
 
-  selectionObj->setAllEdgeValue(false);
-  selectionObj->setAllNodeValue(false);
+  selectionResult->setAllEdgeValue(false);
+  selectionResult->setAllNodeValue(false);
 
   if ( startNodes ) {
     Iterator<node> *itN = superGraph->getNodes();
@@ -81,7 +81,7 @@ bool ReachableSubGraphSelection::run() {
 	while (itN->hasNext()) { 
 	  node itn = itN->next();
 	  if (distance.get(itn.id) <= maxDepth && distance.get(itn.id)<superGraph->numberOfNodes() ) 
-	    selectionObj->setNodeValue(itn,true);
+	    selectionResult->setNodeValue(itn,true);
 	} delete itN;
       }
     } delete itN;
@@ -91,8 +91,8 @@ bool ReachableSubGraphSelection::run() {
       edge e = itE->next();
       node source = superGraph->source(e);
       node target = superGraph->target(e);
-      if (selectionObj->getNodeValue(source) && selectionObj->getNodeValue(target))
-	selectionObj->setEdgeValue(e,true);
+      if (selectionResult->getNodeValue(source) && selectionResult->getNodeValue(target))
+	selectionResult->setEdgeValue(e,true);
     }delete itE;
   }
  

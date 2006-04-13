@@ -21,9 +21,6 @@
 class PropertyContext;
 class Layout;
 
-// for compatibility purpose
-#define layoutProxy layoutObj
-
 /**
  * \defgroup plugins
  */ 
@@ -37,7 +34,7 @@ public:
    * This layout is the one associated to the plug-ins,
    * The data should be store in it
    */
-  Layout *layoutObj;
+  Layout *layoutResult;
 protected: 
   ///
   LayoutAlgorithm (const PropertyContext &context);

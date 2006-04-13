@@ -146,12 +146,12 @@ bool ScatterPlot::run()
 	}
       
       // We have to revert Y axis to make the histogram looks good
-      layoutObj->setNodeValue(n, Coord((double)histoVal[0], (double)-histoVal[1], (double)histoVal[2]));      
+      layoutResult->setNodeValue(n, Coord((double)histoVal[0], (double)-histoVal[1], (double)histoVal[2]));      
     }
   
   delete itN;
   
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
 
   dataSet->set("histoMax", histoMax);
 

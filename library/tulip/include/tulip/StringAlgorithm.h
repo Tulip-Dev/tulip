@@ -23,9 +23,6 @@
 class PropertyContext;
 class String;
 
-// for compatibility purpose
-#define stringProxy stringObj
-
 /** \addtogroup plugins */ 
 /*@{*/
 
@@ -37,7 +34,7 @@ class TLP_SCOPE StringAlgorithm:public Property<StringType , StringType>
 public:
   /** This string is the one associated to the algorithm,
       The data should be store in it*/
-  String *stringObj;
+  String *stringResult;
 
 protected:
   ///

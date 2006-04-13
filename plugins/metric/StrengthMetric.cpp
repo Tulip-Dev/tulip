@@ -127,7 +127,7 @@ double StrengthMetric::getNodeValue(const node n ) {
   Iterator<edge> *itE=superGraph->getInOutEdges(n);
   while (itE->hasNext()) {
     edge ite=itE->next();
-    result+=metricObj->getEdgeValue(ite);
+    result+=metricResult->getEdgeValue(ite);
   } delete itE;
   return result/double(superGraph->deg(n));
 }
@@ -135,10 +135,10 @@ double StrengthMetric::getNodeValue(const node n ) {
 bool StrengthMetric::run() {
   edge e;
   forEach(e, superGraph->getEdges())
-    metricObj->setEdgeValue(e, getEdgeValue(e));
+    metricResult->setEdgeValue(e, getEdgeValue(e));
   node n;
   forEach(n, superGraph->getNodes())
-    metricObj->setNodeValue(n, getNodeValue(n));
+    metricResult->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=============================================================

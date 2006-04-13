@@ -32,8 +32,8 @@ bool SpanningTreeSelection::run()
   }
 
   
-  selectionObj->setAllEdgeValue(true);
-  selectionObj->setAllNodeValue(true);
+  selectionResult->setAllEdgeValue(true);
+  selectionResult->setAllNodeValue(true);
 
   bool ok=true;
   node tmp1;
@@ -49,7 +49,7 @@ bool SpanningTreeSelection::run()
 	  fifo.push_back(superGraph->target(adjit));
 	}
 	else
-	  selectionObj->setEdgeValue(adjit,false);
+	  selectionResult->setEdgeValue(adjit,false);
       } delete itE;
     }
     ok=false;

@@ -104,7 +104,7 @@ bool Embedder::run() {
 
   for (hash_map<node, unsigned int>::const_iterator it = rmap.begin(); it != rmap.end(); ++it) {
     unsigned int index = it->second;
-    layoutObj->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
+    layoutResult->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
   }
 
   delete [] dcoords[0];

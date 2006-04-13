@@ -9,8 +9,8 @@ ArityMetric::ArityMetric(const PropertyContext &context):MetricAlgorithm(context
 bool ArityMetric::run() {
   node n;
   forEach(n, superGraph->getNodes())
-    metricObj->setNodeValue(n, superGraph->deg(n));
-  metricObj->setAllEdgeValue(0);
+    metricResult->setNodeValue(n, superGraph->deg(n));
+  metricResult->setAllEdgeValue(0);
   return true;
 }
 //==================================================================

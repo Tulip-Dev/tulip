@@ -74,7 +74,7 @@ public:
       if (xaxis) result[0]=sizos;
       if (yaxis) result[1]=sizos;
       if (zaxis) result[2]=sizos;
-      sizesObj->setNodeValue(itn, result);
+      sizesResult->setNodeValue(itn, result);
     } delete itN;
   }
 
@@ -114,7 +114,7 @@ public:
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
-    sizesObj->setAllEdgeValue(Size(0.25,0.25,0.25));
+    sizesResult->setAllEdgeValue(Size(0.25,0.25,0.25));
     range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
     shift=entryMetric->getNodeMin(superGraph);
     computeNodeSize();

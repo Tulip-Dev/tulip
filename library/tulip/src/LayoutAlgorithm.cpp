@@ -6,7 +6,7 @@
 #include "tulip/Layout.h"
 
 LayoutAlgorithm::LayoutAlgorithm (const PropertyContext & context):Property<PointType , LineType>(context) {
-  layoutObj = (Layout *)context.propertyProxy;
+  layoutResult = (Layout *)context.propertyProxy;
 }
 
 LayoutAlgorithm::~LayoutAlgorithm() {}

@@ -114,21 +114,21 @@ bool MixedModel::run() {
     cout << "Create map" << endl; */
     if(currentGraph->numberOfNodes() == 1){
       node n = currentGraph->getOneNode();
-      layoutObj->setNodeValue(n, Coord(0,0,0));
+      layoutResult->setNodeValue(n, Coord(0,0,0));
       continue;
     }
     else if(currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3){
       Iterator<node> * itn = currentGraph->getNodes();
       node n = itn->next();
       Coord c = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n);
-      layoutObj->setNodeValue(n, Coord(0,0,0));
+      layoutResult->setNodeValue(n, Coord(0,0,0));
       node n2 = itn->next();
       Coord c2 = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n2);
-      layoutObj->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
+      layoutResult->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
       if(currentGraph->numberOfNodes() == 3){
 	node n3 = itn->next();
 	Coord c3 = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n2);
-	layoutObj->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
+	layoutResult->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
 	edge e = currentGraph->existEdge(n,n3).isValid() ? currentGraph->existEdge(n,n3) :currentGraph->existEdge(n3,n);
 	if(e.isValid()){
 	  vector<Coord> bends(2);
@@ -143,7 +143,7 @@ bool MixedModel::run() {
 	    bends.push_back(Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,max,0));
 	    bends.push_back(Coord(0,max,0));
 	  }
-	  layoutObj->setEdgeValue(e, bends);
+	  layoutResult->setEdgeValue(e, bends);
 	}
       
       }
@@ -252,17 +252,17 @@ bool MixedModel::run() {
   if(nbConnectedComponent != 1){
     err ="";
     Layout layout(superGraph);
-    tmp.set("coordinates", layoutObj);
+    tmp.set("coordinates", layoutResult);
     superGraph->computeProperty<Layout *>(string("Connected Componnent Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = superGraph->getNodes();
     while(itN->hasNext()){
       node n = itN->next();
-      layoutObj->setNodeValue(n, layout.getNodeValue(n));
+      layoutResult->setNodeValue(n, layout.getNodeValue(n));
     } delete itN;
     Iterator<edge> *itE = superGraph->getEdges();
     while(itE->hasNext()){
       edge e = itE->next();
-      layoutObj->setEdgeValue(e, layout.getEdgeValue(e));
+      layoutResult->setEdgeValue(e, layout.getEdgeValue(e));
     } delete itE;
   }
   superGraph->delAllSubGraphs(Pere);
@@ -274,18 +274,18 @@ bool MixedModel::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = size->getNodeValue(n);
       size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutObj->getNodeValue(n);
-      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutResult->getNodeValue(n);
+      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;
     forEach(e, superGraph->getEdges()) {
-      LineType::RealType tmp = layoutObj->getEdgeValue(e);
+      LineType::RealType tmp = layoutResult->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;
       for (it = tmp.begin(); it!= tmp.end(); ++it) {
 	tmp2.push_back(Coord(-(*it)[1], (*it)[0], (*it)[2]));
       }
-      layoutObj->setEdgeValue(e, tmp2);
+      layoutResult->setEdgeValue(e, tmp2);
     }
   }
   return true;
@@ -331,7 +331,7 @@ void MixedModel::placeNodesEdges(){
     Coord c = nodeSize.get(n.id);
     c[0] -= edgeNodeSpacing;
     superGraph->getProperty<Sizes>("viewSize")->setNodeValue(n,Size(c[0],c[1],0.3));
-    layoutObj->setNodeValue(n, NodeCoords[n]);
+    layoutResult->setNodeValue(n, NodeCoords[n]);
   }
   delete it;
   
@@ -373,7 +373,7 @@ void MixedModel::placeNodesEdges(){
 		    
 
       if(bends.size() != 0)
-	layoutObj->setEdgeValue(e, bends);
+	layoutResult->setEdgeValue(e, bends);
     }
     // rs == rt, même partition donc pas de points intermédiaire à calculer
     // en cas de post-processing, il faudra pe y changer
@@ -390,7 +390,7 @@ void MixedModel::placeNodesEdges(){
       Coord c_n(-maxX+(NodeCoords[n].getX()+NodeCoords[v].getX())/2, -maxY+(NodeCoords[n].getY()+NodeCoords[v].getY())/2, -z_size);
       vector<Coord> bends;
       bends.push_back(c_n);
-      layoutObj->setEdgeValue(e, bends);
+      layoutResult->setEdgeValue(e, bends);
       superGraph->getProperty<Int>("viewShape")->setEdgeValue(e,4);  
       superGraph->getProperty<Colors>("viewColor")->setEdgeValue(e,Color(218,218,218));    
     }

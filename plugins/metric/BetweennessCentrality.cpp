@@ -40,7 +40,7 @@ class BetweennessCentrality:public MetricAlgorithm {
 public:
   BetweennessCentrality(const PropertyContext &context):MetricAlgorithm(context){};
   bool run() {
-    metricObj->setAllNodeValue(0.0);
+    metricResult->setAllNodeValue(0.0);
     Iterator<node> *it = superGraph->getNodes();
     unsigned int count = 0;
     while(it->hasNext()) {
@@ -83,7 +83,7 @@ public:
 	  node v = *itn;
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
-	if (w != s) metricObj->setNodeValue(w, metricObj->getNodeValue(w) + delta.get(w.id)); 
+	if (w != s) metricResult->setNodeValue(w, metricResult->getNodeValue(w) + delta.get(w.id)); 
       }
     } delete it;
     return pluginProgress->state()!=TLP_CANCEL;

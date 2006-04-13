@@ -188,7 +188,7 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0;
   zeta = rot1*zeta[0] + rot2*zeta[1];
   
-  layoutObj->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
+  layoutResult->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
 				     enclosingCircleCenter[1]+zeta[1],
 				     0) );
   /*
@@ -208,7 +208,7 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
 	delete itE;
 	vector<Coord>tmp(1);
 	tmp[0]=Coord(bend[0],bend[1],0);
-	layoutObj->setEdgeValue(ite,tmp);
+	layoutResult->setEdgeValue(ite,tmp);
     }
   }
   /*
@@ -231,7 +231,7 @@ void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativ
   /*
    * Make the recursive call, to place the children of n.
    */
- layoutObj->setNodeValue(n,Coord(0,0,0));
+ layoutResult->setNodeValue(n,Coord(0,0,0));
   Iterator<node> *it = superGraph->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
@@ -287,7 +287,7 @@ bool BubbleTree::run() {
   if (dataSet==0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   stdext::hash_map<node,Vector<double,5> > relativePosition;
   node startNode;
   tlp::getSource(superGraph, startNode);

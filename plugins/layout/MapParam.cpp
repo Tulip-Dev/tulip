@@ -20,7 +20,7 @@ struct MapParam: public LayoutAlgorithm {
       double max;
       if (p1->getNodeMax()>p2->getNodeMax()) max=p1->getNodeMax(); else max=p2->getNodeMax();
       if (p3->getNodeMax()>max) max=p3->getNodeMax();
-      layoutObj->setNodeValue(itn,Coord(p1->getNodeValue(itn)*1024,p2->getNodeValue(itn)*1024,p3->getNodeValue(itn)*1024));
+      layoutResult->setNodeValue(itn,Coord(p1->getNodeValue(itn)*1024,p2->getNodeValue(itn)*1024,p3->getNodeValue(itn)*1024));
     }delete itN;
     return true;
   }

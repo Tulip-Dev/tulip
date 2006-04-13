@@ -11,8 +11,8 @@ TreeArityMax::TreeArityMax(const PropertyContext &context):MetricAlgorithm(conte
 //======================================================
 double TreeArityMax::getNodeValue(const node n) {
   if (superGraph->outdeg(n) == 0) return 0;
-  if (metricObj->getNodeValue(n) != 0) 
-    return metricObj->getNodeValue(n);
+  if (metricResult->getNodeValue(n) != 0) 
+    return metricResult->getNodeValue(n);
   
   double result = superGraph->outdeg(n);
   node _n;
@@ -21,16 +21,16 @@ double TreeArityMax::getNodeValue(const node n) {
       result = getNodeValue(_n);
   }
   
-  metricObj->setNodeValue(n, result);
+  metricResult->setNodeValue(n, result);
   return result;
 }
 //======================================================
 bool TreeArityMax::run() {
-  metricObj->setAllEdgeValue(0);
-  metricObj->setAllNodeValue(0);
+  metricResult->setAllEdgeValue(0);
+  metricResult->setAllNodeValue(0);
   node n;
   forEach(n, superGraph->getNodes()) {
-    metricObj->setNodeValue(n, getNodeValue(n));
+    metricResult->setNodeValue(n, getNodeValue(n));
   }
   return true;
 }

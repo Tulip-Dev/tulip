@@ -115,7 +115,7 @@ double ConeTreeExtended::treePlace3D(node n,
 //===============================================================
 void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
 			double x, double y, int level) {
-  layoutObj->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
+  layoutResult->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
   node itn;
   forEach(itn, superGraph->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
@@ -170,7 +170,7 @@ bool ConeTreeExtended::run() {
     }
   }
   //===========================================================
-  layoutObj->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   hash_map<node,double> posX;
   hash_map<node,double> posY;
   node root;
@@ -184,8 +184,8 @@ bool ConeTreeExtended::run() {
     forEach(n, superGraph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutObj->getNodeValue(n);
-      layoutObj->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutResult->getNodeValue(n);
+      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
   return true;

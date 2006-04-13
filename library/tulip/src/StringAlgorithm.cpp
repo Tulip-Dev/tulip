@@ -4,6 +4,6 @@
 #include "tulip/SuperGraph.h"
 #include "tulip/String.h"
 StringAlgorithm::StringAlgorithm (const PropertyContext & context):Property<StringType , StringType>(context) {
-  stringObj = (String *)context.propertyProxy;
+  stringResult = (String *)context.propertyProxy;
 }
 

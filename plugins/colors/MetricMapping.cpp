@@ -174,7 +174,7 @@ public:
     while(itE->hasNext()) {
       edge ite=itE->next();
       double dd=entryMetric->getEdgeValue(ite)-minE;
-      colorsObj->setEdgeValue(ite, getColor(dd,maxE-minE));
+      colorsResult->setEdgeValue(ite, getColor(dd,maxE-minE));
     } delete itE;
   }
   //=========================================================
@@ -190,7 +190,7 @@ public:
     while(itN->hasNext()) {
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
-      colorsObj->setNodeValue(itn, getColor(dd,maxN-minN));
+      colorsResult->setNodeValue(itn, getColor(dd,maxN-minN));
     } delete itN;
   }
   //=========================================================

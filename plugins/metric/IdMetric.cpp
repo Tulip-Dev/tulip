@@ -11,10 +11,10 @@ IdMetric::IdMetric(const PropertyContext &context):MetricAlgorithm(context) {
 bool IdMetric::run() {
   node n;
   forEach(n, superGraph->getNodes())
-    metricObj->setNodeValue(n, n.id);
+    metricResult->setNodeValue(n, n.id);
   edge e;
   forEach(e, superGraph->getEdges())
-    metricObj->setEdgeValue(e, e.id);
+    metricResult->setEdgeValue(e, e.id);
   return true;
 }
 //=================================================================

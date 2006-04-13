@@ -11,22 +11,22 @@ NodeMetric::NodeMetric(const PropertyContext &context):MetricAlgorithm(context)
 {}
 //====================================================================
 double NodeMetric::getNodeValue(const node n) {
-  if (metricObj->getNodeValue(n)!=0)
-    return metricObj->getNodeValue(n);
+  if (metricResult->getNodeValue(n)!=0)
+    return metricResult->getNodeValue(n);
   double result = 1;
   node _n;
   forEach(_n, superGraph->getOutNodes(n))
     result += getNodeValue(_n);
-  metricObj->setNodeValue(n, result);
+  metricResult->setNodeValue(n, result);
   return result;
 }
 //====================================================================
 bool NodeMetric::run() {
-  metricObj->setAllEdgeValue(0);
-  metricObj->setAllNodeValue(0);
+  metricResult->setAllEdgeValue(0);
+  metricResult->setAllNodeValue(0);
   node _n;
   forEach(_n, superGraph->getNodes())
-    metricObj->setNodeValue(_n,getNodeValue(_n));
+    metricResult->setNodeValue(_n,getNodeValue(_n));
   return true;
 }
 //====================================================================

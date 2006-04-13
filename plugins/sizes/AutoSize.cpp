@@ -20,10 +20,10 @@ public:
   bool run() {
     node n;
     forEach(n,superGraph->getNodes())
-      sizesObj->setNodeValue(n, getNodeValue(n));
+      sizesResult->setNodeValue(n, getNodeValue(n));
     edge e;
     forEach(e,superGraph->getEdges())
-      sizesObj->setEdgeValue(e, getEdgeValue(e));
+      sizesResult->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 
@@ -65,8 +65,8 @@ private:
   }
 
   Size getEdgeValue(const edge e) {
-    Size s = sizesObj->getNodeValue(superGraph->source(e));
-    Size t = sizesObj->getNodeValue(superGraph->target(e));
+    Size s = sizesResult->getNodeValue(superGraph->source(e));
+    Size t = sizesResult->getNodeValue(superGraph->target(e));
     Coord tmp(s.getW(),s.getH(),s.getD());
     Coord tmp2(t.getW(),t.getH(),t.getD());
     float sizes=tmp.norm();
