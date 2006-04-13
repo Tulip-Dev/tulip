@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.24 $)
+AC_REVISION($Revision: 1.25 $)
 AC_PREREQ(2.53)
-AC_INIT(tulip, 2.0.4)
+AC_INIT(tulip, 2.0.5dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)
