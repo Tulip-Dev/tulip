@@ -34,12 +34,12 @@ bool SimpleTest::isSimple(SuperGraph *graph) {
   if(instance == 0 )
     instance = new SimpleTest();
 
-  if (instance->resultsBuffer.find((unsigned int)graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned int)graph] = simpleTest(graph);
+  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
     graph->addObserver(instance);
   }
   
-  return instance->resultsBuffer[(unsigned int)graph];
+  return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
 void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
@@ -100,17 +100,17 @@ bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vect
 }
 //=================================================================
 void SimpleTest::deleteResult(SuperGraph *graph) {
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
   graph->removeObserver(this);
 }
 //=================================================================
 void SimpleTest::addEdge(SuperGraph *graph, const edge) {
-  if (resultsBuffer[(unsigned int)graph] == true)
+  if (resultsBuffer[(unsigned long)graph] == true)
     deleteResult(graph);
 }
 //=================================================================
 void SimpleTest::delEdge(SuperGraph *graph, const edge) {
-  if (resultsBuffer[(unsigned int)graph] == false)
+  if (resultsBuffer[(unsigned long)graph] == false)
     deleteResult(graph);
 }
 //=================================================================

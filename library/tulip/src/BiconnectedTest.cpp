@@ -26,7 +26,7 @@ void BiconnectedTest::makeBiconnected(SuperGraph *graph, vector<edge> &addedEdge
   //  if (BiconnectedTest::isBiconnected(graph)) return;
   if (instance==0) instance=new BiconnectedTest();
   graph->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned int)graph);  
+  instance->resultsBuffer.erase((unsigned long)graph);  
   instance->connect(graph, addedEdges);
   assert(BiconnectedTest::isBiconnected(graph));
 }
@@ -121,8 +121,8 @@ void BiconnectedTest::connect(SuperGraph *graph, vector<edge> &addedEdges) {
 }
 //=================================================================
 bool BiconnectedTest::compute(SuperGraph *graph) { 
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned int)graph];
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)graph];
 
   MutableContainer<bool> mark;
   mark.setAll(false);
@@ -139,25 +139,25 @@ bool BiconnectedTest::compute(SuperGraph *graph) {
     //  cerr << "connected test" << endl; 
     result=false;
   } //connected test
-  resultsBuffer[(unsigned int)graph]=result;
+  resultsBuffer[(unsigned long)graph]=result;
   graph->addObserver(this);
   return result;
 }
 //=================================================================
 void BiconnectedTest::addEdge(SuperGraph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned int)graph]) return;
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)graph]) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void BiconnectedTest::delEdge(SuperGraph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned int)graph]) return;
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+    if (!resultsBuffer[(unsigned long)graph]) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void BiconnectedTest::reverseEdge(SuperGraph *graph,const edge) {
@@ -165,20 +165,20 @@ void BiconnectedTest::reverseEdge(SuperGraph *graph,const edge) {
 //=================================================================
 void BiconnectedTest::addNode(SuperGraph *graph,const node) {
   //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
-  resultsBuffer[(unsigned int)graph]=false;
+  resultsBuffer[(unsigned long)graph]=false;
 }
 //=================================================================
 void BiconnectedTest::delNode(SuperGraph *graph,const node) {
   //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void BiconnectedTest::destroy(SuperGraph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << (unsigned)graph << endl;
   //  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 

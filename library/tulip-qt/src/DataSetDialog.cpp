@@ -107,7 +107,7 @@ namespace {
     while( it->hasNext() ) {
       pair<string,DataType> p;
       p = it->next();
-      cout << p.first << " : " << int( p.second.value ) << endl;
+      cout << p.first << " : " << (unsigned long)p.second.value << endl;
     } delete it;
   }
 

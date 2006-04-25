@@ -47,7 +47,7 @@ class TLP_SCOPE SimpleTest : public GraphObserver {
   void destroy(SuperGraph *);
   void deleteResult(SuperGraph *graph);
   static SimpleTest *instance;
-  stdext::hash_map<unsigned int, bool> resultsBuffer;
+  stdext::hash_map<unsigned long, bool> resultsBuffer;
 };
 /*@}*/
 #endif
