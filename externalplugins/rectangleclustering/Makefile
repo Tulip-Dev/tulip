@@ -5,7 +5,7 @@ QT_LIBS=-L/usr/lib/qt-3.3/lib -lqt-mt
 
 CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC $(QT_INCLUDES) `xml2-config --cflags`  `tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared -nostdlib `xml2-config --libs` `freetype-config --libs` `tulip-config --libs` $(QT_LIBS)
+LDFLAGS= -shared `xml2-config --libs` `freetype-config --libs` `tulip-config --libs` $(QT_LIBS)
 
 SRCS= $(ARITY_SRCS) $(ARITY_SEGMENT_SRCS) $(SEGMENT_SRCS)
 
