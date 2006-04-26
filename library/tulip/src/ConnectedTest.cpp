@@ -23,7 +23,7 @@ void ConnectedTest::makeConnected(SuperGraph *graph, vector<edge> &addedEdges) {
   if (instance==0)
     instance=new ConnectedTest();
   graph->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned int)graph);  
+  instance->resultsBuffer.erase((unsigned long)graph);  
   vector<node> toLink;  
   instance->connect(graph, toLink);
   for (unsigned int i = 1; i < toLink.size(); ++i)
@@ -43,7 +43,7 @@ unsigned int ConnectedTest::numberOfConnectedComponnents(SuperGraph *graph) {
     result =  toLink.size();
   else 
     result = 1u;
-  instance->resultsBuffer[(unsigned int)graph] = (result == 1u);
+  instance->resultsBuffer[(unsigned long)graph] = (result == 1u);
   graph->addObserver(instance);
   return result;
 }
@@ -63,22 +63,22 @@ void connectedTest(SuperGraph *graph, node n,
 ConnectedTest::ConnectedTest(){}
 //=================================================================
 bool ConnectedTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned int)graph];
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)graph];
   if (graph->numberOfNodes()==0) return true;
   MutableContainer<bool> visited;
   visited.setAll(false);
   unsigned int count = 0;
   connectedTest(graph, graph->getOneNode(), visited, count);
   bool result = (count == graph->numberOfNodes());
-  resultsBuffer[(unsigned int)graph]=result;
+  resultsBuffer[(unsigned long)graph]=result;
   graph->addObserver(this);
   return result;
 }
 //=================================================================
 void ConnectedTest::connect(SuperGraph *graph, vector<node> &toLink) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) {
-    if (resultsBuffer[(unsigned int)graph])
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
+    if (resultsBuffer[(unsigned long)graph])
       return;
   }
   if (graph->numberOfNodes()==0) return;
@@ -96,36 +96,36 @@ void ConnectedTest::connect(SuperGraph *graph, vector<node> &toLink) {
 }
 //=================================================================
 void ConnectedTest::addEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned int)graph]) return;
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)graph]) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void ConnectedTest::delEdge(SuperGraph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned int)graph]) return;
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+    if (!resultsBuffer[(unsigned long)graph]) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void ConnectedTest::reverseEdge(SuperGraph *graph,const edge) {
 }
 //=================================================================
 void ConnectedTest::addNode(SuperGraph *graph,const node) {
-  resultsBuffer[(unsigned int)graph]=false;
+  resultsBuffer[(unsigned long)graph]=false;
 }
 //=================================================================
 void ConnectedTest::delNode(SuperGraph *graph,const node) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void ConnectedTest::destroy(SuperGraph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 

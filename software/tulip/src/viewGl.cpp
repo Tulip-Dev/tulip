@@ -478,12 +478,12 @@ void viewGl::setNavigateCaption(string newCaption) {
 //**********************************************************************
 void viewGl::fileSave() {
   if (!glWidget) return;
-  if (openFiles.find((unsigned int)glWidget)==openFiles.end() || 
-      (openFiles[(unsigned int)glWidget] == "")) {
+  if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
+      (openFiles[(unsigned long)glWidget] == "")) {
     fileSaveAs();
     return;
   }
-  fileSave("tlp", openFiles[(unsigned int)glWidget]);
+  fileSave("tlp", openFiles[(unsigned long)glWidget]);
 }
 //**********************************************************************
 bool viewGl::fileSave(string plugin, string filename) {
@@ -518,7 +518,7 @@ void viewGl::fileSaveAs() {
   if (name == QString::null) return;
   string filename = name.latin1();
   if (fileSave("tlp",filename)) 
-    openFiles[(unsigned int)glWidget]=filename;
+    openFiles[(unsigned long)glWidget]=filename;
 }
 //**********************************************************************
 void viewGl::fileOpen() {
@@ -586,7 +586,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	QWidget *win = windows.at(i);
 	if (typeid(*win)==typeid(GlGraphWidget)) {
 	  GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-	  if(openFiles[((unsigned int)tmpNavigate)] == s.latin1()) {
+	  if(openFiles[((unsigned long)tmpNavigate)] == s.latin1()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -633,7 +633,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 
 
     if(noPlugin)
-      openFiles[((unsigned int)glW)]=s.latin1();
+      openFiles[((unsigned long)glW)]=s.latin1();
     QApplication::restoreOverrideCursor();
     changeSuperGraph(0);
     changeSuperGraph(newGraph);
@@ -954,7 +954,7 @@ int viewGl::closeWin() {
 	  glWidget = tmpNavigate;
 	  fileSave();
 	}
-	treatedGraph.insert((unsigned int)superGraph);
+	treatedGraph.insert((unsigned long)superGraph);
       }
     }
   } 
@@ -966,7 +966,7 @@ int viewGl::alreadyTreated(set<unsigned int> treatedGraph, SuperGraph *graph) {
   set<unsigned int>::iterator iterator = treatedGraph.begin();
   while(iterator != treatedGraph.end()) {
     unsigned int currentGraph = *iterator;
-    if(currentGraph == (unsigned int)graph)
+    if(currentGraph == (unsigned long)graph)
       return true;
     iterator++;
   }
@@ -1349,8 +1349,8 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     delete root;
   }
   
-  if (openFiles.find((unsigned int)w) != openFiles.end())   
-    openFiles.erase((unsigned int)w);
+  if (openFiles.find((unsigned long)w) != openFiles.end())   
+    openFiles.erase((unsigned long)w);
   
   if(w == glWidget) {
     glWidget->setSuperGraph(0);

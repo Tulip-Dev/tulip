@@ -43,7 +43,7 @@ private:
   void destroy(SuperGraph *);
   TreeTest();
   static TreeTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
 #endif
