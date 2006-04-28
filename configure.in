@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.24.2.2 $)
+AC_REVISION($Revision: 1.24.2.3 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -202,14 +202,14 @@ CPPFLAGS="${CPP_FLAGS} -I/usr/X11R6/include"
 LDFLAGS="${LD_FLAGS} -L/usr/X11R6/lib"
 fi
 
-if test ${CONFIGURE_tlprender} != ""
+if test "${CONFIGURE_tlprender}" != ""
  then
   AC_CHECK_HEADERS(GL/osmesa.h, [],
                    [CONFIGURE_tlprender=""
                     AC_MSG_WARN([OSMesa header not found, will not build tlprender])
                    ])
 fi
-if test ${CONFIGURE_tlprender} != ""
+if test "${CONFIGURE_tlprender}" != ""
 then
   AC_CHECK_LIB(OSMesa, OSMesaCreateContext,
                [AC_DEFINE(HAVE_LIBOSMESA, 1, [libOSMesa present])],
