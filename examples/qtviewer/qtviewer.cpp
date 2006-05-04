@@ -13,9 +13,9 @@ using namespace std;
 void importGraph(const string &filename, GlGraph *render) {
   DataSet dataSet;
   dataSet.set("filename", filename);
-  SuperGraph *newSuperGraph=tlp::importGraph("tlp", dataSet, NULL);
-  if (newSuperGraph!=0) {
-    render->setSuperGraph(newSuperGraph);
+  Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
+  if (newGraph!=0) {
+    render->setGraph(newGraph);
     
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))

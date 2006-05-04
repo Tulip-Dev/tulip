@@ -15,7 +15,7 @@
 
 #include "TulipStatsData.h"
 #include <tulip/GlGraphWidget.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/GlADComposite.h>
 #include <tulip/StatisticsNodeModule.h>
 #include <tulip/Color.h>
@@ -41,7 +41,7 @@
 #define GLAD_GRID              6
 
 
-class Metric;
+class DoubleProperty;
 class GlGraphWidget;
 class ClusterTree;
 
@@ -60,7 +60,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
 
  protected:
   GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
-  SuperGraph *supergraph; /**< A reference to the supergraph we are considering */
+  Graph *graph; /**< A reference to the graph we are considering */
   StatisticResults *statsResults; /**< A structure to store the results of the calculus */
   ClusterTree *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
@@ -79,7 +79,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
 
   int histoMax; /**< The value of the biggest column in the case of an histogram. Used to fit correctly the augmented displays */
 
-  std::vector<Metric*> metrics; /**< The metrics used for the computation */
+  std::vector<DoubleProperty*> metrics; /**< The metrics used for the computation */
   int nMetrics; /**< The number of metrics used. \f$ 1 \leq nMetrics \leq \f$ 3 */
 
   float discretizationStep[3]; /**< The discretization step used to regroup informations */
@@ -155,9 +155,9 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void setClusterTreeWidget(ClusterTree *);
 
   /**
-   * Accessor in reading to the supergraph.
+   * Accessor in reading to the graph.
    */
-  SuperGraph* getSuperGraph();
+  Graph* getGraph();
 
   /**
    * Accessor in reading to the glGraphWidget.
@@ -170,9 +170,9 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void setGlGraphWidget(GlGraphWidget *);
 
   /**
-   * Overriden function used to notify when the supergraph is going to be destroyed :
+   * Overriden function used to notify when the graph is going to be destroyed :
    */
-  void destroy(SuperGraph *);
+  void destroy(Graph *);
 
  private slots:
 

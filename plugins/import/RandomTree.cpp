@@ -37,15 +37,15 @@ struct RandomTree:public ImportModule {
   }
 
   bool buildNode(node n,int sizeM) {
-    if (superGraph->numberOfNodes()>sizeM+2) return false;
+    if (graph->numberOfNodes()>sizeM+2) return false;
     bool result=true;
     int randNumber=rand();
     if (randNumber>RAND_MAX/2) {
       node n1,n2;
-      n1=superGraph->addNode();
-      n2=superGraph->addNode();
-      superGraph->addEdge(n,n1);
-      superGraph->addEdge(n,n2);
+      n1=graph->addNode();
+      n2=graph->addNode();
+      graph->addEdge(n,n1);
+      graph->addEdge(n,n2);
       result= result && buildNode(n1,sizeM);
       result= result && buildNode(n2,sizeM);
     }
@@ -66,10 +66,10 @@ struct RandomTree:public ImportModule {
     while (ok) {
       if (pluginProgress->progress(i%100,100)!=TLP_CONTINUE) break;
       i++;
-      superGraph->clear();
-      node n=superGraph->addNode();
+      graph->clear();
+      node n=graph->addNode();
       ok = !buildNode(n,maxSize);
-      if (superGraph->numberOfNodes()<minSize-2) ok=true;
+      if (graph->numberOfNodes()<minSize-2) ok=true;
     }
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }

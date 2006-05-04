@@ -26,8 +26,8 @@
 #include <tulip/MutableContainer.h>
 
 
-class SuperGraph;
-class Selection;
+class Graph;
+class BooleanProperty;
 
 namespace tlp {
   struct SelfLoops {
@@ -39,28 +39,28 @@ namespace tlp {
   };
 }
 
-/** \addtogroup graph_test */ 
+/** \addtogroup sg_test */ 
 /*@{*/
-/// Class for testing if the graph is acyclic
+/// Class for testing if the sg is acyclic
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
-  /** return true if the graph is acyclic else false,
+  /** return true if the sg is acyclic else false,
    *  result is cached (ie. the second call is done in O(1) time)
    */
-  static bool isAcyclic(const SuperGraph *graph);
-  static void makeAcyclic(SuperGraph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
-  static bool acyclicTest(const SuperGraph *, std::vector<edge> *obstructionEdges = 0);
+  static bool isAcyclic(const Graph *sg);
+  static void makeAcyclic(Graph* sg, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+  static bool acyclicTest(const Graph *, std::vector<edge> *obstructionEdges = 0);
 
 private:
 
-  static bool dfsAcyclicTest(const SuperGraph *graph, const node n, 
+  static bool dfsAcyclicTest(const Graph *sg, const node n, 
 			     MutableContainer<bool> &visited, 
 			     MutableContainer<bool> &finished,
 			     std::vector<edge> *obstructionEdges = 0);
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void destroy(SuperGraph *);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void destroy(Graph *);
   AcyclicTest();
   static AcyclicTest * instance;
   stdext::hash_map<unsigned int,bool> resultsBuffer;

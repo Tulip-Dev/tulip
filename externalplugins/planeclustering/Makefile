@@ -2,9 +2,9 @@ SHELL=bash
 
 TARGET=libplaneclustering.so
 SRCS=  PlaneClustering.cpp
-CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `xml2-config --cflags`  `tulip-config --cxxflags`
+CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `xml2-config --cflags`  `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared `xml2-config --libs` `freetype-config --libs` `tulip-config --libs`  
+LDFLAGS= -shared `xml2-config --libs` `freetype-config --libs` `../../tulip-config --libs`  
 
 OBJS=$(SRCS:.cpp=.o)
 

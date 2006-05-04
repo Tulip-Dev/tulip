@@ -24,8 +24,8 @@ void buildGraph(SuperGraph *graph) {
 }
 //==========================================================
 void SelectionProxyTest::setUp() {
-  graph    = tlp::newSuperGraph();
-  selection = graph->getProperty<Selection>("Select Test");
+  graph    = tlp::newGraph();
+  selection = graph->getProperty<BooleanProperty>("Select Test");
   buildGraph(graph);
 }
 //==========================================================

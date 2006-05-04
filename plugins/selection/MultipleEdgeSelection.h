@@ -16,7 +16,7 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class MultipleEdgeSelection:public SelectionAlgorithm { 
+class MultipleEdgeSelection:public BooleanAlgorithm { 
 public:
   MultipleEdgeSelection(const PropertyContext &);
   bool run();

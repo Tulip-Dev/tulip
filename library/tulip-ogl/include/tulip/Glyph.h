@@ -13,18 +13,17 @@
 #include <tulip/Color.h>
 #include <tulip/GlGraph.h>
 
-class SuperGraph;
+class Graph;
 struct node;
-//class GlGraph;
 
 class GlyphContext
 {
 public:
-  SuperGraph **superGraph;
+  Graph **graph;
   GlGraph *glGraph;
   int LOF, LOD;
   ///
-  GlyphContext(SuperGraph **s=NULL, GlGraph *glGraph=NULL, int LOF=5, int LOD=5): superGraph(s), glGraph(glGraph),
+  GlyphContext(Graph **s=NULL, GlGraph *glGraph=NULL, int LOF=5, int LOD=5): graph(s), glGraph(glGraph),
 									     LOF(LOF), LOD(LOD){}
   ///
   ~GlyphContext(){};
@@ -33,7 +32,7 @@ public:
 
 class TLP_GL_SCOPE Glyph : public WithParameter {
 protected:
-  SuperGraph **superGraph;
+  Graph **graph;
   GlGraph *glGraph;
   int LOF; //Level Of Filter
   int LOD; //Level Of Detail

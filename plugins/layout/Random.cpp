@@ -11,8 +11,8 @@ Random::~Random() {}
 
 bool Random::run() {
   layoutResult->setAllEdgeValue(vector<Coord>(0));
-  superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
-  Iterator<node> *itN=superGraph->getNodes();
+  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));

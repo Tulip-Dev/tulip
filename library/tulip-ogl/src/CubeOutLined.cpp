@@ -1,11 +1,11 @@
 #include <GL/gl.h>
 #include <cmath>
 
-#include <tulip/Colors.h>
-#include <tulip/String.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/StringProperty.h>
 
 #include <tulip/Glyph.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
 
 using namespace std;
@@ -61,7 +61,7 @@ void CubeOutLined::draw(node n) {
       setMaterial(Color(255,255,255,0));
   }
   glCallList(LList);
-  Colors *border = glGraph->getSuperGraph()->getProperty<Colors>("viewBorderColor");
+  ColorProperty *border = glGraph->getGraph()->getProperty<ColorProperty>("viewBorderColor");
   glGraph->desactivateTexture();
   Color c = border->getNodeValue(n);
   //  setMaterial(c);

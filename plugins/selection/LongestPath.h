@@ -7,7 +7,7 @@
 ///
 using namespace std;
 ///
-class LongestPath:public SelectionAlgorithm { 
+class LongestPath:public BooleanAlgorithm { 
 public:
   LongestPath(const PropertyContext &);
   ~LongestPath();

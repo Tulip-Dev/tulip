@@ -29,7 +29,7 @@ public:
 
 private:
   unsigned int i;
-  SuperGraphMap* mgraph;
+  SuperGraphMap* msg;
 }; 
 
 //============================================================

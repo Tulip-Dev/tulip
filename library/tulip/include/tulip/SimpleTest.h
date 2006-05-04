@@ -28,24 +28,24 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
-class SuperGraph;
+class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup sg_test */ 
 /*@{*/
 /**
- * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)
+ * class for testing if the sg is simple (ie no self loops and  no multiple or parallel edges)
  */
 class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
-  static bool isSimple(SuperGraph *graph);
-  static void makeSimple(SuperGraph* graph, std::vector<edge> &removed);
-  static bool simpleTest(SuperGraph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
+  static bool isSimple(Graph *sg);
+  static void makeSimple(Graph* sg, std::vector<edge> &removed);
+  static bool simpleTest(Graph *sg, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
  private:
   SimpleTest();
-  void addEdge(SuperGraph *, const edge);
-  void delEdge(SuperGraph *, const edge);
-  void destroy(SuperGraph *);
-  void deleteResult(SuperGraph *graph);
+  void addEdge(Graph *, const edge);
+  void delEdge(Graph *, const edge);
+  void destroy(Graph *);
+  void deleteResult(Graph *sg);
   static SimpleTest *instance;
   stdext::hash_map<unsigned long, bool> resultsBuffer;
 };

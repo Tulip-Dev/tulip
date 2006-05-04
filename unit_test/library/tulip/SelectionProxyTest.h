@@ -2,7 +2,7 @@
 #define TLPSELECTIONPROXYTEST
 
 #include <string>
-#include <tulip/Selection.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/SuperGraph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>

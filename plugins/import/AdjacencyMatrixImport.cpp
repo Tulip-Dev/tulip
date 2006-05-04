@@ -93,8 +93,8 @@ public:
     dataSet->get("filename",name2);
     std::ifstream in(name2.c_str());
     unsigned int curLine=0;
-    Metric *metric = superGraph->getProperty<Metric>("viewMetric");
-    String *stringP = superGraph->getProperty<String>("viewLabel");
+    DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
+    StringProperty *stringP = graph->getProperty<StringProperty>("viewLabel");
     while (!in.eof()) {
       char line[MAX_SIZE];
       in.getline(line,MAX_SIZE);
@@ -117,7 +117,7 @@ public:
 	  }
 
 	  if ( curNode >= nodes.size() || curLine >= nodes.size()) {
-	    nodes.push_back(superGraph->addNode());
+	    nodes.push_back(graph->addNode());
 	  }
 
 	  if (curNode == curLine) {  
@@ -134,15 +134,15 @@ public:
 	    edge e;
 	    switch (type) {
 	    case TLP_DOUBLE:
-	      e=superGraph->addEdge(nodes[curLine],nodes[curNode]);
+	      e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      metric->setEdgeValue(e,valDouble);
 	      break;
 	    case TLP_STRING:
-	      e=superGraph->addEdge(nodes[curLine],nodes[curNode]);
+	      e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      stringP->setEdgeValue(e,valString);
 	      break;
 	    case TLP_NOVAL:
-	      e=superGraph->addEdge(nodes[curLine],nodes[curNode]);
+	      e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      break;
 	    }
 	  }

@@ -11,15 +11,15 @@
 #include <set>
 #include <list>
 
-class SuperGraph;
-class Int;
+class Graph;
+class IntegerProperty;
 
 namespace tlp {
 
-  TLP_SCOPE node makeSimpleSource(SuperGraph* superGraph);
+  TLP_SCOPE node makeSimpleSource(Graph* graph);
 
-  TLP_SCOPE void makeProperDag(SuperGraph* superGraph,std::list<node> &addedNodes, 
-		     stdext::hash_map<edge,edge> &replacedEdges,Int* edgeLength);
+  TLP_SCOPE void makeProperDag(Graph* graph,std::list<node> &addedNodes, 
+		     stdext::hash_map<edge,edge> &replacedEdges,IntegerProperty* edgeLength);
 
 };
 #endif

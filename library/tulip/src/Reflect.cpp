@@ -4,15 +4,15 @@
 
 #include <string>
 #include "tulip/Types.h"
-#include "tulip/PropertyProxy.h"
+#include "tulip/AbstractProperty.h"
 #include "tulip/Color.h"
-#include "tulip/Metric.h"
-#include "tulip/String.h"
-#include "tulip/Selection.h"
-#include "tulip/Layout.h"
-#include "tulip/Int.h"
-#include "tulip/Colors.h"
-#include "tulip/Sizes.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/StringProperty.h"
+#include "tulip/BooleanProperty.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/IntegerProperty.h"
+#include "tulip/ColorProperty.h"
+#include "tulip/SizeProperty.h"
 
 #include "tulip/Reflect.h"
 
@@ -56,7 +56,7 @@ string StructDef::getDefValue( string str ) const {
 #undef TN
 #define	TN( T )	typeid(T).name()
 
-void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
+void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
   Iterator< pair<string,string> > * defIt;
   defIt = getField();
 
@@ -83,7 +83,7 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
     // int
     else if( tname == TN(int) ) {
       int v;
-      bool res = IntType::fromString( v, defv );
+      bool res = IntegerType::fromString( v, defv );
       assert( res );
       if( res )
 	ioDataSet.set( name, v );
@@ -131,32 +131,32 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
 	ioDataSet.set( name, v );
     }
     // Selection
-    else if( inG && tname == TN(Selection) ) {
-      ioDataSet.set( name, inG->getProperty<Selection>(defv) );
+    else if( inG && tname == TN(BooleanProperty) ) {
+      ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
     }
     // Metric
-    else if( inG && tname == TN(Metric) ) {
-      ioDataSet.set( name, inG->getProperty<Metric>(defv) );
+    else if( inG && tname == TN(DoubleProperty) ) {
+      ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
     }
     // Layout
-    else if( inG && tname == TN(Layout) ) {
-      ioDataSet.set( name, inG->getProperty<Layout>(defv) );
+    else if( inG && tname == TN(LayoutProperty) ) {
+      ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
     }
     // String
-    else if( inG && tname == TN(String) ) {
-      ioDataSet.set( name, inG->getProperty<String>(defv) );
+    else if( inG && tname == TN(StringProperty) ) {
+      ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
     }
-    // Int
-    else if( inG && tname == TN(Int) ) {
-      ioDataSet.set( name, inG->getProperty<Int>(defv) );
+    // Integer
+    else if( inG && tname == TN(IntegerProperty) ) {
+      ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
     }
-    // Sizes
-    else if( inG && tname == TN(Sizes) ) {
-      ioDataSet.set( name, inG->getProperty<Sizes>(defv) );
+    // SizeProperty
+    else if( inG && tname == TN(SizeProperty) ) {
+      ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
     }
     // Colors
-    else if( inG && tname == TN(Colors) ) {
-      ioDataSet.set( name, inG->getProperty<Colors>(defv) );
+    else if( inG && tname == TN(ColorProperty) ) {
+      ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
     }
   }
   delete defIt;

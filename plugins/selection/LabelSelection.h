@@ -4,7 +4,7 @@
 #include <string>
 #include <tulip/TulipPlugin.h>
 
-class LabelSelection:public SelectionAlgorithm { 
+class LabelSelection:public BooleanAlgorithm { 
 public:
   LabelSelection(const PropertyContext &);
   ~LabelSelection();

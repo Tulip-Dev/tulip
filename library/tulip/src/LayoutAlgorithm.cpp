@@ -1,12 +1,11 @@
 //-*-c++-*-
 
-#include "tulip/Layout.h"
-#include "tulip/SuperGraph.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/Graph.h"
 #include "tulip/PluginContext.h"
-#include "tulip/Layout.h"
 
-LayoutAlgorithm::LayoutAlgorithm (const PropertyContext & context):Property<PointType , LineType>(context) {
-  layoutResult = (Layout *)context.propertyProxy;
+LayoutAlgorithm::LayoutAlgorithm (const PropertyContext & context):PropertyAlgorithm<PointType , LineType>(context) {
+  layoutResult = (LayoutProperty *)context.propertyProxy;
 }
 
 LayoutAlgorithm::~LayoutAlgorithm() {}

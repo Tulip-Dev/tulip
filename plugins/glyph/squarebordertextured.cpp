@@ -73,27 +73,27 @@ protected:
         TreeCache():texObj(0){
         }
     };
-    typedef stdext::hash_map<SuperGraph*, TreeCache> mapGraphCache_t;
+    typedef stdext::hash_map<Graph*, TreeCache> mapGraphCache_t;
     mapGraphCache_t mapTree;
 
     inline node findRoot(node n);
     
-    bool  initializeNewGraph(SuperGraph* graph, node n);
-    void  unInitializeNewGraph(SuperGraph* graph);
+  bool  initializeNewGraph(Graph*, node);
+    void  unInitializeNewGraph(Graph*);
     void  drawSquare(node n, float borderSize);
     int   attributeNodeLevel(node n, int depth, mapNodeLevel_t& mapnodelevel);
     void  setTulipGLState(node n);
     float calcBorderSum(int level);
-    void  generateTexture(SuperGraph* graph);
+    void  generateTexture(Graph*);
 
-    virtual void addNode(SuperGraph*, const node);
-    virtual void addEdge(SuperGraph*, const edge);
-    virtual void delNode(SuperGraph*, const node);
-    virtual void delEdge(SuperGraph*, const edge);
-    virtual void destroy(SuperGraph*);
+    virtual void addNode(Graph*, const node);
+    virtual void addEdge(Graph*, const edge);
+    virtual void delNode(Graph*, const node);
+    virtual void delEdge(Graph*, const edge);
+    virtual void destroy(Graph*);
 
 private:
-    SuperGraph* tree;
+    Graph* tree;
 };
 
 //====================================================================
@@ -117,16 +117,16 @@ string SquareBorderTex::getName() {
 }
 
 //====================================================================
-bool SquareBorderTex::initializeNewGraph(SuperGraph* graph, node n) {
-    TreeCache& treec = mapTree[graph];          
-    treec.isTree     = TreeTest::isTree(graph);
+bool SquareBorderTex::initializeNewGraph(Graph* sg, node n) {
+    TreeCache& treec = mapTree[sg];          
+    treec.isTree     = TreeTest::isTree(sg);
      
-    graph->addObserver(this);
+    sg->addObserver(this);
     
     if (treec.isTree) {
         treec.root     = findRoot(n);
         treec.maxDepth = attributeNodeLevel(treec.root, 1, treec.mapNodeLevel);   
-        generateTexture(graph);
+        generateTexture(sg);
     }
     else {
         treec.root = NOTATREE;
@@ -136,8 +136,8 @@ bool SquareBorderTex::initializeNewGraph(SuperGraph* graph, node n) {
 }
 
 //===================================================================
-void SquareBorderTex::unInitializeNewGraph(SuperGraph* graph) {
-    mapGraphCache_t::iterator itMap = mapTree.find(graph);
+void SquareBorderTex::unInitializeNewGraph(Graph* sg) {
+    mapGraphCache_t::iterator itMap = mapTree.find(sg);
     
     if (itMap != mapTree.end()) {
         if (glIsTexture(itMap->second.texObj))
@@ -145,7 +145,7 @@ void SquareBorderTex::unInitializeNewGraph(SuperGraph* graph) {
 
         mapTree.erase(itMap);
     }
-    graph->removeObserver(this);
+    sg->removeObserver(this);
 }
 
 //====================================================================
@@ -158,8 +158,8 @@ float SquareBorderTex::calcBorderSum(int level) {
     return sumBorder;
 }
 //====================================================================
-void SquareBorderTex::generateTexture(SuperGraph* graph) {
-    TreeCache& treec = mapTree[graph];
+void SquareBorderTex::generateTexture(Graph* sg) {
+    TreeCache& treec = mapTree[sg];
 
     const float MAXCOLOR = 255.f;
 
@@ -198,7 +198,7 @@ void SquareBorderTex::generateTexture(SuperGraph* graph) {
 
 //====================================================================
 void SquareBorderTex::draw(node n) {
-    tree = (*superGraph);
+    tree = (*graph);
 
     if (mapTree.find(tree) == mapTree.end())
         initializeNewGraph(tree, n);    
@@ -206,7 +206,7 @@ void SquareBorderTex::draw(node n) {
 
     if (treecache.isTree) {
         Size size = 
-                tree->getLocalProperty<Sizes>("viewSize")->getNodeValue(n);
+                tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
         const float borderSize = evaluateBorderSize(treecache.mapNodeLevel[n],
                                                     RectangleArea(size));                                                    
         drawSquare(n, borderSize);
@@ -243,7 +243,7 @@ void SquareBorderTex::setTulipGLState(node n) {
 
 //====================================================================
 void SquareBorderTex::drawSquare(node n, float borderSizePixel) {
-    Size size = tree->getLocalProperty<Sizes>("viewSize")->getNodeValue(n);
+    Size size = tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
 
     float widthBorderRatio = borderSizePixel / size.getW();
     const float posX       = min(widthBorderRatio, 0.45f);  
@@ -350,28 +350,28 @@ int SquareBorderTex::attributeNodeLevel(node n, int depth,
 }
 
 //====================================================================
-void SquareBorderTex::addNode(SuperGraph* graph, const node) {
-    unInitializeNewGraph(graph);
+void SquareBorderTex::addNode(Graph* sg, const node) {
+    unInitializeNewGraph(sg);
 }
 
 //====================================================================
-void SquareBorderTex::addEdge(SuperGraph* graph, const edge) {
-    unInitializeNewGraph(graph);
+void SquareBorderTex::addEdge(Graph* sg, const edge) {
+    unInitializeNewGraph(sg);
 }
 
 //====================================================================  
-void SquareBorderTex::delNode(SuperGraph* graph, const node) {
-    unInitializeNewGraph(graph);
+void SquareBorderTex::delNode(Graph* sg, const node) {
+    unInitializeNewGraph(sg);
 }
 
 //====================================================================
-void SquareBorderTex::delEdge(SuperGraph* graph, const edge) {
-    unInitializeNewGraph(graph);
+void SquareBorderTex::delEdge(Graph* sg, const edge) {
+    unInitializeNewGraph(sg);
 }
 
 //====================================================================
-void SquareBorderTex::destroy(SuperGraph* graph) {
-    unInitializeNewGraph(graph);
+void SquareBorderTex::destroy(Graph* sg) {
+    unInitializeNewGraph(sg);
 }
 
 

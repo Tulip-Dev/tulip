@@ -1,7 +1,7 @@
 //-*-c++-*-
 
 #include "tulip/Types.h"
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/StringCollection.h"
 
 using namespace std;
@@ -41,20 +41,20 @@ namespace {
 }
 
 //
-// MetaGraphType
+// GraphType
 
-MetaGraphType::RealType MetaGraphType::undefineValue() {
+GraphType::RealType GraphType::undefineValue() {
   return 0;
 }
 
-MetaGraphType::RealType MetaGraphType::defaultValue() {
+GraphType::RealType GraphType::defaultValue() {
 	return 0;
 }
 
-void MetaGraphType::del(MetaGraphType::RealType element) {
+void GraphType::del(GraphType::RealType element) {
 }
 
-string MetaGraphType::toString( const RealType & v ) {
+string GraphType::toString( const RealType & v ) {
   // NULL ?
   if( !v )
     return string();
@@ -63,7 +63,7 @@ string MetaGraphType::toString( const RealType & v ) {
   return oss.str();
 }
 
-bool MetaGraphType::fromString( RealType & v, const string & s ) {
+bool GraphType::fromString( RealType & v, const string & s ) {
   v = 0;
   return false;
 }
@@ -96,25 +96,25 @@ bool DoubleType::fromString( RealType & v, const string & s ) {
 }
 
 //
-// IntType
-int IntType::undefineValue() {
+// IntegerType
+int IntegerType::undefineValue() {
 	return INT_MIN;
 }
 
-int IntType::defaultValue() {
+int IntegerType::defaultValue() {
   return 0;
 }
 
-void IntType::del(IntType::RealType element) {
+void IntegerType::del(IntegerType::RealType element) {
 }
 
-string IntType::toString( const RealType & v ) {
+string IntegerType::toString( const RealType & v ) {
   ostringstream oss;
   oss << v;
   return oss.str();
 }
 
-bool IntType::fromString( RealType & v, const string & s ) {
+bool IntegerType::fromString( RealType & v, const string & s ) {
   istringstream iss;
   iss.str( s );
   return (iss >> v);

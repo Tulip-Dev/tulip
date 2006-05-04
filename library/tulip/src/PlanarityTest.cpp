@@ -1,4 +1,4 @@
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarityTestImpl.h>
 #include <tulip/BiconnectedTest.h>
@@ -14,37 +14,37 @@ PlanarityTest * PlanarityTest::instance=0;
 PlanarityTest * PlanarityTest::instance=0;
 #endif
 //=================================================================
-bool PlanarityTest::isPlanar(SuperGraph *graph){
+bool PlanarityTest::isPlanar(Graph *sg){
   if(instance==0)
     instance = new PlanarityTest();
-  return instance->compute(graph);
+  return instance->compute(sg);
 }
 //=================================================================
-bool PlanarityTest::planarEmbedding(SuperGraph *graph) {
-  if (!PlanarityTest::isPlanar(graph))
+bool PlanarityTest::planarEmbedding(Graph *sg) {
+  if (!PlanarityTest::isPlanar(sg))
     return false;
   vector<edge> addedEdges;
-  BiconnectedTest::makeBiconnected(graph, addedEdges);
-  PlanarityTestImpl planarTest(graph);
+  BiconnectedTest::makeBiconnected(sg, addedEdges);
+  PlanarityTestImpl planarTest(sg);
   planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
-    graph->delAllEdge(*it);
+    sg->delAllEdge(*it);
   return true;
 }
 //=================================================================
-list<edge> PlanarityTest::getObstructionsEdges(SuperGraph *graph) {
-  if (PlanarityTest::isPlanar(graph))
+list<edge> PlanarityTest::getObstructionsEdges(Graph *sg) {
+  if (PlanarityTest::isPlanar(sg))
     return list<edge>();
   vector<edge> addedEdges;
-  BiconnectedTest::makeBiconnected(graph, addedEdges);
-  PlanarityTestImpl planarTest(graph);
+  BiconnectedTest::makeBiconnected(sg, addedEdges);
+  PlanarityTestImpl planarTest(sg);
   planarTest.isPlanar(true);
   list<edge> tmpList = planarTest.getObstructions();
   {
     vector<edge>::const_iterator it = addedEdges.begin();
     for (; it!=addedEdges.end(); ++it)
-      graph->delAllEdge(*it);
+      sg->delAllEdge(*it);
   }
   set<edge> tmpAdded(addedEdges.begin(), addedEdges.end());
   list<edge> result;
@@ -55,49 +55,49 @@ list<edge> PlanarityTest::getObstructionsEdges(SuperGraph *graph) {
   return result;
 }
 //=================================================================
-bool PlanarityTest::compute(SuperGraph *graph) { 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned long)graph];
+bool PlanarityTest::compute(Graph *sg) { 
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)sg];
   vector<edge> addedEdges;
-  BiconnectedTest::makeBiconnected(graph, addedEdges);
-  PlanarityTestImpl planarTest(graph);
-  resultsBuffer[(unsigned long)graph] = planarTest.isPlanar(true);
+  BiconnectedTest::makeBiconnected(sg, addedEdges);
+  PlanarityTestImpl planarTest(sg);
+  resultsBuffer[(unsigned long)sg] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
-    graph->delAllEdge(*it);
-  graph->addObserver(this);
-  return resultsBuffer[(unsigned long)graph];
+    sg->delAllEdge(*it);
+  sg->addObserver(this);
+  return resultsBuffer[(unsigned long)sg];
 }
 //=================================================================
-void PlanarityTest::addEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void PlanarityTest::addEdge(Graph *sg,const edge) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (!resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void PlanarityTest::delEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void PlanarityTest::delEdge(Graph *sg,const edge) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void PlanarityTest::reverseEdge(SuperGraph *graph,const edge) {
+void PlanarityTest::reverseEdge(Graph *sg,const edge) {
 }
 //=================================================================
-void PlanarityTest::addNode(SuperGraph *graph,const node) {
+void PlanarityTest::addNode(Graph *sg,const node) {
 }
 //=================================================================
-void PlanarityTest::delNode(SuperGraph *graph,const node) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void PlanarityTest::delNode(Graph *sg,const node) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void PlanarityTest::destroy(SuperGraph *graph) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void PlanarityTest::destroy(Graph *sg) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================

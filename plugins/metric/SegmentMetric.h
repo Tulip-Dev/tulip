@@ -8,7 +8,7 @@
 // Autheur Auber David
 // Date 01/12/1999
 ///
-class SegmentMetric:public MetricAlgorithm { 
+class SegmentMetric:public DoubleAlgorithm { 
 public:
   SegmentMetric(const PropertyContext &);
   bool run();

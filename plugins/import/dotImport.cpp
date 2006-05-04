@@ -68,7 +68,7 @@ public:
 
     // Create & Init YY global data 
     DOT_YY _dotyy;
-    _dotyy.sg = superGraph;
+    _dotyy.sg = graph;
 
     dotyy = &_dotyy;
     yyrestart( fd );

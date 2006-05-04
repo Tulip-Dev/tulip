@@ -15,7 +15,7 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class LoopSelection:public SelectionAlgorithm { 
+class LoopSelection:public BooleanAlgorithm { 
 public:
   LoopSelection(const PropertyContext &);
   bool run();

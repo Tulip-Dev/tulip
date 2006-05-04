@@ -13,7 +13,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( MetaGraphProxyTest );
 
 //==========================================================
 void MetaGraphProxyTest::setUp() {
-  graph    = tlp::newSuperGraph();
+  graph    = tlp::newGraph();
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -33,7 +33,7 @@ void MetaGraphProxyTest::testDestroyGraph() {
   SuperGraph * g1 = tlp::newCloneSubGraph(graph, "G1");
   SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
   SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraph * proxy1 = meta1->getLocalProperty<MetaGraph>("viewMetaGraph");
+  MetaGraph * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   MetaGraph proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
@@ -59,7 +59,7 @@ void MetaGraphProxyTest::testSetGet() {
   SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
   SuperGraph * g3 = tlp::newCloneSubGraph(graph, "G3");
   SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraph * proxy1 = meta1->getLocalProperty<MetaGraph>("viewMetaGraph");
+  MetaGraph * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
   MetaGraph proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();

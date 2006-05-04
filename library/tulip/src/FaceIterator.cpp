@@ -20,19 +20,19 @@ using namespace std;
 //============================================================
 FaceIterator::FaceIterator(SuperGraphMap* m){
   assert(m);
-  mgraph = m;   i = 0;
+  msg = m;   i = 0;
   m->update();
 }
 
 //============================================================
 Face FaceIterator::next(){
-  Face tmp = mgraph->faces[i++];
+  Face tmp = msg->faces[i++];
   return tmp;
 }
 
 //============================================================
 bool FaceIterator::hasNext(){
-  if(i == mgraph->faces.size())
+  if(i == msg->faces.size())
     return false;
   else return true;
 }

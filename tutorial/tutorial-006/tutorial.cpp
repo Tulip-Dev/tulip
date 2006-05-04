@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/TlpTools.h>
 
 /**
@@ -10,7 +10,7 @@
  */
 
 using namespace std;
-void buildGraph(SuperGraph *graph) {
+void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -21,7 +21,7 @@ void buildGraph(SuperGraph *graph) {
   graph->addEdge(n3,n1);
 }
 
-void displayAdjacency(node n, SuperGraph *graph) {
+void displayAdjacency(node n, Graph *graph) {
   Iterator<edge>*ite=graph->getInOutEdges(n);
   while(ite->hasNext())
     cout << ite->next().id << " ";
@@ -31,7 +31,7 @@ void displayAdjacency(node n, SuperGraph *graph) {
 
 int main() {
   //create an empty graph
-  SuperGraph *graph=tlp::newSuperGraph();
+  Graph *graph=tlp::newGraph();
 
   //build the graph
   node n1=graph->addNode();

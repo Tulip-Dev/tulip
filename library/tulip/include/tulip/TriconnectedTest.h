@@ -23,24 +23,23 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
-class SuperGraph;
-class Selection;
+class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup sg_test */ 
 /*@{*/
-/// class for testing if a graph is triconnected
+/// class for testing if a sg is triconnected
 class TLP_SCOPE TriconnectedTest : private GraphObserver {
 public:
-  static bool isTriconnected(SuperGraph *graph);
+  static bool isTriconnected(Graph *sg);
 
 private:
-  bool compute(SuperGraph *);
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void addNode(SuperGraph *,const node);
-  void delNode(SuperGraph *,const node);
-  void destroy(SuperGraph *);
+  bool compute(Graph *);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void addNode(Graph *,const node);
+  void delNode(Graph *,const node);
+  void destroy(Graph *);
   TriconnectedTest();
   static TriconnectedTest * instance;
   stdext::hash_map<unsigned long,bool> resultsBuffer;

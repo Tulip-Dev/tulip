@@ -23,49 +23,49 @@ nobase_include_HEADERS = \
 	tulip/ConnectedTest.h \
 	tulip/BiconnectedTest.h \
 	tulip/TriconnectedTest.h \
-	tulip/cxx/PropertyProxy.cxx \
+	tulip/cxx/AbstractProperty.cxx \
 	tulip/cxx/TemplateFactory.cxx \
 	tulip/cxx/Reflect.cxx \
-	tulip/cxx/SuperGraph.cxx \
-	tulip/MetaGraph.h \
-	tulip/MetaGraphAlgorithm.h \
-	tulip/Layout.h \
+	tulip/cxx/Graph.cxx \
+	tulip/GraphProperty.h \
+	tulip/GraphAlgorithm.h \
+	tulip/LayoutProperty.h \
 	tulip/Plugin.h \
-	tulip/SelectionAlgorithm.h  \
-	tulip/SuperGraphAbstract.h   \
+	tulip/BooleanAlgorithm.h  \
+	tulip/GraphAbstract.h   \
 	tulip/Clustering.h \
 	tulip/LayoutAlgorithm.h \
 	tulip/PluginLoader.h \
 	tulip/Size.h \
 	tulip/Node.h \
 	tulip/Edge.h \
-	tulip/SuperGraph.h \
+	tulip/Graph.h \
 	tulip/Types.h \
 	tulip/Color.h \
 	tulip/IdManager.h \
 	tulip/MethodFactory.h \
 	tulip/PluginLoaderTxt.h \
-	tulip/Sizes.h \
-	tulip/Colors.h \
+	tulip/SizeProperty.h \
+	tulip/ColorProperty.h \
 	tulip/ImportModule.h \
-	tulip/Metric.h \
+	tulip/DoubleProperty.h \
 	tulip/Property.h \
-	tulip/SizesAlgorithm.h \
-	tulip/ColorsAlgorithm.h \
-	tulip/Int.h \
-	tulip/MetricAlgorithm.h \
+	tulip/SizeAlgorithm.h \
+	tulip/ColorAlgorithm.h \
+	tulip/IntegerProperty.h \
+	tulip/DoubleAlgorithm.h \
 	tulip/PropertyManager.h \
-	tulip/String.h \
+	tulip/StringProperty.h \
 	tulip/TemplateFactory.h \
 	tulip/Coord.h \
-	tulip/IntAlgorithm.h \
+	tulip/IntegerAlgorithm.h \
 	tulip/Observable.h \
 	tulip/ObservableGraph.h \
-	tulip/PropertyProxy.h \
+	tulip/AbstractProperty.h \
 	tulip/StringAlgorithm.h \
 	tulip/TlpTools.h \
 	tulip/PluginContext.h \
-	tulip/Selection.h \
+	tulip/BooleanProperty.h \
 	tulip/TulipPlugin.h \
 	tulip/ExportModule.h \
 	tulip/Reflect.h \
@@ -90,9 +90,9 @@ nobase_include_HEADERS = \
 	tulip/Face.h \
 	tulip/FaceIterator.h \
 	tulip/PlanarityTest.h \
-	tulip/SuperGraphDeco.h \
+	tulip/GraphDecorator.h \
 	tulip/SuperGraphMap.h \
-	tulip/cxx/SuperGraphDeco.cxx \
+	tulip/cxx/GraphDecorator.cxx \
 	tulip/Plane.h \
 	tulip/Polynome.h \
 	tulip/ForEach.h \
@@ -106,5 +106,5 @@ noinst_HEADERS = tulip/cxx/BmdLink.cxx \
 	tulip/PlanarityTestImpl.h \
 	tulip/BmdLink.h \
 	tulip/BmdList.h \
-	tulip/SuperGraphView.h \
-	tulip/SuperGraphImpl.h
+	tulip/GraphView.h \
+	tulip/GraphImpl.h

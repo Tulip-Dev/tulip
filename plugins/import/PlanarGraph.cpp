@@ -34,11 +34,11 @@ struct PlanarGraph:public ImportModule {
     }
     if (nbNodes < 3) nbNodes = 3;
     srand(clock()); 
-    Layout *newLayout = superGraph->getLocalProperty<Layout>("viewLayout");
-    Sizes  *newSize   = superGraph->getLocalProperty<Sizes>("viewSize");
+    LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
+    SizeProperty  *newSize   = graph->getLocalProperty<SizeProperty>("viewSize");
     newSize->setAllNodeValue(Size(1.0,1.0,1.0));
 
-    vector<node> graph(nbNodes);
+    vector<node> sg(nbNodes);
     hash_map < unsigned int, hash_map<unsigned int, bool> > matrix;
     
     vector<Coord> coords(nbNodes);
@@ -57,15 +57,15 @@ struct PlanarGraph:public ImportModule {
 	
       } while ( !ok);
       matrix[x][y]=true;
-      graph[i] = superGraph->addNode();
+      sg[i] = graph->addNode();
       coords[i] = Coord(x + 1, y + 1, 0);
-      newLayout->setNodeValue(graph[i], coords[i]);
+      newLayout->setNodeValue(sg[i], coords[i]);
     }
     vector<pair<unsigned int, unsigned int> > edges;
     tlp::delaunayTriangulation(coords, edges);
     vector<pair<unsigned int, unsigned int> >::const_iterator it;
     for (it = edges.begin(); it != edges.end(); ++it) {
-      superGraph->addEdge(graph[it->first], graph[it->second]);
+      graph->addEdge(sg[it->first], sg[it->second]);
     }
     return  pluginProgress->state()!=TLP_CANCEL;
   }

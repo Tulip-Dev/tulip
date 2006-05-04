@@ -39,13 +39,13 @@ public:
   void reset();
 
 private:
-  Metric *arityM;
-  Metric *leafM;
-  Metric *nodeM;
+  DoubleProperty *arityM;
+  DoubleProperty *leafM;
+  DoubleProperty *nodeM;
   int mResult;
   double inter;
-  bool DfsClustering (node ,Selection *,Selection *);
-  void getRecurseChild(node,Selection *,Selection *);
+  bool DfsClustering (node ,BooleanProperty *,BooleanProperty *);
+  void getRecurseChild(node,BooleanProperty *,BooleanProperty *);
 };
 
 #endif

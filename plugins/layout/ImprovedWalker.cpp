@@ -23,14 +23,14 @@ const node  ImprovedWalker::BADNODE;
 //====================================================================
 class ImprovedWalkerIterator : public Iterator<node> {
 private:
-  SuperGraph* graph;
+  Graph* graph;
   node        n;
   int         currentChild; 
   int         endChild;
   bool        isReversed;
 
 public:
-  ImprovedWalkerIterator(SuperGraph* graphParam, node nParam,
+  ImprovedWalkerIterator(Graph* graphParam, node nParam,
 			 int currentChildParam, int endChildParam) :
     graph(graphParam), n(nParam), currentChild(currentChildParam),
     endChild(endChildParam) { 
@@ -61,10 +61,10 @@ ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
-  node root                 = searchRoot(superGraph);
+  node root                 = searchRoot(graph);
   orientationType mask      = getMask(dataSet);
   oriLayout                 = new OrientableLayout(layoutResult, mask);
-  Sizes* viewSize = superGraph->getLocalProperty<Sizes>("viewSize");
+  SizeProperty* viewSize = graph->getLocalProperty<SizeProperty>("viewSize");
   oriSize                   = new OrientableSizeProxy(viewSize, mask);
   depthMax                  = initializeAllNodes();    
   order[root]               = 1;
@@ -83,7 +83,7 @@ bool ImprovedWalker::run() {
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, oriSize, superGraph,INTER_NODE_DISTANCE_Y);
+    setOrthogonalEdge(oriLayout, oriSize, graph,INTER_NODE_DISTANCE_Y);
     
   delete oriLayout;
   delete oriSize;
@@ -91,7 +91,7 @@ bool ImprovedWalker::run() {
 }
 //====================================================================
 bool ImprovedWalker::check(string& errorMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     errorMsg = "";
     return true;
   }
@@ -106,7 +106,7 @@ void ImprovedWalker::reset() {
 
 //====================================================================
 int ImprovedWalker::initializeAllNodes() {    
-  node root = searchRoot(superGraph);
+  node root = searchRoot(graph);
   return initializeNode(root, 0);
 }
 //====================================================================
@@ -130,7 +130,7 @@ int ImprovedWalker::initializeNode(node n, unsigned int depth) {
 
   int maxDepth           = 0;
   int count              = 0;
-  Iterator<node>* itNode = superGraph->getOutNodes(n);
+  Iterator<node>* itNode = graph->getOutNodes(n);
   while (itNode->hasNext()) {
     node currentNode   = itNode->next();
     order[currentNode] = ++count;
@@ -148,24 +148,24 @@ int ImprovedWalker::countSibling(node from, node to) {
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::iterateSibling(node from, node to) {
   int modifier = (order[from] > order[to] ? 1 : -1 );
-  node father  = superGraph->getInNode(from,1);
+  node father  = graph->getInNode(from,1);
   
-  return new ImprovedWalkerIterator(superGraph,father, order[from],
+  return new ImprovedWalkerIterator(graph,father, order[from],
 				    order[to]+modifier);
 }
 //====================================================================
 Iterator<node>* ImprovedWalker::getChildren(node n) {    
-    return superGraph->getOutNodes(n);
+    return graph->getOutNodes(n);
 }
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::getReversedChildren(node n) {
-  int nbChildren = superGraph->outdeg(n);
-  return new ImprovedWalkerIterator(superGraph, n, nbChildren, 0);
+  int nbChildren = graph->outdeg(n);
+  return new ImprovedWalkerIterator(graph, n, nbChildren, 0);
 }
 
 //==================================================================== 
 void ImprovedWalker::firstWalk(node v) {       
-  if (isLeaf(superGraph, v)) {   
+  if (isLeaf(graph, v)) {   
     prelimX[v]        = 0;
     node vleftSibling = leftSibling(v);
     if (vleftSibling  != BADNODE)

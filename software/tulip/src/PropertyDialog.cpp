@@ -36,15 +36,15 @@
 #include "tulip/Qt3ForTulip.h"
 #endif
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/PropertyManager.h>
-#include <tulip/Metric.h>
-#include <tulip/String.h>
-#include <tulip/Selection.h>
-#include <tulip/Layout.h>
-#include <tulip/Int.h>
-#include <tulip/Colors.h>
-#include <tulip/Sizes.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/GlGraph.h>
 #include <tulip/PropertyWidgets.h>
 #include <tulip/ClusterTree.h>
@@ -70,7 +70,7 @@ PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt
 #endif
   _filterSelection=false;
   glWidget=0;
-  supergraph=0;
+  graph=0;
 #if (QT_REL == 3)
   connect(localProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
   connect(inheritedProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
@@ -96,15 +96,15 @@ void PropertyDialog::changePropertyName(QListViewItem *item) {
 
   tableNodes->selectNodeOrEdge(true);
   tableEdges->selectNodeOrEdge(false);
-  tableNodes->changeProperty(supergraph,item->text(0).ascii());
-  tableEdges->changeProperty(supergraph,item->text(0).ascii());
+  tableNodes->changeProperty(graph,item->text(0).ascii());
+  tableEdges->changeProperty(graph,item->text(0).ascii());
 
-  PProxy *tmpProxy=supergraph->getProperty(item->text(0).ascii());
+  PropertyInterface *tmpProxy=graph->getProperty(item->text(0).ascii());
   editedProperty=tmpProxy;
   editedPropertyName=item->text(0).ascii();
   propertyName->setText(item->text(0));
   
-  if (supergraph->existLocalProperty(item->text(0).ascii()))
+  if (graph->existLocalProperty(item->text(0).ascii()))
     inheritedProperties->clearSelection();
   else
     localProperties->clearSelection();
@@ -137,16 +137,16 @@ void PropertyDialog::setAllValue() {
   setAllButton->setDown(false);
 }
 //=================================================
-void PropertyDialog::setSuperGraph(SuperGraph *sg) {
-  supergraph=sg;
+void PropertyDialog::setGraph(Graph *sg) {
+  graph=sg;
   editedProperty=0;
 
   localProperties->clear();
   inheritedProperties->clear();
   propertyName->setText(QString("Select a Property"));
   //Build the property list
-  tableNodes->setSuperGraph(sg);
-  tableEdges->setSuperGraph(sg);
+  tableNodes->setGraph(sg);
+  tableEdges->setGraph(sg);
   tableEdges->filterSelection(_filterSelection);
   tableNodes->filterSelection(_filterSelection);
   if (sg==0) return;
@@ -166,7 +166,7 @@ void PropertyDialog::setSuperGraph(SuperGraph *sg) {
 }
 //=================================================
 void PropertyDialog::newProperty() {
-  if (!supergraph) return;
+  if (!graph) return;
   QStringList lst;
   lst << "Selection" << "Metric" << "Layout" << "String" << "Integer" << "Sizes" << "Color";
   bool ok = FALSE;
@@ -175,14 +175,14 @@ void PropertyDialog::newProperty() {
       QString text = QInputDialog::getText("Property name", "Please enter the property name", QLineEdit::Normal, QString::null, &ok, this );
       if (ok) {
 	string erreurMsg;
-	if (strcmp(res.ascii(),"Selection")==0) supergraph->getLocalProperty<Selection>(text.ascii());
-	if (strcmp(res.ascii(),"Metric")==0) supergraph->getLocalProperty<Metric>(text.ascii());
-	if (strcmp(res.ascii(),"Layout")==0) supergraph->getLocalProperty<Layout>(text.ascii());
-	if (strcmp(res.ascii(),"String")==0) supergraph->getLocalProperty<String>(text.ascii());
-	if (strcmp(res.ascii(),"Integer")==0) supergraph->getLocalProperty<Int>(text.ascii());
-	if (strcmp(res.ascii(),"Sizes")==0) supergraph->getLocalProperty<Sizes>(text.ascii());
-	if (strcmp(res.ascii(),"Color")==0) supergraph->getLocalProperty<Colors>(text.ascii());
-	setSuperGraph(supergraph);
+	if (strcmp(res.ascii(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.ascii());
+	if (strcmp(res.ascii(),"String")==0) graph->getLocalProperty<StringProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Sizes")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
+	setGraph(graph);
       }
   }
 }
@@ -192,9 +192,8 @@ void PropertyDialog::toStringProperty() {
   string name=editedPropertyName;
   if (name == "viewLabel") return;
   Observable::holdObservers();
-  SuperGraph *graph=supergraph;
-  PProxy *newLabels=graph->getProperty(name);
-  String *labels=graph->getProperty<String>("viewLabel");
+  PropertyInterface *newLabels=graph->getProperty(name);
+  StringProperty *labels=graph->getProperty<StringProperty>("viewLabel");
   if (tabWidget->currentPageIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
@@ -216,9 +215,9 @@ void PropertyDialog::toStringProperty() {
 //=================================================
 void PropertyDialog::removeProperty() {
   if (editedProperty==0) return;
-  if(supergraph->existLocalProperty(editedPropertyName)) {
-    supergraph->delLocalProperty(editedPropertyName);
-    setSuperGraph(supergraph);
+  if(graph->existLocalProperty(editedPropertyName)) {
+    graph->delLocalProperty(editedPropertyName);
+    setGraph(graph);
     editedProperty=0;
   }
   else
@@ -228,33 +227,33 @@ void PropertyDialog::removeProperty() {
 }
 //=================================================
 void PropertyDialog::cloneProperty() {
-  if (!supergraph) return;
+  if (!graph) return;
   bool ok=false;
   QString text = QInputDialog::getText( "Property name" ,  "Please enter the property name" , QLineEdit::Normal,QString::null, &ok, this );
   if (ok) {
     Observable::holdObservers();
-    if (supergraph->existProperty(text.ascii())) {
-      if (typeid(*supergraph->getProperty(text.ascii()))!=typeid(*editedProperty)) {
+    if (graph->existProperty(text.ascii())) {
+      if (typeid(*graph->getProperty(text.ascii()))!=typeid(*editedProperty)) {
 	QMessageBox::critical( 0, "Tulip Warning" ,"Property are not of the same type");
 	return;
       }
     }
     string erreurMsg;
-    if (typeid((*editedProperty)) == typeid(Metric))
-      {*supergraph->getLocalProperty<Metric>(text.ascii())=*((Metric*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(Layout))
-      {*supergraph->getLocalProperty<Layout>(text.ascii())=*((Layout*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(String))
-      {*supergraph->getLocalProperty<String>(text.ascii())=*((String*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(Selection))
-      {*supergraph->getLocalProperty<Selection>(text.ascii())=*((Selection*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(Int))
-      {*supergraph->getLocalProperty<Int>(text.ascii())=*((Int*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(Colors))
-      {*supergraph->getLocalProperty<Colors>(text.ascii())=*((Colors*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(Sizes))
-      {*supergraph->getLocalProperty<Sizes>(text.ascii())=*((Sizes*)editedProperty);}
-    setSuperGraph(supergraph);
+    if (typeid((*editedProperty)) == typeid(DoubleProperty))
+      {*graph->getLocalProperty<DoubleProperty>(text.ascii())=*((DoubleProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(LayoutProperty))
+      {*graph->getLocalProperty<LayoutProperty>(text.ascii())=*((LayoutProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(StringProperty))
+      {*graph->getLocalProperty<StringProperty>(text.ascii())=*((StringProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(BooleanProperty))
+      {*graph->getLocalProperty<BooleanProperty>(text.ascii())=*((BooleanProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(IntegerProperty))
+      {*graph->getLocalProperty<IntegerProperty>(text.ascii())=*((IntegerProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(ColorProperty))
+      {*graph->getLocalProperty<ColorProperty>(text.ascii())=*((ColorProperty*)editedProperty);}
+    if (typeid((*editedProperty)) == typeid(SizeProperty))
+      {*graph->getLocalProperty<SizeProperty>(text.ascii())=*((SizeProperty*)editedProperty);}
+    setGraph(graph);
     Observable::unholdObservers();
   }
 }

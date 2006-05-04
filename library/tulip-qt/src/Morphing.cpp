@@ -1,8 +1,8 @@
 #include <tulip/GlGraphWidget.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/Layout.h>
-#include <tulip/Sizes.h>
-#include <tulip/Colors.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/Morphing.h>
 
 #define	MORPHING_MIN_DURATION	1.0f		// s
@@ -20,8 +20,8 @@ void InterpolateColors( Color & outc, const Color & c0, const Color & c1, float 
 }
 
 
-bool AssociateEdges( GraphState  * g0, Layout * e0, GraphState  * g1,
-		     Layout * e1, edge e ) {
+bool AssociateEdges( GraphState  * g0, LayoutProperty * e0, GraphState  * g1,
+		     LayoutProperty * e1, edge e ) {
   if( e0->getEdgeStringValue(e) == e1->getEdgeStringValue(e) )
     return false;
   
@@ -63,7 +63,7 @@ Morphing::start( GlGraphWidget * outGlgw, GraphState * inG0, GraphState * inG1) 
   assert( inG0 );
   assert( inG1 );
   glWidget = outGlgw;
-  SuperGraph * g = outGlgw->getSuperGraph();
+  Graph * g = outGlgw->getGraph();
   assert( g );
   stop();
   
@@ -81,8 +81,8 @@ Morphing::start( GlGraphWidget * outGlgw, GraphState * inG0, GraphState * inG1) 
   
   // Edges association
   if( g0->layout && g1->layout ) {
-    e0 = new Layout( g0->g );
-    e1 = new Layout( g1->g );
+    e0 = new LayoutProperty( g0->g );
+    e1 = new LayoutProperty( g1->g );
     *e0 = *(g0->layout);
     *e1 = *(g1->layout);
     e0->setAllNodeValue(Coord(0,0,0));
@@ -131,7 +131,7 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   frameCpt++;
   
   assert( outGlgw );
-  SuperGraph * g = outGlgw->getSuperGraph();
+  Graph * g = outGlgw->getGraph();
   assert( g );
   //assert( glg );
   
@@ -139,16 +139,16 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   if (inT > 1.0f) inT = 1.0f; //inT = inT <? 1.0f;
   t = inT;
   
-  Layout * outLayout = g->getProperty<Layout>( "viewLayout" );
-  Sizes  * outSize   = g->getProperty<Sizes>( "viewSize" );
-  Colors * outColor  = g->getProperty<Colors>( "viewColor" );
+  LayoutProperty * outLayout = g->getProperty<LayoutProperty>( "viewLayout" );
+  SizeProperty  * outSize   = g->getProperty<SizeProperty>( "viewSize" );
+  ColorProperty * outColor  = g->getProperty<ColorProperty>( "viewColor" );
   
   // Nodes interpolation
   Iterator<node> * nodeIt = g->getNodes();
   while( nodeIt->hasNext() ) {
     node n = nodeIt->next();
     
-    // Layout
+    // LayoutProperty
     if( g0->layout && g1->layout ) {
       Coord c0, c1;
       c0 = g0->layout->getNodeValue( n );
@@ -183,7 +183,7 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   while( edgeIt->hasNext() ) {
     edge e = edgeIt->next();
     
-    // Layout
+    // LayoutProperty
     if( g0->layout && g1->layout ) {
       if( inT <= 0.0f ) {
 	edgeControls = g0->layout->getEdgeValue( e );

@@ -3,7 +3,7 @@
 #include <iomanip>
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/PropertyProxy.h>
+#include <tulip/AbstractProperty.h>
 
 using namespace std;
 
@@ -49,17 +49,17 @@ struct GML:public ExportModule {
     return newStr;
   }
 
-  bool exportGraph(ostream &os,SuperGraph *currentGraph) {
+  bool exportGraph(ostream &os,Graph *currentGraph) {
 
-    os << "graph [" << endl;
+    os << "sg [" << endl;
     os << "directed 1" << endl;
     os << "version 2" << endl;
 
-    Layout *layout = currentGraph->getProperty<Layout>("viewLayout");
-    String *label = currentGraph->getProperty<String>("viewLabel");
-    //    Int *shape =getProperty<Int>(currentGraph->getPropertyManager(),"viewShape");
-    Colors *colors = currentGraph->getProperty<Colors>("viewColor");    
-    Sizes  *sizes = currentGraph->getProperty<Sizes>("viewSize");  
+    LayoutProperty *layout = currentGraph->getProperty<LayoutProperty>("viewLayout");
+    StringProperty *label = currentGraph->getProperty<StringProperty>("viewLabel");
+    //    IntegerProperty *shape =getProperty<IntegerProperty>(currentGraph->getPropertyManager(),"viewShape");
+    ColorProperty *colors = currentGraph->getProperty<ColorProperty>("viewColor");    
+    SizeProperty  *sizes = currentGraph->getProperty<SizeProperty>("viewSize");  
     //Save Nodes
     Iterator<node> *itN=currentGraph->getNodes();
     if (itN->hasNext())  {
@@ -69,7 +69,7 @@ struct GML:public ExportModule {
 	os << "node [" << endl;
 	os << "id "<< itn.id << endl ;
 	os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
-	os << "graphics [" << endl;
+	os << "sgics [" << endl;
 	printCoord(os,layout->getNodeValue(itn));
 	printSize(os,sizes->getNodeValue(itn));
 	os << "type \"rectangle\"" << endl;
@@ -95,11 +95,11 @@ struct GML:public ExportModule {
       {
 	edge ite=itE->next();
 	os << "edge [" << endl;
-	os << "source " << superGraph->source(ite).id << endl; 
-	os << "target " << superGraph->target(ite).id << endl;
+	os << "source " << graph->source(ite).id << endl; 
+	os << "target " << graph->target(ite).id << endl;
 	os << "id " << ite.id << endl;
 	os << "label \"" << label->getEdgeValue(ite) << "\"" << endl;
-	os << "graphics [" << endl;
+	os << "sgics [" << endl;
 	os << "type \"line\"" << endl;
 	os << "arrow \"last\"" << endl;
 	os << "width 0.1" << endl;
@@ -109,7 +109,7 @@ struct GML:public ExportModule {
 	lcoord=layout->getEdgeValue(ite);
 	if (!lcoord.empty())
 	  {
-	    node itn=superGraph->source(ite);
+	    node itn=graph->source(ite);
 	    printPoint(os,layout->getNodeValue(itn));
 	  }
 	for (it=lcoord.begin();it!=lcoord.end();++it)
@@ -118,7 +118,7 @@ struct GML:public ExportModule {
 	  }
 	if (!lcoord.empty())
 	  {
-	    node itn=superGraph->target(ite);
+	    node itn=graph->target(ite);
 	    printPoint(os,layout->getNodeValue(itn));
 	  }
 	os << "]" << endl;

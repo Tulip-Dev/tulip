@@ -2,7 +2,7 @@
 #define ORIENTABLESIZEPROXY_H
 
 #include <vector>
-#include <tulip/Sizes.h>
+#include <tulip/SizeProperty.h>
 #include "OrientableConstants.h"
 #include "OrientableSize.h"
 
@@ -13,7 +13,7 @@ public:
     typedef OrientableSize PointType;
     typedef OrientableSize LineType;
 
-    OrientableSizeProxy(Sizes* sizesProxy,
+    OrientableSizeProxy(SizeProperty* sizesProxy,
                         orientationType mask = ORI_DEFAULT);
 
     OrientableSize createSize(const float width = 0, const float height = 0,
@@ -36,7 +36,7 @@ public:
     LineType       getEdgeDefaultValue();
 
 private:    
-    Sizes*     sizesProxy;
+    SizeProperty*     sizesProxy;
     orientationType orientation;
 
     float (Size::*readW)() const;

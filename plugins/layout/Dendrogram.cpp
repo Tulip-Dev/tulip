@@ -34,15 +34,15 @@ Dendrogram::~Dendrogram() {
 bool Dendrogram::run() {
     orientationType mask 	  = getMask(dataSet);
     oriLayout                 = new OrientableLayout(layoutResult, mask);
-    Sizes* viewSize = superGraph->getLocalProperty<Sizes>("viewSize");
+    SizeProperty* viewSize = graph->getLocalProperty<SizeProperty>("viewSize");
                            
     oriSize = new OrientableSizeProxy(viewSize, mask);
-    root = searchRoot(superGraph);
+    root = searchRoot(graph);
 
     setAllNodesCoordX(root,0.f);
     shiftAllNodes(root, 0.f);
     setAllNodesCoordY();
-    setOrthogonalEdge(oriLayout, oriSize, superGraph, 
+    setOrthogonalEdge(oriLayout, oriSize, graph, 
                      INTER_NODE_DISTANCE_Y);
    
     delete oriLayout;
@@ -54,7 +54,7 @@ bool Dendrogram::run() {
 
 //====================================================================
 bool Dendrogram::check(string& errorMsg) {
-    if (TreeTest::isTree(superGraph)) {
+    if (TreeTest::isTree(graph)) {
         errorMsg = "";
         return true;
     }
@@ -72,7 +72,7 @@ void Dendrogram::reset() {
 float Dendrogram::setAllNodesCoordX(node n, float rightMargin) {
     float leftMargin       = rightMargin;
 
-    Iterator<node>* itNode = superGraph->getOutNodes(n);
+    Iterator<node>* itNode = graph->getOutNodes(n);
     while (itNode->hasNext()) {
         node currentNode   = itNode->next();
         leftMargin         = setAllNodesCoordX(currentNode, leftMargin);
@@ -82,12 +82,12 @@ float Dendrogram::setAllNodesCoordX(node n, float rightMargin) {
     const float nodeWidth  =  oriSize->getNodeValue(n).getW()
                             + INTER_NODE_DISTANCE_X;
 
-    if (isLeaf(superGraph, n))
+    if (isLeaf(graph, n))
         leftMargin = rightMargin + nodeWidth;               
     const float freeRange  = leftMargin - rightMargin;
 
     float posX;
-	if (isLeaf(superGraph, n))
+	if (isLeaf(graph, n))
         posX = freeRange / 2.f + rightMargin; 
 	else
     	posX = computeFatherXPosition(n);
@@ -106,10 +106,10 @@ void Dendrogram::setAllNodesCoordY() {
     float maxHeightLeaf    = -FLT_MAX;
     setCoordY(root, &maxYLeaf, &maxHeightLeaf);
     
-    Iterator<node>* itNode = superGraph->getNodes();
+    Iterator<node>* itNode = graph->getNodes();
     while (itNode->hasNext()) {
     	node currentNode   = itNode->next();
-        if (isLeaf(superGraph,currentNode)) {
+        if (isLeaf(graph,currentNode)) {
             OrientableCoord coord = oriLayout->getNodeValue(currentNode);
             float newY            = maxYLeaf + maxHeightLeaf
                              - oriSize->getNodeValue(currentNode).getH() / 2.f;
@@ -126,7 +126,7 @@ float Dendrogram::computeFatherXPosition(node father) {
     float minX             =  FLT_MAX;
     float maxX             = -FLT_MAX;
     
-    Iterator<node> *itNode =  superGraph->getOutNodes(father);    
+    Iterator<node> *itNode =  graph->getOutNodes(father);    
     while (itNode->hasNext()) {
         node currentNode   = itNode->next();
         const float x      =  oriLayout->getNodeValue(currentNode).getX()
@@ -147,7 +147,7 @@ void Dendrogram::shiftAllNodes(node n, float shift) {
     coord.setX(coordX + shift);
     oriLayout->setNodeValue(n, coord);
     
-    Iterator<node>* itNode  =   superGraph->getOutNodes(n);
+    Iterator<node>* itNode  =   graph->getOutNodes(n);
     while (itNode->hasNext()) 
         shiftAllNodes(itNode->next(), shift);
     delete itNode;
@@ -163,8 +163,8 @@ inline void Dendrogram::setNodePosition(node n, float x, float y,
 //====================================================================
 void Dendrogram::setCoordY(node n, float* maxYLeaf, float* maxHeightLeaf) {
     float nodeY;
-    if (superGraph->indeg(n) != 0) {
-        node fatherNode             = superGraph->getInNode(n, 1);
+    if (graph->indeg(n) != 0) {
+        node fatherNode             = graph->getInNode(n, 1);
         OrientableCoord coord       = oriLayout->getNodeValue(n); 
         OrientableCoord coordFather = oriLayout->getNodeValue(fatherNode);
         nodeY                       = coordFather.getY()  
@@ -173,7 +173,7 @@ void Dendrogram::setCoordY(node n, float* maxYLeaf, float* maxHeightLeaf) {
                                 + oriSize->getNodeValue(n).getH() / 2.f;                                                                                      
         coord.setY(nodeY);
         oriLayout->setNodeValue(n, coord);
-        if (isLeaf(superGraph, n)) {
+        if (isLeaf(graph, n)) {
             float nodeHeight = oriSize->getNodeValue(n).getH();
             (*maxHeightLeaf)    = max((*maxHeightLeaf), nodeHeight / 2.f);
             (*maxYLeaf)         = max((*maxYLeaf), nodeY);                       
@@ -181,7 +181,7 @@ void Dendrogram::setCoordY(node n, float* maxYLeaf, float* maxHeightLeaf) {
                                 
     }    
     
-    Iterator<node> *itNode = superGraph->getOutNodes(n);
+    Iterator<node> *itNode = graph->getOutNodes(n);
     while (itNode->hasNext()) 
         setCoordY(itNode->next(), maxYLeaf, maxHeightLeaf); 
     delete itNode;

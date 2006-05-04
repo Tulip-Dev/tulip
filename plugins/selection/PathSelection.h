@@ -4,7 +4,7 @@
 
 #include <tulip/TulipPlugin.h>
 ///
-class PathSelection:public SelectionAlgorithm { 
+class PathSelection:public BooleanAlgorithm { 
 public:
   ///
   PathSelection(const PropertyContext &);
@@ -13,7 +13,7 @@ public:
   ///
   bool run();
 private:
-  void reconnect(node n, Int *values);
+  void reconnect(node n, IntegerProperty **values);
 };
 
 #endif

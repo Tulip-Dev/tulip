@@ -18,25 +18,25 @@
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h> 
 
-class SuperGraph;
+class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup sg_test */ 
 /*@{*/
-/// class for testing the planarity of a graph
+/// class for testing the planarity of a sg
 class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
-  static bool isPlanar(SuperGraph *graph);
-  static bool planarEmbedding(SuperGraph *graph);
-  static std::list<edge> getObstructionsEdges(SuperGraph *graph);
+  static bool isPlanar(Graph *sg);
+  static bool planarEmbedding(Graph *sg);
+  static std::list<edge> getObstructionsEdges(Graph *sg);
   
 private:
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void addNode(SuperGraph *,const node);
-  void delNode(SuperGraph *,const node);
-  void destroy(SuperGraph *);
-  bool compute(SuperGraph *graph);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void addNode(Graph *,const node);
+  void delNode(Graph *,const node);
+  void destroy(Graph *);
+  bool compute(Graph *sg);
   PlanarityTest(){}
   static PlanarityTest * instance;
   stdext::hash_map<unsigned long,bool> resultsBuffer;

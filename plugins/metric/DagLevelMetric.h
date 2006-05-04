@@ -28,7 +28,7 @@
  *  (at your option) any later version.
  *
  */
-class DagLevelMetric:public MetricAlgorithm {
+class DagLevelMetric:public DoubleAlgorithm {
 public:
   DagLevelMetric(const PropertyContext &);
   ~DagLevelMetric();

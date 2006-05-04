@@ -23,38 +23,37 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
-class SuperGraph;
-class SelectionProxy;
+class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup sg_test */ 
 /*@{*/
-/// class for testing if the graph is connected
+/// class for testing if the sg is connected
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**
-   * Return true if the graph is connected (ie. it exists an undirected path 
+   * Return true if the sg is connected (ie. it exists an undirected path 
    * between each pair of nodes) else false.
    */
-  static bool isConnected(SuperGraph *graph);
+  static bool isConnected(Graph *sg);
   /**
-   * If the graph is not connected, add edges in order to make the graph
+   * If the sg is not connected, add edges in order to make the sg
    * connected. The new edges are added in addedEdges.
    */
-  static void makeConnected(SuperGraph *graph, std::vector<edge>& addedEdges);
+  static void makeConnected(Graph *sg, std::vector<edge>& addedEdges);
   /**
-   * Return the number of connected componnents in the graph;
+   * Return the number of connected componnents in the sg;
    */
-  static unsigned int numberOfConnectedComponnents(SuperGraph *graph);
+  static unsigned int numberOfConnectedComponnents(Graph *sg);
 
 private:
-  void connect(SuperGraph *, std::vector<node>& toLink);
-  bool compute(SuperGraph *);
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void addNode(SuperGraph *,const node);
-  void delNode(SuperGraph *,const node);
-  void destroy(SuperGraph *);
+  void connect(Graph *, std::vector<node>& toLink);
+  bool compute(Graph *);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void addNode(Graph *,const node);
+  void delNode(Graph *,const node);
+  void destroy(Graph *);
   ConnectedTest();
   static ConnectedTest * instance;
   stdext::hash_map<unsigned int,bool> resultsBuffer;

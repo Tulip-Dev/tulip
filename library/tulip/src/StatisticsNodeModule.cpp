@@ -1,6 +1,6 @@
 #include <tulip/StatisticsNodeModule.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/Metric.h>
+#include <tulip/Graph.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/Coord.h>
 #include <math.h>
 
@@ -8,9 +8,9 @@ using namespace std;
 
 namespace tlp
 {
-  void StatsNodeModule::ComputeAveragePoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeAveragePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
     vector<float> average(nDimensions);
 
     for(int i=0; i < nDimensions; i++)
@@ -25,16 +25,16 @@ namespace tlp
       }
 
     for(int i=0; i < nDimensions; i++)
-      average[i] /= superGraph->numberOfNodes();
+      average[i] /= graph->numberOfNodes();
 
     delete itN;
 
     result = average;
   }
 
-  float StatsNodeModule::ComputeAverage(SuperGraph *superGraph, Metric *metric)
+  float StatsNodeModule::ComputeAverage(Graph *graph, DoubleProperty *metric)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
   
     float average = 0.0f;
 
@@ -47,14 +47,14 @@ namespace tlp
 
     delete itN;
 
-    average /= superGraph->numberOfNodes();
+    average /= graph->numberOfNodes();
 
     return average;
   }
 
-  void StatsNodeModule::ComputeVariancePoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeVariancePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     vector<float> average(nDimensions);
     vector<float> variance(nDimensions);
@@ -63,7 +63,7 @@ namespace tlp
     for(int i=0; i < nDimensions; i++)
       variance[i] = 0;
 
-    StatsNodeModule::ComputeAveragePoint(superGraph, metrics, nDimensions, average);
+    StatsNodeModule::ComputeAveragePoint(graph, metrics, nDimensions, average);
 
     while (itN->hasNext())
       {
@@ -78,7 +78,7 @@ namespace tlp
       }
     delete itN;
 
-    int nNodes = superGraph->numberOfNodes();
+    int nNodes = graph->numberOfNodes();
 
     for(int i=0; i < nDimensions; i++)
       variance[i] /= nNodes;
@@ -86,15 +86,15 @@ namespace tlp
     result = variance;
   }
 
-  float StatsNodeModule::ComputeVariance(SuperGraph *superGraph, Metric *metric)
+  float StatsNodeModule::ComputeVariance(Graph *graph, DoubleProperty *metric)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float average;
     float variance = 0.0f;
     float nodeVal;
 
-    average = StatsNodeModule::ComputeAverage(superGraph, metric);
+    average = StatsNodeModule::ComputeAverage(graph, metric);
 
     while (itN->hasNext())
       {
@@ -107,14 +107,14 @@ namespace tlp
 
     delete itN;
 
-    variance /= superGraph->numberOfNodes();
+    variance /= graph->numberOfNodes();
 
     return variance;
   }
 
-  void StatsNodeModule::ComputeStandardDeviationPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeStandardDeviationPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result)
   {
-    ComputeVariancePoint(superGraph, metrics, nDimensions, result);
+    ComputeVariancePoint(graph, metrics, nDimensions, result);
 
     for(int i=0; i < nDimensions; i++)
       result[i] = sqrt(result[i]);
@@ -128,9 +128,9 @@ namespace tlp
       result[i] = sqrt(variances[i]);
   }
 
-  float StatsNodeModule::ComputeStandardDeviation(SuperGraph *superGraph, Metric *metric)
+  float StatsNodeModule::ComputeStandardDeviation(Graph *graph, DoubleProperty *metric)
   {
-    float variance = ComputeVariance(superGraph, metric);
+    float variance = ComputeVariance(graph, metric);
 
     return sqrt(variance);
   }
@@ -141,9 +141,9 @@ namespace tlp
   }
 
 
-  float StatsNodeModule::ComputeCovariance(SuperGraph *superGraph, Metric* metric1, Metric* metric2)
+  float StatsNodeModule::ComputeCovariance(Graph *graph, DoubleProperty* metric1, DoubleProperty* metric2)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float ave1, ave2, ave3;
     float sum1, sum2, sum3;
@@ -165,16 +165,16 @@ namespace tlp
 
     delete itN;
 
-    ave1 = sum1 / superGraph->numberOfNodes();
-    ave2 = sum2 / superGraph->numberOfNodes();
-    ave3 = sum3 / superGraph->numberOfNodes();
+    ave1 = sum1 / graph->numberOfNodes();
+    ave2 = sum2 / graph->numberOfNodes();
+    ave3 = sum3 / graph->numberOfNodes();
 
     return (ave3) - (ave1 * ave2);
   }
 
-  void StatsNodeModule::ComputeCovariancePoints(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<std::vector<float> > &result)
+  void StatsNodeModule::ComputeCovariancePoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<std::vector<float> > &result)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     std::vector<float> ave(nDimensions);
     std::vector<float> sum(nDimensions);
@@ -208,7 +208,7 @@ namespace tlp
 	    bigsum[i*nDimensions + j] += (val[i] * val[j]);
       }
 
-    float nNode = superGraph->numberOfNodes();
+    float nNode = graph->numberOfNodes();
 
     for(int i=0; i < nDimensions; i++)
       ave[i] = sum[i] / nNode;
@@ -219,9 +219,9 @@ namespace tlp
 	result[i][j] = (bigsum[i * nDimensions + j] / nNode) - (ave[i] * ave[j]);
   }
 
-  void StatsNodeModule::ComputeMinPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeMinPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
     vector<float> min(nDimensions);
     float nodeVal;
 
@@ -246,9 +246,9 @@ namespace tlp
     result = min;
   }
 
-  float StatsNodeModule::ComputeMin(SuperGraph *superGraph, Metric *metric)
+  float StatsNodeModule::ComputeMin(Graph *graph, DoubleProperty *metric)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float min = INT_MAX;
 
@@ -267,9 +267,9 @@ namespace tlp
     return min;
   }
 
-  void StatsNodeModule::ComputeMaxPoint(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &result)
+  void StatsNodeModule::ComputeMaxPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
     vector<float> max(nDimensions);
     float nodeVal;
 
@@ -295,9 +295,9 @@ namespace tlp
   }
 
 
-  float StatsNodeModule::ComputeMax(SuperGraph *superGraph, Metric *metric)
+  float StatsNodeModule::ComputeMax(Graph *graph, DoubleProperty *metric)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float max = INT_MIN;
 
@@ -316,9 +316,9 @@ namespace tlp
     return max;
   }
 
-  void StatsNodeModule::ComputeMinMaxPoints(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax)
+  void StatsNodeModule::ComputeMinMaxPoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     vector<float> min(nDimensions);
     vector<float> max(nDimensions);
@@ -353,9 +353,9 @@ namespace tlp
     resMax = max;
   }
 
-  void StatsNodeModule::ComputeMinMax(SuperGraph *superGraph, Metric *metric, float &resMin, float &resMax)
+  void StatsNodeModule::ComputeMinMax(Graph *graph, DoubleProperty *metric, float &resMin, float &resMax)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float min = INT_MAX;
     float max = INT_MIN;
@@ -381,9 +381,9 @@ namespace tlp
     resMax = max;
   }
 
-  void StatsNodeModule::ComputeLinearRegressionFunction(SuperGraph *superGraph, Metric *xk, Metric *yk, float &b0, float &b1)
+  void StatsNodeModule::ComputeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &b0, float &b1)
   {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
 
     float nodeValx, nodeValy;
     float sxk, syk, sxkxk, sxkyk;
@@ -409,7 +409,7 @@ namespace tlp
 
     delete itN;
 
-    int n = superGraph->numberOfNodes();
+    int n = graph->numberOfNodes();
 
     // Then we compute b0 and b1 :
     // The equation used is equation #6 on : http://www.unilim.fr/pages_perso/jean.debord/math/reglin/reglin.htm
@@ -417,7 +417,7 @@ namespace tlp
     b1 = (n * sxkyk - sxk * syk)     / (n * sxkxk - sxk * sxk);
   }
 
-  StatisticResults* StatsNodeModule::ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<Metric*> &metrics, int nDimensions)
+  StatisticResults* StatsNodeModule::ComputeStatisticsResults(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions)
   {
     StatisticResults *res = new StatisticResults;
 
@@ -441,7 +441,7 @@ namespace tlp
 	res->maxPoint[i] = INT_MIN;
       }
 
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
   
     vector<float> bigsum(nDimensions * nDimensions);
     vector<float> vals(nDimensions);
@@ -477,7 +477,7 @@ namespace tlp
 
     delete itN;
 
-    float nNodes = superGraph->numberOfNodes();
+    float nNodes = graph->numberOfNodes();
 
     for(int i=0; i < nDimensions; i++)
       res->averagePoint[i] /= nNodes;

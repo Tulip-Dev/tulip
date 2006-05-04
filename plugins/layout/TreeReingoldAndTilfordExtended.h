@@ -61,8 +61,8 @@ private:
   std::list<LR>* TreePlace(node, stdext::hash_map<node,double>*);
   void TreeLevelSizing(node ,std::map<int,double> &,int , std::map<node,int> &levels);
 
-  Sizes *sizes;
-  Int   *lengthMetric;
+  SizeProperty *sizes;
+  IntegerProperty *lengthMetric;
   bool ortho;
   bool useLength;
   std::string orientation;

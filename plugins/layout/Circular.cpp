@@ -42,30 +42,30 @@ namespace {
 }
 
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
-  addParameter<Sizes>("nodeSize", paramHelp[0], "viewSize");
+  addParameter<SizeProperty>("nodeSize", paramHelp[0], "viewSize");
   addParameter<bool>("search_cycle", paramHelp[1], "false");
 }
 
 namespace {
   //============================================================================
-  void dfsRecCall(SuperGraph *graph, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
+  void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
     nodeVisited.set(n.id, true);
     vec.push_back(n);
     node dest;
-    forEach(dest, graph->getInOutNodes(n)) {
+    forEach(dest, sg->getInOutNodes(n)) {
       if (!nodeVisited.get(dest.id)) {
-	dfsRecCall(graph, vec, nodeVisited, dest);
+	dfsRecCall(sg, vec, nodeVisited, dest);
       }
     }
   }
   //============================================================================
-  void buildDfsOrdering(SuperGraph *graph, vector<node> &vec) {
+  void buildDfsOrdering(Graph *sg, vector<node> &vec) {
     MutableContainer<bool> nodeVisited;
     nodeVisited.setAll(false);
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach(n, sg->getNodes()) {
       if (!nodeVisited.get(n.id)) {
-	dfsRecCall(graph, vec, nodeVisited, n);
+	dfsRecCall(sg, vec, nodeVisited, n);
       }
     }
   }
@@ -83,7 +83,7 @@ namespace {
     return result;
   }
   //===============================================================================
-  void dfs(node n, const SuperGraph * graph, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
+  void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
 	   unsigned int &nbCalls, PluginProgress *pluginProgress) {
     { //to enable stop of the recursion
       ++nbCalls; 
@@ -103,8 +103,8 @@ namespace {
     st.push_back(n);
     flag.set(n.id,true);
     node n2;
-    forEach(n2, graph->getInOutNodes(n)){
-      dfs(n2, graph, st, maxCycle, flag, nbCalls, pluginProgress);
+    forEach(n2, sg->getInOutNodes(n)){
+      dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
     }
     flag.set(n.id, false);
     st.pop_back();
@@ -112,16 +112,16 @@ namespace {
   
 
   //=======================================================================
-  vector<node> findMaxCycle(SuperGraph * graph, PluginProgress *pluginProgress) {
-    SuperGraph * g = tlp::newCloneSubGraph(graph);
+  vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
+    Graph * g = tlp::newCloneSubGraph(sg);
     cerr << __PRETTY_FUNCTION__ << endl;
-    Metric m(g);
+    DoubleProperty m(g);
     string err ="";
     g->computeProperty(string("Connected Component"),&m,err);
     DataSet tmp;
     tmp.set("Metric", &m);
     tlp::clusterizeGraph(g, err, &tmp, "Equal Value");
-    SuperGraph * g_tmp;
+    Graph * g_tmp;
     
     MutableContainer<bool> flag;
     deque<node> st;
@@ -139,7 +139,7 @@ namespace {
 	max = res;
     }
     
-    graph->delAllSubGraphs(g);
+    sg->delAllSubGraphs(g);
     return max;
   } 
 }
@@ -150,15 +150,15 @@ inline double computeRadius (const Size &s) {
 }//end computeRad
 
 bool Circular::run() {
-  Sizes *nodeSizes;
+  SizeProperty *nodeSize;
   bool searchCycle = false;
   
-  if ( dataSet==0 || !dataSet->get("nodeSize", nodeSizes)) {
-    if (superGraph->existProperty("viewSize"))
-      nodeSizes = superGraph->getProperty<Sizes>("viewSize");    
+  if ( dataSet==0 || !dataSet->get("nodeSize", nodeSize)) {
+    if (graph->existProperty("viewSize"))
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");    
     else {
-      nodeSizes = superGraph->getProperty<Sizes>("viewSize");  
-      nodeSizes->setAllNodeValue(Size(1.0,1.0,1.0));
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");  
+      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
 
@@ -173,8 +173,8 @@ bool Circular::run() {
   double maxRad = 0;
   node maxRadNode;
   node itn;
-  forEach(itn, superGraph->getNodes()) {
-    double rad = computeRadius(nodeSizes->getNodeValue(itn));
+  forEach(itn, graph->getNodes()) {
+    double rad = computeRadius(nodeSize->getNodeValue(itn));
     sumOfRad += rad;
     if (maxRad < rad) {
       maxRad = rad;
@@ -183,11 +183,11 @@ bool Circular::run() {
   }
 
   //with two nodes, lay them on a line max rad appart
-  if (superGraph->numberOfNodes() <= 2) {
+  if (graph->numberOfNodes() <= 2) {
     //set the (max 2) nodes maxRad appart
     double xcoord = maxRad/2.0;
     node itn;
-    forEach(itn, superGraph->getNodes()) {
+    forEach(itn, graph->getNodes()) {
       layoutResult->setNodeValue (itn, Coord (xcoord, 0, 0));
       xcoord *= -1;
     }
@@ -205,10 +205,10 @@ bool Circular::run() {
 
     vector<node> cycleOrdering;
     if (searchCycle)
-      cycleOrdering = findMaxCycle(superGraph, pluginProgress);
+      cycleOrdering = findMaxCycle(graph, pluginProgress);
     
     vector<node> dfsOrdering;
-    buildDfsOrdering(superGraph, dfsOrdering);
+    buildDfsOrdering(graph, dfsOrdering);
 
     MutableContainer<bool> inCir;
     inCir.setAll(false);
@@ -223,7 +223,7 @@ bool Circular::run() {
     for(; it!=cycleOrdering.end(); ++it) {
       node itn = *it;
       //get the node and its size
-      Size curNodeSize = nodeSizes->getNodeValue(itn);
+      Size curNodeSize = nodeSize->getNodeValue(itn);
       
       //compute the radius to ensure non overlap.  If adjustment to 
       //ensure no angle greater than pi done, detect it.

@@ -17,7 +17,7 @@ public:
   bool check(std::string &);
   void reset();
 private :
-  bool split (Metric*, std::list<node> &);
+  bool split (DoubleProperty*, std::list<node> &);
 };
 /*@}*/
 

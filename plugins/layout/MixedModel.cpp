@@ -57,7 +57,7 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
 MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
-  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[2],"18");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"8");
@@ -67,7 +67,7 @@ MixedModel::~MixedModel(){
 }
 //====================================================
 bool MixedModel::run() {
-  size = superGraph->getProperty<Sizes>("viewSize");
+  size = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
   if (dataSet!=0) {
     dataSet->get("nodeSize", size);
@@ -82,20 +82,20 @@ bool MixedModel::run() {
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size tmp = size->getNodeValue(n);
       size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
   //===========================================================
-    Int * intProxy = superGraph->getProperty<Int>("viewShape");
+    IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
   intProxy->setAllEdgeValue(0);
   
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
   
-  Pere = tlp::newCloneSubGraph(superGraph, "Father");
-  Metric connectedComponnent(Pere);
+  Pere = tlp::newCloneSubGraph(graph, "Father");
+  DoubleProperty connectedComponnent(Pere);
   string err;
   Pere->computeProperty(string("Connected Component"), &connectedComponnent, err);
   DataSet tmp;
@@ -104,7 +104,7 @@ bool MixedModel::run() {
 
   
   int nbConnectedComponent = 0;
-  Iterator<SuperGraph *> *it = Pere->getSubGraphs();
+  Iterator<Graph *> *it = Pere->getSubGraphs();
   while(it->hasNext()) {
     nbConnectedComponent++;
     currentGraph = it->next();
@@ -120,14 +120,14 @@ bool MixedModel::run() {
     else if(currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3){
       Iterator<node> * itn = currentGraph->getNodes();
       node n = itn->next();
-      Coord c = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n);
+      Coord c = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(0,0,0));
       node n2 = itn->next();
-      Coord c2 = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n2);
+      Coord c2 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
       layoutResult->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
       if(currentGraph->numberOfNodes() == 3){
 	node n3 = itn->next();
-	Coord c3 = currentGraph->getProperty<Sizes>("viewSize")->getNodeValue(n2);
+	Coord c3 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
 	layoutResult->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
 	edge e = currentGraph->existEdge(n,n3).isValid() ? currentGraph->existEdge(n,n3) :currentGraph->existEdge(n3,n);
 	if(e.isValid()){
@@ -153,10 +153,10 @@ bool MixedModel::run() {
     
     //====================================================
     planar = PlanarityTest::isPlanar(currentGraph);      
-    SuperGraph * G;
+    Graph * G;
     if(!planar){
       // cout << "Graph is not planar ...";
-      Selection * resultatAlgoSelection = currentGraph->getProperty<Selection>("viewSelection");
+      BooleanProperty * resultatAlgoSelection = currentGraph->getProperty<BooleanProperty>("viewSelection");
       Bfs::Bfs sp(currentGraph,resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
       G = tlp::newSubGraph(currentGraph);
@@ -251,34 +251,34 @@ bool MixedModel::run() {
   } delete it;
   if(nbConnectedComponent != 1){
     err ="";
-    Layout layout(superGraph);
+    LayoutProperty layout(graph);
     tmp.set("coordinates", layoutResult);
-    superGraph->computeProperty<Layout *>(string("Connected Componnent Packing"),&layout,err,NULL,&tmp);
-    Iterator<node> *itN = superGraph->getNodes();
+    graph->computeProperty<LayoutProperty *>(string("Connected Componnent Packing"),&layout,err,NULL,&tmp);
+    Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()){
       node n = itN->next();
       layoutResult->setNodeValue(n, layout.getNodeValue(n));
     } delete itN;
-    Iterator<edge> *itE = superGraph->getEdges();
+    Iterator<edge> *itE = graph->getEdges();
     while(itE->hasNext()){
       edge e = itE->next();
       layoutResult->setEdgeValue(e, layout.getEdgeValue(e));
     } delete itE;
   }
-  superGraph->delAllSubGraphs(Pere);
+  graph->delAllSubGraphs(Pere);
 
 
   //rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size  tmp = size->getNodeValue(n);
       size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       Coord tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;
-    forEach(e, superGraph->getEdges()) {
+    forEach(e, graph->getEdges()) {
       LineType::RealType tmp = layoutResult->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;
@@ -296,7 +296,7 @@ bool MixedModel::run() {
 bool MixedModel::check(string &err) {  
   bool result = true ;
   err = "The graph must be ";
-  if(!SimpleTest::isSimple(superGraph)){
+  if(!SimpleTest::isSimple(graph)){
     err += "simple and without self-loop ";
     result = false;
   }
@@ -305,15 +305,15 @@ bool MixedModel::check(string &err) {
 
       
 //====================================================
-vector<edge> MixedModel::getPlanarSubGraph(SuperGraphConMap *graph, vector<edge> unplanar_edges){
+vector<edge> MixedModel::getPlanarSubGraph(SuperGraphConMap *sg, vector<edge> unplanar_edges){
   vector<edge> res;
   for(unsigned int ui = 0; ui < unplanar_edges.size() ; ++ui){
     edge e = unplanar_edges[ui];
-    node n = graph->source(e); 
-    node n2 =  graph->target(e);
-    Face f = graph->sameFace(n, n2);
+    node n = sg->source(e); 
+    node n2 =  sg->target(e);
+    Face f = sg->sameFace(n, n2);
     if( f != Face()){
-      graph->splitFace(f,e);
+      sg->splitFace(f,e);
       res.push_back(e);
     }
   } 
@@ -330,7 +330,7 @@ void MixedModel::placeNodesEdges(){
     node n = it->next();
     Coord c = nodeSize.get(n.id);
     c[0] -= edgeNodeSpacing;
-    superGraph->getProperty<Sizes>("viewSize")->setNodeValue(n,Size(c[0],c[1],0.3));
+    graph->getProperty<SizeProperty>("viewSize")->setNodeValue(n,Size(c[0],c[1],0.3));
     layoutResult->setNodeValue(n, NodeCoords[n]);
   }
   delete it;
@@ -391,8 +391,8 @@ void MixedModel::placeNodesEdges(){
       vector<Coord> bends;
       bends.push_back(c_n);
       layoutResult->setEdgeValue(e, bends);
-      superGraph->getProperty<Int>("viewShape")->setEdgeValue(e,4);  
-      superGraph->getProperty<Colors>("viewColor")->setEdgeValue(e,Color(218,218,218));    
+      graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e,4);  
+      graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e,Color(218,218,218));    
     }
   }  
 }

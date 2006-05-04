@@ -30,7 +30,7 @@ private :
   
 public :
   void setUp(){
-    carte = new SuperGraphMap(tlp::newSuperGraph());
+    carte = new SuperGraphMap(tlp::newGraph());
     edges.clear();
     nodes.clear();
   }

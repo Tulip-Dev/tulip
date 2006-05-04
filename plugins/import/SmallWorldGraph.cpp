@@ -60,13 +60,13 @@ struct SmallWorldGraph:public ImportModule {
     double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
 			      / (double (nbNodes) * M_PI));
     srand(clock()); 
-    Layout *newLayout=superGraph->getLocalProperty<Layout>("viewLayout");
-    Sizes *newSize=superGraph->getLocalProperty<Sizes>("viewSize");
+    LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
+    SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
 
-    vector<node> graph(nbNodes);
+    vector<node> sg(nbNodes);
     for (int i=0; i<nbNodes;++i) {
-      graph[i]=superGraph->addNode();
-      newLayout->setNodeValue(graph[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
+      sg[i]=graph->addNode();
+      newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
     }
     unsigned int count = 0;
     unsigned int iterations = nbNodes*(nbNodes-1)/2;
@@ -77,17 +77,17 @@ struct SmallWorldGraph:public ImportModule {
       for (int j=i+1;j<nbNodes;++j) {
 	++count;
 	if (i!=j) {
-	  double distance = newLayout->getNodeValue(graph[i]).dist(newLayout->getNodeValue(graph[j]));
+	  double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
 	  minSize = std::min(distance, minSize);
 	  newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
 	  if ( distance  < (double)maxDistance)
-	    superGraph->addEdge(graph[i],graph[j]);
+	    graph->addEdge(sg[i],sg[j]);
 	  else 
 	    if (!longEdge && enableLongEdge) {
 	      double distrand = (double)rand()/(double)RAND_MAX;
 	      if (distrand < 1.0/(2.0+double(nbNodes-i-1))) {
 		longEdge = true;
-		superGraph->addEdge(graph[i],graph[j]);
+		graph->addEdge(sg[i],sg[j]);
 	      }
 	    }
 	}

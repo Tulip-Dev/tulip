@@ -40,7 +40,7 @@ struct NodeInfo{
  *  (at your option) any later version.
  *
  */
-class StrongComponent:public MetricAlgorithm { 
+class StrongComponent:public DoubleAlgorithm { 
 public:
   StrongComponent(const PropertyContext &);
   ~StrongComponent();

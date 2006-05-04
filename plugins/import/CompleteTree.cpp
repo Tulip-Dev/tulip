@@ -40,8 +40,8 @@ struct CompleteTree:public ImportModule {
   void buildNode(node n,unsigned int degree,int depth) {
     if (depth<1) return;
     for (int i=0;i<degree;++i) {
-      node n1=superGraph->addNode();
-      superGraph->addEdge(n,n1);
+      node n1=graph->addNode();
+      graph->addEdge(n,n1);
       buildNode(n1,degree,depth - 1);
     }
   }
@@ -52,7 +52,7 @@ struct CompleteTree:public ImportModule {
       dataSet->get("depth", depth);
       dataSet->get("degree", degree);
     }
-    node n=superGraph->addNode();
+    node n=graph->addNode();
     buildNode(n,degree,depth);
     return true;
   }

@@ -9,13 +9,13 @@
 */
 
 #include <assert.h>
-#include "LabelSelection.h"
-#include <tulip/Selection.h>
+#include "LabelBooleanProperty.h"
+#include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 #include <qinputdialog.h>
 #include <qstring.h>
 
-SELECTIONPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","0","1");
 
 using namespace std;
 
@@ -56,7 +56,7 @@ namespace
 
 
 
-LabelSelection::LabelSelection(const PropertyContext &context):SelectionAlgorithm(context) {
+LabelSelection::LabelSelection(const PropertyContext &context):BooleanAlgorithm(context) {
   addParameter<vector<string> *> ("searchStrings",paramHelp[0]);
   addParameter<bool>("searchType",paramHelp[1],"false");
   addParameter<String*>("searchLabel",paramHelp[2],"viewLabel");
@@ -97,7 +97,7 @@ bool LabelSelection::check(string &errMsg) {
     dataSet->get("searchLabel",stringProxy);
   }
   if (stringProxy==0) {
-    stringProxy=superGraph->getProperty<String>("viewLabel");
+    stringProxy=graph->getProperty<StringProperty>("viewLabel");
   }
   if (searchStrings==0) {
     bool ok=true;

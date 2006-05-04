@@ -12,7 +12,7 @@
 #include "StlIterator.h"
 
 
-struct SuperGraph;
+struct Graph;
 
 
 struct TLP_SIMPLE_SCOPE DataType {
@@ -65,8 +65,8 @@ struct TLP_SIMPLE_SCOPE StructDef {
   void		erase(std::string str);
 
   ///Build a default dataSet according to fields
-  ///The optional SuperGraph is needed to create properties (PProxy*)
-  void		buildDefaultDataSet( DataSet & ioDataSet, SuperGraph * inG = 0 );
+  ///The optional Graph is needed to create properties (PropertyInterface*)
+  void		buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 );
 private:
   std::map<std::string,std::string> data;
   std::map<std::string,std::string> help;
@@ -92,9 +92,9 @@ private:
   	const char * paramHelp[] = {
 		// property
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "MetricProxy" ) \
+		HTML_HELP_DEF( "type", "DoubleProperty" ) \
 		HTML_HELP_BODY() \
-		"This metricProxy is used to affect scalar values to superGraph items." \
+		"This metricProxy is used to affect scalar values to graph items." \
 		"The meaning of theses values depends of the choosen color model." \
 		HTML_HELP_CLOSE(),
 
@@ -110,7 +110,7 @@ private:
 	};
 	
 	...	
-	addParameter<MetricProxy>("property",paramHelp[0]);
+	addParameter<DoubleProperty>("property",paramHelp[0]);
     addParameter<int>("colormodel",paramHelp[1]);
 	...
 

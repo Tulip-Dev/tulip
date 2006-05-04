@@ -20,14 +20,14 @@
 #endif
 
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 
 class QLineEdit;
 class QPaintEvent;
 class QPushButton;
-class PProxy;
+class PropertyInterface;
 
 class ColorButton : public QButton {
 
@@ -201,9 +201,9 @@ public:
   TulipTableWidget(QWidget *, const char *);
   ~TulipTableWidget();
 
-  void setTulipNodeItem(const PProxy *, const std::string propertyName, const node &, const int row, const int col);
+  void setTulipNodeItem(const PropertyInterface *, const std::string propertyName, const node &, const int row, const int col);
   QString getTulipNodeValue(const int row, const int col) const;
-  void setTulipEdgeItem(const PProxy *, const std::string propertyName, const edge &, const int row, const int col);
+  void setTulipEdgeItem(const PropertyInterface *, const std::string propertyName, const edge &, const int row, const int col);
   QString getTulipEdgeValue(const int row, const int col) const;
   QColor getBackColor1() const;
   QColor getBackColor2() const;

@@ -9,14 +9,14 @@
 #include "Node.h"
 #include "MutableContainer.h"
 
-class SuperGraph;
+class Graph;
 
 namespace tlp {
-  TLP_SCOPE double averagePathLength(SuperGraph *);
-  TLP_SCOPE double averageCluster(SuperGraph *);
-  TLP_SCOPE unsigned int maxDegree(SuperGraph *);
-  TLP_SCOPE unsigned int minDegree(SuperGraph *);
-  TLP_SCOPE unsigned int maxDistance(SuperGraph *graph, node n, MutableContainer<unsigned int> &distance, int direction = 2);
+  TLP_SCOPE double averagePathLength(Graph *);
+  TLP_SCOPE double averageCluster(Graph *);
+  TLP_SCOPE unsigned int maxDegree(Graph *);
+  TLP_SCOPE unsigned int minDegree(Graph *);
+  TLP_SCOPE unsigned int maxDistance(Graph *sg, node n, MutableContainer<unsigned int> &distance, int direction = 2);
 };
 
 #endif

@@ -13,23 +13,23 @@
 #define	MORPHING_MAX_FPS	30
 
 class GlGraphWidget;
-class SuperGraph;
-class Layout;
-class Sizes;
-class Colors;
+class Graph;
+class LayoutProperty;
+class SizeProperty;
+class ColorProperty;
 
 struct TLP_QT_SCOPE GraphState {
-  SuperGraph *g;
-  Layout *layout;
-  Sizes *size;
-  Colors *color;
+  Graph *g;
+  LayoutProperty *layout;
+  SizeProperty *size;
+  ColorProperty *color;
   Camera camera;
   Coord sceneT;
   Coord sceneR;
   
   GraphState( GlGraphWidget * glgw );
   ~GraphState();
-  static bool setupDiff( SuperGraph * inG, GraphState * inGS0, GraphState * inGS1 );
+  static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );
   void EdgeEnds( Coord & outC0, Coord & outC1, edge e );
 };
 
@@ -47,7 +47,7 @@ class TLP_QT_SCOPE Morphing : public QObject{
 
  private: 
   GraphState *g0, *g1;
-  Layout *e0, *e1;
+  LayoutProperty *e0, *e1;
   GlGraphWidget *glWidget;
   QTime qt0;
   int frameCpt; 

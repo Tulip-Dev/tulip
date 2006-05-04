@@ -1,16 +1,16 @@
 #ifndef __TULIPPLUGININCLUDE_H
 #define __TULIPPLUGININCLUDE_H
 
-#include "PropertyProxy.h"
-#include "Metric.h"
-#include "Layout.h"
-#include "Selection.h"
-#include "String.h"
+#include "AbstractProperty.h"
+#include "DoubleProperty.h"
+#include "LayoutProperty.h"
+#include "BooleanProperty.h"
+#include "StringProperty.h"
 #include "Clustering.h"
 #include "ImportModule.h"
-#include "Sizes.h"
-#include "Colors.h"
-#include "Int.h"
+#include "SizeProperty.h"
+#include "ColorProperty.h"
+#include "IntegerProperty.h"
 #include "MethodFactory.h"
 
 #endif

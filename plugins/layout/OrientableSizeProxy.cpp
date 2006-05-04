@@ -1,7 +1,7 @@
 #include "OrientableSizeProxy.h"
 
 //====================================================================
-OrientableSizeProxy::OrientableSizeProxy(Sizes* sizesProxyParam,
+OrientableSizeProxy::OrientableSizeProxy(SizeProperty* sizesProxyParam,
                                          orientationType mask) : 
     sizesProxy(sizesProxyParam) {
     setOrientation(mask);

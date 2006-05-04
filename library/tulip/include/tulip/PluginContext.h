@@ -14,8 +14,8 @@
 
 #include "Reflect.h"
 
-class SuperGraph;
-class PProxy;
+class Graph;
+class PropertyInterface;
 class PluginProgress;
 ///Parameter for calling clustering plugins
 
@@ -27,11 +27,11 @@ class PluginProgress;
 class ClusterContext {
   public :
   ///
-  SuperGraph *superGraph;
+  Graph *graph;
   PluginProgress *pluginProgress;
   DataSet *dataSet;
   ///
-  ClusterContext ():superGraph(0),pluginProgress(0), dataSet(0) {}
+  ClusterContext ():graph(0),pluginProgress(0), dataSet(0) {}
   ///
   ~ClusterContext(){}
 };
@@ -40,12 +40,12 @@ class ClusterContext {
 class PropertyContext {
   public :
   ///
-  SuperGraph *superGraph;
-  PProxy *propertyProxy;
+  Graph *graph;
+  PropertyInterface *propertyProxy;
   PluginProgress *pluginProgress;
   DataSet *dataSet;
   ///
-  PropertyContext ():superGraph(0),propertyProxy(0),pluginProgress(0),dataSet(0){}
+  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0){}
   ///
   ~PropertyContext(){}
 };

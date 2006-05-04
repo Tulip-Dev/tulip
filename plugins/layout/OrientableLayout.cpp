@@ -3,7 +3,7 @@
 #include "OrientableLayout.h"
 
 //====================================================================
-OrientableLayout::OrientableLayout(Layout* layoutParam,
+OrientableLayout::OrientableLayout(LayoutProperty* layoutParam,
                                    orientationType mask) {
     layout = layoutParam;
     setOrientation(mask);

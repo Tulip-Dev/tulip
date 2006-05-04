@@ -8,39 +8,39 @@
 
 using namespace std;
 
-void ObservableGraph::notifyAddNode(SuperGraph *graph, const node n) {
+void ObservableGraph::notifyAddNode(Graph *sg, const node n) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->addNode(graph, n);
+    (*itlObs)->addNode(sg, n);
 }
 
-void ObservableGraph::notifyDelNode(SuperGraph *graph, const node n) {
+void ObservableGraph::notifyDelNode(Graph *sg, const node n) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->delNode(graph, n);
+    (*itlObs)->delNode(sg, n);
 }
 
-void ObservableGraph::notifyAddEdge(SuperGraph *graph, const edge e) {
+void ObservableGraph::notifyAddEdge(Graph *sg, const edge e) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->addEdge(graph, e);
+    (*itlObs)->addEdge(sg, e);
 }
 
-void ObservableGraph::notifyDelEdge(SuperGraph *graph, const edge e) {
+void ObservableGraph::notifyDelEdge(Graph *sg, const edge e) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->delEdge(graph, e);
+    (*itlObs)->delEdge(sg, e);
 }
 
-void ObservableGraph::notifyReverseEdge(SuperGraph *graph, const edge e) {
+void ObservableGraph::notifyReverseEdge(Graph *sg, const edge e) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->reverseEdge(graph, e);
+    (*itlObs)->reverseEdge(sg, e);
 }
 
-void ObservableGraph::notifyDestroy(SuperGraph *graph) {
+void ObservableGraph::notifyDestroy(Graph *sg) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros
   for (set<GraphObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->destroy(graph);
+    (*itlObs)->destroy(sg);
 }
 

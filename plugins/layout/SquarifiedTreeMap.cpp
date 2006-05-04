@@ -38,7 +38,7 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 
 //====================================================================
 bool SquarifiedTreeMap::check(string& errorMsg) {
-  metric = superGraph->getProperty<Metric>("viewMetric"); 
+  metric = graph->getProperty<DoubleProperty>("viewMetric"); 
   if (dataSet != 0)
     dataSet->get("property", metric);    
   if (!metric) {
@@ -46,7 +46,7 @@ bool SquarifiedTreeMap::check(string& errorMsg) {
     return false;
   }
 
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     if (verifyMetricIsPositive()) {
       errorMsg = "Graph's nodes must have positive metric";
       return false;
@@ -72,8 +72,8 @@ bool SquarifiedTreeMap::run() {
     dataSet->get("Texture?", glyphTextured);
   }
     
-  size  = superGraph->getLocalProperty<Sizes>("viewSize");    
-  glyph = superGraph->getLocalProperty<Int>("viewShape"); 
+  size  = graph->getLocalProperty<SizeProperty>("viewSize");    
+  glyph = graph->getLocalProperty<IntegerProperty>("viewShape"); 
     
   if (glyphTextured)
     glyph->setAllNodeValue(TEXTUREDGLYPHID);
@@ -81,7 +81,7 @@ bool SquarifiedTreeMap::run() {
   RectangleArea initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio,
 			     DEFAULT_HEIGHT);
 
-  node root = searchRoot(superGraph);
+  node root = searchRoot(graph);
 
   initializeMapSum(root);
   Coord initialSpaceCenterCoord = initialSpace.getCenterCoord();   
@@ -146,7 +146,7 @@ void SquarifiedTreeMap::layRow(pairIterator itFirstChildNode,
     Size childAreaSize = childArea.getSize();
     size->setNodeValue(itCurrentNode->first, childAreaSize);
 
-    if (superGraph->outdeg(itCurrentNode->first) > 0)
+    if (graph->outdeg(itCurrentNode->first) > 0)
       squarify(itCurrentNode->first, childArea, depth);
 
     rectArea.getVirtualY() += childHeight;
@@ -172,7 +172,7 @@ void SquarifiedTreeMap::squarify(node n, RectangleArea rectArea, int depth) {
     
   vector<pairNodeF> childOfN;
     
-  Iterator<node>* itNode = superGraph->getOutNodes(n);
+  Iterator<node>* itNode = graph->getOutNodes(n);
   while (itNode->hasNext()) {
     node currentNode   = itNode->next();
     childOfN.push_back(pairNodeF(currentNode,
@@ -238,14 +238,14 @@ float SquarifiedTreeMap::findWorstRatio(float metric1, float metric2,
 //====================================================================
 float SquarifiedTreeMap::initializeMapSum(node n) {
     
-  if (isLeaf(superGraph, n)) {
+  if (isLeaf(graph, n)) {
     if ((sumChildrenMetric[n] = metric->getNodeValue(n)) == 0)
       sumChildrenMetric[n] = 1;
     return sumChildrenMetric[n];
   }
 
   float sum              = 0;
-  Iterator<node>* itNode = superGraph->getOutNodes(n);
+  Iterator<node>* itNode = graph->getOutNodes(n);
   while (itNode->hasNext()) 
     sum += initializeMapSum(itNode->next());
   delete itNode;
@@ -256,7 +256,7 @@ float SquarifiedTreeMap::initializeMapSum(node n) {
 //====================================================================
 bool SquarifiedTreeMap::verifyMetricIsPositive() {
   bool result            = true;
-  Iterator<node>* itNode = superGraph->getNodes();
+  Iterator<node>* itNode = graph->getNodes();
   while (itNode->hasNext() && result) 
     if (metric->getNodeValue(itNode->next()) < 0)
       result = false;

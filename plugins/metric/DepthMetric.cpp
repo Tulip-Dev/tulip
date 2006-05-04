@@ -2,36 +2,36 @@
 #include <tulip/ForEach.h>
 #include "DepthMetric.h"
 
-METRICPLUGIN(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2");
+DOUBLEPLUGIN(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2");
 
 using namespace std;
 
-DepthMetric::DepthMetric(const PropertyContext &context):MetricAlgorithm(context) {}
+DepthMetric::DepthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 
 //=================================================
 double DepthMetric::getNodeValue(const node n) {
-  if (superGraph->outdeg(n)==0) return 0.0;
-  if (metricResult->getNodeValue(n) != 0)
-    return metricResult->getNodeValue(n);
+  if (graph->outdeg(n)==0) return 0.0;
+  if (doubleResult->getNodeValue(n) != 0)
+    return doubleResult->getNodeValue(n);
   double max = 0;
   node _n;
-  forEach(_n, superGraph->getOutNodes(n))
+  forEach(_n, graph->getOutNodes(n))
     max = std::max(max, getNodeValue(_n));
-  metricResult->setNodeValue(_n, max + 1);
+  doubleResult->setNodeValue(_n, max + 1);
   return max + 1;
 }
 //====================================================================
 bool DepthMetric::run() {
-  metricResult->setAllEdgeValue(0);
-  metricResult->setAllNodeValue(0);
+  doubleResult->setAllEdgeValue(0);
+  doubleResult->setAllNodeValue(0);
   node _n;
-  forEach(_n, superGraph->getNodes())
+  forEach(_n, graph->getNodes())
     getNodeValue(_n);
   return true;
 }
 //=================================================
 bool DepthMetric::check(string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(superGraph))
+  if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
     erreurMsg="The Graph must be acyclic";

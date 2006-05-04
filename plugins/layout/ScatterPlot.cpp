@@ -88,9 +88,9 @@ namespace
 
 ScatterPlot::ScatterPlot(const PropertyContext &context) : LayoutAlgorithm(context) 
 {
-  addParameter<Metric>("usedMetric1", paramHelp[0], "viewMetric");
-  addParameter<Metric>("usedMetric2", paramHelp[1], "viewMetric");
-  addParameter<Metric>("usedMetric3", paramHelp[2], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric1", paramHelp[0], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric2", paramHelp[1], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric3", paramHelp[2], "viewMetric");
 
   addParameter<double>("discretizationStep1", paramHelp[3], "1.0");
   addParameter<double>("discretizationStep2", paramHelp[4], "1.0");
@@ -106,12 +106,12 @@ ScatterPlot::~ScatterPlot()
 
 bool ScatterPlot::run() 
 {
-  Iterator<node> *itN = superGraph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
 
-  superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue(Size(1,1,1));
+  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   
   if (shapeConversion)
-    superGraph->getLocalProperty<Int>("viewShape")->setAllNodeValue(1);
+    graph->getLocalProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   
   // The histogram if we only have 1 metric
   std::map<int, int> histogram;
@@ -190,7 +190,7 @@ bool ScatterPlot::check(string &erreurMsg)
       mtxt[10] = n;
 
       if (dataSet == 0 || !dataSet->get(mtxt, metric[i]))
-	metric[i] = superGraph->getProperty<Metric>("viewMetric");
+	metric[i] = graph->getProperty<DoubleProperty>("viewMetric");
     }
 
   if (dataSet == 0 || !dataSet->get("shapeConversion", shapeConversion))

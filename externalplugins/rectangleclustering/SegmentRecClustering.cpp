@@ -1,8 +1,8 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/Selection.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/Graph.h>
 #include <tulip/TreeTest.h>
 
 #include "SegmentRecClustering.h"
@@ -18,26 +18,26 @@ SegmentRecClustering::SegmentRecClustering(ClusterContext context):Clustering(co
 SegmentRecClustering::~SegmentRecClustering()
 {}
 //================================================================================
-void SegmentRecClustering::getRecurseChild(node nNode,Selection *resultGood,Selection *resultBad) {
+void SegmentRecClustering::getRecurseChild(node nNode,BooleanProperty *resultGood,BooleanProperty *resultBad) {
   resultBad->setNodeValue(nNode,true);
-  Iterator<edge> *itE=superGraph->getOutEdges(nNode);
+  Iterator<edge> *itE=graph->getOutEdges(nNode);
   while (itE->hasNext()) {
     edge ite=itE->next();
-    resultGood->setNodeValue(superGraph->target(ite),false);
+    resultGood->setNodeValue(graph->target(ite),false);
     resultGood->setEdgeValue(ite,false);
     resultBad->setEdgeValue(ite,true);
-    getRecurseChild(superGraph->target(ite),resultGood,resultBad);
+    getRecurseChild(graph->target(ite),resultGood,resultBad);
   } delete itE;
 }
 //================================================================================
-bool SegmentRecClustering::DfsClustering (node currentNode,Selection *selectGood,Selection *selectBad) {
+bool SegmentRecClustering::DfsClustering (node currentNode,BooleanProperty *selectGood,BooleanProperty *selectBad) {
   double n,c1,c2;
   double leafMax,leafMin;
   int se;
   string tmpString;
   bool result=true;
   
-  Iterator<node> *itN=superGraph->getOutNodes(currentNode);
+  Iterator<node> *itN=graph->getOutNodes(currentNode);
   while (itN->hasNext()) {
     node itn=itN->next();
     result = result & DfsClustering (itn,selectGood,selectBad);
@@ -113,16 +113,16 @@ bool SegmentRecClustering::run() {
   string tmpString;
   //=================================================
   //initialisation des metrics necessaires
-  leafM = new Metric(superGraph);
-  resultBool = superGraph->computeProperty("Leaf",leafM,erreurMsg);
-  nodeM = new Metric(superGraph);
-  resultBool = superGraph->computeProperty("Node",nodeM,erreurMsg);
+  leafM = new DoubleProperty(graph);
+  resultBool = graph->computeProperty("Leaf",leafM,erreurMsg);
+  nodeM = new DoubleProperty(graph);
+  resultBool = graph->computeProperty("Node",nodeM,erreurMsg);
 
   //Creation de la liste des sommets OK
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node nit=itN->next();
-    if (superGraph->indeg(nit)==0) {
+    if (graph->indeg(nit)==0) {
       rootNode=nit;
       break;
     }
@@ -130,23 +130,23 @@ bool SegmentRecClustering::run() {
 
   bool result=false;
   while (!result) {
-    Selection *selectGood= superGraph->getLocalProperty<Selection>("tmpSelectionGood");
-    Selection *selectBad = superGraph->getLocalProperty<Selection>("tmpSelectionBad");
-    SuperGraph * saveSuper=superGraph;
+    BooleanProperty *selectGood= graph->getLocalProperty<BooleanProperty>("tmpSelectionGood");
+    BooleanProperty *selectBad = graph->getLocalProperty<BooleanProperty>("tmpSelectionBad");
+    Graph * saveSuper=graph;
     selectGood->setAllNodeValue(true);
     selectGood->setAllEdgeValue(true);
     selectBad->setAllNodeValue(false);
     selectBad->setAllEdgeValue(false);
     
-    segmentM = new Metric(superGraph);
-    resultBool = superGraph->computeProperty("Segment", segmentM, erreurMsg);
+    segmentM = new DoubleProperty(graph);
+    resultBool = graph->computeProperty("Segment", segmentM, erreurMsg);
     
     result = DfsClustering(rootNode,selectGood,selectBad);
     if (!result) {
-      SuperGraph * tmpSubGraph,*tmpSubGraph2;
-      tmpSubGraph = superGraph->addSubGraph(selectGood);
-      tmpSubGraph2 = superGraph->addSubGraph(selectBad);
-      superGraph=tmpSubGraph;
+      Graph * tmpSubGraph,*tmpSubGraph2;
+      tmpSubGraph = graph->addSubGraph(selectGood);
+      tmpSubGraph2 = graph->addSubGraph(selectBad);
+      graph=tmpSubGraph;
     }
     saveSuper->delLocalProperty("tmpSelectionGood");
     saveSuper->delLocalProperty("tmpSelectionBad");
@@ -158,7 +158,7 @@ bool SegmentRecClustering::run() {
 }
 //================================================================================
 bool SegmentRecClustering::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     erreurMsg="";
     return true;
   }

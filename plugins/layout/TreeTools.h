@@ -3,17 +3,17 @@
 
 #include <tulip/Node.h>
 
-class SuperGraph;
-class Layout;
-class Sizes;
+class Graph;
+class LayoutProperty;
+class SizeProperty;
 
-node    searchRoot(const SuperGraph* tree);
-int     getTreeDepth(const SuperGraph* tree, node root);
-bool    isLeaf (const SuperGraph* tree, node n);
-float   getNodeX(Layout* pLayout, node current);
-float   getNodeY(Layout* pLayout, node current);
-float   getNodeHeight(Sizes* size, node current);
-float   getNodeWidth(Sizes* size, node current);
+node    searchRoot(const Graph* tree);
+int     getTreeDepth(const Graph* tree, node root);
+bool    isLeaf (const Graph* tree, node n);
+float   getNodeX(LayoutProperty* pLayout, node current);
+float   getNodeY(LayoutProperty* pLayout, node current);
+float   getNodeHeight(SizeProperty* size, node current);
+float   getNodeWidth(SizeProperty* size, node current);
 
 #endif
 

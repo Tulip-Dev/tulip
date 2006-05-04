@@ -1,9 +1,9 @@
 SHELL=bash
 TARGET= tutorial
 SRCS=  tutorial.cpp 
-CXXFLAGS = -O3 -Wall -DNDEBUG `xml2-config --cflags`  `tulip-config --cxxflags`
+CXXFLAGS = -O3 -Wall -DNDEBUG `xml2-config --cflags`  `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= `xml2-config --libs` `freetype-config --libs` `tulip-config --libs`  
+LDFLAGS= `xml2-config --libs` `freetype-config --libs` `../../tulip-config --libs`  
 
 OBJS=$(SRCS:.cpp=.o)
 

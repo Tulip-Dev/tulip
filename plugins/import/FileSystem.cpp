@@ -15,10 +15,10 @@ struct FileSystem:public ImportModule {
   FileSystem(ClusterContext context):ImportModule(context) {}
   ~FileSystem(){}
 
-  Metric *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
-  Int *type;
-  String *label;
-  Layout *layout;
+  DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
+  IntegerProperty *type;
+  StringProperty *label;
+  LayoutProperty *layout;
   int progress;
 
 
@@ -64,8 +64,8 @@ struct FileSystem:public ImportModule {
       lstat(pathEntry.c_str(),&infoEntry);
     #endif
       if (infoEntry.st_dev==true) continue;
-      node newNode=superGraph->addNode();
-      superGraph->addEdge(n,newNode);
+      node newNode=graph->addNode();
+      graph->addEdge(n,newNode);
       label->setNodeValue(newNode,entryName);
       if (infoEntry.st_size<1)
 	size->setNodeValue(newNode,1);
@@ -80,11 +80,11 @@ struct FileSystem:public ImportModule {
       if ((infoEntry.st_mode & S_IFMT) == S_IFDIR) {
 	x += 2;
 	if (readDir(newNode,pathEntry+"/", x , x ) == TLP_CANCEL)
-	  superGraph->delNode(newNode);
+	  graph->delNode(newNode);
 	else {
 	  double newSize=0;
 	  Coord tmp(0,0,0);
-	  Iterator<node> *itN=superGraph->getOutNodes(newNode);
+	  Iterator<node> *itN=graph->getOutNodes(newNode);
 	  for (;itN->hasNext();) {
 	    node itn=itN->next();
 	    newSize+=size->getNodeValue(itn);
@@ -92,11 +92,11 @@ struct FileSystem:public ImportModule {
 	  }
 	  delete itN;
 	  size->setNodeValue(newNode,newSize/1024.0);
-	  if (superGraph->outdeg(newNode) == 0) {
+	  if (graph->outdeg(newNode) == 0) {
 	    layout->setNodeValue(newNode, Coord(x, y, 0));
 	    x += 2;
 	  } else {
-	    tmp[0] /= superGraph->outdeg(newNode);
+	    tmp[0] /= graph->outdeg(newNode);
 	    tmp[1] = y;
 	    layout->setNodeValue(newNode, tmp);
 	  }
@@ -119,18 +119,18 @@ struct FileSystem:public ImportModule {
 
   bool import(const string &name) {
     bool ok;
-    size=superGraph->getProperty<Metric>("size");
-    uid=superGraph->getProperty<Metric>("uid");
-    gid=superGraph->getProperty<Metric>("gid");
-    lastaccess=superGraph->getProperty<Metric>("lastaccess");
-    lastmodif=superGraph->getProperty<Metric>("lastmodif");
-    lastchange=superGraph->getProperty<Metric>("lastchange");
-    type=superGraph->getProperty<Int>("viewShape");
-    layout=superGraph->getProperty<Layout>("viewLayout");
-    label=superGraph->getProperty<String>("name");
+    size=graph->getProperty<DoubleProperty>("size");
+    uid=graph->getProperty<DoubleProperty>("uid");
+    gid=graph->getProperty<DoubleProperty>("gid");
+    lastaccess=graph->getProperty<DoubleProperty>("lastaccess");
+    lastmodif=graph->getProperty<DoubleProperty>("lastmodif");
+    lastchange=graph->getProperty<DoubleProperty>("lastchange");
+    type=graph->getProperty<IntegerProperty>("viewShape");
+    layout=graph->getProperty<LayoutProperty>("viewLayout");
+    label=graph->getProperty<StringProperty>("name");
     type->setAllNodeValue(0);
     layout->setAllNodeValue(Coord(0,0,0));
-    node newNode=superGraph->addNode();
+    node newNode=graph->addNode();
     QString dirName=QFileDialog::getExistingDirectory ();
     if (dirName.isNull()) return false;
 
@@ -157,14 +157,14 @@ struct FileSystem:public ImportModule {
     double newSize=0;
     Coord tmp(0,0,0);
     if (pluginProgress->state()!=TLP_CANCEL) {
-      Iterator<node> *itN=superGraph->getOutNodes(newNode);
+      Iterator<node> *itN=graph->getOutNodes(newNode);
       while (itN->hasNext()) {
 	node itn=itN->next();
 	newSize+=size->getNodeValue(itn);
 	tmp += layout->getNodeValue(itn);
       } delete itN;
       size->setNodeValue(newNode,newSize);
-      tmp /= superGraph->outdeg(newNode);
+      tmp /= graph->outdeg(newNode);
       tmp[1] = 0;
       layout->setNodeValue(newNode, tmp);
     }

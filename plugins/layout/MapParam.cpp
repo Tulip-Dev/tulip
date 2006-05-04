@@ -1,7 +1,7 @@
 #include <cmath>
-#include <Layout.h>
+#include <LayoutProperty.h>
 #include <tulip/TlpTools.h>
-#include <tulip/Metric.h>
+#include <tulip/DoubleProperty.h>
 
 struct MapParam: public LayoutAlgorithm {
 
@@ -10,11 +10,11 @@ struct MapParam: public LayoutAlgorithm {
   bool run () {
     bool cached,errresult;
     string errmsg;
-    Metric *p1=getLocalProperty<Metric>(superGraph,"Spreading Interpolation",cached,errresult,errmsg,pluginProgress);
-    Metric *p2=getLocalProperty<Metric>(superGraph,"StrahlerAllGeneral",cached,errresult,errmsg,pluginProgress);
-    Metric *p3=getLocalProperty<Metric>(superGraph,"Arity",cached,errresult,errmsg,pluginProgress);
+    Metric *p1=getLocalProperty<DoubleProperty>(graph,"Spreading Interpolation",cached,errresult,errmsg,pluginProgress);
+    Metric *p2=getLocalProperty<DoubleProperty>(graph,"StrahlerAllGeneral",cached,errresult,errmsg,pluginProgress);
+    Metric *p3=getLocalProperty<DoubleProperty>(graph,"Arity",cached,errresult,errmsg,pluginProgress);
 
-    Iterator<node> *itN=superGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
     for (;itN->hasNext();) {
       node itn=itN->next();
       double max;
@@ -26,4 +26,4 @@ struct MapParam: public LayoutAlgorithm {
   }
 };
 
-METRICPLUGIN(MapParam,"MapParam","David Auber","18/06/2002","Ok","0","1")
+DOUBLEPLUGIN(MapParam,"MapParam","David Auber","18/06/2002","Ok","0","1")

@@ -1,6 +1,6 @@
 #include <fstream>
 #include <tulip/TulipPlugin.h>
-#include <tulip/PropertyProxy.h>
+#include <tulip/AbstractProperty.h>
 #include "GMLParser.h"
 
 #define NODE "node"
@@ -26,67 +26,67 @@ void edgeAttributeError() {
 
 //=================================================================================
 struct GMLGraphBuilder:public GMLTrue {
-  SuperGraph *_superGraph;
+  Graph *_graph;
   map<int,node> nodeIndex;
   virtual ~GMLGraphBuilder(){}
-  GMLGraphBuilder(SuperGraph *superGraph):_superGraph(superGraph) {
+  GMLGraphBuilder(Graph *graph):_graph(graph) {
     //cer << "buil GraphBuilder" << endl;
   }
   bool addNode(int id) {
-    if (nodeIndex.find(id)==nodeIndex.end()) {nodeIndex[id]=_superGraph->addNode();}
+    if (nodeIndex.find(id)==nodeIndex.end()) {nodeIndex[id]=_graph->addNode();}
     return true;
   }
   edge addEdge(int idSource,int idTarget) {
     // return and invalid edge if one of the two nodes does not exits
-    if (_superGraph->isElement(nodeIndex[idSource]) && _superGraph->isElement(nodeIndex[idTarget]))
-      return _superGraph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
+    if (_graph->isElement(nodeIndex[idSource]) && _graph->isElement(nodeIndex[idTarget]))
+      return _graph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
     return edge();
   }
   bool setNodeValue(int nodeId, const string propertyName, string value) {
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<String>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<StringProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, double value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Metric>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<DoubleProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, int value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Int>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<IntegerProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, bool value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Selection>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<BooleanProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Coord value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Layout>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<LayoutProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Size value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Sizes>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<SizeProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Color value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<Colors>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<ColorProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
@@ -105,7 +105,7 @@ struct GMLGraphBuilder:public GMLTrue {
     return true;
   }
   void setEdgeValue(edge e,const LineType::RealType & lCoord) {
-    _superGraph->getLocalProperty<Layout>("viewLayout")->setEdgeValue(e,lCoord);
+    _graph->getLocalProperty<LayoutProperty>("viewLayout")->setEdgeValue(e,lCoord);
   }
   bool setAllNodeValue(const string propertyType, const string propertyName, string value) {
     return true;
@@ -380,7 +380,7 @@ bool GMLEdgeBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) 
 //=================================================================================
 bool GMLGraphBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) {
   if (structName==GRAPH) {
-    newBuilder=new GMLGraphBuilder(_superGraph);
+    newBuilder=new GMLGraphBuilder(_graph);
   }
   else if (structName==NODE) {
     newBuilder=new GMLNodeBuilder(this);
@@ -418,7 +418,7 @@ struct GMLImport:public ImportModule {
     string filename;
     dataSet->get<string>("filename", filename);
     ifstream myFile(filename.c_str());
-    GMLParser<true> myParser(myFile,new GMLGraphBuilder(superGraph));
+    GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();
     return true;
   }

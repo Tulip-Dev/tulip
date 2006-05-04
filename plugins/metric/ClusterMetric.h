@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// ClusterMetric.h - An implementation of the clustering parameter.
+/// ClusterDoubleProperty.h - An implementation of the clustering parameter.
 /** This plugin is an implementation of the Clustering Parameter.
  *  algorithm published in :
  *
@@ -40,7 +40,7 @@
  *  (at your option) any later version.
  *
  */
-class ClusterMetric:public MetricAlgorithm { 
+class ClusterMetric:public DoubleAlgorithm { 
 public:
   ClusterMetric(const PropertyContext &);
   bool run();

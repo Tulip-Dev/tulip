@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// EccentricyMetric.h - Compute the eccentricity of each node.
+/// EccentricyDoubleProperty.h - Compute the eccentricity of each node.
 /** This plugin compute the eccentricity of each node, 
  *
  * Eccentricity is the maximum distance to go from a node to all others.
@@ -39,7 +39,7 @@
  *  (at your option) any later version.
  *
  */
-class EccentricityMetric:public MetricAlgorithm { 
+class EccentricityMetric:public DoubleAlgorithm { 
 public:
   EccentricityMetric(const PropertyContext &);
   ~EccentricityMetric();

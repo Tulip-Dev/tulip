@@ -10,8 +10,8 @@
 
 #include <tulip/TulipPlugin.h>
 
-class Metric;
-class Sizes;
+class DoubleProperty;
+class SizeProperty;
 
 
 /** \addtogroup layout */
@@ -58,9 +58,9 @@ private:
   void dfsPlacement(node n, int depth, double x, double y, double width, double height,
 		    bool direction, stdext::hash_map<node,double> &value);
   double initVal(node n, stdext::hash_map<node,double> &value);
-  Sizes *size;
-  Metric *metric;
-  Colors *color;
+  SizeProperty *size;
+  DoubleProperty *metric;
+  ColorProperty *color;
 };
 /*@}*/
 #endif

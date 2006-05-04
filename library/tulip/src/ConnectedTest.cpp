@@ -1,4 +1,4 @@
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
 
@@ -12,120 +12,120 @@ ConnectedTest * ConnectedTest::instance=0;
 ConnectedTest * ConnectedTest::instance=0;
 #endif
 //=================================================================
-bool ConnectedTest::isConnected(SuperGraph *graph) {
+bool ConnectedTest::isConnected(Graph *sg) {
   if (instance==0)
     instance=new ConnectedTest();
-  return instance->compute(graph);
+  return instance->compute(sg);
 }
 //=================================================================
-void ConnectedTest::makeConnected(SuperGraph *graph, vector<edge> &addedEdges) {
-  //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
+void ConnectedTest::makeConnected(Graph *sg, vector<edge> &addedEdges) {
+  //  cerr << __PRETTY_FUNCTION__ << " : " << sg->getAttribute<string>("name") << endl;
   if (instance==0)
     instance=new ConnectedTest();
-  graph->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned long)graph);  
+  sg->removeObserver(instance);
+  instance->resultsBuffer.erase((unsigned long)sg);  
   vector<node> toLink;  
-  instance->connect(graph, toLink);
+  instance->connect(sg, toLink);
   for (unsigned int i = 1; i < toLink.size(); ++i)
-    addedEdges.push_back(graph->addEdge(toLink[i-1], toLink[i]));
-  assert(ConnectedTest::isConnected(graph));
+    addedEdges.push_back(sg->addEdge(toLink[i-1], toLink[i]));
+  assert(ConnectedTest::isConnected(sg));
 }
 //=================================================================
-unsigned int ConnectedTest::numberOfConnectedComponnents(SuperGraph *graph) {
-  if (graph->numberOfNodes()==0) return 0u;
+unsigned int ConnectedTest::numberOfConnectedComponnents(Graph *sg) {
+  if (sg->numberOfNodes()==0) return 0u;
   if (instance==0)
     instance=new ConnectedTest();
-  graph->removeObserver(instance);
+  sg->removeObserver(instance);
   vector<node> toLink;
-  instance->connect(graph, toLink);
+  instance->connect(sg, toLink);
   unsigned int result;
   if (toLink.size()>0) 
     result =  toLink.size();
   else 
     result = 1u;
-  instance->resultsBuffer[(unsigned long)graph] = (result == 1u);
-  graph->addObserver(instance);
+  instance->resultsBuffer[(unsigned long)sg] = (result == 1u);
+  sg->addObserver(instance);
   return result;
 }
 //=================================================================
-void connectedTest(SuperGraph *graph, node n, 
+void connectedTest(Graph *sg, node n, 
 		   MutableContainer<bool> &visited,
 		   unsigned int &count) {
   if (visited.get(n.id)) return;
   visited.set(n.id,true);
   ++count;
-  Iterator<node> *it=graph->getInOutNodes(n);
+  Iterator<node> *it=sg->getInOutNodes(n);
   while (it->hasNext()) {
-    connectedTest(graph, it->next(), visited, count);
+    connectedTest(sg, it->next(), visited, count);
   } delete it;
 }
 //=================================================================
 ConnectedTest::ConnectedTest(){}
 //=================================================================
-bool ConnectedTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned long)graph];
-  if (graph->numberOfNodes()==0) return true;
+bool ConnectedTest::compute(Graph *sg) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)sg];
+  if (sg->numberOfNodes()==0) return true;
   MutableContainer<bool> visited;
   visited.setAll(false);
   unsigned int count = 0;
-  connectedTest(graph, graph->getOneNode(), visited, count);
-  bool result = (count == graph->numberOfNodes());
-  resultsBuffer[(unsigned long)graph]=result;
-  graph->addObserver(this);
+  connectedTest(sg, sg->getOneNode(), visited, count);
+  bool result = (count == sg->numberOfNodes());
+  resultsBuffer[(unsigned long)sg]=result;
+  sg->addObserver(this);
   return result;
 }
 //=================================================================
-void ConnectedTest::connect(SuperGraph *graph, vector<node> &toLink) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
-    if (resultsBuffer[(unsigned long)graph])
+void ConnectedTest::connect(Graph *sg, vector<node> &toLink) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) {
+    if (resultsBuffer[(unsigned long)sg])
       return;
   }
-  if (graph->numberOfNodes()==0) return;
+  if (sg->numberOfNodes()==0) return;
   MutableContainer<bool> visited;
   visited.setAll(false);
   unsigned int count = 0;
-  Iterator<node> *itN = graph->getNodes();
+  Iterator<node> *itN = sg->getNodes();
   while(itN->hasNext()) {
     node n = itN->next();
     if (!visited.get(n.id)) {
       toLink.push_back(n);
-      connectedTest(graph, n, visited, count);
+      connectedTest(sg, n, visited, count);
     }
   }
 }
 //=================================================================
-void ConnectedTest::addEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void ConnectedTest::addEdge(Graph *sg,const edge) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void ConnectedTest::delEdge(SuperGraph *graph,const edge) {
+void ConnectedTest::delEdge(Graph *sg,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (!resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void ConnectedTest::reverseEdge(SuperGraph *graph,const edge) {
+void ConnectedTest::reverseEdge(Graph *sg,const edge) {
 }
 //=================================================================
-void ConnectedTest::addNode(SuperGraph *graph,const node) {
-  resultsBuffer[(unsigned long)graph]=false;
+void ConnectedTest::addNode(Graph *sg,const node) {
+  resultsBuffer[(unsigned long)sg]=false;
 }
 //=================================================================
-void ConnectedTest::delNode(SuperGraph *graph,const node) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void ConnectedTest::delNode(Graph *sg,const node) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void ConnectedTest::destroy(SuperGraph *graph) {
+void ConnectedTest::destroy(Graph *sg) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
 

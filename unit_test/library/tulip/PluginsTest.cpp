@@ -11,7 +11,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
 //==========================================================
 void PluginsTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void PluginsTest::tearDown() {

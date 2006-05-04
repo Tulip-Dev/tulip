@@ -9,18 +9,18 @@
 #include <fstream>
 #include <string>
 
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/TypeConverter.h"
 #include "tulip/PropertyManager.h"
-#include "tulip/PropertyProxy.h"
-#include "tulip/Metric.h"
-#include "tulip/String.h"
-#include "tulip/Selection.h"
-#include "tulip/Layout.h"
-#include "tulip/Int.h"
-#include "tulip/Colors.h"
-#include "tulip/Sizes.h"
-#include "tulip/MetaGraph.h"
+#include "tulip/AbstractProperty.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/StringProperty.h"
+#include "tulip/BooleanProperty.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/IntegerProperty.h"
+#include "tulip/ColorProperty.h"
+#include "tulip/SizeProperty.h"
+#include "tulip/GraphProperty.h"
 
 using namespace std;
 
@@ -206,62 +206,62 @@ bool stringToLCoord(string &str,LineType::RealType &lcoo) {
 }
 
 //== A deplacer dans les types pour augmenter la simplicit� des extensions
-bool stringToNodeProperty(PProxy *propertyName,node n,string &str) {
-  if (typeid((*propertyName)) == typeid(Sizes)) {
+bool stringToNodeProperty(PropertyInterface *propertyName,node n,string &str) {
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
     Size tmpSiz;
     if (stringToSize(str,tmpSiz)) {
-      ((Sizes*)propertyName)->setNodeValue(n,tmpSiz);
+      ((SizeProperty*)propertyName)->setNodeValue(n,tmpSiz);
       return true;
     }
     else
       return false;
   }
 
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     Coord tmpCoo;
     if (stringToCoord(str,tmpCoo)) {
-      ((Layout*)propertyName)->setNodeValue(n,tmpCoo);
+      ((LayoutProperty*)propertyName)->setNodeValue(n,tmpCoo);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
     Color tmpCol;
     if (stringToColor(str,tmpCol)) {
-      ((Colors*)propertyName)->setNodeValue(n,tmpCol);
+      ((ColorProperty*)propertyName)->setNodeValue(n,tmpCol);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    ((String*)propertyName)->setNodeValue(n,str);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    ((StringProperty*)propertyName)->setNodeValue(n,str);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     double result=strtod(startPtr,&endPtr);
     if (endPtr==startPtr) return false;
-    ((Metric*)propertyName)->setNodeValue(n,result);
+    ((DoubleProperty*)propertyName)->setNodeValue(n,result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     long result=strtol(startPtr,&endPtr,10);
     if (endPtr==startPtr) return false;
-    ((Int*)propertyName)->setNodeValue(n,(int)result);
+    ((IntegerProperty*)propertyName)->setNodeValue(n,(int)result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Selection)) {
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
     if (strcasecmp(str.c_str(),"true")==0) {
-      ((Selection*)propertyName)->setNodeValue(n,true);
+      ((BooleanProperty*)propertyName)->setNodeValue(n,true);
       return true;
     }
     if (strcasecmp(str.c_str(),"false")==0) {
-      ((Selection*)propertyName)->setNodeValue(n,false);
+      ((BooleanProperty*)propertyName)->setNodeValue(n,false);
       return true;
     }
     return false;
@@ -269,61 +269,61 @@ bool stringToNodeProperty(PProxy *propertyName,node n,string &str) {
   return false;
 }
 
-bool stringToEdgeProperty(PProxy *propertyName,edge e,string &str) {
-  if (typeid((*propertyName)) == typeid(Sizes)) {
+bool stringToEdgeProperty(PropertyInterface *propertyName,edge e,string &str) {
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
     Size tmpSiz;
     if (stringToSize(str,tmpSiz)) {
-      ((Sizes*)propertyName)->setEdgeValue(e,tmpSiz);
+      ((SizeProperty*)propertyName)->setEdgeValue(e,tmpSiz);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     LineType::RealType tmpLCoo;
     if (stringToLCoord(str,tmpLCoo)) {
-      ((Layout*)propertyName)->setEdgeValue(e,tmpLCoo);
+      ((LayoutProperty*)propertyName)->setEdgeValue(e,tmpLCoo);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
     Color tmpCol;
     if (stringToColor(str,tmpCol)) {
-      ((Colors*)propertyName)->setEdgeValue(e,tmpCol);
+      ((ColorProperty*)propertyName)->setEdgeValue(e,tmpCol);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    ((String*)propertyName)->setEdgeValue(e,str);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    ((StringProperty*)propertyName)->setEdgeValue(e,str);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     double result=strtod(startPtr,&endPtr);
     if (endPtr==startPtr) return false;
-    ((Metric*)propertyName)->setEdgeValue(e,result);
+    ((DoubleProperty*)propertyName)->setEdgeValue(e,result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     long result=strtol(startPtr,&endPtr,10);
     if (endPtr==startPtr) return false;
-    ((Int*)propertyName)->setEdgeValue(e,(int)result);
+    ((IntegerProperty*)propertyName)->setEdgeValue(e,(int)result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Selection)) {
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
     if (strcasecmp(str.c_str(),"true")==0) {
-      ((Selection*)propertyName)->setEdgeValue(e,true);
+      ((BooleanProperty*)propertyName)->setEdgeValue(e,true);
       return true;
     }
     if (strcasecmp(str.c_str(),"false")==0) {
-      ((Selection*)propertyName)->setEdgeValue(e,false);
+      ((BooleanProperty*)propertyName)->setEdgeValue(e,false);
       return true;
     }
     return false;
@@ -331,69 +331,69 @@ bool stringToEdgeProperty(PProxy *propertyName,edge e,string &str) {
   return false;
 }
 
-string nodePropertyToString(PProxy *propertyName,node n) {
+string nodePropertyToString(PropertyInterface *propertyName,node n) {
   string result;
   ostringstream s;
-  if (typeid((*propertyName)) == typeid(MetaGraph)) {
-    if (((MetaGraph*)propertyName)->getNodeValue(n)!=0) 
-      s << ((MetaGraph*)propertyName)->getNodeValue(n)->getId();
+  if (typeid((*propertyName)) == typeid(GraphProperty)) {
+    if (((GraphProperty*)propertyName)->getNodeValue(n)!=0) 
+      s << ((GraphProperty*)propertyName)->getNodeValue(n)->getId();
     else
       s << "0";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
-    s << ((Metric*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
+    s << ((DoubleProperty*)propertyName)->getNodeValue(n);
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
-    const Coord &tmpCo=((Layout*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
+    const Coord &tmpCo=((LayoutProperty*)propertyName)->getNodeValue(n);
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-      return ((String*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+      return ((StringProperty*)propertyName)->getNodeValue(n);
     }
-  if (typeid((*propertyName)) == typeid(Selection)) {
-    if ( ((Selection*)propertyName)->getNodeValue(n))
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
+    if ( ((BooleanProperty*)propertyName)->getNodeValue(n))
       return string("true");
     else
       return string("false");
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
-    s << ((Int*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
+    s << ((IntegerProperty*)propertyName)->getNodeValue(n);
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
-    const Color &tmpCo=((Colors*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
+    const Color &tmpCo=((ColorProperty*)propertyName)->getNodeValue(n);
     s << "(" << (unsigned int)tmpCo[0] << "," << (unsigned int)tmpCo[1] ;
     s << "," << (unsigned int)tmpCo[2] << "," << (unsigned int)tmpCo[3] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Sizes)) {
-    const Size &tmpCo=((Sizes*)propertyName)->getNodeValue(n);
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
+    const Size &tmpCo=((SizeProperty*)propertyName)->getNodeValue(n);
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
   return result;
 }
 
-string edgePropertyToString(PProxy *propertyName,edge e) {
+string edgePropertyToString(PropertyInterface *propertyName,edge e) {
   string result;
   ostringstream s;
-  if (typeid((*propertyName)) == typeid(MetaGraph)) {
-      if  ( ((MetaGraph*)propertyName)->getEdgeValue(e)!=0 )
-	s << ((MetaGraph*)propertyName)->getEdgeValue(e)->getId();
+  if (typeid((*propertyName)) == typeid(GraphProperty)) {
+      if  ( ((GraphProperty*)propertyName)->getEdgeValue(e)!=0 )
+	s << ((GraphProperty*)propertyName)->getEdgeValue(e)->getId();
       else
 	s << "0";
       return s.str();
     }
-  if (typeid((*propertyName)) == typeid(Metric)) {
-    s << ((Metric*)propertyName)->getEdgeValue(e);
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
+    s << ((DoubleProperty*)propertyName)->getEdgeValue(e);
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     vector<Coord>::iterator lCoordIt,lCoordItEnd;
-    vector<Coord> tmpLi=((Layout*)propertyName)->getEdgeValue(e);
+    vector<Coord> tmpLi=((LayoutProperty*)propertyName)->getEdgeValue(e);
     lCoordIt = tmpLi.begin();
     lCoordItEnd = tmpLi.end();
     s << "(" ;
@@ -405,108 +405,108 @@ string edgePropertyToString(PProxy *propertyName,edge e) {
     s << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-      return ((String*)propertyName)->getEdgeValue(e);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+      return ((StringProperty*)propertyName)->getEdgeValue(e);
     }
-  if (typeid((*propertyName)) == typeid(Selection)) {
-      if (((Selection*)propertyName)->getEdgeValue(e))
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
+      if (((BooleanProperty*)propertyName)->getEdgeValue(e))
 	return string("true");
       else
 	return string("false");
     }
-  if (typeid((*propertyName)) == typeid(Int)) {
-    s << ((Int*)propertyName)->getEdgeValue(e);
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
+    s << ((IntegerProperty*)propertyName)->getEdgeValue(e);
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
-    Color tmpCo=((Colors*)propertyName)->getEdgeValue(e);
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
+    Color tmpCo=((ColorProperty*)propertyName)->getEdgeValue(e);
     s << "(" << (unsigned int)tmpCo[0] << "," << (unsigned int)tmpCo[1] ;
     s << "," << (unsigned int)tmpCo[2] << "," << (unsigned int)tmpCo[3] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Sizes)) {
-    Size tmpCo=((Sizes*)propertyName)->getEdgeValue(e);
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
+    Size tmpCo=((SizeProperty*)propertyName)->getEdgeValue(e);
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
   return result;
 }
 
-string propertyType(PProxy *propertyName) {
-  if (typeid((*propertyName)) == typeid(MetaGraph)) return "metagraph";
-  if (typeid((*propertyName)) == typeid(Metric)) return "metric";
-  if (typeid((*propertyName)) == typeid(Layout)) return "layout";
-  if (typeid((*propertyName)) == typeid(String)) return "string";
-  if (typeid((*propertyName)) == typeid(Int)) return "int";
-  if (typeid((*propertyName)) == typeid(Colors)) return "color";
-  if (typeid((*propertyName)) == typeid(Sizes)) return "size";
-  if (typeid((*propertyName)) == typeid(Selection)) return "bool";
+string propertyType(PropertyInterface *propertyName) {
+  if (typeid((*propertyName)) == typeid(GraphProperty)) return "graph";
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) return "double";
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) return "layout";
+  if (typeid((*propertyName)) == typeid(StringProperty)) return "string";
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) return "int";
+  if (typeid((*propertyName)) == typeid(ColorProperty)) return "color";
+  if (typeid((*propertyName)) == typeid(SizeProperty)) return "size";
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) return "bool";
   return "unknown";
 }
 
-string propertyNodeDefaultValue(PProxy *propertyName) {
+string propertyNodeDefaultValue(PropertyInterface *propertyName) {
   string result;
   ostringstream s;
-  if (typeid((*propertyName)) == typeid(MetaGraph)) {
-    if (((MetaGraph*)propertyName)->getNodeDefaultValue()!=0) 
-      s << ((MetaGraph*)propertyName)->getNodeDefaultValue()->getId();
+  if (typeid((*propertyName)) == typeid(GraphProperty)) {
+    if (((GraphProperty*)propertyName)->getNodeDefaultValue()!=0) 
+      s << ((GraphProperty*)propertyName)->getNodeDefaultValue()->getId();
     else
       s << "0";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
-    s << ((Metric*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
+    s << ((DoubleProperty*)propertyName)->getNodeDefaultValue();
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
-    const Coord &tmpCo=((Layout*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
+    const Coord &tmpCo=((LayoutProperty*)propertyName)->getNodeDefaultValue();
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    return ((String*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    return ((StringProperty*)propertyName)->getNodeDefaultValue();
   }
-  if (typeid((*propertyName)) == typeid(Selection))  {
-    if (((Selection*)propertyName)->getNodeDefaultValue())
+  if (typeid((*propertyName)) == typeid(BooleanProperty))  {
+    if (((BooleanProperty*)propertyName)->getNodeDefaultValue())
       return string("true");
     else
       return string("false");
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
-    s << ((Int*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
+    s << ((IntegerProperty*)propertyName)->getNodeDefaultValue();
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
-    const Color &tmpCo=((Colors*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
+    const Color &tmpCo=((ColorProperty*)propertyName)->getNodeDefaultValue();
     s << "(" << (unsigned int)tmpCo[0] << "," << (unsigned int)tmpCo[1] ;
     s << "," << (unsigned int)tmpCo[2] << "," << (unsigned int)tmpCo[3] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Sizes)) {
-    const Size &tmpCo=((Sizes*)propertyName)->getNodeDefaultValue();
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
+    const Size &tmpCo=((SizeProperty*)propertyName)->getNodeDefaultValue();
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
   return result;
 }
 
-string propertyEdgeDefaultValue(PProxy *propertyName) {
+string propertyEdgeDefaultValue(PropertyInterface *propertyName) {
   string result;
   ostringstream s;
-  if (typeid((*propertyName)) == typeid(MetaGraph)) {
-    if (((MetaGraph*)propertyName)->getEdgeDefaultValue()!=0) 
-      s << ((MetaGraph*)propertyName)->getEdgeDefaultValue()->getId();
+  if (typeid((*propertyName)) == typeid(GraphProperty)) {
+    if (((GraphProperty*)propertyName)->getEdgeDefaultValue()!=0) 
+      s << ((GraphProperty*)propertyName)->getEdgeDefaultValue()->getId();
     else
       s << "0";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
-    s << ((Metric*)propertyName)->getEdgeDefaultValue();
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
+    s << ((DoubleProperty*)propertyName)->getEdgeDefaultValue();
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     vector<Coord>::iterator lCoordIt,lCoordItEnd;
-    vector<Coord> tmpLi=((Layout*)propertyName)->getEdgeDefaultValue();
+    vector<Coord> tmpLi=((LayoutProperty*)propertyName)->getEdgeDefaultValue();
     lCoordIt = tmpLi.begin();
     lCoordItEnd = tmpLi.end();
     s << "(";
@@ -518,27 +518,27 @@ string propertyEdgeDefaultValue(PProxy *propertyName) {
     s << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    return ((String*)propertyName)->getEdgeDefaultValue();
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    return ((StringProperty*)propertyName)->getEdgeDefaultValue();
   }
-  if (typeid((*propertyName)) == typeid(Selection)) {
-    if ( ((Selection*)propertyName)->getEdgeDefaultValue())
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
+    if ( ((BooleanProperty*)propertyName)->getEdgeDefaultValue())
       return string("true");
     else
       return string("false");
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
-    s << ((Int*)propertyName)->getEdgeDefaultValue();
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
+    s << ((IntegerProperty*)propertyName)->getEdgeDefaultValue();
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
-    const Color &tmpCo=((Colors*)propertyName)->getEdgeDefaultValue();
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
+    const Color &tmpCo=((ColorProperty*)propertyName)->getEdgeDefaultValue();
     s << "(" << (unsigned int)tmpCo[0] << "," << (unsigned int)tmpCo[1] ;
     s << "," << (unsigned int)tmpCo[2] << "," << (unsigned int)tmpCo[3] << ")";
     return s.str();
   }
-  if (typeid((*propertyName)) == typeid(Sizes)) {
-    const Size &tmpCo=((Sizes*)propertyName)->getEdgeDefaultValue();
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
+    const Size &tmpCo=((SizeProperty*)propertyName)->getEdgeDefaultValue();
     s << "(" << tmpCo[0] << "," << tmpCo[1] << "," << tmpCo[2] << ")";
     return s.str();
   }
@@ -546,63 +546,63 @@ string propertyEdgeDefaultValue(PProxy *propertyName) {
 }
 
 //== A deplacer dans les types pour augmenter la simplicit� des extensions
-bool stringToAllNodeProperty(PProxy *propertyName, string &str) {
-  if (typeid((*propertyName)) == typeid(Sizes)) {
+bool stringToAllNodeProperty(PropertyInterface *propertyName, string &str) {
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
     Size tmpSiz;
     if (stringToSize(str,tmpSiz)) {
       //cer << "tulip set nodeValue()" ;
-      ((Sizes*)propertyName)->setAllNodeValue(tmpSiz);
+      ((SizeProperty*)propertyName)->setAllNodeValue(tmpSiz);
       //cer << "ok" << endl;
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     Coord tmpCoo;
     if (stringToCoord(str,tmpCoo)) {
-      ((Layout*)propertyName)->setAllNodeValue(tmpCoo);
+      ((LayoutProperty*)propertyName)->setAllNodeValue(tmpCoo);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
     Color tmpCol;
     if (stringToColor(str,tmpCol)) {
-      ((Colors*)propertyName)->setAllNodeValue(tmpCol);
+      ((ColorProperty*)propertyName)->setAllNodeValue(tmpCol);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    ((String*)propertyName)->setAllNodeValue(str);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    ((StringProperty*)propertyName)->setAllNodeValue(str);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     double result=strtod(startPtr,&endPtr);
     if (endPtr==startPtr) return false;
-    ((Metric*)propertyName)->setAllNodeValue(result);
+    ((DoubleProperty*)propertyName)->setAllNodeValue(result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     long result=strtol(startPtr,&endPtr,10);
     if (endPtr==startPtr) return false;
-    ((Int*)propertyName)->setAllNodeValue((int)result);
+    ((IntegerProperty*)propertyName)->setAllNodeValue((int)result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Selection)) {
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
       if (strcasecmp(str.c_str(),"true")==0) {
-	((Selection*)propertyName)->setAllNodeValue(true);
+	((BooleanProperty*)propertyName)->setAllNodeValue(true);
 	return true;
       }
       if (strcasecmp(str.c_str(),"false")==0) {
-	((Selection*)propertyName)->setAllNodeValue(false);
+	((BooleanProperty*)propertyName)->setAllNodeValue(false);
 	return true;
       }
       return false;
@@ -610,74 +610,71 @@ bool stringToAllNodeProperty(PProxy *propertyName, string &str) {
   return false;
 }
 
-bool stringToAllEdgeProperty(PProxy *propertyName, string &str) {
+bool stringToAllEdgeProperty(PropertyInterface *propertyName, string &str) {
   //cer << "StringToEdge" << endl;
-  if (typeid((*propertyName)) == typeid(Sizes)) {
+  if (typeid((*propertyName)) == typeid(SizeProperty)) {
     Size tmpSiz;
     if (stringToSize(str,tmpSiz)) {
-      ((Sizes*)propertyName)->setAllEdgeValue(tmpSiz);
+      ((SizeProperty*)propertyName)->setAllEdgeValue(tmpSiz);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Layout)) {
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) {
     vector<Coord> tmpLCoo;
     if (stringToLCoord(str,tmpLCoo)) {
-      vector<Coord> tmpL;//=((Layout*)propertyName)->getEdgeValue(e);
+      vector<Coord> tmpL;//=((LayoutProperty*)propertyName)->getEdgeValue(e);
       //tmpL.clear();
       for (unsigned int i=0;i<tmpLCoo.size();++i) {
 	tmpL.push_back(tmpLCoo[i]);
       }
       tmpLCoo.clear();
-      ((Layout*)propertyName)->setAllEdgeValue(tmpL);
+      ((LayoutProperty*)propertyName)->setAllEdgeValue(tmpL);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(Colors)) {
+  if (typeid((*propertyName)) == typeid(ColorProperty)) {
     Color tmpCol;
     if (stringToColor(str,tmpCol)) {
-      ((Colors*)propertyName)->setAllEdgeValue(tmpCol);
+      ((ColorProperty*)propertyName)->setAllEdgeValue(tmpCol);
       return true;
     }
     else
       return false;
   }
-  if (typeid((*propertyName)) == typeid(String)) {
-    ((String*)propertyName)->setAllEdgeValue(str);
+  if (typeid((*propertyName)) == typeid(StringProperty)) {
+    ((StringProperty*)propertyName)->setAllEdgeValue(str);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Metric)) {
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     double result=strtod(startPtr,&endPtr);
     if (endPtr==startPtr) return false;
-    ((Metric*)propertyName)->setAllEdgeValue(result);
+    ((DoubleProperty*)propertyName)->setAllEdgeValue(result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Int)) {
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) {
     char *endPtr=0;
     const char *startPtr=str.c_str();
     long result=strtol(startPtr,&endPtr,10);
     if (endPtr==startPtr) return false;
-    ((Int*)propertyName)->setAllEdgeValue((int)result);
+    ((IntegerProperty*)propertyName)->setAllEdgeValue((int)result);
     return true;
   }
-  if (typeid((*propertyName)) == typeid(Selection)) {
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) {
     if (strcasecmp(str.c_str(),"true")==0) {
-      ((Selection*)propertyName)->setAllEdgeValue(true);
+      ((BooleanProperty*)propertyName)->setAllEdgeValue(true);
       return true;
     }
     if (strcasecmp(str.c_str(),"false")==0) {
-      ((Selection*)propertyName)->setAllEdgeValue(false);
+      ((BooleanProperty*)propertyName)->setAllEdgeValue(false);
       return true;
     }
     return false;
   }
   return false;
 }
-
-
-

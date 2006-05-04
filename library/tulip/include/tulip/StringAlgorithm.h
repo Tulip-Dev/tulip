@@ -21,20 +21,20 @@
 #include "Property.h"
 
 class PropertyContext;
-class String;
+class StringProperty;
 
 /** \addtogroup plugins */ 
 /*@{*/
 
 /// Interface for String plug-ins
-class TLP_SCOPE StringAlgorithm:public Property<StringType , StringType>
+class TLP_SCOPE StringAlgorithm:public PropertyAlgorithm<StringType , StringType>
 { 
   ///
-  friend class String;
+  friend class StringProperty;
 public:
   /** This string is the one associated to the algorithm,
       The data should be store in it*/
-  String *stringResult;
+  StringProperty *stringResult;
 
 protected:
   ///

@@ -11,7 +11,7 @@
 /** \addtogroup clustering */
 /*@{*/
 
-class PlaneClustering : public Clustering 
+class PlaneClustering : public Clustering
 { 
  public:
 

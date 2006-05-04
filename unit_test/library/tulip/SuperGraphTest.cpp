@@ -8,7 +8,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( SuperGraphTest );
 
 //==========================================================
 void SuperGraphTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void SuperGraphTest::tearDown() {
@@ -401,7 +401,7 @@ void SuperGraphTest::testInheritance() {
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
-  Metric *m = graph->getProperty<Metric>("metric");
+  Metric *m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->existProperty("metric"));
   CPPUNIT_ASSERT(g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
@@ -416,14 +416,14 @@ void SuperGraphTest::testInheritance() {
   CPPUNIT_ASSERT(!g4->existProperty("metric"));
 
 
-  Metric *m2 = g2->getLocalProperty<Metric>("metric");
+  Metric *m2 = g2->getLocalProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(!graph->existProperty("metric"));
   CPPUNIT_ASSERT(!g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
   CPPUNIT_ASSERT(g3->existProperty("metric"));
   CPPUNIT_ASSERT(g4->existProperty("metric"));
 
-  m = graph->getProperty<Metric>("metric");
+  m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->getProperty("metric") == m);
   CPPUNIT_ASSERT(g1->getProperty("metric") == m);
   CPPUNIT_ASSERT(g2->getProperty("metric") == m2);
@@ -458,7 +458,7 @@ void SuperGraphTest::testPropertiesIteration() {
 
   set<string>::const_iterator it;
   for (it=propList1.begin();it!=propList1.end();++it) {
-    graph->getProperty<Int>(*it);
+    graph->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
   Iterator<string> *itS = graph->getProperties();
@@ -483,7 +483,7 @@ void SuperGraphTest::testPropertiesIteration() {
   } delete itS;
 
   for (it=propList2.begin();it!=propList2.end();++it) {
-    g2->getProperty<Int>(*it);
+    g2->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
 

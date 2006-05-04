@@ -78,15 +78,15 @@ class MixedModel : public LayoutAlgorithm {
   std::map<edge, std::vector<Coord> > InPoints;
   std::map<edge, Coord> OutPoints;
 
-  SuperGraph * Pere;
+  Graph * Pere;
   SuperGraphConMap * graphMap;
-  SuperGraph * currentGraph;
+  Graph * currentGraph;
   std::vector<edge> dummy;
   std::map<node, std::vector<Coord> > out_points;
   MutableContainer<Coord>::MutableContainer nodeSize;
   std::vector<edge> unplanar_edges;
   bool planar;
-  Sizes *size;
+  SizeProperty *size;
 
 };
 /*@}*/

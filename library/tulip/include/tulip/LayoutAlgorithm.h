@@ -19,22 +19,22 @@
 #include "Types.h"
 #include "Property.h"
 class PropertyContext;
-class Layout;
+class LayoutProperty;
 
 /**
  * \defgroup plugins
  */ 
 /*@{*/
 ///Interface for layout plug-ins
-class TLP_SCOPE LayoutAlgorithm:public Property<PointType , LineType> {
+class TLP_SCOPE LayoutAlgorithm:public PropertyAlgorithm<PointType , LineType> {
   ///
-  friend class Layout;
+  friend class LayoutProperty;
 public:
   /** 
    * This layout is the one associated to the plug-ins,
    * The data should be store in it
    */
-  Layout *layoutResult;
+  LayoutProperty *layoutResult;
 protected: 
   ///
   LayoutAlgorithm (const PropertyContext &context);

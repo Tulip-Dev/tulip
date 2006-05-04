@@ -2,7 +2,7 @@
 #include "EdgeTools.h"
 
 //====================================================================
-void setOrthogonalEdge(OrientableLayout* oriLayout, const SuperGraph* tree,
+void setOrthogonalEdge(OrientableLayout* oriLayout, const Graph* tree,
 					   float interNodeDistance) {
    	
    	setOrthogonalEdge(oriLayout,NULL,tree,interNodeDistance);
@@ -10,7 +10,7 @@ void setOrthogonalEdge(OrientableLayout* oriLayout, const SuperGraph* tree,
 
 //====================================================================
 void setOrthogonalEdge(OrientableLayout* oriLayout,
-					   OrientableSizeProxy* oriSize, const SuperGraph* tree,
+					   OrientableSizeProxy* oriSize, const Graph* tree,
 					   float interNodeDistance) {
     Iterator<node>* itNode = tree->getNodes();
     while (itNode->hasNext()) {
@@ -27,7 +27,7 @@ void setOrthogonalEdge(OrientableLayout* oriLayout,
 
 //====================================================================
 void addControlPoints(OrientableLayout* oriLayout, OrientableSizeProxy* oriSize,
-                      const SuperGraph* tree, OrientableCoord fatherCoord,
+                      const Graph* tree, OrientableCoord fatherCoord,
                       edge e, float interNodeDistance) {
     node child                  = tree->target(e);
     node father                 = tree->source(e);

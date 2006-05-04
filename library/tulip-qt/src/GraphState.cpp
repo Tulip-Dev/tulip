@@ -1,12 +1,12 @@
 #include <tulip/Morphing.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/Layout.h>
-#include <tulip/Sizes.h>
-#include <tulip/Colors.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ColorProperty.h>
 
 static bool 
-HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
+HaveSameValues( Graph * inG, PropertyInterface * inP0, PropertyInterface * inP1 ) {
   assert( inP0 );
   assert( inP1 );
   assert( inG );
@@ -33,13 +33,13 @@ HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
 
 GraphState::GraphState( GlGraphWidget * glgw ) {
   assert( glgw );
-  g = glgw->getSuperGraph();
-  layout = new Layout( g );
-  *layout = *( g->getProperty<Layout>("viewLayout") );
-  size = new Sizes( g );
-  *size = *( g->getProperty<Sizes>("viewSize") );
-  color = new Colors( g );
-  *color = *( g->getProperty<Colors>("viewColor") );
+  g = glgw->getGraph();
+  layout = new LayoutProperty( g );
+  *layout = *( g->getProperty<LayoutProperty>("viewLayout") );
+  size = new SizeProperty( g );
+  *size = *( g->getProperty<SizeProperty>("viewSize") );
+  color = new ColorProperty( g );
+  *color = *( g->getProperty<ColorProperty>("viewColor") );
   
   camera = glgw->getCamera();
   sceneT = glgw->getSceneTranslation();
@@ -53,7 +53,7 @@ GraphState::~GraphState() {
 }
 
 bool  
-GraphState::setupDiff( SuperGraph * inG, GraphState * inGS0, GraphState * inGS1 ) {
+GraphState::setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 ) {
   int remain = 3;
   if( HaveSameValues(inG,inGS0->layout,inGS1->layout) ) {
     delete inGS0->layout;

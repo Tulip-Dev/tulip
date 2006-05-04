@@ -45,7 +45,7 @@ struct RandomTreeGeneral:public ImportModule {
   ~RandomTreeGeneral() {
   }
   bool buildNode(node n,unsigned int sizeM,int arityMax) {
-    if (superGraph->numberOfNodes()>sizeM) return true;
+    if (graph->numberOfNodes()>sizeM) return true;
     bool result=true;
     int randNumber=rand();
     int i = 0;
@@ -54,8 +54,8 @@ struct RandomTreeGeneral:public ImportModule {
     i = i % arityMax;
     for (;i>0;i--) {
       node n1;
-      n1=superGraph->addNode();
-      superGraph->addEdge(n,n1);
+      n1=graph->addNode();
+      graph->addEdge(n,n1);
       result= result && buildNode(n1,sizeM,arityMax);
     }
     return result;
@@ -81,11 +81,11 @@ struct RandomTreeGeneral:public ImportModule {
 	if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
       }
       i++;
-      superGraph->clear();
-      node n=superGraph->addNode();
+      graph->clear();
+      node n=graph->addNode();
       ok=!buildNode(n,sizeMax,arityMax);
       ok=false;
-      if (superGraph->numberOfNodes()<sizeMin) ok=true;
+      if (graph->numberOfNodes()<sizeMin) ok=true;
     }
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }

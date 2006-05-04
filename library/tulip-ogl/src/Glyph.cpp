@@ -5,13 +5,13 @@
 
 Glyph::Glyph(GlyphContext *gc) {
   if (gc!=NULL) {
-    superGraph=gc->superGraph;
+    graph=gc->graph;
     glGraph=gc->glGraph;
     LOF=gc->LOF;
     LOD=gc->LOD;
   }
   else {
-    superGraph = NULL;
+    graph = NULL;
     glGraph = NULL;
     LOD=LOF=0;
   }

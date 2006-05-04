@@ -32,7 +32,7 @@
 #endif
 #include <string>
 #include <tulip/Reflect.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 #include <tulip/MouseInterface.h>
 #include "TulipData.h"
@@ -78,7 +78,7 @@ protected:
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
   TulipElementProperties *nodeProperties;
-  SuperGraph * copyCutPasteGraph;
+  Graph * copyCutPasteGraph;
   bool elementsDisabled;
 
   QPopupMenu layoutMenu;
@@ -105,7 +105,7 @@ protected:
   void enableQPopupMenu(QPopupMenu *, bool);
   void enableElements(bool);
   void setNavigateCaption(std::string);
-  void initializeGraph(SuperGraph *);
+  void initializeGraph(Graph *);
   void initializeGlGraph(GlGraph *);
 
 public slots:
@@ -123,7 +123,7 @@ protected slots:
   void fileSaveAs();
   int  closeWin();
   void windowActivated(QWidget *);
-  void hierarchyChangeSuperGraph(SuperGraph *);
+  void hierarchyChangeGraph(Graph *);
   void fileNew();
   void fileOpen();  
   void filePrint();
@@ -157,8 +157,8 @@ protected slots:
   void restoreView();
   void new3DView();
   void goInside();
-  void changeSuperGraph(SuperGraph *);
-  void superGraphAboutToBeRemoved(SuperGraph *);
+  void changeGraph(Graph *);
+  void graphAboutToBeRemoved(Graph *);
   void glGraphWidgetClosed(GlGraphWidget *);
   void ungroup();  
   void group();  
@@ -185,12 +185,12 @@ private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlGraphWidget *newOpenGlView(SuperGraph *graph,const QString &);
+  GlGraphWidget *newOpenGlView(Graph *graph,const QString &);
   std::string newName();
   stdext::hash_map<unsigned int, std::string> openFiles;
   void buildMenus();
   bool fileSave(std::string plugin, std::string filename);
-  int alreadyTreated(std::set<unsigned int>, SuperGraph *);
+  int alreadyTreated(std::set<unsigned int>, Graph *);
   unsigned int mouseClicX,mouseClicY;
   Morphing *morph;
 

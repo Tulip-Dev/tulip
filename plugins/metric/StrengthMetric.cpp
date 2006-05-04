@@ -1,12 +1,12 @@
 #include <tulip/ForEach.h>
 #include "StrengthMetric.h"
 
-METRICPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1");
+DOUBLEPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1");
 
 using namespace std;
 using namespace stdext;
 
-StrengthMetric::StrengthMetric(const PropertyContext &context):MetricAlgorithm(context) {}
+StrengthMetric::StrengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
@@ -21,7 +21,7 @@ double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
     A = &V; B=&U;
   }
   for (itU=A->begin();itU!=A->end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    Iterator<node> *itN=graph->getInOutNodes(*itU);
     while (itN->hasNext()) {
       node itn=itN->next();
       if (B->find(itn)!=B->end()) result+=1.0;
@@ -34,7 +34,7 @@ double StrengthMetric::e(const hash_set<node> &U) {
   hash_set<node>::const_iterator itU;
   double result=0.0;
   for (itU=U.begin();itU!=U.end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    Iterator<node> *itN=graph->getInOutNodes(*itU);
     while (itN->hasNext()) {
       node itn=itN->next();
       if (U.find(itn)!=U.end()) result+=1.0;
@@ -54,12 +54,12 @@ double StrengthMetric::s(const hash_set<node> &U) {
 }
 //=============================================================
 double StrengthMetric::getEdgeValue(const edge ee ) {
-  node u=superGraph->source(ee);
-  node v=superGraph->target(ee);
+  node u=graph->source(ee);
+  node v=graph->target(ee);
   hash_set<node> Nu,Nv,Wuv;
 
   //Compute Nu
-  Iterator<node> *itN=superGraph->getInOutNodes(u);
+  Iterator<node> *itN=graph->getInOutNodes(u);
   while (itN->hasNext()) {
     node n=itN->next();
     if (n!=v) Nu.insert(n);
@@ -67,7 +67,7 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
   if (Nu.size()==0) return 0;
 
   //Compute Nv
-  itN=superGraph->getInOutNodes(v);
+  itN=graph->getInOutNodes(v);
   while (itN->hasNext()) {
     node n=itN->next();
     if (n!=u) Nv.insert(n);
@@ -122,23 +122,23 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
 //=============================================================
 double StrengthMetric::getNodeValue(const node n ) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (superGraph->deg(n)==0) return 0;
+  if (graph->deg(n)==0) return 0;
   double result=0;
-  Iterator<edge> *itE=superGraph->getInOutEdges(n);
+  Iterator<edge> *itE=graph->getInOutEdges(n);
   while (itE->hasNext()) {
     edge ite=itE->next();
-    result+=metricResult->getEdgeValue(ite);
+    result+=doubleResult->getEdgeValue(ite);
   } delete itE;
-  return result/double(superGraph->deg(n));
+  return result/double(graph->deg(n));
 }
 //=============================================================
 bool StrengthMetric::run() {
   edge e;
-  forEach(e, superGraph->getEdges())
-    metricResult->setEdgeValue(e, getEdgeValue(e));
+  forEach(e, graph->getEdges())
+    doubleResult->setEdgeValue(e, getEdgeValue(e));
   node n;
-  forEach(n, superGraph->getNodes())
-    metricResult->setNodeValue(n, getNodeValue(n));
+  forEach(n, graph->getNodes())
+    doubleResult->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=============================================================

@@ -1,9 +1,8 @@
 //-*-c++-*-
 #ifndef _TLPSTLFUNCTIONS_H
 #define _TLPSTLFUNCTIONS_H
-//#include "SuperGraph.h"
-//#include "MetricProxy.h"
-class Metric;
+
+class DoubleProperty;
 class node;
 class edge;
 /**
@@ -12,11 +11,11 @@ class edge;
  */
 class LessByMetric {
  public:
-  LessByMetric(Metric *metric):metric(metric){}
+  LessByMetric(DoubleProperty *metric):metric(metric){}
   bool operator() (node n1,node n2);
   bool operator() (edge e1,edge e2);
 private:
-  Metric *metric;
+  DoubleProperty *metric;
 };
 
 #endif

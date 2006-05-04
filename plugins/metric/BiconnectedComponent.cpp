@@ -1,11 +1,11 @@
 #include <iostream>
-#include <tulip/MetaGraph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/TlpTools.h>
 #include <stack>
 
 using namespace std;
 //=============================================================================================
-static void bicoTestAndLabeling(const SuperGraph & graph,node v, MutableContainer<int>& compnum,
+static void bicoTestAndLabeling(const Graph & graph,node v, MutableContainer<int>& compnum,
                     MutableContainer<int>& dfsnum, MutableContainer<int>& lowpt,
                     MutableContainer<node>& father,stack<node>& current,
                     int& count1,int& count2) {
@@ -40,7 +40,7 @@ static void bicoTestAndLabeling(const SuperGraph & graph,node v, MutableContaine
   }
 }
 //=============================================================================================
-int biconnectedComponents(const SuperGraph& graph, MutableContainer<int>& compnum) {
+int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
   stack<node> current;
   MutableContainer<int> dfsnum;
   dfsnum.setAll(-1);
@@ -108,23 +108,23 @@ using namespace std;
  *  (at your option) any later version.
  *
  */
-class BiconnectedComponnent:public MetricAlgorithm { 
+class BiconnectedComponnent:public DoubleAlgorithm { 
 public:
-  BiconnectedComponnent(const PropertyContext &context):MetricAlgorithm(context){};
+  BiconnectedComponnent(const PropertyContext &context):DoubleAlgorithm(context){};
   bool run() {
     MutableContainer<int> compo;
     compo.setAll(-1);
-    biconnectedComponents(*superGraph, compo);
-    metricResult->setAllEdgeValue(-1);
-    metricResult->setAllNodeValue(-1);
-    Iterator<edge> *it = superGraph->getEdges();
+    biconnectedComponents(*graph, compo);
+    doubleResult->setAllEdgeValue(-1);
+    doubleResult->setAllNodeValue(-1);
+    Iterator<edge> *it = graph->getEdges();
     while(it->hasNext()) {
       edge e = it->next();
-      metricResult->setEdgeValue(e, compo.get(e.id));
+      doubleResult->setEdgeValue(e, compo.get(e.id));
     } delete it;
     return true;
   }
 };
 /*@}*/
 //=============================================================================================
-METRICPLUGIN(BiconnectedComponnent,"Biconnected Componnent","David Auber","03/01/2005","Alpha","0","1");
+DOUBLEPLUGIN(BiconnectedComponnent,"Biconnected Componnent","David Auber","03/01/2005","Alpha","0","1");

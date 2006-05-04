@@ -5,17 +5,17 @@
 
 class OrientableLayout;
 class OrientableSizeProxy;
-class SuperGraph;
+class Graph;
 
-void setOrthogonalEdge(OrientableLayout* oriLayout, const SuperGraph* tree,
+void setOrthogonalEdge(OrientableLayout* oriLayout, const Graph* tree,
 					   float interNodeDistance);
 
 void setOrthogonalEdge(OrientableLayout* oriLayout,
-                       OrientableSizeProxy* oriSize, const SuperGraph* tree,
+                       OrientableSizeProxy* oriSize, const Graph* tree,
                        float interNodeDistance);
                        
 void addControlPoints(OrientableLayout* oriLayout, OrientableSizeProxy* oriSize,
-                      const SuperGraph* tree, OrientableCoord fatherCoord,
+                      const Graph* tree, OrientableCoord fatherCoord,
                       edge e, float interNodeDistance);
 
 #endif

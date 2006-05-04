@@ -1,8 +1,8 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/Selection.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/Graph.h>
 #include <tulip/TreeTest.h>
 
 #include "ArityRecClustering.h"
@@ -16,22 +16,22 @@ ArityRecClustering::ArityRecClustering(ClusterContext context):Clustering(contex
 //================================================================================
 ArityRecClustering::~ArityRecClustering() {}
 //================================================================================
-void ArityRecClustering::getRecurseChild(node nNode,Selection *resultGood,Selection *resultBad) {
+void ArityRecClustering::getRecurseChild(node nNode,BooleanProperty *resultGood,BooleanProperty *resultBad) {
   resultBad->setNodeValue(nNode,true);
-  Iterator<edge> *itE=superGraph->getOutEdges(nNode);
+  Iterator<edge> *itE=graph->getOutEdges(nNode);
   for (;itE->hasNext();)
     {
       edge ite=itE->next();
-      resultGood->setNodeValue(superGraph->target(ite),false);
+      resultGood->setNodeValue(graph->target(ite),false);
       resultGood->setEdgeValue(ite,false);
       resultBad->setEdgeValue(ite,true);
-      getRecurseChild(superGraph->target(ite),resultGood,resultBad);
+      getRecurseChild(graph->target(ite),resultGood,resultBad);
     }
   delete itE;
 }
 
 //================================================================================
-bool ArityRecClustering::DfsClustering (node currentNode,Selection *selectGood,Selection *selectBad) {
+bool ArityRecClustering::DfsClustering (node currentNode,BooleanProperty *selectGood,BooleanProperty *selectBad) {
   bool result;
   double n,c1,c2;
   double leafMax,leafMin;
@@ -40,7 +40,7 @@ bool ArityRecClustering::DfsClustering (node currentNode,Selection *selectGood,S
 
   result=true;
 
-  Iterator<node> *itN=superGraph->getOutNodes(currentNode);
+  Iterator<node> *itN=graph->getOutNodes(currentNode);
   for (;itN->hasNext();) {
     node itn=itN->next();
     result = result & DfsClustering (itn,selectGood,selectBad);
@@ -121,42 +121,42 @@ bool ArityRecClustering::run() {
   string tmpString;
   //=================================================
   //initialisation des metrics necessaires
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   for (;itN->hasNext();) {
     node nit=itN->next();
-    if (superGraph->indeg(nit)==0) {
+    if (graph->indeg(nit)==0) {
       rootNode=nit;
       break;
     }
   }
 
-  /*  arityM=superGraph->getLocalProperty<Metric>("TreeArityMax",cached,resultBool,erreurMsg);
-  leafM=superGraph->getLocalProperty<Metric>("Leaf",cached,resultBool,erreurMsg);
-  nodeM=superGraph->getLocalProperty<Metric>("Node",cached,resultBool,erreurMsg);
+  /*  arityM=graph->getLocalProperty<DoubleProperty>("TreeArityMax",cached,resultBool,erreurMsg);
+  leafM=graph->getLocalProperty<DoubleProperty>("Leaf",cached,resultBool,erreurMsg);
+  nodeM=graph->getLocalProperty<DoubleProperty>("Node",cached,resultBool,erreurMsg);
   */
 
-  arityM = new Metric(superGraph);
-  superGraph->computeProperty("TreeArityMax", arityM, erreurMsg);
-  leafM = new Metric(superGraph);
-  superGraph->computeProperty("Leaf", leafM, erreurMsg);
-  nodeM = new Metric(superGraph);
-  superGraph->computeProperty("Node", nodeM, erreurMsg);
+  arityM = new DoubleProperty(graph);
+  graph->computeProperty("TreeArityMax", arityM, erreurMsg);
+  leafM = new DoubleProperty(graph);
+  graph->computeProperty("Leaf", leafM, erreurMsg);
+  nodeM = new DoubleProperty(graph);
+  graph->computeProperty("Node", nodeM, erreurMsg);
 
   bool result=false;
   while (!result) {
-    Selection *selectGood= superGraph->getLocalProperty<Selection>("tmpSelectionGood");
-    Selection *selectBad= superGraph->getLocalProperty<Selection>("tmpSelectionBad");
-    SuperGraph * saveSuper=superGraph;
+    BooleanProperty *selectGood= graph->getLocalProperty<BooleanProperty>("tmpSelectionGood");
+    BooleanProperty *selectBad= graph->getLocalProperty<BooleanProperty>("tmpSelectionBad");
+    Graph * saveSuper=graph;
     selectGood->setAllNodeValue(true);
     selectGood->setAllEdgeValue(true);
     selectBad->setAllNodeValue(false);
     selectBad->setAllEdgeValue(false);
     result = DfsClustering(rootNode,selectGood,selectBad);
     if (!result) {
-      SuperGraph * tmpSubGraph,*tmpSubGraph2;
-      tmpSubGraph = superGraph->addSubGraph(selectGood);
-      tmpSubGraph2 = superGraph->addSubGraph(selectBad);
-      superGraph=tmpSubGraph;
+      Graph * tmpSubGraph,*tmpSubGraph2;
+      tmpSubGraph = graph->addSubGraph(selectGood);
+      tmpSubGraph2 = graph->addSubGraph(selectBad);
+      graph=tmpSubGraph;
     }
     saveSuper->delLocalProperty("tmpSelectionGood");
     saveSuper->delLocalProperty("tmpSelectionBad");
@@ -169,7 +169,7 @@ bool ArityRecClustering::run() {
 }
 //================================================================================
 bool ArityRecClustering::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
       erreurMsg="";
       return true;
     }

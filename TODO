@@ -94,9 +94,9 @@ pas dans un sous graphe par exemple.
  * Refactoring
  ***************************************************************************************************
 **Tulip lib :
-- PropertyProxy.h, Attention sur les const.
-- (OK) PropertyProxy.h, Les handlers doivent être protected.
-- PropertyProxy.h, Pas de constructeur de copy.
+- AbstractProperty.h, Attention sur les const.
+- (OK) AbstractProperty.h, Les handlers doivent être protected.
+- AbstractProperty.h, Pas de constructeur de copy.
 **Tulip OGL :
 **Tulip QT :
 **Tulip Soft : 

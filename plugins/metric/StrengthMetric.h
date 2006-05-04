@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// StrengthMetric.h - An implementation of the strength parameter.
+/// StrengthDoubleProperty.h - An implementation of the strength parameter.
 /** This plugin is an implementation of the Strength Parameter.
  *  algorithm first published in :
  *
@@ -33,7 +33,7 @@
  *  (at your option) any later version.
  *
  */
-class StrengthMetric:public MetricAlgorithm { 
+class StrengthMetric:public DoubleAlgorithm { 
 public:
   StrengthMetric(const PropertyContext &);
   ~StrengthMetric();

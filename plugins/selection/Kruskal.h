@@ -16,11 +16,11 @@
  * This working work on undirected graphs, (ie. the orientation of edges is ommitted).
  *
  * It takes one parameter :
- * - <MetricProxy> edge weight, thif parameter defines the weight of each edge in the graph. 
+ * - <DoubleProperty> edge weight, this parameter defines the weight of each edge in the graph. 
  *
  *  \author Anthony Don, LaBRI University Bordeaux I France: 
  */
-class Kruskal:public SelectionAlgorithm { 
+class Kruskal:public BooleanAlgorithm { 
   
 public:
   Kruskal(const PropertyContext &);
@@ -31,8 +31,8 @@ public:
 private:
 
   struct ltEdge {
-    Metric *m;
-    ltEdge(Metric *m) : m(m) {}
+    DoubleProperty *m;
+    ltEdge(DoubleProperty *m) : m(m) {}
     bool operator()(const edge &e1, const edge &e2) const
     {
       return (m->getEdgeValue(e1) < m->getEdgeValue(e2));

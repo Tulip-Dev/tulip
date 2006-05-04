@@ -4,15 +4,15 @@
 #include <iostream>
 #include <qinputdialog.h>
 #include <qstringlist.h>
-#include <tulip/Selection.h>
+#include <tulip/BooleanProperty.h>
 
 
 using namespace std;
-class OnValueSelection:public SelectionAlgorithm { 
+class OnValueSelection:public BooleanAlgorithm { 
 private:
 
 public:
-  OnValueSelection(const PropertyContext &context):SelectionAlgorithm(context){}
+  OnValueSelection(const PropertyContext &context):BooleanAlgorithm(context){}
   ~OnValueSelection(){}
   bool run() {
     string nameMetric; 
@@ -58,12 +58,12 @@ public:
     if ((ope[0]=='>') || (ope[1]=='>'))
       sup=true;
     cerr << "D" << endl;
-    MetricProxy *metric=superGraph->getProperty<MetricProxy>(nameMetric);
+    MetricProxy *metric=graph->getProperty<MetricProxy>(nameMetric);
 
     set<node> tmpSmall;
     set<node> tmpEqual;
     set<node> tmpHigh;
-    Iterator<node> *itN=superGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
     for (;itN->hasNext();){
       node n=itN->next();
       if (metric->getNodeValue(n)<threshold)
@@ -74,18 +74,18 @@ public:
 	else 
 	  tmpHigh.insert(n);
     }delete itN;
-    selectionResult->setAllNodeValue(false);
-    selectionResult->setAllEdgeValue(false);
+    BooleanResult->setAllNodeValue(false);
+    BooleanResult->setAllEdgeValue(false);
     set<node>::const_iterator iN;
     if (eq) 
       for (iN=tmpEqual.begin();iN!=tmpEqual.end();++iN)
-	selectionResult->setNodeValue(*iN,true);
+	BooleanResult->setNodeValue(*iN,true);
     if (inf)
 	for (iN=tmpSmall.begin();iN!=tmpSmall.end();++iN)
-	  selectionResult->setNodeValue(*iN,true);
+	  BooleanResult->setNodeValue(*iN,true);
     if (sup)
 	for (iN=tmpHigh.begin();iN!=tmpHigh.end();++iN)
-	  selectionResult->setNodeValue(*iN,true);
+	  BooleanResult->setNodeValue(*iN,true);
     return true;
   }
   
@@ -94,4 +94,4 @@ public:
     return true;
   }
 };
-SELECTIONPLUGIN(OnValueSelection,"OnValueSelection","Maylis Delest","04/06/2003","Alpha","0","1")
+BOOLEANPLUGIN(OnValueSelection,"OnValueSelection","Maylis Delest","04/06/2003","Alpha","0","1")

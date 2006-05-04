@@ -1,4 +1,4 @@
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/TriconnectedTest.h"
 #include "tulip/BiconnectedTest.h"
 #include "tulip/MutableContainer.h"
@@ -17,20 +17,20 @@ TriconnectedTest * TriconnectedTest::instance=0;
 TriconnectedTest::TriconnectedTest(){
 }
 //=================================================================
-bool TriconnectedTest::isTriconnected(SuperGraph *graph) {
+bool TriconnectedTest::isTriconnected(Graph *sg) {
   if (instance==0)
     instance=new TriconnectedTest();
-  return instance->compute(graph);
+  return instance->compute(sg);
 }
 //=================================================================
-bool TriconnectedTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned long)graph];
-  if (graph->numberOfNodes()==0) return false;
-  graph->addObserver(this);
+bool TriconnectedTest::compute(Graph *sg) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)sg];
+  if (sg->numberOfNodes()==0) return false;
+  sg->addObserver(this);
   bool result = true;
-  SuperGraph *tmp = tlp::newCloneSubGraph(graph);
-  Iterator<node> *itN = graph->getNodes();
+  Graph *tmp = tlp::newCloneSubGraph(sg);
+  Iterator<node> *itN = sg->getNodes();
   while(itN->hasNext()) {
     node n = itN->next();
     tmp->delNode(n);
@@ -39,43 +39,43 @@ bool TriconnectedTest::compute(SuperGraph *graph) {
       break;
     }
     tmp->addNode(n);
-    Iterator<edge> *itE = graph->getInOutEdges(n);
+    Iterator<edge> *itE = sg->getInOutEdges(n);
     while(itE->hasNext()) {
       tmp->addEdge(itE->next());
     } delete itE;
   } delete itN;
-  graph->delSubGraph(tmp);
-  resultsBuffer[(unsigned long)graph] = result;
+  sg->delSubGraph(tmp);
+  resultsBuffer[(unsigned long)sg] = result;
   return result;
 }
 //=================================================================
-void TriconnectedTest::addEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TriconnectedTest::addEdge(Graph *sg,const edge) {
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)sg]) return;
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void TriconnectedTest::delEdge(SuperGraph *graph,const edge) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TriconnectedTest::delEdge(Graph *sg,const edge) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void TriconnectedTest::reverseEdge(SuperGraph *graph,const edge) {
+void TriconnectedTest::reverseEdge(Graph *sg,const edge) {
 }
 //=================================================================
-void TriconnectedTest::addNode(SuperGraph *graph,const node) {
-  resultsBuffer[(unsigned long)graph]=false;
+void TriconnectedTest::addNode(Graph *sg,const node) {
+  resultsBuffer[(unsigned long)sg]=false;
 }
 //=================================================================
-void TriconnectedTest::delNode(SuperGraph *graph,const node) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TriconnectedTest::delNode(Graph *sg,const node) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
-void TriconnectedTest::destroy(SuperGraph *graph) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TriconnectedTest::destroy(Graph *sg) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 //=================================================================
 

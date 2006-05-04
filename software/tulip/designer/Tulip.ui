@@ -62,7 +62,7 @@
     </item>
     <item text="&amp;Algorithm" name="propertyMenu">
     </item>
-    <item text="&amp;Graph" name="Graph">
+    <item text="&amp;Graph" name="graphMenu">
         <action name="Action"/>
         <item text="Tests" name="popupMenu_15" accel="">
             <action name="is_simple"/>

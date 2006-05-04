@@ -11,7 +11,7 @@ void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, 
   //Affecte la valeur du noeud courant
   layoutResult->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
   size->setNodeValue(n,Size(width,height,1));
-  if (superGraph->outdeg(n)==0) return;
+  if (graph->outdeg(n)==0) return;
   
   //Calcul la somme des valeurs des fils.
   double tmpSomme=value[n];
@@ -24,7 +24,7 @@ void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, 
   double newX=x,newY=y;
   double newWidth=width,newHeight=height;
   
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=graph->getOutNodes(n);
   //interpolation horizontale
   if (direction) {
     delta=width/tmpSomme;
@@ -51,12 +51,12 @@ TreeMap::TreeMap(const PropertyContext &context):LayoutAlgorithm(context){}
 TreeMap::~TreeMap() {}
 
 double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
-  if (superGraph->outdeg(n)==0) { 
+  if (graph->outdeg(n)==0) { 
     if (!(value[n]=metric->getNodeValue(n)>0)) value[n]=1;
     return value[n];
   }
   double sum=0;
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=graph->getOutNodes(n);
   while (itN->hasNext()) {
     node itn=itN->next();
     sum+=initVal(itn,value);
@@ -66,14 +66,14 @@ double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
 }
 
 bool TreeMap::run() {
-  metric=superGraph->getProperty<Metric>("viewMetric");
-  size=superGraph->getLocalProperty<Sizes>("viewSize");
-  stdext::hash_map<node,double> value(superGraph->numberOfNodes());
+  metric=graph->getProperty<DoubleProperty>("viewMetric");
+  size=graph->getLocalProperty<SizeProperty>("viewSize");
+  stdext::hash_map<node,double> value(graph->numberOfNodes());
 
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    if (superGraph->indeg(itn)==0) {
+    if (graph->indeg(itn)==0) {
       initVal(itn,value);
       dfsPlacement(itn,1,0,0,1024,1024,true,value);
       break;
@@ -83,7 +83,7 @@ bool TreeMap::run() {
 }
 
 bool TreeMap::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     erreurMsg="";
     return true;
   }

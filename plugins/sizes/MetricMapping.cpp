@@ -9,13 +9,13 @@ namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Metric" ) \
+    HTML_HELP_DEF( "type", "DoubleProperty" ) \
     HTML_HELP_BODY() \
-    "This metric is used to affect scalar values to superGraph items." \
+    "This metric is used to affect scalar values to graph items." \
     HTML_HELP_CLOSE(),
     // input
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Sizes" ) \
+    HTML_HELP_DEF( "type", "SizeProperty" ) \
     HTML_HELP_BODY() \
     "This sizes is used to affect values to unselected dimensions (width, height, depth)." \
     HTML_HELP_CLOSE(),
@@ -50,11 +50,11 @@ static const char* rangeErrorMsg = "max size must be greater than min size";
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class MetricMapping:public SizesAlgorithm {
+class MetricMapping:public SizeAlgorithm {
 public:
-  MetricMapping(const PropertyContext &context):SizesAlgorithm(context) {
-    addParameter<Metric>("property", paramHelp[0]);
-    addParameter<Sizes>("input", paramHelp[1]);
+  MetricMapping(const PropertyContext &context):SizeAlgorithm(context) {
+    addParameter<DoubleProperty>("property", paramHelp[0]);
+    addParameter<SizeProperty>("input", paramHelp[1]);
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
     addParameter<bool>("depth", paramHelp[2],"true");
@@ -66,7 +66,7 @@ public:
   ~MetricMapping(){}
 
   void computeNodeSize() {
-    Iterator<node> *itN=superGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
     while(itN->hasNext()) {
       node itn=itN->next();
       double sizos=min+(entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
@@ -74,7 +74,7 @@ public:
       if (xaxis) result[0]=sizos;
       if (yaxis) result[1]=sizos;
       if (zaxis) result[2]=sizos;
-      sizesResult->setNodeValue(itn, result);
+      sizeResult->setNodeValue(itn, result);
     } delete itN;
   }
 
@@ -82,8 +82,8 @@ public:
     xaxis=yaxis=zaxis=true;
     min=1;
     max=10;
-    entryMetric=superGraph->getProperty<Metric>("viewMetric");
-    entrySize=superGraph->getProperty<Sizes>("viewSize");
+    entryMetric=graph->getProperty<DoubleProperty>("viewMetric");
+    entrySize=graph->getProperty<SizeProperty>("viewSize");
     mappingType = true;
     if ( dataSet!=0 ) {
       dataSet->get("property",entryMetric);
@@ -107,28 +107,28 @@ public:
     string metricS="viewMetric";
     string sizeS="viewSize";
 
-    Metric *tmp = 0;
+    DoubleProperty *tmp = 0;
     if (!mappingType) {
-      tmp = new Metric(superGraph);
+      tmp = new DoubleProperty(graph);
       *tmp = *entryMetric;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
-    sizesResult->setAllEdgeValue(Size(0.25,0.25,0.25));
-    range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
-    shift=entryMetric->getNodeMin(superGraph);
+    sizeResult->setAllEdgeValue(Size(0.25,0.25,0.25));
+    range=entryMetric->getNodeMax(graph) - entryMetric->getNodeMin(graph);
+    shift=entryMetric->getNodeMin(graph);
     computeNodeSize();
     if (!mappingType) delete tmp;
     return true;
   }
 
 private:
-  Metric *entryMetric;
-  Sizes *entrySize;
+  DoubleProperty *entryMetric;
+  SizeProperty *entrySize;
   bool xaxis,yaxis,zaxis,mappingType;
   double min,max;
   double range;
   double shift;
 };
 /*@}*/
-SIZESPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
+SIZEPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");

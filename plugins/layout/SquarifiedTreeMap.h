@@ -47,11 +47,11 @@ public:
     void reset();
 
 private:
-    Sizes*     size;   
-    Metric*    metric;
-    Int*       glyph;
-    mapNode         sumChildrenMetric;
-    float           aspectRatio;
+    SizeProperty*     size;   
+    DoubleProperty*    metric;
+    IntegerProperty*   glyph;
+    mapNode    sumChildrenMetric;
+    float      aspectRatio;
     
     void    layRow(pairIterator firstChildNode, pairIterator endChildNode,
                    int depth, RectangleArea rectArea, float listMetric);

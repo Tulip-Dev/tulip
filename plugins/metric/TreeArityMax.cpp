@@ -2,41 +2,41 @@
 #include <tulip/ForEach.h>
 #include "TreeArityMax.h"
 
-METRICPLUGIN(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1");
+DOUBLEPLUGIN(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1");
 
 using namespace std;
 
-TreeArityMax::TreeArityMax(const PropertyContext &context):MetricAlgorithm(context) 
+TreeArityMax::TreeArityMax(const PropertyContext &context):DoubleAlgorithm(context) 
 {}
 //======================================================
 double TreeArityMax::getNodeValue(const node n) {
-  if (superGraph->outdeg(n) == 0) return 0;
-  if (metricResult->getNodeValue(n) != 0) 
-    return metricResult->getNodeValue(n);
+  if (graph->outdeg(n) == 0) return 0;
+  if (doubleResult->getNodeValue(n) != 0) 
+    return doubleResult->getNodeValue(n);
   
-  double result = superGraph->outdeg(n);
+  double result = graph->outdeg(n);
   node _n;
-  forEach(_n, superGraph->getOutNodes(n)) {
+  forEach(_n, graph->getOutNodes(n)) {
     if (getNodeValue(_n) > result)
       result = getNodeValue(_n);
   }
   
-  metricResult->setNodeValue(n, result);
+  doubleResult->setNodeValue(n, result);
   return result;
 }
 //======================================================
 bool TreeArityMax::run() {
-  metricResult->setAllEdgeValue(0);
-  metricResult->setAllNodeValue(0);
+  doubleResult->setAllEdgeValue(0);
+  doubleResult->setAllNodeValue(0);
   node n;
-  forEach(n, superGraph->getNodes()) {
-    metricResult->setNodeValue(n, getNodeValue(n));
+  forEach(n, graph->getNodes()) {
+    doubleResult->setNodeValue(n, getNodeValue(n));
   }
   return true;
 }
 //======================================================
 bool TreeArityMax::check(string &erreurMsg) {
-   if (AcyclicTest::isAcyclic(superGraph)) {
+   if (AcyclicTest::isAcyclic(graph)) {
      erreurMsg="";
      return true;
    }

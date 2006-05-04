@@ -15,9 +15,9 @@ private:
   bool checkEdgeIntersection(const node n, const Coord& move);
   Coord repulsiveForces(node n);
   Coord attractiveForces(node n);
-  Selection* inputSelection;
-  Sizes* inputSize;
-  Layout* inputLayout;
+  BooleanProperty* inputSelection;
+  SizeProperty* inputSize;
+  LayoutProperty* inputLayout;
   MutableContainer<Coord> prevMove;
   double k,k2; 
   Coord t;

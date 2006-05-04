@@ -14,7 +14,7 @@ using namespace std;
  **/
 class TreeRadial:public LayoutAlgorithm {
 public:
-  Metric *leaves;
+  DoubleProperty *leaves;
 
   TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
   }
@@ -29,7 +29,7 @@ public:
       }
     } 
     layoutResult->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
-    if (superGraph->outdeg(n)==0) return;
+    if (graph->outdeg(n)==0) return;
     
     double sumM = leaves->getNodeValue(n);
     double counto = 0;
@@ -38,7 +38,7 @@ public:
     double newAlphaEnd;
     deltaAlpha=(alphaEnd-alphaStart)/(sumM);
 
-    Iterator<node> *itN=superGraph->getOutNodes(n);
+    Iterator<node> *itN=graph->getOutNodes(n);
     while (itN->hasNext()) {
       node itn=itN->next();
       newAlphaStart= alphaStart + ((double)counto)*deltaAlpha;
@@ -46,7 +46,7 @@ public:
       counto += leaves->getNodeValue(itn);
       double sizeTmp=(newAlphaEnd-newAlphaStart)/2*(depth+1);
       if (sizeTmp<0.5) {
-	superGraph->getLocalProperty<Sizes>("viewSize")->setNodeValue(itn,Size( sizeTmp , sizeTmp , sizeTmp   ));
+	graph->getLocalProperty<SizeProperty>("viewSize")->setNodeValue(itn,Size( sizeTmp , sizeTmp , sizeTmp   ));
       }
       dfsPlacement(itn,depth+1,newAlphaStart,newAlphaEnd);
     } delete itN;
@@ -54,14 +54,14 @@ public:
 
   bool run() {
     node startNode;
-    tlp::getSource(superGraph,startNode);
-    superGraph->getLocalProperty<Sizes>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
+    tlp::getSource(graph,startNode);
+    graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
   
     bool cached,resultBool;
     string erreurMsg;
-    //    leaves = superGraph->getLocalProperty<Metric>("Leaf",cached,resultBool,erreurMsg);
-    leaves = new Metric(superGraph);
-    resultBool = superGraph->computeProperty("Leaf",leaves,erreurMsg);
+    //    leaves = graph->getLocalProperty<DoubleProperty>("Leaf",cached,resultBool,erreurMsg);
+    leaves = new DoubleProperty(graph);
+    resultBool = graph->computeProperty("Leaf",leaves,erreurMsg);
     assert(resultBool);
     dfsPlacement(startNode,0,0,6.283);
     delete leaves;
@@ -69,7 +69,7 @@ public:
   }
 
   bool check(string &erreurMsg) {
-    if (TreeTest::isTree(superGraph)) {
+    if (TreeTest::isTree(graph)) {
       erreurMsg="";
       return true;
     }

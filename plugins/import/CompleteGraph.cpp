@@ -37,19 +37,19 @@ struct CompleteGraph:public ImportModule {
     }
     
     for (int j=0; j<nbNodes; ++j) 
-      superGraph->addNode();
+      graph->addNode();
     Iterator<node> *it1,*it2;
-    it1=superGraph->getNodes();
+    it1=graph->getNodes();
     int i=0;
     while (it1->hasNext()) {
       if (pluginProgress->progress(i,nbNodes) != TLP_CONTINUE) 
 	return false;
       i++;
       node n1=it1->next();
-      it2=superGraph->getNodes();
+      it2=graph->getNodes();
       while (it2->hasNext()) {
 	node n2=it2->next();
-	if (n1!=n2) superGraph->addEdge(n1,n2);
+	if (n1!=n2) graph->addEdge(n1,n2);
       } delete it2;
     } delete it1;
     return true;

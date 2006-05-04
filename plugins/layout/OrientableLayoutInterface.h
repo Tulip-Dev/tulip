@@ -1,7 +1,7 @@
 #ifndef ORIENTABLELAYOUTINTERFACE_H
 #define ORIENTABLELAYOUTINTERFACE_H
 #include <vector>
-#include <tulip/Layout.h>
+#include <tulip/LayoutProperty.h>
 #include "OrientableConstants.h"
 #include "OrientableCoord.h"
 

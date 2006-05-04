@@ -8,7 +8,7 @@
 
 
 #include "tulip/Reflect.h"
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 class QWidget;
 
 
@@ -26,7 +26,7 @@ namespace tlp {
 								const StructDef &	inDef,
 								const DataSet *		inSet	= NULL,
 								const char *		inName	= NULL,
-								SuperGraph *		inG		= NULL	);
+								Graph *		inG		= NULL	);
 
 }
 

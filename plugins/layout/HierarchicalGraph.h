@@ -20,7 +20,7 @@ public:
 
 class LessThanNode2 {
 public:
-  Metric *metric;
+  DoubleProperty *metric;
   bool operator() (node n1,node n2){return (metric->getNodeValue(n1) < metric->getNodeValue(n2));}
 };
 
@@ -60,20 +60,20 @@ public:
   bool run();
 
 private:
-  void DagLevelSpanningTree(SuperGraph* ,Metric *);
+  void DagLevelSpanningTree(Graph* ,DoubleProperty *);
   std::vector< std::vector<node> > grid;
-  Metric *embedding;
-  void twoLayerCrossReduction(SuperGraph*,unsigned int freeLayer,bool sense);
-  void crossReduction(SuperGraph*);
-  void computeEdgeBends(const SuperGraph *mySGraph, Layout &tmpLayout, 
+  DoubleProperty *embedding;
+  void twoLayerCrossReduction(Graph*,unsigned int freeLayer,bool sense);
+  void crossReduction(Graph*);
+  void computeEdgeBends(const Graph *mySGraph, LayoutProperty &tmpLayout, 
 			const stdext::hash_map<edge,edge> &replacedEdges, const std::vector<edge> &reversedEdges);
-  void computeSelfLoops(SuperGraph *mySGraph, Layout &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
-  void buildGrid(SuperGraph*);
-  unsigned int degree(SuperGraph*,node,bool);
-  void initCross(SuperGraph*superGraph,node n, MutableContainer<bool> &visited,int id);
+  void computeSelfLoops(Graph *mySGraph, LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
+  void buildGrid(Graph*);
+  unsigned int degree(Graph*,node,bool);
+  void initCross(Graph*graph,node n, MutableContainer<bool> &visited,int id);
 
   LessThanNode2 lessNode;
-  Sizes *nodeSize;
+  SizeProperty *nodeSize;
   std::string orientation;
   float spacing;
   float nodeSpacing;

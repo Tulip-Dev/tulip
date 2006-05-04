@@ -41,11 +41,11 @@ public:
   void reset();
 
 private:
-  bool DfsClustering (node ,Selection *,Selection *);
-  void getRecurseChild(node,Selection *,Selection *);
-  Metric *segmentM;
-  Metric *leafM;
-  Metric *nodeM;
+  bool DfsClustering (node ,BooleanProperty *,BooleanProperty *);
+  void getRecurseChild(node,BooleanProperty *,BooleanProperty *);
+  DoubleProperty *segmentM;
+  DoubleProperty *leafM;
+  DoubleProperty *nodeM;
   int mResult;
   double inter;
 };

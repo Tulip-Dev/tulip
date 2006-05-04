@@ -7,7 +7,7 @@ class OrientableLayout : public OrientableLayoutInterface {
     friend class OrientableCoord;
 public:
 
-    OrientableLayout(Layout* layout, orientationType mask = ORI_DEFAULT);
+    OrientableLayout(LayoutProperty* layout, orientationType mask = ORI_DEFAULT);
     
     OrientableCoord createCoord(const float x = 0, const float y = 0,
                                 const float z = 0);
@@ -31,7 +31,7 @@ private:
 	typedef std::vector<Coord> CoordLineType;
 	std::vector<OrientableCoord> convertEdgeLinetype(const std::vector<Coord>& v);
 	
-	Layout*    layout;
+	LayoutProperty*    layout;
 	orientationType orientation;
 	
 	float (OrientableCoord::*readX)() const;

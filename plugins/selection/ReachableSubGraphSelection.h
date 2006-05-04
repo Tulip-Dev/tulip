@@ -17,7 +17,7 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class ReachableSubGraphSelection:public SelectionAlgorithm {
+class ReachableSubGraphSelection:public BooleanAlgorithm {
 public:
   ReachableSubGraphSelection(const PropertyContext &);
   ~ReachableSubGraphSelection();

@@ -76,12 +76,12 @@ struct RandomGraph:public ImportModule {
     
     vector<node> tmpVect(nbNodes);
     for (int i=0; i<nbNodes; ++i) {
-      tmpVect[i]=superGraph->addNode();
+      tmpVect[i]=graph->addNode();
     }
     
     set<edgeS>::const_iterator it;
     for (it=myGraph.begin(); it!=myGraph.end(); ++it)   {
-      superGraph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
+      graph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
     }
     return true;
   }

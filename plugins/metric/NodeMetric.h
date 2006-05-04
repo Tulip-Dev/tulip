@@ -9,7 +9,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// NodeMetric.h - Compute the number of nodes in the subtree induced by each node.
+/// NodeDoubleProperty.h - Compute the number of nodes in the subtree induced by each node.
 /** Computes the number of nodes in the subtree induced by each node.
  *
  *  <b>HISTORY</b>
@@ -32,7 +32,7 @@
  *  (at your option) any later version.
  *
  */
-class NodeMetric:public MetricAlgorithm { 
+class NodeMetric:public DoubleAlgorithm { 
 public:
   NodeMetric(const PropertyContext &);
   bool run();

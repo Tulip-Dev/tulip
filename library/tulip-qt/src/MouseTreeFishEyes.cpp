@@ -2,12 +2,12 @@
 #include <config.h>
 #endif
 #include <tulip/PluginProgress.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/PropertyManager.h>
-#include <tulip/Selection.h>
-#include <tulip/Layout.h>
-#include <tulip/Sizes.h>
-#include <tulip/Metric.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/GlGraphWidget.h>
 
 
@@ -23,7 +23,7 @@ void MouseTreeFishEyes::mPressEvent(GlGraphWidget *glGraphWidget,QMouseEvent *qM
   double y=glGraphWidget->height() - qMouseEv->y();
   double w=30,h=30;
   glGraphWidget->setMouseTracking(true);
-  SuperGraph *superGraph=glGraphWidget->getGlGraph()->getSuperGraph();
+  Graph *graph=glGraphWidget->getGlGraph()->getGraph();
   set<node> tmpSetNode;
   set<edge> tmpSetEdge;
   double centX= (x+x+w)/2;
@@ -34,8 +34,8 @@ void MouseTreeFishEyes::mPressEvent(GlGraphWidget *glGraphWidget,QMouseEvent *qM
 
   if (tmpSetNode.empty()) return;
 
-  //  Sizes *sizes=superGraph->getProperty<Sizes>("viewSize");
-  Metric *sizes=superGraph->getProperty<Metric>("viewMetric");
+  //  Sizes *sizes=graph->getProperty<SizeProperty>("viewSize");
+  DoubleProperty *sizes=graph->getProperty<DoubleProperty>("viewMetric");
   set<node>::const_iterator it;
   if (qMouseEv->state()!=QEvent::ControlButton) {
     for (it=tmpSetNode.begin();it!=tmpSetNode.end();++it) {
@@ -51,10 +51,10 @@ void MouseTreeFishEyes::mPressEvent(GlGraphWidget *glGraphWidget,QMouseEvent *qM
   string err;
   DataSet tmpData;
   tmpData.set("complexity",false);
-  Layout *tree=superGraph->getLocalProperty<Layout>("Bubble Tree",cached,result,err,0,&tmpData);
+  Layout *tree=graph->getLocalProperty<LayoutProperty>("Bubble Tree",cached,result,err,0,&tmpData);
   if (cached) tree->recompute(err);
-  *superGraph->getProperty<Layout>("viewLayout")=*tree;
-  superGraph->delLocalProperty("Bubble Tree");
+  *graph->getProperty<LayoutProperty>("viewLayout")=*tree;
+  graph->delLocalProperty("Bubble Tree");
   glGraphWidget->redraw();
   Observable::unholdObservers();
   }

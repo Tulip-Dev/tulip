@@ -21,7 +21,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
 
 //==========================================================
 void TestAlgorithmTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void TestAlgorithmTest::tearDown() {
@@ -151,7 +151,7 @@ void TestAlgorithmTest::testBiconnected() {
 
   SuperGraph *tmpGraph;
   for (unsigned int i = 0; i<5; ++i) {
-    tmpGraph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+    tmpGraph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     vector<edge> vEdges;
     BiconnectedTest::makeBiconnected(tmpGraph, vEdges);

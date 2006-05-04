@@ -321,7 +321,7 @@ struct DOT_YY
 {
 	DOT_YY() :	sg(0), isDirected(true), isStrict(true) {}
 
-	SuperGraph  *		sg;
+	Graph  *		sg;
     NodeMap				nodeMap;
     bool				isDirected;			// directed graph ?
     bool				isStrict;			// strict graph ?
@@ -396,10 +396,10 @@ struct DOT_YY
 	void				SetupNode(	const NodeA			&	inA,
 									const DOT_ATTR		&	inAttr	)
 	{
-		// Layout
+		// LayoutProperty
 
 		if( inAttr.mask & DOT_ATTR::LAYOUT ) {
-		    Layout * layoutP = sg->getProperty<Layout>(TLP_LAYOUT_PROXY_NAME);
+		    LayoutProperty * layoutP = sg->getProperty<LayoutProperty>(TLP_LAYOUT_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				layoutP->setNodeValue( inA[i], inAttr.layout );
 		}
@@ -407,8 +407,8 @@ struct DOT_YY
 		// Label
 
 		if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
-		    String * stringP  = sg->getProperty<String>(TLP_LABEL_PROXY_NAME);
-		    String * string2P = sg->getProperty<String>(TLP_EXTLABEL_PROXY_NAME);
+		    StringProperty * stringP  = sg->getProperty<StringProperty>(TLP_LABEL_PROXY_NAME);
+		    StringProperty * string2P = sg->getProperty<StringProperty>(TLP_EXTLABEL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
 				stringP->setNodeValue( inA[i], inAttr.label );
 				string2P->setNodeValue( inA[i], inAttr.label );
@@ -422,7 +422,7 @@ struct DOT_YY
 		  	if( inAttr.mask & DOT_ATTR::WIDTH )		s.setW( inAttr.size.getW() );
 		  	if( inAttr.mask & DOT_ATTR::HEIGHT )	s.setH( inAttr.size.getH() );
 		  	if( inAttr.mask & DOT_ATTR::DEPTH )		s.setD( inAttr.size.getD() );
-		    Sizes * sizeP = sg->getProperty<Sizes>(TLP_SIZE_PROXY_NAME);
+		    SizeProperty * sizeP = sg->getProperty<SizeProperty>(TLP_SIZE_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				sizeP->setNodeValue( inA[i], s );
 		}
@@ -430,7 +430,7 @@ struct DOT_YY
 		// Color
 
 	  	if( inAttr.mask & DOT_ATTR::COLOR )	{
-		    Colors * colP = sg->getProperty<Colors>(TLP_COLOR_PROXY_NAME);
+		    ColorProperty * colP = sg->getProperty<ColorProperty>(TLP_COLOR_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				colP->setNodeValue( inA[i], inAttr.color );
 		}
@@ -438,7 +438,7 @@ struct DOT_YY
 		// Shape
 
 	  	{
-		    Int * shapeP = sg->getProperty<Int>(TLP_SHAPE_PROXY_NAME);
+		    IntegerProperty * shapeP = sg->getProperty<IntegerProperty>(TLP_SHAPE_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				if( inAttr.mask & DOT_ATTR::SHAPE )
 					shapeP->setNodeValue( inA[i], inAttr.shape );
@@ -449,7 +449,7 @@ struct DOT_YY
 		// Comment
 
 	  	if( inAttr.mask & DOT_ATTR::COMMENT ) {
-		    String * cmntP = sg->getProperty<String>(TLP_COMMENT_PROXY_NAME);
+		    StringProperty * cmntP = sg->getProperty<StringProperty>(TLP_COMMENT_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				cmntP->setNodeValue( inA[i], inAttr.comment );
 		}
@@ -457,7 +457,7 @@ struct DOT_YY
 		// URL
 
 		if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
-		    String * urlP = sg->getProperty<String>(TLP_URL_PROXY_NAME);
+		    StringProperty * urlP = sg->getProperty<StringProperty>(TLP_URL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				urlP->setNodeValue( inA[i], inAttr.url );
 		}
@@ -471,8 +471,8 @@ struct DOT_YY
 		// Label
 
 		if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
-		    String * stringP = sg->getProperty<String>(TLP_LABEL_PROXY_NAME);
-		    String * string2P = sg->getProperty<String>(TLP_EXTLABEL_PROXY_NAME);
+		    StringProperty * stringP = sg->getProperty<StringProperty>(TLP_LABEL_PROXY_NAME);
+		    StringProperty * string2P = sg->getProperty<StringProperty>(TLP_EXTLABEL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
 				stringP->setEdgeValue( inA[i], inAttr.label );
 				string2P->setEdgeValue( inA[i], inAttr.label );
@@ -482,7 +482,7 @@ struct DOT_YY
 		// Head-Label
 
 		if( (inAttr.mask & DOT_ATTR::HEAD_LABEL) && inAttr.headLabel.size() ) {
-		    String * labelP = sg->getProperty<String>(TLP_HEAD_LABEL_PROXY_NAME);
+		    StringProperty * labelP = sg->getProperty<StringProperty>(TLP_HEAD_LABEL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				labelP->setEdgeValue( inA[i], inAttr.headLabel );
 		}
@@ -490,7 +490,7 @@ struct DOT_YY
 		// Tail-Label
 
 		if( (inAttr.mask & DOT_ATTR::TAIL_LABEL) && inAttr.tailLabel.size() ) {
-		    String * labelP = sg->getProperty<String>(TLP_TAIL_LABEL_PROXY_NAME);
+		    StringProperty * labelP = sg->getProperty<StringProperty>(TLP_TAIL_LABEL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				labelP->setEdgeValue( inA[i], inAttr.tailLabel );
 		}
@@ -498,7 +498,7 @@ struct DOT_YY
 		// Color
 
 	  	if( inAttr.mask & DOT_ATTR::COLOR ) {
-		    Colors * colP = sg->getProperty<Colors>(TLP_COLOR_PROXY_NAME);
+		    ColorProperty * colP = sg->getProperty<ColorProperty>(TLP_COLOR_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				colP->setEdgeValue( inA[i], inAttr.color );
 		}
@@ -506,7 +506,7 @@ struct DOT_YY
 		// Comment
 
 	  	if( inAttr.mask & DOT_ATTR::COMMENT ) {
-		    String * cmntP = sg->getProperty<String>(TLP_COMMENT_PROXY_NAME);
+		    StringProperty * cmntP = sg->getProperty<StringProperty>(TLP_COMMENT_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				cmntP->setEdgeValue( inA[i], inAttr.comment );
 		}
@@ -514,7 +514,7 @@ struct DOT_YY
 		// URL
 
 		if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
-		    String * urlP = sg->getProperty<String>(TLP_URL_PROXY_NAME);
+		    StringProperty * urlP = sg->getProperty<StringProperty>(TLP_URL_PROXY_NAME);
 			for( unsigned int i = 0 ; i < inA.size() ; i++ )
 				urlP->setEdgeValue( inA[i], inAttr.url );
 		}

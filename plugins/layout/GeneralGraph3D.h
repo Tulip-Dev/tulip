@@ -54,10 +54,10 @@ public:
   bool run();
 
 private:
-  void DagLevelSpanningTree(SuperGraph* ,node n);
-  void makeAcyclic(SuperGraph*,std::set<edge> &,std::list<SelfLoops> &);
-  node makeSimpleSource(SuperGraph* superGraph);
-  void makeProperDag(SuperGraph* superGraph, std::list<node> &, stdext::hash_map<edge,edge> &);
+  void DagLevelSpanningTree(Graph* ,node n);
+  void makeAcyclic(Graph*,std::set<edge> &,std::list<SelfLoops> &);
+  node makeSimpleSource(Graph* graph);
+  void makeProperDag(Graph* graph, std::list<node> &, stdext::hash_map<edge,edge> &);
 };
 /*@}*/
 #endif

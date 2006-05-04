@@ -3,10 +3,10 @@
 #include <set>
 #include "Node.h"
 #include "Edge.h"
-struct SuperGraph;
+struct Graph;
 //=========================================================
 
-/** \addtogroup graphs */ 
+/** \addtogroup sgs */ 
 /*@{*/
 /// Observer for Graph
 /**
@@ -18,12 +18,12 @@ struct SuperGraph;
 class GraphObserver {
  public:
   virtual ~GraphObserver() {}
-  virtual void addNode(SuperGraph *,const node ){}
-  virtual void addEdge(SuperGraph *,const edge ){}
-  virtual void delNode(SuperGraph *,const node ){}
-  virtual void delEdge(SuperGraph *,const edge ){}
-  virtual void reverseEdge(SuperGraph *,const edge ){}
-  virtual void destroy(SuperGraph *){}
+  virtual void addNode(Graph *,const node ){}
+  virtual void addEdge(Graph *,const edge ){}
+  virtual void delNode(Graph *,const node ){}
+  virtual void delEdge(Graph *,const edge ){}
+  virtual void reverseEdge(Graph *,const edge ){}
+  virtual void destroy(Graph *){}
 };
 /*@}*/
 
@@ -36,11 +36,11 @@ namespace std {
   };
 }
 
-/** \addtogroup graphs */ 
+/** \addtogroup sgs */ 
 /*@{*/
 /**
  */
-/// Observable object for graph
+/// Observable object for sg
 class ObservableGraph {
  public:
   virtual ~ObservableGraph() {}
@@ -62,12 +62,12 @@ class ObservableGraph {
   void removeObservers();
 
  protected:
-  void notifyAddNode(SuperGraph *,const node n);
-  void notifyAddEdge(SuperGraph *,const edge e);
-  void notifyDelNode(SuperGraph *,const node n);
-  void notifyDelEdge(SuperGraph *,const edge e);
-  void notifyReverseEdge(SuperGraph *,const edge e);
-  void notifyDestroy(SuperGraph *);
+  void notifyAddNode(Graph *,const node n);
+  void notifyAddEdge(Graph *,const edge e);
+  void notifyDelNode(Graph *,const node n);
+  void notifyDelEdge(Graph *,const edge e);
+  void notifyReverseEdge(Graph *,const edge e);
+  void notifyDestroy(Graph *);
   mutable std::set<GraphObserver*> observers;
 };
 /*@}*/

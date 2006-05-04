@@ -6,13 +6,13 @@
 #include "tulip/TlpQtTools.h"
 #include "tulip/Reflect.h"
 #include "tulip/Color.h"
-#include "tulip/Metric.h"
-#include "tulip/String.h"
-#include "tulip/Selection.h"
-#include "tulip/Layout.h"
-#include "tulip/Int.h"
-#include "tulip/Colors.h"
-#include "tulip/Sizes.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/StringProperty.h"
+#include "tulip/BooleanProperty.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/IntegerProperty.h"
+#include "tulip/ColorProperty.h"
+#include "tulip/SizeProperty.h"
 
 #if (QT_REL == 3)
 #include <qvalidator.h>
@@ -63,15 +63,15 @@ namespace {
   typedef vector<string> stringA;
 
   int getAllProperties(	stringA	&outA,
-			SuperGraph *inG,
-			PProxy *inCurrent = 0	) {
+			Graph *inG,
+			PropertyInterface *inCurrent = 0	) {
     assert( inG );
     outA.clear();
     Iterator< std::string > * propIt = inG->getProperties();
     int curIdx = -1;
     while( propIt->hasNext() ) {
       string s = propIt->next();
-      PProxy * proxy = inG->getProperty( s );
+      PropertyInterface * proxy = inG->getProperty( s );
       if( inCurrent && proxy == inCurrent )
 	curIdx = outA.size();
       outA.push_back( s );
@@ -81,16 +81,16 @@ namespace {
   }
 
   int getPropertyOf(stringA &outA,
-		    SuperGraph *inG,
+		    Graph *inG,
 		    string inTypeName,
-		    PProxy *inCurrent = 0) {
+		    PropertyInterface *inCurrent = 0) {
     assert( inG );
     outA.clear();
     Iterator< std::string > * propIt = inG->getProperties();
     int curIdx = -1;
     while( propIt->hasNext() ) {
       string s = propIt->next();
-      PProxy * proxy = inG->getProperty( s );
+      PropertyInterface * proxy = inG->getProperty( s );
       if( typeid((*proxy)).name() == inTypeName ) {
 	if( inCurrent && proxy == inCurrent )
 	  curIdx = outA.size();
@@ -207,7 +207,7 @@ namespace {
 
     bool fillIn( const StructDef& inDef,
 		 const DataSet* inSet,
-		 SuperGraph* inG) {
+		 Graph* inG) {
       //
       // Parse inDef
 
@@ -381,10 +381,10 @@ namespace {
 	  leD->setText( QString("%1").arg(v.getD()) );
 	}
 
-	// PProxy*
-	else if( inG && ip.typeName == TN(PProxy*) ) {
+	// PropertyInterface*
+	else if( inG && ip.typeName == TN(PropertyInterface*) ) {
 	  stringA proxyA;
-	  PProxy * curProxy = 0;
+	  PropertyInterface * curProxy = 0;
 	  if( !inSet || !inSet->get
 	      (ip.name,curProxy) )
 	    curProxy = 0;
@@ -401,15 +401,15 @@ namespace {
 
 	// Typed Proxy
 	else if( inG &&
-		 ( ip.typeName == TN(Selection)
-		   || ip.typeName == TN(Metric)
-		   || ip.typeName == TN(Layout)
-		   || ip.typeName == TN(String)
-		   || ip.typeName == TN(Int)
-		   || ip.typeName == TN(Sizes)
-		   || ip.typeName == TN(Colors) ) ) {
+		 ( ip.typeName == TN(BooleanProperty)
+		   || ip.typeName == TN(DoubleProperty)
+		   || ip.typeName == TN(LayoutProperty)
+		   || ip.typeName == TN(StringProperty)
+		   || ip.typeName == TN(IntegerProperty)
+		   || ip.typeName == TN(SizeProperty)
+		   || ip.typeName == TN(ColorProperty) ) ) {
 	  stringA proxyA;
-	  PProxy * curProxy = 0;
+	  PropertyInterface * curProxy = 0;
 	  if( !inSet || !inSet->get
 	      (ip.name,curProxy) )
 	    curProxy = 0;
@@ -516,7 +516,7 @@ namespace {
 
 
     void fillOut(	DataSet &			outSet,
-			SuperGraph *		inG			) {
+			Graph *		inG			) {
       for( uint i = 0 ; i < iparamA.size(); i++ ) {
 	IParam & ip = iparamA[i];
 
@@ -581,23 +581,23 @@ namespace {
 	  outSet.set<Size>( ip.name, Size(W,H,D) );
 	}
 
-	// PProxy*
-	else if( inG && ip.typeName == TN(PProxy*) ) {
+	// PropertyInterface*
+	else if( inG && ip.typeName == TN(PropertyInterface*) ) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  outSet.set<PProxy*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
+	  outSet.set<PropertyInterface*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
 	}
 
 	// Typed Proxy
 	else if(	inG &&
-			(	ip.typeName == TN(Selection)
-				||	ip.typeName == TN(Metric)
-				||	ip.typeName == TN(Layout)
-				||	ip.typeName == TN(String)
-				||	ip.typeName == TN(Int)
-				||	ip.typeName == TN(Sizes)
-				||	ip.typeName == TN(Colors) )		) {
+			(	ip.typeName == TN(BooleanProperty)
+				||	ip.typeName == TN(DoubleProperty)
+				||	ip.typeName == TN(LayoutProperty)
+				||	ip.typeName == TN(StringProperty)
+				||	ip.typeName == TN(IntegerProperty)
+				||	ip.typeName == TN(SizeProperty)
+				||	ip.typeName == TN(ColorProperty) )		) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  outSet.set<PProxy*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
+	  outSet.set<PropertyInterface*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
 	}
 	
 	// StringCollection
@@ -625,7 +625,7 @@ tlp::openDataSetDialog(	DataSet & outSet,
                         const StructDef & inDef,
                         const DataSet *	inSet,
                         const char * inName,
-                        SuperGraph * inG) {
+                        Graph * inG) {
   // DEBUG
   //	if( inSet )
   //		OutputDataSet( *inSet );

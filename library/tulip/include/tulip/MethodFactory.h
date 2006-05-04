@@ -20,14 +20,14 @@
 
 #include "Plugin.h"
 #include "PluginContext.h"
-#include "SizesAlgorithm.h"
-#include "IntAlgorithm.h"
-#include "MetricAlgorithm.h"
-#include "ColorsAlgorithm.h"
+#include "SizeAlgorithm.h"
+#include "IntegerAlgorithm.h"
+#include "DoubleAlgorithm.h"
+#include "ColorAlgorithm.h"
 #include "LayoutAlgorithm.h"
 #include "StringAlgorithm.h"
-#include "SelectionAlgorithm.h"
-#include "MetaGraphAlgorithm.h"
+#include "BooleanAlgorithm.h"
+#include "GraphAlgorithm.h"
 #include "Clustering.h"
 #include "ImportModule.h"
 #include "ExportModule.h"
@@ -45,8 +45,8 @@ class C##T##Factory:public PropertyFactory<T##Algorithm>\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    T::initFactory();				\
-    T::factory->getPluginParameters((PropertyFactory<T##Algorithm> *) this); \
+    T##Property::initFactory();				\
+    T##Property::factory->getPluginParameters((PropertyFactory<T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -65,20 +65,20 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define INTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Int,C,N,A,D,I,V,R)
-#define COLORSPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Colors,C,N,A,D,I,V,R)
+#define INTEGERPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,V,R)
+#define COLORPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,V,R)
 #define LAYOUTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R)
-#define METAGRAPHPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(MetaGraph,C,N,A,D,I,V,R)
-#define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
-#define SELECTIONPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Selection,C,N,A,D,I,V,R)
-#define SIZESPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Sizes,C,N,A,D,I,V,R)
+#define GRAPHPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,V,R)
+#define DOUBLEPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,V,R)
+#define BOOLEANPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Boolean,C,N,A,D,I,V,R)
+#define SIZEPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Size,C,N,A,D,I,V,R)
 #define STRINGPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R)
 
 //===========================================================
-// Declaclartion of SuperGraph modification plug-in Mechanism
+// Declaration of Graph modification plug-in Mechanism
 //===========================================================
 ///
-#define SUPERGRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)	\
+#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)	\
 class C##T##Factory:public T##Factory                   \
 {                                                       \
  public:						\
@@ -103,8 +103,8 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define EXPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R)
-#define IMPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R)
-#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R)
+#define EXPORTPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R)
+#define IMPORTPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R)
+#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R)
 /*@}*/
 #endif

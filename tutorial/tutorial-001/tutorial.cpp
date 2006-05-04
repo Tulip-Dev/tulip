@@ -16,7 +16,7 @@ using namespace std;
 
 int main() {
   //create an empty graph
-  SuperGraph *graph = tlp::newSuperGraph();
+  Graph *graph = tlp::newGraph();
 
   //add three nodes
   node n1 = graph->addNode();

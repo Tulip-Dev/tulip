@@ -3,34 +3,34 @@
 
 #include "tulip/GraphMeasure.h"
 #include "tulip/Reflect.h"
-#include "tulip/SuperGraph.h"
-#include "tulip/Metric.h"
+#include "tulip/Graph.h"
+#include "tulip/DoubleProperty.h"
 
 
 using namespace std;
 namespace {
-  inline Iterator<node> *getIt(SuperGraph *graph, node n, int direction) {
+  inline Iterator<node> *getIt(Graph *sg, node n, int direction) {
     switch(direction) {
     case 0:
-      return graph->getOutNodes(n);
+      return sg->getOutNodes(n);
     case 1:
-      return graph->getInNodes(n);
+      return sg->getInNodes(n);
     case 2:
-      return graph->getInOutNodes(n);
+      return sg->getInOutNodes(n);
     default:
       cerr << __PRETTY_FUNCTION__ << "serious bug...";
       return 0;
     }
     return NULL;
   }
-  inline Iterator<node> *getAncIt(SuperGraph *graph, node n, int direction) {
+  inline Iterator<node> *getAncIt(Graph *sg, node n, int direction) {
     switch(direction) {
     case 1:
-      return graph->getOutNodes(n);
+      return sg->getOutNodes(n);
     case 0:
-      return graph->getInNodes(n);
+      return sg->getInNodes(n);
     case 2:
-      return graph->getInOutNodes(n);
+      return sg->getInOutNodes(n);
     default:
       cerr << __PRETTY_FUNCTION__ << "serious bug...";
       return 0;
@@ -39,11 +39,11 @@ namespace {
   }
 }
 //================================================================
-unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsigned int> &distance, int direction) {
+unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> &distance, int direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   visited.setAll(false);
-  distance.setAll(graph->numberOfNodes());
+  distance.setAll(sg->numberOfNodes());
   fifo.push_back(n);
   visited.set(n.id, true);
   distance.set(n.id, 0);
@@ -51,7 +51,7 @@ unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsign
   while(!fifo.empty()) {
     node current = fifo.front();
     fifo.pop_front();
-    Iterator<node> *itN = getIt(graph, current, direction);
+    Iterator<node> *itN = getIt(sg, current, direction);
     while(itN->hasNext()) {
       node itn = itN->next();
       if (!visited.get(itn.id)) {
@@ -66,10 +66,10 @@ unsigned int tlp::maxDistance(SuperGraph *graph, node n, MutableContainer<unsign
 }
 //================================================================
 //Warning the algorithm is not optimal
-double tlp::averagePathLength(SuperGraph *sg) {
+double tlp::averagePathLength(Graph *sg) {
   list<node> fifo;
   double sumPath=0;
-  Metric *mark = new Metric(sg);
+  DoubleProperty *mark = new DoubleProperty(sg);
   Iterator<node>*itN=sg->getNodes();
   while (itN->hasNext()) {
     mark->setAllNodeValue(0);
@@ -94,12 +94,12 @@ double tlp::averagePathLength(SuperGraph *sg) {
   return sumPath/double(sg->numberOfNodes()*(sg->numberOfNodes()-1));
 }
 //================================================================
-double tlp::averageCluster(SuperGraph *sg) {
+double tlp::averageCluster(Graph *sg) {
   DataSet data;
   data.set("depth",1);
   bool result;
   string errMsg;
-  Metric *cluster = new Metric(sg);
+  DoubleProperty *cluster = new DoubleProperty(sg);
   result = sg->computeProperty("Cluster",cluster,errMsg,0,&data);
   double sum=0;
   Iterator<node>*itN=sg->getNodes();
@@ -110,7 +110,7 @@ double tlp::averageCluster(SuperGraph *sg) {
   return sum /= double(sg->numberOfNodes());
 }
 //================================================================
-unsigned int tlp::maxDegree(SuperGraph *sg) {
+unsigned int tlp::maxDegree(Graph *sg) {
   unsigned int maxdeg = 0;
   Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())
@@ -119,7 +119,7 @@ unsigned int tlp::maxDegree(SuperGraph *sg) {
   return maxdeg;
 }
 //================================================================
-unsigned int tlp::minDegree(SuperGraph *sg) {
+unsigned int tlp::minDegree(Graph *sg) {
   unsigned int mindeg = sg->numberOfNodes();
   Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())

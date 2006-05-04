@@ -17,7 +17,7 @@ class MutableConatainer;
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class SpanningDagSelection:public SelectionAlgorithm { 
+class SpanningDagSelection:public BooleanAlgorithm { 
 
 public:
   SpanningDagSelection(const PropertyContext &);

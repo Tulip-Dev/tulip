@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// LeafMetric.h - Compute the number of leaves in the subtree induced by each node.
+/// LeafDoubleProperty.h - Compute the number of leaves in the subtree induced by each node.
 /** Computes the number of leaves in the subtree induced by each node.
  *
  *  <b>HISTORY</b>
@@ -29,7 +29,7 @@
  *  (at your option) any later version.
  *
  */
-class LeafMetric:public MetricAlgorithm { 
+class LeafMetric:public DoubleAlgorithm { 
 public:
   LeafMetric(const PropertyContext &);
   bool check(std::string &);

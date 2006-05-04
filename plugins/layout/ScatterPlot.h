@@ -3,7 +3,7 @@
 #define _SCATTERPlOTLAYOUT_H
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/Metric.h>
+#include <tulip/DoubleProperty.h>
 
 class ScatterPlot : public LayoutAlgorithm
 { 
@@ -20,7 +20,7 @@ class ScatterPlot : public LayoutAlgorithm
   int nMetrics;
   bool shapeConversion;
   double disc[3];
-  Metric* metric[3]; 
+  DoubleProperty* metric[3]; 
 };
 #endif
 

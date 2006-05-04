@@ -28,7 +28,7 @@ void ConeTreeExtended::computeLayerSize(node n, int level) {
     levelSize.push_back(0);
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
   node i;
-  forEach(i, superGraph->getOutNodes(n)) {
+  forEach(i, graph->getOutNodes(n)) {
     computeLayerSize(i, level + 1);
   }
 }
@@ -49,13 +49,13 @@ double ConeTreeExtended::treePlace3D(node n,
 				     hash_map<node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
-  if (superGraph->outdeg(n)==0) {
+  if (graph->outdeg(n)==0) {
     Coord tmp = nodeSize->getNodeValue(n);
     return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   
-  if (superGraph->outdeg(n)==1) {
-    Iterator<node> *itN=superGraph->getOutNodes(n);
+  if (graph->outdeg(n)==1) {
+    Iterator<node> *itN=graph->getOutNodes(n);
     node itn=itN->next(); 
     delete itN;
     return treePlace3D(itn,posRelX,posRelY);
@@ -65,8 +65,8 @@ double ConeTreeExtended::treePlace3D(node n,
   double maxRadius=0;
   float newRadius;
 
-  vector<double> subCircleRadius(superGraph->outdeg(n));
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  vector<double> subCircleRadius(graph->outdeg(n));
+  Iterator<node> *itN=graph->getOutNodes(n);
   for (int i=0; itN->hasNext(); ++i)  {
     node itn = itN->next();
     subCircleRadius[i] = treePlace3D(itn,posRelX,posRelY);
@@ -104,7 +104,7 @@ double ConeTreeExtended::treePlace3D(node n,
   tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
 
   //Place relative position
-  itN = superGraph->getOutNodes(n);
+  itN = graph->getOutNodes(n);
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
     node itn = itN->next();
     (*posRelX)[itn]=newRadius*cos(vangles[i])-circleH[0];
@@ -117,7 +117,7 @@ void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<no
 			double x, double y, int level) {
   layoutResult->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
   node itn;
-  forEach(itn, superGraph->getOutNodes(n)) {
+  forEach(itn, graph->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
   }
 }
@@ -144,14 +144,14 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<Sizes>("nodeSize",paramHelp[0],"viewSize");
+  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  nodeSize = superGraph->getProperty<Sizes>("viewSize");
+  nodeSize = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
   if (dataSet!=0) {
     dataSet->get("nodeSize", nodeSize);
@@ -164,7 +164,7 @@ bool ConeTreeExtended::run() {
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -174,14 +174,14 @@ bool ConeTreeExtended::run() {
   hash_map<node,double> posX;
   hash_map<node,double> posY;
   node root;
-  tlp::getSource(superGraph, root);
+  tlp::getSource(graph, root);
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);
   //rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       Coord tmpC = layoutResult->getNodeValue(n);
@@ -192,7 +192,7 @@ bool ConeTreeExtended::run() {
 }
 //===============================================================
 bool ConeTreeExtended::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     erreurMsg="";
     return true;
   }

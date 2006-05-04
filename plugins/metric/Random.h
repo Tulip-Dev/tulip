@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// RandomhMetric.h - This plugins assigns random values to nodes and edges.
+/// RandomhDoubleProperty.h - This plugins assigns random values to nodes and edges.
 /** This plugins assigns random values to nodes and edges. the values are between 0 and 1.
  *
  *  <b>HISTORY</b>
@@ -25,7 +25,7 @@
  *  (at your option) any later version.
  *
  */
-class RandomMetric:public MetricAlgorithm { 
+class RandomMetric:public DoubleAlgorithm { 
 public:
   RandomMetric(const PropertyContext &);
   bool run();

@@ -21,13 +21,13 @@ public:
   void reset();
 private:
   std::vector< std::set<node> > computeNodePartition(double threshold);
-  double computeMQValue(const std::vector< std::set<node> > & partition, SuperGraph *);
+  double computeMQValue(const std::vector< std::set<node> > & partition, Graph *);
   double findBestThreshold(int numberOfSteps);
-  SuperGraph* buildSubGraphs(const std::vector< std::set<node > > &);
-  void recursiveCall(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
-  SuperGraph* buildQuotientGraph(SuperGraph *graph);
-  void adjustMetaGraphProtperty(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
-  Metric* values;
+  Graph* buildSubGraphs(const std::vector< std::set<node > > &);
+  void recursiveCall(Graph *, std::map<Graph *,Graph *> &);
+  Graph* buildQuotientGraph(Graph *);
+  void adjustMetaGraphProtperty(Graph *, std::map<Graph *,Graph *> &);
+  DoubleProperty* values;
 };
 /*@}*/
 #endif

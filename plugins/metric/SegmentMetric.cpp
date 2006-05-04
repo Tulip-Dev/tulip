@@ -1,23 +1,23 @@
 #include <tulip/AcyclicTest.h>
-#include <tulip/Metric.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/ForEach.h>
 #include "SegmentMetric.h"
 
 
-METRICPLUGIN(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1");
+DOUBLEPLUGIN(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1");
 
 using namespace std;
 
 //=============================
-SegmentMetric::SegmentMetric(const PropertyContext &context):MetricAlgorithm(context) {}
+SegmentMetric::SegmentMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 //=============================
 int SegmentMetric::segNode(node n,int &curSeg,int &segMax) {
   curSeg=0;
   segMax=0;
-  if (superGraph->outdeg(n)!=0) {
+  if (graph->outdeg(n)!=0) {
     int resCurSeg=0,resSegMax=0;
     node _n;
-    forEach(_n, superGraph->getOutNodes(n)) {
+    forEach(_n, graph->getOutNodes(n)) {
       segNode(_n, resCurSeg, resSegMax);
       ++resCurSeg;
       if (resCurSeg>curSeg)
@@ -25,31 +25,31 @@ int SegmentMetric::segNode(node n,int &curSeg,int &segMax) {
       resSegMax = max(resCurSeg,resSegMax);
       if (segMax<resSegMax) segMax=resSegMax;
     }
-    if (superGraph->outdeg(n)>1) curSeg=0;
+    if (graph->outdeg(n)>1) curSeg=0;
     return segMax;
   }
   return 0;
 }
 /*
 double SegmentMetric::getNodeValue(const node n) {
-  if (superGraph->outdeg(n)==0) return 0.0;
+  if (graph->outdeg(n)==0) return 0.0;
   int seg,segMax;
   return (double)segNode(n,seg,segMax);
 }
 */
 //=============================
 bool SegmentMetric::run() {
-  metricResult->setAllNodeValue(0);
-  metricResult->setAllEdgeValue(0);
+  doubleResult->setAllNodeValue(0);
+  doubleResult->setAllEdgeValue(0);
   node n;
-  forEach(n, superGraph->getNodes()){
+  forEach(n, graph->getNodes()){
     int seg,segMax;
-    metricResult->setNodeValue(n, segNode(n, seg, segMax));
+    doubleResult->setNodeValue(n, segNode(n, seg, segMax));
   }
   return true;
 }
 bool SegmentMetric::check(string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(superGraph)) {
+  if (AcyclicTest::isAcyclic(graph)) {
     erreurMsg="";
     return true;
     }

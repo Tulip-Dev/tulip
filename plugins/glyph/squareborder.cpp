@@ -45,7 +45,7 @@ private:
   static float 	   borderProportion;
   const static float BORDER_COLOR[3];
   const static float MAX_BORDER_COEF;
-  SuperGraph*        tree;
+  Graph*        tree;
   float calculateDepth(node n);
   float calculateBorderSize(node n);
 };
@@ -73,7 +73,7 @@ SquareBorder::~SquareBorder() {
 }
 //====================================================================
 void SquareBorder::draw(node n) {
-  tree = (*superGraph);
+  tree = (*graph);
   borderProportion  = calculateBorderSize(n);
   Color borderColor = glGraph->elementColor->getNodeValue(n);
   setMaterial(borderColor);

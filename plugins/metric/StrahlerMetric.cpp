@@ -12,9 +12,9 @@
 #include <cmath>
 #include <stdio.h>
 #include "StrahlerMetric.h"
-#include <tulip/String.h>
+#include <tulip/StringProperty.h>
 
-METRICPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
+DOUBLEPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
 
 using namespace std;
 
@@ -77,11 +77,11 @@ Strahler StrahlerMetric::topSortStrahler(node n, int &curPref,
   Strahler result;
   prefix[n]=curPref;
   curPref++;
-  if (superGraph->outdeg(n)==0) {finished[n]=true;return(result);}
+  if (graph->outdeg(n)==0) {finished[n]=true;return(result);}
   list<int> strahlerResult;
   list<StackEval> tmpEval;
   //Construction des ensembles pour evaluer le strahler
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=graph->getOutNodes(n);
   for (;itN->hasNext();) {
     node tmpN=itN->next();
     if (!visited[tmpN])	{
@@ -175,7 +175,7 @@ namespace {
   };
 }
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const PropertyContext &context):MetricAlgorithm(context) {
+StrahlerMetric::StrahlerMetric(const PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<bool>("allNodes", paramHelp[0], "false");
 }
 //==============================================================================
@@ -189,8 +189,8 @@ bool StrahlerMetric::run() {
   stdext::hash_map<node,Strahler> cachedValues;
   int curPref=0;
   /*
-    Selection *parameter=superGraph->getProperty<Selection>("viewSelection");
-    Iterator<node> *it=superGraph->getNodes();
+    Selection *parameter=graph->getProperty<BooleanProperty>("viewSelection");
+    Iterator<node> *it=graph->getNodes();
     for (;it->hasNext();) {
     node curNode=it->next();
     if ((!visited[curNode]) && (parameter->getNodeValue(curNode)) ) {
@@ -199,7 +199,7 @@ bool StrahlerMetric::run() {
     }
     } delete it;
   */
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   unsigned int i = 0;
   while (itN->hasNext()) {
     node itn = itN->next();
@@ -208,8 +208,8 @@ bool StrahlerMetric::run() {
       topSortStrahler(itn,curPref,tofree,prefix,visited,finished,cachedValues);
     }
     if (allNodes) {
-      if (pluginProgress->progress(i++, superGraph->numberOfNodes())!=TLP_CONTINUE) break;
-      metricResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      if (pluginProgress->progress(i++, graph->numberOfNodes())!=TLP_CONTINUE) break;
+      doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
       visited.clear();
       finished.clear();
@@ -221,10 +221,10 @@ bool StrahlerMetric::run() {
   }  delete itN;
 
   if (!allNodes) {
-    itN = superGraph->getNodes();
+    itN = graph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
-      metricResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+      doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
     } delete itN;
   }

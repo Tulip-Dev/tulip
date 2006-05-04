@@ -9,7 +9,7 @@
 #include <climits>
 
 /**
- * \defgroup graphs
+ * \defgroup sgs
  */ 
 /*@{*/
 /// class node

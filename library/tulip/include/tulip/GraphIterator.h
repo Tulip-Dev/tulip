@@ -11,8 +11,8 @@
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
 #include "Iterator.h"
-#include "SuperGraph.h"
-#include "SuperGraphImpl.h"
+#include "Graph.h"
+#include "GraphImpl.h"
 #include <set>
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -23,7 +23,6 @@
 #include "tulipconf.h"
 
 
-class Selection;
 //template<class C>class Iterator;
 #ifndef DOXYGEN_NOTFOR_DEVEL
 template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
@@ -47,16 +46,16 @@ private:
 ///Factorization of code for iterators
 template<class itType> class FactorIterator:public Iterator<itType> {
  protected:
-  SuperGraph *_parentGraph;
+  Graph *_parentGraph;
   const MutableContainer<bool>& _filter;
  public:
-  FactorIterator(const SuperGraph *sG,const MutableContainer<bool>& filter):
+  FactorIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getFather()),
     _filter(filter)
   {}
 };
 //============================================================
-///Node iterator for SuperGraphView
+///Node iterator for GraphView
 class SGraphNodeIterator:public FactorIterator<node> {
  private:
   Iterator<node> *it;
@@ -64,56 +63,56 @@ class SGraphNodeIterator:public FactorIterator<node> {
   bool _hasnext;
 
  public:
-  SGraphNodeIterator(const SuperGraph *sG, const MutableContainer<bool>& filter);
+  SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter);
   ~SGraphNodeIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///Out node iterator for SuperGraphView
+///Out node iterator for GraphView
 class OutNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
-  const SuperGraph *graph;
+  const Graph *sg;
   #endif
  public:
-  OutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n);
+  OutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~OutNodesIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///In node iterator for SuperGraphView
+///In node iterator for GraphView
 class InNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
-  const SuperGraph *graph;
+  const Graph *sg;
   #endif
  public:
-  InNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter ,node n);
+  InNodesIterator(const Graph *sG, const MutableContainer<bool>& filter ,node n);
   ~InNodesIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///In Out node iterator for SuperGraphView
+///In Out node iterator for GraphView
 class InOutNodesIterator:public FactorIterator<node> {
  private:
   Iterator<edge> *it;
   node n;
   #ifndef NDEBUG
-  const SuperGraph *graph;
+  const Graph *sg;
   #endif
  public:
-  InOutNodesIterator(const SuperGraph *sG,const MutableContainer<bool>& filter,node n);
+  InOutNodesIterator(const Graph *sG,const MutableContainer<bool>& filter,node n);
   ~InOutNodesIterator();
   node next();
   bool hasNext();
 };
 //=============================================================
-///Edge iterator for SuperGraphView
+///Edge iterator for GraphView
 class SGraphEdgeIterator:public FactorIterator<edge>
 {
  private:
@@ -122,13 +121,13 @@ class SGraphEdgeIterator:public FactorIterator<edge>
   bool _hasnext;
 
  public:
-  SGraphEdgeIterator(const SuperGraph *sG, const MutableContainer<bool>& filter);
+  SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter);
   ~SGraphEdgeIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///Out edge iterator for SuperGraphView
+///Out edge iterator for GraphView
 class OutEdgesIterator:public FactorIterator<edge> {
  private:
   Iterator<edge> *it;
@@ -136,13 +135,13 @@ class OutEdgesIterator:public FactorIterator<edge> {
   bool _hasnext;
 
  public:
-  OutEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n);
+  OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~OutEdgesIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///In edge iterator for SuperGraphView
+///In edge iterator for GraphView
 class InEdgesIterator:public FactorIterator<edge> {
  private:
   Iterator<edge> *it;
@@ -150,13 +149,13 @@ class InEdgesIterator:public FactorIterator<edge> {
   bool _hasnext;
 
  public:
-  InEdgesIterator(const SuperGraph *sG,const MutableContainer<bool>& filter,node n);
+  InEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter,node n);
   ~InEdgesIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///In Out edge iterator for SuperGraphView
+///In Out edge iterator for GraphView
 class InOutEdgesIterator:public FactorIterator<edge> {
  private:
   Iterator<edge> *it;
@@ -164,7 +163,7 @@ class InOutEdgesIterator:public FactorIterator<edge> {
   bool _hasnext;
 
  public:
-  InOutEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n);
+  InOutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~InOutEdgesIterator();
   edge next();
   bool hasNext();
@@ -173,100 +172,100 @@ class InOutEdgesIterator:public FactorIterator<edge> {
 
 
 //============================================================
-//Iterator for the SuperGraphImpl
+//Iterator for the GraphImpl
 //============================================================
-///Node iterator for data graph
+///Node iterator for data sg
 class xSGraphNodeIterator:public Iterator<node> {
  private:
   Iterator<unsigned int> *itId;
  public:
-  xSGraphNodeIterator(const SuperGraph *sG);
+  xSGraphNodeIterator(const Graph *sG);
   ~xSGraphNodeIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///Out Node iterator for data graph
+///Out Node iterator for data sg
 class xOutNodesIterator:public Iterator<node> {
  private:
   Iterator<edge> *it;
-  SuperGraphImpl *spG;
+  GraphImpl *spG;
  public:
-  xOutNodesIterator(const SuperGraph *sG,const node n);
+  xOutNodesIterator(const Graph *sG,const node n);
   ~xOutNodesIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///In Node iterator for data graph
+///In Node iterator for data sg
 class xInNodesIterator:public Iterator<node> {
  private:
   Iterator<edge> *it;
-  const SuperGraphImpl *spG;
+  const GraphImpl *spG;
  public:
-  xInNodesIterator(const SuperGraph *sG,const node n);
+  xInNodesIterator(const Graph *sG,const node n);
   ~xInNodesIterator();
   node next();
   bool hasNext();
 };
 //============================================================
-///In Out Node iterator for data graph
+///In Out Node iterator for data sg
 class xInOutNodesIterator:public Iterator<node> {
-  SuperGraphImpl::EdgeContainer::iterator it,itEnd;
+  GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
-  const SuperGraphImpl *spG;
+  const GraphImpl *spG;
  public:
-  xInOutNodesIterator(const SuperGraph *sG,const node n);
+  xInOutNodesIterator(const Graph *sG,const node n);
   ~xInOutNodesIterator();
   node next();
   bool hasNext();
 };
 //=============================================================
-///Edge iterator for data graph
+///Edge iterator for data sg
 class xSGraphEdgeIterator:public Iterator<edge> {
  private:
   Iterator<unsigned int> *itId;
  public:
-  xSGraphEdgeIterator(const SuperGraph *sG);
+  xSGraphEdgeIterator(const Graph *sG);
   ~xSGraphEdgeIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///Out edge iterator for data graph
+///Out edge iterator for data sg
 class xOutEdgesIterator:public Iterator<edge> {
  private:
-  SuperGraphImpl::EdgeContainer::iterator it,itEnd;
+  GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
   edge curEdge;
-  SuperGraphImpl *spG;
+  GraphImpl *spG;
   std::set<edge> loop;
  public:
-  xOutEdgesIterator(const SuperGraph *sG,const node n);
+  xOutEdgesIterator(const Graph *sG,const node n);
   ~xOutEdgesIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///In edge iterator for data graph
+///In edge iterator for data sg
 class xInEdgesIterator:public Iterator<edge> {
-  SuperGraphImpl::EdgeContainer::iterator it,itEnd;
+  GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
   edge curEdge;
-  SuperGraphImpl *spG;
+  GraphImpl *spG;
   std::set<edge> loop;
  public:
-  xInEdgesIterator(const SuperGraph *sG,const node n);
+  xInEdgesIterator(const Graph *sG,const node n);
   ~xInEdgesIterator();
   edge next();
   bool hasNext();
 };
 //============================================================
-///In out edge iterator for data graph
+///In out edge iterator for data sg
 class xInOutEdgesIterator:public Iterator<edge> {
-  SuperGraphImpl::EdgeContainer::iterator it,itEnd;
+  GraphImpl::EdgeContainer::iterator it,itEnd;
 public:
-  xInOutEdgesIterator(const SuperGraph *sG,const node n);
+  xInOutEdgesIterator(const Graph *sG,const node n);
   ~xInOutEdgesIterator();
   edge next();
   bool hasNext();

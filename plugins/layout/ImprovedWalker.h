@@ -41,7 +41,7 @@ class ImprovedWalker : public LayoutAlgorithm {
  private:
   typedef std::vector<float>      levelToFloatType;
   typedef std::map<node, float>   nodeToFloatType;
-  typedef std::map<node, int>     nodeToIntType;
+  typedef std::map<node, int>     nodeToIntegerPropertyType;
   typedef std::map<node, node>    nodeToNodeType;
 
   static const float      INTER_NODE_DISTANCE_X;
@@ -52,7 +52,7 @@ class ImprovedWalker : public LayoutAlgorithm {
   OrientableSizeProxy*    oriSize;
 
   int                     depthMax;
-  nodeToIntType           order;
+  nodeToIntegerPropertyType           order;
   levelToFloatType        maxYbyLevel;
   levelToFloatType        posYbyLevel;
   nodeToFloatType         prelimX;
@@ -92,24 +92,24 @@ class ImprovedWalker : public LayoutAlgorithm {
 
 //====================================================================    
 inline node ImprovedWalker::getFather(node n) {
-   if (superGraph->indeg(n)<1)
+   if (graph->indeg(n)<1)
         return BADNODE;
-    return superGraph->getInNode(n,1);
+    return graph->getInNode(n,1);
 }
 
 //====================================================================    
 inline node ImprovedWalker::leftmostChild(node n) {    
-    if (superGraph->outdeg(n)<1)
+    if (graph->outdeg(n)<1)
         return BADNODE;
-    return superGraph->getOutNode(n,1);
+    return graph->getOutNode(n,1);
 }
 
 //====================================================================
 inline node ImprovedWalker::rightmostChild(node n) {
     int pos;
-    if ((pos=superGraph->outdeg(n))<1)
+    if ((pos=graph->outdeg(n))<1)
         return BADNODE;        
-    return superGraph->getOutNode(n,pos);
+    return graph->getOutNode(n,pos);
 }
 
 //====================================================================    
@@ -117,15 +117,15 @@ inline node ImprovedWalker::leftSibling(node n) {
     if (order[n]<=1)
         return BADNODE; 
     else
-        return superGraph->getOutNode( getFather(n) ,order[n]-1);
+        return graph->getOutNode( getFather(n) ,order[n]-1);
 }
 
 //====================================================================
 inline node ImprovedWalker::rightSibling(node n) {
     node father=getFather(n);
-    if (order[n]>=int(superGraph->outdeg(father)))
+    if (order[n]>=int(graph->outdeg(father)))
         return BADNODE;     
-    return superGraph->getOutNode(father ,order[n]+1);
+    return graph->getOutNode(father ,order[n]+1);
 }
 
 //====================================================================
@@ -136,7 +136,7 @@ inline node ImprovedWalker::leftMostSibling(node n) {
 
 //====================================================================
 inline node ImprovedWalker::nextRightContour(node n) {
-    if (isLeaf(superGraph, n))
+    if (isLeaf(graph, n))
         return thread[n];
     else
         return rightmostChild(n);
@@ -144,7 +144,7 @@ inline node ImprovedWalker::nextRightContour(node n) {
 
 //====================================================================
 inline node ImprovedWalker::nextLeftContour(node n) {
-    if (isLeaf(superGraph, n))
+    if (isLeaf(graph, n))
         return thread[n];
     else
         return leftmostChild(n);

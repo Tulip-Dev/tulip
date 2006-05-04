@@ -5,7 +5,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// ArityMetric.h - Compute the degree of each node.
+/// ArityDoubleProperty.h - Compute the degree of each node.
 /** This plugin compute the degree of each node
  *
  *  <b>HISTORY</b>
@@ -15,7 +15,7 @@
  *  \note This plug-ins exists to obtain a uniform interface in the 
  *  Tulip graph viusalization software. To access to the degree
  *  of a node it is recommended to use directly the degree function
- *  available in each SuperGraph.
+ *  available in each Graph.
  *
  *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
@@ -27,7 +27,7 @@
  *  (at your option) any later version.
  *
  */
-class ArityMetric:public MetricAlgorithm { 
+class ArityMetric:public DoubleAlgorithm { 
 public:
   ArityMetric(const PropertyContext &);
   bool run();

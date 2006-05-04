@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <sstream>
-#include <tulip/SuperGraph.h>
-#include <tulip/MetaGraph.h>
+#include <tulip/Graph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/TlpTools.h>
 #include <tulip/DrawingTools.h>
 
@@ -36,14 +36,14 @@ QuotientClustering::QuotientClustering(ClusterContext context):Clustering(contex
 QuotientClustering::~QuotientClustering(){}
 //===============================================================================
 bool QuotientClustering::run() {
-  SuperGraph *quotientGraph = tlp::newSubGraph(superGraph->getRoot());
-  MetaGraph *meta = quotientGraph->getProperty<MetaGraph>("viewMetaGraph");
+  Graph *quotientGraph = tlp::newSubGraph(graph->getRoot());
+  GraphProperty *meta = quotientGraph->getProperty<GraphProperty>("viewMetaGraph");
   //Create one metanode for each subgraph(cluster) of current graph.
-  SuperGraph *graph= superGraph;
-  map<SuperGraph*,node> mapping;
-  Iterator<SuperGraph *> *itS=graph->getSubGraphs();
+  Graph *sg= graph;
+  map<Graph*,node> mapping;
+  Iterator<Graph *> *itS=sg->getSubGraphs();
   while (itS->hasNext()) {
-    SuperGraph *its=itS->next();
+    Graph *its=itS->next();
     if (its!=quotientGraph) {
       node n = quotientGraph->addNode();
       meta->setNodeValue(n,its);
@@ -52,27 +52,27 @@ bool QuotientClustering::run() {
   } delete itS;
   //
   set<Edge> myQuotientGraph;
-  Iterator<edge>*itE=superGraph->getEdges();
+  Iterator<edge>*itE=graph->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
-    node source=superGraph->source(ite);
-    node target=superGraph->target(ite);
-    list<SuperGraph *> clusterSource;
-    list<SuperGraph *> clusterTarget;
+    node source=graph->source(ite);
+    node target=graph->target(ite);
+    list<Graph *> clusterSource;
+    list<Graph *> clusterTarget;
     clusterSource.clear();
     clusterTarget.clear();
-    itS=graph->getSubGraphs();
+    itS=sg->getSubGraphs();
     while (itS->hasNext()) {
-      SuperGraph *its=itS->next();
+      Graph *its=itS->next();
       if (its!=quotientGraph) {
-	SuperGraph *tmp=its;
+	Graph *tmp=its;
 	if (tmp->isElement(source)) clusterSource.push_back(its);
 	if (tmp->isElement(target)) clusterTarget.push_back(its);
       }
     } delete itS;
     
-    for (std::list<SuperGraph *>::iterator it1=clusterSource.begin(); it1!=clusterSource.end(); ++it1)
-      for (std::list<SuperGraph *>::iterator it2=clusterTarget.begin(); it2!=clusterTarget.end(); ++it2) {
+    for (std::list<Graph *>::iterator it1=clusterSource.begin(); it1!=clusterSource.end(); ++it1)
+      for (std::list<Graph *>::iterator it2=clusterTarget.begin(); it2!=clusterTarget.end(); ++it2) {
 	Edge tmp;
 	tmp.source=mapping[*it1].id;
 	tmp.target=mapping[*it2].id;
@@ -84,15 +84,15 @@ bool QuotientClustering::run() {
   } delete itE;
 
   //compute layout according to the layouts of subgraphs
-  Sizes *size  = quotientGraph->getProperty<Sizes>("viewSize");
+  SizeProperty *size  = quotientGraph->getProperty<SizeProperty>("viewSize");
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
     node n = itN->next();
-    SuperGraph * graph = meta->getNodeValue(n);
-    Layout * graphlayout = graph->getProperty<Layout>("viewLayout");
-    Sizes * graphsize = graph->getProperty<Sizes>("viewSize");
-    Metric * graphrot = graph->getProperty<Metric>("viewRotation");
-    pair<Coord, Coord> bboxe = tlp::computeBoundingBox(graph, graphlayout, graphsize, graphrot);
+    Graph * graph = meta->getNodeValue(n);
+    LayoutProperty* graphlayout = sg->getProperty<LayoutProperty>("viewLayout");
+    SizeProperty* graphsize = sg->getProperty<SizeProperty>("viewSize");
+    DoubleProperty* graphrot = sg->getProperty<DoubleProperty>("viewRotation");
+    pair<Coord, Coord> bboxe = tlp::computeBoundingBox(sg, graphlayout, graphsize, graphrot);
     Coord max = bboxe.first;
     Coord min = bboxe.second;
     Coord center = (max + min) / 2.0;

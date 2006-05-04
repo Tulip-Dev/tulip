@@ -24,7 +24,7 @@ libtulip_la_SOURCES = \
 	ExtendedClusterOperation.cpp \
 	Reflect.cpp \
 	Types.cpp \
-	PropertyProxy.cpp \
+	AbstractProperty.cpp \
 	GraphTools.cpp \
 	BiconnectedTest.cpp \
 	TriconnectedTest.cpp   \
@@ -33,34 +33,34 @@ libtulip_la_SOURCES = \
 	AcyclicTest.cpp   \
 	SimpleTest.cpp \
 	Color.cpp  \
-	Colors.cpp \
-	ColorsAlgorithm.cpp \
+	ColorProperty.cpp \
+	ColorAlgorithm.cpp \
 	Coord.cpp \
 	GraphIterator.cpp \
 	MapIterator.cpp \
 	IdManager.cpp \
-	Int.cpp \
-	IntAlgorithm.cpp \
-	Layout.cpp \
+	IntegerProperty.cpp \
+	IntegerAlgorithm.cpp \
+	LayoutProperty.cpp \
 	LayoutAlgorithm.cpp \
-	Metric.cpp \
-	MetricAlgorithm.cpp \
-	MetaGraph.cpp \
-	MetaGraphAlgorithm.cpp \
+	DoubleProperty.cpp \
+	DoubleAlgorithm.cpp \
+	GraphProperty.cpp \
+	GraphAlgorithm.cpp \
 	Observable.cpp \
 	ObservableGraph.cpp \
 	PluginLoaderTxt.cpp \
 	PropertyManager.cpp \
-	Selection.cpp \
-	SelectionAlgorithm.cpp \
-	Sizes.cpp \
-	SizesAlgorithm.cpp \
-	String.cpp \
+	BooleanProperty.cpp \
+	BooleanAlgorithm.cpp \
+	SizeProperty.cpp \
+	SizeAlgorithm.cpp \
+	StringProperty.cpp \
 	StringAlgorithm.cpp \
-	SuperGraph.cpp \
-	SuperGraphAbstract.cpp \
-	SuperGraphImpl.cpp \
-	SuperGraphView.cpp \
+	Graph.cpp \
+	GraphAbstract.cpp \
+	GraphImpl.cpp \
+	GraphView.cpp \
 	TlpTools.cpp \
 	WithParameter.cpp \
 	PluginProgress.cpp \

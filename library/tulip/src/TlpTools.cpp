@@ -4,7 +4,7 @@
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
-#include "tulip/SuperGraphImpl.h"
+#include "tulip/GraphImpl.h"
 #include "tulip/Reflect.h"
 
 #include "tulip/PluginsCreation.h"
@@ -96,33 +96,33 @@ TemplateFactory<ClusteringFactory,Clustering,ClusterContext > *ClusteringFactory
 TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleFactory::factory = 0;
 TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
 //=========================================================
-SuperGraph * tlp::newSuperGraph(){
-  return new SuperGraphImpl();
+Graph * tlp::newGraph(){
+  return new GraphImpl();
 }
 //=========================================================
-SuperGraph * tlp::newSubGraph(SuperGraph *sg,string name) {
-  SuperGraph *newGraph = sg->addSubGraph();
+Graph * tlp::newSubGraph(Graph *sg,string name) {
+  Graph *newGraph = sg->addSubGraph();
   newGraph->setAttribute("name", name);
   return newGraph;
 }
 //=========================================================
-SuperGraph * tlp::newCloneSubGraph(SuperGraph *sg, string name) {
-  Selection sel1(sg);
+Graph * tlp::newCloneSubGraph(Graph *sg, string name) {
+  BooleanProperty sel1(sg);
   sel1.setAllNodeValue(true);
   sel1.setAllEdgeValue(true);
-  SuperGraph *newGraph = sg->addSubGraph(&sel1);
+  Graph *newGraph = sg->addSubGraph(&sel1);
   newGraph->setAttribute("name", name);
   return newGraph;
 }
 //=========================================================
-SuperGraph * tlp::load(const string &filename) {
+Graph * tlp::loadGraph(const string &filename) {
   DataSet dataSet;
   dataSet.set("filename", filename);
-  SuperGraph *graph = tlp::importGraph("tlp", dataSet);
-  return graph;
+  Graph *sg = tlp::importGraph("tlp", dataSet);
+  return sg;
 }
 //=========================================================
-bool tlp::save(SuperGraph *graph, const string &filename) {
+bool tlp::saveGraph(Graph *sg, const string &filename) {
   ostream *os;
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename.c_str());
@@ -130,26 +130,26 @@ bool tlp::save(SuperGraph *graph, const string &filename) {
     os = new ofstream(filename.c_str());
   bool result;
   DataSet data;
-  result=tlp::exportGraph(graph, *os, "tlp", data, 0);
+  result=tlp::exportGraph(sg, *os, "tlp", data, 0);
   delete os;
   return result;
 }
 //=========================================================
-SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress,SuperGraph *newSuperGraph){
+Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph){
 
   if (!ImportModuleFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
   }
-  bool newGraph=false;
-  if (newSuperGraph==0) {
-    newSuperGraph=new SuperGraphImpl();
-    newGraph=true;
+  bool newGraphP=false;
+  if (newGraph==0) {
+    newGraph=new GraphImpl();
+    newGraphP=true;
   }
 
   ClusterContext tmp;
-  tmp.superGraph=newSuperGraph;
+  tmp.graph=newGraph;
   tmp.dataSet = &dataSet;
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
@@ -163,7 +163,7 @@ SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgres
   assert(newImportModule!=0);
   bool result;
   if (!(result=newImportModule->import(""))) {
-    if (newGraph) delete newSuperGraph;
+    if (newGraphP) delete newGraph;
   }
   if (deletePluginProgress) delete tmpProgress;
   delete newImportModule;
@@ -171,10 +171,10 @@ SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgres
   if (!result) 
     return 0;
   else
-    return newSuperGraph;
+    return newGraph;
 }
 //=========================================================
-bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
+bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
                            DataSet &dataSet, PluginProgress *plugProgress) {
   if (!ExportModuleFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
@@ -185,7 +185,7 @@ bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
   bool result;
   bool deletePluginProgress=false;
   ClusterContext tmp;
-  tmp.superGraph=sg;
+  tmp.graph=sg;
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
   if (plugProgress==0) {
@@ -203,7 +203,7 @@ bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
   return result;
 }
 //=========================================================
-bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
+bool tlp::clusterizeGraph(Graph *sg,string &errorMsg,DataSet *dataSet,
 			  const string &alg, PluginProgress *plugProgress) {
   if (!ClusteringFactory::factory->exists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": cluster plugin \"" << alg
@@ -214,7 +214,7 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
   bool result;
   bool deletePluginProgress=false;
   ClusterContext tmp;
-  tmp.superGraph=sg;
+  tmp.graph=sg;
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
   if (plugProgress==0) {
@@ -235,32 +235,32 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
 // our different kinds of plugins
 #if !defined( __APPLE__)
 template <class Tnode, class Tedge, class TPROPERTY>
-  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *PropertyProxy<Tnode,Tedge,TPROPERTY>::factory = 0;
+  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
  #else
-TemplateFactory<PropertyFactory<ColorsAlgorithm>, ColorsAlgorithm, PropertyContext> *PropertyProxy<ColorType, ColorType, ColorsAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<IntAlgorithm>, IntAlgorithm, PropertyContext> *PropertyProxy<IntType, IntType, IntAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *PropertyProxy<PointType, LineType, LayoutAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<MetricAlgorithm>, MetricAlgorithm, PropertyContext> *PropertyProxy<DoubleType, DoubleType, MetricAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<SelectionAlgorithm>, SelectionAlgorithm, PropertyContext> *PropertyProxy<BooleanType, BooleanType, SelectionAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<SizesAlgorithm>, SizesAlgorithm, PropertyContext> *PropertyProxy<SizeType,SizeType, SizesAlgorithm>::factory = 0;
-TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *PropertyProxy<StringType, StringType, StringAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<ColorAlgorithm>, ColorAlgorithm, PropertyContext> *AbstractProperty<ColorType, ColorType, ColorAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<IntegerAlgorithm>, IntegerAlgorithm, PropertyContext> *AbstractProperty<IntegerType, IntegerType, IntegerAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *AbstractProperty<PointType, LineType, LayoutAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<DoubleAlgorithm>, DoubleAlgorithm, PropertyContext> *AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<BooleanAlgorithm>, BooleanAlgorithm, PropertyContext> *AbstractProperty<BooleanType, BooleanType, BooleanAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> *AbstractProperty<SizeType,SizeType, SizeAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
 void loadPlugins(string dir,PluginLoader *plug) {
-  Sizes::initFactory();
-  Sizes::factory->load(dir + "sizes", "Sizes",plug);
-  Int::initFactory();
-  Int::factory->load(dir + "int", "Int",plug);
-  Layout::initFactory();
-  Layout::factory->load(dir + "layout" , "Layout",plug);
-  Colors::initFactory();
-  Colors::factory->load(dir + "colors" , "Colors",plug);
-  Metric::initFactory();
-  Metric::factory->load(dir + "metric" , "Metric",plug);
-  String::initFactory();
-  String::factory->load(dir + "string" , "String",plug);
-  Selection::initFactory();
-  Selection::factory->load(dir + "selection" , "Selection",plug);
+  SizeProperty::initFactory();
+  SizeProperty::factory->load(dir + "sizes", "Size",plug);
+  IntegerProperty::initFactory();
+  IntegerProperty::factory->load(dir + "int", "Integer",plug);
+  LayoutProperty::initFactory();
+  LayoutProperty::factory->load(dir + "layout" , "Layout",plug);
+  ColorProperty::initFactory();
+  ColorProperty::factory->load(dir + "colors" , "Color",plug);
+  DoubleProperty::initFactory();
+  DoubleProperty::factory->load(dir + "metric" , "Double",plug);
+  StringProperty::initFactory();
+  StringProperty::factory->load(dir + "string" , "String",plug);
+  BooleanProperty::initFactory();
+  BooleanProperty::factory->load(dir + "selection" , "Boolean",plug);
   ClusteringFactory::initFactory();
   ClusteringFactory::factory->load(dir + "clustering" , "Cluster",plug);
   ImportModuleFactory::initFactory();
@@ -288,11 +288,11 @@ bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
     PluginIterator::loadPlugin(filename, plug);
 }
 //=========================================================
-bool tlp::getSource(SuperGraph *superGraph, node &n) {
-  Iterator<node> *it=superGraph->getNodes();
+bool tlp::getSource(Graph *graph, node &n) {
+  Iterator<node> *it=graph->getNodes();
   while (it->hasNext()) {
     n=it->next();
-    if (superGraph->indeg(n)==0){
+    if (graph->indeg(n)==0){
       delete it;
       return true;
     }
@@ -300,7 +300,7 @@ bool tlp::getSource(SuperGraph *superGraph, node &n) {
   return false;
 }
 //=========================================================
-void tlp::removeFromGraph(SuperGraph *ioG, Selection *inSel) {
+void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   if( !ioG )
     return;
 
@@ -338,7 +338,7 @@ void tlp::removeFromGraph(SuperGraph *ioG, Selection *inSel) {
   Iterator<std::string> * propIt = ioG->getProperties();
   while( propIt->hasNext() ) {
     std::string n = propIt->next();
-    PProxy * p = ioG->getProperty( n );
+    PropertyInterface * p = ioG->getProperty( n );
     for( unsigned int in = 0 ; in < nodeA.size() ; in++ )
       p->erase( nodeA[in] );
     for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
@@ -355,7 +355,7 @@ void tlp::removeFromGraph(SuperGraph *ioG, Selection *inSel) {
     ioG->delNode( nodeA[in] );
 }
 
-void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, Selection *inSel, Selection* outSel) {
+void tlp::copyToGraph (	Graph *outG, Graph *	inG, BooleanProperty *inSel, BooleanProperty* outSel) {
   if( outSel ) {
     outSel->setAllNodeValue( false );
     outSel->setAllEdgeValue( false );
@@ -399,9 +399,9 @@ void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, Selection *inSel, Se
 	Iterator<std::string> * propIt = inG->getProperties();
 	while( propIt->hasNext() ) {
 	  std::string n = propIt->next();
-	  PProxy * src = inG->getProperty( n );
-	  if(dynamic_cast<MetaGraph *>(src) == 0) {
-	    PProxy *dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
+	  PropertyInterface * src = inG->getProperty( n );
+	  if(dynamic_cast<GraphProperty *>(src) == 0) {
+	    PropertyInterface *dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
 	    dst->copy( n1, n0, src );
 	  }
 	}
@@ -430,7 +430,7 @@ void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, Selection *inSel, Se
 	Iterator<std::string> * propIt = inG->getProperties();
 	while( propIt->hasNext() ) {
 	  std::string n = propIt->next();
-	  PProxy * src = inG->getProperty( n ),
+	  PropertyInterface * src = inG->getProperty( n ),
 	    * dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
 	  dst->copy( e1, e0, src );
 	}

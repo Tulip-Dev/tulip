@@ -6,7 +6,7 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 
 #include "PropertyDialogData.h"
@@ -14,7 +14,7 @@
 class QListViewItem;
 class QStringList;
 
-class PProxy;
+class PropertyInterface;
 class GlGraph;
 class QScrollBar;
 
@@ -28,9 +28,9 @@ public:
   void setGlGraphWidget(GlGraph *);
 
 private:
-  SuperGraph *supergraph;
+  Graph *graph;
   GlGraph *glWidget;
-  PProxy *editedProperty;
+  PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;
   void updateNbElements();
@@ -40,7 +40,7 @@ public slots:
   void update();
   void selectNode(node);
   void selectEdge(edge);
-  void setSuperGraph(SuperGraph *);
+  void setGraph(Graph *);
   void changePropertyName(QListViewItem *);
   void newProperty();
   void removeProperty();
@@ -50,8 +50,8 @@ public slots:
   void setAllValue();
   
 signals:
-  void tulipAllNodePropertyChanged(SuperGraph *, const QString &property, const QString &value);
-  void tulipAllEdgePropertyChanged(SuperGraph *, const QString &property, const QString &value);
+  void tulipAllNodePropertyChanged(Graph *, const QString &property, const QString &value);
+  void tulipAllEdgePropertyChanged(Graph *, const QString &property, const QString &value);
 };
 
 #endif // PROPERTYDIALOG_H

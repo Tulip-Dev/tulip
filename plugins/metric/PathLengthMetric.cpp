@@ -2,45 +2,45 @@
 #include <tulip/ForEach.h>
 #include "PathLengthMetric.h"
 
-METRICPLUGIN(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2");
+DOUBLEPLUGIN(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2");
 
 using namespace std;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const PropertyContext &context):MetricAlgorithm(context) {
+PathLengthMetric::PathLengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {
 }
 //=======================================
 double PathLengthMetric::getNodeValue(const node n) {
-  if (superGraph->outdeg(n)==0) return 0.0;
-  if (metricResult->getNodeValue(n)!=0)
-    return metricResult->getNodeValue(n);
+  if (graph->outdeg(n)==0) return 0.0;
+  if (doubleResult->getNodeValue(n)!=0)
+    return doubleResult->getNodeValue(n);
   double result=0;
   node child;
-  forEach(child, superGraph->getOutNodes(n)) {
-    result += metricResult->getNodeValue(child);
+  forEach(child, graph->getOutNodes(n)) {
+    result += doubleResult->getNodeValue(child);
   }
   result += leafMetric->getNodeValue(n);
-  metricResult->setNodeValue(n, result);
+  doubleResult->setNodeValue(n, result);
   return result;
 }
 //=======================================
 bool PathLengthMetric::run() {
-  metricResult->setAllNodeValue(0);
-  metricResult->setAllEdgeValue(0);
-  leafMetric = new Metric(superGraph);
+  doubleResult->setAllNodeValue(0);
+  doubleResult->setAllEdgeValue(0);
+  leafMetric = new DoubleProperty(graph);
   string erreurMsg;
-  if (!superGraph->computeProperty("Leaf", leafMetric, erreurMsg)) {
+  if (!graph->computeProperty("Leaf", leafMetric, erreurMsg)) {
     cerr << erreurMsg << endl;
     return false;
   }
   node _n;
-  forEach(_n, superGraph->getNodes())
+  forEach(_n, graph->getNodes())
     getNodeValue(_n);
   delete leafMetric;
 }
 //=======================================
 bool PathLengthMetric::check(string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(superGraph))
+  if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
     erreurMsg="The Graph must be acyclic";

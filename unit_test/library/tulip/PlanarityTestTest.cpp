@@ -22,7 +22,7 @@ const std::string GRAPHPATH = "./DATA/graphs/";
 CPPUNIT_TEST_SUITE_REGISTRATION( PlanarityTestTest );
 //==========================================================
 void PlanarityTestTest::setUp() {
-  //  graph = tlp::newSuperGraph();
+  //  graph = tlp::newGraph();
 }
 //==========================================================
 void PlanarityTestTest::tearDown() {
@@ -30,25 +30,25 @@ void PlanarityTestTest::tearDown() {
 }
 //==========================================================
 void PlanarityTestTest::planarGraphs() {
-  graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graph));
   delete graph;
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphs() {
-  graph = tlp::load(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
+  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
   delete graph;
-  graph = tlp::load(GRAPHPATH + "notplanar/k33k55.tlp.gz");
+  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33k55.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
   delete graph;  
-  graph = tlp::load(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
+  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
   delete graph;
 }
@@ -60,14 +60,14 @@ unsigned int eulerIdentity(SuperGraph *graph) {
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "==================================" << endl;
-  graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   SuperGraphMap *graphMap = new SuperGraphMap(graph);
   graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
-  graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
   graphMap = new SuperGraphMap(graph);
   cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
@@ -81,7 +81,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   delete graph;
   cerr << "==================================" << endl;
   cerr << "unbiconnected" << endl;
-  graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+  graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
 
   graphMap = new SuperGraphMap(graph);
 

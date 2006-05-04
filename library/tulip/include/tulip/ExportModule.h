@@ -13,7 +13,7 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include "SuperGraph.h"
+#include "Graph.h"
 #include "WithParameter.h"
 #include "Reflect.h"
 #include "PluginProgress.h"
@@ -29,13 +29,13 @@ class ExportModule:public WithParameter
 {
 public:
   ///
-  ExportModule (ClusterContext context):superGraph(context.superGraph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  ExportModule (ClusterContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
   ///
   virtual ~ExportModule(){};
   ///
-  virtual bool exportGraph(std::ostream &,SuperGraph *)=0;
-  /** It is the root superGraph*/
-  SuperGraph *superGraph;
+  virtual bool exportGraph(std::ostream &,Graph *)=0;
+  /** It is the root graph*/
+  Graph *graph;
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;

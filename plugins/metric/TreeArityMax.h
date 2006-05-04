@@ -30,7 +30,7 @@
  *  (at your option) any later version.
  *
  */
-class TreeArityMax:public MetricAlgorithm {   
+class TreeArityMax:public DoubleAlgorithm {   
 public:
   TreeArityMax(const PropertyContext &);
   bool run();

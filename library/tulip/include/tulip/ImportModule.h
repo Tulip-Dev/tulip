@@ -12,7 +12,7 @@
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
-#include "SuperGraph.h"
+#include "Graph.h"
 #include "WithParameter.h"
 #include "Reflect.h"
 #include "PluginProgress.h"
@@ -29,12 +29,12 @@ public:
   DataSet *dataSet;
   ///
   ImportModule (ClusterContext context) : dataSet(context.dataSet),
-    superGraph(context.superGraph),pluginProgress(context.pluginProgress) {}
+    graph(context.graph),pluginProgress(context.pluginProgress) {}
   virtual ~ImportModule(){};
   ///
   virtual bool import(const std::string &)=0;
-  /** It is the SuperGraph where the plug-ins should build the imported graph*/
-  SuperGraph *superGraph;
+  /** It is the Graph where the plug-ins should build the imported sg*/
+  Graph *graph;
   ///
   PluginProgress *pluginProgress;
 };

@@ -30,9 +30,9 @@
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)), 
  *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using 
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).
- *  The algorithm can manage nodes of different size. The Sizes "viewSize"
+ *  The algorithm can manage nodes of different size. The SizeProperty "viewSize"
  *  is used by default if no parameters are given to the plug-in. 
- *  The parameter is (Sizes*)"nodeSize".
+ *  The parameter is (SizeProperty*)"nodeSize".
  *
  *  
  *
@@ -51,7 +51,7 @@ private:
   void calcLayout(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
   void calcLayout2(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
-  Sizes *nodeSize;
+  SizeProperty *nodeSize;
   bool nAlgo;
 };
 /*@}*/

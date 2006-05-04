@@ -13,10 +13,10 @@
 
 #include "TulipStatsWidget.h"
 #include <tulip/PropertyManager.h> 
-#include <tulip/Metric.h> 
-#include <tulip/Sizes.h> 
-#include <tulip/Layout.h> 
-#include <tulip/Int.h> 
+#include <tulip/DoubleProperty.h> 
+#include <tulip/SizeProperty.h> 
+#include <tulip/LayoutProperty.h> 
+#include <tulip/IntegerProperty.h> 
 #include <tulip/Iterator.h> 
 #include <tulip/GlGraph.h> 
 #include <tulip/TlpTools.h>
@@ -57,7 +57,7 @@ using namespace std;
 
 namespace tlp
 {
-  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glGraphWidget(0), supergraph(0)
+  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glGraphWidget(0), graph(0)
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 
@@ -127,11 +127,11 @@ namespace tlp
     clusterTreeWidget = clusterTree;
   }
 
-  SuperGraph* TulipStats::getSuperGraph()
+  Graph* TulipStats::getGraph()
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
     //  cout << " ...[END]" << endl;
-    return supergraph;
+    return graph;
   }
 
   GlGraphWidget* TulipStats::getGlGraphWidget()
@@ -144,7 +144,7 @@ namespace tlp
   void TulipStats::setGlGraphWidget(GlGraphWidget *g)
   {
     // cout << "[START]..." << __PRETTY_FUNCTION__ ;
-    if (supergraph != 0)
+    if (graph != 0)
       reset();
 
     resetComposite(true);
@@ -154,24 +154,24 @@ namespace tlp
     if (g == 0)
       return;
 
-    /*    if (supergraph != 0)
-	  supergraph->removeObserver(this); */
+    /*    if (graph != 0)
+	  graph->removeObserver(this); */
 
-    supergraph = g->getSuperGraph();
+    graph = g->getGraph();
 
-    if (supergraph != 0 && supergraph != NULL)
+    if (graph != 0 && graph != NULL)
       {
 	updateMetrics();
-	supergraph->addObserver(this);
+	graph->addObserver(this);
       }
 
     // cout << " ...[END]" << endl;
   } 
 
-  void TulipStats::destroy(SuperGraph *superGraph)
+  void TulipStats::destroy(Graph *sg)
   {
-    if (superGraph == supergraph)
-      supergraph->removeObserver(this);
+    if (graph == sg)
+      graph->removeObserver(this);
   }
 
   //************************************************************
@@ -396,15 +396,15 @@ namespace tlp
 
     AvaiMetricsList->clear();
 
-    Iterator<std::string>* properties = supergraph->getProperties();
+    Iterator<std::string>* properties = graph->getProperties();
 
     while (properties->hasNext())
       {
 	std::string proxyName = properties->next();
 
-	PProxy* proxy = supergraph->getProperty(proxyName);
+	PropertyInterface* proxy = graph->getProperty(proxyName);
 
-	if (dynamic_cast<Metric*>(proxy) != 0)
+	if (dynamic_cast<DoubleProperty*>(proxy) != 0)
 	  AvaiMetricsList->insertItem(proxyName.c_str());	
       }
 
@@ -480,9 +480,9 @@ namespace tlp
 	return;
       }
   
-    Metric* metric;
+    DoubleProperty* metric;
 
-    metric = supergraph->getProperty<Metric>(proxyName);
+    metric = graph->getProperty<DoubleProperty>(proxyName);
 
     metrics.push_back(metric); 
     nMetrics++; 
@@ -589,7 +589,7 @@ namespace tlp
     resetComposite(false);
     resetDisplayTab();
 
-    statsResults = StatsNodeModule::ComputeStatisticsResults(supergraph, metrics, nMetrics);
+    statsResults = StatsNodeModule::ComputeStatisticsResults(graph, metrics, nMetrics);
 
     std::string output;
 
@@ -678,8 +678,8 @@ namespace tlp
 
     // We build the data set :
     dataSet = new DataSet();
-    StructDef parameter = Layout::factory->getParam("Scatter Plot");
-    parameter.buildDefaultDataSet( *dataSet, supergraph );
+    StructDef parameter = LayoutProperty::factory->getParam("Scatter Plot");
+    parameter.buildDefaultDataSet( *dataSet, graph );
     
     char dtxt[20] = "discretizationStep1";
     char mtxt[12] = "usedMetric1";
@@ -698,13 +698,13 @@ namespace tlp
     dataSet->set("nMetrics", nMetrics);
     dataSet->set("shapeConversion", ShapeConversionCB->isChecked());
 
-    Layout dest(supergraph);
-    resultBool = supergraph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
+    LayoutProperty dest(graph);
+    resultBool = graph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
 
     if (!resultBool) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString(("Scatter Plot::" + erreurMsg).c_str()) );
     else {
-      *supergraph->getLocalProperty<Layout>("viewLayout") = dest;
+      *graph->getLocalProperty<LayoutProperty>("viewLayout") = dest;
     }
 
     glGraphWidget->setDisplayEdges(false);
@@ -1212,7 +1212,7 @@ namespace tlp
     DataSet dataSet;
 
     StructDef parameter = ClusteringFactory::factory->getParam(name);
-    parameter.buildDefaultDataSet( dataSet, supergraph );
+    parameter.buildDefaultDataSet( dataSet, graph );
 
     float a, b, c, d;
 
@@ -1226,7 +1226,7 @@ namespace tlp
     dataSet.set("CoordC", c);
     dataSet.set("CoordD", d);
 
-    if (!tlp::clusterizeGraph(supergraph, erreurMsg, &dataSet, name, NULL  )) 
+    if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, NULL  )) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
   
     if (clusterTreeWidget != NULL)

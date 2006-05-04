@@ -7,7 +7,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// DepthMetric.h - This plugins compute for each node n, the maximum path-length between n and the other node.
+/// DepthDoubleProperty.h - This plugins compute for each node n, the maximum path-length between n and the other node.
 /** This plugins compute for each node n, the maximum path-length between n and the other node.
  *  The graph must be acyclic.
  *
@@ -27,7 +27,7 @@
  *  (at your option) any later version.
  *
  */
-class DepthMetric:public MetricAlgorithm { 
+class DepthMetric:public DoubleAlgorithm { 
 public:
   DepthMetric(const PropertyContext &);
   bool run();

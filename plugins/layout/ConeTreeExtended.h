@@ -42,7 +42,7 @@ private:
 		  double x, double y, int level);
   void computeLayerSize(node , int);
   void computeYCoodinates(node);
-  Sizes * nodeSize;
+  SizeProperty * nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;
 

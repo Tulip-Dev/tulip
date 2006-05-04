@@ -1,10 +1,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <tulip/String.h>
-#include <tulip/Colors.h>
+#include <tulip/StringProperty.h>
+#include <tulip/ColorProperty.h>
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 
 #include <iostream>

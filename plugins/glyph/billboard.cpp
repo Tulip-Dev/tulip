@@ -3,14 +3,14 @@
 #include <string>
 #include <GL/gl.h>
 
-#include <tulip/String.h>
-#include <tulip/Colors.h>
-#include <tulip/Sizes.h>
+#include <tulip/StringProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
 
 using namespace std;

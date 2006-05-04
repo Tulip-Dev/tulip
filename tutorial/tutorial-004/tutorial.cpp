@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/TlpTools.h>
 
 /**
@@ -10,7 +10,7 @@
  */
 
 using namespace std;
-void buildGraph(SuperGraph *graph) {
+void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -23,19 +23,19 @@ void buildGraph(SuperGraph *graph) {
 
 int main() {
   //create an empty graph
-  SuperGraph *graph=tlp::newSuperGraph();
+  Graph *graph=tlp::newGraph();
   //build the graph
   buildGraph(graph);
 
   //Get and create several properties
-  Metric *metric=graph->getLocalProperty<Metric>("firstMetric");
-  Selection *select=graph->getLocalProperty<Selection>("firstSelection");
-  Layout *layout=graph->getLocalProperty<Layout>("firstLayout");
-  Int *integer=graph->getLocalProperty<Int>("firstInteger");
-  Colors *colors=graph->getLocalProperty<Colors>("firstColors");
-  Sizes *sizes=graph->getLocalProperty<Sizes>("firstSizes");
-  MetaGraph *meta=graph->getLocalProperty<MetaGraph>("firstMeta");
-  String *strings=graph->getLocalProperty<String>("firstString");
+  DoubleProperty *metric=graph->getLocalProperty<DoubleProperty>("firstMetric");
+  BooleanProperty *select=graph->getLocalProperty<BooleanProperty>("firstSelection");
+  LayoutProperty *layout=graph->getLocalProperty<LayoutProperty>("firstLayout");
+  IntegerProperty *integer=graph->getLocalProperty<IntegerProperty>("firstInteger");
+  ColorProperty *colors=graph->getLocalProperty<ColorProperty>("firstColors");
+  SizeProperty *sizes=graph->getLocalProperty<SizeProperty>("firstSizes");
+  GraphProperty *meta=graph->getLocalProperty<GraphProperty>("firstMeta");
+  StringProperty *strings=graph->getLocalProperty<StringProperty>("firstString");
 
   //initialize all the properties
   metric->setAllNodeValue(0.0);

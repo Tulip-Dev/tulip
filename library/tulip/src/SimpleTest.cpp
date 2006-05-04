@@ -11,10 +11,10 @@
  */
 
 #include <vector>
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/SimpleTest.h"
 #include "tulip/MutableContainer.h"
-#include "tulip/Selection.h"
+#include "tulip/BooleanProperty.h"
 #include "tulip/StableIterator.h"
 
 using namespace std;
@@ -30,43 +30,43 @@ SimpleTest * SimpleTest::instance=0;
 SimpleTest::SimpleTest () {
 }
 //=================================================================
-bool SimpleTest::isSimple(SuperGraph *graph) {
+bool SimpleTest::isSimple(Graph *sg) {
   if(instance == 0 )
     instance = new SimpleTest();
 
-  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
-    graph->addObserver(instance);
+  if (instance->resultsBuffer.find((unsigned long)sg) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned long)sg] = simpleTest(sg);
+    sg->addObserver(instance);
   }
   
-  return instance->resultsBuffer[(unsigned long)graph];
+  return instance->resultsBuffer[(unsigned long)sg];
 }
 //**********************************************************************
-void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
-  if (SimpleTest::isSimple(graph)) return;
-  SimpleTest::simpleTest(graph, &removed, &removed);
+void SimpleTest::makeSimple(Graph* sg,vector<edge> &removed) {
+  if (SimpleTest::isSimple(sg)) return;
+  SimpleTest::simpleTest(sg, &removed, &removed);
   vector<edge>::const_iterator it;
   for(it = removed.begin(); it!=removed.end(); ++it) {
-    graph->delEdge(*it);
+    sg->delEdge(*it);
   }
-  assert(SimpleTest::isSimple(graph));
+  assert(SimpleTest::isSimple(sg));
 }
 //=================================================================
-bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
+bool SimpleTest::simpleTest(Graph *sg, vector<edge> *multipleEdges, vector<edge> *loops) {
  bool result = true;
  bool computeAll = (loops != 0) || (multipleEdges != 0);
- Iterator<node> *itNode = graph->getNodes();
+ Iterator<node> *itNode = sg->getNodes();
  MutableContainer<bool> inserted;
  inserted.setAll(false);
  while (itNode->hasNext ()) {
    node current = itNode->next ();
    //Search for multiple edges and loops
-   Iterator<edge> *itEdge = graph->getInOutEdges (current);
+   Iterator<edge> *itEdge = sg->getInOutEdges (current);
    MutableContainer<bool> targeted;
    targeted.setAll(false);
    while (itEdge->hasNext ()) {
      edge e = itEdge->next();
-     node target = graph->opposite(e, current);
+     node target = sg->opposite(e, current);
      if (target == current) { //loop 
        if (!computeAll) {
 	 result = false;
@@ -99,22 +99,22 @@ bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vect
  return result;
 }
 //=================================================================
-void SimpleTest::deleteResult(SuperGraph *graph) {
-  resultsBuffer.erase((unsigned long)graph);
-  graph->removeObserver(this);
+void SimpleTest::deleteResult(Graph *sg) {
+  resultsBuffer.erase((unsigned long)sg);
+  sg->removeObserver(this);
 }
 //=================================================================
-void SimpleTest::addEdge(SuperGraph *graph, const edge) {
-  if (resultsBuffer[(unsigned long)graph] == true)
-    deleteResult(graph);
+void SimpleTest::addEdge(Graph *sg, const edge) {
+  if (resultsBuffer[(unsigned long)sg] == true)
+    deleteResult(sg);
 }
 //=================================================================
-void SimpleTest::delEdge(SuperGraph *graph, const edge) {
-  if (resultsBuffer[(unsigned long)graph] == false)
-    deleteResult(graph);
+void SimpleTest::delEdge(Graph *sg, const edge) {
+  if (resultsBuffer[(unsigned long)sg] == false)
+    deleteResult(sg);
 }
 //=================================================================
-void SimpleTest::destroy(SuperGraph *graph) {
-  deleteResult(graph);
+void SimpleTest::destroy(Graph *sg) {
+  deleteResult(sg);
 }
 //=================================================================

@@ -1,4 +1,4 @@
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/TreeTest.h"
 #include "tulip/AcyclicTest.h"
 
@@ -14,77 +14,77 @@ TreeTest * TreeTest::instance=0;
 TreeTest::TreeTest(){
 }
 
-bool TreeTest::isTree(SuperGraph *graph) {
+bool TreeTest::isTree(Graph *sg) {
   if (instance==0)
     instance=new TreeTest();
-  return instance->compute(graph);
+  return instance->compute(sg);
 }
 
 
-bool TreeTest::compute(SuperGraph *graph) { 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
-    return resultsBuffer[(unsigned long)graph];
+bool TreeTest::compute(Graph *sg) { 
+  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) {
+    return resultsBuffer[(unsigned long)sg];
   }
-  if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
-    resultsBuffer[(unsigned long)graph]=false;
-    graph->addObserver(this);
+  if (sg->numberOfEdges()!=sg->numberOfNodes()-1) {
+    resultsBuffer[(unsigned long)sg]=false;
+    sg->addObserver(this);
     return false;
   }
   bool rootNodeFound=false;
-  Iterator<node> *it=graph->getNodes();
+  Iterator<node> *it=sg->getNodes();
   while (it->hasNext()) {
     node tmp=it->next();
-    if (graph->indeg(tmp)>1) {
+    if (sg->indeg(tmp)>1) {
       delete it;
-      resultsBuffer[(unsigned long)graph]=false;
-      graph->addObserver(this);
+      resultsBuffer[(unsigned long)sg]=false;
+      sg->addObserver(this);
       return false;
     }
-    if (graph->indeg(tmp)==0) {
+    if (sg->indeg(tmp)==0) {
       if (rootNodeFound) {
 	delete it;
-	resultsBuffer[(unsigned long)graph]=false;
-	graph->addObserver(this);
+	resultsBuffer[(unsigned long)sg]=false;
+	sg->addObserver(this);
 	return false;
       }
       else
 	rootNodeFound=true;
     }
   } delete it;
-  if (AcyclicTest::isAcyclic(graph)) {
-    resultsBuffer[(unsigned long)graph]=true;
-    graph->addObserver(this);
+  if (AcyclicTest::isAcyclic(sg)) {
+    resultsBuffer[(unsigned long)sg]=true;
+    sg->addObserver(this);
     return true;
   }
   else {
-    resultsBuffer[(unsigned long)graph]=false;
-    graph->addObserver(this);
+    resultsBuffer[(unsigned long)sg]=false;
+    sg->addObserver(this);
     return false;
   }
 }
 
-void TreeTest::addEdge(SuperGraph *graph,const edge) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::addEdge(Graph *sg,const edge) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
-void TreeTest::delEdge(SuperGraph *graph,const edge) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::delEdge(Graph *sg,const edge) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
-void TreeTest::reverseEdge(SuperGraph *graph,const edge) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::reverseEdge(Graph *sg,const edge) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
-void TreeTest::addNode(SuperGraph *graph,const node) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::addNode(Graph *sg,const node) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
-void TreeTest::delNode(SuperGraph *graph,const node) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::delNode(Graph *sg,const node) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }
 
-void TreeTest::destroy(SuperGraph *graph) {
-  graph->removeObserver(this);
-  resultsBuffer.erase((unsigned long)graph);
+void TreeTest::destroy(Graph *sg) {
+  sg->removeObserver(this);
+  resultsBuffer.erase((unsigned long)sg);
 }

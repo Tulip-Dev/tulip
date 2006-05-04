@@ -9,10 +9,10 @@
 */
 #include <cassert>
 #include "InducedSubGraphSelection.h"
-#include <tulip/Selection.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-SELECTIONPLUGIN(InducedSubGraphSelection,"Induced sub-graph","David Auber","08/08/2001","Alpha","0","1");
+BOOLEANPLUGIN(InducedSubGraphSelection,"Induced sub-graph","David Auber","08/08/2001","Alpha","0","1");
 
 //=================================================================================
 namespace {
@@ -27,30 +27,30 @@ namespace {
 }
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const PropertyContext &context):
-  SelectionAlgorithm(context) {
-  addParameter<Selection>("Nodes", paramHelp[0], "viewSelection");
+  BooleanAlgorithm(context) {
+  addParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  selectionResult->setAllNodeValue(false);
-  selectionResult->setAllEdgeValue(false);
-  Selection *entrySelection = 0;
+  booleanResult->setAllNodeValue(false);
+  booleanResult->setAllEdgeValue(false);
+  BooleanProperty *entrySelection = 0;
   if (dataSet!=0) 
     dataSet->get("Nodes", entrySelection);  
   if (entrySelection == 0) 
-    entrySelection = superGraph->getProperty<Selection>("viewSelection");
+    entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  Iterator<node> *itN = superGraph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next() ;
     if (entrySelection->getNodeValue(itn)) {
-      selectionResult->setNodeValue(itn, true);
-      Iterator<edge> *itE = superGraph->getOutEdges(itn);
+      booleanResult->setNodeValue(itn, true);
+      Iterator<edge> *itE = graph->getOutEdges(itn);
       while (itE->hasNext()) {
 	edge e = itE->next();
-	node target = superGraph->target(e);
+	node target = graph->target(e);
 	if (entrySelection->getNodeValue(target))
-	  selectionResult->setEdgeValue(e, true);
+	  booleanResult->setEdgeValue(e, true);
       } delete itE;
     }
   } delete itN;

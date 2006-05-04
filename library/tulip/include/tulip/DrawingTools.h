@@ -8,14 +8,14 @@
 
 #include <tulip/Coord.h>
 
-class SuperGraph;
-class Layout;
-class Sizes;
-class Metric;
-class Selection;
+class Graph;
+class LayoutProperty;
+class SizeProperty;
+class DoubleProperty;
+class BooleanProperty;
 
 namespace tlp {
-  TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(SuperGraph *graph, Layout *layout, Sizes *size, Metric *rotation, Selection *selection = 0);
+  TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection = 0);
 };
 
 

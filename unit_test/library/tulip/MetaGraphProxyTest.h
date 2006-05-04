@@ -2,7 +2,7 @@
 #define TLPMETAGRAPHPROXYTEST
 
 #include <string>
-#include <tulip/MetaGraph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/SuperGraph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>

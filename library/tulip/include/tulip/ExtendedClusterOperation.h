@@ -8,15 +8,15 @@
 #include <set>
 #include <tulip/Node.h>
 
-class SuperGraph;
+class Graph;
 
 namespace tlp {
-  TLP_SCOPE void openMetaNode(SuperGraph *graph, node n);
-  TLP_SCOPE node createMetaNode(SuperGraph *graph, std::set<node> &subGraph);
+  TLP_SCOPE void openMetaNode(Graph *sg, node n);
+  TLP_SCOPE node createMetaNode(Graph *sg, std::set<node> &subGraph);
   /**
-   *  Return a subgraph induced by a set of nodes
+   *  Return a subsg induced by a set of nodes
    */
-  TLP_SCOPE SuperGraph *inducedSubGraph(SuperGraph *, const std::set<node> &, std::string name = "induced subgraph");
+  TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &, std::string name = "induced subsg");
 };
 
 #endif

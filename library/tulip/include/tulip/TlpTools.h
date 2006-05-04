@@ -6,15 +6,15 @@
 #include <config.h>
 #endif
 
-#include "SuperGraph.h"
-#include "Layout.h"
-#include "Metric.h"
-#include "String.h"
-#include "Selection.h"
-#include "Colors.h"
-#include "Int.h"
-#include "Sizes.h"
-#include "MetaGraph.h"
+#include "Graph.h"
+#include "LayoutProperty.h"
+#include "DoubleProperty.h"
+#include "StringProperty.h"
+#include "BooleanProperty.h"
+#include "ColorProperty.h"
+#include "IntegerProperty.h"
+#include "SizeProperty.h"
+#include "GraphProperty.h"
 #include "PluginProgress.h"
 #include "Reflect.h"
 #include "ExtendedClusterOperation.h"
@@ -35,34 +35,34 @@ namespace tlp {
   TLP_SCOPE bool loadPlugin(const std::string & filename, PluginLoader *plug=0);
 
   /**
-   * Load a graph in the tlp format
+   * Load a sg in the tlp format
    * Warning : this function use "tlp" import plugin (must be laoded)
    */
-  TLP_SCOPE SuperGraph * load(const std::string &filename);
+  TLP_SCOPE Graph * loadGraph(const std::string &filename);
   /**
-   * Save a graph in tlp format
+   * Save a sg in tlp format
    * Warning : this function use "tlp" export plugin (must be laoded)
    */
-  TLP_SCOPE bool save(SuperGraph *, const std::string &filename);
-  TLP_SCOPE SuperGraph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,SuperGraph *newSuperGraph=0);
-  TLP_SCOPE bool exportGraph(SuperGraph *sg,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
-  TLP_SCOPE bool clusterizeGraph(SuperGraph *sg,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
+  TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
+  TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
+  TLP_SCOPE bool exportGraph(Graph *sg,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
+  TLP_SCOPE bool clusterizeGraph(Graph *sg,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
   /**
-   * Return a new graph
+   * Return a new sg
    */
-  TLP_SCOPE SuperGraph* newSuperGraph();
+  TLP_SCOPE Graph* newGraph();
   /**
-   *  Return an empty subgraph 
+   *  Return an empty subsg 
    */
-  TLP_SCOPE SuperGraph *newSubGraph(SuperGraph *, std::string name = "unnamed");
+  TLP_SCOPE Graph *newSubGraph(Graph *, std::string name = "unnamed");
   /**
-   *  Return a subgraph equal to the graph given in parameter (a clone subgraph)
+   *  Return a subsg equal to the sg given in parameter (a clone subsg)
    */
-  TLP_SCOPE SuperGraph *newCloneSubGraph(SuperGraph *, std::string name = "unnamed");
+  TLP_SCOPE Graph *newCloneSubGraph(Graph *, std::string name = "unnamed");
   /**
    *  find the first node of degree 0, if no node exist return false else true
    */
-  TLP_SCOPE bool getSource(SuperGraph *, node &n);
+  TLP_SCOPE bool getSource(Graph *, node &n);
   /**
    * Return an istream from a gzipped file (uses gzstream lib)
    * the stream has to be deleted after use.
@@ -76,18 +76,18 @@ namespace tlp {
    */
   TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
   /**
-   * Append the selected part of the graph inG (properties, nodes & edges) into the graph outG.
-   * If no selection is done (inSel=NULL), the whole inG graph is appended.
+   * Append the selected part of the sg inG (properties, nodes & edges) into the sg outG.
+   * If no selection is done (inSel=NULL), the whole inG sg is appended.
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void copyToGraph( SuperGraph * outG, SuperGraph *	inG, Selection* inSelection=0, Selection* outSelection=0 );
+  TLP_SCOPE void copyToGraph( Graph * outG, Graph *	inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
   /**
-   * Remove the selected part of the graph ioG (properties, nodes & edges).
-   * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
+   * Remove the selected part of the sg ioG (properties, nodes & edges).
+   * If no selection is done (inSel=NULL), the whole sg is reseted to default value.
    * \warning The selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void removeFromGraph(SuperGraph * ioG, Selection* inSelection = 0 );
+  TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
   
 };
 

@@ -2,7 +2,7 @@
 #define DATASETTOOLS_H
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/Layout.h>
+#include <tulip/LayoutProperty.h>
 #include "Orientation.h"
 
 void 	        addOrientationParameters(LayoutAlgorithm* pLayout);

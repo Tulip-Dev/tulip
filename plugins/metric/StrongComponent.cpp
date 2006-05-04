@@ -1,8 +1,8 @@
 #include <cmath>
 #include "StrongComponent.h"
-#include <tulip/Metric.h>
+#include <tulip/DoubleProperty.h>
 
-METRICPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
+DOUBLEPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
 
 using namespace std;
 
@@ -22,7 +22,7 @@ int StrongComponent::attachNumerotation(node n,
   minAttach[n]=myId;
   renum.push(n);
   int result=myId;
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=graph->getOutNodes(n);
   for (;itN->hasNext();) {
     node tmpN=itN->next();
     if (!finished[tmpN]) {
@@ -37,43 +37,43 @@ int StrongComponent::attachNumerotation(node n,
       renum.pop();
       finished[tmp]=true;
       minAttach[tmp]=result;
-      metricResult->setNodeValue(tmp,curComponent);
+      doubleResult->setNodeValue(tmp,curComponent);
     }
     finished[n]=true;
-    metricResult->setNodeValue(n,curComponent);
+    doubleResult->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
   return result;
 }
 
-StrongComponent::StrongComponent(const PropertyContext &context):MetricAlgorithm(context) {}
+StrongComponent::StrongComponent(const PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrongComponent::~StrongComponent() {}
 
 bool StrongComponent::run() {
-  stdext::hash_map<node,bool> visited(superGraph->numberOfNodes());
-  stdext::hash_map<node,bool> finished(superGraph->numberOfNodes());
+  stdext::hash_map<node,bool> visited(graph->numberOfNodes());
+  stdext::hash_map<node,bool> finished(graph->numberOfNodes());
   stack<node> renum;
-  stdext::hash_map<node,int> cachedValues(superGraph->numberOfNodes());
+  stdext::hash_map<node,int> cachedValues(graph->numberOfNodes());
   int id=1;
   int curComponent=0;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     if (!visited[itn]) {attachNumerotation(itn,visited,finished,cachedValues,id,renum,curComponent);}
   } delete itN;
 
 
-  Iterator<edge> *itE=superGraph->getEdges();
+  Iterator<edge> *itE=graph->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
-    node source= superGraph->source(ite);
-    node target= superGraph->target(ite);
-    if (metricResult->getNodeValue(source)==metricResult->getNodeValue(target))
-      metricResult->setEdgeValue(ite,metricResult->getNodeValue(source));
+    node source= graph->source(ite);
+    node target= graph->target(ite);
+    if (doubleResult->getNodeValue(source)==doubleResult->getNodeValue(target))
+      doubleResult->setEdgeValue(ite,doubleResult->getNodeValue(source));
     else
-      metricResult->setEdgeValue(ite,curComponent);
+      doubleResult->setEdgeValue(ite,curComponent);
   } delete itE;
 
 

@@ -25,7 +25,7 @@ struct TreeRadialExtended:public LayoutAlgorithm {
 
   TreeRadialExtended(const PropertyContext &context):LayoutAlgorithm(context)  {}
   void dfsPlacement(node n, int depth,double alphaStart,double alphaEnd) {
-    if (superGraph->outdeg(n)==0) return;
+    if (graph->outdeg(n)==0) return;
 
 
     //calcul le nombre de feuille des sous-arbres
@@ -33,10 +33,10 @@ struct TreeRadialExtended:public LayoutAlgorithm {
     stack<node> leaves;
     double nbLeafSubTrees=0;
     unsigned int nbChild=0;
-    Iterator<node> *itN=superGraph->getOutNodes(n);
+    Iterator<node> *itN=graph->getOutNodes(n);
     for (;itN->hasNext();) {
       node itn=itN->next();
-      if (superGraph->outdeg(itn)>0) {
+      if (graph->outdeg(itn)>0) {
 	nbLeafSubTrees+=m->getNodeValue(itn);
 	++nbChild;
       }
@@ -52,10 +52,10 @@ struct TreeRadialExtended:public LayoutAlgorithm {
     double deltaAlpha;
     list<node> tmpMap;
     if (nbChild>0) {
-      itN=superGraph->getOutNodes(n);
+      itN=graph->getOutNodes(n);
       for (;itN->hasNext();) {
 	node itn=itN->next();
-	if (superGraph->outdeg(itn)>0) {
+	if (graph->outdeg(itn)>0) {
 	  tmpMap.push_back(itn);
 	}
       }delete itN;
@@ -79,11 +79,11 @@ struct TreeRadialExtended:public LayoutAlgorithm {
       }
     }
     alphaStart=ta;
-    deltaAlpha=(alphaEnd-alphaStart)/(superGraph->outdeg(n));
+    deltaAlpha=(alphaEnd-alphaStart)/(graph->outdeg(n));
     double midle;
     unsigned int index=0;
     counto=0;
-    for (int i=0;i<superGraph->outdeg(n);++i) {
+    for (int i=0;i<graph->outdeg(n);++i) {
       midle=alphaStart+((double)counto)*deltaAlpha;
       counto++;
       if (index<nbChild) {
@@ -121,22 +121,22 @@ struct TreeRadialExtended:public LayoutAlgorithm {
   bool run() {
     bool cached,resultBool;
     string erreurMsg;
-    m=getLocalProperty<Metric>(superGraph,"Leaf",cached,resultBool,erreurMsg);
-    Iterator<node> *itN=superGraph->getNodes();
+    m=getLocalProperty<DoubleProperty>(graph,"Leaf",cached,resultBool,erreurMsg);
+    Iterator<node> *itN=graph->getNodes();
     node startNode;
     for (;itN->hasNext();) {
       startNode=itN->next();
-      if (superGraph->indeg(startNode)==0) break;
+      if (graph->indeg(startNode)==0) break;
     } delete itN;
-    getLocalProperty<Sizes>(superGraph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
+    getLocalProperty<SizeProperty>(graph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
     layoutResult->setAllNodeValue(Coord(0,0,0));
     dfsPlacement(startNode,0,0,6.283);
-    superGraph->getPropertyManager()->delLocalProperty("Leaf");
+    graph->getPropertyManager()->delLocalProperty("Leaf");
     return true;
   }
 
   bool check(string &erreurMsg) {
-    if (superGraph->isTree()) {
+    if (graph->isTree()) {
       erreurMsg="";
       return true;
     }

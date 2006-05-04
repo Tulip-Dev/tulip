@@ -1,9 +1,9 @@
 #include "tulip/DrawingTools.h"
-#include "tulip/SuperGraph.h"
-#include "tulip/Layout.h"
-#include "tulip/Sizes.h"
-#include "tulip/Metric.h"
-#include "tulip/Selection.h"
+#include "tulip/Graph.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/SizeProperty.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/BooleanProperty.h"
 #include <climits>
 
 using namespace std;
@@ -45,19 +45,19 @@ namespace {
   }
 }
 
-pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, Layout *layout, Sizes *size, Metric *rotation, Selection *selection) {
+pair<Coord, Coord> tlp::computeBoundingBox(Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;
   pair<Coord, Coord> result;
-  if (graph->numberOfNodes()==0) {
+  if (sg->numberOfNodes()==0) {
     result.first.set(0, 0, 0);
     result.second.set(0, 0, 0);
     return result;
   }
   result.first.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   result.second.set(FLT_MAX, FLT_MAX, FLT_MAX);
-  Iterator<node> *itN=graph->getNodes();
+  Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
 
@@ -69,7 +69,7 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, Layout *layout, Si
       }
   } delete itN;
 
-  Iterator<edge> *itE=graph->getEdges();
+  Iterator<edge> *itE=sg->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
 
@@ -84,7 +84,3 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, Layout *layout, Si
   } delete itE;
   return result;
 }
-
-
-
-

@@ -17,7 +17,7 @@
 #include "Color.h"
 #include "StringCollection.h"
 
-class SuperGraph;
+class Graph;
 
 /**
  * \defgroup types
@@ -31,12 +31,12 @@ public:
   ~Type();
 };
 
-class TLP_SCOPE MetaGraphType:public Type {
+class TLP_SCOPE GraphType:public Type {
 public:
-  typedef SuperGraph* RealType;
-  static MetaGraphType::RealType undefineValue();
-  static MetaGraphType::RealType defaultValue();
-  static void  del(MetaGraphType::RealType element);
+  typedef Graph* RealType;
+  static GraphType::RealType undefineValue();
+  static GraphType::RealType defaultValue();
+  static void  del(GraphType::RealType element);
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
@@ -51,13 +51,13 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
-class TLP_SCOPE IntType:public Type
+class TLP_SCOPE IntegerType:public Type
 {
 public:
   typedef int RealType;
   static int undefineValue();
   static int defaultValue();
-  static void  del(IntType::RealType element);
+  static void  del(IntegerType::RealType element);
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };

@@ -2,8 +2,8 @@
 #include <math.h>
 #include <sstream>
 
-#include <tulip/SuperGraph.h>
-#include <tulip/Selection.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/StableIterator.h>
 
 #include "EqualValueClustering.h"
@@ -16,7 +16,7 @@ namespace {
   const char * paramHelp[] = {
     // selectedNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Metric" ) \
+    HTML_HELP_DEF( "type", "DoubleProperty" ) \
     HTML_HELP_BODY() \
     "Define the metric that will be used in order partition to the graph" \
     HTML_HELP_CLOSE(),
@@ -24,7 +24,7 @@ namespace {
 }
 //================================================================================
 EqualValueClustering::EqualValueClustering(ClusterContext context):Clustering(context) {
-  addParameter<Metric>("Metric", paramHelp[0], "viewMetric");
+  addParameter<DoubleProperty>("Metric", paramHelp[0], "viewMetric");
 }
 //================================================================================
 namespace stdext {
@@ -36,15 +36,15 @@ namespace stdext {
 //===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
-  Metric *metric=0;
+  DoubleProperty *metric=0;
   if (dataSet!=0) 
     dataSet->get("Metric", metric);  
   if (metric == 0)
-    metric = superGraph->getProperty<Metric>("viewMetric");
+    metric = graph->getProperty<DoubleProperty>("viewMetric");
   
   stdext::hash_map<double,int> partitions;
   int curPart=0;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     double tmp=metric->getNodeValue(itN->next());
     if (partitions.find(tmp)==partitions.end()) {
@@ -53,27 +53,27 @@ bool EqualValueClustering::run() {
     }
   } delete itN;
 
-  stdext::hash_map <int, SuperGraph *> newClusters;
+  stdext::hash_map <int, Graph *> newClusters;
   char str[100];
   for (int i=0; i<curPart; ++i) {
     sprintf(str, "c_%06i", i);
     //    cerr << "create :" << str << endl;
-    newClusters[i] = superGraph->addSubGraph();
+    newClusters[i] = graph->addSubGraph();
     newClusters[i]->setAttribute("name",string(str));
   }
   
-  StableIterator<node> itNS(superGraph->getNodes());
+  StableIterator<node> itNS(graph->getNodes());
   while (itNS.hasNext()) {
     node itn = itNS.next();
     double tmp = metric->getNodeValue(itn);
     newClusters[partitions[tmp]]->addNode(itn);
   }
 
-  StableIterator<edge> itE(superGraph->getEdges());
+  StableIterator<edge> itE(graph->getEdges());
   while(itE.hasNext()) {
     edge ite = itE.next();
-    double tmp = metric->getNodeValue(superGraph->source(ite));
-    if (tmp == metric->getNodeValue(superGraph->target(ite))) {
+    double tmp = metric->getNodeValue(graph->source(ite));
+    if (tmp == metric->getNodeValue(graph->target(ite))) {
       newClusters[partitions[tmp]]->addEdge(ite);
     }
   }

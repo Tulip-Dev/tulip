@@ -1,4 +1,4 @@
-#include <tulip/Layout.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/Types.h>
 #include "DatasetTools.h"
 

@@ -6,9 +6,9 @@
 #include <iostream>
 using namespace std;
 
-class Test:public SelectionAlgorithm { 
+class Test:public BooleanAlgorithm { 
 public:
-  Test(const PropertyContext &context):SelectionAlgorithm(context){}
+  Test(const PropertyContext &context):BooleanAlgorithm(context){}
   ~Test(){}
   bool run() { 
     std::string name = "Test";

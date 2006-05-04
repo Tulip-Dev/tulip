@@ -18,7 +18,7 @@ Coord SpringElectrical::repulsiveForces(node u) {
   Coord uCoord = layoutResult->getNodeValue(u);
   Coord result(0,0,0);
   node v;
-  forEach(v, superGraph->getNodes()) {
+  forEach(v, graph->getNodes()) {
     if (u == v) continue;
     Coord uv = layoutResult->getNodeValue(v) - uCoord;
     double dist = uv.norm();
@@ -43,7 +43,7 @@ Coord SpringElectrical::attractiveForces(node n) {
   Coord u = layoutResult->getNodeValue(nu);
   Coord result(0,0,0);
   node nv;
-  forEach(nv, superGraph->getInOutNodes(n)) {
+  forEach(nv, graph->getInOutNodes(n)) {
     Coord v = layoutResult->getNodeValue(nv);
     Coord uv = v-u;
     double length = 1. +  (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
@@ -80,7 +80,7 @@ bool SpringElectrical::overlap(node u, Coord &move) {
   Coord pos = layoutResult->getNodeValue(u) + move;
   bool  overlap = false;
   node v;
-  forEach(v, superGraph->getNodes()) {
+  forEach(v, graph->getNodes()) {
     if (v==u) continue;
     Coord pos2 = layoutResult->getNodeValue(v);
     if ((pos - pos2).norm() < (sizeNorm.get(u.id) + sizeNorm.get(v.id)))
@@ -91,16 +91,16 @@ bool SpringElectrical::overlap(node u, Coord &move) {
 //================================================================================  
 bool SpringElectrical::run() {
   
-  int iterations = superGraph->numberOfNodes();
+  int iterations = graph->numberOfNodes();
   prevMove.setAll(Coord(0,0,0));
   if (iterations < 500) iterations = 500;// iterations = iterations >? 500;
 
-  inputSelection = superGraph->getProperty<Selection>("viewSelection");
-  inputSize = superGraph->getProperty<Sizes>("viewSize");
-  Layout *inputLayout = superGraph->getProperty<Layout>("viewLayout");
+  inputSelection = graph->getProperty<BooleanProperty>("viewSelection");
+  inputSize = graph->getProperty<SizeProperty>("viewSize");
+  LayoutProperty *inputLayout = graph->getProperty<LayoutProperty>("viewLayout");
   
   node n;
-  forEach(n, superGraph->getNodes()) {
+  forEach(n, graph->getNodes()) {
     layoutResult->setNodeValue(n, inputLayout->getNodeValue(n));
     sizeNorm.set(n.id, inputSize->getNodeValue(n).norm()/2.0);
   }
@@ -112,7 +112,7 @@ bool SpringElectrical::run() {
     maxforce = ((layoutResult->getMax() - layoutResult->getMin()).norm() + inputSize->getMax().norm()) / 100;
     if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
     node itn;
-    forEach(itn, superGraph->getNodes()) {
+    forEach(itn, graph->getNodes()) {
       if (inputSelection->getNodeValue(itn)) continue;
 
       Coord newMove;
@@ -180,11 +180,11 @@ bool intersect2D(const Coord &a, const Coord &b, const Coord &c, const Coord &d)
 bool SpringElectrical::checkEdgeIntersection(const node n, const Coord & move) {
   Coord a = layoutResult->getNodeValue(n);
   Coord b = a + move;
-  Iterator<edge> *itE = superGraph->getEdges();
+  Iterator<edge> *itE = graph->getEdges();
   while(itE->hasNext()) {
     edge e = itE->next();
-    node src = superGraph->source(e);
-    node tgt = superGraph->target(e);
+    node src = graph->source(e);
+    node tgt = graph->target(e);
     if (src == n || tgt == n) continue;
     Coord c = layoutResult->getNodeValue(src);
     Coord d = layoutResult->getNodeValue(tgt);
@@ -193,14 +193,14 @@ bool SpringElectrical::checkEdgeIntersection(const node n, const Coord & move) {
       return true;
     }
   } delete itE;
-  itE = superGraph->getInOutEdges(n);
+  itE = graph->getInOutEdges(n);
   while(itE->hasNext()) {
     edge e = itE->next();
-    node src = superGraph->source(e);
-    node tgt = superGraph->target(e);
+    node src = graph->source(e);
+    node tgt = graph->target(e);
     Coord a = layoutResult->getNodeValue(src);
     Coord b = layoutResult->getNodeValue(tgt);
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()) {
       node currentNode = itN->next();
       if((currentNode == src) || (currentNode == tgt))
