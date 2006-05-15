@@ -116,4 +116,4 @@ package_bundle_libs $ASSISTANT_LIBS_BUNDLE_DIR "*.dylib"
 echo creating Tulip-@PACKAGE_VERSION@.dmg disk image
 hdiutil create -srcdir $APP_DIR -format UDZO -fs HFS+ -volname Tulip-@PACKAGE_VERSION@ -ov Tulip-@PACKAGE_VERSION@.dmg
 # then internet enabled it
-hdiutil internet-enable -yes tulip-@PACKAGE_VERSION@.dmg
+hdiutil internet-enable -yes Tulip-@PACKAGE_VERSION@.dmg

@@ -233,7 +233,7 @@ bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
 
 // initialize and export the factories needed to manage
 // our different kinds of plugins
-#if !defined( __APPLE__)
+#if !defined( __APPLE__) || __GNUC__ > 3
 template <class Tnode, class Tedge, class TPROPERTY>
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *PropertyProxy<Tnode,Tedge,TPROPERTY>::factory = 0;
  #else

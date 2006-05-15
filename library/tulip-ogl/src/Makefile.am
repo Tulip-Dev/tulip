@@ -13,10 +13,10 @@ endif
 lib_LTLIBRARIES = libtulip-ogl.la
 INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ -I../../../thirdparty/ftgl ${ADD_INCLUDES}
 # MAC PORT
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ ../../../thirdparty/ftgl/libftgl.la ${ADDLDFLAGS}
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls ../../../thirdparty/ftgl/.libs/*.o` `ls ../../../thirdparty/gle/*.o` ${ADDLDFLAGS}
 
 libtulip_ogl_la_LDFLAGS = -export-dynamic -release ${RELEASE}
-libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@ 
+# libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@ 
 
 libtulip_ogl_la_SOURCES = \
 	Hline.cpp \

@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.27 $)
+AC_REVISION($Revision: 1.28 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.5dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -227,6 +227,10 @@ TULIP_INCLUDE='-I$(top_srcdir)/library/tulip/include '
 TULIP_OGL_INCLUDE='-I$(top_srcdir)/library/tulip-ogl/include'
 TULIP_QT_INCLUDE='-I$(top_srcdir)/library/tulip-qt/include'
 TULIP_LDFLAGS='-L$(top_builddir)/library/tulip/src -ltulip'
+if test ${VAR_MACOSX} = 1 && test "$(uname -r)" = "7.9.0"
+then 
+TULIP_LDFLAGS='$(top_builddir)/library/tulip/src/.libs/libtulip.a'
+fi
 TULIP_OGL_LDFLAGS='-L$(top_builddir)/library/tulip-ogl/src -ltulip-ogl'
 TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt'
 TULIP_PLUGINS_BUILD_PATH=$PWD/plugins

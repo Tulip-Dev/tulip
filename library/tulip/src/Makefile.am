@@ -10,7 +10,7 @@ endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
-AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ ../../../thirdparty/triangle/libtriangle.la -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` `ls ../../../thirdparty/triangle/.libs/*.o` -lz -release ${RELEASE}
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
