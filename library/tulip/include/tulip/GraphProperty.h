@@ -10,6 +10,8 @@
 #include "TemplateFactory.h"
 #include "GraphAlgorithm.h"
 
+namespace tlp {
+
 class PropertyContext;
 
 /** \addtogroup properties */ 
@@ -32,5 +34,7 @@ private:
 
 };
 /*@}*/
+
+}
 #endif
 

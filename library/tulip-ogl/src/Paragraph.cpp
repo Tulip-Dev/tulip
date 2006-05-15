@@ -9,6 +9,7 @@
 #define H 3
 
 using namespace std;
+using namespace tlp;
 
 //***************************************************************************
 // CLASSE C_String

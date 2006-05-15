@@ -6,8 +6,10 @@
 #include <vector>
 #include <tulip/Fonts.h>
 
-#define TAILLE 100
 class FTFont;
+
+#define TAILLE 100
+namespace tlp {
 
 //---------------------------------------------------------------------------
 class _GlFonts {
@@ -44,9 +46,14 @@ class t_GlFonts {
   _GlFonts operator[](unsigned int i) const;
 };
 
+}
+
 //---------------------------------------------------------------------------
 
 #include <tulip/Renderer.h>
+
+namespace tlp {
+
 class GlRenderer : public Renderer {
 
  private:
@@ -75,6 +82,8 @@ class GlRenderer : public Renderer {
   void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
 
 };
+
+}
 
 #endif
 

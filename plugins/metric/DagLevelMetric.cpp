@@ -6,6 +6,7 @@
 DOUBLEPLUGIN(DagLevelMetric,"DagLevel","David Auber","10/03/2000","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 DagLevelMetric::DagLevelMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 

@@ -15,6 +15,7 @@
 #include <tulip/DrawingTools.h>
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 const string metasgProperty = "viewMetaGraph";

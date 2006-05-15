@@ -9,6 +9,8 @@
 #include "Node.h"
 #include "Edge.h"
 
+namespace tlp {
+
 struct PropertyInterface;
 
 
@@ -32,4 +34,6 @@ std::string propertyNodeDefaultValue(PropertyInterface *propertyName);
 std::string propertyEdgeDefaultValue(PropertyInterface *propertyName);
 
 /*@}*/
+
+}
 #endif

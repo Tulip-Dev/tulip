@@ -27,6 +27,9 @@
 class QLineEdit;
 class QPaintEvent;
 class QPushButton;
+
+namespace tlp {
+
 class PropertyInterface;
 
 class ColorButton : public QButton {
@@ -218,5 +221,7 @@ public slots:
   void resetBackColor2();
   void setUpdateColumnTitle(const bool);
 };
+
+}
 /*@}*/
 #endif //PROPERTYWIDGETS_H

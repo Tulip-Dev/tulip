@@ -5,6 +5,7 @@
 #include "tulip/MutableContainer.h"
 
 using namespace std;
+using namespace tlp;
 //=================================================================
 #ifdef _WIN32 
 #ifdef DLL_EXPORT

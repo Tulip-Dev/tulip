@@ -22,6 +22,7 @@
 
 #include "tulipconf.h"
 
+namespace tlp {
 
 //template<class C>class Iterator;
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -270,14 +271,8 @@ public:
   edge next();
   bool hasNext();
 };
-//=============================================================
+//============================================================
+
+}
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif
-
-
-
-
-
-
-
-

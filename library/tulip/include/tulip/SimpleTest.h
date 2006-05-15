@@ -28,6 +28,8 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
+namespace tlp {
+
 class Graph;
 
 /** \addtogroup sg_test */ 
@@ -50,4 +52,6 @@ class TLP_SCOPE SimpleTest : public GraphObserver {
   stdext::hash_map<unsigned long, bool> resultsBuffer;
 };
 /*@}*/
+
+}
 #endif

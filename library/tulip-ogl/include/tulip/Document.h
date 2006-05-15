@@ -8,6 +8,8 @@
 #include <vector>
 #include <stack>
 
+namespace tlp {
+
 typedef std::vector<Frame*, std::allocator<Frame*> > VFrame; // tableau de Frames : contenu du document
 typedef std::stack<Context> SContext; // la pile de context nécessaire lors d'un ajout de frames
 typedef std::stack<Align> SAlign; // pile des alignements, dans le cas, où les <tags> sont imbriqués
@@ -34,5 +36,7 @@ class Document : public FLayout{
   void getBoundingBox(float w_max, float& h, float& w) const;
   bool addFrame(Frame* f);
 };
+
+}
 
 #endif

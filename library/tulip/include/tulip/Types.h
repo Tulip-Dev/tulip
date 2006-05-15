@@ -17,6 +17,8 @@
 #include "Color.h"
 #include "StringCollection.h"
 
+namespace tlp {
+
 class Graph;
 
 /**
@@ -133,7 +135,7 @@ public:
   static  bool             fromString( RealType& v, const std::string& s);
 };
 
-
+}
 /*@}*/
 #endif
 

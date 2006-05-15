@@ -1,10 +1,8 @@
-#include <tulip/StableIterator.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Bfs.h>
-
-//#include "Bfs.h"
+#include <tulip/BooleanProperty.h>
 
 using namespace std;
+using namespace tlp;
 
 Bfs::Bfs(Graph * G, BooleanProperty * resultatAlgoSelection): graph(tlp::newSubGraph(G)),selectedNodes(), selectedEdges() {
   selectedNodes.setAll(false);    selectedEdges.setAll(false);

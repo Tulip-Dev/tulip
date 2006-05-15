@@ -20,6 +20,8 @@
 #include "Types.h"
 #include "Property.h"
 
+namespace tlp {
+
 class PropertyContext;
 class StringProperty;
 
@@ -42,8 +44,9 @@ protected:
   ///
   virtual ~StringAlgorithm(){}
 };
-
 /*@}*/
+
+}
 #endif
 
 

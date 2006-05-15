@@ -19,9 +19,9 @@
 #include <tulip/IntegerProperty.h> 
 #include <tulip/Iterator.h> 
 #include <tulip/GlGraph.h> 
-#include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ClusterTree.h>
+#include "tulip/Clustering.h"
 
 #if (QT_REL == 3)
 #include <qlistbox.h>
@@ -53,7 +53,7 @@
 #include <GL/glu.h> 
 
 using namespace tlp; 
-using namespace std; 
+using namespace std;
 
 namespace tlp
 {

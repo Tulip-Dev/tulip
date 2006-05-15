@@ -2,6 +2,7 @@
 #include <tulip/ConvexHull.h>
 
 using namespace std;
+using namespace tlp;
 
 //==============================================================
 //A private struct for vectors about a point used in convex hull computation

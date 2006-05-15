@@ -1,7 +1,7 @@
 #ifndef TLPSUPERGRAPHTEST
 #define TLPSUPERGRAPHTEST
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
 //#include <cppunit/extensions/HelperMacros.h>
@@ -21,7 +21,7 @@ class SuperGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE_END();
   */
 private:
-  SuperGraph *graph;
+  Graph *graph;
 
 public:
   void setUp();

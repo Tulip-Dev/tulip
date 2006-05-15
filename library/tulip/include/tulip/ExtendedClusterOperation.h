@@ -8,15 +8,16 @@
 #include <set>
 #include <tulip/Node.h>
 
+namespace tlp {
+
 class Graph;
 
-namespace tlp {
   TLP_SCOPE void openMetaNode(Graph *sg, node n);
   TLP_SCOPE node createMetaNode(Graph *sg, std::set<node> &subGraph);
   /**
    *  Return a subsg induced by a set of nodes
    */
   TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &, std::string name = "induced subsg");
-};
+}
 
 #endif

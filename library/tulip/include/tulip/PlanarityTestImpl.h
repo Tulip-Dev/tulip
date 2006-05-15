@@ -22,18 +22,17 @@
 #include <ext/hash_set>
 #endif
 #include <tulip/ObservableGraph.h>
-#include <tulip/Edge.h> 
+#include <tulip/Edge.h>
 #include <list>
 #include <tulip/MutableContainer.h>
 #include <tulip/BmdList.h>
-
-class Graph;
+#include <tulip/Graph.h>
 
 namespace tlp {
+
   enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
   static const node NULL_NODE = node(); 
   static const edge NULL_EDGE = edge();
-}
 
 class TLP_SCOPE PlanarityTestImpl {
 
@@ -227,9 +226,11 @@ private:
   unsigned int numberOfNodesInG;
 };
 
+}
+
 //std::ostream& operator <<(std::ostream &os , node n);
 //std::ostream& operator <<(std::ostream &os , edge e);
-std::list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos);
+std::list<edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
 
 #endif
 #endif

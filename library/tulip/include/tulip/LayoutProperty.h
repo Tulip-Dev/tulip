@@ -11,6 +11,8 @@
 #include "LayoutAlgorithm.h"
 #include "Types.h"
 
+namespace tlp {
+
 class PropertyContext;
 class Graph;
 
@@ -95,4 +97,6 @@ private:
   void computeMinMax(Graph * sg=NULL);
 };
 /*@}*/
+
+}
 #endif

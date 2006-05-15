@@ -5,6 +5,7 @@
 DOUBLEPLUGIN(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2");
 
 using namespace std;
+using namespace tlp;
 
 DepthMetric::DepthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 

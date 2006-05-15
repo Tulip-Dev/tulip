@@ -410,6 +410,5 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>tulip/PropertyWidgets.h</includehint>
-    <includehint>tulip/PropertyWidgets.h</includehint>
 </includehints>
 </UI>

@@ -6,6 +6,7 @@
 LAYOUTPLUGIN(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","0","1");
 
 using namespace std;
+using namespace tlp;
 
 int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
   int resultMin=0;

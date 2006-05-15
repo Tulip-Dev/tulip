@@ -17,6 +17,8 @@
 #include <vector>
 #include <tulip/Matrix.h>
 
+namespace tlp {
+
 class Graph;
 class DoubleProperty;
 class Coord;
@@ -161,4 +163,5 @@ class TLP_SCOPE StatsNodeModule
   static StatisticResults* ComputeStatisticsResults(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions);
 };
 
+}
 #endif

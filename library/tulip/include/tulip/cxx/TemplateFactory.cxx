@@ -14,6 +14,8 @@
 
 #include <tulip/Plugin.h>
 
+using namespace tlp;
+
 template<class ObjectFactory, class ObjectType, class Parameter>
 Iterator<std::string>* TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
   return new StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());

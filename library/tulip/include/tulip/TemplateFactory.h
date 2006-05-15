@@ -9,6 +9,8 @@
 
 #include "tulip/PluginsCreation.h"
 
+namespace tlp {
+
 /** \addtogroup plugins */ 
 /*@{*/
 template<class ObjectFactory, class ObjectType, class Parameter> class TemplateFactory {
@@ -40,6 +42,8 @@ public:
 };
 
 /*@}*/
+
+}
 #include "./cxx/TemplateFactory.cxx"
 #endif
 

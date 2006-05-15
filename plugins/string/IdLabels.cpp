@@ -5,6 +5,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 class IdLabels:public StringAlgorithm { 
 public:

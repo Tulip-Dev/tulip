@@ -1,4 +1,3 @@
-#include <tulip/TlpTools.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/MethodFactory.h>
 #include <tulip/TreeTest.h>
@@ -7,6 +6,7 @@
 
 LAYOUTPLUGIN(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2");
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {

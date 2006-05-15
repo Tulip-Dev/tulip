@@ -3,6 +3,7 @@
 #define TLP_GEO_RECTANGLE_H
 #include <tulip/Vector.h>
 namespace tlp {
+
   /**
    * \addtogroup basic
    */ 
@@ -32,6 +33,7 @@ namespace tlp {
       }
     };
     /*@}*/
+
 }
 //#include "cxx/Rectangle.cxx"
 #endif

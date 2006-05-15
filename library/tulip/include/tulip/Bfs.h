@@ -13,7 +13,9 @@
 //#define Bfs_H
 
 #include <tulip/MutableContainer.h>
+#include <tulip/Graph.h>
 
+namespace tlp {
 class TLP_SCOPE Bfs {
  public :
   
@@ -32,3 +34,4 @@ class TLP_SCOPE Bfs {
   MutableContainer<bool>::MutableContainer selectedEdges;
 
  };  
+}

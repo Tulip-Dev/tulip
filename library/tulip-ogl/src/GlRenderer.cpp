@@ -6,7 +6,6 @@
 #include <cassert>
 #include <GL/gl.h>
 
-#include "tulip/GlRenderer.h"
 #include <FTGLExtrdFont.h>
 #include <FTGLOutlineFont.h>
 #include <FTGLPolygonFont.h>
@@ -14,9 +13,11 @@
 #include <FTGLPixmapFont.h>
 #include <FTGLBitmapFont.h>
 #include "tulip/TLPPixmapFont.h"
+#include "tulip/GlRenderer.h"
 
 
 using namespace std;
+using namespace tlp;
 
 
 //***************************************************************************

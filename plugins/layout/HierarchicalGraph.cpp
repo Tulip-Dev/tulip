@@ -8,7 +8,6 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphTools.h>
-#include <tulip/TlpTools.h>
 #include <tulip/ForEach.h>
 #include <tulip/SortIterator.h>
 #include "HierarchicalGraph.h"
@@ -17,6 +16,7 @@
 LAYOUTPLUGIN(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 static const int NB_UPDOWN_SWEEP = 4;
 

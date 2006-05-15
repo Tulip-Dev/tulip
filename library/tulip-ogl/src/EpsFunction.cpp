@@ -8,13 +8,15 @@
 
 #include "tulip/EpsFunction.h"
 
+using namespace tlp;
+
 //====================================================
-inline void SetColor(const Color &c) {
+static inline void SetColor(const Color &c) {
   glColor4ub(c[0],c[1],c[2],c[3]);
 }
 
 //====================================================
-void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2)
+void tlp::Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2)
 {
   glBegin(GL_LINES);
   SetColor(C1);
@@ -25,7 +27,7 @@ void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, C
 }
 
 //====================================================
-void Rect(float x, float y , float z, float w , float h)
+void tlp::Rect(float x, float y , float z, float w , float h)
 {
   glBegin(GL_QUADS);
    glVertex3f(x, y , z);
@@ -77,7 +79,7 @@ GLfloat alpha;
 
 GLfloat pointSize;
 
-GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc)
+GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc)
 {
   int token;
   int nvertices, i;
@@ -231,14 +233,14 @@ GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc)
 }
 
 
-void spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer)
+void tlp::spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer)
 {
   GLfloat *loc, *end;
 
   loc = buffer;
   end = buffer + size;
   while (loc < end) {
-    loc = spewPrimitiveEPS(file, loc);
+    loc = tlp::spewPrimitiveEPS(file, loc);
   }
 }
 
@@ -247,7 +249,7 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-int compare(const void *a, const void *b)
+int tlp::compare(const void *a, const void *b)
 {
   DepthIndex *p1 = (DepthIndex *) a;
   DepthIndex *p2 = (DepthIndex *) b;
@@ -263,7 +265,7 @@ int compare(const void *a, const void *b)
 }
 
 
-void spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
+void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
 {
   int token;
   GLfloat *loc, *end;
@@ -381,7 +383,7 @@ void spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
 
 smooth shading. */
 
-void spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator)
+void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator)
 {
   GLfloat clearColor[4], viewport[4];
   GLfloat lineWidth;
@@ -442,7 +444,7 @@ void spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, cha
 }
 
 /* Write contents of one vertex to stdout. */
-void print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
+void tlp::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
 {
   int i;
   
@@ -454,7 +456,7 @@ void print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
   printf("\n");
 }
 
-void printBuffer(GLint size, GLfloat * buffer)
+void tlp::printBuffer(GLint size, GLfloat * buffer)
 {
   GLint count;
   int token, nvertices;

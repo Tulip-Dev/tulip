@@ -2,7 +2,7 @@
 #define TLPBIEXTCLUSTEROPERATION
 
 #include <string>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Vector.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>

@@ -7,6 +7,7 @@
 #include "EdgeTools.h"
 #include "Dendrogram.h"
 using namespace std;
+using namespace tlp;
 
 
 LAYOUTPLUGIN(Dendrogram, "Dendrogram",

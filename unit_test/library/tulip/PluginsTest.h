@@ -2,13 +2,13 @@
 #define TLPPLUGINSTEST
 
 #include <string>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
 class PluginsTest : public CppUnit::TestFixture {
 private:
-  SuperGraph *graph;
+  Graph *graph;
 
 public:
   void setUp();

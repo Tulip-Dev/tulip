@@ -1,6 +1,7 @@
 #include    "tulip/TLPPixmapGlyph.h"
 #include    "tulip/TLPPixmapFont.h"
 
+using namespace tlp;
 
 TLPPixmapFont::TLPPixmapFont( const char* fontname)
 :   FTFont( fontname)

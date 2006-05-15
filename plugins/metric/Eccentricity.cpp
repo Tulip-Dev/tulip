@@ -6,6 +6,7 @@
 DOUBLEPLUGIN(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {

@@ -5,11 +5,13 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
-class SuperGraph;
+namespace tlp {
+class Graph;
+}
 
 class TestAlgorithmTest : public CppUnit::TestFixture {
 private:
-  SuperGraph *graph;
+  Graph *graph;
 
 public:
   void setUp();

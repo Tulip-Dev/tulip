@@ -10,6 +10,8 @@
 
 using namespace std;
 
+namespace tlp {
+
 class CubeOutLined : public Glyph {
 public:
   CubeOutLined(GlyphContext *gc=NULL);
@@ -26,6 +28,10 @@ private:
 };
 
 GLYPHPLUGIN(CubeOutLined, "CubeOutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1", "1", 1);
+
+}
+
+using namespace tlp;
 
 //===================================================================================
 CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc),listOk(false) {

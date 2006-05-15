@@ -5,7 +5,6 @@
 #include <qmessagebox.h>
 #include <tulip/Circle.h>
 #include <tulip/TreeTest.h>
-#include <tulip/TlpTools.h>
 #include "BubbleTree.h"
 
 LAYOUTPLUGIN(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1","1");

@@ -5,6 +5,7 @@
 DOUBLEPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 int StrongComponent::attachNumerotation(node n,
 					stdext::hash_map<node,bool> &visited,

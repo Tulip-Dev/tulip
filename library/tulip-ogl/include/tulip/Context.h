@@ -2,6 +2,8 @@
 #define _CONTEXT_H_
 
 #include <string>
+namespace tlp {
+
 class Renderer;
 
 class Context {
@@ -22,5 +24,7 @@ class Context {
   friend bool operator==(Context& a, Context& b);
   Renderer& getRenderer() const;  
 };
+
+}
 
 #endif

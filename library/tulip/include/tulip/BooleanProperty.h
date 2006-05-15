@@ -10,6 +10,8 @@
 #include "TemplateFactory.h"
 #include "BooleanAlgorithm.h"
 
+namespace tlp {
+
 class PropertyContext;
 /** \addtogroup properties */ 
 /*@{*/
@@ -30,5 +32,7 @@ public :
 protected:
   void reset_handler();
 };
+
+}
 /*@}*/
 #endif

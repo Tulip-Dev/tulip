@@ -6,6 +6,9 @@
 #endif
 
 #include "Reflect.h"
+
+namespace tlp {
+
 /** \addtogroup plugins */ 
 /*@{*/
 struct TLP_SCOPE WithParameter {
@@ -21,6 +24,8 @@ protected:
   StructDef parameters;
 };
 /*@}*/
+
+}
 #endif
 
 

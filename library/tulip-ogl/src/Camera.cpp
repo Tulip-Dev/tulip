@@ -1,6 +1,8 @@
 #include <cmath>
 #include "tulip/Camera.h"
 
+using namespace tlp;
+
 Camera::Camera(Coord center,Coord eyes, Coord up, double zoomFactor, double sceneRadius):
   center(center),
   eyes(eyes),

@@ -24,6 +24,8 @@
 #include "tulipconf.h"
 #include "TemplateFactory.h"
 
+namespace tlp {
+
 /**
  * \addtogroup properties
  */ 
@@ -228,5 +230,7 @@ protected:
   typename Tedge::RealType edgeDefaultValue;
 };
 /*@}*/
+
+}
 #include "./cxx/AbstractProperty.cxx"
 #endif

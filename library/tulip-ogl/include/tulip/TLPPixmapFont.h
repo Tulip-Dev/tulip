@@ -6,6 +6,8 @@
 
 class FTGlyph;
 
+namespace tlp {
+
 /**
  * TLPPixmapFont is a specialisation of the FTFont class for handling
  * Pixmap (Grey Scale) fonts
@@ -60,6 +62,7 @@ class FTGL_EXPORT TLPPixmapFont : public FTFont
         
 };
 
+}
 
 #endif  //  __TLPPixmapFont__
 

@@ -2,9 +2,9 @@
 #include "tulip/TriconnectedTest.h"
 #include "tulip/BiconnectedTest.h"
 #include "tulip/MutableContainer.h"
-#include "tulip/TlpTools.h"
 
 using namespace std;
+using namespace tlp;
 //=================================================================
 #ifdef _WIN32 
 #ifdef DLL_EXPORT

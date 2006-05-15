@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 using namespace std;
+using namespace tlp;
 
 const int H = 10;
 

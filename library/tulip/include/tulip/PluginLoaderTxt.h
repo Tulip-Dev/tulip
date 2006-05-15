@@ -1,6 +1,9 @@
 #ifndef TLP_PLUGINLOADERTXT
 #define TLP_PLUGINLOADERTXT
 #include "PluginLoader.h"
+
+namespace tlp {
+
 struct PluginLoaderTxt:public PluginLoader {
   virtual void start(const std::string &path,const std::string &type);
   virtual void numberOfFile(int nbFile);
@@ -15,4 +18,5 @@ struct PluginLoaderTxt:public PluginLoader {
   virtual void finished(bool state,const std::string &msg);
 };
 
+}
 #endif

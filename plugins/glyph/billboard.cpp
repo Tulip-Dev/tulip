@@ -14,6 +14,7 @@
 #include <tulip/GlGraph.h>
 
 using namespace std;
+using namespace tlp;
 
 class Billboard : public Glyph {
 public:

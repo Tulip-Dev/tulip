@@ -2,6 +2,7 @@
 
 #include <iostream>
 using namespace std;
+using namespace tlp;
 
 //***************************************************************************
 // CLASSE Context
@@ -17,7 +18,7 @@ void Context::getColor(unsigned char& r, unsigned char& v, unsigned char& b) con
 }
 
 //---------------------------------------------------------------------------
-bool operator==(Context& a, Context& b){
+bool tlp::operator==(Context& a, Context& b){
   if( (a.size == b.size) && // taille
       (a.c[0] == b.c[0]) && // rouge
       (a.c[1] == b.c[1]) && // vert

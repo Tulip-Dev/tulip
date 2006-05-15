@@ -13,6 +13,8 @@
 #define TULIPPLUGIN_H
 #include <string>
 
+namespace tlp {
+
 /** Common interface for plug-ins.*/
 class Plugin {
 public:
@@ -32,4 +34,6 @@ public:
   /**Return the version number of the plug-in*/ 
   virtual  std::string getVersion() const=0;
 };
+
+}
 #endif

@@ -9,8 +9,8 @@
 
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"
-class QWidget;
 
+class QWidget;
 
 namespace tlp {
 

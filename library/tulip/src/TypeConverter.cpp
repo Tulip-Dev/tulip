@@ -23,6 +23,7 @@
 #include "tulip/GraphProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 bool stringToColor(string &str,Color &col) {
   char strC[512];

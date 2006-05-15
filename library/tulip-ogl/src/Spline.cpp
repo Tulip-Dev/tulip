@@ -5,12 +5,14 @@
 #include <cmath>
 #include "tulip/Spline.h"
 
+using namespace tlp;
+
 static void SplinePoint(int *u, unsigned int n, unsigned int t, double v,
                         const double (*control)[3], double (&output)[3]);
 static double SplineBlend(unsigned int k, unsigned int t, int *u, double v);
 static void SplineKnots(int *u, unsigned int n, unsigned int t);
 
-void Spline3(double (&p)[3], const double (*point)[3], unsigned int size, double mu)
+void tlp::Spline3(double (&p)[3], const double (*point)[3], unsigned int size, double mu)
 {
   int u[size+3];
   size--;
@@ -18,7 +20,7 @@ void Spline3(double (&p)[3], const double (*point)[3], unsigned int size, double
   SplinePoint(u, size, 3, mu * (size-1), point, p);
 }
 
-void Spline4(double (&p)[3], const double (*point)[3], unsigned int size, double mu)
+void tlp::Spline4(double (&p)[3], const double (*point)[3], unsigned int size, double mu)
 {
   int u[size+4];
   size--;

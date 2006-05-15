@@ -47,6 +47,7 @@
 
 
 using namespace std;
+using namespace tlp;
 
 
 #define	INFO_MSG				"The following parameters are requested :"

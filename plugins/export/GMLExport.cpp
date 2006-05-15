@@ -6,6 +6,7 @@
 #include <tulip/AbstractProperty.h>
 
 using namespace std;
+using namespace tlp;
 
 void printFloat(ostream &os, const string &name , float f){
   float a=floor(f);

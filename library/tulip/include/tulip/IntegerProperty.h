@@ -10,6 +10,8 @@
 #include "TemplateFactory.h"
 #include "IntegerAlgorithm.h"
 
+namespace tlp {
+
 class Graph;
 class PropertyContext;
 
@@ -42,4 +44,6 @@ private:
   void computeMinMax();
 };
 /*@}*/
+
+}
 #endif

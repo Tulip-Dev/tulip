@@ -4,7 +4,6 @@
 #include <sstream>
 #include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
 #include <tulip/DrawingTools.h>
 
 #include "QuotientClustering.h"
@@ -13,6 +12,7 @@
 CLUSTERINGPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 struct Edge {
   unsigned int source,target;

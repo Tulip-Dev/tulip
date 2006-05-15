@@ -1,6 +1,8 @@
 #include "tulip/Hline.h"
 #include "tulip/Renderer.h"
 
+using namespace tlp;
+
 const int HAUTEUR=5; // défini l'espace avant et après la ligne horizontale
 
 void Hline::draw(float w_max, float& w)const{

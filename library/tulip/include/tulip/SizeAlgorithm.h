@@ -18,6 +18,9 @@
 
 #include "Types.h"
 #include "Property.h"
+
+namespace tlp {
+
 class PropertyContext;
 class SizeProperty;
 
@@ -39,6 +42,8 @@ protected:
   virtual ~SizeAlgorithm(){}
 };
 /*@}*/
+
+}
 #endif
 
 

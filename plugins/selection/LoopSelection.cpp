@@ -16,6 +16,7 @@
 BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 LoopSelection::LoopSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
 //============================================

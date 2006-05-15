@@ -10,6 +10,7 @@
 #include "tulip/ConcatIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 //=========================================================================
 GraphAbstract::GraphAbstract(Graph *father):father(father){

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
 #include <stack>
 #include <queue>
 #include <ext/hash_map>
@@ -9,6 +8,7 @@
 
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 

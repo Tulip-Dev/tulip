@@ -13,6 +13,8 @@
 #include <iostream>
 #endif
 
+using namespace tlp;
+
 // This is not the right place to do the initialization below
 // because this file is include in many cpp files
 // The initialization has to take place in only one cpp file

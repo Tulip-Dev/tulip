@@ -4,6 +4,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+namespace tlp {
+
 class Parser{
 
  private:
@@ -28,5 +30,7 @@ class Parser{
   xmlAttr* Next(xmlAttr* attribut);
   unsigned char* getName(xmlAttr* attribut);
 };
+
+}
 
 #endif

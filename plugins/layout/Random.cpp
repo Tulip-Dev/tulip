@@ -4,6 +4,7 @@
 LAYOUTPLUGIN(Random,"Random","David Auber","01/12/1999","Ok","0","1");
 
 using namespace std;
+using namespace tlp;
 
 Random::Random(const PropertyContext &context):LayoutAlgorithm(context){}
 

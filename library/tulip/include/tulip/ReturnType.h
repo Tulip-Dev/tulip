@@ -5,6 +5,8 @@
 #include "Edge.h"
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
+namespace tlp {
+
 template <typename TYPE> 
 struct ReturnType {
   typedef const TYPE &Value;
@@ -24,5 +26,7 @@ template <>
 struct ReturnType<edge> {
   typedef edge Value;
 };
+
+}
 #endif
 #endif

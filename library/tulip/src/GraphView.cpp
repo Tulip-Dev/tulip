@@ -19,6 +19,7 @@
 #include "tulip/StableIterator.h"
 
 using namespace std;
+using namespace tlp;
 //----------------------------------------------------------------
 GraphView::GraphView(Graph *father,BooleanProperty *filter):
   GraphAbstract(father),

@@ -19,6 +19,8 @@
 #include "Types.h"
 #include "Property.h"
 
+namespace tlp {
+
 class PropertyContext;
 class BooleanProperty;
 
@@ -44,6 +46,8 @@ protected:
   virtual ~BooleanAlgorithm(){}
 };
 /*@*/
+
+}
 #endif
 
 

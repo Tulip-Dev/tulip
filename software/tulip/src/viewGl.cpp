@@ -79,14 +79,21 @@
 #include <tulip/ClusterTree.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/StableIterator.h>
 #include <tulip/FindSelection.h>
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
+#include "tulip/ExportModule.h"
+#include "tulip/Clustering.h"
+#include "tulip/ImportModule.h"
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"

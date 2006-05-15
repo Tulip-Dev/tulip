@@ -1,9 +1,9 @@
 #include <iostream>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
 #include <stack>
 
 using namespace std;
+using namespace tlp;
 //=============================================================================================
 static void bicoTestAndLabeling(const Graph & graph,node v, MutableContainer<int>& compnum,
                     MutableContainer<int>& dfsnum, MutableContainer<int>& lowpt,
@@ -81,6 +81,7 @@ int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
 //=============================================================================================
 #include <tulip/TulipPlugin.h>
 using namespace std;
+using namespace tlp;
 
 /** \addtogroup metric */
 /*@{*/

@@ -17,13 +17,13 @@
 #ifndef TULIP_NODEMAPITERATOR_H
 #define TULIP_NODEMAPITERATOR_H
 
+namespace tlp {
+
 /** \addtogroup sgs */ 
 /*@{*/
 
+TLP_SCOPE edge nextFaceEdge(Graph* g, edge e, node n);
 
-namespace tlp {
-  TLP_SCOPE edge nextFaceEdge(Graph* g, edge e, node n);
-}
 /**
  *
  */
@@ -62,4 +62,6 @@ private :
   bool finished;
 };
 /*@}*/
+
+}
 #endif

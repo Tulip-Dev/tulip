@@ -9,6 +9,7 @@
 #include <dotImportCLUT.h>
 
 using namespace std;
+using namespace tlp;
 
 namespace {
 #include "dotImportParser.h"

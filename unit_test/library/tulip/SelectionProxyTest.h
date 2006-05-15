@@ -3,16 +3,16 @@
 
 #include <string>
 #include <tulip/BooleanProperty.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
-// Warning SelectionProxy has been renamed in Selection
+// Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 class SelectionProxyTest : public CppUnit::TestFixture {
 private:
-  SuperGraph *graph;
-  Selection *selection;
+  Graph *graph;
+  BooleanProperty *selection;
 
 public:
   void setUp();

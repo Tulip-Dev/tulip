@@ -8,6 +8,7 @@
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 //==============================
 SizeProperty::SizeProperty (Graph *sg):

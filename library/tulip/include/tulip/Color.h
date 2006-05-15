@@ -3,6 +3,8 @@
 #define _COLOR_H
 #include <tulip/Vector.h>
 ///
+namespace tlp {
+
 class Color : public tlp::Vector<unsigned char,4>{
  public:
   ///
@@ -50,33 +52,34 @@ class Color : public tlp::Vector<unsigned char,4>{
   ///
   void setV(int );
 };
+}
 
-std::ostream& operator<<(std::ostream &os,const Color &);
-std::istream& operator>>(std::istream &is, Color &);
+std::ostream& operator<<(std::ostream &os,const tlp::Color &);
+std::istream& operator>>(std::istream &is, tlp::Color &);
 
-Color::Color(const unsigned char red ,const unsigned char green ,const unsigned char blue,const unsigned char alpha) {
+tlp::Color::Color(const unsigned char red ,const unsigned char green ,const unsigned char blue,const unsigned char alpha) {
   array[0]=red;
   array[1]=green;
   array[2]=blue;
   array[3]=alpha;
 }
-void Color::set(unsigned char red,unsigned char green,unsigned char blue, unsigned char alpha) {
+void tlp::Color::set(unsigned char red,unsigned char green,unsigned char blue, unsigned char alpha) {
   array[0]=red;
   array[1]=green;
   array[2]=blue;
   array[3]=alpha;
 }
 
-unsigned char Color::getR()const{return array[0];}
-unsigned char Color::getG()const{return array[1];}
-unsigned char Color::getB()const{return array[2];}
-unsigned char Color::getA()const{return array[3];}
+unsigned char tlp::Color::getR()const{return array[0];}
+unsigned char tlp::Color::getG()const{return array[1];}
+unsigned char tlp::Color::getB()const{return array[2];}
+unsigned char tlp::Color::getA()const{return array[3];}
 
-float Color::getRGL()const{return (float)array[0]/255.0;}
-float Color::getGGL()const{return (float)array[1]/255.0;}
-float Color::getBGL()const{return (float)array[2]/255.0;}
-float Color::getAGL()const{return (float)array[3]/255.0;}
-float* Color::getGL()const{
+float tlp::Color::getRGL()const{return (float)array[0]/255.0;}
+float tlp::Color::getGGL()const{return (float)array[1]/255.0;}
+float tlp::Color::getBGL()const{return (float)array[2]/255.0;}
+float tlp::Color::getAGL()const{return (float)array[3]/255.0;}
+float* tlp::Color::getGL()const{
   float *result=new float[4];
   result[0]=getRGL();
   result[1]=getGGL();
@@ -85,10 +88,9 @@ float* Color::getGL()const{
   return result;
 }
 
-void Color::setR(unsigned char red){array[0]=red;}
-void Color::setG(unsigned char green){array[1]=green;}
-void Color::setB(unsigned char blue){array[2]=blue;}
-void Color::setA(unsigned char alpha){array[3]=alpha;}
-
+void tlp::Color::setR(unsigned char red){array[0]=red;}
+void tlp::Color::setG(unsigned char green){array[1]=green;}
+void tlp::Color::setB(unsigned char blue){array[2]=blue;}
+void tlp::Color::setA(unsigned char alpha){array[3]=alpha;}
 #endif
 

@@ -8,6 +8,7 @@
 
 
 using namespace std;
+using namespace tlp;
 namespace {
   inline Iterator<node> *getIt(Graph *sg, node n, int direction) {
     switch(direction) {

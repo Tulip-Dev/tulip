@@ -18,6 +18,7 @@
 BOOLEANPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 using namespace std;
+using namespace tlp;
 
 const unsigned int MAX_SIZE = 10000;
 

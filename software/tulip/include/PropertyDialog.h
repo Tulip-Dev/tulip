@@ -13,10 +13,12 @@
 
 class QListViewItem;
 class QStringList;
+class QScrollBar;
 
+namespace tlp {
 class PropertyInterface;
 class GlGraph;
-class QScrollBar;
+}
 
 class PropertyDialog : public PropertyDialogData
 { 

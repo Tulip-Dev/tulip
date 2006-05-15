@@ -17,6 +17,7 @@
 DOUBLEPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 namespace std {
   struct couple {

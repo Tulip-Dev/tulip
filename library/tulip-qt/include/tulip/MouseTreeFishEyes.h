@@ -4,6 +4,8 @@
 
 #include <tulip/MouseInterface.h>
 ///
+namespace tlp {
+
 class MouseTreeFishEyes:public MouseInterface
 {
 public:
@@ -19,4 +21,6 @@ public:
   void wheelEvent(GlGraphWidget *, QWheelEvent *){}
   MouseInterface * clone() { return new MouseTreeFishEyes();}
 };
+
+}
 #endif

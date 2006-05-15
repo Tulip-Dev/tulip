@@ -14,6 +14,8 @@
 
 #include "Reflect.h"
 
+namespace tlp {
+
 class Graph;
 class PropertyInterface;
 class PluginProgress;
@@ -50,6 +52,8 @@ class PropertyContext {
   ~PropertyContext(){}
 };
 /*@}*/
+
+}
 #endif
 
 

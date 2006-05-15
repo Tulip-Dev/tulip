@@ -5,6 +5,7 @@
 DOUBLEPLUGIN(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 //=======================================================================
 LeafMetric::LeafMetric(const PropertyContext &context):DoubleAlgorithm(context) {}

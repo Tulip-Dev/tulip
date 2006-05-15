@@ -6,6 +6,7 @@
 #include <tulip/TulipPlugin.h>
 ///
 using namespace std;
+using namespace tlp;
 ///
 class LongestPath:public BooleanAlgorithm { 
 public:

@@ -1,9 +1,9 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
-#include <tulip/TlpTools.h>
-
-#include "tulip/TemplateFactory.h"
 #include "PluginsTest.h"
+#include <tulip/TlpTools.h>
+#include <tulip/BooleanProperty.h>
+
 using namespace std;
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -19,15 +19,15 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( Selection::factory->objMap.find("Test") == Selection::factory->objMap.end());
+  CPPUNIT_ASSERT( BooleanProperty::factory->objMap.find("Test") == BooleanProperty::factory->objMap.end());
   tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( Selection::factory->objMap.find("Test") != Selection::factory->objMap.end());
+  CPPUNIT_ASSERT( BooleanProperty::factory->objMap.find("Test") != BooleanProperty::factory->objMap.end());
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
-  Selection sel(graph);
+  BooleanProperty sel(graph);
   CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
 //==========================================================
@@ -35,10 +35,10 @@ void PluginsTest::testAncestorGraph() {
   string name = "Test";
   string err = "Error";
   tlp::loadPlugin("testPlugin2.so");
-  SuperGraph *child = graph->addSubGraph();
-  SuperGraph *child2 = graph->addSubGraph();
-  SuperGraph *child3 = child->addSubGraph();
-  Selection sel(child);
+  Graph *child = graph->addSubGraph();
+  Graph *child2 = graph->addSubGraph();
+  Graph *child3 = child->addSubGraph();
+  BooleanProperty sel(child);
   CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));

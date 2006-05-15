@@ -10,6 +10,7 @@
 #include <tulip/Glyph.h>
 
 using namespace std;
+using namespace tlp;
 
 class Cylinder : public Glyph {
 public:

@@ -1,6 +1,5 @@
 //-*-c++-*-
 #include <cmath>
-#include <tulip/TlpTools.h>
 #include <iostream>
 #include <qinputdialog.h>
 #include <qstringlist.h>
@@ -8,6 +7,7 @@
 
 
 using namespace std;
+using namespace tlp;
 class OnValueSelection:public BooleanAlgorithm { 
 private:
 

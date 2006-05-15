@@ -26,10 +26,10 @@
 #include <tulip/MutableContainer.h>
 
 
+namespace tlp {
 class Graph;
 class BooleanProperty;
 
-namespace tlp {
   struct SelfLoops {
     SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
       n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old){
@@ -37,7 +37,6 @@ namespace tlp {
     node n1,n2;
     edge e1,e2,e3,old;  
   };
-}
 
 /** \addtogroup sg_test */ 
 /*@{*/
@@ -65,5 +64,6 @@ private:
   static AcyclicTest * instance;
   stdext::hash_map<unsigned int,bool> resultsBuffer;
 };
+}
 /*@}*/
 #endif

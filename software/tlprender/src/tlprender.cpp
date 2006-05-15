@@ -33,6 +33,7 @@
 #include "Shape.h"
 
 using namespace std;
+using namespace tlp;
 //EXIT CODES
 enum EXIT_CODES {LAYOUT_NOTFOUND = 2,
                  LAYOUT_ERROR,

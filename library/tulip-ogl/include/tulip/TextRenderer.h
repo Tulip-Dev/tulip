@@ -9,6 +9,8 @@
 
 enum TextMode{XML,VERBATIM};
 
+namespace tlp {
+
 class Paragraph;
 class Document;
 class Parser;
@@ -34,4 +36,6 @@ class TLP_GL_SCOPE TextRenderer{
   void initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d);
   void finalTextXMLManager(Paragraph* f);
 };
+
+}
 #endif

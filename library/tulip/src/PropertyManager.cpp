@@ -16,6 +16,7 @@
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 //==============================================================
 PropertyManagerImpl::PropertyManagerImpl(Graph *spGr) {

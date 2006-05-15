@@ -2,15 +2,13 @@
 #define TLPBIEXTCLUSTEROPERATION
 
 #include <string>
-#include <tulip/SuperGraph.h>
-#include <tulip/TlpTools.h>
-#include <tulip/ExtendedClusterOperation.h>
+#include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
 class ExtendedClusterOperationTest : public CppUnit::TestFixture {
 private:
-  SuperGraph *graph,*quotient;
+  Graph *graph,*quotient;
   node meta;
   std::vector<node> nodes;
   std::vector<edge> edges;

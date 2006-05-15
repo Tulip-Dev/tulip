@@ -20,6 +20,7 @@
 #include "tulip/StableIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 /* 
  * function to test if an edge e exist in the adjacency of a node

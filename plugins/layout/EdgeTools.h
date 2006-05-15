@@ -5,7 +5,10 @@
 
 class OrientableLayout;
 class OrientableSizeProxy;
+
+namespace tlp {
 class Graph;
+}
 
 void setOrthogonalEdge(OrientableLayout* oriLayout, const Graph* tree,
 					   float interNodeDistance);

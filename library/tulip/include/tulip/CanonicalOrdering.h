@@ -27,6 +27,8 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
+namespace tlp {
+
 class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
   
  public :
@@ -97,5 +99,6 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
 
 };
 
+}
 #endif
 #endif

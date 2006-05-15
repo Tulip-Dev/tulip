@@ -10,13 +10,13 @@
 #include "tulip/GraphProperty.h"
 
 std::string PropertyInterface::getTypename( PropertyInterface * propertyName ) {
-  if (typeid((*propertyName)) == typeid(GraphProperty)) return "sgproperty";
-  if (typeid((*propertyName)) == typeid(DoubleProperty)) return "doubleproperty";
-  if (typeid((*propertyName)) == typeid(LayoutProperty)) return "layoutproperty";
-  if (typeid((*propertyName)) == typeid(StringProperty)) return "stringproperty";
-  if (typeid((*propertyName)) == typeid(IntegerProperty)) return "integerproperty";
-  if (typeid((*propertyName)) == typeid(ColorProperty)) return "colorproperty";
-  if (typeid((*propertyName)) == typeid(SizeProperty)) return "sizeproperty";
-  if (typeid((*propertyName)) == typeid(BooleanProperty)) return "boolproperty";
+  if (typeid((*propertyName)) == typeid(GraphProperty)) return "graph";
+  if (typeid((*propertyName)) == typeid(DoubleProperty)) return "double";
+  if (typeid((*propertyName)) == typeid(LayoutProperty)) return "layout";
+  if (typeid((*propertyName)) == typeid(StringProperty)) return "string";
+  if (typeid((*propertyName)) == typeid(IntegerProperty)) return "int";
+  if (typeid((*propertyName)) == typeid(ColorProperty)) return "color";
+  if (typeid((*propertyName)) == typeid(SizeProperty)) return "size";
+  if (typeid((*propertyName)) == typeid(BooleanProperty)) return "bool";
   return "unknown";
 }

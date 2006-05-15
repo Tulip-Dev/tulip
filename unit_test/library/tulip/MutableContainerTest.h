@@ -8,9 +8,9 @@
 
 class MutableContainerTest : public CppUnit::TestFixture {
 private:
-  MutableContainer<bool> *mutBool;
-  MutableContainer<double> *mutDouble;
-  MutableContainer<std::string> *mutString;
+  tlp::MutableContainer<bool> *mutBool;
+  tlp::MutableContainer<double> *mutDouble;
+  tlp::MutableContainer<std::string> *mutString;
   static const unsigned int NBTEST=1000;
 
 public:

@@ -18,6 +18,7 @@
 #include "SimpleVector.h"
 #include "MutableContainer.h"
 
+namespace tlp {
 
 class GraphView;
 template<class C>class Iterator;
@@ -89,6 +90,7 @@ private :
   void externRemove(const node);
 };
 
+}
 #endif
 
 #endif

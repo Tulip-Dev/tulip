@@ -9,7 +9,7 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
+#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
@@ -18,6 +18,7 @@
 CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 //================================================================================

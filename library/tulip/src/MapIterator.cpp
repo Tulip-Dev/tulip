@@ -5,6 +5,7 @@
 #include "tulip/MapIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 edge tlp::nextFaceEdge(Graph *g, edge e, node n) {
   EdgeMapIterator it(g, e, n);

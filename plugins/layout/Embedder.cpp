@@ -44,6 +44,7 @@ private:
 LAYOUTPLUGIN(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "0", "1");
 
 using namespace std;
+using namespace tlp;
 
 
 Embedder::Embedder(const PropertyContext &context) : LayoutAlgorithm(context) {

@@ -17,6 +17,7 @@
 #endif
 
 using namespace std;
+using namespace tlp;
 
 const node NOTATREE;
 

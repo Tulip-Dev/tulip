@@ -11,6 +11,8 @@
 #include <map>
 #include <set>
 
+namespace tlp {
+
 class Observable;
 
 //=========================================================
@@ -103,6 +105,8 @@ inline void Observable::deleteObserver(Observer *item) {
 
 inline void Observable::deleteObservers() { 
   observersList.clear(); 
+}
+
 }
 
 #endif

@@ -2,7 +2,6 @@
 #include <math.h>
 #include <sstream>
 #include <qinputdialog.h>
-#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <fstream>
@@ -13,6 +12,7 @@
 CLUSTERINGPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 //================================================================================
   ConvolutionClustering::ConvolutionClustering(ClusterContext context):Clustering(context) {}
 //================================================================================

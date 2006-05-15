@@ -10,6 +10,8 @@
 #include <config.h>
 #endif
 
+namespace tlp {
+
 class PropertyContext;
 
 /** \addtogroup properties */ 
@@ -47,4 +49,6 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 /*@}*/
+
+}
 #endif

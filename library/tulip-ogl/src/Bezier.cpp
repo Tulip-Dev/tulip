@@ -5,7 +5,7 @@
 #include <cmath>
 #include "tulip/Bezier.h"
 
-void Bezier3(double (&p)[3], const double p1[3], const double p2[3],
+void tlp::Bezier3(double (&p)[3], const double p1[3], const double p2[3],
 		    const double p3[3], double mu) {
   double mum1,mum12,mu2;
   mu2 = mu * mu;
@@ -17,7 +17,7 @@ void Bezier3(double (&p)[3], const double p1[3], const double p2[3],
   p[2] = p1[2]*mum12 + 2*p2[2]*mum1*mu + p3[2]*mu2;
 }
 
-void Bezier4(double (&p)[3], const double p1[3], const double p2[3],
+void tlp::Bezier4(double (&p)[3], const double p1[3], const double p2[3],
 		    const double p3[3], const double p4[3], double mu) {
  double mum1,mum13,mu3;
  mum1 = 1 - mu;
@@ -32,7 +32,7 @@ void Bezier4(double (&p)[3], const double p1[3], const double p2[3],
 /*
  * IMPORTANT: the LAST point is NOT computed
  */
-void Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu) {
+void tlp::Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu) {
   int n=size-1;
   if (n==2) {
     return Bezier3(p, points[0], points[1], points[2], mu);

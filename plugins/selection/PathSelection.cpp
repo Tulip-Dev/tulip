@@ -17,6 +17,7 @@
 BOOLEANPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 PathSelection::PathSelection(const PropertyContext &context):BooleanAlgorithm(context)  {
 }

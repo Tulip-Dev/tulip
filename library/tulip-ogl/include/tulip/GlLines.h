@@ -7,6 +7,8 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 
+namespace tlp {
+
 struct GlLines
 {
   //Curves types: linear, bezier, spline order 3, spline order 4
@@ -43,4 +45,6 @@ struct GlLines
   static GLfloat *buildCurvePoints(const Coord &startPoint,const std::vector<Coord> &bends,const Coord &endPoint);
   static GLfloat *buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &p2,const Coord &p3);
 };
+
+}
 #endif

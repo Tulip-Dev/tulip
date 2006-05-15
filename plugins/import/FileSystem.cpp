@@ -10,6 +10,7 @@
 #endif
 
 using namespace std;
+using namespace tlp;
 
 struct FileSystem:public ImportModule {
   FileSystem(ClusterContext context):ImportModule(context) {}

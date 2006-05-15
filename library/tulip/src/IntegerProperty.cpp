@@ -7,6 +7,7 @@
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 //==============================
 ///Constructeur d'un IntegerProperty

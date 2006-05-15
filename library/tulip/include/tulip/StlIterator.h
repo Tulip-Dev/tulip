@@ -13,7 +13,7 @@
 #include <map>
 #include "Iterator.h"
 
-
+namespace tlp {
 
 template<typename VALUE, typename ITERATOR> 
 struct StlIterator:public Iterator< VALUE  > {
@@ -57,4 +57,6 @@ bool StlMapIterator<KEY,VALUE>::hasNext(){
   return (itEnd!=it);
 }
 //=================================================
+
+}
 #endif

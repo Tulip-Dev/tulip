@@ -8,6 +8,7 @@
 #include <cmath>
 
 using namespace std;
+using namespace tlp;
 /* 
  *  Constructs a ConvolutionClusteringSetup which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 

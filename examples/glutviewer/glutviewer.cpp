@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
@@ -145,9 +146,9 @@ static void Key(unsigned char key, int x, int y) {
 void importGraph(const string &filename, GlGraph &glGraph) {
   DataSet dataSet;
   dataSet.set("filename", filename);
-  SuperGraph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
+  Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph!=0) {
-    glGraph.setSuperGraph(newGraph);
+    glGraph.setGraph(newGraph);
     glGraph.centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))

@@ -6,8 +6,6 @@
 
 #include <tulip/TulipPlugin.h>
 
-class DoubleProperty;
-
 class ConvolutionClustering:public Clustering
 { 
 public:
@@ -27,7 +25,7 @@ private:
   std::vector<double> smoothHistogram;
   std::map<int,int> histogramOfValues;
   int histosize,threshold,width;
-  DoubleProperty *metric;
+  tlp::DoubleProperty *metric;
 };
 
 #endif

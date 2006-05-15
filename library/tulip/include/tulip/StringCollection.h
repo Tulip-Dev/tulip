@@ -9,6 +9,8 @@
 
 #include "tulipconf.h"
 
+namespace tlp {
+
 struct TLP_SCOPE StringCollection : public std::vector<std::string> {
 
 private:
@@ -26,4 +28,5 @@ public:
   int         getCurrent();
 };
 
+}
 #endif

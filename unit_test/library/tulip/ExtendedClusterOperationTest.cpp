@@ -1,10 +1,10 @@
 #include <cassert>
-#include <tulip/TlpTools.h>
 #include <vector>
 #include <tulip/ExtendedClusterOperation.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include "ExtendedClusterOperationTest.h"
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -42,8 +42,8 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(true, quotient->existEdge(meta, nodes[2]).isValid());
   CPPUNIT_ASSERT_EQUAL(true, quotient->existEdge(meta, nodes[3]).isValid());
   CPPUNIT_ASSERT_EQUAL(4u, quotient->numberOfEdges());
-  MetaGraph *clusterInfo = quotient->getProperty<GraphProperty>("viewMetaGraph");
-  SuperGraph *cluster = clusterInfo->getNodeValue(meta);
+  GraphProperty *clusterInfo = quotient->getProperty<GraphProperty>("viewMetaGraph");
+  Graph *cluster = clusterInfo->getNodeValue(meta);
   CPPUNIT_ASSERT(cluster!=0);
   CPPUNIT_ASSERT_EQUAL(true, cluster->isElement(nodes[0]));
   CPPUNIT_ASSERT_EQUAL(true, cluster->isElement(nodes[1]));

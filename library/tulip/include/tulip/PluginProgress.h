@@ -7,6 +7,8 @@
 #include <tulip/tulipconf.h>
 #include <string>
 
+namespace tlp {
+
 enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
 
 class TLP_SCOPE PluginProgress {
@@ -27,4 +29,6 @@ class TLP_SCOPE PluginProgress {
   bool _preview;
   std::string _error;
 };
+
+}
 #endif

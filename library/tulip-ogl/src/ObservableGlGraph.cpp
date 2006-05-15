@@ -7,6 +7,7 @@
 #include "tulip/ObservableGlGraph.h"
 
 using namespace std;
+using namespace tlp;
 
 void ObservableGlGraph::notifyMoveCamera(GlGraph *glGraph) {
   set<GlGraphObserver *> copy(observers); //Used to preserve iteratros

@@ -15,6 +15,8 @@
 #include <tulip/Graph.h>
 #include <tulip/Face.h>
 
+namespace tlp {
+
 class GraphDecorator : public Graph {  // non-orienté, planaire
  public:
   GraphDecorator(Graph* s){assert(s); sg_component = s;}
@@ -91,7 +93,7 @@ private:
   // to examinate !!!
 };
 
-
+}
 #include <tulip/cxx/GraphDecorator.cxx>
 
 #endif

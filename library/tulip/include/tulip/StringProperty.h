@@ -9,6 +9,9 @@
 #include "AbstractProperty.h"
 #include "TemplateFactory.h"
 #include "StringAlgorithm.h"
+
+namespace tlp {
+
 class PropertyContext;
 /** \addtogroup properties */ 
 /*\@{*/
@@ -28,4 +31,5 @@ protected:
   void recompute_handler();  
 };
 /*\@}*/
+}
 #endif

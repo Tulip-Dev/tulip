@@ -1,7 +1,6 @@
 #include <tulip/PlanarityTest.h>
 #include <tulip/BiconnectedTest.h>
 #include <tulip/SimpleTest.h>
-#include <tulip/TlpTools.h>
 #include <tulip/TulipPlugin.h>
 
 #include <tulip/MapIterator.h>
@@ -16,6 +15,7 @@
 LAYOUTPLUGIN(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1");
 
 using namespace std;
+using namespace tlp;
 
 float spacing = 18;
 float edgeNodeSpacing = 8;

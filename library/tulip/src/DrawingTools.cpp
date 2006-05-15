@@ -7,6 +7,7 @@
 #include <climits>
 
 using namespace std;
+using namespace tlp;
 namespace {
   Coord maxCoord(const Coord &a, const Coord &b) {
     return Coord(std::max(a[0], b[0]),

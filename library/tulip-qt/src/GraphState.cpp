@@ -5,6 +5,8 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 
+using namespace tlp;
+
 static bool 
 HaveSameValues( Graph * inG, PropertyInterface * inP0, PropertyInterface * inP1 ) {
   assert( inP0 );

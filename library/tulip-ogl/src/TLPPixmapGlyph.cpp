@@ -1,6 +1,8 @@
 #include    <FTBitmapGlyph.h>
 #include    "tulip/TLPPixmapGlyph.h"
 
+using namespace tlp;
+
 unsigned char outlineFont(unsigned x,unsigned y, unsigned srcWidth, 
 		      unsigned srcHeight, unsigned char *src) {
   if (src[x+y*srcWidth]!=0) return src[x+y*srcWidth];

@@ -9,7 +9,7 @@
 #define PLANARITYGRAPHTEST_H
 
 #include <string>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
@@ -27,7 +27,7 @@ class PlanarityTestTest : public CppUnit::TestFixture {
   static CppUnit::Test *suite();
 
  private:
-  SuperGraph *graph;
+  Graph *graph;
 };
 
 #endif 

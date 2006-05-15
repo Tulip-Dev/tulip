@@ -10,6 +10,8 @@
 #include "TemplateFactory.h"
 #include "SizeAlgorithm.h"
 
+namespace tlp {
+
 class PropertyContext;
 /**
  * \defgroup properties
@@ -44,5 +46,7 @@ private:
   void computeMinMax(Graph * sg=NULL);
 };
 /*@}*/
+
+}
 #endif
 

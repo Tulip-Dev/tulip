@@ -41,9 +41,12 @@
 #define GLAD_GRID              6
 
 
-class DoubleProperty;
 class GlGraphWidget;
 class ClusterTree;
+
+namespace tlp {
+class DoubleProperty;
+}
 
 /** \brief Panel widget using tulip data to compute statistical results.
  *

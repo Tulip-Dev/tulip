@@ -8,6 +8,7 @@
 #include "tulip/GraphIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 //=================================================================================
 BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(sg) {

@@ -3,6 +3,9 @@
 #define TULIP_SIZE_H
 #include <tulip/Vector.h>
 ///
+
+namespace tlp {
+
 class Size : public tlp::Vector<float,3> {
 public:
   inline Size(const float width=0,const float height=0,const float depth=0);
@@ -42,4 +45,5 @@ void Size::setW(const float width) {array[0]=width;}
 void Size::setH(const float height) {array[1]=height;}
 void Size::setD(const float depth) {array[2]=depth;}
 
+}
 #endif

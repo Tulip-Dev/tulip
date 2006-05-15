@@ -10,6 +10,8 @@
 #include "TemplateFactory.h"
 #include "ColorAlgorithm.h"
 
+namespace tlp {
+
 class PropertyContext;
 /** \addtogroup properties */ 
 /*@{*/
@@ -23,5 +25,7 @@ public :
   void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
+
+}
 #endif
 

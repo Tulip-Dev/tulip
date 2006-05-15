@@ -18,6 +18,9 @@
 
 #include "Types.h"
 #include "Property.h"
+
+namespace tlp {
+
 class PropertyContext;
 class ColorProperty;
 
@@ -37,6 +40,8 @@ protected:
   virtual ~ColorAlgorithm();
 };
 /*@}*/
+
+}
 #endif
 
 

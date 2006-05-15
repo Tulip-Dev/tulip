@@ -7,12 +7,12 @@ using namespace std;
 
 #include <cppunit/extensions/HelperMacros.h>
 
-// Warning SelectionProxy has been renamed in Selection
+// Warning SelectionProxy has been renamed in BooleanAlgorithm
 
 CPPUNIT_TEST_SUITE_REGISTRATION( SelectionProxyTest );
 
 //==========================================================
-void buildGraph(SuperGraph *graph) {
+void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -132,7 +132,7 @@ void SelectionProxyTest::testCopy() {
     CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
   }
 
-  Selection tmp(graph);
+  BooleanProperty tmp(graph);
   tmp = *selection;
   itN=graph->getNodes();
   while(itN->hasNext()) {
@@ -152,7 +152,7 @@ void SelectionProxyTest::testSetGet() {
 }
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Selection" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : BooleanProperty" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators", 
 								      &SelectionProxyTest::testIterators ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 

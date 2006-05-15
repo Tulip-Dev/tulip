@@ -11,6 +11,7 @@
 #include <typeinfo>
 #include "StlIterator.h"
 
+namespace tlp {
 
 struct Graph;
 
@@ -116,7 +117,7 @@ private:
 
  *
  */
-
+}
 
 #include "cxx/Reflect.cxx"
 

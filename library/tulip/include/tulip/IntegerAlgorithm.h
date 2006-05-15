@@ -19,6 +19,9 @@
 
 #include "Types.h"
 #include "Property.h"
+
+namespace tlp {
+
 class PropertyContext;
 class IntegerProperty;
 
@@ -41,6 +44,8 @@ protected:
   virtual ~IntegerAlgorithm(){}
 };
 /*@}*/
+
+}
 #endif
 
 

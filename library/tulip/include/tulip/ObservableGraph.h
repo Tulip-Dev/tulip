@@ -3,6 +3,9 @@
 #include <set>
 #include "Node.h"
 #include "Edge.h"
+
+namespace tlp {
+
 struct Graph;
 //=========================================================
 
@@ -26,15 +29,18 @@ class GraphObserver {
   virtual void destroy(Graph *){}
 };
 /*@}*/
+}
 
 namespace std {
   template <>
-  struct less<GraphObserver *> {
-    size_t operator()(const GraphObserver * obs1,const GraphObserver *obs2) const {
+    struct less<tlp::GraphObserver *> {
+    size_t operator()(const tlp::GraphObserver * obs1,const tlp::GraphObserver *obs2) const {
       return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
 }
+
+namespace tlp {
 
 /** \addtogroup sgs */ 
 /*@{*/
@@ -86,6 +92,8 @@ inline void ObservableGraph::removeObserver(GraphObserver *item) const{
 
 inline void ObservableGraph::removeObservers() { 
   observers.clear(); 
+}
+
 }
 
 #endif

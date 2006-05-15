@@ -17,6 +17,8 @@
  * The iterators given in parameter will be automatically
  * delete when the iterator will be deleted.
  */
+namespace tlp {
+
 template<class itType> struct ConcatIterator : public Iterator<itType> {
   ConcatIterator(Iterator<itType> *itOne,Iterator<itType> *itTwo) : 
     itOne(itOne),
@@ -42,4 +44,5 @@ template<class itType> struct ConcatIterator : public Iterator<itType> {
   Iterator<itType> *itTwo;
 };
 
+}
 #endif

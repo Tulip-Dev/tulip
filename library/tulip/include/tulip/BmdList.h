@@ -21,6 +21,7 @@
 
 #include <tulip/BmdLink.h>
 
+namespace tlp {
 template <typename TYPE>
 class BmdList {
  public:
@@ -98,6 +99,6 @@ struct BmdListRevIt : public Iterator<TYPE> {
   tlp::BmdLink< TYPE > *suc;
   BmdList<TYPE> &bmdList;
 };
-
+}
 #endif
 #endif

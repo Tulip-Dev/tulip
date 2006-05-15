@@ -16,6 +16,8 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/Graph.h>
 
+namespace tlp {
+
 struct LessThan {
   DoubleProperty* metric;
   bool operator() (node n1,node n2) {
@@ -62,5 +64,5 @@ struct SortTargetEdgeIterator : public StableIterator<edge> {
   ~SortTargetEdgeIterator(){};
 };
 
-
+}
 #endif

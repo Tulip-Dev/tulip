@@ -3,6 +3,8 @@
 #ifndef _SIMPLE_VECTOR_H_
 #define _SIMPLE_VECTOR_H_
 
+namespace tlp {
+
 // SimpleVector
 //   simple copy constructor
 //   deallocate with hand
@@ -71,4 +73,5 @@ class SimpleVector {
   }
 };
 
+}
 #endif

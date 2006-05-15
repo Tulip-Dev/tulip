@@ -10,10 +10,6 @@
 
 #include <tulip/TulipPlugin.h>
 
-class DoubleProperty;
-class SizeProperty;
-
-
 /** \addtogroup layout */
 /*@{*/
 /// TreeMap.h - An implementation of the tree map layout.

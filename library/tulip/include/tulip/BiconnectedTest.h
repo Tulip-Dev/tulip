@@ -23,6 +23,7 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
+namespace tlp {
 class Graph;
 
 /** \addtogroup sg_test */ 
@@ -54,5 +55,6 @@ private:
   static BiconnectedTest * instance;
   stdext::hash_map<unsigned int,bool> resultsBuffer;
 };
+}
 /*@}*/
 #endif

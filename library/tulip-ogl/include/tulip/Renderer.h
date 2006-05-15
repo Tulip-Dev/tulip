@@ -3,6 +3,8 @@
 
 #include "Fonts.h"
 
+namespace tlp {
+
 class Renderer : public Fonts {
 public:
   virtual void translate(float x, float y, float z) const =0;
@@ -17,4 +19,6 @@ public:
   FontMode mode;
   float depth;
 };
+
+}
 #endif

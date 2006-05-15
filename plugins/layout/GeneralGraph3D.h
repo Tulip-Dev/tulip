@@ -2,24 +2,7 @@
 #ifndef Tulip_GeneralGraph3D_H
 #define Tulip_GeneralGraph3D_H
 #include <tulip/TulipPlugin.h>
-
-class SelfLoops
-{
-public:
-  SelfLoops(node n1,node n2,edge ee1, edge ee2,edge ee3,edge old)
-  {
-    ghostNode1=n1;
-    ghostNode2=n2;
-    e1=ee1;
-    e2=ee2;
-    e3=ee3;
-    oldEdge=old;
-  }
-  ~SelfLoops(){}
-  node ghostNode1,ghostNode2;
-  edge e1,e2,e3,oldEdge;  
-};
-
+#include <tulip/AcyclicTest.h>
 
 struct LR
 {

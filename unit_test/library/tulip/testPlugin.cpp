@@ -13,7 +13,7 @@ public:
   bool run() { 
     std::string name = "Test";
     std::string err = "Error";
-    CPPUNIT_ASSERT(!superGraph->computeProperty(name, selection, err));
+    CPPUNIT_ASSERT(!graph->computeProperty(name, booleanResult, err));
     return true;}
 };
-SELECTIONPLUGIN(Test,"Test","Jezequel","03/11/2004","0","0","1");
+BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","0","1");

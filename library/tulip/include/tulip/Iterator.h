@@ -11,6 +11,8 @@
 #ifndef TULIP_ITERATOR_H
 #define TULIP_ITERATOR_H
 
+namespace tlp {
+
 ///Interface of Iterators
 template<class itType> struct Iterator {
   ///
@@ -23,5 +25,6 @@ template<class itType> struct Iterator {
   virtual bool hasNext()=0;
 };
 
+}
 #endif
 

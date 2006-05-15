@@ -17,6 +17,7 @@
 #include "tulip/Reflect.h"
 
 using namespace std;
+using namespace tlp;
 
 
 bool DataSet::exist(const string &str) const {

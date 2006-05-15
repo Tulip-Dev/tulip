@@ -3,9 +3,9 @@
 #include <fstream>
 #include <tulip/TulipPlugin.h>
 #include <tulip/TreeTest.h>
-#include <tulip/TlpTools.h>
 
 using namespace std;
+using namespace tlp;
 /** \addtogroup layout */
 /*@{*/
 /// TreeRadial.cpp - An implementation of radial drawing of trees.

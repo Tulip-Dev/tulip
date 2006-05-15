@@ -2,6 +2,8 @@
 #define _HLINE_H_
 
 #include "Frame.h"
+namespace tlp {
+
 class Renderer;
 
 const unsigned char ROUGE=255;
@@ -20,5 +22,7 @@ class Hline : public Frame{
   void getColor(unsigned char& r, unsigned char& v, unsigned char& b) const;
   void setColor(unsigned char r, unsigned char v, unsigned char b);
 };
+
+}
 
 #endif

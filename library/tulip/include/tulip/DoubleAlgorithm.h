@@ -19,6 +19,8 @@
 #include "Types.h"
 #include "Property.h"
 
+namespace tlp {
+
 class PropertyContext;
 class DoubleProperty;
 
@@ -40,13 +42,5 @@ protected:
 };
 /*@}*/
 
+}
 #endif
-
-
-
-
-
-
-
-
-

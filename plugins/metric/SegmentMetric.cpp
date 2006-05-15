@@ -7,6 +7,7 @@
 DOUBLEPLUGIN(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 //=============================
 SegmentMetric::SegmentMetric(const PropertyContext &context):DoubleAlgorithm(context) {}

@@ -7,6 +7,8 @@
 
 #include <tulip/Coord.h>
 
+namespace tlp {
+
 class TLP_GL_SCOPE Camera {
  public:
   Coord center,eyes,up;
@@ -24,5 +26,7 @@ class TLP_GL_SCOPE Camera {
   void rotate(float angle, float x, float y, float z);
   
 };
+
+}
 
 #endif

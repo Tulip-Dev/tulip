@@ -6,6 +6,7 @@
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 //==============================
 GraphProperty::GraphProperty (Graph *sg) : 

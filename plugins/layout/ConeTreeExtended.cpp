@@ -5,13 +5,13 @@
 #include <tulip/TreeTest.h>
 #include <tulip/ForEach.h>
 #include <tulip/Node.h>
-#include <tulip/TlpTools.h>
 
 #include "ConeTreeExtended.h"
 
 LAYOUTPLUGIN(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1","0");
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 //===============================================================

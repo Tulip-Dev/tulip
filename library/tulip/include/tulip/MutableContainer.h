@@ -14,6 +14,7 @@
 #include <tulip/ReturnType.h>
 #include <tulip/Iterator.h>
 
+namespace tlp {
 
 enum State { VECT=0, HASH=1 };
 
@@ -381,4 +382,6 @@ void MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsign
   }
 }
 //===================================================================
+
+}
 #endif

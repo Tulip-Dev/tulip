@@ -1,6 +1,6 @@
 #include <iostream>
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
+#include <tulip/Graph.h>
 
 /**
  * Tutorial 006

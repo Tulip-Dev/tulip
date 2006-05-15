@@ -18,6 +18,7 @@
 #include "tulip/GraphAbstract.h"
 #include "tulip/MutableContainer.h"
 
+namespace tlp {
 
 /**
  * This class is one the implementation of the Graph Interface
@@ -69,7 +70,7 @@ private:
   mutable int nEdges;
 };
 
-
+}
 #endif
 
 #endif

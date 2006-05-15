@@ -2,6 +2,8 @@
 #define Tulip_OCCLUSIONTEST_H
 #include <tulip/Rectangle.h>
 
+namespace tlp {
+
 struct RectangleInt2D : public tlp::Rectangle<int> {
   RectangleInt2D(int x,int y,int x1,int y1) {
     (*this)[0][0]=x;
@@ -37,5 +39,7 @@ struct OcclusionTest {
   }
 
 };
+
+}
 
 #endif

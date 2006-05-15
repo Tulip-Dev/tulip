@@ -26,6 +26,7 @@
 #include <tulip/ForEach.h>
 
 using namespace std;
+using namespace tlp;
 
 /** \addtogroup size */
 /*@{*/

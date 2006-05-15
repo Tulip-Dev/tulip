@@ -9,6 +9,7 @@
 BOOLEANPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 LongestPath::LongestPath(const PropertyContext &context):BooleanAlgorithm(context)  {
 }

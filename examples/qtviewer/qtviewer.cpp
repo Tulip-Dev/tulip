@@ -3,6 +3,7 @@
 #else
 #include <qapplication.h>
 #endif
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/MouseObject.h>

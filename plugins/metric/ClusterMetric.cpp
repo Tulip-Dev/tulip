@@ -6,6 +6,7 @@
 DOUBLEPLUGIN(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","0","2");
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {

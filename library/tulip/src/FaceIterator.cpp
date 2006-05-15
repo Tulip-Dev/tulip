@@ -10,10 +10,12 @@ namespace Sgi = ::__gnu_cxx;
 #endif
 #else // ...  there are other compilers, right?
 namespace Sgi = std;
+using namespace tlp;
 #endif
 
 using namespace Sgi;
 using namespace std;
+using namespace tlp;
 
 //============================================================
 //Iterator for Face : FaceIterator

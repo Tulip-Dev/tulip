@@ -13,6 +13,8 @@
 #include <tulip/Color.h>
 #include <tulip/GlGraph.h>
 
+namespace tlp {
+
 class Graph;
 struct node;
 
@@ -81,13 +83,15 @@ public:
   virtual int getId() const=0;
 };
 
+}
+
 #define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID)       \
-class C##T##Factory:public T##Factory            \
+class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    GlGraph::initFactory();                      \
-    GlGraph::glyphFactory->getPluginParameters(this);\
+    tlp::GlGraph::initFactory();			\
+    tlp::GlGraph::glyphFactory->getPluginParameters(this);	\
   }       					 \
   string getName() const { return string(N);}	 \
   string getAuthor() const {return string(A);}	 \
@@ -96,10 +100,10 @@ public:                                          \
   string getRelease() const {return string(R);}	 \
   string getVersion() const {return string(V);}	 \
   int    getId() const {return ID;}		 \
-  T * createObject(GlyphContext *gc)		 \
+  tlp::T * createObject(tlp::GlyphContext *gc)	 \
   {						 \
     C *tmp = new C(gc);				 \
-    return ((T *) tmp);				 \
+    return ((tlp::T *) tmp);			 \
   }						 \
 };                                               \
 extern "C" {                                            \

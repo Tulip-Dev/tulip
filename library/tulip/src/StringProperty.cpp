@@ -7,6 +7,7 @@
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
+using namespace tlp;
 
 StringProperty::StringProperty (Graph *sg):AbstractProperty<StringType,StringType, StringAlgorithm>(sg) {
   //  propertyProxy=this;

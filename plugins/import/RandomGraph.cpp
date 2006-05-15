@@ -2,6 +2,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 struct edgeS {
   unsigned  source,target;

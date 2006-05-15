@@ -13,6 +13,7 @@
 #include "AppStartUp.h"
 
 using namespace std;
+using namespace tlp;
 
 //==============================================================
 struct PluginLoaderQt:public PluginLoader {

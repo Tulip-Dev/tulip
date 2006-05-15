@@ -13,6 +13,7 @@ extern "C" {
 #include "tulip/Spline.h"
 
 using namespace std;
+using namespace tlp;
 
 static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor=false))[3];
 static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray=false);

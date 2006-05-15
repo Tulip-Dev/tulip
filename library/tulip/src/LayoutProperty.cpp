@@ -7,6 +7,7 @@
 #include "tulip/PluginContext.h"
 
 using namespace std;
+using namespace tlp;
 
 inline double sqr(double x){return (x*x);}
 

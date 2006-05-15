@@ -16,6 +16,7 @@
 #define DEFAULTVALUE "default"
 
 using namespace std;
+using namespace tlp;
 
 void nodeAttributeError() {
   cerr << "Error reading node attribute: The attributes of nodes must be defined after the node id (data ignored)" << endl;

@@ -15,6 +15,7 @@
 #include <tulip/Iterator.h>
 
 namespace tlp {
+
   template<typename TYPE>
   struct _TLP_IT {
     _TLP_IT(TYPE &_n, Iterator<TYPE> *_it ) : _it(_it), _n(_n) {

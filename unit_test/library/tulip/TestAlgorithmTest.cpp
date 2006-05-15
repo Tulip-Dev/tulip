@@ -1,5 +1,5 @@
 #include <string>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 
 #include <tulip/SimpleTest.h>
@@ -149,7 +149,7 @@ void TestAlgorithmTest::testBiconnected() {
   graph->delEdge(addedEdges[0]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
 
-  SuperGraph *tmpGraph;
+  Graph *tmpGraph;
   for (unsigned int i = 0; i<5; ++i) {
     tmpGraph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));

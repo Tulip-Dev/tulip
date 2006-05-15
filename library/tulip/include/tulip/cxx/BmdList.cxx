@@ -16,26 +16,26 @@
 
 //=================================================================
 template <typename TYPE>
-BmdList<TYPE>::BmdList():head(0),tail(0),count(0) {
+tlp::BmdList<TYPE>::BmdList():head(0),tail(0),count(0) {
 }
 //=================================================================
 template <typename TYPE>
-BmdList<TYPE>::BmdList<TYPE>::~BmdList() {
+tlp::BmdList<TYPE>::BmdList<TYPE>::~BmdList() {
   clear();
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::firstItem() {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::firstItem() {
   return head;
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::lastItem() {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::lastItem() {
   return tail;
 }
 //=================================================================
 template <typename TYPE>
-TYPE BmdList<TYPE>::entry(tlp::BmdLink<TYPE> *it) {
+TYPE tlp::BmdList<TYPE>::entry(tlp::BmdLink<TYPE> *it) {
   return it->data;
 }
 //=================================================================
@@ -51,31 +51,31 @@ tlp::BmdLink<TYPE>* BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<
       return 0;
     if (p == head)
       predP = 0;
-    if (p->pre != predP)
-      return p->pre;
+    if (p->prev() != predP)
+      return p->prev();
     else
-      return p->suc;
+      return p->succ();
   } else
     return 0;
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *succP) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *succP) {
   if (p != 0) {
     if (p == head)
       return 0;
     if (p == tail)
       succP = 0;
-    if (p->suc != succP)
-      return p->suc;
+    if (p->succ() != succP)
+      return p->succ();
     else
-      return p->pre;
+      return p->prev();
   } else
     return 0;    
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *succIt) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *succIt) {
   if (it == 0)
     return 0;
   if (it == head)
@@ -86,7 +86,7 @@ tlp::BmdLink<TYPE> *BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::BmdLi
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *predIt) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *predIt) {
   if (it == 0)
     return 0;
   if (it == tail)
@@ -97,7 +97,7 @@ tlp::BmdLink<TYPE> *BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::BmdLi
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::push(const TYPE &data) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   count++;
   if (head != 0) {
@@ -111,7 +111,7 @@ tlp::BmdLink<TYPE> *BmdList<TYPE>::push(const TYPE &data) {
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdLink<TYPE> *BmdList<TYPE>::append(const TYPE &data) {
+tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::append(const TYPE &data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   count++;
   //  std::cerr << "0 - appending : " << data << std::endl;
@@ -130,7 +130,7 @@ tlp::BmdLink<TYPE> *BmdList<TYPE>::append(const TYPE &data) {
 }
 //=================================================================
 template <typename TYPE>
-TYPE BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
+TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
   assert(it != 0);
   if (it == head)
     return pop();
@@ -153,7 +153,7 @@ TYPE BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
 }
 //=================================================================
 template <typename TYPE>
-TYPE BmdList<TYPE>::pop() {
+TYPE tlp::BmdList<TYPE>::pop() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert(head != 0);
   tlp::BmdLink<TYPE> *x = head;
@@ -172,7 +172,7 @@ TYPE BmdList<TYPE>::pop() {
 }
 //=================================================================
 template <typename TYPE>
-TYPE BmdList<TYPE>::popBack() {
+TYPE tlp::BmdList<TYPE>::popBack() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert(head != 0);
   tlp::BmdLink<TYPE> *x= tail;
@@ -192,14 +192,14 @@ TYPE BmdList<TYPE>::popBack() {
 }
 //=================================================================
 template <typename TYPE>
-void BmdList<TYPE>::reverse() {
+void tlp::BmdList<TYPE>::reverse() {
   tlp::BmdLink<TYPE> *x = head;
   head = tail;
   tail = x;
 }
 //=================================================================
 template <typename TYPE>
-void BmdList<TYPE>::conc(BmdList<TYPE> &l) {
+void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
   if (head == 0) {
     head = l.head;
     tail = l.tail;
@@ -223,7 +223,7 @@ void BmdList<TYPE>::conc(BmdList<TYPE> &l) {
 }
 //=================================================================
 template <typename TYPE>
-void BmdList<TYPE>::clear() {
+void tlp::BmdList<TYPE>::clear() {
   if (head == 0) return;
   tlp::BmdLink<TYPE> *it = head;
   tlp::BmdLink<TYPE> *p = head;
@@ -240,7 +240,7 @@ void BmdList<TYPE>::clear() {
 }
 //=================================================================
 template <typename TYPE>
-void BmdList<TYPE>::swap(BmdList<TYPE>& l) {
+void tlp::BmdList<TYPE>::swap(tlp::BmdList<TYPE>& l) {
   tlp::BmdLink<TYPE> *tmp;
   int tmp1;
   tmp = l.head;

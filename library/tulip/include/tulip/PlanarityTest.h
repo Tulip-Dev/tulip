@@ -18,6 +18,8 @@
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h> 
 
+namespace tlp {
+
 class Graph;
 
 /** \addtogroup sg_test */ 
@@ -42,4 +44,6 @@ private:
   stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
+
+}
 #endif

@@ -6,6 +6,7 @@
 #include <tulip/Glyph.h>
 
 using namespace std;
+using namespace tlp;
 
 /// - An implementation of square with variable border glyph.
 /** 

@@ -11,6 +11,7 @@
 
 
 using namespace std;
+using namespace tlp;
 using namespace triangle_1_5;
 
 #define FLOAT_ERROR (1e-6) 

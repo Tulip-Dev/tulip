@@ -4,6 +4,7 @@
 #include <tulip/Coord.h>
 
 namespace tlp {
+
   /**
    * \addtogroup basic
    */ 
@@ -42,5 +43,6 @@ namespace tlp {
 		   std::vector<unsigned int> &mergedConvexHull);
   
   /*@}*/
+
 }
 #endif

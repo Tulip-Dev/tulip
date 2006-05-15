@@ -11,16 +11,16 @@
 #include <set>
 #include <list>
 
+namespace tlp {
+
 class Graph;
 class IntegerProperty;
-
-namespace tlp {
 
   TLP_SCOPE node makeSimpleSource(Graph* graph);
 
   TLP_SCOPE void makeProperDag(Graph* graph,std::list<node> &addedNodes, 
 		     stdext::hash_map<edge,edge> &replacedEdges,IntegerProperty* edgeLength);
 
-};
+}
 #endif
 

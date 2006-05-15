@@ -13,6 +13,7 @@
 
 #include "tulip/IdManager.h"
 using namespace std;
+using namespace tlp;
 IdManager::IdManager():
   maxId(UINT_MAX),
   minId(UINT_MAX) {
@@ -112,7 +113,7 @@ Iterator<unsigned int>* IdManager::getUsedId() const{
   return new IdManagerIterator(*this);
 }
 //-----------------------------------------------------------
-ostream& operator<<(ostream &os,const IdManager &idM) {
+ostream& tlp::operator<<(ostream &os,const tlp::IdManager &idM) {
   os << endl << "--------------------------------------" << endl;
   os << "Id Manager Information :" << endl;
   os << "Minimum index :" << idM.minId<< endl;

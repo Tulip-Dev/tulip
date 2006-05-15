@@ -23,12 +23,3 @@ public:
 extern  Application *qApp;
 #endif
 #endif
-
-
-
-
-
-
-
-
-

@@ -5,6 +5,7 @@
 #include "tulip/StringCollection.h"
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   int nocase_cmp(const string & s1, const string& s2) {

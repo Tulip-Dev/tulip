@@ -3,6 +3,7 @@
 #include <tulip/StableIterator.h>
 
 using namespace std;
+using namespace tlp;
 
 
 

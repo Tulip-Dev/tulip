@@ -1,3 +1,4 @@
+using namespace tlp;
 
 //=======================================================================
 //Strucdef implementation

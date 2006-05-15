@@ -15,6 +15,7 @@
 BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple edge","David Auber","20/01/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
 

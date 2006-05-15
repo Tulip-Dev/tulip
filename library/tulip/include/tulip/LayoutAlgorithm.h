@@ -18,6 +18,9 @@
 
 #include "Types.h"
 #include "Property.h"
+
+namespace tlp {
+
 class PropertyContext;
 class LayoutProperty;
 
@@ -43,7 +46,7 @@ protected:
 };
 /*@}*/
 
-
+}
 #endif
 
 

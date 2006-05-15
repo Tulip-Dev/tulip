@@ -33,13 +33,60 @@
 #include "ObservableGraph.h"
 #include "IdManager.h"
 
+namespace tlp {
+
 class PropertyManager;
 class BooleanProperty;
 template<class C>class Iterator;
 
-namespace tlp {
   enum ElementType {NODE=0, EDGE};
-}
+  /**
+   * Load a sg in the tlp format
+   * Warning : this function use "tlp" import plugin (must be laoded)
+   */
+  TLP_SCOPE Graph * loadGraph(const std::string &filename);
+  /**
+   * Save a sg in tlp format
+   * Warning : this function use "tlp" export plugin (must be laoded)
+   */
+  TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
+  TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
+  TLP_SCOPE bool exportGraph(Graph *sg,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
+  TLP_SCOPE bool clusterizeGraph(Graph *sg,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
+  /**
+   * Return a new sg
+   */
+  TLP_SCOPE Graph* newGraph();
+  /**
+   *  Return an empty subsg 
+   */
+  TLP_SCOPE Graph *newSubGraph(Graph *, std::string name = "unnamed");
+  /**
+   *  Return a subsg equal to the sg given in parameter (a clone subsg)
+   */
+  TLP_SCOPE Graph *newCloneSubGraph(Graph *, std::string name = "unnamed");
+  /**
+   *  find the first node of degree 0, if no node exist return false else true
+   */
+  TLP_SCOPE bool getSource(Graph *, node &n);
+  /**
+   * Return an istream from a gzipped file (uses gzstream lib)
+   * the stream has to be deleted after use.
+   * \warning Don't forget to check the stream with ios::bad()!
+   */
+  /**
+   * Append the selected part of the sg inG (properties, nodes & edges) into the sg outG.
+   * If no selection is done (inSel=NULL), the whole inG sg is appended.
+   * The output selection is used to select the appended nodes & edges
+   * \warning The input selection is extended to all selected edge ends.
+   */
+  TLP_SCOPE void copyToGraph( Graph * outG, Graph *	inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+  /**
+   * Remove the selected part of the sg ioG (properties, nodes & edges).
+   * If no selection is done (inSel=NULL), the whole sg is reseted to default value.
+   * \warning The selection is extended to all selected edge ends.
+   */
+  TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
 
 /**
  * \defgroup sgs
@@ -310,8 +357,10 @@ private:
   unsigned int id;
 };
 
+}
+
 ///Print the sg (only nodes and edges) in ostream, in the tulip format
-TLP_SCOPE std::ostream& operator<< (std::ostream &,const Graph *);
+TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 /*@}*/
 //================================================================================
 // Specilization of some template class
@@ -320,12 +369,12 @@ TLP_SCOPE std::ostream& operator<< (std::ostream &,const Graph *);
 
 namespace stdext {
   template <>
-  struct TLP_SCOPE hash<const Graph *> {
-    size_t operator()(const Graph *s) const {return size_t(s->getId());}
+  struct TLP_SCOPE hash<const tlp::Graph *> {
+    size_t operator()(const tlp::Graph *s) const {return size_t(s->getId());}
   };
   template <>
-  struct TLP_SCOPE hash<Graph *> {
-    size_t operator()(Graph *s) const {return size_t(s->getId());}
+  struct TLP_SCOPE hash<tlp::Graph *> {
+    size_t operator()(tlp::Graph *s) const {return size_t(s->getId());}
   };
 }
 

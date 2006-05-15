@@ -12,6 +12,8 @@
 #include <FTGlyph.h>
 #endif
 
+namespace tlp {
+
 /**
  * TLPPixmapGlyph is a specialisation of FTGlyph for creating pixmaps.
  * 
@@ -63,6 +65,8 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
          */
         unsigned char* data;
 };
+
+}
 
 
 #endif  //  __TLPPixmapGlyph__

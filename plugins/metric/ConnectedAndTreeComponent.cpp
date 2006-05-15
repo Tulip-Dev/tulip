@@ -1,8 +1,9 @@
 #include <tulip/GraphProperty.h>
-#include <tulip/TlpTools.h>
+#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/StableIterator.h>
 #include <iostream>
 using namespace std;
+using namespace tlp;
 
 #include <tulip/TulipPlugin.h>
 /** \addtogroup metric */

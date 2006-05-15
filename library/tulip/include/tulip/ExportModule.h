@@ -25,6 +25,8 @@
 /*@{*/
 
 /// Interface for exportModule plug-ins
+namespace tlp {
+
 class ExportModule:public WithParameter
 {
 public:
@@ -54,5 +56,6 @@ public:
   virtual ExportModule * createObject(ClusterContext)=0;
 };
 
+}
 /*@}*/
 #endif

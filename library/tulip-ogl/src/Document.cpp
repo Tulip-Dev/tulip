@@ -6,6 +6,7 @@
 #include <cassert>
 
 using namespace std;
+using namespace tlp;
 
 const Align DEFAULT_ALIGN=LEFT;
 

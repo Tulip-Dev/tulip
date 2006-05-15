@@ -12,6 +12,7 @@ CLUSTERINGPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","
 
 //================================================================================
 using namespace std;
+using namespace tlp;
 namespace {
   const char * paramHelp[] = {
     // selectedNodes

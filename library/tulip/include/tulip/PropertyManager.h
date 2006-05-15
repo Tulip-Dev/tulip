@@ -19,6 +19,8 @@
 #include "Node.h"
 #include "Edge.h"
 
+namespace tlp {
+
 class PropertyInterface;
 class Graph;
 
@@ -117,5 +119,7 @@ public:
   Iterator<std::string>* getLocalProperties();
   Iterator<std::string>* getInheritedProperties();
 };
+
+}
 
 #endif

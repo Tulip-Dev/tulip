@@ -13,6 +13,9 @@
 #define	MORPHING_MAX_FPS	30
 
 class GlGraphWidget;
+
+namespace tlp {
+
 class Graph;
 class LayoutProperty;
 class SizeProperty;
@@ -54,5 +57,7 @@ class TLP_QT_SCOPE Morphing : public QObject{
   int tid;
   float t;
 };
+
+}
 
 #endif //MORPHING_H

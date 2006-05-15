@@ -8,6 +8,7 @@
 #include "tulip/DoubleProperty.h"
 #include <math.h>
 using namespace std;
+using namespace tlp;
 
 void tlp::makeProperDag(Graph* graph,list<node> &addedNodes, 
 			stdext::hash_map<edge,edge> &replacedEdges, IntegerProperty *edgeLength) {

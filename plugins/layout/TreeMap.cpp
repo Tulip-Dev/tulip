@@ -5,6 +5,7 @@
 LAYOUTPLUGIN(TreeMap,"Tree Map (Shneiderman)","David Auber","01/12/1999","ok","0","1");
 
 using namespace std;
+using namespace tlp;
 
 void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, double height,
 			   bool direction, stdext::hash_map<node,double> &value) {

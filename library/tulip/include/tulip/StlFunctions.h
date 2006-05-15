@@ -2,6 +2,8 @@
 #ifndef _TLPSTLFUNCTIONS_H
 #define _TLPSTLFUNCTIONS_H
 
+namespace tlp {
+
 class DoubleProperty;
 class node;
 class edge;
@@ -18,4 +20,5 @@ private:
   DoubleProperty *metric;
 };
 
+}
 #endif

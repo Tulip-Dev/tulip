@@ -10,6 +10,8 @@
 #define	MORPHING_MIN_FRAMES	8		// #
 
 
+using namespace tlp;
+
 static
 void InterpolateColors( Color & outc, const Color & c0, const Color & c1, float inT ) {
   for( int i = 0 ; i < 4 ; i++ ) {
@@ -20,7 +22,7 @@ void InterpolateColors( Color & outc, const Color & c0, const Color & c1, float 
 }
 
 
-bool AssociateEdges( GraphState  * g0, LayoutProperty * e0, GraphState  * g1,
+static bool AssociateEdges( GraphState  * g0, LayoutProperty * e0, GraphState  * g1,
 		     LayoutProperty * e1, edge e ) {
   if( e0->getEdgeStringValue(e) == e1->getEdgeStringValue(e) )
     return false;

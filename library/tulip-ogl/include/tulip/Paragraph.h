@@ -9,6 +9,8 @@
 
 
 
+namespace tlp {
+
 typedef enum Align{LEFT, RIGHT, CENTER, JUSTIFIED}; // défini l'alignement du texte
 
 class C_String{  // la classe utilisée pour le stockage un texte à afficher
@@ -44,5 +46,7 @@ class Paragraph : public Frame{
   void setAlign(Align h){ alignement = h; }
   std::vector<C_String>* getMyString(){return &myString;}
 };
+
+}
 
 #endif

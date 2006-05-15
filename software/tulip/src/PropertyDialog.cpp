@@ -52,6 +52,7 @@
 #include "PropertyDialog.h"
 
 using namespace std;
+using namespace tlp;
 
 //==================================================================================================
 void PropertyDialog::setGlGraphWidget(GlGraph *glwidget) {

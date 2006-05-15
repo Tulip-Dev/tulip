@@ -15,6 +15,8 @@
 #include <iostream>
 #include "Iterator.h"
 
+namespace tlp {
+
 class IdManagerIterator;
 
 /// class for the management of the identifiers : node, edge
@@ -42,12 +44,12 @@ public:
    * will be invalidate.
    */
   Iterator<unsigned int>* getUsedId() const;
-  
+
   friend std::ostream& operator<<(std::ostream &,const IdManager &);
   friend class IdManagerIterator;
   friend class IdManagerTest;
 
-private:
+  private:
   std::set<unsigned int> freeIds;  
   unsigned int maxId;
   unsigned int minId;
@@ -69,5 +71,7 @@ private:
 #endif
 //======================================================
 std::ostream& operator<<(std::ostream &,const IdManager &);
+
+}
 
 #endif

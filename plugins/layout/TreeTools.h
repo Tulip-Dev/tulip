@@ -3,17 +3,19 @@
 
 #include <tulip/Node.h>
 
+namespace tlp {
 class Graph;
 class LayoutProperty;
 class SizeProperty;
+}
 
-node    searchRoot(const Graph* tree);
-int     getTreeDepth(const Graph* tree, node root);
-bool    isLeaf (const Graph* tree, node n);
-float   getNodeX(LayoutProperty* pLayout, node current);
-float   getNodeY(LayoutProperty* pLayout, node current);
-float   getNodeHeight(SizeProperty* size, node current);
-float   getNodeWidth(SizeProperty* size, node current);
+tlp::node    searchRoot(const tlp::Graph* tree);
+int     getTreeDepth(const tlp::Graph* tree, tlp::node root);
+bool    isLeaf (const tlp::Graph* tree, tlp::node n);
+float   getNodeX(tlp::LayoutProperty* pLayout, tlp::node current);
+float   getNodeY(tlp::LayoutProperty* pLayout, tlp::node current);
+float   getNodeHeight(tlp::SizeProperty* size, tlp::node current);
+float   getNodeWidth(tlp::SizeProperty* size, tlp::node current);
 
 #endif
 

@@ -8,6 +8,8 @@
 #include "Graph.h"
 #include "Reflect.h"
 
+namespace tlp {
+
 class PropertyManager;
 template<class C>class Iterator;
 
@@ -62,6 +64,7 @@ private:
 
 };
 
+}
 #endif // DOXYGEN_NOTFOR_USER
 
 #endif

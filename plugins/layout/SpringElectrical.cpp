@@ -6,6 +6,7 @@
 LAYOUTPLUGIN(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 inline double sqr(double x) {
   return (x*x);

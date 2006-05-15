@@ -8,6 +8,7 @@
 #include "ImprovedWalker.h"
 
 using namespace std;
+using namespace tlp;
 
 LAYOUTPLUGIN(ImprovedWalker, "ImprovedWalker",
              "Julien Testut, Antony Durand, Pascal Ollier, "

@@ -1,6 +1,5 @@
 #include <cmath>
 #include <LayoutProperty.h>
-#include <tulip/TlpTools.h>
 #include <tulip/DoubleProperty.h>
 
 struct MapParam: public LayoutAlgorithm {

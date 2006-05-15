@@ -7,6 +7,7 @@
 LAYOUTPLUGIN(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2");
 
 using namespace std;
+using namespace tlp;
 //====================================================
 Tutte::Tutte(const PropertyContext &context):LayoutAlgorithm(context) 
 {}

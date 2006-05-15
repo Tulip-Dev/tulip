@@ -16,9 +16,8 @@
 
 #include <tulip/GlHud.h>
 
-/** \brief General class for the rendering of 2D lines
- *
- */
+namespace tlp {
+
 class GlHudLine : public GlHud
 {
  protected:
@@ -103,6 +102,8 @@ class GlHudLine : public GlHud
    */
   virtual void setThickness(unsigned int thickness);
 };
+
+}
 
 
 #endif

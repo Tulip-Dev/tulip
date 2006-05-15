@@ -6,7 +6,7 @@
 
 class GlGraphWidget;
 
-class QtProgress:public QtProgressData, public PluginProgress {
+class QtProgress:public QtProgressData, public tlp::PluginProgress {
 
   Q_OBJECT
 

@@ -1,5 +1,7 @@
 #include "tulip/PluginProgress.h"
 
+using namespace tlp;
+
 //====================================================
 PluginProgress::PluginProgress() :
   _state(TLP_CONTINUE),

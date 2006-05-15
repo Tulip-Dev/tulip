@@ -8,6 +8,7 @@
 #include "HierarchicalClustering.h"
 
 using namespace std;
+using namespace tlp;
 
 CLUSTERINGPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","0","1");
 

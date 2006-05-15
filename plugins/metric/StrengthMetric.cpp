@@ -4,6 +4,7 @@
 DOUBLEPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 StrengthMetric::StrengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}

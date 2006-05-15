@@ -12,6 +12,9 @@
 #include <cassert>
 #include <stack>
 
+using namespace std;
+using namespace tlp;
+
 const FontMode DEFAULT_FONTMODE=TLP_POLYGON;
 const float DEFAULT_PROF=20;
 
@@ -21,7 +24,7 @@ const int H3=10;
 const int H4=5;
 
 const int DEFAULT_SIZE=20;
-using namespace std;
+
 const string FONT_FILE(tlp::TulipLibDir + "tlp/bitmaps/" + "font.ttf");
 
 typedef struct Cell{

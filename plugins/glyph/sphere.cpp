@@ -9,6 +9,7 @@
 
 #include <iostream>
 using namespace std;
+using namespace tlp;
 
 class Sphere : public Glyph {
 public:

@@ -1,6 +1,8 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include "SuperGraphTest.h"
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
 
 using namespace std;
 #include <cppunit/extensions/HelperMacros.h>
@@ -106,7 +108,7 @@ void SuperGraphTest::testIterators() {
   delete it6;
 }
 //==========================================================
-void degreeCheck(SuperGraph *graph) {
+void degreeCheck(Graph *graph) {
   Iterator<node> *itN = graph->getNodes();
   while (itN->hasNext()) {
     node n = itN->next();
@@ -136,9 +138,9 @@ void SuperGraphTest::testDegree() {
   graph->clear();
   build(100, 100);
   degreeCheck(graph);
-  SuperGraph *gr = tlp::newCloneSubGraph(graph);
-  SuperGraph *gr1 = tlp::newCloneSubGraph(graph);
-  SuperGraph *gr2 = tlp::newCloneSubGraph(gr1);
+  Graph *gr = tlp::newCloneSubGraph(graph);
+  Graph *gr1 = tlp::newCloneSubGraph(graph);
+  Graph *gr2 = tlp::newCloneSubGraph(gr1);
 
   degreeCheck(graph);
   degreeCheck(gr);
@@ -288,7 +290,7 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
 //==========================================================
 void SuperGraphTest::testDeleteSubgraph() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
@@ -318,7 +320,7 @@ void SuperGraphTest::testDeleteSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g3->addSubGraph();
   g1->delAllSubGraphs(g2);
-  Iterator<SuperGraph *> *itGr = g1->getSubGraphs();
+  Iterator<Graph *> *itGr = g1->getSubGraphs();
   CPPUNIT_ASSERT(!itGr->hasNext());
   delete itGr;
   graph->clear();
@@ -326,7 +328,7 @@ void SuperGraphTest::testDeleteSubgraph() {
 //==========================================================
 void SuperGraphTest::testSubgraph() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
@@ -344,8 +346,8 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(g3->getRoot()==graph);
   CPPUNIT_ASSERT(g4->getRoot()==graph);
 
-  Iterator<SuperGraph *> *it= g2->getSubGraphs();
-  SuperGraph *a,*b;
+  Iterator<Graph *> *it= g2->getSubGraphs();
+  Graph *a,*b;
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
@@ -395,13 +397,13 @@ void SuperGraphTest::testSubgraph() {
 //==========================================================
 void SuperGraphTest::testInheritance() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
 
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
-  Metric *m = graph->getProperty<DoubleProperty>("metric");
+  DoubleProperty *m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->existProperty("metric"));
   CPPUNIT_ASSERT(g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
@@ -416,7 +418,7 @@ void SuperGraphTest::testInheritance() {
   CPPUNIT_ASSERT(!g4->existProperty("metric"));
 
 
-  Metric *m2 = g2->getLocalProperty<DoubleProperty>("metric");
+  DoubleProperty *m2 = g2->getLocalProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(!graph->existProperty("metric"));
   CPPUNIT_ASSERT(!g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
@@ -442,7 +444,7 @@ void SuperGraphTest::testInheritance() {
 //==========================================================
 void SuperGraphTest::testPropertiesIteration() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   set<string> propList1;
   set<string> propList2;
   propList1.insert("m1");
@@ -516,7 +518,7 @@ void SuperGraphTest::testPropertiesIteration() {
 }
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SuperGraph" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Add/Del operations (Simple Graph)", 
 								  &SuperGraphTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)", 

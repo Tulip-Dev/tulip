@@ -17,6 +17,7 @@
 
 
 namespace tlp {
+
   /**
    * \addtogroup basic
    */ 
@@ -134,6 +135,7 @@ namespace tlp {
       inline bool computeEigenVectors(Matrix<Obj, 3> &eigenVectors) const;
     };
     /*@}*/
+
 }
 
 #include "./cxx/Matrix.cxx"

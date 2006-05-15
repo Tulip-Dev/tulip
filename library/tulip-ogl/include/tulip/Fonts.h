@@ -2,6 +2,9 @@
 #define _FONTS_H_
 
 #include <string>
+
+namespace tlp {
+
 enum FontMode{TLP_BITMAP, TLP_PIXMAP, TLP_OUTLINE, TLP_POLYGON, TLP_EXTRUDE, TLP_TEXTURE, TLP_TLPPIXMAP};
 
 class Fonts {
@@ -17,5 +20,7 @@ class Fonts {
   virtual int AddFont(FontMode type, int size, const std::string f, float depth=0)=0;
   virtual int searchFont(FontMode type, int size, const std::string f, float depth=0)const=0;
 };
+
+}
 
 #endif

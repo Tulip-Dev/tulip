@@ -1,6 +1,9 @@
 #ifndef TLP_PLUGINLOADER
 #define TLP_PLUGINLOADER
 #include <string>
+
+namespace tlp {
+
 struct PluginLoader {
   virtual ~PluginLoader(){}
   virtual void start(const std::string &path,const std::string &type)=0;
@@ -15,4 +18,6 @@ struct PluginLoader {
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg)=0;
   virtual void finished(bool state,const std::string &msg)=0;
 };
+
+}
 #endif

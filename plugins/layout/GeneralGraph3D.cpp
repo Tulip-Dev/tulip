@@ -7,12 +7,12 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/TlpTools.h>
 
 #include "GeneralGraph3D.h"
 
 
 using namespace std;
+using namespace tlp;
 
 LAYOUTPLUGIN(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1")
 
@@ -111,7 +111,7 @@ void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops
     //We remove all self loops from the graph
     list<SelfLoops>::iterator itSelf;
     for (itSelf=selfLoops.begin();itSelf!=selfLoops.end();++itSelf) {
-      graph->delEdge((*itSelf).oldEdge);
+      graph->delEdge((*itSelf).old);
     }
   }
   assert(AcyclicTest::isAcyclic(graph));
@@ -255,15 +255,15 @@ bool GeneralGraph3D::run() {
     LineType::RealType::const_iterator it;
     for (it=edge1.begin();it!=edge1.end();++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode1));
+    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n1));
     for (it=edge2.begin();it!=edge2.end();++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode2));
+    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n2));
     for (it=edge3.begin();it!=edge3.end();++it)
       tmpLCoord.push_back(*it);
-    layoutResult->setEdgeValue(tmp.oldEdge,tmpLCoord);
-    mySGraph->delAllNode(tmp.ghostNode1);
-    mySGraph->delAllNode(tmp.ghostNode2);
+    layoutResult->setEdgeValue(tmp.old,tmpLCoord);
+    mySGraph->delAllNode(tmp.n1);
+    mySGraph->delAllNode(tmp.n2);
   }
   
   //  cerr << "we clean every added nodes and edges" << endl;

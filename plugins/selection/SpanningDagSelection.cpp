@@ -8,6 +8,7 @@
 BOOLEANPLUGIN(SpanningDagSelection,"SpanningDag","David Auber","01/12/1999","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 //=================================================================
 SpanningDagSelection::SpanningDagSelection(const PropertyContext &context):BooleanAlgorithm(context) {}

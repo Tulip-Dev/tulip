@@ -4,6 +4,8 @@
 #include "Coord.h"
 #include "Size.h"
 
+namespace tlp {
+
 /*
   This is used by some plugins:
   glyph/SquareBorder
@@ -65,5 +67,7 @@ protected:
 };
 
 bool intersect(const RectangleArea& rect1, const RectangleArea& rect2);
+
+}
 
 #endif

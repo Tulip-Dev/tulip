@@ -3,6 +3,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 
 namespace {

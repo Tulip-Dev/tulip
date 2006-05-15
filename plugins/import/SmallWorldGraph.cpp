@@ -4,6 +4,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 static const int WIDTH = 1024;
 static const int HEIGHT = 1024;
 

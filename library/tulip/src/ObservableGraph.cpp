@@ -7,6 +7,7 @@
 #include "tulip/ObservableGraph.h"
 
 using namespace std;
+using namespace tlp;
 
 void ObservableGraph::notifyAddNode(Graph *sg, const node n) {
   set<GraphObserver *> copy(observers); //Used to preserve iteratros

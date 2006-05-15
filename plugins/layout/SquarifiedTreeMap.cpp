@@ -8,6 +8,7 @@
 #include "TreeTools.h"
 
 using namespace std;
+using namespace tlp;
 
 LAYOUTPLUGIN(SquarifiedTreeMap,"Squarified Tree Map",
              "Julien Testut, Antony Durand, Pascal Ollier, "

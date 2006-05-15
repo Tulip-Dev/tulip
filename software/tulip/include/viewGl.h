@@ -37,20 +37,23 @@
 #include <tulip/MouseInterface.h>
 #include "TulipData.h"
 
-class Cluster;
+namespace tlp {
+class GlGraph;
+class Morphing;
+}
+
+class ClusterTree;
+class TulipElementProperties;
+class GlGraphWidget;
+class TulipStats;
+class PropertyDialog;
 class QWorkspace;
 class QProgressDialog;
 class QEvent;
-class PropertyDialog;
-class GlGraphWidget;
-class GlGraph;
 class View3DSetup;
-class ClusterTree;
-class TulipElementProperties;
-class TulipStats;
+class Cluster;
 class ToolBar;
 class Overview;
-class Morphing;
 class GridOptionsWidget;
 
 ///Widget for manipulation and visualization of a graph

@@ -6,6 +6,7 @@
 BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 SpanningTreeSelection::SpanningTreeSelection(const PropertyContext &context):BooleanAlgorithm(context) 
 {}

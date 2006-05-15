@@ -22,6 +22,8 @@
 
 /** \addtogroup plugins */ 
 /*@{*/
+namespace tlp {
+
 /// Interface for importModule plug-ins
 class ImportModule :public WithParameter
 {
@@ -51,5 +53,7 @@ public:
   virtual ~ImportModuleFactory() {}
   virtual ImportModule * createObject(ClusterContext)=0;
 };
+
+}
 /*@}*/
 #endif

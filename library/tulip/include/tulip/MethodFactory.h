@@ -31,7 +31,6 @@
 #include "Clustering.h"
 #include "ImportModule.h"
 #include "ExportModule.h"
-#include "TlpTools.h"
 
 //===========================================================
 // Declaclartion of Properties plugin mechanism
@@ -41,12 +40,12 @@
 
 // Macro for factorization of source code
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R)          \
-class C##T##Factory:public PropertyFactory<T##Algorithm>\
+class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    T##Property::initFactory();				\
-    T##Property::factory->getPluginParameters((PropertyFactory<T##Algorithm> *) this); \
+    tlp::T##Property::initFactory();			\
+    tlp::T##Property::factory->getPluginParameters((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -55,10 +54,10 @@ class C##T##Factory:public PropertyFactory<T##Algorithm>\
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
- T##Algorithm * createObject(const PropertyContext &context)	\
+ tlp::T##Algorithm * createObject(const tlp::PropertyContext &context)	\
    {							\
      C *tmp=new C(context);				\
-     return ((T##Algorithm *) tmp);				\
+     return ((tlp::T##Algorithm *) tmp);		\
    }							\
 };                                                      \
 extern "C" {                                            \
@@ -79,7 +78,7 @@ extern "C" {                                            \
 //===========================================================
 ///
 #define GRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)	\
-class C##T##Factory:public T##Factory                   \
+class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
  public:						\
   C##T##Factory(){					\
@@ -93,10 +92,10 @@ class C##T##Factory:public T##Factory                   \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
- T * createObject(ClusterContext context)		\
+ tlp::T * createObject(ClusterContext context)		\
    {							\
      C *tmp=new C(context);				\
-     return ((T *) tmp);				\
+     return ((tlp::T *) tmp);				\
    }							\
 };                                                      \
 extern "C" {                                            \

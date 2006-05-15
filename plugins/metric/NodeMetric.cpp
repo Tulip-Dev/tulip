@@ -5,6 +5,7 @@
 DOUBLEPLUGIN(NodeMetric,"Node","David Auber","20/12/1999","Alpha","0","1");
 
 using namespace std;
+using namespace tlp;
 
 //====================================================================
 NodeMetric::NodeMetric(const PropertyContext &context):DoubleAlgorithm(context) 

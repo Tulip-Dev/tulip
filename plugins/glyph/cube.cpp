@@ -13,6 +13,7 @@
 #include <tulip/GlGraph.h>
 
 using namespace std;
+using namespace tlp;
 
 class Cube : public Glyph {
 public:
