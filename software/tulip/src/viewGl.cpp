@@ -901,11 +901,11 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  string filename( QFileDialog::getSaveFileName(this->caption().ascii()).ascii());
-  if (filename == "") return;
+  QString filename(QFileDialog::getSaveFileName(this->caption().ascii()));
+  if (filename.isNull()) return;    
   DataSet dataSet;
   string name(exportGraphMenu.text(id).ascii());
-  fileSave(name,filename);
+  fileSave(name, filename.ascii());
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
