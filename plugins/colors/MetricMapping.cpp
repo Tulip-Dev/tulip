@@ -126,15 +126,15 @@ private:
   int colorModel;
   Color color1;
   Color color2;
-  Vector<float,3> deltaRGB;
+  Vector<float,4> deltaRGBA;
 
 public:
   MetricMapping(const PropertyContext &context):Colors(context){
     addParameter<MetricProxy>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
-    addParameter<Color>("color1",paramHelp[2],"(255,255,0,255)");
-    addParameter<Color>("color2",paramHelp[3],"(0,0,255,255)");
+    addParameter<Color>("color1",paramHelp[2],"(255,255,0,128)");
+    addParameter<Color>("color2",paramHelp[3],"(0,0,255,228)");
   }
   //=========================================================
   ~MetricMapping(){}
@@ -149,15 +149,15 @@ public:
       s=1;
       h=55.0+value*300.0/range;
       HSVtoRGB(&r,&g,&b,h,s,v);
-      return Color((int)(r*255.0f),(int)(g*255.0f),(int)(b*255.0f),0); 
+      return Color((int)(r*255.0f),(int)(g*255.0f),(int)(b*255.0f),color1[3] + (int)deltaRGBA[3]*value); 
       break;
     case 1: //RGB interpolation
-      Vector<float,3> tmp(deltaRGB);
+      Vector<float,4> tmp(deltaRGBA);
       tmp *= value;
       return  Color((int)(tmp[0]+color1[0]),
 		    (int)(tmp[1]+color1[1]),
 		    (int)(tmp[2]+color1[2]),
-		    0);
+		    (int)(tmp[3]+color1[3]));
       break;
     }
   }
@@ -166,10 +166,10 @@ public:
     double minE,maxE;
     minE = entryMetric->getEdgeMin(superGraph);
     maxE = entryMetric->getEdgeMax(superGraph);
-    for (int i=0;i<3;++i)
-      deltaRGB[i]=double(color2[i]-color1[i]);
+    for (int i=0;i<4;++i)
+      deltaRGBA[i]=double(color2[i]-color1[i]);
     if (maxE!=minE)
-      deltaRGB/=double(maxE-minE);
+      deltaRGBA/=double(maxE-minE);
     Iterator<edge> *itE=superGraph->getEdges();
     while(itE->hasNext()) {
       edge ite=itE->next();
@@ -182,10 +182,10 @@ public:
     double minN,maxN;
     minN=entryMetric->getNodeMin(superGraph);
     maxN=entryMetric->getNodeMax(superGraph);
-    for (int i=0;i<3;++i)
-      deltaRGB[i]=double(color2[i]-color1[i]);
+    for (int i=0;i<4;++i)
+      deltaRGBA[i]=double(color2[i]-color1[i]);
     if (maxN!=minN)
-      deltaRGB/=double(maxN-minN);
+      deltaRGBA/=double(maxN-minN);
     Iterator<node> *itN=superGraph->getNodes();
     while(itN->hasNext()) {
       node itn=itN->next();
@@ -198,8 +198,8 @@ public:
     //    cerr << __PRETTY_FUNCTION__ << endl;
     MetricProxy* metricS = superGraph->getProperty<MetricProxy>("viewMetric");
     colorModel=1;
-    color1.set(255,255,0);
-    color2.set(0,0,255);
+    color1.set(255,255,0,128);
+    color2.set(0,0,255,228);
     bool mappingType = true;
     if ( dataSet!=0 ) {
       dataSet->get("property", metricS);

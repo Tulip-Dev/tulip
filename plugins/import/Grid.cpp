@@ -50,6 +50,7 @@ struct Grid:public ImportModule {
 
   bool import(const string &name) {
     superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
+    superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.05,0.05,0.4));
     bool ok=true;
     int width = 10;
     int height = 10;

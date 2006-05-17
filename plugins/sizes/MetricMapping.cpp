@@ -1,9 +1,9 @@
 //-*-c++-*-
 #include <cmath>
 #include <tulip/TulipPlugin.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
-
 
 namespace {
   const char * paramHelp[] = {
@@ -36,6 +36,15 @@ namespace {
     "This value defines the type of mapping. Following values are valid :" \
     "<ul><li>true : linear mapping</li><li>false: uniform quantification</li></ul>" \
     HTML_HELP_CLOSE(),
+    // Mapping type
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" ) \
+    HTML_HELP_DEF( "values", "true / false" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "If true the plug-in will compute node sizes else it will compute edge sizes :" \
+    "<ul><li>true : node size</li><li>false: edge size</li></ul>" \
+    HTML_HELP_CLOSE(),
   };
 }
 
@@ -58,11 +67,12 @@ public:
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
     addParameter<bool>("depth", paramHelp[2],"true");
-    addParameter<double>("min size","");
-    addParameter<double>("max size","");
+    addParameter<double>("min size","","1");
+    addParameter<double>("max size","","10");
     addParameter<bool>("type", paramHelp[3],"true");
+    addParameter<bool>("node/edge", paramHelp[3],"true");
   }
-
+  
   ~MetricMapping(){}
 
   void computeNodeSize() {
@@ -77,11 +87,24 @@ public:
       sizesProxy->setNodeValue(itn, result);
     } delete itN;
   }
+  
+  void computeEdgeSize() {
+    Iterator<edge> *itE=superGraph->getEdges();
+    while(itE->hasNext()) {
+      edge ite=itE->next();
+      double sizos = min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
+      Size result  = entrySize->getEdgeValue(ite);
+      result[0] = sizos;
+      result[1] = sizos;
+      sizesProxy->setEdgeValue(ite, result);
+    } delete itE;
+  }
 
   bool check(std::string &errorMsg) {
     xaxis=yaxis=zaxis=true;
     min=1;
     max=10;
+    nodeoredge = true;
     entryMetric=superGraph->getProperty<MetricProxy>("viewMetric");
     entrySize=superGraph->getProperty<SizesProxy>("viewSize");
     mappingType = true;
@@ -94,6 +117,7 @@ public:
       dataSet->get("min size",min);
       dataSet->get("max size",max);
       dataSet->get("type",mappingType);
+      dataSet->get("node/edge",nodeoredge);
     }
     if (min >= max) {
       /*cerr << rangeErrorMsg << endl;
@@ -114,10 +138,22 @@ public:
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
-    sizesProxy->setAllEdgeValue(Size(0.25,0.25,0.25));
-    range=entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
-    shift=entryMetric->getNodeMin(superGraph);
-    computeNodeSize();
+    if(nodeoredge) {
+      range = entryMetric->getNodeMax(superGraph) - entryMetric->getNodeMin(superGraph);
+      shift = entryMetric->getNodeMin(superGraph);
+      computeNodeSize();
+      edge e;
+      forEach(e, superGraph->getEdges())
+	sizesProxy->setEdgeValue(e, entrySize->getEdgeValue(e));
+    }
+    else {
+      range = entryMetric->getEdgeMax(superGraph) - entryMetric->getEdgeMin(superGraph);
+      shift = entryMetric->getEdgeMin(superGraph);
+      computeEdgeSize();
+      node n;
+      forEach(n, superGraph->getNodes())
+	sizesProxy->setNodeValue(n, entrySize->getNodeValue(n));
+    }
     if (!mappingType) delete tmp;
     return true;
   }
@@ -129,6 +165,7 @@ private:
   double min,max;
   double range;
   double shift;
+  bool nodeoredge;
 };
 /*@}*/
 SIZESPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
