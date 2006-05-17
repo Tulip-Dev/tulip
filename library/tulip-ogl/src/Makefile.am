@@ -19,6 +19,8 @@ libtulip_ogl_la_LDFLAGS = -export-dynamic -release ${RELEASE}
 # libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@ 
 
 libtulip_ogl_la_SOURCES = \
+	GlTools.cpp \
+	Curves.cpp \
 	Hline.cpp \
 	Parser.cpp \
 	Paragraph.cpp \
