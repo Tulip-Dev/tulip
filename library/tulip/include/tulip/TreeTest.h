@@ -22,6 +22,7 @@
 #include <ext/hash_set>
 #endif
 #include "tulip/ObservableGraph.h"
+#include "tulip/MutableContainer.h"
 
 class SuperGraph;
 class SelectionProxy;
@@ -32,7 +33,8 @@ class SelectionProxy;
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
   static bool isTree(SuperGraph *graph);
-
+  static bool isTopologicalTree(SuperGraph *graph);
+  static void makeRootedTree(SuperGraph *graph, node root);
 private:
   bool compute(SuperGraph *);
   void addEdge(SuperGraph *,const edge);
@@ -43,6 +45,9 @@ private:
   void destroy(SuperGraph *);
   TreeTest();
   static TreeTest * instance;
+  bool isTopologicalTree (SuperGraph *graph, node curRoot, node cameFrom,
+			  MutableContainer<bool> &visited);
+  void makeRootedTree (SuperGraph *graph, node curRoot, node cameFrom);
   stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
