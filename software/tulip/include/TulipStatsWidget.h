@@ -45,6 +45,7 @@ class MetricProxy;
 class GlGraphWidget;
 class ClusterTree;
 
+namespace tlp {
 /** \brief Panel widget using tulip data to compute statistical results.
  *
  * This class is a widget which takes places in the main interface of tulip, in the tabwidget of properties.
@@ -271,5 +272,5 @@ class TulipStats : public TulipStatsData, public GraphObserver
    */
   void enableRemoveMetricBtn();
 };
-
+}
 #endif

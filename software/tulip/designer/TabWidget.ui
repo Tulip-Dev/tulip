@@ -112,7 +112,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="TulipStats" row="0" column="0">
+                    <widget class="tlp::TulipStats" row="0" column="0">
                         <property name="name">
                             <cstring>tulipStats</cstring>
                         </property>
@@ -140,7 +140,7 @@
         <pixmap>image0</pixmap>
     </customwidget>
     <customwidget>
-        <class>TulipStats</class>
+        <class>tlp::TulipStats</class>
         <header location="global">../include/TulipStatsWidget.h</header>
         <sizehint>
             <width>-1</width>

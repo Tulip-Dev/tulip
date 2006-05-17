@@ -51,7 +51,9 @@ class TulipStats;
 class ToolBar;
 class Overview;
 class Morphing;
+namespace tlp {
 class GridOptionsWidget;
+}
 
 ///Widget for manipulation and visualization of a graph
 class viewGl : public TulipData, Observer {
@@ -64,7 +66,7 @@ public:
   bool eventFilter(QObject *, QEvent *);
 
 protected:
-  GridOptionsWidget *gridOptionsWidget;
+  tlp::GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
 #ifdef STATS_UI
   TulipStats *statsWidget;
