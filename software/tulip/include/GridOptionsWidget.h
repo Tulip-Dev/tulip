@@ -40,7 +40,7 @@ class GridOptionsWidget : public GridOptionsData
 
  protected:
   GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
-  GlADGrid *grid; /**< The considered GlADGrid */
+  tlp::GlADGrid *grid; /**< The considered GlADGrid */
 
  public:
   /**
