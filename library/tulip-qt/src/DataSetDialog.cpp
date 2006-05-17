@@ -224,7 +224,6 @@ namespace {
 	// first part of the parameter name may be used
 	// to indicate a subtype
 	string::size_type pos = def.first.find("::");
-	cout << "pos = " << pos << endl;
 	if (pos != string::npos)
 	  ip.label = new QLabel(def.first.substr(pos + 2, def.first.length() - pos - 2).c_str(), this);
 	else
