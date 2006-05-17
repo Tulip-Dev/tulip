@@ -181,17 +181,21 @@ namespace {
 	  QLineEdit * leR = (QLineEdit*) ip->wA[0];
 	  QLineEdit * leG = (QLineEdit*) ip->wA[2];
 	  QLineEdit * leB = (QLineEdit*) ip->wA[4];
-	  QColor rgb( leR->text().toInt(),
-		      leG->text().toInt(),
-		      leB->text().toInt()	);
+	  QLineEdit * leA = (QLineEdit*) ip->wA[6];
+	  QRgb rgb = qRgba( leR->text().toInt(),
+			    leG->text().toInt(),
+			    leB->text().toInt(),
+			    leA->text().toInt()
+			    );
 	  bool ok = false;
-	  rgb.setRgb( QColorDialog::getRgba(rgb.rgb(),&ok) );
+	  rgb = QColorDialog::getRgba(rgb,&ok);
 	  if( ok ) {
-	    leR->setText( QString("%1").arg(rgb.red()) );
-	    leG->setText( QString("%1").arg(rgb.green()) );
-	    leB->setText( QString("%1").arg(rgb.blue()) );
+	    leR->setText( QString("%1").arg(qRed(rgb)));
+	    leG->setText( QString("%1").arg(qGreen(rgb)));
+	    leB->setText( QString("%1").arg(qBlue(rgb)));
+	    leA->setText( QString("%1").arg(qAlpha(rgb)));
 	  }
-	  ((QWidget *)obj)->setPaletteBackgroundColor(rgb);
+	  ((QWidget *)obj)->setPaletteBackgroundColor(QColor(rgb));
 	  return false;
 	} else if( ip->typeName == TN(string) ) {
 	  QString s = QFileDialog::getOpenFileName();
