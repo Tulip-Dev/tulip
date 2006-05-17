@@ -14,8 +14,6 @@ AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` `ls ../../
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
-	FaceIterator2.cpp \
-	SuperGraphConMap.cpp \
 	CanonicalOrdering.cpp \
 	ConvexHull.cpp \
 	Delaunay.cpp \
@@ -70,8 +68,8 @@ libtulip_la_SOURCES = \
 	StatisticsNodeModule.cpp \
 	Polynome.cpp \
 	Plane.cpp \
-	SuperGraphMap.cpp \
 	FaceIterator.cpp \
+	PlanarConMap.cpp \
 	PlanarityTest.cpp \
 	PlanarityTestImpl.cpp \
 	PlanarityTestEmbed.cpp \

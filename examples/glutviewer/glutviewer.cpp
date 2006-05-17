@@ -7,6 +7,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 static int win;
@@ -227,6 +228,13 @@ int main (int argc, char **argv) {
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);
+
+  SuperGraph *g;
+  forEach(g, glGlutScreen->getSuperGraph()->getSubGraphs()) {
+    cerr << g->getId() << ",";
+  }
+
+
   glutMainLoop();  
   return EXIT_SUCCESS;
 }

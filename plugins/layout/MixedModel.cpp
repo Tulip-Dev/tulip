@@ -5,10 +5,9 @@
 #include <tulip/TulipPlugin.h>
 
 #include <tulip/MapIterator.h>
-#include <tulip/SuperGraphConMap.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/CanonicalOrdering.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/SuperGraphMap.h>
 #include <tulip/Bfs.h>
 #include <tulip/ForEach.h>
 #include "MixedModel.h"
@@ -173,8 +172,7 @@ bool MixedModel::run() {
       } delete ite;
       //===================================================
       
-      graphMap = new SuperGraphConMap(G);
-      graphMap->update();
+      graphMap = new PlanarConMap(G);
       vector<edge> re_added = getPlanarSubGraph(graphMap,unplanar_edges);
       
       for (unsigned int ui = 0; ui < re_added.size() ; ++ui){
@@ -194,16 +192,18 @@ bool MixedModel::run() {
     
     // give some empirical feedback of what we are doing 2%
     pluginProgress->progress(5, 1000);
-    carte = new SuperGraphMap(G);
+    vector<edge> added_edges;
+    if(!BiconnectedTest::isBiconnected(G))    
+      BiconnectedTest::makeBiconnected(G,added_edges);
+    assert(BiconnectedTest::isBiconnected(G));
+    carte = new PlanarConMap(G);
+    assert(BiconnectedTest::isBiconnected(carte));
     // give some empirical feedback of what we are doing 2%
     pluginProgress->progress(1, 100);
-   vector<edge> added_edges;
-    if(!BiconnectedTest::isBiconnected(carte))    
-      BiconnectedTest::makeBiconnected(carte,added_edges);
-   // give some empirical feedback (5%)
+
+    // give some empirical feedback (5%)
     pluginProgress->progress(2, 100); 
     // cout << "Make the map planar ...";
-    carte->makePlanar();
     // cout << "... end" << endl;
     // give some empirical feedback of what we are doing (10%)
     if (pluginProgress->progress(5, 100) !=TLP_CONTINUE)
@@ -219,13 +219,11 @@ bool MixedModel::run() {
     V.clear();
     
     NodeCoords.clear();
-    
-    // cout << "Partition initialization ...";
+    // Cout << "Partition initialization ...";
     initPartition() ;
     // cout<<"... Partition initialized"<<endl;
     if (pluginProgress->state() == TLP_CANCEL)
       return false;
-
     // cout << "InOutPoint computation ..."  ;
     assignInOutPoints();
     // cout<<"... InOutPoints computed"<<endl;
@@ -305,7 +303,7 @@ bool MixedModel::check(string &err) {
 
       
 //====================================================
-vector<edge> MixedModel::getPlanarSubGraph(SuperGraphConMap *graph, vector<edge> unplanar_edges){
+vector<edge> MixedModel::getPlanarSubGraph(PlanarConMap *graph, vector<edge> unplanar_edges){
   vector<edge> res;
   for(unsigned int ui = 0; ui < unplanar_edges.size() ; ++ui){
     edge e = unplanar_edges[ui];
@@ -313,8 +311,12 @@ vector<edge> MixedModel::getPlanarSubGraph(SuperGraphConMap *graph, vector<edge>
     node n2 =  graph->target(e);
     Face f = graph->sameFace(n, n2);
     if( f != Face()){
+      cerr << graph << endl;
+      cout << "b split " << endl;
       graph->splitFace(f,e);
       res.push_back(e);
+      cout << "a split " << endl;
+      cerr << graph << endl;
     }
   } 
   return res;
@@ -414,7 +416,7 @@ void MixedModel::initPartition(){
 }
 
 //====================================================
-void afficheCycle(SuperGraphMap* m){
+void afficheCycle(PlanarConMap* m){
   assert(m);
   cout<<"Cycles :"<<endl;
   Iterator<node>* itn = m->getNodes();

@@ -56,8 +56,13 @@ list<edge> PlanarityTest::getObstructionsEdges(SuperGraph *graph) {
 }
 //=================================================================
 bool PlanarityTest::compute(SuperGraph *graph) { 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned long)graph];
+
+  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned int)graph];
+  else if(graph->numberOfNodes()==0){
+    resultsBuffer[(unsigned int)graph] = true;
+    return true;
+  }
   vector<edge> addedEdges;
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
