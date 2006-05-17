@@ -14,6 +14,7 @@
 #ifndef TLP_POLYNOME_H
 #define TLP_POLYNOME_H
 
+namespace tlp {
 /** \brief Simple class used to represent a Polynome up to the 3rd degree
  *
  * This class represents a Polynome up to the 3rd degree.
@@ -48,5 +49,5 @@ class Polynome
    */
   void resolv(float result[3], int &nResult);
 };
-
+}
 #endif

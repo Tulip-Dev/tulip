@@ -21,6 +21,7 @@ class SuperGraph;
 class MetricProxy;
 class Coord;
 
+namespace tlp {
 /** \brief Structure used to store statistic results
  *
  *  This structure is designed to store statistic results computed by the class StatsNodeModule.
@@ -160,5 +161,5 @@ class TLP_SCOPE StatsNodeModule
    */
   static StatisticResults* ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions);
 };
-
+}
 #endif
