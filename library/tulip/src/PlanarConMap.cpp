@@ -462,7 +462,7 @@ void PlanarConMap::computeFaces(){
     v_faces.push_back(f);
 
     // Compute the list of adjacent faces of each edge 
-    egde e;
+    edge e;
     forEach(e,getEdges()){
       edgesFaces.insert(edgeMapEntry(e,v_faces));
       faceMap::iterator itf = facesEdges.find(f);

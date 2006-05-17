@@ -18,7 +18,7 @@ public:
   virtual string getName() {return string("Cone");}
   virtual void draw(node n);
   virtual void setLOD(int n);
-  virtual Coord Cone::getAnchor(const Coord &vector) const;
+  virtual Coord getAnchor(const Coord &vector) const;
 
 private:
   GLuint LList;
