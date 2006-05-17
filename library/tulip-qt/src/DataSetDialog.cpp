@@ -221,7 +221,14 @@ namespace {
 	ip.name     = def.first;
 	ip.typeName = def.second;
 	ip.helpText = inDef.getHelp(ip.name);
-	ip.label    = new QLabel( ip.name.c_str(), this );
+	// first part of the parameter name may be used
+	// to indicate a subtype
+	string::size_type pos = def.first.find("::");
+	cout << "pos = " << pos << endl;
+	if (pos != string::npos)
+	  ip.label = new QLabel(def.first.substr(pos + 2, def.first.length() - pos - 2).c_str(), this);
+	else
+	  ip.label    = new QLabel( ip.name.c_str(), this );
 	ip.label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 	ip.label->installEventFilter( this );
 	ip.label->setMouseTracking( true );
@@ -288,21 +295,36 @@ namespace {
 	}
 	// string
 	else if( ip.typeName == TN(string) ) {
-	  QLineEdit * le = new QLineEdit( "", this );
-	  le->resize( le->width()*3, le->height() );
-	  QToolButton * opt = new QToolButton( this );
-	  opt->setText( "..." );
-	  opt->adjustSize();
-	  opt->resize( opt->width(), le->height() );
-	  ip.opt = opt;
-	  opt->installEventFilter( this );
-	  ip.wA.push_back( le );
-	  ip.wA.push_back( opt );
-	  if( inSet ) {
-	    string v;
-	    if( inSet->get
-		(ip.name,v) )
-	      le->setText( v.c_str() );
+	  // if text prefixed than create a QTextEdit
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = new QTextEdit("", QString::null, this);
+	    te->resize(te->width() * 3, te->height()*3);
+	    ip.wA.push_back(te);
+	    if( inSet ) {
+	      string v;
+	      if( inSet->get
+		  (ip.name, v) )
+		te->setText( v.c_str() );
+	    }
+	  } else {
+	    QLineEdit * le = new QLineEdit( "", this );
+	    le->resize( le->width()*3, le->height() );
+	    ip.wA.push_back( le );
+	    if( inSet ) {
+	      string v;
+	      if( inSet->get
+		  (ip.name, v) )
+		le->setText( v.c_str() );
+	    }
+	    if (ip.name.find("file::") == 0) {
+	      QToolButton * opt = new QToolButton( this );
+	      opt->setText( "..." );
+	      opt->adjustSize();
+	      opt->resize( opt->width(), le->height() );
+	      ip.opt = opt;
+	      opt->installEventFilter( this );
+	      ip.wA.push_back( opt );
+	    }
 	  }
 	}
 
@@ -467,13 +489,16 @@ namespace {
 	ip.label->move( ix, y );
 
 	int x = labelWidthMax+ix*2;
+	int maxHeight = 0;
 	for( uint j = 0 ; j < ip.wA.size() ; j++ ) {
 	  ip.wA[j]->move( x, y );
 	  x += ip.wA[j]->width() + ix;
+	  if (ip.wA[j]->height() > maxHeight)
+	    maxHeight = ip.wA[j]->height();
 	}
 	if (maxx < x) maxx = x; //maxx = maxx >? x;
 
-	y += ip.label->height() + iy;
+	y += /* ip.label->height()*/ maxHeight + iy;
       }
 
       y += iy;
@@ -552,8 +577,13 @@ namespace {
 
 	// string
 	else if(	ip.typeName == TN(string)	) {
-	  QLineEdit * le = (QLineEdit *) ip.wA[0];
-	  outSet.set<string>( ip.name, le->text().ascii() );
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = (QTextEdit *) ip.wA[0];
+	    outSet.set<string>(ip.name, te->text().ascii());
+	  } else {
+	    QLineEdit * le = (QLineEdit *) ip.wA[0];
+	    outSet.set<string>( ip.name, le->text().ascii() );
+	  }
 	}
 
 	// Color

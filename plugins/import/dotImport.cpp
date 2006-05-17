@@ -53,7 +53,7 @@ namespace {
 class DotImport:public ImportModule {
 public:
   DotImport(ClusterContext context):ImportModule(context){
-    addParameter<string>("filename",paramHelp[0]);
+    addParameter<string>("file::filename",paramHelp[0]);
   }
   ~DotImport(){}
 
@@ -61,7 +61,7 @@ public:
 
     // Open input stream
     string fn;
-    dataSet->get( "filename", fn );
+    dataSet->get( "file::filename", fn );
     FILE * fd = fopen( fn.c_str(), "r" );
     if( !fd )
       return false;

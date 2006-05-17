@@ -494,6 +494,10 @@ bool viewGl::fileSave(string plugin, string filename) {
   else
     os = new ofstream(filename.c_str());
   DataSet dataSet;
+  StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
+  parameter.buildDefaultDataSet(dataSet);
+  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters"))
+    return false;
   dataSet.set("displaying", glWidget->getParameters());
   bool result;
   if (!(result=tlp::exportGraph(glWidget->getSuperGraph(), *os, plugin, dataSet, NULL))) {
@@ -565,7 +569,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       if (s == QString::null)
 	cancel=true;
       else
-	dataSet.set("filename", string(s.latin1()));
+	dataSet.set("file::filename", string(s.latin1()));
     }
     else {
       noPlugin = false;
@@ -576,7 +580,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
   } else {
     plugin = &tmpStr;
-    dataSet.set("filename", string(s.latin1()));
+    dataSet.set("file::filename", string(s.latin1()));
     noPlugin = true;
   }
   if (!cancel) {
