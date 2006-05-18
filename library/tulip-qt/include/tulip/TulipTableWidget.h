@@ -175,6 +175,14 @@ public:
   QString text() const;
 };
 
+class EdgeShapeTableItem : public QComboTableItem {
+public:
+  EdgeShapeTableItem(QTable *, bool editable = false);
+  ~EdgeShapeTableItem();
+  int rtti() const;
+  QString text() const;
+};
+
 class SelectionTableItem : public QCheckTableItem {
 public:
   SelectionTableItem(QTable *table, const QString &txt);
