@@ -11,10 +11,7 @@ public:
 
 private:
   MutableContainer<double> sizeNorm;
-  bool overlap(node u, Coord &move);
   bool checkEdgeIntersection(const node n, const Coord& move);
-  Coord repulsiveForces(node n);
-  Coord attractiveForces(node n);
   SelectionProxy* inputSelection;
   SizesProxy* inputSize;
   LayoutProxy* inputLayout;
