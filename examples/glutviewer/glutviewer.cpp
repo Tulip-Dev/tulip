@@ -145,7 +145,7 @@ static void Key(unsigned char key, int x, int y) {
 //==============================================================================
 void importGraph(const string &filename, GlGraph &glGraph) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   SuperGraph *newSuperGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newSuperGraph!=0) {
     glGraph.setSuperGraph(newSuperGraph);
