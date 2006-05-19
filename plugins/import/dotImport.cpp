@@ -10,6 +10,10 @@
 
 using namespace std;
 
+#ifdef _WIN32
+#define uint unsigned int
+#endif
+
 namespace {
 #include "dotImportParser.h"
 #include "dotImportLexer.h"

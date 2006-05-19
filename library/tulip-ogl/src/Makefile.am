@@ -13,7 +13,11 @@ endif
 lib_LTLIBRARIES = libtulip-ogl.la
 INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ -I../../../thirdparty/ftgl ${ADD_INCLUDES}
 # MAC PORT
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls ../../../thirdparty/ftgl/.libs/*.o` `ls ../../../thirdparty/gle/*.o` ${ADDLDFLAGS}
+if WIN32
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ $(top_builddir)/thirdparty/ftgl/libftgl.la $(top_builddir)/thirdparty/gle/libgle.la ${ADDLDFLAGS}
+else
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls $(top_builddir)/thirdparty/ftgl/.libs/*.o` `ls $(top_builddir)/thirdparty/gle/*.o` ${ADDLDFLAGS}
+endif
 
 libtulip_ogl_la_LDFLAGS = -export-dynamic -release ${RELEASE}
 # libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@ 

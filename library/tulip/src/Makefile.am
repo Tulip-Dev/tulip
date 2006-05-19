@@ -10,7 +10,11 @@ endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
+if WIN32
+AM_LDFLAGS = ${DLL_FLAGS} $(top_builddir)/thirdparty/gzstream/libgzstream.la $(top_builddir)/thirdparty/triangle/libtriangle.la -lz -release ${RELEASE}
+else
 AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` `ls ../../../thirdparty/triangle/.libs/*.o` -lz -release ${RELEASE}
+endif
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
