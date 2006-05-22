@@ -73,11 +73,11 @@ void GraphProperty::setNodeValue_handler(const node n, const GraphType::RealType
   }
 }
 //==========================================================
-void GraphProperty:: destroy(Graph *sg) {
+void GraphProperty::destroy(Graph *sg) {
   //test si c'est la valeur par défaut;
   //  cerr << __PRETTY_FUNCTION__ << endl;
   //sinon
-  cerr << "Tulip Warning : A sg pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
+  cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
   if (getNodeDefaultValue() == sg) {
     //we must backup old value
     MutableContainer<Graph *> backup;
