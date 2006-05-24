@@ -21,6 +21,10 @@ public:
      this name must be unique, if two plug-ins have the same name
      only the latest loaded will be available*/
   virtual  std::string getName() const=0;
+  /* Return the group name of the plug-in,
+     a string with subgroup names separated by ::
+     ex: trees::planar trees */
+  virtual std::string getGroup() const=0;
   /**Return the author of the plug-in*/
   virtual  std::string getAuthor() const=0;
   /**Return the date of creation of the plug-in*/

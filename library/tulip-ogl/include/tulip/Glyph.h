@@ -82,7 +82,7 @@ public:
   virtual int getId() const=0;
 };
 
-#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID)       \
+#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID,G)	 \
 class C##T##Factory:public T##Factory            \
 {                                                \
 public:                                          \
@@ -91,6 +91,7 @@ public:                                          \
     GlGraph::glyphFactory->getPluginParameters(this);\
   }       					 \
   string getName() const { return string(N);}	 \
+  string getGroup() const { return string(G);}	 \
   string getAuthor() const {return string(A);}	 \
   string getDate() const {return string(D);}	 \
   string getInfo() const {return string(I);}	 \
@@ -107,6 +108,7 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define GLYPHPLUGIN(C,N,A,D,I,V,R,ID) GPLUGINFACTORY(Glyph,C,N,A,D,I,V,R,ID)
+#define GLYPHPLUGINOFGROUP(C,N,A,D,I,V,R,ID,G) GPLUGINFACTORY(Glyph,C,N,A,D,I,V,R,ID,G)
+#define GLYPHPLUGIN(C,N,A,D,I,V,R,ID) GLYPHPLUGINOFGROUP(C,N,A,D,I,V,R,ID,"") 
 
 #endif //GLYPH_H
