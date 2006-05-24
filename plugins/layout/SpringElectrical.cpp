@@ -121,7 +121,7 @@ bool SpringElectrical::run() {
     layoutProxy->setNodeValue(n, inputLayout->getNodeValue(n));
     sizeNorm.set(n.id, inputSize->getNodeValue(n).norm()/2.0);
   }
-  double maxforce   = sqrt(graph->numberOfNodes());
+  double maxforce   = sqrt((float) graph->numberOfNodes());
   double temperature = 1.0;
   bool overlapTest=false;
 

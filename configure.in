@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.28 $)
+AC_REVISION($Revision: 1.29 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 2.0.5dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
@@ -99,6 +99,7 @@ dnl AM_PROG_LEX
 
 VAR_WIN32=0
 VAR_MACOSX=0
+VAR_MACOSX_7=0
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
@@ -112,11 +113,15 @@ case "`uname -s`" in
     *darwin* | *Darwin* | *DARWIN*)
 	VAR_MACOSX=1
         bindir=$bindir/tulip.app/Contents/MacOS
+        if test "$(uname -r)" = "7.9.0"; then
+	  VAR_MACOSX_7=1
+        fi
 	;;
 esac
 
 AM_CONDITIONAL(WIN32, test $VAR_WIN32 = 1)
 AM_CONDITIONAL(MACOSX, test $VAR_MACOSX = 1)
+AM_CONDITIONAL(MACOSX_7, test $VAR_MACOSX_7 = 1)
 
 dnl
 AC_LIBTOOL_DLOPEN
@@ -227,10 +232,6 @@ TULIP_INCLUDE='-I$(top_srcdir)/library/tulip/include '
 TULIP_OGL_INCLUDE='-I$(top_srcdir)/library/tulip-ogl/include'
 TULIP_QT_INCLUDE='-I$(top_srcdir)/library/tulip-qt/include'
 TULIP_LDFLAGS='-L$(top_builddir)/library/tulip/src -ltulip'
-if test ${VAR_MACOSX} = 1 && test "$(uname -r)" = "7.9.0"
-then 
-TULIP_LDFLAGS='$(top_builddir)/library/tulip/src/.libs/libtulip.a'
-fi
 TULIP_OGL_LDFLAGS='-L$(top_builddir)/library/tulip-ogl/src -ltulip-ogl'
 TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt'
 TULIP_PLUGINS_BUILD_PATH=$PWD/plugins
