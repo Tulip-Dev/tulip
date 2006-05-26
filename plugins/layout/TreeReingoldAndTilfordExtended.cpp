@@ -53,6 +53,14 @@ namespace {
     HTML_HELP_BODY() \
     "This parameter enables to set up the minimum space between two nodes in the same layer" \
     HTML_HELP_CLOSE()
+    HTML_HELP_CLOSE(),
+    //bounding circles
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "false" )	 \
+    HTML_HELP_BODY() \
+    "Indicates if the node bounding objects are boxes or bounding circles." \
+    HTML_HELP_CLOSE()
   };
 }
 //=============================================================================
@@ -68,6 +76,7 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyCon
   addParameter<StringCollection> ("orientation", paramHelp[4], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[4], "64." );
   addParameter<float> ("node spacing", paramHelp[5], "18." );
+  addParameter<bool> ("bounding circles", paramHelp[6], "false");
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
@@ -333,6 +342,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   nodeSpacing = 18.0;
   ortho = true;
   useLength = false;
+  bool boundingCircles = false;
   if (dataSet!=0) {
     dataSet->get("edgeLength", lengthMetric);
     dataSet->get("use length", useLength);
@@ -340,11 +350,26 @@ bool TreeReingoldAndTilfordExtended::run() {
     dataSet->get("orthogonal", ortho);
     dataSet->get("layer spacing", spacing);
     dataSet->get("node spacing", nodeSpacing);
+    dataSet->get("bounding circles", boundingCircles);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
     }
   }
+
+  //use bounding circles if specified
+  if (boundingCircles) {
+    node n;
+    SizesProxy *circleSizes = 
+      superGraph->getLocalProperty<SizesProxy> ("bounding circle sizes");
+    forEach(n, superGraph->getNodes()) {
+      Size boundCircle = sizesProxy->getNodeValue (n);
+      double diam = 2*sqrt (boundCircle.getW()*boundCircle.getW()/4.0 +
+			    boundCircle.getH()*boundCircle.getH()/4.0);
+      circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
+    }//end forEach
+    sizesProxy = circleSizes;
+  }//end if
 
   //=========================================================
   //rotate size if necessary
@@ -356,6 +381,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
   }
   //===========================================================
+
   node startNode;
   tlp::getSource(superGraph, startNode);
 
@@ -420,7 +446,10 @@ bool TreeReingoldAndTilfordExtended::run() {
       layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
-  
+
+  if (boundingCircles)
+    superGraph->delLocalProperty ("bounding circle sizes");
+
   return true;
 }
 //=============================================================================
