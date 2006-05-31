@@ -107,6 +107,7 @@
 using namespace std;
 using namespace tlp;
 
+
 //**********************************************************************
 ///Constructor of ViewGl
 viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
