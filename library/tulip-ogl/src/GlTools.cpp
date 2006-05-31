@@ -14,7 +14,7 @@ namespace tlp {
   }
   //====================================================
   void setColor(const Color &c) {
-    glColor3ubv((unsigned char *) &c);
+    glColor4ubv((unsigned char *) &c);
   }
   //====================================================
   void setMaterial(const Color &c) {
@@ -22,7 +22,7 @@ namespace tlp {
     colorMat[0] = ((float)c[0])/255.0;
     colorMat[1] = ((float)c[1])/255.0;
     colorMat[2] = ((float)c[2])/255.0;
-    colorMat[3] = 1.0;
+    colorMat[3] = ((float)c[3])/255.0;
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
