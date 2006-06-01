@@ -117,31 +117,31 @@ clean:
 	rm -rf tulip-libogl tulip-libqt tulip-lib tulip-plugins
 
 install-data-am :
-	mkdir -p $(pkgdatadir)/doxygen
-	mkdir -p $(pkgdatadir)/man
-	cp tulip.html $(pkgdatadir)/doxygen/.
+	mkdir -p $(DESTDIR)$(pkgdatadir)/doxygen
+	mkdir -p $(DESTDIR)$(pkgdatadir)/man
+	cp $(srcdir)/tulip.html $(DESTDIR)$(pkgdatadir)/doxygen/.
 	if test -f tulipdoc.html ; then \
-		cp tulipdoc.html $(pkgdatadir)/doxygen/. ;\
+		cp tulipdoc.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ; 
 	if test -d tulip-lib ; then \
-		cp -r tulip-lib $(pkgdatadir)/doxygen/. ;\
+		cp -r tulip-lib $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 	if test -d tulip-libogl ; then\
-		cp -r tulip-libogl $(pkgdatadir)/doxygen/. ;\
+		cp -r tulip-libogl $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 	if test -d tulip-libqt ; then\
-		cp -r tulip-libqt $(pkgdatadir)/doxygen/. ;\
+		cp -r tulip-libqt $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 	if test -d tulip-plugins ; then\
-                cp -r tulip-plugins $(pkgdatadir)/doxygen/. ;\
+                cp -r tulip-plugins $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
         fi ;
 	if test -d tulip-man ; then\
-		cp -r tulip-man/* $(pkgdatadir)/man/. ;\
+		cp -r tulip-man/* $(DESTDIR)$(pkgdatadir)/man/. ;\
 	fi ;
 	if test -f allPlugins.html ; then \
-		cp allPlugins.html $(pkgdatadir)/doxygen/. ;\
+		cp allPlugins.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 uninstall-am :
-	rm -rf $(pkgdatadir)/doxygen
-	rm -rf $(pkgdatadir)/man
+	rm -rf $(DESTDIR)$(pkgdatadir)/doxygen
+	rm -rf $(DESTDIR)$(pkgdatadir)/man
 

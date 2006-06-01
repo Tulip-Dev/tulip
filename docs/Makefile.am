@@ -29,18 +29,18 @@ html-am :
 
 install-data-am :
 if MACOSX
-	if test ! -h  $(exec_prefix)/bin/tulip.app/Contents/share/tulip; then \
-		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/share ;\
-		ln -s $(pkgdatadir) $(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
+	if test ! -h  $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip; then \
+		mkdir -p $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share ;\
+		ln -s $(pkgdatadir) $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
 	fi;
 endif
-	mkdir -p $(pkgdatadir)/common
-	cp -r common/*.png common/*.css common/favicon.ico $(pkgdatadir)/common/.
+	mkdir -p $(DESTDIR)$(pkgdatadir)/common
+	cp -r $(srcdir)/common/*.png $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/.
 	if test -f profile.adp ; then \
-		cp profile.adp $(pkgdatadir)/.; \
+		cp profile.adp $(DESTDIR)$(pkgdatadir)/.; \
 	fi;
 
 uninstall-am:
-	rm -rf $(pkgdatadir)/common $(pkgdatadir)/profile.adp
+	rm -rf $(DESTDIR)$(pkgdatadir)/common $(DESTDIR)$(pkgdatadir)/profile.adp
 
 
