@@ -809,13 +809,22 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
     QPopupMenu *groupMenu = (QPopupMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
-      if (itemGroupNames[i] == groupMenus[j]->name()) {
+      if (itemGroupNames[i] ==
+#if (QT_REL == 3)
+	  groupMenus[j]->name()
+#else
+	  groupMenus[j]->objectName().ascii()
+#endif
+	  ) {
 	subMenu = groupMenu = groupMenus[j];
 	break;
       }
     }
     if (!groupMenu) {
       groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
+#if (QT_REL == 4)
+      groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
+#endif
       subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
