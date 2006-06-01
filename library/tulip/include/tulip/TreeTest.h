@@ -22,6 +22,7 @@
 #include <ext/hash_set>
 #endif
 #include "tulip/ObservableGraph.h"
+#include "tulip/MutableContainer.h"
 
 namespace tlp {
 
@@ -33,7 +34,8 @@ class Graph;
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
   static bool isTree(Graph *sg);
-
+  static bool isTopologicalTree(Graph *sg);
+  static void makeRootedTree(Graph *sg, node root);
 private:
   bool compute(Graph *);
   void addEdge(Graph *,const edge);
@@ -44,6 +46,9 @@ private:
   void destroy(Graph *);
   TreeTest();
   static TreeTest * instance;
+  bool isTopologicalTree (Graph *graph, node curRoot, node cameFrom,
+			  MutableContainer<bool> &visited);
+  void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
   stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/

@@ -1,7 +1,5 @@
 nobase_include_HEADERS = \
 	tulip/Bfs.h \
-	tulip/FaceIterator2.h \
-	tulip/SuperGraphConMap.h \
 	tulip/CanonicalOrdering.h \
 	tulip/ConvexHull.h \
 	tulip/Delaunay.h \
@@ -89,9 +87,9 @@ nobase_include_HEADERS = \
 	tulip/DrawingTools.h \
 	tulip/Face.h \
 	tulip/FaceIterator.h \
+	tulip/PlanarConMap.h \
 	tulip/PlanarityTest.h \
 	tulip/GraphDecorator.h \
-	tulip/SuperGraphMap.h \
 	tulip/cxx/GraphDecorator.cxx \
 	tulip/Plane.h \
 	tulip/Polynome.h \

@@ -1,4 +1,6 @@
 nobase_include_HEADERS = \
+	tulip/GlTools.h\
+	tulip/Curves.h\
 	tulip/ObservableGlGraph.h\
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\

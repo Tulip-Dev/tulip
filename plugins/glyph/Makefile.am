@@ -4,6 +4,7 @@ endif
 
 plugins_LTLIBRARIES = \
 	libcube.la \
+	libcubeoutlinedtransparent.la \
 	libsphere.la \
 	libcone.la \
 	libsquare.la \
@@ -19,6 +20,7 @@ pluginsdir = $(libdir)/tlp/plugins/glyph
 libsquare_la_SOURCES = square.cpp
 libbillboard_la_SOURCES = billboard.cpp
 libcube_la_SOURCES = cube.cpp 
+libcubeoutlinedtransparent_la_SOURCES = cubeoutlinedtransparent.cpp 
 libsphere_la_SOURCES = sphere.cpp 
 libcone_la_SOURCES = cone.cpp 
 libteapot_la_SOURCES = teapot.cpp 

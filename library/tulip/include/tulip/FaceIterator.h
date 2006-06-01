@@ -1,50 +1,46 @@
 //-*-c++-*-
 /*
- Author: Sophie BARDET  Alexandre BURNETT
- Email : sophie.bardet@gmail.com, aburnett397@gmail.com
- Last modification : 19/06/2005
+ Author: Romain BOURQUI
+ Email : bourqui@labri.fr
+ Last modification : 02/11/2005
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by  
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
-#ifndef FACEITERATOR_TLP
-#define FACEITERATOR_TLP
+#ifndef FACEITERATOR2_H
+#define FACEITERATOR2_H
 
 #include <list>
-#include <tulip/SuperGraphMap.h>
+#include <tulip/PlanarConMap.h>
+
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
-/// Face iterator for SuperGraphMap
+/// Face iterator for PlanarConMap
 namespace tlp {
 
 class FaceIterator : public Iterator<Face>{
 public:
-  FaceIterator(SuperGraphMap* m);
+  FaceIterator(PlanarConMap* m);
   virtual ~FaceIterator(){}
   
-  /** return the next element */
   Face next();
-  /** test if there's a next element */
   bool hasNext();
 
 private:
   unsigned int i;
-  SuperGraphMap* msg;
+  PlanarConMap* mgraph;
 }; 
 
 //============================================================
-/// Adjacente Face iterator for SuperGraphMap
+/// Adjacente Face iterator for PlanarConMap
 class FaceAdjIterator : public Iterator<Face>{
 public:
-  /** compute the adjacent faces of the node n */
-  FaceAdjIterator(SuperGraphMap* m, const node n);
+  FaceAdjIterator(PlanarConMap* m, const node n);
   virtual ~FaceAdjIterator(){}
   
-  /** return the next element */
   Face next();
-  /** test if there's a next element */
   bool hasNext();
 
 private:
@@ -53,16 +49,13 @@ private:
 }; 
 
 //============================================================
-/// Node of face iterator for SuperGraphMap
+/// Node of face iterator for PlanarConMap
 class NodeFaceIterator : public Iterator<node>{
 public :
-  /** compute the node of the face */
-  NodeFaceIterator(SuperGraphMap *m, const Face );
+  NodeFaceIterator(PlanarConMap *m, const Face );
   virtual ~NodeFaceIterator(){}
   
-  /** return the next element */
   node next();
-  /**  test if there's a next element */
   bool hasNext();
 
 private :
@@ -73,15 +66,13 @@ private :
 
 
 //============================================================
-/// Edge of face iterator for SuperGraphMap
+/// Edge of face iterator for PlanarConMap
 class EdgeFaceIterator : public Iterator<edge>{
 public :
-  EdgeFaceIterator(SuperGraphMap *m, const Face );
+  EdgeFaceIterator(PlanarConMap *m, const Face );
   virtual ~EdgeFaceIterator(){}
   
-  /** return the next element */
   edge next();
-  /**  test if there's a next element */
   bool hasNext();
 
 private :

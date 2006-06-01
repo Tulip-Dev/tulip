@@ -22,6 +22,7 @@ class PlanarityTestTest : public CppUnit::TestFixture {
   void planarGraphs();
   void notPlanarGraphs();
   void planarGraphsEmbedding();
+  void planarMetaGraphsEmbedding();
   void notPlanarGraphsObstruction();
 
   static CppUnit::Test *suite();

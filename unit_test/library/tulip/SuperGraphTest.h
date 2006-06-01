@@ -31,6 +31,7 @@ public:
   void testClear();
   void testOrderEdgeAndSwap();
   void testSubgraph();
+  void testSubgraphId();
   void testDeleteSubgraph();
   void testInheritance();
   void testIterators();

@@ -1,5 +1,6 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
+#include <tulip/ForEach.h>
 #include "SuperGraphTest.h"
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
@@ -326,6 +327,22 @@ void SuperGraphTest::testDeleteSubgraph() {
   graph->clear();
 }
 //==========================================================
+void SuperGraphTest::testSubgraphId() {
+  graph->clear();
+  CPPUNIT_ASSERT(graph->getId() == 0);
+  SelectionProxy sel(graph);
+  SuperGraph *g1 = graph->addSubGraph(&sel);
+  CPPUNIT_ASSERT(g1->getId() == 1);
+  SuperGraph *g2 = graph->addSubGraph(&sel);
+  CPPUNIT_ASSERT(g2->getId() == 2);
+  SuperGraph *g;
+  int i = 1;
+  forEach(g, graph->getSubGraphs()) {
+    CPPUNIT_ASSERT(g->getId() == i);
+    ++i;
+  }
+}
+//==========================================================
 void SuperGraphTest::testSubgraph() {
   graph->clear();
   Graph *g1, *g2, *g3, *g4;
@@ -537,6 +554,8 @@ CppUnit::Test * SuperGraphTest::suite() {
 								  &SuperGraphTest::testInheritance) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Iteration of properties", 
 								  &SuperGraphTest::testPropertiesIteration) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test subgraph id", 
+								  &SuperGraphTest::testSubgraphId) );
   return suiteOfTests;
 }
 //==========================================================

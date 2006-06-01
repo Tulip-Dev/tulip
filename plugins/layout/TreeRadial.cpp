@@ -81,4 +81,4 @@ public:
   void reset() {}
 };
 /*@}*/
-LAYOUTPLUGIN(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","0","1");
+LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","0","1","Tree");

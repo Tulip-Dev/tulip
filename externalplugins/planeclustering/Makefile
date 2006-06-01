@@ -1,4 +1,4 @@
-SHELL=bash
+SHELL=sh
 
 TARGET=libplaneclustering.so
 SRCS=  PlaneClustering.cpp

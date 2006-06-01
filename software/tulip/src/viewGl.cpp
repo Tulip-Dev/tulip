@@ -308,20 +308,20 @@ void viewGl::startTulip() {
   int needResize = 0;
   if (vRect.width() > sRect.width()) {
     vRect.setWidth(sRect.width());
-    vRect.setHeight(sRect.height());
+    //vRect.setHeight(sRect.height());
     needResize = 1;
   }
   if (vRect.right() > sRect.right()) {
-    vRect.moveLeft(sRect.left());
+    vRect.moveLeft(sRect.left() + (sRect.width() - vRect.width())/2);
     needResize = 1;
   }
   if (vRect.height() > sRect.height()) {
     vRect.setHeight(sRect.height());
-    vRect.setWidth(sRect.width());
+    //vRect.setWidth(sRect.width());
     needResize = 1;
   }
   if (vRect.bottom() > sRect.bottom()) {
-    vRect.moveTop(sRect.top());
+    vRect.moveTop(sRect.top() + (sRect.height() - vRect.height())/2);
     needResize = 1;
   }
   if (needResize)
@@ -501,6 +501,10 @@ bool viewGl::fileSave(string plugin, string filename) {
   else
     os = new ofstream(filename.c_str());
   DataSet dataSet;
+  StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
+  parameter.buildDefaultDataSet(dataSet);
+  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters"))
+    return false;
   dataSet.set("displaying", glWidget->getParameters());
   bool result;
   if (!(result=tlp::exportGraph(glWidget->getGraph(), *os, plugin, dataSet, NULL))) {
@@ -572,7 +576,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       if (s == QString::null)
 	cancel=true;
       else
-	dataSet.set("filename", string(s.latin1()));
+	dataSet.set("file::filename", string(s.latin1()));
     }
     else {
       noPlugin = false;
@@ -583,7 +587,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
   } else {
     plugin = &tmpStr;
-    dataSet.set("filename", string(s.latin1()));
+    dataSet.set("file::filename", string(s.latin1()));
     noPlugin = true;
   }
   if (!cancel) {
@@ -784,37 +788,111 @@ void viewGl::updateStatusBar() {
   sprintf(tmp,"Ready, Nodes:%d, Edges:%d",graph->numberOfNodes(),graph->numberOfEdges());
   statusBar()->message(tmp);
 }
+//*********************************************************************
+static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
+  std::string::size_type start = 0;
+  std::string::size_type end = 0;
+  std::vector<std::string> groupNames;
+  const char * separator = "::";
+
+  while(true) {
+    start = itemGroup.find_first_not_of(separator, end);
+    if (start == std::string::npos) {
+      return groupNames;
+    }
+    end = itemGroup.find_first_of(separator, start);
+    if (end == std::string::npos)
+      end = itemGroup.length();
+    groupNames.push_back(itemGroup.substr(start, end - start));
+  }
+}
+//**********************************************************************
+static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
+			 std::vector<QPopupMenu*> &groupMenus, std::string::size_type &nGroups) {
+  std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
+  QPopupMenu *subMenu = &menu;
+  std::string::size_type nGroupNames = itemGroupNames.size();
+  for (std::string::size_type i = 0; i < nGroupNames; i++) {
+    QPopupMenu *groupMenu = (QPopupMenu *) 0;
+    for (std::string::size_type j = 0; j < nGroups; j++) {
+      if (itemGroupNames[i] == groupMenus[j]->name()) {
+	subMenu = groupMenu = groupMenus[j];
+	break;
+      }
+    }
+    if (!groupMenu) {
+      groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
+      subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
+      groupMenus.push_back(groupMenu);
+      nGroups++;
+      subMenu = groupMenu;
+    }
+  }
+  //cout << subMenu->name() << "->" << itemName << endl;
+  subMenu->insertItem(itemName.c_str());
+}
+  
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
-void buildPropertyMenu(QPopupMenu &menu) {
+std::vector<QPopupMenu*> buildPropertyMenu(QPopupMenu &menu) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
+  std::vector<QPopupMenu*> groupMenus;
+  std::string::size_type nGroups = 0;
   it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
-  for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)  
-    menu.insertItem( it->first.c_str() );
+  for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
+    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+  return groupMenus;
 }
 //**********************************************************************
 void viewGl::buildMenus(){
   //Properties PopMenus
-  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
-  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
-  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
-  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
-  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
-  buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
-  buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
+  std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
+  std::string::size_type nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
+  groupMenus = buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
+  groupMenus = buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
+  groupMenus = buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
+  groupMenus = buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
+  groupMenus = buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
+  groupMenus = buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
+  nGroups = groupMenus.size();
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
+  groupMenus.resize(nGroups = 0);
   for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
-    clusteringMenu.insertItem( it3->first.c_str() );
+    clusteringMenu.insertItem(it3->first.c_str());
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
+  groupMenus.resize(nGroups = 0);
   for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
-    exportGraphMenu.insertItem( it9->first.c_str() );
+    insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
   //Import PopMenu
   TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
-  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4) {
-    importGraphMenu.insertItem( it4->first.c_str() );
-  }
+  groupMenus.resize(nGroups = 0);
+  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
+    insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
   //Image PopuMenu
 #if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
@@ -910,11 +988,11 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  string filename( QFileDialog::getSaveFileName(this->caption().ascii()).ascii());
-  if (filename == "") return;
+  QString filename(QFileDialog::getSaveFileName(this->caption().ascii()));
+  if (filename.isNull()) return;    
   DataSet dataSet;
   string name(exportGraphMenu.text(id).ascii());
-  fileSave(name,filename);
+  fileSave(name, filename.ascii());
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {

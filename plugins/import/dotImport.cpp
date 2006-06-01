@@ -11,6 +11,10 @@
 using namespace std;
 using namespace tlp;
 
+#ifdef _WIN32
+#define uint unsigned int
+#endif
+
 namespace {
 #include "dotImportParser.h"
 #include "dotImportLexer.h"
@@ -54,7 +58,7 @@ namespace {
 class DotImport:public ImportModule {
 public:
   DotImport(ClusterContext context):ImportModule(context){
-    addParameter<string>("filename",paramHelp[0]);
+    addParameter<string>("file::filename",paramHelp[0]);
   }
   ~DotImport(){}
 
@@ -62,7 +66,7 @@ public:
 
     // Open input stream
     string fn;
-    dataSet->get( "filename", fn );
+    dataSet->get( "file::filename", fn );
     FILE * fd = fopen( fn.c_str(), "r" );
     if( !fd )
       return false;
@@ -81,5 +85,5 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGIN(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","0","0","1")
+IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","0","0","1","File in format")
 

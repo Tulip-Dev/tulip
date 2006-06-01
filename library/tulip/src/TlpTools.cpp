@@ -106,7 +106,7 @@ TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleF
 TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
 // initialize and export the factories needed to manage
 // our different kinds of plugins
-#if !defined( __APPLE__)
+#if !defined( __APPLE__) || __GNUC__ > 3
 template <class Tnode, class Tedge, class TPROPERTY>
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
  #else

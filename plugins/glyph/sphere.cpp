@@ -28,7 +28,7 @@ GLYPHPLUGIN(Sphere, "Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere
 
 //=========================================================================================
 Sphere::Sphere(GlyphContext *gc): Glyph(gc),listOk(false) {
-  setLOD(15);
+  setLOD(30);
 }
 
 Sphere::~Sphere(){
@@ -37,7 +37,7 @@ Sphere::~Sphere(){
 }
 
 void Sphere::setLOD(int n) {
-  LOD = ((n<0) ? 0 : ((n > 10) ? 10 : n));
+  LOD = ((n<0) ? 0 : ((n > 20) ? 20 : n));
   if (listOk) {glDeleteLists(LList, 1);listOk=false;};
 }
 

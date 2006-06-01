@@ -19,7 +19,7 @@ namespace tlp {
 
 class GraphDecorator : public Graph {  // non-orienté, planaire
  public:
-  GraphDecorator(Graph* s){assert(s); sg_component = s;}
+  GraphDecorator(Graph* s){assert(s); graph_component = s;}
   virtual ~GraphDecorator(){}
 
   inline virtual void clear();
@@ -87,7 +87,7 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   //============================================================
 
 protected:
-  Graph* sg_component;
+  Graph* graph_component;
 private:
   virtual PropertyManager *getPropertyManager(){return getPropertyManager();} 
   // to examinate !!!

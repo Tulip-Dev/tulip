@@ -32,23 +32,19 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
    destWidth(0),
    destHeight(0),
    data(0) {
-  FT_Glyph glyph;
-  FT_Get_Glyph(glyphSlot, &glyph);
-  // This function will always fail if the glyph's format isn't scalable????
-  err = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-  if( err || ft_glyph_format_bitmap != glyph->format)
-    {
-      return;
-    }
+  err = FT_Render_Glyph(glyphSlot, FT_RENDER_MODE_NORMAL);
+  if( err || ft_glyph_format_bitmap != glyphSlot->format) {
+    return;
+  }
 
-  FT_BitmapGlyph  bitmap = (FT_BitmapGlyph)glyph;
-  FT_Bitmap*      source = &bitmap->bitmap;
+  FT_Bitmap bitmap = glyphSlot->bitmap;
 
   //check the pixel mode
   //ft_pixel_mode_grays
         
-  int srcWidth = source->width;
-  int srcHeight = source->rows;
+  int srcWidth = bitmap.width;
+  int srcHeight = bitmap.rows;
+
 
   // FIXME What about dest alignment?
   //    destWidth = srcWidth;
@@ -70,12 +66,13 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
       unsigned char greenComponent = static_cast<unsigned char>( ftglColour[1] * 255.0f);
       unsigned char blueComponent =  static_cast<unsigned char>( ftglColour[2] * 255.0f);
 
-      unsigned char* tmp = source->buffer;
+      unsigned char* tmp = bitmap.buffer;
 
       unsigned char* src  = new unsigned char[(destWidth)*(destHeight)];
       unsigned char* src1 = new unsigned char[(destWidth)*(destHeight)];
 
-      for (unsigned i=0;i<(destWidth)*(destHeight);++i) src1[i]=0;
+      //for (unsigned i=0;i<(destWidth)*(destHeight);++i) src1[i]=0;
+      memset(src1, 0, destWidth*destHeight);
 
       for( int y = 0; y < srcHeight; ++y) 
 	for( int x = 0; x < srcWidth; ++x)
@@ -120,15 +117,13 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
       delete [] src1;
       destHeight = srcHeight;
     }
-  pos.X(bitmap->left - 2);
-  pos.Y(srcHeight - bitmap->top - 2);
+  pos.X(glyphSlot->bitmap_left - 2);
+  pos.Y(srcHeight - glyphSlot->bitmap_top - 2);
   bBox.lowerX-=2;
   bBox.lowerY-=2;
   bBox.upperX+=2;
   bBox.upperY+=2;
-  advance += FTPoint(4, 4, 0); //advance+=4;
-  // Is this the right place to do this?
-  FT_Done_Glyph( glyph );
+  advance += FTPoint(4, 0, 0); //advance+=4;
 }
 
 
@@ -150,7 +145,7 @@ FTPoint& TLPPixmapGlyph::Render( const FTPoint& pen)
         glDrawPixels( destWidth, destHeight, GL_RGBA, GL_UNSIGNED_BYTE, (const GLvoid*)data);
         
         // Restore the glyph origin
-        glBitmap( 0, 0, 0.0, 0.0, -pen.X() - pos.X(), -pen.Y() + pos.Y(), (const GLubyte*)0);
+	glBitmap( 0, 0, 0.0f, 0.0f, -pos.X(), pos.Y(), (const GLubyte*)0);
     }
 
     return advance;

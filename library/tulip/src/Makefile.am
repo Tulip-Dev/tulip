@@ -10,12 +10,14 @@ endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
-AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ ../../../thirdparty/triangle/libtriangle.la -release ${RELEASE}
+if WIN32
+AM_LDFLAGS = ${DLL_FLAGS} $(top_builddir)/thirdparty/gzstream/libgzstream.la $(top_builddir)/thirdparty/triangle/libtriangle.la -lz -release ${RELEASE}
+else
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` `ls ../../../thirdparty/triangle/.libs/*.o` -lz -release ${RELEASE}
+endif
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
-	FaceIterator2.cpp \
-	SuperGraphConMap.cpp \
 	CanonicalOrdering.cpp \
 	ConvexHull.cpp \
 	Delaunay.cpp \
@@ -70,8 +72,8 @@ libtulip_la_SOURCES = \
 	StatisticsNodeModule.cpp \
 	Polynome.cpp \
 	Plane.cpp \
-	SuperGraphMap.cpp \
 	FaceIterator.cpp \
+	PlanarConMap.cpp \
 	PlanarityTest.cpp \
 	PlanarityTestImpl.cpp \
 	PlanarityTestEmbed.cpp \

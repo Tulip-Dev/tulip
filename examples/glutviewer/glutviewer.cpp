@@ -8,6 +8,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 static int win;
@@ -145,10 +146,10 @@ static void Key(unsigned char key, int x, int y) {
 //==============================================================================
 void importGraph(const string &filename, GlGraph &glGraph) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph!=0) {
-    glGraph.setGraph(newGraph);
+    glGraph.setSuperGraph(newGraph);
     glGraph.centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
@@ -194,18 +195,19 @@ int main (int argc, char **argv) {
   cout << "Author : Auber David 29/01/2003" << endl;
   cout << "********************************************" <<endl;
   cout << "key :" << endl;
-  cout << "\t x: (de)Activate X axis rotation" << endl;
-  cout << "\t y: (de)Activate Y axis rotation" << endl;
-  cout << "\t z: (de)Activate Z axis rotation" << endl;
-  cout << "\t s: (de)Activate strahler ordering" << endl;
-  cout << "\t l: (de)Activate labels" << endl;
-  cout << "\t a: (de)Activate arrows" << endl;
-  cout << "\t f: (de)Activate fan rendering" << endl;
-  cout << "\t e: (de)Activate 3D edges" << endl;
-  cout << "\t o: (de)Activate Orthogonal projection" << endl;
-  cout << "\t b: (de)Activate Frame rate displaying" << endl;
-  cout << "\t 1: (de)Activate full screen" << endl;
-  cout << "\t I: (de)Activate incremental rendering" << endl;
+  cout << "\t x\t: (de)Activate X axis rotation" << endl;
+  cout << "\t y\t: (de)Activate Y axis rotation" << endl;
+  cout << "\t z\t: (de)Activate Z axis rotation" << endl;
+  cout << "\t +/-: zoom" << endl;
+  cout << "\t s\t: (de)Activate strahler ordering" << endl;
+  cout << "\t l\t: (de)Activate labels" << endl;
+  cout << "\t a\t: (de)Activate arrows" << endl;
+  cout << "\t E\t: (de)Activate edge rendering" << endl;
+  cout << "\t e\t: (de)Activate 3D edges" << endl;
+  cout << "\t o\t: (de)Activate Orthogonal projection" << endl;
+  cout << "\t b\t: (de)Activate Frame rate displaying" << endl;
+  cout << "\t 1\t: (de)Activate full screen" << endl;
+  cout << "\t I\t: (de)Activate incremental rendering" << endl;
   cout << "\t esc: quit" << endl;
   cout << "**********************************************" <<endl;
 
@@ -227,6 +229,13 @@ int main (int argc, char **argv) {
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);
+
+  Graph *g;
+  forEach(g, glGlutScreen->getGraph()->getSubGraphs()) {
+    cerr << g->getId() << ",";
+  }
+
+
   glutMainLoop();  
   return EXIT_SUCCESS;
 }

@@ -343,19 +343,20 @@ namespace {
 //=======================================================================
 bool HierarchicalGraph::run() {
   //make acyclic
-  // vector<node> order;
-  // buildDfsOrdering(graph, order);
-  // MutableContainer<int> orderid;
-  // for(unsigned int i=0; i< order.size(); ++i) 
-  //   orderid.set(order[i].id, i);
+  /*
+  vector<node> order;
+  buildDfsOrdering(graph, order);
+  MutableContainer<int> orderid;
+  for(unsigned int i=0; i< order.size(); ++i) 
+    orderid.set(order[i].id, i);
   edge e;
-  // forEach(e, graph->getEdges()) {
-  //   node src = graph->source(e);
-  //   node tgt = graph->target(e);
-  //   if(orderid.get(src.id) > orderid.get(tgt.id))
-  //     graph->reverse(e);
-  // }
-    
+  forEach(e, graph->getEdges()) {
+    node src = graph->source(e);
+    node tgt = graph->target(e);
+    if(orderid.get(src.id) > orderid.get(tgt.id))
+      graph->reverse(e);
+  }
+  */    
   //=======================================================================
   // Build a clone of this graph
   Graph *mySGraph = tlp::newCloneSubGraph(graph,"tmp clone");
@@ -479,6 +480,7 @@ bool HierarchicalGraph::run() {
     }
   }
   
+  edge e;
   forEach(e, graph->getEdges()) {
     node src = graph->source(e);
     node tgt = graph->target(e);

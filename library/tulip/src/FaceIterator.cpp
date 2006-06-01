@@ -20,21 +20,27 @@ using namespace tlp;
 //============================================================
 //Iterator for Face : FaceIterator
 //============================================================
-FaceIterator::FaceIterator(SuperGraphMap* m){
+FaceIterator::FaceIterator(PlanarConMap* m){
   assert(m);
-  msg = m;   i = 0;
-  m->update();
+  mgraph = m;
+  i = 0;
 }
 
 //============================================================
+/**
+ * return the next element 
+ */
 Face FaceIterator::next(){
-  Face tmp = msg->faces[i++];
+  Face tmp = mgraph->faces[i++];
   return tmp;
 }
 
 //============================================================
+/**
+ * test if there's a next element 
+ */
 bool FaceIterator::hasNext(){
-  if(i == msg->faces.size())
+  if(i == mgraph->faces.size())
     return false;
   else return true;
 }
@@ -43,9 +49,8 @@ bool FaceIterator::hasNext(){
 //============================================================
 //Iterator for Face : FaceAdjIterator
 //============================================================
-FaceAdjIterator::FaceAdjIterator(SuperGraphMap* m, const node n){
+FaceAdjIterator::FaceAdjIterator(PlanarConMap* m, const node n){
   assert(m->isElement(n));
-  m->update();
   i = 0;
   facesAdj.erase(facesAdj.begin(),facesAdj.end());
   edge e;
@@ -73,13 +78,17 @@ FaceAdjIterator::FaceAdjIterator(SuperGraphMap* m, const node n){
       f_tmp = (m->edgesFaces[e])[1];
       facesAdj.push_back(f_tmp);
     }
-    else {
+    else  if(f_tmp2 == (m->edgesFaces[e])[1]){
       facesAdj.push_back(f_tmp2);
       f_tmp = (m->edgesFaces[e])[0];
       facesAdj.push_back(f_tmp);
     }
     
   }
+  else {
+    facesAdj.push_back(f_tmp);
+    //  facesAdj.push_back(f_tmp2);
+  }	  
   while(ite->hasNext()){
     e = ite->next();
     if(f_tmp == (m->edgesFaces[e])[0]){
@@ -94,12 +103,18 @@ FaceAdjIterator::FaceAdjIterator(SuperGraphMap* m, const node n){
 }
 
 //============================================================
+/**
+ * return the next element 
+ */
 Face FaceAdjIterator::next(){
   Face tmp = facesAdj[i]; ++i;
   return tmp;
 }
 
 //============================================================
+/**
+ * test if there's a next element 
+ */
 bool FaceAdjIterator::hasNext(){
   return (i != facesAdj.size());
 }
@@ -108,10 +123,8 @@ bool FaceAdjIterator::hasNext(){
 //============================================================
 // NodeFaceIterator
 //============================================================
-NodeFaceIterator::NodeFaceIterator(SuperGraphMap* m, const Face face){
-  //assert(face && m);
+NodeFaceIterator::NodeFaceIterator(PlanarConMap* m, const Face face){
   i=0;
-
   vector<edge> e = m->facesEdges[face];
   edge e1 = e[0];
   edge e2 = e[1];
@@ -136,6 +149,9 @@ NodeFaceIterator::NodeFaceIterator(SuperGraphMap* m, const Face face){
 }
 
 //============================================================
+/**
+ * return the next element 
+ */
 node NodeFaceIterator::next(){
   node n = nodes[i];
   i++;
@@ -143,6 +159,9 @@ node NodeFaceIterator::next(){
 }
 
 //============================================================
+/** 
+ * test if there's a next element 
+ */
 bool NodeFaceIterator::hasNext(){
   return (i != nodes.size());
 }
@@ -151,13 +170,15 @@ bool NodeFaceIterator::hasNext(){
 //============================================================
 // EdgeFaceIterator
 //============================================================
-EdgeFaceIterator::EdgeFaceIterator(SuperGraphMap * m,const Face f){
-  //assert(f);
+EdgeFaceIterator::EdgeFaceIterator(PlanarConMap * m,const Face f){
   i = 0;
   ve = m->facesEdges[f];
 }
 
 //============================================================
+/**
+ * return the next element 
+ */
 edge EdgeFaceIterator::next(){
   edge tmp = ve[i];
   i++;
@@ -165,6 +186,9 @@ edge EdgeFaceIterator::next(){
 }
 
 //============================================================
+/**
+ * test if there's a next element 
+ */
 bool EdgeFaceIterator::hasNext(){
   return (i != ve.size());
 }

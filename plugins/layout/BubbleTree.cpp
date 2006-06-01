@@ -7,7 +7,7 @@
 #include <tulip/TreeTest.h>
 #include "BubbleTree.h"
 
-LAYOUTPLUGIN(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1","1");
+LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1","1","Tree");
 
 using namespace std;
 using namespace stdext;
@@ -31,7 +31,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   if (graph->indeg(n) == 0) sizeVirtualNode = 0.0;
   /*
    * Iniatilize node position
-   */  
+   */
   (*relativePosition)[n][0]=0;
   (*relativePosition)[n][1]=0;
   /*

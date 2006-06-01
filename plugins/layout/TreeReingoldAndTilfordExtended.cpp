@@ -4,7 +4,7 @@
 #include <tulip/ForEach.h>
 #include "TreeReingoldAndTilfordExtended.h"
 
-LAYOUTPLUGIN(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2");
+LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2","Tree");
 using namespace std;
 using namespace tlp;
 
@@ -30,14 +30,14 @@ namespace {
     HTML_HELP_DEF( "type", "bool" ) \
     HTML_HELP_DEF( "default", "true" )	 \
     HTML_HELP_BODY() \
-    "This parameter enables to choose if the tree tree is drawn orthogonally or not" \
+    "This parameter enables to choose if the tree is drawn orthogonally or not" \
     HTML_HELP_CLOSE(),
     //Orthogonal
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "bool" ) \
     HTML_HELP_DEF( "default", "true" )					\
     HTML_HELP_BODY()							\
-    "This parameter enables to choose if the tree tree is drawn orthogonally or not" \
+    "This parameter enables to choose if the tree is drawn orthogonally or not" \
     HTML_HELP_CLOSE(),
     //Spacing
     HTML_HELP_OPEN()				 \

@@ -51,6 +51,7 @@ struct Grid:public ImportModule {
 
   bool import(const string &name) {
     graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
+    graph->getProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.05,0.05,0.4));
     bool ok=true;
     int width = 10;
     int height = 10;

@@ -13,10 +13,10 @@ using namespace std;
 /*******************************************************************/
 void importGraph(const string &filename, GlGraph *render) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph!=0) {
-    render->setGraph(newGraph);
+    render->setSuperGraph(newSuperGraph);
     
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))

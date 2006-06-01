@@ -16,7 +16,10 @@ class SizeProperty;
 class DoubleProperty;
 class BooleanProperty;
 
-  TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection = 0);
+TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection = 0);
+  
+TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection = 0);
+
 }
 
 

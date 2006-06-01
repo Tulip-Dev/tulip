@@ -1,18 +1,18 @@
 How to build Tulip on windows platform
 --------------------------------------
 
-1- Build the Qt/Windows Open Source Edition
--------------------------------------------
-You first have to download the corresponding Qt 4 source code
-from http://www.trolltech.com/download/qt/windows.html.
-Then install it using the following configuration options:
-configure.exe -release -qt-libjpeg -qt-libpng -qt-zlib
-
 2- Install MinGW and MSYS
 -------------------------
 Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
 from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
 and accept the proposed mount point during the installation process of MSYS.
+
+2- Build the Qt/Windows Commercial or Open Source Edition
+----------------------------------------------------------
+You first have to download the corresponding Qt source code
+from http://www.trolltech.com/download/qt/windows.html.
+Then install it using the following configuration options:
+configure.exe -release -qt-libjpeg -qt-libpng -qt-zlib
 
 3- Install the needed librairies
 --------------------------------
@@ -28,8 +28,11 @@ MinGW installation as root installation directory.
 
 4- Configure Tulip
 ------------------
-Using and MSYS command shell, set the current directory to the tulip directory
-then run
+Using and MSYS command shell, 
+set the current directory to the tulip directory
+> cd <tulip source installation directory>
+copy the local file libxml.m' in /usr/share/aclocal
+> cp libxml.m4 /usr/share/aclocal
 
 > sh gen-conf.sh
 and
