@@ -7,7 +7,7 @@ else
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 endif
 
-lib_LTLIBRARIES = libtulip-qt.la
+lib_LTLIBRARIES = libtulip-qt@QT_VERSION@.la
 if QT3
 qtplugin_LTLIBRARIES = libTulipWidgets.la
 else
@@ -57,10 +57,10 @@ nodist_libTulipPropertyTablePlugin_la_SOURCES = moc_TulipPropertyTablePlugin.cpp
 EXTRA_DIST = TulipWidgetsPlugin.cpp
 endif
 
-libtulip_qt_la_LDFLAGS = -release ${RELEASE}  
+libtulip_qt@QT_VERSION@_la_LDFLAGS = -release ${RELEASE}  
 
 
-dist_libtulip_qt_la_SOURCES = \
+dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlGraphWidget.cpp \
 	PropertyWidgets.cpp \
@@ -83,7 +83,7 @@ dist_libtulip_qt_la_SOURCES = \
 CLEANFILES = $(BUILT_SOURCES)
 
 if QT3
-nodist_libtulip_qt_la_SOURCES = \
+nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlGraphWidget.cpp \
 	moc_PropertyWidgets.cpp \
@@ -98,7 +98,7 @@ nodist_libtulip_qt_la_SOURCES = \
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) -o $@ $<
 else
-nodist_libtulip_qt_la_SOURCES = \
+nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlGraphWidget.cpp \
 	moc_PropertyWidgets.cpp \
