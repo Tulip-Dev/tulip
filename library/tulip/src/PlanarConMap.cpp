@@ -1,4 +1,5 @@
 #include <tulip/ConnectedTest.h>
+#include <tulip/BiconnectedTest.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/MutableContainer.h>
@@ -17,7 +18,7 @@ using namespace std;
 PlanarConMap::PlanarConMap(SuperGraph* s):SuperGraphDeco(s), facesEdges(), edgesFaces(){
   assert(SimpleTest::isSimple(s));
   assert(ConnectedTest::isConnected(s));
-  assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
+  assert(s->numberOfNodes()==0 || PlanarityTest::isPlanar(s));
   
   PlanarityTest::planarEmbedding(s);
   computeFaces();
@@ -823,8 +824,11 @@ void PlanarConMap::mergeFaces(Face f, Face g){
 bool PlanarConMap::containNode(Face f, node v) {
   Iterator<Face> * it_f = getFacesAdj(v);
   while(it_f->hasNext())
-    if((it_f->next()) == f)
+    if((it_f->next()) == f){
+      delete it_f;
       return true;
+    }
+  delete it_f;
   return false;
 }
 
@@ -873,10 +877,14 @@ Face PlanarConMap::getFaceContaining(node v, node w) {
 //=================================================================
 Face PlanarConMap::sameFace(node v, node n) {
   Face f;
-  forEach(f, getFacesAdj(v)){
-    if(containNode(f,n))
+  Iterator<Face> * it_f = getFacesAdj(v);
+  while(it_f->hasNext()){
+    f = it_f->next();
+    if(containNode(f,n)){
+      delete it_f;
       return f;
-  }
+    }
+  } delete it_f;
   return Face();
 }
 
