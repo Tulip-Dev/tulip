@@ -300,7 +300,11 @@ namespace {
 	else if( ip.typeName == TN(string) ) {
 	  // if text prefixed than create a QTextEdit
 	  if (ip.name.find("text::") != string::npos) {
-	    QTextEdit *te = new QTextEdit("", QString::null, this);
+	    QTextEdit *te = new QTextEdit(QString(""),
+#if (QT_REL == 3)
+					  QString::null,
+#endif
+					  this);
 	    te->resize(te->width() * 3, te->height()*3);
 	    ip.wA.push_back(te);
 	    if( inSet ) {
