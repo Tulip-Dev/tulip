@@ -1,0 +1,28 @@
+contents of tulip tulip-ogl ang tulip-qt defined in tlp namespace
+graph functions in TlpTools.h => Graph.h
+tlp::newSuperGraph => tlp::newGraph
+tlp::load => tlp::loadGraph
+tlp::save => tlp::saveGraph
+
+Supergraph => Graph
+Property => PropertyAlgorithm
+PProxy => PropertyInterface
+PropertyProxy => AbstractProperty
+PropertyProxy::superGraph => AbstractProperty::graph
+Layout => LayoutAlgorithm
+LayoutProxy => LayoutProperty
+IntProxy => IntegerProperty
+ColorsProxy => ColorProperty
+StringProxy => StringProperty
+MetagraphProxy => GraphProperty
+MetricProxy => DoubleProperty
+SelectionProxy => BooleanProperty
+SizesProxy => SizeProperty
+Metric => DoubleAlgorithm
+Selection => BooleanAlgorithm
+Int => IntegerAlgorithm
+IntType => IntegerType
+GlGraph::_superGraph => GlGraph::_graph
+GlGraph::getSuperGraph => GlGraph::getGraph
+GlGraph::setSuperGRaph => GlGraph::setGraph
+GlGraphWidget::setSuperGraph => GlGraphWidget::setGraph
