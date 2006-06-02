@@ -96,10 +96,8 @@ nobase_include_HEADERS = \
 	tulip/ForEach.h \
 	tulip/RectangleArea.h \
 	tulip/Border.h \
-	tulip/StatisticsNodeModule.h
-
-
-noinst_HEADERS = tulip/cxx/BmdLink.cxx \
+	tulip/StatisticsNodeModule.h \
+	tulip/cxx/BmdLink.cxx \
 	tulip/cxx/BmdList.cxx \
 	tulip/PlanarityTestImpl.h \
 	tulip/BmdLink.h \
