@@ -43,11 +43,11 @@ Group:		Applications/Engineering
 Requires:       lib%{name}, Mesa
 %description -n lib%{name}-ogl
 
-%package -n     lib%{name}-qt
-Summary:        A set of Qt Widgets for Tulip/Tulip-ogl
+%package -n     lib%{name}-qt@QT_VERSION@
+Summary:        A set of Qt Widgets for tulip/tulip-ogl
 Group:          Applications/Engineering
-Requires:       lib%{name}, lib%{name}-ogl, qt >= 3.0
-%description -n lib%{name}-qt
+Requires:       lib%{name}, lib%{name}-ogl, qt >= @QT_VERSION@.0
+%description -n lib%{name}-qt@QT_VERSION@
 
 ##############################
 %prep
@@ -107,12 +107,12 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/font.ttf
 %{prefix}/lib/tlp/plugins/glyph
 
-%files -n lib%{name}-qt
+%files -n lib%{name}-qt@QT_VERSION@
 %defattr(-,root,root)
-%{prefix}/lib/libtulip-qt.a
-%{prefix}/lib/libtulip-qt.la
-%{prefix}/lib/libtulip-qt.so
-%{prefix}/lib/libtulip-qt-%{tulip_version}.so.*
+%{prefix}/lib/libtulip-qt@QT_VERSION@.a
+%{prefix}/lib/libtulip-qt@QT_VERSION@.la
+%{prefix}/lib/libtulip-qt@QT_VERSION@.so
+%{prefix}/lib/libtulip-qt@QT_VERSION@-%{tulip_version}.so.*
 %{prefix}/lib/tlp/plugins/designer/libTulipWidgets.*
 
 %changelog
