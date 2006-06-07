@@ -59,9 +59,9 @@ static const char* rangeErrorMsg = "max size must be greater than min size";
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class MetricMapping:public Sizes {
+class MetricSizeMapping:public Sizes {
 public:
-  MetricMapping(const PropertyContext &context):Sizes(context) {
+  MetricSizeMapping(const PropertyContext &context):Sizes(context) {
     addParameter<MetricProxy>("property", paramHelp[0]);
     addParameter<SizesProxy>("input", paramHelp[1]);
     addParameter<bool>("width", paramHelp[2],"true");
@@ -73,7 +73,7 @@ public:
     addParameter<bool>("node/edge", paramHelp[3],"true");
   }
   
-  ~MetricMapping(){}
+  ~MetricSizeMapping(){}
 
   void computeNodeSize() {
     Iterator<node> *itN=superGraph->getNodes();
@@ -143,8 +143,10 @@ public:
       shift = entryMetric->getNodeMin(superGraph);
       computeNodeSize();
       edge e;
-      forEach(e, superGraph->getEdges())
-	sizesProxy->setEdgeValue(e, entrySize->getEdgeValue(e));
+      forEach(e, superGraph->getEdges()) {
+	Size result= entrySize->getEdgeValue(e);
+	sizesProxy->setEdgeValue(e, result);
+      }
     }
     else {
       range = entryMetric->getEdgeMax(superGraph) - entryMetric->getEdgeMin(superGraph);
@@ -168,4 +170,4 @@ private:
   bool nodeoredge;
 };
 /*@}*/
-SIZESPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
+SIZESPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
