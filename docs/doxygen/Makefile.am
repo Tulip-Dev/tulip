@@ -119,8 +119,8 @@ clean:
 install-data-am :
 	mkdir -p $(DESTDIR)$(pkgdatadir)/doxygen
 	mkdir -p $(DESTDIR)$(pkgdatadir)/man
-	cp $(srcdir)/tulip.html $(DESTDIR)$(pkgdatadir)/doxygen/.
 	if test -f tulipdoc.html ; then \
+		cp $(srcdir)/tulip.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 		cp tulipdoc.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ; 
 	if test -d tulip-lib ; then \

@@ -34,10 +34,10 @@ if MACOSX
 		ln -s $(pkgdatadir) $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
 	fi;
 endif
-	mkdir -p $(DESTDIR)$(pkgdatadir)/common
-	cp -r $(srcdir)/common/*.png $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/.
 	if test -f profile.adp ; then \
 		cp profile.adp $(DESTDIR)$(pkgdatadir)/.; \
+		mkdir -p $(DESTDIR)$(pkgdatadir)/common ;\
+		cp -r $(srcdir)/common/*.png $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/. ;\
 	fi;
 
 uninstall-am:
