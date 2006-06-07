@@ -47,12 +47,12 @@ class GlGraph;
 class View3DSetup;
 class ClusterTree;
 class TulipElementProperties;
-class TulipStats;
 class ToolBar;
 class Overview;
 class Morphing;
 namespace tlp {
 class GridOptionsWidget;
+class TulipStats;
 }
 
 ///Widget for manipulation and visualization of a graph
@@ -69,7 +69,7 @@ protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
 #ifdef STATS_UI
-  TulipStats *statsWidget;
+  tlp::TulipStats *statsWidget;
 #endif
   ToolBar *mouseToolBar;
   Overview *overviewWidget;
