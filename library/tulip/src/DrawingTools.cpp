@@ -62,19 +62,19 @@ namespace {
   }
 }
 
-pair<Coord, Coord> tlp::computeBoundingBox(Graph *sg, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
+pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;
   pair<Coord, Coord> result;
-  if (sg->numberOfNodes()==0) {
+  if (graph->numberOfNodes()==0) {
     result.first.set(0, 0, 0);
     result.second.set(0, 0, 0);
     return result;
   }
   result.first.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   result.second.set(FLT_MAX, FLT_MAX, FLT_MAX);
-  Iterator<node> *itN=sg->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
 
@@ -86,7 +86,7 @@ pair<Coord, Coord> tlp::computeBoundingBox(Graph *sg, LayoutProperty *layout, Si
       }
   } delete itN;
 
-  Iterator<edge> *itE=sg->getEdges();
+  Iterator<edge> *itE=graph->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
 

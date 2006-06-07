@@ -49,14 +49,14 @@ struct StatisticResults
 
 /** \brief Static class used to compute statistic results
  *
- *  This class is used to compute statistic results from a sg and up to three metrics. \n
+ *  This class is used to compute statistic results from a graph and up to three metrics. \n
  *  ComputeStatisticsResults is way more efficient than calling every other function, because 
  *  it computes every algorithm in only one pass. \n
  *
  *  There is two types of functions for the common statistic results. \n
  *
  *  The first type has 4 parameters which are the following :
- *   \param graph The supersg structure that will be used to retrieve the list of nodes.
+ *   \param graph The Graph structure that will be used to retrieve the list of nodes.
  *   \param metrics The metrics that will be treated by the algorithm. There can be up to 3 metrics.
  *   \param nDimensions The number of dimensions that will be treated. This integer ranges from 1 to 3
  *   \param result The vector containing the result of the algorithm.
@@ -64,7 +64,7 @@ struct StatisticResults
  *  That kind of function computes the result for many dimensions (1 to 3)
  *
  *  The second one has only two parameters :
- *   \param graph The supersg structure that will be used to retrieve the list of nodes
+ *   \param graph The Graph structure that will be used to retrieve the list of nodes
  *   \param metric The metric that will be treated by the algorithm
  *
  */
@@ -143,17 +143,17 @@ class TLP_SCOPE StatsNodeModule
   static float ComputeMax(Graph *graph, DoubleProperty *metric);
 
   /**
-   * Computes the Bounding box of a sg
+   * Computes the Bounding box of a graph
    */
   static void ComputeMinMaxPoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax);
 
   /**
-   * Computes the range of a metric in a sg
+   * Computes the range of a metric in a graph
    */
   static void ComputeMinMax(Graph *graph, DoubleProperty *metric, float &min, float &max);
 
   /**
-   * Computes the Linear regression function of a sg on two metrics
+   * Computes the Linear regression function of a graph on two metrics
    */
   static void ComputeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &b0, float &b1);
 
@@ -162,6 +162,5 @@ class TLP_SCOPE StatsNodeModule
    */
   static StatisticResults* ComputeStatisticsResults(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions);
 };
-
 }
 #endif

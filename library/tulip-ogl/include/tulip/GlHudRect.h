@@ -19,11 +19,11 @@
 #define N_RECT_POINTS 4
 
 namespace tlp {
-
 /** \brief This is a general class for the rendering of 2D rectangles.
  *
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
  */
+
 class TLP_GL_SCOPE GlHudRect : public GlHud {
  protected:
 
@@ -101,7 +101,5 @@ class TLP_GL_SCOPE GlHudRect : public GlHud {
    */
   bool inRect(double x, double y);
 };
-
 }
-
 #endif

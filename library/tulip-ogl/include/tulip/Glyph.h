@@ -17,6 +17,7 @@ namespace tlp {
 
 class Graph;
 struct node;
+//class GlGraph;
 
 class GlyphContext
 {

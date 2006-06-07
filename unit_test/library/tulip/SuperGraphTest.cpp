@@ -2,6 +2,7 @@
 #include <cppunit/TestCaller.h>
 #include <tulip/ForEach.h>
 #include "SuperGraphTest.h"
+#include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 
@@ -330,12 +331,12 @@ void SuperGraphTest::testDeleteSubgraph() {
 void SuperGraphTest::testSubgraphId() {
   graph->clear();
   CPPUNIT_ASSERT(graph->getId() == 0);
-  SelectionProxy sel(graph);
-  SuperGraph *g1 = graph->addSubGraph(&sel);
+  BooleanProperty sel(graph);
+  Graph *g1 = graph->addSubGraph(&sel);
   CPPUNIT_ASSERT(g1->getId() == 1);
-  SuperGraph *g2 = graph->addSubGraph(&sel);
+  Graph *g2 = graph->addSubGraph(&sel);
   CPPUNIT_ASSERT(g2->getId() == 2);
-  SuperGraph *g;
+  Graph *g;
   int i = 1;
   forEach(g, graph->getSubGraphs()) {
     CPPUNIT_ASSERT(g->getId() == i);

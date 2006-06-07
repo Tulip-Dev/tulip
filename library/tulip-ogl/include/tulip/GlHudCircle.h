@@ -18,7 +18,6 @@
 #include <vector>
 
 namespace tlp {
-
 /** \brief This is a general class for the rendering of 2D circles.
  *
  * This class is used as a 2D HUD for the rendering of 2D circles.
@@ -100,8 +99,6 @@ class GlHudCircle : public GlHud {
    */
   virtual void setSegments(int segments);
 };
-
 }
-
 
 #endif

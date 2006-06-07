@@ -16,8 +16,8 @@ LAYOUTPLUGIN(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1
 using namespace std;
 using namespace tlp;
 
-float spacing = 18;
-float edgeNodeSpacing = 8;
+float spacing = 2;
+float edgeNodeSpacing = 2;
 
 //===============================================================
 namespace {
@@ -40,14 +40,14 @@ namespace {
     // y node-node spacing
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18" ) \
+    HTML_HELP_DEF( "default", "2" ) \
     HTML_HELP_BODY() \
     "This parameter defines the minimum y-spacing between any two nodes." \
     HTML_HELP_CLOSE(),
     // x node-node and edge-node spacing
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18" ) \
+    HTML_HELP_DEF( "default", "2" ) \
     HTML_HELP_BODY() \
     "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
     HTML_HELP_CLOSE()
@@ -58,8 +58,8 @@ namespace {
 MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
-  addParameter<float> ("y node-node spacing",paramHelp[2],"18");
-  addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"8");
+  addParameter<float> ("y node-node spacing",paramHelp[2],"2");
+  addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
 }
 //====================================================
 MixedModel::~MixedModel(){
@@ -87,7 +87,7 @@ bool MixedModel::run() {
     }
   }
   //===========================================================
-    IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
+  IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
   intProxy->setAllEdgeValue(0);
   
   // give some empirical feedback of what we are doing 1 %
@@ -100,6 +100,7 @@ bool MixedModel::run() {
   DataSet tmp;
   tmp.set("Metric", &connectedComponnent);
   tlp::clusterizeGraph(Pere, err, &tmp, "Equal Value");
+  vector<edge> edge_planar;
 
   
   int nbConnectedComponent = 0;
@@ -147,6 +148,9 @@ bool MixedModel::run() {
       
       }
       delete itn;      
+      edge e;
+      forEach(e,currentGraph->getEdges())
+	edge_planar.push_back(e);
       continue;
     }
     
@@ -166,6 +170,7 @@ bool MixedModel::run() {
 	  G->addNode(currentGraph->source(e_tmp));
 	  G->addNode(currentGraph->target(e_tmp));
 	  G->addEdge(e_tmp);
+	  edge_planar.push_back(e_tmp);
 	}
 	else
 	  unplanar_edges.push_back(e_tmp);
@@ -179,15 +184,21 @@ bool MixedModel::run() {
 	edge e = re_added[ui];
 	G->addEdge(e);
 	resultatAlgoSelection->setEdgeValue(e,true);
+	edge_planar.push_back(e);
 	vector<edge>::iterator ite = find(unplanar_edges.begin(),unplanar_edges.end(),e);
 	unplanar_edges.erase(ite);
-	}
+      }
       delete graphMap;
+      resultatAlgoSelection->setAllEdgeValue(false);
+      resultatAlgoSelection->setAllNodeValue(false);
       // cout << "... Planar subGraph computed" << endl;
     }
-    else
+    else {
       G = tlp::newCloneSubGraph(currentGraph);
-    
+      edge e;
+      forEach(e,currentGraph->getEdges())
+	edge_planar.push_back(e);
+    }
     //===============================================
     
     // give some empirical feedback of what we are doing 2%
@@ -197,7 +208,9 @@ bool MixedModel::run() {
       BiconnectedTest::makeBiconnected(G,added_edges);
     assert(BiconnectedTest::isBiconnected(G));
     carte = new PlanarConMap(G);
+    assert(BiconnectedTest::isBiconnected(G));
     assert(BiconnectedTest::isBiconnected(carte));
+
     // give some empirical feedback of what we are doing 2%
     pluginProgress->progress(1, 100);
 
@@ -286,6 +299,8 @@ bool MixedModel::run() {
       layoutResult->setEdgeValue(e, tmp2);
     }
   }
+
+  dataSet->set("planar_edges",edge_planar);
   return true;
 }
 

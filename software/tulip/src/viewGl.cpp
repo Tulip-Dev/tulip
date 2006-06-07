@@ -69,6 +69,7 @@
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qprinter.h>
 #include "tulip/Qt3ForTulip.h"
+#include <QtGui/qmenudata.h>
 #endif
 
 #include <tulip/TlpTools.h>
@@ -113,6 +114,7 @@
 
 using namespace std;
 using namespace tlp;
+
 
 //**********************************************************************
 ///Constructor of ViewGl
@@ -186,10 +188,10 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
 
   ((Application*)qApp)->nodeProperties = nodeProperties;
   //connect signals related to graph replacement
-  connect(clusterTreeWidget, SIGNAL(graphChanged(Graph *)), 
-	  this, SLOT(hierarchyChangeGraph(Graph *)));
-  connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(Graph *)), this, SLOT(graphAboutToBeRemoved(Graph *)));
-  connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(Graph *)), this, SLOT(graphAboutToBeRemoved(Graph *)));
+  connect(clusterTreeWidget, SIGNAL(graphChanged(tlp::Graph *)), 
+	  this, SLOT(hierarchyChangeGraph(tlp::Graph *)));
+  connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
+  connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   //+++++++++++++++++++++++++++
   //Connection of the menu
   connect(&stringMenu     , SIGNAL(activated(int)), SLOT(changeString(int)));
@@ -408,8 +410,8 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
-  connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
-  connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
+  connect(mouseToolBar,   SIGNAL(mouseChanged(tlp::MouseInterface *)), glWidget, SLOT(setMouse(tlp::MouseInterface *)));
+  connect(mouseToolBar,   SIGNAL(mouseChanged(tlp::MouseInterface *)), SLOT(mouseChanged(tlp::MouseInterface *)));
   connect(glWidget,       SIGNAL(nodeClicked(Graph *, const node &)), 
 	  nodeProperties, SLOT(setCurrentNode(Graph*, const node &)));
   connect(glWidget,       SIGNAL(nodeClicked(Graph *, const node &)), 
@@ -659,8 +661,26 @@ void viewGl::fileOpen(string *plugin, QString &s) {
   Observable::unholdObservers();
 }
 //**********************************************************************
+static string findMenuItemText(QPopupMenu &menu, int id) {
+#if (QT_REL == 3)
+  return menu.text(id).ascii();
+#else
+  string name(menu.text(id).ascii());
+
+  if (name.length() == 0) {
+    QList<QPopupMenu *> popups = menu.findChildren<QPopupMenu *>();
+    for (int i = 0; i < popups.size(); ++i) {
+      name = popups.at(i)->text(id).ascii();
+      if (name.length() != 0)
+	break;
+    }
+  }
+  return name;
+#endif
+}
+//**********************************************************************
 void viewGl::importGraph(int id) {
-  string name(importGraphMenu.text(id).ascii());
+  string name = findMenuItemText(importGraphMenu, id);
   QString s;
   fileOpen(&name,s);
 }
@@ -815,13 +835,22 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
     QPopupMenu *groupMenu = (QPopupMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
-      if (itemGroupNames[i] == groupMenus[j]->name()) {
+      if (itemGroupNames[i] ==
+#if (QT_REL == 3)
+	  groupMenus[j]->name()
+#else
+	  groupMenus[j]->objectName().ascii()
+#endif
+	  ) {
 	subMenu = groupMenu = groupMenus[j];
 	break;
       }
     }
     if (!groupMenu) {
       groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
+#if (QT_REL == 4)
+      groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
+#endif
       subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
@@ -831,7 +860,6 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   //cout << subMenu->name() << "->" << itemName << endl;
   subMenu->insertItem(itemName.c_str());
 }
-  
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
 std::vector<QPopupMenu*> buildPropertyMenu(QPopupMenu &menu) {
@@ -844,55 +872,77 @@ std::vector<QPopupMenu*> buildPropertyMenu(QPopupMenu &menu) {
   return groupMenus;
 }
 //**********************************************************************
-void viewGl::buildMenus(){
+void viewGl::buildMenus() {
   //Properties PopMenus
   std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
   std::string::size_type nGroups = groupMenus.size();
+#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
+#endif
   groupMenus = buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
+#endif
   groupMenus = buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
+#endif
   groupMenus = buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
+#endif
   groupMenus = buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
+     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
+#endif
   groupMenus = buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
+#endif
   groupMenus = buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
+#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
+#endif
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
   groupMenus.resize(nGroups = 0);
   for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
-    clusteringMenu.insertItem(it3->first.c_str());
+    insertInMenu(clusteringMenu, it3->first.c_str(), it3->second->getGroup(), groupMenus, nGroups);
+#if (QT_REL == 3)
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(makeClustering(int)));
+#endif
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
   groupMenus.resize(nGroups = 0);
   for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
     insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
+#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
+#endif
   //Import PopMenu
   TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
   groupMenus.resize(nGroups = 0);
   for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
     insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
+#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
+#endif
   //Image PopuMenu
 #if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
@@ -1517,7 +1567,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 //**********************************************************************
 void viewGl::changeString(int id) {
   clearObservers();
-  string name(stringMenu.text(id).ascii());
+  string name = findMenuItemText(stringMenu, id);
   if (changeProperty<StringProperty>(name,"viewLabel"))
     redrawView();
   initObservers();
@@ -1525,7 +1575,7 @@ void viewGl::changeString(int id) {
 //**********************************************************************
 void viewGl::changeSelection(int id) {
   clearObservers();
-  string name(selectMenu.text(id).ascii());
+  string name = findMenuItemText(selectMenu, id);
   if (changeProperty<BooleanProperty>(name,"viewSelection"))
     redrawView();
   initObservers();
@@ -1533,7 +1583,7 @@ void viewGl::changeSelection(int id) {
 //**********************************************************************
 void viewGl::changeMetric(int id) {
   clearObservers();
-  string name(metricMenu.text(id).ascii());
+  string name = findMenuItemText(metricMenu, id);
   bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
   if (result && map_metric->isOn()) {
     if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
@@ -1544,7 +1594,7 @@ void viewGl::changeMetric(int id) {
 //**********************************************************************
 void viewGl::changeLayout(int id) {
   clearObservers();
-  string name(layoutMenu.text(id).ascii());
+  string name = findMenuItemText(layoutMenu, id);
   GraphState * g0 = 0;
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
@@ -1585,7 +1635,7 @@ void viewGl::changeLayout(int id) {
   //**********************************************************************
 void viewGl::changeInt(int id) {
   clearObservers();
-  string name(intMenu.text(id).ascii());
+  string name = findMenuItemText(intMenu, id);
   changeProperty<IntegerProperty>(name,"viewInt");
   initObservers();
 }
@@ -1595,7 +1645,7 @@ void viewGl::changeColors(int id) {
   GraphState * g0 = 0;
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
-  string name(colorsMenu.text(id).ascii());
+  string name = findMenuItemText(colorsMenu, id);
   bool result = changeProperty<ColorProperty>(name,"viewColor");
   if( result ) {
     if( enable_morphing->isOn() ) {
@@ -1620,7 +1670,7 @@ void viewGl::changeSizes(int id) {
   GraphState * g0 = 0;
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
-  string name(sizesMenu.text(id).ascii());
+  string name = findMenuItemText(sizesMenu, id);
   bool result = changeProperty<SizeProperty>(name,"viewSize");
   if( result ) {
     if( enable_morphing->isOn() ) {

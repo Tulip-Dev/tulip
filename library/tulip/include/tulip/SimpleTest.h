@@ -1,5 +1,5 @@
 /*
- * Authors: Jérémy Compostella, Jean Darracq, Benjamin Muller,
+ * Authors: Jï¿½ï¿½y Compostella, Jean Darracq, Benjamin Muller,
  *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
  * 
  * Email : jcompost@etu.u-bordeaux1.fr, jdarracq@etu.u-bordeaux1.fr,
@@ -35,19 +35,19 @@ class Graph;
 /** \addtogroup sg_test */ 
 /*@{*/
 /**
- * class for testing if the sg is simple (ie no self loops and  no multiple or parallel edges)
+ * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)
  */
 class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
-  static bool isSimple(Graph *sg);
-  static void makeSimple(Graph* sg, std::vector<edge> &removed);
-  static bool simpleTest(Graph *sg, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
+  static bool isSimple(Graph *graph);
+  static void makeSimple(Graph* graph, std::vector<edge> &removed);
+  static bool simpleTest(Graph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
  private:
   SimpleTest();
   void addEdge(Graph *, const edge);
   void delEdge(Graph *, const edge);
   void destroy(Graph *);
-  void deleteResult(Graph *sg);
+  void deleteResult(Graph *graph);
   static SimpleTest *instance;
   stdext::hash_map<unsigned long, bool> resultsBuffer;
 };

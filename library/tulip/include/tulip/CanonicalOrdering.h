@@ -4,7 +4,7 @@
  * Email : bourqui@labri.fr
  * Last Version : 10/01/2006
  * implementation of {Gutwenger and Mutzel} 's
- * Canonical Ordering for biconnected planar sgs.
+ * Canonical Ordering for biconnected planar graphs.
  * ref: Extended abstract, Max-Planck-Institut für Informatik,
  * Saarbrücken, Germany, 1997 :
  * Grid Embedding for Biconnected Planar Graphs

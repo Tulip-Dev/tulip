@@ -17,63 +17,63 @@ AcyclicTest * AcyclicTest::instance=0;
 AcyclicTest::AcyclicTest(){
 }
 //**********************************************************************
-bool AcyclicTest::isAcyclic(const Graph *sg) {
+bool AcyclicTest::isAcyclic(const Graph *graph) {
   if (instance==0)
     instance = new AcyclicTest();
 
-  if (instance->resultsBuffer.find((unsigned long)sg) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned long)sg] = acyclicTest(sg);
-    sg->addObserver(instance);
+  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned long)graph] = acyclicTest(graph);
+    graph->addObserver(instance);
   }
   
-  return instance->resultsBuffer[(unsigned long)sg];
+  return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
-void AcyclicTest::makeAcyclic(Graph* sg,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
-  if (AcyclicTest::isAcyclic(sg)) return;
+void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
+  if (AcyclicTest::isAcyclic(graph)) return;
 
   //replace self loops by three edges and two nodes.
-  StableIterator<edge> itE(sg->getEdges());
+  StableIterator<edge> itE(graph->getEdges());
   while (itE.hasNext()) {
     edge e = itE.next();
-    if (sg->source(e) == sg->target(e)) {
-      node n1 = sg->addNode();
-      node n2 = sg->addNode();
+    if (graph->source(e) == graph->target(e)) {
+      node n1 = graph->addNode();
+      node n2 = graph->addNode();
       selfLoops.push_back(tlp::SelfLoops(n1 , n2 , 
-					 sg->addEdge(sg->source(e), n1) , 
-					 sg->addEdge(n1,n2) , 
-					 sg->addEdge(sg->source(e), n2) , 
+					 graph->addEdge(graph->source(e), n1) , 
+					 graph->addEdge(n1,n2) , 
+					 graph->addEdge(graph->source(e), n2) , 
 					 e ));
-      sg->delEdge(e);
+      graph->delEdge(e);
     }
   }
 
   //find obstruction edges
   reversed.clear();
-  acyclicTest(sg, &reversed);
+  acyclicTest(graph, &reversed);
   //  cerr << "reversed : " << reversed.size() << endl;
-  if (reversed.size() > sg->numberOfEdges() / 2) {
+  if (reversed.size() > graph->numberOfEdges() / 2) {
     cerr << "[Warning]: " << __FUNCTION__ << ", is not efficient" << endl;
   }
 
   vector<edge>::const_iterator it = reversed.begin();
   for (; it != reversed.end(); ++it)
-    sg->reverse(*it);
+    graph->reverse(*it);
 
-  assert(AcyclicTest::isAcyclic(sg));
+  assert(AcyclicTest::isAcyclic(graph));
  }
 
 //=================================================================
-bool AcyclicTest::dfsAcyclicTest(const Graph *sg, const node n, 
+bool AcyclicTest::dfsAcyclicTest(const Graph *graph, const node n, 
 				 MutableContainer<bool> &visited, 
 				 MutableContainer<bool> &finished,
 				 vector<edge> *obstructionEdges) {
   visited.set(n.id,true);
   bool result = true;
-  Iterator<edge> *it = sg->getOutEdges(n);
+  Iterator<edge> *it = graph->getOutEdges(n);
   while (it->hasNext()) {
     edge tmp = it->next();
-    node nextNode = sg->target(tmp);
+    node nextNode = graph->target(tmp);
     if (visited.get(nextNode.id)) {
       if (!finished.get(nextNode.id)) {
 	result = false;
@@ -85,7 +85,7 @@ bool AcyclicTest::dfsAcyclicTest(const Graph *sg, const node n,
       }
     }
     else {
-      bool tmp = dfsAcyclicTest(sg, nextNode, visited, finished, obstructionEdges);
+      bool tmp = dfsAcyclicTest(graph, nextNode, visited, finished, obstructionEdges);
       result = tmp && result;
       if ((!result) && (obstructionEdges==0)) break;
     }
@@ -94,17 +94,17 @@ bool AcyclicTest::dfsAcyclicTest(const Graph *sg, const node n,
   return result;
 }
 //**********************************************************************
-bool AcyclicTest::acyclicTest(const Graph *sg, vector<edge> *obstructionEdges) {
+bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges) {
   MutableContainer<bool> visited;
   MutableContainer<bool> finished;
   visited.setAll(false);
   finished.setAll(false);
   bool result = true;
-  Iterator<node> *it = sg->getNodes();
+  Iterator<node> *it = graph->getNodes();
   while (it->hasNext()) {
     node curNode=it->next();
     if (!visited.get(curNode.id)) {
-      if (!dfsAcyclicTest(sg, curNode, visited, finished, obstructionEdges)) {
+      if (!dfsAcyclicTest(graph, curNode, visited, finished, obstructionEdges)) {
 	result = false;
 	if (obstructionEdges == 0) {
 	  break;
@@ -115,25 +115,25 @@ bool AcyclicTest::acyclicTest(const Graph *sg, vector<edge> *obstructionEdges) {
   return result;
 }
 //**********************************************************************
-void AcyclicTest::destroy(Graph *sg) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void AcyclicTest::destroy(Graph *graph) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::reverseEdge(Graph *sg,const edge e) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void AcyclicTest::reverseEdge(Graph *graph,const edge e) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::addEdge(Graph *sg,const edge e) {
-  if (resultsBuffer[(unsigned long)sg]==false) return;
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void AcyclicTest::addEdge(Graph *graph,const edge e) {
+  if (resultsBuffer[(unsigned long)graph]==false) return;
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::delEdge(Graph *sg,const edge e) {
-  if (resultsBuffer[(unsigned long)sg]==true) return;
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void AcyclicTest::delEdge(Graph *graph,const edge e) {
+  if (resultsBuffer[(unsigned long)graph]==true) return;
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************

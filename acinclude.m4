@@ -467,10 +467,11 @@ fi
 dnl check QT version
 QT_VERSION=3
 qtlib_prefix=libqt
-if test -e ${QTDIR}/bin/qt3to4 ; then
+if test -d ${QTDIR}/include/QtCore ; then
   QT_VERSION=4
   qtlib_prefix=libQt
 fi
+AC_SUBST(QT_VERSION)
 
 if test ${VAR_WIN32} = 1; then
 dnl For linking purpose, we need to copy some libs

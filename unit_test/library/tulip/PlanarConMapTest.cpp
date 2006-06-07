@@ -7,6 +7,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( PlanarConMapTest );
 
 using namespace std;
+using namespace tlp;
 
 //============================================================
 // PlanarConMapTest

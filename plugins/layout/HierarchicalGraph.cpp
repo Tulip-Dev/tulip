@@ -125,22 +125,22 @@ void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,
 }
 
 /*
-void HierarchicalGraph::twoLayerCrossReduction(Graph *graph,unsigned int freeLayer,bool sense){
+void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,bool sense){
   vector<node>::const_iterator it;
   for (it = grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
     node n = *it;
-    if (degree(graph,  n, sense)>0) {
+    if (degree(sg,  n, sense)>0) {
       double sum = embedding->getNodeValue(n);
       Iterator<node>*itN;
       if (sense) 
-	itN=graph->getOutNodes(n);
+	itN=sg->getOutNodes(n);
       else
-	itN=graph->getInNodes(n);
+	itN=sg->getInNodes(n);
       while(itN->hasNext()) {
 	node itn=itN->next();
 	sum += embedding->getNodeValue(itn);
       } delete itN;
-      embedding->setNodeValue(n,sum/((double)degree(graph,n,sense) + 1.0));
+      embedding->setNodeValue(n,sum/((double)degree(sg,n,sense) + 1.0));
     }
     else {
       //      embedding->setNodeValue(n, 10000);
@@ -245,7 +245,7 @@ void HierarchicalGraph::DagLevelSpanningTree(Graph* sg, DoubleProperty *embeddin
       }
     }
   }
-  assert(TreeTest::isTree(graph));
+  assert(TreeTest::isTree(sg));
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //==============================================================================================================
@@ -479,7 +479,6 @@ bool HierarchicalGraph::run() {
       }
     }
   }
-  
   edge e;
   forEach(e, graph->getEdges()) {
     node src = graph->source(e);

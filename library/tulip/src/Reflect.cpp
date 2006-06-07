@@ -131,23 +131,23 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
       if( res )
 	ioDataSet.set( name, v );
     }
-    // Selection
+    // BooleanProperty
     else if( inG && tname == TN(BooleanProperty) ) {
       ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
     }
-    // Metric
+    // DoubleProperty
     else if( inG && tname == TN(DoubleProperty) ) {
       ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
     }
-    // Layout
+    // LayoutProperty
     else if( inG && tname == TN(LayoutProperty) ) {
       ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
     }
-    // String
+    // StringProperty
     else if( inG && tname == TN(StringProperty) ) {
       ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
     }
-    // Integer
+    // IntegerProperty
     else if( inG && tname == TN(IntegerProperty) ) {
       ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
     }
@@ -155,7 +155,7 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
     else if( inG && tname == TN(SizeProperty) ) {
       ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
     }
-    // Colors
+    // ColorProperty
     else if( inG && tname == TN(ColorProperty) ) {
       ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
     }

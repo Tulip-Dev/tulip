@@ -15,56 +15,56 @@ TreeTest * TreeTest::instance=0;
 TreeTest::TreeTest(){
 }
 
-bool TreeTest::isTree(Graph *sg) {
+bool TreeTest::isTree(Graph *graph) {
   if (instance==0)
     instance=new TreeTest();
-  return instance->compute(sg);
+  return instance->compute(graph);
 }
 
 //====================================================================
 //Determines if a graph is a topological tree.  This means that
 //if the graph were undirected, there would be no cycles.
-bool TreeTest::isTopologicalTree(Graph *sg) {
+bool TreeTest::isTopologicalTree(Graph *graph) {
   if (instance==0) instance = new TreeTest();
   MutableContainer<bool> visited;
   visited.setAll (false);
-  node firstNode = sg->getOneNode();
-  return instance->isTopologicalTree (sg, firstNode, firstNode,
+  node firstNode = graph->getOneNode();
+  return instance->isTopologicalTree (graph, firstNode, firstNode,
 				      visited);
 }//isTopologicalTree
 
 //====================================================================
 //Turns a topological tree graph into a directed tree starting at
 //the node root.
-void TreeTest::makeRootedTree(Graph *sg, node root) {
+void TreeTest::makeRootedTree(Graph *graph, node root) {
   if (instance==0) instance=new TreeTest();
-  sg->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned int)sg);
-  if (!sg->isElement (root)) {
+  graph->removeObserver(instance);
+  instance->resultsBuffer.erase((unsigned long)graph);
+  if (!graph->isElement (root)) {
     cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;
   }//end if
-  if (!TreeTest::isTopologicalTree (sg)) {
+  if (!TreeTest::isTopologicalTree (graph)) {
     cerr << "makeRootedTree:  Graph is not topological tree, so directed " 
 	 << "tree cannot be made." << endl;
     return;
   }//end if
-  instance->makeRootedTree (sg, root, root);
-  assert (TreeTest::isTree (sg));
+  instance->makeRootedTree (graph, root, root);
+  assert (TreeTest::isTree (graph));
 }//end makeDirectedTree
 
 //====================================================================
 //Determines if the passed graph is topologically a tree.  The 
 //passed mutable container returns if we have visited a node
 bool TreeTest::
-isTopologicalTree (Graph *sg, node curRoot, node cameFrom,
+isTopologicalTree (Graph *graph, node curRoot, node cameFrom,
 		   MutableContainer<bool> &visited) {
   if (visited.get (curRoot.id)) return false;
   visited.set (curRoot.id, true);
   node curNode;
-  forEach (curNode, sg->getInOutNodes(curRoot)) { 
+  forEach (curNode, graph->getInOutNodes(curRoot)) { 
     if (curNode != cameFrom)
-      if (!isTopologicalTree (sg, curNode, curRoot, visited)) return false;
+      if (!isTopologicalTree (graph, curNode, curRoot, visited)) return false;
   }//end forEach
   return true;
 }//end isTopologicalTree 
@@ -73,83 +73,84 @@ isTopologicalTree (Graph *sg, node curRoot, node cameFrom,
 //given that graph is topologically a tree, The function turns graph
 //into a directed tree.
 void TreeTest::
-makeRootedTree (Graph *sg, node curRoot, node cameFrom) {
+makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
   edge curEdge;
-  forEach (curEdge, sg->getInOutEdges(curRoot)) {
-    node opposite = sg->opposite(curEdge, curRoot);
+  forEach (curEdge, graph->getInOutEdges(curRoot)) {
+    node opposite = graph->opposite(curEdge, curRoot);
     if (opposite != cameFrom) {
-      if (sg->target (curEdge) == curRoot) 
-	sg->reverse(curEdge);
-      makeRootedTree (sg, opposite, curRoot);
+      if (graph->target (curEdge) == curRoot) 
+	graph->reverse(curEdge);
+      makeRootedTree (graph, opposite, curRoot);
     }//end if
   }//end forEach
 }//end makeDirectedTree
 
 //====================================================================
-bool TreeTest::compute(Graph *sg) { 
-  if (resultsBuffer.find((unsigned long)sg)!=resultsBuffer.end()) {
-    return resultsBuffer[(unsigned long)sg];
+
+bool TreeTest::compute(Graph *graph) { 
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
+    return resultsBuffer[(unsigned long)graph];
   }
-  if (sg->numberOfEdges()!=sg->numberOfNodes()-1) {
-    resultsBuffer[(unsigned long)sg]=false;
-    sg->addObserver(this);
+  if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
+    resultsBuffer[(unsigned long)graph]=false;
+    graph->addObserver(this);
     return false;
   }
   bool rootNodeFound=false;
-  Iterator<node> *it=sg->getNodes();
+  Iterator<node> *it=graph->getNodes();
   while (it->hasNext()) {
     node tmp=it->next();
-    if (sg->indeg(tmp)>1) {
+    if (graph->indeg(tmp)>1) {
       delete it;
-      resultsBuffer[(unsigned long)sg]=false;
-      sg->addObserver(this);
+      resultsBuffer[(unsigned long)graph]=false;
+      graph->addObserver(this);
       return false;
     }
-    if (sg->indeg(tmp)==0) {
+    if (graph->indeg(tmp)==0) {
       if (rootNodeFound) {
 	delete it;
-	resultsBuffer[(unsigned long)sg]=false;
-	sg->addObserver(this);
+	resultsBuffer[(unsigned long)graph]=false;
+	graph->addObserver(this);
 	return false;
       }
       else
 	rootNodeFound=true;
     }
   } delete it;
-  if (AcyclicTest::isAcyclic(sg)) {
-    resultsBuffer[(unsigned long)sg]=true;
-    sg->addObserver(this);
+  if (AcyclicTest::isAcyclic(graph)) {
+    resultsBuffer[(unsigned long)graph]=true;
+    graph->addObserver(this);
     return true;
   }
   else {
-    resultsBuffer[(unsigned long)sg]=false;
-    sg->addObserver(this);
+    resultsBuffer[(unsigned long)graph]=false;
+    graph->addObserver(this);
     return false;
   }
 }
 
-void TreeTest::addEdge(Graph *sg,const edge) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::addEdge(Graph *graph,const edge) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
-void TreeTest::delEdge(Graph *sg,const edge) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::delEdge(Graph *graph,const edge) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
-void TreeTest::reverseEdge(Graph *sg,const edge) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::reverseEdge(Graph *graph,const edge) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
-void TreeTest::addNode(Graph *sg,const node) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::addNode(Graph *graph,const node) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
-void TreeTest::delNode(Graph *sg,const node) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::delNode(Graph *graph,const node) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }
 
-void TreeTest::destroy(Graph *sg) {
-  sg->removeObserver(this);
-  resultsBuffer.erase((unsigned long)sg);
+void TreeTest::destroy(Graph *graph) {
+  graph->removeObserver(this);
+  resultsBuffer.erase((unsigned long)graph);
 }

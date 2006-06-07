@@ -1,29 +1,16 @@
 #include <tulip/FaceIterator.h>
+//#include "FaceIterator.h"
 
-#ifdef __GNUC__
-#if __GNUC__ < 3
-#include <hash_map.h>
-namespace Sgi { using ::hash_map; }; // inherit globals
-#else
-#include <ext/hash_map>
-namespace Sgi = ::__gnu_cxx;
-#endif
-#else // ...  there are other compilers, right?
-namespace Sgi = std;
-using namespace tlp;
-#endif
-
-using namespace Sgi;
 using namespace std;
 using namespace tlp;
+
 
 //============================================================
 //Iterator for Face : FaceIterator
 //============================================================
 FaceIterator::FaceIterator(PlanarConMap* m){
   assert(m);
-  mgraph = m;
-  i = 0;
+  mgraph = m;   i = 0;
 }
 
 //============================================================

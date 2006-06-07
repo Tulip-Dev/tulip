@@ -17,7 +17,6 @@
 #include <tulip/Coord.h>
 
 namespace tlp {
-
 /** \brief Class used to describe a plane
  *
  * This class is used to represent a plane with it's coordinates.
@@ -68,5 +67,4 @@ class TLP_SCOPE Plane
 };
 
 }
-
 #endif

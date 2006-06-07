@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Revision: 1.24.2.5 $)
+AC_REVISION($Revision: 1.24.2.6 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0dev)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -233,7 +233,12 @@ TULIP_OGL_INCLUDE='-I$(top_srcdir)/library/tulip-ogl/include'
 TULIP_QT_INCLUDE='-I$(top_srcdir)/library/tulip-qt/include'
 TULIP_LDFLAGS='-L$(top_builddir)/library/tulip/src -ltulip'
 TULIP_OGL_LDFLAGS='-L$(top_builddir)/library/tulip-ogl/src -ltulip-ogl'
-TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt'
+if test $QT_VERSION = 3
+ then
+TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt3'
+ else
+TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt4'
+fi
 TULIP_PLUGINS_BUILD_PATH=$PWD/plugins
 TULIP_QTDESIGNERPLUGIN='$(top_builddir)/library/tulip-qt/src/.libs'
 AC_SUBST(TULIP_INCLUDE)
@@ -265,17 +270,34 @@ AC_SUBST(LIB_IMAGES_LDFLAGS)
 dnl
 dnl configure thirdparty libraries and sets flags
 dnl
-LIBGLE_INCLUDE='-I$(top_srcdir)/thirdparty/gle'
-LIBGLE_LDFLAGS='$(top_srcdir)/thirdparty/gle/libgle.la'
+AC_ARG_WITH([gle-includes],[path to gle includes],
+ [LIBGLE_INCLUDE=$withval],
+ [LIBGLE_INCLUDE='-I$(top_srcdir)/thirdparty/gle'])
+AC_ARG_WITH([gle-lib],[ldflags to link with libgle],
+ [LIBGLE_LDFLAGS=$withval],
+ [LIBGLE_LDFLAGS='$(top_builddir)/thirdparty/gle/libgle.la'])
 AC_SUBST(LIBGLE_INCLUDE)
 AC_SUBST(LIBGLE_LDFLAGS)
 
 dnl gzstream ldflag points to top_srcdir
 dnl because it is a no_inst target and 'distcheck' makes the difference
-GZSTREAM_INCLUDE='-I$(top_srcdir)/thirdparty/gzstream'
-GZSTREAM_LDFLAGS='$(top_srcdir)/thirdparty/gzstream/libgzstream.la -lz'
+AC_ARG_WITH([gzstream-includes],[path to gzstream includes],
+ [GZSTREAM_INCLUDE=$withval],
+ [GZSTREAM_INCLUDE='-I$(top_srcdir)/thirdparty/gzstream'])
+AC_ARG_WITH([gzstream-lib],[ldflags to link with gzstream],
+ [GZSTREAM_LDFLAGS=$withval],
+ [GZSTREAM_LDFLAGS='$(top_builddir)/thirdparty/gzstream/libgzstream.la -lz'])
 AC_SUBST(GZSTREAM_INCLUDE)
 AC_SUBST(GZSTREAM_LDFLAGS)
+
+AC_ARG_WITH([ftgl-includes],[path to ftgl includes],
+ [FTGL_INCLUDE=$withval],
+ [FTGL_INCLUDE='-I$(top_srcdir)/thirdparty/ftgl'])
+AC_ARG_WITH([ftgl-lib],[ldflags to link with gzstream],
+ [FTGL_LDFLAGS=$withval],
+ [FTGL_LDFLAGS='$(top_builddir)/thirdparty/ftgl/libftgl.la'])
+AC_SUBST(FTGL_INCLUDE)
+AC_SUBST(FTGL_LDFLAGS)
 
 dnl first add platform dependent generated files
 if test ${VAR_WIN32} = 1
@@ -289,6 +311,7 @@ else
     ac_config_files=${PACKAGE}-${VERSION}.spec:tulip.spec.in
   fi
 fi
+
 dnl then the platform independent files
 AC_OUTPUT(
 tulip-config

@@ -1,5 +1,5 @@
 /*
- * Authors: David Auber, Jérémy Compostella, Jean Darracq, Benjamin Muller,
+ * Authors: David Auber, Jï¿½ï¿½y Compostella, Jean Darracq, Benjamin Muller,
  *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
  * 
  * Last modification : $id $
@@ -31,43 +31,43 @@ SimpleTest * SimpleTest::instance=0;
 SimpleTest::SimpleTest () {
 }
 //=================================================================
-bool SimpleTest::isSimple(Graph *sg) {
+bool SimpleTest::isSimple(Graph *graph) {
   if(instance == 0 )
     instance = new SimpleTest();
 
-  if (instance->resultsBuffer.find((unsigned long)sg) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned long)sg] = simpleTest(sg);
-    sg->addObserver(instance);
+  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
+    graph->addObserver(instance);
   }
   
-  return instance->resultsBuffer[(unsigned long)sg];
+  return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
-void SimpleTest::makeSimple(Graph* sg,vector<edge> &removed) {
-  if (SimpleTest::isSimple(sg)) return;
-  SimpleTest::simpleTest(sg, &removed, &removed);
+void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
+  if (SimpleTest::isSimple(graph)) return;
+  SimpleTest::simpleTest(graph, &removed, &removed);
   vector<edge>::const_iterator it;
   for(it = removed.begin(); it!=removed.end(); ++it) {
-    sg->delEdge(*it);
+    graph->delEdge(*it);
   }
-  assert(SimpleTest::isSimple(sg));
+  assert(SimpleTest::isSimple(graph));
 }
 //=================================================================
-bool SimpleTest::simpleTest(Graph *sg, vector<edge> *multipleEdges, vector<edge> *loops) {
+bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
  bool result = true;
  bool computeAll = (loops != 0) || (multipleEdges != 0);
- Iterator<node> *itNode = sg->getNodes();
+ Iterator<node> *itNode = graph->getNodes();
  MutableContainer<bool> inserted;
  inserted.setAll(false);
  while (itNode->hasNext ()) {
    node current = itNode->next ();
    //Search for multiple edges and loops
-   Iterator<edge> *itEdge = sg->getInOutEdges (current);
+   Iterator<edge> *itEdge = graph->getInOutEdges (current);
    MutableContainer<bool> targeted;
    targeted.setAll(false);
    while (itEdge->hasNext ()) {
      edge e = itEdge->next();
-     node target = sg->opposite(e, current);
+     node target = graph->opposite(e, current);
      if (target == current) { //loop 
        if (!computeAll) {
 	 result = false;
@@ -100,22 +100,22 @@ bool SimpleTest::simpleTest(Graph *sg, vector<edge> *multipleEdges, vector<edge>
  return result;
 }
 //=================================================================
-void SimpleTest::deleteResult(Graph *sg) {
-  resultsBuffer.erase((unsigned long)sg);
-  sg->removeObserver(this);
+void SimpleTest::deleteResult(Graph *graph) {
+  resultsBuffer.erase((unsigned long)graph);
+  graph->removeObserver(this);
 }
 //=================================================================
-void SimpleTest::addEdge(Graph *sg, const edge) {
-  if (resultsBuffer[(unsigned long)sg] == true)
-    deleteResult(sg);
+void SimpleTest::addEdge(Graph *graph, const edge) {
+  if (resultsBuffer[(unsigned long)graph] == true)
+    deleteResult(graph);
 }
 //=================================================================
-void SimpleTest::delEdge(Graph *sg, const edge) {
-  if (resultsBuffer[(unsigned long)sg] == false)
-    deleteResult(sg);
+void SimpleTest::delEdge(Graph *graph, const edge) {
+  if (resultsBuffer[(unsigned long)graph] == false)
+    deleteResult(graph);
 }
 //=================================================================
-void SimpleTest::destroy(Graph *sg) {
-  deleteResult(sg);
+void SimpleTest::destroy(Graph *graph) {
+  deleteResult(graph);
 }
 //=================================================================

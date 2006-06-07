@@ -18,6 +18,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+namespace tlp {
+
 class PlanarConMapTest : public CppUnit::TestFixture{
   
 private :
@@ -63,4 +65,5 @@ public :
 
 };
 
+}
 #endif

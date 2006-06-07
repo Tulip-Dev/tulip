@@ -9,7 +9,7 @@ namespace tlp {
 struct Graph;
 //=========================================================
 
-/** \addtogroup sgs */ 
+/** \addtogroup graphs */ 
 /*@{*/
 /// Observer for Graph
 /**
@@ -42,11 +42,11 @@ namespace std {
 
 namespace tlp {
 
-/** \addtogroup sgs */ 
+/** \addtogroup graphs */ 
 /*@{*/
 /**
  */
-/// Observable object for sg
+/// Observable object for graph
 class ObservableGraph {
  public:
   virtual ~ObservableGraph() {}

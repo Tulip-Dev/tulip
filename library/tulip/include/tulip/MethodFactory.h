@@ -55,7 +55,7 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
- tlp::T##Algorithm * createObject(const tlp::PropertyContext &context)	\
+  tlp::T##Algorithm * createObject(const tlp::PropertyContext &context)	\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T##Algorithm *) tmp);		\
@@ -102,7 +102,7 @@ class C##T##Factory:public tlp::T##Factory              \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
- tlp::T * createObject(ClusterContext context)		\
+  tlp::T * createObject(ClusterContext context)		\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T *) tmp);				\

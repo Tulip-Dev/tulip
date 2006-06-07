@@ -11,7 +11,7 @@
 /** \addtogroup clustering */
 /*@{*/
 
-class PlaneClustering : public Clustering
+class PlaneClustering : public Clustering 
 { 
  public:
 
@@ -24,7 +24,7 @@ class PlaneClustering : public Clustering
 
  private :
 
-  Plane plane;
+  tlp::Plane plane;
 };
 /*@}*/
 

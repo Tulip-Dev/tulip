@@ -126,7 +126,7 @@ protected slots:
   void fileSaveAs();
   int  closeWin();
   void windowActivated(QWidget *);
-  void hierarchyChangeGraph(Graph *);
+  void hierarchyChangeGraph(tlp::Graph *);
   void fileNew();
   void fileOpen();  
   void filePrint();
@@ -161,12 +161,12 @@ protected slots:
   void new3DView();
   void goInside();
   void changeGraph(Graph *);
-  void graphAboutToBeRemoved(Graph *);
+  void graphAboutToBeRemoved(tlp::Graph *);
   void glGraphWidgetClosed(GlGraphWidget *);
   void ungroup();  
   void group();  
   void gridOptions();
-  void mouseChanged(MouseInterface *);
+  void mouseChanged(tlp::MouseInterface *);
   void deleteElement();
   void selectElement();
   void addRemoveElement();

@@ -63,7 +63,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
  protected:
   GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
   Graph *graph; /**< A reference to the graph we are considering */
-  StatisticResults *statsResults; /**< A structure to store the results of the calculus */
+  tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
   ClusterTree *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
   tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */

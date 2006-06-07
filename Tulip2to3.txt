@@ -23,6 +23,7 @@ Selection => BooleanAlgorithm
 Int => IntegerAlgorithm
 IntType => IntegerType
 GlGraph::_superGraph => GlGraph::_graph
+GlGraph::elementMetaGraph => GlGraph::elementGraph
 GlGraph::getSuperGraph => GlGraph::getGraph
 GlGraph::setSuperGRaph => GlGraph::setGraph
 GlGraphWidget::setSuperGraph => GlGraphWidget::setGraph
