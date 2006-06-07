@@ -18,7 +18,12 @@ nobase_include_HEADERS = \
 	tulip/MouseMagicSelection.h\
 	tulip/Morphing.h \
 	tulip/Qt3ForTulip.h \
-	tulip/TlpQtTools.h
+	tulip/TlpQtTools.h \
+	tulip/ClusterTreePlugin.h \
+	tulip/ClusterTreeQt3.h \
+	tulip/GlGraphWidgetPlugin.h \
+	tulip/TulipElementPropertiesPlugin.h \
+	tulip/TulipPropertyTablePlugin.h
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
 	$(UIC) -o $@ $<
