@@ -113,7 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-qt@QT_VERSION@.la
 %{prefix}/lib/libtulip-qt@QT_VERSION@.so
 %{prefix}/lib/libtulip-qt@QT_VERSION@-%{tulip_version}.so.*
-%{prefix}/lib/tlp/plugins/designer/libTulipWidgets.*
+%{prefix}/lib/tlp/plugins/designer/lib*.*
 
 %changelog
 * Wed Jul 23 2003 Bertrand Mathieu <mathieu@labri.fr>
