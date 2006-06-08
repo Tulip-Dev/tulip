@@ -300,28 +300,21 @@ void viewGl::startTulip() {
   // adjust size if needed
   QRect sRect = QApplication::desktop()->availableGeometry();
   QRect vRect(this->geometry());
-  int needResize = 0;
+  // adjust width
   if (vRect.width() > sRect.width()) {
     vRect.setWidth(sRect.width());
-    //vRect.setHeight(sRect.height());
-    needResize = 1;
   }
-  if (vRect.right() > sRect.right()) {
-    vRect.moveLeft(sRect.left() + (sRect.width() - vRect.width())/2);
-    needResize = 1;
-  }
+  // screen width centering
+  vRect.moveLeft(sRect.left() + (sRect.width() - vRect.width())/2);
+  // adjust height
   if (vRect.height() > sRect.height()) {
     vRect.setHeight(sRect.height());
-    //vRect.setWidth(sRect.width());
-    needResize = 1;
   }
-  if (vRect.bottom() > sRect.bottom()) {
-    vRect.moveTop(sRect.top() + (sRect.height() - vRect.height())/2);
-    needResize = 1;
-  }
-  if (needResize)
-    this->setGeometry(vRect.x(), vRect.y(),
-		      vRect.width(), vRect.height());
+  // screen height centering
+  vRect.moveTop(sRect.top() + (sRect.height() - vRect.height())/2);
+  // adjust geometry
+  this->setGeometry(vRect.x(), vRect.y(),
+		    vRect.width(), vRect.height());
 
   AppStartUp *appStart=new AppStartUp(this);
   appStart->show();
