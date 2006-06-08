@@ -566,8 +566,8 @@ dnl Qt3Support lib is for Qt 3 compatibility purpose
       LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGl -framework QtNetwork"
       LIB_QT_DEBUG=${LIB_QT}
     else
-      LIB_QT="-lQtCore -lQtGui -lQt3Support -lQtOpenGL"
-      LIB_QT_DEBUG="-lQtCore_debug -lQtGui_debug -lQt3Support_debug -lQtOpenGL_debug"
+      LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
+      LIB_QT_DEBUG="-lQtCore_debug -lQt3Support_debug -lQtGui_debug -lQtOpenGL_debug"
     fi
   fi
 else
