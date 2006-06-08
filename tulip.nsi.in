@@ -97,7 +97,7 @@ File  "@qt_libraries@\..\bin\assistant.exe"
 setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
-File "@prefix@\bin\libtulip-qt-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-qt@QT_VERSION@-@WIN_VERSION@.dll" 
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
 setOutPath $INSTDIR\lib\tlp\plugins\clustering
