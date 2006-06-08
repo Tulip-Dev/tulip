@@ -8,7 +8,6 @@ nobase_include_HEADERS = \
 	tulip/TulipElementPropertiesData.h \
 	tulip/TulipElementProperties.h \
 	tulip/FindSelection.h \
-	tulip/FindSelectionData.h \
 	tulip/ClusterTreeData.h \
 	tulip/ClusterTree.h \
 	tulip/MouseAddEdge.h\
