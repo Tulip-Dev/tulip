@@ -117,7 +117,7 @@ SuperGraph * tlp::newCloneSubGraph(SuperGraph *sg, string name) {
 //=========================================================
 SuperGraph * tlp::load(const string &filename) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   SuperGraph *graph = tlp::importGraph("tlp", dataSet);
   return graph;
 }
