@@ -82,7 +82,6 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 
 CLEANFILES = $(BUILT_SOURCES)
 
-if QT3
 nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlGraphWidget.cpp \
@@ -95,47 +94,16 @@ nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	FindSelectionData.cpp \
 	moc_ClusterTree.cpp
 
+if QT3
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) -o $@ $<
 else
-nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
-	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
-	moc_PropertyWidgets.cpp \
-	moc_TulipElementPropertiesData.cpp \
-	moc_TulipElementProperties.cpp \
-	moc_FindSelection.cpp \
-	moc_FindSelectionData.cpp \
-	moc_ClusterTreeData.cpp \
-	FindSelectionData.cpp \
-	moc_ClusterTree.cpp \
-	$(srcdir)/../include/tulip/clustertree.h \
-	$(srcdir)/../include/tulip/glgraphwidget.h \
-	$(srcdir)/../include/tulip/tulipelementproperties.h \
-	$(srcdir)/../include/tulip/tulippropertytable.h
-
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
 moc_ClusterTree.cpp: $(srcdir)/../include/tulip/ClusterTreeQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
-../include/tulip/clustertree.h : $(srcdir)/../include/tulip/ClusterTree.h
-	cp -f $< $@
-
-../include/tulip/glgraphwidget.h : $(srcdir)/../include/tulip/GlGraphWidget.h
-	cp -f $< $@
-
-../include/tulip/tulipelementproperties.h : $(srcdir)/../include/tulip/TulipElementProperties.h
-	cp -f $< $@
-
-../include/tulip/tulippropertytable.h : $(srcdir)/../include/tulip/PropertyWidgets.h
-	cp -f $< $@
 endif
-
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui $(srcdir)/../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl $(srcdir)/../include/tulip/FindSelectionData.h $<
-
-../include/tulip/FindSelectionData.h: $(srcdir)/../designer/FindSelection.ui
-	$(UIC) -o $@ $<

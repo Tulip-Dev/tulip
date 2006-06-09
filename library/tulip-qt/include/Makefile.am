@@ -24,5 +24,28 @@ nobase_include_HEADERS = \
 	tulip/TulipElementPropertiesPlugin.h \
 	tulip/TulipPropertyTablePlugin.h
 
+if QT3
+nodist_include_HEADERS = tulip/FindSelectionData.h
+else
+nodist_include_HEADERS = \
+	tulip/FindSelectionData.h \
+	tulip/clustertree.h \
+	tulip/glgraphwidget.h \
+	tulip/tulipelementproperties.h \
+	tulip/tulippropertytable.h
+
+tulip/clustertree.h : tulip/ClusterTree.h
+	cp -f $< $@
+
+tulip/glgraphwidget.h : tulip/GlGraphWidget.h
+	cp -f $< $@
+
+tulip/tulipelementproperties.h : tulip/TulipElementProperties.h
+	cp -f $< $@
+
+tulip/tulippropertytable.h : tulip/PropertyWidgets.h
+	cp -f $< $@
+endif
+
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
 	$(UIC) -o $@ $<
