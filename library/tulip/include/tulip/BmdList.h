@@ -19,6 +19,7 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
+#include <cassert>
 #include <tulip/BmdLink.h>
 
 namespace tlp {
