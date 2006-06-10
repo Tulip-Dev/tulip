@@ -111,4 +111,4 @@ public:
   }
 };
 /*@}*/
-METRICPLUGIN(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","0","1");
+METRICPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","0","1","Component");

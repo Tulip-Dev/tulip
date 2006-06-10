@@ -12,7 +12,7 @@
 #include <tulip/ForEach.h>
 #include "MixedModel.h"
 
-LAYOUTPLUGIN(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1");
+LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1","Planar");
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #include "StrongComponent.h"
 #include <tulip/MetricProxy.h>
 
-METRICPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
+METRICPLUGINOFGROUP(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1","Component");
 
 using namespace std;
 

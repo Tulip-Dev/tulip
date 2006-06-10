@@ -127,4 +127,4 @@ public:
 };
 /*@}*/
 //=============================================================================================
-METRICPLUGIN(BiconnectedComponnent,"Biconnected Componnent","David Auber","03/01/2005","Alpha","0","1");
+METRICPLUGINOFGROUP(BiconnectedComponnent,"Biconnected Component","David Auber","03/01/2005","Alpha","0","1","Component");

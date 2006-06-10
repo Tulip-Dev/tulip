@@ -1,7 +1,7 @@
 #include <tulip/ForEach.h>
 #include "Random.h"
 
-METRICPLUGIN(RandomMetric,"Random","David Auber","04/10/2001","Alpha","0","1")
+METRICPLUGINOFGROUP(RandomMetric,"Random","David Auber","04/10/2001","Alpha","0","1","Misc")
 
 //===========================================
 RandomMetric::RandomMetric(const PropertyContext &context):Metric(context) 

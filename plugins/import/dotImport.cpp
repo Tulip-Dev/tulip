@@ -84,5 +84,5 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","0","0","1","File in format")
+IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","0","0","1","File")
 

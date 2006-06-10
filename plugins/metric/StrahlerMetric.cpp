@@ -14,7 +14,7 @@
 #include "StrahlerMetric.h"
 #include <tulip/StringProxy.h>
 
-METRICPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
+METRICPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1","Graph");
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "TreeArityMax.h"
 
-METRICPLUGIN(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1");
+METRICPLUGINOFGROUP(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1","Tree");
 
 using namespace std;
 

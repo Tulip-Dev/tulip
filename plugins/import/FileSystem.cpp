@@ -172,4 +172,4 @@ struct FileSystem:public ImportModule {
   }
 };
 
-IMPORTPLUGIN(FileSystem,"FileSystem","Auber","16/12/2002","0","0","1")
+  IMPORTPLUGINOFGROUP(FileSystem,"FileSystem", "Auber", "16/12/2002", "0", "0", "1", "Misc")

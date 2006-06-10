@@ -73,4 +73,4 @@ struct Grid:public ImportModule {
     return true;
   }
 };
-IMPORTPLUGIN(Grid,"Grid","Auber","02/12/2003","0","0","1")
+IMPORTPLUGINOFGROUP(Grid,"Grid","Auber","02/12/2003","0","0","1","Graphs")

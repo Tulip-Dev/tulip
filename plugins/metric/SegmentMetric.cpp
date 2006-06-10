@@ -4,7 +4,7 @@
 #include "SegmentMetric.h"
 
 
-METRICPLUGIN(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1");
+METRICPLUGINOFGROUP(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1","Tree");
 
 using namespace std;
 
