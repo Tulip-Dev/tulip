@@ -12,12 +12,17 @@ public:
 private:
   MutableContainer<double> sizeNorm;
   bool checkEdgeIntersection(const node n, const Coord& move);
-  BooleanProperty* inputSelection;
-  SizeProperty* inputSize;
-  LayoutProperty* inputLayout;
-  MutableContainer<Coord> prevMove;
-  double k,k2; 
-  Coord t;
+  
+  SizeProperty * sizeOfNodes;
+  LayoutProperty* originalLayout;
+  
+  bool useEdgeLength;
+  DoubleProperty* edgeLength;
+  
+  bool forbidMoveOfSelectedNodes;
+  BooleanProperty* selectedNodes;
+  
+  bool removeOverlaps;
 };
 
 #endif

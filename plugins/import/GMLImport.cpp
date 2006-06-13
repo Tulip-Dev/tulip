@@ -426,4 +426,4 @@ struct GMLImport:public ImportModule {
 };
 /*@}*/
 
-IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File in format")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File")

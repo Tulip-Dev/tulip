@@ -2,7 +2,7 @@
 #include "StrongComponent.h"
 #include <tulip/DoubleProperty.h>
 
-DOUBLEPLUGIN(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(StrongComponent,"Strongly Connected Component","David Auber","12/06/2001","Alpha","0","1","Component");
 
 using namespace std;
 using namespace tlp;

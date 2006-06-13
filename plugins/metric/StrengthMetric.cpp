@@ -1,7 +1,7 @@
 #include <tulip/ForEach.h>
 #include "StrengthMetric.h"
 
-DOUBLEPLUGIN(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1","Graph");
 
 using namespace std;
 using namespace tlp;

@@ -63,7 +63,7 @@ Graph * tlp::newCloneSubGraph(Graph *sg, string name) {
 //=========================================================
 Graph * tlp::loadGraph(const string &filename) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("tlp", dataSet);
   return sg;
 }

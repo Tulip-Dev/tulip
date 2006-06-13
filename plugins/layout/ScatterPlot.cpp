@@ -3,7 +3,7 @@
 #include <qmessagebox.h>
 #include "ScatterPlot.h"
 
-LAYOUTPLUGIN(ScatterPlot, "Scatter Plot", "M.Delorme", "25/07/2005", "Alpha", "1", "0");
+LAYOUTPLUGINOFGROUP(ScatterPlot, "Scatter Plot", "M.Delorme", "25/07/2005", "Alpha", "1", "0", "Misc");
 
 using namespace std;
 using namespace tlp;

@@ -1,7 +1,7 @@
 #include <tulip/ForEach.h>
 #include "Random.h"
 
-DOUBLEPLUGIN(RandomMetric,"Random","David Auber","04/10/2001","Alpha","0","1")
+DOUBLEPLUGINOFGROUP(RandomMetric,"Random","David Auber","04/10/2001","Alpha","0","1","Misc")
 
 //===========================================
 RandomMetric::RandomMetric(const PropertyContext &context):DoubleAlgorithm(context) 

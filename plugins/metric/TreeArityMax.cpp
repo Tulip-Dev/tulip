@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "TreeArityMax.h"
 
-DOUBLEPLUGIN(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","0","1","Tree");
 
 using namespace std;
 using namespace tlp;

@@ -3,7 +3,7 @@
 #include <tulip/AcyclicTest.h>
 #include "DagLevelMetric.h"
 
-DOUBLEPLUGIN(DagLevelMetric,"DagLevel","David Auber","10/03/2000","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(DagLevelMetric,"DagLevel","David Auber","10/03/2000","Alpha","0","1","Tree");
 
 using namespace std;
 using namespace tlp;

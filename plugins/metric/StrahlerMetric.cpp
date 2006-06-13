@@ -14,7 +14,7 @@
 #include "StrahlerMetric.h"
 #include <tulip/StringProperty.h>
 
-DOUBLEPLUGIN(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1","Graph");
 
 using namespace std;
 using namespace tlp;

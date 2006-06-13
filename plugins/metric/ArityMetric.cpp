@@ -1,7 +1,7 @@
 #include <tulip/ForEach.h>
 #include "ArityMetric.h"
 
-DOUBLEPLUGIN(ArityMetric,"Degree","David Auber","04/10/2001","Stable","0","1");
+DOUBLEPLUGINOFGROUP(ArityMetric,"Degree","David Auber","04/10/2001","Stable","0","1","Graph");
 
 ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
 }

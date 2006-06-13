@@ -17,7 +17,7 @@
 #include <tulip/ForEach.h>
 #include "Circular.h"
 
-LAYOUTPLUGIN(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","0","1");
+LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","0","1","Basic");
 
 using namespace std;
 using namespace tlp;

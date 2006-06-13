@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "NodeMetric.h"
 
-DOUBLEPLUGIN(NodeMetric,"Node","David Auber","20/12/1999","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(NodeMetric,"Node","David Auber","20/12/1999","Alpha","0","1","Tree");
 
 using namespace std;
 using namespace tlp;

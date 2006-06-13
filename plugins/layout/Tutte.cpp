@@ -4,7 +4,7 @@
 #include "Tutte.h"
 
 
-LAYOUTPLUGIN(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2");
+LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2","Planar");
 
 using namespace std;
 using namespace tlp;

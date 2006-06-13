@@ -128,4 +128,4 @@ public:
 };
 /*@}*/
 //=============================================================================================
-DOUBLEPLUGIN(BiconnectedComponnent,"Biconnected Componnent","David Auber","03/01/2005","Alpha","0","1");
+DOUBLEPLUGINOFGROUP(BiconnectedComponnent,"Biconnected Component","David Auber","03/01/2005","Alpha","0","1","Component");

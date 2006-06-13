@@ -10,11 +10,11 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGIN(SquarifiedTreeMap,"Squarified Tree Map",
+LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
              "Julien Testut, Antony Durand, Pascal Ollier, "
              "Yashvin Nababsing, Sebastien Leclerc, "
              "Thibault Ruchon, Eric Dauchier",
-             "03/11/2004", "ok", "0", "1");
+		    "03/11/2004", "ok", "0", "1", "Tree");
 
 //====================================================================
 

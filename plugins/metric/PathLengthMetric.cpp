@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "PathLengthMetric.h"
 
-DOUBLEPLUGIN(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2");
+DOUBLEPLUGINOFGROUP(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2","Tree");
 
 using namespace std;
 using namespace tlp;

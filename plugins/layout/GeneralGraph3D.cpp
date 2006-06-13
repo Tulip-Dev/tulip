@@ -14,7 +14,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGIN(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1")
+LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1","Hierarchical")
 
 namespace {
   const char * paramHelp[] = {

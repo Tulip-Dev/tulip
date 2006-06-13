@@ -13,7 +13,7 @@
 #include "HierarchicalGraph.h"
 
 
-LAYOUTPLUGIN(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1");
+LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1","Hierarchical");
 
 using namespace std;
 using namespace tlp;

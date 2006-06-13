@@ -28,7 +28,7 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is a tree
 class TLP_SCOPE TreeTest : private GraphObserver {
