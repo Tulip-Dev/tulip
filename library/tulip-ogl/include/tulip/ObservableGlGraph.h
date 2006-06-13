@@ -22,7 +22,6 @@ class GlGraphObserver {
   virtual void draw(GlGraph *){}
   virtual void destroy(GlGraph *){}
 };
-
 /*@}*/
 }
 

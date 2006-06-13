@@ -31,7 +31,7 @@ MinGW installation as root installation directory.
 Using and MSYS command shell, 
 set the current directory to the tulip directory
 > cd <tulip source installation directory>
-copy the local file libxml.m' in /usr/share/aclocal
+copy the local file libxml.m4 in /usr/share/aclocal
 > cp libxml.m4 /usr/share/aclocal
 
 > sh gen-conf.sh

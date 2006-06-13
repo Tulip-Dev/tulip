@@ -120,7 +120,7 @@ namespace {
   };
 }
 
-class MetricMapping: public ColorAlgorithm { 
+class MetricColorMapping: public ColorAlgorithm { 
 private:
   DoubleProperty *entryMetric;
   int colorModel;
@@ -129,7 +129,7 @@ private:
   Vector<float,4> deltaRGBA;
 
 public:
-  MetricMapping(const PropertyContext &context):ColorAlgorithm(context){
+  MetricColorMapping(const PropertyContext &context):ColorAlgorithm(context){
     addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
@@ -137,7 +137,7 @@ public:
     addParameter<Color>("color2",paramHelp[3],"(0,0,255,228)");
   }
   //=========================================================
-  ~MetricMapping(){}
+  ~MetricColorMapping(){}
   //=========================================================
   Color getColor(double value, double range) {
     if (range==0) range = 1;
@@ -236,4 +236,4 @@ public:
   }
 };
 
-COLORPLUGIN(MetricMapping,"Metric Mapping","Auber","04/07/2003","0","0","1");
+COLORPLUGIN(MetricColorMapping,"Metric Mapping","Auber","04/07/2003","0","0","1");

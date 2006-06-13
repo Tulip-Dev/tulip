@@ -70,7 +70,7 @@ protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
   ClusterTree *clusterTreeWidget;
 #ifdef STATS_UI
-  TulipStats *statsWidget;
+  tlp::TulipStats *statsWidget;
 #endif
   ToolBar *mouseToolBar;
   Overview *overviewWidget;
