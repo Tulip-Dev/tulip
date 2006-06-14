@@ -979,13 +979,11 @@ void viewGl::buildMenus() {
   editMenu->insertItem( "group", this, SLOT( group() ));
   //Property Menu
   if (selectMenu.count()>0)
-    propertyMenu->insertItem("&Boolean", &selectMenu );
-  if (clusteringMenu.count()>0)
-    propertyMenu->insertItem("&Clustering ", &clusteringMenu );
+    propertyMenu->insertItem("&Selection", &selectMenu );
   if (colorsMenu.count()>0)
     propertyMenu->insertItem("&Color", &colorsMenu );
   if (metricMenu.count()>0)
-    propertyMenu->insertItem("&Double", &metricMenu );
+    propertyMenu->insertItem("&Measure", &metricMenu );
   if (intMenu.count()>0)
     propertyMenu->insertItem("&Integer", &intMenu );
   if (layoutMenu.count()>0)
@@ -994,6 +992,8 @@ void viewGl::buildMenus() {
     propertyMenu->insertItem("&Size", &sizesMenu );
   if (stringMenu.count()>0)
     propertyMenu->insertItem("&String", &stringMenu );
+  if (clusteringMenu.count()>0)
+    propertyMenu->insertItem("&General", &clusteringMenu );
 }
 //**********************************************************************
 void viewGl::outputEPS() {
