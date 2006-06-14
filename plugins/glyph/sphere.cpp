@@ -24,7 +24,7 @@ private:
   bool listOk;
 };
 
-GLYPHPLUGIN(Sphere, "Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1", "1", 2);
+GLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1", "1", 2);
 
 //=========================================================================================
 Sphere::Sphere(GlyphContext *gc): Glyph(gc),listOk(false) {

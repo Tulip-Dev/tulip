@@ -29,17 +29,17 @@ protected:
   void drawCube();
 };
 
-GLYPHPLUGIN(Cube, "Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1", "1" , 0);
+GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1", "1" , 0);
 
 //===================================================================================
 Cube::Cube(GlyphContext *gc): Glyph(gc),listOk(false) {
 }
-
+//=======================================================
 Cube::~Cube() {
   if (listOk)
     if (glIsList(LList)) glDeleteLists(LList, 1);
 }
-
+//=======================================================
 void
 Cube::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
@@ -57,8 +57,7 @@ Cube::draw(node n) {
   }
   glCallList(LList);
 }
-
-
+//=======================================================
 Coord Cube::getAnchor(const Coord & vector ) const {
   float x,y,z, fmax;
   vector.get(x,y,z);
@@ -68,8 +67,7 @@ Coord Cube::getAnchor(const Coord & vector ) const {
   else
     return vector;
 }
-
-
+//=======================================================
 void Cube::drawCube() {
   glBegin(GL_QUADS);
   /* front face */

@@ -26,7 +26,7 @@ private:
   bool listOk;
 };
 
-GLYPHPLUGIN(HalfCylinder, "HalfCylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1", "1", 10);
+GLYPHPLUGIN(HalfCylinder, "3D - HalfCylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1", "1", 10);
 
 //=================================================================================================
 HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc),listOk(false) {

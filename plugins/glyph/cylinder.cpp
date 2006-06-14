@@ -26,7 +26,7 @@ private:
   bool listOk;
 };
 
-GLYPHPLUGIN(Cylinder, "Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1", "1", 6);
+GLYPHPLUGIN(Cylinder, "3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1", "1", 6);
 
 //=================================================================================================
 Cylinder::Cylinder(GlyphContext *gc): Glyph(gc),listOk(false) {
