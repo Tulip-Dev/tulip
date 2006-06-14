@@ -23,7 +23,7 @@ using namespace tlp;
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > AbstractProperty<Tnode,Tedge,TPROPERTY>::factory;*/
 
 template <class Tnode, class Tedge, class TPROPERTY>
-AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(Graph *sg):
+AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg):
   graph(sg) {
   circularCall = false;
   nodeDefaultValue = Tnode::defaultValue();
@@ -32,10 +32,10 @@ AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(Graph *sg):
   edgeProperties.setAll(Tedge::defaultValue());
 }
 //=============================================================
-static bool isAncestor(Graph *g1, Graph *g2) {
+static bool isAncestor(tlp::Graph *g1, tlp::Graph *g2) {
   if(g1 == g2->getRoot())
     return true;
-  Graph *currentGraph = g2;
+  tlp::Graph *currentGraph = g2;
   while(currentGraph->getFather() != currentGraph) {
     if(currentGraph == g1)
       return true;

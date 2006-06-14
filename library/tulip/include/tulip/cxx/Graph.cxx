@@ -2,38 +2,38 @@
 
 //================================================================================
 template<typename ATTRIBUTETYPE>
-ATTRIBUTETYPE Graph::getAttribute(const std::string &name) {
-  DataSet &data=getAttributes();
+ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) {
+  tlp::DataSet &data=getAttributes();
   ATTRIBUTETYPE tmp;
   data.get(name,tmp);
   return tmp;
 }
 //================================================================================
 template<typename ATTRIBUTETYPE>
-void Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value) {
-  DataSet &data=getAttributes();
+void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value) {
+  tlp::DataSet &data=getAttributes();
   data.set(name,value);
 }
 //================================================================================
 template<typename Proxytype>
-Proxytype* Graph::getLocalProperty(const std::string &name) { 
+Proxytype* tlp::Graph::getLocalProperty(const std::string &name) { 
   Proxytype *tmp;
   if (existLocalProperty(name)) {
-    PropertyInterface* tmpProxy=getProperty(name);
+    tlp::PropertyInterface* tmpProxy=getProperty(name);
     assert ( typeid((*tmpProxy)) == typeid(Proxytype) );
     return ( (Proxytype *)(tmpProxy) );
   }
   else {
-    PropertyManager *proxyManager=this->getPropertyManager();
+    tlp::PropertyManager *proxyManager=this->getPropertyManager();
     proxyManager->setLocalProxy(name,tmp=new Proxytype(this));
   }
   return (tmp);
 }
 //====================================================================================
 template<typename Proxytype>
-Proxytype* Graph::getProperty(const std::string &name) {
+Proxytype* tlp::Graph::getProperty(const std::string &name) {
   if (existProperty(name)) {
-    PropertyInterface* tmpProxy=getProperty(name);
+    tlp::PropertyInterface* tmpProxy=getProperty(name);
     assert ( typeid((*tmpProxy)) == typeid(Proxytype) );
     return ( (Proxytype *)(tmpProxy) );
   }
@@ -43,14 +43,14 @@ Proxytype* Graph::getProperty(const std::string &name) {
 }
 //====================================================================================
 template<typename Proxytype>
-bool Graph::computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
-				 PluginProgress *progress, DataSet *data) {
+bool tlp::Graph::computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
+				 tlp::PluginProgress *progress, tlp::DataSet *data) {
   bool resultBool;
-  PropertyContext context;
+  tlp::PropertyContext context;
 
-  PluginProgress *tmpProgress;
+  tlp::PluginProgress *tmpProgress;
   if (progress==0) 
-    tmpProgress=new PluginProgress();
+    tmpProgress=new tlp::PluginProgress();
   else 
     tmpProgress=progress;
 
