@@ -27,7 +27,7 @@ private:
   void drawCubeSimple(GLenum);
 };
 
-GLYPHPLUGIN(CubeOutLined, "CubeOutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1", "1", 1);
+GLYPHPLUGIN(CubeOutLined, "3D - CubeOutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1", "1", 1);
 
 }
 
