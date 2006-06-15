@@ -14,7 +14,7 @@ static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, un
 /*
   Redefined in order to output char in numerical format
 */
-std::ostream& operator<<(std::ostream &os,const Color &a) {
+std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
   const unsigned int SIZE =4;
   os << "(" ;
   for ( unsigned int i=0 ; i<SIZE ; ++i ) {
@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream &os,const Color &a) {
 /*
   Redefined in order to input char in numerical format
 */
-std::istream & operator>> (std::istream &is, Color & outA) {
+std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   const unsigned int SIZE =4;
   char c;
   int pos = is.tellg();

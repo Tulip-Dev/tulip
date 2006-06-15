@@ -52,10 +52,11 @@ class Color : public tlp::Vector<unsigned char,4>{
   ///
   void setV(int );
 };
-}
 
-std::ostream& operator<<(std::ostream &os,const tlp::Color &);
-std::istream& operator>>(std::istream &is, tlp::Color &);
+  std::ostream& operator<<(std::ostream &os,const tlp::Color &);
+  std::istream& operator>>(std::istream &is, tlp::Color &);
+
+}
 
 tlp::Color::Color(const unsigned char red ,const unsigned char green ,const unsigned char blue,const unsigned char alpha) {
   array[0]=red;
