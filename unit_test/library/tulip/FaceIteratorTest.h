@@ -21,7 +21,7 @@
 class FaceIteratorTest : public CppUnit::TestFixture{
   
 private :
-  SuperGraphMap* carte;
+  PlanarConMap* carte;
 
   std::vector<edge> edges;
   std::vector<node> nodes; 
@@ -30,7 +30,7 @@ private :
   
 public :
   void setUp(){
-    carte = new SuperGraphMap(tlp::newSuperGraph());
+    carte = new PlanarConMap(tlp::newSuperGraph());
     edges.clear();
     nodes.clear();
   }

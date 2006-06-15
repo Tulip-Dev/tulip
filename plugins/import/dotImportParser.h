@@ -1,7 +1,7 @@
-/* A Bison parser, made by GNU Bison 1.875.  */
+/* A Bison parser, made by GNU Bison 2.0.  */
 
 /* Skeleton parser for Yacc-like parsing with Bison,
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -83,33 +83,35 @@
 #line 16 "dotImportParser.y"
 
 
-#define	TLP_LAYOUT_PROXY_NAME		"viewLayout"
-#define	TLP_LABEL_PROXY_NAME		"viewLabel"
-#define	TLP_EXTLABEL_PROXY_NAME		"externLabel"
-#define	TLP_HEAD_LABEL_PROXY_NAME	"headLabel"		// edge head label
-#define	TLP_TAIL_LABEL_PROXY_NAME	"tailLabel"		// edge tail label
-#define	TLP_COMMENT_PROXY_NAME		"comment"
-#define	TLP_URL_PROXY_NAME			"URL"
-#define	TLP_COLOR_PROXY_NAME		"viewColor"
-#define	TLP_SIZE_PROXY_NAME			"viewSize"
-#define	TLP_SHAPE_PROXY_NAME		"viewShape"
-#define	DEFAULT_SHAPE				2				// ellipse
+#define TLP_LAYOUT_PROXY_NAME "viewLayout"
+#define TLP_LABEL_PROXY_NAME "viewLabel"
+#define TLP_EXTLABEL_PROXY_NAME "externLabel"
+#define TLP_HEAD_LABEL_PROXY_NAME "headLabel" // edge head label
+#define TLP_TAIL_LABEL_PROXY_NAME "tailLabel" // edge tail label
+#define TLP_COMMENT_PROXY_NAME "comment"
+#define TLP_URL_PROXY_NAME "URL"
+#define TLP_SIZE_PROXY_NAME "viewSize"
+#define TLP_SHAPE_PROXY_NAME "viewShape"
+#define TLP_COLOR_PROXY_NAME "viewColor"
+#define TLP_BORDERCOLOR_PROXY_NAME "viewBorderColor"
+#define TLP_FONTCOLOR_PROXY_NAME "viewLabelColor"
+#define DEFAULT_SHAPE 1 // ellipse
 
 
-int					yylex( void );
-void				yyerror( char const * ) {}
-extern char *		yytext;
-extern int			yylen;
+ int yylex( void );
+ void yyerror( char const * ) {}
+ extern char * yytext;
+extern int yylen;
 
-typedef stdext::hash_map<std::string,node>	NodeMap;
-typedef std::vector<node>					NodeA;
-typedef std::vector<edge>					EdgeA;
+typedef stdext::hash_map<std::string,node> NodeMap;
+typedef std::vector<node> NodeA;
+typedef std::vector<edge> EdgeA;
 
 template < typename T > inline
-std::vector<T> & operator += (	      std::vector<T> & inA,
-								const std::vector<T> & inB ) {
-	inA.insert( inA.end(), inB.begin(), inB.end() );
-	return inA;
+std::vector<T> & operator += ( std::vector<T> & inA,
+ const std::vector<T> & inB ) {
+ inA.insert( inA.end(), inB.begin(), inB.end() );
+ return inA;
 }
 
 
@@ -120,27 +122,25 @@ std::vector<T> & operator += (	      std::vector<T> & inA,
 
 struct ShapeAttr
 {
-	const char *	name;
-	int				idx;
+ const char * name;
+ int idx;
 };
 
-ShapeAttr ShapeAttrA[] =
-{
-	// tulip shapes
-	"box",				0,
-	"boxoutlined",		1,
-	"sphere",			2,
-	"cone",				3,
-	"square",			4,
-	"teapot",			5,
-	"cyclinder",		6,
-	"billboard",		7,
-
-	// dot shapes
-	"circle",			2,	// as a sphere
-	"ellipse",			2,	// as a sphere
+ShapeAttr ShapeAttrA[] = {
+  // tulip shapes
+  "box", 0,
+  "boxoutlined", 1,
+  "sphere", 2,
+  "cone", 3,
+  "square", 4,
+  "teapot", 5,
+  "cyclinder", 6,
+  "billboard", 7,
+  
+  // dot shapes
+  "circle", 2, // as a sphere
+  "ellipse", 2, // as a sphere
 };
-
 
 //
 // dot attributes
@@ -150,138 +150,152 @@ ShapeAttr ShapeAttrA[] =
 // which have been really defined.
 //
 
-struct DOT_ATTR
-{
-	// attributes
-	enum {
-		LAYOUT		= (1<<0),
-		SHAPE		= (1<<1),
-		WIDTH		= (1<<2),
-		HEIGHT		= (1<<3),
-		DEPTH		= (1<<4),
-		LABEL		= (1<<5),
-		HEAD_LABEL	= (1<<6),
-		TAIL_LABEL	= (1<<7),
-		URL			= (1<<8),
-		COMMENT		= (1<<9),
-		COLOR		= (1<<10),
-		STYLE		= (1<<11),
-	};
+struct DOT_ATTR {
+  // attributes
+  enum {
+    LAYOUT = (1<<0),
+    SHAPE = (1<<1),
+    WIDTH = (1<<2),
+    HEIGHT = (1<<3),
+    DEPTH = (1<<4),
+    LABEL = (1<<5),
+    HEAD_LABEL = (1<<6),
+    TAIL_LABEL = (1<<7),
+    URL = (1<<8),
+    COMMENT = (1<<9),
+    FILL_COLOR = (1<<10),
+    FONT_COLOR = (1<<11),
+    COLOR = (1<<12),
+    STYLE = (1<<13)
+  };
 
-	unsigned int			mask;			// defined mask
+  uint mask; // defined mask
 
-	Coord			layout;
-	int				shape;
-	Size			size;
-	std::string		label;
-	std::string		headLabel;
-	std::string		tailLabel;
-	std::string		url;
-	std::string		comment;
-	Color			color;
-	int				style;
+  Coord layout;
+  int shape;
+  Size size;
+  std::string label;
+  std::string headLabel;
+  std::string tailLabel;
+  std::string url;
+  std::string comment;
+  Color color;
+  Color fontcolor;
+  Color fillcolor;
+  int style;
 
-					DOT_ATTR	(							)
-	{
-		clear();
+  DOT_ATTR ( ){
+    clear();
+  }
+
+  void clear ( ) {
+    mask = 0;
+  }
+
+  DOT_ATTR operator + ( const DOT_ATTR & inRef ) {
+    DOT_ATTR attr = *this;
+    attr.mask |= inRef.mask;
+    if( inRef.mask & LAYOUT ) attr.layout = inRef.layout;
+    if( inRef.mask & SHAPE ) attr.shape = inRef.shape;
+    if( inRef.mask & WIDTH ) attr.size.setW( inRef.size.getW() );
+    if( inRef.mask & HEIGHT ) attr.size.setH( inRef.size.getH() );
+    if( inRef.mask & DEPTH ) attr.size.setD( inRef.size.getD() );
+    if( inRef.mask & LABEL ) attr.label = inRef.label;
+    if( inRef.mask & HEAD_LABEL ) attr.headLabel = inRef.headLabel;
+    if( inRef.mask & TAIL_LABEL ) attr.tailLabel = inRef.tailLabel;
+    if( inRef.mask & LABEL ) attr.label = inRef.label;
+    if( inRef.mask & FILL_COLOR ) attr.fillcolor = inRef.fillcolor;
+    if( inRef.mask & FONT_COLOR ) attr.fontcolor = inRef.fontcolor;
+    if( inRef.mask & COLOR ) attr.color = inRef.color;
+    if( inRef.mask & STYLE ) attr.style = inRef.style;
+    if( inRef.mask & COMMENT ) attr.comment = inRef.comment;
+    if( inRef.mask & URL ) attr.url = inRef.url;
+    return attr;
+  }
+
+  void operator += ( const DOT_ATTR & inRef ) {
+    *this = *this + inRef;
+  }
+
+  void setValue ( const std::string & inId,
+		  const std::string & inValue ) {
+    if( inId == "pos" || inId == "layout" ) {
+      float x, y, z;
+      if( sscanf(inValue.c_str(),"%f,%f,%f",&x,&y,&z) == 3 ) {
+	layout = Coord(x,y,z);
+	mask |= LAYOUT;
+      } else if( sscanf(inValue.c_str(),"%f,%f",&x,&y) == 2 ) {
+	layout = Coord(x,y,0);
+	mask |= LAYOUT;
+      } else if( sscanf(inValue.c_str(),"%f",&x) == 1 ) {
+	layout = Coord(x,0,0);
+	mask |= LAYOUT;
+      }
+    }
+    else if( inId == "label" ) {
+      label = inValue;
+      mask |= LABEL;
+    }
+    else if( inId == "headlabel" ) {
+      headLabel = inValue;
+      mask |= HEAD_LABEL;
+    }
+    else if( inId == "taillabel" ) {
+      tailLabel = inValue;
+      mask |= TAIL_LABEL;
+    }
+    else if( inId == "fontcolor" ) { //border color
+      Color c;
+      if( DecodeColor(c,inValue) ) {
+	fontcolor = c;
+	mask |= FONT_COLOR;
+      }
+    }
+    else if( inId == "color" ) { //border color
+      Color c;
+      if( DecodeColor(c,inValue) ) {
+	color = c;
+	mask |= COLOR;
+      }
+    }
+    else if( inId == "fillcolor" ) { //fill color
+      Color c;
+      if( DecodeColor(c,inValue) ) {
+	fillcolor = c;
+	mask |= FILL_COLOR;
+      }
+    }
+    else if( inId == "width" ) {
+      size.setW( atof(inValue.c_str()) );
+      mask |= WIDTH;
+    }
+    else if( inId == "height" ) {
+      size.setH( atof(inValue.c_str()) );
+      mask |= HEIGHT;
+    }
+    else if( inId == "depth" ) {
+      size.setD( atof(inValue.c_str()) );
+      mask |= DEPTH;
+    }
+    else if( inId == "shape" ) {
+      uint N = sizeof(ShapeAttrA) / sizeof(ShapeAttr);
+      for( uint i = 0 ; i < N ; i++ ) {
+	if( !strcasecmp(ShapeAttrA[i].name,inValue.c_str()) ) {
+	  shape = ShapeAttrA[i].idx;
+	  mask |= SHAPE;
+	  break;
 	}
-
-	void			clear		(							)
-	{
-		mask = 0;
-	}
-
-	DOT_ATTR 		operator +	(	const DOT_ATTR & inRef	)
-	{
-		DOT_ATTR attr = *this;
-		attr.mask |= inRef.mask;
-		if( inRef.mask & LAYOUT		)	attr.layout = inRef.layout;
-		if( inRef.mask & SHAPE		)	attr.shape = inRef.shape;
-		if( inRef.mask & WIDTH		)	attr.size.setW( inRef.size.getW() );
-		if( inRef.mask & HEIGHT		)	attr.size.setH( inRef.size.getH() );
-		if( inRef.mask & DEPTH		)	attr.size.setD( inRef.size.getD() );
-		if( inRef.mask & LABEL		)	attr.label = inRef.label;
-		if( inRef.mask & HEAD_LABEL	)	attr.headLabel = inRef.headLabel;
-		if( inRef.mask & TAIL_LABEL	)	attr.tailLabel = inRef.tailLabel;
-		if( inRef.mask & LABEL		)	attr.label = inRef.label;
-		if( inRef.mask & COLOR		)	attr.color = inRef.color;
-		if( inRef.mask & STYLE		)	attr.style = inRef.style;
-		if( inRef.mask & COMMENT	)	attr.comment = inRef.comment;
-		if( inRef.mask & URL		)	attr.url = inRef.url;
-		return attr;
-	}
-
-	void			operator +=	(	const DOT_ATTR & inRef	)
-	{
-		*this = *this + inRef;
-	}
-
-	void			setValue	(	const std::string &		inId,
-									const std::string &		inValue	)
-	{
-		if( inId == "layout" ) {
-			float x, y, z;
-			if( sscanf(inValue.c_str(),"%f,%f,%f",&x,&y,&z) == 3 ) {
-				layout = Coord(x,y,z);
-				mask |= LAYOUT;
-			} else if( sscanf(inValue.c_str(),"%f,%f",&x,&y) == 2 ) {
-				layout = Coord(x,y,0);
-				mask |= LAYOUT;
-			} else if( sscanf(inValue.c_str(),"%f",&x) == 1 ) {
-				layout = Coord(x,0,0);
-				mask |= LAYOUT;
-			}
-		}
-		else if( inId == "label" ) {
-			label = inValue;
-			mask |= LABEL;
-		}
-		else if( inId == "headlabel" ) {
-			headLabel = inValue;
-			mask |= HEAD_LABEL;
-		}
-		else if( inId == "taillabel" ) {
-			tailLabel = inValue;
-			mask |= TAIL_LABEL;
-		}
-		else if( inId == "color" ) {
-			Color c;
-			if( DecodeColor(c,inValue) ) {
-				color = c;
-				mask |= COLOR;
-			}
-		}
-		else if( inId == "width" ) {
-			size.setW( atof(inValue.c_str()) );
-			mask |= WIDTH;
-		}
-		else if( inId == "height" ) {
-			size.setH( atof(inValue.c_str()) );
-			mask |= HEIGHT;
-		}
-		else if( inId == "depth" ) {
-			size.setD( atof(inValue.c_str()) );
-			mask |= DEPTH;
-		}
-		else if( inId == "shape" ) {
-			unsigned int N = sizeof(ShapeAttrA) / sizeof(ShapeAttr);
-			for( unsigned int i = 0 ; i < N ; i++ ) {
-				if( !strcasecmp(ShapeAttrA[i].name,inValue.c_str()) ) {
-					shape = ShapeAttrA[i].idx;
-					mask |= SHAPE;
-					break;
-				}
-			}
-		}
-		else if( inId == "comment" ) {
-			comment = inValue;
-			mask |= COMMENT;
-		}
-		else if( inId == "URL" ) {
-			url = inValue;
-			mask |= URL;
-		}
-	}
+      }
+    }
+    else if( inId == "comment" ) {
+      comment = inValue;
+      mask |= COMMENT;
+    }
+    else if( inId == "URL" ) {
+      url = inValue;
+      mask |= URL;
+    }
+  }
 };
 
 
@@ -289,27 +303,25 @@ struct DOT_ATTR
 // Bison semantic value
 //
 
-struct DOT_YYType
-{
-	std::string		s;
-	bool			created;
-	bool			subg;
-
-	NodeA			nodeA;		// stmt node set
-	EdgeA			edgeA;		// stmt edge set
-	DOT_ATTR		attr;		// stmt accumulated attributes
-
-	void			clear()
-	{
-		s.resize(0);
-		created = false;
-		subg	= false;
-		nodeA.clear();
-		edgeA.clear();
-		attr.clear();
-	}
+struct DOT_YYType {
+  std::string s;
+  bool created;
+  bool subg;
+  
+  NodeA nodeA; // stmt node set
+  EdgeA edgeA; // stmt edge set
+  DOT_ATTR attr; // stmt accumulated attributes
+  
+  void clear() {
+    s.resize(0);
+    created = false;
+    subg = false;
+    nodeA.clear();
+    edgeA.clear();
+    attr.clear();
+  }
 };
-
+ 
 
 //
 // Global data needed by the parser
@@ -317,221 +329,221 @@ struct DOT_YYType
 //
 
 
-struct DOT_YY
-{
-	DOT_YY() :	sg(0), isDirected(true), isStrict(true) {}
+struct DOT_YY {
+  DOT_YY() : sg(0), isDirected(true), isStrict(true) {}
 
-	SuperGraph  *		sg;
-    NodeMap				nodeMap;
-    bool				isDirected;			// directed graph ?
-    bool				isStrict;			// strict graph ?
-	DOT_ATTR			nodeAttr;			// def. node's attribute
-	DOT_ATTR			edgeAttr;			// def. edge's attribute
-	DOT_ATTR			subgAttr;			// def. subgraph's attribute
+  SuperGraph * sg;
+  NodeMap nodeMap;
+  bool isDirected; // directed graph ?
+  bool isStrict; // strict graph ?
+  DOT_ATTR nodeAttr; // def. node's attribute
+  DOT_ATTR edgeAttr; // def. edge's attribute
+  DOT_ATTR subgAttr; // def. subgraph's attribute
 
-	// bind a node
+  // bind a node
 
-	node				bindNode(	const std::string	&	inId,
-									bool				&	inCreated	)
-	{
-		NodeMap::iterator it = nodeMap.find( inId );
-		if( it != nodeMap.end() ) {
-			inCreated = false;
-			return it->second;
-		}
-		node n = sg->addNode();
-		inCreated = true;
-		return nodeMap[inId] = n;
-	}
+  node bindNode( const std::string & inId,
+		 bool & inCreated ) {
+    NodeMap::iterator it = nodeMap.find( inId );
+    if( it != nodeMap.end() ) {
+      inCreated = false;
+      return it->second;
+    }
+    node n = sg->addNode();
+    inCreated = true;
+    return nodeMap[inId] = n;
+  }
 
-	// bind some edges (cartesian product A X B)
+  // bind some edges (cartesian product A X B)
 
-	EdgeA				bindEdge( const std::string & inOp,		// "--" or "->"
-								  const NodeA		& inA,
-								  const NodeA		& inB	)
-	{
-		EdgeA edgeA;
-		bool di = isStrict ? isDirected : ( inOp == "->" );
-		// produit cartesien A x B
-		for( unsigned int i = 0 ; i < inA.size(); i++ ) {
-			for( unsigned int j = 0 ; j < inB.size() ; j++ ) {
-				edgeA.push_back( sg->addEdge(inA[i],inB[j]) );
-				if( !di )
-					edgeA.push_back( sg->addEdge(inB[j],inA[i]) );
-			}
-		}
-		return edgeA;
-	}
+  EdgeA bindEdge( const std::string & inOp, // "--" or "->"
+		  const NodeA & inA,
+		  const NodeA & inB ) {
+    EdgeA edgeA;
+    bool di = isStrict ? isDirected : ( inOp == "->" );
+    // produit cartesien A x B
+    for( uint i = 0 ; i < inA.size(); i++ ) {
+      for( uint j = 0 ; j < inB.size() ; j++ ) {
+	edgeA.push_back( sg->addEdge(inA[i],inB[j]) );
+	if( !di )
+	  edgeA.push_back( sg->addEdge(inB[j],inA[i]) );
+      }
+    }
+    return edgeA;
+  }
 
-	EdgeA				bindEdge( const std::string & inOp,		// "--" or "->"
-								  const NodeA		& inA,
-								  const node		& inB	)
-	{
-		NodeA nA;
-		nA.push_back( inB );
-		return bindEdge( inOp, inA, nA );
-	}
+  EdgeA bindEdge( const std::string & inOp, // "--" or "->"
+		  const NodeA & inA,
+		  const node & inB ) {
+    NodeA nA;
+    nA.push_back( inB );
+    return bindEdge( inOp, inA, nA );
+  }
 
-	EdgeA				bindEdge( const std::string & inOp,		// "--" or "->"
-								  const node		& inA,
-								  const NodeA		& inB	)
-	{
-		NodeA nA;
-		nA.push_back( inA );
-		return bindEdge( inOp, nA, inB );
-	}
+  EdgeA bindEdge( const std::string & inOp, // "--" or "->"
+		  const node & inA,
+		  const NodeA & inB ) {
+    NodeA nA;
+    nA.push_back( inA );
+    return bindEdge( inOp, nA, inB );
+  }
 
-	EdgeA				bindEdge( const std::string & inOp,		// "--" or "->"
-								  const node		& inA,
-								  const node		& inB	)
-	{
-		NodeA nA, _nA;
-		nA.push_back( inA );
-		_nA.push_back( inB );
-		return bindEdge( inOp, nA, _nA );
-	}
+  EdgeA bindEdge( const std::string & inOp, // "--" or "->"
+		  const node & inA,
+		  const node & inB ) {
+    NodeA nA, _nA;
+    nA.push_back( inA );
+    _nA.push_back( inB );
+    return bindEdge( inOp, nA, _nA );
+  }
 
-	// Setup nodes with a context of attributes
+  // Setup nodes with a context of attributes
 
-	void				SetupNode(	const NodeA			&	inA,
-									const DOT_ATTR		&	inAttr	)
-	{
-		// Layout
+  void SetupNode( const NodeA & inA,
+		  const DOT_ATTR & inAttr ) {
+    // Layout
 
-		if( inAttr.mask & DOT_ATTR::LAYOUT ) {
-		    LayoutProxy * layoutP = sg->getProperty<LayoutProxy>(TLP_LAYOUT_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				layoutP->setNodeValue( inA[i], inAttr.layout );
-		}
+    if( inAttr.mask & DOT_ATTR::LAYOUT ) {
+      LayoutProxy * layoutP = sg->getProperty<LayoutProxy>(TLP_LAYOUT_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	layoutP->setNodeValue( inA[i], inAttr.layout );
+    }
 
-		// Label
+    // Label
 
-		if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
-		    StringProxy * stringP  = sg->getProperty<StringProxy>(TLP_LABEL_PROXY_NAME);
-		    StringProxy * string2P = sg->getProperty<StringProxy>(TLP_EXTLABEL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
-				stringP->setNodeValue( inA[i], inAttr.label );
-				string2P->setNodeValue( inA[i], inAttr.label );
-			}
-		}
+    if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
+      StringProxy * stringP = sg->getProperty<StringProxy>(TLP_LABEL_PROXY_NAME);
+      StringProxy * string2P = sg->getProperty<StringProxy>(TLP_EXTLABEL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ ) {
+	stringP->setNodeValue( inA[i], inAttr.label );
+	string2P->setNodeValue( inA[i], inAttr.label );
+      }
+    }
 
-		// Size
+    // Size
 
-		{
-		    Size s( 0.75f, 0.5f, 0.5f );			// in inches unit
-		  	if( inAttr.mask & DOT_ATTR::WIDTH )		s.setW( inAttr.size.getW() );
-		  	if( inAttr.mask & DOT_ATTR::HEIGHT )	s.setH( inAttr.size.getH() );
-		  	if( inAttr.mask & DOT_ATTR::DEPTH )		s.setD( inAttr.size.getD() );
-		    SizesProxy * sizeP = sg->getProperty<SizesProxy>(TLP_SIZE_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				sizeP->setNodeValue( inA[i], s );
-		}
+    {
+      Size s( 0.75f, 0.5f, 0.5f ); // in inches unit
+      if( inAttr.mask & DOT_ATTR::WIDTH ) s.setW( inAttr.size.getW() );
+      if( inAttr.mask & DOT_ATTR::HEIGHT ) s.setH( inAttr.size.getH() );
+      if( inAttr.mask & DOT_ATTR::DEPTH ) s.setD( inAttr.size.getD() );
+      SizesProxy * sizeP = sg->getProperty<SizesProxy>(TLP_SIZE_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	sizeP->setNodeValue( inA[i], s );
+    }
 
-		// Color
+    // Color
 
-	  	if( inAttr.mask & DOT_ATTR::COLOR )	{
-		    ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_COLOR_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				colP->setNodeValue( inA[i], inAttr.color );
-		}
+    if( inAttr.mask & DOT_ATTR::FILL_COLOR ) {
+      ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_COLOR_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	colP->setNodeValue( inA[i], inAttr.fillcolor );
+    }
+    if( inAttr.mask & DOT_ATTR::COLOR ) {
+      ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_BORDERCOLOR_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	colP->setNodeValue( inA[i], inAttr.color );
+    }
+    if( inAttr.mask & DOT_ATTR::FONT_COLOR ) {
+      ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_FONTCOLOR_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	colP->setNodeValue( inA[i], inAttr.fontcolor );
+    }
 
-		// Shape
+    // Shape
+    {
+      IntProxy * shapeP = sg->getProperty<IntProxy>(TLP_SHAPE_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	if( inAttr.mask & DOT_ATTR::SHAPE )
+	  shapeP->setNodeValue( inA[i], inAttr.shape );
+	else
+	  shapeP->setNodeValue( inA[i], DEFAULT_SHAPE );
+    }
 
-	  	{
-		    IntProxy * shapeP = sg->getProperty<IntProxy>(TLP_SHAPE_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				if( inAttr.mask & DOT_ATTR::SHAPE )
-					shapeP->setNodeValue( inA[i], inAttr.shape );
-				else
-					shapeP->setNodeValue( inA[i], DEFAULT_SHAPE );
-		}
+    // Comment
 
-		// Comment
+    if( inAttr.mask & DOT_ATTR::COMMENT ) {
+      StringProxy * cmntP = sg->getProperty<StringProxy>(TLP_COMMENT_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	cmntP->setNodeValue( inA[i], inAttr.comment );
+    }
 
-	  	if( inAttr.mask & DOT_ATTR::COMMENT ) {
-		    StringProxy * cmntP = sg->getProperty<StringProxy>(TLP_COMMENT_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				cmntP->setNodeValue( inA[i], inAttr.comment );
-		}
+    // URL
 
-		// URL
+    if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
+      StringProxy * urlP = sg->getProperty<StringProxy>(TLP_URL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	urlP->setNodeValue( inA[i], inAttr.url );
+    }
+  }
 
-		if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
-		    StringProxy * urlP = sg->getProperty<StringProxy>(TLP_URL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				urlP->setNodeValue( inA[i], inAttr.url );
-		}
-	}
+  // Setup edges with a context of attributes
 
-	// Setup edges with a context of attributes
+  void SetupEdge( const EdgeA & inA,
+		  const DOT_ATTR & inAttr ) {
+    // Label
 
-	void				SetupEdge(	const EdgeA		&	inA,
-									const DOT_ATTR	&	inAttr	)
-	{
-		// Label
+    if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
+      StringProxy * stringP = sg->getProperty<StringProxy>(TLP_LABEL_PROXY_NAME);
+      StringProxy * string2P = sg->getProperty<StringProxy>(TLP_EXTLABEL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ ) {
+	stringP->setEdgeValue( inA[i], inAttr.label );
+	string2P->setEdgeValue( inA[i], inAttr.label );
+      }
+    }
 
-		if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
-		    StringProxy * stringP = sg->getProperty<StringProxy>(TLP_LABEL_PROXY_NAME);
-		    StringProxy * string2P = sg->getProperty<StringProxy>(TLP_EXTLABEL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
-				stringP->setEdgeValue( inA[i], inAttr.label );
-				string2P->setEdgeValue( inA[i], inAttr.label );
-			}
-		}
+    // Head-Label
 
-		// Head-Label
+    if( (inAttr.mask & DOT_ATTR::HEAD_LABEL) && inAttr.headLabel.size() ) {
+      StringProxy * labelP = sg->getProperty<StringProxy>(TLP_HEAD_LABEL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	labelP->setEdgeValue( inA[i], inAttr.headLabel );
+    }
 
-		if( (inAttr.mask & DOT_ATTR::HEAD_LABEL) && inAttr.headLabel.size() ) {
-		    StringProxy * labelP = sg->getProperty<StringProxy>(TLP_HEAD_LABEL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				labelP->setEdgeValue( inA[i], inAttr.headLabel );
-		}
+    // Tail-Label
 
-		// Tail-Label
+    if( (inAttr.mask & DOT_ATTR::TAIL_LABEL) && inAttr.tailLabel.size() ) {
+      StringProxy * labelP = sg->getProperty<StringProxy>(TLP_TAIL_LABEL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	labelP->setEdgeValue( inA[i], inAttr.tailLabel );
+    }
 
-		if( (inAttr.mask & DOT_ATTR::TAIL_LABEL) && inAttr.tailLabel.size() ) {
-		    StringProxy * labelP = sg->getProperty<StringProxy>(TLP_TAIL_LABEL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				labelP->setEdgeValue( inA[i], inAttr.tailLabel );
-		}
+    // Color
+    if( inAttr.mask & DOT_ATTR::COLOR ) {
+      ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_COLOR_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	colP->setEdgeValue( inA[i], inAttr.color );
+    }
 
-		// Color
+    // Comment
 
-	  	if( inAttr.mask & DOT_ATTR::COLOR ) {
-		    ColorsProxy * colP = sg->getProperty<ColorsProxy>(TLP_COLOR_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				colP->setEdgeValue( inA[i], inAttr.color );
-		}
+    if( inAttr.mask & DOT_ATTR::COMMENT ) {
+      StringProxy * cmntP = sg->getProperty<StringProxy>(TLP_COMMENT_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	cmntP->setEdgeValue( inA[i], inAttr.comment );
+    }
 
-		// Comment
+    // URL
 
-	  	if( inAttr.mask & DOT_ATTR::COMMENT ) {
-		    StringProxy * cmntP = sg->getProperty<StringProxy>(TLP_COMMENT_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				cmntP->setEdgeValue( inA[i], inAttr.comment );
-		}
-
-		// URL
-
-		if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
-		    StringProxy * urlP = sg->getProperty<StringProxy>(TLP_URL_PROXY_NAME);
-			for( unsigned int i = 0 ; i < inA.size() ; i++ )
-				urlP->setEdgeValue( inA[i], inAttr.url );
-		}
-	}
+    if( (inAttr.mask & DOT_ATTR::URL) && inAttr.url.size() ) {
+      StringProxy * urlP = sg->getProperty<StringProxy>(TLP_URL_PROXY_NAME);
+      for( uint i = 0 ; i < inA.size() ; i++ )
+	urlP->setEdgeValue( inA[i], inAttr.url );
+    }
+  }
 
 } * dotyy;
 
 
-#define YYSTYPE			DOT_YYType
+#define YYSTYPE DOT_YYType
 
 // Semantic value DOT_YYType is a C++ object, with constructor/destructor.
 // Dynamic stack managment should be done in futur version.
 // For a purpose of simplicity, this parser uses a large and fixed array.
 // You can change theses values. Only take care to keep YYMAXDEPTH = YYINITDEPTH
 // to avoid the dynamic relocation of the stack.
-#define	YYINITDEPTH		2048
-#define	YYMAXDEPTH		YYINITDEPTH		// No reallocation !
+#define YYINITDEPTH 2048
+#define YYMAXDEPTH YYINITDEPTH // No reallocation !
 
 
 
@@ -560,23 +572,26 @@ typedef int YYSTYPE;
 /* Copy the second part of user declarations.  */
 
 
-/* Line 214 of yacc.c.  */
-#line 564 "dotImportParser.h"
+/* Line 213 of yacc.c.  */
+#line 577 "dotImportParser.h"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
 
+# ifndef YYFREE
+#  define YYFREE free
+# endif
+# ifndef YYMALLOC
+#  define YYMALLOC malloc
+# endif
+
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
-# if YYSTACK_USE_ALLOCA
-#  define YYSTACK_ALLOC alloca
-# else
-#  ifndef YYSTACK_USE_ALLOCA
-#   if defined (alloca) || defined (_ALLOCA_H)
-#    define YYSTACK_ALLOC alloca
+# ifdef YYSTACK_USE_ALLOCA
+#  if YYSTACK_USE_ALLOCA
+#   ifdef __GNUC__
+#    define YYSTACK_ALLOC __builtin_alloca
 #   else
-#    ifdef __GNUC__
-#     define YYSTACK_ALLOC __builtin_alloca
-#    endif
+#    define YYSTACK_ALLOC alloca
 #   endif
 #  endif
 # endif
@@ -589,20 +604,20 @@ typedef int YYSTYPE;
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   define YYSIZE_T size_t
 #  endif
-#  define YYSTACK_ALLOC malloc
-#  define YYSTACK_FREE free
+#  define YYSTACK_ALLOC YYMALLOC
+#  define YYSTACK_FREE YYFREE
 # endif
 #endif /* ! defined (yyoverflow) || YYERROR_VERBOSE */
 
 
 #if (! defined (yyoverflow) \
      && (! defined (__cplusplus) \
-	 || (YYSTYPE_IS_TRIVIAL)))
+	 || (defined (YYSTYPE_IS_TRIVIAL) && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
-  short yyss;
+  short int yyss;
   YYSTYPE yyvs;
   };
 
@@ -612,13 +627,13 @@ union yyalloc
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (short) + sizeof (YYSTYPE))				\
+     ((N) * (sizeof (short int) + sizeof (YYSTYPE))			\
       + YYSTACK_GAP_MAXIMUM)
 
 /* Copy COUNT objects from FROM to TO.  The source and destination do
    not overlap.  */
 # ifndef YYCOPY
-#  if 1 < __GNUC__
+#  if defined (__GNUC__) && 1 < __GNUC__
 #   define YYCOPY(To, From, Count) \
       __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
 #  else
@@ -654,7 +669,7 @@ union yyalloc
 #if defined (__STDC__) || defined (__cplusplus)
    typedef signed char yysigned_char;
 #else
-   typedef short yysigned_char;
+   typedef short int yysigned_char;
 #endif
 
 /* YYFINAL -- State number of the termination state. */
@@ -747,15 +762,15 @@ static const yysigned_char yyrhs[] =
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const unsigned short yyrline[] =
+static const unsigned short int yyrline[] =
 {
-       0,   478,   478,   479,   480,   483,   484,   485,   486,   487,
-     490,   491,   494,   495,   498,   499,   502,   505,   506,   509,
-     512,   515,   516,   519,   520,   521,   522,   525,   526,   533,
-     534,   535,   538,   539,   540,   541,   544,   547,   561,   562,
-     563,   564,   565,   568,   569,   572,   575,   583,   595,   609,
-     610,   611,   622,   635,   636,   637,   638,   641,   644,   645,
-     646,   649,   650
+       0,   490,   490,   491,   492,   495,   496,   497,   498,   499,
+     502,   503,   506,   507,   510,   511,   514,   517,   518,   521,
+     524,   527,   528,   531,   532,   533,   534,   537,   538,   545,
+     546,   547,   550,   551,   552,   553,   556,   559,   573,   574,
+     575,   576,   577,   580,   581,   584,   587,   595,   607,   621,
+     622,   623,   634,   647,   648,   649,   650,   653,   656,   657,
+     658,   661,   662
 };
 #endif
 
@@ -764,22 +779,21 @@ static const unsigned short yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals. */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NUMBER", "IDENT", "STRING", "_STRICT", 
-  "_DIGRAPH", "_GRAPH", "_NODE", "_EDGE", "_SUBGRAPH", "_EDGEOP", "'{'", 
-  "'}'", "','", "'['", "']'", "'='", "';'", "':'", "'('", "')'", "'@'", 
-  "'+'", "$accept", "file", "graph_type", "graph_name", 
-  "inside_attr_list", "optcomma", "attr_list", "rec_attr_list", 
-  "opt_attr_list", "attr_set", "iattr_set", "attr_stmt", "stmt_list", 
-  "stmt", "stmt1", "node_id", "node_name", "node_port", "port_location", 
-  "port_angle", "node_stmt", "edge_stmt", "edgeRHS", "subg_stmt", 
-  "subg_hdr", "id", "qid", 0
+  "$end", "error", "$undefined", "NUMBER", "IDENT", "STRING", "_STRICT",
+  "_DIGRAPH", "_GRAPH", "_NODE", "_EDGE", "_SUBGRAPH", "_EDGEOP", "'{'",
+  "'}'", "','", "'['", "']'", "'='", "';'", "':'", "'('", "')'", "'@'",
+  "'+'", "$accept", "file", "graph_type", "graph_name", "inside_attr_list",
+  "optcomma", "attr_list", "rec_attr_list", "opt_attr_list", "attr_set",
+  "iattr_set", "attr_stmt", "stmt_list", "stmt", "stmt1", "node_id",
+  "node_name", "node_port", "port_location", "port_angle", "node_stmt",
+  "edge_stmt", "edgeRHS", "subg_stmt", "subg_hdr", "id", "qid", 0
 };
 #endif
 
 # ifdef YYPRINT
 /* YYTOKNUM[YYLEX-NUM] -- Internal token number corresponding to
    token YYLEX-NUM.  */
-static const unsigned short yytoknum[] =
+static const unsigned short int yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   123,   125,    44,    91,    93,    61,    59,
@@ -941,7 +955,7 @@ static const unsigned char yystos[] =
 
 #define YYACCEPT	goto yyacceptlab
 #define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrlab1
+#define YYERROR		goto yyerrorlab
 
 
 /* Like YYERROR except do call yyerror.  This remains here temporarily
@@ -969,19 +983,52 @@ do								\
     }								\
 while (0)
 
+
 #define YYTERROR	1
 #define YYERRCODE	256
 
-/* YYLLOC_DEFAULT -- Compute the default location (before the actions
-   are run).  */
 
+/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
+   If N is 0, then set CURRENT to the empty location which ends
+   the previous symbol: RHS[0] (always defined).  */
+
+#define YYRHSLOC(Rhs, K) ((Rhs)[K])
 #ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)         \
-  Current.first_line   = Rhs[1].first_line;      \
-  Current.first_column = Rhs[1].first_column;    \
-  Current.last_line    = Rhs[N].last_line;       \
-  Current.last_column  = Rhs[N].last_column;
+# define YYLLOC_DEFAULT(Current, Rhs, N)				\
+    do									\
+      if (N)								\
+	{								\
+	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
+	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
+	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
+	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
+	}								\
+      else								\
+	{								\
+	  (Current).first_line   = (Current).last_line   =		\
+	    YYRHSLOC (Rhs, 0).last_line;				\
+	  (Current).first_column = (Current).last_column =		\
+	    YYRHSLOC (Rhs, 0).last_column;				\
+	}								\
+    while (0)
 #endif
+
+
+/* YY_LOCATION_PRINT -- Print the location on the stream.
+   This macro was not mandated originally: define only if we know
+   we won't break user code: when these are the locations we know.  */
+
+#ifndef YY_LOCATION_PRINT
+# if YYLTYPE_IS_TRIVIAL
+#  define YY_LOCATION_PRINT(File, Loc)			\
+     fprintf (File, "%d.%d-%d.%d",			\
+              (Loc).first_line, (Loc).first_column,	\
+              (Loc).last_line,  (Loc).last_column)
+# else
+#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# endif
+#endif
+
 
 /* YYLEX -- calling `yylex' with the right arguments.  */
 
@@ -1005,36 +1052,30 @@ do {						\
     YYFPRINTF Args;				\
 } while (0)
 
-# define YYDSYMPRINT(Args)			\
-do {						\
-  if (yydebug)					\
-    yysymprint Args;				\
-} while (0)
-
-# define YYDSYMPRINTF(Title, Token, Value, Location)		\
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)		\
 do {								\
   if (yydebug)							\
     {								\
       YYFPRINTF (stderr, "%s ", Title);				\
       yysymprint (stderr, 					\
-                  Token, Value);	\
+                  Type, Value);	\
       YYFPRINTF (stderr, "\n");					\
     }								\
 } while (0)
 
 /*------------------------------------------------------------------.
 | yy_stack_print -- Print the state stack from its BOTTOM up to its |
-| TOP (cinluded).                                                   |
+| TOP (included).                                                   |
 `------------------------------------------------------------------*/
 
 #if defined (__STDC__) || defined (__cplusplus)
 static void
-yy_stack_print (short *bottom, short *top)
+yy_stack_print (short int *bottom, short int *top)
 #else
 static void
 yy_stack_print (bottom, top)
-    short *bottom;
-    short *top;
+    short int *bottom;
+    short int *top;
 #endif
 {
   YYFPRINTF (stderr, "Stack now");
@@ -1064,9 +1105,9 @@ yy_reduce_print (yyrule)
 #endif
 {
   int yyi;
-  unsigned int yylineno = yyrline[yyrule];
+  unsigned int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %u), ",
-             yyrule - 1, yylineno);
+             yyrule - 1, yylno);
   /* Print the symbols being reduced, and their result.  */
   for (yyi = yyprhs[yyrule]; 0 <= yyrhs[yyi]; yyi++)
     YYFPRINTF (stderr, "%s ", yytname [yyrhs[yyi]]);
@@ -1084,8 +1125,7 @@ do {					\
 int yydebug;
 #else /* !YYDEBUG */
 # define YYDPRINTF(Args)
-# define YYDSYMPRINT(Args)
-# define YYDSYMPRINTF(Title, Token, Value, Location)
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
@@ -1102,10 +1142,6 @@ int yydebug;
    Do not make this value too large; the results are undefined if
    SIZE_MAX < YYSTACK_BYTES (YYMAXDEPTH)
    evaluated with infinite-precision integer arithmetic.  */
-
-#if YYMAXDEPTH == 0
-# undef YYMAXDEPTH
-#endif
 
 #ifndef YYMAXDEPTH
 # define YYMAXDEPTH 10000
@@ -1188,15 +1224,15 @@ yysymprint (yyoutput, yytype, yyvaluep)
   (void) yyvaluep;
 
   if (yytype < YYNTOKENS)
-    {
-      YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-# ifdef YYPRINT
-      YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# endif
-    }
+    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
+
+# ifdef YYPRINT
+  if (yytype < YYNTOKENS)
+    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+# endif
   switch (yytype)
     {
       default:
@@ -1212,16 +1248,21 @@ yysymprint (yyoutput, yytype, yyvaluep)
 
 #if defined (__STDC__) || defined (__cplusplus)
 static void
-yydestruct (int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
 #else
 static void
-yydestruct (yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep)
+    const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
 #endif
 {
   /* Pacify ``unused variable'' warnings.  */
   (void) yyvaluep;
+
+  if (!yymsg)
+    yymsg = "Deleting";
+  YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
   switch (yytype)
     {
@@ -1250,10 +1291,10 @@ int yyparse ();
 
 
 
-/* The lookahead symbol.  */
+/* The look-ahead symbol.  */
 int yychar;
 
-/* The semantic value of the lookahead symbol.  */
+/* The semantic value of the look-ahead symbol.  */
 YYSTYPE yylval;
 
 /* Number of syntax errors so far.  */
@@ -1289,7 +1330,7 @@ yyparse ()
   int yyresult;
   /* Number of tokens to shift before error messages enabled.  */
   int yyerrstatus;
-  /* Lookahead token as an internal (translated) token number.  */
+  /* Look-ahead token as an internal (translated) token number.  */
   int yytoken = 0;
 
   /* Three stacks and their tools:
@@ -1301,9 +1342,9 @@ yyparse ()
      to reallocate them elsewhere.  */
 
   /* The state stack.  */
-  short	yyssa[YYINITDEPTH];
-  short *yyss = yyssa;
-  register short *yyssp;
+  short int yyssa[YYINITDEPTH];
+  short int *yyss = yyssa;
+  register short int *yyssp;
 
   /* The semantic value stack.  */
   YYSTYPE yyvsa[YYINITDEPTH];
@@ -1340,6 +1381,9 @@ yyparse ()
   yyssp = yyss;
   yyvsp = yyvs;
 
+
+  yyvsp[0] = yylval;
+
   goto yysetstate;
 
 /*------------------------------------------------------------.
@@ -1365,7 +1409,7 @@ yyparse ()
 	   these so that the &'s don't force the real ones into
 	   memory.  */
 	YYSTYPE *yyvs1 = yyvs;
-	short *yyss1 = yyss;
+	short int *yyss1 = yyss;
 
 
 	/* Each stack pointer address is followed by the size of the
@@ -1393,7 +1437,7 @@ yyparse ()
 	yystacksize = YYMAXDEPTH;
 
       {
-	short *yyss1 = yyss;
+	short int *yyss1 = yyss;
 	union yyalloc *yyptr =
 	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 	if (! yyptr)
@@ -1429,18 +1473,18 @@ yyparse ()
 yybackup:
 
 /* Do appropriate processing given the current state.  */
-/* Read a lookahead token if we need one and don't already have one.  */
+/* Read a look-ahead token if we need one and don't already have one.  */
 /* yyresume: */
 
-  /* First try to decide what to do without reference to lookahead token.  */
+  /* First try to decide what to do without reference to look-ahead token.  */
 
   yyn = yypact[yystate];
   if (yyn == YYPACT_NINF)
     goto yydefault;
 
-  /* Not known => get a lookahead token if don't already have one.  */
+  /* Not known => get a look-ahead token if don't already have one.  */
 
-  /* YYCHAR is either YYEMPTY or YYEOF or a valid lookahead symbol.  */
+  /* YYCHAR is either YYEMPTY or YYEOF or a valid look-ahead symbol.  */
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
@@ -1455,7 +1499,7 @@ yybackup:
   else
     {
       yytoken = YYTRANSLATE (yychar);
-      YYDSYMPRINTF ("Next token is", yytoken, &yylval, &yylloc);
+      YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
     }
 
   /* If the proper action on seeing token YYTOKEN is to reduce or to
@@ -1475,8 +1519,8 @@ yybackup:
   if (yyn == YYFINAL)
     YYACCEPT;
 
-  /* Shift the lookahead token.  */
-  YYDPRINTF ((stderr, "Shifting token %s, ", yytname[yytoken]));
+  /* Shift the look-ahead token.  */
+  YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
 
   /* Discard the token being shifted unless it is eof.  */
   if (yychar != YYEOF)
@@ -1526,292 +1570,292 @@ yyreduce:
   switch (yyn)
     {
         case 6:
-#line 484 "dotImportParser.y"
-    { dotyy->isDirected = true;		dotyy->isStrict = false; ;}
+#line 496 "dotImportParser.y"
+    { dotyy->isDirected = true; dotyy->isStrict = false; ;}
     break;
 
   case 7:
-#line 485 "dotImportParser.y"
-    { dotyy->isDirected = false;	dotyy->isStrict = false; ;}
+#line 497 "dotImportParser.y"
+    { dotyy->isDirected = false; dotyy->isStrict = false; ;}
     break;
 
   case 8:
-#line 486 "dotImportParser.y"
-    { dotyy->isDirected = true;		dotyy->isStrict = true;  ;}
+#line 498 "dotImportParser.y"
+    { dotyy->isDirected = true; dotyy->isStrict = true; ;}
     break;
 
   case 9:
-#line 487 "dotImportParser.y"
-    { dotyy->isDirected = false;	dotyy->isStrict = true;  ;}
+#line 499 "dotImportParser.y"
+    { dotyy->isDirected = false; dotyy->isStrict = true; ;}
     break;
 
   case 12:
-#line 494 "dotImportParser.y"
-    { yyval.clear(); ;}
+#line 506 "dotImportParser.y"
+    { (yyval).clear(); ;}
     break;
 
   case 13:
-#line 495 "dotImportParser.y"
-    { yyval.attr = yyvsp[-2].attr + yyvsp[0].attr; ;}
+#line 507 "dotImportParser.y"
+    { (yyval.attr) = (yyvsp[-2].attr) + (yyvsp[0].attr); ;}
     break;
 
   case 16:
-#line 502 "dotImportParser.y"
-    { yyval = yyvsp[-1]; ;}
+#line 514 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); ;}
     break;
 
   case 17:
-#line 505 "dotImportParser.y"
-    { yyval.clear(); ;}
+#line 517 "dotImportParser.y"
+    { (yyval).clear(); ;}
     break;
 
   case 18:
-#line 506 "dotImportParser.y"
-    { yyval.attr = yyvsp[-1].attr + yyvsp[0].attr; ;}
+#line 518 "dotImportParser.y"
+    { (yyval.attr) = (yyvsp[-1].attr) + (yyvsp[0].attr); ;}
     break;
 
   case 19:
-#line 509 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 521 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 20:
-#line 512 "dotImportParser.y"
-    { yyval.clear(); yyval.attr.setValue( yyvsp[-2].s, yyvsp[0].s ); ;}
+#line 524 "dotImportParser.y"
+    { (yyval).clear(); (yyval.attr).setValue( (yyvsp[-2].s), (yyvsp[0].s) ); ;}
     break;
 
   case 21:
-#line 515 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 527 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 22:
-#line 516 "dotImportParser.y"
-    { yyval.clear(); ;}
+#line 528 "dotImportParser.y"
+    { (yyval).clear(); ;}
     break;
 
   case 23:
-#line 519 "dotImportParser.y"
-    { yyval = yyvsp[0]; dotyy->subgAttr += yyvsp[0].attr; ;}
+#line 531 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); dotyy->subgAttr += (yyvsp[0].attr); ;}
     break;
 
   case 24:
-#line 520 "dotImportParser.y"
-    { yyval = yyvsp[0]; dotyy->nodeAttr += yyvsp[0].attr; ;}
+#line 532 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); dotyy->nodeAttr += (yyvsp[0].attr); ;}
     break;
 
   case 25:
-#line 521 "dotImportParser.y"
-    { yyval = yyvsp[0]; dotyy->edgeAttr += yyvsp[0].attr; ;}
+#line 533 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); dotyy->edgeAttr += (yyvsp[0].attr); ;}
     break;
 
   case 26:
-#line 522 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 534 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 27:
-#line 525 "dotImportParser.y"
-    { yyval.clear(); ;}
+#line 537 "dotImportParser.y"
+    { (yyval).clear(); ;}
     break;
 
   case 28:
-#line 526 "dotImportParser.y"
+#line 538 "dotImportParser.y"
     {
-																	yyval = yyvsp[-1];
-																	yyval.nodeA += yyvsp[0].nodeA;
-																	yyval.edgeA += yyvsp[0].edgeA;
-																;}
+ (yyval) = (yyvsp[-1]);
+ (yyval.nodeA) += (yyvsp[0].nodeA);
+ (yyval.edgeA) += (yyvsp[0].edgeA);
+ ;}
     break;
 
   case 29:
-#line 533 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 545 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 30:
-#line 534 "dotImportParser.y"
-    { yyval = yyvsp[-1]; ;}
+#line 546 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); ;}
     break;
 
   case 32:
-#line 538 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 550 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 33:
-#line 539 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 551 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 34:
-#line 540 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 552 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 35:
-#line 541 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 553 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 36:
-#line 544 "dotImportParser.y"
-    {	yyval = yyvsp[-1];	;}
+#line 556 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); ;}
     break;
 
   case 37:
-#line 547 "dotImportParser.y"
+#line 559 "dotImportParser.y"
     {
-																	yyval = yyvsp[0];
-																	node n = dotyy->bindNode( yyval.s, yyval.created );
-																	yyval.nodeA.clear();
-																	yyval.nodeA.push_back( n );
-																	yyval.attr = dotyy->nodeAttr;
-																	if( yyval.created ) {
-																		if( !(yyval.attr.mask & DOT_ATTR::LABEL) || yyval.attr.label.size()==0 )
-																			yyval.attr.setValue( "label", yyval.s );
-																		dotyy->SetupNode( yyval.nodeA, yyval.attr );
-																	}
-																;}
+ (yyval) = (yyvsp[0]);
+ node n = dotyy->bindNode( (yyval.s), (yyval.created) );
+ (yyval.nodeA).clear();
+ (yyval.nodeA).push_back( n );
+ (yyval.attr) = dotyy->nodeAttr;
+ if( (yyval.created) ) {
+ if( !((yyval.attr).mask & DOT_ATTR::LABEL) || (yyval.attr).label.size()==0 )
+ (yyval.attr).setValue( "label", (yyval.s) );
+ dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
+ }
+ ;}
     break;
 
   case 46:
-#line 575 "dotImportParser.y"
+#line 587 "dotImportParser.y"
     {
-																	yyval = yyvsp[-1];
-																	yyval.attr += yyvsp[0].attr;
-																//	if( $<created>$ )
-																		dotyy->SetupNode( yyval.nodeA, yyval.attr );
-																;}
+  (yyval) = (yyvsp[-1]);
+  (yyval.attr) += (yyvsp[0].attr);
+  // if( $<created>$ )
+  dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );
+;}
     break;
 
   case 47:
-#line 583 "dotImportParser.y"
+#line 595 "dotImportParser.y"
     {
-                													yyval.clear();
-                													yyval.nodeA  = yyvsp[-3].nodeA;
-                													yyval.nodeA += yyvsp[-1].nodeA;
-                													yyval.edgeA  = yyvsp[-3].edgeA;
-                													yyval.edgeA += yyvsp[-1].edgeA;
-                													if( yyvsp[-1].subg )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-2].s, yyvsp[-3].nodeA, yyvsp[-1].nodeA );
-	                												else if( yyvsp[-1].nodeA.size() )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-2].s, yyvsp[-3].nodeA, yyvsp[-1].nodeA[0]);
-                													dotyy->SetupEdge( yyval.edgeA, dotyy->edgeAttr + yyvsp[0].attr );
-																;}
+  (yyval).clear();
+  (yyval.nodeA) = (yyvsp[-3].nodeA);
+  (yyval.nodeA) += (yyvsp[-1].nodeA);
+  (yyval.edgeA) = (yyvsp[-3].edgeA);
+  (yyval.edgeA) += (yyvsp[-1].edgeA);
+  if( (yyvsp[-1].subg) )
+    (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
+  else if( (yyvsp[-1].nodeA).size() )
+    (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
+  dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
+;}
     break;
 
   case 48:
-#line 595 "dotImportParser.y"
+#line 607 "dotImportParser.y"
     {
-                													yyval.clear();
-                													yyval.nodeA  = yyvsp[-3].nodeA;
-                													yyval.nodeA += yyvsp[-1].nodeA;
-                													yyval.edgeA  = yyvsp[-3].edgeA;
-                													yyval.edgeA += yyvsp[-1].edgeA;
-                													if( yyvsp[-1].subg )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-2].s, yyvsp[-3].nodeA, yyvsp[-1].nodeA );
-	                												else if( yyvsp[-1].nodeA.size() )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-2].s, yyvsp[-3].nodeA, yyvsp[-1].nodeA[0]);
-                													dotyy->SetupEdge( yyval.edgeA, dotyy->edgeAttr + yyvsp[0].attr );
-																;}
+ (yyval).clear();
+ (yyval.nodeA) = (yyvsp[-3].nodeA);
+ (yyval.nodeA) += (yyvsp[-1].nodeA);
+ (yyval.edgeA) = (yyvsp[-3].edgeA);
+ (yyval.edgeA) += (yyvsp[-1].edgeA);
+ if( (yyvsp[-1].subg) )
+ (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA) );
+ else if( (yyvsp[-1].nodeA).size() )
+ (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-2].s), (yyvsp[-3].nodeA), (yyvsp[-1].nodeA)[0]);
+ dotyy->SetupEdge( (yyval.edgeA), dotyy->edgeAttr + (yyvsp[0].attr) );
+ ;}
     break;
 
   case 49:
-#line 609 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 621 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 50:
-#line 610 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 622 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 51:
-#line 611 "dotImportParser.y"
+#line 623 "dotImportParser.y"
     {
-                													yyval.clear();
-                													yyval.nodeA  = yyvsp[-2].nodeA;
-                													yyval.nodeA += yyvsp[0].nodeA;
-                													yyval.edgeA  = yyvsp[-2].edgeA;
-                													yyval.edgeA += yyvsp[0].edgeA;
-                													if( yyvsp[0].subg )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-1].s, yyvsp[-2].nodeA, yyvsp[0].nodeA );
-	                												else if( yyvsp[0].nodeA.size() )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-1].s, yyvsp[-2].nodeA, yyvsp[0].nodeA[0]);
-                												;}
+  (yyval).clear();
+  (yyval.nodeA) = (yyvsp[-2].nodeA);
+  (yyval.nodeA) += (yyvsp[0].nodeA);
+  (yyval.edgeA) = (yyvsp[-2].edgeA);
+  (yyval.edgeA) += (yyvsp[0].edgeA);
+  if( (yyvsp[0].subg) )
+    (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
+  else if( (yyvsp[0].nodeA).size() )
+    (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
+;}
     break;
 
   case 52:
-#line 622 "dotImportParser.y"
+#line 634 "dotImportParser.y"
     {
-                													yyval.clear();
-                													yyval.nodeA  = yyvsp[-2].nodeA;
-                													yyval.nodeA += yyvsp[0].nodeA;
-                													yyval.edgeA  = yyvsp[-2].edgeA;
-                													yyval.edgeA += yyvsp[0].edgeA;
-                													if( yyvsp[0].subg )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-1].s, yyvsp[-2].nodeA, yyvsp[0].nodeA );
-	                												else if( yyvsp[0].nodeA.size() )
-	                													yyval.edgeA += dotyy->bindEdge( yyvsp[-1].s, yyvsp[-2].nodeA, yyvsp[0].nodeA[0]);
-                												;}
+   (yyval).clear();
+   (yyval.nodeA) = (yyvsp[-2].nodeA);
+   (yyval.nodeA) += (yyvsp[0].nodeA);
+   (yyval.edgeA) = (yyvsp[-2].edgeA);
+   (yyval.edgeA) += (yyvsp[0].edgeA);
+   if( (yyvsp[0].subg) )
+     (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA) );
+   else if( (yyvsp[0].nodeA).size() )
+     (yyval.edgeA) += dotyy->bindEdge( (yyvsp[-1].s), (yyvsp[-2].nodeA), (yyvsp[0].nodeA)[0]);
+ ;}
     break;
 
   case 53:
-#line 635 "dotImportParser.y"
-    { yyval = yyvsp[-1]; yyval.subg = true;	;}
+#line 647 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
     break;
 
   case 54:
-#line 636 "dotImportParser.y"
-    { yyval = yyvsp[-1]; yyval.subg = true;	;}
+#line 648 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
     break;
 
   case 55:
-#line 637 "dotImportParser.y"
-    { yyval = yyvsp[-1]; yyval.subg = true;	;}
+#line 649 "dotImportParser.y"
+    { (yyval) = (yyvsp[-1]); (yyval.subg) = true; ;}
     break;
 
   case 56:
-#line 638 "dotImportParser.y"
-    { yyval = yyvsp[0]; yyval.subg = true;	;}
+#line 650 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); (yyval.subg) = true; ;}
     break;
 
   case 57:
-#line 641 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 653 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 58:
-#line 644 "dotImportParser.y"
-    { yyval.clear(); yyval.s = yyvsp[0].s; ;}
+#line 656 "dotImportParser.y"
+    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
     break;
 
   case 59:
-#line 645 "dotImportParser.y"
-    { yyval.clear(); yyval.s = yyvsp[0].s; ;}
+#line 657 "dotImportParser.y"
+    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
     break;
 
   case 60:
-#line 646 "dotImportParser.y"
-    { yyval = yyvsp[0]; ;}
+#line 658 "dotImportParser.y"
+    { (yyval) = (yyvsp[0]); ;}
     break;
 
   case 61:
-#line 649 "dotImportParser.y"
-    { yyval.clear(); yyval.s = yyvsp[0].s; ;}
+#line 661 "dotImportParser.y"
+    { (yyval).clear(); (yyval.s) = (yyvsp[0].s); ;}
     break;
 
   case 62:
-#line 650 "dotImportParser.y"
-    { yyval.s = yyvsp[-2].s + yyvsp[0].s; ;}
+#line 662 "dotImportParser.y"
+    { (yyval.s) = (yyvsp[-2].s) + (yyvsp[0].s); ;}
     break;
 
 
     }
 
-/* Line 999 of yacc.c.  */
-#line 1814 "dotImportParser.h"
+/* Line 1037 of yacc.c.  */
+#line 1859 "dotImportParser.h"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1852,18 +1896,33 @@ yyerrlab:
 	{
 	  YYSIZE_T yysize = 0;
 	  int yytype = YYTRANSLATE (yychar);
+	  const char* yyprefix;
 	  char *yymsg;
-	  int yyx, yycount;
+	  int yyx;
 
-	  yycount = 0;
 	  /* Start YYX at -YYN if negative to avoid negative indexes in
 	     YYCHECK.  */
-	  for (yyx = yyn < 0 ? -yyn : 0;
-	       yyx < (int) (sizeof (yytname) / sizeof (char *)); yyx++)
+	  int yyxbegin = yyn < 0 ? -yyn : 0;
+
+	  /* Stay within bounds of both yycheck and yytname.  */
+	  int yychecklim = YYLAST - yyn;
+	  int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
+	  int yycount = 0;
+
+	  yyprefix = ", expecting ";
+	  for (yyx = yyxbegin; yyx < yyxend; ++yyx)
 	    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	      yysize += yystrlen (yytname[yyx]) + 15, yycount++;
-	  yysize += yystrlen ("syntax error, unexpected ") + 1;
-	  yysize += yystrlen (yytname[yytype]);
+	      {
+		yysize += yystrlen (yyprefix) + yystrlen (yytname [yyx]);
+		yycount += 1;
+		if (yycount == 5)
+		  {
+		    yysize = 0;
+		    break;
+		  }
+	      }
+	  yysize += (sizeof ("syntax error, unexpected ")
+		     + yystrlen (yytname[yytype]));
 	  yymsg = (char *) YYSTACK_ALLOC (yysize);
 	  if (yymsg != 0)
 	    {
@@ -1872,16 +1931,13 @@ yyerrlab:
 
 	      if (yycount < 5)
 		{
-		  yycount = 0;
-		  for (yyx = yyn < 0 ? -yyn : 0;
-		       yyx < (int) (sizeof (yytname) / sizeof (char *));
-		       yyx++)
+		  yyprefix = ", expecting ";
+		  for (yyx = yyxbegin; yyx < yyxend; ++yyx)
 		    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
 		      {
-			const char *yyq = ! yycount ? ", expecting " : " or ";
-			yyp = yystpcpy (yyp, yyq);
+			yyp = yystpcpy (yyp, yyprefix);
 			yyp = yystpcpy (yyp, yytname[yyx]);
-			yycount++;
+			yyprefix = " or ";
 		      }
 		}
 	      yyerror (yymsg);
@@ -1899,38 +1955,57 @@ yyerrlab:
 
   if (yyerrstatus == 3)
     {
-      /* If just tried and failed to reuse lookahead token after an
+      /* If just tried and failed to reuse look-ahead token after an
 	 error, discard it.  */
 
-      /* Return failure if at end of input.  */
-      if (yychar == YYEOF)
+      if (yychar <= YYEOF)
         {
-	  /* Pop the error token.  */
-          YYPOPSTACK;
-	  /* Pop the rest of the stack.  */
-	  while (yyss < yyssp)
-	    {
-	      YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
-	      yydestruct (yystos[*yyssp], yyvsp);
-	      YYPOPSTACK;
-	    }
-	  YYABORT;
+          /* If at end of input, pop the error token,
+	     then the rest of the stack, then return failure.  */
+	  if (yychar == YYEOF)
+	     for (;;)
+	       {
+
+		 YYPOPSTACK;
+		 if (yyssp == yyss)
+		   YYABORT;
+		 yydestruct ("Error: popping",
+                             yystos[*yyssp], yyvsp);
+	       }
         }
-
-      YYDSYMPRINTF ("Error: discarding", yytoken, &yylval, &yylloc);
-      yydestruct (yytoken, &yylval);
-      yychar = YYEMPTY;
-
+      else
+	{
+	  yydestruct ("Error: discarding", yytoken, &yylval);
+	  yychar = YYEMPTY;
+	}
     }
 
-  /* Else will try to reuse lookahead token after shifting the error
+  /* Else will try to reuse look-ahead token after shifting the error
      token.  */
   goto yyerrlab1;
 
 
-/*----------------------------------------------------.
-| yyerrlab1 -- error raised explicitly by an action.  |
-`----------------------------------------------------*/
+/*---------------------------------------------------.
+| yyerrorlab -- error raised explicitly by YYERROR.  |
+`---------------------------------------------------*/
+yyerrorlab:
+
+#ifdef __GNUC__
+  /* Pacify GCC when the user code never invokes YYERROR and the label
+     yyerrorlab therefore never appears in user code.  */
+  if (0)
+     goto yyerrorlab;
+#endif
+
+yyvsp -= yylen;
+  yyssp -= yylen;
+  yystate = *yyssp;
+  goto yyerrlab1;
+
+
+/*-------------------------------------------------------------.
+| yyerrlab1 -- common code for both syntax error and YYERROR.  |
+`-------------------------------------------------------------*/
 yyerrlab1:
   yyerrstatus = 3;	/* Each real token shifted decrements this.  */
 
@@ -1952,21 +2027,21 @@ yyerrlab1:
       if (yyssp == yyss)
 	YYABORT;
 
-      YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
-      yydestruct (yystos[yystate], yyvsp);
-      yyvsp--;
-      yystate = *--yyssp;
 
+      yydestruct ("Error: popping", yystos[yystate], yyvsp);
+      YYPOPSTACK;
+      yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
     }
 
   if (yyn == YYFINAL)
     YYACCEPT;
 
-  YYDPRINTF ((stderr, "Shifting error token, "));
-
   *++yyvsp = yylval;
 
+
+  /* Shift the error token. */
+  YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
 
   yystate = yyn;
   goto yynewstate;
@@ -1983,6 +2058,9 @@ yyacceptlab:
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
 yyabortlab:
+  yydestruct ("Error: discarding lookahead",
+              yytoken, &yylval);
+  yychar = YYEMPTY;
   yyresult = 1;
   goto yyreturn;
 
@@ -2005,7 +2083,7 @@ yyreturn:
 }
 
 
-#line 654 "dotImportParser.y"
+#line 666 "dotImportParser.y"
 
 
 

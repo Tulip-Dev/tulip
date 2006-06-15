@@ -2,7 +2,7 @@
 
 #include "IdMetric.h"
 
-METRICPLUGIN(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1");
+METRICPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1","Misc");
 
 //==================================================================
 IdMetric::IdMetric(const PropertyContext &context):Metric(context) {

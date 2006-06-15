@@ -9,11 +9,11 @@
 using namespace std;
 
 
-LAYOUTPLUGIN(Dendrogram, "Dendrogram",
+LAYOUTPLUGINOFGROUP(Dendrogram, "Dendrogram",
              "Julien Testut, Antony Durand, Pascal Ollier, "
              "Yashvin Nababsing, Sebastien Leclerc, "
              "Thibault Ruchon, Eric Dauchier",
-             "03/12/04", "ok", "0", "1");
+	     "03/12/04", "ok", "0", "1","Tree");
 
 const float Dendrogram::INTER_NODE_DISTANCE_X = 1.f;
 const float Dendrogram::INTER_NODE_DISTANCE_Y = 2.f;

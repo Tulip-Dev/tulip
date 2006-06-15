@@ -45,6 +45,7 @@ class MetricProxy;
 class GlGraphWidget;
 class ClusterTree;
 
+namespace tlp {
 /** \brief Panel widget using tulip data to compute statistical results.
  *
  * This class is a widget which takes places in the main interface of tulip, in the tabwidget of properties.
@@ -61,18 +62,18 @@ class TulipStats : public TulipStatsData, public GraphObserver
  protected:
   GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
   SuperGraph *supergraph; /**< A reference to the supergraph we are considering */
-  StatisticResults *statsResults; /**< A structure to store the results of the calculus */
+  tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
   ClusterTree *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
-  GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
+  tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
 
-  GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
-  GlADBox *AABB; /**< An augmented display for the bounding box */
+  tlp::GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
+  tlp::GlADBox *AABB; /**< An augmented display for the bounding box */
 
-  GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
-  GlADLine *linearRegression; /**< An augmented display for the linear regression */
+  tlp::GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
+  tlp::GlADLine *linearRegression; /**< An augmented display for the linear regression */
 
-  GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
+  tlp::GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
 
   // GRID_REGION
   //  GlADGrid *grid; /**< An augmented display for the gris \attention This will be removed soon */
@@ -271,5 +272,5 @@ class TulipStats : public TulipStatsData, public GraphObserver
    */
   void enableRemoveMetricBtn();
 };
-
+}
 #endif

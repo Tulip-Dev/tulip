@@ -20,12 +20,12 @@ bool AcyclicTest::isAcyclic(const SuperGraph *graph) {
   if (instance==0)
     instance = new AcyclicTest();
 
-  if (instance->resultsBuffer.find((unsigned int)graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned int)graph] = acyclicTest(graph);
+  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[(unsigned long)graph] = acyclicTest(graph);
     graph->addObserver(instance);
   }
   
-  return instance->resultsBuffer[(unsigned int)graph];
+  return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
 void AcyclicTest::makeAcyclic(SuperGraph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
@@ -116,23 +116,23 @@ bool AcyclicTest::acyclicTest(const SuperGraph *graph, vector<edge> *obstruction
 //**********************************************************************
 void AcyclicTest::destroy(SuperGraph *graph) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::reverseEdge(SuperGraph *graph,const edge e) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::addEdge(SuperGraph *graph,const edge e) {
-  if (resultsBuffer[(unsigned int)graph]==false) return;
+  if (resultsBuffer[(unsigned long)graph]==false) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::delEdge(SuperGraph *graph,const edge e) {
-  if (resultsBuffer[(unsigned int)graph]==true) return;
+  if (resultsBuffer[(unsigned long)graph]==true) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************

@@ -150,7 +150,7 @@ private:
   MetricProxy *m;
 };
 
-LAYOUTPLUGIN(TreeRadialExtended,"Tree Radial Extended","David Auber","03/03/2001","developpement","0","1")
+LAYOUTPLUGINOFGROUP(TreeRadialExtended,"Tree Radial Extended","David Auber","03/03/2001","developpement","0","1","Tree")
 
 
 

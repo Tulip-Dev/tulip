@@ -119,7 +119,7 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
       assert( res );
       if( res ) {
 	ioDataSet.set( name, v );
-	cout << v;
+	//cout << v;
       }
     }
     // Size

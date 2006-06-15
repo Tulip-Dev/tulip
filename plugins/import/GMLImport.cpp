@@ -425,4 +425,4 @@ struct GMLImport:public ImportModule {
 };
 /*@}*/
 
-IMPORTPLUGIN(GMLImport,"GML import","Auber","04/07/2001","0","0","1")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File")

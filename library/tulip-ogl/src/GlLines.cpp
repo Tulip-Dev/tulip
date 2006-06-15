@@ -18,6 +18,7 @@ static float (*buildColorArray(const Color &startColor, const Color &endColor, u
 static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray=false);
 static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target);
 
+//=============================================================
 void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width, const unsigned int stippleType,
 			 const Color &startColor, const Color &endColor,
 			 const bool arrow, const double arrowWidth, const double arrowHeight)
@@ -25,16 +26,14 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
   glBegin(GL_LINES);
-  //  glColor4ub(startColor.getR(),startColor.getG(),startColor.getB(), 255);//startColor.getA());
   glColor3ub(startColor.getR(),startColor.getG(),startColor.getB());
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
   glColor3ub(endColor.getR(),endColor.getG(),endColor.getB()); //endColor.getA());
-  //  glColor4ub(endColor.getR(),endColor.getG(),endColor.getB(), 255); //endColor.getA());
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
   GlLines::glDisableLineStipple(stippleType);
 }
-
+//=============================================================
 void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, const Coord &endPoint, const double width,
 			  const unsigned int stippleType, const Color &startColor, const Color &endColor,
 			  const bool arrow, const double arrowWidth, const double arrowHeight)
@@ -46,22 +45,27 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
   
-  GLfloat *colorStart=startColor.getGL();
+  GLfloat *colorStart = startColor.getGL();
   colorStart[3] = 1.0;
-  GLfloat *colorEnd=endColor.getGL();
+  GLfloat *colorEnd = endColor.getGL();
   colorEnd[3] = 1.0;
   GLfloat colorDelta[4];
-  for (int i=0;i<4;i++) colorDelta[i]=(colorEnd[i]-colorStart[i])/(bends.size()+2);
+  for (int i=0;i<4;i++) 
+    colorDelta[i] = (colorEnd[i]-colorStart[i])/(bends.size()+2);
   
   glBegin(GL_LINE_STRIP);
   glColor4fv(colorStart);
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
-  for (int i=0;i<4;i++) colorStart[i]+=colorDelta[i];
+  
+  for (int i=0;i<4;i++) 
+    colorStart[i] += colorDelta[i];
   for (unsigned int i = 0; i < bends.size(); i++) {
     glColor4fv(colorStart);
     glVertex3f(bends[i][0],bends[i][1],bends[i][2]);
-    for (int i=0;i<4;i++) colorStart[i]+=colorDelta[i];
+    for (int i=0;i<4;i++) 
+      colorStart[i] += colorDelta[i];
   }
+
   glColor4fv(colorEnd);
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
@@ -69,7 +73,7 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   delete [] colorEnd;
   GlLines::glDisableLineStipple(stippleType);
 }
-
+//=============================================================
 void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &bends,const Coord &endPoint,
 				unsigned int steps,const double width,const unsigned int stippleType,
 				const Color &startColor,const Color &endColor,
@@ -106,7 +110,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
   delete [] colorStart;
   GlLines::glDisableLineStipple(stippleType);
 }
-
+//=============================================================
 void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &bends,const Coord &endPoint,
 				unsigned int steps,const double width,const unsigned int stippleType,
 				const Color &startColor,const Color &endColor,const bool arrow,const double arrowWidth,
@@ -231,8 +235,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
   delete [] colorStart;
   GlLines::glDisableLineStipple(stippleType);
 }
-
-
+//=============================================================
 void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &bends,const Coord &endPoint,
 				unsigned int steps,const double width,const unsigned int stippleType,
 				const Color &startColor,const Color &endColor,const bool arrow,const double arrowWidth,
@@ -317,7 +320,7 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
 			     startColor,endColor,arrow,arrowWidth,
 			     arrowHeight);
 }
-
+//=============================================================
 void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
                               const Coord &startPoint, const vector<Coord> &bends, const Coord &endPoint,
                               unsigned int steps, const Size &size, const StippleType stippleType,
@@ -337,7 +340,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
   controlPoints[cpSize-2][0] = endPoint.getX();
   controlPoints[cpSize-2][1] = endPoint.getY();
   controlPoints[cpSize-2][2] = endPoint.getZ();
-  for (unsigned int i=0; i<(pathSize-2); ++i){
+  for (unsigned int i=0; i<(pathSize-2); ++i) {
     controlPoints[i+2][0] = bends[i].getX();
     controlPoints[i+2][1] = bends[i].getY();
     controlPoints[i+2][2] = bends[i].getZ();
@@ -354,12 +357,14 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     if (size.getH() != size.getW()) {
       radiusArray = buildRadiusArray(size.getW(), size.getH(), pathSize-1, true);
     }
-    Coord tmp = gleComputeAngle(Coord(path[1][0], path[1][1], path[1][2]), startPoint, startNode);
+    Coord tmp = gleComputeAngle(Coord(path[1][0], path[1][1], path[1][2]), 
+				startPoint, startNode);
     controlPoints[0][0] = tmp.getX();
     controlPoints[0][1] = tmp.getY();
     controlPoints[0][2] = tmp.getZ();
 
-    tmp = gleComputeAngle(Coord(path[pathSize-2][0], path[pathSize-2][1], path[pathSize-2][2]), endPoint, finalNode);
+    tmp = gleComputeAngle(Coord(path[pathSize-2][0], path[pathSize-2][1], path[pathSize-2][2]), 
+			  endPoint, finalNode);
     controlPoints[cpSize-1][0] = tmp.getX();
     controlPoints[cpSize-1][1] = tmp.getY();
     controlPoints[cpSize-1][2] = tmp.getZ();
@@ -386,6 +391,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     if (size.getH() != size.getW()) {
       radiusArray = buildRadiusArray(size.getW(), size.getH(), steps, true);    
     }
+    
     for (unsigned int i=1; i < steps; ++i) {
       (*curvefn)(pointArray[i+1], path, pathSize, (double)i/(double)steps);
     }
@@ -395,18 +401,23 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
       pointArray[steps+1][i] = path[pathSize-1][i];       //endPoint
     }
 
-    Coord tmp = gleComputeAngle(Coord(pointArray[2][0], pointArray[2][1], pointArray[2][2]), startPoint, startNode);
+    Coord tmp = gleComputeAngle(Coord(pointArray[2][0], pointArray[2][1], pointArray[2][2]), 
+				startPoint, startNode);
+
     pointArray[0][0] = tmp.getX();
     pointArray[0][1] = tmp.getY();
     pointArray[0][2] = tmp.getZ();
 
     tmp = gleComputeAngle(Coord(pointArray[steps][0], pointArray[steps][1], pointArray[steps][2]), endPoint, finalNode);
+
     pointArray[steps+2][0] = tmp.getX();
     pointArray[steps+2][1] = tmp.getY();
     pointArray[steps+2][2] = tmp.getZ();
 
-     if (radiusArray == NULL) glePolyCylinder(steps+1+2, pointArray, colorArray, size.getW());
-     else glePolyCone(steps+1+2, pointArray, colorArray, radiusArray);
+     if (radiusArray == NULL) 
+       glePolyCylinder(steps+1+2, pointArray, colorArray, size.getW());
+     else 
+       glePolyCone(steps+1+2, pointArray, colorArray, radiusArray);
     
     delete [] pointArray;
     break;
@@ -418,7 +429,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
   delete [] colorArray;
   if (radiusArray != NULL) delete radiusArray;
 }
-
+//=============================================================
 void GlLines::glDrawPoint(const Coord &p) {
   glPointSize(5.0);
   glColor3f(1.0, 1.0, 0.0);
@@ -426,11 +437,12 @@ void GlLines::glDrawPoint(const Coord &p) {
   glVertex3f(p[0],p[1],p[2]);
   glEnd();
 }
+//=============================================================
 void GlLines::glDisableLineStipple(unsigned int stippleType) {
   if (stippleType>0) glDisable(GL_LINE_STIPPLE);
 }
-void GlLines::glEnableLineStipple(unsigned int stippleType)
-{
+//=============================================================
+void GlLines::glEnableLineStipple(unsigned int stippleType) {
   if (stippleType>0) {
     glEnable(GL_LINE_STIPPLE);
     switch (stippleType){
@@ -451,51 +463,38 @@ void GlLines::glEnableLineStipple(unsigned int stippleType)
     } 
   }
 }
-
-GLfloat *GlLines::buildCurvePoints(const Coord &startPoint,const  vector<Coord> &bends,const Coord &endPoint)
-{
+//=============================================================
+GLfloat *GlLines::buildCurvePoints(const Coord &startPoint,const  vector<Coord> &bends,const Coord &endPoint) {
   GLfloat *bendsCoordinates=new GLfloat[(bends.size()+2)*3];
-  bendsCoordinates[0]=startPoint.getX();
-  bendsCoordinates[1]=startPoint.getY();
-  bendsCoordinates[2]=startPoint.getZ();
+  bendsCoordinates[0]=startPoint[0];
+  bendsCoordinates[1]=startPoint[1];
+  bendsCoordinates[2]=startPoint[2];
   vector<Coord>::const_iterator it;
-  int i=1;
-  for (it=bends.begin();it!=bends.end();++it)
-     {
-      bendsCoordinates[i*3]=(*it).getX();
-      bendsCoordinates[i*3+1]=(*it).getY();
-      bendsCoordinates[i*3+2]=(*it).getZ();
-      i++;
-    }
-  bendsCoordinates[i*3]=endPoint.getX();
-  bendsCoordinates[i*3+1]=endPoint.getY();
-  bendsCoordinates[i*3+2]=endPoint.getZ();
+  int i = 1;
+  for (it=bends.begin(); it!=bends.end(); ++it) {
+    bendsCoordinates[i*3  ] = (*it)[0];
+    bendsCoordinates[i*3+1] = (*it)[1];
+    bendsCoordinates[i*3+2] = (*it)[2];
+    i++;
+  }
+  bendsCoordinates[i*3]  = endPoint[0];
+  bendsCoordinates[i*3+1]= endPoint[1];
+  bendsCoordinates[i*3+2]= endPoint[2];
   return bendsCoordinates;
 }
-
+//=============================================================
 GLfloat *GlLines::buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &p2,const Coord &p3) {
   GLfloat *bendsCoordinates= new GLfloat[4*3];
-  bendsCoordinates[0]=p0.getX();
-  bendsCoordinates[1]=p0.getY();
-  bendsCoordinates[2]=p0.getZ();
-
-  bendsCoordinates[3]=p1.getX();
-  bendsCoordinates[4]=p1.getY();
-  bendsCoordinates[5]=p1.getZ();
-
-  bendsCoordinates[6]=p2.getX();
-  bendsCoordinates[7]=p2.getY();
-  bendsCoordinates[8]=p2.getZ();
-
-  bendsCoordinates[9]=p3.getX();
-  bendsCoordinates[10]=p3.getY();
-  bendsCoordinates[11]=p3.getZ();
-
+  for (unsigned int i = 0; i < 3; ++i) {
+    bendsCoordinates[i]   =p0[i];
+    bendsCoordinates[i+3] =p1[i];
+    bendsCoordinates[i+6] =p2[i];
+    bendsCoordinates[i+9] =p3[i];
+  }
   return bendsCoordinates;
 }
-
-static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3]
-{
+//=============================================================
+static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3] {
   float (*colorArray)[3] =  new float[steps+1+(gleColor ? 2 : 0)][3];
   float (*tmp)[3] = (gleColor ? &(colorArray[1]) : colorArray);
   
@@ -519,9 +518,8 @@ static float (*buildColorArray(const Color &startColor, const Color &endColor, u
   }
   return colorArray;
 }
-
-static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray)
-{
+//=============================================================
+static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray) {
   double *radius = new double[steps+1+(gleArray ? 2 : 0)];
   double *tmp = (gleArray ? &(radius[1]) : radius);
   double d = (endRadius - startRadius) / (double)steps;
@@ -536,9 +534,8 @@ static double *buildRadiusArray(const double startRadius, const double endRadius
   }
   return radius;
 }
-
-static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target)
-{
+//=============================================================
+static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target) {
   //point is point b, finalPoint is point a, target is b
   Coord ab = point - finalPoint;
   Coord ac = target - finalPoint;
@@ -556,3 +553,4 @@ static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &
 
   return angle;
 }
+//=============================================================

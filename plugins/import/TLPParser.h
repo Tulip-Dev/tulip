@@ -155,9 +155,11 @@ struct TLPParser {
 
   ~TLPParser() {
     while (!builderStack.empty()) {
-	delete builderStack.front();
-	builderStack.pop_front();
-      }
+      TLPBuilder *builder = builderStack.front();
+      builderStack.pop_front();
+      if (builder != builderStack.front())
+	delete builder;
+    }
   }
 
   bool parse() {
@@ -212,15 +214,17 @@ struct TLPParser {
 	    }
 	    break;
 	  case CLOSETOKEN:
-	    if (builderStack.front()->close())
-	      delete builderStack.front();
-	    else {
+	    if (builderStack.front()->close()) {
+	      TLPBuilder * builder = builderStack.front();
+	      builderStack.pop_front();
+	      if (builder != builderStack.front())
+		delete builder;
+	    } else {
 	      std::stringstream ess;
 	      ess << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
 	      pluginProgress->setError(ess.str());
 	      return false;
 	    }
-	    builderStack.pop_front();
 	    break;
 	  case ERRORINFILE: {
 	    std::stringstream ess;

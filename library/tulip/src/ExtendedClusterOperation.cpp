@@ -184,7 +184,7 @@ void updateLayoutUngroup(SuperGraph *graph, node metanode) {
   if (depth<0.0001) depth=1.0;
   Coord center = (maxL + minL) / -2.0;
   clusterLayout->translate(center, cluster);
-  clusterLayout->rotateZ(-graphRot->getNodeValue(metanode), cluster);
+  clusterLayout->rotateZ(graphRot->getNodeValue(metanode), cluster);
   clusterLayout->scale(Coord(size[0]/width, size[1]/height, size[2]/depth), cluster);
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(size[0]/width, size[1]/height, size[2]/depth), cluster);

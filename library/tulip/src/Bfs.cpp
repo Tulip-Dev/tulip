@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::newSubGraph(G)),selectedNodes(), selectedEdges() {
+Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::newCloneSubGraph(G)),selectedNodes(), selectedEdges() {
   selectedNodes.setAll(false);    selectedEdges.setAll(false);
   nbNodes = 0;
 
@@ -20,16 +20,11 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
   }
   else
     unselected = true;
-
-  if(unselected) {
-    Iterator<node> * itN = G->getNodes();
-    root = itN->next();
-    delete itN;
-  }
- 
-    
- 
   delete itn;
+
+  if(unselected) 
+    root = graph->getOneNode();
+
   s_proxy = G->getProperty<SelectionProxy>("viewSelection");
   s_proxy->setAllNodeValue(false);
   s_proxy->setAllEdgeValue(false);
@@ -39,31 +34,33 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
   
   resultatAlgoSelection->setNodeValue(root, true);
   selectedNodes.set(root.id, true);
-  graph->addNode(root);
-  nbNodes++;
+  //  graph->addNode(root);
+  ++nbNodes;
   computeBfs(G,resultatAlgoSelection,root);
 }
 
 void Bfs::computeBfs(SuperGraph * G,SelectionProxy * resultatAlgoSelection, node root){
   unsigned int taille = G->numberOfNodes();
+  unsigned int nb_n = 1;
   unsigned int i = 0;
-
   vector<node> next_roots;
   next_roots.push_back(root);
-  cerr << "root " << root.id << endl;
   while(taille != nbNodes) {
     node r = next_roots[i];
+    nb_n++;
+    if(!G->isElement(r))
+      cerr << "ERROR NODE R NOT IN G"<< endl;
     Iterator<edge> * ite = G->getInOutEdges(r);
     while(ite->hasNext()){
       edge e = ite->next();
       if(!selectedEdges.get(e.id)) {
-	node tmp = (G->source(e) == r ? G->target(e) : G->source(e));
+	node tmp = G->opposite(e,r);
 	if(!selectedNodes.get(tmp.id)) {
 	  selectedNodes.set(tmp.id,true);
 	  selectedEdges.set(e.id, true);
 	  next_roots.push_back(tmp);
-	  graph->addNode(tmp);
-	  graph->addEdge(e);
+	  //  graph->addNode(tmp);
+	  //graph->addEdge(e);
 	  nbNodes++;
 	  s_proxy->setNodeValue(tmp,true);
 	  s_proxy->setEdgeValue(e,true);

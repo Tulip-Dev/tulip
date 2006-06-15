@@ -14,7 +14,7 @@
 #include "HierarchicalGraph.h"
 
 
-LAYOUTPLUGIN(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1");
+LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1","Hierarchical");
 
 using namespace std;
 
@@ -343,19 +343,20 @@ namespace {
 //=======================================================================
 bool HierarchicalGraph::run() {
   //make acyclic
-  // vector<node> order;
-  // buildDfsOrdering(superGraph, order);
-  // MutableContainer<int> orderid;
-  // for(unsigned int i=0; i< order.size(); ++i) 
-  //   orderid.set(order[i].id, i);
+  /*
+  vector<node> order;
+  buildDfsOrdering(superGraph, order);
+  MutableContainer<int> orderid;
+  for(unsigned int i=0; i< order.size(); ++i) 
+    orderid.set(order[i].id, i);
   edge e;
-  // forEach(e, superGraph->getEdges()) {
-  //   node src = superGraph->source(e);
-  //   node tgt = superGraph->target(e);
-  //   if(orderid.get(src.id) > orderid.get(tgt.id))
-  //     superGraph->reverse(e);
-  // }
-    
+  forEach(e, superGraph->getEdges()) {
+    node src = superGraph->source(e);
+    node tgt = superGraph->target(e);
+    if(orderid.get(src.id) > orderid.get(tgt.id))
+      superGraph->reverse(e);
+  }
+  */    
   //=======================================================================
   // Build a clone of this graph
   SuperGraph *mySGraph = tlp::newCloneSubGraph(superGraph,"tmp clone");
@@ -478,7 +479,7 @@ bool HierarchicalGraph::run() {
       }
     }
   }
-  
+  edge e;
   forEach(e, superGraph->getEdges()) {
     node src = superGraph->source(e);
     node tgt = superGraph->target(e);

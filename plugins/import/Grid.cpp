@@ -50,6 +50,7 @@ struct Grid:public ImportModule {
 
   bool import(const string &name) {
     superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
+    superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.05,0.05,0.4));
     bool ok=true;
     int width = 10;
     int height = 10;
@@ -72,4 +73,4 @@ struct Grid:public ImportModule {
     return true;
   }
 };
-IMPORTPLUGIN(Grid,"Grid","Auber","02/12/2003","0","0","1")
+IMPORTPLUGINOFGROUP(Grid,"Grid","Auber","02/12/2003","0","0","1","Graphs")

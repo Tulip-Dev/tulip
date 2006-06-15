@@ -19,6 +19,7 @@
 #include <tulip/GlGraphWidget.h>
 #include <tulip/GlADGrid.h>
 
+namespace tlp {
 /** \brief Widget for displaying a grid on the graph.
  *
  * This class is a widget accessible from the interface of Tulip Software.
@@ -40,7 +41,7 @@ class GridOptionsWidget : public GridOptionsData
 
  protected:
   GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
-  GlADGrid *grid; /**< The considered GlADGrid */
+  tlp::GlADGrid *grid; /**< The considered GlADGrid */
 
  public:
   /**
@@ -85,5 +86,5 @@ class GridOptionsWidget : public GridOptionsData
    */
   void chDisplayGrid();
 };
-
+}
 #endif

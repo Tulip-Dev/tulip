@@ -40,7 +40,7 @@
 /*@{*/
 
 // Macro for factorization of source code
-#define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R)          \
+#define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R,G)	\
 class C##T##Factory:public PropertyFactory<T>           \
 {                                                       \
  public:						\
@@ -50,6 +50,7 @@ class C##T##Factory:public PropertyFactory<T>           \
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
+  std::string getGroup() const { return std::string(G);}\
   std::string getAuthor() const {return std::string(A);}\
   std::string getDate() const {return std::string(D);}	\
   std::string getInfo() const {return std::string(I);}	\
@@ -65,20 +66,28 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define METRICPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R)
-#define STRINGPLUGIN(C,N,A,D,I,V,R)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R)
-#define SELECTIONPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Selection,C,N,A,D,I,V,R)
-#define LAYOUTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R)
-#define COLORSPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Colors,C,N,A,D,I,V,R)
-#define INTPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Int,C,N,A,D,I,V,R)
-#define SIZESPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(Sizes,C,N,A,D,I,V,R)
-#define METAGRAPHPLUGIN(C,N,A,D,I,V,R) PROPERTYPLUGINFACTORY(MetaGraph,C,N,A,D,I,V,R)
+#define METRICPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(Metric,C,N,A,D,I,V,R,G)
+#define METRICPLUGIN(C,N,A,D,I,V,R)  METRICPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define STRINGPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R,G)
+#define STRINGPLUGIN(C,N,A,D,I,V,R) STRINGPLUGINOFGROUP(C,N,A,D,I,V,R,G,"")
+#define SELECTIONPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Selection,C,N,A,D,I,V,R,G)
+#define SELECTIONPLUGIN(C,N,A,D,I,V,R) SELECTIONPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R,G)
+#define LAYOUTPLUGIN(C,N,A,D,I,V,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define COLORSPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Colors,C,N,A,D,I,V,R,G)
+#define COLORSPLUGIN(C,N,A,D,I,V,R) COLORSPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define INTPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Int,C,N,A,D,I,V,R,G)
+#define INTPLUGIN(C,N,A,D,I,V,R) INTPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
+#define SIZESPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Sizes,C,N,A,D,I,V,R,G)
+#define SIZESPLUGIN(C,N,A,D,I,V,R) SIZESPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
+#define METAGRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(MetaGraph,C,N,A,D,I,V,R,G)
+#define METAGRAPHPLUGIN(C,N,A,D,I,V,R) METAGRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
 
 //===========================================================
 // Declaclartion of SuperGraph modification plug-in Mechanism
 //===========================================================
 ///
-#define SUPERGRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R)	\
+#define SUPERGRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R,G)	\
 class C##T##Factory:public T##Factory                   \
 {                                                       \
  public:						\
@@ -88,6 +97,7 @@ class C##T##Factory:public T##Factory                   \
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
+  std::string getGroup() const { return std::string(G);}\
   std::string getAuthor() const {return std::string(A);}\
   std::string getDate() const {return std::string(D);}	\
   std::string getInfo() const {return std::string(I);}	\
@@ -103,8 +113,11 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define EXPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R)
-#define IMPORTPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R)
-#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) SUPERGRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R)
+#define EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) SUPERGRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R,G)
+#define EXPORTPLUGIN(C,N,A,D,I,V,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
+#define IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) SUPERGRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R,G)
+#define IMPORTPLUGIN(C,N,A,D,I,V,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,G) SUPERGRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R,G)
+#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 /*@}*/
 #endif

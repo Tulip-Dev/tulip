@@ -49,7 +49,7 @@ class MixedModel : public Layout {
 
  private:
   
-  std::vector<edge> getPlanarSubGraph(SuperGraphConMap *graph, std::vector<edge> unplanar_edges);
+  std::vector<edge> getPlanarSubGraph(PlanarConMap *graph, std::vector<edge> unplanar_edges);
   void initPartition();
   void assignInOutPoints();
   void computeCoords();
@@ -62,7 +62,7 @@ class MixedModel : public Layout {
   int next_right(unsigned int k, const node v);
   int next_left(unsigned int k, const node v);
   
-  SuperGraphMap* carte;
+  PlanarConMap* carte;
   std::vector< std::vector<node> > V;
   std::map<node, Coord> NodeCoords;
   
@@ -79,7 +79,7 @@ class MixedModel : public Layout {
   std::map<edge, Coord> OutPoints;
 
   SuperGraph * Pere;
-  SuperGraphConMap * graphMap;
+  PlanarConMap * graphMap;
   SuperGraph * currentGraph;
   std::vector<edge> dummy;
   std::map<node, std::vector<Coord> > out_points;

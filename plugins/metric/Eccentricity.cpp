@@ -3,7 +3,7 @@
 #include <tulip/ForEach.h>
 #include "Eccentricity.h"
 
-METRICPLUGIN(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","0","1");
+METRICPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","0","1","Graph");
 
 using namespace std;
 
@@ -15,7 +15,7 @@ namespace {
     HTML_HELP_DEF( "values", "[true , false]" ) \
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
-    "If true the eccentricity will be computed using all path between a node to the other (not only the maximum one)"\
+    "If true the eccentricity will be computed using all path between a node to the other (not only the maximum one, ie radiality)"\
     HTML_HELP_CLOSE(),
   };
 }

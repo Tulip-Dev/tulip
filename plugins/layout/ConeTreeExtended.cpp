@@ -9,7 +9,7 @@
 
 #include "ConeTreeExtended.h"
 
-LAYOUTPLUGIN(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1","0");
+LAYOUTPLUGINOFGROUP(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1","0","Tree");
 
 using namespace std;
 using namespace stdext;

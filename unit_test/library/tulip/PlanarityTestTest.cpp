@@ -10,7 +10,7 @@
 #include <cppunit/TestCaller.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PlanarityTest.h>
-#include <tulip/SuperGraphMap.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>
 #include "PlanarityTestTest.h"
 
@@ -61,17 +61,17 @@ unsigned int eulerIdentity(SuperGraph *graph) {
 void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "==================================" << endl;
   graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
-  SuperGraphMap *graphMap = new SuperGraphMap(graph);
-  graphMap->makePlanar();
+  PlanarConMap *graphMap = new PlanarConMap(graph);
+  //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
   graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
-  graphMap = new SuperGraphMap(graph);
+  graphMap = new PlanarConMap(graph);
   cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  graphMap->makePlanar();
+  //  graphMap->makePlanar();
   /* 
    * The number of faces must be adapted because the Planarity Test split the 
    * external face into several faces (one by connected componnent).
@@ -83,14 +83,69 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "unbiconnected" << endl;
   graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
 
-  graphMap = new SuperGraphMap(graph);
+  graphMap = new PlanarConMap(graph);
+
+  //  graphMap->makePlanar();
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
+
+  delete graphMap;
+  delete graph;
+  cerr << "==================================" << endl;
+}
+//==========================================================
+void PlanarityTestTest::planarMetaGraphsEmbedding() {
+  cerr << "===========MetaGraphsEmbedding=======================" << endl;
+  graph = tlp::load(GRAPHPATH + "planar/grid1010.tlp");
+  SuperGraph * g= tlp::newCloneSubGraph(graph);
+  set<node> toGroup;
+  Iterator<node> * itn = g->getNodes();
+  for(unsigned int i = 0; i < 10; ++i)
+    toGroup.insert(itn->next());
+  node meta = tlp::createMetaNode(g,toGroup);
+  toGroup.clear();
+  for(unsigned int i = 0; i < 10; ++i)
+    toGroup.insert(itn->next());
+  node meta2 = tlp::createMetaNode(g,toGroup);
+  toGroup.clear();
+  toGroup.insert(meta2);
+  for(unsigned int i = 0; i < 10; ++i)
+    toGroup.insert(itn->next());
+  node meta3 = tlp::createMetaNode(g,toGroup);
+  toGroup.clear();
+
+  PlanarConMap *graphMap = new PlanarConMap(g);
+  //  graphMap->makePlanar();
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(g));//eulerIdentity(g), graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graphMap));//eulerIdentity(g), graphMap->nbFaces());  
+  delete graphMap;
+  graph->delSubGraph(g);
+  delete graph;
+  cerr << "==================================" << endl;
+  /*
+  graph = tlp::load(GRAPHPATH + "planar/unconnected.tlp");
+  graph->setAttribute("name", string("unconnected"));
+  graphMap = new PlanarConMap(graph);
+  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
+  graphMap->makePlanar();
+  /* 
+   * The number of faces must be adapted because the Planarity Test split the 
+   * external face into several faces (one by connected componnent).
+   */
+  /*  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));  
+  delete graphMap;
+  delete graph;
+  cerr << "==================================" << endl;
+  cerr << "unbiconnected" << endl;
+  graph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+
+  graphMap = new PlanarConMap(graph);
 
   graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
 
   delete graphMap;
   delete graph;
-  cerr << "==================================" << endl;
+  cerr << "==================================" << endl;*/
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphsObstruction() {
@@ -105,7 +160,9 @@ CppUnit::Test * PlanarityTestTest::suite() {
 								     &PlanarityTestTest::notPlanarGraphs ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
   								     &PlanarityTestTest::planarGraphsEmbedding ) );
-
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
+  								     &PlanarityTestTest::planarMetaGraphsEmbedding ) );
+  
   return suiteOfTests;
 }
 //==========================================================

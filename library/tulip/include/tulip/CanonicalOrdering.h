@@ -17,7 +17,7 @@
 #ifndef Tulip_CanonicalOrdering_H
 #define Tulip_CanonicalOrdering_H
 #include <tulip/Face.h>
-#include <tulip/SuperGraphMap.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/Node.h>
 #include <vector>
 #include <map>
@@ -39,14 +39,14 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
 
   std::vector<edge> getDummyEdges(){ return dummy_edge; }
   
-  Ordering(SuperGraphMap * G, PluginProgress* pluginProgress = 0,
+  Ordering(PlanarConMap * G, PluginProgress* pluginProgress = 0,
 	   int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
   std::vector<std::vector<node> > computeCanonicalOrdering(PluginProgress* pluginProgress = 0, int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
 
  private :
  
-  SuperGraphMap::SuperGraphMap * Gp;
+  PlanarConMap::PlanarConMap * Gp;
   MutableContainer<int>::MutableContainer oute;
   MutableContainer<int>::MutableContainer outv;
   MutableContainer<bool>::MutableContainer visitedNodes;

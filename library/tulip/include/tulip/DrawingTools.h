@@ -16,7 +16,7 @@ class SelectionProxy;
 
 namespace tlp {
   TLP_SCOPE   std::pair<Coord, Coord> computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection = 0);
+
+  TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection = 0);
 };
-
-
 #endif

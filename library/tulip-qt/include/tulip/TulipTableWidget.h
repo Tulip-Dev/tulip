@@ -32,15 +32,15 @@ class PProxy;
 class ColorButton : public QButton {
 
   Q_OBJECT;
-  Q_PROPERTY(QColor color READ getColor);
+  Q_PROPERTY(QRgb color READ getColor);
   
 private:
-  QColor color;
+  QRgb color;
 public:
-  ColorButton(const QColor &c, QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
+  ColorButton(const QRgb &c, QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
   ~ColorButton();
 
-  QColor getColor() const;
+  QRgb getColor() const;
   void paintEvent (QPaintEvent *);
   
 public slots:
@@ -116,11 +116,11 @@ private slots:
 /* table items */
 class ColorTableItem : public QTableItem {
 private:
-  QColor color;
+  QRgb color;
 public:
-  ColorTableItem(QTable *table, const QColor &color);
+  ColorTableItem(QTable *table, const QRgb &color);
   ~ColorTableItem();
-  QColor getColor() const;
+  QRgb getColor() const;
   // void setPixmap(const QPixmap &p);
   // void setText(const QString &str);
   // QString text() const;
@@ -171,6 +171,14 @@ class GlyphTableItem : public QComboTableItem {
 public:
   GlyphTableItem(QTable *, bool editable = false);
   ~GlyphTableItem();
+  int rtti() const;
+  QString text() const;
+};
+
+class EdgeShapeTableItem : public QComboTableItem {
+public:
+  EdgeShapeTableItem(QTable *, bool editable = false);
+  ~EdgeShapeTableItem();
   int rtti() const;
   QString text() const;
 };

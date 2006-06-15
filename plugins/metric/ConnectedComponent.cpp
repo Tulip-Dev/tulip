@@ -3,7 +3,7 @@
 #include "ConnectedComponent.h"
 
 
-METRICPLUGIN(ConnectedComponent,"Connected Component","David Auber","01/07/2002","Alpha","0","1");
+METRICPLUGINOFGROUP(ConnectedComponent,"Connected Component","David Auber","01/07/2002","Alpha","0","1","Component");
 
 ConnectedComponent::ConnectedComponent(const PropertyContext &context):Metric(context) {}
 //======================================================
