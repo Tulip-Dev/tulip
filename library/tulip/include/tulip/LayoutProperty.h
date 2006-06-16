@@ -43,7 +43,14 @@ public:
   void translate(const tlp::Vector<float,3>& v, Iterator<node> *, Iterator<edge> *);
   void scale(const tlp::Vector<float,3>& v, Graph *sg=0);
   void scale(const tlp::Vector<float,3>& v, Iterator<node> *, Iterator<edge> *);
-  void rotateZ(const double& alpha, Graph *sg=0);
+  /**
+   * Rotates the layout proxy of the passed graph by alpha degrees
+   */
+  void rotateZ(const double& alpha, Graph *graph=0);
+  /**
+   * Rotates the passed nodes and edges in the given layout proxy by
+   * alpha degrees
+   */
   void rotateZ(const double& alpha, Iterator<node> *, Iterator<edge> *);
   void center(Graph *sg = 0);
   void normalize(Graph *sg = 0);

@@ -18,7 +18,7 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-const string metasgProperty = "viewMetaGraph";
+const string metagraphProperty = "viewMetaGraph";
 const string layoutProperty = "viewLayout";
 const string sizeProperty = "viewSize";
 const string rotationProperty = "viewRotation";
@@ -27,15 +27,15 @@ const string rotationProperty = "viewRotation";
 /*
   resolve overlap,
   taille de noeud n,
-  pour tous les sommets du sge autre que n, 
+  pour tous les sommets du graphe autre que n, 
   calculer la boite englobante la plus grande possible centré sur le barycentre 
   des sommets de a.
 */
 /*
-  void shrink(Graph *sg, node n) {
-  Iterator<node> *itN = sg->getNodes();
-  LayoutProperty *layout = sg->getProperty<LayoutProperty>("viewLayout");
-  SizeProperty *size = sg->getProperty<SizeProperty>("viewSize");
+  void shrink(Graph *graph, node n) {
+  Iterator<node> *itN = graph->getNodes();
+  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
+  SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
   Coord result(DBL_MAX,DBL_MAX,DBL_MAX);
   Coord nPos  = layout->getNodeValue(n);
   Size  nSize = size->getNodeValue(n)/2.0;
@@ -73,87 +73,87 @@ void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, GraphProp
   } delete it;
 }
 //====================================================================================
-void updateGroupLayout(Graph *sg, Graph *cluster, node metanode) {
-  LayoutProperty *sgLayout = sg->getProperty<LayoutProperty>(layoutProperty);
-  SizeProperty *sgSize = sg->getProperty<SizeProperty>(sizeProperty);
-  DoubleProperty *sgRotation = sg->getProperty<DoubleProperty>(rotationProperty);
-  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, sgLayout, sgSize, sgRotation);
+void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
+  LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
+  SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
+  DoubleProperty *graphRotation = graph->getProperty<DoubleProperty>(rotationProperty);
+  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, graphLayout, graphSize, graphRotation);
   Coord maxL = box.first;
   Coord minL = box.second;
-  sgLayout->setNodeValue(metanode, (maxL + minL) / 2.0 );
+  graphLayout->setNodeValue(metanode, (maxL + minL) / 2.0 );
   Coord v = (maxL - minL);
   if (v[2] < 0.0001) v[2] = 0.1;
-  sgSize->setNodeValue(metanode, Size(v[0],v[1],v[2]));
+  graphSize->setNodeValue(metanode, Size(v[0],v[1],v[2]));
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
   Iterator<node> *itN= cluster->getNodes();
   while (itN->hasNext()){
     node itn = itN->next();
-    clusterLayout->setNodeValue(itn, sgLayout->getNodeValue(itn));
-    clusterSize->setNodeValue(itn, sgSize->getNodeValue(itn));
+    clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
+    clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
   } delete itN;
   Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
     edge ite = itE->next();
-    clusterLayout->setEdgeValue(ite, sgLayout->getEdgeValue(ite));
-    clusterSize->setEdgeValue(ite, sgSize->getEdgeValue(ite));
+    clusterLayout->setEdgeValue(ite, graphLayout->getEdgeValue(ite));
+    clusterSize->setEdgeValue(ite, graphSize->getEdgeValue(ite));
   } delete itE;
-  //  shrink(sg, metanode);
+  //  shrink(graph, metanode);
 }
 //====================================================================================
-node tlp::createMetaNode(Graph *sg, set<node> &subGraph) {
-  if (sg->getRoot()==sg) {
+node tlp::createMetaNode(Graph *graph, set<node> &subGraph) {
+  if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not group a set of nodes in the root sg" << endl;
+    cerr << "\t Error: Could not group a set of nodes in the root graph" << endl;
     return node();
   }
   Observable::holdObservers();
   if (subGraph.empty()) {
     cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << '\t' << "Warning: Creation of an empty metasg" << endl;
+    cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
-  GraphProperty *metaInfo = sg->getProperty<GraphProperty>(metasgProperty);
-  Graph *metaGraph = tlp::inducedSubGraph(sg->getFather(), subGraph, "cluster");
+  GraphProperty *metaInfo = graph->getProperty<GraphProperty>(metagraphProperty);
+  Graph *metaGraph = tlp::inducedSubGraph(graph->getFather(), subGraph, "cluster");
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << metaGraph->getId(); 
   metaGraph->setAttribute("name", st.str()); 
-  node metaNode = sg->addNode();
+  node metaNode = graph->addNode();
   metaInfo->setNodeValue(metaNode, metaGraph);
 
-  updateGroupLayout(sg, metaGraph, metaNode);
+  updateGroupLayout(graph, metaGraph, metaNode);
 
-  //remove nodes from sg
+  //remove nodes from graph
   StableIterator<node> itN(metaGraph->getNodes());
   while (itN.hasNext())
-    sg->delNode(itN.next());
+    graph->delNode(itN.next());
 
   //create new edges from nodes to metanodes
-  Graph *root = sg->getRoot();
+  Graph *root = graph->getRoot();
   hash_map<node, hash_set<node> > edges;
   StableIterator<edge> it(root->getEdges());
   while (it.hasNext()) {
     edge e = it.next();
-    node source = sg->source(e);
-    node target = sg->target(e);
+    node source = graph->source(e);
+    node target = graph->target(e);
     bool toDelete = (metaInfo->getNodeValue(source)!=0) || (metaInfo->getNodeValue(target)!=0);
-    if (sg->isElement(source) && metaGraph->isElement(target)) {
+    if (graph->isElement(source) && metaGraph->isElement(target)) {
       if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
 	edges[source].insert(target);
-	sg->addEdge(source,metaNode);
+	graph->addEdge(source,metaNode);
       } 
       if (toDelete) {
 	//	cerr << "delete edge e :" << e.id << endl;
-	sg->delAllEdge(e);
+	graph->delAllEdge(e);
       }
     }
-    if (sg->isElement(target) && metaGraph->isElement(source)) {
+    if (graph->isElement(target) && metaGraph->isElement(source)) {
       if ( (edges.find(target) == edges.end()) || (edges[target].find(source) == edges[target].end()) ) {
 	edges[target].insert(source);
-	sg->addEdge(metaNode, target);
+	graph->addEdge(metaNode, target);
       }
       if (toDelete) {
 	//	cerr << "delete edge e :" << e.id << endl;
-	sg->delAllEdge(e);
+	graph->delAllEdge(e);
       }
     }
   }
@@ -161,15 +161,15 @@ node tlp::createMetaNode(Graph *sg, set<node> &subGraph) {
   return metaNode;
 }
 //====================================================================================
-void updateLayoutUngroup(Graph *sg, node metanode) {
-  GraphProperty *clusterInfo = sg->getProperty<GraphProperty>(metasgProperty);
+void updateLayoutUngroup(Graph *graph, node metanode) {
+  GraphProperty *clusterInfo = graph->getProperty<GraphProperty>(metagraphProperty);
   if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
-  LayoutProperty *sgLayout = sg->getProperty<LayoutProperty>(layoutProperty);
-  SizeProperty *sgSize = sg->getProperty<SizeProperty>(sizeProperty);
-  DoubleProperty *sgRot = sg->getProperty<DoubleProperty>(rotationProperty);
-  Size size = sgSize->getNodeValue(metanode);
-  Coord pos = sgLayout->getNodeValue(metanode);
-  double rot = sgRot->getNodeValue(metanode);
+  LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
+  SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
+  DoubleProperty *graphRot = graph->getProperty<DoubleProperty>(rotationProperty);
+  Size size = graphSize->getNodeValue(metanode);
+  Coord pos = graphLayout->getNodeValue(metanode);
+  double rot = graphRot->getNodeValue(metanode);
   Graph  *cluster = clusterInfo->getNodeValue(metanode);
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
@@ -185,7 +185,7 @@ void updateLayoutUngroup(Graph *sg, node metanode) {
   if (depth<0.0001) depth=1.0;
   Coord center = (maxL + minL) / -2.0;
   clusterLayout->translate(center, cluster);
-  clusterLayout->rotateZ(-sgRot->getNodeValue(metanode), cluster);
+  clusterLayout->rotateZ(graphRot->getNodeValue(metanode), cluster);
   clusterLayout->scale(Coord(size[0]/width, size[1]/height, size[2]/depth), cluster);
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(size[0]/width, size[1]/height, size[2]/depth), cluster);
@@ -193,22 +193,22 @@ void updateLayoutUngroup(Graph *sg, node metanode) {
   Iterator<node> *itN = cluster->getNodes();
   while(itN->hasNext()) { 
     node itn = itN->next();
-    sgLayout->setNodeValue(itn, clusterLayout->getNodeValue(itn));
-    sgSize->setNodeValue(itn, clusterSize->getNodeValue(itn));
-    sgRot->setNodeValue(itn, clusterRot->getNodeValue(itn) + rot);
+    graphLayout->setNodeValue(itn, clusterLayout->getNodeValue(itn));
+    graphSize->setNodeValue(itn, clusterSize->getNodeValue(itn));
+    graphRot->setNodeValue(itn, clusterRot->getNodeValue(itn) + rot);
   } delete itN;
  Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
     edge ite = itE->next();
-    sgLayout->setEdgeValue(ite, clusterLayout->getEdgeValue(ite));
-    sgSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
+    graphLayout->setEdgeValue(ite, clusterLayout->getEdgeValue(ite));
+    graphSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
   } delete itE;
 }
 //====================================================================================
-void tlp::openMetaNode(Graph *sg, node n) {
-  if (sg->getRoot()==sg) {
+void tlp::openMetaNode(Graph *graph, node n) {
+  if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not ungroup a meta node in the root sg" << endl;
+    cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
     return;
   }
   Observable::holdObservers();
@@ -216,24 +216,24 @@ void tlp::openMetaNode(Graph *sg, node n) {
   MutableContainer<node> mappingN;
   mappingC.setAll(node());
   mappingN.setAll(node());
-  Graph *root = sg->getRoot();
-  GraphProperty *metaInfo = root->getProperty<GraphProperty>(metasgProperty);
+  Graph *root = graph->getRoot();
+  GraphProperty *metaInfo = root->getProperty<GraphProperty>(metagraphProperty);
   Graph *metaGraph = metaInfo->getNodeValue(n);
   if (metaGraph == 0) return;
   buildMapping(root->getInOutNodes(n), mappingC, metaInfo, node() );
   buildMapping(metaGraph->getNodes() , mappingN, metaInfo, node() );
-  //add node from meta to sg
+  //add node from meta to graph
   Iterator<node> *itN = metaGraph->getNodes();
   while (itN->hasNext()) {
-    sg->addNode(itN->next());
+    graph->addNode(itN->next());
   } delete itN;
   Iterator<edge> *itE = metaGraph->getEdges();
   while (itE->hasNext()) {
-    sg->addEdge(itE->next());
+    graph->addEdge(itE->next());
   } delete itE;
-  updateLayoutUngroup(sg, n);
+  updateLayoutUngroup(graph, n);
   //===========================
-  //Remove the metasg from the hierarchy and remove the metanode
+  //Remove the metagraph from the hierarchy and remove the metanode
   root->delAllNode(n);
   metaGraph->getFather()->delSubGraph(metaGraph);
   hash_map<node, hash_set<node> > edges;
@@ -241,7 +241,7 @@ void tlp::openMetaNode(Graph *sg, node n) {
   StableIterator<edge> it(root->getEdges());
   while(it.hasNext()) {
     edge e = it.next();
-    if (sg->isElement(e)) continue;
+    if (graph->isElement(e)) continue;
     node sourceC = mappingC.get(root->source(e).id);
     node targetN = mappingN.get(root->target(e).id);
     node sourceN = mappingN.get(root->source(e).id);
@@ -258,13 +258,13 @@ void tlp::openMetaNode(Graph *sg, node n) {
 	continue;
     }
     if (metaInfo->getNodeValue(source) == 0 && metaInfo->getNodeValue(target) == 0) {
-      sg->addEdge(e);
+      graph->addEdge(e);
       continue;
     }
     if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
       edges[source].insert(target);
-      if (!sg->existEdge(source,target).isValid())
-	sg->addEdge(source,target);
+      if (!graph->existEdge(source,target).isValid())
+	graph->addEdge(source,target);
       else 
 	cerr << "bug exist edge 1";
     }
@@ -272,8 +272,8 @@ void tlp::openMetaNode(Graph *sg, node n) {
   Observable::unholdObservers();
 }
 //=========================================================
-Graph * tlp::inducedSubGraph(Graph *sg, const std::set<node> &nodes, string name) {
-  Graph *result = sg->addSubGraph();
+Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string name) {
+  Graph *result = graph->addSubGraph();
   set<node>::const_iterator itNodeSet = nodes.begin();
   for(;itNodeSet!=nodes.end(); ++itNodeSet) {
     result->addNode(*itNodeSet);
@@ -281,10 +281,10 @@ Graph * tlp::inducedSubGraph(Graph *sg, const std::set<node> &nodes, string name
   Iterator<node> *itN=result->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    Iterator<edge> *itE=sg->getOutEdges(itn);
+    Iterator<edge> *itE=graph->getOutEdges(itn);
     while (itE->hasNext()) {
       edge ite = itE->next();
-      if (result->isElement(sg->target(ite)))
+      if (result->isElement(graph->target(ite)))
 	result->addEdge(ite);
     } delete itE;
   } delete itN;

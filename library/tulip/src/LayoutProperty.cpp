@@ -38,7 +38,7 @@ Coord  LayoutProperty::getMin(Graph *sg) {
 //=================================================================================
 void rotate_z(Coord &vec, double alpha) {
   Coord backupVec(vec);
-  double zRot =  - 2.0*M_PI * alpha / 360.0;
+  double zRot =  2.0*M_PI * alpha / 360.0;
   float cosz = cos(zRot);
   float sinz = sin(zRot);
   vec[0] = backupVec[0]*cosz - backupVec[1]*sinz;
