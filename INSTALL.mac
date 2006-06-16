@@ -1,0 +1,57 @@
+How to build Tulip on MacOSX platform
+--------------------------------------
+
+1- Build the Qt/Mac Open Source Edition
+-------------------------------------------
+You first have to download the corresponding Qt 3 source code
+ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
+Refer to the INSTALL file for the build directives
+but be sure to add the -thread and -static flags when configuring Qt
+> ./configure -thread -static
+> make
+Edit libqt-mt.la in the lib subdirectory of your Qt installation directory
+in order to disable (add a leading #) the line beginning with
+dependency_libs= ...
+This step is necessary because glibtool chokes on the -framework switch.
+Removing the line is not correct but it ensures a working Tulip building
+process. The Qt qmake process doesn't use glibtool so this isn't an issue
+for most Qt applications.
+
+2- Build freetype2
+------------------
+Download the FreeType 2 source code from
+http://freetype.sourceforge.net/download.html
+then 
+> ./configure
+> make
+> make install
+
+3- Configure Tulip
+------------------
+Change the current directory to the tulip directory
+then run
+
+> sh gen-conf.sh
+and
+> ./configure  -prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
+
+More configuration flags are available; use ./configure --help to see them.
+
+5- Build Tulip
+-------------
+run
+
+> make
+then
+> make install
+
+6- Build a downloadable Tulip Mac bundle
+----------------------------------------
+If you want to build a self sufficient downloadable Tulip Mac bundle,
+just run
+
+> sh make_tulip-<release number>_mac_bundle.sh
+
+this will produce a Tulip-<release number>.app Mac bundle and
+a Tulip-<release number>.dmg file which is a disk image of that bundle
+which can be downloaded as is from the Internet.
