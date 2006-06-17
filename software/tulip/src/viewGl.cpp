@@ -969,14 +969,6 @@ void viewGl::buildMenus() {
   viewMenu->insertItem( "Center View", this, SLOT( centerView() ));
   viewMenu->insertItem( "Restore View", this, SLOT( restoreView() ));
   viewMenu->insertItem( "Dialogs",  &dialogMenu);
-  //EditMenu
-  editMenu->insertSeparator();
-  editMenu->insertItem( "Deselect All", this, SLOT( deselectALL() ));
-  editMenu->insertItem( "Reverse Selection", this, SLOT( reverseSelection() ));
-  editMenu->insertItem( "Delete Selection", this , SLOT(delSelection() ));
-  editMenu->insertItem( "New subgraph", this, SLOT( newSubgraph() ));
-  editMenu->insertItem( "Reverse selected edges direction", this, SLOT( reverseSelectedEdgeDirection() ));
-  editMenu->insertItem( "group", this, SLOT( group() ));
   //Property Menu
   if (selectMenu.count()>0)
     propertyMenu->insertItem("&Selection", &selectMenu );
@@ -1348,7 +1340,7 @@ void viewGl::newSubgraph() {
   
   if(!verifGraph) 
     QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
-  QString text = QInputDialog::getText( "View building" ,  "Please enter view name" , QLineEdit::Normal,QString::null, &ok, this );
+  QString text = QInputDialog::getText( "Creation of subgraph" ,  "Please enter the subgraph name" , QLineEdit::Normal,QString::null, &ok, this );
   if (ok && !text.isEmpty()) {
     sel1 = graph->getProperty<BooleanProperty>("viewSelection");
     Graph *tmp = graph->addSubGraph(sel1);

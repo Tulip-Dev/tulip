@@ -59,6 +59,13 @@
         <action name="editPasteAction"/>
         <separator/>
         <action name="editFindAction"/>
+        <separator/>
+        <action name="editDeselect_allAction"/>
+        <action name="editReverse_selectionAction"/>
+        <action name="editDelete_selectionAction"/>
+        <separator/>
+        <action name="editCreate_subgraphAction"/>
+        <action name="editCreate_groupAction"/>
     </item>
     <item text="&amp;Algorithm" name="propertyMenu">
     </item>
@@ -80,6 +87,8 @@
             <action name="make_connected"/>
             <action name="make_biconnected"/>
             <action name="triangulate"/>
+            <separator/>
+            <action name="Reverse_selected_edgesAction"/>
         </item>
     </item>
     <item text="&amp;View" name="viewMenu">
@@ -596,6 +605,99 @@
             <string>Connected</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>Reverse_selected_edgesAction</cstring>
+        </property>
+        <property name="text">
+            <string>Reverse selected edges</string>
+        </property>
+        <property name="menuText">
+            <string>Reverse selected edges</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_2</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action_3</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDeselect_allAction</cstring>
+        </property>
+        <property name="text">
+            <string>Deselect all</string>
+        </property>
+        <property name="menuText">
+            <string>Deselect all</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editReverse_selectionAction</cstring>
+        </property>
+        <property name="text">
+            <string>Reverse selection</string>
+        </property>
+        <property name="menuText">
+            <string>Reverse selection</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editAction</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="menuText">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDelete_selectionAction</cstring>
+        </property>
+        <property name="text">
+            <string>Delete selection</string>
+        </property>
+        <property name="menuText">
+            <string>Delete selection</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCreate_subgraphAction</cstring>
+        </property>
+        <property name="text">
+            <string>Create subgraph</string>
+        </property>
+        <property name="menuText">
+            <string>Create subgraph</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCreate_groupAction</cstring>
+        </property>
+        <property name="text">
+            <string>Create group</string>
+        </property>
+        <property name="menuText">
+            <string>Create group</string>
+        </property>
+    </action>
 </actions>
 <images>
     <image name="image0">
@@ -795,6 +897,48 @@
         <receiver>TulipData</receiver>
         <slot>isConnected()</slot>
     </connection>
+    <connection>
+        <sender>Reverse_selected_edgesAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>reverseSelectedEdgeDirection()</slot>
+    </connection>
+    <connection>
+        <sender>editDeselect_allAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>deselectALL()</slot>
+    </connection>
+    <connection>
+        <sender>editCreate_groupAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>group()</slot>
+    </connection>
+    <connection>
+        <sender>editCreate_subgraphAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>newSubgraph()</slot>
+    </connection>
+    <connection>
+        <sender>editDelete_selectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>delSelection()</slot>
+    </connection>
+    <connection>
+        <sender>editDeselect_allAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>deselectALL()</slot>
+    </connection>
+    <connection>
+        <sender>editReverse_selectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>reverseSelection()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>fileNew()</slot>
@@ -823,6 +967,12 @@
     <slot>isAcyclic()</slot>
     <slot>makeConnected()</slot>
     <slot>isConnected()</slot>
+    <slot>reverseSelectedEdgeDirection()</slot>
+    <slot>deselectALL()</slot>
+    <slot>reverseSelection()</slot>
+    <slot>delSelection()</slot>
+    <slot>newSubgraph()</slot>
+    <slot>group()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
