@@ -465,23 +465,24 @@ if test ! "$ac_qt_dir" = "NO"; then
 fi
 
 qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
-AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
-ac_qt_includes="$qt_incdir"
-
+AC_FIND_FILE(QtCore, $qt_incdirs, qt_incdir)
 dnl check QT version
-QT_VERSION=3
-qtlib_prefix=libqt
-if test -d $qt_incdir/QtCore ; then
+if test ! "$qt_incdir" = "NO"; then
   QT_VERSION=4
   qtlib_prefix=libQt
+else
+  AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
+  QT_VERSION=3
+  qtlib_prefix=libqt
 fi
 AC_SUBST(QT_VERSION)
+ac_qt_includes="$qt_incdir"
 
 dnl add our own flag QT_REL (QT_VERSION is internally used by Qt)
 QT_CPPFLAGS="-DQT_REL=$QT_VERSION"
 
 if test ${QT_VERSION} -eq 4 && test -d $qt_incdir; then
-  ac_qt_includes="$(dirname $qt_incdir) -I$qt_incdir"
+  ac_qt_includes="$qt_incdir -I$qt_incdir/Qt"
 dnl we add QT3_SUPPORT compilation flag as indicated 
 dnl in http://doc.trolltech.com/4.0/porting4.html
 dnl an QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
