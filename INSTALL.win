@@ -24,7 +24,8 @@ libpng-*-[bin|lib].zip, and zlib-*-[bin|lib].zip) have to be installed
 using the MinGW installation directory as the root installation directory.
 - iconv (iconv-*.win32.zip) and xml2 (libxml2-*.win32.zip) libraries have to be
 downloaded from http://www.zlatkovic.com/pub/libxml/ and installed using the
-MinGW installation as root installation directory.
+MinGW installation as root installation directory for the contents of the
+bin, include and lib directories of the .win32 directory contained in the zip files.
 
 4- Configure Tulip
 ------------------
