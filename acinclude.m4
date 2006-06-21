@@ -465,23 +465,24 @@ if test ! "$ac_qt_dir" = "NO"; then
 fi
 
 qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
-AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
-ac_qt_includes="$qt_incdir"
-
+AC_FIND_FILE(QtCore, $qt_incdirs, qt_incdir)
 dnl check QT version
-QT_VERSION=3
-qtlib_prefix=libqt
-if test -d $qt_incdir/QtCore ; then
+if test ! "$qt_incdir" = "NO"; then
   QT_VERSION=4
   qtlib_prefix=libQt
+else
+  AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
+  QT_VERSION=3
+  qtlib_prefix=libqt
 fi
 AC_SUBST(QT_VERSION)
+ac_qt_includes="$qt_incdir"
 
 dnl add our own flag QT_REL (QT_VERSION is internally used by Qt)
 QT_CPPFLAGS="-DQT_REL=$QT_VERSION"
 
 if test ${QT_VERSION} -eq 4 && test -d $qt_incdir; then
-  ac_qt_includes="$(dirname $qt_incdir) -I$qt_incdir"
+  ac_qt_includes="$qt_incdir -I$qt_incdir/Qt"
 dnl we add QT3_SUPPORT compilation flag as indicated 
 dnl in http://doc.trolltech.com/4.0/porting4.html
 dnl an QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
@@ -532,32 +533,24 @@ dnl Qt3Support lib is for Qt 3 compatibility purpose
     LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
     LIB_QT_DEBUG="-lQtCore4_debug -lQtGui4_debug -lQt3Support4_debug -lQtOpenGL4_debug -lQtNetwork4_debug -lQtXml4_debug"
 dnl For linking purpose, we need to copy some libs
-    if test ${QT_VERSION} = 3; then
-dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
-      if test ! -f $QTDIR/lib/libqt-mt.dll ; then
-        library=$(ls -1 ${QTDIR}/bin/qt-mt*.dll)
-        cp ${library} ${QTDIR}/lib/libqt-mt.dll
-      fi
-    else
 dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
-      if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
-        cp ${QTDIR}/lib/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
-      fi
-      if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
-        cp ${QTDIR}/lib/QtGui4.dll ${QTDIR}/lib/libQtGui4.dll
-      fi
-      if test ! -f ${QTDIR}/lib/libQt3Support4.dll ; then
-        cp ${QTDIR}/lib/Qt3Support4.dll ${QTDIR}/lib/libQt3Support4.dll
-      fi
-      if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
-        cp ${QTDIR}/lib/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
-      fi
-      if test ! -f ${QTDIR}/lib/libQtNetwork4.dll ; then
-        cp ${QTDIR}/lib/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
-      fi
-      if test ! -f ${QTDIR}/lib/libQtXml4.dll ; then
-        cp ${QTDIR}/lib/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
-      fi
+    if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
+      cp ${QTDIR}/lib/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
+    fi
+    if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
+      cp ${QTDIR}/lib/QtGui4.dll ${QTDIR}/lib/libQtGui4.dll
+    fi
+    if test ! -f ${QTDIR}/lib/libQt3Support4.dll ; then
+      cp ${QTDIR}/lib/Qt3Support4.dll ${QTDIR}/lib/libQt3Support4.dll
+    fi
+    if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
+      cp ${QTDIR}/lib/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
+    fi
+    if test ! -f ${QTDIR}/lib/libQtNetwork4.dll ; then
+      cp ${QTDIR}/lib/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
+    fi
+    if test ! -f ${QTDIR}/lib/libQtXml4.dll ; then
+      cp ${QTDIR}/lib/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
     fi
   else
     if test ${VAR_MACOSX} = 1
@@ -571,6 +564,13 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
   fi
 else
   LIB_QT_DEBUG=${LIB_QT}
+  if test ${VAR_WIN32} = 1 ; then
+dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
+    if test ! -f $QTDIR/lib/libqt-mt.dll ; then
+      library=$(ls -1 ${QTDIR}/bin/qt-mt*.dll)
+      cp ${library} ${QTDIR}/lib/libqt-mt.dll
+    fi
+  fi
 fi
 
 AC_SUBST(LIB_QT)
@@ -659,6 +659,9 @@ AC_DEFUN([AC_PATH_MINGW],
 [
 AC_MSG_CHECKING(for MinGW needed libraries)
 MINGWDIR=${INCLUDE/\\\\include;/}
+if test -z "$MINGWDIR"; then
+  MINGWDIR=/mingw
+fi
 GLDIR=${MINGWDIR}/lib
 libraries="iconv.dll freetype*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
 for lib in $libraries; do

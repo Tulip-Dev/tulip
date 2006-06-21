@@ -8,7 +8,7 @@
 
 Name "Tulip @VERSION@"
 OutFile "TulipSetup_@WIN_EXE_VERSION@.exe"
-InstallDir "$PROGRAMFILES\Tulip\"
+InstallDir "$PROGRAMFILES\Tulip_@VERSION@\"
 
 
 
@@ -205,4 +205,5 @@ RMDir "$INSTDIR\include"
 IfFileExists "$INSTDIR\share\*.*" 0 +2
 RMDir /r "$INSTDIR\share"
 Delete "$INSTDIR\assistant.exe"
+RMDir "$INSTDIR"
 SectionEnd
