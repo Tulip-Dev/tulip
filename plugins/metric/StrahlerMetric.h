@@ -12,7 +12,7 @@ struct Strahler {
 
 /** \addtogroup metric */
 /*@{*/
-/// StrahlerMeric.h - An implementation of the Strahler parameter.
+/// StrahlerMetric.h - An implementation of the Strahler parameter.
 /** This plugin is an implementation of the Strahler Parameter.
  *  algorithm first published as:
  *

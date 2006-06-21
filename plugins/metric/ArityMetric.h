@@ -5,7 +5,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// ArityDoubleProperty.h - Compute the degree of each node.
+/// ArityMetric.h - Compute the degree of each node.
 /** This plugin compute the degree of each node
  *
  *  <b>HISTORY</b>

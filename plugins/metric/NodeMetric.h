@@ -9,7 +9,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// NodeDoubleProperty.h - Compute the number of nodes in the subtree induced by each node.
+/// NodeMetric.h - Compute the number of nodes in the subtree induced by each node.
 /** Computes the number of nodes in the subtree induced by each node.
  *
  *  <b>HISTORY</b>

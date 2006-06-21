@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// ClusterDoubleProperty.h - An implementation of the clustering parameter.
+/// ClusterMetric.h - An implementation of the clustering parameter.
 /** This plugin is an implementation of the Clustering Parameter.
  *  algorithm published in :
  *

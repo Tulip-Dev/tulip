@@ -6,7 +6,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// LeafDoubleProperty.h - Compute the number of leaves in the subtree induced by each node.
+/// LeafMetric.h - Compute the number of leaves in the subtree induced by each node.
 /** Computes the number of leaves in the subtree induced by each node.
  *
  *  <b>HISTORY</b>
