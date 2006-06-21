@@ -25,9 +25,9 @@ nobase_include_HEADERS = \
 	tulip/TulipPropertyTablePlugin.h
 
 if QT3
-nodist_include_HEADERS = tulip/FindSelectionData.h
+nobase_nodist_include_HEADERS = tulip/FindSelectionData.h
 else
-nodist_include_HEADERS = \
+nobase_nodist_include_HEADERS = \
 	tulip/FindSelectionData.h \
 	tulip/clustertree.h \
 	tulip/glgraphwidget.h \
