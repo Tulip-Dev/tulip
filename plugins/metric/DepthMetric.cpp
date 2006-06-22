@@ -12,13 +12,13 @@ DepthMetric::DepthMetric(const PropertyContext &context):DoubleAlgorithm(context
 //=================================================
 double DepthMetric::getNodeValue(const node n) {
   if (graph->outdeg(n)==0) return 0.0;
-  if (doubleResult->getNodeValue(n) != 0)
+  if (doubleResult->getNodeValue(n) > 0.1)
     return doubleResult->getNodeValue(n);
   double max = 0;
-  node _n;
-  forEach(_n, graph->getOutNodes(n))
-    max = std::max(max, getNodeValue(_n));
-  doubleResult->setNodeValue(_n, max + 1);
+  node _n2;
+  forEach(_n2, graph->getOutNodes(n))
+    max = std::max(max, getNodeValue(_n2));
+  doubleResult->setNodeValue(n, max + 1);
   return max + 1;
 }
 //====================================================================
@@ -27,7 +27,7 @@ bool DepthMetric::run() {
   doubleResult->setAllNodeValue(0);
   node _n;
   forEach(_n, graph->getNodes())
-    getNodeValue(_n);
+    doubleResult->setNodeValue(_n, getNodeValue(_n));
   return true;
 }
 //=================================================

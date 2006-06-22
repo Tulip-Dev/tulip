@@ -13,12 +13,12 @@ PathLengthMetric::PathLengthMetric(const PropertyContext &context):DoubleAlgorit
 //=======================================
 double PathLengthMetric::getNodeValue(const node n) {
   if (graph->outdeg(n)==0) return 0.0;
-  if (doubleResult->getNodeValue(n)!=0)
+  if (doubleResult->getNodeValue(n) > 0.1)
     return doubleResult->getNodeValue(n);
   double result=0;
   node child;
   forEach(child, graph->getOutNodes(n)) {
-    result += doubleResult->getNodeValue(child);
+    result += getNodeValue(child);
   }
   result += leafMetric->getNodeValue(n);
   doubleResult->setNodeValue(n, result);
