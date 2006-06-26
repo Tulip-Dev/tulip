@@ -14,6 +14,52 @@ struct p0Vectors {
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
   return (p1.pos^p2.pos)[2] > 0; 
 }
+
+//==============================================================
+//the following inline function of cross product ensures we
+//ignore the z-coordinate.  Only 2d-hull merging allowed.
+inline double cross (Coord v1, Coord v2) {
+  v1.setZ (0.0);
+  v2.setZ (0.0);
+  return ((v1^v2).getZ());
+}//end cross
+
+//==============================================================
+//the following inline function returns when a double is "almost zero"
+inline bool almostZero (double n) {
+  return fabs(n) < 1e-6;
+}
+
+//==============================================================
+//the following function computes the intersection point
+//between two line segments v1 and v2.  It returns true if the
+//segments intersect and false otherwise.  The intersection
+//is returned in intersection.
+inline bool hit (const Coord &v1Tail, const Coord &v1Head,
+		 const Coord &v2Tail, const Coord &v2Head,
+		 Coord &intersection) {
+  float s, t;
+  float D = (v1Tail.getX()*(v2Head.getY() - v2Tail.getY()) +
+	     v1Head.getX()*(v2Tail.getY() - v2Head.getY()) +
+	     v2Head.getX()*(v1Head.getY() - v1Tail.getY()) +
+	     v2Tail.getX()*(v1Tail.getY() - v1Head.getY()));
+  if (almostZero (D)) return false; //parallel
+
+  //compute two hit times and hit point
+  s = (v1Tail.getX()*(v2Head.getY() - v2Tail.getY()) +
+       v2Tail.getX()*(v1Tail.getY() - v2Head.getY()) +
+       v2Head.getX()*(v2Tail.getY() - v1Tail.getY()))/D;
+  t = -(v1Tail.getX()*(v2Tail.getY() - v1Head.getY()) +
+	v1Head.getX()*(v1Tail.getY() - v2Tail.getY()) +
+	v2Tail.getX()*(v1Head.getY() - v1Tail.getY()))/D;
+  intersection = v1Tail + (v1Head - v1Tail)*s;
+
+  //If both hit times are less than one, the segments intersect
+  if (((0.0 <= s) && (s <= 1.0)) && ((0.0 <= t) && (t <= 1.0)))
+    return true;
+  return false;
+}
+
 //==============================================================
 
 //A function that returns a point on the convex hull
@@ -99,49 +145,7 @@ void tlp::convexHull (const vector<Coord> &points,
     convexHull.push_back((*it).index);
   }//end for
 }//end ConvexHull
-//==============================================================
-//the following inline function of cross product ensures we
-//ignore the z-coordinate.  Only 2d-hull merging allowed.
-inline double cross (Coord v1, Coord v2) {
-  v1.setZ (0.0);
-  v2.setZ (0.0);
-  return ((v1^v2).getZ());
-}//end cross
 
-//==============================================================
-//the following inline function returns true if the point
-//is in the left halfplane defined by the vector
-inline bool inLeftHalfplane (const Coord halfplaneVecHead,
-			     const Coord halfplaneVecTail,
-			     const Coord point) {
-  return cross (halfplaneVecHead - halfplaneVecTail,
-		point - halfplaneVecTail) >= 0;
-}
-
-//==============================================================
-//the following inline function returns the intersection hit
-//of vector v1 on vector v2.  The vectors are anchored at the
-//points p1 and p2 respectively in the plane.
-inline float hitTime (const Coord &p1, const Coord &v1,
-		      const Coord &p2, const Coord &v2) {
-  cout << v1.getY() << " " << v2.getY() << endl;
-  //paralell lines don't intersect
-  if ((fabs (v1.getY()) < 1e-6) && (fabs (v2.getY()) < 1e-6))
-    return FLT_MAX;
-
-  //if v2's denominator is zero, we have a degenerate form
-  if (fabs (v2.getY()) < 1e-6)
-    return (p2.getY() - p1.getY())/v1.getY();
-
-  //compute the denominator and make sure it is not zero
-  float invMv2 = v2.getX()/v2.getY();
-  if (fabs (v1.getX() - invMv2*v1.getY()) < 1e-6)
-    return FLT_MAX;
-
-  //otherwise we have the standard case.
-  return (p2.getX() - p1.getX() + invMv2*(p1.getY() - p2.getY()))/
-    (v1.getX() - invMv2*v1.getY());
-}
 
 //==============================================================
 void tlp::mergeHulls (const vector<Coord> &points,
@@ -227,6 +231,7 @@ void tlp::mergeHulls (const vector<Coord> &points,
 }//end convex hull
 
 //==============================================================
+//helper function to advance calipers for intersecting hulls
 inline unsigned int advance (unsigned int caliper, unsigned int &adv,
 			     bool inside,
 			     const vector<unsigned int> &hull,
@@ -237,6 +242,10 @@ inline unsigned int advance (unsigned int caliper, unsigned int &adv,
   return (caliper + 1) % hull.size();
 }//end advance
 
+//==============================================================
+//A function to intersect hull1 and hull2 and place the result
+//in intersection.  Points will be inserted into the points list
+//if the hulls intersect.
 void tlp::intersectHulls (vector<Coord> &points,
 			  const vector<unsigned int> &hull1,
 			  const vector<unsigned int> &hull2,
@@ -249,86 +258,102 @@ void tlp::intersectHulls (vector<Coord> &points,
   //These two variables are used to indicate the current positions
   //of the calipers.  start1 and start2 are the end positions of the calipers
   unsigned int caliper1, caliper2;
-  unsigned int start1, start2;
-  start1 = caliper1 = 1;
-  start2 = caliper2 = 1;
+  caliper1 = caliper2 = 0;
   unsigned int adv1 = 0;
   unsigned int adv2 = 0;
 
-  cout << "hull 1 " << endl;
-  for (unsigned int i = 0; i < hull1.size(); ++i)
-    cout << points[hull1[i]] << endl;
-  cout << "hull 2" << endl;
-  for (unsigned int i = 0; i < hull2.size(); ++i)
-    cout << points[hull2[i]] << endl;
-  
-  cout << "start1 start2 " << start1 << " " << start2 << endl; 
   bool hullsIntersect = false;
   bool hull1Inside = false;
-  do {
-    unsigned int prev1 = (caliper1 + hull1.size() - 1) % hull1.size();
-    unsigned int prev2 = (caliper2 + hull2.size() - 1) % hull2.size();
-    cout << "prev1 caliper1 " << prev1 << " " << caliper1 << endl;
-    cout << "prev2 caliper2 " << prev2 << " " << caliper2 << endl << endl;
-    Coord vec1 = points[hull1[caliper1]] - points[hull1[prev1]];
-    Coord vec2 = points[hull2[caliper2]] - points[hull2[prev2]];
+  Coord firstIntPoint;
+  if ((hull1.size() > 1) && (hull2.size() > 1)) { 
+    do {
+      unsigned int prev1 = (caliper1 + hull1.size() - 1) % hull1.size();
+      unsigned int prev2 = (caliper2 + hull2.size() - 1) % hull2.size();
+      Coord vec1 = points[hull1[caliper1]] - points[hull1[prev1]];
+      Coord vec2 = points[hull2[caliper2]] - points[hull2[prev2]];
+      Coord oneLeftTwoVec = points[hull1[caliper1]] - points[hull2[prev2]];
+      Coord twoLeftOneVec = points[hull2[caliper2]] - points[hull1[prev1]];
+      double oneLeftVecTwo = cross (vec2, oneLeftTwoVec); 
+      double twoLeftVecOne = cross (vec1, twoLeftOneVec);
+      double oneCrossTwo = cross (vec1, vec2);
 
-    //check for intersection
-    float t = hitTime (points[hull1[prev1]], vec1,
-		       points[hull2[prev2]], vec2);
-    cout << "hit time " << t << endl;
-    if ((t >= 0) && (t <= 1)) {
-      cout << "add intersection point " << endl;
-      intersection.push_back (points.size());
-      points.push_back (points[hull1[caliper1]] + vec1*t);
-      hullsIntersect = true;
-      hull1Inside = inLeftHalfplane (points[hull2[caliper2]],
-				     points[hull2[prev2]],
-				     points[hull1[caliper1]]);
-      start1 = caliper1;
-      start2 = caliper2;
-      adv1 = adv2 = 0;
-    }//end if
-   
-    //advance calipers
-    cout << "cross " << cross (vec1, vec2) << endl;
-    cout << "2 in left of 1 " 
-	 << inLeftHalfplane (points[hull1[caliper1]],
-			     points[hull1[prev1]],
-			     points[hull2[caliper2]]) << endl;
-    cout << "1 in left of 2 "
-	 << inLeftHalfplane (points[hull2[caliper2]], 
-			     points[hull2[prev2]],
-			     points[hull1[caliper1]]) << endl;
-    if (cross (vec1, vec2) >= 0) {
-      if (inLeftHalfplane (points[hull1[caliper1]],
-			   points[hull1[prev1]],
-			   points[hull2[caliper2]])) 
-	caliper1 = advance (caliper1, adv1,
-			    (hullsIntersect && hull1Inside),
-			    hull1, intersection);
-      else
-	caliper2 = advance (caliper2, adv2, 
-			    (hullsIntersect && !hull1Inside),
-			     hull2, intersection);
-    }//end if
-    else {
-      if (inLeftHalfplane (points[hull2[caliper2]], 
-			   points[hull2[prev2]],
-			   points[hull1[caliper1]])) 
-	caliper2 = advance (caliper2, adv2, 
-			    (hullsIntersect && !hull1Inside),
-			    hull2, intersection);
-       else
-	 caliper1 = advance (caliper1, adv1,
-			     (hullsIntersect && hull1Inside),
-			     hull1, intersection);
-    }//end else
+      //check for intersection
+      Coord intPoint;
+      if (hit (points[hull1[prev1]], points[hull1[caliper1]],
+	       points[hull2[prev2]], points[hull2[caliper2]],
+	       intPoint)) {
+	if (!hullsIntersect) {
+	  adv1 = adv2 = 0;
+	  hullsIntersect = true;
+	  firstIntPoint = intPoint;
+	}//end if
+	intersection.push_back (points.size());
+	points.push_back (intPoint);
+	if (oneLeftVecTwo > 0) hull1Inside = true;
+	else if (twoLeftVecOne > 0) hull1Inside = false;
+      }//end if
 
-    cout << "adv " << adv1 << " " << adv2 << endl;
-  } while ((adv1 < hull1.size()) || (adv2 < hull2.size()));
+      //special cases
+      //parallel and intersecting
+      if (almostZero (cross (oneLeftTwoVec, twoLeftOneVec))) {
+	
+      }
+
+      //parallel and separated
+      if (almostZero (oneCrossTwo) && (oneLeftVecTwo < 0) && 
+	  (twoLeftVecOne < 0)) break;
+      
+      //colinear segments
+      if (almostZero (oneCrossTwo) && (almostZero (oneLeftVecTwo))
+	  && (almostZero (twoLeftVecOne))) {
+	if (hullsIntersect) {
+	  if (hull1Inside)
+	    caliper2 = advance (caliper2, adv2, false,
+				hull2, intersection);
+	  else
+	    caliper1 = advance (caliper1, adv1, false,
+				hull1, intersection);
+	}//end if
+      }//end if
+
+      //normal case -- advance calipers
+      if (oneCrossTwo >= 0) {
+	if (twoLeftVecOne > 0) 
+	  caliper1 = advance (caliper1, adv1,
+			      (hullsIntersect && hull1Inside),
+			      hull1, intersection);
+	else
+	  caliper2 = advance (caliper2, adv2, 
+			      (hullsIntersect && !hull1Inside),
+			      hull2, intersection);
+      }//end if
+      else {
+	if (oneLeftVecTwo > 0) 
+	  caliper2 = advance (caliper2, adv2, 
+			      (hullsIntersect && !hull1Inside),
+			      hull2, intersection);
+	else
+	  caliper1 = advance (caliper1, adv1,
+			      (hullsIntersect && hull1Inside),
+			      hull1, intersection);
+      }//end else
+    } while (((adv1 < hull1.size()) || (adv2 < hull2.size())) &&
+	     ((adv1 < 2*hull1.size()) && (adv2 < 2*hull2.size())));
+  }//end if
+
+  //check to see if one hull is inside the other, otherwise no intersect.
+  if (!hullsIntersect) {
+    if (insideHull (points, hull1, points[hull2[0]]))
+      intersection = hull2;
+    else if (insideHull (points, hull2, points[hull1[0]]))
+      intersection = hull1;
+    else intersection.clear();   
+  }//end if
 }
-
+  
+//==============================================================
+//Function to compute the area of the passed hull using
+//convex combinations of its boundary.
 double tlp::areaOfHull (const vector<Coord> &points,
 			const vector<unsigned int> &hull) {
   if (hull.size() < 3) return 0.0;
@@ -344,6 +369,11 @@ double tlp::areaOfHull (const vector<Coord> &points,
   return area/2.0;
 }
 
+//==============================================================
+//This function to test if point is inside the convex hull
+//It does so by making sure that point is in the left
+//halfspace of hull edges on a counterclockwise traversal
+//of the boundary.
 bool tlp::insideHull (const vector<Coord> &points,
 		      const vector<unsigned int> &hull,
 		      const Coord &point) {
@@ -351,11 +381,14 @@ bool tlp::insideHull (const vector<Coord> &points,
   unsigned int prevElement = hull[0];
   vector<unsigned int>::const_iterator hullIt = hull.begin();
   ++hullIt;
+  Coord vec, pointVec;
   for (; hullIt != hull.end(); ++hullIt) {
-    if (!inLeftHalfplane (points[*hullIt],
-			  points[prevElement], point)) return false;
+    vec = points[*hullIt] - points[prevElement];
+    pointVec = point - points[prevElement];
+    if (cross (vec, pointVec) < 0) return false;
     prevElement = *hullIt;
   }
-  return inLeftHalfplane (points[hull[0]],
-			  points[prevElement], point);
+  vec = points[hull[0]] - points[prevElement];
+  pointVec = point - points[prevElement];
+  return (cross (vec, pointVec) > 0);
 }
