@@ -40,6 +40,18 @@ namespace tlp {
 		   const std::vector<unsigned int> &hull1,
 		   const std::vector<unsigned int> &hull2,
 		   std::vector<unsigned int> &mergedConvexHull);
+
+  void intersectHulls (std::vector<Coord> &points,
+		       const std::vector<unsigned int> &hull1,
+		       const std::vector<unsigned int> &hull2,
+		       std::vector<unsigned int> &intersection);
+
+  double areaOfHull (const std::vector<Coord> &points,
+		     const std::vector<unsigned int> &hull);
+
+  bool insideHull (const std::vector<Coord> &points,
+		   const std::vector<unsigned int> &hull,
+		   const Coord &point);
   
   /*@}*/
 }
