@@ -43,7 +43,7 @@ inline bool hit (const Coord &v1Tail, const Coord &v1Head,
 	     v1Head.getX()*(v2Tail.getY() - v2Head.getY()) +
 	     v2Head.getX()*(v1Head.getY() - v1Tail.getY()) +
 	     v2Tail.getX()*(v1Tail.getY() - v1Head.getY()));
-  if (almostZero (D)) return false; //parallel
+  if (almostZero (D)) return false; //lines parallel
 
   //compute two hit times and hit point
   s = (v1Tail.getX()*(v2Head.getY() - v2Tail.getY()) +
@@ -287,22 +287,17 @@ void tlp::intersectHulls (vector<Coord> &points,
 	  hullsIntersect = true;
 	  firstIntPoint = intPoint;
 	}//end if
-	intersection.push_back (points.size());
-	points.push_back (intPoint);
+	//insert the same intersection point only once
+	//(if one convex hull is a line add only the first intersect)
+	if (!almostZero ((intPoint - points[points.size() - 1]).norm())) {
+	  intersection.push_back (points.size());
+	  points.push_back (intPoint);
+	}
 	if (oneLeftVecTwo > 0) hull1Inside = true;
 	else if (twoLeftVecOne > 0) hull1Inside = false;
       }//end if
 
       //special cases
-      //parallel and intersecting
-      if (almostZero (cross (oneLeftTwoVec, twoLeftOneVec))) {
-	
-      }
-
-      //parallel and separated
-      if (almostZero (oneCrossTwo) && (oneLeftVecTwo < 0) && 
-	  (twoLeftVecOne < 0)) break;
-      
       //colinear segments
       if (almostZero (oneCrossTwo) && (almostZero (oneLeftVecTwo))
 	  && (almostZero (twoLeftVecOne))) {
