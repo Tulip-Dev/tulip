@@ -194,7 +194,7 @@ void GraphImpl::delEdge(const edge e) {
     return;
   }
   //Warning, the current implementation doesn't manage the updating of 
-  //properties for upper_subsg in the case of Super Graph Implementation
+  //properties for upper_subgraph in the case of Super Graph Implementation
   node s = source(e);
   node t = target(e);
   outDegree.set(s.id, outDegree.get(s.id)-1);
@@ -308,10 +308,10 @@ void GraphImpl::externRemove(const edge e) {
   assert(isElement(e));
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
-    Graph *subsg = itS->next();
-    assert(subsg != this);
-    if (subsg->isElement(e))
-      subsg->delEdge(e);
+    Graph *subgraph = itS->next();
+    assert(subgraph != this);
+    if (subgraph->isElement(e))
+      subgraph->delEdge(e);
   } delete itS;
   getPropertyManager()->erase(e);
   edgeIds.free(e.id);
@@ -322,10 +322,10 @@ void GraphImpl::externRemove(const node n) {
   assert(isElement(n));
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
-    Graph *subsg = itS->next();
-    assert(subsg != this);
-    if (subsg->isElement(n))
-      subsg->delNode(n);
+    Graph *subgraph = itS->next();
+    assert(subgraph != this);
+    if (subgraph->isElement(n))
+      subgraph->delNode(n);
   } delete itS;
   getPropertyManager()->erase(n);
   nodeIds.free(n.id);

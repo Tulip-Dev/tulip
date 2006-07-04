@@ -109,7 +109,7 @@ public:
   // Graph hierarrchy acces and building
   //=========================================================================
   /**
-   *  Remove all nodes, edges and subsgs of the supersg 
+   *  Remove all nodes, edges and subgraphs of the supergraph 
    */
   virtual  void clear()=0;
   /**
@@ -349,7 +349,7 @@ public:
 private:
   /**
    *  Return a pointer on the porperty proxy container associated to the 
-   *  supersg.
+   *  supergraph.
    */
   virtual  PropertyManager *getPropertyManager()=0;
 
