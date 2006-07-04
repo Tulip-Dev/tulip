@@ -32,7 +32,7 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /**
  * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)

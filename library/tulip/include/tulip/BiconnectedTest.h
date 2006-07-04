@@ -26,7 +26,7 @@
 namespace tlp {
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if the sg is biconnected
 class TLP_SCOPE BiconnectedTest : public GraphObserver {

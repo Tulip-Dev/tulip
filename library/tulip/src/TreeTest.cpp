@@ -24,14 +24,14 @@ bool TreeTest::isTree(Graph *graph) {
 //====================================================================
 //Determines if a graph is a topological tree.  This means that
 //if the graph were undirected, there would be no cycles.
-bool TreeTest::isTopologicalTree(Graph *graph) {
+bool TreeTest::isFreeTree(Graph *graph) {
   if (instance==0) instance = new TreeTest();
   MutableContainer<bool> visited;
   visited.setAll (false);
   node firstNode = graph->getOneNode();
-  return instance->isTopologicalTree (graph, firstNode, firstNode,
+  return instance->isFreeTree (graph, firstNode, firstNode,
 				      visited);
-}//isTopologicalTree
+}//isFreeTree
 
 //====================================================================
 //Turns a topological tree graph into a directed tree starting at
@@ -44,7 +44,7 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
     cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;
   }//end if
-  if (!TreeTest::isTopologicalTree (graph)) {
+  if (!TreeTest::isFreeTree (graph)) {
     cerr << "makeRootedTree:  Graph is not topological tree, so directed " 
 	 << "tree cannot be made." << endl;
     return;
@@ -57,17 +57,17 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
 //Determines if the passed graph is topologically a tree.  The 
 //passed mutable container returns if we have visited a node
 bool TreeTest::
-isTopologicalTree (Graph *graph, node curRoot, node cameFrom,
+isFreeTree (Graph *graph, node curRoot, node cameFrom,
 		   MutableContainer<bool> &visited) {
   if (visited.get (curRoot.id)) return false;
   visited.set (curRoot.id, true);
   node curNode;
   forEach (curNode, graph->getInOutNodes(curRoot)) { 
     if (curNode != cameFrom)
-      if (!isTopologicalTree (graph, curNode, curRoot, visited)) return false;
+      if (!isFreeTree (graph, curNode, curRoot, visited)) return false;
   }//end forEach
   return true;
-}//end isTopologicalTree 
+}//end isFreeTree 
 
 //====================================================================
 //given that graph is topologically a tree, The function turns graph

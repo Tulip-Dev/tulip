@@ -34,7 +34,7 @@ class Graph;
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
   static bool isTree(Graph *graph);
-  static bool isTopologicalTree(Graph *graph);
+  static bool isFreeTree(Graph *graph);
   static void makeRootedTree(Graph *graph, node root);
 private:
   bool compute(Graph *);
@@ -46,7 +46,7 @@ private:
   void destroy(Graph *);
   TreeTest();
   static TreeTest * instance;
-  bool isTopologicalTree (Graph *graph, node curRoot, node cameFrom,
+  bool isFreeTree (Graph *graph, node curRoot, node cameFrom,
 			  MutableContainer<bool> &visited);
   void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
   stdext::hash_map<unsigned long,bool> resultsBuffer;

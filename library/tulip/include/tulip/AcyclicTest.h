@@ -38,7 +38,7 @@ class BooleanProperty;
     edge e1,e2,e3,old;  
   };
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the sg is acyclic
 class TLP_SCOPE AcyclicTest : public GraphObserver {

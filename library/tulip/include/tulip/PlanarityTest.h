@@ -22,7 +22,7 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing the planarity of a sg
 class TLP_SCOPE PlanarityTest : public GraphObserver {

@@ -27,7 +27,7 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if a sg is triconnected
 class TLP_SCOPE TriconnectedTest : private GraphObserver {

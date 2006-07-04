@@ -27,7 +27,7 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup sg_test */ 
+/** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if the sg is connected
 class TLP_SCOPE ConnectedTest : private GraphObserver {
