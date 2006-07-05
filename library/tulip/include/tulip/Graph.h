@@ -89,7 +89,7 @@ template<class C>class Iterator;
   TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
 
 /**
- * \defgroup sgs
+ * \defgroup graphs
  */ 
 /*@{*/
 /// Interface for a sg
@@ -150,35 +150,35 @@ public:
   //==============================================================================
   /** 
    * Add a new node in the sg and return it. This node is also added in all 
-   * the Graph of the sg to maintain the sub_sg relation between sgs.
+   * the Graph of the sg to maintain the sub_graph relation between graphs.
    */
   virtual node addNode()=0;
   /** 
    * Add an existing node in the sg. this node is also added in all 
-   * the Graph of the sg to maintain the sub_sg relation between sgs.
+   * the Graph of the sg to maintain the sub_graph relation between graphs.
    * Warning, the node must be element of the sg hierarchy, thus it must be 
    * element of the root sg.
    */
   virtual void addNode(const node)=0;
   /**
    * Delete a node in the sg. this node is also removed in all 
-   * the sub-sg of the sg to maintain the sub-sg relation between sgs.
+   * the sub-graph of the sg to maintain the sub-graph relation between graphs.
    * Warning : One can't add an existing node to the root sg
    */
   virtual void delNode(const node)=0;
   /**
-   * Delete a node in all the hierarchy of sgs.
+   * Delete a node in all the hierarchy of graphs.
    */
   virtual void delAllNode(const node)=0;
   /** 
    * Add a new edge in the sg and return it. This edge is also added in all 
-   * the super-sg of the sg to maintain the sub-sg relation between sgs. 
+   * the super-graph of the sg to maintain the sub-graph relation between graphs. 
    * If the second parameter is true the ordering of edges will be preserved.
    */
   virtual edge addEdge(const node, const node )=0;
   /** 
    * Add an existing edge in the sg. this edge is also added in all 
-   * the super-sg of the sg to maintain the sub-sg relation between sgs.
+   * the super-graph of the sg to maintain the sub-graph relation between graphs.
    * Warning, the edge must be element of the sg hierarchy, thus it must be 
    * element of the root sg.
    * Warning : One can't add an existing edge to the root sg
@@ -186,12 +186,12 @@ public:
   virtual void addEdge(const edge )=0;
   /**
    * Delete an edge in the sg. this edge is also removed in all 
-   * the sub-sg of the sg to maintain the sub-sg relation between sgs.
+   * the sub-graph of the sg to maintain the sub-graph relation between graphs.
    * The ordering of edges is preserved.
    */
   virtual  void delEdge(const edge )=0;
   /**
-   * Delete an edge in all the hierarchy of sgs. 
+   * Delete an edge in all the hierarchy of graphs. 
    * The ordering of edges around the node
    * is preserved.
    */

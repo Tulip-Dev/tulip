@@ -7,7 +7,7 @@
 #endif
 #include <climits>
 /**
- * \defgroup sgs
+ * \defgroup graphs
  */ 
 /*@{*/
 /// class edge

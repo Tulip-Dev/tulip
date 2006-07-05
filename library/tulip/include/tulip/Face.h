@@ -20,7 +20,7 @@
 #include <climits>
 
 /**
- * \defgroup sgs
+ * \defgroup graphs
  */ 
 /*@{*/
 /// class face

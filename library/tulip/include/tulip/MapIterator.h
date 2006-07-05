@@ -19,7 +19,7 @@
 
 namespace tlp {
 
-/** \addtogroup sgs */ 
+/** \addtogroup graphs */ 
 /*@{*/
 
 TLP_SCOPE edge nextFaceEdge(Graph* g, edge e, node n);

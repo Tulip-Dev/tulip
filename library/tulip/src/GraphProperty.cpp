@@ -29,7 +29,7 @@ GraphProperty::~GraphProperty() {
 }
 //==============================
 void GraphProperty::setAllNodeValue_handler(const GraphType::RealType &sg) {
-  //remove all observed sgs
+  //remove all observed graphs
   Iterator<node> *it = graph->getNodes();
   while(it->hasNext()) {
     node n = it->next();
