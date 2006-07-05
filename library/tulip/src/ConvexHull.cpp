@@ -134,14 +134,16 @@ void tlp::convexHull (const vector<Coord> &points,
   convexHull.push_back((*it++).index);
   convexHull.push_back((*it++).index);
   for (;it != vectors.end(); ++it) {
-    while (!((((*it).pos - 
+    while ((convexHull.size() > 1) && 
+	   !((((*it).pos - 
 	       (points[convexHull[convexHull.size() - 1]] -
 		points[p0Index])) ^
 	      ((points[convexHull[convexHull.size() - 2]] - 
-	       points[p0Index]) -
+		points[p0Index]) -
 	       (points[convexHull[convexHull.size() - 1]] -
-		points[p0Index])))[2] > 0))
+		points[p0Index])))[2] > 0)) 
       convexHull.pop_back();
+    
     convexHull.push_back((*it).index);
   }//end for
 }//end ConvexHull
