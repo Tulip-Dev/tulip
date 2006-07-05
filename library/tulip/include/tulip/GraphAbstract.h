@@ -10,10 +10,12 @@
 
 namespace tlp {
 
+#define GRAPH_SEQ std::vector<Graph *>
+
 class PropertyManager;
 template<class C>class Iterator;
 
-///Abstract class for default sg operations.
+///Abstract class for default graph operations.
 class GraphAbstract:public Graph {
 public:
   GraphAbstract(Graph *father=0);
@@ -60,7 +62,7 @@ protected:
 private:
   DataSet attributes;
   Graph *father;
-  std::set<Graph *> subsgs;
+  GRAPH_SEQ subgraphs;
 
 };
 

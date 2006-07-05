@@ -33,7 +33,7 @@ void GraphAbstract::clear() {
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
   Graph *tmp = new GraphView(this, selection);
-  subsgs.insert(tmp);
+  subgraphs.push_back(tmp);
   return tmp;
 }
 //=========================================================================
@@ -41,10 +41,15 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   Iterator<Graph *> *itS = toRemove->getSubGraphs();
   while (itS->hasNext()) {
     Graph *tmp = itS->next();
-    subsgs.insert(tmp);
+    subgraphs.push_back(tmp);
     tmp->setFather(this);
   } delete itS;
-  subsgs.erase(toRemove);
+  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
+    if (*it == toRemove) {
+      subgraphs.erase(it);
+      break;
+    }
+  }
   delete toRemove;
 }
 //=========================================================================
@@ -52,7 +57,12 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
   while (itS.hasNext())
     toRemove->delAllSubGraphs(itS.next());
-  subsgs.erase(toRemove);
+  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
+    if (*it == toRemove) {
+      subgraphs.erase(it);
+      break;
+    }
+  }
   delete toRemove;
 }
 //=========================================================================
@@ -72,7 +82,7 @@ void GraphAbstract::setFather(Graph *sg) {
 }
 //=========================================================================
 Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
-  return new StlIterator<Graph *, set<Graph*>::const_iterator >(subsgs.begin(),subsgs.end());
+  return new StlIterator<Graph *, GRAPH_SEQ::const_iterator >(subgraphs.begin(),subgraphs.end());
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
