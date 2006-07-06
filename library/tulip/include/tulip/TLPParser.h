@@ -5,6 +5,8 @@
 
 #include <tulip/PluginProgress.h>
 
+namespace tlp {
+
 struct ParserError {
   ParserError(int err=0,int lin=0,int cha=0):errorNumber(err),lineInFile(lin),charInLine(cha){}
   int errorNumber;
@@ -240,4 +242,6 @@ struct TLPParser {
     return true;
   }
 };
+
+}
 //=====================================================================================

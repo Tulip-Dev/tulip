@@ -80,4 +80,5 @@ libtulip_la_SOURCES = \
 	PlanarityTestObstr.cpp \
 	PlanarityTestTools.cpp \
 	RectangleArea.cpp \
-	Border.cpp
+	Border.cpp \
+	TLPImport.cpp

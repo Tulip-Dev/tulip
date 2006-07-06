@@ -104,3 +104,6 @@ nobase_include_HEADERS = \
 	tulip/BmdList.h \
 	tulip/GraphView.h \
 	tulip/GraphImpl.h
+
+noinst_HEADERS = tulip/TLPParser.h
+

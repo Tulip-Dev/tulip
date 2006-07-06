@@ -6,7 +6,6 @@ plugins_LTLIBRARIES = \
 	libplanar.la \
 	libgrid.la \
 	libdot.la \
-	libtlp.la \
 	libgml.la \
 	libfilesystem.la \
 	librandomgraph.la \
@@ -23,7 +22,6 @@ pluginsdir = $(libdir)/tlp/plugins/import
 libplanar_la_SOURCES = PlanarGraph.cpp
 libdot_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
 libgrid_la_SOURCES = Grid.cpp
-libtlp_la_SOURCES = TLPImport.cpp TLPParser.h
 libgml_la_SOURCES = GMLImport.cpp GMLParser.h
 librandomgraph_la_SOURCES = RandomGraph.cpp
 librandomsimplegraph_la_SOURCES = RandomSimpleGraph.cpp
