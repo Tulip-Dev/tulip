@@ -26,7 +26,10 @@ install-data-am :
 		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/Resources ;\
 		ln -s $(abs_srcdir)/Info.plist $(exec_prefix)/bin/tulip.app/Contents/Info.plist ;\
 		ln -s $(abs_srcdir)/tulip_mac.icns $(exec_prefix)/bin/tulip.app/Contents/Resources/tulip.icns ;\
+		mkdir $(exec_prefix)/bin/tulip.app/Contents/include ;\
+		ln -s $(includedir)/tulip $(exec_prefix)/bin/tulip.app/Contents/include/tulip ;\
 	fi;
+	
 
 macinst: install-data-am
 	sh make_tulip-$(VERSION)_mac_bundle.sh

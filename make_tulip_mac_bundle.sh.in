@@ -92,7 +92,7 @@ TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp/plugins
 # remove lib*.a and lib*.la files
 find $TLP_PLUGINS_BUNDLE_DIR -name "lib*.*a" -print | xargs rm
 # remove the plugins designer bundle dir
-rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
+# rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
 # package the lib*.so files
 package_bundle_libs $TLP_PLUGINS_BUNDLE_DIR "*.so" $LIBS_BUNDLE_DIR
 

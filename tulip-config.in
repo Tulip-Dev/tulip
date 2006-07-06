@@ -1,11 +1,29 @@
 #!/bin/sh
 
+thisdir=$(dirname $0)
+if test "$thisdir" = "." ; then
+  thisdir=$PWD
+fi
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
 qtversion=@QT_VERSION@
-plugins_builddir=@TULIP_PLUGINS_BUILD_PATH@
+libversion=
+# check for MacOS of Windows installation
+if test "$(basename $thisdir)" = "MacOS" ; then
+  if test -d $(dirname $thisdir)/lib; then
+# MacOS bundle
+    includedir=$(dirname $thisdir)/include
+    libdir=$(dirname $thisdir)/lib
+  fi
+fi
+if test -f $thisdir/assistant.exe ; then
+# Windows installation
+  includedir=$thisdir/include
+  libdir=$thisdir/lib
+  libversion=-@WIN_VERSION@
+fi
 
 usage()
 {
@@ -48,7 +66,7 @@ while test $# -gt 0; do
       echo @GL_LDFLAGS@ @LIB_GL@
       ;;
     --libs)
-      echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt${qtversion}
+      echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt${qtversion}${libversion}
       ;;
     --pluginpath)
       echo ${libdir}/tlp/plugins
