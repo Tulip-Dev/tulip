@@ -73,7 +73,7 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
 
 public:
   static TLP_SCOPE TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
-  static TLP_SCOPE void initFactory() {
+  static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >();
       factory->currentLoader = 0;
