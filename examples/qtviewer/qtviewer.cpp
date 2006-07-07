@@ -16,7 +16,7 @@ void importGraph(const string &filename, GlGraph *render) {
   dataSet.set("file::filename", filename);
   Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph!=0) {
-    render->setSuperGraph(newSuperGraph);
+    render->setGraph(newGraph);
     
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
