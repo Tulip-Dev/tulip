@@ -71,6 +71,7 @@ SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 File @prefix@\bin\Tulip.exe
+File @prefix@\bin\tulip-config
 SectionEnd
 
 Section "-Install Plugins"
@@ -162,6 +163,7 @@ Call un.DeleteEnvStr
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
 Delete "$INSTDIR\Tulip.exe"
+Delete "$INSTDIR\tulip-config"
 ;Delete "$INSTDIR\Tulip.txt"
 Delete "$INSTDIR\uninst-Tulip.exe"
 Delete "$INSTDIR\logo32x32.ico"

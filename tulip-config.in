@@ -20,8 +20,10 @@ if test "$(basename $thisdir)" = "MacOS" ; then
 fi
 if test -f $thisdir/assistant.exe ; then
 # Windows installation
+  drive=`echo $thisdir | awk -F / '{print $2}'`
+  thisdir=${thisdir/\/$drive\//$drive:/}
   includedir=$thisdir/include
-  libdir=$thisdir/lib
+  libdir=$this/lib
   libversion=-@WIN_VERSION@
 fi
 
