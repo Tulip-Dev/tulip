@@ -658,14 +658,11 @@ dnl if this is the version 4 of Qt we use uic3
 AC_DEFUN([AC_PATH_MINGW],
 [
 AC_MSG_CHECKING(for MinGW needed libraries)
-MINGWDIR=${INCLUDE/\\\\include;/}
-if test -z "$MINGWDIR"; then
-  MINGWDIR=/mingw
-fi
-GLDIR=${MINGWDIR}/lib
+MINGWDIR=`grep mingw /etc/fstab | awk '{print $1}'`
+GLDIR=/mingw/lib
 libraries="iconv.dll freetype*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
 for lib in $libraries; do
-try="ls -1 ${MINGWDIR}/bin/$lib"
+try="ls -1 /mingw/bin/$lib"
 if !(test=`eval $try 2> /dev/null`)
 then 
 AC_MSG_RESULT($lib not found)
