@@ -36,21 +36,36 @@ Coord  LayoutProperty::getMin(Graph *sg) {
   return min[sgi];
 }
 //=================================================================================
-void rotate_z(Coord &vec, double alpha) {
+#define X_ROT 0
+#define Y_ROT 1
+#define Z_ROT 2
+static void rotateVector(Coord &vec, double alpha, int rot) {
   Coord backupVec(vec);
-  double zRot =  2.0*M_PI * alpha / 360.0;
-  float cosz = cos(zRot);
-  float sinz = sin(zRot);
-  vec[0] = backupVec[0]*cosz - backupVec[1]*sinz;
-  vec[1] = backupVec[0]*sinz + backupVec[1]*cosz;
+  double aRot =  2.0*M_PI * alpha / 360.0;
+  float cosA = cos(aRot);
+  float sinA = sin(aRot);
+  switch(rot) {
+  case Z_ROT:
+    vec[0] = backupVec[0]*cosA - backupVec[1]*sinA;
+    vec[1] = backupVec[0]*sinA + backupVec[1]*cosA;
+    break;
+  case Y_ROT:
+    vec[0] = backupVec[0]*cosA + backupVec[2]*sinA;
+    vec[2] = backupVec[2]*cosA - backupVec[0]*sinA;
+    break;
+  case X_ROT:
+    vec[1] = backupVec[1]*cosA - backupVec[2]*sinA;
+    vec[2] = backupVec[1]*sinA + backupVec[2]*cosA;
+    break;
+  }
 }
 //=================================================================================
-void LayoutProperty::rotateZ(const double& alpha,  Iterator<node> *itN, Iterator<edge> *itE) {
+void LayoutProperty::rotate(const double& alpha, int rot, Iterator<node> *itN, Iterator<edge> *itE) {
   Observable::holdObservers();
   while (itN->hasNext()) {
     node itn = itN->next();
     Coord tmpCoord(getNodeValue(itn));
-    rotate_z(tmpCoord, alpha);
+    rotateVector(tmpCoord, alpha, rot);
     setNodeValue(itn,tmpCoord);
   }
   while (itE->hasNext()) {
@@ -60,13 +75,25 @@ void LayoutProperty::rotateZ(const double& alpha,  Iterator<node> *itN, Iterator
       LineType::RealType::iterator itCoord;
       itCoord=tmp.begin();
       while(itCoord!=tmp.end()) {
-	rotate_z(*itCoord, alpha);
+	rotateVector(*itCoord, alpha, rot);
 	++itCoord;
       }
       setEdgeValue(ite,tmp);
     }
   }
   Observable::unholdObservers();
+}
+//=================================================================================
+void LayoutProperty::rotateX(const double& alpha,  Iterator<node> *itN, Iterator<edge> *itE) {
+  rotate(alpha, X_ROT, itN, itE);
+}
+//=================================================================================
+void LayoutProperty::rotateY(const double& alpha,  Iterator<node> *itN, Iterator<edge> *itE) {
+  rotate(alpha, Y_ROT, itN, itE);
+}
+//=================================================================================
+void LayoutProperty::rotateZ(const double& alpha,  Iterator<node> *itN, Iterator<edge> *itE) {
+  rotate(alpha, Z_ROT, itN, itE);
 }
 //=================================================================================
 void LayoutProperty::rotateZ(const double& alpha, Graph *sg) {

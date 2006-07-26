@@ -51,6 +51,8 @@ public:
    * Rotates the passed nodes and edges in the given layout proxy by
    * alpha degrees
    */
+  void rotateX(const double& alpha, Iterator<node> *, Iterator<edge> *);
+  void rotateY(const double& alpha, Iterator<node> *, Iterator<edge> *);
   void rotateZ(const double& alpha, Iterator<node> *, Iterator<edge> *);
   void center(Graph *sg = 0);
   void normalize(Graph *sg = 0);
@@ -102,6 +104,7 @@ private:
   stdext::hash_map<unsigned long,Coord> max,min;
   stdext::hash_map<unsigned long,bool> minMaxOk;
   void computeMinMax(Graph * sg=NULL);
+  void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
 /*@}*/
 
