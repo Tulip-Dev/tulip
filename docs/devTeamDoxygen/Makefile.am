@@ -12,7 +12,7 @@ tulip-lib/index.html: tulip-lib.doxygen header.html footer.html
 
 tulip-lib.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip " >> $@
 	echo "HTML_OUTPUT = tulip-lib">> $@
@@ -24,7 +24,7 @@ tulip-libogl/index.html: tulip-libogl.doxygen header.html footer.html
 
 tulip-libogl.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl " >> $@
 	echo "HTML_OUTPUT = tulip-libogl">> $@
@@ -36,7 +36,7 @@ tulip-libqt/index.html: tulip-libqt.doxygen header.html footer.html
 
 tulip-libqt.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt " >> $@
 	echo "EXCLUDE_PATTERNS = *Data.h *Data.cpp moc_*">> $@
@@ -49,7 +49,7 @@ tulip-soft/index.html: tulip-soft.doxygen header.html footer.html
 
 tulip-soft.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Development Software\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/software/tulip " >> $@
 	echo "EXCLUDE_PATTERNS = *Data.h *Data.cpp moc_*">> $@
@@ -62,7 +62,7 @@ tulip-plugins/index.html: tulip-plugins.doxygen header.html footer.html
 
 tulip-plugins.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Plug-ins\"" > $@
-	echo "PROJECT_NUMBER = 2.0.1" >> $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/plugins " >> $@
 	echo "EXCLUDE_PATTERNS = *Data.h *Data.cpp moc_*">> $@
