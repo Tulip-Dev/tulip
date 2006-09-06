@@ -26,6 +26,9 @@
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/ExportModule.h>
+#include <tulip/ImportModule.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
 
@@ -150,7 +153,7 @@ public:
 };
 
 //load software side plugins
-static void loadPlugins(PluginLoader *plug)
+static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
@@ -173,11 +176,11 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
     }
   }delete itP;
   
-  SuperGraph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
+  Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
   
   if (newGraph!=0) {
-    glGraph.setSuperGraph(newGraph);
-    Layout *layout = glGraph.getSuperGraph()->getProperty<LayoutProperty>("viewLayout");
+    glGraph.setGraph(newGraph);
+    LayoutProperty *layout = glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
     layout->resetBoundingBox();
     layout->center();
     layout->notifyObservers();
@@ -275,8 +278,8 @@ void outputPolygons(const int size, const GlGraph &glgraph)
   } //end while(count)
 
   /* write HTML AREA MAP */
-  String *hrefp = glgraph.getSuperGraph()->getProperty<StringProperty>("href");
-  String *altp = glgraph.getSuperGraph()->getProperty<StringProperty>("alt");
+  StringProperty *hrefp = glgraph.getGraph()->getProperty<StringProperty>("href");
+  StringProperty *altp = glgraph.getGraph()->getProperty<StringProperty>("alt");
 
   if (outputHtmlBody) {
     of << "<html><body>" << endl;
@@ -329,7 +332,7 @@ int main (int argc, char **argv) {
   MyPluginLoader plug;
   tlp::initTulipLib();
   tlp::loadPlugins(&plug);   // library side plugins
-  loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  loadGlyphPlugins(&plug);   // software side plugins, i.e. glyphs
 
   GLOffscreen glOffscreen(width, height);
 
@@ -338,9 +341,9 @@ int main (int argc, char **argv) {
   if (layoutSpecified) {
     bool resultBool=false, cached=false;
     string errorMsg;
-    if (Layout::factory->exists(layoutName)) {
-      Layout *myLayout = glOffscreen.getSuperGraph()->getProperty<LayoutProperty>("viewLayout");
-      resultBool = glOffscreen.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
+    if (LayoutProperty::factory->exists(layoutName)) {
+      LayoutProperty *myLayout = glOffscreen.getGraph()->getProperty<LayoutProperty>("viewLayout");
+      resultBool = glOffscreen.getGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;
         exit(LAYOUT_ERROR);
@@ -402,7 +405,7 @@ int main (int argc, char **argv) {
 
     dataSet.set("displaying", glOffscreen.getParameters());
 
-    if (!tlp::exportGraph(glOffscreen.getSuperGraph(), *os, "tlp", dataSet, NULL)) {
+    if (!tlp::exportGraph(glOffscreen.getGraph(), *os, "tlp", dataSet, NULL)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }
