@@ -1,4 +1,5 @@
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <cmath>
 
 #include <tulip/ColorProperty.h>
@@ -34,7 +35,7 @@ GLYPHPLUGIN(CubeOutLined, "3D - CubeOutLined", "David Auber", "09/07/2002", "Tex
 using namespace tlp;
 
 //===================================================================================
-CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc),listOk(false) {
+CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc),listOk(false), LList(0) {
 }
 
 CubeOutLined::~CubeOutLined() {
@@ -51,12 +52,9 @@ void CubeOutLined::draw(node n) {
     drawCube(GL_QUADS);
     glEndList();
     glNewList( LList + 1, GL_COMPILE );
-    //    setMaterial(Color(0,0,0,255));
     drawCubeSimple(GL_LINE_LOOP);
     glEndList();
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR)
-      cerr << "Open GL Error : " << error << " in " << __PRETTY_FUNCTION__ << endl;
+
     listOk=true;
   }
   assert(glIsList(LList));
