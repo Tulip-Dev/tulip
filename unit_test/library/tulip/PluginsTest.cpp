@@ -19,15 +19,15 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( BooleanProperty::factory->objMap.find("Test") == BooleanProperty::factory->objMap.end());
+  CPPUNIT_ASSERT( tlp::BooleanProperty::factory->objMap.find("Test") == tlp::BooleanProperty::factory->objMap.end());
   tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( BooleanProperty::factory->objMap.find("Test") != BooleanProperty::factory->objMap.end());
+  CPPUNIT_ASSERT( tlp::BooleanProperty::factory->objMap.find("Test") != tlp::BooleanProperty::factory->objMap.end());
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
-  BooleanProperty sel(graph);
+  tlp::BooleanProperty sel(graph);
   CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
 //==========================================================

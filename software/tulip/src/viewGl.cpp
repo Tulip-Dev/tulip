@@ -497,8 +497,8 @@ bool viewGl::fileSave(string plugin, string filename) {
     os = new ofstream(filename.c_str());
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
-  parameter.buildDefaultDataSet(dataSet);
-  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters"))
+  parameter.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
+  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getParameters());
   bool result;

@@ -6,6 +6,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+namespace tlp {
 class MutableContainerTest : public CppUnit::TestFixture {
 private:
   tlp::MutableContainer<bool> *mutBool;
@@ -22,5 +23,5 @@ public:
   void testCompression();
   static CppUnit::Test *suite();
 };
-
+}
 #endif

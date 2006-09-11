@@ -12,12 +12,10 @@
 namespace tlp {
 
   class Graph;
-
   TLP_SCOPE double averagePathLength(Graph *);
   TLP_SCOPE double averageCluster(Graph *);
   TLP_SCOPE unsigned int maxDegree(Graph *);
   TLP_SCOPE unsigned int minDegree(Graph *);
   TLP_SCOPE unsigned int maxDistance(Graph *sg, node n, MutableContainer<unsigned int> &distance, int direction = 2);
-
 }
 #endif

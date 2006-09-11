@@ -2,9 +2,11 @@
 #define TLPPLUGINSTEST
 
 #include <string>
-#include <tulip/Graph.h>
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+
+#include <tulip/Graph.h>
 
 class PluginsTest : public CppUnit::TestFixture {
 private:

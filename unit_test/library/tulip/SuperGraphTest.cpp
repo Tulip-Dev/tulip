@@ -332,12 +332,12 @@ void SuperGraphTest::testSubgraphId() {
   graph->clear();
   CPPUNIT_ASSERT(graph->getId() == 0);
   BooleanProperty sel(graph);
-  Graph *g1 = graph->addSubGraph(&sel);
-  CPPUNIT_ASSERT(g1->getId() == 1);
-  Graph *g2 = graph->addSubGraph(&sel);
-  CPPUNIT_ASSERT(g2->getId() == 2);
+  for (unsigned int i = 1; i<1000; ++i) {
+    Graph *g1 = graph->addSubGraph(&sel);
+    CPPUNIT_ASSERT(g1->getId() == i);
+  }
   Graph *g;
-  int i = 1;
+  unsigned int i = 1; //if the graph are not ordered that test can fail.
   forEach(g, graph->getSubGraphs()) {
     CPPUNIT_ASSERT(g->getId() == i);
     ++i;
