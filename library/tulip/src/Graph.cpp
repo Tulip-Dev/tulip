@@ -1,6 +1,7 @@
 
 #include "thirdparty/gzstream/gzstream.h"
 #include "tulip/Graph.h"
+#include "tulip/IdManager.h"
 #include "tulip/TlpTools.h"
 #include "tulip/GraphImpl.h"
 #include "tulip/BooleanProperty.h"
@@ -13,13 +14,15 @@
 using namespace std;
 using namespace tlp;
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
-IdManager Graph::idManager;
-#endif
-#else
-IdManager Graph::idManager;
-#endif
+static IdManager graphIdManager;
+
+Graph::Graph() {
+  id = graphIdManager.get();
+}
+
+Graph::~Graph() {
+  graphIdManager.free(id);
+}
 
 ostream & operator << (ostream &os,const Graph *sp) {
   os << ";(nodes <node_id> <node_id> ...)" << endl;

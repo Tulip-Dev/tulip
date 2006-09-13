@@ -30,7 +30,6 @@ nobase_include_HEADERS = \
 	tulip/LayoutProperty.h \
 	tulip/Plugin.h \
 	tulip/BooleanAlgorithm.h  \
-	tulip/GraphAbstract.h   \
 	tulip/Clustering.h \
 	tulip/LayoutAlgorithm.h \
 	tulip/PluginLoader.h \
@@ -40,7 +39,6 @@ nobase_include_HEADERS = \
 	tulip/Graph.h \
 	tulip/Types.h \
 	tulip/Color.h \
-	tulip/IdManager.h \
 	tulip/MethodFactory.h \
 	tulip/PluginLoaderTxt.h \
 	tulip/SizeProperty.h \
@@ -70,12 +68,9 @@ nobase_include_HEADERS = \
 	tulip/WithParameter.h \
 	tulip/PluginProgress.h \
 	tulip/Iterator.h \
-	tulip/GraphIterator.h \
 	tulip/StlIterator.h \
-	tulip/MapIterator.h \
 	tulip/StableIterator.h \
 	tulip/SortIterator.h \
-	tulip/SimpleVector.h \
 	tulip/GraphMeasure.h \
 	tulip/ConcatIterator.h \
 	tulip/ReturnType.h \
@@ -86,24 +81,28 @@ nobase_include_HEADERS = \
 	tulip/StringCollection.h \
 	tulip/DrawingTools.h \
 	tulip/Face.h \
-	tulip/FaceIterator.h \
-	tulip/PlanarConMap.h \
 	tulip/PlanarityTest.h \
-	tulip/GraphDecorator.h \
-	tulip/cxx/GraphDecorator.cxx \
-	tulip/Plane.h \
 	tulip/Polynome.h \
-	tulip/ForEach.h \
-	tulip/RectangleArea.h \
-	tulip/Border.h \
-	tulip/StatisticsNodeModule.h \
-	tulip/cxx/BmdLink.cxx \
-	tulip/cxx/BmdList.cxx \
-	tulip/PlanarityTestImpl.h \
+	tulip/ForEach.h
+
+noinst_HEADERS = tulip/TLPParser.h \
 	tulip/BmdLink.h \
 	tulip/BmdList.h \
+	tulip/cxx/BmdLink.cxx \
+	tulip/cxx/BmdList.cxx \
+	tulip/GraphAbstract.h   \
+	tulip/GraphIterator.h \
+	tulip/GraphImpl.h \
 	tulip/GraphView.h \
-	tulip/GraphImpl.h
-
-noinst_HEADERS = tulip/TLPParser.h
-
+	tulip/SimpleVector.h \
+	tulip/IdManager.h \
+	tulip/MapIterator.h \
+	tulip/PlanarityTestImpl.h \
+	tulip/RectangleArea.h \
+	tulip/Border.h \
+	tulip/Plane.h \
+	tulip/FaceIterator.h \
+	tulip/PlanarConMap.h \
+	tulip/GraphDecorator.h \
+	tulip/cxx/GraphDecorator.cxx \
+	tulip/StatisticsNodeModule.h

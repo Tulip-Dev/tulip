@@ -31,7 +31,6 @@
 #include "Node.h"
 #include "Edge.h"
 #include "ObservableGraph.h"
-#include "IdManager.h"
 
 namespace tlp {
 
@@ -99,12 +98,8 @@ template<class C>class Iterator;
 class TLP_SIMPLE_SCOPE Graph : public ObservableGraph {
 
 public:  
-  Graph() {
-    id=Graph::idManager.get();
-  }
-  virtual ~Graph(){
-    Graph::idManager.free(id);
-  };
+  Graph();
+  virtual ~Graph();
   //=========================================================================  
   // Graph hierarrchy acces and building
   //=========================================================================
@@ -353,7 +348,6 @@ private:
    */
   virtual  PropertyManager *getPropertyManager()=0;
 
-  static IdManager idManager;
   unsigned int id;
 };
 

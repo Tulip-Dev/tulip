@@ -18,7 +18,6 @@
 #include "Observable.h"
 #include "Types.h"
 #include "Property.h"
-#include "PropertyManager.h"
 #include "MutableContainer.h"
 #include "ReturnType.h"
 #include "tulipconf.h"
