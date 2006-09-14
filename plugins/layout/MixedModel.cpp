@@ -11,6 +11,8 @@
 #include <tulip/ForEach.h>
 #include "MixedModel.h"
 
+#include <tulip/GraphTools.h>
+
 LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1","Planar");
 
 using namespace std;
@@ -412,12 +414,8 @@ void MixedModel::placeNodesEdges(){
 
 //====================================================
 void MixedModel::initPartition(){
-  Ordering o(carte, pluginProgress, 50, 850, 1000); // feedback (5% -> 90%)
-  if (pluginProgress->state() == TLP_CANCEL)
-    return;
-  dummy=o.getDummyEdges();
-  V = o.computeCanonicalOrdering(pluginProgress, // feedback (90% -> 95%)
-				 900, 50, 1000);
+  V = tlp::computeCanonicalOrdering(carte, &dummy, pluginProgress);
+  
   if (pluginProgress->state() == TLP_CANCEL)
     return;
 
