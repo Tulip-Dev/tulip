@@ -7,6 +7,11 @@
 #include "tulip/IntegerProperty.h"
 #include "tulip/DoubleProperty.h"
 #include <math.h>
+
+#include <tulip/CanonicalOrdering.h>
+
+
+
 using namespace std;
 using namespace tlp;
 
@@ -74,3 +79,9 @@ node tlp::makeSimpleSource(Graph* graph) {
 
 
 
+vector<vector<node> > tlp::computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge>  *dummyEdges,PluginProgress* pluginProgress){
+  Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
+  if (dummyEdges!=0) 
+    *dummyEdges = o.getDummyEdges();
+  return o;
+}
