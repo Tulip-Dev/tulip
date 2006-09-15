@@ -490,18 +490,32 @@ void viewGl::fileSave() {
 //**********************************************************************
 bool viewGl::fileSave(string plugin, string filename) {
   if (!glWidget) return false;
-  ostream *os;
-  if (filename.rfind(".gz") == (filename.length() - 3)) 
-    os = tlp::getOgzstream(filename.c_str());
-  else
-    os = new ofstream(filename.c_str());
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
   parameter.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
   if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getParameters());
+  if (filename.length() == 0) {
+    QString name;
+    if (plugin == "tlp")
+      name = QFileDialog::getSaveFileName( QString::null,
+					   tr("Tulip graph (*.tlp *.tlp.gz)"),
+					   this,
+					   tr("open file dialog"),
+					   tr("Choose a file to save" ));
+    else
+      name = QFileDialog::getSaveFileName(this->caption().ascii());
+    if (name == QString::null) return false;
+    filename = name.latin1();
+  }
   bool result;
+  ostream *os;
+  if (filename.rfind(".gz") == (filename.length() - 3)) 
+    os = tlp::getOgzstream(filename.c_str());
+  else
+    os = new ofstream(filename.c_str());
+  openFiles[(unsigned long)glWidget]=filename;
   if (!(result=tlp::exportGraph(glWidget->getGraph(), *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
@@ -516,15 +530,7 @@ void viewGl::fileSaveAs() {
   if (!glWidget) return;
   if( !glWidget->getGraph() )
     return;
-  QString name = QFileDialog::getSaveFileName( QString::null,
-					       tr("Tulip graph (*.tlp *.tlp.gz)"),
-					       this,
-					       tr("open file dialog"),
-					       tr("Choose a file to save" ));
-  if (name == QString::null) return;
-  string filename = name.latin1();
-  if (fileSave("tlp",filename)) 
-    openFiles[(unsigned long)glWidget]=filename;
+  fileSave("tlp", "");
 }
 //**********************************************************************
 void viewGl::fileOpen() {
@@ -1024,11 +1030,7 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  QString filename(QFileDialog::getSaveFileName(this->caption().ascii()));
-  if (filename.isNull()) return;    
-  DataSet dataSet;
-  string name(exportGraphMenu.text(id).ascii());
-  fileSave(name, filename.ascii());
+  fileSave(exportGraphMenu.text(id).ascii(), "");
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
