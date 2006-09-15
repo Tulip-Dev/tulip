@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include "TulipStatsWidget.h"
-#include <tulip/PropertyManager.h> 
 #include <tulip/DoubleProperty.h> 
 #include <tulip/SizeProperty.h> 
 #include <tulip/LayoutProperty.h> 

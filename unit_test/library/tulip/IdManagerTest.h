@@ -3,7 +3,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include <tulip/IdManager.h>
+#include "../../../library/tulip/include/tulip/IdManager.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 

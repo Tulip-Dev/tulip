@@ -1,3 +1,5 @@
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -245,3 +247,5 @@ struct TLPParser {
 
 }
 //=====================================================================================
+
+#endif // DOXYGEN_NOTFOR_DEVEL

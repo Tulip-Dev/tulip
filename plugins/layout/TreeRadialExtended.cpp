@@ -131,7 +131,7 @@ struct TreeRadialExtended:public LayoutAlgorithm {
     getLocalProperty<SizeProperty>(graph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
     layoutResult->setAllNodeValue(Coord(0,0,0));
     dfsPlacement(startNode,0,0,6.283);
-    graph->getPropertyManager()->delLocalProperty("Leaf");
+    graph->delLocalProperty("Leaf");
     return true;
   }
 

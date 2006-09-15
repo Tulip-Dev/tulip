@@ -3,7 +3,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include <tulip/Matrix.h>
+#include "../../../library/tulip/include/tulip/Matrix.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 

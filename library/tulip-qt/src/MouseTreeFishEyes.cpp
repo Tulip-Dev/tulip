@@ -3,7 +3,6 @@
 #endif
 #include <tulip/PluginProgress.h>
 #include <tulip/Graph.h>
-#include <tulip/PropertyManager.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>

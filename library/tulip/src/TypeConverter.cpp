@@ -11,7 +11,6 @@
 
 #include "tulip/Graph.h"
 #include "tulip/TypeConverter.h"
-#include "tulip/PropertyManager.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/StringProperty.h"

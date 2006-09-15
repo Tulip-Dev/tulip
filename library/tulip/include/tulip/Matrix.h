@@ -10,7 +10,7 @@
 #include <cassert>
 #include <iostream>
 #include <tulip/Vector.h>
-#include <tulip/Polynome.h>
+//#include <tulip/Polynome.h>
 #include <vector>
 
 #define MATRIX Matrix<Obj,SIZE>
@@ -112,12 +112,6 @@ namespace tlp {
       inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;
 
       /**
-       * Returns a Polynome representing the caracteristic polynome of the matrix.
-       * For the moment, this function only computes a 3x3 matrix caracteristic polynome.
-       */
-      inline void caracteristicPolynome(Polynome &result) const;
-
-      /**
        * Simplifies a 3x3 matrix in 2x2 matrix to be used with computeEigenVector
        */
       inline bool simplify(Matrix<Obj, 2> &simplifiedMatrix) const;
@@ -128,11 +122,6 @@ namespace tlp {
        */
       inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
 
-      /**
-       * Returns every EigenVectors of a 3x3 matrix !
-       * To be used only on symmetric matrices
-       */
-      inline bool computeEigenVectors(Matrix<Obj, 3> &eigenVectors) const;
     };
     /*@}*/
 

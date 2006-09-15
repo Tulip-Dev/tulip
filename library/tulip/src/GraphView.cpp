@@ -12,7 +12,6 @@
 #endif
 
 #include "tulip/GraphView.h"
-#include "tulip/PropertyManager.h"
 #include "tulip/BooleanProperty.h"
 #include "tulip/Graph.h"
 #include "tulip/GraphIterator.h"

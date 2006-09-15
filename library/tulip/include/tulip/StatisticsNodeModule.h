@@ -16,12 +16,32 @@
 
 #include <vector>
 #include <tulip/Matrix.h>
+#include <tulip/Polynome.h>
 
 namespace tlp {
 
 class Graph;
 class DoubleProperty;
 class Coord;
+
+class CorrelationMatrix: public tlp::Matrix<float, 3> {
+public:
+  CorrelationMatrix() {}
+  CorrelationMatrix(std::vector<std::vector<float> > v):
+    tlp::Matrix<float, 3>(v) {
+  }
+  /**
+   * Returns a Polynome representing the caracteristic polynome of the matrix.
+   * For the moment, this function only computes a 3x3 matrix caracteristic polynome.
+   */
+  void caracteristicPolynome(Polynome &result) const;
+
+      /**
+       * Returns every EigenVectors of a 3x3 matrix !
+       * To be used only on symmetric matrices
+       */
+  bool computeEigenVectors(Matrix<float, 3> &eigenVectors) const;
+};
 
 /** \brief Structure used to store statistic results
  *
@@ -40,7 +60,7 @@ struct StatisticResults
   std::vector<float> minPoint;
   std::vector<float> maxPoint;
 
-  tlp::Matrix<float, 3> correlationMatrix;
+  CorrelationMatrix correlationMatrix;
   tlp::Matrix<float, 3> eigenVectors;
 
   float linearRegressionFunctionb0;
