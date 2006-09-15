@@ -412,12 +412,12 @@ namespace {
 /*@{*/
 struct GMLImport:public ImportModule {
   GMLImport(ClusterContext context):ImportModule(context) {
-    addParameter<string>("filename",paramHelp[0]);
+    addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport(){}
   bool import(const string &dummy) {
     string filename;
-    dataSet->get<string>("filename", filename);
+    dataSet->get<string>("file::filename", filename);
     ifstream myFile(filename.c_str());
     GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();
