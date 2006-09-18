@@ -38,7 +38,7 @@ bool TreeTest::isTopologicalTree(SuperGraph *graph) {
 void TreeTest::makeRootedTree(SuperGraph *graph, node root) {
   if (instance==0) instance=new TreeTest();
   graph->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned int)graph);
+  instance->resultsBuffer.erase((unsigned long)graph);
   if (!graph->isElement (root)) {
     cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;
