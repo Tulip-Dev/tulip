@@ -22,9 +22,9 @@ namespace tlp {
     ~_TLP_IT() {
       delete _it;
     }
-    void (*_d) (void *);
     Iterator<TYPE> *_it;
     TYPE &_n;
+    void (*_d) (void *);
   };
 
   template <typename TYPE>
