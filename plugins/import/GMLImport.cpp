@@ -210,7 +210,30 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     if (st=="d") size.setD(real);
     return true;
   }
-  bool addString(const string &st,const string &str) {return true;}
+  bool addString(const string &st,const string &str) {
+    if (st == "fill") {
+      // parse color in format #rrggbb
+      if (str[0] == '#' && str.length() == 7) {
+	char *c_str = (char *) str.c_str() + 1;
+	for (int i = 0; i < 3; i++, c_str++) {
+	  unsigned char value = 0;
+	  if (isdigit(*c_str))
+	    value += (*c_str - '0') * 16;
+	  else value += ((tolower(*c_str) - 'a') + 10) * 16;
+	  c_str++;
+	  if (isdigit(*c_str))
+	    value += *c_str - '0';
+	  else value += (tolower(*c_str) - 'a') + 10;
+	  switch(i) {
+	  case 0: color.setR(value); break;
+	  case 1: color.setG(value); break;
+	  case 2: color.setB(value);
+	  }
+	}
+      }
+    }
+    return true;
+  }
   bool close() {
     nodeBuilder->setCoord(coord);
     nodeBuilder->setColor(color);

@@ -52,7 +52,7 @@ struct GML:public ExportModule {
 
   bool exportGraph(ostream &os,Graph *currentGraph) {
 
-    os << "sg [" << endl;
+    os << "graph [" << endl;
     os << "directed 1" << endl;
     os << "version 2" << endl;
 
@@ -70,7 +70,7 @@ struct GML:public ExportModule {
 	os << "node [" << endl;
 	os << "id "<< itn.id << endl ;
 	os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
-	os << "sgics [" << endl;
+	os << "graphics [" << endl;
 	printCoord(os,layout->getNodeValue(itn));
 	printSize(os,sizes->getNodeValue(itn));
 	os << "type \"rectangle\"" << endl;
@@ -100,7 +100,7 @@ struct GML:public ExportModule {
 	os << "target " << graph->target(ite).id << endl;
 	os << "id " << ite.id << endl;
 	os << "label \"" << label->getEdgeValue(ite) << "\"" << endl;
-	os << "sgics [" << endl;
+	os << "graphics [" << endl;
 	os << "type \"line\"" << endl;
 	os << "arrow \"last\"" << endl;
 	os << "width 0.1" << endl;
