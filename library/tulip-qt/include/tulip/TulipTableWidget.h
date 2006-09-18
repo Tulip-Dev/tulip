@@ -16,7 +16,7 @@
 #include <Qt3Support/q3button.h>
 #include <Qt/qpainter.h>
 #include <Qt3Support/q3table.h>
-#include "Qt3ForTulip.h"
+#include "tulip/Qt3ForTulip.h"
 #endif
 
 

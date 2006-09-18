@@ -48,4 +48,5 @@ tulip/tulippropertytable.h : tulip/PropertyWidgets.h
 endif
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
+	mkdir -p tulip
 	$(UIC) -o $@ $<
