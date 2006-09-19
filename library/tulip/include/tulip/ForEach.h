@@ -13,6 +13,7 @@
 
 #include <assert.h>
 #include <tulip/Iterator.h>
+#include <tulip/StableIterator.h>
 
 namespace tlp {
   template<typename TYPE>
@@ -37,6 +38,12 @@ namespace tlp {
     return (void *)new _TLP_IT<TYPE>(n, _it, (void (*) (void *)) &_tlp_delete_it<TYPE>);
   }
 
+  template <typename TYPE>
+  inline void * _tlp_get_stable_it(TYPE &n, Iterator<TYPE> *_it) {
+    return (void *)new _TLP_IT<TYPE>(n, new StableIterator<TYPE>(_it),
+				     (void (*) (void *)) &_tlp_delete_it<TYPE>);
+  }
+
   template<typename TYPE>
   inline bool _tlp_if_test(TYPE &n, void *_it) {
     assert(((_TLP_IT<TYPE>*)_it)->_it !=0);
@@ -54,10 +61,13 @@ namespace tlp {
 
 /**
  * Warning, do not use break or return inside a for each block;
- * it causes a memory leak.
+ * it causes a memory leak; use breakForEach pr returnForEachInstead
  */
 #define forEach(A, B) \
   for(void *_it_foreach = tlp::_tlp_get_it(A, B); tlp::_tlp_if_test(A, _it_foreach);)
+
+#define stableForEach(A, B)  \
+  for(void *_it_foreach = tlp::_tlp_get_stable_it(A, B); tlp::_tlp_if_test(A, _it_foreach);)
 
 #define _delete_it_foreach ((**((void (**) (void *)) _it_foreach))(_it_foreach))
 
