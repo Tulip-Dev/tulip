@@ -104,7 +104,8 @@ void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   //  shrink(graph, metanode);
 }
 //====================================================================================
-node tlp::createMetaNode(Graph *graph, set<node> &subGraph) {
+node tlp::createMetaNode(Graph *graph, set<node> &subGraph,
+			 Graph *groupUnderSubGraph) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not group a set of nodes in the root graph" << endl;
@@ -116,7 +117,8 @@ node tlp::createMetaNode(Graph *graph, set<node> &subGraph) {
     cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
   GraphProperty *metaInfo = graph->getProperty<GraphProperty>(metagraphProperty);
-  Graph *metaGraph = tlp::inducedSubGraph(graph->getFather(), subGraph, "cluster");
+  Graph *metaGraph = 
+    tlp::inducedSubGraph(groupUnderSubGraph, subGraph, "cluster");
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << metaGraph->getId(); 
   metaGraph->setAttribute("name", st.str()); 
@@ -124,8 +126,7 @@ node tlp::createMetaNode(Graph *graph, set<node> &subGraph) {
   metaInfo->setNodeValue(metaNode, metaGraph);
 
   updateGroupLayout(graph, metaGraph, metaNode);
-
-  //remove nodes from graph
+  //Remove nodes from graph
   StableIterator<node> itN(metaGraph->getNodes());
   while (itN.hasNext())
     graph->delNode(itN.next());
@@ -208,7 +209,8 @@ void updateLayoutUngroup(Graph *graph, node metanode) {
   } delete itE;
 }
 //====================================================================================
-void tlp::openMetaNode(Graph *graph, node n) {
+void tlp::openMetaNode(Graph *graph, node n,
+		       Graph *groupUnderSubGraph) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
@@ -238,7 +240,7 @@ void tlp::openMetaNode(Graph *graph, node n) {
   //===========================
   //Remove the metagraph from the hierarchy and remove the metanode
   root->delAllNode(n);
-  metaGraph->getFather()->delSubGraph(metaGraph);
+  groupUnderSubGraph->delSubGraph(metaGraph);
   hash_map<node, hash_set<node> > edges;
   //=================================
   StableIterator<edge> it(root->getEdges());
@@ -274,6 +276,7 @@ void tlp::openMetaNode(Graph *graph, node n) {
   }
   Observable::unholdObservers();
 }
+
 //=========================================================
 Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string name) {
   Graph *result = graph->addSubGraph();
@@ -293,4 +296,3 @@ Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string n
   } delete itN;
   return result;
 }
-//=========================================================
