@@ -48,10 +48,10 @@ FunctionEnd
 
 ; initialization
 Function .onInit
-InitPluginsDir ;on initialise le répertoire de démarrage des plugins
+InitPluginsDir ;on initialise le rï¿½ertoire de dï¿½arrage des plugins
 File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie l'image dans l'exe final et on on la met dans le dossier temporaire.
 advsplash::show 1800 350 187 2 $PLUGINSDIR\splash
-Pop $R0 ;on récupère la valeur de retour : 1, si l'utilisateur a fermé l'écran, 0 si tout s'est bien passé, et -1 si un problème est survenu
+Pop $R0 ;on rï¿½upï¿½e la valeur de retour : 1, si l'utilisateur a fermï¿½l'ï¿½ran, 0 si tout s'est bien passï¿½ et -1 si un problï¿½e est survenu
 Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
 Call CheckPreviousVersion
 FunctionEnd

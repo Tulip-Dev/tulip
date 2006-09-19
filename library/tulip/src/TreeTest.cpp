@@ -39,7 +39,7 @@ bool TreeTest::isFreeTree(Graph *graph) {
 void TreeTest::makeRootedTree(Graph *graph, node root) {
   if (instance==0) instance=new TreeTest();
   graph->removeObserver(instance);
-  instance->resultsBuffer.erase((unsigned long)graph);
+  instance->resultsBuffer.erase((unsigned int)graph);
   if (!graph->isElement (root)) {
     cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
     return;

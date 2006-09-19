@@ -48,8 +48,11 @@ const string rotationProperty = "viewRotation";
     float dx = fabs(itPos[0]-nPos[0]) - itSize[0] - nSize[0];
     float dy = fabs(itPos[1]-nPos[1]) - itSize[1] - nSize[1];
     //    float dz = fabs(itPos[2]-nPos[2]) - itSize[2] - nSize[2];
-    if (dx<0) scale <?= (fabs(itPos[0]-nPos[0]) - itSize[0]) / nSize[0];
+    // GCC 4.2: <?= is no longer supported
+    // if (dx<0) scale <?= (fabs(itPos[0]-nPos[0]) - itSize[0]) / nSize[0];
     if (dy<0) scale <?= (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1];
+    if (dx<0) scale = min(scale, (fabs(itPos[0]-nPos[0]) - itSize[0]) / nSize[0]);
+    if (dy<0) scale = std::min(scale, (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1]);
     //    if (dz<0) scale <?= (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1];
   } delete itN;
   if (scale<1.0) {

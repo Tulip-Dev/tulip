@@ -48,7 +48,9 @@ void ConvolutionClusteringSetup::setlog(bool b) {
 }
 
 void ConvolutionClusteringSetup::update() {
-  widthSlider->setMaxValue(discretizationSlider->value() / 2 >? 1);
+  // GC 4.2: >? is no longer supported
+  //widthSlider->setMaxValue(discretizationSlider->value() / 2 >? 1);
+  widthSlider->setMaxValue(std::max(discretizationSlider->value() / 2, 1));
   convolPlugin->setParameters(discretizationSlider->value(),0,widthSlider->value());
   paintEvent(0);
 }

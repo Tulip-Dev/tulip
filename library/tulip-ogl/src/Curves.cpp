@@ -69,17 +69,17 @@ namespace {
 
 
   //================================================
-  GLfloat* buildCurvePoints(const vector<Coord> &vertices, 
-			    const vector<float> &sizes,
-			    const Coord &startN,
-			    const Coord &endN) {
+  GLfloat* buildCurvePoints (const vector<Coord> &vertices, 
+			     const vector<float> &sizes,
+			     const Coord &startN,
+			     const Coord &endN) {
     CurvePoints result(vertices.size());
     //start point
     Coord xu = startN - vertices[0];
     xu /= xu.norm(); 
     Coord xv = Coord(0,0,1.);
     Coord dir = xu^xv;
-    dir /= dir.norm();
+    if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
     result(0,0) = vertices[0] - dir*sizes[0];
     result(0,1) = vertices[0] + dir*sizes[0];
     //============
@@ -94,7 +94,7 @@ namespace {
 	Coord xv = Coord(0,0,1);
 	xu /= xu.norm();
 	Coord dir = xu^xv;
-	dir /= dir.norm();
+	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
 	result(i,0) = vertices[i] - dir*sizes[i];
 	result(i,1) = vertices[i] + dir*sizes[i];
       } 
@@ -115,7 +115,7 @@ namespace {
     xu /= xu.norm();    
     xv = Coord(0,0,-1);
     dir = xu^xv;
-    dir /= dir.norm();
+    if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
     result(vertices.size()-1,0) = vertices[vertices.size()-1] - dir*sizes[vertices.size()-1];
     result(vertices.size()-1,1) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
     //============

@@ -97,13 +97,17 @@ nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 if QT3
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) -o $@ $<
+moc_%.cpp: ../include/tulip/%.h
+	$(MOC) -o $@ $<
 else
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
+	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
+moc_%.cpp: ../include/tulip/%.h
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
 moc_ClusterTree.cpp: $(srcdir)/../include/tulip/ClusterTreeQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 endif
 
-FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui $(srcdir)/../include/tulip/FindSelectionData.h
-	$(UIC) -o $@ -impl $(srcdir)/../include/tulip/FindSelectionData.h $<
+FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
+	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
