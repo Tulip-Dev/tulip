@@ -29,6 +29,8 @@
 #include <tulip/TLPParser.h>
 
 #define TLP "tlp"
+#define AUTHOR "author"
+#define COMMENTS "comments"
 #define TLP_VERSION 2.0
 #define NODES "nodes"
 #define EDGE "edge"
@@ -90,7 +92,7 @@ struct TLPGraphBuilder:public TLPTrue {
     }
     return false;
   }
-  
+
   bool addNode(int id) {
     nodeIndex[id]=_graph->addNode();
     return true;
@@ -360,6 +362,28 @@ struct TLPDataSetBuilder: public TLPFalse {
   }
 };
 //================================================================================
+struct TLPFileInfoBuilder: public TLPFalse {
+  TLPGraphBuilder *graphBuilder;
+  string name;
+
+  TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, string infoName):
+    graphBuilder(graphBuilder), name(infoName){
+  }
+  virtual ~TLPFileInfoBuilder(){
+  }
+
+  bool addString(const string &str) {
+    if (name == AUTHOR)
+      graphBuilder->dataSet->set<string>(AUTHOR, str);
+    else if (name == COMMENTS)
+      graphBuilder->dataSet->set<string>("text::comments", str);
+    return true;
+  }
+  bool close(){
+    return true;
+  }
+};
+//================================================================================
 struct TLPDataBuilder : public TLPFalse
 {
   TLPDataSetBuilder *dataSetBuilder;
@@ -589,7 +613,7 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
     newBuilder=new TLPDataSetBuilder(this);
   }
   else
-    newBuilder=new TLPTrue();
+    newBuilder=new TLPFileInfoBuilder(this, structName);
   return true;
 }
 //================================================================================

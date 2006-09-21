@@ -56,6 +56,13 @@ class Cluster;
 class ToolBar;
 class Overview;
 
+// minimal structure to keep open files infos
+struct viewGlFile {
+  std::string name;
+  std::string author;
+  std::string comments;
+};
+
 ///Widget for manipulation and visualization of a graph
 class viewGl : public TulipData, Observer {
   Q_OBJECT;
@@ -190,9 +197,9 @@ private:
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
   GlGraphWidget *newOpenGlView(Graph *graph,const QString &);
   std::string newName();
-  stdext::hash_map<unsigned int, std::string> openFiles;
+  stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
-  bool fileSave(std::string plugin, std::string filename);
+  bool fileSave(std::string plugin, std::string filename, std::string author, std::string comments);
   int alreadyTreated(std::set<unsigned int>, Graph *);
   unsigned int mouseClicX,mouseClicY;
   Morphing *morph;

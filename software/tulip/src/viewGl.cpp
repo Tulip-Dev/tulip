@@ -481,18 +481,23 @@ void viewGl::setNavigateCaption(string newCaption) {
 void viewGl::fileSave() {
   if (!glWidget) return;
   if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
-      (openFiles[(unsigned long)glWidget] == "")) {
+      (openFiles[(unsigned long)glWidget].name == "")) {
     fileSaveAs();
     return;
   }
-  fileSave("tlp", openFiles[(unsigned long)glWidget]);
+  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
+  fileSave("tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
-bool viewGl::fileSave(string plugin, string filename) {
+bool viewGl::fileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
   parameter.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
+  if (author.length() > 0)
+    dataSet.set<string>("author", author);
+  if (comments.length() > 0)
+    dataSet.set<string>("text::comments", comments);
   if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getParameters());
@@ -515,7 +520,13 @@ bool viewGl::fileSave(string plugin, string filename) {
     os = tlp::getOgzstream(filename.c_str());
   else
     os = new ofstream(filename.c_str());
-  openFiles[(unsigned long)glWidget]=filename;
+
+  // keep trace of file infos
+  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
+  vFile.name = filename;
+  dataSet.get<string>("author", vFile.author);
+  dataSet.get<string>("text::comments", vFile.comments);
+
   if (!(result=tlp::exportGraph(glWidget->getGraph(), *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
@@ -530,7 +541,7 @@ void viewGl::fileSaveAs() {
   if (!glWidget) return;
   if( !glWidget->getGraph() )
     return;
-  fileSave("tlp", "");
+  fileSave("tlp", "", "", "");
 }
 //**********************************************************************
 void viewGl::fileOpen() {
@@ -598,7 +609,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	QWidget *win = windows.at(i);
 	if (typeid(*win)==typeid(GlGraphWidget)) {
 	  GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-	  if(openFiles[((unsigned long)tmpNavigate)] == s.latin1()) {
+	  if(openFiles[((unsigned long)tmpNavigate)].name == s.latin1()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -644,8 +655,13 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
 
 
-    if(noPlugin)
-      openFiles[((unsigned long)glW)]=s.latin1();
+    if(noPlugin) {
+      viewGlFile vFile;
+      vFile.name = s.latin1();
+      dataSet.get<std::string>("author", vFile.author);
+      dataSet.get<std::string>("text::comments", vFile.comments);
+      openFiles[((unsigned long)glW)] = vFile;
+    }
     QApplication::restoreOverrideCursor();
     changeGraph(0);
     changeGraph(newGraph);
@@ -1030,7 +1046,7 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  fileSave(exportGraphMenu.text(id).ascii(), "");
+  fileSave(exportGraphMenu.text(id).ascii(), "", "", "");
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
