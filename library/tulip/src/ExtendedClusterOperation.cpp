@@ -11,6 +11,7 @@
 #include <tulip/LayoutProxy.h>
 #include <tulip/SizesProxy.h>
 #include <tulip/MetricProxy.h>
+#include <tulip/ColorsProxy.h>
 #include <tulip/SelectionProxy.h>
 #include <tulip/DrawingTools.h>
 
@@ -20,7 +21,7 @@ using namespace stdext;
 const string layoutProperty = "viewLayout";
 const string sizeProperty = "viewSize";
 const string rotationProperty = "viewRotation";
-
+const string colorsProperty = "viewColor";
 
 /*
   resolve overlap,
@@ -91,7 +92,7 @@ void updateGroupLayout(SuperGraph *graph, SuperGraph *cluster, node metanode) {
   while (itN->hasNext()){
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
-    clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
+    clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));    
   } delete itN;
   Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
@@ -133,33 +134,48 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph,
 
   //create new edges from nodes to metanodes
   SuperGraph *root = graph->getRoot();
+  ColorsProxy *colors = root->getProperty<ColorsProxy> (colorsProperty);
   hash_map<node, hash_set<node> > edges;
-  StableIterator<edge> it(root->getEdges());
-  while (it.hasNext()) {
-    edge e = it.next();
-    node source = graph->source(e);
-    node target = graph->target(e);
-    bool toDelete = (metaInfo->getNodeValue(source)!=0) || (metaInfo->getNodeValue(target)!=0);
-    if (graph->isElement(source) && metaGraph->isElement(target)) {
-      if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
-	if (multiEdges || edges[source].empty())
-	  graph->addEdge(source,metaNode);
-	edges[source].insert(target);
-      } 
-      if (toDelete) {
-	//	cerr << "delete edge e :" << e.id << endl;
-	graph->delAllEdge(e);
+  Iterator<node> *metaGraphNodes = metaGraph->getNodes();
+  while (metaGraphNodes->hasNext()){
+    node n = metaGraphNodes->next();
+    StableIterator<edge> it(root->getInOutEdges (n));
+    while (it.hasNext()) {
+      edge e = it.next();
+      node source = graph->source(e);
+      node target = graph->target(e);
+      bool toDelete = (metaInfo->getNodeValue(source)!=0) || 
+	(metaInfo->getNodeValue(target)!=0);
+      if (graph->isElement(source) && metaGraph->isElement(target)) {
+	if ( (edges.find(source) == edges.end()) || 
+	     (edges[source].find(target) == edges[source].end()) ) {
+	  if (multiEdges || edges[source].empty()) {
+	    edge added = graph->addEdge(source,metaNode);
+	    cout << "is valid " << added.isValid();
+	    colors->setEdgeValue (added, colors->getEdgeValue (e));
+	  }
+	  edges[source].insert(target);
+	} 
+	if (toDelete) {
+	  //	cerr << "delete edge e :" << e.id << endl;
+	  graph->delAllEdge(e);
+	}
       }
-    }
-    if (graph->isElement(target) && metaGraph->isElement(source)) {
-      if ( (edges.find(target) == edges.end()) || (edges[target].find(source) == edges[target].end()) ) {
-	if (multiEdges || edges[target].empty()) 
-	  graph->addEdge(metaNode, target);
-	edges[target].insert(source);
-      }
-      if (toDelete) {
-	//	cerr << "delete edge e :" << e.id << endl;
-	graph->delAllEdge(e);
+      if (graph->isElement(target) && metaGraph->isElement(source)) {
+	if ( (edges.find(target) == edges.end()) || 
+	     
+	     (edges[target].find(source) == edges[target].end()) ) {
+	  if (multiEdges || edges[target].empty()) {
+	    edge added = graph->addEdge(metaNode, target);
+	    cout << "is valid " << added.isValid();
+	    colors->setEdgeValue (added, colors->getEdgeValue (e));
+	  }
+	  edges[target].insert(source);
+	}
+	if (toDelete) {
+	  //	cerr << "delete edge e :" << e.id << endl;
+	  graph->delAllEdge(e);
+	}
       }
     }
   }
