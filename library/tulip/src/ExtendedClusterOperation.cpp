@@ -151,7 +151,6 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph,
 	     (edges[source].find(target) == edges[source].end()) ) {
 	  if (multiEdges || edges[source].empty()) {
 	    edge added = graph->addEdge(source,metaNode);
-	    cout << "is valid " << added.isValid();
 	    colors->setEdgeValue (added, colors->getEdgeValue (e));
 	  }
 	  edges[source].insert(target);
@@ -167,7 +166,6 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph,
 	     (edges[target].find(source) == edges[target].end()) ) {
 	  if (multiEdges || edges[target].empty()) {
 	    edge added = graph->addEdge(metaNode, target);
-	    cout << "is valid " << added.isValid();
 	    colors->setEdgeValue (added, colors->getEdgeValue (e));
 	  }
 	  edges[target].insert(source);
