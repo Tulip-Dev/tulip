@@ -1,7 +1,9 @@
 #include <float.h>
 #include <tulip/Delaunay.h>
-#define ANSI_DECLARATORS //ansi style declarations for triangle.h
-#include "thirdparty/triangle/triangle.h"
+// Triangle from Jonathan Richard Shewchuk
+// is no longer used by Tulip
+//#define ANSI_DECLARATORS //ansi style declarations for triangle.h
+//#include "thirdparty/triangle/triangle.h"
 #ifdef _WIN32
 #include <float.h>
 #endif
@@ -11,7 +13,10 @@
 
 
 using namespace std;
-using namespace triangle_1_5;
+
+// Triangle from Jonathan Richard Shewchuk
+// is no longer used by Tulip
+//using namespace triangle_1_5;
 
 #define FLOAT_ERROR (1e-6) 
 #define TRIANGLE_NULL (-1)
@@ -79,7 +84,6 @@ inline void copyVorVertexToVorDiagram (const double *points, int numberofpoints,
 inline void  copyVorEdgeAndRaysToVorDiagram (const int *edgelist,
 					     const double *normlist,
 					     const int numberofedges,
-					     const triangulateio &triangleOutput,
 					     const bool computeVoronoiEdgeList,
 					     tlp::VoronoiDiagram *voronoiDiagram) {
   for (int i = 0; i < numberofedges; ++i) {
@@ -104,6 +108,49 @@ inline void  copyVorEdgeAndRaysToVorDiagram (const int *edgelist,
   }//end for i
 }//end copyVorEdgeToVorDiagram
 
+//==============================================================
+//a function to reverse the order of the vertices and the rays in the cell
+void reverseCellOrder (tlp::VoronoiDiagram::Cell &voronoiCell) {
+  const vector<unsigned int> reverse = voronoiCell.vertices;
+  voronoiCell.vertices.clear();
+  for (vector<unsigned int>::const_reverse_iterator reverseit = reverse.rbegin();
+       reverseit != reverse.rend(); ++reverseit)
+    voronoiCell.vertices.push_back (*reverseit);
+  if (voronoiCell.hasRays()) {
+    unsigned int tempRay = voronoiCell.rays[0];
+    voronoiCell.rays[0] = voronoiCell.rays[1];
+    voronoiCell.rays[1] = tempRay;
+  }//end if
+}//end reverseCellOrder
+
+//==============================================================
+//An inline function to make the voronoi diagram of two vertices.
+inline void voronoiOfTwo (const vector<Coord> &points,
+			  tlp::VoronoiDiagram *voronoiDiagram) {
+  voronoiDiagram->vertices.push_back ((points[0] + points[1])/2.0);
+  tlp::VoronoiDiagram::Ray ray;
+  ray.p = 0;
+  Coord edge = points[1] - points[0];
+  if (edge.norm() > FLOAT_ERROR) edge /= edge.norm();
+  ray.v.setX (edge.getY()); 
+  ray.v.setY (-edge.getX());
+  voronoiDiagram->rays.push_back (ray);
+  ray.v *= -1.0;
+  voronoiDiagram->rays.push_back (ray);
+  tlp::VoronoiDiagram::Cell cell;
+  cell.vertices.push_back (0);
+  cell.rays.push_back(0);
+  cell.rays.push_back(1);
+  voronoiDiagram->cells.push_back (cell);
+  cell.rays[0] = 1;
+  cell.rays[1] = 0;
+  voronoiDiagram->cells.push_back (cell);
+}//end voronoiOfTwo
+
+//==============================================================
+// Triangle from Jonathan Richard Shewchuk
+// is no longer used by Tulip
+/*
 //==============================================================
 //inits the tritoRay datastructure, which given a triangle returns
 //the ray associated with each edge or TRIANGLE_NULL
@@ -234,21 +281,6 @@ bool counterclockwiseTraversal (const int voronoiCentre,
   }//end while
   return counterclockwise;
 }//end counterclockwiseBoundaryTraversal
-
-//==============================================================
-//a function to reverse the order of the vertices and the rays in the cell
-void reverseCellOrder (tlp::VoronoiDiagram::Cell &voronoiCell) {
-  const vector<unsigned int> reverse = voronoiCell.vertices;
-  voronoiCell.vertices.clear();
-  for (vector<unsigned int>::const_reverse_iterator reverseit = reverse.rbegin();
-       reverseit != reverse.rend(); ++reverseit)
-    voronoiCell.vertices.push_back (*reverseit);
-  if (voronoiCell.hasRays()) {
-    unsigned int tempRay = voronoiCell.rays[0];
-    voronoiCell.rays[0] = voronoiCell.rays[1];
-    voronoiCell.rays[1] = tempRay;
-  }//end if
-}//end reverseCellOrder
 
 //==============================================================
 //a function to trace out the voronoi cell in counterclockwise order
@@ -416,30 +448,6 @@ inline void cleanupTriangle (triangulateio &triangleOutput) {
 }//end cleanupTriangle
 
 //==============================================================
-//An inline function to make the voronoi diagram of two vertices.
-inline void voronoiOfTwo (const vector<Coord> &points,
-			  tlp::VoronoiDiagram *voronoiDiagram) {
-  voronoiDiagram->vertices.push_back ((points[0] + points[1])/2.0);
-  tlp::VoronoiDiagram::Ray ray;
-  ray.p = 0;
-  Coord edge = points[1] - points[0];
-  if (edge.norm() > FLOAT_ERROR) edge /= edge.norm();
-  ray.v.setX (edge.getY()); 
-  ray.v.setY (-edge.getX());
-  voronoiDiagram->rays.push_back (ray);
-  ray.v *= -1.0;
-  voronoiDiagram->rays.push_back (ray);
-  tlp::VoronoiDiagram::Cell cell;
-  cell.vertices.push_back (0);
-  cell.rays.push_back(0);
-  cell.rays.push_back(1);
-  voronoiDiagram->cells.push_back (cell);
-  cell.rays[0] = 1;
-  cell.rays[1] = 0;
-  voronoiDiagram->cells.push_back (cell);
-}//end voronoiOfTwo
-
-//==============================================================
 //A function to compute the triangulation using triangle.  The
 //solution is written into triangleOutput.  The two booleans indicate
 //if the edge list or the triangle list should be computed.
@@ -525,7 +533,6 @@ void runTriangle (const vector<Coord> &points,
     copyVorEdgeAndRaysToVorDiagram (voronoiOutput.edgelist,
 				    voronoiOutput.normlist,
 				    voronoiOutput.numberofedges,
-				    triangleOutput,
 				    computeVoronoiEdgeList,
 				    voronoiDiagram);
     int triToRay[3*triangleOutput.numberoftriangles];
@@ -537,26 +544,27 @@ void runTriangle (const vector<Coord> &points,
   cleanupTriangle (triangleOutput);
   cleanupTriangle (voronoiOutput);
 }//end runTriangle
+*/
 
 //==============================================================
 void tlp::delaunayTriangulation (const vector<Coord> &points, 
 	    vector<pair<unsigned int, unsigned int> > &edges) {
-  runTriangle (points, &edges);
+  //runTriangle (points, &edges);
 }//end delaunayTriangulation
 //==============================================================
 void tlp::delaunayTriangulation (const vector<Coord> &points, 
 	    vector< tlp::Array<unsigned int, 3> > &triangles) {
-  runTriangle (points, NULL, &triangles);
+  //runTriangle (points, NULL, &triangles);
 }//end delaunayTriangulation
 //==============================================================
 void tlp::delaunayTriangulation (const vector<Coord> &points,
 		       vector<pair<unsigned int, unsigned int> > &edges,
 		       vector< tlp::Array<unsigned int, 3> > &triangles) {
-  runTriangle (points, &edges, &triangles);
+  //runTriangle (points, &edges, &triangles);
 }//end delaunayTriangulation
 //==============================================================
 void tlp::voronoiDiagram (const vector<Coord> &points,
 			  VoronoiDiagram &voronoiDiagram,
 			  bool returnVoronoiEdgeList) {
-  runTriangle (points, NULL, NULL, returnVoronoiEdgeList, &voronoiDiagram);
+  //runTriangle (points, NULL, NULL, returnVoronoiEdgeList, &voronoiDiagram);
 }//end voronoiDiagram
