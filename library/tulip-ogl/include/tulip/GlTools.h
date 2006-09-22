@@ -12,8 +12,10 @@ namespace tlp {
 		       const GLdouble *transform,
 		       const GLint *viewport,
 		       GLdouble &winx, GLdouble &winy);
-  bool segmentVisible(const Coord &u, const Coord &v, 
+  double segmentVisible(const Coord &u, const Coord &v, 
 		      const GLdouble *transform, const GLint *viewport);
+  double segmentSize(const Coord &u, const Coord &v, 
+		     const GLdouble *transform, const GLint *viewport);
   inline GLdouble sqr(const GLdouble f) {return f*f;}
   GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport);
 }

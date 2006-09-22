@@ -707,7 +707,7 @@ namespace tlp
     }
 
     glGraphWidget->setDisplayEdges(false);
-    glGraphWidget->goodScale();
+    glGraphWidget->centerScene();
 
     if (dataSet != 0) 
       delete dataSet;

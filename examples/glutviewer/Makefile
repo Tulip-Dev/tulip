@@ -2,7 +2,7 @@ SHELL=bash
 TARGET= glutviewer
 SRCS=   glutviewer.cpp
 
-CXXFLAGS = -DNDEBUG -O3 -funroll-all-loops -Wall `../../tulip-config --cxxflags` `xml2-config --libs`
+CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `../../tulip-config --cxxflags` `xml2-config --libs`
 CXX=g++
 LDFLAGS=  -L/usr/lib/GL -lGL -lGLU -lglut `../../tulip-config --libs`
 

@@ -164,7 +164,6 @@ protected slots:
   void reverseSelectedEdgeDirection();
   void windowsMenuAboutToShow();
   void windowsMenuActivated( int id );
-  void restoreView();
   void new3DView();
   void goInside();
   void changeGraph(Graph *);

@@ -139,7 +139,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
     circles[i][1] = packRadius*sin(angle);
     circles[i].radius = realCircleRadius[i];
   }
-  Circle<double> circleH=tlp::enclosingCircle(circles);
+  Circle<double> circleH = tlp::enclosingCircle(circles);
   (*relativePosition)[n][2] = -circleH[0];
   (*relativePosition)[n][3] = -circleH[1];
   (*relativePosition)[n][4] = sqrt(circleH.radius*circleH.radius - circleH[1]*circleH[1])-fabs(circleH[0]);
@@ -147,7 +147,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
    * Set relative position of all children
    * according to the center of the enclosing circle
    */
-  itN=graph->getOutNodes(n);
+  itN = graph->getOutNodes(n);
   for (unsigned int i=1;i<Nc;++i) {
     node itn = itN->next();
     (*relativePosition)[itn][0] = circles[i][0]-circleH[0];
@@ -168,8 +168,8 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   bend[0] = (*relativePosition)[n][4];
 
   zeta[0] = (*relativePosition)[n][2];
-  zeta[1]=(*relativePosition)[n][3];
-  zeta[2]=0;
+  zeta[1] = (*relativePosition)[n][3];
+  zeta[2] = 0;
   zetaOriginal = zeta;
 
   Vector<double,3> vect,vect3;

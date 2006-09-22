@@ -64,7 +64,7 @@ void Camera::rotate(float angle, float x, float y, float z) {
   // Now we just add the newly rotated vector to our position to set
   // our new rotated eyes of our camera.
   eyes = center + vNewEyes;
-  up=vNewUp;
+  up   = vNewUp;
 }
 
 ///  This strafes the camera left and right depending on the speed (-/+)

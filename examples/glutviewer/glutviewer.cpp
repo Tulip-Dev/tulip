@@ -13,6 +13,9 @@
 using namespace std;
 static int win;
 
+unsigned int frameCount = 5;
+GLuint LList;
+bool listOk = false;
 //==============================================================================
 class GLGlut: public GlGraph {
 public:
@@ -47,7 +50,7 @@ static int width(640), height(480);
 static GLGlut *glGlutScreen;
 static int frame=0;
 static GLint timer;
-static int rx=0,ry=0,rz=0;
+static int rx = 0,ry = 0,rz = 0;
 static bool frameRateDisplaying=false;
 static bool incremental=false;
 static char strFrameRate[50] = {0};      
@@ -60,16 +63,17 @@ void idle(void) {
     glutSwapBuffers();
   }
   else {
-    glGlutScreen->rotateScene(rx*2,ry*2,rz*2);
+    glGlutScreen->rotateScene(rx*2., ry*2., rz*2.);
     if (frameRateDisplaying) {
-      if (frame%20==0) {
+      if (frame%frameCount == 0) {
 	GLint t = glutGet(GLUT_ELAPSED_TIME);
 	GLfloat seconds = (t - timer) / 1000.0;
 	GLfloat fps = frame / seconds;
+	frameCount = int (fps + 5);
 	sprintf(strFrameRate, "Tulip Glut Viewer: fps = %.2f", fps);
 	glutSetWindowTitle(strFrameRate);
-	frame=0;
-	timer=t;
+	frame = 0;
+	timer = t;
       }
     }
     glutPostRedisplay();
@@ -149,7 +153,7 @@ void importGraph(const string &filename, GlGraph &glGraph) {
   dataSet.set("file::filename", filename);
   Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph!=0) {
-    glGraph.setSuperGraph(newGraph);
+    glGraph.setGraph(newGraph);
     glGraph.centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
@@ -165,31 +169,27 @@ void Reshape(int widt, int heigh) {
 //=============================================
 void Draw(void) {
   glGlutScreen->draw();
+  /*
+  if (!listOk) {
+  glGlutScreen->setDisplayEdges(false);
+    LList = glGenLists( 1 );
+    glNewList( LList, GL_COMPILE );
+    glGlutScreen->draw();
+    glEndList();
+    listOk = true;
+    cerr << ".";
+  }
+  else {
+    glCallList(LList);
+  }
+  */
   if (!glGlutScreen->isIncrementalRendering()) 
     glutSwapBuffers();
   else
     idle();
   if (frameRateDisplaying) frame++;
 }
-/***************************************************************************************************/
-int main (int argc, char **argv) {
-  glutInit(&argc, argv);
-  if (argc!=2) {
-    cerr << "usage :" << endl;
-    cerr << "\t " << argv[0] << " <filename>" << endl;
-    cerr << "file must be in tlp format" << endl;
-    exit(1);
-  }
-
-  tlp::initTulipLib();
-  tlp::loadPlugins();   // library side plugins
-  GlGraph::loadPlugins();
-
-  /*  GlGraphWidget *mywidget = new GlGraphWidget(parent);
-  mywidget->show();
-  */
-
-
+void helpMessage() {
   cout << "********************************************" <<endl;
   cout << "Glut graph viewer demo" << endl;
   cout << "Author : Auber David 29/01/2003" << endl;
@@ -210,7 +210,18 @@ int main (int argc, char **argv) {
   cout << "\t I\t: (de)Activate incremental rendering" << endl;
   cout << "\t esc: quit" << endl;
   cout << "**********************************************" <<endl;
-
+}
+void usage() {
+  cerr << "usage :" << endl;
+  cerr << "\t glutviewer <filename>" << endl;
+  cerr << "file must be in tlp format" << endl;
+  exit(1);
+}
+/***************************************************************************************************/
+int main (int argc, char **argv) {
+  glutInit(&argc, argv);
+  if (argc!=2) 
+    usage();
   glutInitWindowPosition(0, 0); 
   glutInitWindowSize( width, height);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL);
@@ -218,6 +229,10 @@ int main (int argc, char **argv) {
     cerr << "Impossible to create the new window" << endl;
     exit(1);
   }
+
+  tlp::initTulipLib();
+  tlp::loadPlugins();   // library side plugins
+  GlGraph::loadPlugins();
 
   glGlutScreen = new GLGlut("", width, height);
   glGlutScreen->initializeGL();
@@ -229,13 +244,7 @@ int main (int argc, char **argv) {
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);
-
-  Graph *g;
-  forEach(g, glGlutScreen->getGraph()->getSubGraphs()) {
-    cerr << g->getId() << ",";
-  }
-
-
+  
   glutMainLoop();  
   return EXIT_SUCCESS;
 }

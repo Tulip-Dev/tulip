@@ -665,7 +665,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     QApplication::restoreOverrideCursor();
     changeGraph(0);
     changeGraph(newGraph);
-    restoreView();
+    centerView();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
@@ -989,7 +989,6 @@ void viewGl::buildMenus() {
   //View Menu
   viewMenu->insertItem( "Redraw View", this, SLOT( redrawView() ));
   viewMenu->insertItem( "Center View", this, SLOT( centerView() ));
-  viewMenu->insertItem( "Restore View", this, SLOT( restoreView() ));
   viewMenu->insertItem( "Dialogs",  &dialogMenu);
   //Property Menu
   if (selectMenu.count()>0)
@@ -1278,19 +1277,8 @@ void viewGl::centerView() {
   if (graph==0) return;
   Observable::holdObservers();
   glWidget->centerScene();
-  redrawView();
-  Observable::unholdObservers();
-}
-//**********************************************************************
-///Restore the view of the graph
-void viewGl::restoreView() {
-  if (!glWidget) return;
-  Graph *graph=glWidget->getGraph();
-  if (graph==0) return;
-  Observable::holdObservers();
-  glWidget->centerScene();
-  redrawView();
   overviewWidget->setObservedView(glWidget);
+  redrawView();
   updateStatusBar();
   Observable::unholdObservers();
 }
@@ -1603,14 +1591,10 @@ void viewGl::changeLayout(int id) {
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
   Camera cam = glWidget->getCamera();
-  Coord scTrans = glWidget->getSceneTranslation();
-  Coord scRot = glWidget->getSceneRotation();
   glWidget->setInputLayout(name);
   bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
   glWidget->setInputLayout("viewLayout");
   glWidget->setCamera(cam);
-  glWidget->setSceneTranslation(scTrans);
-  glWidget->setSceneRotation(scRot);
   if (result) {
     if( force_ratio->isOn() )
       glWidget->getGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();

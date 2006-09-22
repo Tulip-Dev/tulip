@@ -44,8 +44,8 @@ GraphState::GraphState( GlGraphWidget * glgw ) {
   *color = *( g->getProperty<ColorProperty>("viewColor") );
   
   camera = glgw->getCamera();
-  sceneT = glgw->getSceneTranslation();
-  sceneR = glgw->getSceneRotation();
+  //  sceneT = glgw->getSceneTranslation();
+  //  sceneR = glgw->getSceneRotation();
 }
 
 GraphState::~GraphState() {

@@ -234,10 +234,12 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
   c = g0->camera;
   outGlgw->setCamera( Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
   // Scene
-  Coord scn_t      = g0->sceneT + (g1->sceneT - g0->sceneT) * inT;
-  Coord scn_r      = g0->sceneR + (g1->sceneR - g0->sceneR) * inT;
-  outGlgw->setSceneTranslation( scn_t );
-  outGlgw->setSceneRotation( scn_r );
+  /*
+    Coord scn_t      = g0->sceneT + (g1->sceneT - g0->sceneT) * inT;
+    Coord scn_r      = g0->sceneR + (g1->sceneR - g0->sceneR) * inT;
+    outGlgw->setSceneTranslation( scn_t );
+    outGlgw->setSceneRotation( scn_r );
+  */
 }
 
   void Morphing::timerEvent( QTimerEvent * te ) {

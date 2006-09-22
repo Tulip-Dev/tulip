@@ -66,13 +66,25 @@ namespace {
       return (Coord&)data[j*size*3+i*3];
     }
   };
-
-
   //================================================
   GLfloat* buildCurvePoints (const vector<Coord> &vertices, 
 			     const vector<float> &sizes,
 			     const Coord &startN,
-			     const Coord &endN) {
+			     const Coord &endN,
+			     GlGraph *glGraph) {
+
+    //    Camera cam = glGraph->getCamera();
+    /*
+    vector<float> zVal(vvertices.size());
+    vector<Coord> vertices(vvertices.size());
+    for (unsigned int i = 0; i< vvertices.size(); ++i) {
+      Coord tmp = vvertices[i];
+      //   glGraph->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+      zVal[i] = tmp[2];
+      tmp[2] = 0;
+      vertices[i] = tmp;
+    }
+    */
     CurvePoints result(vertices.size());
     //start point
     Coord xu = startN - vertices[0];
@@ -119,6 +131,15 @@ namespace {
     result(vertices.size()-1,0) = vertices[vertices.size()-1] - dir*sizes[vertices.size()-1];
     result(vertices.size()-1,1) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
     //============
+    /*
+      for (unsigned int i = 0; i< vvertices.size(); ++i)
+      for (unsigned int j = 0; j < 2; ++j) {
+	Coord tmp = result(i,j);
+	tmp[2] = zVal[i];
+	//glGraph->screenTo3DWorld(tmp[0], tmp[1], tmp[2]);
+	result(i,j) = tmp;
+      }
+    */
     return result.data;
   }
   //==============================================
@@ -149,15 +170,15 @@ namespace {
   bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
 	       const GLdouble *transformMatrix, const GLint *viewportArray) {
     if (bends.size() == 0) 
-      return segmentVisible(startPoint, endPoint, transformMatrix, viewportArray);
+      return segmentVisible(startPoint, endPoint, transformMatrix, viewportArray) > 0.;
     
     //first point
-    if (segmentVisible(startPoint, bends[0], transformMatrix, viewportArray))
+    if (segmentVisible(startPoint, bends[0], transformMatrix, viewportArray)>0.)
       return true;
     for (unsigned int i=1; i<bends.size(); ++i) 
-      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewportArray))
+      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewportArray)>0.)
 	return true;
-    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewportArray))
+    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewportArray)>0.)
       return true;
     return false;
   }
@@ -206,8 +227,9 @@ namespace tlp {
   void polyQuad(const vector<Coord> &vertices, 
 		const vector<Color> &colors, 
 		const vector<float> &sizes,
-		const Coord & startN, const Coord &endN) {
-    GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN);
+		const Coord & startN, const Coord &endN,
+		GlGraph *glGraph) {
+    GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN, glGraph);
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < vertices.size(); ++i) {
       glColor4ubv(((const GLubyte *)&colors[i]));
@@ -220,11 +242,12 @@ namespace tlp {
   void polyQuad(const vector<Coord> &vertices, 
 		const Color &c1, const Color &c2, 
 		float s1, float s2,
-		const Coord &startN, const Coord &endN) {
+		const Coord &startN, const Coord &endN,
+		GlGraph *glGraph) {
     polyQuad(vertices, 
 	     getColors(vertices, c1, c2), 
 	     getSizes(vertices, s1, s2),
-	     startN, endN); 
+	     startN, endN, glGraph); 
   }
   //=============================================
   typedef gleDouble gleCoord[3];
@@ -281,7 +304,8 @@ namespace tlp {
   void bezierQuad(const vector<Coord> &vertices, 
 		  const Color &c1, const Color &c2, 
 		  float s1, float s2,
-		  const Coord &startN, const Coord &endN) {
+		  const Coord &startN, const Coord &endN,
+		  GlGraph *glGraph) {
     unsigned int MAX_BENDS = 8;
     if (vertices.size()>MAX_BENDS) {
       vector<float> sizes = getSizes(vertices, s1, s2);
@@ -292,7 +316,7 @@ namespace tlp {
       Coord dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
       dir /= dir.norm();
       dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.);
-      bezierQuad(points, c1, colors[MAX_BENDS - 1], s1, sizes[MAX_BENDS - 1], startN, vertices[MAX_BENDS-1] + dir);
+      bezierQuad(points, c1, colors[MAX_BENDS - 1], s1, sizes[MAX_BENDS - 1], startN, vertices[MAX_BENDS-1] + dir, glGraph);
       vector<Coord> newCurve(vertices.size()-(MAX_BENDS - 2));
       newCurve[0] = vertices[MAX_BENDS - 1];
       newCurve[1] = vertices[MAX_BENDS - 1] + dir;
@@ -300,7 +324,7 @@ namespace tlp {
        newCurve[i-(MAX_BENDS) + 2] = vertices[i];
       bezierQuad(newCurve, colors[MAX_BENDS-1], c2, sizes[MAX_BENDS-1], s2, 
 		 vertices[MAX_BENDS - 2], 
-		 endN);
+		 endN, glGraph);
       return;
     }
 
@@ -311,7 +335,7 @@ namespace tlp {
       delta[i] = float(c2[i]) - float(c1[i]);
     }
     delta /= steps;
-    GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN);
+    GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN, glGraph);
     GLfloat *pointsIt  = points;
     glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, vertices.size() , 0.0, 1.0, 
 	    vertices.size()*3, 2, pointsIt );
@@ -390,8 +414,8 @@ namespace tlp {
   void splineQuad(const vector<Coord> &vertices, 
 		  const Color &c1, const Color &c2, 
 		  float s1, float s2,
-		  const Coord &startN, const Coord &endN) {
-    tlp::bezierQuad(splineCurve(vertices), c1, c2, s1, s2, startN, endN);
+		  const Coord &startN, const Coord &endN, GlGraph *glGraph) {
+    tlp::bezierQuad(splineCurve(vertices), c1, c2, s1, s2, startN, endN, glGraph);
   }
   void splineLine(const vector<Coord> &vertices, 
 		  const Color &c1, const Color &c2) {

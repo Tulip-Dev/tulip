@@ -53,11 +53,18 @@ namespace tlp {
 	     /winw * 0.5 + 0.5 ) * viewport[2] + viewport[0];
     winy = ( (transform[1] * objx + transform[5] * objy +  transform[9] * objz + transform[13])
 	     /winw * 0.5 + 0.5) * viewport[3] + viewport[1];
-    
     return true;
   }
   //====================================================
-  bool segmentVisible(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
+  double segmentSize(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
+    GLdouble x1Scr,y1Scr;
+    GLdouble x2Scr,y2Scr;
+    projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
+    projectToScreen(v[0], v[1], v[2], transform, viewport, x2Scr, y2Scr);
+    return sqr(x1Scr-x2Scr) + sqr(y1Scr-y2Scr);
+  }
+  //====================================================
+  double segmentVisible(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
     GLdouble x1Scr,y1Scr;
     GLdouble x2Scr,y2Scr;
     projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
@@ -66,17 +73,17 @@ namespace tlp {
     GLdouble miny = viewport[1];
     GLdouble maxx = minx + viewport[2];
     GLdouble maxy = miny + viewport[3];
+    double size = sqr(x1Scr-x2Scr) + sqr(y1Scr-y2Scr);
     if (!( (x1Scr<minx && x2Scr<minx) || 
 	   (x1Scr>maxx && x2Scr>maxx) || 
 	   (y1Scr<miny && y2Scr<miny) || 
 	   (y1Scr>maxy && y2Scr>maxy) ) )
-      return true;
+      return size;
     else 
-      return false;
+      return -size;
   }
   //====================================================
   GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport) {
-
     bool project;  
     bool visible = false;
     GLdouble max = 0;
