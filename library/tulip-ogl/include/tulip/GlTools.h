@@ -18,4 +18,6 @@ namespace tlp {
 		     const GLdouble *transform, const GLint *viewport);
   inline GLdouble sqr(const GLdouble f) {return f*f;}
   GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport);
+  void cube(GLenum type);
+  void solidCone();
 }

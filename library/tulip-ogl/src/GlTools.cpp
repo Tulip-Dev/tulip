@@ -140,4 +140,92 @@ namespace tlp {
     return max;
   }
   //====================================================
+  void solidCone() {
+    GLUquadricObj *quadratic;
+    quadratic = gluNewQuadric();
+    gluQuadricNormals(quadratic, GLU_SMOOTH);
+    gluQuadricTexture(quadratic, GL_TRUE);  
+    glTranslatef(0.0f, 0.0f, -1.0f);
+    gluQuadricOrientation(quadratic, GLU_INSIDE);
+    gluDisk(quadratic, 0.0f, 0.5f, 8, 1);
+    gluQuadricOrientation(quadratic, GLU_OUTSIDE);
+    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 8, 1);  
+    gluDeleteQuadric(quadratic);
+  }
+  //====================================================
+  void cube(GLenum type) {
+    //  GLenum type = GL_LINE_LOOP;
+    /* front face */
+    glBegin(type);
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glEnd();
+    /* back face */
+    glBegin(type);
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f);
+    glEnd();
+    /* right face */
+    glBegin(type);
+    glNormal3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glEnd();
+    /* left face */
+    glBegin(type);
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glEnd();
+    /* top face */
+    glBegin(type);
+    glNormal3f(0.0f, 1.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glEnd();
+    /* bottom face */
+    glBegin(type);
+    glNormal3f(0.0f, -1.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glEnd();
+  }
 }
