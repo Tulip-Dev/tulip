@@ -31,17 +31,17 @@ public:
 
   //=======================================
   //Functions for extra layout information
-  Coord getMax(Graph *sg=0);
-  Coord getMin(Graph *sg=0);
+  Coord getMax(Graph *graph=0);
+  Coord getMin(Graph *graph=0);
 
   //============================================
   //Functions for layout modification
-  void translate(const tlp::Vector<float,3>& v, Graph *sg=0);
+  void translate(const tlp::Vector<float,3>& v, Graph *graph=0);
   /*
    * translate a set of nodes and edges. Warning : the iterators are not deleted.
    */
   void translate(const tlp::Vector<float,3>& v, Iterator<node> *, Iterator<edge> *);
-  void scale(const tlp::Vector<float,3>& v, Graph *sg=0);
+  void scale(const tlp::Vector<float,3>& v, Graph *graph=0);
   void scale(const tlp::Vector<float,3>& v, Iterator<node> *, Iterator<edge> *);
   /**
    * Rotates the layout proxy of the passed graph by alpha degrees
@@ -54,8 +54,8 @@ public:
   void rotateX(const double& alpha, Iterator<node> *, Iterator<edge> *);
   void rotateY(const double& alpha, Iterator<node> *, Iterator<edge> *);
   void rotateZ(const double& alpha, Iterator<node> *, Iterator<edge> *);
-  void center(Graph *sg = 0);
-  void normalize(Graph *sg = 0);
+  void center(Graph *graph = 0);
+  void normalize(Graph *graph = 0);
   void perfectAspectRatio();
   void resetBoundingBox();
   //=======================================================================
@@ -73,19 +73,19 @@ public:
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  double averageAngularResolution(Graph *sg=0);
+  double averageAngularResolution(Graph *graph=0);
   /**
    * Return the average angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  double averageAngularResolution(const node n,Graph *sg=0);
+  double averageAngularResolution(const node n,Graph *graph=0);
   /**
    * Return a vector of all angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  std::vector<double> angularResolutions(const node n, Graph *sg=0);
+  std::vector<double> angularResolutions(const node n, Graph *graph=0);
   /**
    * Return the number of crossings in the layout
    */
@@ -103,7 +103,7 @@ protected:
 private:
   stdext::hash_map<unsigned long,Coord> max,min;
   stdext::hash_map<unsigned long,bool> minMaxOk;
-  void computeMinMax(Graph * sg=NULL);
+  void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
 /*@}*/

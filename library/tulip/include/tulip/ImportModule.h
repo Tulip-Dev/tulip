@@ -21,9 +21,9 @@
 
 
 /** \addtogroup plugins */ 
-/*@{*/
 namespace tlp {
 
+/*@{*/
 /// Interface for importModule plug-ins
 class ImportModule :public WithParameter
 {
@@ -35,7 +35,7 @@ public:
   virtual ~ImportModule(){};
   ///
   virtual bool import(const std::string &)=0;
-  /** It is the Graph where the plug-ins should build the imported sg*/
+  /** It is the Graph where the plug-ins should build the imported graph*/
   Graph *graph;
   ///
   PluginProgress *pluginProgress;
@@ -53,7 +53,6 @@ public:
   virtual ~ImportModuleFactory() {}
   virtual ImportModule * createObject(ClusterContext)=0;
 };
-
-}
 /*@}*/
+}
 #endif

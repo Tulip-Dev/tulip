@@ -22,10 +22,10 @@
 /**
  * \defgroup graphs
  */ 
-/*@{*/
 /// class face
 namespace tlp {
 
+/*@{*/
 struct Face { 
   unsigned int id;
   Face():id(UINT_MAX){}
@@ -34,8 +34,8 @@ struct Face {
   bool operator==(const Face f) const {return id==f.id;}
   bool isValid() const {return id!=UINT_MAX;}
 };
-}
 /*@}*/
+}
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 

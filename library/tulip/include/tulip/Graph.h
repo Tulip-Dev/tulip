@@ -40,28 +40,28 @@ template<class C>class Iterator;
 
   enum ElementType {NODE=0, EDGE};
   /**
-   * Load a sg in the tlp format
+   * Load a graph in the tlp format
    * Warning : this function use "tlp" import plugin (must be laoded)
    */
   TLP_SCOPE Graph * loadGraph(const std::string &filename);
   /**
-   * Save a sg in tlp format
+   * Save a graph in tlp format
    * Warning : this function use "tlp" export plugin (must be laoded)
    */
   TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
   TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
-  TLP_SCOPE bool exportGraph(Graph *sg,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
-  TLP_SCOPE bool clusterizeGraph(Graph *sg,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
+  TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
+  TLP_SCOPE bool clusterizeGraph(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
   /**
-   * Return a new sg
+   * Return a new graph
    */
   TLP_SCOPE Graph* newGraph();
   /**
-   *  Return an empty subsg 
+   *  Return an empty subgraph 
    */
   TLP_SCOPE Graph *newSubGraph(Graph *, std::string name = "unnamed");
   /**
-   *  Return a subsg equal to the sg given in parameter (a clone subsg)
+   *  Return a subgraph equal to the graph given in parameter (a clone subgraph)
    */
   TLP_SCOPE Graph *newCloneSubGraph(Graph *, std::string name = "unnamed");
   /**
@@ -74,15 +74,15 @@ template<class C>class Iterator;
    * \warning Don't forget to check the stream with ios::bad()!
    */
   /**
-   * Append the selected part of the sg inG (properties, nodes & edges) into the sg outG.
-   * If no selection is done (inSel=NULL), the whole inG sg is appended.
+   * Append the selected part of the graph inG (properties, nodes & edges) into the graph outG.
+   * If no selection is done (inSel=NULL), the whole inG graph is appended.
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
   TLP_SCOPE void copyToGraph( Graph * outG, Graph *	inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
   /**
-   * Remove the selected part of the sg ioG (properties, nodes & edges).
-   * If no selection is done (inSel=NULL), the whole sg is reseted to default value.
+   * Remove the selected part of the graph ioG (properties, nodes & edges).
+   * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
    * \warning The selection is extended to all selected edge ends.
    */
   TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
@@ -91,7 +91,7 @@ template<class C>class Iterator;
  * \defgroup graphs
  */ 
 /*@{*/
-/// Interface for a sg
+/// Interface for a graph
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
@@ -108,57 +108,57 @@ public:
    */
   virtual  void clear()=0;
   /**
-   * Create and return a new SubGraph of the sg
+   * Create and return a new SubGraph of the graph
    * The elements of the new SubGraph is those selected in the selection
    * if there is no selection an empty SubGraph is return.
    */
   virtual Graph *addSubGraph(BooleanProperty *selection=0)=0;
   /**
-   * Del a SubGraph of this sg.
-   * The SubGraph's SubGraphs become SubGraphs of the sg.
+   * Del a SubGraph of this graph.
+   * The SubGraph's SubGraphs become SubGraphs of the graph.
    */
   virtual void delSubGraph(Graph *)=0;
   /**
-   * Del the SubGraph of the sg and all its SubGraphs.
+   * Del the SubGraph of the graph and all its SubGraphs.
    */
   virtual void delAllSubGraphs(Graph *)=0;
   /**
-   * Return the Graph(UpperGraph of the sg), if it has no Graph it 
+   * Return the Graph(UpperGraph of the graph), if it has no Graph it 
    * returns itself
    */
   virtual Graph* getFather()const =0;
   /**
-   * Return the root sg of the sg hierarchy
+   * Return the root graph of the graph hierarchy
    */
   virtual Graph* getRoot() const =0;
   /**
-   * Set the Graph of a sg (use very carefully)
+   * Set the Graph of a graph (use very carefully)
    * Normal user should never use this function.
    */
   virtual void setFather(Graph *)=0;
   /**
-   * Return an iterator on all the SubGraphs of the sg
+   * Return an iterator on all the SubGraphs of the graph
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
   //==============================================================================
-  // Modification of the sg structure
+  // Modification of the graph structure
   //==============================================================================
   /** 
-   * Add a new node in the sg and return it. This node is also added in all 
-   * the Graph of the sg to maintain the sub_graph relation between graphs.
+   * Add a new node in the graph and return it. This node is also added in all 
+   * the Graph of the graph to maintain the sub_graph relation between graphs.
    */
   virtual node addNode()=0;
   /** 
-   * Add an existing node in the sg. this node is also added in all 
-   * the Graph of the sg to maintain the sub_graph relation between graphs.
-   * Warning, the node must be element of the sg hierarchy, thus it must be 
-   * element of the root sg.
+   * Add an existing node in the graph. this node is also added in all 
+   * the Graph of the graph to maintain the sub_graph relation between graphs.
+   * Warning, the node must be element of the graph hierarchy, thus it must be 
+   * element of the root graph.
    */
   virtual void addNode(const node)=0;
   /**
-   * Delete a node in the sg. this node is also removed in all 
-   * the sub-graph of the sg to maintain the sub-graph relation between graphs.
-   * Warning : One can't add an existing node to the root sg
+   * Delete a node in the graph. this node is also removed in all 
+   * the sub-graph of the graph to maintain the sub-graph relation between graphs.
+   * Warning : One can't add an existing node to the root graph
    */
   virtual void delNode(const node)=0;
   /**
@@ -166,22 +166,22 @@ public:
    */
   virtual void delAllNode(const node)=0;
   /** 
-   * Add a new edge in the sg and return it. This edge is also added in all 
-   * the super-graph of the sg to maintain the sub-graph relation between graphs. 
+   * Add a new edge in the graph and return it. This edge is also added in all 
+   * the super-graph of the graph to maintain the sub-graph relation between graphs. 
    * If the second parameter is true the ordering of edges will be preserved.
    */
   virtual edge addEdge(const node, const node )=0;
   /** 
-   * Add an existing edge in the sg. this edge is also added in all 
-   * the super-graph of the sg to maintain the sub-graph relation between graphs.
-   * Warning, the edge must be element of the sg hierarchy, thus it must be 
-   * element of the root sg.
-   * Warning : One can't add an existing edge to the root sg
+   * Add an existing edge in the graph. this edge is also added in all 
+   * the super-graph of the graph to maintain the sub-graph relation between graphs.
+   * Warning, the edge must be element of the graph hierarchy, thus it must be 
+   * element of the root graph.
+   * Warning : One can't add an existing edge to the root graph
    */
   virtual void addEdge(const edge )=0;
   /**
-   * Delete an edge in the sg. this edge is also removed in all 
-   * the sub-graph of the sg to maintain the sub-graph relation between graphs.
+   * Delete an edge in the graph. this edge is also removed in all 
+   * the sub-graph of the graph to maintain the sub-graph relation between graphs.
    * The ordering of edges is preserved.
    */
   virtual  void delEdge(const edge )=0;
@@ -204,14 +204,14 @@ public:
   /**
    *  Reverse the direction of an edge, the source becomes the target and the target.
    *  becomes the source.
-   *  Warning : The ordering is global to the entire sg hierarchy. Thus, by changing
-   *  The ordering of a sg you change the ordering of the hierarchy.
+   *  Warning : The ordering is global to the entire graph hierarchy. Thus, by changing
+   *  The ordering of a graph you change the ordering of the hierarchy.
    */
   virtual void reverse(const edge)=0;
   //================================================================================
-  //Iterators on the sg structure.
+  //Iterators on the graph structure.
   //================================================================================
-  /// Return an existing node of the sg
+  /// Return an existing node of the graph
   virtual node getOneNode() const =0;
   ///Return an iterator on the nodes.
   virtual Iterator<node>* getNodes() const =0;
@@ -227,7 +227,7 @@ public:
   virtual Iterator<node>* getInOutNodes(const node) const =0;
   /// Return an iterator on the edges.
   virtual Iterator<edge>* getEdges() const =0;
-  /// Return an existing edge of the sg
+  /// Return an existing edge of the graph
   virtual edge getOneEdge() const =0;
   /// Return an iterator on the out-edges of a node.
   virtual Iterator<edge>* getOutEdges(const node) const =0;
@@ -236,13 +236,13 @@ public:
   /// Return an iterator on the in--edges of a node.
   virtual Iterator<edge>* getInEdges(const node) const =0;
   //================================================================================
-  // Graph, nodes and adges informations about the sg stucture
+  // Graph, nodes and adges informations about the graph stucture
   //================================================================================
-  /// Return the sg's id, this id is unique.
+  /// Return the graph's id, this id is unique.
   int getId() const {return id;}
-  /// Return the number of nodes in the sg
+  /// Return the number of nodes in the graph
   virtual unsigned int numberOfNodes()const =0;
-  /// Return the number of edges in the sg
+  /// Return the number of edges in the graph
   virtual unsigned int numberOfEdges()const =0;
   /// Return degree of a node.
   virtual unsigned int deg(const node)const =0;
@@ -256,9 +256,9 @@ public:
   virtual node target(const edge)const =0;
   /// Return the opposite node for s in the edge e
   virtual node opposite(const edge, const node)const =0;
-  /// Return true if the node is element of the sg.
+  /// Return true if the node is element of the graph.
   virtual bool isElement(const node ) const =0;
-  /// Return true if the edge is element of the sg.
+  /// Return true if the edge is element of the graph.
   virtual bool isElement(const edge ) const =0;
   /** Return the edge if it exists an edge between two node 
    *  sens of the edge is not taken into account)
@@ -266,14 +266,14 @@ public:
    */
   virtual edge existEdge(const node , const node) const =0;
   //================================================================================
-  // Access to the sg attributes and to the node/edge property.
+  // Access to the graph attributes and to the node/edge property.
   //================================================================================
-  ///Return sg attributes
+  ///Return graph attributes
   virtual DataSet & getAttributes() =0;
-  ///Get an attribute of the sg
+  ///Get an attribute of the graph
   template<typename ATTRIBUTETYPE> 
   ATTRIBUTETYPE getAttribute(const std::string &name);
-  ///Set an attribute of the sg
+  ///Set an attribute of the graph
   template<typename ATTRIBUTETYPE> 
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /**
@@ -284,7 +284,7 @@ public:
   template<typename Proxytype> 
   Proxytype* getLocalProperty(const std::string &name);
   /**
-   * Compute a property on this sg using an external algorithm (plug-in) 
+   * Compute a property on this graph using an external algorithm (plug-in) 
    * The result is stored in result, Warning all information in result will be deleted
    * If the function return false error message are stored in msg.
    * One can give a PluginProgress to the algortihm in order to have feed back or to stop
@@ -321,11 +321,11 @@ public:
    */
   virtual  bool existProperty(const std::string&name)=0;
   /**
-   * Return true if the propertyProxy is in the sg
+   * Return true if the propertyProxy is in the graph
    */
   virtual  bool existLocalProperty(const std::string&name)=0;
   /**
-   * Remove a AbstractProperty from the sg
+   * Remove a AbstractProperty from the graph
    */
   virtual  void delLocalProperty(const std::string&name)=0;
   /**
@@ -353,7 +353,7 @@ private:
 
 }
 
-///Print the sg (only nodes and edges) in ostream, in the tulip format
+///Print the graph (only nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 /*@}*/
 //================================================================================

@@ -7,10 +7,12 @@ using namespace tlp;
 
 //==============================================================
 //A private struct for vectors about a point used in convex hull computation
+#ifndef DOXYGEN_NOTFOR_DEVEL
 struct p0Vectors {
   Coord pos;
   unsigned int index;
 };
+#endif DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
   return (p1.pos^p2.pos)[2] > 0; 

@@ -11,10 +11,10 @@
 /**
  * \defgroup graphs
  */ 
-/*@{*/
-/// class node
 namespace tlp {
 
+/*@{*/
+/// class node
 struct node { 
   unsigned int id;
   node():id(UINT_MAX){}
@@ -23,9 +23,8 @@ struct node {
   bool operator==(const node n) const {return id==n.id;}
   bool isValid() const {return id!=UINT_MAX;}
 };
-
-}
 /*@}*/
+}
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 

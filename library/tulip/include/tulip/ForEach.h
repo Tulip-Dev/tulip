@@ -15,6 +15,7 @@
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
   template<typename TYPE>
   struct _TLP_IT {
@@ -57,6 +58,7 @@ namespace tlp {
     }
   }
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
 
 
 /**

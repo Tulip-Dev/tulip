@@ -9,10 +9,10 @@
 /**
  * \defgroup graphs
  */ 
-/*@{*/
-/// class edge
 namespace tlp {
 
+/*@{*/
+/// class edge
 struct edge { 
   unsigned int id;
   edge():id(UINT_MAX){}
@@ -21,9 +21,8 @@ struct edge {
   bool operator!=(const edge e) const{return id!=e.id;}
   bool isValid() const {return id!=UINT_MAX;}
 };
-}
-
 /*@}*/
+}
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 

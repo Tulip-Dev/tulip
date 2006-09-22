@@ -25,7 +25,7 @@ public :
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void reverse();
-  ///reverse all the direction of edges of the visible sg which are true in this BooleanProperty
+  ///reverse all the direction of edges of the visible graph which are true in this BooleanProperty
   void reverseEdgeDirection();
   Iterator<node> *getNodesEqualTo(const bool val, Graph * = 0);
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph * = 0);

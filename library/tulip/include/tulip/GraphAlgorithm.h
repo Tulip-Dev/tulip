@@ -23,23 +23,23 @@ class GraphProperty;
 /** \addtogroup plugins */ 
 /*@{*/
 
-/// Interface for metric plug-ins
+/// Interface for graph plug-ins
 class GraphAlgorithm:public PropertyAlgorithm<GraphType , GraphType>
 { 
   ///
   friend class GraphProperty;
 public:
-  /** This sg property is the one associated to the algorithm,
+  /** This graph property is the one associated to the algorithm,
     *  The data should be store in it
     */
-  GraphProperty *sgResult;
+  GraphProperty *graphResult;
 protected:
   ///
   GraphAlgorithm (const PropertyContext & context);
   ///
   virtual ~GraphAlgorithm(){}
 };
-  /*@}*/
+/*@}*/
 
 }
 #endif

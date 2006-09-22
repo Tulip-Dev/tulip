@@ -24,7 +24,7 @@ class GraphView;
 template<class C>class Iterator;
 class Int;
 
-///Implementation of the sg support of the Graph.
+///Implementation of the graph support of the Graph.
 class GraphImpl:public GraphAbstract {
 
   friend class xSGraphNodeIterator;

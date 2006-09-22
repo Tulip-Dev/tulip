@@ -24,12 +24,12 @@ class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing the planarity of a sg
+/// class for testing the planarity of a graph
 class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
-  static bool isPlanar(Graph *sg);
-  static bool planarEmbedding(Graph *sg);
-  static std::list<edge> getObstructionsEdges(Graph *sg);
+  static bool isPlanar(Graph *graph);
+  static bool planarEmbedding(Graph *graph);
+  static std::list<edge> getObstructionsEdges(Graph *graph);
   
 private:
   void addEdge(Graph *,const edge);
@@ -38,7 +38,7 @@ private:
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
-  bool compute(Graph *sg);
+  bool compute(Graph *graph);
   PlanarityTest(){}
   static PlanarityTest * instance;
   stdext::hash_map<unsigned long,bool> resultsBuffer;

@@ -8,6 +8,7 @@
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #ifndef Tulip_GraphDecorator_H
 #define Tulip_GraphDecorator_H
@@ -98,3 +99,4 @@ private:
 
 #endif
 
+#endif //DOXYGEN_NOTFOR_DEVEL

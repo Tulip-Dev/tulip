@@ -40,19 +40,19 @@ class BooleanProperty;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// Class for testing if the sg is acyclic
+/// Class for testing if the graph is acyclic
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
-  /** return true if the sg is acyclic else false,
+  /** return true if the graph is acyclic else false,
    *  result is cached (ie. the second call is done in O(1) time)
    */
-  static bool isAcyclic(const Graph *sg);
-  static void makeAcyclic(Graph* sg, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+  static bool isAcyclic(const Graph *graph);
+  static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
   static bool acyclicTest(const Graph *, std::vector<edge> *obstructionEdges = 0);
 
 private:
 
-  static bool dfsAcyclicTest(const Graph *sg, const node n, 
+  static bool dfsAcyclicTest(const Graph *graph, const node n, 
 			     MutableContainer<bool> &visited, 
 			     MutableContainer<bool> &finished,
 			     std::vector<edge> *obstructionEdges = 0);

@@ -29,10 +29,10 @@ class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing if a sg is triconnected
+/// class for testing if a graph is triconnected
 class TLP_SCOPE TriconnectedTest : private GraphObserver {
 public:
-  static bool isTriconnected(Graph *sg);
+  static bool isTriconnected(Graph *graph);
 
 private:
   bool compute(Graph *);

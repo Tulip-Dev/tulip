@@ -29,23 +29,23 @@ class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing if the sg is connected
+/// class for testing if the graph is connected
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**
-   * Return true if the sg is connected (ie. it exists an undirected path 
+   * Return true if the graph is connected (ie. it exists an undirected path 
    * between each pair of nodes) else false.
    */
-  static bool isConnected(Graph *sg);
+  static bool isConnected(Graph *graph);
   /**
-   * If the sg is not connected, add edges in order to make the sg
+   * If the graph is not connected, add edges in order to make the graph
    * connected. The new edges are added in addedEdges.
    */
-  static void makeConnected(Graph *sg, std::vector<edge>& addedEdges);
+  static void makeConnected(Graph *graph, std::vector<edge>& addedEdges);
   /**
-   * Return the number of connected componnents in the sg;
+   * Return the number of connected componnents in the graph;
    */
-  static unsigned int numberOfConnectedComponnents(Graph *sg);
+  static unsigned int numberOfConnectedComponnents(Graph *graph);
 
 private:
   void connect(Graph *, std::vector<node>& toLink);

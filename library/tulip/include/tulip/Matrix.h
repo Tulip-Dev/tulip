@@ -1,5 +1,6 @@
 //@TLPGEOLICENCE#
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLP_GEO_MATRIX_H
 #define _TLP_GEO_MATRIX_H
 
@@ -129,3 +130,4 @@ namespace tlp {
 
 #include "./cxx/Matrix.cxx"
 #endif
+#endif DOXYGEN_NOTFOR_DEVEL

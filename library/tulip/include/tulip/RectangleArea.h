@@ -1,3 +1,4 @@
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef RECTANGLEAREA_H
 #define RECTANGLEAREA_H
 
@@ -71,3 +72,4 @@ bool intersect(const RectangleArea& rect1, const RectangleArea& rect2);
 }
 
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

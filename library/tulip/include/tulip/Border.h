@@ -1,3 +1,4 @@
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef BORDER_H
 #define BORDER_H
 
@@ -16,3 +17,4 @@ float TLP_SCOPE evaluateBorderSize(int nodeLevel, const RectangleArea& NodeArea,
                          
 }
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

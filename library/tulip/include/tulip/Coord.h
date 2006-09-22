@@ -10,9 +10,9 @@
 #include <cassert>
 #include <ostream>
 
-/// Class for coordinates in 3D
 namespace tlp {
 
+/// Class for coordinates in 3D
 class TLP_SCOPE Coord : public tlp::Vector<float,3> {
 public:
   inline Coord(const float=0,const float=0,const float=0);

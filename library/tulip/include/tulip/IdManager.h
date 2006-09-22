@@ -8,6 +8,7 @@
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #ifndef _TULIPIDMANAGER_H
 #define _TULIPIDMANAGER_H
@@ -75,3 +76,4 @@ std::ostream& operator<<(std::ostream &,const IdManager &);
 }
 
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

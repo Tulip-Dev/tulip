@@ -63,6 +63,8 @@
 using namespace std;
 using namespace tlp;
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 namespace tlp {
 //=================================================================================
 struct TLPGraphBuilder:public TLPTrue {
@@ -628,6 +630,7 @@ bool TLPDataSetBuilder::addStruct(const string& structName,TLPBuilder*&newBuilde
   return true;
 }
 //================================================================================
+
 namespace {
   const char * paramHelp[] = {
     // filename
@@ -675,6 +678,7 @@ public:
     return result;
   }
 };
+#endif //DOXYGEN_NOTFOR_DEVEL
 /*@}*/
 IMPORTPLUGINOFGROUP(TLPImport,"tlp","Auber","16/02/2001","0","0","1","File");
 }

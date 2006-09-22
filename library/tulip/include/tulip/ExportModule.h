@@ -22,11 +22,11 @@
 
 
 /** \addtogroup plugins */ 
-/*@{*/
 
-/// Interface for exportModule plug-ins
 namespace tlp {
 
+/*@{*/
+/// Interface for exportModule plug-ins
 class ExportModule:public WithParameter
 {
 public:
@@ -55,7 +55,6 @@ public:
   virtual ~ExportModuleFactory() {}
   virtual ExportModule * createObject(ClusterContext)=0;
 };
-
-}
 /*@}*/
+}
 #endif

@@ -8,5 +8,5 @@
 #include "tulip/GraphProperty.h"
 
 GraphAlgorithm::GraphAlgorithm (const PropertyContext &context):PropertyAlgorithm<GraphType , GraphType>(context) {
-  sgResult =(GraphProperty *)context.propertyProxy;
+  graphResult =(GraphProperty *)context.propertyProxy;
 }

@@ -9,6 +9,7 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef Tulip_PlanarConMap_H
 #define Tulip_PlanarConMap_H
 #include <tulip/Face.h>
@@ -207,4 +208,4 @@ private:
 TLP_SCOPE std::ostream& operator<< (std::ostream &, tlp::PlanarConMap *);
 
 #endif
-
+#endif //DOXYGEN_NOTFOR_DEVEL

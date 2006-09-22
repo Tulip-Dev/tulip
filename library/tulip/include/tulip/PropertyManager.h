@@ -9,6 +9,7 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TLP_PROPERTYMANAGER_H
 #define TLP_PROPERTYMANAGER_H
 
@@ -123,3 +124,4 @@ public:
 }
 
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

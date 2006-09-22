@@ -28,19 +28,19 @@ class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
-/// class for testing if the sg is biconnected
+/// class for testing if the graph is biconnected
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
   /**
-   * Return true if the sg is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the sg) else false.
+   * Return true if the graph is biconnected (ie. one must remove at least two nodes in order
+   * to disconnect the graph) else false.
    */
-  static bool isBiconnected(Graph *sg);
+  static bool isBiconnected(Graph *graph);
   /**
-   * If the sg is not biconnected, add edges in order to make the sg
+   * If the graph is not biconnected, add edges in order to make the graph
    * biconnected. The new edges are added in addedEdges.
    */
-  static void makeBiconnected(Graph *sg, std::vector<edge>& addedEdges);
+  static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);
 
 private:
   void connect(Graph *, std::vector<edge>& addedEdges);

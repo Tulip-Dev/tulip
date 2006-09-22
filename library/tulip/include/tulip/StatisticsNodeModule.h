@@ -11,6 +11,7 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef STATISTICS_MODULE
 #define STATISTICS_MODULE
 
@@ -184,3 +185,4 @@ class TLP_SCOPE StatsNodeModule
 };
 }
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL
