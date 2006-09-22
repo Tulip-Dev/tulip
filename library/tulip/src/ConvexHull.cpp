@@ -12,7 +12,7 @@ struct p0Vectors {
   Coord pos;
   unsigned int index;
 };
-#endif DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
   return (p1.pos^p2.pos)[2] > 0; 
