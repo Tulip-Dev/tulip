@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/osmesa.h>
 
 #include <tulip/TlpTools.h>

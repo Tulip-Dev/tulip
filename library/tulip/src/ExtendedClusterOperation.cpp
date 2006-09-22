@@ -151,6 +151,8 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph,
 	     (edges[source].find(target) == edges[source].end()) ) {
 	  if (multiEdges || edges[source].empty()) {
 	    edge added = graph->addEdge(source,metaNode);
+	    if (!groupUnderSubGraph->isElement (added))
+	      groupUnderSubGraph->addEdge (added);
 	    colors->setEdgeValue (added, colors->getEdgeValue (e));
 	  }
 	  edges[source].insert(target);
@@ -166,6 +168,8 @@ node tlp::createMetaNode(SuperGraph *graph, set<node> &subGraph,
 	     (edges[target].find(source) == edges[target].end()) ) {
 	  if (multiEdges || edges[target].empty()) {
 	    edge added = graph->addEdge(metaNode, target);
+	    if (!groupUnderSubGraph->isElement (added))
+	      groupUnderSubGraph->addEdge (added);
 	    colors->setEdgeValue (added, colors->getEdgeValue (e));
 	  }
 	  edges[target].insert(source);
@@ -257,6 +261,11 @@ void tlp::openMetaNode(SuperGraph *graph, node n,
   updateLayoutUngroup(graph, n, metaInfo);
   //===========================
   //Remove the metagraph from the hierarchy and remove the metanode
+  Iterator<edge> *metaEdges = graph->getInOutEdges (n);
+  while (metaEdges->hasNext()) {
+    edge metaEdge = metaEdges->next();
+    if (groupUnderSubGraph != root) groupUnderSubGraph->delEdge (metaEdge);
+  } delete metaEdges;
   root->delAllNode(n);
   groupUnderSubGraph->delSubGraph(metaGraph);
   hash_map<node, hash_set<node> > edges;
