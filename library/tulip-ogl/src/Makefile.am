@@ -11,14 +11,22 @@ RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 endif
 
 lib_LTLIBRARIES = libtulip-ogl.la
-INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ -I../../../thirdparty/ftgl ${ADD_INCLUDES}
+INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ @FTGL_INCLUDE@ ${ADD_INCLUDES}
 # MAC PORT
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ ../../../thirdparty/ftgl/libftgl.la ${ADDLDFLAGS}
+if MACOSX
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls $(top_builddir)/thirdparty/ftgl/.libs/*.o` `ls $(top_builddir)/thirdparty/gle/.libs/*.o` ${ADDLDFLAGS}
+else
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ @FTGL_LDFLAGS@ ${ADDLDFLAGS}
+endif
 
 libtulip_ogl_la_LDFLAGS = -export-dynamic -release ${RELEASE}
-libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@ 
+if !MACOSX
+libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@
+endif
 
 libtulip_ogl_la_SOURCES = \
+	GlTools.cpp \
+	Curves.cpp \
 	Hline.cpp \
 	Parser.cpp \
 	Paragraph.cpp \

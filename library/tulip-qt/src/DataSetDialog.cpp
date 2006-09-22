@@ -107,7 +107,7 @@ namespace {
     while( it->hasNext() ) {
       pair<string,DataType> p;
       p = it->next();
-      cout << p.first << " : " << int( p.second.value ) << endl;
+      cout << p.first << " : " << (unsigned long)p.second.value << endl;
     } delete it;
   }
 
@@ -181,17 +181,21 @@ namespace {
 	  QLineEdit * leR = (QLineEdit*) ip->wA[0];
 	  QLineEdit * leG = (QLineEdit*) ip->wA[2];
 	  QLineEdit * leB = (QLineEdit*) ip->wA[4];
-	  QColor rgb( leR->text().toInt(),
-		      leG->text().toInt(),
-		      leB->text().toInt()	);
+	  QLineEdit * leA = (QLineEdit*) ip->wA[6];
+	  QRgb rgb = qRgba( leR->text().toInt(),
+			    leG->text().toInt(),
+			    leB->text().toInt(),
+			    leA->text().toInt()
+			    );
 	  bool ok = false;
-	  rgb.setRgb( QColorDialog::getRgba(rgb.rgb(),&ok) );
+	  rgb = QColorDialog::getRgba(rgb,&ok);
 	  if( ok ) {
-	    leR->setText( QString("%1").arg(rgb.red()) );
-	    leG->setText( QString("%1").arg(rgb.green()) );
-	    leB->setText( QString("%1").arg(rgb.blue()) );
+	    leR->setText( QString("%1").arg(qRed(rgb)));
+	    leG->setText( QString("%1").arg(qGreen(rgb)));
+	    leB->setText( QString("%1").arg(qBlue(rgb)));
+	    leA->setText( QString("%1").arg(qAlpha(rgb)));
 	  }
-	  ((QWidget *)obj)->setPaletteBackgroundColor(rgb);
+	  ((QWidget *)obj)->setPaletteBackgroundColor(QColor(rgb));
 	  return false;
 	} else if( ip->typeName == TN(string) ) {
 	  QString s = QFileDialog::getOpenFileName();
@@ -221,7 +225,13 @@ namespace {
 	ip.name     = def.first;
 	ip.typeName = def.second;
 	ip.helpText = inDef.getHelp(ip.name);
-	ip.label    = new QLabel( ip.name.c_str(), this );
+	// first part of the parameter name may be used
+	// to indicate a subtype
+	string::size_type pos = def.first.find("::");
+	if (pos != string::npos)
+	  ip.label = new QLabel(def.first.substr(pos + 2, def.first.length() - pos - 2).c_str(), this);
+	else
+	  ip.label    = new QLabel( ip.name.c_str(), this );
 	ip.label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 	ip.label->installEventFilter( this );
 	ip.label->setMouseTracking( true );
@@ -288,21 +298,40 @@ namespace {
 	}
 	// string
 	else if( ip.typeName == TN(string) ) {
-	  QLineEdit * le = new QLineEdit( "", this );
-	  le->resize( le->width()*3, le->height() );
-	  QToolButton * opt = new QToolButton( this );
-	  opt->setText( "..." );
-	  opt->adjustSize();
-	  opt->resize( opt->width(), le->height() );
-	  ip.opt = opt;
-	  opt->installEventFilter( this );
-	  ip.wA.push_back( le );
-	  ip.wA.push_back( opt );
-	  if( inSet ) {
-	    string v;
-	    if( inSet->get
-		(ip.name,v) )
-	      le->setText( v.c_str() );
+	  // if text prefixed than create a QTextEdit
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = new QTextEdit(QString(""),
+#if (QT_REL == 3)
+					  QString::null,
+#endif
+					  this);
+	    te->resize(te->width() * 3, te->height()*3);
+	    ip.wA.push_back(te);
+	    if( inSet ) {
+	      string v;
+	      if( inSet->get
+		  (ip.name, v) )
+		te->setText( v.c_str() );
+	    }
+	  } else {
+	    QLineEdit * le = new QLineEdit( "", this );
+	    le->resize( le->width()*3, le->height() );
+	    ip.wA.push_back( le );
+	    if( inSet ) {
+	      string v;
+	      if( inSet->get
+		  (ip.name, v) )
+		le->setText( v.c_str() );
+	    }
+	    if (ip.name.find("file::") == 0) {
+	      QToolButton * opt = new QToolButton( this );
+	      opt->setText( "..." );
+	      opt->adjustSize();
+	      opt->resize( opt->width(), le->height() );
+	      ip.opt = opt;
+	      opt->installEventFilter( this );
+	      ip.wA.push_back( opt );
+	    }
 	  }
 	}
 
@@ -467,13 +496,16 @@ namespace {
 	ip.label->move( ix, y );
 
 	int x = labelWidthMax+ix*2;
+	int maxHeight = 0;
 	for( uint j = 0 ; j < ip.wA.size() ; j++ ) {
 	  ip.wA[j]->move( x, y );
 	  x += ip.wA[j]->width() + ix;
+	  if (ip.wA[j]->height() > maxHeight)
+	    maxHeight = ip.wA[j]->height();
 	}
 	if (maxx < x) maxx = x; //maxx = maxx >? x;
 
-	y += ip.label->height() + iy;
+	y += /* ip.label->height()*/ maxHeight + iy;
       }
 
       y += iy;
@@ -552,8 +584,13 @@ namespace {
 
 	// string
 	else if(	ip.typeName == TN(string)	) {
-	  QLineEdit * le = (QLineEdit *) ip.wA[0];
-	  outSet.set<string>( ip.name, le->text().ascii() );
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = (QTextEdit *) ip.wA[0];
+	    outSet.set<string>(ip.name, te->text().ascii());
+	  } else {
+	    QLineEdit * le = (QLineEdit *) ip.wA[0];
+	    outSet.set<string>( ip.name, le->text().ascii() );
+	  }
 	}
 
 	// Color

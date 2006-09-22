@@ -4,6 +4,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
+qtversion=@QT_VERSION@
 plugins_builddir=@TULIP_PLUGINS_BUILD_PATH@
 
 usage()
@@ -47,7 +48,7 @@ while test $# -gt 0; do
       echo @GL_LDFLAGS@ @LIB_GL@
       ;;
     --libs)
-      echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt
+      echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt${qtversion}
       ;;
     --pluginpath)
       echo ${libdir}/tlp/plugins

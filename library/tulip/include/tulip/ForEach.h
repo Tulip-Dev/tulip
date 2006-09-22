@@ -17,18 +17,24 @@
 namespace tlp {
   template<typename TYPE>
   struct _TLP_IT {
-    _TLP_IT(TYPE &_n, Iterator<TYPE> *_it ) : _it(_it), _n(_n) {
+    _TLP_IT(TYPE &_n, Iterator<TYPE> *_it, void (*_d) (void *)) : _d(_d), _it(_it), _n(_n) {
     }
     ~_TLP_IT() {
       delete _it;
     }
+    void (*_d) (void *);
     Iterator<TYPE> *_it;
     TYPE &_n;
   };
 
   template <typename TYPE>
+  static void _tlp_delete_it(void *_it) {
+    delete (_TLP_IT<TYPE>*)_it;
+  }
+
+  template <typename TYPE>
   inline void * _tlp_get_it(TYPE &n, Iterator<TYPE> *_it) {
-    return (void *)new _TLP_IT<TYPE>(n, _it);
+    return (void *)new _TLP_IT<TYPE>(n, _it, (void (*) (void *)) &_tlp_delete_it<TYPE>);
   }
 
   template<typename TYPE>
@@ -52,5 +58,11 @@ namespace tlp {
  */
 #define forEach(A, B) \
   for(void *_it_foreach = tlp::_tlp_get_it(A, B); tlp::_tlp_if_test(A, _it_foreach);)
+
+#define _delete_it_foreach ((**((void (**) (void *)) _it_foreach))(_it_foreach))
+
+#define breakForEach {_delete_it_foreach; break;}
+
+#define returnForEach(VAL) {_delete_it_foreach; return VAL;}
 
 #endif

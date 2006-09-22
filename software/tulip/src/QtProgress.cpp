@@ -7,6 +7,7 @@
 #include <tulip/GlGraphWidget.h>
 #include <qprogressbar.h>
 using namespace std;
+
 //=====================================
 QtProgress::QtProgress(QWidget* parent,string text,GlGraphWidget *glGraphWidget):
   QtProgressData( parent, text.c_str(), Qt::WType_Popup ),

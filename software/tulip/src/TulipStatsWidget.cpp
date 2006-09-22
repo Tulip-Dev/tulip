@@ -467,7 +467,7 @@ namespace tlp
 
     std::string proxyName = 
 #if (QT_REL == 3)
-      AvaiMetricsList->currentText();
+      AvaiMetricsList->currentText().ascii();
 #else
     AvaiMetricsList->currentText().toStdString();
 #endif

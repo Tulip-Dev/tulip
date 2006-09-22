@@ -24,8 +24,8 @@ bool TriconnectedTest::isTriconnected(SuperGraph *graph) {
 }
 //=================================================================
 bool TriconnectedTest::compute(SuperGraph *graph) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned int)graph];
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)graph];
   if (graph->numberOfNodes()==0) return false;
   graph->addObserver(this);
   bool result = true;
@@ -45,37 +45,37 @@ bool TriconnectedTest::compute(SuperGraph *graph) {
     } delete itE;
   } delete itN;
   graph->delSubGraph(tmp);
-  resultsBuffer[(unsigned int)graph] = result;
+  resultsBuffer[(unsigned long)graph] = result;
   return result;
 }
 //=================================================================
 void TriconnectedTest::addEdge(SuperGraph *graph,const edge) {
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end())
-    if (resultsBuffer[(unsigned int)graph]) return;
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
+    if (resultsBuffer[(unsigned long)graph]) return;
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void TriconnectedTest::delEdge(SuperGraph *graph,const edge) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void TriconnectedTest::reverseEdge(SuperGraph *graph,const edge) {
 }
 //=================================================================
 void TriconnectedTest::addNode(SuperGraph *graph,const node) {
-  resultsBuffer[(unsigned int)graph]=false;
+  resultsBuffer[(unsigned long)graph]=false;
 }
 //=================================================================
 void TriconnectedTest::delNode(SuperGraph *graph,const node) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void TriconnectedTest::destroy(SuperGraph *graph) {
   graph->removeObserver(this);
-  resultsBuffer.erase((unsigned int)graph);
+  resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 

@@ -9,11 +9,11 @@
 
 using namespace std;
 
-LAYOUTPLUGIN(ImprovedWalker, "ImprovedWalker",
+LAYOUTPLUGINOFGROUP(ImprovedWalker, "ImprovedWalker",
              "Julien Testut, Antony Durand, Pascal Ollier, "
              "Yashvin Nababsing, Sebastien Leclerc, "
              "Thibault Ruchon, Eric Dauchier",
-             "11/11/04", "ok", "0", "1");
+		    "11/11/04", "ok", "0", "1","Tree");
 
 //====================================================================
 const float ImprovedWalker::INTER_NODE_DISTANCE_X = 1;

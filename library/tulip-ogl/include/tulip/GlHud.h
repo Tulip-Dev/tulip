@@ -16,6 +16,7 @@
 
 #include <tulip/GlAugmentedDisplay.h>
 
+namespace tlp {
 /** \brief General class for the rendering of 2D augmented displays
  *
  */
@@ -59,6 +60,6 @@ public:
    */
   virtual Coord transformCoordinates(const Coord &position);
 };
-
+}
 
 #endif

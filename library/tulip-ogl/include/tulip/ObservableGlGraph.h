@@ -25,7 +25,7 @@ namespace std {
   template<>
   struct less<GlGraphObserver *> {
     size_t operator()(const GlGraphObserver * obs1,const GlGraphObserver *obs2) const {
-      return (unsigned)obs1<(unsigned)obs2;
+      return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
 }

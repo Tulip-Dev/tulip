@@ -5,20 +5,19 @@
 #include <tulip/TulipPlugin.h>
 
 #include <tulip/MapIterator.h>
-#include <tulip/SuperGraphConMap.h>
+#include <tulip/PlanarConMap.h>
 #include <tulip/CanonicalOrdering.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/SuperGraphMap.h>
 #include <tulip/Bfs.h>
 #include <tulip/ForEach.h>
 #include "MixedModel.h"
 
-LAYOUTPLUGIN(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1");
+LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1","Planar");
 
 using namespace std;
 
-float spacing = 18;
-float edgeNodeSpacing = 8;
+float spacing = 2;
+float edgeNodeSpacing = 2;
 
 //===============================================================
 namespace {
@@ -41,14 +40,14 @@ namespace {
     // y node-node spacing
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18" ) \
+    HTML_HELP_DEF( "default", "2" ) \
     HTML_HELP_BODY() \
     "This parameter defines the minimum y-spacing between any two nodes." \
     HTML_HELP_CLOSE(),
     // x node-node and edge-node spacing
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18" ) \
+    HTML_HELP_DEF( "default", "2" ) \
     HTML_HELP_BODY() \
     "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
     HTML_HELP_CLOSE()
@@ -59,8 +58,8 @@ namespace {
 MixedModel::MixedModel(const PropertyContext &context):Layout(context)  {
   addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
-  addParameter<float> ("y node-node spacing",paramHelp[2],"18");
-  addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"8");
+  addParameter<float> ("y node-node spacing",paramHelp[2],"2");
+  addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
 }
 //====================================================
 MixedModel::~MixedModel(){
@@ -88,7 +87,7 @@ bool MixedModel::run() {
     }
   }
   //===========================================================
-    IntProxy * intProxy = superGraph->getProperty<IntProxy>("viewShape");
+  IntProxy * intProxy = superGraph->getProperty<IntProxy>("viewShape");
   intProxy->setAllEdgeValue(0);
   
   // give some empirical feedback of what we are doing 1 %
@@ -101,6 +100,7 @@ bool MixedModel::run() {
   DataSet tmp;
   tmp.set("Metric", &connectedComponnent);
   tlp::clusterizeGraph(Pere, err, &tmp, "Equal Value");
+  vector<edge> edge_planar;
 
   
   int nbConnectedComponent = 0;
@@ -148,6 +148,9 @@ bool MixedModel::run() {
       
       }
       delete itn;      
+      edge e;
+      forEach(e,currentGraph->getEdges())
+	edge_planar.push_back(e);
       continue;
     }
     
@@ -167,43 +170,53 @@ bool MixedModel::run() {
 	  G->addNode(currentGraph->source(e_tmp));
 	  G->addNode(currentGraph->target(e_tmp));
 	  G->addEdge(e_tmp);
+	  edge_planar.push_back(e_tmp);
 	}
 	else
 	  unplanar_edges.push_back(e_tmp);
       } delete ite;
       //===================================================
       
-      graphMap = new SuperGraphConMap(G);
-      graphMap->update();
+      graphMap = new PlanarConMap(G);
       vector<edge> re_added = getPlanarSubGraph(graphMap,unplanar_edges);
       
       for (unsigned int ui = 0; ui < re_added.size() ; ++ui){
 	edge e = re_added[ui];
 	G->addEdge(e);
 	resultatAlgoSelection->setEdgeValue(e,true);
+	edge_planar.push_back(e);
 	vector<edge>::iterator ite = find(unplanar_edges.begin(),unplanar_edges.end(),e);
 	unplanar_edges.erase(ite);
-	}
+      }
       delete graphMap;
+      resultatAlgoSelection->setAllEdgeValue(false);
+      resultatAlgoSelection->setAllNodeValue(false);
       // cout << "... Planar subGraph computed" << endl;
     }
-    else
+    else {
       G = tlp::newCloneSubGraph(currentGraph);
-    
+      edge e;
+      forEach(e,currentGraph->getEdges())
+	edge_planar.push_back(e);
+    }
     //===============================================
     
     // give some empirical feedback of what we are doing 2%
     pluginProgress->progress(5, 1000);
-    carte = new SuperGraphMap(G);
+    vector<edge> added_edges;
+    if(!BiconnectedTest::isBiconnected(G))    
+      BiconnectedTest::makeBiconnected(G,added_edges);
+    assert(BiconnectedTest::isBiconnected(G));
+    carte = new PlanarConMap(G);
+    assert(BiconnectedTest::isBiconnected(G));
+    assert(BiconnectedTest::isBiconnected(carte));
+
     // give some empirical feedback of what we are doing 2%
     pluginProgress->progress(1, 100);
-   vector<edge> added_edges;
-    if(!BiconnectedTest::isBiconnected(carte))    
-      BiconnectedTest::makeBiconnected(carte,added_edges);
-   // give some empirical feedback (5%)
+
+    // give some empirical feedback (5%)
     pluginProgress->progress(2, 100); 
     // cout << "Make the map planar ...";
-    carte->makePlanar();
     // cout << "... end" << endl;
     // give some empirical feedback of what we are doing (10%)
     if (pluginProgress->progress(5, 100) !=TLP_CONTINUE)
@@ -219,13 +232,11 @@ bool MixedModel::run() {
     V.clear();
     
     NodeCoords.clear();
-    
-    // cout << "Partition initialization ...";
+    // Cout << "Partition initialization ...";
     initPartition() ;
     // cout<<"... Partition initialized"<<endl;
     if (pluginProgress->state() == TLP_CANCEL)
       return false;
-
     // cout << "InOutPoint computation ..."  ;
     assignInOutPoints();
     // cout<<"... InOutPoints computed"<<endl;
@@ -288,6 +299,8 @@ bool MixedModel::run() {
       layoutProxy->setEdgeValue(e, tmp2);
     }
   }
+
+  dataSet->set("planar_edges",edge_planar);
   return true;
 }
 
@@ -305,7 +318,7 @@ bool MixedModel::check(string &err) {
 
       
 //====================================================
-vector<edge> MixedModel::getPlanarSubGraph(SuperGraphConMap *graph, vector<edge> unplanar_edges){
+vector<edge> MixedModel::getPlanarSubGraph(PlanarConMap *graph, vector<edge> unplanar_edges){
   vector<edge> res;
   for(unsigned int ui = 0; ui < unplanar_edges.size() ; ++ui){
     edge e = unplanar_edges[ui];
@@ -414,7 +427,7 @@ void MixedModel::initPartition(){
 }
 
 //====================================================
-void afficheCycle(SuperGraphMap* m){
+void afficheCycle(PlanarConMap* m){
   assert(m);
   cout<<"Cycles :"<<endl;
   Iterator<node>* itn = m->getNodes();

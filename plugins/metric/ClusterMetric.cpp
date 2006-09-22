@@ -3,7 +3,7 @@
 #include <deque>
 #include "ClusterMetric.h"
 
-METRICPLUGIN(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","0","2");
+METRICPLUGINOFGROUP(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","0","2","Graph");
 
 using namespace std;
 

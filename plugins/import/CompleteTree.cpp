@@ -57,4 +57,4 @@ struct CompleteTree:public ImportModule {
     return true;
   }
 };
-IMPORTPLUGIN(CompleteTree,"Complete Tree","Auber","08/09/2002","0","0","1")
+IMPORTPLUGINOFGROUP(CompleteTree,"Complete Tree","Auber","08/09/2002","0","0","1","Graphs")

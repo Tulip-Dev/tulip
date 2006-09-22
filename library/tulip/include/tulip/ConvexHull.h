@@ -9,13 +9,14 @@ namespace tlp {
    */ 
   /*@{*/
     /**
-     * \brief function for convex hull computation
+     * \brief function for convex hull manipulation
      *
-     * Used to compute the convex hull of a set of points in the plane
+     * Contains functions for computing, merging, intersecting, and
+     * testing convex hulls.
      *
-     * \author : David Auber/Daniel Archambault auber@tulip-software.org 
+     * \author : Daniel Archambault archam@cs.ubc.ca,
      * 
-     * \version 0.0.1 03/06/2005
+     * \version 0.0.3 26/06/2006
      */
   /**
    * Compute the convex hull and return a list of indexes for the
@@ -40,6 +41,40 @@ namespace tlp {
 		   const std::vector<unsigned int> &hull1,
 		   const std::vector<unsigned int> &hull2,
 		   std::vector<unsigned int> &mergedConvexHull);
+
+  /**
+   * Intersects two convex hulls using the algorithm of
+   * O'Rourke, Chien, Olson, and Naddor, 1982.  Code inspired
+   * by Computational Geometry in C by Joseph O'Rourke pp 243 -- 251.
+   * and code on his website: 
+   * http://maven.smith.edu/~orourke/books/compgeom.html
+   * Provide a full list of points involved in the convex hull computation
+   * in "points".  The vectors hull1 and hull2 contain a list of indexes 
+   * into the points vector that define the vertices of the convex hull.
+   * The indices corresponding to the points on the intersecting hull
+   * are returned in "intersection".  Node that several points may
+   * be inserted into the "points" list.  These points correspond to the
+   * points generated when edges of hull1 and hull2 intersect.
+   */
+  void intersectHulls (std::vector<Coord> &points,
+		       const std::vector<unsigned int> &hull1,
+		       const std::vector<unsigned int> &hull2,
+		       std::vector<unsigned int> &intersection);
+
+  /**
+   * Computes the area of the convex "hull" which is a list of indexes
+   * into the vector of Coord "points".
+   */
+  double areaOfHull (const std::vector<Coord> &points,
+		     const std::vector<unsigned int> &hull);
+  
+  /**
+   * Returns true if "point" is inside "hull".  Hull is a list of
+   * indexes into the vector of Coord "points."
+   */
+  bool insideHull (const std::vector<Coord> &points,
+		   const std::vector<unsigned int> &hull,
+		   const Coord &point);
   
   /*@}*/
 }

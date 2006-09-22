@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "DepthMetric.h"
 
-METRICPLUGIN(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2");
+METRICPLUGINOFGROUP(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2","Tree");
 
 using namespace std;
 

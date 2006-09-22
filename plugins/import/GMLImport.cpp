@@ -411,12 +411,12 @@ namespace {
 /*@{*/
 struct GMLImport:public ImportModule {
   GMLImport(ClusterContext context):ImportModule(context) {
-    addParameter<string>("filename",paramHelp[0]);
+    addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport(){}
   bool import(const string &dummy) {
     string filename;
-    dataSet->get<string>("filename", filename);
+    dataSet->get<string>("file::filename", filename);
     ifstream myFile(filename.c_str());
     GMLParser<true> myParser(myFile,new GMLGraphBuilder(superGraph));
     myParser.parse();
@@ -425,4 +425,4 @@ struct GMLImport:public ImportModule {
 };
 /*@}*/
 
-IMPORTPLUGIN(GMLImport,"GML import","Auber","04/07/2001","0","0","1")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File")

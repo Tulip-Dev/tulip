@@ -43,6 +43,22 @@ namespace {
       boundingbox.second =minCoord(boundingbox.second, points[i]);
     }
   }
+  
+  void computeRotatedPoints(vector<Coord> &rotatedPoints, 
+			    const Coord &point, const Size & size, 
+			    const double & rot) {
+    //rotate size
+    rotatedPoints.clear();
+    rotatedPoints.resize(4);
+    rotatedPoints[0].set(size[0], size[1], size[2]);
+    rotatedPoints[1].set(-size[0], -size[1], -size[2]);
+    rotatedPoints[2].set(+size[0], -size[1], -size[2]);
+    rotatedPoints[3].set(-size[0], +size[1], size[2]);
+    for (unsigned int i=0; i<4; ++i) {
+      rotate(rotatedPoints[i], rot);
+      rotatedPoints[i] += point;
+    }
+  }
 }
 
 pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection) {
@@ -85,6 +101,57 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layou
   return result;
 }
 
+pair<Coord, Coord> tlp::computeBoundingRadius(SuperGraph *graph, 
+					      LayoutProxy *layout, 
+					      SizesProxy *size, 
+					      MetricProxy *rotation, 
+					      SelectionProxy *selection) {
+  Coord curCoord;
+  Size  curSize;
+  double curRot;
+  pair<Coord, Coord> result;
+  result.first.set(0, 0, 0);
+  result.second.set(0, 0, 0);
+  if (graph->numberOfNodes()==0) return result;
+  pair <Coord, Coord> boundingBox = 
+    tlp::computeBoundingBox (graph, layout, size, rotation, selection);
+  Coord centre = (boundingBox.first + boundingBox.second)/2.0;
+  result.first = result.second = centre;
+  
+  double maxRad = 0;
+  Iterator<node> *itN=graph->getNodes();
+  while (itN->hasNext()) {
+    node itn = itN->next();
+    curCoord = layout->getNodeValue(itn);
+    curSize  = size->getNodeValue(itn) / 2.0;
+    curRot = rotation->getNodeValue(itn);
+    if (selection == 0 || selection->getNodeValue(itn)) {
+      vector<Coord> pointBounds;
+      computeRotatedPoints (pointBounds, curCoord, curSize, curRot);
+      for (unsigned int i = 0; i < 4; ++i) {
+	double curRad = (pointBounds[i] - centre).norm();
+	if (curRad > maxRad) {
+	  maxRad = curRad;
+	  result.second = pointBounds[i];
+	}//end if
+      }//end for
+    }//end if
+  } delete itN;
 
-
-
+  Iterator<edge> *itE=graph->getEdges();
+  while (itE->hasNext()) {
+    edge ite=itE->next();
+    if (selection == 0 || selection->getEdgeValue(ite)) {
+      LineType::RealType::const_iterator itCoord;
+      const LineType::RealType &bends = layout->getEdgeValue(ite);
+      for (itCoord = bends.begin(); itCoord!=bends.end();++itCoord) {
+	double curRad = (*itCoord - centre).norm();
+	if (curRad > maxRad) {
+	  maxRad = curRad;
+	  result.second = *itCoord;
+	}//end if
+      }//end for
+    }//end if
+  } delete itE;
+  return result;
+}

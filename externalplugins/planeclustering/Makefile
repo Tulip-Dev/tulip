@@ -1,10 +1,11 @@
-SHELL=bash
+SHELL=sh
 
 TARGET=libplaneclustering.so
 SRCS=  PlaneClustering.cpp
-CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `xml2-config --cflags`  `tulip-config --cxxflags`
+
+CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `../../tulip-config --qtincludes` `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared -nostdlib `xml2-config --libs` `freetype-config --libs` `tulip-config --libs`  
+LDFLAGS= -shared `../../tulip-config --libs` `../../tulip-config --qtlibs`
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -20,7 +21,7 @@ clean :
 	-rm -f $(TARGET) *.o *.d
 
 install: all
-	install $(TARGET) `tulip-config --pluginpath`/clustering  
+	install $(TARGET) `../../tulip-config --pluginpath`/clustering  
 
 %.d: %.cpp
 	@$(SHELL) -ec '$(CXX) -M $(CXXFLAGS) $< \

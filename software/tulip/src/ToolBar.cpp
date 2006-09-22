@@ -18,7 +18,7 @@
 #include <tulip/MouseAddEdge.h>
 #include <tulip/MouseSelection.h>
 #include <tulip/MouseMagicSelection.h>
-#include <tulip/MouseTreeFishEyes.h>
+//#include <tulip/MouseTreeFishEyes.h>
 #include <tulip/MouseZoomBox.h>
 #include "ToolBar.h"
 #include "Application.h"

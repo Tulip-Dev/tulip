@@ -2,7 +2,6 @@
 #include <math.h>
 #include <climits>
 #include <tulip/TulipPlugin.h>
-#include <tulip/Delaunay.h>
 
 
 using namespace std;
@@ -18,6 +17,13 @@ namespace {
     "This parameter defines the number of nodes used to build the planr graph graph." \
     HTML_HELP_CLOSE(),
   };
+
+struct Triangle {
+  Triangle(node a, node b, node c):
+    a(a),b(b),c(c) {
+  }
+  node a,b,c;
+};
 }
 
 //=============================================================
@@ -38,37 +44,48 @@ struct PlanarGraph:public ImportModule {
     SizesProxy  *newSize   = superGraph->getLocalProperty<SizesProxy>("viewSize");
     newSize->setAllNodeValue(Size(1.0,1.0,1.0));
 
-    vector<node> graph(nbNodes);
-    hash_map < unsigned int, hash_map<unsigned int, bool> > matrix;
-    
-    vector<Coord> coords(nbNodes);
-    for (int i=0; i<nbNodes; ++i) {
-      unsigned int x;
-      unsigned int y;
-      bool ok = false;
-      do {
-	x = rand()%nbNodes;
-	y = rand()%nbNodes;
-	if (matrix.find(x) == matrix.end())
-	  ok = true;
-	else 
-	  if (matrix[x].find(y)==matrix[x].end())
-	    ok = true;
+    newSize->setAllNodeValue(Size(1.0,1.0,1.0));    
+
+    vector<Triangle> faces;
+    Triangle f(superGraph->addNode(),
+	       superGraph->addNode(),
+	       superGraph->addNode());
+    faces.push_back(f);
+    superGraph->addEdge(f.a, f.b);
+    superGraph->addEdge(f.b, f.c);
+    superGraph->addEdge(f.c, f.a);
+    newLayout->setNodeValue(f.a, Coord(-nbNodes,-nbNodes,0));
+    newLayout->setNodeValue(f.b, Coord(0,nbNodes,0));
+    newLayout->setNodeValue(f.c, Coord(+nbNodes,-nbNodes,0));
+    unsigned int nb = 3;
+    unsigned int ext_faces = 0;
+    while(nb<nbNodes) {
+      //choose a Triangle randomly
+      unsigned int i = rand()%faces.size(); 
+      Triangle f = faces[i];
+      node n = superGraph->addNode();
+      Coord tmp = newLayout->getNodeValue(f.a) +
+	newLayout->getNodeValue(f.b) +
+	newLayout->getNodeValue(f.c);
+      tmp /= 3.0;
+      newLayout->setNodeValue(n, tmp);
 	
-      } while ( !ok);
-      matrix[x][y]=true;
-      graph[i] = superGraph->addNode();
-      coords[i] = Coord(x + 1, y + 1, 0);
-      newLayout->setNodeValue(graph[i], coords[i]);
+      //Split the triangle in three part
+      superGraph->addEdge(n, f.a);
+      superGraph->addEdge(n, f.b);
+      superGraph->addEdge(n, f.c);
+      //add the three new Triangle, remove the old one(replace)
+      Triangle f1(f.a, f.b, n);
+      Triangle f2(f.b, f.c, n);
+      Triangle f3(f.c, f.a, n);
+      faces[i] = f1;
+      faces.push_back(f2);
+      faces.push_back(f3);
+      ++nb;
     }
-    vector<pair<unsigned int, unsigned int> > edges;
-    tlp::delaunayTriangulation(coords, edges);
-    vector<pair<unsigned int, unsigned int> >::const_iterator it;
-    for (it = edges.begin(); it != edges.end(); ++it) {
-      superGraph->addEdge(graph[it->first], graph[it->second]);
-    }
+
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
 
-IMPORTPLUGIN(PlanarGraph,"Planar Graph","Auber","25/06/2005","0","0","1")
+IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","0","0","1","Graphs")

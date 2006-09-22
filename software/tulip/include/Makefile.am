@@ -33,6 +33,7 @@ noinst_HEADERS = \
 	InfoDialog.h\
 	NavigateButton.h\
 	PropertyDialog.h\
+	PropertyDialogQt3.h \
 	ToolBar.h\
 	QtProgress.h\
 	viewGl.h \

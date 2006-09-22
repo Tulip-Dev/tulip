@@ -39,7 +39,7 @@ private:
   bool compute(SuperGraph *graph);
   PlanarityTest(){}
   static PlanarityTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
 #endif

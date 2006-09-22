@@ -24,7 +24,7 @@ class PlaneClustering : public Clustering
 
  private :
 
-  Plane plane;
+  tlp::Plane plane;
 };
 /*@}*/
 

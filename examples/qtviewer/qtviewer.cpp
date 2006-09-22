@@ -12,7 +12,7 @@ using namespace std;
 /*******************************************************************/
 void importGraph(const string &filename, GlGraph *render) {
   DataSet dataSet;
-  dataSet.set("filename", filename);
+  dataSet.set("file::filename", filename);
   SuperGraph *newSuperGraph=tlp::importGraph("tlp", dataSet, NULL);
   if (newSuperGraph!=0) {
     render->setSuperGraph(newSuperGraph);

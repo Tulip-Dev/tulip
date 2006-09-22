@@ -3,155 +3,261 @@
 #include <tulip/Rectangle.h>
 #include "SpringElectrical.h"
 
-LAYOUTPLUGIN(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","0","1");
+LAYOUTPLUGINOFGROUP(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","0","1","Force Directed");
 
 using namespace std;
-
+//================================================================================
 inline double sqr(double x) {
   return (x*x);
 }
+
+namespace {
+  const char * paramHelp[] = {
+    // property
+    HTML_HELP_OPEN()			   \
+    HTML_HELP_DEF( "type", "LayoutProxy" ) \
+    HTML_HELP_BODY()							\
+    "This layoutProxy is the one used for the initial positions of nodes" \
+    HTML_HELP_CLOSE(),
+    // property
+    HTML_HELP_OPEN()			  \
+    HTML_HELP_DEF( "type", "SizesProxy" ) \
+    HTML_HELP_BODY()			     			\
+    "This SizesProxy is the one used for the size of each node" \
+    HTML_HELP_CLOSE(),
+    // property
+    HTML_HELP_OPEN()			      \
+    HTML_HELP_DEF( "type", "SelectionProxy" ) \
+    HTML_HELP_BODY()							\
+    "This SelectionProxy enables to forbid the move of selected nodes" \
+    HTML_HELP_CLOSE(),
+    // Edge length
+    HTML_HELP_OPEN()			   \
+    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_BODY()							\
+    "This metricProxy is the one used if need to have edge of a specific length " \
+    "By default, the lenght of each edge is equal to 1."		\
+    HTML_HELP_CLOSE(),
+    // Use edge length
+    HTML_HELP_OPEN()			      \
+    HTML_HELP_DEF( "type", "Boolean" )	      \
+    HTML_HELP_DEF( "values", "true / false" ) \
+    HTML_HELP_DEF( "default", "false" )					\
+    HTML_HELP_BODY()							\
+    "If enable the values given in the edge_length property will be used "\
+    "for the length  of each edge in the graph"				\
+    HTML_HELP_CLOSE(),
+    // remove overlaps
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" )	      \
+    HTML_HELP_DEF( "values", "true / false" ) \
+    HTML_HELP_DEF( "default", "false" )					\
+    HTML_HELP_BODY()							\
+    "If enable the algorithm will try to remove overlapping in the "	\
+    "final drawing"\
+    HTML_HELP_CLOSE(),
+    // Forbid movements
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" )	      \
+    HTML_HELP_DEF( "values", "true / false" ) \
+    HTML_HELP_DEF( "default", "false" )					\
+    HTML_HELP_BODY()							\
+    "If enable the algorithm will forbid move of selected nodes"	\
+    HTML_HELP_CLOSE()
+  };
+}
 //================================================================================
 SpringElectrical::SpringElectrical(const PropertyContext &context):Layout(context){
+  addParameter<LayoutProxy>    ("initial_layout", paramHelp[0], "viewLayout");
+  addParameter<SizesProxy>     ("node_size",      paramHelp[1], "viewSizes");
+  addParameter<SelectionProxy> ("node_move",      paramHelp[2], "viewSelection");
+  addParameter<MetricProxy>    ("edge_length",    paramHelp[3], "viewMetric");
+  addParameter<bool>           ("use_edge_length",paramHelp[4], "false");
+  addParameter<bool>           ("prevent_ovelap",  paramHelp[5], "true");
+  addParameter<bool>           ("forbid_move",    paramHelp[6], "true");
+  //addParameter<int>          ("edge_bends",     paramHelp[7], "0");
 }
 //================================================================================
-Coord SpringElectrical::repulsiveForces(node u) {
-  Coord uCoord = layoutProxy->getNodeValue(u);
-  Coord result(0,0,0);
-  node v;
-  forEach(v, superGraph->getNodes()) {
-    if (u == v) continue;
-    Coord uv = layoutProxy->getNodeValue(v) - uCoord;
-    double dist = uv.norm();
-    if (dist > 1.0E-3) {
-      uv /= dist;
-      dist -= (1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
-      //      if (dist > 5.0) continue;
-      if (dist < 1.E-3)
-	uv *= dist;//-(1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
-      else
-	uv *=  -sizeNorm.get(u.id) /sqr(dist);
-    } else {
-      uv[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
-    }
-    result += uv;
-  }
-  return result;
-}
-//================================================================================
-Coord SpringElectrical::attractiveForces(node n) {
-  node nu = n;
-  Coord u = layoutProxy->getNodeValue(nu);
-  Coord result(0,0,0);
-  node nv;
-  forEach(nv, superGraph->getInOutNodes(n)) {
-    Coord v = layoutProxy->getNodeValue(nv);
-    Coord uv = v-u;
-    double length = 1. +  (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
-    double dist = uv.norm();
-    if (dist < length) {
-      uv *= dist - length;
-    }
-    else {
-      if (dist > 1e-3) {
-	uv /= dist;
-	uv *= pow((dist - length) , 2.0); //Hooke's law
-	//	uv *= pow((dist - length) , 1.0); //Hooke's law
-	//uv *= length/k * log( dist / length); //Eades's law
-      }
-      else
-	uv[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
-    }
-    result += uv;
-  }
-  return result;
-}
-//================================================================================
-Coord maxForce(Coord force, double max) {
+Coord maxForce(Coord force, double _max) {
+  double max = std::max(0.001, _max);
   Coord result(force);
   float norm = result.norm();
   if (norm > max) {
     result /= norm;
     result *= max;
   }
+  if (norm < 0.001)
+    result *=0.0;
   return result;
 }
-
-bool SpringElectrical::overlap(node u, Coord &move) {
-  Coord pos = layoutProxy->getNodeValue(u) + move;
+//================================================================================
+Coord repulsiveForces(node u, LayoutProxy *layout, SuperGraph * graph,   
+		      const MutableContainer<double> &sizeNorm, double temperature, double maxforce) {
+  Coord uCoord = layout->getNodeValue(u);
+  Coord result(0,0,0);
+  node v;
+  forEach(v, graph->getNodes()) {
+    if (u == v) continue;
+    Coord uv = layout->getNodeValue(v) - uCoord;
+    double dist = uv.norm();
+    if (dist > 1.1*(1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id))) continue;
+    if (dist > 1.0E-3) {
+      uv /= dist;
+      dist -= (1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id));
+      if (dist < 1.E-3)
+	uv *= -(1.0 + sizeNorm.get(u.id) + sizeNorm.get(v.id)) + dist;
+      else
+	uv *=  - sizeNorm.get(u.id) /sqr(dist);
+    } else {
+      uv[rand()%2] += 0.1 - (0.2 * (double(rand()%2)));
+    }
+    result += maxForce(uv, temperature * maxforce);
+  }
+  return result;
+}
+//================================================================================
+Coord attractiveForces(node nu, LayoutProxy *layout, SuperGraph * graph,   
+		       const MutableContainer<double> &sizeNorm,
+		       double temperature, double maxforce, MetricProxy* edgeLength) {
+  Coord u = layout->getNodeValue(nu);
+  Coord result(0,0,0);
+  node nv;
+  edge ne;
+  forEach(ne, graph->getInOutEdges(nu)) {
+    nv = graph->opposite(ne, nu);
+    Coord v = layout->getNodeValue(nv);
+    Coord uv = v-u;
+    double length;
+    if (edgeLength != 0) 
+      length = edgeLength->getEdgeValue(ne) +  (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
+    else
+      length = 1. +  (sizeNorm.get(nu.id) + sizeNorm.get(nv.id));
+    double dist = uv.norm();
+    if (dist > length) {
+      uv /= dist;
+      //uv *= pow((dist - length) , 2.0); //Hooke's law
+      //uv *= pow((dist - length) , 1.0); //Hooke's law
+      uv *= length/1. * log( dist / length); //Eades's law
+      result += maxForce(uv, temperature * maxforce);
+    }
+  }
+  return result;
+}
+//================================================================================
+bool overlap(node u, Coord &move, LayoutProxy *layout, SuperGraph * graph,
+	     const MutableContainer<double> &sizeNorm ,
+	     int &before) {
+  Coord prev = layout->getNodeValue(u);
+  Coord pos = layout->getNodeValue(u) + move;
   bool  overlap = false;
   node v;
-  forEach(v, superGraph->getNodes()) {
+  int nboverlapbefore = 0;
+  int nboverlapafter  = 0;
+  forEach(v, graph->getNodes()) {
     if (v==u) continue;
-    Coord pos2 = layoutProxy->getNodeValue(v);
+    Coord pos2 = layout->getNodeValue(v);
     if ((pos - pos2).norm() < (sizeNorm.get(u.id) + sizeNorm.get(v.id)))
-      overlap = true;
+      ++nboverlapafter;
+    if ((prev - pos2).norm() < (sizeNorm.get(u.id) + sizeNorm.get(v.id)))
+      ++nboverlapbefore;
   }
-  return overlap;
+  before = nboverlapbefore;
+  return nboverlapafter > nboverlapbefore;
 }
 //================================================================================  
 bool SpringElectrical::run() {
+  SuperGraph *graph = superGraph;
   
-  int iterations = superGraph->numberOfNodes();
-  prevMove.setAll(Coord(0,0,0));
+  int iterations = graph->numberOfNodes()/2;
   if (iterations < 500) iterations = 500;// iterations = iterations >? 500;
 
-  inputSelection = superGraph->getProperty<SelectionProxy>("viewSelection");
-  inputSize = superGraph->getProperty<SizesProxy>("viewSize");
-  LayoutProxy *inputLayout = superGraph->getProperty<LayoutProxy>("viewLayout");
-  
-  node n;
-  forEach(n, superGraph->getNodes()) {
-    layoutProxy->setNodeValue(n, inputLayout->getNodeValue(n));
-    sizeNorm.set(n.id, inputSize->getNodeValue(n).norm()/2.0);
-  }
+  originalLayout = 0;
+  edgeLength     = 0;
+  selectedNodes  = 0;
+  sizeOfNodes    = 0;
+  removeOverlaps = true;
+  forbidMoveOfSelectedNodes = false;
+  useEdgeLength = false;
 
-  double maxforce   = inputSize->getMax().norm() / 2.0;
-  double deltaForce = 1.0;
+  if (dataSet != 0) {
+    dataSet->get("node_size", sizeOfNodes);
+    dataSet->get("initial_layout", originalLayout);
+    dataSet->get("use_edge_length", useEdgeLength);
+    dataSet->get("edge_length", edgeLength);
+    dataSet->get("forbid_move", forbidMoveOfSelectedNodes);
+    dataSet->get("node_nodes", selectedNodes);
+    dataSet->get("prevent_overlaps", removeOverlaps);
+    //dataSet->get("edge_bends", nbBends);
+  }
   
+  if (originalLayout == 0) 
+    originalLayout = graph->getProperty<LayoutProxy>("viewLayout");
+  if (edgeLength == 0 && useEdgeLength)
+    edgeLength = graph->getProperty<MetricProxy>("viewMetric");
+  if (forbidMoveOfSelectedNodes && selectedNodes == 0)
+    selectedNodes = graph->getProperty<SelectionProxy>("viewSelection");
+  if (sizeOfNodes == 0)
+    sizeOfNodes = graph->getProperty<SizesProxy>("viewSize");
+
+  node n;
+  forEach(n, graph->getNodes()) {
+    layoutProxy->setNodeValue(n, originalLayout->getNodeValue(n));
+    sizeNorm.set(n.id, sizeOfNodes->getNodeValue(n).norm()/2.0);
+  }
+  double maxforce   = sqrt((float) graph->numberOfNodes());
+  double temperature = 1.0;
+  bool overlapTest = false;
+
   for (int count = 0; count < iterations; ++count) {
-    maxforce = ((layoutProxy->getMax() - layoutProxy->getMin()).norm() + inputSize->getMax().norm()) / 100;
     if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
     node itn;
-    forEach(itn, superGraph->getNodes()) {
-      if (inputSelection->getNodeValue(itn)) continue;
-
-      Coord newMove;
-      if (count%3 == 0)
-	newMove = maxForce(repulsiveForces(itn), maxforce); //prevent too big jumps
-      else 
-	newMove = maxForce(attractiveForces(itn) + repulsiveForces(itn), maxforce); //prevent too big jumps
-      
-      Coord move;
-      if (count == 0 || count%3!=0) {
-	move = newMove;
-      } else {
-	Coord prev = prevMove.get(itn.id);
-	Coord cur  = newMove;
-	cur  /= cur.norm();
-	prev /= prev.norm();
-	float r = prev.dotProduct(cur);
-	if (r > 0) {
-	  move = (prevMove.get(itn.id) + newMove) * (r / 2.0 );
-	} else {
-	  move  = newMove;
-	  move /= move.norm();
+    forEach(itn, graph->getNodes()) {
+      if (forbidMoveOfSelectedNodes && selectedNodes->getNodeValue(itn)) continue;
+      if (rand()%graph->numberOfNodes() < 100) {
+	Coord att = maxForce( attractiveForces(itn, layoutProxy, graph, sizeNorm, temperature, maxforce, edgeLength),  maxforce * temperature);
+	Coord rep = maxForce( repulsiveForces(itn, layoutProxy, graph, sizeNorm, temperature, maxforce) ,  maxforce * temperature);
+	Coord newMove = maxForce(att + rep, maxforce * temperature); //prevent too big jumps
+	//test overlapping	
+	if (!overlapTest ) {
+	  Coord tmp  = layoutProxy->getNodeValue(itn);
+	  tmp[2] = 0;
+	  layoutProxy->setNodeValue(itn, tmp + newMove);      
+	  if (count==iterations - 1) {
+	    overlapTest = true;
+	    temperature = 1.0;
+	    if (removeOverlaps)
+	      count = 0;
+	  }
+	}
+	else {
+	  //test overlapping
+	  int i = 0;
+	  bool _overlap;
+	  int nbBefore = 0;
+	  while( (_overlap = overlap(itn, newMove, layoutProxy, graph, sizeNorm, nbBefore)) && i<5 ) {
+	    newMove /= 2.0;
+	    ++i;
+	  }
+	  if (!_overlap) {
+	    Coord tmp  = layoutProxy->getNodeValue(itn);
+	    tmp[2] = 0;
+	    layoutProxy->setNodeValue(itn,  tmp + newMove);      
+	  } 
+	  else {
+	    if (nbBefore>0) {
+	      temperature += 0.5;
+	    }
+	  }
 	}
       }
-      
-      //test overlapping
-      int i = 0;
-      while(overlap(itn, move) && i<10) {
-	move /= 4.0;
-	++i;
-      }
-      if (overlap(itn, move)) {
-	move = Coord(0,0,0);
-	move[rand()%2] += 0.01 - (0.02 * (double(rand()%2)));
-      }
-      
-      prevMove.set(itn.id, move);
-      Coord tmp  = layoutProxy->getNodeValue(itn);
-      layoutProxy->setNodeValue(itn, tmp + prevMove.get(itn.id));      
+    }
+    if (!overlapTest) {
+      if (temperature > 0.05)
+	temperature -= 1./(double)graph->numberOfNodes();
+    }
+    else {
+      if (temperature > 0.01)
+	temperature /= 1.01;
     }
   }
   return pluginProgress->state()!=TLP_CANCEL;
@@ -217,3 +323,4 @@ bool SpringElectrical::checkEdgeIntersection(const node n, const Coord & move) {
   } delete itE;
   return false;
 }
+//================================================================================
