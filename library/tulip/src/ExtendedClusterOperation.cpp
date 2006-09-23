@@ -272,45 +272,48 @@ void tlp::openMetaNode(SuperGraph *graph, node n,
     if (groupUnderSubGraph != root) groupUnderSubGraph->delEdge (metaEdge);
   } delete metaEdges;
   root->delAllNode(n);
-  groupUnderSubGraph->delSubGraph(metaGraph);
   hash_map<node, hash_set<node> > edges;
   //=================================
-  StableIterator<edge> it(root->getEdges());
-  while(it.hasNext()) {
-    edge e = it.next();
-    if (graph->isElement(e)) continue;
-    node sourceC = mappingC.get(root->source(e).id);
-    node targetN = mappingN.get(root->target(e).id);
-    node sourceN = mappingN.get(root->source(e).id);
-    node targetC = mappingC.get(root->target(e).id);
-    node source, target;
-    Color edgeColor;
-    if (sourceC.isValid() && targetN.isValid()) {
-      source = sourceC;
-      target = targetN;
-      edgeColor = metaEdgeToColor[source];
-    } else {
-      if (sourceN.isValid() && targetC.isValid()) {
+  StableIterator<node> metaGraphNodes (metaGraph->getNodes());
+  while (metaGraphNodes.hasNext()) {
+    StableIterator<edge> it(root->getInOutEdges(metaGraphNodes.next()));
+    while(it.hasNext()) {
+      edge e = it.next();
+      if (graph->isElement(e)) continue;
+      node sourceC = mappingC.get(root->source(e).id);
+      node targetN = mappingN.get(root->target(e).id);
+      node sourceN = mappingN.get(root->source(e).id);
+      node targetC = mappingC.get(root->target(e).id);
+      node source, target;
+      Color edgeColor;
+      if (sourceC.isValid() && targetN.isValid()) {
+	source = sourceC;
+	target = targetN;
+	edgeColor = metaEdgeToColor[source];
+      } 
+      else if (sourceN.isValid() && targetC.isValid()) {
 	source = sourceN;
 	target = targetC;
 	edgeColor = metaEdgeToColor[target];
-      } else
+      } 
+      else continue;
+      
+      if (metaInfo->getNodeValue(source) == 0 && metaInfo->getNodeValue(target) == 0) {
+	graph->addEdge(e);
 	continue;
-    }
-    if (metaInfo->getNodeValue(source) == 0 && metaInfo->getNodeValue(target) == 0) {
-      graph->addEdge(e);
-      continue;
-    }
-    if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
-      edges[source].insert(target);
-      if (!graph->existEdge(source,target).isValid()) {
-	edge addedEdge =graph->addEdge(source,target);
-	graphColors->setEdgeValue (addedEdge, edgeColor);
       }
-      else 
-	cerr << "bug exist edge 1";
+      if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
+	edges[source].insert(target);
+	if (!graph->existEdge(source,target).isValid()) {
+	  edge addedEdge =graph->addEdge(source,target);
+	  graphColors->setEdgeValue (addedEdge, edgeColor);
+	}
+	else 
+	  cerr << "bug exist edge 1";
+      }
     }
   }
+  groupUnderSubGraph->delSubGraph(metaGraph);
   Observable::unholdObservers();
 }
 
