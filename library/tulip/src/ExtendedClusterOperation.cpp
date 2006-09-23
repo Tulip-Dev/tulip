@@ -198,7 +198,8 @@ void updateLayoutUngroup(SuperGraph *graph, node metanode,
   LayoutProxy *clusterLayout = cluster->getProperty<LayoutProxy>(layoutProperty);
   SizesProxy  *clusterSize   = cluster->getProperty<SizesProxy>(sizeProperty);
   MetricProxy *clusterRot = cluster->getProperty<MetricProxy>(rotationProperty);
-  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
+  pair<Coord, Coord> box = 
+    tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   Coord maxL = box.first;
   Coord minL = box.second;
   double width  = maxL[0] - minL[0];
@@ -261,9 +262,13 @@ void tlp::openMetaNode(SuperGraph *graph, node n,
   updateLayoutUngroup(graph, n, metaInfo);
   //===========================
   //Remove the metagraph from the hierarchy and remove the metanode
+  ColorsProxy *graphColors = graph->getProperty<ColorsProxy>(colorsProperty);
+  hash_map<node, Color> metaEdgeToColor;
   Iterator<edge> *metaEdges = graph->getInOutEdges (n);
   while (metaEdges->hasNext()) {
     edge metaEdge = metaEdges->next();
+    metaEdgeToColor[graph->opposite (metaEdge, n)] =
+      graphColors->getEdgeValue (metaEdge);
     if (groupUnderSubGraph != root) groupUnderSubGraph->delEdge (metaEdge);
   } delete metaEdges;
   root->delAllNode(n);
@@ -279,13 +284,16 @@ void tlp::openMetaNode(SuperGraph *graph, node n,
     node sourceN = mappingN.get(root->source(e).id);
     node targetC = mappingC.get(root->target(e).id);
     node source, target;
+    Color edgeColor;
     if (sourceC.isValid() && targetN.isValid()) {
       source = sourceC;
       target = targetN;
+      edgeColor = metaEdgeToColor[source];
     } else {
       if (sourceN.isValid() && targetC.isValid()) {
 	source = sourceN;
 	target = targetC;
+	edgeColor = metaEdgeToColor[target];
       } else
 	continue;
     }
@@ -295,8 +303,10 @@ void tlp::openMetaNode(SuperGraph *graph, node n,
     }
     if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
       edges[source].insert(target);
-      if (!graph->existEdge(source,target).isValid())
-	graph->addEdge(source,target);
+      if (!graph->existEdge(source,target).isValid()) {
+	edge addedEdge =graph->addEdge(source,target);
+	graphColors->setEdgeValue (addedEdge, edgeColor);
+      }
       else 
 	cerr << "bug exist edge 1";
     }
