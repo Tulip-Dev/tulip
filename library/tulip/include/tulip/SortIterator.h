@@ -18,6 +18,7 @@
 
 namespace tlp {
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 struct LessThan {
   DoubleProperty* metric;
   bool operator() (node n1,node n2) {
@@ -37,7 +38,7 @@ private:
   DoubleProperty* metric;
   Graph *sg;
 };
-
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 ///Interface of Sortiterator,
 struct SortNodeIterator : public StableIterator<node> {

@@ -326,6 +326,7 @@ double LayoutProperty::averageAngularResolution(Graph *sg) {
   return result/(double)sg->numberOfNodes();
 }
 //=================================================================================
+#ifndef DOXYGEN_NOTFOR_DEVEL
 struct AngularOrder {
   bool operator() (const Coord &c1, const Coord &c2) {
     //if the vectors have not the same direction on y-coordiantes
@@ -340,6 +341,7 @@ struct AngularOrder {
       return c1[0]<c2[0];
   }
 };
+#endif // DOXYGEN_NOTFOR_DEVEL
 //=================================================================================
 vector<double> LayoutProperty::angularResolutions(const node n, Graph *sg) {
   vector<double> result;
