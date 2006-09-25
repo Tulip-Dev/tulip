@@ -63,7 +63,7 @@ bool AbstractProperty<Tnode,Tedge,TPROPERTY>::compute(const std::string &algorit
   circularCall = true;
   PropertyContext tmpContext(context);
   tmpContext.propertyProxy = this;
-  PAlgorithm *tmpAlgo = factory->getObject(algorithm, tmpContext);
+  AbstractAlgorithm *tmpAlgo = factory->getObject(algorithm, tmpContext);
   bool result;
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);

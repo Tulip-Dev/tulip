@@ -6,6 +6,7 @@ tlp::save => tlp::saveGraph
 
 Supergraph => Graph
 Property => PropertyAlgorithm
+PAlgorithm => AbstractAlgorithm
 PProxy => PropertyInterface
 PropertyProxy => AbstractProperty
 PropertyProxy::superGraph => AbstractProperty::graph
