@@ -440,7 +440,7 @@ std::string viewGl::newName() {
   stringstream ss;
   ss << UNNAMED << '_' << idx - 1;
   return ss.str();
-}    
+}
 //**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -569,6 +569,13 @@ void viewGl::initializeGlGraph(GlGraph *glGraph) {
     glGraph->setViewOrtho(true);
     glGraph->setViewStrahler(false);
     glGraph->setEdgeColorInterpolate(false);
+    Camera cam = glGraph->getCamera();
+    cam.center = Coord(0, 0,  0);
+    cam.eyes   = Coord(0, 0,-10);
+    cam.up     = Coord(0,-1,  0);
+    cam.zoomFactor = 0.5;
+    cam.sceneRadius = 15;
+    glGraph->setCamera(cam);
 }
 //**********************************************************************
 void viewGl::fileOpen(string *plugin, QString &s) {
