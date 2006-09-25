@@ -4,20 +4,20 @@
 #include <tulip/Size.h>
 
 namespace tlp {
-  bool glError();
+  void glTest(std::string message = "(no description)");
   void setColor(const Color &c);
   void setMaterial(const Color &c);
-  void multMatrix(const GLdouble *projectionMatrix, const GLdouble *modelviewMatrix, GLdouble *result);
-  bool projectToScreen(const GLdouble objx, const GLdouble objy, const GLdouble objz, 
-		       const GLdouble *transform,
+  void multMatrix(const GLfloat *projectionMatrix, const GLfloat *modelviewMatrix, GLfloat *result);
+  bool projectToScreen(const GLfloat objx, const GLfloat objy, const GLfloat objz, 
+		       const GLfloat *transform,
 		       const GLint *viewport,
-		       GLdouble &winx, GLdouble &winy);
+		       GLfloat &winx, GLfloat &winy);
   double segmentVisible(const Coord &u, const Coord &v, 
-		      const GLdouble *transform, const GLint *viewport);
+		      const GLfloat *transform, const GLint *viewport);
   double segmentSize(const Coord &u, const Coord &v, 
-		     const GLdouble *transform, const GLint *viewport);
-  inline GLdouble sqr(const GLdouble f) {return f*f;}
-  GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport);
+		     const GLfloat *transform, const GLint *viewport);
+  inline GLfloat sqr(const GLfloat f) {return f*f;}
+  GLfloat projectSize(const Coord& position, const Size &_size, const GLfloat *transformMatrix, const GLint *viewport);
   void cube(GLenum type);
   void solidCone();
 }

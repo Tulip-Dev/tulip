@@ -24,24 +24,13 @@ public:
     makeCurrent();
   }
   virtual ~GLGlut(){}
-  void makeCurrent() {glutSetWindow(win);}
-
-  void updateGL(){
-    draw();
+  void makeCurrent() {
+    glutSetWindow(win);
   }
-
-  void setDoubleBuffering(bool b) {}
-
-  bool timerIsActive() {return drawing;}
-  int timerStart(int msec, bool sshot=false) {
-    drawing=true;
-    return true;
+  void draw_handler(bool b) {
+    drawing = b;
   }
-  void timerStop() {
-    drawing=false;
-  }
-  void mPaint() {}
-  bool drawing;
+    bool drawing;
 private:
   int width,height;
 };
@@ -169,24 +158,8 @@ void Reshape(int widt, int heigh) {
 //=============================================
 void Draw(void) {
   glGlutScreen->draw();
-  /*
-  if (!listOk) {
-  glGlutScreen->setDisplayEdges(false);
-    LList = glGenLists( 1 );
-    glNewList( LList, GL_COMPILE );
-    glGlutScreen->draw();
-    glEndList();
-    listOk = true;
-    cerr << ".";
-  }
-  else {
-    glCallList(LList);
-  }
-  */
   if (!glGlutScreen->isIncrementalRendering()) 
     glutSwapBuffers();
-  else
-    idle();
   if (frameRateDisplaying) frame++;
 }
 void helpMessage() {
@@ -230,12 +203,13 @@ int main (int argc, char **argv) {
     exit(1);
   }
 
+  helpMessage();
+
   tlp::initTulipLib();
   tlp::loadPlugins();   // library side plugins
   GlGraph::loadPlugins();
 
   glGlutScreen = new GLGlut("", width, height);
-  glGlutScreen->initializeGL();
   glutIdleFunc(idle);
   importGraph(argv[1], *glGlutScreen);
   glGlutScreen->centerScene();

@@ -5,12 +5,12 @@
 using namespace std;
 namespace tlp {
   //====================================================
-  bool glTest(){
-    if (glGetError() != GL_NO_ERROR) {
-      cerr << "[ERROR] Open GL ERROR : " << glGetError() << gluErrorString(glGetError()) <<  endl;
-      return false;
+  void glTest(string message) {
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+      cerr << "[OpenGL ERROR] : " << message << endl;
+      cerr << "=============> : " << gluErrorString(error) <<  endl;
     }
-    return true;
   }
   //====================================================
   void setColor(const Color &c) {
@@ -26,8 +26,8 @@ namespace tlp {
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
-  void multMatrix(const GLdouble *projectionMatrix, const GLdouble *modelviewMatrix, GLdouble *result){
-    GLdouble sum_cell = 0;
+  void multMatrix(const GLfloat *projectionMatrix, const GLfloat *modelviewMatrix, GLfloat *result){
+    GLfloat sum_cell = 0;
     for(unsigned int i=0; i<4; ++i) { // (i,j) sur projection
       for(unsigned int l=0; l<4; ++l) { // (j,l) sur modelview
 	for(unsigned int j=0; j<4; ++j) {
@@ -39,12 +39,12 @@ namespace tlp {
     }
   }
   //====================================================
-  bool projectToScreen(const GLdouble objx, const GLdouble objy, const GLdouble objz, 
-		       const GLdouble *transform,
+  bool projectToScreen(const GLfloat objx, const GLfloat objy, const GLfloat objz, 
+		       const GLfloat *transform,
 		       const GLint *viewport,
-		       GLdouble &winx, GLdouble &winy){
+		       GLfloat &winx, GLfloat &winy){
     
-    GLdouble winw;
+    GLfloat winw;
     // transform * [objx, objy, objz, 1]
     winw = transform[3] * objx + transform[7] * objy +  transform[11] * objz + transform[15];
     if(winw == 0.0) return false;
@@ -56,23 +56,23 @@ namespace tlp {
     return true;
   }
   //====================================================
-  double segmentSize(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
-    GLdouble x1Scr,y1Scr;
-    GLdouble x2Scr,y2Scr;
+  double segmentSize(const Coord &u, const Coord &v, const GLfloat *transform, const GLint *viewport) {
+    GLfloat x1Scr,y1Scr;
+    GLfloat x2Scr,y2Scr;
     projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
     projectToScreen(v[0], v[1], v[2], transform, viewport, x2Scr, y2Scr);
     return sqr(x1Scr-x2Scr) + sqr(y1Scr-y2Scr);
   }
   //====================================================
-  double segmentVisible(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
-    GLdouble x1Scr,y1Scr;
-    GLdouble x2Scr,y2Scr;
+  double segmentVisible(const Coord &u, const Coord &v, const GLfloat *transform, const GLint *viewport) {
+    GLfloat x1Scr,y1Scr;
+    GLfloat x2Scr,y2Scr;
     projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
     projectToScreen(v[0], v[1], v[2], transform, viewport, x2Scr, y2Scr);
-    GLdouble minx = viewport[0];
-    GLdouble miny = viewport[1];
-    GLdouble maxx = minx + viewport[2];
-    GLdouble maxy = miny + viewport[3];
+    GLfloat minx = viewport[0];
+    GLfloat miny = viewport[1];
+    GLfloat maxx = minx + viewport[2];
+    GLfloat maxy = miny + viewport[3];
     double size = sqr(x1Scr-x2Scr) + sqr(y1Scr-y2Scr);
     if (!( (x1Scr<minx && x2Scr<minx) || 
 	   (x1Scr>maxx && x2Scr>maxx) || 
@@ -83,20 +83,20 @@ namespace tlp {
       return -size;
   }
   //====================================================
-  GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport) {
+  GLfloat projectSize(const Coord& position, const Size &_size, const GLfloat *transformMatrix, const GLint *viewport) {
     bool project;  
     bool visible = false;
-    GLdouble max = 0;
-    GLdouble x1Scr,y1Scr;
-    GLdouble x2Scr,y2Scr;
+    GLfloat max = 0;
+    GLfloat x1Scr,y1Scr;
+    GLfloat x2Scr,y2Scr;
   
 
     Size size(_size/2.0);
     //  size /= 2.0;
-    GLdouble minx = viewport[0];
-    GLdouble miny = viewport[1];
-    GLdouble maxx = minx + viewport[2];
-    GLdouble maxy = miny + viewport[3];
+    GLfloat minx = viewport[0];
+    GLfloat miny = viewport[1];
+    GLfloat maxx = minx + viewport[2];
+    GLfloat maxy = miny + viewport[3];
 
     //test x-axis
     if (project=(projectToScreen(position[0] - size[0], position[1], position[2],transformMatrix, viewport,x1Scr,y1Scr) &&

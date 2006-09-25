@@ -168,7 +168,7 @@ namespace {
     return curve;
   }
   bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-	       const GLdouble *transformMatrix, const GLint *viewportArray) {
+	       const GLfloat *transformMatrix, const GLint *viewportArray) {
     if (bends.size() == 0) 
       return segmentVisible(startPoint, endPoint, transformMatrix, viewportArray) > 0.;
     
@@ -187,7 +187,7 @@ namespace {
 namespace tlp {  
   
   void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &drawPoly, bool &drawLine, const GLdouble *transformMatrix, const GLint *viewportArray) {
+		       const Size &size, bool &drawPoly, bool &drawLine, const GLfloat *transformMatrix, const GLint *viewportArray) {
     Size tmp(size[0], size[0], size[0]);
     Size tmp2(size[1], size[1], size[1]);
     float s1 = projectSize(startPoint, tmp,  transformMatrix, viewportArray);

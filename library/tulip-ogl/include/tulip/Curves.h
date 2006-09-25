@@ -6,7 +6,7 @@
 
 namespace tlp {
   void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &polygon, bool &line, const GLdouble *transformMatrix, const GLint *viewportArray);
+		       const Size &size, bool &polygon, bool &line, const GLfloat *transformMatrix, const GLint *viewportArray);
   //====================================================================
   void polyLine(const std::vector<Coord> &,/* polyline vertces */
 		const Color &,             /* start color */

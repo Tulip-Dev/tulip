@@ -262,7 +262,7 @@ Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
 	interpolate(glWidget, t);
       Observable::unholdObservers();
       if(glWidget)
-	glWidget->updateGL();
+	glWidget->draw();
       if( t >= 1.0f ) {
 	killTimer( te->timerId() );
 	stop();

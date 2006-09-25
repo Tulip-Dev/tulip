@@ -826,7 +826,7 @@ namespace tlp
       glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     //  cout << " ...[END]" << endl;
   }
@@ -880,7 +880,7 @@ namespace tlp
       glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -934,7 +934,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(AABB);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -964,7 +964,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(linearRegression);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1015,7 +1015,7 @@ namespace tlp
 	for(int i=0; i < 3; i++)
 	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
       }
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1100,7 +1100,7 @@ namespace tlp
     else
       glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }

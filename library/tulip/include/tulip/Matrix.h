@@ -130,4 +130,4 @@ namespace tlp {
 
 #include "./cxx/Matrix.cxx"
 #endif
-#endif DOXYGEN_NOTFOR_DEVEL
+#endif //DOXYGEN_NOTFOR_DEVEL

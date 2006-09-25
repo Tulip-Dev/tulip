@@ -120,7 +120,7 @@ namespace tlp
 	  grid = NULL;
 	}
       }
-      glGraphWidget->updateGL();   
+      glGraphWidget->draw();   
       close();
     }
   }
@@ -155,7 +155,7 @@ namespace tlp
 
     grid->setHollowGrid(HollowGridCB->isChecked());
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
   }
   //==============================================
   void GridOptionsWidget::chDisplayGrid() {
@@ -163,7 +163,7 @@ namespace tlp
       return;
     bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
     grid->setDisplayDim(display);
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
   }
   //==============================================
 }

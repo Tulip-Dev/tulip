@@ -328,7 +328,6 @@ void viewGl::startTulip() {
   appStart->initTulip();
   delete appStart;
   buildMenus();
-  overviewWidget->view->initializeGL();
   this->show();
   enableElements(false);
   int argc = qApp->argc();
@@ -366,6 +365,7 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
   if (glWidget->getGraph() == graph)  return;
   clearObservers();
   glWidget->setGraph(graph);  
+  glWidget->centerScene();
   changeGraph(graph);
   initObservers();
 }
@@ -669,6 +669,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
+    glW->draw();
   }
   /* else {
     qWarning("Canceled  Open/import");
@@ -1123,10 +1124,10 @@ void viewGl::goInside() {
   node tmpNode;
   edge tmpEdge;
   tlp::ElementType type;
-  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
+  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode, tmpEdge)) {
     if (type==NODE) {
-      Graph *graph=glWidget->getGraph();
-      GraphProperty *meta=graph->getProperty<GraphProperty>("viewMetaGraph");
+      Graph *graph = glWidget->getGraph();
+      GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
       if (meta->getNodeValue(tmpNode)!=0) {
 	changeGraph(meta->getNodeValue(tmpNode));
       }
@@ -1267,7 +1268,7 @@ void viewGl::showDialog(int id){
 ///Redraw the view of the graph
 void  viewGl::redrawView() {
   if (!glWidget) return;
-  glWidget->updateGL();
+  glWidget->draw();
 }
 //**********************************************************************
 ///Reccenter the layout of the graph
