@@ -7,10 +7,10 @@
 
 #include <set>
 #include <tulip/Node.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 
-class Graph;
   TLP_SCOPE void openMetaNode(Graph *graph, node n,
 			      Graph *groupUnderSubGraph);
   TLP_SCOPE inline void openMetaNode(Graph *graph, node n) {
