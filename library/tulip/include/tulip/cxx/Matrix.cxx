@@ -39,11 +39,18 @@ MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
   MATRIXTLPGEO tmpMat(*this);
-  fill(0);
+  MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
+  if (pMat == this)
+    pMat = new MATRIXTLPGEO(*this);
   for (unsigned int i=0;i<SIZE;++i)
-    for (unsigned int j=0;j<SIZE;++j)
+    for (unsigned int j=0;j<SIZE;++j) {
+      Obj tmpObj = (Obj) 0;
       for (unsigned int k=0;k<SIZE;++k)
-	(*this)[i][j]+=tmpMat[i][k]*mat[k][j];
+	tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
+      (*this)[i][j] = tmpObj;
+    }
+  if (pMat != &mat)
+    delete pMat;
   return (*this);
 }
 //=====================================================================================
