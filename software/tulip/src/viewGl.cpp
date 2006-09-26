@@ -405,13 +405,13 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->setMouse(mouseToolBar->getCurrentMouse());
   connect(mouseToolBar,   SIGNAL(mouseChanged(tlp::MouseInterface *)), glWidget, SLOT(setMouse(tlp::MouseInterface *)));
   connect(mouseToolBar,   SIGNAL(mouseChanged(tlp::MouseInterface *)), SLOT(mouseChanged(tlp::MouseInterface *)));
-  connect(glWidget,       SIGNAL(nodeClicked(Graph *, const node &)), 
-	  nodeProperties, SLOT(setCurrentNode(Graph*, const node &)));
-  connect(glWidget,       SIGNAL(nodeClicked(Graph *, const node &)), 
+  connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
+	  nodeProperties, SLOT(setCurrentNode(tlp::Graph*, const tlp::node &)));
+  connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
 	  this, SLOT(showElementProperties()));
-  connect(glWidget,       SIGNAL(edgeClicked(Graph *, const edge &)), 
-	  nodeProperties, SLOT(setCurrentEdge(Graph*, const edge &)));
-  connect(glWidget,       SIGNAL(edgeClicked(Graph *, const edge &)), 
+  connect(glWidget,       SIGNAL(edgeClicked(tlp::Graph *, const tlp::edge &)), 
+	  nodeProperties, SLOT(setCurrentEdge(tlp::Graph*, const tlp::edge &)));
+  connect(glWidget,       SIGNAL(edgeClicked(tlp::Graph *, const tlp::edge &)), 
 	  this, SLOT(showElementProperties()));
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
 
