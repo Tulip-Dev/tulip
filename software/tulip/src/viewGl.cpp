@@ -569,12 +569,12 @@ void viewGl::initializeGlGraph(GlGraph *glGraph) {
     glGraph->setViewOrtho(true);
     glGraph->setViewStrahler(false);
     glGraph->setEdgeColorInterpolate(false);
-    Camera cam = glGraph->getCamera();
+    Camera cam = glGraph->getCamera(); //default value for drawing small graph in the window
     cam.center = Coord(0, 0,  0);
-    cam.eyes   = Coord(0, 0,-10);
+    cam.eyes   = Coord(0, 0, 10);
     cam.up     = Coord(0,-1,  0);
     cam.zoomFactor = 0.5;
-    cam.sceneRadius = 15;
+    cam.sceneRadius = 10;
     glGraph->setCamera(cam);
 }
 //**********************************************************************

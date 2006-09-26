@@ -26,37 +26,35 @@ namespace tlp {
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
-  void multMatrix(const GLfloat *projectionMatrix, const GLfloat *modelviewMatrix, GLfloat *result){
-    GLfloat sum_cell = 0;
-    for(unsigned int i=0; i<4; ++i) { // (i,j) sur projection
-      for(unsigned int l=0; l<4; ++l) { // (j,l) sur modelview
-	for(unsigned int j=0; j<4; ++j) {
-	  sum_cell += projectionMatrix[4*j+i] * modelviewMatrix[4*l+j];
-	}
-	result[4*l+i] = sum_cell;
-	sum_cell = 0;
-      }
-    }
-  }
-  //====================================================
   bool projectToScreen(const GLfloat objx, const GLfloat objy, const GLfloat objz, 
-		       const GLfloat *transform,
+		       const MatrixGL &transform,
 		       const GLint *viewport,
 		       GLfloat &winx, GLfloat &winy){
     
     GLfloat winw;
     // transform * [objx, objy, objz, 1]
-    winw = transform[3] * objx + transform[7] * objy +  transform[11] * objz + transform[15];
-    if(winw == 0.0) return false;
+    winw = 
+      transform[0][3] * objx + 
+      transform[1][3] * objy +  
+      transform[2][3] * objz + 
+      transform[3][3];
 
-    winx = ( (transform[0] * objx + transform[4] * objy +  transform[8] * objz + transform[12] )
+    if ( fabs(winw) < 1E-6 ) return false;
+
+    winx = ( (transform[0][0] * objx + 
+	      transform[1][0] * objy +  
+	      transform[2][0] * objz + 
+	      transform[3][0] )
 	     /winw * 0.5 + 0.5 ) * viewport[2] + viewport[0];
-    winy = ( (transform[1] * objx + transform[5] * objy +  transform[9] * objz + transform[13])
+    winy = ( (transform[0][1] * objx + 
+	      transform[1][1] * objy +  
+	      transform[2][1] * objz + 
+	      transform[3][1] )
 	     /winw * 0.5 + 0.5) * viewport[3] + viewport[1];
     return true;
   }
   //====================================================
-  double segmentSize(const Coord &u, const Coord &v, const GLfloat *transform, const GLint *viewport) {
+  double segmentSize(const Coord &u, const Coord &v, const tlp::MatrixGL &transform, const GLint *viewport) {
     GLfloat x1Scr,y1Scr;
     GLfloat x2Scr,y2Scr;
     projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
@@ -64,7 +62,7 @@ namespace tlp {
     return sqr(x1Scr-x2Scr) + sqr(y1Scr-y2Scr);
   }
   //====================================================
-  double segmentVisible(const Coord &u, const Coord &v, const GLfloat *transform, const GLint *viewport) {
+  double segmentVisible(const Coord &u, const Coord &v, const tlp::MatrixGL &transform, const GLint *viewport) {
     GLfloat x1Scr,y1Scr;
     GLfloat x2Scr,y2Scr;
     projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
@@ -83,7 +81,7 @@ namespace tlp {
       return -size;
   }
   //====================================================
-  GLfloat projectSize(const Coord& position, const Size &_size, const GLfloat *transformMatrix, const GLint *viewport) {
+  GLfloat projectSize(const Coord& position, const Size &_size, const MatrixGL &transformMatrix, const GLint *viewport) {
     bool project;  
     bool visible = false;
     GLfloat max = 0;

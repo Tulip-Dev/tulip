@@ -14,7 +14,7 @@ class TLP_GL_SCOPE Camera {
   Coord center,eyes,up;
   double zoomFactor;
   double sceneRadius;
-  Camera(Coord center=Coord(0,0,-1),Coord eyes=Coord(0,0,0), Coord up=Coord(0,1,0), double zoomFactor=1, double sceneRadius=1);
+  Camera(Coord center=Coord(0,0,0),Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0), double zoomFactor=0.5, double sceneRadius=10);
   /// This moves the camera forward or backward depending on the speed
   void move(float speed);
   ///  This strafes the camera left and right depending on the speed (-/+)
