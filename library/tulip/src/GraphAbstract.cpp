@@ -182,10 +182,6 @@ edge GraphAbstract::existEdge(const node n1, const node n2)const {
   return edge();
 }
 //=========================================================================
-PropertyManager *GraphAbstract::getPropertyManager() {
-  return propertyContainer;
-}
-//=========================================================================
 bool GraphAbstract::existProperty(const std::string&name) {
   return propertyContainer->existProperty(name);
 }
@@ -200,6 +196,11 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string&name) {
   propertyContainer->delLocalProperty(name);
+}
+//=========================================================================
+void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
+  assert(!existLocalProperty(name));
+  propertyContainer->setLocalProxy(name, prop);
 }
 //=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {

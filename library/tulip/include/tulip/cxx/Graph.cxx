@@ -24,8 +24,8 @@ Proxytype* tlp::Graph::getLocalProperty(const std::string &name) {
     return ( (Proxytype *)(tmpProxy) );
   }
   else {
-    tlp::PropertyManager *proxyManager=this->getPropertyManager();
-    proxyManager->setLocalProxy(name,tmp=new Proxytype(this));
+    tmp=new Proxytype(this);
+    this->addLocalProperty(name, tmp);
   }
   return (tmp);
 }

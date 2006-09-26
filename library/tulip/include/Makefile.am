@@ -50,7 +50,6 @@ nobase_include_HEADERS = \
 	tulip/ColorAlgorithm.h \
 	tulip/IntegerProperty.h \
 	tulip/DoubleAlgorithm.h \
-	tulip/PropertyManager.h \
 	tulip/StringProperty.h \
 	tulip/TemplateFactory.h \
 	tulip/Coord.h \
@@ -95,6 +94,7 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/GraphView.h \
 	tulip/SimpleVector.h \
 	tulip/IdManager.h \
+	tulip/PropertyManager.h \
 	tulip/MapIterator.h \
 	tulip/PlanarityTestImpl.h \
 	tulip/RectangleArea.h \

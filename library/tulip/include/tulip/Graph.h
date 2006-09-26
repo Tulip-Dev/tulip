@@ -329,6 +329,10 @@ public:
    */
   virtual  void delLocalProperty(const std::string&name)=0;
   /**
+   *  add a property to the graph
+   */
+  virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+  /**
    * Return an iterator on the local properties
    */
   virtual Iterator<std::string>* getLocalProperties()=0;
@@ -342,11 +346,6 @@ public:
   virtual Iterator<std::string>* getProperties()=0;
 
 private:
-  /**
-   *  Return a pointer on the porperty proxy container associated to the 
-   *  supergraph.
-   */
-  virtual  PropertyManager *getPropertyManager()=0;
 
   unsigned int id;
 };

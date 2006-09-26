@@ -81,6 +81,7 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   inline virtual bool existProperty(const std::string&name);
   inline virtual bool existLocalProperty(const std::string&name);
   inline virtual void delLocalProperty(const std::string&name);
+  inline virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
   inline virtual Iterator<std::string>* getLocalProperties();
   inline virtual Iterator<std::string>* getInheritedProperties();
   inline virtual Iterator<std::string>* getProperties();
@@ -89,9 +90,6 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
 
 protected:
   Graph* graph_component;
-private:
-  virtual PropertyManager *getPropertyManager(){return getPropertyManager();} 
-  // to examinate !!!
 };
 
 }

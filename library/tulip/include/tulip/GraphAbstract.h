@@ -46,10 +46,10 @@ public:
   virtual unsigned int numberOfEdges() const;
   DataSet & getAttributes() {return attributes;}
   //========================================
-  PropertyManager *getPropertyManager();
   bool existProperty(const std::string&);
   bool existLocalProperty(const std::string&);
   void delLocalProperty(const std::string&);
+  void addLocalProperty(const std::string &name, PropertyInterface *prop);
   Iterator<std::string>* getLocalProperties();
   Iterator<std::string>* getInheritedProperties();
   Iterator<std::string>* getProperties();
@@ -58,6 +58,9 @@ public:
 protected:
   void setFather(Graph *);
   PropertyManager *propertyContainer;
+  PropertyManager *getPropertyManager() {
+    return propertyContainer;
+  }  
 
 private:
   DataSet attributes;
