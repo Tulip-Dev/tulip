@@ -2,6 +2,8 @@
 
 #include "IdMetric.h"
 
+using namespace tlp;
+
 DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1","Misc");
 
 //==================================================================

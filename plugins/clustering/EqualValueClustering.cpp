@@ -8,11 +8,12 @@
 
 #include "EqualValueClustering.h"
 
-CLUSTERINGPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
-
 //================================================================================
 using namespace std;
 using namespace tlp;
+
+CLUSTERINGPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
+
 namespace {
   const char * paramHelp[] = {
     // selectedNodes

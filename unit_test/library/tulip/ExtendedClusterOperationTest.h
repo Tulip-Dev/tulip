@@ -8,11 +8,11 @@
 
 class ExtendedClusterOperationTest : public CppUnit::TestFixture {
 private:
-  Graph *graph,*quotient;
-  node meta;
-  std::vector<node> nodes;
-  std::vector<edge> edges;
-  std::set<node> group;
+  tlp::Graph *graph,*quotient;
+  tlp::node meta;
+  std::vector<tlp::node> nodes;
+  std::vector<tlp::edge> edges;
+  std::set<tlp::node> group;
 public:
   void setUp();
   void tearDown();

@@ -1,8 +1,7 @@
-using namespace tlp;
 
 //=======================================================================
 //Strucdef implementation
-template<typename T> void StructDef::add(const char* str, const char* inHelp, const char* inDefValue) {
+template<typename T> void tlp::StructDef::add(const char* str, const char* inHelp, const char* inDefValue) {
   if (data.find(str)==data.end()) {
     data[str]= std::string(typeid(T).name());
     if (inHelp)
@@ -18,7 +17,7 @@ template<typename T> void StructDef::add(const char* str, const char* inHelp, co
 }
 //=======================================================================
 //DataSet implementation
-template<typename T> bool DataSet::get(const std::string str,T& value) const {
+template<typename T> bool tlp::DataSet::get(const std::string str,T& value) const {
   if (data.find(str)!=data.end()) {
     //     Do not work if T do not contain a virtual function
     //     DataType dt = (*(data.find(str))).second;
@@ -31,7 +30,7 @@ template<typename T> bool DataSet::get(const std::string str,T& value) const {
   else
     return false;
 }
-template<typename T> bool DataSet::getAndFree(const std::string &str,T& value) {
+template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
   if (get(str,value)) {
     delete ((T*)(data[str].value));
     data.erase(str);
@@ -40,7 +39,7 @@ template<typename T> bool DataSet::getAndFree(const std::string &str,T& value) {
   else
     return false;
 }
-template<typename T> void DataSet::set(const std::string &str,const T& value) {
+template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
   if (data.find(str)!=data.end()) {
     //    assert(data[str].typeName==typeid(T).name()); Do not work if T do not contain a virtual function
     delete (T*)(data[str].value);

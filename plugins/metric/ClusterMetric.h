@@ -40,15 +40,15 @@
  *  (at your option) any later version.
  *
  */
-class ClusterMetric:public DoubleAlgorithm { 
+class ClusterMetric:public tlp::DoubleAlgorithm { 
 public:
-  ClusterMetric(const PropertyContext &);
+  ClusterMetric(const tlp::PropertyContext &);
   bool run();
 
 private:
-  double getNodeValue(const node n);
-  double getEdgeValue(const edge n);
-  void buildSubGraph(node n,node startNode,std::set<node> &selected,unsigned int depth);
+  double getNodeValue(const tlp::node n);
+  double getEdgeValue(const tlp::edge n);
+  void buildSubGraph(tlp::node n, tlp::node startNode,std::set<tlp::node> &selected,unsigned int depth);
   int  maxDepth;
 };
 /*@}*/

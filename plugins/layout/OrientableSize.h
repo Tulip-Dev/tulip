@@ -4,16 +4,16 @@
 #include <tulip/Size.h>
 class OrientableSizeProxy;
 
-class OrientableSize: public Size {
+class OrientableSize: public tlp::Size {
 public:  
 
     OrientableSize(OrientableSizeProxy* fatherParam, const float width = 0,
                    const float height = 0, const float depth = 0);
-    OrientableSize(OrientableSizeProxy* fatherParam, const Size& size);
+    OrientableSize(OrientableSizeProxy* fatherParam, const tlp::Size& size);
 
     void set(const float width = 0, const float height = 0,
              const float depth = 0);
-    void set(const Size& size);
+    void set(const tlp::Size& size);
 
     void setW(const float width);
     void setH(const float height);

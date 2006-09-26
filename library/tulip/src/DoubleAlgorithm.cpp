@@ -3,8 +3,8 @@
 #include "tulip/Graph.h"
 #include "tulip/DoubleProperty.h"
 
-DoubleAlgorithm::DoubleAlgorithm (const PropertyContext &context):PropertyAlgorithm<DoubleType , DoubleType>(context) {
-  doubleResult = (DoubleProperty *)context.propertyProxy;
+tlp::DoubleAlgorithm::DoubleAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm<tlp::DoubleType , tlp::DoubleType>(context) {
+  doubleResult = (tlp::DoubleProperty *)context.propertyProxy;
 }
 
-DoubleAlgorithm::~DoubleAlgorithm() {}
+tlp::DoubleAlgorithm::~DoubleAlgorithm() {}

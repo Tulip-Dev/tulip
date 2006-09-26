@@ -4,6 +4,7 @@
 #include "MetaGraphProxyTest.h"
 
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
 

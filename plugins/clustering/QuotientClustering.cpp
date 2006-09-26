@@ -9,10 +9,10 @@
 #include "QuotientClustering.h"
 
 
-CLUSTERINGPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","0","1");
-
 using namespace std;
 using namespace tlp;
+
+CLUSTERINGPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","0","1");
 
 struct Edge {
   unsigned int source,target;

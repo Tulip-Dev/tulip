@@ -11,8 +11,8 @@
 
 class SelectionProxyTest : public CppUnit::TestFixture {
 private:
-  Graph *graph;
-  BooleanProperty *selection;
+  tlp::Graph *graph;
+  tlp::BooleanProperty *selection;
 
 public:
   void setUp();

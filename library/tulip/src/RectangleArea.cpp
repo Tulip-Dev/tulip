@@ -1,5 +1,7 @@
 #include "tulip/RectangleArea.h"
 
+using namespace tlp;
+
 RectangleArea::RectangleArea(float x, float y, float width, float height) {
     direction = HORIZONTAL_DIRECTION;
     set2D(x, y, width, height);

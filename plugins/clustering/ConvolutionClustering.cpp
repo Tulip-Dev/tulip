@@ -9,10 +9,11 @@
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
 
-CLUSTERINGPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","0","1");
-
 using namespace std;
 using namespace tlp;
+
+CLUSTERINGPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","0","1");
+
 //================================================================================
   ConvolutionClustering::ConvolutionClustering(ClusterContext context):Clustering(context) {}
 //================================================================================

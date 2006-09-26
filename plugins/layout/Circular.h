@@ -30,9 +30,9 @@
  * Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */
-class Circular:public LayoutAlgorithm { 
+class Circular:public tlp::LayoutAlgorithm { 
 public:
-  Circular(const PropertyContext &);
+  Circular(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

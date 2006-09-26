@@ -10,6 +10,7 @@
 
 using namespace stdext;
 using namespace std;
+using namespace tlp;
 
 //============================================================
 // PlanarConMap

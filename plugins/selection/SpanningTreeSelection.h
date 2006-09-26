@@ -14,9 +14,9 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class SpanningTreeSelection:public BooleanAlgorithm { 
+class SpanningTreeSelection:public tlp::BooleanAlgorithm { 
 public:
-  SpanningTreeSelection(const PropertyContext &);
+  SpanningTreeSelection(const tlp::PropertyContext &);
   ~SpanningTreeSelection();
   bool run();
 };

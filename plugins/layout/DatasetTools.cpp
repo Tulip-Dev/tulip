@@ -6,6 +6,8 @@
 #define ORIENTATION "up to down;down to up;right to left;left to right;"
 #define ORIENTATION_ID "Orientation"
 
+using namespace tlp;
+
 namespace {
 const char* paramHelp[] = {
 //Orientation

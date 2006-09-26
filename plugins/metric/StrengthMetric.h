@@ -33,18 +33,18 @@
  *  (at your option) any later version.
  *
  */
-class StrengthMetric:public DoubleAlgorithm { 
+class StrengthMetric:public tlp::DoubleAlgorithm { 
 public:
-  StrengthMetric(const PropertyContext &);
+  StrengthMetric(const tlp::PropertyContext &);
   ~StrengthMetric();
-  double getNodeValue(const node n);
-  double getEdgeValue(const edge n);
+  double getNodeValue(const tlp::node n);
+  double getEdgeValue(const tlp::edge n);
   bool run();
 private:
-  double e(const stdext::hash_set<node> &U);
-  double e(stdext::hash_set<node> &U, stdext::hash_set<node> &V);
-  double s(stdext::hash_set<node> &U, stdext::hash_set<node> &V);
-  double s(const stdext::hash_set<node> &U);
+  double e(const stdext::hash_set<tlp::node> &U);
+  double e(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
+  double s(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
+  double s(const stdext::hash_set<tlp::node> &U);
 };
 /*@}*/
 #endif

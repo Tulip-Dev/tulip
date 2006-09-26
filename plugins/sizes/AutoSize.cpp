@@ -3,6 +3,8 @@
 #include <tulip/ForEach.h>
 #include <cmath>
 
+using namespace tlp;
+
 /** \addtogroup size */
 /*@{*/
 /// AutoSize.cpp - Compute size in order to prevent node-node overlapping

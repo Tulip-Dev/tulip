@@ -33,9 +33,9 @@
  *  (at your option) any later version.
  *
 */
-class Tutte:public LayoutAlgorithm {
+class Tutte:public tlp::LayoutAlgorithm {
 public:
-  Tutte(const PropertyContext &);
+  Tutte(const tlp::PropertyContext &);
   ~Tutte();
   
   bool run();

@@ -1,6 +1,8 @@
 #include "Orientation.h"
 #include "EdgeTools.h"
 
+using namespace tlp;
+
 //====================================================================
 void setOrthogonalEdge(OrientableLayout* oriLayout, const Graph* tree,
 					   float interNodeDistance) {
@@ -15,7 +17,7 @@ void setOrthogonalEdge(OrientableLayout* oriLayout,
     Iterator<node>* itNode = tree->getNodes();
     while (itNode->hasNext()) {
         node            currentNode      = itNode->next();
-		OrientableCoord currentNodeCoord = oriLayout->getNodeValue(currentNode);
+	OrientableCoord currentNodeCoord = oriLayout->getNodeValue(currentNode);
         Iterator<edge>* itEdge           = tree->getOutEdges(currentNode);
         while (itEdge->hasNext())
             addControlPoints(oriLayout, oriSize, tree, currentNodeCoord, 
@@ -39,7 +41,7 @@ void addControlPoints(OrientableLayout* oriLayout, OrientableSizeProxy* oriSize,
         float coordModifier  = interNodeDistance / 2.f;
         
         if (oriSize != NULL)
-        	coordModifier += oriSize->getNodeValue(father).getH()/2.f;
+	  coordModifier += oriSize->getNodeValue(father).getH()/2.f;
         
         OrientableCoord coord  = oriLayout->createCoord();
         float           coordY = fatherCoord.getY() + coordModifier;

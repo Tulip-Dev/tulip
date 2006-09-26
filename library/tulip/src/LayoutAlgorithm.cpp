@@ -4,8 +4,8 @@
 #include "tulip/Graph.h"
 #include "tulip/PluginContext.h"
 
-LayoutAlgorithm::LayoutAlgorithm (const PropertyContext & context):PropertyAlgorithm<PointType , LineType>(context) {
-  layoutResult = (LayoutProperty *)context.propertyProxy;
+tlp::LayoutAlgorithm::LayoutAlgorithm (const tlp::PropertyContext & context):tlp::PropertyAlgorithm<tlp::PointType , tlp::LineType>(context) {
+  layoutResult = (tlp::LayoutProperty *)context.propertyProxy;
 }
 
-LayoutAlgorithm::~LayoutAlgorithm() {}
+tlp::LayoutAlgorithm::~LayoutAlgorithm() {}

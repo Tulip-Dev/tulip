@@ -25,14 +25,14 @@
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class TreeLeaf:public LayoutAlgorithm { 
+class TreeLeaf:public tlp::LayoutAlgorithm { 
 public:
-  TreeLeaf(const PropertyContext &);
+  TreeLeaf(const tlp::PropertyContext &);
   ~TreeLeaf();
   bool run();
   bool check(std::string &);
   void reset();
-  int dfsPlacement(node,int &,int );
+  int dfsPlacement(tlp::node,int &,int );
 };
 /*@}*/
 #endif

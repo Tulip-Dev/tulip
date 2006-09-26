@@ -8,15 +8,15 @@
 // Autheur Auber David
 // Date 01/12/1999
 ///
-class SegmentMetric:public DoubleAlgorithm { 
+class SegmentMetric:public tlp::DoubleAlgorithm { 
 public:
-  SegmentMetric(const PropertyContext &);
+  SegmentMetric(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 
 private:
-  int segNode(node,int &,int &);
-  double getNodeValue(const node n);
+  int segNode(tlp::node,int &,int &);
+  double getNodeValue(const tlp::node n);
 };
 
 #endif

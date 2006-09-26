@@ -29,20 +29,20 @@
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class ConeTreeExtended:public LayoutAlgorithm { 
+class ConeTreeExtended:public tlp::LayoutAlgorithm { 
 public:
-  ConeTreeExtended(const PropertyContext &);
+  ConeTreeExtended(const tlp::PropertyContext &);
   ~ConeTreeExtended();
   bool run();
   bool check(std::string &);
   void reset();
 private:
-  double treePlace3D(node n, stdext::hash_map<node,double> *posRelX, stdext::hash_map<node,double> *posRelY);
-  void calcLayout(node n, stdext::hash_map<node,double> *px, stdext::hash_map<node,double> *py,
+  double treePlace3D(tlp::node n, stdext::hash_map<tlp::node,double> *posRelX, stdext::hash_map<tlp::node,double> *posRelY);
+  void calcLayout(tlp::node n, stdext::hash_map<tlp::node,double> *px, stdext::hash_map<tlp::node,double> *py,
 		  double x, double y, int level);
-  void computeLayerSize(node , int);
-  void computeYCoodinates(node);
-  SizeProperty * nodeSize;
+  void computeLayerSize(tlp::node , int);
+  void computeYCoodinates(tlp::node);
+  tlp::SizeProperty * nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;
 

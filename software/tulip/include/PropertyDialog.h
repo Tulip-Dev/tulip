@@ -27,12 +27,12 @@ class PropertyDialog : public PropertyDialogData
 public:
   PropertyDialog(QWidget *parent = 0, const char *name = 0, bool modal = FALSE, WFlags fl = 0);
   ~PropertyDialog();
-  void setGlGraphWidget(GlGraph *);
+  void setGlGraphWidget(tlp::GlGraph *);
 
 private:
-  Graph *graph;
-  GlGraph *glWidget;
-  PropertyInterface *editedProperty;
+  tlp::Graph *graph;
+  tlp::GlGraph *glWidget;
+  tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;
   void updateNbElements();
@@ -40,9 +40,9 @@ private:
 public slots:  
   ///Manages observers change notification.
   void update();
-  void selectNode(node);
-  void selectEdge(edge);
-  void setGraph(Graph *);
+  void selectNode(tlp::node);
+  void selectEdge(tlp::edge);
+  void setGraph(tlp::Graph *);
   void changePropertyName(QListViewItem *);
   void newProperty();
   void removeProperty();
@@ -52,8 +52,8 @@ public slots:
   void setAllValue();
   
 signals:
-  void tulipAllNodePropertyChanged(Graph *, const QString &property, const QString &value);
-  void tulipAllEdgePropertyChanged(Graph *, const QString &property, const QString &value);
+  void tulipAllNodePropertyChanged(tlp::Graph *, const QString &property, const QString &value);
+  void tulipAllEdgePropertyChanged(tlp::Graph *, const QString &property, const QString &value);
 };
 
 #endif // PROPERTYDIALOG_H

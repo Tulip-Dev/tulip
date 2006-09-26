@@ -40,53 +40,53 @@
  *  (at your option) any later version.
  *
  */
-class MixedModel : public LayoutAlgorithm {
+class MixedModel : public tlp::LayoutAlgorithm {
  public:
-  MixedModel(const PropertyContext &context);
+  MixedModel(const tlp::PropertyContext &context);
   ~MixedModel();
   bool run();
   bool check(std::string &);
 
  private:
   
-  std::vector<edge> getPlanarSubGraph(PlanarConMap *graph, std::vector<edge> unplanar_edges);
+  std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph, std::vector<tlp::edge> unplanar_edges);
   void initPartition();
   void assignInOutPoints();
   void computeCoords();
   void placeNodesEdges();
 
-  edge existEdge(node n, node v);
+  tlp::edge existEdge(tlp::node n, tlp::node v);
   
-  node rightV(unsigned int k);
-  node leftV(unsigned int k);
-  int next_right(unsigned int k, const node v);
-  int next_left(unsigned int k, const node v);
+  tlp::node rightV(unsigned int k);
+  tlp::node leftV(unsigned int k);
+  int next_right(unsigned int k, const tlp::node v);
+  int next_left(unsigned int k, const tlp::node v);
   
-  PlanarConMap* carte;
-  std::vector< std::vector<node> > V;
-  std::map<node, Coord> NodeCoords;
+  tlp::PlanarConMap* carte;
+  std::vector< std::vector<tlp::node> > V;
+  std::map<tlp::node, tlp::Coord> NodeCoords;
   
-  std::map<node, int> outl;
-  std::map<node, int> outr;
-  std::map<node, int> inl;
-  std::map<node, int> inr;
+  std::map<tlp::node, int> outl;
+  std::map<tlp::node, int> outr;
+  std::map<tlp::node, int> inl;
+  std::map<tlp::node, int> inr;
   
-  std::map<node, unsigned int> rank;
-  std::map<node, std::vector<edge> > EdgesIN;
-  std::map<node, std::vector<edge> > EdgesOUT;
+  std::map<tlp::node, unsigned int> rank;
+  std::map<tlp::node, std::vector<tlp::edge> > EdgesIN;
+  std::map<tlp::node, std::vector<tlp::edge> > EdgesOUT;
 
-  std::map<edge, std::vector<Coord> > InPoints;
-  std::map<edge, Coord> OutPoints;
+  std::map<tlp::edge, std::vector<tlp::Coord> > InPoints;
+  std::map<tlp::edge, tlp::Coord> OutPoints;
 
-  Graph * Pere;
-  PlanarConMap * graphMap;
-  Graph * currentGraph;
-  std::vector<edge> dummy;
-  std::map<node, std::vector<Coord> > out_points;
-  MutableContainer<Coord>::MutableContainer nodeSize;
-  std::vector<edge> unplanar_edges;
+  tlp::Graph * Pere;
+  tlp::PlanarConMap * graphMap;
+  tlp::Graph * currentGraph;
+  std::vector<tlp::edge> dummy;
+  std::map<tlp::node, std::vector<tlp::Coord> > out_points;
+  tlp::MutableContainer<tlp::Coord>::MutableContainer nodeSize;
+  std::vector<tlp::edge> unplanar_edges;
   bool planar;
-  SizeProperty *size;
+  tlp::SizeProperty *size;
 
 };
 /*@}*/

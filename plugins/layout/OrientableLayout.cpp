@@ -2,6 +2,8 @@
 
 #include "OrientableLayout.h"
 
+using namespace tlp;
+
 //====================================================================
 OrientableLayout::OrientableLayout(LayoutProperty* layoutParam,
                                    orientationType mask) {

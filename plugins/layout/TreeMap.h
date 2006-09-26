@@ -41,9 +41,9 @@
  *  (at your option) any later version.
  *
 */
-class TreeMap:public LayoutAlgorithm { 
+class TreeMap:public tlp::LayoutAlgorithm { 
 public:
-  TreeMap(const PropertyContext &);
+  TreeMap(const tlp::PropertyContext &);
   ~TreeMap();
   bool run();
   bool check(std::string &);
@@ -51,12 +51,12 @@ public:
 
 
 private:
-  void dfsPlacement(node n, int depth, double x, double y, double width, double height,
-		    bool direction, stdext::hash_map<node,double> &value);
-  double initVal(node n, stdext::hash_map<node,double> &value);
-  SizeProperty *size;
-  DoubleProperty *metric;
-  ColorProperty *color;
+  void dfsPlacement(tlp::node n, int depth, double x, double y, double width, double height,
+		    bool direction, stdext::hash_map<tlp::node,double> &value);
+  double initVal(tlp::node n, stdext::hash_map<tlp::node,double> &value);
+  tlp::SizeProperty *size;
+  tlp::DoubleProperty *metric;
+  tlp::ColorProperty *color;
 };
 /*@}*/
 #endif

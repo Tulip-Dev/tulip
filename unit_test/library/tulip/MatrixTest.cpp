@@ -92,7 +92,7 @@ void MatrixTest::testInternalOperation() {
       CPPUNIT_ASSERT_EQUAL((double)((i+1)*(j+SIZE)), mat1[i][j]);
       if (i==j) mat1[i][j] = 0.0;
     }
-  const Matrix<double, SIZE> mat2(mat1);
+  Matrix<double, SIZE> mat2(mat1);
   CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
   mat1[1] += 3;
   CPPUNIT_ASSERT_EQUAL(false, mat1 == mat2);
@@ -118,6 +118,14 @@ void MatrixTest::testInternalOperation() {
       if (res < 1.E-5) ok = true;
       CPPUNIT_ASSERT_EQUAL(true, ok);
     }
+  mat1.fill(1.0);
+  mat2 = mat1;
+  mat1*= mat2;
+  mat2*= SIZE;
+  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  mat1.fill(1.0);
+  mat1*= mat1;
+  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
 }
 //==========================================================
 CppUnit::Test * MatrixTest::suite() {

@@ -12,8 +12,8 @@ class Application:public QApplication {
 public:
   TulipElementProperties *nodeProperties;
   std::string bitmapPath;
-  Color nodeColor;
-  Color edgeColor;
+  tlp::Color nodeColor;
+  tlp::Color edgeColor;
   Application(int& argc, char ** argv); 
   ~Application();
 };

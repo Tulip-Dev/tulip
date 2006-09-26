@@ -16,9 +16,9 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class MultipleEdgeSelection:public BooleanAlgorithm { 
+class MultipleEdgeSelection:public tlp::BooleanAlgorithm { 
 public:
-  MultipleEdgeSelection(const PropertyContext &);
+  MultipleEdgeSelection(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

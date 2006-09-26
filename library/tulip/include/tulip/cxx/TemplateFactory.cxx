@@ -14,20 +14,18 @@
 
 #include <tulip/Plugin.h>
 
-using namespace tlp;
-
 template<class ObjectFactory, class ObjectType, class Parameter>
-Iterator<std::string>* TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
-  return new StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
+tlp::Iterator<std::string>* tlp::TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
+  return new tlp::StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
 }
 
 template<class ObjectFactory, class ObjectType, class Parameter>
-bool TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::string &pluginName) {
+bool tlp::TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::string &pluginName) {
   return (objMap.find(pluginName) != objMap.end());
 }
 
 template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
   objNames.insert(objectFactory->getName());
   objMap[objectFactory->getName()]=objectFactory;
   if (currentLoader!=0) currentLoader->loaded(
@@ -39,16 +37,16 @@ void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(Ob
 				objectFactory->getVersion()
 				);
   Parameter p = Parameter();
-  WithParameter *withParam=objectFactory->createObject(p);
+  tlp::WithParameter *withParam=objectFactory->createObject(p);
   objParam[objectFactory->getName()]=withParam->getParameters();
 }
 
 template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,PluginLoader *loader) {
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,tlp::PluginLoader *loader) {
   if (loader!=0)
     loader->start(pluginPath.c_str(),type);
 
-  PluginIterator iterator(pluginPath, loader);
+  tlp::PluginIterator iterator(pluginPath, loader);
 
   currentLoader = loader;
   if (iterator.isValid()) {
@@ -62,23 +60,8 @@ void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string plugi
   }
 }
 
-/* template<class ObjectFactory, class ObjectType, class Parameter>
-bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file) {
-  createObj = getCreationFunc(file);
-  if(createObj == NULL)
-    return false;
-  else {
-    ObjectFactory *tmpObjectFactory=(ObjectFactory *)createObj();
-    objMap[tmpObjectFactory->getName()]=tmpObjectFactory;
-    Parameter p;
-    WithParameter *withParam=tmpObjectFactory->createObject(p);
-    objParam[tmpObjectFactory->getName()]=withParam->getParameters();
-  }
- return true;
- } */
-
 template<class ObjectFactory, class ObjectType, class Parameter>
-ObjectType * TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)
+ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)
 {
   typename ObjectCreator::iterator it;
 #ifndef NDEBUG 
@@ -89,7 +72,7 @@ ObjectType * TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std:
   return 0;
 }
 template<class ObjectFactory, class ObjectType, class Parameter>
-StructDef TemplateFactory<ObjectFactory,ObjectType,Parameter>::getParam(std::string name){
+tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getParam(std::string name){
   assert(objMap.find(name)!=objMap.end());
   return objParam[name];
 }

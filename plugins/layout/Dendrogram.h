@@ -22,9 +22,9 @@ class OrientableSizeProxy;
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  **/
-class Dendrogram: public LayoutAlgorithm {
+class Dendrogram: public tlp::LayoutAlgorithm {
 public:
-    Dendrogram(const PropertyContext&);
+    Dendrogram(const tlp::PropertyContext&);
     ~Dendrogram();
   
     bool run();
@@ -35,17 +35,17 @@ private:
     static const float      INTER_NODE_DISTANCE_X;  
     static const float      INTER_NODE_DISTANCE_Y;  
     
-    std::map<node, float>   leftshift;
-    node                    root;
+    std::map<tlp::node, float>   leftshift;
+    tlp::node                    root;
     OrientableLayout*       oriLayout;
     OrientableSizeProxy*    oriSize;
 
-    float   setAllNodesCoordX(node n, float rightMargin);
+    float   setAllNodesCoordX(tlp::node n, float rightMargin);
     void    setAllNodesCoordY();
-    float   computeFatherXPosition(node father);
-    void    shiftAllNodes(node n, float shift);
-    void    setNodePosition(node n, float x, float y, float z);
-    void    setCoordY(node n, float* maxYLeaf, float* maxHeightLeaf);
+    float   computeFatherXPosition(tlp::node father);
+    void    shiftAllNodes(tlp::node n, float shift);
+    void    setNodePosition(tlp::node n, float x, float y, float z);
+    void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf);
 };
 /*@}*/
 #endif

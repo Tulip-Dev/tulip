@@ -5,12 +5,12 @@
 #include <tulip/LayoutProperty.h>
 #include "Orientation.h"
 
-void 	        addOrientationParameters(LayoutAlgorithm* pLayout);
-DataSet         setOrientationParameters(int orientation);
-void 		addOrthogonalParameters(LayoutAlgorithm* pLayout);
+void 	        addOrientationParameters(tlp::LayoutAlgorithm* pLayout);
+tlp::DataSet         setOrientationParameters(int orientation);
+void 		addOrthogonalParameters(tlp::LayoutAlgorithm* pLayout);
 	
-orientationType getMask(DataSet* dataSet);
-bool 		hasOrthogonalEdge(DataSet* dataSet);
+orientationType getMask(tlp::DataSet* dataSet);
+bool 		hasOrthogonalEdge(tlp::DataSet* dataSet);
 
 
 #endif

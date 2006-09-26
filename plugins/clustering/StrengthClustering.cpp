@@ -15,11 +15,12 @@
 #include <tulip/ForEach.h>
 #include "StrengthClustering.h"
 
-CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
 
 using namespace std;
 using namespace tlp;
 using namespace stdext;
+
+CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}

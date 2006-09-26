@@ -62,7 +62,13 @@ namespace {
   };
 }
 
+// workaround for G++ bug for <<
+inline void printGraph(std::ostream &os, tlp::Graph *graph) {
+  os << graph << endl;
+}
+
 namespace tlp {
+
 /** \addtogroup export */
 /*@{*/
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -78,7 +84,7 @@ struct TLPExport:public ExportModule {
     //=====================================================
   ~TLPExport(){}
     //=====================================================
-  void saveGraphElements(ostream &os,Graph *graph) {
+  void saveGraphElements(ostream &os, Graph *graph) {
     if (graph->getFather() != graph) {
       os << "(cluster " << graph->getId() << " \"" << graph->getAttribute<string>("name") << "\"" << endl;
       Iterator<node> *itN = graph->getNodes();
@@ -101,7 +107,7 @@ struct TLPExport:public ExportModule {
       } delete itE;
     }
     else
-      os << graph << endl;
+      printGraph(os, graph);
     Iterator<Graph *> *itS = graph->getSubGraphs();
     while (itS->hasNext())
       saveGraphElements(os,itS->next());

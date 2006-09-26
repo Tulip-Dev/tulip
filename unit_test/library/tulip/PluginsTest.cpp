@@ -5,6 +5,7 @@
 #include <tulip/BooleanProperty.h>
 
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );

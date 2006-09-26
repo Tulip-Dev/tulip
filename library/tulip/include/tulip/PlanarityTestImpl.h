@@ -230,7 +230,7 @@ private:
 
 //std::ostream& operator <<(std::ostream &os , node n);
 //std::ostream& operator <<(std::ostream &os , edge e);
-std::list<edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
+std::list<tlp::edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
 
 #endif
 #endif

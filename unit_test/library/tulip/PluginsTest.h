@@ -10,7 +10,7 @@
 
 class PluginsTest : public CppUnit::TestFixture {
 private:
-  Graph *graph;
+  tlp::Graph *graph;
 
 public:
   void setUp();

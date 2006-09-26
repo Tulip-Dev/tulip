@@ -4,23 +4,23 @@
 #include <cmath>
 #include <tulip/TulipPlugin.h>
 
-class SpringElectrical:public LayoutAlgorithm { 
+class SpringElectrical:public tlp::LayoutAlgorithm { 
 public:
-  SpringElectrical(const PropertyContext &);
+  SpringElectrical(const tlp::PropertyContext &);
   bool run();
 
 private:
-  MutableContainer<double> sizeNorm;
-  bool checkEdgeIntersection(const node n, const Coord& move);
+  tlp::MutableContainer<double> sizeNorm;
+  bool checkEdgeIntersection(const tlp::node n, const tlp::Coord& move);
   
-  SizeProperty * sizeOfNodes;
-  LayoutProperty* originalLayout;
+  tlp::SizeProperty * sizeOfNodes;
+  tlp::LayoutProperty* originalLayout;
   
   bool useEdgeLength;
-  DoubleProperty* edgeLength;
+  tlp::DoubleProperty* edgeLength;
   
   bool forbidMoveOfSelectedNodes;
-  BooleanProperty* selectedNodes;
+  tlp::BooleanProperty* selectedNodes;
   
   bool removeOverlaps;
 };

@@ -29,24 +29,21 @@ struct LR
  *  (at your option) any later version.
  *
 */
-class GeneralGraph3D:public LayoutAlgorithm { 
+class GeneralGraph3D:public tlp::LayoutAlgorithm { 
 
 public:
-  GeneralGraph3D(const PropertyContext &);
+  GeneralGraph3D(const tlp::PropertyContext &);
   ~GeneralGraph3D();  
   bool run();
 
 private:
-  void DagLevelSpanningTree(Graph* ,node n);
-  void makeAcyclic(Graph*,std::set<edge> &,std::list<SelfLoops> &);
-  node makeSimpleSource(Graph* graph);
-  void makeProperDag(Graph* graph, std::list<node> &, stdext::hash_map<edge,edge> &);
+  void DagLevelSpanningTree(tlp::Graph* , tlp::node n);
+  void makeAcyclic(tlp::Graph*,std::set<tlp::edge> &,std::list<tlp::SelfLoops> &);
+  tlp::node makeSimpleSource(tlp::Graph* graph);
+  void makeProperDag(tlp::Graph* graph, std::list<tlp::node> &, stdext::hash_map<tlp::edge,tlp::edge> &);
 };
 /*@}*/
 #endif
-
-
-
 
 
 

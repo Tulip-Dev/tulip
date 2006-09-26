@@ -35,9 +35,9 @@
  *  (at your option) any later version.
  *
  */
-class IdMetric:public DoubleAlgorithm { 
+class IdMetric:public tlp::DoubleAlgorithm { 
 public:
-  IdMetric(const PropertyContext &);
+  IdMetric(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

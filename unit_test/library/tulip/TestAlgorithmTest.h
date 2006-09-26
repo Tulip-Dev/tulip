@@ -11,7 +11,7 @@ class Graph;
 
 class TestAlgorithmTest : public CppUnit::TestFixture {
 private:
-  Graph *graph;
+  tlp::Graph *graph;
 
 public:
   void setUp();

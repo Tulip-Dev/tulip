@@ -2,6 +2,7 @@
 #include <tulip/ForEach.h>
 #include "ConnectedComponent.h"
 
+using namespace tlp;
 
 DOUBLEPLUGINOFGROUP(ConnectedComponent,"Connected Component","David Auber","01/07/2002","Alpha","0","1","Component");
 

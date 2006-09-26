@@ -3,25 +3,10 @@
 #define Tulip_Hierarchical_H
 #include <tulip/TulipPlugin.h>
 
-class SelfLoops {
-public:
-  SelfLoops(node n1,node n2,edge ee1, edge ee2,edge ee3,edge old) {
-    ghostNode1=n1;
-    ghostNode2=n2;
-    e1=ee1;
-    e2=ee2;
-    e3=ee3;
-    oldEdge=old;
-  }
-  ~SelfLoops(){}
-  node ghostNode1,ghostNode2;
-  edge e1,e2,e3,oldEdge;  
-};
-
 class LessThanNode2 {
 public:
-  DoubleProperty *metric;
-  bool operator() (node n1,node n2){return (metric->getNodeValue(n1) < metric->getNodeValue(n2));}
+  tlp::DoubleProperty *metric;
+  bool operator() (tlp::node n1, tlp::node n2){return (metric->getNodeValue(n1) < metric->getNodeValue(n2));}
 };
 
 /** \addtogroup layout */
@@ -52,28 +37,28 @@ public:
  *  (at your option) any later version.
  *
 */
-class HierarchicalGraph:public LayoutAlgorithm { 
+class HierarchicalGraph:public tlp::LayoutAlgorithm { 
 
 public:
-  HierarchicalGraph(const PropertyContext &);
+  HierarchicalGraph(const tlp::PropertyContext &);
   ~HierarchicalGraph();
   bool run();
 
 private:
-  void DagLevelSpanningTree(Graph* ,DoubleProperty *);
-  std::vector< std::vector<node> > grid;
-  DoubleProperty *embedding;
-  void twoLayerCrossReduction(Graph*,unsigned int freeLayer,bool sense);
-  void crossReduction(Graph*);
-  void computeEdgeBends(const Graph *mySGraph, LayoutProperty &tmpLayout, 
-			const stdext::hash_map<edge,edge> &replacedEdges, const std::vector<edge> &reversedEdges);
-  void computeSelfLoops(Graph *mySGraph, LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
-  void buildGrid(Graph*);
-  unsigned int degree(Graph*,node,bool);
-  void initCross(Graph*graph,node n, MutableContainer<bool> &visited,int id);
+  void DagLevelSpanningTree(tlp::Graph* ,tlp::DoubleProperty *);
+  std::vector< std::vector<tlp::node> > grid;
+  tlp::DoubleProperty *embedding;
+  void twoLayerCrossReduction(tlp::Graph*,unsigned int freeLayer,bool sense);
+  void crossReduction(tlp::Graph*);
+  void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, 
+			const stdext::hash_map<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
+  void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
+  void buildGrid(tlp::Graph*);
+  unsigned int degree(tlp::Graph*, tlp::node, bool);
+  void initCross(tlp::Graph*graph, tlp::node n, tlp::MutableContainer<bool> &visited,int id);
 
   LessThanNode2 lessNode;
-  SizeProperty *nodeSize;
+  tlp::SizeProperty *nodeSize;
   std::string orientation;
   float spacing;
   float nodeSpacing;

@@ -40,17 +40,17 @@ struct NodeInfo{
  *  (at your option) any later version.
  *
  */
-class StrongComponent:public DoubleAlgorithm { 
+class StrongComponent:public tlp::DoubleAlgorithm { 
 public:
-  StrongComponent(const PropertyContext &);
+  StrongComponent(const tlp::PropertyContext &);
   ~StrongComponent();
   bool run();
   bool check(std::string &);
   void reset();
   
 private:
-  int  attachNumerotation(node, stdext::hash_map<node,bool> &, stdext::hash_map<node,bool> &,
-			  stdext::hash_map<node,int> &, int &, std::stack<node> &, int &);
+  int  attachNumerotation(tlp::node, stdext::hash_map<tlp::node,bool> &, stdext::hash_map<tlp::node,bool> &,
+			  stdext::hash_map<tlp::node,int> &, int &, std::stack<tlp::node> &, int &);
 };
 
 #endif

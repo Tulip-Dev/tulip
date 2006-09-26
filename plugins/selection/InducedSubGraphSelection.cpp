@@ -12,6 +12,8 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
+using namespace tlp;
+
 BOOLEANPLUGIN(InducedSubGraphSelection,"Induced sub-graph","David Auber","08/08/2001","Alpha","0","1");
 
 //=================================================================================

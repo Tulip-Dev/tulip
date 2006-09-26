@@ -15,9 +15,9 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class InducedSubGraphSelection:public BooleanAlgorithm { 
+class InducedSubGraphSelection:public tlp::BooleanAlgorithm { 
 public:
-  InducedSubGraphSelection(const PropertyContext &);
+  InducedSubGraphSelection(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

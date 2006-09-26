@@ -5,11 +5,11 @@
 #include <tulip/TulipPlugin.h>
 #include <tulip/DoubleProperty.h>
 
-class ScatterPlot : public LayoutAlgorithm
+class ScatterPlot : public tlp::LayoutAlgorithm
 { 
  public:
 
-  ScatterPlot(const PropertyContext &);
+  ScatterPlot(const tlp::PropertyContext &);
   ~ScatterPlot();
   
   bool run();
@@ -20,7 +20,7 @@ class ScatterPlot : public LayoutAlgorithm
   int nMetrics;
   bool shapeConversion;
   double disc[3];
-  DoubleProperty* metric[3]; 
+  tlp::DoubleProperty* metric[3]; 
 };
 #endif
 

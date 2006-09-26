@@ -1,5 +1,7 @@
 #include "OrientableSizeProxy.h"
 
+using namespace tlp;
+
 //====================================================================
 OrientableSizeProxy::OrientableSizeProxy(SizeProperty* sizesProxyParam,
                                          orientationType mask) : 

@@ -28,9 +28,9 @@
  *  (at your option) any later version.
  *
  */
-class DagLevelMetric:public DoubleAlgorithm {
+class DagLevelMetric:public tlp::DoubleAlgorithm {
 public:
-  DagLevelMetric(const PropertyContext &);
+  DagLevelMetric(const tlp::PropertyContext &);
   ~DagLevelMetric();
   bool run();
   bool check(std::string &);

@@ -27,9 +27,9 @@
  *  (at your option) any later version.
  *
  */
-class ArityMetric:public DoubleAlgorithm { 
+class ArityMetric:public tlp::DoubleAlgorithm { 
 public:
-  ArityMetric(const PropertyContext &);
+  ArityMetric(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

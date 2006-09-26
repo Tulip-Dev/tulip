@@ -11,6 +11,8 @@
 #include <tulip/ForEach.h>
 
 using namespace std;
+using namespace tlp;
+ 
 static int win;
 
 unsigned int frameCount = 5;

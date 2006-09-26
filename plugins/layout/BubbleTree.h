@@ -39,19 +39,19 @@
  *  \author David Auber, S. Grivet  University Bordeaux I France: 
  *   auber@tulip-software.org, grivet@labri.fr
  */
-class BubbleTree:public LayoutAlgorithm { 
+class BubbleTree:public tlp::LayoutAlgorithm { 
 public:
-  BubbleTree(const PropertyContext &);
+  BubbleTree(const tlp::PropertyContext &);
   ~BubbleTree();
   bool run();
   bool check(std::string &);
   void reset();
 private:
-  double computeRelativePosition(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout2(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition,
+  double computeRelativePosition(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout2(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
-  SizeProperty *nodeSize;
+  tlp::SizeProperty *nodeSize;
   bool nAlgo;
 };
 /*@}*/

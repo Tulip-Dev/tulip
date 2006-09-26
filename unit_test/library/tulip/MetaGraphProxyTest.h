@@ -11,8 +11,8 @@
 
 class MetaGraphProxyTest : public CppUnit::TestFixture {
 private:
-  Graph *graph;
-  GraphProperty *metaGraph;
+  tlp::Graph *graph;
+  tlp::GraphProperty *metaGraph;
 
 public:
   void setUp();

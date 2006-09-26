@@ -21,7 +21,7 @@ class SuperGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE_END();
   */
 private:
-  Graph *graph;
+  tlp::Graph *graph;
 
 public:
   void setUp();

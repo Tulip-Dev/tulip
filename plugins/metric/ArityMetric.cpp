@@ -1,6 +1,8 @@
 #include <tulip/ForEach.h>
 #include "ArityMetric.h"
 
+using namespace tlp;
+
 DOUBLEPLUGINOFGROUP(ArityMetric,"Degree","David Auber","04/10/2001","Stable","0","1","Graph");
 
 ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
@@ -14,7 +16,3 @@ bool ArityMetric::run() {
   return true;
 }
 //==================================================================
-
-
-
-

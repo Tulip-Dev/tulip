@@ -18,10 +18,10 @@
  *
  *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.com
  */
-class Random:public LayoutAlgorithm
+class Random:public tlp::LayoutAlgorithm
 { 
 public:
-  Random(const PropertyContext &);
+  Random(const tlp::PropertyContext &);
   ~Random();
   
   bool run();

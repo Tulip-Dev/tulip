@@ -3,6 +3,8 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 
+using namespace tlp;
+
 Glyph::Glyph(GlyphContext *gc) {
   if (gc!=NULL) {
     graph=gc->graph;

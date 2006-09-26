@@ -14,14 +14,14 @@
 
 #include <tulip/TulipPlugin.h>
 
-class PathLengthMetric:public DoubleAlgorithm { 
+class PathLengthMetric:public tlp::DoubleAlgorithm { 
 public:
-  PathLengthMetric(const PropertyContext &);
+  PathLengthMetric(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 private:
-  double getNodeValue(const node n);
-  DoubleProperty* leafMetric;
+  double getNodeValue(const tlp::node n);
+  tlp::DoubleProperty* leafMetric;
 };
 
 #endif

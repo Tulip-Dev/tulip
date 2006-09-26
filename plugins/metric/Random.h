@@ -25,9 +25,9 @@
  *  (at your option) any later version.
  *
  */
-class RandomMetric:public DoubleAlgorithm { 
+class RandomMetric:public tlp::DoubleAlgorithm { 
 public:
-  RandomMetric(const PropertyContext &);
+  RandomMetric(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

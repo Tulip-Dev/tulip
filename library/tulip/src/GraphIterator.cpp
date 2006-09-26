@@ -7,6 +7,8 @@
 #include "tulip/GraphIterator.h"
 #include "tulip/BooleanProperty.h"
 
+using namespace tlp;
+
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter):FactorIterator<node>(sG,filter) {
   it=_parentGraph->getNodes();

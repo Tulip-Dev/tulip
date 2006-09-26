@@ -2,7 +2,7 @@
 #include "tulip/IntegerProperty.h"
 #include "tulip/Graph.h"
 
-IntegerAlgorithm::IntegerAlgorithm (const PropertyContext & context):PropertyAlgorithm<IntegerType , IntegerType>(context) {
-  integerResult =(IntegerProperty *)context.propertyProxy;
+tlp::IntegerAlgorithm::IntegerAlgorithm (const tlp::PropertyContext & context):tlp::PropertyAlgorithm<tlp::IntegerType , tlp::IntegerType>(context) {
+  integerResult =(tlp::IntegerProperty *)context.propertyProxy;
 }
 

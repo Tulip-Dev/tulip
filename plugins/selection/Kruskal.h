@@ -20,10 +20,10 @@
  *
  *  \author Anthony Don, LaBRI University Bordeaux I France: 
  */
-class Kruskal:public BooleanAlgorithm { 
+class Kruskal:public tlp::BooleanAlgorithm { 
   
 public:
-  Kruskal(const PropertyContext &);
+  Kruskal(const tlp::PropertyContext &);
   ~Kruskal();
   bool run();
   bool check(std::string &);
@@ -31,9 +31,9 @@ public:
 private:
 
   struct ltEdge {
-    DoubleProperty *m;
-    ltEdge(DoubleProperty *m) : m(m) {}
-    bool operator()(const edge &e1, const edge &e2) const
+    tlp::DoubleProperty *m;
+    ltEdge(tlp::DoubleProperty *m) : m(m) {}
+    bool operator()(const tlp::edge &e1, const tlp::edge &e2) const
     {
       return (m->getEdgeValue(e1) < m->getEdgeValue(e2));
     } 
@@ -43,7 +43,7 @@ private:
   int numClasses;
   int getClass(const int i);
   int makeUnion(const int p, const int q);
-  bool edgeOk(const edge &e);
+  bool edgeOk(const tlp::edge &e);
 };
 /*@}*/
 #endif

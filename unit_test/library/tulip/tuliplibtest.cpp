@@ -30,6 +30,7 @@ int main( int argc, char** argv ) {
 #include "SuperGraphTest.h"
 #include "ExtendedClusterOperationTest.h"
 #include "PluginsTest.h"
+#include "MatrixTest.h"
 using namespace std;
 int main( int argc, char **argv) {
   CppUnit::TextUi::TestRunner runner;
@@ -41,6 +42,7 @@ int main( int argc, char **argv) {
   runner.addTest( ExtendedClusterOperationTest::suite() );
   runner.addTest( SuperGraphMapTest::suite());
   runner.addTest( FaceIteratorTest::suite());
+  runner.addTest( MatrixTest::suite());
   runner.run();
   return EXIT_SUCCESS;
 }

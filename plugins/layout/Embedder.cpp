@@ -14,6 +14,8 @@
    using stdext::hash_map;
 #endif
 
+using namespace tlp;
+
 /** \addtogroup layout */
 /*@{*/
 /// Embedder.cpp - An implementation of the HDE algorithm.

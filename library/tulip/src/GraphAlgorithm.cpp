@@ -7,6 +7,6 @@
 #include "tulip/Graph.h"
 #include "tulip/GraphProperty.h"
 
-GraphAlgorithm::GraphAlgorithm (const PropertyContext &context):PropertyAlgorithm<GraphType , GraphType>(context) {
-  graphResult =(GraphProperty *)context.propertyProxy;
+tlp::GraphAlgorithm::GraphAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm<tlp::GraphType , tlp::GraphType>(context) {
+  graphResult =(tlp::GraphProperty *)context.propertyProxy;
 }

@@ -6,11 +6,11 @@
 
 #include <tulip/TulipPlugin.h>
 
-class ConvolutionClustering:public Clustering
+class ConvolutionClustering:public tlp::Clustering
 { 
 public:
 
-  ConvolutionClustering(ClusterContext);
+  ConvolutionClustering(tlp::ClusterContext);
   ~ConvolutionClustering();
   bool run();
   bool check(std::string &);

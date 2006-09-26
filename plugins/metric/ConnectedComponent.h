@@ -29,14 +29,14 @@
  *  (at your option) any later version.
  *
  */
-class ConnectedComponent:public DoubleAlgorithm { 
+class ConnectedComponent:public tlp::DoubleAlgorithm { 
 public:
-  ConnectedComponent(const PropertyContext &);
+  ConnectedComponent(const tlp::PropertyContext &);
   ~ConnectedComponent();
   bool run();
 
 private:
-  void dfs(node n, MutableContainer<bool> &flag,double value);
+  void dfs(tlp::node n, tlp::MutableContainer<bool> &flag,double value);
 };
 /*@}*/
 #endif

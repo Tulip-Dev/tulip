@@ -9,6 +9,7 @@
 #include <tulip/GlGraph.h>
 
 using namespace std;
+using namespace tlp;
 
 class CubeOutLinedTransparent : public Glyph {
 public:

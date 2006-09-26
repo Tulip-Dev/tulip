@@ -64,13 +64,13 @@ struct viewGlFile {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public TulipData, Observer {
+class viewGl : public TulipData, tlp::Observer {
   Q_OBJECT;
 
 public:
   viewGl(QWidget *parent=NULL, const char *name=NULL);
   virtual ~viewGl();
-  void setParameters(const DataSet);
+  void setParameters(const tlp::DataSet);
   bool eventFilter(QObject *, QEvent *);
 
 protected:
@@ -88,7 +88,7 @@ protected:
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
   TulipElementProperties *nodeProperties;
-  Graph * copyCutPasteGraph;
+  tlp::Graph * copyCutPasteGraph;
   bool elementsDisabled;
 
   QPopupMenu layoutMenu;
@@ -107,16 +107,16 @@ protected:
 
   //QPopupMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );
-  typedef std::set< Observable * >::iterator ObserverIterator;
+  typedef std::set< tlp::Observable * >::iterator ObserverIterator;
   void update ( ObserverIterator begin, ObserverIterator end);
-  void observableDestroyed(Observable *);
+  void observableDestroyed(tlp::Observable *);
   void initObservers();
   void clearObservers();
   void enableQPopupMenu(QPopupMenu *, bool);
   void enableElements(bool);
   void setNavigateCaption(std::string);
-  void initializeGraph(Graph *);
-  void initializeGlGraph(GlGraph *);
+  void initializeGraph(tlp::Graph *);
+  void initializeGlGraph(tlp::GlGraph *);
 
 public slots:
   void startTulip();
@@ -166,7 +166,7 @@ protected slots:
   void windowsMenuActivated( int id );
   void new3DView();
   void goInside();
-  void changeGraph(Graph *);
+  void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
   void glGraphWidgetClosed(GlGraphWidget *);
   void ungroup();  
@@ -194,14 +194,14 @@ private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlGraphWidget *newOpenGlView(Graph *graph,const QString &);
+  GlGraphWidget *newOpenGlView(tlp::Graph *graph,const QString &);
   std::string newName();
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
   bool fileSave(std::string plugin, std::string filename, std::string author, std::string comments);
-  int alreadyTreated(std::set<unsigned int>, Graph *);
+  int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
-  Morphing *morph;
+  tlp::Morphing *morph;
 
   QAssistantClient* assistant;
 };

@@ -1,4 +1,3 @@
-using namespace tlp;
 
 //=================================================================
 template <typename Obj,unsigned int SIZE>
