@@ -95,6 +95,7 @@
 #include "tulip/ExportModule.h"
 #include "tulip/Clustering.h"
 #include "tulip/ImportModule.h"
+#include "tulip/ForEach.h"
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
@@ -676,6 +677,33 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
+
+    // Ugly hack to handle old Tulip 2 file
+    // to remove in future version
+    Coord sr;
+    if (glGraphData.get<Coord>("sceneRotation", sr)) {
+      // recenter view
+      // because setParameters no long deals with sceneRotation
+      // and sceneTranslation
+      centerView();
+      // update viewColor alpha channel
+      // which not manage in Tulip 2
+      ColorProperty *colors = newGraph->getLocalProperty<ColorProperty>("viewColor");
+      node n;
+      forEach(n, newGraph->getNodes()) {
+	Color color = colors->getNodeValue(n);
+	if (!color.getA())
+	  color.setA(200);
+	colors->setNodeValue(n, color);
+      }
+      edge e;
+      forEach(e, newGraph->getEdges()) {
+	Color color = colors->getEdgeValue(e);
+	if (!color.getA())
+	  color.setA(200);
+	colors->setEdgeValue(e, color);
+      }
+    }
     glW->draw();
   }
   /* else {
