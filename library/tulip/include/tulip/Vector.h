@@ -10,8 +10,6 @@
 #include <cassert>
 #include <tulip/Array.h>
 #include <tulip/tulipconf.h>
-#define VECTOR Vector<Obj,SIZE>
-#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
 
 namespace tlp {
   /**
@@ -28,6 +26,9 @@ namespace tlp {
    * \author : David Auber auber@tulip-software.org
    * \version 0.0.1 24/01/2003 
    */
+#define VECTOR Vector<Obj,SIZE>
+#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
+
   TEMPLATEVECTOR
     class TLP_SCOPE Vector:public Array<Obj,SIZE> {
     public:

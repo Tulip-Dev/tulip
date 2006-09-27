@@ -1,6 +1,5 @@
 //@TLPGEOLICENCE#
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLP_GEO_MATRIX_H
 #define _TLP_GEO_MATRIX_H
 
@@ -13,8 +12,6 @@
 #include <tulip/Vector.h>
 //#include <tulip/Polynome.h>
 #include <vector>
-
-#define MATRIX Matrix<Obj,SIZE>
 
 
 namespace tlp {
@@ -35,6 +32,8 @@ namespace tlp {
      * \author Contributor : Maxime Delorme
      * \version 0.0.2 27/04/2005 
      */
+#define MATRIX Matrix<Obj,SIZE>
+
     template<typename Obj,unsigned int SIZE>
     class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
     public:
@@ -112,6 +111,7 @@ namespace tlp {
        */
       inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
       /**
        * Simplifies a 3x3 matrix in 2x2 matrix to be used with computeEigenVector
        */
@@ -122,6 +122,7 @@ namespace tlp {
        *           /!\ This can only be used with a 2x2 matrix !!! /!\
        */
       inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
+#endif // DOXYGEN_NOTFOR_DEVEL
 
     };
     /*@}*/
@@ -130,4 +131,3 @@ namespace tlp {
 
 #include "./cxx/Matrix.cxx"
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
