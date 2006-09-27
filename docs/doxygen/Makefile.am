@@ -14,7 +14,7 @@ tulip-lib.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip " >> $@
+	echo "INPUT = $(top_srcdir)/library/tulip/include/tulip " >> $@
 	echo "HTML_OUTPUT = tulip-lib">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
@@ -26,7 +26,7 @@ tulip-libogl.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip-ogl " >> $@
+	echo "INPUT = $(top_srcdir)/library/tulip-ogl/include/tulip " >> $@
 	echo "HTML_OUTPUT = tulip-libogl" >> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
@@ -38,7 +38,7 @@ tulip-libqt.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip-qt " >> $@
+	echo "INPUT = $(top_srcdir)/library/tulip-qt/include/tulip " >> $@
 	echo "HTML_OUTPUT = tulip-libqt">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
@@ -68,7 +68,7 @@ man-lib.doxygen: general general-man
 	echo "PROJECT_NAME = \"Tulip Graph Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip">> $@
+	echo "INPUT = $(top_srcdir)/library/tulip/include/tulip">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
@@ -76,7 +76,7 @@ man-ogl.doxygen: general general-man
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip-ogl">> $@
+	echo "INPUT = $(top_srcdir)/library/tulip-ogl/include/tulip">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
@@ -84,7 +84,7 @@ man-qt.doxygen: general general-man
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
-	echo "INPUT = $(top_srcdir)/library/tulip-qt">> $@
+	echo "INPUT = $(top_srcdir)/library/tulip-qt/include/tulip">> $@
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
