@@ -110,7 +110,7 @@ bool _GlFonts::operator< (const _GlFonts &dest) const {
 //  CLASSE GlFonts
 //***************************************************************************
 //---------------------------------------------------------------------------
-void GlRenderer::drawString(const string str, int index) const{
+void GlRenderer::drawString(const string &str, int index) const{
   if(index == -1){
     if(active)
       ftfonts[current_font].font->Render(str.c_str());
@@ -122,11 +122,11 @@ void GlRenderer::drawString(const string str, int index) const{
   }
 }
 //--------------------------------------------------------------------------- 
-void GlRenderer::getBBox(const std::string s, float& x1, float& y1, float& z1, float& x2, float& y2, float& z2){
+void GlRenderer::getBBox(const std::string &s, float& x1, float& y1, float& z1, float& x2, float& y2, float& z2){
   getBBox(s.c_str(), x1, y1, z1, x2, y2, z2);
 }
 //--------------------------------------------------------------------------- 
-float GlRenderer::getAdvance(const string str, int index) const{
+float GlRenderer::getAdvance(const string &str, int index) const{
   //  cerr << __PRETTY_FUNCTION__ << " " << index << " " << str << endl;
   if(index == -1){
     if(active)
@@ -170,7 +170,7 @@ bool GlRenderer::ActiveFont(int index){
   return true;
 }
 //--------------------------------------------------------------------------- 
-bool GlRenderer::ActiveFont(FontMode t, int s,const string f, float d){
+bool GlRenderer::ActiveFont(FontMode t, int s, const string &f, float d){
   int val = ftfonts.searchFont(t, s, f, d);
   if(val != -1) return false;
   current_font = val;
@@ -178,7 +178,7 @@ bool GlRenderer::ActiveFont(FontMode t, int s,const string f, float d){
   return true;
 }
 
-int GlRenderer::searchFont(FontMode type, int size, const std::string f, float depth)const {
+int GlRenderer::searchFont(FontMode type, int size, const std::string &f, float depth)const {
   return ftfonts.searchFont(type,size,f.c_str(),depth);
 }
 //--------------------------------------------------------------------------- 
@@ -210,7 +210,7 @@ int GlRenderer::getFontType(int index)const{
   }
 }
 //--------------------------------------------------------------------------- 
-int GlRenderer::AddFont(FontMode type, int size, const string f, float depth){
+int GlRenderer::AddFont(FontMode type, int size, const string &f, float depth){
   //  cerr << __PRETTY_FUNCTION__ << " " << size << " " << f << " " << depth << endl;
   int val = ftfonts.searchFont(type, size, f, depth);
   if(val != -1) {

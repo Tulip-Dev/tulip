@@ -18,6 +18,7 @@
 #include <qapplication.h>
 #include <qcolordialog.h>
 #include <qfiledialog.h>
+#include <qfileinfo.h>
 #include <qinputdialog.h>
 #include <qworkspace.h>
 #include <qmenubar.h>
@@ -48,6 +49,8 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
+#include <QtGui/qfileinfo.h>
+#include <QtGui/qdir.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qworkspace.h>
 #include <QtGui/qmenubar.h>
@@ -92,10 +95,11 @@
 #include <tulip/FindSelection.h>
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
-#include "tulip/ExportModule.h"
-#include "tulip/Clustering.h"
-#include "tulip/ImportModule.h"
-#include "tulip/ForEach.h"
+#include <tulip/ExportModule.h>
+#include <tulip/Clustering.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ForEach.h>
+#include <tulip/MouseSelection.h>
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
@@ -109,7 +113,7 @@
 #include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
-#include <tulip/MouseSelection.h>
+
           
 #define UNNAMED "unnamed"
 
@@ -345,6 +349,9 @@ void viewGl::startTulip() {
 void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
+  QFileInfo tmp(openFiles[(unsigned int)glWidget].name);
+  glWidget->setTexturePath(string(tmp.dirPath().latin1()) + "/");
+  QDir::setCurrent(string(tmp.dirPath().latin1()) + "/");
   clusterTreeWidget->setGraph(graph);
   propertiesWidget->setGraph(graph);
   nodeProperties->setGraph(graph);
@@ -365,7 +372,7 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
   if( !glWidget ) return;
   if (glWidget->getGraph() == graph)  return;
   clearObservers();
-  glWidget->setGraph(graph);  
+  glWidget->setGraph(graph);
   glWidget->centerScene();
   changeGraph(graph);
   initObservers();
@@ -445,10 +452,13 @@ std::string viewGl::newName() {
 //**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  DataSet param=glWidget->getParameters();
+  DataSet param = glWidget->getParameters();
+  string  texturePath = glWidget->getTexturePath();
   //QString name(glWidget->name());
   newOpenGlView(glWidget->getGraph(),glWidget->parentWidget()->caption());
+  glWidget->setTexturePath(texturePath);
   glWidget->setParameters(param);
+  glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
   glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
@@ -636,6 +646,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     bool result=true;
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
     initializeGlGraph(glW);
+    QFileInfo tmp(s);
+    glW->setTexturePath(string(tmp.dirPath().latin1()) + "/");
+    QDir::setCurrent(string(tmp.dirPath().latin1()) + "/");
     glW->setGraph(newGraph);
     changeGraph(0);
     QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
@@ -677,7 +690,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
-
+    
+    
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
     Coord sr;
@@ -704,6 +718,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	colors->setEdgeValue(e, color);
       }
     }
+
     glW->draw();
   }
   /* else {
