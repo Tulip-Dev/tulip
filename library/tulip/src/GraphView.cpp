@@ -65,7 +65,7 @@ GraphView::GraphView(Graph *father,BooleanProperty *filter):
 //----------------------------------------------------------------
 GraphView::~GraphView() {
   notifyDestroy(this);
-  delete propertyContainer; //must be done here because Property proxy needs to access to the sg structure
+  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeObservers();
 }
 //----------------------------------------------------------------
@@ -155,8 +155,8 @@ void GraphView::delNode(const node n) {
   notifyDelNode(this, n);
   Iterator<Graph *>*itS = getSubGraphs();
   while (itS->hasNext()) {
-    Graph *subsg = itS->next();
-    if (subsg->isElement(n)) subsg->delNode(n);
+    Graph *subGraph = itS->next();
+    if (subGraph->isElement(n)) subGraph->delNode(n);
   } delete itS;
   set<edge> loops;
   unsigned int toRemove = 0;
@@ -197,8 +197,8 @@ void GraphView::delEdge(const edge e) {
     notifyDelEdge(this,e);
     Iterator<Graph *>*itS=getSubGraphs();
     while (itS->hasNext()) {
-      Graph *subsg = itS->next();
-      if (subsg->isElement(e)) subsg->delEdge(e);
+      Graph *subGraph = itS->next();
+      if (subGraph->isElement(e)) subGraph->delEdge(e);
     } delete itS;
     edgeAdaptativeFilter.set(e.id,false);
     getPropertyManager()->erase(e);

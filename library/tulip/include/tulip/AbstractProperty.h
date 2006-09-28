@@ -40,7 +40,7 @@ public:
   virtual PropertyInterface* clonePrototype(Graph *, std::string) =0;
   //=================================================================================
   // Returns a string describing the type of the property.
-  // i.e. "sg", "double", "layout", "string", "integer", "color", "size", ...
+  // i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
   virtual std::string getTypename() = 0;
   static  std::string getTypename( PropertyInterface * );
 
@@ -56,7 +56,7 @@ public:
 };
 
 /**
- * This class is used to store a property of a sg.
+ * This class is used to store a property of a graph.
  * A property is a couple of two functions:
  * - One from the set of nodes to a set of Tnode value
  * - One from the set of edges to a set of Tedge value

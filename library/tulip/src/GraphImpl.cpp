@@ -37,36 +37,36 @@ bool existEdgeE(Graph *g, const node n1, const node n2, edge e) {
   return false;
 }
 /* 
- * function to test the integrity of the sg structure
+ * function to test the integrity of the graph structure
  */
-bool integrityTest(Graph *sg) {
-  Iterator<edge> *itE = sg->getEdges();
+bool integrityTest(Graph *graph) {
+  Iterator<edge> *itE = graph->getEdges();
   set<edge> edgesTest;
   while(itE->hasNext()) {
     edge e = itE->next();
     edgesTest.insert(e);
-    if (!existEdgeE(sg, sg->source(e), sg->target(e), e)) {
+    if (!existEdgeE(graph, graph->source(e), graph->target(e), e)) {
       cerr << "edge do not exist in neighbood" << endl;
       delete itE;
       return false;
     }
   }
   delete itE;
-  Iterator<node> *itN = sg->getNodes();
+  Iterator<node> *itN = graph->getNodes();
   while(itN->hasNext()) {
     node n(itN->next());
     unsigned int degree = 0;
-    Iterator<edge> *it = sg->getInOutEdges(n);
+    Iterator<edge> *it = graph->getInOutEdges(n);
     while (it->hasNext()) {
       edge e = it->next();
       bool found = edgesTest.find(e)!=edgesTest.end();
-      if (sg->isElement(e)!=found) {
+      if (graph->isElement(e)!=found) {
 	cerr << "isElment function not valid" << endl;
 	delete it;
 	delete itN;
 	return false;
       }
-      if (!sg->isElement(e)) {
+      if (!graph->isElement(e)) {
 	cerr << "Adjacency edges are not valid" << endl;
 	delete it;
 	delete itN;
@@ -74,7 +74,7 @@ bool integrityTest(Graph *sg) {
       }
       degree++;
     } delete it;
-    if (sg->deg(n) != degree) {
+    if (graph->deg(n) != degree) {
       cerr << "degree failed" << endl;
       return false;
     }
@@ -93,7 +93,7 @@ GraphImpl::~GraphImpl() {
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphs(itS.next());
-  delete propertyContainer; //must be done here because Property proxy needs to access to the sg structure
+  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeObservers();
   for (Nodes::iterator i=nodes.begin();i!=nodes.end();++i) {
     i->deallocateAll();

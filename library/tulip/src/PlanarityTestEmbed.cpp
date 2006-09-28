@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestEmbed.cpp,v 1.3.4.1 2006-05-04 16:33:11 pmary Exp $
+ * $Id: PlanarityTestEmbed.cpp,v 1.3.4.2 2006-09-28 20:47:01 pmary Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -21,17 +21,17 @@
 using namespace std;
 using namespace tlp;
 
-void sortEdges(Graph *sg, const vector<edge> &order, map<edge,edge>& rev) {
-  map<node, vector<edge> > sgMap;
+void sortEdges(Graph *graph, const vector<edge> &order, map<edge,edge>& rev) {
+  map<node, vector<edge> > graphMap;
   vector<edge>::const_iterator it = order.begin();
   for(;it!=order.end(); ++it) {
-    sgMap[sg->source(*it)].push_back(*it);
-    sgMap[sg->source(*it)].push_back(rev[*it]);
+    graphMap[graph->source(*it)].push_back(*it);
+    graphMap[graph->source(*it)].push_back(rev[*it]);
   }
-  map<node, vector<edge> >::const_iterator itM = sgMap.begin();
-  for(;itM!=sgMap.end();++itM) {
-    assert(sg->deg(itM->first) == itM->second.size());
-    sg->setEdgeOrder(itM->first, itM->second);
+  map<node, vector<edge> >::const_iterator itM = graphMap.begin();
+  for(;itM!=graphMap.end();++itM) {
+    assert(graph->deg(itM->first) == itM->second.size());
+    graph->setEdgeOrder(itM->first, itM->second);
   }
 
 }
@@ -40,7 +40,7 @@ void sortEdges(Graph *sg, const vector<edge> &order, map<edge,edge>& rev) {
  * Embeds all back-edges from T's root and all remaining edges in G that weren't
  * embedded yet.
  * Preconditions:
- * - G is a sg with n nodes;
+ * - G is a graph with n nodes;
  * - G is biconnected.
 */
 void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
