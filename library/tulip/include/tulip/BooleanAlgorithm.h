@@ -25,7 +25,7 @@ class PropertyContext;
 class BooleanProperty;
 
 /**
- * \defgroup plugins
+ * \addtogroup plugins
  */ 
 /*@{*/
 

@@ -14,7 +14,7 @@ namespace tlp {
 
 class PropertyContext;
 /**
- * \defgroup properties
+ * \addtogroup properties
  */ 
 /*@{*/
 class TLP_SCOPE SizeProperty:public AbstractProperty<SizeType,SizeType, SizeAlgorithm> { 

@@ -25,7 +25,7 @@ class PropertyContext;
 class LayoutProperty;
 
 /**
- * \defgroup plugins
+ * \addtogroup plugins
  */ 
 /*@{*/
 ///Interface for layout plug-ins

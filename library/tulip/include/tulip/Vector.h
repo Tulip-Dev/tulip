@@ -15,20 +15,21 @@ namespace tlp {
   /**
    * \addtogroup basic
    */ 
+#define VECTOR Vector<Obj,SIZE>
+#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
+
   /*@{*/
   /**
    * \brief class for mathematical vector
    *
    * Enables to create a Vector of Obj with a
-   * Fixed size and provide Mathematical operation. Mathematical 
-   * operators must be defined for Obj. 
+   * limited size and provides Mathematical operation. Mathematical 
+   * operators must be defined for Obj. Out of bound accesses are only checked
+   * in debug mode.
    *
    * \author : David Auber auber@tulip-software.org
    * \version 0.0.1 24/01/2003 
    */
-#define VECTOR Vector<Obj,SIZE>
-#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
-
   TEMPLATEVECTOR
     class TLP_SCOPE Vector:public Array<Obj,SIZE> {
     public:

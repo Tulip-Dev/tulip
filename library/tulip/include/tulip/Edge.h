@@ -7,7 +7,7 @@
 #endif
 #include <climits>
 /**
- * \defgroup graphs
+ * \addtogroup graphs
  */ 
 namespace tlp {
 

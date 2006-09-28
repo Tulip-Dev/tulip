@@ -31,16 +31,16 @@ class GraphObserver {
 /*@}*/
 }
 
-namespace std {
 #ifndef DOXYGEN_NOTFOR_DEVEL
+namespace std {
   template <>
     struct less<tlp::GraphObserver *> {
     size_t operator()(const tlp::GraphObserver * obs1,const tlp::GraphObserver *obs2) const {
       return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
-#endif // DOXYGEN_NOTFOR_DEVEL
 }
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
 

@@ -19,21 +19,22 @@ namespace tlp {
   /**
    * \addtogroup basic
    */ 
+#define MATRIX Matrix<Obj,SIZE>
+
   /*@{*/
   /**
      * \brief class for mathematical square matrix
      *
      * Enables to create a Square Matrix of Obj with a
-     * Fixed size and provide Mathematical operation. Mathematical 
-     * operators must be defined for Obj. 
+     * limited size and provides Mathematical operation. Mathematical 
+     * operators must be defined for Obj. Out of bound accesses
+     * are only checked in debug mode.
      *
      * \author : David Auber auber@tulip-software.org
      * 
      * \author Contributor : Maxime Delorme
      * \version 0.0.2 27/04/2005 
      */
-#define MATRIX Matrix<Obj,SIZE>
-
     template<typename Obj,unsigned int SIZE>
     class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
     public:

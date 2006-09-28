@@ -19,7 +19,7 @@ namespace tlp {
    * \brief class for array encapsulation
    *
    * Enables to create an Array of Obj with a
-   * Fixed size, limit of the array are checked only
+   * limited size. Out of bound accesses are only checked
    * in debug mode.
    * 
    * \author : David Auber auber@tulip-software.org

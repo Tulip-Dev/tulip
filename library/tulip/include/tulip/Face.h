@@ -20,12 +20,12 @@
 #include <climits>
 
 /**
- * \defgroup graphs
+ * \addtogroup graphs
  */ 
-/// class face
 namespace tlp {
 
 /*@{*/
+/// class Face
 struct Face { 
   unsigned int id;
   Face():id(UINT_MAX){}

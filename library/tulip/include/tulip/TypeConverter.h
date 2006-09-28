@@ -15,7 +15,7 @@ struct PropertyInterface;
 
 
 /**
- * \defgroup types
+ * \addtogroup types
  */ 
 /*@{*/
 

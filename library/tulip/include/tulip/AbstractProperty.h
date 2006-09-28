@@ -26,7 +26,7 @@
 namespace tlp {
 
 /**
- * \addtogroup properties
+ * \defgroup properties
  */ 
 /*@{*/
 //=============================================================

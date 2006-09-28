@@ -25,7 +25,7 @@ class PropertyContext;
 class SizeProperty;
 
 /**
- * \defgroup plugins
+ * \addtogroup plugins
  */ 
 /*@{*/
 /// Interface for sizes plug-ins
