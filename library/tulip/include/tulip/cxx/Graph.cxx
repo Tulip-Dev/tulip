@@ -1,4 +1,3 @@
-#include "tulip/PropertyManager.h"
 
 //================================================================================
 template<typename ATTRIBUTETYPE>

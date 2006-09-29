@@ -34,7 +34,6 @@
 
 namespace tlp {
 
-class PropertyManager;
 class BooleanProperty;
 template<class C>class Iterator;
 

@@ -81,6 +81,10 @@ nobase_include_HEADERS = \
 	tulip/DrawingTools.h \
 	tulip/Face.h \
 	tulip/PlanarityTest.h \
+	tulip/FaceIterator.h \
+        tulip/PlanarConMap.h \
+        tulip/GraphDecorator.h \
+        tulip/cxx/GraphDecorator.cxx \
 	tulip/ForEach.h
 
 noinst_HEADERS = tulip/TLPParser.h \
@@ -100,9 +104,5 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/RectangleArea.h \
 	tulip/Border.h \
 	tulip/Plane.h \
-	tulip/FaceIterator.h \
-	tulip/PlanarConMap.h \
-	tulip/GraphDecorator.h \
-	tulip/cxx/GraphDecorator.cxx \
 	tulip/Polynome.h \
 	tulip/StatisticsNodeModule.h

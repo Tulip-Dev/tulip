@@ -7,12 +7,12 @@
 #include <set>
 #include "Graph.h"
 #include "Reflect.h"
+#include "PropertyManager.h"
 
 namespace tlp {
 
 #define GRAPH_SEQ std::vector<Graph *>
 
-class PropertyManager;
 template<class C>class Iterator;
 
 ///Abstract class for default graph operations.

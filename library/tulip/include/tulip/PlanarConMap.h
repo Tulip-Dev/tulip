@@ -15,12 +15,11 @@
 #include <tulip/Face.h>
 #include <vector>
 #include <tulip/GraphDecorator.h>
-#include <tulip/IdManager.h>
 
 namespace tlp {
 
 class Face;
-
+class IdManager;
 
 /** 
  * \brief interface for a topological graph 
@@ -132,6 +131,20 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   Iterator<edge>* getFaceEdges(const Face);                            
 
   //================================================================================
+  // For Property managment
+  //================================================================================
+  virtual DataSet & getAttributes();
+  virtual PropertyInterface* getProperty(const std::string &name);
+  virtual bool existProperty(const std::string&name);
+  virtual bool existLocalProperty(const std::string&name);
+  virtual void delLocalProperty(const std::string&name);
+  virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
+  virtual Iterator<std::string>* getLocalProperties();
+  virtual Iterator<std::string>* getInheritedProperties();
+  virtual Iterator<std::string>* getProperties();
+  
+
+  //================================================================================
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
   /** Return the edge if it exists an edge between two node sens of the edge 
@@ -198,7 +211,7 @@ private:
   nodeMap nodesFaces;
   mutable std::vector<Face > faces; 
 
-  IdManager faceId;  
+  IdManager *faceId;  
     
 };
 

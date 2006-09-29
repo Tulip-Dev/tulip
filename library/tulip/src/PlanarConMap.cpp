@@ -7,6 +7,7 @@
 #include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ForEach.h>
+#include <tulip/IdManager.h>
 
 using namespace stdext;
 using namespace std;
@@ -19,7 +20,8 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
   assert(SimpleTest::isSimple(s));
   assert(ConnectedTest::isConnected(s));
   assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
-  
+
+  faceId = new IdManager();
   PlanarityTest::planarEmbedding(s);
   computeFaces();
 }
@@ -49,7 +51,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   assert(containEdge(f,succCycleEdge(e1,v)) && containEdge(f,succCycleEdge(e2,w)));
 
   if(new_face == Face())
-    new_face = Face(faceId.get());
+    new_face = Face(faceId->get());
 
   edge e_tmp;
   vector<edge> v_edges1, v_edges2;
@@ -457,7 +459,7 @@ void PlanarConMap::computeFaces(){
 
   unsigned int nbNodes = numberOfNodes();
   if(nbNodes < 3){
-    Face f(faceId.get());
+    Face f(faceId->get());
     faces.push_back(f);
     vector<Face> v_faces;
     v_faces.push_back(f);
@@ -502,7 +504,7 @@ void PlanarConMap::computeFaces(){
       forEach(e,getEdges()){
 	edges.clear();
 	if (considered.get(e.id)<2){
-	  Face lf(faceId.get());
+	  Face lf(faceId->get());
 	  faces.push_back(lf);
 	  edge e1 = e;
 	  node n_tmp, n;
@@ -718,7 +720,7 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n){
     e1 = e_tmp;
   if(!w_found && first_was_w)
     e2 = e_tmp;
-  Face new_face = Face(faceId.get());
+  Face new_face = Face(faceId->get());
   
   // Add the edge and update the map
   addEdgeMap(v,w,f,e1,e2,new_face);
@@ -879,6 +881,51 @@ Face PlanarConMap::sameFace(node v, node n) {
       return f;
   }
   return Face();
+}
+
+//============================================================
+DataSet & PlanarConMap::getAttributes(){
+  return graph_component->getAttributes();
+}
+
+//============================================================
+PropertyInterface* PlanarConMap::getProperty(const string &name){
+  return graph_component->getProperty(name);
+}
+
+//============================================================ 
+bool PlanarConMap::existProperty(const string&name){
+  return graph_component->existProperty(name);
+}
+
+//============================================================
+bool PlanarConMap::existLocalProperty(const string&name){
+  return graph_component->existLocalProperty(name) ;
+}
+
+//============================================================
+void PlanarConMap::delLocalProperty(const string&name){
+  return graph_component->delLocalProperty(name);
+}
+
+//============================================================
+void PlanarConMap::addLocalProperty(const string &name, PropertyInterface *prop) {
+  graph_component->addLocalProperty(name, prop);
+}
+
+//============================================================
+Iterator<string>* PlanarConMap::getLocalProperties(){
+  return graph_component->getLocalProperties();
+}
+
+//============================================================
+Iterator<string>* PlanarConMap::getInheritedProperties(){
+  return graph_component->getInheritedProperties();
+}
+
+//============================================================
+Iterator<string>* PlanarConMap::getProperties(){
+  return graph_component->getProperties();
 }
 
 //============================================================
