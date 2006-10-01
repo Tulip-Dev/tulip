@@ -31,12 +31,11 @@ namespace tlp {
  * 
  * Other options are available :
  * 
- *  - Hollow Grid : Allows the user to hollow the grid to only have 2D projections of the grid. Disabling this option computes a whole 3D grid.
  *  - Display Dimensions : Allows the user to choose on which dimensions the grid will be displayed.
  *
  */
-class GridOptionsWidget : public GridOptionsData
-{
+class GridOptionsWidget : public GridOptionsData {
+
   Q_OBJECT
 
  protected:
@@ -75,11 +74,6 @@ class GridOptionsWidget : public GridOptionsData
    * Function used to enable the panel "Size"
    */
   void chGridSize();
-
-  /**
-   * Function used to enable or disable the hollowed grid.
-   */
-  void chHollowGrid();
 
   /**
    * Function used to change on which axis will be displayed the grid.

@@ -455,11 +455,10 @@ void viewGl::new3DView() {
   DataSet param = glWidget->getParameters();
   string  texturePath = glWidget->getTexturePath();
   //QString name(glWidget->name());
-  newOpenGlView(glWidget->getGraph(),glWidget->parentWidget()->caption());
-  glWidget->setTexturePath(texturePath);
+  newOpenGlView(glWidget->getGraph(), glWidget->parentWidget()->caption());
   glWidget->setParameters(param);
   glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
-  glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
+  glWidget->setTexturePath(texturePath);
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
@@ -583,7 +582,7 @@ void viewGl::initializeGlGraph(GlGraph *glGraph) {
     Camera cam = glGraph->getCamera(); //default value for drawing small graph in the window
     cam.center = Coord(0, 0,  0);
     cam.eyes   = Coord(0, 0, 10);
-    cam.up     = Coord(0,-1,  0);
+    cam.up     = Coord(0, 1,  0);
     cam.zoomFactor = 0.5;
     cam.sceneRadius = 10;
     glGraph->setCamera(cam);

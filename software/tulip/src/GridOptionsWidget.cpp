@@ -26,7 +26,6 @@ namespace tlp
 
     connect(SubdivisionsRB, SIGNAL(clicked()), SLOT(chGridSubdivisions()));
     connect(SizeRB, SIGNAL(clicked()), SLOT(chGridSize()));
-    connect(HollowGridCB, SIGNAL(clicked()), SLOT(chHollowGrid()));
     connect(DisplayXCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
     connect(DisplayYCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
     connect(DisplayZCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
@@ -110,7 +109,7 @@ namespace tlp
 	  for(int i=0; i < 3; i++)
 	    cell[i] = cellsize[i];
 	}
-	grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display, HollowGridCB->isChecked());
+	grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display);
 	glGraphWidget->addGlAugmentedDisplay(grid, "Layout Grid");
 	    
       }
@@ -147,15 +146,6 @@ namespace tlp
     GridSizeX->setEnabled(true);
     GridSizeY->setEnabled(true);
     GridSizeZ->setEnabled(true);
-  }
-  //==============================================
-  void GridOptionsWidget::chHollowGrid() {
-    if (grid == NULL || !ActivatedCB->isChecked())
-      return;
-
-    grid->setHollowGrid(HollowGridCB->isChecked());
-
-    glGraphWidget->draw();
   }
   //==============================================
   void GridOptionsWidget::chDisplayGrid() {

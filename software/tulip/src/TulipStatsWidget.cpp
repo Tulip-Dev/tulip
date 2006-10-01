@@ -956,7 +956,7 @@ namespace tlp
 	end[1] = -(statsResults->linearRegressionFunctionb0 + statsResults->linearRegressionFunctionb1 * end[0]) / discretizationStep[1];
 	end[2] = 0;
 
-	linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), 1);
+	linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), Color(255, 0, 255, 255), 1);
 	linearRegression->setRenderState(GlAD_ZEnable, false);
 
 	glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
@@ -1001,7 +1001,7 @@ namespace tlp
 	      case 2: col = Color(0, 0, 100, 255); break;
 	      }
 
-	    eigenVectors[i] = new GlADLine(center, endPos, col, 2);
+	    eigenVectors[i] = new GlADLine(center, endPos, col, col, 2);
 	    
 	    char n = '0' + i;
 	    char key[13] = "EigenVector0";
