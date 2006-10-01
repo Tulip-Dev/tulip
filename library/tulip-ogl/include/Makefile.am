@@ -14,13 +14,13 @@ nobase_include_HEADERS = \
 	tulip/GlADPoint.h \
 	tulip/GlADQuad.h \
 	tulip/GlHudCircle.h \
+	tulip/GlHudPolygon.h \
 	tulip/GlHud.h \
 	tulip/GlHudLine.h \
 	tulip/GlHudRect.h
 
 
 noinst_HEADERS = \
-	tulip/GlDrawable.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
 	tulip/Bezier.h \
