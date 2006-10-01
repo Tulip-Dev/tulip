@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,7 +21,6 @@ class Pentagone : public Glyph {
 public:
   Pentagone(GlyphContext *gc=NULL);
   virtual ~Pentagone();
-  virtual string getName() {return string("Pentagone");}
   virtual void draw(node n);
 
 protected:

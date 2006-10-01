@@ -7,6 +7,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -15,7 +16,6 @@ class CubeOutLinedTransparent : public Glyph {
 public:
   CubeOutLinedTransparent(GlyphContext *gc=NULL);
   virtual ~CubeOutLinedTransparent();
-  virtual string getName() {return string("CubeOutLinedTransparent");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord & vector) const;
 
@@ -54,7 +54,7 @@ void CubeOutLinedTransparent::draw(node n) {
     listOk = true;
   }
   assert(glIsList(LList));
-  setMaterial(glGraph->elementColor->getNodeValue(n));
+  tlp::setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
   if (texFile != "") {
     if (glGraph->activateTexture(texFile))

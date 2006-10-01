@@ -11,6 +11,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -19,7 +20,6 @@ class Cube : public Glyph {
 public:
   Cube(GlyphContext *gc=NULL);
   virtual ~Cube();
-  virtual string getName() {return string("Cube");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord & vector) const;
 

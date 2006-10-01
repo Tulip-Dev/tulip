@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,7 +21,6 @@ class Billboard : public Glyph {
 public:
   Billboard(GlyphContext *gc=NULL);
   virtual ~Billboard();
-  virtual string getName() {return string("Billboard");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord &vector) const;
 

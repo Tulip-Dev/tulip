@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -80,7 +81,7 @@ void Ring::drawRing() {
   gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
   gluDeleteQuadric(quadratic);
 }
-
+//=====================================================
 void Ring::drawRingBorder() {
   glBegin(GL_LINE_LOOP);
   double alpha = M_PI / 2.;
@@ -98,3 +99,4 @@ void Ring::drawRingBorder() {
   }
   glEnd();
 }
+//=====================================================

@@ -84,14 +84,14 @@ namespace {
 class AdjacencyMatrixImport:public ImportModule {
 public:
   AdjacencyMatrixImport(ClusterContext context):ImportModule(context){
-    addParameter<string>("filename",paramHelp[0]);
+    addParameter<string>("file::name",paramHelp[0]);
   }
   ~AdjacencyMatrixImport(){}
   vector<node> nodes;
 
   bool import(const string &name) {
     string name2;
-    dataSet->get("filename",name2);
+    dataSet->get("file::name",name2);
     std::ifstream in(name2.c_str());
     unsigned int curLine=0;
     DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");

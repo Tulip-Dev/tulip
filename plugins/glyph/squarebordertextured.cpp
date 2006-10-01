@@ -8,7 +8,9 @@
 #include <tulip/GlGraph.h> 
 #include <tulip/Glyph.h>
 #include <tulip/TreeTest.h>
+#include <tulip/GlTools.h>
 #include "tulip/Border.h"
+
 
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -54,7 +56,6 @@ class SquareBorderTex: public Glyph, public GraphObserver {
 public:
     SquareBorderTex(GlyphContext* gc = NULL);
     virtual ~SquareBorderTex();
-    virtual string getName();
     virtual void draw(node n);
     virtual Coord getAnchor(const Coord& vector) const;
 
@@ -111,12 +112,6 @@ SquareBorderTex::SquareBorderTex(GlyphContext* gc):Glyph(gc){
 //====================================================================
 SquareBorderTex::~SquareBorderTex() {
 }
-
-//====================================================================
-string SquareBorderTex::getName() {
-    return string("SquareBorderTex");
-}
-
 //====================================================================
 bool SquareBorderTex::initializeNewGraph(Graph* sg, node n) {
     TreeCache& treec = mapTree[sg];          
@@ -199,21 +194,21 @@ void SquareBorderTex::generateTexture(Graph* sg) {
 
 //====================================================================
 void SquareBorderTex::draw(node n) {
-    tree = (*graph);
-
-    if (mapTree.find(tree) == mapTree.end())
-        initializeNewGraph(tree, n);    
-    TreeCache& treecache = mapTree[tree];
-
-    if (treecache.isTree) {
-        Size size = 
-                tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
-        const float borderSize = evaluateBorderSize(treecache.mapNodeLevel[n],
-                                                    RectangleArea(size));                                                    
+  tree = glGraph->getGraph();
+  
+  if (mapTree.find(tree) == mapTree.end())
+    initializeNewGraph(tree, n);    
+  TreeCache& treecache = mapTree[tree];
+  
+  if (treecache.isTree) {
+    Size size = 
+      tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
+    const float borderSize = evaluateBorderSize(treecache.mapNodeLevel[n],
+						RectangleArea(size));                                                    
         drawSquare(n, borderSize);
-    }
-    else
-        drawSquare(n, 0);       
+  }
+  else
+    drawSquare(n, 0);       
 }
 
 //====================================================================

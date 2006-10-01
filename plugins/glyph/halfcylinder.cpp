@@ -8,18 +8,18 @@
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
 
+//=================================================================================================
 class HalfCylinder : public Glyph {
 public:
   HalfCylinder(GlyphContext *gc=NULL);
   virtual ~HalfCylinder();
-  virtual string getName() {return string("HalfCylinder");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord &vector) const;
-  virtual void setLOD(int n);
 
 private:
   GLuint LList;
@@ -27,22 +27,15 @@ private:
 };
 
 GLYPHPLUGIN(HalfCylinder, "3D - HalfCylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1", "1", 10);
-
 //=================================================================================================
 HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc),listOk(false) {
-  setLOD(8);
 }
-
+//=================================================================================================
 HalfCylinder::~HalfCylinder() {
   if (listOk)
     if (glIsList(LList)) glDeleteLists(LList, 1);
 }
-
-void HalfCylinder::setLOD(int n) {
-  LOD = ((n<0) ? 0 : ((n > 10) ? 10 : n));
-  if (listOk) {glDeleteLists(LList, 1);listOk=false;};
-}
-
+//=================================================================================================
 void HalfCylinder::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
@@ -50,7 +43,6 @@ void HalfCylinder::draw(node n) {
     if (glGraph->activateTexture(texFile))
       setMaterial(Color(255,255,255,255));
   }
-
   if (!listOk) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();
@@ -60,20 +52,19 @@ void HalfCylinder::draw(node n) {
     glNewList( LList, GL_COMPILE ); 
     //    glTranslatef(0.0f, 0.0f, -0.0f);
     gluQuadricOrientation(quadratic, GLU_INSIDE);
-    gluDisk(quadratic, 0.0f, 0.5f, LOD, LOD);
+    gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
     gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-    gluCylinder(quadratic, 0.5f, 0.5f, 0.5f, LOD, LOD);  
+    gluCylinder(quadratic, 0.5f, 0.5f, 0.5f, 10, 10);  
     glTranslatef(0.0f, 0.0f,0.5f);
-    gluDisk(quadratic, 0.0f, 0.5f, LOD, LOD);
+    gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
     glEndList();
     gluDeleteQuadric(quadratic);
     listOk=true;
   }
   glCallList(LList);
 }
-
-Coord HalfCylinder::getAnchor(const Coord &vector) const
-{
+//=================================================================================================
+Coord HalfCylinder::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
   float x,y,z,n;
   anchor.get(x,y,z);
@@ -88,4 +79,4 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const
   if (z > 0.5f) z = 0.5f; //z = z <? 0.5f;
   return Coord(x,y,z);
 }
-
+//=================================================================================================

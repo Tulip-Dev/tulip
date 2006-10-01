@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,7 +21,6 @@ class Circle : public Glyph {
 public:
   Circle(GlyphContext *gc=NULL);
   virtual ~Circle();
-  virtual string getName() {return string("Circle");}
   virtual void draw(node n);
 
 protected:

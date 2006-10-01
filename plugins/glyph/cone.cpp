@@ -8,45 +8,35 @@
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
 
+//===========================================================
 class Cone : public Glyph {
 public:
   Cone(GlyphContext *gc=NULL);
   virtual ~Cone();
-  virtual string getName() {return string("Cone");}
   virtual void draw(node n);
-  virtual void setLOD(int n);
   virtual Coord getAnchor(const Coord &vector) const;
 
 private:
   GLuint LList;
   bool listOk;
 };
-
+//===========================================================
 GLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1", "1", 3);
 //===================================================================================
-
 Cone::Cone(GlyphContext *gc): Glyph(gc),listOk(false) {
-  setLOD(8);
 }
-
+//===========================================================
 Cone::~Cone() {
   if (listOk)
     if (glIsList(LList)) 
       glDeleteLists(LList, 1);
 }
-
-void Cone::setLOD(int n) {
-  LOD = ((n<0) ? 0 : ((n > 10) ? 10 : n));
-  if (listOk) {
-    glDeleteLists(LList, 1);
-    listOk=false;
-  }
-}
-
+//===========================================================
 void Cone::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
@@ -64,22 +54,19 @@ void Cone::draw(node n) {
     glNewList( LList, GL_COMPILE ); 
     glTranslatef(0.0f, 0.0f, -0.5f);
     gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, LOD, LOD);
+    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 10, 10);
     gluQuadricOrientation(quadratic, GLU_INSIDE);
-    gluDisk(quadratic, 0.0f, 0.5f, LOD, LOD);
+    gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
     glEndList();
     gluDeleteQuadric(quadratic);
-    GLenum error=glGetError();
-    if ( error != GL_NO_ERROR)
-      cerr << "Open GL Error : " << error << " in " << __PRETTY_FUNCTION__ << endl;
+    tlp::glTest(__PRETTY_FUNCTION__);
     listOk=true;
   }
   assert(glIsList(LList));
   glCallList(LList);
 }
-
-Coord Cone::getAnchor(const Coord &vector) const
-{
+//===========================================================
+Coord Cone::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
 
   float x,y,z,n;
@@ -103,6 +90,6 @@ Coord Cone::getAnchor(const Coord &vector) const
     anchor.setY(y * px / n);
     anchor.setZ(py);
   }
-
   return anchor;
 }
+//===========================================================

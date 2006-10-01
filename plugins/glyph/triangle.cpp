@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,7 +21,6 @@ class Triangle : public Glyph {
 public:
   Triangle(GlyphContext *gc=NULL);
   virtual ~Triangle();
-  virtual string getName() {return string("Triangle");}
   virtual void draw(node n);
 
 protected:
@@ -68,7 +68,6 @@ void Triangle::draw(node n) {
   glCallList(LList + 1);
   glEnable(GL_LIGHTING);
 }
-
 //=====================================================
 void Triangle::drawTriangle() {
   GLUquadricObj *quadratic;
@@ -81,7 +80,7 @@ void Triangle::drawTriangle() {
   gluDisk(quadratic, 0.0f, 0.5f, 3, 1);
   gluDeleteQuadric(quadratic);
 }
-
+//=====================================================
 void Triangle::drawTriangleBorder() {
   glBegin(GL_LINE_LOOP);
   double alpha = M_PI / 2.;
@@ -92,3 +91,4 @@ void Triangle::drawTriangleBorder() {
   }
   glEnd();
 }
+//=====================================================

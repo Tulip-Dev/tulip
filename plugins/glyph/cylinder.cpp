@@ -8,6 +8,7 @@
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -16,33 +17,23 @@ class Cylinder : public Glyph {
 public:
   Cylinder(GlyphContext *gc=NULL);
   virtual ~Cylinder();
-  virtual string getName() {return string("Cylinder");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord &vector) const;
-  virtual void setLOD(int n);
 
 private:
   GLuint LList;
   bool listOk;
 };
-
 GLYPHPLUGIN(Cylinder, "3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1", "1", 6);
-
 //=================================================================================================
 Cylinder::Cylinder(GlyphContext *gc): Glyph(gc),listOk(false) {
-  setLOD(8);
 }
-
+//=================================================================================================
 Cylinder::~Cylinder() {
   if (listOk)
     if (glIsList(LList)) glDeleteLists(LList, 1);
 }
-
-void Cylinder::setLOD(int n) {
-  LOD = ((n<0) ? 0 : ((n > 10) ? 10 : n));
-  if (listOk) {glDeleteLists(LList, 1);listOk=false;};
-}
-
+//=================================================================================================
 void Cylinder::draw(node n) {
   setMaterial(glGraph->elementColor->getNodeValue(n));
   string texFile = glGraph->elementTexture->getNodeValue(n);
@@ -60,20 +51,19 @@ void Cylinder::draw(node n) {
     glNewList( LList, GL_COMPILE ); 
     glTranslatef(0.0f, 0.0f, -0.5f);
     gluQuadricOrientation(quadratic, GLU_INSIDE);
-    gluDisk(quadratic, 0.0f, 0.5f, LOD, LOD);
+    gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
     gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-    gluCylinder(quadratic, 0.5f, 0.5f, 1.0f, LOD, LOD);  
+    gluCylinder(quadratic, 0.5f, 0.5f, 1.0f, 10, 10);  
     glTranslatef(0.0f, 0.0f,1.0f);
-    gluDisk(quadratic, 0.0f, 0.5f, LOD, LOD);
+    gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
     glEndList();
     gluDeleteQuadric(quadratic);
     listOk=true;
   }
   glCallList(LList);
 }
-
-Coord Cylinder::getAnchor(const Coord &vector) const
-{
+//=================================================================================================
+Coord Cylinder::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
   float x,y,z,n;
   anchor.get(x,y,z);
@@ -88,5 +78,5 @@ Coord Cylinder::getAnchor(const Coord &vector) const
   if (z > +0.5f) z = +0.5f; //z = z <? +0.5f;
   return Coord(x,y,z);
 }
-
+//=================================================================================================
 

@@ -12,6 +12,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlGraph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,7 +21,6 @@ class Hexagone : public Glyph {
 public:
   Hexagone(GlyphContext *gc=NULL);
   virtual ~Hexagone();
-  virtual string getName() {return string("Hexagone");}
   virtual void draw(node n);
 
 protected:
