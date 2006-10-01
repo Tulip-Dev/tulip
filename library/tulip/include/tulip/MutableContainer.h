@@ -90,7 +90,7 @@ public:
   void set(const unsigned int i,const TYPE &value);  
   /**
    * This function return a reference instead of a copy in order to minimize the
-   * the number copy of objects, user must be awer that calling the set function can 
+   * the number copy of objects, user must be aware that calling the set function can 
    * devalidate this reference.
    */
   const typename ReturnType<TYPE>::Value get(const unsigned int i) const;

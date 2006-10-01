@@ -30,7 +30,8 @@ namespace tlp {
 class Graph;
 class BooleanProperty;
 
-  struct SelfLoops {
+  class SelfLoops {
+  public:
     SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
       n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old){
     }
