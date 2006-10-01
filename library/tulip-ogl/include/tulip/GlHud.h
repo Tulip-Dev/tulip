@@ -17,49 +17,29 @@
 #include <tulip/GlAugmentedDisplay.h>
 
 namespace tlp {
-/** \brief General class for the rendering of 2D augmented displays
- *
- */
-class GlHud : public GlAugmentedDisplay {
+  class GlGraph;
+
+  /** \brief General class for the rendering of 2D augmented displays
+   *
+   */
+  class GlHud : public GlAugmentedDisplay {
   
-public:
-  
-  /**
-   * Constructor
-   */
-  GlHud();
+  public:
+    //===============================================
+    GlHud();
+    //===============================================
+    virtual ~GlHud();
+    /**
+     * Function used to draw ... This is a pure virtual function
+     * \attention Must absolutely be called with unsetup in every derivated class
+     * \attention You call setup(), you render, you call unsetup()
+     * \attention This must not be called withing glBegin/glEnd statements.
+     */
+    virtual void draw(GlGraph*);
+    
+    virtual Coord transformCoordinates(const Coord &, GlGraph *);
 
-  /**
-   * Destructor
-   */
-  virtual ~GlHud();
-
-  /**
-   * Function used to draw ... This is a pure virtual function
-   * \attention Must absolutely be called with unsetup in every derivated class
-   * \attention You call setup(), you render, you call unsetup()
-   * \attention This must not be called withing glBegin/glEnd statements.
-   */
-  virtual void draw(GlGraph*);
-
-  /**
-   * Function used to setup the display
-   */
-  virtual void setup();
-
-  /**
-   * Function used to unsetup the display
-   * \attention Must absolutely be called with setup in every derivated class
-   * \attention You call setup(), you render, you call unsetup()
-   * \attention This must not be called withing glBegin/glEnd statements.
-   */
-  virtual void unsetup();
-
-  /**
-   * Function used to transform the coordinates of a vertice, so that the user can define screen coordinates.
-   */
-  virtual Coord transformCoordinates(const Coord &position);
-};
+  };
 }
 
 #endif
