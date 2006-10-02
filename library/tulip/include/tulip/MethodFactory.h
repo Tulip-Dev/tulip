@@ -32,13 +32,13 @@
 #include "ImportModule.h"
 #include "ExportModule.h"
 
-//===========================================================
-// Declaclartion of Properties plugin mechanism
-//===========================================================
 /** \addtogroup plugins */ 
 /*@{*/
 
-// Macro for factorization of source code
+//===========================================================
+// Declaration of Properties plugin mechanism
+//===========================================================
+/// Macro for factorization of source code pf Properties plugin mechanism
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R,G)          \
 class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
@@ -65,18 +65,18 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,V,R,G)
-#define INTEGERPLUGIN(C,N,A,D,I,V,R) INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define COLORPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,V,R,G)
-#define COLORPLUGIN(C,N,A,D,I,V,R) COLORPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R,G)
-#define LAYOUTPLUGIN(C,N,A,D,I,V,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,V,R,G)
-#define GRAPHPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,V,R,G)
-#define DOUBLEPLUGIN(C,N,A,D,I,V,R)  DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 #define BOOLEANPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Boolean,C,N,A,D,I,V,R,G)
 #define BOOLEANPLUGIN(C,N,A,D,I,V,R) BOOLEANPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define COLORPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,V,R,G)
+#define COLORPLUGIN(C,N,A,D,I,V,R) COLORPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,V,R,G)
+#define DOUBLEPLUGIN(C,N,A,D,I,V,R)  DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,V,R,G)
+#define GRAPHPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,V,R,G)
+#define INTEGERPLUGIN(C,N,A,D,I,V,R) INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R,G)
+#define LAYOUTPLUGIN(C,N,A,D,I,V,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 #define SIZEPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Size,C,N,A,D,I,V,R,G)
 #define SIZEPLUGIN(C,N,A,D,I,V,R) SIZEPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 #define STRINGPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R,G)
@@ -85,7 +85,7 @@ extern "C" {                                            \
 //===========================================================
 // Declaration of Graph modification plug-in Mechanism
 //===========================================================
-///
+/// Macro for factorization of source code of Graph modification plugin mechanism 
 #define GRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R,G)	\
 class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
@@ -112,11 +112,11 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
+#define CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R,G)
+#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 #define EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R,G)
 #define EXPORTPLUGIN(C,N,A,D,I,V,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
 #define IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R,G)
 #define IMPORTPLUGIN(C,N,A,D,I,V,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R,G)
-#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 /*@}*/
 #endif

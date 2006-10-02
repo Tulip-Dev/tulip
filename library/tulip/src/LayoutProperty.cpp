@@ -2,7 +2,6 @@
 #include <cmath>
 #include <fstream>
 #include "tulip/LayoutProperty.h"
-#include "tulip/TemplateFactory.h"
 #include "tulip/Coord.h"
 #include "tulip/PluginContext.h"
 

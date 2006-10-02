@@ -19,13 +19,13 @@ namespace tlp {
 class Graph;
 class PropertyInterface;
 class PluginProgress;
-///Parameter for calling clustering plugins
 
 /**
  * \defgroup plugins
  */ 
 /*@{*/
 
+///Parameter for calling clustering plugins
 class ClusterContext {
   public :
   ///

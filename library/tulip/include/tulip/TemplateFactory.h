@@ -17,7 +17,6 @@ template<class ObjectFactory, class ObjectType, class Parameter> class TemplateF
 public:
   //typedef void *(*func)();
   typedef std::map< std::string , ObjectFactory * > ObjectCreator;
-  void *handle;
   PluginLoader *currentLoader;
 
   ObjectCreator objMap;
@@ -27,7 +26,6 @@ public:
   Iterator<std::string>* availablePlugins();
   bool exists(const std::string &pluginName);
   void load(std::string pluginPath,std::string type, PluginLoader *loader=0);
-  //bool load(std::string file);
   ObjectType *getObject(std::string name,Parameter p);
   StructDef getParam(std::string name);
   void getPluginParameters(ObjectFactory* objectFactory);

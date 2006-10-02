@@ -25,7 +25,7 @@
 namespace tlp {
 
 /*@{*/
-/// class Face
+/// class face
 struct Face { 
   unsigned int id;
   Face():id(UINT_MAX){}

@@ -9,9 +9,9 @@ namespace tlp {
    */ 
   /*@{*/
     /**
-     * \brief class for Rectangle
+     * \brief class for rectangle
      *
-     * Enables to both create and manipulate a Rectangle
+     * Enables to both create and manipulate a rectangle
      *
      * Author : <a href="mailto:auber@tulip-software.org>David Auber</A>
      * Version 0.0.1 24/01/2003 

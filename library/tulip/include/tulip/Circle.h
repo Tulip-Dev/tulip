@@ -14,7 +14,7 @@ namespace tlp {
    */ 
   /*@{*/
     /**
-     * \brief class for Circle
+     * \brief class for circle
      *
      * Enables to both create and manipulate a circle
      *
