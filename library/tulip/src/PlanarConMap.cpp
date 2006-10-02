@@ -566,58 +566,6 @@ unsigned int PlanarConMap::nbFacesEdges(const Face f) {
 }
 
 //============================================================
-edge PlanarConMap::existEdge(node u, node v) const {
-  return graph_component->existEdge(u,v);
-}
-//============================================================
-node PlanarConMap::source(edge e) const {
-  return graph_component->source(e);
-}
-//============================================================
-node PlanarConMap::target(edge e) const {
-  return graph_component->target(e);
-}
-//============================================================
-Iterator<node>* PlanarConMap::getNodes(){
-  return graph_component->getNodes();  
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getEdges(){
-  return graph_component->getEdges();  
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getInEdges(node n) const {
-  return graph_component->getInEdges(n);
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getOutEdges(node n) const {
-  return graph_component->getOutEdges(n);
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getInOutEdges(node n) const {
-  return graph_component->getInOutEdges(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getInNodes(node n) const {
-  return graph_component->getInNodes(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getOutNodes(node n) const {
-  return graph_component->getOutNodes(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getInOutNodes(node n) const {
-  return graph_component->getInOutNodes(n);
-}
-
-//============================================================
 Iterator<Face>* PlanarConMap::getFaces(){
   return new FaceIterator(this);  
 }
@@ -881,51 +829,6 @@ Face PlanarConMap::sameFace(node v, node n) {
       return f;
   }
   return Face();
-}
-
-//============================================================
-DataSet & PlanarConMap::getAttributes(){
-  return graph_component->getAttributes();
-}
-
-//============================================================
-PropertyInterface* PlanarConMap::getProperty(const string &name){
-  return graph_component->getProperty(name);
-}
-
-//============================================================ 
-bool PlanarConMap::existProperty(const string&name){
-  return graph_component->existProperty(name);
-}
-
-//============================================================
-bool PlanarConMap::existLocalProperty(const string&name){
-  return graph_component->existLocalProperty(name) ;
-}
-
-//============================================================
-void PlanarConMap::delLocalProperty(const string&name){
-  return graph_component->delLocalProperty(name);
-}
-
-//============================================================
-void PlanarConMap::addLocalProperty(const string &name, PropertyInterface *prop) {
-  graph_component->addLocalProperty(name, prop);
-}
-
-//============================================================
-Iterator<string>* PlanarConMap::getLocalProperties(){
-  return graph_component->getLocalProperties();
-}
-
-//============================================================
-Iterator<string>* PlanarConMap::getInheritedProperties(){
-  return graph_component->getInheritedProperties();
-}
-
-//============================================================
-Iterator<string>* PlanarConMap::getProperties(){
-  return graph_component->getProperties();
 }
 
 //============================================================

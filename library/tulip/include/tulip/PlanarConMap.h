@@ -104,22 +104,6 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   //================================================================================
   //Iterators on the graph structure.
   //================================================================================
-  ///Return an iterator on the nodes.
-  virtual Iterator<node>* getNodes();
-  ///Return an iterator on the edges.
-  virtual Iterator<edge>*getEdges();
-  ///Return an iterator on the in-edges of a node.
-  virtual Iterator<edge>*getInEdges(node) const;
-  ///Return an iterator on the out-edges of a node.
-  virtual Iterator<edge>*getOutEdges(node) const;
-  ///Return an iterator on the in-out-edges of a node.
-  virtual Iterator<edge>*getInOutEdges(node) const;
-  ///Return an iterator on the in-nodes of a node.
-  virtual Iterator<node>*getInNodes(node) const;
-  ///Return an iterator on the out-nodes of a node.
-  virtual Iterator<node>*getOutNodes(node) const;
-  ///Return an iterator on the in-out-nodes of a node.
-  virtual Iterator<node>*getInOutNodes(node) const;
 
   ///Return an iterator on the faces.
   Iterator<Face>* getFaces();        
@@ -131,39 +115,16 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   Iterator<edge>* getFaceEdges(const Face);                            
 
   //================================================================================
-  // For Property managment
-  //================================================================================
-  virtual DataSet & getAttributes();
-  virtual PropertyInterface* getProperty(const std::string &name);
-  virtual bool existProperty(const std::string&name);
-  virtual bool existLocalProperty(const std::string&name);
-  virtual void delLocalProperty(const std::string&name);
-  virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
-  virtual Iterator<std::string>* getLocalProperties();
-  virtual Iterator<std::string>* getInheritedProperties();
-  virtual Iterator<std::string>* getProperties();
-  
-
-  //================================================================================
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
-  /** Return the edge if it exists an edge between two node sens of the edge 
-   * is not taken into account). If no edge is found return an invalid edge.
-   */
-  virtual edge existEdge(node, node) const;
-  /// Return the source of the edge.
-  virtual node source(edge ) const;
-  /// Return the target of the edge.
-  virtual node target(edge ) const;
-  
-  ///Return the edge which is the succcessor of an edge in the cycle of a node. 
+  ///Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;          
   ///Return the edge which is the predecessor of an edge in the cycle of a node. 
   edge predCycleEdge(const edge, const node) const;          
   ///Return the node which is the succcessor of a node in the cycle of a node. 
   node succCycleNode(const node, const node) const;          
-  ///Return the node which is the predecessor of a node in the cycle of a node. 
-  node predCycleNode(const node, const node) const;                                              
+  ///Return the node which is the predecessor of a node in the cycle of a node.
+  node predCycleNode(const node, const node) const;                  
 
   ///Return the number of faces.
   unsigned int nbFaces();
