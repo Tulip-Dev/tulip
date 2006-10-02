@@ -11,6 +11,7 @@
 #include "SizeProperty.h"
 #include "ColorProperty.h"
 #include "IntegerProperty.h"
+#include "GraphProperty.h"
 #include "MethodFactory.h"
 
 #endif
