@@ -156,6 +156,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
   overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
   overviewWidget->show();
+ 
   overviewDock->show();
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
