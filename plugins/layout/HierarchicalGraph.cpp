@@ -187,7 +187,7 @@ void HierarchicalGraph::crossReduction(Graph *sg){
   tlp::getSource(sg,root);
   initCross(sg, root, visited, 1);
 
-  for (int a=0; a<grid.size(); ++a) {
+  for (unsigned int a=0; a<grid.size(); ++a) {
     vector<node>::const_iterator it;
     unsigned int j=0;
     stable_sort(grid[a].begin(), grid[a].end(), lessNode);
@@ -205,12 +205,12 @@ void HierarchicalGraph::crossReduction(Graph *sg){
       twoLayerCrossReduction(graph,i,true);
     }
     //Down sweeping
-    for (int i = 0; i<maxDepth; ++i) {
+    for (unsigned int i = 0; i<maxDepth; ++i) {
       twoLayerCrossReduction(graph,i,false);
     }
   }
 
-  for (int a=0; a<grid.size(); ++a) {
+  for (unsigned int a=0; a<grid.size(); ++a) {
     vector<node>::const_iterator it;
     unsigned int j=0;
     stable_sort(grid[a].begin(), grid[a].end(), lessNode);

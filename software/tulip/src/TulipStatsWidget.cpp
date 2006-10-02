@@ -184,8 +184,6 @@ namespace tlp
     // MAC PORT
     stringstream sstr;
     
-    char val[50];
-    
     for(int i=0; i < nElem-1; i++)
       {
         sstr.seekp(0);
@@ -205,8 +203,6 @@ namespace tlp
     std::string result = "( ";
     // MAC PORT
     stringstream sstr;
-    
-    char val[50];
     
     for(int i=0; i < 2; i++)
       {
