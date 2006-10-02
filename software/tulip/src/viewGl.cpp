@@ -686,11 +686,14 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     changeGraph(0);
     changeGraph(newGraph);
     centerView();
+
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
     
-    
+    // synchronize overview display parameters
+    overviewWidget->syncFromView();
+
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
     Coord sr;
