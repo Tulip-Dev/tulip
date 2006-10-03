@@ -1,5 +1,6 @@
 #ifndef Tulip_OCCLUSIONTEST_H
 #define Tulip_OCCLUSIONTEST_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Rectangle.h>
 
 namespace tlp {
@@ -42,4 +43,5 @@ struct OcclusionTest {
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

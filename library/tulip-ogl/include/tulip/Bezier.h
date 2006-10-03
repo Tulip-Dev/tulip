@@ -1,5 +1,6 @@
 #ifndef BEZIER_H
 #define BEZIER_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
 
@@ -18,4 +19,5 @@ void Bezier4(double (&p)[3], const double p1[3], const double p2[3], const doubl
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif //BEZIER_H

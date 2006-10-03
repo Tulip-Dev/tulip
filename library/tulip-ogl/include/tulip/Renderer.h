@@ -1,5 +1,6 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "Fonts.h"
 
@@ -21,4 +22,5 @@ public:
 };
 
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

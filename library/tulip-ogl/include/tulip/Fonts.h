@@ -1,5 +1,6 @@
 #ifndef _FONTS_H_
 #define _FONTS_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
 
@@ -23,4 +24,5 @@ class Fonts {
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

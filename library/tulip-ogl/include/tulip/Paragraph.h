@@ -1,5 +1,6 @@
 #ifndef _PARAGRAPH_H_
 #define _PARAGRAPH_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "Context.h"
 #include "Frame.h"
@@ -49,4 +50,5 @@ class Paragraph : public Frame{
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

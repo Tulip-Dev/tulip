@@ -1,5 +1,6 @@
 #ifndef _DOCUMENT_H_
 #define _DOCUMENT_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "FLayout.h"
 #include "Context.h"
@@ -39,4 +40,5 @@ class Document : public FLayout{
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

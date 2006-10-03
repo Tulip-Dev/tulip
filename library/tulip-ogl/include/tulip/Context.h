@@ -1,5 +1,6 @@
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
 namespace tlp {
@@ -27,4 +28,5 @@ class Context {
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

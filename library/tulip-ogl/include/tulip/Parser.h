@@ -1,5 +1,6 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -33,4 +34,5 @@ class Parser{
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

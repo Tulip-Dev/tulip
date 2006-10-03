@@ -1,3 +1,6 @@
+#ifndef CURVES_H
+#define CURVES_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/GlGraph.h>
@@ -81,3 +84,5 @@ namespace tlp {
 		  const Color &);          /* end color */
   //====================================================================
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
+#endif

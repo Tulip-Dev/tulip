@@ -1,3 +1,6 @@
+#ifndef GLTOOLS_H
+#define GLTOOLS_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <GL/gl.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -29,3 +32,5 @@ namespace tlp {
 GLfloat tlp::sqr(const GLfloat f) {
   return f*f;
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
+#endif

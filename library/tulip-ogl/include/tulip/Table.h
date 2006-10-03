@@ -1,5 +1,6 @@
 #ifndef _TABLE_H_
 #define _TABLE_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "FLayout.h"
 
@@ -30,4 +31,5 @@ class Table : public FLayout{
 };
 
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

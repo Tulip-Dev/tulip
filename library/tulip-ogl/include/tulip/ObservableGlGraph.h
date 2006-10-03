@@ -26,6 +26,7 @@ class GlGraphObserver {
 }
 
 namespace std {
+  /// for use in some STL sets
   template<>
     struct less<tlp::GlGraphObserver *> {
     size_t operator()(const tlp::GlGraphObserver * obs1,const tlp::GlGraphObserver *obs2) const {

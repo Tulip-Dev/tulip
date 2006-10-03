@@ -1,5 +1,6 @@
 #ifndef     __TLPPixmapFont__
 #define     __TLPPixmapFont__
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <FTGL.h>
 #include <FTFont.h>
@@ -64,5 +65,6 @@ class FTGL_EXPORT TLPPixmapFont : public FTFont
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif  //  __TLPPixmapFont__
 

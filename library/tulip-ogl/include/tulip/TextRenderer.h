@@ -1,5 +1,6 @@
 #ifndef _TEXTRENDERER_H_
 #define _TEXTRENDERER_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
 #include <libxml/parser.h>
@@ -38,4 +39,5 @@ class TLP_GL_SCOPE TextRenderer {
 };
 
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

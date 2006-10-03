@@ -1,5 +1,6 @@
 #ifndef _FLAYOUT_H_
 #define _FLAYOUT_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "Frame.h"
 
@@ -14,4 +15,5 @@ struct FLayout : public Frame{
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

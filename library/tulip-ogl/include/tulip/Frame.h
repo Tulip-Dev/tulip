@@ -1,5 +1,6 @@
 #ifndef _FRAME_H_
 #define _FRAME_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
 
@@ -11,5 +12,6 @@ struct Frame{
 
 }
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif
 

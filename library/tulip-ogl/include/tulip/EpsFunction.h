@@ -1,5 +1,6 @@
 #ifndef EPSFUNCTION
 #define EPSFUNCTION
+#ifndef DOXYGEN_NOTFOR_DEVEL
 //====================================================
 #include <stdio.h>
 #include <tulip/Color.h>
@@ -18,4 +19,5 @@ void print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer);
 void printBuffer(GLint size, GLfloat * buffer);
 
 }
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

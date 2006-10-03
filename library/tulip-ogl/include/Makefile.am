@@ -1,6 +1,5 @@
 nobase_include_HEADERS = \
 	tulip/ObservableGlGraph.h\
-	tulip/OcclusionTest.h\
 	tulip/Camera.h\
 	tulip/GlGraph.h\
 	tulip/Glyph.h \

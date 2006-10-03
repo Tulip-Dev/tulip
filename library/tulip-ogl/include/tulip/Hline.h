@@ -1,5 +1,6 @@
 #ifndef _HLINE_H_
 #define _HLINE_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "Frame.h"
 namespace tlp {
@@ -25,4 +26,5 @@ class Hline : public Frame{
 
 }
 
+#endif //OXYGEN_NOTFOR_DEVEL
 #endif

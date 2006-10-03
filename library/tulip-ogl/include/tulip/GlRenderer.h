@@ -1,6 +1,8 @@
 #ifndef _GLFONTS_H_
 #define _GLFONTS_H_
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <string>
 #include <map>
 #include <vector>
@@ -83,6 +85,6 @@ class GlRenderer : public Renderer {
 };
 
 }
-
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif
 
