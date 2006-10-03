@@ -83,5 +83,10 @@ vector<vector<node> > tlp::computeCanonicalOrdering(PlanarConMap *carte, std::ve
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
   if (dummyEdges!=0) 
     *dummyEdges = o.getDummyEdges();
-  return o;
+  vector<vector<node> > res;
+  int nbMax = o.size()-1;
+  for (int i=nbMax;i>=0;i--) {
+    res.push_back(o[i]);
+  }
+  return res;
 }
