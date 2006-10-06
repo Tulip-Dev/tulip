@@ -67,7 +67,6 @@ BUILT_SOURCES = \
 	moc_ToolBarData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
-	moc_NavigateButton.cpp \
 	moc_QtProgress.cpp \
 	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
@@ -99,7 +98,6 @@ nodist_tulip_SOURCES =  \
 	moc_ToolBarData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
-	moc_NavigateButton.cpp \
 	moc_QtProgress.cpp \
 	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
@@ -112,7 +110,6 @@ dist_tulip_SOURCES = \
 	viewGl.cpp \
 	Application.cpp \
 	geometrie2D.cpp \
-	NavigateButton.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	ToolBar.cpp \
@@ -131,7 +128,6 @@ dist_tulip_SOURCES = \
 	viewGl.cpp \
 	Application.cpp \
 	geometrie2D.cpp \
-	NavigateButton.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	ToolBar.cpp \

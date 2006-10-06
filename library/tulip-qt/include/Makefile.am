@@ -1,9 +1,9 @@
 nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlGraphWidget.h \
+	tulip/GWInteractor.h \
 	tulip/MouseObject.h \
 	tulip/MouseZoomBox.h \
-	tulip/MouseInterface.h \
 	tulip/PropertyWidgets.h \
 	tulip/TulipElementPropertiesData.h \
 	tulip/TulipElementProperties.h \

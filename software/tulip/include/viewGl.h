@@ -34,7 +34,7 @@
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
 #include <tulip/Observable.h>
-#include <tulip/MouseInterface.h>
+#include <tulip/GWInteractor.h>
 #include "TulipData.h"
 
 namespace tlp {
@@ -172,7 +172,7 @@ protected slots:
   void ungroup();  
   void group();  
   void gridOptions();
-  void mouseChanged(tlp::MouseInterface *);
+  void interactorChanged(tlp::GWInteractor *);
   void deleteElement();
   void selectElement();
   void addRemoveElement();

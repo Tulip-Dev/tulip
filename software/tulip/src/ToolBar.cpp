@@ -32,40 +32,40 @@
  */
 ToolBar::ToolBar( QWidget* parent,  const char* name, Qt::WFlags fl )
   : ToolBarData(parent, name, fl) {
-  currentMouse = new MouseGraphNavigate();
+  currentInteractor = new MouseGraphNavigate();
 }
 
 /*  
  *  Destroys the object and frees any allocated resources
  */
 ToolBar::~ToolBar() {
-  if (currentMouse != NULL) delete currentMouse;
+  if (currentInteractor != NULL) delete currentInteractor;
 }
 
-MouseInterface *ToolBar::getCurrentMouse() const {return currentMouse;}
+GWInteractor *ToolBar::getCurrentInteractor() const {return currentInteractor;}
 
-void ToolBar::setCurrentMouse(MouseInterface *m) {
-  if (currentMouse != NULL) {
-    if (typeid(*currentMouse) == typeid(*m)) {
+void ToolBar::setCurrentInteractor(GWInteractor *m) {
+  if (currentInteractor != NULL) {
+    if (typeid(*currentInteractor) == typeid(*m)) {
       delete m;
       return;
     }
     else
-      delete currentMouse;
+      delete currentInteractor;
   }
-  currentMouse = m;
-  emit mouseChanged(currentMouse);
+  currentInteractor = m;
+  emit interactorChanged(currentInteractor);
 }
 /* 
  * public slots
  */
-void ToolBar::setSelect() { setCurrentMouse(new MouseSelect()); }
-void ToolBar::setAddEdge() { setCurrentMouse(new MouseAddEdge()); }
-void ToolBar::setAddNode() { setCurrentMouse(new MouseAddNode()); }
-void ToolBar::setDel() { setCurrentMouse(new MouseDel()); }
-void ToolBar::setZoomBox() { setCurrentMouse(new MouseZoomBox()); }
-//void ToolBar::setDelSelection() { setCurrentMouse(new MouseTreeFishEyes()); }
-void ToolBar::setMoveSelection() { setCurrentMouse(new MouseMoveSelection()); }
-void ToolBar::setSelection() { setCurrentMouse(new MouseSelection()); }
-void ToolBar::setMagicSelection() { setCurrentMouse(new MouseMagicSelection()); }
-void ToolBar::setGraphNavigate() { setCurrentMouse(new MouseGraphNavigate()); }
+void ToolBar::setSelect() { setCurrentInteractor(new MouseSelect()); }
+void ToolBar::setAddEdge() { setCurrentInteractor(new MouseAddEdge()); }
+void ToolBar::setAddNode() { setCurrentInteractor(new MouseAddNode()); }
+void ToolBar::setDel() { setCurrentInteractor(new MouseDel()); }
+void ToolBar::setZoomBox() { setCurrentInteractor(new MouseZoomBox()); }
+//void ToolBar::setDelSelection() { setCurrentInteractor(new MouseTreeFishEyes()); }
+void ToolBar::setMoveSelection() { setCurrentInteractor(new MouseMoveSelection()); }
+void ToolBar::setSelection() { setCurrentInteractor(new MouseSelection()); }
+void ToolBar::setMagicSelection() { setCurrentInteractor(new MouseMagicSelection()); }
+void ToolBar::setGraphNavigate() { setCurrentInteractor(new MouseGraphNavigate()); }

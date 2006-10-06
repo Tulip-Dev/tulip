@@ -31,7 +31,6 @@ noinst_HEADERS = \
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
-	NavigateButton.h\
 	PropertyDialog.h\
 	PropertyDialogQt3.h \
 	ToolBar.h\
