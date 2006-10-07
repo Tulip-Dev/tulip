@@ -70,7 +70,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="TulipElementProperties" row="0" column="0">
+                    <widget class="ElementPropertiesWidget" row="0" column="0">
                         <property name="name">
                             <cstring>elementInfo</cstring>
                         </property>
@@ -94,7 +94,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="ClusterTree" row="0" column="0">
+                    <widget class="SGHierarchyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>clusterTree</cstring>
                         </property>
@@ -163,8 +163,8 @@
 </images>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>tulip/TulipElementProperties.h</includehint>
+    <includehint>tulip/ElementPropertiesWidget.h</includehint>
     <includehint>tulip/PropertyWidgets.h</includehint>
-    <includehint>tulip/ClusterTree.h</includehint>
+    <includehint>tulip/SGHierarchyWidget.h</includehint>
 </includehints>
 </UI>

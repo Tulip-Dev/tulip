@@ -19,7 +19,7 @@
 #include <tulip/Iterator.h> 
 #include <tulip/GlGraph.h> 
 #include <tulip/StableIterator.h>
-#include <tulip/ClusterTree.h>
+#include <tulip/SGHierarchyWidget.h>
 #include "tulip/Clustering.h"
 
 #if (QT_REL == 3)
@@ -121,7 +121,7 @@ namespace tlp
   {
   } 
 
-  void TulipStats::setClusterTreeWidget(ClusterTree *clusterTree)
+  void TulipStats::setSGHierarchyWidgetWidget(SGHierarchyWidget *clusterTree)
   {
     clusterTreeWidget = clusterTree;
   }

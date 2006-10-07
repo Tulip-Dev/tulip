@@ -4,12 +4,12 @@ nobase_include_HEADERS = \
 	tulip/GWInteractor.h \
 	tulip/MouseObject.h \
 	tulip/MouseZoomBox.h \
-	tulip/PropertyWidgets.h \
-	tulip/TulipElementPropertiesData.h \
-	tulip/TulipElementProperties.h \
+	tulip/PropertyWidget.h \
+	tulip/ElementPropertiesWidgetData.h \
+	tulip/ElementPropertiesWidget.h \
 	tulip/FindSelection.h \
-	tulip/ClusterTreeData.h \
-	tulip/ClusterTree.h \
+	tulip/SGHierarchyWidgetData.h \
+	tulip/SGHierarchyWidget.h \
 	tulip/MouseAddEdge.h\
 	tulip/MouseAddNode.h\
 	tulip/MouseMoveSelection.h\
@@ -18,32 +18,32 @@ nobase_include_HEADERS = \
 	tulip/Morphing.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
-	tulip/ClusterTreePlugin.h \
-	tulip/ClusterTreeQt3.h \
+	tulip/SGHierarchyWidgetPlugin.h \
+	tulip/SGHierarchyWidgetQt3.h \
 	tulip/GlGraphWidgetPlugin.h \
-	tulip/TulipElementPropertiesPlugin.h \
-	tulip/TulipPropertyTablePlugin.h
+	tulip/ElementPropertiesWidgetPlugin.h \
+	tulip/PropertyWidgetPlugin.h
 
 if QT3
 nobase_nodist_include_HEADERS = tulip/FindSelectionData.h
 else
 nobase_nodist_include_HEADERS = \
 	tulip/FindSelectionData.h \
-	tulip/clustertree.h \
+	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
-	tulip/tulipelementproperties.h \
-	tulip/tulippropertytable.h
+	tulip/elementpropertieswidget.h \
+	tulip/propertywidget.h
 
-tulip/clustertree.h : tulip/ClusterTree.h
+tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@
 
 tulip/glgraphwidget.h : tulip/GlGraphWidget.h
 	cp -f $< $@
 
-tulip/tulipelementproperties.h : tulip/TulipElementProperties.h
+tulip/elementproperties.h : tulip/ElementPropertiesWidget.h
 	cp -f $< $@
 
-tulip/tulippropertytable.h : tulip/PropertyWidgets.h
+tulip/tulippropertytable.h : tulip/PropertyWidget.h
 	cp -f $< $@
 endif
 

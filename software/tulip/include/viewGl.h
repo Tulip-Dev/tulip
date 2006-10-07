@@ -43,8 +43,8 @@ class Morphing;
 class GridOptionsWidget;
 }
 
-class ClusterTree;
-class TulipElementProperties;
+class SGHierarchyWidget;
+class ElementPropertiesWidget;
 class GlGraphWidget;
 class TulipStats;
 class PropertyDialog;
@@ -75,7 +75,7 @@ public:
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
-  ClusterTree *clusterTreeWidget;
+  SGHierarchyWidget *clusterTreeWidget;
 #ifdef STATS_UI
   tlp::TulipStats *statsWidget;
 #endif
@@ -87,7 +87,7 @@ protected:
   QDockWindow *mouseToolBarDock;
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
-  TulipElementProperties *nodeProperties;
+  ElementPropertiesWidget *nodeProperties;
   tlp::Graph * copyCutPasteGraph;
   bool elementsDisabled;
 

@@ -93,7 +93,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="TulipPropertyTable" row="0" column="0">
+                    <widget class="PropertyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>tableNodes</cstring>
                         </property>
@@ -140,7 +140,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="TulipPropertyTable" row="0" column="0">
+                    <widget class="PropertyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>tableEdges</cstring>
                         </property>

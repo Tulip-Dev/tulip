@@ -45,8 +45,8 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/GlGraph.h>
-#include <tulip/PropertyWidgets.h>
-#include <tulip/ClusterTree.h>
+#include <tulip/PropertyWidget.h>
+#include <tulip/SGHierarchyWidget.h>
 
 #include "PropertyDialog.h"
 

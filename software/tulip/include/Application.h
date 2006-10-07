@@ -6,11 +6,11 @@
 #include <qapplication.h>
 #include <tulip/Color.h>
 
-class TulipElementProperties;
+class ElementPropertiesWidget;
 
 class Application:public QApplication {
 public:
-  TulipElementProperties *nodeProperties;
+  ElementPropertiesWidget *nodeProperties;
   std::string bitmapPath;
   tlp::Color nodeColor;
   tlp::Color edgeColor;

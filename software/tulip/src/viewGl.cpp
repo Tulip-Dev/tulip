@@ -78,9 +78,9 @@
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/TulipElementProperties.h>
-#include <tulip/PropertyWidgets.h>
-#include <tulip/ClusterTree.h>
+#include <tulip/ElementPropertiesWidget.h>
+#include <tulip/PropertyWidget.h>
+#include <tulip/SGHierarchyWidget.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -189,7 +189,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
 #ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
-  statsWidget->setClusterTreeWidget(clusterTreeWidget);
+  statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
 #endif
 
   ((Application*)qApp)->nodeProperties = nodeProperties;

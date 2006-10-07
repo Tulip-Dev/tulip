@@ -42,7 +42,7 @@
 
 
 class GlGraphWidget;
-class ClusterTree;
+class SGHierarchyWidget;
 
 namespace tlp {
 class DoubleProperty;
@@ -64,7 +64,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
   Graph *graph; /**< A reference to the graph we are considering */
   tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
-  ClusterTree *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
+  SGHierarchyWidget *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
   tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
 
@@ -154,7 +154,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   /**
    * Function used by viewGl to set the reference to the clusterTree.
    */
-  void setClusterTreeWidget(ClusterTree *);
+  void setSGHierarchyWidgetWidget(SGHierarchyWidget *);
 
   /**
    * Accessor in reading to the graph.
