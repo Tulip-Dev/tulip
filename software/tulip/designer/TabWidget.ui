@@ -164,7 +164,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>tulip/ElementPropertiesWidget.h</includehint>
-    <includehint>tulip/PropertyWidgets.h</includehint>
+    <includehint>tulip/PropertyWidget.h</includehint>
     <includehint>tulip/SGHierarchyWidget.h</includehint>
 </includehints>
 </UI>
