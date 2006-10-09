@@ -23,6 +23,17 @@
 #include "ToolBar.h"
 #include "Application.h"
 
+// the vectors of interactors associated to each action
+static vector<tlp::GWInteractor *>addEdgeInteractors;
+static vector<tlp::GWInteractor *>addNodeInteractors;
+static vector<tlp::GWInteractor *>deleteEltInteractors;
+static vector<tlp::GWInteractor *>graphNavigateInteractors;
+static vector<tlp::GWInteractor *>magicSelectionInteractors;
+static vector<tlp::GWInteractor *>moveSelectionInteractors;
+static vector<tlp::GWInteractor *>selectInteractors;
+static vector<tlp::GWInteractor *>selectionInteractors;
+static vector<tlp::GWInteractor *>zoomBoxInteractors;
+
 /* 
  *  Constructs a ToolBar which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
@@ -32,40 +43,82 @@
  */
 ToolBar::ToolBar( QWidget* parent,  const char* name, Qt::WFlags fl )
   : ToolBarData(parent, name, fl) {
-  currentInteractor = new MouseGraphNavigate();
+  // initialize the vectors of interactors associated to each action
+  addEdgeInteractors.push_back(new MouseAddEdge());
+  addNodeInteractors.push_back(new MouseAddNode());
+  deleteEltInteractors.push_back(new MouseDelete());
+  graphNavigateInteractors.push_back(new MouseGraphNavigate());
+  magicSelectionInteractors.push_back(new MouseMagicSelection());
+  moveSelectionInteractors.push_back(new MouseSelection());
+  moveSelectionInteractors.push_back(new MouseMoveSelection());
+  selectInteractors.push_back(new MouseSelect());
+  selectionInteractors.push_back(new MouseSelection());
+  zoomBoxInteractors.push_back(new MouseZoomBox());
+  // initialize the current one
+  currentInteractors = &graphNavigateInteractors;
 }
 
 /*  
  *  Destroys the object and frees any allocated resources
  */
 ToolBar::~ToolBar() {
-  if (currentInteractor != NULL) delete currentInteractor;
+  deleteInteractors(addEdgeInteractors);
+  deleteInteractors(addNodeInteractors);
+  deleteInteractors(deleteEltInteractors);
+  deleteInteractors(graphNavigateInteractors);
+  deleteInteractors(magicSelectionInteractors);
+  deleteInteractors(moveSelectionInteractors);
+  deleteInteractors(selectInteractors);
+  deleteInteractors(selectionInteractors);
+  deleteInteractors(zoomBoxInteractors);  
 }
 
-GWInteractor *ToolBar::getCurrentInteractor() const {return currentInteractor;}
-
-void ToolBar::setCurrentInteractor(GWInteractor *m) {
-  if (currentInteractor != NULL) {
-    if (typeid(*currentInteractor) == typeid(*m)) {
-      delete m;
-      return;
-    }
-    else
-      delete currentInteractor;
-  }
-  currentInteractor = m;
-  emit interactorChanged(currentInteractor);
+vector <GWInteractor *> &ToolBar::getCurrentInteractors() const {
+  return *currentInteractors;
 }
+
+void ToolBar::setCurrentInteractors(vector<tlp::GWInteractor *> *interactors) {
+  if (currentInteractors == interactors)
+    return;
+  currentInteractors = interactors;
+  emit interactorsChanged(*currentInteractors);
+}
+
+// deletion of registered interactors
+void ToolBar::deleteInteractors(vector<tlp::GWInteractor *> &interactors) {
+  for(vector<GWInteractor *>::iterator it =
+	interactors.begin(); it != interactors.end(); ++it)
+    delete *it;
+}
+
 /* 
  * public slots
  */
-void ToolBar::setSelect() { setCurrentInteractor(new MouseSelect()); }
-void ToolBar::setAddEdge() { setCurrentInteractor(new MouseAddEdge()); }
-void ToolBar::setAddNode() { setCurrentInteractor(new MouseAddNode()); }
-void ToolBar::setDel() { setCurrentInteractor(new MouseDel()); }
-void ToolBar::setZoomBox() { setCurrentInteractor(new MouseZoomBox()); }
-//void ToolBar::setDelSelection() { setCurrentInteractor(new MouseTreeFishEyes()); }
-void ToolBar::setMoveSelection() { setCurrentInteractor(new MouseMoveSelection()); }
-void ToolBar::setSelection() { setCurrentInteractor(new MouseSelection()); }
-void ToolBar::setMagicSelection() { setCurrentInteractor(new MouseMagicSelection()); }
-void ToolBar::setGraphNavigate() { setCurrentInteractor(new MouseGraphNavigate()); }
+void ToolBar::setAddEdge() {
+  setCurrentInteractors(&addEdgeInteractors);
+}
+void ToolBar::setAddNode() {
+  setCurrentInteractors(&addNodeInteractors);
+}
+void ToolBar::setDelete() {
+  setCurrentInteractors(&deleteEltInteractors);
+}
+void ToolBar::setGraphNavigate() {
+  setCurrentInteractors(&graphNavigateInteractors);
+}
+void ToolBar::setMagicSelection() {
+  setCurrentInteractors(&magicSelectionInteractors);
+}
+void ToolBar::setMoveSelection() {
+  setCurrentInteractors(&moveSelectionInteractors);
+}
+void ToolBar::setSelect() {
+  setCurrentInteractors(&selectInteractors);
+}
+void ToolBar::setSelection() {
+  setCurrentInteractors(&selectionInteractors);
+}
+void ToolBar::setZoomBox() {
+  setCurrentInteractors(&zoomBoxInteractors);
+}
+

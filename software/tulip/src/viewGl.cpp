@@ -411,11 +411,9 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
 #endif
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
-  glWidget->pushInteractor(mouseToolBar->getCurrentInteractor());
-  connect(mouseToolBar,   SIGNAL(interactorChanged(tlp::GWInteractor *)), glWidget, SLOT(resetInteractors(tlp::GWInteractor *)));
-  connect(mouseToolBar,   SIGNAL(interactorChanged(tlp::GWInteractor *)), SLOT(interactorChanged(tlp::GWInteractor *)));
-  connect(glWidget,       SIGNAL(nodeClicked(tlp
-::Graph *, const tlp::node &)), 
+  glWidget->resetInteractors(mouseToolBar->getCurrentInteractors());
+  connect(mouseToolBar,   SIGNAL(interactorsChanged(const std::vector<tlp::GWInteractor *>&)), glWidget, SLOT(resetInteractors(const std::vector<tlp::GWInteractor *>&)));
+  connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
 	  nodeProperties, SLOT(setCurrentNode(tlp::Graph*, const tlp::node &)));
   connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
 	  this, SLOT(showElementProperties()));
@@ -1738,9 +1736,6 @@ void viewGl::gridOptions() {
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
   gridOptionsWidget->show();
-}
-//**********************************************************************
-void viewGl::interactorChanged(GWInteractor *m) {
 }
 //**********************************************************************
 void viewGl::showElementProperties() {

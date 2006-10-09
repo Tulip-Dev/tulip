@@ -172,7 +172,6 @@ protected slots:
   void ungroup();  
   void group();  
   void gridOptions();
-  void interactorChanged(tlp::GWInteractor *);
   void deleteElement();
   void selectElement();
   void addRemoveElement();
