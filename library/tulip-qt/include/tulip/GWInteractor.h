@@ -4,7 +4,7 @@
 #if (QT_REL == 3)
 #include <qobject.h>
 #else
-#include <qQt/object.h>
+#include <Qt/qobject.h>
 #endif
 
 class GlGraphWidget;

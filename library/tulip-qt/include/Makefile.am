@@ -46,7 +46,7 @@ tulip/glgraphwidget.h : tulip/GlGraphWidget.h
 tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h
 	cp -f $< $@
 
-tulip/elementproperties.h : tulip/ElementPropertiesWidget.h
+tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
 	cp -f $< $@
 
 tulip/propertywidget.h : tulip/PropertyWidget.h
