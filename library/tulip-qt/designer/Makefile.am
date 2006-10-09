@@ -1,5 +1,3 @@
-dist_noinst_DATA = ClusterTree.ui FindSelection.ui TulipElementProperties.ui
-SOURCES = TulipElementProperties.ui ClusterTree.ui FindSelection.ui elementtable.xpm GlGraphWidget.xpm clustertree.xpm
-EXTRA_DIST = TulipElementProperties.ui ClusterTree.ui FindSelection.ui elementtable.xpm GlGraphWidget.xpm clustertree.xpm
-
-
+dist_noinst_DATA = ElementPropertiesWidget.ui FindSelection.ui GWOverviewWidget.ui SGHierarchyWidget.ui
+SOURCES = ElementPropertiesWidget.ui FindSelection.ui GWOverviewWidget.ui SGHierarchyWidget.ui elementtable.xpm GlGraphWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm
+EXTRA_DIST = ElementPropertiesWidget.ui FindSelection.ui GWOverviewWidget.ui SGHierarchyWidget.ui elementtable.xpm GlGraphWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm

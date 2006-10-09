@@ -1,0 +1,488 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>GWOverviewWidgetData</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>GWOverviewWidgetData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>416</width>
+            <height>132</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>132</width>
+            <height>132</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>OverviewWidget</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>frame8_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frame8</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>132</width>
+                            <height>132</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32000</width>
+                            <height>32000</height>
+                        </size>
+                    </property>
+                    <property name="paletteBackgroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>127</blue>
+                        </color>
+                    </property>
+                    <property name="frameShape">
+                        <enum>PopupPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="GlGraphWidget" row="0" column="0">
+                            <property name="name">
+                                <cstring>view</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>128</width>
+                                    <height>128</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>2000</width>
+                                    <height>2000</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>parameterBasic</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>0</number>
+                        </property>
+                        <widget class="QPushButton" row="3" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>extended</cstring>
+                            </property>
+                            <property name="text">
+                                <string>more ...</string>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>interpolation</cstring>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>Color Interpolation</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>interpolationEdge</cstring>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>StrongFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string>Size Interpolation</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>arrows</cstring>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>70</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Arrows</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>edges</cstring>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>70</width>
+                                            <height>50</height>
+                                        </size>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Edges</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>labels</cstring>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>70</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Labels</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </grid>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>extView</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>1</number>
+                </property>
+                <property name="spacing">
+                    <number>1</number>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <item>
+                        <property name="text">
+                            <string>3D</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Bitmap</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Texture</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>fonts</cstring>
+                    </property>
+                    <property name="currentItem">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>background</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>Background</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>edge3D</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>3D Edges</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="1">
+                    <property name="name">
+                        <cstring>orthogonal</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>Orthogonal projection</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>metaLabel</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>Metanode labels</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>strahler</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>Strahler ordering</string>
+                    </property>
+                </widget>
+                <widget class="QSlider" row="3" column="1">
+                    <property name="name">
+                        <cstring>density</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Label density</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>labels</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>arrows</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>interpolation</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>edges</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>fonts</sender>
+        <signal>activated(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>background</sender>
+        <signal>clicked()</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>backColor()</slot>
+    </connection>
+    <connection>
+        <sender>edge3D</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>strahler</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>metaLabel</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>orthogonal</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>extended</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>showExtendedParameters(bool)</slot>
+    </connection>
+    <connection>
+        <sender>density</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>metaLabel</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>interpolationEdge</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>updateView()</slot>
+    <slot>backColor()</slot>
+    <slot>extendedView(bool)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>tulip/GlGraphWidget.h</includehint>
+</includehints>
+</UI>

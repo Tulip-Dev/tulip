@@ -45,8 +45,6 @@ BUILT_SOURCES = \
 	moc_QtProgressData.cpp \
 	TulipData.cpp\
 	moc_TulipData.cpp\
-	OverviewData.cpp\
-	moc_OverviewData.cpp\
 	TabWidgetData.cpp \
 	moc_TabWidgetData.cpp \
 	InfoDialogData.cpp \
@@ -57,7 +55,6 @@ BUILT_SOURCES = \
 	GridOptionsData.cpp \
 	moc_TulipStatsData.cpp \
 	moc_GridOptionsData.cpp \
-	moc_Overview.cpp \
 	moc_AppStartUp.cpp \
 	moc_AppStartUpData.cpp \
 	moc_InfoDialogData.cpp \
@@ -74,11 +71,8 @@ BUILT_SOURCES = \
 nodist_tulip_SOURCES =  \
 	QtProgressData.cpp \
 	moc_QtProgressData.cpp \
-	moc_Overview.cpp \
 	TulipData.cpp\
 	moc_TulipData.cpp\
-	OverviewData.cpp\
-	moc_OverviewData.cpp\
 	TabWidgetData.cpp \
 	moc_TabWidgetData.cpp \
 	InfoDialogData.cpp \
@@ -105,7 +99,6 @@ nodist_tulip_SOURCES =  \
 
 if QT3
 dist_tulip_SOURCES = \
-	Overview.cpp \
 	ElementInfoToolTip.cpp \
 	viewGl.cpp \
 	Application.cpp \
@@ -124,7 +117,6 @@ moc_%.cpp: ../include/%.h
 
 else
 dist_tulip_SOURCES = \
-	Overview.cpp \
 	viewGl.cpp \
 	Application.cpp \
 	geometrie2D.cpp \

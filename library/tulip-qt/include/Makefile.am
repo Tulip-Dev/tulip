@@ -10,6 +10,8 @@ nobase_include_HEADERS = \
 	tulip/FindSelection.h \
 	tulip/SGHierarchyWidgetData.h \
 	tulip/SGHierarchyWidget.h \
+	tulip/GWOverviewWidgetData.h \
+	tulip/GWOverviewWidget.h \
 	tulip/MouseAddEdge.h\
 	tulip/MouseAddNode.h\
 	tulip/MouseMoveSelection.h\
@@ -32,6 +34,7 @@ nobase_nodist_include_HEADERS = \
 	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
 	tulip/elementpropertieswidget.h \
+	tulip/gwoverviewwidget.h \
 	tulip/propertywidget.h
 
 tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
@@ -40,10 +43,13 @@ tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 tulip/glgraphwidget.h : tulip/GlGraphWidget.h
 	cp -f $< $@
 
+tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h
+	cp -f $< $@
+
 tulip/elementproperties.h : tulip/ElementPropertiesWidget.h
 	cp -f $< $@
 
-tulip/tulippropertytable.h : tulip/PropertyWidget.h
+tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
 endif
 

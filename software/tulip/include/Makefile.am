@@ -3,7 +3,6 @@ UIC = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs:$(top_builddir)/li
 BUILT_SOURCES = \
 	QtProgressData.h \
 	TulipData.h\
-	OverviewData.h\
 	TabWidgetData.h\
 	AppStartUpData.h\
 	InfoDialogData.h\
@@ -15,7 +14,6 @@ BUILT_SOURCES = \
 nodist_noinst_HEADERS = \
 	QtProgressData.h \
 	TulipData.h\
-	OverviewData.h\
 	TabWidgetData.h\
 	AppStartUpData.h\
 	InfoDialogData.h\
@@ -25,7 +23,6 @@ nodist_noinst_HEADERS = \
 	GridOptionsData.h
 
 noinst_HEADERS = \
-	Overview.h\
 	ElementInfoToolTip.h \
 	Application.h\
 	AppStartUp.h\

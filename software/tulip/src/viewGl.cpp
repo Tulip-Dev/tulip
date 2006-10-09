@@ -109,7 +109,7 @@
 #include "ElementInfoToolTip.h"
 #include "TabWidgetData.h"
 #include "GridOptionsWidget.h"
-#include "Overview.h"
+#include "GWOverviewWidget.h"
 #include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
@@ -151,7 +151,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewDock->setCaption("3D Overview");
   overviewDock->setCloseMode(QDockWindow::Always);
   overviewDock->setResizeEnabled(true);
-  overviewWidget = new Overview(overviewDock);
+  overviewWidget = new GWOverviewWidget(overviewDock);
   overviewDock->boxLayout()->add(overviewWidget);
   this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
   overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
@@ -1029,6 +1029,7 @@ void viewGl::buildMenus() {
   //Windows
   dialogMenu.insertItem("Mouse Tool Bar");
   dialogMenu.insertItem("3D Overview");
+  dialogMenu.insertItem("Show/Hide Rendering parameters");
   dialogMenu.insertItem("Info Editor");
   //==============================================================
   //File Menu 
@@ -1312,6 +1313,9 @@ void viewGl::showDialog(int id){
   if (name=="3D Overview") {
     overviewDock->show();
     overviewDock->raise();
+  }
+  if (name=="Show/Hide Rendering parameters") {
+    overviewWidget->showParameters(!overviewWidget->parameterBasic->isVisibleTo(overviewWidget));
   }
 }
 //======================================================================

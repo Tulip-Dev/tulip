@@ -54,7 +54,7 @@ class QEvent;
 class View3DSetup;
 class Cluster;
 class ToolBar;
-class Overview;
+class GWOverviewWidget;
 
 // minimal structure to keep open files infos
 struct viewGlFile {
@@ -80,7 +80,7 @@ protected:
   tlp::TulipStats *statsWidget;
 #endif
   ToolBar *mouseToolBar;
-  Overview *overviewWidget;
+  GWOverviewWidget *overviewWidget;
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
   QDockWindow *tabWidgetDock;
