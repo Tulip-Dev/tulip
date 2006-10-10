@@ -4,7 +4,7 @@
 #include <QtCore/QtPlugin>
 #include "tulip/SGHierarchyWidgetQt3.h"
 
-#include "../designer/clustertree.xpm"
+#include "../designer/sghierarchywidget.xpm"
 
 using namespace tlp;
 
@@ -50,7 +50,7 @@ QString SGHierarchyWidgetPlugin::group() const {
 }
 
 QIcon SGHierarchyWidgetPlugin::icon() const {
-  return QIcon(QPixmap(clustertree_xpm));
+  return QIcon(QPixmap(sghierarchywidget_xpm));
 }
 
 QString SGHierarchyWidgetPlugin::toolTip() const {

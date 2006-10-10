@@ -5,14 +5,17 @@
 #include "GWOverviewWidgetData.h"
 #include <tulip/ObservableGlGraph.h>
 #include <tulip/GlAugmentedDisplay.h>
+#include <tulip/GlGraphWidget.h>
 #include <qcolor.h>
 #include <string>
 #include <qstring.h>
-
+#include <qlayout.h>
 
 namespace tlp {
-class GlGraph;
+  class GlGraph;
 }
+
+class GlGraphWidget;
 class QEvent;
 
 struct RectPosition : public tlp::GlAugmentedDisplay {
@@ -32,6 +35,7 @@ public:
   void draw(tlp::GlGraph *);
   bool eventFilter(QObject *, QEvent *);
   void showParameters(bool);
+  GlGraphWidget* view;
 
 public slots:
   void updateView();
@@ -42,7 +46,7 @@ public slots:
   
 private:
   void destroy(tlp::GlGraph *);
-  GlGraph *observedView;
+  tlp::GlGraph *observedView;
   bool synchronizing;
   RectPosition *glDraw;
   Camera initialCamera;

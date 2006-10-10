@@ -1,5 +1,5 @@
 /* XPM */
-static const char * sghierarchy_xpm[] = {
+static const char * sghierarchywidget_xpm[] = {
 "22 22 276 2",
 "  	c None",
 ". 	c #010101",

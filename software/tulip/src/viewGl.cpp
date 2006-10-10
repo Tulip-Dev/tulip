@@ -49,8 +49,8 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
-#include <QtGui/qfileinfo.h>
-#include <QtGui/qdir.h>
+#include <QtCore/qfileinfo.h>
+#include <QtCore/qdir.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qworkspace.h>
 #include <QtGui/qmenubar.h>
@@ -350,9 +350,9 @@ void viewGl::startTulip() {
 void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
-  QFileInfo tmp(openFiles[(unsigned int)glWidget].name);
+  QFileInfo tmp(openFiles[(unsigned int)glWidget].name.c_str());
   glWidget->setTexturePath(string(tmp.dirPath().latin1()) + "/");
-  QDir::setCurrent(string(tmp.dirPath().latin1()) + "/");
+  QDir::setCurrent(tmp.dirPath() + "/");
   clusterTreeWidget->setGraph(graph);
   propertiesWidget->setGraph(graph);
   nodeProperties->setGraph(graph);
@@ -647,7 +647,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     initializeGlGraph(glW);
     QFileInfo tmp(s);
     glW->setTexturePath(string(tmp.dirPath().latin1()) + "/");
-    QDir::setCurrent(string(tmp.dirPath().latin1()) + "/");
+    QDir::setCurrent(tmp.dirPath() + "/");
     glW->setGraph(newGraph);
     changeGraph(0);
     QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );

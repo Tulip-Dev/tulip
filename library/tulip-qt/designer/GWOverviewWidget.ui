@@ -109,24 +109,7 @@
                         <property name="spacing">
                             <number>0</number>
                         </property>
-                        <widget class="GlGraphWidget" row="0" column="0">
-                            <property name="name">
-                                <cstring>view</cstring>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>128</width>
-                                    <height>128</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>2000</width>
-                                    <height>2000</height>
-                                </size>
-                            </property>
-                        </widget>
-                    </grid>
+                     </grid>
                 </widget>
                 <widget class="QFrame">
                     <property name="name">
@@ -479,10 +462,7 @@
 <slots>
     <slot>updateView()</slot>
     <slot>backColor()</slot>
-    <slot>extendedView(bool)</slot>
+    <slot>showExtendedParameters(bool)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>tulip/GlGraphWidget.h</includehint>
-</includehints>
 </UI>

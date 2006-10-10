@@ -1,4 +1,3 @@
-#include <tulip/GlGraphWidget.h>
 #include <qcolor.h>
 #include <qslider.h>
 #include <qpushbutton.h>
@@ -7,9 +6,9 @@
 #include <qcolordialog.h>
 #include <qframe.h>
 #include <qevent.h>
-#include <tulip/GlGraph.h>
 
 #include "tulip/GWOverviewWidget.h"
+#include "tulip/GlGraphWidget.h"
 
 using namespace std;
 using namespace tlp;
@@ -23,7 +22,14 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,  const char* name, bool moda
 		      observedView=0;
 		      glDraw=0;
 		      extView->hide();
-		      //		      parameterBasic->hide();
+		      view = new GlGraphWidget( frame8, "view" );
+		      view->setMinimumSize( QSize( 128, 128 ) );
+		      view->setMaximumSize( QSize( 2000, 2000 ) );
+#if (QT_REL == 3)
+		      frame8Layout->addWidget( view, 0, 0 );
+#else
+		      gridLayout->addWidget( view, 0, 0 );
+#endif
 		      view->installEventFilter(this);
 		      extendedViewIsVisible = false;
 		      showParameters(false);
@@ -287,7 +293,7 @@ void RectPosition::draw(GlGraph *target) {
   glPopAttrib();
 }
 //=============================================================================
-RectPosition::RectPosition(GlGraphWidget *view,GlGraph *observedView) : 
+RectPosition::RectPosition(GlGraphWidget *view, GlGraph *observedView) : 
   observedView(observedView), view(view) {
 }
 //=============================================================================

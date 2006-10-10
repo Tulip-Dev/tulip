@@ -27,10 +27,12 @@ nobase_include_HEADERS = \
 	tulip/PropertyWidgetPlugin.h
 
 if QT3
-nobase_nodist_include_HEADERS = tulip/FindSelectionData.h
+nobase_nodist_include_HEADERS = tulip/FindSelectionData.h \
+				tulip/GWOverviewWidgetData.h
 else
 nobase_nodist_include_HEADERS = \
 	tulip/FindSelectionData.h \
+	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
 	tulip/elementpropertieswidget.h \
@@ -54,5 +56,9 @@ tulip/propertywidget.h : tulip/PropertyWidget.h
 endif
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
+	mkdir -p tulip
+	$(UIC) -o $@ $<
+
+tulip/GWOverviewWidgetData.h: ../designer/GWOverviewWidget.ui
 	mkdir -p tulip
 	$(UIC) -o $@ $<

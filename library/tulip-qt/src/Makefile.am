@@ -73,7 +73,6 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	FindSelection.cpp \
 	SGHierarchyWidgetData.cpp \
 	SGHierarchyWidget.cpp \
-	GWOverviewWidgetData.cpp \
 	GWOverviewWidget.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
@@ -98,6 +97,7 @@ nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	moc_FindSelectionData.cpp \
 	moc_SGHierarchyWidgetData.cpp \
 	FindSelectionData.cpp \
+	GWOverviewWidgetData.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
 	moc_GWOverviewWidgetData.cpp
@@ -119,3 +119,6 @@ endif
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
+
+GWOverviewWidgetData.cpp: $(srcdir)/../designer/GWOverviewWidget.ui ../include/tulip/GWOverviewWidgetData.h
+	$(UIC) -o $@ -impl ../include/tulip/GWOverviewWidgetData.h $<
