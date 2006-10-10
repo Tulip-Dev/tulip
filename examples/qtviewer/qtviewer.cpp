@@ -53,6 +53,6 @@ int main(int argc,char ** argv ){
 
   MainWin.centerScene();
   MouseGraphNavigate m;
-  MainWin.setMouse(&m);
+  MainWin.pushInteractor(&m);
   return MainApp.exec();
 }
