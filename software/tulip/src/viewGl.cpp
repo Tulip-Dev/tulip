@@ -144,7 +144,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //=======================================
 
   //MDI
-  workspace->setScrollBarsEnabled( TRUE );
+  workspace->setScrollBarsEnabled( true );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
   //Create overview widget
   overviewDock = new QDockWindow(this,"Overview");
@@ -1663,11 +1663,12 @@ void viewGl::changeLayout(int id) {
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
@@ -1695,11 +1696,12 @@ void viewGl::changeColors(int id) {
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
@@ -1720,11 +1722,12 @@ void viewGl::changeSizes(int id) {
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
