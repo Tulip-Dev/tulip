@@ -21,21 +21,38 @@ using namespace tlp;
 
 
 bool DataSet::exist(const string &str) const {
-  return data.find(str)!=data.end();
+  for (std::list< std::pair<std::string, tlp::DataType> >::const_iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return true;
+  }
+  return false;
 }
 
-Iterator< pair<string,DataType> >* DataSet::getValues() const {
-  return new StlMapIterator<string,DataType>(data.begin(),data.end());
+Iterator< pair<string, DataType> >* DataSet::getValues() const {
+  list< pair<string, DataType> >::const_iterator begin = data.begin();
+  list< pair<string, DataType> >::const_iterator end = data.end();
+  
+  return new StlIterator<pair<string, DataType>, list< pair<string, DataType> >::const_iterator>(begin, end);
 }
 
 void StructDef::erase(string str) {
-  data.erase( data.find(str) );
+  for (std::list< std::pair<std::string, std::string> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str) {
+      data.erase(it);
+      break;
+    }
+  }
   help.erase( help.find(str) );
   defValue.erase( defValue.find(str) );
 }
 
-Iterator< pair<string,string> >* StructDef::getField() const {
-  return new StlMapIterator<string,string>( data.begin(), data.end() );
+Iterator< pair<string, string> >* StructDef::getField() const {
+  list< pair<string, string> >::const_iterator begin = data.begin();
+  list< pair<string, string> >::const_iterator end = data.end();
+  
+  return new StlIterator<pair<string, string>, list< pair<string, string> >::const_iterator>(begin, end);
 }
 
 string StructDef::getHelp( string str ) const {

@@ -9,6 +9,7 @@
 #include <string>
 #include <cassert>
 #include <typeinfo>
+#include <list>
 #include "StlIterator.h"
 
 namespace tlp {
@@ -30,7 +31,7 @@ struct TLP_SIMPLE_SCOPE DataSet {
   /** Return a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true. */
-  template<typename T> bool get(const std::string str, T& value) const;
+  template<typename T> bool get(const std::string &str, T& value) const;
   /** Return a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true.
@@ -41,9 +42,9 @@ struct TLP_SIMPLE_SCOPE DataSet {
   /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
   /**Return an iterator on all values*/
-  Iterator< std::pair<std::string,DataType> > *getValues() const;
+  Iterator< std::pair<std::string, DataType> > *getValues() const;
 private:
-  std::map<std::string,DataType> data;
+  std::list< std::pair<std::string, DataType> > data;
 };
 
 
@@ -69,7 +70,7 @@ struct TLP_SIMPLE_SCOPE StructDef {
   ///The optional Graph is needed to create properties (PropertyInterface*)
   void		buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 );
 private:
-  std::map<std::string,std::string> data;
+  std::list< std::pair<std::string, std::string> > data;
   std::map<std::string,std::string> help;
   std::map<std::string,std::string> defValue;
 };
