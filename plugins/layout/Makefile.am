@@ -6,8 +6,7 @@ plugins_LTLIBRARIES = \
 	libmixedmodel.la \
 	libconnnecteccomponnentpacking.la \
 	librandom.la \
-	libgem.la \
-	libgem3d.la \
+	libgemlayout.la \
 	libtreereingoldextended.la \
 	libtreemap.la \
 	libconetreeextended.la\
@@ -31,8 +30,7 @@ pluginsdir = $(libdir)/tlp/plugins/layout
 libmixedmodel_la_SOURCES = MixedModel.cpp MixedModel.h
 libconnnecteccomponnentpacking_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
 librandom_la_SOURCES = Random.cpp Random.h
-libgem_la_SOURCES = GEM.cpp GEM.h
-libgem3d_la_SOURCES = GEM3D.cpp GEM3D.h
+libgemlayout_la_SOURCES = GEMLayout.cpp GEMLayout.h
 libtreereingoldextended_la_SOURCES = TreeReingoldAndTilfordExtended.cpp TreeReingoldAndTilfordExtended.h 
 libconetreeextended_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp
 libtreemap_la_SOURCES = TreeMap.h TreeMap.cpp 
