@@ -24,8 +24,7 @@ class GraphProperty;
 /*@{*/
 
 /// Interface for graph plug-ins
-class GraphAlgorithm:public PropertyAlgorithm<GraphType , GraphType>
-{ 
+class GraphAlgorithm:public PropertyAlgorithm<GraphType , GraphType> { 
   ///
   friend class GraphProperty;
 public:

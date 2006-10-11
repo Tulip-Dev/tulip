@@ -16,6 +16,11 @@ namespace tlp {
   TLP_SCOPE double averageCluster(Graph *);
   TLP_SCOPE unsigned int maxDegree(Graph *);
   TLP_SCOPE unsigned int minDegree(Graph *);
+  /*
+   * Compute the distance from n to all the other nodes in sg and store it into distance, if direction is set
+   * to 2 use undirected graph, 0 use directed graph and 1 use reverse directed graph (ie. all edges are reversed)
+   * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
+   */
   TLP_SCOPE unsigned int maxDistance(Graph *sg, node n, MutableContainer<unsigned int> &distance, int direction = 2);
 }
 #endif
