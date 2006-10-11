@@ -60,11 +60,11 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
   hash_set<node> Nu,Nv,Wuv;
 
   //Compute Nu
-  Iterator<node> *itN=graph->getInOutNodes(u);
+  Iterator<node> *itN = graph->getInOutNodes(u);
   while (itN->hasNext()) {
     node n=itN->next();
     if (n!=v) Nu.insert(n);
-  }delete itN;
+  } delete itN;
   if (Nu.size()==0) return 0;
 
   //Compute Nv
@@ -108,27 +108,25 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
 			  Mu.size() * Mv.size() ) + 
 		   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
 
-  if (norm3 > 1E-5)
-    gamma3 /= norm3;
+  double norm = norm3 + norm4;
+  double gamma = gamma3 + gamma4;
+  
+  if (norm > 1E-5)
+    gamma /= norm;
   else
-    gamma3 = 0;
+    gamma = 0;
 
-  if (norm4 > 1E-5)
-    gamma4 /= norm4;
-  else
-    gamma4 = 0;
-
-  return gamma3 + gamma4;
+  return gamma;
 }
 //=============================================================
 double StrengthMetric::getNodeValue(const node n ) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (graph->deg(n)==0) return 0;
   double result=0;
-  Iterator<edge> *itE=graph->getInOutEdges(n);
+  Iterator<edge> *itE = graph->getInOutEdges(n);
   while (itE->hasNext()) {
-    edge ite=itE->next();
-    result+=doubleResult->getEdgeValue(ite);
+    edge ite = itE->next();
+    result += doubleResult->getEdgeValue(ite);
   } delete itE;
   return result/double(graph->deg(n));
 }

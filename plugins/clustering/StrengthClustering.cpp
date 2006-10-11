@@ -13,6 +13,7 @@
 #include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
+#include <tulip/SimpleTest.h>
 #include "StrengthClustering.h"
 
 
@@ -203,7 +204,7 @@ Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition)
   if (partition.size()<2) return graph;
   Graph *tmpGraph=tlp::newCloneSubGraph(graph);
   for (unsigned int i=0;i<partition.size();++i) {
-    tlp::inducedSubGraph(tmpGraph,partition[i]);
+    tlp::inducedSubGraph(tmpGraph, partition[i]);
   }
   return tmpGraph;
 }
@@ -212,8 +213,8 @@ void StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
   Iterator<Graph*> *itS = rootGraph->getSubGraphs();
   while(itS->hasNext()){
     Graph *sg=itS->next();
-    double avPath=tlp::averagePathLength(sg);
-    double avCluster=tlp::averageCluster(sg);
+    double avPath = tlp::averagePathLength(sg);
+    double avCluster = tlp::averageCluster(sg);
     /*
       cout << "Average Path Length :" << avPath << endl;
       cout << "Average clustering  :" <<  avCluster << endl; 
@@ -224,6 +225,7 @@ void StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
     if ( avPath>1 && avPath<4 && avCluster>0.25 && sg->numberOfNodes()>10) {
       DataSet tmpData;
       string errMsg;
+      
       tlp::clusterizeGraph(sg,errMsg,&tmpData,"Strength");
       tmpData.get("strengthGraph",tmpGr);
     }
@@ -240,6 +242,11 @@ Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   tlp::clusterizeGraph(sg,errMsg,&tmpData,"QuotientClustering");
   Graph *quotientGraph;
   tmpData.get<Graph *>("quotientGraph",quotientGraph);
+  vector<edge> toRemoved;
+  SimpleTest::makeSimple(quotientGraph, toRemoved);
+  for(vector<edge>::iterator it= toRemoved.begin(); it!=toRemoved.end(); ++it) 
+    quotientGraph->delAllEdge(*it);
+
   drawGraph(quotientGraph);
   return quotientGraph;
 }
@@ -286,7 +293,7 @@ namespace {
 //================================================================================
 StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0],"viewMetric");
-  addParameter<bool>("multiply",paramHelp[1],"true");
+  addParameter<bool>("multiply",paramHelp[1],"false");
 }
 //==============================================================================
 bool StrengthClustering::run() {

@@ -91,7 +91,7 @@ double ClusterMetric::getNodeValue(const node n ) {
 }
 //=================================================
 bool ClusterMetric::run() {
-  cerr << __PRETTY_FUNCTION__ << endl;
+  //  cerr << __PRETTY_FUNCTION__ << endl;
   maxDepth=1;
   if (dataSet!=0) dataSet->get("depth",maxDepth);
   node n;
