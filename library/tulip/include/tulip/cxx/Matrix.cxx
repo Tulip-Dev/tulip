@@ -37,7 +37,11 @@ MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
 }
 //===================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
+#else
+void MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
+#endif
   MATRIXTLPGEO tmpMat(*this);
   MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
   if (pMat == this)
@@ -51,7 +55,9 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
     }
   if (pMat != &mat)
     delete pMat;
+#if __GNUC__ > 3
   return (*this);
+#endif
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
@@ -179,7 +185,7 @@ MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO MATRIXTLPGEO::operator*(const MATRIXTLPGEO &mat2) const {
-  return  MATRIXTLPGEO(*this)*=mat2;
+  return MATRIXTLPGEO(*this)*=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>

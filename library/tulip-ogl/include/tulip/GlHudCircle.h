@@ -21,7 +21,7 @@ namespace tlp {
    *
    * This class is used as a 2D HUD for the rendering of 2D circles.
    */
-  class GlHudCircle : public GlHudPolygon {
+  class TLP_GL_SCOPE GlHudCircle : public GlHudPolygon {
   public:
     GlHudCircle(const Coord &center = Coord(0,0,0), 
 		float radius = 1., 

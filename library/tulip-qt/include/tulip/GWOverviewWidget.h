@@ -26,7 +26,9 @@ private :
   GlGraphWidget *view;
 };
 
-class GWOverviewWidget : public GWOverviewWidgetData, public tlp::GlGraphObserver { 
+/** \addtogroup Tulip_Widgets */ 
+/*@{*/
+class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public GWOverviewWidgetData, public tlp::GlGraphObserver { 
   Q_OBJECT
   
 public:
@@ -52,5 +54,5 @@ private:
   Camera initialCamera;
   bool extendedViewIsVisible;
 };
-
+/*@}*/
 #endif // GWOVERVIEW_H

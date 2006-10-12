@@ -63,7 +63,11 @@ namespace tlp {
       /**
        * Multiply the matrix by another matrix and return "&(*this)"
        */
+#if __GNUC__ > 3
       inline MATRIX & operator*=(const MATRIX &mat);
+#else
+      inline void operator*=(const MATRIX &mat);
+#endif
       /**
        * Multiply all elements of the matrix by obj, return "&(*this)"
        */
