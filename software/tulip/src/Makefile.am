@@ -1,8 +1,4 @@
-if ! WIN32
-if ! MACOSX
-ADD_LIB = -lXext -lXi -lpthread
-endif
-else
+if WIN32
 MWINDOWS = -mwindows
 endif
 
