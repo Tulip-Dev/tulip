@@ -358,7 +358,7 @@ bool GEMLayout::run() {
     _particules[i] = GEMparticule(graph->deg(n));
     _particules[i].n = n;
     _particules[i].id = i;
-    if (initLayout && layout != 0)
+    if (!initLayout && layout != 0)
       _particules[i].pos = layout->getNodeValue(n);
     else 
       _particules[i].pos.fill(0);

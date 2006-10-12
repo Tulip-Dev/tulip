@@ -10,7 +10,6 @@ plugins_LTLIBRARIES = \
 	libconetreeextended.la\
 	libcircular.la \
 	libhierarchicalgraph.la \
-	libspringelectrical.la \
 	libtreeleaf.la \
 	libtreeradial.la \
 	libgeneralgraph3d.la \
@@ -36,7 +35,6 @@ libtreeradial_la_SOURCES = TreeRadial.cpp
 libtreeleaf_la_SOURCES = TreeLeaf.h TreeLeaf.cpp 
 libbubbletree_la_SOURCES = BubbleTree.h BubbleTree.cpp 
 libcircular_la_SOURCES = Circular.h Circular.cpp
-libspringelectrical_la_SOURCES = SpringElectrical.h SpringElectrical.cpp
 libhierarchicalgraph_la_SOURCES = HierarchicalGraph.h HierarchicalGraph.cpp
 libgeneralgraph3d_la_SOURCES = GeneralGraph3D.cpp GeneralGraph3D.h 
 libtutte_la_SOURCES = Tutte.h Tutte.cpp
