@@ -1,6 +1,7 @@
+DLL_FLAGS = -no-undefined
+
 if WIN32
 ADD_INCLUDES = -I/mingw/include/freetype2
-DLL_FLAGS = -no-undefined
 else
 ADD_INCLUDES = `xml2-config --cflags` 
 endif

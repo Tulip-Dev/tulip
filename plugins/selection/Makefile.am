@@ -1,6 +1,4 @@
-if WIN32
 DLL_FLAGS = -no-undefined
-endif
 
 plugins_LTLIBRARIES = 	libspanningdag.la \
 			libinducedsubgraph.la \
