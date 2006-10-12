@@ -2,7 +2,6 @@
 #include <math.h>
 #include <climits>
 #include <tulip/TulipPlugin.h>
-#include <tulip/Delaunay.h>
 
 
 using namespace std;

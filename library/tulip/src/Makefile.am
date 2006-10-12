@@ -11,9 +11,9 @@ endif
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@ -I$(top_srcdir)
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 if !MACOSX
-AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ $(top_builddir)/thirdparty/triangle/libtriangle.la -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
 else
-AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` `ls ../../../thirdparty/triangle/.libs/*.o` -lz -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` -lz -release ${RELEASE}
 endif
 
 libtulip_la_SOURCES = \
