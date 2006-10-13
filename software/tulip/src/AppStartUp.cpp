@@ -5,6 +5,7 @@
 #include <string>
 #include <qprogressbar.h>
 #include <qlabel.h>
+#include <qmessagebox.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/GlGraphWidget.h>
@@ -42,7 +43,8 @@ struct PluginLoaderQt:public PluginLoader {
   }
   virtual void aborted(const string &filename,const  string &erreurmsg) {
     progress++;
-    //    cerr << "Loading error : " << erreurmsg << endl;
+    QMessageBox::critical(0, "Plugin loading error", erreurmsg.c_str());
+    //cerr << "Loading error : " << erreurmsg << endl;
     appStartUp->setLabel("Error");
     appStartUp->setProgress(progress);
     qApp->processEvents();
