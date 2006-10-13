@@ -13,7 +13,7 @@ AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 if !MACOSX
 AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
 else
-AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` -lz -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/*.lo` -lz -release ${RELEASE}
 endif
 
 libtulip_la_SOURCES = \
