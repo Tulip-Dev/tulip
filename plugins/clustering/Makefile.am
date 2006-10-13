@@ -1,4 +1,6 @@
+if !MACOSX
 DLL_FLAGS = -no-undefined
+endif
 
 plugins_LTLIBRARIES = \
 	libstrength.la \
