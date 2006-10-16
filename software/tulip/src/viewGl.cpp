@@ -200,7 +200,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   //+++++++++++++++++++++++++++
-  //Connection of the menu
+  //Connection of the menus
   connect(&stringMenu     , SIGNAL(activated(int)), SLOT(changeString(int)));
   connect(&metricMenu     , SIGNAL(activated(int)), SLOT(changeMetric(int)));
   connect(&layoutMenu     , SIGNAL(activated(int)), SLOT(changeLayout(int)));
@@ -985,73 +985,53 @@ void viewGl::buildMenus() {
   //Properties PopMenus
   std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
   std::string::size_type nGroups = groupMenus.size();
-#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
-#endif
   groupMenus = buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
-#endif
   groupMenus = buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
-#endif
   groupMenus = buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
-#endif
   groupMenus = buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
      connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
-#endif
   groupMenus = buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
-#endif
   groupMenus = buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
-#if (QT_REL == 3)
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
-#endif
   //Clustering PopMenu
   TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
   groupMenus.resize(nGroups = 0);
   for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
     insertInMenu(clusteringMenu, it3->first.c_str(), it3->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(makeClustering(int)));
-#endif
   //Export PopMenu
   TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
   groupMenus.resize(nGroups = 0);
   for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
     insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
-#endif
   //Import PopMenu
   TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
   groupMenus.resize(nGroups = 0);
   for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
     insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3)
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
-#endif
   //Image PopuMenu
 #if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
