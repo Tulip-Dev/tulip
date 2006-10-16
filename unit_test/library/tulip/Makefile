@@ -31,10 +31,10 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS) $(LIBS)
 
 testPlugin.so:
-	$(CXX) $(CXXFLAGS) testPlugin.cpp -shared -o testPlugin.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin.cpp -fPIC -shared -o testPlugin.so $(LDFLAGS) $(LIBS)
 
 testPlugin2.so:
-	$(CXX) $(CXXFLAGS) testPlugin2.cpp -shared -o testPlugin2.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin2.cpp -fPIC -shared -o testPlugin2.so $(LDFLAGS) $(LIBS)
 
 
 
