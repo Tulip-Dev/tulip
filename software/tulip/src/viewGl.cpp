@@ -985,42 +985,42 @@ void viewGl::buildMenus() {
   //Properties PopMenus
   std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
   std::string::size_type nGroups = groupMenus.size();
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
 #endif
   groupMenus = buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
 #endif
   groupMenus = buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
 #endif
   groupMenus = buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
 #endif
   groupMenus = buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
      connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
 #endif
   groupMenus = buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
 #endif
   groupMenus = buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   nGroups = groupMenus.size();
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
@@ -1030,7 +1030,7 @@ void viewGl::buildMenus() {
   groupMenus.resize(nGroups = 0);
   for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
     insertInMenu(clusteringMenu, it3->first.c_str(), it3->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(makeClustering(int)));
 #endif
@@ -1039,7 +1039,7 @@ void viewGl::buildMenus() {
   groupMenus.resize(nGroups = 0);
   for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
     insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
 #endif
@@ -1048,7 +1048,7 @@ void viewGl::buildMenus() {
   groupMenus.resize(nGroups = 0);
   for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
     insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (QT_MINOR_REL > 1)
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
   for (std::string::size_type i = 0; i < nGroups; i++)
     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
 #endif
