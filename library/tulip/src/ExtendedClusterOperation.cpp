@@ -209,7 +209,7 @@ void updateLayoutUngroup(Graph *graph, node metanode) {
   } delete itE;
 }
 //====================================================================================
-void tlp::openMetaNode(Graph *graph, node n,
+void tlp::openMetaNode(Graph *graph, node n, 
 		       Graph *groupUnderSubGraph) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
@@ -222,7 +222,7 @@ void tlp::openMetaNode(Graph *graph, node n,
   mappingC.setAll(node());
   mappingN.setAll(node());
   Graph *root = graph->getRoot();
-  GraphProperty *metaInfo = root->getProperty<GraphProperty>(metagraphProperty);
+  GraphProperty *metaInfo = graph->getProperty<GraphProperty>(metagraphProperty);
   Graph *metaGraph = metaInfo->getNodeValue(n);
   if (metaGraph == 0) return;
   buildMapping(root->getInOutNodes(n), mappingC, metaInfo, node() );
