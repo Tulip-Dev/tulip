@@ -560,7 +560,7 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
       LIB_QT_DEBUG=${LIB_QT}
       if test -d ${QTDIR}/lib/QtAssistantClient.framework
       then
-        LIB_QT_ASSISTANT="-Fac_qt_libraries -framework QtAssistantClient"
+        LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"
       fi
     else
       LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
