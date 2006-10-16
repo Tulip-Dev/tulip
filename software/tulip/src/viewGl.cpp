@@ -309,6 +309,10 @@ viewGl::~viewGl() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
 }
 //**********************************************************************
+// the dialog below is used to show plugins loading errors
+// if needed it will be deleted when showing first graph
+static QDialog *errorDlg = (QDialog *) NULL;
+
 void viewGl::startTulip() {
   // adjust size if needed
   QRect sRect = QApplication::desktop()->availableGeometry();
@@ -330,11 +334,37 @@ void viewGl::startTulip() {
 		    vRect.width(), vRect.height());
 
   AppStartUp *appStart=new AppStartUp(this);
+  QDialog *errorDlg;
+  std::string errors;
   appStart->show();
-  appStart->initTulip();
+  appStart->initTulip(errors);
   delete appStart;
   buildMenus();
   this->show();
+  if (errors.size() > 0) {
+    errorDlg = new QDialog(this, "errorDlg", true);
+    errorDlg->setCaption("Errors when loading Tulip plugins !!!");
+    QVBoxLayout* errorDlgLayout = new QVBoxLayout( errorDlg, 11, 6, "errorDlgLayout"); 
+    QFrame *frame = new QFrame( errorDlg, "frame" );
+    QHBoxLayout* frameLayout = new QHBoxLayout( frame, 0, 0, "frameLayout"); 
+    QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    frameLayout->addItem( spacer );
+    QTextEdit* textWidget = new QTextEdit(QString(""),
+#if (QT_REL == 3)
+					  QString::null,
+#endif
+					  errorDlg);
+    textWidget->setReadOnly(true);
+    textWidget->setWordWrap(QTextEdit::NoWrap);
+    errorDlgLayout->addWidget( textWidget );
+    QPushButton * closeB = new QPushButton( "Close", frame);
+    frameLayout->addWidget( closeB );
+    errorDlgLayout->addWidget( frame );
+    QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
+    errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
+    textWidget->setText(errors);
+    errorDlg->show();
+  }
   enableElements(false);
   int argc = qApp->argc();
   if (argc>1) {
@@ -392,6 +422,11 @@ void viewGl::windowActivated(QWidget *w) {
 }
 //**********************************************************************
 GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
+  // delete plugins loading errors dialog if needed
+  if (errorDlg) {
+    delete errorDlg;
+    errorDlg = (QDialog *) NULL;
+  }
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
 #if (QT_REL == 4)

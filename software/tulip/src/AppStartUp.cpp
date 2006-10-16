@@ -4,8 +4,10 @@
 
 #include <string>
 #include <qprogressbar.h>
+#include <qdialog.h>
+#include <qpushbutton.h>
+#include <qtextedit.h>
 #include <qlabel.h>
-#include <qmessagebox.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/GlGraphWidget.h>
@@ -15,6 +17,8 @@
 
 using namespace std;
 using namespace tlp;
+
+static std::string errorMsgs;
 
 //==============================================================
 struct PluginLoaderQt:public PluginLoader {
@@ -41,10 +45,11 @@ struct PluginLoaderQt:public PluginLoader {
     appStartUp->setProgress(progress);
     qApp->processEvents();
   }
-  virtual void aborted(const string &filename,const  string &erreurmsg) {
+  virtual void aborted(const string &filename,const  string &errormsg) {
     progress++;
-    QMessageBox::critical(0, "Plugin loading error", erreurmsg.c_str());
-    //cerr << "Loading error : " << erreurmsg << endl;
+    // accumulate error messages
+    errorMsgs += errormsg + '\n';
+    cerr << "Loading error : " << errormsg << endl;
     appStartUp->setLabel("Error");
     appStartUp->setProgress(progress);
     qApp->processEvents();
@@ -52,8 +57,7 @@ struct PluginLoaderQt:public PluginLoader {
   virtual void finished(bool state,const string &msg){}
 };
 
-
-void AppStartUp::initTulip() {
+void AppStartUp::initTulip(std::string &errors) {
   setTotalSteps(0);
   setProgress(0);
   setLabel("Tulip");
@@ -68,6 +72,9 @@ void AppStartUp::initTulip() {
   //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(&plug);   // library side plugins
   GlGraph::loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  errors = errorMsgs;
+  // free memory
+  errorMsgs.resize(0);
 }
 
 /* 
