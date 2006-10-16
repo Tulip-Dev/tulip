@@ -73,6 +73,7 @@
 #include <QtGui/qprinter.h>
 #include "tulip/Qt3ForTulip.h"
 #include <QtGui/qmenudata.h>
+#include <QtGui/qtextedit.h>
 #endif
 
 #include <tulip/TlpTools.h>
@@ -355,14 +356,18 @@ void viewGl::startTulip() {
 #endif
 					  errorDlg);
     textWidget->setReadOnly(true);
+#if (QT_REL == 3)
     textWidget->setWordWrap(QTextEdit::NoWrap);
+#else
+    textWidget->setLineWrapMode(QTextEdit::NoWrap);
+#endif
     errorDlgLayout->addWidget( textWidget );
     QPushButton * closeB = new QPushButton( "Close", frame);
     frameLayout->addWidget( closeB );
     errorDlgLayout->addWidget( frame );
     QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
     errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
-    textWidget->setText(errors);
+    textWidget->setText(QString(errors.c_str()));
     errorDlg->show();
   }
   enableElements(false);
