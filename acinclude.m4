@@ -479,6 +479,7 @@ AC_SUBST(QT_VERSION)
 ac_qt_includes="$qt_incdir"
 
 dnl add our own flag QT_REL (QT_VERSION is internally used by Qt)
+dnl QT_MINOR_REL is added far below
 QT_CPPFLAGS="-DQT_REL=$QT_VERSION"
 
 if test ${QT_VERSION} -eq 4 && test -d $qt_incdir; then
@@ -658,8 +659,11 @@ dnl if this is the version 4 of Qt we use uic3
        UIC_ERROR_MESSAGE
     fi
    fi
-   
    AC_SUBST(UIC)
+dnl look for Qt minor version adn add QT_MINOR_REL
+   QT_MINOR_VERSION=`$UIC -version 2>&1 | awk -F'.' '{print $(NF - 1)}'`
+   QT_CPPFLAGS="$QT_CPPFLAGS -DQT_MINOR_REL=$QT_MINOR_VERSION"
+   AC_SUBST(QT_MINOR_VERSION)
 ])
 
 AC_DEFUN([AC_PATH_MINGW],
