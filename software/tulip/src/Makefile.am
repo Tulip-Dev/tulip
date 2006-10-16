@@ -22,11 +22,7 @@ endif
 AM_CPPFLAGS= @QT_CPPFLAGS@
 
 tulip_LDFLAGS = -L.
-if QT3
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-else
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lQtAssistantClient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-endif
+tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @LIB_QT_ASSISTANT@ @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/

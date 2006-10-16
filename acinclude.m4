@@ -528,6 +528,7 @@ AC_SUBST(QT_CPPFLAGS)
 if test ${QT_VERSION} -eq 4; then
 dnl With the version 4 of Qt, its features are splitted in many libs
 dnl Qt3Support lib is for Qt 3 compatibility purpose
+  LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
   if test ${VAR_WIN32} = 1
   then
     LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
@@ -557,12 +558,17 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
     then
       LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGL -framework QtNetwork"
       LIB_QT_DEBUG=${LIB_QT}
+      if test -d ${QTDIR}/lib/QtAssistantClient.framework
+      then
+        LIB_QT_ASSISTANT="-Fac_qt_libraries -framework QtAssistantClient"
+      fi
     else
       LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
       LIB_QT_DEBUG="-lQtCore_debug -lQt3Support_debug -lQtGui_debug -lQtOpenGL_debug"
     fi
   fi
 else
+  LIB_QT_ASSISTANT="-L${QTDIR}/lib -lqassistantclient"
   LIB_QT_DEBUG=${LIB_QT}
   if test ${VAR_WIN32} = 1 ; then
 dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
@@ -574,6 +580,7 @@ dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
 fi
 
 AC_SUBST(LIB_QT)
+AC_SUBST(LIB_QT_ASSISTANT)
 AC_SUBST(QTDIR)
 ])
 
