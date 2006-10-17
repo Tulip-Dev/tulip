@@ -12,57 +12,19 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/DrawingTools.h>
 
 using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-const string metagraphProperty = "viewMetaGraph";
 const string layoutProperty = "viewLayout";
 const string sizeProperty = "viewSize";
 const string rotationProperty = "viewRotation";
+const string colorProperty = "viewColor";
+const string metaGraphProperty = "viewMetaGraph";
 
-
-/*
-  resolve overlap,
-  taille de noeud n,
-  pour tous les sommets du graphe autre que n, 
-  calculer la boite englobante la plus grande possible centré sur le barycentre 
-  des sommets de a.
-*/
-/*
-  void shrink(Graph *graph, node n) {
-  Iterator<node> *itN = graph->getNodes();
-  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-  SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
-  Coord result(DBL_MAX,DBL_MAX,DBL_MAX);
-  Coord nPos  = layout->getNodeValue(n);
-  Size  nSize = size->getNodeValue(n)/2.0;
-  float scale = 1.0;
-  while(itN->hasNext()) {
-    node it = itN->next();
-    if (n == it) continue;
-    Size itSize = size->getNodeValue(it)/2.0;
-    Coord itPos = layout->getNodeValue(it);
-    float dx = fabs(itPos[0]-nPos[0]) - itSize[0] - nSize[0];
-    float dy = fabs(itPos[1]-nPos[1]) - itSize[1] - nSize[1];
-    //    float dz = fabs(itPos[2]-nPos[2]) - itSize[2] - nSize[2];
-    // GCC 4.2: <?= is no longer supported
-    // if (dx<0) scale <?= (fabs(itPos[0]-nPos[0]) - itSize[0]) / nSize[0];
-    if (dy<0) scale <?= (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1];
-    if (dx<0) scale = min(scale, (fabs(itPos[0]-nPos[0]) - itSize[0]) / nSize[0]);
-    if (dy<0) scale = std::min(scale, (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1]);
-    //    if (dz<0) scale <?= (fabs(itPos[1]-nPos[1]) - itSize[1]) / nSize[1];
-  } delete itN;
-  if (scale<1.0) {
-    nSize *= 2.0*scale;
-    size->setNodeValue(n, nSize);
-  }
-  }
-*/
-
-//====================================================================================
 void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, GraphProperty * metaInfo, const node from = node()) {
   while(it->hasNext()) {
     node n = it->next();
@@ -104,8 +66,9 @@ void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   //  shrink(graph, metanode);
 }
 //====================================================================================
-node tlp::createMetaNode(Graph *graph, set<node> &subGraph,
-			 Graph *groupUnderSubGraph) {
+node createMNode (Graph *graph, set<node> &subGraph,
+		  Graph *groupUnderSubGraph, GraphProperty *metaInfo,
+		  bool multiEdges, bool delAllEdge) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not group a set of nodes in the root graph" << endl;
@@ -116,7 +79,7 @@ node tlp::createMetaNode(Graph *graph, set<node> &subGraph,
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
-  GraphProperty *metaInfo = graph->getProperty<GraphProperty>(metagraphProperty);
+
   Graph *metaGraph = 
     tlp::inducedSubGraph(groupUnderSubGraph, subGraph, "cluster");
   stringstream st;
@@ -133,31 +96,48 @@ node tlp::createMetaNode(Graph *graph, set<node> &subGraph,
 
   //create new edges from nodes to metanodes
   Graph *root = graph->getRoot();
+  ColorProperty *colors = root->getProperty<ColorProperty> (colorProperty);
   hash_map<node, hash_set<node> > edges;
-  StableIterator<edge> it(root->getEdges());
-  while (it.hasNext()) {
-    edge e = it.next();
-    node source = graph->source(e);
-    node target = graph->target(e);
-    bool toDelete = (metaInfo->getNodeValue(source)!=0) || (metaInfo->getNodeValue(target)!=0);
-    if (graph->isElement(source) && metaGraph->isElement(target)) {
-      if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
-	edges[source].insert(target);
-	graph->addEdge(source,metaNode);
-      } 
-      if (toDelete) {
-	//	cerr << "delete edge e :" << e.id << endl;
-	graph->delAllEdge(e);
+  Iterator<node> *metaGraphNodes = metaGraph->getNodes();
+  while (metaGraphNodes->hasNext()) {
+    node n = metaGraphNodes->next();
+    StableIterator<edge> it(root->getInOutEdges (n));
+    while (it.hasNext()) {
+      edge e = it.next();
+      node source = graph->source(e);
+      node target = graph->target(e);
+      bool toDelete = (metaInfo->getNodeValue(source)!=0) || (metaInfo->getNodeValue(target)!=0);
+      if (graph->isElement(source) && metaGraph->isElement(target)) {
+	if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
+	  if (multiEdges || edges[source].empty()) {
+	    edge added = graph->addEdge(source, metaNode);
+	    if (!groupUnderSubGraph->isElement (added))
+	      groupUnderSubGraph->addEdge (added);
+	    colors->setEdgeValue (added, colors->getEdgeValue (e));
+	  }
+	  edges[source].insert(target);
+	} 
+	if (toDelete) {
+	  //	cerr << "delete edge e :" << e.id << endl;
+	  if (delAllEdge) graph->delAllEdge(e);
+	  else graph->delEdge(e);
+	}
       }
-    }
-    if (graph->isElement(target) && metaGraph->isElement(source)) {
-      if ( (edges.find(target) == edges.end()) || (edges[target].find(source) == edges[target].end()) ) {
-	edges[target].insert(source);
-	graph->addEdge(metaNode, target);
-      }
-      if (toDelete) {
-	//	cerr << "delete edge e :" << e.id << endl;
-	graph->delAllEdge(e);
+      if (graph->isElement(target) && metaGraph->isElement(source)) {
+	if ( (edges.find(target) == edges.end()) || (edges[target].find(source) == edges[target].end()) ) {
+	  if (multiEdges || edges[target].empty()) {
+	    edge added = graph->addEdge(metaNode, target);
+	    if (!groupUnderSubGraph->isElement (added))
+	      groupUnderSubGraph->addEdge (added);
+	    colors->setEdgeValue (added, colors->getEdgeValue (e));
+	  }
+	  edges[target].insert(source);
+	}
+	if (toDelete) {
+	  //	cerr << "delete edge e :" << e.id << endl;
+	  if (delAllEdge) graph->delAllEdge(e);
+	  else graph->delEdge (e);
+	}
       }
     }
   }
@@ -165,8 +145,8 @@ node tlp::createMetaNode(Graph *graph, set<node> &subGraph,
   return metaNode;
 }
 //====================================================================================
-void updateLayoutUngroup(Graph *graph, node metanode) {
-  GraphProperty *clusterInfo = graph->getProperty<GraphProperty>(metagraphProperty);
+void updateLayoutUngroup(Graph *graph, node metanode, 
+			 GraphProperty *clusterInfo) {
   if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
@@ -209,8 +189,8 @@ void updateLayoutUngroup(Graph *graph, node metanode) {
   } delete itE;
 }
 //====================================================================================
-void tlp::openMetaNode(Graph *graph, node n, 
-		       Graph *groupUnderSubGraph) {
+void tlp::openMetaNode(Graph *graph, node n,
+		       Graph *groupUnderSubGraph, GraphProperty *metaInfo) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
@@ -222,7 +202,7 @@ void tlp::openMetaNode(Graph *graph, node n,
   mappingC.setAll(node());
   mappingN.setAll(node());
   Graph *root = graph->getRoot();
-  GraphProperty *metaInfo = graph->getProperty<GraphProperty>(metagraphProperty);
+
   Graph *metaGraph = metaInfo->getNodeValue(n);
   if (metaGraph == 0) return;
   buildMapping(root->getInOutNodes(n), mappingC, metaInfo, node() );
@@ -236,45 +216,66 @@ void tlp::openMetaNode(Graph *graph, node n,
   while (itE->hasNext()) {
     graph->addEdge(itE->next());
   } delete itE;
-  updateLayoutUngroup(graph, n);
+  updateLayoutUngroup(graph, n, metaInfo);
   //===========================
+  //set the colour of the meta edges
+  ColorProperty *graphColors = 
+    graph->getProperty<ColorProperty>(colorProperty);
+  hash_map<node, Color> metaEdgeToColor;
+  Iterator<edge> *metaEdges = graph->getInOutEdges (n);
+  while (metaEdges->hasNext()) {
+    edge metaEdge = metaEdges->next();
+    metaEdgeToColor[graph->opposite (metaEdge, n)] =
+      graphColors->getEdgeValue (metaEdge);
+  } delete metaEdges;
   //Remove the metagraph from the hierarchy and remove the metanode
   root->delAllNode(n);
-  groupUnderSubGraph->delSubGraph(metaGraph);
   hash_map<node, hash_set<node> > edges;
   //=================================
-  StableIterator<edge> it(root->getEdges());
-  while(it.hasNext()) {
-    edge e = it.next();
-    if (graph->isElement(e)) continue;
-    node sourceC = mappingC.get(root->source(e).id);
-    node targetN = mappingN.get(root->target(e).id);
-    node sourceN = mappingN.get(root->source(e).id);
-    node targetC = mappingC.get(root->target(e).id);
-    node source, target;
-    if (sourceC.isValid() && targetN.isValid()) {
-      source = sourceC;
-      target = targetN;
-    } else {
-      if (sourceN.isValid() && targetC.isValid()) {
-	source = sourceN;
-	target = targetC;
-      } else
+  StableIterator<node> metaGraphNodes (metaGraph->getNodes());
+  while (metaGraphNodes.hasNext()) {
+    StableIterator<edge> it(root->getInOutEdges(metaGraphNodes.next()));
+    while(it.hasNext()) {
+      edge e = it.next();
+      if (graph->isElement(e)) continue;
+      node sourceC = mappingC.get(root->source(e).id);
+      node targetN = mappingN.get(root->target(e).id);
+      node sourceN = mappingN.get(root->source(e).id);
+      node targetC = mappingC.get(root->target(e).id);
+      node source, target;
+      Color edgeColor;
+      if (sourceC.isValid() && targetN.isValid()) {
+	source = sourceC;
+	target = targetN;
+	edgeColor = metaEdgeToColor[source];
+      } 
+      else {
+	if (sourceN.isValid() && targetC.isValid()) {
+	  source = sourceN;
+	  target = targetC;
+	  edgeColor = metaEdgeToColor[target];
+	} 
+	else continue;
+      }
+      if (metaInfo->getNodeValue(source) == 0 && 
+	  metaInfo->getNodeValue(target) == 0) {
+	graph->addEdge(e);
 	continue;
-    }
-    if (metaInfo->getNodeValue(source) == 0 && metaInfo->getNodeValue(target) == 0) {
-      graph->addEdge(e);
-      continue;
-    }
-    if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
-      edges[source].insert(target);
-      if (!graph->existEdge(source,target).isValid())
-	graph->addEdge(source,target);
-      else 
-	cerr << "bug exist edge 1";
+      }
+      if ( (edges.find(source) == edges.end()) || 
+	   (edges[source].find(target) == edges[source].end()) ) {
+	edges[source].insert(target);
+	if (!graph->existEdge(source,target).isValid()) {
+	  edge addedEdge = graph->addEdge(source,target);
+	  graphColors->setEdgeValue (addedEdge, edgeColor);
+	}
+	else 
+	  cerr << "bug exist edge 1";
+      }
     }
   }
   Observable::unholdObservers();
+  groupUnderSubGraph->delSubGraph(metaGraph);
 }
 
 //=========================================================
@@ -296,3 +297,24 @@ Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string n
   } delete itN;
   return result;
 }
+
+//====================================================================================
+void tlp::openMetaNode(Graph *graph, node n) {
+  return openMetaNode (graph, n, graph->getFather(), 
+		       graph->getProperty<GraphProperty> (metaGraphProperty));
+}
+//====================================================================================
+node tlp::createMetaNode (Graph *graph, std::set<node> &subGraph) {
+  return createMNode (graph, subGraph, graph->getFather(),
+		      graph->getProperty<GraphProperty> (metaGraphProperty),
+		      true, true);
+}
+
+//====================================================================================
+node tlp::createMetaNode (Graph *graph, std::set<node> &subGraph,
+			  Graph *groupUnderSubGraph, GraphProperty *metaInfo) {
+  return createMNode (graph, subGraph, groupUnderSubGraph, metaInfo,
+		      false, false);
+}
+
+//====================================================================================
