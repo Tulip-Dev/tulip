@@ -1311,6 +1311,32 @@ void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, b
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
+  #if (QT_REL == 4)
+  // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
+  // is no longer needed; the tooltip implementation must take place
+  // in the event() method inherited from QWidget.
+  if (obj->inherits("GlGraphWidget") &&
+      e->type() == QEvent::ToolTip) {
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    QString tmp;
+    QHelpEvent *he = static_cast<QHelpEvent *>(e);
+    if (((GlGraphWidget *) obj)->doSelect(he->pos().x(), he->pos().y(), type, tmpNode, tmpEdge)) {
+      switch(type) {
+      case NODE:
+	QToolTip::showText(he->globalPos(),
+			   QString("node: ") + tmp.setNum(tmpNode.id));
+	break;
+      case EDGE: 
+	QToolTip::showText(he->globalPos(),
+			   QString("edge: ") + tmp.setNum(tmpEdge.id));
+	break;
+      }
+      return true;
+    }
+  }
+#endif
   if ( obj->inherits("GlGraphWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
