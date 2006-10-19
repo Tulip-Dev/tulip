@@ -157,7 +157,8 @@ protected slots:
   void redrawView();
   void centerView();
   void updateStatusBar();
-  void deselectALL();
+  void selectAll();
+  void deselectAll();
   void reverseSelection();
   void delSelection();
   void newSubgraph();
@@ -184,10 +185,8 @@ protected slots:
   void isPlanar();
   void makeAcyclic();
   void makeBiconnected();
-  //void makeTriangulated();
   void makeSimple();
   void makeConnected();
-  void showElementProperties();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
