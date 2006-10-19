@@ -100,7 +100,7 @@
 #include <tulip/Clustering.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
-#include <tulip/MouseSelection.h>
+#include <tulip/GWInteractor.h>
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
@@ -121,6 +121,37 @@
 using namespace std;
 using namespace tlp;
 
+
+// we define a specific interactor to show element graph infos in nodeProperties
+class MouseShowElementInfos : public GWInteractor {
+public:
+  ElementPropertiesWidget *eltProperties;
+  MouseShowElementInfos(ElementPropertiesWidget *widget) :eltProperties(widget) {}
+  ~MouseShowElementInfos(){}
+  bool eventFilter(QObject *widget, QEvent *e) {
+    if (e->type() == QEvent::MouseButtonPress &&
+	((QMouseEvent *) e)->button()==Qt::LeftButton) {
+      QMouseEvent *qMouseEv = (QMouseEvent *) e;
+      GlGraphWidget *g = (GlGraphWidget *) widget;
+      node tmpNode;
+      edge tmpEdge;
+      ElementType type;  
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+	switch(type) {
+	case NODE: eltProperties->setCurrentNode(g->getGraph(), tmpNode); break;
+	case EDGE: eltProperties->setCurrentEdge(g->getGraph(), tmpEdge); break;
+	}
+	// show 'Element' tab in 'Info Editor'
+	QWidget *tab = eltProperties->parentWidget();
+	QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
+	tabWidget->showPage(tab);
+	return true;
+      }
+    }
+    return false;
+  }
+  GWInteractor *clone() { return new MouseShowElementInfos(eltProperties); }
+};
 
 //**********************************************************************
 ///Constructor of ViewGl
@@ -187,6 +218,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   propertiesWidget=tabWidget->propertyDialog;
   //Init Element info widget
   nodeProperties = tabWidget->elementInfo;
+  mouseToolBar->setSelectInteractor(new MouseShowElementInfos(nodeProperties));
 #ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
@@ -453,14 +485,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(mouseToolBar->getCurrentInteractors());
   connect(mouseToolBar,   SIGNAL(interactorsChanged(const std::vector<tlp::GWInteractor *>&)), glWidget, SLOT(resetInteractors(const std::vector<tlp::GWInteractor *>&)));
-  connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
-	  nodeProperties, SLOT(setCurrentNode(tlp::Graph*, const tlp::node &)));
-  connect(glWidget,       SIGNAL(nodeClicked(tlp::Graph *, const tlp::node &)), 
-	  this, SLOT(showElementProperties()));
-  connect(glWidget,       SIGNAL(edgeClicked(tlp::Graph *, const tlp::edge &)), 
-	  nodeProperties, SLOT(setCurrentEdge(tlp::Graph*, const tlp::edge &)));
-  connect(glWidget,       SIGNAL(edgeClicked(tlp::Graph *, const tlp::edge &)), 
-	  this, SLOT(showElementProperties()));
   connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
 
 #if (QT_REL == 3)
@@ -971,87 +995,45 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
-std::vector<QPopupMenu*> buildPropertyMenu(QPopupMenu &menu) {
+void buildPropertyMenu(QPopupMenu &menu, QObject *receiver, const char *slot) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
   std::vector<QPopupMenu*> groupMenus;
   std::string::size_type nGroups = 0;
   it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
   for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
-  return groupMenus;
+#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+#endif
+}
+
+template <typename TFACTORY, typename TMODULE>
+void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot) {
+  typename TemplateFactory<TFACTORY, TMODULE, ClusterContext>::ObjectCreator::const_iterator it;
+  std::vector<QPopupMenu*> groupMenus;
+  std::string::size_type nGroups = 0;
+  for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
+    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+ #if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
+   for (std::string::size_type i = 0; i < nGroups; i++)
+     receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+ #endif
 }
 //**********************************************************************
 void viewGl::buildMenus() {
   //Properties PopMenus
-  std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu);
-  std::string::size_type nGroups = groupMenus.size();
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
-#endif
-  groupMenus = buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
-#endif
-  groupMenus = buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
-#endif
-  groupMenus = buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
-#endif
-  groupMenus = buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
-#endif
-  groupMenus = buildPropertyMenu<DoubleType,DoubleType,DoubleAlgorithm>(metricMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
-#endif
-  groupMenus = buildPropertyMenu<BooleanType,BooleanType, BooleanAlgorithm>(selectMenu);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
-#endif
-  //Clustering PopMenu
-  TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
-  groupMenus.resize(nGroups = 0);
-  for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
-    insertInMenu(clusteringMenu, it3->first.c_str(), it3->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(makeClustering(int)));
-#endif
-  //Export PopMenu
-  TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
-  groupMenus.resize(nGroups = 0);
-  for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
-    insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
-#endif
-  //Import PopMenu
-  TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
-  groupMenus.resize(nGroups = 0);
-  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
-    insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
-#endif
+  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(int)));
+  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu, this, SLOT(changeString(int)));
+  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu, this, SLOT(changeSize(int)));
+  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu, this, SLOT(changeColor(int)));
+  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu, this, SLOT(changeLayout(int)));
+  buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(metricMenu, this, SLOT(changeMetric(int)));
+  buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(selectMenu, this, SLOT(changeSelection(int)));
+
+  buildMenuWithContext<ClusteringFactory, Clustering>(clusteringMenu, this, SLOT(makeClustering(int)));
+  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(int)));
+  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(int)));
   //Image PopuMenu
 #if (QT_REL == 3)
   QStrList listFormat=QImageIO::outputFormats();
@@ -1409,7 +1391,17 @@ void viewGl::centerView() {
 //Menu Edit : functions
 //===========================================================
 ///Deselect all entries in the glGraph current selection 
-void viewGl::deselectALL() {
+void viewGl::selectAll() {
+  if (!glWidget) return;
+  Graph *graph=glWidget->getGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+  graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+  Observable::unholdObservers();
+}
+///Deselect all entries in the glGraph current selection 
+void viewGl::deselectAll() {
   if (!glWidget) return;
   Graph *graph=glWidget->getGraph();
   if (graph==0) return;
@@ -1809,13 +1801,6 @@ void viewGl::gridOptions() {
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
   gridOptionsWidget->show();
-}
-//**********************************************************************
-void viewGl::showElementProperties() {
-  // show 'Element' tab in 'Info Editor'
-  QWidget *tab = nodeProperties->parentWidget();
-  QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
-  tabWidget->showPage(tab);
 }
 //**********************************************************************
 #include <tulip/AcyclicTest.h>
