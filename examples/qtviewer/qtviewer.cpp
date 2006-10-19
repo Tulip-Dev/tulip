@@ -6,7 +6,7 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/MouseObject.h>
+#include <tulip/MouseInteractors.h>
 
 using namespace std;
 
@@ -52,7 +52,7 @@ int main(int argc,char ** argv ){
   }
 
   MainWin.centerScene();
-  MouseGraphNavigate m;
+  MouseNKeysNavigator m;
   MainWin.pushInteractor(&m);
   return MainApp.exec();
 }
