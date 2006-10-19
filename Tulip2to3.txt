@@ -41,3 +41,13 @@ GlGraph::elementMetaGraph => GlGraph::elementGraph
 GlGraph::getSuperGraph => GlGraph::getGraph
 GlGraph::setSuperGRaph => GlGraph::setGraph
 GlGraphWidget::setSuperGraph => GlGraphWidget::setGraph
+
+MouseInterface => GWInteractor
+MouseAddEdge => MouseEdgeBuilder
+MouseAddNode => MouseNodeBuilder
+MouseDel => MouseElementDeleter
+MouseSelection => MouseSelector
+MouseMagicSelection => MouseMagicSelector
+MouseMoveSelection => MouseSelectionEditor
+MouseGraphNavigate => MouseNKeysNavigator
+MouseZoomBox => MouseBoxZoomer
