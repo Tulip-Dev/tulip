@@ -76,13 +76,13 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	GWOverviewWidget.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
-	MouseAddNode.cpp \
-	MouseAddEdge.cpp \
-	MouseSelection.cpp \
-	MouseMagicSelection.cpp \
-	MouseMoveSelection.cpp \
-	MouseObject.cpp \
-	MouseZoomBox.cpp \
+	MouseBoxZoomer.cpp \
+	MouseEdgeBuilder.cpp \
+	MouseInteractors.cpp \
+	MouseMagicSelector.cpp \
+	MouseNodeBuilder.cpp \
+	MouseSelectionEditor.cpp \
+	MouseSelector.cpp \
 	DataSetDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES)

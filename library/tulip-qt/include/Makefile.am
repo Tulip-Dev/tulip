@@ -2,8 +2,13 @@ nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlGraphWidget.h \
 	tulip/GWInteractor.h \
-	tulip/MouseObject.h \
-	tulip/MouseZoomBox.h \
+	tulip/MouseBoxZoomer.h\
+	tulip/MouseEdgeBuilder.h\
+	tulip/MouseInteractors.h \
+	tulip/MouseMagicSelector.h\
+	tulip/MouseNodeBuilder.h\
+	tulip/MouseSelectionEditor.h\
+	tulip/MouseSelector.h\
 	tulip/PropertyWidget.h \
 	tulip/ElementPropertiesWidgetData.h \
 	tulip/ElementPropertiesWidget.h \
@@ -12,11 +17,6 @@ nobase_include_HEADERS = \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GWOverviewWidget.h \
-	tulip/MouseAddEdge.h\
-	tulip/MouseAddNode.h\
-	tulip/MouseMoveSelection.h\
-	tulip/MouseSelection.h\
-	tulip/MouseMagicSelection.h\
 	tulip/Morphing.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \

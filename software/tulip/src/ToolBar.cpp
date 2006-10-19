@@ -12,14 +12,13 @@
 #include <config.h>
 #endif
 
-#include <tulip/MouseObject.h>
-#include <tulip/MouseMoveSelection.h>
-#include <tulip/MouseAddNode.h>
-#include <tulip/MouseAddEdge.h>
-#include <tulip/MouseSelection.h>
-#include <tulip/MouseMagicSelection.h>
-//#include <tulip/MouseTreeFishEyes.h>
-#include <tulip/MouseZoomBox.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/MouseSelectionEditor.h>
+#include <tulip/MouseNodeBuilder.h>
+#include <tulip/MouseEdgeBuilder.h>
+#include <tulip/MouseSelector.h>
+#include <tulip/MouseMagicSelector.h>
+#include <tulip/MouseBoxZoomer.h>
 #include "ToolBar.h"
 #include "Application.h"
 
@@ -29,7 +28,7 @@ static vector<tlp::GWInteractor *>addNodeInteractors;
 static vector<tlp::GWInteractor *>deleteEltInteractors;
 static vector<tlp::GWInteractor *>graphNavigateInteractors;
 static vector<tlp::GWInteractor *>magicSelectionInteractors;
-static vector<tlp::GWInteractor *>moveSelectionInteractors;
+static vector<tlp::GWInteractor *>editSelectionInteractors;
 static vector<tlp::GWInteractor *>selectInteractors;
 static vector<tlp::GWInteractor *>selectionInteractors;
 static vector<tlp::GWInteractor *>zoomBoxInteractors;
@@ -44,17 +43,25 @@ static vector<tlp::GWInteractor *>zoomBoxInteractors;
 ToolBar::ToolBar( QWidget* parent,  const char* name, Qt::WFlags fl )
   : ToolBarData(parent, name, fl) {
   // initialize the vectors of interactors associated to each action
-  addEdgeInteractors.push_back(new MouseAddEdge());
-  addNodeInteractors.push_back(new MouseAddNode());
-  deleteEltInteractors.push_back(new MouseDelete());
-  graphNavigateInteractors.push_back(new MouseGraphNavigate());
-  magicSelectionInteractors.push_back(new MouseMagicSelection());
-  moveSelectionInteractors.push_back(new MouseSelection());
-  moveSelectionInteractors.push_back(new MouseMoveSelection());
-  selectInteractors.push_back(new MouseSelect());
-  selectionInteractors.push_back(new MouseSelection());
-  zoomBoxInteractors.push_back(new MouseZoomBox());
-  // initialize the current one
+  addEdgeInteractors.push_back(new MousePanNZoomNavigator());
+  //addEdgeInteractors.push_back(new MouseNodeBuilder());
+  addEdgeInteractors.push_back(new MouseEdgeBuilder());
+  addNodeInteractors.push_back(new MousePanNZoomNavigator());
+  addNodeInteractors.push_back(new MouseNodeBuilder());
+  deleteEltInteractors.push_back(new MousePanNZoomNavigator());
+  deleteEltInteractors.push_back(new MouseElementDeleter());
+  graphNavigateInteractors.push_back(new MouseNKeysNavigator());
+  magicSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  magicSelectionInteractors.push_back(new MouseMagicSelector());
+  editSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  editSelectionInteractors.push_back(new MouseSelector());
+  editSelectionInteractors.push_back(new MouseSelectionEditor());
+  selectInteractors.push_back(new MousePanNZoomNavigator());
+  selectionInteractors.push_back(new MousePanNZoomNavigator());
+  selectionInteractors.push_back(new MouseSelector());
+  zoomBoxInteractors.push_back(new MousePanNZoomNavigator());
+  zoomBoxInteractors.push_back(new MouseBoxZoomer());
+  // set the current one
   currentInteractors = &graphNavigateInteractors;
 }
 
@@ -67,7 +74,7 @@ ToolBar::~ToolBar() {
   deleteInteractors(deleteEltInteractors);
   deleteInteractors(graphNavigateInteractors);
   deleteInteractors(magicSelectionInteractors);
-  deleteInteractors(moveSelectionInteractors);
+  deleteInteractors(editSelectionInteractors);
   deleteInteractors(selectInteractors);
   deleteInteractors(selectionInteractors);
   deleteInteractors(zoomBoxInteractors);  
@@ -110,10 +117,13 @@ void ToolBar::setMagicSelection() {
   setCurrentInteractors(&magicSelectionInteractors);
 }
 void ToolBar::setMoveSelection() {
-  setCurrentInteractors(&moveSelectionInteractors);
+  setCurrentInteractors(&editSelectionInteractors);
 }
 void ToolBar::setSelect() {
   setCurrentInteractors(&selectInteractors);
+}
+void ToolBar::setSelectInteractor(GWInteractor *interactor) {
+  selectInteractors.push_back(interactor);
 }
 void ToolBar::setSelection() {
   setCurrentInteractors(&selectionInteractors);
