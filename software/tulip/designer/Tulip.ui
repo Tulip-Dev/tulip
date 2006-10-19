@@ -60,18 +60,21 @@
         <separator/>
         <action name="editFindAction"/>
         <separator/>
+        <action name="editSelect_AllAction"/>
+        <action name="editDelete_selectionAction"/>
         <action name="editDeselect_allAction"/>
         <action name="editReverse_selectionAction"/>
-        <action name="editDelete_selectionAction"/>
         <separator/>
-        <action name="editCreate_subgraphAction"/>
         <action name="editCreate_groupAction"/>
+        <action name="editCreate_subgraphAction"/>
     </item>
     <item text="&amp;Algorithm" name="propertyMenu">
     </item>
+    <item text="&amp;View" name="viewMenu">
+    </item>
     <item text="&amp;Graph" name="graphMenu">
         <action name="Action"/>
-        <item text="Tests" name="popupMenu_15" accel="">
+        <item text="Tests" name="popupMenu_22" accel="">
             <action name="is_simple"/>
             <action name="is_directed_tree"/>
             <action name="is_acyclic"/>
@@ -81,17 +84,14 @@
             <action name="is_planar"/>
         </item>
         <action name="menunew_itemAction"/>
-        <item text="&amp;Modify" name="popupMenu_23" accel="">
+        <item text="&amp;Modify" name="popupMenu_30" accel="">
             <action name="make_simple"/>
             <action name="make_acyclic"/>
             <action name="make_connected"/>
             <action name="make_biconnected"/>
-            <action name="triangulate"/>
             <separator/>
             <action name="Reverse_selected_edgesAction"/>
         </item>
-    </item>
-    <item text="&amp;View" name="viewMenu">
     </item>
     <item text="&amp;Windows" name="windowsMenu">
     </item>
@@ -568,20 +568,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>triangulate</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="text">
-            <string>Triangulate</string>
-        </property>
-        <property name="menuText">
-            <string>Triangulate</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>make_connected</cstring>
         </property>
         <property name="text">
@@ -637,10 +623,13 @@
             <cstring>editDeselect_allAction</cstring>
         </property>
         <property name="text">
-            <string>Deselect all</string>
+            <string>Deselect All</string>
         </property>
         <property name="menuText">
-            <string>Deselect all</string>
+            <string>Deselect All</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+A</string>
         </property>
     </action>
     <action>
@@ -648,10 +637,13 @@
             <cstring>editReverse_selectionAction</cstring>
         </property>
         <property name="text">
-            <string>Reverse selection</string>
+            <string>Inverse selection</string>
         </property>
         <property name="menuText">
-            <string>Reverse selection</string>
+            <string>Inverse selection</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+I</string>
         </property>
     </action>
     <action>
@@ -675,6 +667,9 @@
         <property name="menuText">
             <string>Delete selection</string>
         </property>
+        <property name="accel">
+            <string>Del</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -686,6 +681,9 @@
         <property name="menuText">
             <string>Create subgraph</string>
         </property>
+        <property name="accel">
+            <string>Ctrl+Shift+G</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -696,6 +694,23 @@
         </property>
         <property name="menuText">
             <string>Create group</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+G</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editSelect_AllAction</cstring>
+        </property>
+        <property name="text">
+            <string>Select All</string>
+        </property>
+        <property name="menuText">
+            <string>Select All</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+A</string>
         </property>
     </action>
 </actions>
@@ -844,12 +859,6 @@
         <slot>makeBiconnected()</slot>
     </connection>
     <connection>
-        <sender>triangulate</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeTriangulated()</slot>
-    </connection>
-    <connection>
         <sender>is_biconnected</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
@@ -904,12 +913,6 @@
         <slot>reverseSelectedEdgeDirection()</slot>
     </connection>
     <connection>
-        <sender>editDeselect_allAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>deselectALL()</slot>
-    </connection>
-    <connection>
         <sender>editCreate_groupAction</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
@@ -928,18 +931,27 @@
         <slot>delSelection()</slot>
     </connection>
     <connection>
-        <sender>editDeselect_allAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>deselectALL()</slot>
-    </connection>
-    <connection>
         <sender>editReverse_selectionAction</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
         <slot>reverseSelection()</slot>
     </connection>
+    <connection>
+        <sender>editSelect_AllAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>selectAll()</slot>
+    </connection>
+    <connection>
+        <sender>editDeselect_allAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>deselecAll()</slot>
+    </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in implementation">Tulip.ui.h</include>
+</includes>
 <slots>
     <slot>fileNew()</slot>
     <slot>fileOpen()</slot>
@@ -968,11 +980,12 @@
     <slot>makeConnected()</slot>
     <slot>isConnected()</slot>
     <slot>reverseSelectedEdgeDirection()</slot>
-    <slot>deselectALL()</slot>
     <slot>reverseSelection()</slot>
     <slot>delSelection()</slot>
     <slot>newSubgraph()</slot>
     <slot>group()</slot>
+    <slot>selectAll()</slot>
+    <slot>deselecAll()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
