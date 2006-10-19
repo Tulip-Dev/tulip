@@ -25,6 +25,7 @@ namespace tlp {
     virtual GWInteractor *clone() = 0;
     ID getID() { return id; }
     void setID(ID i) { id = i; }
+    static const ID invalidID = 0;
 };
 
 }
