@@ -8,6 +8,7 @@ SRCS=   tuliplibtest.cpp \
 	SelectionProxyTest.cpp \
 	MetaGraphProxyTest.cpp \
 	SuperGraphTest.cpp \
+	TlpImportExportTest.cpp \
 	PluginsTest.cpp \
 	ExtendedClusterOperationTest.cpp \
 	IdManagerTest.cpp \

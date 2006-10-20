@@ -31,6 +31,7 @@ int main( int argc, char** argv ) {
 #include "ExtendedClusterOperationTest.h"
 #include "PluginsTest.h"
 #include "MatrixTest.h"
+#include "TlpImportExportTest.h"
 using namespace std;
 int main( int argc, char **argv) {
   CppUnit::TextUi::TestRunner runner;
@@ -43,6 +44,7 @@ int main( int argc, char **argv) {
   runner.addTest( SuperGraphMapTest::suite());
   runner.addTest( FaceIteratorTest::suite());
   runner.addTest( MatrixTest::suite());
+  runner.addTest( TlpImportExportTest::suite());
   runner.run();
   return EXIT_SUCCESS;
 }
