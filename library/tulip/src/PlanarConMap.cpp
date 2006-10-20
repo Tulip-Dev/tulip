@@ -8,6 +8,7 @@
 #include <tulip/PlanarConMap.h>
 #include <tulip/ForEach.h>
 #include <tulip/IdManager.h>
+#include <tulip/TreeTest.h>
 
 using namespace stdext;
 using namespace std;
@@ -22,7 +23,8 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
   assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
 
   faceId = new IdManager();
-  PlanarityTest::planarEmbedding(s);
+  if (!TreeTest::isFreeTree(s)) //all map of trees are valid (do not change the existing order)
+    PlanarityTest::planarEmbedding(s);
   computeFaces();
 }
 
