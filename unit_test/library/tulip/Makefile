@@ -12,7 +12,7 @@ SRCS=   tuliplibtest.cpp \
 	PluginsTest.cpp \
 	ExtendedClusterOperationTest.cpp \
 	IdManagerTest.cpp \
-#	PlanarConMapTest.cpp \
+	PlanarConMapTest.cpp 
 
 
 
