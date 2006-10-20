@@ -11,7 +11,7 @@ using namespace tlp;
 
 //=====================================
 QtProgress::QtProgress(QWidget* parent,string text,GlGraphWidget *glGraphWidget):
-  QtProgressData( parent, text.c_str(), Qt::WType_Popup ),
+  QtProgressData( parent, text.c_str(), true),
   firstCall(true),label(text),parent(parent),glGraphWidget(glGraphWidget) {
 }
 //=====================================
