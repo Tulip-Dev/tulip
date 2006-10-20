@@ -13,6 +13,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <errno.h>
+#include <string.h>
 
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -656,11 +658,14 @@ public:
     string filename;
     dataSet->get<string>("file::filename", filename);
     struct stat infoEntry;
-    #ifdef _WIN32
-    stat(filename.c_str(),&infoEntry);
-    #else
-    lstat(filename.c_str(),&infoEntry);
-    #endif
+    bool result = (stat(filename.c_str(),&infoEntry) == 0);
+    if (!result) {
+      std::stringstream ess;
+      ess << filename.c_str() << ": " << strerror(errno);
+      pluginProgress->setError(ess.str());
+      std::cerr << pluginProgress->getError() << std::endl;
+      return false;
+    }
     int size=infoEntry.st_size;
     istream *input;
     if (filename.rfind(".gz") == (filename.length() - 3)) {
@@ -671,9 +676,11 @@ public:
       input = new ifstream(filename.c_str());
     
     TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet),pluginProgress,size);
-    bool result = myParser.parse();
-    if (!result)
+    result = myParser.parse();
+    if (!result) {
+      pluginProgress->setError(filename + ": " + pluginProgress->getError());
       std::cerr << pluginProgress->getError() << std::endl;
+    }
     delete input;
     return result;
   }
