@@ -1021,6 +1021,16 @@ void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot)
  #endif
 }
 //**********************************************************************
+#if (QT_REL > 3)
+// used to sort output formats
+struct LessCharPtr {
+ public:
+  bool operator() (char* str1, char* str2) {
+    return strcmp(str1, str2) < 0;
+  }
+};
+#endif
+
 void viewGl::buildMenus() {
   //Properties PopMenus
   buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(int)));
@@ -1034,20 +1044,42 @@ void viewGl::buildMenus() {
   buildMenuWithContext<ClusteringFactory, Clustering>(clusteringMenu, this, SLOT(makeClustering(int)));
   buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(int)));
   buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(int)));
+  // Tulip known formats (see GlGraph)
+  // formats are sorted, "~" is just an end marker
+  char *tlpFormats[] = {"EPS", "SVG", "~"};
+  unsigned int i = 0;
   //Image PopuMenu
 #if (QT_REL == 3)
+  // in Qt 3 output formats are sorted and uppercased
   QStrList listFormat=QImageIO::outputFormats();
   char *tmp=listFormat.first();
   while (tmp!=0) {
+    if (strcmp(tlpFormats[i], tmp) < 0)
+      // insert the current Tulip format at the right place
+      exportImageMenu.insertItem(tlpFormats[i++]);
+    // insert the current Qt format
     exportImageMenu.insertItem(tmp);
     tmp=listFormat.next();
   }
 #else
+  // output formats are not necessary sorted and uppercased
+  list<char *> formats;
+  // first add Tulip known formats
+  while (strcmp(tlpFormats[i], "~") != 0)
+    formats.push_back(tlpFormats[i++]);
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-    exportImageMenu.insertItem(QString(format));
+    // uppercase and insert each Qt format
+    char* tmp = format.data();
+    i = strlen(tmp);
+    while(i > 0)
+      tmp[--i] = toupper(tmp[i]);
+    formats.push_back(tmp);
   }
+  // sort before inserting in exportImageMenu
+  formats.sort(LessCharPtr());
+  foreach(char* tmp, formats)
+    exportImageMenu.insertItem(QString(tmp));
 #endif
-  exportImageMenu.insertItem("EPS");
   //Windows
   dialogMenu.insertItem("Mouse Tool Bar");
   dialogMenu.insertItem("3D Overview");
@@ -1093,11 +1125,22 @@ void viewGl::outputEPS() {
   }
 }
 //**********************************************************************
+void viewGl::outputSVG() {
+  if (!glWidget) return;
+  QString s( QFileDialog::getSaveFileName());
+  if (!s.isNull()) {
+    glWidget->outputSVG(64000000,s.ascii());
+  }
+}
+//**********************************************************************
 void viewGl::exportImage(int id) {
   if (!glWidget) return;
   string name(exportImageMenu.text(id).ascii());
   if (name=="EPS") {
     outputEPS();
+    return;
+  } else if (name=="SVG") {
+    outputSVG();
     return;
   }
   QString s(QFileDialog::getSaveFileName());

@@ -153,6 +153,7 @@ protected slots:
   void exportImage(int);
   void makeClustering(int );
   void outputEPS();
+  void outputSVG();
   void showDialog(int);
   void redrawView();
   void centerView();
