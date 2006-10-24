@@ -90,7 +90,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     initProxies(glGraphWidget);
     computeFFD(glGraphWidget);
+
+    int W, H;
+    W = glGraphWidget->width();
+    H = glGraphWidget->height();
     editCenter = centerRect.getCenter();
+    editCenter[2] = 0;
+    editCenter[0] = W - editCenter[0];
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
     editPosition[2] = 0;
@@ -343,26 +349,32 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWi
   //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
   Coord strecth(1,1,1);
+  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
     strecth[0] = (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
     strecth[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
   }
+  cerr << "strecth : << "<< strecth << endl;
+
   Observable::holdObservers();  
   restoreInfo();
   //strecth layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
     center *= -1.;
+    //move the center to the origin in order to be able to scale
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->translate(center, itN, itE);
     delete itN; delete itE;
+    //scale the drawing
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->scale(strecth, itN, itE);
     delete itN; delete itE;
+    //replace the center of the graph at its originale position
     center *= -1.;
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
