@@ -17,7 +17,6 @@ nobase_include_HEADERS = \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GWOverviewWidget.h \
-	tulip/Morphing.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
@@ -28,9 +27,11 @@ nobase_include_HEADERS = \
 
 if QT3
 nobase_nodist_include_HEADERS = tulip/FindSelectionData.h \
+				tulip/Morphing.h \
 				tulip/GWOverviewWidgetData.h
 else
 nobase_nodist_include_HEADERS = \
+	tulip/Morphing.h \
 	tulip/FindSelectionData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \

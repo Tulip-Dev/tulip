@@ -2,6 +2,8 @@
 #ifndef MOUSETREEFISHEYES_H
 #define MOUSETREEFISHEYES_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #include <tulip/MouseInterface.h>
 ///
 namespace tlp {
@@ -23,4 +25,5 @@ public:
 };
 
 }
+#endif //DOXYGEN_NOTFOR_USER
 #endif

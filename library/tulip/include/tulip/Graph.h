@@ -278,7 +278,9 @@ public:
   /**
    * Return a pointer to a propertyProxy which is in the pool.
    * The real type of the propertyproxy is tested with the template parameter.
-   * If the propertyProxy is not in the pool, a new one is created and return.
+   * If the propertyProxy is not in the pool, a new one is created and returned.
+   * Using of delete on that property will cause a segmentation violation
+   * (use delLocalProperty instead).
    */
   template<typename Proxytype> 
   Proxytype* getLocalProperty(const std::string &name);
@@ -298,6 +300,8 @@ public:
    * Return a pointer to a propertyProxy which is in the pool or in the pool of an ascendant
    * The real type of the propertyproxy is tested with the template parameter.
    * If the propertyProxy is not the pool it creates a new one and return it.
+   * Using of delete on that property will cause a segmentation violation
+   * (use delLocalProperty instead).
    */
   template<typename Proxytype>
   Proxytype* getProperty(const std::string &name);
@@ -329,6 +333,9 @@ public:
   virtual  void delLocalProperty(const std::string&name)=0;
   /**
    *  add a property to the graph
+   *  Be aware that the PropertyInterface will now belong to the graph object;
+   *  and so it will be deleted automatically. Using of delete on that property
+   *  will cause a segmentation violation (use delLocalProperty instead).
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
   /**

@@ -25,6 +25,7 @@ class GlGraphObserver {
 /*@}*/
 }
 
+#ifndef DOXYGEN_NOTFOR_USER
 namespace std {
   /// for use in some STL sets
   template<>
@@ -34,6 +35,7 @@ namespace std {
     }
   };
 }
+#endif //DOXYGEN_NOTFOR_USER
 
 namespace tlp {
 

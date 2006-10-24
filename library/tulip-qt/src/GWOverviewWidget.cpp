@@ -12,6 +12,15 @@
 
 using namespace std;
 using namespace tlp;
+
+struct RectPosition : public tlp::GlAugmentedDisplay {
+  void draw(tlp::GlGraph *);
+  RectPosition(GlGraphWidget *, tlp::GlGraph *);
+  tlp::GlGraph *observedView;
+private :
+  GlGraphWidget *view;
+};
+
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
 #if (QT_REL == 3)

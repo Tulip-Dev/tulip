@@ -32,6 +32,8 @@ namespace tlp {
 
 class PropertyInterface;
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 class ColorButton : public QButton {
 
   Q_OBJECT;
@@ -194,6 +196,8 @@ public:
 
   QString text() const;
 };
+#endif //DOXYGEN_NOTFOR_USER
+
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
 /* this table handle displaying and editing node or edge properties */

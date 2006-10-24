@@ -1,6 +1,8 @@
 #ifndef MORPHING_H
 #define MORPHING_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #include <tulip/Camera.h>
 #include <tulip/Coord.h>
 #include <tulip/Edge.h>
@@ -60,4 +62,5 @@ namespace tlp {
   //=====================================
 }
 
+#endif //DOXYGEN_NOTFOR_USER
 #endif //MORPHING_H

@@ -18,13 +18,7 @@ namespace tlp {
 class GlGraphWidget;
 class QEvent;
 
-struct RectPosition : public tlp::GlAugmentedDisplay {
-  void draw(tlp::GlGraph *);
-  RectPosition(GlGraphWidget *, tlp::GlGraph *);
-  tlp::GlGraph *observedView;
-private :
-  GlGraphWidget *view;
-};
+class RectPosition;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
