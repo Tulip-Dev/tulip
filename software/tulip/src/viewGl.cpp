@@ -1081,10 +1081,10 @@ void viewGl::buildMenus() {
     exportImageMenu.insertItem(QString(tmp));
 #endif
   //Windows
-  dialogMenu.insertItem("Mouse Tool Bar");
-  dialogMenu.insertItem("3D Overview");
-  dialogMenu.insertItem("Show/Hide Rendering parameters");
-  dialogMenu.insertItem("Info Editor");
+  dialogMenu.insertItem("&Mouse Tool Bar");
+  dialogMenu.insertItem("3D &Overview");
+  dialogMenu.insertItem("&Show/Hide Rendering parameters");
+  dialogMenu.insertItem("&Info Editor");
   //==============================================================
   //File Menu 
   fileMenu->insertSeparator();
@@ -1095,9 +1095,9 @@ void viewGl::buildMenus() {
   if (exportImageMenu.count()>0)
     fileMenu->insertItem("&Save Picture as " , &exportImageMenu); //this , SLOT( outputImage() ));
   //View Menu
-  viewMenu->insertItem( "Redraw View", this, SLOT( redrawView() ));
-  viewMenu->insertItem( "Center View", this, SLOT( centerView() ));
-  viewMenu->insertItem( "Dialogs",  &dialogMenu);
+  viewMenu->insertItem( "&Redraw View", this, SLOT( redrawView() ));
+  viewMenu->insertItem( "&Center View", this, SLOT( centerView() ));
+  viewMenu->insertItem( "&Dialogs",  &dialogMenu);
   //Property Menu
   if (selectMenu.count()>0)
     propertyMenu->insertItem("&Selection", &selectMenu );
@@ -1110,7 +1110,7 @@ void viewGl::buildMenus() {
   if (layoutMenu.count()>0)
     propertyMenu->insertItem("&Layout", &layoutMenu );
   if (sizesMenu.count()>0)
-    propertyMenu->insertItem("&Size", &sizesMenu );
+    propertyMenu->insertItem("S&ize", &sizesMenu );
   if (stringMenu.count()>0)
     propertyMenu->insertItem("&String", &stringMenu );
   if (clusteringMenu.count()>0)
