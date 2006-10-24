@@ -637,10 +637,10 @@
             <cstring>editReverse_selectionAction</cstring>
         </property>
         <property name="text">
-            <string>Inverse selection</string>
+            <string>Invert selection</string>
         </property>
         <property name="menuText">
-            <string>Inverse selection</string>
+            <string>Invert selection</string>
         </property>
         <property name="accel">
             <string>Ctrl+I</string>

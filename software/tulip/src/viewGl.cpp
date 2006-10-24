@@ -1439,8 +1439,8 @@ void viewGl::selectAll() {
   Graph *graph=glWidget->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
-  graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+  graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+  graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
   Observable::unholdObservers();
 }
 ///Deselect all entries in the glGraph current selection 
