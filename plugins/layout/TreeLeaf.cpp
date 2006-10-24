@@ -15,7 +15,7 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
   if (graph->outdeg(n)==0) {
     curPos+=2;
     Coord tmpC;
-    tmpC.set(curPos,depth,0);
+    tmpC.set(curPos,-depth,0);
     layoutResult->setNodeValue(n,tmpC);
     return curPos;
   }
@@ -36,7 +36,7 @@ int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
   }
   delete itN;
   result=(resultMin+resultMax)/2;
-  layoutResult->setNodeValue(n,Coord(result,depth,0));
+  layoutResult->setNodeValue(n,Coord(result,-depth,0));
   return result;
 }
 

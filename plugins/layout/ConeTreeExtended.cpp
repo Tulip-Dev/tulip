@@ -115,7 +115,7 @@ double ConeTreeExtended::treePlace3D(node n,
 //===============================================================
 void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
 			double x, double y, int level) {
-  layoutResult->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
+  layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
   forEach(itn, graph->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);

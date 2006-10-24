@@ -486,9 +486,9 @@ bool HierarchicalGraph::run() {
     if (src == tgt) {
       continue;
     }
-    float rev = 1.0;
+    float rev = -1.0;
     if (nodeLevel.get(src.id)>nodeLevel.get(tgt.id)) {
-      rev = -1.0;
+      rev = 1.0;
     }
     Coord srcPos = layoutResult->getNodeValue(src);
     Coord tgtPos = layoutResult->getNodeValue(tgt);

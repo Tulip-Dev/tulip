@@ -304,7 +304,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
-  tmpCoord.set(x+(*p)[n], y+maxLevelSize[level]/2., 0);
+  tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
   layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
@@ -420,8 +420,8 @@ bool TreeReingoldAndTilfordExtended::run() {
       Coord srcPos = layoutResult->getNodeValue(src);
       Coord tgtPos = layoutResult->getNodeValue(tgt);
       double y = levelCoord[levels[tgt]-1];
-      tmp.push_back(Coord(srcPos[0], y, 0));
-      tmp.push_back(Coord(tgtPos[0], y, 0));
+      tmp.push_back(Coord(srcPos[0], -y, 0));
+      tmp.push_back(Coord(tgtPos[0], -y, 0));
       layoutResult->setEdgeValue(e, tmp);
     }
     
