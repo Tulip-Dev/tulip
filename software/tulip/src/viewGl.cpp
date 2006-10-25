@@ -516,6 +516,7 @@ std::string viewGl::newName() {
 //**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
+  if (!glWidget) return;
   DataSet param = glWidget->getParameters();
   string  texturePath = glWidget->getTexturePath();
   //QString name(glWidget->name());
@@ -1095,9 +1096,10 @@ void viewGl::buildMenus() {
   if (exportImageMenu.count()>0)
     fileMenu->insertItem("&Save Picture as " , &exportImageMenu); //this , SLOT( outputImage() ));
   //View Menu
-  viewMenu->insertItem( "&Redraw View", this, SLOT( redrawView() ));
-  viewMenu->insertItem( "&Center View", this, SLOT( centerView() ));
-  viewMenu->insertItem( "&Dialogs",  &dialogMenu);
+  viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()));
+  viewMenu->insertItem("&Center View", this, SLOT(centerView()));
+  viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()));
+  viewMenu->insertItem("&Dialogs",  &dialogMenu);
   //Property Menu
   if (selectMenu.count()>0)
     propertyMenu->insertItem("&Selection", &selectMenu );
@@ -1370,7 +1372,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       mouseClicY = me->y();
       QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
       contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
-      contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
+      //contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
       contextMenu->insertItem(tr("Delete"), this, SLOT(deleteElement()));
       contextMenu->insertItem(tr("Select"), this, SLOT(selectElement()));
       contextMenu->insertItem(tr("Add/Remove selection"), this, SLOT(addRemoveElement()));
