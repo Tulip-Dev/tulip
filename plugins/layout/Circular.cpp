@@ -201,7 +201,7 @@ bool Circular::run() {
       sumOfRad -= maxRad;
       angleAdjust = true;
     }//end if
-    cerr << "*************************" << endl;
+    //cerr << "*************************" << endl;
 
     vector<node> cycleOrdering;
     if (searchCycle)
