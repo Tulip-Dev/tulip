@@ -1393,19 +1393,19 @@ void viewGl::focusInEvent ( QFocusEvent * ) {
 //**********************************************************************
 void viewGl::showDialog(int id){
   string name(dialogMenu.text(id).ascii());
-  if (name=="Mouse Tool Bar") {
+  if (name=="&Mouse Tool Bar") {
     mouseToolBarDock->show();
     clusterTreeWidget->raise();
   }
-  if (name=="Info Editor") {
+  if (name=="&Info Editor") {
     tabWidgetDock->show();
     tabWidgetDock->raise();
   }
-  if (name=="3D Overview") {
+  if (name=="3D &Overview") {
     overviewDock->show();
     overviewDock->raise();
   }
-  if (name=="Show/Hide Rendering parameters") {
+  if (name=="&Show/Hide Rendering parameters") {
     overviewWidget->showParameters(!overviewWidget->parameterBasic->isVisibleTo(overviewWidget));
   }
 }
