@@ -168,9 +168,9 @@ void PropertyDialog::setGraph(Graph *sg) {
 void PropertyDialog::newProperty() {
   if (!graph) return;
   QStringList lst;
-  lst << "Selection" << "Metric" << "Layout" << "String" << "Integer" << "Sizes" << "Color";
+  lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String";
   bool ok = FALSE;
-  QString res = QInputDialog::getItem( "Property type","Please select your property type", lst, 1, FALSE, &ok, this );
+  QString res = QInputDialog::getItem( "Property type","Please select the property type", lst, 3, FALSE, &ok, this );
   if ( ok ) {
       QString text = QInputDialog::getText("Property name", "Please enter the property name", QLineEdit::Normal, QString::null, &ok, this );
       if (ok) {
@@ -180,7 +180,7 @@ void PropertyDialog::newProperty() {
 	if (strcmp(res.ascii(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.ascii());
 	if (strcmp(res.ascii(),"String")==0) graph->getLocalProperty<StringProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Sizes")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
 	setGraph(graph);
       }
