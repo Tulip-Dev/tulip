@@ -1,15 +1,15 @@
 <chapter id="functions"><title>Functionalities</title>
     <sect1 id="manag-graphs"><title>Management of Graphs</title>
-        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you had. Tulip supports different formats : BMP, JPEG, PBM, PGM, PNG, PPM, XBM, XPM, EPS. </para>
+        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you had. Tulip supports different formats : BMP, EPS, JPEG, PBM, PGM, PNG, PPM, SVG, XBM, XPM. </para>
         <para>
         Tulip could generate a graph from data : importation.
         <itemizedlist><title>Examples of importation</title>
         <listitem><para>Adjacency Matrix : a form of representation of graphs.</para></listitem>
         <listitem><para>File System : make a graph with your file system ; the root is the directory you have selected.</para></listitem>
         <listitem><para>GML import : create a graph from this other format.</para></listitem>
-        <listitem><para>dot : create a graph from this other format, <emphasis>graphviz</emphasis>.</para></listitem>
+        <listitem><para>dot : create a graph from <emphasis>graphviz</emphasis>format.</para></listitem>
         </itemizedlist>
-        The second possibilty of using is to generate different kinds of graph : Graph, Tree, Grid which could be complete, simple, uniform, ...
+        The second possibility is to generate automatically different kinds of graph : Graph, Tree, Grid, which could be complete, simple, uniform, ...
         <itemizedlist><title>Examples of generation</title>
         <listitem><para>Complete General Graph</para></listitem>
         <listitem><para>Complete Tree</para></listitem>
@@ -21,35 +21,35 @@
         </itemizedlist>
         </para>
 
-        <para>It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected objects from a view. When you paste an object, there are in the same place of the oldest of the view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
+        <para>It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected elements from a view. When you paste an element, there are in the same place of the oldest of the view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
         <sect2 id="find"><title>The <quote>Find</quote> tool</title>
-            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item enabling to make some requests on the current graph. The tool gives a way to choose the concerned property and the action you can do : Make copy of the found elements, Add to the selection, Remove from the selection or Intersect with the current selection.</para>
+            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want to do : Make copy of the found elements, Add to the selection, Remove from the selection or Intersect with the current selection.</para>
         </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
-        <para>Each graph can be modified with algorithms for the layout, the set of selected objects, the size of nodes, the value attributed to an object (node or edge) named metric, the colors. An other advantage of Tulip platform is that it is easy to insert a new algorithm to the structure; this way, it is able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Property</code> menu. Several categories are in there : Selection, Layout, Metric, Colors, Sizes. They modify the properties of the object in the graph.
+        <para>Each graph can be modified with algorithms for the layout, the set of selected elements, the size of nodes, the value attributed to an element (node or edge) named metric, the colors. An other advantage of <application>Tulip</application> is that it is easy to add a new algorithm in the structure; this way, it is able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Algorithms</code> menu. Several categories are in there : Selection, Color, Layout, Measure, Size, General. They modify the properties of the graph elements.
         </para>
     </sect1>
     <sect1 id="graph-properties"><title>Properties of graph</title>
-        <para>In <application>Tulip</application> software, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign nodes values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
+        <para>In <application>Tulip</application>, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign nodes values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
 
-        <para>For each graph, <emphasis>Tulip</emphasis> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are used for the compute of plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
+        <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
     </sect1>
     <sect1 id="hierarchy"><title>Hierarchy</title>
         <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relationships, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a popup menu is displayed, it allows to manage the instances of cluster : remove, clone, create subgraph.</para>
         <sect2 id="subgraph"><title>SubGraphs</title>
-         <para>A graph can have several parts of itself : these are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph have the same object, it is just a part of the graph. It is possible to add properties for the subgraph only or to use the inherited properties.</para>
+         <para>A graph can have several parts of itself : these are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph share its elements with the graph, it is just a part of the graph. It is possible to add properties for the subgraph only or to use the inherited properties.</para>
         </sect2>
         <sect2 id="group"><title>Groups</title>
             <para>Some graph can be a subgraph of an other graph. This kind of hierarchy enables to assign a graph to a node. Then, you can go inside the node to show the metagraph.</para>
         </sect2>
     </sect1>
-    <sect1 id="stats-panels"><title>Statistics Panel (available in experimental version)</title>
-        <para><application>Tulip</application> also provides a simple statistics interface which allows the user to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). The display of the statistics values computed on the graph is performed with the help of the GlAD system (GlAugmentedDisplay). Finally, the clustering is performed from a clustering plane, specified by the user with a plane equation.</para>
+    <sect1 id="stats-panels"><title>Statistics Panel (not available in standard version)</title>
+        <para><application>Tulip</application> also provides a simple statistics interface which allows the user to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). Finally, the clustering is performed from a clustering plane, specified by the user with a plane equation.</para>
     </sect1>
     <sect1 id="text-rend"><title>Text Rendering</title>
-        <para>It is possible to assign a label to each object of the graph. Tulip can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
+        <para>It is possible to assign a label to each element of the graph. <application>Tulip</application> can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
         <figure>
             <title>Bitmap Rendering</title>
             <graphic fileref="images/bitmap-label.png"/>

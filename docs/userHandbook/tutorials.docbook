@@ -2,29 +2,29 @@
 <chapter id="tutorial"><title>Tutorials</title>
     <sect1 id="first-step"><title>First Step</title>
         <para> In this part, the goal is to help you to simply make a graph and to save your work.</para>
-        <sect2 id="first-dis"><title>First display</title>
+        <sect2 id="first-dis"><title>First graph display</title>
             <sect3 id="import"><title>Importation of a graph</title>
                 <para>
 		<itemizedlist>
-		    <listitem><para>Select the <code>File</code> -> <code>Import</code> item.</para>
+		    <listitem><para>Select the <code>File</code>-><code>Import</code> item.</para>
 		    </listitem>
 		    <listitem><para>Select a method of importation : <code>Grid approximation</code>, for example.</para></listitem>
 		</itemizedlist>
-		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>CTRL</keycap> to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View</code> -> <code>Center view</code> from the menu bar.
+		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>CTRL</keycap> (<keycap>ALT</keycap> key on Mac) to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View</code>-><code>Center view</code> from the menu bar.
 		<itemizedlist>
-		    <listitem><para>Select <code>Property</code> -> <code>Metric</code> -> <code>Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
+		    <listitem><para>Select <code>Algorithm</code>-><code>Measure</code>-> <code>Misc</code>-><code>Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
 		</itemizedlist>
-		The graph is now displayed with colors depending of the metric. You can change the colors with the menu : <code>Property</code> -> <code>Colors</code>. The choice of <code>Distribution</code> computes the color on the entire palette. The second choice, <code>Metric mapping</code>, compute an interpolation between the two selected colors.
+		The graph is now displayed with colors depending of the metric. You can change the colors with the menu : <code>Algorithm</code>-><code>Color</code>-><code>Metric Mapping</code>. This plugin computes an interpolation between the two selected colors.
                 </para>
             </sect3>
             <sect3 id="create"><title>Creation of a graph</title>
-                <para>In this section, we learn how to create its own graph, object by object.
+                <para>In this section, we learn how to create its own graph, element by element.
                 <itemizedlist>
                     <listitem>
-                        <para>Select the <code>File</code> -> <code>New</code> from the menu bar to create a new view for the graph.</para>
+                        <para>Select the <code>File</code>-><code>New</code> from the menu bar to create a new graph.</para>
                     </listitem>
                     <listitem>
-                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> sub-window. In the same way, you can display or hide the arrows checking <code>Arrows</code> in the subwindow <code>Overview</code> too.</para>
+                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> subwindow. In the same way, you can display or hide the arrows checking <code>Arrows</code>.</para>
                     </listitem>
                     <listitem>
                         <para>Delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> mouse toolbar operation, then click on the element you want to delete.</para>
@@ -34,33 +34,33 @@
             </sect3>
         </sect2>
 	<sect2 id="save"><title>Save options</title>
-	    <para>To save your work, you just have to select <code>File</code> -> <code>Save</code> or <code>Save as</code>, type the name of the file and choose the path.</para>
-            <para>The second way to make a save is to export in a special format : GML or tlp. Select <code>File</code> -> <code>Export</code> and your choice, then choose the name of your file.</para>
+	    <para>To save your work, you just have to select <code>File</code>-> <code>Save</code> or <code>Save as</code>: a dialog appears allowing to enter the author of the graph and some comments; then after clicking on the 'OK' button, just type the file name and choose its location.</para>
+            <para>The second way to make a save is to export the graph in a special format : GML or TLP (equivalent to <code>Save as</code>). Select <code>File</code>-><code>Export</code> and the format of your choice, then choose the file name and location.</para>
 	</sect2>
         <sect2 id="algos"><title>Algorithms</title>
-	    <para>This part explains how to apply an algorithm to a graph. Then, you have made or imported a graph. Select <code>Property</code> -> <code>Layout</code> (for example) and an algorithm : <code>Hierarchical Graph</code> for example. </para>
-            <para>In this case, we used an algorithm dealing with the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. With the <code>Bubble Tree</code> layout, you can not display a grid. If it is not valid, a pop-up message will displayed explaining why it is not ok.</para>
+	    <para>This part explains how to apply an algorithm to a graph. Previously, you have created or imported a graph. Select <code>Algorithm</code>-><code>Layout</code> (for example) and an algorithm : <code>Hierarchical</code>-><code>Hierarchical Graph</code> for example.</para>
+            <para>In this case, we use an algorithm dealing with the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. With the <code>Bubble Tree</code> layout, you can not display a grid. If it is not valid, a pop-up message will displayed explaining the problem.</para>
 	</sect2>
     </sect1>
     <sect1 id="properties"><title>Properties</title>
-        <para>As it is explained in the last section, it is possible to modify the properties with algorithms. An other solution is to change the values in the property tab of the <code>Info Editor</code> sub-window.</para>
+        <para>As it is explained in the last section, it is possible to update the properties attached to the graph elements with algorithms. An other solution is to update the values through the <code>Property</code> tab of the <code>Info Editor</code> subwindow.</para>
         <para>To give an example, create a graph :
         <itemizedlist>
-            <listitem><para>Select the properties you want to change, <code>viewSize</code> in the <code>local</code> table for example to manage the size of the nodes. Now, you can change all values or the value of one node.
+            <listitem><para>Select the property you want to update, <code>viewSize</code> in the <code>local</code> table, for example, to manage the size of the nodes. Now, you can change all values or the value of one node.
                 <orderedlist>
                     <listitem><para>Click on <code>Set all</code>, and write the new coordinates : <code>(2.0, 2.0, 2.0)</code></para></listitem>
-                    <listitem><para>Click on the line and the second column of the concerned node in the table. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
+                    <listitem><para>Click on the line and the second column of the choosed node in the table. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
                 </orderedlist>
             </para></listitem>
         </itemizedlist>
 
-         If you want to change properties of selected objects, use the check box <code>Filter</code> of the <code>Property</code> tab.
+         If you want to change properties of selected elements, use the check box <code>Filter</code> of the <code>Property</code> tab.
         <itemizedlist>
-            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the Add/Remove Selection item displayed in the right clicking pop-up menu.
+            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the 'Add/Remove Selection' item displayed in the contextual pop-up menu which appears when pressing on the mouse right button (press <keycap>CTRL</keycap> key when mouse pressing on Mac).
             </para></listitem>
             <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
             </para></listitem>
-            <listitem><para>Click on the checkbox named <code>Filter</code>. The selected object just appears in the table above.
+            <listitem><para>Click on the checkbox named <code>Filter</code>. The selected element just appears in the table above.
             </para></listitem>
             <listitem><para>Click on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
             </para></listitem>
@@ -69,37 +69,37 @@
 
         <itemizedlist>
             <title>Set of properties available :</title>
-            <listitem><para><code>viewColor</code> : It is chosen with a palette of colors.</para></listitem>
-            <listitem><para><code>viewLabel</code> : It is a string, you just have to write text.</para></listitem>
-            <listitem><para><code>viewLayout</code> : This represents the position of the object in the three dimension. X, Y and Z coordinates must be indicated. (e.g. <code>(-1.0,0,1.0)</code>)</para></listitem>
-            <listitem><para><code>viewMetaGraph</code> : Contains a link to an other graph. A node can contain a graph. It is not easy to modify the value (identifier of graph) but it is a way to display informations. </para></listitem>
-            <listitem><para><code>viewRotation</code> : Type a value in degree. The rotation is made counterclockwise around the Z axis.</para></listitem>
-            <listitem><para><code>viewSelection</code> :  This property can take two values : <code>true</code> or <code>false</code>. To change a value, just check/uncheck the box in the table.</para></listitem>
-            <listitem><para><code>viewShape</code> : For the nodes, it determines the shape : Billboard, Cone, Cube, CubeOutlined, Cylinder, HalfCylinder, Sphere, Square, TeaPot. To change it, select an item in the listbox. For the edges, it determines the kind of lines : plain, dash,... It is represented by a number : 0-3 for polylines, 4-7 for Bezier curves and 8-11 for BSpline curves. For each kind of line, the four possible values specify, respectively, plain, point, dash and point dash mixed, display modes.</para></listitem>
-            <listitem><para><code>viewSize</code> : For nodes, the property is represented by three values : width, height, and depth. For edges, the values correspond to the size of the arrows.</para></listitem>
-            <listitem><para><code>viewTexture</code> : This property contains the name of the file of the texture you want to apply. The dimensions must be 64x64. It is possible to go through the file system with a double click.</para></listitem>
+            <listitem><para><code>viewColor</code> : it is chosen with a palette of colors.</para></listitem>
+            <listitem><para><code>viewLabel</code> : it is a string, you just have to write text.</para></listitem>
+            <listitem><para><code>viewLayout</code> : this represents the position of the element in the three dimension. X, Y and Z coordinates must be indicated. (e.g. <code>(-1.0,0,1.0)</code>)</para></listitem>
+            <listitem><para><code>viewMetaGraph</code> : contains a link to an other graph. A node can contain a graph. It is not easy to modify the value (identifier of graph) but it is a way to display informations. </para></listitem>
+            <listitem><para><code>viewRotation</code> : type a value in degree. The rotation is made counterclockwise around the Z axis.</para></listitem>
+            <listitem><para><code>viewSelection</code> :  this property can take two values : <code>true</code> or <code>false</code>. To change a value, just check/uncheck the box in the table.</para></listitem>
+            <listitem><para><code>viewShape</code> : for the nodes, it determines the shape. 2D shapes are : Billboard, Circle, Hexagone, Pentagone, Ring, Square, SquareBorderTex, Triangle. Te 3D ones are: Cone, Cube, CubeOutLined, CubeOutLinedTransparent, Cylinder, HalfCylinder, Sphere . To change it, select an item in the listbox. For the edges, it determines the kind of curves : Bezier Curve, Polyline or Spline Curve.</para></listitem>
+            <listitem><para><code>viewSize</code> : for nodes, the property is represented by three values : width, height, and depth. For edges, the values correspond to the size of the arrows.</para></listitem>
+            <listitem><para><code>viewTexture</code> : This property contains the name of the file of the texture you want to apply. The dimensions must be 64x64. By double clicking, you can display a File chooser dialog which allow to browse the file system in order to find the file you need.</para></listitem>
         </itemizedlist>
      There is an other solution to modify the value of one node or edge :
         <itemizedlist>
-            <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation then select the node or edge you want to modify.</para></listitem>
-            <listitem><para>Click on the <code>Element</code> tab of the <code>Info Editor</code> sub-window. It displays the informations of the selected elements. Note that the object is not really selected but just for this tab.</para></listitem>
+            <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation, then click on the node or edge you want to  update.</para></listitem>
+            <listitem><para>The <code>Element</code> tab of the <code>Info Editor</code> subwindow is then selected. It displays the informations of the element you clicked on.</para></listitem>
         </itemizedlist>
         </para>
         <sect2 id="mana-inst"><title>Management of instances</title>
-            <para>The bottom of the <code>Property</code> sub-window enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
+            <para>The bottom of the <code>Property</code> subwindow enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
                 <itemizedlist>
                     <listitem><para>Click on the <code>New</code> button.</para></listitem>
-                    <listitem><para>Select the type of property, <code>String</code>. (other possibilities : Metric, Selection, Layout, Integer, Sizes, Color)</para></listitem>
+                    <listitem><para>Select the type of property, <code>String</code>. (other possibilities are Color, Integer, Layout, Metric, Size, Selection)</para></listitem>
                     <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>).</para></listitem>
                 </itemizedlist>
 
             For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
             </para>
-            <para>The last functionnality is to clone properties. Select the concerned property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
+            <para>The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
         </sect2>
 
         <sect2 id="find-tut"><title>Find : make a request.</title>
-            <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Push on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
+            <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Click on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
                 <itemizedlist>
                         <listitem><para>Select the property used for the request : <code>viewRotation</code>.</para></listitem>
                         <listitem><para>Choose the operation and type a value for the comparaisons : <code>=</code> and <code>20</code>, to find the element rotated of 20 degrees. </para></listitem>
@@ -114,7 +114,7 @@
     <sect1 id="labels"><title>Labels Formatted</title>
         <para>under construction</para>
     </sect1>
-    <sect1 id="statistics"><title>Statistics Panel (available in experimental version)</title>
+    <sect1 id="statistics"><title>Statistics Panel (not available in the downloadable binary versions)</title>
 	<sect2 id="stats-tut-intro"><title>Introduction</title>
     	    <para>
 	    This section will explain how to use the statistics panel in Tulip. The tutorial is composed of 3 main parts. Firstly, you will see how to generate a scatter plot or an histogram from a graph. In a second part, you will see how to enable augmented displays on the graph. And finally, you will see how to clusterize the graph from the statistics values previously computed.
