@@ -25,9 +25,12 @@ nobase_include_HEADERS = \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h
 
+noinst_HEADERS = \
+	tulip/Morphing.h
+
+
 if QT3
 nobase_nodist_include_HEADERS = tulip/FindSelectionData.h \
-				tulip/Morphing.h \
 				tulip/GWOverviewWidgetData.h
 else
 nobase_nodist_include_HEADERS = \

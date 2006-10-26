@@ -39,4 +39,5 @@ noinst_HEADERS = \
 	tulip/TextRenderer.h \
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\
+	tulip/OcclusionTest.h \
 	tulip/GlLines.h
