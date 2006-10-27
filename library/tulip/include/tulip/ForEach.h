@@ -46,7 +46,7 @@ namespace tlp {
   }
 
   template<typename TYPE>
-  inline bool _tlp_if_test(TYPE &n, void *_it) {
+  inline bool _tlp_if_test(TYPE &, void *_it) {
     assert(((_TLP_IT<TYPE>*)_it)->_it !=0);
     if(((_TLP_IT<TYPE>*)_it)->_it->hasNext()) {
       ((_TLP_IT<TYPE>*)_it)->_n = ((_TLP_IT<TYPE>*)_it)->_it->next(); 

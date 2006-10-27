@@ -203,22 +203,22 @@ protected:
    * Handler function for inherited AbstractProperty. This function
    * is called after a setAllNodeValue operation.
    */
-  virtual void setAllNodeValue_handler(const typename Tnode::RealType &v){};
+  virtual void setAllNodeValue_handler(const typename Tnode::RealType &){};
   /**
    * Handler function for inherited AbstractProperty. This function
    * is called after a setAllEdgeValue operation.
    */
-  virtual void setAllEdgeValue_handler(const typename Tedge::RealType &v){};
+  virtual void setAllEdgeValue_handler(const typename Tedge::RealType &){};
   /**
    * Handler function for inherited AbstractProperty. This function
    * is called after a setEdgeValue operation.
    */
-  virtual void setEdgeValue_handler(const edge e, const typename Tedge::RealType &v){};
+  virtual void setEdgeValue_handler(const edge, const typename Tedge::RealType &){};
   /**
    * Handler function for inherited AbstractProperty. This function
    * is called after a setNodeValue operation.
    */
-  virtual void setNodeValue_handler(const node n, const typename Tnode::RealType &v){};
+  virtual void setNodeValue_handler(const node, const typename Tnode::RealType &){};
 
 protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;
