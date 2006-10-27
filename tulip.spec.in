@@ -86,15 +86,15 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip.so
 %{prefix}/lib/libtulip-%{tulip_version}.so*
 %dir %{prefix}/lib/tlp
-%{prefix}/lib/tlp/plugins/clustering/*.so
-%{prefix}/lib/tlp/plugins/colors/*.so
-%{prefix}/lib/tlp/plugins/export/*.so
-%{prefix}/lib/tlp/plugins/import/*.so
-%{prefix}/lib/tlp/plugins/layout/*.so
-%{prefix}/lib/tlp/plugins/metric/*.so
-%{prefix}/lib/tlp/plugins/selection/*.so
-%{prefix}/lib/tlp/plugins/sizes/*.so
-#%{prefix}/lib/tlp/plugins/string/*.so
+%{prefix}/lib/tlp/plugins/clustering
+%{prefix}/lib/tlp/plugins/colors
+%{prefix}/lib/tlp/plugins/export
+%{prefix}/lib/tlp/plugins/import
+%{prefix}/lib/tlp/plugins/layout
+%{prefix}/lib/tlp/plugins/metric
+%{prefix}/lib/tlp/plugins/selection
+%{prefix}/lib/tlp/plugins/sizes
+#%{prefix}/lib/tlp/plugins/string
 %{datadir}/aclocal/tulip.m4
 
 %files -n lib%{name}-ogl
@@ -105,7 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-ogl-%{tulip_version}.so.*
 %{prefix}/lib/tlp/bitmaps/fontb.ttf
 %{prefix}/lib/tlp/bitmaps/font.ttf
-%{prefix}/lib/tlp/plugins/glyph/*.so
+%{prefix}/lib/tlp/plugins/glyph
 
 %files -n lib%{name}-qt@QT_VERSION@
 %defattr(-,root,root)
