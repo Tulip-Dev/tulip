@@ -57,10 +57,10 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
 //=================================================================
 bool PlanarityTest::compute(Graph *graph) { 
 
-  if (resultsBuffer.find((unsigned int)graph)!=resultsBuffer.end()) 
-    return resultsBuffer[(unsigned int)graph];
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
+    return resultsBuffer[(unsigned long)graph];
   else if(graph->numberOfNodes()==0){
-    resultsBuffer[(unsigned int)graph] = true;
+    resultsBuffer[(unsigned long)graph] = true;
     return true;
   }
   vector<edge> addedEdges;
