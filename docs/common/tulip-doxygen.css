@@ -84,7 +84,7 @@ TD{font-size: 11pt}
 TD.mdRow { padding: 8px 20px; }
 TD.md { font-weight: bold; font-size:12pt}
 TD.mdname1 { font-weight: bold; color: #602020; font-size:12pt}
-TD.mdname { font-weight: bold; color: #602020; width: 600px; font-size:12pt}
+TD.mdname { font-weight: bold; color: #602020; font-size:12pt}
 DIV.groupHeader { margin-left: 16px; margin-top: 12px; margin-bottom: 6px; font-weight: bold }
 DIV.groupText { margin-left: 16px; font-style: italic; font-size: smaller }
 DIV{}
