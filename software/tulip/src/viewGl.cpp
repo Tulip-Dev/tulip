@@ -1022,16 +1022,6 @@ void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot)
  #endif
 }
 //**********************************************************************
-#if (QT_REL > 3)
-// used to sort output formats
-struct LessCharPtr {
- public:
-  bool operator() (char* str1, char* str2) {
-    return strcmp(str1, str2) < 0;
-  }
-};
-#endif
-
 void viewGl::buildMenus() {
   //Properties PopMenus
   buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(int)));
@@ -1063,23 +1053,23 @@ void viewGl::buildMenus() {
     tmp=listFormat.next();
   }
 #else
-  // output formats are not necessary sorted and uppercased
-  list<char *> formats;
+  // int Qt 4, output formats are not yet sorted and uppercased
+  list<QString> formats;
   // first add Tulip known formats
   while (strcmp(tlpFormats[i], "~") != 0)
     formats.push_back(tlpFormats[i++]);
+  // uppercase and insert all Qt formats
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-    // uppercase and insert each Qt format
     char* tmp = format.data();
     i = strlen(tmp);
     while(i > 0)
       tmp[--i] = toupper(tmp[i]);
-    formats.push_back(tmp);
+    formats.push_back(QString(tmp));
   }
   // sort before inserting in exportImageMenu
-  formats.sort(LessCharPtr());
-  foreach(char* tmp, formats)
-    exportImageMenu.insertItem(QString(tmp));
+  formats.sort();
+  foreach(QString str, formats)
+    exportImageMenu.insertItem(str);
 #endif
   //Windows
   dialogMenu.insertItem("&Mouse Tool Bar");
