@@ -87,8 +87,8 @@ node createMNode (Graph *graph, set<node> &subGraph,
   metaGraph->setAttribute("name", st.str()); 
   node metaNode = graph->addNode();
   metaInfo->setNodeValue(metaNode, metaGraph);
-
   updateGroupLayout(graph, metaGraph, metaNode);
+  
   //Remove nodes from graph
   StableIterator<node> itN(metaGraph->getNodes());
   while (itN.hasNext())
@@ -106,7 +106,9 @@ node createMNode (Graph *graph, set<node> &subGraph,
       edge e = it.next();
       node source = graph->source(e);
       node target = graph->target(e);
-      bool toDelete = (metaInfo->getNodeValue(source)!=0) || (metaInfo->getNodeValue(target)!=0);
+      bool toDelete = ((metaInfo->getNodeValue(source)!=0) || 
+		       (metaInfo->getNodeValue(target)!=0)) && 
+	graph->existEdge (source, target).isValid();
       if (graph->isElement(source) && metaGraph->isElement(target)) {
 	if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
 	  if (multiEdges || edges[source].empty()) {
