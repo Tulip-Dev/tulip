@@ -29,8 +29,8 @@ namespace tlp {
     //We compute the dag level metric on resulting sg.
     bool resultBool;
     string erreurMsg;
-    DoubleProperty *dagLevel= new DoubleProperty(graph);
-    resultBool = graph->computeProperty("DagLevel", dagLevel, erreurMsg);
+    DoubleProperty dagLevel(graph);
+    resultBool = graph->computeProperty("DagLevel", &dagLevel, erreurMsg);
     assert(resultBool);
     //we now transform the dag in a proper Dag, two linked nodes of a proper dag
     //must have a difference of one of dag level metric.
@@ -44,24 +44,24 @@ namespace tlp {
     edgeLength->setAllEdgeValue(1);
     for (vector<edge>::const_iterator itEdge=sgEdges.begin();itEdge!=sgEdges.end();++itEdge) {
       edge ite=*itEdge;
-      int delta=(int)rint(dagLevel->getNodeValue(graph->target(ite))-dagLevel->getNodeValue(graph->source(ite)));
+      int delta=(int)rint(dagLevel.getNodeValue(graph->target(ite))-dagLevel.getNodeValue(graph->source(ite)));
       if (delta>1) {
 	tmp1=graph->addNode();
 	replacedEdges[ite]=graph->addEdge(graph->source(ite),tmp1);
 	addedNodes.push_back(tmp1);
-	dagLevel->setNodeValue(tmp1,dagLevel->getNodeValue(graph->source(ite))+1);
+	dagLevel.setNodeValue(tmp1,dagLevel.getNodeValue(graph->source(ite))+1);
 	if (delta>2) {
 	  tmp2=graph->addNode();
 	  addedNodes.push_back(tmp2);
 	  edge e=graph->addEdge(tmp1,tmp2);
 	  edgeLength->setEdgeValue(e,delta-2);	  
-	  dagLevel->setNodeValue(tmp2,dagLevel->getNodeValue(graph->target(ite))-1);
+	  dagLevel.setNodeValue(tmp2,dagLevel.getNodeValue(graph->target(ite))-1);
 	  tmp1=tmp2;
 	}
 	graph->addEdge(tmp1,graph->target(ite));
       }
     }
-    for (stdext::hash_map<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it) 
+    for (stdext::hash_map<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it)
       graph->delEdge((*it).first);
     assert(AcyclicTest::isAcyclic(graph));
   }
