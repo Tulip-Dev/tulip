@@ -38,6 +38,18 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
 }
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
+  //check if the graph we want to remove is a subgraph of the graph
+#ifndef NDEBUG
+  bool find = false;
+  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
+    if (*it == toRemove) {
+      find = true;
+      break;
+    }
+  }
+  assert(find);
+#endif
+
   Iterator<Graph *> *itS = toRemove->getSubGraphs();
   while (itS->hasNext()) {
     Graph *tmp = itS->next();
