@@ -10,15 +10,13 @@ echo "<META NAME=\"copyright\" content=\"$THIS_YEAR by LaBRI\"><META NAME=\"auth
 echo "</HEAD><BODY><div align=\"center\">" >> $HEAD_FILE
 echo "<table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"text-decoration: none; border : solid 1px #597ba8 ; border-right-style: none; border-top-style: none; border-left-style: none;\" bgcolor=\"E5E5E5\">" >> $HEAD_FILE
 echo "<tr><td valign=center>" >> $HEAD_FILE
-for A in `ls */index.html`
+for A in `ls tulip-*/index.html`
 do
     B=`dirname $A`
     B=`basename $B`
     echo "<A href=\"$A\" target=\"doc\" style=\"text-decoration: none; font-family : sans-serif; color: #000000; font-size: 12pt\">" >> $HEAD_FILE
     echo "$B</A> <font color=\"#41597A\">&nbsp;&nbsp;&nbsp;</font>" >> $HEAD_FILE
 done
-echo "<A href=\"allPlugins.html\" target=\"doc\" style=\"text-decoration: none; font-family : sans-serif; color: #000000; font-size: 12pt\">" >> $HEAD_FILE
-echo "tulip-plugins</A> <font color=\"#41597A\">&nbsp;&nbsp;&nbsp;</font>" >> $HEAD_FILE
 echo "</td>" >> $HEAD_FILE
 echo "<td align=\"right\" valign=\"center\"><img src=\"$REP_COMMON/logo.png\" align=\"right\" width=\"32\" height=\"32\" border=\"0\"></td></tr></table>" >> $HEAD_FILE
 

@@ -2,7 +2,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : 
 
-html: tulip-lib tulip-libogl tulip-libqt tulipdoc.html profile.dcf allPlugins.html man
+html: tulip-lib tulip-libogl tulip-libqt tulipdoc.html profile.dcf allPlugins.html tulipPlugins.html man
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -43,6 +43,18 @@ tulip-libqt.doxygen: general general-html
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
+tulip-plugins.tag: tulip-plugins.doxygen header.html footer.html
+	$(DOXYGEN) tulip-plugins.doxygen
+
+tulip-plugins.doxygen: general
+	echo "PROJECT_NAME = \"Tulip Plugins\"" > $@
+	echo "PROJECT_NUMBER = $(VERSION)" >> $@
+	cat general >> $@
+	echo "INPUT = $(top_srcdir)/plugins " >> $@
+	echo "GENERATE_TAGFILE = tulip-plugins.tag" >> $@
+	echo "XML_OUTPUT = xml" >> $@
+	echo "GENERATE_XML = YES" >> $@
+
 man: tulip-man
 
 tulip-man :  man-lib.doxygen  man-ogl.doxygen  man-qt.doxygen man-plugins.doxygen
@@ -81,23 +93,32 @@ man-plugins.doxygen: general general-man
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
-profile.dcf: ../common/CatalogManager.properties dox-profile.xsl
+profile.dcf: ../common/CatalogManager.properties dox-profile.xsl tulip-plugins.tag
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
-	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf tulip-plugins.tag  dox-profile.xsl
+	-r org.apache.xml.resolver.tools.CatalogResolver \
+	-o $@ tulip-plugins.tag  dox-profile.xsl
 
-allPlugins.html: ../common/CatalogManager.properties dox-html.xsl
+tulipPlugins.html: ../common/CatalogManager.properties dox-plugins.xsl tulip-plugins.tag
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	com.icl.saxon.StyleSheet \
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
+	-r org.apache.xml.resolver.tools.CatalogResolver \
+	-o $@ tulip-plugins.tag  dox-plugins.xsl
+
+allPlugins.html: ../common/CatalogManager.properties dox-html.xsl tulip-plugins.tag
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
 	 com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver \
-	-o allPlugins.html tulip-plugins.tag dox-html.xsl
+	-o $@ tulip-plugins.tag dox-html.xsl
 
 clean:
-	rm -rf tulip-man profile.dcf xml allPlugins.html
+	rm -rf tulip-man profile.dcf xml allPlugins.html tulipPlugins.html
 	rm -rf tulipdoc.html *~ tulip-plugins.tag *.doxygen
 	rm -rf tulip-libogl tulip-libqt tulip-lib
 
@@ -122,6 +143,9 @@ install-data-am :
 	fi ;
 	if test -f allPlugins.html ; then \
 		cp allPlugins.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
+	fi ;
+	if test -f tulipPlugins.html ; then \
+		cp tulipPlugins.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 uninstall-am :
 	rm -rf $(DESTDIR)$(pkgdatadir)/doxygen

@@ -37,7 +37,7 @@ endif
 	if test -f profile.adp ; then \
 		cp profile.adp $(DESTDIR)$(pkgdatadir)/.; \
 		mkdir -p $(DESTDIR)$(pkgdatadir)/common ;\
-		cp -r $(srcdir)/common/*.png $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/. ;\
+		cp -r $(srcdir)/common/*.png $(srcdir)/common/*.gif $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/. ;\
 	fi;
 
 uninstall-am:
