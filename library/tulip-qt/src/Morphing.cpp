@@ -96,6 +96,7 @@ namespace tlp {
 	e0 = e1 = 0;
       }
     }
+    return true;
   }
   //===========================================================
   bool Morphing::start(GlGraphWidget * outGlgw) {
