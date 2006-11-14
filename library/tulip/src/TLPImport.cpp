@@ -645,9 +645,21 @@ namespace {
 }
 
 namespace tlp {
+#endif //DOXYGEN_NOTFOR_DEVEL
+
 /** \addtogroup import */
 /*@{*/
-struct TLPImport:public ImportModule {
+/// Import plugin for TLP format.
+/**
+ * This plugin imports a Tulip graph structure recorded in a file
+ * using the TLP format.
+ * TLP is the Tulip Software Graph Format.
+ * See 'Tulip-Software.org->Docs->TLP File Format' for description.
+ * Note: When using the Tulip graphical user interface,
+ * choosing "File->Import->TLP" menu item is the same that using
+ * "File->Open" menu item.
+ */
+class TLPImport:public ImportModule {
 public:
   TLPImport(ClusterContext context):ImportModule(context) {
     addParameter<string>("file::filename", paramHelp[0]);
@@ -685,7 +697,6 @@ public:
     return result;
   }
 };
-#endif //DOXYGEN_NOTFOR_DEVEL
-/*@}*/
 IMPORTPLUGINOFGROUP(TLPImport,"tlp","Auber","16/02/2001","0","0","1","File");
+/*@}*/
 }

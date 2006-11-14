@@ -32,6 +32,8 @@ const float PARAM_B = 16.f;
 
 typedef GLfloat Point3[3];
 
+/** \addtogroup glyph */
+/*@{*/
 /// - An implementation of square with variable border glyph.
 /** 
  * This glyph is an implementation of a square with a variable border.
@@ -369,5 +371,4 @@ void SquareBorderTex::delEdge(Graph* sg, const edge) {
 void SquareBorderTex::destroy(Graph* sg) {
     unInitializeNewGraph(sg);
 }
-
-
+/*@}*/

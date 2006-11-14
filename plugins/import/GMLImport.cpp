@@ -433,7 +433,14 @@ namespace {
 
 /** \addtogroup import */
 /*@{*/
-struct GMLImport:public ImportModule {
+/// Import plugin for GML format.
+/**
+ * This plugin imports a graph structure recorded using the GML File format.
+ * This format is the file format used by Graphlet.
+ * See http://www.infosun.fmi.uni-passu.de/Graphlet/GML/ for details.
+ */
+class GMLImport:public ImportModule {
+public:
   GMLImport(ClusterContext context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }

@@ -21,6 +21,8 @@
 #include <tulip/Coord.h>
 #include <tulip/AbstractProperty.h>
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #define TLP_FILE_VERSION "2.0"
 
 using namespace std;
@@ -68,12 +70,21 @@ inline void printGraph(std::ostream &os, tlp::Graph *graph) {
 }
 
 namespace tlp {
+#endif //DOXYGEN_NOTFOR_DEVEL
 
 /** \addtogroup export */
 /*@{*/
-#ifndef DOXYGEN_NOTFOR_DEVEL
-struct TLPExport:public ExportModule {
-
+/// Export plugin for TLP format.
+/**
+ * This plugin records a Tulip graph structure in a file using the TLP format.
+ * TLP is the Tulip Software Graph Format.
+ * See 'Tulip-Software.org->Docs->TLP File Format' for description.
+ * Note: When using the Tulip graphical user interface,
+ * choosing "File->Export->TLP" menu item is the same that using
+ * "File->Save as" menu item.
+ */
+class TLPExport:public ExportModule {
+public:
   DataSet displaying;
   
   TLPExport(ClusterContext context):ExportModule(context) {
@@ -289,8 +300,6 @@ struct TLPExport:public ExportModule {
     return true;
   }
 };
-#endif //DOXYGEN_NOTFOR_DEVEL
-
-}
-/*@}*/
 EXPORTPLUGIN(TLPExport,"tlp","Auber David","31/07/2001","0","1","0");
+/*@}*/
+}

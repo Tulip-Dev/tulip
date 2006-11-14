@@ -16,6 +16,14 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph.
+/**
+ * This glyph draws a textured square using the "viewTexture" node
+ * property value. If this property has no value, the square
+ * is then colored using the "viewColor" node property value.
+ */
 class Square : public Glyph {
 public:
   Square(GlyphContext *gc=NULL);
@@ -114,3 +122,4 @@ void Square::drawSquareBorder() {
   glVertex2f(-0.5f, 0.5f);
   glEnd();
 }
+/*@}*/

@@ -33,7 +33,14 @@ void printSize(ostream &os,const Size &v){
 
 /** \addtogroup export */
 /*@{*/
-struct GML:public ExportModule {
+/// Export plugin for GML format.
+/**
+ * This plugin records a Tulip graph structure using the GML File format.
+ * This format is the file format used by Graphlet.
+ * See http://www.infosun.fmi.uni-passu.de/Graphlet/GML/ for details.
+ */
+class GML:public ExportModule {
+public:
   GML(ClusterContext context):ExportModule(context)
   {}
 

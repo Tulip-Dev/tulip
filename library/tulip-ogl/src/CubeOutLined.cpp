@@ -12,8 +12,17 @@
 
 using namespace std;
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
-
+#endif //DOXYGEN_NOTFOR_DEVEL
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a textured cube using the "viewTexture" node
+ * property value. If this property has no value, the cube is then colored
+ * using the "viewColor" node property value. The "viewBorderColor"
+ * node property value is used to draw its edges.
+ */
   class CubeOutLined : public Glyph {
   public:
     CubeOutLined(GlyphContext *gc=NULL);
@@ -30,7 +39,7 @@ namespace tlp {
   };
 
   GLYPHPLUGIN(CubeOutLined, "3D - CubeOutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1", "1", 1);
-
+/*@}*/
 
   //===================================================================================
   CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc),listOk(false), LList(0) {

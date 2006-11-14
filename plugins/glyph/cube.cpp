@@ -16,6 +16,13 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a textured cube using the "viewTexture" node
+ * property value. If this property has no value, the cube is then colored
+ * using the "viewColor" node property value.
+ */ 
 class Cube : public Glyph {
 public:
   Cube(GlyphContext *gc=NULL);
@@ -132,3 +139,4 @@ void Cube::drawCube() {
   glVertex3f(-0.5f, -0.5f, -0.5f);
   glEnd();
 }
+/*@}*/

@@ -17,6 +17,14 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured hexagone using the "viewTexture"
+ * node property value. If this property has no value, the hexagone
+ * is then colored using the "viewColor" node property value.
+ */
 class Hexagone : public Glyph {
 public:
   Hexagone(GlyphContext *gc=NULL);
@@ -91,3 +99,4 @@ void Hexagone::drawHexagoneBorder() {
   }
   glEnd();
 }
+/*@}*/

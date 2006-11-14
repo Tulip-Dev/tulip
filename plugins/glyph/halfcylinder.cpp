@@ -13,6 +13,16 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/// A 3D glyph.
+/**
+ * This glyph draws an textured a half cylinder - a cylinder whose height
+ * is half the one draws by the Cylinder glyph - using the "viewTexture"
+ * node property value. If this property has no value, the half cylinder
+ * is then colored using the "viewColor" node property value.
+ */
+/*@{*/
+
 //=================================================================================================
 class HalfCylinder : public Glyph {
 public:
@@ -80,3 +90,4 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
   return Coord(x,y,z);
 }
 //=================================================================================================
+/*@}*/

@@ -17,6 +17,15 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured disc with a circular hole using the
+ * "viewTexture" node property value.
+ * If this property has no value, the ring
+ * is then colored using the "viewColor" node property value.
+ */
 class Ring : public Glyph {
 public:
   Ring(GlyphContext *gc=NULL);
@@ -100,3 +109,4 @@ void Ring::drawRingBorder() {
   glEnd();
 }
 //=====================================================
+/*@}*/

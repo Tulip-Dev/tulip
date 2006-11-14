@@ -13,6 +13,14 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/**
+ * This glyph draws a textured sphere using the "viewTexture" node
+ * property value. If this property has no value, the sphere
+ * is then colored using the "viewColor" node property value.
+ */
 class Sphere : public Glyph {
 public:
   Sphere(GlyphContext *gc=NULL);
@@ -57,5 +65,4 @@ void Sphere::draw(node n) {
   assert(glIsList(LList));
   glCallList(LList);
 }
-
-
+/*@}*/

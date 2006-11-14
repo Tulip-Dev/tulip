@@ -13,6 +13,13 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/// A 3D glyph.
+/**
+ * This glyph draws an textured cylinder using the "viewTexture" node
+ * property value. If this property has no value, the cylinder is then colored
+ * using the "viewColor" node property value.
+ */
 class Cylinder : public Glyph {
 public:
   Cylinder(GlyphContext *gc=NULL);

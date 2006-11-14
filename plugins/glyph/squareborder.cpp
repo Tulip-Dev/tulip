@@ -8,6 +8,8 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
 /// - An implementation of square with variable border glyph.
 /** 
  * This glyph is an implementation of a square with a variable border.
@@ -223,3 +225,4 @@ float SquareBorder::calculateBorderSize(node n) {
     return 0;
   return (profondeur / nbNoeuds) * MAX_BORDER_COEF;
 }
+/*@}*/

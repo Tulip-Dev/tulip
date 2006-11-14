@@ -17,6 +17,14 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph
+/**
+ * This glyph draws a textured pentagone using the "viewTexture"
+ * node property value. If this property has no value, the pentagone
+ * is then colored using the "viewColor" node property value.
+ */
 class Pentagone : public Glyph {
 public:
   Pentagone(GlyphContext *gc=NULL);
@@ -92,3 +100,4 @@ void Pentagone::drawPentagoneBorder() {
   }
   glEnd();
 }
+/*@}*/

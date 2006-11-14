@@ -12,6 +12,12 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a transparent cube using the "viewBorderColor" node
+ * property value to draw its edges.
+ */
 class CubeOutLinedTransparent : public Glyph {
 public:
   CubeOutLinedTransparent(GlyphContext *gc=NULL);
@@ -127,3 +133,4 @@ void CubeOutLinedTransparent::drawCubeSimple(GLenum type) {
   glVertex3f(-0.5f, -0.5f, -0.5f);
   glEnd();
 }
+/*@}*/

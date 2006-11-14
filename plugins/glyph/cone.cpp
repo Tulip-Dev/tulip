@@ -13,6 +13,14 @@
 using namespace std;
 using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/**
+ * This glyph draws a textured cone using the "viewTexture" node
+ * property value. If this property has no value, it is then colored
+ * using the "viewColor" node property value.
+ */
 //===========================================================
 class Cone : public Glyph {
 public:
@@ -93,3 +101,4 @@ Coord Cone::getAnchor(const Coord &vector) const {
   return anchor;
 }
 //===========================================================
+/*@}*/
