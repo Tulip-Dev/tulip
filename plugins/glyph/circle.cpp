@@ -22,7 +22,7 @@ using namespace tlp;
 /// A 2D glyph.
 /**
  * This glyph draws a textured disc using the "viewTexture" node
- * property value. If this property has no value, the disk is then colored
+ * property value. If this property has no value, the disc is then colored
  * using the "viewColor" node property value.
  */
 class Circle : public Glyph {

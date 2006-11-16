@@ -18,7 +18,7 @@ using namespace tlp;
 /// A 3D glyph.
 /**
  * This glyph draws a textured cone using the "viewTexture" node
- * property value. If this property has no value, it is then colored
+ * property value. If this property has no value, the cone is then colored
  * using the "viewColor" node property value.
  */
 //===========================================================

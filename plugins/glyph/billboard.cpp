@@ -22,9 +22,9 @@ using namespace tlp;
 /// A 2D glyph.
 /**
  * This glyph draws a textured square using the "viewTexture"
- * node property value. If this property has no value,the square is
+ * node property value. If this property has no value, the square is
  *  then colored using the "viewColor" node property value.
- * It is unsensitive to any axis rotation and so always remains
+ * It is unsensitive to any axis rotation and so always remains displayed
  * in the same position.
  */
 class Billboard : public Glyph {
