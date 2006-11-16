@@ -37,7 +37,7 @@ void printSize(ostream &os,const Size &v){
 /**
  * This plugin records a Tulip graph structure using the GML File format.
  * This format is the file format used by Graphlet.
- * See http://www.infosun.fmi.uni-passu.de/Graphlet/GML/ for details.
+ * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
 class GML:public ExportModule {
 public:

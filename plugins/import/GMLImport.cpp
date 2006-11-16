@@ -437,7 +437,7 @@ namespace {
 /**
  * This plugin imports a graph structure recorded using the GML File format.
  * This format is the file format used by Graphlet.
- * See http://www.infosun.fmi.uni-passu.de/Graphlet/GML/ for details.
+ * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
 class GMLImport:public ImportModule {
 public:
