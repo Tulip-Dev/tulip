@@ -755,6 +755,17 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
       glW->setParameters(glGraphData);
+
+    int id = 0;
+    if (glGraphData.get<int>("SupergraphId", id) && id) {
+      Graph *subGraph;
+      forEach(subGraph, newGraph->getSubGraphs()) {
+	if (subGraph->getId() == id) {
+	  hierarchyChangeGraph(subGraph);
+	  breakForEach;
+	}
+      }
+    }
     
     // synchronize overview display parameters
     overviewWidget->syncFromView();
