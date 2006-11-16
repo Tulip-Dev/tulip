@@ -1,5 +1,7 @@
 if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
