@@ -478,9 +478,12 @@ namespace {
       // Layout'ing
 
       int labelWidthMax = 0;
-      for( uint i = 0 ; i < iparamA.size() ; i++ )
-	if (labelWidthMax < iparamA[i].label->width())
-	  labelWidthMax = iparamA[i].label->width();
+      for( uint i = 0 ; i < iparamA.size() ; i++ ) {
+	iparamA[i].label->adjustSize();
+	int lWidth = iparamA[i].label->width();
+	if (labelWidthMax < lWidth)
+	  labelWidthMax = lWidth;
+      }
 
       int ix = 5, iy = 5;
       int y  = iy;
@@ -494,8 +497,6 @@ namespace {
       for( uint i = 0 ; i < iparamA.size() ; i++ ) {
 	IParam & ip = iparamA[i];
 
-	ip.label->move( ix, y );
-
 	int x = labelWidthMax+ix*2;
 	int maxHeight = 0;
 	for( uint j = 0 ; j < ip.wA.size() ; j++ ) {
@@ -505,6 +506,9 @@ namespace {
 	    maxHeight = ip.wA[j]->height();
 	}
 	if (maxx < x) maxx = x; //maxx = maxx >? x;
+
+	ip.label->resize(labelWidthMax, ip.label->height());
+	ip.label->move( ix, y + (maxHeight -  ip.label->height())/2);
 
 	y += /* ip.label->height()*/ maxHeight + iy;
       }
