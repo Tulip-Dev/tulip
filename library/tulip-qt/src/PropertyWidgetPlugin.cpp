@@ -49,7 +49,7 @@ QIcon PropertyWidgetPlugin::icon() const {
 }
 
 QString PropertyWidgetPlugin::toolTip() const {
-  return "Element Table Widget";
+  return "Graph Properties Widget";
 }
 
 QString PropertyWidgetPlugin::whatsThis() const {
