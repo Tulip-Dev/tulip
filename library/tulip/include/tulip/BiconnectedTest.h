@@ -32,8 +32,8 @@ class Graph;
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
   /**
-   * Return true if the graph is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the graph) else false.
+   * Returns true if the graph is biconnected (ie. one must remove at least two nodes in order
+   * to disconnect the graph), false if not.
    */
   static bool isBiconnected(Graph *graph);
   /**

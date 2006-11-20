@@ -1155,7 +1155,7 @@ int yydebug;
 #  if defined (__GLIBC__) && defined (_STRING_H)
 #   define yystrlen strlen
 #  else
-/* Return the length of YYSTR.  */
+/* Returns the length of YYSTR.  */
 static YYSIZE_T
 #   if defined (__STDC__) || defined (__cplusplus)
 yystrlen (const char *yystr)

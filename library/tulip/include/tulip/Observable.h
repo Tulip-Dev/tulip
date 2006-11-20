@@ -54,7 +54,7 @@ class TLP_SCOPE Observable {
    */
   void addObserver(Observer *);
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**

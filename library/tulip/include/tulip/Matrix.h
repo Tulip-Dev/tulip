@@ -81,37 +81,37 @@ namespace tlp {
        */
       inline MATRIX & operator/=(const Obj &obj);
       /**
-       * Return the cofactor Matrix of this
+       * Returns the cofactor Matrix of this
        */
       MATRIX cofactor() const;
       /**
-       * Return a new matrix equal to the multiplication of the matrix by 
+       * Returns a new matrix equal to the multiplication of the matrix by 
        * another matrix"
        */
       MATRIX operator*(const MATRIX &mat2) const;
       /**
-       * Return a new matrix equal to the division of the matrix by 
+       * Returns a new matrix equal to the division of the matrix by 
        * another matrix"
        */
       MATRIX operator/(const MATRIX &mat2) const;
       /**
-       * Return a new matrix equal to the multiplication of the matrix by 
+       * Returns a new matrix equal to the multiplication of the matrix by 
        * obj"
        */
       MATRIX operator*(const Obj &obj) const;
       /**
-       * Return a new matrix equal to the division of the matrix by 
+       * Returns a new matrix equal to the division of the matrix by 
        * obj"
        */
       MATRIX operator/(const Obj &obj) const;
       /**
-       * Return a new vector equal to the multiplication of the matrix by 
+       * Returns a new vector equal to the multiplication of the matrix by 
        * a vector"
        */
       inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec) const;
 
       /**
-       * Return a new vector equal to the most influent eigenvector of the
+       * Returns a new vector equal to the most influent eigenvector of the
        * matrix
        */
       inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;

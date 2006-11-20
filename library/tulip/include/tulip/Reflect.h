@@ -28,11 +28,11 @@ struct TLP_SIMPLE_SCOPE DataType {
 /*!  A container which allows insertion of different type.
      The inserted data must have a copy-constructor well done */
 struct TLP_SIMPLE_SCOPE DataSet {
-  /** Return a copy of the value of the variable with name str.
+  /** Returns a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true. */
   template<typename T> bool get(const std::string &str, T& value) const;
-  /** Return a copy of the value of the variable with name str.
+  /** Returns a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true.
      The data is removed after the call. */

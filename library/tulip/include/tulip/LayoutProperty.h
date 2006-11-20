@@ -62,32 +62,32 @@ public:
   // Set of function in order to measure the quality of the LayoutAlgorithm
   //======================================================================
   /**
-   * Return the length of an edge, the bends are taken into account.
+   * Returns the length of an edge, the bends are taken into account.
    * Thus, it measure the length of a polyline. Warning this function 
    * only measure the length of the polyline between bends, when using
    * curves like bezier etc... the result will not be the length of the curve.
    */
   double edgeLength(edge e);
   /**
-   * Return the average angular resolution of the layout
+   * Returns the average angular resolution of the layout
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
   double averageAngularResolution(Graph *graph=0);
   /**
-   * Return the average angular resolution of a node
+   * Returns the average angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
   double averageAngularResolution(const node n,Graph *graph=0);
   /**
-   * Return a vector of all angular resolution of a node
+   * Returns a vector of all angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
   std::vector<double> angularResolutions(const node n, Graph *graph=0);
   /**
-   * Return the number of crossings in the layout
+   * Returns the number of crossings in the layout
    */
   unsigned int crossingNumber();
 

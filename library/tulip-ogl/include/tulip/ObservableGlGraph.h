@@ -51,7 +51,7 @@ class ObservableGlGraph {
    */
   void addObserver(GlGraphObserver *);
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**

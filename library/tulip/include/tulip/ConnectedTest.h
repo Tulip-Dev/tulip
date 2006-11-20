@@ -33,17 +33,17 @@ class Graph;
 class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**
-   * Return true if the graph is connected (ie. it exists an undirected path 
+   * Returns true if the graph is connected (ie. it exists an undirected path 
    * between each pair of nodes) else false.
    */
   static bool isConnected(Graph *graph);
   /**
-   * If the graph is not connected, add edges in order to make the graph
+   * If the graph is not connected, adds edges in order to make the graph
    * connected. The new edges are added in addedEdges.
    */
   static void makeConnected(Graph *graph, std::vector<edge>& addedEdges);
   /**
-   * Return the number of connected componnents in the graph;
+   * Returns the number of connected components in the graph;
    */
   static unsigned int numberOfConnectedComponnents(Graph *graph);
 

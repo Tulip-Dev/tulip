@@ -52,7 +52,7 @@ template<class C>class Iterator;
   TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
   TLP_SCOPE bool clusterizeGraph(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
   /**
-   * Return a new graph
+   * Returns a new graph
    */
   TLP_SCOPE Graph* newGraph();
   /**
@@ -68,7 +68,7 @@ template<class C>class Iterator;
    */
   TLP_SCOPE bool getSource(Graph *, node &n);
   /**
-   * Return an istream from a gzipped file (uses gzstream lib)
+   * Returns an istream from a gzipped file (uses gzstream lib)
    * the stream has to be deleted after use.
    * \warning Don't forget to check the stream with ios::bad()!
    */
@@ -122,12 +122,12 @@ public:
    */
   virtual void delAllSubGraphs(Graph *)=0;
   /**
-   * Return the Graph(UpperGraph of the graph), if it has no Graph it 
+   * Returns the Graph(UpperGraph of the graph), if it has no Graph it 
    * returns itself
    */
   virtual Graph* getFather()const =0;
   /**
-   * Return the root graph of the graph hierarchy
+   * Returns the root graph of the graph hierarchy
    */
   virtual Graph* getRoot() const =0;
   /**
@@ -136,7 +136,7 @@ public:
    */
   virtual void setFather(Graph *)=0;
   /**
-   * Return an iterator on all the SubGraphs of the graph
+   * Returns an iterator on all the SubGraphs of the graph
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
   //==============================================================================
@@ -259,7 +259,7 @@ public:
   virtual bool isElement(const node ) const =0;
   /// Return true if the edge is element of the graph.
   virtual bool isElement(const edge ) const =0;
-  /** Return the edge if it exists an edge between two node 
+  /** Returns the edge if it exists an edge between two node 
    *  sens of the edge is not taken into account)
    *  If no edge is found return an invalid edge.
    */
@@ -276,7 +276,7 @@ public:
   template<typename ATTRIBUTETYPE> 
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /**
-   * Return a pointer to a propertyProxy which is in the pool.
+   * Returns a pointer to a propertyProxy which is in the pool.
    * The real type of the propertyproxy is tested with the template parameter.
    * If the propertyProxy is not in the pool, a new one is created and returned.
    * Using of delete on that property will cause a segmentation violation
@@ -297,7 +297,7 @@ public:
   bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
 		       PluginProgress *progress=0, DataSet *data=0);
   /**
-   * Return a pointer to a propertyProxy which is in the pool or in the pool of an ascendant
+   * Returns a pointer to a propertyProxy which is in the pool or in the pool of an ascendant
    * The real type of the propertyproxy is tested with the template parameter.
    * If the propertyProxy is not the pool it creates a new one and return it.
    * Using of delete on that property will cause a segmentation violation
@@ -306,14 +306,14 @@ public:
   template<typename Proxytype>
   Proxytype* getProperty(const std::string &name);
   /**
-   * Return a pointer to a propertyProxy which is in the pool or in the pool of an ascendant.
+   * Returns a pointer to a propertyProxy which is in the pool or in the pool of an ascendant.
    * The real type of the propertyproxy is tested with the template parameter.
    * If the propertyProxy is in the pool the cached value return true else false.
    * The resultBool value indicate if the check algorithm of the associated property was ok;
    * The resultStr is the error message which has been return by the Property.
    */
   /**
-   * Return a pointer on an existing property. If the property does not 
+   * Returns a pointer on an existing property. If the property does not 
    * exist return 0.
    * In DEBUG the existence of a property is checked using an assertion.
    */
@@ -324,7 +324,7 @@ public:
    */
   virtual  bool existProperty(const std::string&name)=0;
   /**
-   * Return true if the propertyProxy is in the graph
+   * Returns true if the propertyProxy is in the graph
    */
   virtual  bool existLocalProperty(const std::string&name)=0;
   /**
@@ -339,15 +339,15 @@ public:
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
   /**
-   * Return an iterator on the local properties
+   * Returns an iterator on the local properties
    */
   virtual Iterator<std::string>* getLocalProperties()=0;
   /**
-   * Return an iterator on the inherited properties
+   * Returns an iterator on the inherited properties
    */
   virtual Iterator<std::string>* getInheritedProperties()=0;
   /**
-   * Return an iterator on the properties
+   * Returns an iterator on the properties
    */
   virtual Iterator<std::string>* getProperties()=0;
 

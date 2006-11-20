@@ -26,7 +26,7 @@ class IdManager {
 public:
   IdManager();
   /**
-   * Return true if the id is not used else false.
+   * Returns true if the id is not used else false.
    */
   bool is_free(unsigned int) const;
   /**
@@ -34,13 +34,13 @@ public:
    */
   void free(const unsigned int);
   /**
-   * Return a new id, the returned id is choosen to minimize
+   * Returns a new id, the returned id is choosen to minimize
    * the memory space of the free list, and the fragmetation
    * of the ids.
    */
   unsigned int get();
   /**
-   * Return an iterator on all the used id. Warning, if
+   * Returns an iterator on all the used id. Warning, if
    * the idManager is modified (free, get) this iterator 
    * will be invalidate.
    */

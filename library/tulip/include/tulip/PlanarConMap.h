@@ -137,7 +137,7 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   bool containNode(const Face, const node) ;
   ///Return true if the face contains the edge.
   bool containEdge(const Face, const edge);   
-  /** Return the face containing the two nodes in this order 
+  /** Returns the face containing the two nodes in this order 
    * and the edge between this two nodes.
    * Warning, the edge must exists in the map.
    */

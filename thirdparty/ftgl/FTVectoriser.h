@@ -56,7 +56,7 @@ class FTGL_EXPORT FTTesselation
         const FTPoint& Point( unsigned int index) const { return pointList[index];}
         
         /**
-         * Return the OpenGL polygon type.
+         * Returns the OpenGL polygon type.
          */
         GLenum PolygonType() const { return meshType;}
         
@@ -129,7 +129,7 @@ class FTGL_EXPORT FTMesh
         const FTTesselation* const Tesselation( unsigned int index) const;
         
         /**
-         * Return the temporary point list. For testing only.
+         * Returns the temporary point list. For testing only.
          */
         const PointList& TempPointList() const { return tempPointList;}
 
@@ -218,7 +218,7 @@ class FTGL_EXPORT FTVectoriser
         size_t ContourCount() const { return ftContourCount;}
 
         /**
-         * Return a contour at index
+         * Returns a contour at index
          *
          * @return the number of contours
          */

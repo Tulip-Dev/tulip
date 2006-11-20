@@ -24,7 +24,7 @@ namespace tlp {
 
   TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
   /**
-   * Return an ostream to write to a gzipped file (uses gzstream lib)
+   * Returns an ostream to write to a gzipped file (uses gzstream lib)
    * the stream has to be deleted after use.
    * \warning Don't forget to check the stream with ios::bad()!
    */

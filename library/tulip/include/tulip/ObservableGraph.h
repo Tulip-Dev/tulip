@@ -57,7 +57,7 @@ class ObservableGraph {
    */
   void addObserver(GraphObserver *) const;
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**

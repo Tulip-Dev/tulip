@@ -19,7 +19,7 @@ namespace tlp {
     template<typename Obj>
     struct Rectangle : public Array<Vector<Obj,2>,2> {
       /**
-       * Return true if r intersect "this".
+       * Returns true if r intersect "this".
        */
       bool intersect(const Rectangle &r) const {
 	return (*this)[0][0]<r[1][0] && (*this)[1][0]>r[0][0] && (*this)[0][1]<r[1][1] && (*this)[1][1]>r[0][1];

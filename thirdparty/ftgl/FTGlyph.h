@@ -49,14 +49,14 @@ class FTGL_EXPORT FTGlyph
         virtual const FTPoint& Render( const FTPoint& pen) = 0;
         
         /**
-         * Return the advance width for this glyph.
+         * Returns the advance width for this glyph.
          *
          * @return  advance width.
          */
         const FTPoint& Advance() const { return advance;}
         
         /**
-         * Return the bounding box for this glyph.
+         * Returns the bounding box for this glyph.
          *
          * @return  bounding box.
          */

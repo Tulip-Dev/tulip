@@ -81,19 +81,19 @@ public:
   AbstractProperty(Graph *);
   virtual ~AbstractProperty() ;
   /** 
-   * Return the node default value of the property proxy
+   * Returns the node default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory
    * leak if the user doesn't manage the memory himself
    */
   typename Tnode::RealType getNodeDefaultValue();
   /** 
-   * Return the edge default value of the property proxy
+   * Returns the edge default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory
    * leak if the user doesn't manage the memory himself
    */
   typename Tedge::RealType getEdgeDefaultValue();
   /**
-   * Return the value associated to the node n in this property.
+   * Returns the value associated to the node n in this property.
    * If the value is already fixed it is done in constant time.
    * else if it is a computed property (plug-in), it calls the associated property
    * If there is no value and no algorithms it returns the default value
@@ -101,7 +101,7 @@ public:
    */
   typename ReturnType<typename Tnode::RealType>::Value getNodeValue(const node n );
   /**
-   * Return the value associated to the node n in this property.
+   * Returns the value associated to the node n in this property.
    * If the value is already fixed it is done in constant time.
    * else if it is a computed property (plug-in), it calls the associated property
    * If there is no value and no algorithms it returns the default value

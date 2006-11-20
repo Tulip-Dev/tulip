@@ -34,7 +34,7 @@ namespace tlp {
 	(*this)+=v;
       }
       /**
-       * Merge this circle with another circle; merging operation
+       * Merges this circle with another circle; merging operation
        * consists in computing the smallest enclosing circle of the 
        * two circle and to store the result in "this".
        */
@@ -44,7 +44,7 @@ namespace tlp {
        */
       Obj radius;
       /**
-       * Return true if the circle is include in an other circle, false otherwise.
+       * Returns true if the circle is include in an other circle, false otherwise.
        */
       bool isIncludeIn(const Circle<Obj> & circle) const;
     };
