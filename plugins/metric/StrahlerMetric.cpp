@@ -173,16 +173,35 @@ namespace {
     HTML_HELP_BODY() \
     "If true the strahler number will be computed for each node, it means that a spanning tree will be recomputed for each nodes complexity o(n^2)." \
     HTML_HELP_CLOSE(),
+    //Orientation
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF("Values", "all <BR> registers<BR> stacks") \
+    HTML_HELP_DEF( "default", "all" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the type of computation"	\
+    HTML_HELP_CLOSE()
   };
 }
+#define COMPUTATION_TYPE "Type"
+#define COMPUTATION_TYPES "all;registers;stacks;"
+#define ALL 0
+#define REGISTERS 1
+#define STACKS 2
 //==============================================================================
 StrahlerMetric::StrahlerMetric(const PropertyContext &context):DoubleAlgorithm(context) {
-   addParameter<bool>("allNodes", paramHelp[0], "false");
+   addParameter<bool>("All nodes", paramHelp[0], "false");
+   addParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES);
 }
 //==============================================================================
 bool StrahlerMetric::run() {
   allNodes = false;
-  if (dataSet!=0) dataSet->get("allNodes", allNodes);
+  StringCollection computationTypes(COMPUTATION_TYPES);
+  computationTypes.setCurrent(0);
+  if (dataSet!=0) {
+    dataSet->get("All nodes", allNodes);
+    dataSet->get(COMPUTATION_TYPE, computationTypes);
+  }
   stdext::hash_map<node,bool> visited;
   stdext::hash_map<node,bool> finished;
   stdext::hash_map<node,int> prefix;
@@ -210,8 +229,17 @@ bool StrahlerMetric::run() {
     }
     if (allNodes) {
       if (pluginProgress->progress(i++, graph->numberOfNodes())!=TLP_CONTINUE) break;
-      doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+      switch(computationTypes.getCurrent()) {
+      case ALL:
+	doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+	break;
+      case REGISTERS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	break;
+      case STACKS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
+      }
       visited.clear();
       finished.clear();
       prefix.clear();
@@ -225,8 +253,17 @@ bool StrahlerMetric::run() {
     itN = graph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
-      doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+      switch(computationTypes.getCurrent()) {
+      case ALL:
+	doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+	break;
+      case REGISTERS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	break;
+      case STACKS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
+      }
     } delete itN;
   }
   return pluginProgress->state()!=TLP_CANCEL;
