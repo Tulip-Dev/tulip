@@ -1,13 +1,13 @@
 How to build Tulip on MacOSX platform
 --------------------------------------
 
-1- Build the Qt/Mac Open Source Edition
+1- Build the Qt/Mac 3.3 Open Source Edition
 -------------------------------------------
 You first have to download the corresponding Qt 3 source code
 ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
 Refer to the INSTALL file for the build directives
-but be sure to add the -thread and -static flags when configuring Qt
-> ./configure -thread -static
+but be sure to add the -thread flag when configuring Qt
+> ./configure -thread
 > make
 Edit libqt-mt.la in the lib subdirectory of your Qt installation directory
 in order to disable (add a leading #) the line beginning with

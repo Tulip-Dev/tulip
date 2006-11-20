@@ -17,6 +17,10 @@ Application *qApp = (Application *) NULL;
 Application::Application(int& argc, char ** argv): QApplication(argc,argv) 
 {
   qApp = this;
+#if defined(__APPLE__)
+  // allows to load qt imageformats plugin
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
   tlp::initTulipLib((char *) QApplication::applicationDirPath().ascii());
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
