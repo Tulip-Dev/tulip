@@ -1,6 +1,7 @@
 SHELL=bash
 TARGET= libtulip_test
 SRCS=   tuliplibtest.cpp \
+	ExtendedClusterOperationTest.cpp \
 	VectorTest.cpp \
 	MatrixTest.cpp \
 	TestAlgorithmTest.cpp \
@@ -10,7 +11,6 @@ SRCS=   tuliplibtest.cpp \
 	SuperGraphTest.cpp \
 	TlpImportExportTest.cpp \
 	PluginsTest.cpp \
-	ExtendedClusterOperationTest.cpp \
 	IdManagerTest.cpp \
 	PlanarConMapTest.cpp 
 

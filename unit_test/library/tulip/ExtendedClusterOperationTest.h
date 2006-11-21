@@ -17,6 +17,7 @@ public:
   void setUp();
   void tearDown();
   void testCreateMetaNode();
+  void testBugOpenInSubgraph();
   //  void testExtractNodeFromMetaNode();
   //  void testAddNodeToMetaNode();
   void testOpenMetaNode();

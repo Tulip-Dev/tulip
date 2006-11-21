@@ -1,10 +1,12 @@
 #include <cassert>
 #include <vector>
-#include <tulip/ExtendedClusterOperation.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
-#include "ExtendedClusterOperationTest.h"
+#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/ForEach.h>
+
+#include "ExtendedClusterOperationTest.h"
 
 using namespace std;
 using namespace tlp;
@@ -58,28 +60,31 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(2u, cluster->numberOfNodes());
 }
 //==========================================================
-/*
-void ExtendedClusterOperationTest::testExtractNodeFromMetaNode() {
-  meta = createMetaNode(quotient, group);
-  extractNodeFromMetaNode(quotient, nodes[0], meta);
-  CPPUNIT_ASSERT(quotient->isElement(nodes[0]));
-  CPPUNIT_ASSERT(!quotient->existEdge(meta, nodes[1]).isValid());
-  CPPUNIT_ASSERT(!quotient->existEdge(meta, nodes[2]).isValid());
-  CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
-  CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
+void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
+  cerr << __PRETTY_FUNCTION__ << endl;
+  Graph * graph = tlp::loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
+  //take the quotient graph
+  Graph * subgraph = 0;
+  bool find = false;
+  forEach(subgraph, graph->getSubGraphs()){
+    string name = subgraph->getAttribute<string>("name");
+    if (name == "unnamed") {
+      find = true;
+      breakForEach;
+    }
+  }
+  CPPUNIT_ASSERT(find && subgraph != 0);
+  CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
+  //open all meta nodes
+  node n;
+  stableForEach(n, subgraph->getNodes()) {
+    tlp::openMetaNode(subgraph, n);
+  }
+  CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(5u, subgraph->numberOfEdges());
+  delete graph;
 }
-*/
-//==========================================================
-/*
-void ExtendedClusterOperationTest::testAddNodeToMetaNode() {
-  meta = createMetaNode(quotient, group);
-  extractNodeFromMetaNode(quotient, nodes[0], meta);
-  addNodeToMetaNode(quotient, nodes[0], meta);
-  CPPUNIT_ASSERT(!quotient->isElement(nodes[0]));
-  CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[1]).isValid());
-  CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[2]).isValid());
-}
-*/
 //==========================================================
 void ExtendedClusterOperationTest::testOpenMetaNode() {
 
@@ -109,6 +114,8 @@ CppUnit::Test * ExtendedClusterOperationTest::suite() {
 								    &ExtendedClusterOperationTest::testCreateMetaNode ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup a MetaNode", 
 								    &ExtendedClusterOperationTest::testOpenMetaNode ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Open a metanode in a hierarchy of subgraph #BUG-1", 
+										&ExtendedClusterOperationTest::testBugOpenInSubgraph ) );
   return suiteOfTests;
 }
 //==========================================================
