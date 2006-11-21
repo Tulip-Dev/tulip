@@ -38,7 +38,10 @@ static string convert(string tmp) {
       if (tmp[i]=='\n')
 	newStr+="\\n";
       else
-	newStr+=tmp[i];
+	if (tmp[i] == '\\')
+	  newStr+="\\\\";
+	else
+	  newStr+=tmp[i];
   }
   return newStr;
 }

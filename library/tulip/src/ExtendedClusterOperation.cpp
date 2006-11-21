@@ -14,6 +14,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -210,14 +211,14 @@ void tlp::openMetaNode(Graph *graph, node n,
   buildMapping(root->getInOutNodes(n), mappingC, metaInfo, node() );
   buildMapping(metaGraph->getNodes() , mappingN, metaInfo, node() );
   //add node from meta to graph
-  Iterator<node> *itN = metaGraph->getNodes();
-  while (itN->hasNext()) {
-    graph->addNode(itN->next());
-  } delete itN;
-  Iterator<edge> *itE = metaGraph->getEdges();
-  while (itE->hasNext()) {
-    graph->addEdge(itE->next());
-  } delete itE;
+  {
+    node n;
+    stableForEach(n, metaGraph->getNodes()) //stable in case of fractal graph
+      graph->addNode(n);
+    edge e;
+    stableForEach(e, metaGraph->getEdges())
+      graph->addEdge(e);
+  }
   updateLayoutUngroup(graph, n, metaInfo);
   //===========================
   //set the colour of the meta edges
@@ -276,8 +277,8 @@ void tlp::openMetaNode(Graph *graph, node n,
       }
     }
   }
+  metaGraph->getFather()->delSubGraph(metaGraph);
   Observable::unholdObservers();
-  groupUnderSubGraph->delSubGraph(metaGraph);
 }
 
 //=========================================================
@@ -302,7 +303,7 @@ Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string n
 
 //====================================================================================
 void tlp::openMetaNode(Graph *graph, node n) {
-  return openMetaNode (graph, n, graph->getFather(), 
+  return openMetaNode (graph, n, 0, 
 		       graph->getProperty<GraphProperty> (metaGraphProperty));
 }
 //====================================================================================

@@ -46,8 +46,8 @@ struct TLPTokenParser {
 	case '\n': curChar=0;curLine++;val.str+=ch; break;
 	case '\t': val.str+="    "; break;
 	case '\\':if (!slashMode) {slashMode=true;} else {val.str+=ch;slashMode=false;} break;
-	case '"':if (!slashMode) {return STRINGTOKEN;} else {val.str+=ch;slashMode=false;} break;
-	case 'n':if (slashMode)  {val.str+='\n'; slashMode=false; break;}
+	case '"':if (!slashMode)  {return STRINGTOKEN;} else {val.str+=ch;slashMode=false;} break;
+	case 'n':if (slashMode)   {val.str+='\n'; slashMode=false; break;}
 	default:
 	  if (!slashMode)
 	    val.str+=ch;

@@ -148,7 +148,8 @@ edge GraphImpl::addEdge(const node s,const node t) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
-  cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
+  cerr << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
+  cerr << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")" << endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n) {
