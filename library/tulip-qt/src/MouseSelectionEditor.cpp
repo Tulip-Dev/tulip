@@ -349,14 +349,14 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWi
   //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
   Coord strecth(1,1,1);
-  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
+  //  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
     strecth[0] = (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
     strecth[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
   }
-  cerr << "strecth : << "<< strecth << endl;
+  //  cerr << "strecth : << "<< strecth << endl;
 
   Observable::holdObservers();  
   restoreInfo();
