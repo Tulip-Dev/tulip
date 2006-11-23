@@ -946,12 +946,9 @@
         <sender>editDeselect_allAction</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
-        <slot>deselecAll()</slot>
+        <slot>deselectAll()</slot>
     </connection>
 </connections>
-<includes>
-    <include location="local" impldecl="in implementation">Tulip.ui.h</include>
-</includes>
 <slots>
     <slot>fileNew()</slot>
     <slot>fileOpen()</slot>
@@ -985,7 +982,7 @@
     <slot>newSubgraph()</slot>
     <slot>group()</slot>
     <slot>selectAll()</slot>
-    <slot>deselecAll()</slot>
+    <slot>deselectAll()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
