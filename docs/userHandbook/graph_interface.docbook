@@ -75,7 +75,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>3D navigation</code> : it enables to navigate in the 3D view using left button pressed mouse movements; the available operations are : translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key  (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac).
+                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>3D navigation</code> : it enables to navigate in the 3D view using left button pressed mouse movements; the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
                 </para>
             </listitem>
             <listitem>
