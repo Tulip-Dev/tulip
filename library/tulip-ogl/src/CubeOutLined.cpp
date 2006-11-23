@@ -42,7 +42,7 @@ namespace tlp {
 /*@}*/
 
   //===================================================================================
-  CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc),listOk(false), LList(0) {
+  CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc), LList(0), listOk(false) {
   }
 
   CubeOutLined::~CubeOutLined() {

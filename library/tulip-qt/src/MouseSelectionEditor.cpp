@@ -441,7 +441,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlGraphWidget 
 
     Observable::unholdObservers();
   } else {
-    double initDelta, delta, sign, cosa;
+    double initDelta, delta, cosa;
     double xAngle = 0, yAngle = 0;
     double nbPI = 0;
 

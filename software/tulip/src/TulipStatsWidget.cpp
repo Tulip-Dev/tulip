@@ -617,7 +617,6 @@ namespace tlp
     if (nMetrics == 2)
       {
 	// 2 metrics ? We can compute the linear regression function
-	char val[50];
 	// MAC PORT
 	stringstream sstr;
       

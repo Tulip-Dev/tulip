@@ -80,7 +80,7 @@ int t_GlFonts::Add(FontMode t, int s, float d, const string f) {
 
 //---------------------------------------------------------------------------
 _GlFonts t_GlFonts::operator[](unsigned int i) const {
-  assert (i<fonts.size() && i<-1);
+  assert (i < fonts.size());
   return fonts[i];
 }
 

@@ -339,7 +339,7 @@ int main (int argc, char **argv) {
   importGraph(graphFile, importPluginName, glOffscreen);
   
   if (layoutSpecified) {
-    bool resultBool=false, cached=false;
+    bool resultBool=false;
     string errorMsg;
     if (LayoutProperty::factory->exists(layoutName)) {
       LayoutProperty *myLayout = glOffscreen.getGraph()->getProperty<LayoutProperty>("viewLayout");

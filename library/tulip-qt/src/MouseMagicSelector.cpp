@@ -65,16 +65,14 @@ bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
       selection->setAllNodeValue(false);
       selection->setAllEdgeValue(false);
       double initValue = metric->getNodeValue(tmpNode);
-      double threshold = 1;
       list <node> bfsFifo;
-      bool start=true;
       bfsFifo.push_back(tmpNode);
       while(!bfsFifo.empty()) {
-	node itn = bfsFifo.front();
-	bfsFifo.pop_front();
-	selection->setNodeValue(itn,true);
-	visited->setNodeValue(itn,true);
-	Iterator<node> *itN = graph->getInOutNodes(itn);
+      node itn = bfsFifo.front();
+      bfsFifo.pop_front();
+      selection->setNodeValue(itn,true);
+      visited->setNodeValue(itn,true);
+      Iterator<node> *itN = graph->getInOutNodes(itn);
 	while (itN->hasNext()) {
 	  node itv = itN->next();
 	  double curValue = metric->getNodeValue(itv);

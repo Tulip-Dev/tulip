@@ -125,7 +125,6 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   double angle = 0;
   vector<tlp::Circle<double> > circles(Nc);
   for (unsigned int i=0; i<Nc; ++i) {
-    tlp::Vector<double,2> point;
     double packRadius;
     if (fabs(sin(angularSector[i])) > 1E-05)
       packRadius = realCircleRadius[i] / sin(angularSector[i] /2.0);
@@ -282,7 +281,6 @@ bool BubbleTree::run() {
       nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
-  bool result=false;
   if (dataSet==0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 

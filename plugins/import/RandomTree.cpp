@@ -37,7 +37,7 @@ struct RandomTree:public ImportModule {
   ~RandomTree() {
   }
 
-  bool buildNode(node n,int sizeM) {
+  bool buildNode(node n, unsigned int sizeM) {
     if (graph->numberOfNodes()>sizeM+2) return false;
     bool result=true;
     int randNumber=rand();
@@ -55,8 +55,8 @@ struct RandomTree:public ImportModule {
 
   bool import(const string &name) {
     srand(clock()); 
-    int minSize  = 100;
-    int maxSize  = 1000;
+    unsigned int minSize  = 100;
+    unsigned int maxSize  = 1000;
     if (dataSet!=0) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);

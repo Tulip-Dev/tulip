@@ -1072,9 +1072,8 @@ void viewGl::buildMenus() {
   // uppercase and insert all Qt formats
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
     char* tmp = format.data();
-    i = strlen(tmp);
-    while(i > 0)
-      tmp[--i] = toupper(tmp[i]);
+    for (int i = strlen(tmp) - 1; i >= 0; --i)
+      tmp[i] = toupper(tmp[i]);
     formats.push_back(QString(tmp));
   }
   // sort before inserting in exportImageMenu

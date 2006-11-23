@@ -58,7 +58,6 @@ struct PlanarGraph:public ImportModule {
     newLayout->setNodeValue(f.b, Coord(0,nbNodes,0));
     newLayout->setNodeValue(f.c, Coord(+nbNodes,-nbNodes,0));
     unsigned int nb = 3;
-    unsigned int ext_faces = 0;
     while(nb<nbNodes) {
       //choose a Triangle randomly
       unsigned int i = rand()%faces.size(); 

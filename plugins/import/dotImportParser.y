@@ -60,18 +60,18 @@ struct ShapeAttr
 
 ShapeAttr ShapeAttrA[] = {
   // tulip shapes
-  "box", 0,
-  "boxoutlined", 1,
-  "sphere", 2,
-  "cone", 3,
-  "square", 4,
-  "teapot", 5,
-  "cyclinder", 6,
-  "billboard", 7,
+  {"box", 0},
+  {"boxoutlined", 1},
+  {"sphere", 2},
+  {"cone", 3},
+  {"square", 4},
+  {"teapot", 5},
+  {"cyclinder", 6},
+  {"billboard", 7},
   
   // dot shapes
-  "circle", 2, // as a sphere
-  "ellipse", 2, // as a sphere
+  {"circle", 2}, // as a sphere
+  {"ellipse", 2}, // as a sphere
 };
 
 //

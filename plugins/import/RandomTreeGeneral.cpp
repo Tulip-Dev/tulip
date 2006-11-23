@@ -65,9 +65,9 @@ struct RandomTreeGeneral:public ImportModule {
   bool import(const string &name) {
     srand(clock()); 
 
-    int sizeMin  = 10;
-    int sizeMax  = 100;
-    int arityMax = 5;
+    unsigned int sizeMin  = 10;
+    unsigned int sizeMax  = 100;
+    unsigned int arityMax = 5;
     if (dataSet!=0) {
       dataSet->get("minsize", sizeMin);   
       dataSet->get("maxsize", sizeMax);

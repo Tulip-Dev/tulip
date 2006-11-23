@@ -28,8 +28,7 @@ struct LessThan {
 
 struct LessThanEdgeTargetMetric {
   LessThanEdgeTargetMetric(Graph *sg, DoubleProperty* metric):
-    sg(sg),
-    metric(metric) {
+    metric(metric), sg(sg) {
   }
   bool operator() (edge e1,edge e2){
     return (metric->getNodeValue(sg->target(e1)) < metric->getNodeValue(sg->target(e2)));

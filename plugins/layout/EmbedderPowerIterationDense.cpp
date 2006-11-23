@@ -37,7 +37,6 @@ void mat_mult_vec(double ** mat, int dim1, int dim2, double * vec, double *resul
 
 void power_iteration(double ** square_mat, int n, int neigs, double ** eigs, double * evals) {
   int i,j;
-  int converged = 0;
   double *tmp_vec = new double[n]; 
   double *last_vec = new double[n];
   double * curr_vector;

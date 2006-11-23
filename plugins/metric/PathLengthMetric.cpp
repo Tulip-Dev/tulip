@@ -38,6 +38,7 @@ bool PathLengthMetric::run() {
   forEach(_n, graph->getNodes())
     getNodeValue(_n);
   delete leafMetric;
+  return true;
 }
 //=======================================
 bool PathLengthMetric::check(string &erreurMsg) {

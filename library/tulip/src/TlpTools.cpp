@@ -158,5 +158,5 @@ void tlp::loadPlugins(PluginLoader *plug) {
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-    PluginIterator::loadPlugin(filename, plug);
+    return PluginIterator::loadPlugin(filename, plug);
 }

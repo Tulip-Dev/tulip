@@ -11,6 +11,8 @@ public:
 	typedef OrientableCoord PointType;
     typedef std::vector<OrientableCoord> LineType;
 
+    virtual ~OrientableLayoutInterface() {}
+
     virtual OrientableCoord     createCoord(const float x = 0, const float y = 0,
                                   const float z = 0) = 0;
     virtual OrientableCoord     createCoord(const tlp::Coord& v) = 0;

@@ -28,7 +28,7 @@ bool LeafMetric::run() {
   node n;
   forEach(n, graph->getNodes())
     doubleResult->setNodeValue(n, getNodeValue(n));
-  
+  return true;
 }
 //=======================================================================
 bool LeafMetric::check(string &erreurMsg) {

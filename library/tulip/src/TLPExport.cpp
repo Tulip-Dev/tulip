@@ -249,7 +249,6 @@ public:
   }    
   //=====================================================
   void saveAttributes(ostream &os, Graph *graph) {
-    DataSet &dataSet = graph->getAttributes();
     os << "(attributes " << endl;
     saveDataSet(os, graph->getAttributes());
     os << ")" << endl;

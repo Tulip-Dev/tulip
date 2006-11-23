@@ -149,8 +149,8 @@ void draw_raw_style_end_cap (int ncp,		/* number of contour points */
    /* malloc the @#$%^&* array that OpenGL wants ! */
    pts = (double *) malloc (3*ncp*sizeof(double));
    tobj = gluNewTess ();
-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+   gluTessCallback (tobj, GLU_BEGIN, (GLvoid(*))glBegin);
+   gluTessCallback (tobj, GLU_VERTEX, (GLvoid(*))glVertex3dv);
    gluTessCallback (tobj, GLU_END, glEnd);
    gluBeginPolygon (tobj);
 
@@ -209,8 +209,8 @@ draw_front_contour_cap (int ncp,	/* number of contour points */
 
 #ifdef OPENGL_10
    tobj = gluNewTess ();
-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+   gluTessCallback (tobj, GLU_BEGIN, (GLvoid(*))glBegin);
+   gluTessCallback (tobj, GLU_VERTEX, (GLvoid(*))glVertex3dv);
    gluTessCallback (tobj, GLU_END, glEnd);
    gluBeginPolygon (tobj);
 
@@ -255,8 +255,8 @@ draw_back_contour_cap (int ncp,	/* number of contour points */
 
 #ifdef OPENGL_10
    tobj = gluNewTess ();
-   gluTessCallback (tobj, GLU_BEGIN, glBegin);
-   gluTessCallback (tobj, GLU_VERTEX, glVertex3dv);
+   gluTessCallback (tobj, GLU_BEGIN, (GLvoid(*))glBegin);
+   gluTessCallback (tobj, GLU_VERTEX, (GLvoid(*))glVertex3dv);
    gluTessCallback (tobj, GLU_END, glEnd);
    gluBeginPolygon (tobj);
 

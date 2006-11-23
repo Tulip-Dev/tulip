@@ -57,7 +57,8 @@ public:
     tlp::getSource(graph,startNode);
     graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
   
-    bool cached,resultBool;
+    //bool cached;
+    bool resultBool;
     string erreurMsg;
     //    leaves = graph->getLocalProperty<DoubleProperty>("Leaf",cached,resultBool,erreurMsg);
     leaves = new DoubleProperty(graph);

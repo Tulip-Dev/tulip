@@ -21,7 +21,7 @@ list<node> findCycle(Graph *sg) {
   Iterator<node> *it=sg->getNodes();
   node itn=it->next();
   node startNode=itn;
-  int maxDeg=sg->deg(itn);
+  unsigned int maxDeg=sg->deg(itn);
   while (it->hasNext()) {
     itn=it->next();
     if (sg->deg(itn)>maxDeg) {

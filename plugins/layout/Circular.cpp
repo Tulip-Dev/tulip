@@ -166,7 +166,6 @@ bool Circular::run() {
     dataSet->get("search_cycle", searchCycle);
   
   Size resultSize;
-  double sizeTm;
 
   //compute the sum of radii and the max radius of the graph
   double sumOfRad = 0;

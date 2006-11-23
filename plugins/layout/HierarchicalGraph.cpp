@@ -77,7 +77,6 @@ public:
 //================================================================================
 void HierarchicalGraph::buildGrid(Graph *sg){
   //  cerr << __PRETTY_FUNCTION__  << endl;
-  bool resultBool;
   string erreurMsg;
   DoubleProperty dagLevel(sg);
   if(!sg->computeProperty("DagLevel", &dagLevel,erreurMsg)) {

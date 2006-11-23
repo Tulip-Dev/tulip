@@ -257,7 +257,6 @@ void LayoutProperty::computeMinMax(Graph *sg) {
   Coord maxT(0,0,0);
   Coord minT(0,0,0);
 
-  double minZ=0;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
   if  (itN->hasNext()) {

@@ -85,6 +85,7 @@ struct GMLTokenParser {
 //=====================================================================================
 struct GMLBuilder
 {
+  virtual ~GMLBuilder() {}
   virtual bool addBool(const std::string &,const bool)=0;
   virtual bool addInt(const std::string &,const int)=0;
   virtual bool addDouble(const std::string &,const double)=0;

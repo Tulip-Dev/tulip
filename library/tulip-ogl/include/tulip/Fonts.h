@@ -12,6 +12,7 @@ class Fonts {
   friend class TextRenderer;
 
  public:
+  virtual ~Fonts() {}
   virtual void drawString(const std::string &str, int indice=-1) const = 0;
   virtual float getAdvance(const  std::string &str, int index=-1) const = 0;
   virtual float getAscender(int index = -1) const = 0;

@@ -126,6 +126,7 @@ public:
       errorMsg = std::string(rangeErrorMsg);
       return false;
     }
+    return true;
   }
 
   bool run() {

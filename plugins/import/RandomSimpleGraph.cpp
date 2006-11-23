@@ -96,7 +96,7 @@ struct RandomSimpleGraph:public ImportModule {
       ite--;
     }
     vector<node> tmpVect(nbNodes);
-    for (int i=0; i<nbNodes; ++i) {
+    for (unsigned int i=0; i<nbNodes; ++i) {
       tmpVect[i]=graph->addNode();
     }
     set<edgeS>::iterator it;

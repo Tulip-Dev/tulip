@@ -119,7 +119,6 @@ struct FileSystem:public ImportModule {
   }
 
   bool import(const string &name) {
-    bool ok;
     size=graph->getProperty<DoubleProperty>("size");
     uid=graph->getProperty<DoubleProperty>("uid");
     gid=graph->getProperty<DoubleProperty>("gid");

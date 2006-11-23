@@ -40,7 +40,7 @@ struct CompleteTree:public ImportModule {
   }
   void buildNode(node n,unsigned int degree,int depth) {
     if (depth<1) return;
-    for (int i=0;i<degree;++i) {
+    for (unsigned int i=0;i<degree;++i) {
       node n1=graph->addNode();
       graph->addEdge(n,n1);
       buildNode(n1,degree,depth - 1);
