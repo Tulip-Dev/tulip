@@ -42,7 +42,7 @@ struct TLPTokenParser {
       curChar++;
       if (strGet)
 	switch (ch) {
-	case 13 : break;
+	case 13 :
 	case '\n': curChar=0;curLine++;val.str+=ch; break;
 	case '\t': val.str+="    "; break;
 	case '\\':if (!slashMode) {slashMode=true;} else {val.str+=ch;slashMode=false;} break;
@@ -57,15 +57,15 @@ struct TLPTokenParser {
       else
 	if (strComment)
 	  switch (ch) {
-	  case 13 : break;
+	  case 13 :
 	  case '\n': curChar=0;curLine++;stop=true;return COMMENTTOKEN; break;
 	  default: curChar++;val.str+=ch;break;
 	  }
 	else
 	  switch (ch) {
-	  case 13 : break;
-	  case ' ' : if (started) stop=true; break;
+	  case ' ':
 	  case '\t': if (started) stop=true; break;
+	  case 13 :
 	  case '\n': curChar=0;curLine++;if (started) stop=true; break;
 	  case '(': if (!started) return OPENTOKEN; else {is.unget();stop=true;} break;
 	  case ')': if (!started) return CLOSETOKEN; else {is.unget();stop=true;} break;
