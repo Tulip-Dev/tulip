@@ -127,15 +127,16 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
     curSize  = size->getNodeValue(itn) / 2.0;
     curRot = rotation->getNodeValue(itn);
     if (selection == 0 || selection->getNodeValue(itn)) {
-      vector<Coord> pointBounds;
-      computeRotatedPoints (pointBounds, curCoord, curSize, curRot);
-      for (unsigned int i = 0; i < 4; ++i) {
-	double curRad = (pointBounds[i] - centre).norm();
-	if (curRad > maxRad) {
-	  maxRad = curRad;
-	  result.second = pointBounds[i];
-	}//end if
-      }//end for
+      double nodeRad = sqrt (curSize.getW()*curSize.getW() +
+			     curSize.getH()*curSize.getH());
+      Coord radDir = curCoord - centre;
+      double curRad = nodeRad + radDir.norm();
+      if (curRad > maxRad) {
+	maxRad = curRad;
+	radDir /= radDir.norm();
+	radDir *= curRad;
+	result.second = radDir + centre;
+      }
     }//end if
   } delete itN;
 
