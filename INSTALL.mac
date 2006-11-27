@@ -3,16 +3,29 @@ How to build Tulip on MacOSX platform
 
 1- Build the Qt/Mac 3.3 Open Source Edition
 -------------------------------------------
-You first have to download the corresponding Qt 3 source code
-ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
-Refer to the INSTALL file for the build directives
-but be sure to add the -thread flag when configuring Qt
-> ./configure -thread
-> make
-Edit libqt-mt.la in the lib subdirectory of your Qt installation directory
-in order to disable (add a leading #) the line beginning with
-dependency_libs= ...
-This step is necessary because glibtool chokes on the -framework switch.
+Download the corresponding Qt 3 source code
+  ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
+
+Add the following to ~/.profile
+  export QTDIR=/usr/local/Trolltech/qt-mac-free-3.3.6
+  export PATH=$QTDIR/bin:$PATH
+  export DYLD_LIBRARY_PATH=$QTDIR/lib:$DYLD_LIBRARY_PATH
+
+Do
+  mkdir /usr/local/Trolltech/
+  cd /usr/local/Trolltech/
+  tar xzvf qt-mac-free-3.3.6.tar.gz
+  cd qt-mac-free-3.3.6/
+  ./configure -thread
+  make
+  sudo ln -sf $QTDIR/lib/libqt-mt.3.dylib /usr/lib
+  sudo ln -sf $QTDIR/lib/libqui.1.dylib /usr/lib
+  open -e /usr/local/Trolltech/qt-mac-free-3.3.6/lib/libqt-mt.la
+
+In the file libqt-mt.la, add a hash ("#") in front of the line starting with
+  dependency_libs=
+and save.
+This last step is necessary because glibtool chokes on the -framework switch.
 Removing the line is not correct but it ensures a working Tulip building
 process. The Qt qmake process doesn't use glibtool so this isn't an issue
 for most Qt applications.
@@ -22,35 +35,33 @@ for most Qt applications.
 Download the FreeType 2 source code from
 http://freetype.sourceforge.net/download.html
 then 
-> ./configure
-> make
-> make install
+  ./configure
+  make
+  make install
 
 3- Configure Tulip
 ------------------
 Change the current directory to the tulip directory
 then run
 
-> sh gen-conf.sh
-and
-> ./configure  -prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
+  sh gen-conf.sh
+  ./configure --prefix=/usr/local/tulip-qt3 --with-qt-dir=/usr/local/Trolltech/qt-mac-free-3.3.6
 
 More configuration flags are available; use ./configure --help to see them.
 
 5- Build Tulip
--------------
+--------------
 run
 
-> make
-then
-> make install
+  make
+  make install
 
 6- Build a downloadable Tulip Mac bundle
 ----------------------------------------
 If you want to build a self sufficient downloadable Tulip Mac bundle,
 just run
 
-> sh make_tulip-<release number>_mac_bundle.sh
+  sh make_tulip-<release number>_mac_bundle.sh
 
 this will produce a Tulip-<release number>.app Mac bundle and
 a Tulip-<release number>.dmg file which is a disk image of that bundle
