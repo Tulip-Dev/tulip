@@ -5,6 +5,9 @@ DLL_TULIP_QT2 = -DDLL_TULIP_QT2
 RELEASE = ${VERSION}
 else 
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
+if MACOSX
+DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 lib_LTLIBRARIES = libtulip-qt@QT_VERSION@.la

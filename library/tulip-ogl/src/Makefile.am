@@ -8,6 +8,9 @@ else
 ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
 ADD_INCLUDES = `freetype-config --cflags` `xml2-config --cflags` 
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
+if MACOSX
+DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 lib_LTLIBRARIES = libtulip-ogl.la

@@ -6,6 +6,9 @@ DLL_FLAGS = -no-undefined
 RELEASE = ${VERSION}
 else
 RELEASE = @TULIP_VERSION@ -version-info 0:0:0
+if MACOSX
+DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@ -I$(top_srcdir)
