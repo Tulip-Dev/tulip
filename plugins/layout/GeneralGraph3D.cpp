@@ -41,6 +41,9 @@ namespace {
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+  addDependency<BooleanAlgorithm>("SpanningDag");
+  addDependency<DoubleAlgorithm>("DagLevel");
+  addDependency<LayoutAlgorithm>("Cone Tree");
 }
 
 GeneralGraph3D::~GeneralGraph3D() {}

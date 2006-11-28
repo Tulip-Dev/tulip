@@ -15,6 +15,7 @@
 #include <iostream>
 #include "Graph.h"
 #include "WithParameter.h"
+#include "WithDependency.h"
 #include "Reflect.h"
 #include "PluginProgress.h"
 #include "Plugin.h"
@@ -27,7 +28,7 @@ namespace tlp {
 
 /*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter
+class ExportModule:public WithParameter, public WithDependency
 {
 public:
   ///
@@ -41,6 +42,10 @@ public:
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;
+
+  static const char* getClassName() {
+    return "ExportModule";
+  }
 };
 
 class ExportModuleFactory:public Plugin{
@@ -53,7 +58,7 @@ public:
     }
   }    
   virtual ~ExportModuleFactory() {}
-  virtual ExportModule * createObject(ClusterContext)=0;
+  virtual ExportModule * createPluginObject(ClusterContext)=0;
 };
 /*@}*/
 }

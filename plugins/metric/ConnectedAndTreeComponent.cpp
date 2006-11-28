@@ -35,7 +35,10 @@ using namespace tlp;
  */
 class ConnectedAndTreeComponent:public DoubleAlgorithm { 
 public:
-  ConnectedAndTreeComponent(const PropertyContext &context):DoubleAlgorithm(context){};
+  ConnectedAndTreeComponent(const PropertyContext &context):DoubleAlgorithm(context){
+    // Connected component metric dependency
+    addDependency<DoubleAlgorithm>("Connected Component");
+  };
 
   void dfsErase(node n, Graph * sg, set<node> &deleted, MutableContainer<bool> &visited) {
     if (visited.get(n.id)) return;

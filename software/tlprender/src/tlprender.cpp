@@ -157,7 +157,7 @@ static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
-  GlGraph::glyphFactory->load(getEnvVar + "glyph", "Glyph", plug);
+  GlyphFactory::factory->load(getEnvVar + "glyph", "Glyph", plug);
 }
 
 //==============================================================================
@@ -165,7 +165,8 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
 {
   DataSet dataSet;
 
-  StructDef parameter= ImportModuleFactory::factory->getParam(importPluginName);
+  StructDef parameter=
+    ImportModuleFactory::factory->getPluginParameters(importPluginName);
   Iterator<pair<string,string> > *itP=parameter.getField();
   
   for (;itP->hasNext();) {
@@ -180,7 +181,8 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
   
   if (newGraph!=0) {
     glGraph.setGraph(newGraph);
-    LayoutProperty *layout = glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *layout =
+      glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
     layout->resetBoundingBox();
     layout->center();
     layout->notifyObservers();
@@ -341,7 +343,7 @@ int main (int argc, char **argv) {
   if (layoutSpecified) {
     bool resultBool=false;
     string errorMsg;
-    if (LayoutProperty::factory->exists(layoutName)) {
+    if (LayoutProperty::factory->pluginExists(layoutName)) {
       LayoutProperty *myLayout = glOffscreen.getGraph()->getProperty<LayoutProperty>("viewLayout");
       resultBool = glOffscreen.getGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
@@ -401,7 +403,8 @@ int main (int argc, char **argv) {
   if (saveTLP) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
-    StructDef parameter = ExportModuleFactory::factory->getParam("tlp");
+    StructDef parameter =
+      ExportModuleFactory::factory->getPluginParameters("tlp");
 
     dataSet.set("displaying", glOffscreen.getParameters());
 

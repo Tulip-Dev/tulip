@@ -62,6 +62,8 @@ HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgor
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
   addParameter<float> ("node spacing", paramHelp[3], "18." );
+  addDependency<DoubleAlgorithm>("DagLevel");
+  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)");
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}

@@ -1,4 +1,4 @@
-//-*-c++-*
+//-*-c++-*-
 /**
  Author: David Auber
  Email : auber@labri.fr
@@ -14,65 +14,84 @@
 
 #include <tulip/Plugin.h>
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-tlp::Iterator<std::string>* tlp::TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
+template<class ObjectFactory, class ObjectType, class Context>
+tlp::Iterator<std::string>* tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::availablePlugins() {
   return new tlp::StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-bool tlp::TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::string &pluginName) {
+template<class ObjectFactory, class ObjectType, class Context>
+bool tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::pluginExists(const std::string &pluginName) {
   return (objMap.find(pluginName) != objMap.end());
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-void tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
-  objNames.insert(objectFactory->getName());
-  objMap[objectFactory->getName()]=objectFactory;
+template<class ObjectFactory, class ObjectType, class Context>
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(ObjectFactory *objectFactory) {
+  std::string pluginName = objectFactory->getName();
+  objNames.insert(pluginName);
+  objMap[pluginName]=objectFactory;
   if (currentLoader!=0) currentLoader->loaded(
-				objectFactory->getName(),
-				objectFactory->getAuthor(),
-				objectFactory->getDate(),
-				objectFactory->getInfo(),
-				objectFactory->getRelease(),
-				objectFactory->getVersion()
-				);
-  Parameter p = Parameter();
-  tlp::WithParameter *withParam=objectFactory->createObject(p);
-  objParam[objectFactory->getName()]=withParam->getParameters();
+					      pluginName,
+					      objectFactory->getAuthor(),
+					      objectFactory->getDate(),
+					      objectFactory->getInfo(),
+					      objectFactory->getRelease(),
+					      objectFactory->getVersion()
+					      );
+  ObjectType *withParam=objectFactory->createPluginObject(Context());
+  objParam[pluginName] = withParam->getParameters();
+  objDeps[pluginName]= withParam->getDependencies();
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-void tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,tlp::PluginLoader *loader) {
+template<class ObjectFactory, class ObjectType, class Context>
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::removePlugin(const std::string &name) {
+  objNames.erase(name);
+  objMap.erase(name);
+  objParam.erase(name);
+  objDeps.erase(name);
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::loadPluginsFromDir(std::string pluginPath, std::string type,tlp::PluginLoader *loader) {
   if (loader!=0)
     loader->start(pluginPath.c_str(),type);
 
-  tlp::PluginIterator iterator(pluginPath, loader);
+  tlp::PluginLibraryLoader plLoader(pluginPath, loader);
 
   currentLoader = loader;
-  if (iterator.isValid()) {
-    while(iterator.nextPlugin(loader)) {
+  if (plLoader.hasPluginLibraryToLoad()) {
+    while(plLoader.loadNextPluginLibrary(loader)) {
     }
     if (loader)
-      loader->finished(true, iterator.msg);
+      loader->finished(true, plLoader.msg);
   } else {
     if (loader)
-      loader->finished(false, iterator.msg);
+      loader->finished(false, plLoader.msg);
   }
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)
-{
+template<class ObjectFactory, class ObjectType, class Context>
+ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginObject(const std::string& name, Context c) {
   typename ObjectCreator::iterator it;
 #ifndef NDEBUG 
   std::cerr << "TemplateFactory::GetObject :" << name << std::endl;  
 #endif
   it=objMap.find(name);
-  if (it!=objMap.end()) return (*it).second->createObject(p);
+  if (it!=objMap.end()) return (*it).second->createPluginObject(c);
   return 0;
 }
-template<class ObjectFactory, class ObjectType, class Parameter>
-tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Parameter>::getParam(std::string name){
+
+template<class ObjectFactory, class ObjectType, class Context>
+tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginParameters(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objParam[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
+std::vector< std::pair < std::string, std::string > > tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
+  assert(objMap.find(name)!=objMap.end());
+  return objDeps[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context> std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginsClassName() {
+  return std::string(ObjectType::getClassName());
 }

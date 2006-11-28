@@ -101,6 +101,7 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
+map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
 TemplateFactory<ClusteringFactory,Clustering,ClusterContext > *ClusteringFactory::factory = 0;
 TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleFactory::factory = 0;
 TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
@@ -121,25 +122,51 @@ TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyConte
 //=========================================================
 static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
   SizeProperty::initFactory();
-  SizeProperty::factory->load(dir + "sizes", "Size",plug);
+  SizeProperty::factory->loadPluginsFromDir(dir + "sizes", "Size",plug);
   IntegerProperty::initFactory();
-  IntegerProperty::factory->load(dir + "int", "Integer",plug);
+  IntegerProperty::factory->loadPluginsFromDir(dir + "int", "Integer",plug);
   LayoutProperty::initFactory();
-  LayoutProperty::factory->load(dir + "layout" , "Layout",plug);
+  LayoutProperty::factory->loadPluginsFromDir(dir + "layout" , "Layout",plug);
   ColorProperty::initFactory();
-  ColorProperty::factory->load(dir + "colors" , "Color",plug);
+  ColorProperty::factory->loadPluginsFromDir(dir + "colors" , "Color",plug);
   DoubleProperty::initFactory();
-  DoubleProperty::factory->load(dir + "metric" , "Double",plug);
+  DoubleProperty::factory->loadPluginsFromDir(dir + "metric" , "Double",plug);
   StringProperty::initFactory();
-  StringProperty::factory->load(dir + "string" , "String",plug);
+  StringProperty::factory->loadPluginsFromDir(dir + "string" , "String",plug);
   BooleanProperty::initFactory();
-  BooleanProperty::factory->load(dir + "selection" , "Boolean",plug);
+  BooleanProperty::factory->loadPluginsFromDir(dir + "selection" , "Boolean",plug);
   ClusteringFactory::initFactory();
-  ClusteringFactory::factory->load(dir + "clustering" , "Cluster",plug);
+  ClusteringFactory::factory->loadPluginsFromDir(dir + "clustering" , "Cluster",plug);
   ImportModuleFactory::initFactory();
-  ImportModuleFactory::factory->load(dir + "import" , "Import Module",plug);
+  ImportModuleFactory::factory->loadPluginsFromDir(dir + "import" , "Import Module",plug);
   ExportModuleFactory::initFactory();
-  ExportModuleFactory::factory->load(dir + "export" , "Export Module",plug);
+  ExportModuleFactory::factory->loadPluginsFromDir(dir + "export" , "Export Module",plug);
+  // plugins dependencies loop
+  map<string, TemplateFactoryInterface *>::const_iterator it =
+    TemplateFactoryInterface::allFactories->begin();
+  // loop over factories
+  for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
+    TemplateFactoryInterface *tfi = (*it).second;
+    // loop over plugins
+    Iterator<string> *itP = tfi->availablePlugins();
+    while(itP->hasNext()) {
+      string pluginName = itP->next();
+      vector<pair < string, string > > dependencies =
+	tfi->getPluginDependencies(pluginName);
+      vector<pair < string, string > >::const_iterator itD = dependencies.begin();
+      // loop over dependencies
+      for (; itD != dependencies.end(); itD++) {
+	string factoryDepName = (*itD).first;
+	string pluginDepName = (*itD).second;
+	if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
+	  plug->aborted(pluginName, tfi->getPluginsClassName() + " '" + pluginName +
+			"' depends on " + factoryDepName +
+			" '" + pluginDepName + "' which does not exist.");
+	  tfi->removePlugin(pluginName);
+	}
+      }
+    } delete itP;
+  }
 }
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
@@ -158,5 +185,5 @@ void tlp::loadPlugins(PluginLoader *plug) {
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-    return PluginIterator::loadPlugin(filename, plug);
+    return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }

@@ -567,13 +567,13 @@ void viewGl::fileSave() {
 bool viewGl::fileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
-  StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
-  parameter.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
+  StructDef parameters = ExportModuleFactory::factory->getPluginParameters(plugin);
+  parameters.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
   if (author.length() > 0)
     dataSet.set<string>("author", author);
   if (comments.length() > 0)
     dataSet.set<string>("text::comments", comments);
-  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
+  if (!tlp::openDataSetDialog(dataSet, parameters, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getParameters());
   if (filename.length() == 0) {
@@ -675,9 +675,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     else {
       noPlugin = false;
       s = QString::null;
-      StructDef parameter = ImportModuleFactory::factory->getParam(*plugin);
-      parameter.buildDefaultDataSet( dataSet );
-      cancel = !tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter plugin parameter");
+      StructDef parameters = ImportModuleFactory::factory->getPluginParameters(*plugin);
+      parameters.buildDefaultDataSet( dataSet );
+      cancel = !tlp::openDataSetDialog(dataSet, parameters, &dataSet, "Enter plugin parameter");
     }
   } else {
     plugin = &tmpStr;
@@ -1658,7 +1658,7 @@ void viewGl::makeClustering(int id) {
   string erreurMsg;
   DataSet dataSet;
   Graph *graph=glWidget->getGraph();
-  StructDef parameter = ClusteringFactory::factory->getParam(name);
+  StructDef parameter = ClusteringFactory::factory->getPluginParameters(name);
   parameter.buildDefaultDataSet( dataSet, graph );
   tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
   QtProgress myProgress(this,name);
@@ -1687,7 +1687,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   DataSet *dataSet =0;
   if (query) {
     dataSet = new DataSet();
-    StructDef parameter = PROPERTY::factory->getParam(name);
+    StructDef parameter = PROPERTY::factory->getPluginParameters(name);
     parameter.buildDefaultDataSet( *dataSet, graph );
     resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
   }

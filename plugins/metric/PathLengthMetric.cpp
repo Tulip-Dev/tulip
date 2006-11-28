@@ -9,6 +9,8 @@ using namespace tlp;
 
 //=======================================
 PathLengthMetric::PathLengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+  // Leaf metric needed
+  addDependency<DoubleAlgorithm>("Leaf");
 }
 //=======================================
 double PathLengthMetric::getNodeValue(const node n) {

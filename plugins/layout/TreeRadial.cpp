@@ -17,6 +17,7 @@ public:
   DoubleProperty *leaves;
 
   TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
+    addDependency<DoubleAlgorithm>("Leaf");
   }
 
   void dfsPlacement(node n, int depth, double alphaStart, double alphaEnd) {

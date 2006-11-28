@@ -3,6 +3,7 @@
 #include "PluginsTest.h"
 #include <tulip/TlpTools.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
 using namespace tlp;
@@ -20,9 +21,17 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( tlp::BooleanProperty::factory->objMap.find("Test") == tlp::BooleanProperty::factory->objMap.end());
-  tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( tlp::BooleanProperty::factory->objMap.find("Test") != tlp::BooleanProperty::factory->objMap.end());
+  // plugin does not exist yet
+  CPPUNIT_ASSERT(!tlp::BooleanProperty::factory->pluginExists("Test"));
+  PluginLoaderTxt loader;
+  tlp::loadPlugin("./testPlugin.so", &loader);
+  // plugin should exist now
+  CPPUNIT_ASSERT(tlp::BooleanProperty::factory->pluginExists("Test"));
+  vector<pair<string, string> > deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
+  // only one dependency (see testPlugin.cpp)
+  CPPUNIT_ASSERT(deps.size() == 1);
+  CPPUNIT_ASSERT(deps[0].first == "BooleanAlgorithm");
+  CPPUNIT_ASSERT(deps[0].second == "Test");  
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {

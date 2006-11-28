@@ -45,9 +45,10 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
  public:						\
   C##T##Factory(){					\
     tlp::T##Property::initFactory();			\
-    tlp::T##Property::factory->getPluginParameters((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    tlp::T##Property::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
+  std::string getClassName() const { return std::string(#T);} \
   std::string getName() const { return std::string(N);}	\
   std::string getGroup() const { return std::string(G);}\
   std::string getAuthor() const {return std::string(A);}\
@@ -55,7 +56,7 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
-  tlp::T##Algorithm * createObject(const tlp::PropertyContext &context)	\
+  tlp::T##Algorithm * createPluginObject(const tlp::PropertyContext &context)\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T##Algorithm *) tmp);		\
@@ -92,7 +93,7 @@ class C##T##Factory:public tlp::T##Factory              \
  public:						\
   C##T##Factory(){					\
     initFactory();					\
-    factory->getPluginParameters(this);			\
+    factory->registerPlugin(this);			\
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -102,7 +103,7 @@ class C##T##Factory:public tlp::T##Factory              \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
-  tlp::T * createObject(ClusterContext context)		\
+  tlp::T * createPluginObject(ClusterContext context)	\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T *) tmp);				\

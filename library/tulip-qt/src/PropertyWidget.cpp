@@ -45,6 +45,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/GlGraph.h>
+#include <tulip/Glyph.h>
 
 #include "tulip/PropertyWidget.h"
 
@@ -299,8 +300,8 @@ void PropertyWidget::setAllNodeValue() {
 
   if (editedPropertyName == "viewShape") {
     QStringList tmp;
-    GlGraph::initFactory();
-    Iterator<string> *itS=GlGraph::glyphFactory->availablePlugins();
+    GlyphFactory::initFactory();
+    Iterator<string> *itS=GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()){
       tmp.append(QString(itS->next().c_str()));
     }delete itS;

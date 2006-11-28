@@ -35,6 +35,11 @@ class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm< SizeType , SizeType >
   friend class SizeProperty;
 public:
   SizeProperty *sizeResult;
+
+  static const char* getClassName() {
+    return "SizeAlgorithm";
+  }
+
 protected:
   ///
   SizeAlgorithm (const PropertyContext  &context);

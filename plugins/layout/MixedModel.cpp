@@ -62,6 +62,7 @@ MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context) 
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
+  addDependency<DoubleAlgorithm>("Connected Component");
 }
 //====================================================
 MixedModel::~MixedModel(){

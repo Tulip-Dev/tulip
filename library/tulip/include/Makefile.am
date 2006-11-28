@@ -65,6 +65,7 @@ nobase_include_HEADERS = \
 	tulip/ExportModule.h \
 	tulip/Reflect.h \
 	tulip/WithParameter.h \
+	tulip/WithDependency.h \
 	tulip/PluginProgress.h \
 	tulip/Iterator.h \
 	tulip/StlIterator.h \

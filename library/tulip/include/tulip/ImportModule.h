@@ -14,6 +14,7 @@
 
 #include "Graph.h"
 #include "WithParameter.h"
+#include "WithDependency.h"
 #include "Reflect.h"
 #include "PluginProgress.h"
 #include "Plugin.h"
@@ -25,7 +26,7 @@ namespace tlp {
 
 /*@{*/
 /// Interface for importModule plug-ins
-class ImportModule :public WithParameter
+class ImportModule :public WithParameter, public WithDependency
 {
 public:
   DataSet *dataSet;
@@ -39,6 +40,10 @@ public:
   Graph *graph;
   ///
   PluginProgress *pluginProgress;
+
+  static const char* getClassName() {
+    return "ImportModule";
+  }
 };
 
 class ImportModuleFactory:public Plugin{
@@ -51,7 +56,7 @@ public:
     }
   }    
   virtual ~ImportModuleFactory() {}
-  virtual ImportModule * createObject(ClusterContext)=0;
+  virtual ImportModule * createPluginObject(ClusterContext)=0;
 };
 /*@}*/
 }

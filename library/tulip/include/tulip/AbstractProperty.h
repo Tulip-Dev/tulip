@@ -74,7 +74,7 @@ public:
   static TLP_SCOPE TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >();
+      factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
       factory->currentLoader = 0;
     }
   }

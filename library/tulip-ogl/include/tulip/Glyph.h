@@ -8,6 +8,7 @@
 
 #include <tulip/Plugin.h>
 #include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
@@ -30,7 +31,7 @@ namespace tlp {
     }
   };
   //==========================================================
-  class TLP_GL_SCOPE Glyph : public WithParameter {
+  class TLP_GL_SCOPE Glyph : public WithParameter, public WithDependency {
   public:
     Glyph(GlyphContext *);
     virtual ~Glyph();
@@ -42,7 +43,11 @@ namespace tlp {
      */
     virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const;
 
-  protected:
+ 
+  static const char* getClassName() {
+    return "Glyph";
+  }
+ protected:
     GlGraph *glGraph;
   
   protected:
@@ -62,20 +67,28 @@ namespace tlp {
   public:
     virtual ~GlyphFactory() {}
     ///
-    virtual Glyph *createObject(GlyphContext *gc)=0;
+    virtual Glyph *createPluginObject(GlyphContext *gc)=0;
     ///
     virtual int getId() const=0;
+
+    static TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
+    static TLP_GL_SCOPE void initFactory() {
+      if (!factory) {
+	factory = new TemplateFactory<GlyphFactory,Glyph,GlyphContext *>;
+	factory->currentLoader = 0;
+      }
+    }
   };
 
 }
 
-#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID,G)       \
+#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID,G)     \
 class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    tlp::GlGraph::initFactory();			\
-    tlp::GlGraph::glyphFactory->getPluginParameters(this);	\
+    initFactory(); 			         \
+    factory->registerPlugin(this);	         \
   }       					 \
   string getName() const { return string(N);}	 \
   string getGroup() const { return string(G);}	 \
@@ -85,7 +98,7 @@ public:                                          \
   string getRelease() const {return string(R);}	 \
   string getVersion() const {return string(V);}	 \
   int    getId() const {return ID;}		 \
-  tlp::T * createObject(tlp::GlyphContext *gc)	 \
+  tlp::T * createPluginObject(tlp::GlyphContext *gc)	 \
   {						 \
     C *tmp = new C(gc);				 \
     return ((tlp::T *) tmp);			 \

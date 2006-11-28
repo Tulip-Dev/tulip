@@ -672,7 +672,7 @@ namespace tlp
 
     // We build the data set :
     dataSet = new DataSet();
-    StructDef parameter = LayoutProperty::factory->getParam("Scatter Plot");
+    StructDef parameter = LayoutProperty::factory->getPluginParameters("Scatter Plot");
     parameter.buildDefaultDataSet( *dataSet, graph );
     
     char dtxt[20] = "discretizationStep1";
@@ -1205,7 +1205,7 @@ namespace tlp
     string erreurMsg;
     DataSet dataSet;
 
-    StructDef parameter = ClusteringFactory::factory->getParam(name);
+    StructDef parameter = ClusteringFactory::factory->getPluginParameters(name);
     parameter.buildDefaultDataSet( dataSet, graph );
 
     float a, b, c, d;

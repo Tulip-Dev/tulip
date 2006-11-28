@@ -39,6 +39,10 @@ public:
       The data should be store in it*/
   BooleanProperty *booleanResult;
 
+  static const char* getClassName() {
+    return "BooleanAlgorithm";
+  }
+
 protected:
   ///
   BooleanAlgorithm (const PropertyContext &);

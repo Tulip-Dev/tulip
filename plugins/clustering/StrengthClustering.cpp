@@ -294,6 +294,8 @@ namespace {
 StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0],"viewMetric");
   addParameter<bool>("multiply",paramHelp[1],"false");
+  addDependency<DoubleAlgorithm>("Connected Component");
+  addDependency<DoubleAlgorithm>("Strength");
 }
 //==============================================================================
 bool StrengthClustering::run() {

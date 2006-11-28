@@ -34,6 +34,11 @@ public:
   /** This metric is the one associated to the algorithm,
       The data should be store in it*/
   DoubleProperty *doubleResult;
+
+  static const char* getClassName() {
+    return "DoubleAlgorithm";
+  }
+
 protected:
   ///
   DoubleAlgorithm (const PropertyContext  &context);

@@ -37,6 +37,11 @@ public:
   /** This int obj is the one associated to the algorithm,
       The data should be store in it*/
   IntegerProperty *integerResult;
+
+  static const char* getClassName() {
+    return "IntegerAlgorithm";
+  }
+
 protected:
   ///
   IntegerAlgorithm (const PropertyContext  &context);

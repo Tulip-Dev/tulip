@@ -38,6 +38,11 @@ public:
    * The data should be store in it
    */
   LayoutProperty *layoutResult;
+
+  static const char* getClassName() {
+    return "LayoutAlgorithm";
+  }
+
 protected: 
   ///
   LayoutAlgorithm (const PropertyContext &context);

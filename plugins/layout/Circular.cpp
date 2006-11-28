@@ -44,6 +44,8 @@ namespace {
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addParameter<SizeProperty>("nodeSize", paramHelp[0], "viewSize");
   addParameter<bool>("search_cycle", paramHelp[1], "false");
+  // Connected component metric dependency
+  addDependency<DoubleAlgorithm>("Connected Component");
 }
 
 namespace {
