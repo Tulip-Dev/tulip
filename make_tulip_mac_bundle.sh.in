@@ -14,6 +14,7 @@ BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
 BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
 LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
+BUNDLE_LIB_PATH=@executable_path/../Frameworks
 if test ${QT_VERSION} -eq 3; then
 SHLIBS_REGEXP="dylib "
 else
@@ -47,13 +48,13 @@ function make_bundle_lib() {
        chmod 755 $slibdir/$slib
        echo installing $slib in $slibdir
        # update the name of the current bundle lib
-       install_name_tool -id @executable_path/../Frameworks/$slib $slibdir/$slib
+       install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
     else
        slib=`basename $slib`
     fi
     echo renaming $slib in `basename $bbin`
     # package tulip bundle binary with the current bundle lib
-    install_name_tool -change $oldlib @executable_path/../Frameworks/$slib $bbin
+    install_name_tool -change $oldlib $BUNDLE_LIB_PATH/$slib $bbin
   else
     echo `basename $slib` not found... exiting
     exit
@@ -83,6 +84,9 @@ function package_bundle_libs() {
       if [ "$libname" = "$blibname" ]; then
 	continue
       fi
+      if [ "/$libname" = "${lib#$BUNDLE_LIB_PATH}" ]; then
+        continue
+      fi
       make_bundle_lib $lib $fdir $blib
     done
   done
@@ -97,8 +101,6 @@ for LIB in $SHARED_LIBS
 do
   make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE
 done
-# package tulip shared libs
-package_bundle_libs $LIBS_BUNDLE_DIR
 
 # clean up the plugins bundle dir
 TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp/plugins
@@ -126,12 +128,16 @@ done
 package_bundle_libs $ASSISTANT_LIBS_BUNDLE_DIR
 
 # copy Qt imageformats plugins
-if test ${QT_VERSION} -eq 3; then
-  QT_IMG_PLUGINS_LIBDIR=$APP_DIR/Contents/imageformats
-  mkdir $QT_IMG_PLUGINS_LIBDIR
-  cp $QT_DIR/plugins/imageformats/* $QT_IMG_PLUGINS_LIBDIR
-  package_bundle_libs $QT_IMG_PLUGINS_LIBDIR '*.dylib' $LIBS_BUNDLE_DIR
-fi
+QT_IMG_PLUGINS_LIBDIR=$APP_DIR/Contents/imageformats
+mkdir $QT_IMG_PLUGINS_LIBDIR
+cp $QT_DIR/plugins/imageformats/libqjpeg.dylib $QT_DIR/plugins/imageformats/libqmng.dylib  $QT_IMG_PLUGINS_LIBDIR
+package_bundle_libs $QT_IMG_PLUGINS_LIBDIR '*.dylib' $LIBS_BUNDLE_DIR
+
+# package tulip shared libs
+package_bundle_libs $LIBS_BUNDLE_DIR
+# do it twice because of possibly newly installed files
+# during first try 
+package_bundle_libs $LIBS_BUNDLE_DIR
 
 # create disk image with our bundle
 echo creating Tulip-@PACKAGE_VERSION@.dmg disk image
