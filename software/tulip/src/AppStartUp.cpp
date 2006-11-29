@@ -49,7 +49,7 @@ struct PluginLoaderQt:public PluginLoader {
     progress++;
     // accumulate error messages
     errorMsgs += errormsg + '\n';
-    cerr << "Loading error : " << errormsg << endl;
+    cerr << "Loading error: " << errormsg << endl;
     appStartUp->setLabel("Error");
     appStartUp->setProgress(progress);
     qApp->processEvents();
