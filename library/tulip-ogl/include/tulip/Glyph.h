@@ -69,7 +69,7 @@ namespace tlp {
     ///
     virtual int getId() const=0;
 
-    static TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
+    static TLP_GL_SCOPE TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
     static TLP_GL_SCOPE void initFactory() {
       if (!factory) {
 	factory = new TemplateFactory<GlyphFactory,Glyph,GlyphContext *>;
