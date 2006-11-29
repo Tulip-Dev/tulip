@@ -34,10 +34,6 @@ class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm< ColorType , ColorType >
 public:
   ColorProperty *colorResult;
 
-  static const char* getClassName() {
-    return "ColorAlgorithm";
-  }
-
 protected:
   ///
   ColorAlgorithm (const PropertyContext & context);

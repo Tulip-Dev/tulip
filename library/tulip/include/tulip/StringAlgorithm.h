@@ -38,10 +38,6 @@ public:
       The data should be store in it*/
   StringProperty *stringResult;
 
-  static const char* getClassName() {
-    return "StringAlgorithm";
-  }
-
 protected:
   ///
   StringAlgorithm (const PropertyContext &context);

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <typeinfo>
 #include "PluginLoader.h"
 #include "WithParameter.h"
 #include "WithDependency.h"
@@ -43,7 +44,7 @@ public:
 template<class ObjectFactory, class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
 public:
   TemplateFactory() {
-    TemplateFactoryInterface::addFactory(this, ObjectType::getClassName());
+    TemplateFactoryInterface::addFactory(this, typeid(ObjectType).name());
   }
   //typedef void *(*func)();
   typedef std::map< std::string , ObjectFactory * > ObjectCreator;

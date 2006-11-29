@@ -35,10 +35,6 @@ public:
       The data should be store in it*/
   DoubleProperty *doubleResult;
 
-  static const char* getClassName() {
-    return "DoubleAlgorithm";
-  }
-
 protected:
   ///
   DoubleAlgorithm (const PropertyContext  &context);

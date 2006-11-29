@@ -39,10 +39,6 @@ public:
    */
   LayoutProperty *layoutResult;
 
-  static const char* getClassName() {
-    return "LayoutAlgorithm";
-  }
-
 protected: 
   ///
   LayoutAlgorithm (const PropertyContext &context);

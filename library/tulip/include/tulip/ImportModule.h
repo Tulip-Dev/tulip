@@ -40,10 +40,6 @@ public:
   Graph *graph;
   ///
   PluginProgress *pluginProgress;
-
-  static const char* getClassName() {
-    return "ImportModule";
-  }
 };
 
 class ImportModuleFactory:public Plugin{

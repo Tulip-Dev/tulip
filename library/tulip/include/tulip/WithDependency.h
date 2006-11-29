@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <typeinfo>
 
 namespace tlp {
 
@@ -28,7 +29,7 @@ public:
   }
   ///
   template<typename Ty> void addDependency(const char* str) {
-    addDependency(Ty::getClassName(), str);
+    addDependency(typeid(Ty).name(), str);
   }
 };
 /*@}*/

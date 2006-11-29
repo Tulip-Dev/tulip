@@ -42,10 +42,6 @@ public:
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;
-
-  static const char* getClassName() {
-    return "ExportModule";
-  }
 };
 
 class ExportModuleFactory:public Plugin{

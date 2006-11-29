@@ -41,13 +41,11 @@ namespace tlp {
      * by default, the point will be on the surface of the largest sphere contained
      * inside the unit cube (before scaling).
      */
-    virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const;
+    virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from,
+			    const Size &scale, const double zRotation) const;
 
  
-  static const char* getClassName() {
-    return "Glyph";
-  }
- protected:
+  protected:
     GlGraph *glGraph;
   
   protected:

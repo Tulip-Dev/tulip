@@ -93,5 +93,5 @@ std::vector< std::pair < std::string, std::string > > tlp::TemplateFactory<Objec
 }
 
 template<class ObjectFactory, class ObjectType, class Context> std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginsClassName() {
-  return std::string(ObjectType::getClassName());
+  return std::string(typeid(ObjectType).name());
 }

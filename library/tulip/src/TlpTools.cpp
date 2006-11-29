@@ -120,6 +120,18 @@ TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> 
 TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
+// class names demangler used in the function below
+#include <cxxabi.h>
+static char demangleBuffer[256];
+char *demangle(string className) {
+  int status;
+  size_t length = 256;
+  abi::__cxa_demangle(className.c_str(), (char *) demangleBuffer,
+		      &length, &status);
+  // skip tlp::
+  return demangleBuffer + 5;
+}
+//=========================================================
 static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
   SizeProperty::initFactory();
   SizeProperty::factory->loadPluginsFromDir(dir + "sizes", "Size",plug);
@@ -142,31 +154,36 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
   ExportModuleFactory::initFactory();
   ExportModuleFactory::factory->loadPluginsFromDir(dir + "export" , "Export Module",plug);
   // plugins dependencies loop
-  map<string, TemplateFactoryInterface *>::const_iterator it =
-    TemplateFactoryInterface::allFactories->begin();
-  // loop over factories
-  for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
-    TemplateFactoryInterface *tfi = (*it).second;
-    // loop over plugins
-    Iterator<string> *itP = tfi->availablePlugins();
-    while(itP->hasNext()) {
-      string pluginName = itP->next();
-      vector<pair < string, string > > dependencies =
-	tfi->getPluginDependencies(pluginName);
-      vector<pair < string, string > >::const_iterator itD = dependencies.begin();
-      // loop over dependencies
-      for (; itD != dependencies.end(); itD++) {
-	string factoryDepName = (*itD).first;
-	string pluginDepName = (*itD).second;
-	if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-	  plug->aborted(pluginName, tfi->getPluginsClassName() + " '" + pluginName +
-			"' depends on " + factoryDepName +
-			" '" + pluginDepName + "' which does not exist.");
-	  tfi->removePlugin(pluginName);
+  bool depsNeedCheck;
+  do {
+    map<string, TemplateFactoryInterface *>::const_iterator it =
+      TemplateFactoryInterface::allFactories->begin();
+    depsNeedCheck = false;
+    // loop over factories
+    for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
+      TemplateFactoryInterface *tfi = (*it).second;
+      // loop over plugins
+      Iterator<string> *itP = tfi->availablePlugins();
+      while(itP->hasNext()) {
+	string pluginName = itP->next();
+	vector<pair < string, string > > dependencies =
+	  tfi->getPluginDependencies(pluginName);
+	vector<pair < string, string > >::const_iterator itD = dependencies.begin();
+	// loop over dependencies
+	for (; itD != dependencies.end(); itD++) {
+	  string factoryDepName = (*itD).first;
+	  string pluginDepName = (*itD).second;
+	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
+	    plug->aborted(pluginName, string(demangle(tfi->getPluginsClassName())) +
+			  " '" + pluginName + "' will be removed, it depends on missing " +
+			  demangle(factoryDepName) + " '" + pluginDepName);
+	    tfi->removePlugin(pluginName);
+	    depsNeedCheck = true;
+	  }
 	}
-      }
-    } delete itP;
-  }
+      } delete itP;
+    }
+  } while (depsNeedCheck);
 }
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
