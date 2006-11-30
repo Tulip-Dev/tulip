@@ -564,6 +564,13 @@ void viewGl::fileSave() {
   fileSave("tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
+static void setGraphName(Graph *g, QString s) {
+  QString cleanName=s.section('/',-1);
+  QStringList fields = QStringList::split('.', cleanName);
+  cleanName=cleanName.section('.',-fields.count(), -2);
+  g->setAttribute("name", string(cleanName.latin1()));
+}
+//**********************************************************************
 bool viewGl::fileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
@@ -608,6 +615,7 @@ bool viewGl::fileSave(string plugin, string filename, string author, string comm
 			   );
   }
   setNavigateCaption(filename);
+  setGraphName(glWidget->getGraph(), QString(filename.c_str()));
   delete os;
   return result;
 }
@@ -732,13 +740,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       return;
     }
     delete progressBar;
-    if(noPlugin) {
-      QString cleanName=s.section('/',-1);
-      QStringList fields = QStringList::split('.', cleanName);
-      cleanName=cleanName.section('.',-fields.count(), -2);
-      newGraph->setAttribute("name", string(cleanName.latin1()));
-    }
-
+    if(noPlugin)
+      setGraphName(newGraph, s);
 
     if(noPlugin) {
       viewGlFile vFile;
