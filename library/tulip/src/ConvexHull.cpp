@@ -15,7 +15,11 @@ struct p0Vectors {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
-  return (p1.pos^p2.pos)[2] > 0; 
+  float z = (p1.pos^p2.pos)[2];
+  if (z == 0)
+    // aligned points so check norm of vectors
+    return p1.pos.norm() < p2.pos.norm();
+  return z > 0;
 }
 
 //==============================================================
@@ -144,7 +148,7 @@ void tlp::convexHull (const vector<Coord> &points,
 	      ((points[convexHull[convexHull.size() - 2]] - 
 		points[p0Index]) -
 	       (points[convexHull[convexHull.size() - 1]] -
-		points[p0Index])))[2] > 0)) 
+		points[p0Index])))[2] > 0))
       convexHull.pop_back();
     
     convexHull.push_back((*it).index);
