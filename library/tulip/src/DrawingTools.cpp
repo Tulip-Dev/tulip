@@ -131,11 +131,15 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
 			     curSize.getH()*curSize.getH());
       Coord radDir = curCoord - centre;
       double curRad = nodeRad + radDir.norm();
+      if (radDir.norm() < 1e-6) {
+	curRad = nodeRad;
+	radDir = Coord (1.0,0.0,0.0);
+      }
       if (curRad > maxRad) {
 	maxRad = curRad;
 	radDir /= radDir.norm();
 	radDir *= curRad;
-	result.second = radDir + centre;
+	result.second = radDir + centre;	
       }
     }//end if
   } delete itN;
