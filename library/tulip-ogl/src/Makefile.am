@@ -28,6 +28,7 @@ libtulip_ogl_la_LIBADD = @LIBGLE_LDFLAGS@
 endif
 
 libtulip_ogl_la_SOURCES = \
+	GlGraphRenderingParameters.cpp\
 	GlTools.cpp \
 	Curves.cpp \
 	Hline.cpp \

@@ -27,7 +27,7 @@ class C_String{  // la classe utilisée pour le stockage un texte à afficher
 };
 
 
-class Paragraph : public Frame{
+class Paragraph : public Frame {
   std::vector<C_String> myString; // le texte à afficher
   std::vector<Context*> listOfcontexts; // tableau de contextes à utiliser
   Context* findContext(Context& c);  // recherche un contexte dans le vecteur

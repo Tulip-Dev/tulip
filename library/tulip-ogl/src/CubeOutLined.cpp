@@ -72,7 +72,7 @@ namespace tlp {
 	setMaterial(Color(255,255,255,0));
     }
     glCallList(LList);
-    ColorProperty *border = glGraph->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+    ColorProperty *border = glGraph->getRenderingParameters().getGraph()->getProperty<ColorProperty>("viewBorderColor");
     glGraph->desactivateTexture();
     Color c = border->getNodeValue(n);
     //  setMaterial(c);

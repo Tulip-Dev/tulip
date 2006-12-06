@@ -169,17 +169,17 @@ namespace {
     return curve;
   }
   bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-	       const MatrixGL &transformMatrix, const GLint *viewportArray) {
+	       const MatrixGL &transformMatrix, const Vector<int, 4> &viewport) {
     if (bends.size() == 0) 
-      return segmentVisible(startPoint, endPoint, transformMatrix, viewportArray) > 0.;
+      return segmentVisible(startPoint, endPoint, transformMatrix, viewport) > 0.;
     
     //first point
-    if (segmentVisible(startPoint, bends[0], transformMatrix, viewportArray)>0.)
+    if (segmentVisible(startPoint, bends[0], transformMatrix, viewport)>0.)
       return true;
     for (unsigned int i=1; i<bends.size(); ++i) 
-      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewportArray)>0.)
+      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewport)>0.)
 	return true;
-    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewportArray)>0.)
+    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewport)>0.)
       return true;
     return false;
   }
@@ -188,11 +188,11 @@ namespace {
 namespace tlp {  
   
   void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &drawPoly, bool &drawLine, const MatrixGL &transformMatrix, const GLint *viewportArray) {
+		       const Size &size, bool &drawPoly, bool &drawLine, const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
     Size tmp(size[0], size[0], size[0]);
     Size tmp2(size[1], size[1], size[1]);
-    float s1 = projectSize(startPoint, tmp,  transformMatrix, viewportArray);
-    float s2 = projectSize(endPoint,   tmp2, transformMatrix, viewportArray);
+    float s1 = projectSize(startPoint, tmp,  projectionMatrix, modelviewMatrix, viewport);
+    float s2 = projectSize(endPoint,   tmp2, projectionMatrix, modelviewMatrix, viewport);
     //    cerr << startPoint<< "/" << endPoint << "/" << size << "/" << s1 << "/" << s2 << endl;
     drawLine = false;
     drawPoly = false;
@@ -200,7 +200,7 @@ namespace tlp {
       drawLine = true;
       drawPoly = true;
     } else {
-      if (visible(startPoint, bends, endPoint, transformMatrix, viewportArray)) {
+      if (visible(startPoint, bends, endPoint,  modelviewMatrix * projectionMatrix, viewport)) {
 	drawLine = true;
 	drawPoly = true;
       }

@@ -2,6 +2,7 @@ nobase_include_HEADERS = \
 	tulip/ObservableGlGraph.h\
 	tulip/Camera.h\
 	tulip/GlGraph.h\
+	tulip/GlGraphRenderingParameters.h\
 	tulip/Glyph.h \
 	tulip/GlAugmentedDisplay.h \
 	tulip/GlADRenderOptions.h \

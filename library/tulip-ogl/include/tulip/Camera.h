@@ -23,7 +23,7 @@ class TLP_GL_SCOPE Camera {
   void strafeUpDown(float speed);
   /// This rotates the camera's eyes around the center depending on the values passed in.
   void rotate(float angle, float x, float y, float z);
-  
+
 };
 
 }

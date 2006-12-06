@@ -16,7 +16,6 @@ Context::Context(string str, int s, unsigned char r, unsigned char v, unsigned c
 void Context::getColor(unsigned char& r, unsigned char& v, unsigned char& b) const{
   r = c[0];  v = c[1];  b = c[2];
 }
-
 //---------------------------------------------------------------------------
 bool tlp::operator==(Context& a, Context& b){
   if( (a.size == b.size) && // taille
@@ -28,7 +27,7 @@ bool tlp::operator==(Context& a, Context& b){
   else
     return false;
 }
-
+//---------------------------------------------------------------------------
 Renderer& Context::getRenderer() const {
   return *renderer;
 }

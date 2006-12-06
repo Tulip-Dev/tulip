@@ -6,12 +6,13 @@
 #include <tulip/GlGraph.h>
 #include <vector>
 
-template<typename T, unsigned int N>
-  class Matrix;
+
 
 namespace tlp {
+  template<typename T, unsigned int N>
+    class Matrix;
   void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &polygon, bool &line, const Matrix<float,4> &transformMatrix, const GLint *viewportArray);
+		       const Size &size, bool &polygon, bool &line, const Matrix<float,4> &projectionMatrix, const Matrix<float,4> &modelviewMatrix, const tlp::Vector<int, 4>&viewportArray);
   //====================================================================
   void polyLine(const std::vector<Coord> &,/* polyline vertces */
 		const Color &,             /* start color */

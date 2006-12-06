@@ -206,7 +206,7 @@ void TextRenderer::initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d
       sCell pile; // contient les cellules à parcourir
       Cell* cell, *tmp_cell;
       
-      cell = new Cell;
+      cell = new Cell();
       cell->pt = courant;
       cell->new_context = false;
       pile.push(cell); // empile le premier état à regarder
