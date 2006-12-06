@@ -700,8 +700,9 @@ namespace tlp
     else {
       *graph->getLocalProperty<LayoutProperty>("viewLayout") = dest;
     }
-
-    glGraphWidget->setDisplayEdges(false);
+    GlGraphRenderingParameters param = glGraphWidget->getRenderingParameters();
+    param.setDisplayEdges(false);
+    glGraphWidget->setRenderingParameters(param);
     glGraphWidget->centerScene();
 
     if (dataSet != 0) 

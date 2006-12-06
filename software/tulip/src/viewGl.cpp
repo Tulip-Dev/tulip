@@ -138,8 +138,8 @@ public:
       ElementType type;  
       if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
 	switch(type) {
-	case NODE: eltProperties->setCurrentNode(g->getGraph(), tmpNode); break;
-	case EDGE: eltProperties->setCurrentEdge(g->getGraph(), tmpEdge); break;
+	case NODE: eltProperties->setCurrentNode(g->getRenderingParameters().getGraph(), tmpNode); break;
+	case EDGE: eltProperties->setCurrentEdge(g->getRenderingParameters().getGraph(), tmpEdge); break;
 	}
 	// show 'Element' tab in 'Info Editor'
 	QWidget *tab = eltProperties->parentWidget();
@@ -186,7 +186,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewWidget = new GWOverviewWidget(overviewDock);
   overviewDock->boxLayout()->add(overviewWidget);
   this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
-  overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
+  //  overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
   overviewWidget->show();
  
   overviewDock->show();
@@ -319,20 +319,22 @@ static const string viewed_properties[NB_VIEWED_PROPERTIES]= {"viewLabel",
 void viewGl::initObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
-  Graph *graph = glWidget->getGraph();
+  Graph *graph = glWidget->getRenderingParameters().getGraph();
   if (graph==0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    graph->getProperty(viewed_properties[i])->addObserver(this);
+    if (graph->existProperty(viewed_properties[i]))
+      graph->getProperty(viewed_properties[i])->addObserver(this);
   }
 }
 //**********************************************************************
 void viewGl::clearObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (glWidget == 0) return;
-  Graph *graph = glWidget->getGraph();
+  Graph *graph = glWidget->getRenderingParameters().getGraph();
   if (graph == 0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    graph->getProperty(viewed_properties[i])->deleteObserver(this);
+    if (graph->existProperty(viewed_properties[i]))
+      graph->getProperty(viewed_properties[i])->deleteObserver(this);
   }
 }
 //**********************************************************************
@@ -418,7 +420,9 @@ void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
   QFileInfo tmp(openFiles[(unsigned int)glWidget].name.c_str());
-  glWidget->setTexturePath(string(tmp.dirPath().latin1()) + "/");
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
+  glWidget->setRenderingParameters(param);
   QDir::setCurrent(tmp.dirPath() + "/");
   clusterTreeWidget->setGraph(graph);
   propertiesWidget->setGraph(graph);
@@ -436,11 +440,13 @@ void viewGl::changeGraph(Graph *graph) {
 }
 //**********************************************************************
 void viewGl::hierarchyChangeGraph(Graph *graph) {
-  //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
-  if( !glWidget ) return;
+  cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
+  if( glWidget == 0 ) return;
   if (glWidget->getGraph() == graph)  return;
   clearObservers();
-  glWidget->setGraph(graph);
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  param.setGraph(graph);
+  glWidget->setRenderingParameters(param);
   glWidget->centerScene();
   changeGraph(graph);
   initObservers();
@@ -459,6 +465,7 @@ void viewGl::windowActivated(QWidget *w) {
 }
 //**********************************************************************
 GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
+  assert(graph != 0);
   // delete plugins loading errors dialog if needed
   if (errorDlg) {
     delete errorDlg;
@@ -469,7 +476,11 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
 #if (QT_REL == 4)
   workspace->addWindow(glWidget);
 #endif
-  glWidget->setGraph(graph);
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  assert(param.getGraph() == 0);
+  param.setGraph(graph);
+  glWidget->setRenderingParameters(param);
+  assert(glWidget->getRenderingParameters().getGraph()==graph);
   glWidget->move(0,0);
   glWidget->setCaption(name);
   glWidget->show();
@@ -517,13 +528,11 @@ std::string viewGl::newName() {
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
-  DataSet param = glWidget->getParameters();
-  string  texturePath = glWidget->getTexturePath();
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
   //QString name(glWidget->name());
-  newOpenGlView(glWidget->getGraph(), glWidget->parentWidget()->caption());
-  glWidget->setParameters(param);
-  glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
-  glWidget->setTexturePath(texturePath);
+  newOpenGlView(glWidget->getRenderingParameters().getGraph(), 
+		glWidget->parentWidget()->caption());
+  glWidget->setRenderingParameters(param);
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
@@ -567,7 +576,7 @@ void viewGl::fileSave() {
 static void setGraphName(Graph *g, QString s) {
   QString cleanName=s.section('/',-1);
   QStringList fields = QStringList::split('.', cleanName);
-  cleanName=cleanName.section('.',-fields.count(), -2);
+  cleanName=cleanName.section('.', -fields.count(), -2);
   g->setAttribute("name", string(cleanName.latin1()));
 }
 //**********************************************************************
@@ -582,7 +591,7 @@ bool viewGl::fileSave(string plugin, string filename, string author, string comm
     dataSet.set<string>("text::comments", comments);
   if (!tlp::openDataSetDialog(dataSet, parameters, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
-  dataSet.set("displaying", glWidget->getParameters());
+  dataSet.set("displaying", glWidget->getRenderingParameters().getParameters());
   if (filename.length() == 0) {
     QString name;
     if (plugin == "tlp")
@@ -643,22 +652,24 @@ void viewGl::initializeGraph(Graph *graph) {
 }
 //**********************************************************************
 void viewGl::initializeGlGraph(GlGraph *glGraph) {
-    glGraph->setViewArrow(true);
-    glGraph->setDisplayEdges(true);
-    glGraph->setFontsType(1);
-    glGraph->setFontsPath(((Application *)qApp)->bitmapPath);
-    glGraph->setViewLabel(true);
-    glGraph->setBackgroundColor(Color(255,255,255));
-    glGraph->setViewOrtho(true);
-    glGraph->setViewStrahler(false);
-    glGraph->setEdgeColorInterpolate(false);
-    Camera cam = glGraph->getCamera(); //default value for drawing small graph in the window
-    cam.center = Coord(0, 0,  0);
-    cam.eyes   = Coord(0, 0, 10);
-    cam.up     = Coord(0, 1,  0);
-    cam.zoomFactor = 0.5;
-    cam.sceneRadius = 10;
-    glGraph->setCamera(cam);
+  GlGraphRenderingParameters param = glGraph->getRenderingParameters();
+  param.setViewArrow(true);
+  param.setDisplayEdges(true);
+  param.setFontsType(1);
+  param.setFontsPath(((Application *)qApp)->bitmapPath);
+  param.setViewNodeLabel(true);
+  param.setBackgroundColor(Color(255,255,255));
+  param.setViewOrtho(true);
+  param.setElementOrdered(false);
+  param.setEdgeColorInterpolate(false);
+  Camera cam = param.getCamera(); //default value for drawing small graph in the window
+  cam.center = Coord(0, 0,  0);
+  cam.eyes   = Coord(0, 0, 10);
+  cam.up     = Coord(0, 1,  0);
+  cam.zoomFactor = 0.5;
+  cam.sceneRadius = 10;
+  param.setCamera(cam);
+  glGraph->setRenderingParameters(param);
 }
 //**********************************************************************
 void viewGl::fileOpen(string *plugin, QString &s) {
@@ -719,14 +730,16 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
     initializeGlGraph(glW);
     QFileInfo tmp(s);
-    glW->setTexturePath(string(tmp.dirPath().latin1()) + "/");
+    GlGraphRenderingParameters param = glW->getRenderingParameters();
+    param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
+    param.setGraph(newGraph);
+    glW->setRenderingParameters(param);
     QDir::setCurrent(tmp.dirPath() + "/");
-    glW->setGraph(newGraph);
-    changeGraph(0);
+    //    changeGraph(0);
     QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
     if (progressBar->state()==TLP_CANCEL || !result ) {
-      changeGraph(0);
+      //      changeGraph(0);
       delete glW;
       delete newGraph;
       QApplication::restoreOverrideCursor();
@@ -751,13 +764,21 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       openFiles[((unsigned long)glW)] = vFile;
     }
     QApplication::restoreOverrideCursor();
-    changeGraph(0);
-    changeGraph(newGraph);
-    centerView();
+    //    changeGraph(0);
+    bool displayingInfoFound = false;
 
+
+    param = glW->getRenderingParameters();
     DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
-      glW->setParameters(glGraphData);
+    if (dataSet.get<DataSet>("displaying", glGraphData)) {
+      param.setParameters(glGraphData);
+      glW->setRenderingParameters(param);
+      displayingInfoFound = true;
+    }
+    if (!displayingInfoFound)
+      glW->centerScene();
+
+    changeGraph(newGraph);
 
     int id = 0;
     if (glGraphData.get<int>("SupergraphId", id) && id) {
@@ -769,9 +790,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	}
       }
     }
-    
-    // synchronize overview display parameters
-    overviewWidget->syncFromView();
 
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
@@ -783,7 +801,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       centerView();
       // update viewColor alpha channel
       // which not manage in Tulip 2
-      ColorProperty *colors = newGraph->getLocalProperty<ColorProperty>("viewColor");
+      ColorProperty *colors = newGraph->getProperty<ColorProperty>("viewColor");
       node n;
       forEach(n, newGraph->getNodes()) {
 	Color color = colors->getNodeValue(n);
@@ -800,7 +818,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       }
     }
 
-    glW->draw();
+    // synchronize overview display parameters
   }
   /* else {
     qWarning("Canceled  Open/import");
@@ -941,7 +959,9 @@ void viewGl::editFind() {
 //**********************************************************************
 void viewGl::setParameters(const DataSet data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  glWidget->setParameters(data);
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  param.setParameters(data);
+  glWidget->setRenderingParameters(param);
   clusterTreeWidget->setGraph(glWidget->getGraph());
   nodeProperties->setGraph(glWidget->getGraph());
   propertiesWidget->setGraph(glWidget->getGraph());
@@ -1151,7 +1171,9 @@ void viewGl::exportImage(int id) {
   QString s(QFileDialog::getSaveFileName());
   if (s.isNull()) return;    
   int width,height;
-  unsigned char* image = glWidget->getImage(width,height);
+  width = glWidget->width();
+  height = glWidget->height();
+  unsigned char* image = glWidget->getImage();
   QPixmap pm(width,height);
   QPainter painter;
   painter.begin(&pm);
@@ -1419,21 +1441,17 @@ void viewGl::showDialog(int id){
 //======================================================================
 ///Redraw the view of the graph
 void  viewGl::redrawView() {
-  if (!glWidget) return;
+  if (glWidget == 0) return;
   glWidget->draw();
 }
 //**********************************************************************
 ///Reccenter the layout of the graph
 void viewGl::centerView() {
-  if (!glWidget) return;
-  Graph *graph=glWidget->getGraph();
-  if (graph==0) return;
-  Observable::holdObservers();
+  if (glWidget == 0) return;
   glWidget->centerScene();
   overviewWidget->setObservedView(glWidget);
-  redrawView();
   updateStatusBar();
-  Observable::unholdObservers();
+  redrawView();
 }
 //===========================================================
 //Menu Edit : functions
@@ -1535,7 +1553,9 @@ void viewGl::reverseSelectedEdgeDirection() {
 //==============================================================
 void viewGl::graphAboutToBeRemoved(Graph *sg) {
   //  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
-  glWidget->setGraph(0);
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  param.setGraph(0);
+  glWidget->setRenderingParameters(param);
 }
 //==============================================================
 void viewGl::helpAbout() {
@@ -1589,7 +1609,9 @@ void viewGl::filePrint() {
   if (!printer.setup(this)) 
     return;
   int width,height;
-  unsigned char* image = glWidget->getImage(width,height);
+  width = glWidget->width();
+  height = glWidget->height();
+  unsigned char* image = glWidget->getImage();
   QPainter painter(&printer);
   for (int y=0; y<height; y++)
     for (int x=0; x<width; x++) {
@@ -1635,7 +1657,9 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
 #endif
-    w->setGraph(0);
+    GlGraphRenderingParameters param = w->getRenderingParameters();
+    param.setGraph(0);
+    w->setRenderingParameters(param);
     delete root;
   }
   
@@ -1643,7 +1667,9 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     openFiles.erase((unsigned long)w);
   
   if(w == glWidget) {
-    glWidget->setGraph(0);
+    GlGraphRenderingParameters param = w->getRenderingParameters();
+    param.setGraph(0);
+    w->setRenderingParameters(param);
     glWidget = 0;
   }
   delete navigate;
@@ -1753,11 +1779,15 @@ void viewGl::changeLayout(int id) {
   GraphState * g0 = 0;
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
-  Camera cam = glWidget->getCamera();
-  glWidget->setInputLayout(name);
+
+  Camera cam = glWidget->getRenderingParameters().getCamera();
+  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
+  param.setInputLayout(name);
+  glWidget->setRenderingParameters(param);
   bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
-  glWidget->setInputLayout("viewLayout");
-  glWidget->setCamera(cam);
+  param.setInputLayout("viewLayout");
+  param.setCamera(cam);
+  glWidget->setRenderingParameters(param);
   if (result) {
     if( force_ratio->isOn() )
       glWidget->getGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
