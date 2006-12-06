@@ -20,7 +20,7 @@ namespace tlp {
 class TemplateFactoryInterface {
 public:
   static TLP_SCOPE std::map< std::string, TemplateFactoryInterface* > *allFactories;
-
+  virtual ~TemplateFactoryInterface(){}
   virtual Iterator<std::string>* availablePlugins()=0;
   virtual bool pluginExists(const std::string &pluginName)=0;
   virtual void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0)=0;
