@@ -93,15 +93,15 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
 	    {
 	      unsigned char newVal=outlineFont(x,y,srcWidth,srcHeight,src);
 	      if (newVal==128) {
-		*dest++ = 255;
-		*dest++ = 255;
-		*dest++ = 255;
-		*dest++ = 255;
+		*dest++ = 64;
+		*dest++ = 64;
+		*dest++ = 64;
+		*dest++ = 128;
 	      } else
 		if (newVal!=0) {
-		  *dest++ = redComponent;
-		  *dest++ = greenComponent;
-		  *dest++ = blueComponent;
+		  *dest++ = 255;
+		  *dest++ = 255;
+		  *dest++ = 255;
 		  *dest++ = 255;
 		} else
 		  {

@@ -11,6 +11,7 @@ namespace tlp {
     if (error != GL_NO_ERROR) {
       cerr << "[OpenGL ERROR] : " << message << endl;
       cerr << "=============> : " << gluErrorString(error) <<  endl;
+      assert (error == GL_NO_ERROR);
     }
   }
   //====================================================

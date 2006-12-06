@@ -48,7 +48,7 @@ void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
     c_current->getColor(r, v, b);
     renderer.setColor(r, v, b);    
     renderer.ActiveFont(val);
-
+    
     if(myString.at(j).getString() != ""){
        renderer.drawString(myString.at(j).getString());
        decal = renderer.getAdvance(myString.at(j).getString());

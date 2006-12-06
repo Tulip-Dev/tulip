@@ -239,6 +239,7 @@ void GlRenderer::translate(float x, float y, float z) const {
 
 void GlRenderer::setColor(unsigned char r, unsigned char v, unsigned char b) const {
   glColor4ub(r, v, b ,255);
+  
 }
 
 void GlRenderer::drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const {
