@@ -33,8 +33,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     ElementType type;
     node tmpNode;
     edge tmpEdge;
-    Graph*_graph=glGraphWidget->getGraph();
-    LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
+    Graph * _graph = glGraphWidget->getRenderingParameters().getGraph();
+    LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>("viewLayout");
     if (qMouseEv->button()==Qt::LeftButton) {
       if (!started) {
 	bool result=glGraphWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
@@ -53,7 +53,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Observable::holdObservers();
 	  started=false;
 	  glGraphWidget->setMouseTracking(false);
-	  edge newEdge = glGraphWidget->getGraph()->addEdge(source, tmpNode);
+	  edge newEdge = glGraphWidget->getRenderingParameters().getGraph()->addEdge(source, tmpNode);
 	  mLayout->setEdgeValue(newEdge, bends);
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
 	  bends.clear();

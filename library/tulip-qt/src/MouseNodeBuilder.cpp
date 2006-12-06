@@ -29,7 +29,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->button() == Qt::LeftButton) {
       GlGraphWidget *glw = (GlGraphWidget *) widget;
 
-      Graph*_graph=glw->getGraph();
+      Graph*_graph=glw->getRenderingParameters().getGraph();
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       //  Colors* mColors=_graph->getProperty<ColorProperty>("viewColor");
       node newNode;

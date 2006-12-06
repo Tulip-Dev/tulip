@@ -56,7 +56,7 @@ bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
 	return true;
       }
       Observable::holdObservers();
-      graph=glGraphWidget->getGraph();
+      graph=glGraphWidget->getRenderingParameters().getGraph();
       BooleanProperty* selection=graph->getProperty<BooleanProperty>("viewSelection");
       BooleanProperty* visited=graph->getProperty<BooleanProperty>("tmpVisited");
       DoubleProperty* metric=graph->getProperty<DoubleProperty>("viewMetric");

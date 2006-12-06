@@ -319,7 +319,7 @@ void MouseSelectionEditor::stopEdition() {
 }
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlGraphWidget *glGraphWidget) {
-  _graph     = glGraphWidget->getGraph();
+  _graph     = glGraphWidget->getRenderingParameters().getGraph();
   _layout    = _graph->getProperty<LayoutProperty>("viewLayout");
   _selection = _graph->getProperty<BooleanProperty>("viewSelection");
   _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");

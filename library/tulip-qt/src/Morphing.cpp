@@ -63,7 +63,7 @@ namespace tlp {
     assert( inG0 );
     assert( inG1 );
     glWidget = outGlgw;
-    Graph * g = outGlgw->getGraph();
+    Graph * g = outGlgw->getRenderingParameters().getGraph();
     assert( g );
     stop();
     bool hasdiff = GraphState::setupDiff( g, inG0, inG1 );
@@ -127,7 +127,7 @@ namespace tlp {
     frameCpt++;
   
     assert( outGlgw );
-    Graph * g = outGlgw->getGraph();
+    Graph * g = outGlgw->getRenderingParameters().getGraph();
     assert( g );
     //assert( glg );
   
@@ -225,7 +225,9 @@ namespace tlp {
     float radius     = g0->camera.sceneRadius + (g1->camera.sceneRadius - g0->camera.sceneRadius) * inT;
     Camera c;
     c = g0->camera;
-    outGlgw->setCamera( Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
+    GlGraphRenderingParameters newParam = outGlgw->getRenderingParameters();
+    newParam.setCamera(Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
+    outGlgw->setRenderingParameters(newParam);
   }
   //===========================================================
   void Morphing::timerEvent( QTimerEvent * te ) {

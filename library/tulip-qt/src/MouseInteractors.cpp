@@ -49,8 +49,8 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
     if(result == true) {
       Observable::holdObservers();
       switch(type) {
-      case NODE: glGraphWidget->getGraph()->delNode(tmpNode); break;
-      case EDGE: glGraphWidget->getGraph()->delEdge(tmpEdge); break;
+      case NODE: glGraphWidget->getRenderingParameters().getGraph()->delNode(tmpNode); break;
+      case EDGE: glGraphWidget->getRenderingParameters().getGraph()->delEdge(tmpEdge); break;
       }
       Observable::unholdObservers();
     }

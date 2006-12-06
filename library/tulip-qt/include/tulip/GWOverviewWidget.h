@@ -17,7 +17,6 @@ namespace tlp {
 
 class GlGraphWidget;
 class QEvent;
-
 class RectPosition;
 
 /** \addtogroup Tulip_Widgets */ 
@@ -28,25 +27,29 @@ class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public GWOverviewWidgetData, public
 public:
   GWOverviewWidget(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~GWOverviewWidget();
-  void draw(tlp::GlGraph *);
   bool eventFilter(QObject *, QEvent *);
-  void showParameters(bool);
-  GlGraphWidget* view;
 
 public slots:
+  void syncFromView();
   void updateView();
   void setObservedView(tlp::GlGraph *);
-  void syncFromView();
-  void backColor();
+  void backColor(); //background color button
+  void showParameters(bool);
   void showExtendedParameters(bool);
   
 private:
+
+  //implements GlGraphObserver
+  void draw(tlp::GlGraph *);
   void destroy(tlp::GlGraph *);
-  tlp::GlGraph *observedView;
-  bool synchronizing;
-  RectPosition *glDraw;
-  Camera initialCamera;
-  bool extendedViewIsVisible;
+
+private :
+  tlp::GlGraph  *_observedView;
+  GlGraphWidget *_view;
+  bool _synchronizing;
+  RectPosition *_glDraw;
+  Camera _initialCamera;
+  bool _extendedViewIsVisible;
 };
 /*@}*/
 #endif // GWOVERVIEW_H

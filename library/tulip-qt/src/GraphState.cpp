@@ -37,14 +37,15 @@ static bool HaveSameValues( Graph * inG,
 //====================================================
 GraphState::GraphState( GlGraphWidget * glgw ) {
   assert( glgw );
-  g = glgw->getGraph();
+  GlGraphRenderingParameters param = glgw->getRenderingParameters();
+  g = param.getGraph();
   layout = new LayoutProperty( g );
   *layout = *( g->getProperty<LayoutProperty>("viewLayout") );
   size = new SizeProperty( g );
   *size = *( g->getProperty<SizeProperty>("viewSize") );
   color = new ColorProperty( g );
   *color = *( g->getProperty<ColorProperty>("viewColor") );
-  camera = glgw->getCamera();
+  camera = param.getCamera();
 }
 //====================================================
 GraphState::~GraphState() {

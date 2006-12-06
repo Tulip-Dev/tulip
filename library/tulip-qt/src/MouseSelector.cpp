@@ -40,10 +40,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	h = 0;
 	started = true;
 	glGraphWidget->setMouseTracking(true);
-	graph=glGraphWidget->getGraph();
+	graph=glGraphWidget->getRenderingParameters().getGraph();
       }
       else {
-	if (glGraphWidget->getGraph()!=graph) {
+	if (glGraphWidget->getRenderingParameters().getGraph()!=graph) {
 	  graph = 0;
 	  started = false;
 	  glGraphWidget->setMouseTracking(false);
@@ -62,8 +62,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseMove) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    if (glGraphWidget->getGraph()!=graph) {
-      graph=0;started=false;glGraphWidget->setMouseTracking(false);
+    if (glGraphWidget->getRenderingParameters().getGraph()!=graph) {
+      graph=0;
+      started=false;
+      glGraphWidget->setMouseTracking(false);
     }
     if (started){
       if ((qMouseEv->x()>0) && (qMouseEv->x()<glGraphWidget->width()))
@@ -78,7 +80,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseButtonRelease) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    if (glGraphWidget->getGraph()!=graph) {
+    if (glGraphWidget->getRenderingParameters().getGraph()!=graph) {
       graph=0;
       started=false;
       glGraphWidget->setMouseTracking(false);
@@ -87,7 +89,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     if (started) {
       glGraphWidget->setMouseTracking(false);
       Observable::holdObservers();
-      BooleanProperty* selection=glGraphWidget->getGraph()->getProperty<BooleanProperty>("viewSelection");
+      BooleanProperty* selection=glGraphWidget->getRenderingParameters().getGraph()->getProperty<BooleanProperty>("viewSelection");
       bool boolVal = true; // add to selection
       if (qMouseEv->stateAfter() != Qt::ShiftButton) {
 	if (qMouseEv->stateAfter() !=
@@ -144,7 +146,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 }
 //==================================================================
 bool MouseSelector::draw(GlGraphWidget *glGraphWidget){
-  if (glGraphWidget->getGraph()!=graph) {
+  if (glGraphWidget->getRenderingParameters().getGraph()!=graph) {
     graph = 0;
     started = false;
     glGraphWidget->setMouseTracking(false);

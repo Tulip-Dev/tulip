@@ -16,38 +16,47 @@ using namespace tlp;
 struct RectPosition : public tlp::GlAugmentedDisplay {
   void draw(tlp::GlGraph *);
   RectPosition(GlGraphWidget *, tlp::GlGraph *);
-  tlp::GlGraph *observedView;
+  void setObservedView(GlGraph *glG) {
+    _observedView = glG;
+  }
 private :
-  GlGraphWidget *view;
+  tlp::GlGraph  * _observedView;
+  GlGraphWidget * _view;
 };
 
 //=============================================================================
-GWOverviewWidget::GWOverviewWidget(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
+GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
+				   const char* name, bool modal, Qt::WFlags fl )
 #if (QT_REL == 3)
-  : GWOverviewWidgetData( parent, name, modal ) {
+  : GWOverviewWidgetData( parent, name, modal )
 #else
-  : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
+  : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) 
 #endif
-		      observedView=0;
-		      glDraw=0;
-		      extView->hide();
-		      view = new GlGraphWidget( frame8, "view" );
-		      view->setMinimumSize( QSize( 128, 128 ) );
-		      view->setMaximumSize( QSize( 2000, 2000 ) );
+{
+  _observedView = 0;
+  _glDraw = 0;
+  _extendedViewIsVisible = false;
+  
+  extView->hide();
+  _view = new GlGraphWidget( frame8, "view" );
+  _view->setMinimumSize( QSize( 128, 128 ) );
+  _view->setMaximumSize( QSize( 2000, 2000 ) );
 #if (QT_REL == 3)
-		      frame8Layout->addWidget( view, 0, 0 );
+  frame8Layout->addWidget( _view, 0, 0 );
 #else
-		      gridLayout->addWidget( view, 0, 0 );
+  gridLayout->addWidget( _view, 0, 0 );
 #endif
-		      view->installEventFilter(this);
-		      extendedViewIsVisible = false;
-		      showParameters(false);
+  _view->installEventFilter(this);
+  _glDraw = new RectPosition(_view, 0);
+  _view->addGlAugmentedDisplay(_glDraw, "Overview");
+
+  showParameters(false);
 }
 //=============================================================================
 void GWOverviewWidget::showParameters(bool visible) {
   if (visible) {
     parameterBasic->show();
-    if (extendedViewIsVisible)
+    if (_extendedViewIsVisible)
       extView->show();
   }
   else {
@@ -55,42 +64,45 @@ void GWOverviewWidget::showParameters(bool visible) {
     extView->hide();
   }
 }
-  
 //=============================================================================
-GWOverviewWidget::~GWOverviewWidget() {}
+GWOverviewWidget::~GWOverviewWidget() {
+  if (_observedView != 0) _observedView->removeObserver(this);
+  delete _view;
+  delete _glDraw;
+}
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
-  if (observedView == 0) return false;
+  if (_observedView == 0) return false;
   if ( obj->inherits("GlGraphWidget") && ( (e->type() == QEvent::MouseButtonPress) || (e->type() == QEvent::MouseMove))  ) {
     QMouseEvent *me = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) obj;
+    assert(glw == _view);
     if (me->state()==LeftButton || me->button()==LeftButton) {
       double mouseClicX = me->x();
       double mouseClicY = me->y();
-      double widgetWidth = glw->width();
-      double widgetHeight = glw->height();
-      GLint *vp = new GLint[4];  
-      int X,Y,W,H;
-      observedView->getWinParameters(&X,&Y,&W,&H,&vp);
-      delete [] vp;
-      Coord upperLeftCorner(X,Y,0);
-      Coord lowerRigihtCorner(X+W, Y+H, 0);
+      double widgetWidth = _view->width();
+      double widgetHeight = _view->height();
+      Vector<int, 4> viewport = _observedView->getRenderingParameters().getViewport();
+      Coord upperLeftCorner(viewport[0], viewport[1],0);
+      Coord lowerRigihtCorner(viewport[0] + viewport[2], 
+			      viewport[1] + viewport[3], 
+			      0);
       Coord middle = (upperLeftCorner + lowerRigihtCorner) / 2.0;
       float x = middle[0];
       float y = middle[1];
       float z = 0.0;
-      observedView->screenTo3DWorld(x, y , z);
-      Camera cover  = glw->getCamera();
-      Camera cview  = observedView->getCamera();
-      glw->worldTo2DScreen(x, y, z);
+      _observedView->screenTo3DWorld(x, y , z);
+      Camera cover  = _view->getRenderingParameters().getCamera();
+      Camera cview  = _observedView->getRenderingParameters().getCamera();
+      _view->worldTo2DScreen(x, y, z);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       double dx, dy, dz;
-      dx = (x - mouseClicX) * W * cview.zoomFactor / (cover.zoomFactor * widgetWidth);
-      dy = (y - (widgetHeight - mouseClicY)) * H * cview.zoomFactor / (cover.zoomFactor * widgetHeight);
+      dx = (x - mouseClicX) * viewport[2] * cview.zoomFactor / (cover.zoomFactor * widgetWidth);
+      dy = (y - (widgetHeight - mouseClicY)) * viewport[3] * cview.zoomFactor / (cover.zoomFactor * widgetHeight);
       dz = 0;
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
-      observedView->translateCamera((int) dx, (int) dy, 0);
-      observedView->draw();
+      _observedView->translateCamera((int) dx, (int) dy, 0);
+      _observedView->draw();
       return true;
     }
     else {
@@ -101,43 +113,52 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 }
 //=============================================================================
 void GWOverviewWidget::draw(GlGraph *glG) {
-  Camera cam = glG->getCamera();
-  cam.zoomFactor = 0.5;
-  cam.eyes -= (cam.center - initialCamera.center);
-  cam.center -= (cam.center - initialCamera.center);
-  view->setCamera(cam);
-  view->draw();
+  assert( glG == _observedView);
+  if (_observedView != 0) {
+    _view->centerScene();
+    _initialCamera = _view->getRenderingParameters().getCamera();   
+    Camera cam = _observedView->getRenderingParameters().getCamera();
+    cam.zoomFactor = 0.5;
+    cam.eyes -= (cam.center - _initialCamera.center);
+    cam.center -= (cam.center - _initialCamera.center);
+    GlGraphRenderingParameters newParam = _view->getRenderingParameters();
+    newParam.setCamera(cam);
+    _view->setRenderingParameters(newParam);
+  }
+  _view->draw();
 }
 //=============================================================================
-void GWOverviewWidget::setObservedView(GlGraph *glV){
-  //  cerr << __PRETTY_FUNCTION__ << endl << flush;
-  if (observedView!=0)
-    observedView->removeObserver(this);
-  observedView=glV;
-  if (glDraw==0) {
-    glDraw = new RectPosition(view,observedView);
-    view->addGlAugmentedDisplay(glDraw, "Overview");
-  }
-  glDraw->observedView=observedView;
-  if (glV!=0) {
-    // cerr << "." ;
-    view->setGraph(glV->getGraph());
+void GWOverviewWidget::setObservedView(GlGraph *glWidget){
+  cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
+  if (_observedView != 0)
+    _observedView->removeObserver(this);
+  _observedView = glWidget;
+  _glDraw->setObservedView(glWidget);
+  
+  if (glWidget != 0) {
+
+    GlGraphRenderingParameters newParam = _observedView->getRenderingParameters();
+    newParam.setViewport(_view->getRenderingParameters().getViewport());
+    _view->setRenderingParameters(newParam);
     syncFromView();
-    view->centerScene();
-    initialCamera = view->getCamera();
-    observedView->addObserver(this);
+    //    _view->centerScene();
+    //    _initialCamera = _view->getRenderingParameters().getCamera();
+    _observedView->addObserver(this);
   }
 }
 //=============================================================================
 void GWOverviewWidget::destroy(GlGraph *glGraph) {
-  observedView=0;
-  glDraw->observedView = 0;
-  view->setGraph(0);
-  draw(glGraph);
+  assert(_observedView == glGraph);
+  _observedView = 0;
+  _glDraw->setObservedView(0);
+  GlGraphRenderingParameters param = _view->getRenderingParameters();
+  param.setGraph(0);
+  _view->setRenderingParameters(param);
+  draw(0);
 }
 //=============================================================================
 void GWOverviewWidget::backColor() {
-  QColor tmp=QColorDialog::getColor(background->paletteBackgroundColor(), this, tr("Choose background color") ) ;
+  QColor tmp = QColorDialog::getColor(background->paletteBackgroundColor(), this, tr("Choose background color") ) ;
   if (tmp.isValid()) {
     background->setPaletteBackgroundColor(tmp);
     updateView();
@@ -149,82 +170,106 @@ void GWOverviewWidget::showExtendedParameters(bool b) {
     extView->hide();
   else
     extView->show();
-  extendedViewIsVisible = b;
+  _extendedViewIsVisible = b;
 }
 //=============================================================================
 void GWOverviewWidget::syncFromView() {
-  if (observedView!=0) {
-    synchronizing=true;
-    arrows->setChecked( observedView->isViewArrow());
-    edges->setChecked( observedView->isDisplayEdges());
-    labels->setChecked( observedView->isViewLabel());
-    interpolation->setChecked( observedView->isEdgeColorInterpolate());
-    view->setEdgeColorInterpolate( observedView->isEdgeColorInterpolate() );
-    view->setTexturePath( observedView->getTexturePath() );
-    interpolationEdge->setChecked( observedView->isEdgeSizeInterpolate());
-    view->setEdgeSizeInterpolate( observedView->isEdgeSizeInterpolate() );
-    strahler->setChecked( observedView->isViewStrahler());
-    orthogonal->setChecked( observedView->isViewOrtho());
-    view->setViewOrtho( observedView->isViewOrtho() );
-    metaLabel->setChecked( observedView->isViewMetaLabel());
-    edge3D->setChecked( observedView->isEdged3D());
-    Color tmp=observedView->getBackgroundColor();
+  if (_observedView!=0) {
+    _synchronizing = true;
+    GlGraphRenderingParameters param = _observedView->getRenderingParameters();
+    arrows->setChecked( param.isViewArrow());
+    edges->setChecked( param.isDisplayEdges());
+    labels->setChecked( param.isViewNodeLabel());
+    interpolation->setChecked( param.isEdgeColorInterpolate());
+    interpolationEdge->setChecked( param.isEdgeSizeInterpolate());
+    strahler->setChecked( param.isElementOrdered());
+    orthogonal->setChecked( param.isViewOrtho());
+    metaLabel->setChecked( param.isViewMetaLabel());
+    edge3D->setChecked( param.isEdge3D());
+    Color tmp = param.getBackgroundColor();
     background->setPaletteBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
-    fonts->setCurrentItem(observedView->fontsType());
-    density->setValue(observedView->getLabelsBorder());
-    synchronizing=false;
+    fonts->setCurrentItem(param.getFontsType());
+    density->setValue(param.getLabelsBorder());
+
+    GlGraphRenderingParameters paramView = _view->getRenderingParameters();
+    paramView.setViewOrtho( param.isViewOrtho() );
+    paramView.setEdgeSizeInterpolate( param.isEdgeSizeInterpolate() );
+    paramView.setEdgeColorInterpolate( param.isEdgeColorInterpolate() );
+    paramView.setTexturePath( param.getTexturePath() );
+    paramView.setViewNodeLabel(false);
+    paramView.setViewEdgeLabel(false);
+    paramView.setElementOrdered(false);
+    _view->setRenderingParameters(paramView);
+
+    _synchronizing=false;
   }
 }
 //=============================================================================
 void GWOverviewWidget::updateView() {
-  if (observedView!=0 && !synchronizing) {
-    observedView->setViewArrow(arrows->isChecked());
-    observedView->setDisplayEdges(edges->isChecked());
-    observedView->setViewLabel(labels->isChecked());
+  if (_observedView!=0 && !_synchronizing) {
+    GlGraphRenderingParameters paramObservedViev = _observedView->getRenderingParameters();
 
-    observedView->setEdgeColorInterpolate(interpolation->isChecked());
-    view->setEdgeColorInterpolate( observedView->isEdgeColorInterpolate() );
-
-    observedView->setEdgeSizeInterpolate(interpolationEdge->isChecked());
-    view->setEdgeSizeInterpolate( observedView->isEdgeSizeInterpolate() );
-
-    observedView->setViewStrahler(strahler->isChecked());
-    observedView->setViewOrtho(orthogonal->isChecked());
-    view->setViewOrtho(orthogonal->isChecked());
-    observedView->setViewMetaLabel(metaLabel->isChecked());
-    observedView->setEdge3D(edge3D->isChecked());
-    observedView->setFontsType(fonts->currentItem());
+    paramObservedViev.setViewArrow(arrows->isChecked());
+    paramObservedViev.setDisplayEdges(edges->isChecked());
+    paramObservedViev.setViewNodeLabel(labels->isChecked());
+    paramObservedViev.setEdgeColorInterpolate(interpolation->isChecked());
+    paramObservedViev.setEdgeSizeInterpolate(interpolationEdge->isChecked());
+    paramObservedViev.setElementOrdered(strahler->isChecked());
+    paramObservedViev.setViewOrtho(orthogonal->isChecked());
+    paramObservedViev.setViewMetaLabel(metaLabel->isChecked());
+    paramObservedViev.setEdge3D(edge3D->isChecked());
+    paramObservedViev.setFontsType(fonts->currentItem());
     QColor tmp = background->paletteBackgroundColor();
-    observedView->setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
-    observedView->setLabelsBorder(density->value());
-    observedView->draw();
+    paramObservedViev.setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
+    paramObservedViev.setLabelsBorder(density->value());
+    _observedView->setRenderingParameters(paramObservedViev);
+
+    GlGraphRenderingParameters paramView = _view->getRenderingParameters();
+    paramView.setBackgroundColor( paramObservedViev.getBackgroundColor() );
+    paramView.setEdgeColorInterpolate( paramObservedViev.isEdgeColorInterpolate() );
+    paramView.setViewOrtho(paramObservedViev.isViewOrtho());
+    paramView.setEdgeSizeInterpolate(paramObservedViev.isEdgeSizeInterpolate() );
+    paramView.setViewNodeLabel(false);
+    paramView.setViewEdgeLabel(false);
+    paramView.setElementOrdered(false);
+    _view->setRenderingParameters(paramView);
+    
+    _observedView->draw();
   }
 }
 //=============================================================================
 void RectPosition::draw(GlGraph *target) {
-  if(observedView == 0) {
+  assert (_view == target);
+  if(_observedView == 0) {
     return ;
   }
   float x[4],xv[4];
   float y[4],yv[4];
   float z[4],zv[4];
-  GLint *vp;
+  _observedView->screenTo3DWorld(x[0],y[0],z[0]);
+
+  Vector<int, 4> viewport = _observedView->getRenderingParameters().getViewport();
   int X,Y,W,H;
-  vp = new GLint[4];  
-  observedView->screenTo3DWorld(x[0],y[0],z[0]);
-  observedView->getWinParameters(&X,&Y,&W,&H,&vp);
-  delete [] vp;
-  for (int i=0;i<4;++i)
-    z[i]=0;
+  X = viewport[0];
+  Y = viewport[1];
+  W = viewport[2];
+  H = viewport[3];
+
+  for (int i=0;i<4;++i) z[i]=0;
   x[0]=X; y[0]=Y;
   x[1]=X+W; y[1]=Y;
   x[2]=X+W; y[2]=Y+H;
   x[3]=X; y[3]=Y+H;
   for (int i=0;i<4;++i)
-    observedView->screenTo3DWorld(x[i],y[i],z[i]);
-  vp = new GLint[4];  
-  view->getWinParameters(&X,&Y,&W,&H,&vp);
-  delete [] vp;
+    _observedView->screenTo3DWorld(x[i],y[i],z[i]);
+
+
+  viewport = _view->getRenderingParameters().getViewport();
+  X = viewport[0];
+  Y = viewport[1];
+  W = viewport[2];
+  H = viewport[3];
+
   for (int i=0;i<4;++i)
     zv[i]=0;
   xv[0]=X;   yv[0]=Y;
@@ -232,7 +277,7 @@ void RectPosition::draw(GlGraph *target) {
   xv[2]=X+W; yv[2]=Y+H;
   xv[3]=X;   yv[3]=Y+H;
   for (int i=0;i<4;++i)
-    view->screenTo3DWorld(xv[i],yv[i],zv[i]);
+    _view->screenTo3DWorld(xv[i],yv[i],zv[i]);
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
@@ -303,6 +348,6 @@ void RectPosition::draw(GlGraph *target) {
 }
 //=============================================================================
 RectPosition::RectPosition(GlGraphWidget *view, GlGraph *observedView) : 
-  observedView(observedView), view(view) {
+  _observedView(observedView), _view(view) {
 }
 //=============================================================================

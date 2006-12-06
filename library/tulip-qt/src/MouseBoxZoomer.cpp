@@ -33,10 +33,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	w = 0; h = 0;
 	started = true;
 	glw->setMouseTracking(true);
-	graph = glw->getGraph();
+	graph = glw->getRenderingParameters().getGraph();
       }
       else {
-	if (glw->getGraph() != graph) {
+	if (glw->getRenderingParameters().getGraph() != graph) {
 	  graph = NULL;
 	  started = false;
 	  glw->setMouseTracking(false);
@@ -56,7 +56,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       ((QMouseEvent *) e)->state() & Qt::LeftButton) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) widget;
-    if (glw->getGraph() != graph) {
+    if (glw->getRenderingParameters().getGraph() != graph) {
       graph = NULL;
       started = false;
       glw->setMouseTracking(false);
@@ -73,7 +73,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease &&
       ((QMouseEvent *) e)->button() == Qt::LeftButton) {
     GlGraphWidget *glw = (GlGraphWidget *) widget;
-    if (glw->getGraph() != graph) {
+    if (glw->getRenderingParameters().getGraph() != graph) {
       graph = NULL;
       started = false;
       glw->setMouseTracking(false);
@@ -86,8 +86,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	int height = glw->height();
 	glw->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
 	w = abs(w); h = abs(h);
-      
-	Camera cam = glw->getCamera();
+	GlGraphRenderingParameters param = glw->getRenderingParameters();
+	Camera cam = param.getCamera();
 	//we prevent zooming in a minimal square area less than 4x4: a least
 	//one of the 2 lengths must be higher than 3
 	if (w > h) {
@@ -96,8 +96,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	else {
 	  cam.zoomFactor *= (double) height / (double) h;
 	}
-      
-	glw->setCamera(cam);
+	param.setCamera(cam);
+	glw->setRenderingParameters(param);
 	glw->draw();
       }
     }
@@ -107,7 +107,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 }
 //=====================================================================
 bool MouseBoxZoomer::draw(GlGraphWidget *glw) {
-  if (glw->getGraph() != graph) {
+  if (glw->getRenderingParameters().getGraph() != graph) {
     graph = NULL;
     started = false;
     glw->setMouseTracking(false);
