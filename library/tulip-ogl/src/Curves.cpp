@@ -200,7 +200,13 @@ namespace tlp {
       drawLine = true;
       drawPoly = true;
     } else {
+#if __GNUC__ > 3
       if (visible(startPoint, bends, endPoint,  modelviewMatrix * projectionMatrix, viewport)) {
+#else
+      MatrixGL tmp(modelviewMatrix);
+      tmp *= projectionMatrix;
+      if (visible(startPoint, bends, endPoint, tmp, viewport)) {
+#endif
 	drawLine = true;
 	drawPoly = true;
       }

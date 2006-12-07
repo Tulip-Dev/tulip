@@ -30,10 +30,16 @@ MATRIXTLPGEO::Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix)
 
 //===================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
+#else
+void MATRIXTLPGEO::fill(Obj obj) {
+#endif
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i].fill(obj);
+#if __GNUC__ > 3
   return (*this);
+#endif
 }
 //===================================================================
 template<typename Obj,unsigned int SIZE>
@@ -165,7 +171,11 @@ MATRIXTLPGEO MATRIXTLPGEO::cofactor() const{
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO & MATRIXTLPGEO::transpose() {
+#else
+void MATRIXTLPGEO::transpose() {
+#endif
   register Obj tmp;
   for (unsigned int i=1; i<SIZE; ++i) {
     for (unsigned int j=0; j<i; ++j) {
@@ -174,7 +184,9 @@ MATRIXTLPGEO & MATRIXTLPGEO::transpose() {
       (*this)[j][i] = tmp;
     }
   }
+#if __GNUC__ > 3
   return (*this);
+#endif
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>

@@ -47,7 +47,11 @@ namespace tlp {
       /**
        * Fill the matrix with the value of obj
        */
+#if __GNUC__ > 3
       inline MATRIX& fill(Obj obj);
+#else
+      inline void fill(Obj obj);
+#endif
       /**
        * Compute the determinant of the matrix,
        */
@@ -55,7 +59,11 @@ namespace tlp {
       /**
        * Transpose the matrix and return "&(*this)".
        */
+#if __GNUC__ > 3
       MATRIX& transpose();
+#else
+      void transpose();
+#endif
       /**
        * Inverse the matrix and return "&(*this)"
        */
