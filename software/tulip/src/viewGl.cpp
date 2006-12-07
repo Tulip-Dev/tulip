@@ -1375,14 +1375,28 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
     QString tmp;
     QHelpEvent *he = static_cast<QHelpEvent *>(e);
     if (((GlGraphWidget *) obj)->doSelect(he->pos().x(), he->pos().y(), type, tmpNode, tmpEdge)) {
+      // try to show the viewLabel if any
+      StringProperty *labels = ((GlGraphWidget *) obj)->getGraph()->getProperty<StringProperty>("viewLabel");
+      std::string label;
+      QString ttip;
       switch(type) {
       case NODE:
-	QToolTip::showText(he->globalPos(),
-			   QString("node: ") + tmp.setNum(tmpNode.id));
+	label = labels->getNodeValue(tmpNode);
+	if (!label.empty())
+	  ttip += (label + " (").c_str();
+	ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
+	if (!label.empty())
+	  ttip += ")";
+	QToolTip::showText(he->globalPos(), ttip);
 	break;
       case EDGE: 
-	QToolTip::showText(he->globalPos(),
-			   QString("edge: ") + tmp.setNum(tmpEdge.id));
+	label = labels->getEdgeValue(tmpEdge);
+	if (!label.empty())
+	  ttip += (label + "(").c_str();
+	ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
+	if (!label.empty())
+	  ttip += ")";
+	QToolTip::showText(he->globalPos(), ttip);
 	break;
       }
       return true;
