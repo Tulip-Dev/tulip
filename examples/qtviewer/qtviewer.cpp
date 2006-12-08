@@ -7,6 +7,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/MouseInteractors.h>
+#include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
 
@@ -14,15 +15,15 @@ using namespace std;
 void importGraph(const string &filename, GlGraph *render) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
-  Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
-  if (newGraph!=0) {
-    render->setGraph(newGraph);
-    
+  Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
+  GlGraphRenderingParameters param = render->getRenderingParameters();
+  if (newGraph != 0) {
+    param.setGraph(newGraph);
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
-      render->setParameters(glGraphData);
+      param.setParameters(glGraphData);
   }
-  
+  render->setRenderingParameters(param);
 }
 /*******************************************************************/
 int main(int argc,char ** argv ){
@@ -38,8 +39,10 @@ int main(int argc,char ** argv ){
 
   /****************************************************/
   tlp::initTulipLib();
-  /* tlp::loadPlugins();   // library side plugins
-     GlGraph::loadPlugins(); //Glyoh plugins */
+
+  PluginLoaderTxt txtPlug;
+  tlp::loadPlugins(&txtPlug);   // library side plugins
+  //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlGraphWidget MainWin;
   
