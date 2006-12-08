@@ -1638,8 +1638,7 @@ void viewGl::filePrint() {
   delete image;
 }
 //==============================================================
-void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
-  GlGraphWidget *w = navigate;
+void viewGl::glGraphWidgetClosed(GlGraphWidget *w) {
   Graph *root = w->getGraph()->getRoot();
   QWidgetList windows = workspace->windowList();
   int i;
@@ -1647,15 +1646,15 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     QWidget *win = windows.at(i);
     if (typeid(*win)==typeid(GlGraphWidget)) {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-      int graph1 = w->getGraph()->getRoot()->getId();
+      int graph1 = root->getId();
       int graph2 = tmpNavigate->getGraph()->getRoot()->getId();
-      if((tmpNavigate != navigate) && (graph1 == graph2))
+      if((tmpNavigate != w) && (graph1 == graph2))
 	break;
     }
   }
   if(i == int(windows.count())) {
     string message = "Do you want to save this graph : " +
-      navigate->getGraph()->getAttribute<string>("name") + " ?";
+      w->getGraph()->getAttribute<string>("name") + " ?";
 
     int answer = QMessageBox::question(this, "Save", message.c_str(), QMessageBox::Yes,
 				       QMessageBox::No, 
@@ -1674,8 +1673,9 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     GlGraphRenderingParameters param = w->getRenderingParameters();
     param.setGraph(0);
     w->setRenderingParameters(param);
-    delete root;
-  }
+  } else
+    // no graph to delete
+    root = (Graph *) 0;
   
   if (openFiles.find((unsigned long)w) != openFiles.end())   
     openFiles.erase((unsigned long)w);
@@ -1686,7 +1686,13 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
     w->setRenderingParameters(param);
     glWidget = 0;
   }
-  delete navigate;
+  delete w;
+
+  // if needed the graph must be deleted after
+  // the GlGraphWidget because this one has to remove itself
+  // from the graph observers list
+  if (root)
+    delete root;
   
   if(windows.count() == 1)
     enableElements(false);
