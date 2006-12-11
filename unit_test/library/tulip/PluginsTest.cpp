@@ -30,7 +30,7 @@ void PluginsTest::testloadPlugin() {
   vector<pair<string, string> > deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT(deps.size() == 1);
-  CPPUNIT_ASSERT(deps[0].first == "BooleanAlgorithm");
+  CPPUNIT_ASSERT(deps[0].first == typeid(BooleanAlgorithm).name());
   CPPUNIT_ASSERT(deps[0].second == "Test");  
 }
 //==========================================================

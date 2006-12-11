@@ -57,26 +57,43 @@ void MatrixTest::testExternalOperation() {
     for (unsigned int j=0; j<SIZE; ++j) {
       double res = fabs(matid[i][j] - result[i][j]);
       bool ok = false;
-      if (res < 1.E-5) ok = true;
+      if (fabs(res) < 1.E-5) ok = true;
       CPPUNIT_ASSERT_EQUAL(true, ok);
     }
-  Vector<double, SIZE> vec2;
-  vec2 = matid *vec;
+  Vector<double, SIZE> vec2, vec3;
+  vec2 = matid * vec;
   CPPUNIT_ASSERT_EQUAL(true, vec == vec2);
-  //  cerr << vec << endl;
-  //  display(mat2);
+  
   vec2 = mat2 * vec;
-  //  cerr << vec2 << endl;
-  //  display(matinv);
   vec2 = matinv * vec2;
-  //  cerr << vec2 << endl;
   for (unsigned int j=0; j<SIZE; ++j) {
     double res = fabs(vec2[j] - vec[j]);
     bool ok = false;
     if (res < 1.E-5) ok = true;
     CPPUNIT_ASSERT_EQUAL(true, ok);
   }
+  
+  vec2 = mat2 * vec;
+  vec3 = vec * mat2;
+  bool ok = false;
+  for (unsigned int j=0; j<SIZE; ++j) {
+    double res = fabs(vec2[j] - vec3[j]);
+    if (res > 1.E-5) ok = true;
+  }
+  CPPUNIT_ASSERT_EQUAL(true, ok);
 
+  vec2 = vec * mat2;
+  vec3 = vec2 * matinv;
+  
+  for (unsigned int j=0; j<SIZE; ++j) {
+    bool ok = false;
+    double res = fabs(vec[j] - vec3[j]);
+    if (res < 1.E-5) ok = true;
+    CPPUNIT_ASSERT_EQUAL(true, ok);
+  }
+
+  
+  
 }
 //==========================================================
 void MatrixTest::testInternalOperation() {
