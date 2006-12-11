@@ -114,7 +114,7 @@
     <sect1 id="labels"><title>Labels Formatted</title>
         <para>under construction</para>
     </sect1>
-    <sect1 id="statistics"><title>Statistics Panel (not available in the downloadable binary versions)</title>
+    <sect1 id="statistics"><title>Statistics Panel (not available in the downloadable binary versions, requires configuration with --enable-stats-gui when compiling Tulip from source code)</title>
 	<sect2 id="stats-tut-intro"><title>Introduction</title>
     	    <para>
 	    This section will explain how to use the statistics panel in Tulip. The tutorial is composed of 3 main parts. Firstly, you will see how to generate a scatter plot or an histogram from a graph. In a second part, you will see how to enable augmented displays on the graph. And finally, you will see how to clusterize the graph from the statistics values previously computed.
