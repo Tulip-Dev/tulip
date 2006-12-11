@@ -122,8 +122,8 @@ public:
    */
   virtual void delAllSubGraphs(Graph *)=0;
   /**
-   * Returns the Graph(UpperGraph of the graph), if it has no Graph it 
-   * returns itself
+   * Returns the parent of the graph,
+   *  if it has no parent (is the root graph), it returns itself.
    */
   virtual Graph* getFather()const =0;
   /**
@@ -131,8 +131,8 @@ public:
    */
   virtual Graph* getRoot() const =0;
   /**
-   * Set the Graph of a graph (use very carefully)
-   * Normal user should never use this function.
+   * Set the parent of a graph (use very carefully)
+   * Standard user should never use this function.
    */
   virtual void setFather(Graph *)=0;
   /**
@@ -144,12 +144,12 @@ public:
   //==============================================================================
   /** 
    * Add a new node in the graph and return it. This node is also added in all 
-   * the Graph of the graph to maintain the sub_graph relation between graphs.
+   * the graph ancestors to maintain the sub_graph relation between graphs.
    */
   virtual node addNode()=0;
   /** 
    * Add an existing node in the graph. this node is also added in all 
-   * the Graph of the graph to maintain the sub_graph relation between graphs.
+   * the graph ancestors to maintain the sub_graph relation between graphs.
    * Warning, the node must be element of the graph hierarchy, thus it must be 
    * element of the root graph.
    */
@@ -235,7 +235,7 @@ public:
   /// Return an iterator on the in--edges of a node.
   virtual Iterator<edge>* getInEdges(const node) const =0;
   //================================================================================
-  // Graph, nodes and adges informations about the graph stucture
+  // Graph, nodes and edges informations about the graph stucture
   //================================================================================
   /// Return the graph's id, this id is unique.
   int getId() const {return id;}
@@ -319,8 +319,8 @@ public:
    */
   virtual PropertyInterface* getProperty(const std::string &name)=0;  
   /**
-   *  Return true if the propertyProxy exists
-   *  in the Graph or in a Graph
+   *  Return true if a property of that name exists
+   *  in the graph or in an ancestor
    */
   virtual  bool existProperty(const std::string&name)=0;
   /**
