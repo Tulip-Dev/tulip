@@ -99,13 +99,13 @@ VECTORTLP VECTORTLP::operator-(const Obj& scalaire) const {
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator*(const VECTORTLP &v) const { 
-  return VECTORTLP(*this)*=v;
+VECTORTLP tlp::operator*(const VECTORTLP &v1, const VECTORTLP &v2) { 
+  return VECTORTLP(v1)*=v2;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP  VECTORTLP::operator*(const Obj& scalaire) const {
-  return VECTORTLP(*this)*=scalaire;
+VECTORTLP  tlp::operator*(const VECTORTLP &v, const Obj& scalaire) {
+  return VECTORTLP(v)*=scalaire;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>

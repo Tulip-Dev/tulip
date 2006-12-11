@@ -61,10 +61,10 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Observable::unholdObservers(); 
 	}
 	else {
-	  float x1, y1, z1;
-	  x1 = (double) glGraphWidget->width() - (double) qMouseEv->x(); y1 = (double) qMouseEv->y(); z1 = 0;
-	  glGraphWidget->screenTo3DWorld(x1, y1, z1);
-	  bends.push_back(Coord(x1, y1, z1));
+	  Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
+		 (double) qMouseEv->y(),
+		 0);
+	  bends.push_back(glGraphWidget->screenTo3DWorld(point));
 	  glGraphWidget->draw();
 	}
       }
@@ -82,10 +82,12 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     if (!started) return false;
-    float x1,y1,z1;
-    x1 = (double) glGraphWidget->width() - (double) qMouseEv->x() ;y1 = (double) qMouseEv->y();z1 = 0;
-    glGraphWidget->screenTo3DWorld(x1,y1,z1);
-    curPos.set(x1,y1,z1);
+    
+    Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
+		(double) qMouseEv->y(),
+		0);
+    point = glGraphWidget->screenTo3DWorld(point);
+    curPos.set(point[0], point[1], point[2]);
     glGraphWidget->draw();
     return true;
   }

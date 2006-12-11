@@ -36,11 +36,11 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       float x1,y1,z1;
       newNode = _graph->addNode();
       //if (isViewStrahler()) orderedNode.push_front(newNode);
-      x1 = (double) glw->width() - (double) qMouseEv->x() ;
-      y1 = (double) qMouseEv->y();
-      z1 = 0;
-      glw->screenTo3DWorld(x1,y1,z1);
-      mLayout->setNodeValue(newNode, Coord(x1,y1,z1));
+      Coord point((double) glw->width() - (double) qMouseEv->x(),
+		  (double) qMouseEv->y(),
+		  0);
+      point = glw->screenTo3DWorld(point);
+      mLayout->setNodeValue(newNode, point);
       //      mColors->setNodeValue(newNode,((Application *)qApp)->nodeColor);
       glw->redraw();
       return true;

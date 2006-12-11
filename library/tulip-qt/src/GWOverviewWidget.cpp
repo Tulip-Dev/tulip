@@ -88,17 +88,15 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 			      viewport[1] + viewport[3], 
 			      0);
       Coord middle = (upperLeftCorner + lowerRigihtCorner) / 2.0;
-      float x = middle[0];
-      float y = middle[1];
-      float z = 0.0;
-      _observedView->screenTo3DWorld(x, y , z);
+      middle[2] = 0.;
+      middle = _observedView->screenTo3DWorld(middle);
       Camera cover  = _view->getRenderingParameters().getCamera();
       Camera cview  = _observedView->getRenderingParameters().getCamera();
-      _view->worldTo2DScreen(x, y, z);
+      middle = _view->worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
-      double dx, dy, dz;
-      dx = (x - mouseClicX) * viewport[2] * cview.zoomFactor / (cover.zoomFactor * widgetWidth);
-      dy = (y - (widgetHeight - mouseClicY)) * viewport[3] * cview.zoomFactor / (cover.zoomFactor * widgetHeight);
+      float dx, dy, dz;
+      dx = (middle[0] - mouseClicX) * viewport[2] * cview.zoomFactor / (cover.zoomFactor * widgetWidth);
+      dy = (middle[1] - (widgetHeight - mouseClicY)) * viewport[3] * cview.zoomFactor / (cover.zoomFactor * widgetHeight);
       dz = 0;
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
       _observedView->translateCamera((int) dx, (int) dy, 0);
@@ -243,41 +241,25 @@ void RectPosition::draw(GlGraph *target) {
   if(_observedView == 0) {
     return ;
   }
-  float x[4],xv[4];
-  float y[4],yv[4];
-  float z[4],zv[4];
-  _observedView->screenTo3DWorld(x[0],y[0],z[0]);
-
-  Vector<int, 4> viewport = _observedView->getRenderingParameters().getViewport();
-  int X,Y,W,H;
-  X = viewport[0];
-  Y = viewport[1];
-  W = viewport[2];
-  H = viewport[3];
-
-  for (int i=0;i<4;++i) z[i]=0;
-  x[0]=X; y[0]=Y;
-  x[1]=X+W; y[1]=Y;
-  x[2]=X+W; y[2]=Y+H;
-  x[3]=X; y[3]=Y+H;
+  Vector<Coord, 4> points;
+  Vector<int,   4> viewport = _observedView->getRenderingParameters().getViewport();
+  points[0] = Coord(viewport[0]              , viewport[1], 0);
+  points[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
+  points[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
+  points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    _observedView->screenTo3DWorld(x[i],y[i],z[i]);
-
+    points[i] = _observedView->screenTo3DWorld(points[i]);
+  
 
   viewport = _view->getRenderingParameters().getViewport();
-  X = viewport[0];
-  Y = viewport[1];
-  W = viewport[2];
-  H = viewport[3];
-
+  Vector<Coord, 4> points2;
+  points2[0] = Coord(viewport[0]              , viewport[1], 0);
+  points2[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
+  points2[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
+  points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    zv[i]=0;
-  xv[0]=X;   yv[0]=Y;
-  xv[1]=X+W; yv[1]=Y;
-  xv[2]=X+W; yv[2]=Y+H;
-  xv[3]=X;   yv[3]=Y+H;
-  for (int i=0;i<4;++i)
-    _view->screenTo3DWorld(xv[i],yv[i],zv[i]);
+    points2[i] = _view->screenTo3DWorld(points2[i]);
+  
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
@@ -295,36 +277,36 @@ void RectPosition::draw(GlGraph *target) {
 #define GVAL 90
 #define BVAL 233
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[0],yv[0],zv[0]);
+  glVertex3fv((float *)&points2[0]);
   glColor4ub(255,255,255,100);
-  glVertex3d(x[0],y[0],z[0]);
-  glVertex3d(x[1],y[1],z[1]);
+  glVertex3fv((float *)&points[0]);
+  glVertex3fv((float *)&points[1]);
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[1],yv[1],zv[1]);
+  glVertex3fv((float *)&points2[1]);
 
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[1],yv[1],zv[1]);
+  glVertex3fv((float *)&points2[1]);
   glColor4ub(255,255,255,100);
-  glVertex3d(x[1],y[1],z[1]);
-  glVertex3d(x[2],y[2],z[2]);
+  glVertex3fv((float *)&points[1]);
+  glVertex3fv((float *)&points[2]);
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[2],yv[2],zv[2]);
+  glVertex3fv((float *)&points2[2]);
+  
+  glColor4ub(RVAL,GVAL,BVAL,200);
+  glVertex3fv((float *)&points2[2]);
+  glColor4ub(255,255,255,100);
+  glVertex3fv((float *)&points[2]);
+  glVertex3fv((float *)&points[3]);
+  glColor4ub(RVAL,GVAL,BVAL,200);
+  glVertex3fv((float *)&points2[3]);
 
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[2],yv[2],zv[2]);
+  glVertex3fv((float *)&points2[3]);
   glColor4ub(255,255,255,100);
-  glVertex3d(x[2],y[2],z[2]);
-  glVertex3d(x[3],y[3],z[3]);
+  glVertex3fv((float *)&points[3]);
+  glVertex3fv((float *)&points[0]);
   glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[3],yv[3],zv[3]);
-
-  glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[3],yv[3],zv[3]);
-  glColor4ub(255,255,255,100);
-  glVertex3d(x[3],y[3],z[3]);
-  glVertex3d(x[0],y[0],z[0]);
-  glColor4ub(RVAL,GVAL,BVAL,200);
-  glVertex3d(xv[0],yv[0],zv[0]);
+  glVertex3fv((float *)&points2[0]);
 
   glEnd();
   glDisable(GL_BLEND);
@@ -332,7 +314,7 @@ void RectPosition::draw(GlGraph *target) {
   glLineWidth(1);
   glBegin(GL_LINE_LOOP);
   for (int i=0;i<4;++i)
-    glVertex3d(x[i],y[i],z[i]);
+    glVertex3fv((float *)&points[i]);
   glEnd();
   glLineWidth(1);
   glEnable(GL_CULL_FACE);
@@ -340,8 +322,8 @@ void RectPosition::draw(GlGraph *target) {
   glEnable(GL_LINE_STIPPLE);
   glBegin(GL_LINES);
   for (int i=0;i<4;++i) {
-    glVertex3d(xv[i],yv[i],zv[i]);
-    glVertex3d(x[i],y[i],z[i]);
+    glVertex3fv((float *)&points2[i]);
+    glVertex3fv((float *)&points[i]);
   }
   glEnd();
   glPopAttrib();

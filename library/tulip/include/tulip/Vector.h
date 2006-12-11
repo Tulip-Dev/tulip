@@ -49,8 +49,7 @@ namespace tlp {
     inline VECTOR operator+(const Obj &) const;
     inline VECTOR operator-(const VECTOR &) const;
     inline VECTOR operator-(const Obj &) const;
-    inline VECTOR operator*(const VECTOR &) const;
-    inline VECTOR operator*(const Obj &) const ;
+
     inline VECTOR operator/(const VECTOR &) const;
     inline VECTOR operator/(const Obj &) const;
     inline VECTOR operator^(const VECTOR &) const;
@@ -62,6 +61,11 @@ namespace tlp {
     inline Obj dist (const VECTOR &) const;
     inline Obj dotProduct(const VECTOR &) const;
   };
+  TEMPLATEVECTOR
+  inline VECTOR operator*(const VECTOR &, const VECTOR &);
+  TEMPLATEVECTOR
+  inline VECTOR operator*(const VECTOR &, const Obj &);
+
   /*@}*/
 }
 

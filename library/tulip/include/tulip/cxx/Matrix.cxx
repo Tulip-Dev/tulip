@@ -196,8 +196,8 @@ MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator*(const MATRIXTLPGEO &mat2) const {
-  return MATRIXTLPGEO(*this)*=mat2;
+  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
+  return MATRIXTLPGEO(mat1)*=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
@@ -206,24 +206,38 @@ MATRIXTLPGEO MATRIXTLPGEO::operator/(const MATRIXTLPGEO &mat2) const{
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator*(const Obj &obj) const {
-  return  MATRIXTLPGEO(*this) *= obj;
-}
-//=====================================================================================
-template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO MATRIXTLPGEO::operator/(const Obj &obj) const{
   return  MATRIXTLPGEO(*this) /= obj;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-tlp::Vector<Obj,SIZE> MATRIXTLPGEO::operator*(const tlp::Vector<Obj,SIZE> &vec) const {
+  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat ,const Obj &obj) {
+  return  MATRIXTLPGEO(mat) *= obj;
+}
+//=====================================================================================
+template<typename Obj, unsigned int SIZE>
+  tlp::Vector<Obj, SIZE> tlp::operator*( const MATRIXTLPGEO &mat , const tlp::Vector<Obj, SIZE> &vec) {
   tlp::Vector<Obj,SIZE> result;
   for (unsigned int row=0; row<SIZE; ++row) {
-    result[row] = (*this)[row][0] * vec[0];
+    result[row] = mat[row][0] * vec[0];
   }
   for (unsigned int col=1; col<SIZE; ++col) {
     for (unsigned int row=0; row<SIZE; ++row) {
-      result[row] += (*this)[row][col] * vec[col];
+      result[row] += mat[row][col] * vec[col];
+    }
+  }
+  return  result;
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+  tlp::Vector<Obj,SIZE> tlp::operator*( const tlp::Vector<Obj,SIZE> &vec, const MATRIXTLPGEO &mat) {
+  tlp::Vector<Obj,SIZE> result;
+  for (unsigned int row=0; row<SIZE; ++row) {
+    result[row] = mat[0][row] * vec[0];
+  }
+  for (unsigned int col=1; col<SIZE; ++col) {
+    for (unsigned int row=0; row<SIZE; ++row) {
+      result[row] += mat[col][row] * vec[col];
     }
   }
   return  result;

@@ -332,8 +332,8 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlGraphWidg
   initProxies(glGraphWidget);
   Coord v0(0,0,0);
   Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
-  glGraphWidget->screenTo3DWorld(v0[0], v0[1], v0[2]);
-  glGraphWidget->screenTo3DWorld(v1[0], v1[1], v1[2]);
+  v0 = glGraphWidget->screenTo3DWorld(v0);
+  v1 = glGraphWidget->screenTo3DWorld(v1);
   v1 -= v0;
   Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
@@ -518,14 +518,14 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   Coord bbsize = (boundingBox.first - boundingBox.second);
   //v1
   Coord tmp(boundingBox.second);
-  glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+  tmp = glGraphWidget->worldTo2DScreen(tmp);
   min2D = tmp;
   max2D = tmp;
   //v2, v3, V4
   for (unsigned int i=0; i<3; ++i) {
     tmp = boundingBox.second;
     tmp[i] += bbsize[i];
-    glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+    tmp = glGraphWidget->worldTo2DScreen(tmp);
     min2D = minCoord(tmp, min2D);
     max2D = maxCoord(tmp, max2D);
   }
@@ -533,27 +533,27 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   tmp = boundingBox.second;
   tmp[0] += bbsize[0];
   tmp[1] += bbsize[1];
-  glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+  tmp = glGraphWidget->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v6
   tmp = boundingBox.second;
   tmp[0] += bbsize[0];
   tmp[2] += bbsize[2];
-  glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+  tmp = glGraphWidget->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v7
   tmp = boundingBox.second;
   tmp[1] += bbsize[1];
   tmp[2] += bbsize[2];
-  glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+  tmp = glGraphWidget->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v8
   tmp = boundingBox.second;
   tmp += bbsize;
-  glGraphWidget->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+  tmp = glGraphWidget->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
 
@@ -585,7 +585,7 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   
   Coord tmpCenter(ffdCenter);
 
-  glGraphWidget->worldTo2DScreen(tmpCenter[0], tmpCenter[1], tmpCenter[2]);
+  tmpCenter = glGraphWidget->worldTo2DScreen(tmpCenter);
    
   Coord recCenter(tmpCenter);
   

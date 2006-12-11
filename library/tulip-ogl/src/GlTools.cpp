@@ -1,17 +1,21 @@
 #include <GL/glu.h>
 #include <tulip/Rectangle.h>
 #include "tulip/GlTools.h"
+#include "tulip/Matrix.h"
 #include <iostream>
 
 using namespace std;
 namespace tlp {
   //====================================================
   void glTest(string message) {
+    unsigned int i = 1;
     GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-      cerr << "[OpenGL ERROR] : " << message << endl;
-      cerr << "=============> : " << gluErrorString(error) <<  endl;
+    while (error != GL_NO_ERROR) {
+      if (i==1) cerr << "[OpenGL ERROR] : " << message << endl;
+      cerr << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
       assert (error == GL_NO_ERROR);
+      error = glGetError();
+      ++i;
     }
   }
   //====================================================
@@ -28,41 +32,57 @@ namespace tlp {
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
-  bool projectToScreen(const Coord &obj, 
-		       const MatrixGL &transform,
-		       const Vector<int, 4> &viewport,
-		       Vector<float, 2> &result) {
-    GLfloat winw;
-    //  [objx, objy, objz, 1] * transform;
-    winw = 
-      transform[0][3] * obj[0] + 
-      transform[1][3] * obj[1] +  
-      transform[2][3] * obj[2] + 
-      transform[3][3];
-    if ( fabs(winw) < 1E-6 ) {
-      cerr << "unprojectable" << endl;
-      return false;
-    }
+  Coord projectPoint(const Coord &obj, 
+		     const MatrixGL &transform,
+		     const Vector<int, 4> &viewport) {
+    Vector<float, 4> point;
+    point[0] = obj[0];
+    point[1] = obj[1];
+    point[2] = obj[2];
+    point[3] = 1;
+    point =  point * transform;// * transform;
+    assert(fabs(point[3]) > 1E-6);
     //    cerr << winw << endl;
-    result[0] = ( (transform[0][0] * obj[0] + 
-		   transform[1][0] * obj[1] +  
-		   transform[2][0] * obj[2] + 
-		   transform[3][0] )
-		  /winw * 0.5 + 0.5 ) * float(viewport[2]) + float(viewport[0]);
-    result[1] = ( (transform[0][1] * obj[0] + 
-		   transform[1][1] * obj[1] +  
-		   transform[2][1] * obj[2] + 
-		   transform[3][1] )
-		  /winw * 0.5 + 0.5) * float(viewport[3]) + float(viewport[1]);
-    return true;
+    Coord result(point[0], point[1], point[2]);
+    result /= point[3];
+    result *= 0.5;
+    result += 0.5;
+    
+    result[0] = result[0] * viewport[2] + viewport[0];
+    result[1] = result[1] * viewport[3] + viewport[1];
+    return result;
+  }
+  //====================================================
+  Coord unprojectPoint(const Coord &obj, 
+		       const MatrixGL &invtransform,
+		       const Vector<int, 4> &viewport) {
+    Vector<float, 4> point;
+    point[0] = obj[0];
+    point[1] = obj[1];
+    point[2] = obj[2];
+
+    point[0] = (point[0] - viewport[0]) / viewport[2];
+    point[1] = (point[1] - viewport[1]) / viewport[3];
+    
+    point *= 2.;
+    point -= 1.;
+    
+    point[3] = 1.;
+
+    point = point * invtransform;
+    assert(fabs(point[3]) > 1E-6);
+  
+    Coord result(point[0], point[1], point[2]);
+    result /= point[3];
+
+    return result;
   }
   //====================================================
   double segmentSize(const Coord &u, const Coord &v, 
 		     const tlp::MatrixGL &transform, 
 		     const Vector<int, 4> &viewport) {
-    Vector<float,2> p1, p2;
-    projectToScreen(u, transform, viewport, p1);
-    projectToScreen(v, transform, viewport, p2);
+    Coord p1 = projectPoint(u, transform, viewport);
+    Coord p2 = projectPoint(v, transform, viewport);
     return sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
   }
   //====================================================
@@ -70,9 +90,8 @@ namespace tlp {
 			const tlp::MatrixGL &transform, 
 			const Vector<int, 4> &viewport) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
-    Vector<float,2> p1, p2;
-    projectToScreen(u, transform, viewport, p1);
-    projectToScreen(v, transform, viewport, p2);
+    Coord p1 = projectPoint(u, transform, viewport);
+    Coord p2 = projectPoint(v, transform, viewport);
     GLfloat minx = viewport[0];
     GLfloat miny = viewport[1];
     GLfloat maxx = minx + viewport[2];
@@ -85,6 +104,7 @@ namespace tlp {
 	  (p1[0]>maxx && p2[0]>maxx) || 
 	  (p1[1]>maxy && p2[1]>maxy) ) ) {
       //      cerr << "not visible" << endl;
+      //      cerr << p1 << " *** " << p2 << endl;
       return -size;
     }
     else 
@@ -94,7 +114,6 @@ namespace tlp {
   GLfloat projectSize(const Coord& position, const Size &_size, 
 		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
 		      const Vector<int, 4> &viewport) {
-    double max = -1;
     float  nSize = _size.norm(); //Enclosing bounding box
 
     MatrixGL translate;
@@ -119,24 +138,24 @@ namespace tlp {
     //    cerr << projectionMatrix << endl;
 
     tmp *= projectionMatrix;
-    tmp.transpose();
+
     Vector<float, 4> vect1;
-    vect1.fill(0);
-    vect1[0] = 0.5;
-    vect1[3] = 1.0;
-    Vector<float, 4> proj1 =  tmp * vect1;
+    vect1[0] = 0.5; vect1[1] = 0;
+    vect1[2] = 0;   vect1[3] = 1.0;
+    Vector<float, 4> proj1 =  vect1 * tmp;
+
     Vector<float, 4> vect2;
     vect2.fill(0);
     vect2[3] = 1.0;
-    Vector<float, 4> proj2 =  tmp * vect2;
-    //cerr << proj1 << endl;
-    //cerr << proj2 << endl;
+    Vector<float, 4> proj2 =  vect2 * tmp;
+
+
     float x1 = (proj1[0]/proj1[3] * 0.5 + 0.5 ) * viewport[2];
     float x2 = (proj2[0]/proj2[3] * 0.5 + 0.5 ) * viewport[2];
-    //    cerr << x1 << "," << x2 << endl;
+
     float width = fabs(x1 - x2);
     float size = sqr(2. * width);
-    //    cerr << "size :" << size << endl;
+
     // Test of visibily
     x2 += viewport[0];
     float y2 = (proj2[1]/proj2[3] * 0.5 + 0.5) * viewport[3] + viewport[1];
@@ -162,18 +181,11 @@ namespace tlp {
     r2[0] = upleftV;
     r2[1] = downrightV;
     
-    //    cerr << r1 << endl;
-    //    cerr << r2 << endl;
-    
     if (!r1.intersect(r2)) {
-      //      cerr << "not visible" << endl;
       size *= -1.0;
     }
-    
-    //    Vector<float, 2> upleft;
-    //    r1[0] = 
-    //    cerr << size << endl;
-    return size;
+    else
+      return size;
     
     //    cerr << "s: " << nSize << " => " << minx << "," << miny << "/" << maxx << "," << maxy << endl;
   }
