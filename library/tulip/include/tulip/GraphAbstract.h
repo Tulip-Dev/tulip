@@ -18,13 +18,13 @@ template<class C>class Iterator;
 ///Abstract class for default graph operations.
 class GraphAbstract:public Graph {
 public:
-  GraphAbstract(Graph *father=0);
+  GraphAbstract(Graph *supergraph=0);
   virtual ~GraphAbstract();
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0);
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
-  virtual Graph* getFather()const;
+  virtual Graph* getSuperGraph()const;
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *> * getSubGraphs() const;
 
@@ -56,7 +56,7 @@ public:
   PropertyInterface* getProperty(const std::string &);
 
 protected:
-  void setFather(Graph *);
+  void setSuperGraph(Graph *);
   PropertyManager *propertyContainer;
   PropertyManager *getPropertyManager() {
     return propertyContainer;
@@ -64,7 +64,7 @@ protected:
 
 private:
   DataSet attributes;
-  Graph *father;
+  Graph *supergraph;
   GRAPH_SEQ subgraphs;
 
 };

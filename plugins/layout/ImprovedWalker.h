@@ -76,7 +76,7 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
 				      float rightShift);
   void                    executeShifts(tlp::node v);
     
-  inline tlp::node getFather(tlp::node n);
+  inline tlp::node getSuperGraph(tlp::node n);
 
   inline tlp::node leftmostChild(tlp::node n);
   inline tlp::node rightmostChild(tlp::node n);
@@ -91,7 +91,7 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
 };
 
 //====================================================================    
-inline tlp::node ImprovedWalker::getFather(tlp::node n) {
+inline tlp::node ImprovedWalker::getSuperGraph(tlp::node n) {
    if (graph->indeg(n)<1)
         return BADNODE;
     return graph->getInNode(n,1);
@@ -117,12 +117,12 @@ inline tlp::node ImprovedWalker::leftSibling(tlp::node n) {
     if (order[n]<=1)
         return BADNODE; 
     else
-        return graph->getOutNode( getFather(n) ,order[n]-1);
+        return graph->getOutNode( getSuperGraph(n) ,order[n]-1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::rightSibling(tlp::node n) {
-    tlp::node father=getFather(n);
+    tlp::node father=getSuperGraph(n);
     if (order[n]>=int(graph->outdeg(father)))
         return BADNODE;     
     return graph->getOutNode(father ,order[n]+1);
@@ -130,7 +130,7 @@ inline tlp::node ImprovedWalker::rightSibling(tlp::node n) {
 
 //====================================================================
 inline tlp::node ImprovedWalker::leftMostSibling(tlp::node n) {
-    tlp::node father=getFather(n);
+    tlp::node father=getSuperGraph(n);
     return leftmostChild(father);
 }
 
@@ -153,7 +153,7 @@ inline tlp::node ImprovedWalker::nextLeftContour(tlp::node n) {
 //====================================================================
 inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left, tlp::node right, 
 						    tlp::node defaultAncestor) {
-    if (getFather(ancestor[left]) == getFather(right) /*&& left!=right*/)
+    if (getSuperGraph(ancestor[left]) == getSuperGraph(right) /*&& left!=right*/)
         return ancestor[left];
     else
         return defaultAncestor;

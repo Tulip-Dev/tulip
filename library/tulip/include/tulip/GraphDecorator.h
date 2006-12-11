@@ -27,8 +27,8 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   inline virtual Graph *addSubGraph(BooleanProperty *selection=0);
   inline virtual void delSubGraph(Graph * s);
   inline virtual void delAllSubGraphs(Graph *s);
-  inline virtual Graph* getFather()const;
-  inline virtual void setFather(Graph* s);
+  inline virtual Graph* getSuperGraph()const;
+  inline virtual void setSuperGraph(Graph* s);
   inline virtual Graph* getRoot() const;
   inline virtual Iterator<Graph *> * getSubGraphs() const;
 

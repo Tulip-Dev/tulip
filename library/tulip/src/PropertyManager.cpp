@@ -34,10 +34,10 @@ bool PropertyManagerImpl::existProperty(const string &str) {
   if (existLocalProperty(str)) 
     return true;
   else {
-    if (graph->getFather()==graph)
+    if (graph->getSuperGraph()==graph)
         return false;
     else 
-      return (graph->getFather()->existProperty(str));
+      return (graph->getSuperGraph()->existProperty(str));
   }
 }
 //==============================================================
@@ -57,7 +57,7 @@ PropertyInterface* PropertyManagerImpl::getProperty(const string &str) {
   if (existLocalProperty(str))
     return this->getLocalProperty(str);
   else {
-      return (graph->getFather()->getProperty(str));
+      return (graph->getSuperGraph()->getProperty(str));
     }
   return 0;
 }
@@ -100,9 +100,9 @@ bool LocalPropertiesIterator::hasNext() {
 //===============================================================
 InheritedPropertiesIterator::InheritedPropertiesIterator(PropertyManager *ppc) {
   this->ppc=ppc; 
-  if (ppc->graph->getFather()!=ppc->graph) {
+  if (ppc->graph->getSuperGraph()!=ppc->graph) {
     //Récupération des propriétées locale du père.
-    Iterator<string> *itS=ppc->graph->getFather()->getLocalProperties();
+    Iterator<string> *itS=ppc->graph->getSuperGraph()->getLocalProperties();
     for (;itS->hasNext();) {
       string tmp=itS->next();
       if (!ppc->existLocalProperty(tmp)) {
@@ -110,7 +110,7 @@ InheritedPropertiesIterator::InheritedPropertiesIterator(PropertyManager *ppc) {
       }
     } delete itS;
     //Récupération des propriétées héritées du père.
-    itS=ppc->graph->getFather()->getInheritedProperties();
+    itS=ppc->graph->getSuperGraph()->getInheritedProperties();
     for (;itS->hasNext();) {
       string tmp=itS->next();
       if (!ppc->existLocalProperty(tmp)) {

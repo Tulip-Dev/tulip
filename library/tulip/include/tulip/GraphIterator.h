@@ -51,7 +51,7 @@ template<class itType> class FactorIterator:public Iterator<itType> {
   const MutableContainer<bool>& _filter;
  public:
   FactorIterator(const Graph *sG,const MutableContainer<bool>& filter):
-    _parentGraph(sG->getFather()),
+    _parentGraph(sG->getSuperGraph()),
     _filter(filter)
   {}
 };

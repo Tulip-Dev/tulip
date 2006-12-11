@@ -27,7 +27,7 @@ namespace tlp {
 class GraphView:public GraphAbstract {
     
 public:
-  GraphView(Graph *father,BooleanProperty *filter);
+  GraphView(Graph *supergraph,BooleanProperty *filter);
   ~GraphView();
   //========================================================================
   node addNode();

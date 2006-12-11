@@ -263,12 +263,12 @@ struct TLPGraphBuilder:public TLPTrue {
     }
     return false;
   }
-  bool addCluster(int id, const string&name, int fatherId=0) {
-    if (clusterIndex[fatherId]) {
-      BooleanProperty sel(clusterIndex[fatherId]);
+  bool addCluster(int id, const string&name, int supergraphId=0) {
+    if (clusterIndex[supergraphId]) {
+      BooleanProperty sel(clusterIndex[supergraphId]);
       sel.setAllNodeValue(false);
       sel.setAllEdgeValue(false);
-      clusterIndex[id] = clusterIndex[fatherId]->addSubGraph(&sel);
+      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel);
       clusterIndex[id]->setAttribute("name", name);
       return true;
     }
@@ -309,14 +309,14 @@ struct TLPEdgeBuilder:public TLPFalse {
 //=================================================================================
 struct TLPClusterBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
-  int clusterId, fatherId;
-  TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int father=0):graphBuilder(graphBuilder), fatherId(father){}
+  int clusterId, supergraphId;
+  TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), supergraphId(supergraph){}
   bool addInt(const int id) {
     clusterId = id;
     return true;
   }
   bool addString(const string &str) {
-    return graphBuilder->addCluster(clusterId , str, fatherId);
+    return graphBuilder->addCluster(clusterId , str, supergraphId);
   }
   bool addStruct(const string& structName, TLPBuilder*&newBuilder);
   bool addNode (int nodeId) {

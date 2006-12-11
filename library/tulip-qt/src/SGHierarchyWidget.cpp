@@ -157,7 +157,7 @@ void SGHierarchyWidget::removeSubgraph(Graph *graph, bool recursive) {
     return;
   } 
   emit aboutToRemoveView(graph);
-  _currentGraph = graph->getFather();
+  _currentGraph = graph->getSuperGraph();
   if (!recursive)
     _currentGraph->delSubGraph(graph);
   else
@@ -184,7 +184,7 @@ void SGHierarchyWidget::contextCloneCluster() {
   QString text = QInputDialog::getText( "Cluster name" , "Please enter the cluster name" ,
                                         QLineEdit::Normal,QString::null, &ok, this);
   if (ok) {
-    Graph *tmp=_currentGraph->getFather()->addSubGraph();
+    Graph *tmp=_currentGraph->getSuperGraph()->addSubGraph();
     tmp->setAttribute("name",string(text.latin1()));
     Iterator<node> *itN=_currentGraph->getNodes();
     while (itN->hasNext())

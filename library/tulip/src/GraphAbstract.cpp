@@ -13,8 +13,8 @@ using namespace std;
 using namespace tlp;
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *father):father(father){
-  if (father==0) father=this;
+GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph){
+  if (supergraph==0) supergraph=this;
   propertyContainer=new PropertyManagerImpl(this);
 }
 //=========================================================================
@@ -54,7 +54,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   while (itS->hasNext()) {
     Graph *tmp = itS->next();
     subgraphs.push_back(tmp);
-    tmp->setFather(this);
+    tmp->setSuperGraph(this);
   } delete itS;
   for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
     if (*it == toRemove) {
@@ -78,19 +78,19 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
   delete toRemove;
 }
 //=========================================================================
-Graph* GraphAbstract::getFather()const {
-  return father;
+Graph* GraphAbstract::getSuperGraph()const {
+  return supergraph;
 }
 //=========================================================================
 Graph* GraphAbstract::getRoot()const {
-  Graph *result=getFather();
-  while (result!=result->getFather()) 
-    result=result->getFather();
+  Graph *result=getSuperGraph();
+  while (result!=result->getSuperGraph()) 
+    result=result->getSuperGraph();
   return result;
 }
 //=========================================================================
-void GraphAbstract::setFather(Graph *sg) {
-  father=sg;
+void GraphAbstract::setSuperGraph(Graph *sg) {
+  supergraph=sg;
 }
 //=========================================================================
 Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
@@ -166,11 +166,11 @@ unsigned int GraphAbstract::outdeg(const node n) const {
 }
 //=========================================================================
 node GraphAbstract::source(const edge e) const {
-  return getFather()->source(e);
+  return getSuperGraph()->source(e);
 }
 //=========================================================================
 node GraphAbstract::target(const edge e) const {
-  return getFather()->target(e);
+  return getSuperGraph()->target(e);
 }
 //=========================================================================
 node GraphAbstract::opposite(const edge e, const node n)const {
@@ -179,7 +179,7 @@ node GraphAbstract::opposite(const edge e, const node n)const {
 //=========================================================================
 void GraphAbstract::reverse(const edge e) {
   notifyReverseEdge(this,e);
-  getFather()->reverse(e);
+  getSuperGraph()->reverse(e);
 }
 //=========================================================================
 edge GraphAbstract::existEdge(const node n1, const node n2)const {

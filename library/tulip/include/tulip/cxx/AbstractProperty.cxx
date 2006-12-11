@@ -34,10 +34,10 @@ static bool isAncestor(tlp::Graph *g1, tlp::Graph *g2) {
   if(g1 == g2->getRoot())
     return true;
   tlp::Graph *currentGraph = g2;
-  while(currentGraph->getFather() != currentGraph) {
+  while(currentGraph->getSuperGraph() != currentGraph) {
     if(currentGraph == g1)
       return true;
-    currentGraph = currentGraph->getFather();
+    currentGraph = currentGraph->getSuperGraph();
   }
   return false;
 }

@@ -30,7 +30,7 @@ namespace tlp {
   /**
    * Function to open a metanode and replace all edges between that
    * meta node and other nodes in the graph.  Provided for backwards
-   * compatability with groupUnderSubGraph set to graph->getFather(),
+   * compatability with groupUnderSubGraph set to graph->getSuperGraph(),
    * and metaGraphs set to viewMetaGraphs.
    */
   TLP_SCOPE void openMetaNode(Graph *graph, node n);
@@ -55,7 +55,7 @@ namespace tlp {
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
    * Version for backwards compatibility with groupUnderSubGraph set
-   * to graph->getFather(), multiEdges set to true,
+   * to graph->getSuperGraph(), multiEdges set to true,
    * metaInfo set to viewMetaGraph, and delAllEdge set to true.
    */
   TLP_SCOPE node createMetaNode(Graph *graph, 

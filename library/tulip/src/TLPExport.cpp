@@ -99,7 +99,7 @@ public:
   ~TLPExport(){}
     //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
-    if (graph->getFather() != graph) {
+    if (graph->getSuperGraph() != graph) {
       os << "(cluster " << graph->getId() << " \"" << graph->getAttribute<string>("name") << "\"" << endl;
       Iterator<node> *itN = graph->getNodes();
       if (itN->hasNext()) {
@@ -126,7 +126,7 @@ public:
     while (itS->hasNext())
       saveGraphElements(os,itS->next());
     delete itS;
-    if (graph->getFather() != graph)  os << ")" << endl;
+    if (graph->getSuperGraph() != graph)  os << ")" << endl;
   }
   //=====================================================
   void saveLocalProperties(ostream &os,Graph *graph) {
@@ -135,7 +135,7 @@ public:
     while (itS->hasNext()) {
       string its=itS->next();
       pproxy=graph->getProperty(its);
-      if (graph->getFather()==graph)
+      if (graph->getSuperGraph()==graph)
 	os << "(property " << " 0 " << pproxy->getTypename() << " " ;
       else
 	os << "(property " << " " << graph->getId() << " " << pproxy->getTypename() << " " ;

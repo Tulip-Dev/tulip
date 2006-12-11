@@ -277,7 +277,7 @@ void tlp::openMetaNode(Graph *graph, node n,
       }
     }
   }
-  metaGraph->getFather()->delSubGraph(metaGraph);
+  metaGraph->getSuperGraph()->delSubGraph(metaGraph);
   Observable::unholdObservers();
 }
 
@@ -308,7 +308,7 @@ void tlp::openMetaNode(Graph *graph, node n) {
 }
 //====================================================================================
 node tlp::createMetaNode (Graph *graph, std::set<node> &subGraph) {
-  return createMNode (graph, subGraph, graph->getFather(),
+  return createMNode (graph, subGraph, graph->getSuperGraph(),
 		      graph->getProperty<GraphProperty> (metaGraphProperty),
 		      true, true);
 }

@@ -300,11 +300,11 @@ void SuperGraphTest::testDeleteSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g2->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==g2);
-  CPPUNIT_ASSERT(g4->getFather()==g2);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);
@@ -313,10 +313,10 @@ void SuperGraphTest::testDeleteSubgraph() {
   CPPUNIT_ASSERT(g4->getRoot()==graph);
 
   graph->delSubGraph(g2);
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==graph);
-  CPPUNIT_ASSERT(g4->getFather()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
 
   graph->delSubGraph(g3);
   graph->delSubGraph(g4);
@@ -354,11 +354,11 @@ void SuperGraphTest::testSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g2->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==g2);
-  CPPUNIT_ASSERT(g4->getFather()==g2);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);

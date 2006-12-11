@@ -28,7 +28,7 @@ class IdManager;
  * The class PlanarConMap is an interface for map in the Tulip Library. This only
  * considers connected planar map, moreover the graph must be simple.
  * After, its initialization, if modifications, such as additions or deletions of 
- * edges or/and nodes, are made on the super-graph (father), the map will not be 
+ * edges or/and nodes, are made on the supergraph, the map will not be 
  * valid any more. In this case, one can calls update() function to update the map
  * but it completely compute the map.
  */

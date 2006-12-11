@@ -20,8 +20,8 @@
 using namespace std;
 using namespace tlp;
 //----------------------------------------------------------------
-GraphView::GraphView(Graph *father,BooleanProperty *filter):
-  GraphAbstract(father),
+GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
+  GraphAbstract(supergraph),
   nNodes(0),
   nEdges(0) {
   nodeAdaptativeFilter.setAll(false);
@@ -37,7 +37,7 @@ GraphView::GraphView(Graph *father,BooleanProperty *filter):
   }
   Iterator<node> *iteN;
   if (it==0)
-    iteN =getFather()->getNodes();
+    iteN =getSuperGraph()->getNodes();
   else
     iteN = new UINTIterator<node>(it);
   
@@ -53,7 +53,7 @@ GraphView::GraphView(Graph *father,BooleanProperty *filter):
   }
   Iterator<edge> *iteE;
   if (it==0)
-    iteE = getFather()->getEdges();
+    iteE = getSuperGraph()->getEdges();
   else
     iteE = new UINTIterator<edge>(it);
 
@@ -98,12 +98,12 @@ bool GraphView::isElement(const edge e) const {
   inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
   inDegree.set(src.id, inDegree.get(src.id)+1);
   outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
-  getFather()->reverse(e);
+  getSuperGraph()->reverse(e);
   }
 */
 //----------------------------------------------------------------
 node GraphView::addNode() {
-  node tmp = getFather()->addNode();
+  node tmp = getSuperGraph()->addNode();
   nodeAdaptativeFilter.set(tmp.id,true);
   ++nNodes;
   //  inDegree.set(tmp.id,0);
@@ -115,7 +115,7 @@ node GraphView::addNode() {
 void GraphView::addNode(const node n) {
   assert(getRoot()->isElement(n));
   if (!isElement(n)) {
-    if (!getFather()->isElement(n)) getFather()->addNode(n);
+    if (!getSuperGraph()->isElement(n)) getSuperGraph()->addNode(n);
     nodeAdaptativeFilter.set(n.id,true);
     ++nNodes;
     //    inDegree.set(n.id,0);
@@ -127,7 +127,7 @@ void GraphView::addNode(const node n) {
 edge GraphView::addEdge(const node n1,const node n2) {
   assert(isElement(n1));
   assert(isElement(n2));
-  edge tmp = getFather()->addEdge(n1,n2);
+  edge tmp = getSuperGraph()->addEdge(n1,n2);
   edgeAdaptativeFilter.set(tmp.id,true);
   ++nEdges;
   //  outDegree.set(n1.id, outDegree.get(n1.id)+1);
@@ -141,7 +141,7 @@ void GraphView::addEdge(const edge e) {
   assert(isElement(source(e)));
   assert(isElement(target(e)));
   if (!edgeAdaptativeFilter.get(e.id)) {
-    if (!getFather()->isElement(e)) getFather()->addEdge(e);
+    if (!getSuperGraph()->isElement(e)) getSuperGraph()->addEdge(e);
     edgeAdaptativeFilter.set(e.id,true);
     ++nEdges;
     //    outDegree.set(source(e).id, outDegree.get(source(e).id)+1);
@@ -209,19 +209,19 @@ void GraphView::delEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphView::delAllNode(const node n){
-  getFather()->delAllNode(n);
+  getSuperGraph()->delAllNode(n);
 }
 //----------------------------------------------------------------
 void GraphView::delAllEdge(const edge e){
-  getFather()->delAllEdge(e);
+  getSuperGraph()->delAllEdge(e);
 }
 //----------------------------------------------------------------
 void GraphView::setEdgeOrder(const node n,const std::vector<edge> &v ) {
-  getFather()->setEdgeOrder(n,v);
+  getSuperGraph()->setEdgeOrder(n,v);
 }
 //----------------------------------------------------------------
 void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
-  getFather()->swapEdgeOrder(n,e1,e2);
+  getSuperGraph()->swapEdgeOrder(n,e1,e2);
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
@@ -230,8 +230,8 @@ Iterator<node>* GraphView::getNodes() const {
     it = nodeAdaptativeFilter.findAll(true);
   } catch (ImpossibleOperation &e) {
     it=0;
-    //    if (numberOfNodes()<getFather()->numberOfNodes() / 2)
-    //      cerr << "GraphView : Optimization problem: " << numberOfNodes() << "/" << getFather()->numberOfNodes() << endl;
+    //    if (numberOfNodes()<getSuperGraph()->numberOfNodes() / 2)
+    //      cerr << "GraphView : Optimization problem: " << numberOfNodes() << "/" << getSuperGraph()->numberOfNodes() << endl;
   }
   if (it==0)
     return (new SGraphNodeIterator(this, nodeAdaptativeFilter));

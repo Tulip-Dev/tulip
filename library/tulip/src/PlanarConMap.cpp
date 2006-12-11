@@ -70,10 +70,10 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   succ2 = succCycleEdge(e2,w);
 
 
-  Graph * father = getFather();
-  edge e = ((father->existEdge(v,w)).isValid() ? father->existEdge(v,w) : father->existEdge(w,v));
+  Graph * supergraph = getSuperGraph();
+  edge e = ((supergraph->existEdge(v,w)).isValid() ? supergraph->existEdge(v,w) : supergraph->existEdge(w,v));
   if(!e.isValid()){
-    e = father->addEdge(v,w); 
+    e = supergraph->addEdge(v,w); 
     graph_component->addEdge(e);
   }
   else
