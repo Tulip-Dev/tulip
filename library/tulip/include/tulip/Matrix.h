@@ -69,7 +69,11 @@ namespace tlp {
       /**
        * Inverse the matrix and return "&(*this)"
        */
+#if __GNUC__ > 3
       MATRIX& inverse();
+#else
+      void inverse();
+#endif
       /**
        * Multiply the matrix by another matrix and return "&(*this)"
        */
@@ -89,12 +93,19 @@ namespace tlp {
       /**
        * Divide all elements of the matrix by obj, return "&(*this)"
        */
+#if __GNUC__ > 3
       inline MATRIX & operator/=(const Obj &obj);
+#else
+      inline void operator/=(const Obj &obj);
+#endif
       /**
        * Returns the cofactor Matrix of this
        */
+#if __GNUC__ > 3
       MATRIX cofactor() const;
-
+#else
+      void cofactor() const;
+#endif
       /**
        * Returns a new matrix equal to the division of the matrix by 
        * another matrix"

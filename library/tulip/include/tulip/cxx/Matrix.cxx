@@ -82,10 +82,16 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const MATRIXTLPGEO &mat) {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const Obj &obj) {
+#else
+void MATRIXTLPGEO::operator/=(const Obj &obj) {
+#endif
   for (unsigned int i=0;i<SIZE;++i)
     (*this)[i] /= obj;
+#if __GNUC__ > 3
   return (*this);
+#endif
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
@@ -124,6 +130,7 @@ Obj MATRIXTLPGEO::determinant() const {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO MATRIXTLPGEO::cofactor() const{
   MATRIXTLPGEO result;
   switch (SIZE){
@@ -169,6 +176,54 @@ MATRIXTLPGEO MATRIXTLPGEO::cofactor() const{
   }
   return result;
 }
+#else
+void MATRIXTLPGEO::cofactor() const{
+  MATRIXTLPGEO tmp(*this);
+  switch (SIZE){
+  case 2:
+    (*this)[0][0] = tmp[1][1];	
+    (*this)[0][1] = - tmp[1][0];	
+    (*this)[1][0] = - tmp[0][1];	
+    (*this)[1][1] = tmp[0][0];
+    break;
+  case 3:
+    (*this)[0][0] = tmp[1][1]*tmp[2][2] - tmp[1][2]*tmp[2][1];
+    (*this)[0][1] = - (tmp[1][0]*tmp[2][2] - tmp[2][0]*tmp[1][2]);
+    (*this)[0][2] = tmp[1][0]*tmp[2][1] - tmp[1][1]*tmp[2][0];
+    (*this)[1][0] = - (tmp[0][1]*tmp[2][2] - tmp[0][2]*tmp[2][1]);
+    (*this)[1][1] = tmp[0][0]*tmp[2][2] - tmp[0][2]*tmp[2][0];
+    (*this)[1][2] = - (tmp[0][0]*tmp[2][1] - tmp[0][1]*tmp[2][0]);
+    (*this)[2][0] = tmp[0][1]*tmp[1][2] - tmp[0][2]*tmp[1][1];
+    (*this)[2][1] = - (tmp[0][0]*tmp[1][2] - tmp[0][2]*tmp[1][0]); 
+    (*this)[2][2] = tmp[0][0]*tmp[1][1] - tmp[0][1]*tmp[1][0];
+    break;
+  default :
+    int i1,j1;
+    tlp::Matrix<Obj,SIZE - 1> c;
+    for (unsigned int j=0;j<SIZE;++j) {
+      for (unsigned int i=0;i<SIZE;++i) {
+	i1 = 0;
+	for (unsigned int ii=0;ii<SIZE;++ii) {
+	  if (ii == i)
+	    continue;
+	  j1 = 0;
+	  for (unsigned int jj=0;jj<SIZE;jj++) {
+	    if (jj == j)
+	      continue;
+	    c[i1][j1] = tmp[ii][jj];
+	    ++j1;
+	  }
+	    ++i1;
+	}
+	if ((i+j) & 1)
+	  (*this)[i][j]=c.determinant(); else (*this)[i][j]=-c.determinant();
+      }
+    }
+    break;
+  }
+}
+#endif
+
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 #if __GNUC__ > 3
@@ -190,9 +245,18 @@ void MATRIXTLPGEO::transpose() {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
+#if __GNUC__ > 3
 MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
   (*this) = (*this).cofactor().transpose() /= (*this).determinant();
   return (*this);
+#else
+void MATRIXTLPGEO::inverse() {
+  MATRIXTLPGEO tmp(*this);
+  tmp.cofactor();
+  tmp.transpose();
+  tmp /= determinant();
+  (*this) = tmp;
+#endif
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
