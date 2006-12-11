@@ -41,6 +41,9 @@ namespace tlp {
 class GlGraph;
 class Morphing;
 class GridOptionsWidget;
+#ifdef STATS_UI
+class TulipStats;
+#endif
 }
 
 class SGHierarchyWidget;
