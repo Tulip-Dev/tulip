@@ -55,16 +55,14 @@ list<int> ConvolutionClustering::getLocalMinimum() {
   vector<double> &discretHisto = *getHistogram();
   list<int> localMinimum;
   localMinimum.push_back(0);
-  bool slopeSens; //false descent
-  if (discretHisto[0]>discretHisto[1]) slopeSens=false; else slopeSens=true;
-  for (unsigned int i=1;i<discretHisto.size();++i) {
-    bool newSlopeSens;
-    if (discretHisto[i-1]>discretHisto[i]) newSlopeSens=false; else newSlopeSens=true;
-    if (newSlopeSens!=slopeSens) {
+  bool slopeSens = !(discretHisto[0]>discretHisto[1]); //false descent
+  for (unsigned int i = 1; i < discretHisto.size(); ++i) {
+    bool newSlopeSens = !(discretHisto[i-1]>discretHisto[i]);
+    if (newSlopeSens != slopeSens) {
       //new Local minimum
       if (slopeSens==false) {
 	int local = localMinimum.back();
-	if (i-local<width/2){
+	if ((int) i - local < width/2){
 	  localMinimum.pop_back();
 	  localMinimum.push_back((i+local)/2);
 	}
