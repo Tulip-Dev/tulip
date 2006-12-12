@@ -180,12 +180,19 @@ namespace tlp {
     Rectangle<float> r2;
     r2[0] = upleftV;
     r2[1] = downrightV;
-    
+    /*
+      cerr << r1 << endl;
+      cerr << r2 << endl;
+      cerr << " ==> inter :";
+      if (r1.intersect(r2))
+      cerr << "yes" << endl;
+      else
+      cerr << "no" << endl;
+    */
     if (!r1.intersect(r2)) {
       size *= -1.0;
     }
-    else
-      return size;
+    return size;
     
     //    cerr << "s: " << nSize << " => " << minx << "," << miny << "/" << maxx << "," << maxy << endl;
   }
