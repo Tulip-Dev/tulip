@@ -157,7 +157,7 @@ static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
-  GlyphFactory::factory->load(getEnvVar + "glyph", "Glyph", plug);
+  GlyphFactory::factory->loadPluginsFromDir(getEnvVar + "glyph", "Glyph", plug);
 }
 
 //==============================================================================
@@ -180,7 +180,9 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
   Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
   
   if (newGraph!=0) {
-    glGraph.setGraph(newGraph);
+    GlGraphRenderingParameters params = glGraph.getRenderingParameters();
+    params.setGraph(newGraph);
+    glGraph.setRenderingParameters(params);
     LayoutProperty *layout =
       glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
     layout->resetBoundingBox();
@@ -189,7 +191,10 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
     glGraph.centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
-      glGraph.setParameters(glGraphData);
+    {
+      params.setParameters(glGraphData);
+      glGraph.setRenderingParameters(params);
+    }
   }
 }
 //==============================================================================
@@ -363,7 +368,9 @@ int main (int argc, char **argv) {
     }
   }
   
-  glOffscreen.setIncrementalRendering(false);
+  GlGraphRenderingParameters params = glOffscreen.getRenderingParameters();
+  params.setIncrementalRendering(false);
+  glOffscreen.setRenderingParameters(params);
   glOffscreen.draw();
 
   //write image
@@ -406,7 +413,7 @@ int main (int argc, char **argv) {
     StructDef parameter =
       ExportModuleFactory::factory->getPluginParameters("tlp");
 
-    dataSet.set("displaying", glOffscreen.getParameters());
+    dataSet.set("displaying", glOffscreen.getRenderingParameters().getParameters());
 
     if (!tlp::exportGraph(glOffscreen.getGraph(), *os, "tlp", dataSet, NULL)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
