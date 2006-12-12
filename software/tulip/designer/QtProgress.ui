@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>274</width>
-            <height>68</height>
+            <width>413</width>
+            <height>81</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,7 +25,12 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="QProgressBar" row="0" column="0" rowspan="1" colspan="4">
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>comment</cstring>
+            </property>
+        </widget>
+        <widget class="QProgressBar" row="1" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>progressBar</cstring>
             </property>
@@ -36,7 +41,7 @@
                 <enum>Raised</enum>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="3">
+        <widget class="QPushButton" row="2" column="3">
             <property name="name">
                 <cstring>pushButton2</cstring>
             </property>
@@ -44,7 +49,15 @@
                 <string>Cancel</string>
             </property>
         </widget>
-        <spacer row="1" column="1">
+        <widget class="QPushButton" row="2" column="2">
+            <property name="name">
+                <cstring>pushButton1</cstring>
+            </property>
+            <property name="text">
+                <string>Stop</string>
+            </property>
+        </widget>
+        <spacer row="2" column="1">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -61,15 +74,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>pushButton1</cstring>
-            </property>
-            <property name="text">
-                <string>Stop</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="1" column="0">
+        <widget class="QCheckBox" row="2" column="0">
             <property name="name">
                 <cstring>preview</cstring>
             </property>
@@ -99,10 +104,13 @@
         <slot>changePreview(bool)</slot>
     </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in implementation">QtProgress.ui.h</include>
+</includes>
 <slots>
     <slot>stopCompute()</slot>
     <slot>cancelCompute()</slot>
-    <slot>changePreview(bool)</slot>
+    <slot>changePreview( bool )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

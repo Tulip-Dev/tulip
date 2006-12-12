@@ -14,6 +14,7 @@ public:
   QtProgress(QWidget* parent,std::string text, GlGraphWidget * =0);
   virtual ~QtProgress();
   void progress_handler(int i,int j);
+  void setComment(std::string msg);
 public slots:
   void stopCompute();
   void cancelCompute();

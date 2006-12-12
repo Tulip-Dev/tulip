@@ -3,6 +3,7 @@
 #endif
 #include <qapplication.h>
 #include <qcheckbox.h>
+#include <qlabel.h>
 #include "QtProgress.h"
 #include <tulip/GlGraphWidget.h>
 #include <qprogressbar.h>
@@ -32,6 +33,10 @@ void QtProgress::progress_handler(int i,int j) {
     glGraphWidget->centerScene();
     glGraphWidget->draw();
   }
+}
+//=====================================
+void QtProgress::setComment(string msg) {
+  comment->setText(QString(msg.c_str()));
 }
 //=====================================
 void QtProgress::stopCompute(){
