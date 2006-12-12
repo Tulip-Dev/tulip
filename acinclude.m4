@@ -533,7 +533,6 @@ dnl Qt3Support lib is for Qt 3 compatibility purpose
   if test ${VAR_WIN32} = 1
   then
     LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
-    LIB_QT_DEBUG="-lQtCore4_debug -lQtGui4_debug -lQt3Support4_debug -lQtOpenGL4_debug -lQtNetwork4_debug -lQtXml4_debug"
 dnl For linking purpose, we need to copy some libs
 dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
     if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
@@ -558,7 +557,6 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
     if test ${VAR_MACOSX} = 1
     then
       LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGL -framework QtNetwork"
-      LIB_QT_DEBUG=${LIB_QT}
       if test -d ${QTDIR}/lib/QtAssistantClient.framework
       then
         LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"
@@ -570,12 +568,10 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
       fi
     else
       LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
-      LIB_QT_DEBUG="-lQtCore_debug -lQt3Support_debug -lQtGui_debug -lQtOpenGL_debug"
     fi
   fi
 else
   LIB_QT_ASSISTANT="-L${QTDIR}/lib -lqassistantclient"
-  LIB_QT_DEBUG=${LIB_QT}
   if test ${VAR_WIN32} = 1 ; then
 dnl Copy $QTDIR/bin/qt-mt*.dll in $QTDIR/lib/libqt-mt.dll if needed
     if test ! -f $QTDIR/lib/libqt-mt.dll ; then
