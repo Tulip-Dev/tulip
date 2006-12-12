@@ -130,7 +130,7 @@ public:
    * Deprecated function, use getSuperGraph() instead.
    */  
   Graph* getFather()const {
-    std::cerr << __PRETTY_FUNCTION__ << "is deprecated, use getSuperGraph() instead." << std::endl;
+    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use getSuperGraph() instead." << std::endl;
     return getSuperGraph();
   }
   /**
@@ -146,7 +146,7 @@ public:
    * Deprecated function, use setSuperGraph() instead.
    */
   void setFather(Graph *sg) {
-    std::cerr << __PRETTY_FUNCTION__ << "is deprecated, use setSuperGraph() instead." << std::endl;
+    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
     setFather(sg);
   }
   /**
