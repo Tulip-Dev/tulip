@@ -251,11 +251,10 @@ MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
   return (*this);
 #else
 void MATRIXTLPGEO::inverse() {
-  MATRIXTLPGEO tmp(*this);
-  tmp.cofactor();
-  tmp.transpose();
-  tmp /= determinant();
-  (*this) = tmp;
+  Obj det = determinant();
+  cofactor();
+  transpose();
+  (*this) /= det;
 #endif
 }
 //=====================================================================================
