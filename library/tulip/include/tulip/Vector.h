@@ -9,7 +9,6 @@
 
 #include <cassert>
 #include <tulip/Array.h>
-#include <tulip/tulipconf.h>
 
 namespace tlp {
   /**
@@ -31,7 +30,7 @@ namespace tlp {
    * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTOR
-    class TLP_SCOPE Vector:public Array<Obj,SIZE> {
+    class Vector:public Array<Obj,SIZE> {
     public:
     /*      Vector(const VECTOR &v):Array<Obj,SIZE>(v) {}
 	    Vector() {}*/

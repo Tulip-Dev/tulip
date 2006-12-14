@@ -9,9 +9,8 @@
 
 #include <cassert>
 #include <iostream>
-#include <tulip/Vector.h>
-//#include <tulip/Polynome.h>
 #include <vector>
+#include <tulip/Vector.h>
 
 
 namespace tlp {
@@ -36,7 +35,7 @@ namespace tlp {
    * \version 0.0.2 27/04/2005 
    */
   template<typename Obj,unsigned int SIZE>
-    class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
+    class Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
   public:
     Matrix(){}
     Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a) :
@@ -49,11 +48,7 @@ namespace tlp {
       /**
        * Fill the matrix with the value of obj
        */
-#if __GNUC__ > 3
       inline MATRIX& fill(Obj obj);
-#else
-      inline void fill(Obj obj);
-#endif
       /**
        * Compute the determinant of the matrix,
        */
@@ -61,27 +56,15 @@ namespace tlp {
       /**
        * Transpose the matrix and return "&(*this)".
        */
-#if __GNUC__ > 3
       MATRIX& transpose();
-#else
-      void transpose();
-#endif
       /**
        * Inverse the matrix and return "&(*this)"
        */
-#if __GNUC__ > 3
       MATRIX& inverse();
-#else
-      void inverse();
-#endif
       /**
        * Multiply the matrix by another matrix and return "&(*this)"
        */
-#if __GNUC__ > 3
       inline MATRIX & operator*=(const MATRIX &mat);
-#else
-      inline void operator*=(const MATRIX &mat);
-#endif
       /**
        * Multiply all elements of the matrix by obj, return "&(*this)"
        */
@@ -93,19 +76,11 @@ namespace tlp {
       /**
        * Divide all elements of the matrix by obj, return "&(*this)"
        */
-#if __GNUC__ > 3
-      inline MATRIX & operator/=(const Obj &obj);
-#else
-      inline void operator/=(const Obj &obj);
-#endif
+     inline MATRIX & operator/=(const Obj &obj);
       /**
        * Returns the cofactor Matrix of this
        */
-#if __GNUC__ > 3
       MATRIX cofactor() const;
-#else
-      void cofactor() const;
-#endif
       /**
        * Returns a new matrix equal to the division of the matrix by 
        * another matrix"

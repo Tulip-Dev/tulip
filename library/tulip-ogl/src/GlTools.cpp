@@ -123,12 +123,7 @@ namespace tlp {
     for (unsigned int i = 0; i<3; ++i)
       translate[3][i] = position[i];
 
-#if __GNUC__ > 3
     MatrixGL tmp(translate * modelviewMatrix);
-#else
-    MatrixGL tmp(translate);
-    tmp *= modelviewMatrix;
-#endif
     //MatrixGL tmp(modelviewMatrix);
     tmp[0][0] = nSize; tmp[0][1] = 0;     tmp[0][2] = 0;     
     tmp[1][0] = 0;     tmp[1][1] = 0;     tmp[1][2] = 0;     
