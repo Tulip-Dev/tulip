@@ -23,16 +23,20 @@ class GLGlut: public GlGraph {
 public:
   GLGlut(string name, const int width=640, const int height=480) {
     drawing=false;
-    makeCurrent();
   }
   virtual ~GLGlut(){}
-  void makeCurrent() {
+  void setupOpenGlContext() {
     glutSetWindow(win);
   }
   void draw_handler(bool b) {
     drawing = b;
   }
-    bool drawing;
+  void timerCallBack() {
+    if (!drawing) return;
+    drawing = !drawPart();
+    glutSwapBuffers();
+  }
+  bool drawing;
 private:
   int width,height;
 };
@@ -49,11 +53,8 @@ static char strFrameRate[50] = {0};
 using namespace tlp;
 //=============================================
 void idle(void) {  
-  if (glGlutScreen->drawing) {
-    glGlutScreen->drawing = !glGlutScreen->drawPart();
-    glutSwapBuffers();
-  }
-  else {
+  glGlutScreen->timerCallBack();
+  if (!glGlutScreen->drawing) {
     glGlutScreen->rotateScene(rx*2., ry*2., rz*2.);
     if (frameRateDisplaying) {
       if (frame%frameCount == 0) {
@@ -70,15 +71,39 @@ void idle(void) {
     glutPostRedisplay();
   }
 }
+
+static void setRasterPosition(unsigned int x, unsigned int y) {
+  float *val;
+  unsigned char *tmp;
+  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
+  glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
+}
 //=============================================
 static void printMessage(string str,bool b) {
   cout << str << " => " << (b ? "On" : "Off") << endl;
 }
 //=============================================
 static void Key(unsigned char key, int x, int y) {
+  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
   switch (key) {
   case '1':
-    glutFullScreen();
+    cerr << "backup" << endl;
+    //    glutFullScreen();
+    glReadBuffer(GL_BACK);
+    glDrawBuffer(GL_AUX0);
+    setRasterPosition(0,0);
+    glCopyPixels(0,0,width, height, GL_COLOR);
+    glDrawBuffer(GL_BACK);
+    break;
+  case '2':
+    cerr << "restore" << endl;
+    int i;
+    glDrawBuffer(GL_BACK);
+    glReadBuffer(GL_AUX0);
+    setRasterPosition(0,0);
+    glCopyPixels(0,0,width, height, GL_COLOR);
+    glutSwapBuffers();
+    cin >> i;
     break;
   case 27:
     exit(1);
@@ -98,29 +123,29 @@ static void Key(unsigned char key, int x, int y) {
     rz=(rz+1)%2;
     break;
   case 'e':
-    glGlutScreen->setEdge3D(!glGlutScreen->isEdged3D());
-    printMessage("3D edges",glGlutScreen->isEdged3D());
+    param.setEdge3D(!param.isEdge3D());
+    printMessage("3D edges", param.isEdge3D());
     break;
   case 'a':
-    glGlutScreen->setViewArrow(!glGlutScreen->isViewArrow());
-    printMessage("Arrow ",glGlutScreen->isViewArrow());
+    param.setViewArrow(!param.isViewArrow());
+    printMessage("Arrow ",param.isViewArrow());
     break;
   case 'o':
-    glGlutScreen->setViewOrtho(!glGlutScreen->isViewOrtho());
-    printMessage("Projection orthogonal",glGlutScreen->isViewOrtho());
+    param.setViewOrtho(!param.isViewOrtho());
+    printMessage("Projection orthogonal",param.isViewOrtho());
     break;
   case 'l':
-    glGlutScreen->setViewLabel(!glGlutScreen->isViewLabel());
-    printMessage("Labels",glGlutScreen->isViewLabel());
-    glGlutScreen->setFontsType(1);
+    param.setViewNodeLabel(!param.isViewNodeLabel());
+    printMessage("Labels",param.isViewNodeLabel());
+    param.setFontsType(1);
     break;
   case 's':
-    glGlutScreen->setViewStrahler(!glGlutScreen->isViewStrahler());
-    printMessage("StrahlerMode",glGlutScreen->isViewStrahler());
+    param.setElementOrdered(!param.isElementOrdered());
+    printMessage("StrahlerMode",param.isElementOrdered());
     break;
   case 'E':
-    glGlutScreen->setDisplayEdges(!glGlutScreen->isDisplayEdges());
-    printMessage("Edge displaying", glGlutScreen->isDisplayEdges());
+    param.setDisplayEdges(!param.isDisplayEdges());
+    printMessage("Edge displaying", param.isDisplayEdges());
     break;
   case 'b':
     frameRateDisplaying=!frameRateDisplaying;
@@ -130,37 +155,52 @@ static void Key(unsigned char key, int x, int y) {
     glutSetWindowTitle("Tulip Glut Viewer");
     break;
   case 'I':
-    incremental=!incremental;
-    glGlutScreen->setIncrementalRendering(incremental);
-    printMessage("Incremental rendering",incremental);
+    incremental = !incremental;
+    param.setIncrementalRendering(!param.isIncrementalRendering());
+    printMessage("Incremental rendering", param.isIncrementalRendering());
     break;
   default:
     return;
   }
+  glGlutScreen->setRenderingParameters(param);
 }
 //==============================================================================
 void importGraph(const string &filename, GlGraph &glGraph) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
-  Graph *newGraph=tlp::importGraph("tlp", dataSet, NULL);
-  if (newGraph!=0) {
-    glGraph.setGraph(newGraph);
-    glGraph.centerScene();
+  Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
+  if (newGraph != 0) {
+    GlGraphRenderingParameters param = glGraph.getRenderingParameters();
+    param.setGraph(newGraph);
+    glGraph.setRenderingParameters(param);
+
     DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
-      glGraph.setParameters(glGraphData);
+    if (dataSet.get<DataSet>("displaying", glGraphData)){
+      param.setParameters(glGraphData);
+      glGraph.setRenderingParameters(param);
+    }
+    else
+      glGraph.centerScene();
   }
 }
 //=============================================
 void Reshape(int widt, int heigh) {
+  cerr << __PRETTY_FUNCTION__ << endl;
   width=widt;
   height=heigh;
-  glGlutScreen->changeViewport(0,0,width,height);
+  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
+  Vector<int, 4> viewport;
+  viewport[0] = 0;
+  viewport[1] = 0;
+  viewport[2] = widt;
+  viewport[3] = heigh;
+  param.setViewport(viewport);
+  glGlutScreen->setRenderingParameters(param);
 }
 //=============================================
 void Draw(void) {
   glGlutScreen->draw();
-  if (!glGlutScreen->isIncrementalRendering()) 
+  if (!glGlutScreen->getRenderingParameters().isIncrementalRendering()) 
     glutSwapBuffers();
   if (frameRateDisplaying) frame++;
 }
@@ -216,11 +256,15 @@ int main (int argc, char **argv) {
   importGraph(argv[1], *glGlutScreen);
   glGlutScreen->centerScene();
   timer = glutGet(GLUT_ELAPSED_TIME);
-  glGlutScreen->setIncrementalRendering(false);
+  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
+  param.setIncrementalRendering(false);
+  glGlutScreen->setRenderingParameters(param);
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);
-  
+  int res;
+  glGetIntegerv(GL_AUX_BUFFERS, &res);
+  cerr << "=========> " << res << endl;
   glutMainLoop();  
   return EXIT_SUCCESS;
 }
