@@ -533,6 +533,7 @@ void viewGl::new3DView() {
   newOpenGlView(glWidget->getRenderingParameters().getGraph(), 
 		glWidget->parentWidget()->caption());
   glWidget->setRenderingParameters(param);
+  glWidget->draw();
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
