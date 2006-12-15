@@ -55,7 +55,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->button()==Qt::MidButton){
       started = false;
       glGraphWidget->setMouseTracking(false);
-      glGraphWidget->updateGL();
+      glGraphWidget->redraw();
       return true;
     }
   }
@@ -72,7 +72,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	w = qMouseEv->x() - x;
       if ((qMouseEv->y()>0) && (qMouseEv->y()<glGraphWidget->height()))
 	h = qMouseEv->y() - y;
-      glGraphWidget->updateGL();
+      glGraphWidget->redraw();
       return true;
     }
     return false;
@@ -137,7 +137,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
       started = false;
-      glGraphWidget->updateGL();
+      glGraphWidget->redraw();
       Observable::unholdObservers();
       return true;
     }

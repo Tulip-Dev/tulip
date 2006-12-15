@@ -203,7 +203,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
     default: return false;
     }
-    glGraphWidget->updateGL();
+    glGraphWidget->redraw();
     return true;
   }
   if (e->type() == QEvent::MouseButtonRelease &&
@@ -216,7 +216,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       _controls[i].ocolor(0) = Color(128,20,20,200);
     }
     glGraphWidget->setCursor(QCursor(Qt::ArrowCursor));
-    glGraphWidget->updateGL();
+    glGraphWidget->redraw();
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&

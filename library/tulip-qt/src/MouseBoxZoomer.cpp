@@ -47,7 +47,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->button()==Qt::MidButton){
       started = false;
       glw->setMouseTracking(false);
-      glw->updateGL();
+      glw->redraw();
       return true;
     }
     return false;
@@ -66,7 +66,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	w = qMouseEv->x() - x;
       if ((qMouseEv->y() > 0) && (qMouseEv->y() < glw->height()))
 	h = y - (glw->height() - qMouseEv->y());
-      glw->updateGL();
+      glw->redraw();
     return true;
     }
   }
