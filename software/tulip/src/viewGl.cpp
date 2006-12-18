@@ -673,6 +673,19 @@ void viewGl::initializeGlGraph(GlGraph *glGraph) {
   glGraph->setRenderingParameters(param);
 }
 //**********************************************************************
+static Graph* getCurrentSubGraph(Graph *graph, int id) {
+  if (graph->getId() == id) {
+    return graph;
+  }
+  Graph *sg;
+  forEach(sg, graph->getSubGraphs()) {
+    Graph *csg = getCurrentSubGraph(sg, id);
+    if (csg)
+      returnForEach(csg);
+  }
+  return (Graph *) 0;
+}
+//**********************************************************************
 void viewGl::fileOpen(string *plugin, QString &s) {
   Observable::holdObservers();
   DataSet dataSet;
@@ -781,28 +794,26 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 
     changeGraph(newGraph);
 
+    // show current subgraph if any
     int id = 0;
     if (glGraphData.get<int>("SupergraphId", id) && id) {
-      Graph *subGraph;
-      forEach(subGraph, newGraph->getSubGraphs()) {
-	if (subGraph->getId() == id) {
-	  hierarchyChangeGraph(subGraph);
-	  breakForEach;
-	}
-      }
+      Graph *subGraph = getCurrentSubGraph(newGraph, id);
+      if (subGraph)
+	hierarchyChangeGraph(subGraph);
     }
 
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
     Coord sr;
     if (glGraphData.get<Coord>("sceneRotation", sr)) {
-      // recenter view
-      // because setParameters no long deals with sceneRotation
-      // and sceneTranslation
+      // only recenter view
+      // because setRenderingParameters
+      // no longer deals with sceneRotation and sceneTranslation
       centerView();
       // update viewColor alpha channel
-      // which not manage in Tulip 2
-      ColorProperty *colors = newGraph->getProperty<ColorProperty>("viewColor");
+      // which was not managed in Tulip 2
+      ColorProperty *colors =
+	newGraph->getProperty<ColorProperty>("viewColor");
       node n;
       forEach(n, newGraph->getNodes()) {
 	Color color = colors->getNodeValue(n);
