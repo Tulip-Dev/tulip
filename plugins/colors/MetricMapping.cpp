@@ -149,16 +149,18 @@ public:
       s=1;
       h=55.0+value*300.0/range;
       HSVtoRGB(&r,&g,&b,h,s,v);
-      return Color((int)(r*255.0f),(int)(g*255.0f),(int)(b*255.0f),(int)(color1[3] + deltaRGBA[3]*value)); 
-      break;
+      return Color((int)(r*255.0f),
+		   (int)(g*255.0f),
+		   (int)(b*255.0f),
+		   (int)(color1[3] + deltaRGBA[3]*value)); 
     case 1: //RGB interpolation
+    default:
       Vector<float,4> tmp(deltaRGBA);
       tmp *= value;
       return  Color((int)(tmp[0]+color1[0]),
 		    (int)(tmp[1]+color1[1]),
 		    (int)(tmp[2]+color1[2]),
 		    (int)(tmp[3]+color1[3]));
-      break;
     }
   }
   //=========================================================
