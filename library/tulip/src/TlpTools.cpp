@@ -120,18 +120,6 @@ TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> 
 TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
-// class names demangler used in the function below
-#include <cxxabi.h>
-static char demangleBuffer[256];
-char *demangle(string className) {
-  int status;
-  size_t length = 256;
-  abi::__cxa_demangle(className.c_str(), (char *) demangleBuffer,
-		      &length, &status);
-  // skip tlp::
-  return demangleBuffer + 5;
-}
-//=========================================================
 static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
   SizeProperty::initFactory();
   SizeProperty::factory->loadPluginsFromDir(dir + "sizes", "Size",plug);
@@ -166,17 +154,17 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
       Iterator<string> *itP = tfi->availablePlugins();
       while(itP->hasNext()) {
 	string pluginName = itP->next();
-	vector<pair < string, string > > dependencies =
+	list<pair < string, string > > dependencies =
 	  tfi->getPluginDependencies(pluginName);
-	vector<pair < string, string > >::const_iterator itD = dependencies.begin();
+	list<pair < string, string > >::const_iterator itD = dependencies.begin();
 	// loop over dependencies
 	for (; itD != dependencies.end(); itD++) {
 	  string factoryDepName = (*itD).first;
 	  string pluginDepName = (*itD).second;
 	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-	    plug->aborted(pluginName, string(demangle(tfi->getPluginsClassName())) +
+	    plug->aborted(pluginName, tfi->getPluginsClassName() +
 			  " '" + pluginName + "' will be removed, it depends on missing " +
-			  demangle(factoryDepName) + " '" + pluginDepName);
+			  factoryDepName + " '" + pluginDepName);
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
 	  }
@@ -204,3 +192,20 @@ void tlp::loadPlugins(PluginLoader *plug) {
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
     return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }
+
+//=========================================================
+// tlp class names demangler
+#if defined(__GNUC__)
+#include <cxxabi.h>
+char *tlp::demangleTlpClassName(const char* className) {
+  static char demangleBuffer[256];
+  int status;
+  size_t length = 256;
+  abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
+		      &length, &status);
+  // skip tlp::
+  return demangleBuffer + 5;
+}
+#else
+#error define symbols demangling function
+#endif

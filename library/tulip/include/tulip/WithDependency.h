@@ -5,7 +5,7 @@
 #include <config.h>
 #endif
 
-#include <vector>
+#include <list>
 #include <string>
 #include <typeinfo>
 
@@ -16,11 +16,11 @@ namespace tlp {
 class TLP_SCOPE WithDependency {
 protected:
   ///
-  std::vector< std::pair < std::string, std::string > > dependencies;
+  std::list< std::pair < std::string, std::string > > dependencies;
 
 public:
   ///
-  std::vector< std::pair < std::string, std::string > > getDependencies() {
+  std::list< std::pair < std::string, std::string > > getDependencies() {
     return dependencies;
   }
   ///

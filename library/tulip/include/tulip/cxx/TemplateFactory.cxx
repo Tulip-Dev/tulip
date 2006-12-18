@@ -29,17 +29,28 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
   std::string pluginName = objectFactory->getName();
   objNames.insert(pluginName);
   objMap[pluginName]=objectFactory;
+  ObjectType *withParam=objectFactory->createPluginObject(Context());
+  objParam[pluginName] = withParam->getParameters();
+  // loop over dependencies
+  // to demangle the class names
+  std::list<std::pair < std::string, std::string > > dependencies =
+    withParam->getDependencies();
+  std::list<std::pair < std::string, std::string > >::iterator itD =
+    dependencies.begin();
+  for (; itD != dependencies.end(); itD++) {
+    const char *factoryDepName = (*itD).first.c_str();
+    (*itD).first = std::string(demangleTlpClassName(factoryDepName));
+  }
+  objDeps[pluginName] = dependencies;
   if (currentLoader!=0) currentLoader->loaded(
 					      pluginName,
 					      objectFactory->getAuthor(),
 					      objectFactory->getDate(),
 					      objectFactory->getInfo(),
 					      objectFactory->getRelease(),
-					      objectFactory->getVersion()
+					      objectFactory->getVersion(),
+					      dependencies
 					      );
-  ObjectType *withParam=objectFactory->createPluginObject(Context());
-  objParam[pluginName] = withParam->getParameters();
-  objDeps[pluginName]= withParam->getDependencies();
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
@@ -87,11 +98,11 @@ tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPlugin
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-std::vector< std::pair < std::string, std::string > > tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
+std::list< std::pair < std::string, std::string > > tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objDeps[name];
 }
 
 template<class ObjectFactory, class ObjectType, class Context> std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginsClassName() {
-  return std::string(typeid(ObjectType).name());
+  return std::string(demangleTlpClassName(typeid(ObjectType).name()));
 }

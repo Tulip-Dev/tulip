@@ -125,23 +125,20 @@ public:
 //==============================================================================
 //a pluginLoader with less output than PluginLoaderTxt
 struct MyPluginLoader:public PluginLoader {
-private:
-  int nbFiles, num;
 public:
   virtual void start(const std::string &path,const std::string &type) {
     cout << "Loading " << type << " plugins: ";
   }
-  virtual void numberOfFile(int nbFile){nbFiles=nbFile; num=0;}
   virtual void loading(const std::string &filename) {}
   virtual void loaded(const std::string &name,
 		      const std::string &author,
 		      const std::string &date, 
 		      const std::string &info,
 		      const std::string &release,
-		      const std::string &version)
+		      const std::string &version,
+		      const std::list < std::pair < std::string, std::string > > &deps)
   {
     cout << "[" << name << "]";
-    //     if (++num < nbFiles) cout << ", ";
   }
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg) {
     //    cout << "Error loading " << filename << ": " << erreurmsg << endl;

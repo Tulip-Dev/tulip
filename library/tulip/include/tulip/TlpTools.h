@@ -22,6 +22,13 @@ namespace tlp {
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
 
+  /**
+   * returns the demangled name of a C++ class defines in the tlp namespace.
+   * The tlp:: prefix is omitted and the returned pointer
+   * do not have to be deallocated.
+   */
+  TLP_SCOPE char *demangleTlpClassName(const char *className);
+
   TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
   /**
    * Returns an ostream to write to a gzipped file (uses gzstream lib)

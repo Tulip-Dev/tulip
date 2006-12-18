@@ -28,7 +28,7 @@ struct PluginLoaderQt:public PluginLoader {
     appStartUp->setProgress(0);
     progress=0;
   }
-  virtual void numberOfFile(int nbFile) {
+  virtual void numberOfFiles(int nbFile) {
     appStartUp->setTotalSteps(nbFile);
     qApp->processEvents();
   }
@@ -38,7 +38,8 @@ struct PluginLoaderQt:public PluginLoader {
 		      const string &date, 
 		      const string &info,
 		      const string &release,
-		      const string &version)
+		      const string &version,
+		      const list < pair < string, string > > &deps)
   {
     progress++;
     appStartUp->setLabel(name);
