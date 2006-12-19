@@ -1254,7 +1254,6 @@ int viewGl::closeWin() {
       }
     }
   } 
-  delete this;
   return true;
 }
 //**********************************************************************
@@ -1624,6 +1623,7 @@ void viewGl::helpAssistantError(const QString &msg) {
 //==============================================================
 void viewGl::fileExit() {
   closeWin();
+  delete this;
 }
 //==============================================================
 void viewGl::filePrint() {
