@@ -39,7 +39,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
     dependencies.begin();
   for (; itD != dependencies.end(); itD++) {
     const char *factoryDepName = (*itD).first.c_str();
-    (*itD).first = std::string(demangleTlpClassName(factoryDepName));
+    (*itD).first = std::string(tlp::demangleTlpClassName(factoryDepName));
   }
   objDeps[pluginName] = dependencies;
   if (currentLoader!=0) currentLoader->loaded(
