@@ -33,7 +33,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       //  Colors* mColors=_graph->getProperty<ColorProperty>("viewColor");
       node newNode;
-      float x1,y1,z1;
       newNode = _graph->addNode();
       //if (isViewStrahler()) orderedNode.push_front(newNode);
       Coord point((double) glw->width() - (double) qMouseEv->x(),
