@@ -109,7 +109,7 @@
                         <property name="spacing">
                             <number>0</number>
                         </property>
-                     </grid>
+                    </grid>
                 </widget>
                 <widget class="QFrame">
                     <property name="name">
@@ -148,33 +148,81 @@
                                 <bool>true</bool>
                             </property>
                         </widget>
-                        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="3">
+                        <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>interpolation</cstring>
+                                <cstring>layout10</cstring>
                             </property>
-                            <property name="focusPolicy">
-                                <enum>StrongFocus</enum>
-                            </property>
-                            <property name="text">
-                                <string>Color Interpolation</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed10</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>interpolation</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Color Interpolation</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>interpolationEdge</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Size Interpolation</string>
+                                    </property>
+                                    <property name="checked">
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </hbox>
                         </widget>
-                        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="3">
+                        <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>interpolationEdge</cstring>
+                                <cstring>layout11</cstring>
                             </property>
-                            <property name="focusPolicy">
-                                <enum>StrongFocus</enum>
-                            </property>
-                            <property name="text">
-                                <string>Size Interpolation</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed11</cstring>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>elabels</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Edge label</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>show/hide the label of edges</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>nlabels</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>StrongFocus</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>Node label</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>show/hide the label of nodes</string>
+                                    </property>
+                                </widget>
+                            </hbox>
                         </widget>
                         <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                             <property name="name">
@@ -188,28 +236,19 @@
                                     <property name="name">
                                         <cstring>arrows</cstring>
                                     </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>70</width>
-                                            <height>32767</height>
-                                        </size>
-                                    </property>
                                     <property name="focusPolicy">
                                         <enum>StrongFocus</enum>
                                     </property>
                                     <property name="text">
                                         <string>Arrows</string>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>show/hide arrow on edges</string>
+                                    </property>
                                 </widget>
                                 <widget class="QCheckBox">
                                     <property name="name">
                                         <cstring>edges</cstring>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>70</width>
-                                            <height>50</height>
-                                        </size>
                                     </property>
                                     <property name="focusPolicy">
                                         <enum>StrongFocus</enum>
@@ -220,22 +259,8 @@
                                     <property name="checked">
                                         <bool>true</bool>
                                     </property>
-                                </widget>
-                                <widget class="QCheckBox">
-                                    <property name="name">
-                                        <cstring>labels</cstring>
-                                    </property>
-                                    <property name="maximumSize">
-                                        <size>
-                                            <width>70</width>
-                                            <height>32767</height>
-                                        </size>
-                                    </property>
-                                    <property name="focusPolicy">
-                                        <enum>StrongFocus</enum>
-                                    </property>
-                                    <property name="text">
-                                        <string>Labels</string>
+                                    <property name="toolTip" stdset="0">
+                                        <string>show/hide edges</string>
                                     </property>
                                 </widget>
                             </hbox>
@@ -342,13 +367,13 @@
                 </widget>
                 <widget class="QCheckBox" row="0" column="1">
                     <property name="name">
-                        <cstring>strahler</cstring>
+                        <cstring>ordering</cstring>
                     </property>
                     <property name="focusPolicy">
                         <enum>StrongFocus</enum>
                     </property>
                     <property name="text">
-                        <string>Strahler ordering</string>
+                        <string>Metric ordering</string>
                     </property>
                 </widget>
                 <widget class="QSlider" row="3" column="1">
@@ -371,11 +396,15 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
-        <sender>labels</sender>
+        <sender>elabels</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>GWOverviewWidgetData</receiver>
+        <slot>updateView()</slot>
+    </connection>
+    <connection>
+        <sender>nlabels</sender>
         <signal>stateChanged(int)</signal>
         <receiver>GWOverviewWidgetData</receiver>
         <slot>updateView()</slot>
@@ -417,7 +446,7 @@
         <slot>updateView()</slot>
     </connection>
     <connection>
-        <sender>strahler</sender>
+        <sender>ordering</sender>
         <signal>stateChanged(int)</signal>
         <receiver>GWOverviewWidgetData</receiver>
         <slot>updateView()</slot>

@@ -66,8 +66,11 @@ void GWOverviewWidget::showParameters(bool visible) {
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
-  if (_observedView != 0) _observedView->removeObserver(this);
-  delete _view;
+  if (_observedView != 0)
+    _observedView->removeObserver(this);
+  // no need to explicitely delete _view because it is a children
+  // of frame8, and so it will be deleted further
+  //delete _view;
   delete _glDraw;
 }
 //=============================================================================
@@ -177,10 +180,11 @@ void GWOverviewWidget::syncFromView() {
     GlGraphRenderingParameters param = _observedView->getRenderingParameters();
     arrows->setChecked( param.isViewArrow());
     edges->setChecked( param.isDisplayEdges());
-    labels->setChecked( param.isViewNodeLabel());
+    elabels->setChecked( param.isViewEdgeLabel());
+    nlabels->setChecked( param.isViewNodeLabel());
     interpolation->setChecked( param.isEdgeColorInterpolate());
     interpolationEdge->setChecked( param.isEdgeSizeInterpolate());
-    strahler->setChecked( param.isElementOrdered());
+    ordering->setChecked( param.isElementOrdered());
     orthogonal->setChecked( param.isViewOrtho());
     metaLabel->setChecked( param.isViewMetaLabel());
     edge3D->setChecked( param.isEdge3D());
@@ -209,10 +213,11 @@ void GWOverviewWidget::updateView() {
 
     paramObservedViev.setViewArrow(arrows->isChecked());
     paramObservedViev.setDisplayEdges(edges->isChecked());
-    paramObservedViev.setViewNodeLabel(labels->isChecked());
+    paramObservedViev.setViewNodeLabel(nlabels->isChecked());
+    paramObservedViev.setViewEdgeLabel(elabels->isChecked());
     paramObservedViev.setEdgeColorInterpolate(interpolation->isChecked());
     paramObservedViev.setEdgeSizeInterpolate(interpolationEdge->isChecked());
-    paramObservedViev.setElementOrdered(strahler->isChecked());
+    paramObservedViev.setElementOrdered(ordering->isChecked());
     paramObservedViev.setViewOrtho(orthogonal->isChecked());
     paramObservedViev.setViewMetaLabel(metaLabel->isChecked());
     paramObservedViev.setEdge3D(edge3D->isChecked());
