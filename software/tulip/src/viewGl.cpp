@@ -440,7 +440,9 @@ void viewGl::changeGraph(Graph *graph) {
 }
 //**********************************************************************
 void viewGl::hierarchyChangeGraph(Graph *graph) {
+#ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
+#endif
   if( glWidget == 0 ) return;
   if (glWidget->getGraph() == graph)  return;
   clearObservers();

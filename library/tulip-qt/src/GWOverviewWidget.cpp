@@ -130,7 +130,9 @@ void GWOverviewWidget::draw(GlGraph *glG) {
 }
 //=============================================================================
 void GWOverviewWidget::setObservedView(GlGraph *glWidget){
+#ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
+#endif
   if (_observedView != 0)
     _observedView->removeObserver(this);
   _observedView = glWidget;
