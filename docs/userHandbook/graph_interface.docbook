@@ -106,17 +106,19 @@
                 <graphic fileref="images/overview.png"/>
             The 3D overview panel enables to configure the rendering of the graph. The available options are the following: 
             <itemizedlist>
-                <listitem><para><code>labels</code> : enables/disables the display of labels on nodes/edges.</para></listitem>
                 <listitem><para><code>Arrows</code> : enables/disables the display of arrows on edges.</para></listitem>
-                <listitem><para><code>Interpolation</code> : enables/disables the interpolation of color nodes along edges.</para></listitem>
                 <listitem><para><code>Edges</code> : enables/disables the display of edges.</para></listitem>
+                <listitem><para><code>Edge label</code> : enables/disables the display of label on edges.</para></listitem>
+                <listitem><para><code>Node label</code> : enables/disables the display of label on nodes.</para></listitem>
+                <listitem><para><code>Color Interpolation</code> : enables/disables the interpolation of the color of nodes along edges.</para></listitem>
+                <listitem><para><code>Size Interpolation</code> : enables/disables the interpolation of the size of nodes along edges.</para></listitem>
             </itemizedlist>
         </para>
         <para>
                 <graphic fileref="images/overview-more.png"/>
             <itemizedlist>
                 <listitem>
-                    <para><code>Strahler ordering</code> : enables/disables clustering elements with strahler metric before display.</para>
+                    <para><code>Metric ordering</code> : enables/disables clustering elements with metric before display.</para>
                 </listitem>
                 <listitem>
                     <para><code>Metanode labels</code> : enables/disables the display of metanode(group) labels.</para>
