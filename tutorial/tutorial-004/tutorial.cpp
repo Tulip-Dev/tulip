@@ -1,5 +1,4 @@
 #include <iostream>
-#include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -17,6 +16,8 @@
  */
 
 using namespace std;
+using namespace tlp;
+
 void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();

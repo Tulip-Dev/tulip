@@ -13,6 +13,7 @@
  */
 
 using namespace std;
+using namespace tlp;
 
 int main() {
   //create an empty graph

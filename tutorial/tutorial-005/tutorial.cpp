@@ -1,6 +1,7 @@
 #include <iostream>
-#include <tulip/GraphProperty.h>
-#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
 
 /**
  * Tutorial 005
@@ -10,6 +11,8 @@
  */
 
 using namespace std;
+using namespace tlp;
+
 void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
@@ -29,7 +32,7 @@ int main() {
   buildGraph(graph);
 
   //Get and create several properties
-  Selection *select=graph->getLocalProperty<BooleanProperty>("firstSelection");
+  BooleanProperty *select=graph->getLocalProperty<BooleanProperty>("firstSelection");
   graph->getLocalProperty<ColorProperty>("firstColors");
   graph->getLocalProperty<DoubleProperty>("firstMetric");
 

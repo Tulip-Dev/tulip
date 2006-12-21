@@ -10,6 +10,8 @@
  */
 
 using namespace std;
+using namespace tlp;
+
 void buildGraph(Graph *graph) {
   //add three nodes
   node n0=graph->addNode();
