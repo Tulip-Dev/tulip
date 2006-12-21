@@ -14,7 +14,7 @@ do
   first=$(awk 'NR == 1 {print $1; exit}' $FILE)
   if [ "$first" = "//-*-c++-*-" ]; then
     second=$(awk 'NR == 2 {print $1; exit}' $FILE)
-    if [ "$second" = "/**" ]; then
+    if [ "$second" = "/**" -o "$second" = "/*" ]; then
       #remove from //-*-c++ to */
       sed '/\/\/-\*-c/,/\*\//d' $FILE >> tmpfile
     else
