@@ -126,3 +126,9 @@ $$Virer vieux algo dessin arbre RT, RT Ortho
 
 Regarder :
 path length et path sum pour voir ce que cà fait.
+
+/=================================================
+21/12/06 PM
+- Ajouter viewLabelPosition (Top, Bottom, Center, Left, Right)
+- Renommer plus simplement les attributs de "displaying",
+  assurer la compatibilité ascendante pour la lecture des fichiers
