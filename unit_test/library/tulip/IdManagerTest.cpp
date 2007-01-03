@@ -17,16 +17,16 @@ void IdManagerTest::testFragmentation() {
   for (unsigned int i = 1; i <100; ++i) {
     idManager->free(i);
   }
-  CPPUNIT_ASSERT_EQUAL(99u, idManager->freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->freeIds.size());
   idManager->free(0);
-  CPPUNIT_ASSERT_EQUAL(0u, idManager->freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t) 0, idManager->freeIds.size());
 
   for (unsigned int i = 900; i <999; ++i) {
     idManager->free(i);
   }
-  CPPUNIT_ASSERT_EQUAL(99u, idManager->freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->freeIds.size());
   idManager->free(999);
-  CPPUNIT_ASSERT_EQUAL(0u, idManager->freeIds.size());
+  CPPUNIT_ASSERT_EQUAL((size_t) 0, idManager->freeIds.size());
 }
 //==========================================================
 void IdManagerTest::testGetFree() {
