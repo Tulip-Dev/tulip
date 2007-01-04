@@ -134,7 +134,6 @@ protected slots:
   void fileExit();
   void fileSave();
   void fileSaveAs();
-  int  closeWin();
   void windowActivated(QWidget *);
   void hierarchyChangeGraph(tlp::Graph *);
   void fileNew();
@@ -173,7 +172,7 @@ protected slots:
   void goInside();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
-  void glGraphWidgetClosed(GlGraphWidget *);
+  void glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *);
   void ungroup();  
   void group();  
   void gridOptions();
@@ -201,6 +200,8 @@ private:
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
   bool fileSave(std::string plugin, std::string filename, std::string author, std::string comments);
+  bool askSaveGraph(const std::string name);
+  bool closeWin();
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
   tlp::Morphing *morph;

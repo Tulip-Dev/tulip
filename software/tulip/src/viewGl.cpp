@@ -427,13 +427,11 @@ void viewGl::changeGraph(Graph *graph) {
   clusterTreeWidget->setGraph(graph);
   propertiesWidget->setGraph(graph);
   nodeProperties->setGraph(graph);
-  if(glWidget != 0) {
-    propertiesWidget->setGlGraphWidget(glWidget);
-    overviewWidget->setObservedView(glWidget);
+  propertiesWidget->setGlGraphWidget(glWidget);
+  overviewWidget->setObservedView(glWidget);
 #ifdef STATS_UI
-    statsWidget->setGlGraphWidget(glWidget);
+  statsWidget->setGlGraphWidget(glWidget);
 #endif
-  }
   updateStatusBar();
   redrawView();
   initObservers();
@@ -485,7 +483,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   assert(glWidget->getRenderingParameters().getGraph()==graph);
   glWidget->move(0,0);
   glWidget->setCaption(name);
-  glWidget->show();
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
@@ -498,7 +495,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(mouseToolBar->getCurrentInteractors());
   connect(mouseToolBar,   SIGNAL(interactorsChanged(const std::vector<tlp::GWInteractor *>&)), glWidget, SLOT(resetInteractors(const std::vector<tlp::GWInteractor *>&)));
-  connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
+  connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
 
 #if (QT_REL == 3)
   new ElementInfoToolTip(glWidget,"toolTip",glWidget);
@@ -506,13 +503,10 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   QToolTip::setWakeUpDelay(2500);
 #endif
 
-  changeGraph(graph);
-
   if(elementsDisabled)
     enableElements(true);
 
   //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
-  qApp->processEvents();
   return glWidget;
 }
 //**********************************************************************
@@ -530,12 +524,11 @@ std::string viewGl::newName() {
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
-  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
-  //QString name(glWidget->name());
-  newOpenGlView(glWidget->getRenderingParameters().getGraph(), 
-		glWidget->parentWidget()->caption());
-  glWidget->setRenderingParameters(param);
-  glWidget->draw();
+  GlGraphWidget *newGlWidget =
+    newOpenGlView(glWidget->getRenderingParameters().getGraph(), 
+		  glWidget->parentWidget()->caption());
+  newGlWidget->centerScene();
+  newGlWidget->show();
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
@@ -543,12 +536,12 @@ void viewGl::fileNew() {
   Observable::holdObservers();
   Graph *newGraph=tlp::newGraph();
   initializeGraph(newGraph);
-  GlGraph *glW = newOpenGlView(newGraph,
-			       newGraph->getAttribute<string>(std::string("name")).c_str());
+  GlGraphWidget *glW =
+    newOpenGlView(newGraph,
+		  newGraph->getAttribute<string>(std::string("name")).c_str());
   initializeGlGraph(glW);
-  overviewWidget->syncFromView();
-  redrawView();
   Observable::unholdObservers();
+  glW->show();
 }
 //**********************************************************************
 void viewGl::setNavigateCaption(string newCaption) {
@@ -794,7 +787,11 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if (!displayingInfoFound)
       glW->centerScene();
 
-    changeGraph(newGraph);
+    // glWidget will be bind to that new GlGraphWidget
+    // in the windowActivated method,
+    // so let it be activated
+    glW->show();
+    qApp->processEvents();
 
     // show current subgraph if any
     int id = 0;
@@ -803,7 +800,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       if (subGraph)
 	hierarchyChangeGraph(subGraph);
     }
-
+    
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
     Coord sr;
@@ -1234,7 +1231,22 @@ void viewGl::windowsMenuAboutToShow() {
   }
 }
 //**********************************************************************
-int viewGl::closeWin() {
+/* returns true if user canceled */
+bool viewGl::askSaveGraph(const std::string name) {
+  string message = "Do you want to save this graph: " + name + " ?";
+  int answer = QMessageBox::question(this, "Save", message.c_str(),
+    QMessageBox::Yes | QMessageBox::Default,
+    QMessageBox::No,
+    QMessageBox::Cancel | QMessageBox::Escape);
+  switch(answer) {
+    case QMessageBox::Cancel : return true;
+    case QMessageBox::Yes: fileSave(); return false; // bug: should return true if user canceled "save as"
+    default: return false;
+  }
+}
+//**********************************************************************
+/* returns true if window agrees to be closed */ 
+bool viewGl::closeWin() {
   set<unsigned int> treatedGraph;
   QWidgetList windows = workspace->windowList();
   for(int i = 0; i < int(windows.count()); ++i ) {
@@ -1243,15 +1255,10 @@ int viewGl::closeWin() {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
       Graph *graph = tmpNavigate->getGraph()->getRoot();
       if(!alreadyTreated(treatedGraph, graph)) {
-	string message = "Do you want to save this graph : " + graph->getAttribute<string>("name") + " ?";
-	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
-					   QMessageBox::Cancel);
-	if(answer == QMessageBox::Cancel)
-	  return false;
-	if(answer == QMessageBox::Yes) {
-	  glWidget = tmpNavigate;
-	  fileSave();
-	}
+        glWidget = tmpNavigate;
+        bool canceled = askSaveGraph(graph->getAttribute<string>("name"));
+        if (canceled)
+          return false;
 	treatedGraph.insert((unsigned long)graph);
       }
     }
@@ -1624,8 +1631,8 @@ void viewGl::helpAssistantError(const QString &msg) {
 }
 //==============================================================
 void viewGl::fileExit() {
-  closeWin();
-  delete this;
+  if (closeWin())
+    delete this;
 }
 //==============================================================
 void viewGl::filePrint() {
@@ -1652,8 +1659,8 @@ void viewGl::filePrint() {
   delete image;
 }
 //==============================================================
-void viewGl::glGraphWidgetClosed(GlGraphWidget *w) {
-  Graph *root = w->getGraph()->getRoot();
+void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
+  Graph *root = glgw->getGraph()->getRoot();
   QWidgetList windows = workspace->windowList();
   int i;
   for( i = 0; i < int(windows.count()); ++i ) {
@@ -1662,21 +1669,16 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *w) {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
       int graph1 = root->getId();
       int graph2 = tmpNavigate->getGraph()->getRoot()->getId();
-      if((tmpNavigate != w) && (graph1 == graph2))
+      if((tmpNavigate != glgw) && (graph1 == graph2))
 	break;
     }
   }
   if(i == int(windows.count())) {
-    string message = "Do you want to save this graph : " +
-      w->getGraph()->getAttribute<string>("name") + " ?";
-
-    int answer = QMessageBox::question(this, "Save", message.c_str(), QMessageBox::Yes,
-				       QMessageBox::No, 
-				       QMessageBox::Cancel);
-    if(answer == QMessageBox::Cancel)
+    bool canceled = askSaveGraph(glgw->getGraph()->getAttribute<string>("name"));
+    if (canceled) {
+      event->ignore();
       return;
-    if(answer == QMessageBox::Yes)
-      fileSave();
+    }
     clusterTreeWidget->setGraph(0);
     propertiesWidget->setGraph(0);
     propertiesWidget->setGlGraphWidget(0);
@@ -1684,23 +1686,23 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *w) {
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
 #endif
-    GlGraphRenderingParameters param = w->getRenderingParameters();
+    GlGraphRenderingParameters param = glgw->getRenderingParameters();
     param.setGraph(0);
-    w->setRenderingParameters(param);
+    glgw->setRenderingParameters(param);
   } else
     // no graph to delete
     root = (Graph *) 0;
   
-  if (openFiles.find((unsigned long)w) != openFiles.end())   
-    openFiles.erase((unsigned long)w);
+  if (openFiles.find((unsigned long)glgw) != openFiles.end())   
+    openFiles.erase((unsigned long)glgw);
   
-  if(w == glWidget) {
-    GlGraphRenderingParameters param = w->getRenderingParameters();
+  if(glgw == glWidget) {
+    GlGraphRenderingParameters param = glgw->getRenderingParameters();
     param.setGraph(0);
-    w->setRenderingParameters(param);
+    glgw->setRenderingParameters(param);
     glWidget = 0;
   }
-  delete w;
+  delete glgw;
 
   // if needed the graph must be deleted after
   // the GlGraphWidget because this one has to remove itself
@@ -1710,7 +1712,7 @@ void viewGl::glGraphWidgetClosed(GlGraphWidget *w) {
   
   if(windows.count() == 1)
     enableElements(false);
-} 
+}
 //**********************************************************************
 ///Make a new clustering of the view graph
 void viewGl::makeClustering(int id) {
