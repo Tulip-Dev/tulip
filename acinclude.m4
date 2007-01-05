@@ -660,8 +660,15 @@ dnl if this is the version 4 of Qt we use uic3
        UIC_ERROR_MESSAGE
     fi
    fi
+   AC_MSG_CHECKING([whether $UIC runs])
+   if test `$UIC -version 2>&1 | grep -c version` -ne 0; then
+     AC_MSG_RESULT([yes])
+   else
+     AC_MSG_RESULT([no])
+     UIC_ERROR_MESSAGE
+   fi
    AC_SUBST(UIC)
-dnl look for Qt minor version adn add QT_MINOR_REL
+dnl look for Qt minor version and add QT_MINOR_REL
    QT_MINOR_VERSION=`$UIC -version 2>&1 | awk -F'.' '{print $(NF - 1)}'`
    QT_CPPFLAGS="$QT_CPPFLAGS -DQT_MINOR_REL=$QT_MINOR_VERSION"
    AC_SUBST(QT_MINOR_VERSION)
