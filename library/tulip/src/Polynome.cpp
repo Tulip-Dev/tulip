@@ -61,7 +61,7 @@ void Polynome::resolv(float result[3], int &nResult) {
 	
       float alpha = 0;
 	
-      if (abs(k) == 1)
+      if (abs((int) k) == 1)
 	alpha = - PI * (k - 1) / 2;
       else 
 	alpha = acos(k); 
