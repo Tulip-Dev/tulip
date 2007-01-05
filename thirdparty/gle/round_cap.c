@@ -12,7 +12,9 @@
  */
 
 
+#ifndef __STDC__
 #include <malloc.h>
+#endif
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>	/* for the memcpy() subroutine */

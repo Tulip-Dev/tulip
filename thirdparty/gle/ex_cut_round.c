@@ -20,7 +20,9 @@
  */
 
 
+#ifndef __STDC__
 #include <malloc.h>
+#endif
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
