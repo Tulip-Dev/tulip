@@ -360,8 +360,43 @@ struct TLPDataSetBuilder: public TLPFalse {
   }
   bool addStruct(const string& structName, TLPBuilder*&newBuilder);
   bool close(){
-    if (dataSetName)
+    if (dataSetName) {
+      // handle old displaying properties
+      // to ensure compatibility
+      bool b;
+      if (dataSet.get<bool>("_viewArrow", b))
+	dataSet.set("arrow", b);
+      if (dataSet.get<bool>("_viewLabel", b)) {
+	dataSet.set("nodeLabel", b);
+	dataSet.set("edgeLabel", b);
+      }
+      if (dataSet.get<bool>("_viewNodeLabel", b))
+	dataSet.set("nodeLabel", b);
+      if (dataSet.get<bool>("_viewEdgeLabel", b))
+	dataSet.set("edgeLabel", b);
+      if (dataSet.get<bool>("_viewMetaLabel", b)) 
+	dataSet.set("metaLabel", b);
+      if (dataSet.get<bool>("_viewElementOrdered", b)) 
+	dataSet.set("elementOrdered", b);
+      if (dataSet.get<bool>("_viewStrahler", b)) 
+	dataSet.set("elementOrdered", b);
+      if (dataSet.get<bool>("_viewAutoScale", b)) 
+	dataSet.set("autoScale", b);
+      if (dataSet.get<bool>("_incrementalRendering", b)) 
+	dataSet.set("incrementalRendering", b);
+      if (dataSet.get<bool>("_edgeColorInterpolate", b)) 
+	dataSet.set("edgeColorInterpolation", b);
+      if (dataSet.get<bool>("_edgeSizeInterpolate", b)) 
+	dataSet.set("edgeSizeInterpolation", b);
+      if (dataSet.get<bool>("_edge3D", b)) 
+	dataSet.set("edge3D", b);
+      unsigned int ui;
+      if (dataSet.get<unsigned int>("_viewOrtho", ui)) 
+	dataSet.set("orthogonalProjection", ui ? true : false);
+      if (dataSet.get<unsigned int>("_FontsType", ui)) 
+	dataSet.set("fontType", ui);
       graphBuilder->dataSet->set(dataSetName, dataSet);
+    }
     return true;
   }
 };

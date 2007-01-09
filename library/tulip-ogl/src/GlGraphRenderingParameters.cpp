@@ -39,19 +39,19 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   //Color
   data.set("backgroundColor", _backgroundColor);
   //bool
-  data.set("_viewArrow", _viewArrow);
-  data.set("_viewNodeLabel", _viewNodeLabel);
-  data.set("_viewEdgeLabel", _viewEdgeLabel);
-  data.set("_viewMetaLabel", _viewMetaLabel);
-  data.set("_ElementOrdered", _elementOrdered);
-  data.set("_viewAutoScale", _viewAutoScale);
-  data.set("_incrementalRendering", _incrementalRendering);
-  data.set("_edgeColorInterpolate", _edgeColorInterpolate);
-  data.set("_edgeSizeInterpolate", _edgeSizeInterpolate);
-  data.set("_edge3D", _edge3D);
+  data.set("arrow", _viewArrow);
+  data.set("nodeLabel", _viewNodeLabel);
+  data.set("edgeLabel", _viewEdgeLabel);
+  data.set("metaLabel", _viewMetaLabel);
+  data.set("elementOrdered", _elementOrdered);
+  data.set("autoScale", _viewAutoScale);
+  data.set("incrementalRendering", _incrementalRendering);
+  data.set("edgeColorInterpolation", _edgeColorInterpolate);
+  data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
+  data.set("edge3D", _edge3D);
+  data.set("orthogonalProjection", _viewOrtho);
   //unsigned int
-  data.set("_viewOrtho", _viewOrtho);
-  data.set("_FontsType", _FontsType);
+  data.set("fontType", _FontsType);
   //int
   data.set("SupergraphId", _graph->getId());
   //Coord
@@ -80,30 +80,30 @@ void GlGraphRenderingParameters::setParameters(const DataSet data) {
   if (data.get<Color>("backgroundColor", color)) 
     _backgroundColor = color;
   bool b;
-  if (data.get<bool>("_viewArrow", b))
+  if (data.get<bool>("arrow", b))
     setViewArrow(b);
-  if (data.get<bool>("_viewNodeLabel", b))
+  if (data.get<bool>("nodeLabel", b))
     setViewNodeLabel(b);
-  if (data.get<bool>("_viewEdgeLabel", b))
+  if (data.get<bool>("edgeLabel", b))
     setViewEdgeLabel(b);
-  if (data.get<bool>("_viewMetaLabel", b)) 
+  if (data.get<bool>("metaLabel", b)) 
     setViewMetaLabel(b);
-  if (data.get<bool>("_viewElementOrdered", b)) 
+  if (data.get<bool>("elementOrdered", b)) 
     setElementOrdered(b);
-  if (data.get<bool>("_viewAutoScale", b)) 
+  if (data.get<bool>("autoScale", b)) 
     _viewAutoScale=b;
-  if (data.get<bool>("_incrementalRendering", b)) 
+  if (data.get<bool>("incrementalRendering", b)) 
     setIncrementalRendering(b);
-  if (data.get<bool>("_edgeColorInterpolate", b)) 
+  if (data.get<bool>("edgeColorInterpolation", b)) 
     setEdgeColorInterpolate(b);
-  if (data.get<bool>("_edgeSizeInterpolate", b)) 
-    setEdgeColorInterpolate(b);
-  if (data.get<bool>("_edge3D", b)) 
+  if (data.get<bool>("edgeSizeInterpolation", b)) 
+    setEdgeSizeInterpolate(b);
+  if (data.get<bool>("edge3D", b)) 
     setEdge3D(b);
+  if (data.get<bool>("orthogonalProjection", b)) 
+    _viewOrtho = b;
   unsigned int ui;
-  if (data.get<unsigned int>("_viewOrtho", ui)) 
-    _viewOrtho = ui;
-  if (data.get<unsigned int>("_FontsType", ui)) 
+  if (data.get<unsigned int>("fontType", ui)) 
     _FontsType = ui;
   //restore all view parameters or none
   Coord ce,cc,cu;
