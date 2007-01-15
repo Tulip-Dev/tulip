@@ -4,6 +4,7 @@
 
 #include <tulip/ColorProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/DoubleProperty.h>
 
 #include <tulip/Glyph.h>
 #include <tulip/Graph.h>
@@ -72,11 +73,19 @@ namespace tlp {
 	setMaterial(Color(255,255,255,0));
     }
     glCallList(LList);
-    ColorProperty *border = glGraph->getRenderingParameters().getGraph()->getProperty<ColorProperty>("viewBorderColor");
+    ColorProperty *borderColor = glGraph->getRenderingParameters().getGraph()->getProperty<ColorProperty>("viewBorderColor");
+    DoubleProperty *borderWidth = 0;
+    if (glGraph->getRenderingParameters().getGraph()->existProperty ("viewBorderWidth"))
+      borderWidth = glGraph->getRenderingParameters().getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
     glGraph->desactivateTexture();
-    Color c = border->getNodeValue(n);
+    Color c = borderColor->getNodeValue(n);
     //  setMaterial(c);
-    glLineWidth(2);
+    if (borderWidth == 0) glLineWidth(2);
+    else {
+      double lineWidth = borderWidth->getNodeValue (n);
+      if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
+      else glLineWidth (lineWidth);
+    }
     glDisable(GL_LIGHTING);
     glColor3ub(c[0],c[1],c[2]);
     glCallList(LList + 1);  
