@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include <tulip/Graph.h>
+#include <tulip/hash_string.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/StableIterator.h>
 
@@ -18,66 +19,62 @@ namespace {
   const char * paramHelp[] = {
     // selectedNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "DoubleProperty" ) \
+    HTML_HELP_DEF( "type", "PropertyInterface*" ) \
     HTML_HELP_BODY() \
-    "Define the metric that will be used in order partition to the graph" \
+    "Specify the property that will be used to partition the graph" \
     HTML_HELP_CLOSE(),
   };
 }
 //================================================================================
 EqualValueClustering::EqualValueClustering(ClusterContext context):Clustering(context) {
-  addParameter<DoubleProperty>("Metric", paramHelp[0], "viewMetric");
+  addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
 }
 //================================================================================
-namespace stdext {
-  template<>
-  struct hash<double> {
-    size_t operator()(const double s) const { return (size_t)s; }
-  };
-};
-//===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
-  DoubleProperty *metric=0;
+  PropertyInterface *metric=0;
   if (dataSet!=0) 
-    dataSet->get("Metric", metric);  
+    dataSet->get("Property", metric);  
   if (metric == 0)
-    metric = graph->getProperty<DoubleProperty>("viewMetric");
+    metric = graph->getProperty("viewMetric");
   
-  stdext::hash_map<double,int> partitions;
-  int curPart=0;
-  Iterator<node> *itN=graph->getNodes();
-  while (itN->hasNext()) {
-    double tmp=metric->getNodeValue(itN->next());
+  stdext::hash_map<string, Graph *> partitions;
+  StableIterator<node> itN(graph->getNodes());
+  int i = 0, step = 0, maxSteps = graph->numberOfNodes();
+  pluginProgress->setComment("Partitioning nodes...");
+  while (itN.hasNext()) {
+    Graph *sg;
+    node n = itN.next();
+    string tmp=metric->getNodeStringValue(n);
     if (partitions.find(tmp)==partitions.end()) {
-      partitions[tmp]=curPart;
-      curPart++;
-    }
-  } delete itN;
-
-  stdext::hash_map <int, Graph *> newClusters;
-  char str[100];
-  for (int i=0; i<curPart; ++i) {
-    sprintf(str, "c_%06i", i);
-    //    cerr << "create :" << str << endl;
-    newClusters[i] = graph->addSubGraph();
-    newClusters[i]->setAttribute("name",string(str));
-  }
-  
-  StableIterator<node> itNS(graph->getNodes());
-  while (itNS.hasNext()) {
-    node itn = itNS.next();
-    double tmp = metric->getNodeValue(itn);
-    newClusters[partitions[tmp]]->addNode(itn);
+      char str[100];
+      sprintf(str, "c_%06i", i++);
+      sg = graph->addSubGraph();
+      sg->setAttribute("name",string(str));
+      partitions[tmp]=sg;
+    } else
+      sg = partitions[tmp];
+    sg->addNode(n);
+    step++;
+    pluginProgress->progress(step, maxSteps);
+    if (pluginProgress->state() !=TLP_CONTINUE)
+      return pluginProgress->state()!= TLP_CANCEL;
   }
 
   StableIterator<edge> itE(graph->getEdges());
+  step = 0;
+  maxSteps = graph->numberOfEdges();
+  pluginProgress->setComment("Partitioning edges...");
   while(itE.hasNext()) {
     edge ite = itE.next();
-    double tmp = metric->getNodeValue(graph->source(ite));
-    if (tmp == metric->getNodeValue(graph->target(ite))) {
-      newClusters[partitions[tmp]]->addEdge(ite);
+    string tmp = metric->getNodeStringValue(graph->source(ite));
+    if (tmp == metric->getNodeStringValue(graph->target(ite))) {
+      partitions[tmp]->addEdge(ite);
     }
+    step++;
+    pluginProgress->progress(step, maxSteps);
+    if (pluginProgress->state() !=TLP_CONTINUE)
+      return pluginProgress->state()!= TLP_CANCEL;    
   }
 
   return true;
