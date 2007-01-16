@@ -76,13 +76,19 @@ struct TLPTokenParser {
     }
     if (!started && !endOfStream) return ENDOFSTREAM;
     char *endPtr=0;
+    errno = 0;
     long resultl=strtol(val.str.c_str(),&endPtr,10);
+    if (errno == ERANGE)
+      return ERRORINFILE;
     if (endPtr==(val.str.c_str()+val.str.length())) {
       val.integer=resultl;
       return INTTOKEN;
     }
     endPtr=0;
+
     double resultd=strtod(val.str.c_str(),&endPtr);
+    if (errno == ERANGE)
+      return ERRORINFILE;
     if (endPtr==(val.str.c_str()+val.str.length())) {
       val.real=resultd;
       return DOUBLETOKEN;
@@ -169,7 +175,9 @@ struct TLPParser {
   bool formatError() {
     std::stringstream ess;
     ess << "Error when parsing char " << tokenParser->curChar
-	<< " at line " << tokenParser->curLine;
+	<< " at line " << tokenParser->curLine + 1;
+    if (errno)
+      ess << std::endl << strerror(errno);
     pluginProgress->setError(ess.str());
     return false;
   }
