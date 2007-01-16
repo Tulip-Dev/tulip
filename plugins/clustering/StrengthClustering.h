@@ -24,7 +24,7 @@ private:
   tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
   void recursiveCall(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::Graph* buildQuotientGraph(tlp::Graph *);
-  void adjustMetaGraphProtperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
+  void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::DoubleProperty* values;
 };
 /*@}*/

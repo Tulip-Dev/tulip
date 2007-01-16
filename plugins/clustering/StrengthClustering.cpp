@@ -255,7 +255,7 @@ Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   Create a new metagraph property in order to have in the "viewMetagraph" the result
   of recursive clustering, and in "strengthMetaGraph" the graphs before without recursive clustering.
 */
-void StrengthClustering::adjustMetaGraphProtperty(Graph *quotientGraph, map<Graph *,Graph *> &mapGraph) {
+void StrengthClustering::adjustMetaGraphProperty(Graph *quotientGraph, map<Graph *,Graph *> &mapGraph) {
   if (quotientGraph != graph) {
     Graph *rootGraph = graph->getRoot();
     GraphProperty *meta = rootGraph->getLocalProperty<GraphProperty>("viewMetaGraph");
@@ -340,7 +340,7 @@ bool StrengthClustering::run() {
   tmpGraph = buildSubGraphs(tmp);
   recursiveCall(tmpGraph, mapGraph);
   quotientGraph = buildQuotientGraph(tmpGraph);
-  adjustMetaGraphProtperty(quotientGraph, mapGraph);
+  adjustMetaGraphProperty(quotientGraph, mapGraph);
 
   if (dataSet!=0) {
     dataSet->set("strengthGraph",quotientGraph);
