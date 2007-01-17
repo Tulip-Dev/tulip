@@ -305,16 +305,21 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   initObservers();
 }
 //**********************************************************************
-static const unsigned int NB_VIEWED_PROPERTIES=9;
-static const string viewed_properties[NB_VIEWED_PROPERTIES]= {"viewLabel",
-					   "viewColor",
-					   "viewSelection",
-					   "viewMetaGraph",
-					   "viewShape",
-					   "viewSize",
-					   "viewTexture",
-					   "viewLayout",
-					   "viewRotation" };
+static const unsigned int NB_VIEWED_PROPERTIES=13;
+static const string viewed_properties[NB_VIEWED_PROPERTIES]=
+  {"viewLabel",
+   "viewLabelColor",
+   "viewLabelPosition",
+   "viewBorderColor",
+   "viewBorderWidth",
+   "viewColor",
+   "viewSelection",
+   "viewMetaGraph",
+   "viewShape",
+   "viewSize",
+   "viewTexture",
+   "viewLayout",
+   "viewRotation" };
 //**********************************************************************
 void viewGl::initObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -419,7 +424,7 @@ void viewGl::startTulip() {
 void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
-  QFileInfo tmp(openFiles[(unsigned int)glWidget].name.c_str());
+  QFileInfo tmp(openFiles[(unsigned long)glWidget].name.c_str());
   GlGraphRenderingParameters param = glWidget->getRenderingParameters();
   param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
   glWidget->setRenderingParameters(param);

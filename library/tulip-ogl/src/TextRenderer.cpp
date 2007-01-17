@@ -74,12 +74,29 @@ void TextRenderer::initTextManager(const string &str){
   }
 }
 //---------------------------------------------------------------------------
-void TextRenderer::draw(float w_max, float& w) const{
+void TextRenderer::draw(float w_max, float& w, int relPos) const{
   float h = 0;
   w = w_max;
   if(doc){
     doc->getBoundingBox(w_max, h, w);
-    c.getRenderer().translate(-(w-3.5)/2., (h-2.5)/2.,0); //Quick fix to center correctly text need more rigourus fix.
+    // Quick fix to center correctly text need more rigourus fix.
+    float dx = -(w-3.5)/2.;
+    float dy = (h-2.5)/2.;
+
+    switch(relPos) {
+    case ON_TOP:
+      dy += h/2.;
+      break;
+    case ON_BOTTOM:
+      dy -= h/2.;
+      break;
+    case ON_LEFT:
+      dx -= w/2.;
+      break;
+    case ON_RIGHT:
+      dx += w/2.;
+    }
+    c.getRenderer().translate(dx, dy, 0);
     doc->draw(w_max, w);
     if(w<w_max) w = w_max;
   }

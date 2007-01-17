@@ -188,6 +188,14 @@ public:
   QString text() const;
 };
 
+class LabelPositionTableItem : public QComboTableItem {
+public:
+  LabelPositionTableItem(QTable *, bool editable = false);
+  ~LabelPositionTableItem();
+  int rtti() const;
+  QString text() const;
+};
+
 class SelectionTableItem : public QCheckTableItem {
 public:
   SelectionTableItem(QTable *table, const QString &txt);
