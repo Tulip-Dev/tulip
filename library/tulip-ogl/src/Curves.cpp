@@ -299,10 +299,10 @@ namespace tlp {
 		      const Color &c1, const Color &c2, 
 		      float s1, float s2,
 		      const Coord &startN, const Coord &endN) {
-    gleCoord  *point_array  = new gleCoord [30 + 2];
+    /* gleCoord  *point_array  = new gleCoord [30 + 2];
     gleColor  *color_array  = new gleColor [30 + 2];
     gleDouble *radius_array = new gleDouble[30 + 2];
-    /*
+
       for (unsigned int i = 0; i < 30; ++i) {
       Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu);
     }
