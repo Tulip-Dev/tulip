@@ -5,6 +5,7 @@
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"
 #include "tulip/DoubleProperty.h"
+#include "tulip/ForEach.h"
 
 
 using namespace std;
@@ -52,47 +53,30 @@ unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> 
   while(!fifo.empty()) {
     node current = fifo.front();
     fifo.pop_front();
-    Iterator<node> *itN = getIt(sg, current, direction);
-    while(itN->hasNext()) {
-      node itn = itN->next();
+    node itn;
+    unsigned int itnDist = distance.get(current.id) + 1;
+    forEach(itn, getIt(sg, current, direction)) {
       if (!visited.get(itn.id)) {
 	fifo.push_back(itn);
 	visited.set(itn.id, true);
-	distance.set(itn.id, distance.get(current.id) + 1);
-	maxDist = std::max(maxDist, distance.get(current.id) + 1);
+	distance.set(itn.id, itnDist);
+	maxDist = std::max(maxDist, itnDist);
       }
-    } delete itN;
+    }
   }
   return maxDist;
 }
 //================================================================
 //Warning the algorithm is not optimal
 double tlp::averagePathLength(Graph *sg) {
-  list<node> fifo;
-  double sumPath=0;
-  DoubleProperty *mark = new DoubleProperty(sg);
-  Iterator<node>*itN=sg->getNodes();
-  while (itN->hasNext()) {
-    mark->setAllNodeValue(0);
-    node itn=itN->next();
-    fifo.clear();
-    fifo.push_back(itn);
-    while(!fifo.empty()) {
-      node current=fifo.front();
-      fifo.pop_front();
-      Iterator<node> *itNei=sg->getInOutNodes(current);
-      while (itNei->hasNext()) {
-	node nei=itNei->next();
-	if (mark->getNodeValue(nei)==0 && nei!=itn)  {
-	  mark->setNodeValue(nei,mark->getNodeValue(current)+1);
-	  sumPath+=mark->getNodeValue(current)+1;
-	  fifo.push_back(nei);
-	}
-      } delete itNei;
-    }
-  } delete itN;
-  delete mark;
-  return sumPath/double(sg->numberOfNodes()*(sg->numberOfNodes()-1));
+  double sumPath = 0;
+  int nbNodes = sg->numberOfNodes();
+  node n;
+  forEach(n, sg->getNodes()) {
+    MutableContainer<unsigned int> distance;
+    sumPath += (double) tlp::maxDistance(sg, n, distance, 2 /* inout */);
+  }
+  return sumPath/(nbNodes * (nbNodes - 1));
 }
 //================================================================
 double tlp::averageCluster(Graph *sg) {
