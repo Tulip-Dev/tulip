@@ -37,6 +37,9 @@ void QtProgress::progress_handler(int i,int j) {
 //=====================================
 void QtProgress::setComment(string msg) {
   comment->setText(QString(msg.c_str()));
+  if (firstCall) show();
+  firstCall=false;
+  qApp->processEvents();
 }
 //=====================================
 void QtProgress::stopCompute(){
