@@ -63,6 +63,7 @@ MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context) 
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
   addDependency<DoubleAlgorithm>("Connected Component");
+  addDependency<Clustering>("Equal Value");
 }
 //====================================================
 MixedModel::~MixedModel(){
@@ -101,7 +102,7 @@ bool MixedModel::run() {
   string err;
   Pere->computeProperty(string("Connected Component"), &connectedComponnent, err);
   DataSet tmp;
-  tmp.set("Metric", &connectedComponnent);
+  tmp.set("Property", &connectedComponnent);
   tlp::clusterizeGraph(Pere, err, &tmp, "Equal Value");
   vector<edge> edge_planar;
 

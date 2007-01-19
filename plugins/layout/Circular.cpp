@@ -46,6 +46,7 @@ Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addParameter<bool>("search_cycle", paramHelp[1], "false");
   // Connected component metric dependency
   addDependency<DoubleAlgorithm>("Connected Component");
+  addDependency<Clustering>("Equal Value");
 }
 
 namespace {
@@ -121,7 +122,7 @@ namespace {
     string err ="";
     g->computeProperty(string("Connected Component"),&m,err);
     DataSet tmp;
-    tmp.set("Metric", &m);
+    tmp.set("Property", &m);
     tlp::clusterizeGraph(g, err, &tmp, "Equal Value");
     Graph * g_tmp;
     
