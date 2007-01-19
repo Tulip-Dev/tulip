@@ -430,7 +430,6 @@ void viewGl::changeGraph(Graph *graph) {
   glWidget->setRenderingParameters(param);
   QDir::setCurrent(tmp.dirPath() + "/");
   clusterTreeWidget->setGraph(graph);
-  propertiesWidget->setGraph(graph);
   nodeProperties->setGraph(graph);
   propertiesWidget->setGlGraphWidget(glWidget);
   overviewWidget->setObservedView(glWidget);
@@ -439,6 +438,10 @@ void viewGl::changeGraph(Graph *graph) {
 #endif
   updateStatusBar();
   redrawView();
+  // this line has been moved after the call to redrawView to ensure
+  // that a new created graph has all its view... properties created
+  // (call to initProxies())
+  propertiesWidget->setGraph(graph);
   initObservers();
 }
 //**********************************************************************
