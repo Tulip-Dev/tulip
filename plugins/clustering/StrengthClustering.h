@@ -20,9 +20,9 @@ public:
 private:
   std::vector< std::set<tlp::node> > computeNodePartition(double threshold);
   double computeMQValue(const std::vector< std::set<tlp::node> > & partition, tlp::Graph *);
-  double findBestThreshold(int numberOfSteps);
+  double findBestThreshold(int numberOfSteps, bool& stopped);
   tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
-  void recursiveCall(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
+  bool recursiveCall(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::Graph* buildQuotientGraph(tlp::Graph *);
   void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::DoubleProperty* values;

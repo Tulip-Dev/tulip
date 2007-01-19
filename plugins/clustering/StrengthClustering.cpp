@@ -116,7 +116,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
     if (tmpGraph->deg(itn)==0) singleton.insert(itn);
   }
   
-  // restore edges to reconnect singleton by computing induced subgraph 
+  // restore edges to reconnect singleton by computing induced subgraph
   StableIterator<edge> itE2(graph->getEdges());
   while (itE2.hasNext()) {
     edge ite=itE2.next();
@@ -143,8 +143,8 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   } delete itN2;
 
   //Compute the node partition
-  vector< set<node > > result;
   int index=0;
+  vector< set<node > > result;
   map<double,int> resultIndex;
   itN2=tmpGraph->getNodes();
   while (itN2->hasNext()) {
@@ -180,13 +180,18 @@ void drawGraph(Graph *tmpg) {
     tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizeProperty>("viewSize"),errMsg);
 }
 //==============================================================================
-double StrengthClustering::findBestThreshold(int numberOfSteps){
+double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped){
   double maxMQ=-2;
   double threshold = values->getEdgeMin(graph);
   double deltaThreshold = (values->getEdgeMax(graph)-values->getEdgeMin(graph))/double(numberOfSteps);
+  int steps = 0;
   for (double i=values->getEdgeMin(graph); i<values->getEdgeMax(graph); i+=deltaThreshold) {
     vector< set<node > > tmp;
     tmp = computeNodePartition(i);
+    pluginProgress->progress(++steps, numberOfSteps);
+    if (stopped = (pluginProgress->state() !=TLP_CONTINUE)) {
+      return threshold;
+    }
     double mq = computeMQValue(tmp, graph);
     if ( mq > maxMQ) {
       threshold=i;
@@ -204,16 +209,28 @@ Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition)
   if (partition.size()<2) return graph;
   Graph *tmpGraph=tlp::newCloneSubGraph(graph);
   for (unsigned int i=0;i<partition.size();++i) {
+    pluginProgress->progress(i, partition.size());
+    if (pluginProgress->state() !=TLP_CONTINUE) {
+      graph->delSubGraph(tmpGraph);
+      return 0;
+    }
     tlp::inducedSubGraph(tmpGraph, partition[i]);
   }
   return tmpGraph;
 }
 //==============================================================================
-void StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &mapGraph) {
+bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &mapGraph) {
   Iterator<Graph*> *itS = rootGraph->getSubGraphs();
-  while(itS->hasNext()){
+  int i = 0;
+  while(itS->hasNext()) {
     Graph *sg=itS->next();
+    pluginProgress->setComment("Computing average path length on subgraphs");
+    pluginProgress->progress(i, 100);
     double avPath = tlp::averagePathLength(sg);
+    pluginProgress->setComment("Computing average cluster on subgraphs");
+    pluginProgress->progress(i, 100);
+    if (pluginProgress->state() !=TLP_CONTINUE)
+      return pluginProgress->state()!= TLP_CANCEL;
     double avCluster = tlp::averageCluster(sg);
     /*
       cout << "Average Path Length :" << avPath << endl;
@@ -226,20 +243,29 @@ void StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
       DataSet tmpData;
       string errMsg;
       
-      tlp::clusterizeGraph(sg,errMsg,&tmpData,"Strength");
+      pluginProgress->setComment("Computing strength clustering on subgraphs...");
+      pluginProgress->progress(i, 100);
+      if (pluginProgress->state() !=TLP_CONTINUE)
+	return pluginProgress->state()!= TLP_CANCEL;
+      if (!tlp::clusterizeGraph(sg,errMsg,&tmpData,"Strength")) {
+	return false;
+      }
       tmpData.get("strengthGraph",tmpGr);
     }
     mapGraph[sg]=tmpGr;
     if (sg==tmpGr) {
       drawGraph(sg);
     }
+    i++;
   } delete itS;
+  return true;
 }
 //==============================================================================
 Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   DataSet tmpData;
   string errMsg;
-  tlp::clusterizeGraph(sg,errMsg,&tmpData,"QuotientClustering");
+  if (!tlp::clusterizeGraph(sg,errMsg,&tmpData,"QuotientClustering"))
+    return 0;
   Graph *quotientGraph;
   tmpData.get<Graph *>("quotientGraph",quotientGraph);
   vector<edge> toRemoved;
@@ -277,7 +303,7 @@ namespace {
     HTML_HELP_DEF( "values", "An existing metric property" )		\
     HTML_HELP_DEF( "default", "viewSize" )				\
     HTML_HELP_BODY()							\
-    "This parameter defines the property used in order to multiply strength values." \
+    "This parameter defines the property used in order to multiply strength metric computed values." \
     HTML_HELP_CLOSE(),
     //Complexity
     HTML_HELP_OPEN()							\
@@ -285,47 +311,65 @@ namespace {
     HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" )	\
     HTML_HELP_DEF( "default", "false" )					\
     HTML_HELP_BODY()							\
-    "If true the strength value wiil be multipplied by the metric proxy given in parameter." \
+    "If true the strength value wiil be multiplied by the metric given in parameter." \
     HTML_HELP_CLOSE()
   };
 }
 
 //================================================================================
 StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
-  addParameter<DoubleProperty>("metric", paramHelp[0],"viewMetric");
-  addParameter<bool>("multiply",paramHelp[1],"false");
+  addParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric");
+  addParameter<bool>("multiply", paramHelp[1], "false");
   addDependency<DoubleAlgorithm>("Connected Component");
   addDependency<DoubleAlgorithm>("Strength");
+  addDependency<Clustering>("QuotientClustering");
 }
+
 //==============================================================================
 bool StrengthClustering::run() {
   bool result;
   string errMsg;
   values = new DoubleProperty(graph);
+  pluginProgress->setComment("Computing Strength metric");
+  pluginProgress->progress(0, 100);
   result = graph->computeProperty("Strength", values, errMsg);
   
   bool multi;
   if ( dataSet==0 || !dataSet->get("multiply",multi)) {
     multi = false;
   }
-  
+
   if (multi) {
     DoubleProperty *metric;
-    if (!dataSet->get("metric",metric)) 
+    if (!dataSet->get("metric", metric)) 
       metric = graph->getProperty<DoubleProperty>("viewMetric");
     DoubleProperty mult(graph);
+    pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
     mult = *metric;
     mult.uniformQuantification(100);
     edge e;
+    int steps = 0, maxSteps = graph->numberOfEdges();
     forEach (e, graph->getEdges()) {
       values->setEdgeValue(e, values->getEdgeValue(e)*(mult.getEdgeValue(e) + 1));
+      pluginProgress->progress(++steps, maxSteps);
+      if (pluginProgress->state() !=TLP_CONTINUE)
+	return pluginProgress->state()!= TLP_CANCEL;
     }
   }
   
+  bool stopped = false;
   const unsigned int NB_TEST = 100;
-  double threshold = findBestThreshold(NB_TEST);
+  pluginProgress->setComment("Partitioning nodes...");
+  pluginProgress->progress(0, NB_TEST + 1);
+
+  double threshold = findBestThreshold(NB_TEST, stopped);
+  if (stopped)
+    return pluginProgress->state()!= TLP_CANCEL;
   vector< set<node > > tmp;
   tmp = computeNodePartition(threshold);
+  pluginProgress->progress(NB_TEST + 1, NB_TEST + 1);
+  if (pluginProgress->state() !=TLP_CONTINUE)
+    return pluginProgress->state()!= TLP_CANCEL;
   if (tmp.size()==1) {
     drawGraph(graph);
     if (dataSet!=0) {
@@ -337,9 +381,17 @@ bool StrengthClustering::run() {
   map<Graph *,Graph *> mapGraph;
   Graph *tmpGraph, *quotientGraph;
 
+  pluginProgress->setComment("Building subgraphs...");
   tmpGraph = buildSubGraphs(tmp);
-  recursiveCall(tmpGraph, mapGraph);
+  if (!tmpGraph)
+    return pluginProgress->state()!= TLP_CANCEL;
+  if (!recursiveCall(tmpGraph, mapGraph))
+    return pluginProgress->state()!= TLP_CANCEL;
+  pluginProgress->setComment("Building quotient graph...");
   quotientGraph = buildQuotientGraph(tmpGraph);
+  if (!quotientGraph)
+    return pluginProgress->state()!= TLP_CANCEL;
+  pluginProgress->setComment("Adjusting metagraph property...");
   adjustMetaGraphProperty(quotientGraph, mapGraph);
 
   if (dataSet!=0) {
@@ -357,7 +409,3 @@ bool StrengthClustering::check(string &erreurMsg) {
 void StrengthClustering::reset() {
 }
 //================================================================================
-
-
-
-
