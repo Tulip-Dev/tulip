@@ -12,11 +12,11 @@
 /** \addtogroup clustering */
 /*@{*/
 
-class PlaneClustering : public Clustering 
+class PlaneClustering : public tlp::Clustering 
 { 
  public:
 
-  PlaneClustering(ClusterContext);
+  PlaneClustering(tlp::ClusterContext);
   ~PlaneClustering();
 
   bool run();
