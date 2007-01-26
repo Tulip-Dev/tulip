@@ -1733,14 +1733,16 @@ void viewGl::makeClustering(int id) {
   Graph *graph=glWidget->getGraph();
   StructDef parameter = ClusteringFactory::factory->getPluginParameters(name);
   parameter.buildDefaultDataSet( dataSet, graph );
-  tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
-  QtProgress myProgress(this,name);
-  myProgress.hide();
-  if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-    QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+  bool ok = tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
+  if (ok) {
+    QtProgress myProgress(this,name);
+    myProgress.hide();
+    if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
+      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+    }
+    clusterTreeWidget->update();
+    clusterTreeWidget->setGraph(graph);
   }
-  clusterTreeWidget->update();
-  clusterTreeWidget->setGraph(graph);
   Observable::unholdObservers();
   initObservers();
 }
