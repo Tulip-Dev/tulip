@@ -314,6 +314,19 @@ void PropertyWidget::setAllNodeValue() {
       ss << GlGraph::glyphId(shapeName.ascii());
       tmpStr = ss.str();
     }
+  } else if (editedPropertyName == "viewLabelPosition") {
+    QStringList tmp;
+    for (int i = 0; i < 5; i++)
+      tmp.append(QString(GlGraph::labelPositionName(i).c_str()));
+    
+    QString labelPosName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+                                              "Please choose a position",
+                                              tmp, 0, false, &ok, this);
+    if (ok) {
+      stringstream ss;
+      ss << GlGraph::labelPositionId(labelPosName.ascii());
+      tmpStr = ss.str();
+    }
   }
   else if (typeid((*editedProperty)) == typeid(DoubleProperty)) {
     double d = QInputDialog::getDouble(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
