@@ -132,3 +132,16 @@ path length et path sum pour voir ce que cà fait.
 - Ajouter viewLabelPosition (Top, Bottom, Center, Left, Right)
 - Renommer plus simplement les attributs de "displaying",
   assurer la compatibilité ascendante pour la lecture des fichiers
+/=================================================
+10/01/07 PM
+- Ajouter doc sur feature 'Copy-Paste" et pb de camera 
+utiliser "center view" pour mettre à jour
+- Ajouter les propriétés de type integer et boolean dans le Find du GUI
+- Ajouter feedback sur Strength
+- Remove all sur elt de graph hierarchy (Fiat ...) => pb sur overview
+- Ajouter cardinalité arètes sur QuotientClustering
+ Quotient clustering => aggregation, on doit pouvoir sommer les metric
+sur les sommets/aretes et parametrage dirigé/non dirigé.
+- Equal value avec chaine de caractères et donc autoriser toutes les propriétés
+- Pb crash avec mauvaise valeur par défaut (double) quand ouverture fichier
+- plugin Kruskal orienté/non orienté (David)
