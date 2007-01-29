@@ -1598,6 +1598,7 @@ void viewGl::graphAboutToBeRemoved(Graph *sg) {
   GlGraphRenderingParameters param = glWidget->getRenderingParameters();
   param.setGraph(0);
   glWidget->setRenderingParameters(param);
+  overviewWidget->setObservedView(glWidget);
 }
 //==============================================================
 void viewGl::helpAbout() {
