@@ -38,7 +38,7 @@ namespace {
 
 
 struct RandomTreeGeneral:public ImportModule {
-  RandomTreeGeneral(ClusterContext context):ImportModule(context) {
+  RandomTreeGeneral(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("minsize",paramHelp[0],"10");
     addParameter<int>("maxsize",paramHelp[1],"100");
     addParameter<int>("maxdegree",paramHelp[2],"5");

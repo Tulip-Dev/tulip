@@ -9,9 +9,9 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class HierarchicalClustering:public tlp::Clustering { 
+class HierarchicalClustering:public tlp::Algorithm { 
 public:
-  HierarchicalClustering(tlp::ClusterContext);
+  HierarchicalClustering(tlp::AlgorithmContext);
   ~HierarchicalClustering();
   bool run();
   bool check(std::string &);

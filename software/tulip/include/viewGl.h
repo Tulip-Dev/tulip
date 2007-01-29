@@ -97,7 +97,7 @@ protected:
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
   QPopupMenu colorsMenu;
-  QPopupMenu clusteringMenu;
+  QPopupMenu generalMenu;
   QPopupMenu sizesMenu;
   QPopupMenu intMenu;
   QPopupMenu stringMenu;
@@ -153,7 +153,7 @@ protected slots:
   void importGraph(int);
   void exportGraph(int);
   void exportImage(int);
-  void makeClustering(int );
+  void applyAlgorithm(int );
   void outputEPS();
   void outputSVG();
   void showDialog(int);

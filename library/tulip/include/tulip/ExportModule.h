@@ -32,7 +32,7 @@ class ExportModule:public WithParameter, public WithDependency
 {
 public:
   ///
-  ExportModule (ClusterContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
   ///
   virtual ~ExportModule(){};
   ///
@@ -46,15 +46,15 @@ public:
 
 class ExportModuleFactory:public Plugin{
 public:
-  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *factory;
+  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *factory;
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext >;
+      factory = new TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext >;
       factory->currentLoader = 0;
     }
   }    
   virtual ~ExportModuleFactory() {}
-  virtual ExportModule * createPluginObject(ClusterContext)=0;
+  virtual ExportModule * createPluginObject(AlgorithmContext)=0;
 };
 /*@}*/
 }

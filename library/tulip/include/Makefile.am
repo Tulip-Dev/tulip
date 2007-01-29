@@ -29,8 +29,8 @@ nobase_include_HEADERS = \
 	tulip/GraphAlgorithm.h \
 	tulip/LayoutProperty.h \
 	tulip/Plugin.h \
+	tulip/Algorithm.h \
 	tulip/BooleanAlgorithm.h  \
-	tulip/Clustering.h \
 	tulip/LayoutAlgorithm.h \
 	tulip/PluginLoader.h \
 	tulip/Size.h \

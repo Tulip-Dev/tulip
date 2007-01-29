@@ -31,7 +31,7 @@ class ImportModule :public WithParameter, public WithDependency
 public:
   DataSet *dataSet;
   ///
-  ImportModule (ClusterContext context) : dataSet(context.dataSet),
+  ImportModule (AlgorithmContext context) : dataSet(context.dataSet),
     graph(context.graph),pluginProgress(context.pluginProgress) {}
   virtual ~ImportModule(){};
   ///
@@ -44,15 +44,15 @@ public:
 
 class ImportModuleFactory:public Plugin{
 public:
-  static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *factory;
+  static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *factory;
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext >;
+      factory = new TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext >;
       factory->currentLoader = 0;
     }
   }    
   virtual ~ImportModuleFactory() {}
-  virtual ImportModule * createPluginObject(ClusterContext)=0;
+  virtual ImportModule * createPluginObject(AlgorithmContext)=0;
 };
 /*@}*/
 }

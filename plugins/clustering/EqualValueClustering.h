@@ -4,9 +4,9 @@
 
 #include <tulip/TulipPlugin.h>
 
-class EqualValueClustering:public tlp::Clustering { 
+class EqualValueClustering:public tlp::Algorithm { 
 public:
-  EqualValueClustering(tlp::ClusterContext);
+  EqualValueClustering(tlp::AlgorithmContext);
   bool run();
 };
 

@@ -7,7 +7,7 @@
 /** \addtogroup metric */
 /*@{*/
 /// ClusterMetric.h - An implementation of the clustering parameter.
-/** This plugin is an implementation of the Clustering Parameter.
+/** This plugin is an implementation of the Algorithm Parameter.
  *  algorithm published in :
  *
  *  Y. Chiricota. F.Jourdan, an G.Melançon \n

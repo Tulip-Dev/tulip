@@ -25,7 +25,7 @@ namespace {
 
 
 struct Grid:public ImportModule {
-  Grid(ClusterContext context):ImportModule(context) {
+  Grid(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("width",paramHelp[0],"10");
     addParameter<int>("height",paramHelp[1],"10");
   }

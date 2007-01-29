@@ -441,7 +441,7 @@ namespace {
  */
 class GMLImport:public ImportModule {
 public:
-  GMLImport(ClusterContext context):ImportModule(context) {
+  GMLImport(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport(){}

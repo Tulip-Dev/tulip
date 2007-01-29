@@ -97,7 +97,7 @@
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ExportModule.h>
-#include <tulip/Clustering.h>
+#include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
 #include <tulip/GWInteractor.h>
@@ -237,7 +237,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(&metricMenu     , SIGNAL(activated(int)), SLOT(changeMetric(int)));
   connect(&layoutMenu     , SIGNAL(activated(int)), SLOT(changeLayout(int)));
   connect(&selectMenu     , SIGNAL(activated(int)), SLOT(changeSelection(int)));
-  connect(&clusteringMenu  , SIGNAL(activated(int)), SLOT(makeClustering(int)));
+  connect(&generalMenu  , SIGNAL(activated(int)), SLOT(applyAlgorithm(int)));
   connect(&sizesMenu      , SIGNAL(activated(int)), SLOT(changeSizes(int)));
   connect(&intMenu        , SIGNAL(activated(int)), SLOT(changeInt(int)));
   connect(&colorsMenu     , SIGNAL(activated(int)), SLOT(changeColors(int)));
@@ -278,7 +278,7 @@ void viewGl::enableElements(bool enabled) {
   enableQPopupMenu(&intMenu, enabled);
   enableQPopupMenu(&sizesMenu, enabled);
   enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu(&clusteringMenu, enabled);
+  enableQPopupMenu(&generalMenu, enabled);
   enableQPopupMenu(&exportGraphMenu, enabled);
   enableQPopupMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
@@ -1064,7 +1064,7 @@ void buildPropertyMenu(QPopupMenu &menu, QObject *receiver, const char *slot) {
 
 template <typename TFACTORY, typename TMODULE>
 void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot) {
-  typename TemplateFactory<TFACTORY, TMODULE, ClusterContext>::ObjectCreator::const_iterator it;
+  typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
   std::vector<QPopupMenu*> groupMenus;
   std::string::size_type nGroups = 0;
   for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
@@ -1085,7 +1085,7 @@ void viewGl::buildMenus() {
   buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(metricMenu, this, SLOT(changeMetric(int)));
   buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(selectMenu, this, SLOT(changeSelection(int)));
 
-  buildMenuWithContext<ClusteringFactory, Clustering>(clusteringMenu, this, SLOT(makeClustering(int)));
+  buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(int)));
   buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(int)));
   buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(int)));
   // Tulip known formats (see GlGraph)
@@ -1157,8 +1157,8 @@ void viewGl::buildMenus() {
     propertyMenu->insertItem("S&ize", &sizesMenu );
   if (stringMenu.count()>0)
     propertyMenu->insertItem("&String", &stringMenu );
-  if (clusteringMenu.count()>0)
-    propertyMenu->insertItem("&General", &clusteringMenu );
+  if (generalMenu.count()>0)
+    propertyMenu->insertItem("&General", &generalMenu );
 }
 //**********************************************************************
 void viewGl::outputEPS() {
@@ -1722,22 +1722,22 @@ void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
     enableElements(false);
 }
 //**********************************************************************
-///Make a new clustering of the view graph
-void viewGl::makeClustering(int id) {
+/// Apply a general algorithm
+void viewGl::applyAlgorithm(int id) {
   clearObservers();
   if (glWidget==0) return;
   Observable::holdObservers();
-  string name(clusteringMenu.text(id).ascii());
+  string name(generalMenu.text(id).ascii());
   string erreurMsg;
   DataSet dataSet;
   Graph *graph=glWidget->getGraph();
-  StructDef parameter = ClusteringFactory::factory->getPluginParameters(name);
+  StructDef parameter = AlgorithmFactory::factory->getPluginParameters(name);
   parameter.buildDefaultDataSet( dataSet, graph );
   bool ok = tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
   if (ok) {
     QtProgress myProgress(this,name);
     myProgress.hide();
-    if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
+    if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
     }
     clusterTreeWidget->update();

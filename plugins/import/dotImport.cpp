@@ -61,7 +61,7 @@ namespace {
  */
 class DotImport:public ImportModule {
 public:
-  DotImport(ClusterContext context):ImportModule(context){
+  DotImport(AlgorithmContext context):ImportModule(context){
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~DotImport(){}

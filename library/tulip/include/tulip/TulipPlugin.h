@@ -6,7 +6,7 @@
 #include "LayoutProperty.h"
 #include "BooleanProperty.h"
 #include "StringProperty.h"
-#include "Clustering.h"
+#include "Algorithm.h"
 #include "ImportModule.h"
 #include "SizeProperty.h"
 #include "ColorProperty.h"

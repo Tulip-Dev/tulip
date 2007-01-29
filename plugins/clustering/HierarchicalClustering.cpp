@@ -10,10 +10,10 @@
 using namespace std;
 using namespace tlp;
 
-CLUSTERINGPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","0","1");
+ALGORITHMPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","0","1");
 
 //================================================================================
-HierarchicalClustering::HierarchicalClustering(ClusterContext context):Clustering(context)
+HierarchicalClustering::HierarchicalClustering(AlgorithmContext context):Algorithm(context)
 {}
 //================================================================================
 HierarchicalClustering::~HierarchicalClustering()

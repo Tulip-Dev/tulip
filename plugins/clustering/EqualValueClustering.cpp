@@ -13,7 +13,7 @@
 using namespace std;
 using namespace tlp;
 
-CLUSTERINGPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
+ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
 
 namespace {
   const char * paramHelp[] = {
@@ -26,7 +26,7 @@ namespace {
   };
 }
 //================================================================================
-EqualValueClustering::EqualValueClustering(ClusterContext context):Clustering(context) {
+EqualValueClustering::EqualValueClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
 }
 //================================================================================

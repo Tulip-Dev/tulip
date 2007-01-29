@@ -9,11 +9,12 @@
 #include "AritySegmentRecClustering.h"
 #include "TableAritySegment.h"
 
-CLUSTERINGPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","0","1");
-
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","0","1");
 //================================================================================
-AritySegmentRecClustering::AritySegmentRecClustering(ClusterContext context):Clustering(context)
+AritySegmentRecClustering::AritySegmentRecClustering(AlgorithmContext context):Algorithm(context)
 {}
 //================================================================================
 AritySegmentRecClustering::~AritySegmentRecClustering()

@@ -29,21 +29,21 @@
  *  (at your option) any later version.
  *
  */
-class AritySegmentRecClustering:public Clustering {
+class AritySegmentRecClustering:public tlp::Algorithm {
 public:
-  AritySegmentRecClustering(ClusterContext);
+  AritySegmentRecClustering(tlp::AlgorithmContext);
   ~AritySegmentRecClustering();
   bool run();
   bool check(std::string &);
   void reset();
 
 private:
-  bool DfsClustering (node ,BooleanProperty *,BooleanProperty *);
-  void getRecurseChild(node,BooleanProperty *,BooleanProperty *);
-  DoubleProperty *arityM;
-  DoubleProperty *leafM;
-  DoubleProperty *nodeM;
-  DoubleProperty *segmentM;
+  bool DfsClustering (tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
+  void getRecurseChild(tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
+  tlp::DoubleProperty *arityM;
+  tlp::DoubleProperty *leafM;
+  tlp::DoubleProperty *nodeM;
+  tlp::DoubleProperty *segmentM;
   int mResult;
   double inter;
 };

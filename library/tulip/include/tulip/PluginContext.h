@@ -26,16 +26,16 @@ class PluginProgress;
 /*@{*/
 
 ///Parameter for calling clustering plugins
-class ClusterContext {
+class AlgorithmContext {
   public :
   ///
   Graph *graph;
   PluginProgress *pluginProgress;
   DataSet *dataSet;
   ///
-  ClusterContext ():graph(0),pluginProgress(0), dataSet(0) {}
+  AlgorithmContext ():graph(0),pluginProgress(0), dataSet(0) {}
   ///
-  ~ClusterContext(){}
+  ~AlgorithmContext(){}
 };
 
 ///Parameter for calling Property plugins

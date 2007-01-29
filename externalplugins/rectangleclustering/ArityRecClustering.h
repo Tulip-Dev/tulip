@@ -30,22 +30,22 @@
  *  (at your option) any later version.
  *
  */
-class ArityRecClustering:public Clustering { 
+class ArityRecClustering:public tlp::Algorithm { 
 public:
-  ArityRecClustering(ClusterContext);
+  ArityRecClustering(tlp::AlgorithmContext);
   ~ArityRecClustering();
   bool run();
   bool check(std::string &);
   void reset();
 
 private:
-  DoubleProperty *arityM;
-  DoubleProperty *leafM;
-  DoubleProperty *nodeM;
+  tlp::DoubleProperty *arityM;
+  tlp::DoubleProperty *leafM;
+  tlp::DoubleProperty *nodeM;
   int mResult;
   double inter;
-  bool DfsClustering (node ,BooleanProperty *,BooleanProperty *);
-  void getRecurseChild(node,BooleanProperty *,BooleanProperty *);
+  bool DfsClustering (tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
+  void getRecurseChild(tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
 };
 
 #endif

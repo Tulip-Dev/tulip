@@ -50,7 +50,7 @@ template<class C>class Iterator;
   TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
   TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
   TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
-  TLP_SCOPE bool clusterizeGraph(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
+  TLP_SCOPE bool applyAlgorithm(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
   /**
    * Returns a new graph
    */

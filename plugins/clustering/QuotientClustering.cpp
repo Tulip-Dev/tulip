@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-CLUSTERINGPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","0","1");
+ALGORITHMPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","0","1");
 
 struct Edge {
   unsigned int source,target;
@@ -31,7 +31,7 @@ namespace std {
   };
 };
 //================================================================================
-QuotientClustering::QuotientClustering(ClusterContext context):Clustering(context) {}
+QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {}
 //================================================================================
 QuotientClustering::~QuotientClustering(){}
 //===============================================================================

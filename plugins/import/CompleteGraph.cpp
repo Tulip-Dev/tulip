@@ -25,7 +25,7 @@ namespace
 
 struct CompleteGraph:public ImportModule {
 
-  CompleteGraph(ClusterContext context):ImportModule(context) {
+  CompleteGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"5");
   }
   ~CompleteGraph(){

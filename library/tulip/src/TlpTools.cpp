@@ -13,7 +13,7 @@
 #include "tulip/SizeProperty.h"
 #include "tulip/GraphProperty.h"
 #include "tulip/ExportModule.h"
-#include "tulip/Clustering.h"
+#include "tulip/Algorithm.h"
 #include "tulip/ImportModule.h"
 #include "tulip/PluginsCreation.h"
 
@@ -102,9 +102,9 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
 }
 //=========================================================
 map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
-TemplateFactory<ClusteringFactory,Clustering,ClusterContext > *ClusteringFactory::factory = 0;
-TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleFactory::factory = 0;
-TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
+TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *AlgorithmFactory::factory = 0;
+TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = 0;
+TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = 0;
 // initialize and export the factories needed to manage
 // our different kinds of plugins
 #if !defined( __APPLE__) || __GNUC__ > 3
@@ -135,8 +135,8 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
   StringProperty::factory->loadPluginsFromDir(dir + "string" , "String",plug);
   BooleanProperty::initFactory();
   BooleanProperty::factory->loadPluginsFromDir(dir + "selection" , "Boolean",plug);
-  ClusteringFactory::initFactory();
-  ClusteringFactory::factory->loadPluginsFromDir(dir + "clustering" , "Cluster",plug);
+  AlgorithmFactory::initFactory();
+  AlgorithmFactory::factory->loadPluginsFromDir(dir + "clustering" , "Cluster",plug);
   ImportModuleFactory::initFactory();
   ImportModuleFactory::factory->loadPluginsFromDir(dir + "import" , "Import Module",plug);
   ExportModuleFactory::initFactory();

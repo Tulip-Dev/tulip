@@ -10,9 +10,9 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class StrengthClustering:public tlp::Clustering { 
+class StrengthClustering:public tlp::Algorithm { 
 public:
-  StrengthClustering(tlp::ClusterContext);
+  StrengthClustering(tlp::AlgorithmContext);
   ~StrengthClustering();
   bool run();
   bool check(std::string &);

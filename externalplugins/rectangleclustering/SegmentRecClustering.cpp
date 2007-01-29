@@ -8,11 +8,13 @@
 #include "SegmentRecClustering.h"
 #include "TableSegment.h"
 
-CLUSTERINGPLUGIN(SegmentRecClustering,"Segment Dfs-Recursive","David Auber","27/01/2000","Alpha","0","1");
-
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(SegmentRecClustering,"Segment Dfs-Recursive","David Auber","27/01/2000","Alpha","0","1");
+
 //================================================================================
-SegmentRecClustering::SegmentRecClustering(ClusterContext context):Clustering(context)
+SegmentRecClustering::SegmentRecClustering(AlgorithmContext context):Algorithm(context)
 {}
 //================================================================================
 SegmentRecClustering::~SegmentRecClustering()

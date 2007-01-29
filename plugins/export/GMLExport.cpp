@@ -41,7 +41,7 @@ void printSize(ostream &os,const Size &v){
  */
 class GML:public ExportModule {
 public:
-  GML(ClusterContext context):ExportModule(context)
+  GML(AlgorithmContext context):ExportModule(context)
   {}
 
   ~GML(){}

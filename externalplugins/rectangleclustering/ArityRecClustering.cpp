@@ -8,11 +8,13 @@
 #include "ArityRecClustering.h"
 #include "TableArity.h"
 
-CLUSTERINGPLUGIN(ArityRecClustering,"Arity Dfs-Recursive","David Auber","27/01/2000","Alpha","0","1");
-
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(ArityRecClustering,"Arity Dfs-Recursive","David Auber","27/01/2000","Alpha","0","1");
+
 //================================================================================
-ArityRecClustering::ArityRecClustering(ClusterContext context):Clustering(context) {}
+ArityRecClustering::ArityRecClustering(AlgorithmContext context):Algorithm(context) {}
 //================================================================================
 ArityRecClustering::~ArityRecClustering() {}
 //================================================================================

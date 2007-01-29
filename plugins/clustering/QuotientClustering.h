@@ -6,9 +6,9 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class QuotientClustering:public tlp::Clustering { 
+class QuotientClustering:public tlp::Algorithm { 
 public:
-  QuotientClustering(tlp::ClusterContext);
+  QuotientClustering(tlp::AlgorithmContext);
   ~QuotientClustering();
   bool run();
   bool check(std::string &);

@@ -29,7 +29,7 @@ struct Triangle {
 }
 //=============================================================
 struct PlanarGraph:public ImportModule {
-  PlanarGraph(ClusterContext context):ImportModule(context) {
+  PlanarGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph(){}

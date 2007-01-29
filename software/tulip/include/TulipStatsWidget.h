@@ -101,7 +101,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void resetDisplayTab();
 
   /**
-   * Function used to reset the Clustering tab.
+   * Function used to reset the Algorithm tab.
    *
    * It resets mainly the combobox of the tab.
    */
@@ -125,7 +125,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void updateMetrics();
 
   /**
-   * Function used to update the displayed Clustering plane when the user changes the coordinates.
+   * Function used to update the displayed Algorithm plane when the user changes the coordinates.
    */
   void updateClusteringPlane();
 

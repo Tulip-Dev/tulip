@@ -8,7 +8,7 @@
 #include "tulip/GraphProperty.h"
 #include "tulip/Reflect.h"
 #include "tulip/ExportModule.h"
-#include "tulip/Clustering.h"
+#include "tulip/Algorithm.h"
 #include "tulip/ImportModule.h"
 
 using namespace std;
@@ -97,7 +97,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
     newGraphP=true;
   }
 
-  ClusterContext tmp;
+  AlgorithmContext tmp;
   tmp.graph=newGraph;
   tmp.dataSet = &dataSet;
   PluginProgress *tmpProgress;
@@ -133,7 +133,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
 
   bool result;
   bool deletePluginProgress=false;
-  ClusterContext tmp;
+  AlgorithmContext tmp;
   tmp.graph=sg;
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
@@ -152,17 +152,17 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   return result;
 }
 //=========================================================
-bool tlp::clusterizeGraph(Graph *sg,string &errorMsg,DataSet *dataSet,
+bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
 			  const string &alg, PluginProgress *plugProgress) {
-  if (!ClusteringFactory::factory->pluginExists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": cluster plugin \"" << alg
+  if (!AlgorithmFactory::factory->pluginExists(alg)) {
+    cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
   }
 
   bool result;
   bool deletePluginProgress=false;
-  ClusterContext tmp;
+  AlgorithmContext tmp;
   tmp.graph=sg;
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
@@ -172,10 +172,10 @@ bool tlp::clusterizeGraph(Graph *sg,string &errorMsg,DataSet *dataSet,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress; 
-  Clustering *newClustering=ClusteringFactory::factory->getPluginObject(alg, tmp);
-  if ((result=newClustering->check(errorMsg)))
-    newClustering->run();
-  delete newClustering;
+  Algorithm *newAlgo=AlgorithmFactory::factory->getPluginObject(alg, tmp);
+  if ((result=newAlgo->check(errorMsg)))
+    newAlgo->run();
+  delete newAlgo;
   if (deletePluginProgress) delete tmpProgress;
   return result;
 }

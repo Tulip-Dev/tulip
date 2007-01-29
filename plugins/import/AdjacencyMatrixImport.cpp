@@ -83,7 +83,7 @@ namespace {
  */
 class AdjacencyMatrixImport:public ImportModule {
 public:
-  AdjacencyMatrixImport(ClusterContext context):ImportModule(context){
+  AdjacencyMatrixImport(AlgorithmContext context):ImportModule(context){
     addParameter<string>("file::name",paramHelp[0]);
   }
   ~AdjacencyMatrixImport(){}

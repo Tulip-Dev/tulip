@@ -28,7 +28,7 @@
 #include "StringAlgorithm.h"
 #include "BooleanAlgorithm.h"
 #include "GraphAlgorithm.h"
-#include "Clustering.h"
+#include "Algorithm.h"
 #include "ImportModule.h"
 #include "ExportModule.h"
 
@@ -103,7 +103,7 @@ class C##T##Factory:public tlp::T##Factory              \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getVersion() const {return std::string(V);}\
-  tlp::T * createPluginObject(ClusterContext context)	\
+  tlp::T * createPluginObject(AlgorithmContext context)	\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T *) tmp);				\
@@ -113,8 +113,8 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(Clustering,C,N,A,D,I,V,R,G)
-#define CLUSTERINGPLUGIN(C,N,A,D,I,V,R) CLUSTERINGPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(Algorithm,C,N,A,D,I,V,R,G)
+#define ALGORITHMPLUGIN(C,N,A,D,I,V,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,V,R,"")
 #define EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R,G)
 #define EXPORTPLUGIN(C,N,A,D,I,V,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
 #define IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R,G)

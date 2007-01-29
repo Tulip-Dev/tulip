@@ -44,7 +44,7 @@ namespace {
 
 
 struct RandomGraph:public ImportModule {
-  RandomGraph(ClusterContext context):ImportModule(context) {
+  RandomGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"5");
     addParameter<int>("edges",paramHelp[1],"9");
   }

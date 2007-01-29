@@ -21,7 +21,7 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-CLUSTERINGPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
+ALGORITHMPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
@@ -247,7 +247,7 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
       pluginProgress->progress(i, 100);
       if (pluginProgress->state() !=TLP_CONTINUE)
 	return pluginProgress->state()!= TLP_CANCEL;
-      if (!tlp::clusterizeGraph(sg,errMsg,&tmpData,"Strength")) {
+      if (!tlp::applyAlgorithm(sg,errMsg,&tmpData,"Strength")) {
 	return false;
       }
       tmpData.get("strengthGraph",tmpGr);
@@ -264,7 +264,7 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   DataSet tmpData;
   string errMsg;
-  if (!tlp::clusterizeGraph(sg,errMsg,&tmpData,"QuotientClustering"))
+  if (!tlp::applyAlgorithm(sg,errMsg,&tmpData,"QuotientClustering"))
     return 0;
   Graph *quotientGraph;
   tmpData.get<Graph *>("quotientGraph",quotientGraph);
@@ -317,12 +317,12 @@ namespace {
 }
 
 //================================================================================
-StrengthClustering::StrengthClustering(ClusterContext context):Clustering(context) {
+StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric");
   addParameter<bool>("multiply", paramHelp[1], "false");
   addDependency<DoubleAlgorithm>("Connected Component");
   addDependency<DoubleAlgorithm>("Strength");
-  addDependency<Clustering>("QuotientClustering");
+  addDependency<Algorithm>("QuotientClustering");
 }
 
 //==============================================================================

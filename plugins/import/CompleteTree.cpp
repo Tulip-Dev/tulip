@@ -32,7 +32,7 @@ namespace
 
 
 struct CompleteTree:public ImportModule {
-  CompleteTree(ClusterContext context):ImportModule(context) {
+  CompleteTree(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("depth",paramHelp[0],"5");
     addParameter<int>("degree",paramHelp[1],"2");
   }

@@ -696,7 +696,7 @@ namespace tlp {
  */
 class TLPImport:public ImportModule {
 public:
-  TLPImport(ClusterContext context):ImportModule(context) {
+  TLPImport(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("file::filename", paramHelp[0]);
     addParameter<DataSet>(DISPLAYING);
   }

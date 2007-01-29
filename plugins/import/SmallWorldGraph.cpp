@@ -42,7 +42,7 @@ namespace {
  */
 
 struct SmallWorldGraph:public ImportModule {
-  SmallWorldGraph(ClusterContext context):ImportModule(context) {
+  SmallWorldGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"200");
     addParameter<int>("degree",paramHelp[1],"10");
     addParameter<bool>("long edge",paramHelp[2],"false");

@@ -3,6 +3,7 @@ graph functions in TlpTools.h => Graph.h
 tlp::newSuperGraph => tlp::newGraph
 tlp::load => tlp::loadGraph
 tlp::save => tlp::saveGraph
+tlp::clusterizeGraph => tlp::applyAlgorithm
 
 Supergraph => Graph
 Property => PropertyAlgorithm
@@ -36,6 +37,8 @@ Sizes::sizesProxy => SizeAlgorithm::sizeResult
 SizesProxy => SizeProperty
 IntType => IntegerType
 MetaGraphType => GraphType
+Clustering => Algorithm
+ClusterContext => AlgorithmContext
 SuperGraph::getFather => Graph::getSuperGraph
 SuperGraph::setFather => Graph::setSuperGraph
 SuperGraph::father => Graph::supergraph

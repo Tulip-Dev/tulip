@@ -20,7 +20,7 @@
 #include <tulip/GlGraph.h> 
 #include <tulip/StableIterator.h>
 #include <tulip/SGHierarchyWidget.h>
-#include "tulip/Clustering.h"
+#include "tulip/Algorithm.h"
 
 #if (QT_REL == 3)
 #include <qlistbox.h>
@@ -1206,7 +1206,7 @@ namespace tlp
     string erreurMsg;
     DataSet dataSet;
 
-    StructDef parameter = ClusteringFactory::factory->getPluginParameters(name);
+    StructDef parameter = AlgorithmFactory::factory->getPluginParameters(name);
     parameter.buildDefaultDataSet( dataSet, graph );
 
     float a, b, c, d;
@@ -1221,7 +1221,7 @@ namespace tlp
     dataSet.set("CoordC", c);
     dataSet.set("CoordD", d);
 
-    if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, NULL  )) 
+    if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, NULL  )) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
   
     if (clusterTreeWidget != NULL)
