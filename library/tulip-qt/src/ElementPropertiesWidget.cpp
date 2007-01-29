@@ -166,51 +166,47 @@ void ElementPropertiesWidget::updateTable() {
   int i=0;
   if (displayAllProperties) {
     propertyTable->setNumRows(0);    
-    propertyTable->setNumRows(50);    
     Iterator<std::string> *it=graph->getLocalProperties();
     while(it->hasNext()) {
+      propertyTable->setNumRows(i + 1);
       std::string pname=it->next();
       propertyTable->setText(i, 0, QString(pname.c_str()));
+      PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
 	if (nodeSet) {
-	  PropertyInterface *editedProperty = graph->getProperty(pname);
 	  propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
-	  ++i;
 	}
 	break;
       case EDGE:
 	if (edgeSet) {
-	  PropertyInterface *editedProperty = graph->getProperty(pname);
 	  propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
-	  ++i;
 	}
 	break;
       }
-
-    }delete it;
+      ++i;
+    } delete it;
     it=graph->getInheritedProperties();
     while(it->hasNext()) {
+      propertyTable->setNumRows(i + 1);
       std::string pname=it->next();
       propertyTable->setText(i, 0, QString(pname.c_str()));
+      PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
 	if (nodeSet) {
-	  PropertyInterface *editedProperty = graph->getProperty(pname);
 	  propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
-	  ++i;
 	}
 	break;
       case EDGE:
 	if (edgeSet) {
 	  PropertyInterface *editedProperty = graph->getProperty(pname);
 	  propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
-	  ++i;
 	}
 	break;
       }
+      ++i;
     }delete it;
-    propertyTable->setNumRows(i);
   }
   else {
     QStringList *listedProperties = NULL;
