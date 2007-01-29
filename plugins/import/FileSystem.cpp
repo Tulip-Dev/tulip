@@ -1,5 +1,6 @@
 #include <qfiledialog.h>
 #include <tulip/TulipPlugin.h>
+#include <tulip/ForEach.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -12,8 +13,15 @@
 using namespace std;
 using namespace tlp;
 
-struct FileSystem:public ImportModule {
-  FileSystem(ClusterContext context):ImportModule(context) {}
+/** \addtogroup import */
+/*@{*/
+/// Import a tree representation of a file system directory.
+/** This plugin enables to capture in a tree the full hierarchy of
+ *  of a given file system directory
+ */
+class FileSystem:public ImportModule {
+public:
+  FileSystem(AlgorithmContext context):ImportModule(context) {}
   ~FileSystem(){}
 
   DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
@@ -167,9 +175,15 @@ struct FileSystem:public ImportModule {
       tmp /= graph->outdeg(newNode);
       tmp[1] = 0;
       layout->setNodeValue(newNode, tmp);
+      node itn;
+      forEach(itn, graph->getNodes()) {
+	tmp = layout->getNodeValue(itn);
+	tmp[1] = -tmp[1];
+	layout->setNodeValue(itn, tmp);
+      }
     }
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };
-
-  IMPORTPLUGINOFGROUP(FileSystem,"FileSystem", "Auber", "16/12/2002", "0", "0", "1", "Misc")
+/*@}*/
+IMPORTPLUGINOFGROUP(FileSystem,"File system directory", "Auber", "16/12/2002", "0", "0", "1", "Misc")
