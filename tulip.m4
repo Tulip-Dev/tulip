@@ -1,8 +1,8 @@
 dnl check for tulip
-AC_DEFUN(AC_PATH_TULIP,
+AC_DEFUN([AC_PATH_TULIP],
 [
 AC_ARG_WITH(tulip-config,
-        [  --with-tulip-config=DIR   optionnal path list where to prepend to $PATH to find tulip-config],
+        [  --with-tulip-config=DIR   optional path list where to prepend to $PATH to find tulip-config],
         [ac_tulip_config="$withval:$PATH"],
         [ac_tulip_config="$PATH"])
 
