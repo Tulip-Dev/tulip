@@ -227,7 +227,7 @@ void PropertyDialog::removeProperty() {
 }
 //=================================================
 void PropertyDialog::cloneProperty() {
-  if (!graph) return;
+  if (!graph || !editedProperty) return;
   bool ok=false;
   QString text = QInputDialog::getText( "Property name" ,  "Please enter the property name" , QLineEdit::Normal,QString::null, &ok, this );
   if (ok) {
