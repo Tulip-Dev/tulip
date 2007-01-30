@@ -72,6 +72,7 @@ namespace tlp {
     g1  = inG1;
     e0  = 0;
     e1  = 0;
+
     // Edges association
     if( g0->layout && g1->layout ) {
       e0 = new LayoutProperty( g0->g );
@@ -96,6 +97,7 @@ namespace tlp {
 	e0 = e1 = 0;
       }
     }
+  
     return true;
   }
   //===========================================================
@@ -125,7 +127,7 @@ namespace tlp {
   //===========================================================
   void Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
     frameCpt++;
-  
+
     assert( outGlgw );
     Graph * g = outGlgw->getRenderingParameters().getGraph();
     assert( g );
@@ -217,6 +219,7 @@ namespace tlp {
       }
     }
     delete edgeIt;
+
     // Camera
     Coord cam_center = g0->camera.center + (g1->camera.center - g0->camera.center) * inT;
     Coord cam_eyes   = g0->camera.eyes + (g1->camera.eyes - g0->camera.eyes) * inT;
@@ -225,10 +228,47 @@ namespace tlp {
     float radius     = g0->camera.sceneRadius + (g1->camera.sceneRadius - g0->camera.sceneRadius) * inT;
     Camera c;
     c = g0->camera;
+
     GlGraphRenderingParameters newParam = outGlgw->getRenderingParameters();
     newParam.setCamera(Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
     outGlgw->setRenderingParameters(newParam);
-  }
+
+    //aug displays
+    g0->curInterpolation.clear();
+    g0->interpolateCenters.clear();
+    if (g0->augPoints.size() > 0) {
+      g0->curInterpolation.resize (g0->augPoints.size());
+      g0->interpolateCenters.resize (g0->augPoints.size());
+      if (g0->augPoints.size() != g1->augPoints.size()) {
+	cerr << "Cannot interpolate augmented displays. " << endl;
+	cerr << "Not the same point sets " << endl;
+	return;
+      }
+      for (unsigned int i = 0; i < g0->augPoints.size(); ++i) {
+	if (g0->augPoints[i].size() != g1->augPoints[i].size()) {
+	  cerr << "Cannot interpolate augmented displays. " << endl;
+	  cerr << "Set " << i << " for g0 and g1 don't have same members." << endl;
+	  cerr << "Set g0 " << g0->augPoints[i].size() << " " 
+	       << g1->augPoints[i].size() << endl;
+	  return;
+	}
+	g0->curInterpolation[i].clear();
+	for (unsigned int j = 0; j < g0->augPoints[i].size(); ++j) {
+	  Coord c0, c1;
+	  c0 = g0->augPoints[i][j];
+	  c1 = g1->augPoints[i][j];
+	  c0 += (c1 - c0) * inT;
+	  g0->curInterpolation[i].push_back (c0);
+	}//end for j
+	Coord cent0, cent1;
+	cent0 = g0->augCenters[i];
+	cent1 = g1->augCenters[i];
+	cent0 += (cent1 - cent0) * inT;
+	g0->interpolateCenters[i] = cent0;
+      }//end for i
+    }//end if
+  }//end interpolate
+
   //===========================================================
   void Morphing::timerEvent( QTimerEvent * te ) {
     if( te->timerId() == this->tid ) {

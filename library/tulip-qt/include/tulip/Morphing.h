@@ -2,7 +2,7 @@
 #define MORPHING_H
 
 #ifndef DOXYGEN_NOTFOR_USER
-
+#include <vector>
 #include <tulip/Camera.h>
 #include <tulip/Coord.h>
 #include <tulip/Edge.h>
@@ -29,7 +29,11 @@ namespace tlp {
     SizeProperty *size;
     ColorProperty *color;
     Camera camera;
-  
+    std::vector<std::vector<Coord> > augPoints;
+    std::vector<Coord> augCenters;
+    std::vector<std::vector<Coord> > curInterpolation;
+    std::vector<Coord> interpolateCenters;
+
     GraphState( GlGraphWidget * glgw );
     ~GraphState();
     static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );

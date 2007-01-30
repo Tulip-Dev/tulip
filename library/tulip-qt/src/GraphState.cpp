@@ -8,6 +8,20 @@
 using namespace tlp;
 
 //====================================================
+static bool HaveSameValues( const vector<vector <Coord> > &v1,
+			    const vector<vector <Coord> > &v2 ) {
+  if (v1.size() != v2.size()) return false;
+  for (unsigned int i = 0; i < v1.size(); ++i) {
+    if (v1[i].size() != v2[i].size()) return false;
+    for (unsigned int j = 0; j < v1.size(); ++j) {
+      if ((v1[i][j] - v2[i][j]).norm() > 1e-6)
+	return false;
+    }//end for
+  }//end for
+  return true;
+}//end HaveSameValues
+
+//====================================================
 static bool HaveSameValues( Graph * inG, 
 			    PropertyInterface * inP0, 
 			    PropertyInterface * inP1 ) {
@@ -57,7 +71,7 @@ GraphState::~GraphState() {
 bool GraphState::setupDiff( Graph * inG, 
 			    GraphState * inGS0, 
 			    GraphState * inGS1 ) {
-  int remain = 3;
+  int remain = 4;
   if( HaveSameValues(inG,inGS0->layout,inGS1->layout) ) {
     delete inGS0->layout;
     delete inGS1->layout;
@@ -74,6 +88,11 @@ bool GraphState::setupDiff( Graph * inG,
     delete inGS0->color;
     delete inGS1->color;
     inGS0->color = inGS1->color = 0;
+    remain--;
+  }
+  if ( HaveSameValues(inGS0->augPoints, inGS1->augPoints) ) {
+    inGS0->augPoints.clear();
+    inGS1->augPoints.clear();
     remain--;
   }
   return ( remain > 0 );
