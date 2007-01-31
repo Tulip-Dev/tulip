@@ -52,6 +52,7 @@ libtulip_la_SOURCES = \
 	DoubleAlgorithm.cpp \
 	GraphProperty.cpp \
 	GraphAlgorithm.cpp \
+	GraphDecorator.cpp \
 	Observable.cpp \
 	ObservableGraph.cpp \
 	PluginLoaderTxt.cpp \

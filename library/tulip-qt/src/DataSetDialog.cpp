@@ -210,6 +210,8 @@ namespace {
       return false;
     }
 
+#define NONE_PROP " None"
+
     bool fillIn( const StructDef& inDef,
 		 const DataSet* inSet,
 		 Graph* inG) {
@@ -421,6 +423,9 @@ namespace {
 	  int curIdx = getAllProperties( proxyA, inG, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
+	    // if no default value, insert None
+	    if (!curProxy && !inDef.getDefValue(ip.name).size())
+	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
@@ -446,6 +451,9 @@ namespace {
 	  int curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
+	    // if no default value, insert None
+	    if (!curProxy && !inDef.getDefValue(ip.name).size())
+	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
@@ -626,7 +634,9 @@ namespace {
 	// PropertyInterface*
 	else if( inG && ip.typeName == TN(PropertyInterface*) ) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  outSet.set<PropertyInterface*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
+	  string propName(cb->currentText().latin1());
+	  if (propName != NONE_PROP)
+	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
 	}
 
 	// Typed Proxy
@@ -639,7 +649,9 @@ namespace {
 				||	ip.typeName == TN(SizeProperty)
 				||	ip.typeName == TN(ColorProperty) )		) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  outSet.set<PropertyInterface*>( ip.name, inG->getProperty( cb->currentText().latin1() ) );
+	  string propName(cb->currentText().latin1());
+	  if (propName != NONE_PROP)
+	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
 	}
 	
 	// StringCollection

@@ -121,6 +121,10 @@
 using namespace std;
 using namespace tlp;
 
+//-------------- Convex Hull -----------------------------
+#include "GlConvexHull.cpp"
+#include "GlHierarchyConvexHulls.cpp"
+//-------------- end of Convex Hull ----------------------
 
 // we define a specific interactor to show element graph infos in nodeProperties
 class MouseShowElementInfos : public GWInteractor {
@@ -481,6 +485,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   }
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
+  glWidget->addGlAugmentedDisplay(new GlHierarchyConvexHulls(false), "hcvxh");
 #if (QT_REL == 4)
   workspace->addWindow(glWidget);
 #endif

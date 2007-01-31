@@ -85,7 +85,6 @@ nobase_include_HEADERS = \
 	tulip/FaceIterator.h \
         tulip/PlanarConMap.h \
         tulip/GraphDecorator.h \
-        tulip/cxx/GraphDecorator.cxx \
 	tulip/ForEach.h
 
 noinst_HEADERS = tulip/TLPParser.h \

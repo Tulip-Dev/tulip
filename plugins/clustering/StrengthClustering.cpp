@@ -300,26 +300,17 @@ namespace {
     // nodeSize
     HTML_HELP_OPEN()							\
     HTML_HELP_DEF( "type", "DoubleProperty" )				\
-    HTML_HELP_DEF( "values", "An existing metric property" )		\
-    HTML_HELP_DEF( "default", "viewSize" )				\
+    HTML_HELP_DEF( "value", "An existing metric property" )		\
     HTML_HELP_BODY()							\
-    "This parameter defines the property used in order to multiply strength metric computed values." \
+    "This parameter defines the metric used in order to multiply strength metric computed values."\
+    "If none is given the complexity will be in o(nlog(n)), o(n) neither." \
     HTML_HELP_CLOSE(),
-    //Complexity
-    HTML_HELP_OPEN()							\
-    HTML_HELP_DEF( "type", "bool" )					\
-    HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" )	\
-    HTML_HELP_DEF( "default", "false" )					\
-    HTML_HELP_BODY()							\
-    "If true the strength value wiil be multiplied by the metric given in parameter." \
-    HTML_HELP_CLOSE()
   };
 }
 
 //================================================================================
 StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
-  addParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric");
-  addParameter<bool>("multiply", paramHelp[1], "false");
+  addParameter<DoubleProperty>("metric", paramHelp[0]);
   addDependency<DoubleAlgorithm>("Connected Component");
   addDependency<DoubleAlgorithm>("Strength");
   addDependency<Algorithm>("QuotientClustering");
@@ -334,15 +325,13 @@ bool StrengthClustering::run() {
   pluginProgress->progress(0, 100);
   result = graph->computeProperty("Strength", values, errMsg);
   
-  bool multi;
-  if ( dataSet==0 || !dataSet->get("multiply",multi)) {
+  DoubleProperty *metric;
+  bool multi = true;
+  if ( dataSet==0 || !dataSet->get("metric", metric)) {
     multi = false;
   }
 
   if (multi) {
-    DoubleProperty *metric;
-    if (!dataSet->get("metric", metric)) 
-      metric = graph->getProperty<DoubleProperty>("viewMetric");
     DoubleProperty mult(graph);
     pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
     mult = *metric;

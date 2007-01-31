@@ -12,11 +12,21 @@ namespace {
     HTML_HELP_DEF( "type", "String Collection" ) \
     HTML_HELP_DEF( "default", "InOut" )	 \
     HTML_HELP_BODY() \
-    "This parameter enables to choose the type of degree to use"	\
+    "This parameter indicates the type of degree to compute (in/out/inout)."	\
+    HTML_HELP_CLOSE(),
+    HTML_HELP_OPEN()							\
+    HTML_HELP_DEF( "type", "DoubleProperty" )				\
+    HTML_HELP_DEF( "value", "An existing metric corresponding to weights.")		\
+    HTML_HELP_DEF( "default", "none" )					\
+    HTML_HELP_BODY()							\
+    "The weighted degree of a node is the sum of weights of "\
+    "all its in/out/inout edges. "\
+    "If no metric is specified, using a uniform metric value of 1 for all edges" \
+    "returns the usual degree for nodes (number of in/out/inout neighbors)."\
     HTML_HELP_CLOSE(),
   };
 }
-#define DEGREE_TYPE "Type"
+#define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 #define INOUT 0
 #define IN 1
@@ -24,6 +34,7 @@ namespace {
 //==============================================================================
 ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
+  addParameter<DoubleProperty>("metric", paramHelp[1]);
 }
 //==================================================================
 bool ArityMetric::run() {
@@ -32,22 +43,61 @@ bool ArityMetric::run() {
   if (dataSet!=0) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
   }
+  DoubleProperty* weights = 0;
+  dataSet->get("metric", weights);
+
   node n;
-  switch(degreeTypes.getCurrent()) {
-  case INOUT:
-    forEach(n, graph->getNodes())
-      doubleResult->setNodeValue(n, graph->deg(n));
-    break;
-  case IN:
-    forEach(n, graph->getNodes())
-      doubleResult->setNodeValue(n, graph->indeg(n));
-    break;
-  case OUT:
-    forEach(n, graph->getNodes())
-      doubleResult->setNodeValue(n, graph->outdeg(n));
-    break;
+  if (!weights) {
+    switch(degreeTypes.getCurrent()) {
+    case INOUT:
+      forEach(n, graph->getNodes())
+	doubleResult->setNodeValue(n, graph->deg(n));
+      break;
+    case IN:
+      forEach(n, graph->getNodes())
+	doubleResult->setNodeValue(n, graph->indeg(n));
+      break;
+    case OUT:
+      forEach(n, graph->getNodes())
+	doubleResult->setNodeValue(n, graph->outdeg(n));
+      break;
+    }
+    // null value for edges
+    doubleResult->setAllEdgeValue(0);
+  } else {
+    switch(degreeTypes.getCurrent()) {
+    case INOUT:
+      forEach(n, graph->getNodes()) {
+	edge e;
+	double nWeight = 0.0;
+	forEach(e, graph->getInOutEdges(n)) {
+	  nWeight += weights->getEdgeValue(e);
+	}
+	doubleResult->setNodeValue(n, nWeight);
+      }
+      break;
+    case IN:
+      forEach(n, graph->getNodes()) {
+	edge e;
+	double nWeight = 0.0;
+	forEach(e, graph->getInEdges(n)) {
+	  nWeight += weights->getEdgeValue(e);
+	}
+	doubleResult->setNodeValue(n, nWeight);
+      }
+      break;
+    case OUT:
+      forEach(n, graph->getNodes()) {
+	edge e;
+	double nWeight = 0.0;
+	forEach(e, graph->getOutEdges(n)) {
+	  nWeight += weights->getEdgeValue(e);
+	}
+	doubleResult->setNodeValue(n, nWeight);
+      }
+      break;
+    }
   }
-  doubleResult->setAllEdgeValue(0);
   return true;
 }
 //==================================================================
