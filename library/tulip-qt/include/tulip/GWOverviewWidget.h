@@ -21,7 +21,7 @@ class RectPosition;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public GWOverviewWidgetData, public tlp::GlGraphObserver { 
+class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public GWOverviewWidgetData { 
   Q_OBJECT
   
 public:
@@ -32,19 +32,18 @@ public:
 public slots:
   void syncFromView();
   void updateView();
-  void setObservedView(tlp::GlGraph *);
+  void setObservedView(GlGraphWidget *);
   void backColor(); //background color button
   void showParameters(bool);
   void showExtendedParameters(bool);
   
-private:
-
-  //implements GlGraphObserver
-  void draw(tlp::GlGraph *);
-  void destroy(tlp::GlGraph *);
+private slots:
+  //Used to catch graphRedrawn signal from view of which
+  //we are showing an overview.
+  void draw(GlGraphWidget *glWidget);
 
 private :
-  tlp::GlGraph  *_observedView;
+  GlGraphWidget *_observedView;
   GlGraphWidget *_view;
   bool _synchronizing;
   RectPosition *_glDraw;

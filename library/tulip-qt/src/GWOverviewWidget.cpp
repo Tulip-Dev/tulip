@@ -14,13 +14,13 @@ using namespace std;
 using namespace tlp;
 
 struct RectPosition : public tlp::GlAugmentedDisplay {
-  void draw(tlp::GlGraph *);
-  RectPosition(GlGraphWidget *, tlp::GlGraph *);
-  void setObservedView(GlGraph *glG) {
+  void draw(GlGraph *);
+  RectPosition(GlGraphWidget *, GlGraphWidget *);
+  void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
   }
 private :
-  tlp::GlGraph  * _observedView;
+  GlGraphWidget * _observedView;
   GlGraphWidget * _view;
 };
 
@@ -66,8 +66,9 @@ void GWOverviewWidget::showParameters(bool visible) {
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
-  if (_observedView != 0)
-    _observedView->removeObserver(this);
+  if (_observedView != 0) {
+    disconnect(this, 0, 0, 0);
+  }
   // no need to explicitely delete _view because it is a children
   // of frame8, and so it will be deleted further
   //delete _view;
@@ -113,7 +114,8 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   return false;
 }
 //=============================================================================
-void GWOverviewWidget::draw(GlGraph *glG) {
+void GWOverviewWidget::draw(GlGraphWidget *glG) {
+  //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
   if (_observedView != 0) {
     _view->centerScene();
@@ -129,35 +131,26 @@ void GWOverviewWidget::draw(GlGraph *glG) {
   _view->draw();
 }
 //=============================================================================
-void GWOverviewWidget::setObservedView(GlGraph *glWidget){
+void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
-  if (_observedView != 0)
-    _observedView->removeObserver(this);
+  if (_observedView != 0) {
+    disconnect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)), 
+	       this, SLOT(draw(GlGraphWidget *)));
+    _observedView = 0;
+  }
   _observedView = glWidget;
-  _glDraw->setObservedView(glWidget);
+  _glDraw->setObservedView(_observedView);
   
-  if (glWidget != 0) {
-
+  if (_observedView != 0) {
     GlGraphRenderingParameters newParam = _observedView->getRenderingParameters();
     newParam.setViewport(_view->getRenderingParameters().getViewport());
     _view->setRenderingParameters(newParam);
     syncFromView();
-    //    _view->centerScene();
-    //    _initialCamera = _view->getRenderingParameters().getCamera();
-    _observedView->addObserver(this);
+    connect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)),
+	   this, SLOT(draw(GlGraphWidget *)));
   }
-}
-//=============================================================================
-void GWOverviewWidget::destroy(GlGraph *glGraph) {
-  assert(_observedView == glGraph);
-  _observedView = 0;
-  _glDraw->setObservedView(0);
-  GlGraphRenderingParameters param = _view->getRenderingParameters();
-  param.setGraph(0);
-  _view->setRenderingParameters(param);
-  draw(0);
 }
 //=============================================================================
 void GWOverviewWidget::backColor() {
@@ -238,7 +231,7 @@ void GWOverviewWidget::updateView() {
     paramView.setViewEdgeLabel(false);
     paramView.setElementOrdered(false);
     _view->setRenderingParameters(paramView);
-    
+
     _observedView->draw();
   }
 }
@@ -248,6 +241,8 @@ void RectPosition::draw(GlGraph *target) {
   if(_observedView == 0) {
     return ;
   }
+
+  //  _observedView->makeCurrent();
   Vector<Coord, 4> points;
   Vector<int,   4> viewport = _observedView->getRenderingParameters().getViewport();
   points[0] = Coord(viewport[0]              , viewport[1], 0);
@@ -256,8 +251,8 @@ void RectPosition::draw(GlGraph *target) {
   points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
     points[i] = _observedView->screenTo3DWorld(points[i]);
-  
 
+  //  _view->makeCurrent();
   viewport = _view->getRenderingParameters().getViewport();
   Vector<Coord, 4> points2;
   points2[0] = Coord(viewport[0]              , viewport[1], 0);
@@ -272,50 +267,53 @@ void RectPosition::draw(GlGraph *target) {
   glDisable(GL_CULL_FACE);
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
-  float col[4]={0.2,0.8,0.8,0.2};
-  glColor4fv(col);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   glBegin(GL_QUADS);
-  /*
-  for (int i=0;i<4;++i)
-    glVertex3d(x[i],y[i],z[i]);
-  */
-#define RVAL 59
-#define GVAL 90
-#define BVAL 233
-  glColor4ub(RVAL,GVAL,BVAL,200);
+
+  //#define RVAL 59
+  //#define GVAL 90
+  //#define BVAL 233
+
+#define RVAL  180
+#define GVAL  180
+#define BVAL  180
+#define ALPHA 120
+
+  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[0]);
-  glColor4ub(255,255,255,100);
+  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[0]);
   glVertex3fv((float *)&points[1]);
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[1]);
 
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[1]);
-  glColor4ub(255,255,255,100);
+  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[1]);
   glVertex3fv((float *)&points[2]);
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[2]);
   
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[2]);
-  glColor4ub(255,255,255,100);
+  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[2]);
   glVertex3fv((float *)&points[3]);
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[3]);
 
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[3]);
-  glColor4ub(255,255,255,100);
+  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[3]);
   glVertex3fv((float *)&points[0]);
-  glColor4ub(RVAL,GVAL,BVAL,200);
+  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[0]);
 
   glEnd();
+
   glDisable(GL_BLEND);
   glColor3ub(0,0,0);
   glLineWidth(1);
@@ -324,7 +322,7 @@ void RectPosition::draw(GlGraph *target) {
     glVertex3fv((float *)&points[i]);
   glEnd();
   glLineWidth(1);
-  glEnable(GL_CULL_FACE);
+  //  glEnable(GL_CULL_FACE);
   glLineStipple(2, 0xAAAA);
   glEnable(GL_LINE_STIPPLE);
   glBegin(GL_LINES);
@@ -333,10 +331,11 @@ void RectPosition::draw(GlGraph *target) {
     glVertex3fv((float *)&points[i]);
   }
   glEnd();
+
   glPopAttrib();
 }
 //=============================================================================
-RectPosition::RectPosition(GlGraphWidget *view, GlGraph *observedView) : 
+RectPosition::RectPosition(GlGraphWidget *view, GlGraphWidget *observedView) : 
   _observedView(observedView), _view(view) {
 }
 //=============================================================================
