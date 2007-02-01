@@ -179,15 +179,8 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
     //
     else if ( inG && tname == TN(PropertyInterface*) ) {
       // look for an already existing property
-      Iterator< std::string > * propIt = inG->getProperties();
-      while( propIt->hasNext() ) {
-	string s = propIt->next();
-	if (s == defv) {
-	  ioDataSet.set( name, inG->getProperty(defv) );
-	  break;
-	}
-      }
-      delete propIt;
+      if (inG->existProperty(defv))
+	ioDataSet.set( name, inG->getProperty(defv) );
     }
   }
   delete defIt;
