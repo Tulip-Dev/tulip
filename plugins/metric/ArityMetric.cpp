@@ -40,12 +40,12 @@ ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context
 bool ArityMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
+  DoubleProperty* weights = 0;
   if (dataSet!=0) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
+    dataSet->get("metric", weights);
   }
-  DoubleProperty* weights = 0;
-  dataSet->get("metric", weights);
-
+  
   node n;
   if (!weights) {
     switch(degreeTypes.getCurrent()) {
@@ -64,7 +64,8 @@ bool ArityMetric::run() {
     }
     // null value for edges
     doubleResult->setAllEdgeValue(0);
-  } else {
+  }
+  else {
     switch(degreeTypes.getCurrent()) {
     case INOUT:
       forEach(n, graph->getNodes()) {
