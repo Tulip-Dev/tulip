@@ -1692,7 +1692,6 @@ void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
     propertiesWidget->setGraph(0);
     propertiesWidget->setGlGraphWidget(0);
     nodeProperties->setGraph(0);
-    overviewWidget->setObservedView(0);
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
 #endif

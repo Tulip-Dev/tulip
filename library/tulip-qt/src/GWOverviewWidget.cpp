@@ -138,6 +138,8 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
   if (_observedView != 0) {
     disconnect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)), 
 	       this, SLOT(draw(GlGraphWidget *)));
+    disconnect(_observedView, SIGNAL(destroyed(QObject *)), 
+	       this, SLOT(observedViewDestroyed(QObject *)));
     _observedView = 0;
   }
   _observedView = glWidget;
@@ -150,12 +152,24 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     syncFromView();
     connect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)),
 	   this, SLOT(draw(GlGraphWidget *)));
+    connect(_observedView, SIGNAL(destroyed(QObject *)), 
+	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
     GlGraphRenderingParameters newParam = _view->getRenderingParameters();
     newParam.setGraph(0);
     _view->setRenderingParameters(newParam);
   }
 }
+//=============================================================================
+void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) { 	 
+  assert(_observedView == glWidget); 	 
+  _observedView = 0; 	 
+  _glDraw->setObservedView(0); 	 
+  GlGraphRenderingParameters param = _view->getRenderingParameters(); 	 
+  param.setGraph(0); 	 
+  _view->setRenderingParameters(param); 	 
+  draw(0); 	 
+} 	 
 //=============================================================================
 void GWOverviewWidget::backColor() {
   QColor tmp = QColorDialog::getColor(background->paletteBackgroundColor(), this, tr("Choose background color") ) ;

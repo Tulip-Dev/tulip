@@ -39,9 +39,12 @@ public slots:
   
 private slots:
   //Used to catch graphRedrawn signal from view of which
-  //we are showing an overview.
+  //we are showing an overview
   void draw(GlGraphWidget *glWidget);
-
+  //Used to catch the destroyed signal from view of which
+  //we are showing an overview
+  void observedViewDestroyed(QObject *glWidget);
+  
 private :
   GlGraphWidget *_observedView;
   GlGraphWidget *_view;
