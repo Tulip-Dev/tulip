@@ -423,8 +423,8 @@ namespace {
 	  int curIdx = getAllProperties( proxyA, inG, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
-	    // if no default value, insert None
-	    if (!curProxy && !inDef.getDefValue(ip.name).size())
+	    // if property is not mandatory, insert None
+	    if (!inDef.isMandatory(ip.name))
 	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
@@ -451,8 +451,8 @@ namespace {
 	  int curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
-	    // if no default value, insert None
-	    if (!curProxy && !inDef.getDefValue(ip.name).size())
+	    // if property is not mandatory, insert None
+	    if (!inDef.isMandatory(ip.name))
 	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );

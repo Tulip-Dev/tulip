@@ -54,14 +54,17 @@ struct TLP_SIMPLE_SCOPE StructDef {
   ///Add the variable of type T and name str in the structure.
   template<typename T> void add(const char* str,
 				const char* inHelp = 0,
-				const char* inDefValue = 0);
+				const char* inDefValue = 0,
+				bool mandatory = true);
 
   ///Get iterator on structure fields
   Iterator< std::pair<std::string,std::string> >* getField() const;
 
   ///Get field help & default string-value (see also XXXType in Types.h)
-  std::string									  getHelp( std::string str ) const;
-  std::string									  getDefValue( std::string str ) const;
+  std::string getHelp( std::string str ) const;
+  std::string getDefValue( std::string str ) const;
+  // return if field is mandatory
+  bool isMandatory(std::string str) const;
 
   ///Remove the variable which have str has name in the structure.
   void		erase(std::string str);
@@ -73,6 +76,7 @@ private:
   std::list< std::pair<std::string, std::string> > data;
   std::map<std::string,std::string> help;
   std::map<std::string,std::string> defValue;
+  std::map<std::string,bool> mandatory;
 };
 
 

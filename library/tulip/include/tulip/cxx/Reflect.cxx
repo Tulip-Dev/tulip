@@ -1,7 +1,8 @@
 
 //=======================================================================
 //Strucdef implementation
-template<typename T> void tlp::StructDef::add(const char* str, const char* inHelp, const char* inDefValue) {
+template<typename T> void tlp::StructDef::add(const char* str, const char* inHelp,
+					      const char* inDefValue, bool isMandatory) {
   std::list< std::pair<std::string, std::string> >::const_iterator it;
   for (it = data.begin(); it != data.end(); ++it) {
     if ((*it).first == str)
@@ -13,6 +14,7 @@ template<typename T> void tlp::StructDef::add(const char* str, const char* inHel
       help[str] = std::string(inHelp);
     if (inDefValue)
       defValue[str] = std::string(inDefValue);
+    mandatory[str] = isMandatory;
   }
 #ifndef NDEBUG
   else {

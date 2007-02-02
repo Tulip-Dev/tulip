@@ -34,7 +34,7 @@ namespace {
 //==============================================================================
 ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addParameter<DoubleProperty>("metric", paramHelp[1]);
+   addParameter<DoubleProperty>("metric", paramHelp[1], 0, false);
 }
 //==================================================================
 bool ArityMetric::run() {

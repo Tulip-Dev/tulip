@@ -71,6 +71,14 @@ string StructDef::getDefValue( string str ) const {
     return it->second;
 }
 
+bool StructDef::isMandatory( string str ) const {
+  map<string,bool>::const_iterator it = mandatory.find(str);
+  if( it == mandatory.end() )
+    return false;
+  else
+    return it->second;
+}
+
 #undef TN
 #define	TN( T )	typeid(T).name()
 

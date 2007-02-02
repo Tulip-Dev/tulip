@@ -17,8 +17,9 @@ struct TLP_SCOPE WithParameter {
   ///
   template<typename Ty> void addParameter(const char* str,
 					  const char* inHelp=0,
-					  const char* inDefValue = 0)
-  { parameters.template add<Ty>(str,inHelp,inDefValue); }
+					  const char* inDefValue = 0,
+					  bool isMandatory = true)
+  { parameters.template add<Ty>(str,inHelp,inDefValue,isMandatory); }
 protected:
   ///
   StructDef parameters;
