@@ -150,6 +150,10 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     syncFromView();
     connect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)),
 	   this, SLOT(draw(GlGraphWidget *)));
+  } else {
+    GlGraphRenderingParameters newParam = _view->getRenderingParameters();
+    newParam.setGraph(0);
+    _view->setRenderingParameters(newParam);
   }
 }
 //=============================================================================
