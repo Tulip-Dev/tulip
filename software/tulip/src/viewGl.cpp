@@ -535,6 +535,7 @@ void viewGl::new3DView() {
   GlGraphWidget *newGlWidget =
     newOpenGlView(glWidget->getRenderingParameters().getGraph(), 
 		  glWidget->parentWidget()->caption());
+  newGlWidget->setRenderingParameters(glWidget->getRenderingParameters());
   newGlWidget->centerScene();
   newGlWidget->show();
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
