@@ -310,7 +310,7 @@ namespace {
 
 //================================================================================
 StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
-  addParameter<DoubleProperty>("metric", paramHelp[0]);
+  addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   addDependency<DoubleAlgorithm>("Connected Component");
   addDependency<DoubleAlgorithm>("Strength");
   addDependency<Algorithm>("QuotientClustering");
