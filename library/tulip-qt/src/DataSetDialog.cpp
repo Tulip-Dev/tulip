@@ -423,14 +423,14 @@ namespace {
 	  int curIdx = getAllProperties( proxyA, inG, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
-	    // if property is not mandatory, insert None
-	    if (!inDef.isMandatory(ip.name))
-	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
 	    if( curIdx >= 0 )
-	      cb->setCurrentItem( curIdx + 1 );
+	      cb->setCurrentItem( curIdx );
+	    // if property is not mandatory, insert None
+	    if (!inDef.isMandatory(ip.name))
+	      cb->insertItem(NONE_PROP, 0);
 	  }
 	}
 
@@ -451,14 +451,14 @@ namespace {
 	  int curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
-	    // if property is not mandatory, insert None
-	    if (!inDef.isMandatory(ip.name))
-	      cb->insertItem(NONE_PROP);
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
 	    if( curIdx >= 0 )
-	      cb->setCurrentItem( curIdx + 1 );
+	      cb->setCurrentItem( curIdx );
+	    // if property is not mandatory, insert None
+	    if (!inDef.isMandatory(ip.name))
+	      cb->insertItem(NONE_PROP, 0);
 	  }
 	}
 	// StringCollection
