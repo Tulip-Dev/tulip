@@ -430,7 +430,7 @@ namespace {
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
 	    if( curIdx >= 0 )
-	      cb->setCurrentItem( curIdx );
+	      cb->setCurrentItem( curIdx + 1 );
 	  }
 	}
 
@@ -458,7 +458,7 @@ namespace {
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
 	    if( curIdx >= 0 )
-	      cb->setCurrentItem( curIdx );
+	      cb->setCurrentItem( curIdx + 1 );
 	  }
 	}
 	// StringCollection
