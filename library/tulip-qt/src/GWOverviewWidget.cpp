@@ -6,6 +6,7 @@
 #include <qcolordialog.h>
 #include <qframe.h>
 #include <qevent.h>
+#include <qtooltip.h>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlGraphWidget.h"
@@ -41,6 +42,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   _view = new GlGraphWidget( frame8, "view" );
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
+  QToolTip::add(_view, "Left+Ctrl Click show/hide rendering parameters");
 #if (QT_REL == 3)
   frame8Layout->addWidget( _view, 0, 0 );
 #else
@@ -76,22 +78,34 @@ GWOverviewWidget::~GWOverviewWidget() {
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
-  if (_observedView == 0) return false;
-  if ( obj->inherits("GlGraphWidget") && ( (e->type() == QEvent::MouseButtonPress) || (e->type() == QEvent::MouseMove))  ) {
+  if ( obj->inherits("GlGraphWidget") &&
+       ((e->type() == QEvent::MouseButtonPress) ||
+	(e->type() == QEvent::MouseMove))) {
     QMouseEvent *me = (QMouseEvent *) e;
-    GlGraphWidget *glw = (GlGraphWidget *) obj;
-    assert(glw == _view);
     if (me->state()==LeftButton || me->button()==LeftButton) {
+      if  (me->state() &
+#if defined(__APPLE__)
+	   Qt::AltButton
+#else
+	   Qt::ControlButton
+#endif
+	   ) {
+	showParameters(parameterBasic->isHidden());
+	return true;
+      }
+      if (_observedView == 0) return false;
+      GlGraphWidget *glw = (GlGraphWidget *) obj;
+      assert(glw == _view);
       double mouseClicX = me->x();
       double mouseClicY = me->y();
       double widgetWidth = _view->width();
       double widgetHeight = _view->height();
       Vector<int, 4> viewport = _observedView->getRenderingParameters().getViewport();
       Coord upperLeftCorner(viewport[0], viewport[1],0);
-      Coord lowerRigihtCorner(viewport[0] + viewport[2], 
-			      viewport[1] + viewport[3], 
-			      0);
-      Coord middle = (upperLeftCorner + lowerRigihtCorner) / 2.0;
+      Coord lowerRightCorner(viewport[0] + viewport[2], 
+			     viewport[1] + viewport[3], 
+			     0);
+      Coord middle = (upperLeftCorner + lowerRightCorner) / 2.0;
       middle[2] = 0.;
       middle = _observedView->screenTo3DWorld(middle);
       Camera cover  = _view->getRenderingParameters().getCamera();
