@@ -148,6 +148,26 @@
         </widget>
     </hbox>
 </widget>
+<connections>
+    <connection>
+        <sender>pushButton2</sender>
+        <signal>released()</signal>
+        <receiver>QtProgressData</receiver>
+        <slot>cancelCompute()</slot>
+    </connection>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>released()</signal>
+        <receiver>QtProgressData</receiver>
+        <slot>stopCompute()</slot>
+    </connection>
+    <connection>
+        <sender>preview</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>QtProgressData</receiver>
+        <slot>changePreview(bool)</slot>
+    </connection>
+</connections>
 <includes>
     <include location="local" impldecl="in implementation">QtProgress.ui.h</include>
 </includes>
