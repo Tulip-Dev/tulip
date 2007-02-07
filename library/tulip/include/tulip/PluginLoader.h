@@ -2,6 +2,7 @@
 #define TLP_PLUGINLOADER
 #include <list>
 #include <string>
+#include <tulip/WithDependency.h>
 
 namespace tlp {
 
@@ -16,7 +17,7 @@ struct PluginLoader {
 		      const std::string &info,
 		      const std::string &release,
 		      const std::string &version,
-		      const std::list < std::pair < std:: string, std::string > >&)=0;
+		      const std::list <Dependency>&)=0;
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg)=0;
   virtual void finished(bool state,const std::string &msg)=0;
 };

@@ -57,13 +57,15 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
+static char *EqualValueParams[] = {"Property", 0};
+
 MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
   addDependency<DoubleAlgorithm>("Connected Component");
-  addDependency<Algorithm>("Equal Value");
+  addDependency<Algorithm>("Equal Value", EqualValueParams);
 }
 //====================================================
 MixedModel::~MixedModel(){

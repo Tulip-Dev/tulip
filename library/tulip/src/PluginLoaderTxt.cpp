@@ -24,17 +24,17 @@ void PluginLoaderTxt::loaded(const string &name,
 			     const string &info,
 			     const string &release,
 			     const string &version,
-			     const list < pair < string, string > > &deps)
+			     const list <Dependency> &deps)
 {
   cout << "Plug-in " << name << " loaded, Author:"<< author << " Date: " << date << " Release:" << release << " Version: "<< version <<  endl;
   // ouput dependencies if any
   if (deps.size()) {
     unsigned int i = deps.size();
     cout << "depending on ";
-    list<pair < string, string > >::const_iterator itD = deps.begin();
+    list<Dependency>::const_iterator itD = deps.begin();
     for (i--; itD != deps.end(); itD++, i--) {
-      std::string factoryDepName = (*itD).first;
-      std::string pluginDepName = (*itD).second;
+      std::string factoryDepName = (*itD).factoryName;
+      std::string pluginDepName = (*itD).pluginName;
       cout << factoryDepName << " " << pluginDepName;
       if (i > 0)
 	cout << ", ";

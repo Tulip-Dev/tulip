@@ -39,7 +39,7 @@ struct PluginLoaderQt:public PluginLoader {
 		      const string &info,
 		      const string &release,
 		      const string &version,
-		      const list < pair < string, string > > &deps)
+		      const list <Dependency> &deps)
   {
     progress++;
     appStartUp->setLabel(name);

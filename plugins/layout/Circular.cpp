@@ -41,12 +41,15 @@ namespace {
   };
 }
 
+static char *EqualValueParams[] = {"Property", 0};
+
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addParameter<SizeProperty>("nodeSize", paramHelp[0], "viewSize");
   addParameter<bool>("search_cycle", paramHelp[1], "false");
   // Connected component metric dependency
   addDependency<DoubleAlgorithm>("Connected Component");
-  addDependency<Algorithm>("Equal Value");
+  // Equal Value algorithm dependency
+  addDependency<Algorithm>("Equal Value", EqualValueParams);
 }
 
 namespace {

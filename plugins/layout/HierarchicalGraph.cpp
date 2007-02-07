@@ -57,13 +57,16 @@ namespace {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
+static char *HierarchicalTreeParams[] =
+  {"nodeSize", "edgeLength", "layer spacing", "node spacing", "orthogonal", "orientation", 0};
+
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
   addParameter<float> ("node spacing", paramHelp[3], "18." );
   addDependency<DoubleAlgorithm>("DagLevel");
-  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)");
+  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", HierarchicalTreeParams);
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}
@@ -438,7 +441,7 @@ bool HierarchicalGraph::run() {
     tmp.set("use length", true);
   else
     tmp.set("use length", false);
-  tmp.set("ortogonal", false);
+  tmp.set("orthogonal", false);
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);

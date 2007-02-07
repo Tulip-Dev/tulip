@@ -13,7 +13,7 @@ struct PluginLoaderTxt:public PluginLoader {
 		      const std::string &info,
 		      const std::string &release,
 		      const std::string &version,
-		      const std::list < std::pair < std::string, std::string > > &deps);
+		      const std::list <Dependency> &deps);
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg);
   virtual void finished(bool state,const std::string &msg);
 };

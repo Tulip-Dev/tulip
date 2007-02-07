@@ -36,6 +36,15 @@ Iterator< pair<string, DataType> >* DataSet::getValues() const {
   return new StlIterator<pair<string, DataType>, list< pair<string, DataType> >::const_iterator>(begin, end);
 }
 
+bool StructDef::hasField(string str) {
+  for (std::list< std::pair<std::string, std::string> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return true;
+  }
+  return false;
+}
+
 void StructDef::erase(string str) {
   for (std::list< std::pair<std::string, std::string> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {

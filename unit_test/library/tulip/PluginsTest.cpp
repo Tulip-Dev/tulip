@@ -27,11 +27,12 @@ void PluginsTest::testloadPlugin() {
   tlp::loadPlugin("./testPlugin.so", &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::BooleanProperty::factory->pluginExists("Test"));
-  list<pair<string, string> > deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
+  list<Dependency> deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT(deps.size() == 1);
-  CPPUNIT_ASSERT(deps.front().first == typeid(BooleanAlgorithm).name());
-  CPPUNIT_ASSERT(deps.front().second == "Test");  
+  CPPUNIT_ASSERT(deps.front().factoryName == tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()));
+  CPPUNIT_ASSERT(deps.front().pluginName == "Test");
+  CPPUNIT_ASSERT(deps.front().pluginParams == 0);
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {

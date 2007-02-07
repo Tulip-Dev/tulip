@@ -303,7 +303,7 @@ namespace {
     HTML_HELP_DEF( "value", "An existing metric property" )		\
     HTML_HELP_BODY()							\
     "This parameter defines the metric used in order to multiply strength metric computed values."\
-    "If none is given the complexity will be in o(nlog(n)), o(n) neither." \
+    "If one is given the complexity will be in o(nlog(n)), o(n) neither." \
     HTML_HELP_CLOSE(),
   };
 }

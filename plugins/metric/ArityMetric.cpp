@@ -21,7 +21,7 @@ namespace {
     HTML_HELP_BODY()							\
     "The weighted degree of a node is the sum of weights of "\
     "all its in/out/inout edges. "\
-    "If no metric is specified, using a uniform metric value of 1 for all edges" \
+    "If no metric is specified, using a uniform metric value of 1 for all edges " \
     "returns the usual degree for nodes (number of in/out/inout neighbors)."\
     HTML_HELP_CLOSE(),
   };

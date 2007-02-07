@@ -57,13 +57,16 @@ struct TLP_SIMPLE_SCOPE StructDef {
 				const char* inDefValue = 0,
 				bool mandatory = true);
 
+  ///Returns if a name field exists
+  bool hasField(std::string);
+
   ///Get iterator on structure fields
   Iterator< std::pair<std::string,std::string> >* getField() const;
 
   ///Get field help & default string-value (see also XXXType in Types.h)
   std::string getHelp( std::string str ) const;
   std::string getDefValue( std::string str ) const;
-  // return if field is mandatory
+  ///Return if field is mandatory
   bool isMandatory(std::string str) const;
 
   ///Remove the variable which have str has name in the structure.

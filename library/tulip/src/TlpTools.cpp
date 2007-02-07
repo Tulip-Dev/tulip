@@ -154,19 +154,36 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
       Iterator<string> *itP = tfi->availablePlugins();
       while(itP->hasNext()) {
 	string pluginName = itP->next();
-	list<pair < string, string > > dependencies =
-	  tfi->getPluginDependencies(pluginName);
-	list<pair < string, string > >::const_iterator itD = dependencies.begin();
+	list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
+	list<Dependency>::const_iterator itD = dependencies.begin();
 	// loop over dependencies
-	for (; itD != dependencies.end(); itD++) {
-	  string factoryDepName = (*itD).first;
-	  string pluginDepName = (*itD).second;
+	for (; itD != dependencies.end(); ++itD) {
+	  string factoryDepName = (*itD).factoryName;
+	  string pluginDepName = (*itD).pluginName;
+	  bool removed = false;
 	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-	    plug->aborted(pluginName, tfi->getPluginsClassName() +
-			  " '" + pluginName + "' will be removed, it depends on missing " +
-			  factoryDepName + " '" + pluginDepName);
+	    if (plug)
+	      plug->aborted(pluginName, tfi->getPluginsClassName() +
+			    " '" + pluginName + "' will be removed, it depends on missing " +
+			    factoryDepName + " '" + pluginDepName + "'");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
+	    removed = true;
+	  }
+	  char** pluginDepParams = (*itD).pluginParams;
+	  if (!removed && pluginDepParams) {
+	    StructDef params = 
+	      (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginParameters(pluginDepName);
+	    for (unsigned int i = 0; pluginDepParams[i]; ++i) {
+	      if (!params.hasField(pluginDepParams[i])) {
+		if (plug)
+		  plug->aborted(pluginName, tfi->getPluginsClassName() +
+				" '" + pluginName + "' will be removed, it depends on the undefined parameter '" +
+				pluginDepParams[i] + "' of " + factoryDepName + " '" + pluginDepName + "'");
+		tfi->removePlugin(pluginName);
+		depsNeedCheck = true;
+	      }
+	    }
 	  }
 	}
       } delete itP;

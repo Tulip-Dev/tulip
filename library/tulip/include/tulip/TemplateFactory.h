@@ -26,7 +26,7 @@ public:
   virtual bool pluginExists(const std::string &pluginName)=0;
   virtual void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0)=0;
   virtual StructDef getPluginParameters(std::string name)=0;
-  virtual std::list< std::pair < std::string, std::string > > getPluginDependencies(std::string name)=0;
+  virtual std::list<tlp::Dependency> getPluginDependencies(std::string name)=0;
   virtual std::string getPluginsClassName()=0;
   virtual void removePlugin(const std::string& name)=0;
 
@@ -55,14 +55,14 @@ public:
   ObjectCreator objMap;
   std::map<std::string,StructDef> objParam;
   std::set<std::string> objNames;
-  std::map<std::string, std::list< std::pair < std::string, std::string > > > objDeps;
+  std::map<std::string, std::list<tlp::Dependency> > objDeps;
 
   Iterator<std::string>* availablePlugins();
   bool pluginExists(const std::string& pluginName);
   void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0);
   ObjectType *getPluginObject(const std::string& name, Context p);
   StructDef getPluginParameters(std::string name);
-  std::list< std::pair < std::string, std::string > > getPluginDependencies(std::string name);
+  std::list<tlp::Dependency> getPluginDependencies(std::string name);
   std::string getPluginsClassName();
   void registerPlugin(ObjectFactory* objectFactory);
   void removePlugin(const std::string &name);

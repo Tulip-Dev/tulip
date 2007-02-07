@@ -18,19 +18,20 @@ namespace {
     HTML_HELP_BODY() \
     "This parameter defines the property used for node's sizes." \
     HTML_HELP_CLOSE(),
+    //edge length
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Int" ) \
+    HTML_HELP_DEF( "values", "An existing int property" ) \
+    HTML_HELP_DEF( "default", "None" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates the property used to compute the length of edges." \
+    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "String Collection" ) \
     HTML_HELP_DEF( "default", "horizontal" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the orientation of the drawing" \
-    HTML_HELP_CLOSE(),
-    //Orthogonal
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "true" )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to choose if the tree is drawn orthogonally or not" \
     HTML_HELP_CLOSE(),
     //Orthogonal
     HTML_HELP_OPEN() \
@@ -70,13 +71,12 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyCon
   LayoutAlgorithm(context),
   lengthMetric(0) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<IntegerProperty>("edgeLength",paramHelp[1]);
-  addParameter<bool>("orthogonal", paramHelp[2], "true" );
-  addParameter<bool>("use length", paramHelp[3], "false" );
-  addParameter<StringCollection> ("orientation", paramHelp[4], ORIENTATION );
-  addParameter<float> ("layer spacing", paramHelp[4], "64." );
-  addParameter<float> ("node spacing", paramHelp[5], "18." );
-  addParameter<bool> ("bounding circles", paramHelp[6], "false");
+  addParameter<IntegerProperty>("edgeLength", paramHelp[1], 0, false);
+  addParameter<StringCollection>("orientation", paramHelp[2], ORIENTATION );
+  addParameter<bool>("orthogonal", paramHelp[3], "true" );
+  addParameter<float>("layer spacing", paramHelp[4], "64." );
+  addParameter<float>("node spacing", paramHelp[5], "18." );
+  addParameter<bool>("bounding circles", paramHelp[6], "false");
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
@@ -344,8 +344,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   useLength = false;
   bool boundingCircles = false;
   if (dataSet!=0) {
-    dataSet->get("edgeLength", lengthMetric);
-    dataSet->get("use length", useLength);
+    useLength = dataSet->get("edgeLength", lengthMetric);
     dataSet->get("nodeSize", sizes);
     dataSet->get("orthogonal", ortho);
     dataSet->get("layer spacing", spacing);

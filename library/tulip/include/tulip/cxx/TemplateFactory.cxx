@@ -33,13 +33,11 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
   objParam[pluginName] = withParam->getParameters();
   // loop over dependencies
   // to demangle the class names
-  std::list<std::pair < std::string, std::string > > dependencies =
-    withParam->getDependencies();
-  std::list<std::pair < std::string, std::string > >::iterator itD =
-    dependencies.begin();
+  std::list<tlp::Dependency> dependencies = withParam->getDependencies();
+  std::list<tlp::Dependency>::iterator itD = dependencies.begin();
   for (; itD != dependencies.end(); itD++) {
-    const char *factoryDepName = (*itD).first.c_str();
-    (*itD).first = std::string(tlp::demangleTlpClassName(factoryDepName));
+    const char *factoryDepName = (*itD).factoryName.c_str();
+    (*itD).factoryName = std::string(tlp::demangleTlpClassName(factoryDepName));
   }
   objDeps[pluginName] = dependencies;
   if (currentLoader!=0) currentLoader->loaded(
@@ -98,7 +96,7 @@ tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPlugin
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-std::list< std::pair < std::string, std::string > > tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
+std::list<tlp::Dependency> tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objDeps[name];
 }
