@@ -200,7 +200,7 @@ void TextRenderer::finalTextXMLManager(Paragraph* f){
     prec_s = s;
   }
   s = myString->at(n-1).getStringPtr();
-  if(s->c_str() != ""){
+  if (s->size()){
     int length_s = s->size();
     if((*s)[length_s-1] != ' '){
       s->push_back(' ');
