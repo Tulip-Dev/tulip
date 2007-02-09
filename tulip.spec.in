@@ -56,6 +56,10 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix}
 
 %build
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+pushd docs
+export DISPLAY=:0.0
+make html
+popd
 
 %install
 make DESTDIR="$RPM_BUILD_ROOT" install
@@ -75,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/headerlogo.bmp
 %{prefix}/lib/tlp/bitmaps/welcomelogo.bmp
 %{prefix}/include
+%{prefix}/share/@PACKAGE@
 
 #%{prefix}/lib/tlp/samples
 
