@@ -42,7 +42,7 @@ private:
   std::map<int,int> *classes;
   int numClasses;
   int getClass(const int i);
-  int makeUnion(const int p, const int q);
+  void makeUnion(const int p, const int q);
   bool edgeOk(const tlp::edge &e);
 };
 /*@}*/

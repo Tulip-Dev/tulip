@@ -20,7 +20,7 @@ int Kruskal::getClass(const int i) {
   return (*classes)[i];
 }
 //======================================================
-int Kruskal::makeUnion(const int p, const int q) {
+void Kruskal::makeUnion(const int p, const int q) {
   int x = getClass(p);
   int y = getClass(q);
 
