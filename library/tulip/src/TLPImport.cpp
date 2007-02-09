@@ -721,8 +721,11 @@ public:
     }
     else
       input = new ifstream(filename.c_str());
-    
-    TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet),pluginProgress,size);
+
+    pluginProgress->showPreview(false);
+    pluginProgress->setComment(string("Loading ") + filename + "...");
+
+    TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet), pluginProgress, size);
     result = myParser.parse();
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
