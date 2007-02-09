@@ -1,8 +1,14 @@
 How to build Tulip on MacOSX platform
+-------------------------------------
+
+1- Build Qt
+-----------
+
+You can use either Qt 3 or Qt 4. Qt 4 has (at the time of this writing) problems with screen refreshes.
+
+1a- Build the Qt/Mac 3.3 Open Source Edition
 --------------------------------------
 
-1- Build the Qt/Mac 3.3 Open Source Edition
--------------------------------------------
 Download the corresponding Qt 3 source code
   ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
 
@@ -30,6 +36,19 @@ Removing the line is not correct but it ensures a working Tulip building
 process. The Qt qmake process doesn't use glibtool so this isn't an issue
 for most Qt applications.
 
+1b- Build the Qt/Mac 4.2.2 Open Source Edition
+-------------------------------------------
+Download the Qt 4.2.2 or later source code (Qt 4.2.0 and 4.2.1 crash (bug 135585))
+  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.2.2.tar.gz
+
+To install Qt-4.2.2 into its default install directory ( /usr/local/Trolltech/Qt-4.2.2 ),
+do (for example in your home directory)
+  tar xzvf qt-mac-opensource-src-4.2.2.tar.gz
+  cd qt-mac-opensource-src-4.2.2
+  ./configure
+  make
+  make install
+
 2- Build freetype2
 ------------------
 Download the FreeType 2 source code from
@@ -45,7 +64,14 @@ Change the current directory to the tulip directory
 then run
 
   sh gen-conf.sh
+
+If you've installed Qt/Mac 3.3 as described in 1a, do
+
   ./configure --prefix=/usr/local/tulip-qt3 --with-qt-dir=/usr/local/Trolltech/qt-mac-free-3.3.6
+
+If you've installed Qt/Mac 4.2.2 as described in 1b, do
+
+  ./configure --prefix=/usr/local/tulip-qt4 --with-qt-dir=/usr/local/Trolltech/Qt-4.2.2
 
 More configuration flags are available; use ./configure --help to see them.
 
