@@ -42,6 +42,13 @@ void QtProgress::setComment(string msg) {
   qApp->processEvents();
 }
 //=====================================
+void QtProgress::showPreview(bool flag) {
+  if (flag)
+    preview->show();
+  else
+    preview->hide();
+}
+//=====================================
 void QtProgress::stopCompute(){
   //  cerr << __PRETTY_FUNCTION__ << endl;
   PluginProgress::stop();

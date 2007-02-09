@@ -15,6 +15,7 @@ public:
   virtual ~QtProgress();
   void progress_handler(int i,int j);
   void setComment(std::string msg);
+  void showPreview(bool);
 public slots:
   void stopCompute();
   void cancelCompute();

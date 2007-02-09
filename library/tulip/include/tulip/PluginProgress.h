@@ -20,6 +20,7 @@ class TLP_SCOPE PluginProgress {
   void stop();
   bool isPreviewMode() const ;
   void setPreviewMode(bool);
+  virtual void showPreview(bool);
   ProgressState state() const;
   std::string getError() { return _error; }
   void setError(std::string error) { _error = error; }
