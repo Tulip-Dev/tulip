@@ -13,13 +13,13 @@ DOCBOOK_SRC = index.docbook \
 
 install-data-am :
 	if test -d html ; then \
-		mkdir -p $(pkgdatadir)/developerHandbook ;\
-		cp -r images $(pkgdatadir)/developerHandbook ;\
-		cp -r html $(pkgdatadir)/developerHandbook ;\
+	  mkdir -p $(DESTDIR)$(pkgdatadir)/developerHandbook ;\
+	  cp -r images $(DESTDIR)$(pkgdatadir)/developerHandbook ;\
+	  cp -r html $(DESTDIR)$(pkgdatadir)/developerHandbook ;\
 	fi;
 
 uninstall-am :
-	rm -rf $(pkgdatadir)/developerHandbook
+	rm -rf $(DESTDIR)$(pkgdatadir)/developerHandbook
 
 all :
 
