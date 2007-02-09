@@ -17,15 +17,14 @@ void Context::getColor(unsigned char& r, unsigned char& v, unsigned char& b) con
   r = c[0];  v = c[1];  b = c[2];
 }
 //---------------------------------------------------------------------------
-bool tlp::operator==(Context& a, Context& b){
-  if( (a.size == b.size) && // taille
-      (a.c[0] == b.c[0]) && // rouge
-      (a.c[1] == b.c[1]) && // vert
-      (a.c[2] == b.c[2]) && //bleu
-      (a.font_name == b.font_name) )
-    return true;
-  else
-    return false;
+namespace tlp {
+  bool operator==(Context& a, Context& b){
+    return ( (a.size == b.size) && // taille
+	     (a.c[0] == b.c[0]) && // rouge
+	     (a.c[1] == b.c[1]) && // vert
+	     (a.c[2] == b.c[2]) && //bleu
+	     (a.font_name == b.font_name) );
+  }
 }
 //---------------------------------------------------------------------------
 Renderer& Context::getRenderer() const {
