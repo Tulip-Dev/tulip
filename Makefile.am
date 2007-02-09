@@ -11,7 +11,8 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     tulip.spec.in \
 	     tulip-config.in \
 	     tulip.m4 \
-	     libxml.m4
+	     libxml.m4 \
+	     WriteEnvStr.nsh
 
 bin_SCRIPTS = tulip-config
 
@@ -29,7 +30,6 @@ install-data-am :
 		mkdir $(exec_prefix)/bin/tulip.app/Contents/include ;\
 		ln -s $(includedir)/tulip $(exec_prefix)/bin/tulip.app/Contents/include/tulip ;\
 	fi;
-	
 
 macinst: install-data-am
 	sh make_tulip-$(VERSION)_mac_bundle.sh
