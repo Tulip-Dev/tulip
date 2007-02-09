@@ -8,12 +8,13 @@
 
 #include "Node.h"
 #include "MutableContainer.h"
+#include "PluginProgress.h"
 
 namespace tlp {
 
   class Graph;
-  TLP_SCOPE double averagePathLength(Graph *);
-  TLP_SCOPE double averageCluster(Graph *);
+  TLP_SCOPE bool averagePathLength(Graph *, double&, PluginProgress * = 0);
+  TLP_SCOPE bool averageCluster(Graph *, double &, PluginProgress * = 0);
   TLP_SCOPE unsigned int maxDegree(Graph *);
   TLP_SCOPE unsigned int minDegree(Graph *);
   /*

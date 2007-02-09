@@ -1,5 +1,6 @@
 #include <deque>
 #include <list>
+#include <limits.h>
 
 #include "tulip/GraphMeasure.h"
 #include "tulip/Reflect.h"
@@ -68,31 +69,40 @@ unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> 
 }
 //================================================================
 //Warning the algorithm is not optimal
-double tlp::averagePathLength(Graph *sg) {
-  double sumPath = 0;
+bool tlp::averagePathLength(Graph *sg, double& sumPath, PluginProgress *pluginProgress) {
   int nbNodes = sg->numberOfNodes();
   node n;
+  int steps = 0;
   forEach(n, sg->getNodes()) {
     MutableContainer<unsigned int> distance;
+    if (pluginProgress && ((++steps % 100) == 0)) {
+	pluginProgress->progress(steps, nbNodes);
+	if (pluginProgress->state() !=TLP_CONTINUE)
+	  return false;
+    }
     sumPath += (double) tlp::maxDistance(sg, n, distance, 2 /* inout */);
   }
-  return sumPath/(nbNodes * (nbNodes - 1));
+  if (pluginProgress)
+    pluginProgress->progress(nbNodes, nbNodes);
+  sumPath /= (nbNodes * (nbNodes - 1));
+  return true;
 }
 //================================================================
-double tlp::averageCluster(Graph *sg) {
+bool tlp::averageCluster(Graph *sg, double &sum, PluginProgress * pluginProgress) {
+  sum=0;
   DataSet data;
   data.set("depth",1);
-  bool result;
   string errMsg;
   DoubleProperty *cluster = new DoubleProperty(sg);
-  result = sg->computeProperty("Cluster",cluster,errMsg,0,&data);
-  double sum=0;
+  if (!sg->computeProperty("Cluster", cluster, errMsg, pluginProgress, &data))
+    return false;
   Iterator<node>*itN=sg->getNodes();
   while (itN->hasNext())
     sum += cluster->getNodeValue(itN->next());
   delete itN;
   delete cluster;
-  return sum /= double(sg->numberOfNodes());
+  sum /= double(sg->numberOfNodes());
+  return true;
 }
 //================================================================
 unsigned int tlp::maxDegree(Graph *sg) {
