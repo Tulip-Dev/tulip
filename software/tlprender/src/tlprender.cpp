@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/osmesa.h>
 
 #include <tulip/TlpTools.h>
@@ -107,6 +108,11 @@ public:
     //    cerr << __PRETTY_FUNCTION__ << endl;
     glDrawBuffer(GL_FRONT_LEFT);
     glFlush();
+  }
+
+  void setupOpenGlContext() {
+    //  cerr << __PRETTY_FUNCTION__ << " (" << (int)this << ")" << endl;
+    makeCurrent();
   }
 
   void setDoubleBuffering(bool b) {}
