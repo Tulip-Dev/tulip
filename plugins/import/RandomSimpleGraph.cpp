@@ -69,8 +69,8 @@ struct RandomSimpleGraph:public ImportModule {
   
   bool import(const string &name) {
     srand(clock());
-    int nbNodes  = 5;
-    int nbEdges  = 9;
+    unsigned int nbNodes  = 5;
+    unsigned int nbEdges  = 9;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);

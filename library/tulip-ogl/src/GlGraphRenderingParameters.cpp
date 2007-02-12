@@ -11,7 +11,6 @@ using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _graph(0),
-  _backgroundColor(255,255,255),
   _viewArrow(false), 
   _viewNodeLabel(false),
   _viewEdgeLabel(false),
@@ -20,10 +19,11 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _incrementalRendering(true),
   _edgeColorInterpolate(true), 
   _edge3D(false),
+  _displayEdges(true),
   _viewOrtho(true), 
   _FontsType(0),
-  _displayEdges(true),
   _labelsBorder(2),
+  _backgroundColor(255,255,255),
   _layoutName("viewLayout") {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";

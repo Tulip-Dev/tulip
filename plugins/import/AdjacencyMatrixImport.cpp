@@ -103,7 +103,6 @@ public:
       unsigned int curNode = 0;
       while (lines.good()) {
 	string valString;
-	double valDouble;
 	ValType type;
 	if ( lines >> valString) {
 	  const char *start= valString.c_str();
@@ -129,6 +128,9 @@ public:
 	    case TLP_STRING:
 	      stringP->setNodeValue(nodes[curNode],valString);
 	      break;
+	    default:
+	      std::cerr << "Error parsing line :" << curLine << std::endl;
+	      return false;
 	    }
 	  }
 	  else {
@@ -145,6 +147,9 @@ public:
 	    case TLP_NOVAL:
 	      e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      break;
+	    default:
+	      std::cerr << "Error parsing line :" << curLine << std::endl;
+	      return false;
 	    }
 	  }
 	  curNode++;

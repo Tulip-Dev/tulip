@@ -88,7 +88,6 @@ bool QuotientClustering::run() {
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
     node n = itN->next();
-    Graph * graph = meta->getNodeValue(n);
     LayoutProperty* graphlayout = sg->getProperty<LayoutProperty>("viewLayout");
     SizeProperty* graphsize = sg->getProperty<SizeProperty>("viewSize");
     DoubleProperty* graphrot = sg->getProperty<DoubleProperty>("viewRotation");

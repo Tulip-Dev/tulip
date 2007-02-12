@@ -62,10 +62,6 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
       float ftglColour[4];
       glGetFloatv( GL_CURRENT_COLOR, ftglColour);
 
-      unsigned char redComponent =   static_cast<unsigned char>( ftglColour[0] * 255.0f);
-      unsigned char greenComponent = static_cast<unsigned char>( ftglColour[1] * 255.0f);
-      unsigned char blueComponent =  static_cast<unsigned char>( ftglColour[2] * 255.0f);
-
       unsigned char* tmp = bitmap.buffer;
 
       unsigned char* src  = new unsigned char[(destWidth)*(destHeight)];

@@ -161,70 +161,70 @@ struct GMLParser
     GMLToken nextToken;
     GMLValue currentValue;
     GMLValue nextValue;
-    while ((currentToken=tokenParser->nextToken(currentValue))!=ENDOFSTREAM)
-      {
-	switch (currentToken)
+    while ((currentToken=tokenParser->nextToken(currentValue))!=ENDOFSTREAM) {
+      switch (currentToken) {
+      case STRINGTOKEN:
+	nextToken=tokenParser->nextToken(nextValue);
+	switch (nextToken) {
+	case OPENTOKEN:
+	  GMLBuilder *newBuilder;
+	  if (builderStack.front()->addStruct(currentValue.str,newBuilder))
+	    {
+	      builderStack.push_front(newBuilder);
+	    }
+	  else
+	    {
+	      return false;
+	    }
+	  break;
+	case BOOLTOKEN:
+	  if (!builderStack.front()->addBool(currentValue.str,nextValue.boolean)) 
+	    {
+	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      return false;
+	    }
+	  break;
+	case INTTOKEN:
+	  if (!builderStack.front()->addInt(currentValue.str,nextValue.integer)) 
+	    {
+	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      return false;
+	    }
+	  break;
+	case DOUBLETOKEN:
+	  if (!builderStack.front()->addDouble(currentValue.str,nextValue.real)) 
+	    {
+	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      return false;
+	    }
+	  break;
+	case STRINGTOKEN:
+	  if (!builderStack.front()->addString(currentValue.str,nextValue.str)) 
+	    {
+	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      return false;
+	    }
+	  break;
+	case ERRORINFILE:return false;break;
+	case ENDOFSTREAM:return true;break;
+	default:break;
+	}
+	break;
+      case CLOSETOKEN:
+	if (builderStack.front()->close())
+	  delete builderStack.front();
+	else
 	  {
-	  case STRINGTOKEN:
-	    nextToken=tokenParser->nextToken(nextValue);
-	    switch (nextToken)
-	      {
-	      case OPENTOKEN:
-		GMLBuilder *newBuilder;
-		if (builderStack.front()->addStruct(currentValue.str,newBuilder))
-		  {
-		    builderStack.push_front(newBuilder);
-		  }
-		else
-		  {
-		    return false;
-		  }
-		break;
-	      case BOOLTOKEN:
-		if (!builderStack.front()->addBool(currentValue.str,nextValue.boolean)) 
-		  {
-		    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		    return false;
-		  }
-		break;
-	      case INTTOKEN:
-		if (!builderStack.front()->addInt(currentValue.str,nextValue.integer)) 
-		  {
-		    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		    return false;
-		  }
-		break;
-	      case DOUBLETOKEN:
-		if (!builderStack.front()->addDouble(currentValue.str,nextValue.real)) 
-		  {
-		    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		    return false;
-		  }
-		break;
-	      case STRINGTOKEN:
-		if (!builderStack.front()->addString(currentValue.str,nextValue.str)) 
-		  {
-		    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		    return false;
-		  }
-		break;
-	      case ERRORINFILE:return false;break;
-	      case ENDOFSTREAM:return true;break;
-	      default:break;
-	      }
-	    break;
-	  case CLOSETOKEN:
-	    if (builderStack.front()->close())
-	      delete builderStack.front();
-	    else
-	      {
-		std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
-		return false;
-	      }
-	    builderStack.pop_front();
-	    break;
-	  }	    
-      }
+	    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	    return false;
+	  }
+	builderStack.pop_front();
+	break;
+      default:
+	std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	return false;
+      }	    
+    }
     return true;
   }
 };

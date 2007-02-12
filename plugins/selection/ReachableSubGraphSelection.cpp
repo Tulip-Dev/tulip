@@ -59,7 +59,7 @@ ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
-  int maxDepth = 5;
+  unsigned int maxDepth = 5;
   int direction = 0;
   BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
   if ( dataSet!=0) {

@@ -187,19 +187,21 @@ void PropertyWidget::filterSelection(bool b) {
 
 void PropertyWidget::scroll(int i) {
   if (editedProperty==0) return;
-  int curId=i/20;
-  bool toUpdate=false;
-  if (curId>vScrollPos+TABLEBUFSIZE/4) {
-    if (vScrollPos+TABLEBUFSIZE/2!=nbElement) {
+  int curId = i/20;
+  bool toUpdate = false;
+  if (curId > (vScrollPos + TABLEBUFSIZE/4)) {
+    if ((vScrollPos + TABLEBUFSIZE/2) != (int) nbElement) {
       vScrollPos=curId;
-      if (curId+TABLEBUFSIZE/2>nbElement) curId=nbElement-TABLEBUFSIZE/2;
+      if (curId + TABLEBUFSIZE/2 > (int) nbElement)
+	curId=nbElement-TABLEBUFSIZE/2;
       toUpdate=true;
     }
   }
   if (curId<vScrollPos-TABLEBUFSIZE/4) {
     if (vScrollPos-TABLEBUFSIZE/2!=0) {
       vScrollPos=curId;
-      if (curId-TABLEBUFSIZE/2<0) curId=TABLEBUFSIZE/2-1;
+      if (curId-TABLEBUFSIZE/2<0)
+	curId=TABLEBUFSIZE/2-1;
       toUpdate=true;
     }
   }
