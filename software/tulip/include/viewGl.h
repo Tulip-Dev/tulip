@@ -199,7 +199,9 @@ private:
   std::string newName();
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
-  bool fileSave(std::string plugin, std::string filename, std::string author, std::string comments);
+  bool doFileSave();
+  bool doFileSaveAs();
+  bool doFileSave(std::string plugin, std::string filename, std::string author, std::string comments);
   bool askSaveGraph(const std::string name);
   bool closeWin();
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);

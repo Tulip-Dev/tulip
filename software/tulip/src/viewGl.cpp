@@ -567,15 +567,18 @@ void viewGl::setNavigateCaption(string newCaption) {
    }
 }
 //**********************************************************************
-void viewGl::fileSave() {
-  if (!glWidget) return;
+bool viewGl::doFileSave() {
+  if (!glWidget) return false;
   if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
       (openFiles[(unsigned long)glWidget].name == "")) {
-    fileSaveAs();
-    return;
+    return doFileSaveAs();
   }
   viewGlFile &vFile = openFiles[(unsigned long)glWidget];
-  fileSave("tlp", vFile.name, vFile.author, vFile.comments);
+  return doFileSave("tlp", vFile.name, vFile.author, vFile.comments);
+}
+//**********************************************************************
+void viewGl::fileSave() {
+  doFileSave();
 }
 //**********************************************************************
 static void setGraphName(Graph *g, QString s) {
@@ -585,7 +588,7 @@ static void setGraphName(Graph *g, QString s) {
   g->setAttribute("name", string(cleanName.latin1()));
 }
 //**********************************************************************
-bool viewGl::fileSave(string plugin, string filename, string author, string comments) {
+bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
   StructDef parameters = ExportModuleFactory::factory->getPluginParameters(plugin);
@@ -634,11 +637,14 @@ bool viewGl::fileSave(string plugin, string filename, string author, string comm
   return result;
 }
 //**********************************************************************
+bool viewGl::doFileSaveAs() {
+  if (!glWidget || !glWidget->getGraph())
+    return false;
+  return doFileSave("tlp", "", "", "");
+}
+//**********************************************************************
 void viewGl::fileSaveAs() {
-  if (!glWidget) return;
-  if( !glWidget->getGraph() )
-    return;
-  fileSave("tlp", "", "", "");
+  doFileSaveAs();
 }
 //**********************************************************************
 void viewGl::fileOpen() {
@@ -1211,7 +1217,7 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  fileSave(exportGraphMenu.text(id).ascii(), "", "", "");
+  doFileSave(exportGraphMenu.text(id).ascii(), "", "", "");
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
@@ -1249,7 +1255,7 @@ bool viewGl::askSaveGraph(const std::string name) {
     QMessageBox::Cancel | QMessageBox::Escape);
   switch(answer) {
     case QMessageBox::Cancel : return true;
-    case QMessageBox::Yes: fileSave(); return false; // bug: should return true if user canceled "save as"
+    case QMessageBox::Yes: return !doFileSave();
     default: return false;
   }
 }
