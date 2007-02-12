@@ -23,29 +23,17 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "If true the layout is in 3D else it is computed in 2D" \
   HTML_HELP_CLOSE(),
-  // use edge length
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true the layout will use edge length given in parameter else all edge have a size equal to one." \
-  HTML_HELP_CLOSE(),
   // edge length
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "DoubleProperty" ) \
   HTML_HELP_BODY() \
-  "This DoubleProperty is used for edges weights." \
-  HTML_HELP_CLOSE(),
-  // initialisation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true the algorithm will compute initial position of elements else layout given in parameter will be used." \
+  "This DoubleProperty is used to compute the length of edges." \
   HTML_HELP_CLOSE(),
   // initial layout
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "LayoutProperty" ) \
   HTML_HELP_BODY() \
-  "The layout used when initialisation is not activated." \
+  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
   HTML_HELP_CLOSE(),
 };
 
@@ -53,15 +41,13 @@ const char * paramHelp[] = {
  * GEM3D Constants
  */
     
-// static const int MAXATTRACT    = 1048576;
 static const float EDGELENGTH = 10;
 static const float EDGELENGTHSQR = EDGELENGTH * EDGELENGTH;
 static const float MAXATTRACT = 8192; 
 
 /*
- * GEM3D Defualt Parameter Values
+ * GEM3D Default Parameter Values
  */
-
 static const float IMAXTEMPDEF     = 1.0;
 static const float ISTARTTEMPDEF   = 0.3;
 static const float IFINALTEMPDEF   = 0.05;
@@ -85,10 +71,8 @@ LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","David Duke","29/09/2006","Alpha","1
 
 GEMLayout::GEMLayout(const PropertyContext &context) : LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "false");
-  addParameter<bool>("use length", paramHelp[1], "false");
-  addParameter<DoubleProperty>("edge length", paramHelp[2], "viewMetric");
-  addParameter<bool>("initialisation", paramHelp[3], "true");
-  addParameter<LayoutProperty>("initial layout", paramHelp[4], "viewLayout");
+  addParameter<DoubleProperty>("edge length", paramHelp[1], 0, false);
+  addParameter<LayoutProperty>("initial layout", paramHelp[2], 0, false);
   
   i_maxtemp      = IMAXTEMPDEF;
   a_maxtemp      = AMAXTEMPDEF;
@@ -144,9 +128,9 @@ void GEMLayout::updateLayout() {
  * are considered
  */
 Coord GEMLayout::computeForces(unsigned int v, 
-				 float shake, 
-				 float gravity, 
-				 bool testPlaced) {
+			       float shake, 
+			       float gravity, 
+			       bool testPlaced) {
   Coord force;
   Coord vPos  = _particules[v].pos;
   float vMass = _particules[v].mass;
@@ -338,10 +322,8 @@ bool GEMLayout::run() {
   
   if ( dataSet!=0 ) {
     dataSet->get("3D layout", is3D);
-    dataSet->get("use length", _useLength);
-    dataSet->get("edge length", metric);
-    dataSet->get("initialisation", initLayout);
-    dataSet->get("initial layout", layout);
+    _useLength = dataSet->get("edge length", metric);
+    initLayout = !dataSet->get("initial layout", layout);
   }
 
   if (is3D) _dim = 3; else _dim = 2;
