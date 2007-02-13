@@ -18,15 +18,27 @@ namespace {
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "SizeProperty" ) \
     HTML_HELP_BODY() \
-    "This sizes is used to affect values to unselected dimensions (width, height, depth)." \
+    "This size property is used to affect values to unselected dimensions (width, height, depth)." \
     HTML_HELP_CLOSE(),
-    // colormodel
+    // width, height, depth
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Boolean" ) \
+    HTML_HELP_DEF( "type", "boolean" ) \
     HTML_HELP_DEF( "values", "true/false" ) \
     HTML_HELP_DEF( "default", "true" ) \
     HTML_HELP_BODY() \
-    "This value defines if this parameter will be computed or taken from the input sizes" \
+    "Indicates if this parameter will be computed(box is checked) or kept(box is unchecked) from the value of input size property" \
+    HTML_HELP_CLOSE(),
+    // min
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "double" ) \
+    HTML_HELP_BODY() \
+    "Gives the minimum value of the range of computed sizes." \
+    HTML_HELP_CLOSE(),
+    // max
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "double" ) \
+    HTML_HELP_BODY() \
+    "Gives the maximum value of the range of computed sizes." \
     HTML_HELP_CLOSE(),
     // Mapping type
     HTML_HELP_OPEN() \
@@ -43,7 +55,7 @@ namespace {
     HTML_HELP_DEF( "values", "true / false" ) \
     HTML_HELP_DEF( "default", "true" ) \
     HTML_HELP_BODY() \
-    "If true the plug-in will compute node sizes else it will compute edge sizes :" \
+    "If true the algorithm will compute the size of nodes else it will compute the size of edges :" \
     "<ul><li>true : node size</li><li>false: edge size</li></ul>" \
     HTML_HELP_CLOSE(),
   };
@@ -68,10 +80,10 @@ public:
     addParameter<bool>("width", paramHelp[2],"true");
     addParameter<bool>("height", paramHelp[2],"true");
     addParameter<bool>("depth", paramHelp[2],"true");
-    addParameter<double>("min size","","1");
-    addParameter<double>("max size","","10");
-    addParameter<bool>("type", paramHelp[3],"true");
-    addParameter<bool>("node/edge", paramHelp[3],"true");
+    addParameter<double>("min size",paramHelp[3],"1");
+    addParameter<double>("max size",paramHelp[4],"10");
+    addParameter<bool>("type", paramHelp[5],"true");
+    addParameter<bool>("node/edge", paramHelp[6],"true");
   }
   
   ~MetricMapping(){}
