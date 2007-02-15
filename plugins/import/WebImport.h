@@ -1,3 +1,4 @@
+#include <string>
 #include <qhttp.h>
 #include <qeventloop.h>
 

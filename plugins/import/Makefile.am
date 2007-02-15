@@ -37,7 +37,7 @@ libsmallworld_la_SOURCES = SmallWorldGraph.cpp
 libfilesystem_la_SOURCES = FileSystem.cpp
 libwebimport_la_SOURCES = WebImport.cpp moc_WebImport.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
 

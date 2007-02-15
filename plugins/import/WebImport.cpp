@@ -168,7 +168,7 @@ bool UrlElement::siteconnect(const string &server, const string &url,const int s
   if (!context)
     context = new HttpContext();
 
-  context->setHost(QString(server), serverport);
+  context->setHost(QString(server.c_str()), serverport);
   string theUrl("/");
   // prefix the url with / if it doesn't start with it..
   if (url.empty() || url.c_str()[0] != '/')
@@ -178,9 +178,9 @@ bool UrlElement::siteconnect(const string &server, const string &url,const int s
   context->processed = context->isHtml = context->redirected = false;
   // start the request and store the request ID
   if (headonly)
-    context->rqid = context->head(QString(theUrl));
+    context->rqid = context->head(QString(theUrl.c_str()));
   else
-    context->rqid = context->get(QString(theUrl));
+    context->rqid = context->get(QString(theUrl.c_str()));
   // block until the request is finished
   // or there is timeout
   QTimer timer;
