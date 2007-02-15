@@ -2,12 +2,14 @@
 #include <qtooltip.h>
 
 class GlGraphWidget;
+class viewGl;
 
 struct ElementInfoToolTip : public QToolTip {
   virtual ~ElementInfoToolTip(){}
-  ElementInfoToolTip(QWidget* parent = NULL,const char* name = NULL,GlGraphWidget *glWidget = NULL);
+  ElementInfoToolTip(GlGraphWidget *glWidget, viewGl *viewWidget);
   void maybeTip ( const QPoint & );
 
  private:
   GlGraphWidget *glWidget;
+  viewGl *viewWidget;
 };

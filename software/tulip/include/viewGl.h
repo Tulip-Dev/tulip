@@ -75,6 +75,9 @@ public:
   virtual ~viewGl();
   void setParameters(const tlp::DataSet);
   bool eventFilter(QObject *, QEvent *);
+#if (QT_REL == 3)
+  bool areTooltipsEnabled();
+#endif
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
@@ -93,6 +96,8 @@ protected:
   ElementPropertiesWidget *nodeProperties;
   tlp::Graph * copyCutPasteGraph;
   bool elementsDisabled;
+  bool tooltipsEnabled;
+  int tooltipsMenuItem;
 
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
@@ -157,6 +162,7 @@ protected slots:
   void outputEPS();
   void outputSVG();
   void showDialog(int);
+  void enableDisableTooltips();
   void redrawView();
   void centerView();
   void updateStatusBar();

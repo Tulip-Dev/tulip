@@ -172,6 +172,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   aboutWidget=0;
   copyCutPasteGraph = 0;
   elementsDisabled = false;
+  tooltipsEnabled = false;
 
   //=======================================
 
@@ -506,8 +507,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
 
 #if (QT_REL == 3)
-  new ElementInfoToolTip(glWidget,"toolTip",glWidget);
-
+  new ElementInfoToolTip(glWidget,this);
   QToolTip::setWakeUpDelay(2500);
 #endif
 
@@ -1148,6 +1148,7 @@ void viewGl::buildMenus() {
   viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()));
   viewMenu->insertItem("&Center View", this, SLOT(centerView()));
   viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()));
+  tooltipsMenuItem = viewMenu->insertItem("Enable &Tooltips", this, SLOT(enableDisableTooltips()));
   viewMenu->insertItem("&Dialogs",  &dialogMenu);
   //Property Menu
   if (selectMenu.count()>0)
@@ -1398,12 +1399,12 @@ void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, b
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
-  #if (QT_REL == 4)
+#if (QT_REL == 4)
   // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
   if (obj->inherits("GlGraphWidget") &&
-      e->type() == QEvent::ToolTip) {
+      e->type() == QEvent::ToolTip && tooltipsEnabled) {
     node tmpNode;
     edge tmpEdge;
     ElementType type;
@@ -1446,7 +1447,6 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       mouseClicY = me->y();
       QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
       contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
-      //contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
       contextMenu->insertItem(tr("Delete"), this, SLOT(deleteElement()));
       contextMenu->insertItem(tr("Select"), this, SLOT(selectElement()));
       contextMenu->insertItem(tr("Add/Remove selection"), this, SLOT(addRemoveElement()));
@@ -1494,7 +1494,7 @@ void  viewGl::redrawView() {
   glWidget->draw();
 }
 //**********************************************************************
-///Reccenter the layout of the graph
+///Recenter the layout of the graph
 void viewGl::centerView() {
   if (glWidget == 0) return;
   glWidget->centerScene();
@@ -1502,6 +1502,18 @@ void viewGl::centerView() {
   updateStatusBar();
   redrawView();
 }
+//**********************************************************************
+/// enable/disable the tooltips display
+void viewGl::enableDisableTooltips() {
+  tooltipsEnabled = !tooltipsEnabled;
+  viewMenu->changeItem(tooltipsMenuItem,
+		       QString(tooltipsEnabled ? "Disable &Tooltips" : "Enable &Tooltips"));
+}
+#if (QT_REL == 3)
+bool viewGl::areTooltipsEnabled() {
+  return tooltipsEnabled;
+}
+#endif
 //===========================================================
 //Menu Edit : functions
 //===========================================================
