@@ -39,8 +39,8 @@ libwebimport_la_SOURCES = WebImport.cpp moc_WebImport.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
 
 moc_%.cpp: %.h 
-	moc -o $@ $<
+	$(MOC) -o $@ $<
 
