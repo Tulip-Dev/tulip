@@ -22,6 +22,8 @@ plugins_LTLIBRARIES = \
 
 pluginsdir = $(libdir)/tlp/plugins/import
 
+BUILT_SOURCES =  moc_WebImport.cpp
+
 libplanar_la_SOURCES = PlanarGraph.cpp
 libdot_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
 libgrid_la_SOURCES = Grid.cpp
@@ -35,7 +37,8 @@ librandomtreegeneral_la_SOURCES = RandomTreeGeneral.cpp
 libcompletetree_la_SOURCES = CompleteTree.cpp
 libsmallworld_la_SOURCES = SmallWorldGraph.cpp
 libfilesystem_la_SOURCES = FileSystem.cpp
-libwebimport_la_SOURCES = WebImport.cpp WebImport.h moc_WebImport.cpp
+libwebimport_la_SOURCES = WebImport.cpp WebImport.h
+nodist_libwebimport_la_SOURCES = moc_WebImport.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
