@@ -35,7 +35,7 @@ librandomtreegeneral_la_SOURCES = RandomTreeGeneral.cpp
 libcompletetree_la_SOURCES = CompleteTree.cpp
 libsmallworld_la_SOURCES = SmallWorldGraph.cpp
 libfilesystem_la_SOURCES = FileSystem.cpp
-libwebimport_la_SOURCES = WebImport.cpp moc_WebImport.cpp
+libwebimport_la_SOURCES = WebImport.cpp WebImport.h moc_WebImport.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
