@@ -521,13 +521,13 @@ struct WebImport:public ImportModule {
 	  if (pluginProgress->progress(graph->numberOfNodes(), maxSize) !=TLP_CONTINUE)
 	    return pluginProgress->state()!= TLP_CANCEL;
 	}
-#ifndef NDEBUF
+#ifndef NDEBUG
 	cerr << "Visiting : " << url.server << url.url << " ..." << flush;
 #endif
 	if (url.isRedirected()) {
 	  UrlElement redirection = url.getRedirection();
 	  if (redirection.isValid()) {
-#ifndef NDEBUF
+#ifndef NDEBUG
 	    cerr << endl << "redirected to " << redirection.server << redirection.url << endl;
 #endif
 	    addUrl(redirection,
@@ -539,12 +539,13 @@ struct WebImport:public ImportModule {
 	  url.load();
 	  parseHtml(url);
 	  url.clear();
-#ifndef NDEBUF
+#ifndef NDEBUG
 	  cerr << " done" << endl << flush;
 #endif      
 	}
-      } else
-#ifndef NDEBUF
+      }
+#ifndef NDEBUG
+      else
 	cerr << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
 #endif
     }
