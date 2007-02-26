@@ -1212,7 +1212,7 @@ void viewGl::exportImage(int id) {
       painter.drawPoint(x,y);
     }
   painter.end();
-  delete image;
+  free(image);
   pm.save( s, name.c_str());
 }
 //**********************************************************************
