@@ -15,7 +15,6 @@ nobase_include_HEADERS = \
 	tulip/FindSelection.h \
 	tulip/SGHierarchyWidgetData.h \
 	tulip/SGHierarchyWidget.h \
-	tulip/GWOverviewWidgetData.h \
 	tulip/GWOverviewWidget.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
