@@ -133,7 +133,9 @@ double StrengthMetric::getNodeValue(const node n ) {
 //=============================================================
 bool StrengthMetric::run() {
   edge e;
-  int steps = 0, maxSteps = graph->numberOfEdges();
+  unsigned int steps = 0, maxSteps = graph->numberOfEdges();
+  if (maxSteps < 10)
+    maxSteps = 10;
   if (pluginProgress) {
     pluginProgress->showPreview(false);
     pluginProgress->setComment("Computing Strength metric on edges...");
@@ -149,6 +151,8 @@ bool StrengthMetric::run() {
   node n;
   steps = 0;
   maxSteps = graph->numberOfNodes();
+  if (maxSteps < 10)
+    maxSteps = 10;
   pluginProgress->setComment("Computing Strength metric on nodes...");
   forEach(n, graph->getNodes()) {
     doubleResult->setNodeValue(n, getNodeValue(n));

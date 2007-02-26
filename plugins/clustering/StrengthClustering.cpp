@@ -210,8 +210,9 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped){
 Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition) {
   if (partition.size()<2) return graph;
   Graph *tmpGraph=tlp::newCloneSubGraph(graph);
+  unsigned int step = partition.size() / 10;
   for (unsigned int i=0;i<partition.size();++i) {
-    if (pluginProgress && ((i % (partition.size() / 10)) == 0)) {
+    if (pluginProgress && step && ((i % step) == 0)) {
       pluginProgress->progress(i, partition.size());
       if (pluginProgress->state() !=TLP_CONTINUE) {
 	graph->delSubGraph(tmpGraph);
@@ -338,7 +339,9 @@ bool StrengthClustering::run() {
     mult = *metric;
     mult.uniformQuantification(100);
     edge e;
-    int steps = 0, maxSteps = graph->numberOfEdges();
+    unsigned int steps = 0, maxSteps = graph->numberOfEdges();
+    if (maxSteps < 10)
+      maxSteps = 10;
     forEach (e, graph->getEdges()) {
       values->setEdgeValue(e, values->getEdgeValue(e)*(mult.getEdgeValue(e) + 1));
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
