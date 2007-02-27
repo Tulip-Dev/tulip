@@ -631,7 +631,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
 			   "The file has not been saved"
 			   );
   } else {
-    statusBar()->message(filename + " saved.");
+    statusBar()->message((filename + " saved.").c_str());
   }
   setNavigateCaption(filename);
   setGraphName(glWidget->getGraph(), QString(filename.c_str()));
@@ -980,9 +980,17 @@ void viewGl::editFind() {
   
   SelectionWidget *sel = new SelectionWidget(g);
   Observable::holdObservers();
-  sel->exec();
+  int nbItemsFound = sel->exec();
   Observable::unholdObservers();
   delete sel;
+  switch(nbItemsFound) {
+  case -1: break;
+  case 0: statusBar()->message("No item found."); break;
+  default:
+    stringstream sstr;
+    sstr << nbItemsFound << " item(s) found.";
+    statusBar()->message(sstr.str().c_str());
+  }
 }
 //**********************************************************************
 void viewGl::setParameters(const DataSet data) {
