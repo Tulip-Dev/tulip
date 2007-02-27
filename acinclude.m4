@@ -529,9 +529,9 @@ AC_SUBST(QT_CPPFLAGS)
 if test ${QT_VERSION} -eq 4; then
 dnl With the version 4 of Qt, its features are splitted in many libs
 dnl Qt3Support lib is for Qt 3 compatibility purpose
-  LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
   if test ${VAR_WIN32} = 1
   then
+    LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient4"
     LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
 dnl For linking purpose, we need to copy some libs
 dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
@@ -567,6 +567,7 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
          fi
       fi
     else
+      LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
       LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
     fi
   fi
