@@ -630,6 +630,8 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
 			   );
+  } else {
+    statusBar()->message(filename + " saved.");
   }
   setNavigateCaption(filename);
   setGraphName(glWidget->getGraph(), QString(filename.c_str()));
@@ -1173,7 +1175,12 @@ void viewGl::outputEPS() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    glWidget->outputEPS(64000000,true,s.ascii());
+    if (glWidget->outputEPS(64000000,true,s.ascii()))
+      statusBar()->message(s + " saved.");
+    else
+      QMessageBox::critical( 0, "Save Picture Failed",
+			     "The file has not been saved."
+			     );
   }
 }
 //**********************************************************************
@@ -1181,7 +1188,12 @@ void viewGl::outputSVG() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    glWidget->outputSVG(64000000,s.ascii());
+    if (glWidget->outputSVG(64000000,s.ascii()))
+      statusBar()->message(s + " saved.");
+    else
+      QMessageBox::critical( 0, "Save Picture Failed",
+			     "The file has not been saved."
+			     );
   }
 }
 //**********************************************************************
@@ -1214,6 +1226,7 @@ void viewGl::exportImage(int id) {
   painter.end();
   free(image);
   pm.save( s, name.c_str());
+  statusBar()->message(s + " saved.");
 }
 //**********************************************************************
 void viewGl::exportGraph(int id) {
