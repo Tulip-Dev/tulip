@@ -48,7 +48,10 @@ bool EqualValueClustering::run() {
   StableIterator<node> itN(graph->getNodes());
   StableIterator<edge> itE(graph->getEdges());
   int step = 0, maxSteps = graph->numberOfNodes();
-  pluginProgress->setComment("Partitioning nodes...");
+  if (maxSteps < 100)
+    maxSteps = 100;
+  if (pluginProgress)
+    pluginProgress->setComment("Partitioning nodes...");
 
   // try to work with double value if it's a DoubleProperty
   if (typeid(*property) == typeid(DoubleProperty)) {
@@ -76,6 +79,8 @@ bool EqualValueClustering::run() {
 
     step = 0;
     maxSteps = graph->numberOfEdges();
+    if (maxSteps < 100)
+      maxSteps = 100;
     pluginProgress->setComment("Partitioning edges...");
     while(itE.hasNext()) {
       edge ite = itE.next();
@@ -111,6 +116,8 @@ bool EqualValueClustering::run() {
 
     step = 0;
     maxSteps = graph->numberOfEdges();
+    if (maxSteps < 100)
+      maxSteps = 100;
     pluginProgress->setComment("Partitioning edges...");
     while(itE.hasNext()) {
       edge ite = itE.next();
