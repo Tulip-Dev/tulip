@@ -22,6 +22,7 @@ nobase_include_HEADERS = \
 	tulip/SGHierarchyWidgetQt3.h \
 	tulip/GlGraphWidgetPlugin.h \
 	tulip/ElementPropertiesWidgetPlugin.h \
+	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h
 
 noinst_HEADERS = \
