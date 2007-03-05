@@ -434,13 +434,10 @@ bool HierarchicalGraph::run() {
   LayoutProperty tmpLayout(graph);
   DataSet tmp;
   tmp.set("nodeSize", nodeSize);
-  tmp.set("edgeLength", edgeLength);
   tmp.set("layer spacing", spacing);
   tmp.set("node spacing", nodeSpacing);
   if (edgeLength!=0)
-    tmp.set("use length", true);
-  else
-    tmp.set("use length", false);
+    tmp.set("edgeLength", edgeLength);
   tmp.set("orthogonal", false);
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");
