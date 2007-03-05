@@ -142,7 +142,7 @@ public:
 		      const std::string &info,
 		      const std::string &release,
 		      const std::string &version,
-		      const std::list < std::pair < std::string, std::string > > &deps)
+		      const std::list <Dependency> &deps)
   {
     cout << "[" << name << "]";
   }
