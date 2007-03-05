@@ -18,6 +18,7 @@
 #include <qsizepolicy.h>
 #include <qmessagebox.h>
 #include <qinputdialog.h>
+#include <qpopupmenu.h>
 #else
 #include <QtCore/qstring.h>
 #include <QtGui/qpushbutton.h>
@@ -34,6 +35,7 @@
 #include <QtGui/qsizepolicy.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
+#include <Qt3Support/q3popupmenu.h>
 #include "tulip/Qt3ForTulip.h"
 #endif
 
@@ -65,6 +67,8 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   horizontalHeader()->setLabel(0, tr("Undefined"));
   connect(vScroll,SIGNAL(valueChanged(int)),SLOT(scroll(int)));
   connect(this,SIGNAL(valueChanged(int,int)),SLOT(changePropertyValue(int,int)));
+  connect(this,SIGNAL(contextMenuRequested (int, int, const QPoint&)),
+	  SLOT(showContextMenu(int, int, const QPoint&)));
   vScrollPos=0;
 }
 
@@ -463,4 +467,51 @@ void  PropertyWidget::setAllEdgeValue() {
     }
   }
   Observable::unholdObservers();
+}
+
+void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
+  if (row < nbElement) {
+    std::string textId(text(row, 0).latin1());
+    if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
+      selectRow(row);
+      QPopupMenu contextMenu(this,"dd");
+      string title;
+      title += displayNode ? "node " : "edge ";
+      title += textId;
+      contextMenu.insertItem(title);
+      contextMenu.insertSeparator();
+      contextMenu.insertItem(tr("Add/Remove selection"));
+      contextMenu.insertItem(tr("Select"));
+      contextMenu.insertItem(tr("Delete"));
+      int menuId = contextMenu.exec(pos, 2);
+      clearSelection();
+      if (menuId == -1)
+	return;
+      unsigned int itemId = (unsigned int) atoi(textId.c_str());
+      Observable::holdObservers();
+      if (menuId == contextMenu.idAt(5)) { // Delete
+	// delete graph item
+	if (displayNode)
+	  graph->delNode(node(itemId));
+	else
+	  graph->delEdge(edge(itemId));
+      } else {
+	BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+	if (menuId == contextMenu.idAt(3)) { // Select
+	  // empty selection
+	  elementSelected->setAllNodeValue(false);
+	  elementSelected->setAllEdgeValue(false);
+	}
+	// select graph item
+	if (displayNode) {
+	  node tmpNode(itemId);
+	  elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+	} else {
+	  edge tmpEdge(itemId);
+	  elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
+	}
+      }
+      Observable::unholdObservers();	  
+    }
+  }
 }

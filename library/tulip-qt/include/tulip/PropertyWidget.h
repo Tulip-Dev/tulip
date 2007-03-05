@@ -59,6 +59,9 @@ private :
   unsigned int nbElement;
   tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
+  
+private slots:
+  void showContextMenu(int row, int col, const QPoint & pos); 
 
 public slots:  
   void changeProperty(tlp::Graph *,const std::string &name);
