@@ -413,52 +413,39 @@ namespace {
 	  leD->setText( QString("%1").arg(v.getD()) );
 	}
 
-	// PropertyInterface*
-	else if( inG && ip.typeName == TN(PropertyInterface*) ) {
+	// PropertyInterface* or Typed Proxy
+	else if (inG &&
+		 (ip.typeName == TN(PropertyInterface*)
+		  || ip.typeName == TN(BooleanProperty)
+		  || ip.typeName == TN(DoubleProperty)
+		  || ip.typeName == TN(LayoutProperty)
+		  || ip.typeName == TN(StringProperty)
+		  || ip.typeName == TN(IntegerProperty)
+		  || ip.typeName == TN(SizeProperty)
+		  || ip.typeName == TN(ColorProperty))) {
 	  stringA proxyA;
 	  PropertyInterface * curProxy = 0;
 	  if( !inSet || !inSet->get
 	      (ip.name,curProxy) )
 	    curProxy = 0;
-	  int curIdx = getAllProperties( proxyA, inG, curProxy );
+	  int curIdx;
+	  if (ip.typeName == TN(PropertyInterface*))
+	    curIdx = getAllProperties( proxyA, inG, curProxy );
+	  else
+	    curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
 	    for( uint i = 0 ; i < proxyA.size() ; i++ )
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
-	    if( curIdx >= 0 )
-	      cb->setCurrentItem( curIdx );
 	    // if property is not mandatory, insert None
-	    if (!inDef.isMandatory(ip.name))
+	    if (!inDef.isMandatory(ip.name)) {
 	      cb->insertItem(NONE_PROP, 0);
-	  }
-	}
-
-	// Typed Proxy
-	else if( inG &&
-		 ( ip.typeName == TN(BooleanProperty)
-		   || ip.typeName == TN(DoubleProperty)
-		   || ip.typeName == TN(LayoutProperty)
-		   || ip.typeName == TN(StringProperty)
-		   || ip.typeName == TN(IntegerProperty)
-		   || ip.typeName == TN(SizeProperty)
-		   || ip.typeName == TN(ColorProperty) ) ) {
-	  stringA proxyA;
-	  PropertyInterface * curProxy = 0;
-	  if( !inSet || !inSet->get
-	      (ip.name,curProxy) )
-	    curProxy = 0;
-	  int curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
-	  if( proxyA.size() ) {
-	    QComboBox * cb = new QComboBox( this );
-	    for( uint i = 0 ; i < proxyA.size() ; i++ )
-	      cb->insertItem( proxyA[i].c_str() );
-	    ip.wA.push_back( cb );
-	    if( curIdx >= 0 )
+	      if ( curIdx >= 0 )
+		++curIdx;
+	    }
+	    if (curIdx >= 0)
 	      cb->setCurrentItem( curIdx );
-	    // if property is not mandatory, insert None
-	    if (!inDef.isMandatory(ip.name))
-	      cb->insertItem(NONE_PROP, 0);
 	  }
 	}
 	// StringCollection
@@ -632,26 +619,23 @@ namespace {
 	}
 
 	// PropertyInterface*
-	else if( inG && ip.typeName == TN(PropertyInterface*) ) {
+	else if (inG &&
+		 (ip.typeName == TN(PropertyInterface*)
+		  || ip.typeName == TN(BooleanProperty)
+		  || ip.typeName == TN(DoubleProperty)
+		  || ip.typeName == TN(LayoutProperty)
+		  || ip.typeName == TN(StringProperty)
+		  || ip.typeName == TN(IntegerProperty)
+		  || ip.typeName == TN(SizeProperty)
+		  || ip.typeName == TN(ColorProperty))) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
 	  string propName(cb->currentText().latin1());
 	  if (propName != NONE_PROP)
 	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
-	}
-
-	// Typed Proxy
-	else if(	inG &&
-			(	ip.typeName == TN(BooleanProperty)
-				||	ip.typeName == TN(DoubleProperty)
-				||	ip.typeName == TN(LayoutProperty)
-				||	ip.typeName == TN(StringProperty)
-				||	ip.typeName == TN(IntegerProperty)
-				||	ip.typeName == TN(SizeProperty)
-				||	ip.typeName == TN(ColorProperty) )		) {
-	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string propName(cb->currentText().latin1());
-	  if (propName != NONE_PROP)
-	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
+	  else {
+	    PropertyInterface * curProxy;
+	    outSet.getAndFree(ip.name, curProxy);
+	  }
 	}
 	
 	// StringCollection
