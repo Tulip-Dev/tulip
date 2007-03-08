@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.24.2.19 $)
+AC_REVISION($Revision: 1.24.2.20 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0B3)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -324,6 +324,7 @@ Makefile
 library/Makefile
 library/tulip/Makefile
 library/tulip/include/Makefile
+library/tulip/include/tulip/TulipRelease.h
 library/tulip/src/Makefile
 library/tulip-ogl/Makefile
 library/tulip-ogl/bitmaps/Makefile
