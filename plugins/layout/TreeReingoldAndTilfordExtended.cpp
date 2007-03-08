@@ -4,7 +4,7 @@
 #include <tulip/ForEach.h>
 #include "TreeReingoldAndTilfordExtended.h"
 
-LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","0","2","Tree");
+LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","1.0","Tree");
 using namespace std;
 using namespace tlp;
 

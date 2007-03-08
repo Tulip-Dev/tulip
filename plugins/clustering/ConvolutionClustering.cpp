@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","0","1");
+ALGORITHMPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","1.0");
 
 //================================================================================
   ConvolutionClustering::ConvolutionClustering(AlgorithmContext context):Algorithm(context) {}

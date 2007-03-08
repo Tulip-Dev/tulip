@@ -3,7 +3,7 @@
 #include <tulip/Rectangle.h>
 #include "SpringElectrical.h"
 
-LAYOUTPLUGINOFGROUP(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","0","1","Force Directed");
+LAYOUTPLUGINOFGROUP(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","1.0","Force Directed");
 
 using namespace std;
 using namespace tlp;

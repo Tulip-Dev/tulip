@@ -58,7 +58,7 @@ GLYPHPLUGIN(SquareBorder, "SquareBorder",
             "Julien Testut, Antony Durand, Pascal Ollier,"
             "Yashvin Nababsing, Sebastien Leclerc, Ruchon Thibault,"
             "Eric Dauchier",
-            "09/07/2004", "Textured square22", "1", "1", 100);
+            "09/07/2004", "Textured square22", "1.0", 100);
 
 const float SquareBorder::MAX_BORDER_COEF = 0.8;
 float SquareBorder::borderProportion = 0;

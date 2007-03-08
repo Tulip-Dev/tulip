@@ -39,7 +39,7 @@ protected:
   void drawHexagoneBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1", "1", 13);
+GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13);
 //===================================================================================
 Hexagone::Hexagone(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

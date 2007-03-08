@@ -26,6 +26,7 @@ public:
   virtual bool pluginExists(const std::string &pluginName)=0;
   virtual void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0)=0;
   virtual StructDef getPluginParameters(std::string name)=0;
+  virtual std::string getPluginRelease(std::string name)=0;
   virtual std::list<tlp::Dependency> getPluginDependencies(std::string name)=0;
   virtual std::string getPluginsClassName()=0;
   virtual void removePlugin(const std::string& name)=0;
@@ -56,12 +57,14 @@ public:
   std::map<std::string,StructDef> objParam;
   std::set<std::string> objNames;
   std::map<std::string, std::list<tlp::Dependency> > objDeps;
+  std::map<std::string, std::string> objRels;
 
   Iterator<std::string>* availablePlugins();
   bool pluginExists(const std::string& pluginName);
   void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0);
   ObjectType *getPluginObject(const std::string& name, Context p);
   StructDef getPluginParameters(std::string name);
+  std::string getPluginRelease(std::string name);
   std::list<tlp::Dependency> getPluginDependencies(std::string name);
   std::string getPluginsClassName();
   void registerPlugin(ObjectFactory* objectFactory);
@@ -74,6 +77,18 @@ public:
   PropertyFactory(){}
   virtual ~PropertyFactory() {}
   virtual T* createPluginObject(const PropertyContext &context)=0;
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  virtual  std::string getMinor() const  {
+    return tlp::getMinor(getRelease());
+  }
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
 };
 
 /*@}*/

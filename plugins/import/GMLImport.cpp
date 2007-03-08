@@ -456,4 +456,4 @@ public:
 };
 /*@}*/
 
-IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","GML Import plugin","1.0","File")

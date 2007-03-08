@@ -139,4 +139,4 @@ public:
   }
 };
 /*@}*/
-EXPORTPLUGIN(GML,"GML","Auber David","31/07/2001","0","0","1")
+EXPORTPLUGIN(GML,"GML","Auber David","31/07/2001","GML Export plugin","1.0")

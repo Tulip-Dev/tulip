@@ -17,7 +17,7 @@
 #include <tulip/ForEach.h>
 #include "Circular.h"
 
-LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","0","1","Basic");
+LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.0","Basic");
 
 using namespace std;
 using namespace tlp;
@@ -41,15 +41,13 @@ namespace {
   };
 }
 
-static char *EqualValueParams[] = {"Property", 0};
-
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addParameter<SizeProperty>("nodeSize", paramHelp[0], "viewSize");
   addParameter<bool>("search_cycle", paramHelp[1], "false");
   // Connected component metric dependency
-  addDependency<DoubleAlgorithm>("Connected Component");
+  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   // Equal Value algorithm dependency
-  addDependency<Algorithm>("Equal Value", EqualValueParams);
+  addDependency<Algorithm>("Equal Value", "1.0");
 }
 
 namespace {

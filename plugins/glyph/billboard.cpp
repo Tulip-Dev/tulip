@@ -40,7 +40,7 @@ protected:
   void drawBillboard();
 };
 
-GLYPHPLUGIN(Billboard, "2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1", "1", 7);
+GLYPHPLUGIN(Billboard, "2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", 7);
 
 //===================================================================================
 Billboard::Billboard(GlyphContext *gc): Glyph(gc),listOk(false) {

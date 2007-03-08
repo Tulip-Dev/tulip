@@ -238,4 +238,4 @@ public:
   }
 };
 
-COLORPLUGIN(MetricColorMapping,"Metric Mapping","Auber","04/07/2003","0","0","1");
+COLORPLUGIN(MetricColorMapping,"Metric Mapping","Auber","04/07/2003","Color metric mapping plugin","1.0");

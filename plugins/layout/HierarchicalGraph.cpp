@@ -13,7 +13,7 @@
 #include "HierarchicalGraph.h"
 
 
-LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","0","1","Hierarchical");
+LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical");
 
 using namespace std;
 using namespace tlp;
@@ -57,16 +57,13 @@ namespace {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
-static char *HierarchicalTreeParams[] =
-  {"nodeSize", "edgeLength", "layer spacing", "node spacing", "orthogonal", "orientation", 0};
-
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
   addParameter<float> ("node spacing", paramHelp[3], "18." );
-  addDependency<DoubleAlgorithm>("DagLevel");
-  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", HierarchicalTreeParams);
+  addDependency<DoubleAlgorithm>("DagLevel", "1.0");
+  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.0");
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}

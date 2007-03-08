@@ -31,7 +31,7 @@ protected:
   void drawTriangleBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1", "1", 11);
+GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11);
 //===================================================================================
 Triangle::Triangle(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

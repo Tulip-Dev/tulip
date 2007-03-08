@@ -36,7 +36,14 @@ namespace tlp {
    * \warning Don't forget to check the stream with ios::bad()!
    */
   TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
-  
+  /**
+   * Extracts Major number from a release number
+   */
+  TLP_SCOPE std::string getMajor(const std::string &release);
+  /**
+   * Extracts Minor number from a release number
+   */
+  TLP_SCOPE std::string getMinor(const std::string &release);
 };
 
 #endif

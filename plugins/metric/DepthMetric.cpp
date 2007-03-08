@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "DepthMetric.h"
 
-DOUBLEPLUGINOFGROUP(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","0","2","Tree");
+DOUBLEPLUGINOFGROUP(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

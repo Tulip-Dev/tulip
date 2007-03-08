@@ -3,7 +3,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(RandomMetric,"Random","David Auber","04/10/2001","Alpha","0","1","Misc")
+DOUBLEPLUGINOFGROUP(RandomMetric,"Random","David Auber","04/10/2001","Alpha","1.0","Misc")
 
 //===========================================
 RandomMetric::RandomMetric(const PropertyContext &context):DoubleAlgorithm(context) 

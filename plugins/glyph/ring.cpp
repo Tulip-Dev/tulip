@@ -41,7 +41,7 @@ protected:
   void drawRingBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1", "1", 15);
+GLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15);
 //===================================================================================
 Ring::Ring(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

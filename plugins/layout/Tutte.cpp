@@ -4,7 +4,7 @@
 #include "Tutte.h"
 
 
-LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2","Planar");
+LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar");
 
 using namespace std;
 using namespace tlp;

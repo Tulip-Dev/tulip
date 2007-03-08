@@ -13,7 +13,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

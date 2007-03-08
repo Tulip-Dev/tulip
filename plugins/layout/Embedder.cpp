@@ -43,7 +43,7 @@ private:
   hash_map<node, unsigned int> rmap;
 };
 
-LAYOUTPLUGINOFGROUP(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "0", "1", "Force Directed");
+LAYOUTPLUGINOFGROUP(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "1.0", "Force Directed");
 
 using namespace std;
 using namespace tlp;

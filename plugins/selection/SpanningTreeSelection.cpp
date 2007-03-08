@@ -3,7 +3,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","0","1");
+BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

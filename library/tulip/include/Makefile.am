@@ -87,6 +87,10 @@ nobase_include_HEADERS = \
         tulip/GraphDecorator.h \
 	tulip/ForEach.h
 
+nobase_nodist_include_HEADERS = tulip/TulipRelease.h
+
+nobase_dist_noinst_DATA = tulip/TulipRelease.h.in
+
 noinst_HEADERS = tulip/TLPParser.h \
 	tulip/BmdLink.h \
 	tulip/BmdList.h \

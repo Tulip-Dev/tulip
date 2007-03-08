@@ -161,5 +161,5 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(AdjacencyMatrixImport,"Adjacency Matrix","Auber David", "9/02/2004","0","0","1","File")
+IMPORTPLUGINOFGROUP(AdjacencyMatrixImport,"Adjacency Matrix","Auber David", "9/02/2004","","1.0","File")
 

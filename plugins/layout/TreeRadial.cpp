@@ -17,7 +17,7 @@ public:
   DoubleProperty *leaves;
 
   TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
-    addDependency<DoubleAlgorithm>("Leaf");
+    addDependency<DoubleAlgorithm>("Leaf", "1.0");
   }
 
   void dfsPlacement(node n, int depth, double alphaStart, double alphaEnd) {
@@ -83,4 +83,4 @@ public:
   void reset() {}
 };
 /*@}*/
-LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","0","1","Tree");
+LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","1.0","Tree");

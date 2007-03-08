@@ -45,6 +45,18 @@ public:
   }
   virtual ~AlgorithmFactory() {}
   virtual Algorithm * createPluginObject(AlgorithmContext)=0;
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  virtual  std::string getMinor() const  {
+    return tlp::getMinor(getRelease());
+  }
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
 };
 /*@}*/
 

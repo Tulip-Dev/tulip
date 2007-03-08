@@ -34,7 +34,7 @@ private:
   bool listOk;
 };
 //===========================================================
-GLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1", "1", 3);
+GLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", 3);
 //===================================================================================
 Cone::Cone(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

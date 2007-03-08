@@ -15,7 +15,7 @@
 #include <qinputdialog.h>
 #include <qstring.h>
 
-BOOLEANPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

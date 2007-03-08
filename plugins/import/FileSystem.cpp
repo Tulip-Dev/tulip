@@ -186,4 +186,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(FileSystem,"File system directory", "Auber", "16/12/2002", "0", "0", "1", "Misc")
+IMPORTPLUGINOFGROUP(FileSystem,"File system directory", "Auber", "16/12/2002", "", "1.0", "Misc")

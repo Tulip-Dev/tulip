@@ -105,7 +105,7 @@ GLYPHPLUGIN(SquareBorderTex, "SquareBorderTex",
             "Julien Testut, Antony Durand, Pascal Ollier,"
             "Yashvin Nababsing, Sebastien Leclerc, Ruchon Thibault,"
             "Eric Dauchier",
-            "09/07/2004", "Textured square22", "1", "1", 101);
+            "09/07/2004", "Textured square22", "1.0", 101);
             
 //====================================================================
 SquareBorderTex::SquareBorderTex(GlyphContext* gc):Glyph(gc){

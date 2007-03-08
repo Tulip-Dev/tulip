@@ -379,7 +379,7 @@ struct WebImport:public ImportModule {
     addParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
     addParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
     addParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
-    addDependency<LayoutAlgorithm>("GEM (Frick)");
+    addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
   }
 
   //========================================================
@@ -614,4 +614,4 @@ struct WebImport:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(WebImport,"Web site","Auber","15/11/2004","0","0","1","Misc")
+IMPORTPLUGINOFGROUP(WebImport,"Web site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")

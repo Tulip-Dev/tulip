@@ -39,7 +39,7 @@ protected:
   void drawPentagoneBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1", "1", 12);
+GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12);
 //===================================================================================
 Pentagone::Pentagone(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

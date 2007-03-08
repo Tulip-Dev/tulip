@@ -40,13 +40,14 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
     (*itD).factoryName = std::string(tlp::demangleTlpClassName(factoryDepName));
   }
   objDeps[pluginName] = dependencies;
+  objRels[pluginName] = objectFactory->getRelease();
   if (currentLoader!=0) currentLoader->loaded(
 					      pluginName,
 					      objectFactory->getAuthor(),
 					      objectFactory->getDate(),
 					      objectFactory->getInfo(),
 					      objectFactory->getRelease(),
-					      objectFactory->getVersion(),
+					      objectFactory->getTulipRelease(),
 					      dependencies
 					      );
 }
@@ -57,6 +58,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::removePlugin(const 
   objMap.erase(name);
   objParam.erase(name);
   objDeps.erase(name);
+  objRels.erase(name);
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
@@ -83,6 +85,8 @@ ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginOb
   typename ObjectCreator::iterator it;
 #ifndef NDEBUG 
   std::cerr << "TemplateFactory::GetObject: " << name << std::endl;  
+  c.factory = this;
+  c.name = name;
 #endif
   it=objMap.find(name);
   if (it!=objMap.end()) return (*it).second->createPluginObject(c);
@@ -93,6 +97,12 @@ template<class ObjectFactory, class ObjectType, class Context>
 tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginParameters(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objParam[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
+std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginRelease(std::string name) {
+  assert(objMap.find(name)!=objMap.end());
+  return objRels[name];
 }
 
 template<class ObjectFactory, class ObjectType, class Context>

@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "LeafMetric.h"
 
-DOUBLEPLUGINOFGROUP(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","0","1","Tree");
+DOUBLEPLUGINOFGROUP(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

@@ -160,30 +160,25 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
 	for (; itD != dependencies.end(); ++itD) {
 	  string factoryDepName = (*itD).factoryName;
 	  string pluginDepName = (*itD).pluginName;
-	  bool removed = false;
 	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
 	    if (plug)
 	      plug->aborted(pluginName, tfi->getPluginsClassName() +
 			    " '" + pluginName + "' will be removed, it depends on missing " +
-			    factoryDepName + " '" + pluginDepName + "'");
+			    factoryDepName + " '" + pluginDepName + "'.");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
-	    removed = true;
 	  }
-	  char** pluginDepParams = (*itD).pluginParams;
-	  if (!removed && pluginDepParams) {
-	    StructDef params = 
-	      (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginParameters(pluginDepName);
-	    for (unsigned int i = 0; pluginDepParams[i]; ++i) {
-	      if (!params.hasField(pluginDepParams[i])) {
-		if (plug)
-		  plug->aborted(pluginName, tfi->getPluginsClassName() +
-				" '" + pluginName + "' will be removed, it depends on the undefined parameter '" +
-				pluginDepParams[i] + "' of " + factoryDepName + " '" + pluginDepName + "'");
-		tfi->removePlugin(pluginName);
-		depsNeedCheck = true;
-	      }
-	    }
+	  string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+	  string releaseDep = (*itD).pluginRelease;
+	  if (getMajor(release) != getMajor(releaseDep) ||
+	      getMinor(release) != getMinor(releaseDep)) {
+	    if (plug)
+	      plug->aborted(pluginName, tfi->getPluginsClassName() +
+			    " '" + pluginName + "' will be removed, it depends on release " +
+			    releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+			    release + " is loaded.");
+	    tfi->removePlugin(pluginName);
+	    depsNeedCheck = true;
 	  }
 	}
       } delete itP;
@@ -226,3 +221,20 @@ char *tlp::demangleTlpClassName(const char* className) {
 #else
 #error define symbols demangling function
 #endif
+
+//=========================================================
+std::string tlp::getMajor(const std::string& v) {
+  unsigned int pos = v.find('.');
+  return v.substr(0, pos);
+}
+
+//=========================================================
+std::string tlp::getMinor(const std::string& v) {
+  unsigned int pos = v.find('.');
+  if (pos == string::npos)
+    return string("0");
+  unsigned int rpos = v.rfind('.');
+  if (pos == rpos)
+    return v.substr(0, pos);
+  return v.substr(pos + 1, rpos - pos - 1);
+}

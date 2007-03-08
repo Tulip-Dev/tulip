@@ -14,7 +14,7 @@ LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
              "Julien Testut, Antony Durand, Pascal Ollier, "
              "Yashvin Nababsing, Sebastien Leclerc, "
              "Thibault Ruchon, Eric Dauchier",
-		    "03/11/2004", "ok", "0", "1", "Tree");
+		    "03/11/2004", "ok", "1.0", "Tree");
 
 //====================================================================
 

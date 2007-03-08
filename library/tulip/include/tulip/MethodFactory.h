@@ -19,6 +19,7 @@
 #include <string>
 
 #include "Plugin.h"
+#include "TulipRelease.h"
 #include "PluginContext.h"
 #include "SizeAlgorithm.h"
 #include "IntegerAlgorithm.h"
@@ -39,7 +40,7 @@
 // Declaration of Properties plugin mechanism
 //===========================================================
 /// Macro for factorization of source code pf Properties plugin mechanism
-#define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,V,R,G)          \
+#define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,R,G)          \
 class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
  public:						\
@@ -55,7 +56,7 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
   std::string getDate() const {return std::string(D);}	\
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
-  std::string getVersion() const {return std::string(V);}\
+  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
   tlp::T##Algorithm * createPluginObject(const tlp::PropertyContext &context)\
    {							\
      C *tmp=new C(context);				\
@@ -66,28 +67,28 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define BOOLEANPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Boolean,C,N,A,D,I,V,R,G)
-#define BOOLEANPLUGIN(C,N,A,D,I,V,R) BOOLEANPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define COLORPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,V,R,G)
-#define COLORPLUGIN(C,N,A,D,I,V,R) COLORPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,V,R,G)
-#define DOUBLEPLUGIN(C,N,A,D,I,V,R)  DOUBLEPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,V,R,G)
-#define GRAPHPLUGIN(C,N,A,D,I,V,R) GRAPHPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,V,R,G)
-#define INTEGERPLUGIN(C,N,A,D,I,V,R) INTEGERPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,V,R,G)
-#define LAYOUTPLUGIN(C,N,A,D,I,V,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define SIZEPLUGINOFGROUP(C,N,A,D,I,V,R,G) PROPERTYPLUGINFACTORY(Size,C,N,A,D,I,V,R,G)
-#define SIZEPLUGIN(C,N,A,D,I,V,R) SIZEPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define STRINGPLUGINOFGROUP(C,N,A,D,I,V,R,G)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,V,R,G)
-#define STRINGPLUGIN(C,N,A,D,I,V,R)  STRINGPLUGINOF(C,N,A,D,I,V,R,"")
+#define BOOLEANPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Boolean,C,N,A,D,I,R,G)
+#define BOOLEANPLUGIN(C,N,A,D,I,R) BOOLEANPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define COLORPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Color,C,N,A,D,I,R,G)
+#define COLORPLUGIN(C,N,A,D,I,R) COLORPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define DOUBLEPLUGINOFGROUP(C,N,A,D,I,R,G)  PROPERTYPLUGINFACTORY(Double,C,N,A,D,I,R,G)
+#define DOUBLEPLUGIN(C,N,A,D,I,R)  DOUBLEPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define GRAPHPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Graph,C,N,A,D,I,R,G)
+#define GRAPHPLUGIN(C,N,A,D,I,R) GRAPHPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define INTEGERPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Integer,C,N,A,D,I,R,G)
+#define INTEGERPLUGIN(C,N,A,D,I,R) INTEGERPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define LAYOUTPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Layout,C,N,A,D,I,R,G)
+#define LAYOUTPLUGIN(C,N,A,D,I,R) LAYOUTPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define SIZEPLUGINOFGROUP(C,N,A,D,I,R,G) PROPERTYPLUGINFACTORY(Size,C,N,A,D,I,R,G)
+#define SIZEPLUGIN(C,N,A,D,I,R) SIZEPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define STRINGPLUGINOFGROUP(C,N,A,D,I,R,G)  PROPERTYPLUGINFACTORY(String,C,N,A,D,I,R,G)
+#define STRINGPLUGIN(C,N,A,D,I,R)  STRINGPLUGINOF(C,N,A,D,I,R,"")
 
 //===========================================================
 // Declaration of Graph modification plug-in Mechanism
 //===========================================================
 /// Macro for factorization of source code of Graph modification plugin mechanism 
-#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,V,R,G)	\
+#define GRAPHPLUGINFACTORY(T,C,N,A,D,I,R,G)	\
 class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
  public:						\
@@ -102,7 +103,7 @@ class C##T##Factory:public tlp::T##Factory              \
   std::string getDate() const {return std::string(D);}	\
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
-  std::string getVersion() const {return std::string(V);}\
+  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
   tlp::T * createPluginObject(AlgorithmContext context)	\
    {							\
      C *tmp=new C(context);				\
@@ -113,11 +114,11 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(Algorithm,C,N,A,D,I,V,R,G)
-#define ALGORITHMPLUGIN(C,N,A,D,I,V,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,V,R,"")
-#define EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,V,R,G)
-#define EXPORTPLUGIN(C,N,A,D,I,V,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"") 
-#define IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,V,R,G)
-#define IMPORTPLUGIN(C,N,A,D,I,V,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,V,R,"")
+#define ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(Algorithm,C,N,A,D,I,R,G)
+#define ALGORITHMPLUGIN(C,N,A,D,I,R) ALGORITHMPLUGINOFGROUP(C,N,A,D,I,R,"")
+#define EXPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ExportModule,C,N,A,D,I,R,G)
+#define EXPORTPLUGIN(C,N,A,D,I,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,R,"") 
+#define IMPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,R,G)
+#define IMPORTPLUGIN(C,N,A,D,I,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
 /*@}*/
 #endif

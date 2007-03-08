@@ -87,4 +87,4 @@ struct RandomGraph:public ImportModule {
     return true;
   }
 };
-IMPORTPLUGINOFGROUP(RandomGraph,"Random General Graph","Auber","16/06/2002","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(RandomGraph,"Random General Graph","Auber","16/06/2002","","1.0","Graphs")

@@ -39,7 +39,7 @@ protected:
   void drawSquareBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square", "1", "1", 4);
+GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4);
 //===================================================================================
 Square::Square(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

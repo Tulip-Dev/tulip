@@ -14,7 +14,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1","Hierarchical")
+LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
 
 namespace {
   const char * paramHelp[] = {
@@ -41,9 +41,9 @@ namespace {
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
-  addDependency<BooleanAlgorithm>("SpanningDag");
-  addDependency<DoubleAlgorithm>("DagLevel");
-  addDependency<LayoutAlgorithm>("Cone Tree");
+  addDependency<BooleanAlgorithm>("SpanningDag", "1.0");
+  addDependency<DoubleAlgorithm>("DagLevel", "1.0");
+  addDependency<LayoutAlgorithm>("Cone Tree", "1.0");
 }
 
 GeneralGraph3D::~GeneralGraph3D() {}

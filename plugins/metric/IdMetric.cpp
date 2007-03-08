@@ -4,7 +4,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1","Misc");
+DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","1.0","Misc");
 
 //==================================================================
 IdMetric::IdMetric(const PropertyContext &context):DoubleAlgorithm(context) {

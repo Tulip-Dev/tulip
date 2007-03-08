@@ -13,7 +13,7 @@
 
 using namespace tlp;
 
-BOOLEANPLUGIN(ReachableSubGraphSelection,"ReachableSubGraph","David Auber","01/12/1999","Alpha","0","1");
+BOOLEANPLUGIN(ReachableSubGraphSelection,"ReachableSubGraph","David Auber","01/12/1999","Alpha","1.0");
 
 namespace {
   const char * paramHelp[] = {

@@ -14,7 +14,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-BOOLEANPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","0","1");
+BOOLEANPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

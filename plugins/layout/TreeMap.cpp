@@ -2,7 +2,7 @@
 #include <tulip/TreeTest.h>
 #include "TreeMap.h"
 
-LAYOUTPLUGINOFGROUP(TreeMap,"Tree Map (Shneiderman)","David Auber","01/12/1999","ok","0","1","Tree");
+LAYOUTPLUGINOFGROUP(TreeMap,"Tree Map (Shneiderman)","David Auber","01/12/1999","ok","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

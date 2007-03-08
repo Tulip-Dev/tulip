@@ -91,4 +91,4 @@ struct RandomTreeGeneral:public ImportModule {
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }
 };
-IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","","1.0","Graphs")

@@ -3,7 +3,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(ArityMetric,"Degree","David Auber","04/10/2001","Stable","0","1","Graph");
+DOUBLEPLUGINOFGROUP(ArityMetric,"Degree","David Auber","04/10/2001","Stable","1.0","Graph");
 
 namespace {
   const char * paramHelp[] = {

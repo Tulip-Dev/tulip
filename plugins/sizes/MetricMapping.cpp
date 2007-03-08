@@ -182,4 +182,4 @@ private:
   bool nodeoredge;
 };
 /*@}*/
-SIZEPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","0","0","1");
+SIZEPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","","1.0");

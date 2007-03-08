@@ -17,12 +17,13 @@ namespace tlp {
   struct Dependency {
     std::string factoryName;
     std::string pluginName;
-    char** pluginParams;
+    std::string pluginRelease;
 
-    Dependency(std::string fName, std::string pName, char* pParams[]) {
+    Dependency(std::string fName, std::string pName,
+	       std::string pRelease) {
       factoryName = fName;
       pluginName = pName;
-      pluginParams = pParams;
+      pluginRelease = pRelease;
     }
   };
 
@@ -31,8 +32,9 @@ namespace tlp {
     ///
     std::list<Dependency> dependencies;
     /// 
-    void addDependency(const char* factory, const char *name, char* params[]) {
-      dependencies.push_back(Dependency(factory, name, params));
+    void addDependency(const char* factory, const char *name,
+		       const char *release) {
+      dependencies.push_back(Dependency(factory, name, release));
     }
 
   public:
@@ -44,8 +46,8 @@ namespace tlp {
      *  which is supposing to have the parameters specified as second argument.
      *  If non null the second argument needs to be a null terminated array of character strings.
      */
-    template<typename Ty> void addDependency(const char* name, char* params[] = 0) {
-      addDependency(typeid(Ty).name(), name, params);
+    template<typename Ty> void addDependency(const char* name, const char* release) {
+      addDependency(typeid(Ty).name(), name, release);
     }
   };
   /*@}*/

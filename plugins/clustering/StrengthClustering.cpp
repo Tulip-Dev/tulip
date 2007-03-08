@@ -21,7 +21,7 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-ALGORITHMPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","0","1");
+ALGORITHMPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","1.0");
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
@@ -174,7 +174,7 @@ void drawGraph(Graph *tmpg) {
     layoutName = "Circular";
   else
     layoutName = "GEM (Frick)";
-  string sizesName="Auto_sizing";
+  string sizesName="Auto sizing";
   tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProperty>("viewLayout"),errMsg);
   if (tmpg->numberOfNodes() < 300)
     tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizeProperty>("viewSize"),errMsg);
@@ -313,9 +313,12 @@ namespace {
 //================================================================================
 StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
-  addDependency<DoubleAlgorithm>("Connected Component");
-  addDependency<DoubleAlgorithm>("Strength");
-  addDependency<Algorithm>("QuotientClustering");
+  addDependency<Algorithm>("QuotientClustering", "1.0");
+  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
+  addDependency<DoubleAlgorithm>("Strength", "1.0");
+  addDependency<LayoutAlgorithm>("Circular", "1.0");
+  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
+  addDependency<SizeAlgorithm>("Auto sizing", "1.0");
 }
 
 //==============================================================================

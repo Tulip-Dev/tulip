@@ -72,4 +72,4 @@ public:
   //====================================================
 };
 /*@}*/
-SIZEPLUGIN(FitToLabel,"Fit to label","Carceles,Niotout,Bardet,Mercadal,Ng Sing Kwong","25/01/2006","0","0","1");
+SIZEPLUGIN(FitToLabel,"Fit to label","Carceles,Niotout,Bardet,Mercadal,Ng Sing Kwong","25/01/2006","","1.0");

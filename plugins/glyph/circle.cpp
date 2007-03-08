@@ -39,7 +39,7 @@ protected:
   void drawCircleBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1", "1", 14);
+GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.0", 14);
 //===================================================================================
 Circle::Circle(GlyphContext *gc): Glyph(gc),listOk(false) {
 }

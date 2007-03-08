@@ -94,4 +94,4 @@ public:
     return true;
   }
 };
-BOOLEANPLUGIN(OnValueSelection,"OnValueSelection","Maylis Delest","04/06/2003","Alpha","0","1")
+BOOLEANPLUGIN(OnValueSelection,"OnValueSelection","Maylis Delest","04/06/2003","Alpha","1.0")

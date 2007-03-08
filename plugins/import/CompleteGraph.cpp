@@ -57,4 +57,4 @@ struct CompleteGraph:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(CompleteGraph,"Complete General Graph","Auber","16/12/2002","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(CompleteGraph,"Complete General Graph","Auber","16/12/2002","","1.0","Graphs")

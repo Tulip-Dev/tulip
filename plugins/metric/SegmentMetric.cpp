@@ -4,7 +4,7 @@
 #include "SegmentMetric.h"
 
 
-DOUBLEPLUGINOFGROUP(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","0","1","Tree");
+DOUBLEPLUGINOFGROUP(SegmentMetric,"Segment","David Auber","19/02/2000","Alpha","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

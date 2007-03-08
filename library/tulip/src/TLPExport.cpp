@@ -302,6 +302,6 @@ public:
     return true;
   }
 };
-EXPORTPLUGIN(TLPExport,"tlp","Auber David","31/07/2001","0","1","0");
+  EXPORTPLUGIN(TLPExport,"tlp","Auber David","31/07/2001","TLP Export plugin", "1.0");
 /*@}*/
 }

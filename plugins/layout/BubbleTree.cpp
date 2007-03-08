@@ -7,7 +7,7 @@
 #include <tulip/TreeTest.h>
 #include "BubbleTree.h"
 
-LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1","1","Tree");
+LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree");
 
 using namespace std;
 using namespace stdext;

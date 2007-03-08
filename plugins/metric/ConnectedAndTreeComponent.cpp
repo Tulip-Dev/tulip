@@ -37,7 +37,7 @@ class ConnectedAndTreeComponent:public DoubleAlgorithm {
 public:
   ConnectedAndTreeComponent(const PropertyContext &context):DoubleAlgorithm(context){
     // Connected component metric dependency
-    addDependency<DoubleAlgorithm>("Connected Component");
+    addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   };
 
   void dfsErase(node n, Graph * sg, set<node> &deleted, MutableContainer<bool> &visited) {
@@ -115,4 +115,4 @@ public:
   }
 };
 /*@}*/
-DOUBLEPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","0","1","Component");
+DOUBLEPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","1.0","Component");

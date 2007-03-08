@@ -6,7 +6,7 @@
 #include "PathBooleanProperty.h"
 #include "LongestPath.h"
 
-BOOLEANPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","0","1");
+BOOLEANPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

@@ -7,12 +7,14 @@
 #endif
 
 #include <tulip/Plugin.h>
+#include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/GlGraph.h>
+#include <tulip/TlpTools.h>
 
 namespace tlp {
 
@@ -60,14 +62,26 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class GlyphFactory: public Plugin
-  {
+  class GlyphFactory: public Plugin {
   public:
     virtual ~GlyphFactory() {}
     ///
     virtual Glyph *createPluginObject(GlyphContext *gc)=0;
     ///
     virtual int getId() const=0;
+    
+    virtual  std::string getMajor() const {
+      return tlp::getMajor(getRelease());
+    }
+    virtual  std::string getMinor() const  {
+      return tlp::getMinor(getRelease());
+    }
+    virtual  std::string getTulipMajor() const {
+      return tlp::getMajor(getTulipRelease());
+    }
+    virtual  std::string getTulipMinor() const  {
+      return tlp::getMinor(getTulipRelease());
+    }
 
     static TLP_GL_SCOPE TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
     static TLP_GL_SCOPE void initFactory() {
@@ -80,7 +94,7 @@ namespace tlp {
 
 }
 
-#define GPLUGINFACTORY(T,C,N,A,D,I,V,R,ID,G)     \
+#define GPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
 class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
@@ -93,8 +107,8 @@ public:                                          \
   string getAuthor() const {return string(A);}	 \
   string getDate() const {return string(D);}	 \
   string getInfo() const {return string(I);}	 \
-  string getRelease() const {return string(R);}	 \
-  string getVersion() const {return string(V);}	 \
+  string getRelease() const {return string(R);}\
+  string getTulipRelease() const {return string(TULIP_RELEASE);}\
   int    getId() const {return ID;}		 \
   tlp::T * createPluginObject(tlp::GlyphContext *gc)	 \
   {						 \
@@ -106,7 +120,7 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define GLYPHPLUGINOFGROUP(C,N,A,D,I,V,R,ID,G) GPLUGINFACTORY(Glyph,C,N,A,D,I,V,R,ID,G)
-#define GLYPHPLUGIN(C,N,A,D,I,V,R,ID) GLYPHPLUGINOFGROUP(C,N,A,D,I,V,R,ID,"") 
+#define GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,G) GPLUGINFACTORY(Glyph,C,N,A,D,I,R,ID,G)
+#define GLYPHPLUGIN(C,N,A,D,I,R,ID) GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,"") 
 
 #endif //GLYPH_H

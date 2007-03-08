@@ -90,4 +90,4 @@ public:
   }
 };
 /*@}*/
-DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.0","Graph");

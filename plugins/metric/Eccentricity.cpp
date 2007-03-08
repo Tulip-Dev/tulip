@@ -3,7 +3,7 @@
 #include <tulip/ForEach.h>
 #include "Eccentricity.h"
 
-DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","1.0","Graph");
 
 using namespace std;
 using namespace tlp;

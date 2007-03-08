@@ -1,7 +1,7 @@
 #include <assert.h>
 #include "Random.h"
 
-LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","0","1","Basic");
+LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.0","Basic");
 
 using namespace std;
 using namespace tlp;

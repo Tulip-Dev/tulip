@@ -13,7 +13,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
+ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","1.0");
 
 namespace {
   const char * paramHelp[] = {

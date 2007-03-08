@@ -86,4 +86,4 @@ struct PlanarGraph:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","","1.0","Graphs")

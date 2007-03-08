@@ -22,4 +22,4 @@ public:
     return string(tmp);
   }
 };
-STRINGPLUGIN(IdLabels,"IdLabels","Auber","04/05/2001","0","0","1");
+STRINGPLUGIN(IdLabels,"IdLabels","Auber","04/05/2001","","1.0");

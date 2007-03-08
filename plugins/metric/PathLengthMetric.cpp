@@ -2,7 +2,7 @@
 #include <tulip/ForEach.h>
 #include "PathLengthMetric.h"
 
-DOUBLEPLUGINOFGROUP(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","0","2","Tree");
+DOUBLEPLUGINOFGROUP(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","1.0","Tree");
 
 using namespace std;
 using namespace tlp;
@@ -10,7 +10,7 @@ using namespace tlp;
 //=======================================
 PathLengthMetric::PathLengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {
   // Leaf metric needed
-  addDependency<DoubleAlgorithm>("Leaf");
+  addDependency<DoubleAlgorithm>("Leaf", "1.0");
 }
 //=======================================
 double PathLengthMetric::getNodeValue(const node n) {

@@ -3,7 +3,7 @@
 #include "TreeLeaf.h"
 
 
-LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","0","1","Tree");
+LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

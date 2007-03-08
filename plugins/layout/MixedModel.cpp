@@ -13,7 +13,7 @@
 
 #include <tulip/GraphTools.h>
 
-LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","0","1","Planar");
+LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar");
 
 using namespace std;
 using namespace tlp;
@@ -57,15 +57,13 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
-static char *EqualValueParams[] = {"Property", 0};
-
 MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
-  addDependency<DoubleAlgorithm>("Connected Component");
-  addDependency<Algorithm>("Equal Value", EqualValueParams);
+  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
+  addDependency<Algorithm>("Equal Value", "1.0");
 }
 //====================================================
 MixedModel::~MixedModel(){
