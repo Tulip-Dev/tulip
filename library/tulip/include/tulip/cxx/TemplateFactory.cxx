@@ -83,11 +83,6 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::loadPluginsFromDir(
 template<class ObjectFactory, class ObjectType, class Context>
 ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginObject(const std::string& name, Context c) {
   typename ObjectCreator::iterator it;
-#ifndef NDEBUG 
-  std::cerr << "TemplateFactory::GetObject: " << name << std::endl;  
-  c.factory = this;
-  c.name = name;
-#endif
   it=objMap.find(name);
   if (it!=objMap.end()) return (*it).second->createPluginObject(c);
   return 0;
