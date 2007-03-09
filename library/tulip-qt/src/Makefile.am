@@ -67,6 +67,23 @@ endif
 libtulip_qt@QT_VERSION@_la_LDFLAGS = -release ${RELEASE}  
 
 
+nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_PropertyWidget.cpp \
+	moc_ElementPropertiesWidgetData.cpp \
+	moc_ElementPropertiesWidget.cpp \
+	moc_FindSelection.cpp \
+	moc_FindSelectionData.cpp \
+	moc_RenderingParametersDialogData.cpp \
+	moc_SGHierarchyWidgetData.cpp \
+	FindSelectionData.cpp \
+	RenderingParametersDialogData.cpp \
+	GWOverviewWidgetData.cpp \
+	moc_SGHierarchyWidget.cpp \
+	moc_GWOverviewWidget.cpp \
+	moc_GWOverviewWidgetData.cpp
+
 dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlGraphWidget.cpp \
@@ -90,21 +107,6 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 
 CLEANFILES = $(BUILT_SOURCES)
 
-nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
-	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
-	moc_PropertyWidget.cpp \
-	moc_ElementPropertiesWidgetData.cpp \
-	moc_ElementPropertiesWidget.cpp \
-	moc_FindSelection.cpp \
-	moc_FindSelectionData.cpp \
-	moc_SGHierarchyWidgetData.cpp \
-	FindSelectionData.cpp \
-	GWOverviewWidgetData.cpp \
-	moc_SGHierarchyWidget.cpp \
-	moc_GWOverviewWidget.cpp \
-	moc_GWOverviewWidgetData.cpp
-
 if QT3
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) -o $@ $<
@@ -122,6 +124,9 @@ endif
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
+
+RenderingParametersDialogData.cpp: $(srcdir)/../designer/RenderingParametersDialog.ui ../include/tulip/RenderingParametersDialogData.h
+	$(UIC) -o $@ -impl ../include/tulip/RenderingParametersDialogData.h $<
 
 GWOverviewWidgetData.cpp: $(srcdir)/../designer/GWOverviewWidget.ui ../include/tulip/GWOverviewWidgetData.h
 	$(UIC) -o $@ -impl ../include/tulip/GWOverviewWidgetData.h $<

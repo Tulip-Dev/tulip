@@ -19,6 +19,7 @@
 #include <qmessagebox.h>
 #include <qinputdialog.h>
 #include <qpopupmenu.h>
+#include <qlabel.h>
 #else
 #include <QtCore/qstring.h>
 #include <QtGui/qpushbutton.h>
@@ -35,6 +36,7 @@
 #include <QtGui/qsizepolicy.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
+#include <qlabel.h>
 #include <Qt3Support/q3popupmenu.h>
 #include "tulip/Qt3ForTulip.h"
 #endif
@@ -65,6 +67,7 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   vScroll=verticalScrollBar();
   setColumnReadOnly(0, true);
   horizontalHeader()->setLabel(0, tr("Undefined"));
+  showProperties = false;
   connect(vScroll,SIGNAL(valueChanged(int)),SLOT(scroll(int)));
   connect(this,SIGNAL(valueChanged(int,int)),SLOT(changePropertyValue(int,int)));
   connect(this,SIGNAL(contextMenuRequested (int, int, const QPoint&)),
@@ -469,35 +472,59 @@ void  PropertyWidget::setAllEdgeValue() {
   Observable::unholdObservers();
 }
 
+void PropertyWidget::connectNotify ( const char * signal ) {
+  if (string(signal).find("showElementProperties") != string::npos)
+    showProperties = true;
+}
+
 void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
   if (row < nbElement) {
     std::string textId(text(row, 0).latin1());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QPopupMenu contextMenu(this,"dd");
+#if (QT_REL == 3)
+      string title("<font color=darkblue><b>");
+#else
       string title;
+#endif
       title += displayNode ? "node " : "edge ";
       title += textId;
-      contextMenu.insertItem(title);
+#if (QT_REL == 3)
+      title += "</b></font>";
+      QLabel *caption = new QLabel(title.c_str(), &contextMenu);
+      caption->setAlignment( Qt::AlignCenter ); 
+      contextMenu.insertItem(caption);
+#else
+      contextMenu.setItemEnabled(contextMenu.insertItem(tr(title.c_str())), false);
+#endif
       contextMenu.insertSeparator();
-      contextMenu.insertItem(tr("Add/Remove selection"));
-      contextMenu.insertItem(tr("Select"));
-      contextMenu.insertItem(tr("Delete"));
+      contextMenu.insertItem(tr("Add to/Remove from selection"));
+      int selectId = contextMenu.insertItem(tr("Select"));
+      int deleteId = contextMenu.insertItem(tr("Delete"));
+      int propId = -1;
+      if (showProperties) {
+	contextMenu.insertSeparator();
+	propId = contextMenu.insertItem(tr("Properties"));
+      }
       int menuId = contextMenu.exec(pos, 2);
       clearSelection();
       if (menuId == -1)
 	return;
       unsigned int itemId = (unsigned int) atoi(textId.c_str());
       Observable::holdObservers();
-      if (menuId == contextMenu.idAt(5)) { // Delete
+      if (menuId == deleteId) { // Delete
 	// delete graph item
 	if (displayNode)
 	  graph->delNode(node(itemId));
 	else
 	  graph->delEdge(edge(itemId));
-      } else {
+      }
+      if (showProperties && menuId == propId) {
+	emit showElementProperties(itemId, displayNode);
+      }	else {
 	BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-	if (menuId == contextMenu.idAt(3)) { // Select
+	if (menuId == selectId) { // Select
 	  // empty selection
 	  elementSelected->setAllNodeValue(false);
 	  elementSelected->setAllEdgeValue(false);

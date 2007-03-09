@@ -101,6 +101,13 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
 #include <tulip/GWInteractor.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/MouseSelectionEditor.h>
+#include <tulip/MouseNodeBuilder.h>
+#include <tulip/MouseEdgeBuilder.h>
+#include <tulip/MouseSelector.h>
+#include <tulip/MouseMagicSelector.h>
+#include <tulip/MouseBoxZoomer.h>
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
@@ -111,7 +118,6 @@
 #include "TabWidgetData.h"
 #include "GridOptionsWidget.h"
 #include "GWOverviewWidget.h"
-#include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
 
@@ -122,11 +128,11 @@ using namespace std;
 using namespace tlp;
 
 
-// we define a specific interactor to show element graph infos in nodeProperties
+// we define a specific interactor to show element graph infos in eltProperties
 class MouseShowElementInfos : public GWInteractor {
 public:
-  ElementPropertiesWidget *eltProperties;
-  MouseShowElementInfos(ElementPropertiesWidget *widget) :eltProperties(widget) {}
+  viewGl *vWidget;
+  MouseShowElementInfos(viewGl *widget) :vWidget(widget) {}
   ~MouseShowElementInfos(){}
   bool eventFilter(QObject *widget, QEvent *e) {
     if (e->type() == QEvent::MouseButtonPress &&
@@ -138,20 +144,27 @@ public:
       ElementType type;  
       if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
 	switch(type) {
-	case NODE: eltProperties->setCurrentNode(g->getRenderingParameters().getGraph(), tmpNode); break;
-	case EDGE: eltProperties->setCurrentEdge(g->getRenderingParameters().getGraph(), tmpEdge); break;
+	case NODE: vWidget->showElementProperties(tmpNode.id, true); break;
+	case EDGE: vWidget->showElementProperties(tmpEdge.id, true); break;
 	}
-	// show 'Element' tab in 'Info Editor'
-	QWidget *tab = eltProperties->parentWidget();
-	QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
-	tabWidget->showPage(tab);
 	return true;
       }
     }
     return false;
   }
-  GWInteractor *clone() { return new MouseShowElementInfos(eltProperties); }
+  GWInteractor *clone() { return new MouseShowElementInfos(vWidget); }
 };
+
+// the vectors of interactors associated to each action
+static vector<tlp::GWInteractor *>addEdgeInteractors;
+static vector<tlp::GWInteractor *>addNodeInteractors;
+static vector<tlp::GWInteractor *>deleteEltInteractors;
+static vector<tlp::GWInteractor *>graphNavigateInteractors;
+static vector<tlp::GWInteractor *>magicSelectionInteractors;
+static vector<tlp::GWInteractor *>editSelectionInteractors;
+static vector<tlp::GWInteractor *>selectInteractors;
+static vector<tlp::GWInteractor *>selectionInteractors;
+static vector<tlp::GWInteractor *>zoomBoxInteractors;
 
 //**********************************************************************
 ///Constructor of ViewGl
@@ -172,10 +185,8 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   aboutWidget=0;
   copyCutPasteGraph = 0;
   elementsDisabled = false;
-  tooltipsEnabled = false;
 
   //=======================================
-
   //MDI
   workspace->setScrollBarsEnabled( true );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
@@ -205,28 +216,22 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   this->addDockWindow(tabWidgetDock,"Data manipulation", Qt::DockLeft);
   tabWidget->show();
   tabWidgetDock->show();
-  //Create toolbar widget
-  mouseToolBarDock = new QDockWindow(this,"Tool Bar");
-  mouseToolBarDock->setCloseMode(QDockWindow::Always);
-  mouseToolBar = new ToolBar(mouseToolBarDock);
-  mouseToolBarDock->boxLayout()->add(mouseToolBar);
-  this->addDockWindow(mouseToolBarDock,"ToolBar", Qt::DockRight);
-  mouseToolBar->show();
-  mouseToolBarDock->show();
   //Init hierarchy visualization widget
   clusterTreeWidget=tabWidget->clusterTree;
   //Init Property Editor Widget
   propertiesWidget=tabWidget->propertyDialog;
+  connect(propertiesWidget->tableNodes, SIGNAL(showElementProperties(unsigned int,bool)),
+	  this, SLOT(showElementProperties(unsigned int,bool)));
+  connect(propertiesWidget->tableEdges, SIGNAL(showElementProperties(unsigned int,bool)),
+	  this, SLOT(showElementProperties(unsigned int,bool)));
   //Init Element info widget
-  nodeProperties = tabWidget->elementInfo;
-  mouseToolBar->setSelectInteractor(new MouseShowElementInfos(nodeProperties));
+  eltProperties = tabWidget->elementInfo;
 #ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
   statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
 #endif
 
-  ((Application*)qApp)->nodeProperties = nodeProperties;
   //connect signals related to graph replacement
   connect(clusterTreeWidget, SIGNAL(graphChanged(tlp::Graph *)), 
 	  this, SLOT(hierarchyChangeGraph(tlp::Graph *)));
@@ -245,11 +250,34 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(&exportGraphMenu, SIGNAL(activated(int)), SLOT(exportGraph(int)));
   connect(&importGraphMenu, SIGNAL(activated(int)), SLOT(importGraph(int)));
   connect(&exportImageMenu, SIGNAL(activated(int)), SLOT(exportImage(int)));
-  connect(&dialogMenu     , SIGNAL(activated(int)), SLOT(showDialog(int)));
+  connect(dialogMenu     , SIGNAL(activated(int)), SLOT(showDialog(int)));
   windowsMenu->setCheckable( TRUE );
   connect(windowsMenu, SIGNAL( aboutToShow() ), this, SLOT( windowsMenuAboutToShow() ) );
   Observable::unholdObservers();
   morph = new Morphing();
+
+  // initialize the vectors of interactors associated to each action
+  addEdgeInteractors.push_back(new MousePanNZoomNavigator());
+  //addEdgeInteractors.push_back(new MouseNodeBuilder());
+  addEdgeInteractors.push_back(new MouseEdgeBuilder());
+  addNodeInteractors.push_back(new MousePanNZoomNavigator());
+  addNodeInteractors.push_back(new MouseNodeBuilder());
+  deleteEltInteractors.push_back(new MousePanNZoomNavigator());
+  deleteEltInteractors.push_back(new MouseElementDeleter());
+  graphNavigateInteractors.push_back(new MouseNKeysNavigator());
+  magicSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  magicSelectionInteractors.push_back(new MouseMagicSelector());
+  editSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  editSelectionInteractors.push_back(new MouseSelector());
+  editSelectionInteractors.push_back(new MouseSelectionEditor());
+  selectInteractors.push_back(new MousePanNZoomNavigator());
+  selectInteractors.push_back(new MouseShowElementInfos(this));
+  selectionInteractors.push_back(new MousePanNZoomNavigator());
+  selectionInteractors.push_back(new MouseSelector());
+  zoomBoxInteractors.push_back(new MousePanNZoomNavigator());
+  zoomBoxInteractors.push_back(new MouseBoxZoomer());
+  // set the current one
+  currentInteractors = &graphNavigateInteractors;
 
   // initialization of Qt Assistant, the path should be in $PATH
 #if defined(__APPLE__)
@@ -285,7 +313,9 @@ void viewGl::enableElements(bool enabled) {
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
+  mouseActionGroup->setEnabled(enabled);
   grid_option->setEnabled(enabled);
+  dialogMenu->setItemEnabled(1000, enabled);
 
   elementsDisabled = !enabled;
 }
@@ -297,7 +327,7 @@ void viewGl::observableDestroyed(Observable *) {
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   Observable::holdObservers();
   clearObservers();
-  nodeProperties->updateTable();
+  eltProperties->updateTable();
   propertiesWidget->update();
   if (gridOptionsWidget !=0 )
     gridOptionsWidget->validateGrid();
@@ -347,6 +377,15 @@ void viewGl::clearObservers() {
 ///Destructor of viewGl
 viewGl::~viewGl() {
   delete morph;
+  deleteInteractors(addEdgeInteractors);
+  deleteInteractors(addNodeInteractors);
+  deleteInteractors(deleteEltInteractors);
+  deleteInteractors(graphNavigateInteractors);
+  deleteInteractors(magicSelectionInteractors);
+  deleteInteractors(editSelectionInteractors);
+  deleteInteractors(selectInteractors);
+  deleteInteractors(selectionInteractors);
+  deleteInteractors(zoomBoxInteractors);  
   //  cerr << __PRETTY_FUNCTION__ << endl;
 }
 //**********************************************************************
@@ -431,7 +470,7 @@ void viewGl::changeGraph(Graph *graph) {
   glWidget->setRenderingParameters(param);
   QDir::setCurrent(tmp.dirPath() + "/");
   clusterTreeWidget->setGraph(graph);
-  nodeProperties->setGraph(graph);
+  eltProperties->setGraph(graph);
   propertiesWidget->setGlGraphWidget(glWidget);
   overviewWidget->setObservedView(glWidget);
 #ifdef STATS_UI
@@ -502,8 +541,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
 #endif
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
-  glWidget->resetInteractors(mouseToolBar->getCurrentInteractors());
-  connect(mouseToolBar,   SIGNAL(interactorsChanged(const std::vector<tlp::GWInteractor *>&)), glWidget, SLOT(resetInteractors(const std::vector<tlp::GWInteractor *>&)));
+  glWidget->resetInteractors(*currentInteractors);
   connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
 
 #if (QT_REL == 3)
@@ -999,17 +1037,23 @@ void viewGl::setParameters(const DataSet data) {
   param.setParameters(data);
   glWidget->setRenderingParameters(param);
   clusterTreeWidget->setGraph(glWidget->getGraph());
-  nodeProperties->setGraph(glWidget->getGraph());
+  eltProperties->setGraph(glWidget->getGraph());
   propertiesWidget->setGraph(glWidget->getGraph());
 }
 //**********************************************************************
 void viewGl::updateStatusBar() {
+  static QLabel *normalStatusBar = 0;
+  if (!normalStatusBar) {
+    statusBar()->addWidget(new QLabel(statusBar()), true);
+    normalStatusBar = new QLabel(statusBar());
+    statusBar()->addWidget(normalStatusBar);
+  }
   //  cerr << __PRETTY_FUNCTION__ << endl;
   Graph *graph=clusterTreeWidget->getGraph();
   if (graph==0) return;
   char tmp[255];
-  sprintf(tmp,"Ready, Nodes:%d, Edges:%d",graph->numberOfNodes(),graph->numberOfEdges());
-  statusBar()->message(tmp);
+  sprintf(tmp,"nodes:%d, edges:%d",graph->numberOfNodes(),graph->numberOfEdges());
+  normalStatusBar->setText(tmp);
 }
 //*********************************************************************
 static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
@@ -1141,10 +1185,10 @@ void viewGl::buildMenus() {
     exportImageMenu.insertItem(str);
 #endif
   //Windows
-  dialogMenu.insertItem("&Mouse Tool Bar");
-  dialogMenu.insertItem("3D &Overview");
-  dialogMenu.insertItem("&Show/Hide Rendering parameters");
-  dialogMenu.insertItem("&Info Editor");
+  dialogMenu->insertItem("3D &Overview");
+  dialogMenu->insertItem("&Info Editor");
+  dialogMenu->insertItem("&Rendering Parameters", 1000);
+  dialogMenu->setAccel(tr("Ctrl+R"), 1000);
   //==============================================================
   //File Menu 
   fileMenu->insertSeparator();
@@ -1155,11 +1199,9 @@ void viewGl::buildMenus() {
   if (exportImageMenu.count()>0)
     fileMenu->insertItem("&Save Picture as " , &exportImageMenu); //this , SLOT( outputImage() ));
   //View Menu
-  viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()));
-  viewMenu->insertItem("&Center View", this, SLOT(centerView()));
-  viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()));
-  tooltipsMenuItem = viewMenu->insertItem("Enable &Tooltips", this, SLOT(enableDisableTooltips()));
-  viewMenu->insertItem("&Dialogs",  &dialogMenu);
+  viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
+  viewMenu->insertItem("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
+  viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
   //Property Menu
   if (selectMenu.count()>0)
     propertyMenu->insertItem("&Selection", &selectMenu );
@@ -1321,35 +1363,6 @@ void viewGl::closeEvent(QCloseEvent *e) {
     e->ignore();
 }
 //**********************************************************************
-void viewGl::goInside() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  node tmpNode;
-  edge tmpEdge;
-  tlp::ElementType type;
-  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode, tmpEdge)) {
-    if (type==NODE) {
-      Graph *graph = glWidget->getGraph();
-      GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-      if (meta->getNodeValue(tmpNode)!=0) {
-	changeGraph(meta->getNodeValue(tmpNode));
-      }
-    }
-  }
-}
-//**********************************************************************
-void viewGl::ungroup() {
-  node tmpNode;
-  edge tmpEdge;
-  tlp::ElementType type;
-  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
-    if (type==NODE) {
-      Graph *graph=glWidget->getGraph();
-      tlp::openMetaNode(graph, tmpNode);
-    }
-  }
-  clusterTreeWidget->update();
-}
-//**********************************************************************
 void viewGl::group() {
   set<node> tmp;
   Graph *graph=glWidget->getGraph();
@@ -1370,62 +1383,13 @@ void viewGl::group() {
   changeGraph(graph);
 }
 //**********************************************************************
-void viewGl::deleteElement(unsigned int x, unsigned int y, GlGraphWidget *glW){
-  bool result;
-  ElementType type;
-  node tmpNode;
-  edge tmpEdge;
-  Observable::holdObservers();
-  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
-  if(result==true) {
-    switch(type) {
-    case NODE: glW->getGraph()->delNode(tmpNode); break;
-    case EDGE: glW->getGraph()->delEdge(tmpEdge); break;
-    }
-  }
-  Observable::unholdObservers();
-}
-//**********************************************************************
-void viewGl::selectElement() {
-  selectElement(mouseClicX, mouseClicY, glWidget, true);
-}
-//**********************************************************************
-void viewGl::addRemoveElement() {
-  selectElement(mouseClicX, mouseClicY, glWidget, false);
-}
-//**********************************************************************
-void viewGl::deleteElement() {
-  deleteElement(mouseClicX, mouseClicY, glWidget);
-}
-//**********************************************************************
-void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, bool reset) {
-  Observable::holdObservers();
-  bool result;
-  ElementType type;
-  node tmpNode;
-  edge tmpEdge;
-  BooleanProperty *elementSelected = glW->getGraph()->getProperty<BooleanProperty>("viewSelection");
-  if (reset) {
-    elementSelected->setAllNodeValue(false);
-    elementSelected->setAllEdgeValue(false);
-  }
-  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
-  if (result==true) {
-    switch(type) {
-    case NODE: elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode)); break;
-    case EDGE: elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge)); break;
-    }
-  }
-  Observable::unholdObservers();
-}
-//**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 #if (QT_REL == 4)
   // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
   if (obj->inherits("GlGraphWidget") &&
-      e->type() == QEvent::ToolTip && tooltipsEnabled) {
+      e->type() == QEvent::ToolTip && tooltips->isOn()) {
     node tmpNode;
     edge tmpEdge;
     ElementType type;
@@ -1464,23 +1428,90 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button()==RightButton) {
-      mouseClicX = me->x();
-      mouseClicY = me->y();
-      QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
-      contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
-      contextMenu->insertItem(tr("Delete"), this, SLOT(deleteElement()));
-      contextMenu->insertItem(tr("Select"), this, SLOT(selectElement()));
-      contextMenu->insertItem(tr("Add/Remove selection"), this, SLOT(addRemoveElement()));
+      bool result;
+      ElementType type;
+      node tmpNode;
+      edge tmpEdge;
+      // look if the mouse pointer is over a node or edge
+      result = glWidget->doSelect(me->x(), me->y(), type, tmpNode, tmpEdge);
+      if (!result)
+	return false;
+      // Display a context menu
+      bool isNode = type == NODE;
+      int itemId = isNode ? tmpNode.id : tmpEdge.id;
+      QPopupMenu contextMenu(this,"dd");
+      stringstream sstr;
+#if (QT_REL == 3)
+      sstr << "<font color=darkblue><b>";
+#endif
+      sstr << (isNode ? "node " : "edge ") << itemId;
+#if (QT_REL == 3)
+      sstr << "</b></font>";
+      QLabel *caption = new QLabel(sstr.str(), &contextMenu);
+      caption->setAlignment( Qt::AlignCenter ); 
+      contextMenu.insertItem(caption);
+#else
+      contextMenu.setItemEnabled(contextMenu.insertItem(tr(sstr.str().c_str())), false);
+#endif
+      contextMenu.insertSeparator();
+      contextMenu.insertItem(tr("Add to/Remove from selection"));
+      int selectId = contextMenu.insertItem(tr("Select"));
+      int deleteId = contextMenu.insertItem(tr("Delete"));
+      contextMenu.insertSeparator();
       Graph *graph=glWidget->getGraph();
-      if (graph != graph->getRoot())
-	contextMenu->insertItem(tr("ungroup"), this, SLOT(ungroup()));
-      contextMenu->exec(me->globalPos());
-      delete contextMenu;
+      int goId = -1;
+      int ungroupId = -1;
+      if (isNode) {
+	GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	if (meta->getNodeValue(tmpNode)!=0) {
+	  goId = contextMenu.insertItem(tr("Go inside"));
+	  ungroupId = contextMenu.insertItem(tr("Ungroup"));
+	}
+      }
+      if (goId != -1)
+	contextMenu.insertSeparator();
+      int propId = contextMenu.insertItem(tr("Properties"));
+      int menuId = contextMenu.exec(me->globalPos(), 2);
+      if (menuId == -1)
+	return true;
+      Observable::holdObservers();
+      if (menuId == deleteId) { // Delete
+	// delete graph item
+	if (isNode)
+	  graph->delNode(node(itemId));
+	else
+	  graph->delEdge(edge(itemId));
+      }
+      if (menuId == propId) // Properties
+	showElementProperties(itemId, isNode);
+      else  {
+	if (menuId == goId) { // Go inside
+	  GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	  changeGraph(meta->getNodeValue(tmpNode));
+	}
+	else  {
+	  if (menuId == ungroupId) { // Ungroup
+	    tlp::openMetaNode(graph, tmpNode);
+	    clusterTreeWidget->update();
+	  } else {
+	    BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+	    if (menuId == selectId) { // Select
+	      // empty selection
+	      elementSelected->setAllNodeValue(false);
+	      elementSelected->setAllEdgeValue(false);
+	    }
+	    // selection add/remove graph item
+	    if (isNode)
+	      elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+	    else
+	      elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
+	  }
+	}
+      }
+      Observable::unholdObservers();
       return true;
     }
-    else {
-      return false;
-    }
+    return false;
   }
   return false;
 }
@@ -1489,11 +1520,7 @@ void viewGl::focusInEvent ( QFocusEvent * ) {
 }
 //**********************************************************************
 void viewGl::showDialog(int id){
-  string name(dialogMenu.text(id).ascii());
-  if (name=="&Mouse Tool Bar") {
-    mouseToolBarDock->show();
-    clusterTreeWidget->raise();
-  }
+  string name(dialogMenu->text(id).ascii());
   if (name=="&Info Editor") {
     tabWidgetDock->show();
     tabWidgetDock->raise();
@@ -1502,8 +1529,8 @@ void viewGl::showDialog(int id){
     overviewDock->show();
     overviewDock->raise();
   }
-  if (name=="&Show/Hide Rendering parameters") {
-    overviewWidget->showParameters(!overviewWidget->parameterBasic->isVisibleTo(overviewWidget));
+  if (id == 1000 && glWidget != 0) {
+    overviewWidget->showRenderingParametersDialog();
   }
 }
 //======================================================================
@@ -1524,15 +1551,9 @@ void viewGl::centerView() {
   redrawView();
 }
 //**********************************************************************
-/// enable/disable the tooltips display
-void viewGl::enableDisableTooltips() {
-  tooltipsEnabled = !tooltipsEnabled;
-  viewMenu->changeItem(tooltipsMenuItem,
-		       QString(tooltipsEnabled ? "Disable &Tooltips" : "Enable &Tooltips"));
-}
 #if (QT_REL == 3)
 bool viewGl::areTooltipsEnabled() {
-  return tooltipsEnabled;
+  return tooltips->isOn();
 }
 #endif
 //===========================================================
@@ -1731,7 +1752,7 @@ void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
     clusterTreeWidget->setGraph(0);
     propertiesWidget->setGraph(0);
     propertiesWidget->setGlGraphWidget(0);
-    nodeProperties->setGraph(0);
+    eltProperties->setGraph(0);
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
 #endif
@@ -2090,3 +2111,59 @@ void viewGl::isPlanar() {
   Observable::unholdObservers();
 }
 //**********************************************************************
+void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
+  if (glWidget == 0) return;
+  if (isNode)
+    eltProperties->setCurrentNode(glWidget->getGraph(),  tlp::node(eltId));
+  else
+    eltProperties->setCurrentEdge(glWidget->getGraph(),  tlp::edge(eltId));
+  // show 'Element' tab in 'Info Editor'
+  QWidget *tab = eltProperties->parentWidget();
+  QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
+  tabWidget->showPage(tab);
+}
+//**********************************************************************
+// management of interactors
+void viewGl::setCurrentInteractors(vector<tlp::GWInteractor *> *interactors) {
+  if (currentInteractors == interactors)
+    return;
+  currentInteractors = interactors;
+  if (glWidget)
+    glWidget->resetInteractors(*currentInteractors);
+}
+
+// deletion of registered interactors
+void viewGl::deleteInteractors(vector<tlp::GWInteractor *> &interactors) {
+  for(vector<GWInteractor *>::iterator it =
+	interactors.begin(); it != interactors.end(); ++it)
+    delete *it;
+}
+
+void viewGl::setAddEdge() {
+  setCurrentInteractors(&addEdgeInteractors);
+}
+void viewGl::setAddNode() {
+  setCurrentInteractors(&addNodeInteractors);
+}
+void viewGl::setDelete() {
+  setCurrentInteractors(&deleteEltInteractors);
+}
+void viewGl::setGraphNavigate() {
+  setCurrentInteractors(&graphNavigateInteractors);
+}
+void viewGl::setMagicSelection() {
+  setCurrentInteractors(&magicSelectionInteractors);
+}
+void viewGl::setMoveSelection() {
+  setCurrentInteractors(&editSelectionInteractors);
+}
+void viewGl::setSelect() {
+  setCurrentInteractors(&selectInteractors);
+}
+
+void viewGl::setSelection() {
+  setCurrentInteractors(&selectionInteractors);
+}
+void viewGl::setZoomBox() {
+  setCurrentInteractors(&zoomBoxInteractors);
+}

@@ -50,11 +50,15 @@ public:
 public slots:
   void setGraph(tlp::Graph *);
 
+protected:
+  virtual void connectNotify (const char * signal);
+
 private :
   QScrollBar *vScroll;
   int vScrollPos;
   bool displayNode;
   bool _filterSelection;
+  bool showProperties;
   tlp::BooleanProperty *filter;
   unsigned int nbElement;
   tlp::PropertyInterface *editedProperty;
@@ -82,6 +86,7 @@ public slots:
 signals:
   void tulipNodePropertyChanged(tlp::Graph *, const tlp::node &, const QString &property, const QString &value);
   void tulipEdgePropertyChanged(tlp::Graph *, const tlp::edge &, const QString &property, const QString &value);
+  void showElementProperties(unsigned int eltId, bool isNode);
 };
 /*@}*/
 #endif //PROPERTYWIDGETS_H

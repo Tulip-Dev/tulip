@@ -18,6 +18,7 @@ namespace tlp {
 class GlGraphWidget;
 class QEvent;
 class RectPosition;
+class RenderingParametersDialogData;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
@@ -31,11 +32,10 @@ public:
 
 public slots:
   void syncFromView();
-  void updateView();
   void setObservedView(GlGraphWidget *);
+  void updateView();
   void backColor(); //background color button
-  void showParameters(bool);
-  void showExtendedParameters(bool);
+  void showRenderingParametersDialog();
   
 private slots:
   //Used to catch graphRedrawn signal from view of which
@@ -51,7 +51,8 @@ private :
   bool _synchronizing;
   RectPosition *_glDraw;
   Camera _initialCamera;
-  bool _extendedViewIsVisible;
+  RenderingParametersDialogData *paramDialog;
+  void setBackgroundColor(QColor);
 };
 /*@}*/
 #endif // GWOVERVIEW_H

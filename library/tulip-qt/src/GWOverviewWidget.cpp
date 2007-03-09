@@ -10,6 +10,7 @@
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlGraphWidget.h"
+#include "tulip/RenderingParametersDialogData.h"
 
 using namespace std;
 using namespace tlp;
@@ -25,6 +26,27 @@ private :
   GlGraphWidget * _view;
 };
 
+class RenderingParametersDialog : public RenderingParametersDialogData {
+  GWOverviewWidget *overview;
+public:
+  RenderingParametersDialog(GWOverviewWidget* parent) : RenderingParametersDialogData(parent->parentWidget()) {
+    overview = parent;
+  }
+
+  void windowActivationChange(bool oldActive) {
+    if (!oldActive)
+      buttonClose->setFocus();
+  }
+
+  void updateView() {
+    overview->updateView();
+  }
+
+  void backColor() {
+    overview->backColor();
+  }
+};
+
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
 				   const char* name, bool modal, Qt::WFlags fl )
@@ -36,13 +58,9 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
 {
   _observedView = 0;
   _glDraw = 0;
-  _extendedViewIsVisible = false;
-  
-  extView->hide();
   _view = new GlGraphWidget( frame8, "view" );
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
-  QToolTip::add(_view, "Left+Ctrl Click show/hide rendering parameters");
 #if (QT_REL == 3)
   frame8Layout->addWidget( _view, 0, 0 );
 #else
@@ -51,20 +69,11 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   _view->installEventFilter(this);
   _glDraw = new RectPosition(_view, 0);
   _view->addGlAugmentedDisplay(_glDraw, "Overview");
-
-  showParameters(false);
+  paramDialog = new RenderingParametersDialog(this);
 }
 //=============================================================================
-void GWOverviewWidget::showParameters(bool visible) {
-  if (visible) {
-    parameterBasic->show();
-    if (_extendedViewIsVisible)
-      extView->show();
-  }
-  else {
-    parameterBasic->hide();
-    extView->hide();
-  }
+void GWOverviewWidget::showRenderingParametersDialog() {
+  paramDialog->exec();
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
@@ -75,12 +84,14 @@ GWOverviewWidget::~GWOverviewWidget() {
   // of frame8, and so it will be deleted further
   //delete _view;
   delete _glDraw;
+  delete paramDialog;
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   if ( obj->inherits("GlGraphWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
 	(e->type() == QEvent::MouseMove))) {
+    if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->state()==LeftButton || me->button()==LeftButton) {
       if  (me->state() &
@@ -90,10 +101,9 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 	   Qt::ControlButton
 #endif
 	   ) {
-	showParameters(parameterBasic->isHidden());
+	paramDialog->show();
 	return true;
       }
-      if (_observedView == 0) return false;
       GlGraphWidget *glw = (GlGraphWidget *) obj;
       assert(glw == _view);
       double mouseClicX = me->x();
@@ -156,6 +166,10 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
 	       this, SLOT(observedViewDestroyed(QObject *)));
     _observedView = 0;
   }
+  if (glWidget)
+    QToolTip::add(_view, "Click Left+Ctrl to show rendering parameters");
+  else
+    QToolTip::remove(_view);
   _observedView = glWidget;
   _glDraw->setObservedView(_observedView);
   
@@ -185,40 +199,42 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   draw(0); 	 
 } 	 
 //=============================================================================
-void GWOverviewWidget::backColor() {
-  QColor tmp = QColorDialog::getColor(background->paletteBackgroundColor(), this, tr("Choose background color") ) ;
+void GWOverviewWidget::setBackgroundColor(QColor tmp) {
   if (tmp.isValid()) {
-    background->setPaletteBackgroundColor(tmp);
-    updateView();
+    paramDialog->background->setPaletteBackgroundColor(tmp);
+    int h,s,v;
+    tmp.getHsv(&h, &s, &v);
+    if (v < 128)
+      paramDialog->background->setPaletteForegroundColor(QColor(255, 255, 255));
+    else
+      paramDialog->background->setPaletteForegroundColor(QColor(0, 0, 0));
   }
 }
 //=============================================================================
-void GWOverviewWidget::showExtendedParameters(bool b) {
-  if (!b)
-    extView->hide();
-  else
-    extView->show();
-  _extendedViewIsVisible = b;
+void GWOverviewWidget::backColor() {
+  setBackgroundColor(QColorDialog::getColor(paramDialog->background->paletteBackgroundColor(),
+					    this, tr("Choose background color")));
+  updateView();
 }
 //=============================================================================
 void GWOverviewWidget::syncFromView() {
   if (_observedView!=0) {
     _synchronizing = true;
     GlGraphRenderingParameters param = _observedView->getRenderingParameters();
-    arrows->setChecked( param.isViewArrow());
-    edges->setChecked( param.isDisplayEdges());
-    elabels->setChecked( param.isViewEdgeLabel());
-    nlabels->setChecked( param.isViewNodeLabel());
-    interpolation->setChecked( param.isEdgeColorInterpolate());
-    interpolationEdge->setChecked( param.isEdgeSizeInterpolate());
-    ordering->setChecked( param.isElementOrdered());
-    orthogonal->setChecked( param.isViewOrtho());
-    metaLabel->setChecked( param.isViewMetaLabel());
-    edge3D->setChecked( param.isEdge3D());
+    paramDialog->arrows->setChecked( param.isViewArrow());
+    paramDialog->edges->setChecked( param.isDisplayEdges());
+    paramDialog->elabels->setChecked( param.isViewEdgeLabel());
+    paramDialog->nlabels->setChecked( param.isViewNodeLabel());
+    paramDialog->interpolation->setChecked( param.isEdgeColorInterpolate());
+    paramDialog->interpolationEdge->setChecked( param.isEdgeSizeInterpolate());
+    paramDialog->ordering->setChecked( param.isElementOrdered());
+    paramDialog->orthogonal->setChecked( param.isViewOrtho());
+    paramDialog->metaLabel->setChecked( param.isViewMetaLabel());
+    paramDialog->edge3D->setChecked( param.isEdge3D());
     Color tmp = param.getBackgroundColor();
-    background->setPaletteBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
-    fonts->setCurrentItem(param.getFontsType());
-    density->setValue(param.getLabelsBorder());
+    setBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
+    paramDialog->fonts->setCurrentItem(param.getFontsType());
+    paramDialog->density->setValue(param.getLabelsBorder());
 
     GlGraphRenderingParameters paramView = _view->getRenderingParameters();
     paramView.setViewOrtho( param.isViewOrtho() );
@@ -238,20 +254,20 @@ void GWOverviewWidget::updateView() {
   if (_observedView!=0 && !_synchronizing) {
     GlGraphRenderingParameters paramObservedViev = _observedView->getRenderingParameters();
 
-    paramObservedViev.setViewArrow(arrows->isChecked());
-    paramObservedViev.setDisplayEdges(edges->isChecked());
-    paramObservedViev.setViewNodeLabel(nlabels->isChecked());
-    paramObservedViev.setViewEdgeLabel(elabels->isChecked());
-    paramObservedViev.setEdgeColorInterpolate(interpolation->isChecked());
-    paramObservedViev.setEdgeSizeInterpolate(interpolationEdge->isChecked());
-    paramObservedViev.setElementOrdered(ordering->isChecked());
-    paramObservedViev.setViewOrtho(orthogonal->isChecked());
-    paramObservedViev.setViewMetaLabel(metaLabel->isChecked());
-    paramObservedViev.setEdge3D(edge3D->isChecked());
-    paramObservedViev.setFontsType(fonts->currentItem());
-    QColor tmp = background->paletteBackgroundColor();
+    paramObservedViev.setViewArrow(paramDialog->arrows->isChecked());
+    paramObservedViev.setDisplayEdges(paramDialog->edges->isChecked());
+    paramObservedViev.setViewNodeLabel(paramDialog->nlabels->isChecked());
+    paramObservedViev.setViewEdgeLabel(paramDialog->elabels->isChecked());
+    paramObservedViev.setEdgeColorInterpolate(paramDialog->interpolation->isChecked());
+    paramObservedViev.setEdgeSizeInterpolate(paramDialog->interpolationEdge->isChecked());
+    paramObservedViev.setElementOrdered(paramDialog->ordering->isChecked());
+    paramObservedViev.setViewOrtho(paramDialog->orthogonal->isChecked());
+    paramObservedViev.setViewMetaLabel(paramDialog->metaLabel->isChecked());
+    paramObservedViev.setEdge3D(paramDialog->edge3D->isChecked());
+    paramObservedViev.setFontsType(paramDialog->fonts->currentItem());
+    QColor tmp = paramDialog->background->paletteBackgroundColor();
     paramObservedViev.setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
-    paramObservedViev.setLabelsBorder(density->value());
+    paramObservedViev.setLabelsBorder(paramDialog->density->value());
     _observedView->setRenderingParameters(paramObservedViev);
 
     GlGraphRenderingParameters paramView = _view->getRenderingParameters();

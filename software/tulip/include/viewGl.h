@@ -56,7 +56,6 @@ class QProgressDialog;
 class QEvent;
 class View3DSetup;
 class Cluster;
-class ToolBar;
 class GWOverviewWidget;
 
 // minimal structure to keep open files infos
@@ -85,19 +84,15 @@ protected:
 #ifdef STATS_UI
   tlp::TulipStats *statsWidget;
 #endif
-  ToolBar *mouseToolBar;
   GWOverviewWidget *overviewWidget;
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
   QDockWindow *tabWidgetDock;
-  QDockWindow *mouseToolBarDock;
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
-  ElementPropertiesWidget *nodeProperties;
+  ElementPropertiesWidget *eltProperties;
   tlp::Graph * copyCutPasteGraph;
   bool elementsDisabled;
-  bool tooltipsEnabled;
-  int tooltipsMenuItem;
 
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
@@ -111,7 +106,6 @@ protected:
   QPopupMenu optionMenu;
   QPopupMenu selectMenu;
   QPopupMenu exportImageMenu;
-  QPopupMenu dialogMenu;
 
   //QPopupMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );
@@ -130,6 +124,16 @@ public slots:
   void startTulip();
   void fileOpen(std::string *,QString &);
   void closeEvent(QCloseEvent *e); 
+  void setSelect();
+  void setAddEdge();
+  void setAddNode();
+  void setDelete();
+  void setZoomBox();
+  void setMoveSelection();
+  void setSelection();
+  void setMagicSelection();
+  void setGraphNavigate();
+  void showElementProperties(unsigned int eltId, bool isNode);
   
 protected slots:
   void helpIndex();
@@ -162,7 +166,6 @@ protected slots:
   void outputEPS();
   void outputSVG();
   void showDialog(int);
-  void enableDisableTooltips();
   void redrawView();
   void centerView();
   void updateStatusBar();
@@ -175,16 +178,11 @@ protected slots:
   void windowsMenuAboutToShow();
   void windowsMenuActivated( int id );
   void new3DView();
-  void goInside();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
   void glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *);
-  void ungroup();  
   void group();  
   void gridOptions();
-  void deleteElement();
-  void selectElement();
-  void addRemoveElement();
   void isAcyclic();
   void isSimple();
   void isConnected();
@@ -213,6 +211,9 @@ private:
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
   tlp::Morphing *morph;
+  std::vector<tlp::GWInteractor *> *currentInteractors;
+  void setCurrentInteractors(std::vector<tlp::GWInteractor *> *interactors);
+  void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
 
   QAssistantClient* assistant;
 };

@@ -41,7 +41,6 @@ BUILT_SOURCES = \
 	moc_TabWidgetData.cpp \
 	InfoDialogData.cpp \
 	AppStartUpData.cpp \
-	ToolBarData.cpp \
 	PropertyDialogData.cpp \
 	TulipStatsData.cpp \
 	GridOptionsData.cpp \
@@ -52,8 +51,6 @@ BUILT_SOURCES = \
 	moc_InfoDialogData.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
-	moc_ToolBar.cpp \
-	moc_ToolBarData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_QtProgress.cpp \
@@ -69,7 +66,6 @@ nodist_tulip_SOURCES =  \
 	moc_TabWidgetData.cpp \
 	InfoDialogData.cpp \
 	AppStartUpData.cpp \
-	ToolBarData.cpp \
 	PropertyDialogData.cpp \
 	TulipStatsData.cpp \
 	GridOptionsData.cpp \
@@ -80,8 +76,6 @@ nodist_tulip_SOURCES =  \
 	moc_InfoDialogData.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
-	moc_ToolBar.cpp \
-	moc_ToolBarData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_QtProgress.cpp \
@@ -97,7 +91,6 @@ dist_tulip_SOURCES = \
 	geometrie2D.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
-	ToolBar.cpp \
 	PropertyDialog.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
@@ -114,14 +107,13 @@ dist_tulip_SOURCES = \
 	geometrie2D.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
-	ToolBar.cpp \
 	PropertyDialog.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \
 	main.cpp
 
-moc_%.cpp: ../include/%.h 
+moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
 endif

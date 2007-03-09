@@ -31,11 +31,13 @@ noinst_HEADERS = \
 
 if QT3
 nobase_nodist_include_HEADERS = tulip/FindSelectionData.h \
+				tulip/RenderingParametersDialogData.h \
 				tulip/GWOverviewWidgetData.h
 else
 nobase_nodist_include_HEADERS = \
 	tulip/Morphing.h \
 	tulip/FindSelectionData.h \
+	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
@@ -60,6 +62,10 @@ tulip/propertywidget.h : tulip/PropertyWidget.h
 endif
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
+	mkdir -p tulip
+	$(UIC) -o $@ $<
+
+tulip/RenderingParametersDialogData.h: ../designer/RenderingParametersDialog.ui
 	mkdir -p tulip
 	$(UIC) -o $@ $<
 

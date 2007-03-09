@@ -10,10 +10,7 @@ class ElementPropertiesWidget;
 
 class Application:public QApplication {
 public:
-  ElementPropertiesWidget *nodeProperties;
   std::string bitmapPath;
-  tlp::Color nodeColor;
-  tlp::Color edgeColor;
   Application(int& argc, char ** argv); 
   ~Application();
 };
