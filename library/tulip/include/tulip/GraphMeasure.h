@@ -9,12 +9,16 @@
 #include "Node.h"
 #include "MutableContainer.h"
 #include "PluginProgress.h"
+#include "DoubleProperty.h"
 
 namespace tlp {
 
   class Graph;
   TLP_SCOPE bool averagePathLength(Graph *, double&, PluginProgress * = 0);
   TLP_SCOPE bool averageCluster(Graph *, double &, PluginProgress * = 0);
+  TLP_SCOPE bool computeClusterMetric(Graph *graph, DoubleProperty *prop,
+				    unsigned int depth, PluginProgress * = 0);
+  TLP_SCOPE bool computeDagLevelMetric(Graph *graph, DoubleProperty *prop, PluginProgress * = 0);
   TLP_SCOPE unsigned int maxDegree(Graph *);
   TLP_SCOPE unsigned int minDegree(Graph *);
   /*

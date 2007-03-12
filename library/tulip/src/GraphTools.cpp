@@ -28,9 +28,8 @@ namespace tlp {
     assert(AcyclicTest::isAcyclic(graph));
     //We compute the dag level metric on resulting sg.
     bool resultBool;
-    string erreurMsg;
     DoubleProperty dagLevel(graph);
-    resultBool = graph->computeProperty("DagLevel", &dagLevel, erreurMsg);
+    resultBool = computeDagLevelMetric(graph, &dagLevel);
     assert(resultBool);
     //we now transform the dag in a proper Dag, two linked nodes of a proper dag
     //must have a difference of one of dag level metric.

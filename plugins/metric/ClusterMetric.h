@@ -49,7 +49,6 @@ private:
   double getNodeValue(const tlp::node n);
   double getEdgeValue(const tlp::edge n);
   void buildSubGraph(tlp::node n, tlp::node startNode,std::set<tlp::node> &selected,unsigned int depth);
-  int  maxDepth;
 };
 /*@}*/
 #endif
