@@ -1016,10 +1016,13 @@ void viewGl::editFind() {
   Graph * g = glWidget->getGraph();
   if( !g ) return;
   
-  SelectionWidget *sel = new SelectionWidget(g);
+  static string currentProperty;
+  SelectionWidget *sel = new SelectionWidget(g, currentProperty);
   Observable::holdObservers();
   int nbItemsFound = sel->exec();
   Observable::unholdObservers();
+  if (nbItemsFound > - 1)
+    currentProperty = sel->getCurrentProperty();
   delete sel;
   switch(nbItemsFound) {
   case -1: break;
