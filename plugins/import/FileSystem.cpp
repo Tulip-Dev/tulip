@@ -1,8 +1,7 @@
 #include <qfiledialog.h>
-#include <tulip/TulipPlugin.h>
-#include <tulip/ForEach.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <tulip/TulipPlugin.h>
 
 #ifdef _WIN32
 #include <windows.h>

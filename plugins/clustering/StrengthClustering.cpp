@@ -6,14 +6,7 @@
 #include <map>
 #include <iostream>
 #include <ext/hash_map>
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/GraphProperty.h>
-#include <tulip/ExtendedClusterOperation.h>
-#include <tulip/GraphMeasure.h>
 #include <tulip/StableIterator.h>
-#include <tulip/ForEach.h>
-#include <tulip/SimpleTest.h>
 #include "StrengthClustering.h"
 
 

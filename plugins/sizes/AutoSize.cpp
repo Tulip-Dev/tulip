@@ -1,6 +1,5 @@
 //-*-c++-*-
 #include <tulip/TulipPlugin.h>
-#include <tulip/ForEach.h>
 #include <cmath>
 
 using namespace tlp;

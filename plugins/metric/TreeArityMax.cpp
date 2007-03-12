@@ -1,5 +1,3 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include "TreeArityMax.h"
 
 DOUBLEPLUGINOFGROUP(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","1.0","Tree");

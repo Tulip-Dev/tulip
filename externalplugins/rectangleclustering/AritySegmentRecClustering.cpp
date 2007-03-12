@@ -1,18 +1,13 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/Graph.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/TreeTest.h>
-
 #include "AritySegmentRecClustering.h"
 #include "TableAritySegment.h"
 
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","0","1");
+ALGORITHMPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","1.0");
 //================================================================================
 AritySegmentRecClustering::AritySegmentRecClustering(AlgorithmContext context):Algorithm(context)
 {}

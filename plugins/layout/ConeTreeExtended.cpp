@@ -1,10 +1,8 @@
 #include <map>
 #include <cmath>
 #include <climits>
+
 #include <tulip/Circle.h>
-#include <tulip/TreeTest.h>
-#include <tulip/ForEach.h>
-#include <tulip/Node.h>
 
 #include "ConeTreeExtended.h"
 

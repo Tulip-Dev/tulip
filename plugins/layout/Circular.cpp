@@ -14,7 +14,6 @@
  */
 
 #include <math.h>
-#include <tulip/ForEach.h>
 #include "Circular.h"
 
 LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.0","Basic");

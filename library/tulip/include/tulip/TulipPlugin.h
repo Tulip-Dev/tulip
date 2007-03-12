@@ -13,5 +13,14 @@
 #include "IntegerProperty.h"
 #include "GraphProperty.h"
 #include "MethodFactory.h"
-
+#include "GraphMeasure.h"
+#include "GraphTools.h"
+#include "AcyclicTest.h"
+#include "BiconnectedTest.h"
+#include "ConnectedTest.h"
+#include "PlanarityTest.h"
+#include "SimpleTest.h"
+#include "TreeTest.h"
+#include "ExtendedClusterOperation.h"
+#include "ForEach.h"
 #endif

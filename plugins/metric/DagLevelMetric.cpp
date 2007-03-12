@@ -1,6 +1,4 @@
 #include <cassert>
-#include <tulip/AcyclicTest.h>
-#include <tulip/GraphMeasure.h>
 #include "DagLevelMetric.h"
 
 DOUBLEPLUGINOFGROUP(DagLevelMetric,"DagLevel","David Auber","10/03/2000","Alpha","1.0","Tree");

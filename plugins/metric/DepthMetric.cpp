@@ -1,5 +1,3 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include "DepthMetric.h"
 
 DOUBLEPLUGINOFGROUP(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","1.0","Tree");

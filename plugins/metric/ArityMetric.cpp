@@ -1,4 +1,3 @@
-#include <tulip/ForEach.h>
 #include "ArityMetric.h"
 
 using namespace tlp;

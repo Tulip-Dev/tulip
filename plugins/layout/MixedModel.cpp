@@ -1,6 +1,3 @@
-#include <tulip/PlanarityTest.h>
-#include <tulip/BiconnectedTest.h>
-#include <tulip/SimpleTest.h>
 #include <tulip/TulipPlugin.h>
 
 #include <tulip/MapIterator.h>
@@ -8,7 +5,6 @@
 #include <tulip/CanonicalOrdering.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Bfs.h>
-#include <tulip/ForEach.h>
 #include "MixedModel.h"
 
 #include <tulip/GraphTools.h>

@@ -9,9 +9,6 @@
 */
 #include <assert.h>
 #include "LoopSelection.h"
-#include <tulip/ForEach.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/MethodFactory.h>
 
 BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0");
 

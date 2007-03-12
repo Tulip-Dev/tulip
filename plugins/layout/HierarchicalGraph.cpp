@@ -2,13 +2,6 @@
 #include <cassert>
 #include <math.h> 
 #include <stack>
-#include <tulip/AcyclicTest.h>
-#include <tulip/TreeTest.h>
-#include <tulip/MethodFactory.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/GraphTools.h>
-#include <tulip/ForEach.h>
 #include <tulip/SortIterator.h>
 #include "HierarchicalGraph.h"
 

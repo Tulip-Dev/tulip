@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(PlaneClustering, "Plane Clustering", "Maxime Delorme", "27/07/2005", "Alpha", "0", "1");
+ALGORITHMPLUGIN(PlaneClustering, "Plane Clustering", "Maxime Delorme", "27/07/2005", "Alpha", "1.0");
 
 namespace 
 {

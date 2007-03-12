@@ -1,5 +1,3 @@
-
-#include <tulip/ForEach.h>
 #include "ConnectedComponent.h"
 
 using namespace tlp;

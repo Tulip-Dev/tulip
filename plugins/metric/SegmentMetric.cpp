@@ -1,6 +1,3 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/ForEach.h>
 #include "SegmentMetric.h"
 
 

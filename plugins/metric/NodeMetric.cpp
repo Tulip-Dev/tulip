@@ -1,5 +1,3 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include "NodeMetric.h"
 
 DOUBLEPLUGINOFGROUP(NodeMetric,"Node","David Auber","20/12/1999","Alpha","1.0","Tree");

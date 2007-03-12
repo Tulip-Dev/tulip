@@ -23,7 +23,6 @@
 
 #include <cmath>
 #include <tulip/TulipPlugin.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;

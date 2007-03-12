@@ -9,7 +9,6 @@
  (at your option) any later version.
 */
 #include "ReachableSubGraphSelection.h"
-#include <tulip/GraphMeasure.h>
 
 using namespace tlp;
 

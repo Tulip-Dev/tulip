@@ -1,17 +1,13 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/BooleanProperty.h>
-#include <tulip/Graph.h>
-#include <tulip/TreeTest.h>
-
 #include "ArityRecClustering.h"
 #include "TableArity.h"
 
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(ArityRecClustering,"Arity Dfs-Recursive","David Auber","27/01/2000","Alpha","0","1");
+ALGORITHMPLUGIN(ArityRecClustering,"Arity Dfs-Recursive","David Auber","27/01/2000","Alpha","1.0");
 
 //================================================================================
 ArityRecClustering::ArityRecClustering(AlgorithmContext context):Algorithm(context) {}

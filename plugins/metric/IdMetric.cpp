@@ -1,5 +1,3 @@
-#include <tulip/ForEach.h>
-
 #include "IdMetric.h"
 
 using namespace tlp;

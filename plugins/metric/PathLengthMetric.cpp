@@ -1,5 +1,3 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include "PathLengthMetric.h"
 
 DOUBLEPLUGINOFGROUP(PathLengthMetric,"Path Length","David Auber","15/02/2001","Alpha","1.0","Tree");

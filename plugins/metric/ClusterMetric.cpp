@@ -1,6 +1,3 @@
-#include <tulip/DoubleProperty.h>
-#include <tulip/ForEach.h>
-#include <tulip/GraphMeasure.h>
 #include <deque>
 #include "ClusterMetric.h"
 
