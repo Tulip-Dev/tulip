@@ -89,6 +89,9 @@ node createMNode (Graph *graph, set<node> &subGraph,
   node metaNode = graph->addNode();
   metaInfo->setNodeValue(metaNode, metaGraph);
   updateGroupLayout(graph, metaGraph, metaNode);
+  ColorProperty *colors = graph->getProperty<ColorProperty>(colorProperty);
+  colors->setNodeValue(metaNode, Color(255, 255, 255));
+
   
   //Remove nodes from graph
   StableIterator<node> itN(metaGraph->getNodes());
@@ -97,7 +100,7 @@ node createMNode (Graph *graph, set<node> &subGraph,
 
   //create new edges from nodes to metanodes
   Graph *root = graph->getRoot();
-  ColorProperty *colors = root->getProperty<ColorProperty> (colorProperty);
+  colors = root->getProperty<ColorProperty> (colorProperty);
   hash_map<node, hash_set<node> > edges;
   Iterator<node> *metaGraphNodes = metaGraph->getNodes();
   while (metaGraphNodes->hasNext()) {
