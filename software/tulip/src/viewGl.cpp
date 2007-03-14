@@ -1381,7 +1381,10 @@ void viewGl::group() {
     QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");    
     graph = tlp::newCloneSubGraph(graph, "groups");
   }
-  tlp::createMetaNode(graph, tmp);
+  node metaNode = tlp::createMetaNode(graph, tmp);
+  // set metanode viewColor to glWidget background color
+  graph->getProperty<ColorProperty>("viewColor")->
+    setNodeValue(metaNode, glWidget->getRenderingParameters().getBackgroundColor());  
   clusterTreeWidget->update();
   changeGraph(graph);
 }
