@@ -167,7 +167,11 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     _observedView = 0;
   }
   if (glWidget)
+#if defined(__APPLE__)
+    QToolTip::add(_view, "Click+Alt show rendering parameters");
+#else
     QToolTip::add(_view, "Click Left+Ctrl to show rendering parameters");
+#endif
   else
     QToolTip::remove(_view);
   _observedView = glWidget;
