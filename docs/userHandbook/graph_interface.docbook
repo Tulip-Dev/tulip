@@ -44,13 +44,16 @@
                      </itemizedlist></para>
             </listitem>
             <listitem>
-                <para><code>View</code>: this is composed of the operations about a view. It is possible to redraw, center the current view, create a new 3D view and to redisplay each of the dialog windows.</para>
+                <para><code>View</code>: this is composed of the operations about a view. It is possible to redraw, center the current view, create a new 3D view (initially a copy of the current one)</para>
+            </listitem>
+            <listitem>
+                <para><code>Dialogs</code>:  this menu allows to redisplay each of the dialog windows</para>
             </listitem>
             <listitem>
                 <para><code>Windows</code>: this menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
             </listitem>
             <listitem>
-                <para><code>Options</code>: this menu allows to enable/disable the display options: Force ratio, Map metric, Morphing and Grid.</para>
+                <para><code>Options</code>: this menu allows to enable/disable the display options: Force ratio, Map metric, Morphing, Tooltips and Grid.</para>
             </listitem>
             <listitem>
                 <para><code>Help</code>: in this menu, you can find informations about the software and the way to make your first steps.</para>
@@ -58,32 +61,32 @@
         </itemizedlist>
         </para>
     </sect1>
-    <sect1 id="mouse"><title>Mouse Toolbar</title>
+    <sect1 id="mouse"><title>Mouse Interaction Toolbar</title>
         <para>
 	     <graphic fileref="images/mouse-tool.png"/>
             This toolbar allows to select the mouse operation you want to perform. The current available operations are from top to bottom of the toolbar :
         <itemizedlist>
             <listitem>
-                <para><inlinegraphic fileref="images/i_selection.png"/> <code>Box Selection</code> : it enables to select a set of elements. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
+                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>3D Navigation</code> : it enables to navigate in the 3D view of a grah using left button pressed mouse movements; the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
                 </para>
             </listitem>
             <listitem>
                 <para><inlinegraphic fileref="images/i_select.png"/> <code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window.</para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_magic.png"/> <code>Magic Selection</code> : it enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
-                </para>
-            </listitem>
-            <listitem>
-                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>3D navigation</code> : it enables to navigate in the 3D view using left button pressed mouse movements; the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
-                </para>
-            </listitem>
-            <listitem>
-                <para><inlinegraphic fileref="images/i_zoom.png"/> <code>Zoom Box</code> : It enables to zoom on an area defined by the user.
+                <para><inlinegraphic fileref="images/i_selection.png"/> <code>Rectangle Selection</code> : it enables to select a set of elements in a rectangle. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
                 </para>
             </listitem>
             <listitem>
                 <para><inlinegraphic fileref="images/i_move.png"/> <code>Selection edition</code> : It enables to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates and sizes are modified. if <keycap>SHIFT</keycap> key is pressed, only coordinates are modified. A left button pressed outside the selection box reset the selection.
+                </para>
+            </listitem>
+            <listitem>
+                <para><inlinegraphic fileref="images/i_magic.png"/> <code>Magic Selection</code> : it enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
+                </para>
+            </listitem>
+            <listitem>
+                <para><inlinegraphic fileref="images/i_zoom.png"/> <code>Zoom Box</code> : It enables to zoom on an area defined by the user.
                 </para>
             </listitem>
             <listitem>
@@ -102,43 +105,52 @@
         </para>
     </sect1>
     <sect1 id="overview"><title>3D Overview</title>
-        <para>All actions on this subwindow are just performed for the currently selected view window.
+        <para>This subwindow always shows an overview of the current graph view.
                 <graphic fileref="images/overview.png"/>
-            The 3D overview panel enables to configure the rendering of the graph. The available options are the following: 
-            <itemizedlist>
-                <listitem><para><code>Arrows</code> : enables/disables the display of arrows on edges.</para></listitem>
-                <listitem><para><code>Edges</code> : enables/disables the display of edges.</para></listitem>
-                <listitem><para><code>Edge label</code> : enables/disables the display of label on edges.</para></listitem>
-                <listitem><para><code>Node label</code> : enables/disables the display of label on nodes.</para></listitem>
-                <listitem><para><code>Color Interpolation</code> : enables/disables the interpolation of the color of nodes along edges.</para></listitem>
-                <listitem><para><code>Size Interpolation</code> : enables/disables the interpolation of the size of nodes along edges.</para></listitem>
-            </itemizedlist>
+              The part of the graph which is visible in the current view is inside a black bordered frame.In order to see an other part of the graph in the current view, you can move the frame over the desired part of the graph. To achieve this, when the mouse is inside the frame, just move it with the left button pressed.
+              A mouse left click with the <keycap>CTRL</keycap> key pressed (<keycap>ALT</keycap> key on Mac) displays the Rendering Parameters dialog (see after).
         </para>
-        <para>
-                <graphic fileref="images/overview-more.png"/>
-            <itemizedlist>
-                <listitem>
-                    <para><code>Metric ordering</code> : enables/disables clustering elements with metric before display.</para>
+    </sect1>
+    <sect1 id="renderingparams"><title>Rendering Parameters</title>
+        <para>All actions on this dialog are just performed for the currently selected view window.
+                <graphic fileref="images/overview.png"/>
+            This dialog enables to configure the rendering of the graph. The available options are grouped in the following three frames:
+             <itemizedlist>
+                <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
+                <itemizedlist>
+                    <listitem><para><code>Visibility</code> : you can enable/disable the display of labels on nodes, edges or metanodes.</para>
+                    </listitem>
+                    <listitem><para><code>Type</code> : this indicates the text display mode which can be one of Bitmap, Texture or 3D.</para>
+                    </listitem>
+                    <listitem><para><code>metric ordering</code> : when checked the labels are displayed in using the viewMetric property decreasing order.</para>
+                    </listitem>
+                    <listitem><para><code>Density</code> : use this slider to avoid having too much labels displayed (max is on the left).</para>
+                    </listitem>
+                </itemizedlist></para>
                 </listitem>
-                <listitem>
-                    <para><code>Metanode labels</code> : enables/disables the display of metanode(group) labels.</para>
+                <listitem><para><code>Edges</code> : this frame options affect the way the edges are displayed:
+                <itemizedlist>
+                    <listitem><para><code>visible</code> : enables/disables the display of edges. If not checked, the other options of this frame are not active.</para>
+                    </listitem>
+                    <listitem><para><code>arrows</code> : enables/disables the display of arrows.</para>
+                    </listitem>
+                    <listitem><para><code>3D</code> : enables/disables the display of edges in 3D.</para>
+                    </listitem>
+                    <listitem><para><code>Color interpolation</code> : when checked the edge color is interpolated from the color of its source node to the color of its target node.</para>
+                    </listitem>
+                    <listitem><para><code>Size interpolation</code> : when checked the edge size is interpolated from the size of its source node to the size of its target node.</para>
+                    </listitem>
+                </itemizedlist></para>
                 </listitem>
-                <listitem>
-                    <para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If disabled, the perpsective projection is used.</para>
+                <listitem><para><code>Others</code> : the options in this frame are related to general aspects of the rendering:
+                <itemizedlist>
+                    <listitem><para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If not checked, the perpsective projection is used.</para>
+                    </listitem>
+                    <listitem><para><code>Background color</code> : enables to choose a color for the background of a graph view.</para>
+                    </listitem>
+                </itemizedlist></para>
                 </listitem>
-                <listitem>
-                    <para><code>3D edges</code> : enables/disables the display of edges in 3D.</para>
-                </listitem>
-                <listitem>
-                    <para><code>label density</code> : use this slider to avoid having too much labels displayed (max is on the left)</para>
-                </listitem>
-                <listitem>
-                    <para><code>3D/Bitmap/Texture</code> : activates one of the modes of text rendering for display the labels.</para>
-                </listitem>
-                <listitem>
-                    <para><code>Background</code> : enables to choose a color for the background of a view</para>
-                </listitem>
-            </itemizedlist>
+           </itemizedlist>
         </para>
     </sect1>
     <sect1 id="infoeditor"><title>Info Editor</title>
@@ -147,7 +159,7 @@
         </para>
         <sect2 id="property"><title>Property</title>
 	    <para>
-		    This window enables to display properties of nodes and edges as a table. It is composed of two parts, the first one displays all the values of nodes or edges in text format using spreed sheets. It is possible to display only the values of selected elements by using the filter option. The user can modify directly a value by clicking on the value in the table. It is possible to set all the nodes or edges value with the <quote>Set all</quote> button; if the <code>Filter</code> box is checked, this will only affect the selected elements. An other possibility is to set to the labels the property values by clicking on the <quote>To labels</quote> button. The second part is a list of all local and inherited properties of a graph. An inherited property is a property which belongs to an upper graph in the hierarchy of graphs (see <quote>Hierarchy</quote> tab). 
+		    This window enables to display properties of nodes and edges as a table. It is composed of two parts, the first one displays all the values of nodes or edges in text format using spreed sheets. It is possible to display only the values of selected elements by using the <code>selected only</code> box. The user can modify directly a value by clicking on the value in the table. It is possible to set all the nodes or edges value with the <quote>Set all</quote> button; if the <code>selected only</code> box is checked, this will only affect the selected elements. An other possibility is to set to the labels the property values by clicking on the <quote>To labels</quote> button. The second part is a list of all local and inherited properties of a graph. An inherited property is a property which belongs to an upper graph in the hierarchy of graphs (see <quote>Hierarchy</quote> tab). 
                 <graphic fileref="images/info-editor.png"/>
 	    </para>
         </sect2>
