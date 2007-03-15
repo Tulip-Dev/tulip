@@ -183,7 +183,7 @@
                                                                 </widget>
                                                                 <widget class="QCheckBox">
                                                                     <property name="name">
-                                                                        <cstring>metaLabel</cstring>
+                                                                        <cstring>mlabels</cstring>
                                                                     </property>
                                                                     <property name="text">
                                                                         <string>metanodes</string>
@@ -290,7 +290,7 @@
                                         </property>
                                         <widget class="QCheckBox">
                                             <property name="name">
-                                                <cstring>edges</cstring>
+                                                <cstring>edgeVisible</cstring>
                                             </property>
                                             <property name="text">
                                                 <string>visible</string>
@@ -339,7 +339,7 @@
                                         </property>
                                         <widget class="QCheckBox">
                                             <property name="name">
-                                                <cstring>interpolation</cstring>
+                                                <cstring>colorInterpolation</cstring>
                                             </property>
                                             <property name="focusPolicy">
                                                 <enum>StrongFocus</enum>
@@ -356,7 +356,7 @@
                                         </widget>
                                         <widget class="QCheckBox">
                                             <property name="name">
-                                                <cstring>interpolationEdge</cstring>
+                                                <cstring>sizeInterpolation</cstring>
                                             </property>
                                             <property name="focusPolicy">
                                                 <enum>StrongFocus</enum>
@@ -530,13 +530,13 @@
         <slot>updateView()</slot>
     </connection>
     <connection>
-        <sender>metaLabel</sender>
+        <sender>mlabels</sender>
         <signal>stateChanged(int)</signal>
         <receiver>RenderingParametersDialogData</receiver>
         <slot>updateView()</slot>
     </connection>
     <connection>
-        <sender>edges</sender>
+        <sender>edgeVisible</sender>
         <signal>stateChanged(int)</signal>
         <receiver>RenderingParametersDialogData</receiver>
         <slot>updateView()</slot>
@@ -548,13 +548,13 @@
         <slot>updateView()</slot>
     </connection>
     <connection>
-        <sender>interpolation</sender>
+        <sender>colorInterpolation</sender>
         <signal>stateChanged(int)</signal>
         <receiver>RenderingParametersDialogData</receiver>
         <slot>updateView()</slot>
     </connection>
     <connection>
-        <sender>interpolationEdge</sender>
+        <sender>sizeInterpolation</sender>
         <signal>stateChanged(int)</signal>
         <receiver>RenderingParametersDialogData</receiver>
         <slot>updateView()</slot>

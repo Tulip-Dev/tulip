@@ -38,7 +38,16 @@ public:
       buttonClose->setFocus();
   }
 
+  void updateEdgeOptions() {
+    bool visible = edgeVisible->isChecked();
+    arrows->setEnabled(visible);
+    edge3D->setEnabled(visible);
+    colorInterpolation->setEnabled(visible);
+    sizeInterpolation->setEnabled(visible);
+  }
+
   void updateView() {
+    updateEdgeOptions();
     overview->updateView();
   }
 
@@ -226,19 +235,20 @@ void GWOverviewWidget::syncFromView() {
     _synchronizing = true;
     GlGraphRenderingParameters param = _observedView->getRenderingParameters();
     paramDialog->arrows->setChecked( param.isViewArrow());
-    paramDialog->edges->setChecked( param.isDisplayEdges());
+    paramDialog->edgeVisible->setChecked( param.isDisplayEdges());
     paramDialog->elabels->setChecked( param.isViewEdgeLabel());
     paramDialog->nlabels->setChecked( param.isViewNodeLabel());
-    paramDialog->interpolation->setChecked( param.isEdgeColorInterpolate());
-    paramDialog->interpolationEdge->setChecked( param.isEdgeSizeInterpolate());
+    paramDialog->colorInterpolation->setChecked( param.isEdgeColorInterpolate());
+    paramDialog->sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
     paramDialog->ordering->setChecked( param.isElementOrdered());
     paramDialog->orthogonal->setChecked( param.isViewOrtho());
-    paramDialog->metaLabel->setChecked( param.isViewMetaLabel());
+    paramDialog->mlabels->setChecked( param.isViewMetaLabel());
     paramDialog->edge3D->setChecked( param.isEdge3D());
     Color tmp = param.getBackgroundColor();
     setBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
     paramDialog->fonts->setCurrentItem(param.getFontsType());
     paramDialog->density->setValue(param.getLabelsBorder());
+    ((RenderingParametersDialog *) paramDialog)->updateEdgeOptions();
 
     GlGraphRenderingParameters paramView = _view->getRenderingParameters();
     paramView.setViewOrtho( param.isViewOrtho() );
@@ -259,14 +269,14 @@ void GWOverviewWidget::updateView() {
     GlGraphRenderingParameters paramObservedViev = _observedView->getRenderingParameters();
 
     paramObservedViev.setViewArrow(paramDialog->arrows->isChecked());
-    paramObservedViev.setDisplayEdges(paramDialog->edges->isChecked());
+    paramObservedViev.setDisplayEdges(paramDialog->edgeVisible->isChecked());
     paramObservedViev.setViewNodeLabel(paramDialog->nlabels->isChecked());
     paramObservedViev.setViewEdgeLabel(paramDialog->elabels->isChecked());
-    paramObservedViev.setEdgeColorInterpolate(paramDialog->interpolation->isChecked());
-    paramObservedViev.setEdgeSizeInterpolate(paramDialog->interpolationEdge->isChecked());
+    paramObservedViev.setEdgeColorInterpolate(paramDialog->colorInterpolation->isChecked());
+    paramObservedViev.setEdgeSizeInterpolate(paramDialog->sizeInterpolation->isChecked());
     paramObservedViev.setElementOrdered(paramDialog->ordering->isChecked());
     paramObservedViev.setViewOrtho(paramDialog->orthogonal->isChecked());
-    paramObservedViev.setViewMetaLabel(paramDialog->metaLabel->isChecked());
+    paramObservedViev.setViewMetaLabel(paramDialog->mlabels->isChecked());
     paramObservedViev.setEdge3D(paramDialog->edge3D->isChecked());
     paramObservedViev.setFontsType(paramDialog->fonts->currentItem());
     QColor tmp = paramDialog->background->paletteBackgroundColor();
