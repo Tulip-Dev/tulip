@@ -117,7 +117,7 @@
             <cstring>toolBar</cstring>
         </property>
         <property name="label">
-            <string>Tools</string>
+            <string>Standard Tools</string>
         </property>
         <action name="fileOpenAction"/>
         <action name="fileSaveAction"/>
@@ -128,7 +128,7 @@
             <cstring>graphToolBar</cstring>
         </property>
         <property name="label">
-            <string>Graph tools</string>
+            <string>Mouse Interaction Tools</string>
         </property>
         <action name="navigateAction"/>
         <action name="selectAction"/>
