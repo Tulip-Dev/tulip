@@ -64,41 +64,41 @@
     <sect1 id="mouse"><title>Mouse Interaction Toolbar</title>
         <para>
 	     <graphic fileref="images/mouse-tool.png"/>
-            This toolbar allows to select the mouse operation you want to perform. The current available operations are from top to bottom of the toolbar :
+            This toolbar allows to select the mouse operation you want to perform. The current available operations are from left to right of the toolbar :
         <itemizedlist>
             <listitem>
-                <para><inlinegraphic fileref="images/i_navigation.png"/> <code>3D Navigation</code> : it enables to navigate in the 3D view of a grah using left button pressed mouse movements; the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
+                <para><inlinegraphic fileref="images/i_navigation.png"/>&nbsp;<code>3D Navigation</code> : it enables to navigate in the 3D view of a graph using the mouse movements (left button pressed); the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>SHIFT</keycap> key, zoom is activated using <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_select.png"/> <code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window.</para>
+                <para><inlinegraphic fileref="images/i_select.png"/>&nbsp;<code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window(see after).</para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_selection.png"/> <code>Rectangle Selection</code> : it enables to select a set of elements in a rectangle. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
+                <para><inlinegraphic fileref="images/i_selection.png"/>&nbsp;<code>Rectangle Selection</code> : it enables to select a set of elements in a rectangle. If <keycap>SHIFT</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>CTRL</keycap> key (<keycap>ALT</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_move.png"/> <code>Selection edition</code> : It enables to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates and sizes are modified. if <keycap>SHIFT</keycap> key is pressed, only coordinates are modified. A left button pressed outside the selection box reset the selection.
+                <para><inlinegraphic fileref="images/i_move.png"/>&nbsp;<code>Selection edition</code> : It enables to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates and sizes are modified. if <keycap>SHIFT</keycap> key is pressed, only coordinates are modified. A left button pressed outside the selection box reset the selection.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_magic.png"/> <code>Magic Selection</code> : it enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
+                <para><inlinegraphic fileref="images/i_magic.png"/>&nbsp;<code>Magic Selection</code> : it enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_zoom.png"/> <code>Zoom Box</code> : It enables to zoom on an area defined by the user.
+                <para><inlinegraphic fileref="images/i_zoom.png"/>&nbsp;<code>Zoom Box</code> : It enables to zoom on a defined rectangle area. The first corner of the rectangle is defined when pressing the mouse left button, the opposite corner is defined when moving the mouse and the zoom operation is performed on the desired rectangle when the button is released.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_del.png"/> <code>Delete element</code> : allows to delete node or edge by a simple click.
+                <para><inlinegraphic fileref="images/i_del.png"/>&nbsp;<code>Delete element</code> : allows to delete a node or edge by a simple click. The deleted node or edge is the one under the mouse when you clicked.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_addnode.png"/> <code>Add node</code> : when it is selected, you can add a node in the graph by a simple mouse click on the 3D graph view window. The node is placed at the coordinates you clicked.
+                <para><inlinegraphic fileref="images/i_addnode.png"/>&nbsp;<code>Add node</code> : when it is selected, you can add a node in the graph by a simple mouse click on the current graph view. The node is placed at the coordinates corresponding to the mouse position when you clicked.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_addedge.png"/> <code>Add edge</code> : when it is selected, you can add an edge in the graph by mouse clicking first on the source node then on the target node. 
+                <para><inlinegraphic fileref="images/i_addedge.png"/>&nbsp;<code>Add edge</code> : when it is selected, you can add an edge in the graph by mouse clicking first on the source node then on the target node. 
                 </para>
             </listitem>
         </itemizedlist>
@@ -107,13 +107,13 @@
     <sect1 id="overview"><title>3D Overview</title>
         <para>This subwindow always shows an overview of the current graph view.
                 <graphic fileref="images/overview.png"/>
-              The part of the graph which is visible in the current view is inside a black bordered frame.In order to see an other part of the graph in the current view, you can move the frame over the desired part of the graph. To achieve this, when the mouse is inside the frame, just move it with the left button pressed.
+              The part of the graph which is visible in the current view is inside a black bordered frame. In order to see a different part of the graph in the current view, you can move the frame over the desired part. To achieve this, when the mouse is inside the frame, just move it with the left button pressed.
               A mouse left click with the <keycap>CTRL</keycap> key pressed (<keycap>ALT</keycap> key on Mac) displays the Rendering Parameters dialog (see after).
         </para>
     </sect1>
     <sect1 id="renderingparams"><title>Rendering Parameters</title>
-        <para>All actions on this dialog are just performed for the currently selected view window.
-                <graphic fileref="images/overview.png"/>
+        <para>All actions in this dialog are just performed for the current view window.
+                <graphic fileref="images/renderingparams.png"/>
             This dialog enables to configure the rendering of the graph. The available options are grouped in the following three frames:
              <itemizedlist>
                 <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
@@ -159,13 +159,25 @@
         </para>
         <sect2 id="property"><title>Property</title>
 	    <para>
-		    This window enables to display properties of nodes and edges as a table. It is composed of two parts, the first one displays all the values of nodes or edges in text format using spreed sheets. It is possible to display only the values of selected elements by using the <code>selected only</code> box. The user can modify directly a value by clicking on the value in the table. It is possible to set all the nodes or edges value with the <quote>Set all</quote> button; if the <code>selected only</code> box is checked, this will only affect the selected elements. An other possibility is to set to the labels the property values by clicking on the <quote>To labels</quote> button. The second part is a list of all local and inherited properties of a graph. An inherited property is a property which belongs to an upper graph in the hierarchy of graphs (see <quote>Hierarchy</quote> tab). 
+		This tab enables to display the properties of nodes and edges as a table. It is composed of two parts. The one of the top of the tab displays all the values of nodes or edges for the selected property (choosen in the lists at the bottom of the tab). It is possible to display only the values of the selected elements by using the <code>selected only</code> box. The user can modify directly a value by clicking on the value in the table. It is possible to set all the nodes or edges value with the <code>Set all</code> button; if the <code>selected only</code> box is checked, this will only affect the selected elements. An other possibility is to set as labels the values of the selected property by clicking on the <code>To labels</code> button. The bottom part of the tab displays the lists of all the local and inherited properties of a graph. An inherited property is a property which is defined for an upper graph in the hierarchy of graphs (see <quote>Hierarchy</quote> tab). 
                 <graphic fileref="images/info-editor.png"/>
+                By a right mouse button press (press <keycap>CTRL</keycap> key when mouse pressing on Mac) on a row of the table values, you can display a pop-up menu allowing some actions on the graph element corresponding to the table row: 
+                <graphic fileref="images/info-contextmenu.png"/>
+                <itemizedlist>
+                   <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
+                   </listitem>
+                   <listitem><para><code>Select</code> : the current element replaces the whole selection,</para>
+                   </listitem>
+                   <listitem><para><code>Delete</code> : this permanently removes the element from the current graph,</para>
+	          </listitem>
+                   <listitem><para><code>Properties</code> : this shows the element properties in the <quote>Element</quote> tab (see after).</para>
+	          </listitem>
+                </itemizedlist>
 	    </para>
         </sect2>
         <sect2 id="element"><title>Element</title>
             <para>
-                This tab shows informations about an element of the graph, node or edge, previously "pointed" using the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation. At the top, you can find the type of the element and its <quote>id</quote>. To follow, here is the table displaying the elements properties and associated values. It is possible to update the values within this table.
+                This tab shows informations about an element of the graph, node or edge, previously "pointed" using the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation. At the top, you can find the type of the element and its <quote>id</quote>. To follow, here is the table displaying the elements properties and associated values. As within the tables of the <quote>Property</quote> tab, it is possible to update the values within this table.
                 <graphic fileref="images/element.png"/>
             </para>
         </sect2>
@@ -195,11 +207,26 @@
     <sect1 id="view-window"><title>View window</title>
         <para>
             <graphic fileref="images/3d-view.png"/>
-
-            The 3D graph view subwindow is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node/edge, a tooltip window displays its id.
+            The 3D graph view subwindow is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node/edge, a tooltip window displays its id and label (use <quote>Options</quote> menu to enable tooltips).
         </para>
         <sect2 id="pop-up"><title>Pop-up menu of graph view</title>
-		<para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>CTRL</keycap> key when mouse pressing on Mac) and allows to make simple operations : 'go inside' for subgraphs or groups, 'Delete' the element under the mouse pointer , 'Select' the element under the mouse pointer, Add/Remove to/from selection the element under the mouse pointer. </para>
+                <graphic fileref="images/view-contextmenu.png"/>
+		<para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>CTRL</keycap> key when mouse pressing on Mac) while on a graph element, and allows to perform simple actions on this element : 
+                <itemizedlist>
+                   <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
+                   </listitem>
+                   <listitem><para><code>Select</code> : the current element replaces the whole selection,</para>
+                   </listitem>
+                   <listitem><para><code>Delete</code> : this permanently removes the element from the current graph,</para>
+	          </listitem>
+                   <listitem><para><code>Go inside</code> : if the element is a metanode, this shows the corresponding subgraph in the current view,</para>
+	          </listitem>
+                   <listitem><para><code>Ungroup</code> : if the element is a metanode, this permanently removes it and its corresponding subgraph,</para>
+	          </listitem>
+                   <listitem><para><code>Properties</code> : this shows the element properties in the <quote>Element</quote> tab.</para>
+	          </listitem>
+                </itemizedlist>
+               </para>
         </sect2>
     </sect1>
 </chapter>
