@@ -24,6 +24,8 @@ StringCollection::StringCollection(const string param) {
       temp += *itChar;
     itChar++;        
   }
+  if (temp.size())
+    this->push_back(temp);
   current = 0;
 } 
      
