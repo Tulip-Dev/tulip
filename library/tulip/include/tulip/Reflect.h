@@ -66,6 +66,7 @@ struct TLP_SIMPLE_SCOPE StructDef {
   ///Get field help & default string-value (see also XXXType in Types.h)
   std::string getHelp( std::string str ) const;
   std::string getDefValue( std::string str ) const;
+  void setDefValue(std::string name, std::string value);
   ///Return if field is mandatory
   bool isMandatory(std::string str) const;
 

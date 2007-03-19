@@ -80,6 +80,14 @@ string StructDef::getDefValue( string str ) const {
     return it->second;
 }
 
+void StructDef::setDefValue(string name, string value) {
+  map<string,string>::iterator it = defValue.find(name);
+  if( it == defValue.end() )
+    defValue[name] = value;
+  else
+    it->second = value;
+}
+
 bool StructDef::isMandatory( string str ) const {
   map<string,bool>::const_iterator it = mandatory.find(str);
   if( it == mandatory.end() )
