@@ -1465,7 +1465,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       sstr << (isNode ? "node " : "edge ") << itemId;
 #if (QT_REL == 3)
       sstr << "</b></font>";
-      QLabel *caption = new QLabel(sstr.str(), &contextMenu);
+      QLabel *caption = new QLabel(sstr.str().c_str(), &contextMenu);
       caption->setAlignment( Qt::AlignCenter ); 
       contextMenu.insertItem(caption);
 #else
