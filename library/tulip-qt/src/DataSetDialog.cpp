@@ -26,8 +26,8 @@
 #include <qcolordialog.h>
 #include <qfiledialog.h>
 #include <qtoolbutton.h>
-#include <qwidget.h>
 #include <qtextbrowser.h>
+#include <qtooltip.h>
 #else
 #include <QtGui/qvalidator.h>
 #include <QtGui/qdialog.h>
@@ -40,7 +40,7 @@
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
 #include <QtGui/qtoolbutton.h>
-#include <QtGui/qwidget.h>
+#include <QtGui/qtooltip.h>
 #include <QtGui/qtextbrowser.h>
 #include "tulip/Qt3ForTulip.h"
 #endif
@@ -130,17 +130,223 @@ namespace {
 
   struct QParamDialog : public QDialog {
 
-    QParamDialog( QWidget * parent = 0, const char * name = 0, bool modal = FALSE, Qt::WFlags f = 0 )
-      : QDialog( parent, name, modal, f ) {
+    const StructDef* sysDef;
+    StructDef *inDef;
+
+    QParamDialog(const StructDef *sDef, StructDef *iDef,
+		 QWidget * parent = 0, const char * name = 0, bool modal = FALSE, Qt::WFlags f = 0 )
+      : QDialog( parent, name, modal, f ), sysDef(sDef), inDef(iDef) {
       helpBrowser = 0;
       curHelpParam = -1;
     }
 
     IParamA iparamA;
     QTextBrowser *helpBrowser;
+    QPushButton *setDefB;
+    QPushButton *restoreSysDefB;
     int	curHelpParam;
 
+#define NONE_PROP " None"
+
+    void setDefaults() {
+      for( uint i = 0 ; i < iparamA.size(); i++ ) {
+	IParam & ip = iparamA[i];
+
+	// bool
+	if(ip.typeName == TN(bool)) {
+	  QCheckBox * cb = (QCheckBox*) ip.wA[0];
+	  inDef->setDefValue(ip.name, BooleanType::toString(cb->isChecked()));
+	}
+
+	// int
+	// unsigned int
+	// float
+	// double
+	else if(ip.typeName == TN(int) ||
+		ip.typeName == TN(unsigned int) ||
+		ip.typeName == TN(float) ||
+		ip.typeName == TN(double)) {
+	  QLineEdit * le = (QLineEdit *) ip.wA[0];
+	  inDef->setDefValue(ip.name, le->text().ascii());
+	}
+
+	// string
+	else if(ip.typeName == TN(string)) {
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = (QTextEdit *) ip.wA[0];
+	    inDef->setDefValue(ip.name, te->text().ascii());
+	  } else {
+	    QLineEdit * le = (QLineEdit *) ip.wA[0];
+	    inDef->setDefValue( ip.name, le->text().ascii() );
+	  }
+	}
+
+	// Color
+	else if( ip.typeName == TN(Color) )	{
+	  QLineEdit * leR = (QLineEdit*) ip.wA[0];
+	  QLineEdit * leG = (QLineEdit*) ip.wA[2];
+	  QLineEdit * leB = (QLineEdit*) ip.wA[4];
+	  QLineEdit * leA = (QLineEdit*) ip.wA[6];
+	  int R			= leR->text().toInt();
+	  int G			= leG->text().toInt();
+	  int B			= leB->text().toInt();
+	  int A			= leA->text().toInt();
+	  Color c( R, G, B, A );
+	  inDef->setDefValue(ip.name, ColorType::toString(c));
+	}
+
+	// Size
+	else if( ip.typeName == TN(Size) )	{
+	  QLineEdit * leW = (QLineEdit*) ip.wA[0];
+	  QLineEdit * leH = (QLineEdit*) ip.wA[2];
+	  QLineEdit * leD = (QLineEdit*) ip.wA[4];
+	  float W	= leW->text().toFloat();
+	  float H	= leH->text().toFloat();
+	  float D	= leD->text().toFloat();
+	  inDef->setDefValue(ip.name, SizeType::toString(Size(W,H,D)));
+	}
+
+	// PropertyInterface*
+	else if (ip.typeName == TN(PropertyInterface*)
+		 || ip.typeName == TN(BooleanProperty)
+		 || ip.typeName == TN(DoubleProperty)
+		 || ip.typeName == TN(LayoutProperty)
+		 || ip.typeName == TN(StringProperty)
+		 || ip.typeName == TN(IntegerProperty)
+		 || ip.typeName == TN(SizeProperty)
+		 || ip.typeName == TN(ColorProperty)) {
+	  QComboBox * cb = (QComboBox*) ip.wA[0];
+	  string value = cb->currentText().ascii();
+	  if (value != NONE_PROP)
+	    inDef->setDefValue(ip.name, value);
+	}
+	
+	// StringCollection
+	else if (ip.typeName == TN(StringCollection)) {
+	  QComboBox * cb = (QComboBox*) ip.wA[0];
+	  string current = cb->currentText().ascii();
+	  string value(current);
+	  for ( int i = 0; i < cb->count(); i++)
+	    if (current != cb->text(i).ascii()){
+	      value += ";";
+	      value += cb->text(i).ascii();
+	    }
+	  inDef->setDefValue(ip.name, value);
+	}
+      }
+    }
+
+    void restoreSystemDefaults() {
+      for( uint i = 0 ; i < iparamA.size(); i++ ) {
+	IParam & ip = iparamA[i];
+
+	// bool
+	if(ip.typeName == TN(bool)) {
+	  QCheckBox * cb = (QCheckBox*) ip.wA[0];
+	  bool isOn;
+	  BooleanType::fromString(isOn, sysDef->getDefValue(ip.name));
+	  cb->setChecked(isOn);
+	}
+	// int
+	// unsigned int
+	// float
+	// double
+	else if(ip.typeName == TN(int) ||
+		ip.typeName == TN(unsigned int) ||
+		ip.typeName == TN(float) ||
+		ip.typeName == TN(double)) {
+	  QLineEdit * le = (QLineEdit *) ip.wA[0];
+	  le->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+	}
+
+	// string
+	else if(ip.typeName == TN(string)) {
+	  if (ip.name.find("text::") != string::npos) {
+	    QTextEdit *te = (QTextEdit *) ip.wA[0];
+	    te->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+	  } else {
+	    QLineEdit * le = (QLineEdit *) ip.wA[0];
+	    le->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+	  }
+	}
+
+	// Color
+	else if( ip.typeName == TN(Color))	{
+	  QLineEdit * leR = (QLineEdit*) ip.wA[0];
+	  QLineEdit * leG = (QLineEdit*) ip.wA[2];
+	  QLineEdit * leB = (QLineEdit*) ip.wA[4];
+	  QLineEdit * leA = (QLineEdit*) ip.wA[6];
+	  Color c;
+	  ColorType::fromString(c, sysDef->getDefValue(ip.name));
+	  leR->setText(QString("%1").arg(c.getR()));
+	  leG->setText(QString("%1").arg(c.getG()));
+	  leB->setText(QString("%1").arg(c.getB()));
+	  leA->setText(QString("%1").arg(c.getA()));
+	  ip.opt->setPaletteBackgroundColor(QColor(c.getR(), c.getG(), c.getB()));
+	}
+
+	// Size
+	else if( ip.typeName == TN(Size))	{
+	  QLineEdit * leW = (QLineEdit*) ip.wA[0];
+	  QLineEdit * leH = (QLineEdit*) ip.wA[2];
+	  QLineEdit * leD = (QLineEdit*) ip.wA[4];
+	  Size s;
+	  SizeType::fromString(s, sysDef->getDefValue(ip.name));
+	  leW->setText(QString("%1").arg(s.getW()));
+	  leH->setText(QString("%1").arg(s.getH()));
+	  leD->setText(QString("%1").arg(s.getD()));
+	}
+
+	// PropertyInterface*
+	else if (ip.typeName == TN(PropertyInterface*)
+		 || ip.typeName == TN(BooleanProperty)
+		 || ip.typeName == TN(DoubleProperty)
+		 || ip.typeName == TN(LayoutProperty)
+		 || ip.typeName == TN(StringProperty)
+		 || ip.typeName == TN(IntegerProperty)
+		 || ip.typeName == TN(SizeProperty)
+		 || ip.typeName == TN(ColorProperty)) {
+	  QComboBox * cb = (QComboBox*) ip.wA[0];
+	  string value = sysDef->getDefValue(ip.name);
+	  if (sysDef->isMandatory(ip.name))
+	    cb->setCurrentItem(0);
+	  else {
+	    if (value.empty())
+	      value = NONE_PROP;
+	  
+	    for (int i = 0; i <  cb->count(); i++)
+	      if (value == cb->text(i).ascii()) {
+		cb->setCurrentItem(i);
+		break;
+	      }
+	  }
+	}
+	
+	// StringCollection
+	else if (ip.typeName == TN(StringCollection)) {
+	  QComboBox * cb = (QComboBox*) ip.wA[0];
+	  StringCollection coll(sysDef->getDefValue(ip.name));
+	  string current = coll.getCurrentString();
+	  for ( int i = 0; i < cb->count(); i++)
+	    if (current == cb->text(i).ascii()){
+	      cb->setCurrentItem(i);
+	      break;
+	    }
+	}
+      }
+      *inDef = *sysDef;
+    }
+
     bool eventFilter(QObject *obj, QEvent *e) {
+      if (obj == setDefB) {
+	if (e->type() == QEvent::MouseButtonRelease)
+	  setDefaults();
+	return false;
+      } else if (obj == restoreSysDefB) {
+	if (e->type() == QEvent::MouseButtonRelease)
+	  restoreSystemDefaults();
+	return false;
+      }	
       if( e->type() == QEvent::MouseMove ) {
 	IParam * ip = 0;
 	for( uint i = 0 ; i < iparamA.size(); i++ ) {
@@ -206,20 +412,15 @@ namespace {
 	  }
 	}
       }
-
       return false;
     }
 
-#define NONE_PROP " None"
-
-    bool fillIn( const StructDef& inDef,
-		 const DataSet* inSet,
-		 Graph* inG) {
+    bool fillIn(const DataSet *inSet, Graph* inG) {
       //
       // Parse inDef
 
       Iterator< std::pair<std::string,std::string> > * defIt;
-      defIt = ((StructDef*)&inDef)->getField();
+      defIt = inDef->getField();
 
       while( defIt->hasNext() ) {
 	std::pair<std::string,std::string> def;
@@ -227,7 +428,7 @@ namespace {
 	IParam ip;
 	ip.name     = def.first;
 	ip.typeName = def.second;
-	ip.helpText = inDef.getHelp(ip.name);
+	ip.helpText = inDef->getHelp(ip.name);
 	// first part of the parameter name may be used
 	// to indicate a subtype
 	string::size_type pos = def.first.find("::");
@@ -439,7 +640,7 @@ namespace {
 	      cb->insertItem( proxyA[i].c_str() );
 	    ip.wA.push_back( cb );
 	    // if property is not mandatory, insert None
-	    if (!inDef.isMandatory(ip.name)) {
+	    if (!inDef->isMandatory(ip.name)) {
 	      cb->insertItem(NONE_PROP, 0);
 	      if ( curIdx >= 0 )
 		++curIdx;
@@ -450,7 +651,7 @@ namespace {
 	}
 	// StringCollection
 	else if(ip.typeName == TN (StringCollection) ) {
-	  string valueCollection =  inDef.getDefValue(ip.name);
+	  string valueCollection =  inDef->getDefValue(ip.name);
 	  StringCollection stringCol(valueCollection);
 	  QComboBox * cb = new QComboBox( this );
 	  for(unsigned int i=0; i < stringCol.size(); i++ ) {
@@ -480,9 +681,35 @@ namespace {
 	  labelWidthMax = lWidth;
       }
 
+      QPushButton * okB = new QPushButton("OK", this);
+      QSize size = okB->size();
+      size.setWidth(size.width() - 20);
+      okB->resize(size);
+      QPushButton * cancelB = new QPushButton("Cancel", this );
+      size = cancelB->size();
+      size.setWidth(size.width() - 10);
+      cancelB->resize(size);
+      setDefB = new QPushButton("Set as Defaults", this);
+      QToolTip::add(setDefB, "Set the current values as the default ones for future use");
+      setDefB->installEventFilter(this);
+      size = setDefB->size();
+      size.setWidth(size.width() + 10);
+      setDefB->resize(size);
+      restoreSysDefB = new QPushButton("Restore System Defaults", this);
+      QToolTip::add(restoreSysDefB, "ReInitialize the dialog with the original default values");
+      restoreSysDefB->installEventFilter(this);
+      size = restoreSysDefB->size();
+      size.setWidth(size.width() + 60);
+      restoreSysDefB->resize(size);
+      if (!sysDef) {
+	setDefB->hide();
+	restoreSysDefB->hide();
+      }
+
       int ix = 5, iy = 5;
       int y  = iy;
-      int maxx = 0;
+      int maxx = okB->width() + cancelB->width() +
+	setDefB->width() + restoreSysDefB->width() + 4 * ix;
 
       QLabel * info = new QLabel( 0, this );
       info->setText( INFO_MSG );
@@ -528,12 +755,14 @@ namespace {
       y += f->height() + iy*2;
 
       int x = parentw - ix;
-      QPushButton * okB     = new QPushButton( "OK",     this );
       x -= okB->width();
       okB->move( x, y );
-      QPushButton * cancelB = new QPushButton( "Cancel", this );
       x -= cancelB->width() + ix;
       cancelB->move( x, y );
+      x -= setDefB->width() + ix;
+      setDefB->move( x, y );
+      x -= restoreSysDefB->width() + ix;
+      restoreSysDefB->move( x, y );
       y += cancelB->height() + iy;
 
       info->resize( parentw-ix*2, info->height() );
@@ -650,7 +879,6 @@ namespace {
         StringCollection toto;
         outSet.get<StringCollection>( ip.name,toto);
 	}
-
       }
     }
 
@@ -660,38 +888,32 @@ namespace {
 
 bool
 tlp::openDataSetDialog(	DataSet & outSet,
-                        const StructDef & inDef,
-                        const DataSet *	inSet,
+			const StructDef *sysDef,
+                        StructDef *inDef,
+                        const DataSet *inSet,
                         const char * inName,
                         Graph * inG) {
   // DEBUG
   //	if( inSet )
   //		OutputDataSet( *inSet );
-    /////
+  /////
 
-    if( inSet && inSet != &outSet )
-        outSet = *inSet;
+  if( inSet && inSet != &outSet )
+    outSet = *inSet;
 
-    if( !inName )
-        inName = "Parameter's Dialog";
-    QParamDialog * dlg = new QParamDialog();
-    dlg->setCaption( inName );
+  if( !inName )
+    inName = "Parameter's Dialog";
+  QParamDialog *dlg = new QParamDialog(sysDef, inDef);
+  dlg->setCaption( inName );
 
-    if( !dlg->fillIn(inDef,inSet,inG) )
-        return true;
+  if( !dlg->fillIn(inSet, inG) )
+    return true;
 
-    bool res = ( dlg->exec() == QDialog::Accepted );
+  bool res = ( dlg->exec() == QDialog::Accepted );
 
-    if( res )
-        dlg->fillOut( outSet, inG );
+  if( res )
+    dlg->fillOut( outSet, inG );
 
-    ///// DEBUG
-    //	OutputDataSet( outSet );
-    /////
-
-    delete dlg;
-    return res;
+  delete dlg;
+  return res;
 }
-
-
-

@@ -22,11 +22,12 @@ namespace tlp {
    * [inSet		: Input (optional) set, containing some default values]
    */
 
-  TLP_QT_SCOPE bool openDataSetDialog	(	DataSet &			outSet,
-								const StructDef &	inDef,
-								const DataSet *		inSet	= NULL,
-								const char *		inName	= NULL,
-								Graph *		inG		= NULL	);
+  TLP_QT_SCOPE bool openDataSetDialog	(DataSet & outSet,
+					 const StructDef *sysDef,
+					 StructDef *inDef,
+					 const DataSet *inSet	= NULL,
+					 const char *inName = NULL,
+					 Graph *inG = NULL);
 
 }
 

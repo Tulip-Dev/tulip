@@ -629,13 +629,14 @@ static void setGraphName(Graph *g, QString s) {
 bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
-  StructDef parameters = ExportModuleFactory::factory->getPluginParameters(plugin);
-  parameters.buildDefaultDataSet(dataSet);//, glWidget->getGraph());
+  StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
+  parameter.buildDefaultDataSet(dataSet);
   if (author.length() > 0)
     dataSet.set<string>("author", author);
   if (comments.length() > 0)
     dataSet.set<string>("text::comments", comments);
-  if (!tlp::openDataSetDialog(dataSet, parameters, &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
+  if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
+			      &dataSet, "Enter Export parameters")) //, glWidget->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getRenderingParameters().getParameters());
   if (filename.length() == 0) {
@@ -736,6 +737,16 @@ static Graph* getCurrentSubGraph(Graph *graph, int id) {
   return (Graph *) 0;
 }
 //**********************************************************************
+// we use a hash_map to store plugin parameters
+static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+  static stdext::hash_map<unsigned long, stdext::hash_map<std::string, StructDef * > > paramMaps;
+  stdext::hash_map<std::string, StructDef *>::const_iterator it;
+  it = paramMaps[(unsigned long) factory].find(name);
+  if (it == paramMaps[(unsigned long) factory].end())
+    paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+  return paramMaps[(unsigned long) factory][name];
+}
+//**********************************************************************
 void viewGl::fileOpen(string *plugin, QString &s) {
   Observable::holdObservers();
   DataSet dataSet;
@@ -758,9 +769,10 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     else {
       noPlugin = false;
       s = QString::null;
-      StructDef parameters = ImportModuleFactory::factory->getPluginParameters(*plugin);
-      parameters.buildDefaultDataSet( dataSet );
-      cancel = !tlp::openDataSetDialog(dataSet, parameters, &dataSet, "Enter plugin parameter");
+      StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
+      StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
+      params->buildDefaultDataSet( dataSet );
+      cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, "Enter plugin parameter(s)");
     }
   } else {
     plugin = &tmpStr;
@@ -1799,9 +1811,10 @@ void viewGl::applyAlgorithm(int id) {
   string erreurMsg;
   DataSet dataSet;
   Graph *graph=glWidget->getGraph();
-  StructDef parameter = AlgorithmFactory::factory->getPluginParameters(name);
-  parameter.buildDefaultDataSet( dataSet, graph );
-  bool ok = tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
+  StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
+  StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
+  params->buildDefaultDataSet(dataSet, graph );
+  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, "Tulip Parameter Editor", graph );
   if (ok) {
     QtProgress myProgress(this,name);
     myProgress.hide();
@@ -1823,16 +1836,25 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   Graph *graph = glWidget->getGraph();
   if(graph == 0) return false;
   Observable::holdObservers();
-  overviewWidget->setObservedView(0);    
+  overviewWidget->setObservedView(0);
+  Camera cam;
+  GlGraphRenderingParameters param;
+  if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+    cam = glWidget->getRenderingParameters().getCamera();
+    param = glWidget->getRenderingParameters();
+    param.setInputLayout(name);
+    glWidget->setRenderingParameters(param);
+  }
   QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
   bool   resultBool=true;  
   DataSet *dataSet =0;
   if (query) {
     dataSet = new DataSet();
-    StructDef parameter = PROPERTY::factory->getPluginParameters(name);
-    parameter.buildDefaultDataSet( *dataSet, graph );
-    resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
+    StructDef *params = getPluginParameters(PROPERTY::factory, name);
+    StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
+    params->buildDefaultDataSet( *dataSet, graph );
+    resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet, "Tulip Parameter Editor", graph );
   }
 
   if (resultBool) {
@@ -1854,6 +1876,12 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
   if (dataSet!=0) delete dataSet;
 
+  if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+    param = glWidget->getRenderingParameters();
+    param.setInputLayout("viewLayout");
+    param.setCamera(cam);
+    glWidget->setRenderingParameters(param);
+  }
   propertiesWidget->setGraph(graph);
   overviewWidget->setObservedView(glWidget);
   Observable::unholdObservers();
@@ -1894,14 +1922,7 @@ void viewGl::changeLayout(int id) {
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
 
-  Camera cam = glWidget->getRenderingParameters().getCamera();
-  GlGraphRenderingParameters param = glWidget->getRenderingParameters();
-  param.setInputLayout(name);
-  glWidget->setRenderingParameters(param);
   bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
-  param.setInputLayout("viewLayout");
-  param.setCamera(cam);
-  glWidget->setRenderingParameters(param);
   if (result) {
     if( force_ratio->isOn() )
       glWidget->getGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
