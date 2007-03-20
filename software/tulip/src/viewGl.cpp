@@ -220,6 +220,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   clusterTreeWidget=tabWidget->clusterTree;
   //Init Property Editor Widget
   propertiesWidget=tabWidget->propertyDialog;
+  propertiesWidget->setGraph(0);
   connect(propertiesWidget->tableNodes, SIGNAL(showElementProperties(unsigned int,bool)),
 	  this, SLOT(showElementProperties(unsigned int,bool)));
   connect(propertiesWidget->tableEdges, SIGNAL(showElementProperties(unsigned int,bool)),
@@ -1462,7 +1463,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 #if (QT_REL == 3)
       sstr << "<font color=darkblue><b>";
 #endif
-      sstr << (isNode ? "node " : "edge ") << itemId;
+      sstr << (isNode ? "Node " : "Edge ") << itemId;
 #if (QT_REL == 3)
       sstr << "</b></font>";
       QLabel *caption = new QLabel(sstr.str().c_str(), &contextMenu);

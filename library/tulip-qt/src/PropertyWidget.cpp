@@ -66,7 +66,10 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   editedProperty=0;
   vScroll=verticalScrollBar();
   setColumnReadOnly(0, true);
-  horizontalHeader()->setLabel(0, tr("Undefined"));
+  setNumRows(0);
+  QHeader *header = horizontalHeader();
+  header->setLabel(0, "Id");
+  header->setLabel(1, "");
   showProperties = false;
   connect(vScroll,SIGNAL(valueChanged(int)),SLOT(scroll(int)));
   connect(this,SIGNAL(valueChanged(int,int)),SLOT(changePropertyValue(int,int)));
@@ -85,6 +88,9 @@ void PropertyWidget::setGraph(Graph *s) {
     clearCell(i,1);
   }
   setNumRows(0);
+  QHeader *header = horizontalHeader();
+  header->setLabel(0, "Id");
+  header->setLabel(1, "Property");
   vScrollPos = 0;
   graph = s;
   update();
@@ -100,6 +106,9 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
     editedPropertyName=name;
   }
   setNumCols(2);
+  QHeader *header = horizontalHeader();
+  header->setLabel(0, "Id");
+  header->setLabel(1, name.c_str());
   setColumnStretchable(1, true);
   updateNbElements();
   update();
@@ -488,7 +497,7 @@ void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
 #else
       string title;
 #endif
-      title += displayNode ? "node " : "edge ";
+      title += displayNode ? "Node " : "Edge ";
       title += textId;
 #if (QT_REL == 3)
       title += "</b></font>";
