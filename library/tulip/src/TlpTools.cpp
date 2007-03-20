@@ -167,6 +167,7 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
 			    factoryDepName + " '" + pluginDepName + "'.");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
+	    break;
 	  }
 	  string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
 	  string releaseDep = (*itD).pluginRelease;
@@ -179,6 +180,7 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
 			    release + " is loaded.");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
+	    break;
 	  }
 	}
       } delete itP;
