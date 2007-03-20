@@ -44,7 +44,7 @@ namespace {
 //
 // GraphType
 
-GraphType::RealType GraphType::undefineValue() {
+GraphType::RealType GraphType::undefinedValue() {
   return 0;
 }
 
@@ -73,7 +73,7 @@ bool GraphType::fromString( RealType & v, const string & s ) {
 //
 // DoubleType
 
-double DoubleType::undefineValue() {
+double DoubleType::undefinedValue() {
   return DBL_MIN;
 }
 
@@ -98,7 +98,7 @@ bool DoubleType::fromString( RealType & v, const string & s ) {
 
 //
 // IntegerType
-int IntegerType::undefineValue() {
+int IntegerType::undefinedValue() {
 	return INT_MIN;
 }
 
@@ -126,7 +126,7 @@ bool IntegerType::fromString( RealType & v, const string & s ) {
 //
 // BooleanType
 
-bool BooleanType::undefineValue() {
+bool BooleanType::undefinedValue() {
   return false;
 }
 
@@ -155,7 +155,7 @@ bool BooleanType::fromString( RealType & v, const string & s ) {
 //
 // LineType
 
-vector<Coord> LineType::undefineValue() {
+vector<Coord> LineType::undefinedValue() {
   vector<Coord> tmp;
   return tmp;
 }
@@ -202,7 +202,7 @@ bool LineType::fromString( RealType & v, const string & s ) {
 
 //
 // PointType
-Coord PointType::undefineValue() {
+Coord PointType::undefinedValue() {
   Coord tmp;
   tmp.set(DBL_MIN,DBL_MIN,DBL_MIN);
   return tmp;
@@ -233,7 +233,7 @@ bool PointType::fromString( RealType & v, const string & s ) {
 //
 // SizeType
 
-Size SizeType::undefineValue() {
+Size SizeType::undefinedValue() {
   return Size(DBL_MIN,DBL_MIN,DBL_MIN);
 }
 
@@ -259,7 +259,7 @@ bool SizeType::fromString( RealType & v, const string & s ) {
 //
 // StringType
 
-string StringType::undefineValue() {
+string StringType::undefinedValue() {
   return string("");
 }
 
@@ -282,7 +282,7 @@ bool StringType::fromString( RealType & v, const string & s ) {
 //
 // ColorType
 
-Color ColorType::undefineValue() {
+Color ColorType::undefinedValue() {
   return Color(255,255,255,255);
 }
 
@@ -308,7 +308,7 @@ bool ColorType::fromString( RealType & v, const string & s ) {
 //
 // StringCollectionType
 
-StringCollection StringCollectionType::undefineValue() {
+StringCollection StringCollectionType::undefinedValue() {
   return StringCollection();
 }
 
