@@ -444,6 +444,11 @@ namespace {
 	// bool
 	if(		ip.typeName == TN(bool) ) {
 	  QCheckBox * cb = new QCheckBox( this );
+#if (QT_REL > 3)
+	  QSize size = cb->size();
+	  size.setHeight(size.height() + 5);
+	  cb->resize(size);
+#endif
 	  ip.wA.push_back( cb );
 	  if( inSet ) {
 	    bool isOn;
@@ -546,6 +551,12 @@ namespace {
 	  QLabel    * lbG = new QLabel( "G", this );
 	  QLabel    * lbB = new QLabel( "B", this );
 	  QLabel    * lbA = new QLabel( "A", this );
+#if (QT_REL > 3)
+	  lbR->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	  lbG->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	  lbB->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	  lbA->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+#endif
 	  lbR->resize( 16, lbR->height() );
 	  lbG->resize( 16, lbG->height() );
 	  lbB->resize( 16, lbB->height() );
@@ -647,6 +658,8 @@ namespace {
 	    }
 	    if (curIdx >= 0)
 	      cb->setCurrentItem( curIdx );
+	    else
+	      cb->setCurrentItem(0);
 	  }
 	}
 	// StringCollection
@@ -657,6 +670,7 @@ namespace {
 	  for(unsigned int i=0; i < stringCol.size(); i++ ) {
             cb->insertItem( stringCol[i].c_str());
 	  }
+	  cb->setCurrentItem(0);
 	  ip.wA.push_back( cb );       
 	}
 	
