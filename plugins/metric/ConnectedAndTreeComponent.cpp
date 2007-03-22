@@ -115,4 +115,4 @@ public:
   }
 };
 /*@}*/
-DOUBLEPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","1.0","Component");
+DOUBLEPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected Tree Component","David Auber","03/01/2005","Alpha","1.0","Component");

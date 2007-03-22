@@ -32,7 +32,7 @@ private:
   void drawCubeSimple(GLenum);
 };
 
-GLYPHPLUGIN(CubeOutLinedTransparent, "CubeOutLinedTransparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9);
+GLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9);
 
 //===================================================================================
 CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc): Glyph(gc),listOk(false) {

@@ -77,4 +77,4 @@ private:
 
 };
 /*@}*/
-SIZEPLUGIN(AutoSize,"Auto sizing","Auber","04/05/2001","","1.0")
+SIZEPLUGIN(AutoSize,"Auto Sizing","Auber","04/05/2001","","1.0")

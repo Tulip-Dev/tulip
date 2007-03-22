@@ -5,7 +5,7 @@
 
 #include "SpanningDagSelection.h"
 
-BOOLEANPLUGIN(SpanningDagSelection,"SpanningDag","David Auber","01/12/1999","Alpha","1.0");
+BOOLEANPLUGIN(SpanningDagSelection,"Spanning Dag","David Auber","01/12/1999","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

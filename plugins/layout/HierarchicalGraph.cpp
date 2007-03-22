@@ -55,7 +55,7 @@ HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgor
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("layer spacing", paramHelp[2], "64." );
   addParameter<float> ("node spacing", paramHelp[3], "18." );
-  addDependency<DoubleAlgorithm>("DagLevel", "1.0");
+  addDependency<DoubleAlgorithm>("Dag Level", "1.0");
   addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.0");
 }
 //================================================================================
@@ -74,7 +74,7 @@ void HierarchicalGraph::buildGrid(Graph *sg){
   //  cerr << __PRETTY_FUNCTION__  << endl;
   string erreurMsg;
   DoubleProperty dagLevel(sg);
-  if(!sg->computeProperty("DagLevel", &dagLevel,erreurMsg)) {
+  if(!sg->computeProperty("Dag Level", &dagLevel,erreurMsg)) {
     cerr << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
     return;
   }

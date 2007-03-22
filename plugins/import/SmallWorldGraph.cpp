@@ -98,4 +98,4 @@ struct SmallWorldGraph:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(SmallWorldGraph,"Grid approximation","Auber","25/06/2002","","1.0","Graphs")
+IMPORTPLUGINOFGROUP(SmallWorldGraph,"Grid Approximation","Auber","25/06/2002","","1.0","Graphs")

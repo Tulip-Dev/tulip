@@ -167,7 +167,7 @@ void drawGraph(Graph *tmpg) {
     layoutName = "Circular";
   else
     layoutName = "GEM (Frick)";
-  string sizesName="Auto sizing";
+  string sizesName="Auto Sizing";
   tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProperty>("viewLayout"),errMsg);
   if (tmpg->numberOfNodes() < 300)
     tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizeProperty>("viewSize"),errMsg);
@@ -259,7 +259,7 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   DataSet tmpData;
   string errMsg;
-  if (!tlp::applyAlgorithm(sg,errMsg,&tmpData,"QuotientClustering", pluginProgress))
+  if (!tlp::applyAlgorithm(sg,errMsg,&tmpData,"Quotient Clustering", pluginProgress))
     return 0;
   Graph *quotientGraph;
   tmpData.get<Graph *>("quotientGraph",quotientGraph);
@@ -306,12 +306,12 @@ namespace {
 //================================================================================
 StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
-  addDependency<Algorithm>("QuotientClustering", "1.0");
+  addDependency<Algorithm>("Quotient Clustering", "1.0");
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   addDependency<DoubleAlgorithm>("Strength", "1.0");
   addDependency<LayoutAlgorithm>("Circular", "1.0");
   addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
-  addDependency<SizeAlgorithm>("Auto sizing", "1.0");
+  addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
 }
 
 //==============================================================================

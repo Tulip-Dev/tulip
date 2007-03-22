@@ -65,15 +65,15 @@ static const char* rangeErrorMsg = "max size must be greater than min size";
 
 /** \addtogroup size */
 /*@{*/
-/// MetricMapping.h - Compute size of elements according to a metric.
+/// Metric Mapping - Compute size of elements according to a metric.
 /** This plugin enables to set the size of the grapĥ&#146;s elements
  *  according to a metric.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class MetricMapping:public SizeAlgorithm {
+class MetricSizeMapping:public SizeAlgorithm {
 public:
-  MetricMapping(const PropertyContext &context):SizeAlgorithm(context) {
+  MetricSizeMapping(const PropertyContext &context):SizeAlgorithm(context) {
     addParameter<DoubleProperty>("property", paramHelp[0]);
     addParameter<SizeProperty>("input", paramHelp[1]);
     addParameter<bool>("width", paramHelp[2],"true");
@@ -85,7 +85,7 @@ public:
     addParameter<bool>("node/edge", paramHelp[6],"true");
   }
   
-  ~MetricMapping(){}
+  ~MetricSizeMapping(){}
 
   void computeNodeSize() {
     Iterator<node> *itN=graph->getNodes();
@@ -181,4 +181,4 @@ private:
   bool nodeoredge;
 };
 /*@}*/
-SIZEPLUGIN(MetricMapping,"Metric Mapping","Auber","08/08/2003","","1.0");
+SIZEPLUGIN(MetricSizeMapping,"Metric Mapping","Auber","08/08/2003","","1.0");

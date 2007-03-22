@@ -41,8 +41,8 @@ namespace {
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
   addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
-  addDependency<BooleanAlgorithm>("SpanningDag", "1.0");
-  addDependency<DoubleAlgorithm>("DagLevel", "1.0");
+  addDependency<BooleanAlgorithm>("Spanning Dag", "1.0");
+  addDependency<DoubleAlgorithm>("Dag Level", "1.0");
   addDependency<LayoutAlgorithm>("Cone Tree", "1.0");
 }
 
@@ -73,7 +73,7 @@ void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops
     bool resultBool;
     string erreurMsg;
     BooleanProperty *spanningDag= new BooleanProperty(graph);
-    resultBool = graph->computeProperty("SpanningDag",spanningDag,erreurMsg);
+    resultBool = graph->computeProperty("Spanning Dag",spanningDag,erreurMsg);
     if (!resultBool) {
       cerr << __PRETTY_FUNCTION__ << endl;
       cerr << erreurMsg << endl;
@@ -140,7 +140,7 @@ void GeneralGraph3D::makeProperDag(Graph* graph, list<node> &addedNodes, stdext:
   bool resultBool;
   string erreurMsg;
   DoubleProperty *dagLevel= new DoubleProperty(graph);
-  resultBool = graph->computeProperty("DagLevel",dagLevel,erreurMsg);
+  resultBool = graph->computeProperty("Dag Level",dagLevel,erreurMsg);
   assert(resultBool);
   //we now transform the dag in a proper Dag, two linked nodes of a proper dag
   //must have a difference of one of dag level metric.

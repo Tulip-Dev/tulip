@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"QuotientClustering","David Auber","13/06/2001","Alpha","1.0");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.0");
 
 struct Edge {
   unsigned int source,target;

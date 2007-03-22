@@ -14,7 +14,7 @@
 
 using namespace tlp;
 
-BOOLEANPLUGIN(InducedSubGraphSelection,"Induced sub-graph","David Auber","08/08/2001","Alpha","1.0");
+BOOLEANPLUGIN(InducedSubGraphSelection,"Induced Sub-Graph","David Auber","08/08/2001","Alpha","1.0");
 
 //=================================================================================
 namespace {

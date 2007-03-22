@@ -12,7 +12,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/SimpleTest.h>
 
-BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple edge","David Auber","20/01/2003","Alpha","1.0");
+BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple Edge","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
 using namespace tlp;

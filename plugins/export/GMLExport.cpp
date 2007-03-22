@@ -39,12 +39,12 @@ void printSize(ostream &os,const Size &v){
  * This format is the file format used by Graphlet.
  * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
-class GML:public ExportModule {
+class GMLExport:public ExportModule {
 public:
-  GML(AlgorithmContext context):ExportModule(context)
+  GMLExport(AlgorithmContext context):ExportModule(context)
   {}
 
-  ~GML(){}
+  ~GMLExport(){}
 
   string convert(string tmp) {
     string newStr;
@@ -139,4 +139,4 @@ public:
   }
 };
 /*@}*/
-EXPORTPLUGIN(GML,"GML","Auber David","31/07/2001","GML Export plugin","1.0")
+EXPORTPLUGIN(GMLExport,"GML","Auber David","31/07/2001","GML Export plugin","1.0")

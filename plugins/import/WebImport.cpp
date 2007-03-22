@@ -614,4 +614,4 @@ struct WebImport:public ImportModule {
   }
 };
 
-IMPORTPLUGINOFGROUP(WebImport,"Web site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")
+IMPORTPLUGINOFGROUP(WebImport,"Web Site","Auber","15/11/2004","Import Web site plugin","1.0","Misc")

@@ -10,7 +10,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(ImprovedWalker, "ImprovedWalker",
+LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
              "Julien Testut, Antony Durand, Pascal Ollier, "
              "Yashvin Nababsing, Sebastien Leclerc, "
              "Thibault Ruchon, Eric Dauchier",

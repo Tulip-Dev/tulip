@@ -1,6 +1,6 @@
 #include "TreeArityMax.h"
 
-DOUBLEPLUGINOFGROUP(TreeArityMax,"TreeArityMax","David Auber","20/12/1999","Alpha","1.0","Tree");
+DOUBLEPLUGINOFGROUP(TreeArityMax,"Tree Arity Max","David Auber","20/12/1999","Alpha","1.0","Tree");
 
 using namespace std;
 using namespace tlp;

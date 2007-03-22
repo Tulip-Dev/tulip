@@ -59,6 +59,7 @@ MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context) 
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
+  addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
   addDependency<Algorithm>("Equal Value", "1.0");
 }
 //====================================================
@@ -264,7 +265,7 @@ bool MixedModel::run() {
     err ="";
     LayoutProperty layout(graph);
     tmp.set("coordinates", layoutResult);
-    graph->computeProperty<LayoutProperty *>(string("Connected Componnent Packing"),&layout,err,NULL,&tmp);
+    graph->computeProperty<LayoutProperty *>(string("Connected Component Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()){
       node n = itN->next();
