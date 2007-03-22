@@ -87,7 +87,6 @@ namespace tlp {
     static TLP_GL_SCOPE void initFactory() {
       if (!factory) {
 	factory = new TemplateFactory<GlyphFactory,Glyph,GlyphContext *>;
-	factory->currentLoader = 0;
       }
     }
   };

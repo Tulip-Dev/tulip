@@ -21,7 +21,7 @@ namespace tlp {
 class TemplateFactoryInterface {
 public:
   static TLP_SCOPE std::map< std::string, TemplateFactoryInterface* > *allFactories;
-  static PluginLoader *currentLoader;
+  static TLP_SCOPE PluginLoader *currentLoader;
 
   virtual ~TemplateFactoryInterface(){}
   virtual Iterator<std::string>* availablePlugins()=0;

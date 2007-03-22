@@ -75,7 +75,6 @@ public:
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
-      factory->currentLoader = 0;
     }
   }
   AbstractProperty(Graph *);

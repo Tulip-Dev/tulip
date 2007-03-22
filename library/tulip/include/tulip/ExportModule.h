@@ -50,8 +50,7 @@ public:
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext >;
-      factory->currentLoader = 0;
-    }
+     }
   }    
   virtual ~ExportModuleFactory() {}
   virtual ExportModule * createPluginObject(AlgorithmContext)=0;

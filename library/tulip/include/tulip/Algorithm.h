@@ -40,7 +40,6 @@ public:
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext >;
-      factory->currentLoader = 0;
     }
   }
   virtual ~AlgorithmFactory() {}
