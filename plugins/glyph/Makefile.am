@@ -5,38 +5,38 @@ DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libcube.la \
-	libcubeoutlinedtransparent.la \
-	libsphere.la \
-	libcone.la \
-	libsquare.la \
-	libtriangle.la \
-	libring.la \
-	libcircle.la \
-	libpentagone.la \
-	libhexagone.la \
-	libbillboard.la \
-	libcylinder.la \
-	libhalfcylinder.la \
-	libsquarebordertextured.la
-#	libsquareborder.la
+	libCube-@VERSION@.la \
+	libCubeOutlinedTransparent-@VERSION@.la \
+	libSphere-@VERSION@.la \
+	libCone-@VERSION@.la \
+	libSquare-@VERSION@.la \
+	libTriangle-@VERSION@.la \
+	libRing-@VERSION@.la \
+	libCircle-@VERSION@.la \
+	libPentagone-@VERSION@.la \
+	libHexagone-@VERSION@.la \
+	libBillboard-@VERSION@.la \
+	libCylinder-@VERSION@.la \
+	libHalfCylinder-@VERSION@.la \
+	libSquareBorderTextured-@VERSION@.la
+#	libSquareBorder-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/plugins/glyph
+pluginsdir = $(libdir)/tlp/glyphs
 
-libcircle_la_SOURCES = circle.cpp
-libhexagone_la_SOURCES = hexagone.cpp
-libtriangle_la_SOURCES = triangle.cpp
-libpentagone_la_SOURCES = pentagone.cpp
-libsquare_la_SOURCES = square.cpp
-libring_la_SOURCES = ring.cpp
-libbillboard_la_SOURCES = billboard.cpp
-libcube_la_SOURCES = cube.cpp 
-libcubeoutlinedtransparent_la_SOURCES = cubeoutlinedtransparent.cpp 
-libsphere_la_SOURCES = sphere.cpp 
-libcone_la_SOURCES = cone.cpp 
-libcylinder_la_SOURCES = cylinder.cpp 
-libhalfcylinder_la_SOURCES = halfcylinder.cpp 
+libCircle_@VERSION@_la_SOURCES = circle.cpp
+libHexagone_@VERSION@_la_SOURCES = hexagone.cpp
+libTriangle_@VERSION@_la_SOURCES = triangle.cpp
+libPentagone_@VERSION@_la_SOURCES = pentagone.cpp
+libSquare_@VERSION@_la_SOURCES = square.cpp
+libRing_@VERSION@_la_SOURCES = ring.cpp
+libBillboard_@VERSION@_la_SOURCES = billboard.cpp
+libCube_@VERSION@_la_SOURCES = cube.cpp 
+libCubeOutlinedTransparent_@VERSION@_la_SOURCES = cubeoutlinedtransparent.cpp 
+libSphere_@VERSION@_la_SOURCES = sphere.cpp 
+libCone_@VERSION@_la_SOURCES = cone.cpp 
+libCylinder_@VERSION@_la_SOURCES = cylinder.cpp 
+libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp 
+libSquareBorderTextured_@VERSION@_la_SOURCES = squarebordertextured.cpp
 
-libsquarebordertextured_la_SOURCES = squarebordertextured.cpp
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @LIB_GL@ @GL_LDFLAGS@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@

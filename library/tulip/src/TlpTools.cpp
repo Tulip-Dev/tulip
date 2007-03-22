@@ -80,9 +80,9 @@ void tlp::initTulipLib(char* appDirPath) {
       pos = TulipPluginsPath.find('\\', pos);
     }
 #endif
-    TulipPluginsPath= TulipLibDir + "tlp/plugins" + PATH_DELIMITER + TulipPluginsPath;
+    TulipPluginsPath= TulipLibDir + "tlp" + PATH_DELIMITER + TulipPluginsPath;
   } else
-    TulipPluginsPath= TulipLibDir + "tlp/plugins";
+    TulipPluginsPath= TulipLibDir + "tlp";
     
 
   // one dir up to initialize the doc dir
@@ -120,27 +120,39 @@ TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> 
 TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
-static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
+PluginLoader *TemplateFactoryInterface::currentLoader;
+//=========================================================
+void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
+  if (loader!=0)
+    loader->start(dir.c_str(), type);
+
+  tlp::PluginLibraryLoader plLoader(dir, loader);
+
+  TemplateFactoryInterface::currentLoader = loader;
+  if (plLoader.hasPluginLibraryToLoad()) {
+    while(plLoader.loadNextPluginLibrary(loader)) {
+    }
+    if (loader)
+      loader->finished(true, plLoader.msg);
+  } else {
+    if (loader)
+      loader->finished(false, plLoader.msg);
+  }
+}  
+
+static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* loader) {
   SizeProperty::initFactory();
-  SizeProperty::factory->loadPluginsFromDir(dir + "sizes", "Size",plug);
   IntegerProperty::initFactory();
-  IntegerProperty::factory->loadPluginsFromDir(dir + "int", "Integer",plug);
   LayoutProperty::initFactory();
-  LayoutProperty::factory->loadPluginsFromDir(dir + "layout" , "Layout",plug);
   ColorProperty::initFactory();
-  ColorProperty::factory->loadPluginsFromDir(dir + "colors" , "Color",plug);
   DoubleProperty::initFactory();
-  DoubleProperty::factory->loadPluginsFromDir(dir + "metric" , "Double",plug);
   StringProperty::initFactory();
-  StringProperty::factory->loadPluginsFromDir(dir + "string" , "String",plug);
   BooleanProperty::initFactory();
-  BooleanProperty::factory->loadPluginsFromDir(dir + "selection" , "Boolean",plug);
   AlgorithmFactory::initFactory();
-  AlgorithmFactory::factory->loadPluginsFromDir(dir + "clustering" , "Cluster",plug);
   ImportModuleFactory::initFactory();
-  ImportModuleFactory::factory->loadPluginsFromDir(dir + "import" , "Import Module",plug);
   ExportModuleFactory::initFactory();
-  ExportModuleFactory::factory->loadPluginsFromDir(dir + "export" , "Export Module",plug);
+  // plugins load
+  loadPluginsFromDir(dir, "Algorithm", loader);
   // plugins dependencies loop
   bool depsNeedCheck;
   do {
@@ -161,10 +173,10 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
 	  string factoryDepName = (*itD).factoryName;
 	  string pluginDepName = (*itD).pluginName;
 	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
-	    if (plug)
-	      plug->aborted(pluginName, tfi->getPluginsClassName() +
-			    " '" + pluginName + "' will be removed, it depends on missing " +
-			    factoryDepName + " '" + pluginDepName + "'.");
+	    if (loader)
+	      loader->aborted(pluginName, tfi->getPluginsClassName() +
+			      " '" + pluginName + "' will be removed, it depends on missing " +
+			      factoryDepName + " '" + pluginDepName + "'.");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
 	    break;
@@ -173,11 +185,11 @@ static void loadPluginsFromDir(std::string dir, PluginLoader *plug) {
 	  string releaseDep = (*itD).pluginRelease;
 	  if (getMajor(release) != getMajor(releaseDep) ||
 	      getMinor(release) != getMinor(releaseDep)) {
-	    if (plug)
-	      plug->aborted(pluginName, tfi->getPluginsClassName() +
-			    " '" + pluginName + "' will be removed, it depends on release " +
-			    releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-			    release + " is loaded.");
+	    if (loader)
+	      loader->aborted(pluginName, tfi->getPluginsClassName() +
+			      " '" + pluginName + "' will be removed, it depends on release " +
+			      releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+			      release + " is loaded.");
 	    tfi->removePlugin(pluginName);
 	    depsNeedCheck = true;
 	    break;
@@ -194,13 +206,13 @@ void tlp::loadPlugins(PluginLoader *plug) {
   while (end!=TulipPluginsPath.end())
     if ((*end)==PATH_DELIMITER) {
       if (begin!=end) 
-	loadPluginsFromDir(string(begin,end)+'/', plug);
+	loadAlgorithmPluginsFromDir(string(begin,end), plug);
       ++end;
       begin=end;
     } else
       ++end;
   if (begin!=end) 
-    loadPluginsFromDir(string(begin,end)+'/', plug);
+    loadAlgorithmPluginsFromDir(string(begin,end), plug);
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {

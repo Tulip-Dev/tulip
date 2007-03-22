@@ -1,13 +1,13 @@
+RELEASE = ${VERSION}
+
 if WIN32
 DLL_FLAGS = -no-undefined
 DLL_TULIP_GL = -DDLL_TULIP_GL
 ADDLDFLAGS = -lfreetype -lxml2 
 ADD_INCLUDES = -I/mingw/include/freetype2
-RELEASE = ${VERSION}
 else
 ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
 ADD_INCLUDES = `freetype-config --cflags` `xml2-config --cflags` 
-RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 if MACOSX
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif

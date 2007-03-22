@@ -11,15 +11,15 @@ ADD_INCLUDES = `xml2-config --cflags`
 endif
 
 plugins_LTLIBRARIES = \
-		libAutoSize.la \
-		libfittolabels.la \
-		libmetricmapping.la 
+		libAutoSize-@VERSION@.la \
+		libFitToLabels-@VERSION@.la \
+		libMetricSizeMapping-@VERSION@.la 
 
-pluginsdir = $(libdir)/tlp/plugins/sizes
+pluginsdir = $(libdir)/tlp
 
-libmetricmapping_la_SOURCES = MetricMapping.cpp 
-libAutoSize_la_SOURCES = AutoSize.cpp 
-libfittolabels_la_SOURCES = FitToLabel.cpp 
+libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
+libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
+libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_OGL_LDFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@ ${ADD_INCLUDES}

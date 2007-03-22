@@ -1,16 +1,19 @@
-SHELL=sh
+TULIP_DIR=../..
+TULIP_CONFIG=$(TULIP_DIR)/tulip-config
+TULIP_VERSION=$(shell ${TULIP_CONFIG} --version)
+LIB_EXTENSION=$(shell ${TULIP_CONFIG} --pluginextension)
 
-CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `../../tulip-config --qtincludes` `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared `../../tulip-config --libs` `../../tulip-config --qtlibs`
+CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `${TULIP_CONFIG} --qtincludes` `${TULIP_CONFIG} --cxxflags`
+LDFLAGS= -shared `${TULIP_CONFIG} --libs` `${TULIP_CONFIG} --qtlibs`
 
 SRCS= $(ARITY_SRCS) $(ARITY_SEGMENT_SRCS) $(SEGMENT_SRCS)
 
 OBJS=$(SRCS:.cpp=.o)
 
-ARITY_TARGET=libarity.so
-ARITY_SEGMENT_TARGET=libaritysegment.so
-SEGMENT_TARGET=libsegment.so
+ARITY_TARGET=libarity-$(TULIP_VERSION).$(LIB_EXTENSION)
+ARITY_SEGMENT_TARGET=libaritysegment-$(TULIP_VERSION).$(LIB_EXTENSION)
+SEGMENT_TARGET=libsegment-$(TULIP_VERSION).$(LIB_EXTENSION)
 
 all: $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET)
 
@@ -18,7 +21,7 @@ clean :
 	-rm -f $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET) *.o *.d
 
 install: all
-	install $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET) `../../tulip-config --pluginpath`/clustering  
+	install $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET) `${TULIP_CONFIG} --pluginpath` 
 
 ARITY_SRCS=ArityRecClustering.cpp
 ARITY_OBJS=$(ARITY_SRCS:.cpp=.o)

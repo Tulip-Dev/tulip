@@ -62,25 +62,6 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::removePlugin(const 
 }
 
 template<class ObjectFactory, class ObjectType, class Context>
-void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::loadPluginsFromDir(std::string pluginPath, std::string type,tlp::PluginLoader *loader) {
-  if (loader!=0)
-    loader->start(pluginPath.c_str(),type);
-
-  tlp::PluginLibraryLoader plLoader(pluginPath, loader);
-
-  currentLoader = loader;
-  if (plLoader.hasPluginLibraryToLoad()) {
-    while(plLoader.loadNextPluginLibrary(loader)) {
-    }
-    if (loader)
-      loader->finished(true, plLoader.msg);
-  } else {
-    if (loader)
-      loader->finished(false, plLoader.msg);
-  }
-}
-
-template<class ObjectFactory, class ObjectType, class Context>
 ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginObject(const std::string& name, Context c) {
   typename ObjectCreator::iterator it;
   it=objMap.find(name);

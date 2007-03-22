@@ -1,10 +1,10 @@
+RELEASE = ${VERSION}
+
 if WIN32 
 DLL_FLAGS = -no-undefined
 DLL_TULIP_QT = -DDLL_TULIP_QT
 DLL_TULIP_QT2 = -DDLL_TULIP_QT2
-RELEASE = ${VERSION}
 else 
-RELEASE = @TULIP_VERSION@ -version-info 0:0:0
 if MACOSX
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
@@ -26,7 +26,7 @@ AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDF
 endif
 
 AM_CPPFLAGS= @QT_CPPFLAGS@
-qtplugindir = $(libdir)/tlp/plugins/designer
+qtplugindir = $(libdir)/tlp/designer
 
 if QT3
 libTulipWidgets_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version

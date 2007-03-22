@@ -1,11 +1,13 @@
-SHELL=sh
-
-TARGET=libplaneclustering.so
+TULIP_DIR=../..
+TULIP_CONFIG=$(TULIP_DIR)/tulip-config
+TULIP_VERSION=$(shell ${TULIP_CONFIG} --version)
+LIB_EXTENSION=$(shell ${TULIP_CONFIG} --pluginextension)
+TARGET=libplaneclustering-$(TULIP_VERSION).$(LIB_EXTENSION)
 SRCS=  PlaneClustering.cpp
 
-CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `../../tulip-config --qtincludes` `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared `../../tulip-config --libs` `../../tulip-config --qtlibs`
+CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `${TULIP_CONFIG} --qtincludes` `${TULIP_CONFIG} --cxxflags`
+LDFLAGS= -shared `${TULIP_CONFIG} --libs` `${TULIP_CONFIG} --qtlibs`
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -21,7 +23,7 @@ clean :
 	-rm -f $(TARGET) *.o *.d
 
 install: all
-	install $(TARGET) `../../tulip-config --pluginpath`/clustering  
+	install $(TARGET) `${TULIP_CONFIG} --pluginpath`
 
 %.d: %.cpp
 	@$(SHELL) -ec '$(CXX) -M $(CXXFLAGS) $< \

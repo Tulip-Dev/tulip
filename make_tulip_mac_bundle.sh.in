@@ -103,7 +103,7 @@ do
 done
 
 # clean up the plugins bundle dir
-TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp/plugins
+TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp
 # remove lib*.a and lib*.la files
 find $TLP_PLUGINS_BUNDLE_DIR -name 'lib*.*a' -print | xargs rm
 # remove the plugins designer bundle dir

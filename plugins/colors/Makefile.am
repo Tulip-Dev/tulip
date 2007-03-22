@@ -5,11 +5,11 @@ DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libmetricmapping.la
+	libMetricColorMapping-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/plugins/colors
+pluginsdir = $(libdir)/tlp
 
-libmetricmapping_la_SOURCES = MetricMapping.cpp
+libMetricColorMapping_@VERSION@_la_SOURCES = MetricMapping.cpp
 
 INCLUDES = @TULIP_INCLUDE@
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@

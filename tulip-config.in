@@ -10,7 +10,8 @@ includedir=@includedir@
 libdir=@libdir@
 qtversion=@QT_VERSION@
 libversion=
-# check for MacOS of Windows installation
+libextension=so
+# check for MacOS or Windows installation
 if test "$(basename $thisdir)" = "MacOS" ; then
   if test -d $(dirname $thisdir)/lib; then
 # MacOS bundle
@@ -25,6 +26,7 @@ if test -f $thisdir/assistant.exe ; then
   includedir=$thisdir/include
   libdir=$this/lib
   libversion=-@WIN_VERSION@
+  libextension=dll
 fi
 
 usage()
@@ -37,6 +39,7 @@ Options:
 	--cxxflags
 	--glincludes
         --pluginpath
+	--pluginextension
         --qtlibs
         --qtincludes
 	
@@ -71,7 +74,10 @@ while test $# -gt 0; do
       echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt${qtversion}${libversion}
       ;;
     --pluginpath)
-      echo ${libdir}/tlp/plugins
+      echo ${libdir}/tlp
+      ;;
+    --pluginextension)
+      echo ${libextension}
       ;;
     --qtlibs)
       echo @QT_LDFLAGS@ @LIB_QT@

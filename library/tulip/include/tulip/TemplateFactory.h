@@ -21,10 +21,11 @@ namespace tlp {
 class TemplateFactoryInterface {
 public:
   static TLP_SCOPE std::map< std::string, TemplateFactoryInterface* > *allFactories;
+  static PluginLoader *currentLoader;
+
   virtual ~TemplateFactoryInterface(){}
   virtual Iterator<std::string>* availablePlugins()=0;
   virtual bool pluginExists(const std::string &pluginName)=0;
-  virtual void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0)=0;
   virtual StructDef getPluginParameters(std::string name)=0;
   virtual std::string getPluginRelease(std::string name)=0;
   virtual std::list<tlp::Dependency> getPluginDependencies(std::string name)=0;
@@ -51,7 +52,6 @@ public:
   }
   //typedef void *(*func)();
   typedef std::map< std::string , ObjectFactory * > ObjectCreator;
-  PluginLoader *currentLoader;
 
   ObjectCreator objMap;
   std::map<std::string,StructDef> objParam;
@@ -61,7 +61,6 @@ public:
 
   Iterator<std::string>* availablePlugins();
   bool pluginExists(const std::string& pluginName);
-  void loadPluginsFromDir(std::string pluginPath, std::string type, PluginLoader *loader=0);
   ObjectType *getPluginObject(const std::string& name, Context p);
   StructDef getPluginParameters(std::string name);
   std::string getPluginRelease(std::string name);
