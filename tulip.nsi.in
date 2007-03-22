@@ -101,26 +101,10 @@ File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll"
 File "@prefix@\bin\libtulip-qt@QT_VERSION@-@WIN_VERSION@.dll" 
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
-setOutPath $INSTDIR\lib\tlp\plugins\clustering
-File @prefix@\lib\tlp\plugins\clustering\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\colors
-File @prefix@\lib\tlp\plugins\colors\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\designer
-File @prefix@\lib\tlp\plugins\designer\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\export
-File @prefix@\lib\tlp\plugins\export\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\glyph
-File @prefix@\lib\tlp\plugins\glyph\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\import
-File @prefix@\lib\tlp\plugins\import\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\layout
-File @prefix@\lib\tlp\plugins\layout\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\metric
-File @prefix@\lib\tlp\plugins\metric\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\selection
-File @prefix@\lib\tlp\plugins\selection\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\sizes
-File @prefix@\lib\tlp\plugins\sizes\*.dll
+setOutPath $INSTDIR\lib\tlp
+File @prefix@\lib\tlp\*.dll
+setOutPath $INSTDIR\lib\tlp\glyphs
+File @prefix@\lib\tlp\glyphs\*.dll
 setOutPath $INSTDIR\share
 ; Try to save doc files if any
 File /nonfatal /r @prefix@\share\*
