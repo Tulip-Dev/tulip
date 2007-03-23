@@ -30,11 +30,12 @@ noinst_HEADERS = \
 
 
 if QT3
-nobase_nodist_include_HEADERS = tulip/FindSelectionData.h \
-				tulip/RenderingParametersDialogData.h \
-				tulip/GWOverviewWidgetData.h
+BUILT_SOURCES = \
+	tulip/FindSelectionData.h \
+	tulip/RenderingParametersDialogData.h \
+	tulip/GWOverviewWidgetData.h
 else
-nobase_nodist_include_HEADERS = \
+BUILT_SOURCES = \
 	tulip/Morphing.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
@@ -60,6 +61,10 @@ tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
 tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
 endif
+
+nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
+
+CLEANFILES = $(BUILT_SOURCES)
 
 tulip/FindSelectionData.h: ../designer/FindSelection.ui
 	mkdir -p tulip

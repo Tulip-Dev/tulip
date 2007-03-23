@@ -67,7 +67,7 @@ endif
 libtulip_qt@QT_VERSION@_la_LDFLAGS = -release ${RELEASE}  
 
 
-nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
+BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlGraphWidget.cpp \
 	moc_PropertyWidget.cpp \
@@ -83,6 +83,8 @@ nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
 	moc_GWOverviewWidgetData.cpp
+
+nodist_libtulip_qt@QT_VERSION@_la_SOURCES = $(BUILT_SOURCES)
 
 dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	TulipTableWidget.cpp \
