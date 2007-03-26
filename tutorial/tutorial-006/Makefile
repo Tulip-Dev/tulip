@@ -1,4 +1,3 @@
-SHELL=bash
 TARGET= tutorial
 SRCS=  tutorial.cpp 
 CXXFLAGS = -g -Wall `tulip-config --cxxflags`
@@ -25,8 +24,3 @@ clean :
 
 
 -include $(DEPS)
-
-
-
-
-
