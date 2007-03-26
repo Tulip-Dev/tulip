@@ -91,7 +91,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip.so
 %{prefix}/lib/libtulip-%{tulip_version}.so*
 %{prefix}/lib/tlp/*.so
-%{prefix}/lib/tlp/lib*-%{tulip_version}.so.*
 %{datadir}/aclocal/tulip.m4
 
 %files -n lib%{name}-ogl
@@ -99,7 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-ogl.a
 %{prefix}/lib/libtulip-ogl.la
 %{prefix}/lib/libtulip-ogl.so
-%{prefix}/lib/libtulip-ogl-%{tulip_version}.so.*
+%{prefix}/lib/libtulip-ogl-%{tulip_version}.so*
 %{prefix}/lib/tlp/glyphs/*.so
 %{prefix}/lib/tlp/bitmaps/fontb.ttf
 %{prefix}/lib/tlp/bitmaps/font.ttf
@@ -109,7 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-qt@QT_VERSION@.a
 %{prefix}/lib/libtulip-qt@QT_VERSION@.la
 %{prefix}/lib/libtulip-qt@QT_VERSION@.so
-%{prefix}/lib/libtulip-qt@QT_VERSION@-%{tulip_version}.so.*
+%{prefix}/lib/libtulip-qt@QT_VERSION@-%{tulip_version}.so*
 %{prefix}/lib/tlp/designer/lib*.*
 
 %changelog
