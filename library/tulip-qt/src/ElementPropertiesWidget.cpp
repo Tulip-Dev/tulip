@@ -29,7 +29,7 @@ ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
   setEdgeListedProperties(edgeListedProperties);
   propertyTable->horizontalHeader()->setLabel(0, tr("Property"));
   propertyTable->horizontalHeader()->setLabel(1, tr("Value"));
-  propertyTable->setColumnStretchable(1, false);
+  propertyTable->setColumnStretchable(1, true);
   displayAllProperties=false;
   connect(propertyTable,SIGNAL(valueChanged(int,int)),this,SLOT(propertyTableValueChanged(int,int)));
 }
@@ -237,7 +237,12 @@ void ElementPropertiesWidget::updateTable() {
     }
   }
   propertyTable->adjustColumn(0);
-  propertyTable->adjustColumn(1);
+  // Ugly hack to avoid resizing
+  if (propertyTable->isVisible()) {
+    propertyTable->setColumnWidth(1, propertyTable->horizontalHeader()->size().width()
+				  - propertyTable->columnWidth(0) - 5);
+  }
+  //propertyTable->adjustColumn(1);
 }
 using namespace std;
 //==========================================
