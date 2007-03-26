@@ -27,7 +27,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
   while (end!=tlp::TulipPluginsPath.end())
     if ((*end)==tlp::PATH_DELIMITER) {
       if (begin!=end) {
-	string path = string(begin,end) + "/../bitmaps/";
+	string path = string(begin,end) + "/bitmaps/";
 	QDir *bitmapsDir= new QDir(path.c_str());
 	if(bitmapsDir->exists()) {
 	  bitmapPath = path.c_str();
@@ -42,7 +42,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
     else
       ++end;
   if (begin!=end) {
-    string path = string(begin,end) + "/../bitmaps/";
+    string path = string(begin,end) + "/bitmaps/";
     QDir *bitmapsDir= new QDir(path.c_str());
     if(bitmapsDir->exists()) {
       bitmapPath = path.c_str();
