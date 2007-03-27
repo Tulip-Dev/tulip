@@ -23,7 +23,7 @@ plugins_LTLIBRARIES = \
 	libTreeArityMax-@VERSION@.la \
 	libEccentricity-@VERSION@.la \
 	libBetweennessCentrality-@VERSION@.la \
-        libRandom-@VERSION@.la	
+        libRandomMetric-@VERSION@.la	
 
 pluginsdir = $(libdir)/tlp
 
@@ -44,7 +44,7 @@ libPathLengthMetric_@VERSION@_la_SOURCES = PathLengthMetric.cpp PathLengthMetric
 libSegmentMetric_@VERSION@_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
 libStrahlerMetric_@VERSION@_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
 libTreeArityMax_@VERSION@_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
-libRandom_@VERSION@_la_SOURCES = Random.cpp  Random.h
+libRandomMetric_@VERSION@_la_SOURCES = Random.cpp  Random.h
 libBetweennessCentrality_@VERSION@_la_SOURCES = BetweennessCentrality.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
