@@ -707,13 +707,21 @@ namespace {
       QToolTip::add(setDefB, "Set the current values as the default ones for future use");
       setDefB->installEventFilter(this);
       size = setDefB->size();
+#if defined(__APPLE__)
+      size.setWidth(size.width() + 20);
+#else
       size.setWidth(size.width() + 10);
+#endif
       setDefB->resize(size);
       restoreSysDefB = new QPushButton("Restore System Defaults", this);
       QToolTip::add(restoreSysDefB, "ReInitialize the dialog with the original default values");
       restoreSysDefB->installEventFilter(this);
       size = restoreSysDefB->size();
+#if defined(__APPLE__)
+      size.setWidth(size.width() + 80);
+#else
       size.setWidth(size.width() + 60);
+#endif
       restoreSysDefB->resize(size);
       if (!sysDef) {
 	setDefB->hide();
