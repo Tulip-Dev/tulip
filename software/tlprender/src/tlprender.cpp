@@ -160,7 +160,7 @@ static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
-  GlyphFactory::factory->loadPluginsFromDir(getEnvVar + "glyph", "Glyph", plug);
+  tlp::loadPluginsFromDir(getEnvVar + "glyph", "Glyph", plug);
 }
 
 //==============================================================================
