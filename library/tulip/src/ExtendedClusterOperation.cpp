@@ -112,7 +112,9 @@ node createMNode (Graph *graph, set<node> &subGraph,
       node target = graph->target(e);
       bool toDelete = ((metaInfo->getNodeValue(source)!=0) || 
 		       (metaInfo->getNodeValue(target)!=0)) && 
+	graph->isElement (source) && graph->isElement (target) &&
 	graph->existEdge (source, target).isValid();
+
       if (graph->isElement(source) && metaGraph->isElement(target)) {
 	if ( (edges.find(source) == edges.end()) || (edges[source].find(target) == edges[source].end()) ) {
 	  if (multiEdges || edges[source].empty()) {
@@ -238,10 +240,10 @@ void tlp::openMetaNode(Graph *graph, node n,
   root->delAllNode(n);
   hash_map<node, hash_set<node> > edges;
   //=================================
-  StableIterator<node> metaGraphNodes (metaGraph->getNodes());
-  while (metaGraphNodes.hasNext()) {
-    StableIterator<edge> it(root->getInOutEdges(metaGraphNodes.next()));
-    while(it.hasNext()) {
+  //StableIterator<node> metaGraphNodes (metaGraph->getNodes());
+  //while (metaGraphNodes.hasNext()) {
+  StableIterator<edge> it(root->getEdges());
+  while(it.hasNext()) {
       edge e = it.next();
       if (graph->isElement(e)) continue;
       node sourceC = mappingC.get(root->source(e).id);
@@ -278,7 +280,7 @@ void tlp::openMetaNode(Graph *graph, node n,
 	else 
 	  cerr << "bug exist edge 1";
       }
-    }
+      // }
   }
   metaGraph->getSuperGraph()->delSubGraph(metaGraph);
   Observable::unholdObservers();
