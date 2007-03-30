@@ -282,7 +282,7 @@ void tlp::openMetaNode(Graph *graph, node n,
       }
       // }
   }
-  metaGraph->getSuperGraph()->delSubGraph(metaGraph);
+  if (groupUnderSubGraph != NULL) groupUnderSubGraph->delSubGraph(metaGraph);
   Observable::unholdObservers();
 }
 
