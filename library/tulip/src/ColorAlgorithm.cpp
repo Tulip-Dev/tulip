@@ -5,7 +5,7 @@
 #include "tulip/Graph.h"
 #include "tulip/ColorProperty.h"
 
-tlp::ColorAlgorithm::ColorAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm<tlp::ColorType , tlp::ColorType>(context) {
+tlp::ColorAlgorithm::ColorAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm(context) {
   colorResult = (tlp::ColorProperty *)context.propertyProxy;
 }
 

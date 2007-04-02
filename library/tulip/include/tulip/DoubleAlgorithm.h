@@ -17,7 +17,7 @@
 #endif
 
 #include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -27,7 +27,7 @@ class DoubleProperty;
 /** \addtogroup plugins */ 
 /*@{*/
 /// Interface for metric plug-ins
-class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm<DoubleType , DoubleType> { 
+class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm { 
   ///
   friend class DoubleProperty;
 public:

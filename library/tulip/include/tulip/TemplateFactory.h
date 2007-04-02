@@ -12,8 +12,6 @@
 #include "Plugin.h"
 #include "TlpTools.h"
 
-#include "tulip/PluginsCreation.h"
-
 namespace tlp {
 
 /** \addtogroup plugins */ 

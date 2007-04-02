@@ -10,10 +10,10 @@ nobase_include_HEADERS = \
 	tulip/MouseSelectionEditor.h\
 	tulip/MouseSelector.h\
 	tulip/PropertyWidget.h \
-	tulip/ElementPropertiesWidgetData.h \
+	tulip/ElementPropertiesWidgetUI.h \
 	tulip/ElementPropertiesWidget.h \
-	tulip/FindSelection.h \
-	tulip/SGHierarchyWidgetData.h \
+	tulip/FindSelectionWidget.h \
+	tulip/SGHierarchyWidgetUI.h \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidget.h \
 	tulip/Qt3ForTulip.h \
@@ -66,14 +66,6 @@ nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
 CLEANFILES = $(BUILT_SOURCES)
 
-tulip/FindSelectionData.h: ../designer/FindSelection.ui
-	mkdir -p tulip
-	$(UIC) -o $@ $<
-
-tulip/RenderingParametersDialogData.h: ../designer/RenderingParametersDialog.ui
-	mkdir -p tulip
-	$(UIC) -o $@ $<
-
-tulip/GWOverviewWidgetData.h: ../designer/GWOverviewWidget.ui
+tulip/%Data.h: ../designer/%.ui
 	mkdir -p tulip
 	$(UIC) -o $@ $<

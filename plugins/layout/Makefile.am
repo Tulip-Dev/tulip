@@ -28,7 +28,7 @@ plugins_LTLIBRARIES = \
 pluginsdir = $(libdir)/tlp
 
 libMixedModel_@VERSION@_la_SOURCES = MixedModel.cpp MixedModel.h
-libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
+libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.cpp ConnectedComponentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
 libRandom_@VERSION@_la_SOURCES = Random.cpp Random.h
 libGemLayout_@VERSION@_la_SOURCES = GEMLayout.cpp GEMLayout.h
 libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.cpp TreeReingoldAndTilfordExtended.h 

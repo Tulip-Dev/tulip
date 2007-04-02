@@ -7,7 +7,7 @@ tlp::clusterizeGraph => tlp::applyAlgorithm
 
 Supergraph => Graph
 Property => PropertyAlgorithm
-PAlgorithm => AbstractAlgorithm
+PProperty no longer exists
 PProxy => PropertyInterface
 PropertyProxy => AbstractProperty
 PropertyProxy::superGraph => AbstractProperty::graph

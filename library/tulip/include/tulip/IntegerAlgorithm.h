@@ -17,8 +17,7 @@
 #include <config.h>
 #endif
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -29,8 +28,7 @@ class IntegerProperty;
 /*@{*/
 
 /// Interface for int plug-ins
-class TLP_SCOPE IntegerAlgorithm:public PropertyAlgorithm<IntegerType , IntegerType>
-{ 
+class TLP_SCOPE IntegerAlgorithm:public PropertyAlgorithm { 
   ///
   friend class IntegerProperty;
 public:

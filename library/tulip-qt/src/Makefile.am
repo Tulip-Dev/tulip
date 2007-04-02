@@ -71,12 +71,12 @@ BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlGraphWidget.cpp \
 	moc_PropertyWidget.cpp \
-	moc_ElementPropertiesWidgetData.cpp \
+	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
-	moc_FindSelection.cpp \
+	moc_FindSelectionWidget.cpp \
 	moc_FindSelectionData.cpp \
 	moc_RenderingParametersDialogData.cpp \
-	moc_SGHierarchyWidgetData.cpp \
+	moc_SGHierarchyWidgetUI.cpp \
 	FindSelectionData.cpp \
 	RenderingParametersDialogData.cpp \
 	GWOverviewWidgetData.cpp \
@@ -90,10 +90,10 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlGraphWidget.cpp \
 	PropertyWidget.cpp \
-	ElementPropertiesWidgetData.cpp \
+	ElementPropertiesWidgetUI.cpp \
 	ElementPropertiesWidget.cpp \
-	FindSelection.cpp \
-	SGHierarchyWidgetData.cpp \
+	FindSelectionWidget.cpp \
+	SGHierarchyWidgetUI.cpp \
 	SGHierarchyWidget.cpp \
 	GWOverviewWidget.cpp \
 	Morphing.cpp \

@@ -16,8 +16,7 @@
 #include <config.h>
 #endif
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -30,8 +29,7 @@ class BooleanProperty;
 /*@{*/
 
 /// Interface for selection plug-ins
-class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm<BooleanType , BooleanType>
-{ 
+class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm { 
   ///
   friend class BooleanProperty;
 public:

@@ -61,7 +61,7 @@ bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compute(const std::string &al
   circularCall = true;
   tlp::PropertyContext tmpContext(context);
   tmpContext.propertyProxy = this;
-  tlp::AbstractAlgorithm *tmpAlgo = factory->getPluginObject(algorithm, tmpContext);
+  tlp::PropertyAlgorithm *tmpAlgo = factory->getPluginObject(algorithm, tmpContext);
   bool result;
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);

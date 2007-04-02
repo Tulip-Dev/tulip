@@ -16,8 +16,7 @@
 #include <config.h>
 #endif
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -29,7 +28,7 @@ class LayoutProperty;
  */ 
 /*@{*/
 ///Interface for layout plug-ins
-class TLP_SCOPE LayoutAlgorithm:public PropertyAlgorithm<PointType , LineType> {
+class TLP_SCOPE LayoutAlgorithm:public PropertyAlgorithm {
   ///
   friend class LayoutProperty;
 public:

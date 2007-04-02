@@ -12,7 +12,7 @@
 
 #include <math.h>
 
-#include <tulip/CanonicalOrdering.h>
+#include <tulip/Ordering.h>
 
 
 

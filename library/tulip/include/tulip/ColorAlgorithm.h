@@ -17,7 +17,7 @@
 #endif
 
 #include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -27,8 +27,7 @@ class ColorProperty;
 /** \addtogroup plugins */ 
 /*@{*/
 /// Interface for color plug-ins
-class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm< ColorType , ColorType >
-{ 
+class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm { 
   ///
   friend class ColorProperty;
 public:

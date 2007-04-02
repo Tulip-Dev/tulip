@@ -14,8 +14,8 @@
  * (at your option) any later version.
  */
 
-#ifndef Tulip_CanonicalOrdering_H
-#define Tulip_CanonicalOrdering_H
+#ifndef ORDERING_H
+#define ORDERING_H
 #include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/Node.h>

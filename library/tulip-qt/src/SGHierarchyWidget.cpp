@@ -39,7 +39,7 @@ struct ClusterListViewItem: public QListViewItem {
  *  name 'name' and widget flags set to 'f' 
  */
 SGHierarchyWidget::SGHierarchyWidget(Graph *graph , QWidget* parent,  const char* name, Qt::WFlags fl) : 
-  SGHierarchyWidgetData(parent, name, fl),
+  SGHierarchyWidgetUI(parent, name, fl),
   _currentGraph(graph) {
   setCaption(trUtf8("Cluster Tree"));
   treeView->setColumnText(0,trUtf8("Subgraph Hierarchy"));
@@ -58,7 +58,7 @@ SGHierarchyWidget::SGHierarchyWidget(Graph *graph , QWidget* parent,  const char
 }
 //=======================================================
 SGHierarchyWidget::SGHierarchyWidget(QWidget* parent, const char* name, Qt::WFlags fl) :
-  SGHierarchyWidgetData(parent, name,fl),
+  SGHierarchyWidgetUI(parent, name,fl),
   _currentGraph(0) {
   setCaption(trUtf8("Cluster Tree"));
   treeView->setColumnText(0,trUtf8("Subgraph Hierarchy"));

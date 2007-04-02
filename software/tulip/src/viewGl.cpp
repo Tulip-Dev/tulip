@@ -93,7 +93,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/StableIterator.h>
-#include <tulip/FindSelection.h>
+#include <tulip/FindSelectionWidget.h>
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ExportModule.h>
@@ -1030,7 +1030,7 @@ void viewGl::editFind() {
   if( !g ) return;
   
   static string currentProperty;
-  SelectionWidget *sel = new SelectionWidget(g, currentProperty);
+  FindSelectionWidget *sel = new FindSelectionWidget(g, currentProperty);
   Observable::holdObservers();
   int nbItemsFound = sel->exec();
   Observable::unholdObservers();

@@ -16,9 +16,9 @@
 
 #include <tulip/Graph.h>
 #include <tulip/ObservableGraph.h>
-#include "tulip/ElementPropertiesWidgetData.h"
+#include "tulip/ElementPropertiesWidgetUI.h"
 
-class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget : public tlp::ElementPropertiesWidgetData, public tlp::GraphObserver
+class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget : public tlp::ElementPropertiesWidgetUI, public tlp::GraphObserver
 {
   Q_OBJECT;
   // moc as of qt 3.0.5 doesn't understand '::'... silly

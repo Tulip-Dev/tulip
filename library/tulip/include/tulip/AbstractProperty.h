@@ -17,7 +17,7 @@
 
 #include "Observable.h"
 #include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 #include "MutableContainer.h"
 #include "ReturnType.h"
 #include "tulipconf.h"
@@ -66,7 +66,7 @@ public:
  * In the second case it is only a memory area for storing data.
  * A AbstractProperty is an observable, so it can be observed by others objects.
  */
-template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm<Tnode,Tedge> > 
+template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm > 
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class GraphView;
 

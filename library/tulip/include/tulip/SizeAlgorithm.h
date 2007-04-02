@@ -16,8 +16,7 @@
 #include <config.h>
 #endif
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -29,8 +28,7 @@ class SizeProperty;
  */ 
 /*@{*/
 /// Interface for sizes plug-ins
-class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm< SizeType , SizeType >
-{ 
+class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm { 
   ///
   friend class SizeProperty;
 public:

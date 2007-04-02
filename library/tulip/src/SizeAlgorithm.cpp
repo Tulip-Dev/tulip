@@ -5,6 +5,6 @@
 #include "tulip/Graph.h"
 #include "tulip/SizeProperty.h"
 
-tlp::SizeAlgorithm::SizeAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm<tlp::SizeType , tlp::SizeType>(context) {
+tlp::SizeAlgorithm::SizeAlgorithm (const tlp::PropertyContext &context):tlp::PropertyAlgorithm(context) {
   sizeResult = (tlp::SizeProperty *)context.propertyProxy;
 }

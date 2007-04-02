@@ -12,8 +12,7 @@
 #ifndef _METAGRAPHALGO_H
 #define _METAGRAPHALGO_H
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -24,7 +23,7 @@ class GraphProperty;
 /*@{*/
 
 /// Interface for graph plug-ins
-class GraphAlgorithm:public PropertyAlgorithm<GraphType , GraphType> { 
+class GraphAlgorithm:public PropertyAlgorithm { 
   ///
   friend class GraphProperty;
 public:

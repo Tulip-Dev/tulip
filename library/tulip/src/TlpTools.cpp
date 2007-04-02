@@ -15,7 +15,7 @@
 #include "tulip/ExportModule.h"
 #include "tulip/Algorithm.h"
 #include "tulip/ImportModule.h"
-#include "tulip/PluginsCreation.h"
+#include "tulip/PluginLibraryLoader.h"
 
 using namespace std;
 using namespace tlp;

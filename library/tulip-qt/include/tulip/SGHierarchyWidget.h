@@ -10,7 +10,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
-#include "tulip/SGHierarchyWidgetData.h"
+#include "tulip/SGHierarchyWidgetUI.h"
 
 class QListViewItem;
 class QListView;
@@ -22,7 +22,7 @@ class Graph;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public tlp::SGHierarchyWidgetData { 
+class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public tlp::SGHierarchyWidgetUI { 
   Q_OBJECT;
   
 public:

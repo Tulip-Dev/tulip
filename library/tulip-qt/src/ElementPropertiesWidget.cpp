@@ -18,7 +18,7 @@ ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
                                                const QStringList &nodeListedProperties,
                                                const QStringList &edgeListedProperties,
                                                QWidget *parent, const char *name, Qt::WFlags fl) :
-  ElementPropertiesWidgetData(parent, name, fl), 
+  ElementPropertiesWidgetUI(parent, name, fl), 
   displayMode(NODE), 
   nodeSet(false), 
   edgeSet(false),
@@ -35,7 +35,7 @@ ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
 }
 //==========================================
 ElementPropertiesWidget::ElementPropertiesWidget(QWidget *parent, const char *name, Qt::WFlags fl) :
-  ElementPropertiesWidgetData(parent, name, fl), 
+  ElementPropertiesWidgetUI(parent, name, fl), 
   displayMode(NODE), 
   nodeSet(false), 
   edgeSet(false),

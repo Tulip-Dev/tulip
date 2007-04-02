@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>FindSelection</class>
+<class>FindSelectionData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>FindSelection</cstring>
+        <cstring>FindSelectionData</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -299,19 +299,19 @@
     <connection>
         <sender>cancelButton</sender>
         <signal>clicked()</signal>
-        <receiver>FindSelection</receiver>
+        <receiver>FindSelectionData</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>findButton</sender>
         <signal>clicked()</signal>
-        <receiver>FindSelection</receiver>
+        <receiver>FindSelectionData</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>inputProp</sender>
         <signal>activated(int)</signal>
-        <receiver>FindSelection</receiver>
+        <receiver>FindSelectionData</receiver>
         <slot>propertyChanged(int)</slot>
     </connection>
 </connections>

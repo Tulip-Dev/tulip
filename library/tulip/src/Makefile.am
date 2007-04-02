@@ -21,7 +21,7 @@ endif
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
-	CanonicalOrdering.cpp \
+	Ordering.cpp \
 	ConvexHull.cpp \
 	Delaunay.cpp \
 	DrawingTools.cpp \
@@ -71,7 +71,7 @@ libtulip_la_SOURCES = \
 	WithParameter.cpp \
 	PluginProgress.cpp \
 	GraphMeasure.cpp \
-	PluginsCreation.cpp \
+	PluginLibraryLoader.cpp \
 	StlFunctions.cpp \
 	StatisticsNodeModule.cpp \
 	Polynome.cpp \

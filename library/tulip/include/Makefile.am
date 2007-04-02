@@ -1,6 +1,6 @@
 nobase_include_HEADERS = \
 	tulip/Bfs.h \
-	tulip/CanonicalOrdering.h \
+	tulip/Ordering.h \
 	tulip/ConvexHull.h \
 	tulip/Delaunay.h \
 	tulip/tulipconf.h \
@@ -45,7 +45,7 @@ nobase_include_HEADERS = \
 	tulip/ColorProperty.h \
 	tulip/ImportModule.h \
 	tulip/DoubleProperty.h \
-	tulip/Property.h \
+	tulip/PropertyAlgorithm.h \
 	tulip/SizeAlgorithm.h \
 	tulip/ColorAlgorithm.h \
 	tulip/IntegerProperty.h \
@@ -75,7 +75,7 @@ nobase_include_HEADERS = \
 	tulip/ConcatIterator.h \
 	tulip/ReturnType.h \
 	tulip/MutableContainer.h \
-	tulip/PluginsCreation.h \
+	tulip/PluginLibraryLoader.h \
 	tulip/StlFunctions.h \
 	tulip/ExtendedClusterOperation.h \
 	tulip/StringCollection.h \
@@ -109,4 +109,5 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/Border.h \
 	tulip/Plane.h \
 	tulip/Polynome.h \
+	tulip/PluginLibraryLoader.h \
 	tulip/StatisticsNodeModule.h

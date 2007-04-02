@@ -17,8 +17,7 @@
 #include <config.h>
 #endif
 
-#include "Types.h"
-#include "Property.h"
+#include "PropertyAlgorithm.h"
 
 namespace tlp {
 
@@ -29,8 +28,7 @@ class StringProperty;
 /*@{*/
 
 /// Interface for String plug-ins
-class TLP_SCOPE StringAlgorithm:public PropertyAlgorithm<StringType , StringType>
-{ 
+class TLP_SCOPE StringAlgorithm:public PropertyAlgorithm { 
   ///
   friend class StringProperty;
 public:
