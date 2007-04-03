@@ -357,8 +357,8 @@ bool HierarchicalGraph::run() {
 
   nodeSize = graph->getProperty<SizeProperty>("viewSize");
   orientation = "horizontal";
-  float spacing = 64.0;
-  float nodeSpacing = 18;
+  spacing = 64.0;
+  nodeSpacing = 18;
   if (dataSet!=0) {
     dataSet->get("nodeSize", nodeSize);
     dataSet->get("layer spacing", spacing);
