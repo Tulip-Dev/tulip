@@ -38,7 +38,7 @@ if [ $WINNT -eq 0 ] ; then
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
     thisdir=${thisdir/\/$drive\//$drive:/}
     includedir=${thisdir}/include
-    libdir=${this}/lib
+    libdir=${thisdir}/lib
     pluginpath=${libdir}/tlp
   else
     libdir=${exec_prefix}/bin
