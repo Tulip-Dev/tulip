@@ -1,5 +1,5 @@
 TULIP_DIR=../..
-TULIP_CONFIG=tulip-config
+TULIP_CONFIG=$(TULIP_DIR)/tulip-config
 TULIP_VERSION=$(shell ${TULIP_CONFIG} --version)
 LIB_EXTENSION=$(shell ${TULIP_CONFIG} --pluginextension)
 TARGET=libplaneclustering-$(TULIP_VERSION).$(LIB_EXTENSION)
