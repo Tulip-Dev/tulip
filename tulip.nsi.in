@@ -1,16 +1,10 @@
 !include "MUI.nsh"
 !include "WriteEnvStr.nsh"
 
-
-
-;--------------------------------
 ;General
 
 Name "Tulip @VERSION@"
 OutFile "TulipSetup_@WIN_EXE_VERSION@.exe"
-InstallDir "$PROGRAMFILES\Tulip_@VERSION@\"
-
-
 
 ;--------------------------------
 ;Pages
@@ -46,6 +40,31 @@ Function CheckPreviousVersion
 CheckPrev_no: 
 FunctionEnd
 
+Function GetParentDir
+  Exch $R0
+  Push $R1
+  Push $R2
+  Push $R3
+   
+  StrCpy $R1 0
+  StrLen $R2 $R0
+   
+  loop:
+    IntOp $R1 $R1 + 1
+    IntCmp $R1 $R2 get 0 get
+    StrCpy $R3 $R0 1 -$R1
+    StrCmp $R3 "\" get
+    Goto loop
+
+  get:
+    StrCpy $R0 $R0 -$R1
+    
+    Pop $R3
+    Pop $R2
+    Pop $R1
+    Exch $R0
+FunctionEnd
+
 ; initialization
 Function .onInit
 InitPluginsDir ;on initialise le r�ertoire de d�arrage des plugins
@@ -53,6 +72,15 @@ File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie
 advsplash::show 1800 350 187 2 $PLUGINSDIR\splash
 Pop $R0 ;on r�up�e la valeur de retour : 1, si l'utilisateur a ferm�l'�ran, 0 si tout s'est bien pass� et -1 si un probl�e est survenu
 Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
+
+; we try to avoid to have a space in the install dir path
+; in order to ease the compilation of customer plugins using g++
+; so we remove Program Files from the proposed installation path
+Push $PROGRAMFILES
+Call GetParentDir
+Pop $R0
+StrCpy $INSTDIR "$R0\Tulip_@VERSION@\"
+
 Call CheckPreviousVersion
 FunctionEnd
 
