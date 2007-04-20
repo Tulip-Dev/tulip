@@ -1,6 +1,6 @@
 #!/bin/sh
 
-thisdir=$(dirname $0)
+thisdir=$(dirname "$0")
 if test "$thisdir" = "." ; then
   thisdir=$PWD
 fi
@@ -11,22 +11,38 @@ libdir=@libdir@
 qtversion=@QT_VERSION@
 libversion=
 libextension=so
+plugincxxflags="-fPIC -DPIC"
+pluginldflags=-shared
+pluginpath=${libdir}/tlp
+
+WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
+MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
+LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
+
 # check for MacOS or Windows installation
-if test "$(basename $thisdir)" = "MacOS" ; then
-  if test -d $(dirname $thisdir)/lib; then
+if [ $MACOSX -eq 0 ] ; then
+  pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
+  if [ -d $(dirname $thisdir)/lib ] ; then
 # MacOS bundle
     includedir=$(dirname $thisdir)/include
     libdir=$(dirname $thisdir)/lib
+    pluginpath=${libdir}/tlp
   fi
 fi
-if test -f $thisdir/assistant.exe ; then
-# Windows installation
-  drive=`echo $thisdir | awk -F / '{print $2}'`
-  thisdir=${thisdir/\/$drive\//$drive:/}
-  includedir=$thisdir/include
-  libdir=$this/lib
+if [ $WINNT -eq 0 ] ; then
   libversion=-@WIN_VERSION@
   libextension=dll
+  plugincxxflags=-DPIC
+  if [ -f "$thisdir/assistant.exe" ] ; then
+#   Windows installation
+    drive=`echo ${thisdir} | awk -F / '{print $2}'`
+    thisdir=${thisdir/\/$drive\//$drive:/}
+    includedir=${thisdir}/include
+    libdir=${this}/lib
+    pluginpath=${libdir}/tlp
+  else
+    libdir=${exec_prefix}/bin
+  fi
 fi
 
 usage()
@@ -38,8 +54,10 @@ Options:
 	--libs
 	--cxxflags
 	--glincludes
-        --pluginpath
+	--plugincxxflags
 	--pluginextension
+	--pluginldflags
+        --pluginpath
         --qtlibs
         --qtincludes
 	
@@ -73,11 +91,17 @@ while test $# -gt 0; do
     --libs)
       echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt${qtversion}${libversion}
       ;;
-    --pluginpath)
-      echo ${libdir}/tlp
+    --plugincxxflags)
+      echo ${plugincxxflags}
+      ;;
+    --pluginldflags)
+      echo ${pluginldflags}
       ;;
     --pluginextension)
       echo ${libextension}
+      ;;
+    --pluginpath)
+      echo ${pluginpath}
       ;;
     --qtlibs)
       echo @QT_LDFLAGS@ @LIB_QT@
