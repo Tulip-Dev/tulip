@@ -678,7 +678,8 @@ dnl look for Qt minor version and add QT_MINOR_REL
 AC_DEFUN([AC_PATH_MINGW],
 [
 AC_MSG_CHECKING(for MinGW needed libraries)
-MINGWDIR=`grep mingw /etc/fstab | awk '{print $1}'`
+MINGWDIR=$(grep mingw /etc/fstab)
+MINGWDIR=$(echo $MINGWDIR | sed 's/ \/mingw//')
 GLDIR=/mingw/lib
 libraries="iconv.dll freetype*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
 for lib in $libraries; do
