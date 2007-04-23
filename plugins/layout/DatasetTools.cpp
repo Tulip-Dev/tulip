@@ -52,11 +52,21 @@ DataSet setOrientationParameters(int pOrientation) {
 orientationType getMask(DataSet* dataSet) { 
   StringCollection orientation(ORIENTATION);
   orientation.setCurrent(0);
+  int current = 0;
 
-  if (dataSet != 0)
-    dataSet->get(ORIENTATION_ID, orientation);
+  if (dataSet != 0) {
+    StringCollection dataSetOrientation;
+    dataSet->get(ORIENTATION_ID, dataSetOrientation);
 
-  switch (orientation.getCurrent()) {
+    // the order of ORIENTATION items may have change
+    // because the default value may have change (see DataSetDialog.cpp)
+    std::string currentString = dataSetOrientation.getCurrentString();
+    for (current = 0; current < 4; ++current) {
+      if (currentString == orientation.at(current))
+	break;
+    }
+  }
+  switch (current) {
       case 0  : return ORI_DEFAULT;
       case 1  : return ORI_INVERSION_VERTICAL;
       case 2  : return ORI_ROTATION_XY;
