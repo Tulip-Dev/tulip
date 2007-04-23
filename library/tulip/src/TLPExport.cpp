@@ -28,10 +28,9 @@
 using namespace std;
 using namespace tlp;
 
-
-static string convert(string tmp) {
+static string convert(const string & tmp) {
   string newStr;
-  for (unsigned int i=0;i<tmp.length();i++) {
+  for (unsigned int i=0; i<tmp.length(); ++i) {
     if (tmp[i]=='\"')
       newStr+="\\\"";
     else
