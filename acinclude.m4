@@ -469,13 +469,16 @@ AC_FIND_FILE(QtCore, $qt_incdirs, qt_incdir)
 dnl check QT version
 if test ! "$qt_incdir" = "NO"; then
   QT_VERSION=4
+  QT_PACKAGE=qt4
   qtlib_prefix=libQt
 else
   AC_FIND_FILE(qgl.h, $qt_incdirs, qt_incdir)
   QT_VERSION=3
+  QT_PACKAGE=qt
   qtlib_prefix=libqt
 fi
 AC_SUBST(QT_VERSION)
+AC_SUBST(QT_PACKAGE)
 ac_qt_includes="$qt_incdir"
 
 dnl add our own flag QT_REL (QT_VERSION is internally used by Qt)

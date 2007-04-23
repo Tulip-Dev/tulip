@@ -14,11 +14,11 @@ Version:	%{version}
 Release:	%{release}
 Vendor:		David Auber <david.auber@labri.fr>
 URL:		http://www.tulip-software.org
-Source:		%{name}-%{version}.tar.gz
+Source:		%{name}-%{version}.tar.bz2
 License:	GPL
 Group:		Applications/Engineering
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-Requires:	qt >= 3.0
+Requires:	@QT_PACKAGE@ >= @QT_VERSION@.0
 
 %description
 Tulip software is a system dedicated to the visualization of huge graphs. It manages graphs with a number of elements(nodes and edges) up to 500.000 on a personal computer(PIII 600, with 256mo). Its graph technology architecture enables to do the following things :
@@ -40,13 +40,13 @@ Group:		Applications/Engineering
 %package -n     lib%{name}-ogl
 Summary:        A library for displaying graph in a GL context
 Group:		Applications/Engineering
-Requires:       lib%{name}, Mesa
+Requires:       lib%{name}
 %description -n lib%{name}-ogl
 
 %package -n     lib%{name}-qt@QT_VERSION@
 Summary:        A set of Qt Widgets for tulip/tulip-ogl
 Group:          Applications/Engineering
-Requires:       lib%{name}, lib%{name}-ogl, qt >= @QT_VERSION@.0
+Requires:       lib%{name}, lib%{name}-ogl, @QT_PACKAGE@ >= @QT_VERSION@.0
 %description -n lib%{name}-qt@QT_VERSION@
 
 ##############################
