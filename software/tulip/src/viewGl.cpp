@@ -397,22 +397,27 @@ static QDialog *errorDlg = (QDialog *) NULL;
 void viewGl::startTulip() {
   // adjust size if needed
   QRect sRect = QApplication::desktop()->availableGeometry();
-  QRect vRect(this->geometry());
+  QRect wRect(this->geometry());
+  QRect fRect(this->frameGeometry());
+  int deltaWidth = fRect.width() - wRect.width();
+  int deltaHeight = fRect.height() - wRect.height();
   // adjust width
-  if (vRect.width() > sRect.width()) {
-    vRect.setWidth(sRect.width());
+  if (fRect.width() > sRect.width()) {
+    wRect.setWidth(sRect.width() - deltaWidth);
   }
   // screen width centering
-  vRect.moveLeft(sRect.left() + (sRect.width() - vRect.width())/2);
+  wRect.moveLeft(sRect.left() + 
+		 (sRect.width() - wRect.width())/2);
   // adjust height
-  if (vRect.height() > sRect.height()) {
-    vRect.setHeight(sRect.height());
+  if (fRect.height() > sRect.height()) {
+    wRect.setHeight(sRect.height() - deltaHeight);
   }
   // screen height centering
-  vRect.moveTop(sRect.top() + (sRect.height() - vRect.height())/2);
+  wRect.moveTop(sRect.top() + (deltaHeight - deltaWidth)/2 + 
+		(sRect.height() - wRect.height())/2);
   // adjust geometry
-  this->setGeometry(vRect.x(), vRect.y(),
-		    vRect.width(), vRect.height());
+  this->setGeometry(wRect.x(), wRect.y(),
+		    wRect.width(), wRect.height());
 
   AppStartUp *appStart=new AppStartUp(this);
   QDialog *errorDlg;
