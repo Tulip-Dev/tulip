@@ -36,29 +36,28 @@ bool TreeTest::isFreeTree(Graph *graph) {
 //====================================================================
 //Turns a topological tree graph into a directed tree starting at
 //the node root.
-void TreeTest::makeRootedTree(Graph *graph, node root) {
+void TreeTest::makeDirectedTree(Graph *graph, node root) {
   if (instance==0) instance=new TreeTest();
   graph->removeObserver(instance);
   instance->resultsBuffer.erase((unsigned long)graph);
   if (!graph->isElement (root)) {
-    cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
+    cerr << "makeDirectedTree:  Passed root is not element of graph" << endl;
     return;
   }//end if
   if (!TreeTest::isFreeTree (graph)) {
-    cerr << "makeRootedTree:  Graph is not topological tree, so directed " 
+    cerr << "makeDirectedTree:  Graph is not topological tree, so directed " 
 	 << "tree cannot be made." << endl;
     return;
   }//end if
-  instance->makeRootedTree (graph, root, root);
+  instance->makeDirectedTree (graph, root, root);
   assert (TreeTest::isTree (graph));
 }//end makeDirectedTree
 
 //====================================================================
 //Determines if the passed graph is topologically a tree.  The 
 //passed mutable container returns if we have visited a node
-bool TreeTest::
-isFreeTree (Graph *graph, node curRoot, node cameFrom,
-		   MutableContainer<bool> &visited) {
+bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
+	    MutableContainer<bool> &visited) {
   if (visited.get (curRoot.id)) return false;
   visited.set (curRoot.id, true);
   node curNode;
@@ -72,15 +71,14 @@ isFreeTree (Graph *graph, node curRoot, node cameFrom,
 //====================================================================
 //given that graph is topologically a tree, The function turns graph
 //into a directed tree.
-void TreeTest::
-makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
+void TreeTest::makeDirectedTree (Graph *graph, node curRoot, node cameFrom) {
   edge curEdge;
   forEach (curEdge, graph->getInOutEdges(curRoot)) {
     node opposite = graph->opposite(curEdge, curRoot);
     if (opposite != cameFrom) {
-      if (graph->target (curEdge) == curRoot) 
+      if (graph->target (curEdge) == curRoot)
 	graph->reverse(curEdge);
-      makeRootedTree (graph, opposite, curRoot);
+      makeDirectedTree (graph, opposite, curRoot);
     }//end if
   }//end forEach
 }//end makeDirectedTree

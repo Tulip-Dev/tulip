@@ -35,7 +35,7 @@ class TLP_SCOPE TreeTest : private GraphObserver {
 public:
   static bool isTree(Graph *graph);
   static bool isFreeTree(Graph *graph);
-  static void makeRootedTree(Graph *graph, node root);
+  static void makeDirectedTree(Graph *graph, node root);
 private:
   bool compute(Graph *);
   void addEdge(Graph *,const edge);
@@ -47,8 +47,8 @@ private:
   TreeTest();
   static TreeTest * instance;
   bool isFreeTree (Graph *graph, node curRoot, node cameFrom,
-			  MutableContainer<bool> &visited);
-  void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
+		   MutableContainer<bool> &visited);
+  void makeDirectedTree (Graph *graph, node curRoot, node cameFrom);
   stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
