@@ -2121,12 +2121,48 @@ void viewGl::isTree() {
   if (glWidget == 0) return;
   if (TreeTest::isTree(glWidget->getGraph()))
     QMessageBox::information( this, "Tulip test",
-			   "The graph is a tree"
+			   "The graph is a directed tree"
 			   );
   else
     QMessageBox::information( this, "Tulip test",
-			   "The graph is not a tree"
+			   "The graph is not a directed tree"
 			   );
+}
+//**********************************************************************
+void viewGl::isFreeTree() {
+  if (glWidget == 0) return;
+  if (TreeTest::isFreeTree(glWidget->getGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is a free tree"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not a free tree"
+			   );
+}
+#include <tulip/GraphTools.h>
+void viewGl::makeDirected() {
+  if (glWidget == 0) return;
+  if (!TreeTest::isFreeTree(glWidget->getGraph()))
+    QMessageBox::information( this, "Tulip test",
+			      "The graph is not a free tree"
+			      );
+  Graph *graph = glWidget->getGraph();
+  node n, root;
+  forEach(n, graph->getProperty<BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
+    if (root.isValid()) {
+      QMessageBox::critical( this, "Make Directed",
+			     "Only one root node must be selected.");
+      breakForEach;
+    }
+    root = n;
+  }
+  if (!root.isValid())
+    root = graphCenterHeuristic(graph);
+      
+  Observable::holdObservers();
+  TreeTest::makeDirectedTree(glWidget->getGraph(), root);
+  Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/PlanarityTest.h>

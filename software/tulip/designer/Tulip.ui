@@ -75,6 +75,7 @@
         <item text="Tests" name="popupMenu_23" accel="">
             <action name="is_simple"/>
             <action name="is_directed_tree"/>
+            <action name="is_free_tree"/>
             <action name="is_acyclic"/>
             <action name="is_connected"/>
             <action name="is_biconnected"/>
@@ -87,6 +88,7 @@
             <action name="make_acyclic"/>
             <action name="make_connected"/>
             <action name="make_biconnected"/>
+            <action name="make_directed"/>
             <separator/>
             <action name="Reverse_selected_edgesAction"/>
         </item>
@@ -480,6 +482,9 @@
         <property name="menuText">
             <string>Acyclic</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is acyclic</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -490,6 +495,9 @@
         </property>
         <property name="menuText">
             <string>Biconnected</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is biconnected</string>
         </property>
     </action>
     <action>
@@ -502,6 +510,9 @@
         <property name="menuText">
             <string>Triconnected</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is triconnected</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -511,7 +522,10 @@
             <string>Planarity</string>
         </property>
         <property name="menuText">
-            <string>Planarity</string>
+            <string>Planar</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is planar</string>
         </property>
     </action>
     <action>
@@ -524,6 +538,9 @@
         <property name="menuText">
             <string>Simple</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is simple</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -534,6 +551,9 @@
         </property>
         <property name="menuText">
             <string>Directed Tree</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks if the current graph is a directed tree</string>
         </property>
     </action>
     <action>
@@ -560,6 +580,9 @@
         <property name="menuText">
             <string>Make acyclic</string>
         </property>
+        <property name="toolTip">
+            <string>Makes the current graph acyclic</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -574,6 +597,9 @@
         <property name="menuText">
             <string>Make simple</string>
         </property>
+        <property name="toolTip">
+            <string>Makes the current graph simple</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -585,6 +611,9 @@
         <property name="menuText">
             <string>Make biconnected</string>
         </property>
+        <property name="toolTip">
+            <string>Makes the current graph biconnected</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -595,6 +624,9 @@
         </property>
         <property name="menuText">
             <string>Make connected</string>
+        </property>
+        <property name="toolTip">
+            <string>Makes the current graph connected</string>
         </property>
     </action>
     <action>
@@ -899,6 +931,34 @@
         </property>
         <property name="toolTip">
             <string>Enable/disable the display of tooltips on graph nodes or edges</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>is_free_tree</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+        <property name="menuText">
+            <string>Free Tree</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks if the current graph is a free tree</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>make_directed</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+        <property name="menuText">
+            <string>Make directed</string>
+        </property>
+        <property name="toolTip">
+            <string>Tranforms the current graph into a directed tree</string>
         </property>
     </action>
 </actions>
@@ -1217,6 +1277,18 @@
         <receiver>TulipData</receiver>
         <slot>setSelect()</slot>
     </connection>
+    <connection>
+        <sender>is_free_tree</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isFreeTree()</slot>
+    </connection>
+    <connection>
+        <sender>make_directed</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeDirected()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">Tulip.ui.h</include>
@@ -1264,6 +1336,8 @@
     <slot>setMagicSelection()</slot>
     <slot>setSelect()</slot>
     <slot>setSelection()</slot>
+    <slot>isFreeTree()</slot>
+    <slot>makeDirected()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

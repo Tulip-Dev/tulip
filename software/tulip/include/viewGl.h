@@ -189,11 +189,13 @@ protected slots:
   void isBiconnected();
   void isTriconnected();
   void isTree();
+  void isFreeTree();
   void isPlanar();
   void makeAcyclic();
   void makeBiconnected();
   void makeSimple();
   void makeConnected();
+  void makeDirected();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
