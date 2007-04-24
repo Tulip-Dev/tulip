@@ -37,15 +37,21 @@ private:
     
     std::map<tlp::node, float>   leftshift;
     tlp::node                    root;
-    OrientableLayout*       oriLayout;
-    OrientableSizeProxy*    oriSize;
 
-    float   setAllNodesCoordX(tlp::node n, float rightMargin);
-    void    setAllNodesCoordY();
-    float   computeFatherXPosition(tlp::node father);
-    void    shiftAllNodes(tlp::node n, float shift);
-    void    setNodePosition(tlp::node n, float x, float y, float z);
-    void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf);
+    float   setAllNodesCoordX(tlp::node n, float rightMargin,
+			      OrientableLayout *oriLayout,
+			      OrientableSizeProxy *oriSize);
+    void    setAllNodesCoordY(OrientableLayout *oriLayout,
+			      OrientableSizeProxy *oriSize);
+    float   computeFatherXPosition(tlp::node father,
+				   OrientableLayout *oriLayout);
+    void    shiftAllNodes(tlp::node n, float shift,
+			  OrientableLayout *oriLayout);
+    void    setNodePosition(tlp::node n, float x, float y, float z,
+			    OrientableLayout *oriLayout);
+    void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf,
+		      OrientableLayout *oriLayout,
+		      OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif
