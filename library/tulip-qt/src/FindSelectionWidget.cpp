@@ -181,7 +181,7 @@ void FindSelectionWidget::insertProperties(std::string &currentProperty) {
 
 int FindSelectionWidget::exec() {
   nbItemsFound = -1;
-  ((FindSelectionWidget *)this)->exec();
+  FindSelectionData::exec();
   return nbItemsFound;
 }
 
