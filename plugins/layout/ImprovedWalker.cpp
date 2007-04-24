@@ -211,18 +211,18 @@ void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {
 }   
 //====================================================================
 void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
-  node nodeInsideRight; 
-  node nodeOutsideRight;
-  node nodeInsideLeft;
-  node nodeOutsideLeft;
-  
-  float shiftInsideRight; 
-  float shiftOutsideRight; 
-  float shiftInsideLeft; 
-  float shiftOutsideLeft; 
-    
   node leftBrother = leftSibling(v);
   if (leftBrother != BADNODE) {
+    node nodeInsideRight; 
+    node nodeOutsideRight;
+    node nodeInsideLeft;
+    node nodeOutsideLeft;
+  
+    float shiftInsideRight; 
+    float shiftOutsideRight; 
+    float shiftInsideLeft; 
+    float shiftOutsideLeft; 
+    
     nodeInsideRight   = v; 
     nodeOutsideRight  = v;
     nodeInsideLeft    = leftBrother;
@@ -261,20 +261,20 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
       shiftInsideLeft   += modChildX[nodeInsideLeft]; 
       shiftOutsideLeft  += modChildX[nodeOutsideLeft];         
     }
-  }
-  if (nextRightContour(nodeInsideLeft)   != BADNODE && 
-      nextRightContour(nodeOutsideRight) == BADNODE) {    
-    thread[nodeOutsideRight]    = nextRightContour(nodeInsideLeft);
-    modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight; 
-  }
+    if (nextRightContour(nodeInsideLeft)   != BADNODE && 
+	nextRightContour(nodeOutsideRight) == BADNODE) {    
+      thread[nodeOutsideRight]    = nextRightContour(nodeInsideLeft);
+      modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight; 
+    }
    
-  if (nextLeftContour (nodeInsideRight) != BADNODE && 
-      nextLeftContour (nodeOutsideLeft) == BADNODE) {    
-    thread[nodeOutsideLeft]      =  nextLeftContour(nodeInsideRight);
-    modChildX[nodeOutsideLeft]   += shiftInsideRight - shiftOutsideLeft;
+    if (nextLeftContour (nodeInsideRight) != BADNODE && 
+	nextLeftContour (nodeOutsideLeft) == BADNODE) {    
+      thread[nodeOutsideLeft]      =  nextLeftContour(nodeInsideRight);
+      modChildX[nodeOutsideLeft]   += shiftInsideRight - shiftOutsideLeft;
        
-    *defaultAncestor              =  v;       
-  }         
+      *defaultAncestor              =  v;       
+    }
+  }
 }
 //====================================================================
 void ImprovedWalker::moveSubtree(node fromNode, node toNode, float rightShift) {
