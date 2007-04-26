@@ -8,6 +8,7 @@
 void 	        addOrientationParameters(tlp::LayoutAlgorithm* pLayout);
 tlp::DataSet         setOrientationParameters(int orientation);
 void 		addOrthogonalParameters(tlp::LayoutAlgorithm* pLayout);
+void 		addSpacingParameters(tlp::LayoutAlgorithm* pLayout);
 	
 orientationType getMask(tlp::DataSet* dataSet);
 bool 		hasOrthogonalEdge(tlp::DataSet* dataSet);

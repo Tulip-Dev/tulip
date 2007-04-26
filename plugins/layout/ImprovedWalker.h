@@ -44,8 +44,8 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   typedef std::map<tlp::node, int>     nodeToIntegerPropertyType;
   typedef std::map<tlp::node, tlp::node>    nodeToNodeType;
 
-  static const float      INTER_NODE_DISTANCE_X;
-  static const float      INTER_NODE_DISTANCE_Y;
+  float spacing;
+  float nodeSpacing;
   static const tlp::node       BADNODE;
 
   OrientableLayout*       oriLayout;

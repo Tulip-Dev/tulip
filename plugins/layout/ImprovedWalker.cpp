@@ -17,8 +17,6 @@ LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
 		    "11/11/04", "ok", "1.0","Tree");
 
 //====================================================================
-const float ImprovedWalker::INTER_NODE_DISTANCE_X = 1;
-const float ImprovedWalker::INTER_NODE_DISTANCE_Y = 1;
 const node  ImprovedWalker::BADNODE;  
 
 //====================================================================
@@ -55,7 +53,8 @@ public:
 ImprovedWalker::ImprovedWalker(const PropertyContext& context) :
     LayoutAlgorithm(context) {
   addOrientationParameters(this);
-    addOrthogonalParameters(this);
+  addOrthogonalParameters(this);
+  addSpacingParameters(this);
 }
 //====================================================================
 ImprovedWalker::~ImprovedWalker() {
@@ -69,22 +68,29 @@ bool ImprovedWalker::run() {
   oriSize                   = new OrientableSizeProxy(viewSize, mask);
   depthMax                  = initializeAllNodes();    
   order[root]               = 1;
+  spacing = 64.0;
+  nodeSpacing = 18.0;
   
+  if (dataSet!=0) {
+    dataSet->get("layer spacing", spacing);
+    dataSet->get("node spacing", nodeSpacing);
+  }
+
   firstWalk(root);
         
   float sumY                       = 0;
   levelToFloatType::iterator itMax = maxYbyLevel.begin();
   levelToFloatType::iterator itPos = posYbyLevel.begin();
   while(itMax != maxYbyLevel.end()) {
-    *itPos = sumY + (INTER_NODE_DISTANCE_Y + *itMax)/2.f;
-    sumY   += *itMax +  INTER_NODE_DISTANCE_Y;
+    *itPos = sumY + (spacing + *itMax)/2.f;
+    sumY   += *itMax + spacing;
     ++itMax;
     ++itPos;
   }     
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, oriSize, graph,INTER_NODE_DISTANCE_Y);
+    setOrthogonalEdge(oriLayout, oriSize, graph, spacing);
     
   delete oriLayout;
   delete oriSize;
@@ -170,7 +176,7 @@ void ImprovedWalker::firstWalk(node v) {
     prelimX[v]        = 0;
     node vleftSibling = leftSibling(v);
     if (vleftSibling  != BADNODE)
-      prelimX[v]     += prelimX[vleftSibling] + INTER_NODE_DISTANCE_X
+      prelimX[v]     += prelimX[vleftSibling] + nodeSpacing
 	+ oriSize->getNodeValue(v).getW()/2.
 	+ oriSize->getNodeValue(vleftSibling).getW()/2.;
   }
@@ -190,7 +196,7 @@ void ImprovedWalker::firstWalk(node v) {
                           
     node leftBrother = leftSibling(v);
     if (leftBrother != BADNODE) {
-      prelimX[v]   =  prelimX[leftBrother] + INTER_NODE_DISTANCE_X
+      prelimX[v]   =  prelimX[leftBrother] + nodeSpacing
 	+ oriSize->getNodeValue(v).getW()/2.f
 	+ oriSize->getNodeValue(leftBrother).getW()/2.f;
       modChildX[v] = prelimX[v] - midPoint;
@@ -245,7 +251,7 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
             
       float shift =   (prelimX[nodeInsideLeft]  + shiftInsideLeft)
 	- (prelimX[nodeInsideRight] + shiftInsideRight)
-	+ INTER_NODE_DISTANCE_X
+	+ nodeSpacing
 	+ oriSize->getNodeValue(nodeInsideLeft).getW()/2.f
 	+ oriSize->getNodeValue(nodeInsideRight).getW()/2.f;
 

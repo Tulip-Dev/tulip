@@ -23,35 +23,35 @@ class OrientableSizeProxy;
  *  University Bordeaux I France
  **/
 class Dendrogram: public tlp::LayoutAlgorithm {
-public:
-    Dendrogram(const tlp::PropertyContext&);
-    ~Dendrogram();
+ public:
+  Dendrogram(const tlp::PropertyContext&);
+  ~Dendrogram();
   
-    bool run();
-    bool check(std::string&);
-    void reset();
+  bool run();
+  bool check(std::string&);
+  void reset();
 
-private: 
-    static const float      INTER_NODE_DISTANCE_X;  
-    static const float      INTER_NODE_DISTANCE_Y;  
+ private: 
+  float spacing;
+  float nodeSpacing;
     
-    std::map<tlp::node, float>   leftshift;
-    tlp::node                    root;
+  std::map<tlp::node, float>   leftshift;
+  tlp::node                    root;
 
-    float   setAllNodesCoordX(tlp::node n, float rightMargin,
-			      OrientableLayout *oriLayout,
-			      OrientableSizeProxy *oriSize);
-    void    setAllNodesCoordY(OrientableLayout *oriLayout,
-			      OrientableSizeProxy *oriSize);
-    float   computeFatherXPosition(tlp::node father,
-				   OrientableLayout *oriLayout);
-    void    shiftAllNodes(tlp::node n, float shift,
+  float   setAllNodesCoordX(tlp::node n, float rightMargin,
+			    OrientableLayout *oriLayout,
+			    OrientableSizeProxy *oriSize);
+  void    setAllNodesCoordY(OrientableLayout *oriLayout,
+			    OrientableSizeProxy *oriSize);
+  float   computeFatherXPosition(tlp::node father,
+				 OrientableLayout *oriLayout);
+  void    shiftAllNodes(tlp::node n, float shift,
+			OrientableLayout *oriLayout);
+  void    setNodePosition(tlp::node n, float x, float y, float z,
 			  OrientableLayout *oriLayout);
-    void    setNodePosition(tlp::node n, float x, float y, float z,
-			    OrientableLayout *oriLayout);
-    void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf,
-		      OrientableLayout *oriLayout,
-		      OrientableSizeProxy *oriSize);
+  void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf,
+		    OrientableLayout *oriLayout,
+		    OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif
