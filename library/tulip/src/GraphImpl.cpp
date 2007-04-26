@@ -290,11 +290,13 @@ void GraphImpl::reverse(const edge e) {
     LayoutProperty *graphLayout = (LayoutProperty *) getProperty(layoutProperty);
     std::vector<Coord> bends = graphLayout->getEdgeValue(e);
     if (bends.size() > 0) {
-      vector<Coord> rBends;
-      for (vector<Coord>::const_reverse_iterator rIt = bends.rbegin();
-	   rIt != bends.rend(); ++rIt)
-	rBends.push_back(*rIt);
-      graphLayout->setEdgeValue(e, rBends);
+      unsigned int halfSize = bends.size()/2;
+      for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
+	Coord tmp = bends[i];
+	bends[i] = bends[j];
+	bends[j] = tmp;
+      }
+      graphLayout->setEdgeValue(e, bends);
     }
   }
   notifyReverseEdge(this,e);
