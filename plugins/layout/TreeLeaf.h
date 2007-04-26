@@ -25,6 +25,8 @@
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
+class OrientableLayout;
+
 class TreeLeaf:public tlp::LayoutAlgorithm { 
 public:
   TreeLeaf(const tlp::PropertyContext &);
@@ -32,17 +34,8 @@ public:
   bool run();
   bool check(std::string &);
   void reset();
-  int dfsPlacement(tlp::node,int &,int );
+  int dfsPlacement(tlp::node, int &, int, OrientableLayout *oriLayout);
 };
 /*@}*/
 #endif
-
-
-
-
-
-
-
-
-
 
