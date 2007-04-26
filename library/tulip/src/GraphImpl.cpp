@@ -15,7 +15,7 @@
 #include "tulip/Graph.h"
 #include "tulip/GraphImpl.h"
 #include "tulip/GraphView.h"
-#include "tulip/BooleanProperty.h"
+#include "tulip/LayoutProperty.h"
 #include "tulip/GraphIterator.h"
 #include "tulip/StableIterator.h"
 
@@ -276,6 +276,7 @@ node GraphImpl::source(const edge e)const{return edges[e.id].first;}
 //----------------------------------------------------------------
 node GraphImpl::target(const edge e)const{return edges[e.id].second;}
 //----------------------------------------------------------------
+const string layoutProperty = "viewLayout";
 void GraphImpl::reverse(const edge e) {
   assert(isElement(e));
   node src = edges[e.id].first;
@@ -284,6 +285,18 @@ void GraphImpl::reverse(const edge e) {
   edges[e.id].second = src;
   outDegree.set(src.id, outDegree.get(src.id) - 1);
   outDegree.set(tgt.id, outDegree.get(tgt.id) + 1);
+  // reverse bends if needed
+  if (existProperty(layoutProperty)) {
+    LayoutProperty *graphLayout = (LayoutProperty *) getProperty(layoutProperty);
+    std::vector<Coord> bends = graphLayout->getEdgeValue(e);
+    if (bends.size() > 0) {
+      vector<Coord> rBends;
+      for (vector<Coord>::const_reverse_iterator rIt = bends.rbegin();
+	   rIt != bends.rend(); ++rIt)
+	rBends.push_back(*rIt);
+      graphLayout->setEdgeValue(e, rBends);
+    }
+  }
   notifyReverseEdge(this,e);
 }
 //----------------------------------------------------------------
