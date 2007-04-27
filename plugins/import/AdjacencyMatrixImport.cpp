@@ -129,7 +129,10 @@ public:
 	      stringP->setNodeValue(nodes[curNode],valString);
 	      break;
 	    default:
-	      std::cerr << "Error parsing line :" << curLine << std::endl;
+	      std::stringstream ess;
+	      ess <<  "Error parsing " << valString.c_str() << " at line :" << curLine;
+	      pluginProgress->setError(ess.str());
+	      std::cerr << pluginProgress->getError() << std::endl;
 	      return false;
 	    }
 	  }
@@ -147,8 +150,13 @@ public:
 	    case TLP_NOVAL:
 	      e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      break;
+	    case TLP_NOTHING:
+	      break;
 	    default:
-	      std::cerr << "Error parsing line :" << curLine << std::endl;
+	      std::stringstream ess;
+	      ess <<  "Error parsing " << valString.c_str() << " at line :" << curLine;
+	      pluginProgress->setError(ess.str());
+	      std::cerr << pluginProgress->getError() << std::endl;
 	      return false;
 	    }
 	  }
