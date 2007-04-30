@@ -266,15 +266,30 @@ Iterator<edge>* GraphImpl::getOutEdges(const node n)const
 Iterator<edge>* GraphImpl::getInOutEdges(const node n)const
 {return (new xInOutEdgesIterator(this,n));}
 //----------------------------------------------------------------
-unsigned int GraphImpl::deg(const node n) const {return nodes[n.id].size();}
+unsigned int GraphImpl::deg(const node n) const {
+  assert(isElement(n));
+  return nodes[n.id].size();
+}
 //----------------------------------------------------------------
-unsigned int GraphImpl::indeg(const node n) const {return nodes[n.id].size()-outDegree.get(n.id);}
+unsigned int GraphImpl::indeg(const node n) const {
+  assert(isElement(n));
+  return nodes[n.id].size()-outDegree.get(n.id);
+}
 //----------------------------------------------------------------
-unsigned int GraphImpl::outdeg(const node n) const {return outDegree.get(n.id);}
+unsigned int GraphImpl::outdeg(const node n) const {
+  assert(isElement(n));
+  return outDegree.get(n.id);
+}
 //----------------------------------------------------------------
-node GraphImpl::source(const edge e)const{return edges[e.id].first;}
+node GraphImpl::source(const edge e)const{
+  assert(isElement(n));
+  return edges[e.id].first;
+}
 //----------------------------------------------------------------
-node GraphImpl::target(const edge e)const{return edges[e.id].second;}
+node GraphImpl::target(const edge e)const{
+  assert(isElement(n));
+  return edges[e.id].second;
+}
 //----------------------------------------------------------------
 const string layoutProperty = "viewLayout";
 void GraphImpl::reverse(const edge e) {
