@@ -282,12 +282,12 @@ unsigned int GraphImpl::outdeg(const node n) const {
 }
 //----------------------------------------------------------------
 node GraphImpl::source(const edge e)const{
-  assert(isElement(n));
+  assert(isElement(e));
   return edges[e.id].first;
 }
 //----------------------------------------------------------------
 node GraphImpl::target(const edge e)const{
-  assert(isElement(n));
+  assert(isElement(e));
   return edges[e.id].second;
 }
 //----------------------------------------------------------------
