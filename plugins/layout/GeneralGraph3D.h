@@ -39,8 +39,6 @@ public:
 private:
   void DagLevelSpanningTree(tlp::Graph* , tlp::node n);
   void makeAcyclic(tlp::Graph*,std::set<tlp::edge> &,std::list<tlp::SelfLoops> &);
-  tlp::node makeSimpleSource(tlp::Graph* graph);
-  void makeProperDag(tlp::Graph* graph, std::list<tlp::node> &, stdext::hash_map<tlp::edge,tlp::edge> &);
 };
 /*@}*/
 #endif

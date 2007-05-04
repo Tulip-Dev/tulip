@@ -2,20 +2,33 @@
 #define TREETOOLS_H
 
 #include <tulip/Node.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
 
-namespace tlp {
-class Graph;
-class LayoutProperty;
-class SizeProperty;
+//====================================================================
+inline bool isLeaf (const tlp::Graph* tree, tlp::node n) {
+    return tree->outdeg(n) == 0;
 }
 
-tlp::node    searchRoot(const tlp::Graph* tree);
-int     getTreeDepth(const tlp::Graph* tree, tlp::node root);
-bool    isLeaf (const tlp::Graph* tree, tlp::node n);
-float   getNodeX(tlp::LayoutProperty* pLayout, tlp::node current);
-float   getNodeY(tlp::LayoutProperty* pLayout, tlp::node current);
-float   getNodeHeight(tlp::SizeProperty* size, tlp::node current);
-float   getNodeWidth(tlp::SizeProperty* size, tlp::node current);
+//====================================================================
+inline float getNodeX(tlp::LayoutProperty* pLayout, tlp::node current) {
+    return pLayout->getNodeValue(current).getX();
+}
 
+//====================================================================
+inline float getNodeY(tlp::LayoutProperty* pLayout, tlp::node current) {
+    return pLayout->getNodeValue(current).getY();
+}
+
+//====================================================================
+inline float getNodeHeight(tlp::SizeProperty* size, tlp::node current) {
+    return size->getNodeValue(current).getH();
+}
+
+//====================================================================
+inline float getNodeWidth(tlp::SizeProperty* size, tlp::node current) {
+    return size->getNodeValue(current).getW();
+}
 #endif
 

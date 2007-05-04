@@ -7,6 +7,7 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/GraphTools.h>
 
 #include "GeneralGraph3D.h"
 
@@ -72,27 +73,19 @@ void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops
   if (!AcyclicTest::isAcyclic(graph)) {
     bool resultBool;
     string erreurMsg;
-    BooleanProperty *spanningDag= new BooleanProperty(graph);
-    resultBool = graph->computeProperty("Spanning Dag",spanningDag,erreurMsg);
+    BooleanProperty spanningDag(graph);
+    resultBool = graph->computeProperty("Spanning Dag", &spanningDag,erreurMsg);
     if (!resultBool) {
       cerr << __PRETTY_FUNCTION__ << endl;
       cerr << erreurMsg << endl;
     }
     assert(resultBool);
     
-    //sauvegarde information
-    vector<edge> graphEdges(graph->numberOfEdges());
-    int i=0;
-    Iterator<edge> *itE=graph->getEdges();
-    while (itE->hasNext()) {
-      graphEdges[i]=itE->next();
-      i++;
-    }delete itE;
-    
     //We replace self loops by three edges an two nodes.
-    for (vector<edge>::const_iterator itEdge=graphEdges.begin();itEdge!=graphEdges.end();++itEdge) {
-      edge ite=*itEdge;
-      if ((spanningDag->getEdgeValue(ite))==false) {
+    StableIterator<edge> itE(graph->getEdges());
+    while (itE.hasNext()) {
+      edge ite=itE.next();
+      if ((spanningDag.getEdgeValue(ite))==false) {
 	if (graph->source(ite)==graph->target(ite)) {
 	  node n1=graph->addNode();
 	  node n2=graph->addNode();
@@ -102,6 +95,7 @@ void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops
 					graph->addEdge(n1,n2) , 
 					graph->addEdge(graph->source(ite),n2) , 
 					ite ));
+	  graph->delEdge(ite);
 	}
 	else {
 	  reversed.insert(ite);
@@ -109,75 +103,6 @@ void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops
 	}
       }
     }
-    
-    delete spanningDag;
-    //We remove all self loops from the graph
-    list<SelfLoops>::iterator itSelf;
-    for (itSelf=selfLoops.begin();itSelf!=selfLoops.end();++itSelf) {
-      graph->delEdge((*itSelf).old);
-    }
-  }
-  assert(AcyclicTest::isAcyclic(graph));
-}
-
-node GeneralGraph3D::makeSimpleSource(Graph* graph) {
-  assert(AcyclicTest::isAcyclic(graph));
-  node startNode=graph->addNode();
-  Iterator<node> *itN=graph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    if ((graph->indeg(itn)==0) && (itn!=startNode)) {
-      graph->addEdge(startNode,itn);
-    }
-  } delete itN;
-  assert(AcyclicTest::isAcyclic(graph));
-  return startNode;
-}
-
-void GeneralGraph3D::makeProperDag(Graph* graph, list<node> &addedNodes, stdext::hash_map<edge,edge> &replacedEdges) {
-  assert(AcyclicTest::isAcyclic(graph));
-  //We compute the dag level metric on resulting graph.
-  bool resultBool;
-  string erreurMsg;
-  DoubleProperty *dagLevel= new DoubleProperty(graph);
-  resultBool = graph->computeProperty("Dag Level",dagLevel,erreurMsg);
-  assert(resultBool);
-  //we now transform the dag in a proper Dag, two linked nodes of a proper dag
-  //must have a difference of one of dag level metric.
-  node tmp1,tmp2;
-  string tmpString;
-  //sauvegarde information
-  vector<edge> graphEdges(graph->numberOfEdges());
-  int i=0;
-  Iterator<edge> *itE=graph->getEdges();
-  while (itE->hasNext()) {
-    graphEdges[i]=itE->next();
-    i++;
-  } delete itE;
-  
-  for (vector<edge>::const_iterator itEdge=graphEdges.begin();itEdge!=graphEdges.end();++itEdge) {
-    edge ite=*itEdge;
-    double delta=dagLevel->getNodeValue(graph->target(ite))-dagLevel->getNodeValue(graph->source(ite));
-    double levelStartNode=dagLevel->getNodeValue(graph->source(ite))+1;
-    if (delta>1) {
-      tmp1=graph->addNode();
-      levelStartNode++;
-      replacedEdges[ite]=graph->addEdge(graph->source(ite),tmp1);
-      addedNodes.push_back(tmp1);
-      while (delta>2) {
-	tmp2=graph->addNode();
-	levelStartNode++;
-	addedNodes.push_back(tmp2);
-	graph->addEdge(tmp1,tmp2);
-	tmp1=tmp2;
-	delta--;
-      }
-      graph->addEdge(tmp1,graph->target(ite));
-    }
-  }
-  delete dagLevel;
-  for (stdext::hash_map<edge,edge>::iterator it=replacedEdges.begin();it!=replacedEdges.end();++it) {
-    graph->delEdge((*it).first);
   }
   assert(AcyclicTest::isAcyclic(graph));
 }
