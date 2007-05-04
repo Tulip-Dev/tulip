@@ -22,8 +22,8 @@ namespace tlp {
   
   //======================================================================
   void makeProperDag(Graph* graph,list<node> &addedNodes, 
-			  stdext::hash_map<edge,edge> &replacedEdges, 
-			  IntegerProperty *edgeLength) {
+		     stdext::hash_map<edge,edge> &replacedEdges, 
+		     IntegerProperty *edgeLength) {
     if (TreeTest::isTree(graph)) return;
     assert(AcyclicTest::isAcyclic(graph));
     //We compute the dag level metric on resulting sg.
@@ -40,7 +40,8 @@ namespace tlp {
     for (int i=0;itE->hasNext();++i) {
       sgEdges[i]=itE->next();
     } delete itE;
-    edgeLength->setAllEdgeValue(1);
+    if (edgeLength)
+      edgeLength->setAllEdgeValue(1);
     for (vector<edge>::const_iterator itEdge=sgEdges.begin();itEdge!=sgEdges.end();++itEdge) {
       edge ite=*itEdge;
       int delta=(int)rint(dagLevel.getNodeValue(graph->target(ite))-dagLevel.getNodeValue(graph->source(ite)));
@@ -53,7 +54,8 @@ namespace tlp {
 	  tmp2=graph->addNode();
 	  addedNodes.push_back(tmp2);
 	  edge e=graph->addEdge(tmp1,tmp2);
-	  edgeLength->setEdgeValue(e,delta-2);	  
+	  if (edgeLength)
+	    edgeLength->setEdgeValue(e,delta-2);	  
 	  dagLevel.setNodeValue(tmp2,dagLevel.getNodeValue(graph->target(ite))-1);
 	  tmp1=tmp2;
 	}
@@ -160,5 +162,191 @@ namespace tlp {
       }
     }
     return result;
+  }
+
+  void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty) {
+    list<node> fifo;
+
+    BooleanProperty *nodeFlag= graph->getLocalProperty<BooleanProperty>("selectionNodeFlag");
+    
+    // get previously selected nodes 
+    Iterator<node> *itN=graph->getNodes();
+    for (;itN->hasNext();) { 
+      node itn=itN->next();
+      if (selectionProperty->getNodeValue(itn)==true) {
+	fifo.push_back(itn);
+	nodeFlag->setNodeValue(itn,true);
+      }
+    } delete itN;
+
+    selectionProperty->setAllEdgeValue(true);
+    selectionProperty->setAllNodeValue(true);
+
+    bool ok=true;
+    node tmp1;
+    while (ok) {
+      while (!fifo.empty()) {
+	tmp1=fifo.front();
+	fifo.pop_front();
+	Iterator<edge> *itE=graph->getOutEdges(tmp1);
+	for(;itE->hasNext();) {
+	  edge adjit=itE->next();
+	  if (!nodeFlag->getNodeValue(graph->target(adjit)))	{
+	    nodeFlag->setNodeValue(graph->target(adjit),true);	    
+	    fifo.push_back(graph->target(adjit));
+	  }
+	  else
+	    selectionProperty->setEdgeValue(adjit,false);
+	} delete itE;
+      }
+      ok=false;
+      bool degZ=false;
+      node goodNode;
+      Iterator<node> *itN=graph->getNodes();
+      for(;itN->hasNext();) {
+	node itn=itN->next();
+	if (!nodeFlag->getNodeValue(itn)) {
+	  if (!ok) {
+	    goodNode=itn;
+	    ok=true;
+	  }
+	  if (graph->indeg(itn)==0) {
+	    fifo.push_back(itn);
+	    nodeFlag->setNodeValue(itn,true);
+	    degZ=true;
+	  }
+	  if (!degZ) {
+	    if (graph->indeg(itn)<graph->indeg(goodNode))
+	      goodNode=itn;
+	    else {
+	      if (graph->indeg(itn)==graph->indeg(goodNode))
+		if (graph->outdeg(itn)>graph->outdeg(goodNode))
+		  goodNode=itn;
+	    }
+	  }
+	}
+      } delete itN;
+      if (ok && (!degZ)) {
+	fifo.push_back(goodNode);
+	nodeFlag->setNodeValue(goodNode,true);
+      }
+    }
+    graph->delLocalProperty("selectionNodeFlag");
+  }
+
+  //====================================================================
+  static Graph *computeTreeFromConnectedComponents(Graph *graph, vector<node> &addedNodes,
+						   Graph* rGraph) {
+    // graph is not connected
+    // compute the connected components's subgraph
+    string err;
+    DoubleProperty connectedComponent(graph);
+    graph->computeProperty(string("Connected Component"), &connectedComponent, err);
+    DataSet tmp;
+    tmp.set("Property", &connectedComponent);
+    bool result = tlp::applyAlgorithm(graph, err, &tmp, "Equal Value");
+    assert(result);
+  
+    // create a new subgraph for the tree
+    Graph *tree = rGraph->addSubGraph();
+    node root = tree->addNode();
+    addedNodes.push_back(root);
+    Graph *gConn;
+
+    // connected components subgraphs loop
+    forEach(gConn, graph->getSubGraphs()) {
+      if (tree == gConn)
+	continue;
+      // compute a tree for each subgraph
+      // add each element of that tree
+      // to our main tree
+      // and connect the main root to each
+      // subtree root
+      Graph *sTree = computeTree(gConn, addedNodes, rGraph, true);
+      node n;
+      forEach(n, sTree->getNodes()) {
+	tree->addNode(n);
+	if (sTree->indeg(n) == 0)
+	  tree->addEdge(root, n);
+      }
+      edge e;
+      forEach(e, sTree->getEdges())
+	tree->addEdge(e);
+    }
+    assert (TreeTest::isTree(tree));
+    return tree;
+  }
+
+#define CLONE_NAME "CloneForTree"
+  Graph *computeTree(Graph *graph, vector<node> &addedNodes, Graph *rGraph, bool isConnected) {
+    // nothing todo if the graph is already a tree
+    if (TreeTest::isTree(graph))
+      return graph;
+  
+    // if needed, create a clone of the graph
+    // as a working copy
+    Graph *gClone = graph;
+    if (!rGraph)
+      rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
+
+    // if the graph is topologically a tree, make it directed
+    // using a 'center' of the graph as root
+    if (TreeTest::isFreeTree(gClone)) {
+      TreeTest::makeDirectedTree(gClone, graphCenterHeuristic(gClone));
+      return gClone;
+    }
+
+    // if the graph is connected,
+    // make it acyclic,
+    // extract a spanning forest,
+    // add a new node as a tree root
+    // and connect it to each root of the forest's trees
+    if (isConnected || ConnectedTest::isConnected(gClone)) {
+      vector<edge> reversed;
+      vector<SelfLoops> selfLoops;
+      AcyclicTest::makeAcyclic(gClone, reversed, selfLoops);
+      vector<SelfLoops>::iterator itSelf;
+      for (itSelf=selfLoops.begin();itSelf!=selfLoops.end();++itSelf) {
+	addedNodes.push_back((*itSelf).n1);
+	addedNodes.push_back((*itSelf).n2);
+      }
+      BooleanProperty spanningForestSelection(gClone);
+      selectSpanningForest(gClone, &spanningForestSelection);
+      gClone = gClone->addSubGraph(&spanningForestSelection);
+      if (ConnectedTest::isConnected(gClone))
+	return computeTree(gClone, addedNodes, rGraph, true);
+      node root = gClone->addNode(), n;
+      addedNodes.push_back(root);
+      forEach(n, gClone->getNodes()) {
+	if (n == root)
+	  continue;
+	if (gClone->indeg(n) == 0)
+	  gClone->addEdge(root, n);
+      }
+      assert(TreeTest::isTree(gClone));
+      return gClone;
+    }
+
+    return computeTreeFromConnectedComponents(gClone, addedNodes, rGraph);
+  }
+
+  void cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree, vector<node> &addedNodes) {
+    if (graph == tree)
+      return;
+
+    // remove all added nodes
+    vector<node>::iterator it;
+    for (it = addedNodes.begin(); it != addedNodes.end(); ++it)
+      graph->delNode(*it);
+
+    // then remove the subgraph clone
+    Graph *sg = tree;
+    string nameAtt("name");
+    string name = sg->getAttribute<string>(nameAtt);
+    while(name != CLONE_NAME) {
+      sg = sg->getSuperGraph();
+      name = sg->getAttribute<string>(nameAtt);
+    }
+    graph->delAllSubGraphs(sg);
   }
 }
