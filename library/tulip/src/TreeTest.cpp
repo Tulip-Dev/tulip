@@ -1,4 +1,5 @@
 #include "tulip/Graph.h"
+#include "tulip/ConnectedTest.h"
 #include "tulip/TreeTest.h"
 #include "tulip/AcyclicTest.h"
 #include "tulip/ForEach.h"
@@ -30,7 +31,9 @@ bool TreeTest::isFreeTree(Graph *graph) {
   visited.setAll (false);
   node firstNode = graph->getOneNode();
   return instance->isFreeTree (graph, firstNode, firstNode,
-				      visited);
+			       visited)
+    ? ConnectedTest::isConnected(graph)
+    : false;
 }//isFreeTree
 
 //====================================================================
@@ -57,7 +60,7 @@ void TreeTest::makeDirectedTree(Graph *graph, node root) {
 //Determines if the passed graph is topologically a tree.  The 
 //passed mutable container returns if we have visited a node
 bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
-	    MutableContainer<bool> &visited) {
+			   MutableContainer<bool> &visited) {
   if (visited.get (curRoot.id)) return false;
   visited.set (curRoot.id, true);
   node curNode;
