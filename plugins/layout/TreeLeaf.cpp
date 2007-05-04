@@ -1,16 +1,16 @@
-#include <cmath>
-#include <tulip/TreeTest.h>
+#include <tulip/GraphTools.h>
 #include "TreeLeaf.h"
 #include "DatasetTools.h"
 #include "Orientation.h"
+
 
 LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","Tree");
 
 using namespace std;
 using namespace tlp;
 
-int TreeLeaf::dfsPlacement(node n, int &curPos, int depth,
-			   OrientableLayout *oriLayout) {
+static int dfsPlacement(Graph* graph, node n, int &curPos, int depth,
+			OrientableLayout *oriLayout) {
   int resultMin=0;
   int resultMax=0;
   int result=0;
@@ -22,13 +22,13 @@ int TreeLeaf::dfsPlacement(node n, int &curPos, int depth,
   Iterator<node> *itN=graph->getOutNodes(n);
   if (itN->hasNext()) {
     node itn=itN->next();
-    result=dfsPlacement(itn, curPos, depth+2, oriLayout);
+    result=dfsPlacement(graph, itn, curPos, depth+2, oriLayout);
     resultMin=result;
     resultMax=result;
   }
   for (;itN->hasNext();) {
     node itn=itN->next();
-    result=dfsPlacement(itn, curPos, depth+2, oriLayout);
+    result=dfsPlacement(graph, itn, curPos, depth+2, oriLayout);
     if (result>resultMax)
       resultMax=result;
     if (result<resultMin)
@@ -52,42 +52,15 @@ bool TreeLeaf::run() {
 
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-  Iterator<node> *itN=graph->getNodes();
+
+  vector<node> addedNodes;
+  Graph *tree = computeTree(graph, addedNodes);
   node tmpNode;
-  for (;itN->hasNext();) {
-    node itn=itN->next();
-    if (graph->indeg(itn)==0) {
-      tmpNode=itn;
-      break;
-    }
-  } delete itN;
+  tlp::getSource(tree, tmpNode);
   int x=0;
-  dfsPlacement(tmpNode,x,0, &oriLayout);
+
+  dfsPlacement(tree, tmpNode, x, 0, &oriLayout);
+
+  cleanComputedTree(graph, tree, addedNodes);
   return true;
 }
-
-bool TreeLeaf::check(string &erreurMsg) {
-  if (TreeTest::isTree(graph)) {
-    erreurMsg="";
-    return true;
-  }
-  else {
-    erreurMsg="The Graph must be a Tree";
-    return false;
-  }
-}
-
-void TreeLeaf::reset()
-{}
-
-
-
-
-
-
-
-
-
-
-
-

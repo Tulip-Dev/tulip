@@ -35,14 +35,14 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   ~ImprovedWalker();
 
   bool run();
-  bool check(std::string&);
-  void reset();
 
  private:
   typedef std::vector<float>      levelToFloatType;
   typedef std::map<tlp::node, float>   nodeToFloatType;
   typedef std::map<tlp::node, int>     nodeToIntegerPropertyType;
   typedef std::map<tlp::node, tlp::node>    nodeToNodeType;
+
+  tlp::Graph *tree;
 
   float spacing;
   float nodeSpacing;
@@ -62,7 +62,7 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   nodeToFloatType         shiftDelta;
   nodeToNodeType          ancestor;
 
-  int                     initializeAllNodes();
+  int                     initializeAllNodes(tlp::node);
   int                     initializeNode(tlp::node root, unsigned int depth);
   int                     countSibling(tlp::node from, tlp::node to);
   ImprovedWalkerIterator* iterateSibling(tlp::node from, tlp::node to);
@@ -92,24 +92,24 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
 
 //====================================================================    
 inline tlp::node ImprovedWalker::getSuperGraph(tlp::node n) {
-   if (graph->indeg(n)<1)
+   if (tree->indeg(n)<1)
         return BADNODE;
-    return graph->getInNode(n,1);
+    return tree->getInNode(n,1);
 }
 
 //====================================================================    
 inline tlp::node ImprovedWalker::leftmostChild(tlp::node n) {    
-    if (graph->outdeg(n)<1)
+    if (tree->outdeg(n)<1)
         return BADNODE;
-    return graph->getOutNode(n,1);
+    return tree->getOutNode(n,1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::rightmostChild(tlp::node n) {
     int pos;
-    if ((pos=graph->outdeg(n))<1)
+    if ((pos=tree->outdeg(n))<1)
         return BADNODE;        
-    return graph->getOutNode(n,pos);
+    return tree->getOutNode(n,pos);
 }
 
 //====================================================================    
@@ -117,15 +117,15 @@ inline tlp::node ImprovedWalker::leftSibling(tlp::node n) {
     if (order[n]<=1)
         return BADNODE; 
     else
-        return graph->getOutNode( getSuperGraph(n) ,order[n]-1);
+        return tree->getOutNode( getSuperGraph(n) ,order[n]-1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::rightSibling(tlp::node n) {
     tlp::node father=getSuperGraph(n);
-    if (order[n]>=int(graph->outdeg(father)))
+    if (order[n]>=int(tree->outdeg(father)))
         return BADNODE;     
-    return graph->getOutNode(father ,order[n]+1);
+    return tree->getOutNode(father ,order[n]+1);
 }
 
 //====================================================================
@@ -136,7 +136,7 @@ inline tlp::node ImprovedWalker::leftMostSibling(tlp::node n) {
 
 //====================================================================
 inline tlp::node ImprovedWalker::nextRightContour(tlp::node n) {
-    if (isLeaf(graph, n))
+    if (isLeaf(tree, n))
         return thread[n];
     else
         return rightmostChild(n);
@@ -144,7 +144,7 @@ inline tlp::node ImprovedWalker::nextRightContour(tlp::node n) {
 
 //====================================================================
 inline tlp::node ImprovedWalker::nextLeftContour(tlp::node n) {
-    if (isLeaf(graph, n))
+    if (isLeaf(tree, n))
         return thread[n];
     else
         return leftmostChild(n);

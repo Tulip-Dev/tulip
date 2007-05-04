@@ -1,4 +1,5 @@
 #include "TreeReingoldAndTilfordExtended.h"
+#include <tulip/GraphTools.h>
 
 LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","1.0","Tree");
 using namespace std;
@@ -191,7 +192,7 @@ list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L, list<LR>*R, d
 //=============================================================================
 list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<node,double> *p) {
   //cerr << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
-  if (graph->outdeg(n)==0){
+  if (tree->outdeg(n)==0){
     list<LR> *result = new list<LR>();
     LR tmpLR;
     tmpLR.L = -sizes->getNodeValue(n).getW()/2.;
@@ -203,10 +204,10 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
   }
   else {
     Iterator<edge> *it;
-    it=graph->getOutEdges(n);
+    it=tree->getOutEdges(n);
       
     edge ite = it->next();
-    node itn = graph->target(ite);
+    node itn = tree->target(ite);
       
     list<LR> *leftTree,*rightTree;
     list<double> childPos;
@@ -225,7 +226,7 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
 
     while (it->hasNext()) {
       ite=it->next();
-      itn=graph->target(ite);
+      itn=tree->target(ite);
       rightTree=TreePlace(itn,p);
       if (useLength) {
 	int tmpLength;
@@ -259,8 +260,8 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<no
     leftTree->push_front(tmpLR);
 
     list<double>::const_iterator itI = childPos.begin();
-    forEach(ite, graph->getOutEdges(n)) {
-      itn = graph->target(ite);
+    forEach(ite, tree->getOutEdges(n)) {
+      itn = tree->target(ite);
       (*p)[itn] = *itI - posFather;
       ++itI;
     } 
@@ -282,14 +283,14 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &ma
   
   if (useLength) {
     edge ite;
-    forEach(ite, graph->getOutEdges(n)) {
-      node itn=graph->target(ite);
+    forEach(ite, tree->getOutEdges(n)) {
+      node itn=tree->target(ite);
       TreeLevelSizing(itn,maxSize,level+(lengthMetric->getEdgeValue(ite)), levels);
     }
   }
   else {
     node itn;
-    forEach(itn, graph->getOutNodes(n)) {
+    forEach(itn, tree->getOutNodes(n)) {
       TreeLevelSizing(itn, maxSize, level+1, levels);
     }
   }
@@ -304,8 +305,8 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
-    forEach(ite, graph->getOutEdges(n)) {
-      node itn = graph->target(ite);
+    forEach(ite, tree->getOutEdges(n)) {
+      node itn = tree->target(ite);
       double decalY = y;
       int decalLevel = level;
       int tmp = lengthMetric->getEdgeValue(ite);
@@ -319,7 +320,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   }
   else {
     node itn;
-    forEach(itn, graph->getOutNodes(n)) {
+    forEach(itn, tree->getOutNodes(n)) {
       calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+spacing, 
 		 level+1, maxLevelSize);
     }
@@ -377,8 +378,10 @@ bool TreeReingoldAndTilfordExtended::run() {
   }
   //===========================================================
 
+  vector<node> addedNodes;
+  tree = computeTree(graph, addedNodes);
   node startNode;
-  tlp::getSource(graph, startNode);
+  tlp::getSource(tree, startNode);
 
   map<int,double> maxSizeLevel;
   map<node, int> levels;
@@ -408,10 +411,10 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
     //============================
     edge e;
-    forEach(e, graph->getEdges()) {
+    forEach(e, tree->getEdges()) {
       LineType::RealType tmp;
-      node src = graph->source(e);
-      node tgt = graph->target(e);
+      node src = tree->source(e);
+      node tgt = tree->target(e);
       Coord srcPos = layoutResult->getNodeValue(src);
       Coord tgtPos = layoutResult->getNodeValue(tgt);
       double y = levelCoord[levels[tgt]-1];
@@ -421,7 +424,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
     
     if (orientation == "horizontal") {
-      forEach(e, graph->getEdges()) {
+      forEach(e, tree->getEdges()) {
 	LineType::RealType tmp = layoutResult->getEdgeValue(e);
 	LineType::RealType tmp2;
 	tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
@@ -434,7 +437,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   //rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach(n, tree->getNodes()) {
       Size  tmp = sizes->getNodeValue(n);
       sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       Coord tmpC = layoutResult->getNodeValue(n);
@@ -445,19 +448,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     graph->delLocalProperty ("bounding circle sizes");
 
+  cleanComputedTree(graph, tree, addedNodes);
+
   return true;
-}
-//=============================================================================
-bool TreeReingoldAndTilfordExtended::check(string &erreurMsg) {
-  if (TreeTest::isTree(graph)) {
-    erreurMsg="";
-    return true;
-  } else {
-    erreurMsg="The Graph must be a Tree";
-    return false;
-  }
-}
-//=============================================================================
-void TreeReingoldAndTilfordExtended::reset() {
 }
 //=============================================================================

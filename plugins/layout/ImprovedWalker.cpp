@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include <tulip/TreeTest.h>
+#include <tulip/GraphTools.h>
 #include "DatasetTools.h"
 #include "EdgeTools.h"
 #include "Orientation.h"
@@ -61,12 +61,15 @@ ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
-  node root                 = searchRoot(graph);
+  vector<node> addedNodes;
+  tree = computeTree(graph, addedNodes);
+  node root;
+  tlp::getSource(tree, root);
   orientationType mask      = getMask(dataSet);
   oriLayout                 = new OrientableLayout(layoutResult, mask);
-  SizeProperty* viewSize = graph->getLocalProperty<SizeProperty>("viewSize");
+  SizeProperty* viewSize    = graph->getLocalProperty<SizeProperty>("viewSize");
   oriSize                   = new OrientableSizeProxy(viewSize, mask);
-  depthMax                  = initializeAllNodes();    
+  depthMax                  = initializeAllNodes(root);    
   order[root]               = 1;
   spacing = 64.0;
   nodeSpacing = 18.0;
@@ -90,30 +93,16 @@ bool ImprovedWalker::run() {
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, oriSize, graph, spacing);
+    setOrthogonalEdge(oriLayout, oriSize, tree, spacing);
     
+  cleanComputedTree(graph, tree, addedNodes);
+
   delete oriLayout;
   delete oriSize;
   return true;
 }
 //====================================================================
-bool ImprovedWalker::check(string& errorMsg) {
-  if (TreeTest::isTree(graph)) {
-    errorMsg = "";
-    return true;
-  }
-  else {
-    errorMsg = "The Graph must be a Tree";
-    return false;
-  }
-}
-//====================================================================
-void ImprovedWalker::reset() {
-}
-
-//====================================================================
-int ImprovedWalker::initializeAllNodes() {    
-  node root = searchRoot(graph);
+int ImprovedWalker::initializeAllNodes(node root) {    
   return initializeNode(root, 0);
 }
 //====================================================================
@@ -137,7 +126,7 @@ int ImprovedWalker::initializeNode(node n, unsigned int depth) {
 
   int maxDepth           = 0;
   int count              = 0;
-  Iterator<node>* itNode = graph->getOutNodes(n);
+  Iterator<node>* itNode = tree->getOutNodes(n);
   while (itNode->hasNext()) {
     node currentNode   = itNode->next();
     order[currentNode] = ++count;
@@ -155,24 +144,24 @@ int ImprovedWalker::countSibling(node from, node to) {
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::iterateSibling(node from, node to) {
   int modifier = (order[from] > order[to] ? 1 : -1 );
-  node father  = graph->getInNode(from,1);
+  node father  = tree->getInNode(from,1);
   
-  return new ImprovedWalkerIterator(graph,father, order[from],
+  return new ImprovedWalkerIterator(tree,father, order[from],
 				    order[to]+modifier);
 }
 //====================================================================
 Iterator<node>* ImprovedWalker::getChildren(node n) {    
-    return graph->getOutNodes(n);
+    return tree->getOutNodes(n);
 }
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::getReversedChildren(node n) {
-  int nbChildren = graph->outdeg(n);
-  return new ImprovedWalkerIterator(graph, n, nbChildren, 0);
+  int nbChildren = tree->outdeg(n);
+  return new ImprovedWalkerIterator(tree, n, nbChildren, 0);
 }
 
 //==================================================================== 
 void ImprovedWalker::firstWalk(node v) {       
-  if (isLeaf(graph, v)) {   
+  if (isLeaf(tree, v)) {   
     prelimX[v]        = 0;
     node vleftSibling = leftSibling(v);
     if (vleftSibling  != BADNODE)
@@ -244,8 +233,10 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
                                   
       nodeInsideLeft    = nextRightContour(nodeInsideLeft);
       nodeInsideRight   = nextLeftContour(nodeInsideRight);
-      nodeOutsideLeft   = nextLeftContour(nodeOutsideLeft);
-      nodeOutsideRight  = nextRightContour(nodeOutsideRight);
+      if (nodeOutsideLeft.isValid())
+	nodeOutsideLeft   = nextLeftContour(nodeOutsideLeft);
+      if (nodeOutsideRight.isValid())
+	nodeOutsideRight  = nextRightContour(nodeOutsideRight);
 
       ancestor[nodeOutsideRight] = v;
             

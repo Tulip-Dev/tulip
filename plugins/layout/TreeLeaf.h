@@ -32,9 +32,7 @@ public:
   TreeLeaf(const tlp::PropertyContext &);
   ~TreeLeaf();
   bool run();
-  bool check(std::string &);
   void reset();
-  int dfsPlacement(tlp::node, int &, int, OrientableLayout *oriLayout);
 };
 /*@}*/
 #endif

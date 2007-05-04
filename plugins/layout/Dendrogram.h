@@ -28,8 +28,6 @@ class Dendrogram: public tlp::LayoutAlgorithm {
   ~Dendrogram();
   
   bool run();
-  bool check(std::string&);
-  void reset();
 
  private: 
   float spacing;
@@ -37,6 +35,7 @@ class Dendrogram: public tlp::LayoutAlgorithm {
     
   std::map<tlp::node, float>   leftshift;
   tlp::node                    root;
+  tlp::Graph *tree;
 
   float   setAllNodesCoordX(tlp::node n, float rightMargin,
 			    OrientableLayout *oriLayout,

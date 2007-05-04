@@ -50,9 +50,6 @@ public:
   TreeReingoldAndTilfordExtended(const tlp::PropertyContext &);
   ~TreeReingoldAndTilfordExtended();
   bool run();
-  bool check(std::string &);
-  void reset();
-
 
 private:
   void calcLayout(tlp::node, stdext::hash_map<tlp::node,double> *,double, double, int ,std::map<int,double> &);
@@ -61,6 +58,7 @@ private:
   std::list<LR>* TreePlace(tlp::node, stdext::hash_map<tlp::node,double>*);
   void TreeLevelSizing(tlp::node ,std::map<int,double> &,int , std::map<tlp::node,int> &levels);
 
+  tlp::Graph *tree;
   tlp::SizeProperty *sizes;
   tlp::IntegerProperty *lengthMetric;
   bool ortho;

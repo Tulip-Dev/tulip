@@ -1,7 +1,3 @@
-#include <map>
-#include <cmath>
-#include <climits>
-
 #include <tulip/Circle.h>
 
 #include "ConeTreeExtended.h"
@@ -26,7 +22,7 @@ void ConeTreeExtended::computeLayerSize(node n, unsigned int level) {
     levelSize.push_back(0);
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
   node i;
-  forEach(i, graph->getOutNodes(n)) {
+  forEach(i, tree->getOutNodes(n)) {
     computeLayerSize(i, level + 1);
   }
 }
@@ -47,13 +43,13 @@ double ConeTreeExtended::treePlace3D(node n,
 				     hash_map<node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
-  if (graph->outdeg(n)==0) {
+  if (tree->outdeg(n)==0) {
     Coord tmp = nodeSize->getNodeValue(n);
     return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   
-  if (graph->outdeg(n)==1) {
-    Iterator<node> *itN=graph->getOutNodes(n);
+  if (tree->outdeg(n)==1) {
+    Iterator<node> *itN=tree->getOutNodes(n);
     node itn=itN->next(); 
     delete itN;
     return treePlace3D(itn,posRelX,posRelY);
@@ -63,8 +59,8 @@ double ConeTreeExtended::treePlace3D(node n,
   double maxRadius=0;
   float newRadius;
 
-  vector<double> subCircleRadius(graph->outdeg(n));
-  Iterator<node> *itN=graph->getOutNodes(n);
+  vector<double> subCircleRadius(tree->outdeg(n));
+  Iterator<node> *itN=tree->getOutNodes(n);
   for (int i=0; itN->hasNext(); ++i)  {
     node itn = itN->next();
     subCircleRadius[i] = treePlace3D(itn,posRelX,posRelY);
@@ -102,7 +98,7 @@ double ConeTreeExtended::treePlace3D(node n,
   tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
 
   //Place relative position
-  itN = graph->getOutNodes(n);
+  itN = tree->getOutNodes(n);
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
     node itn = itN->next();
     (*posRelX)[itn]=newRadius*cos(vangles[i])-circleH[0];
@@ -115,7 +111,7 @@ void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<no
 			double x, double y, int level) {
   layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
-  forEach(itn, graph->getOutNodes(n)) {
+  forEach(itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
   }
 }
@@ -171,8 +167,12 @@ bool ConeTreeExtended::run() {
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   hash_map<node,double> posX;
   hash_map<node,double> posY;
+
+  vector<node> addedNodes;
+  tree = computeTree(graph, addedNodes);
+
   node root;
-  tlp::getSource(graph, root);
+  tlp::getSource(tree, root);
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);
@@ -186,20 +186,7 @@ bool ConeTreeExtended::run() {
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
+  cleanComputedTree(graph, tree, addedNodes);
+
   return true;
 }
-//===============================================================
-bool ConeTreeExtended::check(string &erreurMsg) {
-  if (TreeTest::isTree(graph)) {
-    erreurMsg="";
-    return true;
-  }
-  else {
-    erreurMsg="The Graph must be a Tree";
-    return false;
-  }
-}
-//===============================================================
-void ConeTreeExtended::reset() {
-}
-//===============================================================

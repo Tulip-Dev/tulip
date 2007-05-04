@@ -34,14 +34,13 @@ public:
   ConeTreeExtended(const tlp::PropertyContext &);
   ~ConeTreeExtended();
   bool run();
-  bool check(std::string &);
-  void reset();
 private:
   double treePlace3D(tlp::node n, stdext::hash_map<tlp::node,double> *posRelX, stdext::hash_map<tlp::node,double> *posRelY);
   void calcLayout(tlp::node n, stdext::hash_map<tlp::node,double> *px, stdext::hash_map<tlp::node,double> *py,
 		  double x, double y, int level);
   void computeLayerSize(tlp::node , unsigned int);
   void computeYCoodinates(tlp::node);
+  tlp::Graph *tree;
   tlp::SizeProperty * nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;

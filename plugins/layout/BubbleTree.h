@@ -44,13 +44,12 @@ public:
   BubbleTree(const tlp::PropertyContext &);
   ~BubbleTree();
   bool run();
-  bool check(std::string &);
-  void reset();
 private:
   double computeRelativePosition(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
   void calcLayout(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
   void calcLayout2(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
+  tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;
   bool nAlgo;
 };
