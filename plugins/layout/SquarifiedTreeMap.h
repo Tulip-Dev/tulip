@@ -44,7 +44,6 @@ public:
 
     bool check(std::string&);
     bool run();
-    void reset();
 
 private:
     tlp::SizeProperty*     size;   

@@ -82,7 +82,8 @@ bool SquarifiedTreeMap::run() {
   RectangleArea initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio,
 			     DEFAULT_HEIGHT);
 
-  node root = searchRoot(graph);
+  node root;
+  tlp::getSource(graph, root);
 
   initializeMapSum(root);
   Coord initialSpaceCenterCoord = initialSpace.getCenterCoord();   
@@ -94,11 +95,6 @@ bool SquarifiedTreeMap::run() {
   return true;
 }
 
-//====================================================================
-void SquarifiedTreeMap::reset() {
-}
-
-//====================================================================
 inline float computeAspectRatio(float area, float childrenArea,
                                 float widthArea) {
   float ratio = (area * widthArea * widthArea) / 
