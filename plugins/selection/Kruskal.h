@@ -2,8 +2,6 @@
 #define _KRUSKAL_H
 
 #include <tulip/TulipPlugin.h>
-#include <map>
-#include <iostream>
 
 /** \addtogroup selection */
 /*@{*/
@@ -27,23 +25,6 @@ public:
   ~Kruskal();
   bool run();
   bool check(std::string &);
-
-private:
-
-  struct ltEdge {
-    tlp::DoubleProperty *m;
-    ltEdge(tlp::DoubleProperty *m) : m(m) {}
-    bool operator()(const tlp::edge &e1, const tlp::edge &e2) const
-    {
-      return (m->getEdgeValue(e1) < m->getEdgeValue(e2));
-    } 
-  };
-
-  std::map<int,int> *classes;
-  int numClasses;
-  int getClass(const int i);
-  void makeUnion(const int p, const int q);
-  bool edgeOk(const tlp::edge &e);
 };
 /*@}*/
 #endif
