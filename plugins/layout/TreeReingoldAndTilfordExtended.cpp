@@ -378,8 +378,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   }
   //===========================================================
 
-  vector<node> addedNodes;
-  tree = computeTree(graph, addedNodes);
+  tree = computeTree(graph);
   node startNode;
   tlp::getSource(tree, startNode);
 
@@ -448,7 +447,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     graph->delLocalProperty ("bounding circle sizes");
 
-  cleanComputedTree(graph, tree, addedNodes);
+  cleanComputedTree(graph, tree);
 
   return true;
 }

@@ -165,14 +165,13 @@ bool ConeTreeExtended::run() {
   }
   //===========================================================
   layoutResult->setAllEdgeValue(vector<Coord>(0));
-  hash_map<node,double> posX;
-  hash_map<node,double> posY;
 
-  vector<node> addedNodes;
-  tree = computeTree(graph, addedNodes);
+  tree = computeTree(graph);
 
   node root;
   tlp::getSource(tree, root);
+  hash_map<node,double> posX;
+  hash_map<node,double> posY;
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);
@@ -186,7 +185,7 @@ bool ConeTreeExtended::run() {
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
-  cleanComputedTree(graph, tree, addedNodes);
+  cleanComputedTree(graph, tree);
 
   return true;
 }

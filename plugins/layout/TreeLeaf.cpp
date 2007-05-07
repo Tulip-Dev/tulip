@@ -53,14 +53,13 @@ bool TreeLeaf::run() {
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
 
-  vector<node> addedNodes;
-  Graph *tree = computeTree(graph, addedNodes);
+  Graph *tree = computeTree(graph);
   node tmpNode;
   tlp::getSource(tree, tmpNode);
   int x=0;
 
   dfsPlacement(tree, tmpNode, x, 0, &oriLayout);
 
-  cleanComputedTree(graph, tree, addedNodes);
+  cleanComputedTree(graph, tree);
   return true;
 }

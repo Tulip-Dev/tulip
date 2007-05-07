@@ -41,8 +41,7 @@ bool Dendrogram::run() {
     dataSet->get("node spacing", nodeSpacing);
   }
 
-  vector<node> addedNodes;
-  tree = computeTree(graph, addedNodes);
+  tree = computeTree(graph);
   tlp::getSource(tree, root);
 
   setAllNodesCoordX(root, 0.f, &oriLayout, &oriSize);
@@ -51,7 +50,7 @@ bool Dendrogram::run() {
   setOrthogonalEdge(&oriLayout, &oriSize, graph, 
 		    spacing);
 
-  cleanComputedTree(graph, tree, addedNodes);
+  cleanComputedTree(graph, tree);
   return true;
 }
 

@@ -279,13 +279,15 @@ bool BubbleTree::run() {
     nAlgo = true;
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));
-  stdext::hash_map<node,Vector<double,5> > relativePosition;
-  vector<node> addedNodes;
-  tree = computeTree(graph, addedNodes);
+
+  tree = computeTree(graph);
+
   node startNode;
   tlp::getSource(tree, startNode);
+  stdext::hash_map<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
-  cleanComputedTree(graph, tree, addedNodes);
+
+  cleanComputedTree(graph, tree);
   return true;
 }

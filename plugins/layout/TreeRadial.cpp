@@ -52,8 +52,7 @@ public:
   }
 
   bool run() {
-    vector<node> addedNodes;
-    tree = computeTree(graph, addedNodes);
+    tree = computeTree(graph);
     node startNode;
     tlp::getSource(tree, startNode);
     graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
@@ -66,7 +65,7 @@ public:
     dfsPlacement(startNode,0,0,6.283);
     delete leaves;
 
-    cleanComputedTree(graph, tree, addedNodes);
+    cleanComputedTree(graph, tree);
     return true;
   }
 };

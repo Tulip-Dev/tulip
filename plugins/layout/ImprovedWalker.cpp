@@ -61,8 +61,8 @@ ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
-  vector<node> addedNodes;
-  tree = computeTree(graph, addedNodes);
+  tree = computeTree(graph);
+
   node root;
   tlp::getSource(tree, root);
   orientationType mask      = getMask(dataSet);
@@ -95,7 +95,7 @@ bool ImprovedWalker::run() {
   if (hasOrthogonalEdge(dataSet))
     setOrthogonalEdge(oriLayout, oriSize, tree, spacing);
     
-  cleanComputedTree(graph, tree, addedNodes);
+  cleanComputedTree(graph, tree);
 
   delete oriLayout;
   delete oriSize;
