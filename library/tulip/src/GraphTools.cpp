@@ -234,9 +234,91 @@ namespace tlp {
     graph->delLocalProperty("selectionNodeFlag");
   }
 
+  struct ltEdge {
+    DoubleProperty *m;
+    ltEdge(DoubleProperty *metric) : m(metric) {}
+    bool operator()(const edge &e1, const edge &e2) const
+    {
+      return (m->getEdgeValue(e1) < m->getEdgeValue(e2));
+    } 
+  };
+
+  void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
+				 DoubleProperty *edgeWeight) {
+    selection->setAllNodeValue(true);
+    selection->setAllEdgeValue(false);
+
+    int numClasses = 0;
+    map<int, int> classes;
+  
+    Iterator<node> *itN = graph->getNodes();
+    while (itN->hasNext()) { 
+      node n=itN->next();
+      classes[n.id] = numClasses;
+      ++numClasses;
+    }delete itN;
+
+    std::list<edge> sortedEdges;
+    Iterator<edge> *itE = graph->getEdges();
+    while (itE->hasNext()) { 
+      edge e=itE->next();
+      sortedEdges.push_back(e);
+    } delete itE;
+
+    if (edgeWeight)
+      sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
+    while(numClasses > 1) {
+      edge cur;
+      do {
+	cur = sortedEdges.front();
+	sortedEdges.pop_front();
+      } while(!(classes[graph->source(cur).id] !=  classes[graph->target(cur).id]));
+    
+      selection->setEdgeValue(cur, true);
+
+      int x = classes[graph->source(cur).id];
+      int y = classes[graph->target(cur).id];
+
+      Iterator<node> *itN = graph->getNodes();
+      while (itN->hasNext()) { 
+	node n=itN->next();
+	if(classes[n.id] == y)
+	  classes[n.id] = x;
+      } delete itN;
+      numClasses--;
+    }
+  }
+
   //====================================================================
-  static Graph *computeTreeFromConnectedComponents(Graph *graph, vector<node> &addedNodes,
-						   Graph* rGraph) {
+  Graph *computeTree(Graph *graph, Graph *rGraph, bool isConnected) {
+    // nothing todo if the graph is already a tree
+    if (TreeTest::isTree(graph))
+      return graph;
+  
+    // if needed, create a clone of the graph
+    // as a working copy
+    Graph *gClone = graph;
+    if (!rGraph)
+      // the name used for subgraph clone when computing a tree
+      #define CLONE_NAME "CloneForTree"
+      rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
+
+    // if the graph is topologically a tree, make it directed
+    // using a 'center' of the graph as root
+    if (TreeTest::isFreeTree(gClone)) {
+      TreeTest::makeDirectedTree(gClone, graphCenterHeuristic(gClone));
+      return gClone;
+    }
+
+    // if the graph is connected,
+    // extract a minimum spanning tree,
+    // and make it directed
+    if (isConnected || ConnectedTest::isConnected(gClone)) {
+      BooleanProperty treeSelection(gClone);
+      selectMinimumSpanningTree(gClone, &treeSelection);
+      return computeTree(gClone->addSubGraph(&treeSelection), rGraph, true);
+    }
+
     // graph is not connected
     // compute the connected components's subgraph
     string err;
@@ -250,7 +332,6 @@ namespace tlp {
     // create a new subgraph for the tree
     Graph *tree = rGraph->addSubGraph();
     node root = tree->addNode();
-    addedNodes.push_back(root);
     Graph *gConn;
 
     // connected components subgraphs loop
@@ -262,7 +343,7 @@ namespace tlp {
       // to our main tree
       // and connect the main root to each
       // subtree root
-      Graph *sTree = computeTree(gConn, addedNodes, rGraph, true);
+      Graph *sTree = computeTree(gConn, rGraph, true);
       node n;
       forEach(n, sTree->getNodes()) {
 	tree->addNode(n);
@@ -277,67 +358,16 @@ namespace tlp {
     return tree;
   }
 
-#define CLONE_NAME "CloneForTree"
-  Graph *computeTree(Graph *graph, vector<node> &addedNodes, Graph *rGraph, bool isConnected) {
-    // nothing todo if the graph is already a tree
-    if (TreeTest::isTree(graph))
-      return graph;
-  
-    // if needed, create a clone of the graph
-    // as a working copy
-    Graph *gClone = graph;
-    if (!rGraph)
-      rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
-
-    // if the graph is topologically a tree, make it directed
-    // using a 'center' of the graph as root
-    if (TreeTest::isFreeTree(gClone)) {
-      TreeTest::makeDirectedTree(gClone, graphCenterHeuristic(gClone));
-      return gClone;
-    }
-
-    // if the graph is connected,
-    // make it acyclic,
-    // extract a spanning forest,
-    // add a new node as a tree root
-    // and connect it to each root of the forest's trees
-    if (isConnected || ConnectedTest::isConnected(gClone)) {
-      vector<edge> reversed;
-      vector<SelfLoops> selfLoops;
-      AcyclicTest::makeAcyclic(gClone, reversed, selfLoops);
-      vector<SelfLoops>::iterator itSelf;
-      for (itSelf=selfLoops.begin();itSelf!=selfLoops.end();++itSelf) {
-	addedNodes.push_back((*itSelf).n1);
-	addedNodes.push_back((*itSelf).n2);
-      }
-      BooleanProperty spanningForestSelection(gClone);
-      selectSpanningForest(gClone, &spanningForestSelection);
-      gClone = gClone->addSubGraph(&spanningForestSelection);
-      if (ConnectedTest::isConnected(gClone))
-	return computeTree(gClone, addedNodes, rGraph, true);
-      node root = gClone->addNode(), n;
-      addedNodes.push_back(root);
-      forEach(n, gClone->getNodes()) {
-	if (n == root)
-	  continue;
-	if (gClone->indeg(n) == 0)
-	  gClone->addEdge(root, n);
-      }
-      assert(TreeTest::isTree(gClone));
-      return gClone;
-    }
-
-    return computeTreeFromConnectedComponents(gClone, addedNodes, rGraph);
-  }
-
-  void cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree, vector<node> &addedNodes) {
+  void cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
     if (graph == tree)
       return;
 
-    // remove all added nodes
-    vector<node>::iterator it;
-    for (it = addedNodes.begin(); it != addedNodes.end(); ++it)
-      graph->delNode(*it);
+    if (!ConnectedTest::isConnected(graph)) {
+      // graph is not connected, so remove the tree root
+      node root;
+      getSource(tree, root);
+      graph->delNode(root);
+    }
 
     // then remove the subgraph clone
     Graph *sg = tree;

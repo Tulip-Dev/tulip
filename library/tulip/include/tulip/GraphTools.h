@@ -15,8 +15,9 @@
 
 namespace tlp {
 
-class IntegerProperty;
 class BooleanProperty;
+class DoubleProperty;
+class IntegerProperty;
   
 
   /**
@@ -60,27 +61,32 @@ class BooleanProperty;
   TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty);
 
   /**
+   * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,
+   * i.e for all graph elements (nodes or edges) belonging to that tree
+   * the selectionProperty associated value is true. The value is false
+   * for the other elements
+   */
+  TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectionProperty,
+					   DoubleProperty *weight = 0);
+
+  /**
    * Compute a directed tree from the graph.
    * The algorithm is the following
    * - if the graph is a directed tree, return the graph
    * - if the graph is a free tree, return a directed copy
-   * - if the graph is connected, make an acyclic copy
-   *   make a spanning forest of that copy, add a simple source
-   *   and return the copy.
+   * - if the graph is connected, make a copy
+   *   return a directed spanning tree of that copy
    * - if the graph is not connected, make a copy,
    *   compute a tree for each of its connected components,
    *   add a simple source and return the copy.
-   * The second argument contains all the added nodes due to
-   * self loop removal or simple source creation
    */  
-  TLP_SCOPE Graph *computeTree(Graph* graph, std::vector<node> &addedNodes,
-			       Graph* rootGraph = 0, bool isConnected=false);
+  TLP_SCOPE Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false);
 
   /**
-   * Clean the graph from a tree and added nodes previously computed
+   * Clean the graph from a tree previously computed
    * with the computTree function
    */
-  TLP_SCOPE void cleanComputedTree(Graph *graph, Graph *tree, std::vector<node> &addedNodes);
+  TLP_SCOPE void cleanComputedTree(Graph *graph, Graph *tree);
 }
 #endif
 
