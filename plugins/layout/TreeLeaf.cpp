@@ -9,39 +9,54 @@ LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","
 using namespace std;
 using namespace tlp;
 
-static int dfsPlacement(Graph* graph, node n, int &curPos, int depth,
-			OrientableLayout *oriLayout) {
-  int resultMin=0;
-  int resultMax=0;
-  int result=0;
-  if (graph->outdeg(n)==0) {
-    curPos+=2;
-    oriLayout->setNodeValue(n,OrientableCoord(oriLayout, curPos,depth,0));
-    return curPos;
+void TreeLeaf::computeLevelHeights(Graph *tree, node n, unsigned int depth,
+				   OrientableSizeProxy *oriSize) {
+  if (levelHeights.size() == depth)
+    levelHeights.push_back(0);
+  float nodeHeight = oriSize->getNodeValue(n).getH();
+  if (nodeHeight > levelHeights[depth])
+    levelHeights[depth] = nodeHeight;
+  node on;
+  forEach(on, tree->getOutNodes(n))
+    computeLevelHeights(tree, on, depth + 1, oriSize);
+}
+  
+float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int depth,
+			     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
+  float minX = 0;
+  float maxX = 0;
+  float nodeWidth = oriSize->getNodeValue(n).getW();
+  y += levelHeights[depth]/2;
+  if (tree->outdeg(n) == 0) {
+    oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth/2, y, 0));
+    return x + nodeWidth;
   }
-  Iterator<node> *itN=graph->getOutNodes(n);
+  Iterator<node> *itN=tree->getOutNodes(n);
   if (itN->hasNext()) {
-    node itn=itN->next();
-    result=dfsPlacement(graph, itn, curPos, depth+2, oriLayout);
-    resultMin=result;
-    resultMax=result;
+    node itn = itN->next();
+    minX = x;
+    maxX = x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+    if (minX + nodeWidth > maxX)
+      maxX = minX + nodeWidth;
   }
   for (;itN->hasNext();) {
-    node itn=itN->next();
-    result=dfsPlacement(graph, itn, curPos, depth+2, oriLayout);
-    if (result>resultMax)
-      resultMax=result;
-    if (result<resultMin)
-      resultMin=result;
+    node itn = itN->next();
+    x += spacing;
+    x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+    if (x > maxX)
+      maxX = x;
+    if (x < minX)
+      minX = x;
   }
   delete itN;
-  result=(resultMin+resultMax)/2;
-  oriLayout->setNodeValue(n, OrientableCoord(oriLayout, result,depth,0));
-  return result;
+  x = (minX + maxX)/2;
+  oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x, y, 0));
+  return maxX;
 }
 
 TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){
   addOrientationParameters(this);
+  addSpacingParameters(this);
 }
 
 TreeLeaf::~TreeLeaf() {}
@@ -49,16 +64,23 @@ TreeLeaf::~TreeLeaf() {}
 bool TreeLeaf::run() {
   orientationType mask = getMask(dataSet);
   OrientableLayout oriLayout(layoutResult, mask);
+  OrientableSizeProxy oriSize(graph->getProperty<SizeProperty>("viewSize"), mask);
+  spacing = 64.0;
+  nodeSpacing = 18.0;
 
-  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
-  graph->getLocalProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  if (dataSet!=0) {
+    dataSet->get("layer spacing", spacing);
+    dataSet->get("node spacing", nodeSpacing);
+  }
 
   Graph *tree = computeTree(graph);
-  node tmpNode;
-  tlp::getSource(tree, tmpNode);
-  int x=0;
+  node root;
+  if (!tlp::getSource(tree, root))
+    // graph is empty
+    return true;
 
-  dfsPlacement(tree, tmpNode, x, 0, &oriLayout);
+  computeLevelHeights(tree, root, 0, &oriSize);
+  dfsPlacement(tree, root, 0, -levelHeights[0]/2, 0, &oriLayout, &oriSize);
 
   cleanComputedTree(graph, tree);
   return true;
