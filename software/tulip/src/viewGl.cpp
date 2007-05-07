@@ -514,6 +514,7 @@ void viewGl::windowActivated(QWidget *w) {
   }
   if (typeid(*w)==typeid(GlGraphWidget)) {
     glWidget=((GlGraphWidget *)w);
+    glWidget->resetInteractors(*currentInteractors);
     changeGraph(glWidget->getGraph());
   }
 }
@@ -540,11 +541,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
-#if (QT_REL == 3)
-  glWidget->setFocusPolicy(QWidget::NoFocus);
-#else
-  glWidget->setFocusPolicy(Qt::NoFocus);
-#endif
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(*currentInteractors);
