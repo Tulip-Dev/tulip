@@ -11,10 +11,21 @@ using namespace std;
 using namespace tlp;
 
 LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
-             "Julien Testut, Antony Durand, Pascal Ollier, "
-             "Yashvin Nababsing, Sebastien Leclerc, "
-             "Thibault Ruchon, Eric Dauchier",
+		    "Julien Testut, Antony Durand, Pascal Ollier, "
+		    "Yashvin Nababsing, Sebastien Leclerc, "
+		    "Thibault Ruchon, Eric Dauchier",
 		    "11/11/04", "ok", "1.0","Tree");
+
+const char * paramHelp[] = {
+  // node size
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Size" ) \
+  HTML_HELP_DEF( "values", "An existing size property" ) \
+  HTML_HELP_DEF( "default", "viewSize" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used for node's sizes." \
+  HTML_HELP_CLOSE(),
+};
 
 //====================================================================
 const node  ImprovedWalker::BADNODE;  
@@ -52,6 +63,7 @@ public:
 //====================================================================
 ImprovedWalker::ImprovedWalker(const PropertyContext& context) :
     LayoutAlgorithm(context) {
+  addParameter<SizeProperty>("node size",paramHelp[0], "viewSize");
   addOrientationParameters(this);
   addOrthogonalParameters(this);
   addSpacingParameters(this);
@@ -61,24 +73,25 @@ ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
+  spacing = 64.0;
+  nodeSpacing = 18.0;
+
   tree = computeTree(graph);
 
   node root;
   tlp::getSource(tree, root);
-  orientationType mask      = getMask(dataSet);
-  oriLayout                 = new OrientableLayout(layoutResult, mask);
-  SizeProperty* viewSize    = graph->getLocalProperty<SizeProperty>("viewSize");
-  oriSize                   = new OrientableSizeProxy(viewSize, mask);
-  depthMax                  = initializeAllNodes(root);    
-  order[root]               = 1;
-  spacing = 64.0;
-  nodeSpacing = 18.0;
-  
+  orientationType mask = getMask(dataSet);
+  oriLayout = new OrientableLayout(layoutResult, mask);
+  SizeProperty* size = graph->getProperty<SizeProperty>("viewSize");
   if (dataSet!=0) {
+    dataSet->get("node size", size);
     dataSet->get("layer spacing", spacing);
     dataSet->get("node spacing", nodeSpacing);
   }
-
+  oriSize                   = new OrientableSizeProxy(size, mask);
+  depthMax                  = initializeAllNodes(root);    
+  order[root]               = 1;
+  
   firstWalk(root);
         
   float sumY                       = 0;
