@@ -14,7 +14,6 @@ class ScatterPlot : public tlp::LayoutAlgorithm
   
   bool run();
   bool check(std::string &);
-  void reset();
  private:
 
   int nMetrics;

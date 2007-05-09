@@ -198,8 +198,3 @@ bool ScatterPlot::check(string &erreurMsg)
 
   return true;
 }
-
-void ScatterPlot::reset() 
-{
-}
-

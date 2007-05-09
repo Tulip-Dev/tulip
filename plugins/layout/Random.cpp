@@ -25,6 +25,3 @@ bool Random::check(string &erreurMsg) {
   erreurMsg="";
   return (true);
 }
-
-void Random::reset(){
-}

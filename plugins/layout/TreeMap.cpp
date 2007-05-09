@@ -94,10 +94,6 @@ bool TreeMap::check(string &erreurMsg) {
   }
 }
 
-void TreeMap::reset()
-{}
-
-
 
 
 

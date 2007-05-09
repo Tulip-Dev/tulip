@@ -47,8 +47,6 @@ public:
   ~TreeMap();
   bool run();
   bool check(std::string &);
-  void reset();
-
 
 private:
   void dfsPlacement(tlp::node n, int depth, double x, double y, double width, double height,

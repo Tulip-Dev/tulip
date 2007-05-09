@@ -148,6 +148,3 @@ bool Tutte::check(string &erreurMsg) {
     erreurMsg="";
   return result;
 }
-//====================================================
-void Tutte::reset() {
-}
