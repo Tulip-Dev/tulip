@@ -1841,12 +1841,6 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   overviewWidget->setObservedView(0);
   Camera cam;
   GlGraphRenderingParameters param;
-  if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-    cam = glWidget->getRenderingParameters().getCamera();
-    param = glWidget->getRenderingParameters();
-    param.setInputLayout(name);
-    glWidget->setRenderingParameters(param);
-  }
   QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
   bool   resultBool=true;  
@@ -1860,6 +1854,13 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
 
   if (resultBool) {
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      param = glWidget->getRenderingParameters();
+      cam = param.getCamera();
+      param.setInputLayout(name);
+      glWidget->setRenderingParameters(param);
+    }
+
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
     if (!resultBool) {
@@ -1875,15 +1876,15 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	resultBool=false;
       };
     graph->delLocalProperty(name);
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      param = glWidget->getRenderingParameters();
+      param.setInputLayout("viewLayout");
+      param.setCamera(cam);
+      glWidget->setRenderingParameters(param);
+    }
   }
   if (dataSet!=0) delete dataSet;
 
-  if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-    param = glWidget->getRenderingParameters();
-    param.setInputLayout("viewLayout");
-    param.setCamera(cam);
-    glWidget->setRenderingParameters(param);
-  }
   propertiesWidget->setGraph(graph);
   overviewWidget->setObservedView(glWidget);
   Observable::unholdObservers();
