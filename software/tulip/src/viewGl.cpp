@@ -145,7 +145,7 @@ public:
       if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
 	switch(type) {
 	case NODE: vWidget->showElementProperties(tmpNode.id, true); break;
-	case EDGE: vWidget->showElementProperties(tmpEdge.id, true); break;
+	case EDGE: vWidget->showElementProperties(tmpEdge.id, false); break;
 	}
 	return true;
       }
