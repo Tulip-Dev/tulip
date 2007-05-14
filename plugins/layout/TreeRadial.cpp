@@ -1,73 +1,143 @@
+#include <math.h>
 #include <tulip/TulipPlugin.h>
+#include "DatasetTools.h"
 
 using namespace std;
 using namespace tlp;
 
 /** \addtogroup layout */
 /*@{*/
-/// TreeRadial.cpp - An implementation of radial drawing of trees.
+/// TreeRadial.cpp - An implementation of a radial drawing of trees.
 /** 
- *
+ * This algorithm is largely inspired from
+ * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes
+ * from T. J. Jankun-Kelly, Kwan-Liu Ma
+ * published in IEEE Symposium on Information Visualization (2003)
  **/
 class TreeRadial:public LayoutAlgorithm {
 public:
-  DoubleProperty *leaves;
   Graph *tree;
+  vector<float> nRadii;
+  vector<float> lRadii;
+  vector<vector <node> > bfs;
 
-  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
-    addDependency<DoubleAlgorithm>("Leaf", "1.0");
+  void dfsComputeNodeRadii(node n, unsigned depth, SizeProperty *sizes) {
+    node on;
+    float radius = sizes->getNodeValue(n).getW()/2;
+    if (bfs.size() == depth) {
+      bfs.push_back(vector<node>());
+      nRadii.push_back(radius);
+    } else if (radius > nRadii[depth]) {
+	nRadii[depth] = radius;
+    }
+    bfs[depth].push_back(n);
+    forEach(on, tree->getOutNodes(n)) {
+      dfsComputeNodeRadii(on, depth + 1, sizes);
+    }
   }
 
-  void dfsPlacement(node n, int depth, double alphaStart, double alphaEnd) {
-    double alpha=(alphaEnd+alphaStart)/2.0;
-    if (depth>0) {
-      double arcCos=acos((double)depth/((double)(depth+1)));
-      if ((alphaEnd-alphaStart)> 2*arcCos) {
-	alphaStart=alpha-arcCos;
-	alphaEnd=alpha+arcCos;
-      }
-    } 
-    layoutResult->setNodeValue(n,Coord(((double)depth)*cos(alpha),((double)depth)*sin(alpha),0));
-    if (tree->outdeg(n)==0) return;
+  void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *sizes) {
+    if (bfs.size() < 2) return;
     
-    double sumM = leaves->getNodeValue(n);
-    double counto = 0;
-    double deltaAlpha = 2;
-    double newAlphaStart;
-    double newAlphaEnd;
-    deltaAlpha=(alphaEnd-alphaStart)/(sumM);
+    float lRadius = 0;
+    lRadii.push_back(0);
+    unsigned int nbLayers = bfs.size() - 1;
+    for (unsigned int i = 0; i < nbLayers; ++i) {
+      lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
+      // check if there is enough space for nodes of layer i + 1
+      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/(2 * M_PI);
+      if (mRadius > lRadius)
+	lRadius = mRadius;
+      lRadii.push_back(lRadius);
+    }
+  }
+    
 
-    Iterator<node> *itN=tree->getOutNodes(n);
-    while (itN->hasNext()) {
-      node itn=itN->next();
-      newAlphaStart= alphaStart + ((double)counto)*deltaAlpha;
-      newAlphaEnd  = alphaStart + ((double)(counto+leaves->getNodeValue(itn)))*deltaAlpha;
-      counto += leaves->getNodeValue(itn);
-      double sizeTmp=(newAlphaEnd-newAlphaStart)/2*(depth+1);
-      if (sizeTmp<0.5) {
-	tree->getLocalProperty<SizeProperty>("viewSize")->setNodeValue(itn,Size( sizeTmp , sizeTmp , sizeTmp   ));
-      }
-      dfsPlacement(itn,depth+1,newAlphaStart,newAlphaEnd);
-    } delete itN;
+  double dfsComputeAngularSpread(node n, unsigned int depth,
+				 SizeProperty *sizes, DoubleProperty *angles) {
+    node on;
+    double cAngle = 0;
+    forEach(on, tree->getOutNodes(n)) {
+      // compute the sum of the childs's angular spreads
+      cAngle += dfsComputeAngularSpread(on, depth + 1, sizes, angles);
+    }
+    if (depth > 0) {
+      // compute the node angular spread
+      double nAngle = 2 * atan(sizes->getNodeValue(n).getW()/(2. * lRadii[depth]));
+      // check if it is not greater than the sum
+      if (nAngle > cAngle)
+	cAngle = nAngle;
+    }
+    // affect the greater of the two computed angular spreads
+    angles->setNodeValue(n, cAngle);
+    return cAngle;
+  }
+
+  void doLayout(node n, unsigned int depth, double startAngle, double endAngle,
+		DoubleProperty *angles) {
+    double sAngle = endAngle - startAngle;
+    if (depth > 0) {
+      // layout the node in the middle of the sector
+      double nAngle = (startAngle + endAngle)/2.0;
+      layoutResult->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
+					  lRadii[depth] * sin(nAngle),
+					  0));
+    } else
+      layoutResult->setNodeValue(n, Coord(0, 0, 0));
+    node on;
+    double nSpread = angles->getNodeValue(n);
+    forEach(on, tree->getOutNodes(n)) {
+      endAngle = startAngle + (sAngle * (angles->getNodeValue(on)/nSpread));
+      doLayout(on, depth + 1, startAngle, endAngle, angles);
+      startAngle = endAngle;
+    }
+  }
+
+  TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
+    addNodeSizePropertyParameter(this);
+    addSpacingParameters(this);
+    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
   }
 
   bool run() {
+    float lSpacing = 64.0;
+    float nSpacing = 18.0;
     tree = computeTree(graph);
-    node startNode;
-    tlp::getSource(tree, startNode);
-    graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
-  
-    bool resultBool;
-    string erreurMsg;
-    leaves = new DoubleProperty(tree);
-    resultBool = tree->computeProperty("Leaf",leaves,erreurMsg);
-    assert(resultBool);
-    dfsPlacement(startNode,0,0,6.283);
-    delete leaves;
 
+    SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
+    LayoutProperty tmpLayout(graph);
+    if (dataSet!=0) {
+      getNodeSizePropertyParameter(dataSet, sizes);
+      getSpacingParameters(dataSet, nSpacing, lSpacing);
+    }
+  
+    node n;
+    SizeProperty *circleSizes = 
+      graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
+    forEach(n, tree->getNodes()) {
+      Size boundingBox = sizes->getNodeValue (n);
+      double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
+			    boundingBox.getH() * boundingBox.getH()/4.0);
+      circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
+    }
+    sizes = circleSizes;
+
+    bool resultBool;
+    node root;
+    resultBool = tlp::getSource(tree, root);
+    assert(resultBool);
+
+    dfsComputeNodeRadii(root, 0, sizes);
+    bfsComputeLayerRadii(lSpacing, nSpacing, sizes);
+    DoubleProperty angles(tree);
+    dfsComputeAngularSpread(root, 0, sizes, &angles);
+    doLayout(root, 0, 0., 2 * M_PI, &angles);
+
+    graph->delLocalProperty("bounding circle sizes");
     cleanComputedTree(graph, tree);
     return true;
   }
 };
 /*@}*/
 LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","1.0","Tree");
+
