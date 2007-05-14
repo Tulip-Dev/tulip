@@ -131,8 +131,8 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<SizeProperty>("node size",paramHelp[0],"viewSize");
-  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+  addNodeSizePropertyParameter(this);
+  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}

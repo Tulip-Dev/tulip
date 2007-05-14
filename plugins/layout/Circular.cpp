@@ -35,7 +35,7 @@ namespace {
 
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addNodeSizePropertyParameter(this);
-  addParameter<bool>("search_cycle", paramHelp[1], "false");
+  addParameter<bool>("search cycle", paramHelp[0], "false");
   // Connected component metric dependency
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   // Equal Value algorithm dependency
@@ -159,7 +159,7 @@ bool Circular::run() {
   }
 
   if ( dataSet != 0 )
-    dataSet->get("search_cycle", searchCycle);
+    dataSet->get("search cycle", searchCycle);
   
   Size resultSize;
 

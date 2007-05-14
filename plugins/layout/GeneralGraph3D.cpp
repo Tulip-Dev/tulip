@@ -26,7 +26,7 @@ namespace {
     HTML_HELP_DEF( "default", "horizontal" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the orientation of the drawing"	\
-    HTML_HELP_CLOSE()
+    HTML_HELP_CLOSE(),
   };
 }
 
@@ -34,7 +34,7 @@ namespace {
 
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addDependency<BooleanAlgorithm>("Spanning Dag", "1.0");
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
   addDependency<LayoutAlgorithm>("Cone Tree", "1.0");

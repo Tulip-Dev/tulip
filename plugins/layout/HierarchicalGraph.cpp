@@ -31,7 +31,7 @@ namespace {
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
   addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.0");

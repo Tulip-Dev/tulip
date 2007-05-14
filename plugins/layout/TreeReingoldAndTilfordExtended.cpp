@@ -1,5 +1,6 @@
-#include "TreeReingoldAndTilfordExtended.h"
 #include <tulip/GraphTools.h>
+#include "TreeReingoldAndTilfordExtended.h"
+#include "DatasetTools.h"
 
 LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","1.0","Tree");
 using namespace std;
@@ -7,14 +8,6 @@ using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //edge length
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "Int" ) \
@@ -37,21 +30,6 @@ namespace {
     HTML_HELP_BODY()							\
     "This parameter enables to choose if the tree is drawn orthogonally or not" \
     HTML_HELP_CLOSE(),
-    //Spacing
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "64." )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to set up the minimum space between two layers in the drawing" \
-    HTML_HELP_CLOSE(),
-    //Spacing
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18." )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to set up the minimum space between two nodes in the same layer" \
-    HTML_HELP_CLOSE()
-    HTML_HELP_CLOSE(),
     //bounding circles
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "bool" ) \
@@ -67,13 +45,12 @@ namespace {
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
   LayoutAlgorithm(context),
   lengthMetric(0) {
-  addParameter<SizeProperty>("node size",paramHelp[0],"viewSize");
-  addParameter<IntegerProperty>("edge length", paramHelp[1], 0, false);
-  addParameter<StringCollection>("orientation", paramHelp[2], ORIENTATION );
-  addParameter<bool>("orthogonal", paramHelp[3], "true" );
-  addParameter<float>("layer spacing", paramHelp[4], "64." );
-  addParameter<float>("node spacing", paramHelp[5], "18." );
-  addParameter<bool>("bounding circles", paramHelp[6], "false");
+  addNodeSizePropertyParameter(this);
+  addParameter<IntegerProperty>("edge length", paramHelp[0], 0, false);
+  addParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION );
+  addParameter<bool>("orthogonal", paramHelp[2], "true" );
+  addSpacingParameters(this);
+  addParameter<bool>("bounding circles", paramHelp[3], "false");
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
@@ -342,10 +319,9 @@ bool TreeReingoldAndTilfordExtended::run() {
   bool boundingCircles = false;
   if (dataSet!=0) {
     useLength = dataSet->get("edge length", lengthMetric);
-    dataSet->get("node size", sizes);
+    getNodeSizePropertyParameter(dataSet, sizes);
     dataSet->get("orthogonal", ortho);
-    dataSet->get("layer spacing", spacing);
-    dataSet->get("node spacing", nodeSpacing);
+    getSpacingParameters(dataSet, nodeSpacing, spacing);
     dataSet->get("bounding circles", boundingCircles);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {

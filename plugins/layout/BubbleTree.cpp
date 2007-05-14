@@ -254,7 +254,7 @@ namespace {
 
 BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addParameter<bool>("complexity",paramHelp[1],"true");
+  addParameter<bool>("complexity",paramHelp[0],"true");
 }
 
 BubbleTree::~BubbleTree() {}
