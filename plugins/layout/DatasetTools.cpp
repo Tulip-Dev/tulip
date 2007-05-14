@@ -78,7 +78,7 @@ void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout) {
   pLayout->addParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
 }
 
-bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty *sizes) {
+bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty* &sizes) {
   return (dataSet != 0) && dataSet->get("node size", sizes);
 }
 
