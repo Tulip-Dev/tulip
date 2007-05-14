@@ -4,6 +4,7 @@
 
 #include "ConnectedComponentPacking.h"
 #include "rectanglePackingFonctions.h"
+#include "DatasetTools.h"
 
 using namespace std;
 using namespace tlp;
@@ -21,14 +22,6 @@ HTML_HELP_OPEN() \
     HTML_HELP_DEF("Default", "viewLayout") \
     HTML_HELP_BODY() \
         "Choose the input coordinates of nodes and edges" \
-HTML_HELP_CLOSE(),
-//SizeProperty
-HTML_HELP_OPEN() \
-    HTML_HELP_DEF("Type", "SizeProperty") \
-    HTML_HELP_DEF("Values", "Any size property") \
-    HTML_HELP_DEF("Default", "viewSize") \
-    HTML_HELP_BODY() \
-        "Choose the input size of nodes" \
 HTML_HELP_CLOSE(),
 //Rotation
 HTML_HELP_OPEN() \
@@ -51,8 +44,8 @@ HTML_HELP_CLOSE()};
 ConnectedComponentPacking::ConnectedComponentPacking(const PropertyContext& context)
     : LayoutAlgorithm(context) {
   addParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
-  addParameter<SizeProperty> ("size",paramHelp[1],"viewSize");
-  addParameter<DoubleProperty> ("rotation",paramHelp[2],"viewRotation");
+  addNodeSizePropertyParameter(this);
+  addParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
   addParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY );
   // Connected component metric dependency
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
@@ -71,7 +64,7 @@ bool ConnectedComponentPacking::run() {
 
   if ( dataSet!=0 ) {
     dataSet->get("coordinates", layout);
-    dataSet->get("size", size);
+    getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
     StringCollection complexityCol;
     if (dataSet->get("complexity", complexityCol))

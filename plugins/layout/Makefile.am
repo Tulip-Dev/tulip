@@ -28,7 +28,7 @@ plugins_LTLIBRARIES = \
 pluginsdir = $(libdir)/tlp
 
 libMixedModel_@VERSION@_la_SOURCES = MixedModel.cpp DatasetTools.cpp
-libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.cpp Number.cpp RectanglePacking.cpp rectanglePackingFonctions.cpp RectangleRelativePositionList.cpp
+libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.cpp Number.cpp RectanglePacking.cpp rectanglePackingFonctions.cpp RectangleRelativePositionList.cpp DatasetTools.cpp
 libRandom_@VERSION@_la_SOURCES = Random.cpp
 libGemLayout_@VERSION@_la_SOURCES = GEMLayout.cpp
 libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.cpp DatasetTools.cpp
