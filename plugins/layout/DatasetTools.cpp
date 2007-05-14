@@ -1,8 +1,8 @@
 #include "DatasetTools.h"
 
-#define ORTHOGONAL "Orthogonal"
+#define ORTHOGONAL "orthogonal"
 #define ORIENTATION "up to down;down to up;right to left;left to right;"
-#define ORIENTATION_ID "Orientation"
+#define ORIENTATION_ID "orientation"
 
 using namespace tlp;
 
