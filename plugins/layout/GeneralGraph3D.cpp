@@ -30,7 +30,7 @@ namespace {
   };
 }
 
-#define ORIENTATION "vertical;horizontal;"
+#define ORIENTATION "horizontal;vertical;"
 
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
