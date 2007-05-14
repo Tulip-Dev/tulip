@@ -1,5 +1,6 @@
 #include <tulip/Circle.h>
 #include "BubbleTree.h"
+#include "DatasetTools.h"
 
 LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree");
 
@@ -240,14 +241,6 @@ void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativ
 
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Complexity
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "bool" ) \
@@ -260,14 +253,14 @@ namespace {
 }
 
 BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
+  addNodeSizePropertyParameter(this);
   addParameter<bool>("complexity",paramHelp[1],"true");
 }
 
 BubbleTree::~BubbleTree() {}
 
 bool BubbleTree::run() {
-  if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
+  if (!getNodeSizePropertyParameter(dataSet,nodeSize)) {
     if (graph->existProperty("viewSize"))
       nodeSize = graph->getProperty<SizeProperty>("viewSize");    
     else {

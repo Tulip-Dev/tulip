@@ -10,6 +10,7 @@
 #include <tulip/GraphTools.h>
 
 #include "GeneralGraph3D.h"
+#include "DatasetTools.h"
 
 
 using namespace std;
@@ -19,14 +20,6 @@ LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/
 
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
@@ -40,7 +33,7 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 
 GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
+  addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addDependency<BooleanAlgorithm>("Spanning Dag", "1.0");
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");

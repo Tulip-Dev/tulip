@@ -32,7 +32,7 @@
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).
  *  The algorithm can manage nodes of different size. The SizeProperty "viewSize"
  *  is used by default if no parameters are given to the plug-in. 
- *  The parameter is (SizeProperty*)"nodeSize".
+ *  The parameter is (SizeProperty*) "node size".
  *
  *  
  *

@@ -27,19 +27,19 @@ plugins_LTLIBRARIES = \
 
 pluginsdir = $(libdir)/tlp
 
-libMixedModel_@VERSION@_la_SOURCES = MixedModel.cpp MixedModel.h
+libMixedModel_@VERSION@_la_SOURCES = MixedModel.cpp DatasetTools.cpp
 libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.cpp Number.cpp RectanglePacking.cpp rectanglePackingFonctions.cpp RectangleRelativePositionList.cpp
 libRandom_@VERSION@_la_SOURCES = Random.cpp
 libGemLayout_@VERSION@_la_SOURCES = GEMLayout.cpp
-libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.cpp
-libConeTreeExtended_@VERSION@_la_SOURCES = ConeTreeExtended.cpp
+libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.cpp DatasetTools.cpp
+libConeTreeExtended_@VERSION@_la_SOURCES = ConeTreeExtended.cpp DatasetTools.cpp
 libTreeMap_@VERSION@_la_SOURCES = TreeMap.cpp 
-libTreeRadial_@VERSION@_la_SOURCES = TreeRadial.cpp
+libTreeRadial_@VERSION@_la_SOURCES = TreeRadial.cpp DatasetTools.cpp
 libTreeLeaf_@VERSION@_la_SOURCES = TreeLeaf.cpp DatasetTools.cpp OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp
-libBubbleTree_@VERSION@_la_SOURCES = BubbleTree.cpp 
-libCircular_@VERSION@_la_SOURCES = Circular.cpp
-libHierarchicalGraph_@VERSION@_la_SOURCES = HierarchicalGraph.cpp
-libGeneralGraph3D_@VERSION@_la_SOURCES = GeneralGraph3D.cpp
+libBubbleTree_@VERSION@_la_SOURCES = BubbleTree.cpp DatasetTools.cpp
+libCircular_@VERSION@_la_SOURCES = Circular.cpp DatasetTools.cpp
+libHierarchicalGraph_@VERSION@_la_SOURCES = HierarchicalGraph.cpp DatasetTools.cpp
+libGeneralGraph3D_@VERSION@_la_SOURCES = GeneralGraph3D.cpp DatasetTools.cpp
 libTutte_@VERSION@_la_SOURCES = Tutte.cpp
 libEmbedder_@VERSION@_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.cpp EmbedderDijkstra.cpp EmbedderBfs.cpp EmbedderParameters.cpp EmbedderPowerIterationDense.cpp
 libScatterPlot_@VERSION@_la_SOURCES = ScatterPlot.cpp

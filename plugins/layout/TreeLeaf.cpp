@@ -9,17 +9,6 @@ LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","
 using namespace std;
 using namespace tlp;
 
-const char * paramHelp[] = {
-  // node size
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used for node's sizes." \
-  HTML_HELP_CLOSE(),
-};
-
 
 void TreeLeaf::computeLevelHeights(Graph *tree, node n, unsigned int depth,
 				   OrientableSizeProxy *oriSize) {
@@ -67,6 +56,7 @@ float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int
 }
 
 TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){
+  addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);
 }
@@ -81,9 +71,8 @@ bool TreeLeaf::run() {
   OrientableLayout oriLayout(layoutResult, mask);
   SizeProperty* size = graph->getProperty<SizeProperty>("viewSize");
   if (dataSet!=0) {
-    dataSet->get("node size", size);
-    dataSet->get("layer spacing", spacing);
-    dataSet->get("node spacing", nodeSpacing);
+    getNodeSizePropertyParameter(dataSet, size);
+    getSpacingParameters(dataSet, nodeSpacing, spacing);
   }
   OrientableSizeProxy oriSize(size, mask);
 

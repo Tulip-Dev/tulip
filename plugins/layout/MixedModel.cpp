@@ -5,9 +5,10 @@
 #include <tulip/Ordering.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Bfs.h>
-#include "MixedModel.h"
-
 #include <tulip/GraphTools.h>
+
+#include "MixedModel.h"
+#include "DatasetTools.h"
 
 LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar");
 
@@ -20,14 +21,6 @@ float edgeNodeSpacing = 2;
 //===============================================================
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
@@ -54,7 +47,7 @@ namespace {
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
 MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
-  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
+  addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[2],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[3],"2");
@@ -70,7 +63,7 @@ bool MixedModel::run() {
   size = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
   if (dataSet!=0) {
-    dataSet->get("nodeSize", size);
+    getNodeSizePropertyParameter(dataSet, size);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();

@@ -67,8 +67,8 @@ namespace {
 TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
   LayoutAlgorithm(context),
   lengthMetric(0) {
-  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<IntegerProperty>("edgeLength", paramHelp[1], 0, false);
+  addParameter<SizeProperty>("node size",paramHelp[0],"viewSize");
+  addParameter<IntegerProperty>("edge length", paramHelp[1], 0, false);
   addParameter<StringCollection>("orientation", paramHelp[2], ORIENTATION );
   addParameter<bool>("orthogonal", paramHelp[3], "true" );
   addParameter<float>("layer spacing", paramHelp[4], "64." );
@@ -341,8 +341,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   useLength = false;
   bool boundingCircles = false;
   if (dataSet!=0) {
-    useLength = dataSet->get("edgeLength", lengthMetric);
-    dataSet->get("nodeSize", sizes);
+    useLength = dataSet->get("edge length", lengthMetric);
+    dataSet->get("node size", sizes);
     dataSet->get("orthogonal", ortho);
     dataSet->get("layer spacing", spacing);
     dataSet->get("node spacing", nodeSpacing);

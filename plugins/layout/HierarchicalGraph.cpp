@@ -4,6 +4,7 @@
 #include <stack>
 #include <tulip/SortIterator.h>
 #include "HierarchicalGraph.h"
+#include "DatasetTools.h"
 
 
 LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical");
@@ -16,34 +17,12 @@ static const int NB_UPDOWN_SWEEP = 4;
 //================================================================================
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
     HTML_HELP_DEF( "default", "horizontal" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the orientation of the drawing"	\
-    HTML_HELP_CLOSE(),
-    //Spacing
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "64." )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to set up the minimum space between two layers in the drawing" \
-    HTML_HELP_CLOSE(),
-    //Spacing
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "float" ) \
-    HTML_HELP_DEF( "default", "18." )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to set up the minimum space between two nodes in the same layer" \
     HTML_HELP_CLOSE()
   };
 }
@@ -51,10 +30,9 @@ namespace {
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<SizeProperty>("nodeSize",paramHelp[0],"viewSize");
+  addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
-  addParameter<float> ("layer spacing", paramHelp[2], "64." );
-  addParameter<float> ("node spacing", paramHelp[3], "18." );
+  addSpacingParameters(this);
   addDependency<DoubleAlgorithm>("Dag Level", "1.0");
   addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.0");
 }
@@ -360,9 +338,8 @@ bool HierarchicalGraph::run() {
   spacing = 64.0;
   nodeSpacing = 18;
   if (dataSet!=0) {
-    dataSet->get("nodeSize", nodeSize);
-    dataSet->get("layer spacing", spacing);
-    dataSet->get("node spacing", nodeSpacing);
+    getNodeSizePropertyParameter(dataSet, nodeSize);
+    getSpacingParameters(dataSet, nodeSpacing, spacing);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
@@ -423,11 +400,11 @@ bool HierarchicalGraph::run() {
   string erreurMsg;
   LayoutProperty tmpLayout(graph);
   DataSet tmp;
-  tmp.set("nodeSize", nodeSize);
+  tmp.set("node size", nodeSize);
   tmp.set("layer spacing", spacing);
   tmp.set("node spacing", nodeSpacing);
   if (edgeLength!=0)
-    tmp.set("edgeLength", edgeLength);
+    tmp.set("edge length", edgeLength);
   tmp.set("orthogonal", false);
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");

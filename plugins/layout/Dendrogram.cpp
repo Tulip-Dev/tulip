@@ -16,21 +16,10 @@ LAYOUTPLUGINOFGROUP(Dendrogram, "Dendrogram",
              "Thibault Ruchon, Eric Dauchier",
 	     "03/12/04", "ok", "1.0","Tree");
 
-const char * paramHelp[] = {
-  // node size
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used for node's sizes." \
-  HTML_HELP_CLOSE(),
-};
-
 //====================================================================
 Dendrogram::Dendrogram(const PropertyContext& context)
     :LayoutAlgorithm(context) {
-  addParameter<SizeProperty>("node size",paramHelp[0],"viewSize");
+  addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);
 }
@@ -48,9 +37,8 @@ bool Dendrogram::run() {
   OrientableLayout oriLayout(layoutResult, mask);
   SizeProperty* size = graph->getProperty<SizeProperty>("viewSize");
   if (dataSet!=0) {
-    dataSet->get("node size", size);
-    dataSet->get("layer spacing", spacing);
-    dataSet->get("node spacing", nodeSpacing);
+    getNodeSizePropertyParameter(dataSet, size);
+    getSpacingParameters(dataSet, nodeSpacing, spacing);
   }
   OrientableSizeProxy oriSize(size, mask);
 

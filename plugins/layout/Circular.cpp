@@ -15,6 +15,7 @@
 
 #include <math.h>
 #include "Circular.h"
+#include "DatasetTools.h"
 
 LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.0","Basic");
 
@@ -22,14 +23,6 @@ using namespace std;
 using namespace tlp;
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Size" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     HTML_HELP_OPEN()					   \
     HTML_HELP_DEF( "type", "bool" )		   \
     HTML_HELP_DEF( "values", "true/false" ) \
@@ -41,7 +34,7 @@ namespace {
 }
 
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
-  addParameter<SizeProperty>("nodeSize", paramHelp[0], "viewSize");
+  addNodeSizePropertyParameter(this);
   addParameter<bool>("search_cycle", paramHelp[1], "false");
   // Connected component metric dependency
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
@@ -156,7 +149,7 @@ bool Circular::run() {
   SizeProperty *nodeSize;
   bool searchCycle = false;
   
-  if ( dataSet==0 || !dataSet->get("nodeSize", nodeSize)) {
+  if (!getNodeSizePropertyParameter(dataSet, nodeSize)) {
     if (graph->existProperty("viewSize"))
       nodeSize = graph->getProperty<SizeProperty>("viewSize");    
     else {

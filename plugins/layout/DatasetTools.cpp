@@ -1,5 +1,3 @@
-#include <tulip/LayoutProperty.h>
-#include <tulip/Types.h>
 #include "DatasetTools.h"
 
 #define ORTHOGONAL "Orthogonal"
@@ -41,7 +39,16 @@ const char* paramHelp[] = {
   HTML_HELP_DEF( "default", "18." )	 \
   HTML_HELP_BODY() \
   "This parameter enables to set up the minimum space between two nodes in the same layer" \
-  HTML_HELP_CLOSE()
+  HTML_HELP_CLOSE(),
+
+  // node size
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Size" ) \
+  HTML_HELP_DEF( "values", "An existing size property" ) \
+  HTML_HELP_DEF( "default", "viewSize" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the property used for node's sizes." \
+  HTML_HELP_CLOSE(),
 };
 }                     
 
@@ -60,6 +67,21 @@ void addSpacingParameters(LayoutAlgorithm* pLayout) {
   pLayout->addParameter<float>("layer spacing", paramHelp[2], "64." );
   pLayout->addParameter<float>("node spacing", paramHelp[3], "18." );
 }
+void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpacing) {
+  if (dataSet) {
+    dataSet->get("node spacing", nodeSpacing);
+    dataSet->get("layer spacing", layerSpacing);
+  }
+}
+//====================================================================	
+void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout) {
+  pLayout->addParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
+}
+
+bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty *sizes) {
+  return (dataSet != 0) && dataSet->get("node size", sizes);
+}
+
 //====================================================================
 DataSet setOrientationParameters(int pOrientation) {
   DataSet dataSet;
@@ -77,14 +99,14 @@ orientationType getMask(DataSet* dataSet) {
 
   if (dataSet != 0) {
     StringCollection dataSetOrientation;
-    dataSet->get(ORIENTATION_ID, dataSetOrientation);
-
-    // the order of ORIENTATION items may have change
-    // because the default value may have change (see DataSetDialog.cpp)
-    std::string currentString = dataSetOrientation.getCurrentString();
-    for (current = 0; current < 4; ++current) {
-      if (currentString == orientation.at(current))
-	break;
+    if (dataSet->get(ORIENTATION_ID, dataSetOrientation)) {
+      // the order of ORIENTATION items may have change
+      // because the default value may have change (see DataSetDialog.cpp)
+      std::string currentString = dataSetOrientation.getCurrentString();
+      for (current = 0; current < 4; ++current) {
+	if (currentString == orientation.at(current))
+	  break;
+      }
     }
   }
   switch (current) {
