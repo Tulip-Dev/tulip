@@ -164,18 +164,23 @@ namespace tlp {
     return result;
   }
 
-  void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty) {
+  void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
+			    PluginProgress *pluginProgress) {
     list<node> fifo;
 
     BooleanProperty *nodeFlag= graph->getLocalProperty<BooleanProperty>("selectionNodeFlag");
     
+    unsigned int nbSelectedNodes = 0;
+    unsigned int nbNodes = 0;
     // get previously selected nodes 
     Iterator<node> *itN=graph->getNodes();
-    for (;itN->hasNext();) { 
+    for (;itN->hasNext();) {
+      ++ nbNodes;
       node itn=itN->next();
       if (selectionProperty->getNodeValue(itn)==true) {
 	fifo.push_back(itn);
 	nodeFlag->setNodeValue(itn,true);
+	++nbSelectedNodes;
       }
     } delete itN;
 
@@ -184,6 +189,7 @@ namespace tlp {
 
     bool ok=true;
     node tmp1;
+    unsigned int edgeCount = 0;
     while (ok) {
       while (!fifo.empty()) {
 	tmp1=fifo.front();
@@ -191,12 +197,24 @@ namespace tlp {
 	Iterator<edge> *itE=graph->getOutEdges(tmp1);
 	for(;itE->hasNext();) {
 	  edge adjit=itE->next();
-	  if (!nodeFlag->getNodeValue(graph->target(adjit)))	{
-	    nodeFlag->setNodeValue(graph->target(adjit),true);	    
+	  if (!nodeFlag->getNodeValue(graph->target(adjit))) {
+	    nodeFlag->setNodeValue(graph->target(adjit),true);
+	    ++nbSelectedNodes;
 	    fifo.push_back(graph->target(adjit));
 	  }
 	  else
 	    selectionProperty->setEdgeValue(adjit,false);
+	  if (pluginProgress) {
+	    pluginProgress->setComment("Computing a spanning forest...");
+	    ++edgeCount;
+	    if (edgeCount == 200 ) {
+	      if (pluginProgress->progress(nbSelectedNodes*100/nbNodes, 100) != TLP_CONTINUE) {
+		graph->delLocalProperty("selectionNodeFlag");
+		return;
+	      }
+	      edgeCount = 0;
+	    }
+	  }	  
 	} delete itE;
       }
       ok=false;
@@ -213,6 +231,7 @@ namespace tlp {
 	  if (graph->indeg(itn)==0) {
 	    fifo.push_back(itn);
 	    nodeFlag->setNodeValue(itn,true);
+	    ++nbSelectedNodes;
 	    degZ=true;
 	  }
 	  if (!degZ) {
@@ -229,6 +248,7 @@ namespace tlp {
       if (ok && (!degZ)) {
 	fifo.push_back(goodNode);
 	nodeFlag->setNodeValue(goodNode,true);
+	++nbSelectedNodes;
       }
     }
     graph->delLocalProperty("selectionNodeFlag");
@@ -244,11 +264,12 @@ namespace tlp {
   };
 
   void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
-				 DoubleProperty *edgeWeight) {
+				 DoubleProperty *edgeWeight,
+				 PluginProgress *pluginProgress) {
     selection->setAllNodeValue(true);
     selection->setAllEdgeValue(false);
 
-    int numClasses = 0;
+    unsigned int numClasses = 0;
     map<int, int> classes;
   
     Iterator<node> *itN = graph->getNodes();
@@ -256,8 +277,11 @@ namespace tlp {
       node n=itN->next();
       classes[n.id] = numClasses;
       ++numClasses;
-    }delete itN;
+    } delete itN;
 
+    unsigned int maxCount = numClasses;
+    unsigned int edgeCount = 0;
+    
     std::list<edge> sortedEdges;
     Iterator<edge> *itE = graph->getEdges();
     while (itE->hasNext()) { 
@@ -275,6 +299,15 @@ namespace tlp {
       } while(!(classes[graph->source(cur).id] !=  classes[graph->target(cur).id]));
     
       selection->setEdgeValue(cur, true);
+      if (pluginProgress) {
+	pluginProgress->setComment("Computing minimim spanning tree...");
+	++edgeCount;
+	if (edgeCount == 200 ) {
+	  if (pluginProgress->progress((maxCount - numClasses)*100/maxCount, 100) != TLP_CONTINUE)
+	    return;
+	  edgeCount = 0;
+	}
+      }	  
 
       int x = classes[graph->source(cur).id];
       int y = classes[graph->target(cur).id];
@@ -290,7 +323,8 @@ namespace tlp {
   }
 
   //====================================================================
-  Graph *computeTree(Graph *graph, Graph *rGraph, bool isConnected) {
+  Graph *computeTree(Graph *graph, Graph *rGraph, bool isConnected,
+		     PluginProgress *pluginProgress) {
     // nothing todo if the graph is already a tree
     if (TreeTest::isTree(graph))
       return graph;
@@ -315,18 +349,24 @@ namespace tlp {
     // and make it directed
     if (isConnected || ConnectedTest::isConnected(gClone)) {
       BooleanProperty treeSelection(gClone);
-      selectMinimumSpanningTree(gClone, &treeSelection);
-      return computeTree(gClone->addSubGraph(&treeSelection), rGraph, true);
+      selectMinimumSpanningTree(gClone, &treeSelection, 0, pluginProgress);
+      if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+	return 0;
+      return computeTree(gClone->addSubGraph(&treeSelection), rGraph, true, pluginProgress);
     }
 
     // graph is not connected
     // compute the connected components's subgraph
     string err;
     DoubleProperty connectedComponent(graph);
-    graph->computeProperty(string("Connected Component"), &connectedComponent, err);
+    graph->computeProperty(string("Connected Component"), &connectedComponent, err, pluginProgress);
+    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+      return 0;
     DataSet tmp;
     tmp.set("Property", &connectedComponent);
-    bool result = tlp::applyAlgorithm(graph, err, &tmp, "Equal Value");
+    bool result = tlp::applyAlgorithm(graph, err, &tmp, "Equal Value", pluginProgress);
+    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+      return 0;
     assert(result);
   
     // create a new subgraph for the tree
@@ -343,7 +383,9 @@ namespace tlp {
       // to our main tree
       // and connect the main root to each
       // subtree root
-      Graph *sTree = computeTree(gConn, rGraph, true);
+      Graph *sTree = computeTree(gConn, rGraph, true, pluginProgress);
+      if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+	return 0;
       node n;
       forEach(n, sTree->getNodes()) {
 	tree->addNode(n);

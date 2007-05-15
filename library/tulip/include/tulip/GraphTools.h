@@ -58,7 +58,8 @@ class IntegerProperty;
    * the selectionProperty associated value is true. The value is false
    * for the other elements
    */
-  TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty);
+  TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
+				      PluginProgress *pluginProgress = 0);
 
   /**
    * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,
@@ -67,7 +68,8 @@ class IntegerProperty;
    * for the other elements
    */
   TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectionProperty,
-					   DoubleProperty *weight = 0);
+					   DoubleProperty *weight = 0,
+					   PluginProgress *pluginProgress = 0);
 
   /**
    * Compute a directed tree from the graph.
@@ -80,7 +82,8 @@ class IntegerProperty;
    *   compute a tree for each of its connected components,
    *   add a simple source and return the copy.
    */  
-  TLP_SCOPE Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false);
+  TLP_SCOPE Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false,
+			       PluginProgress *pluginProgress = 0);
 
   /**
    * Clean the graph from a tree previously computed
