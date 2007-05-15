@@ -65,6 +65,9 @@ struct SmallWorldGraph:public ImportModule {
     SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
 
     vector<node> sg(nbNodes);
+
+    pluginProgress->showPreview(false);
+
     for (int i=0; i<nbNodes;++i) {
       sg[i]=graph->addNode();
       newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));

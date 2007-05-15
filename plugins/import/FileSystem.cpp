@@ -159,6 +159,10 @@ public:
       lastmodif->setNodeValue(newNode,infoEntry.st_mtime);
       lastchange->setNodeValue(newNode,infoEntry.st_ctime);
     }
+
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+
     unsigned int x = 0, y = 2;
     readDir(newNode,string(dirName.ascii())+"/", x , y);
     double newSize=0;

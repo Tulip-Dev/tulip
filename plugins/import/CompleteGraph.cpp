@@ -37,6 +37,9 @@ struct CompleteGraph:public ImportModule {
       dataSet->get("nodes", nbNodes);
     }
     
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+
     for (int j=0; j<nbNodes; ++j) 
       graph->addNode();
     Iterator<node> *it1,*it2;

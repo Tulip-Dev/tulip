@@ -79,6 +79,10 @@ struct RandomSimpleGraph:public ImportModule {
     int ite = nbNodes*nbEdges;
     int nbIteration = ite;
     set<edgeS> myGraph;
+
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+
     while (ite>0) {
       if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE) 
 	return pluginProgress->state()!=TLP_CANCEL;

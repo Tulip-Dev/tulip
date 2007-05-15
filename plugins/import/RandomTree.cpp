@@ -62,6 +62,9 @@ struct RandomTree:public ImportModule {
       dataSet->get("maxsize", maxSize);
     }
 
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+
     bool ok=true;
     int i=0;
     while (ok) {
