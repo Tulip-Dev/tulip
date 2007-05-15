@@ -65,7 +65,11 @@ bool ImprovedWalker::run() {
   spacing = 64.0;
   nodeSpacing = 18.0;
 
-  tree = computeTree(graph);
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  tree = computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
 
   node root;
   tlp::getSource(tree, root);

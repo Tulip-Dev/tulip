@@ -17,7 +17,7 @@ namespace {
 }
 //======================================================
 Kruskal::Kruskal(const PropertyContext &context):BooleanAlgorithm(context) {
-  addParameter<DoubleProperty> ("Edge weight", paramHelp[0], "viewMetric");
+  addParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
@@ -40,12 +40,12 @@ bool Kruskal::run(){
   /* Initialisation */
   DoubleProperty *edgeWeight = 0;
   if ( dataSet!=0) {
-    dataSet->get("Edge Weight", edgeWeight);
+    dataSet->get("edge weight", edgeWeight);
   }
   if (edgeWeight == 0)
     edgeWeight = graph->getProperty<DoubleProperty>("viewMetric");
 
-  selectMinimumSpanningTree(graph, booleanResult, edgeWeight);
+  selectMinimumSpanningTree(graph, booleanResult, edgeWeight, pluginProgress);
 
   return true;
 }

@@ -29,6 +29,6 @@ bool SpanningTreeSelection::run()
     } delete itN;
   }
 
-  selectSpanningForest(graph, booleanResult); 
+  selectSpanningForest(graph, booleanResult, pluginProgress); 
   return true;
 }

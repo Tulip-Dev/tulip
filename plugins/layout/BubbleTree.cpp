@@ -273,7 +273,11 @@ bool BubbleTree::run() {
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));
 
-  tree = computeTree(graph);
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  tree = computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
 
   node startNode;
   tlp::getSource(tree, startNode);

@@ -76,7 +76,12 @@ bool TreeLeaf::run() {
   }
   OrientableSizeProxy oriSize(size, mask);
 
-  Graph *tree = computeTree(graph);
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  Graph *tree = computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
+
   node root;
   if (!tlp::getSource(tree, root))
     // graph is empty

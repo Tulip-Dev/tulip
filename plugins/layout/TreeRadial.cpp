@@ -102,7 +102,12 @@ public:
   bool run() {
     float lSpacing = 64.0;
     float nSpacing = 18.0;
-    tree = computeTree(graph);
+
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+    tree = computeTree(graph, 0, false, pluginProgress);
+    if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+      return false;
 
     SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
     LayoutProperty tmpLayout(graph);
