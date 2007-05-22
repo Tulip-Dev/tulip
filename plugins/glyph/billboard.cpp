@@ -56,7 +56,7 @@ void Billboard::draw(node n) {
   string texFile = glGraph->elementTexture->getNodeValue(n);
   if(texFile.size() && texFile != "") {
     if (glGraph->activateTexture(texFile)) {
-//      setMaterial(Color(255,255,255,0));
+      //      setMaterial(Color(255,255,255,0));
     }
   }
   if (!listOk) {
@@ -66,11 +66,10 @@ void Billboard::draw(node n) {
     glEndList();
     listOk=true;
   }
-
   // setup orientation
   float mdlM[16];
   glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
-  glMatrixMode( GL_MODELVIEW_MATRIX );
+  glMatrixMode( GL_MODELVIEW );
   glPushMatrix();
   Size sz(1,1,1);
   if( glGraph->elementSize )
@@ -85,7 +84,10 @@ void Billboard::draw(node n) {
   mdlM[4] = mdlM[6] = 0.0f;
   mdlM[8] = mdlM[9] = 0.0f;
   glLoadMatrixf( mdlM );
+  glEnable(GL_ALPHA_TEST);
+  glAlphaFunc(GL_GREATER, 0.5);
   glCallList(LList);
+  glDisable(GL_ALPHA_TEST);
   glPopMatrix();
 }
 //========================================================
@@ -102,8 +104,6 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
 }
 //========================================================
 void Billboard::drawBillboard() {
-  glEnable(GL_ALPHA_TEST);
-  glAlphaFunc(GL_GREATER, 0.5);
   glBegin(GL_QUADS);
   glNormal3f(0.0f, 0.0f, 1.0f);
   glTexCoord2f(0.0f, 0.0f);
@@ -114,7 +114,6 @@ void Billboard::drawBillboard() {
   glVertex2f(0.5f, 0.5f);
   glTexCoord2f(0.0f, 1.0f);
   glVertex2f(-0.5f, 0.5f);
-  glDisable(GL_ALPHA_TEST);
   glEnd();
 }
 //========================================================
