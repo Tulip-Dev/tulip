@@ -23,18 +23,18 @@ html : html/index.html profile.dcf
 
 
 html/index.html : $(DOCBOOK_SRC) $(srcdir)/../common/tulip-html.xsl $(srcdir)/../common/CatalogManager.properties
-	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
-	-r org.apache.xml.resolver.tools.CatalogResolver -u\
+	-r org.apache.xml.resolver.tools.CatalogResolver -u \
 	$(srcdir)/index.docbook  $(srcdir)/../common/tulip-html.xsl
 
 
 pdf :   pdf/userManual.fo pdf/userManual.pdf
 
 pdf/userManual.fo : $(DOCBOOK_SRC) $(srcdir)/../common/tulip-pdf.xsl $(srcdir)/../common/CatalogManager.properties
-	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -u -o pdf/userManual.fo \
@@ -44,9 +44,9 @@ pdf/userManual.pdf : pdf/userManual.fo
 	$(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo && $(PDFXMLTEX) --output-directory="pdf/" pdf/userManual.fo
 
 profile.dcf : $(srcdir)/../common/tulip-profile.xsl $(DOCBOOK_SRC) $(srcdir)/../common/CatalogManager.properties
-	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
-	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver -o profile.dcf $(srcdir)/index.docbook  $(srcdir)/../common/tulip-profile.xsl install.path="userHandbook/html/"
 
