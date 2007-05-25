@@ -658,8 +658,11 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   ostream *os;
   if (filename.rfind(".gz") == (filename.length() - 3)) 
     os = tlp::getOgzstream(filename.c_str());
-  else
+  else {
+    if (filename.rfind(".tlp") == std::string::npos)
+      filename += ".tlp";
     os = new ofstream(filename.c_str());
+  }
 
   // keep trace of file infos
   viewGlFile &vFile = openFiles[(unsigned long)glWidget];
