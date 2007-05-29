@@ -266,6 +266,7 @@ namespace tlp {
   void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
 				 DoubleProperty *edgeWeight,
 				 PluginProgress *pluginProgress) {
+    assert(ConnectedTest::isConnected(graph));
     selection->setAllNodeValue(true);
     selection->setAllEdgeValue(false);
 
@@ -332,11 +333,13 @@ namespace tlp {
     // if needed, create a clone of the graph
     // as a working copy
     Graph *gClone = graph;
-    if (!rGraph)
+    if (!rGraph) {
       // the name used for subgraph clone when computing a tree
       #define CLONE_NAME "CloneForTree"
+      #define CLONE_ROOT "CloneRoot"
       rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
-
+      rGraph->setAttribute(CLONE_ROOT, node());
+    }
     // if the graph is topologically a tree, make it directed
     // using a 'center' of the graph as root
     if (TreeTest::isFreeTree(gClone)) {
@@ -358,13 +361,13 @@ namespace tlp {
     // graph is not connected
     // compute the connected components's subgraph
     string err;
-    DoubleProperty connectedComponent(graph);
-    graph->computeProperty(string("Connected Component"), &connectedComponent, err, pluginProgress);
+    DoubleProperty connectedComponent(rGraph);
+    rGraph->computeProperty(string("Connected Component"), &connectedComponent, err, pluginProgress);
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
     DataSet tmp;
     tmp.set("Property", &connectedComponent);
-    bool result = tlp::applyAlgorithm(graph, err, &tmp, "Equal Value", pluginProgress);
+    bool result = tlp::applyAlgorithm(rGraph, err, &tmp, "Equal Value", pluginProgress);
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
     assert(result);
@@ -372,11 +375,12 @@ namespace tlp {
     // create a new subgraph for the tree
     Graph *tree = rGraph->addSubGraph();
     node root = tree->addNode();
+    rGraph->setAttribute(CLONE_ROOT, root);
     Graph *gConn;
 
     // connected components subgraphs loop
-    forEach(gConn, graph->getSubGraphs()) {
-      if (tree == gConn)
+    forEach(gConn, rGraph->getSubGraphs()) {
+      if (gConn == tree)
 	continue;
       // compute a tree for each subgraph
       // add each element of that tree
@@ -403,15 +407,7 @@ namespace tlp {
   void cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
     if (graph == tree)
       return;
-
-    if (!ConnectedTest::isConnected(graph)) {
-      // graph is not connected, so remove the tree root
-      node root;
-      getSource(tree, root);
-      graph->delNode(root);
-    }
-
-    // then remove the subgraph clone
+    // get the subgraph clone
     Graph *sg = tree;
     string nameAtt("name");
     string name = sg->getAttribute<string>(nameAtt);
@@ -419,6 +415,12 @@ namespace tlp {
       sg = sg->getSuperGraph();
       name = sg->getAttribute<string>(nameAtt);
     }
+    // get its added root
+    node root = sg->getAttribute<node>(CLONE_ROOT);
+    // delete it if needed
+    if (root.isValid())
+      graph->delNode(root);
+    // delete the clone
     graph->delAllSubGraphs(sg);
   }
 }
