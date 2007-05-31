@@ -221,32 +221,34 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
   Iterator<Graph*> *itS = rootGraph->getSubGraphs();
   while(itS->hasNext()) {
     Graph *sg=itS->next();
-    double avPath;
-    if (pluginProgress)
-      pluginProgress->setComment("Computing average path length on subgraphs");
-    if (!tlp::averagePathLength(sg, avPath, pluginProgress))
-      return false;
-    double avCluster;
-    if (pluginProgress)
-      pluginProgress->setComment("Computing average cluster on subgraphs");
-    if (!tlp::averageCluster(sg, avCluster, pluginProgress))
-      return false;
-    /*
-      cout << "Average Path Length :" << avPath << endl;
-      cout << "Average clustering  :" <<  avCluster << endl; 
-      cout << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl; 
-      cout << "Number of edges     :" <<  tmpg->numberOfEdges() << endl; 
-    */
-    Graph *tmpGr=sg;
-    if ( avPath>1 && avPath<4 && avCluster>0.25 && sg->numberOfNodes()>10) {
-      DataSet tmpData;
-      string errMsg;
-      
-      //pluginProgress->setComment("Computing strength clustering on subgraphs...");
-      if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength", pluginProgress)) {
+    Graph *tmpGr = sg;
+    if (sg->numberOfNodes() > 10) {
+      double avPath;
+      if (pluginProgress)
+	pluginProgress->setComment("Computing average path length on subgraphs");
+      if (!tlp::averagePathLength(sg, avPath, pluginProgress))
 	return false;
+      double avCluster;
+      if (pluginProgress)
+	pluginProgress->setComment("Computing average cluster on subgraphs");
+      if (!tlp::averageCluster(sg, avCluster, pluginProgress))
+	return false;
+      /*
+	cout << "Average Path Length :" << avPath << endl;
+	cout << "Average clustering  :" <<  avCluster << endl; 
+	cout << "Number of nodes     :" <<  tmpg->numberOfNodes() << endl; 
+	cout << "Number of edges     :" <<  tmpg->numberOfEdges() << endl; 
+      */
+      if ( avPath > 1 && avPath < 4 && avCluster > 0.25) {
+	DataSet tmpData; 
+	string errMsg;
+      
+	//pluginProgress->setComment("Computing strength clustering on subgraphs...");
+	if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength", pluginProgress)) {
+	  return false;
+	}
+	tmpData.get("strengthGraph",tmpGr);
       }
-      tmpData.get("strengthGraph",tmpGr);
     }
     mapGraph[sg]=tmpGr;
     if (sg==tmpGr) {
