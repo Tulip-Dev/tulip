@@ -80,7 +80,7 @@ bool ReachableSubGraphSelection::run() {
 	Iterator<node> *itN = graph->getNodes();
 	while (itN->hasNext()) { 
 	  node itn = itN->next();
-	  if (distance.get(itn.id) <= maxDepth && distance.get(itn.id)<graph->numberOfNodes() ) 
+	  if (distance.get(itn.id) <= maxDepth) 
 	    booleanResult->setNodeValue(itn,true);
 	} delete itN;
       }
