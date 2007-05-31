@@ -44,11 +44,8 @@ namespace {
 //================================================================
 unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> &distance, int direction) {
   deque<node> fifo;
-  MutableContainer<bool> visited;
-  visited.setAll(false);
-  distance.setAll(sg->numberOfNodes());
+  distance.setAll(UINT_MAX);
   fifo.push_back(n);
-  visited.set(n.id, true);
   distance.set(n.id, 0);
   unsigned int maxDist = 0;
   while(!fifo.empty()) {
@@ -57,9 +54,8 @@ unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> 
     node itn;
     unsigned int itnDist = distance.get(current.id) + 1;
     forEach(itn, getIt(sg, current, direction)) {
-      if (!visited.get(itn.id)) {
+      if (distance.get(itn.id) == UINT_MAX) {
 	fifo.push_back(itn);
-	visited.set(itn.id, true);
 	distance.set(itn.id, itnDist);
 	maxDist = std::max(maxDist, itnDist);
       }
@@ -70,22 +66,71 @@ unsigned int tlp::maxDistance(Graph *sg, node n, MutableContainer<unsigned int> 
 //================================================================
 //Warning the algorithm is not optimal
 bool tlp::averagePathLength(Graph *sg, double& sumPath, PluginProgress *pluginProgress) {
+  sumPath = 0;
   int nbNodes = sg->numberOfNodes();
+  if (nbNodes == 1)
+    return true;
   node n;
   int steps = 0;
+  MutableContainer<unsigned int> distance;
   forEach(n, sg->getNodes()) {
-    MutableContainer<unsigned int> distance;
     if (pluginProgress && ((++steps % 100) == 0)) {
 	pluginProgress->progress(steps, nbNodes);
 	if (pluginProgress->state() !=TLP_CONTINUE)
 	  return false;
     }
-    sumPath += (double) tlp::maxDistance(sg, n, distance, 2 /* inout */);
+    tlp::maxDistance(sg, n, distance, 2);
+    Iterator<node>*itN=sg->getNodes();
+    while (itN->hasNext()) {
+      node itn=itN->next();
+      unsigned int d =  distance.get(itn.id);
+      if (itn != n && d != UINT_MAX)
+	sumPath += d;
+    } delete itN;
   }
   if (pluginProgress)
     pluginProgress->progress(nbNodes, nbNodes);
   sumPath /= (nbNodes * (nbNodes - 1));
   return true;
+  /*
+  sumPath=0;
+  int nbNodes = sg->numberOfNodes();
+  if (nbNodes == 1)
+    return true;
+  int steps = 0;
+  list<node> fifo;
+  DoubleProperty *mark = new DoubleProperty(sg);
+  Iterator<node>*itN=sg->getNodes();
+  while (itN->hasNext()) {
+    if (pluginProgress && ((++steps % 100) == 0)) {
+	pluginProgress->progress(steps, nbNodes);
+	if (pluginProgress->state() !=TLP_CONTINUE)
+	  return false;
+    }
+    mark->setAllNodeValue(0);
+    node itn=itN->next();
+    fifo.clear();
+    fifo.push_back(itn);
+    while(!fifo.empty()) {
+      node current = fifo.front();
+      fifo.pop_front();
+      Iterator<node> *itNei=sg->getInOutNodes(current);
+      double value = mark->getNodeValue(current) + 1;
+      while (itNei->hasNext()) {
+	node nei = itNei->next();
+	if (mark->getNodeValue(nei)==0 && nei!=itn)  {
+	  mark->setNodeValue(nei, value);
+	  sumPath += value;
+	  fifo.push_back(nei);
+	}
+      } delete itNei;
+    }
+  } delete itN;
+  delete mark;
+  sumPath /= double(nbNodes *(nbNodes - 1));
+  if (pluginProgress)
+    pluginProgress->progress(nbNodes, nbNodes);
+    return true; */
 }
 //================================================================
 bool tlp::averageCluster(Graph *sg, double &sum, PluginProgress * pluginProgress) {
