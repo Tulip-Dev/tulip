@@ -43,7 +43,9 @@ SGHierarchyWidget::SGHierarchyWidget(Graph *graph , QWidget* parent,  const char
   _currentGraph(graph) {
   setCaption(trUtf8("Cluster Tree"));
   treeView->setColumnText(0,trUtf8("Subgraph Hierarchy"));
-  treeView->addColumn(QString(tr("Nb elements")));
+  treeView->addColumn(QString(tr("Nb nodes")));
+  treeView->addColumn(QString(tr("Nb edges")));
+  treeView->addColumn(QString(tr("Graph id")));
 #if (QT_REL == 3)
   connect(treeView, SIGNAL(currentChanged(QListViewItem *)), SLOT(changeGraph(QListViewItem *)));
   connect(treeView, SIGNAL(contextMenuRequested ( QListViewItem *, const QPoint &, int )),
@@ -62,7 +64,9 @@ SGHierarchyWidget::SGHierarchyWidget(QWidget* parent, const char* name, Qt::WFla
   _currentGraph(0) {
   setCaption(trUtf8("Cluster Tree"));
   treeView->setColumnText(0,trUtf8("Subgraph Hierarchy"));
-  treeView->addColumn(QString(tr("Nb elements")));
+  treeView->addColumn(QString(tr("Nb nodes")));
+  treeView->addColumn(QString(tr("Nb edges")));
+  treeView->addColumn(QString(tr("Graph id")));
 #if (QT_REL == 3)
   connect(treeView, SIGNAL(currentChanged(QListViewItem *)), SLOT(changeGraph(QListViewItem *)));
   connect(treeView, SIGNAL(contextMenuRequested ( QListViewItem *, const QPoint &, int )),
@@ -122,16 +126,18 @@ void SGHierarchyWidget::buildTreeView(QListView *item, Graph *p) {
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
   tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
   stringstream sstr;
-  sstr << ' ';
   sstr.width(7);
   sstr.fill('0');
-  sstr << p->numberOfNodes() << ' ';
-  sstr << (p->numberOfNodes() > 1 ? "nodes" : "node");
-  sstr << " /";
-  sstr.width(7);
-  sstr << p->numberOfEdges() << ' ';
-  sstr << (p->numberOfEdges() > 1 ? "edges" : "edge");
+  sstr << p->numberOfNodes();
   tmpItem->setText(1, QString(sstr.str().c_str()));
+  sstr.seekp(0);
+  sstr.width(7);
+  sstr << p->numberOfEdges();
+  tmpItem->setText(2, QString(sstr.str().c_str()));
+  sstr.seekp(0);
+  sstr.width(5);
+  sstr << p->getId();
+  tmpItem->setText(3, QString(sstr.str().c_str()));
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS = p->getSubGraphs();
   while (itS->hasNext())
@@ -144,16 +150,18 @@ void SGHierarchyWidget::buildTreeView(QListViewItem *item, Graph *p) {
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
   tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
   stringstream sstr;
-  sstr << ' ';
   sstr.width(7);
   sstr.fill('0');
-  sstr << p->numberOfNodes() << ' ';
-  sstr << (p->numberOfNodes() > 1 ? "nodes" : "node");
-  sstr << " / ";
-  sstr.width(7);
-  sstr << p->numberOfEdges() << ' ';
-  sstr << (p->numberOfEdges() > 1 ? "edges" : "edge");
+  sstr << p->numberOfNodes();
   tmpItem->setText(1, QString(sstr.str().c_str()));
+  sstr.seekp(0);
+  sstr.width(7);
+  sstr << p->numberOfEdges();
+  tmpItem->setText(2, QString(sstr.str().c_str()));
+  sstr.seekp(0);
+  sstr.width(5);
+  sstr << p->getId();
+  tmpItem->setText(3, QString(sstr.str().c_str()));
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS=p->getSubGraphs();
   while (itS->hasNext())
