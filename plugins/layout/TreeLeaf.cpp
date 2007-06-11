@@ -42,7 +42,7 @@ float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int
   }
   for (;itN->hasNext();) {
     node itn = itN->next();
-    x += spacing;
+    x += nodeSpacing;
     x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
     if (x > maxX)
       maxX = x;
