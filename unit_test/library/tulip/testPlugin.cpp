@@ -10,7 +10,7 @@ using namespace std;
 class Test : public tlp::BooleanAlgorithm { 
 public:
   Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context){
-    addDependency<BooleanAlgorithm>("Test");
+    addDependency<BooleanAlgorithm>("Test", "1.0");
   }
   ~Test(){}
   bool run() { 
@@ -19,4 +19,4 @@ public:
     return graph->computeProperty(name, booleanResult, err);
   }
 };
-BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","0","1");
+BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0");

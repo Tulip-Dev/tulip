@@ -32,7 +32,6 @@ void PluginsTest::testloadPlugin() {
   CPPUNIT_ASSERT(deps.size() == 1);
   CPPUNIT_ASSERT(deps.front().factoryName == tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()));
   CPPUNIT_ASSERT(deps.front().pluginName == "Test");
-  CPPUNIT_ASSERT(deps.front().pluginParams == 0);
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
