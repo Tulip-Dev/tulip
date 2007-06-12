@@ -8,6 +8,8 @@ namespace tlp {
 class Color : public tlp::Vector<unsigned char,4>{
  public:
   ///
+  inline Color(const tlp::Vector<unsigned char,4>&);
+  ///
   inline Color(const unsigned char red=0 ,const unsigned char green=0 ,const unsigned char blue=0,const unsigned char alpha=255);
   ///
   inline void set(const unsigned char red=0,const unsigned char green=0 ,const unsigned char blue=0, const unsigned char alpha=255);
@@ -57,6 +59,8 @@ class Color : public tlp::Vector<unsigned char,4>{
   std::istream& operator>>(std::istream &is, tlp::Color &);
 
 }
+
+tlp::Color::Color(const tlp::Vector<unsigned char,4> &v) : tlp::Vector<unsigned char,4>(v) {}
 
 tlp::Color::Color(const unsigned char red ,const unsigned char green ,const unsigned char blue,const unsigned char alpha) {
   array[0]=red;
