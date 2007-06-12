@@ -19,9 +19,30 @@
 using namespace std;
 using namespace tlp;
 
+DataSet::DataSet(const DataSet &set) {
+  *this = set;
+}
+
+DataSet & DataSet::operator=(const DataSet &set) {
+  if (this != &set) {
+    data.clear();
+    for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+	   set.data.begin(); it != set.data.end(); ++it) {
+      data.push_back(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
+    }
+  }
+  return *this;
+}
+
+DataSet::~DataSet() {
+   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+     delete (*it).second;
+   }
+}
 
 bool DataSet::exist(const string &str) const {
-  for (std::list< std::pair<std::string, tlp::DataType> >::const_iterator it =
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
 	 data.begin(); it != data.end(); ++it) {
     if ((*it).first == str)
       return true;
@@ -29,11 +50,11 @@ bool DataSet::exist(const string &str) const {
   return false;
 }
 
-Iterator< pair<string, DataType> >* DataSet::getValues() const {
-  list< pair<string, DataType> >::const_iterator begin = data.begin();
-  list< pair<string, DataType> >::const_iterator end = data.end();
+Iterator< pair<string, DataType*> >* DataSet::getValues() const {
+  list< pair<string, DataType*> >::const_iterator begin = data.begin();
+  list< pair<string, DataType*> >::const_iterator end = data.end();
   
-  return new StlIterator<pair<string, DataType>, list< pair<string, DataType> >::const_iterator>(begin, end);
+  return new StlIterator<pair<string, DataType*>, list< pair<string, DataType*> >::const_iterator>(begin, end);
 }
 
 bool StructDef::hasField(string str) {

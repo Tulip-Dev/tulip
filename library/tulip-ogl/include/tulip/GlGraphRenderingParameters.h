@@ -34,7 +34,7 @@ namespace tlp {
     GlGraphRenderingParameters();
     //============================================
     DataSet getParameters() const;
-    void    setParameters(const DataSet);
+    void    setParameters(const DataSet &);
     /**
      * set the graph used for rendering
      */

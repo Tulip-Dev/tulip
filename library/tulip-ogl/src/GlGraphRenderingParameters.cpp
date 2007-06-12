@@ -74,7 +74,7 @@ static Graph *findGraphById(Graph *sg, const int id) {
 }
 
 //This function should rewriten completly
-void GlGraphRenderingParameters::setParameters(const DataSet data) {
+void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   TRACE_EXEC();
   Color color;
   if (data.get<Color>("backgroundColor", color)) 

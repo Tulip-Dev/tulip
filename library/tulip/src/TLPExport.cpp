@@ -191,11 +191,11 @@ public:
   void saveDataSet(ostream &os, DataSet &data) {
     initTypeNames();
     // get iterator over pair attribute/value
-    Iterator< pair<string, DataType> > *it = data.getValues();
+    Iterator< pair<string, DataType*> > *it = data.getValues();
     while( it->hasNext() ) {
-      pair<string, DataType> p;
+      pair<string, DataType*> p;
       p = it->next();
-      const string tn = p.second.typeName;
+      const string tn = p.second->typeName;
       char *otn = 0;
       // get output type name
       if (tn == boolTN)
@@ -223,25 +223,25 @@ public:
       // output value
       // special cases
       if (tn == boolTN)
-	os << ((*(bool*)p.second.value) ? "true" : "false");
+	os << ((*(bool*)p.second->value) ? "true" : "false");
       else if (tn == colorTN) {
-	Color *color = (Color*) p.second.value;
+	Color *color = (Color*) p.second->value;
 	//os << "\"(" << (int)color->getR() << ',' << (int)color->getG() << ',' << (int) color->getB() << ",0)\"";
 	os << "\"" << convert(ColorType::toString(*color)) << "\"";
       } else if (tn == coordTN) {
-	Coord *coord =  (Coord*) p.second.value;
+	Coord *coord =  (Coord*) p.second->value;
 	//os << "\"(" << coord->getX() << "," << coord->getY() << "," << coord->getZ() << ")\"";
 	os << "\"" << convert(PointType::toString(*coord)) << "\"";
       }	else if (tn == doubleTN)
-	os << *(double*)p.second.value;
+	os << *(double*)p.second->value;
       else if (tn == floatTN)
-	os << *(float*)p.second.value;
+	os << *(float*)p.second->value;
       else if (tn == intTN)
-	os << *(int*)p.second.value;
+	os << *(int*)p.second->value;
       else if (tn == stringTN)
-	os << '"' << *(string *)p.second.value << '"';
+	os << '"' << *(string *)p.second->value << '"';
       else if (tn == uintTN)
-	os << *(unsigned int *) p.second.value;
+	os << *(unsigned int *) p.second->value;
       // output closed parenthesis
       os << ')' << endl;
     } delete it;

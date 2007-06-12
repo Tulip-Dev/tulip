@@ -395,7 +395,7 @@ struct TLPDataSetBuilder: public TLPFalse {
 	dataSet.set("orthogonalProjection", ui ? true : false);
       if (dataSet.get<unsigned int>("_FontsType", ui)) 
 	dataSet.set("fontType", ui);
-      graphBuilder->dataSet->set(dataSetName, dataSet);
+      graphBuilder->dataSet->set<DataSet>(dataSetName, dataSet);
     }
     return true;
   }

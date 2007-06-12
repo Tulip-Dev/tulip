@@ -103,14 +103,16 @@ namespace {
   }
 
 
-  void	OutputDataSet( const DataSet & inSet ) {
-    Iterator< pair<string,DataType> > * it = inSet.getValues();
+  /*
+    void OutputDataSet( const DataSet & inSet ) {
+    Iterator< pair<string,DataType*> > * it = inSet.getValues();
     while( it->hasNext() ) {
-      pair<string,DataType> p;
+      pair<string,DataType*> p;
       p = it->next();
-      cout << p.first << " : " << (unsigned long)p.second.value << endl;
+      cout << p.first << " : " << (unsigned long)p.second->value << endl;
     } delete it;
   }
+  */
 
 
   struct  IParam;

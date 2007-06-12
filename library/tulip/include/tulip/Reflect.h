@@ -16,18 +16,22 @@ namespace tlp {
 
 struct Graph;
 
+ struct TLP_SIMPLE_SCOPE DataType {
+   DataType(){}
+   DataType(void *value,const std::string typeName):value(value),typeName(typeName){}
+   virtual ~DataType() {};
+   virtual DataType *clone() = 0;
+   void *value;
+   std::string typeName;
+ };
 
-struct TLP_SIMPLE_SCOPE DataType {
-  DataType(){}
-  DataType(void *value,const std::string typeName):value(value),typeName(typeName){}
-  void * value;
-  std::string typeName;
-};
-
-
-/*!  A container which allows insertion of different type.
+/*!  A container which allows insertion of different types.
      The inserted data must have a copy-constructor well done */
 struct TLP_SIMPLE_SCOPE DataSet {
+  DataSet() {}
+  DataSet(const DataSet &set);
+  DataSet& operator=(const DataSet &set);
+  ~DataSet();
   /** Returns a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true. */
@@ -42,9 +46,9 @@ struct TLP_SIMPLE_SCOPE DataSet {
   /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
   /**Return an iterator on all values*/
-  Iterator< std::pair<std::string, DataType> > *getValues() const;
+  Iterator< std::pair<std::string, DataType*> > *getValues() const;
 private:
-  std::list< std::pair<std::string, DataType> > data;
+  std::list< std::pair<std::string, DataType*> > data;
 };
 
 

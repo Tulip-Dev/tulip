@@ -25,11 +25,11 @@ template<typename T> void tlp::StructDef::add(const char* str, const char* inHel
 //=======================================================================
 //DataSet implementation
 template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
-  for (std::list< std::pair<std::string, tlp::DataType> >::const_iterator it =
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
 	 data.begin(); it != data.end(); ++it) {
-    const std::pair<std::string, tlp::DataType> &p = *it;
+    const std::pair<std::string, tlp::DataType*> &p = *it;
     if (p.first == str) {
-      value = *((T*) p.second.value);
+      value = *((T*) p.second->value);
       return true;
     }
   }
@@ -37,12 +37,12 @@ template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) con
 }
 
 template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
-  for (std::list< std::pair<std::string, tlp::DataType> >::iterator it =
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {
-    std::pair<std::string, tlp::DataType> &p = *it;
+    std::pair<std::string, tlp::DataType *> &p = *it;
     if (p.first == str) {
-      value = *((T*) p.second.value);
-      delete (T*) p.second.value;
+      value = *((T*) p.second->value);
+      delete p.second;
       data.erase(it);
       return true;
     }
@@ -50,19 +50,28 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
   return false;
 }
 
+template<typename T>
+struct DataTypeContainer :public tlp::DataType {
+  DataTypeContainer(void *value, std::string str) :DataType(value, str) {}
+  ~DataTypeContainer() {
+    delete (T*) value;
+  }
+  DataType* clone() {
+    return new DataTypeContainer<T>(new T(*(T*)value), typeName);
+  }
+};
+
 template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
-  T* tmp=new T(value);
-  for (std::list< std::pair<std::string, tlp::DataType> >::iterator it =
+  DataTypeContainer<T> *tmp= new DataTypeContainer<T>(new T(value), typeid(T).name());
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {
-    std::pair<std::string, tlp::DataType> &p = *it;
+    std::pair<std::string, tlp::DataType*> &p = *it;
     if (p.first == str) {
-      delete (T*) p.second.value;
-      p.second.value = (void *) tmp;
-      p.second.typeName = typeid(T).name();
+      delete p.second;
+      p.second = tmp;
       return;
     }
   }
-  data.push_back(std::pair<std::string, tlp::DataType>(str, tlp::DataType((void *)tmp, typeid(T).name())));
-
+  data.push_back(std::pair<std::string, tlp::DataType*>(str, tmp));
 }
 //=======================================================================
