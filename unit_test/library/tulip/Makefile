@@ -11,7 +11,8 @@ SRCS=   tuliplibtest.cpp \
 	SuperGraphTest.cpp \
 	TlpImportExportTest.cpp \
 	PluginsTest.cpp \
-	IdManagerTest.cpp 
+	IdManagerTest.cpp \
+	DataSetTest.cpp \
 #	PlanarConMapTest.cpp 
 
 
