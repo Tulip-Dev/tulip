@@ -1051,7 +1051,7 @@ void viewGl::editFind() {
   }
 }
 //**********************************************************************
-void viewGl::setParameters(const DataSet data) {
+void viewGl::setParameters(const DataSet& data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   GlGraphRenderingParameters param = glWidget->getRenderingParameters();
   param.setParameters(data);

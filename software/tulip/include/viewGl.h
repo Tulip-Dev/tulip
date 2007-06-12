@@ -72,7 +72,7 @@ class viewGl : public TulipData, tlp::Observer {
 public:
   viewGl(QWidget *parent=NULL, const char *name=NULL);
   virtual ~viewGl();
-  void setParameters(const tlp::DataSet);
+  void setParameters(const tlp::DataSet &);
   bool eventFilter(QObject *, QEvent *);
 #if (QT_REL == 3)
   bool areTooltipsEnabled();
