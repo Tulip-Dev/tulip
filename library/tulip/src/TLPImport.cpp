@@ -10,11 +10,9 @@
 */
 #include <fstream>
 #include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <dirent.h>
 #include <errno.h>
-#include <string.h>
+#include <locale.h>
+#include <sys/stat.h>
 
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -702,6 +700,10 @@ public:
   }
   ~TLPImport(){}
   bool import(const string &dummy) {
+    // first we must ensure that parsing of float or double
+    // doest not depend of locale
+    setlocale(LC_NUMERIC, "C");
+
     string filename;
     dataSet->get<string>("file::filename", filename);
     struct stat infoEntry;
