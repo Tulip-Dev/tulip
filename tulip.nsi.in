@@ -123,6 +123,8 @@ File "@qt_libraries@\QtSql4.dll"
 File "@qt_libraries@\QtXml4.dll"
 !endif
 File  "@qt_libraries@\..\bin\assistant.exe"
+setOutPath $INSTDIR\imageformats
+File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
@@ -183,7 +185,9 @@ Delete "$INSTDIR\win-uninstall.ico"
 Delete "$DESKTOP\Tulip @VERSION@.lnk"
 Delete "$SMPROGRAMS\Tulip @VERSION@\*.*"
 RMDir "$SMPROGRAMS\Tulip @VERSION@"
-Delete $INSTDIR\*.dll
+Delete "$INSTDIR\*.dll"
+Delete "$INSTDIR\imageformats\*.dll"
+RMDir "$INSTDIR\imageformats"
 Delete "$INSTDIR\lib\tlp\bitmaps\*"
 RMDir "$INSTDIR\lib\tlp\bitmaps"
 Delete "$INSTDIR\lib\tlp\designer\*"
