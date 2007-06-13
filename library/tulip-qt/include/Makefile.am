@@ -36,7 +36,6 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h
 else
 BUILT_SOURCES = \
-	tulip/Morphing.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
