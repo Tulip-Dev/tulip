@@ -35,6 +35,12 @@ BUILT_SOURCES = \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h
 else
+if WIN32 
+BUILT_SOURCES = \
+	tulip/FindSelectionData.h \
+	tulip/RenderingParametersDialogData.h \
+	tulip/GWOverviewWidgetData.h
+else
 BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
@@ -59,6 +65,7 @@ tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
 
 tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
+endif
 endif
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
