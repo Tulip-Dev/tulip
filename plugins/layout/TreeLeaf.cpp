@@ -28,6 +28,8 @@ float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int
   float maxX = 0;
   float nodeWidth = oriSize->getNodeValue(n).getW();
   y += levelHeights[depth]/2;
+  if (depth > 1)
+    y += levelHeights[depth - 1]/ 2;
   if (tree->outdeg(n) == 0) {
     oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth/2, y, 0));
     return x + nodeWidth;
