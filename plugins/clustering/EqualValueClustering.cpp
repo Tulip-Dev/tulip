@@ -52,7 +52,8 @@ namespace stdext {
   };
 };
 //==============================================================================
-void drawGraph(Graph *tmpg) {
+/*
+  void drawGraph(Graph *tmpg) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   string errMsg;
   string layoutName;
@@ -64,7 +65,8 @@ void drawGraph(Graph *tmpg) {
   tmpg->computeProperty(layoutName,tmpg->getLocalProperty<LayoutProperty>("viewLayout"),errMsg);
   if (tmpg->numberOfNodes() < 300)
     tmpg->computeProperty(sizesName,tmpg->getLocalProperty<SizeProperty>("viewSize"),errMsg);
-}
+  }
+*/
 //===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
@@ -156,11 +158,12 @@ bool EqualValueClustering::run() {
     }
 
     // do subgraphs layout
+    /*
     stdext::hash_map<double, Graph *>::const_iterator it;
     for (it = partitions.begin(); it != partitions.end(); ++it) {
       drawGraph((*it).second);
     }
-      
+    */
   } else {
     stdext::hash_map<string, Graph *> partitions;
     if (onNodes) {
@@ -221,10 +224,12 @@ bool EqualValueClustering::run() {
       }
     }
     // do subgraphs layout
+    /*
     stdext::hash_map<string, Graph *>::const_iterator it;
     for (it = partitions.begin(); it != partitions.end(); ++it) {
       drawGraph((*it).second);
     }
+    */
   }
   return true;
 }
