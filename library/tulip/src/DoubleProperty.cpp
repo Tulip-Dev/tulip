@@ -137,7 +137,8 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
   double tmp;
   double maxN2,minN2;
-  Iterator<node> *itN=graph->getNodes();
+  if (sg==0) sg=graph;
+  Iterator<node> *itN=sg->getNodes();
   if (itN->hasNext()) {
     node itn=itN->next();
     tmp=getNodeValue(itn);
@@ -151,7 +152,6 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
     if (tmp<minN2) minN2=tmp;
   } delete itN;
 
-  if (sg==0) sg=graph;
   unsigned long sgi=(unsigned long)sg;
 
   minMaxOkNode[sgi]=true;  
@@ -162,7 +162,8 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
   double tmp;
   double maxE2,minE2;
-  Iterator<edge> *itE=graph->getEdges();
+  if (sg==0) sg=graph;
+  Iterator<edge> *itE=sg->getEdges();
   if (itE->hasNext()) {
     edge ite=itE->next();
     tmp=getEdgeValue(ite);
@@ -176,7 +177,6 @@ void DoubleProperty::computeMinMaxEdge(Graph *sg) {
     if (tmp<minE2) minE2=tmp;
   } delete itE;
 
-  if (sg==0) sg=graph;
   unsigned long sgi=(unsigned long)sg;
 
   minMaxOkEdge[sgi]=true;
