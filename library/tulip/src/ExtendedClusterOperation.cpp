@@ -13,6 +13,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ForEach.h>
 
@@ -53,11 +54,21 @@ void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
   Iterator<node> *itN= cluster->getNodes();
+  node viewMetricMaxNode;
+  double vMax = DBL_MIN;
+  DoubleProperty *graphMetric = graph->getProperty<DoubleProperty>("viewMetric");
   while (itN->hasNext()){
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
     clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
+    double value = graphMetric->getNodeValue(itn);
+    if (value > vMax) {
+      vMax = value;
+      viewMetricMaxNode = itn;
+    }
   } delete itN;
+  // set metanode label to label of viewMetric max corresponding node
+  cluster->getProperty<StringProperty>("viewLabel")->setNodeValue(metanode, graph->getProperty<StringProperty>("viewLabel")->getNodeValue(viewMetricMaxNode));
   Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
     edge ite = itE->next();
