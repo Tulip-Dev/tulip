@@ -25,12 +25,42 @@ const int DEFAULT_HEIGHT  = 1024;
 
 const int TEXTUREDGLYPHID = 101;
 
+namespace 
+{
+  const char * paramHelp[] = 
+    {
+      // metric :
+      HTML_HELP_OPEN() \
+      HTML_HELP_DEF( "type", "Metric" ) \
+      HTML_HELP_DEF( "values", "An existing metric property" ) \
+      HTML_HELP_DEF( "default", "viewMetric" ) \
+      HTML_HELP_BODY() \
+      "This parameter defines the metric used to estimate the size allocated to each node." \
+      HTML_HELP_CLOSE(),
+      // aspect ratio
+      HTML_HELP_OPEN()				 \
+      HTML_HELP_DEF( "type", "float" ) \
+      HTML_HELP_DEF( "default", "1." )	 \
+      HTML_HELP_BODY() \
+      "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
+      HTML_HELP_CLOSE(),
+      // texture
+      HTML_HELP_OPEN() \
+      HTML_HELP_DEF( "type", "bool" ) \
+      HTML_HELP_DEF( "values", "[true, false]" ) \
+      HTML_HELP_DEF( "default", "false" ) \
+      HTML_HELP_BODY() \
+      "This parameter indicates if the glyphs representing nodes are textured or not." \
+      HTML_HELP_CLOSE(),
+    };
+}
+
 //====================================================================
-SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context)
-                                                    :LayoutAlgorithm(context){
+SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context) :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
-  addParameter<float>("Aspect Ratio", NULL, "1");
-  addParameter<bool>("Texture?", NULL, "false");
+  addParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric");
+  addParameter<float>("Aspect Ratio", paramHelp[1], "1.");
+  addParameter<bool>("Texture?", paramHelp[2], "false");
 }
 
 //====================================================================
@@ -41,9 +71,9 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 bool SquarifiedTreeMap::check(string& errorMsg) {
   metric = graph->getProperty<DoubleProperty>("viewMetric"); 
   if (dataSet != 0)
-    dataSet->get("property", metric);    
+    dataSet->get("metric", metric);    
   if (!metric) {
-    errorMsg = "Metric is not valid";
+    errorMsg = "metric is not valid";
     return false;
   }
 
@@ -68,12 +98,13 @@ bool SquarifiedTreeMap::run() {
   float aspectRatio  = DEFAULT_RATIO;
   bool glyphTextured = false;
     
+  size  = graph->getLocalProperty<SizeProperty>("viewSize");    
+
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Texture?", glyphTextured);
   }
     
-  size  = graph->getLocalProperty<SizeProperty>("viewSize");    
   glyph = graph->getLocalProperty<IntegerProperty>("viewShape"); 
     
   if (glyphTextured)
@@ -260,4 +291,3 @@ bool SquarifiedTreeMap::verifyMetricIsPositive() {
   delete itNode;
   return !result;
 }
-
