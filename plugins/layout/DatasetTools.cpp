@@ -68,6 +68,8 @@ void addSpacingParameters(LayoutAlgorithm* pLayout) {
   pLayout->addParameter<float>("node spacing", paramHelp[3], "18." );
 }
 void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpacing) {
+  layerSpacing = 64.;
+  nodeSpacing = 18.;
   if (dataSet) {
     dataSet->get("node spacing", nodeSpacing);
     dataSet->get("layer spacing", layerSpacing);
