@@ -9,7 +9,7 @@ using namespace tlp;
 /*@{*/
 /// TreeRadial.cpp - An implementation of a radial drawing of trees.
 /** 
- * This algorithm is largely inspired from
+ * This algorithm is inspired from
  * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes
  * from T. J. Jankun-Kelly, Kwan-Liu Ma
  * published in IEEE Symposium on Information Visualization (2003)
@@ -39,16 +39,24 @@ public:
   void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *sizes) {
     if (bfs.size() < 2) return;
     
-    float lRadius = 0;
+    float lRadius = 0, lSpacingMax = 0;
     lRadii.push_back(0);
     unsigned int nbLayers = bfs.size() - 1;
     for (unsigned int i = 0; i < nbLayers; ++i) {
+      float lRadiusPrev = lRadius;
       lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
       // check if there is enough space for nodes of layer i + 1
       float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/(2 * M_PI);
       if (mRadius > lRadius)
 	lRadius = mRadius;
       lRadii.push_back(lRadius);
+      if ((lRadius - lRadiusPrev) > lSpacingMax)
+	lSpacingMax = lRadius - lRadiusPrev;
+    }
+    ++nbLayers;
+    lRadius = lSpacingMax;
+    for (unsigned int i = 1; i < nbLayers; ++i, lRadius += lSpacingMax) {
+      lRadii[i] = lRadius;
     }
   }
     
@@ -100,21 +108,19 @@ public:
   }
 
   bool run() {
-    float lSpacing = 64.0;
-    float nSpacing = 18.0;
-
     if (pluginProgress)
       pluginProgress->showPreview(false);
     tree = computeTree(graph, 0, false, pluginProgress);
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return false;
 
-    SizeProperty *sizes = graph->getProperty<SizeProperty>("viewSize");
+    float nSpacing, lSpacing;
+    SizeProperty* sizes;
+    if (getNodeSizePropertyParameter(dataSet, sizes))
+      sizes = graph->getProperty<SizeProperty>("viewSize");
+    getSpacingParameters(dataSet, nSpacing, lSpacing);
+
     LayoutProperty tmpLayout(graph);
-    if (dataSet!=0) {
-      getNodeSizePropertyParameter(dataSet, sizes);
-      getSpacingParameters(dataSet, nSpacing, lSpacing);
-    }
   
     node n;
     SizeProperty *circleSizes = 
@@ -144,5 +150,5 @@ public:
   }
 };
 /*@}*/
-LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","David Auber","03/03/2001","Ok","1.0","Tree");
+LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree");
 

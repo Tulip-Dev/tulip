@@ -27,9 +27,6 @@ float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int
   float minX = 0;
   float maxX = 0;
   float nodeWidth = oriSize->getNodeValue(n).getW();
-  y += levelHeights[depth]/2;
-  if (depth > 1)
-    y += levelHeights[depth - 1]/ 2;
   if (tree->outdeg(n) == 0) {
     oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth/2, y, 0));
     return x + nodeWidth;
@@ -66,17 +63,13 @@ TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){
 TreeLeaf::~TreeLeaf() {}
 
 bool TreeLeaf::run() {
-  spacing = 64.0;
-  nodeSpacing = 18.0;
-
   orientationType mask = getMask(dataSet);
   OrientableLayout oriLayout(layoutResult, mask);
-  SizeProperty* size = graph->getProperty<SizeProperty>("viewSize");
-  if (dataSet!=0) {
-    getNodeSizePropertyParameter(dataSet, size);
-    getSpacingParameters(dataSet, nodeSpacing, spacing);
-  }
+  SizeProperty* size;
+  if (getNodeSizePropertyParameter(dataSet, size))
+    size = graph->getProperty<SizeProperty>("viewSize");
   OrientableSizeProxy oriSize(size, mask);
+  getSpacingParameters(dataSet, nodeSpacing, spacing);
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
@@ -90,7 +83,14 @@ bool TreeLeaf::run() {
     return true;
 
   computeLevelHeights(tree, root, 0, &oriSize);
-  dfsPlacement(tree, root, 0, -levelHeights[0]/2, 0, &oriLayout, &oriSize);
+  // check if the specified layer spacing is greater
+  // than the max of the minimum layer spacing of the tree
+  for (unsigned int i = 0; i < levelHeights.size() - 1;  ++i) {
+    float minLayerSpacing = (levelHeights[i] + levelHeights[i + 1]) / 2;
+    if (minLayerSpacing + nodeSpacing > spacing)
+      spacing = minLayerSpacing + nodeSpacing;
+  }
+  dfsPlacement(tree, root, 0, 0, 0, &oriLayout, &oriSize);
 
   cleanComputedTree(graph, tree);
   return true;

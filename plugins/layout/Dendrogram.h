@@ -36,6 +36,7 @@ class Dendrogram: public tlp::LayoutAlgorithm {
   std::map<tlp::node, float>   leftshift;
   tlp::node                    root;
   tlp::Graph *tree;
+  std::vector<float> levelHeights;
 
   float   setAllNodesCoordX(tlp::node n, float rightMargin,
 			    OrientableLayout *oriLayout,
@@ -48,9 +49,11 @@ class Dendrogram: public tlp::LayoutAlgorithm {
 			OrientableLayout *oriLayout);
   void    setNodePosition(tlp::node n, float x, float y, float z,
 			  OrientableLayout *oriLayout);
-  void    setCoordY(tlp::node n, float* maxYLeaf, float* maxHeightLeaf,
+  void    setCoordY(tlp::node n, float* maxYLeaf,
 		    OrientableLayout *oriLayout,
 		    OrientableSizeProxy *oriSize);
+  void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
+			   OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif

@@ -62,9 +62,6 @@ ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
-  spacing = 64.0;
-  nodeSpacing = 18.0;
-
   if (pluginProgress)
     pluginProgress->showPreview(false);
   tree = computeTree(graph, 0, false, pluginProgress);
@@ -75,30 +72,29 @@ bool ImprovedWalker::run() {
   tlp::getSource(tree, root);
   orientationType mask = getMask(dataSet);
   oriLayout = new OrientableLayout(layoutResult, mask);
-  SizeProperty* size = graph->getProperty<SizeProperty>("viewSize");
-  if (dataSet!=0) {
-    getNodeSizePropertyParameter(dataSet, size);
-    getSpacingParameters(dataSet, nodeSpacing, spacing);
-  }
+  SizeProperty* size;
+  if (getNodeSizePropertyParameter(dataSet, size))
+    size = graph->getProperty<SizeProperty>("viewSize");
+  getSpacingParameters(dataSet, nodeSpacing, spacing);
+
   oriSize                   = new OrientableSizeProxy(size, mask);
   depthMax                  = initializeAllNodes(root);    
   order[root]               = 1;
   
   firstWalk(root);
         
-  float sumY                       = 0;
-  levelToFloatType::iterator itMax = maxYbyLevel.begin();
-  levelToFloatType::iterator itPos = posYbyLevel.begin();
-  while(itMax != maxYbyLevel.end()) {
-    *itPos = sumY + (spacing + *itMax)/2.f;
-    sumY   += *itMax + spacing;
-    ++itMax;
-    ++itPos;
-  }     
+  // check if the specified layer spacing is greater
+  // than the max of the minimum layer spacing of the tree
+  for (unsigned int i = 0; i < maxYbyLevel.size() - 1;  ++i) {
+    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.;
+    if (minLayerSpacing + nodeSpacing > spacing)
+      spacing = minLayerSpacing + nodeSpacing;
+  }
+
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, oriSize, tree, spacing);
+    setOrthogonalEdge(oriLayout, tree, spacing);
     
   cleanComputedTree(graph, tree);
 
@@ -112,9 +108,8 @@ int ImprovedWalker::initializeAllNodes(node root) {
 }
 //====================================================================
 int ImprovedWalker::initializeNode(node n, unsigned int depth) {    
-  if (maxYbyLevel.size() <= depth) {
-    posYbyLevel.resize(maxYbyLevel.size() + 10);
-    maxYbyLevel.resize(maxYbyLevel.size() + 10);   
+  if (maxYbyLevel.size() == depth) {
+    maxYbyLevel.push_back(0);   
   }
     
   float nodeHeight       = oriSize->getNodeValue(n).getH();
@@ -202,7 +197,7 @@ void ImprovedWalker::firstWalk(node v) {
 //====================================================================
 void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {   
     OrientableCoord coord  = oriLayout->createCoord(prelimX[v]+modifierX,
-                                                   posYbyLevel[depth], 0);        
+                                                   depth * spacing, 0);        
     oriLayout->setNodeValue(v,coord);
     Iterator<node>* itNode = getChildren(v);
     while (itNode->hasNext())

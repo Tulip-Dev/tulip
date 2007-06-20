@@ -278,7 +278,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
-  tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
+  tmpCoord.set(x+(*p)[n], -y, 0);
   layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
@@ -288,7 +288,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
       int decalLevel = level;
       int tmp = lengthMetric->getEdgeValue(ite);
       while(tmp>0) {
-	decalY += maxLevelSize[decalLevel]+spacing;
+	decalY += spacing;
 	decalLevel++;
 	tmp--;
       }
@@ -298,7 +298,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
   else {
     node itn;
     forEach(itn, tree->getOutNodes(n)) {
-      calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+spacing, 
+      calcLayout(itn,p, x+(*p)[n], y + spacing, 
 		 level+1, maxLevelSize);
     }
   }
@@ -309,19 +309,17 @@ bool TreeReingoldAndTilfordExtended::run() {
   stdext::hash_map<node,double> posRelative;
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));
-  sizes = graph->getProperty<SizeProperty>("viewSize");
+  if (!getNodeSizePropertyParameter(dataSet, sizes))
+    sizes = graph->getProperty<SizeProperty>("viewSize");
+  getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
   lengthMetric = 0;
-  spacing = 64.0;
-  nodeSpacing = 18.0;
   ortho = true;
   useLength = false;
   bool boundingCircles = false;
   if (dataSet!=0) {
     useLength = dataSet->get("edge length", lengthMetric);
-    getNodeSizePropertyParameter(dataSet, sizes);
     dataSet->get("orthogonal", ortho);
-    getSpacingParameters(dataSet, nodeSpacing, spacing);
     dataSet->get("bounding circles", boundingCircles);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
@@ -365,7 +363,14 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   map<int,double> maxSizeLevel;
   map<node, int> levels;
-  TreeLevelSizing(startNode, maxSizeLevel,0, levels);
+  TreeLevelSizing(startNode, maxSizeLevel, 0, levels);
+  // check if the specified layer spacing is greater
+  // than the max of the minimum layer spacing of the tree
+  for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
+    float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
+    if (minLayerSpacing + nodeSpacing > spacing)
+      spacing = minLayerSpacing + nodeSpacing;
+  }
   
   list<LR> *tmpList = TreePlace(startNode,&posRelative);
   delete tmpList;
@@ -384,7 +389,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
     map<int,double>::iterator itas = maxSizeLevel.begin();
     for (;itas!=maxSizeLevel.end(); ++itas) {
-      levelCoord[itas->first] = itas->second;
+      levelCoord[itas->first] = 0;
     }
     for (int i=1; i<itos->first; ++i) {
       levelCoord[i] += levelCoord[i-1] + spacing;
