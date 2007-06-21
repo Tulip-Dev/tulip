@@ -27,23 +27,65 @@
         </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
-        <para>Each graph can be modified with algorithms for the layout, the set of selected elements, the size of nodes, the value attributed to an element (node or edge) named metric, the colors. An other advantage of <application>Tulip</application> is that it is easy to add a new algorithm in the structure; this way, it is able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Algorithms</code> menu. Several categories are in there : Selection, Color, Layout, Measure, Size, General. They modify the properties of the graph elements.
-        </para>
+		&Algorithms;
     </sect1>
     <sect1 id="graph-properties"><title>Properties of graph</title>
         <para>In <application>Tulip</application>, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign nodes values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
 
         <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
+	<sect2 id="list-properties"><title>List of Properties</title>
+	<para> Following is a list of properties :</para>
+	<itemizedlist>
+		<listitem><code>viewBorderColor :</code>
+			Color of the border of an edge or a node.
+		</listitem>
+		<listitem><code>viewBorderWidth :</code>
+			Width of the border of an edge or a node.
+		</listitem>
+		<listitem><code>viewColor :</code>
+			Color of an edge or a node.
+		</listitem>
+		<listitem><code>viewLabel :</code>
+			Label of an edge or a node.
+		</listitem>
+		<listitem><code>viewLabelColor :</code>
+			Color label of an edge or a node.
+		</listitem>
+		<listitem><code>viewLabelPosition :</code>
+			Label position (x,y,z) of an edge or a node.
+		</listitem>
+		<listitem><code>viewLayout :</code>
+			Position (x,y,z) of an edge or a node.
+		</listitem>
+		<listitem><code>viewMetric :</code>
+			Metric is the result value of an measure ( <xref linkend="Measure" /> ) algorithm.
+		</listitem>
+		<listitem><code>viewRotation :</code>
+			Rotation (0 to 360) of a node  or an edge
+		</listitem>
+		<listitem><code>viewSelection :</code>
+			Selection equals true if the node or edge is selected. False if it is not.
+		</listitem>
+		<listitem><code>viewShape :</code>
+			Shape of a node or a graph.
+		</listitem>
+		<listitem><code>viewSize :</code>
+			Size (height, width, depth) of a node or an edge.
+		</listitem>
+		<listitem><code>viewTexture :</code>
+			Texture will replace the color background of the node.
+		</listitem>
+	</itemizedlist>
+	</sect2>
+	<sect2 id="create-property"><title>Creating a new Property</title>
+		<para> 1. In the info editor, click New.</para>
+		<para> 2. Select a type of property. </para>
+		<para> 3. Name your new property.</para>
+	</sect2>
     </sect1>
-    <sect1 id="hierarchy"><title>Hierarchy</title>
-        <para><application>Tulip</application> provides a system for the management of the hierarchy of graph. The hierarchy subwindow displays the existing instances of subgraph or group with their relationships, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a popup menu is displayed, it allows to manage the instances of cluster : remove, clone, create subgraph.</para>
-        <sect2 id="subgraph"><title>SubGraphs</title>
-         <para>A graph can have several parts of itself : these are stored in the subgraph instances. Some clustering algorithms can made subgraphs. A subgraph share its elements with the graph, it is just a part of the graph. It is possible to add properties for the subgraph only or to use the inherited properties.</para>
-        </sect2>
-        <sect2 id="group"><title>Groups</title>
-            <para>Some graph can be a subgraph of an other graph. This kind of hierarchy enables to assign a graph to a node. Then, you can go inside the node to show the metagraph.</para>
-        </sect2>
+     <sect1 id="hierarchy"><title>Hierachy</title>
+		&Subgraphs;
     </sect1>
     <sect1 id="stats-panels"><title>Statistics Panel (not available in standard version)</title>
         <para><application>Tulip</application> also provides a simple statistics interface which allows the user to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). Finally, the clustering is performed from a clustering plane, specified by the user with a plane equation.</para>
@@ -65,5 +107,4 @@
         </para>
         <para>In a future version of Tulip, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to allow the user to organize the content of the labels.</para>
     </sect1>
-    
 </chapter>

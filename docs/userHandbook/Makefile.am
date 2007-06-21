@@ -1,6 +1,6 @@
 EXTRA_DIST = *.docbook images/*.png
 
-DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook tutorials.docbook
+DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook algorithms.docbook subgraphs.docbook tutorials.docbook
 
 install-data-am :
 	if test -d html ; then \

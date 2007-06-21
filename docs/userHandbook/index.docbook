@@ -5,6 +5,8 @@
 <!ENTITY Tutorials SYSTEM "tutorials.docbook">
 <!ENTITY Graph_Interface SYSTEM "graph_interface.docbook">
 <!ENTITY Functions SYSTEM "functions.docbook">
+<!ENTITY Algorithms SYSTEM "algorithms.docbook">
+<!ENTITY Subgraphs SYSTEM "subgraphs.docbook">
 ]>
 <book><title>Tulip User Manual</title>
 
