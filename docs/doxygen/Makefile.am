@@ -95,25 +95,25 @@ man-plugins.doxygen: general general-man
 	cat general-man >> $@
 
 profile.dcf: ../common/CatalogManager.properties dox-profile.xsl tulip-plugins.tag
-	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
-	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver \
 	-o $@ tulip-plugins.tag  dox-profile.xsl
 
 tulipPlugins.html: ../common/CatalogManager.properties dox-plugins.xsl tulip-plugins.tag
-	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
-	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver \
 	-o $@ tulip-plugins.tag  dox-plugins.xsl
 
 allPlugins.html: ../common/CatalogManager.properties dox-html.xsl tulip-plugins.tag
-	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar"\
+	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	 com.icl.saxon.StyleSheet \
-	-x org.apache.xml.resolver.tools.ResolvingXMLReader\
+	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver \
 	-o $@ tulip-plugins.tag dox-html.xsl
