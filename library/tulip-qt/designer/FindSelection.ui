@@ -197,73 +197,6 @@
             <property name="title">
                 <string>Options</string>
             </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>setToSelectionOpt</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>60</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Copy</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>addToSelectionOpt</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>80</x>
-                        <y>20</y>
-                        <width>65</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Add</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>rmvFromSelectionOpt</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>145</x>
-                        <y>20</y>
-                        <width>85</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Remove</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>keepSelectionOpt</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>235</x>
-                        <y>20</y>
-                        <width>105</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Intersection</string>
-                </property>
-            </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
@@ -290,6 +223,85 @@
                         <width>110</width>
                         <height>27</height>
                     </rect>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>keepSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>250</x>
+                        <y>20</y>
+                        <width>105</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Intersect</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Deselect the elements of the current selection which are not in the graph elements found</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>rmvFromSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>20</y>
+                        <width>85</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Remove</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Remove the graph elements found from the current selection</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>setToSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>70</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Replace</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Replace the current selection by the graph elements found</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>addToSelectionOpt</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>20</y>
+                        <width>65</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Add</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Add the graph elements found to the current selection</string>
                 </property>
             </widget>
         </widget>
