@@ -1,0 +1,100 @@
+<para><application>Tulip</application> provides a system for the management of graphs hierarchies. The hierarchy sub-window displays the existing instances of sub graphs or groups with their relationships, the user can change the current view of the graph by clicking directly on the tree. When clicking the right mouse button, a pop-up menu is displayed, it allows to manage the instances of cluster : remove, clone, create sub graph.</para>
+<sect2 id="hierarchy-defs"><title>Definitions :</title>
+	<sect3 id="subgraph"><title><code>Sub graphs :</code></title>
+        <para>A graph can have several parts of itself : these are stored in the sub graph instances. Some clustering algorithms can made sub graphs. A sub graph share its elements with the graph, it is just a part of the graph. It is possible to add properties for the sub graph only or to use the inherited properties.</para>
+        </sect3>
+        <sect3 id="group"><title><code>Groups :</code></title>
+            <para>Some graph can be a sub graph of an other graph. This kind of hierarchy enables to assign a graph to a node.</para>
+        </sect3>
+	<sect3 id="meta-graph"><title><code>Meta-graph :</code></title>
+		<para>A meta-graph is a graph that contains meta-nodes.</para>
+	</sect3>
+	<sect3 id="meta-node"><title><code>meta-node :</code></title>
+		<para>A meta-node, is a node that contain a group. A meta node can contain / refer to the root graph (Fractal effect). </para>
+	</sect3>
+	<sect3 id="screen-shot-hierarchy"><title><code>Screen shots :</code></title>	
+		<para>Following is an over view of a graph hierarchy :</para>
+		<para>The graph :</para>
+        	<graphic fileref="images/hierarchy_defs_graph_overview.png" />
+		<para>The sub graph and the meta-node :</para>	
+		<graphic fileref="images/hierarchy_defs_subgraph_metagraph_metanode.png" />
+		<para>The group :</para>
+		<graphic fileref="images/hierarchy_defs_group.png" />
+	</sect3>
+</sect2>
+<sect2 id="hierarchy-create"><title>Creating sub graphs or Groups :</title>
+	<sect3 id="hierarchy-create-sub graph"><title>Creating a sub graph :</title>
+	<para>To create a sub graph follow these steps :</para>
+		<itemizedlist>
+			<listitem><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
+				      To select the edges that are between the selected nodes use the "Induced Sub-graph" algorithm.
+			</listitem>
+			<listitem>
+				<para>
+				<code>2 .</code> Create a sub graph  : From the menu, Edit => create Sub Graph, or from the keyboard, Control + Shift + G. Give it a name.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>You will be able to find your new sub graph in the hierarchy onglet of the info editor window.</para>
+	</sect3>
+	<sect3 id="hierarchy-create-group"><title>Creating a group :</title>
+	<para>To create a group follow these steps :</para>
+		<itemizedlist>
+			<listitem><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
+				      To select the edges that are between the selected nodes use the "Induced Sub-graph" algorithm.
+			</listitem>
+			<listitem>
+				<para>
+				<code>2 .</code> Create a group  : From the menu, Edit => create group, or from the keyboard, Control + G. A warning saying "Grouping can not be done on the root graph a sub graph will be created" may pop up, if it does, just click OK.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>You will be able to find your new group in the hierarchy onglet of the info editor window.</para>
+		<para>Severals sub graphs will be created :</para> 
+			<itemizedlist>
+				<listitem><para>A copy of the root graph called "groups" containing a meta-graph with a new meta-node pointing to our group.</para>
+				</listitem>
+			 	<listitem><para>A sub graph which is our new group.</para></listitem>
+			</itemizedlist>
+	</sect3>
+</sect2>
+<sect2 id="hierarchy-del"><title>Deleting / Ungrouping a sub graph or a Group :</title>
+	 <sect3 id="hierarchy-del-group"><title>Groups :</title>
+	 	<sect4 id="hierarchy-del-group"><title>Delete .</title>
+	 	<para>To delete a group, left click on its name (in the Info editor) => delete </para>
+	 	<note>By deleting a group, all nodes in this group will be deleted as well, whereas the meta-node will still exist.</note>
+	 	</sect4>
+	 	<sect4 id="hierarchy-ungroup-group"><title>Ungroup .</title>
+	 	<para>To ungroup a group, select it, Left click => Ungroup </para>
+	 	<note>By ungrouping a group, all the layouts properties of the group's nodes will be applied to the root graph. The sub graphs created with the group wont be deleted.</note>
+	 	</sect4>
+	 </sect3>
+	  <sect3 id="hierarchy-del-group"><title>Sub graphs :</title>
+	 	<para>To delete a sub graph, left click on its name (in the Info editor) => delete.</para>
+	 	<note>Deleting a sub graph has no effects on the root graph.</note>
+	 	
+	 </sect3>
+</sect2> 
+<sect2 id="hierarchy-uses"><title>Using sub graphs or Groups :</title>
+	<sect3 id="hierarchy-uses-subs"><title>Sub graphs</title>
+	<sect4 id="hierarchy-uses-move"><title>Moving a node  in a sub graph.</title>
+		<para>If you move a node in a sub graph, the same node will be moved in the root graph.</para>
+	</sect4>
+	<sect4 id="hierarchy-uses-algorithm"><title>Using an algorithm on a sub graph</title>
+		<para>If you use a layout algorithm on a sub graph, all changed layout properties will be applied to the root graph.</para>
+		<para>If you use a Measure algorithm on a sub graph, New local properties will be created. Those properties wont be applied to the root graphs.</para>
+	</sect4>
+	</sect3>
+	<sect3 id="hierarchy-uses-groups"><title>Groups :</title>
+		Changes on groups, wont be applied to the root graph unless you ungroup the group.
+	</sect3>
+</sect2>
+<sect2 id="hierarchy-algos"><title>Algorithms that creates subgraphs :</title>
+	You can find those algorithms in the menu Algorithm => General.
+	<itemizedlist>
+		<listitem>Equal Value.<xref linkend="equal-value"/></listitem>
+		<listitem>Hierarchical.<xref linkend="hierarchical-general"/></listitem>
+		<listitem>Quotient Clustering.<xref linkend="quotient-clustering"/></listitem>
+		<listitem>Strenght.<xref linkend="strength-general"/></listitem>
+	</itemizedlist>
+</sect2>
