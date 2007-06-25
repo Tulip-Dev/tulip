@@ -171,12 +171,12 @@ namespace {
     HTML_HELP_DEF( "values", "true, false" ) \
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
-    "If true the strahler number will be computed for each node, it means that a spanning tree will be recomputed for each nodes complexity o(n^2)." \
+    "If true, for each node the strahler number will be computed from a spanning tree having that node as root: complexity o(n^2). If false the strahler number will be computed from a spanning tree having the heuristicly estimated graph center as root." \
     HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("Values", "all <BR> registers<BR> stacks") \
+    HTML_HELP_DEF("Values", "all <BR> ramification<BR> nested cycles") \
     HTML_HELP_DEF( "default", "all" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the type of computation"	\
@@ -184,7 +184,7 @@ namespace {
   };
 }
 #define COMPUTATION_TYPE "Type"
-#define COMPUTATION_TYPES "all;registers;stacks;"
+#define COMPUTATION_TYPES "all;ramification;nested cycles;"
 #define ALL 0
 #define REGISTERS 1
 #define STACKS 2
