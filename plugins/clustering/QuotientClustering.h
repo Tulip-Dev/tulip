@@ -13,7 +13,6 @@ public:
   bool run();
   bool check(std::string &);
   void reset();
-
 };
 /*@}*/
 #endif
