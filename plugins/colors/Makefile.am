@@ -9,7 +9,7 @@ plugins_LTLIBRARIES = \
 
 pluginsdir = $(libdir)/tlp
 
-libMetricColorMapping_@VERSION@_la_SOURCES = MetricMapping.cpp
+libMetricColorMapping_@VERSION@_la_SOURCES = MetricMapping.cpp EnumColorValuesMapping.cpp
 
 INCLUDES = @TULIP_INCLUDE@
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@
