@@ -5,6 +5,7 @@
 #include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/ExtendedClusterOperation.h>
 
 #include "QuotientClustering.h"
 
@@ -330,22 +331,13 @@ bool QuotientClustering::run() {
     for ( it = edgesToDel.begin(); it!=edgesToDel.end(); ++it)
       quotientGraph->delEdge(*it);
   }
+  quotientGraph->delLocalProperty("opposite edge");
 	    
   //compute layout according to the layouts of subgraphs
   SizeProperty *size  = quotientGraph->getProperty<SizeProperty>("viewSize");
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
-    node n = itN->next();
-    LayoutProperty* graphlayout = sg->getProperty<LayoutProperty>("viewLayout");
-    SizeProperty* graphsize = sg->getProperty<SizeProperty>("viewSize");
-    DoubleProperty* graphrot = sg->getProperty<DoubleProperty>("viewRotation");
-    pair<Coord, Coord> bboxe = tlp::computeBoundingBox(sg, graphlayout, graphsize, graphrot);
-    Coord max = bboxe.first;
-    Coord min = bboxe.second;
-    Coord center = (max + min) / 2.0;
-    graphlayout->setNodeValue(n, center);
-    Coord nodeSize = (max - min);
-    size->setNodeValue(n, Size(nodeSize[0], nodeSize[1], nodeSize[2]));
+    updateGroupLayout(sg, quotientGraph, itN->next());
   } delete itN;
 
   if (dataSet!=0) {
