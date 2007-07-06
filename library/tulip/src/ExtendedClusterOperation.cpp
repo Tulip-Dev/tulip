@@ -40,7 +40,7 @@ void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, GraphProp
   } delete it;
 }
 //====================================================================================
-void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
+void tlp::updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *graphRotation = graph->getProperty<DoubleProperty>(rotationProperty);

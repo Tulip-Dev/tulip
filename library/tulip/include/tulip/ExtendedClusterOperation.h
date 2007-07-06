@@ -64,6 +64,12 @@ namespace tlp {
    *  Return a subgraph induced by a set of nodes
    */
   TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &, std::string name = "induced subgraph");
+
+  /**
+   * Update the layout of metanode in cluster according to the layout of underlying nodes in graph
+   *
+   */
+  TLP_SCOPE void updateGroupLayout(Graph *graph, Graph *cluster, node metanode);
 }
 
 #endif
