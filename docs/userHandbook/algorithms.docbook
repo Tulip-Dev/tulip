@@ -3,13 +3,10 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 <sect2 id="Selection"><title>Selection Algorithms</title>
                 <sect3 id="induced-sub-graph"><title>Induced Sub-Graph :</title>
                        		<para>The induced Sub-Graph algorithm can be used to obtain the edges that are between selected nodes.
-				In other words, if you have selected 2 sets of nodes (Set1, Set2), the algorithm will return the sub-graph that link Set1 and Set2.
 				</para>
 				Here is an example :
 				<para><code>Before :</code><graphic fileref="images/algos_induced_1.png"/></para>
 				<para><code>After :</code><graphic fileref="images/algos_induced_2.png"/></para>
-				<para><code>AUTHORS :</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 				<ulink url="../../doxygen/allPlugins.html#InducedSubGraphSelection">Plug in documentation</ulink>
                 </sect3>
                 <sect3 id="kruskal"><title>Kruskal :</title>
@@ -18,47 +15,43 @@ Each graph can be modified with algorithms for the layout, the set of selected e
                         	<para>It is divided in several steps :</para>
                         	<itemizedlist> 
 					<listitem>
-					Make a list of the edges starting with the "Shortest" one, ending with the "biggest one".
+						Make a list of the edges starting with the "shortest" one, ending with the "longest one".
                         		</listitem>
 					<listitem>
-					Add all edges with their from/to nodes to the tree as long as you don't have any cycle.
+						Add all edges with their from/to nodes to the tree as long as you don't have any cycle.
                         		</listitem>
 				</itemizedlist>
 				
                         	Let's take an example :
                         	We have a set of airports, Bordeaux, Paris, L.A ..., the nodes, and a set of Airports connections, the edges. 
                         	<graphic fileref="images/algos_kruskal_1.png" />
-                        	As you can see, this makes a very complicated Graph. As edges do not all have the same Metric, some of them are not really important (the ones with high metric). The algorithm of kruskal will highlight the ones that we can't remove.
+                        	As you can see, this makes a very complicated Graph. As edges do not all have the same Metric, some of them are not really important (the ones with a high metric). The algorithm of kruskal will highlight the ones that we can't remove.
                         	<graphic fileref="images/algos_kruskal_2.png" />
                         	By creating a sub-graph we get a simple graph which is much more easy to read.
                         	<graphic fileref="images/algos_kruskal_3.png" />
 				Please visit <ulink url="http://en.wikipedia.org/wiki/Kruskal%27s_algorithm" > Wikipedia : Kruskal's algorithm </ulink> for more details.
-				<para><code>AUTHORS</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#Kruskal">Plug in documentation</ulink>
+				<para>
+				<ulink url="../../doxygen/allPlugins.html#Kruskal">Algorithm documentation</ulink></para>
 		</sect3>
                 <sect3 id="loop-selection"><title>Loop Selection :</title>
-                        	<para>This selection algorithm is able to find loops in a graph.
+                        	<para>This selection algorithm is able to select the loops of a graph.
  				A loop is an edge that has the same source and target.</para>
-				<para><code>AUTHORS</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#LoopSelection">Plug in documentation</ulink>	
+				<para>
+				<ulink url="../../doxygen/allPlugins.html#LoopSelection">Algorithm documentation</ulink>	</para>
                 </sect3>
                 <sect3 id="multiple-edge"><title>Multiple Edge :</title>
-                        	<para>This selection algorithm highlights the multiple-edges and parallel-edges in a graph.</para> 
+                        	<para>This selection algorithm highlights the multiple-edges also named parallel-edges in a graph.</para> 
                         	<para>Two edges are parallel only if they both have the same target and same source.
 				</para>
-				<para><code>AUTHORS :</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#MultipleEdgeSelection">Plug in documentation</ulink>
+				<ulink url="../../doxygen/allPlugins.html#MultipleEdgeSelection">Algorithm documentation</ulink>
                 </sect3>
                 <sect3 id="reachable-sub-graph"><title>Reachable Sub-Graph :</title>
-                        	This selection algorithm enables to find all nodes and edges at a fixed distance of a set of nodes. It takes three parameter :
+                        	This selection algorithm enables to find all nodes and edges at a fixed distance of a set of nodes. It takes three parameters :
 				
 				<itemizedlist>
-					<listitem><code>Distance</code> : Number of edges to follow.</listitem>
+					<listitem><code>Distance</code> : number of edges to follow.</listitem>
 					<listitem><code>Direction</code> : 0 means directed, 1 reverse directed, 2 undirected </listitem>
-					<listitem><code>Starting nodes</code> : the selected nodes of this selection proxy will be used as starting nodes.
+					<listitem><code>Starting nodes</code> : the selected nodes of this selection property ( boolean ) will be used as starting nodes.
 					</listitem>
 				</itemizedlist>
 				 In the following example, 'distance' equals to 1, 'direction' equals 0, and the starting node is the one in the center.
@@ -70,34 +63,28 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 				 <code> After </code> :
 				 	<graphic fileref="images/algos_reachable_2.png" />
 				 </para>
-				<para><code>AUTHORS :</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#ReachableSubGraphSelection">Plug in documentation</ulink>
+				<ulink url="../../doxygen/allPlugins.html#ReachableSubGraphSelection">Algorithm documentation</ulink>
                 </sect3>
                 <sect3 id="spanning-dag"><title>Spanning Dag :</title>
 				<para> This selection algorithm can be used to select a sub-graph without any cycle. </para>
-				<para><code>AUTHORS</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#SpanningDagSelection">Plug in documentation</ulink>
+				<ulink url="../../doxygen/allPlugins.html#SpanningDagSelection">Algorithm documentation</ulink>
                 </sect3>
                 <sect3 id="spanning-forest"><title>Spanning Forest :</title>
 				<para>This algorithm can be used to create a set of spanning trees out of the graph.</para>
 				A tree is a special kind of graph that has the following properties :
 				<itemizedlist>
 					 <listitem><para> Has a root (a starting point node).</para></listitem>
-					 <listitem> <para>A node have Severals sons and their is only one edges targeting each sons.</para></listitem>
+					 <listitem> <para>A node have severals sons and their is only one edges targeting each sons.</para></listitem>
 					 <listitem><para> Doesn't have any cycle.</para></listitem>
  					 <listitem> A leaf is an "ending node". </listitem>
 				</itemizedlist>
-				<para><code>AUTHORS</code></para>
-				<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-				<ulink url="../../doxygen/allPlugins.html#SpanningTreeSelection">Plug in documentation</ulink>
+				<ulink url="../../doxygen/allPlugins.html#SpanningTreeSelection">Algorithm documentation</ulink>
                 </sect3>
 </sect2>
 <sect2 id="color-algos"><title>Color Algorithms :</title>
         <sect3 id="mertric-mapping"><title>Metric Mapping :</title>
-		<para>The metric mapping algorithm can be used to re-color your graph after using a measure ( <xref linkend="Measure" /> ) algorithm.</para>
-		This Algorithm takes 5 parameter :
+		<para>The metric mapping algorithm can be used to re-color the nodes of the graph after using a measure ( <xref linkend="Measure" /> ) algorithm.</para>
+		This Algorithm takes 5 parameters :
 		<itemizedlist>
 			<listitem><code>Property </code> :
 				Property is a metric value. It is used to affect scalar values to graph items.
@@ -121,28 +108,27 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 			</listitem>
 		</itemizedlist>
 		<para>Let's take an example :</para>
-		As you can see here is a graph where no Metric values has been computed.
+		As you can see here is a graph where no metric values has been computed.
 		<graphic fileref="images/algos_metricmapping_1.png" />
-		After applying the degree algorithm the graph gets colors !
+		After applying the degree algorithm, the graph gets colors !
 		<graphic fileref="images/algos_metricmapping_2.png" />
-		If you do not have any colors, see if you have checked the "Color interpolation"  in the rendering parameters window ( Control+R) .
-		After applying the Metric mapping algorithm (type checked, colormodel equaled to 1 , Color1, a kind of red and color2 a kind of green ) we will obtain the following graph.
+		If you do not have any colors (on edges), see if you have checked the "Color interpolation"  in the rendering parameters window ( <keycap>CTRL+R</keycap>) .
+		After applying the "Metric mapping" algorithm ("type" checked, "colormodel" equaled to 1 , "Color1", a kind of red and "Color2" a kind of green ) we will obtain the following graph.
 		<graphic fileref="images/algos_metricmapping_3.png" />
         </sect3>
 </sect2>
 <sect2 id="Measure"><title>Measure</title>
-	Measure algorithms are used to compute different metrics (on edges or nodes).
+	Measure algorithms are used to compute different metrics (on edges or nodes). The computed values are assigned to the viewMetric property.
         <sect3 id="graph" ><title>Graph :</title>
                                         <sect4 id="betweenness-centrality"><title>Betweenness Centrality :</title>
-						Betweenness is a centrality measure of a node within a graph. Nodes that occur on many shortest paths between other nodes have higher betweenness than those that do not.
+						Betweenness is a centrality measure of a node within a graph. Nodes that occur on many shortest paths between other nodes, have higher betweenness metric than those that do not.
 						As this algorithm will compute a global measure, it can take a long time to finish.
-						See <ulink url="http://en.wikipedia.org/wiki/Betweenness"> Widipedia : Betweenness</ulink> for more details.
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#BetweennessCentrality">Plug in documentation</ulink>
+						See <ulink url="http://en.wikipedia.org/wiki/Betweenness"> Widipedia : Betweenness</ulink> for more details.	
+						<ulink url="../../doxygen/allPlugins.html#BetweennessCentrality">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="cluster"><title>Cluster :</title> 
-						<para>The cluster algorithm is a measure algorithm that can determine whether or not a graph is a "small-world network".</para>
+                                        	<para>This algorithm can only be used on simple graphs (graphs with no loops).</para>
+						<para>The cluster algorithm is a measure algorithm that can determine whether or not a graph is a "small-world network". The clustering measure is a local measure that gives the connections rate of a node and its neighbors.</para>
 						<para>Let's take an example :</para>
 						<graphic fileref="images/algos_cluster_1.png" />
 						<para>On this graph, and by looking at the clustering measure, you can see 2 "communities" (nodes in blue)  and a hub (node in yellow).the hub is the only way to connect the two communities.</para>
@@ -150,64 +136,43 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						<ulink url="../../doxygen/allPlugins.html#ClusterMetric">Plug in documentation</ulink>
                                         </sect4>
                                         <sect4 id="Degree"><title>Degree :</title> 
-						This algorithm will save the degree of each nodes in its viewMetric property.
-						It takes two parameter :
+						This algorithm will save the degree of each node in its viewMetric property.
+						It takes two parameters :
 						<itemizedlist>
-							<listitem><para>Type  : Is the type of degree you want to compute. InOut : Edges that comes onto the node plus the one going away. In : Edges that comes onto the node. Out : Edges that are going away from the node.</para>
+							<listitem><para>Type  : Is the type of degree you want to compute. In : Edges that comes onto the node. Out : Edges that are going away from the node. InOut : Using both (in and out). </para>
 							</listitem> 
-							<listitem><para>Metric : This parameter can take four values: None, 'viewBorderWidth', 'viewMetric' and 'viewRotation'. If you choose none, the degree of the node will be the sum of the edges. If you choose the 'viewMetric' value, degree of the node will be the sum of edges wiewMetric property. As of viewBorderWidth and viewRotation.</para>
+							<listitem><para>Metric : This parameter can take all double properties, but by default it will take : None, 'viewBorderWidth', 'viewMetric' and 'viewRotation'. If you choose none, the degree of the node will be the sum of the edges. If you choose the 'viewMetric' value, degree of the node will be the sum of edges wiewMetric property. As of viewBorderWidth and viewRotation.</para>
 							</listitem> 
 						</itemizedlist>
                                         </sect4>
                                         <sect4 id="eccentricity"><title>Eccentricity :</title>
 						<para>
-						This plug in compute the eccentricity of each node, Eccentricity is the maximum distance to go from a node to all others. In this version the value is normalized (1 means that a node is in the center of the network, 0 means that a node is the more eccentric in the network).
-						The eccentricity will be saved in the viewMetric property of each nodes.
+						This plug in compute the eccentricity of each node, eccentricity is the maximum distance to go from a node to all others. In this version the value is normalized (1 means that a node is in the center of the network, 0 means that a node is the more eccentric in the network).
+						The eccentricity will be saved in the viewMetric property of each node.
 						</para>
-						<para><code>NOTES :</code></para>
-						<para>The complexity of the algorithm is O(|V| * |E|) time and O(1) space.</para> 
-						<para><code>AUTHORS</code></para>
-						<para>David Auber University Bordeaux I France: Email: auber@tulip-software.com Tamara Munzner, University of British Columbia Canada. Email: tmm@cs.ubc.ca</para>
-						<ulink url="../../doxygen/allPlugins.html#EccentricityMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#EccentricityMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="strahler"><title>Strahler :</title>
-						The Strahler algorithm is very powerfull.
-						It can for example point out important path in a graph. By calculating for each nodes its degree of ramification.
-						Following is a graph with only one path. You can see that each nodes have the same Strahler number (1).
+						The Strahler algorithm is very powerful.
+						It can for example point out important path in a graph, by computing for each node the degree of ramification of its (spanning) sub-tree.
+						Following is a graph with only one path. You can see that each node have the same Strahler number (1).
 						<graphic fileref="images/algos_strahler_1.png" />
 						But on this graph, more the degree of ramification is important and more the number of strahler will be high.
 						<graphic fileref="images/algos_strahler_2.png" />
 						Note that this graph could represent anything, a program (inclusion of sources files), or a city road traffic.
- 						<para><code>Algorithm :</code></para>
+ 						<para><code>Parameters :</code></para>
 						<para></para>
 						<itemizedlist>
 							<listitem><code>All nodes :</code>
-							If checked, the algorithm will be applied to all nodes. If not checked, the algorithm will choose a node (a source node) and will apply the algorithm to this node only.</listitem> 
-							<listitem><code>Type :</code>This parameter can take 3 different values : Register which will force the algorithm to give an indication on the degree of ramification (for trees), Stack, that will force the algorithm to give an indication on the number of cycles, and at last, All, that will ask the algorithm to use both Registers and stack. </listitem> 
+							 If not checked, the algorithm will choose a node (a source node) and will apply the algorithm to this node only. If checked, the algorithm will be applied to all nodes.</listitem> 
+							<listitem><code>Type :</code>This parameter can take 3 different values : Register which will force the algorithm to give an indication on the degree of ramification (for trees), Stack, that will force the algorithm to give an indication on the number of nested cycles (for graphs), and at last, All, that will ask the algorithm to use both registers and stack. </listitem> 
 						</itemizedlist>
 						<para>For more information please visit <ulink url="http://en.wikipedia.org/wiki/Strahler_Stream_Order" /></para>
-						<para><code>Published in :</code></para>
-						<para>A.N. Strahler , 
-						"Hypsomic analysis of erosional topography", 
-						"Bulletin Geological Society of America 63,pages 1117-1142.", 
-						1952. </para>
-						<para>Extended to graphs in :</para>
-						<para>D. Auber, "Using Strahler numbers for real time visual exploration of huge graphs, ICCVG, International Conference on Computer Vision and Graphics, pages 56-69, 2002, September. </para>
-						<para>D. Auber, M. Delest., J.M. Fedou, J.P. Domenger, and P. Duchon. New Strahler numbers for rooted plane trees. In Michael Drmota, Philippe Flajolet, Danièle Gardy, and Bernhard Gittenberger, editors, Proceedings of the Third Colloquium on Mathematics and Computer Science, Trends in Mathematics, pages 203-215, Wien, 2004.</para>
-						<para>D. Auber, M. Delest, and Y. Chiricota. Strahler based graph clustering using convolution. In 8th International Conference on Information Visualisation, IV, pages 44-51. IEEE Computer Society, 2004.</para>				
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 						<ulink url="../../doxygen/allPlugins.html#StrahlerMetric">Plug in documentation</ulink>
                                         </sect4>
                                         <sect4 id="strength" ><title>Strength :</title>
+                                        	<para>Graph must be simple (no loops).</para>
 						<para>This algorithm will compute the strength of edges. Every edges with small values are important in the way that their removal can disconnect two connected components. Every edges with a high value metric may belong to a strongly connected component.</para>
-						<para><code>Published in :</code></para>
-						<para>Y. Chiricota. F.Jourdan, an G.MelanÃ§on 
-						"Software component capture using graph clustering", 
-						"IWPC", 
-						2002. </para>
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 						<ulink url="../../doxygen/allPlugins.html#StrengthMetric">Plug in documentation</ulink>
                                         </sect4>
                                 </sect3>
@@ -230,28 +195,24 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						</itemizedlist>
 						<graphic fileref="images/algos_biconnected_2.png" />
 						The intersection of those 3 biconnected components is Berlin and Paris. Which means that  Berlin and Paris are two articulation points of our graph.
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 						<ulink url="../../doxygen/allPlugins.html#BiconnectedComponnent">Plug in documentation</ulink>
                                         </sect4>
                                         <sect4 id="connected-component"><title>Connected Component: </title>
 						<para>A connected component is a maximal connected subgraph.
 						Two nodes are in the same connected component if and only if there exists a path between them.</para>
 						<para>
-						After running the algorithm, the number of the connected component of a node is saved in his viewMetric property. It is the same for the edges.</para>
+						After running the algorithm, the index of the connected component of a node is saved in its viewMetric property. It is the same for the edges.</para>
 
 						For more details please visit : 
 						<ulink url="http://en.wikipedia.org/wiki/Connected_component_(graph_theory)" >Wikipedia:Connected Component</ulink>
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#ConnectedComponent">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#ConnectedComponent">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="connected"><title>Connected Tree Component :</title>
-						<para>The connected tree component algorithm can be useful to find parts of a graph that are tress.
+						<para>The connected tree component algorithm can be useful to find parts of a graph that are trees.
 						Here is an example :</para>
 						Following is a graph with on the left side, a tree. This graph forms a unique connected component.
 						<graphic fileref="images/algos_treecomponent_1.png" />
-						As you can see, the algorithm divided the graph into 2 components. The left component is the tree.
+						As you can see, the algorithm divided the graph into 2 components.
 						<graphic fileref="images/algos_treecomponent_2.png" />
 						<ulink url="../../doxygen/allPlugins.html#ConnectedAndTreeComponent">Plug in documentation</ulink>
                                         </sect4>
@@ -271,47 +232,33 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						</para>
 						<para><code>After </code> :
 						<graphic fileref="images/algos_strongconnect_2.png" /></para>
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
                                         </sect4>
         </sect3>
         <sect3 id="tree" ><title>Tree</title>
 				To use the following algorithms the graph has to be acyclic.
                                         <sect4 id="dag-level"> <title>Dag Level</title>
-						The dag level algorithm will compute the depth of each nodes, as on the following example :
+						The dag level algorithm will compute the depth of each node, as on the following example :
 						<graphic fileref="images/algos_daglevel_1.png" />
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#DagLevelMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#DagLevelMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="depth"><title>Depth</title>
-						The depth algorithm will compute for each nodes, the maximum number of edges to follow to find a leaf.
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#DagLevelMetric">Plug in documentation</ulink>
+						The depth algorithm will compute for each node, the maximum number of edges to follow to find a leaf.
+						<ulink url="../../doxygen/allPlugins.html#DagLevelMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="leaf"><title>Leaf</title> 
-						<para>The leaf algorithm will compute for each node its number of leaf.</para>
-						<para>
-							At start, each leaf receive the number 1.
-							Then, by going backward in the graph, every nodes receive the sum of all their sons
-						</para>
+						<para>The leaf algorithm will compute for each node its number of leaves.</para>
 						<para>
 						Here is an example :
 						<graphic fileref="images/algos_leaf_1.png" />
 						</para>
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#LeafMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#LeafMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="node"><title>Node</title>
-						The Node algorithm, will sum for each nodes the number of its children nodes plus him self.
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#NodeMetric">Plug in documentation</ulink>
+						The Node algorithm, will sum for each node the number of its children nodes plus him self.
+						<ulink url="../../doxygen/allPlugins.html#NodeMetric">Algorithm documentation</ulink>
 					</sect4>
                                         <sect4 id="path-length"><title>Path Length</title> 
-						This algorithm will count for each nodes the number of paths that goes through it.
+						This algorithm will count for each node the number of paths that goes through it.
 						<para>Here is an example :
 						<graphic fileref="images/algos_pathlength_1.png" />
 						</para>
@@ -319,101 +266,70 @@ Each graph can be modified with algorithms for the layout, the set of selected e
                                         <sect4 id="segment"><title>Segment</title>
 						<para>A segment, is a set of nodes that are all on one and only path. The graph showed on the left side of the example is a segment. </para>
 						<para>The segment algorithm will count, for all nodes, its number of edges without ramification.</para>
-						<para>Following are two graphs. On the left one you can see that the root "has" 3 edges without ramification. But, on the right graph all nodes (without considering leafs) have only 1 edge without ramification.</para>
+						<para>Following are two graphs. On the left one you can see that the root "has" 3 edges without ramification. But, on the right graph all nodes (without considering leaves) have only 1 edge without ramification.</para>
 						<graphic fileref="images/algos_segment_1.png" />
-						This algorithms can be useful to see how the graph is formed. Indeed, if the root has a small value, it will mean that the graph has a "good" ramification. But if the root has a high value, it will mean that the graph a lot of segments. 
+						This algorithm can be useful to see how the graph is formed. Indeed, if the root has a small value, it will mean that the graph has a "good" ramification. But if the root has a high value, it will mean that the graph a lot of segments. 
                                         </sect4>
                                         <sect4 id="tree-arity-max"><title>Tree Arity Max</title> 
-						<para>This plug-ins exists to obtain a uniform interface in the Tulip graph visualization software. To access to the degree of a node it is recommended to use directly the degree function available in each Graph.</para>
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#TreeArityMax">Plug in documentation</ulink>
+						<para>Compute the maximum outdegree of the nodes in the subtree induced by each node. To access to the degree of a node it is recommended to use directly the degree function available in each Graph.</para>
+						
+						<ulink url="../../doxygen/allPlugins.html#TreeArityMax">Algorithm documentation</ulink>
                                         </sect4>
  		</sect3>
                 <sect3 id="misc" ><title>Misc</title> 
                                         <sect4 id="id"><title>Id</title> 
-						The "id" algorithm will, for each nodes and edges, save their id number in their viewMetric Property.
-						For example, if we have a node called Node 9, his id number will be 9.
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#IdMetric">Plug in documentation</ulink>
+						The "id" algorithm will, for each node and edge, save their id number in their viewMetric Property.
+						For example, if we have a node called Node 9, its id number will be 9.
+						<ulink url="../../doxygen/allPlugins.html#IdMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="random"><title>Random</title>
-						Random will just save a random number (from 0 to 1) in the viewMetric property of each nodes and edges
-						<para><code>AUTHORS</code></para>
-						<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-						<ulink url="../../doxygen/allPlugins.html#RandomMetric">Plug in documentation</ulink>
+						Random will just save a random number (from 0 to 1) in the viewMetric property of each node and edges
+						<ulink url="../../doxygen/allPlugins.html#RandomMetric">Algorithm documentation</ulink>
                                         </sect4>
                 </sect3>
 </sect2>
 <sect2 id="layout"><title>Layout</title>
-	<para><code>Warning ! :</code> Some of the following algorithm have no effects if the option "Force Ratio" is checked.</para>
+	<para><code>Warning ! :</code> Some of the following algorithm have no effect if the option "Force Ratio" is checked.</para>
         <sect3 id="planar"><title>Planar</title> 
                 <sect4 id="3-connected"><title>3-Connected (Tutte)</title>
-			This algorithm can only be apply to 3-connected Graph. A graph G is said to be 3-connected if there does not exist a set of 2 nodes whose removal disconnects the graph.
-			<para><code>Published in :</code></para>
-			<para>W.T. Tutte, "How to Draw a Graph", "Proc. London Math. Soc.", "1963", pages 743-768.
-			</para>
-			<para><code>AUTHORS</code></para>
-			<para>David Auber University Bordeaux I France, Email : <email>auber@tulip-software.org</email></para>
+			<para>This algorithm can only be applied to 3-connected graphs. A graph G is said to be 3-connected if there does not exist a set of 2 nodes whose removal disconnects the graph. (Triangle Layout)</para>
 			<ulink url="../../doxygen/allPlugins.html#Tutte">Plug in documentation</ulink>
                 </sect4>
                 <sect4 id="mixed-model"><title>Mixed Model</title>
 			Create a planar sub-graph with polylines with a good angular resolution which will make the graph clear and easy to read.
-			
-			<para><code>Published in :</code></para>
-			<para>C. Gutwenger and P. Mutzel, 
-			"Planar Polyline Drawings with Good Angular Resolution", 
-			"Lecture Notes In Computer Science, Vol. 1547" 
-			"Proceedings of the 6th International Symposium on Graph Drawing," 
-			pages "167--182" 
-			1998 
-			</para>
-			<para><code>AUTHORS</code></para>
-			<para>S. Bardet, Romain Bourqui LaBRI, University Bordeaux I France, Email : <email> bourqui@labri.fr </email> </para>
-			<ulink url="../../doxygen/allPlugins.html#MixedModel">Plug in documentation</ulink>
+			<para>
+			<ulink url="../../doxygen/allPlugins.html#MixedModel">Plug in documentation</ulink></para>
                 </sect4>
         </sect3>
         <sect3 id="tree"><title>Tree</title> 
-		To represent a tree, a normal hierarchical layout is the easiest way to understand the tree structure. But this layout has a big weakness when the tree has a lot of nodes : it Doesn't effectively use the space where the tree is displayed.
-		That is why we need other layouts.
+		To represent a tree, a hierarchical layout is the easiest way to understand the tree structure. But this layout has a big weakness when the tree has a lot of nodes : it does not effectively use the space where the tree is displayed.
+		That is why we need different layouts.
                 <sect4 id="bubble-tree"><title>Bubble Tree</title>
-			The Bubble Tree algorithm can be use to change the layout of a tree. On the new layout, a node will be on the center of a circle, and his children will be on the circle.
+			The Bubble Tree algorithm can be use to change the layout of a tree. On the new layout, a node will be on the center of a circle, and its children will be on the circle.
 			This new layout has the following properties :
 			<itemizedlist>
 				<listitem>
-					The edges should not cross each others.
+					The edges should not cross each other.
 				</listitem>	
 				<listitem>
 					The polyline used to draw an edge should have the least possible bends.
 				</listitem>
 				<listitem>
-					The minimal angle between two adjacent edges of a node n should be nearest to 2pi / deg (n). This Property will improve the angular resolution.
+					The minimal angle between two adjacent edges of a node n should be nearest to 2pi / deg (n). This property will improve the angular resolution.
 				</listitem>
 				<listitem>
 					The order of children of a node should be respected in the final drawing.
 				</listitem>
 			</itemizedlist>
 			<para>Here is an example :</para>
-			The following graph has the default layout (hierarchical layout). It has a pretty bad angular resolution. Indeed, we do not see the leafs, but only a large black rectangle of edges.
+			The following graph has the default layout (hierarchical layout). It has a pretty bad angular resolution. Indeed, we do not see the leaves, but only a large black rectangle of edges.
 			<graphic fileref="images/algos_bubbletree_1.png" />
 			Here is the same tree with a Bubble Tree layout. The angular resolution is much better.
 			<graphic fileref="images/algos_bubbletree_2.png" />
-			<para><code>Published in :</code></para>
-			<para>Bubble Tree Drawing Algorithm : 
-			S. Grivet and D. Auber and J-P Domenger and Guy MelanÃ§on, 
-			International conference in computer vision and graphics, 
-			september 2004.</para> 
-			<para>Bubble Tree Drawing Algorithm : 
-			D. Auber and S. Grivet and J-P Domenger and Guy MelanÃ§on, 
-			Technical report : RR-1323-04, LaBRI university Bordeaux I. 
-			</para>
-			<para><code>AUTHORS</code></para>
-			<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 			<ulink url="../../doxygen/allPlugins.html#BubbleTree" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="cone-tree"><title>Cone Tree</title>
-			The cone tree layout will display the graph so that seen from the top, it looks like a bubble tree. (This layout uses 3D).
+			The cone tree is a 3d layout which seen from the top, looks like a bubble tree.
 			It takes two parameters:
 			<itemizedlist>
 				<listitem>Node Size : Size of the node will depend of the metric that you choose. The Algorithm will consider that parameter so that no nodes overlap themselves. This can be useful, if you want a node to be far from the others, just take a new size Metric and give a higher value to that specific node. 
@@ -424,19 +340,11 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 			</itemizedlist>
 			Here is an example of this layout. On the left side you can see a tree with a hierarchical (classic) layout, and, on the right side, the same tree, but with a cone tree layout.
 			<graphic fileref="images/algos_conetree_1.png" />
-			<para><code>Published in :</code></para>
-			<para>A. FJ. Carriere and R. Kazman, 
-			"Interacting with Huge Hierarchies: Beyond Cone Trees", 
-			In Proceedings of InfoViz'95, 
-			IEEE Symposium on Information Visualization 
-			pages 74-78, 1995, </para> 
-			<para><code>AUTHORS</code></para>
-			<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 			<ulink url="../../doxygen/allPlugins.html#ConeTreeExtended" >Algorithm documentation</ulink>
 		</sect4>
                 <sect4 id="dendrogram"><title>Dendrogram</title>
 			<para>
-				The dendrogram layout is a hierarchical layout.
+				The dendrogram layout is a hierarchical layout on which every leaves are displayed on the same layer.
 			</para>
 			<para>
 			A dendrogram is a tree diagram frequently used to illustrate the arrangement of the clusters produced by a clustering algorithm. Dendrograms are often used in computational biology to illustrate the clustering of genes.
@@ -448,56 +356,42 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 				<listitem> Orientation : up to down, left to right, right to left or down to up.
 				</listitem>
 				<listitem>
-					Layer Spacing : space between the levels of the Tree. (vertical).
+					Layer Spacing : space between the levels of the Tree.
 				</listitem>
 				<listitem>
-					Node Spacing : space between nodes. (horizontal).
+					Node Spacing : space between sibling nodes.
 				</listitem>
 			</itemizedlist>
-			<para><code>AUTHORS</code></para>
-			<para>Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, 
-			Sebastien Leclerc, Thibault Ruchon, Eric Dauchier </para>
 			<ulink url="../../doxygen/allPlugins.html#Dendrogram" >Algorithm documentation</ulink>
                  </sect4>
                 <sect4 id="hierarchical-tree"><title>hierarchical Tree (R-T Extended)</title>
-						The hierarchical Tree layout looks the same that the dendrogram layout or the Improved Walker layout but takes an other parameter, Edge Length. This parameter, is the same that the parameter Node Size, but for edges.
+						The hierarchical tree layout looks the same that the dendrogram layout or the improved walker layout but takes an other parameter, "Edge Length".
 			<itemizedlist>
-				<listitem> Node Size : Size of the node will depend of the metric that you choose. The Algorithm will consider that parameter so that no nodes overlap themselves. This can be useful, if you want a node to be far from the others, just take a new size Metric and give a higher value to that specific node. 
+				<listitem> Node Size : Size of the node will depend of the metric that you choose. The Algorithm will consider this parameter so that no nodes overlap themselves. This can be useful, if you want a node to be far from the others, just take a new size Metric and give a higher value to that specific node. 
 				</listitem>
-				<listitem> Edge Length : Same as Node Size.
+				<listitem> Edge Length : This parameter can take a property of type int, and will be used to place a node on a specific layer. If its value is 1, no thing will happen, but if its value is 2, the node will be placed on the next layer. 
 				</listitem>
 				<listitem> Orientation : Vertical / Horizontal;
 				</listitem>
-				<listitem> Orthogonal : Enables the drawing of the graph orthogonally..
+				<listitem> Orthogonal : Enables the drawing of the edges, orthogonally bent.
 				</listitem>
 				<listitem>
-					Layer Spacing : space between the levels of the Tree. (vertical).
+					Layer Spacing : space between the levels of the Tree.
 				</listitem>
 				<listitem>
-					Node Spacing : space between nodes. (horizontal).
+					Node Spacing : space between nodes sibling nodes.
 				</listitem>
-				<listitem> Bounding Circle : Check this parameter if nodes are drawn with circles.
+				<listitem> Bounding Circle : if checked, the estimation of overlapping nodes will be computed with bounding circles instead of bounding rectangles.
 				</listitem>
 			</itemizedlist>
-			<para><code>Published in :</code></para>
-			<para>D. Auber, 
-			"Tulip - A Huge Graph Visualization Framework", 
-			"Book. Graph Drawing Software. (Ed. Michael Junger , Petra Mutzel", 
-			"2004", 
-			pages 105 - 126.</para>
-			<para><code>AUTHORS</code></para>
-			<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
 			<ulink url="../../doxygen/allPlugins.html#TreeReingoldAndTilfordExtended" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="improved-walker"><title>Improved Walker</title>
 				The improved walker layout is just a hierarchical layout.
-			<para><code>AUTHORS</code></para>
-			<para>Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, 
-			Sebastien Leclerc, Thibault Ruchon, Eric Dauchier </para>
 			<ulink url="../../doxygen/allPlugins.html#ImprovedWalker" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="squarified-tree-map"><title>Squarified Tree Map</title>
-			<para>The squarified tree map layout, will place nodes in rectangles. For example, lets take a tree with a root and two sons, the layout will draw a rectangle for the root containing two other rectangles (his sons). This layout can be very useful for analyzing disks usages.</para>
+			<para>The squarified tree map layout, will place nodes in nested rectangles. For example, lets take a tree with a root and two sons, the layout will draw a rectangle for the root containing two other rectangles (its sons). This layout can be very useful for analyzing disks usages.</para>
 			<para>
 				Here is an example :
 			</para>  
@@ -507,42 +401,27 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 			<graphic fileref="images/algos_squarifiedtreemap_2.png" />
 			Using the 3D, we can see how the layout is done :
 			<graphic fileref="images/algos_squarifiedtreemap_3.png" />	
-			<para><code>Published in :</code></para>
-			<para>Squarified Treemaps : 
-			Bruls, M., Huizing, K., van Wijk, J. J. 
-			In Proc. of Joint Eurographics and IEEE TCVG Symp. on Visualization 
-			(TCVG 2000) IEEE Press, pp. 33-42. </para> 
-			<para><code>AUTHORS</code></para>
-			<para>Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, 
-			Sebastien Leclerc, Thibault Ruchon, Eric Dauchier </para>
 			<ulink url="../../doxygen/allPlugins.html#SquarifiedTreeMap" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="tree-leaf"><title>Tree Leaf</title>
-			This layout looks like the improved Walker, but does not pack the nodes. The result is a nice Hierarchical tree in which nodes does not overlap them-selves. 
+			<para>This layout looks like the improved walker, but does not pack the nodes. The result is a nice Hierarchical tree in which nodes does not overlap.</para> 
 			<ulink url="../../doxygen/allPlugins.html#TreeLeaf" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="tree-map"><title>Tree Map (Shneiderman)</title>
 			This layout, is the same as the squarified tree map layout, but the squarified tree map uses shadows to draw the tree.
-			<para><code>Published in :</code></para>
-			<para>Shneiderman, B. (March 1991) 
-			Tree visualization with treemaps: a 2-d space-filling approach 
-			ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99. 
-			HCIL-91-03, CS-TR-2645, CAR-TR-548 </para>
-			<para><code>AUTHORS</code></para>
-			<para>David Auber, LaBRI University Bordeaux I France: <email>auber@tulip-software.org</email> </para>
-			<ulink url="../../doxygen/allPlugins.html#TreeMap" >Algorithm documentation</ulink>
+			<para>
+			<ulink url="../../doxygen/allPlugins.html#TreeMap" >Algorithm documentation</ulink></para>
                 </sect4>
                 <sect4 id="tree-radial"><title>Tree Radial</title> 
-			On this layout, nodes are placed on a circle whose center is the root.
+			<para>On this layout, nodes of the same layer are placed on a circle whose center is the root.</para>
 			<ulink url="../../doxygen/allPlugins.html#TreeRadial" >Algorithm documentation</ulink>
                 </sect4>
         </sect3>
         <sect3 id="Basic"><title>Basic</title>
                 <sect4 id="circular"><title>Circular</title>
 			On this layout, every nodes are placed on a circle.
-			<para><code>AUTHORS</code></para>
-			<para>David Auber and Romain Bourqui University Bordeaux I France: Email: <email>auber@tulip-software.org</email> Daniel Archambault The University of British Columbia: Email: <email>archam@cs.ubc.ca</email></para>
-			<ulink url="../../doxygen/allPlugins.html#Circular" >Algorithm documentation</ulink>
+			<para>
+			<ulink url="../../doxygen/allPlugins.html#Circular" >Algorithm documentation</ulink></para>
                 </sect4>
                 <sect4 id="Random"><title>Random</title>
 			Nodes are placed randomly in space.
@@ -550,14 +429,14 @@ Each graph can be modified with algorithms for the layout, the set of selected e
         </sect3>
 	<sect3 id="Misc"><title>Misc</title>
                 <sect4 id="connected-component-packing"><title>Connected Component Packing</title>
-			This layout groups connected components of the graph to minimize lost space.
+			This layout groups connected components of the graph so that they do not overlap them-selves and that lost space is minimized (packing).
 			It takes 4 parameters :
 			<itemizedlist>
-				<listitem> Coordinates.
-				</listitem>
 				<listitem> Node Size : Size of the node will depend of the metric that you choose. The Algorithm will consider that parameter so that no nodes overlap themselves. This can be useful, if you want a node to be far from the others, just take a new size Metric and give a higher value to that specific node. 
 				</listitem>
 				<listitem> Rotation.
+				</listitem>
+				<listitem> Coordinates.
 				</listitem>
 				<listitem> Complexity.
 				</listitem>
@@ -566,11 +445,11 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 			<graphic fileref="images/algos_connectedpack_1.png" />
                 </sect4>
                 <sect4 id="scatter-plot"><title>Scatter Plot</title>
-			<para>This layout can be use to see a correlation between 3 metrics (parameters). For example, if we have a node with "usedMetric1" = 0, "usedMetric2" = 1 and, "usedMetric3" = 2, the node will be place in the space with the coordinates : (0,1,2).
+			<para>This layout can be used to see a correlation between 3 metrics (parameters). For example, if we have a node with "usedMetric1" = 0, "usedMetric2" = 1 and, "usedMetric3" = 2, the node will be place in the space with the coordinates : (0,1,2).
 			</para>
-			<para> following is an example, in which are 3 nodes. Those 3 nodes have 3 Metrics (called x,y,z). Node 1 equals to (0,0,0), Node 2 equals to (1,1,1) and Node 3 equals to (2,2,2). 
+			<para> Following is an example, in which are 3 nodes. Those 3 nodes have 3 Metrics (called x,y,z). Node 1 equals to (0,0,0), Node 2 equals to (1,1,1) and Node 3 equals to (2,2,2). 
 			</para>
-			<para>We can see from the layout, that our metrics follow a linear function.</para>
+			<para>We can see from the layout, that our correlation follow a linear function.</para>
 			<graphic fileref="images/algos_scatterplot_1.png" />
                 </sect4>
         </sect3>
@@ -578,21 +457,21 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 		<para>Force Directed layouts will try to place nodes so that, the distance in the graph (metric of the edges) should be the closest to the distance on the drawing.</para>
 		<para><code>Attention :</code> The previous property is not true at 100%.</para> 
 		<sect4 id="embedder-hde"><title>Embedder (HDE)</title>
-			The HDE layout, will only work on a Mesh like graph which is in 2D.
+			<para>The HDE layout, will only work on a 2D Mesh like graph.</para>
 			<ulink url="../../doxygen/allPlugins.html#Embedder" >Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="gem-frick"><title>GEM (Frick)</title>
-			The GEM layout, unlike the HDE layout, works on all graphs. But it can be very long to finish if the graph has more than 2000 nodes.
+			<para>The GEM layout, unlike the HDE layout, works on all graphs. But it can take a very long computing time if the graph has more than 2000 nodes.</para>
 			<ulink url="../../doxygen/allPlugins.html#GEMLayout" >Algorithm documentation</ulink>
                 </sect4>
 	</sect3>
-	<sect3 id="hierarchical"><title>hierarchical</title>
+	<sect3 id="hierarchical"><title>Hierarchical</title>
 		<sect4 id="hierarchical-graph"><title>hierarchical Graph</title>
-			This layout, will place the nodes of a graph as if the graph was a tree.
+			<para>This layout, will place the nodes of a graph as if the graph was a tree.</para>
 			<ulink url="../../doxygen/allPlugins.html#HierarchicalGraph" >Algorithm documentation</ulink>
                 </sect4>
-                <sect4 id="hierarchical-graph-3d"><title>hierarchical Graph 3D</title>
-			This layout is the same that the "hierarchical Graph" but in 3D.
+                <sect4 id="hierarchical-graph-3d"><title>Hierarchical Graph 3D</title>
+			<para>This layout is the same that the "hierarchical Graph" but in 3D.</para>
 			<ulink url="../../doxygen/allPlugins.html#GeneralGraph3D" >Algorithm documentation</ulink>
                 </sect4>
         </sect3>
@@ -610,21 +489,37 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 </sect2>
 <sect2 id="general"><title>General</title>
         <sect3 id="convolution"><title>Convolution</title>
-		<para>This algorithm will create a histogram of the viewMetric property.</para>
+		<para>Convolution clustering is an approach to partitioning a graph that gives the user interactive control over how many clusters to create. Tulip calculates a density function based on the chosen metric, displays a convolution of its histogram, and partitions the graph according to the humps in the histogram. </para>
         </sect3>
         <sect3 id="equal-value"><title>Equal Value</title>
-		<para>This algorithm will create sub-graphs in which all nodes have the same value.</para>
+		<para>This algorithm will create sub-graphs in which all nodes or all edges (not both a the same time), have the same value.</para>
         </sect3>
-        <sect3 id="hierarchical-general"><title>hierarchical</title>
-		<para>This algorithm will divide the graph in 2 different subgraph, the first one will contain nodes  that have the viewMetric value under than a certain limit, and, the other one, in which the nodes will have a the viewMetric value higher than the limit.</para>
+        <sect3 id="hierarchical-general"><title>Hierarchical</title>
+		<para>This algorithm will divide the graph in 2 different subgraph, the first one will contain nodes  that have the viewMetric value under than a certain limit, and, the other one, in which nodes will have a the viewMetric value higher than the limit. Then, the algorithm will be re-applied to the subgraph (the one with higher viewMetrics) until the subgraph contains less than 10 nodes.</para>
 		<ulink url="../../doxygen/allPlugins.html#HierarchicalClustering" >Algorithm documentation</ulink>
         </sect3>
         <sect3 id="quotient-clustering"><title>Quotient Clustering</title>
-		This algorithm will create a metagraph. The Metanodes, will be the subgraphs that already exist, and an edge will be created between two metanodes if and only if it exist an edge whose Source is a node of a subgraph, and the target a node of an other subgraph.
+		This algorithm will create a metagraph. The metanodes, will be the subgraphs that already exist, and an edge will be created between two metanodes if and only if it exist an edge whose source is a node of a subgraph, and the target a node of an other subgraph.
+		<para>Parameters :</para>
+		<itemizedlist>
+			<listitem><code>Oriented :</code>
+				<para>This parameter indicates whether the graph has to be considered as oriented or not.</para>
+			</listitem>
+			<listitem><code>Node Function :</code>
+				<para>This parameter enables to choose the function used to compute a measure value for a meta-node using the values of its underlying nodes.</para>
+			</listitem>
+			<listitem><code>Edge function :</code>
+				<para>This parameter enables to choose the function used to compute a measure value for a meta-edge using the values of its underlying edges.</para>
+			</listitem>
+			<listitem><code>Edge Cardinality :</code>
+				<para>This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph.</para>
+			</listitem>
+		</itemizedlist>
 		<para><ulink url="../../doxygen/allPlugins.html#QuotientClustering" >Algorithm documentation</ulink></para>
         </sect3>
         <sect3 id="strength-general"><title>Strength</title>
-		The Strength algorithm will create subgraphs that are "small-worlds". 
+		The strength algorithm will recursively create subgraphs that are nested "small-worlds".
+		<para><ulink url="http://en.wikipedia.org/wiki/Small-world_network" >Wikipedia: small worlds.</ulink></para> 
 		<para><ulink url="../../doxygen/allPlugins.html#StrengthClustering" >Algorithm documentation</ulink></para>
         </sect3>
 </sect2>

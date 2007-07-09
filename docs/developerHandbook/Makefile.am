@@ -2,7 +2,7 @@ EXTRA_DIST = *.docbook \
 	images/*.png
 
 DOCBOOK_SRC = index.docbook \
-	data_structure.docbook \
+	tulip_lib.docbook \
 	doc_guides.docbook \
 	prog_guides.docbook \
 	intro_install.docbook \

@@ -23,7 +23,7 @@
 
         <para>It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected elements from a view. When you paste an element, there are in the same place of the oldest of the view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
         <sect2 id="find"><title>The <quote>Find</quote> tool</title>
-            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want to do : Make copy of the found elements, Add to the selection, Remove from the selection or Intersect with the current selection.</para>
+            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want to do : Make out of the found elements a new selection, Add them to the selection, Remove them from the selection or Intersect them with the current selection.</para>
         </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
@@ -71,20 +71,71 @@
 			Shape of a node or a graph.
 		</listitem>
 		<listitem><code>viewSize :</code>
-			Size (height, width, depth) of a node or an edge.
+			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the edge. 
 		</listitem>
 		<listitem><code>viewTexture :</code>
 			Texture will replace the color background of the node.
 		</listitem>
 	</itemizedlist>
 	</sect2>
-	<sect2 id="create-property"><title>Creating a new Property</title>
-		<para> 1. In the info editor, click New.</para>
-		<para> 2. Select a type of property. </para>
-		<para> 3. Name your new property.</para>
+	<sect2 id="using-props"><title>Using Properties</title>
+		<sect3 id="properties"><title>Properties</title>
+        <para>As it is explained in the last section, it is possible to update the properties attached to the graph elements with algorithms. An other solution is to update the values through the <code>Property</code> tab of the <code>Info Editor</code> subwindow.</para>
+        <para>To give an example, create a graph :
+        <itemizedlist>
+            <listitem><para>Select the property you want to update, <code>viewSize</code> in the <code>local</code> table, for example, to manage the size of the nodes. Now, you can change all values or the value of one node.
+                <orderedlist>
+                    <listitem><para>Click on <code>Set all</code>, and write the new coordinates : <code>(2.0, 2.0, 2.0)</code></para></listitem>
+                    <listitem><para>Click on the line and the second column of the choosed node in the table. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
+                </orderedlist>
+            </para></listitem>
+        </itemizedlist>
+
+         If you want to change properties of selected elements, use the check box <code>Filter</code> of the <code>Property</code> tab.
+        <itemizedlist>
+            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the 'Add/Remove Selection' item displayed in the contextual pop-up menu which appears when pressing on the mouse right button (press <keycap>CTRL</keycap> key when mouse pressing on Mac).
+            </para></listitem>
+            <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
+            </para></listitem>
+            <listitem><para>Click on the checkbox named <code>Filter</code>. The selected element just appears in the table above.
+            </para></listitem>
+            <listitem><para>Click on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
+            </para></listitem>
+        </itemizedlist>
+        If you uncheck <code>Filter</code>, all nodes are in the table. It is possible to do the same thing with the values of edges. You just have to click on the tab named <code>Edges</code>.
+     There is an other solution to modify the value of one node or edge :
+        <itemizedlist>
+            <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation, then click on the node or edge you want to  update.</para></listitem>
+            <listitem><para>The <code>Element</code> tab of the <code>Info Editor</code> subwindow is then selected. It displays the informations of the element you clicked on.</para></listitem>
+        </itemizedlist>
+        </para>
+        </sect3>
+        <sect3 id="mana-inst"><title>Management of instances</title>
+            <para>The bottom of the <code>Property</code> subwindow enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
+                <itemizedlist>
+                    <listitem><para>Click on the <code>New</code> button.</para></listitem>
+                    <listitem><para>Select the type of property, <code>String</code>. (other possibilities are Color, Integer, Layout, Metric, Size, Selection)</para></listitem>
+                    <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>).</para></listitem>
+                </itemizedlist>
+
+            For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
+            </para>
+            <para>The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
+        </sect3>
+
+        <sect3 id="find-tut"><title>Find : make a request.</title>
+            <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Click on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
+                <itemizedlist>
+                        <listitem><para>Select the property used for the request : <code>viewRotation</code>.</para></listitem>
+                        <listitem><para>Choose the operation and type a value for the comparaisons : <code>=</code> and <code>20</code>, to find the element rotated of 20 degrees. </para></listitem>
+                        <listitem><para>Select the action in the <code>Options</code> part : <code>Add</code> and the kind of the elements of the request : <code>on nodes</code>.</para></listitem>
+                </itemizedlist>
+            </para>
+        </sect3>
 	</sect2>
+	To learn how to use the graph properties see <xref linkend="properties" />.
     </sect1>
-     <sect1 id="hierarchy"><title>Hierachy</title>
+     <sect1 id="hierarchy"><title>Hierarchy</title>
 		&Subgraphs;
     </sect1>
     <sect1 id="stats-panels"><title>Statistics Panel (not available in standard version)</title>

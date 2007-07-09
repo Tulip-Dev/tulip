@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY Intro_Install SYSTEM "intro_install.docbook">
-<!ENTITY Data_Structure SYSTEM "data_structure.docbook">
+<!ENTITY Tulip_core_api SYSTEM "tulip_lib.docbook">
 <!ENTITY Tulip_LibOgl SYSTEM "tulip_libogl.docbook">
 <!ENTITY Tulip_LibQt SYSTEM "tulip_libqt.docbook">
 <!ENTITY Plugins SYSTEM "plugins.docbook">
@@ -11,7 +11,7 @@
 ]>
 <book><title>Tulip Developer Handbook</title>
 &Intro_Install;
-&Data_Structure;
+&Tulip_core_api;
 &Tulip_LibOgl;
 &Tulip_LibQt;
 &Plugins;

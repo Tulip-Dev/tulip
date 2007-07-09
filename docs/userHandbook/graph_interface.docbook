@@ -36,7 +36,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para><code>Edit</code>: this is composed of tools : Cut, Copy, Paste and Find, which affect the selected elements. This menu contains also: Select all, Delete Selection, Deselect all, Invert Selection, Create group , Create subgraph see <xref linkend="subgraphs"/> for more dteails.</para>
+                <para><code>Edit</code>: this is composed of tools : Cut, Copy, Paste and Find, which affect the selected elements. This menu contains also: Select all, Delete Selection, Deselect all, Invert Selection, Create group , Create subgraph.</para>
                 <para><code>More details on the "find" tool :</code> The find tool has 4 options :</para>
                 <itemizedlist>
                 	<listitem>Replace : Replace the current selection (nodes or edges already selected).
@@ -79,9 +79,54 @@
                          <listitem>
                              <para><code>General</code>: this submenu is populated by 'clustering' plugins for computing subgraphs or groups. These plugins allow to build a graph hierarchy. For example the 'Equal Value' plugin create subgraphs for which the included elements have the same value for a choosed 'metric' property.</para>
                          </listitem>
-                     </itemizedlist></para>
+                     </itemizedlist>
+                     For more information please visit <xref linkend="algo"/>
+                     </para>
             </listitem>
             <listitem>
+            	<para><code>Graph </code> :
+            		This menu is composed of 2 sub menus :
+            		<itemizedlist>
+            			<listitem> <code>Test </code>: This sub menu contains tools able to say if the graph obey some properties :
+            				<itemizedlist>
+            					<listitem> <code>Simple </code>: Is the Graph Simple ? For more information please visit : 
+            					<para><ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Directed Tree </code>: A directed tree is a directed graph which would be a tree if the directions on the edges were ignored. Some authors restrict the phrase to the case where the edges are all directed towards a particular vertex, or all directed away from a particular vertex. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Trees</ulink></para>
+            					</listitem>
+            					<listitem> <code>Free Tree</code>: A tree without any designated root is called a free tree. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Free_tree">Wikipedia: Simple graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Acyclic</code> :  For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Connected</code> : A graph is called connected if every pair of vertices in the graph is connected. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
+            					</listitem>
+            					<listitem> <code>Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Bicconected Graphs </ulink></para>
+            					</listitem>
+            					<listitem> <code>Tri-connected </code> : For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
+            					</listitem>
+            					<listitem> <code>Planar </code>: <para><ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
+            					</listitem>
+            				</itemizedlist>
+            			</listitem>
+            			<listitem> <code>Modify </code>: Those plugins will modify the entire structure of a graph .
+            				<itemizedlist>
+            					<listitem> <code>Make Simple </code>: This algorithm will change the graph to make it a simple graph. For more information please visit : 
+            					<para><ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Make Acyclic</code> :  For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Make Connected</code> : A graph is said to be connected if every pair of vertices in the graph is connected. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
+            					</listitem>
+            					<listitem> <code>Make Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Bicconected Graphs </ulink></para>
+            					</listitem>
+            					<listitem> <code>Make directed </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_graph#Directed_graph">Wikipedia: Directed Graphs</ulink></para>
+            					</listitem>
+            					<listitem> Reverse selected edges : Exchange source and target of an edge.
+            					</listitem>
+            				</itemizedlist>
+            			</listitem>
+            		</itemizedlist>
+            	</para>
                 <para><code>View</code>: this is composed of the operations about a view. It is possible to redraw, center the current view, create a new 3D view (initially a copy of the current one) ( <xref linkend="New-3D-view" /> )</para>
             </listitem>
             <listitem>
@@ -240,6 +285,7 @@
 	          </listitem>
                 </itemizedlist>
 	    </para>
+	    For more details please visit : <xref linkend="graph-properties" />
         </sect2>
         <sect2 id="element"><title>Element</title>
             <para>
