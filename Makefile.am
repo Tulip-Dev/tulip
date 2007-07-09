@@ -1,5 +1,5 @@
 SUBDIRS = thirdparty library plugins software docs
-DIST_SUBDIRS =  thirdparty library plugins software samples docs
+DIST_SUBDIRS =  thirdparty library plugins software docs
 EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     INSTALL.mac \
 	     INSTALL.win \
