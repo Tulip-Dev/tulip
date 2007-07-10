@@ -164,8 +164,8 @@ node createMNode (Graph *graph, set<node> &subGraph,
   return metaNode;
 }
 //====================================================================================
-void updateLayoutUngroup(Graph *graph, node metanode, 
-			 GraphProperty *clusterInfo) {
+void updatePropertiesUngroup(Graph *graph, node metanode, 
+			     GraphProperty *clusterInfo) {
   if (clusterInfo->getNodeValue(metanode)==0) return; //The metanode is not a metanode.
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
@@ -206,6 +206,26 @@ void updateLayoutUngroup(Graph *graph, node metanode,
     graphLayout->setEdgeValue(ite, clusterLayout->getEdgeValue(ite));
     graphSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
   } delete itE;
+  // propagate all local properties
+  string pName;
+  forEach(pName, cluster->getLocalProperties()) {
+    PropertyInterface *property = graph->getProperty(pName);
+    if (property == graphLayout ||
+	property == graphSize ||
+	property == graphRot)
+      continue;
+    PropertyInterface *clusterProp = cluster->getProperty(pName);
+    itN = cluster->getNodes();
+    while(itN->hasNext()) {
+      node itn = itN->next();
+      property->setNodeStringValue(itn, clusterProp->getNodeStringValue(itn));
+    } delete itN;
+    itE= cluster->getEdges();
+    while (itE->hasNext()){
+      edge ite = itE->next();
+      property->setEdgeStringValue(ite, clusterProp->getEdgeStringValue(ite));
+    } delete itE;
+  }
 }
 //====================================================================================
 void tlp::openMetaNode(Graph *graph, node n,
@@ -235,7 +255,7 @@ void tlp::openMetaNode(Graph *graph, node n,
     stableForEach(e, metaGraph->getEdges())
       graph->addEdge(e);
   }
-  updateLayoutUngroup(graph, n, metaInfo);
+  updatePropertiesUngroup(graph, n, metaInfo);
   //===========================
   //set the colour of the meta edges
   ColorProperty *graphColors = 
