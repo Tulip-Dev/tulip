@@ -505,6 +505,8 @@ Coord maxCoord(const Coord &v1, const Coord &v2) {
 }
 //========================================================================================
 bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
+  if (!glGraphWidget->getRenderingParameters().getGraph())
+    return false;
   // We calculate the bounding box for the selection :
   initProxies(glGraphWidget);
   pair<Coord, Coord> boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
