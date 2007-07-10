@@ -1,4 +1,4 @@
-Each graph can be modified with algorithms for the layout, the set of selected elements, the size of nodes, the value attributed to an element (node or edge) named metric, the colors. An other advantage of <application>Tulip</application> is that it is easy to add a new algorithm in the structure; this way, it is able to include lots of algorithm. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Algorithms</code> menu. Several categories are in there : Selection, Color, Layout, Measure, Size, General. They modify the properties of the graph elements.
+Each graph can be modified with algorithms for the layout, the set of selected elements, the size of nodes, the value attributed to an element (node or edge) named metric, the colors. An other advantage of <application>Tulip</application> is that it is easy to add a new algorithm in the structure; this way, it is able to include lot of algorithms. As explain in the <xref linkend="main-window"/>, the algorithms are accessed by the <code>Algorithms</code> menu. Several categories are in there : Selection, Color, Layout, Measure, Size, General. They modify the properties of the graph elements.
 
 <sect2 id="Selection"><title>Selection Algorithms</title>
                 <sect3 id="induced-sub-graph"><title>Induced Sub-Graph :</title>
@@ -7,7 +7,7 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 				Here is an example :
 				<para><code>Before :</code><graphic fileref="images/algos_induced_1.png"/></para>
 				<para><code>After :</code><graphic fileref="images/algos_induced_2.png"/></para>
-				<ulink url="../../doxygen/allPlugins.html#InducedSubGraphSelection">Plug in documentation</ulink>
+				<ulink url="../../doxygen/allPlugins.html#InducedSubGraphSelection">Algorithm documentation</ulink>
                 </sect3>
                 <sect3 id="kruskal"><title>Kruskal :</title>
                         	<para>The Algorithm of Kruskal is used to create a minimum spanning tree out of a connected graph.
@@ -133,7 +133,7 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						<graphic fileref="images/algos_cluster_1.png" />
 						<para>On this graph, and by looking at the clustering measure, you can see 2 "communities" (nodes in blue)  and a hub (node in yellow).the hub is the only way to connect the two communities.</para>
 						<para>For more details, please visit <ulink url="http://en.wikipedia.org/wiki/Clustering_coefficient" />.</para>
-						<ulink url="../../doxygen/allPlugins.html#ClusterMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#ClusterMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="Degree"><title>Degree :</title> 
 						This algorithm will save the degree of each node in its viewMetric property.
@@ -168,12 +168,12 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 							<listitem><code>Type :</code>This parameter can take 3 different values : Register which will force the algorithm to give an indication on the degree of ramification (for trees), Stack, that will force the algorithm to give an indication on the number of nested cycles (for graphs), and at last, All, that will ask the algorithm to use both registers and stack. </listitem> 
 						</itemizedlist>
 						<para>For more information please visit <ulink url="http://en.wikipedia.org/wiki/Strahler_Stream_Order" /></para>
-						<ulink url="../../doxygen/allPlugins.html#StrahlerMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#StrahlerMetric">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="strength" ><title>Strength :</title>
                                         	<para>Graph must be simple (no loops).</para>
 						<para>This algorithm will compute the strength of edges. Every edges with small values are important in the way that their removal can disconnect two connected components. Every edges with a high value metric may belong to a strongly connected component.</para>
-						<ulink url="../../doxygen/allPlugins.html#StrengthMetric">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#StrengthMetric">Algorithm documentation</ulink>
                                         </sect4>
                                 </sect3>
                         
@@ -195,7 +195,7 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						</itemizedlist>
 						<graphic fileref="images/algos_biconnected_2.png" />
 						The intersection of those 3 biconnected components is Berlin and Paris. Which means that  Berlin and Paris are two articulation points of our graph.
-						<ulink url="../../doxygen/allPlugins.html#BiconnectedComponnent">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#BiconnectedComponnent">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="connected-component"><title>Connected Component: </title>
 						<para>A connected component is a maximal connected subgraph.
@@ -214,7 +214,7 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 						<graphic fileref="images/algos_treecomponent_1.png" />
 						As you can see, the algorithm divided the graph into 2 components.
 						<graphic fileref="images/algos_treecomponent_2.png" />
-						<ulink url="../../doxygen/allPlugins.html#ConnectedAndTreeComponent">Plug in documentation</ulink>
+						<ulink url="../../doxygen/allPlugins.html#ConnectedAndTreeComponent">Algorithm documentation</ulink>
                                         </sect4>
                                         <sect4 id="strong-connect"><title>Strongly Connected Component :</title>
 						A directed graph is said to be strongly connected if for every pair of nodes S1 and S2, it exists two edges e1 and e2 such as :
@@ -293,12 +293,12 @@ Each graph can be modified with algorithms for the layout, the set of selected e
         <sect3 id="planar"><title>Planar</title> 
                 <sect4 id="3-connected"><title>3-Connected (Tutte)</title>
 			<para>This algorithm can only be applied to 3-connected graphs. A graph G is said to be 3-connected if there does not exist a set of 2 nodes whose removal disconnects the graph. (Triangle Layout)</para>
-			<ulink url="../../doxygen/allPlugins.html#Tutte">Plug in documentation</ulink>
+			<ulink url="../../doxygen/allPlugins.html#Tutte">Algorithm documentation</ulink>
                 </sect4>
                 <sect4 id="mixed-model"><title>Mixed Model</title>
 			Create a planar sub-graph with polylines with a good angular resolution which will make the graph clear and easy to read.
 			<para>
-			<ulink url="../../doxygen/allPlugins.html#MixedModel">Plug in documentation</ulink></para>
+			<ulink url="../../doxygen/allPlugins.html#MixedModel">Algorithm documentation</ulink></para>
                 </sect4>
         </sect3>
         <sect3 id="tree"><title>Tree</title> 

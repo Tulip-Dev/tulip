@@ -100,7 +100,7 @@
             					</listitem>
             					<listitem> <code>Connected</code> : A graph is called connected if every pair of vertices in the graph is connected. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
             					</listitem>
-            					<listitem> <code>Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Bicconected Graphs </ulink></para>
+            					<listitem> <code>Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
             					</listitem>
             					<listitem> <code>Tri-connected </code> : For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
             					</listitem>
@@ -108,7 +108,7 @@
             					</listitem>
             				</itemizedlist>
             			</listitem>
-            			<listitem> <code>Modify </code>: Those plugins will modify the entire structure of a graph .
+            			<listitem> <code>Modify </code>: Those operations will modify the entire structure of a graph .
             				<itemizedlist>
             					<listitem> <code>Make Simple </code>: This algorithm will change the graph to make it a simple graph. For more information please visit : 
             					<para><ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
@@ -117,9 +117,9 @@
             					</listitem>
             					<listitem> <code>Make Connected</code> : A graph is said to be connected if every pair of vertices in the graph is connected. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
             					</listitem>
-            					<listitem> <code>Make Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Bicconected Graphs </ulink></para>
+            					<listitem> <code>Make Bi-connected </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
             					</listitem>
-            					<listitem> <code>Make directed </code>: For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_graph#Directed_graph">Wikipedia: Directed Graphs</ulink></para>
+            					<listitem> <code>Make directed </code>: If the graph is a free tree, make it directed. If a node and only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_graph#Directed_graph">Wikipedia: Directed Graphs</ulink></para>
             					</listitem>
             					<listitem> Reverse selected edges : Exchange source and target of an edge.
             					</listitem>
@@ -177,17 +177,17 @@
                 <itemizedlist>
                         <listitem>
                                 <para>
-                                <inlinegraphic fileref="images/mousebarselectcircle.png"/> Press on this 'circle' to rotate the nodes selected.
+                                <inlinegraphic fileref="images/mousebarselectcircle.png"/> Press on this 'circle' to rotate the selection.
                                 </para>
                         </listitem>
                         <listitem>
                                 <para>
-                                <inlinegraphic fileref="images/mousebarselecttriangle.png"/> Press on this 'triangle' to change width or height of the nodes selected.
+                                <inlinegraphic fileref="images/mousebarselecttriangle.png"/> Press on this 'triangle' to change width or height of the selection.
                                 </para>
                         </listitem>
                         <listitem>
                                 <para>
-                                <inlinegraphic fileref="images/mousebarselectsquare.png"/> The 'square' is used both for resizing AND rotating the nodes selected.
+                                <inlinegraphic fileref="images/mousebarselectsquare.png"/> The 'square' is used both for resizing AND rotating the selection.
                                 </para>
                         </listitem>
                 </itemizedlist>
@@ -343,8 +343,8 @@
     </sect1>
    <sect1 id="New-3D-view"><title>New 3D view</title>
 	<para>
-		<para>A very usefull tool in Tulip is the "New 3D view" ( Menu : View / New 3D view ). This tool will create a new window with the same name, and the same graph as before. But this window, is not a copy of the original one. It is in fact just another view of the graph.</para>
-		<para>For exemple, if I zoom in forward a node on the second window. nothing will change on the other one. But if i delete a node on the second window, it will be deleted in the original window.</para>
+		<para>A very useful tool in Tulip is the <code>View->New 3D view</code>. This tool will create a new window with the same name, and the same graph as before. But this window, is not a copy of the original one. It is just another view of the graph.</para>
+		<para>For example, if you zoom in forward a node on the second window. nothing will change on the other one. But if you delete a node on the second window, it will be deleted in the original window.</para>
 		<graphic fileref="images/interface_new3d-view_ex.png" />
 	</para>
    </sect1>

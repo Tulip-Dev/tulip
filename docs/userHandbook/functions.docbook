@@ -21,9 +21,9 @@
         </itemizedlist>
         </para>
 
-        <para>It is posssible to do a <quote>Copy-Paste</quote>. Indeed, you can cut, copy and paste selected elements from a view. When you paste an element, there are in the same place of the oldest of the view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
+        <para>It is posssible to do a <quote>Copy-Paste</quote>. You can cut, copy and paste selected elements from a view. When you paste an element, it is placed at the same location it was in the original view. Use <code>View->Center View</code> (<keycap>Control+Shift+C</keycap>) to make it visible in the second view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
         <sect2 id="find"><title>The <quote>Find</quote> tool</title>
-            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want to do : Make out of the found elements a new selection, Add them to the selection, Remove them from the selection or Intersect them with the current selection.</para>
+            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want perform regarding the current selection: Make out of the found elements a new selection, Add them to the selection, Remove them from the selection or Intersect them with the current selection.</para>
         </sect2>
     </sect1>
     <sect1 id="algo"><title>Algorithms</title>
