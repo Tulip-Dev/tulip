@@ -30,8 +30,9 @@ bool TreeTest::isFreeTree(Graph *graph) {
   MutableContainer<bool> visited;
   visited.setAll (false);
   node firstNode = graph->getOneNode();
-  return instance->isFreeTree (graph, firstNode, firstNode,
-			       visited)
+  return (firstNode.isValid() &&
+	  instance->isFreeTree (graph, firstNode, firstNode,
+				visited))
     ? ConnectedTest::isConnected(graph)
     : false;
 }//isFreeTree
