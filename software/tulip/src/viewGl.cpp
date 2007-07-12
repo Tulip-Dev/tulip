@@ -1236,7 +1236,7 @@ void viewGl::buildMenus() {
   if (sizesMenu.count()>0)
     propertyMenu->insertItem("S&ize", &sizesMenu );
   if (stringMenu.count()>0)
-    propertyMenu->insertItem("&String", &stringMenu );
+    propertyMenu->insertItem("L&abel", &stringMenu );
   if (generalMenu.count()>0)
     propertyMenu->insertItem("&General", &generalMenu );
 }
@@ -1959,7 +1959,7 @@ void viewGl::changeLayout(int id) {
 void viewGl::changeInt(int id) {
   clearObservers();
   string name = findMenuItemText(intMenu, id);
-  changeProperty<IntegerProperty>(name,"viewInt");
+  changeProperty<IntegerProperty>(name, "viewInt");
   initObservers();
 }
   //**********************************************************************
