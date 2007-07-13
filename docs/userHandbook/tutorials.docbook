@@ -8,11 +8,9 @@
 		<itemizedlist>
 		    <listitem><para>Select the <code>File->Import</code> item.</para>
 		    </listitem>
-		    <listitem><para>Select a method of importation : <code>Graphs->Grid approximation</code>, for example. </para></listitem>
+		    <listitem><para>Select a method of importation : <code>Grid approximation</code>, for example.</para></listitem>
 		</itemizedlist>
-		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black):
-		<graphic fileref="images/tutorials_firststep_1.png" />
-		 With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>CTRL</keycap> (<keycap>ALT</keycap> key on Mac) to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View->Center view</code> from the menu bar.
+		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>Ctrl</keycap> (<keycap>Alt</keycap> key on Mac) to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View->Center view</code> from the menu bar.
 		<itemizedlist>
 		    <listitem><para>Select <code>Algorithm->Measure->Misc->Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
 		</itemizedlist>
@@ -26,7 +24,7 @@
                         <para>Select the <code>File->New</code> from the menu bar to create a new graph.</para>
                     </listitem>
                     <listitem>
-                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them in the rendering parameter window (<keycap>CTRL+R</keycap>).</para>
+                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> subwindow. In the same way, you can display or hide the arrows checking <code>Arrows</code>.</para>
                     </listitem>
                     <listitem>
                         <para>Delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> mouse toolbar operation, then click on the element you want to delete.</para>
@@ -64,15 +62,15 @@
      			<para>This layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
      			The bubble tree layout is very useful to notice directories that have the same structure.
      			In this section, we will try to locate those directories.</para>
-     			<para>To have a better view on the tree, we will create a new 3D view. Menu : View->New 3D view or press <keycap>Control+Shift+N</keycap>. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
+     			<para>To have a better view on the tree, we will create a new 3D view. Menu : View->New 3D view or press <keycap>Ctrl+Shift+N</keycap>. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
      			<para>Now that we can see the both views at the same time, we will zoom in (right window). Select the magnifying glass tool, and draw a bounding box on the left side of the graph. Just like this :</para>
      			<graphic fileref="images/tutorials_improvelayout_bubble_1.png" />
      			<para>As you can see, two nodes looks very alike. By using the "Get Information " tool, we can get there ids : Node 1965 and node 2009. Indeed, those to directories have the same structure since they both contains plug-ins source files.</para>
-     			<para>We will now re-center the view (<code>View->Center View</code> or <keycap>Control+Shift+C</keycap>). </para>
+     			<para>We will now re-center the view (<code>View->Center View</code> or <keycap>Ctrl+Shift+C</keycap>). </para>
 			<para>Let's say that we now want to study our graph without the plug-in directory. To delete it we have first to select it, and then select all its sub directories.</para>
 			<itemizedlist>
 				<listitem>
-					<para>Select the plug-in directory : Use the Find tool, (<code>Edit->Find</code> or <keycap>Control+F</keycap>) with the field <code>Input property</code> set to "name", filter function set to "=" and filter value set to "plugins".</para>
+					<para>Select the plug-in directory : Use the Find tool, (<code>Edit->Find</code> or <keycap>Ctrl+F</keycap>) with the field <code>Input property</code> set to "name", filter function set to "=" and filter value set to "plugins".</para>
 				</listitem>
 				<listitem>
 					<para>Select all its sub-directories : Use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm with the field distance set to 50. </para>
@@ -104,7 +102,7 @@
      				<listitem>Texture? : checked
      				</listitem>
      			</itemizedlist>
-     		 <para>Do not forget to refresh the views (<keycap>Control+Shift+R</keycap>). Following is what you should see :</para>
+     		 <para>Do not forget to refresh the views (<keycap>Ctrl+Shift+R</keycap>). Following is what you should see :</para>
      		<graphic fileref="images/tutorials_improvelayout_treemap_1.png" />
      		<para>As you can see, we easily get a global information on the size of files. Which is the biggest, or, which is the smallest ? But, we can also see the structure of directories, since files and directories are nested nodes. See <ulink url="http://en.wikipedia.org/wiki/Tree_map">Wikipedia : Tree Maps </ulink> for more information. </para>
      		</sect3>
@@ -131,11 +129,11 @@
      		</sect3>
      	</sect2>
      	<sect2 id="improve-layout-labels"><title>Showing Labels</title>
-     		<para>First, in the <code>Rendering Parameters</code> dialog (<keycap>Control+R</keycap>), check the <code>nodes</code> box for the <code>Visibility</code> option.</para>
+     		<para>First, in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>), check the <code>nodes</code> box for the <code>Visibility</code> option.</para>
      		<para>We will now try to add labels to the nodes. To do so, select the node property called "name" in the info editor window, click on the button <code>To Labels</code>.</para>
      		<para>You should now see a graph looking like that :</para>
      		<graphic fileref="images/tutorials_improvelayout_3.png" />
-     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem, press <keycap>Control+R</keycap> , in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
+     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem, press <keycap>Ctrl+R</keycap> , in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
      		
      		<para>You should obtain something like this.</para>
      		<graphic fileref="images/tutorials_improvelayout_4.png" />
@@ -144,7 +142,7 @@
      		<para>If you want to display the big file (high disc space) with big nodes, use the <code>Algorithm->Size->Metric Mapping</code> algorithm with the parameter called "property" set to "size". </para>
      	</sect2>
      	<sect2 id="improve-layout-ext"><title>Showing a specific kind of file.</title>
-     		<para>Now that our graph as a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Control+F</keycap>).</para>
+     		<para>Now that our graph as a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
      		<para>Use the following parameters :</para>
      		<itemizedlist>
      			<listitem> Input Property : name
@@ -169,7 +167,7 @@
     		<para>Before anything, download, and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>. Click on the tab Hierarchy (in the info editor window) and select the subgraph GRCite. You need to delete the other sub graphs by doing a right click on there name, and then "remove". </para>
     		<para>This graph represent the relations between authors, conferences and papers. To distinguish paper, conferences and authors, we will re-color them : </para>
     		<itemizedlist>
-    			<listitem> <para>Select all papers : Press on <keycap>Control+F</keycap> to display the find tool. In the Input Property field, select the property "type". And on the line below, set the filter function to "=" and the filter value to 0, before clicking on the Find button.</para>
+    			<listitem> <para>Select all papers : Press on <keycap>Ctrl+F</keycap> to display the find tool. In the Input Property field, select the property "type". And on the line below, set the filter function to "=" and the filter value to 0, before clicking on the Find button.</para>
     			</listitem>
     			<listitem> <para>Re-color the nodes in red : Select the tab Property (in the info editor). Check the "selected only" option. Select the property viewColor, and, by clicking on the button "Set all" choose the red color.</para>
     			</listitem>
@@ -178,14 +176,14 @@
     		<para>You should obtain something like this :</para>
     		<graphic fileref="images/tutorials_peopleinfovis_1.png" />
     		<para><code>Select an author :</code></para>
-    		<para>Let's pick a single author to investigate, in this case George Robertson. First, we interactively select that node by hitting <keycap>Control+F</keycap> for the find tool, choosing the "titleshort" property, the "=" as filter fuction, and the regular expression "G.*Rob.*" as filter value. We then quickly check to see how he is connected to the entire graph by temporarily moving that node away from the others to see roughly how many edges are attached to it.</para>
+    		<para>Let's pick a single author to investigate, in this case George Robertson. First, we interactively select that node by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the "titleshort" property, the "=" as filter fuction, and the regular expression "G.*Rob.*" as filter value. We then quickly check to see how he is connected to the entire graph by temporarily moving that node away from the others to see roughly how many edges are attached to it.</para>
     		<para>Following is what you should get :</para>
     		<graphic fileref="images/tutorials_peopleinfovis_2.png" />
     		<para><code>Go deeper :</code></para>
     		<para>We then select the menu item <code>Algorithm->Selection->Reachable Sub-Graph</code>, type 1 for the distance into the popup panel and 0 for the direction of the edges (outgoing). We then select the menu item Edit->Create Subgraph to save this selection for further manipulation, naming it GR.1hop.outgoing. We then select this new subgraph in the hierarchy tab, and lay out this subgraph using a hierarchical drawing algorithm (<code>Algorithm->Layout->Hierarchical->Hierarchical graph</code>).</para>
     		<para> We can see simply from the drawing which papers were published first, as they are cited by the later ones. Robertson has published 11 papers in this database. The coloring by the number of citations (<code>Algorithm->Color->Metric Mapping</code>, with field property set to "arityOut" ) shows that "Cone Trees" is his most influential work.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_3.png" />
-    		<para>Finally, we select all papers by hitting <keycap>Control+F</keycap> for the find tool, choosing the  type property, the "=" filter, and the value 0 for papers. We explicitly add Robertson to the selection using the selection tool to select its edges too (see below), and save this whole set to a new subgraph that we name GRCitesub:</para>
+    		<para>Finally, we select all papers by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the  type property, the "=" filter, and the value 0 for papers. We explicitly add Robertson to the selection using the selection tool to select its edges too (see below), and save this whole set to a new subgraph that we name GRCitesub:</para>
     		<graphic fileref="images/tutorials_peopleinfovis_4.png" />
     		<para>In the new subgraph, we then select the Robertson node. Again as above, use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm, pick a depth of 2 to find all papers that cite a paper written by Robertson, and save the resulting subgraph using the Edit->Create Subgraph menu. The final image shows the result of using the <code>Algorithm->Layout->Hierarchical Graph</code> layout.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_5.png" />
@@ -241,7 +239,7 @@
     		 </sect3>
     		 In the last section, we will use an other graph. Please download <ulink url="http://tulip.labri.fr/samples/ConfAuthRecSmallWorld.tlp.gz">it</ulink> and open it in tulip.
     		 <sect3 id="interauthor-cons"><title>Hierarchical Structure of Interauthor Connections</title>
-    		 	<para>To be able to see the labels within metanode check the "metanode" option in the <code>Rendering Parameters</code> dialog (<keycap>Control+R</keycap>).</para>
+    		 	<para>To be able to see the labels within metanode check the "metanode" option in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>).</para>
     		 	<para>The clusters have been computed using the <code>Algorithm->General->Strength</code> clustering algorithm.</para>
     		 	<para>The overview image from the previous section, showing the graph of all authors and papers, is extremely cluttered. In the previous task we show one way to extricate more information, by finding the most important items via convolution clustering. Another clustering approach, small-worlds clustering, allows us to instead navigate through a hierarchical subdivision of the entire dataset. The simplified overview allows us to understand the graph's high level structure. The strength metric computes the number of cycles of length 3 and 4 passing through each edge, normalized by the maximum possible value. The first image shows the clustered dataset. Small-world navigation is useful when exploring an unfamiliar graph to quickly find the structure of complex components. The eccentricity metric (<code>Algorithm->Measure->Graph->Eccentricity</code>), which measures whether nodes are peripheral (here in yellow) or central (here in blue), guides us to complexity immediately. This metric is O(n^3), but the small-world decomposition simplifies the graph, making the computation tractable.
     		 	</para>

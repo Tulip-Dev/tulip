@@ -4,10 +4,10 @@
         <para>
         Tulip could generate a graph from data : importation.
         <itemizedlist><title>Examples of importation</title>
-        <listitem><para>Adjacency Matrix : a form of representation of graphs.</para></listitem>
+        <listitem><para>Adjacency Matrix : a form of representation of graphs. Please visit <ulink url="http://en.wikipedia.org/wiki/Adjacency_matrix">Wikipedia: Adjacency Matrix</ulink> for more details.</para></listitem>
         <listitem><para>File System : make a graph with your file system ; the root is the directory you have selected.</para></listitem>
         <listitem><para>GML import : create a graph from this other format.</para></listitem>
-        <listitem><para>dot : create a graph from <emphasis>graphviz</emphasis>format.</para></listitem>
+        <listitem><para>dot : create a graph from <emphasis>graphviz</emphasis> format.</para></listitem>
         </itemizedlist>
         The second possibility is to generate automatically different kinds of graph : Graph, Tree, Grid, which could be complete, simple, uniform, ...
         <itemizedlist><title>Examples of generation</title>
@@ -21,7 +21,7 @@
         </itemizedlist>
         </para>
 
-        <para>It is posssible to do a <quote>Copy-Paste</quote>. You can cut, copy and paste selected elements from a view. When you paste an element, it is placed at the same location it was in the original view. Use <code>View->Center View</code> (<keycap>Control+Shift+C</keycap>) to make it visible in the second view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
+        <para>It is posssible to do a <quote>Copy-Paste</quote>. You can cut, copy and paste selected elements from a view. When you paste an element, it is placed at the same location it was in the original view. Use <code>View->Center View</code> (<keycap>Ctrl+Shift+C</keycap>) to make it visible in the second view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
         <sect2 id="find"><title>The <quote>Find</quote> tool</title>
             <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want perform regarding the current selection: Make out of the found elements a new selection, Add them to the selection, Remove them from the selection or Intersect them with the current selection.</para>
         </sect2>
@@ -30,12 +30,12 @@
 		&Algorithms;
     </sect1>
     <sect1 id="graph-properties"><title>Properties of graph</title>
-        <para>In <application>Tulip</application>, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign nodes values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
+        <para>In <application>Tulip</application>, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
 
-        <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout, viewMetaGraph, viewRotation, viewSelection, viewShape, viewSize, viewTexture. They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
+        <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout... They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
-	<sect2 id="list-properties"><title>List of Properties</title>
-	<para> Following is a list of properties :</para>
+	<sect2 id="list-properties">
+	<para> Following is the list of rendering properties :</para>
 	<itemizedlist>
 		<listitem><code>viewBorderColor :</code>
 			Color of the border of an edge or a node.
@@ -56,13 +56,13 @@
 			Label position (x,y,z) of an edge or a node.
 		</listitem>
 		<listitem><code>viewLayout :</code>
-			Position (x,y,z) of an edge or a node.
+			Position (x,y,z) of a node, or vector of the bends positions of the edges.
 		</listitem>
 		<listitem><code>viewMetric :</code>
-			Metric is the result value of an measure ( <xref linkend="Measure" /> ) algorithm.
+			Result value of the last measure ( <xref linkend="Measure" /> ) algorithm applied.
 		</listitem>
 		<listitem><code>viewRotation :</code>
-			Rotation (0 to 360) of a node  or an edge
+			Rotation (0 to 360) of a node or an edge
 		</listitem>
 		<listitem><code>viewSelection :</code>
 			Selection equals true if the node or edge is selected. False if it is not.
@@ -71,7 +71,7 @@
 			Shape of a node or a graph.
 		</listitem>
 		<listitem><code>viewSize :</code>
-			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the edge. 
+			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the arrow. 
 		</listitem>
 		<listitem><code>viewTexture :</code>
 			Texture will replace the color background of the node.
@@ -79,7 +79,7 @@
 	</itemizedlist>
 	</sect2>
 	<sect2 id="using-props"><title>Using Properties</title>
-		<sect3 id="properties"><title>Properties</title>
+		<sect3 id="properties"><title>Updates of property values</title>
         <para>As it is explained in the last section, it is possible to update the properties attached to the graph elements with algorithms. An other solution is to update the values through the <code>Property</code> tab of the <code>Info Editor</code> subwindow.</para>
         <para>To give an example, create a graph :
         <itemizedlist>
@@ -91,9 +91,9 @@
             </para></listitem>
         </itemizedlist>
 
-         If you want to change properties of selected elements, use the check box <code>Filter</code> of the <code>Property</code> tab.
+         If you want to change properties of selected elements, use the check box <code>selected only</code> of the <code>Property</code> tab.
         <itemizedlist>
-            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the 'Add/Remove Selection' item displayed in the contextual pop-up menu which appears when pressing on the mouse right button (press <keycap>CTRL</keycap> key when mouse pressing on Mac).
+            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the 'Add/Remove Selection' item displayed in the contextual pop-up menu which appears when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac).
             </para></listitem>
             <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
             </para></listitem>
@@ -102,7 +102,7 @@
             <listitem><para>Click on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
             </para></listitem>
         </itemizedlist>
-        If you uncheck <code>Filter</code>, all nodes are in the table. It is possible to do the same thing with the values of edges. You just have to click on the tab named <code>Edges</code>.
+        If you uncheck <code>selected only</code>, all nodes are in the table. It is possible to do the same thing with the values of edges. You just have to click on the tab named <code>Edges</code>.
      There is an other solution to modify the value of one node or edge :
         <itemizedlist>
             <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation, then click on the node or edge you want to  update.</para></listitem>
@@ -110,7 +110,7 @@
         </itemizedlist>
         </para>
         </sect3>
-        <sect3 id="mana-inst"><title>Management of instances</title>
+        <sect3 id="mana-inst"><title>Management of properties</title>
             <para>The bottom of the <code>Property</code> subwindow enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
                 <itemizedlist>
                     <listitem><para>Click on the <code>New</code> button.</para></listitem>
@@ -133,7 +133,6 @@
             </para>
         </sect3>
 	</sect2>
-	To learn how to use the graph properties see <xref linkend="properties" />.
     </sect1>
      <sect1 id="hierarchy"><title>Hierarchy</title>
 		&Subgraphs;
