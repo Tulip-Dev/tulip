@@ -7,18 +7,12 @@
 /** \addtogroup layout */
 /*@{*/
 
-/// BubbleTree.h - An implementation of the bubble tree algorithm.
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
  *
  *  Bubble Tree Drawing Algorithm : \n
- *  S. Grivet and D. Auber and J-P Domenger and Guy Melançon, \n
- *  International conference in computer vision and graphics, \n
- *  september 2004.
- *
- *  Bubble Tree Drawing Algorithm : \n
- *  D. Auber and S. Grivet and J-P Domenger and Guy Melançon, \n
- *  Technical report : RR-1323-04, LaBRI university Bordeaux I.
+ *  D. Auber and S. Grivet and J-P Domenger and Guy Melancon, \n
+ *  In International Conference on Computer Vision and Graphics, pages 633-641, september 2004.
  *
  *  <b>HISTORY</b> 
  *

@@ -6,7 +6,6 @@
 
 /** \addtogroup layout */
 /*@{*/
-/// Circular.h - An implementation of a circurlar layout.
 /** 
  * This plugin is an implementation of a circular layout that takes
  * node size into account.  It manages size of nodes and use a standard dfs

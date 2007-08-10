@@ -10,7 +10,6 @@ class MutableConatainer;
 /** \addtogroup selection */
 /*@{*/
 
-/// This selection plugins enables to find a subgraph of G that is acyclic.
 /**
  * This selection plugins enables to find a subgraph of G that is acyclic.
  *

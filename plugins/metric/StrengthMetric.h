@@ -6,11 +6,10 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// StrengthMetric.h - An implementation of the strength parameter.
 /** This plugin is an implementation of the Strength Parameter.
  *  algorithm first published in :
  *
- *  Y. Chiricota. F.Jourdan, an G.Melançon \n
+ *  Y. Chiricota. F.Jourdan, an G.Melancon\n
  *  "Software component capture using graph clustering", \n
  *  "IWPC", \n
  *   2002.

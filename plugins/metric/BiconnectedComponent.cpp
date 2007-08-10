@@ -85,9 +85,8 @@ using namespace tlp;
 
 /** \addtogroup metric */
 /*@{*/
-/// BicconnectedComponent.h - An implementation of the  biconnected component decompostion algorithm.
-/** This plugin is an implementation of a biconnected component decompostion algorithm. it assigns to 
- *  to all the edge in the same componnent the same value.
+/** This plugin is an implementation of a biconnected component decompostion algorithm. It assigns to 
+ *  the same value to all the edges in the same component.
  *
  *  <b>HISTORY</b>
  *

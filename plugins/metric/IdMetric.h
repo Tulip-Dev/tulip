@@ -17,7 +17,7 @@
 /** \addtogroup metric */
 /*@{*/
 /// IdDoubleMetric.h - This plugins assigns id to nodes and edges.
-/** This plugins assigns id to nodes and edges. The id are those used by tulip.
+/** This plugins assigns id to nodes and edges. The ids are those used by tulip.
  *
  *  <b>HISTORY</b>
  *
@@ -44,11 +44,6 @@ public:
 
 
 #endif
-
-
-
-
-
 
 
 

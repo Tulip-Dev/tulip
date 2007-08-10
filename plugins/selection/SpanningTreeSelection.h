@@ -7,7 +7,6 @@
 /** \addtogroup selection */
 /*@{*/
 
-/// This selection plugins enables to find a subgraph of G that is a forest (a set of trees).
 /**
  * This selection plugins enables to find a subgraph of G that is a forest (a set of trees).
  *

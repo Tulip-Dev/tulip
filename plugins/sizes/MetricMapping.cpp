@@ -66,7 +66,7 @@ static const char* rangeErrorMsg = "max size must be greater than min size";
 /** \addtogroup size */
 /*@{*/
 /// Metric Mapping - Compute size of elements according to a metric.
-/** This plugin enables to set the size of the grapĥ&#146;s elements
+/** This plugin enables to set the size of the grapĥ's elements
  *  according to a metric.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org

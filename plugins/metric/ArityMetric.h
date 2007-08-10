@@ -12,10 +12,10 @@
  *
  *  - 04/10/2001 Verson 0.0.1: Initial release
  *
- *  \note This plug-ins exists to obtain a uniform interface in the 
- *  Tulip graph viusalization software. To access to the degree
+ *  \note This plug-in exists to obtain a uniform interface in the 
+ *  Tulip graph visualization software. To access to the degree
  *  of a node it is recommended to use directly the degree function
- *  available in each Graph.
+ *  available in each graph.
  *
  *  \author David Auber University Bordeaux I France, Email : auber@tulip-software.org
  *
