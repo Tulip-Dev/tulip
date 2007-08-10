@@ -248,7 +248,7 @@ int main() {
   	</programlisting>
   	</sect2>
   	<sect2 id="code-exemples-graphs-addnodes"><title>3. Add Nodes</title>
-  	<para>In the following, we are adding three nodes with the member function <code>  node Graph::addNode () </code> that will, create an instance of a 'node', add it to the graph, and return it. Note that using this function, the node is also added in all the graph ancestors to maintain the sub_graph relation between graphs.
+  	<para>In the following, we are adding three nodes with the member function <code>  node Graph::addNode () </code> that will, create an instance of a 'node', add it to the graph, and return it. Note that using this function, the node is also added in all the graph ancestors to maintain the sub-graph relation between graphs.
   	</para>
   	
   	
@@ -408,12 +408,13 @@ int main() {
 	</para>
     <sect1 id="code-exemples-iterator-foreach"><title>TUTORIAL 002 : Iterating over a graph (class Iterator and the macro forEach)</title>
     	<para>
-    		In this tutorial, we will, display on the standard output, all the structure using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.   The source file (and Makefile) is localized in the directory : /tulip/tutorial/tutorial-002/.
+    		In this tutorial, we will, display on the standard output, all the structure using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
     	</para>
     	<para> In this tutorial, the graph created is the same that in Tutorial 1 (Graphs creation) see the following picture :
     	</para>
+    
+    
     	<graphic fileref="images/tuto_001_graphcreated_1.png"/>
-    	
     	
     	<sect2 id="code-exemples-iterator-headfile"><title>1. Header files (Same as tutorial 1)</title>
         Let's start with the files we need to include :
@@ -449,7 +450,7 @@ int main() {
     		<para>With the functions <code>template &lt;class itType &gt;
  bool tlp::Iterator &lt; itType &gt; ::hasNext ( )</code> and <code> node next ( )  </code>, we can iterate through our graph nodes with a simple while :
 		</para>
-		<programlisting> <![CDATA[
+		<programlisting role="C"> <![CDATA[
 			
    while(itNodes->hasNext()) {
    	node n = itNodes->next();
@@ -457,7 +458,7 @@ int main() {
     		]]>
         	</programlisting>
         	<para>In this <code>while</code> loop, we display some node topological properties :</para>
-        	<programlisting> <![CDATA[
+        	<programlisting role="C"> <![CDATA[
         		
     cout << "node: " <<  n.id << endl;
     cout << " degree: " << graph->deg(n) << endl;
@@ -468,9 +469,8 @@ int main() {
         	</programlisting>
         	<para>At the end of the loop, we will need to delete the iterator.. <code>delete itNodes;</code> </para>
         	<para>Following is the output of this simple while loop :</para>
-		<programlisting> <![CDATA[
-
-[root@atlas tutorial-002]# ./tutorial002 
+        	<programlisting> <![CDATA[
+[root@atlas tutorial-002]# ./tutorial002
 node: 0
  degree: 2
  in-degree: 1
@@ -483,9 +483,7 @@ node: 2
  degree: 2
  in-degree: 1
  out-degree: 1
-[root@atlas tutorial-002]# 
-
-		]]>
+ 	      ]]>
         	</programlisting>
     	</sect2>
     	<sect2 id="code-exemple-graphit"><title>3. Iterating through a node predecessors</title>
@@ -1187,17 +1185,22 @@ cout << "List of the local properties present in the subgraph1:" << endl;
 Iterator<string> *it=subgraph1->getLocalProperties();    		    
 while (it->hasNext()) {                                 		    
     cout << it->next() << endl;                                           
-  } delete it;                                                            
+  } delete it;          
+  
+  
+_________________________________________________________________________  
 
-_________________________________________________________________________    	
-    	
-[root@atlas tutorial-005]# ./tutorial
+ 
+[root@atlas tutorial-005]# ./tutorial 
 List of the local properties present in the subgraph1:
-   firstMetric 	
-   secondMetric	
-    	
+firstMetric	
+secondMetric                                                      	
     			]]>
         		</programlisting>
+        		
+        		
+		       
+			
         		<para>As you can see the only local properties that has subgraph1 are "firstMetric" and "secondMetric". Indeed, "firstMetric" has been redefined, and, "thirdMetric" has been created with subgraph2.</para>
         		<para>Following is a sample and its output that enables the iteration over inherited properties :</para>
         		<programlisting> <![CDATA[
@@ -1390,7 +1393,7 @@ int main() {
     		</sect2>
     </sect1>
     <sect1 id="code-exemples-edge-order"><title>TUTORIAL 006 : Edges order.</title>
-    	<para>In this tutorial, we learn how to change edges order in the graph edges list. Indeed, it can be useful some times to sort the edges considering a Metric.</para>
+    	<para>In this tutorial, we learn how to change edges order in the graph edges adjacency list (please visit <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree">Wikipedia: Adjacency and degree</ulink> for more details ). Indeed, it can be useful some times to sort the edges considering a Metric.</para>
 		    <sect2 id="code-exemple-edgesorder-intro"><title>1. Creation of the graph and its edges </title>
 		    	<para>We will create a graph with 4 nodes and 4 edges. Their "id number" will start from 0 just like in the figure below :</para>
 		    	<graphic fileref="images/tuto_006_edgeorder_1.png" />
