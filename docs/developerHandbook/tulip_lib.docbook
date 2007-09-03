@@ -1,4 +1,4 @@
-<chapter id="tulip-core-library"><title>Tulip Core Library</title>
+<chapter id="tulip-library"><title>Tulip Library</title>
 <para>Efficient visualization of graphs and their usage for data analysis implies
     <itemizedlist>
     <listitem><para>the manipulation of the structure of the graph</para></listitem>
@@ -64,7 +64,7 @@ in order to manage a hierarchy of subgraphs
     <listitem><para><methodname>unsigned int outdeg(node)</methodname> : returns the out degree of a node (number of times it is a source).</para></listitem>
     <listitem><para><methodname>node source(edge)</methodname> : returns the source of an edge.</para></listitem>
     <listitem><para><methodname>node target(edge)</methodname> : returns the target of an edge.</para></listitem>
-    <listitem><para><methodname>void opposite(edge,node)</methodname> : it enables to obtain the opposite of a node of an edge.</para></listitem>
+    <listitem><para><methodname>node opposite(edge,node)</methodname> : it enables to obtain the opposite of a node of an edge.</para></listitem>
     <listitem><para><methodname>Iterator * getInNodes(node)</methodname> : returns an iterator on the predecessor nodes of a node.</para></listitem>
     <listitem><para><methodname>Iterator * getOutNodes(node)</methodname> : returns an iterator on the successor nodes of a node.</para></listitem>
     <listitem><para><methodname>Iterator * getInOutNodes(node)</methodname> : returns an iterator on the neighbor nodes of a node.</para></listitem>
@@ -163,10 +163,10 @@ operations of a property are:
 the C++ signature of functions does not include the return type, the syntax for this call is not 
 very simple. For instance, if one wants to obtain a property containing double (called DoubleProperty in Tulip) one must use
 the following syntax : <methodname> DoubleProperty *metric=graph->getProperty&lt;DoubleProperty&gt;("name of the property");</methodname>
-In the graph each property is identified by its name which a std::string, when one asks for a property the type of this 
+In the graph each property is identified by its name which is a std::string, when one asks for a property the type of this 
 property is checked using the run time type interrogation mechanism of C++. Warning: This test only happens when one 
 compiles its sources in DEBUG mode (default mode). In order to facilitate the navigation/edition of the set of properties, a
-set of function is accessible through the graph interface.
+set of functions is accessible through the graph interface.
     <itemizedlist>
     <title>List of available operations</title>
     <listitem><para><methodname>Iterator * getLocalProperties()</methodname> : returns an iterator on all properties of this graph.</para></listitem>
@@ -183,14 +183,14 @@ In order to facilitate the navigation/edition of properties, a set of function i
     <itemizedlist>
     <title>List of available operations</title>
     <listitem><para><methodname>Iterators * getInheritedProperties()</methodname> : returns an iterator on all properties (both inherited and local).</para></listitem>
-    <listitem><para><methodname>bool existProperty(std::string)</methodname> : returns true if the property exists (inherited or locally).</para></listitem>
+    <listitem><para><methodname>bool existProperty(std::string)</methodname> : returns true if the property exists (inherited or local).</para></listitem>
     <listitem><para><methodname>PropertyType * getProperty(std::string)</methodname> : returns the property (inherited or local). 
     If it did not exist, creates it first (locally)</para></listitem>
     </itemizedlist>
     </para>
 </sect1>
 
-<sect1 id="code-exemple-intro"><title>TUTORIAL Intro.</title>
+<sect1 id="code-example-intro"><title>TUTORIAL Intro.</title>
 <para> Before doing any of the tutorials please read the following warnings :
 </para>
 <itemizedlist>
@@ -205,150 +205,130 @@ In order to facilitate the navigation/edition of properties, a set of function i
 	</listitem>	
 </itemizedlist>
 </sect1>
-    <sect1 id="code-exemples-graphs"><title>TUTORIAL 001 : Graphs creation, adding and deleting nodes or edges.</title>
+    <sect1 id="code-examples-graphs"><title>TUTORIAL 001 : Graphs creation, adding and deleting nodes or edges.</title>
         <para>
         	In this first tutorial, we will show you how to create a graph, add three nodes and three edges, remove an edge and a node, and finally, print the result on the standard output.
         </para>
         <graphic fileref="images/tuto_001_graphcreated_3.png"/>
-        <sect2 id="code-exemples-graphs-headfile"><title>1. Header files</title>
+        <sect2 id="code-examples-graphs-headfile"><title>1. Header files</title>
         Let's start with the files we need to include :
-        <para>  <programlisting> <![CDATA[
-
-#include <iostream>
-#include <tulip/Graph.h>
-
-			]]>
+        <para>  <programlisting>
+<![CDATA[#include <iostream>
+#include <tulip/Graph.h>]]>
 		</programlisting>
         </para>
         <itemizedlist>
-        	<listitem> <code>iostream :</code> Well, as you probably know it, this "file" contains C++ functions for in and out streams. We need it in this tutorial to print the final graph on the standard output. 
+        	<listitem> <code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
         	</listitem>
-        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides definitions for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
+        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
         	</listitem>
         </itemizedlist>
 
 	
-	<para>The namespaces, just useful so that we don't have to write "tlp::" every time.</para>
-	<programlisting> <![CDATA[
-
-using namespace std;
-using namespace tlp;
-
-	]]>
+	<para>The namespaces usage declarations, so that we can omit namespace prefixe.</para>
+	<programlisting>
+<![CDATA[using namespace std;
+using namespace tlp;]]>
   	</programlisting>
   	</sect2>
-  	<sect2 id="code-exemples-graphs-create"><title>2. Creation of a Graph</title>
-	<para>Create an empty graph with the function <code> Graph* tlp::newGraph( ) </code>. This function returns a pointer on a empty Graph.</para>
+  	<sect2 id="code-examples-graphs-create"><title>2. Creation of a Graph</title>
+	<para>Create an empty graph with the function <code> Graph* tlp::newGraph( )</code>. This function returns a pointer on a empty Graph.</para>
 	
-	<programlisting> <![CDATA[
-int main() {
+	<programlisting>
+<![CDATA[int main() {
   //create an empty graph
-  Graph *graph = tlp::newGraph();
-  	]]>
+  Graph *graph = tlp::newGraph();]]>
   	</programlisting>
   	</sect2>
-  	<sect2 id="code-exemples-graphs-addnodes"><title>3. Add Nodes</title>
+  	<sect2 id="code-examples-graphs-addnodes"><title>3. Add nodes</title>
   	<para>In the following, we are adding three nodes with the member function <code>  node Graph::addNode () </code> that will, create an instance of a 'node', add it to the graph, and return it. Note that using this function, the node is also added in all the graph ancestors to maintain the sub-graph relation between graphs.
   	</para>
   	
   	
-  	<programlisting> <![CDATA[
-
-  //add three nodes
+  	<programlisting>
+<![CDATA[  //add three nodes
   node n1 = graph->addNode();
   node n2 = graph->addNode();
-  node n3 = graph->addNode();
-	]]>
+  node n3 = graph->addNode();]]>
   	</programlisting>
   	</sect2>
-  	<sect2 id="code-exemples-graphs-addedges"><title>4. Add edges</title>
+  	<sect2 id="code-examples-graphs-addedges"><title>4. Add edges</title>
   	<para>Now that nodes are created, we can create the edges. To do so, we can use the function <code>  edge Graph::addEdge  ( const node, const node ) </code> that will, add a new edge in the graph and return it. Note that, the edge is also added in all the super-graph of the graph to maintain the sub-graph relation between graphs. 
   	 </para>
   	 <para>
   	 	The first parameter is the "source node", and, of course, the second is the "target node" (in tulip, every edge are oriented but you can choose not to consider the orientation). We will see later (TUTORIAL 005) that the edges enumeration order is the one in which they are added. 
   	 </para>
   	
-  	<programlisting> <![CDATA[
-  //add three edges
+  	<programlisting>
+<![CDATA[  //add three edges
   edge e1 = graph->addEdge(n2,n3);
   edge e2 = graph->addEdge(n1,n2);
-  edge e3 = graph->addEdge(n3,n1);
-
-	]]>
+  edge e3 = graph->addEdge(n3,n1);]]>
   	</programlisting>
   	</sect2>
   	<para>Following is a picture of the graph that we just have created. It is being displayed with tulip.</para>
   	<graphic fileref="images/tuto_001_graphcreated_1.png"/>
   	
-  	<sect2 id="code-exemples-graphs-delEdgeNode"><title>5. Delete an edge and a node</title>
+  	<sect2 id="code-examples-graphs-delEdgeNode"><title>5. Delete an edge and a node</title>
   	
   	<para> The Graph class provides function to delete edges and nodes. </para>
   	<itemizedlist>
   		<listitem> <code>  void tlp::Graph::delEdge (const edge) </code> :
-  			<para> Delete an edge in the graph. this edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+  			<para> Delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
 			</para>
   		</listitem>
   		<listitem> <code>  void tlp::Graph::delNode ( const node ) </code> :
-  			<para> Delete a node in the graph. this node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
+  			<para> Delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
   			</para> 
   		</listitem>
   	</itemizedlist>
   	Note that the class Graph implements member functions like <code> void delAllNode (const node)</code>, and, <code>  void delAllEdge (const edge) </code>. 
-  	<programlisting> <![CDATA[
-	
-  //remove an edge
+  	<programlisting>
+<![CDATA[  //delete an edge
   graph->delEdge(e1);
 
-  //remove a node
-  graph->delNode(n2);
-  
-  
-  	]]>
+  //delete a node
+  graph->delNode(n2);]]>
   	</programlisting>
   	
   	</sect2>
   	<para>Following is our graph with node n2 deleted.</para>
   	<graphic fileref="images/tuto_001_graphcreated_2.png"/>
-  	<sect2 id="code-exemples-graphs-print"><title>6. Printing the graph</title>
+  	<sect2 id="code-examples-graphs-print"><title>6. Printing the graph</title>
   	<para>The class graph has a friend function which is an overload of the stream operator &lt;&lt;. This function will print the graph (only nodes and edges) in an out stream (here, the standard output, "cout"), in the tulip format.</para>
-  	<programlisting> <![CDATA[
-
-  //print the result on the standard output
-  cout << graph << flush ;
-  
-  	]]>
+  	<programlisting>
+<![CDATA[  //print the result on the standard output
+  cout << graph << flush;]]>
         </programlisting>
 
 	</sect2>
-	<sect2 id="code-exemples-graphs-exit"><title>7. Saving a graph</title>
-	<para>Instead of having our graph printed on the standard output, we can save it in a ".tlp" (tulip format) that can be read by tulip :</para>
-        <programlisting> <![CDATA[
-  //Save  the graph :
-  tlp::saveGraph(graph,"tuto1.tlp");	
-]]>
+	<sect2 id="code-examples-graphs-exit"><title>7. Saving a graph</title>
+	<para>Instead of having our graph printed on the standard output, we can save it in a .tlp (tulip format) suffixed file that can be read by tulip :</para>
+        <programlisting>
+<![CDATA[  //Save  the graph :
+  tlp::saveGraph(graph,"tuto1.tlp");]]>
         </programlisting>
         </sect2>
-	<sect2 id="code-exemples-graphs-exit"><title>8. Graph deletion</title>
+	<sect2 id="code-examples-graphs-exit"><title>8. Graph deletion</title>
 	<para>Before exiting the main function, do not forget memory leaks, and delete the graph to free memory usages.</para>
-	<programlisting> <![CDATA[
-	
-  //delete the graph
+	<programlisting>
+<![CDATA[  //delete the graph
   delete graph;
   return EXIT_SUCCESS;
-} ]]>
+}]]>
         </programlisting>
         </sect2>
-        <sect2 id="code-exemples-graphs-exit2"><title>9. Compiling and running the program.</title>
+        <sect2 id="code-examples-graphs-exit2"><title>9. Compiling and running the program.</title>
         <para>
         Compile this program with this command :  <code> g++ `tulip-config --libs --cxxflags` tutorial.cpp -o tutorial001 </code>
         </para>
         <para>Run it to have a look : <code> ./tutorial001 </code> </para>
         <graphic fileref="images/tuto_001_graphcreated_3.png"/>
         </sect2>
-        <sect2 id="code-exemples-graphs-exit"><title>10. Source Code</title>
+        <sect2 id="code-examples-graphs-exit"><title>10. Source Code</title>
         
-<programlisting> <![CDATA[       
-#include <iostream>
+<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/Graph.h>
 
 /**
@@ -379,10 +359,10 @@ int main() {
   edge e2 = graph->addEdge(n1,n2);
   edge e3 = graph->addEdge(n3,n1);
 
-  //remove an edge
+  //delete an edge
   graph->delEdge(e1);
 
-  //remove a node
+  //delete a node
   graph->delNode(n2);
 
   //print the result on the standard output
@@ -393,10 +373,7 @@ int main() {
   //delete the graph
   delete graph;
   return EXIT_SUCCESS;
-}
-      
-        
-        ]]>
+}]]>
         </programlisting>
         </sect2>
     </sect1>
@@ -406,71 +383,59 @@ int main() {
 	</para>
 	<para>
 	</para>
-    <sect1 id="code-exemples-iterator-foreach"><title>TUTORIAL 002 : Iterating over a graph (class Iterator and the macro forEach)</title>
+    <sect1 id="code-examples-iterator-foreach"><title>TUTORIAL 002 : Iterating over a graph (class Iterator and the macro forEach)</title>
     	<para>
     		In this tutorial, we will, display on the standard output, all the structure using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
     	</para>
-    	<para> In this tutorial, the graph created is the same that in Tutorial 1 (Graphs creation) see the following picture :
+    	<para> In this tutorial, the graph created is the same that in Tutorial 1 (after the 3 edges were added) see the following picture :
     	</para>
     
     
     	<graphic fileref="images/tuto_001_graphcreated_1.png"/>
     	
-    	<sect2 id="code-exemples-iterator-headfile"><title>1. Header files (Same as tutorial 1)</title>
+    	<sect2 id="code-examples-iterator-headfile"><title>1. Header files (Same as Tutorial 1)</title>
         Let's start with the files we need to include :
-        <para>  <programlisting> <![CDATA[
-
-#include <iostream>
-#include <tulip/Graph.h>
-
-		]]>
+        <para>  <programlisting>
+<![CDATA[#include <iostream>
+#include <tulip/Graph.h>]]>
 		</programlisting>
         </para>
         <itemizedlist>
-        	<listitem> <code>iostream :</code> Well, as you probably know it, this "file" contains C++ functions for in and out streams. We need it in this tutorial to print the final graph on the standard output. 
+        	<listitem> <code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
         	</listitem>
-        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides definitions for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
+        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
         	</listitem>
         </itemizedlist>
-	<para>As you can see, we just need the "Graph.h" header file to create a graph and iterate over its nodes, even thought the declaration of the abstract class "Iterator" is in Iterator.h</para>    	
+	<para>As you can see, we just need the "Graph.h" header file to create a graph and iterate over its nodes, even though the declaration of the abstract class "Iterator" is in Iterator.h</para>    	
     	</sect2>
     	
-    	<sect2 id="code-exemples-iterator-allnode"><title>2. Iterating over all nodes</title>
-    		<para> To iterate over all nodes, we need to create an Iterator on the graph nodes with the member function <code>  Iterator * Graph::getNodes () const  </code>, we will make it point on the graphs nodes.
+    	<sect2 id="code-examples-iterator-allnode"><title>2. Iterating over all nodes</title>
+    		<para> To iterate over all nodes, we need to create an Iterator on the graph nodes with the member function <code>Iterator* Graph::getNodes () const</code>, we will make it point on the graphs nodes.
     		</para>
-    		<programlisting> <![CDATA[
-    		
-  Iterator<node> *itNodes = graph->getNodes();
-		
-		]]>
+    		<programlisting>
+<![CDATA[  Iterator<node> *itNodes = graph->getNodes();]]>
         	</programlisting>
     		<para>
     		 The documentation of the interface Iterator can be found <ulink url="http://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html"> here.</ulink>
     		</para>
     		<para>With the functions <code>template &lt;class itType &gt;
- bool tlp::Iterator &lt; itType &gt; ::hasNext ( )</code> and <code> node next ( )  </code>, we can iterate through our graph nodes with a simple while :
+ bool tlp::Iterator&lt; itType &gt;::hasNext ( )</code> and <code> node next ( )</code>, we can iterate through our graph nodes with a simple while :
 		</para>
-		<programlisting role="C"> <![CDATA[
-			
-   while(itNodes->hasNext()) {
-   	node n = itNodes->next();
-    				
-    		]]>
+		<programlisting role="C">
+<![CDATA[   while(itNodes->hasNext()) {
+   	node n = itNodes->next();]]>
         	</programlisting>
         	<para>In this <code>while</code> loop, we display some node topological properties :</para>
-        	<programlisting role="C"> <![CDATA[
-        		
-    cout << "node: " <<  n.id << endl;
+        	<programlisting role="C">
+<![CDATA[    cout << "node: " <<  n.id << endl;
     cout << " degree: " << graph->deg(n) << endl;
     cout << " in-degree: " << graph->indeg(n) << endl;
-    cout << " out-degree: " << graph->outdeg(n) << endl;
- 		
-        	]]>
+    cout << " out-degree: " << graph->outdeg(n) << endl;]]>
         	</programlisting>
-        	<para>At the end of the loop, we will need to delete the iterator.. <code>delete itNodes;</code> </para>
+        	<para>At the end of the loop, we will need to delete the iterator: <code>delete itNodes;</code> </para>
         	<para>Following is the output of this simple while loop :</para>
-        	<programlisting> <![CDATA[
-[root@atlas tutorial-002]# ./tutorial002
+        	<programlisting>
+<![CDATA[[root@atlas tutorial-002]# ./tutorial002
 node: 0
  degree: 2
  in-degree: 1
@@ -482,16 +447,14 @@ node: 1
 node: 2
  degree: 2
  in-degree: 1
- out-degree: 1
- 	      ]]>
+ out-degree: 1]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-graphit"><title>3. Iterating through a node predecessors</title>
-    		<para>To iterate through predecessors of node, we use the same technic, the same type of Iterator, but, instead of using the function getNodes() of the class Graph, we will use the function <code> Iterator&lt;node&gt; * getInNodes (const node) const </code> that will return an iterator on the predecessors of a node. </para>
+    	<sect2 id="code-example-graphit"><title>3. Iterating through a node predecessors</title>
+    		<para>To iterate through predecessors of node, we use the same type of Iterator, but, instead of using the function getNodes() of the class Graph, we will use the function <code> Iterator&lt;node&gt;* getInNodes (const node) const</code> that will return an iterator on the predecessors of a node. </para>
     		
-    		<programlisting> <![CDATA[
-    		
-    //===========================
+    		<programlisting>
+<![CDATA[    //===========================
     //iterate all predecessors of a node
     cout << " predecessors: {";
     Iterator<node> *itN=graph->getInNodes(n);
@@ -499,18 +462,14 @@ node: 2
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
     } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
-    cout << "}" << endl;
-
-    		
-    		]]>
+    cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-graphit"><title>4. Iterating through a node successors</title>
-    		<para>To iterate through successors of a node, we just need to use the function <code> Iterator&lt;node&gt; * Graph::getOutNodes (const node) const </code> to have an Iterator on its successors.</para>
+    	<sect2 id="code-example-graphit"><title>4. Iterating through a node successors</title>
+    		<para>To iterate through successors of a node, we just need to use the function <code>Iterator&lt;node&gt;* Graph::getOutNodes (const node) const</code> to have an Iterator on its successors.</para>
     		
-    		<programlisting> <![CDATA[
-    		
-    //===========================
+    		<programlisting>
+<![CDATA[    //===========================
     //iterate all successors of a node
     cout << " successors: {";
     itN = graph->getOutNodes(n);
@@ -518,19 +477,14 @@ node: 2
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
     } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
-    cout << "}" << endl;
-
-
-    		
-    		]]>
+    cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-graphit"><title>5. Iterating through a node neighbors (predecessors and successors)</title>
-    		<para>For neighbors, we will use the function <code> Iterator&lt;node&gt; * Graph::getInOutNodes (const node) const </code> to have an Iterator on its neighbors.</para>
+    	<sect2 id="code-example-graphit"><title>5. Iterating through a node neighbors (predecessors and successors)</title>
+    		<para>For neighbors, we will use the function <code> Iterator&lt;node&gt;* Graph::getInOutNodes (const node) const </code> to have an Iterator on its neighbors.</para>
     		
-    		<programlisting> <![CDATA[
-    		
-   //===========================
+    		<programlisting>
+<![CDATA[    //===========================
     //iterate the neighborhood of a node
     cout << " neighborhood: {";
     itN = graph->getInOutNodes(n);
@@ -538,17 +492,14 @@ node: 2
       cout << itN->next().id;
       if (itN->hasNext()) cout << ",";
     } delete itN; //!!!Warning : do not forget to delete iterators (memory leak)
-    cout << "}" << endl;
-    		
-    		]]>
+    cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-        <sect2 id="code-exemple-graphit"><title>6. Iterating through a node incoming edges</title>
-    		<para>For incoming edges, we will use an Iterator on edges with the member function <code> Iterator&lt;edge&gt; * Graph::getInEdges (const node) const</code>.</para>
+        <sect2 id="code-example-graphit"><title>6. Iterating through a node incoming edges</title>
+    		<para>For incoming edges, we will use an Iterator on edges with the member function <code>Iterator&lt;edge&gt;* Graph::getInEdges (const node) const</code>.</para>
     		
-    		<programlisting> <![CDATA[
-    		
-   //===========================
+    		<programlisting>
+<![CDATA[   //===========================
     //iterate the incoming edges
     cout << " incoming edges: {";
     Iterator<edge> *itE=graph->getInEdges(n);
@@ -557,38 +508,28 @@ node: 2
       if (itE->hasNext()) cout << ",";
     } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
     cout << "}" << endl;
-    cout << " outcoming edges: {";
-
-    		
-    		]]>
+    cout << " outcoming edges: {";]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-graphit"><title>7. Iterating through a node outgoing edges</title>
-    		<para>For outgoing edges, we will use the function <code> Iterator&lt;edge&gt; * Graph::getOutEdges (const node) const </code>.</para>
+    	<sect2 id="code-example-graphit"><title>7. Iterating through a node outgoing edges</title>
+    		<para>For outgoing edges, we will use the function <code>Iterator&lt;edge&gt;* Graph::getOutEdges (const node) const</code>.</para>
     		
-    		<programlisting> <![CDATA[
-    		
-     //===========================
+    		<programlisting>
+<![CDATA[     //===========================
     //iterate the outcomming edges
     itE = graph->getOutEdges(n);
     while(itE->hasNext()) {
       cout << itE->next().id;
       if (itE->hasNext()) cout << ",";
     } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
-    cout << "}" << endl;
-
-
-    		
-    		]]>
+    cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-graphit"><title>8. Iterating through a node adjacent edges</title>
-    		<para>For adjacent edges, we will use the function <code> Iterator&lt;edge&gt; * Graph::getInOutEdges (const node) const </code>.</para>
+    	<sect2 id="code-example-graphit"><title>8. Iterating through a node adjacent edges</title>
+    		<para>For adjacent edges, we will use the function <code>Iterator&lt;edge&gt;* Graph::getInOutEdges (const node) const</code>.</para>
     		
-    		<programlisting> <![CDATA[
-    		
-		
-    //===========================
+    		<programlisting>
+<![CDATA[    //===========================
     //iterate the adjacent edges
     cout << " adjacent edges: {";
     itE = graph->getInOutEdges(n);
@@ -596,30 +537,22 @@ node: 2
       cout << itE->next().id;
       if (itE->hasNext()) cout << ",";
     } delete itE; //!!!Warning : do not forget to delete iterators (memory leak)
-    cout << "}" << endl;
-
-    		
-    		]]>
+    cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-endwhile"><title>Don't forget memory leaks</title>
-    		 <para>As we are still is the first while (iterating over all nodes) we need to delete the Iterator on Nodes :</para>
+    	<sect2 id="code-example-endwhile"><title>Don't forget memory leaks</title>
+    		 <para>As we are still in the first while (iterating through all nodes) we need to delete the Iterator on Nodes :</para>
     		 
-    		 <programlisting> <![CDATA[
-    		 
-}// end while 
-delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)
-
-    		 
-    		]]>
+    		 <programlisting>
+<![CDATA[}// end while 
+delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-endwhile"><title>9. Iterating over edges (all edges).</title>
-    		 <para>Some times it can be useful to iterate over edges, for example in the algorithm of Kruskal. That is why the graph class owns the function <code> Iterator&lt;edge&gt; * Graph::getEdges (const node) const </code>, that return a pointer on an Iterator of type edge. Following is an exemple of its use. </para>
+    	<sect2 id="code-example-endwhile"><title>9. Iterating on edges (all edges).</title>
+    		 <para>Some times it can be useful to iterate on edges, for example in the algorithm of Kruskal. That is why the graph class owns the function <code>Iterator&lt;edge&gt;* Graph::getEdges (const node) const</code>, that return a pointer on an Iterator of type edge. Following is an exemple of its use. </para>
     		 
-    		 <programlisting> <![CDATA[
-    		 
-  //===========================
+    		 <programlisting>
+<![CDATA[  //===========================
   //Iterate all edges
   Iterator<edge> *itEdges=graph->getEdges();
   while(itEdges->hasNext()) {
@@ -628,13 +561,11 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)
     cout << " source: " << graph->source(e).id;
     cout << " target: " << graph->target(e).id;
     cout << endl;
-  } delete itEdges; //!!!Warning : do not forget to delete iterators (memory leak)
-    		 
-    		]]>
+  } delete itEdges; //!!!Warning : do not forget to delete iterators (memory leak)]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-foreach"><title>10. The forEach Macro </title>
-    		<para>To simplify all this process of Iterators, the API of tulip has a Macro forEach which is very similar to the foreach of C# or Java. It takes two parameters :</para>
+    	<sect2 id="code-example-foreach"><title>10. The forEach Macro </title>
+    		<para>To simplify all this process of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters :</para>
     		<itemizedlist>
     			<listitem> A variable :
     			</listitem>
@@ -652,11 +583,8 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)
     		</itemizedlist>
     		This macro function is defined in the header file : tulip/ForEach.h
     		<para>Following is a small example of its use.</para>
-    		<programlisting> <![CDATA[
-  
-  
-  #include <tulip/ForEach.h>
-
+    		<programlisting>
+<![CDATA[#include <tulip/ForEach.h>
 
   //...
   //main
@@ -671,15 +599,12 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)
     cout << e.id << ",";
   }
   
-  //...
-  
-  		]]>
+  //...]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-exemple-tuto002"><title>Source Code</title>
-    		<programlisting> <![CDATA[
-    		
-#include <iostream>
+    	<sect2 id="code-example-tuto002"><title>Source Code</title>
+    		<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/Graph.h>
 
 /**
@@ -796,81 +721,74 @@ int main() {
 
   delete graph; //delete the entire graph
   return EXIT_SUCCESS;
-}
-   		
-    		
-  		]]>
+}]]>
         	</programlisting>
     	</sect2>
 
     </sect1>
     
 
-    <sect1 id="code-exemples-properties"><title>TUTORIAL 003 : Properties</title>
-        <para> This tutorial will show you how to add / create properties to a Graph. For local or inherited properties, see tututorial 005. An instance of a property is owned by a graph and is an association table an element in the graph and a value of a predifined type.
+    <sect1 id="code-examples-properties"><title>TUTORIAL 003 : Properties</title>
+        <para> This tutorial will show you how to add / create properties to a Graph. For local or inherited properties, see tututorial 005. An instance of a property is owned by a graph and is an association table between the elements of graph (nodes and edges) and values of a predefined type.
         </para>
-        <sect2 id="code-exemple-headfiles"><title>1. Header Files and predefined properties</title>
-        	<para> In tulip API, every type of property is declared in its own Header file. Following is a list of those header files :
+        <sect2 id="code-example-headfiles"><title>1. Header files and predefined properties</title>
+        	<para> In tulip API, every type of property is declared in its own header file. Following is a list of those header files and the type of value which can be associated to an element of the graph:
         	</para>
         	<itemizedlist>
         		<listitem>DoubleProperty : tulip/DoubleProperty.h /
-        			Edge = double, Node = double
+        			value type for edge = double, node = double
         		</listitem>
         		<listitem>BooleanProperty : tulip/BooleanProperty.h /
-        			Edge = bool, Node = bool
+        			value type for edge = bool, node = bool
         		</listitem>
         		<listitem>IntegerProperty: tulip/IntegerProperty.h /
-        			Edge = int, Node = int
+        			value type for edge = int, node = int
         		</listitem>
         		<listitem>LayoutProperty : tulip/LayoutProperty.h /
-        			Edge = Coord(), Node = vector&lt;Coord&gt;()
+        			value type for edge = Coord(), node = vector&lt;Coord&gt;()
         		</listitem>
         		<listitem>ColorProperty : tulip/ColorProperty.h /
-        			Edge = Color(), Node = Color()
+        			value type for edge = Color(), node = Color()
         		</listitem>
         		<listitem>SizeProperty : tulip/SizeProperty.h /
-        			Edge = Size(), Node = Size()
+        			value type for edge = Size(), node = Size()
         		</listitem>
         		<listitem>StringProperty : tulip/StringProperty.h /
-        			Edge = string, Node = string
+        			value type for edge = string, node = string
         		</listitem> 
         		<listitem>GraphProperty : tulip/GraphProperty.h /
-        			Edge = graph, Node = graph
+        			value type for edge = graph, node = graph
         		</listitem>
         	</itemizedlist>
         </sect2>
-        <sect2 id="code-exemple-headfiles"><title>2. Creation of a Property.</title>
+        <sect2 id="code-example-headfiles"><title>2. Creation of a property.</title>
         	<para>
-        		The creation of property is done by the function <code> Graph::getLocalProperty&lt;TypeProperty&gt;("name of the property")</code>. This function returns a pointer to a property. The real type of the property is given with the template parameter. If the property does not yet exists, a new one is created and returned. 
+        		The creation of a property is accomplished by the function <code> Graph::getLocalProperty&lt;TypeProperty&gt;("name of the property")</code>. This function returns a pointer to a property. The real type of the property is given with the template parameter. If the property of the given name does not yet exists, a new one is created and returned. 
         	</para>
         	<para><code>Warning !</code></para>
         	<para>Using of delete on that property will cause a segmentation violation (use delLocalProperty instead).
         	</para>
         	<para> Following is a sample of code that creates 8 properties :
         	</para>
-        	<programlisting> <![CDATA[
-        	
-  //Get and create several properties
-  DoubleProperty *metric=graph->getLocalProperty<DoubleProperty>("firstMetric");
-  BooleanProperty *select=graph->getLocalProperty<BooleanProperty>("firstSelection");
-  LayoutProperty *layout=graph->getLocalProperty<LayoutProperty>("firstLayout");
-  IntegerProperty *integer=graph->getLocalProperty<IntegerProperty>("firstInteger");
-  ColorProperty *colors=graph->getLocalProperty<ColorProperty>("firstColors");
-  SizeProperty *sizes=graph->getLocalProperty<SizeProperty>("firstSizes");
-  GraphProperty *meta=graph->getLocalProperty<GraphProperty>("firstMeta");
-  StringProperty *strings=graph->getLocalProperty<StringProperty>("firstString");
-        	
-        	]]>
+        	<programlisting>
+<![CDATA[  //Get and create several properties
+  DoubleProperty *metric = graph->getLocalProperty<DoubleProperty>("firstMetric");
+  BooleanProperty *select = graph->getLocalProperty<BooleanProperty>("firstSelection");
+  LayoutProperty *layout = graph->getLocalProperty<LayoutProperty>("firstLayout");
+  IntegerProperty *integer = graph->getLocalProperty<IntegerProperty>("firstInteger");
+  ColorProperty *colors = graph->getLocalProperty<ColorProperty>("firstColors");
+  SizeProperty *sizes = graph->getLocalProperty<SizeProperty>("firstSizes");
+  GraphProperty *meta = graph->getLocalProperty<GraphProperty>("firstMeta");
+  StringProperty *strings = graph->getLocalProperty<StringProperty>("firstString");]]>
         	</programlisting>
         </sect2>
-        <sect2 id="code-exemple-headfiles"><title>3. Initialize all properties.</title>
+        <sect2 id="code-example-headfiles"><title>3. Initialize all properties.</title>
         	<para>
-        		One property has to be initialized for both edges and nodes. It is done with the functions setAllNodeValue(value) and setAllEdgeValue(value) which are both memeber functions of the property. Following is an example : 
+        		One property has to be initialized for both edges and nodes. It is done with the functions setAllNodeValue(value) and setAllEdgeValue(value) which are both member functions of the property. Following is an example : 
         	</para>
         
-        	<programlisting> <![CDATA[
-        	
-//initialize all the properties
+        	<programlisting>
+<![CDATA[  //initialize all the properties
   metric->setAllNodeValue(0.0);
   metric->setAllEdgeValue(0.0);
   select->setAllNodeValue(false);
@@ -881,41 +799,32 @@ int main() {
   integer->setAllEdgeValue(0);
   sizes->setAllNodeValue(Size(0,0,0)); //width, height, depth
   sizes->setAllEdgeValue(Size(0,0,0)); //start_size, end_size, arrow_size
-  colors->setAllNodeValue(Color(0,0,0,0));//Red, green, blue
-  colors->setAllEdgeValue(Color(0,0,0,0));//Red, green, blue
+  colors->setAllNodeValue(Color(0,0,0,0));//Red, green, blue, alpha
+  colors->setAllEdgeValue(Color(0,0,0,0));//Red, green, blue, alpha
   strings->setAllNodeValue("first");
   strings->setAllEdgeValue("first");
-  meta->setAllNodeValue(graph); //an existing graph
-
-        	
-        	]]>
+  meta->setAllNodeValue(graph); //an existing graph]]>
         	</programlisting>
-        	<para>Following is the list of properties previously created opened with tulip GUI :</para>
+        	<para>Following is the display (in the tulip GUI) of the list of a node associated values for the properties previously created :</para>
         	<graphic fileref="images/tuto_003_properties_1.png"/>
         </sect2>
-        <sect2 id="code-exemple-headfiles"><title>4. Iterating over properties.</title>
-        	<para>Once again, iteration is made with Iterators. The class graph has a member function <code> Iterator&lt; std::string &gt; * getLocalProperties () </code> that returns an iterator on the local properties.</para>
+        <sect2 id="code-example-headfiles"><title>4. Iterating over properties.</title>
+        	<para>Once again, iteration is made with Iterators. The class graph has a member function <code>Iterator&lt; std::string &gt;* getLocalProperties ()</code> that returns an iterator on the local properties.</para>
         	
         	<para>Following is an example :</para>
-        	<programlisting> <![CDATA[
-        	
-        	
-  cout << "List of the properties present in the graph:" << endl;
+        	<programlisting>
+<![CDATA[  cout << "List of the properties present in the graph:" << endl;
   Iterator<string> *it=graph->getLocalProperties();
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
-
-        	
-        	]]>
+  } delete it;]]>
         	</programlisting>
         	
         	<para>You can also use the macro forEach.</para>
         </sect2>
-                	<sect2 id="code-exemple-004-codesource"><title>Source Code</title>
-        		<programlisting> <![CDATA[
-        		
-#include <iostream>
+                	<sect2 id="code-example-003-codesource"><title>Source Code</title>
+        		<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -926,10 +835,10 @@ int main() {
 #include <tulip/StringProperty.h>
 
 /**
- * Tutorial 004
+ * Tutorial 003
  *
  * Create a graph and a properties of each type
- * And display properities present in the graph
+ * And display properties present in the graph
  */
 
 using namespace std;
@@ -987,21 +896,16 @@ int main() {
   tlp::saveGraph (graph, "tutoproper.tlp");  
   delete graph;
   return EXIT_SUCCESS;
-}
-      		
-        		
-        		
-        		]]>
+}]]>
         		</programlisting>
         	</sect2>
        
     </sect1>
-    <sect1 id="code-exemples-subgraph"><title>TUTORIAL 004 : Create your first subgraph.</title>
+    <sect1 id="code-examples-subgraph"><title>TUTORIAL 004 : Create your first subgraph.</title>
     		<para>This tutorial will teach you how to create subgraphs. At the end of it, we will have a hierarchy of 3 graphs.</para>
     		<para>Before anything consider the following function that creates 3 nodes and 3 edges (same as in tutorial 001 ):</para>
-    		<programlisting> <![CDATA[
-    		
-void buildGraph(Graph *graph) 
+    		<programlisting>
+<![CDATA[void buildGraph(Graph *graph) 
 {
   //add three nodes
   node n1=graph->addNode();
@@ -1011,66 +915,49 @@ void buildGraph(Graph *graph)
   graph->addEdge(n2,n3);
   graph->addEdge(n1,n2);
   graph->addEdge(n3,n1);
-}
-
-    		
-        	]]>
+}]]>
         	</programlisting>
         	
-        	<para>The creation of a subgraph is quite simple. You just have to use the function <code>  Graph * addSubGraph ( BooleanProperty * selection = 0) </code>. It will create and return a new SubGraph of the graph. The elements of the new SubGraph is those selected in the selection (selection associated value equals true) if there is no selection an empty SubGraph is returned. </para>
-        	<para>In the following sample we create 3 empty subgraph :</para>
+        	<para>The creation of a subgraph is quite simple. You just have to use the function <code>Graph* addSubGraph (BooleanProperty* selection = 0) </code>. It will create and return a new SubGraph of the graph. The elements of the new subgraph are those selected in the selection(selection associated value equals true); if there is no selection an empty subgraph is returned. </para>
+        	<para>In the following sample we create 3 empty subgraphs :</para>
         	
-        	<programlisting> <![CDATA[
-        	
-        	
-   //build three empty subgraphs
+        	<programlisting>
+<![CDATA[  //build three empty subgraphs
   Graph *subgraph0=graph->addSubGraph();
   Graph *subgraph1=graph->addSubGraph();
-  Graph *subgraph2=subgraph1->addSubGraph();
-
-        	
-        	]]>
+  Graph *subgraph2=subgraph1->addSubGraph();]]>
         	</programlisting>
         	
         	<para>We now need to create some nodes and edges :</para>
-        	<programlisting> <![CDATA[
-        	
-        	
-  //add node inside subgraphs
+        	<programlisting>
+<![CDATA[   //add node inside subgraphs
   buildGraph(subgraph0);
   buildGraph(subgraph1);
-  buildGraph(subgraph2);
-
-        	
-        	]]>
+  buildGraph(subgraph2);]]>
         	</programlisting>
         	
-        	<para>Following is the hierarchy we have just created, opened with tulip :</para>
+        	<para>Following is the hierarchy we have just created, displayed with tulip :</para>
         	<graphic fileref="images/tuto_004_subgraph_1.png" />
         	
         	
-        	<para>We can check that by iterating on our graph's subgraphs using the function <code>Graph::getSubGraphs()</code> :</para>
-        	<programlisting> <![CDATA[
-        	
-  //iterate subgraph (0 and 1 normally ) and output them
+        	<para>We can check that by iterating on our graph's subgraphs using the function <code>Iterator&lt; Graph * &gt;* Graph::getSubGraphs()</code> :</para>
+        	<programlisting>
+<![CDATA[  //iterate subgraph (0 and 1 normally ) and output them
   Iterator<Graph *> *itS=graph->getSubGraphs();
   while (itS->hasNext())
     cout << itS->next() << endl;
-  delete itS;
-
-        	
-        	]]>
+  delete itS;]]>
         	</programlisting>
         	
-        	 <sect2 id="code-exemple-003-code"><title>Source Code</title>
-        	<programlisting> <![CDATA[
-#include <iostream>
+        	 <sect2 id="code-example-004-code"><title>Source Code</title>
+        	<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/Graph.h>
 
 /**
- * Tutorial 003
+ * Tutorial 004
  *
- * Create a graph and three sub graphq 
+ * Create a graph and three subgraphs,
  * display all the structure using iterators
  */
 
@@ -1113,20 +1000,17 @@ int main() {
 
   delete graph;
   return EXIT_SUCCESS;
-}
-     	
-        	]]>
+}]]>
         	</programlisting>
         </sect2>
 
     </sect1>
-    <sect1 id="code-exemples-propertiessub"><title>TUTORIAL 005 : Properties and Subgraphs</title>
+    <sect1 id="code-examples-propertiessub"><title>TUTORIAL 005 : Properties and subgraphs</title>
     		<para>In this tutorial, we will show you how to use properties with subgraphs, how to deal with properties in a big hierarchy. To do so, we will create a graph with some properties, several subgraphs with other properties and iterate over local and inherited properties.</para>
-    		<sect2 id="code-exemple-propertiessub-intro"><title>1. Introduction </title>
+    		<sect2 id="code-example-propertiessub-intro"><title>1. Introduction </title>
     			<para>We will first begin with the creation of the graph and its properties :</para>
-    			<programlisting> <![CDATA[
-    			
-int main() {
+    			<programlisting>
+<![CDATA[int main() {
   //create an empty graph
   Graph *graph=tlp::newGraph();
 
@@ -1140,50 +1024,37 @@ int main() {
 
   //init the selection in order to use it for building clone subgraph
   select->setAllNodeValue(true);
-  select->setAllEdgeValue(true);
-
-    			
-    			]]>
+  select->setAllEdgeValue(true);]]>
         		</programlisting>
         		<para>Note that the function <code>void buildGraph(Graph *g)</code>, is the one implemented in Tutorial 004.</para>
-        		<para>In the sample of code above, we create a graph with 3 properties : firstSelection (select), fisrtColors and firstMetric. We then set all nodes and edges BooleanProperty (select) to true which means that all nodes and edges are selected.</para>
+        		<para>In the sample of code above, we create a graph with 3 properties : firstSelection (select), fisrtColors and firstMetric. We then set all nodes and edges "firstSelection" associated value to true which means that all nodes and edges are selected.</para>
         		<para>We, then, create two subgraphs out of our selection (the entire graph) : </para>
         		
-        		<programlisting> <![CDATA[
-        		
-  //Create a hierarchy of subgraph (they all own the same elements)
+        		<programlisting>
+<![CDATA[  //Create a hierarchy of subgraph (they all own the same elements)
   Graph *subgraph1=graph->addSubGraph(select);
-  Graph *subgraph2=subgraph1->addSubGraph(select);
-
-        		
-        		 ]]>
+  Graph *subgraph2=subgraph1->addSubGraph(select);]]>
         		</programlisting>    
-        		<para>And, to finish this section, we add some more properties to those two subgraphs :</para>
-        		<programlisting> <![CDATA[
-        		
-  //create a property in subgraph1 (redefinition of the one defined in graph)
+        		<para>And, to finish this section, we add some new properties to those two subgraphs :</para>
+        		<programlisting>
+<![CDATA[   //create a property in subgraph1 (redefinition of the one defined in graph)
   subgraph1->getLocalProperty<DoubleProperty>("firstMetric");
 
   //create a new property in subgraph1
   subgraph1->getLocalProperty<DoubleProperty>("secondMetric");
 
   //create a new property in subgraph3
-  subgraph2->getLocalProperty<DoubleProperty>("thirdMetric");
-
-        		
-        		 ]]>
+  subgraph2->getLocalProperty<DoubleProperty>("thirdMetric");]]>
         		</programlisting>
         		<para>The property "firstMetric" will be redefined but not the two other ones.</para>
     		</sect2>
-    		<sect2 id="code-exemple-propertiessub-sub1"><title>2. Properties of subgraph1 </title>
+    		<sect2 id="code-example-propertiessub-sub1"><title>2. Properties of subgraph1 </title>
     			<para>A good way to see what we have created is to iterate over the local properties of subgraph1 and in a second time iterate over inherited properties. </para>
     			<para>Following is a sample and its output that enables the iteration over local properties :</para>
-    			<programlisting> <![CDATA[
-    			
-    			                                                   
-cout << "List of the local properties present in the subgraph1:" << endl;   
-Iterator<string> *it=subgraph1->getLocalProperties();    		    
-while (it->hasNext()) {                                 		    
+    			<programlisting>
+<![CDATA[  cout << "List of the local properties present in the subgraph1:" << endl;   
+  Iterator<string> *it=subgraph1->getLocalProperties();    		    
+  while (it->hasNext()) {                                 		    
     cout << it->next() << endl;                                           
   } delete it;          
   
@@ -1194,8 +1065,7 @@ _________________________________________________________________________
 [root@atlas tutorial-005]# ./tutorial 
 List of the local properties present in the subgraph1:
 firstMetric	
-secondMetric                                                      	
-    			]]>
+secondMetric]]>
         		</programlisting>
         		
         		
@@ -1203,12 +1073,10 @@ secondMetric
 			
         		<para>As you can see the only local properties that has subgraph1 are "firstMetric" and "secondMetric". Indeed, "firstMetric" has been redefined, and, "thirdMetric" has been created with subgraph2.</para>
         		<para>Following is a sample and its output that enables the iteration over inherited properties :</para>
-        		<programlisting> <![CDATA[
-        		
-        		
-cout << "List of the inherited properties present in the subgraph1:" << endl;  
-it=subgraph1->getInheritedProperties();                        		        
-while (it->hasNext()) {                                 		        
+        		<programlisting>
+<![CDATA[  cout << "List of the inherited properties present in the subgraph1:" << endl;  
+  it=subgraph1->getInheritedProperties();                        		        
+  while (it->hasNext()) {                                 		        
     cout << it->next() << endl;                                               
   } delete it;                                                                
   
@@ -1216,15 +1084,13 @@ _________________________________________________________________________
 
  List of the local properties present in the subgraph1:  
    firstColors       		
-   firstSelection   		
-        		]]>
+   firstSelection]]>
         		</programlisting>
         		<para>As you can see, subgraph1 just has two inherited properties since "firstMetric" has been redefined.</para>
         		
 			<para>Following is a sample of code that lists all the properties of a graph, the inherited properties and local properties :</para>
-			<programlisting> <![CDATA[
-
-cout << "List of properties present in the subgraph1:" << endl;
+			<programlisting>
+<![CDATA[  cout << "List of properties present in the subgraph1:" << endl;
   it=subgraph1->getProperties();
   while (it->hasNext()) {
     cout << it->next() << endl;
@@ -1236,42 +1102,32 @@ List of properties present in the subgraph1:
 firstMetric
 secondMetric
 firstColors
-firstSelection
-
-  
-     		
-        		]]>
+firstSelection]]>
         		</programlisting>
 
     		</sect2>
-    		<sect2 id="code-exemple-propertiessub-sub2"><title>3. Properties of subgraph2 </title>
+    		<sect2 id="code-example-propertiessub-sub2"><title>3. Properties of subgraph2 </title>
     			<para>As we did with subgraph1, we will now iterate over the local properties of subgraph2 in a first time and in a second time iterate over its inherited properties. </para>
     			<para>Following is a sample and its output that enables the iteration over local properties :</para>
-    			<programlisting> <![CDATA[
-    			
-    			                                                   
-cout << "List of the local properties present in the subgraph2:" << endl;  
-it=subgraph2->getLocalProperties();    		                            
-while (it->hasNext()) {                                 		    
+    			<programlisting>
+<![CDATA[  cout << "List of the local properties present in the subgraph2:" << endl;  
+  it=subgraph2->getLocalProperties();    		                            
+  while (it->hasNext()) {                                 		    
     cout << it->next() << endl;                                           
-  } delete it;                                                            
+   } delete it;                                                            
 
 _________________________________________________________________________
 
 [root@atlas tutorial-005]# ./tutorial
  List of the local properties present in the subgraph2:
- thirdMetric
-
-    			]]>
+ thirdMetric]]>
         		</programlisting>
         		<para>The only local properties that has subgraph1 is thirdMetric.</para>
         		<para>Following is a sample and its output that enables the iteration over inherited properties :</para>
-        		<programlisting> <![CDATA[
-        		
-        		
-cout << "List of the inherited properties present in the subgraph2:" << endl;   
-it=subgraph2->getInheritedProperties();                        		        
-while (it->hasNext()) {                                 		        
+        		<programlisting>
+<![CDATA[  cout << "List of the inherited properties present in the subgraph2:" << endl;   
+  it=subgraph2->getInheritedProperties();                        		        
+  while (it->hasNext()) {                                 		        
     cout << it->next() << endl;                                                 
   } delete it;                                                                        		
       		
@@ -1281,19 +1137,15 @@ List of the local properties present in the subgraph2:
 firstColors     		
 firstMetric     		
 firstSelection      		
-secondMetric     	
-
-	
-        		]]>
+secondMetric]]>
         		</programlisting>
         		<para>As you can see, subgraph2 has a lot of inherited properties since he is the subgraph of subgraph1 which is the subgraph of the root graph. </para>
         		
     		</sect2>
-    		<sect2 id="code-exemple-005-code"><title>Source Code</title>
+    		<sect2 id="code-example-005-code"><title>Source Code</title>
     			
-    			<programlisting> <![CDATA[
-    			
-#include <iostream>
+    			<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -1301,7 +1153,7 @@ secondMetric
 /**
  * Tutorial 005
  *
- * Create a graph hierarchy and sevral  properties
+ * Create a graph hierarchy with several properties
  * Display the inherited and local properties in each graph
  */
 
@@ -1361,14 +1213,11 @@ int main() {
   } delete it;
 
 
-
-
   cout << "List of properties present in the subgraph1:" << endl;
   it=subgraph1->getProperties();
   while (it->hasNext()) {
     cout << it->next() << endl;
   } delete it;
-
 
 
   cout << "List of the local properties present in the subgraph2:" << endl;
@@ -1385,22 +1234,19 @@ int main() {
 
   delete graph;
   return EXIT_SUCCESS;
-}
-    			
-    			]]>
+}]]>
         		</programlisting>
     			
     		</sect2>
     </sect1>
-    <sect1 id="code-exemples-edge-order"><title>TUTORIAL 006 : Edges order.</title>
-    	<para>In this tutorial, we learn how to change edges order in the graph edges adjacency list (please visit <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree">Wikipedia: Adjacency and degree</ulink> for more details ). Indeed, it can be useful some times to sort the edges considering a Metric.</para>
-		    <sect2 id="code-exemple-edgesorder-intro"><title>1. Creation of the graph and its edges </title>
+    <sect1 id="code-examples-edge-order"><title>TUTORIAL 006 : Edges order.</title>
+    	<para>In this tutorial, we will learn how to change edges order in the graph edges adjacency list (please visit <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph#Adjacency_and_degree">Wikipedia: Adjacency and degree</ulink> for more details ). Indeed, it can be useful to sort the edges considering a metric.</para>
+		    <sect2 id="code-example-edgesorder-intro"><title>1. Creation of the graph and its edges </title>
 		    	<para>We will create a graph with 4 nodes and 4 edges. Their "id number" will start from 0 just like in the figure below :</para>
 		    	<graphic fileref="images/tuto_006_edgeorder_1.png" />
 		    	<para>Following is the sample of code that created such a graph: </para>
-		    	<programlisting> <![CDATA[	
-
-int main() {
+		    	<programlisting>
+<![CDATA[int main() {
   //create an empty graph
   Graph *graph=tlp::newGraph();
 
@@ -1414,54 +1260,44 @@ int main() {
   edge e0=graph->addEdge(n1,n2);
   edge e1=graph->addEdge(n0,n1);
   edge e2=graph->addEdge(n2,n0);
-  edge e3=graph->addEdge(n3,n0);
-
-		    	
-		    	]]>
+  edge e3=graph->addEdge(n3,n0);]]>
         		</programlisting>
         		<para>As you can see, node 0 has three edges : edge 1,edge 2 and edge 3. And if we display its edges adjacency list (see last section for function <code> void displayAdjacency(node n, Graph *graph) </code> ) we obtain the following output : </para>
-        		<programlisting> <![CDATA[ 1 2 3 ]]> </programlisting>
+        		<programlisting><![CDATA[ 1 2 3 ]]> </programlisting>
 		    </sect2>
-		    <sect2 id="code-exemple-edgesorder-"><title>2. Swap edges</title>
+		    <sect2 id="code-example-edgesorder-"><title>2. Swap edges</title>
 		    <para>Swapping edges can be easily done with the function, <code> void Graph::swapEdgeOrder ( const node, const edge,const  edge)</code> that will, as said swap two edges in the adjacent list of a node. Following is an example of its use : </para>
-		    <programlisting> <![CDATA[
-		    	
- //swap e1 and e3
-  graph->swapEdgeOrder(n0,e1,e3);
-	
-		    ]]>
+		    <programlisting>
+<![CDATA[  //swap e1 and e3
+  graph->swapEdgeOrder(n0, e1, e3);]]>
         	    </programlisting>
         	    <para>As you can see, the adjacency list has changed :</para>
         	    <programlisting> <![CDATA[ 3 2 1 ]]> </programlisting>
   
 		    </sect2>
-		    <sect2 id="code-exemple-edgesorder-setorder"><title>3. Setting an order</title>
-		    	<para>An other way to change the edges order is to use a vector of type edge and the function : <code> void Graph::setEdgeOrder (const node, const std::vector &lt; edge  &gt; ) </code>, following is an example that will replace e1 and e3 in their original order :</para>
-		     <programlisting> <![CDATA[
-		     
-  vector<edge> tmp(2);
+		    <sect2 id="code-example-edgesorder-setorder"><title>3. Setting an order</title>
+		    	<para>An other way to change the edges order is to use a vector of type edge and the function : <code> void Graph::setEdgeOrder (const node, const std::vector &lt; edge  &gt; )</code>, following is an example that will replace e1 and e3 in their original order :</para>
+		     <programlisting>
+<![CDATA[  vector<edge> tmp(2);
   tmp[0]=e1;
   tmp[1]=e3;
-  graph->setEdgeOrder(n0,tmp);
-		     
-		    	
-		    ]]>
+  graph->setEdgeOrder(n0,tmp);]]>
         	    </programlisting>
         	    <para>And the new order : </para>
         	    <programlisting> <![CDATA[ 1 2 3 ]]> </programlisting>
         	    
 		    </sect2>
-		    <sect2 id="code-exemple-006-code"><title>Source Code</title>
-		    	<programlisting> <![CDATA[
-		    	
-#include <iostream>
+		    <sect2 id="code-example-006-code"><title>Source Code</title>
+		    	<programlisting>
+<![CDATA[#include <iostream>
 #include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
+
 /**
  * Tutorial 006
  *
  * Create a graph
- * Order the edge around the nodes
+ * Order the edges around the nodes
  */
 
 using namespace std;
@@ -1519,16 +1355,14 @@ int main() {
   tmp[1]=e3;
   graph->setEdgeOrder(n0,tmp);
   //display the new order of edge around n1
-  displayAdjacency(n0,graph);
+  displayAdjacency(n0,graph);
   delete graph;
   return EXIT_SUCCESS;
-}
-		    	
-		    	]]> </programlisting>
+}]]> </programlisting>
 		    	
 		    </sect2>
     </sect1>
-     <sect1 id="code-exemples-propertiessub"><title>TUTORIAL 007 : Mutable Collection</title>
+     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 007 : Mutable Collection</title>
      		<para>In this small tutorial, we will learn how to use the Mutable Container (an efficient associative container) of the tulip API that enables :</para>
      		<itemizedlist>
      			<listitem>
@@ -1557,26 +1391,20 @@ int main() {
      			</listitem>
      		</itemizedlist>
      		<para>Following is a small example of its use :</para>
-     		<programlisting> <![CDATA[
-     		
-
-//declartion of a new MutableContainer 
+     		<programlisting>
+<![CDATA[  //declaration of a new MutableContainer 
   MutableContainer<int> t;
   
-//set all element to 0
+  //set all element to 0
   t.setAll(0);
-//except element of index 1 set to 1.
+  //except element of index 1 set to 1.
   t.set(1,1);
   
-//display on standard output
-  cout << t.get(1) << "and" << t.get(2) << endl;
-
-     		
-     		
-     		 ]]>
+  //display on standard output
+  cout << t.get(1) << "and" << t.get(2) << endl;]]>
         	    </programlisting>
      </sect1>
-     <sect1 id="code-exemples-propertiessub"><title>TUTORIAL 008 : Graph Tests</title>
+     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 008 : Graph Tests</title>
      		<para>The tulip API has special functions to test if a graph is element of a specific class of graph. Moreover results are buffered and automatically updated if it is possible in constant time. </para>
      		<para>Specific functions are available for each test.</para>
      		<para>Each class of graph has its own header file. Following is a list of those header files and an example of their use :</para>
@@ -1618,17 +1446,16 @@ int main() {
      			</listitem>
      		</itemizedlist>
      </sect1>
-     <sect1 id="code-exemples-propertiessub"><title>TUTORIAL 009 : ObservableGraph</title>
+     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 009 : ObservableGraph</title>
      	<para>
-     		In this tutorial, we will show you how to use the class ObservableGraph that enables to receive notification when a graph is modified.
+     		In this tutorial, we will show you how to use the class ObservableGraph that enables to receive notification when a graph is updated.
      	</para>
      	<para>First, we will create a class that inherits from ObservableGraph, and then use it and see what this new class is able to "do".</para>
      	<sect2 id="code-exmple-obser1"><title>1. Our new class, GraphObserverTest :</title>
-     		<para>Header Files and Namespaces :</para>
+     		<para>Header files and namespaces :</para>
      		<para>To continue this tutorial, we need to include the following files, and namespaces.</para>
-     		<programlisting> <![CDATA[
-     		
-#include <iostream>
+     		<programlisting>
+<![CDATA[#include <iostream>
 #include <set>
 //- - - - - - - - - - - - -
 #include <tulip/TlpTools.h>
@@ -1637,16 +1464,13 @@ int main() {
 //- - - - - - - - - - - - -
 
 using namespace std;
-using namespace tlp;
-     		
-     		]]>
+using namespace tlp;]]>
         	</programlisting>
         	
-        	<para>As said before, we will create a new class that inherits from ObservableGraph. This class will have several functions to notify when a node or an edge is deleted or added or reversed (edge).</para>
+        	<para>As said before, we will create a new class that inherits from ObservableGraph. This class will have several functions to be notified when a node or an edge is deleted or added or reversed (edge).</para>
         	<para>Following is the class GraphObserverTest :</para>
-        	<programlisting> <![CDATA[
-        	
-class GraphObserverTest : public GraphObserver {
+        	<programlisting>
+<![CDATA[class GraphObserverTest : public GraphObserver {
 public:
   GraphObserverTest() {
   }
@@ -1670,60 +1494,46 @@ private:
   void destroy(Graph *g) {
     cout << "graph : " << g->getId() << " is about to be deleted" << endl;
   }
-};
-        	
-        	
-        	]]>
+};]]>
         	</programlisting>
         	<para>Those methods are redefinitions of their homologues in the super class.</para>
         	
      	</sect2>
-        <sect2 id="code-exemple-obsmain"><title>2. The Main function</title>
+        <sect2 id="code-example-obsmain"><title>2. The Main function</title>
         	<para>Following in the main function with some explanations :</para>
-        	<programlisting> <![CDATA[
-        	
-int main(int argc, char **argv) {
-  Graph *graph = tlp::newGraph();
-  
-  		]]>
+        	<programlisting>
+<![CDATA[int main(int argc, char **argv) {
+  Graph *graph = tlp::newGraph();]]>
         	</programlisting>
         	<para>Nothing really new here, just the creation of the graph.</para>
-        	<programlisting> <![CDATA[
-        	
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        	<programlisting>
+<![CDATA[  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   GraphObserverTest graphObserverTest;
   graph->addObserver(&graphObserverTest);
-  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  		]]>
+  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]]>
         	</programlisting>
         	<para> We add the instance of our class GraphObserverTest with the function <code> Graph::addObserver </code>.
         	</para>
-        	<para>We then perform some modification on the graph :</para>
-        	<programlisting> <![CDATA[
-        	
-  node n1 = graph->addNode();
-  node n2 = graph->addNode();
-  edge e  = graph->addEdge(n1, n2);
-  graph->reverse(e);
-  graph->delNode(n1);
+        	<para>We then perform some modifications on the graph :</para>
+        	<programlisting>
+<![CDATA[  node n1 = graph->addNode();
+  node n0 = graph->addNode();
+  edge e0  = graph->addEdge(n0, n1);
+  graph->reverse(e0);
+  graph->delNode(n0);
   delete graph;
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   return EXIT_SUCCESS;
-}
-        	
-        	]]>
+}]]>
         	</programlisting>
         	<para>Following is the output of this program :</para>
-        	<programlisting> <![CDATA[
-
-node :0 has been added
+        	<programlisting>
+<![CDATA[node :0 has been added
 node :1 has been added
 edge :0 has been added
 edge :0 is about to be reversed
 node :0 is about to be deleted 
-edge :0 is about to be deleted    	
-
-        	]]>
+edge :0 is about to be deleted]]>
         	</programlisting>
         </sect2>
      </sect1>

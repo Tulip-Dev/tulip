@@ -1,41 +1,41 @@
 <chapter id="plugins-development"><title>Plug-ins development</title>
-    <para>Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set-up. It enables
+    <para>Tulip has been built to be easily extensible. Therefore a mechanism of plug-ins has been set up. It enables
     to directly add new functionalities into the Tulip kernel. One must keeps in mind that a plug-in have access to 
     all the parts of Tulip. Thus, one must write plug-ins very carefully to prevent memory leak and also 
     errors. A bug in plug-in can result in a "core dump" in the software that uses it. To
     enable the use of plug-ins, a program must call the initialization functions of the plug-ins. This function
-    loads dynamically all the plug-ins and register them into a factory that will enables to access to it directly.</para>
+    loads dynamically all the plug-ins and register them into a factory that will enable to directly access to it.</para>
     
-    <para>To develop a plug-in, you need to create a new class that will inherits from a specific  Algorithm class. Algorithms classes are separated in 4 different types :</para>
+    <para>To develop a plug-in, you need to create a new class that will inherits from a specific  algorithm class. Algorithms classes are separated in 4 different types :</para>
     <itemizedlist>
     	<title>Basic  classes :</title>
-    	<listitem> <para><code> Property Algorithms :</code> </para>
-    			<para>Those types of plug-ins will affect a specific property of any type. See <xref linkend="propertyalgorithm-class" />.</para>
+    	<listitem> <para><code> Property algorithms :</code> </para>
+    			<para>This kind of plug-ins will only affect a specific property of any type. See <xref linkend="propertyalgorithm-class" />.</para>
     	</listitem>
-    	<listitem> <para><code>Generic Algorithms :</code></para>
-    			<para>Those types of plug-ins can be used to modify the entire Graph. In other case  it is preferable to use a specific class of Algorithms to implement your plug-in. See <xref linkend="algorithm-class" />.</para>
+    	<listitem> <para><code>Generic algorithms :</code></para>
+    			<para>This kind of plug-ins can be used to modify the entire graph. In other case  it is preferable to use a specific class of algorithms to implement your plug-in. See <xref linkend="algorithm-class" />.</para>
     	</listitem>
-    	<listitem> <para> <code>Importation Algorithms :</code></para> 
-    			<para>Plug-ins to import a specific Graph. For example a plug-in that will create a Graph from a file directory system.  See <xref linkend="importModule" />.</para>
+    	<listitem> <para> <code>Importation algorithms :</code></para> 
+    			<para>Plug-ins to import a specific graph. For example a plug-in that will create a graph from a file directory system.  See <xref linkend="importModule" />.</para>
     	</listitem>
-    	<listitem> <para><code> Exportation Algorithms :</code> </para>
+    	<listitem> <para><code> Export algorithms :</code> </para>
     			<para>Plug-ins to save a graph to a specific type of file. See <xref linkend="exportModule" />. </para>
     	</listitem>
     </itemizedlist>
     
     
     <sect1 id="propertyalgorithm-class"><title>The PropertyAlgorithm class.</title>
-     	<para>The PropertyAlgorithm class, is the class from which inherits different types of algorithms such as the BooleanAlgorithm class or the LayoutAlgorithm class ( see picture below ). This class is important in the way that every specific algorithm that you will develop will have to inherit from one of those classes. For example, if you write a Layout plugin, your new class will have to inherit from the LayoutAlgorithm class which inherits from this PropertyAlgorithm class. </para>
+     	<para>The PropertyAlgorithm class, is the class from which inherits different types of algorithms such as the BooleanAlgorithm class or the LayoutAlgorithm class (see picture below). This class is important in the way that every specific algorithm that you will develop will have to inherit from one of those classes. For example, if you write a plug-in to update the graph layout, your new class will have to inherit from the LayoutAlgorithm class which inherits from this PropertyAlgorithm class. </para>
      	
      	<graphic fileref="../doxygen/tulip-lib/classtlp_1_1PropertyAlgorithm__inherit__graph.png" />
      	
-     	<para>Each one of the 8 classes presented above has a public member, <emphasis>TypeName</emphasis><code>Property</code>* <emphasis>typeName</emphasis><code>Result</code>, which is the data member that which have to be updated by your plug-in. After a successful run tulip will automatically copy this data member into the corresponding property of the graph. Following is a table showing the data member, Graph property and Algorithms GUI submenu corresponding to each subclass of Algorithm :</para>
+     	<para>Each one of the 8 classes presented above has a public member, <emphasis>TypeName</emphasis><code>Property</code>* <emphasis>typeName</emphasis><code>Result</code>, which is the data member that which have to be updated by your plug-in. After a successful run tulip will automatically copy this data member into the corresponding property of the graph. Following is a table showing the data member, graph property and 'Algorithms' GUI submenu corresponding to each subclass of Algorithm :</para>
      	<informaltable frame="all">
   <tgroup cols="4">            
 
   <thead>                      
     <row>
-      <entry>Class Name</entry>
+      <entry>Class name</entry>
       <entry>Data member</entry>
       <entry>Graph property replaced</entry>
       <entry>Algorithms GUI submenu</entry>
@@ -97,10 +97,10 @@
      	<para> Note that at anytime, if the user clicks on the "cancel" button  ( see <xref linkend="pluginprogress-class" /> for more details ), none of your algorithm's actions will changes the graph since the variable <emphasis>typeName</emphasis>Result is not copied in the corresponding property.</para>
      	
      	<sect2 id="algoprop-quick-desc"><title>Overview of the class</title>
-     		<para>A quick overview of the methods and attributes of the class PropertyAlgorithm is needed. Indeed, even though, your algorithm class will inherit form one of the 8 classes inheriting from PropertyAlgorithm, it is important to have a generic understanding of those classes. </para>
+     		<para>A quick overview of the functions and data members of the class PropertyAlgorithm is needed in order to have a generic understanding of its 8 derived classes. </para>
 	     	<sect3 id="algoprop-public-atributes"><title>Public Members</title>
 	     	        <para>
-	    	    			Following is a list of all protected members :
+	    	    			Following is a list of all public members :
 	    	    	</para>
 	    		<itemizedlist>
 	    			<listitem>
@@ -129,15 +129,15 @@
 	    	    		</para>
 	    	    		<itemizedlist>
 	    	    			<listitem>
-	    	    				<methodname>Graph * graph </methodname> :  
+	    	    				<methodname>Graph* graph </methodname> :  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>PluginProgress * pluginProgress </methodname> :
-	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the next Section for more details. </para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    				<para> This instance of the class PluginProgress can be used to have an interaction between the user and our algorithm. See the next section for more details.</para>
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>DataSet * dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
 	    	    </sect3>
@@ -146,10 +146,10 @@
 	    </sect2>
 	    <sect2 id="dataset-class"><title>Parameters :</title>
 	    
-	    	<para>Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being lunched. In this section, we will look at the methods and techniques to do so.
+	    	<para>Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
 	    	</para>
 	    	<sect3 id="algoprop-param-declare"><title>Adding parameters to an algorithm</title>
-	    		<para>The class PropertyAlgorithm inherits form a class called WithParameters that has a member function named <methodname>template&lt;typename Type&gt; void addParameter (const char *name, const char *inHelp=0, const char *inDefValue=0, bool isMandatory=true)</methodname> which is capable of adding a parameter. This method has to be called in the constructor of your class.</para>
+	    		<para>The class PropertyAlgorithm inherits from a class called WithParameters that has a member function named <methodname>template&lt;typename Type&gt; void addParameter (const char *name, const char *inHelp=0, const char *inDefValue=0, bool isMandatory=true)</methodname> which is capable of adding a parameter. This method has to be called in the constructor of your class.</para>
 	    		<para>Following is a description of its parameters :</para>
 	    		<itemizedlist>
 	    			<listitem> name : Name of the new parameter.
@@ -163,9 +163,7 @@
 	    		</itemizedlist>
 	    		<para>On the following example, we declare a character buffer that will contain the documentation of our parameters. </para>
 	    		<programlisting role="C">
- <![CDATA[
-	    		
-namespace {
+ <![CDATA[namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
@@ -209,23 +207,15 @@ namespace {
     "<ul><li>true : linear mapping</li><li>false: uniform quantification</li></ul>" \
     HTML_HELP_CLOSE(),
   };
-}
-	    		
-	    		
-	    		
-]]>
+}]]>
     	    		</programlisting>
     	    		<para>Then, we can add the parameters in the constructor by writing the following lines:</para>
     	    		<programlisting role="C">
- <![CDATA[	    		
-	    		
-    addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
+ <![CDATA[    addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
     addParameter<Color>("color1",paramHelp[2],"(255,255,0,128)");
-    addParameter<Color>("color2",paramHelp[3],"(0,0,255,228)");
-	    		
-]]>
+    addParameter<Color>("color2",paramHelp[3],"(0,0,255,228)");]]>
     	    		</programlisting>
     	    		<para>The picture below is the result of the sample of code above.</para>
     	    		<graphic fileref="images/plugin_doc_add_parameter_1.png" />
@@ -251,16 +241,13 @@ namespace {
     				<para>Returns true if name exists else false.</para>
     			</listitem>
     			<listitem>
-    			    	<methodname>Iterator&lt;std::pair&lt;std::string, DataType&gt;&gt; * getValues () const</methodname> :
+    			    	<methodname>Iterator&lt;std::pair&lt;std::string, DataType&gt; &gt;* getValues () const</methodname> :
     				<para>Returns an iterator on all values </para>
     			</listitem>
     		</itemizedlist>
     	    	<para>Has you could have guess, the one important to access a parameter is get() which allows to access to a specific parameter. Following is an example of its use :</para>
     	    	<programlisting role="C">
- <![CDATA[
-    	    
-    	    
-  DoubleProperty* metricS;
+ <![CDATA[  DoubleProperty* metricS;
   int colorModel;
   Color color1;
   Color color2;
@@ -272,10 +259,7 @@ namespace {
       dataSet->get("color1", color1);
       dataSet->get("color2", color2);
       dataSet->get("type", mappingType);
-    }
-  
-    	    
-    	    	]]>
+    }]]>
     	    	</programlisting>
     	      </sect3>
 	</sect2>
@@ -300,7 +284,7 @@ namespace {
     	    			
     	    			
     	    			<listitem>
-    	    				<methodname>ProgressState progress (int step, int max_step)</methodname> :<para> This method can be used to know the global progress of or algorithm, the number of step accomplished.</para>
+    	    				<methodname>ProgressState progress (int step, int max_step)</methodname> :<para> This method can be used to know the global progress of or algorithm, the number of steps accomplished.</para>
     	    			</listitem>
     	    			
     	    			 
@@ -327,13 +311,10 @@ namespace {
     	    		</itemizedlist>
     	    		<para></para>
     	    	</sect3>
-    	    	<sect3 id="exemple-pluginprogress"><title>PluginProgress Example</title>
+    	    	<sect3 id="exemple-pluginprogress"><title>PluginProgress example</title>
     	    		<para>In following small example, we will iterate over all nodes and notify the user of the progression. </para>
     	    		<programlisting role="C">
- <![CDATA[
-    	    
- 
-  unsigned int i=0;
+ <![CDATA[  unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
   
   const unsigned int STEP = 10;
@@ -346,32 +327,27 @@ namespace {
     ...
     if(i%STEP==0)
     {
-        pluginProgress->progress(i, nbNodes); //Says to the user that the algorithm has progressed.
+       pluginProgress->progress(i, nbNodes); //Says to the user that the algorithm has progressed.
         
-        //exit if the user has pressed on Cancel or Stop
-        if(pluginProgress->state() != TLP_CONTINUE)
-        {
-           returnForEach pluginProgress->state()!=TLP_CANCEL;
-        }
+       //exit if the user has pressed on Cancel or Stop
+       if(pluginProgress->state() != TLP_CONTINUE)
+       {
+          returnForEach pluginProgress->state()!=TLP_CANCEL;
+       }
     }    
     i++;
         	
-  }    	    
- 
-    	    
-    	    	]]>
+  }]]>
     	    	</programlisting>
-    	    	<para>Before exiting, we check if the user pressed stop or cancel. If he pressed "cancel", the graph will not be modified. If he pressed "stop", all values computed till now will be saved to the graph</para>
+    	    	<para>Before exiting, we check if the user pressed stop or cancel. If he pressed "cancel", the graph will not be modified. If he pressed "stop", all values computed till now will be saved to the graph.</para>
     	    	</sect3>
     	    </sect2>
 	
-    	<sect2 id="algoprop-example"><title>Example of a plugin Skeleton</title>
+    	<sect2 id="algoprop-example"><title>Example of a plugin skeleton</title>
     		<para>Following is an example of a dummy color algorithm ( you can find more example in the tulip tarball ):</para>
 
    	    		<programlisting role="C">
- <![CDATA[
-
-#include <tulip/TulipPlugin.h>
+ <![CDATA[#include <tulip/TulipPlugin.h>
 #include <string>
 
 using namespace std;
@@ -421,14 +397,7 @@ public:
 COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comments", "1.0")
 // If you want to present your algorithm in a dedicated submenu of the Tulip GUI,
 // use the declaration below where the last parameter specified the name of submenu.
-// COLORPLUGINOFGROUP(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comments", "1.0", "My algorithms");
-
-
-
-
-
-    	    		
-    	    		]]>
+// COLORPLUGINOFGROUP(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comments", "1.0", "My algorithms");]]>
     	    		</programlisting>
         </sect2>
 </sect1>
@@ -439,7 +408,7 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
      
     <sect1 id="algorithm-class"><title>The Algorithm class.</title>
     	<para>
-    		The class Algorithm is the class from which your algorithm will inherits if ypu want to write a more general algorithm. Instead of modifying just a specific property, it can be used to modify the entire graph. In this section, we will list all its members to have a global overview on what we can use to develop such a plug-in.
+    		The class Algorithm is the class from which your algorithm will inherits if you want to write a more general algorithm. Instead of modifying just a specific property, it can be used to modify the entire graph. In this section, we will list all its members to have a global overview on what we can use to develop such a plug-in.
     	</para>
     	<sect2 id="algo-public-atributes"><title>Public Members</title>
     		<para>
@@ -473,15 +442,15 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     	    		</para>
     	    		<itemizedlist>
     	    			<listitem>
-    	    				<methodname>Graph * graph </methodname> :  
+    	    				<methodname>Graph* graph </methodname> :  
     	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
     	    			</listitem>
     	    			<listitem>
-    	    				<methodname>PluginProgress * pluginProgress </methodname> :
-    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the next Section for more details. </para>
+    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
     	    			</listitem>
     	    			<listitem>
-    	    				<methodname>DataSet * dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
     	    			</listitem>
     	    		</itemizedlist>
     	    	</sect2>
@@ -491,9 +460,9 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     
        <sect1 id="importModule-exportmodule-class"><title>Import and export plug-ins</title>
       		<para>
-      			In this section, we will learn how to create importation or exportation plug-ins. Those plug-ins will inherit from two different classes, ImportModule if it is an importation plug-in, and, ExportModule if it is an exportation plug-in. 
+      			In this section, we will learn how to create import or export plug-ins. Those plug-ins will inherit from two different classes, ImportModule if it is an import plug-in, and, ExportModule if it is an export plug-in. 
       		</para>
-      		<sect2 id="importModule"><title>Importation Plug-ins</title>
+      		<sect2 id="importModule"><title>Import plug-ins</title>
       			<para>Following is a small description of the class ImportModule : </para>
       			<sect3 id="algoprop-public-atributes"><title>Public Members</title>
 			    	<para>
@@ -522,24 +491,22 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
 	    	    		</para>
 	    	    		<itemizedlist>
 	    	    			<listitem>
-	    	    				<methodname>Graph * graph </methodname> :  
+	    	    				<methodname>Graph* graph </methodname> :  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>PluginProgress * pluginProgress </methodname> :
-	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the next Section for more details. </para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>DataSet * dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
 	    	    	</sect3>	
 	    	    	<sect3 id="example-plugin-export"><title>Skeleton</title>
 	    	    		
    	    		<programlisting role="C">
- <![CDATA[
-
-#include <tulip/TulipPlugin.h>
+ <![CDATA[#include <tulip/TulipPlugin.h>
 #include <string>
 
 using namespace std;
@@ -579,14 +546,11 @@ public:
 IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comments", "1.0")
 // If you want to present your algorithm in a dedicated submenu of the Tulip GUI,
 // use the declaration below where the last parameter specified the name of submenu.
-// IMPORTPLUGINOFGROUP(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comments", "1.0", "My algorithms");
-
-
-]]>
+// IMPORTPLUGINOFGROUP(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comments", "1.0", "My algorithms");]]>
     	    		</programlisting>
 	    	    	</sect3>
       		</sect2>
-      		<sect2 id="exportModule"><title>Exportation Plug-ins</title>
+      		<sect2 id="exportModule"><title>Export Plug-ins</title>
       			<para>Following is a small description of the class ExportModule : </para>
       			<sect3 id="algoprop-public-atributes"><title>Public Members</title>
 			    	<para>
@@ -615,15 +579,15 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 	    	    		</para>
 	    	    		<itemizedlist>
 	    	    			<listitem>
-	    	    				<methodname>Graph * graph </methodname> :  
+	    	    				<methodname>Graph* graph </methodname> :  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>PluginProgress * pluginProgress </methodname> :
-	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the next Section for more details. </para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>DataSet * dataSet </methodname> :<para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
 	    	    	</sect3>
@@ -684,10 +648,7 @@ EXPORTPLUGIN(MyExportModule, "My Export Module", "Authors", "07/07/07", "Comment
       	<para>You can download plugins skeletons  <ulink url="http://tulip.labri.fr/samples/plugintemplates.tar.gz">here</ulink> .</para>
       	<para>Following is a Makefile that compiles a plug-in :</para>
       	<programlisting role="C"> 
- <![CDATA[
-      	
-      	
-# May have to be changed if you did'nt install tulip in this directory. 
+ <![CDATA[# Update the line below according to the tulip installation directory you choosed
 TULIP_DIR=/usr/local/bin  
 TULIP_CONFIG=$(TULIP_DIR)/tulip-config
 TULIP_VERSION=$(shell ${TULIP_CONFIG} --version)
@@ -725,10 +686,7 @@ install: all
 	| sed 's!\($*\)\.o[ :]*!\1.o $@ : !g' > $@; \
 	 [ -s $@ ] 2>/dev/null || rm $@
 
--include $(DEPS)
-      	
-      	
-      	]]>
+-include $(DEPS)]]>
     	</programlisting>
     	
     	<procedure><title>Compile and install your plugin</title>
