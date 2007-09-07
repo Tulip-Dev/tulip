@@ -82,8 +82,14 @@ public:
   }
 
   void doLayout(node n, unsigned int depth, double startAngle, double endAngle,
-		DoubleProperty *angles) {
+		DoubleProperty *angles, bool checkAngle = false) {
     double sAngle = endAngle - startAngle;
+    // this will avoid crossing between the egdes from n to its children
+    // and the edge from its ancestor to n
+    if (checkAngle && sAngle > M_PI) {
+      endAngle = startAngle + M_PI;
+      sAngle = M_PI;
+    }
     if (depth > 0) {
       // layout the node in the middle of the sector
       double nAngle = (startAngle + endAngle)/2.0;
@@ -94,9 +100,11 @@ public:
       layoutResult->setNodeValue(n, Coord(0, 0, 0));
     node on;
     double nSpread = angles->getNodeValue(n);
+    checkAngle = false;
     forEach(on, tree->getOutNodes(n)) {
       endAngle = startAngle + (sAngle * (angles->getNodeValue(on)/nSpread));
-      doLayout(on, depth + 1, startAngle, endAngle, angles);
+      doLayout(on, depth + 1, startAngle, endAngle, angles, checkAngle);
+      checkAngle = true;
       startAngle = endAngle;
     }
   }
