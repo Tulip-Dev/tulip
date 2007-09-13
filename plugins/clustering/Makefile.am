@@ -49,4 +49,4 @@ moc_%.cpp: %.h
 	$(UIC) -o $@ $<
 
 clean-generic:
-	rm -f moc_*
+	rm -f moc_* *Data.*
