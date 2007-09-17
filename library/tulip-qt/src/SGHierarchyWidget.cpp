@@ -125,19 +125,13 @@ void SGHierarchyWidget::buildTreeView(QListView *item, Graph *p) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
   tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
-  stringstream sstr;
-  sstr.width(7);
-  sstr.fill('0');
-  sstr << p->numberOfNodes();
-  tmpItem->setText(1, QString(sstr.str().c_str()));
-  sstr.seekp(0);
-  sstr.width(7);
-  sstr << p->numberOfEdges();
-  tmpItem->setText(2, QString(sstr.str().c_str()));
-  sstr.seekp(0);
-  sstr.width(5);
-  sstr << p->getId();
-  tmpItem->setText(3, QString(sstr.str().c_str()));
+  char tmpstr[9];
+  sprintf(tmpstr, " %.7d", p->numberOfNodes());
+  tmpItem->setText(1, QString(tmpstr));
+  sprintf(tmpstr, " %.7d", p->numberOfEdges());
+  tmpItem->setText(2, QString(tmpstr));
+  sprintf(tmpstr, " %.5d", p->getId());
+  tmpItem->setText(3, QString(tmpstr));
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS = p->getSubGraphs();
   while (itS->hasNext())
@@ -149,19 +143,13 @@ void SGHierarchyWidget::buildTreeView(QListView *item, Graph *p) {
 void SGHierarchyWidget::buildTreeView(QListViewItem *item, Graph *p) {
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
   tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
-  stringstream sstr;
-  sstr.width(7);
-  sstr.fill('0');
-  sstr << p->numberOfNodes();
-  tmpItem->setText(1, QString(sstr.str().c_str()));
-  sstr.seekp(0);
-  sstr.width(7);
-  sstr << p->numberOfEdges();
-  tmpItem->setText(2, QString(sstr.str().c_str()));
-  sstr.seekp(0);
-  sstr.width(5);
-  sstr << p->getId();
-  tmpItem->setText(3, QString(sstr.str().c_str()));
+  char tmpstr[9];
+  sprintf(tmpstr, " %.7d", p->numberOfNodes());
+  tmpItem->setText(1, QString(tmpstr));
+  sprintf(tmpstr, " %.7d", p->numberOfEdges());
+  tmpItem->setText(2, QString(tmpstr));
+  sprintf(tmpstr, " %.5d", p->getId());
+  tmpItem->setText(3, QString(tmpstr));
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS=p->getSubGraphs();
   while (itS->hasNext())
