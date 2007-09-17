@@ -241,11 +241,11 @@ bool QuotientClustering::run() {
 	tmp.target=mapping[*it2].id;
 	if ( (tmp.source!=tmp.target) && (myQuotientGraph.find(tmp)==myQuotientGraph.end()) ) {
 	  myQuotientGraph.insert(tmp);
-	  edge op;
-	  if (!oriented)
-	    op = quotientGraph->existEdge(node(tmp.target), node(tmp.source));
 	  edge e = quotientGraph->addEdge(mapping[*it1],mapping[*it2]);
-	  if (!oriented && op.isValid()) {
+	  edge op;
+	  if (!oriented &&
+	      (op = quotientGraph->existEdge(node(tmp.target),
+					     node(tmp.source))).isValid()) {
 	    opProp->setEdgeValue(op, e.id);
 	    opProp->setEdgeValue(e, op.id);
 	  }
