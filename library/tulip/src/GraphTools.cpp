@@ -9,14 +9,19 @@
 #include "tulip/DoubleProperty.h"
 #include "tulip/ForEach.h"
 #include "tulip/ConnectedTest.h"
+#include "tulip/Ordering.h"
+#include "tulip/hash_string.h"
 
 #include <math.h>
 
-#include <tulip/Ordering.h>
-
-
-
 using namespace std;
+
+namespace stdext {
+  template<>
+  struct hash<double> {
+    size_t operator()(const double s) const { return (size_t) s; }
+  };
+};
 
 namespace tlp {
   
@@ -164,6 +169,7 @@ namespace tlp {
     return result;
   }
 
+  //======================================================================
   void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
 			    PluginProgress *pluginProgress) {
     list<node> fifo;
@@ -254,6 +260,7 @@ namespace tlp {
     graph->delLocalProperty("selectionNodeFlag");
   }
 
+  //======================================================================
   struct ltEdge {
     DoubleProperty *m;
     ltEdge(DoubleProperty *metric) : m(metric) {}
@@ -301,7 +308,7 @@ namespace tlp {
     
       selection->setEdgeValue(cur, true);
       if (pluginProgress) {
-	pluginProgress->setComment("Computing minimim spanning tree...");
+	pluginProgress->setComment("Computing minimum spanning tree...");
 	++edgeCount;
 	if (edgeCount == 200 ) {
 	  if (pluginProgress->progress((maxCount - numClasses)*100/maxCount, 100) != TLP_CONTINUE)
@@ -323,6 +330,179 @@ namespace tlp {
     }
   }
 
+  //======================================================================
+  static void dfsSetNodeConnectedComponentsValue(Graph *graph, node n, MutableContainer<bool> &flag,
+						 DoubleProperty* property, double value) {
+    if (flag.get(n.id)) return;
+    flag.set(n.id, true);
+    property->setNodeValue(n, value);
+    node itn;
+    forEach(itn, graph->getInOutNodes(n))
+      dfsSetNodeConnectedComponentsValue(graph, itn, flag, property, value);
+  }
+
+  void computeConnectedComponents(Graph *graph, DoubleProperty* property) {
+    MutableContainer<bool> flag;
+    flag.setAll(false);
+    double curComponent=0;
+    node itn;
+    forEach(itn, graph->getNodes()) {
+      if (!flag.get(itn.id)) {
+	dfsSetNodeConnectedComponentsValue(graph, itn, flag, property, curComponent);
+	curComponent++;
+      }
+    }
+    Iterator<edge> *itE=graph->getEdges();
+    while (itE->hasNext()) {
+      edge ite=itE->next();
+      node source= graph->source(ite);
+      node target= graph->target(ite);
+      if (property->getNodeValue(source) == property->getNodeValue(target))
+	property->setEdgeValue(ite, property->getNodeValue(source));
+      else
+	property->setEdgeValue(ite,curComponent);
+    } delete itE;
+  }
+
+  //=======================================================================
+  bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
+				   bool onNodes, PluginProgress *pluginProgress) {
+    StableIterator<node> itN(graph->getNodes());
+    StableIterator<edge> itE(graph->getEdges());
+    int step = 0, maxSteps = graph->numberOfNodes();
+    if (maxSteps < 100)
+      maxSteps = 100;
+    if (pluginProgress)
+      pluginProgress->setComment(onNodes ? "Partitioning nodes..." : "Partitioning edges");
+
+    // try to work with double value if it's a DoubleProperty
+    if (typeid(*property) == typeid(DoubleProperty)) {
+      stdext::hash_map<double, Graph *> partitions;
+      DoubleProperty *metric = (DoubleProperty *) property;
+      if (onNodes) {
+	while (itN.hasNext()) {
+	  Graph *sg;
+	  node n = itN.next();
+	  double tmp = metric->getNodeValue(n);
+	  if (partitions.find(tmp) == partitions.end()) {
+	    sg = graph->addSubGraph();
+	    stringstream sstr;
+	    sstr << "value = " << tmp;
+	    sg->setAttribute("name", sstr.str());
+	    partitions[tmp]=sg;
+	  } else
+	    sg = partitions[tmp];
+	  sg->addNode(n);
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+
+	step = 0;
+	maxSteps = graph->numberOfEdges();
+	if (maxSteps < 100)
+	  maxSteps = 100;
+	pluginProgress->setComment("Partitioning edges...");
+	while(itE.hasNext()) {
+	  edge ite = itE.next();
+	  double tmp = metric->getNodeValue(graph->source(ite));
+	  if (tmp == metric->getNodeValue(graph->target(ite))) {
+	    partitions[tmp]->addEdge(ite);
+	  }
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+      } else {
+	while (itE.hasNext()) {
+	  Graph *sg;
+	  edge e = itE.next();
+	  double tmp = metric->getEdgeValue(e);
+	  if (partitions.find(tmp) == partitions.end()) {
+	    sg = graph->addSubGraph();
+	    stringstream sstr;
+	    sstr << "value = " << tmp;
+	    sg->setAttribute("name", sstr.str());
+	    partitions[tmp]=sg;
+	  } else
+	    sg = partitions[tmp];
+	  sg->addNode(graph->source(e));
+	  sg->addNode(graph->target(e));
+	  sg->addEdge(e);
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+      }
+    } else {
+      stdext::hash_map<string, Graph *> partitions;
+      if (onNodes) {
+	while (itN.hasNext()) {
+	  Graph *sg;
+	  node n = itN.next();
+	  string tmp=property->getNodeStringValue(n);
+	  if (partitions.find(tmp)==partitions.end()) {
+	    sg = graph->addSubGraph();
+	    sg->setAttribute("name", string("value = ") + tmp);
+	    partitions[tmp]=sg;
+	  } else
+	    sg = partitions[tmp];
+	  sg->addNode(n);
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+
+	step = 0;
+	maxSteps = graph->numberOfEdges();
+	if (maxSteps < 100)
+	  maxSteps = 100;
+	pluginProgress->setComment("Partitioning edges...");
+	while(itE.hasNext()) {
+	  edge ite = itE.next();
+	  string tmp = property->getNodeStringValue(graph->source(ite));
+	  if (tmp == property->getNodeStringValue(graph->target(ite))) {
+	    partitions[tmp]->addEdge(ite);
+	  }
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+      } else {
+	while (itE.hasNext()) {
+	  Graph *sg;
+	  edge e = itE.next();
+	  string tmp = property->getEdgeStringValue(e);
+	  if (partitions.find(tmp) == partitions.end()) {
+	    sg = graph->addSubGraph();
+	    sg->setAttribute("name", string("value = ") + tmp);
+	    partitions[tmp]=sg;
+	  } else
+	    sg = partitions[tmp];
+	  sg->addNode(graph->source(e));
+	  sg->addNode(graph->target(e));
+	  sg->addEdge(e);
+	  if ((++step % (maxSteps/100)) == 0) {
+	    pluginProgress->progress(step, maxSteps);
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+      }
+    }
+    return true;
+  }
+
   //====================================================================
   Graph *computeTree(Graph *graph, Graph *rGraph, bool isConnected,
 		     PluginProgress *pluginProgress) {
@@ -340,16 +520,16 @@ namespace tlp {
       rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
       rGraph->setAttribute(CLONE_ROOT, node());
     }
-    // if the graph is topologically a tree, make it directed
+    // if the graph is topologically a tree, make it rooted
     // using a 'center' of the graph as root
     if (TreeTest::isFreeTree(gClone)) {
-      TreeTest::makeDirectedTree(gClone, graphCenterHeuristic(gClone));
+      TreeTest::makeRootedTree(gClone, graphCenterHeuristic(gClone));
       return gClone;
     }
 
     // if the graph is connected,
-    // extract a minimum spanning tree,
-    // and make it directed
+    // extract a spanning tree,
+    // and make it rooted
     if (isConnected || ConnectedTest::isConnected(gClone)) {
       BooleanProperty treeSelection(gClone);
       selectMinimumSpanningTree(gClone, &treeSelection, 0, pluginProgress);
@@ -360,14 +540,10 @@ namespace tlp {
 
     // graph is not connected
     // compute the connected components's subgraph
-    string err;
     DoubleProperty connectedComponent(rGraph);
-    rGraph->computeProperty(string("Connected Component"), &connectedComponent, err, pluginProgress);
-    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
-      return 0;
-    DataSet tmp;
-    tmp.set("Property", &connectedComponent);
-    bool result = tlp::applyAlgorithm(rGraph, err, &tmp, "Equal Value", pluginProgress);
+    computeConnectedComponents(rGraph, &connectedComponent);
+
+    bool result = computeEqualValueClustering(rGraph, &connectedComponent, true, pluginProgress);
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
     assert(result);
