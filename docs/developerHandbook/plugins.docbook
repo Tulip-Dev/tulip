@@ -98,7 +98,7 @@
      	
      	<sect2 id="algoprop-quick-desc"><title>Overview of the class</title>
      		<para>A quick overview of the functions and data members of the class PropertyAlgorithm is needed in order to have a generic understanding of its 8 derived classes. </para>
-	     	<sect3 id="algoprop-public-atributes"><title>Public Members</title>
+	     	<sect3 id="algoprop-public-atributes"><title>Public members</title>
 	     	        <para>
 	    	    			Following is a list of all public members :
 	    	    	</para>
@@ -123,7 +123,7 @@
 	    			</listitem>
 	    		</itemizedlist>
 	    	</sect3>
-	    	<sect3 id="algoprop-protected-atributes"><title>Protected Members</title>
+	    	<sect3 id="algoprop-protected-atributes"><title>Protected members</title>
 	    	    		<para>
 	    	    			Following is a list of all protected members :
 	    	    		</para>
@@ -137,7 +137,7 @@
 	    	    				<para> This instance of the class PluginProgress can be used to have an interaction between the user and our algorithm. See the next section for more details.</para>
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
 	    	    </sect3>
@@ -267,7 +267,7 @@
 	    	<para>
 	    		The class PluginProgress can be used to interact with the user. Following is a list of its members
 	    	</para>
-    		<sect3 id="pluginprog-public-atributes"><title>Public Members</title>
+    		<sect3 id="pluginprog-public-atributes"><title>Public members</title>
     	    		<para>
     	    			Following is a list of all Public members :
     	    		</para>
@@ -410,7 +410,7 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     	<para>
     		The class Algorithm is the class from which your algorithm will inherits if you want to write a more general algorithm. Instead of modifying just a specific property, it can be used to modify the entire graph. In this section, we will list all its members to have a global overview on what we can use to develop such a plug-in.
     	</para>
-    	<sect2 id="algo-public-atributes"><title>Public Members</title>
+    	<sect2 id="algo-public-atributes"><title>Public members</title>
     		<para>
     			Following is a list of all public members :
     		</para>
@@ -436,7 +436,7 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     		</itemizedlist>
     		<para>The methods below, will be redefined in our plugin (See section plug-in skeleton).</para>
     	</sect2>
-    	<sect2 id="algo-protected-atributes"><title>Protected Members</title>
+    	<sect2 id="algo-protected-atributes"><title>Protected members</title>
     	    		<para>
     	    			Following is a list of all protected members :
     	    		</para>
@@ -447,10 +447,10 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     	    			</listitem>
     	    			<listitem>
     	    				<methodname>PluginProgress* pluginProgress </methodname> :
-    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
+    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
     	    			</listitem>
     	    			<listitem>
-    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
     	    			</listitem>
     	    		</itemizedlist>
     	    	</sect2>
@@ -458,13 +458,12 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     
     <!-- ///////////////////////////////////////////////Import Export////////////////////////////////////////////////////////// !-->
     
-       <sect1 id="importModule-exportmodule-class"><title>Import and export plug-ins</title>
+       <sect1 id="importModule"><title>Import plug-ins</title>
       		<para>
-      			In this section, we will learn how to create import or export plug-ins. Those plug-ins will inherit from two different classes, ImportModule if it is an import plug-in, and, ExportModule if it is an export plug-in. 
+      			In this section, we will learn how to create import plug-ins. Those plug-ins will inherit from ImportModule. 
       		</para>
-      		<sect2 id="importModule"><title>Import plug-ins</title>
-      			<para>Following is a small description of the class ImportModule : </para>
-      			<sect3 id="algoprop-public-atributes"><title>Public Members</title>
+      		<para>Following is a small description of the class ImportModule : </para>
+      		<sect2 id="importprop-public"><title>Public members</title>
 			    	<para>
 		    			Following is a list of all public members :
 		    		</para>
@@ -484,8 +483,8 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
 		    			</listitem>
 		    		</itemizedlist>
 		    		<para>The methods below, will be redefined in our plugin (See section plug-in skeleton).</para>
-	    		</sect3>
-    			<sect3 id="algoprop-protected-atributes"><title>Protected Members</title>
+	    	</sect2>
+    		<sect2 id="import-protected"><title>Protected members</title>
 	    	    		<para>
 	    	    			Following is a list of all protected members :
 	    	    		</para>
@@ -496,14 +495,14 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
 	    	    			</listitem>
 	    	    			<listitem>
 	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
-	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
+	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
 	    	    			<listitem>
 	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
-	    	    	</sect3>	
-	    	    	<sect3 id="example-plugin-export"><title>Skeleton</title>
+                        </sect2>
+                       <sect2 id="import-skeleton"><title>Skeleton an ImportModule derived class</title>
 	    	    		
    	    		<programlisting role="C">
  <![CDATA[#include <tulip/TulipPlugin.h>
@@ -548,11 +547,13 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 // use the declaration below where the last parameter specified the name of submenu.
 // IMPORTPLUGINOFGROUP(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comments", "1.0", "My algorithms");]]>
     	    		</programlisting>
-	    	    	</sect3>
-      		</sect2>
-      		<sect2 id="exportModule"><title>Export Plug-ins</title>
-      			<para>Following is a small description of the class ExportModule : </para>
-      			<sect3 id="algoprop-public-atributes"><title>Public Members</title>
+       </sect2>
+       </sect1>
+       <sect1 id="exportModule"><title>Export plug-ins</title>
+      		<para>
+      			In this section, we will learn how to create export plug-ins. Those plug-ins will inherit from ExportModule. 
+      		</para>
+      		<para>Following is a small description of the class ExportModule : </para>            		<sect2 id="public-attributes"><title>Public members</title>
 			    	<para>
 		    			Following is a list of all public members :
 		    		</para>
@@ -572,8 +573,8 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 		    			</listitem>
 		    		</itemizedlist>
 		    		<para>The methods below, will be redefined in our plugin (See section plug-in skeleton).</para>
-	    		</sect3>
-    			<sect3 id="algoprop-protected-atributes"><title>Protected Members</title>
+	    		</sect2>
+    			<sect2 id="protected-atributes"><title>Protected members</title>
 	    	    		<para>
 	    	    			Following is a list of all protected members :
 	    	    		</para>
@@ -584,14 +585,14 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 	    	    			</listitem>
 	    	    			<listitem>
 	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
-	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See the section <xref linkend="pluginprogress-class" /> for more details. </para>
+	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
 	    	    			<listitem>
-	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different type. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
-	    	    	</sect3>
-	    	    	<sect3 id="example-plugin-export"><title>Skeleton</title>
+	    	    	</sect2>
+	    	    	<sect2 id="example-plugin-export"><title>Skeleton of an ExportModule derived class</title>
 	    	    		
    	    		<programlisting role="C">
  <![CDATA[
@@ -641,7 +642,6 @@ EXPORTPLUGIN(MyExportModule, "My Export Module", "Authors", "07/07/07", "Comment
 
 ]]>
     	    		</programlisting>
-	    	    	</sect3>	
       		</sect2>
       </sect1>
       <sect1 id="plugin-skeleton"><title>Compilation ( Makefiles )</title>
@@ -703,7 +703,7 @@ install: all
 	<step> 
 		<screen><prompt>[user@localhost ]$ </prompt><userinput>make clean</userinput>
 		</screen>
-		'make clean', will remove all generated files (binaries, *.o , ...)
+		'make clean', will remove all generated files (libraries, *.o , ...)
 	</step>
 	</procedure>
       </sect1>
