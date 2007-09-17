@@ -74,7 +74,7 @@
         <action name="Action"/>
         <item text="Tests" name="popupMenu_23" accel="">
             <action name="is_simple"/>
-            <action name="is_directed_tree"/>
+            <action name="is_rooted_tree"/>
             <action name="is_free_tree"/>
             <action name="is_acyclic"/>
             <action name="is_connected"/>
@@ -88,7 +88,7 @@
             <action name="make_acyclic"/>
             <action name="make_connected"/>
             <action name="make_biconnected"/>
-            <action name="make_directed"/>
+            <action name="make_rooted"/>
             <separator/>
             <action name="Reverse_selected_edgesAction"/>
         </item>
@@ -544,16 +544,16 @@
     </action>
     <action>
         <property name="name">
-            <cstring>is_directed_tree</cstring>
+            <cstring>is_rooted_tree</cstring>
         </property>
         <property name="text">
-            <string>Directed Tree</string>
+            <string>Rooted Tree</string>
         </property>
         <property name="menuText">
-            <string>Directed Tree</string>
+            <string>Rooted Tree</string>
         </property>
         <property name="toolTip">
-            <string>Checks if the current graph is a directed tree</string>
+            <string>Checks if the current graph is a rooted tree</string>
         </property>
     </action>
     <action>
@@ -949,16 +949,16 @@
     </action>
     <action>
         <property name="name">
-            <cstring>make_directed</cstring>
+            <cstring>make_rooted</cstring>
         </property>
         <property name="text">
             <string>Unnamed</string>
         </property>
         <property name="menuText">
-            <string>Make directed</string>
+            <string>Make rooted tree</string>
         </property>
         <property name="toolTip">
-            <string>Tranforms the current graph into a directed tree</string>
+            <string>If the current graph is a free tree, turns it into a rooted tree.</string>
         </property>
     </action>
 </actions>
@@ -1158,7 +1158,7 @@
         <slot>isSimple()</slot>
     </connection>
     <connection>
-        <sender>is_directed_tree</sender>
+        <sender>is_rooted_tree</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
         <slot>isTree()</slot>
@@ -1284,10 +1284,10 @@
         <slot>isFreeTree()</slot>
     </connection>
     <connection>
-        <sender>make_directed</sender>
+        <sender>make_rooted</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
-        <slot>makeDirected()</slot>
+        <slot>makeRooted()</slot>
     </connection>
 </connections>
 <includes>
@@ -1337,7 +1337,7 @@
     <slot>setSelect()</slot>
     <slot>setSelection()</slot>
     <slot>isFreeTree()</slot>
-    <slot>makeDirected()</slot>
+    <slot>makeRooted()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

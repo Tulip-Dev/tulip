@@ -195,7 +195,7 @@ protected slots:
   void makeBiconnected();
   void makeSimple();
   void makeConnected();
-  void makeDirected();
+  void makeRooted();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
