@@ -51,9 +51,7 @@ MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context) 
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");
   addParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
-  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
-  addDependency<Algorithm>("Equal Value", "1.0");
 }
 //====================================================
 MixedModel::~MixedModel(){
@@ -88,12 +86,13 @@ bool MixedModel::run() {
   pluginProgress->progress(1, 1000);
   
   Pere = tlp::newCloneSubGraph(graph, "Father");
-  DoubleProperty connectedComponnent(Pere);
-  string err;
-  Pere->computeProperty(string("Connected Component"), &connectedComponnent, err);
-  DataSet tmp;
-  tmp.set("Property", &connectedComponnent);
-  tlp::applyAlgorithm(Pere, err, &tmp, "Equal Value");
+  // compute the connected components's subgraphs
+  std::vector<std::set<node> > components;
+  ConnectedTest::computeConnectedComponents(Pere, components);
+  for (unsigned int i = 0; i < components.size(); ++i) {
+    tlp::inducedSubGraph(Pere, components[i]);
+  }
+
   vector<edge> edge_planar;
 
   
@@ -255,8 +254,9 @@ bool MixedModel::run() {
       
   } delete it;
   if(nbConnectedComponent != 1){
-    err ="";
+    string err ="";
     LayoutProperty layout(graph);
+    DataSet tmp;
     tmp.set("coordinates", layoutResult);
     graph->computeProperty<LayoutProperty *>(string("Connected Component Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();

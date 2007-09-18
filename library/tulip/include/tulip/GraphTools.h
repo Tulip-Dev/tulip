@@ -72,37 +72,9 @@ class IntegerProperty;
 					   PluginProgress *pluginProgress = 0);
 
   /**
-   * Compute the connected components values,
-   * the value of property will be the same for all connected nodes and edges
-   *
-   */
-  TLP_SCOPE void computeConnectedComponents(Graph *graph, DoubleProperty* property);
-
-  /**
    * Compute the subgraphs whom elements have the same value for property
    */
   TLP_SCOPE bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
 					     bool onNodes = true, PluginProgress *pluginProgress = 0);
-
-  /**
-   * Compute a rooted tree from the graph.
-   * The algorithm is the following
-   * - if the graph is a rooted tree, return the graph
-   * - if the graph is a free tree, return a rooted copy
-   * - if the graph is connected, make a copy
-   *   return a rooted spanning tree of that copy
-   * - if the graph is not connected, make a copy,
-   *   compute a tree for each of its connected components,
-   *   add a simple source and return the copy.
-   */  
-  TLP_SCOPE Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false,
-			       PluginProgress *pluginProgress = 0);
-
-  /**
-   * Clean the graph from a tree previously computed
-   * with the computeTree function
-   */
-  TLP_SCOPE void cleanComputedTree(Graph *graph, Graph *tree);
 }
 #endif
-

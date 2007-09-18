@@ -47,10 +47,6 @@ ConnectedComponentPacking::ConnectedComponentPacking(const PropertyContext& cont
   addNodeSizePropertyParameter(this);
   addParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
   addParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY );
-  // Connected component metric dependency
-  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
-  // Equal Value algorithm dependency
-  addDependency<Algorithm>("Equal Value", "1.0");
 }
 //====================================================================
 bool ConnectedComponentPacking::run() {
@@ -80,13 +76,12 @@ bool ConnectedComponentPacking::run() {
   if (complexity=="none")
     complexity = "auto";
 
-
-  DoubleProperty connectedComponent(workingGraph);
-  string err;
-  workingGraph->computeProperty(string("Connected Component"), &connectedComponent, err);
-  DataSet tmp;
-  tmp.set("Property", &connectedComponent);
-  tlp::applyAlgorithm(workingGraph, err, &tmp, "Equal Value");
+  // compute the connected components's subgraphs
+  std::vector<std::set<node> > components;
+  ConnectedTest::computeConnectedComponents(workingGraph, components);
+  for (unsigned int i = 0; i < components.size(); ++i) {
+    tlp::inducedSubGraph(workingGraph, components[i]);
+  }
 
   vector<Rectangle<float> > rectangles;
   Iterator<Graph *> *it = workingGraph->getSubGraphs();

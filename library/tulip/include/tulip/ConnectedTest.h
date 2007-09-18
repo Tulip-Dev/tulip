@@ -45,8 +45,12 @@ public:
   /**
    * Returns the number of connected components in the graph;
    */
-  static unsigned int numberOfConnectedComponnents(Graph *graph);
-
+  static unsigned int numberOfConnectedComponents(Graph *graph);
+  /**
+   * Compute the nodes for each connected component
+   */
+  static void computeConnectedComponents(Graph *graph, std::vector< std::set<node> >& components);
+    
 private:
   void connect(Graph *, std::vector<node>& toLink);
   bool compute(Graph *);

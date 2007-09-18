@@ -73,7 +73,7 @@ bool TreeLeaf::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
-  Graph *tree = computeTree(graph, 0, false, pluginProgress);
+  Graph *tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
     return false;
 
@@ -92,6 +92,6 @@ bool TreeLeaf::run() {
   }
   dfsPlacement(tree, root, 0, 0, 0, &oriLayout, &oriSize);
 
-  cleanComputedTree(graph, tree);
+  TreeTest::cleanComputedTree(graph, tree);
   return true;
 }

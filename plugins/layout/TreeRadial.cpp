@@ -118,7 +118,7 @@ public:
   bool run() {
     if (pluginProgress)
       pluginProgress->showPreview(false);
-    tree = computeTree(graph, 0, false, pluginProgress);
+    tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return false;
 
@@ -153,7 +153,7 @@ public:
     doLayout(root, 0, 0., 2 * M_PI, &angles);
 
     graph->delLocalProperty("bounding circle sizes");
-    cleanComputedTree(graph, tree);
+    TreeTest::cleanComputedTree(graph, tree);
     return true;
   }
 };

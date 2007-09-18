@@ -1,6 +1,7 @@
 #include "tulip/Graph.h"
 #include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
+#include "tulip/ForEach.h"
 
 using namespace std;
 using namespace tlp;
@@ -32,7 +33,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   assert(ConnectedTest::isConnected(graph));
 }
 //=================================================================
-unsigned int ConnectedTest::numberOfConnectedComponnents(Graph *graph) {
+unsigned int ConnectedTest::numberOfConnectedComponents(Graph *graph) {
   if (graph->numberOfNodes()==0) return 0u;
   if (instance==0)
     instance=new ConnectedTest();
@@ -48,6 +49,29 @@ unsigned int ConnectedTest::numberOfConnectedComponnents(Graph *graph) {
   graph->addObserver(instance);
   return result;
 }
+//======================================================================
+static void dfsAddNodesToComponent(Graph *graph, node n, MutableContainer<bool> &flag,
+				  std::set<node>& component) {
+  if (flag.get(n.id)) return;
+  flag.set(n.id, true);
+  component.insert(n);
+  node itn;
+  forEach(itn, graph->getInOutNodes(n))
+    dfsAddNodesToComponent(graph, itn, flag, component);
+}
+
+void ConnectedTest::computeConnectedComponents(Graph *graph, std::vector<std::set<node> >& components) {
+  MutableContainer<bool> flag;
+  flag.setAll(false);
+  node itn;
+  forEach(itn, graph->getNodes()) {
+    if (!flag.get(itn.id)) {
+      components.push_back(std::set<node>());
+      dfsAddNodesToComponent(graph, itn, flag, components.back());
+    }
+  }
+}
+
 //=================================================================
 void connectedTest(Graph *graph, node n, 
 		   MutableContainer<bool> &visited,

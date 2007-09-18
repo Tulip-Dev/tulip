@@ -23,6 +23,7 @@
 #endif
 #include "tulip/ObservableGraph.h"
 #include "tulip/MutableContainer.h"
+#include "tulip/PluginProgress.h"
 
 namespace tlp {
 
@@ -33,12 +34,37 @@ class Graph;
 /// Class for testing if the graph is a tree
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
+  // check if the graph is a rooted tree
   static bool isTree(Graph *graph);
+  // check if the graph is a free tree
   static bool isFreeTree(Graph *graph);
-  static void makeRootedTree(Graph *graph, node root);
-  static void makeDirectedTree(Graph *graph, node root) {
-    makeRootedTree(graph, root);
+  // turns a free tree into a rooted tree
+  static void makeRootedTree(Graph *freeTree, node root);
+  // synonymous of the makeRootedTree
+  static void makeDirectedTree(Graph *freeTree, node root) {
+    makeRootedTree(freeTree, root);
   };
+
+  /**
+   * Compute a rooted tree from the graph.
+   * The algorithm is the following
+   * - if the graph is a rooted tree, return the graph
+   * - if the graph is a free tree, return a rooted copy
+   * - if the graph is connected, make a copy
+   *   return a rooted spanning tree of that copy
+   * - if the graph is not connected, make a copy,
+   *   compute a tree for each of its connected components,
+   *   add a simple source and return the copy.
+   */  
+  static Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false,
+			    PluginProgress *pluginProgress = 0);
+  
+  /**
+   * Clean the graph from a tree previously computed
+   * with the computeRootedTree function
+   */
+  static void cleanComputedTree(Graph *graph, Graph *tree);
+
 private:
   bool compute(Graph *);
   void addEdge(Graph *,const edge);

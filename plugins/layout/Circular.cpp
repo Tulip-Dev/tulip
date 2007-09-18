@@ -36,10 +36,6 @@ namespace {
 Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
   addNodeSizePropertyParameter(this);
   addParameter<bool>("search cycle", paramHelp[0], "false");
-  // Connected component metric dependency
-  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
-  // Equal Value algorithm dependency
-  addDependency<Algorithm>("Equal Value", "1.0");
 }
 
 namespace {
@@ -111,12 +107,14 @@ namespace {
   vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
     Graph * g = tlp::newCloneSubGraph(sg);
     cerr << __PRETTY_FUNCTION__ << endl;
-    DoubleProperty m(g);
-    string err ="";
-    g->computeProperty(string("Connected Component"),&m,err);
-    DataSet tmp;
-    tmp.set("Property", &m);
-    tlp::applyAlgorithm(g, err, &tmp, "Equal Value");
+
+    // compute the connected components's subgraphs
+    std::vector<std::set<node> > components;
+    ConnectedTest::computeConnectedComponents(g, components);
+    for (unsigned int i = 0; i < components.size(); ++i) {
+      tlp::inducedSubGraph(g, components[i]);
+    }
+    
     Graph * g_tmp;
     
     MutableContainer<bool> flag;

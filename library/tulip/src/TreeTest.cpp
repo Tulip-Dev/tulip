@@ -3,6 +3,9 @@
 #include "tulip/TreeTest.h"
 #include "tulip/AcyclicTest.h"
 #include "tulip/ForEach.h"
+#include "tulip/GraphTools.h"
+#include "tulip/ExtendedClusterOperation.h"
+#include "tulip/BooleanProperty.h"
 
 using namespace std;
 using namespace tlp;
@@ -86,6 +89,102 @@ void TreeTest::makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
     }//end if
   }//end forEach
 }//end makeRootedTree
+
+//====================================================================
+Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
+			     PluginProgress *pluginProgress) {
+  // nothing todo if the graph is already a tree
+  if (TreeTest::isTree(graph))
+    return graph;
+  
+  // if needed, create a clone of the graph
+  // as a working copy
+  Graph *gClone = graph;
+  if (!rGraph) {
+    // the name used for subgraph clone when computing a tree
+#define CLONE_NAME "CloneForTree"
+#define CLONE_ROOT "CloneRoot"
+    rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
+    rGraph->setAttribute(CLONE_ROOT, node());
+  }
+  // if the graph is topologically a tree, make it rooted
+  // using a 'center' of the graph as root
+  if (TreeTest::isFreeTree(gClone)) {
+    TreeTest::makeRootedTree(gClone, graphCenterHeuristic(gClone));
+    return gClone;
+  }
+
+  // if the graph is connected,
+  // extract a spanning tree,
+  // and make it rooted
+  if (isConnected || ConnectedTest::isConnected(gClone)) {
+    BooleanProperty treeSelection(gClone);
+    selectMinimumSpanningTree(gClone, &treeSelection, 0, pluginProgress);
+    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+      return 0;
+    return TreeTest::computeTree(gClone->addSubGraph(&treeSelection),
+				 rGraph, true, pluginProgress);
+  }
+
+  // graph is not connected
+  // compute the connected components's subgraphs
+  std::vector<std::set<node> > components;
+  ConnectedTest::computeConnectedComponents(rGraph, components);
+  for (unsigned int i = 0; i < components.size(); ++i) {
+    tlp::inducedSubGraph(rGraph, components[i]);
+  }
+
+  // create a new subgraph for the tree
+  Graph *tree = rGraph->addSubGraph();
+  node root = tree->addNode();
+  rGraph->setAttribute(CLONE_ROOT, root);
+  Graph *gConn;
+
+  // connected components subgraphs loop
+  forEach(gConn, rGraph->getSubGraphs()) {
+    if (gConn == tree)
+      continue;
+    // compute a tree for each subgraph
+    // add each element of that tree
+    // to our main tree
+    // and connect the main root to each
+    // subtree root
+    Graph *sTree = TreeTest::computeTree(gConn, rGraph, true, pluginProgress);
+    if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
+      return 0;
+    node n;
+    forEach(n, sTree->getNodes()) {
+      tree->addNode(n);
+      if (sTree->indeg(n) == 0)
+	tree->addEdge(root, n);
+    }
+    edge e;
+    forEach(e, sTree->getEdges())
+      tree->addEdge(e);
+  }
+  assert (TreeTest::isTree(tree));
+  return tree;
+}
+
+void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
+  if (graph == tree)
+    return;
+  // get the subgraph clone
+  Graph *sg = tree;
+  string nameAtt("name");
+  string name = sg->getAttribute<string>(nameAtt);
+  while(name != CLONE_NAME) {
+    sg = sg->getSuperGraph();
+    name = sg->getAttribute<string>(nameAtt);
+  }
+  // get its added root
+  node root = sg->getAttribute<node>(CLONE_ROOT);
+  // delete it if needed
+  if (root.isValid())
+    graph->delNode(root);
+  // delete the clone
+  graph->delAllSubGraphs(sg);
+}
 
 //====================================================================
 

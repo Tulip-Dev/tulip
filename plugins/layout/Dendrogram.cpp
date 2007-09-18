@@ -51,7 +51,7 @@ bool Dendrogram::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
-  tree = computeTree(graph, 0, false, pluginProgress);
+  tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
     return false;
 
@@ -70,7 +70,7 @@ bool Dendrogram::run() {
   setAllNodesCoordY(&oriLayout, &oriSize);
   setOrthogonalEdge(&oriLayout, graph, spacing);
 
-  cleanComputedTree(graph, tree);
+  TreeTest::cleanComputedTree(graph, tree);
   return true;
 }
 
