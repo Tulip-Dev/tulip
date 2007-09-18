@@ -47,3 +47,5 @@ INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
 moc_%.cpp: %.h 
 	$(MOC) -o $@ $<
 
+clean-generic:
+	rm -f moc_*
