@@ -8,17 +8,10 @@ BUILT_SOURCES = \
 	InfoDialogData.h\
 	PropertyDialogData.h\
 	TulipStatsData.h\
-	GridOptionsData.h
+	GridOptionsData.h \
+	CopyPropertyDialogData.h
 
-nodist_noinst_HEADERS = \
-	QtProgressData.h \
-	TulipData.h\
-	TabWidgetData.h\
-	AppStartUpData.h\
-	InfoDialogData.h\
-	PropertyDialogData.h\
-	TulipStatsData.h\
-	GridOptionsData.h
+nodist_noinst_HEADERS = $(BUILT_SOURCES)
 
 noinst_HEADERS = \
 	ElementInfoToolTip.h \

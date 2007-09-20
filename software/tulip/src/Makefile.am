@@ -41,8 +41,11 @@ BUILT_SOURCES = \
 	PropertyDialogData.cpp \
 	TulipStatsData.cpp \
 	GridOptionsData.cpp \
+	CopyPropertyDialogData.cpp \
 	moc_TulipStatsData.cpp \
 	moc_GridOptionsData.cpp \
+	moc_CopyPropertyDialog.cpp \
+	moc_CopyPropertyDialogData.cpp \
 	moc_AppStartUp.cpp \
 	moc_AppStartUpData.cpp \
 	moc_InfoDialogData.cpp \
@@ -54,31 +57,7 @@ BUILT_SOURCES = \
 	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
 
-nodist_tulip_SOURCES =  \
-	QtProgressData.cpp \
-	moc_QtProgressData.cpp \
-	TulipData.cpp\
-	moc_TulipData.cpp\
-	TabWidgetData.cpp \
-	moc_TabWidgetData.cpp \
-	InfoDialogData.cpp \
-	AppStartUpData.cpp \
-	PropertyDialogData.cpp \
-	TulipStatsData.cpp \
-	GridOptionsData.cpp \
-	moc_TulipStatsData.cpp \
-	moc_GridOptionsData.cpp \
-	moc_AppStartUp.cpp \
-	moc_AppStartUpData.cpp \
-	moc_InfoDialogData.cpp \
-	moc_InfoDialog.cpp \
-	moc_viewGl.cpp \
-	moc_PropertyDialog.cpp \
-	moc_PropertyDialogData.cpp \
-	moc_QtProgress.cpp \
-	moc_TulipStatsWidget.cpp \
-	moc_GridOptionsWidget.cpp
-
+nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
 if QT3
 dist_tulip_SOURCES = \
@@ -89,6 +68,7 @@ dist_tulip_SOURCES = \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	PropertyDialog.cpp \
+	CopyPropertyDialog.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \
@@ -105,6 +85,7 @@ dist_tulip_SOURCES = \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	PropertyDialog.cpp \
+	CopyPropertyDialog.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \

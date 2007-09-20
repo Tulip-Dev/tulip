@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
+#include <vector>
 
 #if (QT_REL == 3)
 #include <qlistview.h>
@@ -47,8 +48,10 @@
 #include <tulip/GlGraph.h>
 #include <tulip/PropertyWidget.h>
 #include <tulip/SGHierarchyWidget.h>
+#include <tulip/ForEach.h>
 
 #include "PropertyDialog.h"
+#include "CopyPropertyDialog.h"
 
 using namespace std;
 using namespace tlp;
@@ -228,31 +231,79 @@ void PropertyDialog::removeProperty() {
 //=================================================
 void PropertyDialog::cloneProperty() {
   if (!graph || !editedProperty) return;
-  bool ok=false;
-  QString text = QInputDialog::getText( "Property name" ,  "Please enter the property name" , QLineEdit::Normal,QString::null, &ok, this );
-  if (ok) {
-    Observable::holdObservers();
-    if (graph->existProperty(text.ascii())) {
-      if (typeid(*graph->getProperty(text.ascii()))!=typeid(*editedProperty)) {
-	QMessageBox::critical( 0, "Tulip Warning" ,"Property are not of the same type");
-	return;
-      }
+  CopyPropertyDialog dialog(parentWidget());
+  vector<string> localProps;
+  vector<string> inheritedProps;
+  string prop;
+  Graph *parent = graph->getSuperGraph();
+  if (parent == graph)
+    parent = 0;
+  forEach(prop, graph->getLocalProperties()) {
+    if (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)) {
+      if (prop != editedPropertyName)
+	localProps.push_back(prop);
+      if (parent && parent->existProperty(prop))
+	inheritedProps.push_back(prop);
     }
-    string erreurMsg;
-    if (typeid((*editedProperty)) == typeid(DoubleProperty))
-      {*graph->getLocalProperty<DoubleProperty>(text.ascii())=*((DoubleProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(LayoutProperty))
-      {*graph->getLocalProperty<LayoutProperty>(text.ascii())=*((LayoutProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(StringProperty))
-      {*graph->getLocalProperty<StringProperty>(text.ascii())=*((StringProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(BooleanProperty))
-      {*graph->getLocalProperty<BooleanProperty>(text.ascii())=*((BooleanProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(IntegerProperty))
-      {*graph->getLocalProperty<IntegerProperty>(text.ascii())=*((IntegerProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(ColorProperty))
-      {*graph->getLocalProperty<ColorProperty>(text.ascii())=*((ColorProperty*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(SizeProperty))
-      {*graph->getLocalProperty<SizeProperty>(text.ascii())=*((SizeProperty*)editedProperty);}
+  }
+  forEach(prop, graph->getInheritedProperties()) {
+    if ((prop != editedPropertyName) &&
+	(typeid(*graph->getProperty(prop)) == typeid(*editedProperty)))
+      inheritedProps.push_back(prop);
+  }
+  dialog.setProperties(editedPropertyName, localProps, inheritedProps);
+  CopyPropertyDialog::destType type;
+  std::string text = dialog.getDestinationProperty(type);
+  if (text.size() > 0) {
+    if (type != CopyPropertyDialog::INHERITED) {
+      if (graph->existProperty(text)) {
+	if (typeid(*graph->getProperty(text))!=typeid(*editedProperty)) {
+	  QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
+	  return;
+	}
+	if (type == CopyPropertyDialog::NEW) {
+	  if (text == editedPropertyName) {	 
+	    QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are the same.");
+	    return;
+	  }
+	  else if (QMessageBox::question(parentWidget(), "Copy confirmation",
+					 (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(), QMessageBox::Ok, QMessageBox::Cancel) == QDialog::Rejected)
+	    return;
+	}
+	Observable::holdObservers();
+	if (typeid((*editedProperty)) == typeid(DoubleProperty))
+	  {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(LayoutProperty))
+	  {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(StringProperty))
+	  {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(BooleanProperty))
+	  {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(IntegerProperty))
+	  {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(ColorProperty))
+	  {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+	if (typeid((*editedProperty)) == typeid(SizeProperty))
+	  {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+      }
+    } else {
+      Graph *parent = graph->getSuperGraph();
+      Observable::holdObservers();
+      if (typeid((*editedProperty)) == typeid(DoubleProperty))
+	{*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(LayoutProperty))
+	{*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(StringProperty))
+	{*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(BooleanProperty))
+	{*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(IntegerProperty))
+	{*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(ColorProperty))
+	{*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(SizeProperty))
+	{*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+    }
     setGraph(graph);
     Observable::unholdObservers();
   }
