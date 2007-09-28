@@ -139,13 +139,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	((GlHudCircle *)select[shapeId].second)->fcolor(0) = Color(40,255,40,200);
 	((GlHudCircle *)select[shapeId].second)->ocolor(0) = Color(20,128,20,200);
 	//left <-> right anchor
-	// strect_x
+	// stretch_x
 	if (select[shapeId].second == &_controls[0] || select[shapeId].second == &_controls[4]) {
 	  operation = STRETCH_X;
 	  glGraphWidget->setCursor(QCursor(Qt::SizeHorCursor));
 	}else
 	  //top <-> bottom anchor
-	  // strect_y
+	  // stretch_y
 	  if (select[shapeId].second == &_controls[2] || select[shapeId].second == &_controls[6]) {
 	    operation = STRETCH_Y;
 	    glGraphWidget->setCursor(QCursor(Qt::SizeVerCursor));
@@ -159,7 +159,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	    }
 	    else
 	      //Corner anchor top-right bottom-left 
-	      //strect_xy
+	      //stretch_xy
 	      if (select[shapeId].second == &_controls[1] || select[shapeId].second == &_controls[5]) {
 		operation = STRETCH_XY;
 		glGraphWidget->setCursor(QCursor(Qt::SizeFDiagCursor));
@@ -320,7 +320,7 @@ void MouseSelectionEditor::stopEdition() {
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlGraphWidget *glGraphWidget) {
   _graph     = glGraphWidget->getRenderingParameters().getGraph();
-  _layout    = _graph->getProperty<LayoutProperty>("viewLayout");
+  _layout    = _graph->getProperty<LayoutProperty>(glGraphWidget->getRenderingParameters().getInputLayout());
   _selection = _graph->getProperty<BooleanProperty>("viewSelection");
   _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
   _sizes     = _graph->getProperty<SizeProperty>("viewSize");
@@ -348,19 +348,19 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlGraphWidg
 void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWidget* glGraphWidget) {
   //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
-  Coord strecth(1,1,1);
+  Coord stretch(1,1,1);
   //  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
-    strecth[0] = (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
+    stretch[0] = (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
-    strecth[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
+    stretch[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
   }
-  //  cerr << "strecth : << "<< strecth << endl;
+  //  cerr << "stretch : << "<< stretch << endl;
 
   Observable::holdObservers();  
   restoreInfo();
-  //strecth layout
+  //stretch layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
     center *= -1.;
@@ -372,7 +372,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWi
     //scale the drawing
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
-    _layout->scale(strecth, itN, itE);
+    _layout->scale(stretch, itN, itE);
     delete itN; delete itE;
     //replace the center of the graph at its originale position
     center *= -1.;
@@ -381,11 +381,11 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWi
     _layout->translate(center, itN, itE);
     delete itN; delete itE;
   }
-  //strecth size
+  //stretch size
   if (mode == COORD_AND_SIZE || mode == SIZE) {
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
-    _sizes->scale(strecth, itN, itE);
+    _sizes->scale(stretch, itN, itE);
     delete itN; delete itE;
   }
   Observable::unholdObservers();
@@ -561,42 +561,14 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
 
   ffdCenter = (boundingBox.first + boundingBox.second) / 2.0;
   
-  Color hudColor(128, 128, 128, 128);
- 
-  int W, H;
-  W = glGraphWidget->width();
-  H = glGraphWidget->height();
-
-  /*
-   * Change the coordinate system (should not be necessary ?)
-   * min becom max due to that operation (need to swap)
-   */
-  {
-    min2D[1] = (double)H - min2D[1];
-    min2D[0] = (double)W - min2D[0];
-    max2D[1] = (double)H - max2D[1];
-    max2D[0] = (double)W - max2D[0];
-    
-    //swap min and max
-    {
-      Coord tmp = min2D;
-      min2D = max2D;
-      max2D = tmp;
-    }
-  }
+  Coord tmpCenter = glGraphWidget->worldTo2DScreen(ffdCenter);
   
-  Coord tmpCenter(ffdCenter);
-
-  tmpCenter = glGraphWidget->worldTo2DScreen(tmpCenter);
-   
-  Coord recCenter(tmpCenter);
+  //  cerr << tmpCenter << endl;
   
-  //  cerr << recCenter << endl;
-  
-  recCenter[1] = (double)H - recCenter[1];
-  recCenter[0] = (double)W - recCenter[0];
+  tmpCenter[0] = (double)glGraphWidget->width() - tmpCenter[0];
+  tmpCenter[1] = (double)glGraphWidget->height() - tmpCenter[1];
 
-  //  recCenter[1] = recCenter[1];
+  //  tmpCenter[1] = tmpCenter[1];
   
   int x = int(max2D[0] - min2D[0]) / 2 + 1; // (+1) because selection use glLineWidth=3 thus
   int y = int(max2D[1] - min2D[1]) / 2 + 1; //the rectangle can be too small.
@@ -604,18 +576,18 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   if (x < 20) x = 18;
   if (y < 20) y = 18;
 
-  Coord center, topLeft, bottomRight;
-
   Coord positions[8];
 
-  positions[0] = Coord( x,  0, 0) + recCenter; // left
-  positions[1] = Coord( x, -y, 0) + recCenter; // Top left
-  positions[2] = Coord( 0, -y, 0) + recCenter; // Top
-  positions[3] = Coord(-x, -y, 0) + recCenter; // Top r
-  positions[4] = Coord(-x,  0, 0) + recCenter; // r
-  positions[5] = Coord(-x,  y, 0) + recCenter; // Bottom r
-  positions[6] = Coord( 0,  y, 0) + recCenter; // Bottom
-  positions[7] = Coord( x,  y, 0) + recCenter; // Bottom l
+  // we keep the z coordinate of the ffdCenter
+  // to ensure a correct position of our controls (see GlHudPolygon.cpp)
+  positions[0] = Coord( x,  0, ffdCenter[2]) + tmpCenter; // left
+  positions[1] = Coord( x, -y, ffdCenter[2]) + tmpCenter; // Top left
+  positions[2] = Coord( 0, -y, ffdCenter[2]) + tmpCenter; // Top
+  positions[3] = Coord(-x, -y, ffdCenter[2]) + tmpCenter; // Top r
+  positions[4] = Coord(-x,  0, ffdCenter[2]) + tmpCenter; // r
+  positions[5] = Coord(-x,  y, ffdCenter[2]) + tmpCenter; // Bottom r
+  positions[6] = Coord( 0,  y, ffdCenter[2]) + tmpCenter; // Bottom
+  positions[7] = Coord( x,  y, ffdCenter[2]) + tmpCenter; // Bottom l
   
   //Parameters of the rectangle that shows the selected area.
   centerRect.point(0) = positions[3];
