@@ -29,7 +29,7 @@ bin, include and lib directories of the .win32 directory contained in the zip fi
 
 4- Configure Tulip
 ------------------
-Using and MSYS command shell, 
+Using an MSYS command shell, 
 set the current directory to the tulip directory
 > cd <tulip source installation directory>
 copy the local file libxml.m4 in /usr/share/aclocal
