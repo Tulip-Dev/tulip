@@ -124,14 +124,7 @@ void SGHierarchyWidget::currentGraphChanged(const Graph *graph) {
 void SGHierarchyWidget::buildTreeView(QListView *item, Graph *p) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
-  tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
-  char tmpstr[9];
-  sprintf(tmpstr, " %.7d", p->numberOfNodes());
-  tmpItem->setText(1, QString(tmpstr));
-  sprintf(tmpstr, " %.7d", p->numberOfEdges());
-  tmpItem->setText(2, QString(tmpstr));
-  sprintf(tmpstr, " %.5d", p->getId());
-  tmpItem->setText(3, QString(tmpstr));
+  setItemInfos(tmpItem, p, p->numberOfNodes(), p->numberOfEdges());
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS = p->getSubGraphs();
   while (itS->hasNext())
@@ -142,20 +135,25 @@ void SGHierarchyWidget::buildTreeView(QListView *item, Graph *p) {
 //=======================================================
 void SGHierarchyWidget::buildTreeView(QListViewItem *item, Graph *p) {
   QListViewItem *tmpItem = new ClusterListViewItem(p, item);
-  tmpItem->setText(0, QString(p->getAttribute<string>("name").c_str()));
-  char tmpstr[9];
-  sprintf(tmpstr, " %.7d", p->numberOfNodes());
-  tmpItem->setText(1, QString(tmpstr));
-  sprintf(tmpstr, " %.7d", p->numberOfEdges());
-  tmpItem->setText(2, QString(tmpstr));
-  sprintf(tmpstr, " %.5d", p->getId());
-  tmpItem->setText(3, QString(tmpstr));
+  setItemInfos(tmpItem, p, p->numberOfNodes(), p->numberOfEdges());
   graphItems.set(p->getId(), tmpItem);
   Iterator<Graph *> *itS=p->getSubGraphs();
   while (itS->hasNext())
     buildTreeView(tmpItem, itS->next());
   delete itS;
 }
+//=======================================================
+void SGHierarchyWidget::setItemInfos(QListViewItem *item, Graph *p,
+				     unsigned int nbNodes, unsigned int nbEdges) {
+  item->setText(0, QString(p->getAttribute<string>("name").c_str()));
+  char tmpstr[9];
+  sprintf(tmpstr, " %.7d", nbNodes);
+  item->setText(1, QString(tmpstr));
+  sprintf(tmpstr, " %.7d", nbEdges);
+  item->setText(2, QString(tmpstr));
+  sprintf(tmpstr, " %.5d", p->getId());
+  item->setText(3, QString(tmpstr));
+}  
 //=======================================================
 void SGHierarchyWidget::update() {  
   //cerr << __PRETTY_FUNCTION__ << endl;
@@ -167,6 +165,13 @@ void SGHierarchyWidget::update() {
   }
   show();
 }
+//=======================================================
+void SGHierarchyWidget::updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges) {
+  if (_currentGraph == 0) return;
+  QListViewItem  *item = graphItems.get(_currentGraph->getId());
+  if (item != 0)
+    setItemInfos(item, _currentGraph, nbNodes, nbEdges);
+}  
 //=======================================================
 //Cluster Tree Structure modification
 void SGHierarchyWidget::removeSubgraph(Graph *graph, bool recursive) {

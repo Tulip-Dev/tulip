@@ -362,6 +362,12 @@ void viewGl::initObservers() {
     if (graph->existProperty(viewed_properties[i]))
       graph->getProperty(viewed_properties[i])->addObserver(this);
   }
+  graph->addObserver(this);
+  // initialize the number of nodes ans edges
+  currentGraphNbNodes = graph->numberOfNodes();
+  currentGraphNbEdges = graph->numberOfEdges();
+  // show the infos
+  updateCurrentGraphInfos();
 }
 //**********************************************************************
 void viewGl::clearObservers() {
@@ -373,7 +379,31 @@ void viewGl::clearObservers() {
     if (graph->existProperty(viewed_properties[i]))
       graph->getProperty(viewed_properties[i])->removeObserver(this);
   }
+  graph->removeObserver(this);
 }
+//**********************************************************************
+// GraphObserver interface
+void viewGl::addNode (Graph *graph, const node) {
+  ++currentGraphNbNodes;
+  updateCurrentGraphInfos();
+}
+void  viewGl::addEdge (Graph *graph, const edge) {
+  ++currentGraphNbEdges;
+  updateCurrentGraphInfos();
+}
+void  viewGl::delNode (Graph *graph, const node) {
+  --currentGraphNbNodes;
+  updateCurrentGraphInfos();
+}
+void  viewGl::delEdge (Graph *graph, const edge) {
+  --currentGraphNbEdges;
+  updateCurrentGraphInfos();
+}
+void  viewGl::reverseEdge (Graph *, const edge) {
+}
+void  viewGl::destroy (Graph *) {
+}
+
 //**********************************************************************
 ///Destructor of viewGl
 viewGl::~viewGl() {
@@ -456,6 +486,8 @@ void viewGl::startTulip() {
     errorDlg->show();
   }
   enableElements(false);
+  // this call force initialization of status bar
+  updateCurrentGraphInfos();
   int argc = qApp->argc();
   if (argc>1) {
     char ** argv = qApp->argv();
@@ -482,13 +514,15 @@ void viewGl::changeGraph(Graph *graph) {
 #ifdef STATS_UI
   statsWidget->setGlGraphWidget(glWidget);
 #endif
-  updateStatusBar();
   redrawView();
   // this line has been moved after the call to redrawView to ensure
   // that a new created graph has all its view... properties created
   // (call to initProxies())
   propertiesWidget->setGraph(graph);
-  initObservers();
+  // avoid too much notification when importing a graph
+  // see fileOpen
+  if (importedGraph != graph)
+    initObservers();
 }
 //**********************************************************************
 void viewGl::hierarchyChangeGraph(Graph *graph) {
@@ -497,13 +531,13 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
 #endif
   if( glWidget == 0 ) return;
   if (glWidget->getGraph() == graph)  return;
-  clearObservers();
+  //clearObservers();
   GlGraphRenderingParameters param = glWidget->getRenderingParameters();
   param.setGraph(graph);
   glWidget->setRenderingParameters(param);
   glWidget->centerScene();
   changeGraph(graph);
-  initObservers();
+  //initObservers();
 }
 //**********************************************************************
 void viewGl::windowActivated(QWidget *w) {
@@ -818,7 +852,13 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     QDir::setCurrent(tmp.dirPath() + "/");
     //    changeGraph(0);
     QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
+    // this will avoid too much notification when
+    // importing a graph (see changeGraph)
+    importedGraph = newGraph;
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
+    importedGraph = 0;
+    // now ensure notification
+    initObservers();
     if (progressBar->state()==TLP_CANCEL || !result ) {
       //      changeGraph(0);
       delete glW;
@@ -1061,19 +1101,20 @@ void viewGl::setParameters(const DataSet& data) {
   propertiesWidget->setGraph(glWidget->getGraph());
 }
 //**********************************************************************
-void viewGl::updateStatusBar() {
-  static QLabel *normalStatusBar = 0;
-  if (!normalStatusBar) {
+void viewGl::updateCurrentGraphInfos() {
+  static QLabel *currentGraphInfosLabel = 0;
+  if (!currentGraphInfosLabel) {
     statusBar()->addWidget(new QLabel(statusBar()), true);
-    normalStatusBar = new QLabel(statusBar());
-    statusBar()->addWidget(normalStatusBar);
+    currentGraphInfosLabel = new QLabel(statusBar());
+    statusBar()->addWidget(currentGraphInfosLabel);
   }
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  Graph *graph=clusterTreeWidget->getGraph();
-  if (graph==0) return;
-  char tmp[255];
-  sprintf(tmp,"nodes:%d, edges:%d",graph->numberOfNodes(),graph->numberOfEdges());
-  normalStatusBar->setText(tmp);
+  if (glWidget) {
+    char tmp[255];
+    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
+    currentGraphInfosLabel->setText(tmp);
+    clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
+  } else
+    currentGraphInfosLabel->setText("");
 }
 //*********************************************************************
 static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
@@ -1571,7 +1612,6 @@ void viewGl::centerView() {
   if (glWidget == 0) return;
   glWidget->centerScene();
   overviewWidget->setObservedView(glWidget);
-  updateStatusBar();
   redrawView();
 }
 //**********************************************************************
@@ -1795,6 +1835,7 @@ void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
     param.setGraph(0);
     glgw->setRenderingParameters(param);
     glWidget = 0;
+    updateCurrentGraphInfos();
   }
   delete glgw;
 
@@ -1937,7 +1978,6 @@ void viewGl::changeLayout(int id) {
     Observable::holdObservers();
     glWidget->centerScene();
     overviewWidget->setObservedView(glWidget);
-    updateStatusBar();
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );

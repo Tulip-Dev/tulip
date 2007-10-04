@@ -33,6 +33,7 @@ public:
 public slots:
   void setGraph(tlp::Graph *);
   void update();
+  void updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges);
 
 signals:
   void aboutToRemoveView(tlp::Graph *);
@@ -50,6 +51,7 @@ private slots:
   void rightButtonSGHierarchyWidget(QListViewItem *item, const QPoint &p, int c);
   void changeGraph(QListViewItem *item,const QPoint &p, int i);
   void changeGraph(QListViewItem *item);
+  void setItemInfos(QListViewItem *item, tlp::Graph *, unsigned int nbNodes, unsigned int nbEdges);
 
  protected:
   void buildTreeView(QListView *item, tlp::Graph *p);

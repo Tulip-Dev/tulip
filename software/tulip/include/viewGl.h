@@ -66,7 +66,7 @@ struct viewGlFile {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public TulipData, tlp::Observer {
+class viewGl : public TulipData, tlp::Observer, tlp::GraphObserver {
   Q_OBJECT;
 
 public:
@@ -119,6 +119,13 @@ protected:
   void setNavigateCaption(std::string);
   void initializeGraph(tlp::Graph *);
   void initializeGlGraph(tlp::GlGraph *);
+  // GraphObserver interface
+  void addNode (tlp::Graph *, const tlp::node);
+  void addEdge (tlp::Graph *, const tlp::edge);
+  void delNode (tlp::Graph *, const tlp::node);
+  void delEdge (tlp::Graph *, const tlp::edge);
+  void reverseEdge (tlp::Graph *, const tlp::edge);
+  void destroy (tlp::Graph *);
 
 public slots:
   void startTulip();
@@ -168,7 +175,7 @@ protected slots:
   void showDialog(int);
   void redrawView();
   void centerView();
-  void updateStatusBar();
+  void updateCurrentGraphInfos();
   void selectAll();
   void deselectAll();
   void reverseSelection();
@@ -218,6 +225,8 @@ private:
   void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
 
   QAssistantClient* assistant;
+  unsigned int currentGraphNbNodes, currentGraphNbEdges;
+  tlp::Graph* importedGraph;
 };
 
 #endif // viewGl_included
