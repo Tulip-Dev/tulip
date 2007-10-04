@@ -1504,30 +1504,31 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 	  graph->delNode(node(itemId));
 	else
 	  graph->delEdge(edge(itemId));
-      }
-      if (menuId == propId) // Properties
-	showElementProperties(itemId, isNode);
-      else  {
-	if (menuId == goId) { // Go inside
-	  GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	  changeGraph(meta->getNodeValue(tmpNode));
-	}
+      } else {
+	if (menuId == propId) // Properties
+	  showElementProperties(itemId, isNode);
 	else  {
-	  if (menuId == ungroupId) { // Ungroup
-	    tlp::openMetaNode(graph, tmpNode);
-	    clusterTreeWidget->update();
-	  } else {
-	    BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-	    if (menuId == selectId) { // Select
-	      // empty selection
-	      elementSelected->setAllNodeValue(false);
-	      elementSelected->setAllEdgeValue(false);
+	  if (menuId == goId) { // Go inside
+	    GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	    changeGraph(meta->getNodeValue(tmpNode));
+	  }
+	  else  {
+	    if (menuId == ungroupId) { // Ungroup
+	      tlp::openMetaNode(graph, tmpNode);
+	      clusterTreeWidget->update();
+	    } else {
+	      BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+	      if (menuId == selectId) { // Select
+		// empty selection
+		elementSelected->setAllNodeValue(false);
+		elementSelected->setAllEdgeValue(false);
+	      }
+	      // selection add/remove graph item
+	      if (isNode)
+		elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+	      else
+		elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
 	    }
-	    // selection add/remove graph item
-	    if (isNode)
-	      elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
-	    else
-	      elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
 	  }
 	}
       }
