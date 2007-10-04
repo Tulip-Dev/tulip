@@ -60,11 +60,11 @@ class TLP_SCOPE Observable {
   /**
    * Remove an observer
    */
-  void deleteObserver(Observer *);
+  void removeObserver(Observer *);
   /**
    * Remove all observers
    */
-  void deleteObservers();
+  void removeObservers();
   /**
    * Notify all the observers
    */
@@ -98,11 +98,11 @@ inline unsigned int Observable::countObservers() {
   return observersList.size(); 
 }
 
-inline void Observable::deleteObserver(Observer *item) {  
+inline void Observable::removeObserver(Observer *item) {  
   observersList.remove(item);
 }
 
-inline void Observable::deleteObservers() { 
+inline void Observable::removeObservers() { 
   observersList.clear(); 
 }
 

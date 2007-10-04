@@ -371,7 +371,7 @@ void viewGl::clearObservers() {
   if (graph == 0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
     if (graph->existProperty(viewed_properties[i]))
-      graph->getProperty(viewed_properties[i])->deleteObserver(this);
+      graph->getProperty(viewed_properties[i])->removeObserver(this);
   }
 }
 //**********************************************************************
