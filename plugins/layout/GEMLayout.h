@@ -1,4 +1,18 @@
+#ifndef Tulip_GEMLayout_H
+#define Tulip_GEMLayout_H
 
+#include <queue>
+#include <vector>
+#if (__GNUC__ < 3)
+#include <hash_map>
+#else
+#include <ext/hash_map>
+#endif
+
+#include <tulip/TulipPlugin.h>
+using namespace tlp;
+using namespace std;
+using namespace stdext;
 
 /** \addtogroup layout */
 /*@{*/
@@ -45,27 +59,11 @@
  * require it anymore).
  *
  *  \author David Duke, University of Bath, UK: Email: D.Duke@bath.ac.uk
- *  \author David Auber,University of Bordeauw, FR: Email: david.auber@labri.fr
+ *  \author David Auber,University of Bordeaux, FR: Email: david.auber@labri.fr
  *  Version 0.1: 23 July 2001.
  *  Version 0.2: September 2006
  */
  
-#ifndef Tulip_GEMLayout_H
-#define Tulip_GEMLayout_H
-
-#include <queue>
-#include <vector>
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
-#include <tulip/TulipPlugin.h>
-using namespace tlp;
-using namespace std;
-using namespace stdext;
-
 class GEMLayout : public tlp::LayoutAlgorithm
 { 
 public:
