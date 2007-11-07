@@ -1,6 +1,6 @@
 #ifndef Tulip_NODE_H
 #define Tulip_NODE_H
-#include "tulipconf.h"
+#include "tulip/tulipconf.h"
 #if (__GNUC__ < 3)
 #include <hash_map>
 #else

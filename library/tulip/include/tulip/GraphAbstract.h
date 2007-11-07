@@ -5,9 +5,9 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 #include <set>
-#include "Graph.h"
-#include "Reflect.h"
-#include "PropertyManager.h"
+#include "tulip/Graph.h"
+#include "tulip/Reflect.h"
+#include "tulip/PropertyManager.h"
 
 namespace tlp {
 

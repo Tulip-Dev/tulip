@@ -5,7 +5,7 @@
 #include <config.h>
 #endif
 
-#include "Reflect.h"
+#include "tulip/Reflect.h"
 
 namespace tlp {
 

@@ -2,7 +2,7 @@
 #ifndef GWOVERVIEW_H
 #define GWOVERVIEW_H
 
-#include "GWOverviewWidgetData.h"
+#include "tulip/GWOverviewWidgetData.h"
 #include <tulip/ObservableGlGraph.h>
 #include <tulip/GlAugmentedDisplay.h>
 #include <tulip/GlGraphWidget.h>

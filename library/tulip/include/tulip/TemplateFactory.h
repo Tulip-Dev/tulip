@@ -5,12 +5,12 @@
 #include <list>
 #include <string>
 #include <typeinfo>
-#include "PluginLoader.h"
-#include "WithParameter.h"
-#include "WithDependency.h"
-#include "Iterator.h"
-#include "Plugin.h"
-#include "TlpTools.h"
+#include "tulip/PluginLoader.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
+#include "tulip/Iterator.h"
+#include "tulip/Plugin.h"
+#include "tulip/TlpTools.h"
 
 namespace tlp {
 

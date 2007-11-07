@@ -12,10 +12,10 @@
 #include <iostream>
 #include <sstream>
 #include <float.h>
-#include "Coord.h"
-#include "Size.h"
-#include "Color.h"
-#include "StringCollection.h"
+#include "tulip/Coord.h"
+#include "tulip/Size.h"
+#include "tulip/Color.h"
+#include "tulip/StringCollection.h"
 
 namespace tlp {
 

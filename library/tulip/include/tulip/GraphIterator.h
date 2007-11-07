@@ -10,9 +10,9 @@
 */
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
-#include "Iterator.h"
-#include "Graph.h"
-#include "GraphImpl.h"
+#include "tulip/Iterator.h"
+#include "tulip/Graph.h"
+#include "tulip/GraphImpl.h"
 #include <set>
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -20,7 +20,7 @@
 #include <ext/hash_map>
 #endif
 
-#include "tulipconf.h"
+#include "tulip/tulipconf.h"
 
 namespace tlp {
 

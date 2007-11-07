@@ -1,4 +1,4 @@
-//-*-c++-*
+//-*-c++-*-
 /*
  Author: David Auber
  Email : auber@labri.fr
@@ -16,9 +16,9 @@
 #include <map>
 #include <set>
 #include <string>
-#include "Iterator.h"
-#include "Node.h"
-#include "Edge.h"
+#include "tulip/Iterator.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
 
 namespace tlp {
 

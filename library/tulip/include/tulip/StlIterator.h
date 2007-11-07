@@ -11,7 +11,7 @@
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
 #include <map>
-#include "Iterator.h"
+#include "tulip/Iterator.h"
 
 namespace tlp {
 

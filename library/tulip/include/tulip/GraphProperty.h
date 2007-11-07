@@ -6,9 +6,9 @@
 #include <config.h>
 #endif
 
-#include "AbstractProperty.h"
-#include "TemplateFactory.h"
-#include "GraphAlgorithm.h"
+#include "tulip/AbstractProperty.h"
+#include "tulip/TemplateFactory.h"
+#include "tulip/GraphAlgorithm.h"
 
 namespace tlp {
 

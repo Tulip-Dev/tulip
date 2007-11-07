@@ -1,4 +1,4 @@
-//-*-C++-*
+//-*-C++-*-
 /*
  Author: David Auber
  Email : auber@labri.fr
@@ -13,13 +13,13 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include "Graph.h"
-#include "WithParameter.h"
-#include "WithDependency.h"
-#include "Reflect.h"
-#include "PluginProgress.h"
-#include "Plugin.h"
-#include "TemplateFactory.h"
+#include "tulip/Graph.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
+#include "tulip/Reflect.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/Plugin.h"
+#include "tulip/TemplateFactory.h"
 
 
 /** \addtogroup plugins */ 

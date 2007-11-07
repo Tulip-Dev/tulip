@@ -1,6 +1,6 @@
 #ifndef TLP_PLUGINLOADERTXT
 #define TLP_PLUGINLOADERTXT
-#include "PluginLoader.h"
+#include "tulip/PluginLoader.h"
 
 namespace tlp {
 

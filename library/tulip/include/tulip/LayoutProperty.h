@@ -6,10 +6,10 @@
 #include <config.h>
 #endif
 
-#include "AbstractProperty.h"
-#include "TemplateFactory.h"
-#include "LayoutAlgorithm.h"
-#include "Types.h"
+#include "tulip/AbstractProperty.h"
+#include "tulip/TemplateFactory.h"
+#include "tulip/LayoutAlgorithm.h"
+#include "tulip/Types.h"
 
 namespace tlp {
 

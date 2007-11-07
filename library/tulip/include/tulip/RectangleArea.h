@@ -2,8 +2,8 @@
 #ifndef RECTANGLEAREA_H
 #define RECTANGLEAREA_H
 
-#include "Coord.h"
-#include "Size.h"
+#include "tulip/Coord.h"
+#include "tulip/Size.h"
 
 namespace tlp {
 

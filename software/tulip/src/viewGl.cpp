@@ -71,7 +71,7 @@
 #include <QtGui/qaction.h>
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qprinter.h>
-#include "tulip/Qt3ForTulip.h"
+#include <tulip/Qt3ForTulip.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
 #endif
@@ -101,6 +101,7 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
 #include <tulip/GWInteractor.h>
+#include <tulip/GWOverviewWidget.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelectionEditor.h>
 #include <tulip/MouseNodeBuilder.h>
@@ -117,7 +118,6 @@
 #include "ElementInfoToolTip.h"
 #include "TabWidgetData.h"
 #include "GridOptionsWidget.h"
-#include "GWOverviewWidget.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
 

@@ -10,7 +10,7 @@
 #include <cassert>
 #include <typeinfo>
 #include <list>
-#include "StlIterator.h"
+#include "tulip/StlIterator.h"
 
 namespace tlp {
 

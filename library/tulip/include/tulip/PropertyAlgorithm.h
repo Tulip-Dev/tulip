@@ -17,11 +17,11 @@
 #include <config.h>
 #endif
 
-#include "PluginContext.h"
-#include "Graph.h"
-#include "Reflect.h"
-#include "WithParameter.h"
-#include "WithDependency.h"
+#include "tulip/PluginContext.h"
+#include "tulip/Graph.h"
+#include "tulip/Reflect.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
 
 namespace tlp {
 

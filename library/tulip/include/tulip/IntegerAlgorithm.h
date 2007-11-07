@@ -17,7 +17,7 @@
 #include <config.h>
 #endif
 
-#include "PropertyAlgorithm.h"
+#include "tulip/PropertyAlgorithm.h"
 
 namespace tlp {
 

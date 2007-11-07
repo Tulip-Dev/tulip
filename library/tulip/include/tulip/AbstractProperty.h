@@ -15,13 +15,13 @@
 #include <config.h>
 #endif
 
-#include "Observable.h"
-#include "Types.h"
-#include "PropertyAlgorithm.h"
-#include "MutableContainer.h"
-#include "ReturnType.h"
-#include "tulipconf.h"
-#include "TemplateFactory.h"
+#include "tulip/Observable.h"
+#include "tulip/Types.h"
+#include "tulip/PropertyAlgorithm.h"
+#include "tulip/MutableContainer.h"
+#include "tulip/ReturnType.h"
+#include "tulip/tulipconf.h"
+#include "tulip/TemplateFactory.h"
 
 namespace tlp {
 

@@ -12,7 +12,7 @@
 #ifndef _METAGRAPHALGO_H
 #define _METAGRAPHALGO_H
 
-#include "PropertyAlgorithm.h"
+#include "tulip/PropertyAlgorithm.h"
 
 namespace tlp {
 

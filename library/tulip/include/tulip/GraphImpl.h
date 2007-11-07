@@ -13,10 +13,10 @@
 #endif
 
 #include <vector>
-#include "GraphAbstract.h"
-#include "IdManager.h"
-#include "SimpleVector.h"
-#include "MutableContainer.h"
+#include "tulip/GraphAbstract.h"
+#include "tulip/IdManager.h"
+#include "tulip/SimpleVector.h"
+#include "tulip/MutableContainer.h"
 
 namespace tlp {
 

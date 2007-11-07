@@ -11,7 +11,7 @@
 
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
-#include "tulipconf.h"
+#include "tulip/tulipconf.h"
 #if (__GNUC__ < 3)
 #include <hash_map>
 #else

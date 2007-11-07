@@ -2,9 +2,9 @@
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
-#include "AbstractProperty.h"
-#include "TemplateFactory.h"
-#include "DoubleAlgorithm.h"
+#include "tulip/AbstractProperty.h"
+#include "tulip/TemplateFactory.h"
+#include "tulip/DoubleAlgorithm.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

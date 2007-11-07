@@ -1,8 +1,8 @@
 #ifndef _TLPRETURNTYPE_
 #define _TLPRETURNTYPE_
 
-#include "Node.h"
-#include "Edge.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {

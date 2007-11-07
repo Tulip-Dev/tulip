@@ -7,8 +7,8 @@
 #endif
 
 #include <iostream>
-#include "tulipconf.h"
-#include "PluginLoader.h"
+#include "tulip/tulipconf.h"
+#include "tulip/PluginLoader.h"
 
 namespace tlp {
   extern TLP_SCOPE const char PATH_DELIMITER;

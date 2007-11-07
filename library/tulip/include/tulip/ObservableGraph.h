@@ -1,8 +1,8 @@
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
 #include <set>
-#include "Node.h"
-#include "Edge.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
 
 namespace tlp {
 

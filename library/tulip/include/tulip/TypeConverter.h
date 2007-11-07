@@ -3,11 +3,11 @@
 
 #include <string>
 #include <list>
-#include "Color.h"
-#include "Size.h"
-#include "Coord.h"
-#include "Node.h"
-#include "Edge.h"
+#include "tulip/Color.h"
+#include "tulip/Size.h"
+#include "tulip/Coord.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
 
 namespace tlp {
 

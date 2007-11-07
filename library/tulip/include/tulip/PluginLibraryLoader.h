@@ -3,8 +3,8 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-#include "PluginLoader.h"
-#include "tulipconf.h"
+#include "tulip/PluginLoader.h"
+#include "tulip/tulipconf.h"
 
 namespace tlp {
 

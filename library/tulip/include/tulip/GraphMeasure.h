@@ -6,10 +6,10 @@
 #include <config.h>
 #endif
 
-#include "Node.h"
-#include "MutableContainer.h"
-#include "PluginProgress.h"
-#include "DoubleProperty.h"
+#include "tulip/Node.h"
+#include "tulip/MutableContainer.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/DoubleProperty.h"
 
 namespace tlp {
 

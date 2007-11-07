@@ -24,13 +24,13 @@
 #include <ext/hash_map>
 #endif
 #include <climits>
-#include "tulipconf.h"
-#include "Reflect.h"
-#include "PluginContext.h"
-#include "PluginProgress.h"
-#include "Node.h"
-#include "Edge.h"
-#include "ObservableGraph.h"
+#include "tulip/tulipconf.h"
+#include "tulip/Reflect.h"
+#include "tulip/PluginContext.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
+#include "tulip/ObservableGraph.h"
 
 namespace tlp {
 

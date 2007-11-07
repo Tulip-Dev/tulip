@@ -4,13 +4,13 @@
 
 #include <list>
 #include <string>
-#include "Graph.h"
-#include "Reflect.h"
-#include "WithParameter.h"
-#include "WithDependency.h"
-#include "PluginProgress.h"
-#include "Plugin.h"
-#include "TemplateFactory.h"
+#include "tulip/Graph.h"
+#include "tulip/Reflect.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/Plugin.h"
+#include "tulip/TemplateFactory.h"
 
 /**
  * \addtogroup plugins

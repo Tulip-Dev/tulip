@@ -14,7 +14,7 @@
 #include <QtGui/qcursor.h>
 #endif
 
-#include "GWInteractor.h"
+#include "tulip/GWInteractor.h"
 namespace tlp {
 
 /** \addtogroup Mouse_interactor */ 
