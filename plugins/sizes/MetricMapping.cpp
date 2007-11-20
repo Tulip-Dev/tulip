@@ -61,12 +61,13 @@ namespace {
 }
 
 // error msg for invalid range value
-static const char* rangeErrorMsg = "max size must be greater than min size";
+static const char* rangeSizeErrorMsg = "max size must be greater than min size";
+static const char* rangeMetricErrorMsg = "All values are the same";
 
 /** \addtogroup size */
 /*@{*/
 /// Metric Mapping - Compute size of elements according to a metric.
-/** This plugin enables to set the size of the grapĥ's elements
+/** This plugin enables to set the size of the graph's elements
  *  according to a metric.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
@@ -133,10 +134,19 @@ public:
     }
     if (min >= max) {
       /*cerr << rangeErrorMsg << endl;
-	pluginProgress->setError(rangeErrorMsg); */
-      errorMsg = std::string(rangeErrorMsg);
+	pluginProgress->setError(rangeSizeErrorMsg); */
+      errorMsg = std::string(rangeSizeErrorMsg);
       return false;
     }
+    if (nodeoredge)
+      range = entryMetric->getNodeMax(graph) - entryMetric->getNodeMin(graph);
+    else
+      range = entryMetric->getEdgeMax(graph) - entryMetric->getEdgeMin(graph);
+    if (!range) {
+       errorMsg = std::string(rangeMetricErrorMsg);
+      return false;
+    }
+     
     return true;
   }
 
@@ -152,7 +162,6 @@ public:
       entryMetric = tmp;
     }
     if(nodeoredge) {
-      range = entryMetric->getNodeMax(graph) - entryMetric->getNodeMin(graph);
       shift = entryMetric->getNodeMin(graph);
       computeNodeSize();
       edge e;
@@ -160,7 +169,6 @@ public:
 	sizeResult->setEdgeValue(e, entrySize->getEdgeValue(e));
     }
     else {
-      range = entryMetric->getEdgeMax(graph) - entryMetric->getEdgeMin(graph);
       shift = entryMetric->getEdgeMin(graph);
       computeEdgeSize();
       node n;
