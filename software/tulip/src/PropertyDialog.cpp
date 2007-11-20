@@ -261,13 +261,18 @@ void PropertyDialog::cloneProperty() {
 	  QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
 	  return;
 	}
-	if (type == CopyPropertyDialog::NEW) {
-	  if (text == editedPropertyName) {	 
-	    QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are the same.");
+	if (type == CopyPropertyDialog::NEW &&
+	    graph->existLocalProperty(text)) {
+	  if (text == editedPropertyName) {
+	    QMessageBox::critical(parentWidget(), "Tulip Warning",
+				  "Properties are the same.");
 	    return;
-	  }
-	  else if (QMessageBox::question(parentWidget(), "Copy confirmation",
-					 (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(), QMessageBox::Ok, QMessageBox::Cancel) == QDialog::Rejected)
+	  } else if (QMessageBox::question(parentWidget(),
+					   "Copy confirmation",
+					   (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(),
+					   QMessageBox::Ok,
+					   QMessageBox::Cancel)
+		     == QDialog::Rejected)
 	    return;
 	}
 	Observable::holdObservers();
