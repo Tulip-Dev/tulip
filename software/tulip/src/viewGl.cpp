@@ -693,7 +693,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   if (filename.rfind(".gz") == (filename.length() - 3)) 
     os = tlp::getOgzstream(filename.c_str());
   else {
-    if (filename.rfind(".tlp") == std::string::npos)
+    if ((plugin == "tlp") && (filename.rfind(".tlp") == std::string::npos))
       filename += ".tlp";
     os = new ofstream(filename.c_str());
   }
