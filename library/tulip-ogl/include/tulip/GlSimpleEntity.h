@@ -11,8 +11,8 @@
 #ifndef Tulip_GLSIMPLEENTITY_H
 #define Tulip_GLSIMPLEENTITY_H
 
-#include "GlEntity.h"
-#include "GlSceneVisitor.h"
+#include "tulip/GlEntity.h"
+#include "tulip/GlSceneVisitor.h"
 
 namespace tlp {
 
