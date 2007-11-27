@@ -48,7 +48,8 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/GlGraph.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlGraphStaticData.h>
 #include <tulip/Glyph.h>
 
 #include "tulip/PropertyWidget.h"
@@ -329,20 +330,20 @@ void PropertyWidget::setAllNodeValue() {
                                               tmp, 0, false, &ok, this);
     if (ok) {
       stringstream ss;
-      ss << GlGraph::glyphId(shapeName.ascii());
+      ss << GlyphManager::getInst().glyphId(shapeName.ascii());
       tmpStr = ss.str();
     }
   } else if (editedPropertyName == "viewLabelPosition") {
     QStringList tmp;
     for (int i = 0; i < 5; i++)
-      tmp.append(QString(GlGraph::labelPositionName(i).c_str()));
+      tmp.append(QString(GlGraphStaticData::labelPositionName(i).c_str()));
     
     QString labelPosName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a position",
                                               tmp, 0, false, &ok, this);
     if (ok) {
       stringstream ss;
-      ss << GlGraph::labelPositionId(labelPosName.ascii());
+      ss << GlGraphStaticData::labelPositionId(labelPosName.ascii());
       tmpStr = ss.str();
     }
   }
@@ -426,15 +427,15 @@ void  PropertyWidget::setAllEdgeValue() {
   }
   else if (editedPropertyName == "viewShape") {
     QStringList tmp;
-    for (int i = 0; i < GlGraph::edgeShapesCount; i++)
-      tmp.append(QString(GlGraph::edgeShapeName(GlGraph::edgeShapeIds[i]).c_str()));
+    for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++)
+      tmp.append(QString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i]).c_str()));
     
     QString shapeName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a shape",
                                               tmp, 0, false, &ok, this);
     if (ok) {
       stringstream ss;
-      ss << GlGraph::edgeShapeId(shapeName.ascii());
+      ss << GlGraphStaticData::edgeShapeId(shapeName.ascii());
       tmpStr = ss.str();
     }
   }

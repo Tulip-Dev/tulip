@@ -85,7 +85,8 @@ nobase_include_HEADERS = \
 	tulip/FaceIterator.h \
         tulip/PlanarConMap.h \
         tulip/GraphDecorator.h \
-	tulip/ForEach.h
+	tulip/ForEach.h \
+	tulip/BoundingBox.h
 
 nobase_nodist_include_HEADERS = tulip/TulipRelease.h
 

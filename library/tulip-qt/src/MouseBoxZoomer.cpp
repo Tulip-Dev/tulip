@@ -33,10 +33,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	w = 0; h = 0;
 	started = true;
 	glw->setMouseTracking(true);
-	graph = glw->getRenderingParameters().getGraph();
+	graph = glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       }
       else {
-	if (glw->getRenderingParameters().getGraph() != graph) {
+	if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
 	  graph = NULL;
 	  started = false;
 	  glw->setMouseTracking(false);
@@ -56,7 +56,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       ((QMouseEvent *) e)->state() & Qt::LeftButton) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) widget;
-    if (glw->getRenderingParameters().getGraph() != graph) {
+    if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;
       started = false;
       glw->setMouseTracking(false);
@@ -73,7 +73,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease &&
       ((QMouseEvent *) e)->button() == Qt::LeftButton) {
     GlGraphWidget *glw = (GlGraphWidget *) widget;
-    if (glw->getRenderingParameters().getGraph() != graph) {
+    if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;
       started = false;
       glw->setMouseTracking(false);
@@ -84,20 +84,18 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	//      cerr << __FUNCTION__ << ": " << this << "(x,y)=(" << e->x() << "," << e->y() << ")" << endl;
 	int width = glw->width();
 	int height = glw->height();
-	glw->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
+	glw->getScene()->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
 	w = abs(w); h = abs(h);
-	GlGraphRenderingParameters param = glw->getRenderingParameters();
-	Camera cam = param.getCamera();
+	Camera cam = *glw->getScene()->getCamera();
 	//we prevent zooming in a minimal square area less than 4x4: a least
 	//one of the 2 lengths must be higher than 3
 	if (w > h) {
-	  cam.zoomFactor *= (double) width / (double) w;
+	  cam.setZoomFactor(cam.getZoomFactor() * ((double) width / (double) w));
 	}
 	else {
-	  cam.zoomFactor *= (double) height / (double) h;
+	  cam.setZoomFactor(cam.getZoomFactor() * ((double) height / (double) h));
 	}
-	param.setCamera(cam);
-	glw->setRenderingParameters(param);
+	glw->getScene()->setCamera(&cam);
 	glw->draw();
       }
     }
@@ -107,7 +105,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 }
 //=====================================================================
 bool MouseBoxZoomer::draw(GlGraphWidget *glw) {
-  if (glw->getRenderingParameters().getGraph() != graph) {
+  if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = NULL;
     started = false;
     glw->setMouseTracking(false);

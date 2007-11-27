@@ -16,18 +16,11 @@
 #include "TulipStatsData.h"
 #include <tulip/GlGraphWidget.h>
 #include <tulip/Graph.h>
-#include <tulip/GlADComposite.h>
 #include <tulip/StatisticsNodeModule.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Plane.h>
-
-#include <tulip/GlADAxisPoint.h>
-#include <tulip/GlADLine.h>
-#include <tulip/GlADQuad.h>
-#include <tulip/GlADBox.h>
-#include <tulip/GlADGrid.h>
 
 
 #define N_STATS_GLAD 7
@@ -66,15 +59,15 @@ class TulipStats : public TulipStatsData, public GraphObserver
   tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
   SGHierarchyWidget *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
-  tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
+  //tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
 
-  tlp::GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
-  tlp::GlADBox *AABB; /**< An augmented display for the bounding box */
+  //tlp::GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
+  //tlp::GlADBox *AABB; /**< An augmented display for the bounding box */
 
-  tlp::GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
-  tlp::GlADLine *linearRegression; /**< An augmented display for the linear regression */
+  //tlp::GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
+  //tlp::GlADLine *linearRegression; /**< An augmented display for the linear regression */
 
-  tlp::GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
+  //tlp::GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
 
   // GRID_REGION
   //  GlADGrid *grid; /**< An augmented display for the gris \attention This will be removed soon */

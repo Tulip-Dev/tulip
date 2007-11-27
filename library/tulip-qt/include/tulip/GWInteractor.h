@@ -21,6 +21,7 @@ namespace tlp {
     GWInteractor() {}
     virtual ~GWInteractor() {}
     /// an interactor may do some drawing feedback on the GlGraphWidget it interacts with
+    virtual bool compute(GlGraphWidget *glGraphWidget) { return false; }
     virtual bool draw(GlGraphWidget *){ return false; }
     virtual GWInteractor *clone() = 0;
     ID getID() { return id; }

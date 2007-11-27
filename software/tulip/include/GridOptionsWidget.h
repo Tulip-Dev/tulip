@@ -15,9 +15,8 @@
 
 #include "GridOptionsData.h"
 
-#include <tulip/GlADComposite.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/GlADGrid.h>
+#include <tulip/GlGrid.h>
 
 namespace tlp {
 /** \brief Widget for displaying a grid on the graph.
@@ -40,7 +39,7 @@ class GridOptionsWidget : public GridOptionsData {
 
  protected:
   GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
-  tlp::GlADGrid *grid; /**< The considered GlADGrid */
+  tlp::GlGrid *grid; /**< The considered GlADGrid */
 
  public:
   /**

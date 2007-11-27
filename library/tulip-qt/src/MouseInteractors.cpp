@@ -16,6 +16,7 @@
 #include "tulip/MouseInteractors.h"
 #include "tulip/GlGraphWidget.h"
 #include "tulip/ElementPropertiesWidget.h"
+#include <tulip/Observable.h>
 
 using namespace tlp;
 using namespace std;
@@ -28,8 +29,8 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::Wheel &&
       (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
     GlGraphWidget *g = (GlGraphWidget *) widget;
-    g->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
-	      ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
+    g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
+      ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
     g->draw();
     return true;
   }
@@ -49,9 +50,10 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
     if(result == true) {
       Observable::holdObservers();
       switch(type) {
-      case NODE: glGraphWidget->getRenderingParameters().getGraph()->delNode(tmpNode); break;
-      case EDGE: glGraphWidget->getRenderingParameters().getGraph()->delEdge(tmpEdge); break;
+	case NODE: glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delNode(tmpNode); break;
+	case EDGE: glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delEdge(tmpEdge); break;
       }
+      glGraphWidget->redraw();
       Observable::unholdObservers();
     }
     return true;
@@ -84,8 +86,8 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
       deltaY=0;
     else
       deltaX=0;  
-    if (deltaY!=0) glGraphWidget->rotateScene(deltaY,0,0);
-    if (deltaX!=0) glGraphWidget->rotateScene(0,deltaX,0);
+    if (deltaY!=0) glGraphWidget->getScene()->rotateScene(deltaY,0,0);
+    if (deltaX!=0) glGraphWidget->getScene()->rotateScene(0,deltaX,0);
     x=qMouseEv->x();
     y=qMouseEv->y();
     glGraphWidget->draw();
@@ -118,14 +120,14 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
     if (x == NO_ROTATION) {
       // Zoom
       deltaY = qMouseEv->y() - y;
-      glGraphWidget->zoom(-deltaY/2);
+      glGraphWidget->getScene()->zoom(-deltaY/2);
       y = qMouseEv->y();
     }
     else {
       deltaX = qMouseEv->x() - x;
       if (y == NO_ZOOM) {
 	// Rotation
-	glGraphWidget->rotateScene(0,0,deltaX);
+	glGraphWidget->getScene()->rotateScene(0,0,deltaX);
 	x = qMouseEv->x();
       }
       else {
@@ -170,9 +172,9 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     if (qMouseEv->x() != x)
-      glGraphWidget->translateCamera(qMouseEv->x()-x,0,0);
+      glGraphWidget->getScene()->translateCamera(qMouseEv->x()-x,0,0);
     if (qMouseEv->y() != y)
-      glGraphWidget->translateCamera(0,y-qMouseEv->y(),0);
+    glGraphWidget->getScene()->translateCamera(0,y-qMouseEv->y(),0);
     x = qMouseEv->x();
     y = qMouseEv->y();
     glGraphWidget->draw();
@@ -216,16 +218,16 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     int delta = (((QKeyEvent *) e)->isAutoRepeat() ? 3 : 1);
     GlGraphWidget *g = (GlGraphWidget *) widget;
     switch(((QKeyEvent *) e)->key()) {
-    case Qt::Key_Left: g->translateCamera(delta * 2,0,0); break;
-    case Qt::Key_Right: g->translateCamera(-1 * delta * 2,0,0); break;
-    case Qt::Key_Up: g->translateCamera(0,-1 * delta * 2,0); break;
-    case Qt::Key_Down: g->translateCamera(0,delta * 2,0); break;
-    case Qt::Key_Prior: g->zoom(delta); break;
-    case Qt::Key_Next: g->zoom(-1 * delta); break;
-    case Qt::Key_Home: g->translateCamera(0,0,-1 * delta * 2); break;
-    case Qt::Key_End: g->translateCamera(0,0,delta * 2); break;
-    case Qt::Key_Insert: g->rotateScene(0,0,-1 * delta * 2); break;
-    case Qt::Key_Delete : g->rotateScene(0,0,delta * 2); break;
+    case Qt::Key_Left: g->getScene()->translateCamera(delta * 2,0,0); break;
+    case Qt::Key_Right: g->getScene()->translateCamera(-1 * delta * 2,0,0); break;
+    case Qt::Key_Up: g->getScene()->translateCamera(0,-1 * delta * 2,0); break;
+    case Qt::Key_Down: g->getScene()->translateCamera(0,delta * 2,0); break;
+    case Qt::Key_Prior: g->getScene()->zoom(delta); break;
+    case Qt::Key_Next: g->getScene()->zoom(-1 * delta); break;
+    case Qt::Key_Home: g->getScene()->translateCamera(0,0,-1 * delta * 2); break;
+    case Qt::Key_End: g->getScene()->translateCamera(0,0,delta * 2); break;
+    case Qt::Key_Insert: g->getScene()->rotateScene(0,0,-1 * delta * 2); break;
+    case Qt::Key_Delete : g->getScene()->rotateScene(0,0,delta * 2); break;
     default:
       return false;
     }

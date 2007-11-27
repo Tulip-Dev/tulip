@@ -9,6 +9,7 @@
 #define	MORPHING_MAX_DURATION	3.0f		// s
 #define	MORPHING_MIN_FRAMES	8		// #
 
+using namespace std;
 
 namespace tlp {
 
@@ -63,7 +64,7 @@ namespace tlp {
     assert( inG0 );
     assert( inG1 );
     glWidget = outGlgw;
-    Graph * g = outGlgw->getRenderingParameters().getGraph();
+    Graph * g = outGlgw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     assert( g );
     stop();
     bool hasdiff = GraphState::setupDiff( g, inG0, inG1 );
@@ -129,7 +130,7 @@ namespace tlp {
     frameCpt++;
 
     assert( outGlgw );
-    Graph * g = outGlgw->getRenderingParameters().getGraph();
+    Graph * g = outGlgw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     assert( g );
     //assert( glg );
   
@@ -221,17 +222,17 @@ namespace tlp {
     delete edgeIt;
 
     // Camera
-    Coord cam_center = g0->camera.center + (g1->camera.center - g0->camera.center) * inT;
-    Coord cam_eyes   = g0->camera.eyes + (g1->camera.eyes - g0->camera.eyes) * inT;
-    Coord cam_up     = g0->camera.up + (g1->camera.up - g0->camera.up) * inT;
-    float zoomf      = g0->camera.zoomFactor + (g1->camera.zoomFactor - g0->camera.zoomFactor) * inT;
-    float radius     = g0->camera.sceneRadius + (g1->camera.sceneRadius - g0->camera.sceneRadius) * inT;
-    Camera c;
+    Coord cam_center = g0->camera->getCenter() + (g1->camera->getCenter() - g0->camera->getCenter()) * inT;
+    Coord cam_eyes   = g0->camera->getEyes() + (g1->camera->getEyes() - g0->camera->getEyes()) * inT;
+    Coord cam_up     = g0->camera->getUp() + (g1->camera->getUp() - g0->camera->getUp()) * inT;
+    float zoomf      = g0->camera->getZoomFactor() + (g1->camera->getZoomFactor() - g0->camera->getZoomFactor()) * inT;
+    float radius     = g0->camera->getSceneRadius() + (g1->camera->getSceneRadius() - g0->camera->getSceneRadius()) * inT;
+    Camera *c;
     c = g0->camera;
 
-    GlGraphRenderingParameters newParam = outGlgw->getRenderingParameters();
+    /*GlGraphRenderingParameters newParam = outGlgw->getRenderingParameters();
     newParam.setCamera(Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );
-    outGlgw->setRenderingParameters(newParam);
+    outGlgw->setRenderingParameters(newParam);*/
 
     //aug displays
     g0->curInterpolation.clear();

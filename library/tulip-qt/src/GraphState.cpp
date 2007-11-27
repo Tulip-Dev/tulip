@@ -6,6 +6,7 @@
 #include <tulip/ColorProperty.h>
 
 using namespace tlp;
+using namespace std;
 
 //====================================================
 static bool HaveSameValues( const vector<vector <Coord> > &v1,
@@ -51,15 +52,14 @@ static bool HaveSameValues( Graph * inG,
 //====================================================
 GraphState::GraphState( GlGraphWidget * glgw ) {
   assert( glgw );
-  GlGraphRenderingParameters param = glgw->getRenderingParameters();
-  g = param.getGraph();
+  g = glgw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   layout = new LayoutProperty( g );
   *layout = *( g->getProperty<LayoutProperty>("viewLayout") );
   size = new SizeProperty( g );
   *size = *( g->getProperty<SizeProperty>("viewSize") );
   color = new ColorProperty( g );
   *color = *( g->getProperty<ColorProperty>("viewColor") );
-  camera = param.getCamera();
+  camera = glgw->getScene()->getCamera();
 }
 //====================================================
 GraphState::~GraphState() {

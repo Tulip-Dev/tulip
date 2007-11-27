@@ -2,9 +2,10 @@
 #ifndef MOUSEMOVESELECTION_H
 #define MOUSEMOVESELECTION_H
 
-#include <tulip/GlHudRect.h>
-#include <tulip/GlHudCircle.h>
-#include <tulip/GlADComposite.h>
+//#include <tulip/GlRect.h>
+#include <tulip/GlCircle.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
 #include <tulip/GWInteractor.h>
 
@@ -19,7 +20,8 @@ namespace tlp {
   public:
 
     MouseSelectionEditor();
-    ~MouseSelectionEditor() {}
+    ~MouseSelectionEditor() {if(glGraphWidget)glGraphWidget->getScene()->getSelectionLayer()->deleteGlEntity("selectionComposite");}
+    bool compute(GlGraphWidget *glGraphWidget);
     bool draw(GlGraphWidget *);
     bool eventFilter(QObject *, QEvent *);
     GWInteractor *clone() { return new MouseSelectionEditor(); }
@@ -29,6 +31,7 @@ namespace tlp {
     enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
     Graph *_graph;
+    GlGraphWidget *glGraphWidget;
     LayoutProperty *_layout;
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
@@ -55,9 +58,9 @@ namespace tlp {
     //    double centerX, centerY;
     Coord ffdCenter; 
 
-    tlp::GlADComposite ffd;
-    tlp::GlHudCircle _controls[8];
-    tlp::GlHudRect centerRect;
+    GlComposite composite;
+    GlCircle _controls[8];
+    GlRect centerRect;
     Coord _layoutCenter;
 
     bool computeFFD(GlGraphWidget*);

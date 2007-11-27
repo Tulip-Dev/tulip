@@ -29,7 +29,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
     if (qMouseEv->button() == Qt::LeftButton) {
       GlGraphWidget *glw = (GlGraphWidget *) widget;
 
-      Graph*_graph=glw->getRenderingParameters().getGraph();
+      Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       //  Colors* mColors=_graph->getProperty<ColorProperty>("viewColor");
       node newNode;
@@ -38,7 +38,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       Coord point((double) glw->width() - (double) qMouseEv->x(),
 		  (double) qMouseEv->y(),
 		  0);
-      point = glw->screenTo3DWorld(point);
+      point = glw->getScene()->getCamera()->screenTo3DWorld(point);
       mLayout->setNodeValue(newNode, point);
       //      mColors->setNodeValue(newNode,((Application *)qApp)->nodeColor);
       glw->redraw();

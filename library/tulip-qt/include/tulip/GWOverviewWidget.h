@@ -4,8 +4,8 @@
 
 #include "tulip/GWOverviewWidgetData.h"
 #include <tulip/ObservableGlGraph.h>
-#include <tulip/GlAugmentedDisplay.h>
 #include <tulip/GlGraphWidget.h>
+#include <tulip/Camera.h>
 #include <qcolor.h>
 #include <string>
 #include <qstring.h>
@@ -50,7 +50,7 @@ private :
   GlGraphWidget *_view;
   bool _synchronizing;
   RectPosition *_glDraw;
-  Camera _initialCamera;
+  tlp::Camera *_initialCamera;
   RenderingParametersDialogData *paramDialog;
   void setBackgroundColor(QColor);
 };

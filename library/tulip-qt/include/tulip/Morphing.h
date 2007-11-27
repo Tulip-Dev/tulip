@@ -28,7 +28,7 @@ namespace tlp {
     LayoutProperty *layout;
     SizeProperty *size;
     ColorProperty *color;
-    Camera camera;
+    Camera *camera;
     std::vector<std::vector<Coord> > augPoints;
     std::vector<Coord> augCenters;
     std::vector<std::vector<Coord> > curInterpolation;

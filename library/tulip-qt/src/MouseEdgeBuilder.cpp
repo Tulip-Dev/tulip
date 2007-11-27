@@ -33,7 +33,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     ElementType type;
     node tmpNode;
     edge tmpEdge;
-    Graph * _graph = glGraphWidget->getRenderingParameters().getGraph();
+    Graph * _graph = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>("viewLayout");
     if (qMouseEv->button()==Qt::LeftButton) {
       if (!started) {
@@ -53,7 +53,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Observable::holdObservers();
 	  started=false;
 	  glGraphWidget->setMouseTracking(false);
-	  edge newEdge = glGraphWidget->getRenderingParameters().getGraph()->addEdge(source, tmpNode);
+	  cout << "new edge" << endl;
+	  edge newEdge = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->addEdge(source, tmpNode);
 	  mLayout->setEdgeValue(newEdge, bends);
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
 	  bends.clear();
@@ -64,9 +65,9 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
 		 (double) qMouseEv->y(),
 		 0);
-	  bends.push_back(glGraphWidget->screenTo3DWorld(point));
+	  bends.push_back(glGraphWidget->getScene()->getCamera()->screenTo3DWorld(point));
 	  glGraphWidget->draw();
-	}
+	  }
       }
       return true;
     }
@@ -86,7 +87,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
 		(double) qMouseEv->y(),
 		0);
-    point = glGraphWidget->screenTo3DWorld(point);
+    point = glGraphWidget->getScene()->getCamera()->screenTo3DWorld(point);
     curPos.set(point[0], point[1], point[2]);
     glGraphWidget->draw();
     return true;

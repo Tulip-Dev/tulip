@@ -8,15 +8,18 @@
 #include <qevent.h>
 #include <qtooltip.h>
 
+#include <tulip/GlSimpleEntity.h>
+
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlGraphWidget.h"
 #include "tulip/RenderingParametersDialogData.h"
 
+
 using namespace std;
 using namespace tlp;
 
-struct RectPosition : public tlp::GlAugmentedDisplay {
-  void draw(GlGraph *);
+struct RectPosition : public tlp::GlSimpleEntity {
+  void draw(float lod);
   RectPosition(GlGraphWidget *, GlGraphWidget *);
   void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
@@ -68,6 +71,12 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   _observedView = 0;
   _glDraw = 0;
   _view = new GlGraphWidget( frame8, "view" );
+  _view->setViewLabel(false);
+  GlLayer* layer=new GlLayer();
+  //GlGraphComposite* graphComposite=new GlGraphComposite();
+  //layer->addGlEntity(graphComposite,"graphComposite");
+  //_view->getScene()->setGlGraphComposite(graphComposite);
+  _view->getScene()->addLayer(layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
 #if (QT_REL == 3)
@@ -77,7 +86,8 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
 #endif
   _view->installEventFilter(this);
   _glDraw = new RectPosition(_view, 0);
-  _view->addGlAugmentedDisplay(_glDraw, "Overview");
+  layer->addGlEntity(_glDraw,"RectPosition");
+  //_view->addGlAugmentedDisplay(_glDraw, "Overview");
   paramDialog = new RenderingParametersDialog(this);
 }
 //=============================================================================
@@ -119,24 +129,24 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       double mouseClicY = me->y();
       double widgetWidth = _view->width();
       double widgetHeight = _view->height();
-      Vector<int, 4> viewport = _observedView->getRenderingParameters().getViewport();
+      Vector<int, 4> viewport = _observedView->getScene()->getViewport();
       Coord upperLeftCorner(viewport[0], viewport[1],0);
       Coord lowerRightCorner(viewport[0] + viewport[2], 
 			     viewport[1] + viewport[3], 
 			     0);
       Coord middle = (upperLeftCorner + lowerRightCorner) / 2.0;
       middle[2] = 0.;
-      middle = _observedView->screenTo3DWorld(middle);
-      Camera cover  = _view->getRenderingParameters().getCamera();
-      Camera cview  = _observedView->getRenderingParameters().getCamera();
-      middle = _view->worldTo2DScreen(middle);
+      middle = _observedView->getScene()->getCamera()->screenTo3DWorld(middle);
+      Camera cover  = *_view->getScene()->getCamera();
+      Camera cview  = *_observedView->getScene()->getCamera();
+      middle = _view->getScene()->getCamera()->worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       float dx, dy, dz;
-      dx = (middle[0] - mouseClicX) * viewport[2] * cview.zoomFactor / (cover.zoomFactor * widgetWidth);
-      dy = (middle[1] - (widgetHeight - mouseClicY)) * viewport[3] * cview.zoomFactor / (cover.zoomFactor * widgetHeight);
+      dx = (middle[0] - mouseClicX) * viewport[2] * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
+      dy = (middle[1] - (widgetHeight - mouseClicY)) * viewport[3] * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
       dz = 0;
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
-      _observedView->translateCamera((int) dx, (int) dy, 0);
+      _observedView->getScene()->translateCamera((int) dx, (int) dy, 0);
       _observedView->draw();
       return true;
     }
@@ -151,15 +161,14 @@ void GWOverviewWidget::draw(GlGraphWidget *glG) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
   if (_observedView != 0) {
-    _view->centerScene();
-    _initialCamera = _view->getRenderingParameters().getCamera();   
-    Camera cam = _observedView->getRenderingParameters().getCamera();
-    cam.zoomFactor = 0.5;
-    cam.eyes -= (cam.center - _initialCamera.center);
-    cam.center -= (cam.center - _initialCamera.center);
-    GlGraphRenderingParameters newParam = _view->getRenderingParameters();
-    newParam.setCamera(cam);
-    _view->setRenderingParameters(newParam);
+    _view->getScene()->centerScene();
+    _initialCamera = _view->getScene()->getCamera();   
+    Camera cam = *_observedView->getScene()->getCamera();
+    cam.scene=_initialCamera->scene;
+    cam.setZoomFactor(0.5);
+    cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
+    cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
+    _view->getScene()->setCamera(&cam);
   }
   _view->draw();
 }
@@ -173,6 +182,7 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
 	       this, SLOT(draw(GlGraphWidget *)));
     disconnect(_observedView, SIGNAL(destroyed(QObject *)), 
 	       this, SLOT(observedViewDestroyed(QObject *)));
+    //_observedView->getScene()->getSelectionLayout()->clear();
     _observedView = 0;
   }
   if (glWidget)
@@ -187,28 +197,29 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
   _glDraw->setObservedView(_observedView);
   
   if (_observedView != 0) {
-    GlGraphRenderingParameters newParam = _observedView->getRenderingParameters();
-    newParam.setViewport(_view->getRenderingParameters().getViewport());
-    _view->setRenderingParameters(newParam);
+    _view->getScene()->getLayer()->addGlEntity(_observedView->getScene()->getGlGraphComposite(),"graphComposite");
+    _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),_observedView->getScene()->getGlGraphComposite());
+    _view->getScene()->centerScene();
+    //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
+    
+    //_observedView->getScene()->setViewport(_view->getScene()->getViewport());
     syncFromView();
     connect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)),
 	   this, SLOT(draw(GlGraphWidget *)));
     connect(_observedView, SIGNAL(destroyed(QObject *)), 
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
-    GlGraphRenderingParameters newParam = _view->getRenderingParameters();
-    newParam.setGraph(0);
-    _view->setRenderingParameters(newParam);
+    _view->getScene()->addGlGraphCompositeInfo(0,0);
+    _view->getScene()->getLayer()->deleteGlEntity("graphComposite");
   }
 }
 //=============================================================================
 void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) { 	 
   assert(_observedView == glWidget); 	 
   _observedView = 0; 	 
-  _glDraw->setObservedView(0); 	 
-  GlGraphRenderingParameters param = _view->getRenderingParameters(); 	 
-  param.setGraph(0); 	 
-  _view->setRenderingParameters(param); 	 
+  _glDraw->setObservedView(0); 	
+  _view->getScene()->getLayer()->deleteGlEntity("graphComposite");
+  _view->getScene()->addGlGraphCompositeInfo(0,0);
   draw(0); 	 
 } 	 
 //=============================================================================
@@ -233,7 +244,7 @@ void GWOverviewWidget::backColor() {
 void GWOverviewWidget::syncFromView() {
   if (_observedView!=0) {
     _synchronizing = true;
-    GlGraphRenderingParameters param = _observedView->getRenderingParameters();
+    GlGraphRenderingParameters param = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
     paramDialog->arrows->setChecked( param.isViewArrow());
     paramDialog->edgeVisible->setChecked( param.isDisplayEdges());
     paramDialog->elabels->setChecked( param.isViewEdgeLabel());
@@ -241,24 +252,25 @@ void GWOverviewWidget::syncFromView() {
     paramDialog->colorInterpolation->setChecked( param.isEdgeColorInterpolate());
     paramDialog->sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
     paramDialog->ordering->setChecked( param.isElementOrdered());
-    paramDialog->orthogonal->setChecked( param.isViewOrtho());
+    paramDialog->orthogonal->setChecked(_observedView->getScene()->isViewOrtho());
     paramDialog->mlabels->setChecked( param.isViewMetaLabel());
     paramDialog->edge3D->setChecked( param.isEdge3D());
-    Color tmp = param.getBackgroundColor();
+    Color tmp = _observedView->getScene()->getBackgroundColor();
     setBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
     paramDialog->fonts->setCurrentItem(param.getFontsType());
     paramDialog->density->setValue(param.getLabelsBorder());
     ((RenderingParametersDialog *) paramDialog)->updateEdgeOptions();
 
-    GlGraphRenderingParameters paramView = _view->getRenderingParameters();
-    paramView.setViewOrtho( param.isViewOrtho() );
+    GlGraphRenderingParameters paramView = _view->getScene()->getGlGraphComposite()->getRenderingParameters();
+    //paramView.setViewOrtho( param.isViewOrtho() );
     paramView.setEdgeSizeInterpolate( param.isEdgeSizeInterpolate() );
     paramView.setEdgeColorInterpolate( param.isEdgeColorInterpolate() );
     paramView.setTexturePath( param.getTexturePath() );
     paramView.setViewNodeLabel(false);
     paramView.setViewEdgeLabel(false);
     paramView.setElementOrdered(false);
-    _view->setRenderingParameters(paramView);
+    _view->getScene()->getGlGraphComposite()->setRenderingParameters(paramView);
+    _view->getScene()->setViewOrtho(_observedView->getScene()->isViewOrtho());
 
     _synchronizing=false;
   }
@@ -266,7 +278,7 @@ void GWOverviewWidget::syncFromView() {
 //=============================================================================
 void GWOverviewWidget::updateView() {
   if (_observedView!=0 && !_synchronizing) {
-    GlGraphRenderingParameters paramObservedViev = _observedView->getRenderingParameters();
+    GlGraphRenderingParameters paramObservedViev = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
 
     paramObservedViev.setViewArrow(paramDialog->arrows->isChecked());
     paramObservedViev.setDisplayEdges(paramDialog->edgeVisible->isChecked());
@@ -275,54 +287,54 @@ void GWOverviewWidget::updateView() {
     paramObservedViev.setEdgeColorInterpolate(paramDialog->colorInterpolation->isChecked());
     paramObservedViev.setEdgeSizeInterpolate(paramDialog->sizeInterpolation->isChecked());
     paramObservedViev.setElementOrdered(paramDialog->ordering->isChecked());
-    paramObservedViev.setViewOrtho(paramDialog->orthogonal->isChecked());
+    _observedView->getScene()->setViewOrtho(paramDialog->orthogonal->isChecked());
     paramObservedViev.setViewMetaLabel(paramDialog->mlabels->isChecked());
     paramObservedViev.setEdge3D(paramDialog->edge3D->isChecked());
     paramObservedViev.setFontsType(paramDialog->fonts->currentItem());
     QColor tmp = paramDialog->background->paletteBackgroundColor();
-    paramObservedViev.setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
+    _observedView->getScene()->setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
     paramObservedViev.setLabelsBorder(paramDialog->density->value());
-    _observedView->setRenderingParameters(paramObservedViev);
+    _observedView->getScene()->getGlGraphComposite()->setRenderingParameters(paramObservedViev);
 
-    GlGraphRenderingParameters paramView = _view->getRenderingParameters();
-    paramView.setBackgroundColor( paramObservedViev.getBackgroundColor() );
+    GlGraphRenderingParameters paramView = _view->getScene()->getGlGraphComposite()->getRenderingParameters();
+    _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
     paramView.setEdgeColorInterpolate( paramObservedViev.isEdgeColorInterpolate() );
-    paramView.setViewOrtho(paramObservedViev.isViewOrtho());
+    _view->getScene()->setViewOrtho(_observedView->getScene()->isViewOrtho());
     paramView.setEdgeSizeInterpolate(paramObservedViev.isEdgeSizeInterpolate() );
-    paramView.setViewNodeLabel(false);
-    paramView.setViewEdgeLabel(false);
-    paramView.setElementOrdered(false);
-    _view->setRenderingParameters(paramView);
+    //paramView.setViewNodeLabel(false);
+    //paramView.setViewEdgeLabel(false);
+    //paramView.setElementOrdered(false);
+    _view->getScene()->getGlGraphComposite()->setRenderingParameters(paramView);
 
     _observedView->draw();
   }
 }
 //=============================================================================
-void RectPosition::draw(GlGraph *target) {
-  assert (_view == target);
+void RectPosition::draw(float lod) {
+  //assert (_view == target);
   if(_observedView == 0) {
     return ;
   }
 
-  //  _observedView->makeCurrent();
+  _observedView->makeCurrent();
   Vector<Coord, 4> points;
-  Vector<int,   4> viewport = _observedView->getRenderingParameters().getViewport();
+  Vector<int,   4> viewport = _observedView->getScene()->getViewport();
   points[0] = Coord(viewport[0]              , viewport[1], 0);
   points[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    points[i] = _observedView->screenTo3DWorld(points[i]);
+    points[i] = _observedView->getScene()->getCamera()->screenTo3DWorld(points[i]);
 
-  //  _view->makeCurrent();
-  viewport = _view->getRenderingParameters().getViewport();
+  _view->makeCurrent();
+  viewport = _view->getScene()->getViewport();
   Vector<Coord, 4> points2;
   points2[0] = Coord(viewport[0]              , viewport[1], 0);
   points2[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points2[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    points2[i] = _view->screenTo3DWorld(points2[i]);
+    points2[i] = _view->getScene()->getCamera()->screenTo3DWorld(points2[i]);
   
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
@@ -399,5 +411,6 @@ void RectPosition::draw(GlGraph *target) {
 //=============================================================================
 RectPosition::RectPosition(GlGraphWidget *view, GlGraphWidget *observedView) : 
   _observedView(observedView), _view(view) {
+  boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));
 }
 //=============================================================================
