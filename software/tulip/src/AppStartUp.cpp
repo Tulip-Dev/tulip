@@ -12,6 +12,9 @@
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 #include <qapplication.h>
 #include "AppStartUp.h"
 
@@ -72,7 +75,11 @@ void AppStartUp::initTulip(std::string &errors) {
   
   //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(&plug);   // library side plugins
-  GlGraph::loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  GlyphManager::createInst();
+  GlyphManager::getInst().loadPlugins(&plug);   // software side plugins, i.e. glyphs
+
+  GlDisplayListManager::createInst();
+  GlTextureManager::createInst();
   errors = errorMsgs;
   // free memory
   errorMsgs.resize(0);

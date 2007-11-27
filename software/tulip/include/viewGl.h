@@ -33,6 +33,7 @@
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
+#include <tulip/GlScene.h>
 #include <tulip/Observable.h>
 #include <tulip/GWInteractor.h>
 #include "TulipData.h"
@@ -118,7 +119,7 @@ protected:
   void enableElements(bool);
   void setNavigateCaption(std::string);
   void initializeGraph(tlp::Graph *);
-  void initializeGlGraph(tlp::GlGraph *);
+  void initializeGlScene(tlp::GlScene *);
   // GraphObserver interface
   void addNode (tlp::Graph *, const tlp::node);
   void addEdge (tlp::Graph *, const tlp::edge);

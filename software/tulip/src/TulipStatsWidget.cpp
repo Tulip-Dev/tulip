@@ -17,7 +17,6 @@
 #include <tulip/LayoutProperty.h> 
 #include <tulip/IntegerProperty.h> 
 #include <tulip/Iterator.h> 
-#include <tulip/GlGraph.h> 
 #include <tulip/StableIterator.h>
 #include <tulip/SGHierarchyWidget.h>
 #include "tulip/Algorithm.h"
@@ -156,7 +155,7 @@ namespace tlp
     /*    if (graph != 0)
 	  graph->removeObserver(this); */
 
-    graph = g->getGraph();
+    graph = g->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
     if (graph != 0 && graph != NULL)
       {
@@ -303,7 +302,7 @@ namespace tlp
   {
     //cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    if (AverageDisplayCB->isChecked())
+    /*if (AverageDisplayCB->isChecked())
       glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
     if (StdDeviationDisplayCB->isChecked())
@@ -325,7 +324,7 @@ namespace tlp
       {
 	if (DisplayCPCB->isChecked())
 	  glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
-      }
+	  }*/
   
     /*  if (glGraphWidget != 0 && glGraphWidget != NULL)
 	glGraphWidget->UpdateGL();*/
@@ -438,7 +437,7 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    //glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
     chDisplayClusteringPlaneSlot();
 
     // cout << " ...[END]" << endl;
@@ -700,10 +699,10 @@ namespace tlp
     else {
       *graph->getLocalProperty<LayoutProperty>("viewLayout") = dest;
     }
-    GlGraphRenderingParameters param = glGraphWidget->getRenderingParameters();
+    GlGraphRenderingParameters param = glGraphWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setDisplayEdges(false);
-    glGraphWidget->setRenderingParameters(param);
-    glGraphWidget->centerScene();
+    glGraphWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    //glGraphWidget->centerScene();
 
     if (dataSet != 0) 
       delete dataSet;
@@ -811,15 +810,15 @@ namespace tlp
 	// We flip the Y axis ^^
 	pos[1] *= -1;
 
-	averagePoint = new GlADAxisPoint(pos, Color(255, 0, 0, 255), max, 1, 2);
+	/*averagePoint = new GlADAxisPoint(pos, Color(255, 0, 0, 255), max, 1, 2);
 	averagePoint->setRenderState(GlAD_AlphaBlending, true);
 	averagePoint->setRenderState(GlAD_ZEnable, false);
-	averagePoint->setDisplayDim(disp);
+	averagePoint->setDisplayDim(disp);*/
 
-	glGraphWidget->addGlAugmentedDisplay(averagePoint, "Average");
+	//glGraphWidget->addGlAugmentedDisplay(averagePoint, "Average");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(averagePoint);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
 
     glGraphWidget->draw();
@@ -863,17 +862,17 @@ namespace tlp
 	topLeft     = Coord(aPoint[0] - pos[0], -aPoint[1] - pos[1], aPoint[2] - pos[2]);
 	bottomRight = Coord(aPoint[0] + pos[0], -aPoint[1] + pos[1], aPoint[2] + pos[2]);
 
-	stdDeviationBox = new GlADBox(topLeft, bottomRight, Color(220, 220, 255, 80));
+	/*stdDeviationBox = new GlADBox(topLeft, bottomRight, Color(220, 220, 255, 80));
 	stdDeviationBox->setRenderState(GlAD_AlphaBlending, true);
 	stdDeviationBox->setRenderState(GlAD_Culling, false);
 	stdDeviationBox->setRenderState(GlAD_ZEnable, false);
 	stdDeviationBox->setRenderState(GlAD_Wireframe, true);
-	stdDeviationBox->setRenderState(GlAD_Solid, true);
+	stdDeviationBox->setRenderState(GlAD_Solid, true);*/
 
-	glGraphWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
+	//glGraphWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
 
     glGraphWidget->draw();
@@ -918,17 +917,17 @@ namespace tlp
 	min[1]    = max[1];
 	max[1]    = tmp;
 
-	AABB = new GlADBox(min, max, Color(255, 255, 0, 255));
+	/*AABB = new GlADBox(min, max, Color(255, 255, 0, 255));
 	AABB->setRenderState(GlAD_Solid, false);
 	AABB->setRenderState(GlAD_Wireframe, true);
-	AABB->changeRenderOptions();
+	AABB->changeRenderOptions();*/
 
 	// cout << "Solid ? " << AABB->getRenderState(GlAD_Solid) << endl;
 
-	glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
+	//glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(AABB);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(AABB);
 
     glGraphWidget->draw();
 
@@ -952,13 +951,13 @@ namespace tlp
 	end[1] = -(statsResults->linearRegressionFunctionb0 + statsResults->linearRegressionFunctionb1 * end[0]) / discretizationStep[1];
 	end[2] = 0;
 
-	linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), Color(255, 0, 255, 255), 1);
-	linearRegression->setRenderState(GlAD_ZEnable, false);
+	/*linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), Color(255, 0, 255, 255), 1);
+	  linearRegression->setRenderState(GlAD_ZEnable, false);*/
 
-	glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
+	//glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(linearRegression);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(linearRegression);
 
     glGraphWidget->draw();
 
@@ -997,20 +996,20 @@ namespace tlp
 	      case 2: col = Color(0, 0, 100, 255); break;
 	      }
 
-	    eigenVectors[i] = new GlADLine(center, endPos, col, col, 2);
+	    //eigenVectors[i] = new GlADLine(center, endPos, col, col, 2);
 	    
 	    char n = '0' + i;
 	    char key[13] = "EigenVector0";
 	    key[11] = n;
 
-	    glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
+	    //glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
 	  }
       }
-    else 
+    /*else 
       {
 	for(int i=0; i < 3; i++)
 	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
-      }
+	  }*/
     glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
@@ -1086,15 +1085,15 @@ namespace tlp
 
 	Coord coordsTab[4] = {p1, p2, p3, p4};
 
-	clusteringPlane = new GlADQuad(coordsTab, Color(255, 220, 220, 80));
+	/*clusteringPlane = new GlADQuad(coordsTab, Color(255, 220, 220, 80));
 	clusteringPlane->setRenderState(GlAD_AlphaBlending, true);
 	clusteringPlane->setRenderState(GlAD_ZEnable, false);
-	clusteringPlane->setRenderState(GlAD_Culling, false);
+	clusteringPlane->setRenderState(GlAD_Culling, false);*/
       
-	glGraphWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
+	//glGraphWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    //else
+    // glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
 
     glGraphWidget->draw();
 

@@ -30,7 +30,7 @@ void QtProgress::progress_handler(int i,int j) {
   if (firstCall) show();
   firstCall=false;
   if (glGraphWidget!=0 && preview->isChecked()) {
-    glGraphWidget->centerScene();
+    //glGraphWidget->centerScene();
     glGraphWidget->draw();
   }
 }

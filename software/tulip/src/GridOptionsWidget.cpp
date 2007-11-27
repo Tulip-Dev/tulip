@@ -14,6 +14,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/hash_string.h>
 
 using namespace tlp;
 using namespace std;
@@ -53,14 +54,14 @@ namespace tlp
     this->glGraphWidget = graphWidget;
 
     if (glGraphWidget != NULL && glGraphWidget != 0)
-      grid = (GlADGrid*)glGraphWidget->findGlAugmentedDisplay("Layout Grid");
+      grid = (GlGrid*)glGraphWidget->getScene()->getLayer()->findGlEntity("Layout Grid");
   }
   //==============================================
   void GridOptionsWidget::validateGrid() {
     if (glGraphWidget != 0) {
       if (ActivatedCB->isChecked()) {
 	if (grid != NULL) {
-	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  glGraphWidget->getScene()->getLayer()->deleteGlEntity(grid);
 	  grid = NULL;
 	}
 	    
@@ -69,10 +70,10 @@ namespace tlp
 	Coord min, max;
 	    
 	// We get the min and the max of the Layout to display the grid
-	LayoutProperty *layout = glGraphWidget->getGraph()->getProperty<LayoutProperty>("viewLayout");
-	SizeProperty *sizes = glGraphWidget->getGraph()->getProperty<SizeProperty>("viewSize");
-	DoubleProperty *rotation = glGraphWidget->getGraph()->getProperty<DoubleProperty>("viewRotation");
-	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getGraph(), layout, 
+	LayoutProperty *layout = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<LayoutProperty>("viewLayout");
+	SizeProperty *sizes = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<SizeProperty>("viewSize");
+	DoubleProperty *rotation = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<DoubleProperty>("viewRotation");
+	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout, 
 							    sizes, rotation);
 	max = bboxes.first;	
 	min = bboxes.second;
@@ -109,13 +110,13 @@ namespace tlp
 	  for(int i=0; i < 3; i++)
 	    cell[i] = cellsize[i];
 	}
-	grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display);
-	glGraphWidget->addGlAugmentedDisplay(grid, "Layout Grid");
+	grid = new GlGrid(min, max, cell, Color(0, 0, 0, 255), display);
+	glGraphWidget->getScene()->getLayer()->addGlEntity(grid, "Layout Grid");
 	    
       }
       else {
 	if (grid != NULL) {
-	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  glGraphWidget->getScene()->getLayer()->deleteGlEntity(grid);
 	  grid = NULL;
 	}
       }
