@@ -39,33 +39,38 @@ libtulip_ogl_la_SOURCES = \
 	Glyph.cpp \
 	CubeOutLined.cpp \
 	Camera.cpp \
-        GlGraph.cpp \
-        GlGraphSelection.cpp \
-        GlGraphDrawGraph.cpp \
-        GlGraphMouse.cpp \
-	GlGraphNavigate.cpp \
-        GlGraphMakeObject.cpp \
-	GlGraphTextureProxy.cpp \
-        GlGraphSetGet.cpp \
-        GlGraphInit.cpp \
-	GlAugmentedDisplay.cpp \
-	GlADPoint.cpp \
-	GlADAxisPoint.cpp \
-	GlADLine.cpp \
-	GlADQuad.cpp \
-	GlADBox.cpp \
-	GlADGrid.cpp \
-	GlADRenderOptions.cpp \
-	GlADComposite.cpp \
-	GlHud.cpp \
-	GlHudLine.cpp \
-	GlHudRect.cpp \
-	GlHudCircle.cpp \
-	GlHudPolygon.cpp \
+	GlGraphStaticData.cpp \
+	GlGrid.cpp \
+	GlLabel.cpp \
+	GlComposite.cpp \
+	GlGraphComposite.cpp \
+	GlCircle.cpp \
+	GlRect.cpp \
+	GlRectTextured.cpp \
+	GlPolygon.cpp \
+	GlLayer.cpp \
+	GlCPULODCalculator.cpp \
+	GlLODSceneVisitor.cpp \
+	GlLabelSceneVisitor.cpp \
+	GlBoundingBoxSceneVisitor.cpp \
+	GlSelectSceneVisitor.cpp \
+	GlBox.cpp \
+	GlScene.cpp \
+	GlTextureManager.cpp \
 	Bezier.cpp \
 	Spline.cpp \
         GlLines.cpp \
 	TLPPixmapFont.cpp \
 	TLPPixmapGlyph.cpp \
-        EpsFunction.cpp
+        EpsFunction.cpp \
+	GlSVGFeedBackBuilder.cpp \
+	GlEPSFeedBackBuilder.cpp \
+	GlTLPFeedBackBuilder.cpp \
+	GlFeedBackRecorder.cpp \
+	GlyphManager.cpp \
+	GlGraphInputData.cpp \
+	GlNode.cpp \
+	GlMetaNode.cpp \
+	GlEdge.cpp \
+	GlDisplayListManager.cpp
 

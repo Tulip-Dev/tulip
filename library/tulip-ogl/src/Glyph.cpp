@@ -5,12 +5,14 @@
 
 using namespace tlp;
 
+TemplateFactory<GlyphFactory,Glyph, GlyphContext *> *GlyphFactory::factory;
+
 Glyph::Glyph(GlyphContext *gc) {
   if (gc != 0) {
-    glGraph=gc->glGraph;
+    glGraphInputData=gc->glGraphInputData;
   }
   else {
-    glGraph = 0;
+    glGraphInputData = 0;
   }
 }
 //=============================================

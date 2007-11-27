@@ -2,6 +2,7 @@
 #include <tulip/Rectangle.h>
 #include "tulip/GlTools.h"
 #include "tulip/Matrix.h"
+#include "tulip/BoundingBox.h"
 #include <iostream>
 
 using namespace std;
@@ -111,17 +112,24 @@ namespace tlp {
       return size;
   }
   //====================================================
-  GLfloat projectSize(const Coord& position, const Size &_size, 
+  GLfloat projectSize(const Coord &position,const Coord& size, 
 		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
 		      const Vector<int, 4> &viewport) {
-    float  nSize = _size.norm(); //Enclosing bounding box
+    projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
+  }
+  //====================================================
+  GLfloat projectSize(const BoundingBox &bb, 
+		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
+		      const Vector<int, 4> &viewport) {
+    Coord bbSize=bb.second-bb.first;
+    float  nSize = bbSize.norm(); //Enclosing bounding box
 
     MatrixGL translate;
     translate.fill(0);
     for (unsigned int i = 0; i<4; ++i)
       translate[i][i] = 1;
     for (unsigned int i = 0; i<3; ++i)
-      translate[3][i] = position[i];
+      translate[3][i] = bb.first[i] + bbSize[i] ;
 
     MatrixGL tmp(translate * modelviewMatrix);
     //MatrixGL tmp(modelviewMatrix);
@@ -279,5 +287,60 @@ namespace tlp {
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.5f, -0.5f, -0.5f);
     glEnd();
+  }
+
+  //=======================================================
+  //Calcul 3D,
+  //=======================================================
+  //Calcul de la matrice de transformation pour 
+  //le positionnement des flèches sur les arètes
+  MatrixGL makeArrowMatrix(const Coord &A, const Coord &B) {
+    MatrixGL matrix;
+    
+    //Vecteur AB
+    Vector<float, 3> vAB;
+    //Vecteur V
+    Vector<float, 3> vV;
+  //Vecteur W
+    Vector<float, 3> vW;
+    
+    vAB = B - A;
+    float nAB; //|AB|
+    nAB = vAB.norm();
+    if (fabs(nAB) > 1E-6)
+      vAB /= nAB;
+    
+  //vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
+    if (fabs(vAB[2]) < 1E-6) {
+      vV[0] = 0; vV[1] = 0; vV[2] = 1.0;
+    }
+    else 
+    if (fabs(vAB[1]) < 1E-6) {
+      vV[0] = 0; vV[1] = 1.0; vV[2] = 0;
+    }
+    else {
+      vV[0] = 0;
+      vV[1] = 1./vAB[1];
+      vV[2] = -1./vAB[2];
+      vV /= vV.norm();
+    }
+    
+    vW = vAB ^ vV;
+    float nW = vW.norm();
+    if (fabs(nW) > 1E-6)
+      vW /= nW;
+ 
+    for (unsigned int i = 0; i < 3; ++i) {
+      matrix[0][i] = vW[i];
+      matrix[1][i] = vV[i];
+      matrix[2][i] = vAB[i];
+      matrix[3][i] = B[i];
+    }
+    matrix[0][3]=0; 
+    matrix[1][3]=0;
+    matrix[2][3]=0;
+    matrix[3][3]=1;
+    
+    return matrix;
   }
 }

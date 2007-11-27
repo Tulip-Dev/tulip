@@ -34,9 +34,6 @@ Paragraph::~Paragraph(){
 }
 //---------------------------------------------------------------------------
 void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
-#ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << endl;
-#endif
   int val;
   float decal = 0;
   
