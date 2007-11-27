@@ -3,7 +3,6 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/GlGraph.h>
 #include <vector>
 
 
@@ -29,14 +28,12 @@ namespace tlp {
 		const float,              /* start size */
 		const float,              /* end size */
 		const Coord &,            /* nomal to the begin of the curve */
-		const Coord &,           /* nomal to the end curve */
-		GlGraph *); /*direction of the eyes (only for 3D);*/
+		const Coord &);           /* nomal to the end curve */
   void polyQuad(const std::vector<Coord> &, /* polyline vertces */
 		const std::vector<Color> &, /* colors at polyline verts */
 		const std::vector<float> &, /* size at polyline verts */
 		const Coord &,            /* nomal to the begin of the curve */
-		const Coord &,           /* nomal to the end curve */    
-		GlGraph *); /*direction of the eyes (only for 3D);*/
+		const Coord &);           /* nomal to the end curve */    
   void polyCylinder(const std::vector<Coord> &,    /* polyline vertces */
 		    const std::vector<Color> &,    /* colors at polyline verts */
 		    const std::vector<float> &,    /* size at polyline verts */
@@ -63,8 +60,7 @@ namespace tlp {
 		  const float,            /* start size */
 		  const float,            /* end size */
 		  const Coord &,          /* nomal to the begin of the curve */
-		  const Coord &,         /* nomal to the end curve */    
-		  GlGraph *); /*direction of the eyes (only for 3D);*/
+		  const Coord &);         /* nomal to the end curve */    
   void bezierLine(const std::vector<Coord> &,  /* polyline vertces */
 		  const Color &,          /* start color */
 		  const Color &);          /* end color */
@@ -82,8 +78,7 @@ namespace tlp {
 		  const float,            /* start size */
 		  const float,            /* end size */
 		  const Coord &,          /* nomal to the begin of the curve */
-		  const Coord &,         /* nomal to the end curve */    
-		  GlGraph *); /*direction of the eyes (only for 3D);*/
+		  const Coord &);         /* nomal to the end curve */
   void splineLine(const std::vector<Coord> &,  /* polyline vertces */
 		  const Color &,          /* start color */
 		  const Color &);          /* end color */
