@@ -23,7 +23,7 @@ namespace tlp {
     
   public:
     
-    GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):bbIsInit(false),inputData(inputData){}
+    GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData){}
     
     virtual void visit(GlSimpleEntity *entity);
     virtual void visit(GlNode *glNode);
@@ -33,7 +33,6 @@ namespace tlp {
     
   private:
     
-    bool bbIsInit;
     BoundingBox boundingBox;
     GlGraphInputData* inputData;
 
