@@ -8,8 +8,9 @@
 
 #include <tulip/Glyph.h>
 #include <tulip/Graph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlDisplayListManager.h>
 
 using namespace std;
 
@@ -32,8 +33,6 @@ namespace tlp {
     virtual Coord getAnchor(const Coord & vector) const;
 
   private:
-    GLuint LList;
-    bool listOk;
     void drawCube(GLenum);
     void drawCubeSimple(GLenum);
   };
@@ -42,41 +41,40 @@ namespace tlp {
 /*@}*/
 
   //===================================================================================
-  CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc), LList(0), listOk(false) {
+  CubeOutLined::CubeOutLined(GlyphContext *gc): Glyph(gc) {
   }
 
   CubeOutLined::~CubeOutLined() {
-    if (listOk) {
-      if (glIsList(LList)) glDeleteLists(LList, 2);
-    }
   }
 
   void CubeOutLined::draw(node n) {
+    //glEnable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
     //  cerr << __PRETTY_FUNCTION__ << endl;
-    if (!listOk) {
-      LList = glGenLists( 2 );
-      glNewList( LList, GL_COMPILE );
+    if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_cube")) {
       drawCube(GL_QUADS);
-      glEndList();
-      glNewList( LList + 1, GL_COMPILE );
-      drawCubeSimple(GL_LINE_LOOP);
-      glEndList();
-
-      listOk=true;
+      GlDisplayListManager::getInst().endNewDisplayList();
     }
-    assert(glIsList(LList));
-    setMaterial(glGraph->elementColor->getNodeValue(n));
-    string texFile = glGraph->elementTexture->getNodeValue(n);
+    if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_outline")) {
+      drawCubeSimple(GL_LINE_LOOP);
+      GlDisplayListManager::getInst().endNewDisplayList();
+    }
+  
+    //assert(glIsList(LList));
+    setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+    string texFile = glGraphInputData->elementTexture->getNodeValue(n);
     if (texFile != "") {
-      if (glGraph->activateTexture(texFile))
+      string texturePath=glGraphInputData->parameters->getTexturePath();
+      if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
 	setMaterial(Color(255,255,255,0));
     }
-    glCallList(LList);
-    ColorProperty *borderColor = glGraph->getRenderingParameters().getGraph()->getProperty<ColorProperty>("viewBorderColor");
+    //glCallList(LList);
+    GlDisplayListManager::getInst().callDisplayList("CubeOutLined_cube");
+    ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
     DoubleProperty *borderWidth = 0;
-    if (glGraph->getRenderingParameters().getGraph()->existProperty ("viewBorderWidth"))
-      borderWidth = glGraph->getRenderingParameters().getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-    glGraph->desactivateTexture();
+    if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+      borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+    GlTextureManager::getInst().desactivateTexture();
     Color c = borderColor->getNodeValue(n);
     //  setMaterial(c);
     if (borderWidth == 0) glLineWidth(2);
@@ -87,7 +85,9 @@ namespace tlp {
     }
     glDisable(GL_LIGHTING);
     glColor3ub(c[0],c[1],c[2]);
-    glCallList(LList + 1);  
+    GlDisplayListManager::getInst().callDisplayList("CubeOutLined_outline");
+    //glCallList(LList + 1);  
+    //drawCubeSimple(GL_LINE_LOOP);
     glEnable(GL_LIGHTING);
   }
 
