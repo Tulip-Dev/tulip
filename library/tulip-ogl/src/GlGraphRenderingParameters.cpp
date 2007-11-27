@@ -10,7 +10,7 @@
 using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
-  _graph(0),
+  //_graph(0),
   _viewArrow(false), 
   _viewNodeLabel(false),
   _viewEdgeLabel(false),
@@ -20,24 +20,23 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgeColorInterpolate(true), 
   _edge3D(false),
   _displayEdges(true),
-  _viewOrtho(true), 
   _FontsType(0),
   _labelsBorder(2),
-  _backgroundColor(255,255,255),
+  //_backgroundColor(255,255,255),
   _layoutName("viewLayout") {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
-  _viewport[0] = 0;
+  /*_viewport[0] = 0;
   _viewport[1] = 0;
   _viewport[2] = 640;
-  _viewport[3] = 480;
+  _viewport[3] = 480;*/
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
   TRACE_EXEC();
   DataSet data;
   //Color
-  data.set("backgroundColor", _backgroundColor);
+  //data.set("backgroundColor", _backgroundColor);
   //bool
   data.set("arrow", _viewArrow);
   data.set("nodeLabel", _viewNodeLabel);
@@ -49,17 +48,16 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("edgeColorInterpolation", _edgeColorInterpolate);
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
   data.set("edge3D", _edge3D);
-  data.set("orthogonalProjection", _viewOrtho);
   //unsigned int
   data.set("fontType", _FontsType);
   //int
-  data.set("SupergraphId", _graph->getId());
+  //data.set("SupergraphId", _graph->getId());
   //Coord
-  data.set("cameraEyes", _camera.eyes);
+  /*data.set("cameraEyes", _camera.eyes);
   data.set("cameraCenter", _camera.center);
   data.set("cameraUp", _camera.up);
   data.set("cameraZoomFactor", _camera.zoomFactor);
-  data.set("distCam", _camera.sceneRadius);
+  data.set("distCam", _camera.sceneRadius);*/
   return data;
 }
 
@@ -77,8 +75,8 @@ static Graph *findGraphById(Graph *sg, const int id) {
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   TRACE_EXEC();
   Color color;
-  if (data.get<Color>("backgroundColor", color)) 
-    _backgroundColor = color;
+  /*if (data.get<Color>("backgroundColor", color)) 
+    _backgroundColor = color;*/
   bool b;
   if (data.get<bool>("arrow", b))
     setViewArrow(b);
@@ -100,13 +98,11 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setEdgeSizeInterpolate(b);
   if (data.get<bool>("edge3D", b)) 
     setEdge3D(b);
-  if (data.get<bool>("orthogonalProjection", b)) 
-    _viewOrtho = b;
   unsigned int ui;
   if (data.get<unsigned int>("fontType", ui)) 
     _FontsType = ui;
   //restore all view parameters or none
-  Coord ce,cc,cu;
+  /*Coord ce,cc,cu;
   double czf;
   double dc;
   if (
@@ -121,24 +117,24 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
       _camera.up = cu;
       _camera.zoomFactor  = czf;
       _camera.sceneRadius = dc;
-    }
+      }*/
 }
 //====================================================
-tlp::Graph* GlGraphRenderingParameters::getGraph() const {
+/*tlp::Graph* GlGraphRenderingParameters::getGraph() const {
   return _graph;
-}
+  }*/
 //====================================================
-void GlGraphRenderingParameters::setGraph(tlp::Graph *graph) {
+/*void GlGraphRenderingParameters::setGraph(tlp::Graph *graph) {
   _graph = graph;
-}
+  }*/
 //====================================================
-Camera GlGraphRenderingParameters::getCamera() const {
+/*Camera GlGraphRenderingParameters::getCamera() const {
   return _camera;
-}
+  }*/
 //====================================================
-void GlGraphRenderingParameters::setCamera(const Camera &cam) {
+/*void GlGraphRenderingParameters::setCamera(const Camera &cam) {
   _camera = cam;
-}
+  }*/
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
   return _labelsBorder;
@@ -168,10 +164,10 @@ std::string GlGraphRenderingParameters::getFontsPath() {
   return _fontsPath;
 }
 //====================================================
-void GlGraphRenderingParameters::setTexturePath(const std::string &path){
+void GlGraphRenderingParameters::setTexturePath(const std::string &path) {
   _texturePath = path;
 }
-std::string GlGraphRenderingParameters::getTexturePath() {
+std::string GlGraphRenderingParameters::getTexturePath() const {
   return _texturePath;
 }
 //====================================================
@@ -194,13 +190,6 @@ bool GlGraphRenderingParameters::isViewArrow() const {
 }
 void GlGraphRenderingParameters::setViewArrow(const bool b) {
   _viewArrow=b;
-}
-//====================================================
-bool GlGraphRenderingParameters::isViewOrtho() const {
-  return _viewOrtho;
-}
-void GlGraphRenderingParameters::setViewOrtho(const bool b) {
-  _viewOrtho=b;
 }
 //====================================================
 bool GlGraphRenderingParameters::isElementOrdered() const {
@@ -245,14 +234,14 @@ void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b){
   _edgeSizeInterpolate=b;
 }
 //====================================================
-Color GlGraphRenderingParameters::getBackgroundColor() const {
+/*Color GlGraphRenderingParameters::getBackgroundColor() const {
   return _backgroundColor;
 }
 void GlGraphRenderingParameters::setBackgroundColor(const Color &color){
   _backgroundColor = color;
-}
+  }*/
 //====================================================
-void GlGraphRenderingParameters::setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height) {
+/*void GlGraphRenderingParameters::setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height) {
   _viewport[0] = x;
   _viewport[1] = y;
   _viewport[2] = width;
@@ -264,7 +253,7 @@ void GlGraphRenderingParameters::setViewport(const Vector<int, 4>&viewport) {
 
 Vector<int, 4> GlGraphRenderingParameters::getViewport() const {
   return _viewport;
-}  
+  } */ 
 //====================================================
 void GlGraphRenderingParameters::setInputLayout(const std::string &layoutName) {
   _layoutName = layoutName;
