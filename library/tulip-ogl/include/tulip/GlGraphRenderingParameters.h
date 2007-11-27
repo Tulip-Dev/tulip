@@ -22,6 +22,7 @@
 #include <string>
 #include <tulip/Color.h>
 #include <tulip/Camera.h>
+#include <tulip/Reflect.h>
 
 namespace tlp {
   /**
@@ -38,40 +39,40 @@ namespace tlp {
     /**
      * set the graph used for rendering
      */
-    void setGraph(tlp::Graph *graph);
+    //void setGraph(tlp::Graph *graph);
     /**
      * get the graph used for rendering
      */
-    Graph* getGraph() const;
+    //Graph* getGraph() const;
     /**
      * set viewport of the drawing (screen size)
      */
-    void setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height);
+    //void setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height);
     /**
      * set viewport of the drawing (screen size)
      */
-    void setViewport(const Vector<int, 4>&viewport);
+    //void setViewport(const Vector<int, 4>&viewport);
     /**
      * copy current values into given parameters (names are corresponding)
      */
-    tlp::Vector<int, 4> getViewport() const;
+    //tlp::Vector<int, 4> getViewport() const;
     /** 
      * return a Camera object which desribes the 
      * camera used for he rendering
      */
-    Camera getCamera() const;
+    //Camera getCamera() const;
     /** 
      * set the camera parameter for the rendering
      */
-    void setCamera(const Camera &cam);
+    //void setCamera(const Camera &cam);
     /**
      * return the background color
      */
-    Color getBackgroundColor() const;
+    //Color getBackgroundColor() const;
     /** 
      * set the background color, RGB colorspace.
      */
-    void setBackgroundColor(const Color &);
+    //void setBackgroundColor(const Color &);
     /** 
      * activate or deactivate displaying of arrows along the graph's edges.
      */
@@ -127,7 +128,7 @@ namespace tlp {
     /** 
      * return the absolute path used for texture loading
      */
-    std::string getTexturePath();
+    std::string getTexturePath() const;
     /**
      * set the absolute path used for the fonts loading
      */
@@ -136,14 +137,6 @@ namespace tlp {
      * return the absolute path used for the fonts loading
      */
     std::string getFontsPath();
-    /** 
-     * if true activate the Orthogonal projection, else perspective is used.
-     */
-    void setViewOrtho(const bool state);
-    /** 
-     * return true if orthogonal projection is used.
-     */
-    bool isViewOrtho() const;
     /** 
      * if true glgraph use the incremental rendering else display all elements in one pass
      */
@@ -207,7 +200,7 @@ namespace tlp {
      */
     std::string getInputLayout() const;
   private:
-    tlp::Graph  *_graph;
+    //tlp::Graph  *_graph;
     bool _viewArrow;
     bool _viewNodeLabel;
     bool _viewEdgeLabel;
@@ -219,15 +212,11 @@ namespace tlp {
     bool _edge3D;
     bool _edgeSizeInterpolate;
     bool _displayEdges;
-    unsigned int _viewOrtho;
     unsigned int _FontsType;
     unsigned int _labelsBorder;
-    Camera  _camera;
-    Color _backgroundColor;
     std::string _layoutName;
     std::string _fontsPath;
     std::string _texturePath;
-    Vector<int, 4> _viewport;
   }; 
 }
 
