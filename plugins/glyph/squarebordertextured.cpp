@@ -5,11 +5,11 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <tulip/TulipPlugin.h>
-#include <tulip/GlGraph.h> 
 #include <tulip/Glyph.h>
 #include <tulip/TreeTest.h>
 #include <tulip/GlTools.h>
 #include "tulip/Border.h"
+#include <tulip/GlTextureManager.h>
 
 
 #if (__GNUC__ < 3)
@@ -196,7 +196,7 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
 
 //====================================================================
 void SquareBorderTextured::draw(node n) {
-  tree = glGraph->getGraph();
+  tree = glGraphInputData->getGraph();
   
   if (mapTree.find(tree) == mapTree.end())
     initializeNewGraph(tree, n);    
@@ -230,12 +230,13 @@ Coord SquareBorderTextured::getAnchor(const Coord& vector) const {
 
 //====================================================================
 void SquareBorderTextured::setTulipGLState(node n) {
-    setMaterial(glGraph->elementColor->getNodeValue(n));
-    string texFile = glGraph->elementTexture->getNodeValue(n);
+    setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+    string texFile = glGraphInputData->elementTexture->getNodeValue(n);
     
     if (texFile != "") {
-        if (glGraph->activateTexture(texFile))
-            setMaterial(Color(255, 255, 255, 0));
+      string texturePath=glGraphInputData->parameters->getTexturePath();
+      if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
+	setMaterial(Color(255, 255, 255, 0));
     }
 }
 

@@ -4,6 +4,8 @@
 
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
@@ -28,41 +30,38 @@ public:
   virtual void draw(node n);
 
 private:
-  GLuint LList;
-  bool listOk;
 };
 
 GLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2);
 
 //=========================================================================================
-Sphere::Sphere(GlyphContext *gc): Glyph(gc),listOk(false) {
+Sphere::Sphere(GlyphContext *gc): Glyph(gc) {
 }
 
 Sphere::~Sphere(){
-  if (listOk)
-    if (glIsList(LList)) glDeleteLists(LList, 1);
 }
 
 void Sphere::draw(node n) {
-  tlp::setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
-  if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
-      setMaterial(Color(255,255,255,255));
-  }
-  if (!listOk) {
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Sphere_sphere")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();
     gluQuadricNormals(quadratic, GLU_SMOOTH);
     gluQuadricTexture(quadratic, GL_TRUE);  
-    LList = glGenLists( 1 );
-    glNewList( LList, GL_COMPILE ); 
     gluSphere(quadratic, 0.5f, 30, 30);
-    glEndList();
+    GlDisplayListManager::getInst().endNewDisplayList();
     gluDeleteQuadric(quadratic);
-    listOk=true;
   }
-  assert(glIsList(LList));
-  glCallList(LList);
+
+  tlp::setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+  if (texFile != "") {
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
+      setMaterial(Color(255,255,255,255));
+  }
+  
+  GlDisplayListManager::getInst().callDisplayList("Sphere_sphere");
+
+  GlTextureManager::getInst().desactivateTexture();
 }
 /*@}*/

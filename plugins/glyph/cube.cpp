@@ -8,9 +8,10 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <tulip/Graph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/GlTools.h>
 
 using namespace std;
@@ -31,38 +32,35 @@ public:
   virtual Coord getAnchor(const Coord & vector) const;
 
 protected:
-  GLuint LList;
-  bool listOk;
   void drawCube();
 };
 
 GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0);
 
 //===================================================================================
-Cube::Cube(GlyphContext *gc): Glyph(gc),listOk(false) {
+Cube::Cube(GlyphContext *gc): Glyph(gc) {
 }
 //=======================================================
 Cube::~Cube() {
-  if (listOk)
-    if (glIsList(LList)) glDeleteLists(LList, 1);
 }
 //=======================================================
 void
 Cube::draw(node n) {
-  setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Cube_cube")) {
+    drawCube();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+
+  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
       setMaterial(Color(255,255,255,0));
   }
-  if (!listOk) {
-    LList = glGenLists( 1 );
-    glNewList( LList, GL_COMPILE ); 
-    drawCube();
-    glEndList();
-    listOk=true;
-  }
-  glCallList(LList);
+ 
+  GlDisplayListManager::getInst().callDisplayList("Cube_cube");
+  GlTextureManager::getInst().desactivateTexture();
 }
 //=======================================================
 Coord Cube::getAnchor(const Coord & vector ) const {

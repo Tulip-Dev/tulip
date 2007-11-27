@@ -10,9 +10,10 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <tulip/Graph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/GlTools.h>
 
 using namespace std;
@@ -33,45 +34,43 @@ public:
   virtual void draw(node n);
 
 protected:
-  GLuint LList;
-  bool listOk;
   void drawHexagone();
   void drawHexagoneBorder();
 };
 //=====================================================
 GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13);
 //===================================================================================
-Hexagone::Hexagone(GlyphContext *gc): Glyph(gc),listOk(false) {
+Hexagone::Hexagone(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Hexagone::~Hexagone() {
-  if (listOk)
-    if (glIsList(LList)) glDeleteLists(LList, 2);
+  
 }
 //=====================================================
 void Hexagone::draw(node n) {
-  setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagone")) {
+    drawHexagone();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagoneborder")) {
+    drawHexagoneBorder();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
       setMaterial(Color(255,255,255,0));
   }
-  if (!listOk) {
-    LList = glGenLists( 2 );
-    glNewList( LList, GL_COMPILE ); 
-    drawHexagone();
-    glEndList();
-    glNewList( LList + 1, GL_COMPILE ); 
-    drawHexagoneBorder();
-    glEndList();
-    listOk=true;
-  }
-  glCallList(LList);
-  ColorProperty *borderColor = glGraph->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+  
+  GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagone");
+    
+  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
   DoubleProperty *borderWidth = 0;
-  if (glGraph->getRenderingParameters().getGraph()->existProperty ("viewBorderWidth"))
-    borderWidth = glGraph->getRenderingParameters().getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-  glGraph->desactivateTexture();
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+  GlTextureManager::getInst().desactivateTexture();
   Color c = borderColor->getNodeValue(n);
   //  setMaterial(c);
   if (borderWidth == 0) glLineWidth(2);
@@ -82,7 +81,7 @@ void Hexagone::draw(node n) {
   }
   glDisable(GL_LIGHTING);
   glColor4ub(c[0],c[1],c[2],c[3]);
-  glCallList(LList + 1);
+  GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagoneborder");
   glEnable(GL_LIGHTING);
 }
 //=====================================================

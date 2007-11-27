@@ -11,8 +11,9 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/Graph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -33,57 +34,55 @@ public:
   virtual Coord getAnchor(const Coord &vector) const;
 
 protected:
-  GLuint LList;
-  bool listOk;
   void drawSquare();
   void drawSquareBorder();
 };
 //=====================================================
 GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4);
 //===================================================================================
-Square::Square(GlyphContext *gc): Glyph(gc),listOk(false) {
+Square::Square(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Square::~Square() {
-  if (listOk)
-    if (glIsList(LList)) glDeleteLists(LList, 2);
 }
 //=====================================================
 void Square::draw(node n) {
-  setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Square_square")) {
+    drawSquare();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Square_squareborder")) {
+    drawSquareBorder();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+
+  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
       setMaterial(Color(255,255,255,0));
   }
-  if (!listOk) {
-    LList = glGenLists( 2 );
-    glNewList( LList, GL_COMPILE ); 
-    drawSquare();
-    glEndList();
-    glNewList(LList + 1, GL_COMPILE ); 
-    drawSquareBorder();
-    glEndList();
-    listOk=true;
-  }
-  glCallList(LList);
-  ColorProperty *borderColor = glGraph->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+
+  GlDisplayListManager::getInst().callDisplayList("Square_square");
+  
+  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
   DoubleProperty *borderWidth = 0;
-  if (glGraph->getRenderingParameters().getGraph()->existProperty ("viewBorderWidth"))
-    borderWidth = glGraph->getRenderingParameters().getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-  glGraph->desactivateTexture();
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+  GlTextureManager::getInst().desactivateTexture();
   Color c = borderColor->getNodeValue(n);
   //  setMaterial(c);
   if (borderWidth == 0) glLineWidth(2);
   else {
-    double lineWidth = borderWidth->getNodeValue (n);
+    double lineWidth = borderWidth->getNodeValue(n);
     if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
     else glLineWidth (lineWidth);
   }
 
   glDisable(GL_LIGHTING);
   glColor4ub(c[0],c[1],c[2],c[3]);
-  glCallList(LList + 1);
+  GlDisplayListManager::getInst().callDisplayList("Square_squareborder");
   glEnable(GL_LIGHTING);
 }
 //=====================================================

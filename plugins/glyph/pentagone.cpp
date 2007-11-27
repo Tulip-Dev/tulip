@@ -10,9 +10,10 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <tulip/Graph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/GlTools.h>
 
 using namespace std;
@@ -33,45 +34,42 @@ public:
   virtual void draw(node n);
 
 protected:
-  GLuint LList;
-  bool listOk;
   void drawPentagone();
   void drawPentagoneBorder();
 };
 //=====================================================
 GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12);
 //===================================================================================
-Pentagone::Pentagone(GlyphContext *gc): Glyph(gc),listOk(false) {
+Pentagone::Pentagone(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Pentagone::~Pentagone() {
-  if (listOk)
-    if (glIsList(LList)) glDeleteLists(LList, 2);
 }
 //=====================================================
 void Pentagone::draw(node n) {
-  setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Pentagone_pentagone")) {
+    drawPentagone();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Pentagone_pentagoneborder")) {
+    drawPentagoneBorder();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
+  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
       setMaterial(Color(255,255,255,0));
   }
-  if (!listOk) {
-    LList = glGenLists( 2 );
-    glNewList( LList, GL_COMPILE ); 
-    drawPentagone();
-    glEndList();
-    glNewList( LList + 1, GL_COMPILE ); 
-    drawPentagoneBorder();
-    glEndList();
-    listOk=true;
-  }
-  glCallList(LList);
-  ColorProperty *borderColor = glGraph->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+  
+  GlDisplayListManager::getInst().callDisplayList("Pentagone_pentagone");
+    
+  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
   DoubleProperty *borderWidth = 0;
-  if (glGraph->getRenderingParameters().getGraph()->existProperty ("viewBorderWidth"))
-    borderWidth = glGraph->getRenderingParameters().getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-  glGraph->desactivateTexture();
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+  GlTextureManager::getInst().desactivateTexture();
   Color c = borderColor->getNodeValue(n);
   //  setMaterial(c);
   if (borderWidth == 0) glLineWidth(2);
@@ -82,7 +80,7 @@ void Pentagone::draw(node n) {
   }
   glDisable(GL_LIGHTING);
   glColor4ub(c[0],c[1],c[2],c[3]);
-  glCallList(LList + 1);
+  GlDisplayListManager::getInst().callDisplayList("Pentagone_pentagoneborder");
   glEnable(GL_LIGHTING);
 }
 
