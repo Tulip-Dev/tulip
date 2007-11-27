@@ -1,26 +1,46 @@
 nobase_include_HEADERS = \
-	tulip/ObservableGlGraph.h\
 	tulip/Camera.h\
-	tulip/GlGraph.h\
+	tulip/GlComposite.h \
+	tulip/GlGraphComposite.h \
+	tulip/GlGrid.h \
+	tulip/GlEntity.h \
 	tulip/GlGraphRenderingParameters.h\
+	tulip/GlGraphStaticData.h \
+	tulip/GlCircle.h \
+	tulip/GlLabel.h \
+	tulip/GlRect.h \
+	tulip/GlRectTextured.h \
+	tulip/GlPolygon.h \
+	tulip/GlLayer.h \
+	tulip/GlLODCalculator.h \
+	tulip/GlCPULODCalculator.h \
+	tulip/GlBox.h \
+	tulip/GlScene.h \
+	tulip/GlTextureManager.h \
 	tulip/Glyph.h \
-	tulip/GlAugmentedDisplay.h \
-	tulip/GlADRenderOptions.h \
-	tulip/GlADComposite.h \
-	tulip/GlADAxisPoint.h \
-	tulip/GlADBox.h \
-	tulip/GlADGrid.h \
-	tulip/GlADLine.h \
-	tulip/GlADPoint.h \
-	tulip/GlADQuad.h \
-	tulip/GlHudCircle.h \
-	tulip/GlHudPolygon.h \
-	tulip/GlHud.h \
-	tulip/GlHudLine.h \
-	tulip/GlHudRect.h
+	tulip/ObservableGlGraph.h \
+	tulip/GlSimpleEntity.h \
+	tulip/GlComplexeEntity.h \
+	tulip/GlLODSceneVisitor.h \
+	tulip/GlLabelSceneVisitor.h \
+	tulip/GlBoundingBoxSceneVisitor.h \
+	tulip/GlSelectSceneVisitor.h \
+	tulip/GlSceneVisitor.h \
+	tulip/GlFeedBackRecorder.h \
+	tulip/GlFeedBackBuilder.h \
+	tulip/GlTLPFeedBackBuilder.h \
+	tulip/GlSVGFeedBackBuilder.h \
+	tulip/GlEPSFeedBackBuilder.h \
+	tulip/GlGraphInputData.h \
+	tulip/GlyphManager.h \
+	tulip/GlNode.h \
+	tulip/GlMetaNode.h \
+	tulip/GlEdge.h \
+	tulip/GlDisplayListManager.h 
 
 
 noinst_HEADERS = \
+	tulip/Bezier.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
 	tulip/Bezier.h \
