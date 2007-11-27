@@ -1,0 +1,65 @@
+#include <typeinfo>
+#include "tulip/GlComposite.h"
+
+using namespace tlp;
+using namespace std;
+
+typedef std::map<string, GlEntity *>::const_iterator ITM;
+//============================================================
+GlComposite::GlComposite() {
+}
+//============================================================
+GlComposite::~GlComposite() {
+  reset(false);
+}
+//============================================================
+void GlComposite::reset(bool deleteElems) {
+  if (deleteElems)
+    for(ITM i = elements.begin(); i != elements.end(); ++i)
+      delete (*i).second;
+  elements.clear();
+  _sortedElements.clear();
+}
+//============================================================
+void GlComposite::addGlEntity(GlEntity *entity, const string &key) {
+  elements[key] = entity;
+  _sortedElements.push_back(entity);
+}
+//============================================================
+void GlComposite::deleteGlEntity(const string &key) {
+  _sortedElements.remove(elements[key]);
+  elements.erase(key);
+}
+//============================================================
+void GlComposite::deleteGlEntity(GlEntity *entity) {
+  for(ITM i = elements.begin(); i != elements.end(); ++i) {
+    if(entity == (*i).second) {
+      _sortedElements.remove((*i).second);
+      elements.erase(i->first);
+      return;
+    }
+  }
+}
+//============================================================
+string GlComposite::findKey(GlEntity *entity) {
+  for(ITM it = elements.begin(); it != elements.end(); ++it) {
+    if(entity == (*it).second) {
+      return it->first;
+    }
+  }
+  return string("");
+}
+//============================================================
+GlEntity* GlComposite::findGlEntity(const string &key) {
+  ITM ite = elements.find(key);
+  if (ite == elements.end())
+    return NULL;
+  return (*ite).second;
+}
+//============================================================
+void GlComposite::draw(float lod) {
+  list<GlEntity *>::iterator it;
+  for(it = _sortedElements.begin(); it!=_sortedElements.end(); ++it) {
+    ((GlSimpleEntity*)(*it))->draw(lod);
+  }
+}
