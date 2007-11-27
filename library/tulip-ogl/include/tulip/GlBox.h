@@ -13,8 +13,8 @@
 #ifndef Tulip_GLBOX_H
 #define Tulip_GLBOX_H
 
-#include "GlSimpleEntity.h"
-#include "GlPolygon.h"
+#include "tulip/GlSimpleEntity.h"
+#include "tulip/GlPolygon.h"
 
 #include "tulip/Coord.h"
 #include "tulip/Color.h"
