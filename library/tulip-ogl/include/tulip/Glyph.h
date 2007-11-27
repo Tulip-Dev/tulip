@@ -13,8 +13,11 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/GlGraph.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TemplateFactory.h>
+
+#include "tulip/GlGraphInputData.h"
+
 
 namespace tlp {
 
@@ -23,10 +26,10 @@ namespace tlp {
 
   class GlyphContext {
   public:
-    GlGraph *glGraph;
+    GlGraphInputData *glGraphInputData;
     ///
-    GlyphContext(Graph **s=NULL, GlGraph *glGraph=NULL, int LOF=5, int LOD=5): 
-      glGraph(glGraph) {
+    GlyphContext(Graph **s=NULL, GlGraphInputData *glGraphInputData=NULL, int LOF=5, int LOD=5): 
+      glGraphInputData(glGraphInputData) {
     }
     ///
     ~GlyphContext() {
@@ -48,7 +51,7 @@ namespace tlp {
 
  
   protected:
-    GlGraph *glGraph;
+    GlGraphInputData *glGraphInputData;
   
   protected:
     /*

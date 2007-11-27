@@ -6,6 +6,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Matrix.h>
+#include <tulip/BoundingBox.h>
 
 namespace tlp {
   typedef Matrix<float, 4> MatrixGL;
@@ -31,10 +32,14 @@ namespace tlp {
   TLP_GL_SCOPE double segmentSize(const Coord &u, const Coord &v, 
 				  const MatrixGL &, const Vector<int, 4> &viewport);
   inline GLfloat sqr(const GLfloat f);
-  TLP_GL_SCOPE GLfloat projectSize(const Coord& position, const Size &_size, 
+  TLP_GL_SCOPE GLfloat projectSize(const BoundingBox& bb, 
+		      const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
+  TLP_GL_SCOPE GLfloat projectSize(const Coord& position,const Coord& size, 
 		      const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
   TLP_GL_SCOPE void cube(GLenum type);
   TLP_GL_SCOPE void solidCone();
+
+  TLP_GL_SCOPE MatrixGL makeArrowMatrix(const Coord &A, const Coord &B);
 }
 
 
