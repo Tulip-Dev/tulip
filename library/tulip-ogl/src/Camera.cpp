@@ -116,7 +116,7 @@ namespace tlp {
   void Camera::initLight() {
     GLuint error = glGetError();
     if ( error != GL_NO_ERROR)
-      cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "begin" << endl;
+      cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
     if(d3) {
       GLfloat pos[4];
       eyes.get(pos[0],pos[1],pos[2]);
@@ -178,7 +178,6 @@ namespace tlp {
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
-    /**/
   }
 
   void Camera::initModelView() {

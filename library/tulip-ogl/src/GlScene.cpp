@@ -7,7 +7,8 @@
 #include <stdio.h>
 
 #include "tulip/GlLODSceneVisitor.h"
-#include "tulip/GlLabelSceneVisitor.h"
+#include "tulip/TextRenderer.h"
+#include "tulip/OcclusionTest.h"
 #include "tulip/GlDrawSceneVisitor.h"
 #include "tulip/GlCPULODCalculator.h"
 #include "tulip/GlBoundingBoxSceneVisitor.h"
@@ -30,7 +31,7 @@ namespace tlp {
     selectionLayer= new GlLayer();
     selectionLayer->setCamera(camera);
     selectionLayer->setScene(this);
-    cout << "New Scene" << endl;
+    //cout << "New Scene" << endl;
   }
 
   void GlScene::initGlParametters() {
@@ -65,20 +66,28 @@ namespace tlp {
     GlCPULODCalculator calculator;
     GlLODSceneVisitor lodVisitor(&calculator,glGraphComposite->getInputData());
 
+    //cout << ">>> Check bounding box" << endl ;
     selectionLayer->acceptVisitor(&lodVisitor);
 
     for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
       (*it)->acceptVisitor(&lodVisitor);
     }
 
+    //cout << "<<< End Check bounding box" << endl;
+    //cout << ">>> Begin LOD compute" << endl;
     calculator.compute(viewport);
+    //cout << "<<< End LOD compute" << endl;
     //calculator.compute();
+
+    TextRenderer fontRenderer;
+    OcclusionTest occlusionTest;
 
     LODResultVector* ceVector=calculator.getResultForComplexeEntities();
     LODResultVector* seVector=calculator.getResultForSimpleEntities();
     LODResultVector::iterator itCE=ceVector->begin();
     LODResultVector::iterator itSE=seVector->begin();
 
+    //cout << ">>> Begin draw" << endl;
     Camera *camera=selectionLayer->getCamera();
     if((Camera*)((*itSE).first)==camera) {
       camera->initGl();
@@ -91,9 +100,9 @@ namespace tlp {
       ++itCE;
     }
 
-    bool drawComplexeEntity=false;
 
     for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
+      //cout << ">>> Draw SE" << endl;
       camera=(*it)->getCamera();
       camera->initGl();
       if((Camera*)((*itSE).first)==camera) {
@@ -104,46 +113,80 @@ namespace tlp {
 	}
 	++itSE;
       }
-      
+      //cout << "<<< End draw SE" << endl;
+      //cout << ">>> Draw CE" << endl;
       if((Camera*)((*itCE).first)==camera) {
+	// Draw Nodes and Edges
 	for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
 	  if((*itE).second>0) {
 	    ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
 	  }
-	  drawComplexeEntity=true;
 	}
-	++itCE;
-      }
 
-      if(drawComplexeEntity) {
+	// Draw Label
 	if(viewLabel) {
 	  glPushAttrib(GL_ALL_ATTRIB_BITS);
 	  glDisable(GL_LIGHTING);
 	  glDepthFunc(GL_ALWAYS );
 	  glDisable(GL_CULL_FACE);
 	  glDisable(GL_COLOR_MATERIAL);
-	  
-	  GlLabelSceneVisitor labelVisitor(glGraphComposite->getInputData());
-	  labelVisitor.setDrawSelect(true);
-	  
-	  for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-	    (*it)->acceptVisitor(&labelVisitor);
+
+	  // Draw Nodes Label
+	  if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
+	    // Draw Label for selected Nodes
+	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
+	      if((*itE).second>0) {
+		((GlComplexeEntity*)((*itE).first))->drawLabel(true,
+							       true,
+							       false,
+							       &occlusionTest,
+							       &fontRenderer,glGraphComposite->getInputData());
+	      }
+	    }
+	    // Draw Label for others Nodes
+	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
+	      if((*itE).second>0) {
+		((GlComplexeEntity*)((*itE).first))->drawLabel(false,
+							       true,
+							       false,
+							       &occlusionTest,
+							       &fontRenderer,glGraphComposite->getInputData());
+	      }
+	    }
 	  }
-	  
-	  labelVisitor.setDrawSelect(false);
-	  
-	  for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-	    (*it)->acceptVisitor(&labelVisitor);
+
+	  // Draw Edges Label
+	  if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
+	    // Draw Label for selected Edges
+	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
+	      if((*itE).second>0) {
+		((GlComplexeEntity*)((*itE).first))->drawLabel(true,
+							       false,
+							       true,
+							       &occlusionTest,
+							       &fontRenderer,glGraphComposite->getInputData());
+	      }
+	    }
+	    // Draw Label for others Edges
+	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
+	      if((*itE).second>0) {
+		((GlComplexeEntity*)((*itE).first))->drawLabel(false,
+							       false,
+							       true,
+							       &occlusionTest,
+							       &fontRenderer,glGraphComposite->getInputData());
+	      }
+	    }
 	  }
-	  
+
 	  glPopAttrib();
 	}
-	drawComplexeEntity=false;
-      }
-    }
 
-    
-     
+	++itCE;
+      }
+      //cout << "<<< End draw CE" << endl;
+    }
+    //cout << "<<< End draw" << endl;
   }
 
   void GlScene::centerScene() {

@@ -22,7 +22,6 @@ nobase_include_HEADERS = \
 	tulip/GlSimpleEntity.h \
 	tulip/GlComplexeEntity.h \
 	tulip/GlLODSceneVisitor.h \
-	tulip/GlLabelSceneVisitor.h \
 	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlSelectSceneVisitor.h \
 	tulip/GlSceneVisitor.h \

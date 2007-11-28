@@ -20,14 +20,18 @@
 
 namespace tlp {
 
+  class OcclusionTest;
+  class TextRenderer;
+
   class TLP_GL_SCOPE GlComplexeEntity : public GlEntity {
 
   public:
     
     virtual BoundingBox getBoundingBox(GlGraphInputData* data) = 0;
-
+    
     virtual void draw(float lod,GlGraphInputData* data,Camera* camera) = 0;
 
+    virtual void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) = 0;
   };
   
 }

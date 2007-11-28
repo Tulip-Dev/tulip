@@ -51,7 +51,6 @@ libtulip_ogl_la_SOURCES = \
 	GlLayer.cpp \
 	GlCPULODCalculator.cpp \
 	GlLODSceneVisitor.cpp \
-	GlLabelSceneVisitor.cpp \
 	GlBoundingBoxSceneVisitor.cpp \
 	GlSelectSceneVisitor.cpp \
 	GlBox.cpp \

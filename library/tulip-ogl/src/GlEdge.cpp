@@ -62,13 +62,13 @@ namespace tlp {
     Color strokeColor = data->elementBorderColor->getEdgeValue(e);
     Color textColor = data->elementLabelColor->getEdgeValue(e);
 
-    glPassThrough(TLP_FB_COLOR_INFO);
+    /*glPassThrough(TLP_FB_COLOR_INFO);
     glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
     glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
     glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
 
     glPassThrough(TLP_FB_BEGIN_EDGE);
-    glPassThrough(id); //id of the node for the feed back mode
+    glPassThrough(id); //id of the node for the feed back mode*/
 
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
     unsigned nbBends = bends.size();
@@ -211,7 +211,7 @@ namespace tlp {
     //draw Edge
     drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D());
     //  cerr << this << "::" << "[END]" << endl;
-    glPassThrough(TLP_FB_END_EDGE);
+    //glPassThrough(TLP_FB_END_EDGE);
   }
 
   #define L3D_BIT (1<<9)
@@ -301,7 +301,10 @@ namespace tlp {
     }
   }
 
-  void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+  void GlEdge::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+    if(!drawEdgesLabel)
+      return;
+
     edge e=edge(id);
 
     const string &tmp = data->elementLabel->getEdgeValue(e);

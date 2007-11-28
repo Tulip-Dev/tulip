@@ -31,6 +31,7 @@ namespace tlp {
     void rotate(float angle, float x, float y, float z);
 
     bool is3D() {return d3;}
+    bool isReversed() {return reversed;}
 
     Vector<int, 4> getViewport();
     

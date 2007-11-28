@@ -31,7 +31,7 @@ namespace tlp {
     virtual BoundingBox getBoundingBox(GlGraphInputData* data);
 
     virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
-    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    virtual void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
     virtual void drawPixmapFont(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,
 				const std::string &str, const Color &col,  const Coord &position, int labelPos, bool selected, float width);
 

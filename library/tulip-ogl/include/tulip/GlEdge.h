@@ -38,7 +38,7 @@ namespace tlp {
 		  const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
 		  const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D);
 
-    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
     unsigned int id;
     

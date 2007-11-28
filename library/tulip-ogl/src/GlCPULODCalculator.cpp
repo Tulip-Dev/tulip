@@ -8,6 +8,7 @@
 #include "tulip/Camera.h"
 #include "tulip/GlEntity.h"
 #include "tulip/GlTools.h"
+#include "tulip/GlScene.h"
 
 #include <iostream>
 
@@ -53,17 +54,29 @@ namespace tlp {
       glMatrixMode(GL_PROJECTION);
       glPushMatrix();
       glLoadIdentity();
-
-      float ratio = double(viewport[2])/double(viewport[3]);
     
-      if (ratio>1)
-	glOrtho(ratio*-camera->getSceneRadius()/2.0/camera->getZoomFactor(), ratio*camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		-camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		-100, 100);
-      else 
-	glOrtho(-camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		1./ratio * - camera->getSceneRadius()/2.0/camera->getZoomFactor(), 1./ratio * camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		-100, 100);
+      if(camera->is3D()) { 
+      float ratio = double(viewport[2])/double(viewport[3]);
+      if(camera->scene->isViewOrtho()) {
+	if (ratio>1)
+	  glOrtho(-ratio*camera->getSceneRadius()/2.0/camera->getZoomFactor(), ratio*camera->getSceneRadius()/2.0/camera->getZoomFactor(),
+		  -camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
+		  -10000, 10000);
+	else 
+	  glOrtho(-camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
+		  1./ratio * - camera->getSceneRadius()/2.0/camera->getZoomFactor(), 1./ratio * camera->getSceneRadius()/2.0/camera->getZoomFactor(),
+		  -10000, 10000);
+      }else{
+	glFrustum(ratio*-1.0/camera->getZoomFactor(), ratio*1.0/camera->getZoomFactor(), 
+		  -1.0/camera->getZoomFactor(), 1.0/camera->getZoomFactor(), 1.0 , 
+		  camera->getSceneRadius()*2.);
+      }
+      }else{
+	if(!camera->isReversed())
+	  gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
+	else
+	  gluOrtho2D(viewport[0]+viewport[2],viewport[0],viewport[1]+viewport[3],viewport[1]);
+      }
       
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix();
@@ -75,11 +88,20 @@ namespace tlp {
       glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
       glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
+      /*cout << "mdv : " << modelviewMatrix << endl;
+	cout << "proj : " << projectionMatrix << endl;*/
+
+      float lod;
+
       for(BoundingBoxVector::iterator itV=(*itM).second.first->begin();itV!=(*itM).second.first->end();++itV){
-	(*itSE).second.push_back(pair<unsigned int,float>((*itV).first,projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport)));
+	lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	if(lod>0)
+	  (*itSE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
       for(BoundingBoxVector::iterator itV=(*itM).second.second->begin();itV!=(*itM).second.second->end();++itV){
-	(*itCE).second.push_back(pair<unsigned int,float>((*itV).first,projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport)));
+	lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	if(lod>0)
+	  (*itCE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
       glPopMatrix();
       glMatrixMode(GL_PROJECTION);
