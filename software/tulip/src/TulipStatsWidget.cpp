@@ -21,19 +21,6 @@
 #include <tulip/SGHierarchyWidget.h>
 #include "tulip/Algorithm.h"
 
-#if (QT_REL == 3)
-#include <qlistbox.h>
-#include <qpushbutton.h> 
-#include <qlineedit.h> 
-#include <qgroupbox.h> 
-#include <qcheckbox.h> 
-#include <qvalidator.h> 
-#include <qlabel.h> 
-#include <qcombobox.h>
-#include <qtabwidget.h>
-#include <qmessagebox.h>
-#include <qradiobutton.h>
-#else
 #include <QtGui/qpushbutton.h> 
 #include <QtGui/qlineedit.h> 
 #include <QtGui/qgroupbox.h> 
@@ -44,7 +31,6 @@
 #include <QtGui/qtabwidget.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qradiobutton.h>
-#endif
 
 //#include "../../../thirdparty/ftgl/FTGLPixmapFont.h"
 
@@ -459,12 +445,7 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    std::string proxyName = 
-#if (QT_REL == 3)
-      AvaiMetricsList->currentText().ascii();
-#else
-    AvaiMetricsList->currentText().toStdString();
-#endif
+    std::string proxyName = AvaiMetricsList->currentText().toStdString();
 
     // We limit the number of proxy to 3 maximum :
     if (nMetrics == 3) 

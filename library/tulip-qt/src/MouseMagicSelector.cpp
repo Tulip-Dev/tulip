@@ -14,16 +14,12 @@
 
 #include <iostream>
 
-#if (QT_REL == 3)
-#include <qevent.h>
-#else
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
 #endif
 #include <QtGui/qevent.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>

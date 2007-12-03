@@ -14,21 +14,6 @@
 #include "tulip/ColorProperty.h"
 #include "tulip/SizeProperty.h"
 
-#if (QT_REL == 3)
-#include <qvalidator.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qcolordialog.h>
-#include <qfiledialog.h>
-#include <qtoolbutton.h>
-#include <qtextbrowser.h>
-#include <qtooltip.h>
-#else
 #include <QtGui/qvalidator.h>
 #include <QtGui/qdialog.h>
 #include <QtGui/qframe.h>
@@ -43,7 +28,6 @@
 #include <QtGui/qtooltip.h>
 #include <QtGui/qtextbrowser.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 
 using namespace std;
@@ -366,11 +350,7 @@ namespace {
 	curHelpParam = ipIdx;
 
 	if( ip->helpText.size() )
-#if (QT_REL == 3)  
-	  helpBrowser->setText( ip->helpText.c_str() );
-#else
 	  helpBrowser->setHtml( ip->helpText.c_str() );
-#endif
 	else
 	  helpBrowser->setText( NO_HELP_AVAILABLE_MSG );
       }
@@ -446,11 +426,9 @@ namespace {
 	// bool
 	if(		ip.typeName == TN(bool) ) {
 	  QCheckBox * cb = new QCheckBox( this );
-#if (QT_REL > 3)
 	  QSize size = cb->size();
 	  size.setHeight(size.height() + 5);
 	  cb->resize(size);
-#endif
 	  ip.wA.push_back( cb );
 	  if( inSet ) {
 	    bool isOn;
@@ -512,9 +490,6 @@ namespace {
 	  // if text prefixed than create a QTextEdit
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = new QTextEdit(QString(""),
-#if (QT_REL == 3)
-					  QString::null,
-#endif
 					  this);
 	    te->resize(te->width() * 3, te->height()*3);
 	    ip.wA.push_back(te);
@@ -553,12 +528,10 @@ namespace {
 	  QLabel    * lbG = new QLabel( "G", this );
 	  QLabel    * lbB = new QLabel( "B", this );
 	  QLabel    * lbA = new QLabel( "A", this );
-#if (QT_REL > 3)
 	  lbR->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	  lbG->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	  lbB->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	  lbA->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-#endif
 	  lbR->resize( 16, lbR->height() );
 	  lbG->resize( 16, lbG->height() );
 	  lbB->resize( 16, lbB->height() );

@@ -1,4 +1,4 @@
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 #include <qtimer.h>
 #include <iostream>
 #include <tulip/TulipPlugin.h>
@@ -187,11 +187,7 @@ bool UrlElement::siteconnect(const string &server, const string &url,const int s
   context->setTimer(&timer);
   timer.start(2000, true);
   while(!context->processed) {
-#if (QT_REL == 3)
-    qApp->processEvents();
-#else
     QCoreApplication::processEvents();
-#endif
   }
   timer.stop();
   return context->status;

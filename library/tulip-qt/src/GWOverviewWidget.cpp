@@ -62,11 +62,7 @@ public:
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
 				   const char* name, bool modal, Qt::WFlags fl )
-#if (QT_REL == 3)
-  : GWOverviewWidgetData( parent, name, modal )
-#else
   : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) 
-#endif
 {
   _observedView = 0;
   _glDraw = 0;
@@ -79,11 +75,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   _view->getScene()->addLayer(layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
-#if (QT_REL == 3)
-  frame8Layout->addWidget( _view, 0, 0 );
-#else
   gridLayout->addWidget( _view, 0, 0 );
-#endif
   _view->installEventFilter(this);
   _glDraw = new RectPosition(_view, 0);
   layer->addGlEntity(_glDraw,"RectPosition");

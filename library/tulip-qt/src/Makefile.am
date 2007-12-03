@@ -10,12 +10,8 @@ DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 endif
 
-lib_LTLIBRARIES = libtulip-qt@QT_VERSION@.la
-if QT3
-qtplugin_LTLIBRARIES = libTulipWidgets.la
-else
+lib_LTLIBRARIES = libtulip-qt4.la
 qtplugin_LTLIBRARIES = libPropertyWidgetPlugin.la libElementPropertiesWidgetPlugin.la libGlGraphWidgetPlugin.la libSGHierarchyWidgetPlugin.la libGWOverviewWidgetPlugin.la
-endif
 
 INCLUDES = ${DLL_TULIP_QT} @GL_INCLUDES@ @TULIP_QT_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
@@ -28,16 +24,6 @@ endif
 AM_CPPFLAGS= @QT_CPPFLAGS@
 qtplugindir = $(libdir)/tlp/designer
 
-if QT3
-libTulipWidgets_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libTulipWidgets_laINCLUDES = ${DLL_TULIP_QT2}
-
-libTulipWidgets_la_SOURCES = \
-	TulipWidgetsPlugin.cpp
-
-EXTRA_DIST = SGHierarchyWidgetPlugin.cpp GlGraphWidgetPlugin.cpp\
-	     ElementPropertiesWidgetPlugin.cpp PropertyWidgetPlugin.cpp GWOverviewWidgetPlugin.cpp
-else
 libPropertyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libElementPropertiesWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libGlGraphWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
@@ -62,7 +48,6 @@ libPropertyWidgetPlugin_la_SOURCES = PropertyWidgetPlugin.cpp
 nodist_libPropertyWidgetPlugin_la_SOURCES = moc_PropertyWidgetPlugin.cpp
 
 EXTRA_DIST = TulipWidgetsPlugin.cpp
-endif
 
 BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
@@ -81,9 +66,9 @@ BUILT_SOURCES = \
 	moc_GWOverviewWidget.cpp \
 	moc_GWOverviewWidgetData.cpp
 
-nodist_libtulip_qt@QT_VERSION@_la_SOURCES = $(BUILT_SOURCES)
+nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
-dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
+dist_libtulip_qt4_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlGraphWidget.cpp \
 	PropertyWidget.cpp \
@@ -105,21 +90,6 @@ dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
 	DataSetDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
-
-if QT3
-moc_%.cpp: $(srcdir)/../include/tulip/%.h 
-	$(MOC) -o $@ $<
-moc_%.cpp: ../include/tulip/%.h
-	$(MOC) -o $@ $<
-else
-moc_%.cpp: $(srcdir)/../include/tulip/%.h 
-	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
-moc_%.cpp: ../include/tulip/%.h
-	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
-
-moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidgetQt3.h 
-	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-endif
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<

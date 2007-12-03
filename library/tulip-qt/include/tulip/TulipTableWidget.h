@@ -8,17 +8,10 @@
 #endif
 #include <string>
 
-#if (QT_REL == 3)
-#include <qtable.h>
-#include <qbutton.h>
-#include <qpainter.h>
-#else
 #include <Qt3Support/q3button.h>
 #include <Qt/qpainter.h>
 #include <Qt3Support/q3table.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
-
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>

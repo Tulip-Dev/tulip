@@ -2,13 +2,6 @@
 #include <config.h>
 #endif
 
-#if (QT_REL == 3)
-#include <qradiobutton.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qdialog.h>
-#include <qlabel.h>
-#else
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -24,7 +17,6 @@
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include "CopyPropertyDialog.h"
 #include "tulip/ForEach.h"
@@ -34,11 +26,7 @@ using namespace tlp;
 
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-#if (QT_REL == 3)
-  : CopyPropertyDialogData(parent, name, modal) {
-#else
   : CopyPropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
-#endif
   connect((QObject *) buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
   connect((QObject *) buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
 }

@@ -11,15 +11,6 @@
 #endif
 
 #include <vector>
-#if (QT_REL == 3)
-#include <qlistview.h>
-#include <qtextview.h> 
-#include <qsplitter.h>
-#include <qpopupmenu.h>
-#include <qstring.h>
-#include <qmainwindow.h>
-#include <qassistantclient.h>
-#else
 #include <Qt3Support/q3listview.h>
 #include <Qt3Support/q3textview.h>
 #include <Qt3Support/q3dockwindow.h>
@@ -29,7 +20,7 @@
 #include <QtGui/qmainwindow.h>
 #include <QtAssistant/qassistantclient.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
+
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
@@ -75,9 +66,6 @@ public:
   virtual ~viewGl();
   void setParameters(const tlp::DataSet &);
   bool eventFilter(QObject *, QEvent *);
-#if (QT_REL == 3)
-  bool areTooltipsEnabled();
-#endif
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;

@@ -12,34 +12,6 @@
 #include <map>
 #include <vector>
 
-#if (QT_REL == 3)
-#include <qmessagebox.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
-#include <qcolordialog.h>
-#include <qfiledialog.h>
-#include <qfileinfo.h>
-#include <qinputdialog.h>
-#include <qworkspace.h>
-#include <qmenubar.h>
-#include <qtable.h>
-#include <qvbox.h>
-#include <qstatusbar.h>
-#include <qpixmap.h>
-#include <qstrlist.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qprogressdialog.h>
-#include <qdockwindow.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qcursor.h>
-#include <qaction.h>
-#include <qradiobutton.h>
-#include <qprinter.h>
-#include <qtabwidget.h>
-#include <qdesktopwidget.h>
-#else
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -74,7 +46,6 @@
 #include <tulip/Qt3ForTulip.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
-#endif
 
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
@@ -173,13 +144,11 @@ static vector<tlp::GWInteractor *>zoomBoxInteractors;
 viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
-#if (QT_REL == 4)
   // remove strange scories from designer/Tulip.ui
   graphMenu->removeAction(Action);
   graphMenu->removeAction(menunew_itemAction);
   // set workspace background
   workspace->setBackground(QBrush(Ui_TulipData::icon(image1_ID)));
-#endif
 
   Observable::holdObservers();
   glWidget=0;
@@ -466,17 +435,9 @@ void viewGl::startTulip() {
     QHBoxLayout* frameLayout = new QHBoxLayout( frame, 0, 0, "frameLayout"); 
     QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     frameLayout->addItem( spacer );
-    QTextEdit* textWidget = new QTextEdit(QString(""),
-#if (QT_REL == 3)
-					  QString::null,
-#endif
-					  errorDlg);
+    QTextEdit* textWidget = new QTextEdit(QString(""), errorDlg);
     textWidget->setReadOnly(true);
-#if (QT_REL == 3)
-    textWidget->setWordWrap(QTextEdit::NoWrap);
-#else
     textWidget->setLineWrapMode(QTextEdit::NoWrap);
-#endif
     errorDlgLayout->addWidget( textWidget );
     QPushButton * closeB = new QPushButton( "Close", frame);
     frameLayout->addWidget( closeB );
@@ -569,9 +530,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
   //GlGraphWidget *glWidget = new GlGraphWidget();
-#if (QT_REL == 4)
   workspace->addWindow(glWidget);
-#endif
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
   //Camera *camera=new Camera(glWidget->getScene());
@@ -592,11 +551,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(*currentInteractors);
   connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
-
-#if (QT_REL == 3)
-  new ElementInfoToolTip(glWidget,this);
-  QToolTip::setWakeUpDelay(2500);
-#endif
 
   if(elementsDisabled)
     enableElements(true);
@@ -979,9 +933,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 }
 //**********************************************************************
 static string findMenuItemText(QPopupMenu &menu, int id) {
-#if (QT_REL == 3)
-  return menu.text(id).ascii();
-#else
   string name(menu.text(id).ascii());
 
   if (name.length() == 0) {
@@ -993,7 +944,6 @@ static string findMenuItemText(QPopupMenu &menu, int id) {
     }
   }
   return name;
-#endif
 }
 //**********************************************************************
 void viewGl::importGraph(int id) {
@@ -1172,22 +1122,14 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
     QPopupMenu *groupMenu = (QPopupMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
-      if (itemGroupNames[i] ==
-#if (QT_REL == 3)
-	  groupMenus[j]->name()
-#else
-	  groupMenus[j]->objectName().ascii()
-#endif
-	  ) {
+      if (itemGroupNames[i] == groupMenus[j]->objectName().ascii()) {
 	subMenu = groupMenu = groupMenus[j];
 	break;
       }
     }
     if (!groupMenu) {
       groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
-#if (QT_REL == 4)
       groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
-#endif
       subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
@@ -1207,7 +1149,7 @@ void buildPropertyMenu(QPopupMenu &menu, QObject *receiver, const char *slot) {
   it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
   for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
+#if defined(__APPLE__) && (QT_MINOR_REL > 1)
   for (std::string::size_type i = 0; i < nGroups; i++)
     receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
 #endif
@@ -1220,7 +1162,7 @@ void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot)
   std::string::size_type nGroups = 0;
   for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
- #if (QT_REL == 3) || (defined(__APPLE__) && (QT_MINOR_REL > 1))
+ #if defined(__APPLE__) && (QT_MINOR_REL > 1)
    for (std::string::size_type i = 0; i < nGroups; i++)
      receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
  #endif
@@ -1244,19 +1186,6 @@ void viewGl::buildMenus() {
   char *tlpFormats[] = {"EPS", "SVG", "~"};
   unsigned int i = 0;
   //Image PopuMenu
-#if (QT_REL == 3)
-  // in Qt 3 output formats are sorted and uppercased
-  QStrList listFormat=QImageIO::outputFormats();
-  char *tmp=listFormat.first();
-  while (tmp!=0) {
-    if (strcmp(tlpFormats[i], tmp) < 0)
-      // insert the current Tulip format at the right place
-      exportImageMenu.insertItem(tlpFormats[i++]);
-    // insert the current Qt format
-    exportImageMenu.insertItem(tmp);
-    tmp=listFormat.next();
-  }
-#else
   // int Qt 4, output formats are not yet sorted and uppercased
   list<QString> formats;
   // first add Tulip known formats
@@ -1273,7 +1202,6 @@ void viewGl::buildMenus() {
   formats.sort();
   foreach(QString str, formats)
     exportImageMenu.insertItem(str);
-#endif
   //Windows
   dialogMenu->insertItem("3D &Overview");
   dialogMenu->insertItem("&Info Editor");
@@ -1477,7 +1405,6 @@ void viewGl::group() {
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
-#if (QT_REL == 4)
   // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
@@ -1516,7 +1443,6 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       return true;
     }
   }
-#endif
   if ( obj->inherits("GlGraphWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
@@ -1534,18 +1460,8 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       int itemId = isNode ? tmpNode.id : tmpEdge.id;
       QPopupMenu contextMenu(this,"dd");
       stringstream sstr;
-#if (QT_REL == 3)
-      sstr << "<font color=darkblue><b>";
-#endif
       sstr << (isNode ? "Node " : "Edge ") << itemId;
-#if (QT_REL == 3)
-      sstr << "</b></font>";
-      QLabel *caption = new QLabel(sstr.str().c_str(), &contextMenu);
-      caption->setAlignment( Qt::AlignCenter ); 
-      contextMenu.insertItem(caption);
-#else
       contextMenu.setItemEnabled(contextMenu.insertItem(tr(sstr.str().c_str())), false);
-#endif
       contextMenu.insertSeparator();
       contextMenu.insertItem(tr("Add to/Remove from selection"));
       int selectId = contextMenu.insertItem(tr("Select"));
@@ -1643,12 +1559,6 @@ void viewGl::centerView() {
   overviewWidget->setObservedView(glWidget);
   redrawView();
 }
-//**********************************************************************
-#if (QT_REL == 3)
-bool viewGl::areTooltipsEnabled() {
-  return tooltips->isOn();
-}
-#endif
 //===========================================================
 //Menu Edit : functions
 //===========================================================

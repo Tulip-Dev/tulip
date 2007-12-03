@@ -8,18 +8,6 @@
 #include <typeinfo>
 #include <vector>
 
-#if (QT_REL == 3)
-#include <qlistview.h>
-#include <qtable.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qlabel.h>
-#include <qcolordialog.h>
-#include <qtabwidget.h>
-#else
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -35,7 +23,6 @@
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -66,21 +53,12 @@ void PropertyDialog::setGlGraphWidget(GlGraph *glwidget) {
 }
 
 PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-#if (QT_REL == 3)
-  : PropertyDialogData(parent, name, modal) {
-#else
   : PropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
-#endif
   _filterSelection=false;
   glWidget=0;
   graph=0;
-#if (QT_REL == 3)
-  connect(localProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-  connect(inheritedProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-#else
   connect(localProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
   connect(inheritedProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
-#endif
   connect(removeButton , SIGNAL(clicked()) , SLOT(removeProperty()) );
   connect(newButton,SIGNAL(clicked()),SLOT(newProperty()));
   connect(cloneButton,SIGNAL(clicked()),SLOT(cloneProperty()));

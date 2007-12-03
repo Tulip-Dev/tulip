@@ -12,14 +12,9 @@
 #endif
 #include <string>
 
-#if (QT_REL == 3)
-#include <qwidget.h>
-#include <qscrollbar.h>
-#else
 #include <QtGui/qwidget.h>
 #include <QtGui/qscrollbar.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>

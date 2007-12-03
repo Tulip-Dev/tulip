@@ -3,20 +3,12 @@
 #endif
 
 #include <iostream>
-#if (QT_REL == 3)
-#include <qlistview.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
-#include <qpopupmenu.h>
-#include "../include/tulip/SGHierarchyWidget.h"
-#else
 #include <Qt3Support/q3listview.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
 #include <Qt3Support/q3popupmenu.h>
 #include "tulip/Qt3ForTulip.h"
 #include "../include/tulip/SGHierarchyWidgetQt3.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
@@ -46,16 +38,10 @@ SGHierarchyWidget::SGHierarchyWidget(Graph *graph , QWidget* parent,  const char
   treeView->addColumn(QString(tr("Nb nodes")));
   treeView->addColumn(QString(tr("Nb edges")));
   treeView->addColumn(QString(tr("Graph id")));
-#if (QT_REL == 3)
-  connect(treeView, SIGNAL(currentChanged(QListViewItem *)), SLOT(changeGraph(QListViewItem *)));
-  connect(treeView, SIGNAL(contextMenuRequested ( QListViewItem *, const QPoint &, int )),
-	  SLOT(rightButtonSGHierarchyWidget( QListViewItem *, const QPoint &, int )));
-#else
   // because of moc control
   connect(treeView, SIGNAL(currentChanged(Q3ListViewItem *)), SLOT(changeGraph(Q3ListViewItem *)));
   connect(treeView, SIGNAL(contextMenuRequested ( Q3ListViewItem *, const QPoint &, int )),
 	  SLOT(rightButtonSGHierarchyWidget( Q3ListViewItem *, const QPoint &, int )));
-#endif
   update();
 }
 //=======================================================
@@ -67,16 +53,10 @@ SGHierarchyWidget::SGHierarchyWidget(QWidget* parent, const char* name, Qt::WFla
   treeView->addColumn(QString(tr("Nb nodes")));
   treeView->addColumn(QString(tr("Nb edges")));
   treeView->addColumn(QString(tr("Graph id")));
-#if (QT_REL == 3)
-  connect(treeView, SIGNAL(currentChanged(QListViewItem *)), SLOT(changeGraph(QListViewItem *)));
-  connect(treeView, SIGNAL(contextMenuRequested ( QListViewItem *, const QPoint &, int )),
-	  SLOT(rightButtonSGHierarchyWidget( QListViewItem *, const QPoint &, int )));
-#else
   // because of moc control
   connect(treeView, SIGNAL(currentChanged(Q3ListViewItem *)), SLOT(changeGraph(Q3ListViewItem *)));
   connect(treeView, SIGNAL(contextMenuRequested ( Q3ListViewItem *, const QPoint &, int )),
 	  SLOT(rightButtonSGHierarchyWidget( Q3ListViewItem *, const QPoint &, int )));
-#endif
 }
 //=======================================================
 Graph* SGHierarchyWidget::getGraph() const {
@@ -104,18 +84,10 @@ void SGHierarchyWidget::currentGraphChanged(const Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   QListViewItem  *item = graphItems.get(graph->getId());
   if (item != 0) {
-#if (QT_REL == 3)
-    disconnect(treeView, SIGNAL(currentChanged(QListViewItem *)), this, SLOT(changeGraph(QListViewItem *)));
-#else
     disconnect(treeView, SIGNAL(currentChanged(Q3ListViewItem *)), this, SLOT(changeGraph(Q3ListViewItem *)));
-#endif
     treeView->setCurrentItem(item);
     treeView->ensureItemVisible(item);
-#if (QT_REL == 3)
-    connect(treeView, SIGNAL(currentChanged(QListViewItem *)), this, SLOT(changeGraph(QListViewItem *)));
-#else
     connect(treeView, SIGNAL(currentChanged(Q3ListViewItem *)), this, SLOT(changeGraph(Q3ListViewItem *)));
-#endif   
     _currentGraph = ((ClusterListViewItem *)item)->getGraph();
   }
 }

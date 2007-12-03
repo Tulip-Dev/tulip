@@ -8,11 +8,7 @@
 
 #include <tulip/tulipconf.h>
 
-#if (QT_REL == 3)
-#include <qcursor.h>
-#else
 #include <QtGui/qcursor.h>
-#endif
 
 #include "tulip/GWInteractor.h"
 namespace tlp {

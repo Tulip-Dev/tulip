@@ -2,22 +2,16 @@
 ** Form implementation generated from reading ui file 'ElementPropertiesWidget.ui'
 **
 ** Created: lun sep 29 12:43:35 2003
-**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.1.2.1 2007-04-02 07:52:57 pmary Exp $)
+**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.1.2.2 2007-12-03 09:13:39 pmary Exp $)
 **
 ****************************************************************************/
 
 #include "../include/tulip/ElementPropertiesWidgetUI.h"
 
-#if (QT_REL == 3)
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qwhatsthis.h>
-#else
 #include <QtGui/qlabel.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qwhatsthis.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/PropertyWidget.h>
 

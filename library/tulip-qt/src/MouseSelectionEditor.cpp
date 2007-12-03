@@ -15,14 +15,8 @@
 
 #include <tulip/MouseSelectionEditor.h>
 
-#if (QT_REL == 3)
-#include <qevent.h>
-// include below is for compilation purpose only
-#include <qcursor.h>
-#else
 #include <QtGui/qevent.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50

@@ -6,18 +6,8 @@
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
-#if (QT_REL == 3)
-#include <qregexp.h>
-// the 4 include below are only needed for compilation purpose
-// (because of FindSelectionData.h generated file)
-#include <qvalidator.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#else
 #include <QtCore/qregexp.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 using namespace tlp;
 

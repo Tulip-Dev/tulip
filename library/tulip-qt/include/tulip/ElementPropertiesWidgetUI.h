@@ -2,19 +2,15 @@
 ** Form interface generated from reading ui file 'ElementPropertiesWidget.ui'
 **
 ** Created: lun sep 29 12:43:34 2003
-**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.h,v 1.1.2.1 2007-04-02 07:52:54 pmary Exp $)
+**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.h,v 1.1.2.2 2007-12-03 09:13:38 pmary Exp $)
 **
 ****************************************************************************/
 
 #ifndef ELEMENTPROPERTIESDATA_H
 #define ELEMENTPROPERTIESDATA_H
 
-#if (QT_REL == 3)
-#include <qwidget.h>
-#else
 #include <QtGui/qwidget.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 class QGridLayout;
 class QLabel;

@@ -1,11 +1,7 @@
 #ifndef _GL_INTERACTOR_H
 #define _GL_INTERACTOR_H
 
-#if (QT_REL == 3)
-#include <qobject.h>
-#else
 #include <Qt/qobject.h>
-#endif
 
 class GlGraphWidget;
 

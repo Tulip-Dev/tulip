@@ -9,9 +9,7 @@
 
 using namespace std;
 
-#if (QT_REL == 4)
 Application *qApp = (Application *) NULL;
-#endif
 
 //**********************************************************************
 Application::Application(int& argc, char ** argv): QApplication(argc,argv) 

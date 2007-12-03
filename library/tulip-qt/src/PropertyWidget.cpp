@@ -2,25 +2,6 @@
 #include <sstream>
 #include <string>
 
-#if (QT_REL == 3)
-#include <qstring.h>
-#include <qpushbutton.h>
-#include <qfiledialog.h>
-#include <qcolordialog.h>
-#include <qpainter.h>
-#include <qfontmetrics.h>
-#include <qapplication.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qvalidator.h>
-#include <qsizepolicy.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
-#include <qpopupmenu.h>
-#include <qlabel.h>
-#else
 #include <QtCore/qstring.h>
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qfiledialog.h>
@@ -36,10 +17,9 @@
 #include <QtGui/qsizepolicy.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
-#include <qlabel.h>
+#include <QtGui/qlabel.h>
 #include <Qt3Support/q3popupmenu.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -493,21 +473,10 @@ void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QPopupMenu contextMenu(this,"dd");
-#if (QT_REL == 3)
-      string title("<font color=darkblue><b>");
-#else
       string title;
-#endif
       title += displayNode ? "Node " : "Edge ";
       title += textId;
-#if (QT_REL == 3)
-      title += "</b></font>";
-      QLabel *caption = new QLabel(title.c_str(), &contextMenu);
-      caption->setAlignment( Qt::AlignCenter ); 
-      contextMenu.insertItem(caption);
-#else
       contextMenu.setItemEnabled(contextMenu.insertItem(tr(title.c_str())), false);
-#endif
       contextMenu.insertSeparator();
       contextMenu.insertItem(tr("Add to/Remove from selection"));
       int selectId = contextMenu.insertItem(tr("Select"));

@@ -1,11 +1,6 @@
-#if (QT_REL == 3)
-#include <qmessagebox.h>
-#include <qlabel.h>
-#else
 #include <QtGui/qlabel.h>
 #include <QtGui/qmessagebox.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/AbstractProperty.h>
 

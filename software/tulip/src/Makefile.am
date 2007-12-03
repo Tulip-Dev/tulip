@@ -59,25 +59,6 @@ BUILT_SOURCES = \
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
-if QT3
-dist_tulip_SOURCES = \
-	ElementInfoToolTip.cpp \
-	viewGl.cpp \
-	Application.cpp \
-	geometrie2D.cpp \
-	InfoDialog.cpp \
-	AppStartUp.cpp \
-	PropertyDialog.cpp \
-	CopyPropertyDialog.cpp \
-	QtProgress.cpp \
-	TulipStatsWidget.cpp \
-	GridOptionsWidget.cpp \
-	main.cpp
-
-moc_%.cpp: ../include/%.h 
-	$(MOC) -o $@ $<
-
-else
 dist_tulip_SOURCES = \
 	viewGl.cpp \
 	Application.cpp \
@@ -94,15 +75,10 @@ dist_tulip_SOURCES = \
 moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
-endif
-
-
 CLEANFILES = $(BUILT_SOURCES)
 
-if !QT3
 moc_PropertyDialog.cpp: ../include/PropertyDialogQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-endif
 
 %Data.cpp: ../designer/%.ui ../include/%Data.h
 	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<

@@ -18,7 +18,7 @@ Source:		%{name}-%{version}.tar.bz2
 License:	GPL
 Group:		Applications/Engineering
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-Requires:	@QT_PACKAGE@ >= @QT_VERSION@.0
+Requires:	@QT_PACKAGE@ >= 4.0
 
 %description
 Tulip software is a system dedicated to the visualization of huge graphs. It manages graphs with a number of elements(nodes and edges) up to 500.000 on a personal computer(PIII 600, with 256mo). Its graph technology architecture enables to do the following things :
@@ -43,11 +43,11 @@ Group:		Applications/Engineering
 Requires:       lib%{name}
 %description -n lib%{name}-ogl
 
-%package -n     lib%{name}-qt@QT_VERSION@
+%package -n     lib%{name}-qt4
 Summary:        A set of Qt Widgets for tulip/tulip-ogl
 Group:          Applications/Engineering
-Requires:       lib%{name}, lib%{name}-ogl, @QT_PACKAGE@ >= @QT_VERSION@.0
-%description -n lib%{name}-qt@QT_VERSION@
+Requires:       lib%{name}, lib%{name}-ogl, @QT_PACKAGE@ >= 4.0
+%description -n lib%{name}-qt4
 
 ##############################
 %prep
@@ -103,12 +103,12 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/fontb.ttf
 %{prefix}/lib/tlp/bitmaps/font.ttf
 
-%files -n lib%{name}-qt@QT_VERSION@
+%files -n lib%{name}-qt4
 %defattr(-,root,root)
-%{prefix}/lib/libtulip-qt@QT_VERSION@.a
-%{prefix}/lib/libtulip-qt@QT_VERSION@.la
-%{prefix}/lib/libtulip-qt@QT_VERSION@.so
-%{prefix}/lib/libtulip-qt@QT_VERSION@-%{tulip_version}.so*
+%{prefix}/lib/libtulip-qt4.a
+%{prefix}/lib/libtulip-qt4.la
+%{prefix}/lib/libtulip-qt4.so
+%{prefix}/lib/libtulip-qt4-%{tulip_version}.so*
 %{prefix}/lib/tlp/designer/lib*.*
 
 %changelog

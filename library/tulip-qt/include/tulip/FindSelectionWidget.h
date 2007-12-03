@@ -5,9 +5,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
-#if (QT_REL == 4)
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include "tulip/FindSelectionData.h"
 

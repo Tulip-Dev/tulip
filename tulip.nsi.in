@@ -111,9 +111,6 @@ File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
-!ifdef QT3
-File "@qt_libraries@\qt-mt*.dll"
-!else
 File "@qt_libraries@\Qt3Support4.dll"
 File "@qt_libraries@\QtCore4.dll"
 File "@qt_libraries@\QtGui4.dll"
@@ -129,7 +126,7 @@ File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
-File "@prefix@\bin\libtulip-qt@QT_VERSION@-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
 setOutPath $INSTDIR\lib\tlp

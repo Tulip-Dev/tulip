@@ -4,7 +4,6 @@
 # disk image of a tulip MAC 'bundle' in the current directory
 APP_DIR=Tulip-@PACKAGE_VERSION@.app
 QT_DIR=@QTDIR@
-QT_VERSION=@QT_VERSION@
 
 if [ -d $APP_DIR ]; then
   rm -rf $APP_DIR
@@ -15,11 +14,7 @@ BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
 LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
 BUNDLE_LIB_PATH=@executable_path/../Frameworks
-if test ${QT_VERSION} -eq 3; then
-SHLIBS_REGEXP="dylib "
-else
 SHLIBS_REGEXP="dylib \|lib/Qt"
-fi
 
 # copy the tulip app installed in @prefix@/bin
 echo installing $APP_DIR
