@@ -29,7 +29,7 @@ namespace tlp {
     colorMat[0] = ((float)c[0])/255.0;
     colorMat[1] = ((float)c[1])/255.0;
     colorMat[2] = ((float)c[2])/255.0;
-    colorMat[3] = 1.0;
+    colorMat[3] = ((float)c[3])/255.0;
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
@@ -129,7 +129,7 @@ namespace tlp {
     for (unsigned int i = 0; i<4; ++i)
       translate[i][i] = 1;
     for (unsigned int i = 0; i<3; ++i)
-      translate[3][i] = bb.first[i] + bbSize[i] ;
+      translate[3][i] = bb.first[i] + bbSize[i]/2 ;
 
     MatrixGL tmp(translate * modelviewMatrix);
     //MatrixGL tmp(modelviewMatrix);

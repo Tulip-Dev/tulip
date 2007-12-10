@@ -35,16 +35,25 @@ namespace tlp {
     GlGraphInputData* getInputData();
 
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-	(*it).acceptVisitor(visitor);
-      }
-      for(std::vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-	if(parameters.isDisplayEdges() || parameters.isViewEdgeLabel())
+      if(isDisplayNodes()) {
+	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
 	  (*it).acceptVisitor(visitor);
+	}
       }
-      for(std::vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-	(*it).acceptVisitor(visitor);
+      
+      if(isDisplayEdges()) {
+	for(std::vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
+	  if(parameters.isDisplayEdges() || parameters.isViewEdgeLabel())
+	    (*it).acceptVisitor(visitor);
+	}
       }
+      
+      if(isDisplayMetaNodes()) {
+	for(std::vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
+	  (*it).acceptVisitor(visitor);
+	}
+      }
+
     }
 
     virtual void addNode(Graph *,const node );
@@ -52,6 +61,33 @@ namespace tlp {
     virtual void delNode(Graph *,const node );
     virtual void delEdge(Graph *,const edge );
     virtual void destroy(Graph *);
+
+    //Delegate 
+    void setDisplayNodes(bool display) {parameters.setDisplayNodes(display);}
+    void setDisplayMetaNodes(bool display) {parameters.setDisplayMetaNodes(display);}
+    void setDisplayEdges(bool display) {parameters.setDisplayEdges(display);}
+    void setDisplayNodesLabel(bool display) {parameters.setViewNodeLabel(display);}
+    void setDisplayMetaNodesLabel(bool display) {parameters.setViewMetaLabel(display);}
+    void setDisplayEdgesLabel(bool display) {parameters.setViewEdgeLabel(display);}
+    void setNodesStencil(int stencil) {parameters.setNodesStencil(stencil);}
+    void setMetaNodesStencil(int stencil) {parameters.setMetaNodesStencil(stencil);}
+    void setEdgesStencil(int stencil) {parameters.setEdgesStencil(stencil);}
+    void setNodesLabelStencil(int stencil) {parameters.setNodesLabelStencil(stencil);}
+    void setMetaNodesLabelStencil(int stencil) {parameters.setMetaNodesLabelStencil(stencil);}
+    void setEdgesLabelStencil(int stencil) {parameters.setEdgesLabelStencil(stencil);}
+
+    bool isDisplayNodes() {return parameters.isDisplayNodes();}
+    bool isDisplayMetaNodes() {return parameters.isDisplayMetaNodes();}
+    bool isDisplayEdges() {return parameters.isDisplayEdges();}
+    bool isDisplayNodesLabel() {return parameters.isViewNodeLabel();}
+    bool isDisplayMetaNodesLabel() {return parameters.isViewMetaLabel();}
+    bool isDisplayEdgesLabel() {return parameters.isViewEdgeLabel();}
+    int getNodesStencil() {return parameters.getNodesStencil();}
+    int getMetaNodesStencil() {return parameters.getMetaNodesStencil();}
+    int getEdgesStencil() {return parameters.getEdgesStencil();}
+    int getNodesLabelStencil() {return parameters.getNodesLabelStencil();}
+    int getMetaNodesLabelStencil() {return parameters.getMetaNodesLabelStencil();}
+    int getEdgesLabelStencil() {return parameters.getEdgesLabelStencil();}
 
   protected:
 

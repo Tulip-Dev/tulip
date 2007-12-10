@@ -56,6 +56,8 @@ libtulip_ogl_la_SOURCES = \
 	GlBox.cpp \
 	GlScene.cpp \
 	GlTextureManager.cpp \
+	GlConvexHull.cpp \
+	GlHierarchyConvexHulls.cpp \
 	Bezier.cpp \
 	Spline.cpp \
         GlLines.cpp \

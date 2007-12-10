@@ -54,14 +54,18 @@ namespace tlp
     this->glGraphWidget = graphWidget;
 
     if (glGraphWidget != NULL && glGraphWidget != 0)
-      grid = (GlGrid*)glGraphWidget->getScene()->getLayer()->findGlEntity("Layout Grid");
+      grid = (GlGrid*)glGraphWidget->getScene()->getLayer("Main")->findGlEntity("Layout Grid");
+  }
+  //==============================================
+  void GridOptionsWidget::setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget) {
+    this->layerWidget=layerWidget;
   }
   //==============================================
   void GridOptionsWidget::validateGrid() {
     if (glGraphWidget != 0) {
       if (ActivatedCB->isChecked()) {
 	if (grid != NULL) {
-	  glGraphWidget->getScene()->getLayer()->deleteGlEntity(grid);
+	  glGraphWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
 	}
 	    
@@ -111,13 +115,14 @@ namespace tlp
 	    cell[i] = cellsize[i];
 	}
 	grid = new GlGrid(min, max, cell, Color(0, 0, 0, 255), display);
-	glGraphWidget->getScene()->getLayer()->addGlEntity(grid, "Layout Grid");
-	    
+	glGraphWidget->getScene()->getLayer("Main")->addGlEntity(grid, "Layout Grid");   
+	layerWidget->updateLayer("Main",glGraphWidget->getScene()->getLayer("Main"));
       }
       else {
 	if (grid != NULL) {
-	  glGraphWidget->getScene()->getLayer()->deleteGlEntity(grid);
+	  glGraphWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
+	  layerWidget->updateLayer("Main",glGraphWidget->getScene()->getLayer("Main"));
 	}
       }
       glGraphWidget->draw();   

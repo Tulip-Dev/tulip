@@ -49,7 +49,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Observable::holdObservers();
 	  started=false;
 	  glGraphWidget->setMouseTracking(false);
-	  cout << "new edge" << endl;
 	  edge newEdge = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->addEdge(source, tmpNode);
 	  mLayout->setEdgeValue(newEdge, bends);
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
@@ -94,6 +93,9 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
 bool MouseEdgeBuilder::draw(GlGraphWidget *glGraphWidget) {
   if (!started) return false;
+  glStencilFunc(GL_LEQUAL,0,0xFFFF);
+  glGraphWidget->getScene()->getGraphLayer()->getCamera()->initGl();
+  glDisable(GL_LIGHTING);
   float color[4];
   color[0]=1; color[1]=0;  color[2]=0;  color[3]=1;
   vector<Coord>::iterator lCoordIt=bends.begin();

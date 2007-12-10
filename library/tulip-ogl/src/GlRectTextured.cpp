@@ -27,7 +27,10 @@ namespace tlp {
 
   void GlRectTextured::draw(float lod) {
     glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHTING);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+    glColor3ub(255,255,255);
     if(GlTextureManager::getInst().activateTexture(textureName))
       setMaterial(Color(255,255,255,0));
     glBegin(GL_QUADS);

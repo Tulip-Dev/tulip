@@ -316,7 +316,6 @@ bool GlTextureManager::loadTexture(const string& filename)
 
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename) {
-
   if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end()) 
     loadTexture(filename);
   else

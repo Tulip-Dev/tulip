@@ -161,6 +161,70 @@ namespace tlp {
      * return true if edges are displayed.
      */
     bool isDisplayEdges() const;
+    /**
+     * If true nodes are displayed.
+     */
+    void setDisplayNodes(const bool state);
+    /**
+     * return true if nodes are displayed.
+     */
+    bool isDisplayNodes() const;
+    /**
+     * If true meta-nodes are displayed.
+     */
+    void setDisplayMetaNodes(const bool state);
+    /**
+     * return true if meta-nodes are displayed.
+     */
+    bool isDisplayMetaNodes() const;
+    /**
+     * set stencil number for nodes
+     */
+    void setNodesStencil(const int stencil);
+    /**
+     * get stencil number for nodes
+     */
+    int getNodesStencil();
+    /**
+     * set stencil number for meta-nodes
+     */
+    void setMetaNodesStencil(const int stencil);
+    /**
+     * get stencil number for meta-nodes
+     */
+    int getMetaNodesStencil();
+    /**
+     * set stencil number for edges
+     */
+    void setEdgesStencil(const int stencil);
+    /**
+     * get stencil number for edges
+     */
+    int getEdgesStencil();
+    /**
+     * set stencil number for nodes label
+     */
+    void setNodesLabelStencil(const int stencil);
+    /**
+     * get stencil number for nodes label
+     */
+    int getNodesLabelStencil();
+    /**
+     * set stencil number for meta-nodes label
+     */
+    void setMetaNodesLabelStencil(const int stencil);
+    /**
+     * get stencil number for meta-nodes label
+     */
+    int getMetaNodesLabelStencil();
+    /**
+     * set stencil number for edges label
+     */
+    void setEdgesLabelStencil(const int stencil);
+    /**
+     * get stencil number for edges label
+     */
+    int getEdgesLabelStencil();
     /** 
      * If true node and edges are ordered according to the viewMetric property
      */
@@ -212,6 +276,14 @@ namespace tlp {
     bool _edge3D;
     bool _edgeSizeInterpolate;
     bool _displayEdges;
+    bool _displayNodes;
+    bool _displayMetaNodes;
+    int _nodesStencil;
+    int _metaNodesStencil;
+    int _edgesStencil;
+    int _nodesLabelStencil;
+    int _metaNodesLabelStencil;
+    int _edgesLabelStencil;
     unsigned int _FontsType;
     unsigned int _labelsBorder;
     std::string _layoutName;

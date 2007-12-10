@@ -26,12 +26,11 @@ using namespace std;
 
 namespace tlp {
   
-  GlScene::GlScene():backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true) {
+  GlScene::GlScene():backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false,true);
     selectionLayer= new GlLayer();
     selectionLayer->setCamera(camera);
     selectionLayer->setScene(this);
-    //cout << "New Scene" << endl;
   }
 
   void GlScene::initGlParametters() {
@@ -45,6 +44,7 @@ namespace tlp {
     glShadeModel(GL_SMOOTH);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
     glEnable(GL_NORMALIZE);
     glDepthFunc(GL_LEQUAL );
     glPolygonMode(GL_FRONT, GL_FILL);
@@ -52,8 +52,10 @@ namespace tlp {
     glEnable(GL_BLEND);
     glIndexMask(~0);
     glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), 1.0);
-    glClearStencil(3);
+    glClearStencil(0xFFFF);
+    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glDisable(GL_TEXTURE_2D);
     
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
@@ -67,12 +69,14 @@ namespace tlp {
     GlLODSceneVisitor lodVisitor(&calculator,glGraphComposite->getInputData());
 
     //cout << ">>> Check bounding box" << endl ;
-    selectionLayer->acceptVisitor(&lodVisitor);
+    
 
-    for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      (*it)->acceptVisitor(&lodVisitor);
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      (*it).second->acceptVisitor(&lodVisitor);
+      if((*it).first=="Main")
+	selectionLayer->acceptVisitor(&lodVisitor);
     }
-
+    
     //cout << "<<< End Check bounding box" << endl;
     //cout << ">>> Begin LOD compute" << endl;
     calculator.compute(viewport);
@@ -86,9 +90,10 @@ namespace tlp {
     LODResultVector* seVector=calculator.getResultForSimpleEntities();
     LODResultVector::iterator itCE=ceVector->begin();
     LODResultVector::iterator itSE=seVector->begin();
+    
 
     //cout << ">>> Begin draw" << endl;
-    Camera *camera=selectionLayer->getCamera();
+    /*Camera *camera=selectionLayer->getCamera();
     if((Camera*)((*itSE).first)==camera) {
       camera->initGl();
       for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
@@ -98,16 +103,21 @@ namespace tlp {
       }
       ++itSE;
       ++itCE;
-    }
+      }*/
+    Camera *camera;
 
-
-    for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+   
       //cout << ">>> Draw SE" << endl;
-      camera=(*it)->getCamera();
+      //selection layout Draw
+
+      camera=(*it).second->getCamera();
       camera->initGl();
+      
       if((Camera*)((*itSE).first)==camera) {
 	for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
 	  if((*itE).second>0) {
+	    glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*itE).first))->getStencil(),0xFFFF);
 	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
 	  }
 	}
@@ -133,6 +143,7 @@ namespace tlp {
 
 	  // Draw Nodes Label
 	  if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
+	    glStencilFunc(GL_LEQUAL,glGraphComposite->getNodesLabelStencil(),0xFFFF);
 	    // Draw Label for selected Nodes
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
 	      if((*itE).second>0) {
@@ -157,6 +168,7 @@ namespace tlp {
 
 	  // Draw Edges Label
 	  if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
+	    glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
 	    // Draw Label for selected Edges
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
 	      if((*itE).second>0) {
@@ -184,47 +196,69 @@ namespace tlp {
 
 	++itCE;
       }
+
+      if((*it).first=="Main") {
+	if((*it).second->isVisible()) {
+	  camera=selectionLayer->getCamera();
+	  if((Camera*)((*itSE).first)==camera) {
+	    camera->initGl();
+	    for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
+	      if((*itE).second>0) {
+		((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
+	      }
+	    }
+	  }
+	}
+	++itSE;
+	++itCE;
+      }
       //cout << "<<< End draw CE" << endl;
     }
     //cout << "<<< End draw" << endl;
   }
 
+  void GlScene::addLayer(const std::string &name,GlLayer *layer) {
+    layersList.push_back(std::pair<std::string,GlLayer*>(name,layer));
+    layer->setScene(this);
+    //notifyAddLayer(this,name,layer);
+  }
+
   void GlScene::centerScene() {
     GlBoundingBoxSceneVisitor visitor(glGraphComposite->getInputData());
 
-    for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      (*it)->acceptVisitor(&visitor);
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D())
+	(*it).second->acceptVisitor(&visitor);
     }
 
     Coord maxC = visitor.getBoundingBox().second;
     Coord minC = visitor.getBoundingBox().first;
-  
+    
     double dx = maxC[0] - minC[0];
     double dy = maxC[1] - minC[1];
     double dz = maxC[2] - minC[2];
 
-    for(vector<GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      (*it)->getCamera()->setCenter((maxC + minC) / 2.0);
-
-      
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      Camera* camera=(*it).second->getCamera();
+      camera->setCenter((maxC + minC) / 2.0);
 
       if ((dx==0) && (dy==0) && (dz==0))
 	dx = dy = dz = 10.0;
   
-      (*it)->getCamera()->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.0); //radius of the sphere hull of the layer bounding box
+      camera->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.0); //radius of the sphere hull of the layer bounding box
 
-      (*it)->getCamera()->setEyes(Coord(0, 0, (*it)->getCamera()->getSceneRadius()));
-      (*it)->getCamera()->setEyes((*it)->getCamera()->getEyes() + (*it)->getCamera()->getCenter());
-      (*it)->getCamera()->setUp(Coord(0, 1., 0));
-      (*it)->getCamera()->setZoomFactor(0.5);
+      camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
+      camera->setEyes(camera->getEyes() + camera->getCenter());
+      camera->setUp(Coord(0, 1., 0));
+      camera->setZoomFactor(0.5);
     }
   } 
 
   void GlScene::zoomXY(int step, const int x, const int y) {
     
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it)->getCamera()->is3D())
-	(*it)->getCamera()->setZoomFactor((*it)->getCamera()->getZoomFactor() * pow(1.1,step));
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D())
+	(*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1,step));
     }
     if (step < 0) step *= -1;
     int factX = (int)(step*(double(viewport[2])/2.0-x)/ 7.0);
@@ -233,52 +267,48 @@ namespace tlp {
   }
 
   void GlScene::zoom(float factor,const Coord& dest) {
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it)->getCamera()->is3D()) {
-	(*it)->getCamera()->setEyes(dest + ((*it)->getCamera()->getEyes() - (*it)->getCamera()->getCenter()));
-	(*it)->getCamera()->setCenter(dest);
-	
-	//(*it)->getCamera()->zoomFactor=5;
-	//cout << (*it)->getCamera()->getEyes() << endl;
-	//(*it)->getCamera()->center = (*it)->getCamera()->getCenter() * (1.-factor) + dest * factor;
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D()) {
+	(*it).second->getCamera()->setEyes(dest + ((*it).second->getCamera()->getEyes() - (*it).second->getCamera()->getCenter()));
+	(*it).second->getCamera()->setCenter(dest);
       }
     }
   }
 
   void GlScene::translateCamera(const int x, const int y, const int z) {
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it)->getCamera()->is3D()) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D()) {
 	Coord v1(0, 0, 0);
 	Coord v2(x, y, z);
-	v1 = (*it)->getCamera()->screenTo3DWorld(v1);
-	v2 = (*it)->getCamera()->screenTo3DWorld(v2);
+	v1 = (*it).second->getCamera()->screenTo3DWorld(v1);
+	v2 = (*it).second->getCamera()->screenTo3DWorld(v2);
 	Coord move = v2 - v1;
-	(*it)->getCamera()->setEyes((*it)->getCamera()->getEyes() + move);
-	(*it)->getCamera()->setCenter((*it)->getCamera()->getCenter() + move);
+	(*it).second->getCamera()->setEyes((*it).second->getCamera()->getEyes() + move);
+	(*it).second->getCamera()->setCenter((*it).second->getCamera()->getCenter() + move);
       }
     }
   }
 
   void GlScene::zoom(int step) {
 
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it)->getCamera()->is3D()) {
-	(*it)->getCamera()->setZoomFactor((*it)->getCamera()->getZoomFactor() * pow(1.1, step));
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D()) {
+	(*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1, step));
       }
     }
   }
   
   void GlScene::rotateScene(const int x, const int y, const int z) {
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it)->getCamera()->is3D()) {
-	(*it)->getCamera()->rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
-	(*it)->getCamera()->rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
-	(*it)->getCamera()->rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D()) {
+	(*it).second->getCamera()->rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
+	(*it).second->getCamera()->rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
+	(*it).second->getCamera()->rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
       }
     }
   }
 
-  bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, vector<GlEntity*>& selectedEntities) {
+  bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLayer* layer, vector<GlEntity*>& selectedEntities) {
     if(w==0)
       w=1;
     if(h==0)
@@ -286,26 +316,27 @@ namespace tlp {
     GlCPULODCalculator calculator;
     GlSelectSceneVisitor visitor(type,glGraphComposite->getInputData(),&calculator);
 
-    if(type==SelectSimpleEntities)
+    if(layer) {
+      layer->acceptVisitor(&visitor);
+    }else {
+      if(type==SelectSimpleEntities)
 	selectionLayer->acceptVisitor(&visitor);
-
-    for(vector< GlLayer *>::iterator it=layersList.begin();it!=layersList.end();++it) {
-      (*it)->acceptVisitor(&visitor);
+      
+      for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+	(*it).second->acceptVisitor(&visitor);
+      }
     }
 
     Vector<int,4> selectionViewport;
     selectionViewport[0]=x;
     selectionViewport[1]=y;
-    selectionViewport[2]=w+20;
-    selectionViewport[3]=h+20;
+    selectionViewport[2]=w+50;
+    selectionViewport[3]=h+50;
+
+    glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
 
     calculator.compute(selectionViewport);
     //calculator.compute();
-
-    glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
-    glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
-
-    unsigned int entitiesNumber=0;
 
     LODResultVector* lodResultVector;
 
@@ -315,23 +346,25 @@ namespace tlp {
       lodResultVector=calculator.getResultForComplexeEntities();
     }
 
-    for(LODResultVector::iterator it=lodResultVector->begin();it!=lodResultVector->end();++it) {
-      entitiesNumber+=(*it).second.size();
-    }
-
-    //Allocate memory to store the result oh the selection
-    GLuint (*selectBuf)[4] = new GLuint[entitiesNumber][4];
-    glSelectBuffer(entitiesNumber*4 , (GLuint *)selectBuf);
-    //Activate Open Gl Selection mode
-    glRenderMode(GL_SELECT);
-    glInitNames();
-
-    glPushName(0);
 
     for(LODResultVector::iterator it=lodResultVector->begin();it!=lodResultVector->end();++it) {
+      if((*it).second.size()==0)
+	continue;
+
       Camera *camera=(Camera*)((*it).first);
-      
+
       Vector<int, 4> viewport = camera->getViewport();
+
+      glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
+      glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
+
+      //Allocate memory to store the result oh the selection
+      GLuint (*selectBuf)[4] = new GLuint[(*it).second.size()][4];
+      glSelectBuffer((*it).second.size()*4 , (GLuint *)selectBuf);
+      //Activate Open Gl Selection mode
+      glRenderMode(GL_SELECT);
+      glInitNames();
+      glPushName(0);
       
       glMatrixMode(GL_PROJECTION);
       glPushMatrix(); //save previous projection matrix
@@ -341,8 +374,10 @@ namespace tlp {
       x += w/2;
       y =  viewport[3] - (y + h/2);
       gluPickMatrix(x, y, w, h, (GLint *)&viewport);
+ 
+
       camera->initProjection(false);
-      
+
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix(); //save previous model view matrix
       
@@ -352,7 +387,7 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       glDisable(GL_BLEND);
       glDisable(GL_STENCIL_TEST);
-      
+
       for(vector<LODResultEntity>::iterator itE=(*it).second.begin();itE!=(*it).second.end();++itE) {
 	if((*itE).second>0) {
 	  glLoadName((unsigned int)((*itE).first));
@@ -368,20 +403,23 @@ namespace tlp {
       
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
+      //glLoadIdentity();
+
+      glFlush();
+      GLint hits = glRenderMode(GL_RENDER);
+
+      while(hits>0) {
+	selectedEntities.push_back((GlEntity*)(selectBuf[hits-1][3]));
+	hits--;
+      }
+
+      glPopClientAttrib();
+      glPopAttrib();
+
+      delete[] selectBuf;
     }
     
-    glFlush();
-    GLint hits = glRenderMode(GL_RENDER);
-
-    while(hits>0) {
-      selectedEntities.push_back((GlEntity*)(selectBuf[hits-1][3]));
-      hits--;
-    }
     
-    glPopClientAttrib();
-    glPopAttrib();
-
-    delete[] selectBuf;
     return (selectedEntities.size()!=0);
   }
   //====================================================
@@ -406,7 +444,7 @@ namespace tlp {
     GlSVGFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(false,returned,buffer,layersList[0]->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
@@ -444,7 +482,7 @@ namespace tlp {
     GlEPSFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(false,returned,buffer,layersList[0]->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
@@ -469,6 +507,14 @@ namespace tlp {
     glPixelStorei(GL_PACK_ALIGNMENT,1);
     glReadPixels(viewport[0],viewport[1],viewport[2],viewport[3],GL_RGB,GL_UNSIGNED_BYTE,image);
     return image;
+  }
+  //====================================================
+  GlLayer* GlScene::getLayer(const std::string& name) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).first==name)
+	return (*it).second;
+    }
+    return NULL;
   }
 
 }

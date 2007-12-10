@@ -8,7 +8,10 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
 
+#include "tulip/Glyph.h"
 #include "tulip/GlCPULODCalculator.h"
 #include "tulip/GlGraphInputData.h"
 #include "tulip/DrawingTools.h"
@@ -24,8 +27,12 @@ namespace tlp {
   static const Color colorSelect2 = Color(255, 102, 255, 255);
 
   void GlMetaNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
-    GlNode::draw(lod,data,camera);
-    
+    node n=node(id);
+    if(((data->elementColor->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)){
+      GlNode::draw(lod,data,camera);
+      return;
+    }
+    //glDepthFunc(GL_LESS);
     glPushMatrix();
     const Coord &nodeCoord = data->elementLayout->getNodeValue(node(id));
     const Size &nodeSize = data->elementSize->getNodeValue(node(id));
@@ -36,16 +43,23 @@ namespace tlp {
     Graph *metaGraph = data->elementGraph->getNodeValue(node(id));
     GlGraphRenderingParameters metaParameters;
     metaParameters.setTexturePath(data->parameters->getTexturePath());
+    metaParameters.setNodesStencil(data->parameters->getNodesStencil());
+    metaParameters.setMetaNodesStencil(data->parameters->getMetaNodesStencil());
+    metaParameters.setEdgesStencil(data->parameters->getEdgesStencil());
     GlGraphInputData metaData(metaGraph,&metaParameters);
     pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
     //  cerr << bboxes.first << "/" << bboxes.second << endl;
     Coord maxC = bboxes.first;
     Coord minC = bboxes.second;
     //MatrixGL saveMatrix(modelviewMatrix);
-    Coord translate= (maxC + minC)/ (-2.0);
-    double dept  = maxC[2] - minC[2];
-    double width  = maxC[0] - minC[0];
-    double height = maxC[1] - minC[1];
+    BoundingBox includeBoundingBox;
+    data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
+    Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
+    Coord size=(maxC + minC)/-1.;
+    Coord translate=(maxC+minC)/-2 - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2) +(maxC-minC)*includeScale ;
+    double dept  = (maxC[2] - minC[2]) / includeScale[2];
+    double width  = (maxC[0] - minC[0]) / includeScale[0];
+    double height = (maxC[1] - minC[1]) / includeScale[1];
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
@@ -54,12 +68,18 @@ namespace tlp {
     Coord scale(1/width,1/height,1/dept);
     
     vector<GlNode> nodes;
+    vector<GlMetaNode> metaNodes;
     vector<GlEdge> edges;
 
     Iterator<node> *itN=metaGraph->getNodes();
+    unsigned int id;
     while (itN->hasNext()) {
-      nodes.push_back(GlNode(itN->next().id));
-    }
+       id=itN->next().id;
+      if(data->elementGraph->getNodeValue(node(id)) == 0)
+	nodes.push_back(GlNode(id));
+      else
+	metaNodes.push_back(GlMetaNode(id));
+ }
     delete itN;
 
     if (data->parameters->isDisplayEdges()) {
@@ -77,13 +97,30 @@ namespace tlp {
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
       BoundingBox bb = (*it).getBoundingBox(data);
       Coord size=bb.second-bb.first;
-      Coord middle=bb.first+(size)/2;
+      Coord middle=bb.first+size/2;
 
       middle+=nodeCoord+translate;
       size=size*nodeSize*scale;
       
-      bb.first=bb.first+nodeCoord+translate;
-      bb.second=bb.second+nodeCoord+translate;
+      /*bb.first=bb.first+nodeCoord+translate;
+	bb.second=bb.second+nodeCoord+translate;*/
+      bb.first=middle-size/2;
+      bb.second=middle+size/2;
+      calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
+    }
+
+    for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
+      BoundingBox bb = (*it).getBoundingBox(data);
+      Coord size=bb.second-bb.first;
+      Coord middle=bb.first+size/2;
+
+      middle+=nodeCoord+translate;
+      size=size*nodeSize*scale;
+      
+      /*bb.first=bb.first+nodeCoord+translate;
+	bb.second=bb.second+nodeCoord+translate;*/
+      bb.first=middle-size/2;
+      bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
     }
 
@@ -117,5 +154,7 @@ namespace tlp {
     }
 
     glPopMatrix();
+
+    GlNode::draw(lod,data,camera);
   }
 }

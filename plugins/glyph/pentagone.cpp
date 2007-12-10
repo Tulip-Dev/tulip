@@ -31,6 +31,7 @@ class Pentagone : public Glyph {
 public:
   Pentagone(GlyphContext *gc=NULL);
   virtual ~Pentagone();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
 
 protected:
@@ -44,6 +45,11 @@ Pentagone::Pentagone(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Pentagone::~Pentagone() {
+}
+//=====================================================
+void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0);
+  boundingBox.second=Coord(0.85,0.85,1);
 }
 //=====================================================
 void Pentagone::draw(node n) {
@@ -60,7 +66,7 @@ void Pentagone::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Pentagone_pentagone");

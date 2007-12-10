@@ -62,9 +62,12 @@ BUILT_SOURCES = \
 	FindSelectionData.cpp \
 	RenderingParametersDialogData.cpp \
 	GWOverviewWidgetData.cpp \
+	LayerManagerWidgetData.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
-	moc_GWOverviewWidgetData.cpp
+	moc_GWOverviewWidgetData.cpp \
+	moc_LayerManagerWidget.cpp \
+	moc_LayerManagerWidgetData.cpp 
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -78,6 +81,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	SGHierarchyWidgetUI.cpp \
 	SGHierarchyWidget.cpp \
 	GWOverviewWidget.cpp \
+	LayerManagerWidget.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
 	MouseBoxZoomer.cpp \
@@ -87,9 +91,19 @@ dist_libtulip_qt4_la_SOURCES = \
 	MouseNodeBuilder.cpp \
 	MouseSelectionEditor.cpp \
 	MouseSelector.cpp \
+	MouseEdgeSelector.cpp \
+	MouseEdgeBendEditor.cpp \
 	DataSetDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
+
+moc_%.cpp: $(srcdir)/../include/tulip/%.h 
+	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
+moc_%.cpp: ../include/tulip/%.h
+	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
+
+moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidgetQt3.h 
+	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<

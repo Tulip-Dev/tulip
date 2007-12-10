@@ -20,6 +20,14 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgeColorInterpolate(true), 
   _edge3D(false),
   _displayEdges(true),
+  _displayNodes(true),
+  _displayMetaNodes(true),
+  _nodesStencil(0xFFFF),
+  _edgesStencil(0xFFFF),
+  _metaNodesStencil(0xFFFF),
+  _nodesLabelStencil(0xFFFF),
+  _edgesLabelStencil(0xFFFF),
+  _metaNodesLabelStencil(0xFFFF),
   _FontsType(0),
   _labelsBorder(2),
   //_backgroundColor(255,255,255),
@@ -185,6 +193,20 @@ void GlGraphRenderingParameters::setDisplayEdges(const bool b) {
   _displayEdges=b;
 }
 //====================================================
+bool GlGraphRenderingParameters::isDisplayNodes() const {
+  return _displayNodes;
+}
+void GlGraphRenderingParameters::setDisplayNodes(const bool b) {
+  _displayNodes=b;
+}
+//====================================================
+bool GlGraphRenderingParameters::isDisplayMetaNodes() const {
+  return _displayMetaNodes;
+}
+void GlGraphRenderingParameters::setDisplayMetaNodes(const bool b) {
+  _displayMetaNodes=b;
+}
+//====================================================
 bool GlGraphRenderingParameters::isViewArrow() const {
   return (_viewArrow);
 }
@@ -218,6 +240,48 @@ bool GlGraphRenderingParameters::isViewEdgeLabel()const {
 }
 void GlGraphRenderingParameters::setViewEdgeLabel(const bool b) {
   _viewEdgeLabel=b;
+}
+//====================================================
+void GlGraphRenderingParameters::setNodesStencil(const int stencil) {
+  _nodesStencil=stencil;
+}
+int GlGraphRenderingParameters::getNodesStencil() {
+  return _nodesStencil;
+} 
+//====================================================
+void GlGraphRenderingParameters::setMetaNodesStencil(const int stencil) {
+  _metaNodesStencil=stencil;
+}   
+int GlGraphRenderingParameters::getMetaNodesStencil() {
+  return _metaNodesStencil;
+}
+//====================================================
+void GlGraphRenderingParameters::setEdgesStencil(const int stencil) {
+  _edgesStencil=stencil;
+}
+int GlGraphRenderingParameters::getEdgesStencil(){
+  return _edgesStencil;
+}
+//====================================================
+void GlGraphRenderingParameters::setNodesLabelStencil(const int stencil) {
+  _nodesLabelStencil=stencil;
+}
+int GlGraphRenderingParameters::getNodesLabelStencil() {
+  return _nodesLabelStencil;
+} 
+//====================================================
+void GlGraphRenderingParameters::setMetaNodesLabelStencil(const int stencil) {
+  _metaNodesLabelStencil=stencil;
+}   
+int GlGraphRenderingParameters::getMetaNodesLabelStencil() {
+  return _metaNodesLabelStencil;
+}
+//====================================================
+void GlGraphRenderingParameters::setEdgesLabelStencil(const int stencil) {
+  _edgesLabelStencil=stencil;
+}
+int GlGraphRenderingParameters::getEdgesLabelStencil(){
+  return _edgesLabelStencil;
 }
 //====================================================
 bool GlGraphRenderingParameters::isEdgeColorInterpolate()const {

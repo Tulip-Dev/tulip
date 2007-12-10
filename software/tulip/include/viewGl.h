@@ -20,7 +20,6 @@
 #include <QtGui/qmainwindow.h>
 #include <QtAssistant/qassistantclient.h>
 #include "tulip/Qt3ForTulip.h"
-
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
@@ -49,6 +48,7 @@ class QEvent;
 class View3DSetup;
 class Cluster;
 class GWOverviewWidget;
+class LayerManagerWidget;
 
 // minimal structure to keep open files infos
 struct viewGlFile {
@@ -74,8 +74,10 @@ protected:
   tlp::TulipStats *statsWidget;
 #endif
   GWOverviewWidget *overviewWidget;
+  LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
+  QDockWindow *layerDock;
   QDockWindow *tabWidgetDock;
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
@@ -122,6 +124,7 @@ public slots:
   void closeEvent(QCloseEvent *e); 
   void setSelect();
   void setAddEdge();
+  void setEditEdgeBend();
   void setAddNode();
   void setDelete();
   void setZoomBox();

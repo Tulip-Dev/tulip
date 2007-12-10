@@ -29,6 +29,7 @@ namespace tlp {
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
+    //cout << data->elementLayout->getNodeValue(n) << endl;
     return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n),data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n));
   }
 
@@ -45,6 +46,12 @@ namespace tlp {
     }
 
     node n=node(id);
+
+    if(data->elementGraph->getNodeValue(n) == 0) {
+      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+    }else{
+      glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
+    }
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size &nodeSize = data->elementSize->getNodeValue(n);
@@ -73,13 +80,13 @@ namespace tlp {
 	 glEnd();
       }
       else {
-	glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
+	//glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
 	setColor(colorSelect2);
 	glPointSize(sqrt(lod)+1);
 	glBegin(GL_POINTS);
 	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
 	glEnd();
-	glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
+	//glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
       }
       glEnable(GL_LIGHTING);
     } else { //draw a glyph or make recursive call for meta nodes
@@ -92,18 +99,20 @@ namespace tlp {
 	data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
       }
       else {
-	glStencilFunc(GL_LEQUAL, 3, 0xFFFF);
-	glDisable(GL_DEPTH_TEST);
+	/*glStencilFunc(GL_LEQUAL, 3, 0xFFFF);*/
+	//glDisable(GL_DEPTH_TEST);
 	data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
-	glEnable(GL_DEPTH_TEST);
-	glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
+	//glEnable(GL_DEPTH_TEST);
+	/*  glStencilFunc(GL_LEQUAL, 2, 0xFFFF);*/
 	//drawMetaNode(n,depth);
       }
       
       if (data->elementSelected->getNodeValue(n)) {
-	glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
+	//glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
 	GlDisplayListManager::getInst().callDisplayList("selection");
-	glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+	//glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
       }
       glPopMatrix();
     }

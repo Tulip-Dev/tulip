@@ -39,11 +39,16 @@ namespace tlp {
 
     void setVisible(bool visible) {this->visible=visible;}
     bool isVisible() {return visible;}
+    void setStencil(bool stencil) {this->stencil=stencil;}
+    bool stencilTest() {return stencil;}
 
-    void addGlEntity(GlEntity *entity,const std::string& name) {composite.addGlEntity(entity,name);}
+    void addGlEntity(GlSimpleEntity *entity,const std::string& name) {composite.addGlEntity(entity,name);}
     void deleteGlEntity(const std::string &key) {composite.deleteGlEntity(key);}
-    void deleteGlEntity(GlEntity *entity) {composite.deleteGlEntity(entity);}
-    GlEntity* findGlEntity(const std::string &key) {return composite.findGlEntity(key);}
+    void deleteGlEntity(GlSimpleEntity *entity) {composite.deleteGlEntity(entity);}
+    GlSimpleEntity* findGlEntity(const std::string &key) {return composite.findGlEntity(key);}
+    std::map<std::string, GlSimpleEntity*> *getDisplays() {return composite.getDisplays();}
+
+    GlComposite *getComposite() {return &composite;}
 
     void acceptVisitor(GlSceneVisitor *visitor);
 
@@ -52,6 +57,7 @@ namespace tlp {
   private:
 
     bool visible;
+    bool stencil;
 
     GlComposite composite;
     GlScene *scene;

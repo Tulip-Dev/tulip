@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 
+
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -73,14 +74,18 @@
 #include <tulip/ForEach.h>
 #include <tulip/GWInteractor.h>
 #include <tulip/GWOverviewWidget.h>
+#include <tulip/LayerManagerWidget.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelectionEditor.h>
+#include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/MouseEdgeSelector.h>
 #include <tulip/MouseMagicSelector.h>
 #include <tulip/MouseBoxZoomer.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlRectTextured.h>
 #include <tulip/hash_string.h>
 
 #include "TulipStatsWidget.h"
@@ -135,6 +140,7 @@ static vector<tlp::GWInteractor *>deleteEltInteractors;
 static vector<tlp::GWInteractor *>graphNavigateInteractors;
 static vector<tlp::GWInteractor *>magicSelectionInteractors;
 static vector<tlp::GWInteractor *>editSelectionInteractors;
+static vector<tlp::GWInteractor *>editEdgeBendInteractors;
 static vector<tlp::GWInteractor *>selectInteractors;
 static vector<tlp::GWInteractor *>selectionInteractors;
 static vector<tlp::GWInteractor *>zoomBoxInteractors;
@@ -169,9 +175,20 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewWidget = new GWOverviewWidget(overviewDock);
   overviewDock->boxLayout()->add(overviewWidget);
   this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
-  overviewWidget->show();
- 
+  overviewWidget->show(); 
   overviewDock->show();
+
+  //Create layer widget
+  layerDock = new QDockWindow(this,"Layer");
+  layerDock->setCaption("Layer Manager");
+  layerDock->setCloseMode(QDockWindow::Always);
+  layerDock->setResizeEnabled(true);
+  layerWidget = new LayerManagerWidget(layerDock);
+  layerDock->boxLayout()->add(layerWidget);
+  this->addDockWindow(layerDock,"Layer", Qt::DockLeft);
+  //layerWidget->show(); 
+  //layerDock->show();
+
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
   tabWidgetDock->setCaption("Info Editor");
@@ -241,6 +258,9 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   editSelectionInteractors.push_back(new MousePanNZoomNavigator());
   editSelectionInteractors.push_back(new MouseSelector());
   editSelectionInteractors.push_back(new MouseSelectionEditor());
+  editEdgeBendInteractors.push_back(new MousePanNZoomNavigator());
+  editEdgeBendInteractors.push_back(new MouseEdgeSelector());
+  editEdgeBendInteractors.push_back(new MouseEdgeBendEditor());
   selectInteractors.push_back(new MousePanNZoomNavigator());
   selectInteractors.push_back(new MouseShowElementInfos(this));
   selectionInteractors.push_back(new MousePanNZoomNavigator());
@@ -435,7 +455,7 @@ void viewGl::startTulip() {
     QHBoxLayout* frameLayout = new QHBoxLayout( frame, 0, 0, "frameLayout"); 
     QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     frameLayout->addItem( spacer );
-    QTextEdit* textWidget = new QTextEdit(QString(""), errorDlg);
+    QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
     textWidget->setReadOnly(true);
     textWidget->setLineWrapMode(QTextEdit::NoWrap);
     errorDlgLayout->addWidget( textWidget );
@@ -473,9 +493,11 @@ void viewGl::changeGraph(Graph *graph) {
   eltProperties->setGraph(graph);
   //propertiesWidget->setGlGraphWidget(glWidget->getScene()->getGlGraph());
   overviewWidget->setObservedView(glWidget);
+  layerWidget->attachGraphWidget(glWidget);
 #ifdef STATS_UI
   statsWidget->setGlGraphWidget(glWidget);
 #endif
+  glWidget->getScene()->centerScene();
   redrawView();
   // this line has been moved after the call to redrawView to ensure
   // that a new created graph has all its view... properties created
@@ -496,13 +518,12 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
   //clearObservers();
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   delete glWidget->getScene()->getGlGraphComposite();
-  glWidget->getScene()->getLayer()->deleteGlEntity("graph");
+  glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
   GlGraphComposite* graphComposite=new GlGraphComposite(graph);
-  glWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer(),graphComposite);
-  glWidget->getScene()->getLayer()->addGlEntity(graphComposite,"graph");
+  glWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),graphComposite);
+  glWidget->getScene()->getLayer("Main")->addGlEntity(graphComposite,"graph");
   //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
   //glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-  glWidget->getScene()->centerScene();
   changeGraph(graph);
   //initObservers();
 }
@@ -529,6 +550,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   }
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
+  layerWidget->attachGraphWidget(glWidget);
   //GlGraphWidget *glWidget = new GlGraphWidget();
   workspace->addWindow(glWidget);
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -536,12 +558,32 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //Camera *camera=new Camera(glWidget->getScene());
 
   GlLayer* layer=new GlLayer();
-  /*GlGraphComposite* glGraphComposite=new GlGraphComposite(graph);
-    layer->addGlEntity(glGraphComposite,"graph");*/
-  glWidget->getScene()->addLayer(layer);
-  //glWidget->getScene()->setGlGraphComposite(glGraphComposite);
-  //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
-  //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()==graph);
+  GlLayer *backgroundLayer=new GlLayer();
+  backgroundLayer->setVisible(false);
+  GlLayer *foregroundLayer=new GlLayer();
+  foregroundLayer->setVisible(false);
+
+  Camera d2Camera(NULL,false);
+  backgroundLayer->setCamera(&d2Camera);
+  foregroundLayer->setCamera(&d2Camera);
+
+  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),"/home/morgan/Projects/tulip/samples/tlp/logotulip.jpg");
+  backgroundLayer->addGlEntity(background,"background");
+
+  GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),"/home/morgan/Projects/tulip/samples/tlp/logolabri.jpg");
+  foregroundLayer->addGlEntity(labri,"labrilogo");
+
+  GlComposite *hulls=new GlComposite;
+  hulls->setVisible(false);
+  layer->addGlEntity(hulls,"Hulls");
+
+  glWidget->getScene()->addLayer("Background",backgroundLayer);
+  layerWidget->addLayer(glWidget->getScene(),"Background",backgroundLayer);
+  glWidget->getScene()->addLayer("Main",layer);
+  layerWidget->addLayer(glWidget->getScene(),"Main",layer);
+  glWidget->getScene()->addLayer("Foreground",foregroundLayer);
+  layerWidget->addLayer(glWidget->getScene(),"Foreground",foregroundLayer);
+  
   glWidget->move(0,0);
   glWidget->setCaption(name);
   glWidget->setMinimumSize(0, 0);
@@ -576,8 +618,8 @@ void viewGl::new3DView() {
   GlGraphWidget *newGlWidget =
     newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
 		  glWidget->parentWidget()->caption());
-  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer(),glWidget->getScene()->getGlGraphComposite());
-  newGlWidget->getScene()->getLayer()->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
+  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
+  newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
   newGlWidget->getScene()->getGlGraphComposite()->setRenderingParameters(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters());
   newGlWidget->getScene()->setBackgroundColor(glWidget->getScene()->getBackgroundColor());
   newGlWidget->getScene()->centerScene();
@@ -593,8 +635,9 @@ void viewGl::fileNew() {
     newOpenGlView(newGraph,
 		  newGraph->getAttribute<string>(std::string("name")).c_str());
   GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
-  glW->getScene()->getLayer()->addGlEntity(glGraphComposite,"graph");
-  glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer(),glGraphComposite);
+  glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+  glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
+  layerWidget->updateLayer("Main",glW->getScene()->getLayer("Main"));
   initializeGlScene(glW->getScene());
   Observable::unholdObservers();
   glW->show();
@@ -846,8 +889,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       setGraphName(newGraph, s);
 
     GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
-    glW->getScene()->getLayer()->addGlEntity(glGraphComposite,"graph");
-    glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer(),glGraphComposite);
+    glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+    glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
   //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
     assert(glW->getScene()->getGlGraphComposite()->getInputData()->getGraph()==newGraph);
     initializeGlScene(glW->getScene());
@@ -1205,6 +1248,7 @@ void viewGl::buildMenus() {
   //Windows
   dialogMenu->insertItem("3D &Overview");
   dialogMenu->insertItem("&Info Editor");
+  dialogMenu->insertItem("&Layer Manager");
   dialogMenu->insertItem("&Rendering Parameters", 1000);
   dialogMenu->setAccel(tr("Ctrl+R"), 1000);
   //==============================================================
@@ -1405,6 +1449,7 @@ void viewGl::group() {
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
+#if (QT_REL == 4)
   // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
@@ -1443,6 +1488,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       return true;
     }
   }
+#endif
   if ( obj->inherits("GlGraphWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
@@ -1538,6 +1584,9 @@ void viewGl::showDialog(int id){
   if (name=="3D &Overview") {
     overviewDock->show();
     overviewDock->raise();
+  }
+  if (name=="&Layer Manager") {
+    layerWidget->show();
   }
   if (id == 1000 && glWidget != 0) {
     overviewWidget->showRenderingParametersDialog();
@@ -1998,6 +2047,7 @@ void viewGl::gridOptions() {
   if (gridOptionsWidget == 0)
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
+  gridOptionsWidget->setCurrentLayerManagerWidget(layerWidget);
   gridOptionsWidget->show();
 }
 //**********************************************************************
@@ -2204,6 +2254,9 @@ void viewGl::setMagicSelection() {
 }
 void viewGl::setMoveSelection() {
   setCurrentInteractors(&editSelectionInteractors);
+}
+void viewGl::setEditEdgeBend() {
+  setCurrentInteractors(&editEdgeBendInteractors);
 }
 void viewGl::setSelect() {
   setCurrentInteractors(&selectInteractors);

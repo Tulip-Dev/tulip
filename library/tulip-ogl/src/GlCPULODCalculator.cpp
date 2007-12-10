@@ -94,12 +94,18 @@ namespace tlp {
       float lod;
 
       for(BoundingBoxVector::iterator itV=(*itM).second.first->begin();itV!=(*itM).second.first->end();++itV){
-	lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	if(camera->is3D())
+	  lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	else
+	  lod=1;
 	if(lod>0)
 	  (*itSE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
       for(BoundingBoxVector::iterator itV=(*itM).second.second->begin();itV!=(*itM).second.second->end();++itV){
-	lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	if(camera->is3D())
+	  lod=projectSize((*itV).second, projectionMatrix, modelviewMatrix, viewport);
+	else
+	  lod=1;
 	if(lod>0)
 	  (*itCE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }

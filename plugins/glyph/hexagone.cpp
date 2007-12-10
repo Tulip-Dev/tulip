@@ -31,6 +31,7 @@ class Hexagone : public Glyph {
 public:
   Hexagone(GlyphContext *gc=NULL);
   virtual ~Hexagone();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
 
 protected:
@@ -47,6 +48,11 @@ Hexagone::~Hexagone() {
   
 }
 //=====================================================
+void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0);
+  boundingBox.second=Coord(0.85,0.85,1);
+}
+//=====================================================
 void Hexagone::draw(node n) {
   if(GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagone")) {
     drawHexagone();
@@ -61,7 +67,7 @@ void Hexagone::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagone");

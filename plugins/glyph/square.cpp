@@ -61,7 +61,7 @@ void Square::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
 
   GlDisplayListManager::getInst().callDisplayList("Square_square");

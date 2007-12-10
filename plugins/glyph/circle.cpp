@@ -31,6 +31,7 @@ class Circle : public Glyph {
 public:
   Circle(GlyphContext *gc=NULL);
   virtual ~Circle();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
 
 protected:
@@ -44,6 +45,11 @@ Circle::Circle(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Circle::~Circle() {
+}
+//=====================================================
+void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0);
+  boundingBox.second=Coord(0.85,0.85,1);
 }
 //=====================================================
 void Circle::draw(node n) {
@@ -60,7 +66,7 @@ void Circle::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Circle_circle");

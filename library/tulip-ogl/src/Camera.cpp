@@ -120,6 +120,8 @@ namespace tlp {
     if(d3) {
       GLfloat pos[4];
       eyes.get(pos[0],pos[1],pos[2]);
+      for(int i=0;i<3;i++) 
+	pos[i] += (eyes[i]-center[i])/zoomFactor;
       pos[3]=1;
       GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
       GLfloat dif[4] = {1,1,1,1};
@@ -140,6 +142,7 @@ namespace tlp {
       glLightfv( GL_LIGHT0, GL_SPECULAR , specular);
     }else{
       glDisable( GL_LIGHTING );
+      //glDisable( GL_LIGHT0 );
     }
     error = glGetError();
     if ( error != GL_NO_ERROR)

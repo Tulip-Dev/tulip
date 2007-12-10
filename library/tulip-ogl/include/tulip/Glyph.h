@@ -13,6 +13,7 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
+#include <tulip/BoundingBox.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TemplateFactory.h>
 
@@ -40,6 +41,10 @@ namespace tlp {
   public:
     Glyph(GlyphContext *);
     virtual ~Glyph();
+    virtual void getIncludeBoundingBox(BoundingBox &boundingBox) {
+      boundingBox.first=Coord(0,0,0);
+      boundingBox.second=Coord(1,1,1);
+    }
     virtual void draw(node)=0;
     /*
      * return a point where an edge coming from "from" can be attached

@@ -23,6 +23,7 @@ class Triangle : public Glyph {
 public:
   Triangle(GlyphContext *gc=NULL);
   virtual ~Triangle();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
 
 protected:
@@ -36,6 +37,11 @@ Triangle::Triangle(GlyphContext *gc): Glyph(gc){
 }
 //=====================================================
 Triangle::~Triangle() {
+}
+//=====================================================
+void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.25,0,0);
+  boundingBox.second=Coord(0.75,0.5,1);
 }
 //=====================================================
 void Triangle::draw(node n) {
@@ -52,7 +58,7 @@ void Triangle::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Triangle_triangle");

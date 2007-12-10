@@ -20,7 +20,7 @@ namespace tlp {
 
   public:
 
-    GlSimpleEntity():visible(true) {}
+    GlSimpleEntity():visible(true),stencil(0xFFFF) {}
 
     virtual void draw(float lod) = 0;
     
@@ -28,14 +28,17 @@ namespace tlp {
       visitor->visit(this);
     }
 
-    virtual void setVisible(bool visible) {this->visible=visible;}
-    virtual bool isVisible() {return visible;}
+    void setVisible(bool visible) {this->visible=visible;}
+    bool isVisible() {return visible;}
+    virtual void setStencil(int stencil) {this->stencil=stencil;}
+    int getStencil() {return stencil;}
 
     virtual BoundingBox getBoundingBox() {return boundingBox;}
 
   protected:
     
     bool visible;
+    int stencil;
     
     BoundingBox boundingBox;
 

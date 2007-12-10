@@ -9,6 +9,8 @@ nobase_include_HEADERS = \
 	tulip/MouseNodeBuilder.h\
 	tulip/MouseSelectionEditor.h\
 	tulip/MouseSelector.h\
+	tulip/MouseEdgeSelector.h \
+	tulip/MouseEdgeBendEditor.h \
 	tulip/PropertyWidget.h \
 	tulip/ElementPropertiesWidgetUI.h \
 	tulip/ElementPropertiesWidget.h \
@@ -16,6 +18,7 @@ nobase_include_HEADERS = \
 	tulip/SGHierarchyWidgetUI.h \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidget.h \
+	tulip/LayerManagerWidget.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
@@ -33,14 +36,17 @@ if WIN32
 BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
-	tulip/GWOverviewWidgetData.h
+	tulip/GWOverviewWidgetData.h\
+	tulip/LayerManagerWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
+	tulip/layermanagerwidget.h \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
 	tulip/propertywidget.h
@@ -49,6 +55,9 @@ tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@
 
 tulip/glgraphwidget.h : tulip/GlGraphWidget.h
+	cp -f $< $@
+
+tulip/layermanagerwidget.h : tulip/LayerManagerWidget.h
 	cp -f $< $@
 
 tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h

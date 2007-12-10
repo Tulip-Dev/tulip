@@ -16,6 +16,7 @@
 #include "GridOptionsData.h"
 
 #include <tulip/GlGraphWidget.h>
+#include <tulip/LayerManagerWidget.h>
 #include <tulip/GlGrid.h>
 
 namespace tlp {
@@ -39,6 +40,7 @@ class GridOptionsWidget : public GridOptionsData {
 
  protected:
   GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
+  LayerManagerWidget *layerWidget; /**< The considered LayerManagerWidget */
   tlp::GlGrid *grid; /**< The considered GlADGrid */
 
  public:
@@ -56,6 +58,11 @@ class GridOptionsWidget : public GridOptionsData {
    * Function used to define on which GlGraphWidget we are working
    */
   void setCurrentGraphWidget(GlGraphWidget *graphWidget);
+
+  /**
+   * Function used to define on which LayerManagerWidget we are working
+   */
+  void setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget);						
 
  public slots:
  

@@ -27,6 +27,7 @@ class Cone : public Glyph {
 public:
   Cone(GlyphContext *gc=NULL);
   virtual ~Cone();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -39,6 +40,11 @@ Cone::Cone(GlyphContext *gc): Glyph(gc) {
 }
 //===========================================================
 Cone::~Cone() {
+}
+//===========================================================
+void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
+  boundingBox.first=Coord(0.25,0.25,0);
+  boundingBox.second=Coord(0.75,0.75,0.5);
 }
 //===========================================================
 void Cone::draw(node n) {
@@ -61,7 +67,7 @@ void Cone::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,255));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
 
   GlDisplayListManager::getInst().callDisplayList("Cone_cone");

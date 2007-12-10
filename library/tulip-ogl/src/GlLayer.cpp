@@ -14,7 +14,7 @@ using namespace std;
 namespace tlp {
 
   GlLayer::GlLayer() 
-    :visible(true),scene(0),camera(0){
+    :visible(true),stencil(false),scene(0),camera(0){
   }
 
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {

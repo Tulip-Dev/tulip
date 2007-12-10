@@ -36,20 +36,30 @@ MouseSelectionEditor::MouseSelectionEditor():glGraphWidget(NULL){
   //composite.addGlEntity(&centerRect, "CenterRectangle");
   //composite.addGlEntity(&_controls[0], "left");
   _controls[0].resizePoints(3); //triangle
+  _controls[0].setStencil(0);
   //composite.addGlEntity(&_controls[1], "top-left");
   _controls[1].resizePoints(4); //square
+  _controls[1].setStencil(0);
   //composite.addGlEntity(&_controls[2], "top");
   _controls[2].resizePoints(3); //triangle
+  _controls[2].setStencil(0);
   //composite.addGlEntity(&_controls[3], "top-right");
   _controls[3].resizePoints(30); //circle
+  _controls[3].setStencil(0);
   //composite.addGlEntity(&_controls[4], "right");
   _controls[4].resizePoints(3); //triangle
+  _controls[4].setStencil(0);
   //composite.addGlEntity(&_controls[5], "bottom-right");
   _controls[5].resizePoints(4); //square
+  _controls[5].setStencil(0);
   //composite.addGlEntity(&_controls[6], "bottom");
   _controls[6].resizePoints(3); //triangle
+  _controls[6].setStencil(0);
   //composite.addGlEntity(&_controls[7], "bottom-left");
   _controls[7].resizePoints(30); //circle
+  _controls[7].setStencil(0);
+
+  centerRect.setStencil(0);
 
   
   //widget->getScene()->getLayout()->addGlEntity(&composite);
@@ -88,7 +98,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     initProxies(glGraphWidget);
-    //computeFFD(glGraphWidget);
+    computeFFD(glGraphWidget);
 
     int W, H;
     W = glGraphWidget->width();
@@ -122,7 +132,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
       if (!hasSelection ||
 	  (!glGraphWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
-						      6, 6, select) &&
+					    6, 6, select,glGraphWidget->getScene()->getSelectionLayer()) &&
 	   !centerRect.inRect((double) qMouseEv->x(),
 			      (double) qMouseEv->y()))) {
 	// event occurs outside the selection rectangle
@@ -133,10 +143,16 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	return false;
       }
 
-      unsigned int shapeId;
-      for (shapeId = 0; (shapeId < select.size()) && (select[shapeId] == &centerRect); ++shapeId);
-      cout << "shapeId:" << shapeId <<" select size:" << select.size() << endl;
-      if (shapeId < select.size()) {
+      int shapeId=-1;
+      
+      for (int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
+	for(int j=0 ; j<8;++j) {
+	  if(select[i]==&_controls[j]){
+	    shapeId=i;
+	  }
+	}
+      }
+      if (shapeId != -1) {
 	((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
 	((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
 	//left <-> right anchor
@@ -268,7 +284,7 @@ bool MouseSelectionEditor::compute(GlGraphWidget *glGraphWidget) {
 }
 //========================================================================================
 bool MouseSelectionEditor::draw(GlGraphWidget *glGraphWidget) {
-  return true;
+  //return compute(glGraphWidget);
 }
 //========================================================================================
 void MouseSelectionEditor::restoreInfo() {
@@ -326,7 +342,7 @@ void MouseSelectionEditor::undoEdition() {
 //========================================================================================
 void MouseSelectionEditor::stopEdition() {
   //cerr << __PRETTY_FUNCTION__ << endl;
-  cout << "StopEdition" << endl;
+  glGraphWidget->getScene()->getSelectionLayer()->clear();
   
   if (operation == NONE) return;
   operation = NONE;
@@ -527,7 +543,6 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   // We calculate the bounding box for the selection :
   initProxies(glGraphWidget);
   pair<Coord, Coord> boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
-  cout << boundingBox.first << endl;
 
   if (boundingBox.first[0] == -FLT_MAX) 
     return false;

@@ -25,6 +25,7 @@ class Cylinder : public Glyph {
 public:
   Cylinder(GlyphContext *gc=NULL);
   virtual ~Cylinder();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -36,6 +37,11 @@ Cylinder::Cylinder(GlyphContext *gc): Glyph(gc) {
 }
 //=================================================================================================
 Cylinder::~Cylinder() {
+}
+//=====================================================
+void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0);
+  boundingBox.second=Coord(0.85,0.85,1);
 }
 //=================================================================================================
 void Cylinder::draw(node n) {
@@ -60,7 +66,7 @@ void Cylinder::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
 
   GlDisplayListManager::getInst().callDisplayList("Cylinder_cylinder");

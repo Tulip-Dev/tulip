@@ -13,6 +13,7 @@
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlGraphWidget.h"
 #include "tulip/RenderingParametersDialogData.h"
+#include "tulip/GlTools.h"
 
 
 using namespace std;
@@ -62,7 +63,11 @@ public:
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
 				   const char* name, bool modal, Qt::WFlags fl )
+#if (QT_REL == 3)
+  : GWOverviewWidgetData( parent, name, modal )
+#else
   : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) 
+#endif
 {
   _observedView = 0;
   _glDraw = 0;
@@ -72,7 +77,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   //GlGraphComposite* graphComposite=new GlGraphComposite();
   //layer->addGlEntity(graphComposite,"graphComposite");
   //_view->getScene()->setGlGraphComposite(graphComposite);
-  _view->getScene()->addLayer(layer);
+  _view->getScene()->addLayer("Main",layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
   gridLayout->addWidget( _view, 0, 0 );
@@ -189,7 +194,8 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
   _glDraw->setObservedView(_observedView);
   
   if (_observedView != 0) {
-    _view->getScene()->getLayer()->addGlEntity(_observedView->getScene()->getGlGraphComposite(),"graphComposite");
+    _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
+    _view->getScene()->getLayer("Main")->addGlEntity(_observedView->getScene()->getGlGraphComposite(),"graphComposite");
     _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),_observedView->getScene()->getGlGraphComposite());
     _view->getScene()->centerScene();
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
@@ -202,7 +208,7 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
     _view->getScene()->addGlGraphCompositeInfo(0,0);
-    _view->getScene()->getLayer()->deleteGlEntity("graphComposite");
+    _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
   }
 }
 //=============================================================================
@@ -210,7 +216,7 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   assert(_observedView == glWidget); 	 
   _observedView = 0; 	 
   _glDraw->setObservedView(0); 	
-  _view->getScene()->getLayer()->deleteGlEntity("graphComposite");
+  _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
   _view->getScene()->addGlGraphCompositeInfo(0,0);
   draw(0); 	 
 } 	 
@@ -330,10 +336,13 @@ void RectPosition::draw(float lod) {
   
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
+  glDisable(GL_LIGHT0);
   glDisable(GL_CULL_FACE);
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glDisable(GL_COLOR_MATERIAL);
+  setMaterial(Color(255,255,255,0));
 
   glBegin(GL_QUADS);
 

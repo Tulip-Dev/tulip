@@ -18,12 +18,12 @@ namespace tlp {
     ~GlComposite();
 
     void reset(bool deleteElems);
-    void addGlEntity(GlEntity *entity, const std::string &key);
+    void addGlEntity(GlSimpleEntity *entity, const std::string &key);
     void deleteGlEntity(const std::string &key);
-    void deleteGlEntity(GlEntity *entity);
-    std::string findKey(GlEntity *entity);
-    GlEntity* findGlEntity(const std::string &key);
-    inline std::map<std::string, GlEntity*> *
+    void deleteGlEntity(GlSimpleEntity *entity);
+    std::string findKey(GlSimpleEntity *entity);
+    GlSimpleEntity* findGlEntity(const std::string &key);
+    inline std::map<std::string, GlSimpleEntity*> *
       getDisplays () {
       return &elements;
     }
@@ -31,17 +31,25 @@ namespace tlp {
 
     void draw(float lod);
 
+    virtual void setStencil(int stencil) {
+      this->stencil=stencil;
+      for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
+	(*it)->setStencil(stencil);
+      }
+    }
+
     virtual BoundingBox getBoundingBox() {return BoundingBox();} 
 
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      for(std::list<GlEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
-	(*it)->acceptVisitor(visitor);
+      for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
+	if((*it)->isVisible())
+	  (*it)->acceptVisitor(visitor);
       }
     }
 
   protected:
-    std::map<std::string, GlEntity*> elements;
-    std::list<GlEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
+    std::map<std::string, GlSimpleEntity*> elements;
+    std::list<GlSimpleEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
   };
 }
 #endif

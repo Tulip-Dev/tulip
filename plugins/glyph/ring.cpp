@@ -32,6 +32,7 @@ class Ring : public Glyph {
 public:
   Ring(GlyphContext *gc=NULL);
   virtual ~Ring();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual string getName() {return string("Ring");}
   virtual void draw(node n);
 
@@ -48,6 +49,11 @@ Ring::Ring(GlyphContext *gc): Glyph(gc) {
 Ring::~Ring() {
 }
 //=====================================================
+void Ring::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0);
+  boundingBox.second=Coord(0.85,0.85,1);
+}
+//=====================================================
 void Ring::draw(node n) {
   if(GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
     drawRing();
@@ -62,7 +68,7 @@ void Ring::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Ring_ring");

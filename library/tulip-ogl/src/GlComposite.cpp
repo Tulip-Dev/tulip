@@ -4,7 +4,7 @@
 using namespace tlp;
 using namespace std;
 
-typedef std::map<string, GlEntity *>::const_iterator ITM;
+typedef std::map<string, GlSimpleEntity *>::const_iterator ITM;
 //============================================================
 GlComposite::GlComposite() {
 }
@@ -21,9 +21,11 @@ void GlComposite::reset(bool deleteElems) {
   _sortedElements.clear();
 }
 //============================================================
-void GlComposite::addGlEntity(GlEntity *entity, const string &key) {
-  elements[key] = entity;
-  _sortedElements.push_back(entity);
+void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
+  if(elements.find(key)==elements.end()) {
+    elements[key] = entity;
+    _sortedElements.push_back(entity);
+  }
 }
 //============================================================
 void GlComposite::deleteGlEntity(const string &key) {
@@ -31,7 +33,7 @@ void GlComposite::deleteGlEntity(const string &key) {
   elements.erase(key);
 }
 //============================================================
-void GlComposite::deleteGlEntity(GlEntity *entity) {
+void GlComposite::deleteGlEntity(GlSimpleEntity *entity) {
   for(ITM i = elements.begin(); i != elements.end(); ++i) {
     if(entity == (*i).second) {
       _sortedElements.remove((*i).second);
@@ -41,7 +43,7 @@ void GlComposite::deleteGlEntity(GlEntity *entity) {
   }
 }
 //============================================================
-string GlComposite::findKey(GlEntity *entity) {
+string GlComposite::findKey(GlSimpleEntity *entity) {
   for(ITM it = elements.begin(); it != elements.end(); ++it) {
     if(entity == (*it).second) {
       return it->first;
@@ -50,7 +52,7 @@ string GlComposite::findKey(GlEntity *entity) {
   return string("");
 }
 //============================================================
-GlEntity* GlComposite::findGlEntity(const string &key) {
+GlSimpleEntity* GlComposite::findGlEntity(const string &key) {
   ITM ite = elements.find(key);
   if (ite == elements.end())
     return NULL;
@@ -58,8 +60,8 @@ GlEntity* GlComposite::findGlEntity(const string &key) {
 }
 //============================================================
 void GlComposite::draw(float lod) {
-  list<GlEntity *>::iterator it;
+  list<GlSimpleEntity *>::iterator it;
   for(it = _sortedElements.begin(); it!=_sortedElements.end(); ++it) {
-    ((GlSimpleEntity*)(*it))->draw(lod);
+    (*it)->draw(lod);
   }
 }

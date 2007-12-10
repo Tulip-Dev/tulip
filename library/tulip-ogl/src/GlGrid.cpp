@@ -1,5 +1,7 @@
 #include "tulip/GlGrid.h"
 
+#include <tulip/GlTools.h>
+
 using namespace std;
 
 namespace tlp {
@@ -21,6 +23,10 @@ namespace tlp {
     Coord gridSize = backBottomRight - frontTopLeft;
     delta /= gridSize / cell;
   
+    glDisable(GL_COLOR_MATERIAL);
+    setMaterial(color);
+    //glColor4ubv(((const GLubyte *)&color));
+
     glLineWidth(1);
     glBegin(GL_LINES);
     //xy-plane

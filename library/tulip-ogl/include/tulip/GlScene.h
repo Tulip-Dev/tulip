@@ -11,15 +11,20 @@
 #ifndef Tulip_GLSCENE_H
 #define Tulip_GLSCENE_H
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <tulip/tulipconf.h>
 
+//#include "tulip/ObservableScene.h"
 #include "tulip/GlLayer.h"
 #include "tulip/GlGraphComposite.h"
 #include "tulip/GlSelectSceneVisitor.h"
 
 namespace tlp {
 
-  class TLP_GL_SCOPE GlScene {
+  class TLP_GL_SCOPE GlScene { // : public ObservableScene {
   
   public:
      
@@ -29,7 +34,7 @@ namespace tlp {
 
     void draw();
     
-    void addLayer(GlLayer *layer) {layersList.push_back(layer);layer->setScene(this);}
+    void addLayer(const std::string &name,GlLayer *layer);
 
     void centerScene();
     void zoomXY(int step, const int x, const int y);
@@ -38,7 +43,7 @@ namespace tlp {
     void translateCamera(const int x, const int y, const int z);
     void rotateScene(const int x, const int y, const int z);
 
-    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,std::vector<GlEntity *>& selectedEntities);
+    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<GlEntity *>& selectedEntities);
 
     void outputSVG(unsigned int size,const std::string& filename);
     void outputEPS(unsigned int size,const std::string& filename);
@@ -59,13 +64,15 @@ namespace tlp {
 
     GlLayer* getSelectionLayer() {return selectionLayer;}
 
-    Camera* getCamera() {return layersList[0]->getCamera();}
-    void setCamera(Camera* camera) {layersList[0]->setCamera(*camera);}
-    GlLayer* getLayer() {return layersList[0];}
+    Camera* getCamera() {return getLayer("Main")->getCamera();}
+    void setCamera(Camera* camera) {getLayer("Main")->setCamera(*camera);}
+    //GlLayer* getLayer() {return layersList[0].second;}
+    GlLayer* getLayer(const std::string& name);
+    std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {return &layersList;}
 
   private:
 
-    std::vector<GlLayer *> layersList;
+    std::vector<std::pair<std::string,GlLayer *> > layersList;
     GlLayer* selectionLayer;
     Vector<int, 4> viewport;
     Color backgroundColor;

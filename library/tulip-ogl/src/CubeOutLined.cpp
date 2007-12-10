@@ -48,7 +48,7 @@ namespace tlp {
   }
 
   void CubeOutLined::draw(node n) {
-    //glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
     glDisable(GL_COLOR_MATERIAL);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_cube")) {
@@ -66,7 +66,7 @@ namespace tlp {
     if (texFile != "") {
       string texturePath=glGraphInputData->parameters->getTexturePath();
       if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-	setMaterial(Color(255,255,255,0));
+	setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
     }
     //glCallList(LList);
     GlDisplayListManager::getInst().callDisplayList("CubeOutLined_cube");

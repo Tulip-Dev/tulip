@@ -40,17 +40,24 @@ namespace tlp {
 
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
 
-    vector<Coord> tmp =
+    /*vector<Coord> tmp =
       tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcCoord, tgtCoord);
 
-    for(vector<Coord>::iterator it=tmp.begin();it!=tmp.end();++it)
-      bb.check(*it);
+      for(vector<Coord>::iterator it=tmp.begin();it!=tmp.end();++it)
+      bb.check(*it);*/
 
+    bb.check(srcCoord);
+    bb.check(tgtCoord);
+
+    //cout << bb.first << " * " << bb.second << endl;
     return bb;
   }
 
   void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
     glEnable(GL_DEPTH_TEST);
+
+    glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);
+
     edge e=edge(id);
 
     const node source = data->graph->source(e);
@@ -79,8 +86,8 @@ namespace tlp {
       return;
     }
 
-    if(lod<10)
-      return;
+    /*if(lod<10)
+      return;*/
 
     if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
       return; //two nodes very closed
@@ -219,7 +226,7 @@ namespace tlp {
 			const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
 			const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D) {
     bool drawLine = true;
-    bool drawPoly = false;
+    bool drawPoly = true;
 
     //================================
     bool lightingOn=glIsEnabled(GL_LIGHTING);

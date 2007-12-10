@@ -27,6 +27,7 @@ class Sphere : public Glyph {
 public:
   Sphere(GlyphContext *gc=NULL);
   virtual ~Sphere();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n);
 
 private:
@@ -40,7 +41,12 @@ Sphere::Sphere(GlyphContext *gc): Glyph(gc) {
 
 Sphere::~Sphere(){
 }
-
+//=====================================================
+void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0.15,0.15,0.15);
+  boundingBox.second=Coord(0.85,0.85,0.85);
+}
+//=====================================================
 void Sphere::draw(node n) {
   if(GlDisplayListManager::getInst().beginNewDisplayList("Sphere_sphere")) {
     GLUquadricObj *quadratic;
@@ -57,7 +63,7 @@ void Sphere::draw(node n) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,255));
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
   
   GlDisplayListManager::getInst().callDisplayList("Sphere_sphere");
