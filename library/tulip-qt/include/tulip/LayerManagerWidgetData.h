@@ -13,8 +13,6 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QVBoxLayout>
 
-#include "tulip/LayerTreeModel.h"
-
 class Ui_LayerManagerWidgetData
 {
 public:
