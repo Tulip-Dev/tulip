@@ -27,7 +27,7 @@ using namespace std;
 namespace tlp {
   
   GlScene::GlScene():backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
-    Camera camera(this,false,true);
+    Camera camera(this,false);
     selectionLayer= new GlLayer();
     selectionLayer->setCamera(camera);
     selectionLayer->setScene(this);

@@ -11,6 +11,8 @@ nobase_include_HEADERS = \
 	tulip/GlRect.h \
 	tulip/GlRectTextured.h \
 	tulip/GlPolygon.h \
+	tulip/GlMultiPolygon.h \
+	tulip/GlSphere.h \
 	tulip/GlLayer.h \
 	tulip/GlLODCalculator.h \
 	tulip/GlCPULODCalculator.h \

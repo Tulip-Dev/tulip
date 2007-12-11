@@ -72,10 +72,7 @@ namespace tlp {
 		  camera->getSceneRadius()*2.);
       }
       }else{
-	if(!camera->isReversed())
-	  gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
-	else
-	  gluOrtho2D(viewport[0]+viewport[2],viewport[0],viewport[1]+viewport[3],viewport[1]);
+	gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
       }
       
       glMatrixMode(GL_MODELVIEW);

@@ -80,7 +80,7 @@ namespace tlp
     Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string glyphName=itS->next();
-         cerr << "loading : " << glyphName << endl;
+      //cerr << "loading : " << glyphName << endl;
       Glyph *newGlyph = GlyphFactory::factory->getPluginObject(glyphName, &gc);
       //    cerr << newGlyph << endl;
       //if (GlyphFactory::factory->objMap[glyphName]->getId() == 0) 

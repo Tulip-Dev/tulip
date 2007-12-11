@@ -301,7 +301,7 @@ void MouseEdgeBendEditor::mMouseDelete()
 //========================================================================================
 void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGraphWidget) {
   Coord screenClick(glGraphWidget->width() - (double) x, (double) y, 0);
-  cout << PointType::toString(screenClick) << endl;
+  //cout << PointType::toString(screenClick) << endl;
   Coord worldLocation= glGraphWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(screenClick);
   if(coordinates.empty())
     coordinates.push_back(worldLocation);
@@ -331,8 +331,8 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGrap
       //delete CoordIt;
     }
   }
-  cout << "C R E A T E : " << endl;
-  cout << "===================================" << endl;
+  //cout << "C R E A T E : " << endl;
+  //cout << "===================================" << endl;
   Observable::holdObservers();
   _layout->setEdgeValue(mEdge, coordinates);
   Observable::unholdObservers();
@@ -362,8 +362,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
       while(CoordIt!=coordinates.end()) {
 	tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
 	tmp=glGraphWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
-	tmp[1] = (double)H - tmp[1];
-	tmp[0] = (double)W - tmp[0];
+	//tmp[1] = (double)H - tmp[1];
+	//tmp[0] = (double)W - tmp[0];
 	basicCircle.set(tmp, 5, 0.);
 	circles.push_back(basicCircle);
 	CoordIt++;

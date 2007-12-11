@@ -113,7 +113,6 @@ namespace tlp {
 	if (i < _fillColors.size()) {
 	  glColor4ubv((unsigned char *)&_fillColors[i]);
 	}
-	_points[i][2] = 0;
 	glVertex3fv((float *)&newPoints[i]);
       }
       glEnd();
@@ -125,7 +124,6 @@ namespace tlp {
 	if (i < _outlineColors.size()) {
 	  glColor4ubv((unsigned char *)&_outlineColors[i]);
 	}
-	_points[i][2] = 0;
 	glVertex3fv((float *)&newPoints[i]);
       }
       glEnd();

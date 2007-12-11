@@ -24,8 +24,8 @@ namespace tlp {
     d3(true){
   }
 
-  Camera::Camera(GlScene* scene,bool d3,bool reversed) :
-    matrixCoherent(false),d3(d3),reversed(reversed) {
+  Camera::Camera(GlScene* scene,bool d3) :
+    matrixCoherent(false),d3(d3) {
   }
 
   void Camera::setScene(GlScene* scene) {
@@ -37,6 +37,7 @@ namespace tlp {
     move *= speed/move.norm();
     eyes += move;
     center += move;
+    matrixCoherent=false;
   }
   
   /// This rotates the camera's eyes around the center depending on the values passed in.
@@ -172,10 +173,7 @@ namespace tlp {
       }
       glEnable(GL_DEPTH_TEST);
     }else{
-      if(!reversed)
-	gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
-      else
-	gluOrtho2D(viewport[0]+viewport[2],viewport[0],viewport[1]+viewport[3],viewport[1]);
+      gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
       glDisable(GL_DEPTH_TEST);
     }
     GLenum error = glGetError();
@@ -201,10 +199,9 @@ namespace tlp {
   }
 
   Coord Camera::screenTo3DWorld(const Coord &point) {
-    if(!matrixCoherent){
-      initProjection();
-      initModelView();
-    }
+    initProjection();
+    initModelView();
+
     Vector<int, 4> viewport = getViewport();
     //Try to find a good z-coordinate for reverse projection
     Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
@@ -216,10 +213,9 @@ namespace tlp {
   }
   //====================================================
   Coord Camera::worldTo2DScreen(const Coord &obj) {
-    if(!matrixCoherent){
-      initProjection();
-      initModelView();
-    }
+    initProjection();
+    initModelView();
+ 
     Vector<int, 4> viewport = getViewport();
     return projectPoint(obj, transformMatrix, viewport);
   }

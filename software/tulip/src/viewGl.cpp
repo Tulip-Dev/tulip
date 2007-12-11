@@ -566,11 +566,12 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   Camera d2Camera(NULL,false);
   backgroundLayer->setCamera(&d2Camera);
   foregroundLayer->setCamera(&d2Camera);
-
-  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),"/home/morgan/Projects/tulip/samples/tlp/logotulip.jpg");
+  string dir=TulipLibDir;
+  dir +="tlp/bitmaps/";
+  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "logotulip.jpg");
   backgroundLayer->addGlEntity(background,"background");
 
-  GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),"/home/morgan/Projects/tulip/samples/tlp/logolabri.jpg");
+  GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),dir + "logolabri.jpg");
   foregroundLayer->addGlEntity(labri,"labrilogo");
 
   GlComposite *hulls=new GlComposite;

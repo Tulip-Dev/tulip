@@ -48,6 +48,8 @@ libtulip_ogl_la_SOURCES = \
 	GlRect.cpp \
 	GlRectTextured.cpp \
 	GlPolygon.cpp \
+	GlMultiPolygon.cpp \
+	GlSphere.cpp \
 	GlLayer.cpp \
 	GlCPULODCalculator.cpp \
 	GlLODSceneVisitor.cpp \

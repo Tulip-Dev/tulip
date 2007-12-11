@@ -105,7 +105,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     H = glGraphWidget->height();
     editCenter = centerRect.getCenter();
     editCenter[2] = 0;
-    editCenter[0] = W - editCenter[0];
+    editCenter[1]= H- editCenter[1];
+    //editCenter[0] = W - editCenter[0];
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
     editPosition[2] = 0;
@@ -384,7 +385,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlGraphWi
   Coord stretch(1,1,1);
   //  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
-    stretch[0] = (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
+    stretch[0] =  (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
     stretch[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
@@ -598,8 +599,8 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   
   //  cerr << tmpCenter << endl;
   
-  tmpCenter[0] = (double)glGraphWidget->width() - tmpCenter[0];
-  tmpCenter[1] = (double)glGraphWidget->height() - tmpCenter[1];
+  //tmpCenter[0] = (double)glGraphWidget->width() - tmpCenter[0];
+  //tmpCenter[1] = (double)glGraphWidget->height() - tmpCenter[1];
 
   //  tmpCenter[1] = tmpCenter[1];
   
@@ -634,7 +635,6 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   _controls[5].set(positions[5], 6, M_PI/4.);//c
   _controls[6].set(positions[6], 7, M_PI/2.);//
   _controls[7].set(positions[7], 5, 0.);//s
-  
 
   return true;
 }

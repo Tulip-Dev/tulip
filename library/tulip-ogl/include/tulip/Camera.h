@@ -17,7 +17,7 @@ namespace tlp {
   public:
     
     Camera(GlScene* scene,Coord center=Coord(0,0,0),Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0), double zoomFactor=0.5, double sceneRadius=10);
-    Camera(GlScene* scene,bool d3,bool reversed=false);
+    Camera(GlScene* scene,bool d3);
 
     void setScene(GlScene *scene);
 
@@ -31,7 +31,6 @@ namespace tlp {
     void rotate(float angle, float x, float y, float z);
 
     bool is3D() {return d3;}
-    bool isReversed() {return reversed;}
 
     Vector<int, 4> getViewport();
     
@@ -71,7 +70,6 @@ namespace tlp {
     Matrix<float, 4> transformMatrix;
 
     bool d3;
-    bool reversed;
     
   };
 
