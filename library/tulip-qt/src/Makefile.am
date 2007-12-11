@@ -99,8 +99,6 @@ CLEANFILES = $(BUILT_SOURCES)
 
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
-moc_%.cpp: ../include/tulip/%.h
-	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
 moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidgetQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
