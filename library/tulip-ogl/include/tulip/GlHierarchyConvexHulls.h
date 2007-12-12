@@ -5,7 +5,7 @@
 
 #include "tulip/GlLayer.h"
 
-class GlHierarchyConvexHulls {
+class TLP_GL_SCOPE GlHierarchyConvexHulls {
 
  public:
   GlHierarchyConvexHulls(bool fatherHullsIsDeducedFromChilds = true) {

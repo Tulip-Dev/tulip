@@ -24,7 +24,7 @@ namespace tlp {
     GWInteractor *clone() { return new MouseEdgeBendEditor(); }
 
   private:
-    enum EditOperation { NONE=0, TRANSLATE, NEW, DELETE};
+    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
     enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
     Graph *_graph;

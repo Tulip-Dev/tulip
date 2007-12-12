@@ -36,7 +36,7 @@ using namespace std;
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor() 
   :glGraphWidget(NULL){
-  operation = NONE;
+  operation = NONE_OP;
   _copyLayout = 0;
   _copySizes = 0;
   _copyRotation = 0;
@@ -80,11 +80,11 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	// event occurs outside the selection rectangle
 	// so from now we delegate the job to a MouseEdgeSelector object
 	// which should intercept the event
-	operation = NONE;
+	operation = NONE_OP;
 	return false;
       }
       if (qMouseEv->state() & Qt::ShiftButton){//vérifier que le lieu du clic est sur l'arête
-	operation = NEW;
+	operation = NEW_OP;
 	//int newX = qMouseEv->x();
 	//int newY = qMouseEv->y();
 	//cout << "C R E A T E   C A L L : " << endl;
@@ -104,18 +104,18 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	      Qt::ControlButton
 #endif
 	      ){
-	    operation = DELETE;
+	    operation = DELETE_OP;
 	    mMouseDelete();
 	  }
 	  else
 	    {
-	      operation = TRANSLATE;
+	      operation = TRANSLATE_OP;
 	      glGraphWidget->setCursor(QCursor(Qt::SizeAllCursor));
 	      initEdition();
 	      mode = COORD;
 	    }
 	} else{
-	  operation = NONE;
+	  operation = NONE_OP;
 	  return false;
 	}
       }
@@ -130,14 +130,14 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     glGraphWidget->redraw();
     return true;
   }
-  if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton && operation != NONE) {
+  if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton && operation != NONE_OP) {
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     stopEdition();
     glGraphWidget->setCursor(QCursor(Qt::ArrowCursor));
     glGraphWidget->redraw();
     return true;
   }
-  if  (e->type() == QEvent::MouseMove && ((QMouseEvent *) e)->state() & Qt::LeftButton && operation != NONE) {
+  if  (e->type() == QEvent::MouseMove && ((QMouseEvent *) e)->state() & Qt::LeftButton && operation != NONE_OP) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     int newX = qMouseEv->x();
@@ -145,10 +145,10 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     //int i=0;
     //while(&circles[i] != select[0].second) i++;
     switch (operation) {
-    case TRANSLATE:
+    case TRANSLATE_OP:
       mMouseTranslate(newX, newY, glGraphWidget);
       return true;
-    case NONE:
+    case NONE_OP:
       cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
       break;
     }
@@ -200,9 +200,9 @@ void MouseEdgeBendEditor::initEdition() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::undoEdition() {
-  if (operation == NONE) return;
+  if (operation == NONE_OP) return;
   restoreInfo();
-  operation = NONE;
+  operation = NONE_OP;
   delete _copyLayout;   _copyLayout = 0;
   delete _copySizes;    _copySizes = 0;
   delete _copyRotation; _copyRotation = 0;
@@ -210,8 +210,8 @@ void MouseEdgeBendEditor::undoEdition() {
 //========================================================================================
 void MouseEdgeBendEditor::stopEdition() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (operation == NONE) return;
-  operation = NONE;
+  if (operation == NONE_OP) return;
+  operation = NONE_OP;
   delete _copyLayout;   _copyLayout = 0;
   delete _copySizes;    _copySizes = 0;
   delete _copyRotation; _copyRotation = 0;
