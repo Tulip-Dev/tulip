@@ -5,14 +5,9 @@
 #include <config.h>
 #endif
 
-#if (QT_REL == 3)
-#include <qstringlist.h>
-#include <qsize.h>
-#else
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsize.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
 #include <tulip/Graph.h>
 #include <tulip/ObservableGraph.h>

@@ -14,12 +14,7 @@ using namespace tlp;
 //=============================================================================
 LayerManagerWidget::LayerManagerWidget(QWidget* parent,  
 			 const char* name, bool modal, Qt::WFlags fl )
-#if (QT_REL == 3)
-  : LayerManagerWidgetData( parent, name, modal )
-#else
-  : LayerManagerWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) 
-#endif
-{
+  : LayerManagerWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
 
 }
 //=============================================================================

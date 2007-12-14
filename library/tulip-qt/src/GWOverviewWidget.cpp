@@ -63,12 +63,7 @@ public:
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
 				   const char* name, bool modal, Qt::WFlags fl )
-#if (QT_REL == 3)
-  : GWOverviewWidgetData( parent, name, modal )
-#else
-  : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) 
-#endif
-{
+  : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
   _observedView = 0;
   _glDraw = 0;
   _view = new GlGraphWidget( frame8, "view" );
