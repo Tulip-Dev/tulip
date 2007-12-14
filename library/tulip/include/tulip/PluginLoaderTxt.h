@@ -4,7 +4,7 @@
 
 namespace tlp {
 
-struct PluginLoaderTxt:public PluginLoader {
+struct TLP_SIMPLE_SCOPE PluginLoaderTxt:public PluginLoader {
   virtual void start(const std::string &path,const std::string &type);
   virtual void loading(const std::string &filename);
   virtual void loaded(const std::string &name,

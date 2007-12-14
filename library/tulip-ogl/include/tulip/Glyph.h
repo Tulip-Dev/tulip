@@ -70,7 +70,7 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class GlyphFactory: public Plugin {
+  class TLP_GL_SCOPE GlyphFactory: public Plugin {
   public:
     virtual ~GlyphFactory() {}
     ///
@@ -91,8 +91,8 @@ namespace tlp {
       return tlp::getMinor(getTulipRelease());
     }
 
-    static TLP_GL_SCOPE TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
-    static TLP_GL_SCOPE void initFactory() {
+    static TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
+    static void initFactory() {
       if (!factory) {
 	factory = new TemplateFactory<GlyphFactory,Glyph,GlyphContext *>;
       }
