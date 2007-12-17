@@ -62,7 +62,6 @@ BUILT_SOURCES = \
 	FindSelectionData.cpp \
 	RenderingParametersDialogData.cpp \
 	GWOverviewWidgetData.cpp \
-	LayerManagerWidgetData.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
 	moc_GWOverviewWidgetData.cpp \
@@ -82,6 +81,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	SGHierarchyWidget.cpp \
 	GWOverviewWidget.cpp \
 	LayerManagerWidget.cpp \
+	LayerManagerWidgetData.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
 	MouseBoxZoomer.cpp \

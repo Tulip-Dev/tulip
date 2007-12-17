@@ -39,7 +39,8 @@ nobase_include_HEADERS = \
 	tulip/GlEdge.h \
 	tulip/GlDisplayListManager.h \
 	tulip/GlConvexHull.h \
-	tulip/GlHierarchyConvexHulls.h 
+	tulip/GlHierarchyConvexHulls.h \
+	tulip/GlSceneObserver.h
 
 
 noinst_HEADERS = \

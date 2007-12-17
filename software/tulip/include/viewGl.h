@@ -25,6 +25,7 @@
 #include <tulip/Graph.h>
 #include <tulip/GlScene.h>
 #include <tulip/Observable.h>
+#include <tulip/GlSceneObserver.h>
 #include <tulip/GWInteractor.h>
 #include "TulipData.h"
 
@@ -35,6 +36,8 @@ class GridOptionsWidget;
 #ifdef STATS_UI
 class TulipStats;
 #endif
+class GlScene;
+class GlLayer;  
 }
 
 class SGHierarchyWidget;
@@ -58,7 +61,7 @@ struct viewGlFile {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public TulipData, tlp::Observer, tlp::GraphObserver {
+class viewGl : public TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
   Q_OBJECT;
 
 public:
@@ -117,6 +120,9 @@ protected:
   void delEdge (tlp::Graph *, const tlp::edge);
   void reverseEdge (tlp::Graph *, const tlp::edge);
   void destroy (tlp::Graph *);
+  // GlSceneObserver interface
+  void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+  void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
 
 public slots:
   void startTulip();

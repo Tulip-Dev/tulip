@@ -4,7 +4,7 @@
 #include <GL/glu.h>
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdlib>
 
 #include "tulip/GlLODSceneVisitor.h"
 #include "tulip/TextRenderer.h"
@@ -28,7 +28,7 @@ namespace tlp {
   
   GlScene::GlScene():backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
-    selectionLayer= new GlLayer();
+    selectionLayer= new GlLayer("Selection");
     selectionLayer->setCamera(camera);
     selectionLayer->setScene(this);
   }
@@ -217,10 +217,10 @@ namespace tlp {
     //cout << "<<< End draw" << endl;
   }
 
-  void GlScene::addLayer(const std::string &name,GlLayer *layer) {
-    layersList.push_back(std::pair<std::string,GlLayer*>(name,layer));
+  void GlScene::addLayer(GlLayer *layer) {
+    layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
     layer->setScene(this);
-    //notifyAddLayer(this,name,layer);
+    notifyAddLayer(this,layer->getName(),layer);
   }
 
   void GlScene::centerScene() {
@@ -431,8 +431,9 @@ namespace tlp {
     GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
     glFeedbackBuffer(size, GL_3D_COLOR, buffer);
     glRenderMode(GL_FEEDBACK);
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
     draw();
-
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
     glGetFloatv(GL_LINE_WIDTH, &lineWidth);
     glGetFloatv(GL_POINT_SIZE, &pointSize);
@@ -440,7 +441,6 @@ namespace tlp {
     glFlush();
     glFinish();
     returned = glRenderMode(GL_RENDER);
-    cout << returned << endl;
     GlSVGFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
@@ -450,15 +450,14 @@ namespace tlp {
     if(!filename.empty()) {
       /* subgraphs drawing disabled
 	 initMapsSVG(_renderingParameters.getGraph(), &ge); */
-      //File* file = fopen(filename, "w");
-      /*if (file) {
+      FILE* file = fopen(filename.c_str(), "w");
+      if (file) {
 	fprintf(file, str.c_str());
 	fclose(file);
-      } else
-	perror(filename);
-	} */
+      } else {
+	perror(filename.c_str());
+      } 
     }
-    cout << str << endl;
   }
   //====================================================
   void GlScene::outputEPS(unsigned int size,const string& filename) {
@@ -469,7 +468,9 @@ namespace tlp {
     GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
     glFeedbackBuffer(size, GL_3D_COLOR, buffer);
     glRenderMode(GL_FEEDBACK);
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
     draw();
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
 
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
     glGetFloatv(GL_LINE_WIDTH, &lineWidth);
@@ -486,17 +487,14 @@ namespace tlp {
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
-      /* subgraphs drawing disabled
-	 initMapsSVG(_renderingParameters.getGraph(), &ge); */
-      //File* file = fopen(filename, "w");
-      /*if (file) {
+      FILE* file = fopen(filename.c_str(), "w");
+      if (file) {
 	fprintf(file, str.c_str());
 	fclose(file);
-      } else
-	perror(filename);
-	} */
+      } else {
+	perror(filename.c_str());
+      } 
     }
-    cout << str << endl;
   }
   //====================================================
   unsigned char * GlScene::getImage() {

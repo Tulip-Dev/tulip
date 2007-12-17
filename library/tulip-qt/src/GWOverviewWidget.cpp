@@ -68,11 +68,11 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   _glDraw = 0;
   _view = new GlGraphWidget( frame8, "view" );
   _view->setViewLabel(false);
-  GlLayer* layer=new GlLayer();
+  GlLayer* layer=new GlLayer("Main");
   //GlGraphComposite* graphComposite=new GlGraphComposite();
   //layer->addGlEntity(graphComposite,"graphComposite");
   //_view->getScene()->setGlGraphComposite(graphComposite);
-  _view->getScene()->addLayer("Main",layer);
+  _view->getScene()->addLayer(layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
   gridLayout->addWidget( _view, 0, 0 );

@@ -312,8 +312,10 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGrap
 	  first=last;
 	  last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
 	  midSeg=belong(first, last, screenClick, glGraphWidget);
-	  if(midSeg)
+	  if(midSeg){
 	    coordinates.insert(CoordIt, worldLocation);
+	    break;
+	  }
 	  CoordIt++;
 	}
       //delete CoordIt;

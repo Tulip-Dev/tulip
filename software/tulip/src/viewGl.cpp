@@ -84,6 +84,8 @@
 #include <tulip/MouseEdgeSelector.h>
 #include <tulip/MouseMagicSelector.h>
 #include <tulip/MouseBoxZoomer.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlRectTextured.h>
 #include <tulip/hash_string.h>
@@ -393,6 +395,15 @@ void  viewGl::reverseEdge (Graph *, const edge) {
 }
 void  viewGl::destroy (Graph *) {
 }
+//**********************************************************************
+// GlSceneObserver interface
+void viewGl::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
+  layerWidget->addLayer(scene,name,layer);
+}
+void viewGl::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
+  cout << "modify layer" << endl;
+  layerWidget->updateLayer(name,layer);
+}
 
 //**********************************************************************
 ///Destructor of viewGl
@@ -497,7 +508,6 @@ void viewGl::changeGraph(Graph *graph) {
 #ifdef STATS_UI
   statsWidget->setGlGraphWidget(glWidget);
 #endif
-  glWidget->getScene()->centerScene();
   redrawView();
   // this line has been moved after the call to redrawView to ensure
   // that a new created graph has all its view... properties created
@@ -550,6 +560,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   }
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
+  glWidget->getScene()->addObserver(this);
   layerWidget->attachGraphWidget(glWidget);
   //GlGraphWidget *glWidget = new GlGraphWidget();
   workspace->addWindow(glWidget);
@@ -557,17 +568,17 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
   //Camera *camera=new Camera(glWidget->getScene());
 
-  GlLayer* layer=new GlLayer();
-  GlLayer *backgroundLayer=new GlLayer();
+  GlLayer* layer=new GlLayer("Main");
+  GlLayer *backgroundLayer=new GlLayer("Background");
   backgroundLayer->setVisible(false);
-  GlLayer *foregroundLayer=new GlLayer();
+  GlLayer *foregroundLayer=new GlLayer("Foreground");
   foregroundLayer->setVisible(false);
 
   Camera d2Camera(NULL,false);
   backgroundLayer->setCamera(&d2Camera);
   foregroundLayer->setCamera(&d2Camera);
   string dir=TulipLibDir;
-  dir +="tlp/bitmaps/";
+  dir += "tlp/bitmaps/";
   GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "logotulip.jpg");
   backgroundLayer->addGlEntity(background,"background");
 
@@ -578,12 +589,9 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   hulls->setVisible(false);
   layer->addGlEntity(hulls,"Hulls");
 
-  glWidget->getScene()->addLayer("Background",backgroundLayer);
-  layerWidget->addLayer(glWidget->getScene(),"Background",backgroundLayer);
-  glWidget->getScene()->addLayer("Main",layer);
-  layerWidget->addLayer(glWidget->getScene(),"Main",layer);
-  glWidget->getScene()->addLayer("Foreground",foregroundLayer);
-  layerWidget->addLayer(glWidget->getScene(),"Foreground",foregroundLayer);
+  glWidget->getScene()->addLayer(backgroundLayer);
+  glWidget->getScene()->addLayer(layer);
+  glWidget->getScene()->addLayer(foregroundLayer);
   
   glWidget->move(0,0);
   glWidget->setCaption(name);
@@ -638,7 +646,6 @@ void viewGl::fileNew() {
   GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
   glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
   glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
-  layerWidget->updateLayer("Main",glW->getScene()->getLayer("Main"));
   initializeGlScene(glW->getScene());
   Observable::unholdObservers();
   glW->show();
@@ -923,7 +930,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       glW->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       displayingInfoFound = true;
     }
-    if (!displayingInfoFound)
+    //if (!displayingInfoFound)
       glW->getScene()->centerScene();
 
     // glWidget will be bind to that new GlGraphWidget
@@ -1443,6 +1450,10 @@ void viewGl::group() {
   }
   node metaNode = tlp::createMetaNode(graph, tmp);
   // set metanode viewColor to glWidget background color
+  Color metaNodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
+  metaNodeColor[3]=127;
+  graph->getProperty<ColorProperty>("viewColor")->
+    setNodeValue(metaNode,metaNodeColor);
   /*graph->getProperty<ColorProperty>("viewColor")->
     setNodeValue(metaNode, glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getBackgroundColor());  */
   clusterTreeWidget->update();
@@ -2262,7 +2273,6 @@ void viewGl::setEditEdgeBend() {
 void viewGl::setSelect() {
   setCurrentInteractors(&selectInteractors);
 }
-
 void viewGl::setSelection() {
   setCurrentInteractors(&selectionInteractors);
 }

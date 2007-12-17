@@ -37,6 +37,7 @@ namespace tlp {
     void initGl();
     //void initGlParametters();
     void initLight();
+    void initProjection(const Vector<int, 4>& viewport,bool reset=true);
     void initProjection(bool reset=true);
     void initModelView();
 
@@ -45,6 +46,10 @@ namespace tlp {
     Coord getEyes() {return eyes;}
     Coord getCenter() {return center;}
     Coord getUp() {return up;}
+
+    void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) { modelviewMatrix=this->modelviewMatrix;}
+    void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) { projectionMatrix=this->projectionMatrix;}
+    void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix);
 
     void setSceneRadius(double sceneRadius) {this->sceneRadius=sceneRadius;matrixCoherent=false;}
     void setZoomFactor(double zoomFactor) {this->zoomFactor=zoomFactor;matrixCoherent=false;}

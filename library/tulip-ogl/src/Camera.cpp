@@ -109,9 +109,9 @@ namespace tlp {
   }
   
   void Camera::initGl() {
-    initLight();
     initProjection();
     initModelView();
+    initLight();
   }
 
   void Camera::initLight() {
@@ -121,8 +121,12 @@ namespace tlp {
     if(d3) {
       GLfloat pos[4];
       eyes.get(pos[0],pos[1],pos[2]);
-      for(int i=0;i<3;i++) 
-	pos[i] += (eyes[i]-center[i])/zoomFactor;
+      pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor);
+      pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor);
+      pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor);
+      cout << pos[0] << ":" << pos[1] << ":" << pos[2] << endl;
+      /*for(int i=0;i<3;i++) 
+	pos[i] += (eyes[i]-center[i])/zoomFactor;*/
       pos[3]=1;
       GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
       GLfloat dif[4] = {1,1,1,1};
@@ -149,9 +153,8 @@ namespace tlp {
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
   }
-  
-  void Camera::initProjection(bool reset) {
-    Vector<int, 4> viewport=scene->getViewport();
+
+  void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
     glMatrixMode(GL_PROJECTION);
     if(reset) glLoadIdentity();
     
@@ -161,11 +164,11 @@ namespace tlp {
 	if (ratio>1)
 	  glOrtho(-ratio*sceneRadius/2.0/zoomFactor, ratio*sceneRadius/2.0/zoomFactor,
 		  -sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
-		  -10000, 10000);
+		  -sceneRadius*2.,sceneRadius*2.);
 	else 
 	  glOrtho(-sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
 		  1./ratio * - sceneRadius/2.0/zoomFactor, 1./ratio * sceneRadius/2.0/zoomFactor,
-		  -10000, 10000);
+		  -sceneRadius*2.,sceneRadius*2.);
       }else{
 	glFrustum(ratio*-1.0/zoomFactor, ratio*1.0/zoomFactor, 
 		  -1.0/zoomFactor, 1.0/zoomFactor, 1.0 , 
@@ -179,6 +182,11 @@ namespace tlp {
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+  }
+  
+  void Camera::initProjection(bool reset) {
+    Vector<int, 4> viewport=scene->getViewport();
+    initProjection(viewport,reset);
   }
 
   void Camera::initModelView() {
@@ -196,6 +204,21 @@ namespace tlp {
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+  }
+
+  void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix){
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    initProjection(viewport);
+    initModelView();
+    projectionMatrix=this->projectionMatrix;
+    modelviewMatrix=this->modelviewMatrix;
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
   }
 
   Coord Camera::screenTo3DWorld(const Coord &point) {

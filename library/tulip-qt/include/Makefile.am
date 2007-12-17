@@ -36,14 +36,12 @@ if WIN32
 BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
-	tulip/GWOverviewWidgetData.h\
-	tulip/LayerManagerWidgetData.h
+	tulip/GWOverviewWidgetData.h 
 else
 BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
-	tulip/LayerManagerWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
 	tulip/layermanagerwidget.h \

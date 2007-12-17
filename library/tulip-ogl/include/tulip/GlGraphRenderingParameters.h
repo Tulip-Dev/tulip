@@ -36,43 +36,6 @@ namespace tlp {
     //============================================
     DataSet getParameters() const;
     void    setParameters(const DataSet &);
-    /**
-     * set the graph used for rendering
-     */
-    //void setGraph(tlp::Graph *graph);
-    /**
-     * get the graph used for rendering
-     */
-    //Graph* getGraph() const;
-    /**
-     * set viewport of the drawing (screen size)
-     */
-    //void setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height);
-    /**
-     * set viewport of the drawing (screen size)
-     */
-    //void setViewport(const Vector<int, 4>&viewport);
-    /**
-     * copy current values into given parameters (names are corresponding)
-     */
-    //tlp::Vector<int, 4> getViewport() const;
-    /** 
-     * return a Camera object which desribes the 
-     * camera used for he rendering
-     */
-    //Camera getCamera() const;
-    /** 
-     * set the camera parameter for the rendering
-     */
-    //void setCamera(const Camera &cam);
-    /**
-     * return the background color
-     */
-    //Color getBackgroundColor() const;
-    /** 
-     * set the background color, RGB colorspace.
-     */
-    //void setBackgroundColor(const Color &);
     /** 
      * activate or deactivate displaying of arrows along the graph's edges.
      */
@@ -263,6 +226,14 @@ namespace tlp {
      * for rendering the graph (default is "viewLayout")
      */
     std::string getInputLayout() const;
+    /**
+     * if true draw graph with feedback information (very low) 
+     */
+    void setFeedbackRender(bool feedback);
+    /**
+     * return true if the graph is draw with feedback information
+     */
+    bool getFeedbackRender();
   private:
     //tlp::Graph  *_graph;
     bool _viewArrow;
@@ -289,6 +260,7 @@ namespace tlp {
     std::string _layoutName;
     std::string _fontsPath;
     std::string _texturePath;
+    bool _feedbackRender;
   }; 
 }
 

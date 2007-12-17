@@ -153,6 +153,7 @@ void LayerManagerWidget::updateLayer(const string& name,GlLayer *layer) {
       break;
     }
   }
+  treeWidget->expandAll();
 }
 //=============================================================================
 void LayerManagerWidget::delLayer(GlScene*, const string&, GlLayer*){
@@ -166,6 +167,8 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
   if(column==1) {
     if(!item->parent()) {
       //Layer
+      if(!observedGraphWidget->getScene()->getLayer(item->data(0,0).toString().toStdString()))
+	return;
       if(item->checkState(column)==Qt::Unchecked){
 	observedGraphWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(false);
       }else{
@@ -175,6 +178,8 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
       QList<string> hierarchie;
       buildHierarchie(item,hierarchie);
       GlLayer* layer=observedGraphWidget->getScene()->getLayer(hierarchie[0]);
+      if(!layer)
+	return;
       GlSimpleEntity* entity=layer->getComposite();
       bool isGraphComposite=false;
       for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
@@ -257,6 +262,5 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
 void LayerManagerWidget::buildHierarchie(QTreeWidgetItem *item,QList<string>& hierarchie) {
   if(item->parent())
     buildHierarchie(item->parent(),hierarchie);
-
   hierarchie.push_back(item->data(0,0).toString().toStdString());
 }

@@ -29,6 +29,8 @@ namespace tlp {
   
   public:
     
+    GlMultiPolygon(bool filled=true,bool outlined=true,const Color& fillColor=Color(0,0,0,255),const Color& outlineColor=Color(0,0,0,255));
+
     void addPolygon(const std::vector<Coord> &poly);
 
     virtual void draw(float lod);
@@ -36,6 +38,12 @@ namespace tlp {
   protected:
     
     std::vector<GlPolygon> polygons;
+    
+    bool filled;
+    bool outlined;
+    
+    Color fillColor;
+    Color outlineColor;
 
   };
   

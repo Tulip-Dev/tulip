@@ -18,16 +18,18 @@
 #include <tulip/tulipconf.h>
 
 #include <tulip/Coord.h>
+#include <tulip/Color.h>
 
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
 
-  class TLP_GL_SCOPE GlSphere : public GlSimpleEntity{ // : public ObservableScene {
+  class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
   
   public:
      
-    GlSphere(const Coord &position,float radius);
+    GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
+    GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
 
     virtual void draw(float lod);
 
@@ -35,6 +37,12 @@ namespace tlp {
     
     Coord position;
     float radius;
+    Color color;
+    std::string textureFile;
+    int alpha;
+    float rotX;
+    float rotY;
+    float rotZ;
 
   };
   

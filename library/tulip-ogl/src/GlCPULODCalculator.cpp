@@ -51,42 +51,7 @@ namespace tlp {
       Matrix<float,4> modelviewMatrix;
       Matrix<float,4> projectionMatrix;
 
-      glMatrixMode(GL_PROJECTION);
-      glPushMatrix();
-      glLoadIdentity();
-    
-      if(camera->is3D()) { 
-      float ratio = double(viewport[2])/double(viewport[3]);
-      if(camera->scene->isViewOrtho()) {
-	if (ratio>1)
-	  glOrtho(-ratio*camera->getSceneRadius()/2.0/camera->getZoomFactor(), ratio*camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		  -camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		  -10000, 10000);
-	else 
-	  glOrtho(-camera->getSceneRadius()/2.0/camera->getZoomFactor(), camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		  1./ratio * - camera->getSceneRadius()/2.0/camera->getZoomFactor(), 1./ratio * camera->getSceneRadius()/2.0/camera->getZoomFactor(),
-		  -10000, 10000);
-      }else{
-	glFrustum(ratio*-1.0/camera->getZoomFactor(), ratio*1.0/camera->getZoomFactor(), 
-		  -1.0/camera->getZoomFactor(), 1.0/camera->getZoomFactor(), 1.0 , 
-		  camera->getSceneRadius()*2.);
-      }
-      }else{
-	gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
-      }
-      
-      glMatrixMode(GL_MODELVIEW);
-      glPushMatrix();
-      glLoadIdentity();
-      gluLookAt(camera->getEyes()[0], camera->getEyes()[1], camera->getEyes()[2], 
-		camera->getCenter()[0], camera->getCenter()[1], camera->getCenter()[2],
-		camera->getUp()[0], camera->getUp()[1], camera->getUp()[2]); 
-      
-      glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
-      glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-
-      /*cout << "mdv : " << modelviewMatrix << endl;
-	cout << "proj : " << projectionMatrix << endl;*/
+      camera->getProjAndMVMatrix(viewport,projectionMatrix,modelviewMatrix);
 
       float lod;
 
@@ -106,9 +71,6 @@ namespace tlp {
 	if(lod>0)
 	  (*itCE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
-      glPopMatrix();
-      glMatrixMode(GL_PROJECTION);
-      glPopMatrix();
       glMatrixMode(GL_MODELVIEW);
     }
   }

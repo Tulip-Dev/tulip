@@ -75,5 +75,6 @@ libtulip_ogl_la_SOURCES = \
 	GlNode.cpp \
 	GlMetaNode.cpp \
 	GlEdge.cpp \
-	GlDisplayListManager.cpp
+	GlDisplayListManager.cpp \
+	GlSceneObserver.cpp
 

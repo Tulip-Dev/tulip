@@ -17,14 +17,14 @@
 
 #include <tulip/tulipconf.h>
 
-//#include "tulip/ObservableScene.h"
+#include "tulip/GlSceneObserver.h"
 #include "tulip/GlLayer.h"
 #include "tulip/GlGraphComposite.h"
 #include "tulip/GlSelectSceneVisitor.h"
 
 namespace tlp {
 
-  class TLP_GL_SCOPE GlScene { // : public ObservableScene {
+  class TLP_GL_SCOPE GlScene : public GlObservableScene {
   
   public:
      
@@ -34,7 +34,7 @@ namespace tlp {
 
     void draw();
     
-    void addLayer(const std::string &name,GlLayer *layer);
+    void addLayer(GlLayer *layer);
 
     void centerScene();
     void zoomXY(int step, const int x, const int y);

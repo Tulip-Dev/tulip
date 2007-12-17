@@ -111,6 +111,7 @@ namespace tlp {
       }
       for(unsigned int i=0; i < _points.size(); ++i) {
 	if (i < _fillColors.size()) {
+	  setMaterial(_fillColors[i]);
 	  glColor4ubv((unsigned char *)&_fillColors[i]);
 	}
 	glVertex3fv((float *)&newPoints[i]);
@@ -122,6 +123,7 @@ namespace tlp {
       glBegin(GL_LINE_LOOP);
       for(unsigned int i=0; i < _points.size(); ++i) {
 	if (i < _outlineColors.size()) {
+	  setMaterial(_outlineColors[i]);
 	  glColor4ubv((unsigned char *)&_outlineColors[i]);
 	}
 	glVertex3fv((float *)&newPoints[i]);

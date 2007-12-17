@@ -30,21 +30,15 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _metaNodesLabelStencil(0xFFFF),
   _FontsType(0),
   _labelsBorder(2),
-  //_backgroundColor(255,255,255),
   _layoutName("viewLayout") {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
-  /*_viewport[0] = 0;
-  _viewport[1] = 0;
-  _viewport[2] = 640;
-  _viewport[3] = 480;*/
+  _feedbackRender=false;
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
   TRACE_EXEC();
   DataSet data;
-  //Color
-  //data.set("backgroundColor", _backgroundColor);
   //bool
   data.set("arrow", _viewArrow);
   data.set("nodeLabel", _viewNodeLabel);
@@ -60,12 +54,6 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("fontType", _FontsType);
   //int
   //data.set("SupergraphId", _graph->getId());
-  //Coord
-  /*data.set("cameraEyes", _camera.eyes);
-  data.set("cameraCenter", _camera.center);
-  data.set("cameraUp", _camera.up);
-  data.set("cameraZoomFactor", _camera.zoomFactor);
-  data.set("distCam", _camera.sceneRadius);*/
   return data;
 }
 
@@ -82,9 +70,6 @@ static Graph *findGraphById(Graph *sg, const int id) {
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   TRACE_EXEC();
-  Color color;
-  /*if (data.get<Color>("backgroundColor", color)) 
-    _backgroundColor = color;*/
   bool b;
   if (data.get<bool>("arrow", b))
     setViewArrow(b);
@@ -109,40 +94,7 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   unsigned int ui;
   if (data.get<unsigned int>("fontType", ui)) 
     _FontsType = ui;
-  //restore all view parameters or none
-  /*Coord ce,cc,cu;
-  double czf;
-  double dc;
-  if (
-      data.get<Coord>("cameraEyes", ce)
-      && data.get<Coord>("cameraCenter", cc)
-      && data.get<Coord>("cameraUp", cu)
-      && data.get<double>("cameraZoomFactor", czf)
-      && data.get<double>("distCam", dc))
-    {
-      _camera.eyes = ce;
-      _camera.center = cc;
-      _camera.up = cu;
-      _camera.zoomFactor  = czf;
-      _camera.sceneRadius = dc;
-      }*/
 }
-//====================================================
-/*tlp::Graph* GlGraphRenderingParameters::getGraph() const {
-  return _graph;
-  }*/
-//====================================================
-/*void GlGraphRenderingParameters::setGraph(tlp::Graph *graph) {
-  _graph = graph;
-  }*/
-//====================================================
-/*Camera GlGraphRenderingParameters::getCamera() const {
-  return _camera;
-  }*/
-//====================================================
-/*void GlGraphRenderingParameters::setCamera(const Camera &cam) {
-  _camera = cam;
-  }*/
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
   return _labelsBorder;
@@ -298,27 +250,6 @@ void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b){
   _edgeSizeInterpolate=b;
 }
 //====================================================
-/*Color GlGraphRenderingParameters::getBackgroundColor() const {
-  return _backgroundColor;
-}
-void GlGraphRenderingParameters::setBackgroundColor(const Color &color){
-  _backgroundColor = color;
-  }*/
-//====================================================
-/*void GlGraphRenderingParameters::setViewport(const unsigned x, const unsigned y, const unsigned int width, const unsigned int height) {
-  _viewport[0] = x;
-  _viewport[1] = y;
-  _viewport[2] = width;
-  _viewport[3] = height;
-}
-void GlGraphRenderingParameters::setViewport(const Vector<int, 4>&viewport) {
-  _viewport = viewport;
-}
-
-Vector<int, 4> GlGraphRenderingParameters::getViewport() const {
-  return _viewport;
-  } */ 
-//====================================================
 void GlGraphRenderingParameters::setInputLayout(const std::string &layoutName) {
   _layoutName = layoutName;
 }
@@ -326,3 +257,10 @@ std::string GlGraphRenderingParameters::getInputLayout() const {
   return _layoutName;
 }
 //====================================================
+void GlGraphRenderingParameters::setFeedbackRender(bool feedback){
+  _feedbackRender=feedback;
+}
+//====================================================
+bool GlGraphRenderingParameters::getFeedbackRender(){
+  return _feedbackRender;
+}

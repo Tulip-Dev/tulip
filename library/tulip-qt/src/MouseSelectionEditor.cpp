@@ -622,6 +622,10 @@ bool MouseSelectionEditor::computeFFD(GlGraphWidget *glGraphWidget) {
   positions[5] = Coord(-x,  y, ffdCenter[2]) + tmpCenter; // Bottom r
   positions[6] = Coord( 0,  y, ffdCenter[2]) + tmpCenter; // Bottom
   positions[7] = Coord( x,  y, ffdCenter[2]) + tmpCenter; // Bottom l
+
+  for(int i=0;i<8;i++){
+    positions[i][2]=0;
+  }
   
   //Parameters of the rectangle that shows the selected area.
   centerRect.setTopLeftPos(positions[1]);

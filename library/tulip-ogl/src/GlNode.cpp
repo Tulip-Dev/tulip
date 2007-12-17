@@ -60,13 +60,15 @@ namespace tlp {
     Color strokeColor = data->elementBorderColor->getNodeValue(n);
     Color textColor = data->elementLabelColor->getNodeValue(n);
 
-    /*glPassThrough(TLP_FB_COLOR_INFO);
-    glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
-    glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
-    glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
+    if(data->parameters->getFeedbackRender()) {
+      glPassThrough(TLP_FB_COLOR_INFO);
+      glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
+      glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
+      glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
 
-    glPassThrough(TLP_FB_BEGIN_NODE);
-    glPassThrough(id); //id of the node for the feed back mode */
+      glPassThrough(TLP_FB_BEGIN_NODE);
+      glPassThrough(id); //id of the node for the feed back mode 
+    }
   
     if (lod < 20.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
@@ -116,7 +118,9 @@ namespace tlp {
       }
       glPopMatrix();
     }
-    //glPassThrough(TLP_FB_END_NODE);
+    if(data->parameters->getFeedbackRender()) {
+      glPassThrough(TLP_FB_END_NODE);
+    }
   }
 
   void GlNode::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {

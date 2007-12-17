@@ -60,7 +60,6 @@ namespace tlp {
       GlDisplayListManager::getInst().endNewDisplayList();
     }
   
-    //assert(glIsList(LList));
     setMaterial(glGraphInputData->elementColor->getNodeValue(n));
     string texFile = glGraphInputData->elementTexture->getNodeValue(n);
     if (texFile != "") {
@@ -68,7 +67,6 @@ namespace tlp {
       if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
 	setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
     }
-    //glCallList(LList);
     GlDisplayListManager::getInst().callDisplayList("CubeOutLined_cube");
     ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
     DoubleProperty *borderWidth = 0;
@@ -86,8 +84,6 @@ namespace tlp {
     glDisable(GL_LIGHTING);
     glColor3ub(c[0],c[1],c[2]);
     GlDisplayListManager::getInst().callDisplayList("CubeOutLined_outline");
-    //glCallList(LList + 1);  
-    //drawCubeSimple(GL_LINE_LOOP);
     glEnable(GL_LIGHTING);
   }
 

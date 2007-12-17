@@ -11,6 +11,8 @@
 #ifndef Tulip_GLSIMPLEENTITY_H
 #define Tulip_GLSIMPLEENTITY_H
 
+#include <vector>
+
 #include "tulip/GlEntity.h"
 #include "tulip/GlSceneVisitor.h"
 
@@ -35,12 +37,16 @@ namespace tlp {
 
     virtual BoundingBox getBoundingBox() {return boundingBox;}
 
+    void addParent(GlLayer *layer) {parents.push_back(layer);}
+
   protected:
     
     bool visible;
     int stencil;
-    
+
     BoundingBox boundingBox;
+
+    std::vector<GlLayer*> parents;
 
   };
   

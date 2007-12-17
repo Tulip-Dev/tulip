@@ -48,6 +48,7 @@ namespace tlp {
     }
 
   protected:
+
     std::map<std::string, GlSimpleEntity*> elements;
     std::list<GlSimpleEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
   };

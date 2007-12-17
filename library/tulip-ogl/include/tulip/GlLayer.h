@@ -28,11 +28,13 @@ namespace tlp {
   
   public:
     
-    GlLayer();
+    GlLayer(const std::string& name);
 
     void setScene(GlScene *scene) {this->scene=scene;camera.setScene(scene);}
     GlScene *getScene() {return scene;}
     
+    std::string getName() {return name;}
+
     void setCamera(Camera *camera) {this->camera=*camera;}
     void setCamera(const Camera& camera) {this->camera=camera;} 
     Camera *getCamera() {return &camera;}
@@ -42,11 +44,11 @@ namespace tlp {
     void setStencil(bool stencil) {this->stencil=stencil;}
     bool stencilTest() {return stencil;}
 
-    void addGlEntity(GlSimpleEntity *entity,const std::string& name) {composite.addGlEntity(entity,name);}
-    void deleteGlEntity(const std::string &key) {composite.deleteGlEntity(key);}
-    void deleteGlEntity(GlSimpleEntity *entity) {composite.deleteGlEntity(entity);}
-    GlSimpleEntity* findGlEntity(const std::string &key) {return composite.findGlEntity(key);}
-    std::map<std::string, GlSimpleEntity*> *getDisplays() {return composite.getDisplays();}
+    void addGlEntity(GlSimpleEntity *entity,const std::string& name);
+    void deleteGlEntity(const std::string &key);
+    void deleteGlEntity(GlSimpleEntity *entity);
+    GlSimpleEntity* findGlEntity(const std::string &key);
+    std::map<std::string, GlSimpleEntity*> *getDisplays();
 
     GlComposite *getComposite() {return &composite;}
 
@@ -55,6 +57,8 @@ namespace tlp {
     void clear() {composite.clear();}
 
   private:
+
+    std::string name;
 
     bool visible;
     bool stencil;

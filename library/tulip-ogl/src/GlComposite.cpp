@@ -1,6 +1,9 @@
 #include <typeinfo>
 #include "tulip/GlComposite.h"
 
+#include <tulip/GlLayer.h>
+#include <tulip/GlScene.h>
+
 using namespace tlp;
 using namespace std;
 
@@ -25,6 +28,18 @@ void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
   if(elements.find(key)==elements.end()) {
     elements[key] = entity;
     _sortedElements.push_back(entity);
+    
+    for(vector<GlLayer*>::iterator it=parents.begin();it!=parents.end();++it) {
+      entity->addParent(*it);
+      if((*it)->getScene())
+	(*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+    }
+  }else{
+    if(elements[key]!=entity) {
+      _sortedElements.remove(elements[key]);
+      _sortedElements.push_back(entity);
+      elements[key] = entity;
+    } 
   }
 }
 //============================================================
