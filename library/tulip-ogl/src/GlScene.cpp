@@ -479,7 +479,7 @@ namespace tlp {
     glFlush();
     glFinish();
     returned = glRenderMode(GL_RENDER);
-    cout << returned << endl;
+    //cout << returned << endl;
     GlEPSFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);

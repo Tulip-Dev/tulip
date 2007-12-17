@@ -124,7 +124,7 @@ namespace tlp {
       pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor);
       pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor);
       pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor);
-      cout << pos[0] << ":" << pos[1] << ":" << pos[2] << endl;
+      //cout << pos[0] << ":" << pos[1] << ":" << pos[2] << endl;
       /*for(int i=0;i<3;i++) 
 	pos[i] += (eyes[i]-center[i])/zoomFactor;*/
       pos[3]=1;

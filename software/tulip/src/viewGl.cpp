@@ -401,7 +401,7 @@ void viewGl::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
   layerWidget->addLayer(scene,name,layer);
 }
 void viewGl::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
-  cout << "modify layer" << endl;
+  //cout << "modify layer" << endl;
   layerWidget->updateLayer(name,layer);
 }
 
@@ -1452,8 +1452,7 @@ void viewGl::group() {
   // set metanode viewColor to glWidget background color
   Color metaNodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
   metaNodeColor[3]=127;
-  graph->getProperty<ColorProperty>("viewColor")->
-    setNodeValue(metaNode,metaNodeColor);
+  graph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaNode,metaNodeColor);
   /*graph->getProperty<ColorProperty>("viewColor")->
     setNodeValue(metaNode, glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getBackgroundColor());  */
   clusterTreeWidget->update();
