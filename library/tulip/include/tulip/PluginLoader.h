@@ -6,8 +6,8 @@
 
 namespace tlp {
 
-struct PluginLoader {
-  virtual ~PluginLoader(){}
+struct TLP_SCOPE PluginLoader {
+  virtual ~PluginLoader() {}
   virtual void start(const std::string &path,const std::string &type)=0;
   virtual void numberOfFiles(int nbFiles) {}
   virtual void loading(const std::string &filename)=0;
