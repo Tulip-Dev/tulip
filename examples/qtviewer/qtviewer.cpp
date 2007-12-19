@@ -6,20 +6,22 @@
 #include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
+using namespace tlp;
 
 /*******************************************************************/
-void importGraph(const string &filename, GlGraph *render) {
+void importGraph(const string &filename, GlGraphWidget *glw) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
-  GlGraphRenderingParameters param = render->getRenderingParameters();
   if (newGraph != 0) {
-    param.setGraph(newGraph);
+    GlGraphRenderingParameters param =
+      glw->getScene()->getGlGraphComposite()->getRenderingParameters();
     DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
+    if (dataSet.get<DataSet>("displaying", glGraphData)) {
       param.setParameters(glGraphData);
+      glw->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    }
   }
-  render->setRenderingParameters(param);
 }
 /*******************************************************************/
 int main(int argc,char ** argv ){
@@ -50,7 +52,7 @@ int main(int argc,char ** argv ){
     importGraph(argv[1], &MainWin);
   }
 
-  MainWin.centerScene();
+  MainWin.getScene()->centerScene();
   MouseNKeysNavigator m;
   MainWin.pushInteractor(&m);
   return MainApp.exec();
