@@ -24,13 +24,17 @@ namespace tlp {
     elementColor = graph->getProperty<ColorProperty>("viewColor");
     elementShape = graph->getProperty<IntegerProperty>("viewShape");
     elementSize = graph->getProperty<SizeProperty>("viewSize");
-    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout() );
+    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
     elementGraph = graph->getProperty<GraphProperty>("viewMetaGraph");
     elementTexture = graph->getProperty<StringProperty>("viewTexture");
     elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
     elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
 
     GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
+  }
+
+  void GlGraphInputData::reloadLayoutProperty() {
+    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
   }
   
 }

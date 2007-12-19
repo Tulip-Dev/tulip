@@ -1902,6 +1902,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       //cam = param.getCamera();
       param.setInputLayout(name);
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
 
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
@@ -1924,6 +1925,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       param.setInputLayout("viewLayout");
       //param.setCamera(cam);
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
   }
   if (dataSet!=0) delete dataSet;

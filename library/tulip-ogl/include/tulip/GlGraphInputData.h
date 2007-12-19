@@ -39,6 +39,8 @@ namespace tlp {
     GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters);
 
     Graph* getGraph() {return graph;}
+
+    void reloadLayoutProperty();
     
   public:
 

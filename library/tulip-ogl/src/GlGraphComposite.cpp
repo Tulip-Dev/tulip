@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <tulip/GraphProperty.h>
+#include <tulip/ForEach.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlDisplayListManager.h"
@@ -13,36 +14,73 @@ namespace tlp {
 
   GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters) {
     graph->addObserver(this);
-    Iterator<node>* drawNodesIterator;
-    Iterator<edge>* drawEdgesIterator;
-    if (parameters.isElementOrdered()) {
-      cout << "Error GlGraphComposite ordered list" << endl;
-      assert(false);
-    }
-    else {
-      drawNodesIterator = graph->getNodes();
-      drawEdgesIterator = graph->getEdges();
-    }
+    
+    buildLists();
+  }
+  void GlGraphComposite::buildLists() {
+    if(!nodes.empty())
+      nodes.clear();
+    if(!metaNodes.empty())
+      metaNodes.clear();
+    if(!edges.empty())
+      edges.clear();
 
-    if (!drawNodesIterator->hasNext() || graph->numberOfNodes()==0) return;
-
-    unsigned int number = graph->numberOfNodes(); 
-
-    while ((drawNodesIterator->hasNext()) && (number >0)) {
-      --number;
-      unsigned int id=drawNodesIterator->next().id;
-      if(inputData.elementGraph->getNodeValue(node(id)) == 0){
-	nodes.push_back(GlNode(id));
-      }else{
-	metaNodes.push_back(GlMetaNode(id));
+    Graph *graph=inputData.getGraph();
+    if (!parameters.isElementOrdered()) {
+      cout << "build list ordered" << endl;
+      list<node> orderedNode;
+      list<edge> orderedEdge;
+      DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
+      node n;
+      forEach(n, graph->getNodes())
+	orderedNode.push_back(n);
+      LessThanNode comp;
+      comp.metric=metric;
+      orderedNode.sort(comp);
+      edge e;
+      forEach(e, graph->getEdges()) 
+	orderedEdge.push_back(e);
+      LessThanEdge comp2;
+      comp2.metric = metric;
+      comp2.sp = graph;
+      orderedEdge.sort(comp2);
+      
+      for(list<node>::iterator itN=orderedNode.begin();itN!=orderedNode.end();++itN) {
+	if(inputData.elementGraph->getNodeValue(*itN) == 0){
+	  nodes.push_back(GlNode((*itN).id));
+	}else{
+	  metaNodes.push_back(GlMetaNode((*itN).id));
+	}
       }
-    }
-
-    number = graph->numberOfEdges(); 
-
-    while ((drawEdgesIterator->hasNext()) && (number >0)) {
-      --number;
-      edges.push_back(GlEdge(drawEdgesIterator->next().id));
+      
+      for(list<edge>::iterator itE=orderedEdge.begin();itE!=orderedEdge.end();++itE) {
+	edges.push_back(GlEdge((*itE).id));
+      }
+      
+    } else {
+      Iterator<node>* drawNodesIterator = graph->getNodes();
+      Iterator<edge>* drawEdgesIterator = graph->getEdges();
+      
+      if (!drawNodesIterator->hasNext() || graph->numberOfNodes()==0) return;
+      
+      unsigned int number = graph->numberOfNodes(); 
+      
+      while ((drawNodesIterator->hasNext()) && (number >0)) {
+	--number;
+	unsigned int id=drawNodesIterator->next().id;
+	if(inputData.elementGraph->getNodeValue(node(id)) == 0){
+	  nodes.push_back(GlNode(id));
+	}else{
+	  metaNodes.push_back(GlMetaNode(id));
+	}
+      }
+      
+      number = graph->numberOfEdges(); 
+      
+      while ((drawEdgesIterator->hasNext()) && (number >0)) {
+	--number;
+	edges.push_back(GlEdge(drawEdgesIterator->next().id));
+      }
     }
   }
   //===================================================================
@@ -51,6 +89,10 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
+    if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
+      buildLists();
+    }
+
     parameters = parameter;
   }
   //===================================================================
@@ -59,7 +101,10 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::addNode(Graph *graph,const node n) {
-    nodes.push_back(GlNode(n.id)); 
+    if(inputData.elementGraph->getNodeValue(node(n.id)))
+      nodes.push_back(GlNode(n.id)); 
+    else
+      metaNodes.push_back(GlMetaNode(n.id));
   }
   //===================================================================
   void GlGraphComposite::addEdge(Graph *graph,const edge e) {

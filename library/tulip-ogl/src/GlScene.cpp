@@ -290,7 +290,6 @@ namespace tlp {
   }
 
   void GlScene::zoom(int step) {
-
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D()) {
 	(*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1, step));

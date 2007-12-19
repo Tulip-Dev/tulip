@@ -15,6 +15,7 @@
 #include "tulip/GlMetaNode.h"
 
 namespace tlp {
+
   class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver {
 
   
@@ -23,6 +24,10 @@ namespace tlp {
     GlGraphComposite(Graph* graph);
     ~GlGraphComposite() {inputData.graph->removeObserver(this);}
 
+    /**
+     * Build list of Nodes, Edges and MetaNodes
+     */
+    void buildLists();
     /**
      * Return the rendering parameters used for rendering
      */

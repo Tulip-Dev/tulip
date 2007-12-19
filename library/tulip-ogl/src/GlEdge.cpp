@@ -33,6 +33,7 @@ namespace tlp {
   BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
     edge e=edge(id);
     BoundingBox bb;
+
     const node source = data->graph->source(e);
     const node target = data->graph->target(e);
     Coord srcCoord = data->elementLayout->getNodeValue(source);
@@ -40,11 +41,35 @@ namespace tlp {
 
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
 
-    /*vector<Coord> tmp =
-      tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcCoord, tgtCoord);
+    if(bends.size()!=0) {
 
+      const Size &srcSize  = data->elementSize->getNodeValue(source);
+      const Size &tgtSize  = data->elementSize->getNodeValue(target);
+      double srcRot = data->elementRotation->getNodeValue(source);
+      double tgtRot = data->elementRotation->getNodeValue(target);
+      
+      // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
+      Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
+      
+      int srcGlyphId = data->elementShape->getNodeValue(source);
+      Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
+      tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+      srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
+      
+      int tgtGlyphId = 1; //cube outlined
+      if (data->elementGraph->getNodeValue(target)==0)
+	tgtGlyphId = data->elementShape->getNodeValue(target);
+      Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
+      //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
+      tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+      tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
+      
+      vector<Coord> tmp =
+	tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor, tgtAnchor);
+      
       for(vector<Coord>::iterator it=tmp.begin();it!=tmp.end();++it)
-      bb.check(*it);*/
+	bb.check(*it);
+    }
 
     bb.check(srcCoord);
     bb.check(tgtCoord);
@@ -93,11 +118,13 @@ namespace tlp {
 
     if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
       return; //two nodes very closed
-    /*if (nbBends == 0 && 
-    	(segmentVisible(srcCoord, tgtCoord, data->camera->transformMatrix, data->camera->getViewport()) < 15.)) {
+    Matrix<float,4> transformMatrix;
+    camera->getTransformMatrix(transformMatrix);
+    if (nbBends == 0 && 
+    	(segmentVisible(srcCoord, tgtCoord, transformMatrix, camera->getViewport()) < 15.)) {
     //cerr << ".";
-    return;
-    }*/
+      return;
+    }
     //take source and target information for edge clipping
     const Size &srcSize  = data->elementSize->getNodeValue(source);
     const Size &tgtSize  = data->elementSize->getNodeValue(target);

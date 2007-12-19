@@ -23,8 +23,27 @@
 #include <tulip/Color.h>
 #include <tulip/Camera.h>
 #include <tulip/Reflect.h>
+#include <tulip/DoubleProperty.h>
 
 namespace tlp {
+  
+  class TLP_GL_SCOPE LessThanNode {
+  public:
+    DoubleProperty *metric;
+    bool operator() (node n1,node n2)  {
+      return (metric->getNodeValue(n1) > metric->getNodeValue(n2));
+    } 
+  };
+  //====================================================
+  class TLP_GL_SCOPE LessThanEdge {
+  public:
+    DoubleProperty *metric;
+    Graph *sp;
+    bool operator() (edge e1,edge e2) {
+      return (metric->getNodeValue(sp->target(e1))>metric->getNodeValue(sp->target(e2)));
+    } 
+  };
+
   /**
    * That class defines all the paremters used by the GlGraph class
    * during the rendering of a graph.

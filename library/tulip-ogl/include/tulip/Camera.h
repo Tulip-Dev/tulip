@@ -49,6 +49,7 @@ namespace tlp {
 
     void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) { modelviewMatrix=this->modelviewMatrix;}
     void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) { projectionMatrix=this->projectionMatrix;}
+    void getTransformMatrix(Matrix<float, 4> &transformMatrix) { transformMatrix=this->transformMatrix;} 
     void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix);
 
     void setSceneRadius(double sceneRadius) {this->sceneRadius=sceneRadius;matrixCoherent=false;}
