@@ -138,7 +138,8 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       return true;
     case NONE_OP:
       cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
-      break;
+    default:
+      return false;
     }
   }
   return false;
@@ -148,7 +149,9 @@ bool MouseEdgeBendEditor::compute(GlGraphWidget *glGraphWidget) {
   if (computeBendsCircles(glGraphWidget)) {
     glGraphWidget->getScene()->getSelectionLayer()->addGlEntity(&circleString,"EdgeBendEditorComposite");
     this->glGraphWidget=glGraphWidget;
+    return true;
   }
+  return false;
 }
 //========================================================================================
 bool MouseEdgeBendEditor::draw(GlGraphWidget *glGraphWidget) {
@@ -337,8 +340,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
   select.clear();
   edge ite;
   circleString.reset(false);
-  int W = glGraphWidget->width();
-  int H = glGraphWidget->height();
+  //int W = glGraphWidget->width();
+  //int H = glGraphWidget->height();
   Iterator<edge> *itE=_graph->getEdges();
   while (itE->hasNext()) {
     ite=itE->next();
@@ -358,11 +361,10 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
 	circles.push_back(basicCircle);
 	CoordIt++;
       }
-      //delete CoordIt;
     }
   }
   delete itE;
-  for(int i=0;i<circles.size();i++)
+  for(unsigned int i=0;i<circles.size();i++)
     circleString.addGlEntity(&circles[i], IntegerType::toString(i));
   return hasSelection;
 }

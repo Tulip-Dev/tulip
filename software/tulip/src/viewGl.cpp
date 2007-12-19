@@ -181,6 +181,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewDock->show();
 
   //Create layer widget
+  /*
   layerDock = new QDockWindow(this,"Layer");
   layerDock->setCaption("Layer Manager");
   layerDock->setCloseMode(QDockWindow::Always);
@@ -188,8 +189,9 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   layerWidget = new LayerManagerWidget(layerDock);
   layerDock->boxLayout()->add(layerWidget);
   this->addDockWindow(layerDock,"Layer", Qt::DockLeft);
-  //layerWidget->show(); 
-  //layerDock->show();
+  layerWidget->show(); 
+  layerDock->show();
+  */
 
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
@@ -1908,7 +1910,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
     if (!resultBool) {
-      QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
+      QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
     }
     else 
       switch(myProgress.state()){
