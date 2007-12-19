@@ -8,7 +8,6 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
-qtversion=@QT_VERSION@
 libversion=
 libextension=so
 plugincxxflags="-fPIC -DPIC"
@@ -89,7 +88,7 @@ while test $# -gt 0; do
       echo @GL_LDFLAGS@ @LIB_GL@
       ;;
     --libs)
-      echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt${qtversion}${libversion}
+      echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt4${libversion}
       ;;
     --plugincxxflags)
       echo ${plugincxxflags}
