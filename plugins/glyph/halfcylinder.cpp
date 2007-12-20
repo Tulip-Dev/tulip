@@ -68,7 +68,7 @@ void HalfCylinder::draw(node n) {
       setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
 
-  GlDisplayListManager::getInst().callDisplayList("HalfCylinder_halfcylinder");
+  GlDisplayListManager::getInst().callDisplayList("Halfcylinder_halfcylinder");
   GlTextureManager::getInst().desactivateTexture();
 }
 //=================================================================================================
