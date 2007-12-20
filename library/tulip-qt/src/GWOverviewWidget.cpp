@@ -42,16 +42,7 @@ public:
       buttonClose->setFocus();
   }
 
-  void updateEdgeOptions() {
-    bool visible = edgeVisible->isChecked();
-    arrows->setEnabled(visible);
-    edge3D->setEnabled(visible);
-    colorInterpolation->setEnabled(visible);
-    sizeInterpolation->setEnabled(visible);
-  }
-
   void updateView() {
-    updateEdgeOptions();
     overview->updateView();
   }
 
@@ -96,6 +87,10 @@ GWOverviewWidget::~GWOverviewWidget() {
   //delete _view;
   delete _glDraw;
   delete paramDialog;
+}
+//=============================================================================
+GlGraphWidget *GWOverviewWidget::getObservedView() {
+  return _observedView;
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
@@ -156,7 +151,7 @@ void GWOverviewWidget::draw(GlGraphWidget *glG) {
     _view->getScene()->centerScene();
     _initialCamera = _view->getScene()->getCamera();   
     Camera cam = *_observedView->getScene()->getCamera();
-    cam.scene=_initialCamera->scene;
+    cam.setScene(_initialCamera->getScene());
     cam.setZoomFactor(0.5);
     cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
     cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
@@ -239,20 +234,16 @@ void GWOverviewWidget::syncFromView() {
     _synchronizing = true;
     GlGraphRenderingParameters param = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
     paramDialog->arrows->setChecked( param.isViewArrow());
-    paramDialog->edgeVisible->setChecked( param.isDisplayEdges());
-    paramDialog->elabels->setChecked( param.isViewEdgeLabel());
-    paramDialog->nlabels->setChecked( param.isViewNodeLabel());
     paramDialog->colorInterpolation->setChecked( param.isEdgeColorInterpolate());
     paramDialog->sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
     paramDialog->ordering->setChecked( param.isElementOrdered());
     paramDialog->orthogonal->setChecked(_observedView->getScene()->isViewOrtho());
-    paramDialog->mlabels->setChecked( param.isViewMetaLabel());
     paramDialog->edge3D->setChecked( param.isEdge3D());
     Color tmp = _observedView->getScene()->getBackgroundColor();
     setBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
     paramDialog->fonts->setCurrentItem(param.getFontsType());
     paramDialog->density->setValue(param.getLabelsBorder());
-    ((RenderingParametersDialog *) paramDialog)->updateEdgeOptions();
+    //((RenderingParametersDialog *) paramDialog)->updateEdgeOptions();
 
     GlGraphRenderingParameters paramView = _view->getScene()->getGlGraphComposite()->getRenderingParameters();
     //paramView.setViewOrtho( param.isViewOrtho() );
@@ -274,14 +265,10 @@ void GWOverviewWidget::updateView() {
     GlGraphRenderingParameters paramObservedViev = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
 
     paramObservedViev.setViewArrow(paramDialog->arrows->isChecked());
-    paramObservedViev.setDisplayEdges(paramDialog->edgeVisible->isChecked());
-    paramObservedViev.setViewNodeLabel(paramDialog->nlabels->isChecked());
-    paramObservedViev.setViewEdgeLabel(paramDialog->elabels->isChecked());
     paramObservedViev.setEdgeColorInterpolate(paramDialog->colorInterpolation->isChecked());
     paramObservedViev.setEdgeSizeInterpolate(paramDialog->sizeInterpolation->isChecked());
     paramObservedViev.setElementOrdered(paramDialog->ordering->isChecked());
     _observedView->getScene()->setViewOrtho(paramDialog->orthogonal->isChecked());
-    paramObservedViev.setViewMetaLabel(paramDialog->mlabels->isChecked());
     paramObservedViev.setEdge3D(paramDialog->edge3D->isChecked());
     paramObservedViev.setFontsType(paramDialog->fonts->currentItem());
     QColor tmp = paramDialog->background->paletteBackgroundColor();

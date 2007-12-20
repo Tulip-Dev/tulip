@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>360</width>
+            <width>399</width>
             <height>329</height>
         </rect>
     </property>
@@ -62,14 +62,6 @@
                                         </property>
                                         <widget class="QLabel">
                                             <property name="name">
-                                                <cstring>labelVisibilityText</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Visibility: </string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QLabel">
-                                            <property name="name">
                                                 <cstring>fontType</cstring>
                                             </property>
                                             <property name="text">
@@ -110,17 +102,6 @@
                                                         <property name="name">
                                                             <cstring>unnamed</cstring>
                                                         </property>
-                                                        <widget class="QCheckBox">
-                                                            <property name="name">
-                                                                <cstring>nlabels</cstring>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>nodes</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>show/hide the label of nodes</string>
-                                                            </property>
-                                                        </widget>
                                                         <widget class="QComboBox">
                                                             <item>
                                                                 <property name="text">
@@ -162,38 +143,6 @@
                                                         <property name="name">
                                                             <cstring>unnamed</cstring>
                                                         </property>
-                                                        <widget class="QLayoutWidget">
-                                                            <property name="name">
-                                                                <cstring>layout46</cstring>
-                                                            </property>
-                                                            <hbox>
-                                                                <property name="name">
-                                                                    <cstring>unnamed</cstring>
-                                                                </property>
-                                                                <widget class="QCheckBox">
-                                                                    <property name="name">
-                                                                        <cstring>elabels</cstring>
-                                                                    </property>
-                                                                    <property name="text">
-                                                                        <string>edges</string>
-                                                                    </property>
-                                                                    <property name="toolTip" stdset="0">
-                                                                        <string>show/hide the label of edges</string>
-                                                                    </property>
-                                                                </widget>
-                                                                <widget class="QCheckBox">
-                                                                    <property name="name">
-                                                                        <cstring>mlabels</cstring>
-                                                                    </property>
-                                                                    <property name="text">
-                                                                        <string>metanodes</string>
-                                                                    </property>
-                                                                    <property name="toolTip" stdset="0">
-                                                                        <string>show/hide the label of embedded nodes</string>
-                                                                    </property>
-                                                                </widget>
-                                                            </hbox>
-                                                        </widget>
                                                         <widget class="QLayoutWidget">
                                                             <property name="name">
                                                                 <cstring>layout47</cstring>
@@ -288,17 +237,6 @@
                                         <property name="name">
                                             <cstring>unnamed</cstring>
                                         </property>
-                                        <widget class="QCheckBox">
-                                            <property name="name">
-                                                <cstring>edgeVisible</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>visible</string>
-                                            </property>
-                                            <property name="toolTip" stdset="0">
-                                                <string>show/hide edges</string>
-                                            </property>
-                                        </widget>
                                         <widget class="QCheckBox">
                                             <property name="name">
                                                 <cstring>arrows</cstring>
@@ -513,30 +451,6 @@
     </connection>
     <connection>
         <sender>arrows</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>RenderingParametersDialogData</receiver>
-        <slot>updateView()</slot>
-    </connection>
-    <connection>
-        <sender>nlabels</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>RenderingParametersDialogData</receiver>
-        <slot>updateView()</slot>
-    </connection>
-    <connection>
-        <sender>elabels</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>RenderingParametersDialogData</receiver>
-        <slot>updateView()</slot>
-    </connection>
-    <connection>
-        <sender>mlabels</sender>
-        <signal>stateChanged(int)</signal>
-        <receiver>RenderingParametersDialogData</receiver>
-        <slot>updateView()</slot>
-    </connection>
-    <connection>
-        <sender>edgeVisible</sender>
         <signal>stateChanged(int)</signal>
         <receiver>RenderingParametersDialogData</receiver>
         <slot>updateView()</slot>

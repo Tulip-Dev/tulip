@@ -29,6 +29,7 @@ public:
   GWOverviewWidget(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
+  GlGraphWidget *getObservedView();
 
 public slots:
   void syncFromView();

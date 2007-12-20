@@ -26,8 +26,7 @@ namespace tlp {
       edges.clear();
 
     Graph *graph=inputData.getGraph();
-    if (!parameters.isElementOrdered()) {
-      cout << "build list ordered" << endl;
+    if (parameters.isElementOrdered()) {
       list<node> orderedNode;
       list<edge> orderedEdge;
       DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
@@ -90,10 +89,11 @@ namespace tlp {
   //===================================================================
   void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
     if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
+      parameters = parameter;
       buildLists();
+    }else{
+      parameters = parameter;
     }
-
-    parameters = parameter;
   }
   //===================================================================
   GlGraphInputData* GlGraphComposite::getInputData() {
@@ -101,7 +101,7 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::addNode(Graph *graph,const node n) {
-    if(inputData.elementGraph->getNodeValue(node(n.id)))
+    if(inputData.elementGraph->getNodeValue(node(n.id))==0)
       nodes.push_back(GlNode(n.id)); 
     else
       metaNodes.push_back(GlMetaNode(n.id));

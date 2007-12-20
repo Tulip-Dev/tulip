@@ -88,6 +88,7 @@
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlRectTextured.h>
+#include <tulip/GlLine.h>
 #include <tulip/hash_string.h>
 
 #include "TulipStatsWidget.h"
@@ -576,9 +577,8 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   GlLayer *foregroundLayer=new GlLayer("Foreground");
   foregroundLayer->setVisible(false);
 
-  Camera d2Camera(NULL,false);
-  backgroundLayer->setCamera(&d2Camera);
-  foregroundLayer->setCamera(&d2Camera);
+  backgroundLayer->set2DMode();
+  foregroundLayer->set2DMode();
   string dir=TulipLibDir;
   dir += "tlp/bitmaps/";
   GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "logotulip.jpg");
@@ -586,6 +586,11 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
 
   GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),dir + "logolabri.jpg");
   foregroundLayer->addGlEntity(labri,"labrilogo");
+
+  GlLine *line= new GlLine();
+  line->addPoint(Coord(0,0,0),Color(255,0,0,0));
+  line->addPoint(Coord(200,200,0),Color(0,255,0,255));
+  foregroundLayer->addGlEntity(line,"line");
 
   GlComposite *hulls=new GlComposite;
   hulls->setVisible(false);
