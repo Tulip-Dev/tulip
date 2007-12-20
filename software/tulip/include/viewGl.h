@@ -80,7 +80,6 @@ protected:
   LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
-  QDockWindow *layerDock;
   QDockWindow *tabWidgetDock;
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;

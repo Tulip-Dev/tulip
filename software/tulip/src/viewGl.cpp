@@ -88,7 +88,6 @@
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlRectTextured.h>
-#include <tulip/GlLine.h>
 #include <tulip/hash_string.h>
 
 #include "TulipStatsWidget.h"
@@ -182,13 +181,13 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewDock->show();
 
   //Create layer widget
-  /*
-  layerDock = new QDockWindow(this,"Layer");
+  
+  /*layerDock = new QDockWindow(this,"Layer");
   layerDock->setCaption("Layer Manager");
   layerDock->setCloseMode(QDockWindow::Always);
-  layerDock->setResizeEnabled(true);
-  layerWidget = new LayerManagerWidget(layerDock);
-  layerDock->boxLayout()->add(layerWidget);
+  layerDock->setResizeEnabled(true);*/
+  layerWidget = new LayerManagerWidget(parent);
+  /*layerDock->boxLayout()->add(layerWidget);
   this->addDockWindow(layerDock,"Layer", Qt::DockLeft);
   layerWidget->show(); 
   layerDock->show();
@@ -586,11 +585,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
 
   GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),dir + "logolabri.jpg");
   foregroundLayer->addGlEntity(labri,"labrilogo");
-
-  GlLine *line= new GlLine();
-  line->addPoint(Coord(0,0,0),Color(255,0,0,0));
-  line->addPoint(Coord(200,200,0),Color(0,255,0,255));
-  foregroundLayer->addGlEntity(line,"line");
 
   GlComposite *hulls=new GlComposite;
   hulls->setVisible(false);
