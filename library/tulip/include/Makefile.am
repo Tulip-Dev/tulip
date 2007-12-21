@@ -86,6 +86,7 @@ nobase_include_HEADERS = \
         tulip/PlanarConMap.h \
         tulip/GraphDecorator.h \
 	tulip/ForEach.h \
+	tulip/MapIterator.h \
 	tulip/BoundingBox.h
 
 nobase_nodist_include_HEADERS = tulip/TulipRelease.h
@@ -104,7 +105,6 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/SimpleVector.h \
 	tulip/IdManager.h \
 	tulip/PropertyManager.h \
-	tulip/MapIterator.h \
 	tulip/PlanarityTestImpl.h \
 	tulip/RectangleArea.h \
 	tulip/Border.h \
