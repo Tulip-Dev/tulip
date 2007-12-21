@@ -7,7 +7,7 @@
 #include <tulip/TulipPlugin.h>
 #include <tulip/Color.h>
 #include <tulip/TlpQtTools.h>
-
+#include <QtGui/qmessagebox.h>
 
 //================================================================================
 using namespace std;
@@ -79,7 +79,8 @@ public:
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
 	  if (partitions.size() > 12) {
-	    pluginProgress->setError("More than 12 different values found !!!");
+	    QMessageBox::critical(0, "Enumerated Values Mapping failure",
+				  QString("More than 12 different values found !!!"));
 	    return false;
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
@@ -100,7 +101,8 @@ public:
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
 	  if (partitions.size() > 12) {
-	    pluginProgress->setError("More than 12 different values found !!!");
+	    QMessageBox::critical(0, "Enumerated Values Mapping failure",
+				  QString("More than 12 different values found !!!"));
 	    return false;
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
@@ -121,8 +123,7 @@ public:
       stringstream sstr;
       sstr << "Color #" << i;
       string label(sstr.str());
-      sstr.seekp(0);
-      sstr << "This color will be used for elements whose value is " << (*it).c_str() << '.';
+      sstr << " will be used for elements whose value is " << (*it).c_str() << '.';
       dParams.add<Color>(label.c_str(), sstr.str().c_str(), defColors[i], true);
     }
     dParams.buildDefaultDataSet(dSet);
