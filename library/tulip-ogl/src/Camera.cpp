@@ -221,6 +221,20 @@ namespace tlp {
     glPopMatrix();
   }
 
+  void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) {
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    initProjection(viewport);
+    initModelView();
+    transformMatrix=this->transformMatrix;
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+  }
+
   Coord Camera::screenTo3DWorld(const Coord &point) {
     initProjection();
     initModelView();

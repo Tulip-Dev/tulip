@@ -181,17 +181,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   overviewDock->show();
 
   //Create layer widget
-  
-  /*layerDock = new QDockWindow(this,"Layer");
-  layerDock->setCaption("Layer Manager");
-  layerDock->setCloseMode(QDockWindow::Always);
-  layerDock->setResizeEnabled(true);*/
   layerWidget = new LayerManagerWidget(parent);
-  /*layerDock->boxLayout()->add(layerWidget);
-  this->addDockWindow(layerDock,"Layer", Qt::DockLeft);
-  layerWidget->show(); 
-  layerDock->show();
-  */
 
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
@@ -580,7 +570,7 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   foregroundLayer->set2DMode();
   string dir=TulipLibDir;
   dir += "tlp/bitmaps/";
-  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "logotulip.jpg");
+  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "tex_back.png");
   backgroundLayer->addGlEntity(background,"background");
 
   GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),dir + "logolabri.jpg");

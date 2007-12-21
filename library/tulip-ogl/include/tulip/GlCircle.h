@@ -21,8 +21,15 @@
 
 namespace tlp {
   
+  /** \brief General class used to render circles as GlEntity.
+   *
+   * This class is a generic class to render circles as GlEntity.
+   */
   class TLP_GL_SCOPE GlCircle : public GlPolygon {
   public:
+    /**
+     * Constructor 
+     */
     GlCircle(const Coord &center = Coord(0,0,0), 
 		float radius = 1., 
 		const Color &outlineColor = Color(255, 0 , 0 , 255),
@@ -31,6 +38,9 @@ namespace tlp {
 		bool outlined = true,
 		float startAngle = 0.0,
 		unsigned int segments = 10);
+    /**
+     * Accessor in writing to the center, the radius and the startAngle of the circle
+     */
     void set(const Coord &center, float radius, float startAngle);
   };
 }

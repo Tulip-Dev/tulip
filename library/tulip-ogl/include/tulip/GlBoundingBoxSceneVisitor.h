@@ -18,17 +18,35 @@
 #include "tulip/GlGraphInputData.h"
 
 namespace tlp {
-
+  /**
+   * Visitor to collect doundigBox off all GlEntities
+   * At end, boundingBox member contains the scene boundingBox
+   */
   class TLP_GL_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor{
     
   public:
     
+    /**
+     * Constructor 
+     */
     GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData){}
     
+    /**
+     * Method used for GlSimpleEntity
+     */
     virtual void visit(GlSimpleEntity *entity);
+    /**
+     * Method used for GlNodes (and GlMetaNodes)
+     */
     virtual void visit(GlNode *glNode);
+    /**
+     * Method used for GlEdges
+     */
     virtual void visit(GlEdge *glEdge);
     
+    /**
+     * Return the scene boundingBox
+     */
     BoundingBox getBoundingBox() {return boundingBox;}
     
   private:

@@ -10,6 +10,12 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
+
+  /** \brief GlSimpleEntity used to agregate other GlEntity 
+   *
+   * GlSimpleEntity used to agregate other GlEntity
+   * This class provide basic function to manage other entity
+   */
   class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 
   
@@ -17,20 +23,46 @@ namespace tlp {
     GlComposite();
     ~GlComposite();
 
+    /**
+     * Clear the composite, if deleteElems is true, composite's entities are delete
+     */
     void reset(bool deleteElems);
+    /**
+     * Add new entity with name : key
+     */
     void addGlEntity(GlSimpleEntity *entity, const std::string &key);
+    /**
+     * Delete entity with name : key
+     */
     void deleteGlEntity(const std::string &key);
+    /**
+     * Detele given entity 
+     */
     void deleteGlEntity(GlSimpleEntity *entity);
+    /**
+     * Find name of given entity
+     */
     std::string findKey(GlSimpleEntity *entity);
+    /**
+     * Find entity with name : key
+     */
     GlSimpleEntity* findGlEntity(const std::string &key);
+    /**
+     * Return map of entities in composite
+     */
     inline std::map<std::string, GlSimpleEntity*> *
       getDisplays () {
       return &elements;
     }
-    inline void clear() {elements.clear();_sortedElements.clear();}
 
-    void draw(float lod);
+    /**
+     * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
+     */
+    void draw(float lod) {}
 
+    /**
+     * Set stencil number for all composite's children
+     */
     virtual void setStencil(int stencil) {
       this->stencil=stencil;
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
@@ -38,8 +70,9 @@ namespace tlp {
       }
     }
 
-    virtual BoundingBox getBoundingBox() {return BoundingBox();} 
-
+    /**
+     * Function used to visit composite's children
+     */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
 	if((*it)->isVisible())

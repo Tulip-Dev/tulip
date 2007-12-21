@@ -148,17 +148,22 @@ namespace tlp {
     void getTransformMatrix(Matrix<float, 4> &transformMatrix) { transformMatrix=this->transformMatrix;} 
 
     /**
-     * Get the projection and the modelview matrix generated with the gived viewport
+     * Get the projection and the modelview matrix generated with the given viewport
      */
     void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix);
+    
+    /**
+     * Get the transform matrix generated with the given viewport
+     */
+    void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix);
 
     /**
-     * Return the 3D world coordinate for the gived screen point
+     * Return the 3D world coordinate for the givedn screen point
      */
     Coord screenTo3DWorld(const Coord &point);
     
     /**
-     * Return the screen position for the gived 3D coordinate
+     * Return the screen position for the given 3D coordinate
      */
     Coord worldTo2DScreen(const Coord &obj);
 

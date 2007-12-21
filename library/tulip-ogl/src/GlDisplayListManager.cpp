@@ -42,8 +42,9 @@ namespace tlp
   //====================================================================
   bool GlDisplayListManager::callDisplayList(const std::string& name) {
     map<string,GLuint>::iterator it=displayListMap[currentContext].find(name);
-    if(it==displayListMap[currentContext].end()) 
-      return false;
+    if(it==displayListMap[currentContext].end()){
+      assert(false);
+    }
     assert(glIsList((*it).second));
     glCallList((*it).second);
     return true;

@@ -42,6 +42,24 @@ namespace tlp {
       }
     }
 
+    void getCompleteBB(Coord* bb) const{
+      bb[0]=first;
+      bb[1]=first;
+      bb[1][0]=second[0];
+      bb[2]=bb[1];
+      bb[2][1]=second[1];
+      bb[3]=first;
+      bb[3][1]=second[1];
+      bb[4]=bb[0];
+      bb[4][2]=second[2];
+      bb[5]=bb[1];
+      bb[5][2]=second[2];
+      bb[6]=bb[2];
+      bb[6][2]=second[2];
+      bb[7]=bb[3];
+      bb[7][2]=second[2];
+    } 
+
     bool isValid;
   };
   

@@ -119,7 +119,7 @@ namespace tlp {
     /**
      * Remove all entities of the layer
      */
-    void clear() {composite.clear();}
+    void clear() {composite.reset(false);}
 
   private:
 

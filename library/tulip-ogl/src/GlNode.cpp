@@ -70,7 +70,7 @@ namespace tlp {
       glPassThrough(id); //id of the node for the feed back mode 
     }
   
-    if (lod < 20.0) { //less than four pixel on screen, we use points instead of glyphs
+    if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
       glDisable(GL_LIGHTING);
       const Color &nodeColor = data->elementColor->getNodeValue(n);
