@@ -109,6 +109,7 @@ namespace {
     void* value;
     QLabel* label; // Label widget
     QWidgetA wA;   // Input widgets
+    vector<int> offY;
     QWidget* opt;
     string helpText;
   };
@@ -422,6 +423,8 @@ namespace {
 	ip.label->installEventFilter( this );
 	ip.label->setMouseTracking( true );
 	ip.opt	    = 0;
+	// default offset
+	ip.offY.push_back(4);
 
 	// bool
 	if(		ip.typeName == TN(bool) ) {
@@ -430,6 +433,8 @@ namespace {
 	  size.setHeight(size.height() + 5);
 	  cb->resize(size);
 	  ip.wA.push_back( cb );
+	  // no offset
+	  ip.offY[ip.offY.size() - 1] = 0;
 	  if( inSet ) {
 	    bool isOn;
 	    if( inSet->get
@@ -503,6 +508,8 @@ namespace {
 	    QLineEdit * le = new QLineEdit( "", this );
 	    le->resize( le->width()*3, le->height() );
 	    ip.wA.push_back( le );
+	    // no offset
+	    ip.offY[ip.offY.size() - 1] = 0;
 	    if( inSet ) {
 	      string v;
 	      if( inSet->get
@@ -515,6 +522,8 @@ namespace {
 	      opt->adjustSize();
 	      opt->resize( opt->width(), le->height() );
 	      ip.opt = opt;
+	      // offset
+	      ip.offY.push_back(0);
 	      opt->installEventFilter( this );
 	      ip.wA.push_back( opt );
 	    }
@@ -550,13 +559,22 @@ namespace {
 	  opt->resize( opt->width(), lbR->height() );
 	  ip.wA.push_back( leR );
 	  ip.wA.push_back( lbR );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( leG );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbG );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( leB );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbB );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( leA );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbA );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( opt );
+	  // no offset
+	  ip.offY.push_back(0);
 	  ip.opt = opt;
 	  opt->installEventFilter( this );
 	  Color v(255,255,255,255);
@@ -586,11 +604,17 @@ namespace {
 	  leH->setValidator( intValidator );
 	  leD->setValidator( intValidator );
 	  ip.wA.push_back( leW );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbW );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( leH );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbH );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( leD );
+	  ip.offY.push_back(4);
 	  ip.wA.push_back( lbD );
+	  ip.offY.push_back(4);
 	  Size v(0,0,0);
 	  if( !inSet || !inSet->get
 	      (ip.name,v) )
@@ -703,7 +727,7 @@ namespace {
 	restoreSysDefB->hide();
       }
 
-      int ix = 5, iy = 5;
+      int ix = 10, iy = 5;
       int y  = iy;
       int maxx = okB->width() + cancelB->width() +
 	setDefB->width() + restoreSysDefB->width() + 4 * ix;
@@ -719,7 +743,7 @@ namespace {
 	int x = labelWidthMax+ix*2;
 	int maxHeight = 0;
 	for( uint j = 0 ; j < ip.wA.size() ; j++ ) {
-	  ip.wA[j]->move( x, y );
+	  ip.wA[j]->move( x, y + ip.offY[j]);
 	  x += ip.wA[j]->width() + ix;
 	  if (ip.wA[j]->height() > maxHeight)
 	    maxHeight = ip.wA[j]->height();
