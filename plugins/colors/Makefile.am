@@ -11,6 +11,6 @@ pluginsdir = $(libdir)/tlp
 
 libMetricColorMapping_@VERSION@_la_SOURCES = MetricMapping.cpp EnumColorValuesMapping.cpp
 
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@ @TULIP_QT_INCLUDE@ @QT_INCLUDES@
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
