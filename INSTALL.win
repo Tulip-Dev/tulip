@@ -37,7 +37,7 @@ copy the local file libxml.m4 in /usr/share/aclocal
 
 > sh gen-conf.sh
 and
-> ./configure  -prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
+> ./configure  --prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
 
 Be careful to use / as path separator instead of \ when specifying the paths
 More configuration flags are available; use ./configure --help to see them.
