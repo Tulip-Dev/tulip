@@ -84,7 +84,7 @@ StrCpy $INSTDIR "$R0\Tulip_@VERSION@\"
 Call CheckPreviousVersion
 FunctionEnd
 
-Section "-Programme (requis)"
+Section "-Programs (required)"
 ; Initialize TLP_DIR
 Push TLP_DIR
 StrCpy $R0 "$INSTDIR\lib"
@@ -100,10 +100,6 @@ FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 File @prefix@\bin\Tulip.exe
 File @prefix@\bin\tulip-config
-SectionEnd
-
-Section "-Install Plugins"
-setOutPath $INSTDIR
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
 File "@MINDIR@\bin\freetype*.dll"
@@ -119,7 +115,6 @@ File "@qt_libraries@\QtOpenGL4.dll"
 File "@qt_libraries@\QtSql4.dll"
 File "@qt_libraries@\QtXml4.dll"
 File "@qt_libraries@\QtAssistantClient4.dll"
-!endif
 File  "@qt_libraries@\..\bin\assistant.exe"
 setOutPath $INSTDIR\imageformats
 File "@qt_libraries@\..\plugins\imageformats\*.dll"
@@ -129,6 +124,9 @@ File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll"
 File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
+SectionEnd
+
+Section "-Install Plugins and Docs"
 setOutPath $INSTDIR\lib\tlp
 File @prefix@\lib\tlp\*.dll
 setOutPath $INSTDIR\lib\tlp\glyphs
