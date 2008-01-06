@@ -26,6 +26,8 @@ private:
   tlp::Graph* buildQuotientGraph(tlp::Graph *);
   void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::DoubleProperty* values;
+  bool subgraphsLayout;
+  bool quotientLayout;
 };
 /*@}*/
 #endif

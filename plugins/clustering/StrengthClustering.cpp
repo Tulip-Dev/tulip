@@ -14,7 +14,7 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-ALGORITHMPLUGIN(StrengthClustering,"Strength","David Auber","27/01/2003","Alpha","1.0");
+ALGORITHMPLUGIN(StrengthClustering, "Strength", "David Auber", "27/01/2003", "Alpha", "1.1");
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
@@ -203,6 +203,14 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped){
 Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition) {
   if (partition.size()<2) return graph;
   Graph *tmpGraph=tlp::newCloneSubGraph(graph);
+  stringstream sstr;
+  sstr << "clone of ";
+  string graphName = graph->getAttribute<string>("name");
+  if (graphName.size() == 0)
+    sstr << graph->getId();
+  else
+    sstr << graphName;
+  tmpGraph->setAttribute(string("name"), sstr.str());
   unsigned int step = partition.size() / 10;
   for (unsigned int i=0;i<partition.size();++i) {
     if (pluginProgress && step && ((i % step) == 0)) {
@@ -244,6 +252,9 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 	string errMsg;
       
 	//pluginProgress->setComment("Computing strength clustering on subgraphs...");
+	// propagate values for layout parameters
+	tmpData.set("layout subgraphs", subgraphsLayout);
+	tmpData.set("layout quotient graph", quotientLayout);
 	if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength", pluginProgress)) {
 	  return false;
 	}
@@ -251,7 +262,7 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
       }
     }
     mapGraph[sg]=tmpGr;
-    if (sg==tmpGr) {
+    if (subgraphsLayout && sg==tmpGr) {
       drawGraph(sg);
     }
   } delete itS;
@@ -261,16 +272,18 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   DataSet tmpData;
   string errMsg;
-  if (!tlp::applyAlgorithm(sg,errMsg,&tmpData,"Quotient Clustering", pluginProgress))
+  if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Quotient Clustering",
+			   pluginProgress))
     return 0;
   Graph *quotientGraph;
-  tmpData.get<Graph *>("quotientGraph",quotientGraph);
+  tmpData.get<Graph *>("quotientGraph", quotientGraph);
   vector<edge> toRemoved;
   SimpleTest::makeSimple(quotientGraph, toRemoved);
   for(vector<edge>::iterator it= toRemoved.begin(); it!=toRemoved.end(); ++it) 
     quotientGraph->delAllEdge(*it);
 
-  drawGraph(quotientGraph);
+  if (quotientLayout)
+    drawGraph(quotientGraph);
   return quotientGraph;
 }
 //==============================================================================
@@ -294,7 +307,7 @@ void StrengthClustering::adjustMetaGraphProperty(Graph *quotientGraph, map<Graph
 //==============================================================================
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
+    // metric
     HTML_HELP_OPEN()							\
     HTML_HELP_DEF( "type", "DoubleProperty" )				\
     HTML_HELP_DEF( "value", "An existing metric property" )		\
@@ -302,12 +315,30 @@ namespace {
     "This parameter defines the metric used in order to multiply strength metric computed values."\
     "If one is given the complexity will be in o(nlog(n)), o(n) neither." \
     HTML_HELP_CLOSE(),
+    // layout subgraphs
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the layout of the newly created subgraphs has to be computed or not." \
+    HTML_HELP_CLOSE(),
+    // layout quotient graph
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the layout of quotient graph has to be computed or not." \
+    HTML_HELP_CLOSE(),
   };
 }
 
 //================================================================================
 StrengthClustering::StrengthClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
+  addParameter<bool>("layout subgraphs", paramHelp[1], "true");
+  addParameter<bool>("layout quotient graph", paramHelp[2], "true");
   addDependency<Algorithm>("Quotient Clustering", "1.0");
   addDependency<DoubleAlgorithm>("Connected Component", "1.0");
   addDependency<DoubleAlgorithm>("Strength", "1.0");
@@ -325,9 +356,13 @@ bool StrengthClustering::run() {
     return false;
   
   DoubleProperty *metric;
-  bool multi = true;
-  if ( dataSet==0 || !dataSet->get("metric", metric)) {
-    multi = false;
+  bool multi = false;
+  subgraphsLayout = true;
+  quotientLayout = true;
+  if (dataSet) {
+    multi = dataSet->get("metric", metric);
+    dataSet->get("layout subgraphs", subgraphsLayout);
+    dataSet->get("layout quotient graph", quotientLayout);
   }
 
   if (multi) {
@@ -363,7 +398,8 @@ bool StrengthClustering::run() {
   vector< set<node > > tmp;
   tmp = computeNodePartition(threshold);
   if (tmp.size()==1) {
-    drawGraph(graph);
+    if (quotientLayout)
+      drawGraph(graph);
     if (dataSet!=0) {
       dataSet->set("strengthGraph",graph);
     }
@@ -389,7 +425,7 @@ bool StrengthClustering::run() {
   adjustMetaGraphProperty(quotientGraph, mapGraph);
 
   if (dataSet!=0) {
-    dataSet->set("strengthGraph",quotientGraph);
+    dataSet->set("strengthGraph", quotientGraph);
   }
   delete values;
   return true;
