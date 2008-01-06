@@ -193,7 +193,17 @@ bool QuotientClustering::run() {
 
   IntegerProperty *opProp = 0, *cardProp = 0;
   Graph *quotientGraph = tlp::newSubGraph(graph->getRoot());
-  quotientGraph->setAttribute(string("name"), string("quotient graph"));
+  stringstream sstr;
+  sstr << "quotient of ";
+  string graphName = graph->getAttribute<string>("name");
+  if (graphName.size() == 0)
+    sstr << graph->getId();
+  else {
+    sstr << graphName;
+    if (graphName == "unnamed")
+      sstr << " " << graph->getId();
+  }
+  quotientGraph->setAttribute(string("name"), sstr.str());
   GraphProperty *meta = quotientGraph->getProperty<GraphProperty>("viewMetaGraph");
   if (!oriented) {
     opProp = quotientGraph->getLocalProperty<IntegerProperty>("opposite edge");
