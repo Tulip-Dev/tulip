@@ -2,7 +2,6 @@
 
 #include <string>
 #include <GL/gl.h>
-#include <GL/glext.h>
 
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
@@ -34,18 +33,18 @@ public:
 
 protected:
   void drawCube();
-  void buildVertexList();
+  //void buildVertexList();
 
-  GLuint cubeVertexVBO;
+  /*GLuint cubeVertexVBO;
   GLuint cubeNormalVBO;
-  GLubyte indexes[24];
+  GLubyte indexes[24];*/
 };
 
 GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0);
 
 //===================================================================================
 Cube::Cube(GlyphContext *gc): Glyph(gc) {
-  buildVertexList();
+  //buildVertexList();
 }
 //=======================================================
 Cube::~Cube() {
@@ -66,7 +65,7 @@ Cube::draw(node n) {
       setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
  
-  glEnableClientState(GL_VERTEX_ARRAY);
+  /*glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
 
   glBindBuffer( GL_ARRAY_BUFFER, cubeVertexVBO );
@@ -77,8 +76,8 @@ Cube::draw(node n) {
 
   glBindBuffer( GL_ARRAY_BUFFER, 0 );
   glDisableClientState( GL_VERTEX_ARRAY );
-  glDisableClientState( GL_NORMAL_ARRAY ); // Enable Normal Arrays       
-  /*GlDisplayListManager::getInst().callDisplayList("Cube_cube");*/
+  glDisableClientState( GL_NORMAL_ARRAY ); // Enable Normal Arrays   */    
+  GlDisplayListManager::getInst().callDisplayList("Cube_cube");
   GlTextureManager::getInst().desactivateTexture();
 }
 //=======================================================
@@ -157,7 +156,7 @@ void Cube::drawCube() {
   glEnd();
 }
 
-void Cube::buildVertexList() {
+/*void Cube::buildVertexList() {
   GLfloat points[] = {
       0.5, 0.5, -0.5,   -0.5, 0.5, -0.5,  -0.5, -0.5, -0.5,   0.5, -0.5, -0.5,
       0.5, 0.5, -0.5,    0.5, 0.5, 0.5,   -0.5, 0.5, 0.5,    -0.5, 0.5, -0.5,
@@ -174,13 +173,13 @@ void Cube::buildVertexList() {
       -1.0,0.0,0.0,    -1.0,0.0,0.0,    -1.0,0.0,0.0,    -1.0,0.0,0.0,
       0.0,0.0,-1.0,   0.0,0.0,-1.0,   0.0,0.0,-1.0,   0.0,0.0,-1.0 ,
     };
-    /*  Gluint texture[] = {
+    Gluint texture[] = {
       1,0,   0,0,     0,1,    1,1,
       0,0,   1,0,     1,1,    0,1,
       1,0,   0,0,     0,1,    1,1,
       0,1,   1,1,     1,0,    0,0,
       0,1,   
-      }*/
+      }
     indexes[0] = 0;  indexes[1] = 1;  indexes[2] = 2;  indexes[3] = 3;
     indexes[4] = 4;  indexes[5] = 5;  indexes[6] = 6;  indexes[7] = 7;
     indexes[8] = 8;  indexes[9] = 9;  indexes[10] = 10;  indexes[11] = 11; //
@@ -202,5 +201,5 @@ void Cube::buildVertexList() {
     GLenum error=glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "Open GL Error : " << error << " in " << __PRETTY_FUNCTION__ << endl;
-}
+      }*/
 /*@}*/
