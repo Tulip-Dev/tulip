@@ -19,6 +19,7 @@ noinst_HEADERS = \
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
+	CopyPropertyDialog.h \
 	PropertyDialog.h\
 	PropertyDialogQt3.h \
 	QtProgress.h\
