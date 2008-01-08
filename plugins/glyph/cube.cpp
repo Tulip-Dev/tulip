@@ -2,6 +2,7 @@
 
 #include <string>
 #include <GL/gl.h>
+#include <GL/glew.h>
 
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
@@ -33,9 +34,9 @@ public:
 
 protected:
   void drawCube();
-  //void buildVertexList();
+  /*void buildVertexList();
 
-  /*GLuint cubeVertexVBO;
+  GLuint cubeVertexVBO;
   GLuint cubeNormalVBO;
   GLubyte indexes[24];*/
 };
@@ -52,10 +53,10 @@ Cube::~Cube() {
 //=======================================================
 void
 Cube::draw(node n) {
-  /*if(GlDisplayListManager::getInst().beginNewDisplayList("Cube_cube")) {
+  if(GlDisplayListManager::getInst().beginNewDisplayList("Cube_cube")) {
     drawCube();
     GlDisplayListManager::getInst().endNewDisplayList();
-    }*/
+  }
 
   setMaterial(glGraphInputData->elementColor->getNodeValue(n));
   string texFile = glGraphInputData->elementTexture->getNodeValue(n);
