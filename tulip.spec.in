@@ -78,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/logo32x32.ico
 %{prefix}/lib/tlp/bitmaps/headerlogo.bmp
 %{prefix}/lib/tlp/bitmaps/welcomelogo.bmp
+%{prefix}/lib/tlp/bitmaps/logotulip.jpg
+%{prefix}/lib/tlp/bitmaps/logolabri.jpg
+%{prefix}/lib/tlp/bitmaps/tex_back.png
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
 
