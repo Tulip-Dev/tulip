@@ -20,44 +20,47 @@
 
 namespace tlp {
 
-//====================================================
-typedef struct _FeedBack3Dcolor {
-  GLfloat x;
-  GLfloat y;
-  GLfloat z;
-  GLfloat red;
-  GLfloat green;
-  GLfloat blue;
-  GLfloat alpha;
-} Feedback3Dcolor;
-
-//====================================================
-typedef struct _DepthIndex {
-  GLfloat *ptr;
-  GLfloat depth;
-} DepthIndex;
-
-//====================================================  
-class TLP_GL_SCOPE GlFeedBackBuilder {
+  //====================================================
+  typedef struct _FeedBack3Dcolor {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+    GLfloat red;
+    GLfloat green;
+    GLfloat blue;
+    GLfloat alpha;
+  } Feedback3Dcolor;
   
-public:
+  //====================================================
+  typedef struct _DepthIndex {
+    GLfloat *ptr;
+    GLfloat depth;
+  } DepthIndex;
   
-  virtual ~GlFeedBackBuilder() {}
-
-  virtual void begin(const Vector<int, 4> &viewport) {}
-  virtual void passThroughToken(GLfloat *data) {}
-  virtual void pointToken(GLfloat *data) {}
-  virtual void lineToken(GLfloat *data) {}
-  virtual void lineResetToken(GLfloat *data) {}
-  virtual void polygonToken(GLfloat *data) {}
-  virtual void bitmapToken(GLfloat *data) {}
-  virtual void drawPixelToken(GLfloat *data) {}
-  virtual void copyPixelToken(GLfloat *data) {}
-  virtual void end() {}
-
-  virtual void getResult(std::string* str) = 0;
-
-};
+  //====================================================  
+  /**
+   * Abstract class used to build a object with a OpenGl feedback buffer
+   */
+  class TLP_GL_SCOPE GlFeedBackBuilder {
+    
+  public:
+    
+    virtual ~GlFeedBackBuilder() {}
+    
+    virtual void begin(const Vector<int, 4> &viewport) {}
+    virtual void passThroughToken(GLfloat *data) {}
+    virtual void pointToken(GLfloat *data) {}
+    virtual void lineToken(GLfloat *data) {}
+    virtual void lineResetToken(GLfloat *data) {}
+    virtual void polygonToken(GLfloat *data) {}
+    virtual void bitmapToken(GLfloat *data) {}
+    virtual void drawPixelToken(GLfloat *data) {}
+    virtual void copyPixelToken(GLfloat *data) {}
+    virtual void end() {}
+    
+    virtual void getResult(std::string* str) = 0;
+    
+  };
  
 }
 

@@ -49,6 +49,7 @@ namespace tlp {
 
     GlTexture getTextureInfo(const std::string&);
     bool loadTexture(const std::string&);
+    void beginNewTexture(const std::string&);
     bool activateTexture(const std::string&);
     void desactivateTexture();
 

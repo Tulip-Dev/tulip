@@ -9,7 +9,6 @@
 #include "tulip/GlLODSceneVisitor.h"
 #include "tulip/TextRenderer.h"
 #include "tulip/OcclusionTest.h"
-#include "tulip/GlDrawSceneVisitor.h"
 #include "tulip/GlCPULODCalculator.h"
 #include "tulip/GlBoundingBoxSceneVisitor.h"
 #include "tulip/GlSelectSceneVisitor.h"

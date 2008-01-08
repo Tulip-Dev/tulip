@@ -18,14 +18,29 @@
 #include "tulip/GlFeedBackBuilder.h"
 
 namespace tlp {
-  
+
+  /** \brief Class use to build an object with an OpenGL feedback buffer
+   *
+   * Class use to build an object with an OpenGL feedback buffer
+   * This class call functions of the GlFeedBackBuilder passed to the constructor
+   */
   class TLP_GL_SCOPE GlFeedBackRecorder {
   
   public:
     
+    /**
+     * Constructor : the recorder use GlFeedBackBuilder : builder
+     */
     GlFeedBackRecorder(GlFeedBackBuilder *builder):
       feedBackBuilder(builder) {}
-    void record(bool doSort, GLint, GLfloat *,const Vector<int,4>& viewport);
+    /**
+     * Record a new feedback buffer 
+     * \param doSort : sort the feedback buffer
+     * \param size : size of the feedback buffer
+     * \param feedBackBuffer : the feedback buffer
+     * \param viewport : the viewport of the scene
+     */
+    void record(bool doSort, GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport);
     
   private:
 

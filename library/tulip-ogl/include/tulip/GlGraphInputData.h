@@ -32,14 +32,26 @@ namespace tlp {
   class Graph;
   class Glyph;
  
+  /**
+   * Class use to store inputData of the graph
+   */
   class TLP_GL_SCOPE GlGraphInputData {
     
   public:
 
+    /**
+     * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
+     */
     GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters);
 
+    /**
+     * Return the graph of this inputData
+     */
     Graph* getGraph() {return graph;}
 
+    /**
+     * Reload klayoutProperty of the graph
+     */
     void reloadLayoutProperty();
     
   public:

@@ -120,11 +120,11 @@ namespace tlp {
       return; //two nodes very closed
     Matrix<float,4> transformMatrix;
     camera->getTransformMatrix(transformMatrix);
-    if (nbBends == 0 && 
+    /*if (nbBends == 0 && 
     	(segmentVisible(srcCoord, tgtCoord, transformMatrix, camera->getViewport()) < 15.)) {
     //cerr << ".";
       return;
-    }
+      }*/
     //take source and target information for edge clipping
     const Size &srcSize  = data->elementSize->getNodeValue(source);
     const Size &tgtSize  = data->elementSize->getNodeValue(target);

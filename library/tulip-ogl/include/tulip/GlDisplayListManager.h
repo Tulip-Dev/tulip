@@ -26,6 +26,11 @@
 
 namespace tlp {
   
+  /** \brief Singleton used to manage OpenGl display list 
+   *
+   * Singleton used to manage OpenGl display list. 
+   * First createInst must be call.
+   */
   class TLP_GL_SCOPE GlDisplayListManager {
   
     typedef std::map<std::string,GLuint> DisplayListMap;
@@ -33,21 +38,44 @@ namespace tlp {
 
   public:
 
+    /**
+     * Create an instance of GlDisplayListManager
+     * This function must be call before all others functions
+     */
     static void createInst();
+    
+    /**
+     * Return the current instance
+     */
     static GlDisplayListManager &getInst() {
       assert(inst);
       return *inst;
     }
 
+    /**
+     * Change OpenGl context because display list can't be shared in different context
+     */
     void changeContext(unsigned int context);
 
+    /** 
+     * Begin to record a new display list with name : name
+     */
     bool beginNewDisplayList(const std::string& name);
+    /**
+     * End the current record of display list
+     */
     void endNewDisplayList();
 
+    /**
+     * Call display list with name : name
+     */
     bool callDisplayList(const std::string& name);
 
   private:
 
+    /**
+     * Private constructor for singleton
+     */
     GlDisplayListManager() {}
 
     unsigned int currentContext;
@@ -60,4 +88,4 @@ namespace tlp {
  
 }
 
-#endif // Tulip_GLTEXTUREMANAGER_H
+#endif // Tulip_GLDISPLAYLISTMANAGER_H

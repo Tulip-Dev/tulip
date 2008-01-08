@@ -23,8 +23,8 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   Coord anchor = from - nodeCenter;
   if( anchor.getX() == 0.0f && anchor.getY() == 0.0f && anchor.getZ() == 0.0f )
     return nodeCenter;
-  if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
-    return nodeCenter;
+  /*if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
+    return nodeCenter;*/
 
   //unrotate
   Coord saveAnchor(anchor);
@@ -42,6 +42,9 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   anchor.setX( anchor.getX() * scale.getW() );
   anchor.setY( anchor.getY() * scale.getH() );
   anchor.setZ( anchor.getZ() * scale.getD() );
+
+  if(scale.getD() == 0.0f)
+    anchor[2]=0.;
 
   //rerotate
   saveAnchor = anchor;

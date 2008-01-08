@@ -41,11 +41,11 @@ namespace tlp {
     glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
     Graph *metaGraph = data->elementGraph->getNodeValue(node(id));
-    GlGraphRenderingParameters metaParameters;
-    metaParameters.setTexturePath(data->parameters->getTexturePath());
+    GlGraphRenderingParameters metaParameters = *data->parameters;
+    /*metaParameters.setTexturePath(data->parameters->getTexturePath());
     metaParameters.setNodesStencil(data->parameters->getNodesStencil());
     metaParameters.setMetaNodesStencil(data->parameters->getMetaNodesStencil());
-    metaParameters.setEdgesStencil(data->parameters->getEdgesStencil());
+    metaParameters.setEdgesStencil(data->parameters->getEdgesStencil());*/
     GlGraphInputData metaData(metaGraph,&metaParameters);
     pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
     //  cerr << bboxes.first << "/" << bboxes.second << endl;
@@ -74,15 +74,15 @@ namespace tlp {
     Iterator<node> *itN=metaGraph->getNodes();
     unsigned int id;
     while (itN->hasNext()) {
-       id=itN->next().id;
-      if(data->elementGraph->getNodeValue(node(id)) == 0)
+      id=itN->next().id;
+      if(metaData.elementGraph->getNodeValue(node(id)) == 0)
 	nodes.push_back(GlNode(id));
       else
 	metaNodes.push_back(GlMetaNode(id));
- }
+    }
     delete itN;
 
-    if (data->parameters->isDisplayEdges()) {
+    if (metaData.parameters->isDisplayEdges()) {
       Iterator<edge> *itE=metaGraph->getEdges();
       while (itE->hasNext()) {
 	edges.push_back(GlEdge(itE->next().id));
@@ -95,7 +95,7 @@ namespace tlp {
     calculator.beginNewCamera(&newCamera);
 
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      BoundingBox bb = (*it).getBoundingBox(data);
+      BoundingBox bb = (*it).getBoundingBox(&metaData);
       Coord size=bb.second-bb.first;
       Coord middle=bb.first+size/2;
 
@@ -110,7 +110,7 @@ namespace tlp {
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      BoundingBox bb = (*it).getBoundingBox(data);
+      BoundingBox bb = (*it).getBoundingBox(&metaData);
       Coord size=bb.second-bb.first;
       Coord middle=bb.first+size/2;
 
@@ -124,18 +124,22 @@ namespace tlp {
       calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
     }
 
-    if (data->parameters->isDisplayEdges()) {
+    if (metaData.parameters->isDisplayEdges()) {
       for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-	BoundingBox bb = (*it).getBoundingBox(data);
+	BoundingBox bb = (*it).getBoundingBox(&metaData);
+
 	Coord size=bb.second-bb.first;
 	Coord middle=bb.first+(size)/2;
 	
 	middle+=nodeCoord+translate;
 	size=size*nodeSize*scale;
 	
-	bb.first=bb.first+nodeCoord+translate;
-	bb.second=bb.second+nodeCoord+translate;
-	calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),(*it).getBoundingBox(data));
+	bb.first=middle-size/2;
+	bb.second=middle+size/2;
+
+	/*bb.first=bb.first+nodeCoord+translate;
+	  bb.second=bb.second+nodeCoord+translate;*/
+	calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
       }
     }
 
@@ -148,6 +152,7 @@ namespace tlp {
       glScalef(1.0/width, 1.0/height, 1.0/dept);
       glTranslatef(translate[0],translate[1],translate[2]);
       for(std::vector<LODResultEntity>::iterator itM=(*it).second.begin();itM!=(*it).second.end();++itM) {
+	//cout << (*itM).second << endl;
 	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,camera);
       }
       glPopMatrix();

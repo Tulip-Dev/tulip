@@ -23,6 +23,9 @@ namespace tlp {
   class GlSceneVisitor;
   class GlLayout;
 
+  /**
+   * Abstract class used to represent all entity of a scene
+   */
   class TLP_GL_SCOPE GlEntity {
   
   public:

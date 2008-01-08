@@ -30,20 +30,41 @@ namespace tlp {
   typedef std::pair<unsigned int, float> LODResultEntity;
   typedef std::pair<unsigned int, std::vector<LODResultEntity> > LODResultCameraAndEntities;
   typedef std::vector<LODResultCameraAndEntities> LODResultVector;
-  
+
+  /**
+   * Class use to calculate lod of scene entities
+   */
   class TLP_GL_SCOPE GlLODCalculator {
   
   public:
 
     virtual ~GlLODCalculator() {}
 
+    /**
+     * Begin a new camera
+     */
     virtual void beginNewCamera(Camera* camera)=0;
+    /**
+     * Record a new simple entity in current camera context 
+     */
     virtual void addSimpleEntityBoundingBox(unsigned int entity,const BoundingBox& bb)=0;
+    /**
+     * Record a new complex entity in current camera context
+     */
     virtual void addComplexeEntityBoundingBox(unsigned int entity,const BoundingBox& bb)=0;
 
+    /**
+     * Compute all lod
+     */
     virtual void compute(const Vector<int,4>& viewport)=0;
     
+    /**
+     * Return lod result for simple entities
+     */
     virtual LODResultVector* getResultForSimpleEntities() = 0;
+    /**
+     * Return lod result for complexe entities
+     */
     virtual LODResultVector* getResultForComplexeEntities() = 0;
   };
  

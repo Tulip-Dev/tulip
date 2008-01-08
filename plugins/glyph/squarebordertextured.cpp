@@ -323,6 +323,7 @@ void SquareBorderTextured::drawSquare(node n, float borderSizePixel) {
     glVertex2fv(p1);
     glEnd();        
     glEnable(GL_CULL_FACE);
+    glDisable(GL_TEXTURE_2D);
 }
 
 //====================================================================

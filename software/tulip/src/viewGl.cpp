@@ -518,14 +518,15 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
   if( glWidget == 0 ) return;
   if (glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == graph)  return;
   //clearObservers();
-  //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   delete glWidget->getScene()->getGlGraphComposite();
   glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
   GlGraphComposite* graphComposite=new GlGraphComposite(graph);
   glWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),graphComposite);
   glWidget->getScene()->getLayer("Main")->addGlEntity(graphComposite,"graph");
+  glWidget->getScene()->centerScene();
   //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
-  //glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   changeGraph(graph);
   //initObservers();
 }

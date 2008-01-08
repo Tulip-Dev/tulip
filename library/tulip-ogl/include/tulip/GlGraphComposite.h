@@ -16,11 +16,18 @@
 
 namespace tlp {
 
+  /** \brief Class use to represent a graph 
+   * 
+   * GlComposite use to represent a graph with nodes, metanodes and edges
+   */
   class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver {
 
   
   public:
 
+    /**
+     * Build a GlGraphComposite with the graph data
+     */ 
     GlGraphComposite(Graph* graph);
     ~GlGraphComposite() {inputData.graph->removeObserver(this);}
 
@@ -29,16 +36,22 @@ namespace tlp {
      */
     void buildLists();
     /**
-     * Return the rendering parameters used for rendering
+     * Return the rendering parameters use for rendering
      */
     const GlGraphRenderingParameters& getRenderingParameters();
     /**
-     * Set the rendering parameters used for rendering
+     * Set the rendering parameters use for rendering
      */
     void setRenderingParameters(const GlGraphRenderingParameters &parameter);
 
+    /**
+     * Return the inputData use by the composite
+     */
     GlGraphInputData* getInputData();
 
+    /**
+     * Function used to visit composite's children
+     */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       if(isDisplayNodes()) {
 	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
@@ -61,10 +74,25 @@ namespace tlp {
 
     }
 
+    /**
+     * Function use by the GraphObserver when a node is create in the graph
+     */
     virtual void addNode(Graph *,const node );
+    /**
+     * Function use by the GraphObserver when an edge is create in the graph
+     */
     virtual void addEdge(Graph *,const edge );
+    /**
+     * Function use by the GraphObserver when a node is delete in the graph
+     */
     virtual void delNode(Graph *,const node );
+    /**
+     * Function use by the GraphObserver when an edge is delete in the graph
+     */
     virtual void delEdge(Graph *,const edge );
+    /**
+     * Function use by the GraphObserver when the graph is delete
+     */
     virtual void destroy(Graph *);
 
     //Delegate 

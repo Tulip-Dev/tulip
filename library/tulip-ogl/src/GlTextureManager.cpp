@@ -313,7 +313,17 @@ bool GlTextureManager::loadTexture(const string& filename)
   (texturesMap[currentContext])[filename] = texture;
   
 }
-
+//====================================================================
+void GlTextureManager::beginNewTexture(const string& name)
+{
+  GLuint textureNum;
+  glGenTextures(1, &textureNum);
+  glBindTexture(GL_TEXTURE_2D, textureNum);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+}
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename) {
   if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end()) 
