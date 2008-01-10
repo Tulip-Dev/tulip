@@ -1,8 +1,8 @@
 TARGET= tutorial
 SRCS=  tutorial.cpp 
-CXXFLAGS = -g -Wall `tulip-config --cxxflags`
+CXXFLAGS = -g -Wall `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= `tulip-config --libs` 
+LDFLAGS= `../../tulip-config --libs` 
 
 OBJS=$(SRCS:.cpp=.o)
 
