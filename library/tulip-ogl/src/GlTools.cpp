@@ -292,7 +292,7 @@ namespace tlp {
     if(!inScreen){
       return -1;
     }else{
-      return sqrt((bbBox[2]-bbBox[0])*(bbBox[2]-bbBox[0])+(bbBox[3]-bbBox[1])*(bbBox[3]-bbBox[1])) * 2;
+      return sqrt((double)(bbBox[2]-bbBox[0])*(double)(bbBox[2]-bbBox[0])+(double)(bbBox[3]-bbBox[1])*(double)(bbBox[3]-bbBox[1])) * 2;
     }
   }
   //====================================================

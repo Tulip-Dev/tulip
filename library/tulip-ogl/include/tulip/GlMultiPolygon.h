@@ -33,7 +33,7 @@ namespace tlp {
 
     void addPolygon(const std::vector<Coord> &poly);
 
-    virtual void draw(float lod);
+    virtual void draw(float lod,Camera *camera);
 
   protected:
     

@@ -15,6 +15,7 @@
 
 #include "tulip/GlEntity.h"
 #include "tulip/GlSceneVisitor.h"
+#include "tulip/Camera.h"
 
 namespace tlp {
 
@@ -24,7 +25,7 @@ namespace tlp {
 
     GlSimpleEntity():visible(true),stencil(0xFFFF) {}
 
-    virtual void draw(float lod) = 0;
+    virtual void draw(float lod,Camera* camera) = 0;
     
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       visitor->visit(this);

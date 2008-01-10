@@ -23,9 +23,9 @@ namespace tlp {
     boundingBox.check(bb.second);
   }
 
-  void GlMultiPolygon::draw(float lod) {
+  void GlMultiPolygon::draw(float lod,Camera *camera) {
     for(vector<GlPolygon>::iterator it=polygons.begin();it!=polygons.end();++it) {
-      (*it).draw(lod);
+      (*it).draw(lod,camera);
     }
   }
 

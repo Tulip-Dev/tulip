@@ -117,7 +117,7 @@ namespace tlp {
 	for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
 	  if((*itE).second>0) {
 	    glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*itE).first))->getStencil(),0xFFFF);
-	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
+	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	  }
 	}
 	++itSE;
@@ -203,7 +203,7 @@ namespace tlp {
 	    camera->initGl();
 	    for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
 	      if((*itE).second>0) {
-		((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
+		((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	      }
 	    }
 	  }
@@ -390,7 +390,7 @@ namespace tlp {
 	if((*itE).second>0) {
 	  glLoadName((unsigned int)((*itE).first));
 	  if(type==SelectSimpleEntities) {
-	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
+	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	  }else{
 	    ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
 	  }

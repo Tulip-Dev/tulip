@@ -38,7 +38,7 @@ namespace tlp {
     /**
      * Draw the convexHull
      */
-    virtual void draw(float lod);
+    virtual void draw(float lod,Camera *camera);
     
     /**
      * Static function who build a hierarchy of convexHull with the given graph

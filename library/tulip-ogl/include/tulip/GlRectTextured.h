@@ -23,20 +23,23 @@ namespace tlp {
   class TLP_GL_SCOPE GlRectTextured : public GlSimpleEntity {
 
   public:
-    GlRectTextured(const Coord &topLeft,
-		   const Coord &bottomRight,
-		   const std::string& textureName);
+    GlRectTextured(float top,float bottom,float left, float right,
+		   const std::string& textureName,
+		   bool inPercent=false);
     
     virtual ~GlRectTextured() {}
 
     virtual BoundingBox getBoundingBox();
 
-    virtual void draw(float lod);
+    virtual void draw(float lod,Camera *camera);
 
   protected:
     
-    Coord topLeft;
-    Coord bottomRight;
+    float top;
+    float bottom;
+    float left;
+    float right;
+    bool inPercent;
     std::string textureName;
 
   };

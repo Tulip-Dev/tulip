@@ -82,7 +82,7 @@ namespace tlp {
 	    (y <= maxY));
   }
   //=====================================================
-  void GlRect::draw(float lod) {
-    GlPolygon::draw(lod);
+  void GlRect::draw(float lod,Camera *camera) {
+    GlPolygon::draw(lod,camera);
   }
 }

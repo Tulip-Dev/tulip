@@ -47,7 +47,7 @@ BoundingBox GlConvexHull::getBoundingBox() {
   return bb;
 }
 
-void GlConvexHull::draw(float lod) {
+void GlConvexHull::draw(float lod,Camera *camera) {
   glEnable(GL_BLEND);
   if (_filled){
     if (_points.size() == 3)

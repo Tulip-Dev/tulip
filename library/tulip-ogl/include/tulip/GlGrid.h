@@ -49,7 +49,7 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
   /**
    * Virtual function used to draw the grid.
    */
-  virtual void draw(float lod);
+  virtual void draw(float lod,Camera *camera);
   /**
    * Accessor in reading to the dimensions to display.
    */

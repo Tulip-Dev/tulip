@@ -1,13 +1,20 @@
 #include <iostream>
 
+//#include <tulip/GlVertexListManager.h>
+
 #include <stdio.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 
 #include <tulip/Graph.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLayer.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Glyph.h>
-#include <tulip/GlGraph.h>
 #include <tulip/ForEach.h>
 
 using namespace std;
@@ -19,25 +26,16 @@ unsigned int frameCount = 5;
 GLuint LList;
 bool listOk = false;
 //==============================================================================
-class GLGlut: public GlGraph {
+class GLGlut {
 public:
-  GLGlut(string name, const int width=640, const int height=480) {
-    drawing=false;
-  }
+  GLGlut(string name, const int width=640, const int height=480) {}
   virtual ~GLGlut(){}
   void setupOpenGlContext() {
     glutSetWindow(win);
   }
-  void draw_handler(bool b) {
-    drawing = b;
-  }
-  void timerCallBack() {
-    if (!drawing) return;
-    drawing = !drawPart();
-    glutSwapBuffers();
-  }
-  bool drawing;
-private:
+
+  GlScene scene;
+  private:
   int width,height;
 };
 //=============================================
@@ -53,23 +51,20 @@ static char strFrameRate[50] = {0};
 using namespace tlp;
 //=============================================
 void idle(void) {  
-  glGlutScreen->timerCallBack();
-  if (!glGlutScreen->drawing) {
-    glGlutScreen->rotateScene(rx*2., ry*2., rz*2.);
-    if (frameRateDisplaying) {
-      if (frame%frameCount == 0) {
-	GLint t = glutGet(GLUT_ELAPSED_TIME);
-	GLfloat seconds = (t - timer) / 1000.0;
-	GLfloat fps = frame / seconds;
-	frameCount = int (fps + 5);
-	sprintf(strFrameRate, "Tulip Glut Viewer: fps = %.2f", fps);
-	glutSetWindowTitle(strFrameRate);
-	frame = 0;
-	timer = t;
-      }
+  glGlutScreen->scene.rotateScene(rx*2., ry*2., rz*2.);
+  if (frameRateDisplaying) {
+    if (frame%frameCount == 0) {
+      GLint t = glutGet(GLUT_ELAPSED_TIME);
+      GLfloat seconds = (t - timer) / 1000.0;
+      GLfloat fps = frame / seconds;
+      frameCount = int (fps + 5);
+      sprintf(strFrameRate, "Tulip Glut Viewer: fps = %.2f", fps);
+      glutSetWindowTitle(strFrameRate);
+      frame = 0;
+      timer = t;
     }
-    glutPostRedisplay();
   }
+  glutPostRedisplay();
 }
 
 static void setRasterPosition(unsigned int x, unsigned int y) {
@@ -84,7 +79,7 @@ static void printMessage(string str,bool b) {
 }
 //=============================================
 static void Key(unsigned char key, int x, int y) {
-  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
+  GlGraphRenderingParameters param = glGlutScreen->scene.getGlGraphComposite()->getRenderingParameters();
   switch (key) {
   case '1':
     cerr << "backup" << endl;
@@ -108,10 +103,10 @@ static void Key(unsigned char key, int x, int y) {
   case 27:
     exit(1);
   case '+':
-    glGlutScreen->zoom(2);
+    glGlutScreen->scene.zoom(2);
     break;
   case '-':
-    glGlutScreen->zoom(-2);
+    glGlutScreen->scene.zoom(-2);
     break;
   case 'x':
     rx=(rx+1)%2;
@@ -126,13 +121,17 @@ static void Key(unsigned char key, int x, int y) {
     param.setEdge3D(!param.isEdge3D());
     printMessage("3D edges", param.isEdge3D());
     break;
+  case 'c':
+    param.setEdgeColorInterpolate(!param.isEdgeColorInterpolate());
+    printMessage("Edge color interpolate", param.isEdgeColorInterpolate());
+    break;
   case 'a':
     param.setViewArrow(!param.isViewArrow());
     printMessage("Arrow ",param.isViewArrow());
     break;
   case 'o':
-    param.setViewOrtho(!param.isViewOrtho());
-    printMessage("Projection orthogonal",param.isViewOrtho());
+    glGlutScreen->scene.setViewOrtho(!glGlutScreen->scene.isViewOrtho());
+    printMessage("Projection orthogonal",glGlutScreen->scene.isViewOrtho());
     break;
   case 'l':
     param.setViewNodeLabel(!param.isViewNodeLabel());
@@ -154,54 +153,32 @@ static void Key(unsigned char key, int x, int y) {
     timer=glutGet(GLUT_ELAPSED_TIME);
     glutSetWindowTitle("Tulip Glut Viewer");
     break;
-  case 'I':
-    incremental = !incremental;
-    param.setIncrementalRendering(!param.isIncrementalRendering());
-    printMessage("Incremental rendering", param.isIncrementalRendering());
-    break;
   default:
     return;
   }
-  glGlutScreen->setRenderingParameters(param);
-}
-//==============================================================================
-void importGraph(const string &filename, GlGraph &glGraph) {
-  DataSet dataSet;
-  dataSet.set("file::filename", filename);
-  Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
-  if (newGraph != 0) {
-    GlGraphRenderingParameters param = glGraph.getRenderingParameters();
-    param.setGraph(newGraph);
-    glGraph.setRenderingParameters(param);
-
-    DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData)){
-      param.setParameters(glGraphData);
-      glGraph.setRenderingParameters(param);
-    }
-    else
-      glGraph.centerScene();
-  }
+  glGlutScreen->scene.getGlGraphComposite()->setRenderingParameters(param);
 }
 //=============================================
 void Reshape(int widt, int heigh) {
   cerr << __PRETTY_FUNCTION__ << endl;
   width=widt;
   height=heigh;
-  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
+  //GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
   Vector<int, 4> viewport;
   viewport[0] = 0;
   viewport[1] = 0;
   viewport[2] = widt;
   viewport[3] = heigh;
-  param.setViewport(viewport);
-  glGlutScreen->setRenderingParameters(param);
+  glGlutScreen->scene.setViewport(viewport);
+  //param.setViewport(viewport);
+  //glGlutScreen->setRenderingParameters(param);
 }
 //=============================================
 void Draw(void) {
-  glGlutScreen->draw();
-  if (!glGlutScreen->getRenderingParameters().isIncrementalRendering()) 
-    glutSwapBuffers();
+  glGlutScreen->scene.draw();
+  //glGlutScreen->draw();
+  /*if (!glGlutScreen->getRenderingParameters().isIncrementalRendering()) */
+  glutSwapBuffers();
   if (frameRateDisplaying) frame++;
 }
 void helpMessage() {
@@ -247,18 +224,37 @@ int main (int argc, char **argv) {
 
   helpMessage();
 
+  PluginLoaderTxt plug;
+
   tlp::initTulipLib();
-  tlp::loadPlugins();   // library side plugins
-  GlGraph::loadPlugins();
+  tlp::loadPlugins(&plug);   // library side plugins
+
+  GlyphManager::createInst();
+  GlyphManager::getInst().loadPlugins(&plug);
+  GlDisplayListManager::createInst();
+  //GlVertexListManager::createInst();
+  GlTextureManager::createInst();
+
+  GlDisplayListManager::getInst().changeContext(0);
+  //GlVertexListManager::getInst().changeContext(0);
+  GlTextureManager::getInst().changeContext(0);
+  //GlGraph::loadPlugins();
 
   glGlutScreen = new GLGlut("", width, height);
   glutIdleFunc(idle);
-  importGraph(argv[1], *glGlutScreen);
-  glGlutScreen->centerScene();
+  Graph *graph = tlp::loadGraph(argv[1]);
+
+  GlLayer *layer=new GlLayer("Main");
+
+  glGlutScreen->scene.addLayer(layer);
+
+  GlGraphComposite* graphComposite=new GlGraphComposite(graph);
+  glGlutScreen->scene.addGlGraphCompositeInfo(glGlutScreen->scene.getLayer("Main"),graphComposite);
+  glGlutScreen->scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+  glGlutScreen->scene.centerScene();
+  
+  //glGlutScreen->centerScene();
   timer = glutGet(GLUT_ELAPSED_TIME);
-  GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
-  param.setIncrementalRendering(false);
-  glGlutScreen->setRenderingParameters(param);
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);

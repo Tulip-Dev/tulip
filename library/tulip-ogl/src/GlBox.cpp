@@ -92,10 +92,10 @@ GlBox::~GlBox()
     delete size;
 }
 
-void GlBox::draw(float lod)
+void GlBox::draw(float lod,Camera *camera)
 {
   for(int i=0; i < N_BOX_FACES; i++)
-    faces[i]->draw(lod);   
+    faces[i]->draw(lod,camera);   
 }
 
 /*void GlBox::changeRenderOptions()

@@ -93,7 +93,7 @@ namespace tlp {
     return _outlineColors[i];
   }
   //=====================================================
-  void GlPolygon::draw(float lod) {
+  void GlPolygon::draw(float lod,Camera *camera) {
     glDisable(GL_CULL_FACE);
     vector<Coord> newPoints(_points.size());
     for(unsigned int i=0; i < _points.size(); ++i) {

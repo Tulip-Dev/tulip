@@ -80,7 +80,6 @@ namespace tlp {
 
   void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
     glEnable(GL_DEPTH_TEST);
-    //glDisable(GL_LIGHTING);
     glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);
 
     edge e=edge(id);
@@ -113,8 +112,8 @@ namespace tlp {
       return;
     }
 
-    /*if(lod<10)
-      return;*/
+    if(lod<10)
+      return;
 
     if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
       return; //two nodes very closed
@@ -199,6 +198,13 @@ namespace tlp {
       }
     }
 
+    bool lightingOn=glIsEnabled(GL_LIGHTING);
+    bool colorMaterialOn=glIsEnabled(GL_COLOR_MATERIAL);
+    if(lightingOn)
+      glDisable(GL_LIGHTING);
+    if(!colorMaterialOn)
+      glEnable(GL_COLOR_MATERIAL);
+
     //draw Arrow
     if(data->parameters->isViewArrow()) {
       if(GlDisplayListManager::getInst().beginNewDisplayList("arrow")) {
@@ -209,11 +215,11 @@ namespace tlp {
       float sizeT = edgeSize.getD();
       sizeT = std::min(sizeT, (float)(tmpAnchor- tgtAnchor).norm()/2.0f);
       MatrixGL matrix(makeArrowMatrix(tmpAnchor, tgtAnchor));
-      glEnable(GL_LIGHTING);
       glPushMatrix();
       glMultMatrixf((GLfloat *)&matrix);
       glScalef(sizeT, sizeT, sizeT);
       setMaterial(tgtCol);
+      glColor4ubv(((const GLubyte *)&tgtCol));
       //tlp::solidCone();
       GlDisplayListManager::getInst().callDisplayList("arrow");
       glPopMatrix();
@@ -223,6 +229,7 @@ namespace tlp {
 	glMultMatrixf((GLfloat *)&matrix);
 	glScalef(sizeT+0.1, sizeT+0.1, sizeT+0.1);
 	setMaterial(COLORSELECT);
+	glColor4ubv(((const GLubyte *)&COLORSELECT));
 	//tlp::solidCone();
 	GlDisplayListManager::getInst().callDisplayList("arrow");
 	glPopMatrix();
@@ -237,7 +244,8 @@ namespace tlp {
 	endLineAnchor = tgtAnchor;
       }
       tgtCoord = tgtAnchor; //this defines in drawEdge the arrow head as being the final node
-      glDisable(GL_LIGHTING);
+
+      
     }
     else {
       endLineAnchor = tgtAnchor;
@@ -250,7 +258,20 @@ namespace tlp {
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_EDGE);
     }
-    //glEnable(GL_LIGHTING);
+
+    if(lightingOn != glIsEnabled(GL_LIGHTING)) {
+      if(lightingOn)
+	glEnable(GL_LIGHTING);
+      else
+	glDisable(GL_LIGHTING);
+    }
+    
+    if(colorMaterialOn != glIsEnabled(GL_COLOR_MATERIAL)) {
+      if(colorMaterialOn)
+	glEnable(GL_COLOR_MATERIAL);
+      else
+	glDisable(GL_COLOR_MATERIAL);
+    }
   }
 
   #define L3D_BIT (1<<9)
@@ -261,12 +282,8 @@ namespace tlp {
     bool drawPoly = true;
 
     //================================
-    bool lightingOn=glIsEnabled(GL_LIGHTING);
-    bool colorMaterialOn=glIsEnabled(GL_COLOR_MATERIAL);
-    if(lightingOn)
-      glDisable(GL_LIGHTING);
-    if(!colorMaterialOn)
-      glEnable(GL_COLOR_MATERIAL);
+
+    glDisable(GL_CULL_FACE);
    
     if (edge3D)
       shape |= L3D_BIT;
@@ -324,20 +341,8 @@ namespace tlp {
 	tlp::polyLine(tmp,startColor,endColor);
       break;
     }
-    
-    if(lightingOn != glIsEnabled(GL_LIGHTING)) {
-      if(lightingOn)
-	glEnable(GL_LIGHTING);
-      else
-	glDisable(GL_LIGHTING);
-    }
-    
-    if(colorMaterialOn != glIsEnabled(GL_COLOR_MATERIAL)) {
-      if(colorMaterialOn)
-	glEnable(GL_COLOR_MATERIAL);
-      else
-	glDisable(GL_COLOR_MATERIAL);
-    }
+
+    glEnable(GL_CULL_FACE); 
   }
 
   void GlEdge::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {

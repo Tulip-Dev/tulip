@@ -20,7 +20,7 @@ using namespace std;
 using namespace tlp;
 
 struct RectPosition : public tlp::GlSimpleEntity {
-  void draw(float lod);
+  void draw(float lod,Camera *camera);
   RectPosition(GlGraphWidget *, GlGraphWidget *);
   void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
@@ -188,6 +188,9 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     _view->getScene()->getLayer("Main")->addGlEntity(_observedView->getScene()->getGlGraphComposite(),"graphComposite");
     _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),_observedView->getScene()->getGlGraphComposite());
     _view->getScene()->centerScene();
+    _view->getScene()->getLayer("Main")->deleteGlEntity("RectPosition");
+    _view->getScene()->getLayer("Main")->addGlEntity(_glDraw,"RectPosition");
+    
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
     
     //_observedView->getScene()->setViewport(_view->getScene()->getViewport());
@@ -290,7 +293,7 @@ void GWOverviewWidget::updateView() {
   }
 }
 //=============================================================================
-void RectPosition::draw(float lod) {
+void RectPosition::draw(float lod,Camera *camera) {
   //assert (_view == target);
   if(_observedView == 0) {
     return ;

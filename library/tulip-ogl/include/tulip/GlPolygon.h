@@ -37,7 +37,7 @@ namespace tlp {
 		 const bool outlined = true);
     virtual ~GlPolygon();
 
-    void draw(float lod);
+    void draw(float lod,Camera *camera);
     
     virtual void resizePoints(const unsigned int nbPoints);
     virtual void resizeColors(const unsigned int nbColors);

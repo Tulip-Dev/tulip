@@ -571,10 +571,10 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   foregroundLayer->set2DMode();
   string dir=TulipLibDir;
   dir += "tlp/bitmaps/";
-  GlRectTextured *background=new GlRectTextured(Coord(0,0,0),Coord(500,500,0),dir + "tex_back.png");
+  GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
   backgroundLayer->addGlEntity(background,"background");
 
-  GlRectTextured *labri=new GlRectTextured(Coord(5,5,0),Coord(55,55,0),dir + "logolabri.jpg");
+  GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
   foregroundLayer->addGlEntity(labri,"labrilogo");
 
   GlComposite *hulls=new GlComposite;

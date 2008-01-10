@@ -94,7 +94,7 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    */
   bool inRect(double x, double y);
 
-  virtual void draw(float lod);
+  virtual void draw(float lod,Camera *camera);
 };
 }
 #endif

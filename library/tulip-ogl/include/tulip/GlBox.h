@@ -101,7 +101,7 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   /**
    * Virtual function used to draw the box.
    */
-  virtual void draw(float lod);
+  virtual void draw(float lod,Camera *camera);
 
   /**
    * Accessor in writing to the size.

@@ -48,7 +48,7 @@ public:
     
     void retranslateUi(QWidget *LayerManagerWidgetData)
     {
-    LayerManagerWidgetData->setWindowTitle(QApplication::translate("LayerManagerWidgetData", "OverviewWidget", 0, QApplication::UnicodeUTF8));
+    LayerManagerWidgetData->setWindowTitle(QApplication::translate("LayerManagerWidgetData", "Layer Manager", 0, QApplication::UnicodeUTF8));
     Q_UNUSED(LayerManagerWidgetData);
     } // retranslateUi
 
