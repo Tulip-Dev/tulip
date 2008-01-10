@@ -112,8 +112,8 @@ namespace tlp {
       return;
     }
 
-    if(lod<10)
-      return;
+    /*if(lod<10)
+      return;*/
 
     if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
       return; //two nodes very closed

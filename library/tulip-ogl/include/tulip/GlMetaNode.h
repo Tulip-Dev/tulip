@@ -22,6 +22,8 @@ namespace tlp {
     GlMetaNode(unsigned int id):GlNode(id) {}
 
     virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+
+    virtual void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
     
   };
   
