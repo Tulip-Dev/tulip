@@ -15,7 +15,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( TlpImportExportTest );
 
 //==========================================================
 void TlpImportExportTest::testLoad() {
-  Graph *graph = tlp::loadGraph("qssdddddddffffffffff");
+  Graph *graph = tlp::loadGraph("cette erreur fait partie de testLoad");
   CPPUNIT_ASSERT(graph == 0);
   graph = tlp::loadGraph("TlpImportExportTest.cpp");
   CPPUNIT_ASSERT(graph == 0);
@@ -26,7 +26,7 @@ void TlpImportExportTest::testLoad() {
 //==========================================================
 void TlpImportExportTest::testImport() {
   DataSet dataSet;
-  dataSet.set("file::filename", std::string("qssdddddddffffffffff"));
+  dataSet.set("file::filename", std::string("cette erreur fait partie de testImport"));
   Graph *graph = tlp::importGraph("tlp", dataSet, NULL);
   CPPUNIT_ASSERT(graph == 0);
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));
