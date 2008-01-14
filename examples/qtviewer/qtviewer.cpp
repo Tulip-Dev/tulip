@@ -4,6 +4,11 @@
 #include <tulip/GlGraphWidget.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/PluginLoaderTxt.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLayer.h>
 
 using namespace std;
 using namespace tlp;
@@ -14,13 +19,18 @@ void importGraph(const string &filename, GlGraphWidget *glw) {
   dataSet.set("file::filename", filename);
   Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph != 0) {
+    GlGraphComposite* glGraphComposite = new GlGraphComposite(newGraph);
     GlGraphRenderingParameters param =
-      glw->getScene()->getGlGraphComposite()->getRenderingParameters();
+      glGraphComposite->getRenderingParameters();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData)) {
       param.setParameters(glGraphData);
-      glw->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glGraphComposite->setRenderingParameters(param);
     }
+    GlLayer *layer = new GlLayer("Main");
+    layer->addGlEntity(glGraphComposite, "graph");
+    glw->getScene()->addLayer(layer);
+    glw->getScene()->addGlGraphCompositeInfo(layer, glGraphComposite);
   }
 }
 /*******************************************************************/
@@ -40,6 +50,9 @@ int main(int argc,char ** argv ){
 
   PluginLoaderTxt txtPlug;
   tlp::loadPlugins(&txtPlug);   // library side plugins
+  GlyphManager::createInst();
+  GlDisplayListManager::createInst();
+  GlTextureManager::createInst();
   //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlGraphWidget MainWin;
