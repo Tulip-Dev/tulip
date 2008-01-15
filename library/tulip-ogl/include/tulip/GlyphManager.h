@@ -33,7 +33,7 @@ namespace tlp {
     std::string glyphName(int id);
     int glyphId(std::string name);
     void loadGlyphPlugins();
-    void loadPlugins(PluginLoader *plug);
+    void loadPlugins(PluginLoader *plug=0);
 
     void initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
 
