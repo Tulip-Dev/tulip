@@ -3,7 +3,6 @@
 #define GWOVERVIEW_H
 
 #include "tulip/GWOverviewWidgetData.h"
-#include <tulip/ObservableGlGraph.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/Camera.h>
 #include <qcolor.h>
