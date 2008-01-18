@@ -1311,7 +1311,7 @@ void viewGl::outputSVG() {
 //**********************************************************************
 void viewGl::exportImage(int id) {
   if (!glWidget) return;
-  string name(exportImageMenu.text(id).ascii());
+  string name = findMenuItemText(exportImageMenu, id);
   if (name=="EPS") {
     outputEPS();
     return;
@@ -1343,7 +1343,7 @@ void viewGl::exportImage(int id) {
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  doFileSave(exportGraphMenu.text(id).ascii(), "", "", "");
+  doFileSave(findMenuItemText(exportGraphMenu,id), "", "", "");
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
@@ -1845,7 +1845,7 @@ void viewGl::applyAlgorithm(int id) {
   clearObservers();
   if (glWidget==0) return;
   Observable::holdObservers();
-  string name(generalMenu.text(id).ascii());
+  string name = findMenuItemText(generalMenu, id);
   string erreurMsg;
   DataSet dataSet;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
