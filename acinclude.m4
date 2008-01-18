@@ -642,7 +642,7 @@ dnl we use uic3
    fi
    AC_SUBST(UIC)
 dnl look for Qt minor version and add QT_MINOR_REL
-   QT_MINOR_VERSION=`$UIC -version 2>&1 | grep version | awk -F'.' '{print $(NF - 1)}'`
+   QT_MINOR_VERSION=`$UIC -version 2>&1 | tail -n 1 | awk -F'.' '{print $(NF - 1)}'`
    QT_CPPFLAGS="$QT_CPPFLAGS -DQT_MINOR_REL=$QT_MINOR_VERSION"
    AC_SUBST(QT_MINOR_VERSION)
 ])
