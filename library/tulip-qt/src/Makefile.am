@@ -91,7 +91,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	MouseSelector.cpp \
 	MouseEdgeSelector.cpp \
 	MouseEdgeBendEditor.cpp \
-	DataSetDialog.cpp
+	DataSetDialog.cpp \
+	TlpQtTools.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 

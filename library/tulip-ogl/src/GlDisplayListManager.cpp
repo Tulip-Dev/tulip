@@ -16,11 +16,6 @@ using namespace std;
 namespace tlp
 {
   //====================================================================
-  void GlDisplayListManager::createInst() {
-    if(!inst)
-      inst = new GlDisplayListManager();
-  }
-  //====================================================================
   void GlDisplayListManager::changeContext(unsigned int context) {
     currentContext=context;
   }

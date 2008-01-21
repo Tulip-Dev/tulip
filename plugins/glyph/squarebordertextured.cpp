@@ -235,8 +235,7 @@ void SquareBorderTextured::setTulipGLState(node n) {
     
     if (texFile != "") {
       string texturePath=glGraphInputData->parameters->getTexturePath();
-      if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-	setMaterial(Color(255, 255, 255, 0));
+      GlTextureManager::getInst().activateTexture(texturePath+texFile);
     }
 }
 

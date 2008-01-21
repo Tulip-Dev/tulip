@@ -65,8 +65,7 @@ void Circle::draw(node n) {
   string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
-    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
-      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
+    GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
   
   GlDisplayListManager::getInst().callDisplayList("Circle_circle");

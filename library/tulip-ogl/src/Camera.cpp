@@ -15,12 +15,13 @@ namespace tlp {
 
   Camera::Camera(GlScene* scene,Coord center,Coord eyes, Coord up, double zoomFactor, double sceneRadius):
     matrixCoherent(false),
-    scene(scene),
     center(center),
     eyes(eyes),
     up(up),
     zoomFactor(zoomFactor),
     sceneRadius(sceneRadius),
+    scene(scene),
+    objectTransformation(false),
     d3(true){
   }
 
@@ -198,12 +199,40 @@ namespace tlp {
 		up[0], up[1], up[2]); 
       glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
       glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-      transformMatrix = modelviewMatrix * projectionMatrix;
+
+      glMatrixMode(GL_MODELVIEW);		
+      glPushMatrix();
+      glLoadIdentity();
+      glMultMatrixf((GLfloat*)&projectionMatrix);
+      glMultMatrixf((GLfloat*)&modelviewMatrix);
+      glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+      glPopMatrix();
+      //transformMatrix = modelviewMatrix * projectionMatrix;
       matrixCoherent=true;
     }
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+  }
+
+  void Camera::addObjectTransformation(const Coord &translation,const Coord &scale) {
+    if(objectTransformation){
+      objectTranslation+=translation;
+      objectScale*=scale;
+    }else{
+      objectTranslation=translation;
+      objectScale=scale;
+    }
+    objectTransformation=true;
+  }
+
+  void Camera::getObjectTransformation(Coord &translation,Coord &scale) {
+    translation=objectTranslation;
+    scale=objectScale;
+  }
+
+  bool Camera::haveObjectTransformation() {
+    return objectTransformation;
   }
 
   void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix){

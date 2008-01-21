@@ -24,9 +24,9 @@ namespace tlp {
   
   public:
 
-    static void createInst() {inst=new GlyphManager();}
     static GlyphManager &getInst() {
-      assert(inst);
+      if(!inst)
+	inst=new GlyphManager();
       return *inst;
     }
 

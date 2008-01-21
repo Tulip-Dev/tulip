@@ -37,7 +37,7 @@ namespace tlp {
     virtual LODResultVector* getResultForSimpleEntities();
     virtual LODResultVector* getResultForComplexeEntities();
 
-  private:
+  protected:
     
     typedef std::pair<unsigned int, BoundingBox> BoundingBoxUnit;
     typedef std::vector<BoundingBoxUnit> BoundingBoxVector;

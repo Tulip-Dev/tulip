@@ -63,10 +63,14 @@ namespace tlp {
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
-    Camera newCamera=*camera;
-
     Coord scale(1/width,1/height,1/dept);
-    
+
+    Camera newCamera=*camera;
+    newCamera.addObjectTransformation(nodeCoord+translate,nodeSize*scale);
+
+    Coord bbScale, bbTranslate;
+    newCamera.getObjectTransformation(bbTranslate,bbScale);
+
     vector<GlNode> nodes;
     vector<GlMetaNode> metaNodes;
     vector<GlEdge> edges;
@@ -99,11 +103,9 @@ namespace tlp {
       Coord size=bb.second-bb.first;
       Coord middle=bb.first+size/2;
 
-      middle+=nodeCoord+translate;
-      size=size*nodeSize*scale;
+      middle+=bbTranslate;
+      size=size*bbScale;
       
-      /*bb.first=bb.first+nodeCoord+translate;
-	bb.second=bb.second+nodeCoord+translate;*/
       bb.first=middle-size/2;
       bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
@@ -114,11 +116,9 @@ namespace tlp {
       Coord size=bb.second-bb.first;
       Coord middle=bb.first+size/2;
 
-      middle+=nodeCoord+translate;
-      size=size*nodeSize*scale;
+      middle+=bbTranslate;
+      size=size*bbScale;
       
-      /*bb.first=bb.first+nodeCoord+translate;
-	bb.second=bb.second+nodeCoord+translate;*/
       bb.first=middle-size/2;
       bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
@@ -131,14 +131,12 @@ namespace tlp {
 	Coord size=bb.second-bb.first;
 	Coord middle=bb.first+(size)/2;
 	
-	middle+=nodeCoord+translate;
-	size=size*nodeSize*scale;
+	middle+=bbTranslate;
+	size=size*bbScale;
 	
 	bb.first=middle-size/2;
 	bb.second=middle+size/2;
 
-	/*bb.first=bb.first+nodeCoord+translate;
-	  bb.second=bb.second+nodeCoord+translate;*/
 	calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
       }
     }
@@ -146,18 +144,18 @@ namespace tlp {
     calculator.compute(camera->getViewport());
     
     LODResultVector* result=calculator.getResultForComplexeEntities();
+
+    glPushMatrix();
+    glScalef(scale[0],scale[1],scale[2]);
+    glTranslatef(translate[0],translate[1],translate[2]);
     
     for(LODResultVector::iterator it=result->begin();it!=result->end();++it) {
-      glPushMatrix();
-      glScalef(1.0/width, 1.0/height, 1.0/dept);
-      glTranslatef(translate[0],translate[1],translate[2]);
       for(std::vector<LODResultEntity>::iterator itM=(*it).second.begin();itM!=(*it).second.end();++itM) {
-	//cout << (*itM).second << endl;
-	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,camera);
+	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,&newCamera);
       }
-      glPopMatrix();
     }
 
+    glPopMatrix();
     glPopMatrix();
 
     GlNode::draw(lod,data,camera);

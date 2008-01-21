@@ -41,7 +41,8 @@ namespace tlp {
 
     static void createInst();
     static GlTextureManager &getInst() {
-      assert(inst);
+      if(!inst)
+	inst=new GlTextureManager();
       return *inst;
     }
 

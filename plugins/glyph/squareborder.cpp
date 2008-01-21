@@ -83,8 +83,7 @@ void SquareBorder::draw(node n) {
   string texFile = glGraph->elementTexture->getNodeValue(n);
     
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
-      setMaterial(Color(255, 255, 255, (glGraphInputData->elementColor->getNodeValue(n))[3]));
+    glGraph->activateTexture(texFile);
   }
   
   drawSquare();

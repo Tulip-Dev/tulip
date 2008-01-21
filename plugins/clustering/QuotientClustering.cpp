@@ -219,6 +219,7 @@ bool QuotientClustering::run() {
     Graph *its=itS->next();
     if (its!=quotientGraph) {
       node n = quotientGraph->addNode();
+      quotientGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(255,255,255,100));
       meta->setNodeValue(n,its);
       mapping[its]=n;
     }

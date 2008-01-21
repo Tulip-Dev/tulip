@@ -1,6 +1,7 @@
 #include <QtGui/qapplication.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/GlGraphWidget.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/PluginLoaderTxt.h>
@@ -19,18 +20,7 @@ void importGraph(const string &filename, GlGraphWidget *glw) {
   dataSet.set("file::filename", filename);
   Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph != 0) {
-    GlGraphComposite* glGraphComposite = new GlGraphComposite(newGraph);
-    GlGraphRenderingParameters param =
-      glGraphComposite->getRenderingParameters();
-    DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData)) {
-      param.setParameters(glGraphData);
-      glGraphComposite->setRenderingParameters(param);
-    }
-    GlLayer *layer = new GlLayer("Main");
-    layer->addGlEntity(glGraphComposite, "graph");
-    glw->getScene()->addLayer(layer);
-    glw->getScene()->addGlGraphCompositeInfo(layer, glGraphComposite);
+    openGraphOnGlGraphWidget(newGraph,&dataSet,glw);
   }
 }
 /*******************************************************************/
@@ -50,9 +40,7 @@ int main(int argc,char ** argv ){
 
   PluginLoaderTxt txtPlug;
   tlp::loadPlugins(&txtPlug);   // library side plugins
-  GlyphManager::createInst();
-  GlDisplayListManager::createInst();
-  GlTextureManager::createInst();
+  GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
   //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlGraphWidget MainWin;

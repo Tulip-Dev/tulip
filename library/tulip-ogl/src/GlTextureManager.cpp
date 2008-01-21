@@ -247,11 +247,6 @@ static bool loadPNG(const string &filename, textureImage *texture)
 #endif
 
 //====================================================================
-void GlTextureManager::createInst() {
-  if(!inst)
-    inst = new GlTextureManager();
-}
-//====================================================================
   void GlTextureManager::changeContext(unsigned int context) {
     currentContext=context;
   }

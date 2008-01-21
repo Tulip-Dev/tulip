@@ -253,9 +253,9 @@ void GWOverviewWidget::syncFromView() {
     paramView.setEdgeSizeInterpolate( param.isEdgeSizeInterpolate() );
     paramView.setEdgeColorInterpolate( param.isEdgeColorInterpolate() );
     paramView.setTexturePath( param.getTexturePath() );
-    paramView.setViewNodeLabel(false);
-    paramView.setViewEdgeLabel(false);
-    paramView.setElementOrdered(false);
+    //paramView.setViewNodeLabel(false);
+    //paramView.setViewEdgeLabel(false);
+    //paramView.setElementOrdered(false);
     _view->getScene()->getGlGraphComposite()->setRenderingParameters(paramView);
     _view->getScene()->setViewOrtho(_observedView->getScene()->isViewOrtho());
 

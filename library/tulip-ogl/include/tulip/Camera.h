@@ -133,6 +133,23 @@ namespace tlp {
     Coord getUp() {return up;}
 
     /**
+     * Set translate/scale transformation of object 
+     * It use to compute lod of nodes/edges in metanodes
+     */
+    void addObjectTransformation(const Coord &translation,const Coord &scale);
+
+    /**
+     * Get translate/scale transformation of object 
+     * It use to compute lod of nodes/edges in metanodes
+     */
+    void getObjectTransformation(Coord &translation, Coord &scale);
+
+    /**
+     * Return true if object transformation is set
+     */
+    bool haveObjectTransformation();
+    
+    /**
      * Get the modelview matrix
      */
     void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) { modelviewMatrix=this->modelviewMatrix;}
@@ -180,6 +197,10 @@ namespace tlp {
     Matrix<float, 4> modelviewMatrix;
     Matrix<float, 4> projectionMatrix;
     Matrix<float, 4> transformMatrix;
+
+    Coord objectTranslation;
+    Coord objectScale;
+    bool objectTransformation;
 
     bool d3;
     

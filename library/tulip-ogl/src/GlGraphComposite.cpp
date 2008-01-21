@@ -101,10 +101,7 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::addNode(Graph *graph,const node n) {
-    if(inputData.elementGraph->getNodeValue(node(n.id))==0)
-      nodes.push_back(GlNode(n.id)); 
-    else
-      metaNodes.push_back(GlMetaNode(n.id));
+    nodesToAdd.push_back(n.id);
   }
   //===================================================================
   void GlGraphComposite::addEdge(Graph *graph,const edge e) {
@@ -132,5 +129,19 @@ namespace tlp {
   void GlGraphComposite::destroy(Graph *graph) {
     nodes.clear();
     edges.clear();
+  }
+  //===================================================================
+  void GlGraphComposite::addNodes() {
+    if(!nodesToAdd.empty()) {
+      for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
+	if(inputData.elementGraph->getNodeValue(node(*it))==0){
+	  nodes.push_back(GlNode(*it)); 
+	}
+	else{
+	  metaNodes.push_back(GlMetaNode(*it));
+	}
+      }
+      nodesToAdd.clear();
+    }
   }
 }

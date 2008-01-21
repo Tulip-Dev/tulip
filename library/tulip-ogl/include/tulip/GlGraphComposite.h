@@ -53,6 +53,7 @@ namespace tlp {
      * Function used to visit composite's children
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
+      addNodes();
       if(isDisplayNodes()) {
 	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
 	  (*it).acceptVisitor(visitor);
@@ -95,6 +96,11 @@ namespace tlp {
      */
     virtual void destroy(Graph *);
 
+    /**
+     * Function used to add new nodes
+     */
+    void addNodes();
+
     //Delegate 
     void setDisplayNodes(bool display) {parameters.setDisplayNodes(display);}
     void setDisplayMetaNodes(bool display) {parameters.setDisplayMetaNodes(display);}
@@ -130,6 +136,8 @@ namespace tlp {
     std::vector<GlNode> nodes;
     std::vector<GlMetaNode> metaNodes;
     std::vector<GlEdge> edges;
+
+    std::vector<unsigned int> nodesToAdd;
 
   };
 }

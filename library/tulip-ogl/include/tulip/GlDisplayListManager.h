@@ -37,18 +37,13 @@ namespace tlp {
     typedef std::map<unsigned int, DisplayListMap> ContextAndDisplayListMap;
 
   public:
-
-    /**
-     * Create an instance of GlDisplayListManager
-     * This function must be call before all others functions
-     */
-    static void createInst();
     
     /**
-     * Return the current instance
+     * Return the current instance. If instance doesn't exist, create it.
      */
     static GlDisplayListManager &getInst() {
-      assert(inst);
+      if(!inst)
+	inst=new GlDisplayListManager();
       return *inst;
     }
 
