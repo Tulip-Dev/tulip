@@ -48,7 +48,6 @@ void GlHierarchyConvexHulls::compute(GlLayer *layer,Graph *graph) {
 
   // add convex hulls in gl composite
   vector<GlConvexHull *>::const_iterator it = convexHulls.begin();
-  stringstream sstr;
   unsigned int i = 0;
 
   /*bool isVisible;
@@ -67,7 +66,7 @@ void GlHierarchyConvexHulls::compute(GlLayer *layer,Graph *graph) {
   layer->addGlEntity(glHulls,"Hulls");*/
   
   for (; it != convexHulls.end(); it++, i++) {
-    sstr.clear();
+    stringstream sstr;
     sstr << i;
     if(glHulls->findGlEntity(sstr.str())){
       GlSimpleEntity *oldEntity=glHulls->findGlEntity(sstr.str());
