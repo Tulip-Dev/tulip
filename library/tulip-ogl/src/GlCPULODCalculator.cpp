@@ -107,7 +107,7 @@ namespace tlp {
 	}else{
 	  lod=1;
 	}
-	if(lod>0)
+	if(lod>=0)
 	  (*itSE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
       for(BoundingBoxVector::iterator itV=(*itM).second.second->begin();itV!=(*itM).second.second->end();++itV){
@@ -116,7 +116,7 @@ namespace tlp {
 	}else{
 	  lod=1;
 	}
-	if(lod>0)
+	if(lod>=0)
 	  (*itCE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
       }
       glMatrixMode(GL_MODELVIEW);
