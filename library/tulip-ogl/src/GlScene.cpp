@@ -387,13 +387,11 @@ namespace tlp {
       glDisable(GL_STENCIL_TEST);
 
       for(vector<LODResultEntity>::iterator itE=(*it).second.begin();itE!=(*it).second.end();++itE) {
-	if((*itE).second>0) {
-	  glLoadName((unsigned int)((*itE).first));
-	  if(type==SelectSimpleEntities) {
-	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
-	  }else{
-	    ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
-	  }
+	glLoadName((unsigned int)((*itE).first));
+	if(type==SelectSimpleEntities) {
+	  ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
+	}else{
+	  ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
 	}
       }
       
