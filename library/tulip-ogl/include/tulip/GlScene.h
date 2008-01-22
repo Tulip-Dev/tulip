@@ -30,7 +30,7 @@ namespace tlp {
      
     GlScene();
 
-    void initGlParametters();
+    void initGlParameters();
 
     void draw();
     

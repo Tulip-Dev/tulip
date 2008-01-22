@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <climits>
 
 #include "tulip/GlLODSceneVisitor.h"
 #include "tulip/TextRenderer.h"
@@ -32,7 +33,7 @@ namespace tlp {
     selectionLayer->setScene(this);
   }
 
-  void GlScene::initGlParametters() {
+  void GlScene::initGlParameters() {
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     glEnable(GL_LINE_SMOOTH);
     glDisable(GL_POINT_SMOOTH);
@@ -49,7 +50,7 @@ namespace tlp {
     glPolygonMode(GL_FRONT, GL_FILL);
     glColorMask(1, 1, 1, 1);
     glEnable(GL_BLEND);
-    glIndexMask(~0);
+    glIndexMask(UINT_MAX);
     glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), 1.0);
     glClearStencil(0xFFFF);
     glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
@@ -62,7 +63,7 @@ namespace tlp {
   }
 
   void GlScene::draw() {
-    initGlParametters();
+    initGlParameters();
     
     GlCPULODCalculator calculator;
     GlLODSceneVisitor lodVisitor(&calculator,glGraphComposite->getInputData());
