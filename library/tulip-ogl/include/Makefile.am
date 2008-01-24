@@ -41,8 +41,9 @@ nobase_include_HEADERS = \
 	tulip/GlConvexHull.h \
 	tulip/GlHierarchyConvexHulls.h \
 	tulip/GlSceneObserver.h \
-	tulip/GlLine.h
-
+	tulip/GlLine.h \
+	tulip/libgpugraph.h \
+	tulip/tulipgpu.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
@@ -67,3 +68,6 @@ noinst_HEADERS = \
 	tulip/TLPPixmapGlyph.h\
 	tulip/OcclusionTest.h \
 	tulip/GlLines.h
+
+tulip/libgpugraph.h : ../../../thirdparty/libgpugraph/libgpugraph.h
+	cp -f $< $@

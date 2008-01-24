@@ -17,9 +17,9 @@ lib_LTLIBRARIES = libtulip-ogl.la
 INCLUDES = ${DLL_TULIP_GL} @TULIP_OGL_INCLUDE@ -D_REENTRANT @GL_INCLUDES@  @TULIP_INCLUDE@ @LIBGLE_INCLUDE@ @FTGL_INCLUDE@ ${ADD_INCLUDES}
 # MAC PORT
 if MACOSX
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls $(top_builddir)/thirdparty/ftgl/*.lo` `ls $(top_builddir)/thirdparty/gle/*.lo` ${ADDLDFLAGS} -export-dynamic -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ `ls $(top_builddir)/thirdparty/ftgl/*.lo` `ls $(top_builddir)/thirdparty/gle/*.lo` `ls $(top_builddir)/thirdparty/libgpugraph/*.lo` ${ADDLDFLAGS} -export-dynamic -release ${RELEASE}
 else
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ @FTGL_LDFLAGS@ ${ADDLDFLAGS} -export-dynamic -release ${RELEASE} @LIBGLE_LDFLAGS@
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ @FTGL_LDFLAGS@ $(top_builddir)/thirdparty/libgpugraph/libgpugraph.la ${ADDLDFLAGS} -export-dynamic -release ${RELEASE} @LIBGLE_LDFLAGS@
 endif
 
 libtulip_ogl_la_SOURCES = \
@@ -77,5 +77,6 @@ libtulip_ogl_la_SOURCES = \
 	GlEdge.cpp \
 	GlDisplayListManager.cpp \
 	GlSceneObserver.cpp \
-	GlLine.cpp
+	GlLine.cpp \
+	tulipgpu.cpp
 

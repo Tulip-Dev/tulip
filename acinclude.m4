@@ -421,9 +421,9 @@ then
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="-framework OpenGL"
+    LIB_GL="-lGLEW -framework OpenGL"
   else
-    LIB_GL="-lGLU -lGL"
+    LIB_GL="-lGLEW -lGLU -lGL"
   fi
 fi
 AC_SUBST(LIB_GL)
