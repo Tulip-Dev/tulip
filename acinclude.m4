@@ -417,11 +417,11 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-  LIB_GL="-lglu32 -lopengl32"
+  LIB_GL="-lglew32 -lglu32 -lopengl32"
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="-lGLEW -framework OpenGL"
+    LIB_GL="/usr/local/lib/libGLEW.dylib -framework OpenGL"
   else
     LIB_GL="-lGLEW -lGLU -lGL"
   fi
