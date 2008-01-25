@@ -50,9 +50,14 @@ namespace tlp {
     Graph* getGraph() {return graph;}
 
     /**
-     * Reload klayoutProperty of the graph
+     * Reload layoutProperty of the graph
      */
     void reloadLayoutProperty();
+    
+    /**
+     * Reload viewLabel Property of the graph
+     */
+    void reloadLabelProperty();
     
   public:
 

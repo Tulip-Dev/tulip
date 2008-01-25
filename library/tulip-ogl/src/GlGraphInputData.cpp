@@ -37,4 +37,8 @@ namespace tlp {
     elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
   }
   
+  void GlGraphInputData::reloadLabelProperty() {
+    elementLabel = graph->getProperty<StringProperty>("viewLabel");
+  }
+  
 }
