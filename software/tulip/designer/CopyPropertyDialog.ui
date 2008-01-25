@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>372</width>
-            <height>161</height>
+            <width>476</width>
+            <height>175</height>
         </rect>
     </property>
     <property name="caption">
@@ -61,7 +61,7 @@
                             </property>
                             <property name="minimumSize">
                                 <size>
-                                    <width>110</width>
+                                    <width>120</width>
                                     <height>0</height>
                                 </size>
                             </property>
@@ -79,40 +79,12 @@
                             </property>
                             <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>newPropertyButton</cstring>
-                                </property>
-                                <property name="geometry">
-                                    <rect>
-                                        <x>0</x>
-                                        <y>0</y>
-                                        <width>110</width>
-                                        <height>19</height>
-                                    </rect>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>110</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>new property</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>The destination property will be a new property. It's name is given by the contents of  the text field on the right</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton">
-                                <property name="name">
                                     <cstring>localPropertyButton</cstring>
                                 </property>
                                 <property name="geometry">
                                     <rect>
-                                        <x>1</x>
-                                        <y>26</y>
+                                        <x>0</x>
+                                        <y>35</y>
                                         <width>110</width>
                                         <height>19</height>
                                     </rect>
@@ -136,9 +108,9 @@
                                 </property>
                                 <property name="geometry">
                                     <rect>
-                                        <x>1</x>
-                                        <y>51</y>
-                                        <width>110</width>
+                                        <x>0</x>
+                                        <y>65</y>
+                                        <width>130</width>
                                         <height>19</height>
                                     </rect>
                                 </property>
@@ -153,6 +125,34 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>The destination property will be an already existing parent property choosen in the list on the right</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>newPropertyButton</cstring>
+                                </property>
+                                <property name="geometry">
+                                    <rect>
+                                        <x>0</x>
+                                        <y>5</y>
+                                        <width>110</width>
+                                        <height>19</height>
+                                    </rect>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>110</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>new property</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>The destination property will be a new property. It's name is given by the contents of  the text field on the right</string>
                                 </property>
                             </widget>
                         </widget>
