@@ -17,8 +17,9 @@ class QScrollBar;
 
 namespace tlp {
 class PropertyInterface;
-class GlGraph;
 }
+
+class GlGraphWidget;
 
 class PropertyDialog : public PropertyDialogData
 { 
@@ -27,11 +28,11 @@ class PropertyDialog : public PropertyDialogData
 public:
   PropertyDialog(QWidget *parent = 0, const char *name = 0, bool modal = FALSE, WFlags fl = 0);
   ~PropertyDialog();
-  void setGlGraphWidget(tlp::GlGraph *);
+  void setGlGraphWidget(GlGraphWidget *);
 
 private:
   tlp::Graph *graph;
-  tlp::GlGraph *glWidget;
+  GlGraphWidget *glWidget;
   tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;
@@ -42,8 +43,7 @@ public slots:
   void update();
   void selectNode(tlp::node);
   void selectEdge(tlp::edge);
-  void setGraph(tlp::Graph *);
-  void changePropertyName(QListViewItem *);
+  void changePropertyName(Q3ListViewItem *);
   void newProperty();
   void removeProperty();
   void cloneProperty();

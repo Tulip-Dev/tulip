@@ -201,7 +201,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   clusterTreeWidget=tabWidget->clusterTree;
   //Init Property Editor Widget
   propertiesWidget=tabWidget->propertyDialog;
-  propertiesWidget->setGraph(0);
+  propertiesWidget->setGlGraphWidget(NULL);
   connect(propertiesWidget->tableNodes, SIGNAL(showElementProperties(unsigned int,bool)),
 	  this, SLOT(showElementProperties(unsigned int,bool)));
   connect(propertiesWidget->tableEdges, SIGNAL(showElementProperties(unsigned int,bool)),
@@ -494,7 +494,6 @@ void viewGl::changeGraph(Graph *graph) {
   QDir::setCurrent(tmp.dirPath() + "/");
   clusterTreeWidget->setGraph(graph);
   eltProperties->setGraph(graph);
-  //propertiesWidget->setGlGraphWidget(glWidget->getScene()->getGlGraph());
   overviewWidget->setObservedView(glWidget);
   layerWidget->attachGraphWidget(glWidget);
 #ifdef STATS_UI
@@ -504,7 +503,7 @@ void viewGl::changeGraph(Graph *graph) {
   // this line has been moved after the call to redrawView to ensure
   // that a new created graph has all its view... properties created
   // (call to initProxies())
-  propertiesWidget->setGraph(graph);
+  propertiesWidget->setGlGraphWidget(glWidget);
   // avoid too much notification when importing a graph
   // see fileOpen
   if (importedGraph != graph)
@@ -1120,7 +1119,7 @@ void viewGl::setParameters(const DataSet& data) {
   glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   clusterTreeWidget->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
   eltProperties->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
-  propertiesWidget->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
+  propertiesWidget->setGlGraphWidget(glWidget);
 }
 //**********************************************************************
 void viewGl::updateCurrentGraphInfos() {
@@ -1805,8 +1804,7 @@ void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
       return;
     }
     clusterTreeWidget->setGraph(0);
-    propertiesWidget->setGraph(0);
-    propertiesWidget->setGlGraphWidget(0);
+    propertiesWidget->setGlGraphWidget(NULL);
     eltProperties->setGraph(0);
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
@@ -1922,7 +1920,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
   if (dataSet!=0) delete dataSet;
 
-  propertiesWidget->setGraph(graph);
+  propertiesWidget->setGlGraphWidget(glWidget);
   overviewWidget->setObservedView(glWidget);
   Observable::unholdObservers();
   return resultBool;

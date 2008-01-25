@@ -34,6 +34,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/PropertyWidget.h>
 #include <tulip/SGHierarchyWidget.h>
+#include <tulip/GlGraphWidget.h>
 #include <tulip/ForEach.h>
 #include <tulip/hash_string.h>
 
@@ -44,14 +45,6 @@ using namespace std;
 using namespace tlp;
 
 //==================================================================================================
-void PropertyDialog::setGlGraphWidget(GlGraph *glwidget) {
-  glWidget=glwidget;
-  tableNodes->selectNodeOrEdge(true);
-  tableEdges->selectNodeOrEdge(false);
-  //  tableEdges->filterSelection(_filterSelection);
-  // tableNodes->filterSelection(_filterSelection);
-}
-
 PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
   : PropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
   _filterSelection=false;
@@ -118,7 +111,11 @@ void PropertyDialog::setAllValue() {
   setAllButton->setDown(false);
 }
 //=================================================
-void PropertyDialog::setGraph(Graph *sg) {
+void PropertyDialog::setGlGraphWidget(GlGraphWidget *gw) {
+  glWidget = gw;
+  Graph* sg = NULL;
+  if (gw)
+    sg = gw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   graph=sg;
   editedProperty=0;
 
@@ -126,6 +123,8 @@ void PropertyDialog::setGraph(Graph *sg) {
   inheritedProperties->clear();
   propertyName->setText(QString("Select a Property"));
   //Build the property list
+  tableNodes->selectNodeOrEdge(true);
+  tableEdges->selectNodeOrEdge(false);
   tableNodes->setGraph(sg);
   tableEdges->setGraph(sg);
   tableEdges->filterSelection(_filterSelection);
@@ -163,7 +162,7 @@ void PropertyDialog::newProperty() {
 	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
-	setGraph(graph);
+	setGlGraphWidget(glWidget);
       }
   }
 }
@@ -174,7 +173,7 @@ void PropertyDialog::toStringProperty() {
   if (name == "viewLabel") return;
   Observable::holdObservers();
   PropertyInterface *newLabels=graph->getProperty(name);
-  StringProperty *labels=graph->getProperty<StringProperty>("viewLabel");
+  StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
   if (tabWidget->currentPageIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
@@ -191,14 +190,16 @@ void PropertyDialog::toStringProperty() {
       labels->setEdgeValue(ite,newLabels->getEdgeStringValue(ite));
     } delete itE;
   }
-    Observable::unholdObservers();
+  glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLabelProperty();
+  glWidget->draw();
+  Observable::unholdObservers();
 }
 //=================================================
 void PropertyDialog::removeProperty() {
   if (editedProperty==0) return;
   if(graph->existLocalProperty(editedPropertyName)) {
     graph->delLocalProperty(editedPropertyName);
-    setGraph(graph);
+    setGlGraphWidget(glWidget);
     editedProperty=0;
   }
   else
@@ -253,22 +254,23 @@ void PropertyDialog::cloneProperty() {
 		     == QDialog::Rejected)
 	    return;
 	}
-	Observable::holdObservers();
-	if (typeid((*editedProperty)) == typeid(DoubleProperty))
-	  {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(LayoutProperty))
-	  {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(StringProperty))
-	  {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(BooleanProperty))
-	  {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(IntegerProperty))
-	  {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(ColorProperty))
-	  {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(SizeProperty))
-	  {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
       }
+      Observable::holdObservers();
+      if (typeid((*editedProperty)) == typeid(DoubleProperty))
+	{*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(LayoutProperty))
+	{*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(StringProperty))
+	{*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(BooleanProperty))
+	{*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(IntegerProperty))
+	{*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(ColorProperty))
+	{*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(SizeProperty))
+	{*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+      //}
     } else {
       Graph *parent = graph->getSuperGraph();
       Observable::holdObservers();
@@ -287,7 +289,7 @@ void PropertyDialog::cloneProperty() {
       if (typeid((*editedProperty)) == typeid(SizeProperty))
 	{*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
     }
-    setGraph(graph);
+    setGlGraphWidget(glWidget);
     Observable::unholdObservers();
   }
 }
