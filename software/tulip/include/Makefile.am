@@ -21,7 +21,6 @@ noinst_HEADERS = \
 	InfoDialog.h\
 	CopyPropertyDialog.h \
 	PropertyDialog.h\
-	PropertyDialogQt3.h \
 	QtProgress.h\
 	viewGl.h \
 	TulipStatsWidget.h\

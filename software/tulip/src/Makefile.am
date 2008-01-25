@@ -77,9 +77,6 @@ moc_%.cpp: ../include/%.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
-moc_PropertyDialog.cpp: ../include/PropertyDialogQt3.h 
-	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
 %Data.cpp: ../designer/%.ui ../include/%Data.h
 	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<
 
