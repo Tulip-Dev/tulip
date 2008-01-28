@@ -22,6 +22,7 @@ using namespace tlp;
 struct RectPosition : public tlp::GlSimpleEntity {
   void draw(float lod,Camera *camera);
   RectPosition(GlGraphWidget *, GlGraphWidget *);
+  BoundingBox getBoundingBox() {return BoundingBox();}
   void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
   }

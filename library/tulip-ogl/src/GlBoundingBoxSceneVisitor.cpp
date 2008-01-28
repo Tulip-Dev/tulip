@@ -20,8 +20,10 @@ namespace tlp {
     if(entity->isVisible()) {
       BoundingBox bb=entity->getBoundingBox();
       
-      boundingBox.check(bb.first);
-      boundingBox.check(bb.second);
+      if(bb.isValid) {
+	boundingBox.check(bb.first);
+	boundingBox.check(bb.second);
+      }
     }
   }
   

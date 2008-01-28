@@ -12,6 +12,7 @@
 #define Tulip_BOUNDINGBOX_H
 
 #include <utility>
+#include <limits>
 
 #include "tulip/Coord.h"
 
@@ -19,7 +20,7 @@ namespace tlp {
 
   struct BoundingBox : public std::pair<Coord,Coord> {
   
-    BoundingBox():isValid(false) {}
+    BoundingBox():isValid(false) {first=Coord(std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),0);second=Coord(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),0);}
     BoundingBox(const Coord& min,const Coord& max) : isValid(true) {
       first=min;
       second=max;
@@ -35,10 +36,14 @@ namespace tlp {
 	  first[0]=coord[0];
 	if(coord[1]<first[1])
 	  first[1]=coord[1];
+	if(coord[2]<first[2])
+	  first[2]=coord[2];
 	if(coord[0]>second[0])
 	  second[0]=coord[0];
 	if(coord[1]>second[1])
 	  second[1]=coord[1];
+	if(coord[2]>second[2])
+	  second[2]=coord[2];
       }
     }
 
