@@ -101,6 +101,16 @@ namespace tlp {
      */
     void addNodes();
 
+    /**
+     * Get the data in XML form
+     */
+    void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Set the data with XML
+     */
+    void setWithXML(xmlNodePtr rootNode);
+
     //Delegate 
     void setDisplayNodes(bool display) {parameters.setDisplayNodes(display);}
     void setDisplayMetaNodes(bool display) {parameters.setDisplayMetaNodes(display);}

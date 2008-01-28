@@ -41,14 +41,12 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    */
   void setPosition(const Coord& position);
 
-  /**
-   * Default constructor
-   *
-   * \attention This one is also forbidden to use.
-   */
-  GlQuad();
-
  public:
+
+  /**
+   * Constructor
+   */
+  GlQuad() {}
 
   /**
    * Constructor
@@ -74,7 +72,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   /**
    * Virtual function used to draw the quad.
    */
-  virtual void draw(float lod);
+  virtual void draw(float lod,Camera *camera);
 
   /**
    * Accessor in writing to the position.
@@ -106,6 +104,17 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * \param idColor Indicates which point we want to get the color.
    */
   Color* getColor(int idColor) const;
+
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
+  
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
+  
 };
 }
 #endif

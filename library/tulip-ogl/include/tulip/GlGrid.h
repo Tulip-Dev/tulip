@@ -36,6 +36,11 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
 
   /**
    * Constructor
+   */
+  GlGrid() {}
+
+  /**
+   * Constructor
    *
    * \param frontTopLeft The minimum of the bounding box of the grid.
    * \param backBottomRight The maximum of the bounding box of the grid.
@@ -58,6 +63,16 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
    * Accessor in writing to the dimensions to display.
    */
   void setDisplayDim(bool displayDim[3]);
+  /**
+   * Get the data in XML form
+   */
+  void getXML(xmlNodePtr rootNode);
+  
+  /**
+   * Set the data with XML
+   */
+  void setWithXML(xmlNodePtr rootNode);
+  
 
  protected:
   bool displayDim[3]; /**< Which dimensions should be displayed ? Note that only one dimension at most should be disabled*/

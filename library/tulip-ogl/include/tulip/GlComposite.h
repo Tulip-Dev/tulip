@@ -80,6 +80,16 @@ namespace tlp {
       }
     }
 
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
+
   protected:
 
     std::map<std::string, GlSimpleEntity*> elements;

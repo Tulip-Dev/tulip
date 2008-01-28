@@ -49,13 +49,6 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   GlPolygon* faces[N_BOX_FACES]; /**< Stores a GlPolygon per face */
 
   /**
-   * The default constructor
-   *
-   * \attention It's usage is forbidden, so that's why it has been put in protected members.
-   */
-  GlBox();
-
-  /**
    * Function used to compute the points of the box from a center and a size.
    */
   void computePoints();
@@ -66,6 +59,13 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   void computeFaces();
 
  public:  
+
+  /**
+   * The default constructor
+   *
+   * \attention It's usage is forbidden.
+   */
+  GlBox();
 
   /**
    * Constructor from size
@@ -117,6 +117,16 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
    * Accessor in reading to the size.
    */
   Size* getSize() const;
+
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
+  
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 };
 }
 #endif

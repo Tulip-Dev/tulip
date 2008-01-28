@@ -12,7 +12,7 @@
 using namespace std;
 
 namespace tlp {
-
+  //====================================================
   Camera::Camera(GlScene* scene,Coord center,Coord eyes, Coord up, double zoomFactor, double sceneRadius):
     matrixCoherent(false),
     center(center),
@@ -24,15 +24,15 @@ namespace tlp {
     objectTransformation(false),
     d3(true){
   }
-
+  //====================================================
   Camera::Camera(GlScene* scene,bool d3) :
     matrixCoherent(false),d3(d3) {
   }
-
+  //===================================================
   void Camera::setScene(GlScene* scene) {
     this->scene=scene;
   }
-  
+  //====================================================
   void Camera::move(float speed) {
     Coord move = eyes - center;
     move *= speed/move.norm();
@@ -40,8 +40,7 @@ namespace tlp {
     center += move;
     matrixCoherent=false;
   }
-  
-  /// This rotates the camera's eyes around the center depending on the values passed in.
+  //====================================================
   void Camera::rotate(float angle, float x, float y, float z) {
     Coord vNewEyes;
     Coord vNewUp;
@@ -90,8 +89,7 @@ namespace tlp {
     up   = vNewUp;
     matrixCoherent=false;
   }
-  
-  ///  This strafes the camera left and right depending on the speed (-/+)
+  //====================================================
   void Camera::strafeLeftRight(float speed) {   
     Coord strafeVector=((eyes-center)^up);
     strafeVector *= speed / strafeVector.norm();
@@ -99,8 +97,7 @@ namespace tlp {
     eyes   += strafeVector;
     matrixCoherent=false;
   }
-  
-  ///  This strafes the camera left and right depending on the speed (-/+)
+  //====================================================
   void Camera::strafeUpDown(float speed) {   
     Coord strafeVector(up);
     strafeVector *= speed / strafeVector.norm();
@@ -108,13 +105,13 @@ namespace tlp {
     eyes   += strafeVector;
     matrixCoherent=false;
   }
-  
+  //====================================================
   void Camera::initGl() {
     initProjection();
     initModelView();
     initLight();
   }
-
+  //====================================================
   void Camera::initLight() {
     GLuint error = glGetError();
     if ( error != GL_NO_ERROR)
@@ -154,7 +151,7 @@ namespace tlp {
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
   }
-
+  //====================================================
   void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
     glMatrixMode(GL_PROJECTION);
     if(reset) glLoadIdentity();
@@ -184,12 +181,12 @@ namespace tlp {
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
-  
+  //====================================================
   void Camera::initProjection(bool reset) {
     Vector<int, 4> viewport=scene->getViewport();
     initProjection(viewport,reset);
   }
-
+  //====================================================
   void Camera::initModelView() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -214,7 +211,7 @@ namespace tlp {
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
-
+  //====================================================
   void Camera::addObjectTransformation(const Coord &translation,const Coord &scale) {
     if(objectTransformation){
       objectTranslation+=translation;
@@ -225,16 +222,16 @@ namespace tlp {
     }
     objectTransformation=true;
   }
-
+  //====================================================
   void Camera::getObjectTransformation(Coord &translation,Coord &scale) {
     translation=objectTranslation;
     scale=objectScale;
   }
-
+  //====================================================
   bool Camera::haveObjectTransformation() {
     return objectTransformation;
   }
-
+  //====================================================
   void Camera::getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix){
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -249,7 +246,7 @@ namespace tlp {
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
   }
-
+  //====================================================
   void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -263,7 +260,7 @@ namespace tlp {
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
   }
-
+  //====================================================
   Coord Camera::screenTo3DWorld(const Coord &point) {
     initProjection();
     initModelView();
@@ -285,9 +282,50 @@ namespace tlp {
     Vector<int, 4> viewport = getViewport();
     return projectPoint(obj, transformMatrix, viewport);
   }
-
+  //====================================================
   Vector<int, 4> Camera::getViewport() {
     return scene->getViewport();
   }
+  //====================================================
+  void Camera::getXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr node = NULL;
 
+    stringstream strZF;
+    stringstream strSR;
+    stringstream strD3;
+
+    GlXMLTools::createDataNode(rootNode,dataNode);
+    GlXMLTools::getXML(dataNode,"center",center);
+    GlXMLTools::getXML(dataNode,"eyes",eyes);
+    GlXMLTools::getXML(dataNode,"up",up);
+    GlXMLTools::getXML(dataNode,"zoomFactor",zoomFactor);
+    GlXMLTools::getXML(dataNode,"sceneRadius",sceneRadius);
+    GlXMLTools::getXML(dataNode,"d3",d3);
+  }
+   //====================================================
+  void Camera::setWithXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr node = NULL;
+
+    for (node = rootNode; node; node = node->next) {
+      if(node->type == XML_ELEMENT_NODE) {
+	string name=(char *)node->name;
+	if(name=="data") {
+	  dataNode=node;
+	}
+      }
+    }
+
+    if(dataNode) {
+
+      GlXMLTools::setWithXML(dataNode,"center",center);
+      GlXMLTools::setWithXML(dataNode,"eyes",eyes);
+      GlXMLTools::setWithXML(dataNode,"up",up);
+      GlXMLTools::setWithXML(dataNode,"zoomFactor",zoomFactor);
+      GlXMLTools::setWithXML(dataNode,"sceneRadius",sceneRadius);
+      GlXMLTools::setWithXML(dataNode,"d3",d3);
+      
+    }
+  }
 }

@@ -40,6 +40,10 @@ namespace tlp {
 
     void addParent(GlLayer *layer) {parents.push_back(layer);}
 
+    virtual void getXML(xmlNodePtr rootNode) =0;
+    
+    virtual void setWithXML(xmlNodePtr rootNode) =0;
+
   protected:
     
     bool visible;

@@ -52,5 +52,43 @@ namespace tlp {
     return composite.getDisplays();
   }
 
+  void GlLayer::getXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode= NULL;
+    xmlNodePtr node=NULL;
+
+    GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+
+    GlXMLTools::createChild(dataNode,"camera",node);
+    camera.getXML(node);
+    GlXMLTools::getXML(dataNode,"visible",visible);
+
+    composite.getXML(childrenNode);
+    
+  }
+
+  void GlLayer::setWithXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode= NULL;
+    xmlNodePtr node= NULL;
+
+    GlXMLTools::getDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+
+    // Parse data
+    if(dataNode) {
+      GlXMLTools::getData("camera", dataNode, node);
+      if(node) {
+	camera.setWithXML(node);
+      }
+      GlXMLTools::setWithXML(dataNode,"visible",visible);
+    }
+
+    // Parse children
+    if(childrenNode){
+      composite.setWithXML(childrenNode);
+    }
+    
+  }
+
   
 }

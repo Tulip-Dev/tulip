@@ -28,19 +28,35 @@ namespace tlp {
   {
   public :
     
+    GlLabel() {}
+
     GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor);
 
     void setText(const std::string& text);
 
-    BoundingBox getBoundingBox();
+    virtual BoundingBox getBoundingBox();
 
-    void draw(float lod);
+    virtual void draw(float lod, Camera *camera);
+
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+    
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
+    
 
   private :
 
+    std::string text;
     TextRenderer renderer;
     Coord centerPosition;
     Coord size;
+    Color color;
+    std::string fontPath;
   };
 }
 #endif

@@ -59,6 +59,7 @@
 #define GLYPH "glyph"
 #define PLUGIN "plugin"
 #define ATTRIBUTES "attributes"
+#define SCENE "scene"
 
 using namespace std;
 using namespace tlp;
@@ -421,6 +422,24 @@ struct TLPFileInfoBuilder: public TLPFalse {
   }
 };
 //================================================================================
+struct TLPSceneBuilder: public TLPFalse {
+  TLPGraphBuilder *graphBuilder;
+
+  TLPSceneBuilder(TLPGraphBuilder *graphBuilder):
+    graphBuilder(graphBuilder){
+  }
+  virtual ~TLPSceneBuilder(){
+  }
+
+  bool addString(const string &str) {
+    graphBuilder->dataSet->set<string>(SCENE, str);
+    return true;
+  }
+  bool close(){
+    return true;
+  }
+};
+//================================================================================
 struct TLPDataBuilder : public TLPFalse
 {
   TLPDataSetBuilder *dataSetBuilder;
@@ -648,6 +667,8 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
     newBuilder=new TLPDataSetBuilder(this, DISPLAYING);
   } else if (structName==ATTRIBUTES) {
     newBuilder=new TLPDataSetBuilder(this);
+  } else if (structName==SCENE) {
+    newBuilder=new TLPSceneBuilder(this);
   }
   else
     newBuilder=new TLPFileInfoBuilder(this, structName);

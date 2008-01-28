@@ -144,4 +144,13 @@ namespace tlp {
       nodesToAdd.clear();
     }
   }
+  //====================================================
+  void GlGraphComposite::getXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode = NULL;
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlGraphComposite");
+  }
+   //====================================================
+  void GlGraphComposite::setWithXML(xmlNodePtr rootNode){
+  }
 }

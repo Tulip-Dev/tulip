@@ -21,6 +21,9 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
+  /** 
+   * class to create a polygon
+   */
   class TLP_GL_SCOPE GlPolygon : public GlSimpleEntity {
   public:
     GlPolygon(const bool filled = true,
@@ -30,9 +33,9 @@ namespace tlp {
 	      const std::vector<Color> &outlineColors,
 		 const bool filled,
 		 const bool outlined);
-    GlPolygon(const unsigned int nbPoints = 3u, 
-		 const unsigned int nbFillColors = 1u, 
-		 const unsigned int nbOutlineColors = 1u, 
+    GlPolygon(const unsigned int nbPoints, 
+		 const unsigned int nbFillColors, 
+		 const unsigned int nbOutlineColors, 
 		 const bool filled = true,
 		 const bool outlined = true);
     virtual ~GlPolygon();
@@ -56,6 +59,21 @@ namespace tlp {
     
     void setFillMode(const bool);
     void setOutlineMode(const bool);
+
+    /**
+     * Function to export data and type in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXMLOnlyData(xmlNodePtr rootNode);
+
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
     std::vector<Coord> _points;

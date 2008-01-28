@@ -28,5 +28,12 @@ namespace tlp {
       (*it).draw(lod,camera);
     }
   }
+  
+  //=====================================================
+  void GlMultiPolygon::getXML(xmlNodePtr rootNode) {
+  }
+  //============================================================
+  void GlMultiPolygon::setWithXML(xmlNodePtr rootNode) {
+  }
 
 }

@@ -94,6 +94,16 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    */
   bool inRect(double x, double y);
 
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
+  
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
+
   virtual void draw(float lod,Camera *camera);
 };
 }

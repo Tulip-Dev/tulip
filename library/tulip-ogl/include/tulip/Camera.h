@@ -9,6 +9,8 @@
 #include <tulip/Vector.h>
 #include <tulip/Matrix.h>
 
+#include "tulip/GlXMLTools.h"
+
 namespace tlp {
 
   class GlScene;
@@ -183,6 +185,16 @@ namespace tlp {
      * Return the screen position for the given 3D coordinate
      */
     Coord worldTo2DScreen(const Coord &obj);
+    
+    /**
+     * Get the camera's data in XML form
+     */
+    void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Set the camera's data with XML
+     */
+    void setWithXML(xmlNodePtr rootNode);
 
   private:
 

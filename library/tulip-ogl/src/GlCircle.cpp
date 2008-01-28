@@ -14,7 +14,7 @@ namespace tlp {
     ocolor(0) = outlineColor;
     set(center, radius, startAngle);
   }
-  
+  //===========================================================
   void  GlCircle::set(const Coord &center, float radius, float startAngle) {
     float delta = (2.0f * M_PI) / (float)_points.size();
     for (unsigned int i=0; i < _points.size(); ++i) {
@@ -23,5 +23,12 @@ namespace tlp {
       _points[i] = Coord(center[0] + deltaX, center[1] + deltaY, center[2]);
       boundingBox.check(_points[i]);
     }
+  }
+  //===========================================================
+  void GlCircle::getXML(xmlNodePtr rootNode) {
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlCircle");
+
+    getXMLOnlyData(rootNode);
   }
 }

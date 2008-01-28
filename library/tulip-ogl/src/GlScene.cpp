@@ -511,5 +511,108 @@ namespace tlp {
     }
     return NULL;
   }
+  //====================================================
+  void GlScene::getXML(string &out) {
+    xmlDocPtr doc = NULL;       /* document pointer */
+    xmlNodePtr node = NULL;
+    xmlNodePtr rootNode = NULL;
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode = NULL;/* node pointers */
+
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    rootNode = xmlNewNode(NULL, BAD_CAST "scene");
+    xmlDocSetRootElement(doc, rootNode);
+
+    GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+
+    GlXMLTools::getXML(dataNode,"viewport",viewport);
+    GlXMLTools::getXML(dataNode,"background",backgroundColor);
+
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      GlXMLTools::createChild(childrenNode, (*it).first, node);
+      GlXMLTools::createProperty(node, "type", "GlLayer");
+      (*it).second->getXML(node);
+    }
+
+    /* 
+     * Dumping document to stdio or file
+     */
+    xmlChar *xmlbuff;
+    int buffersize;
+
+    xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+    out.append((char *)xmlbuff);
+    
+    int lastPos=0;
+    int current=out.find("\"",lastPos);
+    while(current!=-1){
+      out.replace(current,1,"\\\"");
+      lastPos=current+2;
+      current=out.find("\"",lastPos);
+    }
+
+    xmlFree(xmlbuff);
+
+    /*free the document */
+    xmlFreeDoc(doc);
+
+    /*
+     *Free the global variables that may
+     *have been allocated by the parser.
+     */
+    xmlCleanupParser();
+
+    /*
+     * this is to debug memory for regression tests
+     */
+    xmlMemoryDump();
+  }
+  //====================================================
+  void GlScene::setWithXML(string &in, Graph *graph) {
+    xmlDocPtr doc;
+    xmlNodePtr rootNode = NULL;
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode = NULL;
+    xmlNodePtr node = NULL;/* node pointers */
+
+    glGraphComposite=new GlGraphComposite(graph);
+
+    doc = xmlReadMemory(&in[0], in.length(), "noname.xml", NULL, 0);
+
+    rootNode = xmlDocGetRootElement(doc);
+
+    string name;
+
+    name=((char*)rootNode->name);
+    if (rootNode->type == XML_ELEMENT_NODE && name=="scene") {
+      GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
+    }else{
+      assert(false);
+    }
+
+    // Parse data
+    if(dataNode) {
+      GlXMLTools::setWithXML(dataNode,"viewport",viewport);
+      GlXMLTools::setWithXML(dataNode,"background",backgroundColor);
+    }
+
+    // Parse children
+    for (node = childrenNode->children; node; node = node->next) {
+      if(node->type == XML_ELEMENT_NODE) {
+	string propName=(char*)node->properties->name;
+	string propValue=(char*)node->properties->children->content;
+	if(propName=="type" && propValue=="GlLayer") {
+	  GlLayer *newLayer=new GlLayer((char*)node->name);
+	  addLayer(newLayer);
+	  newLayer->setWithXML(node);
+	}else{
+	  assert(false);
+	}
+      }
+    }
+
+    getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+    addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
+  }
 
 }

@@ -25,6 +25,9 @@ struct RectPosition : public tlp::GlSimpleEntity {
   void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
   }
+
+  virtual void getXML(xmlNodePtr node) {}
+  virtual void setWithXML(xmlNodePtr node) {}
 private :
   GlGraphWidget * _observedView;
   GlGraphWidget * _view;

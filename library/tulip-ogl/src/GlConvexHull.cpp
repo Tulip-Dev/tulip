@@ -8,18 +8,19 @@
 #include "tulip/GlConvexHull.h"
 
 using namespace std;
-using namespace tlp;
 
-GlConvexHull::GlConvexHull(const vector<Coord> &points, 
-			   const vector<Color> &fcolors,
-			   const vector<Color> &ocolors,
-			   const bool filled,
-			   const bool outlined,
-			   const bool computeHull):
+namespace tlp {
 
-  _points(points),
-  _fillColors(fcolors),
-  _outlineColors(ocolors),
+  GlConvexHull::GlConvexHull(const vector<Coord> &points, 
+			     const vector<Color> &fcolors,
+			     const vector<Color> &ocolors,
+			     const bool filled,
+			     const bool outlined,
+			     const bool computeHull):
+    
+    _points(points),
+    _fillColors(fcolors),
+    _outlineColors(ocolors),
   _filled(filled),
   _outlined(outlined) {
 
@@ -306,3 +307,36 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 			 
   return convexHulls;
 }
+
+  //====================================================
+  void GlConvexHull::getXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlConvexHull");
+
+    GlXMLTools::createDataNode(rootNode, dataNode);
+
+    GlXMLTools::getXML(dataNode, "points", _points);
+    GlXMLTools::getXML(dataNode, "fillColors", _fillColors);
+    GlXMLTools::getXML(dataNode, "outlineColor", _outlineColors);
+    GlXMLTools::getXML(dataNode, "filled", _filled);
+    GlXMLTools::getXML(dataNode, "outlined", _outlined);
+  }
+   //====================================================
+  void GlConvexHull::setWithXML(xmlNodePtr rootNode){
+    xmlNodePtr dataNode= NULL;
+
+    GlXMLTools::getDataNode(rootNode, dataNode);
+
+    if(dataNode) {
+      GlXMLTools::setWithXML(dataNode, "points",_points);
+      GlXMLTools::setWithXML(dataNode, "fillColors", _fillColors);
+      GlXMLTools::setWithXML(dataNode, "outlineColor", _outlineColors);
+      GlXMLTools::setWithXML(dataNode, "filled", _filled);
+      GlXMLTools::setWithXML(dataNode, "outlined", _outlined);
+    }
+  }
+  
+}
+
+

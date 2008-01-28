@@ -48,7 +48,7 @@ namespace tlp {
     return _colors[i];
   }
   //=====================================================
-  void GlLine::draw(float lod) {
+  void GlLine::draw(float lod,Camera *camera) {
     glBegin(GL_LINE_STRIP);
       
     for(unsigned int i=0; i < _points.size(); ++i) {
@@ -63,4 +63,31 @@ namespace tlp {
     glTest(__PRETTY_FUNCTION__);
   }
   //=====================================================
+  void GlLine::getXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlLine");
+    
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    GlXMLTools::getXML(dataNode,"points",_points);
+    GlXMLTools::getXML(dataNode,"colors",_colors);
+    
+  }
+  //============================================================
+  void GlLine::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    // Parse Data
+    if(dataNode) {
+
+      GlXMLTools::setWithXML(dataNode, "points", _points);
+      GlXMLTools::setWithXML(dataNode, "colors", _colors);
+
+      for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
+	boundingBox.check(*it);
+    }
+  }
 }

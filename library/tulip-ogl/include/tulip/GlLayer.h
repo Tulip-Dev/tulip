@@ -121,6 +121,16 @@ namespace tlp {
      */
     void clear() {composite.reset(false);}
 
+    /**
+     * Return the layer's data in XML
+     */
+    void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Set the layer's data with XML
+     */
+    void setWithXML(xmlNodePtr rootNode);
+
   private:
 
     std::string name;

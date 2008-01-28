@@ -14,8 +14,12 @@ namespace tlp {
   GlRectTextured::GlRectTextured(float top,float bottom,float left, float right,
 				 const std::string& textureName,
 				 bool inPercent)
-    :top(top),bottom(bottom),left(left),right(right),textureName(textureName) ,inPercent(inPercent)
+    :top(top),bottom(bottom),left(left),right(right),inPercent(inPercent),textureName(textureName)
   {
+    GlTextureManager::getInst().loadTexture(textureName);
+  }
+
+  void GlRectTextured::reloadData() {
     GlTextureManager::getInst().loadTexture(textureName);
   }
 
@@ -71,5 +75,39 @@ namespace tlp {
       glEnd();
     }
     GlTextureManager::getInst().desactivateTexture();
+  }
+  //===========================================================
+  void GlRectTextured::getXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlRectTextured");
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+    
+    GlXMLTools::getXML(dataNode,"top",top);
+    GlXMLTools::getXML(dataNode,"bottom",bottom);
+    GlXMLTools::getXML(dataNode,"left",left);
+    GlXMLTools::getXML(dataNode,"right",right);
+    GlXMLTools::getXML(dataNode,"inPercent",inPercent);
+    GlXMLTools::getXML(dataNode,"textureName",textureName);
+    
+  }
+  //============================================================
+  void GlRectTextured::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    // Parse Data
+    if(dataNode) {
+      GlXMLTools::setWithXML(dataNode, "top", top);
+      GlXMLTools::setWithXML(dataNode, "bottom", bottom);
+      GlXMLTools::setWithXML(dataNode, "left", left);
+      GlXMLTools::setWithXML(dataNode, "right", right);
+      GlXMLTools::setWithXML(dataNode, "inPercent", inPercent);
+      GlXMLTools::setWithXML(dataNode, "textureName", textureName);
+    }
+
+    reloadData();
   }
 }

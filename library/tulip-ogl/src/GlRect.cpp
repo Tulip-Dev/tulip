@@ -85,4 +85,36 @@ namespace tlp {
   void GlRect::draw(float lod,Camera *camera) {
     GlPolygon::draw(lod,camera);
   }
+  //===========================================================
+  void GlRect::getXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlBox");
+
+    GlPolygon::getXMLOnlyData(rootNode);
+    
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    GlXMLTools::getXML(dataNode,"topLeftPos",topLeftPos);
+    GlXMLTools::getXML(dataNode,"bottomRightPos",bottomRightPos);
+    GlXMLTools::getXML(dataNode,"topLeftCol",topLeftCol);
+    GlXMLTools::getXML(dataNode,"bottomRightCol",bottomRightCol);
+    
+  }
+  //============================================================
+  void GlRect::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlPolygon::setWithXML(rootNode);
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    // Parse Data
+    if(dataNode) {
+      GlXMLTools::setWithXML(dataNode,"topLeftPos",topLeftPos);
+      GlXMLTools::setWithXML(dataNode,"bottomRightPos",bottomRightPos);
+      GlXMLTools::setWithXML(dataNode,"topLeftCol",topLeftCol);
+      GlXMLTools::setWithXML(dataNode,"bottomRightCol",bottomRightCol);
+    }
+  }
 }

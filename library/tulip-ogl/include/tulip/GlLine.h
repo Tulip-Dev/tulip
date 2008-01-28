@@ -29,7 +29,7 @@ namespace tlp {
 
     virtual ~GlLine();
 
-    void draw(float lod);
+    void draw(float lod,Camera *camera);
     
     virtual void resizePoints(const unsigned int nbPoints);
     virtual void resizeColors(const unsigned int nbColors);
@@ -41,6 +41,16 @@ namespace tlp {
     //return the ith color used for draw the line
     virtual const Color& color(const unsigned int i) const;
     virtual Color& color(const unsigned int i);
+
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+    
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
     std::vector<Coord> _points;

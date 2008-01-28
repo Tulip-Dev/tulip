@@ -23,15 +23,29 @@ namespace tlp {
   class TLP_GL_SCOPE GlRectTextured : public GlSimpleEntity {
 
   public:
+    GlRectTextured() {}
+
     GlRectTextured(float top,float bottom,float left, float right,
 		   const std::string& textureName,
 		   bool inPercent=false);
     
     virtual ~GlRectTextured() {}
 
+    void reloadData();
+
     virtual BoundingBox getBoundingBox();
 
     virtual void draw(float lod,Camera *camera);
+
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
     

@@ -50,6 +50,16 @@ namespace tlp {
 								     Graph *root = 0,
 								     unsigned int depth = 0);
     
+    /**
+     * Get the data in XML form
+     */
+    void getXML(xmlNodePtr rootNode);
+
+    /**
+     * Set the data with XML
+     */
+    void setWithXML(xmlNodePtr rootNode);
+    
   protected:
     std::vector<Coord> _points;
     std::vector<Color> _fillColors;

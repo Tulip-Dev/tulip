@@ -263,11 +263,13 @@ public:
     graph=currentGraph->getRoot();
     string author;
     string comments;
+    string sceneData;
 
     if (dataSet != NULL) {
       dataSet->get<DataSet>("displaying", displaying);
       dataSet->get("author", author);
       dataSet->get("text::comments", comments);
+      dataSet->get("scene", sceneData);
     }
 
     // get ostime
@@ -296,6 +298,9 @@ public:
     //    DataSet displaying;
     if (dataSet != NULL && dataSet->get<DataSet>("displaying", displaying))
       saveDisplaying(os, displaying);
+
+    // scene data
+    os << "(scene \"" << sceneData << "\")" << endl;
     
     os << ')' << endl; // end of (tlp ...
     return true;

@@ -1,7 +1,13 @@
-if !MACOSX
+if WIN32
 DLL_FLAGS = -no-undefined
+DLL_TULIP_GL = -DDLL_TULIP_GL
+ADDLDFLAGS = -lxml2 
 else
+ADDLDFLAGS = `xml2-config --libs`
+ADD_INCLUDES = `xml2-config --cflags` 
+if MACOSX
 DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 plugins_LTLIBRARIES = \
@@ -39,4 +45,4 @@ libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp
 libSquareBorderTextured_@VERSION@_la_SOURCES = squarebordertextured.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @LIB_GL@ @GL_LDFLAGS@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@
+INCLUDES = $(ADD_INCLUDES) @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@

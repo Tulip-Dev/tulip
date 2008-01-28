@@ -78,5 +78,6 @@ libtulip_ogl_la_SOURCES = \
 	GlDisplayListManager.cpp \
 	GlSceneObserver.cpp \
 	GlLine.cpp \
+	GlXMLTools.cpp \
 	tulipgpu.cpp
 

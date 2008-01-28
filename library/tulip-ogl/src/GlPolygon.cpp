@@ -133,5 +133,42 @@ namespace tlp {
     
     glTest(__PRETTY_FUNCTION__);
   }
-  //=====================================================
+  //===========================================================
+  void GlPolygon::getXML(xmlNodePtr rootNode) {
+
+    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlPolygone");
+
+    getXMLOnlyData(rootNode);
+    
+  }
+  //===========================================================
+  void GlPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+    
+    GlXMLTools::getDataNode(rootNode,dataNode);
+    
+    GlXMLTools::getXML(dataNode,"points",_points);
+    GlXMLTools::getXML(dataNode,"fillColors",_fillColors);
+    GlXMLTools::getXML(dataNode,"outlineColors",_outlineColors);
+    GlXMLTools::getXML(dataNode,"filled",_filled);
+    GlXMLTools::getXML(dataNode,"outlined",_outlined);
+  }
+  //============================================================
+  void GlPolygon::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    // Parse Data
+    if(dataNode) {
+      GlXMLTools::setWithXML(dataNode,"points",_points);
+      GlXMLTools::setWithXML(dataNode,"fillColors",_fillColors);
+      GlXMLTools::setWithXML(dataNode,"outlineColors",_outlineColors);
+      GlXMLTools::setWithXML(dataNode,"filled",_filled);
+      GlXMLTools::setWithXML(dataNode,"outlined",_outlined);
+
+      for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
+	boundingBox.check(*it);
+    }
+  }
 }

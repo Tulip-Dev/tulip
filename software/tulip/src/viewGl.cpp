@@ -559,7 +559,25 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
   //Camera *camera=new Camera(glWidget->getScene());
+  
+  glWidget->move(0,0);
+  glWidget->setCaption(name);
+  glWidget->setMinimumSize(0, 0);
+  glWidget->resize(500,500);
+  glWidget->setMaximumSize(32767, 32767);
+  glWidget->setBackgroundMode(Qt::PaletteBackground);  
+  glWidget->installEventFilter(this);
+  glWidget->resetInteractors(*currentInteractors);
+  connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
 
+  if(elementsDisabled)
+    enableElements(true);
+
+  //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
+  return glWidget;
+}
+//**********************************************************************
+void viewGl::constructDefaultScene(GlGraphWidget *glWidget) {
   GlLayer* layer=new GlLayer("Main");
   GlLayer *backgroundLayer=new GlLayer("Background");
   backgroundLayer->setVisible(false);
@@ -583,22 +601,6 @@ GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->getScene()->addLayer(backgroundLayer);
   glWidget->getScene()->addLayer(layer);
   glWidget->getScene()->addLayer(foregroundLayer);
-  
-  glWidget->move(0,0);
-  glWidget->setCaption(name);
-  glWidget->setMinimumSize(0, 0);
-  glWidget->resize(500,500);
-  glWidget->setMaximumSize(32767, 32767);
-  glWidget->setBackgroundMode(Qt::PaletteBackground);  
-  glWidget->installEventFilter(this);
-  glWidget->resetInteractors(*currentInteractors);
-  connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
-
-  if(elementsDisabled)
-    enableElements(true);
-
-  //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
-  return glWidget;
 }
 //**********************************************************************
 std::string viewGl::newName() {
@@ -618,6 +620,7 @@ void viewGl::new3DView() {
   GlGraphWidget *newGlWidget =
     newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
 		  glWidget->parentWidget()->caption());
+  constructDefaultScene(newGlWidget);
   newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
   newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
   newGlWidget->getScene()->getGlGraphComposite()->setRenderingParameters(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters());
@@ -634,6 +637,7 @@ void viewGl::fileNew() {
   GlGraphWidget *glW =
     newOpenGlView(newGraph,
 		  newGraph->getAttribute<string>(std::string("name")).c_str());
+  constructDefaultScene(glW);
   GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
   glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
   glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
@@ -690,6 +694,14 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
 			      &dataSet, "Enter Export parameters")) //, glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
+  string sceneOut;
+  glWidget->getScene()->getXML(sceneOut);
+  string dir=TulipLibDir;
+  while(sceneOut.find(dir)!=-1) {
+    int pos=sceneOut.find(dir);
+    sceneOut.replace(pos,dir.length()-1,"TulipLibDir");
+  }
+  dataSet.set<string>("scene", sceneOut);
   if (filename.length() == 0) {
     QString name;
     if (plugin == "tlp")
@@ -887,20 +899,27 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if(noPlugin)
       setGraphName(newGraph, s);
 
-    GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
-    glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-    glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
-  //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
-    assert(glW->getScene()->getGlGraphComposite()->getInputData()->getGraph()==newGraph);
+    string sceneData;
+    dataSet.get<std::string>("scene", sceneData);
+
+    if(!sceneData.empty()) {
+      string dir=TulipLibDir;
+      string name="TulipLibDir";
+      while(sceneData.find(name)!=-1) {
+	int pos=sceneData.find(name);
+	sceneData.replace(pos,name.length(),dir);
+      }
+      glW->getScene()->setWithXML(sceneData,newGraph);
+    } else {
+      constructDefaultScene(glW);
+      GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
+      glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+      glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
+      assert(glW->getScene()->getGlGraphComposite()->getInputData()->getGraph()==newGraph);
+    }
+
     initializeGlScene(glW->getScene());
     
-    GlGraphRenderingParameters param = glW->getScene()->getGlGraphComposite()->getRenderingParameters();
-    //param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
-    //delete glW->getScene()->getGlGraphComposite();
-    //glW->getScene()->getLayer()->deleteGlEntity("graph");
-    //GlGraphComposite* graphComposite=new GlGraphComposite(newGraph);
-    //glW->getScene()->getGlGraphComposite()->getInputData()->setGraph(newGraph);
-    //glW->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 
     if(noPlugin) {
       viewGlFile vFile;
@@ -914,7 +933,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     bool displayingInfoFound = false;
 
 
-    param = glW->getScene()->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters param = glW->getScene()->getGlGraphComposite()->getRenderingParameters();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData)) {
       param.setParameters(glGraphData);
@@ -1917,6 +1936,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
+    //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
   if (dataSet!=0) delete dataSet;
 

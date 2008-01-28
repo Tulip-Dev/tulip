@@ -73,4 +73,57 @@ namespace tlp {
       return NULL;
     return (*ite).second;
   }
+  //============================================================
+  void GlComposite::getXML(xmlNodePtr rootNode) {
+    xmlNodePtr node=NULL;
+    xmlNodePtr dataNode=NULL;
+    xmlNodePtr childrenNode=NULL;
+
+    string name;
+
+    GlXMLTools::createProperty(rootNode,"type","GlComposite");
+
+    GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+
+    for(list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
+      name=findKey(*it);
+      GlXMLTools::createChild(childrenNode,name,node);
+      GlXMLTools::createDataNode(node,dataNode);
+      GlXMLTools::getXML(dataNode,"visible",(*it)->isVisible());
+      GlXMLTools::getXML(dataNode,"stencil",(*it)->getStencil());
+      (*it)->getXML(node);
+    }
+  }
+  //============================================================
+  void GlComposite::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr node=NULL;
+    xmlNodePtr dataNode=NULL;
+    xmlNodePtr childrenNode=NULL;
+
+    GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
+
+    // Parse Children
+    for (node = childrenNode->children; node; node = node->next) {
+      if(node->type == XML_ELEMENT_NODE) {
+	string type = GlXMLTools::getProperty("type",node);
+	
+	if(type!="") {
+	  GlSimpleEntity *entity=GlXMLTools::createEntity(type);
+	  if(entity) {
+	    bool visible;
+	    int stencil;
+
+	    entity->setWithXML(node);
+	    GlXMLTools::getDataNode(node,dataNode);
+
+	    GlXMLTools::setWithXML(dataNode, "visible", visible);
+	    GlXMLTools::setWithXML(dataNode, "stencil", stencil);
+	    entity->setVisible(visible);
+	    entity->setStencil(stencil );
+	    addGlEntity(entity,(char*)node->name);
+	  }
+	}
+      }
+    }
+  }
 }

@@ -1,7 +1,12 @@
-if !MACOSX
+if WIN32
 DLL_FLAGS = -no-undefined
+ADDLDFLAGS = -lxml2 
 else
+ADDLDFLAGS = `xml2-config --libs`
+ADD_INCLUDES = `xml2-config --cflags` 
+if MACOSX
 DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 plugins_LTLIBRARIES = \
@@ -41,7 +46,7 @@ libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
 nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-AM_CPPFLAGS= @QT_CPPFLAGS@
+AM_CPPFLAGS= $(ADD_INCLUDES) @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
 
 moc_%.cpp: %.h 

@@ -35,6 +35,16 @@ namespace tlp {
 
     virtual void draw(float lod,Camera *camera);
 
+    /**
+     * Get the data in XML form
+     */
+    void getXML(xmlNodePtr rootNode);
+    
+    /**
+     * Set the data with XML
+     */
+    void setWithXML(xmlNodePtr rootNode);
+
   protected:
     
     std::vector<GlPolygon> polygons;

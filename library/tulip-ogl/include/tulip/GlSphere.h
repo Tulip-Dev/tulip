@@ -28,21 +28,29 @@ namespace tlp {
   
   public:
      
+    GlSphere() {}
     GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
     GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
 
-    virtual void draw(float lod);
+    virtual void draw(float lod,Camera *camera);
 
+    /**
+     * Function to export data in XML
+     */
+    virtual void getXML(xmlNodePtr rootNode);
+    
+    /**
+     * Function to set data with XML
+     */
+    virtual void setWithXML(xmlNodePtr rootNode);
+    
   private:
     
     Coord position;
     float radius;
     Color color;
     std::string textureFile;
-    int alpha;
-    float rotX;
-    float rotY;
-    float rotZ;
+    Coord rot;
 
   };
   

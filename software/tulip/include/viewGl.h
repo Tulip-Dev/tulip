@@ -206,6 +206,7 @@ private:
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
   GlGraphWidget *newOpenGlView(tlp::Graph *graph,const QString &);
+  void constructDefaultScene(GlGraphWidget *glWidget);
   std::string newName();
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
