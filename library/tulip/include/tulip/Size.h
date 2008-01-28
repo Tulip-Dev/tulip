@@ -6,7 +6,7 @@
 
 namespace tlp {
 
-class Size : public tlp::Vector<float,3> {
+class TLP_SCOPE Size : public tlp::Vector<float,3> {
 public:
   inline Size(const float width=0,const float height=0,const float depth=0);
   inline Size(const tlp::Vector<float,3> &);

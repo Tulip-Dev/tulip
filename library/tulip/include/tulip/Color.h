@@ -5,7 +5,7 @@
 ///
 namespace tlp {
 
-class Color : public tlp::Vector<unsigned char,4>{
+class TLP_SCOPE Color : public tlp::Vector<unsigned char,4>{
  public:
   ///
   inline Color(const tlp::Vector<unsigned char,4>&);
@@ -55,8 +55,8 @@ class Color : public tlp::Vector<unsigned char,4>{
   void setV(int );
 };
 
-  std::ostream& operator<<(std::ostream &os,const tlp::Color &);
-  std::istream& operator>>(std::istream &is, tlp::Color &);
+  TLP_SCOPE std::ostream& operator<<(std::ostream &os,const tlp::Color &);
+  TLP_SCOPE std::istream& operator>>(std::istream &is, tlp::Color &);
 
 }
 
