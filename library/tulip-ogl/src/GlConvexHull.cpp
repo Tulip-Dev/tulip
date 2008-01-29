@@ -312,7 +312,7 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   void GlConvexHull::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlConvexHull");
+    GlXMLTools::createProperty(rootNode, "type", "GlConvexHull");
 
     GlXMLTools::createDataNode(rootNode, dataNode);
 

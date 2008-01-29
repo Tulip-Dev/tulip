@@ -62,6 +62,7 @@ noinst_HEADERS = \
 	tulip/Frame.h \
 	tulip/Renderer.h \
 	tulip/GlTools.h\
+	tulip/GlXMLTools.h \
 	tulip/Curves.h\
 	tulip/TextRenderer.h \
 	tulip/TLPPixmapFont.h\

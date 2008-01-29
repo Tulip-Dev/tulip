@@ -136,7 +136,7 @@ namespace tlp {
   //===========================================================
   void GlPolygon::getXML(xmlNodePtr rootNode) {
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlPolygone");
+    GlXMLTools::createProperty(rootNode, "type", "GlPolygon");
 
     getXMLOnlyData(rootNode);
     

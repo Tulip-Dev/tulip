@@ -16,12 +16,15 @@
 #include <sstream>
 #include <vector>
 
-#include <libxml/tree.h>
-#include <libxml/parser.h>
+/*#include <libxml/tree.h>
+  #include <libxml/parser.h>*/
 
 #include <tulip/Array.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+
+typedef struct _xmlNode xmlNode;
+typedef xmlNode * xmlNodePtr;
 
 namespace tlp {
 
@@ -35,15 +38,21 @@ namespace tlp {
     static void createDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
     static void createChild(xmlNodePtr rootNode, const std::string &name, xmlNodePtr &childNode);
     static void createProperty(xmlNodePtr rootNode, const std::string &name, const std::string &value);
+    static void addContent(xmlNodePtr rootNode,const std::string &content);
     static void getDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode);
     static void getDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
+    static void getDataNodeDirectly(xmlNodePtr rootNode,xmlNodePtr &dataNode);
     static void getData(const std::string &name, xmlNodePtr dataNode, xmlNodePtr &outNode);
     static std::string getProperty(const std::string &name, xmlNodePtr node);
+    static void getContent(xmlNodePtr rootNode,std::string &content);
     static GlSimpleEntity *createEntity(const std::string &name);
 
     template <typename Obj>
-      static void getXML(xmlNodePtr rootNode,const std::string &name,const typename std::vector<Obj> &vect) {
-      xmlNodePtr node=xmlNewChild(rootNode, NULL, BAD_CAST name.c_str(), NULL);
+      static void getXML(xmlNodePtr rootNode,const std::string &name,const typename std::vector<Obj> &vect)
+    {
+      xmlNodePtr node;
+      createChild(rootNode,name,node);
+    
       std::stringstream str;
       str << "(" ;
       typename std::vector<Obj>::const_iterator it=vect.begin();
@@ -52,14 +61,16 @@ namespace tlp {
 	str << "," << *it ;
       }
       str << ")" ;
-      xmlNodeAddContent(node,(xmlChar*)(str.str().c_str()));
+      addContent(node,str.str());
     }
-
+    
     template <typename Obj>
-      static void setWithXML(xmlNodePtr rootNode,const std::string &name,std::vector<Obj> &vect) {
+      static void setWithXML(xmlNodePtr rootNode,const std::string &name,std::vector<Obj> &vect)
+    {
       xmlNodePtr node;
       GlXMLTools::getData(name, rootNode, node);
-      std::string tmp=(char*)node->content;
+      std::string tmp;
+      getContent(node,tmp);
       std::istringstream is(tmp);
       Obj data;
       char c=is.get();
@@ -71,18 +82,22 @@ namespace tlp {
     }
     
     template <typename Obj>
-      static void getXML(xmlNodePtr rootNode, const std::string &name, const Obj &value) {
-      xmlNodePtr node=xmlNewChild(rootNode, NULL, BAD_CAST name.c_str(), NULL);
+      static void getXML(xmlNodePtr rootNode, const std::string &name, const Obj &value)
+    {
+      xmlNodePtr node;
+      createChild(rootNode,name,node);
       std::stringstream str;
       str << value ;
-      xmlNodeAddContent(node, BAD_CAST str.str().c_str());
+      addContent(node,str.str());
     }
-
+    
     template <typename Obj>
       static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value) {
       xmlNodePtr node;
       GlXMLTools::getData(name, rootNode, node);
-      std::stringstream str((char*)node->content);
+      std::string tmp;
+      getContent(node,tmp);
+      std::stringstream str(tmp);
       str >> value;
     }
 

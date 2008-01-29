@@ -89,7 +89,7 @@ namespace tlp {
   void GlRect::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlBox");
+    GlXMLTools::createProperty(rootNode, "type", "GlRect");
 
     GlPolygon::getXMLOnlyData(rootNode);
     

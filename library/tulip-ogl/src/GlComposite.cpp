@@ -1,4 +1,6 @@
 #include <typeinfo>
+#include <libxml/tree.h>
+#include <libxml/parser.h>
 #include "tulip/GlComposite.h"
 
 #include <tulip/GlLayer.h>

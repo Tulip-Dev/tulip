@@ -70,7 +70,13 @@ namespace tlp {
 
   void GlXMLTools::getDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode) {
     xmlNodePtr node;
-    for (node = rootNode->children; node; node = node->next) {
+    node = rootNode->children;
+    getDataNodeDirectly(node,dataNode);
+  }
+
+  void GlXMLTools::getDataNodeDirectly(xmlNodePtr rootNode,xmlNodePtr &dataNode) {
+    xmlNodePtr node;
+    for (node = rootNode; node; node = node->next) {
       if(node->type == XML_ELEMENT_NODE) {
 	string name=(char *)node->name;
 	if(name=="data") {
@@ -86,7 +92,6 @@ namespace tlp {
     xmlNodePtr node;
     for (node = dataNode->children; node; node = node->next) {
       if(node->type == XML_ELEMENT_NODE && (char*)(node->name)==name) {
-	cout << "Node name : " << (char*)node->name << endl;
 	outNode=node->children;
 	return;
       }
@@ -132,6 +137,14 @@ namespace tlp {
       cout << "Unknow entity type : " << name << ". Can't create it !" << endl;
     }
     return NULL;
+  }
+
+  void GlXMLTools::addContent(xmlNodePtr rootNode,const std::string &content) {
+    xmlNodeAddContent(rootNode,(xmlChar*)(content.c_str()));
+  }
+
+  void GlXMLTools::getContent(xmlNodePtr rootNode,std::string &content) {
+    content=(char*)rootNode->content;
   }
 
 }

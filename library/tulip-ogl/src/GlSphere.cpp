@@ -52,7 +52,7 @@ namespace tlp {
   void GlSphere::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlSphere");
+    GlXMLTools::createProperty(rootNode, "type", "GlSphere");
     
     GlXMLTools::getDataNode(rootNode,dataNode);
 

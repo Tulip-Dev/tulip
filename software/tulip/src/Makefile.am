@@ -1,14 +1,12 @@
 if WIN32
 MWINDOWS = -mwindows
-else
-ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
 bin_PROGRAMS = tulip
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 
-INCLUDES = -I$(srcdir)/../include -I../include $(ADD_INCLUDES)\
+INCLUDES = -I$(srcdir)/../include -I../include \
 	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@ @TULIP_QT_INCLUDE@/tulip
 
 

@@ -91,7 +91,7 @@ namespace tlp {
     xmlNodePtr dataNode= NULL;
     xmlNodePtr node = NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlGrid");
+    GlXMLTools::createProperty(rootNode, "type", "GlGrid");
     
     GlXMLTools::getDataNode(rootNode,dataNode);
 

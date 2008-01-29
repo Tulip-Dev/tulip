@@ -196,7 +196,7 @@ namespace tlp {
   void GlBox::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlBox");
+    GlXMLTools::createProperty(rootNode, "type", "GlBox");
     
     GlXMLTools::getDataNode(rootNode,dataNode);
 

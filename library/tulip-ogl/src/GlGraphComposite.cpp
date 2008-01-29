@@ -148,7 +148,7 @@ namespace tlp {
   void GlGraphComposite::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode = NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlGraphComposite");
+    GlXMLTools::createProperty(rootNode, "type", "GlGraphComposite");
   }
    //====================================================
   void GlGraphComposite::setWithXML(xmlNodePtr rootNode){

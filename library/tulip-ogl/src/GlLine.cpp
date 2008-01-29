@@ -66,7 +66,7 @@ namespace tlp {
   void GlLine::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlLine");
+    GlXMLTools::createProperty(rootNode, "type", "GlLine");
     
     GlXMLTools::getDataNode(rootNode,dataNode);
 

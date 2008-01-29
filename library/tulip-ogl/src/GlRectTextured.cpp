@@ -80,7 +80,7 @@ namespace tlp {
   void GlRectTextured::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlRectTextured");
+    GlXMLTools::createProperty(rootNode, "type", "GlRectTextured");
 
     GlXMLTools::getDataNode(rootNode,dataNode);
     

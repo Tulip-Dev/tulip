@@ -306,16 +306,8 @@ namespace tlp {
    //====================================================
   void Camera::setWithXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;
-    xmlNodePtr node = NULL;
 
-    for (node = rootNode; node; node = node->next) {
-      if(node->type == XML_ELEMENT_NODE) {
-	string name=(char *)node->name;
-	if(name=="data") {
-	  dataNode=node;
-	}
-      }
-    }
+    GlXMLTools::getDataNodeDirectly(rootNode,dataNode);
 
     if(dataNode) {
 

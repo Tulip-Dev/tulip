@@ -27,7 +27,7 @@ namespace tlp {
   //===========================================================
   void GlCircle::getXML(xmlNodePtr rootNode) {
 
-    xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlCircle");
+    GlXMLTools::createProperty(rootNode, "type", "GlCircle");
 
     getXMLOnlyData(rootNode);
   }
