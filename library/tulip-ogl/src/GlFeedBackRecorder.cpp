@@ -21,7 +21,6 @@ namespace tlp {
   }
   
   void GlFeedBackRecorder::record(bool doSort,GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport) {
-    cout << "GlFeedBackRecorder::record()" << endl;
     feedBackBuilder->begin(viewport);
     
     if(doSort)
@@ -145,7 +144,6 @@ namespace tlp {
   }
   
   void GlFeedBackRecorder::record(GLint size, GLfloat *feedBackBuffer) {
-    cout << "GlFeedBackRecorder::record2() size : " << size << endl;
     GLfloat *loc, *end;
     loc = feedBackBuffer;
     end = feedBackBuffer + size;
@@ -155,7 +153,6 @@ namespace tlp {
   }
   
   GLfloat* GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
-    cout << "GlFeedBackBuffer::recordPrimitive()" << endl;
     int token = (int)*loc;
     loc++;
     switch (token) {

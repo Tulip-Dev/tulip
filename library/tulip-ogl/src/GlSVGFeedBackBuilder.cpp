@@ -29,7 +29,6 @@ namespace tlp {
       graphId);*/
   }
   void GlSVGFeedBackBuilder::colorInfo(GLfloat* data) {
-    cout << "Color" << endl;
     fillColor[0]=data[0];fillColor[1]=data[1];fillColor[2]=data[2];
     strokeColor[0]=data[3];strokeColor[1]=data[4];strokeColor[2]=data[5];
     textColor[0]=data[6];textColor[1]=data[7];textColor[2]=data[8];
@@ -49,17 +48,17 @@ namespace tlp {
   }
 
   void GlSVGFeedBackBuilder::beginNode(GLfloat data) {
-    stream_out << "\t<n id=\"n"<< data << "\"><!-- Node " << data << "-->" << endl;
+    stream_out << "\t<g id=\"n"<< data << "\"><!-- Node " << data << "-->" << endl;
   }
   void GlSVGFeedBackBuilder::endNode() {
-    stream_out << "</n>" << endl;
+    stream_out << "</g>" << endl;
   }
  
   void GlSVGFeedBackBuilder::beginEdge(GLfloat data) {
-    stream_out << "\t<e id=\"e"<< data << "\"><!-- Edge " << data << "-->" << endl;
+    stream_out << "\t<g id=\"e"<< data << "\"><!-- Edge " << data << "-->" << endl;
   }
   void GlSVGFeedBackBuilder::endEdge() {
-    stream_out << "</e>" << endl;
+    stream_out << "</g>" << endl;
   }
   void GlSVGFeedBackBuilder::pointToken(GLfloat *data) {
     Feedback3DColor *vertex = (Feedback3DColor *)data;
