@@ -29,7 +29,7 @@ namespace tlp {
      * Build a GlGraphComposite with the graph data
      */ 
     GlGraphComposite(Graph* graph);
-    ~GlGraphComposite() {inputData.graph->removeObserver(this);}
+    ~GlGraphComposite() {if(inputData.graph) {inputData.graph->removeObserver(this);}}
 
     /**
      * Build list of Nodes, Edges and MetaNodes

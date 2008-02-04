@@ -129,6 +129,7 @@ namespace tlp {
   void GlGraphComposite::destroy(Graph *graph) {
     nodes.clear();
     edges.clear();
+    inputData.graph=NULL;
   }
   //===================================================================
   void GlGraphComposite::addNodes() {
