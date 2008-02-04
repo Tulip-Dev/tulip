@@ -219,8 +219,7 @@ void PropertyWidget::updateEdges() {
   if (editedProperty==0) {
     return;
   }
-  if (_filterSelection)
-    updateNbElements();
+  updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   setNumRows(nbElement);
   Iterator<edge> *it=graph->getEdges();
@@ -243,8 +242,7 @@ void PropertyWidget::updateEdges() {
 
 void PropertyWidget::updateNodes() {
   if (editedProperty==0) return;
-  if (_filterSelection )
-    updateNbElements();
+  updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   setNumRows(nbElement);
   Iterator<node> *it=graph->getNodes();
