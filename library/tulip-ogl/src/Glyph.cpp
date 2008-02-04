@@ -4,6 +4,7 @@
 #include <tulip/Glyph.h>
 
 using namespace tlp;
+using namespace std;
 
 TemplateFactory<GlyphFactory,Glyph, GlyphContext *> *GlyphFactory::factory;
 
@@ -35,7 +36,11 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   // unscale
   anchor.setX( anchor.getX() / scale.getW() );
   anchor.setY( anchor.getY() / scale.getH() );
-  anchor.setZ( anchor.getZ() / scale.getD() );
+  if(scale.getD() != 0.0f)
+    anchor.setZ( anchor.getZ() / scale.getD() );
+  else
+    anchor.setZ(0.0f);
+
   anchor = getAnchor( anchor );
 
   // rescale
