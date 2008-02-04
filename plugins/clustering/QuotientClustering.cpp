@@ -270,7 +270,9 @@ bool QuotientClustering::run() {
   unsigned int edgeFn = edgeFunctions.getCurrent();
   forEach(pName, graph->getProperties()) {
     PropertyInterface *property = graph->getProperty(pName);
-    if (dynamic_cast<DoubleProperty *>(property)) {
+    if (dynamic_cast<DoubleProperty *>(property) &&
+	// try to avoid view... properties
+	(pName.find("view") != 0 || pName == "viewMetric")) {
       DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
       Iterator<node> *itN = quotientGraph->getNodes();
       while (itN->hasNext()) {
@@ -302,7 +304,9 @@ bool QuotientClustering::run() {
 	bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 	forEach(pName, graph->getProperties()) {
 	  PropertyInterface *property = graph->getProperty(pName);
-	  if (dynamic_cast<DoubleProperty *>(property)) {
+	  if (dynamic_cast<DoubleProperty *>(property) &&
+	      // try to avoid view... properties
+	      (pName.find("view") != 0 || pName == "viewMetric")) {
 	    DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
 	    double value = metric->getEdgeValue(mE);	    
 	    switch(edgeFn) {
