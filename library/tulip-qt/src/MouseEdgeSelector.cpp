@@ -150,12 +150,12 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 }
 //==================================================================
 bool MouseEdgeSelector::draw(GlGraphWidget *glGraphWidget){
+  if (!started) return false;
   if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
     graph = 0;
     started = false;
     glGraphWidget->setMouseTracking(false);
   }
-  if (!started) return false;
   float yy = glGraphWidget->height() - y;
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode (GL_PROJECTION);
