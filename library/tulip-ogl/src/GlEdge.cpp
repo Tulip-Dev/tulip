@@ -284,6 +284,7 @@ namespace tlp {
     //================================
 
     glDisable(GL_CULL_FACE);
+    glDepthFunc(GL_LESS);
    
     if (edge3D)
       shape |= L3D_BIT;
@@ -303,12 +304,14 @@ namespace tlp {
 
     switch (shape) {
     case POLYLINESHAPE:
+      //glAlphaFunc(GL_LESS);
       if (drawPoly) {
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       }
       if (drawLine) {
 	tlp::polyLine(tmp, startColor, endColor);
       }
+      //glBlendEquation( GL_FUNC_ADD);
       break;
     case BEZIERSHAPE:
       if (drawPoly)
@@ -342,6 +345,7 @@ namespace tlp {
       break;
     }
 
+    glDepthFunc(GL_LEQUAL);
     glEnable(GL_CULL_FACE); 
   }
 
