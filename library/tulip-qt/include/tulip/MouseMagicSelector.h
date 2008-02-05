@@ -14,7 +14,6 @@ class TLP_QT_SCOPE MouseMagicSelector:public GWInteractor
 private:
   unsigned int x,y;
   int w,h;
-  bool started;
   Graph *graph;
 public:
   MouseMagicSelector();

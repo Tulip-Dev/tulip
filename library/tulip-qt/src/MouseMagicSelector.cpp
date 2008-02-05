@@ -32,7 +32,7 @@ using namespace std;
 using namespace tlp;
 
 MouseMagicSelector::MouseMagicSelector():
-  x(0),y(0),w(0),h(0),started(false),graph(0)
+  x(0),y(0),w(0),h(0),graph(0)
 {}
 
 bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
