@@ -18,14 +18,16 @@ class Graph;
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
 class TLP_QT_SCOPE MouseBoxZoomer : public GWInteractor {
-
+private:
+  Qt::MouseButton mButton;
+  Qt::KeyboardModifier kModifier;
 public:
-  MouseBoxZoomer();
+  MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
+		 Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseBoxZoomer();
   bool draw(GlGraphWidget *);
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseBoxZoomer(); }
-
+  GWInteractor *clone() { return new MouseBoxZoomer(mButton, kModifier); }
 private:
   unsigned int x, y;
   int w, h;

@@ -20,15 +20,19 @@ using namespace std;
 using namespace tlp;
 
 //==================================================================
-MouseSelector::MouseSelector():
-  x(0),y(0),w(0),h(0),started(false),graph(0) {
+MouseSelector::MouseSelector(Qt::MouseButton button,
+			     Qt::KeyboardModifier modifier):
+  mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
+  started(false),graph(0) {
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    if (qMouseEv->button()==Qt::LeftButton) {
+    if (qMouseEv->button()== mButton &&
+	(kModifier == Qt::NoModifier ||
+	 ((QMouseEvent *) e)->state() & kModifier)) {
       if (!started) {
 	x = qMouseEv->x();
 	y = qMouseEv->y();
@@ -55,7 +59,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
   }
-  if  (e->type() == QEvent::MouseMove) {
+  if  (e->type() == QEvent::MouseMove &&
+      ((((QMouseEvent *) e)->state() & mButton) &&
+       (kModifier == Qt::NoModifier ||
+	((QMouseEvent *) e)->state() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
@@ -142,12 +149,12 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 }
 //==================================================================
 bool MouseSelector::draw(GlGraphWidget *glGraphWidget){
+  if (!started) return false;
   if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
     graph = 0;
     started = false;
     glGraphWidget->setMouseTracking(false);
   }
-  if (!started) return false;
   float yy = glGraphWidget->height() - y;
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode (GL_PROJECTION);

@@ -15,14 +15,18 @@
 using namespace std;
 using namespace tlp;
 
-MouseBoxZoomer::MouseBoxZoomer() : x(0), y(0), w(0), h(0), started(false), graph(0) {}
+MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
+			       Qt::KeyboardModifier modifier)
+  : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(0) {}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) widget;
-    if (qMouseEv->button() == Qt::LeftButton) {
+    if (qMouseEv->button() == mButton &&
+	(kModifier == Qt::NoModifier ||
+	 ((QMouseEvent *) e)->state() & kModifier)) {
       if (!started) {
 	x = qMouseEv->x();
 	y =  glw->height() - qMouseEv->y();
@@ -49,7 +53,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if (e->type() == QEvent::MouseMove &&
-      ((QMouseEvent *) e)->state() & Qt::LeftButton) {
+      ((((QMouseEvent *) e)->state() & mButton) &&
+       	(kModifier == Qt::NoModifier ||
+	 ((QMouseEvent *) e)->state() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glw = (GlGraphWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
@@ -67,7 +73,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     }
   }
   if (e->type() == QEvent::MouseButtonRelease &&
-      ((QMouseEvent *) e)->button() == Qt::LeftButton) {
+      (((QMouseEvent *) e)->button() == mButton &&
+       	(kModifier == Qt::NoModifier ||
+	 ((QMouseEvent *) e)->state() & kModifier))) {
     GlGraphWidget *glw = (GlGraphWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;
@@ -101,12 +109,12 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 }
 //=====================================================================
 bool MouseBoxZoomer::draw(GlGraphWidget *glw) {
+  if (!started) return false;
   if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = NULL;
     started = false;
     glw->setMouseTracking(false);
   }
-  if (!started) return false;
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();

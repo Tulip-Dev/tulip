@@ -15,16 +15,19 @@ class Graph;
 class TLP_QT_SCOPE MouseSelector:public GWInteractor
 {
 private:
+  Qt::MouseButton mButton;
+  Qt::KeyboardModifier kModifier;
   unsigned int x,y;
   int w,h;
   bool started;
   Graph *graph;
 public:
-  MouseSelector();
-  ~MouseSelector(){}
+  MouseSelector(Qt::MouseButton button = Qt::LeftButton,
+		Qt::KeyboardModifier modifier = Qt::NoModifier);
+  ~MouseSelector() {}
   bool draw(GlGraphWidget *);
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseSelector(); }
+  GWInteractor *clone() { return new MouseSelector(mButton, kModifier); }
 };
 /*@}*/
 
