@@ -169,16 +169,6 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //MDI
   workspace->setScrollBarsEnabled( true );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
-  //Create overview widget
-  overviewDock = new QDockWindow(this,"Overview");
-  overviewDock->setCaption("3D Overview");
-  overviewDock->setCloseMode(QDockWindow::Always);
-  overviewDock->setResizeEnabled(true);
-  overviewWidget = new GWOverviewWidget(overviewDock);
-  overviewDock->boxLayout()->add(overviewWidget);
-  this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
-  overviewWidget->show(); 
-  overviewDock->show();
 
   //Create layer widget
   layerWidget = new LayerManagerWidget(parent);
@@ -197,6 +187,24 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   this->addDockWindow(tabWidgetDock,"Data manipulation", Qt::DockLeft);
   tabWidget->show();
   tabWidgetDock->show();
+
+  // Create overview widget after the tabWidgetDock
+  // because of a bug with full docked GlGraphWidget
+  // In doing this the overviewDock will be the first
+  // sibling candidate when the tabWidgetDock will loose the focus
+  // and Qt will not try to give the focus to the first GlGraphWidget
+  overviewDock = new QDockWindow(this,"Overview");
+  overviewDock->setCaption("3D Overview");
+  overviewDock->setCloseMode(QDockWindow::Always);
+  overviewDock->setResizeEnabled(true);
+  overviewWidget = new GWOverviewWidget(overviewDock);
+  overviewDock->boxLayout()->add(overviewWidget);
+  this->addDockWindow(overviewDock, "Overview", Qt::DockLeft);
+  // move it to ensure it is the first one
+  this->moveDockWindow(overviewDock, Qt::DockLeft, false, 0);
+  overviewWidget->show(); 
+  overviewDock->show();
+
   //Init hierarchy visualization widget
   clusterTreeWidget=tabWidget->clusterTree;
   //Init Property Editor Widget
