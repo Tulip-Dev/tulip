@@ -151,17 +151,19 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 void GWOverviewWidget::draw(GlGraphWidget *glG) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
-  if (_observedView != 0) {
-    _view->getScene()->centerScene();
-    _initialCamera = _view->getScene()->getCamera();   
-    Camera cam = *_observedView->getScene()->getCamera();
-    cam.setScene(_initialCamera->getScene());
-    cam.setZoomFactor(0.5);
-    cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
-    cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
-    _view->getScene()->setCamera(&cam);
+  if (isVisible()) {
+    if (_observedView != 0) {
+      _view->getScene()->centerScene();
+      _initialCamera = _view->getScene()->getCamera();   
+      Camera cam = *_observedView->getScene()->getCamera();
+      cam.setScene(_initialCamera->getScene());
+      cam.setZoomFactor(0.5);
+      cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
+      cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
+      _view->getScene()->setCamera(&cam);
+    }
+    _view->draw();
   }
-  _view->draw();
 }
 //=============================================================================
 void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
