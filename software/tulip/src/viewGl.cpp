@@ -784,7 +784,7 @@ void viewGl::initializeGlScene(GlScene *scene) {
   param.setFontsType(1);
   param.setFontsPath(((Application *)qApp)->bitmapPath);
   param.setViewNodeLabel(true);
-  scene->setBackgroundColor(Color(255,255,255));
+  //scene->setBackgroundColor(Color(255,255,255));
   scene->setViewOrtho(true);
   param.setElementOrdered(false);
   param.setEdgeColorInterpolate(false);
@@ -924,6 +924,14 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
       glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
       assert(glW->getScene()->getGlGraphComposite()->getInputData()->getGraph()==newGraph);
+
+      DataSet displaying;
+      Color color;
+      if(dataSet.get<DataSet>("displaying", displaying)) {
+	if(displaying.get<Color>("backgroundColor", color)) {
+	  glW->getScene()->setBackgroundColor(color);
+	}
+      }
     }
 
     initializeGlScene(glW->getScene());
