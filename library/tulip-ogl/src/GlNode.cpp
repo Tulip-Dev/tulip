@@ -75,20 +75,17 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       const Color &nodeColor = data->elementColor->getNodeValue(n);
       if (!data->elementSelected->getNodeValue(n)) {
-	setColor(nodeColor);
 	glPointSize(sqrt(lod));
 	glBegin(GL_POINTS);
 	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
 	 glEnd();
       }
       else {
-	//glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
 	setColor(colorSelect2);
 	glPointSize(sqrt(lod)+1);
 	glBegin(GL_POINTS);
 	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
 	glEnd();
-	//glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
       }
       glEnable(GL_LIGHTING);
     } else { //draw a glyph or make recursive call for meta nodes
@@ -97,24 +94,12 @@ namespace tlp {
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
       
-      if (data->elementGraph->getNodeValue(n) == 0) {
-	data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
-      }
-      else {
-	/*glStencilFunc(GL_LEQUAL, 3, 0xFFFF);*/
-	//glDisable(GL_DEPTH_TEST);
-	data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
-	//glEnable(GL_DEPTH_TEST);
-	/*  glStencilFunc(GL_LEQUAL, 2, 0xFFFF);*/
-	//drawMetaNode(n,depth);
-      }
+      data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
       
       if (data->elementSelected->getNodeValue(n)) {
-	//glStencilFunc(GL_ALWAYS, 1, 0xFFFF);
 	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
 	GlDisplayListManager::getInst().callDisplayList("selection");
 	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-	//glStencilFunc(GL_LEQUAL, 2, 0xFFFF);
       }
       glPopMatrix();
     }

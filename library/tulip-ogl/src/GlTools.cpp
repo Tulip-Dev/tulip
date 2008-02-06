@@ -262,7 +262,8 @@ namespace tlp {
       + ((eye[2] < src[0][2]) << 4)
       + ((eye[2] > src[6][2]) << 5);
     num=hullVertexTable[pos][0];
-    assert(num!=0);
+    if(num==0)
+      return -1;
     for(int i=0;i<num;i++) {
       dst[i] = projectPoint(src[hullVertexTable[pos][i+1]],transformMatrix,viewport);
     }

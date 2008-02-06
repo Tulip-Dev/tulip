@@ -280,8 +280,10 @@ bool MouseSelectionEditor::compute(GlGraphWidget *glGraphWidget) {
     composite.addGlEntity(&_controls[7], "bottom-left");
     this->glGraphWidget=glGraphWidget;
     return true;
+  }else{
+    glGraphWidget->getScene()->getSelectionLayer()->clear();
+    return false;
   }
-  return false;
 }
 //========================================================================================
 bool MouseSelectionEditor::draw(GlGraphWidget *glGraphWidget) {

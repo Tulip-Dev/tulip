@@ -20,7 +20,7 @@ namespace tlp {
 
   struct BoundingBox : public std::pair<Coord,Coord> {
   
-    BoundingBox():isValid(false) {first=Coord(std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),0);second=Coord(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),0);}
+    BoundingBox():isValid(false) {}
     BoundingBox(const Coord& min,const Coord& max) : isValid(true) {
       first=min;
       second=max;

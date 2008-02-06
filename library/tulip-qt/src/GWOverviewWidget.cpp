@@ -22,7 +22,6 @@ using namespace tlp;
 struct RectPosition : public tlp::GlSimpleEntity {
   void draw(float lod,Camera *camera);
   RectPosition(GlGraphWidget *, GlGraphWidget *);
-  BoundingBox getBoundingBox() {return BoundingBox();}
   void setObservedView(GlGraphWidget *glG) {
     _observedView = glG;
   }
@@ -196,6 +195,9 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     _view->getScene()->centerScene();
     _view->getScene()->getLayer("Main")->deleteGlEntity("RectPosition");
     _view->getScene()->getLayer("Main")->addGlEntity(_glDraw,"RectPosition");
+    _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
+
+    _glDraw->draw(1,NULL);
     
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
     
@@ -398,11 +400,17 @@ void RectPosition::draw(float lod,Camera *camera) {
   }
   glEnd();
 
+  boundingBox=BoundingBox();
+  for(int i=0;i<4;++i) {
+    boundingBox.check(points[i]);
+  }
+
   glPopAttrib();
 }
 //=============================================================================
 RectPosition::RectPosition(GlGraphWidget *view, GlGraphWidget *observedView) : 
   _observedView(observedView), _view(view) {
+  setCheckByBoundingBoxVisitor(false);
   boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));
 }
 //=============================================================================

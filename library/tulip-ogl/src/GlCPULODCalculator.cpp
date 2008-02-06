@@ -99,8 +99,10 @@ namespace tlp {
       MatrixGL transformMatrix(tmp);
       float lod;
 
-      Coord eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) * camera->getZoomFactor();
-
+      Coord eye;
+      if(camera->is3D())
+	eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / camera->getZoomFactor();
+      
       for(BoundingBoxVector::iterator itV=(*itM).second.first->begin();itV!=(*itM).second.first->end();++itV){
 	if(camera->is3D()){
 	  lod=calculateAABBSize((*itV).second,eye,transformMatrix,viewport);

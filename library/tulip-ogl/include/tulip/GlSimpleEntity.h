@@ -23,7 +23,7 @@ namespace tlp {
 
   public:
 
-    GlSimpleEntity():visible(true),stencil(0xFFFF) {}
+    GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
 
     virtual void draw(float lod,Camera* camera) = 0;
     
@@ -35,6 +35,8 @@ namespace tlp {
     bool isVisible() {return visible;}
     virtual void setStencil(int stencil) {this->stencil=stencil;}
     int getStencil() {return stencil;}
+    void setCheckByBoundingBoxVisitor(bool check) {checkByBoundingBoxVisitor=check;}
+    bool isCheckByBoundingBoxVisitor() {return checkByBoundingBoxVisitor;}
 
     virtual BoundingBox getBoundingBox() {return boundingBox;}
 
@@ -48,6 +50,7 @@ namespace tlp {
     
     bool visible;
     int stencil;
+    bool checkByBoundingBoxVisitor;
 
     BoundingBox boundingBox;
 
