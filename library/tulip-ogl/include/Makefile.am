@@ -43,7 +43,8 @@ nobase_include_HEADERS = \
 	tulip/GlSceneObserver.h \
 	tulip/GlLine.h \
 	tulip/libgpugraph.h \
-	tulip/tulipgpu.h
+	tulip/tulipgpu.h \
+	tulip/GlXMLTools.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \

@@ -229,11 +229,7 @@ int main (int argc, char **argv) {
   tlp::initTulipLib();
   tlp::loadPlugins(&plug);   // library side plugins
 
-  GlyphManager::createInst();
   GlyphManager::getInst().loadPlugins(&plug);
-  GlDisplayListManager::createInst();
-  //GlVertexListManager::createInst();
-  GlTextureManager::createInst();
 
   GlDisplayListManager::getInst().changeContext(0);
   //GlVertexListManager::getInst().changeContext(0);
