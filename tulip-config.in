@@ -49,16 +49,19 @@ usage()
     cat <<EOF
 Usage: tulip-config [OPTIONS]
 Options:
-	--version
-	--libs
-	--cxxflags
-	--glincludes
-	--plugincxxflags
-	--pluginextension
-	--pluginldflags
-        --pluginpath
-        --qtlibs
-        --qtincludes
+	--version (return the current version of Tulip)
+	--libs (return the whole Tulip libs)
+	--lib_tulip (return the Tulip core lib)
+        --lib_ogl (return the Tulip OpenGL lib)
+	--cxxflags (return the Tulip needed cxx flags)
+	--glincludes (return the OpenGL includes)
+	--gllibs (return the OpenGL libs)
+	--plugincxxflags (return the Tulip plugin cxx flags)
+	--pluginextension (return the plugin file extension)
+	--pluginldflags (return the plugin loader flags)
+        --pluginpath (return the path for installation of Tulip plugins)
+        --qtincludes (return the Qt includes)
+        --qtlibs (return the Qt libs needed by Tulip)
 	
 EOF
     exit $1
@@ -89,6 +92,12 @@ while test $# -gt 0; do
       ;;
     --libs)
       echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt4${libversion}
+      ;;
+    --lib_tulip)
+      echo -L${libdir} -ltulip${libversion}
+      ;;
+    --lib_ogl)
+      echo -L${libdir} -ltulip-ogl${libversion}
       ;;
     --plugincxxflags)
       echo ${plugincxxflags}
