@@ -146,7 +146,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
       int shapeId=-1;
       
-      for (int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
+      for (unsigned int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
 	for(int j=0 ; j<8;++j) {
 	  if(select[i]==&_controls[j]){
 	    shapeId=i;
@@ -288,6 +288,7 @@ bool MouseSelectionEditor::compute(GlGraphWidget *glGraphWidget) {
 //========================================================================================
 bool MouseSelectionEditor::draw(GlGraphWidget *glGraphWidget) {
   //return compute(glGraphWidget);
+  return true;
 }
 //========================================================================================
 void MouseSelectionEditor::restoreInfo() {

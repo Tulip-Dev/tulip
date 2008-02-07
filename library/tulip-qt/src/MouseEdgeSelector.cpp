@@ -74,7 +74,6 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if  (e->type() == QEvent::MouseButtonRelease) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
     if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -86,22 +85,8 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
       glGraphWidget->setMouseTracking(false);
       Observable::holdObservers();
       BooleanProperty* selection=glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
-      bool boolVal = true; // add to selection
-      /*if (qMouseEv->stateAfter() != Qt::ShiftButton) {
-	if (qMouseEv->stateAfter() !=
-#if defined(__APPLE__)
-	    Qt::AltButton
-#else
-	    Qt::ControlButton
-#endif
-	    ) {
-	  selection->setAllNodeValue(false);
-	  selection->setAllEdgeValue(false);
-	} else
-	  boolVal = false; // remove from selection
-      }*/
-	selection->setAllNodeValue(false);
-	selection->setAllEdgeValue(false);
+      selection->setAllNodeValue(false);
+      selection->setAllEdgeValue(false);
       if ((w==0) && (h==0)) {
 	node tmpNode;
 	edge tmpEdge;
@@ -109,8 +94,9 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 	bool result = glGraphWidget->doSelect(x, y, type, tmpNode, tmpEdge);
 	if (result){
 	  switch(type) {
-	  //case NODE: selection->setNodeValue(tmpNode, boolVal); break;
-	  case EDGE: selection->setEdgeValue(tmpEdge, boolVal); break;
+	  case EDGE: selection->setEdgeValue(tmpEdge, true); break;
+	  default:
+	    break;
 	  }
 	}
       } else {
@@ -125,14 +111,10 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 	  y -= h;
 	}
 	glGraphWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
-	/*vector<node>::const_iterator it;
-	for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-	  selection->setNodeValue(*it, boolVal);
-	}*/
 	vector<edge>::const_iterator ite;
 	int compt=0;
 	for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-	  selection->setEdgeValue(*ite, boolVal);
+	  selection->setEdgeValue(*ite, true);
 	  compt++;
 	}
 	if(compt!=1){

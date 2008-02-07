@@ -306,7 +306,8 @@ bool GlTextureManager::loadTexture(const string& filename)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   delete [] texti.data;
   (texturesMap[currentContext])[filename] = texture;
-  
+
+  return true;
 }
 //====================================================================
 void GlTextureManager::beginNewTexture(const string& name)

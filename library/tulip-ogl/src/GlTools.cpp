@@ -162,7 +162,7 @@ namespace tlp {
   GLfloat projectSize(const Coord &position,const Coord& size, 
 		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
 		      const Vector<int, 4> &viewport) {
-    projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
+    return projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
   }
   //====================================================
   GLfloat projectSize(const BoundingBox &bb, 
@@ -248,7 +248,7 @@ namespace tlp {
   }
   //====================================================
   float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& viewport) {
-    float lod=0.;
+    //float lod=0.;
     Coord src[8];
     Coord dst[8];
     int pos;

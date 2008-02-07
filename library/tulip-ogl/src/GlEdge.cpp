@@ -392,7 +392,6 @@ namespace tlp {
     
     float w_max = 300;
     float w,h;
-    float div_w, div_h;
     int rastPos[4];
     unsigned int labelsBorder = data->parameters->getLabelsBorder();
 

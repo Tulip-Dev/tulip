@@ -89,7 +89,6 @@ namespace tlp {
   //============================================================
   void GlGrid::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;
-    xmlNodePtr node = NULL;
 
     GlXMLTools::createProperty(rootNode, "type", "GlGrid");
     

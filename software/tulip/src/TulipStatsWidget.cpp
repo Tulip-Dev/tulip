@@ -1064,7 +1064,7 @@ namespace tlp
 	    plane.computePlane(p1, p2, p3, p4);
 	  }
 
-	Coord coordsTab[4] = {p1, p2, p3, p4};
+	//Coord coordsTab[4] = {p1, p2, p3, p4};
 
 	/*clusteringPlane = new GlADQuad(coordsTab, Color(255, 220, 220, 80));
 	clusteringPlane->setRenderState(GlAD_AlphaBlending, true);

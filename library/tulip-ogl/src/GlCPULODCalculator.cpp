@@ -16,7 +16,7 @@ using namespace std;
 
 namespace tlp {
 
-  static char hullVertexTable[][7] = {
+  /* static char hullVertexTable[][7] = {
     {0,0,0,0,0,0,0},//0
     {4,0,4,7,3,0,0},//1
     {4,1,2,6,5,0,0},//2
@@ -60,7 +60,7 @@ namespace tlp {
     {6,2,3,7,4,5,6},//40
     {6,0,4,5,6,2,3},//41
     {6,1,2,3,7,4,5}//42
-  };
+    };  */
 
   GlCPULODCalculator::~GlCPULODCalculator() {
     for(CameraAndBoundingBoxVector::iterator it=boundingBoxVector.begin();it!=boundingBoxVector.end();++it) {

@@ -69,7 +69,7 @@ namespace tlp {
 	dataBuffer.push_back(*data);
 	if(dataBuffer.size()>=9) {
 	  GLfloat tmp[dataBuffer.size()];
-	  for(int i=0;i<dataBuffer.size();i++)
+	  for(unsigned int i=0;i<dataBuffer.size();i++)
 	    tmp[i]=dataBuffer[i];
 	  colorInfo(tmp);
 	  dataBuffer.clear();

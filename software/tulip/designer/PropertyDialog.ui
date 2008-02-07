@@ -81,7 +81,7 @@
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabNodes</cstring>
                 </property>
                 <attribute name="title">
                     <string>Nodes</string>
@@ -128,7 +128,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabEdges</cstring>
                 </property>
                 <attribute name="title">
                     <string>Edges</string>

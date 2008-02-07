@@ -289,7 +289,6 @@ namespace tlp {
   //====================================================
   void Camera::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;
-    xmlNodePtr node = NULL;
 
     stringstream strZF;
     stringstream strSR;

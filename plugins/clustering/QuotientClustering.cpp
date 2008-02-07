@@ -349,7 +349,7 @@ bool QuotientClustering::run() {
   quotientGraph->delLocalProperty("opposite edge");
 	    
   //compute layout according to the layouts of subgraphs
-  SizeProperty *size  = quotientGraph->getProperty<SizeProperty>("viewSize");
+  //SizeProperty *size  = quotientGraph->getProperty<SizeProperty>("viewSize");
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
     updateGroupLayout(sg, quotientGraph, itN->next());

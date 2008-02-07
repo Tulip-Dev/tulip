@@ -31,7 +31,7 @@
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabProperty</cstring>
                 </property>
                 <attribute name="title">
                     <string>Property</string>
@@ -55,7 +55,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabElement</cstring>
                 </property>
                 <attribute name="title">
                     <string>Element</string>
@@ -87,7 +87,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabHierarchy</cstring>
                 </property>
                 <attribute name="title">
                     <string>Hierarchy</string>

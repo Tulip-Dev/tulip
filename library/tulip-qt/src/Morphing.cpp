@@ -225,8 +225,8 @@ namespace tlp {
     Coord cam_center = g0->camera->getCenter() + (g1->camera->getCenter() - g0->camera->getCenter()) * inT;
     Coord cam_eyes   = g0->camera->getEyes() + (g1->camera->getEyes() - g0->camera->getEyes()) * inT;
     Coord cam_up     = g0->camera->getUp() + (g1->camera->getUp() - g0->camera->getUp()) * inT;
-    float zoomf      = g0->camera->getZoomFactor() + (g1->camera->getZoomFactor() - g0->camera->getZoomFactor()) * inT;
-    float radius     = g0->camera->getSceneRadius() + (g1->camera->getSceneRadius() - g0->camera->getSceneRadius()) * inT;
+    /* float zoomf      = g0->camera->getZoomFactor() + (g1->camera->getZoomFactor() - g0->camera->getZoomFactor()) * inT;
+       float radius     = g0->camera->getSceneRadius() + (g1->camera->getSceneRadius() - g0->camera->getSceneRadius()) * inT; */
     Camera *c;
     c = g0->camera;
 
