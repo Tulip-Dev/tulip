@@ -1,7 +1,5 @@
 #include <iostream>
 
-//#include <tulip/GlVertexListManager.h>
-
 #include <stdio.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -14,8 +12,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlLayer.h>
 #include <tulip/TlpTools.h>
-#include <tulip/Glyph.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,13 +41,12 @@ static int frame=0;
 static GLint timer;
 static int rx = 0,ry = 0,rz = 0;
 static bool frameRateDisplaying=false;
-static bool incremental=false;
 static char strFrameRate[50] = {0};      
 
 using namespace tlp;
 //=============================================
 void idle(void) {  
-  glGlutScreen->scene.rotateScene(rx*2., ry*2., rz*2.);
+  glGlutScreen->scene.rotateScene(rx*2, ry*2, rz*2);
   if (frameRateDisplaying) {
     if (frame%frameCount == 0) {
       GLint t = glutGet(GLUT_ELAPSED_TIME);
@@ -68,10 +63,7 @@ void idle(void) {
 }
 
 static void setRasterPosition(unsigned int x, unsigned int y) {
-  float *val;
-  unsigned char *tmp;
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, val);
-  glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
+  glRasterPos2f(x, y);
 }
 //=============================================
 static void printMessage(string str,bool b) {
@@ -138,9 +130,9 @@ static void Key(unsigned char key, int x, int y) {
     printMessage("Labels",param.isViewNodeLabel());
     param.setFontsType(1);
     break;
-  case 's':
+  case 'm':
     param.setElementOrdered(!param.isElementOrdered());
-    printMessage("StrahlerMode",param.isElementOrdered());
+    printMessage("Metric ordering",param.isElementOrdered());
     break;
   case 'E':
     param.setDisplayEdges(!param.isDisplayEdges());
@@ -160,24 +152,19 @@ static void Key(unsigned char key, int x, int y) {
 }
 //=============================================
 void Reshape(int widt, int heigh) {
-  cerr << __PRETTY_FUNCTION__ << endl;
+  //cerr << __PRETTY_FUNCTION__ << endl;
   width=widt;
   height=heigh;
-  //GlGraphRenderingParameters param = glGlutScreen->getRenderingParameters();
   Vector<int, 4> viewport;
   viewport[0] = 0;
   viewport[1] = 0;
   viewport[2] = widt;
   viewport[3] = heigh;
   glGlutScreen->scene.setViewport(viewport);
-  //param.setViewport(viewport);
-  //glGlutScreen->setRenderingParameters(param);
 }
 //=============================================
 void Draw(void) {
   glGlutScreen->scene.draw();
-  //glGlutScreen->draw();
-  /*if (!glGlutScreen->getRenderingParameters().isIncrementalRendering()) */
   glutSwapBuffers();
   if (frameRateDisplaying) frame++;
 }
@@ -191,7 +178,7 @@ void helpMessage() {
   cout << "\t y\t: (de)Activate Y axis rotation" << endl;
   cout << "\t z\t: (de)Activate Z axis rotation" << endl;
   cout << "\t +/-: zoom" << endl;
-  cout << "\t s\t: (de)Activate strahler ordering" << endl;
+  cout << "\t m\t: (de)Activate metric ordering" << endl;
   cout << "\t l\t: (de)Activate labels" << endl;
   cout << "\t a\t: (de)Activate arrows" << endl;
   cout << "\t E\t: (de)Activate edge rendering" << endl;
@@ -199,7 +186,6 @@ void helpMessage() {
   cout << "\t o\t: (de)Activate Orthogonal projection" << endl;
   cout << "\t b\t: (de)Activate Frame rate displaying" << endl;
   cout << "\t 1\t: (de)Activate full screen" << endl;
-  cout << "\t I\t: (de)Activate incremental rendering" << endl;
   cout << "\t esc: quit" << endl;
   cout << "**********************************************" <<endl;
 }
@@ -218,23 +204,21 @@ int main (int argc, char **argv) {
   glutInitWindowSize( width, height);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH | GLUT_STENCIL);
   if ((win=glutCreateWindow("Tulip Glut Viewer")) == GL_FALSE) {
-    cerr << "Impossible to create the new window" << endl;
+    cerr << "Unable to create the new window" << endl;
     exit(1);
   }
-
-  helpMessage();
 
   PluginLoaderTxt plug;
 
   tlp::initTulipLib();
-  tlp::loadPlugins(&plug);   // library side plugins
+  // library side plugins
+  //tlp::loadPlugins(&plug);
 
+  // glyph plugins
   GlyphManager::getInst().loadPlugins(&plug);
 
   GlDisplayListManager::getInst().changeContext(0);
-  //GlVertexListManager::getInst().changeContext(0);
   GlTextureManager::getInst().changeContext(0);
-  //GlGraph::loadPlugins();
 
   glGlutScreen = new GLGlut("", width, height);
   glutIdleFunc(idle);
@@ -254,9 +238,7 @@ int main (int argc, char **argv) {
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
   glutDisplayFunc(Draw);
-  int res;
-  glGetIntegerv(GL_AUX_BUFFERS, &res);
-  cerr << "=========> " << res << endl;
+  helpMessage();
   glutMainLoop();  
   return EXIT_SUCCESS;
 }
