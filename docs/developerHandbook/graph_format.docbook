@@ -154,4 +154,48 @@
         </variablelist>
         </para>
     </sect1>
+    <sect1 id="glscene-def"><title>GlScene</title>
+        <para>Scene structure are stored with a xml structure.</para>
+	<para>First, scene's data (viewport and background color) are store in data element</para>
+	<para>Syntax<programlisting>
+&lt;data&gt;
+  &lt;viewport&gt;(x,y,width,height)&lt;/viewport&gt;
+  &lt;background&gt;(red,green,blue,alpha)&lt;/background&gt;
+&lt;/data&gt;
+	</programlisting></para>
+	<para>After, scene children are store in children element</para>
+	<para>GlLayer and GlComposite have two elements : data and children</para>
+	<para>All others glEntities have one element : data</para>
+	<para>The scheme of glScene xml are (for example) : </para>
+	<programlisting>
+&lt;scene&gt;
+  &lt;data&gt;
+    ...
+  &lt;/data&gt;
+  &lt;children&gt;
+    &lt;LayerName1 type="GlLayer"&gt;
+      &lt;data&gt;
+	...
+      &lt;/data&gt;
+      &lt;children&gt;
+	...
+      &lt;/children&gt;
+    &lt;/LayerName&gt;
+    &lt;LayerName2 type="GlLayer"&gt;
+      &lt;data&gt;
+	...
+      &lt;/data&gt;
+      &lt;children&gt;
+	&lt;EntityName type="EntityType"&gt;
+	  &lt;data&gt;
+	    ...
+	  &lt;/data&gt;
+	&lt;/EntityName3&gt;
+      &lt;/children&gt;
+    &lt;/LayerName2&gt;
+  &lt;/children&gt;
+&lt;/scene&gt;
+	</programlisting>	
+	<para>For glEntities data see .cpp file</para>
+    </sect1>
 </chapter>

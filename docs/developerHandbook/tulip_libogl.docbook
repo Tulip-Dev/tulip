@@ -4,12 +4,12 @@
     </sect1>
     <sect1 id="augm-disply"><title>2D/3D for Tulip</title>
 	<sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlEntity system</title>
-	    <para>GlSimpleEntity is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays. Based upon the now obsolete GlDrawable system this library offers more efficient services.
+	    <para>Tulip-ogl is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays.
 	    </para>
 	</sect2>
     
 	<sect2 id="glSimpleEntity"><title>GlSimpleEntity</title>
-	    <para> GlSimpleEntity is the mother-class of every 2D/3D shape. It provides one important virtual functions : draw, and one important data field : boundingBox. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The other classes of the library are : GlLine, GlPolygon, GlBox, GlCilcle, GlGrid, GlMultiPolygon, GlQuad, GlRect, GlRectTextured, GlSphere.
+	    <para> GlSimpleEntity is the mother-class of every 2D/3D shape. It provides one important virtual functions : draw, and one important data field : boundingBox. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The other classes of the library are : GlLine, GlPolygon, GlBox, GlCircle, GlGrid, GlMultiPolygon, GlQuad, GlRect, GlRectTextured, GlSphere.
 	    </para>
 	</sect2>
     

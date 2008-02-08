@@ -224,12 +224,10 @@
     <sect1 id="renderingparams"><title>Rendering Parameters</title>
         <para>All actions in this dialog are just performed for the current view window.
                 <graphic fileref="images/renderingparams.png"/>
-            This dialog is diaplayed when clicking on the <code>Dialogs->Rendering Parameters</code>(<keycap>Ctrl+R</keycap>). Ienables to configure the rendering of the graph. The available options are grouped in the following three frames:
+            This dialog is displayed when clicking on the <code>Dialogs->Rendering Parameters</code>(<keycap>Ctrl+R</keycap>). Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
              <itemizedlist>
                 <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
                 <itemizedlist>
-                    <listitem><para><code>Visibility</code> : you can enable/disable the display of labels on nodes, edges or metanodes.</para>
-                    </listitem>
                     <listitem><para><code>Type</code> : this indicates the text display mode which can be one of Bitmap, Texture or 3D.</para>
                     </listitem>
                     <listitem><para><code>metric ordering</code> : when checked the labels are displayed in using the viewMetric property decreasing order.</para>
@@ -240,8 +238,6 @@
                 </listitem>
                 <listitem><para><code>Edges</code> : this frame options affect the way the edges are displayed:
                 <itemizedlist>
-                    <listitem><para><code>visible</code> : enables/disables the display of edges. If not checked, the other options of this frame are not active.</para>
-                    </listitem>
                     <listitem><para><code>arrows</code> : enables/disables the display of arrows.</para>
                     </listitem>
                     <listitem><para><code>3D</code> : enables/disables the display of edges in 3D.</para>
@@ -262,6 +258,19 @@
                 </listitem>
            </itemizedlist>
         </para>
+    </sect1>
+    <sect1 id="layermanager"><title>Layer Manager</title>
+        <para>All actions in this dialog are just performed for the current view window.
+                <graphic fileref="images/layermanager.png"/>
+            This dialog is displayed when clicking on the <code>Dialogs->Layer Manager</code>. Enables to configure the elements visibility and priority. The available options are grouped in two column :
+             <itemizedlist>
+                <listitem><para><code>Visible</code> : Visibility of the entity
+                </para></listitem>
+		<listitem><para><code>Stencil</code> : Priority to display the entity
+                </para></listitem>
+           </itemizedlist>
+        </para>
+	<para>In futur version you could add/modify/remove entity</para>
     </sect1>
     <sect1 id="infoeditor"><title>Info Editor</title>
         <para>
