@@ -14,7 +14,7 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-ALGORITHMPLUGIN(StrengthClustering, "Strength", "David Auber", "27/01/2003", "Alpha", "1.1");
+ALGORITHMPLUGIN(StrengthClustering, "Strength Clustering", "David Auber", "27/01/2003", "Alpha", "1.1");
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}
@@ -255,7 +255,8 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 	// propagate values for layout parameters
 	tmpData.set("layout subgraphs", subgraphsLayout);
 	tmpData.set("layout quotient graph", quotientLayout);
-	if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength", pluginProgress)) {
+	if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Strength Clustering",
+				 pluginProgress)) {
 	  return false;
 	}
 	tmpData.get("strengthGraph",tmpGr);
@@ -329,7 +330,7 @@ namespace {
     HTML_HELP_DEF( "values", "[true, false]" ) \
     HTML_HELP_DEF( "default", "true" ) \
     HTML_HELP_BODY() \
-    "This parameter indicates whether the layout of quotient graph has to be computed or not." \
+    "This parameter indicates whether the layout of the quotient graph has to be computed or not." \
     HTML_HELP_CLOSE(),
   };
 }
