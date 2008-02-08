@@ -49,7 +49,6 @@ void tlp::updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   pair<Coord, Coord> box = tlp::computeBoundingBox(metaGraph->getNodeValue(metanode), graphLayout, graphSize, graphRotation);
   Coord maxL = box.first;
   Coord minL = box.second;
-  cout << maxL << " : " << minL << endl;
   graphLayout->setNodeValue(metanode, (maxL + minL) / 2.0 );
   Coord v = (maxL - minL);
   if (v[2] < 0.0001) v[2] = 0.1;
