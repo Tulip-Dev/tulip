@@ -76,7 +76,7 @@ QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(conte
   addParameter<bool>("oriented", paramHelp[0], "true");
   addParameter<StringCollection>("node function", paramHelp[1], AGGREGATION_FUNCTIONS);
   addParameter<StringCollection>("edge function", paramHelp[2], AGGREGATION_FUNCTIONS);
-  addParameter<bool>("edge cardinality", paramHelp[3], "true");
+  addParameter<bool>("edge cardinality", paramHelp[3], "false");
 }
 //================================================================================
 QuotientClustering::~QuotientClustering(){}
