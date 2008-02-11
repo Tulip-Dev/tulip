@@ -197,7 +197,8 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     _view->getScene()->getLayer("Main")->addGlEntity(_glDraw,"RectPosition");
     _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
 
-    _glDraw->draw(1,NULL);
+    if(isVisible())
+      _glDraw->draw(1,NULL);
     
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
     
