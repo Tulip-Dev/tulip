@@ -912,7 +912,8 @@ tlp::openDataSetDialog(	DataSet & outSet,
                         StructDef *inDef,
                         const DataSet *inSet,
                         const char * inName,
-                        Graph * inG) {
+                        Graph * inG,
+			QWidget* parent) {
   // DEBUG
   //	if( inSet )
   //		OutputDataSet( *inSet );
@@ -923,7 +924,7 @@ tlp::openDataSetDialog(	DataSet & outSet,
 
   if( !inName )
     inName = "Parameter's Dialog";
-  QParamDialog *dlg = new QParamDialog(sysDef, inDef);
+  QParamDialog *dlg = new QParamDialog(sysDef, inDef, parent);
   dlg->setCaption( inName );
 
   if( !dlg->fillIn(inSet, inG) )

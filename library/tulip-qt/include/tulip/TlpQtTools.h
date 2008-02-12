@@ -28,7 +28,8 @@ namespace tlp {
 					 StructDef *inDef,
 					 const DataSet *inSet	= NULL,
 					 const char *inName = NULL,
-					 Graph *inG = NULL);
+					 Graph *inG = NULL,
+					 QWidget *parent = NULL);
 
   /**
    * Create a main layout in GlGraphWidget and display the graph on it 

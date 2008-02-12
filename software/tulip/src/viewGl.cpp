@@ -699,7 +699,8 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   if (comments.length() > 0)
     dataSet.set<string>("text::comments", comments);
   if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
-			      &dataSet, "Enter Export parameters")) //, glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
+			      &dataSet, "Enter Export parameters", NULL,
+			      this)) //, glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
     return false;
   dataSet.set("displaying", glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
   string sceneOut;
@@ -846,7 +847,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
       StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
       params->buildDefaultDataSet( dataSet );
-      cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, "Enter plugin parameter(s)");
+      cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+				       "Enter plugin parameter(s)", NULL, this);
     }
   } else {
     plugin = &tmpStr;
@@ -1885,7 +1887,8 @@ void viewGl::applyAlgorithm(int id) {
   StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
   StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
   params->buildDefaultDataSet(dataSet, graph );
-  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, "Tulip Parameter Editor", graph );
+  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+				   "Tulip Parameter Editor", graph, this);
   if (ok) {
     QtProgress myProgress(this,name);
     myProgress.hide();
@@ -1918,7 +1921,8 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
     StructDef *params = getPluginParameters(PROPERTY::factory, name);
     StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
     params->buildDefaultDataSet( *dataSet, graph );
-    resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet, "Tulip Parameter Editor", graph );
+    resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet,
+					"Tulip Parameter Editor", graph, this);
   }
 
   if (resultBool) {
