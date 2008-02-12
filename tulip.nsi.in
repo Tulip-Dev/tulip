@@ -1,5 +1,6 @@
 !include "MUI.nsh"
-!include "WriteEnvStr.nsh"
+; no more env variables needed
+;!include "WriteEnvStr.nsh"
 
 ;General
 
@@ -85,16 +86,6 @@ Call CheckPreviousVersion
 FunctionEnd
 
 Section "-Programs (required)"
-; Initialize TLP_DIR
-Push TLP_DIR
-StrCpy $R0 "$INSTDIR\lib"
-Push $R0
-Call WriteEnvStr
-Push PATH
-ReadEnvStr $R0 "PATH" 
-StrCpy $R0 "$R0;$INSTDIR;$INSTDIR\lib"
-Push $R0
-Call WriteEnvStr
 SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
@@ -167,9 +158,6 @@ SectionEnd
 UninstallText "Do you really want to remove Tulip @VERSION@ from your system ?"
 
 Section "Uninstall"
-; Delete TLP_DIR variable
-Push TLP_DIR
-Call un.DeleteEnvStr
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
 Delete "$INSTDIR\Tulip.exe"
