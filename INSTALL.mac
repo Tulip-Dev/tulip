@@ -1,50 +1,15 @@
 How to build Tulip on MacOSX platform
 -------------------------------------
 
-1- Build Qt
------------
+1- Build Qt/Mac Open Source Edition
+------------------------------------
+Download the Qt 4.3.3 source code
+  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.3.3.tar.gz
 
-You can use either Qt 3 or Qt 4. Qt 4 has (at the time of this writing) problems with screen refreshes.
-
-1a- Build the Qt/Mac 3.3 Open Source Edition
---------------------------------------
-
-Download the corresponding Qt 3 source code
-  ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
-
-Add the following to ~/.profile
-  export QTDIR=/usr/local/Trolltech/qt-mac-free-3.3.6
-  export PATH=$QTDIR/bin:$PATH
-  export DYLD_LIBRARY_PATH=$QTDIR/lib:$DYLD_LIBRARY_PATH
-
-Do
-  mkdir /usr/local/Trolltech/
-  cd /usr/local/Trolltech/
-  tar xzvf qt-mac-free-3.3.6.tar.gz
-  cd qt-mac-free-3.3.6/
-  ./configure -thread
-  make
-  sudo ln -sf $QTDIR/lib/libqt-mt.3.dylib /usr/lib
-  sudo ln -sf $QTDIR/lib/libqui.1.dylib /usr/lib
-  open -e /usr/local/Trolltech/qt-mac-free-3.3.6/lib/libqt-mt.la
-
-In the file libqt-mt.la, add a hash ("#") in front of the line starting with
-  dependency_libs=
-and save.
-This last step is necessary because glibtool chokes on the -framework switch.
-Removing the line is not correct but it ensures a working Tulip building
-process. The Qt qmake process doesn't use glibtool so this isn't an issue
-for most Qt applications.
-
-1b- Build the Qt/Mac 4.2.2 Open Source Edition
--------------------------------------------
-Download the Qt 4.2.2 or later source code (Qt 4.2.0 and 4.2.1 crash (bug 135585))
-  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.2.2.tar.gz
-
-To install Qt-4.2.2 into its default install directory ( /usr/local/Trolltech/Qt-4.2.2 ),
+To install Qt-4.3.3 into its default install directory ( /usr/local/Trolltech/Qt-4.3.3 ),
 do (for example in your home directory)
-  tar xzvf qt-mac-opensource-src-4.2.2.tar.gz
-  cd qt-mac-opensource-src-4.2.2
+  tar xzvf qt-mac-opensource-src-4.3.3.tar.gz
+  cd qt-mac-opensource-src-4.3.3
   ./configure
   make
   make install
@@ -58,20 +23,26 @@ then
   make
   make install
 
-3- Configure Tulip
+3- Install glew
+-------------
+Download the last MacOS X AGL version of glew from http://glew.sourceforge.net
+Install the librairies libGLEW*.dylib in /usr/lib, 
+the binaries in /usr/local/bin and
+the include/GL directory in /usr/local/include
+
+4- Install libpng and libjpeg
+---------------------------
+Ease your installation in downloading the MacOS X ports of these libraries
+from http://ethan.tira-thompson.com/Mac%20OS%20X%20Ports.html
+
+5- Configure Tulip
 ------------------
 Change the current directory to the tulip directory
 then run
 
   sh gen-conf.sh
 
-If you've installed Qt/Mac 3.3 as described in 1a, do
-
-  ./configure --prefix=/usr/local/tulip-qt3 --with-qt-dir=/usr/local/Trolltech/qt-mac-free-3.3.6
-
-If you've installed Qt/Mac 4.2.2 as described in 1b, do
-
-  ./configure --prefix=/usr/local/tulip-qt4 --with-qt-dir=/usr/local/Trolltech/Qt-4.2.2
+  ./configure --with-qt-dir=/usr/local/Trolltech/Qt-4.3.3
 
 More configuration flags are available; use ./configure --help to see them.
 
