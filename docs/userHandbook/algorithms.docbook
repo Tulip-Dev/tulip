@@ -506,18 +506,18 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 		<para>Convolution clustering is an approach to partitioning a graph that gives the user interactive control over how many clusters to create. Tulip calculates a density function based on the chosen metric, displays a convolution of its histogram, and partitions the graph according to the humps in the histogram. </para>
         </sect3>
         <sect3 id="equal-value"><title>Equal Value</title>
-		<para>This algorithm will create sub-graphs in which all nodes or all edges (not both a the same time), have the same value.</para>
+		<para>This algorithm will create sub-graphs in which all nodes or all edges (not both at the same time), have the same value.</para>
         </sect3>
         <sect3 id="hierarchical-general"><title>Hierarchical</title>
 		<para>This algorithm will divide the graph in 2 different subgraphs; the first one will contain nodes  that have the viewMetric value under than a certain limit, and, the other one, in which nodes will have a the viewMetric value higher than the limit. Then, the algorithm will be re-applied to the subgraph (the one with higher viewMetrics) until the subgraph contains less than 10 nodes.</para>
 		<ulink url="../../doxygen/allPlugins.html#HierarchicalClustering" >Algorithm documentation</ulink>
         </sect3>
         <sect3 id="quotient-clustering"><title>Quotient Clustering</title>
-		This algorithm will create a metagraph. The metanodes, will be the subgraphs that already exist, and an edge will be created between two metanodes if and only if it exist an edge whose source is a node of a subgraph, and the target a node of an other subgraph.
+		This algorithm will create a metagraph. The metanodes will represent the subgraphs that already exist, and a metaedge will be created between two metanodes if and only if it exist an edge whose source is a node of a subgraph, and the target a node of an other subgraph.
 		<para>Parameters :</para>
 		<itemizedlist>
 			<listitem><code>oriented :</code>
-				<para>This parameter indicates whether the graph has to be considered as oriented or not.</para>
+				<para>This parameter indicates whether the graph has to be considered as oriented or not. If it is the case, two metaedges may exist between two metanodes One representing the edges from the nodes of subgraph 1 to the nodes of subgraph 2, the second representing the edges from the nodes of subgraph 2 to the nodes of subgraph 1.</para>
 			</listitem>
 			<listitem><code>node function :</code>
 				<para>This parameter enables to choose the function used to compute a measure value for a meta-node using the values of its underlying nodes.</para>
@@ -531,8 +531,8 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 		</itemizedlist>
 		<para><ulink url="../../doxygen/allPlugins.html#QuotientClustering" >Algorithm documentation</ulink></para>
         </sect3>
-        <sect3 id="strength-general"><title>Strength</title>
-		The strength algorithm will recursively create subgraphs that are nested "small-worlds".
+        <sect3 id="strength-general"><title>Strength Clustering</title>
+		The strength clustering algorithm will recursively create subgraphs that are nested "small-worlds".
 		<para><ulink url="http://en.wikipedia.org/wiki/Small-world_network" >Wikipedia: small worlds.</ulink></para> 
 		<para><ulink url="../../doxygen/allPlugins.html#StrengthClustering" >Algorithm documentation</ulink></para>
         </sect3>

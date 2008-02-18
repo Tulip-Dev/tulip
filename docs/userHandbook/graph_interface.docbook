@@ -171,7 +171,7 @@
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_move.png"/><code>Selection edition</code> : This tool allows to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates are modified. If <keycap>Shift</keycap> key is pressed, only coordinates are modified. If <keycap>Ctrl</keycap> is pressed, only size is modified.A left button click outside the selection box reset the selection.
+                <para><inlinegraphic fileref="images/i_move.png"/><code>Selection edition</code> : This tool allows to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates are modified. If <keycap>Shift</keycap> key is pressed, only coordinates are modified. If <keycap>Ctrl</keycap> is pressed, only size is modified. A left button click outside the selection box reset the selection.
                 </para>
                 <itemizedlist>
                         <listitem>
@@ -192,7 +192,7 @@
                 </itemizedlist>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code> : it enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
+                <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code> : It enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
                 </para>
             </listitem>
             <listitem>
@@ -200,15 +200,19 @@
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a simple click. The deleted node or edge is the one under the mouse when you clicked.
+                <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a simple left click. The deleted node or edge is the one under the mouse when you clicked.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_addnode.png"/><code>Add node</code> : when it is selected, you can add a node in the graph by a simple mouse click on the current graph view. The node is placed at the coordinates corresponding to the mouse position when you clicked.
+                <para><inlinegraphic fileref="images/i_addnode.png"/><code>Add node</code> : when it is selected, you can add a node in the graph by a simple left mouse click on the current graph view. The node is placed at the coordinates corresponding to the mouse position when you clicked.
                 </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_addedge.png"/><code>Add edge</code> : when it is selected, you can add an edge in the graph by mouse clicking first on the source node then on the target node. 
+                <para><inlinegraphic fileref="images/i_addedge.png"/><code>Add edge</code> : when it is selected, you can add an edge in the graph by mouse left clicking first on the source node then any left click will add a bend to the edge until a left click on the target node. 
+                </para>
+            </listitem>
+            <listitem>
+                <para><inlinegraphic fileref="images/i_bends.png"/><code>Edit edge bends</code> : when it is selected, you can edit the bends of an edge by first selecting the edge using the mouse left button. Then a mouse left click with the <keycap>Shift</keycap> key pressed will add a new bend, moving the mouse with the left button pressed will allow to move an existing one, a mouse left click on a bend with the <keycap>Ctrl</keycap> key pressed (<keycap>Alt</keycap> key on Mac) will remove it.
                 </para>
             </listitem>
         </itemizedlist>
