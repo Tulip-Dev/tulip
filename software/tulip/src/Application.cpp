@@ -9,12 +9,9 @@
 
 using namespace std;
 
-Application *qApp = (Application *) NULL;
-
 //**********************************************************************
 Application::Application(int& argc, char ** argv): QApplication(argc,argv) 
 {
-  qApp = this;
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");

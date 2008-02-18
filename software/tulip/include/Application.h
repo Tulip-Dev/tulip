@@ -14,9 +14,4 @@ public:
   Application(int& argc, char ** argv); 
   ~Application();
 };
-
-#ifdef qApp
-#undef qApp
-extern  Application *qApp;
-#endif
 #endif
