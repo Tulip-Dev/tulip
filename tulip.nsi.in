@@ -107,12 +107,11 @@ File "@qt_libraries@\QtSql4.dll"
 File "@qt_libraries@\QtXml4.dll"
 File "@qt_libraries@\QtAssistantClient4.dll"
 File  "@qt_libraries@\..\bin\assistant.exe"
-setOutPath $INSTDIR\imageformats
-File "@qt_libraries@\..\plugins\imageformats\*.dll"
-setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
+setOutPath $INSTDIR\imageformats
+File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
 SectionEnd
