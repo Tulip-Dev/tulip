@@ -26,9 +26,15 @@ namespace tlp {
 		 const std::vector<Color> &outlineColors,
 		 const bool filled,
 		 const bool outlined,
+		 const std::string &name,
 		 bool computeHull=true);
     
     virtual ~GlConvexHull() {}
+
+    /**
+     * Retrun the name of this convex hull
+     */
+    std::string getName() {return _name;}
     
     /**
      * Return the boundingBox of the convexHull
@@ -66,6 +72,7 @@ namespace tlp {
     std::vector<Color> _outlineColors;
     bool _filled;
     bool _outlined;
+    std::string _name;
   };
 }
 #endif

@@ -274,6 +274,7 @@
                 </para></listitem>
            </itemizedlist>
         </para>
+	<para>In this menu, you see Hull entity, this is convex hulls of the graph. When you click on visible, hierarchy of convex hulls are build. The name of a hull is the name of the coresponding subgraph.</para>   
 	<para>In futur version you could add/modify/remove entity</para>
     </sect1>
     <sect1 id="infoeditor"><title>Info Editor</title>

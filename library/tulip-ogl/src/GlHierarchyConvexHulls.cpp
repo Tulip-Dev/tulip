@@ -29,14 +29,23 @@ void GlHierarchyConvexHulls::compute(GlLayer *layer,Graph *graph) {
   }
   
   GlComposite* glHulls;
-  if(!layer->findGlEntity("Hulls")){
-    glHulls=new GlComposite;
+  GlComposite* oldGlHulls=NULL;
+  if(layer->findGlEntity("Hulls")){
+    oldGlHulls=(GlComposite*)(layer->findGlEntity("Hulls"));
+    layer->deleteGlEntity(oldGlHulls);
+  }
+ 
+  glHulls=new GlComposite;
+  if(oldGlHulls) {
+    glHulls->setVisible(oldGlHulls->isVisible());
+    glHulls->setStencil(oldGlHulls->getStencil());
+  }else{
     glHulls->setVisible(false);
     glHulls->setStencil(0xFFFF);
-    layer->addGlEntity(glHulls,"Hulls");
-  }else{
-    glHulls=(GlComposite*)(layer->findGlEntity("Hulls"));
   }
+
+  layer->addGlEntity(glHulls,"Hulls");
+  
 
   // build convex hulls
   vector<GlConvexHull *> convexHulls=GlConvexHull::buildConvexHullsFromHierarchy(graph,
@@ -49,33 +58,28 @@ void GlHierarchyConvexHulls::compute(GlLayer *layer,Graph *graph) {
   // add convex hulls in gl composite
   vector<GlConvexHull *>::const_iterator it = convexHulls.begin();
   unsigned int i = 0;
+  unsigned int noname=0;
 
-  /*bool isVisible;
-  int stencil;
-  if(layer->findGlEntity("Hulls")){
-    isVisible=layer->findGlEntity("Hulls")->isVisible();
-    stencil=layer->findGlEntity("Hulls")->getStencil();
-  }else{
-    isVisible=false;
-    stencil=0xFFFF;
-  }
-
-  layer->deleteGlEntity("Hulls");
-  glHulls->setVisible(isVisible);
-  glHulls->setStencil(stencil);
-  layer->addGlEntity(glHulls,"Hulls");*/
-  
   for (; it != convexHulls.end(); it++, i++) {
     stringstream sstr;
-    sstr << i;
-    if(glHulls->findGlEntity(sstr.str())){
-      GlSimpleEntity *oldEntity=glHulls->findGlEntity(sstr.str());
+    if((*it)->getName()!="") {
+      sstr << (*it)->getName();
+    }else{
+      sstr << "noname_" << noname ;
+      noname++;
+    }
+
+    if(oldGlHulls->findGlEntity(sstr.str())){
+      GlSimpleEntity *oldEntity=oldGlHulls->findGlEntity((*it)->getName());
       (*it)->setVisible(oldEntity->isVisible());
       (*it)->setStencil(oldEntity->getStencil());
     }else{
       (*it)->setStencil(glHulls->getStencil());
       (*it)->setVisible(glHulls->isVisible());
     }
+    
     glHulls->addGlEntity(*it, sstr.str());
   }
+
+  oldGlHulls->reset(true);
 }

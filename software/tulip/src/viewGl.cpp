@@ -398,11 +398,13 @@ void  viewGl::destroy (Graph *) {
 //**********************************************************************
 // GlSceneObserver interface
 void viewGl::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
-  layerWidget->addLayer(scene,name,layer);
+  if(glWidget->getScene()==scene)
+    layerWidget->addLayer(scene,name,layer);
 }
 void viewGl::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
   //cout << "modify layer" << endl;
-  layerWidget->updateLayer(name,layer);
+  if(glWidget->getScene()==scene)
+    layerWidget->updateLayer(name,layer);
 }
 
 //**********************************************************************

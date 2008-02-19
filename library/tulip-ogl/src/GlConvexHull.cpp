@@ -16,13 +16,15 @@ namespace tlp {
 			     const vector<Color> &ocolors,
 			     const bool filled,
 			     const bool outlined,
+			     const string &name,
 			     const bool computeHull):
     
     _points(points),
     _fillColors(fcolors),
     _outlineColors(ocolors),
-  _filled(filled),
-  _outlined(outlined) {
+    _filled(filled),
+    _outlined(outlined),
+    _name(name){
 
   assert(points.size() >= 3);
   if (computeHull) {
@@ -126,6 +128,8 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     oColors.push_back(Color(100, 100, 100, 120));
   }
 
+  
+
   // build convex hulls from subgraphs
   forEach(sg, graph->getSubGraphs()) {
     ////
@@ -222,7 +226,7 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       }
       // add a GlConvexHull for this graph in front of gConvexHulls
       convexHulls.insert(convexHulls.begin(), 1,
-			 new GlConvexHull(gConvexHull, filledColors, outColors, true, true,
+			 new GlConvexHull(gConvexHull, filledColors, outColors, true, true,graph->getAttribute<string>("name"),
 			                  // convex hull is already computed
 					  false));
       } else {
@@ -300,7 +304,7 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	}
 	// add a GlConvexHull for this graph in front of convexHulls
 	convexHulls.insert(convexHulls.begin(), 1,
-			   new GlConvexHull(gConvexHull, filledColors, outColors, true, true));
+			   new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name")));
       }
     }
   }
