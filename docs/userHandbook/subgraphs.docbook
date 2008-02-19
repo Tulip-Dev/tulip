@@ -96,6 +96,6 @@
 		<listitem>Equal Value.<xref linkend="equal-value"/></listitem>
 		<listitem>Hierarchical.<xref linkend="hierarchical-general"/></listitem>
 		<listitem>Quotient Clustering.<xref linkend="quotient-clustering"/></listitem>
-		<listitem>Strenght.<xref linkend="strength-general"/></listitem>
+		<listitem>Strength Clustering.<xref linkend="strength-general"/></listitem>
 	</itemizedlist>
 </sect2>
