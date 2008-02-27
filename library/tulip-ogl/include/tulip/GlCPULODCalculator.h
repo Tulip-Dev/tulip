@@ -29,8 +29,8 @@ namespace tlp {
     virtual ~GlCPULODCalculator();
 
     virtual void beginNewCamera(Camera* camera);
-    virtual void addSimpleEntityBoundingBox(unsigned int entity,const BoundingBox& bb);
-    virtual void addComplexeEntityBoundingBox(unsigned int entity,const BoundingBox& bb);
+    virtual void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb);
+    virtual void addComplexeEntityBoundingBox(unsigned long entity,const BoundingBox& bb);
 
     virtual void compute(const Vector<int,4>& viewport);
     
@@ -39,9 +39,9 @@ namespace tlp {
 
   protected:
     
-    typedef std::pair<unsigned int, BoundingBox> BoundingBoxUnit;
+    typedef std::pair<unsigned long, BoundingBox> BoundingBoxUnit;
     typedef std::vector<BoundingBoxUnit> BoundingBoxVector;
-    typedef std::pair<unsigned int, std::pair<BoundingBoxVector*,BoundingBoxVector*> > CameraAndBoundingBoxUnit;
+    typedef std::pair<unsigned long, std::pair<BoundingBoxVector*,BoundingBoxVector*> > CameraAndBoundingBoxUnit;
     typedef std::vector<CameraAndBoundingBoxUnit> CameraAndBoundingBoxVector;
     
     BoundingBoxVector* actualSEBoundingBoxVector;

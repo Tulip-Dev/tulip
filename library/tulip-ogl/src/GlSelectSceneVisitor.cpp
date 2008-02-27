@@ -10,17 +10,17 @@ namespace tlp {
 
   void GlSelectSceneVisitor::visit(GlSimpleEntity *entity) {
     if(selectionFlag==SelectSimpleEntities)
-      calculator->addSimpleEntityBoundingBox((unsigned int)entity,entity->getBoundingBox());
+      calculator->addSimpleEntityBoundingBox((unsigned long)entity,entity->getBoundingBox());
   }
 
   void GlSelectSceneVisitor::visit(GlNode *glNode) {
     if(selectionFlag == SelectNodes)
-      calculator->addComplexeEntityBoundingBox((unsigned int)glNode,glNode->getBoundingBox(inputData));
+      calculator->addComplexeEntityBoundingBox((unsigned long)glNode,glNode->getBoundingBox(inputData));
   }
   
   void GlSelectSceneVisitor::visit(GlEdge *glEdge) {
     if(selectionFlag == SelectEdges)
-      calculator->addComplexeEntityBoundingBox((unsigned int)glEdge,glEdge->getBoundingBox(inputData));
+      calculator->addComplexeEntityBoundingBox((unsigned long)glEdge,glEdge->getBoundingBox(inputData));
   }
 
   void GlSelectSceneVisitor::visit(GlLayer *layer) {

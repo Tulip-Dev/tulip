@@ -108,7 +108,7 @@ namespace tlp {
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
-      calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
+      calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
@@ -121,7 +121,7 @@ namespace tlp {
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
-      calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
+      calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
     }
 
     if (metaData.parameters->isDisplayEdges()) {
@@ -137,7 +137,7 @@ namespace tlp {
 	bb.first=middle-size/2;
 	bb.second=middle+size/2;
 
-	calculator.addComplexeEntityBoundingBox((unsigned int)(&(*it)),bb);
+	calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
       }
     }
 

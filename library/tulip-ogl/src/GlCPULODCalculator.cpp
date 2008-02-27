@@ -74,13 +74,13 @@ namespace tlp {
     actualCEBoundingBoxVector=new BoundingBoxVector();
 
     pair<BoundingBoxVector*,BoundingBoxVector*> boundingBoxPair=pair<BoundingBoxVector*,BoundingBoxVector*>(actualSEBoundingBoxVector,actualCEBoundingBoxVector);
-    boundingBoxVector.push_back(pair<unsigned int ,pair<BoundingBoxVector*,BoundingBoxVector*> >((unsigned int)camera,boundingBoxPair));
+    boundingBoxVector.push_back(pair<unsigned long ,pair<BoundingBoxVector*,BoundingBoxVector*> >((unsigned long)camera,boundingBoxPair));
   }
 
-  void GlCPULODCalculator::addSimpleEntityBoundingBox(unsigned int entity,const BoundingBox& bb) {
+  void GlCPULODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     actualSEBoundingBoxVector->push_back(BoundingBoxUnit(entity,bb));
   }
-  void GlCPULODCalculator::addComplexeEntityBoundingBox(unsigned int entity,const BoundingBox& bb) {
+  void GlCPULODCalculator::addComplexeEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     actualCEBoundingBoxVector->push_back(BoundingBoxUnit(entity,bb));
   }
   
@@ -110,7 +110,7 @@ namespace tlp {
 	  lod=1;
 	}
 	if(lod>=0)
-	  (*itSE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
+	  (*itSE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
       }
       for(BoundingBoxVector::iterator itV=(*itM).second.second->begin();itV!=(*itM).second.second->end();++itV){
 	if(camera->is3D()){
@@ -119,7 +119,7 @@ namespace tlp {
 	  lod=1;
 	}
 	if(lod>=0)
-	  (*itCE).second.push_back(pair<unsigned int,float>((*itV).first,lod));
+	  (*itCE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
       }
       glMatrixMode(GL_MODELVIEW);
     }

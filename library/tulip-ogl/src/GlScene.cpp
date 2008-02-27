@@ -387,8 +387,13 @@ namespace tlp {
       glDisable(GL_BLEND);
       glDisable(GL_STENCIL_TEST);
 
+      map<unsigned int, unsigned long> idToEntity;
+      unsigned int id=1;
+
       for(vector<LODResultEntity>::iterator itE=(*it).second.begin();itE!=(*it).second.end();++itE) {
-	glLoadName((unsigned int)((*itE).first));
+	idToEntity[id]=(*itE).first;
+	glLoadName(id);
+	id++;
 	if(type==SelectSimpleEntities) {
 	  ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	}else{
@@ -406,7 +411,7 @@ namespace tlp {
       GLint hits = glRenderMode(GL_RENDER);
 
       while(hits>0) {
-	selectedEntities.push_back((GlEntity*)(selectBuf[hits-1][3]));
+	selectedEntities.push_back((GlEntity*)(idToEntity[selectBuf[hits-1][3]]));
 	hits--;
       }
 

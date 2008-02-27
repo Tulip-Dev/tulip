@@ -16,7 +16,7 @@ using namespace std;
 namespace tlp
 {
   //====================================================================
-  void GlDisplayListManager::changeContext(unsigned int context) {
+  void GlDisplayListManager::changeContext(unsigned long context) {
     currentContext=context;
   }
   //====================================================================

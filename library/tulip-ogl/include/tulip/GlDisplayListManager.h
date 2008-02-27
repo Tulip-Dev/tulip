@@ -34,7 +34,7 @@ namespace tlp {
   class TLP_GL_SCOPE GlDisplayListManager {
   
     typedef std::map<std::string,GLuint> DisplayListMap;
-    typedef std::map<unsigned int, DisplayListMap> ContextAndDisplayListMap;
+    typedef std::map<unsigned long, DisplayListMap> ContextAndDisplayListMap;
 
   public:
     
@@ -50,7 +50,7 @@ namespace tlp {
     /**
      * Change OpenGl context because display list can't be shared in different context
      */
-    void changeContext(unsigned int context);
+    void changeContext(unsigned long context);
 
     /** 
      * Begin to record a new display list with name : name
@@ -73,7 +73,7 @@ namespace tlp {
      */
     GlDisplayListManager() {}
 
-    unsigned int currentContext;
+    unsigned long currentContext;
 
     static GlDisplayListManager* inst;
 

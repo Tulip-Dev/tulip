@@ -247,7 +247,7 @@ static bool loadPNG(const string &filename, textureImage *texture)
 #endif
 
 //====================================================================
-  void GlTextureManager::changeContext(unsigned int context) {
+  void GlTextureManager::changeContext(unsigned long context) {
     currentContext=context;
   }
 //====================================================================

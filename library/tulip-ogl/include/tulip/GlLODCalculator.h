@@ -27,8 +27,8 @@ namespace tlp {
   class Camera;
   class GlEntity;
 
-  typedef std::pair<unsigned int, float> LODResultEntity;
-  typedef std::pair<unsigned int, std::vector<LODResultEntity> > LODResultCameraAndEntities;
+  typedef std::pair<unsigned long, float> LODResultEntity;
+  typedef std::pair<unsigned long, std::vector<LODResultEntity> > LODResultCameraAndEntities;
   typedef std::vector<LODResultCameraAndEntities> LODResultVector;
 
   /**
@@ -47,11 +47,11 @@ namespace tlp {
     /**
      * Record a new simple entity in current camera context 
      */
-    virtual void addSimpleEntityBoundingBox(unsigned int entity,const BoundingBox& bb)=0;
+    virtual void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb)=0;
     /**
      * Record a new complex entity in current camera context
      */
-    virtual void addComplexeEntityBoundingBox(unsigned int entity,const BoundingBox& bb)=0;
+    virtual void addComplexeEntityBoundingBox(unsigned long entity,const BoundingBox& bb)=0;
 
     /**
      * Compute all lod

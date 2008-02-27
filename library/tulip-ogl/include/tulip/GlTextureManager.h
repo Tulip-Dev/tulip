@@ -35,7 +35,7 @@ namespace tlp {
   class TLP_GL_SCOPE GlTextureManager {
 
     typedef std::map<std::string,GlTexture> TextureUnit;
-    typedef std::map<unsigned int,TextureUnit> ContextAndTextureMap;
+    typedef std::map<unsigned long,TextureUnit> ContextAndTextureMap;
   
   public:
 
@@ -46,7 +46,7 @@ namespace tlp {
       return *inst;
     }
 
-    void changeContext(unsigned int context);
+    void changeContext(unsigned long context);
 
     GlTexture getTextureInfo(const std::string&);
     bool loadTexture(const std::string&);
@@ -60,7 +60,7 @@ namespace tlp {
 
     static GlTextureManager* inst;
 
-    unsigned int currentContext;
+    unsigned long currentContext;
 
     ContextAndTextureMap texturesMap;
 
