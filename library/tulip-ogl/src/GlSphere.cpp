@@ -22,7 +22,8 @@ namespace tlp {
     boundingBox.second=Coord(position[0]+radius,position[1]+radius,position[2]+radius);
   }
 
-  void GlSphere::draw(float lod, Camera *camera) {
+  void GlSphere::draw(float lod, Camera *camera){
+
     glPushMatrix();
     glTranslatef(position[0],position[1],position[2]);
     glRotatef(rot[0],1,0,0);
@@ -33,17 +34,14 @@ namespace tlp {
     }
     
     setMaterial(color);
-    glBegin(GL_QUADS);
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glEnd();
+
+    GLUquadricObj *quadratic;
+    quadratic = gluNewQuadric();
+    gluQuadricNormals(quadratic, GLU_SMOOTH);
+    gluQuadricTexture(quadratic, GL_TRUE);  
+    gluSphere(quadratic, radius , 30, 30);
+    gluDeleteQuadric(quadratic);
+
     GlTextureManager::getInst().desactivateTexture();
     glPopMatrix();
   }
