@@ -104,7 +104,8 @@ namespace tlp {
       Coord middle=bb.first+size/2;
 
       middle+=bbTranslate;
-      size=size*bbScale;
+      middle=nodeCoord - ((nodeCoord-middle)*bbScale);
+      size=(size*bbScale)/2;
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
@@ -117,7 +118,8 @@ namespace tlp {
       Coord middle=bb.first+size/2;
 
       middle+=bbTranslate;
-      size=size*bbScale;
+      middle=nodeCoord - ((nodeCoord-middle)*bbScale);
+      size=(size*bbScale)/2;
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
@@ -127,16 +129,15 @@ namespace tlp {
     if (metaData.parameters->isDisplayEdges()) {
       for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
 	BoundingBox bb = (*it).getBoundingBox(&metaData);
-
 	Coord size=bb.second-bb.first;
 	Coord middle=bb.first+(size)/2;
 	
 	middle+=bbTranslate;
-	size=size*bbScale;
+	middle=nodeCoord - ((nodeCoord-middle)*bbScale);
+	size=(size*bbScale)/2;
 	
 	bb.first=middle-size/2;
 	bb.second=middle+size/2;
-
 	calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
       }
     }
