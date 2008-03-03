@@ -62,7 +62,7 @@ private:
   void destroy(Graph *);
   ConnectedTest();
   static ConnectedTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 
 }

@@ -53,7 +53,7 @@ private:
   void destroy(Graph *);
   BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 }
 /*@}*/
