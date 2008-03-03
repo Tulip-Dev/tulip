@@ -1,6 +1,6 @@
 
 template<typename Obj>
-tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const Circle<Obj> &c) {
+tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const tlp::Circle<Obj> &c) {
   Vector<Obj,2> p1(*this);
   Vector<Obj,2> p2(c);
   Vector<Obj,2> c12=p2-p1;
@@ -35,13 +35,13 @@ tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const Circle<Obj> &c) {
 }
 
 template<typename Obj>
-bool tlp::Circle<Obj>::isIncludeIn(const Circle<Obj> &c) const {
+bool tlp::Circle<Obj>::isIncludeIn(const tlp::Circle<Obj> &c) const {
   Vector<Obj,2> dir=c-*this;
   return (dir.norm()+radius)<=c.radius;
 }
 
 template<typename Obj>
-tlp::Circle<Obj> tlp::enclosingCircle(const Circle<Obj> &c1,const Circle<Obj> &c2) {
+tlp::Circle<Obj> tlp::enclosingCircle(const tlp::Circle<Obj> &c1,const tlp::Circle<Obj> &c2) {
   Vector<Obj,2> dir=c2-c1;
   Obj n=dir.norm();
   if (n==0)
@@ -53,7 +53,7 @@ tlp::Circle<Obj> tlp::enclosingCircle(const Circle<Obj> &c1,const Circle<Obj> &c
 }
 
 template<typename Obj>
-tlp::Circle<Obj> tlp::lazyEnclosingCircle(const std::vector<Circle<Obj> > & circles) {
+tlp::Circle<Obj> tlp::lazyEnclosingCircle(const std::vector<tlp::Circle<Obj> > & circles) {
   //compute bounding box of a
   tlp::Vector<Obj,4> boundingBox;
   //  for (int i=0;i<4;++i) boundingBox[i]=0;
@@ -83,7 +83,7 @@ tlp::Circle<Obj> tlp::lazyEnclosingCircle(const std::vector<Circle<Obj> > & circ
 }
 
 template<typename Obj>
-tlp::Circle<Obj> tlp::enclosingCircle(const std::vector<Circle<Obj> > & circles) {
+tlp::Circle<Obj> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj> > & circles) {
   class OptimumCircleHull {
     const std::vector<tlp::Circle<Obj> > *circles;
     std::vector<unsigned> enclosedCircles;

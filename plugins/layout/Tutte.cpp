@@ -4,23 +4,24 @@
 #include "Tutte.h"
 
 
-LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","0","2","Planar");
+LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar");
 
 using namespace std;
+using namespace tlp;
 //====================================================
-Tutte::Tutte(const PropertyContext &context):Layout(context) 
+Tutte::Tutte(const PropertyContext &context):LayoutAlgorithm(context) 
 {}
 //====================================================
 Tutte::~Tutte() {}
 //====================================================
-list<node> findCycle(SuperGraph *sg) {
+list<node> findCycle(Graph *sg) {
   stdext::hash_map<node,node> father;
   stdext::hash_map<node,bool> visited;
   std::list<node> bfs;
   Iterator<node> *it=sg->getNodes();
   node itn=it->next();
   node startNode=itn;
-  int maxDeg=sg->deg(itn);
+  unsigned int maxDeg=sg->deg(itn);
   while (it->hasNext()) {
     itn=it->next();
     if (sg->deg(itn)>maxDeg) {
@@ -83,9 +84,9 @@ list<node> findCycle(SuperGraph *sg) {
 }
 //====================================================
 bool Tutte::run() {
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
-  tmp=findCycle(superGraph);
+  tmp=findCycle(graph);
   std::list<node>::iterator itL;
   //We place the nodes on the outer face
   Coord tmpCoord,tmpCoord2,baseCoord;
@@ -94,11 +95,11 @@ bool Tutte::run() {
   int rayon=100;
   gamma=2*M_PI/tmp.size();
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
-    layoutProxy->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
+    layoutResult->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
     i++;
   }
   std::list<node> toMove;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     toMove.push_front(itN->next());
   } delete itN;
@@ -111,16 +112,16 @@ bool Tutte::run() {
     ok=false;
     for (itn=toMove.begin();itn!=toMove.end();++itn) {
       tmpCoord.set(0,0,0);
-      baseCoord=layoutProxy->getNodeValue(*itn);
+      baseCoord=layoutResult->getNodeValue(*itn);
       int i=0;
-      itN=superGraph->getInOutNodes(*itn);
+      itN=graph->getInOutNodes(*itn);
       while (itN->hasNext()) {
 	node itAdj=itN->next();
-	tmpCoord2=layoutProxy->getNodeValue(itAdj);
+	tmpCoord2=layoutResult->getNodeValue(itAdj);
 	tmpCoord.set(tmpCoord.getX()+tmpCoord2.getX(),tmpCoord.getY()+tmpCoord2.getY(),0);
 	++i;
       } delete itN;
-      layoutProxy->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
+      layoutResult->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
       if (fabs(baseCoord.getX()-tmpCoord.getX()/i)>0.02) ok=true;
       if (fabs(baseCoord.getY()-tmpCoord.getY()/i)>0.02) ok=true;
     }
@@ -130,12 +131,12 @@ bool Tutte::run() {
 //====================================================
 bool Tutte::check(string &erreurMsg) {
   bool result=true;
-  if (!TriconnectedTest::isTriconnected(superGraph))
+  if (!TriconnectedTest::isTriconnected(graph))
     result=false;
   else {
-    Iterator<node> *it=superGraph->getNodes();
+    Iterator<node> *it=graph->getNodes();
     while (it->hasNext()) {
-      if (superGraph->deg(it->next())<3) {
+      if (graph->deg(it->next())<3) {
 	result=false;
 	break;
       }
@@ -146,7 +147,4 @@ bool Tutte::check(string &erreurMsg) {
   else
     erreurMsg="";
   return result;
-}
-//====================================================
-void Tutte::reset() {
 }

@@ -26,7 +26,10 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
-#include <tulip/LayoutProxy.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/ExportModule.h>
+#include <tulip/ImportModule.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlGraph.h>
 
@@ -34,6 +37,7 @@
 #include "Shape.h"
 
 using namespace std;
+using namespace tlp;
 //EXIT CODES
 enum EXIT_CODES {LAYOUT_NOTFOUND = 2,
                  LAYOUT_ERROR,
@@ -106,6 +110,11 @@ public:
     glFlush();
   }
 
+  void setupOpenGlContext() {
+    //  cerr << __PRETTY_FUNCTION__ << " (" << (int)this << ")" << endl;
+    makeCurrent();
+  }
+
   void setDoubleBuffering(bool b) {}
 
   bool timerIsActive() {return false;}
@@ -122,23 +131,20 @@ public:
 //==============================================================================
 //a pluginLoader with less output than PluginLoaderTxt
 struct MyPluginLoader:public PluginLoader {
-private:
-  int nbFiles, num;
 public:
   virtual void start(const std::string &path,const std::string &type) {
     cout << "Loading " << type << " plugins: ";
   }
-  virtual void numberOfFile(int nbFile){nbFiles=nbFile; num=0;}
   virtual void loading(const std::string &filename) {}
   virtual void loaded(const std::string &name,
 		      const std::string &author,
 		      const std::string &date, 
 		      const std::string &info,
 		      const std::string &release,
-		      const std::string &version)
+		      const std::string &version,
+		      const std::list <Dependency> &deps)
   {
     cout << "[" << name << "]";
-    //     if (++num < nbFiles) cout << ", ";
   }
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg) {
     //    cout << "Error loading " << filename << ": " << erreurmsg << endl;
@@ -150,11 +156,11 @@ public:
 };
 
 //load software side plugins
-static void loadPlugins(PluginLoader *plug)
+static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
   
-  GlGraph::glyphFactory->load(getEnvVar + "glyph", "Glyph", plug);
+  tlp::loadPluginsFromDir(getEnvVar + "glyph", "Glyph", plug);
 }
 
 //==============================================================================
@@ -162,7 +168,8 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
 {
   DataSet dataSet;
 
-  StructDef parameter= ImportModuleFactory::factory->getParam(importPluginName);
+  StructDef parameter=
+    ImportModuleFactory::factory->getPluginParameters(importPluginName);
   Iterator<pair<string,string> > *itP=parameter.getField();
   
   for (;itP->hasNext();) {
@@ -173,18 +180,24 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
     }
   }delete itP;
   
-  SuperGraph *newSuperGraph=tlp::importGraph(importPluginName, dataSet, NULL);
+  Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
   
-  if (newSuperGraph!=0) {
-    glGraph.setSuperGraph(newSuperGraph);
-    LayoutProxy *layout = glGraph.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
+  if (newGraph!=0) {
+    GlGraphRenderingParameters params = glGraph.getRenderingParameters();
+    params.setGraph(newGraph);
+    glGraph.setRenderingParameters(params);
+    LayoutProperty *layout =
+      glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
     layout->resetBoundingBox();
     layout->center();
     layout->notifyObservers();
     glGraph.centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
-      glGraph.setParameters(glGraphData);
+    {
+      params.setParameters(glGraphData);
+      glGraph.setRenderingParameters(params);
+    }
   }
 }
 //==============================================================================
@@ -275,8 +288,8 @@ void outputPolygons(const int size, const GlGraph &glgraph)
   } //end while(count)
 
   /* write HTML AREA MAP */
-  StringProxy *hrefp = glgraph.getSuperGraph()->getProperty<StringProxy>("href");
-  StringProxy *altp = glgraph.getSuperGraph()->getProperty<StringProxy>("alt");
+  StringProperty *hrefp = glgraph.getGraph()->getProperty<StringProperty>("href");
+  StringProperty *altp = glgraph.getGraph()->getProperty<StringProperty>("alt");
 
   if (outputHtmlBody) {
     of << "<html><body>" << endl;
@@ -329,18 +342,18 @@ int main (int argc, char **argv) {
   MyPluginLoader plug;
   tlp::initTulipLib();
   tlp::loadPlugins(&plug);   // library side plugins
-  loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  loadGlyphPlugins(&plug);   // software side plugins, i.e. glyphs
 
   GLOffscreen glOffscreen(width, height);
 
   importGraph(graphFile, importPluginName, glOffscreen);
   
   if (layoutSpecified) {
-    bool resultBool=false, cached=false;
+    bool resultBool=false;
     string errorMsg;
-    if (LayoutProxy::factory->exists(layoutName)) {
-      LayoutProxy *myLayout = glOffscreen.getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-      resultBool = glOffscreen.getSuperGraph()->computeProperty(layoutName, myLayout, errorMsg);
+    if (LayoutProperty::factory->pluginExists(layoutName)) {
+      LayoutProperty *myLayout = glOffscreen.getGraph()->getProperty<LayoutProperty>("viewLayout");
+      resultBool = glOffscreen.getGraph()->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;
         exit(LAYOUT_ERROR);
@@ -358,7 +371,9 @@ int main (int argc, char **argv) {
     }
   }
   
-  glOffscreen.setIncrementalRendering(false);
+  GlGraphRenderingParameters params = glOffscreen.getRenderingParameters();
+  params.setIncrementalRendering(false);
+  glOffscreen.setRenderingParameters(params);
   glOffscreen.draw();
 
   //write image
@@ -398,11 +413,12 @@ int main (int argc, char **argv) {
   if (saveTLP) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
-    StructDef parameter = ExportModuleFactory::factory->getParam("tlp");
+    StructDef parameter =
+      ExportModuleFactory::factory->getPluginParameters("tlp");
 
-    dataSet.set("displaying", glOffscreen.getParameters());
+    dataSet.set("displaying", glOffscreen.getRenderingParameters().getParameters());
 
-    if (!tlp::exportGraph(glOffscreen.getSuperGraph(), *os, "tlp", dataSet, NULL)) {
+    if (!tlp::exportGraph(glOffscreen.getGraph(), *os, "tlp", dataSet, NULL)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }

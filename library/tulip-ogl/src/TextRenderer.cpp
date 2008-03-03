@@ -12,16 +12,19 @@
 #include <cassert>
 #include <stack>
 
-const FontMode DEFAULT_FONTMODE=TLP_POLYGON;
-const float DEFAULT_PROF=20;
-
-const int H1=20;
-const int H2=15;
-const int H3=10;
-const int H4=5;
-
-const int DEFAULT_SIZE=20;
 using namespace std;
+using namespace tlp;
+
+const FontMode DEFAULT_FONTMODE = TLP_POLYGON;
+const float DEFAULT_PROF = 20;
+
+const int H1 = 20;
+const int H2 = 15;
+const int H3 = 10;
+const int H4 =  5;
+
+const int DEFAULT_SIZE = 20;
+
 const string FONT_FILE(tlp::TulipLibDir + "tlp/bitmaps/" + "font.ttf");
 
 typedef struct Cell{
@@ -39,21 +42,20 @@ TextRenderer::TextRenderer(): c(FONT_FILE, DEFAULT_SIZE, ROUGE, VERT, BLEU) {
   c.renderer = new GlRenderer();
   doc = 0;
 }
-TextRenderer::~TextRenderer(){
+TextRenderer::~TextRenderer() {
   delete c.renderer;
   if (doc!=0) delete doc;
 }
-
 //---------------------------------------------------------------------------
-void TextRenderer::initTextManager(string str){
+void TextRenderer::initTextManager(const string &str){
   string s_local = "";
   Paragraph* f;
-  for(unsigned int i=0; i<str.size(); i++){
+  for(unsigned int i=0; i<str.size(); ++i){
     switch(str[i]){
     case '\n':
       f = new Paragraph(c, doc->getAlign());
-      f->addString(s_local+" ",doc->getContext());
-      f->addString("",doc->getContext());
+      f->addString(s_local + " ",doc->getContext());
+      f->addString("", doc->getContext());
       s_local = "";
       doc->addFrame(f);
       break;
@@ -67,17 +69,34 @@ void TextRenderer::initTextManager(string str){
   }
   if(s_local != ""){
     f = new Paragraph(c, doc->getAlign());
-    f->addString(s_local+" ",doc->getContext());
+    f->addString(s_local + " ", doc->getContext());
     doc->addFrame(f);
   }
 }
 //---------------------------------------------------------------------------
-void TextRenderer::draw(float w_max, float& w) const{
+void TextRenderer::draw(float w_max, float& w, int relPos) const{
   float h = 0;
   w = w_max;
   if(doc){
     doc->getBoundingBox(w_max, h, w);
-    c.getRenderer().translate(-(w-3.5)/2., (h-2.5)/2.,0); //Quick fix to center correctly text need more rigourus fix.
+    // Quick fix to center correctly text need more rigourus fix.
+    float dx = -(w-3.5)/2.;
+    float dy = (h-2.5)/2.;
+
+    switch(relPos) {
+    case ON_TOP:
+      dy += h/2.;
+      break;
+    case ON_BOTTOM:
+      dy -= h/2.;
+      break;
+    case ON_LEFT:
+      dx -= w/2.;
+      break;
+    case ON_RIGHT:
+      dx += w/2.;
+    }
+    c.getRenderer().translate(dx, dy, 0);
     doc->draw(w_max, w);
     if(w<w_max) w = w_max;
   }
@@ -181,7 +200,7 @@ void TextRenderer::finalTextXMLManager(Paragraph* f){
     prec_s = s;
   }
   s = myString->at(n-1).getStringPtr();
-  if(s->c_str() != ""){
+  if (s->size()){
     int length_s = s->size();
     if((*s)[length_s-1] != ' '){
       s->push_back(' ');
@@ -204,7 +223,7 @@ void TextRenderer::initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d
       sCell pile; // contient les cellules à parcourir
       Cell* cell, *tmp_cell;
       
-      cell = new Cell;
+      cell = new Cell();
       cell->pt = courant;
       cell->new_context = false;
       pile.push(cell); // empile le premier état à regarder
@@ -526,30 +545,28 @@ void TextRenderer::getBoundingBox(float w_max, float& h, float& w) const{
     //    if( w < w_max) w = w_max;
   }    
   else{
-    cerr<<"TextRenderer warning : il n'y a pas de Document defini"<<endl;
+    cerr<<"TextRenderer warning : no document defined"<<endl;
     h = 0;
     w = w_max;
   }
 }
 
 //---------------------------------------------------------------------------
-void TextRenderer::setString(std::string str, TextMode mode){
-  if(doc!=0){
+void TextRenderer::setString(const std::string &str, TextMode mode){
+  if(doc != 0){
     delete doc;
-    doc = NULL;
+    doc = 0;
   }
 
   if( str != ""){
     doc = new Document();
-    doc->setContext(c); // attribution d'un contexte par défault
+    doc->setContext(c); // set default context
     doc->setDefaultAlign();
-
-    if(mode == XML){
+    
+    if(mode == XML) {
       string s = "<document>" + str + "</document>";
-      Parser* P = new Parser(s.c_str()); // parse le texte
-      initTextXMLManager(P, P->getHead(), doc); 
-      // traitement du texte pour passer les informations de P à doc
-      delete P; // destruction de l'arbre généré par le parseur
+      Parser P(s.c_str()); // parse le texte
+      initTextXMLManager(&P, P.getHead(), doc); 
     }
     else{ // mode verbatim
       initTextManager(str);
@@ -561,9 +578,9 @@ void TextRenderer::setMode(FontMode m) {
   c.getRenderer().setMode(m);
 }
 //---------------------------------------------------------------------------
-void TextRenderer::setContext(std::string str, int s, unsigned char r, unsigned char v, unsigned char b){
-  c.setFontName(str);
-  c.setSize(s);
+void TextRenderer::setContext(const std::string &font, int size, unsigned char r, unsigned char v, unsigned char b){
+  c.setFontName(font);
+  c.setSize(size);
   c.setColor(r, v, b);
 }
 //---------------------------------------------------------------------------

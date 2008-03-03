@@ -1,6 +1,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 
 
@@ -31,7 +32,7 @@ namespace
 
 
 struct CompleteTree:public ImportModule {
-  CompleteTree(ClusterContext context):ImportModule(context) {
+  CompleteTree(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("depth",paramHelp[0],"5");
     addParameter<int>("degree",paramHelp[1],"2");
   }
@@ -39,9 +40,9 @@ struct CompleteTree:public ImportModule {
   }
   void buildNode(node n,unsigned int degree,int depth) {
     if (depth<1) return;
-    for (int i=0;i<degree;++i) {
-      node n1=superGraph->addNode();
-      superGraph->addEdge(n,n1);
+    for (unsigned int i=0;i<degree;++i) {
+      node n1=graph->addNode();
+      graph->addEdge(n,n1);
       buildNode(n1,degree,depth - 1);
     }
   }
@@ -52,9 +53,9 @@ struct CompleteTree:public ImportModule {
       dataSet->get("depth", depth);
       dataSet->get("degree", degree);
     }
-    node n=superGraph->addNode();
+    node n=graph->addNode();
     buildNode(n,degree,depth);
     return true;
   }
 };
-IMPORTPLUGINOFGROUP(CompleteTree,"Complete Tree","Auber","08/09/2002","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(CompleteTree,"Complete Tree","Auber","08/09/2002","","1.0","Graphs")

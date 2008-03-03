@@ -12,30 +12,15 @@
 #include <sstream>
 
 #include "TulipStatsWidget.h"
-#include <tulip/PropertyManager.h> 
-#include <tulip/MetricProxy.h> 
-#include <tulip/SizesProxy.h> 
-#include <tulip/LayoutProxy.h> 
-#include <tulip/IntProxy.h> 
+#include <tulip/DoubleProperty.h> 
+#include <tulip/SizeProperty.h> 
+#include <tulip/LayoutProperty.h> 
+#include <tulip/IntegerProperty.h> 
 #include <tulip/Iterator.h> 
-#include <tulip/GlGraph.h> 
-#include <tulip/TlpTools.h>
 #include <tulip/StableIterator.h>
-#include <tulip/ClusterTree.h>
+#include <tulip/SGHierarchyWidget.h>
+#include "tulip/Algorithm.h"
 
-#if (QT_REL == 3)
-#include <qlistbox.h>
-#include <qpushbutton.h> 
-#include <qlineedit.h> 
-#include <qgroupbox.h> 
-#include <qcheckbox.h> 
-#include <qvalidator.h> 
-#include <qlabel.h> 
-#include <qcombobox.h>
-#include <qtabwidget.h>
-#include <qmessagebox.h>
-#include <qradiobutton.h>
-#else
 #include <QtGui/qpushbutton.h> 
 #include <QtGui/qlineedit.h> 
 #include <QtGui/qgroupbox.h> 
@@ -46,18 +31,17 @@
 #include <QtGui/qtabwidget.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qradiobutton.h>
-#endif
 
 //#include "../../../thirdparty/ftgl/FTGLPixmapFont.h"
 
 #include <GL/glu.h> 
 
 using namespace tlp; 
-using namespace std; 
+using namespace std;
 
 namespace tlp
 {
-  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glGraphWidget(0), supergraph(0)
+  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glGraphWidget(0), graph(0)
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 
@@ -122,16 +106,16 @@ namespace tlp
   {
   } 
 
-  void TulipStats::setClusterTreeWidget(ClusterTree *clusterTree)
+  void TulipStats::setSGHierarchyWidgetWidget(SGHierarchyWidget *clusterTree)
   {
     clusterTreeWidget = clusterTree;
   }
 
-  SuperGraph* TulipStats::getSuperGraph()
+  Graph* TulipStats::getGraph()
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
     //  cout << " ...[END]" << endl;
-    return supergraph;
+    return graph;
   }
 
   GlGraphWidget* TulipStats::getGlGraphWidget()
@@ -144,7 +128,7 @@ namespace tlp
   void TulipStats::setGlGraphWidget(GlGraphWidget *g)
   {
     // cout << "[START]..." << __PRETTY_FUNCTION__ ;
-    if (supergraph != 0)
+    if (graph != 0)
       reset();
 
     resetComposite(true);
@@ -154,24 +138,24 @@ namespace tlp
     if (g == 0)
       return;
 
-    /*    if (supergraph != 0)
-	  supergraph->removeObserver(this); */
+    /*    if (graph != 0)
+	  graph->removeObserver(this); */
 
-    supergraph = g->getSuperGraph();
+    graph = g->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
-    if (supergraph != 0 && supergraph != NULL)
+    if (graph != 0 && graph != NULL)
       {
 	updateMetrics();
-	supergraph->addObserver(this);
+	graph->addObserver(this);
       }
 
     // cout << " ...[END]" << endl;
   } 
 
-  void TulipStats::destroy(SuperGraph *superGraph)
+  void TulipStats::destroy(Graph *sg)
   {
-    if (superGraph == supergraph)
-      supergraph->removeObserver(this);
+    if (graph == sg)
+      graph->removeObserver(this);
   }
 
   //************************************************************
@@ -184,8 +168,6 @@ namespace tlp
     std::string result = "( ";
     // MAC PORT
     stringstream sstr;
-    
-    char val[50];
     
     for(int i=0; i < nElem-1; i++)
       {
@@ -206,8 +188,6 @@ namespace tlp
     std::string result = "( ";
     // MAC PORT
     stringstream sstr;
-    
-    char val[50];
     
     for(int i=0; i < 2; i++)
       {
@@ -308,7 +288,7 @@ namespace tlp
   {
     //cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    if (AverageDisplayCB->isChecked())
+    /*if (AverageDisplayCB->isChecked())
       glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
     if (StdDeviationDisplayCB->isChecked())
@@ -330,7 +310,7 @@ namespace tlp
       {
 	if (DisplayCPCB->isChecked())
 	  glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
-      }
+	  }*/
   
     /*  if (glGraphWidget != 0 && glGraphWidget != NULL)
 	glGraphWidget->UpdateGL();*/
@@ -396,15 +376,15 @@ namespace tlp
 
     AvaiMetricsList->clear();
 
-    Iterator<std::string>* properties = supergraph->getProperties();
+    Iterator<std::string>* properties = graph->getProperties();
 
     while (properties->hasNext())
       {
 	std::string proxyName = properties->next();
 
-	PProxy* proxy = supergraph->getProperty(proxyName);
+	PropertyInterface* proxy = graph->getProperty(proxyName);
 
-	if (dynamic_cast<MetricProxy*>(proxy) != 0)
+	if (dynamic_cast<DoubleProperty*>(proxy) != 0)
 	  AvaiMetricsList->insertItem(proxyName.c_str());	
       }
 
@@ -443,7 +423,7 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    //glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
     chDisplayClusteringPlaneSlot();
 
     // cout << " ...[END]" << endl;
@@ -465,12 +445,7 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    std::string proxyName = 
-#if (QT_REL == 3)
-      AvaiMetricsList->currentText().ascii();
-#else
-    AvaiMetricsList->currentText().toStdString();
-#endif
+    std::string proxyName = AvaiMetricsList->currentText().toStdString();
 
     // We limit the number of proxy to 3 maximum :
     if (nMetrics == 3) 
@@ -480,9 +455,9 @@ namespace tlp
 	return;
       }
   
-    MetricProxy* metric;
+    DoubleProperty* metric;
 
-    metric = supergraph->getProperty<MetricProxy>(proxyName);
+    metric = graph->getProperty<DoubleProperty>(proxyName);
 
     metrics.push_back(metric); 
     nMetrics++; 
@@ -589,7 +564,7 @@ namespace tlp
     resetComposite(false);
     resetDisplayTab();
 
-    statsResults = StatsNodeModule::ComputeStatisticsResults(supergraph, metrics, nMetrics);
+    statsResults = StatsNodeModule::ComputeStatisticsResults(graph, metrics, nMetrics);
 
     std::string output;
 
@@ -622,7 +597,6 @@ namespace tlp
     if (nMetrics == 2)
       {
 	// 2 metrics ? We can compute the linear regression function
-	char val[50];
 	// MAC PORT
 	stringstream sstr;
       
@@ -678,8 +652,8 @@ namespace tlp
 
     // We build the data set :
     dataSet = new DataSet();
-    StructDef parameter = LayoutProxy::factory->getParam("Scatter Plot");
-    parameter.buildDefaultDataSet( *dataSet, supergraph );
+    StructDef parameter = LayoutProperty::factory->getPluginParameters("Scatter Plot");
+    parameter.buildDefaultDataSet( *dataSet, graph );
     
     char dtxt[20] = "discretizationStep1";
     char mtxt[12] = "usedMetric1";
@@ -698,17 +672,18 @@ namespace tlp
     dataSet->set("nMetrics", nMetrics);
     dataSet->set("shapeConversion", ShapeConversionCB->isChecked());
 
-    LayoutProxy dest(supergraph);
-    resultBool = supergraph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
+    LayoutProperty dest(graph);
+    resultBool = graph->computeProperty("Scatter Plot", &dest, erreurMsg, NULL, dataSet);
 
     if (!resultBool) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString(("Scatter Plot::" + erreurMsg).c_str()) );
     else {
-      *supergraph->getLocalProperty<LayoutProxy>("viewLayout") = dest;
+      *graph->getLocalProperty<LayoutProperty>("viewLayout") = dest;
     }
-
-    glGraphWidget->setDisplayEdges(false);
-    glGraphWidget->goodScale();
+    GlGraphRenderingParameters param = glGraphWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    param.setDisplayEdges(false);
+    glGraphWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    //glGraphWidget->centerScene();
 
     if (dataSet != 0) 
       delete dataSet;
@@ -816,18 +791,18 @@ namespace tlp
 	// We flip the Y axis ^^
 	pos[1] *= -1;
 
-	averagePoint = new GlADAxisPoint(pos, Color(255, 0, 0, 255), max, 1, 2);
+	/*averagePoint = new GlADAxisPoint(pos, Color(255, 0, 0, 255), max, 1, 2);
 	averagePoint->setRenderState(GlAD_AlphaBlending, true);
 	averagePoint->setRenderState(GlAD_ZEnable, false);
-	averagePoint->setDisplayDim(disp);
+	averagePoint->setDisplayDim(disp);*/
 
-	glGraphWidget->addGlAugmentedDisplay(averagePoint, "Average");
+	//glGraphWidget->addGlAugmentedDisplay(averagePoint, "Average");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(averagePoint);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(averagePoint);
 
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     //  cout << " ...[END]" << endl;
   }
@@ -868,20 +843,20 @@ namespace tlp
 	topLeft     = Coord(aPoint[0] - pos[0], -aPoint[1] - pos[1], aPoint[2] - pos[2]);
 	bottomRight = Coord(aPoint[0] + pos[0], -aPoint[1] + pos[1], aPoint[2] + pos[2]);
 
-	stdDeviationBox = new GlADBox(topLeft, bottomRight, Color(220, 220, 255, 80));
+	/*stdDeviationBox = new GlADBox(topLeft, bottomRight, Color(220, 220, 255, 80));
 	stdDeviationBox->setRenderState(GlAD_AlphaBlending, true);
 	stdDeviationBox->setRenderState(GlAD_Culling, false);
 	stdDeviationBox->setRenderState(GlAD_ZEnable, false);
 	stdDeviationBox->setRenderState(GlAD_Wireframe, true);
-	stdDeviationBox->setRenderState(GlAD_Solid, true);
+	stdDeviationBox->setRenderState(GlAD_Solid, true);*/
 
-	glGraphWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
+	//glGraphWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -923,19 +898,19 @@ namespace tlp
 	min[1]    = max[1];
 	max[1]    = tmp;
 
-	AABB = new GlADBox(min, max, Color(255, 255, 0, 255));
+	/*AABB = new GlADBox(min, max, Color(255, 255, 0, 255));
 	AABB->setRenderState(GlAD_Solid, false);
 	AABB->setRenderState(GlAD_Wireframe, true);
-	AABB->changeRenderOptions();
+	AABB->changeRenderOptions();*/
 
 	// cout << "Solid ? " << AABB->getRenderState(GlAD_Solid) << endl;
 
-	glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
+	//glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(AABB);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(AABB);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -957,15 +932,15 @@ namespace tlp
 	end[1] = -(statsResults->linearRegressionFunctionb0 + statsResults->linearRegressionFunctionb1 * end[0]) / discretizationStep[1];
 	end[2] = 0;
 
-	linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), 1);
-	linearRegression->setRenderState(GlAD_ZEnable, false);
+	/*linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), Color(255, 0, 255, 255), 1);
+	  linearRegression->setRenderState(GlAD_ZEnable, false);*/
 
-	glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
+	//glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(linearRegression);
+    //else
+    //glGraphWidget->removeGlAugmentedDisplay(linearRegression);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1002,21 +977,21 @@ namespace tlp
 	      case 2: col = Color(0, 0, 100, 255); break;
 	      }
 
-	    eigenVectors[i] = new GlADLine(center, endPos, col, 2);
+	    //eigenVectors[i] = new GlADLine(center, endPos, col, col, 2);
 	    
 	    char n = '0' + i;
 	    char key[13] = "EigenVector0";
 	    key[11] = n;
 
-	    glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
+	    //glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
 	  }
       }
-    else 
+    /*else 
       {
 	for(int i=0; i < 3; i++)
 	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
-      }
-    glGraphWidget->updateGL();
+	  }*/
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1089,19 +1064,19 @@ namespace tlp
 	    plane.computePlane(p1, p2, p3, p4);
 	  }
 
-	Coord coordsTab[4] = {p1, p2, p3, p4};
+	//Coord coordsTab[4] = {p1, p2, p3, p4};
 
-	clusteringPlane = new GlADQuad(coordsTab, Color(255, 220, 220, 80));
+	/*clusteringPlane = new GlADQuad(coordsTab, Color(255, 220, 220, 80));
 	clusteringPlane->setRenderState(GlAD_AlphaBlending, true);
 	clusteringPlane->setRenderState(GlAD_ZEnable, false);
-	clusteringPlane->setRenderState(GlAD_Culling, false);
+	clusteringPlane->setRenderState(GlAD_Culling, false);*/
       
-	glGraphWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
+	//glGraphWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
       }
-    else
-      glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    //else
+    // glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
 
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1211,8 +1186,8 @@ namespace tlp
     string erreurMsg;
     DataSet dataSet;
 
-    StructDef parameter = ClusteringFactory::factory->getParam(name);
-    parameter.buildDefaultDataSet( dataSet, supergraph );
+    StructDef parameter = AlgorithmFactory::factory->getPluginParameters(name);
+    parameter.buildDefaultDataSet( dataSet, graph );
 
     float a, b, c, d;
 
@@ -1226,7 +1201,7 @@ namespace tlp
     dataSet.set("CoordC", c);
     dataSet.set("CoordD", d);
 
-    if (!tlp::clusterizeGraph(supergraph, erreurMsg, &dataSet, name, NULL  )) 
+    if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, NULL  )) 
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
   
     if (clusterTreeWidget != NULL)

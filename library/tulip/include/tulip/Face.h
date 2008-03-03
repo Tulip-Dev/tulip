@@ -11,7 +11,7 @@
 
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
-#include "tulipconf.h"
+#include "tulip/tulipconf.h"
 #if (__GNUC__ < 3)
 #include <hash_map>
 #else
@@ -20,8 +20,10 @@
 #include <climits>
 
 /**
- * \defgroup graphs
+ * \addtogroup graphs
  */ 
+namespace tlp {
+
 /*@{*/
 /// class face
 struct Face { 
@@ -33,21 +35,22 @@ struct Face {
   bool isValid() const {return id!=UINT_MAX;}
 };
 /*@}*/
+}
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 namespace stdext {
-  template<> struct hash<Face> {
-    size_t operator()(const Face f) const {return f.id;}
+  template<> struct hash<tlp::Face> {
+    size_t operator()(const tlp::Face f) const {return f.id;}
   };
 }
 
 namespace std {
-  template<> struct equal_to<Face> {
-    size_t operator()(const Face f,const Face f2) const {return f.id == f2.id;}
+  template<> struct equal_to<tlp::Face> {
+    size_t operator()(const tlp::Face f,const tlp::Face f2) const {return f.id == f2.id;}
   };
-  template<> struct less<Face>{
-    size_t operator()(const Face f,const Face f2) const {return f.id < f2.id;}
+  template<> struct less<tlp::Face>{
+    size_t operator()(const tlp::Face f,const tlp::Face f2) const {return f.id < f2.id;}
   };
 }
 #endif // DOXYGEN_NOTFOR_DEVEL

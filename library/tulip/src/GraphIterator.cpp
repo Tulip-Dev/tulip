@@ -5,10 +5,12 @@
 
 #include <cassert>
 #include "tulip/GraphIterator.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/BooleanProperty.h"
+
+using namespace tlp;
 
 //============================================================
-SGraphNodeIterator::SGraphNodeIterator(const SuperGraph *sG, const MutableContainer<bool>& filter):FactorIterator<node>(sG,filter) {
+SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter):FactorIterator<node>(sG,filter) {
   it=_parentGraph->getNodes();
   _hasnext=false;
   if (it->hasNext()) {
@@ -40,10 +42,10 @@ bool SGraphNodeIterator::hasNext(){
   return (_hasnext);
 }
 //===================================================================
-OutNodesIterator::OutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter) {
+OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter) {
   it = new OutEdgesIterator(sG,filter,n);
 #ifndef NDEBUG
-  graph = sG;
+  sg = sG;
 #endif
 }
 OutNodesIterator::~OutNodesIterator() {
@@ -52,7 +54,7 @@ OutNodesIterator::~OutNodesIterator() {
 node OutNodesIterator::next() {
 #ifndef NDEBUG
   node tmp = _parentGraph->target(it->next());
-  assert(graph->isElement(tmp));
+  assert(sg->isElement(tmp));
   return tmp;
 #endif
   return _parentGraph->target(it->next());
@@ -61,10 +63,10 @@ bool OutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===================================================================
-InNodesIterator::InNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<node>(sG,filter),
+InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<node>(sG,filter),
 										   it(new InEdgesIterator(sG,filter,n)) {
 #ifndef NDEBUG
-  graph = sG;
+  sg = sG;
 #endif
 }
 InNodesIterator::~InNodesIterator() { 
@@ -73,7 +75,7 @@ InNodesIterator::~InNodesIterator() {
 node InNodesIterator:: next() {
 #ifndef NDEBUG
   node tmp = _parentGraph->source(it->next());
-  assert(graph->isElement(tmp));
+  assert(sg->isElement(tmp));
   return tmp;
 #endif
   return _parentGraph->source(it->next());
@@ -82,11 +84,11 @@ bool InNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===================================================================
-InOutNodesIterator::InOutNodesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter),
+InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<node>(sG,filter),
 											 it(new InOutEdgesIterator(sG,filter,n)),
 											 n(n) {
 #ifndef NDEBUG
-  graph = sG;
+  sg = sG;
 #endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
@@ -95,7 +97,7 @@ InOutNodesIterator::~InOutNodesIterator() {
 node InOutNodesIterator::next() {
 #ifndef NDEBUG
   node tmp = _parentGraph->opposite(it->next(),n);
-  assert(graph->isElement(tmp));
+  assert(sg->isElement(tmp));
   return tmp;
 #else
   return _parentGraph->opposite(it->next(),n);
@@ -105,7 +107,7 @@ bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===============================================================
-SGraphEdgeIterator::SGraphEdgeIterator(const SuperGraph *sG, const MutableContainer<bool>& filter):FactorIterator<edge>(sG,filter) {
+SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter):FactorIterator<edge>(sG,filter) {
   it=_parentGraph->getEdges();
   _hasnext=false;
   if (it->hasNext()) {
@@ -137,7 +139,7 @@ bool SGraphEdgeIterator::hasNext() {
   return (_hasnext);
 }
 //===================================================================
-OutEdgesIterator::OutEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<edge>(sG,filter) {
+OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorIterator<edge>(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getOutEdges(n);
   _hasnext=false;
@@ -171,7 +173,7 @@ bool OutEdgesIterator::hasNext() {
   return (_hasnext);
 }
 //===================================================================
-InEdgesIterator::InEdgesIterator(const SuperGraph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
+InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
   assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
   _hasnext=false;
@@ -204,7 +206,7 @@ bool InEdgesIterator::hasNext() {
   return (_hasnext);
 }
 //===================================================================
-InOutEdgesIterator::InOutEdgesIterator(const SuperGraph *sG,const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
+InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter, node n):FactorIterator<edge>(sG,filter){
   assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
   _hasnext=false;
@@ -240,8 +242,8 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //************************************************************
 //============================================================
-xSGraphNodeIterator::xSGraphNodeIterator(const SuperGraph *sG):
-  itId(((SuperGraphImpl *)sG)->nodeIds.getUsedId()) {
+xSGraphNodeIterator::xSGraphNodeIterator(const Graph *sG):
+  itId(((GraphImpl *)sG)->nodeIds.getUsedId()) {
 }
 xSGraphNodeIterator::~xSGraphNodeIterator(){
   delete itId;
@@ -253,8 +255,8 @@ bool xSGraphNodeIterator::hasNext() {
   return (itId->hasNext());
 }
 //===================================================================
-xOutNodesIterator::xOutNodesIterator(const SuperGraph *sG,const node n):
-  it(new xOutEdgesIterator((SuperGraphImpl *)sG,n)), spG((SuperGraphImpl *)sG) {
+xOutNodesIterator::xOutNodesIterator(const Graph *sG,const node n):
+  it(new xOutEdgesIterator((GraphImpl *)sG,n)), spG((GraphImpl *)sG) {
 }
 xOutNodesIterator::~xOutNodesIterator() {
   delete it;
@@ -266,8 +268,8 @@ bool xOutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===================================================================
-xInNodesIterator::xInNodesIterator(const SuperGraph *sG,const node n): 
-  it(new xInEdgesIterator(sG,n)), spG((SuperGraphImpl *)sG) {
+xInNodesIterator::xInNodesIterator(const Graph *sG,const node n): 
+  it(new xInEdgesIterator(sG,n)), spG((GraphImpl *)sG) {
 }
 xInNodesIterator::~xInNodesIterator() {
   delete it;
@@ -279,10 +281,10 @@ bool xInNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===================================================================
-xInOutNodesIterator::xInOutNodesIterator(const SuperGraph *sG,const node n):
-  it(((SuperGraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((SuperGraphImpl *)sG)->nodes[n.id].end()),
-  n(n), spG((SuperGraphImpl *)sG) {
+xInOutNodesIterator::xInOutNodesIterator(const Graph *sG,const node n):
+  it(((GraphImpl *)sG)->nodes[n.id].begin()),
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
+  n(n), spG((GraphImpl *)sG) {
 }
 xInOutNodesIterator::~xInOutNodesIterator() {}
 node xInOutNodesIterator::next() {
@@ -294,8 +296,8 @@ bool xInOutNodesIterator::hasNext() {
   return (it!=itEnd);
 }
 //===============================================================
-xSGraphEdgeIterator::xSGraphEdgeIterator(const SuperGraph *sG):
-  itId(((SuperGraphImpl *)sG)->edgeIds.getUsedId()) {
+xSGraphEdgeIterator::xSGraphEdgeIterator(const Graph *sG):
+  itId(((GraphImpl *)sG)->edgeIds.getUsedId()) {
 }
 xSGraphEdgeIterator::~xSGraphEdgeIterator(){
   delete itId;
@@ -307,10 +309,10 @@ bool xSGraphEdgeIterator::hasNext() {
   return itId->hasNext();
 }
 //===================================================================
-xOutEdgesIterator::xOutEdgesIterator(const SuperGraph *sG,const node n):
-  it(((SuperGraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((SuperGraphImpl *)sG)->nodes[n.id].end()),
-  n(n), spG((SuperGraphImpl *)sG) {
+xOutEdgesIterator::xOutEdgesIterator(const Graph *sG,const node n):
+  it(((GraphImpl *)sG)->nodes[n.id].begin()),
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
+  n(n), spG((GraphImpl *)sG) {
   if (it!=itEnd) {
     curEdge=*it;
     while(1) {
@@ -370,10 +372,10 @@ bool xOutEdgesIterator::hasNext() {
   return (it!=itEnd);
 }
 //===================================================================
-xInEdgesIterator::xInEdgesIterator(const SuperGraph *sG,const node n):
-  it(((SuperGraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((SuperGraphImpl *)sG)->nodes[n.id].end()),
-  n(n), spG((SuperGraphImpl *)sG) {
+xInEdgesIterator::xInEdgesIterator(const Graph *sG,const node n):
+  it(((GraphImpl *)sG)->nodes[n.id].begin()),
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
+  n(n), spG((GraphImpl *)sG) {
   if (it!=itEnd) {
     curEdge=*it;
     while(1) {
@@ -433,9 +435,9 @@ bool xInEdgesIterator::hasNext() {
   return (it!=itEnd);
 }
 //===================================================================
-xInOutEdgesIterator::xInOutEdgesIterator(const SuperGraph *sG, const node n): 
-  it(((SuperGraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((SuperGraphImpl *)sG)->nodes[n.id].end()){
+xInOutEdgesIterator::xInOutEdgesIterator(const Graph *sG, const node n): 
+  it(((GraphImpl *)sG)->nodes[n.id].begin()),
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()){
 }
 xInOutEdgesIterator::~xInOutEdgesIterator(){}
 edge xInOutEdgesIterator::next() {

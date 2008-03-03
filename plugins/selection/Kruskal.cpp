@@ -1,13 +1,14 @@
 #include "Kruskal.h"
 
-SELECTIONPLUGIN(Kruskal,"Kruskal","Anthony DON","14/04/03","Alpha","0","1");
+BOOLEANPLUGIN(Kruskal,"Kruskal","Anthony DON","14/04/03","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "DoubleProperty" ) \
     HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
     HTML_HELP_BODY() \
     "This parameter defines the metric used for edges weight." \
@@ -15,30 +16,8 @@ namespace {
   };
 }
 //======================================================
-int Kruskal::getClass(const int i) {
-  return (*classes)[i];
-}
-//======================================================
-int Kruskal::makeUnion(const int p, const int q) {
-  int x = getClass(p);
-  int y = getClass(q);
-
-  Iterator<node> *itN = superGraph->getNodes();
-  while (itN->hasNext()) { 
-    node n=itN->next();
-    if(getClass(n.id) == y)
-      (*classes)[n.id] = x;
-  } delete itN;
-  numClasses--;
-  
-}
-//======================================================
-bool Kruskal::edgeOk(const edge &e) {
-  return (getClass(superGraph->source(e).id) !=  getClass(superGraph->target(e).id));
-}
-//======================================================
-Kruskal::Kruskal(const PropertyContext &context):Selection(context) {
-  addParameter<MetricProxy> ("Edge weight", paramHelp[0], "viewMetric");
+Kruskal::Kruskal(const PropertyContext &context):BooleanAlgorithm(context) {
+  addParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
@@ -46,7 +25,7 @@ Kruskal::~Kruskal() {
 //======================================================
 #include <tulip/ConnectedTest.h>
 bool Kruskal::check(string &erreurMsg) {
-  if (ConnectedTest::isConnected(superGraph)) {
+  if (ConnectedTest::isConnected(graph)) {
     erreurMsg = "";
     return true;
   }
@@ -56,51 +35,18 @@ bool Kruskal::check(string &erreurMsg) {
   }
 }
 //======================================================
-///Calcul l'arbre couvrant minimal
+/// Compute the Minimum Spanning Tree
 bool Kruskal::run(){
   /* Initialisation */
-
-  int nNodes = superGraph->numberOfNodes();
-  numClasses = nNodes;
-  classes = new map<int, int>;
-  
-  int classNumber = 0;
-  Iterator<node> *itN = superGraph->getNodes();
-  while (itN->hasNext()) { 
-    node n=itN->next();
-    (*classes)[n.id] = classNumber;
-    classNumber++;
-  }delete itN;
-
-  std::list<edge> sortedEdges;
-  Iterator<edge> *itE = superGraph->getEdges();
-  while (itE->hasNext()) { 
-    edge e=itE->next();
-    sortedEdges.push_back(e);
-  } delete itE;
-  
-  selectionProxy->setAllNodeValue(true);
-  selectionProxy->setAllEdgeValue(false);
-
-  MetricProxy *edgeWeight = 0;
+  DoubleProperty *edgeWeight = 0;
   if ( dataSet!=0) {
-    dataSet->get("Edge Weight", edgeWeight);
+    dataSet->get("edge weight", edgeWeight);
   }
   if (edgeWeight == 0)
-    edgeWeight = superGraph->getProperty<MetricProxy>("viewMetric");
-  /* Calcul */
-  sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
-  while(numClasses > 1) {
-    edge cur;
-    do {
-      cur = sortedEdges.front();
-      sortedEdges.pop_front();
-    } while(! edgeOk(cur));
-    
-    selectionProxy->setEdgeValue(cur, true);
-    makeUnion(superGraph->source(cur).id, superGraph->target(cur).id);
-  }
-  delete classes;
+    edgeWeight = graph->getProperty<DoubleProperty>("viewMetric");
+
+  selectMinimumSpanningTree(graph, booleanResult, edgeWeight, pluginProgress);
+
   return true;
 }
 //=======================================================================

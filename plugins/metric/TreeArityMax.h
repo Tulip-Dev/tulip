@@ -30,14 +30,14 @@
  *  (at your option) any later version.
  *
  */
-class TreeArityMax:public Metric {   
+class TreeArityMax:public tlp::DoubleAlgorithm {   
 public:
-  TreeArityMax(const PropertyContext &);
+  TreeArityMax(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 
 private:
-  double getNodeValue(const node n);
+  double getNodeValue(const tlp::node n);
 };
 /*@}*/
 #endif

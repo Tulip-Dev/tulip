@@ -1,22 +1,60 @@
 nobase_include_HEADERS = \
-	tulip/GlTools.h\
-	tulip/Curves.h\
-	tulip/ObservableGlGraph.h\
-	tulip/TLPPixmapFont.h\
-	tulip/TLPPixmapGlyph.h\
-	tulip/OcclusionTest.h\
 	tulip/Camera.h\
-	tulip/GlGraph.h\
-	tulip/GlLines.h\
+	tulip/GlComposite.h \
+	tulip/GlGraphComposite.h \
+	tulip/GlGrid.h \
+	tulip/GlEntity.h \
+	tulip/GlGraphRenderingParameters.h\
+	tulip/GlGraphStaticData.h \
+	tulip/GlCircle.h \
+	tulip/GlLabel.h \
+	tulip/GlRect.h \
+	tulip/GlRectTextured.h \
+	tulip/GlPolygon.h \
+	tulip/GlMultiPolygon.h \
+	tulip/GlSphere.h \
+	tulip/GlLayer.h \
+	tulip/GlLODCalculator.h \
+	tulip/GlCPULODCalculator.h \
+	tulip/GlBox.h \
+	tulip/GlScene.h \
+	tulip/GlTextureManager.h \
+	tulip/Glyph.h \
+	tulip/ObservableGlGraph.h \
+	tulip/GlSimpleEntity.h \
+	tulip/GlComplexeEntity.h \
+	tulip/GlLODSceneVisitor.h \
+	tulip/GlBoundingBoxSceneVisitor.h \
+	tulip/GlSelectSceneVisitor.h \
+	tulip/GlSceneVisitor.h \
+	tulip/GlFeedBackRecorder.h \
+	tulip/GlFeedBackBuilder.h \
+	tulip/GlTLPFeedBackBuilder.h \
+	tulip/GlSVGFeedBackBuilder.h \
+	tulip/GlEPSFeedBackBuilder.h \
+	tulip/GlGraphInputData.h \
+	tulip/GlyphManager.h \
+	tulip/GlNode.h \
+	tulip/GlMetaNode.h \
+	tulip/GlEdge.h \
+	tulip/GlDisplayListManager.h \
+	tulip/GlConvexHull.h \
+	tulip/GlHierarchyConvexHulls.h \
+	tulip/GlSceneObserver.h \
+	tulip/GlLine.h \
+	tulip/libgpugraph.h \
+	tulip/tulipgpu.h \
+	tulip/GlXMLTools.h
+
+noinst_HEADERS = \
+	tulip/Bezier.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
-	tulip/Glyph.h \
 	tulip/Bezier.h \
 	tulip/Spline.h \
 	tulip/Fonts.h \
 	tulip/Document.h \
 	tulip/Context.h \
-	tulip/TextRenderer.h \
 	tulip/Hline.h \
 	tulip/Table.h \
 	tulip/Parser.h \
@@ -24,19 +62,14 @@ nobase_include_HEADERS = \
 	tulip/FLayout.h \
 	tulip/Frame.h \
 	tulip/Renderer.h \
-	tulip/GlADAxisPoint.h \
-	tulip/GlADBox.h \
-	tulip/GlADComposite.h \
-	tulip/GlADGrid.h \
-	tulip/GlADLine.h \
-	tulip/GlADPoint.h \
-	tulip/GlADQuad.h \
-	tulip/GlADRenderOptions.h \
-	tulip/GlAugmentedDisplay.h \
-	tulip/GlDrawable.h \
-	tulip/GlHudCircle.h \
-	tulip/GlHud.h \
-	tulip/GlHudLine.h \
-	tulip/GlHudRect4.h \
-	tulip/GlHudRect.h
+	tulip/GlTools.h\
+	tulip/GlXMLTools.h \
+	tulip/Curves.h\
+	tulip/TextRenderer.h \
+	tulip/TLPPixmapFont.h\
+	tulip/TLPPixmapGlyph.h\
+	tulip/OcclusionTest.h \
+	tulip/GlLines.h
 
+tulip/libgpugraph.h : ../../../thirdparty/libgpugraph/libgpugraph.h
+	cp -f $< $@

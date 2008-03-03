@@ -8,26 +8,26 @@
 #include <map>
 #include <tulip/TulipPlugin.h>
 
-class MetricProxy;
-
 /** \addtogroup clustering */
 /*@{*/
-class StrengthClustering:public Clustering { 
+class StrengthClustering:public tlp::Algorithm { 
 public:
-  StrengthClustering(ClusterContext);
+  StrengthClustering(tlp::AlgorithmContext);
   ~StrengthClustering();
   bool run();
   bool check(std::string &);
   void reset();
 private:
-  std::vector< std::set<node> > computeNodePartition(double threshold);
-  double computeMQValue(const std::vector< std::set<node> > & partition, SuperGraph *);
-  double findBestThreshold(int numberOfSteps);
-  SuperGraph* buildSubGraphs(const std::vector< std::set<node > > &);
-  void recursiveCall(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
-  SuperGraph* buildQuotientGraph(SuperGraph *graph);
-  void adjustMetaGraphProtperty(SuperGraph *, std::map<SuperGraph *,SuperGraph *> &);
-  MetricProxy * values;
+  std::vector< std::set<tlp::node> > computeNodePartition(double threshold);
+  double computeMQValue(const std::vector< std::set<tlp::node> > & partition, tlp::Graph *);
+  double findBestThreshold(int numberOfSteps, bool& stopped);
+  tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
+  bool recursiveCall(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
+  tlp::Graph* buildQuotientGraph(tlp::Graph *);
+  void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
+  tlp::DoubleProperty* values;
+  bool subgraphsLayout;
+  bool quotientLayout;
 };
 /*@}*/
 #endif

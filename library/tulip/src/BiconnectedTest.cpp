@@ -1,10 +1,11 @@
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/StableIterator.h"
 #include "tulip/BiconnectedTest.h"
 #include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
 
 using namespace std;
+using namespace tlp;
 //=================================================================
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
@@ -15,13 +16,13 @@ BiconnectedTest * BiconnectedTest::instance=0;
 #endif
 
 //=================================================================
-bool BiconnectedTest::isBiconnected(SuperGraph *graph) {
+bool BiconnectedTest::isBiconnected(Graph *graph) {
   if (instance==0)
     instance=new BiconnectedTest();
   return instance->compute(graph);
 }
 //=================================================================
-void BiconnectedTest::makeBiconnected(SuperGraph *graph, vector<edge> &addedEdges) {
+void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   //  if (BiconnectedTest::isBiconnected(graph)) return;
   if (instance==0) instance=new BiconnectedTest();
@@ -34,10 +35,10 @@ void BiconnectedTest::makeBiconnected(SuperGraph *graph, vector<edge> &addedEdge
 BiconnectedTest::BiconnectedTest(){
 }
 //=================================================================
-void makeBiconnectedDFS(SuperGraph *graph, node from, 
+void makeBiconnectedDFS(Graph *graph, node from, 
 			MutableContainer<int> &low,
 			MutableContainer<int> &dfsNumber,
-			MutableContainer<node> &father,
+			MutableContainer<node> &supergraph,
 			unsigned int &count,
 			vector<edge> &addedEdges) {
   node u;
@@ -49,11 +50,11 @@ void makeBiconnectedDFS(SuperGraph *graph, node from,
     if (from == w) continue;
     if (!u.isValid()) u = w;
     if (dfsNumber.get(w.id) == -1) {
-      father.set(w.id, from);
-      makeBiconnectedDFS(graph, w, low, dfsNumber, father, count, addedEdges);
+      supergraph.set(w.id, from);
+      makeBiconnectedDFS(graph, w, low, dfsNumber, supergraph, count, addedEdges);
       if (low.get(w.id) == dfsNumber.get(from.id)) {
-	if (w == u && father.get(from.id).isValid())
-	  addedEdges.push_back(graph->addEdge(w, father.get(from.id)));
+	if (w == u && supergraph.get(from.id).isValid())
+	  addedEdges.push_back(graph->addEdge(w, supergraph.get(from.id)));
 	if (w != u) 
 	  addedEdges.push_back(graph->addEdge(u, w));
       }
@@ -64,11 +65,11 @@ void makeBiconnectedDFS(SuperGraph *graph, node from,
   } 
 }
 //=================================================================
-bool biconnectedTest(SuperGraph *graph, node v, 
+bool biconnectedTest(Graph *graph, node v, 
 		     MutableContainer<bool> &mark,
 		     MutableContainer<unsigned int> &low,
 		     MutableContainer<unsigned int> &dfsNumber,
-		     MutableContainer<node> &father,
+		     MutableContainer<node> &supergraph,
 		     unsigned int &count) {
   mark.set(v.id,true);
   dfsNumber.set(v.id,count);
@@ -85,8 +86,8 @@ bool biconnectedTest(SuperGraph *graph, node v,
 	  return false;
 	}
       }
-      father.set(w.id,v);
-      if (!biconnectedTest(graph,w,mark,low,dfsNumber,father,count)) {
+      supergraph.set(w.id,v);
+      if (!biconnectedTest(graph,w,mark,low,dfsNumber,supergraph,count)) {
 	delete it;
 	return false;
       }
@@ -101,26 +102,29 @@ bool biconnectedTest(SuperGraph *graph, node v,
       }
     }
     else
-      if (father.get(v.id)!=w) {
+      if (supergraph.get(v.id)!=w) {
 	low.set(v.id, std::min(low.get(v.id), dfsNumber.get(w.id)));
       }
   } delete it;
   return true;
 }
 //=================================================================
-void BiconnectedTest::connect(SuperGraph *graph, vector<edge> &addedEdges) {
+void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   ConnectedTest::makeConnected(graph, addedEdges);
   MutableContainer<int> low;
   MutableContainer<int> dfsNumber;
   dfsNumber.setAll(-1);
-  MutableContainer<node> father;
-  father.setAll(node());
+  MutableContainer<node> supergraph;
+  supergraph.setAll(node());
   unsigned int count = 0;
-  makeBiconnectedDFS(graph, graph->getOneNode(), low, dfsNumber, father, count, addedEdges);
+  node root = graph->getOneNode();
+  if (root.isValid())
+    makeBiconnectedDFS(graph, root, low, dfsNumber,
+		       supergraph, count, addedEdges);
 }
 //=================================================================
-bool BiconnectedTest::compute(SuperGraph *graph) { 
+bool BiconnectedTest::compute(Graph *graph) { 
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
     return resultsBuffer[(unsigned long)graph];
 
@@ -128,12 +132,12 @@ bool BiconnectedTest::compute(SuperGraph *graph) {
   mark.setAll(false);
   MutableContainer<unsigned int> low;
   MutableContainer<unsigned int> dfsNumber;
-  MutableContainer<node> father;
+  MutableContainer<node> supergraph;
   unsigned int count = 1;
   bool result = false;
   Iterator<node> *it=graph->getNodes();
   if (it->hasNext())
-    result=(biconnectedTest(graph,it->next(),mark,low,dfsNumber,father,count));
+    result=(biconnectedTest(graph,it->next(),mark,low,dfsNumber,supergraph,count));
   delete it;
   if (count!=graph->numberOfNodes()+1) {
     //  cerr << "connected test" << endl; 
@@ -144,7 +148,7 @@ bool BiconnectedTest::compute(SuperGraph *graph) {
   return result;
 }
 //=================================================================
-void BiconnectedTest::addEdge(SuperGraph *graph,const edge) {
+void BiconnectedTest::addEdge(Graph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
@@ -152,7 +156,7 @@ void BiconnectedTest::addEdge(SuperGraph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void BiconnectedTest::delEdge(SuperGraph *graph,const edge) {
+void BiconnectedTest::delEdge(Graph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (!resultsBuffer[(unsigned long)graph]) return;
@@ -160,21 +164,21 @@ void BiconnectedTest::delEdge(SuperGraph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void BiconnectedTest::reverseEdge(SuperGraph *graph,const edge) {
+void BiconnectedTest::reverseEdge(Graph *graph,const edge) {
 }
 //=================================================================
-void BiconnectedTest::addNode(SuperGraph *graph,const node) {
+void BiconnectedTest::addNode(Graph *graph,const node) {
   //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
   resultsBuffer[(unsigned long)graph]=false;
 }
 //=================================================================
-void BiconnectedTest::delNode(SuperGraph *graph,const node) {
+void BiconnectedTest::delNode(Graph *graph,const node) {
   //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void BiconnectedTest::destroy(SuperGraph *graph) {
+void BiconnectedTest::destroy(Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << (unsigned)graph << endl;
   //  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
   graph->removeObserver(this);

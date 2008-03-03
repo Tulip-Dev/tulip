@@ -18,6 +18,8 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
 /// Face iterator for PlanarConMap
+namespace tlp {
+
 class FaceIterator : public Iterator<Face>{
 public:
   FaceIterator(PlanarConMap* m);
@@ -78,5 +80,7 @@ private :
   std::vector<edge> ve;
   unsigned int i;
 };
+
+}
 #endif
 #endif

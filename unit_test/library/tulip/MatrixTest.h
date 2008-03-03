@@ -2,8 +2,8 @@
 #define TLPBIEXTCLUSTEROPERATION
 
 #include <string>
-#include <tulip/SuperGraph.h>
-#include <tulip/Matrix.h>
+#include <tulip/Graph.h>
+#include "../../../library/tulip/include/tulip/Matrix.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 

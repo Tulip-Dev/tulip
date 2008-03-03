@@ -12,7 +12,7 @@ struct Strahler {
 
 /** \addtogroup metric */
 /*@{*/
-/// StrahlerMeric.h - An implementation of the Strahler parameter.
+/// StrahlerMetric.h - An implementation of the Strahler parameter.
 /** This plugin is an implementation of the Strahler Parameter.
  *  algorithm first published as:
  *
@@ -54,16 +54,16 @@ struct Strahler {
  *  (at your option) any later version.
  *
  */
-class StrahlerMetric:public Metric { 
+class StrahlerMetric:public tlp::DoubleAlgorithm { 
 public:
-  StrahlerMetric(const PropertyContext &);
+  StrahlerMetric(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 
 private:
-  Strahler topSortStrahler(node n,int &curPref, stdext::hash_map<node,int> &tofree, stdext::hash_map<node,int> &prefix,
-			   stdext::hash_map<node,bool> &visited, stdext::hash_map<node,bool> &finished,
-			   stdext::hash_map<node,Strahler> &cachedValues);
+  Strahler topSortStrahler(tlp::node n,int &curPref, stdext::hash_map<tlp::node,int> &tofree, stdext::hash_map<tlp::node,int> &prefix,
+			   stdext::hash_map<tlp::node,bool> &visited, stdext::hash_map<tlp::node,bool> &finished,
+			   stdext::hash_map<tlp::node,Strahler> &cachedValues);
   bool allNodes;
 };
 /*@}*/

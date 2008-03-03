@@ -11,14 +11,16 @@
 #include <map>
 #include <set>
 
+namespace tlp {
+
 class Observable;
 
 //=========================================================
 /**
- * The Observer pattern is described in the lecture notes and pp293-304 
- * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a 
+ * The Observer pattern is a 
  * framework for handling state dependency between observer and observed 
- * object.
+ * object. It is described in the lecture notes and pp293-304 
+ * of Design Patterns by Gamma, Helm, Johnson, and Vlissides.
  */
 class Observer {
  public:
@@ -41,10 +43,9 @@ class Observer {
 typedef std::map<Observer *,std::set<Observable *> > ObserverMap;
 
 //=========================================================
-/**Toutes les instance de cette classe peuvent être observer 
- *par une instance de la classe Observer. 
- *@see Observer
- */
+/** All instances of that class can be observed by by an instance of the
+  * Observer class. 
+  */
 class TLP_SCOPE Observable {
  public:
   virtual ~Observable() {}
@@ -53,17 +54,17 @@ class TLP_SCOPE Observable {
    */
   void addObserver(Observer *);
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**
    * Remove an observer
    */
-  void deleteObserver(Observer *);
+  void removeObserver(Observer *);
   /**
    * Remove all observers
    */
-  void deleteObservers();
+  void removeObservers();
   /**
    * Notify all the observers
    */
@@ -97,12 +98,14 @@ inline unsigned int Observable::countObservers() {
   return observersList.size(); 
 }
 
-inline void Observable::deleteObserver(Observer *item) {  
+inline void Observable::removeObserver(Observer *item) {  
   observersList.remove(item);
 }
 
-inline void Observable::deleteObservers() { 
+inline void Observable::removeObservers() { 
   observersList.clear(); 
+}
+
 }
 
 #endif

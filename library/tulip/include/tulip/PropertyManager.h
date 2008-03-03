@@ -1,4 +1,4 @@
-//-*-c++-*
+//-*-c++-*-
 /*
  Author: David Auber
  Email : auber@labri.fr
@@ -9,51 +9,54 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TLP_PROPERTYMANAGER_H
 #define TLP_PROPERTYMANAGER_H
 
 #include <map>
 #include <set>
 #include <string>
-#include "Iterator.h"
-#include "Node.h"
-#include "Edge.h"
+#include "tulip/Iterator.h"
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
 
-class PProxy;
-class SuperGraph;
+namespace tlp {
+
+class PropertyInterface;
+class Graph;
 
 /**
-   This class is a pool of PropertyProxy, It also manages the inheritance
-   of PropertyProxy beetween views.
+   This class is a pool of AbstractProperty, It also manages the inheritance
+   of AbstractProperty beetween views.
 */
 class PropertyManager {
 
 public:
-  //  PProxy* currentPropertyProxy;
-  SuperGraph *superGraph;
+  //  PropertyInterface* currentAbstractProperty;
+  Graph *graph;
   ///
   virtual ~PropertyManager(){};
   /**
      Return true if the propertyProxy is in the pool, or 
-     in a ascendant SuperGraph
+     in a ascendant Graph
   */
   virtual  bool existProperty(const std::string&)=0;
   /**Return true if the propertyProxy is in the pool*/
   virtual  bool existLocalProperty(const std::string&)=0;
-  /**Add a PropertyProxy in the pool*/
-  virtual  void setLocalProxy(const std::string&,PProxy *)=0;
+  /**Add a AbstractProperty in the pool*/
+  virtual  void setLocalProxy(const std::string&,PropertyInterface *)=0;
   /**Return a pointer to a propertyProxy which is in the pool or
-     in a pool of an ascendant SuperGraph*/
-  virtual  PProxy* getProperty(const std::string&)=0;
+     in a pool of an ascendant Graph*/
+  virtual  PropertyInterface* getProperty(const std::string&)=0;
   /**Return a pointer to a propertyProxy which is in the pool*/
-  virtual  PProxy* getLocalProperty(const std::string&)=0;
-  /**Remove a PropertyProxy from the pool*/
+  virtual  PropertyInterface* getLocalProperty(const std::string&)=0;
+  /**Remove a AbstractProperty from the pool*/
   virtual  void delLocalProperty(const std::string&)=0;
   /**Used to inform the pool that a node doesn't belong anymore to the
-     associated SuperGraph*/
+     associated Graph*/
   virtual void erase(const node )=0;
   /**Used to inform the pool that an edge doesn't belong anymore to the
-     associated SuperGraph*/
+     associated Graph*/
   virtual void erase(const edge )=0;
   /**Return an iterator on the local properties*/
   virtual Iterator<std::string>* getLocalProperties()=0;
@@ -70,7 +73,7 @@ class LocalPropertiesIterator: public Iterator<std::string> {
   bool hasNext();
  private:
   PropertyManagerImpl *ppc;
-  std::map<std::string,PProxy*>::iterator it,itEnd;
+  std::map<std::string,PropertyInterface*>::iterator it,itEnd;
 };
 //======================================================================================
 class InheritedPropertiesIterator: public Iterator<std::string> {
@@ -97,18 +100,18 @@ class PropertyManagerImpl: public PropertyManager {
   friend class LocalPropertiesIterator;
 
 private:
-  std::map<std::string,PProxy*> propertyProxyMap;
+  std::map<std::string,PropertyInterface*> propertyProxyMap;
 
 public:
-  explicit  PropertyManagerImpl(SuperGraph*);
+  explicit  PropertyManagerImpl(Graph*);
   ~PropertyManagerImpl();
   //======================================================================================
   bool existProperty(const std::string&);
   bool existLocalProperty(const std::string&);
-  void setProxy(const std::string&,PProxy *);
-  void setLocalProxy(const std::string&,PProxy *);
-  PProxy* getProperty(const std::string&);
-  PProxy* getLocalProperty(const std::string&);
+  void setProxy(const std::string&,PropertyInterface *);
+  void setLocalProxy(const std::string&,PropertyInterface *);
+  PropertyInterface* getProperty(const std::string&);
+  PropertyInterface* getLocalProperty(const std::string&);
   void delProxy(const std::string&);
   void delLocalProperty(const std::string&);
   void erase(const node );
@@ -118,4 +121,7 @@ public:
   Iterator<std::string>* getInheritedProperties();
 };
 
+}
+
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

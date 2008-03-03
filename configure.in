@@ -1,16 +1,13 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.36 $)
+AC_REVISION($Revision: 1.37 $)
 AC_PREREQ(2.53)
-AC_INIT(tulip, 2.0.6)
-AC_CONFIG_SRCDIR(library/tulip/include/tulip/SuperGraph.h)
+AC_INIT(tulip, 3.0.0)
+AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
-dnl version for libraries name (e.g. libtulip-1.2.so.x.x.x)
-TULIP_VERSION=2.0
-AC_SUBST(TULIP_VERSION)
 dnl autoheader templates for config.h.in
 AH_TOP(
 #ifndef CONFIG_H
@@ -56,6 +53,9 @@ AC_MSG_WARN([
 		Reference guide will not
                 be generated])
 fi
+dnl used when generating docs
+THIS_YEAR=$(date +%Y)
+AC_SUBST(THIS_YEAR)
 
 dnl check for dot
 AC_PATH_PROG(DOT, dot, not_found)
@@ -172,7 +172,6 @@ fi
 AC_PATH_QT
 AC_PATH_QT_UIC
 AC_PATH_QT_MOC
-AM_CONDITIONAL(QT3, test $QT_VERSION = 3)
 AC_PATH_GL
 
 dnl 2.5.4 is libxml2 shipped with RedHat 9.0
@@ -187,13 +186,13 @@ AM_CONDITIONAL(LIBXML2, test "x$XML_LIBS" != "x")
 dnl debug flag
 AC_ARG_ENABLE(debug,
 [  --enable-debug          Compilation flags to allow debugging],
-  [CXXFLAGS="-Wall -g -pipe"
-  LIB_QT=${LIB_QT_DEBUG}],  CXXFLAGS="-DNDEBUG -O3 -funroll-loops -pipe " 
+  [CXXFLAGS="-Wall -g -pipe"],
+  CXXFLAGS="-DNDEBUG -O3 -funroll-loops -pipe " 
 )
 
 dnl statistics flag
 AC_ARG_ENABLE(stats-gui,
-[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface"],
+[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface],
    CXXFLAGS="$CXXFLAGS -DSTATS_UI")
 
 dnl check if we build tlprender, option and presence of OSMesa
@@ -204,8 +203,14 @@ AC_ARG_ENABLE(tlprender,
 
 if test ${VAR_MACOSX} = 1
 then
-CPPFLAGS="${CPP_FLAGS} -I/usr/X11R6/include"
-LDFLAGS="${LD_FLAGS} -L/usr/X11R6/lib"
+  CPPFLAGS="${CPP_FLAGS} -I/usr/X11R6/include"
+  LDFLAGS="${LD_FLAGS} -L/usr/X11R6/lib"
+else
+  if test "${x_includes}" != "NONE" -a "${x_includes}" != ""
+    then
+    CPPFLAGS="${CPP_FLAGS} -I${x_includes}"
+    LDFLAGS="${LD_FLAGS} -L${x_libraries}"
+  fi
 fi
 
 if test "${CONFIGURE_tlprender}" != ""
@@ -229,12 +234,12 @@ AC_SUBST(CONFIGURE_tlprender)
 # define TLP_INCLUDE, TLP_LDFLAGS, ...
 # it is *very* important to use top_srcdir for INCLUDE and top_builddir for LDFLAGS,
 # otherwise the target 'distcheck' will fail
-TULIP_INCLUDE='-I$(top_srcdir)/library/tulip/include '
+TULIP_INCLUDE='-I$(top_srcdir)/library/tulip/include -I$(top_builddir)/library/tulip/include -I$(top_builddir)/library/tulip/include/tulip'
 TULIP_OGL_INCLUDE='-I$(top_srcdir)/library/tulip-ogl/include'
 TULIP_QT_INCLUDE='-I$(top_srcdir)/library/tulip-qt/include -I$(top_builddir)/library/tulip-qt/include'
 TULIP_LDFLAGS='-L$(top_builddir)/library/tulip/src -ltulip'
 TULIP_OGL_LDFLAGS='-L$(top_builddir)/library/tulip-ogl/src -ltulip-ogl'
-TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt$(QT_VERSION)'
+TULIP_QT_LDFLAGS='-L$(top_builddir)/library/tulip-qt/src -ltulip-qt4'
 TULIP_PLUGINS_BUILD_PATH=$PWD/plugins
 TULIP_QTDESIGNERPLUGIN='$(top_builddir)/library/tulip-qt/src/.libs'
 AC_SUBST(TULIP_INCLUDE)
@@ -315,6 +320,7 @@ Makefile
 library/Makefile
 library/tulip/Makefile
 library/tulip/include/Makefile
+library/tulip/include/tulip/TulipRelease.h
 library/tulip/src/Makefile
 library/tulip-ogl/Makefile
 library/tulip-ogl/bitmaps/Makefile
@@ -328,6 +334,7 @@ thirdparty/Makefile
 thirdparty/gzstream/Makefile
 thirdparty/ftgl/Makefile
 thirdparty/gle/Makefile
+thirdparty/libgpugraph/Makefile
 software/Makefile
 software/tulip/Makefile
 software/tulip/include/Makefile
@@ -349,13 +356,16 @@ plugins/colors/Makefile
 plugins/int/Makefile
 plugins/string/Makefile
 plugins/glyph/Makefile
-samples/Makefile
-samples/gml/Makefile
-samples/tlp/Makefile
-samples/matrix/Makefile
 docs/Makefile
 docs/devTeamDoxygen/Makefile
+docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in
+docs/devTeamDoxygen/header.html:docs/devTeamDoxygen/header.html.in
+docs/devTeamDoxygen/tulip.html:docs/devTeamDoxygen/tulip.html.in
 docs/doxygen/Makefile
+docs/doxygen/dox-html.xsl:docs/doxygen/dox-html.xsl.in
+docs/doxygen/footer.html:docs/doxygen/footer.html.in
+docs/doxygen/header.html:docs/doxygen/header.html.in
+docs/doxygen/tulip.html:docs/doxygen/tulip.html.in
 docs/developerHandbook/Makefile
 docs/userHandbook/Makefile,
 [chmod +x tulip-config]

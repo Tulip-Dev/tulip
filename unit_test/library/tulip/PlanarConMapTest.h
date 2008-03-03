@@ -18,11 +18,13 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+namespace tlp {
+
 class PlanarConMapTest : public CppUnit::TestFixture{
   
 private :
-  SuperGraph* graph;
-  PlanarConMap* carte;
+  tlp::Graph* graph;
+  tlp::PlanarConMap* carte;
 
   std::vector<edge> edges;
   std::vector<node> nodes; 
@@ -34,7 +36,7 @@ private :
   
 public :
   void setUp(){
-    graph = tlp::newSuperGraph();
+    graph = tlp::newGraph();
     //carte = new PlanarConMap(graph);
     edges.clear();
     nodes.clear();
@@ -63,4 +65,5 @@ public :
 
 };
 
+}
 #endif

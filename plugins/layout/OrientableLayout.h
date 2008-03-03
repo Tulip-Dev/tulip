@@ -7,31 +7,31 @@ class OrientableLayout : public OrientableLayoutInterface {
     friend class OrientableCoord;
 public:
 
-    OrientableLayout(LayoutProxy* layout, orientationType mask = ORI_DEFAULT);
+    OrientableLayout(tlp::LayoutProperty* layout, orientationType mask = ORI_DEFAULT);
     
     OrientableCoord createCoord(const float x = 0, const float y = 0,
                                 const float z = 0);
-    OrientableCoord createCoord(const Coord& v);
+    OrientableCoord createCoord(const tlp::Coord& v);
         
     void            setOrientation(orientationType mask);        
 
     void            setAllNodeValue(const PointType& v);
     void            setAllEdgeValue(const LineType& v);
 
-    void            setEdgeValue(const edge e, const LineType& v);
-    void            setNodeValue(node n, const PointType& v);
+    void            setEdgeValue(const tlp::edge e, const LineType& v);
+    void            setNodeValue(tlp::node n, const PointType& v);
 
-    PointType       getNodeValue(const node n);
-    LineType        getEdgeValue(const edge e);
+    PointType       getNodeValue(const tlp::node n);
+    LineType        getEdgeValue(const tlp::edge e);
 
     PointType       getNodeDefaultValue();
     LineType        getEdgeDefaultValue();
 
 private:
-	typedef std::vector<Coord> CoordLineType;
-	std::vector<OrientableCoord> convertEdgeLinetype(const std::vector<Coord>& v);
+	typedef std::vector<tlp::Coord> CoordLineType;
+	std::vector<OrientableCoord> convertEdgeLinetype(const std::vector<tlp::Coord>& v);
 	
-	LayoutProxy*    layout;
+	tlp::LayoutProperty*    layout;
 	orientationType orientation;
 	
 	float (OrientableCoord::*readX)() const;

@@ -1,10 +1,12 @@
-SHELL=bash
+TULIP_DIR=../..
+TULIP_CONFIG=$(TULIP_DIR)/tulip-config
 TARGET= glutviewer
 SRCS=   glutviewer.cpp
 
-CXXFLAGS = -DNDEBUG -O3 -funroll-all-loops -Wall `tulip-config --cxxflags` `xml2-config --libs`
+CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `${TULIP_CONFIG} --cxxflags`
+
 CXX=g++
-LDFLAGS=  -L/usr/lib/GL -lGL -lGLU -lglut `tulip-config --libs`
+LDFLAGS=  `${TULIP_CONFIG} --lib_tulip --lib_ogl` -L/usr/lib/GL -lGL -lGLU -lglut
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -26,8 +28,3 @@ clean :
 
 
 -include $(DEPS)
-
-
-
-
-

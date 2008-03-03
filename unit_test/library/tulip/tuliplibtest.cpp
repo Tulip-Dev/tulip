@@ -1,12 +1,9 @@
-#include <qapplication.h>
 //#include <cppunit/ui/qt/TestRunner.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <tulip/TlpTools.h>
 
 int main( int argc, char** argv ) {
-  QApplication app( argc, argv );
-
   tlp::initTulipLib();
   tlp::loadPlugins();   // library side plugins  
 
@@ -30,6 +27,8 @@ int main( int argc, char** argv ) {
 #include "SuperGraphTest.h"
 #include "ExtendedClusterOperationTest.h"
 #include "PluginsTest.h"
+#include "MatrixTest.h"
+#include "TlpImportExportTest.h"
 using namespace std;
 int main( int argc, char **argv) {
   CppUnit::TextUi::TestRunner runner;
@@ -41,6 +40,8 @@ int main( int argc, char **argv) {
   runner.addTest( ExtendedClusterOperationTest::suite() );
   runner.addTest( SuperGraphMapTest::suite());
   runner.addTest( FaceIteratorTest::suite());
+  runner.addTest( MatrixTest::suite());
+  runner.addTest( TlpImportExportTest::suite());
   runner.run();
   return EXIT_SUCCESS;
 }

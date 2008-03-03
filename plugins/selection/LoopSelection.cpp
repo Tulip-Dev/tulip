@@ -9,22 +9,20 @@
 */
 #include <assert.h>
 #include "LoopSelection.h"
-#include <tulip/ForEach.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/MethodFactory.h>
 
-SELECTIONPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
-LoopSelection::LoopSelection(const PropertyContext &context):Selection(context) {}
+LoopSelection::LoopSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
 //============================================
 bool LoopSelection::run() {
-  selectionProxy->setAllNodeValue(false);
+  booleanResult->setAllNodeValue(false);
   edge e;
-  forEach(e, superGraph->getEdges())
-    selectionProxy->setEdgeValue(e, 
-				 superGraph->source(e)==superGraph->target(e));
+  forEach(e, graph->getEdges())
+    booleanResult->setEdgeValue(e, 
+			       graph->source(e)==graph->target(e));
   return true;
 }
 //============================================

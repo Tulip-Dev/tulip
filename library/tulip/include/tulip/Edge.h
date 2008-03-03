@@ -7,8 +7,10 @@
 #endif
 #include <climits>
 /**
- * \defgroup graphs
+ * \addtogroup graphs
  */ 
+namespace tlp {
+
 /*@{*/
 /// class edge
 struct edge { 
@@ -19,25 +21,25 @@ struct edge {
   bool operator!=(const edge e) const{return id!=e.id;}
   bool isValid() const {return id!=UINT_MAX;}
 };
-
 /*@}*/
+}
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 namespace stdext {
   template<>
-  struct hash<edge>{
-    size_t operator()(const edge e) const {return e.id;}
+  struct hash<tlp::edge>{
+    size_t operator()(const tlp::edge e) const {return e.id;}
   };
 }
 
 namespace std {
   template<>
-  struct equal_to<edge>{size_t operator()(const edge e,const edge e2) const {
+  struct equal_to<tlp::edge>{size_t operator()(const tlp::edge e,const tlp::edge e2) const {
     return e.id==e2.id;}
   };
   template<>
-  struct less<edge>{size_t operator()(const edge e,const edge e2) const {
+  struct less<tlp::edge>{size_t operator()(const tlp::edge e,const tlp::edge e2) const {
     return e.id<e2.id;}
   };
 }

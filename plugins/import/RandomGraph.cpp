@@ -2,6 +2,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 struct edgeS {
   unsigned  source,target;
@@ -43,7 +44,7 @@ namespace {
 
 
 struct RandomGraph:public ImportModule {
-  RandomGraph(ClusterContext context):ImportModule(context) {
+  RandomGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"5");
     addParameter<int>("edges",paramHelp[1],"9");
   }
@@ -52,8 +53,8 @@ struct RandomGraph:public ImportModule {
   
   bool import(const string &name) {
     srand(clock());
-    int nbNodes  = 5;
-    int nbEdges  = 9;
+    unsigned int nbNodes  = 5;
+    unsigned int nbEdges  = 9;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
@@ -61,6 +62,10 @@ struct RandomGraph:public ImportModule {
     int ite = nbNodes*nbEdges;
     int nbIteration = ite;
     set<edgeS> myGraph;
+
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
+
     while (ite>0) {
       if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE) 
 	return pluginProgress->state()!=TLP_CANCEL;
@@ -75,15 +80,15 @@ struct RandomGraph:public ImportModule {
     }
     
     vector<node> tmpVect(nbNodes);
-    for (int i=0; i<nbNodes; ++i) {
-      tmpVect[i]=superGraph->addNode();
+    for (unsigned int i=0; i<nbNodes; ++i) {
+      tmpVect[i]=graph->addNode();
     }
     
     set<edgeS>::const_iterator it;
     for (it=myGraph.begin(); it!=myGraph.end(); ++it)   {
-      superGraph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
+      graph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
     }
     return true;
   }
 };
-IMPORTPLUGINOFGROUP(RandomGraph,"Random General Graph","Auber","16/06/2002","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(RandomGraph,"Random General Graph","Auber","16/06/2002","","1.0","Graphs")

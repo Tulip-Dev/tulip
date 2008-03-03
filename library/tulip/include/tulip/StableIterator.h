@@ -14,6 +14,8 @@
 #include <tulip/tulipconf.h>
 #include <vector>
 
+namespace tlp {
+
 ///Interface of StableIterator,
 template<class itType> struct TLP_SCOPE StableIterator : public Iterator<itType> {
   StableIterator(Iterator<itType> *itIn) {
@@ -35,7 +37,7 @@ template<class itType> struct TLP_SCOPE StableIterator : public Iterator<itType>
   protected :
   std::vector<itType> cloneIt;
   typename std::vector<itType>::iterator itStl;
-  itType element;
 };
 
+}
 #endif

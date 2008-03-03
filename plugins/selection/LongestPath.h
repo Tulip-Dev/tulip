@@ -6,8 +6,9 @@
 #include <tulip/TulipPlugin.h>
 ///
 using namespace std;
+using namespace tlp;
 ///
-class LongestPath:public Selection { 
+class LongestPath:public BooleanAlgorithm { 
 public:
   LongestPath(const PropertyContext &);
   ~LongestPath();
@@ -19,7 +20,7 @@ private:
 
 private:
   double max;
-  MetricProxy *metricLevel;
+  Metric *metricLevel;
 };
 
 #endif

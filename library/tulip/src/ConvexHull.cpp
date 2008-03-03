@@ -3,16 +3,23 @@
 #include <tulip/ConvexHull.h>
 
 using namespace std;
+using namespace tlp;
 
 //==============================================================
 //A private struct for vectors about a point used in convex hull computation
+#ifndef DOXYGEN_NOTFOR_DEVEL
 struct p0Vectors {
   Coord pos;
   unsigned int index;
 };
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
-  return (p1.pos^p2.pos)[2] > 0; 
+  float z = (p1.pos^p2.pos)[2];
+  if (z == 0)
+    // aligned points so check norm of vectors
+    return p1.pos.norm() < p2.pos.norm();
+  return z > 0;
 }
 
 //==============================================================

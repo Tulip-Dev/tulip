@@ -1,8 +1,11 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
+namespace tlp {
 
 class Parser{
 
@@ -29,4 +32,7 @@ class Parser{
   unsigned char* getName(xmlAttr* attribut);
 };
 
+}
+
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

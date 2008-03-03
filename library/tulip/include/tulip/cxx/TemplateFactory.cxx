@@ -1,4 +1,4 @@
-//-*-c++-*
+//-*-c++-*-
 /**
  Author: David Auber
  Email : auber@labri.fr
@@ -14,80 +14,79 @@
 
 #include <tulip/Plugin.h>
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-Iterator<std::string>* TemplateFactory<ObjectFactory, ObjectType, Parameter>::availablePlugins() {
-  return new StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
+template<class ObjectFactory, class ObjectType, class Context>
+tlp::Iterator<std::string>* tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::availablePlugins() {
+  return new tlp::StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-bool TemplateFactory<ObjectFactory, ObjectType, Parameter>::exists(const std::string &pluginName) {
+template<class ObjectFactory, class ObjectType, class Context>
+bool tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::pluginExists(const std::string &pluginName) {
   return (objMap.find(pluginName) != objMap.end());
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::getPluginParameters(ObjectFactory *objectFactory) {
-  objNames.insert(objectFactory->getName());
-  objMap[objectFactory->getName()]=objectFactory;
+template<class ObjectFactory, class ObjectType, class Context>
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(ObjectFactory *objectFactory) {
+  std::string pluginName = objectFactory->getName();
+  objNames.insert(pluginName);
+  objMap[pluginName]=objectFactory;
+  ObjectType *withParam=objectFactory->createPluginObject(Context());
+  objParam[pluginName] = withParam->getParameters();
+  // loop over dependencies
+  // to demangle the class names
+  std::list<tlp::Dependency> dependencies = withParam->getDependencies();
+  std::list<tlp::Dependency>::iterator itD = dependencies.begin();
+  for (; itD != dependencies.end(); itD++) {
+    const char *factoryDepName = (*itD).factoryName.c_str();
+    (*itD).factoryName = std::string(tlp::demangleTlpClassName(factoryDepName));
+  }
+  objDeps[pluginName] = dependencies;
+  objRels[pluginName] = objectFactory->getRelease();
   if (currentLoader!=0) currentLoader->loaded(
-				objectFactory->getName(),
-				objectFactory->getAuthor(),
-				objectFactory->getDate(),
-				objectFactory->getInfo(),
-				objectFactory->getRelease(),
-				objectFactory->getVersion()
-				);
-  Parameter p = Parameter();
-  WithParameter *withParam=objectFactory->createObject(p);
-  objParam[objectFactory->getName()]=withParam->getParameters();
+					      pluginName,
+					      objectFactory->getAuthor(),
+					      objectFactory->getDate(),
+					      objectFactory->getInfo(),
+					      objectFactory->getRelease(),
+					      objectFactory->getTulipRelease(),
+					      dependencies
+					      );
 }
 
-template<class ObjectFactory, class ObjectType, class Parameter>
-void TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string pluginPath,std::string type,PluginLoader *loader) {
-  if (loader!=0)
-    loader->start(pluginPath.c_str(),type);
-
-  PluginIterator iterator(pluginPath, loader);
-
-  currentLoader = loader;
-  if (iterator.isValid()) {
-    while(iterator.nextPlugin(loader)) {
-    }
-    if (loader)
-      loader->finished(true, iterator.msg);
-  } else {
-    if (loader)
-      loader->finished(false, iterator.msg);
-  }
+template<class ObjectFactory, class ObjectType, class Context>
+void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::removePlugin(const std::string &name) {
+  objNames.erase(name);
+  objMap.erase(name);
+  objParam.erase(name);
+  objDeps.erase(name);
+  objRels.erase(name);
 }
 
-/* template<class ObjectFactory, class ObjectType, class Parameter>
-bool TemplateFactory<ObjectFactory,ObjectType,Parameter>::load(std::string file) {
-  createObj = getCreationFunc(file);
-  if(createObj == NULL)
-    return false;
-  else {
-    ObjectFactory *tmpObjectFactory=(ObjectFactory *)createObj();
-    objMap[tmpObjectFactory->getName()]=tmpObjectFactory;
-    Parameter p;
-    WithParameter *withParam=tmpObjectFactory->createObject(p);
-    objParam[tmpObjectFactory->getName()]=withParam->getParameters();
-  }
- return true;
- } */
-
-template<class ObjectFactory, class ObjectType, class Parameter>
-ObjectType * TemplateFactory<ObjectFactory,ObjectType,Parameter>::getObject(std::string name,Parameter p)
-{
+template<class ObjectFactory, class ObjectType, class Context>
+ObjectType * tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginObject(const std::string& name, Context c) {
   typename ObjectCreator::iterator it;
-#ifndef NDEBUG 
-  std::cerr << "TemplateFactory::GetObject :" << name << std::endl;  
-#endif
   it=objMap.find(name);
-  if (it!=objMap.end()) return (*it).second->createObject(p);
+  if (it!=objMap.end()) return (*it).second->createPluginObject(c);
   return 0;
 }
-template<class ObjectFactory, class ObjectType, class Parameter>
-StructDef TemplateFactory<ObjectFactory,ObjectType,Parameter>::getParam(std::string name){
+
+template<class ObjectFactory, class ObjectType, class Context>
+tlp::StructDef tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginParameters(std::string name) {
   assert(objMap.find(name)!=objMap.end());
   return objParam[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
+std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginRelease(std::string name) {
+  assert(objMap.find(name)!=objMap.end());
+  return objRels[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context>
+std::list<tlp::Dependency> tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginDependencies(std::string name) {
+  assert(objMap.find(name)!=objMap.end());
+  return objDeps[name];
+}
+
+template<class ObjectFactory, class ObjectType, class Context> std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginsClassName() {
+  return std::string(demangleTlpClassName(typeid(ObjectType).name()));
 }

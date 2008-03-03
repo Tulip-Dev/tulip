@@ -1,7 +1,10 @@
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef BORDER_H
 #define BORDER_H
 
 #include "tulip/RectangleArea.h"
+
+namespace tlp {
 
 const float BORDERWIDTH_LEVEL_FACTOR = .75;
 const float BORDERWIDTH_ROOT = 15;
@@ -12,4 +15,6 @@ float TLP_SCOPE evaluateBorderSize(int nodeLevel);
 float TLP_SCOPE evaluateBorderSize(int nodeLevel, const RectangleArea& NodeArea,
 				   int maxLevel = 0);
                          
+}
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

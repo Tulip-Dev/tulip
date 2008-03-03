@@ -1,36 +1,32 @@
-SHELL=sh
+TULIP_DIR=../..
+TULIP_CONFIG=$(TULIP_DIR)/tulip-config
+TULIP_VERSION=$(shell ${TULIP_CONFIG} --version)
+LIB_EXTENSION=$(shell ${TULIP_CONFIG} --pluginextension)
+TARGET=librectangleclustering-$(TULIP_VERSION).$(LIB_EXTENSION)
+SRCS= ArityRecClustering.cpp AritySegmentRecClustering.cpp SegmentRecClustering.cpp
 
-CXXFLAGS = -O3 -Wall -DNDEBUG -fPIC -DPIC `../../tulip-config --qtincludes` `../../tulip-config --cxxflags`
 CXX=g++
-LDFLAGS= -shared `../../tulip-config --libs` `../../tulip-config --qtlibs`
-
-SRCS= $(ARITY_SRCS) $(ARITY_SEGMENT_SRCS) $(SEGMENT_SRCS)
+CXXFLAGS = -O3 -Wall -DNDEBUG `${TULIP_CONFIG} --plugincxxflags` `${TULIP_CONFIG} --qtincludes` `${TULIP_CONFIG} --cxxflags`
+LDFLAGS= `${TULIP_CONFIG} --pluginldflags` `${TULIP_CONFIG} --libs` `${TULIP_CONFIG} --qtlibs`
 
 OBJS=$(SRCS:.cpp=.o)
 
-ARITY_TARGET=libarity.so
-ARITY_SEGMENT_TARGET=libaritysegment.so
-SEGMENT_TARGET=libsegment.so
+DEPS=$(SRCS:.cpp=.d)
 
-all: $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET)
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS) $(LIBS) 
 
 clean :
-	-rm -f $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET) *.o *.d
+	-rm -f $(TARGET) *.o *.d
 
 install: all
-	install $(ARITY_TARGET) $(ARITY_SEGMENT_TARGET) $(SEGMENT_TARGET) `../../tulip-config --pluginpath`/clustering  
+	install $(TARGET) `${TULIP_CONFIG} --pluginpath`
 
-ARITY_SRCS=ArityRecClustering.cpp
-ARITY_OBJS=$(ARITY_SRCS:.cpp=.o)
-$(ARITY_TARGET): $(ARITY_OBJS)
-	$(CXX) $(ARITY_OBJS) -o $@ $(LDFLAGS) $(LIBS) 
+%.d: %.cpp
+	@$(SHELL) -ec '$(CXX) -M $(CXXFLAGS) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
 
-ARITY_SEGMENT_SRCS=AritySegmentRecClustering.cpp
-ARITY_SEGMENT_OBJS=$(ARITY_SEGMENT_SRCS:.cpp=.o)
-$(ARITY_SEGMENT_TARGET): $(ARITY_SEGMENT_OBJS)
-	$(CXX) $(ARITY_SEGMENT_OBJS) -o $@ $(LDFLAGS) $(LIBS) 
-
-SEGMENT_SRCS=SegmentRecClustering.cpp
-SEGMENT_OBJS=$(SEGMENT_SRCS:.cpp=.o)
-$(SEGMENT_TARGET): $(SEGMENT_OBJS)
-	$(CXX) $(SEGMENT_OBJS) -o $@ $(LDFLAGS) $(LIBS) 
+-include $(DEPS)

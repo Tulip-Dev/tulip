@@ -13,34 +13,36 @@
 #include <vector>
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
-#include <tulip/MetricProxy.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/Graph.h>
 
+namespace tlp {
+
+#ifndef DOXYGEN_NOTFOR_DEVEL
 struct LessThan {
-  MetricProxy *metric;
+  DoubleProperty* metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
   } 
 };
 
 struct LessThanEdgeTargetMetric {
-  LessThanEdgeTargetMetric(SuperGraph *graph, MetricProxy * metric):
-    graph(graph),
-    metric(metric) {
+  LessThanEdgeTargetMetric(Graph *sg, DoubleProperty* metric):
+    metric(metric), sg(sg) {
   }
   bool operator() (edge e1,edge e2){
-    return (metric->getNodeValue(graph->target(e1)) < metric->getNodeValue(graph->target(e2)));
+    return (metric->getNodeValue(sg->target(e1)) < metric->getNodeValue(sg->target(e2)));
   }
 private:
-  MetricProxy *metric;
-  SuperGraph *graph;
+  DoubleProperty* metric;
+  Graph *sg;
 };
-
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 ///Interface of Sortiterator,
 struct SortNodeIterator : public StableIterator<node> {
   ///
-  SortNodeIterator(Iterator<node> *itIn, MetricProxy *metric):StableIterator<node>(itIn) {
+  SortNodeIterator(Iterator<node> *itIn, DoubleProperty* metric):StableIterator<node>(itIn) {
     LessThan tmp;
     tmp.metric=metric;
     sort(cloneIt.begin(),cloneIt.end(),tmp);
@@ -53,8 +55,8 @@ struct SortNodeIterator : public StableIterator<node> {
 ///Interface of Sortiterator,
 struct SortTargetEdgeIterator : public StableIterator<edge> {
   ///
-  SortTargetEdgeIterator(Iterator<edge> *itIn, SuperGraph* graph, MetricProxy *metric):StableIterator<edge>(itIn) {
-    LessThanEdgeTargetMetric tmp(graph,metric);
+  SortTargetEdgeIterator(Iterator<edge> *itIn, Graph* sg, DoubleProperty* metric):StableIterator<edge>(itIn) {
+    LessThanEdgeTargetMetric tmp(sg,metric);
     sort(cloneIt.begin(),cloneIt.end(),tmp);
     itStl=cloneIt.begin();
   }
@@ -62,5 +64,5 @@ struct SortTargetEdgeIterator : public StableIterator<edge> {
   ~SortTargetEdgeIterator(){};
 };
 
-
+}
 #endif

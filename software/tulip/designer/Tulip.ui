@@ -59,16 +59,23 @@
         <action name="editPasteAction"/>
         <separator/>
         <action name="editFindAction"/>
+        <separator/>
+        <action name="editSelect_AllAction"/>
+        <action name="editDelete_selectionAction"/>
+        <action name="editDeselect_allAction"/>
+        <action name="editReverse_selectionAction"/>
+        <separator/>
+        <action name="editCreate_groupAction"/>
+        <action name="editCreate_subgraphAction"/>
     </item>
-    <item text="&amp;Property" name="propertyMenu">
+    <item text="&amp;Algorithm" name="propertyMenu">
     </item>
-    <item text="&amp;Clustering" name="clusteringMenu">
-    </item>
-    <item text="&amp;Graph" name="Graph">
+    <item text="&amp;Graph" name="graphMenu">
         <action name="Action"/>
-        <item text="Tests" name="popupMenu_15" accel="">
+        <item text="Tests" name="popupMenu_23" accel="">
             <action name="is_simple"/>
             <action name="is_directed_tree"/>
+            <action name="is_free_tree"/>
             <action name="is_acyclic"/>
             <action name="is_connected"/>
             <action name="is_biconnected"/>
@@ -76,23 +83,28 @@
             <action name="is_planar"/>
         </item>
         <action name="menunew_itemAction"/>
-        <item text="&amp;Modify" name="popupMenu_23" accel="">
+        <item text="&amp;Modify" name="popupMenu_32" accel="">
             <action name="make_simple"/>
             <action name="make_acyclic"/>
             <action name="make_connected"/>
             <action name="make_biconnected"/>
-            <action name="triangulate"/>
+            <action name="make_directed"/>
+            <separator/>
+            <action name="Reverse_selected_edgesAction"/>
         </item>
     </item>
     <item text="&amp;View" name="viewMenu">
     </item>
-    <item text="&amp;Windows" name="windowsMenu">
+    <item text="&amp;Dialogs" name="dialogMenu">
     </item>
     <item text="&amp;Options" name="Options">
         <action name="force_ratio"/>
         <action name="map_metric"/>
         <action name="enable_morphing"/>
+        <action name="tooltips"/>
         <action name="grid_option"/>
+    </item>
+    <item text="&amp;Windows" name="windowsMenu">
     </item>
     <item text="&amp;Help" name="helpMenu">
         <action name="helpContentsAction"/>
@@ -107,11 +119,29 @@
             <cstring>toolBar</cstring>
         </property>
         <property name="label">
-            <string>Tools</string>
+            <string>Standard Tools</string>
         </property>
         <action name="fileOpenAction"/>
         <action name="fileSaveAction"/>
         <action name="filePrintAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>graphToolBar</cstring>
+        </property>
+        <property name="label">
+            <string>Mouse Interaction Tools</string>
+        </property>
+        <action name="navigateAction"/>
+        <action name="selectAction"/>
+        <action name="selectionAction"/>
+        <action name="moveSelectionAction"/>
+        <action name="magicSelectionAction"/>
+        <action name="zoomAction"/>
+        <action name="deleteAction"/>
+        <action name="addNodeAction"/>
+        <action name="addEdgeAction"/>
+        <action name="editEdgeBendAction"/>
     </toolbar>
 </toolbars>
 <customwidgets>
@@ -195,7 +225,7 @@
             <string>Save &amp;As...</string>
         </property>
         <property name="accel">
-            <string></string>
+            <string>Ctrl+Shift+S</string>
         </property>
     </action>
     <action>
@@ -226,7 +256,7 @@
             <string>E&amp;xit</string>
         </property>
         <property name="accel">
-            <string></string>
+            <string>Ctrl+Q</string>
         </property>
     </action>
     <action>
@@ -453,6 +483,9 @@
         <property name="menuText">
             <string>Acyclic</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is acyclic</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -463,6 +496,9 @@
         </property>
         <property name="menuText">
             <string>Biconnected</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is biconnected</string>
         </property>
     </action>
     <action>
@@ -475,6 +511,9 @@
         <property name="menuText">
             <string>Triconnected</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is triconnected</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -484,7 +523,10 @@
             <string>Planarity</string>
         </property>
         <property name="menuText">
-            <string>Planarity</string>
+            <string>Planar</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is planar</string>
         </property>
     </action>
     <action>
@@ -497,6 +539,9 @@
         <property name="menuText">
             <string>Simple</string>
         </property>
+        <property name="toolTip">
+            <string>Checks is the current graph is simple</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -507,6 +552,9 @@
         </property>
         <property name="menuText">
             <string>Directed Tree</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks if the current graph is a directed tree</string>
         </property>
     </action>
     <action>
@@ -533,6 +581,9 @@
         <property name="menuText">
             <string>Make acyclic</string>
         </property>
+        <property name="toolTip">
+            <string>Makes the current graph acyclic</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -547,6 +598,9 @@
         <property name="menuText">
             <string>Make simple</string>
         </property>
+        <property name="toolTip">
+            <string>Makes the current graph simple</string>
+        </property>
     </action>
     <action>
         <property name="name">
@@ -558,19 +612,8 @@
         <property name="menuText">
             <string>Make biconnected</string>
         </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>triangulate</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="text">
-            <string>Triangulate</string>
-        </property>
-        <property name="menuText">
-            <string>Triangulate</string>
+        <property name="toolTip">
+            <string>Makes the current graph biconnected</string>
         </property>
     </action>
     <action>
@@ -582,6 +625,9 @@
         </property>
         <property name="menuText">
             <string>Make connected</string>
+        </property>
+        <property name="toolTip">
+            <string>Makes the current graph connected</string>
         </property>
     </action>
     <action>
@@ -596,6 +642,341 @@
         </property>
         <property name="menuText">
             <string>Connected</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Reverse_selected_edgesAction</cstring>
+        </property>
+        <property name="text">
+            <string>Reverse selected edges</string>
+        </property>
+        <property name="menuText">
+            <string>Reverse selected edges</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDeselect_allAction</cstring>
+        </property>
+        <property name="text">
+            <string>Deselect All</string>
+        </property>
+        <property name="menuText">
+            <string>Deselect All</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+A</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editReverse_selectionAction</cstring>
+        </property>
+        <property name="text">
+            <string>Invert selection</string>
+        </property>
+        <property name="menuText">
+            <string>Invert selection</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+I</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editAction</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="menuText">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDelete_selectionAction</cstring>
+        </property>
+        <property name="text">
+            <string>Delete selection</string>
+        </property>
+        <property name="menuText">
+            <string>Delete selection</string>
+        </property>
+        <property name="accel">
+            <string>Del</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCreate_subgraphAction</cstring>
+        </property>
+        <property name="text">
+            <string>Create subgraph</string>
+        </property>
+        <property name="menuText">
+            <string>Create subgraph</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+G</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCreate_groupAction</cstring>
+        </property>
+        <property name="text">
+            <string>Create group</string>
+        </property>
+        <property name="menuText">
+            <string>Create group</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+G</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editSelect_AllAction</cstring>
+        </property>
+        <property name="text">
+            <string>Select All</string>
+        </property>
+        <property name="menuText">
+            <string>Select All</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+A</string>
+        </property>
+    </action>
+    <actiongroup>
+        <property name="name">
+            <cstring>mouseActionGroup</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="usesDropDown">
+            <bool>false</bool>
+        </property>
+        <action>
+            <property name="name">
+                <cstring>addEdgeAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image13</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Add edges</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>addNodeAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image14</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Add nodes</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>deleteAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image15</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Delete nodes or edges</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>zoomAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image16</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Zoom on rectangle</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>navigateAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="on">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image17</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Navigate in graph</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>moveSelectionAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image18</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Move/Reshape selection</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>selectionAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image19</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Select nodes/edges in a rectangle</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>magicSelectionAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image20</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Selection of reachable elements with equal value</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>selectAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image21</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Get information on nodes/edges</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>editEdgeBendAction</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>image22</iconset>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="toolTip">
+                <string>Edit edge bends</string>
+            </property>
+        </action>
+    </actiongroup>
+    <action>
+        <property name="name">
+            <cstring>tooltips</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Tooltips</string>
+        </property>
+        <property name="menuText">
+            <string>Tooltips</string>
+        </property>
+        <property name="toolTip">
+            <string>Enable/disable the display of tooltips on graph nodes or edges</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>is_free_tree</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+        <property name="menuText">
+            <string>Free Tree</string>
+        </property>
+        <property name="toolTip">
+            <string>Checks if the current graph is a free tree</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>make_directed</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+        <property name="menuText">
+            <string>Make directed</string>
+        </property>
+        <property name="toolTip">
+            <string>Tranforms the current graph into a directed tree</string>
         </property>
     </action>
 </actions>
@@ -638,6 +1019,36 @@
     </image>
     <image name="image12">
         <data format="PNG" length="813">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002f449444154388dcd95b16b1c4714c67f7ba878072a6641c52ea4b885b838438abbca27707122297ca92c7023e34aff496aab7665d23985412e42e4222005124bddad205cc660c31ce860a710ec831cec2b0e36851d2576224b1015a91edf14331f3fe67d5f329bcec000013343446e4477d41404d41411e1a674329bce2e5ed2a86d380bf885879550af94623d23fd2c65d01f2048725de7c9abe3573871f8b96f7d19a0d7657334a616239514ff7aca6f4725e90a26e309ac933871a8299f9ac96c3a23cc437bf0fd01b7bf1c32d9d905a0a121fe6ec89a512d6bcaef0eb04564e7feceb59c77a2c6b62c4b868f268cee6f5335354d05d177716f53c24f869d2bf95743c8320e4f0eafc5b8539fd5d04b998cbf8615e49a125ed7340402819c023b2a108362d4272e941043ebc48181138799f1b1ee940bcfe6784c45832d617a1ad0cc135d40255011c810aa79857329cd06586557fe8e8eac04b79e02865f0b70a7c1441013b00c2705a57a2413546bf28d1c1ffda54effd41d354557465557b815448d0886cd1dd9f96dbcff01f922a066c81274d590925ecdd889506b4d972e510d8750694d468eff750a034337de9fafbdbbbc91e652a7178c655dd04545a5150254b102e9e2b5a49b29d1145b0ad122b2841003c35bc3ab190ffb43fccf2788099506ba2268acc929a8e70d18344b457084334f5f72dcbabb9ab13849faaee0f0e53e268e4a15b706657388ba08185a43a802761ac83fcf497b297eee5b56b49f60ec280605c5d251bf382247b0a551141952408623b71af74bc5e69d4d468351323d9d72f2e3097b4ff630b5f6df9c5f6445d4d8863270fc768a6c7441841447751e90156c8db7e8f7fac9fb2c689f3d7fc6fe8b7d9c73ec3ed8a51814642e4b3ec88abfefba99b53e785882ad19bdbc47911520241f6743e9cb76ffdb7dfcc2b37d6f9bc1dd01fd5e3fc1f8cbf1556975d98c1adbe397c73c7dfe943ccb79f8e821e3d138f9208fff4b738437a1dd7bb247755e31b93779b77937d11cf9ad3c79fccd63b6ee6ea1aaff64fcbfefbc3f004cfca890af0c20980000000049454e44ae426082</data>
+    </image>
+    <image name="image13">
+        <data format="PNG" length="357">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000012c49444154388dbd93314b033118869fbba647ef0615c445844ec2890e4510840ec5ae76ed24b84a870efe09577f43057f4441872a85fe00876ed2dbb45089508a434997f62a479adc1de20319f2e5cd9b2fc9f7c11fe3e4dd580f6bea7026017805b60e8e19f41f1d6113e8ccda174dd5f2be21fa8428e26c3a65e4f90c006113e8d8f17d8e764b309940a1c010182dd7844db011a5d60390bf0d4d021d43779bbb8f31b87bb0efd12d06bcbc3d39b0fc9466a3ad2a3f639012a4a45b0c989f5e02d07fb8d5be63f5fa5e99d663d14aa89bdbe200aee166f1e9c9434c99190d571b03e1530f6beaa65c5127bd0e5fbd0ee7d52b6d8642174c12be3fd32a975295552ac32c6565bd724ccab24a95a1a9ee92c4c12cbd6c22572f5b0d73f5f206d69f92a197ad196679f47f67018ca6ae9f317b831f0000000049454e44ae426082</data>
+    </image>
+    <image name="image14">
+        <data format="PNG" length="293">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000ec49444154388de594310a023110459f626167a3a508622762ab8d0710d28b6710b1f216b61ec10be400769ec003085662b7bbe5e25818259b8d9155bbfd30ece4c33cfe40b2503a557c66136418183a029737ac9aed28a5446b4d175806801b031c032d600fc46ec206c83400b175003ac016e8038347ea6cc236b05bad204d218a208e4d4510278fdef8f3db8d9981b9aae61c11ab7f9664fd80f2c00c58f2de07b03fa13bf4b784be9485816e1ab1be5fad9c8163017e59f9b5a9811458dd0314abccd9be3e8e16c029087467c467c21a180157a548ac17f76aea203ddf0e1e9d81895268adbd3f9792e90ed89068fc076f740e0000000049454e44ae426082</data>
+    </image>
+    <image name="image15">
+        <data format="PNG" length="362">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000013149444154388ded93b18bc23018c59f22e2dcc5c1dda5e36dfe01b738fb4764cfdebfe566a92024507470912c45b2e874c36d07158c48a4229c7c37dcd533d7d62aaebe31213fdef7bd17e02900586f0ff4c8bd23a51471ce293169e1a3c4a4c43927a55435d418439ee71100628cd17f27ebed81186304803ccf2363cc75e878b622210401384333a78949cf30002484a0f16c55ed723459e4a05fa7530e369a2caa61afeced0500c22876a0beef3bb0308a6f0f25d374be74a0196c3a5f5e85d5cb2efc6e07524ae74c4a09bfdbb9db1c92cdded95910046e509bfded235f5603bf63be7f7ce682baa9dc45d518ca9f020fa52aadd4a59c1db69a75586b010042081c1b6d0cfabd1a000cfabddab1d18610020060ad45ab591ac19f763625ad756935c22826ad35ed6cf1d77cea717d03dc78fca1d0ca823b0000000049454e44ae426082</data>
+    </image>
+    <image name="image16">
+        <data format="PNG" length="724">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000029b49444154388dadd44d48d3711cc7f1f7ffef1efe66cbd49c64ae70963d6196a3a22288ea10158125f480594a8b121112f2dca17ba343e4a1c22e1d3c847810bb649d7ac0ca32b4959a5be53637da967bf261df0e913dd116b3cff9c78befeff7fd7e7ff08f396ab7cbf2ca7d02088a2245abb6495d5393fc7e4e970e3a73e182dcbe7e03bf2fce8143fbd18ed5a066e989c762bc7cd28bce982375e7eddc74381400251da8d74c72fcdc4536566e607dd9322cc5661455cfd32137cef75ec6de0e70e7da65661251256d85ab77d64971de2cb6aa4decdeba9e32cb524451998c4db3795d29e1e80c3a7d15bb0e9ee043202943bd37153515181c77b276d336d6584bb05a8a99e11be6fb3c89d3ed271c89b330db40e5f6bd4c8cf4019012f4be7b84c1a8b1ce5a8c4ea723129b622214c1ed0be1744f2002d99a81bcdcc5045cfde94180a9448270348e3f14c51f8ce0f204191cf3313b9b24994c62ca36a0283f9a9d12cc2d5a493432c9c33e27e3fe202eef675e8f7a989e9e0111f24c1aa61c233e7f80821595409aa6142caf60e8f9237216e5110c47995535445131e8b2589463c4ba2c9f81779f78f5f83e05960a0263fda92b1c797a5779dcdbc58791378c8eb9201142531298730d2cc9d518fde8e7c5b33eee77b6b3a32a1f80acbf61f69616f17e597029ec1d6678b01f9dc14896219bc4d4346e4f8051978707f7bae8ba7d85ea93b5dc696b4b39d8a2d7eb515515bda988c2521b53b130937e1721cfdbb9f72db4dad8b9b9885b57affe7d41cacbcba5a7a7471c0e8798cd66b16e39f2c7befe734c26937476764a7373f3b74f00c4ded27236534fbabbbb7fc18ed4d7675c9d747474486b6beb1c76f8f4e9ccaf5adbd8289aa6494949890052d3d09039f63dd5a74e092047edf6f9633f67cff976db7f05e79baf979615d18af3d67a0000000049454e44ae426082</data>
+    </image>
+    <image name="image17">
+        <data format="PNG" length="291">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000ea49444154388d63601800f01f8dc60b98081976fffa59149a90c1840cc400840c26d9402c06936ea0bfaf270a8d0f1065200b330b0a8dcf606c0662844f4f7b030a0d33181b6044370c1a360c8a9ac60cfebe9e0c13ba5a703b1daa0ed91c0c17be7cf59a81810112e8f85c42ac0b19181818fe9f38b883415c4c94280308ba90818181d1c2de83e1e6addb24bb0e97810c0c0c0c0ccf5fbc26ca80e0005f54d7e051fb7fcfd6350cca4a8a38151c38748c21313d17c50c7c061234143dfc181808276cc6e9b317e2741d3607117221030352da24e43a0606060662121ae393a7cfb1952cc4386610020077ef492769917c7a0000000049454e44ae426082</data>
+    </image>
+    <image name="image18">
+        <data format="PNG" length="489">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000001b049444154388dad94318b134114c77f231b37fb252c22683a0f246c21889c7b4d209d04d3d8257247aeb1085aa5b5ba14e709ba5fc042b04db16b1b5610b4f2c44efc0c373b97856791ecba43925d0feec114f39f3fbf796fdf9b856b0e059024895c07ccf77de5e49b0f9f7fef349ebc7cc28bd71f2b614ff76f01e094c52f3ffe6c18e3f018a514a9c9783c3cad05dea8ba350ac7dcbd739be9744ad37588de8f2bb3ac0446e118cf6dd0eff799cfe70078cd0651580d75761d04c33768930182e736d0e965a15f29c37206c1f094f520acf6a3b3adbe9dc0bccc721438a52cdd732bca4f92445293092093c944b4598a3699a4eb05acb565a175bbdd427ff06c26d62c8b8800329bcda4d7eb0950bb068381b4db6d012435990d2c6708884e2f576b9dd5362d080201e422355686c5377c75f2096d96c525c1e86ca3a3652d8a22746a3818bdb53c565356a3b2b4baa9f2b6949af2cf67c33680b9398f383cb6ceec91da3e8f952fa5e93a1c1d8ee8743aec3f7a583d2a75c0bcac388e69b55a2c160b746a6a5fcacea79743cf7ffec26bdee4421b0e9ebfab84c17ffe60efeddde7fbb7afb530dff755ade9aaf117ede7017fd166f7090000000049454e44ae426082</data>
+    </image>
+    <image name="image19">
+        <data format="PNG" length="194">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000008949444154388d6360187180114aff67606060f8ffff3f449011224c2a9f818101cefa5fd8be9ae12f428224f0f9d32786f96d490c0c0c0c8c2c309b8a3ad6309cbdf6982c03fffefacef0ffff7f064646460626b24cc00398181850c2806c003383362e84c516250066c66818920f681f869f3e7d66f8fbeb3b79f8f74f781852bd70a0b68f8700000095306a05387185530000000049454e44ae426082</data>
+    </image>
+    <image name="image20">
+        <data format="PNG" length="595">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000021a49444154388dd5d23d4c536114c6f1ff7bfbb6de0285044ab051c3808932397477d138b8a126184d1c1848747161a22361234417874eba68a8316d62621d19544a4c6f34d49ad036312ed434a54249bfeeed3d0ea021825284c5673cc32fe7e4398a43662d9711e5d45062a3105c34e2f1133a774101a8c360c5d58f62381b60d440db2805627b10c704ddc7d0f9b0ea185c2b7c16a35946e9ef78cc0a1e5f09a445db19c4ad07715bbd882f88ee783da781520d0c730baf59c067fa50b834eb595aee28caf122ed3a46a79e216d500ecaa8468526763d806bf7a30c014a082d94eb7406e65657270540606bb336b9f46e91ae1e8def844b3e9fa1bad9c06ed988703098cbe5c2e572392a4ab351a971e3ea7dae5cbe85c8175c29f0fa558af59297664d7095fe3bb883a58bc5a2ac57eb5cbc748d278f9ff166b18221616e8f3f6064789c66b51b57fc69b4ffcfa5ecc63e65b35c1f1b23fd76919789a7c416a2048270e7e63d067bced2dd750a6f6028acdb15b52fb81bcbe7f3442211ac749a17cf1778f4304a9f099377239c3e334c6ff02481c1107edd54aeeedbfbd8bf635353535896453c1e67666606af820fef97547fc0cfd76f15191808d2ad1d8536098d8ceec552a9148944426667670510cbb2647a7a5ab63b46322b2b07f5b8179b9b9bdb1fcb64fe770c607979f9f830806432c9fcfcfcf1603f41402626268e8ec1f6c9808442a15fd8ceecdf52281488c56247df6c273f00be4878faa7759b100000000049454e44ae426082</data>
+    </image>
+    <image name="image21">
+        <data format="PNG" length="301">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000f449444154388dad93310e824010453fc6d0714d2bcfa1b1b1066e61e509ac6c4c2c3496da61a5091ac5e5db0059969d459049b6d9ccbc79c32cc0c0e1752d20c91ac0f39a0c33498a7bfa2600fabe4f002c4a9bb52cc205cb735610f3e8b5234d5d349dce56137d309270f62f40f208961ca96664164aa64992d4cc6cbbb076ef626acb6b18b699ea57249dcfa675837abe34816828996659c620089cafc269589ec7f34533d7061cbbec48e2a3729cce376c0f4969ec9520ebf713ba1200c330fce997148165e7288a2ae8225e77879a5bd32de7cbb81fd0bcd32d37fb6bbfd12d4d0880bbe3e57f200028a598a6e930b0bef10560531a01acb34b4e0000000049454e44ae426082</data>
+    </image>
+    <image name="image22">
+        <data format="PNG" length="382">89504e470d0a1a0a0000000d494844520000001200000012080600000056ce8e570000014549444154388d9d93bf4ac35014c67f27694b528a16c50ee22a185c44706a4174d5b56bc78243217d09d776ce58f0210a4e9a800fe0d0b5ddb4508850ac835c1793a6699236fde0c2bd97f3fd39078e00dc9e5dabd36f1f805760efe49c37ef49c88142e7a6a91e4a5f30f984c984abf99c71c9446ff554b4d035ecf02e8eac996855d3c4aad5b02a152c5de7600bf77acc04a0008052cb03f88037e84a8408b042aeb77a2a5a23cdfb8ebaf89982ef83ef332c96f9bdbc136fd0cd4a140abb862de2081a200927284e8437e8e21a7630374540ca70259e2cf8770d3b6c551c112dcb359e2c4d3c335100d55eceb8b1e88722aaad682cfaea5f383d5156ca24e4128aa2b1e8afbc0b9b08e26cb7293b275a33dc8594b4e41b5b8b236dc9730b554d13ebd080d90c749d113066d719252c79ee44236d9fc78f296847705c62582cf3f2fe2c7fa0977c054fd7d5cf0000000049454e44ae426082</data>
     </image>
 </images>
 <connections>
@@ -744,12 +1155,6 @@
         <slot>makeBiconnected()</slot>
     </connection>
     <connection>
-        <sender>triangulate</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeTriangulated()</slot>
-    </connection>
-    <connection>
         <sender>is_biconnected</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
@@ -797,8 +1202,123 @@
         <receiver>TulipData</receiver>
         <slot>isConnected()</slot>
     </connection>
+    <connection>
+        <sender>Reverse_selected_edgesAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>reverseSelectedEdgeDirection()</slot>
+    </connection>
+    <connection>
+        <sender>editCreate_groupAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>group()</slot>
+    </connection>
+    <connection>
+        <sender>editCreate_subgraphAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>newSubgraph()</slot>
+    </connection>
+    <connection>
+        <sender>editDelete_selectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>delSelection()</slot>
+    </connection>
+    <connection>
+        <sender>editReverse_selectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>reverseSelection()</slot>
+    </connection>
+    <connection>
+        <sender>editSelect_AllAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>selectAll()</slot>
+    </connection>
+    <connection>
+        <sender>editDeselect_allAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>deselectAll()</slot>
+    </connection>
+    <connection>
+        <sender>addEdgeAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setAddEdge()</slot>
+    </connection>
+    <connection>
+        <sender>addNodeAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setAddNode()</slot>
+    </connection>
+    <connection>
+        <sender>deleteAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setDelete()</slot>
+    </connection>
+    <connection>
+        <sender>zoomAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setZoomBox()</slot>
+    </connection>
+    <connection>
+        <sender>navigateAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setGraphNavigate()</slot>
+    </connection>
+    <connection>
+        <sender>moveSelectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setMoveSelection()</slot>
+    </connection>
+    <connection>
+        <sender>magicSelectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setMagicSelection()</slot>
+    </connection>
+    <connection>
+        <sender>selectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setSelection()</slot>
+    </connection>
+    <connection>
+        <sender>selectAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setSelect()</slot>
+    </connection>
+    <connection>
+        <sender>is_free_tree</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>isFreeTree()</slot>
+    </connection>
+    <connection>
+        <sender>make_directed</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>makeDirected()</slot>
+    </connection>
+    <connection>
+        <sender>editEdgeBendAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>setEditEdgeBend()</slot>
+    </connection>
 </connections>
 <slots>
+    <slot>setEditEdgeBend()</slot>
     <slot>fileNew()</slot>
     <slot>fileOpen()</slot>
     <slot>fileSave()</slot>
@@ -825,6 +1345,24 @@
     <slot>isAcyclic()</slot>
     <slot>makeConnected()</slot>
     <slot>isConnected()</slot>
+    <slot>reverseSelectedEdgeDirection()</slot>
+    <slot>reverseSelection()</slot>
+    <slot>delSelection()</slot>
+    <slot>newSubgraph()</slot>
+    <slot>group()</slot>
+    <slot>selectAll()</slot>
+    <slot>deselectAll()</slot>
+    <slot>setAddEdge()</slot>
+    <slot>setAddNode()</slot>
+    <slot>setDelete()</slot>
+    <slot>setZoomBox()</slot>
+    <slot>setGraphNavigate()</slot>
+    <slot>setMoveSelection()</slot>
+    <slot>setMagicSelection()</slot>
+    <slot>setSelect()</slot>
+    <slot>setSelection()</slot>
+    <slot>isFreeTree()</slot>
+    <slot>makeDirected()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

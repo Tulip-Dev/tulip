@@ -3,9 +3,10 @@
 #include <iomanip>
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/PropertyProxy.h>
+#include <tulip/AbstractProperty.h>
 
 using namespace std;
+using namespace tlp;
 
 void printFloat(ostream &os, const string &name , float f){
   float a=floor(f);
@@ -32,11 +33,18 @@ void printSize(ostream &os,const Size &v){
 
 /** \addtogroup export */
 /*@{*/
-struct GML:public ExportModule {
-  GML(ClusterContext context):ExportModule(context)
+/// Export plugin for GML format.
+/**
+ * This plugin records a Tulip graph structure using the GML File format.
+ * This format is the file format used by Graphlet.
+ * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
+ */
+class GMLExport:public ExportModule {
+public:
+  GMLExport(AlgorithmContext context):ExportModule(context)
   {}
 
-  ~GML(){}
+  ~GMLExport(){}
 
   string convert(string tmp) {
     string newStr;
@@ -49,17 +57,17 @@ struct GML:public ExportModule {
     return newStr;
   }
 
-  bool exportGraph(ostream &os,SuperGraph *currentGraph) {
+  bool exportGraph(ostream &os,Graph *currentGraph) {
 
     os << "graph [" << endl;
     os << "directed 1" << endl;
     os << "version 2" << endl;
 
-    LayoutProxy *layout = currentGraph->getProperty<LayoutProxy>("viewLayout");
-    StringProxy *label = currentGraph->getProperty<StringProxy>("viewLabel");
-    //    IntProxy *shape =getProperty<IntProxy>(currentGraph->getPropertyManager(),"viewShape");
-    ColorsProxy *colors = currentGraph->getProperty<ColorsProxy>("viewColor");    
-    SizesProxy  *sizes = currentGraph->getProperty<SizesProxy>("viewSize");  
+    LayoutProperty *layout = currentGraph->getProperty<LayoutProperty>("viewLayout");
+    StringProperty *label = currentGraph->getProperty<StringProperty>("viewLabel");
+    //    IntegerProperty *shape =getProperty<IntegerProperty>(currentGraph->getPropertyManager(),"viewShape");
+    ColorProperty *colors = currentGraph->getProperty<ColorProperty>("viewColor");    
+    SizeProperty  *sizes = currentGraph->getProperty<SizeProperty>("viewSize");  
     //Save Nodes
     Iterator<node> *itN=currentGraph->getNodes();
     if (itN->hasNext())  {
@@ -95,8 +103,8 @@ struct GML:public ExportModule {
       {
 	edge ite=itE->next();
 	os << "edge [" << endl;
-	os << "source " << superGraph->source(ite).id << endl; 
-	os << "target " << superGraph->target(ite).id << endl;
+	os << "source " << graph->source(ite).id << endl; 
+	os << "target " << graph->target(ite).id << endl;
 	os << "id " << ite.id << endl;
 	os << "label \"" << label->getEdgeValue(ite) << "\"" << endl;
 	os << "graphics [" << endl;
@@ -109,7 +117,7 @@ struct GML:public ExportModule {
 	lcoord=layout->getEdgeValue(ite);
 	if (!lcoord.empty())
 	  {
-	    node itn=superGraph->source(ite);
+	    node itn=graph->source(ite);
 	    printPoint(os,layout->getNodeValue(itn));
 	  }
 	for (it=lcoord.begin();it!=lcoord.end();++it)
@@ -118,7 +126,7 @@ struct GML:public ExportModule {
 	  }
 	if (!lcoord.empty())
 	  {
-	    node itn=superGraph->target(ite);
+	    node itn=graph->target(ite);
 	    printPoint(os,layout->getNodeValue(itn));
 	  }
 	os << "]" << endl;
@@ -131,4 +139,4 @@ struct GML:public ExportModule {
   }
 };
 /*@}*/
-EXPORTPLUGIN(GML,"GML","Auber David","31/07/2001","0","0","1")
+EXPORTPLUGIN(GMLExport,"GML","Auber David","31/07/2001","GML Export plugin","1.0")

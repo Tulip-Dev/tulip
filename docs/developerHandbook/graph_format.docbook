@@ -1,12 +1,12 @@
 <chapter id="graph-format"><title>Tulip graph format</title>
     <sect1 id="nodes-def"><title>Nodes</title>
-        <para>The nodes are stored with a list of index. The index must be integers (Greater than 0).</para>
+        <para>The nodes are stored with a list of indices. The indices must be non negative integers.</para>
         <para>Syntax<programlisting>(nodes id_node1 id_node2 ...)</programlisting>
-           Sample :<programlisting>(nodes 1 2 3 4 5 )</programlisting>
+           Sample :<programlisting>(nodes 0 1 2 3 4 5 )</programlisting>
         </para>
     </sect1>
     <sect1 id="edges-def"><title>Edges</title>
-        <para>An edge is defined by providing three integers (greater than 0). The first is the id of the edge, the second is the id of source node of the edge and the third is the id of target node of the edge.</para>
+        <para>An edge is defined by providing three non negative integers. The first is the id of the edge, the second is the id of source node of the edge and the third is the id of target node of the edge.</para>
         <para>Syntax<programlisting>(edge id id_source id_target)</programlisting>
         Sample<programlisting>(edge 2 2 1)</programlisting>It defines one edge with the node that has the id 2 as source and the node that has the id 1 as target.
         </para>
@@ -62,8 +62,8 @@
             <listitem><para>color : This type enables to store the color of elements. The color is defined with a sequence of four integer from 0 to 255. <code>(red,green,blue,alpha)</code></para></listitem>
             <listitem><para>string : This enables to store text on elements.</para></listitem>
             <listitem><para>metric : This enables to store real on elements.</para></listitem>
-            <listitem><para>bool : This type enabes to store boolean on elements.</para></listitem>
-            <listitem><para>int : This type enabes to store integers on elements.</para></listitem>  
+            <listitem><para>bool : This type enables to store boolean on elements.</para></listitem>
+            <listitem><para>int : This type enables to store integers on elements.</para></listitem>  
         </itemizedlist>
         </para>
         </sect2>
@@ -153,5 +153,49 @@
             </varlistentry>
         </variablelist>
         </para>
+    </sect1>
+    <sect1 id="glscene-def"><title>GlScene</title>
+        <para>Scene structure are stored with a xml structure.</para>
+	<para>First, scene's data (viewport and background color) are store in data element</para>
+	<para>Syntax<programlisting>
+&lt;data&gt;
+  &lt;viewport&gt;(x,y,width,height)&lt;/viewport&gt;
+  &lt;background&gt;(red,green,blue,alpha)&lt;/background&gt;
+&lt;/data&gt;
+	</programlisting></para>
+	<para>After, scene children are store in children element</para>
+	<para>GlLayer and GlComposite have two elements : data and children</para>
+	<para>All others glEntities have one element : data</para>
+	<para>The scheme of glScene xml are (for example) : </para>
+	<programlisting>
+&lt;scene&gt;
+  &lt;data&gt;
+    ...
+  &lt;/data&gt;
+  &lt;children&gt;
+    &lt;LayerName1 type="GlLayer"&gt;
+      &lt;data&gt;
+	...
+      &lt;/data&gt;
+      &lt;children&gt;
+	...
+      &lt;/children&gt;
+    &lt;/LayerName&gt;
+    &lt;LayerName2 type="GlLayer"&gt;
+      &lt;data&gt;
+	...
+      &lt;/data&gt;
+      &lt;children&gt;
+	&lt;EntityName type="EntityType"&gt;
+	  &lt;data&gt;
+	    ...
+	  &lt;/data&gt;
+	&lt;/EntityName3&gt;
+      &lt;/children&gt;
+    &lt;/LayerName2&gt;
+  &lt;/children&gt;
+&lt;/scene&gt;
+	</programlisting>	
+	<para>For glEntities data see .cpp file</para>
     </sect1>
 </chapter>

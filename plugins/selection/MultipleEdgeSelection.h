@@ -6,7 +6,6 @@
 /** \addtogroup selection */
 /*@{*/
 
-/// This selection plugins enables to find the multiple-edges and parallel-edges in a graph.
 /**
  * This selection plugins enables to find the multiple-edges and parallel-edges in a graph.
  * Let e1, e2 two edges, e1 and e2 are parallel edges if source(e1)=source(e2) and 
@@ -16,9 +15,9 @@
  *  \author David Auber, LaBRI University Bordeaux I France: 
  *   auber@tulip-software.org
  */
-class MultipleEdgeSelection:public Selection { 
+class MultipleEdgeSelection:public tlp::BooleanAlgorithm { 
 public:
-  MultipleEdgeSelection(const PropertyContext &);
+  MultipleEdgeSelection(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

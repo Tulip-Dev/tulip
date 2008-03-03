@@ -17,7 +17,7 @@ public slots:
     void setProgress(int);
     ///Change the total step of the progress bar.
     void setTotalSteps(int);
-    void initTulip();
+    void initTulip(std::string& errors);
 };
 
 #endif // APPSTARTUP_H

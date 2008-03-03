@@ -1,87 +1,97 @@
-#include <cmath>
-#include <tulip/TreeTest.h>
+#include <tulip/GraphTools.h>
 #include "TreeLeaf.h"
+#include "DatasetTools.h"
+#include "Orientation.h"
 
 
-LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","0","1","Tree");
+LAYOUTPLUGINOFGROUP(TreeLeaf,"Tree Leaf","David Auber","01/12/1999","ok","1.0","Tree");
 
 using namespace std;
+using namespace tlp;
 
-int TreeLeaf::dfsPlacement(node n,int &curPos,int depth) {
-  int resultMin=0;
-  int resultMax=0;
-  int result=0;
-  if (superGraph->outdeg(n)==0) {
-    curPos+=2;
-    Coord tmpC;
-    tmpC.set(curPos,depth,0);
-    layoutProxy->setNodeValue(n,tmpC);
-    return curPos;
+
+void TreeLeaf::computeLevelHeights(Graph *tree, node n, unsigned int depth,
+				   OrientableSizeProxy *oriSize) {
+  if (levelHeights.size() == depth)
+    levelHeights.push_back(0);
+  float nodeHeight = oriSize->getNodeValue(n).getH();
+  if (nodeHeight > levelHeights[depth])
+    levelHeights[depth] = nodeHeight;
+  node on;
+  forEach(on, tree->getOutNodes(n))
+    computeLevelHeights(tree, on, depth + 1, oriSize);
+}
+  
+float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int depth,
+			     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
+  float minX = 0;
+  float maxX = 0;
+  float nodeWidth = oriSize->getNodeValue(n).getW();
+  if (tree->outdeg(n) == 0) {
+    oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x + nodeWidth/2, y, 0));
+    return x + nodeWidth;
   }
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=tree->getOutNodes(n);
   if (itN->hasNext()) {
-    node itn=itN->next();
-    result=dfsPlacement(itn,curPos,depth+2);
-    resultMin=result;
-    resultMax=result;
+    node itn = itN->next();
+    minX = x;
+    maxX = x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+    if (minX + nodeWidth > maxX)
+      maxX = minX + nodeWidth;
   }
   for (;itN->hasNext();) {
-    node itn=itN->next();
-    result=dfsPlacement(itn,curPos,depth+2);
-    if (result>resultMax)
-      resultMax=result;
-    if (result<resultMin)
-      resultMin=result;
+    node itn = itN->next();
+    x += nodeSpacing;
+    x = dfsPlacement(tree, itn, x, y + spacing, depth + 1, oriLayout, oriSize);
+    if (x > maxX)
+      maxX = x;
+    if (x < minX)
+      minX = x;
   }
   delete itN;
-  result=(resultMin+resultMax)/2;
-  layoutProxy->setNodeValue(n,Coord(result,depth,0));
-  return result;
+  x = (minX + maxX)/2;
+  oriLayout->setNodeValue(n, OrientableCoord(oriLayout, x, y, 0));
+  return maxX;
 }
 
-TreeLeaf::TreeLeaf(const PropertyContext &context):Layout(context){}
+TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){
+  addNodeSizePropertyParameter(this);
+  addOrientationParameters(this);
+  addSpacingParameters(this);
+}
 
 TreeLeaf::~TreeLeaf() {}
 
 bool TreeLeaf::run() {
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-  Iterator<node> *itN=superGraph->getNodes();
-  node tmpNode;
-  for (;itN->hasNext();) {
-    node itn=itN->next();
-    if (superGraph->indeg(itn)==0) {
-      tmpNode=itn;
-      break;
-    }
-  } delete itN;
-  int x=0;
-  dfsPlacement(tmpNode,x,0);
+  orientationType mask = getMask(dataSet);
+  OrientableLayout oriLayout(layoutResult, mask);
+  SizeProperty* size;
+  if (getNodeSizePropertyParameter(dataSet, size))
+    size = graph->getProperty<SizeProperty>("viewSize");
+  OrientableSizeProxy oriSize(size, mask);
+  getSpacingParameters(dataSet, nodeSpacing, spacing);
+
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  Graph *tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
+
+  node root;
+  if (!tlp::getSource(tree, root))
+    // graph is empty
+    return true;
+
+  computeLevelHeights(tree, root, 0, &oriSize);
+  // check if the specified layer spacing is greater
+  // than the max of the minimum layer spacing of the tree
+  for (unsigned int i = 0; i < levelHeights.size() - 1;  ++i) {
+    float minLayerSpacing = (levelHeights[i] + levelHeights[i + 1]) / 2;
+    if (minLayerSpacing + nodeSpacing > spacing)
+      spacing = minLayerSpacing + nodeSpacing;
+  }
+  dfsPlacement(tree, root, 0, 0, 0, &oriLayout, &oriSize);
+
+  TreeTest::cleanComputedTree(graph, tree);
   return true;
 }
-
-bool TreeLeaf::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
-    erreurMsg="";
-    return true;
-  }
-  else {
-    erreurMsg="The Graph must be a Tree";
-    return false;
-  }
-}
-
-void TreeLeaf::reset()
-{}
-
-
-
-
-
-
-
-
-
-
-
-

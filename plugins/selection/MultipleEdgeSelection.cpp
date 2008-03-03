@@ -9,22 +9,23 @@
 */
 #include <assert.h>
 #include "MultipleEdgeSelection.h"
-#include <tulip/SelectionProxy.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/SimpleTest.h>
 
-SELECTIONPLUGIN(MultipleEdgeSelection,"Multiple edge","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple Edge","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
-MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):Selection(context) {}
+MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
-  SimpleTest::simpleTest(superGraph, &multipleEdges);
-  selectionProxy->setAllNodeValue(false);
-  selectionProxy->setAllEdgeValue(false);
+  SimpleTest::simpleTest(graph, &multipleEdges);
+  booleanResult->setAllNodeValue(false);
+  booleanResult->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
   for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) 
-    selectionProxy->setEdgeValue(*it, true);
+    booleanResult->setEdgeValue(*it, true);
   return true;
 }

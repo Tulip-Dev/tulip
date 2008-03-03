@@ -1,3 +1,4 @@
+
 //=================================================================
 template <typename Obj,unsigned int SIZE>
 Obj tlp::Array<Obj,SIZE>::operator[](const unsigned int i) const {

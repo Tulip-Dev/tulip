@@ -5,10 +5,11 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
-class IdLabels:public String { 
+class IdLabels:public StringAlgorithm { 
 public:
-  IdLabels(const PropertyContext &context):String(context){}
+  IdLabels(const PropertyContext &context):StringAlgorithm(context){}
   ~IdLabels(){}
   string getNodeValue(const node n) {
     char tmp[255];
@@ -21,4 +22,4 @@ public:
     return string(tmp);
   }
 };
-STRINGPLUGIN(IdLabels,"IdLabels","Auber","04/05/2001","0","0","1");
+STRINGPLUGIN(IdLabels,"IdLabels","Auber","04/05/2001","","1.0");

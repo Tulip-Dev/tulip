@@ -1,12 +1,31 @@
 #include <tulip/Morphing.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ColorProperty.h>
 
-static bool 
-HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
+using namespace tlp;
+using namespace std;
+
+//====================================================
+static bool HaveSameValues( const vector<vector <Coord> > &v1,
+			    const vector<vector <Coord> > &v2 ) {
+  if (v1.size() != v2.size()) return false;
+  for (unsigned int i = 0; i < v1.size(); ++i) {
+    if (v1[i].size() != v2[i].size()) return false;
+    for (unsigned int j = 0; j < v1.size(); ++j) {
+      if ((v1[i][j] - v2[i][j]).norm() > 1e-6)
+	return false;
+    }//end for
+  }//end for
+  return true;
+}//end HaveSameValues
+
+//====================================================
+static bool HaveSameValues( Graph * inG, 
+			    PropertyInterface * inP0, 
+			    PropertyInterface * inP1 ) {
   assert( inP0 );
   assert( inP1 );
   assert( inG );
@@ -30,31 +49,29 @@ HaveSameValues( SuperGraph * inG, PProxy * inP0, PProxy * inP1 ) {
   } delete edgeIt;
   return true;
 }
-
+//====================================================
 GraphState::GraphState( GlGraphWidget * glgw ) {
   assert( glgw );
-  g = glgw->getSuperGraph();
-  layout = new LayoutProxy( g );
-  *layout = *( g->getProperty<LayoutProxy>("viewLayout") );
-  size = new SizesProxy( g );
-  *size = *( g->getProperty<SizesProxy>("viewSize") );
-  color = new ColorsProxy( g );
-  *color = *( g->getProperty<ColorsProxy>("viewColor") );
-  
-  camera = glgw->getCamera();
-  sceneT = glgw->getSceneTranslation();
-  sceneR = glgw->getSceneRotation();
+  g = glgw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  layout = new LayoutProperty( g );
+  *layout = *( g->getProperty<LayoutProperty>("viewLayout") );
+  size = new SizeProperty( g );
+  *size = *( g->getProperty<SizeProperty>("viewSize") );
+  color = new ColorProperty( g );
+  *color = *( g->getProperty<ColorProperty>("viewColor") );
+  camera = glgw->getScene()->getCamera();
 }
-
+//====================================================
 GraphState::~GraphState() {
   if( layout ) delete layout;
   if( size ) delete size;
   if( color ) delete color;
 }
-
-bool  
-GraphState::setupDiff( SuperGraph * inG, GraphState * inGS0, GraphState * inGS1 ) {
-  int remain = 3;
+//====================================================
+bool GraphState::setupDiff( Graph * inG, 
+			    GraphState * inGS0, 
+			    GraphState * inGS1 ) {
+  int remain = 4;
   if( HaveSameValues(inG,inGS0->layout,inGS1->layout) ) {
     delete inGS0->layout;
     delete inGS1->layout;
@@ -73,13 +90,21 @@ GraphState::setupDiff( SuperGraph * inG, GraphState * inGS0, GraphState * inGS1 
     inGS0->color = inGS1->color = 0;
     remain--;
   }
+  if ( HaveSameValues(inGS0->augPoints, inGS1->augPoints) ) {
+    inGS0->augPoints.clear();
+    inGS1->augPoints.clear();
+    remain--;
+  }
   return ( remain > 0 );
 }
-
+//====================================================
 void 
-GraphState::EdgeEnds( Coord & outC0, Coord & outC1, edge e ) {
+GraphState::EdgeEnds( Coord & outC0, 
+		      Coord & outC1, 
+		      edge e ) {
   node n0 = g->source(e);
   node n1 = g->target(e);
   outC0   = layout->getNodeValue( n0 );
   outC1   = layout->getNodeValue( n1 );
 }
+//====================================================

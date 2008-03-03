@@ -9,15 +9,16 @@
 */
 
 #include <assert.h>
-#include "LabelSelection.h"
-#include <tulip/SelectionProxy.h>
+#include "LabelBooleanProperty.h"
+#include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 #include <qinputdialog.h>
 #include <qstring.h>
 
-SELECTIONPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","0","1");
+BOOLEANPLUGIN(LabelSelection,"Label Selection","David Auber","20/01/2003","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
 
 
@@ -46,9 +47,9 @@ namespace
 
 		// searchLabels
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "StringProxy" ) \
+		HTML_HELP_DEF( "type", "String" ) \
 		HTML_HELP_BODY() \
-		"This parameter defines the StringProxy used as the node's label." \
+		"This parameter defines the String property used as the node's label." \
 		HTML_HELP_CLOSE(),
 	};
 
@@ -56,10 +57,10 @@ namespace
 
 
 
-LabelSelection::LabelSelection(const PropertyContext &context):Selection(context) {
+LabelSelection::LabelSelection(const PropertyContext &context):BooleanAlgorithm(context) {
   addParameter<vector<string> *> ("searchStrings",paramHelp[0]);
   addParameter<bool>("searchType",paramHelp[1],"false");
-  addParameter<StringProxy*>("searchLabel",paramHelp[2],"viewLabel");
+  addParameter<String*>("searchLabel",paramHelp[2],"viewLabel");
   searchStrings=0;
   stringProxy=0;
   searchType=false;
@@ -97,7 +98,7 @@ bool LabelSelection::check(string &errMsg) {
     dataSet->get("searchLabel",stringProxy);
   }
   if (stringProxy==0) {
-    stringProxy=superGraph->getProperty<StringProxy>("viewLabel");
+    stringProxy=graph->getProperty<StringProperty>("viewLabel");
   }
   if (searchStrings==0) {
     bool ok=true;

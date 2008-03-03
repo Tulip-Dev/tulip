@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <!DOCTYPE book SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY Intro_Install SYSTEM "intro_install.docbook">
-<!ENTITY Data_Structure SYSTEM "data_structure.docbook">
+<!ENTITY Tulip_Lib SYSTEM "tulip_lib.docbook">
 <!ENTITY Tulip_LibOgl SYSTEM "tulip_libogl.docbook">
 <!ENTITY Tulip_LibQt SYSTEM "tulip_libqt.docbook">
 <!ENTITY Plugins SYSTEM "plugins.docbook">
@@ -11,31 +11,13 @@
 ]>
 <book><title>Tulip Developer Handbook</title>
 &Intro_Install;
-&Data_Structure;
+&Tulip_Lib;
 &Tulip_LibOgl;
 &Tulip_LibQt;
 &Plugins;
 &Graph_Format;
 &Prog_Guides;
 &Doc_Guides;
-<!--<bibliography><title>Bibliographical References</title>
-    <biblioentry xreflabel="Kites75">
-  <authorgroup>
-    <author><firstname>Andrea</firstname><surname>Bahadur</surname></author>
-    <author><firstname>Mark</firstname><surname>Shwarek</surname></author>
-  </authorgroup>
-  <copyright><year>1974</year><year>1975</year>
-     <holder>Product Development International Holding N. V.</holder>
-     </copyright>
-  <isbn>0-88459-021-6</isbn>
-  <publisher>
-    <publishername>Plenary Publications International, Inc.</publishername>
-  </publisher>
-  <title>Kites</title>
-  <subtitle>Ancient Craft to Modern Sport</subtitle>
-  <pagenums>988-999</pagenums>
-    </biblioentry>
-</bibliography>-->
 </book>
 
 

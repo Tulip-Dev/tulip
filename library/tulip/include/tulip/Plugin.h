@@ -13,6 +13,8 @@
 #define TULIPPLUGIN_H
 #include <string>
 
+namespace tlp {
+
 /** Common interface for plug-ins.*/
 class Plugin {
 public:
@@ -21,7 +23,7 @@ public:
      this name must be unique, if two plug-ins have the same name
      only the latest loaded will be available*/
   virtual  std::string getName() const=0;
-  /* Return the group name of the plug-in,
+  /* Returns the group name of the plug-in,
      a string with subgroup names separated by ::
      ex: trees::planar trees */
   virtual std::string getGroup() const=0;
@@ -31,9 +33,19 @@ public:
   virtual  std::string getDate() const=0;
   /**Return free information about the plug-in*/  
   virtual  std::string getInfo() const=0;
-  /**Return the release number of the plug-in*/ 
+  /**Return the whole release number of the plug-in*/ 
   virtual  std::string getRelease() const=0;
-  /**Return the version number of the plug-in*/ 
-  virtual  std::string getVersion() const=0;
+  /**Return the major release number of the plug-in*/ 
+  virtual  std::string getMajor() const=0;
+  /**Return the minor release number of the plug-in*/ 
+  virtual  std::string getMinor() const=0;
+  /**Return the whole Tulip release number the plug-in is build with*/ 
+  virtual  std::string getTulipRelease() const=0;
+  /**Return the major Tulip release number the plug-in is build with*/ 
+  virtual  std::string getTulipMajor() const=0;
+  /**Return the major Tulip release number the plug-in is build with*/ 
+  virtual  std::string getTulipMinor() const=0;
 };
+
+}
 #endif

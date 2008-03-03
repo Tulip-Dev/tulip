@@ -1,12 +1,12 @@
-#include <tulip/ForEach.h>
 #include "StrengthMetric.h"
 
-METRICPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","1.0","Graph");
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
-StrengthMetric::StrengthMetric(const PropertyContext &context):Metric(context) {}
+StrengthMetric::StrengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
@@ -21,7 +21,7 @@ double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
     A = &V; B=&U;
   }
   for (itU=A->begin();itU!=A->end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    Iterator<node> *itN=graph->getInOutNodes(*itU);
     while (itN->hasNext()) {
       node itn=itN->next();
       if (B->find(itn)!=B->end()) result+=1.0;
@@ -34,7 +34,7 @@ double StrengthMetric::e(const hash_set<node> &U) {
   hash_set<node>::const_iterator itU;
   double result=0.0;
   for (itU=U.begin();itU!=U.end();++itU) {
-    Iterator<node> *itN=superGraph->getInOutNodes(*itU);
+    Iterator<node> *itN=graph->getInOutNodes(*itU);
     while (itN->hasNext()) {
       node itn=itN->next();
       if (U.find(itn)!=U.end()) result+=1.0;
@@ -54,20 +54,20 @@ double StrengthMetric::s(const hash_set<node> &U) {
 }
 //=============================================================
 double StrengthMetric::getEdgeValue(const edge ee ) {
-  node u=superGraph->source(ee);
-  node v=superGraph->target(ee);
+  node u=graph->source(ee);
+  node v=graph->target(ee);
   hash_set<node> Nu,Nv,Wuv;
 
   //Compute Nu
-  Iterator<node> *itN=superGraph->getInOutNodes(u);
+  Iterator<node> *itN = graph->getInOutNodes(u);
   while (itN->hasNext()) {
     node n=itN->next();
     if (n!=v) Nu.insert(n);
-  }delete itN;
+  } delete itN;
   if (Nu.size()==0) return 0;
 
   //Compute Nv
-  itN=superGraph->getInOutNodes(v);
+  itN=graph->getInOutNodes(v);
   while (itN->hasNext()) {
     node n=itN->next();
     if (n!=u) Nv.insert(n);
@@ -107,38 +107,61 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
 			  Mu.size() * Mv.size() ) + 
 		   double(Wuv.size()*(Wuv.size()-1)) / 2.0);
 
-  if (norm3 > 1E-5)
-    gamma3 /= norm3;
+  double norm = norm3 + norm4;
+  double gamma = gamma3 + gamma4;
+  
+  if (norm > 1E-5)
+    gamma /= norm;
   else
-    gamma3 = 0;
+    gamma = 0;
 
-  if (norm4 > 1E-5)
-    gamma4 /= norm4;
-  else
-    gamma4 = 0;
-
-  return gamma3 + gamma4;
+  return gamma;
 }
 //=============================================================
 double StrengthMetric::getNodeValue(const node n ) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (superGraph->deg(n)==0) return 0;
+  if (graph->deg(n)==0) return 0;
   double result=0;
-  Iterator<edge> *itE=superGraph->getInOutEdges(n);
+  Iterator<edge> *itE = graph->getInOutEdges(n);
   while (itE->hasNext()) {
-    edge ite=itE->next();
-    result+=metricProxy->getEdgeValue(ite);
+    edge ite = itE->next();
+    result += doubleResult->getEdgeValue(ite);
   } delete itE;
-  return result/double(superGraph->deg(n));
+  return result/double(graph->deg(n));
 }
 //=============================================================
 bool StrengthMetric::run() {
   edge e;
-  forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, getEdgeValue(e));
+  unsigned int steps = 0, maxSteps = graph->numberOfEdges();
+  if (maxSteps < 10)
+    maxSteps = 10;
+  if (pluginProgress) {
+    pluginProgress->showPreview(false);
+    pluginProgress->setComment("Computing Strength metric on edges...");
+  }
+  forEach(e, graph->getEdges()) {
+    doubleResult->setEdgeValue(e, getEdgeValue(e));
+    if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
+      pluginProgress->progress(++steps, maxSteps);
+      if (pluginProgress->state() !=TLP_CONTINUE)
+	return pluginProgress->state()!= TLP_CANCEL;
+    }
+  }
   node n;
-  forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, getNodeValue(n));
+  steps = 0;
+  maxSteps = graph->numberOfNodes();
+  if (maxSteps < 10)
+    maxSteps = 10;
+  pluginProgress->setComment("Computing Strength metric on nodes...");
+  forEach(n, graph->getNodes()) {
+    doubleResult->setNodeValue(n, getNodeValue(n));
+    if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
+      pluginProgress->progress(++steps, maxSteps);
+      if (pluginProgress->state() !=TLP_CONTINUE)
+	return pluginProgress->state()!= TLP_CANCEL;
+    }
+  }
+    
   return true;
 }
 //=============================================================

@@ -2,29 +2,29 @@
 <chapter id="tutorial"><title>Tutorials</title>
     <sect1 id="first-step"><title>First Step</title>
         <para> In this part, the goal is to help you to simply make a graph and to save your work.</para>
-        <sect2 id="first-dis"><title>First display</title>
+        <sect2 id="first-dis"><title>First graph display</title>
             <sect3 id="import"><title>Importation of a graph</title>
                 <para>
 		<itemizedlist>
-		    <listitem><para>Select the <code>File</code> -> <code>Import</code> item.</para>
+		    <listitem><para>Select the <code>File->Import</code> item.</para>
 		    </listitem>
 		    <listitem><para>Select a method of importation : <code>Grid approximation</code>, for example.</para></listitem>
 		</itemizedlist>
-		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>CTRL</keycap> to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View</code> -> <code>Center view</code> from the menu bar.
+		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>Ctrl</keycap> (<keycap>Alt</keycap> key on Mac) to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View->Center view</code> from the menu bar.
 		<itemizedlist>
-		    <listitem><para>Select <code>Property</code> -> <code>Metric</code> -> <code>Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
+		    <listitem><para>Select <code>Algorithm->Measure->Misc->Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
 		</itemizedlist>
-		The graph is now displayed with colors depending of the metric. You can change the colors with the menu : <code>Property</code> -> <code>Colors</code>. The choice of <code>Distribution</code> computes the color on the entire palette. The second choice, <code>Metric mapping</code>, compute an interpolation between the two selected colors.
+		The graph is now displayed with colors depending of the metric. You can change the colors with the menu : <code>Algorithm->Color->Metric Mapping</code>. This plugin computes an interpolation between the two selected colors.
                 </para>
             </sect3>
             <sect3 id="create"><title>Creation of a graph</title>
-                <para>In this section, we learn how to create its own graph, object by object.
+                <para>In this section, we learn how to create its own graph, element by element.
                 <itemizedlist>
                     <listitem>
-                        <para>Select the <code>File</code> -> <code>New</code> from the menu bar to create a new view for the graph.</para>
+                        <para>Select the <code>File->New</code> from the menu bar to create a new graph.</para>
                     </listitem>
                     <listitem>
-                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> sub-window. In the same way, you can display or hide the arrows checking <code>Arrows</code> in the subwindow <code>Overview</code> too.</para>
+                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> subwindow. In the same way, you can display or hide the arrows checking <code>Arrows</code>.</para>
                     </listitem>
                     <listitem>
                         <para>Delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> mouse toolbar operation, then click on the element you want to delete.</para>
@@ -34,87 +34,231 @@
             </sect3>
         </sect2>
 	<sect2 id="save"><title>Save options</title>
-	    <para>To save your work, you just have to select <code>File</code> -> <code>Save</code> or <code>Save as</code>, type the name of the file and choose the path.</para>
-            <para>The second way to make a save is to export in a special format : GML or tlp. Select <code>File</code> -> <code>Export</code> and your choice, then choose the name of your file.</para>
+	    <para>To save your work, you just have to select <code>File->Save</code> or <code>Save as</code>: a dialog appears allowing to enter the author of the graph and some comments; then after clicking on the 'OK' button, just type the file name and choose its location.</para>
+            <para>The second way to make a save is to export the graph in a special format : GML or TLP (equivalent to <code>Save as</code>). Select <code>File->Export</code> and the format of your choice, then choose the file name and location.</para>
 	</sect2>
         <sect2 id="algos"><title>Algorithms</title>
-	    <para>This part explains how to apply an algorithm to a graph. Then, you have made or imported a graph. Select <code>Property</code> -> <code>Layout</code> (for example) and an algorithm : <code>Hierarchical Graph</code> for example. </para>
-            <para>In this case, we used an algorithm dealing with the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. With the <code>Bubble Tree</code> layout, you can not display a grid. If it is not valid, a pop-up message will displayed explaining why it is not ok.</para>
+	    <para>This part explains how to apply an algorithm to a graph. Previously, you have created or imported a graph. Select <code>Algorithm->Layout</code> (for example) and an algorithm : <code>Hierarchical->Hierarchical Graph</code> for example.</para>
+            <para>In this case, we use an algorithm dealing with the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. With the <code>Bubble Tree</code> layout, you can not display a grid. If it is not valid, a pop-up message will displayed explaining the problem.</para>
 	</sect2>
     </sect1>
-    <sect1 id="properties"><title>Properties</title>
-        <para>As it is explained in the last section, it is possible to modify the properties with algorithms. An other solution is to change the values in the property tab of the <code>Info Editor</code> sub-window.</para>
-        <para>To give an example, create a graph :
-        <itemizedlist>
-            <listitem><para>Select the properties you want to change, <code>viewSize</code> in the <code>local</code> table for example to manage the size of the nodes. Now, you can change all values or the value of one node.
-                <orderedlist>
-                    <listitem><para>Click on <code>Set all</code>, and write the new coordinates : <code>(2.0, 2.0, 2.0)</code></para></listitem>
-                    <listitem><para>Click on the line and the second column of the concerned node in the table. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
-                </orderedlist>
-            </para></listitem>
-        </itemizedlist>
-
-         If you want to change properties of selected objects, use the check box <code>Filter</code> of the <code>Property</code> tab.
-        <itemizedlist>
-            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the Add/Remove Selection item displayed in the right clicking pop-up menu.
-            </para></listitem>
-            <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
-            </para></listitem>
-            <listitem><para>Click on the checkbox named <code>Filter</code>. The selected object just appears in the table above.
-            </para></listitem>
-            <listitem><para>Click on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
-            </para></listitem>
-        </itemizedlist>
-        If you uncheck <code>Filter</code>, all nodes are in the table. It is possible to do the same thing with the values of edges. You just have to click on the tab named <code>Edges</code>.
-
-        <itemizedlist>
-            <title>Set of properties available :</title>
-            <listitem><para><code>viewColor</code> : It is chosen with a palette of colors.</para></listitem>
-            <listitem><para><code>viewLabel</code> : It is a string, you just have to write text.</para></listitem>
-            <listitem><para><code>viewLayout</code> : This represents the position of the object in the three dimension. X, Y and Z coordinates must be indicated. (e.g. <code>(-1.0,0,1.0)</code>)</para></listitem>
-            <listitem><para><code>viewMetaGraph</code> : Contains a link to an other graph. A node can contain a graph. It is not easy to modify the value (identifier of graph) but it is a way to display informations. </para></listitem>
-            <listitem><para><code>viewRotation</code> : Type a value in degree. The rotation is made counterclockwise around the Z axis.</para></listitem>
-            <listitem><para><code>viewSelection</code> :  This property can take two values : <code>true</code> or <code>false</code>. To change a value, just check/uncheck the box in the table.</para></listitem>
-            <listitem><para><code>viewShape</code> : For the nodes, it determines the shape : Billboard, Cone, Cube, CubeOutlined, Cylinder, HalfCylinder, Sphere, Square, TeaPot. To change it, select an item in the listbox. For the edges, it determines the kind of lines : plain, dash,... It is represented by a number : 0-3 for polylines, 4-7 for Bezier curves and 8-11 for BSpline curves. For each kind of line, the four possible values specify, respectively, plain, point, dash and point dash mixed, display modes.</para></listitem>
-            <listitem><para><code>viewSize</code> : For nodes, the property is represented by three values : width, height, and depth. For edges, the values correspond to the size of the arrows.</para></listitem>
-            <listitem><para><code>viewTexture</code> : This property contains the name of the file of the texture you want to apply. The dimensions must be 64x64. It is possible to go through the file system with a double click.</para></listitem>
-        </itemizedlist>
-     There is an other solution to modify the value of one node or edge :
-        <itemizedlist>
-            <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation then select the node or edge you want to modify.</para></listitem>
-            <listitem><para>Click on the <code>Element</code> tab of the <code>Info Editor</code> sub-window. It displays the informations of the selected elements. Note that the object is not really selected but just for this tab.</para></listitem>
-        </itemizedlist>
-        </para>
-        <sect2 id="mana-inst"><title>Management of instances</title>
-            <para>The bottom of the <code>Property</code> sub-window enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
-                <itemizedlist>
-                    <listitem><para>Click on the <code>New</code> button.</para></listitem>
-                    <listitem><para>Select the type of property, <code>String</code>. (other possibilities : Metric, Selection, Layout, Integer, Sizes, Color)</para></listitem>
-                    <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>).</para></listitem>
-                </itemizedlist>
-
-            For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
-            </para>
-            <para>The last functionnality is to clone properties. Select the concerned property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
-        </sect2>
-
-        <sect2 id="find-tut"><title>Find : make a request.</title>
-            <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Push on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
-                <itemizedlist>
-                        <listitem><para>Select the property used for the request : <code>viewRotation</code>.</para></listitem>
-                        <listitem><para>Choose the operation and type a value for the comparaisons : <code>=</code> and <code>20</code>, to find the element rotated of 20 degrees. </para></listitem>
-                        <listitem><para>Select the action in the <code>Options</code> part : <code>Add</code> and the kind of the elements of the request : <code>on nodes</code>.</para></listitem>
-                </itemizedlist>
-            </para>
-        </sect2>
+    <sect1 id="improve-layout"><title>Improving a layout</title>
+    	<sect2 id="improve-layout-intro"><title>Introduction</title>
+    		In this tutorial, we will show you how to use, layouts algorithms, and graph properties to obtain a nice an clear graph. To do so, we will first import a file-system structure, and then use the graph properties to find specific files. (*.cpp or *.hpp ...)
+    	</sect2>
+    	<sect2 id="improve-layout-import"><title>File-system importation</title>
+    		<para>To import a file-system we need to select the <code>File System Directory</code> importation tool which is in the menu <code>File->Import->Misc</code>.
+    		</para>
+    		<para>A "file browser dialog" will pop-up to select the root directory that you want. On this dialog, you just need to select a directory for instance, your documents (On Windows : My Documents).
+    		</para>
+    		<para>
+    			The importation plug in will work for some time, and a tree graph will appear representing the file system chosen.
+    		</para>
+    		<graphic fileref="images/tutorials_improvelayout_1.png" />
+     	</sect2>
+     	<para>To follow the rest of this tutorial you need to download this tulip graph file : <ulink url="http://www.labri.fr/perso/auber/projects/tulip/samples/filesystem.tlp.gz">Graph</ulink>. Load this compressed tulip file into the software (<code>File->Open</code>).</para>
+     	<sect2 id="improve-layout-newlayout"><title>Using other Layouts :</title>
+     		<sect3 id="tuto-Bubble-Tree-layout"><title><code>Bubble Tree Layout</code> :</title>
+     			<para>This layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
+     			The bubble tree layout is very useful to notice directories that have the same structure.
+     			In this section, we will try to locate those directories.</para>
+     			<para>To have a better view on the tree, we will create a new 3D view. Menu : View->New 3D view or press <keycap>Ctrl+Shift+N</keycap>. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
+     			<para>Now that we can see the both views at the same time, we will zoom in (right window). Select the magnifying glass tool, and draw a bounding box on the left side of the graph. Just like this :</para>
+     			<graphic fileref="images/tutorials_improvelayout_bubble_1.png" />
+     			<para>As you can see, two nodes looks very alike. By using the "Get Information " tool, we can get there ids : Node 1965 and node 2009. Indeed, those to directories have the same structure since they both contains plug-ins source files.</para>
+     			<para>We will now re-center the view (<code>View->Center View</code> or <keycap>Ctrl+Shift+C</keycap>). </para>
+			<para>Let's say that we now want to study our graph without the plug-in directory. To delete it we have first to select it, and then select all its sub directories.</para>
+			<itemizedlist>
+				<listitem>
+					<para>Select the plug-in directory : Use the Find tool, (<code>Edit->Find</code> or <keycap>Ctrl+F</keycap>) with the field <code>Input property</code> set to "name", filter function set to "=" and filter value set to "plugins".</para>
+				</listitem>
+				<listitem>
+					<para>Select all its sub-directories : Use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm with the field distance set to 50. </para>
+				</listitem>
+				<listitem>
+					<para>Delete all the selection : press <keycap>Del</keycap></para>
+				</listitem>
+				<listitem>
+					<para>Re-draw the bubble layout <code>Algorithm->Layout->Tree->Bubble Tree</code>.</para>
+				</listitem>
+			</itemizedlist>
+			<para>Following is what you should see :</para>
+			<graphic fileref="images/tutorials_improvelayout_bubble_2.png" />
+     			
+     		</sect3>
+     		As you can see, the bubble tree layout can be quite useful.
+     		<sect3 id="improve-layout-treemap"><title><code>The Tree Map layout </code>:</title>
+     		<para>This Layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
+     		      The treemap layout is very useful to notice large disk usage files.
+     		      This section will show you how to use the tree map layout</para>
+     		<para>First, make sure that you have unchecked the <code>Force Ratio</code> option that you can access via the menu <code>Options</code>.</para>
+     		<para>Apply the layout algorithm <code>Algorithm->Layout->Tree->Squarified Tree Map</code> with the following parameters :
+     		</para>
+     			<itemizedlist>
+     				<listitem>Metric : set to "size".
+     				</listitem>
+     				<listitem>Aspect Ratio : set to 1
+     				</listitem>
+     				<listitem>Texture? : checked
+     				</listitem>
+     			</itemizedlist>
+     		 <para>Do not forget to refresh the views (<keycap>Ctrl+Shift+R</keycap>). Following is what you should see :</para>
+     		<graphic fileref="images/tutorials_improvelayout_treemap_1.png" />
+     		<para>As you can see, we easily get a global information on the size of files. Which is the biggest, or, which is the smallest ? But, we can also see the structure of directories, since files and directories are nested nodes. See <ulink url="http://en.wikipedia.org/wiki/Tree_map">Wikipedia : Tree Maps </ulink> for more information. </para>
+     		</sect3>
+     		An other layout can be useful, the Improved Walker.
+     		<sect3 id="improve-layout-improvewalker"><title><code> Improved Walker layout </code>:</title>
+     		<para> This layout can be find in the <code>Algorithm->Layout->Tree->Improve Walker</code>.</para>
+     		<para>Use the following parameters :</para>
+     		<itemizedlist>
+     			<listitem> Node Size : viewSize
+     			</listitem>
+     			<listitem>Orientation : Left to right.
+     			</listitem>
+     			<listitem>Orthogonal : Checked.
+     			</listitem>
+     			<listitem>Layer Spacing : Default value.
+     			</listitem>
+     			<listitem>Node Spacing : Default Value.
+     			</listitem>
+     		</itemizedlist>
+     		<para>You should see a tree looking like this :</para>
+     		<graphic fileref="images/tutorials_improvelayout_2.png" />
+     		
+     		<para>As you can see, the improve walker layout, is just a hierarchical layout. It is very useful to understand the tree structure of a file system.</para>
+     		</sect3>
+     	</sect2>
+     	<sect2 id="improve-layout-labels"><title>Showing Labels</title>
+     		<para>First, in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>), check the <code>nodes</code> box for the <code>Visibility</code> option.</para>
+     		<para>We will now try to add labels to the nodes. To do so, select the node property called "name" in the info editor window, click on the button <code>To Labels</code>.</para>
+     		<para>You should now see a graph looking like that :</para>
+     		<graphic fileref="images/tutorials_improvelayout_3.png" />
+     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem, press <keycap>Ctrl+R</keycap> , in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
+     		
+     		<para>You should obtain something like this.</para>
+     		<graphic fileref="images/tutorials_improvelayout_4.png" />
+     		<para>By zooming in we can see the labels :</para>
+     		<graphic fileref="images/tutorials_improvelayout_5.png" />
+     		<para>If you want to display the big file (high disc space) with big nodes, use the <code>Algorithm->Size->Metric Mapping</code> algorithm with the parameter called "property" set to "size". </para>
+     	</sect2>
+     	<sect2 id="improve-layout-ext"><title>Showing a specific kind of file.</title>
+     		<para>Now that our graph as a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
+     		<para>Use the following parameters :</para>
+     		<itemizedlist>
+     			<listitem> Input Property : name
+     			</listitem>
+     			<listitem> Filter :  filter function set to "=" and filter value set to ".*cpp or .*hpp". For more details on regular expressions, follow this link : <ulink url="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia : Regex </ulink>
+     			</listitem>
+     			<listitem> Options : check the <code>Replace</code> radio button and select <code>On nodes</code>.
+     			</listitem>
+     		</itemizedlist>
+     		<para>Now that our source files are selected, we will apply a different color to them.</para>
+     		<para>In the info editor window, select the node property called "viewColor", check the <code>selected only</code> option. Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We choosed green)</para>
+     		<para>You should see a graph like the one following :</para>
+     		<graphic fileref="images/tutorials_improvelayout_6.png" />
+     		<graphic fileref="images/tutorials_improvelayout_treemap_6.png" />
+     	</sect2>
+     	<sect2 id="improve-layout-conclusion"><title>Conclusion</title>
+     		<para>As you could have seen, tulip implements powerful layouts and tools, to make a simple and understandable graph from a complex one.  </para>
+     	</sect2>
     </sect1>
-    <sect1 id="subgraphs"><title>SubGraphs and Groups</title>
-        <para></para>
+    <sect1 id="people-in-infovis"><title>People in InfoVis</title>
+    	<sect2 id="people-in-infovis"><title>Analyzing an author.</title>
+    		<para>Before anything, download, and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>. Click on the tab Hierarchy (in the info editor window) and select the subgraph GRCite. You need to delete the other sub graphs by doing a right click on there name, and then "remove". </para>
+    		<para>This graph represent the relations between authors, conferences and papers. To distinguish paper, conferences and authors, we will re-color them : </para>
+    		<itemizedlist>
+    			<listitem> <para>Select all papers : Press on <keycap>Ctrl+F</keycap> to display the find tool. In the Input Property field, select the property "type". And on the line below, set the filter function to "=" and the filter value to 0, before clicking on the Find button.</para>
+    			</listitem>
+    			<listitem> <para>Re-color the nodes in red : Select the tab Property (in the info editor). Check the "selected only" option. Select the property viewColor, and, by clicking on the button "Set all" choose the red color.</para>
+    			</listitem>
+    		</itemizedlist>
+    		<para>Repeat the actions above, for authors (type = 2 ) and conferences (type = 1) with other color (blue , yellow).</para>
+    		<para>You should obtain something like this :</para>
+    		<graphic fileref="images/tutorials_peopleinfovis_1.png" />
+    		<para><code>Select an author :</code></para>
+    		<para>Let's pick a single author to investigate, in this case George Robertson. First, we interactively select that node by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the "titleshort" property, the "=" as filter fuction, and the regular expression "G.*Rob.*" as filter value. We then quickly check to see how he is connected to the entire graph by temporarily moving that node away from the others to see roughly how many edges are attached to it.</para>
+    		<para>Following is what you should get :</para>
+    		<graphic fileref="images/tutorials_peopleinfovis_2.png" />
+    		<para><code>Go deeper :</code></para>
+    		<para>We then select the menu item <code>Algorithm->Selection->Reachable Sub-Graph</code>, type 1 for the distance into the popup panel and 0 for the direction of the edges (outgoing). We then select the menu item Edit->Create Subgraph to save this selection for further manipulation, naming it GR.1hop.outgoing. We then select this new subgraph in the hierarchy tab, and lay out this subgraph using a hierarchical drawing algorithm (<code>Algorithm->Layout->Hierarchical->Hierarchical graph</code>).</para>
+    		<para> We can see simply from the drawing which papers were published first, as they are cited by the later ones. Robertson has published 11 papers in this database. The coloring by the number of citations (<code>Algorithm->Color->Metric Mapping</code>, with field property set to "arityOut" ) shows that "Cone Trees" is his most influential work.</para>
+    		<graphic fileref="images/tutorials_peopleinfovis_3.png" />
+    		<para>Finally, we select all papers by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the  type property, the "=" filter, and the value 0 for papers. We explicitly add Robertson to the selection using the selection tool to select its edges too (see below), and save this whole set to a new subgraph that we name GRCitesub:</para>
+    		<graphic fileref="images/tutorials_peopleinfovis_4.png" />
+    		<para>In the new subgraph, we then select the Robertson node. Again as above, use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm, pick a depth of 2 to find all papers that cite a paper written by Robertson, and save the resulting subgraph using the Edit->Create Subgraph menu. The final image shows the result of using the <code>Algorithm->Layout->Hierarchical Graph</code> layout.</para>
+    		<graphic fileref="images/tutorials_peopleinfovis_5.png" />
+    	</sect2>
+    	You can now close this graph since we are going to use an other one for the following of this tutorial.
+  	The next graph is similar to the this one but, has coauthorship edges linking authors who write papers together.
+  	You can download <ulink url="http://tulip.labri.fr/samples/GRSC.tlp.gz">it</ulink> and open it in tulip.
+  	<para></para>
+  	<para></para>
+    	<sect2 id="sec"><title>What, if any, are the relationships between two or more or all researchers</title>
+    		<sect3 id="FocusingonTwoAuthors"><title>Focusing on Two Authors</title>
+    			<para>Here we focus on the relationship between two authors, in this case Robertson and Card.</para>
+    			<para>To select them use the find tool, with, at the first time the regular expressions : "G.*Rob.*".
+    			 And at  a  second time, the regular expression ".*Card.*" and the "add" option checked. 
+    			 To move those selected nodes away from the main layout, use the "moving selection" tool. If you click on one of the node, you will be able to move both nodes at the same time.</para>
+    				<graphic fileref="images/tutorials_peopleinfovis_6.png" />
+    		 	<para>Select Card and Roberts at the same time ( Press <keycap>Shift</keycap> while clicking on a node). Select all their neighbors by applying the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm with distance 1. Create a new Subgraph.</para>
+    		 	<para>Following is a hierarchical layout of the neighborhood of all outgoing edges one hop away; that is, the publications and coauthors of the union of Card and Robertson.</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_7.png" />
+    		 	<para>You can repeat those operations for Robertson only and Card only :</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_8.png" />
+    		 	<para> The similarity of these final three images shows the very strong ties between these two authors.</para>
+    		 </sect3>
+    		 You can now close this graph since we are going to use an other one for the following of this tutorial.
+  		 The next graph is similar to the old one but, has links between author and conference by following links from author to paper, and from paper to conference. Then, delete papers.
+  		 You can download <ulink url="http://tulip.labri.fr/samples/ConfAuth.tlp.gz">it</ulink> and open it in tulip.
+    		 <sect3 id="auth-conf"><title>Central Authors and Conferences: Overview</title>
+    		       <para>To show the large-scale structure of this dataset, we colored Authors in green and conferences in blue with a GEM layout (<code>Algorithm->Layout->Force Directed->GEM</code>). We deleted all the papers nodes.</para>
+    		       <graphic fileref="images/tutorials_peopleinfovis_9.png" />
+    		       By zooming in :
+    		       <graphic fileref="images/tutorials_peopleinfovis_10.png" />
+    		       <para>We select only the large connected component (the big set of nodes) : Select a fiew nodes in the center of the component and run the "Reachable Subgraph" selection algorithm with distance set to 50. </para>  
+    		       <para>Color the authors by the Strahler metric: Run the <code>Algorithm->Measure->Graph->Strahler</code> algorithm and then a <code>Algorithm->Color->Metric Mapping</code> algorithm.</para>
+    		       <para>Finally, we color papers in white.</para> 
+    		       <para> This layout, shows the branching structure of the dataset.</para>
+    		       <graphic fileref="images/tutorials_peopleinfovis_11.png" />
+    		       <para>To distinguish authors and conferences :</para>
+    		       <para>Select all authors (nodes of type 2) and set their viewLabelColor property to red.</para>
+    		       <graphic fileref="images/tutorials_peopleinfovis_12.png" />
+    		 </sect3>
+    		 <sect3 id="top-conf"><title>Central Authors and Conferences: Top Conferences</title>
+    		 	<para>It is very simple to see top conferences since they are the ones where the number of authors is high. The Metric Degree will help us to highlight them (<code>Algorithm->Measure->Graph->Degree </code>). </para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_13.png" />
+    		 </sect3>
+    		  <sect3 id="top-conf"><title>Central Authors and Conferences: Top Autors</title>
+    		 	<para>Run the <code>Algorithm->Measure->Graph->Strahler</code> algorithm to see strong ties between conferences and authors : </para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_14.png" />
+    		 	<para>Then run the <code>Algorithm->General->Convolution</code>, the value of the "discretization" parameter should be near 30 to obtain 5 clusters ) (Picture 1) to obtain the following clusters (Picture 2):</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_21.png" />
+    		 	<graphic fileref="images/tutorials_peopleinfovis_15.png" />
+    		 	<para>The Strahler-Convolution clustering yields five clusters, according to increasing centrality. The first cluster is mostly yellow, and contains most of the data. The second cluster contains a next tier of 26 authors that have had a relatively strong impact. The third cluster contains a group of 7 influential authors (Chi, Bederson, Eick, Rao, Pirolli, Ward, and Brown), and the fourth cluster (Roth, Robertson, Keim, and Stasko) is yet more central. The fifth cluster is the single node of Mackinlay, and the last one is Card and Shneiderman. Our automatic clustering method clearly yields very believeable results in this case.
+    		 	</para>
+    		 </sect3>
+    		 In the last section, we will use an other graph. Please download <ulink url="http://tulip.labri.fr/samples/ConfAuthRecSmallWorld.tlp.gz">it</ulink> and open it in tulip.
+    		 <sect3 id="interauthor-cons"><title>Hierarchical Structure of Interauthor Connections</title>
+    		 	<para>To be able to see the labels within metanode check the "metanode" option in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>).</para>
+    		 	<para>The clusters have been computed using the <code>Algorithm->General->Strength</code> clustering algorithm.</para>
+    		 	<para>The overview image from the previous section, showing the graph of all authors and papers, is extremely cluttered. In the previous task we show one way to extricate more information, by finding the most important items via convolution clustering. Another clustering approach, small-worlds clustering, allows us to instead navigate through a hierarchical subdivision of the entire dataset. The simplified overview allows us to understand the graph's high level structure. The strength metric computes the number of cycles of length 3 and 4 passing through each edge, normalized by the maximum possible value. The first image shows the clustered dataset. Small-world navigation is useful when exploring an unfamiliar graph to quickly find the structure of complex components. The eccentricity metric (<code>Algorithm->Measure->Graph->Eccentricity</code>), which measures whether nodes are peripheral (here in yellow) or central (here in blue), guides us to complexity immediately. This metric is O(n^3), but the small-world decomposition simplifies the graph, making the computation tractable.
+    		 	</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_16.png" />
+    		 	<para> The picture shows zooming in towards the  node that has many blue lines leading to it.
+    		 	</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_20.png" />
+    		 	<para> We then jump inside that cluster (Select the metanode, Right Click, Go inside), which is itself a small-world graph.
+    		 	</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_17.png" />
+    		 	<para> We once again zoom towards the most central node with many blue edges, where we see a cluster that has the InfoVis 96 conference and all the authors who only published the infovis community in that year.
+    		 	</para>
+    		 	<graphic fileref="images/tutorials_peopleinfovis_18.png" />
+    		 	<graphic fileref="images/tutorials_peopleinfovis_19.png" />
+    		 	<para> We see this star shape small-world decomposition only for the InfoVis symposia, because of the nature of this dataset: it is only the InfoVis symposia that have a complete set of authors and papers available.</para>
+    		 </sect3>
+    	</sect2>
     </sect1>
-    <sect1 id="labels"><title>Labels Formatted</title>
-        <para>under construction</para>
-    </sect1>
-    <sect1 id="statistics"><title>Statistics Panel (available in experimental version)</title>
+    <sect1 id="statistics"><title>Statistics Panel (not available in the downloadable binary versions, requires configuration with --enable-stats-gui when compiling Tulip from source code)</title>
 	<sect2 id="stats-tut-intro"><title>Introduction</title>
     	    <para>
 	    This section will explain how to use the statistics panel in Tulip. The tutorial is composed of 3 main parts. Firstly, you will see how to generate a scatter plot or an histogram from a graph. In a second part, you will see how to enable augmented displays on the graph. And finally, you will see how to clusterize the graph from the statistics values previously computed.
@@ -236,6 +380,6 @@
 	    <para>
 	    As a conclusion, you have learnt how to use the statistics panel of Tulip. As you can see, obtaining results is easy and fast. If you have any question about that panel, you can contact it's creator at <email>maxime.delorme@gmail.com</email>
 	    </para>
-	</sect2>
+	</sect2>	
     </sect1>
 </chapter>

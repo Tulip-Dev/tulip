@@ -2,17 +2,18 @@
 #include <sstream>
 #include <list>
 
-#include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
 
 #include "HierarchicalClustering.h"
 
 using namespace std;
+using namespace tlp;
 
-CLUSTERINGPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","0","1");
+ALGORITHMPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","1.0");
 
 //================================================================================
-HierarchicalClustering::HierarchicalClustering(ClusterContext context):Clustering(context)
+HierarchicalClustering::HierarchicalClustering(AlgorithmContext context):Algorithm(context)
 {}
 //================================================================================
 HierarchicalClustering::~HierarchicalClustering()
@@ -21,14 +22,14 @@ HierarchicalClustering::~HierarchicalClustering()
 
 class LessThan {
 public:
-  MetricProxy *metric;
+  DoubleProperty *metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
   }
 };
 
-bool HierarchicalClustering::split(MetricProxy *metric,list<node> &orderedNode) {
-  Iterator<node> *itN=superGraph->getNodes();
+bool HierarchicalClustering::split(DoubleProperty *metric,list<node> &orderedNode) {
+  Iterator<node> *itN=graph->getNodes();
   for (;itN->hasNext();)
     orderedNode.push_back(itN->next());
   delete itN;
@@ -64,7 +65,7 @@ bool HierarchicalClustering::split(MetricProxy *metric,list<node> &orderedNode) 
 bool HierarchicalClustering::run() {
 
   string tmp1,tmp2;
-  MetricProxy *metric=superGraph->getProperty<MetricProxy>("viewMetric");
+  DoubleProperty *metric=graph->getProperty<DoubleProperty>("viewMetric");
   tmp1="Hierar Sup";
   tmp2="Hierar Inf";
   bool result=false;
@@ -73,9 +74,9 @@ bool HierarchicalClustering::run() {
     list<node> badNodeList;
     result = split(metric,badNodeList);
     if (!result) {
-      SelectionProxy *sel1 =superGraph->getLocalProperty<SelectionProxy>("good select");
-      SelectionProxy *sel2 =superGraph->getLocalProperty<SelectionProxy>("bad select");
-      SelectionProxy *splitRes =superGraph->getLocalProperty<SelectionProxy>("split result");
+      BooleanProperty *sel1 =graph->getLocalProperty<BooleanProperty>("good select");
+      BooleanProperty *sel2 =graph->getLocalProperty<BooleanProperty>("bad select");
+      BooleanProperty *splitRes =graph->getLocalProperty<BooleanProperty>("split result");
 
       sel1->setAllNodeValue(true);
       sel1->setAllEdgeValue(true);
@@ -88,12 +89,12 @@ bool HierarchicalClustering::run() {
       for (itl=badNodeList.begin();itl!=badNodeList.end();++itl)
 	splitRes->setNodeValue(*itl,false);
 
-      Iterator<node> *itN=superGraph->getNodes();
+      Iterator<node> *itN=graph->getNodes();
       for (;itN->hasNext();) {
 	node nit=itN->next();
 	if (splitRes->getNodeValue(nit)) {
 	  sel2->setNodeValue(nit,false);
-	  Iterator<edge> *itE=superGraph->getInOutEdges(nit);
+	  Iterator<edge> *itE=graph->getInOutEdges(nit);
 	  for (;itE->hasNext();) {
 	    edge ite=itE->next();
 	    sel2->setEdgeValue(ite,false);
@@ -101,7 +102,7 @@ bool HierarchicalClustering::run() {
 	}
 	else {
 	  sel1->setNodeValue(nit,false);
-	  Iterator<edge> *itE=superGraph->getInOutEdges(nit);
+	  Iterator<edge> *itE=graph->getInOutEdges(nit);
 	  for (;itE->hasNext();) {
 	    edge ite=itE->next();
 	    sel1->setEdgeValue(ite,false);
@@ -109,14 +110,14 @@ bool HierarchicalClustering::run() {
 	}
       }delete itN;
 
-      SuperGraph * tmpSubGraph;
-      tmpSubGraph = superGraph->addSubGraph(sel1);
+      Graph * tmpSubGraph;
+      tmpSubGraph = graph->addSubGraph(sel1);
       tmpSubGraph->setAttribute<string>("name",tmp1);
-      (superGraph->addSubGraph(sel2))->setAttribute<string>("name",tmp2);
-      superGraph->delLocalProperty("good select");
-      superGraph->delLocalProperty("bad select");
-      superGraph->delLocalProperty("split result");
-      superGraph=tmpSubGraph;
+      (graph->addSubGraph(sel2))->setAttribute<string>("name",tmp2);
+      graph->delLocalProperty("good select");
+      graph->delLocalProperty("bad select");
+      graph->delLocalProperty("split result");
+      graph=tmpSubGraph;
     }
   }
   return true;

@@ -22,45 +22,44 @@
 #include <ext/hash_set>
 #endif
 #include <tulip/ObservableGraph.h>
-#include <tulip/Edge.h> 
+#include <tulip/Edge.h>
 #include <list>
 #include <tulip/MutableContainer.h>
 #include <tulip/BmdList.h>
-
-class SuperGraph;
+#include <tulip/Graph.h>
 
 namespace tlp {
+
   enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
   static const node NULL_NODE = node(); 
   static const edge NULL_EDGE = edge();
-}
 
 class TLP_SCOPE PlanarityTestImpl {
 
 public:
-  PlanarityTestImpl(SuperGraph *graph);
-  bool isPlanar(bool embedgraph = false);
+  PlanarityTestImpl(Graph *sg);
+  bool isPlanar(bool embedsg = false);
   std::list<edge> getObstructions();
 
 private:
-  bool compute(SuperGraph *);
+  bool compute(Graph *);
   void init();
   void restore();
   edge edgeReversal( edge e);
-  void makeBidirected(SuperGraph *sG);
+  void makeBidirected(Graph *sG);
   void swapNode(node &n1, node &n2);
-  void findTerminalNodes(SuperGraph *sG, node n, std::list<node>& listOfComponents,
+  void findTerminalNodes(Graph *sG, node n, std::list<node>& listOfComponents,
  			 std::map<node, std::list<node> > &terminalNodes);
-  bool findObstruction(SuperGraph *sG, node n, std::list<node>& terminalNodes);
-  void setInfoForNewCNode(SuperGraph *sG, node n, node newCNode,
+  bool findObstruction(Graph *sG, node n, std::list<node>& terminalNodes);
+  void setInfoForNewCNode(Graph *sG, node n, node newCNode,
  			  std::list<node>& terminalNodes);
   node findActiveCNode(node, node, std::list<node>&);
-  void preProcessing(SuperGraph *);
+  void preProcessing(Graph *);
   tlp::BmdLink<node>* searchRBC(int,  tlp::BmdLink<node>*, node, std::list<node>&);
-  bool isT0Edge(SuperGraph *, edge);
-  bool isBackEdge(SuperGraph *, edge);
+  bool isT0Edge(Graph *, edge);
+  bool isBackEdge(Graph *, edge);
   bool isCNode(node);
-  void sortNodesIncreasingOrder(SuperGraph *, MutableContainer<int>&, std::vector<node>&);
+  void sortNodesIncreasingOrder(Graph *, MutableContainer<int>&, std::vector<node>&);
   node activeCNodeOf(bool, node);
   void addOldCNodeRBCToNewRBC(node, node, node, node, node, BmdList<node>&);
   void updateLabelB(node);
@@ -68,57 +67,57 @@ private:
   node lastPNode(node, node);
   node lcaBetween(node, node,  const MutableContainer<node>&);
   node lcaBetweenTermNodes(node, node);
-  void calculateNewRBC(SuperGraph *, node, node, std::list<node>&);
-  node findNodeWithLabelBGreaterThanDfsN(bool, SuperGraph *, node, node);
+  void calculateNewRBC(Graph *, node, node, std::list<node>&);
+  node findNodeWithLabelBGreaterThanDfsN(bool, Graph *, node, node);
   void setPossibleK33Obstruction(node, node, node, node);
-  bool testCNodeCounter(SuperGraph *, node, node, node, node, node&, node&);
-  bool testObstructionFromTerminalNode(SuperGraph *, node, node, node);
+  bool testCNodeCounter(Graph *, node, node, node, node, node&, node&);
+  bool testObstructionFromTerminalNode(Graph *, node, node, node);
 
   //functions PlanarityTestObstr.cpp
   bool listEdgesUpwardT0(node n1, node n2);
-  void extractBoundaryCycle(SuperGraph *sG, node cNode, std::list<edge>& listEdges);
-  //  edge findEdge(SuperGraph *sG, node n1, node n2);
-  void obstrEdgesTerminal(SuperGraph* G, node w, node t, node u);
-  void addPartOfBc(SuperGraph *sG, node cNode, node n1, node n2, node n3);
+  void extractBoundaryCycle(Graph *sG, node cNode, std::list<edge>& listEdges);
+  //  edge findEdge(Graph *sG, node n1, node n2);
+  void obstrEdgesTerminal(Graph* G, node w, node t, node u);
+  void addPartOfBc(Graph *sG, node cNode, node n1, node n2, node n3);
   void sortByLabelB(node &n1, node &n2, node &n3);
-  void obstrEdgesPNode(SuperGraph *sG, node p, node u);
+  void obstrEdgesPNode(Graph *sG, node p, node u);
   void calcInfo3Terminals(node &t1, node &t2, node &t3, int &countMin, int &countF, node &cNode, node &q);
-  void obstructionEdgesT0(SuperGraph *sG, node w, node t1, node t2, node t3, node v);
-  void obstructionEdgesCountMin1(SuperGraph *sG, node n, node cNode, node t1, node t2, node t3);
-  void obstructionEdgesCountMin23(SuperGraph *sG, node n, node cNode, node t1, node t2, node t3, node q, node v);
-  //   void obstrEdgesTermCNode(SuperGraph *sG, node w, node t);
-  void obstructionEdgesK5(SuperGraph *sG, node w, node cNode, node t1, node t2, node t3);
-  void obstructionEdgesPossibleObstrConfirmed(SuperGraph *sG, node w, node t, node v);
-  void obstructionEdgesCNodeCounter(SuperGraph *sG, node cNode, node w, node jl, node jr, node t1, node t2);
+  void obstructionEdgesT0(Graph *sG, node w, node t1, node t2, node t3, node v);
+  void obstructionEdgesCountMin1(Graph *sG, node n, node cNode, node t1, node t2, node t3);
+  void obstructionEdgesCountMin23(Graph *sG, node n, node cNode, node t1, node t2, node t3, node q, node v);
+  //   void obstrEdgesTermCNode(Graph *sG, node w, node t);
+  void obstructionEdgesK5(Graph *sG, node w, node cNode, node t1, node t2, node t3);
+  void obstructionEdgesPossibleObstrConfirmed(Graph *sG, node w, node t, node v);
+  void obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w, node jl, node jr, node t1, node t2);
   
   // functions PlanarityTestEmbed.cpp
-  void embedRoot(SuperGraph *sG, int n);
-  void calculatePartialEmbedding(SuperGraph *sG, node w, node newCNode, std::list<edge>& listBackEdges, std::list<node>& terminalNodes);
+  void embedRoot(Graph *sG, int n);
+  void calculatePartialEmbedding(Graph *sG, node w, node newCNode, std::list<edge>& listBackEdges, std::list<node>& terminalNodes);
   void markPathInT(node t, node w, std::map<node, node>& backEdgeRepresentant, std::list<node>& traversedNodes);
-  std::map< node, std::list<edge> > groupBackEdgesByRepr(SuperGraph *sG, std::list<edge>& listBackEdges,
+  std::map< node, std::list<edge> > groupBackEdgesByRepr(Graph *sG, std::list<edge>& listBackEdges,
 							 std::map<node, node>& backEdgeRepresentant,
 							 std::list<node>& traversedNodes,
 							 std::list<node>& listRepresentants);
-  std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2, SuperGraph *sG, node w,
+  std::list<node> embedUpwardT(bool embBackEdgesOutW, node t1, node t2, Graph *sG, node w,
  			       std::map< node, std::list<edge> > &bEdgesRepres,
  			       std::list<node>& traversedNodes,
  			       BmdList<edge>& embList);
-  void addOldCNodeToEmbedding(bool embBackEdgesOutW, SuperGraph *sG, node w, node oldCNode, node u,
+  void addOldCNodeToEmbedding(bool embBackEdgesOutW, Graph *sG, node w, node oldCNode, node u,
  			      std::map<node,std::list<edge> >& bEdgesRepres,
  			      std::list<node>& traversedNodes,
  			      std::list<node>& toEmbedLater,
  			      BmdList<edge>& embList);
-  void embedBackEdges(bool embBackEdgesOutW, SuperGraph *sG, node repr,
+  void embedBackEdges(bool embBackEdgesOutW, Graph *sG, node repr,
  		      std::list<node>& traversedNodes,
  		      std::list<edge>& listBackEdges,
  		      BmdList<edge>& embList);
-  int sortBackEdgesByDfs(SuperGraph *sG, node w, node repr,
+  int sortBackEdgesByDfs(Graph *sG, node w, node repr,
  			 std::list<edge>& listBackEdges,
  			 std::vector<edge>& backEdge);
-  void checkEmbedding(SuperGraph *sG);
+  void checkEmbedding(Graph *sG);
 //   void cleanPtrItem (node n,  tlp::BmdLink<node>* item);
 
-  SuperGraph *graph;
+  Graph *sg;
   int totalCNodes;
   bool embed, biconnected;
   node lastNodeInQLinha;
@@ -227,9 +226,11 @@ private:
   unsigned int numberOfNodesInG;
 };
 
+}
+
 //std::ostream& operator <<(std::ostream &os , node n);
 //std::ostream& operator <<(std::ostream &os , edge e);
-std::list<edge> posDFS(SuperGraph *sG, MutableContainer<int> &dfsPos);
+std::list<tlp::edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
 
 #endif
 #endif

@@ -2,18 +2,33 @@
 #define TREETOOLS_H
 
 #include <tulip/Node.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
 
-class SuperGraph;
-class LayoutProxy;
-class SizesProxy;
+//====================================================================
+inline bool isLeaf (const tlp::Graph* tree, tlp::node n) {
+    return tree->outdeg(n) == 0;
+}
 
-node    searchRoot(const SuperGraph* tree);
-int     getTreeDepth(const SuperGraph* tree, node root);
-bool    isLeaf (const SuperGraph* tree, node n);
-float   getNodeX(LayoutProxy* pLayout, node current);
-float   getNodeY(LayoutProxy* pLayout, node current);
-float   getNodeHeight(SizesProxy* size, node current);
-float   getNodeWidth(SizesProxy* size, node current);
+//====================================================================
+inline float getNodeX(tlp::LayoutProperty* pLayout, tlp::node current) {
+    return pLayout->getNodeValue(current).getX();
+}
 
+//====================================================================
+inline float getNodeY(tlp::LayoutProperty* pLayout, tlp::node current) {
+    return pLayout->getNodeValue(current).getY();
+}
+
+//====================================================================
+inline float getNodeHeight(tlp::SizeProperty* size, tlp::node current) {
+    return size->getNodeValue(current).getH();
+}
+
+//====================================================================
+inline float getNodeWidth(tlp::SizeProperty* size, tlp::node current) {
+    return size->getNodeValue(current).getW();
+}
 #endif
 

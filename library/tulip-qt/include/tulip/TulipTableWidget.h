@@ -8,26 +8,24 @@
 #endif
 #include <string>
 
-#if (QT_REL == 3)
-#include <qtable.h>
-#include <qbutton.h>
-#include <qpainter.h>
-#else
 #include <Qt3Support/q3button.h>
 #include <Qt/qpainter.h>
 #include <Qt3Support/q3table.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
-
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 
 class QLineEdit;
 class QPaintEvent;
 class QPushButton;
-class PProxy;
+
+namespace tlp {
+
+class PropertyInterface;
+
+#ifndef DOXYGEN_NOTFOR_USER
 
 class ColorButton : public QButton {
 
@@ -183,6 +181,14 @@ public:
   QString text() const;
 };
 
+class LabelPositionTableItem : public QComboTableItem {
+public:
+  LabelPositionTableItem(QTable *, bool editable = false);
+  ~LabelPositionTableItem();
+  int rtti() const;
+  QString text() const;
+};
+
 class SelectionTableItem : public QCheckTableItem {
 public:
   SelectionTableItem(QTable *table, const QString &txt);
@@ -191,6 +197,8 @@ public:
 
   QString text() const;
 };
+#endif //DOXYGEN_NOTFOR_USER
+
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
@@ -209,9 +217,9 @@ public:
   TulipTableWidget(QWidget *, const char *);
   ~TulipTableWidget();
 
-  void setTulipNodeItem(const PProxy *, const std::string propertyName, const node &, const int row, const int col);
+  void setTulipNodeItem(const PropertyInterface *, const std::string propertyName, const node &, const int row, const int col);
   QString getTulipNodeValue(const int row, const int col) const;
-  void setTulipEdgeItem(const PProxy *, const std::string propertyName, const edge &, const int row, const int col);
+  void setTulipEdgeItem(const PropertyInterface *, const std::string propertyName, const edge &, const int row, const int col);
   QString getTulipEdgeValue(const int row, const int col) const;
   QColor getBackColor1() const;
   QColor getBackColor2() const;
@@ -226,5 +234,7 @@ public slots:
   void resetBackColor2();
   void setUpdateColumnTitle(const bool);
 };
+
+}
 /*@}*/
 #endif //PROPERTYWIDGETS_H

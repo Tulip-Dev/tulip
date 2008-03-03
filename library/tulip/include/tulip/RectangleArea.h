@@ -1,8 +1,11 @@
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef RECTANGLEAREA_H
 #define RECTANGLEAREA_H
 
-#include "Coord.h"
-#include "Size.h"
+#include "tulip/Coord.h"
+#include "tulip/Size.h"
+
+namespace tlp {
 
 /*
   This is used by some plugins:
@@ -66,4 +69,7 @@ protected:
 
 bool intersect(const RectangleArea& rect1, const RectangleArea& rect2);
 
+}
+
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

@@ -6,17 +6,20 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 
 #include "PropertyDialogData.h"
 
 class QListViewItem;
 class QStringList;
-
-class PProxy;
-class GlGraph;
 class QScrollBar;
+
+namespace tlp {
+class PropertyInterface;
+}
+
+class GlGraphWidget;
 
 class PropertyDialog : public PropertyDialogData
 { 
@@ -25,12 +28,12 @@ class PropertyDialog : public PropertyDialogData
 public:
   PropertyDialog(QWidget *parent = 0, const char *name = 0, bool modal = FALSE, WFlags fl = 0);
   ~PropertyDialog();
-  void setGlGraphWidget(GlGraph *);
+  void setGlGraphWidget(GlGraphWidget *);
 
 private:
-  SuperGraph *supergraph;
-  GlGraph *glWidget;
-  PProxy *editedProperty;
+  tlp::Graph *graph;
+  GlGraphWidget *glWidget;
+  tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;
   void updateNbElements();
@@ -38,10 +41,9 @@ private:
 public slots:  
   ///Manages observers change notification.
   void update();
-  void selectNode(node);
-  void selectEdge(edge);
-  void setSuperGraph(SuperGraph *);
-  void changePropertyName(QListViewItem *);
+  void selectNode(tlp::node);
+  void selectEdge(tlp::edge);
+  void changePropertyName(Q3ListViewItem *);
   void newProperty();
   void removeProperty();
   void cloneProperty();
@@ -50,8 +52,8 @@ public slots:
   void setAllValue();
   
 signals:
-  void tulipAllNodePropertyChanged(SuperGraph *, const QString &property, const QString &value);
-  void tulipAllEdgePropertyChanged(SuperGraph *, const QString &property, const QString &value);
+  void tulipAllNodePropertyChanged(tlp::Graph *, const QString &property, const QString &value);
+  void tulipAllEdgePropertyChanged(tlp::Graph *, const QString &property, const QString &value);
 };
 
 #endif // PROPERTYDIALOG_H

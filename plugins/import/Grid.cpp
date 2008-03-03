@@ -1,6 +1,7 @@
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {
@@ -24,34 +25,33 @@ namespace {
 
 
 struct Grid:public ImportModule {
-  Grid(ClusterContext context):ImportModule(context) {
+  Grid(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("width",paramHelp[0],"10");
     addParameter<int>("height",paramHelp[1],"10");
   }
   ~Grid(){}
 
   void buildRow(vector<node> &row, double height){
-    LayoutProxy *layout = superGraph->getProperty<LayoutProxy>("viewLayout");
+    LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
     int width=row.size();
     for (int i=0;i<width;++i) {
-      row[i]=superGraph->addNode();
+      row[i]=graph->addNode();
       layout->setNodeValue(row[i], Coord(i*2.0, height*2.0, 0));
     }
     for (int i=0;i<width-1;++i)
-      superGraph->addEdge(row[i],row[i+1]);
+      graph->addEdge(row[i],row[i+1]);
   }
   
   void connectRow(vector<node> &row1,vector<node> &row2){
     assert(row1.size()==row2.size());
     int width=row1.size();
     for (int i=0;i<width;++i)
-      superGraph->addEdge(row1[i],row2[i]);
+      graph->addEdge(row1[i],row2[i]);
   }
 
   bool import(const string &name) {
-    superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-    superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.05,0.05,0.4));
-    bool ok=true;
+    graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
+    graph->getProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.05,0.05,0.4));
     int width = 10;
     int height = 10;
     if (dataSet!=0) {
@@ -73,4 +73,4 @@ struct Grid:public ImportModule {
     return true;
   }
 };
-IMPORTPLUGINOFGROUP(Grid,"Grid","Auber","02/12/2003","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(Grid,"Grid","Auber","02/12/2003","","1.0","Graphs")

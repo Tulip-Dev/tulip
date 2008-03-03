@@ -1,13 +1,17 @@
 #ifndef _GLFONTS_H_
 #define _GLFONTS_H_
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <string>
 #include <map>
 #include <vector>
 #include <tulip/Fonts.h>
 
-#define TAILLE 100
 class FTFont;
+
+#define TAILLE 100
+namespace tlp {
 
 //---------------------------------------------------------------------------
 class _GlFonts {
@@ -44,9 +48,14 @@ class t_GlFonts {
   _GlFonts operator[](unsigned int i) const;
 };
 
+}
+
 //---------------------------------------------------------------------------
 
 #include <tulip/Renderer.h>
+
+namespace tlp {
+
 class GlRenderer : public Renderer {
 
  private:
@@ -59,22 +68,23 @@ class GlRenderer : public Renderer {
   GlRenderer(){active = false;} // défini des valeurs par défault
   virtual ~GlRenderer(){}
 
-  void drawString(const std::string str, int index=-1)const;
-  void getBBox(const std::string s, float& x1, float& y1, float& z1, float& x2, float& y2, float& z2);
-  float getAdvance(const  std::string str, int index=-1)const;
-  float getAscender(int index=-1)const;
-  float getDescender(int index=-1)const; 
+  void drawString(const std::string &str, int index=-1)const;
+  void getBBox(const std::string &s, float& x1, float& y1, float& z1, float& x2, float& y2, float& z2);
+  float getAdvance(const  std::string &str, int index=-1)const;
+  float getAscender(int index = -1)const;
+  float getDescender(int index = -1)const; 
   bool ActiveFont(int index);
-  bool ActiveFont(FontMode t, int s, const std::string f, float d=0);
-  int AddFont(FontMode type, int size, const std::string f, float depth=0);
-  int searchFont(FontMode type, int size, const std::string f, float depth=0)const;
-  const char* getFontFilename(int index=-1) const; 
-  int getFontType(int index=-1) const;
+  bool ActiveFont(FontMode t, int s, const std::string &f, float d=0);
+  int AddFont(FontMode type, int size, const std::string &f, float depth=0);
+  int searchFont(FontMode type, int size, const std::string &f, float depth=0)const;
+  const char* getFontFilename(int index = -1) const; 
+  int getFontType(int index = -1) const;
   void translate(float x, float y, float z) const;
   void setColor(unsigned char r, unsigned char v, unsigned char b) const;
   void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
-
 };
 
+}
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif
 

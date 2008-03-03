@@ -52,7 +52,10 @@
                 <cstring>CheckBox1</cstring>
             </property>
             <property name="text">
-                <string>Filter</string>
+                <string>selected only</string>
+            </property>
+            <property name="toolTip">
+                <string>Display/Update only the selected nodes or edges</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="4">
@@ -78,7 +81,7 @@
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabNodes</cstring>
                 </property>
                 <attribute name="title">
                     <string>Nodes</string>
@@ -93,7 +96,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="TulipPropertyTable" row="0" column="0">
+                    <widget class="PropertyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>tableNodes</cstring>
                         </property>
@@ -125,7 +128,7 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabEdges</cstring>
                 </property>
                 <attribute name="title">
                     <string>Edges</string>
@@ -140,7 +143,7 @@
                     <property name="spacing">
                         <number>0</number>
                     </property>
-                    <widget class="TulipPropertyTable" row="0" column="0">
+                    <widget class="PropertyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>tableEdges</cstring>
                         </property>
@@ -312,7 +315,7 @@
                 </size>
             </property>
             <property name="text">
-                <string>Clone</string>
+                <string>Copy</string>
             </property>
         </widget>
         <widget class="QPushButton" row="4" column="3">
@@ -344,7 +347,10 @@
             <property name="text">
                 <string>Set all</string>
             </property>
-        </widget>
+            <property name="toolTip">
+                <string>Give the same value to current property for all nodes or edges</string>
+            </property>
+	</widget>
         <widget class="QPushButton" row="2" column="1">
             <property name="name">
                 <cstring>removeButton_2</cstring>
@@ -366,7 +372,10 @@
             <property name="text">
                 <string>To labels</string>
             </property>
-        </widget>
+            <property name="toolTip">
+                <string>Set the value of current property as label</string>
+            </property>
+	</widget>
     </grid>
 </widget>
 <customwidgets>
@@ -409,7 +418,6 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>tulip/PropertyWidgets.h</includehint>
-    <includehint>tulip/PropertyWidgets.h</includehint>
+    <includehint>tulip/PropertyWidget.h</includehint>
 </includehints>
 </UI>

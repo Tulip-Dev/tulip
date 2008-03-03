@@ -1,7 +1,10 @@
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
+namespace tlp {
+
 class Renderer;
 
 class Context {
@@ -23,4 +26,7 @@ class Context {
   Renderer& getRenderer() const;  
 };
 
+}
+
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

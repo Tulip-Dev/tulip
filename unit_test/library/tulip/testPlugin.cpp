@@ -1,19 +1,22 @@
 //-*-c++-*-
 #include <stdio.h>
 #include <string>
+#include <iostream>
 #include <cppunit/TestCase.h>
 #include <tulip/TulipPlugin.h>
-#include <iostream>
+
 using namespace std;
 
-class Test:public Selection { 
+class Test : public tlp::BooleanAlgorithm { 
 public:
-  Test(const PropertyContext &context):Selection(context){}
+  Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context){
+    addDependency<BooleanAlgorithm>("Test", "1.0");
+  }
   ~Test(){}
   bool run() { 
     std::string name = "Test";
     std::string err = "Error";
-    CPPUNIT_ASSERT(!superGraph->computeProperty(name, selectionProxy, err));
-    return true;}
+    return graph->computeProperty(name, booleanResult, err);
+  }
 };
-SELECTIONPLUGIN(Test,"Test","Jezequel","03/11/2004","0","0","1");
+BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0");

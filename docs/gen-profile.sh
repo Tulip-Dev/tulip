@@ -30,14 +30,14 @@ echo "<property name=\"startpage\">userHandbook/html/index.html</property>" >> p
 echo "<property name=\"aboutmenutext\">About Manuals</property>" >> profile.adp
 #echo "<property name=\"abouturl\"></property>" >> profile.adp
 echo "<property name=\"assistantdocs\">$QTDOCDIR</property> </profile>" >> profile.adp
-if test -f doxygen/profile.dcf ; then
-	cat doxygen/profile.dcf >> profile.adp ;
+if test -f userHandbook/profile.dcf ; then
+	cat userHandbook/profile.dcf >> profile.adp ;
 fi;
 if test -f developerHandbook/profile.dcf ; then
 	cat developerHandbook/profile.dcf >> profile.adp ;
 fi;
-if test -f userHandbook/profile.dcf ; then
-	cat userHandbook/profile.dcf >> profile.adp ;
+if test -f doxygen/profile.dcf ; then
+	cat doxygen/profile.dcf >> profile.adp ;
 fi;
 
 echo "</assistantconfig>" >> profile.adp

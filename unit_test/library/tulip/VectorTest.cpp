@@ -24,9 +24,12 @@ void VectorTest::testInternalOperation() {
   }
   const Vector<double, SIZE> vect2(vect1);
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
-  vect1[1] += 3;
+  vect1 += 3;
   CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
-  vect1[1] -= 3;
+  for (unsigned int i=0; i<SIZE; ++i)
+    CPPUNIT_ASSERT_EQUAL(double(i + 3), vect1[i]);
+  
+  vect1 -= 3;
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
   vect1 += vect2;
   vect1 /= 2.0;

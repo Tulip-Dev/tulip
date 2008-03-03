@@ -2,7 +2,7 @@
 #include <sstream>
 #include <list>
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/StableIterator.h>
 
 #include "PlaneClustering.h"
@@ -12,7 +12,7 @@
 using namespace std;
 using namespace tlp;
 
-CLUSTERINGPLUGIN(PlaneClustering, "Plane Clustering", "Maxime Delorme", "27/07/2005", "Alpha", "0", "1");
+ALGORITHMPLUGIN(PlaneClustering, "Plane Clustering", "Maxime Delorme", "27/07/2005", "Alpha", "1.0");
 
 namespace 
 {
@@ -52,7 +52,7 @@ namespace
     };
 };
 
-PlaneClustering::PlaneClustering(ClusterContext context):Clustering(context)
+PlaneClustering::PlaneClustering(AlgorithmContext context):Algorithm(context)
 {
   addParameter<float>("CoordA", paramHelp[0], "1.0f");
   addParameter<float>("CoordB", paramHelp[1], "1.0f");
@@ -66,16 +66,16 @@ PlaneClustering::~PlaneClustering()
 
 bool PlaneClustering::run() 
 {
-  LayoutProxy *layout = superGraph->getProperty<LayoutProxy>("viewLayout");
+  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  SuperGraph* sup = superGraph->addSubGraph();
-  SuperGraph* inf = superGraph->addSubGraph();
+  Graph* sup = graph->addSubGraph();
+  Graph* inf = graph->addSubGraph();
   
   sup->setAttribute("name", string("sup"));
   inf->setAttribute("name", string("inf"));
   
 
-  StableIterator<node> itN(superGraph->getNodes());
+  StableIterator<node> itN(graph->getNodes());
   
   while (itN.hasNext())
     {
@@ -89,15 +89,15 @@ bool PlaneClustering::run()
 	sup->addNode(n);
     }
 
-  StableIterator<edge> itE(superGraph->getEdges());
+  StableIterator<edge> itE(graph->getEdges());
 
   while (itE.hasNext())
     {
       edge e = itE.next();
       Coord start, end;
       
-      start = layout->getNodeValue(superGraph->source(e));
-      end   = layout->getNodeValue(superGraph->target(e));
+      start = layout->getNodeValue(graph->source(e));
+      end   = layout->getNodeValue(graph->target(e));
 
       float sval, eval;
 

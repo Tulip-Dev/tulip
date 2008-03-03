@@ -6,21 +6,9 @@
 #include <config.h>
 #endif
 
-#include "SuperGraph.h"
-#include "LayoutProxy.h"
-#include "MetricProxy.h"
-#include "StringProxy.h"
-#include "SelectionProxy.h"
-#include "ColorsProxy.h"
-#include "IntProxy.h"
-#include "SizesProxy.h"
-#include "MetaGraphProxy.h"
-#include "PluginProgress.h"
-#include "Reflect.h"
-#include "ExtendedClusterOperation.h"
-#include "ExportModule.h"
-#include "Clustering.h"
-#include "ImportModule.h"
+#include <iostream>
+#include "tulip/tulipconf.h"
+#include "tulip/PluginLoader.h"
 
 namespace tlp {
   extern TLP_SCOPE const char PATH_DELIMITER;
@@ -32,63 +20,31 @@ namespace tlp {
   extern TLP_SCOPE void initTulipLib(char* appDirPath = 0);
     
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
-  TLP_SCOPE bool loadPlugin(const std::string & filename, PluginLoader *plug=0);
+  TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
+  TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
 
   /**
-   * Load a graph in the tlp format
-   * Warning : this function use "tlp" import plugin (must be laoded)
+   * returns the demangled name of a C++ class defines in the tlp namespace.
+   * The tlp:: prefix is omitted and the returned pointer
+   * do not have to be deallocated.
    */
-  TLP_SCOPE SuperGraph * load(const std::string &filename);
-  /**
-   * Save a graph in tlp format
-   * Warning : this function use "tlp" export plugin (must be laoded)
-   */
-  TLP_SCOPE bool save(SuperGraph *, const std::string &filename);
-  TLP_SCOPE SuperGraph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,SuperGraph *newSuperGraph=0);
-  TLP_SCOPE bool exportGraph(SuperGraph *sg,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
-  TLP_SCOPE bool clusterizeGraph(SuperGraph *sg,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="hierarchical" , PluginProgress *plugProgress=0);
-  /**
-   * Return a new graph
-   */
-  TLP_SCOPE SuperGraph* newSuperGraph();
-  /**
-   *  Return an empty subgraph 
-   */
-  TLP_SCOPE SuperGraph *newSubGraph(SuperGraph *, std::string name = "unnamed");
-  /**
-   *  Return a subgraph equal to the graph given in parameter (a clone subgraph)
-   */
-  TLP_SCOPE SuperGraph *newCloneSubGraph(SuperGraph *, std::string name = "unnamed");
-  /**
-   *  find the first node of degree 0, if no node exist return false else true
-   */
-  TLP_SCOPE bool getSource(SuperGraph *, node &n);
-  /**
-   * Return an istream from a gzipped file (uses gzstream lib)
-   * the stream has to be deleted after use.
-   * \warning Don't forget to check the stream with ios::bad()!
-   */
+  TLP_SCOPE char *demangleTlpClassName(const char *className);
+
   TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
   /**
-   * Return an ostream to write to a gzipped file (uses gzstream lib)
+   * Returns an ostream to write to a gzipped file (uses gzstream lib)
    * the stream has to be deleted after use.
    * \warning Don't forget to check the stream with ios::bad()!
    */
   TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
   /**
-   * Append the selected part of the graph inG (properties, nodes & edges) into the graph outG.
-   * If no selection is done (inSel=NULL), the whole inG graph is appended.
-   * The output selection is used to select the appended nodes & edges
-   * \warning The input selection is extended to all selected edge ends.
+   * Extracts Major number from a release number
    */
-  TLP_SCOPE void copyToGraph( SuperGraph * outG, SuperGraph *	inG, SelectionProxy* inSelection=0, SelectionProxy* outSelection=0 );
+  TLP_SCOPE std::string getMajor(const std::string &release);
   /**
-   * Remove the selected part of the graph ioG (properties, nodes & edges).
-   * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
-   * \warning The selection is extended to all selected edge ends.
+   * Extracts Minor number from a release number
    */
-  TLP_SCOPE void removeFromGraph(	SuperGraph * ioG, SelectionProxy* inSelection = 0 );
-  
+  TLP_SCOPE std::string getMinor(const std::string &release);
 };
 
 #endif

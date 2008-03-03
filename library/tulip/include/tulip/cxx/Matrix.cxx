@@ -39,11 +39,18 @@ MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
   MATRIXTLPGEO tmpMat(*this);
-  fill(0);
+  MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
+  if (pMat == this)
+    pMat = new MATRIXTLPGEO(*this);
   for (unsigned int i=0;i<SIZE;++i)
-    for (unsigned int j=0;j<SIZE;++j)
+    for (unsigned int j=0;j<SIZE;++j) {
+      Obj tmpObj = (Obj) 0;
       for (unsigned int k=0;k<SIZE;++k)
-	(*this)[i][j]+=tmpMat[i][k]*mat[k][j];
+	tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
+      (*this)[i][j] = tmpObj;
+    }
+  if (pMat != &mat)
+    delete pMat;
   return (*this);
 }
 //=====================================================================================
@@ -171,8 +178,8 @@ MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator*(const MATRIXTLPGEO &mat2) const {
-  return  MATRIXTLPGEO(*this)*=mat2;
+  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
+  return MATRIXTLPGEO(mat1)*=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
@@ -181,24 +188,38 @@ MATRIXTLPGEO MATRIXTLPGEO::operator/(const MATRIXTLPGEO &mat2) const{
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator*(const Obj &obj) const {
-  return  MATRIXTLPGEO(*this) *= obj;
-}
-//=====================================================================================
-template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO MATRIXTLPGEO::operator/(const Obj &obj) const{
   return  MATRIXTLPGEO(*this) /= obj;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-tlp::Vector<Obj,SIZE> MATRIXTLPGEO::operator*(const tlp::Vector<Obj,SIZE> &vec) const {
+  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat ,const Obj &obj) {
+  return  MATRIXTLPGEO(mat) *= obj;
+}
+//=====================================================================================
+template<typename Obj, unsigned int SIZE>
+  tlp::Vector<Obj, SIZE> tlp::operator*( const MATRIXTLPGEO &mat , const tlp::Vector<Obj, SIZE> &vec) {
   tlp::Vector<Obj,SIZE> result;
   for (unsigned int row=0; row<SIZE; ++row) {
-    result[row] = (*this)[row][0] * vec[0];
+    result[row] = mat[row][0] * vec[0];
   }
   for (unsigned int col=1; col<SIZE; ++col) {
     for (unsigned int row=0; row<SIZE; ++row) {
-      result[row] += (*this)[row][col] * vec[col];
+      result[row] += mat[row][col] * vec[col];
+    }
+  }
+  return  result;
+}
+//=====================================================================================
+template<typename Obj,unsigned int SIZE>
+  tlp::Vector<Obj,SIZE> tlp::operator*( const tlp::Vector<Obj,SIZE> &vec, const MATRIXTLPGEO &mat) {
+  tlp::Vector<Obj,SIZE> result;
+  for (unsigned int row=0; row<SIZE; ++row) {
+    result[row] = mat[0][row] * vec[0];
+  }
+  for (unsigned int col=1; col<SIZE; ++col) {
+    for (unsigned int row=0; row<SIZE; ++row) {
+      result[row] += mat[col][row] * vec[col];
     }
   }
   return  result;
@@ -221,58 +242,6 @@ tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const int nIterations) const
     }
 
   return iteration;
-}
-
-//=====================================================================================
-template<typename Obj, unsigned int SIZE>
-void MATRIXTLPGEO::caracteristicPolynome(Polynome &result) const
-{
-
-  // This function only works for 3x3 matrices :
-  if (SIZE != 3)
-    {
-      std::cerr << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
-      return;
-    }
-  
-  // This is quite an ugly function but ... well ... it works :)
-  // If P is the caracteristic Polynome of the matrix M
-  // with :
-  //     ( a-Lambda  b         c       )
-  // M = ( d         e-Lambda  f       )
-  //     ( g         h         i-Lambda)
-  //
-  // Then we deduce that P = A * Lambda³ + B * Lambda² + C * Lambda + D
-  // Where :
-  //  
-  //  A = -1
-  //  B = a + e + i
-  //  C = -ae -ai -ei + hf + bd + cg
-  //  D = aei - ahf - bdi + bgf + cdh - cge
-
-  float a, b, c, d, e, f, g, h, i;
-
-  a = (*this)[0][0];
-  b = (*this)[0][1];
-  c = (*this)[0][2];
-  d = (*this)[1][0];
-  e = (*this)[1][1];
-  f = (*this)[1][2];
-  g = (*this)[2][0];
-  h = (*this)[2][1];
-  i = (*this)[2][2];
-
-  // A = -1
-  result.a = -1;
-
-  // B = a + e + i
-  result.b = a + e + i;
-
-  // C = -ae -ai -ei + hf + bd + cg
-  result.c = -(a * e) - (a * i) - (e * i) + (h * f) + (b * d) + (c * g);
-
-  // D = aei - ahf - bdi + bgf + cdh - cge
-  result.d = (a * e * i) - (a * h * f) - (b * d * i) + (b * g * f) + (c * d * h) - (c * g * e);
 }
 
 //=====================================================================================
@@ -369,85 +338,6 @@ bool MATRIXTLPGEO::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenV
 
   eigenVector[1] = (-a * x) / b;
   eigenVector[2] = (-c * x) / d;
-
-  return true;
-}
-
-//=====================================================================================
-
-template<typename Obj, unsigned int SIZE>
-bool MATRIXTLPGEO::computeEigenVectors(tlp::Matrix<Obj, 3> &eigenVectors) const
-{
-  if (SIZE != 3)
-    {
-      std::cerr << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
-
-      return false;
-    }
-
-  // To compute the EigenVectors of the matrix, we first need to find the EigenValues
-  
-  // We compute, firstly, the Caracteristic Polynome of the Matrix :
-  Polynome cara;
-
-  caracteristicPolynome(cara);
-
-  // EigenValues are given by the roots of the Polynome :
-  float EigenValues[3];
-  int nRes;
-
-  cara.resolv(EigenValues, nRes);
-
-  if (nRes != 3)
-    {
-      std::cerr << "Non Symmetric Matrix !!!" << std::endl;
-
-      return false;
-    }
-
-  /* ==== DEBUG ====
-     std:: cout << "EigenValues = ";
-  for(int i=0; i < 3; i++) 
-    std::cout << EigenValues[i] << "; "; 
-    std::cout << std::endl; */
-
-  for(int i=0; i < 3; i++)
-    {
-      // We compute the equation system :
-      Matrix<float, 3> eQSys(*this);
-
-      for(int j=0; j < 3; j++)
-	eQSys[j][j] -= EigenValues[i];
-
-      /*  ==== DEBUG ====
-      std::cout << "\nEQSYS =\n"; 
-      for(int j=0; j < 3; j++)
-      std::cout << eQSys[j] << std::endl;*/
-
-      // And we simplify it :
-      Matrix<float, 2> eVSys;
-
-      if (!eQSys.simplify(eVSys))
-	{
-	  std::cerr << "Couldn't Simplify matrix for " << i << "th EigenValue\n";
-
-	  return false;
-	}
-
-      /* ==== DEBUG ====
-      std::cout << "\nEVQYQ =\n";
-      for(int j=0; j < 2; j++)
-      std::cout << eVSys[j] << std::endl; */
-
-      // And finally, we find the matching EigenVector
-      if (!eVSys.computeEigenVector(1, eigenVectors[i]))
-	{
-	  std::cerr << "Couldn't compute EigenVector for " << i << "th EigenValue\n";
-
-	  return false;
-	}
-      
-    }
 
   return true;
 }

@@ -1,5 +1,6 @@
 #ifndef _DOCUMENT_H_
 #define _DOCUMENT_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "FLayout.h"
 #include "Context.h"
@@ -7,6 +8,8 @@
 
 #include <vector>
 #include <stack>
+
+namespace tlp {
 
 typedef std::vector<Frame*, std::allocator<Frame*> > VFrame; // tableau de Frames : contenu du document
 typedef std::stack<Context> SContext; // la pile de context nécessaire lors d'un ajout de frames
@@ -35,4 +38,7 @@ class Document : public FLayout{
   bool addFrame(Frame* f);
 };
 
+}
+
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

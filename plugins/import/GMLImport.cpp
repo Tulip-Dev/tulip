@@ -1,6 +1,6 @@
 #include <fstream>
 #include <tulip/TulipPlugin.h>
-#include <tulip/PropertyProxy.h>
+#include <tulip/AbstractProperty.h>
 #include "GMLParser.h"
 
 #define NODE "node"
@@ -16,6 +16,7 @@
 #define DEFAULTVALUE "default"
 
 using namespace std;
+using namespace tlp;
 
 void nodeAttributeError() {
   cerr << "Error reading node attribute: The attributes of nodes must be defined after the node id (data ignored)" << endl;
@@ -26,67 +27,67 @@ void edgeAttributeError() {
 
 //=================================================================================
 struct GMLGraphBuilder:public GMLTrue {
-  SuperGraph *_superGraph;
+  Graph *_graph;
   map<int,node> nodeIndex;
   virtual ~GMLGraphBuilder(){}
-  GMLGraphBuilder(SuperGraph *superGraph):_superGraph(superGraph) {
+  GMLGraphBuilder(Graph *graph):_graph(graph) {
     //cer << "buil GraphBuilder" << endl;
   }
   bool addNode(int id) {
-    if (nodeIndex.find(id)==nodeIndex.end()) {nodeIndex[id]=_superGraph->addNode();}
+    if (nodeIndex.find(id)==nodeIndex.end()) {nodeIndex[id]=_graph->addNode();}
     return true;
   }
   edge addEdge(int idSource,int idTarget) {
     // return and invalid edge if one of the two nodes does not exits
-    if (_superGraph->isElement(nodeIndex[idSource]) && _superGraph->isElement(nodeIndex[idTarget]))
-      return _superGraph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
+    if (_graph->isElement(nodeIndex[idSource]) && _graph->isElement(nodeIndex[idTarget]))
+      return _graph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
     return edge();
   }
   bool setNodeValue(int nodeId, const string propertyName, string value) {
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<StringProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<StringProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, double value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<MetricProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<DoubleProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, int value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<IntProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<IntegerProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, bool value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<SelectionProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<BooleanProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Coord value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<LayoutProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<LayoutProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Size value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<SizesProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<SizeProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
   }
   bool setNodeValue(int nodeId, const string propertyName, Color value) { 
-    if (_superGraph->isElement(nodeIndex[nodeId])) {
-      _superGraph->getLocalProperty<ColorsProxy>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
+    if (_graph->isElement(nodeIndex[nodeId])) {
+      _graph->getLocalProperty<ColorProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
     return false;
@@ -105,7 +106,7 @@ struct GMLGraphBuilder:public GMLTrue {
     return true;
   }
   void setEdgeValue(edge e,const LineType::RealType & lCoord) {
-    _superGraph->getLocalProperty<LayoutProxy>("viewLayout")->setEdgeValue(e,lCoord);
+    _graph->getLocalProperty<LayoutProperty>("viewLayout")->setEdgeValue(e,lCoord);
   }
   bool setAllNodeValue(const string propertyType, const string propertyName, string value) {
     return true;
@@ -209,7 +210,30 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     if (st=="d") size.setD(real);
     return true;
   }
-  bool addString(const string &st,const string &str) {return true;}
+  bool addString(const string &st,const string &str) {
+    if (st == "fill") {
+      // parse color in format #rrggbb
+      if (str[0] == '#' && str.length() == 7) {
+	char *c_str = (char *) str.c_str() + 1;
+	for (int i = 0; i < 3; i++, c_str++) {
+	  unsigned char value = 0;
+	  if (isdigit(*c_str))
+	    value += (*c_str - '0') * 16;
+	  else value += ((tolower(*c_str) - 'a') + 10) * 16;
+	  c_str++;
+	  if (isdigit(*c_str))
+	    value += *c_str - '0';
+	  else value += (tolower(*c_str) - 'a') + 10;
+	  switch(i) {
+	  case 0: color.setR(value); break;
+	  case 1: color.setG(value); break;
+	  case 2: color.setB(value);
+	  }
+	}
+      }
+    }
+    return true;
+  }
   bool close() {
     nodeBuilder->setCoord(coord);
     nodeBuilder->setColor(color);
@@ -380,7 +404,7 @@ bool GMLEdgeBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) 
 //=================================================================================
 bool GMLGraphBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) {
   if (structName==GRAPH) {
-    newBuilder=new GMLGraphBuilder(_superGraph);
+    newBuilder=new GMLGraphBuilder(_graph);
   }
   else if (structName==NODE) {
     newBuilder=new GMLNodeBuilder(this);
@@ -409,8 +433,15 @@ namespace {
 
 /** \addtogroup import */
 /*@{*/
-struct GMLImport:public ImportModule {
-  GMLImport(ClusterContext context):ImportModule(context) {
+/// Import plugin for GML format.
+/**
+ * This plugin imports a graph structure recorded using the GML File format.
+ * This format is the file format used by Graphlet.
+ * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
+ */
+class GMLImport:public ImportModule {
+public:
+  GMLImport(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport(){}
@@ -418,11 +449,11 @@ struct GMLImport:public ImportModule {
     string filename;
     dataSet->get<string>("file::filename", filename);
     ifstream myFile(filename.c_str());
-    GMLParser<true> myParser(myFile,new GMLGraphBuilder(superGraph));
+    GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();
     return true;
   }
 };
 /*@}*/
 
-IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","0","0","1","File")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","GML Import plugin","1.0","File")

@@ -1,5 +1,4 @@
 #include <tulip/ConnectedTest.h>
-#include <tulip/BiconnectedTest.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/MutableContainer.h>
@@ -8,19 +7,24 @@
 #include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ForEach.h>
+#include <tulip/IdManager.h>
+#include <tulip/TreeTest.h>
 
 using namespace stdext;
 using namespace std;
+using namespace tlp;
 
 //============================================================
 // PlanarConMap
 //============================================================
-PlanarConMap::PlanarConMap(SuperGraph* s):SuperGraphDeco(s), facesEdges(), edgesFaces(){
+PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFaces(){
   assert(SimpleTest::isSimple(s));
   assert(ConnectedTest::isConnected(s));
-  assert(s->numberOfNodes()==0 || PlanarityTest::isPlanar(s));
-  
-  PlanarityTest::planarEmbedding(s);
+  assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
+
+  faceId = new IdManager();
+  if (!TreeTest::isFreeTree(s)) //all map of trees are valid (do not change the existing order)
+    PlanarityTest::planarEmbedding(s);
   computeFaces();
 }
 
@@ -49,7 +53,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   assert(containEdge(f,succCycleEdge(e1,v)) && containEdge(f,succCycleEdge(e2,w)));
 
   if(new_face == Face())
-    new_face = Face(faceId.get());
+    new_face = Face(faceId->get());
 
   edge e_tmp;
   vector<edge> v_edges1, v_edges2;
@@ -66,10 +70,10 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   succ2 = succCycleEdge(e2,w);
 
 
-  SuperGraph * father = getFather();
-  edge e = ((father->existEdge(v,w)).isValid() ? father->existEdge(v,w) : father->existEdge(w,v));
+  Graph * supergraph = getSuperGraph();
+  edge e = ((supergraph->existEdge(v,w)).isValid() ? supergraph->existEdge(v,w) : supergraph->existEdge(w,v));
   if(!e.isValid()){
-    e = father->addEdge(v,w); 
+    e = supergraph->addEdge(v,w); 
     graph_component->addEdge(e);
   }
   else
@@ -457,7 +461,7 @@ void PlanarConMap::computeFaces(){
 
   unsigned int nbNodes = numberOfNodes();
   if(nbNodes < 3){
-    Face f(faceId.get());
+    Face f(faceId->get());
     faces.push_back(f);
     vector<Face> v_faces;
     v_faces.push_back(f);
@@ -502,7 +506,7 @@ void PlanarConMap::computeFaces(){
       forEach(e,getEdges()){
 	edges.clear();
 	if (considered.get(e.id)<2){
-	  Face lf(faceId.get());
+	  Face lf(faceId->get());
 	  faces.push_back(lf);
 	  edge e1 = e;
 	  node n_tmp, n;
@@ -561,58 +565,6 @@ unsigned int PlanarConMap::nbFacesNodes(const Face f) {
 //============================================================
 unsigned int PlanarConMap::nbFacesEdges(const Face f) {
   return facesEdges[f].size();
-}
-
-//============================================================
-edge PlanarConMap::existEdge(node u, node v) const {
-  return graph_component->existEdge(u,v);
-}
-//============================================================
-node PlanarConMap::source(edge e) const {
-  return graph_component->source(e);
-}
-//============================================================
-node PlanarConMap::target(edge e) const {
-  return graph_component->target(e);
-}
-//============================================================
-Iterator<node>* PlanarConMap::getNodes(){
-  return graph_component->getNodes();  
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getEdges(){
-  return graph_component->getEdges();  
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getInEdges(node n) const {
-  return graph_component->getInEdges(n);
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getOutEdges(node n) const {
-  return graph_component->getOutEdges(n);
-}
-
-//============================================================
-Iterator<edge>* PlanarConMap::getInOutEdges(node n) const {
-  return graph_component->getInOutEdges(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getInNodes(node n) const {
-  return graph_component->getInNodes(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getOutNodes(node n) const {
-  return graph_component->getOutNodes(n);
-}
-
-//============================================================
-Iterator<node>* PlanarConMap::getInOutNodes(node n) const {
-  return graph_component->getInOutNodes(n);
 }
 
 //============================================================
@@ -718,7 +670,7 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n){
     e1 = e_tmp;
   if(!w_found && first_was_w)
     e2 = e_tmp;
-  Face new_face = Face(faceId.get());
+  Face new_face = Face(faceId->get());
   
   // Add the edge and update the map
   addEdgeMap(v,w,f,e1,e2,new_face);
@@ -824,11 +776,8 @@ void PlanarConMap::mergeFaces(Face f, Face g){
 bool PlanarConMap::containNode(Face f, node v) {
   Iterator<Face> * it_f = getFacesAdj(v);
   while(it_f->hasNext())
-    if((it_f->next()) == f){
-      delete it_f;
+    if((it_f->next()) == f)
       return true;
-    }
-  delete it_f;
   return false;
 }
 
@@ -877,14 +826,10 @@ Face PlanarConMap::getFaceContaining(node v, node w) {
 //=================================================================
 Face PlanarConMap::sameFace(node v, node n) {
   Face f;
-  Iterator<Face> * it_f = getFacesAdj(v);
-  while(it_f->hasNext()){
-    f = it_f->next();
-    if(containNode(f,n)){
-      delete it_f;
+  forEach(f, getFacesAdj(v)){
+    if(containNode(f,n))
       return f;
-    }
-  } delete it_f;
+  }
   return Face();
 }
 

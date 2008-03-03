@@ -15,9 +15,9 @@
 
 #include "GridOptionsData.h"
 
-#include <tulip/GlADComposite.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/GlADGrid.h>
+#include <tulip/LayerManagerWidget.h>
+#include <tulip/GlGrid.h>
 
 namespace tlp {
 /** \brief Widget for displaying a grid on the graph.
@@ -31,17 +31,17 @@ namespace tlp {
  * 
  * Other options are available :
  * 
- *  - Hollow Grid : Allows the user to hollow the grid to only have 2D projections of the grid. Disabling this option computes a whole 3D grid.
  *  - Display Dimensions : Allows the user to choose on which dimensions the grid will be displayed.
  *
  */
-class GridOptionsWidget : public GridOptionsData
-{
+class GridOptionsWidget : public GridOptionsData {
+
   Q_OBJECT
 
  protected:
   GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
-  tlp::GlADGrid *grid; /**< The considered GlADGrid */
+  LayerManagerWidget *layerWidget; /**< The considered LayerManagerWidget */
+  tlp::GlGrid *grid; /**< The considered GlADGrid */
 
  public:
   /**
@@ -59,6 +59,11 @@ class GridOptionsWidget : public GridOptionsData
    */
   void setCurrentGraphWidget(GlGraphWidget *graphWidget);
 
+  /**
+   * Function used to define on which LayerManagerWidget we are working
+   */
+  void setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget);						
+
  public slots:
  
   /**
@@ -75,11 +80,6 @@ class GridOptionsWidget : public GridOptionsData
    * Function used to enable the panel "Size"
    */
   void chGridSize();
-
-  /**
-   * Function used to enable or disable the hollowed grid.
-   */
-  void chHollowGrid();
 
   /**
    * Function used to change on which axis will be displayed the grid.

@@ -1,6 +1,12 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
-#include <tulip/TlpTools.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
 /**
  * Tutorial 004
@@ -10,7 +16,9 @@
  */
 
 using namespace std;
-void buildGraph(SuperGraph *graph) {
+using namespace tlp;
+
+void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -23,19 +31,19 @@ void buildGraph(SuperGraph *graph) {
 
 int main() {
   //create an empty graph
-  SuperGraph *graph=tlp::newSuperGraph();
+  Graph *graph=tlp::newGraph();
   //build the graph
   buildGraph(graph);
 
   //Get and create several properties
-  MetricProxy *metric=graph->getLocalProperty<MetricProxy>("firstMetric");
-  SelectionProxy *select=graph->getLocalProperty<SelectionProxy>("firstSelection");
-  LayoutProxy *layout=graph->getLocalProperty<LayoutProxy>("firstLayout");
-  IntProxy *integer=graph->getLocalProperty<IntProxy>("firstInteger");
-  ColorsProxy *colors=graph->getLocalProperty<ColorsProxy>("firstColors");
-  SizesProxy *sizes=graph->getLocalProperty<SizesProxy>("firstSizes");
-  MetaGraphProxy *meta=graph->getLocalProperty<MetaGraphProxy>("firstMeta");
-  StringProxy *strings=graph->getLocalProperty<StringProxy>("firstString");
+  DoubleProperty *metric=graph->getLocalProperty<DoubleProperty>("firstMetric");
+  BooleanProperty *select=graph->getLocalProperty<BooleanProperty>("firstSelection");
+  LayoutProperty *layout=graph->getLocalProperty<LayoutProperty>("firstLayout");
+  IntegerProperty *integer=graph->getLocalProperty<IntegerProperty>("firstInteger");
+  ColorProperty *colors=graph->getLocalProperty<ColorProperty>("firstColors");
+  SizeProperty *sizes=graph->getLocalProperty<SizeProperty>("firstSizes");
+  GraphProperty *meta=graph->getLocalProperty<GraphProperty>("firstMeta");
+  StringProperty *strings=graph->getLocalProperty<StringProperty>("firstString");
 
   //initialize all the properties
   metric->setAllNodeValue(0.0);

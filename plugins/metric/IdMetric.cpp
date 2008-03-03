@@ -1,20 +1,20 @@
-#include <tulip/ForEach.h>
-
 #include "IdMetric.h"
 
-METRICPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","0","1","Misc");
+using namespace tlp;
+
+DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","1.0","Misc");
 
 //==================================================================
-IdMetric::IdMetric(const PropertyContext &context):Metric(context) {
+IdMetric::IdMetric(const PropertyContext &context):DoubleAlgorithm(context) {
 }
 //==================================================================
 bool IdMetric::run() {
   node n;
-  forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, n.id);
+  forEach(n, graph->getNodes())
+    doubleResult->setNodeValue(n, n.id);
   edge e;
-  forEach(e, superGraph->getEdges())
-    metricProxy->setEdgeValue(e, e.id);
+  forEach(e, graph->getEdges())
+    doubleResult->setEdgeValue(e, e.id);
   return true;
 }
 //=================================================================

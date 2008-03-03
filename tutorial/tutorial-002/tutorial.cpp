@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/TlpTools.h>
+#include <tulip/Graph.h>
 
 /**
  * Tutorial 002
@@ -10,7 +10,9 @@
  */
 
 using namespace std;
-void buildGraph(SuperGraph *graph) {
+using namespace tlp;
+
+void buildGraph(Graph *graph) {
   //add three nodes
   node n0=graph->addNode();
   node n1=graph->addNode();
@@ -23,7 +25,7 @@ void buildGraph(SuperGraph *graph) {
 
 int main() {
   //create an empty graph
-  SuperGraph *graph=tlp::newSuperGraph();
+  Graph *graph=tlp::newGraph();
 
   //build the graph
   buildGraph(graph);

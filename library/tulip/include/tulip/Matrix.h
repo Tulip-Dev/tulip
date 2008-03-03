@@ -9,39 +9,42 @@
 
 #include <cassert>
 #include <iostream>
-#include <tulip/Vector.h>
-#include <tulip/Polynome.h>
 #include <vector>
-
-#define MATRIX Matrix<Obj,SIZE>
+#include <tulip/Vector.h>
 
 
 namespace tlp {
+
   /**
    * \addtogroup basic
    */ 
+#define MATRIX Matrix<Obj,SIZE>
+
   /*@{*/
   /**
-     * \brief class for mathematical square matrix
-     *
-     * Enables to create a Square Matrix of Obj with a
-     * Fixed size and provide Mathematical operation. Mathematical 
-     * operators must be defined for Obj. 
-     *
-     * \author : David Auber auber@tulip-software.org
-     * 
-     * \author Contributor : Maxime Delorme
-     * \version 0.0.2 27/04/2005 
-     */
-    template<typename Obj,unsigned int SIZE>
-    class TLP_SCOPE Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
-    public:
-      Matrix(){}
-      Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a):Vector< Vector<Obj,SIZE> , SIZE >(a){};
-
+   * \brief class for mathematical square matrix
+   *
+   * Enables to create a Square Matrix of Obj with a
+   * limited size and provides Mathematical operation. Mathematical 
+   * operators must be defined for Obj. Out of bound accesses
+   * are only checked in debug mode.
+   *
+   * \author : David Auber auber@tulip-software.org
+   * 
+   * \author Contributor : Maxime Delorme
+   * \version 0.0.2 27/04/2005 
+   */
+  template<typename Obj,unsigned int SIZE>
+    class Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
+  public:
+    Matrix(){}
+    Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a) :
+      Vector< Vector<Obj,SIZE> , SIZE >(a) {
+    };
+      
       // Builds a correlation matrix from a covariance matrix !
       Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix);
-
+      
       /**
        * Fill the matrix with the value of obj
        */
@@ -73,49 +76,31 @@ namespace tlp {
       /**
        * Divide all elements of the matrix by obj, return "&(*this)"
        */
-      inline MATRIX & operator/=(const Obj &obj);
+     inline MATRIX & operator/=(const Obj &obj);
       /**
-       * Return the cofactor Matrix of this
+       * Returns the cofactor Matrix of this
        */
       MATRIX cofactor() const;
       /**
-       * Return a new matrix equal to the multiplication of the matrix by 
-       * another matrix"
-       */
-      MATRIX operator*(const MATRIX &mat2) const;
-      /**
-       * Return a new matrix equal to the division of the matrix by 
+       * Returns a new matrix equal to the division of the matrix by 
        * another matrix"
        */
       MATRIX operator/(const MATRIX &mat2) const;
+
       /**
-       * Return a new matrix equal to the multiplication of the matrix by 
-       * obj"
-       */
-      MATRIX operator*(const Obj &obj) const;
-      /**
-       * Return a new matrix equal to the division of the matrix by 
+       * Returns a new matrix equal to the division of the matrix by 
        * obj"
        */
       MATRIX operator/(const Obj &obj) const;
-      /**
-       * Return a new vector equal to the multiplication of the matrix by 
-       * a vector"
-       */
-      inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec) const;
+
 
       /**
-       * Return a new vector equal to the most influent eigenvector of the
+       * Returns a new vector equal to the most influent eigenvector of the
        * matrix
        */
       inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;
 
-      /**
-       * Returns a Polynome representing the caracteristic polynome of the matrix.
-       * For the moment, this function only computes a 3x3 matrix caracteristic polynome.
-       */
-      inline void caracteristicPolynome(Polynome &result) const;
-
+#ifndef DOXYGEN_NOTFOR_DEVEL
       /**
        * Simplifies a 3x3 matrix in 2x2 matrix to be used with computeEigenVector
        */
@@ -126,14 +111,38 @@ namespace tlp {
        *           /!\ This can only be used with a 2x2 matrix !!! /!\
        */
       inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
+#endif // DOXYGEN_NOTFOR_DEVEL
 
-      /**
-       * Returns every EigenVectors of a 3x3 matrix !
-       * To be used only on symmetric matrices
-       */
-      inline bool computeEigenVectors(Matrix<Obj, 3> &eigenVectors) const;
     };
-    /*@}*/
+  
+
+  /**
+   * Returns a new matrix equal to the multiplication of the matrix by 
+   * obj"
+   */
+  template<typename Obj, unsigned int SIZE>
+    inline MATRIX operator*(const MATRIX &mat, const Obj &obj);
+  /**
+   * Returns a new matrix equal to the multiplication of the matrix by 
+   * another matrix"
+   */
+  template<typename Obj, unsigned int SIZE>
+    inline MATRIX operator*(const MATRIX &mat1, const MATRIX &mat2);
+  /**
+   * Returns a new vector equal to the multiplication of the vector by 
+   * a matrix,(the vector is automatically transposed to do the multiplication)"
+   */
+  template<typename Obj, unsigned int SIZE>
+    inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec, const tlp::Matrix<Obj, SIZE> &);
+  /**
+   * Returns a new vector equal to the multiplication of the matrix by 
+   * a vector"
+   */
+  template<typename Obj, unsigned int SIZE>
+    inline Vector<Obj,SIZE> operator*( const Matrix<Obj, SIZE> &, const Vector<Obj,SIZE> &vec);
+  
+  /*@}*/
+
 }
 
 #include "./cxx/Matrix.cxx"

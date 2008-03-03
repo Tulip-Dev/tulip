@@ -13,22 +13,25 @@
 //#define Bfs_H
 
 #include <tulip/MutableContainer.h>
+#include <tulip/Graph.h>
 
+namespace tlp {
 class TLP_SCOPE Bfs {
  public :
   
-  Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection);
+  Bfs(Graph * G, BooleanProperty* resultatAlgoSelection);
   ~Bfs();
 
-  SuperGraph * graph;
+  Graph *graph;
 
  private :
 
-  void computeBfs(SuperGraph * G,SelectionProxy * resultatAlgoSelection, node root);  
+  void computeBfs(Graph * G, BooleanProperty* resultatAlgoSelection, node root);  
 
-  SelectionProxy * s_proxy;
+  BooleanProperty* s_proxy;
   unsigned int nbNodes;
   MutableContainer<bool>::MutableContainer selectedNodes;
   MutableContainer<bool>::MutableContainer selectedEdges;
 
  };  
+}

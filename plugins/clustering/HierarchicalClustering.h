@@ -9,15 +9,15 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class HierarchicalClustering:public Clustering { 
+class HierarchicalClustering:public tlp::Algorithm { 
 public:
-  HierarchicalClustering(ClusterContext);
+  HierarchicalClustering(tlp::AlgorithmContext);
   ~HierarchicalClustering();
   bool run();
   bool check(std::string &);
   void reset();
 private :
-  bool split (MetricProxy *, std::list<node> &);
+  bool split (tlp::DoubleProperty*, std::list<tlp::node> &);
 };
 /*@}*/
 

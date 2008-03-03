@@ -1,12 +1,13 @@
 #include "tulip/DrawingTools.h"
-#include "tulip/SuperGraph.h"
-#include "tulip/LayoutProxy.h"
-#include "tulip/SizesProxy.h"
-#include "tulip/MetricProxy.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/Graph.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/SizeProperty.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/BooleanProperty.h"
 #include <climits>
 
 using namespace std;
+using namespace tlp;
 namespace {
   Coord maxCoord(const Coord &a, const Coord &b) {
     return Coord(std::max(a[0], b[0]),
@@ -61,7 +62,7 @@ namespace {
   }
 }
 
-pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layout, SizesProxy *size, MetricProxy *rotation, SelectionProxy *selection) {
+pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;
@@ -101,11 +102,11 @@ pair<Coord, Coord> tlp::computeBoundingBox(SuperGraph *graph, LayoutProxy *layou
   return result;
 }
 
-pair<Coord, Coord> tlp::computeBoundingRadius(SuperGraph *graph, 
-					      LayoutProxy *layout, 
-					      SizesProxy *size, 
-					      MetricProxy *rotation, 
-					      SelectionProxy *selection) {
+pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph, 
+					      LayoutProperty *layout, 
+					      SizeProperty *size, 
+					      DoubleProperty *rotation, 
+					      BooleanProperty *selection) {
   Coord curCoord;
   Size  curSize;
   double curRot;
@@ -126,15 +127,20 @@ pair<Coord, Coord> tlp::computeBoundingRadius(SuperGraph *graph,
     curSize  = size->getNodeValue(itn) / 2.0;
     curRot = rotation->getNodeValue(itn);
     if (selection == 0 || selection->getNodeValue(itn)) {
-      vector<Coord> pointBounds;
-      computeRotatedPoints (pointBounds, curCoord, curSize, curRot);
-      for (unsigned int i = 0; i < 4; ++i) {
-	double curRad = (pointBounds[i] - centre).norm();
-	if (curRad > maxRad) {
-	  maxRad = curRad;
-	  result.second = pointBounds[i];
-	}//end if
-      }//end for
+      double nodeRad = sqrt (curSize.getW()*curSize.getW() +
+			     curSize.getH()*curSize.getH());
+      Coord radDir = curCoord - centre;
+      double curRad = nodeRad + radDir.norm();
+      if (radDir.norm() < 1e-6) {
+	curRad = nodeRad;
+	radDir = Coord (1.0,0.0,0.0);
+      }
+      if (curRad > maxRad) {
+	maxRad = curRad;
+	radDir /= radDir.norm();
+	radDir *= curRad;
+	result.second = radDir + centre;	
+      }
     }//end if
   } delete itN;
 

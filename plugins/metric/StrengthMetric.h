@@ -6,11 +6,10 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// StrengthMetric.h - An implementation of the strength parameter.
 /** This plugin is an implementation of the Strength Parameter.
  *  algorithm first published in :
  *
- *  Y. Chiricota. F.Jourdan, an G.Melançon \n
+ *  Y. Chiricota. F.Jourdan, an G.Melancon\n
  *  "Software component capture using graph clustering", \n
  *  "IWPC", \n
  *   2002.
@@ -33,18 +32,18 @@
  *  (at your option) any later version.
  *
  */
-class StrengthMetric:public Metric { 
+class StrengthMetric:public tlp::DoubleAlgorithm { 
 public:
-  StrengthMetric(const PropertyContext &);
+  StrengthMetric(const tlp::PropertyContext &);
   ~StrengthMetric();
-  double getNodeValue(const node n);
-  double getEdgeValue(const edge n);
+  double getNodeValue(const tlp::node n);
+  double getEdgeValue(const tlp::edge n);
   bool run();
 private:
-  double e(const stdext::hash_set<node> &U);
-  double e(stdext::hash_set<node> &U, stdext::hash_set<node> &V);
-  double s(stdext::hash_set<node> &U, stdext::hash_set<node> &V);
-  double s(const stdext::hash_set<node> &U);
+  double e(const stdext::hash_set<tlp::node> &U);
+  double e(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
+  double s(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
+  double s(const stdext::hash_set<tlp::node> &U);
 };
 /*@}*/
 #endif

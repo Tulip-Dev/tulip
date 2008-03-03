@@ -14,23 +14,15 @@
  */
 
 #include <math.h>
-#include <tulip/ForEach.h>
-#include <tulip/TlpTools.h>
 #include "Circular.h"
+#include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","0","1","Basic");
+LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.0","Basic");
 
 using namespace std;
+using namespace tlp;
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     HTML_HELP_OPEN()					   \
     HTML_HELP_DEF( "type", "bool" )		   \
     HTML_HELP_DEF( "values", "true/false" ) \
@@ -41,31 +33,31 @@ namespace {
   };
 }
 
-Circular::Circular(const PropertyContext &context):Layout(context){
-  addParameter<SizesProxy>("nodeSize", paramHelp[0], "viewSize");
-  addParameter<bool>("search_cycle", paramHelp[1], "false");
+Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
+  addNodeSizePropertyParameter(this);
+  addParameter<bool>("search cycle", paramHelp[0], "false");
 }
 
 namespace {
   //============================================================================
-  void dfsRecCall(SuperGraph *graph, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
+  void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
     nodeVisited.set(n.id, true);
     vec.push_back(n);
     node dest;
-    forEach(dest, graph->getInOutNodes(n)) {
+    forEach(dest, sg->getInOutNodes(n)) {
       if (!nodeVisited.get(dest.id)) {
-	dfsRecCall(graph, vec, nodeVisited, dest);
+	dfsRecCall(sg, vec, nodeVisited, dest);
       }
     }
   }
   //============================================================================
-  void buildDfsOrdering(SuperGraph *graph, vector<node> &vec) {
+  void buildDfsOrdering(Graph *sg, vector<node> &vec) {
     MutableContainer<bool> nodeVisited;
     nodeVisited.setAll(false);
     node n;
-    forEach(n, graph->getNodes()) {
+    forEach(n, sg->getNodes()) {
       if (!nodeVisited.get(n.id)) {
-	dfsRecCall(graph, vec, nodeVisited, n);
+	dfsRecCall(sg, vec, nodeVisited, n);
       }
     }
   }
@@ -83,7 +75,7 @@ namespace {
     return result;
   }
   //===============================================================================
-  void dfs(node n, const SuperGraph * graph, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
+  void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, MutableContainer<bool> &flag,
 	   unsigned int &nbCalls, PluginProgress *pluginProgress) {
     { //to enable stop of the recursion
       ++nbCalls; 
@@ -103,8 +95,8 @@ namespace {
     st.push_back(n);
     flag.set(n.id,true);
     node n2;
-    forEach(n2, graph->getInOutNodes(n)){
-      dfs(n2, graph, st, maxCycle, flag, nbCalls, pluginProgress);
+    forEach(n2, sg->getInOutNodes(n)){
+      dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
     }
     flag.set(n.id, false);
     st.pop_back();
@@ -112,16 +104,18 @@ namespace {
   
 
   //=======================================================================
-  vector<node> findMaxCycle(SuperGraph * graph, PluginProgress *pluginProgress) {
-    SuperGraph * g = tlp::newCloneSubGraph(graph);
+  vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
+    Graph * g = tlp::newCloneSubGraph(sg);
     cerr << __PRETTY_FUNCTION__ << endl;
-    MetricProxy m(g);
-    string err ="";
-    g->computeProperty(string("Connected Component"),&m,err);
-    DataSet tmp;
-    tmp.set("Metric", &m);
-    tlp::clusterizeGraph(g, err, &tmp, "Equal Value");
-    SuperGraph * g_tmp;
+
+    // compute the connected components's subgraphs
+    std::vector<std::set<node> > components;
+    ConnectedTest::computeConnectedComponents(g, components);
+    for (unsigned int i = 0; i < components.size(); ++i) {
+      tlp::inducedSubGraph(g, components[i]);
+    }
+    
+    Graph * g_tmp;
     
     MutableContainer<bool> flag;
     deque<node> st;
@@ -139,7 +133,7 @@ namespace {
 	max = res;
     }
     
-    graph->delAllSubGraphs(g);
+    sg->delAllSubGraphs(g);
     return max;
   } 
 }
@@ -150,31 +144,30 @@ inline double computeRadius (const Size &s) {
 }//end computeRad
 
 bool Circular::run() {
-  SizesProxy *nodeSizes;
+  SizeProperty *nodeSize;
   bool searchCycle = false;
   
-  if ( dataSet==0 || !dataSet->get("nodeSize", nodeSizes)) {
-    if (superGraph->existProperty("viewSize"))
-      nodeSizes = superGraph->getProperty<SizesProxy>("viewSize");    
+  if (!getNodeSizePropertyParameter(dataSet, nodeSize)) {
+    if (graph->existProperty("viewSize"))
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");    
     else {
-      nodeSizes = superGraph->getProperty<SizesProxy>("viewSize");  
-      nodeSizes->setAllNodeValue(Size(1.0,1.0,1.0));
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");  
+      nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
 
   if ( dataSet != 0 )
-    dataSet->get("search_cycle", searchCycle);
+    dataSet->get("search cycle", searchCycle);
   
   Size resultSize;
-  double sizeTm;
 
   //compute the sum of radii and the max radius of the graph
   double sumOfRad = 0;
   double maxRad = 0;
   node maxRadNode;
   node itn;
-  forEach(itn, superGraph->getNodes()) {
-    double rad = computeRadius(nodeSizes->getNodeValue(itn));
+  forEach(itn, graph->getNodes()) {
+    double rad = computeRadius(nodeSize->getNodeValue(itn));
     sumOfRad += rad;
     if (maxRad < rad) {
       maxRad = rad;
@@ -183,12 +176,12 @@ bool Circular::run() {
   }
 
   //with two nodes, lay them on a line max rad appart
-  if (superGraph->numberOfNodes() <= 2) {
+  if (graph->numberOfNodes() <= 2) {
     //set the (max 2) nodes maxRad appart
     double xcoord = maxRad/2.0;
     node itn;
-    forEach(itn, superGraph->getNodes()) {
-      layoutProxy->setNodeValue (itn, Coord (xcoord, 0, 0));
+    forEach(itn, graph->getNodes()) {
+      layoutResult->setNodeValue (itn, Coord (xcoord, 0, 0));
       xcoord *= -1;
     }
   }//end if
@@ -201,14 +194,14 @@ bool Circular::run() {
       sumOfRad -= maxRad;
       angleAdjust = true;
     }//end if
-    cerr << "*************************" << endl;
+    //cerr << "*************************" << endl;
 
     vector<node> cycleOrdering;
     if (searchCycle)
-      cycleOrdering = findMaxCycle(superGraph, pluginProgress);
+      cycleOrdering = findMaxCycle(graph, pluginProgress);
     
     vector<node> dfsOrdering;
-    buildDfsOrdering(superGraph, dfsOrdering);
+    buildDfsOrdering(graph, dfsOrdering);
 
     MutableContainer<bool> inCir;
     inCir.setAll(false);
@@ -223,7 +216,7 @@ bool Circular::run() {
     for(; it!=cycleOrdering.end(); ++it) {
       node itn = *it;
       //get the node and its size
-      Size curNodeSize = nodeSizes->getNodeValue(itn);
+      Size curNodeSize = nodeSize->getNodeValue(itn);
       
       //compute the radius to ensure non overlap.  If adjustment to 
       //ensure no angle greater than pi done, detect it.
@@ -240,8 +233,8 @@ bool Circular::run() {
 
       //compute the position of the node.
       gamma += halfAngle;
-      layoutProxy->setNodeValue(itn, Coord(rayon*cos(gamma),
-					   rayon*sin(gamma), 0));
+      layoutResult->setNodeValue(itn, Coord(rayon*cos(gamma),
+				      rayon*sin(gamma), 0));
       gamma += halfAngle;
     }//end while
   }//end else

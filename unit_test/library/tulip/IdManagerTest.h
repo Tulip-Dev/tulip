@@ -2,10 +2,12 @@
 #define TLPBIEXTCLUSTEROPERATION
 
 #include <string>
-#include <tulip/SuperGraph.h>
-#include <tulip/IdManager.h>
+#include <tulip/Graph.h>
+#include "../../../library/tulip/include/tulip/IdManager.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
+
+namespace tlp {
 
 class IdManagerTest : public CppUnit::TestFixture {
 
@@ -22,4 +24,5 @@ private:
   IdManager *idManager;
 };
 
+}
 #endif

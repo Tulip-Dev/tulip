@@ -22,30 +22,38 @@ class OrientableSizeProxy;
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  **/
-class Dendrogram: public Layout {
-public:
-    Dendrogram(const PropertyContext&);
-    ~Dendrogram();
+class Dendrogram: public tlp::LayoutAlgorithm {
+ public:
+  Dendrogram(const tlp::PropertyContext&);
+  ~Dendrogram();
   
-    bool run();
-    bool check(std::string&);
-    void reset();
+  bool run();
 
-private: 
-    static const float      INTER_NODE_DISTANCE_X;  
-    static const float      INTER_NODE_DISTANCE_Y;  
+ private: 
+  float spacing;
+  float nodeSpacing;
     
-    std::map<node, float>   leftshift;
-    node                    root;
-    OrientableLayout*       oriLayout;
-    OrientableSizeProxy*    oriSize;
+  std::map<tlp::node, float>   leftshift;
+  tlp::node                    root;
+  tlp::Graph *tree;
+  std::vector<float> levelHeights;
 
-    float   setAllNodesCoordX(node n, float rightMargin);
-    void    setAllNodesCoordY();
-    float   computeFatherXPosition(node father);
-    void    shiftAllNodes(node n, float shift);
-    void    setNodePosition(node n, float x, float y, float z);
-    void    setCoordY(node n, float* maxYLeaf, float* maxHeightLeaf);
+  float   setAllNodesCoordX(tlp::node n, float rightMargin,
+			    OrientableLayout *oriLayout,
+			    OrientableSizeProxy *oriSize);
+  void    setAllNodesCoordY(OrientableLayout *oriLayout,
+			    OrientableSizeProxy *oriSize);
+  float   computeFatherXPosition(tlp::node father,
+				 OrientableLayout *oriLayout);
+  void    shiftAllNodes(tlp::node n, float shift,
+			OrientableLayout *oriLayout);
+  void    setNodePosition(tlp::node n, float x, float y, float z,
+			  OrientableLayout *oriLayout);
+  void    setCoordY(tlp::node n, float* maxYLeaf,
+		    OrientableLayout *oriLayout,
+		    OrientableSizeProxy *oriSize);
+  void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
+			   OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif

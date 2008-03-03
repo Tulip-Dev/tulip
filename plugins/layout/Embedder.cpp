@@ -2,7 +2,7 @@
 #include <config.h>
 #endif
 
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/TulipPlugin.h>
 
 #include "EmbedderEmbedGraph.h"
@@ -13,6 +13,8 @@
 #  include <ext/hash_map>
    using stdext::hash_map;
 #endif
+
+using namespace tlp;
 
 /** \addtogroup layout */
 /*@{*/
@@ -31,7 +33,7 @@
  *
  * Integration in Tulip by B.Mathieu
  */
-class Embedder : public Layout {
+class Embedder : public LayoutAlgorithm {
 public:
   Embedder(const PropertyContext &);
   ~Embedder();
@@ -41,28 +43,29 @@ private:
   hash_map<node, unsigned int> rmap;
 };
 
-LAYOUTPLUGINOFGROUP(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "0", "1", "Force Directed");
+LAYOUTPLUGINOFGROUP(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "1.0", "Force Directed");
 
 using namespace std;
+using namespace tlp;
 
 
-Embedder::Embedder(const PropertyContext &context) : Layout(context) {
+Embedder::Embedder(const PropertyContext &context) : LayoutAlgorithm(context) {
 }
 
 Embedder::~Embedder() {}
 
 bool Embedder::run() {
-  unsigned int numberOfNodes = (unsigned int) superGraph->numberOfNodes();
-  vtx_data *graph = new vtx_data[numberOfNodes];
-  int *edges = new int[2 * superGraph->numberOfEdges() + numberOfNodes];
-  float *ewgts = new float[2 * superGraph->numberOfEdges() + numberOfNodes];
+  unsigned int numberOfNodes = (unsigned int) graph->numberOfNodes();
+  vtx_data *sg = new vtx_data[numberOfNodes];
+  int *edges = new int[2 * graph->numberOfEdges() + numberOfNodes];
+  float *ewgts = new float[2 * graph->numberOfEdges() + numberOfNodes];
 
   nodemap.clear();
   nodemap.resize(numberOfNodes);
   rmap.clear();
   rmap.resize(numberOfNodes);
 
-  Iterator<node> *it = superGraph->getNodes();
+  Iterator<node> *it = graph->getNodes();
   for (unsigned int i=0; i < numberOfNodes; ++i) {
     node n = it->next();
     nodemap[i] = n;
@@ -71,13 +74,13 @@ bool Embedder::run() {
 
   for (unsigned int i=0; i < numberOfNodes; ++i) {
     node n = nodemap[i];
-    graph[i].nedges = superGraph->deg(n) + 1;
-    graph[i].edges = edges++;
-    graph[i].ewgts = ewgts++;
-    graph[i].edges[0] = i;
-    graph[i].ewgts[0] = -1 * superGraph->deg(n);
+    sg[i].nedges = graph->deg(n) + 1;
+    sg[i].edges = edges++;
+    sg[i].ewgts = ewgts++;
+    sg[i].edges[0] = i;
+    sg[i].ewgts[0] = -1 * graph->deg(n);
     
-    Iterator<node> *tmp = superGraph->getInOutNodes(n);
+    Iterator<node> *tmp = graph->getInOutNodes(n);
     while (tmp->hasNext()) {
       node tmpn = tmp->next();
       *edges = rmap[tmpn];
@@ -92,19 +95,19 @@ bool Embedder::run() {
   dcoords[0] = new double[numberOfNodes*2];
   dcoords[1] = &(dcoords[0][numberOfNodes]);
   
-  embed_graph(graph, numberOfNodes, 50, coords);
+  embed_graph(sg, numberOfNodes, 50, coords);
   center_coordinate(coords, numberOfNodes, 50);
   PCA(coords, 50, numberOfNodes, dcoords, 0, 1, true);
   
-  delete [] graph[0].edges;
-  delete [] graph[0].ewgts;
-  delete [] graph;
+  delete [] sg[0].edges;
+  delete [] sg[0].ewgts;
+  delete [] sg;
   delete [] coords[0];
   delete [] coords;
 
   for (hash_map<node, unsigned int>::const_iterator it = rmap.begin(); it != rmap.end(); ++it) {
     unsigned int index = it->second;
-    layoutProxy->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
+    layoutResult->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
   }
 
   delete [] dcoords[0];

@@ -29,13 +29,13 @@
  *  (at your option) any later version.
  *
  */
-class LeafMetric:public Metric { 
+class LeafMetric:public tlp::DoubleAlgorithm { 
 public:
-  LeafMetric(const PropertyContext &);
+  LeafMetric(const tlp::PropertyContext &);
   bool check(std::string &);
   bool run();
 private:
-  double getNodeValue(const node n);
+  double getNodeValue(const tlp::node n);
 };
 /*@}*/
 #endif

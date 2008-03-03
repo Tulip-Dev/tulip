@@ -1,5 +1,5 @@
 /*
- * Authors: Jérémy Compostella, Jean Darracq, Benjamin Muller,
+ * Authors: Jï¿½ï¿½y Compostella, Jean Darracq, Benjamin Muller,
  *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
  * 
  * Email : jcompost@etu.u-bordeaux1.fr, jdarracq@etu.u-bordeaux1.fr,
@@ -28,7 +28,9 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
-class SuperGraph;
+namespace tlp {
+
+class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
@@ -37,17 +39,19 @@ class SuperGraph;
  */
 class TLP_SCOPE SimpleTest : public GraphObserver {
  public: 
-  static bool isSimple(SuperGraph *graph);
-  static void makeSimple(SuperGraph* graph, std::vector<edge> &removed);
-  static bool simpleTest(SuperGraph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
+  static bool isSimple(Graph *graph);
+  static void makeSimple(Graph* graph, std::vector<edge> &removed);
+  static bool simpleTest(Graph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
  private:
   SimpleTest();
-  void addEdge(SuperGraph *, const edge);
-  void delEdge(SuperGraph *, const edge);
-  void destroy(SuperGraph *);
-  void deleteResult(SuperGraph *graph);
+  void addEdge(Graph *, const edge);
+  void delEdge(Graph *, const edge);
+  void destroy(Graph *);
+  void deleteResult(Graph *graph);
   static SimpleTest *instance;
   stdext::hash_map<unsigned long, bool> resultsBuffer;
 };
 /*@}*/
+
+}
 #endif

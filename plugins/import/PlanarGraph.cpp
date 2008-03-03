@@ -5,6 +5,7 @@
 
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 namespace {
@@ -17,7 +18,8 @@ namespace {
     "This parameter defines the number of nodes used to build the planr graph graph." \
     HTML_HELP_CLOSE(),
   };
-
+}
+namespace {
 struct Triangle {
   Triangle(node a, node b, node c):
     a(a),b(b),c(c) {
@@ -25,45 +27,42 @@ struct Triangle {
   node a,b,c;
 };
 }
-
 //=============================================================
 struct PlanarGraph:public ImportModule {
-  PlanarGraph(ClusterContext context):ImportModule(context) {
+  PlanarGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph(){}
   
   bool import(const string &name) {
-    int nbNodes  = 20;
+    unsigned int nbNodes  = 30;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
     }
+
     if (nbNodes < 3) nbNodes = 3;
     srand(clock()); 
-    LayoutProxy *newLayout = superGraph->getLocalProperty<LayoutProxy>("viewLayout");
-    SizesProxy  *newSize   = superGraph->getLocalProperty<SizesProxy>("viewSize");
-    newSize->setAllNodeValue(Size(1.0,1.0,1.0));
-
+    LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
+    SizeProperty  *newSize   = graph->getLocalProperty<SizeProperty>("viewSize");
     newSize->setAllNodeValue(Size(1.0,1.0,1.0));    
 
     vector<Triangle> faces;
-    Triangle f(superGraph->addNode(),
-	       superGraph->addNode(),
-	       superGraph->addNode());
+    Triangle f(graph->addNode(),
+	       graph->addNode(),
+	       graph->addNode());
     faces.push_back(f);
-    superGraph->addEdge(f.a, f.b);
-    superGraph->addEdge(f.b, f.c);
-    superGraph->addEdge(f.c, f.a);
+    graph->addEdge(f.a, f.b);
+    graph->addEdge(f.b, f.c);
+    graph->addEdge(f.c, f.a);
     newLayout->setNodeValue(f.a, Coord(-nbNodes,-nbNodes,0));
     newLayout->setNodeValue(f.b, Coord(0,nbNodes,0));
     newLayout->setNodeValue(f.c, Coord(+nbNodes,-nbNodes,0));
     unsigned int nb = 3;
-    unsigned int ext_faces = 0;
     while(nb<nbNodes) {
       //choose a Triangle randomly
       unsigned int i = rand()%faces.size(); 
       Triangle f = faces[i];
-      node n = superGraph->addNode();
+      node n = graph->addNode();
       Coord tmp = newLayout->getNodeValue(f.a) +
 	newLayout->getNodeValue(f.b) +
 	newLayout->getNodeValue(f.c);
@@ -71,9 +70,9 @@ struct PlanarGraph:public ImportModule {
       newLayout->setNodeValue(n, tmp);
 	
       //Split the triangle in three part
-      superGraph->addEdge(n, f.a);
-      superGraph->addEdge(n, f.b);
-      superGraph->addEdge(n, f.c);
+      graph->addEdge(n, f.a);
+      graph->addEdge(n, f.b);
+      graph->addEdge(n, f.c);
       //add the three new Triangle, remove the old one(replace)
       Triangle f1(f.a, f.b, n);
       Triangle f2(f.b, f.c, n);
@@ -83,9 +82,8 @@ struct PlanarGraph:public ImportModule {
       faces.push_back(f3);
       ++nb;
     }
-
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
 
-IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","","1.0","Graphs")

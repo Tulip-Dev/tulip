@@ -6,9 +6,9 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <tulip/tulipconf.h>
 #include <cassert>
 #include <iostream>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
   /**
@@ -19,14 +19,14 @@ namespace tlp {
    * \brief class for array encapsulation
    *
    * Enables to create an Array of Obj with a
-   * Fixed size, limit of the array are checked only
+   * limited size. Out of bound accesses are only checked
    * in debug mode.
    * 
    * \author : David Auber auber@tulip-software.org
    * \version 0.0.1 24/01/2003 
    */
   template <typename Obj,unsigned int SIZE>
-  struct TLP_SCOPE Array {
+  struct Array {
     Obj array[SIZE];
     inline Obj  operator[](const unsigned int i) const;
     inline Obj& operator[](const unsigned int i);

@@ -1,10 +1,13 @@
 #ifndef     __TLPPixmapFont__
 #define     __TLPPixmapFont__
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <FTGL.h>
 #include <FTFont.h>
 
 class FTGlyph;
+
+namespace tlp {
 
 /**
  * TLPPixmapFont is a specialisation of the FTFont class for handling
@@ -60,6 +63,8 @@ class FTGL_EXPORT TLPPixmapFont : public FTFont
         
 };
 
+}
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif  //  __TLPPixmapFont__
 

@@ -1,6 +1,6 @@
 nobase_include_HEADERS = \
 	tulip/Bfs.h \
-	tulip/CanonicalOrdering.h \
+	tulip/Ordering.h \
 	tulip/ConvexHull.h \
 	tulip/Delaunay.h \
 	tulip/tulipconf.h \
@@ -21,86 +21,94 @@ nobase_include_HEADERS = \
 	tulip/ConnectedTest.h \
 	tulip/BiconnectedTest.h \
 	tulip/TriconnectedTest.h \
-	tulip/cxx/PropertyProxy.cxx \
+	tulip/cxx/AbstractProperty.cxx \
 	tulip/cxx/TemplateFactory.cxx \
 	tulip/cxx/Reflect.cxx \
-	tulip/cxx/SuperGraph.cxx \
-	tulip/MetaGraph.h \
-	tulip/MetaGraphProxy.h \
-	tulip/Layout.h \
+	tulip/cxx/Graph.cxx \
+	tulip/GraphProperty.h \
+	tulip/GraphAlgorithm.h \
+	tulip/LayoutProperty.h \
 	tulip/Plugin.h \
-	tulip/SelectionProxy.h  \
-	tulip/SuperGraphAbstract.h   \
-	tulip/Clustering.h \
-	tulip/LayoutProxy.h \
+	tulip/Algorithm.h \
+	tulip/BooleanAlgorithm.h  \
+	tulip/LayoutAlgorithm.h \
 	tulip/PluginLoader.h \
 	tulip/Size.h \
 	tulip/Node.h \
 	tulip/Edge.h \
-	tulip/SuperGraph.h \
+	tulip/Graph.h \
 	tulip/Types.h \
 	tulip/Color.h \
-	tulip/IdManager.h \
 	tulip/MethodFactory.h \
 	tulip/PluginLoaderTxt.h \
-	tulip/Sizes.h \
-	tulip/Colors.h \
+	tulip/SizeProperty.h \
+	tulip/ColorProperty.h \
 	tulip/ImportModule.h \
-	tulip/Metric.h \
-	tulip/Property.h \
-	tulip/SizesProxy.h \
-	tulip/ColorsProxy.h \
-	tulip/Int.h \
-	tulip/MetricProxy.h \
-	tulip/PropertyManager.h \
-	tulip/String.h \
+	tulip/DoubleProperty.h \
+	tulip/PropertyAlgorithm.h \
+	tulip/SizeAlgorithm.h \
+	tulip/ColorAlgorithm.h \
+	tulip/IntegerProperty.h \
+	tulip/DoubleAlgorithm.h \
+	tulip/StringProperty.h \
 	tulip/TemplateFactory.h \
 	tulip/Coord.h \
-	tulip/IntProxy.h \
+	tulip/IntegerAlgorithm.h \
 	tulip/Observable.h \
 	tulip/ObservableGraph.h \
-	tulip/PropertyProxy.h \
-	tulip/StringProxy.h \
+	tulip/AbstractProperty.h \
+	tulip/StringAlgorithm.h \
 	tulip/TlpTools.h \
 	tulip/PluginContext.h \
-	tulip/Selection.h \
+	tulip/BooleanProperty.h \
 	tulip/TulipPlugin.h \
 	tulip/ExportModule.h \
 	tulip/Reflect.h \
 	tulip/WithParameter.h \
+	tulip/WithDependency.h \
 	tulip/PluginProgress.h \
 	tulip/Iterator.h \
-	tulip/GraphIterator.h \
 	tulip/StlIterator.h \
-	tulip/MapIterator.h \
 	tulip/StableIterator.h \
 	tulip/SortIterator.h \
-	tulip/SimpleVector.h \
 	tulip/GraphMeasure.h \
 	tulip/ConcatIterator.h \
 	tulip/ReturnType.h \
 	tulip/MutableContainer.h \
-	tulip/PluginsCreation.h \
+	tulip/PluginLibraryLoader.h \
 	tulip/StlFunctions.h \
 	tulip/ExtendedClusterOperation.h \
 	tulip/StringCollection.h \
 	tulip/DrawingTools.h \
 	tulip/Face.h \
-	tulip/FaceIterator.h \
-	tulip/PlanarConMap.h \
 	tulip/PlanarityTest.h \
-	tulip/SuperGraphDeco.h \
-	tulip/cxx/SuperGraphDeco.cxx \
-	tulip/Plane.h \
-	tulip/Polynome.h \
+	tulip/FaceIterator.h \
+        tulip/PlanarConMap.h \
+        tulip/GraphDecorator.h \
 	tulip/ForEach.h \
-	tulip/RectangleArea.h \
-	tulip/Border.h \
-	tulip/StatisticsNodeModule.h \
-	tulip/cxx/BmdLink.cxx \
-	tulip/cxx/BmdList.cxx \
-	tulip/PlanarityTestImpl.h \
+	tulip/MapIterator.h \
+	tulip/BoundingBox.h
+
+nobase_nodist_include_HEADERS = tulip/TulipRelease.h
+
+nobase_dist_noinst_DATA = tulip/TulipRelease.h.in
+
+noinst_HEADERS = tulip/TLPParser.h \
 	tulip/BmdLink.h \
 	tulip/BmdList.h \
-	tulip/SuperGraphView.h \
-	tulip/SuperGraphImpl.h
+	tulip/cxx/BmdLink.cxx \
+	tulip/cxx/BmdList.cxx \
+	tulip/GraphAbstract.h   \
+	tulip/GraphIterator.h \
+	tulip/GraphImpl.h \
+	tulip/GraphView.h \
+	tulip/SimpleVector.h \
+	tulip/IdManager.h \
+	tulip/PropertyManager.h \
+	tulip/PlanarityTestImpl.h \
+	tulip/RectangleArea.h \
+	tulip/Border.h \
+	tulip/Plane.h \
+	tulip/Polynome.h \
+	tulip/PluginLibraryLoader.h \
+	tulip/StatisticsNodeModule.h

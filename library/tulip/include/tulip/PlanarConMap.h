@@ -9,15 +9,17 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef Tulip_PlanarConMap_H
 #define Tulip_PlanarConMap_H
 #include <tulip/Face.h>
 #include <vector>
-#include <tulip/SuperGraphDeco.h>
-#include <tulip/IdManager.h>
+#include <tulip/GraphDecorator.h>
+
+namespace tlp {
 
 class Face;
-
+class IdManager;
 
 /** 
  * \brief interface for a topological graph 
@@ -26,13 +28,13 @@ class Face;
  * The class PlanarConMap is an interface for map in the Tulip Library. This only
  * considers connected planar map, moreover the graph must be simple.
  * After, its initialization, if modifications, such as additions or deletions of 
- * edges or/and nodes, are made on the super-graph (father), the map will not be 
+ * edges or/and nodes, are made on the supergraph, the map will not be 
  * valid any more. In this case, one can calls update() function to update the map
  * but it completely compute the map.
  */
 
 
-class TLP_SCOPE PlanarConMap : public SuperGraphDeco {
+class TLP_SCOPE PlanarConMap : public GraphDecorator {
 
   /* for test classes */
   friend class FaceIteratorTest;
@@ -49,7 +51,7 @@ class TLP_SCOPE PlanarConMap : public SuperGraphDeco {
   /** Constructor
    * Warning, the graph must be planar, connected and simple.
    */
-  PlanarConMap(SuperGraph* s);                                                   
+  PlanarConMap(Graph* s);                                                   
   //Destructor.
   virtual ~PlanarConMap();
 
@@ -102,22 +104,6 @@ class TLP_SCOPE PlanarConMap : public SuperGraphDeco {
   //================================================================================
   //Iterators on the graph structure.
   //================================================================================
-  ///Return an iterator on the nodes.
-  virtual Iterator<node>* getNodes();
-  ///Return an iterator on the edges.
-  virtual Iterator<edge>*getEdges();
-  ///Return an iterator on the in-edges of a node.
-  virtual Iterator<edge>*getInEdges(node) const;
-  ///Return an iterator on the out-edges of a node.
-  virtual Iterator<edge>*getOutEdges(node) const;
-  ///Return an iterator on the in-out-edges of a node.
-  virtual Iterator<edge>*getInOutEdges(node) const;
-  ///Return an iterator on the in-nodes of a node.
-  virtual Iterator<node>*getInNodes(node) const;
-  ///Return an iterator on the out-nodes of a node.
-  virtual Iterator<node>*getOutNodes(node) const;
-  ///Return an iterator on the in-out-nodes of a node.
-  virtual Iterator<node>*getInOutNodes(node) const;
 
   ///Return an iterator on the faces.
   Iterator<Face>* getFaces();        
@@ -131,23 +117,14 @@ class TLP_SCOPE PlanarConMap : public SuperGraphDeco {
   //================================================================================
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
-  /** Return the edge if it exists an edge between two node sens of the edge 
-   * is not taken into account). If no edge is found return an invalid edge.
-   */
-  virtual edge existEdge(node, node) const;
-  /// Return the source of the edge.
-  virtual node source(edge ) const;
-  /// Return the target of the edge.
-  virtual node target(edge ) const;
-  
-  ///Return the edge which is the succcessor of an edge in the cycle of a node. 
+  ///Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;          
   ///Return the edge which is the predecessor of an edge in the cycle of a node. 
   edge predCycleEdge(const edge, const node) const;          
   ///Return the node which is the succcessor of a node in the cycle of a node. 
   node succCycleNode(const node, const node) const;          
-  ///Return the node which is the predecessor of a node in the cycle of a node. 
-  node predCycleNode(const node, const node) const;                                              
+  ///Return the node which is the predecessor of a node in the cycle of a node.
+  node predCycleNode(const node, const node) const;                  
 
   ///Return the number of faces.
   unsigned int nbFaces();
@@ -160,7 +137,7 @@ class TLP_SCOPE PlanarConMap : public SuperGraphDeco {
   bool containNode(const Face, const node) ;
   ///Return true if the face contains the edge.
   bool containEdge(const Face, const edge);   
-  /** Return the face containing the two nodes in this order 
+  /** Returns the face containing the two nodes in this order 
    * and the edge between this two nodes.
    * Warning, the edge must exists in the map.
    */
@@ -195,12 +172,14 @@ private:
   nodeMap nodesFaces;
   mutable std::vector<Face > faces; 
 
-  IdManager faceId;  
+  IdManager *faceId;  
     
 };
 
+}
+
 ///Print the map (only faces, nodes and edges) in ostream, in the tulip format
-TLP_SCOPE std::ostream& operator<< (std::ostream &, PlanarConMap *);
+TLP_SCOPE std::ostream& operator<< (std::ostream &, tlp::PlanarConMap *);
 
 #endif
-
+#endif //DOXYGEN_NOTFOR_DEVEL

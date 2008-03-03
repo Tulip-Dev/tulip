@@ -1,4 +1,4 @@
-//-*-C++-*
+//-*-C++-*-
 /*
  Author: David Auber
  Email : auber@labri.fr
@@ -13,29 +13,32 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include "SuperGraph.h"
-#include "WithParameter.h"
-#include "Reflect.h"
-#include "PluginProgress.h"
-#include "Plugin.h"
-#include "TemplateFactory.h"
+#include "tulip/Graph.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
+#include "tulip/Reflect.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/Plugin.h"
+#include "tulip/TemplateFactory.h"
 
 
 /** \addtogroup plugins */ 
-/*@{*/
 
+namespace tlp {
+
+/*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter
+class ExportModule:public WithParameter, public WithDependency
 {
 public:
   ///
-  ExportModule (ClusterContext context):superGraph(context.superGraph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
   ///
   virtual ~ExportModule(){};
   ///
-  virtual bool exportGraph(std::ostream &,SuperGraph *)=0;
-  /** It is the root superGraph*/
-  SuperGraph *superGraph;
+  virtual bool exportGraph(std::ostream &,Graph *)=0;
+  /** It is the root graph*/
+  Graph *graph;
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;
@@ -43,16 +46,27 @@ public:
 
 class ExportModuleFactory:public Plugin{
 public:
-  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *factory;
+  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *factory;
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext >;
-      factory->currentLoader = 0;
-    }
+      factory = new TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext >;
+     }
   }    
   virtual ~ExportModuleFactory() {}
-  virtual ExportModule * createObject(ClusterContext)=0;
+  virtual ExportModule * createPluginObject(AlgorithmContext)=0;
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  virtual  std::string getMinor() const  {
+    return tlp::getMinor(getRelease());
+  }
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
 };
-
 /*@}*/
+}
 #endif

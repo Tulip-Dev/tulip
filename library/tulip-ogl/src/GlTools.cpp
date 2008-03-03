@@ -1,20 +1,74 @@
 #include <GL/glu.h>
+#include <tulip/Rectangle.h>
 #include "tulip/GlTools.h"
+#include "tulip/Matrix.h"
+#include "tulip/BoundingBox.h"
 #include <iostream>
 
 using namespace std;
 namespace tlp {
+
+  static char hullVertexTable[][7] = {
+    {0,0,0,0,0,0,0},//0
+    {4,0,4,7,3,0,0},//1
+    {4,1,2,6,5,0,0},//2
+    {0,0,0,0,0,0,0},//3
+    {4,0,1,5,4,0,0},//4
+    {6,0,1,5,4,7,3},//5
+    {6,0,1,2,6,5,4},//6
+    {0,0,0,0,0,0,0},//7
+    {4,2,3,7,6,0,0},//8
+    {6,4,7,6,2,3,0},//9
+    {6,2,3,7,6,5,1},//10
+    {0,0,0,0,0,0,0},//11
+    {0,0,0,0,0,0,0},//12
+    {0,0,0,0,0,0,0},//13
+    {0,0,0,0,0,0,0},//14
+    {0,0,0,0,0,0,0},//15
+    {4,0,3,2,1,0,0},//16
+    {6,0,4,7,3,2,1},//17
+    {6,0,3,2,6,5,1},//18
+    {0,0,0,0,0,0,0},//19
+    {6,0,3,2,1,5,4},//20
+    {6,2,1,5,4,7,3},//21
+    {6,0,3,2,6,5,4},//22
+    {0,0,0,0,0,0,0},//23
+    {6,0,3,7,6,2,1},//24
+    {6,0,4,7,6,2,1},//25
+    {6,0,3,7,6,5,1},//26
+    {0,0,0,0,0,0,0},//27
+    {0,0,0,0,0,0,0},//28
+    {0,0,0,0,0,0,0},//29
+    {0,0,0,0,0,0,0},//30
+    {0,0,0,0,0,0,0},//31
+    {4,4,5,6,7,0,0},//32
+    {6,4,5,6,7,3,0},//33
+    {6,1,2,6,7,4,5},//34
+    {0,0,0,0,0,0,0},//35
+    {6,0,1,5,6,7,4},//36
+    {6,0,1,5,6,7,3},//37
+    {6,0,1,2,6,7,4},//38
+    {0,0,0,0,0,0,0},//39
+    {6,2,3,7,4,5,6},//40
+    {6,0,4,5,6,2,3},//41
+    {6,1,2,3,7,4,5}//42
+  };
+
   //====================================================
-  bool glTest(){
-    if (glGetError() != GL_NO_ERROR) {
-      cerr << "[ERROR] Open GL ERROR : " << glGetError() << gluErrorString(glGetError()) <<  endl;
-      return false;
+  void glTest(string message) {
+    unsigned int i = 1;
+    GLenum error = glGetError();
+    while (error != GL_NO_ERROR) {
+      if (i==1) cerr << "[OpenGL ERROR] : " << message << endl;
+      cerr << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
+      assert (error == GL_NO_ERROR);
+      error = glGetError();
+      ++i;
     }
-    return true;
   }
   //====================================================
   void setColor(const Color &c) {
-    glColor4ubv((unsigned char *) &c);
+    glColor3ubv((unsigned char *) &c);
   }
   //====================================================
   void setMaterial(const Color &c) {
@@ -26,111 +80,364 @@ namespace tlp {
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
   }
   //====================================================
-  void multMatrix(const GLdouble *projectionMatrix, const GLdouble *modelviewMatrix, GLdouble *result){
-    GLdouble sum_cell = 0;
-    for(unsigned int i=0; i<4; ++i) { // (i,j) sur projection
-      for(unsigned int l=0; l<4; ++l) { // (j,l) sur modelview
-	for(unsigned int j=0; j<4; ++j) {
-	  sum_cell += projectionMatrix[4*j+i] * modelviewMatrix[4*l+j];
-	}
-	result[4*l+i] = sum_cell;
-	sum_cell = 0;
-      }
-    }
+  Coord projectPoint(const Coord &obj, 
+		     const MatrixGL &transform,
+		     const Vector<int, 4> &viewport) {
+    Vector<float, 4> point;
+    point[0] = obj[0];
+    point[1] = obj[1];
+    point[2] = obj[2];
+    point[3] = 1;
+    point =  point * transform;// * transform;
+    assert(fabs(point[3]) > 1E-6);
+    //    cerr << winw << endl;
+    Coord result(point[0], point[1], point[2]);
+    result /= point[3];
+    result *= 0.5;
+    result += 0.5;
+    
+    result[0] = result[0] * viewport[2] + viewport[0];
+    result[1] = result[1] * viewport[3] + viewport[1];
+    return result;
   }
   //====================================================
-  bool projectToScreen(const GLdouble objx, const GLdouble objy, const GLdouble objz, 
-		       const GLdouble *transform,
-		       const GLint *viewport,
-		       GLdouble &winx, GLdouble &winy){
-    
-    GLdouble winw;
-    // transform * [objx, objy, objz, 1]
-    winw = transform[3] * objx + transform[7] * objy +  transform[11] * objz + transform[15];
-    if(winw == 0.0) return false;
+  Coord unprojectPoint(const Coord &obj, 
+		       const MatrixGL &invtransform,
+		       const Vector<int, 4> &viewport) {
+    Vector<float, 4> point;
+    point[0] = obj[0];
+    point[1] = obj[1];
+    point[2] = obj[2];
 
-    winx = ( (transform[0] * objx + transform[4] * objy +  transform[8] * objz + transform[12] )
-	     /winw * 0.5 + 0.5 ) * viewport[2] + viewport[0];
-    winy = ( (transform[1] * objx + transform[5] * objy +  transform[9] * objz + transform[13])
-	     /winw * 0.5 + 0.5) * viewport[3] + viewport[1];
+    point[0] = (point[0] - viewport[0]) / viewport[2];
+    point[1] = (point[1] - viewport[1]) / viewport[3];
     
-    return true;
+    point *= 2.;
+    point -= 1.;
+    
+    point[3] = 1.;
+
+    point = point * invtransform;
+    assert(fabs(point[3]) > 1E-6);
+  
+    Coord result(point[0], point[1], point[2]);
+    result /= point[3];
+
+    return result;
   }
   //====================================================
-  bool segmentVisible(const Coord &u, const Coord &v, const GLdouble *transform, const GLint *viewport) {
-    GLdouble x1Scr,y1Scr;
-    GLdouble x2Scr,y2Scr;
-    projectToScreen(u[0], u[1], u[2], transform, viewport, x1Scr, y1Scr);
-    projectToScreen(v[0], v[1], v[2], transform, viewport, x2Scr, y2Scr);
-    GLdouble minx = viewport[0];
-    GLdouble miny = viewport[1];
-    GLdouble maxx = minx + viewport[2];
-    GLdouble maxy = miny + viewport[3];
-    if (!( (x1Scr<minx && x2Scr<minx) || 
-	   (x1Scr>maxx && x2Scr>maxx) || 
-	   (y1Scr<miny && y2Scr<miny) || 
-	   (y1Scr>maxy && y2Scr>maxy) ) )
-      return true;
+  double segmentSize(const Coord &u, const Coord &v, 
+		     const tlp::MatrixGL &transform, 
+		     const Vector<int, 4> &viewport) {
+    Coord p1 = projectPoint(u, transform, viewport);
+    Coord p2 = projectPoint(v, transform, viewport);
+    return sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
+  }
+  //====================================================
+  double segmentVisible(const Coord &u, const Coord &v, 
+			const tlp::MatrixGL &transform, 
+			const Vector<int, 4> &viewport) {
+    //    cerr << __PRETTY_FUNCTION__ << endl;
+    Coord p1 = projectPoint(u, transform, viewport);
+    Coord p2 = projectPoint(v, transform, viewport);
+    GLfloat minx = viewport[0];
+    GLfloat miny = viewport[1];
+    GLfloat maxx = minx + viewport[2];
+    GLfloat maxy = miny + viewport[3];
+    //    cerr << p1 << endl;
+    //    cerr << p2 << endl;
+    double size = sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
+    if (( (p1[0]<minx && p2[0]<minx) || 
+	  (p1[1]<miny && p2[1]<miny) || 
+	  (p1[0]>maxx && p2[0]>maxx) || 
+	  (p1[1]>maxy && p2[1]>maxy) ) ) {
+      //      cerr << "not visible" << endl;
+      //      cerr << p1 << " *** " << p2 << endl;
+      return -size;
+    }
     else 
-      return false;
+      return size;
   }
   //====================================================
-  GLdouble projectSize(const Coord& position, const Size &_size, const GLdouble *transformMatrix, const GLint *viewport) {
+  GLfloat projectSize(const Coord &position,const Coord& size, 
+		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
+		      const Vector<int, 4> &viewport) {
+    return projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
+  }
+  //====================================================
+  GLfloat projectSize(const BoundingBox &bb, 
+		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
+		      const Vector<int, 4> &viewport) {
+    Coord bbSize=bb.second-bb.first;
+    float  nSize = bbSize.norm(); //Enclosing bounding box
 
-    bool project;  
-    bool visible = false;
-    GLdouble max = 0;
-    GLdouble x1Scr,y1Scr;
-    GLdouble x2Scr,y2Scr;
-  
+    MatrixGL translate;
+    translate.fill(0);
+    for (unsigned int i = 0; i<4; ++i)
+      translate[i][i] = 1;
+    for (unsigned int i = 0; i<3; ++i)
+      translate[3][i] = bb.first[i] + bbSize[i]/2 ;
 
-    Size size(_size/2.0);
-    //  size /= 2.0;
-    GLdouble minx = viewport[0];
-    GLdouble miny = viewport[1];
-    GLdouble maxx = minx + viewport[2];
-    GLdouble maxy = miny + viewport[3];
+    MatrixGL tmp(translate * modelviewMatrix);
+    //MatrixGL tmp(modelviewMatrix);
+    tmp[0][0] = nSize; tmp[0][1] = 0;     tmp[0][2] = 0;     
+    tmp[1][0] = 0;     tmp[1][1] = 0;     tmp[1][2] = 0;     
+    tmp[2][0] = 0;     tmp[2][1] = 0;     tmp[2][2] = 0;     
 
-    //test x-axis
-    if (project=(projectToScreen(position[0] - size[0], position[1], position[2],transformMatrix, viewport,x1Scr,y1Scr) &&
-		 projectToScreen(position[0] + size[0], position[1], position[2],transformMatrix, viewport,x2Scr,y2Scr))) {
-      if (!( (x1Scr<minx && x2Scr<minx) || 
-	     (x1Scr>maxx && x2Scr>maxx) || 
-	     (y1Scr<miny && y2Scr<miny) || 
-	     (y1Scr>maxy && y2Scr>maxy) ) ) {
-	visible = true;
+    //    cerr << modelviewMatrix << endl;
+    //    cerr << projectionMatrix << endl;
+
+    tmp *= projectionMatrix;
+
+    Vector<float, 4> vect1;
+    vect1[0] = 0.5; vect1[1] = 0;
+    vect1[2] = 0;   vect1[3] = 1.0;
+    Vector<float, 4> proj1 =  vect1 * tmp;
+
+    Vector<float, 4> vect2;
+    vect2.fill(0);
+    vect2[3] = 1.0;
+    Vector<float, 4> proj2 =  vect2 * tmp;
+
+
+    float x1 = (proj1[0]/proj1[3] * 0.5 + 0.5 ) * viewport[2];
+    float x2 = (proj2[0]/proj2[3] * 0.5 + 0.5 ) * viewport[2];
+
+    float width = fabs(x1 - x2);
+    float size = sqr(2. * width);
+
+    // Test of visibily
+    x2 += viewport[0];
+    float y2 = (proj2[1]/proj2[3] * 0.5 + 0.5) * viewport[3] + viewport[1];
+    Vector<float, 2> upleft;
+    upleft[0] = x2 - width;
+    upleft[1] = y2 - width;
+    Vector<float, 2> downright;
+    downright[0] = x2 + width;
+    downright[1] = y2 + width;
+    Rectangle<float> r1;
+    r1[0] = upleft;
+    r1[1] = downright;
+    
+    Vector<float, 2> upleftV;
+    upleftV[0] = viewport[0];
+    upleftV[1] = viewport[1];
+
+    Vector<float, 2> downrightV;
+    downrightV[0] = viewport[0] + viewport[2];
+    downrightV[1] = viewport[1] + viewport[3];
+    
+    Rectangle<float> r2;
+    r2[0] = upleftV;
+    r2[1] = downrightV;
+    /*
+      cerr << r1 << endl;
+      cerr << r2 << endl;
+      cerr << " ==> inter :";
+      if (r1.intersect(r2))
+      cerr << "yes" << endl;
+      else
+      cerr << "no" << endl;
+    */
+    if (!r1.intersect(r2)) {
+      size *= -1.0;
+    }
+    return size;
+    
+    //    cerr << "s: " << nSize << " => " << minx << "," << miny << "/" << maxx << "," << maxy << endl;
+  }
+  //====================================================
+  float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& viewport) {
+    //float lod=0.;
+    Coord src[8];
+    Coord dst[8];
+    int pos;
+    int num;
+
+    bb.getCompleteBB(src);
+    pos = ((eye[0] < src[0][0])   )
+      + ((eye[0] > src[6][0]) << 1)
+      + ((eye[1] < src[0][1]) << 2)
+      + ((eye[1] > src[6][1]) << 3)
+      + ((eye[2] < src[0][2]) << 4)
+      + ((eye[2] > src[6][2]) << 5);
+    num=hullVertexTable[pos][0];
+    if(num==0)
+      return -1;
+    for(int i=0;i<num;i++) {
+      dst[i] = projectPoint(src[hullVertexTable[pos][i+1]],transformMatrix,viewport);
+    }
+    bool inScreen=false;
+    int bbBox[4];
+    for(int i=0;i<num;i++) {
+      if((dst[i][0]>= viewport[0]) && (dst[i][0]<=viewport[0]+viewport[2]) && (dst[i][1] >= viewport[1]) && (dst[i][1]<=viewport[1]+viewport[3])){
+	inScreen=true;
       }
-      max = std::max( max, sqr(x1Scr-x2Scr)+sqr(y1Scr-y2Scr));
+      if(i==0){
+	bbBox[0]=dst[i][0];bbBox[2]=dst[i][0];bbBox[1]=dst[i][1];bbBox[3]=dst[i][1];
+      }else{
+	if(dst[i][0]<bbBox[0])
+	  bbBox[0]=dst[i][0];
+	if(dst[i][0]>bbBox[2])
+	  bbBox[2]=dst[i][0];
+	if(dst[i][1]<bbBox[1])
+	  bbBox[1]=dst[i][1];
+	if(dst[i][1]>bbBox[3])
+	  bbBox[3]=dst[i][1];
+      }
+      if(bbBox[0]<viewport[0]+viewport[2] && bbBox[2]>viewport[0] && bbBox[1]<viewport[1]+viewport[3] && bbBox[3]>viewport[1]){
+	inScreen=true;
+      }
     }
 
-    //test Y-axis
-    if (project=(projectToScreen(position[0], position[1] - size[1], position[2],transformMatrix, viewport,x1Scr,y1Scr) &&
-		 projectToScreen(position[0], position[1] + size[1], position[2],transformMatrix, viewport,x2Scr,y2Scr))){
-      if (!( (x1Scr<minx && x2Scr<minx) || 
-	     (x1Scr>maxx && x2Scr>maxx) || 
-	     (y1Scr<miny && y2Scr<miny) || 
-	     (y1Scr>maxy && y2Scr>maxy) ) ) {
-
-	visible = true;
-      }
-      max = std::max( max, sqr(x1Scr-x2Scr)+sqr(y1Scr-y2Scr));
+    if(!inScreen){
+      return -1;
+    }else{
+      return sqrt((double)(bbBox[2]-bbBox[0])*(double)(bbBox[2]-bbBox[0])+(double)(bbBox[3]-bbBox[1])*(double)(bbBox[3]-bbBox[1])) * 2;
     }
-  
-    //test z-axis
-    if (project=(projectToScreen(position[0], position[1], position[2]- size[2],transformMatrix, viewport,x1Scr,y1Scr) &&
-		 projectToScreen(position[0], position[1], position[2]+ size[2],transformMatrix, viewport,x2Scr,y2Scr))){
-      if (!( (x1Scr<minx && x2Scr<minx) || 
-	     (x1Scr>maxx && x2Scr>maxx) || 
-	     (y1Scr<miny && y2Scr<miny) || 
-	     (y1Scr>maxy && y2Scr>maxy) ) ) {
+  }
+  //====================================================
+  void solidCone() {
+    GLUquadricObj *quadratic;
+    quadratic = gluNewQuadric();
+    gluQuadricNormals(quadratic, GLU_SMOOTH);
+    gluQuadricTexture(quadratic, GL_TRUE);  
+    glTranslatef(0.0f, 0.0f, -1.0f);
+    gluQuadricOrientation(quadratic, GLU_INSIDE);
+    gluDisk(quadratic, 0.0f, 0.5f, 8, 1);
+    gluQuadricOrientation(quadratic, GLU_OUTSIDE);
+    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 8, 1);  
+    gluDeleteQuadric(quadratic);
+  }
+  //====================================================
+  void cube(GLenum type) {
+    //  GLenum type = GL_LINE_LOOP;
+    /* front face */
+    glBegin(type);
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glEnd();
+    /* back face */
+    glBegin(type);
+    glNormal3f(0.0f, 0.0f, -1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f);
+    glEnd();
+    /* right face */
+    glBegin(type);
+    glNormal3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glEnd();
+    /* left face */
+    glBegin(type);
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glEnd();
+    /* top face */
+    glBegin(type);
+    glNormal3f(0.0f, 1.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 0.5f, 0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glEnd();
+    /* bottom face */
+    glBegin(type);
+    glNormal3f(0.0f, -1.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glEnd();
+  }
 
-	visible = true;
-      }
-      max = std::max( max, sqr(x1Scr-x2Scr)+sqr(y1Scr-y2Scr));
+  //=======================================================
+  //Calcul 3D,
+  //=======================================================
+  //Calcul de la matrice de transformation pour 
+  //le positionnement des flèches sur les arètes
+  MatrixGL makeArrowMatrix(const Coord &A, const Coord &B) {
+    MatrixGL matrix;
+    
+    //Vecteur AB
+    Vector<float, 3> vAB;
+    //Vecteur V
+    Vector<float, 3> vV;
+  //Vecteur W
+    Vector<float, 3> vW;
+    
+    vAB = B - A;
+    float nAB; //|AB|
+    nAB = vAB.norm();
+    if (fabs(nAB) > 1E-6)
+      vAB /= nAB;
+    
+  //vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
+    if (fabs(vAB[2]) < 1E-6) {
+      vV[0] = 0; vV[1] = 0; vV[2] = 1.0;
+    }
+    else 
+    if (fabs(vAB[1]) < 1E-6) {
+      vV[0] = 0; vV[1] = 1.0; vV[2] = 0;
+    }
+    else {
+      vV[0] = 0;
+      vV[1] = 1./vAB[1];
+      vV[2] = -1./vAB[2];
+      vV /= vV.norm();
     }
     
-    if (!visible) return -max;
-    return max;
+    vW = vAB ^ vV;
+    float nW = vW.norm();
+    if (fabs(nW) > 1E-6)
+      vW /= nW;
+ 
+    for (unsigned int i = 0; i < 3; ++i) {
+      matrix[0][i] = vW[i];
+      matrix[1][i] = vV[i];
+      matrix[2][i] = vAB[i];
+      matrix[3][i] = B[i];
+    }
+    matrix[0][3]=0; 
+    matrix[1][3]=0;
+    matrix[2][3]=0;
+    matrix[3][3]=1;
+    
+    return matrix;
   }
-  //====================================================
 }

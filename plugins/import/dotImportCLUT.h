@@ -712,7 +712,7 @@ void HSBtoRGB(	float  inH,  float  inS,  float  inB,
 }
 
 
-bool DecodeColor	(	Color				&	outColor,
+bool DecodeColor	(	tlp::Color				&	outColor,
 						const std::string	&	inValue		)
 {
 	// #RRGGBB ?
@@ -722,7 +722,7 @@ bool DecodeColor	(	Color				&	outColor,
 			unsigned int r, g, b;
 			int n = sscanf( inValue.c_str(), "#%02x%02x%02x", &r, &g, &b );
 			if( n == 3 ) {
-				outColor = Color(r,g,b);
+				outColor = tlp::Color(r,g,b);
 				return true;
 			} else
 				return false;
@@ -734,7 +734,7 @@ bool DecodeColor	(	Color				&	outColor,
 		float r, g, b;
 		int n = sscanf( inValue.c_str(), "%f,%f,%f", &r, &g, &b );
 		if( n == 3 ) {
-			outColor = Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
+			outColor = tlp::Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
 			return true;
 		}
 	}
@@ -744,7 +744,7 @@ bool DecodeColor	(	Color				&	outColor,
 		float r, g, b;
 		int n = sscanf( inValue.c_str(), "%f %f %f", &r, &g, &b );
 		if( n == 3 ) {
-			outColor = Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
+			outColor = tlp::Color((unsigned int)(r*255.0f),(unsigned int)(g*255.0f),(unsigned int)(b*255.0f));
 			return true;
 		}
 	}
@@ -759,7 +759,7 @@ bool DecodeColor	(	Color				&	outColor,
 							float(X11Clut[i].s)/255.0f,
 							float(X11Clut[i].b)/255.0f,
 							r, g ,b	);
-				outColor = Color((unsigned int)(r),(unsigned int)(g),(unsigned int)(b));
+				outColor = tlp::Color((unsigned int)(r),(unsigned int)(g),(unsigned int)(b));
 				return true;
 			}
 		}

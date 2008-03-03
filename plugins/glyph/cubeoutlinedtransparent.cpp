@@ -1,73 +1,75 @@
 #include <GL/gl.h>
 #include <cmath>
 
-#include <tulip/StringProxy.h>
-#include <tulip/ColorsProxy.h>
+#include <tulip/StringProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <tulip/Glyph.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/GlGraph.h>
+#include <tulip/Graph.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
+using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
+/// A 3D glyph.
+/** This glyph draws a transparent cube using the "viewBorderColor" node
+ * property value to draw its edges.
+ */
 class CubeOutLinedTransparent : public Glyph {
 public:
   CubeOutLinedTransparent(GlyphContext *gc=NULL);
   virtual ~CubeOutLinedTransparent();
-  virtual string getName() {return string("CubeOutLinedTransparent");}
   virtual void draw(node n);
   virtual Coord getAnchor(const Coord & vector) const;
 
 private:
-  GLuint LList;
-  bool listOk;
   void drawCubeSimple(GLenum);
 };
 
-GLYPHPLUGIN(CubeOutLinedTransparent, "CubeOutLinedTransparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1", "1", 9);
+GLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9);
 
 //===================================================================================
-CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc): Glyph(gc),listOk(false) {
+CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc): Glyph(gc) {
 }
 
 CubeOutLinedTransparent::~CubeOutLinedTransparent() {
-  if (listOk) {
-    if (glIsList(LList)) glDeleteLists(LList, 2);
-  }
 }
 
 void CubeOutLinedTransparent::draw(node n) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (!listOk) {
-    LList = glGenLists( 2 );
-    glNewList( LList, GL_COMPILE );
-    //    drawCube(GL_QUADS);
-    glEndList();
-    glNewList( LList + 1, GL_COMPILE );
-    //    setMaterial(Color(0,0,0,255));
+  if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLinedTransparent_cube")) {
     drawCubeSimple(GL_LINE_LOOP);
-    glEndList();
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR)
-      cerr << "Open GL Error : " << error << " in " << __PRETTY_FUNCTION__ << endl;
-    listOk = true;
+    GlDisplayListManager::getInst().endNewDisplayList();
   }
-  assert(glIsList(LList));
-  setMaterial(glGraph->elementColor->getNodeValue(n));
-  string texFile = glGraph->elementTexture->getNodeValue(n);
+  
+  tlp::setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
-      setMaterial(Color(255,255,255,0));
+    string texturePath=glGraphInputData->parameters->getTexturePath();
+    if (GlTextureManager::getInst().activateTexture(texturePath+texFile))
+      setMaterial(Color(255,255,255,(glGraphInputData->elementColor->getNodeValue(n))[3]));
   }
-  glCallList(LList);
-  ColorsProxy *border = glGraph->getSuperGraph()->getProperty<ColorsProxy>("viewBorderColor");
-  glGraph->desactivateTexture();
-  Color c = border->getNodeValue(n);
+  //glCallList(LList);
+  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+  DoubleProperty *borderWidth = 0;
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+  GlTextureManager::getInst().desactivateTexture();
+  Color c = borderColor->getNodeValue(n);
   //  setMaterial(c);
-  glLineWidth(2);
+  if (borderWidth == 0) glLineWidth(2);
+  else {
+    double lineWidth = borderWidth->getNodeValue (n);
+    if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
+    else glLineWidth (lineWidth);
+  }
   glDisable(GL_LIGHTING);
   glColor3ub(c[0],c[1],c[2]);
-  glCallList(LList + 1);  
+   GlDisplayListManager::getInst().callDisplayList("CubeOutLinedTransparent_cube");
   glEnable(GL_LIGHTING);
 }
 
@@ -126,3 +128,4 @@ void CubeOutLinedTransparent::drawCubeSimple(GLenum type) {
   glVertex3f(-0.5f, -0.5f, -0.5f);
   glEnd();
 }
+/*@}*/

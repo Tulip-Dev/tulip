@@ -2,14 +2,19 @@
 #include <cppunit/TestCaller.h>
 #include <tulip/ForEach.h>
 #include "SuperGraphTest.h"
+#include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
 
 using namespace std;
+using namespace tlp;
+
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( SuperGraphTest );
 
 //==========================================================
 void SuperGraphTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void SuperGraphTest::tearDown() {
@@ -107,7 +112,7 @@ void SuperGraphTest::testIterators() {
   delete it6;
 }
 //==========================================================
-void degreeCheck(SuperGraph *graph) {
+void degreeCheck(Graph *graph) {
   Iterator<node> *itN = graph->getNodes();
   while (itN->hasNext()) {
     node n = itN->next();
@@ -137,9 +142,9 @@ void SuperGraphTest::testDegree() {
   graph->clear();
   build(100, 100);
   degreeCheck(graph);
-  SuperGraph *gr = tlp::newCloneSubGraph(graph);
-  SuperGraph *gr1 = tlp::newCloneSubGraph(graph);
-  SuperGraph *gr2 = tlp::newCloneSubGraph(gr1);
+  Graph *gr = tlp::newCloneSubGraph(graph);
+  Graph *gr1 = tlp::newCloneSubGraph(graph);
+  Graph *gr2 = tlp::newCloneSubGraph(gr1);
 
   degreeCheck(graph);
   degreeCheck(gr);
@@ -289,17 +294,17 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
 //==========================================================
 void SuperGraphTest::testDeleteSubgraph() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g2->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==g2);
-  CPPUNIT_ASSERT(g4->getFather()==g2);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);
@@ -308,10 +313,10 @@ void SuperGraphTest::testDeleteSubgraph() {
   CPPUNIT_ASSERT(g4->getRoot()==graph);
 
   graph->delSubGraph(g2);
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==graph);
-  CPPUNIT_ASSERT(g4->getFather()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
 
   graph->delSubGraph(g3);
   graph->delSubGraph(g4);
@@ -319,7 +324,7 @@ void SuperGraphTest::testDeleteSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g3->addSubGraph();
   g1->delAllSubGraphs(g2);
-  Iterator<SuperGraph *> *itGr = g1->getSubGraphs();
+  Iterator<Graph *> *itGr = g1->getSubGraphs();
   CPPUNIT_ASSERT(!itGr->hasNext());
   delete itGr;
   graph->clear();
@@ -328,13 +333,13 @@ void SuperGraphTest::testDeleteSubgraph() {
 void SuperGraphTest::testSubgraphId() {
   graph->clear();
   CPPUNIT_ASSERT(graph->getId() == 0);
-  SelectionProxy sel(graph);
-  SuperGraph *g1 = graph->addSubGraph(&sel);
-  CPPUNIT_ASSERT(g1->getId() == 1);
-  SuperGraph *g2 = graph->addSubGraph(&sel);
-  CPPUNIT_ASSERT(g2->getId() == 2);
-  SuperGraph *g;
-  int i = 1;
+  BooleanProperty sel(graph);
+  for (unsigned int i = 1; i<1000; ++i) {
+    Graph *g1 = graph->addSubGraph(&sel);
+    CPPUNIT_ASSERT(g1->getId() == i);
+  }
+  Graph *g;
+  unsigned int i = 1; //if the graph are not ordered that test can fail.
   forEach(g, graph->getSubGraphs()) {
     CPPUNIT_ASSERT(g->getId() == i);
     ++i;
@@ -343,17 +348,17 @@ void SuperGraphTest::testSubgraphId() {
 //==========================================================
 void SuperGraphTest::testSubgraph() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  CPPUNIT_ASSERT(graph->getFather()==graph);
-  CPPUNIT_ASSERT(g1->getFather()==graph);
-  CPPUNIT_ASSERT(g2->getFather()==graph);
-  CPPUNIT_ASSERT(g3->getFather()==g2);
-  CPPUNIT_ASSERT(g4->getFather()==g2);
+  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);
@@ -361,8 +366,8 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(g3->getRoot()==graph);
   CPPUNIT_ASSERT(g4->getRoot()==graph);
 
-  Iterator<SuperGraph *> *it= g2->getSubGraphs();
-  SuperGraph *a,*b;
+  Iterator<Graph *> *it= g2->getSubGraphs();
+  Graph *a,*b;
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
@@ -412,13 +417,13 @@ void SuperGraphTest::testSubgraph() {
 //==========================================================
 void SuperGraphTest::testInheritance() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
 
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
-  MetricProxy *m = graph->getProperty<MetricProxy>("metric");
+  DoubleProperty *m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->existProperty("metric"));
   CPPUNIT_ASSERT(g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
@@ -433,14 +438,14 @@ void SuperGraphTest::testInheritance() {
   CPPUNIT_ASSERT(!g4->existProperty("metric"));
 
 
-  MetricProxy *m2 = g2->getLocalProperty<MetricProxy>("metric");
+  DoubleProperty *m2 = g2->getLocalProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(!graph->existProperty("metric"));
   CPPUNIT_ASSERT(!g1->existProperty("metric"));
   CPPUNIT_ASSERT(g2->existProperty("metric"));
   CPPUNIT_ASSERT(g3->existProperty("metric"));
   CPPUNIT_ASSERT(g4->existProperty("metric"));
 
-  m = graph->getProperty<MetricProxy>("metric");
+  m = graph->getProperty<DoubleProperty>("metric");
   CPPUNIT_ASSERT(graph->getProperty("metric") == m);
   CPPUNIT_ASSERT(g1->getProperty("metric") == m);
   CPPUNIT_ASSERT(g2->getProperty("metric") == m2);
@@ -459,7 +464,7 @@ void SuperGraphTest::testInheritance() {
 //==========================================================
 void SuperGraphTest::testPropertiesIteration() {
   graph->clear();
-  SuperGraph *g1, *g2, *g3, *g4;
+  Graph *g1, *g2, *g3, *g4;
   set<string> propList1;
   set<string> propList2;
   propList1.insert("m1");
@@ -475,7 +480,7 @@ void SuperGraphTest::testPropertiesIteration() {
 
   set<string>::const_iterator it;
   for (it=propList1.begin();it!=propList1.end();++it) {
-    graph->getProperty<IntProxy>(*it);
+    graph->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
   Iterator<string> *itS = graph->getProperties();
@@ -500,7 +505,7 @@ void SuperGraphTest::testPropertiesIteration() {
   } delete itS;
 
   for (it=propList2.begin();it!=propList2.end();++it) {
-    g2->getProperty<IntProxy>(*it);
+    g2->getProperty<IntegerProperty>(*it);
     CPPUNIT_ASSERT(g4->existProperty(*it));
   }
 
@@ -533,7 +538,7 @@ void SuperGraphTest::testPropertiesIteration() {
 }
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SuperGraph" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Add/Del operations (Simple Graph)", 
 								  &SuperGraphTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Clean operations (Simple Graph)", 

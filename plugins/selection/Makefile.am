@@ -1,23 +1,26 @@
-if WIN32
+if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
-plugins_LTLIBRARIES = 	libspanningdag.la \
-			libinducedsubgraph.la \
-			libreachable.la \
-			libspanningtree.la \
-			libloopselection.la \
-			libkruskal.la \
-			libmultipleselection.la
+plugins_LTLIBRARIES = 	libSpanningDagSelection-@VERSION@.la \
+			libInducedSubGraphSelection-@VERSION@.la \
+			libReachableSubGraphSelection-@VERSION@.la \
+			libSpanningTreeSelection-@VERSION@.la \
+			libLoopSelection-@VERSION@.la \
+			libKruskal-@VERSION@.la \
+			libMultipleSelection-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/plugins/selection
-libspanningdag_la_SOURCES = SpanningDagSelection.cpp SpanningDagSelection.h
-libreachable_la_SOURCES = ReachableSubGraphSelection.h ReachableSubGraphSelection.cpp
-libspanningtree_la_SOURCES = SpanningTreeSelection.cpp SpanningTreeSelection.h
-libinducedsubgraph_la_SOURCES = InducedSubGraphSelection.cpp InducedSubGraphSelection.h
-libloopselection_la_SOURCES = LoopSelection.cpp LoopSelection.h
-libmultipleselection_la_SOURCES = MultipleEdgeSelection.cpp MultipleEdgeSelection.h
-libkruskal_la_SOURCES = Kruskal.cpp Kruskal.h
+pluginsdir = $(libdir)/tlp
+
+libSpanningDagSelection_@VERSION@_la_SOURCES = SpanningDagSelection.cpp SpanningDagSelection.h
+libReachableSubGraphSelection_@VERSION@_la_SOURCES = ReachableSubGraphSelection.h ReachableSubGraphSelection.cpp
+libSpanningTreeSelection_@VERSION@_la_SOURCES = SpanningTreeSelection.cpp SpanningTreeSelection.h
+libInducedSubGraphSelection_@VERSION@_la_SOURCES = InducedSubGraphSelection.cpp InducedSubGraphSelection.h
+libLoopSelection_@VERSION@_la_SOURCES = LoopSelection.cpp LoopSelection.h
+libMultipleSelection_@VERSION@_la_SOURCES = MultipleEdgeSelection.cpp MultipleEdgeSelection.h
+libKruskal_@VERSION@_la_SOURCES = Kruskal.cpp Kruskal.h
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 

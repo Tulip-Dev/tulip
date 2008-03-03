@@ -16,8 +16,8 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// IdMetric.h - This plugins assigns id to nodes and edges.
-/** This plugins assigns id to nodes and edges. The id are those used by tulip.
+/// IdDoubleMetric.h - This plugins assigns id to nodes and edges.
+/** This plugins assigns id to nodes and edges. The ids are those used by tulip.
  *
  *  <b>HISTORY</b>
  *
@@ -35,20 +35,15 @@
  *  (at your option) any later version.
  *
  */
-class IdMetric:public Metric { 
+class IdMetric:public tlp::DoubleAlgorithm { 
 public:
-  IdMetric(const PropertyContext &);
+  IdMetric(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/
 
 
 #endif
-
-
-
-
-
 
 
 

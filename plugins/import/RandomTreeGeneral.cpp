@@ -3,6 +3,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace tlp;
 
 
 
@@ -37,7 +38,7 @@ namespace {
 
 
 struct RandomTreeGeneral:public ImportModule {
-  RandomTreeGeneral(ClusterContext context):ImportModule(context) {
+  RandomTreeGeneral(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("minsize",paramHelp[0],"10");
     addParameter<int>("maxsize",paramHelp[1],"100");
     addParameter<int>("maxdegree",paramHelp[2],"5");
@@ -45,7 +46,7 @@ struct RandomTreeGeneral:public ImportModule {
   ~RandomTreeGeneral() {
   }
   bool buildNode(node n,unsigned int sizeM,int arityMax) {
-    if (superGraph->numberOfNodes()>sizeM) return true;
+    if (graph->numberOfNodes()>sizeM) return true;
     bool result=true;
     int randNumber=rand();
     int i = 0;
@@ -54,8 +55,8 @@ struct RandomTreeGeneral:public ImportModule {
     i = i % arityMax;
     for (;i>0;i--) {
       node n1;
-      n1=superGraph->addNode();
-      superGraph->addEdge(n,n1);
+      n1=graph->addNode();
+      graph->addEdge(n,n1);
       result= result && buildNode(n1,sizeM,arityMax);
     }
     return result;
@@ -64,9 +65,9 @@ struct RandomTreeGeneral:public ImportModule {
   bool import(const string &name) {
     srand(clock()); 
 
-    int sizeMin  = 10;
-    int sizeMax  = 100;
-    int arityMax = 5;
+    unsigned int sizeMin  = 10;
+    unsigned int sizeMax  = 100;
+    unsigned int arityMax = 5;
     if (dataSet!=0) {
       dataSet->get("minsize", sizeMin);   
       dataSet->get("maxsize", sizeMax);
@@ -81,13 +82,13 @@ struct RandomTreeGeneral:public ImportModule {
 	if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
       }
       i++;
-      superGraph->clear();
-      node n=superGraph->addNode();
+      graph->clear();
+      node n=graph->addNode();
       ok=!buildNode(n,sizeMax,arityMax);
       ok=false;
-      if (superGraph->numberOfNodes()<sizeMin) ok=true;
+      if (graph->numberOfNodes()<sizeMin) ok=true;
     }
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }
 };
-IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","","1.0","Graphs")

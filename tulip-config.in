@@ -1,24 +1,67 @@
 #!/bin/sh
 
+thisdir=$(dirname "$0")
+if test "$thisdir" = "." ; then
+  thisdir=$PWD
+fi
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
-qtversion=@QT_VERSION@
-plugins_builddir=@TULIP_PLUGINS_BUILD_PATH@
+libversion=
+libextension=so
+plugincxxflags="-fPIC -DPIC"
+pluginldflags=-shared
+pluginpath=${libdir}/tlp
+
+WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
+MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
+LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
+
+# check for MacOS or Windows installation
+if [ $MACOSX -eq 0 ] ; then
+  pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
+  if [ -d $(dirname $thisdir)/lib ] ; then
+# MacOS bundle
+    includedir=$(dirname $thisdir)/include
+    libdir=$(dirname $thisdir)/lib
+    pluginpath=${libdir}/tlp
+  fi
+fi
+if [ $WINNT -eq 0 ] ; then
+  libversion=-@WIN_VERSION@
+  libextension=dll
+  plugincxxflags=-DPIC
+  if [ -f "$thisdir/assistant.exe" ] ; then
+#   Windows installation
+    drive=`echo ${thisdir} | awk -F / '{print $2}'`
+    thisdir=${thisdir/\/$drive\//$drive:/}
+    includedir=${thisdir}/include
+    libdir=${thisdir}/lib
+    pluginpath=${libdir}/tlp
+  else
+    libdir=${exec_prefix}/bin
+  fi
+fi
 
 usage()
 {
     cat <<EOF
 Usage: tulip-config [OPTIONS]
 Options:
-	--version
-	--libs
-	--cxxflags
-	--glincludes
-        --pluginpath
-        --qtlibs
-        --qtincludes
+	--version (return the current version of Tulip)
+	--libs (return the whole Tulip libs)
+	--lib_tulip (return the Tulip core lib)
+        --lib_ogl (return the Tulip OpenGL lib)
+	--cxxflags (return the Tulip needed cxx flags)
+	--glincludes (return the OpenGL includes)
+	--gllibs (return the OpenGL libs)
+	--plugincxxflags (return the Tulip plugin cxx flags)
+	--pluginextension (return the plugin file extension)
+	--pluginldflags (return the plugin loader flags)
+        --pluginpath (return the path for installation of Tulip plugins)
+        --qtincludes (return the Qt includes)
+        --qtlibs (return the Qt libs needed by Tulip)
 	
 EOF
     exit $1
@@ -48,10 +91,25 @@ while test $# -gt 0; do
       echo @GL_LDFLAGS@ @LIB_GL@
       ;;
     --libs)
-      echo -L${libdir} -ltulip -ltulip-ogl -ltulip-qt${qtversion}
+      echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt4${libversion}
+      ;;
+    --lib_tulip)
+      echo -L${libdir} -ltulip${libversion}
+      ;;
+    --lib_ogl)
+      echo -L${libdir} -ltulip-ogl${libversion}
+      ;;
+    --plugincxxflags)
+      echo ${plugincxxflags}
+      ;;
+    --pluginldflags)
+      echo ${pluginldflags}
+      ;;
+    --pluginextension)
+      echo ${libextension}
       ;;
     --pluginpath)
-      echo ${libdir}/tlp/plugins
+      echo ${pluginpath}
       ;;
     --qtlibs)
       echo @QT_LDFLAGS@ @LIB_QT@

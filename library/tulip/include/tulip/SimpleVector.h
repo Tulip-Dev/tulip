@@ -1,7 +1,10 @@
 //-*-c++-*-
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _SIMPLE_VECTOR_H_
 #define _SIMPLE_VECTOR_H_
+
+namespace tlp {
 
 // SimpleVector
 //   simple copy constructor
@@ -71,4 +74,6 @@ class SimpleVector {
   }
 };
 
+}
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

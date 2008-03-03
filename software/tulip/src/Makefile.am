@@ -1,8 +1,4 @@
-if ! WIN32
-if ! MACOSX
-ADD_LIB = -lXext -lXi -lpthread
-endif
-else
+if WIN32
 MWINDOWS = -mwindows
 endif
 
@@ -18,19 +14,12 @@ if MACOSX_7
 AM_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ `ls $(top_builddir)/library/tulip/src/*.o` `ls $(top_builddir)/thirdparty/gzstream/*.o` `ls $(top_builddir)/thirdparty/triangle/*.o` -lz  @TULIP_OGL_LDFLAGS@ `ls $(top_builddir)/library/tulip-qt/src/*.o` -framework Carbon -framework AGL
 else
 if MACOSX
-AM_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ -framework Carbon -framework AGL
+AM_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ -framework Carbon -framework AGL -lfreetype -lxml2 ${ADD_LIB} @LIB_QT_ASSISTANT@ @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 else
-AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@
+AM_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ -lfreetype -lxml2 ${ADD_LIB} @LIB_QT_ASSISTANT@ @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 endif
 endif
 AM_CPPFLAGS= @QT_CPPFLAGS@
-
-tulip_LDFLAGS = -L.
-if QT3
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lqassistantclient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-else
-tulip_LDADD = -lfreetype -lxml2 ${ADD_LIB} @QT_LDFLAGS@ -lQtAssistantClient @LIB_QT@ @LIB_IMAGES_LDFLAGS@
-endif
 
 if !WIN32
 UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
@@ -45,114 +34,48 @@ BUILT_SOURCES = \
 	moc_QtProgressData.cpp \
 	TulipData.cpp\
 	moc_TulipData.cpp\
-	OverviewData.cpp\
-	moc_OverviewData.cpp\
 	TabWidgetData.cpp \
 	moc_TabWidgetData.cpp \
 	InfoDialogData.cpp \
 	AppStartUpData.cpp \
-	ToolBarData.cpp \
 	PropertyDialogData.cpp \
 	TulipStatsData.cpp \
 	GridOptionsData.cpp \
+	CopyPropertyDialogData.cpp \
 	moc_TulipStatsData.cpp \
 	moc_GridOptionsData.cpp \
-	moc_Overview.cpp \
+	moc_CopyPropertyDialog.cpp \
+	moc_CopyPropertyDialogData.cpp \
 	moc_AppStartUp.cpp \
 	moc_AppStartUpData.cpp \
 	moc_InfoDialogData.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
-	moc_ToolBar.cpp \
-	moc_ToolBarData.cpp \
 	moc_PropertyDialog.cpp \
 	moc_PropertyDialogData.cpp \
-	moc_NavigateButton.cpp \
 	moc_QtProgress.cpp \
 	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
 
-nodist_tulip_SOURCES =  \
-	QtProgressData.cpp \
-	moc_QtProgressData.cpp \
-	moc_Overview.cpp \
-	TulipData.cpp\
-	moc_TulipData.cpp\
-	OverviewData.cpp\
-	moc_OverviewData.cpp\
-	TabWidgetData.cpp \
-	moc_TabWidgetData.cpp \
-	InfoDialogData.cpp \
-	AppStartUpData.cpp \
-	ToolBarData.cpp \
-	PropertyDialogData.cpp \
-	TulipStatsData.cpp \
-	GridOptionsData.cpp \
-	moc_TulipStatsData.cpp \
-	moc_GridOptionsData.cpp \
-	moc_AppStartUp.cpp \
-	moc_AppStartUpData.cpp \
-	moc_InfoDialogData.cpp \
-	moc_InfoDialog.cpp \
-	moc_viewGl.cpp \
-	moc_ToolBar.cpp \
-	moc_ToolBarData.cpp \
-	moc_PropertyDialog.cpp \
-	moc_PropertyDialogData.cpp \
-	moc_NavigateButton.cpp \
-	moc_QtProgress.cpp \
-	moc_TulipStatsWidget.cpp \
-	moc_GridOptionsWidget.cpp
+nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
-
-if QT3
 dist_tulip_SOURCES = \
-	Overview.cpp \
-	ElementInfoToolTip.cpp \
 	viewGl.cpp \
 	Application.cpp \
 	geometrie2D.cpp \
-	NavigateButton.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
-	ToolBar.cpp \
 	PropertyDialog.cpp \
+	CopyPropertyDialog.cpp \
 	QtProgress.cpp \
 	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \
 	main.cpp
 
-moc_%.cpp: ../include/%.h 
-	$(MOC) -o $@ $<
-
-else
-dist_tulip_SOURCES = \
-	Overview.cpp \
-	viewGl.cpp \
-	Application.cpp \
-	geometrie2D.cpp \
-	NavigateButton.cpp \
-	InfoDialog.cpp \
-	AppStartUp.cpp \
-	ToolBar.cpp \
-	PropertyDialog.cpp \
-	QtProgress.cpp \
-	TulipStatsWidget.cpp \
-	GridOptionsWidget.cpp \
-	main.cpp
-
-moc_%.cpp: ../include/%.h 
+moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
-endif
-
 
 CLEANFILES = $(BUILT_SOURCES)
-
-if !QT3
-moc_PropertyDialog.cpp: ../include/PropertyDialogQt3.h 
-	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-endif
 
 %Data.cpp: ../designer/%.ui ../include/%Data.h
 	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<

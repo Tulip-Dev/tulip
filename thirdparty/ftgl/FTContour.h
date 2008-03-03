@@ -36,7 +36,7 @@ class FTGL_EXPORT FTContour
         }
         
         /**
-         * Return a point at index.
+         * Returns a point at index.
          *
          * @param index of the point in the curve.
          * @return const point reference

@@ -25,24 +25,24 @@
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class TreeLeaf:public Layout { 
+class OrientableLayout;
+class OrientableSizeProxy;
+
+class TreeLeaf:public tlp::LayoutAlgorithm { 
 public:
-  TreeLeaf(const PropertyContext &);
+  TreeLeaf(const tlp::PropertyContext &);
   ~TreeLeaf();
   bool run();
-  bool check(std::string &);
-  void reset();
-  int dfsPlacement(node,int &,int );
+
+private:
+  float spacing;
+  float nodeSpacing;
+  std::vector<float> levelHeights;
+  float dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, unsigned int depth,
+		     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize);
+  void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
+			   OrientableSizeProxy *oriSize);
 };
 /*@}*/
 #endif
-
-
-
-
-
-
-
-
-
 

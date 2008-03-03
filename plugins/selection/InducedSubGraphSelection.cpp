@@ -9,17 +9,19 @@
 */
 #include <cassert>
 #include "InducedSubGraphSelection.h"
-#include <tulip/SelectionProxy.h>
+#include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-SELECTIONPLUGIN(InducedSubGraphSelection,"Induced sub-graph","David Auber","08/08/2001","Alpha","0","1");
+using namespace tlp;
+
+BOOLEANPLUGIN(InducedSubGraphSelection,"Induced Sub-Graph","David Auber","08/08/2001","Alpha","1.0");
 
 //=================================================================================
 namespace {
   const char * paramHelp[] = {
     // selectedNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SelectionProxy" ) \
+    HTML_HELP_DEF( "type", "Selection" ) \
     HTML_HELP_BODY() \
     "This selection defines the originally set of nodes used to extend the current selection to the induced sub-graph." \
     HTML_HELP_CLOSE(),
@@ -27,30 +29,30 @@ namespace {
 }
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const PropertyContext &context):
-  Selection(context) {
-  addParameter<SelectionProxy>("Nodes", paramHelp[0], "viewSelection");
+  BooleanAlgorithm(context) {
+  addParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  selectionProxy->setAllNodeValue(false);
-  selectionProxy->setAllEdgeValue(false);
-  SelectionProxy *entrySelection = 0;
+  booleanResult->setAllNodeValue(false);
+  booleanResult->setAllEdgeValue(false);
+  BooleanProperty *entrySelection = 0;
   if (dataSet!=0) 
     dataSet->get("Nodes", entrySelection);  
   if (entrySelection == 0) 
-    entrySelection = superGraph->getProperty<SelectionProxy>("viewSelection");
+    entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  Iterator<node> *itN = superGraph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next() ;
     if (entrySelection->getNodeValue(itn)) {
-      selectionProxy->setNodeValue(itn, true);
-      Iterator<edge> *itE = superGraph->getOutEdges(itn);
+      booleanResult->setNodeValue(itn, true);
+      Iterator<edge> *itE = graph->getOutEdges(itn);
       while (itE->hasNext()) {
 	edge e = itE->next();
-	node target = superGraph->target(e);
+	node target = graph->target(e);
 	if (entrySelection->getNodeValue(target))
-	  selectionProxy->setEdgeValue(e, true);
+	  booleanResult->setEdgeValue(e, true);
       } delete itE;
     }
   } delete itN;

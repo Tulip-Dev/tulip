@@ -5,17 +5,18 @@
 #include <list>
 #include <string>
 
-#include <tulip/Plane.h>
+// the header below is not public
+#include "../../library/tulip/include/tulip/Plane.h"
 #include <tulip/TulipPlugin.h>
 
 /** \addtogroup clustering */
 /*@{*/
 
-class PlaneClustering : public Clustering 
+class PlaneClustering : public tlp::Algorithm 
 { 
  public:
 
-  PlaneClustering(ClusterContext);
+  PlaneClustering(tlp::AlgorithmContext);
   ~PlaneClustering();
 
   bool run();

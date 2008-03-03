@@ -1,5 +1,6 @@
 #include <float.h>
 #include <tulip/Delaunay.h>
+#include <iostream>
 // Triangle from Jonathan Richard Shewchuk
 // is no longer used by Tulip
 //#define ANSI_DECLARATORS //ansi style declarations for triangle.h
@@ -13,7 +14,7 @@
 
 
 using namespace std;
-
+using namespace tlp;
 // Triangle from Jonathan Richard Shewchuk
 // is no longer used by Tulip
 //using namespace triangle_1_5;
@@ -549,11 +550,13 @@ void runTriangle (const vector<Coord> &points,
 //==============================================================
 void tlp::delaunayTriangulation (const vector<Coord> &points, 
 	    vector<pair<unsigned int, unsigned int> > &edges) {
+  std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, &edges);
 }//end delaunayTriangulation
 //==============================================================
 void tlp::delaunayTriangulation (const vector<Coord> &points, 
 	    vector< tlp::Array<unsigned int, 3> > &triangles) {
+  std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, NULL, &triangles);
 }//end delaunayTriangulation
 //==============================================================
@@ -566,5 +569,6 @@ void tlp::delaunayTriangulation (const vector<Coord> &points,
 void tlp::voronoiDiagram (const vector<Coord> &points,
 			  VoronoiDiagram &voronoiDiagram,
 			  bool returnVoronoiEdgeList) {
+  std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, NULL, NULL, returnVoronoiEdgeList, &voronoiDiagram);
 }//end voronoiDiagram

@@ -1,56 +1,64 @@
 How to build Tulip on MacOSX platform
---------------------------------------
+-------------------------------------
 
-1- Build the Qt/Mac Open Source Edition
--------------------------------------------
-You first have to download the corresponding Qt 3 source code
-ftp://ftp.trolltech.com/qt/source/qt-mac-free-3.3.6.tar.gz
-Refer to the INSTALL file for the build directives
-but be sure to add the -thread and -static flags when configuring Qt
-> ./configure -thread -static
-> make
-Edit libqt-mt.la in the lib subdirectory of your Qt installation directory
-in order to disable (add a leading #) the line beginning with
-dependency_libs= ...
-This step is necessary because glibtool chokes on the -framework switch.
-Removing the line is not correct but it ensures a working Tulip building
-process. The Qt qmake process doesn't use glibtool so this isn't an issue
-for most Qt applications.
+1- Build Qt/Mac Open Source Edition
+------------------------------------
+Download the Qt 4.3.3 source code
+  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.3.3.tar.gz
+
+To install Qt-4.3.3 into its default install directory ( /usr/local/Trolltech/Qt-4.3.3 ),
+do (for example in your home directory)
+  tar xzvf qt-mac-opensource-src-4.3.3.tar.gz
+  cd qt-mac-opensource-src-4.3.3
+  ./configure
+  make
+  make install
 
 2- Build freetype2
 ------------------
 Download the FreeType 2 source code from
 http://freetype.sourceforge.net/download.html
 then 
-> ./configure
-> make
-> make install
+  ./configure
+  make
+  make install
 
-3- Configure Tulip
+3- Install glew
+-------------
+Download the last MacOS X AGL version of glew from http://glew.sourceforge.net
+Install the librairies libGLEW*.dylib in /usr/lib, 
+the binaries in /usr/local/bin and
+the include/GL directory in /usr/local/include
+
+4- Install libpng and libjpeg
+---------------------------
+Ease your installation in downloading the MacOS X ports of these libraries
+from http://ethan.tira-thompson.com/Mac%20OS%20X%20Ports.html
+
+5- Configure Tulip
 ------------------
 Change the current directory to the tulip directory
 then run
 
-> sh gen-conf.sh
-and
-> ./configure  -prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
+  sh gen-conf.sh
+
+  ./configure --with-qt-dir=/usr/local/Trolltech/Qt-4.3.3
 
 More configuration flags are available; use ./configure --help to see them.
 
 5- Build Tulip
--------------
+--------------
 run
 
-> make
-then
-> make install
+  make
+  make install
 
 6- Build a downloadable Tulip Mac bundle
 ----------------------------------------
 If you want to build a self sufficient downloadable Tulip Mac bundle,
 just run
 
-> sh make_tulip-<release number>_mac_bundle.sh
+  sh make_tulip-<release number>_mac_bundle.sh
 
 this will produce a Tulip-<release number>.app Mac bundle and
 a Tulip-<release number>.dmg file which is a disk image of that bundle

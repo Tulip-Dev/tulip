@@ -3,7 +3,7 @@
 #include <qmessagebox.h>
 #include "ScatterPlot.h"
 
-LAYOUTPLUGINOFGROUP(ScatterPlot, "Scatter Plot", "M.Delorme", "25/07/2005", "Alpha", "1", "0", "Misc");
+LAYOUTPLUGINOFGROUP(ScatterPlot, "Scatter Plot", "M.Delorme", "25/07/2005", "Alpha", "1.0", "Misc");
 
 using namespace std;
 using namespace tlp;
@@ -14,7 +14,7 @@ namespace
     {
     // Used Metrics 1 :
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_DEF( "values", "An existing metric property" ) \
     HTML_HELP_DEF( "default", "viewMetric" ) \
     HTML_HELP_BODY() \
@@ -23,7 +23,7 @@ namespace
 
     // Used Metrics 2 :
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_DEF( "values", "An existing metric property" ) \
     HTML_HELP_DEF( "default", "viewMetric" ) \
     HTML_HELP_BODY() \
@@ -32,7 +32,7 @@ namespace
 
     // Used Metrics 3 :
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "Metric" ) \
     HTML_HELP_DEF( "values", "An existing metric property" ) \
     HTML_HELP_DEF( "default", "viewMetric" ) \
     HTML_HELP_BODY() \
@@ -86,11 +86,11 @@ namespace
   };
 }
 
-ScatterPlot::ScatterPlot(const PropertyContext &context) : Layout(context) 
+ScatterPlot::ScatterPlot(const PropertyContext &context) : LayoutAlgorithm(context) 
 {
-  addParameter<MetricProxy>("usedMetric1", paramHelp[0], "viewMetric");
-  addParameter<MetricProxy>("usedMetric2", paramHelp[1], "viewMetric");
-  addParameter<MetricProxy>("usedMetric3", paramHelp[2], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric1", paramHelp[0], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric2", paramHelp[1], "viewMetric");
+  addParameter<DoubleProperty>("usedMetric3", paramHelp[2], "viewMetric");
 
   addParameter<double>("discretizationStep1", paramHelp[3], "1.0");
   addParameter<double>("discretizationStep2", paramHelp[4], "1.0");
@@ -106,12 +106,12 @@ ScatterPlot::~ScatterPlot()
 
 bool ScatterPlot::run() 
 {
-  Iterator<node> *itN = superGraph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
 
-  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
+  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   
   if (shapeConversion)
-    superGraph->getLocalProperty<IntProxy>("viewShape")->setAllNodeValue(1);
+    graph->getLocalProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   
   // The histogram if we only have 1 metric
   std::map<int, int> histogram;
@@ -125,7 +125,7 @@ bool ScatterPlot::run()
       float nodeVal[3];
       
       for(int i=0; i < nMetrics; i++)
-	nodeVal[i] = metricProxy[i]->getNodeValue(n);
+	nodeVal[i] = metric[i]->getNodeValue(n);
       
       int histoVal[3];
 
@@ -146,12 +146,12 @@ bool ScatterPlot::run()
 	}
       
       // We have to revert Y axis to make the histogram looks good
-      layoutProxy->setNodeValue(n, Coord((double)histoVal[0], (double)-histoVal[1], (double)histoVal[2]));      
+      layoutResult->setNodeValue(n, Coord((double)histoVal[0], (double)-histoVal[1], (double)histoVal[2]));      
     }
   
   delete itN;
   
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
 
   dataSet->set("histoMax", histoMax);
 
@@ -165,7 +165,7 @@ bool ScatterPlot::check(string &erreurMsg)
 
   else if (nMetrics < 1 || nMetrics > 3)
     {
-      erreurMsg = "Invalid number of metricProxy";
+      erreurMsg = "Invalid number of metric";
       return false;
     }
 
@@ -189,8 +189,8 @@ bool ScatterPlot::check(string &erreurMsg)
       char mtxt[12] = "usedMetric1";
       mtxt[10] = n;
 
-      if (dataSet == 0 || !dataSet->get(mtxt, metricProxy[i]))
-	metricProxy[i] = superGraph->getProperty<MetricProxy>("viewMetric");
+      if (dataSet == 0 || !dataSet->get(mtxt, metric[i]))
+	metric[i] = graph->getProperty<DoubleProperty>("viewMetric");
     }
 
   if (dataSet == 0 || !dataSet->get("shapeConversion", shapeConversion))
@@ -198,8 +198,3 @@ bool ScatterPlot::check(string &erreurMsg)
 
   return true;
 }
-
-void ScatterPlot::reset() 
-{
-}
-

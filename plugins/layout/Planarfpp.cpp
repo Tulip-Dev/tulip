@@ -141,4 +141,4 @@ struct PlanarFPP:public Layout {
   }
 };
 
-LAYOUTPLUGIN(PlanarFPP, "PlanarFPP", "Bourqui Romain", "18/05/2006", "Ok", "0", "1");
+LAYOUTPLUGIN(PlanarFPP, "PlanarFPP", "Bourqui Romain", "18/05/2006", "Ok", "1.0");

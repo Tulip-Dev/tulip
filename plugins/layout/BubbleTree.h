@@ -7,18 +7,12 @@
 /** \addtogroup layout */
 /*@{*/
 
-/// BubbleTree.h - An implementation of the bubble tree algorithm.
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
  *
  *  Bubble Tree Drawing Algorithm : \n
- *  S. Grivet and D. Auber and J-P Domenger and Guy Melançon, \n
- *  International conference in computer vision and graphics, \n
- *  september 2004.
- *
- *  Bubble Tree Drawing Algorithm : \n
- *  D. Auber and S. Grivet and J-P Domenger and Guy Melançon, \n
- *  Technical report : RR-1323-04, LaBRI university Bordeaux I.
+ *  D. Auber and S. Grivet and J-P Domenger and Guy Melancon, \n
+ *  In International Conference on Computer Vision and Graphics, pages 633-641, september 2004.
  *
  *  <b>HISTORY</b> 
  *
@@ -30,28 +24,27 @@
  *  Let n be the number of nodes, the algorithm complexity is in O(n) or O(nlog(n)), 
  *  By default O(nlog(n)) algorithm is used, but one can choose the complexity by using 
  *  the argument (bool)"complexity" (true means  O(nlog(n), false  O(n)).
- *  The algorithm can manage nodes of different size. The SizesProxy "viewSize"
+ *  The algorithm can manage nodes of different size. The SizeProperty "viewSize"
  *  is used by default if no parameters are given to the plug-in. 
- *  The parameter is (SizesProxy*)"nodeSize".
+ *  The parameter is (SizeProperty*) "node size".
  *
  *  
  *
  *  \author David Auber, S. Grivet  University Bordeaux I France: 
  *   auber@tulip-software.org, grivet@labri.fr
  */
-class BubbleTree:public Layout { 
+class BubbleTree:public tlp::LayoutAlgorithm { 
 public:
-  BubbleTree(const PropertyContext &);
+  BubbleTree(const tlp::PropertyContext &);
   ~BubbleTree();
   bool run();
-  bool check(std::string &);
-  void reset();
 private:
-  double computeRelativePosition(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout2(node n, stdext::hash_map<node,tlp::Vector<double, 5 > > *relativePosition,
+  double computeRelativePosition(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout2(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
-  SizesProxy *nodeSize;
+  tlp::Graph *tree;
+  tlp::SizeProperty *nodeSize;
   bool nAlgo;
 };
 /*@}*/

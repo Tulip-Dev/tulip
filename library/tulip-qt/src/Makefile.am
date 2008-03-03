@@ -1,113 +1,112 @@
+RELEASE = ${VERSION}
+
 if WIN32 
 DLL_FLAGS = -no-undefined
 DLL_TULIP_QT = -DDLL_TULIP_QT
 DLL_TULIP_QT2 = -DDLL_TULIP_QT2
-RELEASE = ${VERSION}
 else 
-RELEASE = @TULIP_VERSION@ -version-info 0:0:0
+if MACOSX
+DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
-lib_LTLIBRARIES = libtulip-qt@QT_VERSION@.la
-if QT3
-qtplugin_LTLIBRARIES = libTulipWidgets.la
-else
-qtplugin_LTLIBRARIES = libTulipPropertyTablePlugin.la libTulipElementPropertiesPlugin.la libGlGraphWidgetPlugin.la libClusterTreePlugin.la
-endif
+lib_LTLIBRARIES = libtulip-qt4.la
+qtplugin_LTLIBRARIES = libPropertyWidgetPlugin.la libElementPropertiesWidgetPlugin.la libGlGraphWidgetPlugin.la libSGHierarchyWidgetPlugin.la libGWOverviewWidgetPlugin.la
 
 INCLUDES = ${DLL_TULIP_QT} @GL_INCLUDES@ @TULIP_QT_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
 if MACOSX_7
 AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 else
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
+AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ -release ${RELEASE}
 endif
 
 AM_CPPFLAGS= @QT_CPPFLAGS@
-qtplugindir = $(libdir)/tlp/plugins/designer
+qtplugindir = $(libdir)/tlp/designer
 
-if QT3
-libTulipWidgets_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libTulipWidgets_laINCLUDES = ${DLL_TULIP_QT2}
-
-libTulipWidgets_la_SOURCES = \
-	TulipWidgetsPlugin.cpp
-
-EXTRA_DIST = ClusterTreePlugin.cpp GlGraphWidgetPlugin.cpp\
-	     TulipElementPropertiesPlugin.cpp TulipPropertyTablePlugin.cpp
-else
-libTulipPropertyTablePlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libTulipElementPropertiesPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libPropertyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libElementPropertiesWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libGlGraphWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libClusterTreePlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libGWOverviewWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libSGHierarchyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 
-libTulipPropertyTablePlugin_laINCLUDES = ${DLL_TULIP_QT2}
-libTulipElementPropertiesPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libPropertyWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libElementPropertiesWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 libGlGraphWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
-libClusterTreePlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libGWOverviewWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libSGHierarchyWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 
-libClusterTreePlugin_la_SOURCES = ClusterTreePlugin.cpp
-nodist_libClusterTreePlugin_la_SOURCES = moc_ClusterTreePlugin.cpp
+libSGHierarchyWidgetPlugin_la_SOURCES = SGHierarchyWidgetPlugin.cpp
+nodist_libSGHierarchyWidgetPlugin_la_SOURCES = moc_SGHierarchyWidgetPlugin.cpp
 libGlGraphWidgetPlugin_la_SOURCES = GlGraphWidgetPlugin.cpp
 nodist_libGlGraphWidgetPlugin_la_SOURCES = moc_GlGraphWidgetPlugin.cpp 
-libTulipElementPropertiesPlugin_la_SOURCES = TulipElementPropertiesPlugin.cpp
-nodist_libTulipElementPropertiesPlugin_la_SOURCES = moc_TulipElementPropertiesPlugin.cpp
-libTulipPropertyTablePlugin_la_SOURCES = TulipPropertyTablePlugin.cpp
-nodist_libTulipPropertyTablePlugin_la_SOURCES = moc_TulipPropertyTablePlugin.cpp
+libGWOverviewWidgetPlugin_la_SOURCES = GWOverviewWidgetPlugin.cpp
+nodist_libGWOverviewWidgetPlugin_la_SOURCES = moc_GWOverviewWidgetPlugin.cpp 
+libElementPropertiesWidgetPlugin_la_SOURCES = ElementPropertiesWidgetPlugin.cpp
+nodist_libElementPropertiesWidgetPlugin_la_SOURCES = moc_ElementPropertiesWidgetPlugin.cpp
+libPropertyWidgetPlugin_la_SOURCES = PropertyWidgetPlugin.cpp
+nodist_libPropertyWidgetPlugin_la_SOURCES = moc_PropertyWidgetPlugin.cpp
 
-EXTRA_DIST = TulipWidgetsPlugin.cpp
-endif
+BUILT_SOURCES = \
+	moc_TulipTableWidget.cpp \
+	moc_GlGraphWidget.cpp \
+	moc_PropertyWidget.cpp \
+	moc_ElementPropertiesWidgetUI.cpp \
+	moc_ElementPropertiesWidget.cpp \
+	moc_FindSelectionWidget.cpp \
+	moc_FindSelectionData.cpp \
+	moc_RenderingParametersDialogData.cpp \
+	moc_SGHierarchyWidgetUI.cpp \
+	FindSelectionData.cpp \
+	RenderingParametersDialogData.cpp \
+	GWOverviewWidgetData.cpp \
+	moc_SGHierarchyWidget.cpp \
+	moc_GWOverviewWidget.cpp \
+	moc_GWOverviewWidgetData.cpp \
+	moc_LayerManagerWidget.cpp \
+	moc_LayerManagerWidgetData.cpp 
 
-libtulip_qt@QT_VERSION@_la_LDFLAGS = -release ${RELEASE}  
+nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
-
-dist_libtulip_qt@QT_VERSION@_la_SOURCES = \
+dist_libtulip_qt4_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlGraphWidget.cpp \
-	PropertyWidgets.cpp \
-	TulipElementPropertiesData.cpp \
-	TulipElementProperties.cpp \
-	FindSelection.cpp \
-	MouseObject.cpp \
-	MouseZoomBox.cpp \
-	ClusterTreeData.cpp \
+	PropertyWidget.cpp \
+	ElementPropertiesWidgetUI.cpp \
+	ElementPropertiesWidget.cpp \
+	FindSelectionWidget.cpp \
+	SGHierarchyWidgetUI.cpp \
+	SGHierarchyWidget.cpp \
+	GWOverviewWidget.cpp \
+	LayerManagerWidget.cpp \
+	LayerManagerWidgetData.cpp \
 	Morphing.cpp \
-	ClusterTree.cpp \
 	GraphState.cpp \
-	MouseMoveSelection.cpp \
-	MouseAddNode.cpp \
-	MouseAddEdge.cpp \
-	MouseSelection.cpp \
-	MouseMagicSelection.cpp \
-	DataSetDialog.cpp
+	MouseBoxZoomer.cpp \
+	MouseEdgeBuilder.cpp \
+	MouseInteractors.cpp \
+	MouseMagicSelector.cpp \
+	MouseNodeBuilder.cpp \
+	MouseSelectionEditor.cpp \
+	MouseSelector.cpp \
+	MouseEdgeSelector.cpp \
+	MouseEdgeBendEditor.cpp \
+	DataSetDialog.cpp \
+	TlpQtTools.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 
-nodist_libtulip_qt@QT_VERSION@_la_SOURCES = \
-	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
-	moc_PropertyWidgets.cpp \
-	moc_TulipElementPropertiesData.cpp \
-	moc_TulipElementProperties.cpp \
-	moc_FindSelection.cpp \
-	moc_FindSelectionData.cpp \
-	moc_ClusterTreeData.cpp \
-	FindSelectionData.cpp \
-	moc_ClusterTree.cpp
-
-if QT3
-moc_%.cpp: $(srcdir)/../include/tulip/%.h 
-	$(MOC) -o $@ $<
-moc_%.cpp: ../include/tulip/%.h
-	$(MOC) -o $@ $<
-else
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
-moc_%.cpp: ../include/tulip/%.h
-	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
-moc_ClusterTree.cpp: $(srcdir)/../include/tulip/ClusterTreeQt3.h 
+moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidgetQt3.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-endif
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
 	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
+
+RenderingParametersDialogData.cpp: $(srcdir)/../designer/RenderingParametersDialog.ui ../include/tulip/RenderingParametersDialogData.h
+	$(UIC) -o $@ -impl ../include/tulip/RenderingParametersDialogData.h $<
+
+GWOverviewWidgetData.cpp: $(srcdir)/../designer/GWOverviewWidget.ui ../include/tulip/GWOverviewWidgetData.h
+	$(UIC) -o $@ -impl ../include/tulip/GWOverviewWidgetData.h $<

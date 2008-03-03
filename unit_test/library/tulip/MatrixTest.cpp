@@ -57,26 +57,43 @@ void MatrixTest::testExternalOperation() {
     for (unsigned int j=0; j<SIZE; ++j) {
       double res = fabs(matid[i][j] - result[i][j]);
       bool ok = false;
-      if (res < 1.E-5) ok = true;
+      if (fabs(res) < 1.E-5) ok = true;
       CPPUNIT_ASSERT_EQUAL(true, ok);
     }
-  Vector<double, SIZE> vec2;
-  vec2 = matid *vec;
+  Vector<double, SIZE> vec2, vec3;
+  vec2 = matid * vec;
   CPPUNIT_ASSERT_EQUAL(true, vec == vec2);
-  //  cerr << vec << endl;
-  //  display(mat2);
+  
   vec2 = mat2 * vec;
-  //  cerr << vec2 << endl;
-  //  display(matinv);
   vec2 = matinv * vec2;
-  //  cerr << vec2 << endl;
   for (unsigned int j=0; j<SIZE; ++j) {
     double res = fabs(vec2[j] - vec[j]);
     bool ok = false;
     if (res < 1.E-5) ok = true;
     CPPUNIT_ASSERT_EQUAL(true, ok);
   }
+  
+  vec2 = mat2 * vec;
+  vec3 = vec * mat2;
+  bool ok = false;
+  for (unsigned int j=0; j<SIZE; ++j) {
+    double res = fabs(vec2[j] - vec3[j]);
+    if (res > 1.E-5) ok = true;
+  }
+  CPPUNIT_ASSERT_EQUAL(true, ok);
 
+  vec2 = vec * mat2;
+  vec3 = vec2 * matinv;
+  
+  for (unsigned int j=0; j<SIZE; ++j) {
+    bool ok = false;
+    double res = fabs(vec[j] - vec3[j]);
+    if (res < 1.E-5) ok = true;
+    CPPUNIT_ASSERT_EQUAL(true, ok);
+  }
+
+  
+  
 }
 //==========================================================
 void MatrixTest::testInternalOperation() {
@@ -92,7 +109,7 @@ void MatrixTest::testInternalOperation() {
       CPPUNIT_ASSERT_EQUAL((double)((i+1)*(j+SIZE)), mat1[i][j]);
       if (i==j) mat1[i][j] = 0.0;
     }
-  const Matrix<double, SIZE> mat2(mat1);
+  Matrix<double, SIZE> mat2(mat1);
   CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
   mat1[1] += 3;
   CPPUNIT_ASSERT_EQUAL(false, mat1 == mat2);
@@ -118,6 +135,14 @@ void MatrixTest::testInternalOperation() {
       if (res < 1.E-5) ok = true;
       CPPUNIT_ASSERT_EQUAL(true, ok);
     }
+  mat1.fill(1.0);
+  mat2 = mat1;
+  mat1*= mat2;
+  mat2*= SIZE;
+  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
+  mat1.fill(1.0);
+  mat1*= mat1;
+  CPPUNIT_ASSERT_EQUAL(true, mat1 == mat2);
 }
 //==========================================================
 CppUnit::Test * MatrixTest::suite() {

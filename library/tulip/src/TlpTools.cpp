@@ -4,12 +4,21 @@
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
-#include "tulip/SuperGraphImpl.h"
-#include "tulip/Reflect.h"
-
-#include "tulip/PluginsCreation.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/StringProperty.h"
+#include "tulip/BooleanProperty.h"
+#include "tulip/ColorProperty.h"
+#include "tulip/IntegerProperty.h"
+#include "tulip/SizeProperty.h"
+#include "tulip/GraphProperty.h"
+#include "tulip/ExportModule.h"
+#include "tulip/Algorithm.h"
+#include "tulip/ImportModule.h"
+#include "tulip/PluginLibraryLoader.h"
 
 using namespace std;
+using namespace tlp;
 
 #ifndef _TULIP_LIB_DIR
 #ifdef _WIN32
@@ -39,10 +48,15 @@ void tlp::initTulipLib(char* appDirPath) {
   getEnvTlp=getenv("TLP_DIR");
   if (getEnvTlp==0) {
     if (appDirPath) {
+#ifdef _WIN32
+      // no bin directory on Windows
+      TulipLibDir = std::string(appDirPath) + "/lib";
+#else
       // one dir up to initialize the lib dir
       char *last = strrchr(appDirPath, '/');
       last[1] = 0;
       TulipLibDir = std::string(appDirPath) + "lib";
+#endif
     } else
       TulipLibDir=string(_TULIP_LIB_DIR);
   }
@@ -71,9 +85,9 @@ void tlp::initTulipLib(char* appDirPath) {
       pos = TulipPluginsPath.find('\\', pos);
     }
 #endif
-    TulipPluginsPath= TulipLibDir + "tlp/plugins" + PATH_DELIMITER + TulipPluginsPath;
+    TulipPluginsPath= TulipLibDir + "tlp" + PATH_DELIMITER + TulipPluginsPath;
   } else
-    TulipPluginsPath= TulipLibDir + "tlp/plugins";
+    TulipPluginsPath= TulipLibDir + "tlp";
     
 
   // one dir up to initialize the doc dir
@@ -92,181 +106,103 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-TemplateFactory<ClusteringFactory,Clustering,ClusterContext > *ClusteringFactory::factory = 0;
-TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *ImportModuleFactory::factory = 0;
-TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext > *ExportModuleFactory::factory = 0;
-//=========================================================
-SuperGraph * tlp::newSuperGraph(){
-  return new SuperGraphImpl();
-}
-//=========================================================
-SuperGraph * tlp::newSubGraph(SuperGraph *sg,string name) {
-  SuperGraph *newGraph = sg->addSubGraph();
-  newGraph->setAttribute("name", name);
-  return newGraph;
-}
-//=========================================================
-SuperGraph * tlp::newCloneSubGraph(SuperGraph *sg, string name) {
-  SelectionProxy sel1(sg);
-  sel1.setAllNodeValue(true);
-  sel1.setAllEdgeValue(true);
-  SuperGraph *newGraph = sg->addSubGraph(&sel1);
-  newGraph->setAttribute("name", name);
-  return newGraph;
-}
-//=========================================================
-SuperGraph * tlp::load(const string &filename) {
-  DataSet dataSet;
-  dataSet.set("file::filename", filename);
-  SuperGraph *graph = tlp::importGraph("tlp", dataSet);
-  return graph;
-}
-//=========================================================
-bool tlp::save(SuperGraph *graph, const string &filename) {
-  ostream *os;
-  if (filename.rfind(".gz") == (filename.length() - 3))
-    os = tlp::getOgzstream(filename.c_str());
-  else
-    os = new ofstream(filename.c_str());
-  bool result;
-  DataSet data;
-  result=tlp::exportGraph(graph, *os, "tlp", data, 0);
-  delete os;
-  return result;
-}
-//=========================================================
-SuperGraph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress,SuperGraph *newSuperGraph){
-
-  if (!ImportModuleFactory::factory->exists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
-         << "\" doesn't exists (or is not loaded)" << endl;
-    return NULL;
-  }
-  bool newGraph=false;
-  if (newSuperGraph==0) {
-    newSuperGraph=new SuperGraphImpl();
-    newGraph=true;
-  }
-
-  ClusterContext tmp;
-  tmp.superGraph=newSuperGraph;
-  tmp.dataSet = &dataSet;
-  PluginProgress *tmpProgress;
-  bool deletePluginProgress=false;
-  if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
-    deletePluginProgress=true;
-  }
-  else tmpProgress=plugProgress;
-  tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=ImportModuleFactory::factory->getObject(alg, tmp);
-  assert(newImportModule!=0);
-  bool result;
-  if (!(result=newImportModule->import(""))) {
-    if (newGraph) delete newSuperGraph;
-  }
-  if (deletePluginProgress) delete tmpProgress;
-  delete newImportModule;
-  dataSet = *tmp.dataSet;
-  if (!result) 
-    return 0;
-  else
-    return newSuperGraph;
-}
-//=========================================================
-bool tlp::exportGraph(SuperGraph *sg,ostream &os, const string &alg,
-                           DataSet &dataSet, PluginProgress *plugProgress) {
-  if (!ExportModuleFactory::factory->exists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
-         << "\" doesn't exists (or is not loaded)" << endl;
-    return false;
-  }
-
-  bool result;
-  bool deletePluginProgress=false;
-  ClusterContext tmp;
-  tmp.superGraph=sg;
-  tmp.dataSet=&dataSet;
-  PluginProgress *tmpProgress=NULL;
-  if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
-    deletePluginProgress=true;
-  }
-  else tmpProgress=plugProgress;
-  tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=ExportModuleFactory::factory->getObject(alg, tmp);
-  assert(newExportModule!=0);
-  result=newExportModule->exportGraph(os,sg);
-
-  if (deletePluginProgress) delete tmpProgress;
-  delete newExportModule;
-  return result;
-}
-//=========================================================
-bool tlp::clusterizeGraph(SuperGraph *sg,string &errorMsg,DataSet *dataSet,
-                               const string &alg, PluginProgress *plugProgress) {
-  if (!ClusteringFactory::factory->exists(alg)) {
-    cerr << "libtulip: " << __FUNCTION__ << ": cluster plugin \"" << alg
-         << "\" doesn't exists (or is not loaded)" << endl;
-    return false;
-  }
-
-  bool result;
-  bool deletePluginProgress=false;
-  ClusterContext tmp;
-  tmp.superGraph=sg;
-  tmp.dataSet=dataSet;
-  PluginProgress *tmpProgress;
-  if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
-    deletePluginProgress=true;
-  }
-  else tmpProgress=plugProgress;
-  tmp.pluginProgress=tmpProgress; 
-  Clustering *newClustering=ClusteringFactory::factory->getObject(alg, tmp);
-  if ((result=newClustering->check(errorMsg)))
-    newClustering->run();
-  delete newClustering;
-  if (deletePluginProgress) delete tmpProgress;
-  return result;
-}
-
+map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
+TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *AlgorithmFactory::factory = 0;
+TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = 0;
+TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = 0;
 // initialize and export the factories needed to manage
 // our different kinds of plugins
 #if !defined( __APPLE__) || __GNUC__ > 3
 template <class Tnode, class Tedge, class TPROPERTY>
-  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *PropertyProxy<Tnode,Tedge,TPROPERTY>::factory = 0;
+  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > *AbstractProperty<Tnode,Tedge,TPROPERTY>::factory = 0;
  #else
-TemplateFactory<PropertyFactory<Colors>, Colors, PropertyContext> *PropertyProxy<ColorType, ColorType, Colors>::factory = 0;
-TemplateFactory<PropertyFactory<Int>, Int, PropertyContext> *PropertyProxy<IntType, IntType, Int>::factory = 0;
-TemplateFactory<PropertyFactory<Layout>, Layout, PropertyContext> *PropertyProxy<PointType, LineType, Layout>::factory = 0;
-TemplateFactory<PropertyFactory<Metric>, Metric, PropertyContext> *PropertyProxy<DoubleType, DoubleType, Metric>::factory = 0;
-TemplateFactory<PropertyFactory<Selection>, Selection, PropertyContext> *PropertyProxy<BooleanType, BooleanType, Selection>::factory = 0;
-TemplateFactory<PropertyFactory<Sizes>, Sizes, PropertyContext> *PropertyProxy<SizeType,SizeType, Sizes>::factory = 0;
-TemplateFactory<PropertyFactory<String>, String, PropertyContext> *PropertyProxy<StringType, StringType, String>::factory = 0;
+TemplateFactory<PropertyFactory<ColorAlgorithm>, ColorAlgorithm, PropertyContext> *AbstractProperty<ColorType, ColorType, ColorAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<IntegerAlgorithm>, IntegerAlgorithm, PropertyContext> *AbstractProperty<IntegerType, IntegerType, IntegerAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<LayoutAlgorithm>, LayoutAlgorithm, PropertyContext> *AbstractProperty<PointType, LineType, LayoutAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<DoubleAlgorithm>, DoubleAlgorithm, PropertyContext> *AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<BooleanAlgorithm>, BooleanAlgorithm, PropertyContext> *AbstractProperty<BooleanType, BooleanType, BooleanAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> *AbstractProperty<SizeType,SizeType, SizeAlgorithm>::factory = 0;
+TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
 //=========================================================
-void loadPlugins(string dir,PluginLoader *plug) {
-  SizesProxy::initFactory();
-  SizesProxy::factory->load(dir + "sizes", "Sizes",plug);
-  IntProxy::initFactory();
-  IntProxy::factory->load(dir + "int", "Int",plug);
-  LayoutProxy::initFactory();
-  LayoutProxy::factory->load(dir + "layout" , "Layout",plug);
-  ColorsProxy::initFactory();
-  ColorsProxy::factory->load(dir + "colors" , "Colors",plug);
-  MetricProxy::initFactory();
-  MetricProxy::factory->load(dir + "metric" , "Metric",plug);
-  StringProxy::initFactory();
-  StringProxy::factory->load(dir + "string" , "String",plug);
-  SelectionProxy::initFactory();
-  SelectionProxy::factory->load(dir + "selection" , "Selection",plug);
-  ClusteringFactory::initFactory();
-  ClusteringFactory::factory->load(dir + "clustering" , "Cluster",plug);
+PluginLoader *TemplateFactoryInterface::currentLoader;
+//=========================================================
+void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
+  if (loader!=0)
+    loader->start(dir.c_str(), type);
+
+  tlp::PluginLibraryLoader plLoader(dir, loader);
+
+  TemplateFactoryInterface::currentLoader = loader;
+  if (plLoader.hasPluginLibraryToLoad()) {
+    while(plLoader.loadNextPluginLibrary(loader)) {
+    }
+    if (loader)
+      loader->finished(true, plLoader.msg);
+  } else {
+    if (loader)
+      loader->finished(false, plLoader.msg);
+  }
+}  
+
+static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* loader) {
+  SizeProperty::initFactory();
+  IntegerProperty::initFactory();
+  LayoutProperty::initFactory();
+  ColorProperty::initFactory();
+  DoubleProperty::initFactory();
+  StringProperty::initFactory();
+  BooleanProperty::initFactory();
+  AlgorithmFactory::initFactory();
   ImportModuleFactory::initFactory();
-  ImportModuleFactory::factory->load(dir + "import" , "Import Module",plug);
   ExportModuleFactory::initFactory();
-  ExportModuleFactory::factory->load(dir + "export" , "Export Module",plug);
+  // plugins load
+  loadPluginsFromDir(dir, "Algorithm", loader);
+  // plugins dependencies loop
+  bool depsNeedCheck;
+  do {
+    map<string, TemplateFactoryInterface *>::const_iterator it =
+      TemplateFactoryInterface::allFactories->begin();
+    depsNeedCheck = false;
+    // loop over factories
+    for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
+      TemplateFactoryInterface *tfi = (*it).second;
+      // loop over plugins
+      Iterator<string> *itP = tfi->availablePlugins();
+      while(itP->hasNext()) {
+	string pluginName = itP->next();
+	list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
+	list<Dependency>::const_iterator itD = dependencies.begin();
+	// loop over dependencies
+	for (; itD != dependencies.end(); ++itD) {
+	  string factoryDepName = (*itD).factoryName;
+	  string pluginDepName = (*itD).pluginName;
+	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
+	    if (loader)
+	      loader->aborted(pluginName, tfi->getPluginsClassName() +
+			      " '" + pluginName + "' will be removed, it depends on missing " +
+			      factoryDepName + " '" + pluginDepName + "'.");
+	    tfi->removePlugin(pluginName);
+	    depsNeedCheck = true;
+	    break;
+	  }
+	  string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+	  string releaseDep = (*itD).pluginRelease;
+	  if (getMajor(release) != getMajor(releaseDep) ||
+	      getMinor(release) != getMinor(releaseDep)) {
+	    if (loader)
+	      loader->aborted(pluginName, tfi->getPluginsClassName() +
+			      " '" + pluginName + "' will be removed, it depends on release " +
+			      releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
+			      release + " is loaded.");
+	    tfi->removePlugin(pluginName);
+	    depsNeedCheck = true;
+	    break;
+	  }
+	}
+      } delete itP;
+    }
+  } while (depsNeedCheck);
 }
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
@@ -275,168 +211,49 @@ void tlp::loadPlugins(PluginLoader *plug) {
   while (end!=TulipPluginsPath.end())
     if ((*end)==PATH_DELIMITER) {
       if (begin!=end) 
-	loadPlugins(string(begin,end)+'/',plug);
+	loadAlgorithmPluginsFromDir(string(begin,end), plug);
       ++end;
       begin=end;
     } else
       ++end;
   if (begin!=end) 
-    loadPlugins(string(begin,end)+'/',plug);
+    loadAlgorithmPluginsFromDir(string(begin,end), plug);
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-    PluginIterator::loadPlugin(filename, plug);
+    return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }
+
 //=========================================================
-bool tlp::getSource(SuperGraph *superGraph, node &n) {
-  Iterator<node> *it=superGraph->getNodes();
-  while (it->hasNext()) {
-    n=it->next();
-    if (superGraph->indeg(n)==0){
-      delete it;
-      return true;
-    }
-  }delete it;
-  return false;
+// tlp class names demangler
+#if defined(__GNUC__)
+#include <cxxabi.h>
+char *tlp::demangleTlpClassName(const char* className) {
+  static char demangleBuffer[256];
+  int status;
+  size_t length = 256;
+  abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
+		      &length, &status);
+  // skip tlp::
+  return demangleBuffer + 5;
 }
+#else
+#error define symbols demangling function
+#endif
+
 //=========================================================
-void tlp::removeFromGraph(SuperGraph *ioG, SelectionProxy *inSel) {
-  if( !ioG )
-    return;
-
-  vector<node>	nodeA;
-  vector<edge>	edgeA;
-
-  // Get edges
-  Iterator<edge> * edgeIt = ioG->getEdges();
-  while( edgeIt->hasNext() ) {
-    edge e = edgeIt->next();
-    if( !inSel || inSel->getEdgeValue(e) ) {
-      // selected edge -> remove it !
-      edgeA.push_back( e );
-    } else {
-      // unselected edge -> don't remove node ends !
-      node n0 = ioG->source( e );
-      node n1 = ioG->target( e );
-      assert( inSel );
-      inSel->setNodeValue( n0, false );
-      inSel->setNodeValue( n1, false );
-    }
-  }
-  delete edgeIt;
-
-  // Get nodes
-  Iterator<node> * nodeIt = ioG->getNodes();
-  while( nodeIt->hasNext() ) {
-    node n = nodeIt->next();
-    if( !inSel || inSel->getNodeValue(n) )
-      nodeA.push_back( n );
-  }
-  delete nodeIt;
-
-  // Clean properties
-  Iterator<std::string> * propIt = ioG->getProperties();
-  while( propIt->hasNext() ) {
-    std::string n = propIt->next();
-    PProxy * p = ioG->getProperty( n );
-    for( unsigned int in = 0 ; in < nodeA.size() ; in++ )
-      p->erase( nodeA[in] );
-    for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
-      p->erase( edgeA[ie] );
-  }
-  delete propIt;
-
-  // Remove edges
-  for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
-    ioG->delEdge( edgeA[ie] );
-
-  // Remove nodes
-  for( unsigned int in = 0 ; in < nodeA.size() ; in++ )
-    ioG->delNode( nodeA[in] );
+std::string tlp::getMajor(const std::string& v) {
+  unsigned int pos = v.find('.');
+  return v.substr(0, pos);
 }
 
-void tlp::copyToGraph (	SuperGraph *outG, SuperGraph *	inG, SelectionProxy *inSel, SelectionProxy* outSel) {
-  if( outSel ) {
-    outSel->setAllNodeValue( false );
-    outSel->setAllEdgeValue( false );
-  }
-
-  if( !outG || !inG )
-    return;
-
-  // extend the selection to edge ends
-  if( inSel ) {
-    Iterator<edge> * edgeIt = inG->getEdges();
-    while( edgeIt->hasNext() ) {
-      edge e = edgeIt->next();
-      if( inSel->getEdgeValue(e) ) {
-	node n0 = inG->source( e );
-	node n1 = inG->target( e );
-	inSel->setNodeValue( n0, true );
-	inSel->setNodeValue( n1, true );
-      }
-    }
-    delete edgeIt;
-  }
-	
-  // copy selected nodes
-  MutableContainer<node> nodeTrl;
-  {
-    Iterator<node> * nodeIt = inG->getNodes();
-    while( nodeIt->hasNext() ) {
-      node n0 = nodeIt->next();
-      if( !inSel || inSel->getNodeValue(n0) ) {
-	node n1 = outG->addNode();
-	      
-	// select appended node
-	if( outSel )
-	  outSel->setNodeValue( n1, true );
-	      
-	// add to translation tab
-	nodeTrl.set( n0.id, n1 );
-	      
-	// copy node properties
-	Iterator<std::string> * propIt = inG->getProperties();
-	while( propIt->hasNext() ) {
-	  std::string n = propIt->next();
-	  PProxy * src = inG->getProperty( n );
-	  if(dynamic_cast<MetaGraphProxy *>(src) == 0) {
-	    PProxy *dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
-	    dst->copy( n1, n0, src );
-	  }
-	}
-	delete propIt;
-      }
-    }
-    delete nodeIt;
-  }
-	
-  // copy selected edges
-  {
-    Iterator<edge> * edgeIt = inG->getEdges();
-    while( edgeIt->hasNext() ) {
-      edge e0    = edgeIt->next();
-      if( !inSel || inSel->getEdgeValue(e0) ) {
-	node e0_n0 = inG->source(e0);
-	node e0_n1 = inG->target(e0);
-	edge e1 = outG->addEdge( nodeTrl.get(e0_n0.id),
-				 nodeTrl.get(e0_n1.id) );
-	      
-	// select appended edge
-	if( outSel )
-	  outSel->setEdgeValue( e1, true );
-	      
-	// copy edge properties
-	Iterator<std::string> * propIt = inG->getProperties();
-	while( propIt->hasNext() ) {
-	  std::string n = propIt->next();
-	  PProxy * src = inG->getProperty( n ),
-	    * dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
-	  dst->copy( e1, e0, src );
-	}
-	delete propIt;
-      }
-    }
-    delete edgeIt;
-  }
+//=========================================================
+std::string tlp::getMinor(const std::string& v) {
+  unsigned int pos = v.find('.');
+  if (pos == string::npos)
+    return string("0");
+  unsigned int rpos = v.rfind('.');
+  if (pos == rpos)
+    return v.substr(0, pos);
+  return v.substr(pos + 1, rpos - pos - 1);
 }

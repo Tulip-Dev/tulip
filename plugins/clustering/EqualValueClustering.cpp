@@ -2,82 +2,57 @@
 #include <math.h>
 #include <sstream>
 
-#include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/StableIterator.h>
-
+#include <tulip/Graph.h>
 #include "EqualValueClustering.h"
-
-CLUSTERINGPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","0","1");
 
 //================================================================================
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","1.0");
+
 namespace {
   const char * paramHelp[] = {
     // selectedNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "PropertyInterface*" ) \
     HTML_HELP_BODY() \
-    "Define the metric that will be used in order partition to the graph" \
+    "Specify the property that will be used to partition the graph" \
     HTML_HELP_CLOSE(),
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF("Values", "nodes <BR> edges") \
+    HTML_HELP_DEF( "default", "nodes" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the type of graph elements to partition"	\
+    HTML_HELP_CLOSE()
   };
 }
+#define ELT_TYPE "Type"
+#define ELT_TYPES "nodes;edges;"
+#define NODE_ELT 0
+#define EDGE_ELT 1
 //================================================================================
-EqualValueClustering::EqualValueClustering(ClusterContext context):Clustering(context) {
-  addParameter<MetricProxy>("Metric", paramHelp[0], "viewMetric");
+EqualValueClustering::EqualValueClustering(AlgorithmContext context):Algorithm(context) {
+  addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
+  addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
 }
-//================================================================================
-namespace stdext {
-  template<>
-  struct hash<double> {
-    size_t operator()(const double s) const { return (size_t)s; }
-  };
-};
 //===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
-  MetricProxy *metric=0;
-  if (dataSet!=0) 
-    dataSet->get("Metric", metric);  
-  if (metric == 0)
-    metric = superGraph->getProperty<MetricProxy>("viewMetric");
-  
-  stdext::hash_map<double,int> partitions;
-  int curPart=0;
-  Iterator<node> *itN=superGraph->getNodes();
-  while (itN->hasNext()) {
-    double tmp=metric->getNodeValue(itN->next());
-    if (partitions.find(tmp)==partitions.end()) {
-      partitions[tmp]=curPart;
-      curPart++;
-    }
-  } delete itN;
-
-  stdext::hash_map <int, SuperGraph *> newClusters;
-  char str[100];
-  for (int i=0; i<curPart; ++i) {
-    sprintf(str, "c_%06i", i);
-    //    cerr << "create :" << str << endl;
-    newClusters[i] = superGraph->addSubGraph();
-    newClusters[i]->setAttribute("name",string(str));
-  }
-  
-  StableIterator<node> itNS(superGraph->getNodes());
-  while (itNS.hasNext()) {
-    node itn = itNS.next();
-    double tmp = metric->getNodeValue(itn);
-    newClusters[partitions[tmp]]->addNode(itn);
+  PropertyInterface *property=0;
+  StringCollection eltTypes(ELT_TYPES);
+  eltTypes.setCurrent(0);
+  if (dataSet!=0) {
+    dataSet->get("Property", property);  
+    dataSet->get(ELT_TYPE, eltTypes);
   }
 
-  StableIterator<edge> itE(superGraph->getEdges());
-  while(itE.hasNext()) {
-    edge ite = itE.next();
-    double tmp = metric->getNodeValue(superGraph->source(ite));
-    if (tmp == metric->getNodeValue(superGraph->target(ite))) {
-      newClusters[partitions[tmp]]->addEdge(ite);
-    }
-  }
+  if (property == 0)
+    property = graph->getProperty("viewMetric");
 
-  return true;
+  return computeEqualValueClustering(graph, property,
+				     eltTypes.getCurrent() == NODE_ELT,
+				     pluginProgress);
 }
 //================================================================================

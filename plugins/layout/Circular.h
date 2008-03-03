@@ -6,7 +6,6 @@
 
 /** \addtogroup layout */
 /*@{*/
-/// Circular.h - An implementation of a circurlar layout.
 /** 
  * This plugin is an implementation of a circular layout that takes
  * node size into account.  It manages size of nodes and use a standard dfs
@@ -30,9 +29,9 @@
  * Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */
-class Circular:public Layout { 
+class Circular:public tlp::LayoutAlgorithm { 
 public:
-  Circular(const PropertyContext &);
+  Circular(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/

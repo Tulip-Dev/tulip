@@ -78,9 +78,9 @@ namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "MetricProxy" ) \
+    HTML_HELP_DEF( "type", "DoubleProperty" ) \
     HTML_HELP_BODY() \
-    "This metricProxy is used to affect scalar values to superGraph items." \
+    "This metric is used to affect scalar values to graph items." \
     "The meaning of theses values depends of the choosen color model." \
     HTML_HELP_CLOSE(),
     // colormodel
@@ -120,17 +120,17 @@ namespace {
   };
 }
 
-class MetricColorMapping: public Colors { 
+class MetricColorMapping: public ColorAlgorithm { 
 private:
-  MetricProxy *entryMetric;
+  DoubleProperty *entryMetric;
   int colorModel;
   Color color1;
   Color color2;
   Vector<float,4> deltaRGBA;
 
 public:
-  MetricColorMapping(const PropertyContext &context):Colors(context){
-    addParameter<MetricProxy>("property",paramHelp[0],"viewMetric");
+  MetricColorMapping(const PropertyContext &context):ColorAlgorithm(context){
+    addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
     addParameter<Color>("color1",paramHelp[2],"(255,255,0,128)");
@@ -149,54 +149,56 @@ public:
       s=1;
       h=55.0+value*300.0/range;
       HSVtoRGB(&r,&g,&b,h,s,v);
-      return Color((int)(r*255.0f),(int)(g*255.0f),(int)(b*255.0f),color1[3] + (int)deltaRGBA[3]*value); 
-      break;
+      return Color((int)(r*255.0f),
+		   (int)(g*255.0f),
+		   (int)(b*255.0f),
+		   (int)(color1[3] + deltaRGBA[3]*value)); 
     case 1: //RGB interpolation
+    default:
       Vector<float,4> tmp(deltaRGBA);
       tmp *= value;
       return  Color((int)(tmp[0]+color1[0]),
 		    (int)(tmp[1]+color1[1]),
 		    (int)(tmp[2]+color1[2]),
 		    (int)(tmp[3]+color1[3]));
-      break;
     }
   }
   //=========================================================
   void computeEdgeColor() {
     double minE,maxE;
-    minE = entryMetric->getEdgeMin(superGraph);
-    maxE = entryMetric->getEdgeMax(superGraph);
+    minE = entryMetric->getEdgeMin(graph);
+    maxE = entryMetric->getEdgeMax(graph);
     for (int i=0;i<4;++i)
       deltaRGBA[i]=double(color2[i]-color1[i]);
     if (maxE!=minE)
       deltaRGBA/=double(maxE-minE);
-    Iterator<edge> *itE=superGraph->getEdges();
+    Iterator<edge> *itE=graph->getEdges();
     while(itE->hasNext()) {
       edge ite=itE->next();
       double dd=entryMetric->getEdgeValue(ite)-minE;
-      colorsProxy->setEdgeValue(ite, getColor(dd,maxE-minE));
+      colorResult->setEdgeValue(ite, getColor(dd,maxE-minE));
     } delete itE;
   }
   //=========================================================
   void computeNodeColor() {
     double minN,maxN;
-    minN=entryMetric->getNodeMin(superGraph);
-    maxN=entryMetric->getNodeMax(superGraph);
+    minN=entryMetric->getNodeMin(graph);
+    maxN=entryMetric->getNodeMax(graph);
     for (int i=0;i<4;++i)
       deltaRGBA[i]=double(color2[i]-color1[i]);
     if (maxN!=minN)
       deltaRGBA/=double(maxN-minN);
-    Iterator<node> *itN=superGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
     while(itN->hasNext()) {
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
-      colorsProxy->setNodeValue(itn, getColor(dd,maxN-minN));
+      colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
     } delete itN;
   }
   //=========================================================
   bool run() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
-    MetricProxy* metricS = superGraph->getProperty<MetricProxy>("viewMetric");
+    DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
     colorModel=1;
     color1.set(255,255,0,128);
     color2.set(0,0,255,228);
@@ -211,7 +213,7 @@ public:
     if (mappingType) {
       entryMetric = metricS;
       /*
-	Iterator<node> *itN = superGraph->getNodes();
+	Iterator<node> *itN = graph->getNodes();
 	while(itN->hasNext()) {
 	node n = itN->next();
 	entryMetric->setNodeValue(n, log(1+entryMetric->getNodeValue(n)));
@@ -219,7 +221,7 @@ public:
       */
     }
     else {
-      MetricProxy *tmp= new MetricProxy(superGraph);
+      DoubleProperty *tmp= new DoubleProperty(graph);
       *tmp = *metricS;
       tmp->uniformQuantification(300);
       entryMetric = tmp;
@@ -236,4 +238,4 @@ public:
   }
 };
 
-COLORSPLUGIN(MetricColorMapping,"Metric Mapping","Auber","04/07/2003","0","0","1");
+COLORPLUGIN(MetricColorMapping,"Metric Mapping","Auber","04/07/2003","Color metric mapping plugin","1.0");

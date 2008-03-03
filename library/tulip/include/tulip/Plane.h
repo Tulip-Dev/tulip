@@ -11,6 +11,7 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLP_PLANE_H_
 #define _TLP_PLANE_H_
 
@@ -68,3 +69,4 @@ class TLP_SCOPE Plane
 
 }
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

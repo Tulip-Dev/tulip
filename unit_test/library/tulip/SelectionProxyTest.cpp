@@ -4,12 +4,16 @@
 #include "SelectionProxyTest.h"
 
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
+
+// Warning SelectionProxy has been renamed in BooleanAlgorithm
+
 CPPUNIT_TEST_SUITE_REGISTRATION( SelectionProxyTest );
 
 //==========================================================
-void buildGraph(SuperGraph *graph) {
+void buildGraph(Graph *graph) {
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -21,8 +25,8 @@ void buildGraph(SuperGraph *graph) {
 }
 //==========================================================
 void SelectionProxyTest::setUp() {
-  graph    = tlp::newSuperGraph();
-  selection = graph->getProperty<SelectionProxy>("Select Test");
+  graph    = tlp::newGraph();
+  selection = graph->getProperty<BooleanProperty>("Select Test");
   buildGraph(graph);
 }
 //==========================================================
@@ -129,7 +133,7 @@ void SelectionProxyTest::testCopy() {
     CPPUNIT_ASSERT( selection->getEdgeValue(edges[rando]) == !value );
   }
 
-  SelectionProxy tmp(graph);
+  BooleanProperty tmp(graph);
   tmp = *selection;
   itN=graph->getNodes();
   while(itN->hasNext()) {
@@ -149,7 +153,7 @@ void SelectionProxyTest::testSetGet() {
 }
 //==========================================================
 CppUnit::Test * SelectionProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : SelectionProxy" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : BooleanProperty" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators", 
 								      &SelectionProxyTest::testIterators ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test setAll", 

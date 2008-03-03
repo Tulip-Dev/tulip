@@ -1,10 +1,11 @@
 //-*-c++-*-
 
 #include "tulip/Types.h"
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/StringCollection.h"
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   int nocase_cmp(const string & s1, const string& s2) {
@@ -41,20 +42,20 @@ namespace {
 }
 
 //
-// MetaGraphType
+// GraphType
 
-MetaGraphType::RealType MetaGraphType::undefineValue() {
+GraphType::RealType GraphType::undefinedValue() {
   return 0;
 }
 
-MetaGraphType::RealType MetaGraphType::defaultValue() {
+GraphType::RealType GraphType::defaultValue() {
 	return 0;
 }
 
-void MetaGraphType::del(MetaGraphType::RealType element) {
+void GraphType::del(GraphType::RealType element) {
 }
 
-string MetaGraphType::toString( const RealType & v ) {
+string GraphType::toString( const RealType & v ) {
   // NULL ?
   if( !v )
     return string();
@@ -63,7 +64,7 @@ string MetaGraphType::toString( const RealType & v ) {
   return oss.str();
 }
 
-bool MetaGraphType::fromString( RealType & v, const string & s ) {
+bool GraphType::fromString( RealType & v, const string & s ) {
   v = 0;
   return false;
 }
@@ -72,7 +73,7 @@ bool MetaGraphType::fromString( RealType & v, const string & s ) {
 //
 // DoubleType
 
-double DoubleType::undefineValue() {
+double DoubleType::undefinedValue() {
   return DBL_MIN;
 }
 
@@ -96,25 +97,25 @@ bool DoubleType::fromString( RealType & v, const string & s ) {
 }
 
 //
-// IntType
-int IntType::undefineValue() {
+// IntegerType
+int IntegerType::undefinedValue() {
 	return INT_MIN;
 }
 
-int IntType::defaultValue() {
+int IntegerType::defaultValue() {
   return 0;
 }
 
-void IntType::del(IntType::RealType element) {
+void IntegerType::del(IntegerType::RealType element) {
 }
 
-string IntType::toString( const RealType & v ) {
+string IntegerType::toString( const RealType & v ) {
   ostringstream oss;
   oss << v;
   return oss.str();
 }
 
-bool IntType::fromString( RealType & v, const string & s ) {
+bool IntegerType::fromString( RealType & v, const string & s ) {
   istringstream iss;
   iss.str( s );
   return (iss >> v);
@@ -125,7 +126,7 @@ bool IntType::fromString( RealType & v, const string & s ) {
 //
 // BooleanType
 
-bool BooleanType::undefineValue() {
+bool BooleanType::undefinedValue() {
   return false;
 }
 
@@ -154,7 +155,7 @@ bool BooleanType::fromString( RealType & v, const string & s ) {
 //
 // LineType
 
-vector<Coord> LineType::undefineValue() {
+vector<Coord> LineType::undefinedValue() {
   vector<Coord> tmp;
   return tmp;
 }
@@ -201,7 +202,7 @@ bool LineType::fromString( RealType & v, const string & s ) {
 
 //
 // PointType
-Coord PointType::undefineValue() {
+Coord PointType::undefinedValue() {
   Coord tmp;
   tmp.set(DBL_MIN,DBL_MIN,DBL_MIN);
   return tmp;
@@ -232,7 +233,7 @@ bool PointType::fromString( RealType & v, const string & s ) {
 //
 // SizeType
 
-Size SizeType::undefineValue() {
+Size SizeType::undefinedValue() {
   return Size(DBL_MIN,DBL_MIN,DBL_MIN);
 }
 
@@ -258,7 +259,7 @@ bool SizeType::fromString( RealType & v, const string & s ) {
 //
 // StringType
 
-string StringType::undefineValue() {
+string StringType::undefinedValue() {
   return string("");
 }
 
@@ -281,7 +282,7 @@ bool StringType::fromString( RealType & v, const string & s ) {
 //
 // ColorType
 
-Color ColorType::undefineValue() {
+Color ColorType::undefinedValue() {
   return Color(255,255,255,255);
 }
 
@@ -307,7 +308,7 @@ bool ColorType::fromString( RealType & v, const string & s ) {
 //
 // StringCollectionType
 
-StringCollection StringCollectionType::undefineValue() {
+StringCollection StringCollectionType::undefinedValue() {
   return StringCollection();
 }
 

@@ -6,7 +6,7 @@
  *         bmuller@etu.u-bordeaux1.fr, frochamb@etu.u-bordeaux1.fr,
  *         fsimplic@etu.u-bordeaux1.fr, jczobeid@etu.u-bordeaux1.fr.
  *
- * $Id: PlanarityTestObstr.cpp,v 1.4 2005-08-25 15:24:42 bardet Exp $
+ * $Id: PlanarityTestObstr.cpp,v 1.5 2008-03-03 15:26:52 pmary Exp $
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by  
@@ -41,7 +41,7 @@ bool PlanarityTestImpl::listEdgesUpwardT0(node n1, node n2) {
  * - embed_list[cnode] is an embedding of the 2-connected component represented
  *   by "cnode" with "RBC[cnode] contained in the boundary".
  */
-void PlanarityTestImpl::extractBoundaryCycle(SuperGraph *sG, node cNode, 
+void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode, 
 					 list<edge>& listEdges) {
   assert(embedList[cNode].size()!=0);
   map<node, list<edge> > el;
@@ -67,7 +67,7 @@ void PlanarityTestImpl::extractBoundaryCycle(SuperGraph *sG, node cNode,
   }
 }
 //=================================================================
-void PlanarityTestImpl::obstrEdgesTerminal(SuperGraph* G, node w, node t, node u) {
+void PlanarityTestImpl::obstrEdgesTerminal(Graph* G, node w, node t, node u) {
   node mm = lcaBetween(nodeLabelB.get(t.id), neighborWTerminal.get(t.id), p0);
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
@@ -84,7 +84,7 @@ void PlanarityTestImpl::obstrEdgesTerminal(SuperGraph* G, node w, node t, node u
  * Adds part of the boundary cycle of "cnode" that contains w1 and doesn't contain
  * path between w2 and w3 to "el".
  */
-void PlanarityTestImpl::addPartOfBc(SuperGraph *sG, node cNode, 
+void PlanarityTestImpl::addPartOfBc(Graph *sG, node cNode, 
 				node n1, node n2, node n3) {
   list<edge> bc, el1, el2;
   extractBoundaryCycle(sG, cNode, bc);
@@ -126,7 +126,7 @@ void PlanarityTestImpl::sortByLabelB(node &n1, node &n2, node &n3) {
     swapNode(n2, n3);
 }
 //=================================================================
-void PlanarityTestImpl::obstrEdgesPNode(SuperGraph *sG, node p, node u) {
+void PlanarityTestImpl::obstrEdgesPNode(Graph *sG, node p, node u) {
   assert(listEdgesUpwardT0(nodeLabelB.get(p.id), u));
   edge e = sG->existEdge(nodeLabelB.get(p.id), nodeWithDfsPos.get(labelB.get(p.id)));
   assert(e.isValid());
@@ -225,7 +225,7 @@ void PlanarityTestImpl::calcInfo3Terminals(node &t1, node &t2, node &t3,
  * - t1, t2 and t3 are terminal nodes;
  * - if parent_cnode != nil then t3 == nil.
  */
-void PlanarityTestImpl::obstructionEdgesT0(SuperGraph *sG, node w, node t1,
+void PlanarityTestImpl::obstructionEdgesT0(Graph *sG, node w, node t1,
 				       node t2, node t3, node v) {
   if (t3 == NULL_NODE) t3 = v;
   node w1 = t1, w2 = t2, w3 = t3;
@@ -285,7 +285,7 @@ void PlanarityTestImpl::obstructionEdgesT0(SuperGraph *sG, node w, node t1,
 //  *   label_b[v] > dfspos_num[w] and v is not a descendant of cnode;
 //  * - cnode is part of a K_{3,3} obstruction.
 //  */
-void PlanarityTestImpl::obstructionEdgesCountMin1(SuperGraph *sG, node n, node cNode,
+void PlanarityTestImpl::obstructionEdgesCountMin1(Graph *sG, node n, node cNode,
 					      node t1, node t2, node t3) {
   if (t3 == NULL_NODE) t3 = parent.get(cNode.id);
   sortByLabelB(t1, t2, t3);
@@ -318,7 +318,7 @@ void PlanarityTestImpl::obstructionEdgesCountMin1(SuperGraph *sG, node n, node c
 //  *   label_b[v] > dfspos_num[w] and v is not a descendant of cnode;
 //  * - cnode is part of a K_{3,3} obstruction.
 //  */
-void PlanarityTestImpl::obstructionEdgesCountMin23(SuperGraph *sG,
+void PlanarityTestImpl::obstructionEdgesCountMin23(Graph *sG,
 					       node n,
 					       node cNode,
 					       node t1,
@@ -355,7 +355,7 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(SuperGraph *sG,
   }
 }
 // //=================================================================
-// void PlanarityTestImpl::obstrEdgesTermCNode(SuperGraph *sG, node w, node t) {
+// void PlanarityTestImpl::obstrEdgesTermCNode(Graph *sG, node w, node t) {
 //   node u = lastPNode(nodeLabelB.get(t.id), t);
 //   node uu = lastPNode(neighborWTerminal.get(t.id), t);
 //   assert(listEdgesUpwardT0(nodeLabelB.get(t.id), u));
@@ -375,7 +375,7 @@ void PlanarityTestImpl::obstructionEdgesCountMin23(SuperGraph *sG,
 //  * - t1, t2 and t3 are (p-nodes) terminals in the same c-node;
 //  * - cnode is part of a K_5 obstruction.
 // */
-void PlanarityTestImpl::obstructionEdgesK5(SuperGraph *sG,
+void PlanarityTestImpl::obstructionEdgesK5(Graph *sG,
 				       node w,
 				       node cNode,
 				       node t1,
@@ -400,7 +400,7 @@ void PlanarityTestImpl::obstructionEdgesK5(SuperGraph *sG,
     obstrEdgesPNode(sG, parent.get(cNode.id), w);
 }
 // //=================================================================
-void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(SuperGraph *sG,
+void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(Graph *sG,
 							   node w,
 							   node t,
 							   node v) {
@@ -456,7 +456,7 @@ void PlanarityTestImpl::obstructionEdgesPossibleObstrConfirmed(SuperGraph *sG,
  * - for i = 1, 2, if t_i is not nil, then it is a terminal node that is descendant
  * of cnode.
  */
-void PlanarityTestImpl::obstructionEdgesCNodeCounter(SuperGraph *sG, node cNode, node w,
+void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node w,
 						 node jl, node jr, node t1, node t2) {
   //  cout << __PRETTY_FUNCTION__ << endl;
   // seachs for a node f in RBC[cNode] between jl and jr s.t.

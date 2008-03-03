@@ -1,52 +1,78 @@
 nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlGraphWidget.h \
-	tulip/MouseObject.h \
-	tulip/MouseZoomBox.h \
-	tulip/MouseInterface.h \
-	tulip/PropertyWidgets.h \
-	tulip/TulipElementPropertiesData.h \
-	tulip/TulipElementProperties.h \
-	tulip/FindSelection.h \
-	tulip/ClusterTreeData.h \
-	tulip/ClusterTree.h \
-	tulip/MouseAddEdge.h\
-	tulip/MouseAddNode.h\
-	tulip/MouseMoveSelection.h\
-	tulip/MouseSelection.h\
-	tulip/MouseMagicSelection.h\
-	tulip/Morphing.h \
+	tulip/GWInteractor.h \
+	tulip/MouseBoxZoomer.h\
+	tulip/MouseEdgeBuilder.h\
+	tulip/MouseInteractors.h \
+	tulip/MouseMagicSelector.h\
+	tulip/MouseNodeBuilder.h\
+	tulip/MouseSelectionEditor.h\
+	tulip/MouseSelector.h\
+	tulip/MouseEdgeSelector.h \
+	tulip/MouseEdgeBendEditor.h \
+	tulip/PropertyWidget.h \
+	tulip/ElementPropertiesWidgetUI.h \
+	tulip/ElementPropertiesWidget.h \
+	tulip/FindSelectionWidget.h \
+	tulip/SGHierarchyWidgetUI.h \
+	tulip/SGHierarchyWidget.h \
+	tulip/GWOverviewWidget.h \
+	tulip/LayerManagerWidget.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
-	tulip/ClusterTreePlugin.h \
-	tulip/ClusterTreeQt3.h \
+	tulip/SGHierarchyWidgetPlugin.h \
+	tulip/SGHierarchyWidgetQt3.h \
 	tulip/GlGraphWidgetPlugin.h \
-	tulip/TulipElementPropertiesPlugin.h \
-	tulip/TulipPropertyTablePlugin.h
+	tulip/ElementPropertiesWidgetPlugin.h \
+	tulip/GWOverviewWidgetPlugin.h \
+	tulip/PropertyWidgetPlugin.h
 
-if QT3
-nobase_nodist_include_HEADERS = tulip/FindSelectionData.h
-else
-nobase_nodist_include_HEADERS = \
+noinst_HEADERS = \
+	tulip/Morphing.h
+
+
+if WIN32 
+BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
-	tulip/clustertree.h \
+	tulip/RenderingParametersDialogData.h \
+	tulip/GWOverviewWidgetData.h 
+else
+BUILT_SOURCES = \
+	tulip/FindSelectionData.h \
+	tulip/RenderingParametersDialogData.h \
+	tulip/GWOverviewWidgetData.h \
+	tulip/sghierarchywidget.h \
 	tulip/glgraphwidget.h \
-	tulip/tulipelementproperties.h \
-	tulip/tulippropertytable.h
+	tulip/layermanagerwidget.h \
+	tulip/elementpropertieswidget.h \
+	tulip/gwoverviewwidget.h \
+	tulip/propertywidget.h
 
-tulip/clustertree.h : tulip/ClusterTree.h
+tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@
 
 tulip/glgraphwidget.h : tulip/GlGraphWidget.h
 	cp -f $< $@
 
-tulip/tulipelementproperties.h : tulip/TulipElementProperties.h
+tulip/layermanagerwidget.h : tulip/LayerManagerWidget.h
 	cp -f $< $@
 
-tulip/tulippropertytable.h : tulip/PropertyWidgets.h
+tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h
+	cp -f $< $@
+
+tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
+	cp -f $< $@
+
+tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
 endif
 
-tulip/FindSelectionData.h: ../designer/FindSelection.ui
+nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
+
+CLEANFILES = $(BUILT_SOURCES)
+
+tulip/%Data.h: ../designer/%.ui
 	mkdir -p tulip
 	$(UIC) -o $@ $<

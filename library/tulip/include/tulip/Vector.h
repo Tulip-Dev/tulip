@@ -9,27 +9,28 @@
 
 #include <cassert>
 #include <tulip/Array.h>
-#include <tulip/tulipconf.h>
-#define VECTOR Vector<Obj,SIZE>
-#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
 
 namespace tlp {
   /**
    * \addtogroup basic
    */ 
+#define VECTOR Vector<Obj,SIZE>
+#define TEMPLATEVECTOR template <typename Obj,unsigned int SIZE>
+
   /*@{*/
   /**
    * \brief class for mathematical vector
    *
    * Enables to create a Vector of Obj with a
-   * Fixed size and provide Mathematical operation. Mathematical 
-   * operators must be defined for Obj. 
+   * limited size and provides Mathematical operation. Mathematical 
+   * operators must be defined for Obj. Out of bound accesses are only checked
+   * in debug mode.
    *
    * \author : David Auber auber@tulip-software.org
    * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTOR
-    class TLP_SCOPE Vector:public Array<Obj,SIZE> {
+    class Vector:public Array<Obj,SIZE> {
     public:
     /*      Vector(const VECTOR &v):Array<Obj,SIZE>(v) {}
 	    Vector() {}*/
@@ -47,8 +48,7 @@ namespace tlp {
     inline VECTOR operator+(const Obj &) const;
     inline VECTOR operator-(const VECTOR &) const;
     inline VECTOR operator-(const Obj &) const;
-    inline VECTOR operator*(const VECTOR &) const;
-    inline VECTOR operator*(const Obj &) const ;
+
     inline VECTOR operator/(const VECTOR &) const;
     inline VECTOR operator/(const Obj &) const;
     inline VECTOR operator^(const VECTOR &) const;
@@ -60,6 +60,11 @@ namespace tlp {
     inline Obj dist (const VECTOR &) const;
     inline Obj dotProduct(const VECTOR &) const;
   };
+  TEMPLATEVECTOR
+  inline VECTOR operator*(const VECTOR &, const VECTOR &);
+  TEMPLATEVECTOR
+  inline VECTOR operator*(const VECTOR &, const Obj &);
+
   /*@}*/
 }
 

@@ -1,27 +1,27 @@
-#if (QT_REL == 4)
 #include <QtGui/qapplication.h>
-#else
-#include <qapplication.h>
-#endif
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/MouseObject.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLayer.h>
 
 using namespace std;
+using namespace tlp;
 
 /*******************************************************************/
-void importGraph(const string &filename, GlGraph *render) {
+void importGraph(const string &filename, GlGraphWidget *glw) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
-  SuperGraph *newSuperGraph=tlp::importGraph("tlp", dataSet, NULL);
-  if (newSuperGraph!=0) {
-    render->setSuperGraph(newSuperGraph);
-    
-    DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
-      render->setParameters(glGraphData);
+  Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
+  if (newGraph != 0) {
+    openGraphOnGlGraphWidget(newGraph,&dataSet,glw);
   }
-  
 }
 /*******************************************************************/
 int main(int argc,char ** argv ){
@@ -37,8 +37,11 @@ int main(int argc,char ** argv ){
 
   /****************************************************/
   tlp::initTulipLib();
-  /* tlp::loadPlugins();   // library side plugins
-     GlGraph::loadPlugins(); //Glyoh plugins */
+
+  PluginLoaderTxt txtPlug;
+  tlp::loadPlugins(&txtPlug);   // library side plugins
+  GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
+  //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlGraphWidget MainWin;
   
@@ -50,8 +53,8 @@ int main(int argc,char ** argv ){
     importGraph(argv[1], &MainWin);
   }
 
-  MainWin.centerScene();
-  MouseGraphNavigate m;
-  MainWin.setMouse(&m);
+  MainWin.getScene()->centerScene();
+  MouseNKeysNavigator m;
+  MainWin.pushInteractor(&m);
   return MainApp.exec();
 }

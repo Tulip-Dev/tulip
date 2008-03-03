@@ -1,14 +1,8 @@
-#include <map>
-#include <cmath>
-#include <climits>
-#include <fstream>
-#include <qmessagebox.h>
 #include <tulip/Circle.h>
-#include <tulip/TreeTest.h>
-#include <tulip/TlpTools.h>
 #include "BubbleTree.h"
+#include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1","1","Tree");
+LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree");
 
 using namespace std;
 using namespace stdext;
@@ -29,7 +23,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   double sizeFather = tmpSizeFather.norm() / 2.0;
   if (sizeFather < 1E-5) sizeFather = 1.0;
   double sizeVirtualNode = 1.0;
-  if (superGraph->indeg(n) == 0) sizeVirtualNode = 0.0;
+  if (tree->indeg(n) == 0) sizeVirtualNode = 0.0;
   /*
    * Iniatilize node position
    */
@@ -38,7 +32,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   /*
    * Special case if the node is a leaf.
    */
-  if (superGraph->outdeg(n)==0) {
+  if (tree->outdeg(n)==0) {
     (*relativePosition)[n][2]=0;
     (*relativePosition)[n][3]=0;
     Size tmpSizeNode = nodeSize->getNodeValue(n);
@@ -51,13 +45,13 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
    * A node is dynamically inserted in the neighborhood of n in order to
    * reserve space for the connection of the father of n
    */
-  unsigned int Nc = superGraph->outdeg(n)+1;
+  unsigned int Nc = tree->outdeg(n)+1;
   vector<double> angularSector(Nc);
   std::vector<double> realCircleRadius(Nc);
   realCircleRadius[0] = sizeVirtualNode;
   double sumRadius = sizeVirtualNode;
 
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=tree->getOutNodes(n);
   for (unsigned int i=1; itN->hasNext(); ++i)  {
     node itn = itN->next();
     realCircleRadius[i] = computeRelativePosition(itn, relativePosition);
@@ -126,7 +120,6 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   double angle = 0;
   vector<tlp::Circle<double> > circles(Nc);
   for (unsigned int i=0; i<Nc; ++i) {
-    tlp::Vector<double,2> point;
     double packRadius;
     if (fabs(sin(angularSector[i])) > 1E-05)
       packRadius = realCircleRadius[i] / sin(angularSector[i] /2.0);
@@ -140,7 +133,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
     circles[i][1] = packRadius*sin(angle);
     circles[i].radius = realCircleRadius[i];
   }
-  Circle<double> circleH=tlp::enclosingCircle(circles);
+  Circle<double> circleH = tlp::enclosingCircle(circles);
   (*relativePosition)[n][2] = -circleH[0];
   (*relativePosition)[n][3] = -circleH[1];
   (*relativePosition)[n][4] = sqrt(circleH.radius*circleH.radius - circleH[1]*circleH[1])-fabs(circleH[0]);
@@ -148,7 +141,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
    * Set relative position of all children
    * according to the center of the enclosing circle
    */
-  itN=superGraph->getOutNodes(n);
+  itN = tree->getOutNodes(n);
   for (unsigned int i=1;i<Nc;++i) {
     node itn = itN->next();
     (*relativePosition)[itn][0] = circles[i][0]-circleH[0];
@@ -169,8 +162,8 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   bend[0] = (*relativePosition)[n][4];
 
   zeta[0] = (*relativePosition)[n][2];
-  zeta[1]=(*relativePosition)[n][3];
-  zeta[2]=0;
+  zeta[1] = (*relativePosition)[n][3];
+  zeta[2] = 0;
   zetaOriginal = zeta;
 
   Vector<double,3> vect,vect3;
@@ -188,13 +181,13 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0;
   zeta = rot1*zeta[0] + rot2*zeta[1];
   
-  layoutProxy->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
+  layoutResult->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
 				     enclosingCircleCenter[1]+zeta[1],
 				     0) );
   /*
    * Place bend on edge to prevent overlaping
    */
-  if(superGraph->outdeg(n)>0) {
+  if(tree->outdeg(n)>0) {
     bend += zetaOriginal;
     bend = rot1*bend[0]+rot2*bend[1];
     bend += enclosingCircleCenter;
@@ -203,18 +196,18 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
     a /= a.norm();
     b /= b.norm();
     if ((1.0-fabs(a.dotProduct(b)))>0.001) {
-	Iterator<edge> *itE=superGraph->getInEdges(n);
+	Iterator<edge> *itE=tree->getInEdges(n);
 	edge ite=itE->next();
 	delete itE;
 	vector<Coord>tmp(1);
 	tmp[0]=Coord(bend[0],bend[1],0);
-	layoutProxy->setEdgeValue(ite,tmp);
+	layoutResult->setEdgeValue(ite,tmp);
     }
   }
   /*
    * Make the recursive call, to place the children of n.
    */
-  Iterator<node> *it=superGraph->getOutNodes(n);
+  Iterator<node> *it=tree->getOutNodes(n);
   while (it->hasNext()) {
     node itn = it->next();
     Vector<double,3> newpos;
@@ -231,8 +224,8 @@ void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativ
   /*
    * Make the recursive call, to place the children of n.
    */
- layoutProxy->setNodeValue(n,Coord(0,0,0));
-  Iterator<node> *it = superGraph->getOutNodes(n);
+ layoutResult->setNodeValue(n,Coord(0,0,0));
+  Iterator<node> *it = tree->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
     Coord newpos((*relativePosition)[itn][0]-(*relativePosition)[n][2],
@@ -248,14 +241,6 @@ void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativ
 
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Complexity
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "bool" ) \
@@ -267,44 +252,39 @@ namespace {
   };
 }
 
-BubbleTree::BubbleTree(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<bool>("complexity",paramHelp[1],"true");
+BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) {
+  addNodeSizePropertyParameter(this);
+  addParameter<bool>("complexity",paramHelp[0],"true");
 }
 
 BubbleTree::~BubbleTree() {}
 
 bool BubbleTree::run() {
-  if ( dataSet==0 || !dataSet->get("nodeSize",nodeSize)) {
-    if (superGraph->existProperty("viewSize"))
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");    
+  if (!getNodeSizePropertyParameter(dataSet,nodeSize)) {
+    if (graph->existProperty("viewSize"))
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");    
     else {
-      nodeSize = superGraph->getProperty<SizesProxy>("viewSize");  
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");  
       nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
   }
-  bool result=false;
   if (dataSet==0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
-  stdext::hash_map<node,Vector<double,5> > relativePosition;
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
+
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
+
   node startNode;
-  tlp::getSource(superGraph, startNode);
-  computeRelativePosition(startNode,&relativePosition);
-  calcLayout(startNode,&relativePosition);
+  tlp::getSource(tree, startNode);
+  stdext::hash_map<node,Vector<double,5> > relativePosition;
+  computeRelativePosition(startNode, &relativePosition);
+  calcLayout(startNode, &relativePosition);
+
+   TreeTest::cleanComputedTree(graph, tree);
   return true;
 }
-
-bool BubbleTree::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
-    erreurMsg = "";
-    return true;
-  }
-  else {
-    erreurMsg = "The Graph must be a Tree";
-    return false;
-  }
-}
-
-void BubbleTree::reset() {}

@@ -1,11 +1,14 @@
 lib_LTLIBRARIES = libtulip.la
 
+RELEASE = ${VERSION}
+
 if WIN32 
 DLL_TULIP = -DDLL_TULIP
 DLL_FLAGS = -no-undefined
-RELEASE = ${VERSION}
 else
-RELEASE = @TULIP_VERSION@ -version-info 0:0:0
+if MACOSX
+DLL_FLAGS = -Wl,-headerpad_max_install_names
+endif
 endif
 
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@ -I$(top_srcdir)
@@ -13,12 +16,12 @@ AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 if !MACOSX
 AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
 else
-AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/.libs/*.o` -lz -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/*.lo` -lz -release ${RELEASE}
 endif
 
 libtulip_la_SOURCES = \
 	Bfs.cpp \
-	CanonicalOrdering.cpp \
+	Ordering.cpp \
 	ConvexHull.cpp \
 	Delaunay.cpp \
 	DrawingTools.cpp \
@@ -26,7 +29,7 @@ libtulip_la_SOURCES = \
 	ExtendedClusterOperation.cpp \
 	Reflect.cpp \
 	Types.cpp \
-	PropertyProxy.cpp \
+	AbstractProperty.cpp \
 	GraphTools.cpp \
 	BiconnectedTest.cpp \
 	TriconnectedTest.cpp   \
@@ -35,39 +38,40 @@ libtulip_la_SOURCES = \
 	AcyclicTest.cpp   \
 	SimpleTest.cpp \
 	Color.cpp  \
-	Colors.cpp \
-	ColorsProxy.cpp \
+	ColorProperty.cpp \
+	ColorAlgorithm.cpp \
 	Coord.cpp \
 	GraphIterator.cpp \
 	MapIterator.cpp \
 	IdManager.cpp \
-	Int.cpp \
-	IntProxy.cpp \
-	Layout.cpp \
-	LayoutProxy.cpp \
-	Metric.cpp \
-	MetricProxy.cpp \
-	MetaGraph.cpp \
-	MetaGraphProxy.cpp \
+	IntegerProperty.cpp \
+	IntegerAlgorithm.cpp \
+	LayoutProperty.cpp \
+	LayoutAlgorithm.cpp \
+	DoubleProperty.cpp \
+	DoubleAlgorithm.cpp \
+	GraphProperty.cpp \
+	GraphAlgorithm.cpp \
+	GraphDecorator.cpp \
 	Observable.cpp \
 	ObservableGraph.cpp \
 	PluginLoaderTxt.cpp \
 	PropertyManager.cpp \
-	Selection.cpp \
-	SelectionProxy.cpp \
-	Sizes.cpp \
-	SizesProxy.cpp \
-	String.cpp \
-	StringProxy.cpp \
-	SuperGraph.cpp \
-	SuperGraphAbstract.cpp \
-	SuperGraphImpl.cpp \
-	SuperGraphView.cpp \
+	BooleanProperty.cpp \
+	BooleanAlgorithm.cpp \
+	SizeProperty.cpp \
+	SizeAlgorithm.cpp \
+	StringProperty.cpp \
+	StringAlgorithm.cpp \
+	Graph.cpp \
+	GraphAbstract.cpp \
+	GraphImpl.cpp \
+	GraphView.cpp \
 	TlpTools.cpp \
 	WithParameter.cpp \
 	PluginProgress.cpp \
 	GraphMeasure.cpp \
-	PluginsCreation.cpp \
+	PluginLibraryLoader.cpp \
 	StlFunctions.cpp \
 	StatisticsNodeModule.cpp \
 	Polynome.cpp \
@@ -80,4 +84,6 @@ libtulip_la_SOURCES = \
 	PlanarityTestObstr.cpp \
 	PlanarityTestTools.cpp \
 	RectangleArea.cpp \
-	Border.cpp
+	Border.cpp \
+	TLPImport.cpp \
+	TLPExport.cpp

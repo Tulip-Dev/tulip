@@ -1,37 +1,33 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-#include <tulip/SelectionProxy.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/MetricProxy.h>
-#include <tulip/TreeTest.h>
-
 #include "AritySegmentRecClustering.h"
 #include "TableAritySegment.h"
 
-CLUSTERINGPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","0","1");
-
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(AritySegmentRecClustering,"Arity-Segment Bottom-Recursive","David Auber","27/01/2000","Alpha","1.0");
 //================================================================================
-AritySegmentRecClustering::AritySegmentRecClustering(ClusterContext context):Clustering(context)
+AritySegmentRecClustering::AritySegmentRecClustering(AlgorithmContext context):Algorithm(context)
 {}
 //================================================================================
 AritySegmentRecClustering::~AritySegmentRecClustering()
 {}
 //================================================================================
-void AritySegmentRecClustering::getRecurseChild(node nNode,SelectionProxy *resultGood,SelectionProxy *resultBad) {
+void AritySegmentRecClustering::getRecurseChild(node nNode,BooleanProperty *resultGood,BooleanProperty *resultBad) {
   resultBad->setNodeValue(nNode,true);
-  Iterator<edge> *itE=superGraph->getOutEdges(nNode);
+  Iterator<edge> *itE=graph->getOutEdges(nNode);
   while(itE->hasNext()) {
     edge ite=itE->next();
-    resultGood->setNodeValue(superGraph->target(ite),false);
+    resultGood->setNodeValue(graph->target(ite),false);
     resultGood->setEdgeValue(ite,false);
     resultBad->setEdgeValue(ite,true);
-    getRecurseChild(superGraph->target(ite),resultGood,resultBad);
+    getRecurseChild(graph->target(ite),resultGood,resultBad);
   } delete itE;
 }
 //================================================================================
-bool AritySegmentRecClustering::DfsClustering (node currentNode,SelectionProxy *selectGood,SelectionProxy *selectBad) {
+bool AritySegmentRecClustering::DfsClustering (node currentNode,BooleanProperty *selectGood,BooleanProperty *selectBad) {
   bool result;
   double n,c1,c2;
   double leafMax,leafMin;
@@ -39,7 +35,7 @@ bool AritySegmentRecClustering::DfsClustering (node currentNode,SelectionProxy *
   string tmpString;
 
   result=true;
-  Iterator<node> *itN=superGraph->getOutNodes(currentNode);
+  Iterator<node> *itN=graph->getOutNodes(currentNode);
   while(itN->hasNext()) {
     node itn=itN->next();
     result = result & DfsClustering (itn,selectGood,selectBad);
@@ -121,48 +117,48 @@ bool AritySegmentRecClustering::run() {
   //initialisation des metrics necessaires
   //=================================================
   //initialisation des metrics necessaires
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node nit=itN->next();
-    if (superGraph->indeg(nit)==0) {
+    if (graph->indeg(nit)==0) {
       rootNode=nit;
       break;
     }
   }
   /*
-  arityM=superGraph->getLocalProperty<MetricProxy>("TreeArityMax",cached,resultBool,erreurMsg);
-  leafM=superGraph->getLocalProperty<MetricProxy>("Leaf",cached,resultBool,erreurMsg);
-  nodeM=superGraph->getLocalProperty<MetricProxy>("Node",cached,resultBool,erreurMsg);
+  arityM=graph->getLocalProperty<DoubleProperty>("TreeArityMax",cached,resultBool,erreurMsg);
+  leafM=graph->getLocalProperty<DoubleProperty>("Leaf",cached,resultBool,erreurMsg);
+  nodeM=graph->getLocalProperty<DoubleProperty>("Node",cached,resultBool,erreurMsg);
   */
-  arityM = new MetricProxy(superGraph);
-  superGraph->computeProperty("TreeArityMax", arityM, erreurMsg);
-  leafM = new MetricProxy(superGraph);
-  superGraph->computeProperty("Leaf", leafM, erreurMsg);
-  nodeM = new MetricProxy(superGraph);
-  superGraph->computeProperty("Node", nodeM, erreurMsg);
+  arityM = new DoubleProperty(graph);
+  graph->computeProperty("TreeArityMax", arityM, erreurMsg);
+  leafM = new DoubleProperty(graph);
+  graph->computeProperty("Leaf", leafM, erreurMsg);
+  nodeM = new DoubleProperty(graph);
+  graph->computeProperty("Node", nodeM, erreurMsg);
   
   bool result=false;
   while (!result) {
-    SelectionProxy *selectGood= superGraph->getLocalProperty<SelectionProxy>("tmpSelectionGood");
-    SelectionProxy *selectBad= superGraph->getLocalProperty<SelectionProxy>("tmpSelectionBad");
-    SuperGraph * saveSuper=superGraph;
+    BooleanProperty *selectGood= graph->getLocalProperty<BooleanProperty>("tmpSelectionGood");
+    BooleanProperty *selectBad= graph->getLocalProperty<BooleanProperty>("tmpSelectionBad");
+    Graph * saveSuper=graph;
     selectGood->setAllNodeValue(true);
     selectGood->setAllEdgeValue(true);
     selectBad->setAllNodeValue(false);
     selectBad->setAllEdgeValue(false);
       
-    segmentM = new MetricProxy(superGraph);
-    resultBool = superGraph->computeProperty("Segment", segmentM, erreurMsg);
+    segmentM = new DoubleProperty(graph);
+    resultBool = graph->computeProperty("Segment", segmentM, erreurMsg);
 
     result = DfsClustering(rootNode,selectGood,selectBad);
     if (!result) {
-      SuperGraph * tmpSubGraph,*tmpSubGraph2;
-      //	  tmpSubGraph = superGraph->addView("ArSe-R Good",selectGood);
-      tmpSubGraph = superGraph->addSubGraph(selectGood);
+      Graph * tmpSubGraph,*tmpSubGraph2;
+      //	  tmpSubGraph = graph->addView("ArSe-R Good",selectGood);
+      tmpSubGraph = graph->addSubGraph(selectGood);
       //	  selectGood->reverse();
-      //	  tmpSubGraph2 = superGraph->addView("ArSe-R Bad",selectBad);
-      tmpSubGraph2 = superGraph->addSubGraph(selectBad);
-      superGraph=tmpSubGraph;
+      //	  tmpSubGraph2 = graph->addView("ArSe-R Bad",selectBad);
+      tmpSubGraph2 = graph->addSubGraph(selectBad);
+      graph=tmpSubGraph;
     }
     delete segmentM;
     saveSuper->delLocalProperty("tmpSelectionGood");
@@ -176,7 +172,7 @@ bool AritySegmentRecClustering::run() {
 }
 //================================================================================
 bool AritySegmentRecClustering::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     erreurMsg="";
     return true;
   }

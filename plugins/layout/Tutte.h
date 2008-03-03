@@ -33,14 +33,13 @@
  *  (at your option) any later version.
  *
 */
-class Tutte:public Layout {
+class Tutte:public tlp::LayoutAlgorithm {
 public:
-  Tutte(const PropertyContext &);
+  Tutte(const tlp::PropertyContext &);
   ~Tutte();
   
   bool run();
   bool check(std::string &);
-  void reset();
 };
 /*@}*/
 #endif

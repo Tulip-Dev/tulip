@@ -1,39 +1,40 @@
 //-*-c++-*-
 #include <tulip/TulipPlugin.h>
-#include <tulip/ForEach.h>
 #include <cmath>
+
+using namespace tlp;
 
 /** \addtogroup size */
 /*@{*/
-/// AutoSizes.cpp - Compute size in order to prevent node-node overlapping
+/// AutoSize.cpp - Compute size in order to prevent node-node overlapping
 /**
  * This plug-ins compute size of nodes and edges such that, node-node overlapping do not exists (if it is possible).
  * and sizes of edges are proportional to size of nodes.
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class AutoSizes:public Sizes
+class AutoSize:public SizeAlgorithm
 { 
 public:
-  AutoSizes(const PropertyContext &context):Sizes(context){}
+  AutoSize(const PropertyContext &context):SizeAlgorithm(context){}
 
   bool run() {
     node n;
-    forEach(n,superGraph->getNodes())
-      sizesProxy->setNodeValue(n, getNodeValue(n));
+    forEach(n,graph->getNodes())
+      sizeResult->setNodeValue(n, getNodeValue(n));
     edge e;
-    forEach(e,superGraph->getEdges())
-      sizesProxy->setEdgeValue(e, getEdgeValue(e));
+    forEach(e,graph->getEdges())
+      sizeResult->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 
 
 private:
   Size getNodeValue(const node n) {
-    LayoutProxy *entryLayout=superGraph->getProperty<LayoutProxy>("viewLayout");
+    LayoutProperty *entryLayout=graph->getProperty<LayoutProperty>("viewLayout");
 
     //Compute the minimal distance to one neighbour.
-    Iterator<node> *itN=superGraph->getNodes();
+    Iterator<node> *itN=graph->getNodes();
     Coord tmp1=entryLayout->getNodeValue(n);
     double dist=1000;
     if (itN->hasNext()) {
@@ -65,8 +66,8 @@ private:
   }
 
   Size getEdgeValue(const edge e) {
-    Size s = sizesProxy->getNodeValue(superGraph->source(e));
-    Size t = sizesProxy->getNodeValue(superGraph->target(e));
+    Size s = sizeResult->getNodeValue(graph->source(e));
+    Size t = sizeResult->getNodeValue(graph->target(e));
     Coord tmp(s.getW(),s.getH(),s.getD());
     Coord tmp2(t.getW(),t.getH(),t.getD());
     float sizes=tmp.norm();
@@ -76,4 +77,4 @@ private:
 
 };
 /*@}*/
-SIZESPLUGIN(AutoSizes,"Auto_sizing","Auber","04/05/2001","0","0","1")
+SIZEPLUGIN(AutoSize,"Auto Sizing","Auber","04/05/2001","","1.0")

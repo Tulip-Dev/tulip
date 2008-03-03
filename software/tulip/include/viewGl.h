@@ -11,15 +11,6 @@
 #endif
 
 #include <vector>
-#if (QT_REL == 3)
-#include <qlistview.h>
-#include <qtextview.h> 
-#include <qsplitter.h>
-#include <qpopupmenu.h>
-#include <qstring.h>
-#include <qmainwindow.h>
-#include <qassistantclient.h>
-#else
 #include <Qt3Support/q3listview.h>
 #include <Qt3Support/q3textview.h>
 #include <Qt3Support/q3dockwindow.h>
@@ -29,63 +20,77 @@
 #include <QtGui/qmainwindow.h>
 #include <QtAssistant/qassistantclient.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 #include <string>
 #include <tulip/Reflect.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
+#include <tulip/GlScene.h>
 #include <tulip/Observable.h>
-#include <tulip/MouseInterface.h>
+#include <tulip/GlSceneObserver.h>
+#include <tulip/GWInteractor.h>
 #include "TulipData.h"
 
-class Cluster;
+namespace tlp {
+class GlGraph;
+class Morphing;
+class GridOptionsWidget;
+#ifdef STATS_UI
+class TulipStats;
+#endif
+class GlScene;
+class GlLayer;  
+}
+
+class SGHierarchyWidget;
+class ElementPropertiesWidget;
+class GlGraphWidget;
+class TulipStats;
+class PropertyDialog;
 class QWorkspace;
 class QProgressDialog;
 class QEvent;
-class PropertyDialog;
-class GlGraphWidget;
-class GlGraph;
 class View3DSetup;
-class ClusterTree;
-class TulipElementProperties;
-class ToolBar;
-class Overview;
-class Morphing;
-namespace tlp {
-class GridOptionsWidget;
-class TulipStats;
-}
+class Cluster;
+class GWOverviewWidget;
+class LayerManagerWidget;
+
+// minimal structure to keep open files infos
+struct viewGlFile {
+  std::string name;
+  std::string author;
+  std::string comments;
+};
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public TulipData, Observer {
+class viewGl : public TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
   Q_OBJECT;
 
 public:
   viewGl(QWidget *parent=NULL, const char *name=NULL);
   virtual ~viewGl();
-  void setParameters(const DataSet);
+  void setParameters(const tlp::DataSet &);
   bool eventFilter(QObject *, QEvent *);
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
-  ClusterTree *clusterTreeWidget;
+  SGHierarchyWidget *clusterTreeWidget;
 #ifdef STATS_UI
   tlp::TulipStats *statsWidget;
 #endif
-  ToolBar *mouseToolBar;
-  Overview *overviewWidget;
+  GWOverviewWidget *overviewWidget;
+  LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
   QDockWindow *tabWidgetDock;
-  QDockWindow *mouseToolBarDock;
   GlGraphWidget *glWidget;
   PropertyDialog *propertiesWidget;
-  TulipElementProperties *nodeProperties;
-  SuperGraph * copyCutPasteGraph;
+  ElementPropertiesWidget *eltProperties;
+  tlp::Graph * copyCutPasteGraph;
   bool elementsDisabled;
 
   QPopupMenu layoutMenu;
   QPopupMenu metricMenu;
   QPopupMenu colorsMenu;
+  QPopupMenu generalMenu;
   QPopupMenu sizesMenu;
   QPopupMenu intMenu;
   QPopupMenu stringMenu;
@@ -94,25 +99,45 @@ protected:
   QPopupMenu optionMenu;
   QPopupMenu selectMenu;
   QPopupMenu exportImageMenu;
-  QPopupMenu dialogMenu;
 
   //QPopupMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );
-  typedef std::set< Observable * >::iterator ObserverIterator;
+  typedef std::set< tlp::Observable * >::iterator ObserverIterator;
   void update ( ObserverIterator begin, ObserverIterator end);
-  void observableDestroyed(Observable *);
+  void observableDestroyed(tlp::Observable *);
   void initObservers();
   void clearObservers();
   void enableQPopupMenu(QPopupMenu *, bool);
   void enableElements(bool);
   void setNavigateCaption(std::string);
-  void initializeGraph(SuperGraph *);
-  void initializeGlGraph(GlGraph *);
+  void initializeGraph(tlp::Graph *);
+  void initializeGlScene(tlp::GlScene *);
+  // GraphObserver interface
+  void addNode (tlp::Graph *, const tlp::node);
+  void addEdge (tlp::Graph *, const tlp::edge);
+  void delNode (tlp::Graph *, const tlp::node);
+  void delEdge (tlp::Graph *, const tlp::edge);
+  void reverseEdge (tlp::Graph *, const tlp::edge);
+  void destroy (tlp::Graph *);
+  // GlSceneObserver interface
+  void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+  void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
 
 public slots:
   void startTulip();
   void fileOpen(std::string *,QString &);
   void closeEvent(QCloseEvent *e); 
+  void setSelect();
+  void setAddEdge();
+  void setEditEdgeBend();
+  void setAddNode();
+  void setDelete();
+  void setZoomBox();
+  void setMoveSelection();
+  void setSelection();
+  void setMagicSelection();
+  void setGraphNavigate();
+  void showElementProperties(unsigned int eltId, bool isNode);
   
 protected slots:
   void helpIndex();
@@ -122,9 +147,8 @@ protected slots:
   void fileExit();
   void fileSave();
   void fileSaveAs();
-  int  closeWin();
   void windowActivated(QWidget *);
-  void hierarchyChangeSuperGraph(SuperGraph *);
+  void hierarchyChangeGraph(tlp::Graph *);
   void fileNew();
   void fileOpen();  
   void filePrint();
@@ -142,60 +166,65 @@ protected slots:
   void importGraph(int);
   void exportGraph(int);
   void exportImage(int);
-  void makeClustering(int );
+  void applyAlgorithm(int );
   void outputEPS();
+  void outputSVG();
   void showDialog(int);
   void redrawView();
   void centerView();
-  void updateStatusBar();
-  void deselectALL();
+  void updateCurrentGraphInfos();
+  void selectAll();
+  void deselectAll();
   void reverseSelection();
   void delSelection();
   void newSubgraph();
   void reverseSelectedEdgeDirection();
   void windowsMenuAboutToShow();
   void windowsMenuActivated( int id );
-  void restoreView();
   void new3DView();
-  void goInside();
-  void changeSuperGraph(SuperGraph *);
-  void superGraphAboutToBeRemoved(SuperGraph *);
-  void glGraphWidgetClosed(GlGraphWidget *);
-  void ungroup();  
+  void changeGraph(tlp::Graph *);
+  void graphAboutToBeRemoved(tlp::Graph *);
+  void glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *);
   void group();  
   void gridOptions();
-  void mouseChanged(MouseInterface *);
-  void deleteElement();
-  void selectElement();
-  void addRemoveElement();
   void isAcyclic();
   void isSimple();
   void isConnected();
   void isBiconnected();
   void isTriconnected();
   void isTree();
+  void isFreeTree();
   void isPlanar();
   void makeAcyclic();
   void makeBiconnected();
-  //void makeTriangulated();
   void makeSimple();
   void makeConnected();
-  void showElementProperties();
+  void makeRooted();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
   void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlGraphWidget *newOpenGlView(SuperGraph *graph,const QString &);
+  GlGraphWidget *newOpenGlView(tlp::Graph *graph,const QString &);
+  void constructDefaultScene(GlGraphWidget *glWidget);
   std::string newName();
-  stdext::hash_map<unsigned int, std::string> openFiles;
+  stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
-  bool fileSave(std::string plugin, std::string filename);
-  int alreadyTreated(std::set<unsigned int>, SuperGraph *);
+  bool doFileSave();
+  bool doFileSaveAs();
+  bool doFileSave(std::string plugin, std::string filename, std::string author, std::string comments);
+  bool askSaveGraph(const std::string name);
+  bool closeWin();
+  int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
-  Morphing *morph;
+  tlp::Morphing *morph;
+  std::vector<tlp::GWInteractor *> *currentInteractors;
+  void setCurrentInteractors(std::vector<tlp::GWInteractor *> *interactors);
+  void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
 
   QAssistantClient* assistant;
+  unsigned int currentGraphNbNodes, currentGraphNbEdges;
+  tlp::Graph* importedGraph;
 };
 
 #endif // viewGl_included

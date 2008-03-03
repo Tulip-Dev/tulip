@@ -1,6 +1,8 @@
 #include    <FTBitmapGlyph.h>
 #include    "tulip/TLPPixmapGlyph.h"
 
+using namespace tlp;
+
 unsigned char outlineFont(unsigned x,unsigned y, unsigned srcWidth, 
 		      unsigned srcHeight, unsigned char *src) {
   if (src[x+y*srcWidth]!=0) return src[x+y*srcWidth];
@@ -60,10 +62,6 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
       float ftglColour[4];
       glGetFloatv( GL_CURRENT_COLOR, ftglColour);
 
-      unsigned char redComponent =   static_cast<unsigned char>( ftglColour[0] * 255.0f);
-      unsigned char greenComponent = static_cast<unsigned char>( ftglColour[1] * 255.0f);
-      unsigned char blueComponent =  static_cast<unsigned char>( ftglColour[2] * 255.0f);
-
       unsigned char* tmp = bitmap.buffer;
 
       unsigned char* src  = new unsigned char[(destWidth)*(destHeight)];
@@ -91,15 +89,15 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
 	    {
 	      unsigned char newVal=outlineFont(x,y,srcWidth,srcHeight,src);
 	      if (newVal==128) {
-		*dest++ = 255;
-		*dest++ = 255;
-		*dest++ = 255;
-		*dest++ = 255;
+		*dest++ = 64;
+		*dest++ = 64;
+		*dest++ = 64;
+		*dest++ = 128;
 	      } else
 		if (newVal!=0) {
-		  *dest++ = redComponent;
-		  *dest++ = greenComponent;
-		  *dest++ = blueComponent;
+		  *dest++ = 255;
+		  *dest++ = 255;
+		  *dest++ = 255;
 		  *dest++ = 255;
 		} else
 		  {

@@ -7,7 +7,7 @@
 /*@{*/
 /// ConnectedComponent.h - An implementation of the connected component algorithm.
 /** This plugin is an implementation of the connected componnent decompostion algorithm. each 
- *  node and edge that belongs to the same componnent receive the same value.
+ *  node and edge that belongs to the same component receive the same value.
  *
  *  <b>HISTORY</b>
  *
@@ -15,8 +15,7 @@
  *
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
- *  connected component they have the same value else they have a 
- *  different value.
+ *  connected component they have the same value else they have a different value.
  *
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
@@ -29,14 +28,11 @@
  *  (at your option) any later version.
  *
  */
-class ConnectedComponent:public Metric { 
+class ConnectedComponent:public tlp::DoubleAlgorithm { 
 public:
-  ConnectedComponent(const PropertyContext &);
+  ConnectedComponent(const tlp::PropertyContext &);
   ~ConnectedComponent();
   bool run();
-
-private:
-  void dfs(node n, MutableContainer<bool> &flag,double value);
 };
 /*@}*/
 #endif

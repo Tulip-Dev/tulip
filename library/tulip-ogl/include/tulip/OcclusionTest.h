@@ -1,6 +1,9 @@
 #ifndef Tulip_OCCLUSIONTEST_H
 #define Tulip_OCCLUSIONTEST_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Rectangle.h>
+
+namespace tlp {
 
 struct RectangleInt2D : public tlp::Rectangle<int> {
   RectangleInt2D(int x,int y,int x1,int y1) {
@@ -38,4 +41,7 @@ struct OcclusionTest {
 
 };
 
+}
+
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

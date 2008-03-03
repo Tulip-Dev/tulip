@@ -2,19 +2,20 @@
 #include <math.h>
 #include <sstream>
 #include <qinputdialog.h>
-#include <tulip/TlpTools.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/SelectionProxy.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
 #include <fstream>
 
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
 
-CLUSTERINGPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","0","1");
-
 using namespace std;
+using namespace tlp;
+
+ALGORITHMPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","1.0");
+
 //================================================================================
-  ConvolutionClustering::ConvolutionClustering(ClusterContext context):Clustering(context) {}
+  ConvolutionClustering::ConvolutionClustering(AlgorithmContext context):Algorithm(context) {}
 //================================================================================
 ConvolutionClustering::~ConvolutionClustering(){}
 //================================================================================
@@ -54,16 +55,14 @@ list<int> ConvolutionClustering::getLocalMinimum() {
   vector<double> &discretHisto = *getHistogram();
   list<int> localMinimum;
   localMinimum.push_back(0);
-  bool slopeSens; //false descent
-  if (discretHisto[0]>discretHisto[1]) slopeSens=false; else slopeSens=true;
-  for (unsigned int i=1;i<discretHisto.size();++i) {
-    bool newSlopeSens;
-    if (discretHisto[i-1]>discretHisto[i]) newSlopeSens=false; else newSlopeSens=true;
-    if (newSlopeSens!=slopeSens) {
+  bool slopeSens = !(discretHisto[0]>discretHisto[1]); //false descent
+  for (unsigned int i = 1; i < discretHisto.size(); ++i) {
+    bool newSlopeSens = !(discretHisto[i-1]>discretHisto[i]);
+    if (newSlopeSens != slopeSens) {
       //new Local minimum
       if (slopeSens==false) {
 	int local = localMinimum.back();
-	if (i-local<width/2){
+	if ((int) i - local < width/2){
 	  localMinimum.pop_back();
 	  localMinimum.push_back((i+local)/2);
 	}
@@ -79,7 +78,7 @@ list<int> ConvolutionClustering::getLocalMinimum() {
 void ConvolutionClustering::autoSetParameter() {
 
   map<double,int> histo;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     double tmp = metric->getNodeValue(itn);
@@ -143,7 +142,7 @@ void ConvolutionClustering::autoSetParameter() {
 vector<double> *ConvolutionClustering::getHistogram() {
   //building of the histogram of values
   histogramOfValues.clear();
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     int tmp=(int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) * (double)histosize / 
@@ -175,14 +174,14 @@ void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
   //  cerr << __PRETTY_FUNCTION__ << "...." << flush;
   //build the empty graphs 
   char str[100];
-  vector<SuperGraph *> newGraphs(ranges.size()-1);
+  vector<Graph *> newGraphs(ranges.size()-1);
   for (unsigned int i=0; i< ranges.size()-1; ++i) {
     sprintf(str,"Cluster_%05i",i);
-    newGraphs[i] = tlp::newSubGraph(superGraph,string(str));
+    newGraphs[i] = tlp::newSubGraph(graph,string(str));
   }
   
   //Fill the graphs with nodes
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     int tmp = getInterval((int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) * 
@@ -193,16 +192,16 @@ void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
   
   //Fill the graphs with edges
   for (unsigned int i=0; i< ranges.size()-1; ++i) {
-    Iterator<edge> *itE=superGraph->getEdges();
+    Iterator<edge> *itE=graph->getEdges();
     while (itE->hasNext()) {
       edge ite=itE->next();
-      if (newGraphs[i]->isElement(superGraph->source(ite)) && newGraphs[i]->isElement(superGraph->target(ite)) ) 
+      if (newGraphs[i]->isElement(graph->source(ite)) && newGraphs[i]->isElement(graph->target(ite)) ) 
 	newGraphs[i]->addEdge(ite);
     } delete itE;
   }
   for (unsigned int i=0; i< ranges.size()-1; ++i) {
     if (newGraphs[i]->numberOfNodes()==0) {
-      superGraph->delSubGraph(newGraphs[i]);
+      graph->delSubGraph(newGraphs[i]);
     }
   }
   //  cerr << " end." << endl;
@@ -211,7 +210,7 @@ void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
 bool ConvolutionClustering::run() {
   histosize=128;
   string tmp1,tmp2;
-  metric=superGraph->getProperty<MetricProxy>("viewMetric");
+  metric=graph->getProperty<DoubleProperty>("viewMetric");
   autoSetParameter();
   getHistogram();
   ConvolutionClusteringSetup *mysetup = new ConvolutionClusteringSetup(this);

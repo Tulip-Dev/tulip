@@ -1,9 +1,12 @@
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
 #include <set>
-#include "Node.h"
-#include "Edge.h"
-struct SuperGraph;
+#include "tulip/Node.h"
+#include "tulip/Edge.h"
+
+namespace tlp {
+
+struct Graph;
 //=========================================================
 
 /** \addtogroup graphs */ 
@@ -18,23 +21,28 @@ struct SuperGraph;
 class GraphObserver {
  public:
   virtual ~GraphObserver() {}
-  virtual void addNode(SuperGraph *,const node ){}
-  virtual void addEdge(SuperGraph *,const edge ){}
-  virtual void delNode(SuperGraph *,const node ){}
-  virtual void delEdge(SuperGraph *,const edge ){}
-  virtual void reverseEdge(SuperGraph *,const edge ){}
-  virtual void destroy(SuperGraph *){}
+  virtual void addNode(Graph *,const node ){}
+  virtual void addEdge(Graph *,const edge ){}
+  virtual void delNode(Graph *,const node ){}
+  virtual void delEdge(Graph *,const edge ){}
+  virtual void reverseEdge(Graph *,const edge ){}
+  virtual void destroy(Graph *){}
 };
 /*@}*/
+}
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace std {
   template <>
-  struct less<GraphObserver *> {
-    size_t operator()(const GraphObserver * obs1,const GraphObserver *obs2) const {
+    struct less<tlp::GraphObserver *> {
+    size_t operator()(const tlp::GraphObserver * obs1,const tlp::GraphObserver *obs2) const {
       return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
 }
+#endif // DOXYGEN_NOTFOR_DEVEL
+
+namespace tlp {
 
 /** \addtogroup graphs */ 
 /*@{*/
@@ -49,7 +57,7 @@ class ObservableGraph {
    */
   void addObserver(GraphObserver *) const;
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**
@@ -62,12 +70,12 @@ class ObservableGraph {
   void removeObservers();
 
  protected:
-  void notifyAddNode(SuperGraph *,const node n);
-  void notifyAddEdge(SuperGraph *,const edge e);
-  void notifyDelNode(SuperGraph *,const node n);
-  void notifyDelEdge(SuperGraph *,const edge e);
-  void notifyReverseEdge(SuperGraph *,const edge e);
-  void notifyDestroy(SuperGraph *);
+  void notifyAddNode(Graph *,const node n);
+  void notifyAddEdge(Graph *,const edge e);
+  void notifyDelNode(Graph *,const node n);
+  void notifyDelEdge(Graph *,const edge e);
+  void notifyReverseEdge(Graph *,const edge e);
+  void notifyDestroy(Graph *);
   mutable std::set<GraphObserver*> observers;
 };
 /*@}*/
@@ -86,6 +94,8 @@ inline void ObservableGraph::removeObserver(GraphObserver *item) const{
 
 inline void ObservableGraph::removeObservers() { 
   observers.clear(); 
+}
+
 }
 
 #endif

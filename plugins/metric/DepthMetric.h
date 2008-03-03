@@ -27,13 +27,13 @@
  *  (at your option) any later version.
  *
  */
-class DepthMetric:public Metric { 
+class DepthMetric:public tlp::DoubleAlgorithm { 
 public:
-  DepthMetric(const PropertyContext &);
+  DepthMetric(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 private:
-  double getNodeValue(const node n);
+  double getNodeValue(const tlp::node n);
 };
 /*@}*/
 #endif

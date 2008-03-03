@@ -3,24 +3,23 @@
 #define _SCATTERPlOTLAYOUT_H
 
 #include <tulip/TulipPlugin.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/DoubleProperty.h>
 
-class ScatterPlot : public Layout 
+class ScatterPlot : public tlp::LayoutAlgorithm
 { 
  public:
 
-  ScatterPlot(const PropertyContext &);
+  ScatterPlot(const tlp::PropertyContext &);
   ~ScatterPlot();
   
   bool run();
   bool check(std::string &);
-  void reset();
  private:
 
   int nMetrics;
   bool shapeConversion;
   double disc[3];
-  MetricProxy* metricProxy[3]; 
+  tlp::DoubleProperty* metric[3]; 
 };
 #endif
 

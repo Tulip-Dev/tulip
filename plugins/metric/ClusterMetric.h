@@ -6,11 +6,10 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// ClusterMetric.h - An implementation of the clustering parameter.
-/** This plugin is an implementation of the Clustering Parameter.
+/** This plugin is an implementation of the Algorithm Parameter.
  *  algorithm published in :
  *
- *  Y. Chiricota. F.Jourdan, an G.Melançon \n
+ *  Y. Chiricota. F.Jourdan, an G.Melancon \n
  *  "Software component capture using graph clustering",\n
  *  "IWPC", \n
  *   2002.
@@ -40,16 +39,15 @@
  *  (at your option) any later version.
  *
  */
-class ClusterMetric:public Metric { 
+class ClusterMetric:public tlp::DoubleAlgorithm { 
 public:
-  ClusterMetric(const PropertyContext &);
+  ClusterMetric(const tlp::PropertyContext &);
   bool run();
 
 private:
-  double getNodeValue(const node n);
-  double getEdgeValue(const edge n);
-  void buildSubGraph(node n,node startNode,std::set<node> &selected,unsigned int depth);
-  int  maxDepth;
+  double getNodeValue(const tlp::node n);
+  double getEdgeValue(const tlp::edge n);
+  void buildSubGraph(tlp::node n, tlp::node startNode,std::set<tlp::node> &selected,unsigned int depth);
 };
 /*@}*/
 #endif

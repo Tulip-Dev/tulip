@@ -4,12 +4,11 @@
 #include <tulip/Coord.h>
 #include <tulip/Node.h>
 
-class SuperGraph;
-class LayoutProxy;
+namespace tlp {
+
 template<typename TYPE>
 class  MutableContainer;
 
-namespace tlp {
   /**
    * \addtogroup basic
    */ 

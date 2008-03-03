@@ -1,36 +1,35 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include <tulip/TreeTest.h>
+#include <tulip/GraphTools.h>
 #include "DatasetTools.h"
 #include "EdgeTools.h"
 #include "Orientation.h"
 #include "ImprovedWalker.h"
 
 using namespace std;
+using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(ImprovedWalker, "ImprovedWalker",
-             "Julien Testut, Antony Durand, Pascal Ollier, "
-             "Yashvin Nababsing, Sebastien Leclerc, "
-             "Thibault Ruchon, Eric Dauchier",
-		    "11/11/04", "ok", "0", "1","Tree");
+LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
+		    "Julien Testut, Antony Durand, Pascal Ollier, "
+		    "Yashvin Nababsing, Sebastien Leclerc, "
+		    "Thibault Ruchon, Eric Dauchier",
+		    "11/11/04", "ok", "1.0","Tree");
 
 //====================================================================
-const float ImprovedWalker::INTER_NODE_DISTANCE_X = 1;
-const float ImprovedWalker::INTER_NODE_DISTANCE_Y = 1;
 const node  ImprovedWalker::BADNODE;  
 
 //====================================================================
 class ImprovedWalkerIterator : public Iterator<node> {
 private:
-  SuperGraph* graph;
+  Graph* graph;
   node        n;
   int         currentChild; 
   int         endChild;
   bool        isReversed;
 
 public:
-  ImprovedWalkerIterator(SuperGraph* graphParam, node nParam,
+  ImprovedWalkerIterator(Graph* graphParam, node nParam,
 			 int currentChildParam, int endChildParam) :
     graph(graphParam), n(nParam), currentChild(currentChildParam),
     endChild(endChildParam) { 
@@ -52,68 +51,65 @@ public:
 };
 //====================================================================
 ImprovedWalker::ImprovedWalker(const PropertyContext& context) :
-    Layout(context) {
+    LayoutAlgorithm(context) {
+  addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
-    addOrthogonalParameters(this);
+  addOrthogonalParameters(this);
+  addSpacingParameters(this);
 }
 //====================================================================
 ImprovedWalker::~ImprovedWalker() {
 }
 //====================================================================
 bool ImprovedWalker::run() {
-  node root                 = searchRoot(superGraph);
-  orientationType mask      = getMask(dataSet);
-  oriLayout                 = new OrientableLayout(layoutProxy, mask);
-  SizesProxy* viewSizeProxy = superGraph->getLocalProperty<SizesProxy>("viewSize");
-  oriSize                   = new OrientableSizeProxy(viewSizeProxy, mask);
-  depthMax                  = initializeAllNodes();    
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
+
+  node root;
+  tlp::getSource(tree, root);
+  orientationType mask = getMask(dataSet);
+  oriLayout = new OrientableLayout(layoutResult, mask);
+  SizeProperty* size;
+  if (getNodeSizePropertyParameter(dataSet, size))
+    size = graph->getProperty<SizeProperty>("viewSize");
+  getSpacingParameters(dataSet, nodeSpacing, spacing);
+
+  oriSize                   = new OrientableSizeProxy(size, mask);
+  depthMax                  = initializeAllNodes(root);    
   order[root]               = 1;
   
   firstWalk(root);
         
-  float sumY                       = 0;
-  levelToFloatType::iterator itMax = maxYbyLevel.begin();
-  levelToFloatType::iterator itPos = posYbyLevel.begin();
-  while(itMax != maxYbyLevel.end()) {
-    *itPos = sumY + (INTER_NODE_DISTANCE_Y + *itMax)/2.f;
-    sumY   += *itMax +  INTER_NODE_DISTANCE_Y;
-    ++itMax;
-    ++itPos;
-  }     
+  // check if the specified layer spacing is greater
+  // than the max of the minimum layer spacing of the tree
+  for (unsigned int i = 0; i < maxYbyLevel.size() - 1;  ++i) {
+    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.;
+    if (minLayerSpacing + nodeSpacing > spacing)
+      spacing = minLayerSpacing + nodeSpacing;
+  }
+
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, oriSize, superGraph,INTER_NODE_DISTANCE_Y);
+    setOrthogonalEdge(oriLayout, tree, spacing);
     
+  TreeTest::cleanComputedTree(graph, tree);
+
   delete oriLayout;
   delete oriSize;
   return true;
 }
 //====================================================================
-bool ImprovedWalker::check(string& errorMsg) {
-  if (TreeTest::isTree(superGraph)) {
-    errorMsg = "";
-    return true;
-  }
-  else {
-    errorMsg = "The Graph must be a Tree";
-    return false;
-  }
-}
-//====================================================================
-void ImprovedWalker::reset() {
-}
-
-//====================================================================
-int ImprovedWalker::initializeAllNodes() {    
-  node root = searchRoot(superGraph);
+int ImprovedWalker::initializeAllNodes(node root) {    
   return initializeNode(root, 0);
 }
 //====================================================================
 int ImprovedWalker::initializeNode(node n, unsigned int depth) {    
-  if (maxYbyLevel.size() <= depth) {
-    posYbyLevel.resize(maxYbyLevel.size() + 10);
-    maxYbyLevel.resize(maxYbyLevel.size() + 10);   
+  if (maxYbyLevel.size() == depth) {
+    maxYbyLevel.push_back(0);   
   }
     
   float nodeHeight       = oriSize->getNodeValue(n).getH();
@@ -130,7 +126,7 @@ int ImprovedWalker::initializeNode(node n, unsigned int depth) {
 
   int maxDepth           = 0;
   int count              = 0;
-  Iterator<node>* itNode = superGraph->getOutNodes(n);
+  Iterator<node>* itNode = tree->getOutNodes(n);
   while (itNode->hasNext()) {
     node currentNode   = itNode->next();
     order[currentNode] = ++count;
@@ -148,28 +144,28 @@ int ImprovedWalker::countSibling(node from, node to) {
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::iterateSibling(node from, node to) {
   int modifier = (order[from] > order[to] ? 1 : -1 );
-  node father  = superGraph->getInNode(from,1);
+  node father  = tree->getInNode(from,1);
   
-  return new ImprovedWalkerIterator(superGraph,father, order[from],
+  return new ImprovedWalkerIterator(tree,father, order[from],
 				    order[to]+modifier);
 }
 //====================================================================
 Iterator<node>* ImprovedWalker::getChildren(node n) {    
-    return superGraph->getOutNodes(n);
+    return tree->getOutNodes(n);
 }
 //====================================================================
 ImprovedWalkerIterator* ImprovedWalker::getReversedChildren(node n) {
-  int nbChildren = superGraph->outdeg(n);
-  return new ImprovedWalkerIterator(superGraph, n, nbChildren, 0);
+  int nbChildren = tree->outdeg(n);
+  return new ImprovedWalkerIterator(tree, n, nbChildren, 0);
 }
 
 //==================================================================== 
 void ImprovedWalker::firstWalk(node v) {       
-  if (isLeaf(superGraph, v)) {   
+  if (isLeaf(tree, v)) {   
     prelimX[v]        = 0;
     node vleftSibling = leftSibling(v);
     if (vleftSibling  != BADNODE)
-      prelimX[v]     += prelimX[vleftSibling] + INTER_NODE_DISTANCE_X
+      prelimX[v]     += prelimX[vleftSibling] + nodeSpacing
 	+ oriSize->getNodeValue(v).getW()/2.
 	+ oriSize->getNodeValue(vleftSibling).getW()/2.;
   }
@@ -189,7 +185,7 @@ void ImprovedWalker::firstWalk(node v) {
                           
     node leftBrother = leftSibling(v);
     if (leftBrother != BADNODE) {
-      prelimX[v]   =  prelimX[leftBrother] + INTER_NODE_DISTANCE_X
+      prelimX[v]   =  prelimX[leftBrother] + nodeSpacing
 	+ oriSize->getNodeValue(v).getW()/2.f
 	+ oriSize->getNodeValue(leftBrother).getW()/2.f;
       modChildX[v] = prelimX[v] - midPoint;
@@ -201,7 +197,7 @@ void ImprovedWalker::firstWalk(node v) {
 //====================================================================
 void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {   
     OrientableCoord coord  = oriLayout->createCoord(prelimX[v]+modifierX,
-                                                   posYbyLevel[depth], 0);        
+                                                   depth * spacing, 0);        
     oriLayout->setNodeValue(v,coord);
     Iterator<node>* itNode = getChildren(v);
     while (itNode->hasNext())
@@ -210,18 +206,18 @@ void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {
 }   
 //====================================================================
 void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
-  node nodeInsideRight; 
-  node nodeOutsideRight;
-  node nodeInsideLeft;
-  node nodeOutsideLeft;
-  
-  float shiftInsideRight; 
-  float shiftOutsideRight; 
-  float shiftInsideLeft; 
-  float shiftOutsideLeft; 
-    
   node leftBrother = leftSibling(v);
   if (leftBrother != BADNODE) {
+    node nodeInsideRight; 
+    node nodeOutsideRight;
+    node nodeInsideLeft;
+    node nodeOutsideLeft;
+  
+    float shiftInsideRight; 
+    float shiftOutsideRight; 
+    float shiftInsideLeft; 
+    float shiftOutsideLeft; 
+    
     nodeInsideRight   = v; 
     nodeOutsideRight  = v;
     nodeInsideLeft    = leftBrother;
@@ -237,14 +233,16 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
                                   
       nodeInsideLeft    = nextRightContour(nodeInsideLeft);
       nodeInsideRight   = nextLeftContour(nodeInsideRight);
-      nodeOutsideLeft   = nextLeftContour(nodeOutsideLeft);
-      nodeOutsideRight  = nextRightContour(nodeOutsideRight);
+      if (nodeOutsideLeft.isValid())
+	nodeOutsideLeft   = nextLeftContour(nodeOutsideLeft);
+      if (nodeOutsideRight.isValid())
+	nodeOutsideRight  = nextRightContour(nodeOutsideRight);
 
       ancestor[nodeOutsideRight] = v;
             
       float shift =   (prelimX[nodeInsideLeft]  + shiftInsideLeft)
 	- (prelimX[nodeInsideRight] + shiftInsideRight)
-	+ INTER_NODE_DISTANCE_X
+	+ nodeSpacing
 	+ oriSize->getNodeValue(nodeInsideLeft).getW()/2.f
 	+ oriSize->getNodeValue(nodeInsideRight).getW()/2.f;
 
@@ -260,20 +258,20 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
       shiftInsideLeft   += modChildX[nodeInsideLeft]; 
       shiftOutsideLeft  += modChildX[nodeOutsideLeft];         
     }
-  }
-  if (nextRightContour(nodeInsideLeft)   != BADNODE && 
-      nextRightContour(nodeOutsideRight) == BADNODE) {    
-    thread[nodeOutsideRight]    = nextRightContour(nodeInsideLeft);
-    modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight; 
-  }
+    if (nextRightContour(nodeInsideLeft)   != BADNODE && 
+	nextRightContour(nodeOutsideRight) == BADNODE) {    
+      thread[nodeOutsideRight]    = nextRightContour(nodeInsideLeft);
+      modChildX[nodeOutsideRight] += shiftInsideLeft - shiftOutsideRight; 
+    }
    
-  if (nextLeftContour (nodeInsideRight) != BADNODE && 
-      nextLeftContour (nodeOutsideLeft) == BADNODE) {    
-    thread[nodeOutsideLeft]      =  nextLeftContour(nodeInsideRight);
-    modChildX[nodeOutsideLeft]   += shiftInsideRight - shiftOutsideLeft;
+    if (nextLeftContour (nodeInsideRight) != BADNODE && 
+	nextLeftContour (nodeOutsideLeft) == BADNODE) {    
+      thread[nodeOutsideLeft]      =  nextLeftContour(nodeInsideRight);
+      modChildX[nodeOutsideLeft]   += shiftInsideRight - shiftOutsideLeft;
        
-    *defaultAncestor              =  v;       
-  }         
+      *defaultAncestor              =  v;       
+    }
+  }
 }
 //====================================================================
 void ImprovedWalker::moveSubtree(node fromNode, node toNode, float rightShift) {

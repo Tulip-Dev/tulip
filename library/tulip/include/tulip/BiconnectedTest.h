@@ -23,7 +23,8 @@
 #endif
 #include "tulip/ObservableGraph.h"
 
-class SuperGraph;
+namespace tlp {
+class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
@@ -31,28 +32,29 @@ class SuperGraph;
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
   /**
-   * Return true if the graph is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the graph) else false.
+   * Returns true if the graph is biconnected (ie. one must remove at least two nodes in order
+   * to disconnect the graph), false if not.
    */
-  static bool isBiconnected(SuperGraph *graph);
+  static bool isBiconnected(Graph *graph);
   /**
    * If the graph is not biconnected, add edges in order to make the graph
    * biconnected. The new edges are added in addedEdges.
    */
-  static void makeBiconnected(SuperGraph *graph, std::vector<edge>& addedEdges);
+  static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);
 
 private:
-  void connect(SuperGraph *, std::vector<edge>& addedEdges);
-  bool compute(SuperGraph *);
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void addNode(SuperGraph *,const node);
-  void delNode(SuperGraph *,const node);
-  void destroy(SuperGraph *);
+  void connect(Graph *, std::vector<edge>& addedEdges);
+  bool compute(Graph *);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void addNode(Graph *,const node);
+  void delNode(Graph *,const node);
+  void destroy(Graph *);
   BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
+}
 /*@}*/
 #endif

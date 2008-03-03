@@ -9,27 +9,28 @@
  (at your option) any later version.
 */
 #include <tulip/Iterator.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/tulipconf.h>
 #include <list>
 #include <vector>
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TULIP_NODEMAPITERATOR_H
 #define TULIP_NODEMAPITERATOR_H
+
+namespace tlp {
 
 /** \addtogroup graphs */ 
 /*@{*/
 
+TLP_SCOPE edge nextFaceEdge(Graph* g, edge e, node n);
 
-namespace tlp {
-  TLP_SCOPE edge nextFaceEdge(SuperGraph* g, edge e, node n);
-}
 /**
  *
  */
 struct TLP_SCOPE NodeMapIterator : public Iterator<node> {
   ///
-  NodeMapIterator(SuperGraph *sg, node source, node target);
+  NodeMapIterator(Graph *sg, node source, node target);
   ~NodeMapIterator();
   ///Return the next element
   node next();
@@ -46,7 +47,7 @@ private :
  */
 struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   ///
-  EdgeMapIterator(SuperGraph *sg, edge source, node target);
+  EdgeMapIterator(Graph *sg, edge source, node target);
   ///
   ~EdgeMapIterator();
   ///Return the next element
@@ -62,4 +63,7 @@ private :
   bool finished;
 };
 /*@}*/
+
+}
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

@@ -1,34 +1,37 @@
-if WIN32
+if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libstrength.la \
-	libhierarchical.la \
-	libconvol.la \
-	libequalvalues.la \
-	libquotientclustering.la
+	libStrengthClustering-@VERSION@.la \
+	libHierarchicalClustering-@VERSION@.la \
+	libConvolutionClustering-@VERSION@.la \
+	libEqualValueClustering-@VERSION@.la \
+	libQuotientClustering-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/plugins/clustering
+pluginsdir = $(libdir)/tlp
 
 EXTRA_DIST = ConvolutionClusteringSetup.ui
 
-libstrength_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
-libhierarchical_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
+libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
+libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
 BUILT_SOURCES = \
 			ConvolutionClusteringSetupData.cpp \
 			moc_ConvolutionClusteringSetupData.cpp \
 			moc_ConvolutionClusteringSetup.cpp 
-libconvol_la_SOURCES = 	ConvolutionClustering.h \
+libConvolutionClustering_@VERSION@_la_SOURCES = \
+			ConvolutionClustering.h \
 			ConvolutionClustering.cpp \
 			ConvolutionClusteringSetup.cpp \
 			ConvolutionClusteringSetup.h
-nodist_libconvol_la_SOURCES = \
+nodist_libConvolutionClustering_@VERSION@_la_SOURCES = \
 			ConvolutionClusteringSetupData.cpp \
 			moc_ConvolutionClusteringSetupData.cpp \
 			moc_ConvolutionClusteringSetup.cpp
-libequalvalues_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
-libquotientclustering_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
+libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
+libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
@@ -46,4 +49,4 @@ moc_%.cpp: %.h
 	$(UIC) -o $@ $<
 
 clean-generic:
-	rm -f moc_*
+	rm -f moc_* *Data.*

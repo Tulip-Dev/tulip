@@ -12,9 +12,9 @@
 #include "tulip/TulipPlugin.h"
 #include "tulip/RectangleArea.h"
 
-typedef std::vector<node> vecNode;
-typedef stdext::hash_map<node, float> mapNode;
-typedef std::pair<node, float> pairNodeF;
+typedef std::vector<tlp::node> vecNode;
+typedef stdext::hash_map<tlp::node, float> mapNode;
+typedef std::pair<tlp::node, float> pairNodeF;
 typedef std::vector<pairNodeF> pairVector;
 typedef pairVector::iterator pairIterator;
 
@@ -35,30 +35,29 @@ typedef pairVector::iterator pairIterator;
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  */
-class SquarifiedTreeMap: public Layout {
+class SquarifiedTreeMap: public tlp::LayoutAlgorithm {
    friend class SquarifiedTreeMapUnitTests; 
 
 public:
-    SquarifiedTreeMap(const PropertyContext&);
+    SquarifiedTreeMap(const tlp::PropertyContext&);
     ~SquarifiedTreeMap();
 
     bool check(std::string&);
     bool run();
-    void reset();
 
 private:
-    SizesProxy*     size;   
-    MetricProxy*    metric;
-    IntProxy*       glyph;
-    mapNode         sumChildrenMetric;
-    float           aspectRatio;
+    tlp::SizeProperty*     size;   
+    tlp::DoubleProperty*    metric;
+    tlp::IntegerProperty*   glyph;
+    mapNode    sumChildrenMetric;
+    float      aspectRatio;
     
     void    layRow(pairIterator firstChildNode, pairIterator endChildNode,
-                   int depth, RectangleArea rectArea, float listMetric);
-    void    squarify(node n, RectangleArea rectArea, int depth);
+                   int depth, tlp::RectangleArea rectArea, float listMetric);
+    void    squarify(tlp::node n, tlp::RectangleArea rectArea, int depth);
     float   findWorstRatio(float metric1, float metric2, float listMetric, 
-                           const RectangleArea& rectArea);
-    float   initializeMapSum(node n);
+                           const tlp::RectangleArea& rectArea);
+    float   initializeMapSum(tlp::node n);
     bool    verifyMetricIsPositive();       
 
 };

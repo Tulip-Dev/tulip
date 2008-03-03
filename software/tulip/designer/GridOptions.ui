@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>469</width>
-            <height>278</height>
+            <height>343</height>
         </rect>
     </property>
     <property name="caption">
@@ -61,17 +61,6 @@
                                     </property>
                                     <property name="text">
                                         <string>Activated</string>
-                                    </property>
-                                </widget>
-                                <widget class="QCheckBox">
-                                    <property name="name">
-                                        <cstring>HollowGridCB</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Hollow Grid</string>
-                                    </property>
-                                    <property name="checked">
-                                        <bool>true</bool>
                                     </property>
                                 </widget>
                                 <spacer>
@@ -307,7 +296,7 @@
                                                 <string>Subdivisions</string>
                                             </property>
                                             <property name="checked">
-                                                <bool>true</bool>
+                                                <bool>false</bool>
                                             </property>
                                         </widget>
                                         <widget class="QFrame" row="4" column="0">
@@ -501,6 +490,9 @@
                                             <property name="text">
                                                 <string>Size</string>
                                             </property>
+                                            <property name="checked">
+                                                <bool>true</bool>
+                                            </property>
                                         </widget>
                                         <spacer row="2" column="0">
                                             <property name="name">
@@ -692,7 +684,5 @@
         </widget>
     </grid>
 </widget>
-<tabstops>
-</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

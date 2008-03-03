@@ -1,54 +1,51 @@
-if WIN32
+if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libmixedmodel.la \
-	libconnnecteccomponnentpacking.la \
-	librandom.la \
-	libgem.la \
-	libgem3d.la \
-	libtreereingoldextended.la \
-	libtreemap.la \
-	libconetreeextended.la\
-	libcircular.la \
-	libhierarchicalgraph.la \
-	libspringelectrical.la \
-	libtreeleaf.la \
-	libtreeradial.la \
-	libgeneralgraph3d.la \
-	libbubbletree.la \
-	libembedder.la \
-	libtutte.la \
-	libscatter.la \
-	libdendrogram.la \
-	libimprovedwalker.la \
-	libsquarifiedtreemap.la
+	libMixedModel-@VERSION@.la \
+	libConnectedComponentPacking-@VERSION@.la \
+	libRandom-@VERSION@.la \
+	libGemLayout-@VERSION@.la \
+	libTreeReingoldAndTilforExtended-@VERSION@.la \
+	libTreeMap-@VERSION@.la \
+	libConeTreeExtended-@VERSION@.la\
+	libCircular-@VERSION@.la \
+	libHierarchicalGraph-@VERSION@.la \
+	libTreeLeaf-@VERSION@.la \
+	libTreeRadial-@VERSION@.la \
+	libGeneralGraph3D-@VERSION@.la \
+	libBubbleTree-@VERSION@.la \
+	libEmbedder-@VERSION@.la \
+	libTutte-@VERSION@.la \
+	libScatterPlot-@VERSION@.la \
+	libDendrogram-@VERSION@.la \
+	libImprovedWalker-@VERSION@.la \
+	libSquarifiedTreeMap-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/plugins/layout
+pluginsdir = $(libdir)/tlp
 
-
-libmixedmodel_la_SOURCES = MixedModel.cpp MixedModel.h
-libconnnecteccomponnentpacking_la_SOURCES = ConnnectedComponnentPacking.cpp  ConnnectedComponnentPacking.h Number.cpp Number.h RectanglePacking.cpp RectanglePacking.h rectanglePackingFonctions.cpp rectanglePackingFonctions.h RectangleRelativePositionList.cpp RectangleRelativePositionList.h
-librandom_la_SOURCES = Random.cpp Random.h
-libgem_la_SOURCES = GEM.cpp GEM.h
-libgem3d_la_SOURCES = GEM3D.cpp GEM3D.h
-libtreereingoldextended_la_SOURCES = TreeReingoldAndTilfordExtended.cpp TreeReingoldAndTilfordExtended.h 
-libconetreeextended_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp
-libtreemap_la_SOURCES = TreeMap.h TreeMap.cpp 
-libtreeradial_la_SOURCES = TreeRadial.cpp 
-libtreeleaf_la_SOURCES = TreeLeaf.h TreeLeaf.cpp 
-libbubbletree_la_SOURCES = BubbleTree.h BubbleTree.cpp 
-libcircular_la_SOURCES = Circular.h Circular.cpp
-libspringelectrical_la_SOURCES = SpringElectrical.h SpringElectrical.cpp
-libhierarchicalgraph_la_SOURCES = HierarchicalGraph.h HierarchicalGraph.cpp
-libgeneralgraph3d_la_SOURCES = GeneralGraph3D.cpp GeneralGraph3D.h 
-libtutte_la_SOURCES = Tutte.h Tutte.cpp
-libembedder_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.cpp EmbedderDijkstra.cpp EmbedderBfs.cpp EmbedderParameters.cpp EmbedderPowerIterationDense.cpp EmbedderBfs.h EmbedderDefs.h EmbedderDijkstra.h EmbedderEmbedGraph.h EmbedderParameters.h
-libscatter_la_SOURCES = ScatterPlot.h ScatterPlot.cpp
-libdendrogram_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableConstants.h OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableLayoutInterface.h OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp Dendrogram.h Dendrogram.cpp
-libimprovedwalker_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.h OrientableCoord.cpp OrientableLayout.h OrientableLayout.cpp OrientableSize.h OrientableSize.cpp OrientableSizeProxy.h OrientableSizeProxy.cpp Orientation.h Orientation.cpp TreeTools.h TreeTools.cpp
-libsquarifiedtreemap_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp TreeTools.h TreeTools.cpp
+libMixedModel_@VERSION@_la_SOURCES = MixedModel.h MixedModel.cpp DatasetTools.h DatasetTools.cpp
+libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.h ConnectedComponentPacking.cpp Number.h Number.cpp RectanglePacking.h RectanglePacking.cpp rectanglePackingFonctions.h rectanglePackingFonctions.cpp RectangleRelativePositionList.h RectangleRelativePositionList.cpp DatasetTools.h DatasetTools.cpp
+libRandom_@VERSION@_la_SOURCES = Random.h Random.cpp
+libGemLayout_@VERSION@_la_SOURCES = GEMLayout.h GEMLayout.cpp
+libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.h TreeReingoldAndTilfordExtended.cpp DatasetTools.h DatasetTools.cpp
+libConeTreeExtended_@VERSION@_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp DatasetTools.h DatasetTools.cpp
+libTreeMap_@VERSION@_la_SOURCES = TreeMap.h TreeMap.cpp 
+libTreeRadial_@VERSION@_la_SOURCES = TreeRadial.cpp DatasetTools.h DatasetTools.cpp
+libTreeLeaf_@VERSION@_la_SOURCES = TreeLeaf.h TreeLeaf.cpp DatasetTools.h DatasetTools.cpp OrientableCoord.h OrientableLayout.h OrientableSize.h OrientableSizeProxy.h OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp
+libBubbleTree_@VERSION@_la_SOURCES = BubbleTree.h BubbleTree.cpp DatasetTools.h DatasetTools.cpp
+libCircular_@VERSION@_la_SOURCES = Circular.h Circular.cpp DatasetTools.h DatasetTools.cpp
+libHierarchicalGraph_@VERSION@_la_SOURCES = HierarchicalGraph.h HierarchicalGraph.cpp DatasetTools.h DatasetTools.cpp
+libGeneralGraph3D_@VERSION@_la_SOURCES = GeneralGraph3D.h GeneralGraph3D.cpp DatasetTools.h DatasetTools.cpp
+libTutte_@VERSION@_la_SOURCES = Tutte.h Tutte.cpp
+libEmbedder_@VERSION@_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.h EmbedderEmbedGraph.cpp EmbedderDefs.h EmbedderDijkstra.h EmbedderDijkstra.cpp EmbedderBfs.h EmbedderBfs.cpp EmbedderParameters.h EmbedderParameters.cpp EmbedderPowerIterationDense.cpp
+libScatterPlot_@VERSION@_la_SOURCES = ScatterPlot.h ScatterPlot.cpp
+libDendrogram_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableCoord.h OrientableConstants.h OrientableLayout.h OrientableLayoutInterface.h OrientableSize.h OrientableSizeProxy.h Orientation.h Dendrogram.h OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp Orientation.cpp TreeTools.h Dendrogram.cpp
+libImprovedWalker_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp Orientation.cpp
+libSquarifiedTreeMap_@VERSION@_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ et @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

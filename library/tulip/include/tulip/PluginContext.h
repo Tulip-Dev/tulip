@@ -12,44 +12,48 @@
 #ifndef _PLUGINCONTEXT
 #define _PLUGINCONTEXT
 
-#include "Reflect.h"
+#include "tulip/Reflect.h"
 
-class SuperGraph;
-class PProxy;
+namespace tlp {
+
+class Graph;
+class PropertyInterface;
 class PluginProgress;
-///Parameter for calling clustering plugins
 
 /**
  * \defgroup plugins
  */ 
 /*@{*/
 
-class ClusterContext {
+///Parameter for calling clustering plugins
+class AlgorithmContext {
   public :
   ///
-  SuperGraph *superGraph;
+  Graph *graph;
   PluginProgress *pluginProgress;
   DataSet *dataSet;
   ///
-  ClusterContext ():superGraph(0),pluginProgress(0), dataSet(0) {}
+  AlgorithmContext ():graph(0),pluginProgress(0), dataSet(0) {}
   ///
-  ~ClusterContext(){}
+  ~AlgorithmContext(){}
 };
 
 ///Parameter for calling Property plugins
 class PropertyContext {
   public :
   ///
-  SuperGraph *superGraph;
-  PProxy *propertyProxy;
+  Graph *graph;
+  PropertyInterface *propertyProxy;
   PluginProgress *pluginProgress;
   DataSet *dataSet;
   ///
-  PropertyContext ():superGraph(0),propertyProxy(0),pluginProgress(0),dataSet(0){}
+  PropertyContext ():graph(0),propertyProxy(0),pluginProgress(0),dataSet(0){}
   ///
   ~PropertyContext(){}
 };
 /*@}*/
+
+}
 #endif
 
 

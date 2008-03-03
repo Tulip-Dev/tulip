@@ -10,25 +10,26 @@
 #include <assert.h>
 #include <queue>
 
-#include "PathSelection.h"
-#include <tulip/SelectionProxy.h>
+#include "PathBooleanProperty.h"
+#include <tulip/BooleanProperty.h>
 #include <tulip/MethodFactory.h>
 
-SELECTIONPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","0","1");
+BOOLEANPLUGIN(PathSelection,"Path Selection","David Auber","23/04/2003","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
-PathSelection::PathSelection(const PropertyContext &context):Selection(context)  {
+PathSelection::PathSelection(const PropertyContext &context):BooleanAlgorithm(context)  {
 }
 
 PathSelection::~PathSelection() {
 }
 
-void PathSelection::reconnect(node n, IntProxy *values) {
+void PathSelection::reconnect(node n, IntegerProperty *values) {
   int value=values->getNodeValue(n);
   values->setNodeValue(n,-1);
-  selectionProxy->setNodeValue(n,true);
-  Iterator<node>*itN=superGraph->getInOutNodes(n);
+  BooleanResult->setNodeValue(n,true);
+  Iterator<node>*itN=graph->getInOutNodes(n);
   for (;itN->hasNext();) {
     node itn=itN->next();
     if ( (values->getNodeValue(itn)) == (value-1) && (value!=0))
@@ -40,8 +41,8 @@ bool PathSelection::run() {
   node target;//=targetNode();
   node source;//=sourceNode();
   bool sourceOk=false;
-  SelectionProxy *viewSel=superGraph->getProperty<SelectionProxy>("viewSelection");
-  Iterator<node> *itN=superGraph->getNodes();
+  Selection *viewSel=graph->getProperty<BooleanProperty>("viewSelection");
+  Iterator<node> *itN=graph->getNodes();
   for (;itN->hasNext();) {
     node itn=itN->next();
     if (viewSel->getNodeValue(itn)) {
@@ -58,13 +59,13 @@ bool PathSelection::run() {
   bool finished=false;
   queue<node> fifo;
   fifo.push(source);
-  IntProxy *values=superGraph->getLocalProperty<IntProxy>("depthValue");
+  IntegerProperty *values=graph->getLocalProperty<IntegerProperty>("depthValue");
   values->setAllNodeValue(-1);
   values->setNodeValue(source,0);
   while(!fifo.empty()) {
     node curNode=fifo.front();
     fifo.pop();
-    Iterator<node> *itN=superGraph->getInOutNodes(curNode);
+    Iterator<node> *itN=graph->getInOutNodes(curNode);
     for (;itN->hasNext();) {
       node itn=itN->next();
       if (values->getNodeValue(itn)==-1 && !finished) {
@@ -80,11 +81,11 @@ bool PathSelection::run() {
     //Select nodes in the path
     reconnect(target,values);
     //Select edges in the path
-    Iterator<edge> *itE=superGraph->getEdges();
+    Iterator<edge> *itE=graph->getEdges();
     for (;itE->hasNext();) {
       edge ite=itE->next();
-      if (selectionProxy->getNodeValue(superGraph->source(ite)) && selectionProxy->getNodeValue(superGraph->target(ite)))
-	selectionProxy->setEdgeValue(ite,true);
+      if (BooleanResult->getNodeValue(graph->source(ite)) && BooleanResult->getNodeValue(graph->target(ite)))
+	BooleanResult->setEdgeValue(ite,true);
     } delete itE; 
   }
   return true;

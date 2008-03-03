@@ -1,6 +1,5 @@
 #include <iostream>
-#include <tulip/MetaGraphProxy.h>
-#include <tulip/TlpTools.h>
+#include <tulip/GraphProperty.h>
 #include <stack>
 #include <queue>
 #include <ext/hash_map>
@@ -9,6 +8,7 @@
 
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 
@@ -36,15 +36,15 @@ using namespace stdext;
  *  (at your option) any later version.
  *
  */
-class BetweennessCentrality:public Metric { 
+class BetweennessCentrality:public DoubleAlgorithm { 
 public:
-  BetweennessCentrality(const PropertyContext &context):Metric(context){};
+  BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context){};
   bool run() {
-    metricProxy->setAllNodeValue(0.0);
-    Iterator<node> *it = superGraph->getNodes();
+    doubleResult->setAllNodeValue(0.0);
+    Iterator<node> *it = graph->getNodes();
     unsigned int count = 0;
     while(it->hasNext()) {
-      if (pluginProgress->progress(count++,superGraph->numberOfNodes())!=TLP_CONTINUE) break;
+      if (pluginProgress->progress(count++,graph->numberOfNodes())!=TLP_CONTINUE) break;
       node s = it->next();
       stack<node> S;
       hash_map<node, list<node> > P;
@@ -60,7 +60,7 @@ public:
 	node v = Q.front();
 	Q.pop();
 	S.push(v);
-	Iterator<node> *it2 = superGraph->getInOutNodes(v);
+	Iterator<node> *it2 = graph->getInOutNodes(v);
 	while (it2->hasNext()) {
 	  node w = it2->next();
 	  if (d.get(w.id)<0) {
@@ -83,11 +83,11 @@ public:
 	  node v = *itn;
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
-	if (w != s) metricProxy->setNodeValue(w, metricProxy->getNodeValue(w) + delta.get(w.id)); 
+	if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id)); 
       }
     } delete it;
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };
 /*@}*/
-METRICPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.0","Graph");

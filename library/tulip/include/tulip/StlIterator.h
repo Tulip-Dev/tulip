@@ -11,50 +11,52 @@
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
 #include <map>
-#include "Iterator.h"
+#include "tulip/Iterator.h"
 
+namespace tlp {
 
-
-template<typename VALUE, typename ITERATOR> 
-struct StlIterator:public Iterator< VALUE  > {
-  StlIterator(ITERATOR startIt, ITERATOR endIt):
-    it(startIt),
-    itEnd(endIt)
-  {}
-  VALUE next() {
-    VALUE tmp=*it;
+  template<typename VALUE, typename ITERATOR> 
+  struct StlIterator:public Iterator< VALUE  > {
+    StlIterator(const ITERATOR &startIt, const ITERATOR &endIt):
+      it(startIt),
+      itEnd(endIt) {
+    }
+    VALUE next() {
+      VALUE tmp = *it;
+      ++it;
+      return tmp;
+    }
+    bool hasNext() {
+      return (itEnd!=it);
+    }
+  private:
+    ITERATOR it, itEnd;
+  };
+  //=================================================
+  template<typename KEY, typename VALUE> 
+  struct StlMapIterator:public Iterator< std::pair<KEY,VALUE> > {
+    StlMapIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
+      it(startIt),
+      itEnd(endIt)
+    {}
+    std::pair<KEY,VALUE> next();
+    bool hasNext();
+  private:
+    typename std::map<KEY,VALUE>::const_iterator it, itEnd;
+  };
+  //=================================================
+  ///  StlMapIterator implemetation
+  template<typename KEY, typename VALUE>
+  std::pair<KEY,VALUE> StlMapIterator<KEY,VALUE>::next(){
+    std::pair<KEY,VALUE> tmp=*it;
     ++it;
     return tmp;
   }
-  bool hasNext() {
+  template<typename KEY, typename VALUE>
+  bool StlMapIterator<KEY,VALUE>::hasNext(){
     return (itEnd!=it);
   }
-private:
-  ITERATOR it, itEnd;
-};
+  //=================================================
 
-template<typename KEY, typename VALUE> 
-struct StlMapIterator:public Iterator< std::pair<KEY,VALUE> > {
-  StlMapIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
-    it(startIt),
-    itEnd(endIt)
-  {}
-  std::pair<KEY,VALUE> next();
-  bool hasNext();
-private:
-  typename std::map<KEY,VALUE>::const_iterator it, itEnd;
-};
-//=================================================
-///  StlMapIterator implemetation
-template<typename KEY, typename VALUE>
-std::pair<KEY,VALUE> StlMapIterator<KEY,VALUE>::next(){
-  std::pair<KEY,VALUE> tmp=*it;
-  ++it;
-  return tmp;
 }
-template<typename KEY, typename VALUE>
-bool StlMapIterator<KEY,VALUE>::hasNext(){
-  return (itEnd!=it);
-}
-//=================================================
 #endif

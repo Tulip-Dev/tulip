@@ -1,4 +1,4 @@
-//-*-c++-*
+//-*-c++-*-
 /*
  Author: David Auber
  Email : auber@labri.fr
@@ -12,44 +12,59 @@
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
-#include "SuperGraph.h"
-#include "WithParameter.h"
-#include "Reflect.h"
-#include "PluginProgress.h"
-#include "Plugin.h"
-#include "TemplateFactory.h"
+#include "tulip/Graph.h"
+#include "tulip/WithParameter.h"
+#include "tulip/WithDependency.h"
+#include "tulip/Reflect.h"
+#include "tulip/PluginProgress.h"
+#include "tulip/Plugin.h"
+#include "tulip/TemplateFactory.h"
 
 
 /** \addtogroup plugins */ 
+namespace tlp {
+
 /*@{*/
 /// Interface for importModule plug-ins
-class ImportModule :public WithParameter
+class ImportModule :public WithParameter, public WithDependency
 {
 public:
   DataSet *dataSet;
   ///
-  ImportModule (ClusterContext context) : dataSet(context.dataSet),
-    superGraph(context.superGraph),pluginProgress(context.pluginProgress) {}
+  ImportModule (AlgorithmContext context) : dataSet(context.dataSet),
+    graph(context.graph),pluginProgress(context.pluginProgress) {}
   virtual ~ImportModule(){};
   ///
   virtual bool import(const std::string &)=0;
-  /** It is the SuperGraph where the plug-ins should build the imported graph*/
-  SuperGraph *superGraph;
+  /** It is the Graph where the plug-ins should build the imported graph*/
+  Graph *graph;
   ///
   PluginProgress *pluginProgress;
 };
 
 class ImportModuleFactory:public Plugin{
 public:
-  static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext > *factory;
+  static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *factory;
   static void initFactory() {
     if (!factory) {
-      factory = new TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext >;
-      factory->currentLoader = 0;
+      factory = new TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext >;
     }
   }    
   virtual ~ImportModuleFactory() {}
-  virtual ImportModule * createObject(ClusterContext)=0;
+  virtual ImportModule * createPluginObject(AlgorithmContext)=0;
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  virtual  std::string getMinor() const  {
+    return tlp::getMinor(getRelease());
+  }
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
 };
 /*@}*/
+}
 #endif

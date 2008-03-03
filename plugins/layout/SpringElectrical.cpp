@@ -3,9 +3,10 @@
 #include <tulip/Rectangle.h>
 #include "SpringElectrical.h"
 
-LAYOUTPLUGINOFGROUP(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","0","1","Force Directed");
+LAYOUTPLUGINOFGROUP(SpringElectrical,"Spring_Electrical","David Auber","14/01/2002","Alpha","1.0","Force Directed");
 
 using namespace std;
+using namespace tlp;
 //================================================================================
 inline double sqr(double x) {
   return (x*x);
@@ -67,11 +68,11 @@ namespace {
   };
 }
 //================================================================================
-SpringElectrical::SpringElectrical(const PropertyContext &context):Layout(context){
-  addParameter<LayoutProxy>    ("initial_layout", paramHelp[0], "viewLayout");
-  addParameter<SizesProxy>     ("node_size",      paramHelp[1], "viewSizes");
-  addParameter<SelectionProxy> ("node_move",      paramHelp[2], "viewSelection");
-  addParameter<MetricProxy>    ("edge_length",    paramHelp[3], "viewMetric");
+SpringElectrical::SpringElectrical(const PropertyContext &context):LayoutAlgorithm(context){
+  addParameter<LayoutProperty> ("initial_layout", paramHelp[0], "viewLayout");
+  addParameter<SizeProperty>   ("node_size",      paramHelp[1], "viewSizes");
+  addParameter<BooleanProperty>("node_move",      paramHelp[2], "viewSelection");
+  addParameter<DoubleProperty> ("edge_length",    paramHelp[3], "viewMetric");
   addParameter<bool>           ("use_edge_length",paramHelp[4], "false");
   addParameter<bool>           ("prevent_ovelap",  paramHelp[5], "true");
   addParameter<bool>           ("forbid_move",    paramHelp[6], "true");
@@ -91,7 +92,7 @@ Coord maxForce(Coord force, double _max) {
   return result;
 }
 //================================================================================
-Coord repulsiveForces(node u, LayoutProxy *layout, SuperGraph * graph,   
+Coord repulsiveForces(node u, LayoutProperty *layout, Graph * graph,   
 		      const MutableContainer<double> &sizeNorm, double temperature, double maxforce) {
   Coord uCoord = layout->getNodeValue(u);
   Coord result(0,0,0);
@@ -116,9 +117,9 @@ Coord repulsiveForces(node u, LayoutProxy *layout, SuperGraph * graph,
   return result;
 }
 //================================================================================
-Coord attractiveForces(node nu, LayoutProxy *layout, SuperGraph * graph,   
+Coord attractiveForces(node nu, LayoutProperty *layout, Graph * graph,   
 		       const MutableContainer<double> &sizeNorm,
-		       double temperature, double maxforce, MetricProxy* edgeLength) {
+		       double temperature, double maxforce, DoubleProperty* edgeLength) {
   Coord u = layout->getNodeValue(nu);
   Coord result(0,0,0);
   node nv;
@@ -144,7 +145,7 @@ Coord attractiveForces(node nu, LayoutProxy *layout, SuperGraph * graph,
   return result;
 }
 //================================================================================
-bool overlap(node u, Coord &move, LayoutProxy *layout, SuperGraph * graph,
+bool overlap(node u, Coord &move, LayoutProperty *layout, Graph * graph,
 	     const MutableContainer<double> &sizeNorm ,
 	     int &before) {
   Coord prev = layout->getNodeValue(u);
@@ -166,7 +167,6 @@ bool overlap(node u, Coord &move, LayoutProxy *layout, SuperGraph * graph,
 }
 //================================================================================  
 bool SpringElectrical::run() {
-  SuperGraph *graph = superGraph;
   
   int iterations = graph->numberOfNodes()/2;
   if (iterations < 500) iterations = 500;// iterations = iterations >? 500;
@@ -191,17 +191,17 @@ bool SpringElectrical::run() {
   }
   
   if (originalLayout == 0) 
-    originalLayout = graph->getProperty<LayoutProxy>("viewLayout");
+    originalLayout = graph->getProperty<LayoutProperty>("viewLayout");
   if (edgeLength == 0 && useEdgeLength)
-    edgeLength = graph->getProperty<MetricProxy>("viewMetric");
+    edgeLength = graph->getProperty<DoubleProperty>("viewMetric");
   if (forbidMoveOfSelectedNodes && selectedNodes == 0)
-    selectedNodes = graph->getProperty<SelectionProxy>("viewSelection");
+    selectedNodes = graph->getProperty<BooleanProperty>("viewSelection");
   if (sizeOfNodes == 0)
-    sizeOfNodes = graph->getProperty<SizesProxy>("viewSize");
+    sizeOfNodes = graph->getProperty<SizeProperty>("viewSize");
 
   node n;
   forEach(n, graph->getNodes()) {
-    layoutProxy->setNodeValue(n, originalLayout->getNodeValue(n));
+    layoutResult->setNodeValue(n, originalLayout->getNodeValue(n));
     sizeNorm.set(n.id, sizeOfNodes->getNodeValue(n).norm()/2.0);
   }
   double maxforce   = sqrt((float) graph->numberOfNodes());
@@ -214,14 +214,14 @@ bool SpringElectrical::run() {
     forEach(itn, graph->getNodes()) {
       if (forbidMoveOfSelectedNodes && selectedNodes->getNodeValue(itn)) continue;
       if (rand()%graph->numberOfNodes() < 100) {
-	Coord att = maxForce( attractiveForces(itn, layoutProxy, graph, sizeNorm, temperature, maxforce, edgeLength),  maxforce * temperature);
-	Coord rep = maxForce( repulsiveForces(itn, layoutProxy, graph, sizeNorm, temperature, maxforce) ,  maxforce * temperature);
+	Coord att = maxForce( attractiveForces(itn, layoutResult, graph, sizeNorm, temperature, maxforce, edgeLength),  maxforce * temperature);
+	Coord rep = maxForce( repulsiveForces(itn, layoutResult, graph, sizeNorm, temperature, maxforce) ,  maxforce * temperature);
 	Coord newMove = maxForce(att + rep, maxforce * temperature); //prevent too big jumps
 	//test overlapping	
 	if (!overlapTest ) {
-	  Coord tmp  = layoutProxy->getNodeValue(itn);
+	  Coord tmp  = layoutResult->getNodeValue(itn);
 	  tmp[2] = 0;
-	  layoutProxy->setNodeValue(itn, tmp + newMove);      
+	  layoutResult->setNodeValue(itn, tmp + newMove);      
 	  if (count==iterations - 1) {
 	    overlapTest = true;
 	    temperature = 1.0;
@@ -234,14 +234,14 @@ bool SpringElectrical::run() {
 	  int i = 0;
 	  bool _overlap;
 	  int nbBefore = 0;
-	  while( (_overlap = overlap(itn, newMove, layoutProxy, graph, sizeNorm, nbBefore)) && i<5 ) {
+	  while( (_overlap = overlap(itn, newMove, layoutResult, graph, sizeNorm, nbBefore)) && i<5 ) {
 	    newMove /= 2.0;
 	    ++i;
 	  }
 	  if (!_overlap) {
-	    Coord tmp  = layoutProxy->getNodeValue(itn);
+	    Coord tmp  = layoutResult->getNodeValue(itn);
 	    tmp[2] = 0;
-	    layoutProxy->setNodeValue(itn,  tmp + newMove);      
+	    layoutResult->setNodeValue(itn,  tmp + newMove);      
 	  } 
 	  else {
 	    if (nbBefore>0) {
@@ -284,34 +284,34 @@ bool intersect2D(const Coord &a, const Coord &b, const Coord &c, const Coord &d)
 }
 //================================================================================
 bool SpringElectrical::checkEdgeIntersection(const node n, const Coord & move) {
-  Coord a = layoutProxy->getNodeValue(n);
+  Coord a = layoutResult->getNodeValue(n);
   Coord b = a + move;
-  Iterator<edge> *itE = superGraph->getEdges();
+  Iterator<edge> *itE = graph->getEdges();
   while(itE->hasNext()) {
     edge e = itE->next();
-    node src = superGraph->source(e);
-    node tgt = superGraph->target(e);
+    node src = graph->source(e);
+    node tgt = graph->target(e);
     if (src == n || tgt == n) continue;
-    Coord c = layoutProxy->getNodeValue(src);
-    Coord d = layoutProxy->getNodeValue(tgt);
+    Coord c = layoutResult->getNodeValue(src);
+    Coord d = layoutResult->getNodeValue(tgt);
     if (intersect2D(a, b, c, d)) {
       delete itE;
       return true;
     }
   } delete itE;
-  itE = superGraph->getInOutEdges(n);
+  itE = graph->getInOutEdges(n);
   while(itE->hasNext()) {
     edge e = itE->next();
-    node src = superGraph->source(e);
-    node tgt = superGraph->target(e);
-    Coord a = layoutProxy->getNodeValue(src);
-    Coord b = layoutProxy->getNodeValue(tgt);
-    Iterator<node> *itN = superGraph->getNodes();
+    node src = graph->source(e);
+    node tgt = graph->target(e);
+    Coord a = layoutResult->getNodeValue(src);
+    Coord b = layoutResult->getNodeValue(tgt);
+    Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()) {
       node currentNode = itN->next();
       if((currentNode == src) || (currentNode == tgt))
 	continue;
-      Coord c = layoutProxy->getNodeValue(currentNode);
+      Coord c = layoutResult->getNodeValue(currentNode);
       Coord d = c - move;
       if(intersect2D(a, b, c, d)) {
 	delete itE;

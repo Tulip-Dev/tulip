@@ -2,6 +2,7 @@
 //#include "FaceIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 
 //============================================================

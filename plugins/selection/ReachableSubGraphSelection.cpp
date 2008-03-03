@@ -9,10 +9,10 @@
  (at your option) any later version.
 */
 #include "ReachableSubGraphSelection.h"
-#include <tulip/GraphMeasure.h>
 
+using namespace tlp;
 
-SELECTIONPLUGIN(ReachableSubGraphSelection,"ReachableSubGraph","David Auber","01/12/1999","Alpha","0","1");
+BOOLEANPLUGIN(ReachableSubGraphSelection,"Reachable Sub-Graph","David Auber","01/12/1999","Alpha","1.0");
 
 namespace {
   const char * paramHelp[] = {
@@ -30,7 +30,7 @@ namespace {
 
     // startingNodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SelectionProxy" ) \
+    HTML_HELP_DEF( "type", "Selection" ) \
     HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
     HTML_HELP_BODY() \
     "This parameter defines the starting set of nodes used to walk in the graph." \
@@ -48,9 +48,9 @@ namespace {
 }
 
 
-ReachableSubGraphSelection::ReachableSubGraphSelection(const PropertyContext &context):Selection(context) {
+ReachableSubGraphSelection::ReachableSubGraphSelection(const PropertyContext &context):BooleanAlgorithm(context) {
   addParameter<int> ("direction",paramHelp[0],"0");
-  addParameter<SelectionProxy> ("startingnodes",paramHelp[1],"viewSelection");
+  addParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
   addParameter<int> ("distance",paramHelp[2],"5");
 }
 
@@ -58,41 +58,41 @@ ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
-  int maxDepth = 5;
+  unsigned int maxDepth = 5;
   int direction = 0;
-  SelectionProxy * startNodes=superGraph->getProperty<SelectionProxy>("viewSelection");
+  BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
   if ( dataSet!=0) {
     dataSet->get("distance", maxDepth);
     dataSet->get("direction", direction);
     dataSet->get("startingnodes", startNodes);
   }
 
-  selectionProxy->setAllEdgeValue(false);
-  selectionProxy->setAllNodeValue(false);
+  booleanResult->setAllEdgeValue(false);
+  booleanResult->setAllNodeValue(false);
 
   if ( startNodes ) {
-    Iterator<node> *itN = superGraph->getNodes();
+    Iterator<node> *itN = graph->getNodes();
     while (itN->hasNext()) { 
       node current = itN->next();
       if (startNodes->getNodeValue(current)) {
 	MutableContainer<unsigned int> distance;
-	tlp::maxDistance(superGraph, current, distance, direction);
-	Iterator<node> *itN = superGraph->getNodes();
+	tlp::maxDistance(graph, current, distance, direction);
+	Iterator<node> *itN = graph->getNodes();
 	while (itN->hasNext()) { 
 	  node itn = itN->next();
-	  if (distance.get(itn.id) <= maxDepth && distance.get(itn.id)<superGraph->numberOfNodes() ) 
-	    selectionProxy->setNodeValue(itn,true);
+	  if (distance.get(itn.id) <= maxDepth) 
+	    booleanResult->setNodeValue(itn,true);
 	} delete itN;
       }
     } delete itN;
 
-    Iterator<edge> *itE = superGraph->getEdges();
+    Iterator<edge> *itE = graph->getEdges();
     while(itE->hasNext()) {
       edge e = itE->next();
-      node source = superGraph->source(e);
-      node target = superGraph->target(e);
-      if (selectionProxy->getNodeValue(source) && selectionProxy->getNodeValue(target))
-	selectionProxy->setEdgeValue(e,true);
+      node source = graph->source(e);
+      node target = graph->target(e);
+      if (booleanResult->getNodeValue(source) && booleanResult->getNodeValue(target))
+	booleanResult->setEdgeValue(e,true);
     }delete itE;
   }
  

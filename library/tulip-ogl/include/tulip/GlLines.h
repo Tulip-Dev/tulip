@@ -1,11 +1,14 @@
 #ifndef _TLP_GLLINES
 #define _TLP_GLLINES
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #include <GL/gl.h>
 #include <vector>
 
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
+
+namespace tlp {
 
 struct GlLines
 {
@@ -43,4 +46,7 @@ struct GlLines
   static GLfloat *buildCurvePoints(const Coord &startPoint,const std::vector<Coord> &bends,const Coord &endPoint);
   static GLfloat *buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &p2,const Coord &p3);
 };
+
+}
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

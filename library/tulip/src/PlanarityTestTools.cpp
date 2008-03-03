@@ -28,7 +28,7 @@ edge PlanarityTestImpl::edgeReversal( edge e) {
 static int preCount;
 static int postCount;
 
-void dfsAux(SuperGraph *sG, node n,
+void dfsAux(Graph *sG, node n,
 	    MutableContainer<int>& dfsPre,
 	    MutableContainer<int>& dfsPos,
 	    list<edge>& dfsEdges) { 
@@ -45,7 +45,7 @@ void dfsAux(SuperGraph *sG, node n,
   dfsPos.set(n.id, postCount++);
 }
 //=================================================================
-list<edge> posDFS(SuperGraph *sG,
+list<edge> posDFS(Graph *sG,
 		  MutableContainer<int> &dfsPos) { 
   list<edge> dfsEdges;
   MutableContainer<int> dfsPre;
@@ -60,7 +60,7 @@ list<edge> posDFS(SuperGraph *sG,
   return dfsEdges;
 }
 //=================================================================
-void PlanarityTestImpl::makeBidirected(SuperGraph *sG) {
+void PlanarityTestImpl::makeBidirected(Graph *sG) {
   StableIterator<edge> stIte(sG->getEdges());
   while(stIte.hasNext()) {
     edge e = stIte.next();
@@ -77,7 +77,7 @@ void PlanarityTestImpl::makeBidirected(SuperGraph *sG) {
  * Returns true for all edges e in T_0,
  *         false otherwise.
  */
-bool PlanarityTestImpl::isT0Edge(SuperGraph *g, edge e) {
+bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
   edge e1 = T0EdgeIn.get((g->target(e)).id);
   //test à revoir je pense qu'en testant juste e == e1 ça suffit !
   if (e1 != NULL_EDGE && g->source(e1) == g->source(e) && g->target(e1) == g->target(e))
@@ -90,7 +90,7 @@ bool PlanarityTestImpl::isT0Edge(SuperGraph *g, edge e) {
  * Returns true for all edges e in g - T_0,
  *         false otherwise.
  */
-bool PlanarityTestImpl::isBackEdge(SuperGraph *g, edge e) {
+bool PlanarityTestImpl::isBackEdge(Graph *g, edge e) {
   if (e == NULL_EDGE) return false;
   return (!isT0Edge(g, e));
 }
@@ -103,7 +103,7 @@ bool PlanarityTestImpl::isBackEdge(SuperGraph *g, edge e) {
  * the number of 
  * nodes in g
  */
-void PlanarityTestImpl::sortNodesIncreasingOrder(SuperGraph *g, MutableContainer<int> &value,
+void PlanarityTestImpl::sortNodesIncreasingOrder(Graph *g, MutableContainer<int> &value,
 					     vector<node> &sortedNodes) {
 
   // Counting sort;
@@ -154,7 +154,7 @@ void PlanarityTestImpl::sortNodesIncreasingOrder(SuperGraph *g, MutableContainer
  * in decreasing
  *   order by labelB -- needed by updateLabelB);
  */
-void PlanarityTestImpl::preProcessing(SuperGraph *g) {
+void PlanarityTestImpl::preProcessing(Graph *g) {
   int numberOfNodes = g->numberOfNodes();
   list<edge> edgeInT0; // list of edges in T_0;
   edgeInT0 = posDFS(g, dfsPosNum);
@@ -509,7 +509,7 @@ node PlanarityTestImpl::lcaBetweenTermNodes(node n1,
   return lca;
 }
 //=================================================================
-void PlanarityTestImpl::calculateNewRBC(SuperGraph* sG,
+void PlanarityTestImpl::calculateNewRBC(Graph* sG,
 				    node newCNode,
 				    node n,
 				    list<node>& terminalNodes) {
@@ -583,7 +583,7 @@ void PlanarityTestImpl::calculateNewRBC(SuperGraph* sG,
 }
 //=================================================================
 node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTraversed,
-						      SuperGraph *sG,
+						      Graph *sG,
 						      node n,
 						      node t) {
   node result = NULL_NODE;
@@ -666,7 +666,7 @@ void PlanarityTestImpl::setPossibleK33Obstruction(node cNode,
   cNodeOfPossibleK33Obstruction = cNode;
 } 
 //=================================================================
-bool PlanarityTestImpl::testCNodeCounter(SuperGraph* sG,
+bool PlanarityTestImpl::testCNodeCounter(Graph* sG,
 				     node cNode,
 				     node n,
 				     node n1,
@@ -742,7 +742,7 @@ bool PlanarityTestImpl::testCNodeCounter(SuperGraph* sG,
   return false;
 }
 //=================================================================
-bool PlanarityTestImpl::testObstructionFromTerminalNode(SuperGraph *sG,
+bool PlanarityTestImpl::testObstructionFromTerminalNode(Graph *sG,
 						    node w,
 						    node terminal,
 						    node u) {

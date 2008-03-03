@@ -12,11 +12,12 @@
 #include <cmath>
 #include <stdio.h>
 #include "StrahlerMetric.h"
-#include <tulip/StringProxy.h>
+#include <tulip/StringProperty.h>
 
-METRICPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","1.0","Graph");
 
 using namespace std;
+using namespace tlp;
 
 namespace std {
   struct couple {
@@ -77,11 +78,11 @@ Strahler StrahlerMetric::topSortStrahler(node n, int &curPref,
   Strahler result;
   prefix[n]=curPref;
   curPref++;
-  if (superGraph->outdeg(n)==0) {finished[n]=true;return(result);}
+  if (graph->outdeg(n)==0) {finished[n]=true;return(result);}
   list<int> strahlerResult;
   list<StackEval> tmpEval;
   //Construction des ensembles pour evaluer le strahler
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  Iterator<node> *itN=graph->getOutNodes(n);
   for (;itN->hasNext();) {
     node tmpN=itN->next();
     if (!visited[tmpN])	{
@@ -170,18 +171,37 @@ namespace {
     HTML_HELP_DEF( "values", "true, false" ) \
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
-    "If true the strahler number will be computed for each node, it means that a spanning tree will be recomputed for each nodes complexity o(n^2)." \
+    "If true, for each node the strahler number will be computed from a spanning tree having that node as root: complexity o(n^2). If false the strahler number will be computed from a spanning tree having the heuristicly estimated graph center as root." \
     HTML_HELP_CLOSE(),
+    //Orientation
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF("Values", "all <BR> ramification<BR> nested cycles") \
+    HTML_HELP_DEF( "default", "all" )	 \
+    HTML_HELP_BODY() \
+    "This parameter enables to choose the type of computation"	\
+    HTML_HELP_CLOSE()
   };
 }
+#define COMPUTATION_TYPE "Type"
+#define COMPUTATION_TYPES "all;ramification;nested cycles;"
+#define ALL 0
+#define REGISTERS 1
+#define STACKS 2
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const PropertyContext &context):Metric(context) {
-   addParameter<bool>("allNodes", paramHelp[0], "false");
+StrahlerMetric::StrahlerMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+   addParameter<bool>("All nodes", paramHelp[0], "false");
+   addParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES);
 }
 //==============================================================================
 bool StrahlerMetric::run() {
   allNodes = false;
-  if (dataSet!=0) dataSet->get("allNodes", allNodes);
+  StringCollection computationTypes(COMPUTATION_TYPES);
+  computationTypes.setCurrent(0);
+  if (dataSet!=0) {
+    dataSet->get("All nodes", allNodes);
+    dataSet->get(COMPUTATION_TYPE, computationTypes);
+  }
   stdext::hash_map<node,bool> visited;
   stdext::hash_map<node,bool> finished;
   stdext::hash_map<node,int> prefix;
@@ -189,8 +209,8 @@ bool StrahlerMetric::run() {
   stdext::hash_map<node,Strahler> cachedValues;
   int curPref=0;
   /*
-    SelectionProxy *parameter=superGraph->getProperty<SelectionProxy>("viewSelection");
-    Iterator<node> *it=superGraph->getNodes();
+    Selection *parameter=graph->getProperty<BooleanProperty>("viewSelection");
+    Iterator<node> *it=graph->getNodes();
     for (;it->hasNext();) {
     node curNode=it->next();
     if ((!visited[curNode]) && (parameter->getNodeValue(curNode)) ) {
@@ -199,7 +219,7 @@ bool StrahlerMetric::run() {
     }
     } delete it;
   */
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   unsigned int i = 0;
   while (itN->hasNext()) {
     node itn = itN->next();
@@ -208,9 +228,18 @@ bool StrahlerMetric::run() {
       topSortStrahler(itn,curPref,tofree,prefix,visited,finished,cachedValues);
     }
     if (allNodes) {
-      if (pluginProgress->progress(i++, superGraph->numberOfNodes())!=TLP_CONTINUE) break;
-      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+      if (pluginProgress->progress(i++, graph->numberOfNodes())!=TLP_CONTINUE) break;
+      switch(computationTypes.getCurrent()) {
+      case ALL:
+	doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+	break;
+      case REGISTERS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	break;
+      case STACKS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
+      }
       visited.clear();
       finished.clear();
       prefix.clear();
@@ -221,11 +250,20 @@ bool StrahlerMetric::run() {
   }  delete itN;
 
   if (!allNodes) {
-    itN = superGraph->getNodes();
+    itN = graph->getNodes();
     while (itN->hasNext()) {
       node itn=itN->next();
-      metricProxy->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
-					 +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+      switch(computationTypes.getCurrent()) {
+      case ALL:
+	doubleResult->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
+	break;
+      case REGISTERS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	break;
+      case STACKS:
+	doubleResult->setNodeValue(itn, (double)cachedValues[itn].stacks);
+      }
     } delete itN;
   }
   return pluginProgress->state()!=TLP_CANCEL;

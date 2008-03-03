@@ -8,14 +8,14 @@
 
 #include "tulip/EpsFunction.h"
 
-//====================================================
-inline void SetColor(const Color &c) {
-  glColor4ub(c[0],c[1],c[2],c[3]);
-}
+using namespace tlp;
 
 //====================================================
-void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2)
-{
+static inline void SetColor(const Color &c) {
+  glColor4ub(c[0],c[1],c[2],c[3]);
+}
+//====================================================
+void tlp::Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2) {
   glBegin(GL_LINES);
   SetColor(C1);
   glVertex3f(x1, y1, z1);
@@ -23,10 +23,8 @@ void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, C
   glVertex3f(x2, y2 , z2);
   glEnd();
 }
-
 //====================================================
-void Rect(float x, float y , float z, float w , float h)
-{
+void tlp::Rect(float x, float y , float z, float w , float h) {
   glBegin(GL_QUADS);
    glVertex3f(x, y , z);
    glVertex3f(x+w, y ,z);
@@ -34,7 +32,7 @@ void Rect(float x, float y , float z, float w , float h)
    glVertex3f(x, y+h , z);
   glEnd();
 }
-
+//====================================================
 static char *gouraudtriangleEPS[] =
 {
 "/bd{bind def}bind def /triangle { aload pop   setrgbcolor  aload pop 5 3",
@@ -64,21 +62,20 @@ static char *gouraudtriangleEPS[] =
 "add 3 div 10 1 roll 9 {pop} repeat 3 array astore triangle } ifelse } bd",
 NULL
 };
-
+//====================================================
 typedef struct _Feedback3Dcolor {
-GLfloat x;
-GLfloat y;
-GLfloat z;
-GLfloat red;
-GLfloat green;
-GLfloat blue;
-GLfloat alpha;
+  GLfloat x;
+  GLfloat y;
+  GLfloat z;
+  GLfloat red;
+  GLfloat green;
+  GLfloat blue;
+  GLfloat alpha;
 } Feedback3Dcolor;
-
+//====================================================
 GLfloat pointSize;
-
-GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc)
-{
+//====================================================
+GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
   int token;
   int nvertices, i;
   GLfloat red, green, blue;
@@ -121,11 +118,11 @@ GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc)
 
       xstep = dx / steps;
       ystep = dy / steps;
-
+      
       rstep = dr / steps;
       gstep = dg / steps;
       bstep = db / steps;
-
+      
       xnext = vertex[0].x;
       ynext = vertex[0].y;
       rnext = vertex[0].red;
@@ -229,26 +226,22 @@ GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc)
   }
   return loc;
 }
-
-
-void spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer)
-{
+//====================================================
+void tlp::spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   GLfloat *loc, *end;
-
   loc = buffer;
   end = buffer + size;
   while (loc < end) {
-    loc = spewPrimitiveEPS(file, loc);
+    loc = tlp::spewPrimitiveEPS(file, loc);
   }
 }
-
+//====================================================
 typedef struct _DepthIndex {
   GLfloat *ptr;
   GLfloat depth;
 } DepthIndex;
-
-int compare(const void *a, const void *b)
-{
+//====================================================
+int tlp::compare(const void *a, const void *b) {
   DepthIndex *p1 = (DepthIndex *) a;
   DepthIndex *p2 = (DepthIndex *) b;
   GLfloat diff = p2->depth - p1->depth;
@@ -261,10 +254,8 @@ int compare(const void *a, const void *b)
     return 0;
   }
 }
-
-
-void spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
-{
+//====================================================
+void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   int token;
   GLfloat *loc, *end;
   Feedback3Dcolor *vertex;
@@ -376,13 +367,13 @@ void spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer)
   
   free(prims);
 }
-
+//====================================================
 #define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower) 
 
 smooth shading. */
 
-void spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator)
-{
+void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator) {
+
   GLfloat clearColor[4], viewport[4];
   GLfloat lineWidth;
   int i;
@@ -440,12 +431,10 @@ void spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, cha
   
   fclose(file);
 }
-
+//====================================================
 /* Write contents of one vertex to stdout. */
-void print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
-{
+void tlp::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer) {
   int i;
-  
   printf("  ");
   for (i = 0; i < 7; i++) {
     printf("%4.2f ", buffer[size - (*count)]);
@@ -453,9 +442,8 @@ void print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer)
   }
   printf("\n");
 }
-
-void printBuffer(GLint size, GLfloat * buffer)
-{
+//====================================================
+void tlp::printBuffer(GLint size, GLfloat * buffer) {
   GLint count;
   int token, nvertices;
 
@@ -493,3 +481,4 @@ void printBuffer(GLint size, GLfloat * buffer)
     }
   }
 }
+//====================================================

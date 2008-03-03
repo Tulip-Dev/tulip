@@ -6,13 +6,11 @@
 
 #include <tulip/TulipPlugin.h>
 
-class MetricProxy;
-
-class ConvolutionClustering:public Clustering
+class ConvolutionClustering:public tlp::Algorithm
 { 
 public:
 
-  ConvolutionClustering(ClusterContext);
+  ConvolutionClustering(tlp::AlgorithmContext);
   ~ConvolutionClustering();
   bool run();
   bool check(std::string &);
@@ -27,7 +25,7 @@ private:
   std::vector<double> smoothHistogram;
   std::map<int,int> histogramOfValues;
   int histosize,threshold,width;
-  MetricProxy *metric;
+  tlp::DoubleProperty *metric;
 };
 
 #endif

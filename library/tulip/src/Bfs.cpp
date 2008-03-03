@@ -1,12 +1,13 @@
-#include <tulip/StableIterator.h>
-#include <tulip/TlpTools.h>
-#include <tulip/Bfs.h>
 
-//#include "Bfs.h"
+
+
+#include <tulip/Bfs.h>
+#include <tulip/BooleanProperty.h>
 
 using namespace std;
+using namespace tlp;
 
-Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::newCloneSubGraph(G)),selectedNodes(), selectedEdges() {
+Bfs::Bfs(Graph * G, BooleanProperty * resultatAlgoSelection): graph(tlp::newCloneSubGraph(G)),selectedNodes(), selectedEdges() {
   selectedNodes.setAll(false);    selectedEdges.setAll(false);
   nbNodes = 0;
 
@@ -25,7 +26,7 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
   if(unselected) 
     root = graph->getOneNode();
 
-  s_proxy = G->getProperty<SelectionProxy>("viewSelection");
+  s_proxy = G->getProperty<BooleanProperty>("viewSelection");
   s_proxy->setAllNodeValue(false);
   s_proxy->setAllEdgeValue(false);
 
@@ -39,7 +40,7 @@ Bfs::Bfs(SuperGraph * G, SelectionProxy * resultatAlgoSelection): graph(tlp::new
   computeBfs(G,resultatAlgoSelection,root);
 }
 
-void Bfs::computeBfs(SuperGraph * G,SelectionProxy * resultatAlgoSelection, node root){
+void Bfs::computeBfs(Graph * G,BooleanProperty * resultatAlgoSelection, node root){
   unsigned int taille = G->numberOfNodes();
   unsigned int nb_n = 1;
   unsigned int i = 0;

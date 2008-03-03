@@ -26,6 +26,8 @@ body {
   margin: 0; 
 }
 
+
+
 .legalnotice, .copyright {
   padding: 0;
   margin: 0; 
@@ -43,6 +45,14 @@ body {
 .sect1, .chapter, .synopsis, .appendix, .preface, .article, .refsect1, .index, .glossary, .section, .biblioentry {
   padding: 1em;
 }
+
+.sect3 {
+	padding: 0.5em;
+}
+/*
+.sect4 {
+	padding: 0.5em;
+}*/
 
 .author {
   color: #4B4B4B;
@@ -156,9 +166,15 @@ dt {
   margin-top: 1em; 
 }
 
-.code, .filename, .methodname{
+.code, .filename {
     font-size: 10pt;
     color: rgb(0,96,160)
+}
+
+.methodname {
+	font-weight: bold ;
+   	font-size: 11pt;
+	    	color: rgb(0,96,160)
 }
 
 div.toc dt { 
@@ -243,15 +259,26 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-.screen, .programlisting { 
+.programlisting { 
   background-color: #F4F4F4 ;
   color: rgb(0,0,0); /* should be inherit */
   border-style: dotted;
   border-color: #D5D5D5;
   border-width: 1px; 
   padding: 5px; 
-  font-size: 10pt;
+  font-size: 9pt;
 } 
+
+.screen { 
+  background-color: #202020 ;
+  color: white; /* should be inherit */
+  border-style: dotted;
+  border-color: #D5D5D5;
+  border-width: 1px; 
+  padding: 5px; 
+  font-size: 9pt;
+} 
+
 
 
 /* This one is set in inches because the admonitions are set in inches
@@ -302,3 +329,20 @@ pre.license {
 
 span{color:black}
 span.quote{color:#41597A}
+
+
+
+
+div.book {
+}
+
+.note h3 {
+	color: blue;
+	font-size: 10pt;
+}
+
+
+.prompt {
+	color: #CCCC66;
+	font-size: 9pt;
+}

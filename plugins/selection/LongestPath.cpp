@@ -3,43 +3,42 @@
 
 #include <tulip/TulipPlugin.h>
 #include <tulip/TreeTest.h>
-#include "PathSelection.h"
+#include "PathBooleanProperty.h"
 #include "LongestPath.h"
-#include <tulip/SelectionProxy.h>
-#include <tulip/MethodFactory.h>
 
-SELECTIONPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","0","1");
+BOOLEANPLUGIN(LongestPath,"Longestpath","Maylis Delest","02/06/2003","Alpha","1.0");
 
 using namespace std;
+using namespace tlp;
 
-LongestPath::LongestPath(const PropertyContext &context):Selection(context)  {
+LongestPath::LongestPath(const PropertyContext &context):BooleanAlgorithm(context)  {
 }
 
 LongestPath::~LongestPath() {
 }
 
 void LongestPath::setNodeValue(node n) {
-    selectionProxy->setNodeValue(n,true);
-    Iterator<edge> *itE=superGraph->getOutEdges(n);
+    BooleanResult->setNodeValue(n,true);
+    Iterator<edge> *itE=graph->getOutEdges(n);
     for (;itE->hasNext();){
       edge e=itE->next();
-      node n=superGraph->target(e);
+      node n=graph->target(e);
       if (max==metricLevel->getNodeValue(n)) {
-	selectionProxy->setEdgeValue(e,true);
+	BooleanResult->setEdgeValue(e,true);
 	setNodeValue(n);
       }
     }delete itE;
 }
 
 bool LongestPath::run() {
-  selectionProxy->setAllNodeValue(false);
-  selectionProxy->setAllEdgeValue(false);
+  BooleanResult->setAllNodeValue(false);
+  BooleanResult->setAllEdgeValue(false);
   bool cached=false;
   bool result=false;
   string erreur;
-  metricLevel=superGraph->getLocalProperty<MetricProxy>("MaxLength", cached,result,erreur);
-  SelectionProxy *root=superGraph->getProperty<SelectionProxy>("viewSelection");
-  Iterator<node> *itN=superGraph->getNodes();
+  metricLevel=graph->getLocalProperty<DoubleProperty>("MaxLength", cached,result,erreur);
+  Selection *root=graph->getProperty<BooleanProperty>("viewSelection");
+  Iterator<node> *itN=graph->getNodes();
   node startNode;
   for  (; itN->hasNext();){
     startNode=itN->next();
@@ -51,7 +50,7 @@ bool LongestPath::run() {
 }
 
 bool LongestPath::check(string &err) {
-  if (TreeTest::isTree(superGraph)) {
+  if (TreeTest::isTree(graph)) {
     err = "";
     return true;
   }

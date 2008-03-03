@@ -1,11 +1,10 @@
 #include <deque>
-#include <tulip/GraphMeasure.h>
-#include <tulip/ForEach.h>
 #include "Eccentricity.h"
 
-METRICPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","0","1","Graph");
+DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","1.0","Graph");
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   const char * paramHelp[] = {
@@ -20,7 +19,7 @@ namespace {
   };
 }
 
-EccentricityMetric::EccentricityMetric(const PropertyContext &context):Metric(context) {
+EccentricityMetric::EccentricityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
   addParameter<bool>("all paths",paramHelp[0],"false");
 }
 
@@ -32,28 +31,28 @@ bool EccentricityMetric::run() {
   if (dataSet!=0) dataSet->get("all paths", allPaths);
   double maxV = 0;
   double minV = DBL_MAX;
-  Iterator<node> *itN= superGraph->getNodes();
+  Iterator<node> *itN= graph->getNodes();
   for (unsigned int i=0; itN->hasNext(); ++i) {
-    if (pluginProgress->progress(i,superGraph->numberOfNodes())!=TLP_CONTINUE) break;
+    if (pluginProgress->progress(i,graph->numberOfNodes())!=TLP_CONTINUE) break;
     node n = itN->next();
     MutableContainer<unsigned int> distance;
-    double val = tlp::maxDistance(superGraph, n, distance, 2);
+    double val = tlp::maxDistance(graph, n, distance, 2);
     if (allPaths) {
       node n2;
       val = 0;
-      forEach(n2, superGraph->getNodes()) 
-	val += double(distance.get(n2.id)) / double(superGraph->numberOfNodes()) ;
+      forEach(n2, graph->getNodes()) 
+	val += double(distance.get(n2.id)) / double(graph->numberOfNodes()) ;
     }
-    metricProxy->setNodeValue(n, val);
+    doubleResult->setNodeValue(n, val);
     maxV = std::max(maxV, val);
     minV = std::min(minV, val);
   } delete itN;
   if (maxV>0) {
     node n;
-    forEach(n, superGraph->getNodes()) {
-      double val = maxV - metricProxy->getNodeValue(n); //shift to zero
+    forEach(n, graph->getNodes()) {
+      double val = maxV - doubleResult->getNodeValue(n); //shift to zero
       double newMax = maxV - minV;
-      metricProxy->setNodeValue(n, val / newMax);
+      doubleResult->setNodeValue(n, val / newMax);
     }
   }
   return pluginProgress->state()!=TLP_CANCEL;

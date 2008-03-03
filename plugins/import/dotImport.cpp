@@ -9,6 +9,11 @@
 #include <dotImportCLUT.h>
 
 using namespace std;
+using namespace tlp;
+
+#ifdef _WIN32
+#define uint unsigned int
+#endif
 
 #ifdef _WIN32
 #define uint unsigned int
@@ -56,7 +61,7 @@ namespace {
  */
 class DotImport:public ImportModule {
 public:
-  DotImport(ClusterContext context):ImportModule(context){
+  DotImport(AlgorithmContext context):ImportModule(context){
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~DotImport(){}
@@ -72,7 +77,7 @@ public:
 
     // Create & Init YY global data 
     DOT_YY _dotyy;
-    _dotyy.sg = superGraph;
+    _dotyy.sg = graph;
 
     dotyy = &_dotyy;
     yyrestart( fd );
@@ -84,5 +89,5 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","0","0","1","File")
+IMPORTPLUGINOFGROUP(DotImport,"dot (graphviz)","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
 

@@ -2,8 +2,10 @@
 
 #include "OrientableLayout.h"
 
+using namespace tlp;
+
 //====================================================================
-OrientableLayout::OrientableLayout(LayoutProxy* layoutParam,
+OrientableLayout::OrientableLayout(LayoutProperty* layoutParam,
                                    orientationType mask) {
     layout = layoutParam;
     setOrientation(mask);
@@ -13,21 +15,21 @@ OrientableLayout::OrientableLayout(LayoutProxy* layoutParam,
 void OrientableLayout::setOrientation(orientationType mask) {
     orientation = mask;
 
-    readX  = &Coord::getX;
-    readY  = &Coord::getY;
+    readX  = &OrientableCoord::getInvertedX;
+    readY  = &OrientableCoord::getInvertedY;
     readZ  = &Coord::getZ;
-    writeX = &Coord::setX;
-    writeY = &Coord::setY;
+    writeX = &OrientableCoord::setInvertedX;
+    writeY = &OrientableCoord::setInvertedY;
     writeZ = &Coord::setZ;
 
     if (orientation & ORI_INVERSION_HORIZONTAL) {
-        readX   = &OrientableCoord::getInvertedX;
-        writeX  = &OrientableCoord::setInvertedX;
+        readX   = &Coord::getX;
+        writeX  = &Coord::setX;
     }
         
     if (orientation & ORI_INVERSION_VERTICAL) {
-        readY   = &OrientableCoord::getInvertedY;
-        writeY  = &OrientableCoord::setInvertedY;
+        readY   = &Coord::getY;
+        writeY  = &Coord::setY;
     }
 
     if (orientation & ORI_INVERSION_Z) {

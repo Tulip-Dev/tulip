@@ -1,17 +1,12 @@
-#include <map>
-#include <cmath>
-#include <climits>
 #include <tulip/Circle.h>
-#include <tulip/TreeTest.h>
-#include <tulip/ForEach.h>
-#include <tulip/Node.h>
-#include <tulip/TlpTools.h>
 
 #include "ConeTreeExtended.h"
+#include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1","0","Tree");
+LAYOUTPLUGINOFGROUP(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Stable","1.0","Tree");
 
 using namespace std;
+using namespace tlp;
 using namespace stdext;
 
 //===============================================================
@@ -23,12 +18,12 @@ float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
   return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2)))); 
 }
 //===============================================================
-void ConeTreeExtended::computeLayerSize(node n, int level) {
+void ConeTreeExtended::computeLayerSize(node n, unsigned int level) {
   if (levelSize.size() < level+1 )
     levelSize.push_back(0);
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
   node i;
-  forEach(i, superGraph->getOutNodes(n)) {
+  forEach(i, tree->getOutNodes(n)) {
     computeLayerSize(i, level + 1);
   }
 }
@@ -49,13 +44,13 @@ double ConeTreeExtended::treePlace3D(node n,
 				     hash_map<node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
-  if (superGraph->outdeg(n)==0) {
+  if (tree->outdeg(n)==0) {
     Coord tmp = nodeSize->getNodeValue(n);
     return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   
-  if (superGraph->outdeg(n)==1) {
-    Iterator<node> *itN=superGraph->getOutNodes(n);
+  if (tree->outdeg(n)==1) {
+    Iterator<node> *itN=tree->getOutNodes(n);
     node itn=itN->next(); 
     delete itN;
     return treePlace3D(itn,posRelX,posRelY);
@@ -65,8 +60,8 @@ double ConeTreeExtended::treePlace3D(node n,
   double maxRadius=0;
   float newRadius;
 
-  vector<double> subCircleRadius(superGraph->outdeg(n));
-  Iterator<node> *itN=superGraph->getOutNodes(n);
+  vector<double> subCircleRadius(tree->outdeg(n));
+  Iterator<node> *itN=tree->getOutNodes(n);
   for (int i=0; itN->hasNext(); ++i)  {
     node itn = itN->next();
     subCircleRadius[i] = treePlace3D(itn,posRelX,posRelY);
@@ -104,7 +99,7 @@ double ConeTreeExtended::treePlace3D(node n,
   tlp::Circle<float> circleH=tlp::enclosingCircle(circles);
 
   //Place relative position
-  itN = superGraph->getOutNodes(n);
+  itN = tree->getOutNodes(n);
   for (unsigned int i=0; i<subCircleRadius.size(); ++i) {
     node itn = itN->next();
     (*posRelX)[itn]=newRadius*cos(vangles[i])-circleH[0];
@@ -115,23 +110,15 @@ double ConeTreeExtended::treePlace3D(node n,
 //===============================================================
 void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
 			double x, double y, int level) {
-  layoutProxy->setNodeValue(n,Coord(x+(*px)[n], yCoordinates[level],y+(*py)[n]));
+  layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
-  forEach(itn, superGraph->getOutNodes(n)) {
+  forEach(itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
   }
 }
 //===============================================================
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
@@ -143,18 +130,18 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorithm(context) {
+  addNodeSizePropertyParameter(this);
+  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  nodeSize = superGraph->getProperty<SizesProxy>("viewSize");
+  nodeSize = graph->getProperty<SizeProperty>("viewSize");
   string orientation = "vertical";
   if (dataSet!=0) {
-    dataSet->get("nodeSize", nodeSize);
+    getNodeSizePropertyParameter(dataSet, nodeSize);
     StringCollection tmp;
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
@@ -164,44 +151,38 @@ bool ConeTreeExtended::run() {
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
   //===========================================================
-  layoutProxy->setAllEdgeValue(vector<Coord>(0));
+  layoutResult->setAllEdgeValue(vector<Coord>(0));
+
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+  tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    return false;
+
+  node root;
+  tlp::getSource(tree, root);
   hash_map<node,double> posX;
   hash_map<node,double> posY;
-  node root;
-  tlp::getSource(superGraph, root);
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);
   //rotate layout and size
   if (orientation == "horizontal") {
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       Size  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutProxy->getNodeValue(n);
-      layoutProxy->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      Coord tmpC = layoutResult->getNodeValue(n);
+      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
+  TreeTest::cleanComputedTree(graph, tree);
+
   return true;
 }
-//===============================================================
-bool ConeTreeExtended::check(string &erreurMsg) {
-  if (TreeTest::isTree(superGraph)) {
-    erreurMsg="";
-    return true;
-  }
-  else {
-    erreurMsg="The Graph must be a Tree";
-    return false;
-  }
-}
-//===============================================================
-void ConeTreeExtended::reset() {
-}
-//===============================================================

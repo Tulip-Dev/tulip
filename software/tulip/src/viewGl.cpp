@@ -12,33 +12,7 @@
 #include <map>
 #include <vector>
 
-#if (QT_REL == 3)
-#include <qmessagebox.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
-#include <qcolordialog.h>
-#include <qfiledialog.h>
-#include <qinputdialog.h>
-#include <qworkspace.h>
-#include <qmenubar.h>
-#include <qtable.h>
-#include <qvbox.h>
-#include <qstatusbar.h>
-#include <qpixmap.h>
-#include <qstrlist.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qprogressdialog.h>
-#include <qdockwindow.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qcursor.h>
-#include <qaction.h>
-#include <qradiobutton.h>
-#include <qprinter.h>
-#include <qtabwidget.h>
-#include <qdesktopwidget.h>
-#else
+
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -48,6 +22,8 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
+#include <QtCore/qfileinfo.h>
+#include <QtCore/qdir.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qworkspace.h>
 #include <QtGui/qmenubar.h>
@@ -68,26 +44,51 @@
 #include <QtGui/qaction.h>
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qprinter.h>
-#include "tulip/Qt3ForTulip.h"
+#include <tulip/Qt3ForTulip.h>
 #include <QtGui/qmenudata.h>
-#endif
+#include <QtGui/qtextedit.h>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
 #include <tulip/GlGraphWidget.h>
-#include <tulip/TulipElementProperties.h>
-#include <tulip/PropertyWidgets.h>
-#include <tulip/ClusterTree.h>
-#include <tulip/PropertyProxy.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/ColorsProxy.h>
-#include <tulip/MetaGraphProxy.h>
+#include <tulip/ElementPropertiesWidget.h>
+#include <tulip/PropertyWidget.h>
+#include <tulip/SGHierarchyWidget.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/StableIterator.h>
-#include <tulip/FindSelection.h>
+#include <tulip/FindSelectionWidget.h>
 #include <tulip/Morphing.h>
 #include <tulip/ExtendedClusterOperation.h>
+#include <tulip/ExportModule.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ForEach.h>
+#include <tulip/GWInteractor.h>
+#include <tulip/GWOverviewWidget.h>
+#include <tulip/LayerManagerWidget.h>
+#include <tulip/MouseInteractors.h>
+#include <tulip/MouseSelectionEditor.h>
+#include <tulip/MouseEdgeBendEditor.h>
+#include <tulip/MouseNodeBuilder.h>
+#include <tulip/MouseEdgeBuilder.h>
+#include <tulip/MouseSelector.h>
+#include <tulip/MouseEdgeSelector.h>
+#include <tulip/MouseMagicSelector.h>
+#include <tulip/MouseBoxZoomer.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlRectTextured.h>
+#include <tulip/hash_string.h>
 
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
@@ -97,11 +98,9 @@
 #include "ElementInfoToolTip.h"
 #include "TabWidgetData.h"
 #include "GridOptionsWidget.h"
-#include "Overview.h"
-#include "ToolBar.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
-#include <tulip/MouseMoveSelection.h>
+
           
 #define UNNAMED "unnamed"
 
@@ -109,18 +108,55 @@ using namespace std;
 using namespace tlp;
 
 
+// we define a specific interactor to show element graph infos in eltProperties
+class MouseShowElementInfos : public GWInteractor {
+public:
+  viewGl *vWidget;
+  MouseShowElementInfos(viewGl *widget) :vWidget(widget) {}
+  ~MouseShowElementInfos(){}
+  bool eventFilter(QObject *widget, QEvent *e) {
+    if (e->type() == QEvent::MouseButtonPress &&
+	((QMouseEvent *) e)->button()==Qt::LeftButton) {
+      QMouseEvent *qMouseEv = (QMouseEvent *) e;
+      GlGraphWidget *g = (GlGraphWidget *) widget;
+      node tmpNode;
+      edge tmpEdge;
+      ElementType type;  
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+	switch(type) {
+	case NODE: vWidget->showElementProperties(tmpNode.id, true); break;
+	case EDGE: vWidget->showElementProperties(tmpEdge.id, false); break;
+	}
+	return true;
+      }
+    }
+    return false;
+  }
+  GWInteractor *clone() { return new MouseShowElementInfos(vWidget); }
+};
+
+// the vectors of interactors associated to each action
+static vector<tlp::GWInteractor *>addEdgeInteractors;
+static vector<tlp::GWInteractor *>addNodeInteractors;
+static vector<tlp::GWInteractor *>deleteEltInteractors;
+static vector<tlp::GWInteractor *>graphNavigateInteractors;
+static vector<tlp::GWInteractor *>magicSelectionInteractors;
+static vector<tlp::GWInteractor *>editSelectionInteractors;
+static vector<tlp::GWInteractor *>editEdgeBendInteractors;
+static vector<tlp::GWInteractor *>selectInteractors;
+static vector<tlp::GWInteractor *>selectionInteractors;
+static vector<tlp::GWInteractor *>zoomBoxInteractors;
+
 //**********************************************************************
 ///Constructor of ViewGl
 viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
-#if (QT_REL == 4)
   // remove strange scories from designer/Tulip.ui
-  Graph->removeAction(Action);
-  Graph->removeAction(menunew_itemAction);
+  graphMenu->removeAction(Action);
+  graphMenu->removeAction(menunew_itemAction);
   // set workspace background
   workspace->setBackground(QBrush(Ui_TulipData::icon(image1_ID)));
-#endif
 
   Observable::holdObservers();
   glWidget=0;
@@ -130,21 +166,13 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   elementsDisabled = false;
 
   //=======================================
-
   //MDI
-  workspace->setScrollBarsEnabled( TRUE );
+  workspace->setScrollBarsEnabled( true );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
-  //Create overview widget
-  overviewDock = new QDockWindow(this,"Overview");
-  overviewDock->setCaption("3D Overview");
-  overviewDock->setCloseMode(QDockWindow::Always);
-  overviewDock->setResizeEnabled(true);
-  overviewWidget = new Overview(overviewDock);
-  overviewDock->boxLayout()->add(overviewWidget);
-  this->addDockWindow(overviewDock,"Overview", Qt::DockLeft);
-  overviewWidget->view->GlGraph::setBackgroundColor(Color(255,255,255));
-  overviewWidget->show();
-  overviewDock->show();
+
+  //Create layer widget
+  layerWidget = new LayerManagerWidget(parent);
+
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWindow(this,"Data manipulation");
   tabWidgetDock->setCaption("Info Editor");
@@ -159,50 +187,90 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   this->addDockWindow(tabWidgetDock,"Data manipulation", Qt::DockLeft);
   tabWidget->show();
   tabWidgetDock->show();
-  //Create toolbar widget
-  mouseToolBarDock = new QDockWindow(this,"Tool Bar");
-  mouseToolBarDock->setCloseMode(QDockWindow::Always);
-  mouseToolBar = new ToolBar(mouseToolBarDock);
-  mouseToolBarDock->boxLayout()->add(mouseToolBar);
-  this->addDockWindow(mouseToolBarDock,"ToolBar", Qt::DockRight);
-  mouseToolBar->show();
-  mouseToolBarDock->show();
+
+  // Create overview widget after the tabWidgetDock
+  // because of a bug with full docked GlGraphWidget
+  // In doing this the overviewDock will be the first
+  // sibling candidate when the tabWidgetDock will loose the focus
+  // and Qt will not try to give the focus to the first GlGraphWidget
+  overviewDock = new QDockWindow(this,"Overview");
+  overviewDock->setCaption("3D Overview");
+  overviewDock->setCloseMode(QDockWindow::Always);
+  overviewDock->setResizeEnabled(true);
+  overviewWidget = new GWOverviewWidget(overviewDock);
+  overviewDock->boxLayout()->add(overviewWidget);
+  this->addDockWindow(overviewDock, "Overview", Qt::DockLeft);
+  // move it to ensure it is the first one
+  this->moveDockWindow(overviewDock, Qt::DockLeft, false, 0);
+  overviewWidget->show(); 
+  overviewDock->show();
+
   //Init hierarchy visualization widget
   clusterTreeWidget=tabWidget->clusterTree;
   //Init Property Editor Widget
   propertiesWidget=tabWidget->propertyDialog;
+  propertiesWidget->setGlGraphWidget(NULL);
+  connect(propertiesWidget->tableNodes, SIGNAL(showElementProperties(unsigned int,bool)),
+	  this, SLOT(showElementProperties(unsigned int,bool)));
+  connect(propertiesWidget->tableEdges, SIGNAL(showElementProperties(unsigned int,bool)),
+	  this, SLOT(showElementProperties(unsigned int,bool)));
   //Init Element info widget
-  nodeProperties = tabWidget->elementInfo;
+  eltProperties = tabWidget->elementInfo;
 #ifdef STATS_UI
   //Init Statistics panel
   statsWidget = tabWidget->tulipStats;
-  statsWidget->setClusterTreeWidget(clusterTreeWidget);
+  statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
 #endif
 
-  ((Application*)qApp)->nodeProperties = nodeProperties;
-  //connect signals related to supergraph replacement
-  connect(clusterTreeWidget, SIGNAL(supergraphChanged(SuperGraph *)), 
-	  this, SLOT(hierarchyChangeSuperGraph(SuperGraph *)));
-  connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(SuperGraph *)), this, SLOT(superGraphAboutToBeRemoved(SuperGraph *)));
-  connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(SuperGraph *)), this, SLOT(superGraphAboutToBeRemoved(SuperGraph *)));
+  //connect signals related to graph replacement
+  connect(clusterTreeWidget, SIGNAL(graphChanged(tlp::Graph *)), 
+	  this, SLOT(hierarchyChangeGraph(tlp::Graph *)));
+  connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
+  connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   //+++++++++++++++++++++++++++
-  //Connection of the menu
+  //Connection of the menus
   connect(&stringMenu     , SIGNAL(activated(int)), SLOT(changeString(int)));
   connect(&metricMenu     , SIGNAL(activated(int)), SLOT(changeMetric(int)));
   connect(&layoutMenu     , SIGNAL(activated(int)), SLOT(changeLayout(int)));
   connect(&selectMenu     , SIGNAL(activated(int)), SLOT(changeSelection(int)));
-  connect(clusteringMenu  , SIGNAL(activated(int)), SLOT(makeClustering(int)));
+  connect(&generalMenu  , SIGNAL(activated(int)), SLOT(applyAlgorithm(int)));
   connect(&sizesMenu      , SIGNAL(activated(int)), SLOT(changeSizes(int)));
   connect(&intMenu        , SIGNAL(activated(int)), SLOT(changeInt(int)));
   connect(&colorsMenu     , SIGNAL(activated(int)), SLOT(changeColors(int)));
   connect(&exportGraphMenu, SIGNAL(activated(int)), SLOT(exportGraph(int)));
   connect(&importGraphMenu, SIGNAL(activated(int)), SLOT(importGraph(int)));
   connect(&exportImageMenu, SIGNAL(activated(int)), SLOT(exportImage(int)));
-  connect(&dialogMenu     , SIGNAL(activated(int)), SLOT(showDialog(int)));
+  connect(dialogMenu     , SIGNAL(activated(int)), SLOT(showDialog(int)));
   windowsMenu->setCheckable( TRUE );
   connect(windowsMenu, SIGNAL( aboutToShow() ), this, SLOT( windowsMenuAboutToShow() ) );
   Observable::unholdObservers();
   morph = new Morphing();
+
+  // initialize the vectors of interactors associated to each action
+  addEdgeInteractors.push_back(new MousePanNZoomNavigator());
+  //addEdgeInteractors.push_back(new MouseNodeBuilder());
+  addEdgeInteractors.push_back(new MouseEdgeBuilder());
+  addNodeInteractors.push_back(new MousePanNZoomNavigator());
+  addNodeInteractors.push_back(new MouseNodeBuilder());
+  deleteEltInteractors.push_back(new MousePanNZoomNavigator());
+  deleteEltInteractors.push_back(new MouseElementDeleter());
+  graphNavigateInteractors.push_back(new MouseNKeysNavigator());
+  magicSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  magicSelectionInteractors.push_back(new MouseMagicSelector());
+  editSelectionInteractors.push_back(new MousePanNZoomNavigator());
+  editSelectionInteractors.push_back(new MouseSelector());
+  editSelectionInteractors.push_back(new MouseSelectionEditor());
+  editEdgeBendInteractors.push_back(new MousePanNZoomNavigator());
+  editEdgeBendInteractors.push_back(new MouseEdgeSelector());
+  editEdgeBendInteractors.push_back(new MouseEdgeBendEditor());
+  selectInteractors.push_back(new MousePanNZoomNavigator());
+  selectInteractors.push_back(new MouseShowElementInfos(this));
+  selectionInteractors.push_back(new MousePanNZoomNavigator());
+  selectionInteractors.push_back(new MouseSelector());
+  zoomBoxInteractors.push_back(new MousePanNZoomNavigator());
+  zoomBoxInteractors.push_back(new MouseBoxZoomer());
+  // set the current one
+  currentInteractors = &graphNavigateInteractors;
 
   // initialization of Qt Assistant, the path should be in $PATH
 #if defined(__APPLE__)
@@ -232,13 +300,15 @@ void viewGl::enableElements(bool enabled) {
   enableQPopupMenu(&intMenu, enabled);
   enableQPopupMenu(&sizesMenu, enabled);
   enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu((QPopupMenu *) clusteringMenu, enabled);
+  enableQPopupMenu(&generalMenu, enabled);
   enableQPopupMenu(&exportGraphMenu, enabled);
   enableQPopupMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
+  mouseActionGroup->setEnabled(enabled);
   grid_option->setEnabled(enabled);
+  dialogMenu->setItemEnabled(1000, enabled);
 
   elementsDisabled = !enabled;
 }
@@ -250,7 +320,7 @@ void viewGl::observableDestroyed(Observable *) {
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   Observable::holdObservers();
   clearObservers();
-  nodeProperties->updateTable();
+  eltProperties->updateTable();
   propertiesWidget->update();
   if (gridOptionsWidget !=0 )
     gridOptionsWidget->validateGrid();
@@ -259,71 +329,160 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   initObservers();
 }
 //**********************************************************************
-static const unsigned int NB_VIEWED_PROPERTIES=9;
-static const string viewed_properties[NB_VIEWED_PROPERTIES]= {"viewLabel",
-					   "viewColor",
-					   "viewSelection",
-					   "viewMetaGraph",
-					   "viewShape",
-					   "viewSize",
-					   "viewTexture",
-					   "viewLayout",
-					   "viewRotation" };
+static const unsigned int NB_VIEWED_PROPERTIES=13;
+static const string viewed_properties[NB_VIEWED_PROPERTIES]=
+  {"viewLabel",
+   "viewLabelColor",
+   "viewLabelPosition",
+   "viewBorderColor",
+   "viewBorderWidth",
+   "viewColor",
+   "viewSelection",
+   "viewMetaGraph",
+   "viewShape",
+   "viewSize",
+   "viewTexture",
+   "viewLayout",
+   "viewRotation" };
 //**********************************************************************
 void viewGl::initObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
-  SuperGraph *graph = glWidget->getSuperGraph();
+  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    graph->getProperty(viewed_properties[i])->addObserver(this);
+    if (graph->existProperty(viewed_properties[i]))
+      graph->getProperty(viewed_properties[i])->addObserver(this);
   }
+  graph->addObserver(this);
+  // initialize the number of nodes ans edges
+  currentGraphNbNodes = graph->numberOfNodes();
+  currentGraphNbEdges = graph->numberOfEdges();
+  // show the infos
+  updateCurrentGraphInfos();
 }
 //**********************************************************************
 void viewGl::clearObservers() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (glWidget == 0) return;
-  SuperGraph *graph = glWidget->getSuperGraph();
+  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph == 0) return;
   for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    graph->getProperty(viewed_properties[i])->deleteObserver(this);
+    if (graph->existProperty(viewed_properties[i]))
+      graph->getProperty(viewed_properties[i])->removeObserver(this);
   }
+  graph->removeObserver(this);
 }
+//**********************************************************************
+// GraphObserver interface
+void viewGl::addNode (Graph *graph, const node) {
+  ++currentGraphNbNodes;
+  updateCurrentGraphInfos();
+}
+void  viewGl::addEdge (Graph *graph, const edge) {
+  ++currentGraphNbEdges;
+  updateCurrentGraphInfos();
+}
+void  viewGl::delNode (Graph *graph, const node) {
+  --currentGraphNbNodes;
+  updateCurrentGraphInfos();
+}
+void  viewGl::delEdge (Graph *graph, const edge) {
+  --currentGraphNbEdges;
+  updateCurrentGraphInfos();
+}
+void  viewGl::reverseEdge (Graph *, const edge) {
+}
+void  viewGl::destroy (Graph *) {
+}
+//**********************************************************************
+// GlSceneObserver interface
+void viewGl::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
+  if(glWidget->getScene()==scene)
+    layerWidget->addLayer(scene,name,layer);
+}
+void viewGl::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
+  //cout << "modify layer" << endl;
+  if(glWidget->getScene()==scene)
+    layerWidget->updateLayer(name,layer);
+}
+
 //**********************************************************************
 ///Destructor of viewGl
 viewGl::~viewGl() {
   delete morph;
+  deleteInteractors(addEdgeInteractors);
+  deleteInteractors(addNodeInteractors);
+  deleteInteractors(deleteEltInteractors);
+  deleteInteractors(graphNavigateInteractors);
+  deleteInteractors(magicSelectionInteractors);
+  deleteInteractors(editSelectionInteractors);
+  deleteInteractors(selectInteractors);
+  deleteInteractors(selectionInteractors);
+  deleteInteractors(zoomBoxInteractors);  
   //  cerr << __PRETTY_FUNCTION__ << endl;
 }
 //**********************************************************************
+// the dialog below is used to show plugins loading errors
+// if needed it will be deleted when showing first graph
+static QDialog *errorDlg = (QDialog *) NULL;
+
 void viewGl::startTulip() {
   // adjust size if needed
   QRect sRect = QApplication::desktop()->availableGeometry();
-  QRect vRect(this->geometry());
+  QRect wRect(this->geometry());
+  QRect fRect(this->frameGeometry());
+  int deltaWidth = fRect.width() - wRect.width();
+  int deltaHeight = fRect.height() - wRect.height();
   // adjust width
-  if (vRect.width() > sRect.width()) {
-    vRect.setWidth(sRect.width());
+  if (fRect.width() > sRect.width()) {
+    wRect.setWidth(sRect.width() - deltaWidth);
   }
   // screen width centering
-  vRect.moveLeft(sRect.left() + (sRect.width() - vRect.width())/2);
+  wRect.moveLeft(sRect.left() + 
+		 (sRect.width() - wRect.width())/2);
   // adjust height
-  if (vRect.height() > sRect.height()) {
-    vRect.setHeight(sRect.height());
+  if (fRect.height() > sRect.height()) {
+    wRect.setHeight(sRect.height() - deltaHeight);
   }
   // screen height centering
-  vRect.moveTop(sRect.top() + (sRect.height() - vRect.height())/2);
+  wRect.moveTop(sRect.top() + (deltaHeight - deltaWidth)/2 + 
+		(sRect.height() - wRect.height())/2);
   // adjust geometry
-  this->setGeometry(vRect.x(), vRect.y(),
-		    vRect.width(), vRect.height());
+  this->setGeometry(wRect.x(), wRect.y(),
+		    wRect.width(), wRect.height());
 
   AppStartUp *appStart=new AppStartUp(this);
+  QDialog *errorDlg;
+  std::string errors;
   appStart->show();
-  appStart->initTulip();
+  appStart->initTulip(errors);
   delete appStart;
   buildMenus();
-  overviewWidget->view->initializeGL();
   this->show();
+  if (errors.size() > 0) {
+    errorDlg = new QDialog(this, "errorDlg", true);
+    errorDlg->setCaption("Errors when loading Tulip plugins !!!");
+    QVBoxLayout* errorDlgLayout = new QVBoxLayout( errorDlg, 11, 6, "errorDlgLayout"); 
+    QFrame *frame = new QFrame( errorDlg, "frame" );
+    QHBoxLayout* frameLayout = new QHBoxLayout( frame, 0, 0, "frameLayout"); 
+    QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    frameLayout->addItem( spacer );
+    QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
+    textWidget->setReadOnly(true);
+    textWidget->setLineWrapMode(QTextEdit::NoWrap);
+    errorDlgLayout->addWidget( textWidget );
+    QPushButton * closeB = new QPushButton( "Close", frame);
+    frameLayout->addWidget( closeB );
+    errorDlgLayout->addWidget( frame );
+    QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
+    errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
+    textWidget->setText(QString(errors.c_str()));
+    errorDlg->show();
+  }
   enableElements(false);
+  // this call force initialization of status bar
+  updateCurrentGraphInfos();
   int argc = qApp->argc();
   if (argc>1) {
     char ** argv = qApp->argv();
@@ -335,32 +494,50 @@ void viewGl::startTulip() {
   }
 }
 //**********************************************************************
-void viewGl::changeSuperGraph(SuperGraph *graph) {
-  //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
+void viewGl::changeGraph(Graph *graph) {
+  //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
-  clusterTreeWidget->setSuperGraph(graph);
-  propertiesWidget->setSuperGraph(graph);
-  nodeProperties->setSuperGraph(graph);
-  if(glWidget != 0) {
-    propertiesWidget->setGlGraphWidget(glWidget);
-    overviewWidget->setObservedView(glWidget);
+  QFileInfo tmp(openFiles[(unsigned long)glWidget].name.c_str());
+  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  QDir::setCurrent(tmp.dirPath() + "/");
+  clusterTreeWidget->setGraph(graph);
+  eltProperties->setGraph(graph);
+  overviewWidget->setObservedView(glWidget);
+  layerWidget->attachGraphWidget(glWidget);
 #ifdef STATS_UI
-    statsWidget->setGlGraphWidget(glWidget);
+  statsWidget->setGlGraphWidget(glWidget);
 #endif
-  }
-  updateStatusBar();
   redrawView();
-  initObservers();
+  // this line has been moved after the call to redrawView to ensure
+  // that a new created graph has all its view... properties created
+  // (call to initProxies())
+  propertiesWidget->setGlGraphWidget(glWidget);
+  // avoid too much notification when importing a graph
+  // see fileOpen
+  if (importedGraph != graph)
+    initObservers();
 }
 //**********************************************************************
-void viewGl::hierarchyChangeSuperGraph(SuperGraph *graph) {
-  //cerr << __PRETTY_FUNCTION__ << " (SuperGraph = " << (int)graph << ")" << endl;
-  if( !glWidget ) return;
-  if (glWidget->getSuperGraph() == graph)  return;
-  clearObservers();
-  glWidget->setSuperGraph(graph);  
-  changeSuperGraph(graph);
-  initObservers();
+void viewGl::hierarchyChangeGraph(Graph *graph) {
+#ifndef NDEBUG
+  cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
+#endif
+  if( glWidget == 0 ) return;
+  if (glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == graph)  return;
+  //clearObservers();
+  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  delete glWidget->getScene()->getGlGraphComposite();
+  glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
+  GlGraphComposite* graphComposite=new GlGraphComposite(graph);
+  glWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),graphComposite);
+  glWidget->getScene()->getLayer("Main")->addGlEntity(graphComposite,"graph");
+  glWidget->getScene()->centerScene();
+  //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  changeGraph(graph);
+  //initObservers();
 }
 //**********************************************************************
 void viewGl::windowActivated(QWidget *w) {
@@ -371,57 +548,69 @@ void viewGl::windowActivated(QWidget *w) {
   }
   if (typeid(*w)==typeid(GlGraphWidget)) {
     glWidget=((GlGraphWidget *)w);
-    changeSuperGraph(glWidget->getSuperGraph());
+    glWidget->resetInteractors(*currentInteractors);
+    changeGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
   }
 }
 //**********************************************************************
-GlGraphWidget * viewGl::newOpenGlView(SuperGraph *graph, const QString &name) {
+GlGraphWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
+  assert(graph != 0);
+  // delete plugins loading errors dialog if needed
+  if (errorDlg) {
+    delete errorDlg;
+    errorDlg = (QDialog *) NULL;
+  }
   //Create 3D graph view
   GlGraphWidget *glWidget = new GlGraphWidget(workspace, name);
-#if (QT_REL == 4)
+  glWidget->getScene()->addObserver(this);
+  layerWidget->attachGraphWidget(glWidget);
+  //GlGraphWidget *glWidget = new GlGraphWidget();
   workspace->addWindow(glWidget);
-#endif
-  glWidget->setSuperGraph(graph);
+  //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
+  //Camera *camera=new Camera(glWidget->getScene());
+  
   glWidget->move(0,0);
   glWidget->setCaption(name);
-  glWidget->show();
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
-#if (QT_REL == 3)
-  glWidget->setFocusPolicy(QWidget::NoFocus);
-#else
-  glWidget->setFocusPolicy(Qt::NoFocus);
-#endif
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
-  glWidget->setMouse(mouseToolBar->getCurrentMouse());
-  connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), glWidget, SLOT(setMouse(MouseInterface *)));
-  connect(mouseToolBar,   SIGNAL(mouseChanged(MouseInterface *)), SLOT(mouseChanged(MouseInterface *)));
-  connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
-	  nodeProperties, SLOT(setCurrentNode(SuperGraph*, const node &)));
-  connect(glWidget,       SIGNAL(nodeClicked(SuperGraph *, const node &)), 
-	  this, SLOT(showElementProperties()));
-  connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
-	  nodeProperties, SLOT(setCurrentEdge(SuperGraph*, const edge &)));
-  connect(glWidget,       SIGNAL(edgeClicked(SuperGraph *, const edge &)), 
-	  this, SLOT(showElementProperties()));
-  connect(glWidget, SIGNAL(closed(GlGraphWidget *)), this, SLOT(glGraphWidgetClosed(GlGraphWidget *)));
-
-#if (QT_REL == 3)
-  new ElementInfoToolTip(glWidget,"toolTip",glWidget);
-
-  QToolTip::setWakeUpDelay(2500);
-#endif
-
-  changeSuperGraph(graph);
+  glWidget->resetInteractors(*currentInteractors);
+  connect(glWidget, SIGNAL(closing(GlGraphWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *)));
 
   if(elementsDisabled)
     enableElements(true);
 
   //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
-  qApp->processEvents();
   return glWidget;
+}
+//**********************************************************************
+void viewGl::constructDefaultScene(GlGraphWidget *glWidget) {
+  GlLayer* layer=new GlLayer("Main");
+  GlLayer *backgroundLayer=new GlLayer("Background");
+  backgroundLayer->setVisible(false);
+  GlLayer *foregroundLayer=new GlLayer("Foreground");
+  foregroundLayer->setVisible(false);
+
+  backgroundLayer->set2DMode();
+  foregroundLayer->set2DMode();
+  string dir=TulipLibDir;
+  dir += "tlp/bitmaps/";
+  GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
+  backgroundLayer->addGlEntity(background,"background");
+
+  GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
+  foregroundLayer->addGlEntity(labri,"labrilogo");
+
+  GlComposite *hulls=new GlComposite;
+  hulls->setVisible(false);
+  layer->addGlEntity(hulls,"Hulls");
+
+  glWidget->getScene()->addLayer(backgroundLayer);
+  glWidget->getScene()->addLayer(layer);
+  glWidget->getScene()->addLayer(foregroundLayer);
 }
 //**********************************************************************
 std::string viewGl::newName() {
@@ -433,28 +622,38 @@ std::string viewGl::newName() {
   stringstream ss;
   ss << UNNAMED << '_' << idx - 1;
   return ss.str();
-}    
+}
 //**********************************************************************
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  DataSet param=glWidget->getParameters();
-  //QString name(glWidget->name());
-  newOpenGlView(glWidget->getSuperGraph(),glWidget->parentWidget()->caption());
-  glWidget->setParameters(param);
-  glWidget->setFontsPath(((Application *)qApp)->bitmapPath);
+  if (!glWidget) return;
+  GlGraphWidget *newGlWidget =
+    newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
+		  glWidget->parentWidget()->caption());
+  constructDefaultScene(newGlWidget);
+  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
+  newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
+  newGlWidget->getScene()->getGlGraphComposite()->setRenderingParameters(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters());
+  newGlWidget->getScene()->setBackgroundColor(glWidget->getScene()->getBackgroundColor());
+  newGlWidget->getScene()->centerScene();
+  newGlWidget->show();
   //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;
 }
 //**********************************************************************
 void viewGl::fileNew() {
   Observable::holdObservers();
-  SuperGraph *newSuperGraph=tlp::newSuperGraph();
-  initializeGraph(newSuperGraph);
-  GlGraph *glW = newOpenGlView(newSuperGraph,
-			       newSuperGraph->getAttribute<string>(std::string("name")).c_str());
-  initializeGlGraph(glW);
-  overviewWidget->syncFromView();
-  redrawView();
+  Graph *newGraph=tlp::newGraph();
+  initializeGraph(newGraph);
+  GlGraphWidget *glW =
+    newOpenGlView(newGraph,
+		  newGraph->getAttribute<string>(std::string("name")).c_str());
+  constructDefaultScene(glW);
+  GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
+  glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+  glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
+  initializeGlScene(glW->getScene());
   Observable::unholdObservers();
+  glW->show();
 }
 //**********************************************************************
 void viewGl::setNavigateCaption(string newCaption) {
@@ -471,53 +670,99 @@ void viewGl::setNavigateCaption(string newCaption) {
    }
 }
 //**********************************************************************
-void viewGl::fileSave() {
-  if (!glWidget) return;
+bool viewGl::doFileSave() {
+  if (!glWidget) return false;
   if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
-      (openFiles[(unsigned long)glWidget] == "")) {
-    fileSaveAs();
-    return;
+      (openFiles[(unsigned long)glWidget].name == "")) {
+    return doFileSaveAs();
   }
-  fileSave("tlp", openFiles[(unsigned long)glWidget]);
+  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
+  return doFileSave("tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
-bool viewGl::fileSave(string plugin, string filename) {
+void viewGl::fileSave() {
+  doFileSave();
+}
+//**********************************************************************
+static void setGraphName(Graph *g, QString s) {
+  QString cleanName=s.section('/',-1);
+  QStringList fields = QStringList::split('.', cleanName);
+  cleanName=cleanName.section('.', -fields.count(), -2);
+  g->setAttribute("name", string(cleanName.latin1()));
+}
+//**********************************************************************
+bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
+  DataSet dataSet;
+  StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
+  parameter.buildDefaultDataSet(dataSet);
+  if (author.length() > 0)
+    dataSet.set<string>("author", author);
+  if (comments.length() > 0)
+    dataSet.set<string>("text::comments", comments);
+  if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
+			      &dataSet, "Enter Export parameters", NULL,
+			      this)) //, glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
+    return false;
+  dataSet.set("displaying", glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
+  string sceneOut;
+  glWidget->getScene()->getXML(sceneOut);
+  string dir=TulipLibDir;
+  while(sceneOut.find(dir) != std::string::npos) {
+    int pos=sceneOut.find(dir);
+    sceneOut.replace(pos,dir.length()-1,"TulipLibDir");
+  }
+  dataSet.set<string>("scene", sceneOut);
+  if (filename.length() == 0) {
+    QString name;
+    if (plugin == "tlp")
+      name = QFileDialog::getSaveFileName( QString::null,
+					   tr("Tulip graph (*.tlp *.tlp.gz)"),
+					   this,
+					   tr("open file dialog"),
+					   tr("Choose a file to save" ));
+    else
+      name = QFileDialog::getSaveFileName(this->caption().ascii());
+    if (name == QString::null) return false;
+    filename = name.latin1();
+  }
+  bool result;
   ostream *os;
   if (filename.rfind(".gz") == (filename.length() - 3)) 
     os = tlp::getOgzstream(filename.c_str());
-  else
+  else {
+    if ((plugin == "tlp") && (filename.rfind(".tlp") == std::string::npos))
+      filename += ".tlp";
     os = new ofstream(filename.c_str());
-  DataSet dataSet;
-  StructDef parameter = ExportModuleFactory::factory->getParam(plugin);
-  parameter.buildDefaultDataSet(dataSet);
-  if (!tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter Export parameters"))
-    return false;
-  dataSet.set("displaying", glWidget->getParameters());
-  bool result;
-  if (!(result=tlp::exportGraph(glWidget->getSuperGraph(), *os, plugin, dataSet, NULL))) {
+  }
+
+  // keep trace of file infos
+  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
+  vFile.name = filename;
+  dataSet.get<string>("author", vFile.author);
+  dataSet.get<string>("text::comments", vFile.comments);
+
+  if (!(result=tlp::exportGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
 			   );
+  } else {
+    statusBar()->message((filename + " saved.").c_str());
   }
   setNavigateCaption(filename);
+  setGraphName(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), QString(filename.c_str()));
   delete os;
   return result;
 }
 //**********************************************************************
+bool viewGl::doFileSaveAs() {
+  if (!glWidget || !glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
+    return false;
+  return doFileSave("tlp", "", "", "");
+}
+//**********************************************************************
 void viewGl::fileSaveAs() {
-  if (!glWidget) return;
-  if( !glWidget->getSuperGraph() )
-    return;
-  QString name = QFileDialog::getSaveFileName( QString::null,
-					       tr("Tulip graph (*.tlp *.tlp.gz)"),
-					       this,
-					       tr("open file dialog"),
-					       tr("Choose a file to save" ));
-  if (name == QString::null) return;
-  string filename = name.latin1();
-  if (fileSave("tlp",filename)) 
-    openFiles[(unsigned long)glWidget]=filename;
+  doFileSaveAs();
 }
 //**********************************************************************
 void viewGl::fileOpen() {
@@ -525,26 +770,58 @@ void viewGl::fileOpen() {
   fileOpen(0,s);
 }
 //**********************************************************************
-void viewGl::initializeGraph(SuperGraph *superGraph) {
-  superGraph->setAttribute("name", newName());
-  superGraph->getProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  superGraph->getProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-  superGraph->getProperty<ColorsProxy>("viewColor")->setAllNodeValue(Color(255,0,0));
-  superGraph->getProperty<ColorsProxy>("viewColor")->setAllEdgeValue(Color(0,0,0));
-  superGraph->getProperty<IntProxy>("viewShape")->setAllNodeValue(1);
-  superGraph->getProperty<IntProxy>("viewShape")->setAllEdgeValue(0);
+void viewGl::initializeGraph(Graph *graph) {
+  graph->setAttribute("name", newName());
+  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
+  graph->getProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  graph->getProperty<ColorProperty>("viewColor")->setAllNodeValue(Color(255,0,0));
+  graph->getProperty<ColorProperty>("viewColor")->setAllEdgeValue(Color(0,0,0));
+  graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
+  graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
 }
 //**********************************************************************
-void viewGl::initializeGlGraph(GlGraph *glGraph) {
-    glGraph->setViewArrow(true);
-    glGraph->setDisplayEdges(true);
-    glGraph->setFontsType(1);
-    glGraph->setFontsPath(((Application *)qApp)->bitmapPath);
-    glGraph->setViewLabel(true);
-    glGraph->setBackgroundColor(Color(255,255,255));
-    glGraph->setViewOrtho(true);
-    glGraph->setViewStrahler(false);
-    glGraph->setEdgeColorInterpolate(false);
+void viewGl::initializeGlScene(GlScene *scene) {
+  GlGraphRenderingParameters param = scene->getGlGraphComposite()->getRenderingParameters();
+  param.setViewArrow(true);
+  param.setDisplayEdges(true);
+  param.setFontsType(1);
+  param.setFontsPath(((Application *)qApp)->bitmapPath);
+  param.setViewNodeLabel(true);
+  //scene->setBackgroundColor(Color(255,255,255));
+  scene->setViewOrtho(true);
+  param.setElementOrdered(false);
+  param.setEdgeColorInterpolate(false);
+  Camera cam = *scene->getCamera(); //default value for drawing small graph in the window
+  cam.setCenter(Coord(0, 0,  0));
+  cam.setEyes(Coord(0, 0, 10));
+  cam.setUp(Coord(0, 1,  0));
+  cam.setZoomFactor(0.5);
+  cam.setSceneRadius(10);
+  scene->setCamera(&cam);
+  //scene->setRenderingParameters(param);
+}
+//**********************************************************************
+static Graph* getCurrentSubGraph(Graph *graph, int id) {
+  if (graph->getId() == id) {
+    return graph;
+  }
+  Graph *sg;
+  forEach(sg, graph->getSubGraphs()) {
+    Graph *csg = getCurrentSubGraph(sg, id);
+    if (csg)
+      returnForEach(csg);
+  }
+  return (Graph *) 0;
+}
+//**********************************************************************
+// we use a hash_map to store plugin parameters
+static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+  static stdext::hash_map<unsigned long, stdext::hash_map<std::string, StructDef * > > paramMaps;
+  stdext::hash_map<std::string, StructDef *>::const_iterator it;
+  it = paramMaps[(unsigned long) factory].find(name);
+  if (it == paramMaps[(unsigned long) factory].end())
+    paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+  return paramMaps[(unsigned long) factory][name];
 }
 //**********************************************************************
 void viewGl::fileOpen(string *plugin, QString &s) {
@@ -569,9 +846,11 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     else {
       noPlugin = false;
       s = QString::null;
-      StructDef parameter = ImportModuleFactory::factory->getParam(*plugin);
-      parameter.buildDefaultDataSet( dataSet );
-      cancel = !tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Enter plugin parameter");
+      StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
+      StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
+      params->buildDefaultDataSet( dataSet );
+      cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+				       "Enter plugin parameter(s)", NULL, this);
     }
   } else {
     plugin = &tmpStr;
@@ -585,7 +864,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	QWidget *win = windows.at(i);
 	if (typeid(*win)==typeid(GlGraphWidget)) {
 	  GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-	  if(openFiles[((unsigned long)tmpNavigate)] == s.latin1()) {
+	  if(openFiles[((unsigned long)tmpNavigate)].name == s.latin1()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -597,19 +876,25 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
     
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    SuperGraph *newGraph = tlp::newSuperGraph();
+    Graph *newGraph = tlp::newGraph();
     initializeGraph(newGraph);
     if (s == QString::null)
       s = newGraph->getAttribute<string>("name").c_str();
     bool result=true;
+    QFileInfo tmp(s);
+    QDir::setCurrent(tmp.dirPath() + "/");
     GlGraphWidget *glW = newOpenGlView(newGraph, s);
-    initializeGlGraph(glW);
-    glW->setSuperGraph(newGraph);
-    changeSuperGraph(0);
+    //    changeGraph(0);
     QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
+    // this will avoid too much notification when
+    // importing a graph (see changeGraph)
+    importedGraph = newGraph;
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
+    importedGraph = 0;
+    // now ensure notification
+    initObservers();
     if (progressBar->state()==TLP_CANCEL || !result ) {
-      changeSuperGraph(0);
+      //      changeGraph(0);
       delete glW;
       delete newGraph;
       QApplication::restoreOverrideCursor();
@@ -623,23 +908,104 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       return;
     }
     delete progressBar;
-    if(noPlugin) {
-      QString cleanName=s.section('/',-1);
-      QStringList fields = QStringList::split('.', cleanName);
-      cleanName=cleanName.section('.',-fields.count(), -2);
-      newGraph->setAttribute("name", string(cleanName.latin1()));
+    if(noPlugin)
+      setGraphName(newGraph, s);
+
+    string sceneData;
+    dataSet.get<std::string>("scene", sceneData);
+
+    if(!sceneData.empty()) {
+      string dir=TulipLibDir;
+      string name="TulipLibDir";
+      while(sceneData.find(name)!=-1) {
+	int pos=sceneData.find(name);
+	sceneData.replace(pos,name.length(),dir);
+      }
+      glW->getScene()->setWithXML(sceneData,newGraph);
+    } else {
+      constructDefaultScene(glW);
+      GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
+      glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+      glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
+      assert(glW->getScene()->getGlGraphComposite()->getInputData()->getGraph()==newGraph);
+
+      DataSet displaying;
+      Color color;
+      if(dataSet.get<DataSet>("displaying", displaying)) {
+	if(displaying.get<Color>("backgroundColor", color)) {
+	  glW->getScene()->setBackgroundColor(color);
+	}
+      }
     }
 
+    initializeGlScene(glW->getScene());
+    
 
-    if(noPlugin)
-      openFiles[((unsigned long)glW)]=s.latin1();
+    if(noPlugin) {
+      viewGlFile vFile;
+      vFile.name = s.latin1();
+      dataSet.get<std::string>("author", vFile.author);
+      dataSet.get<std::string>("text::comments", vFile.comments);
+      openFiles[((unsigned long)glW)] = vFile;
+    }
     QApplication::restoreOverrideCursor();
-    changeSuperGraph(0);
-    changeSuperGraph(newGraph);
-    restoreView();
+    //    changeGraph(0);
+    bool displayingInfoFound = false;
+
+
+    GlGraphRenderingParameters param = glW->getScene()->getGlGraphComposite()->getRenderingParameters();
     DataSet glGraphData;
-    if (dataSet.get<DataSet>("displaying", glGraphData))
-      glW->setParameters(glGraphData);
+    if (dataSet.get<DataSet>("displaying", glGraphData)) {
+      param.setParameters(glGraphData);
+      glW->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      displayingInfoFound = true;
+    }
+    //if (!displayingInfoFound)
+      glW->getScene()->centerScene();
+
+    // glWidget will be bind to that new GlGraphWidget
+    // in the windowActivated method,
+    // so let it be activated
+    glW->show();
+    qApp->processEvents();
+
+    // show current subgraph if any
+    int id = 0;
+    if (glGraphData.get<int>("SupergraphId", id) && id) {
+      Graph *subGraph = getCurrentSubGraph(newGraph, id);
+      if (subGraph)
+	hierarchyChangeGraph(subGraph);
+    }
+    
+    // Ugly hack to handle old Tulip 2 file
+    // to remove in future version
+    Coord sr;
+    if (glGraphData.get<Coord>("sceneRotation", sr)) {
+      // only recenter view
+      // because setRenderingParameters
+      // no longer deals with sceneRotation and sceneTranslation
+      centerView();
+      // update viewColor alpha channel
+      // which was not managed in Tulip 2
+      ColorProperty *colors =
+	newGraph->getProperty<ColorProperty>("viewColor");
+      node n;
+      forEach(n, newGraph->getNodes()) {
+	Color color = colors->getNodeValue(n);
+	if (!color.getA())
+	  color.setA(200);
+	colors->setNodeValue(n, color);
+      }
+      edge e;
+      forEach(e, newGraph->getEdges()) {
+	Color color = colors->getEdgeValue(e);
+	if (!color.getA())
+	  color.setA(200);
+	colors->setEdgeValue(e, color);
+      }
+    }
+
+    // synchronize overview display parameters
   }
   /* else {
     qWarning("Canceled  Open/import");
@@ -648,9 +1014,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 }
 //**********************************************************************
 static string findMenuItemText(QPopupMenu &menu, int id) {
-#if (QT_REL == 3)
-  return menu.text(id).ascii();
-#else
   string name(menu.text(id).ascii());
 
   if (name.length() == 0) {
@@ -662,7 +1025,6 @@ static string findMenuItemText(QPopupMenu &menu, int id) {
     }
   }
   return name;
-#endif
 }
 //**********************************************************************
 void viewGl::importGraph(int id) {
@@ -678,7 +1040,7 @@ namespace {
   typedef std::vector<edge> EdgeA;
 
   void GetSelection(NodeA & outNodeA, EdgeA & outEdgeA,
-		    SuperGraph *inG, SelectionProxy * inSel ) {
+		    Graph *inG, BooleanProperty * inSel ) {
     assert( inSel );
     assert( inG );
     outNodeA.clear();
@@ -699,8 +1061,8 @@ namespace {
     } delete nodeIt;
   }
 
-  void SetSelection(SelectionProxy * outSel, NodeA & inNodeA,
-		    EdgeA & inEdgeA, SuperGraph * inG) {
+  void SetSelection(BooleanProperty * outSel, NodeA & inNodeA,
+		    EdgeA & inEdgeA, Graph * inG) {
     assert( outSel );
     assert( inG );
     outSel->setAllNodeValue( false );
@@ -716,21 +1078,21 @@ namespace {
 //**********************************************************************
 void viewGl::editCut() {
   if( !glWidget ) return;
-  SuperGraph * g = glWidget->getSuperGraph();
+  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if( !g ) return;
   // free the previous ccpGraph
   if( copyCutPasteGraph ) {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
   if( !selP ) return;
   // Save selection
   NodeA nodeA;
   EdgeA edgeA;
   GetSelection( nodeA, edgeA, g, selP );
   Observable::holdObservers();
-  copyCutPasteGraph = tlp::newSuperGraph();
+  copyCutPasteGraph = tlp::newGraph();
   tlp::copyToGraph( copyCutPasteGraph, g, selP );
   // Restore selection
   SetSelection( selP, nodeA, edgeA, g );
@@ -740,59 +1102,79 @@ void viewGl::editCut() {
 //**********************************************************************
 void viewGl::editCopy() {
   if( !glWidget ) return;
-  SuperGraph * g = glWidget->getSuperGraph();
+  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if( !g ) return;
   // free the previous ccpGraph
   if( copyCutPasteGraph ) {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
   if( !selP ) return;
   Observable::holdObservers();
-  copyCutPasteGraph = tlp::newSuperGraph();
+  copyCutPasteGraph = tlp::newGraph();
   tlp::copyToGraph( copyCutPasteGraph, g, selP );
   Observable::unholdObservers();
 }
 //**********************************************************************
 void viewGl::editPaste() {
   if( !glWidget ) return;
-  SuperGraph * g = glWidget->getSuperGraph();
+  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if( !g ) return;
   if( !copyCutPasteGraph ) return;
   Observable::holdObservers();
-  SelectionProxy * selP = g->getProperty<SelectionProxy>("viewSelection");
+  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
   tlp::copyToGraph( g, copyCutPasteGraph, 0, selP );
   Observable::unholdObservers();
 }
 //**********************************************************************
 void viewGl::editFind() {
   if(!glWidget) return;
-  SuperGraph * g = glWidget->getSuperGraph();
+  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if( !g ) return;
   
-  SelectionWidget *sel = new SelectionWidget(g);
+  static string currentProperty;
+  FindSelectionWidget *sel = new FindSelectionWidget(g, currentProperty);
   Observable::holdObservers();
-  sel->exec();
+  int nbItemsFound = sel->exec();
   Observable::unholdObservers();
+  if (nbItemsFound > - 1)
+    currentProperty = sel->getCurrentProperty();
   delete sel;
+  switch(nbItemsFound) {
+  case -1: break;
+  case 0: statusBar()->message("No item found."); break;
+  default:
+    stringstream sstr;
+    sstr << nbItemsFound << " item(s) found.";
+    statusBar()->message(sstr.str().c_str());
+  }
 }
 //**********************************************************************
-void viewGl::setParameters(const DataSet data) {
+void viewGl::setParameters(const DataSet& data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  glWidget->setParameters(data);
-  clusterTreeWidget->setSuperGraph(glWidget->getSuperGraph());
-  nodeProperties->setSuperGraph(glWidget->getSuperGraph());
-  propertiesWidget->setSuperGraph(glWidget->getSuperGraph());
+  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  param.setParameters(data);
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  clusterTreeWidget->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
+  eltProperties->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
+  propertiesWidget->setGlGraphWidget(glWidget);
 }
 //**********************************************************************
-void viewGl::updateStatusBar() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  SuperGraph *graph=clusterTreeWidget->getSuperGraph();
-  if (graph==0) return;
-  char tmp[255];
-  sprintf(tmp,"Ready, Nodes:%d, Edges:%d",graph->numberOfNodes(),graph->numberOfEdges());
-  statusBar()->message(tmp);
+void viewGl::updateCurrentGraphInfos() {
+  static QLabel *currentGraphInfosLabel = 0;
+  if (!currentGraphInfosLabel) {
+    statusBar()->addWidget(new QLabel(statusBar()), true);
+    currentGraphInfosLabel = new QLabel(statusBar());
+    statusBar()->addWidget(currentGraphInfosLabel);
+  }
+  if (glWidget) {
+    char tmp[255];
+    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
+    currentGraphInfosLabel->setText(tmp);
+    clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
+  } else
+    currentGraphInfosLabel->setText("");
 }
 //*********************************************************************
 static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
@@ -821,22 +1203,14 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
     QPopupMenu *groupMenu = (QPopupMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
-      if (itemGroupNames[i] ==
-#if (QT_REL == 3)
-	  groupMenus[j]->name()
-#else
-	  groupMenus[j]->objectName().ascii()
-#endif
-	  ) {
+      if (itemGroupNames[i] == groupMenus[j]->objectName().ascii()) {
 	subMenu = groupMenu = groupMenus[j];
 	break;
       }
     }
     if (!groupMenu) {
       groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
-#if (QT_REL == 4)
       groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
-#endif
       subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
@@ -849,101 +1223,72 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
   
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
-std::vector<QPopupMenu*> buildPropertyMenu(QPopupMenu &menu) {
+void buildPropertyMenu(QPopupMenu &menu, QObject *receiver, const char *slot) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
   std::vector<QPopupMenu*> groupMenus;
   std::string::size_type nGroups = 0;
-  it=PropertyProxy<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
-  for (;it!=PropertyProxy<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
+  it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
+  for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
-  return groupMenus;
+#if defined(__APPLE__) && (QT_MINOR_REL > 1)
+  for (std::string::size_type i = 0; i < nGroups; i++)
+    receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+#endif
+}
+
+template <typename TFACTORY, typename TMODULE>
+void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot) {
+  typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+  std::vector<QPopupMenu*> groupMenus;
+  std::string::size_type nGroups = 0;
+  for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
+    insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+ #if defined(__APPLE__) && (QT_MINOR_REL > 1)
+   for (std::string::size_type i = 0; i < nGroups; i++)
+     receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+ #endif
 }
 //**********************************************************************
 void viewGl::buildMenus() {
   //Properties PopMenus
-  std::vector<QPopupMenu*> groupMenus = buildPropertyMenu<IntType, IntType, Int>(intMenu);
-  std::string::size_type nGroups = groupMenus.size();
-#if (QT_REL == 3)
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeInt(int)));
-#endif
-  groupMenus = buildPropertyMenu<StringType, StringType, String>(stringMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeString(int)));
-#endif
-  groupMenus = buildPropertyMenu<SizeType, SizeType, Sizes>(sizesMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSize(int)));
-#endif
-  groupMenus = buildPropertyMenu<ColorType, ColorType, Colors>(colorsMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeColor(int)));
-#endif
-  groupMenus = buildPropertyMenu<PointType, LineType, Layout>(layoutMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-     connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeLayout(int)));
-#endif
-  groupMenus = buildPropertyMenu<DoubleType,DoubleType,Metric>(metricMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeMetric(int)));
-#endif
-  groupMenus = buildPropertyMenu<BooleanType,BooleanType, Selection>(selectMenu);
-#if (QT_REL == 3)
-  nGroups = groupMenus.size();
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(changeSelection(int)));
-#endif
-  //Clustering PopMenu
-  TemplateFactory<ClusteringFactory,Clustering,ClusterContext>::ObjectCreator::const_iterator it3;
-  groupMenus.resize(nGroups = 0);
-  for (it3=ClusteringFactory::factory->objMap.begin();it3!=ClusteringFactory::factory->objMap.end();++it3)
-    clusteringMenu->insertItem(it3->first.c_str());
-  //Export PopMenu
-  TemplateFactory<ExportModuleFactory,ExportModule,ClusterContext>::ObjectCreator::const_iterator it9;
-  groupMenus.resize(nGroups = 0);
-  for (it9=ExportModuleFactory::factory->objMap.begin();it9!=ExportModuleFactory::factory->objMap.end();++it9)
-    insertInMenu(exportGraphMenu, it9->first.c_str(), it9->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3)
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(exportGraph(int)));
-#endif
-  //Import PopMenu
-  TemplateFactory<ImportModuleFactory,ImportModule,ClusterContext>::ObjectCreator::const_iterator it4;
-  groupMenus.resize(nGroups = 0);
-  for (it4=ImportModuleFactory::factory->objMap.begin();it4!=ImportModuleFactory::factory->objMap.end();++it4)
-    insertInMenu(importGraphMenu, it4->first.c_str(), it4->second->getGroup(), groupMenus, nGroups);
-#if (QT_REL == 3)
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    connect(groupMenus[i], SIGNAL(activated(int)), SLOT(importGraph(int)));
-#endif
+  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(int)));
+  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu, this, SLOT(changeString(int)));
+  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu, this, SLOT(changeSize(int)));
+  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu, this, SLOT(changeColor(int)));
+  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu, this, SLOT(changeLayout(int)));
+  buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(metricMenu, this, SLOT(changeMetric(int)));
+  buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(selectMenu, this, SLOT(changeSelection(int)));
+
+  buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(int)));
+  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(int)));
+  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(int)));
+  // Tulip known formats (see GlGraph)
+  // formats are sorted, "~" is just an end marker
+  char *tlpFormats[] = {"EPS", "SVG", "~"};
+  unsigned int i = 0;
   //Image PopuMenu
-#if (QT_REL == 3)
-  QStrList listFormat=QImageIO::outputFormats();
-  char *tmp=listFormat.first();
-  while (tmp!=0) {
-    exportImageMenu.insertItem(tmp);
-    tmp=listFormat.next();
-  }
-#else
+  // int Qt 4, output formats are not yet sorted and uppercased
+  list<QString> formats;
+  // first add Tulip known formats
+  while (strcmp(tlpFormats[i], "~") != 0)
+    formats.push_back(tlpFormats[i++]);
+  // uppercase and insert all Qt formats
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-    exportImageMenu.insertItem(QString(format));
+    char* tmp = format.data();
+    for (int i = strlen(tmp) - 1; i >= 0; --i)
+      tmp[i] = toupper(tmp[i]);
+    formats.push_back(QString(tmp));
   }
-#endif
-  exportImageMenu.insertItem("EPS");
+  // sort before inserting in exportImageMenu
+  formats.sort();
+  foreach(QString str, formats)
+    exportImageMenu.insertItem(str);
   //Windows
-  dialogMenu.insertItem("Mouse Tool Bar");
-  dialogMenu.insertItem("3D Overview");
-  dialogMenu.insertItem("Info Editor");
+  dialogMenu->insertItem("3D &Overview");
+  dialogMenu->insertItem("&Info Editor");
+  dialogMenu->insertItem("&Layer Manager");
+  dialogMenu->insertItem("&Rendering Parameters", 1000);
+  dialogMenu->setAccel(tr("Ctrl+R"), 1000);
   //==============================================================
   //File Menu 
   fileMenu->insertSeparator();
@@ -954,54 +1299,70 @@ void viewGl::buildMenus() {
   if (exportImageMenu.count()>0)
     fileMenu->insertItem("&Save Picture as " , &exportImageMenu); //this , SLOT( outputImage() ));
   //View Menu
-  viewMenu->insertItem( "Redraw View", this, SLOT( redrawView() ));
-  viewMenu->insertItem( "Center View", this, SLOT( centerView() ));
-  viewMenu->insertItem( "Restore View", this, SLOT( restoreView() ));
-  viewMenu->insertItem( "Dialogs",  &dialogMenu);
-  //EditMenu
-  editMenu->insertSeparator();
-  editMenu->insertItem( "Deselect All", this, SLOT( deselectALL() ));
-  editMenu->insertItem( "Reverse Selection", this, SLOT( reverseSelection() ));
-  editMenu->insertItem( "Delete Selection", this , SLOT(delSelection() ));
-  editMenu->insertItem( "New subgraph", this, SLOT( newSubgraph() ));
-  editMenu->insertItem( "Reverse selected edges direction", this, SLOT( reverseSelectedEdgeDirection() ));
-  editMenu->insertItem( "group", this, SLOT( group() ));
+  viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
+  viewMenu->insertItem("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
+  viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
   //Property Menu
   if (selectMenu.count()>0)
     propertyMenu->insertItem("&Selection", &selectMenu );
-  if (layoutMenu.count()>0)
-    propertyMenu->insertItem("&Layout", &layoutMenu );
-  if (metricMenu.count()>0)
-    propertyMenu->insertItem("&Metric", &metricMenu );
   if (colorsMenu.count()>0)
-    propertyMenu->insertItem("&Colors", &colorsMenu );
+    propertyMenu->insertItem("&Color", &colorsMenu );
+  if (metricMenu.count()>0)
+    propertyMenu->insertItem("&Measure", &metricMenu );
   if (intMenu.count()>0)
     propertyMenu->insertItem("&Integer", &intMenu );
-  if (stringMenu.count()>0)
-    propertyMenu->insertItem("&String", &stringMenu );
+  if (layoutMenu.count()>0)
+    propertyMenu->insertItem("&Layout", &layoutMenu );
   if (sizesMenu.count()>0)
-    propertyMenu->insertItem("&Sizes", &sizesMenu );
+    propertyMenu->insertItem("S&ize", &sizesMenu );
+  if (stringMenu.count()>0)
+    propertyMenu->insertItem("L&abel", &stringMenu );
+  if (generalMenu.count()>0)
+    propertyMenu->insertItem("&General", &generalMenu );
 }
 //**********************************************************************
 void viewGl::outputEPS() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    glWidget->outputEPS(64000000,true,s.ascii());
+    if (glWidget->outputEPS(64000000,true,s.ascii()))
+      statusBar()->message(s + " saved.");
+    else
+      QMessageBox::critical( 0, "Save Picture Failed",
+			     "The file has not been saved."
+			     );
+  }
+}
+//**********************************************************************
+void viewGl::outputSVG() {
+  if (!glWidget) return;
+  QString s( QFileDialog::getSaveFileName());
+  if (!s.isNull()) {
+    if (glWidget->outputSVG(64000000,s.ascii()))
+      statusBar()->message(s + " saved.");
+    else
+      QMessageBox::critical( 0, "Save Picture Failed",
+			     "The file has not been saved."
+			     );
   }
 }
 //**********************************************************************
 void viewGl::exportImage(int id) {
   if (!glWidget) return;
-  string name(exportImageMenu.text(id).ascii());
+  string name = findMenuItemText(exportImageMenu, id);
   if (name=="EPS") {
     outputEPS();
+    return;
+  } else if (name=="SVG") {
+    outputSVG();
     return;
   }
   QString s(QFileDialog::getSaveFileName());
   if (s.isNull()) return;    
   int width,height;
-  unsigned char* image = glWidget->getImage(width,height);
+  width = glWidget->width();
+  height = glWidget->height();
+  unsigned char* image= glWidget->getImage();
   QPixmap pm(width,height);
   QPainter painter;
   painter.begin(&pm);
@@ -1013,17 +1374,14 @@ void viewGl::exportImage(int id) {
       painter.drawPoint(x,y);
     }
   painter.end();
-  delete image;
+  free(image);
   pm.save( s, name.c_str());
+  statusBar()->message(s + " saved.");
 }
 //**********************************************************************
 void viewGl::exportGraph(int id) {
   if (!glWidget) return;
-  QString filename(QFileDialog::getSaveFileName(this->caption().ascii()));
-  if (filename.isNull()) return;    
-  DataSet dataSet;
-  string name(exportGraphMenu.text(id).ascii());
-  fileSave(name, filename.ascii());
+  doFileSave(findMenuItemText(exportGraphMenu,id), "", "", "");
 }
 //**********************************************************************
 void viewGl::windowsMenuActivated( int id ) {
@@ -1052,33 +1410,42 @@ void viewGl::windowsMenuAboutToShow() {
   }
 }
 //**********************************************************************
-int viewGl::closeWin() {
+/* returns true if user canceled */
+bool viewGl::askSaveGraph(const std::string name) {
+  string message = "Do you want to save this graph: " + name + " ?";
+  int answer = QMessageBox::question(this, "Save", message.c_str(),
+    QMessageBox::Yes | QMessageBox::Default,
+    QMessageBox::No,
+    QMessageBox::Cancel | QMessageBox::Escape);
+  switch(answer) {
+    case QMessageBox::Cancel : return true;
+    case QMessageBox::Yes: return !doFileSave();
+    default: return false;
+  }
+}
+//**********************************************************************
+/* returns true if window agrees to be closed */ 
+bool viewGl::closeWin() {
   set<unsigned int> treatedGraph;
   QWidgetList windows = workspace->windowList();
   for(int i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
     if (typeid(*win)==typeid(GlGraphWidget)) {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-      SuperGraph *superGraph = tmpNavigate->getSuperGraph()->getRoot();
-      if(!alreadyTreated(treatedGraph, superGraph)) {
-	string message = "Do you want to save this graph : " + superGraph->getAttribute<string>("name") + " ?";
-	int answer = QMessageBox::question(this, "Save", message.c_str(),  QMessageBox::Yes,  QMessageBox::No,
-					   QMessageBox::Cancel);
-	if(answer == QMessageBox::Cancel)
-	  return false;
-	if(answer == QMessageBox::Yes) {
-	  glWidget = tmpNavigate;
-	  fileSave();
-	}
-	treatedGraph.insert((unsigned long)superGraph);
+      Graph *graph = tmpNavigate->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot();
+      if(!alreadyTreated(treatedGraph, graph)) {
+        glWidget = tmpNavigate;
+        bool canceled = askSaveGraph(graph->getAttribute<string>("name"));
+        if (canceled)
+          return false;
+	treatedGraph.insert((unsigned long)graph);
       }
     }
   } 
-  delete this;
   return true;
 }
 //**********************************************************************
-int viewGl::alreadyTreated(set<unsigned int> treatedGraph, SuperGraph *graph) {
+int viewGl::alreadyTreated(set<unsigned int> treatedGraph, Graph *graph) {
   set<unsigned int>::iterator iterator = treatedGraph.begin();
   while(iterator != treatedGraph.end()) {
     unsigned int currentGraph = *iterator;
@@ -1096,127 +1463,152 @@ void viewGl::closeEvent(QCloseEvent *e) {
     e->ignore();
 }
 //**********************************************************************
-void viewGl::goInside() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  node tmpNode;
-  edge tmpEdge;
-  tlp::ElementType type;
-  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
-    if (type==NODE) {
-      SuperGraph *supergraph=glWidget->getSuperGraph();
-      MetaGraphProxy *meta=supergraph->getProperty<MetaGraphProxy>("viewMetaGraph");
-      if (meta->getNodeValue(tmpNode)!=0) {
-	changeSuperGraph(meta->getNodeValue(tmpNode));
-      }
-    }
-  }
-}
-//**********************************************************************
-void viewGl::ungroup() {
-  node tmpNode;
-  edge tmpEdge;
-  tlp::ElementType type;
-  if (glWidget->doSelect(mouseClicX, mouseClicY, type, tmpNode,tmpEdge)) {
-    if (type==NODE) {
-      SuperGraph *supergraph=glWidget->getSuperGraph();
-      tlp::openMetaNode(supergraph, tmpNode);
-    }
-  }
-  clusterTreeWidget->update();
-}
-//**********************************************************************
 void viewGl::group() {
   set<node> tmp;
-  SuperGraph *supergraph=glWidget->getSuperGraph();
-  Iterator<node> *it=supergraph->getNodes();
-  SelectionProxy *select = supergraph->getProperty<SelectionProxy>("viewSelection");
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Iterator<node> *it=graph->getNodes();
+  BooleanProperty *select = graph->getProperty<BooleanProperty>("viewSelection");
   while (it->hasNext()) {
     node itn = it->next();
     if (select->getNodeValue(itn))
 	tmp.insert(itn);
   }delete it;
   if (tmp.empty()) return;
-  if (supergraph == supergraph->getRoot()) {
+  if (graph == graph->getRoot()) {
     QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");    
-    supergraph = tlp::newCloneSubGraph(supergraph, "groups");
+    graph = tlp::newCloneSubGraph(graph, "groups");
   }
-  tlp::createMetaNode(supergraph, tmp);
+  node metaNode = tlp::createMetaNode(graph, tmp);
+  // set metanode viewColor to glWidget background color
+  Color metaNodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
+  metaNodeColor[3]=127;
+  graph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaNode,metaNodeColor);
+  /*graph->getProperty<ColorProperty>("viewColor")->
+    setNodeValue(metaNode, glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getBackgroundColor());  */
   clusterTreeWidget->update();
-  changeSuperGraph(supergraph);
-}
-//**********************************************************************
-void viewGl::deleteElement(unsigned int x, unsigned int y, GlGraphWidget *glW){
-  bool result;
-  ElementType type;
-  node tmpNode;
-  edge tmpEdge;
-  Observable::holdObservers();
-  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
-  if(result==true) {
-    switch(type) {
-    case NODE: glW->getSuperGraph()->delNode(tmpNode); break;
-    case EDGE: glW->getSuperGraph()->delEdge(tmpEdge); break;
-    }
-  }
-  Observable::unholdObservers();
-}
-//**********************************************************************
-void viewGl::selectElement() {
-  selectElement(mouseClicX, mouseClicY, glWidget, true);
-}
-//**********************************************************************
-void viewGl::addRemoveElement() {
-  selectElement(mouseClicX, mouseClicY, glWidget, false);
-}
-//**********************************************************************
-void viewGl::deleteElement() {
-  deleteElement(mouseClicX, mouseClicY, glWidget);
-}
-//**********************************************************************
-void viewGl::selectElement(unsigned int x, unsigned int y, GlGraphWidget *glW, bool reset) {
-  Observable::holdObservers();
-  bool result;
-  ElementType type;
-  node tmpNode;
-  edge tmpEdge;
-  SelectionProxy *elementSelected = glW->getSuperGraph()->getProperty<SelectionProxy>("viewSelection");
-  if (reset) {
-    elementSelected->setAllNodeValue(false);
-    elementSelected->setAllEdgeValue(false);
-  }
-  result = glW->doSelect(x, y, type, tmpNode, tmpEdge);
-  if (result==true) {
-    switch(type) {
-    case NODE: elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode)); break;
-    case EDGE: elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge)); break;
-    }
-  }
-  Observable::unholdObservers();
+  changeGraph(graph);
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
+#if (QT_REL == 4)
+  // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
+  // is no longer needed; the tooltip implementation must take place
+  // in the event() method inherited from QWidget.
+  if (obj->inherits("GlGraphWidget") &&
+      e->type() == QEvent::ToolTip && tooltips->isOn()) {
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    QString tmp;
+    QHelpEvent *he = static_cast<QHelpEvent *>(e);
+    if (((GlGraphWidget *) obj)->doSelect(he->pos().x(), he->pos().y(), type, tmpNode, tmpEdge)) {
+      // try to show the viewLabel if any
+      StringProperty *labels = ((GlGraphWidget *) obj)->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
+      std::string label;
+      QString ttip;
+      switch(type) {
+      case NODE:
+	label = labels->getNodeValue(tmpNode);
+	if (!label.empty())
+	  ttip += (label + " (").c_str();
+	ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
+	if (!label.empty())
+	  ttip += ")";
+	QToolTip::showText(he->globalPos(), ttip);
+	break;
+      case EDGE: 
+	label = labels->getEdgeValue(tmpEdge);
+	if (!label.empty())
+	  ttip += (label + "(").c_str();
+	ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
+	if (!label.empty())
+	  ttip += ")";
+	QToolTip::showText(he->globalPos(), ttip);
+	break;
+      }
+      return true;
+    }
+  }
+#endif
   if ( obj->inherits("GlGraphWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button()==RightButton) {
-      mouseClicX = me->x();
-      mouseClicY = me->y();
-      QPopupMenu *contextMenu=new QPopupMenu(this,"dd");
-      contextMenu->insertItem(tr("Go inside"), this, SLOT(goInside()));
-      contextMenu->insertItem(tr("New 3D View"), this, SLOT(new3DView()));
-      contextMenu->insertItem(tr("Delete"), this, SLOT(deleteElement()));
-      contextMenu->insertItem(tr("Select"), this, SLOT(selectElement()));
-      contextMenu->insertItem(tr("Add/Remove selection"), this, SLOT(addRemoveElement()));
-      SuperGraph *supergraph=glWidget->getSuperGraph();
-      if (supergraph != supergraph->getRoot())
-	contextMenu->insertItem(tr("ungroup"), this, SLOT(ungroup()));
-      contextMenu->exec(me->globalPos());
-      delete contextMenu;
+      bool result;
+      ElementType type;
+      node tmpNode;
+      edge tmpEdge;
+      // look if the mouse pointer is over a node or edge
+      result = glWidget->doSelect(me->x(), me->y(), type, tmpNode, tmpEdge);
+      if (!result)
+      return false;
+      // Display a context menu
+      bool isNode = type == NODE;
+      int itemId = isNode ? tmpNode.id : tmpEdge.id;
+      QPopupMenu contextMenu(this,"dd");
+      stringstream sstr;
+      sstr << (isNode ? "Node " : "Edge ") << itemId;
+      contextMenu.setItemEnabled(contextMenu.insertItem(tr(sstr.str().c_str())), false);
+      contextMenu.insertSeparator();
+      contextMenu.insertItem(tr("Add to/Remove from selection"));
+      int selectId = contextMenu.insertItem(tr("Select"));
+      int deleteId = contextMenu.insertItem(tr("Delete"));
+      contextMenu.insertSeparator();
+      Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+      int goId = -1;
+      int ungroupId = -1;
+      if (isNode) {
+	GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	if (meta->getNodeValue(tmpNode)!=0) {
+	  goId = contextMenu.insertItem(tr("Go inside"));
+	  ungroupId = contextMenu.insertItem(tr("Ungroup"));
+	}
+      }
+      if (goId != -1)
+	contextMenu.insertSeparator();
+      int propId = contextMenu.insertItem(tr("Properties"));
+      int menuId = contextMenu.exec(me->globalPos(), 2);
+      if (menuId == -1)
+	return true;
+      Observable::holdObservers();
+      if (menuId == deleteId) { // Delete
+	// delete graph item
+	if (isNode)
+	  graph->delNode(node(itemId));
+	else
+	  graph->delEdge(edge(itemId));
+      } else {
+	if (menuId == propId) // Properties
+	  showElementProperties(itemId, isNode);
+	else  {
+	  if (menuId == goId) { // Go inside
+	    GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	    changeGraph(meta->getNodeValue(tmpNode));
+	  }
+	  else  {
+	    if (menuId == ungroupId) { // Ungroup
+	      tlp::openMetaNode(graph, tmpNode);
+	      clusterTreeWidget->update();
+	    } else {
+	      BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+	      if (menuId == selectId) { // Select
+		// empty selection
+		elementSelected->setAllNodeValue(false);
+		elementSelected->setAllEdgeValue(false);
+	      }
+	      // selection add/remove graph item
+	      if (isNode)
+		elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+	      else
+		elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
+	    }
+	  }
+	}
+      }
+      Observable::unholdObservers();
       return true;
     }
-    else {
-      return false;
-    }
+    return false;
   }
   return false;
 }
@@ -1225,18 +1617,20 @@ void viewGl::focusInEvent ( QFocusEvent * ) {
 }
 //**********************************************************************
 void viewGl::showDialog(int id){
-  string name(dialogMenu.text(id).ascii());
-  if (name=="Mouse Tool Bar") {
-    mouseToolBarDock->show();
-    clusterTreeWidget->raise();
-  }
-  if (name=="Info Editor") {
+  string name(dialogMenu->text(id).ascii());
+  if (name=="&Info Editor") {
     tabWidgetDock->show();
     tabWidgetDock->raise();
   }
-  if (name=="3D Overview") {
+  if (name=="3D &Overview") {
     overviewDock->show();
     overviewDock->raise();
+  }
+  if (name=="&Layer Manager") {
+    layerWidget->show();
+  }
+  if (id == 1000 && glWidget != 0) {
+    overviewWidget->showRenderingParametersDialog();
   }
 }
 //======================================================================
@@ -1244,52 +1638,46 @@ void viewGl::showDialog(int id){
 //======================================================================
 ///Redraw the view of the graph
 void  viewGl::redrawView() {
-  if (!glWidget) return;
-  glWidget->updateGL();
+  if (glWidget == 0) return;
+  glWidget->draw();
 }
 //**********************************************************************
-///Reccenter the layout of the graph
+///Recenter the layout of the graph
 void viewGl::centerView() {
-  if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
-  if (graph==0) return;
-  Observable::holdObservers();
-  glWidget->centerScene();
-  redrawView();
-  Observable::unholdObservers();
-}
-//**********************************************************************
-///Restore the view of the graph
-void viewGl::restoreView() {
-  if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
-  if (graph==0) return;
-  Observable::holdObservers();
-  glWidget->centerScene();
-  redrawView();
+  if (glWidget == 0) return;
+  glWidget->getScene()->centerScene();
   overviewWidget->setObservedView(glWidget);
-  updateStatusBar();
-  Observable::unholdObservers();
+  redrawView();
 }
 //===========================================================
 //Menu Edit : functions
 //===========================================================
-///Deselect all entries in the glGraph current selection Proxy
-void viewGl::deselectALL() {
+///Deselect all entries in the glGraph current selection 
+void viewGl::selectAll() {
   if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->setAllNodeValue(false);
-  graph->getProperty<SelectionProxy>("viewSelection")->setAllEdgeValue(false);
+  graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+  graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+  Observable::unholdObservers();
+}
+///Deselect all entries in the glGraph current selection 
+void viewGl::deselectAll() {
+  if (!glWidget) return;
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (graph==0) return;
+  Observable::holdObservers();
+  graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(false);
+  graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(false);
   Observable::unholdObservers();
 }
 //**********************************************************************
 void viewGl::delSelection() {
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  SelectionProxy *elementSelected=graph->getProperty<SelectionProxy>("viewSelection");
+  BooleanProperty *elementSelected=graph->getProperty<BooleanProperty>("viewSelection");
   StableIterator<node> itN(graph->getNodes());
   while(itN.hasNext()) {
     node itv = itN.next();
@@ -1305,23 +1693,23 @@ void viewGl::delSelection() {
   Observable::unholdObservers();
 }
 //==============================================================
-///Reverse all entries in the glGraph current selection Proxy
+///Reverse all entries in the glGraph current selection 
 void viewGl::reverseSelection() {
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->reverse();
+  graph->getLocalProperty<BooleanProperty>("viewSelection")->reverse();
   Observable::unholdObservers();
 }
 //==============================================================
 void viewGl::newSubgraph() {
   if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   bool ok = FALSE;
   string tmp;
   bool verifGraph = true;
-  SelectionProxy *sel1 = graph->getProperty<SelectionProxy>("viewSelection");  
+  BooleanProperty *sel1 = graph->getProperty<BooleanProperty>("viewSelection");  
   Observable::holdObservers();
   Iterator<edge>*itE = graph->getEdges();
   while (itE->hasNext()) {
@@ -1335,16 +1723,16 @@ void viewGl::newSubgraph() {
   
   if(!verifGraph) 
     QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
-  QString text = QInputDialog::getText( "View building" ,  "Please enter view name" , QLineEdit::Normal,QString::null, &ok, this );
+  QString text = QInputDialog::getText( "Creation of subgraph" ,  "Please enter the subgraph name" , QLineEdit::Normal,QString::null, &ok, this );
   if (ok && !text.isEmpty()) {
-    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
-    SuperGraph *tmp = graph->addSubGraph(sel1);
+    sel1 = graph->getProperty<BooleanProperty>("viewSelection");
+    Graph *tmp = graph->addSubGraph(sel1);
     tmp->setAttribute("name",string(text.latin1()));
     clusterTreeWidget->update();
   }
   else if (ok) {
-    sel1 = graph->getProperty<SelectionProxy>("viewSelection");
-    SuperGraph *tmp=graph->addSubGraph(sel1);
+    sel1 = graph->getProperty<BooleanProperty>("viewSelection");
+    Graph *tmp=graph->addSubGraph(sel1);
     tmp->setAttribute("name", newName());
     clusterTreeWidget->update();
   }
@@ -1352,16 +1740,19 @@ void viewGl::newSubgraph() {
 //==============================================================
 void viewGl::reverseSelectedEdgeDirection() {
   if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<SelectionProxy>("viewSelection")->reverseEdgeDirection();  
+  graph->getProperty<BooleanProperty>("viewSelection")->reverseEdgeDirection();  
   Observable::unholdObservers();
 }
 //==============================================================
-void viewGl::superGraphAboutToBeRemoved(SuperGraph *sg) {
+void viewGl::graphAboutToBeRemoved(Graph *sg) {
   //  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;
-  glWidget->setSuperGraph(0);
+  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  //param.setGraph(0);
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  overviewWidget->setObservedView(glWidget);
 }
 //==============================================================
 void viewGl::helpAbout() {
@@ -1403,19 +1794,22 @@ void viewGl::helpAssistantError(const QString &msg) {
 }
 //==============================================================
 void viewGl::fileExit() {
-  closeWin();
+  if (closeWin())
+    delete this;
 }
 //==============================================================
 void viewGl::filePrint() {
   if (!glWidget) return;
-  SuperGraph *graph=glWidget->getSuperGraph();
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   
   QPrinter printer;
   if (!printer.setup(this)) 
     return;
   int width,height;
-  unsigned char* image = glWidget->getImage(width,height);
+  width = glWidget->width();
+  height = glWidget->height();
+  unsigned char* image= glWidget->getImage();
   QPainter painter(&printer);
   for (int y=0; y<height; y++)
     for (int x=0; x<width; x++) {
@@ -1428,75 +1822,84 @@ void viewGl::filePrint() {
   delete image;
 }
 //==============================================================
-void viewGl::glGraphWidgetClosed(GlGraphWidget *navigate) {
-  GlGraphWidget *w = navigate;
-  SuperGraph *root = w->getSuperGraph()->getRoot();
+void viewGl::glGraphWidgetClosing(GlGraphWidget *glgw, QCloseEvent *event) {
+  Graph *root = glgw->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot();
   QWidgetList windows = workspace->windowList();
   int i;
   for( i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
     if (typeid(*win)==typeid(GlGraphWidget)) {
       GlGraphWidget *tmpNavigate = dynamic_cast<GlGraphWidget *>(win);
-      int superGraph1 = w->getSuperGraph()->getRoot()->getId();
-      int superGraph2 = tmpNavigate->getSuperGraph()->getRoot()->getId();
-      if((tmpNavigate != navigate) && (superGraph1 == superGraph2))
+      int graph1 = root->getId();
+      int graph2 = tmpNavigate->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot()->getId();
+      if((tmpNavigate != glgw) && (graph1 == graph2))
 	break;
     }
   }
   if(i == int(windows.count())) {
-    string message = "Do you want to save this graph : " +
-      navigate->getSuperGraph()->getAttribute<string>("name") + " ?";
-
-    int answer = QMessageBox::question(this, "Save", message.c_str(), QMessageBox::Yes,
-				       QMessageBox::No, 
-				       QMessageBox::Cancel);
-    if(answer == QMessageBox::Cancel)
+    bool canceled = askSaveGraph(glgw->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getAttribute<string>("name"));
+    if (canceled) {
+      event->ignore();
       return;
-    if(answer == QMessageBox::Yes)
-      fileSave();
-    clusterTreeWidget->setSuperGraph(0);
-    propertiesWidget->setSuperGraph(0);
-    propertiesWidget->setGlGraphWidget(0);
-    nodeProperties->setSuperGraph(0);
+    }
+    clusterTreeWidget->setGraph(0);
+    propertiesWidget->setGlGraphWidget(NULL);
+    eltProperties->setGraph(0);
 #ifdef STATS_UI
     statsWidget->setGlGraphWidget(0);
 #endif
-    w->setSuperGraph(0);
-    delete root;
-  }
+    GlGraphRenderingParameters param = glgw->getScene()->getGlGraphComposite()->getRenderingParameters();
+    //param.setGraph(0);
+    glgw->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  } else
+    // no graph to delete
+    root = (Graph *) 0;
   
-  if (openFiles.find((unsigned long)w) != openFiles.end())   
-    openFiles.erase((unsigned long)w);
+  if (openFiles.find((unsigned long)glgw) != openFiles.end())   
+    openFiles.erase((unsigned long)glgw);
   
-  if(w == glWidget) {
-    glWidget->setSuperGraph(0);
+  if(glgw == glWidget) {
+    GlGraphRenderingParameters param = glgw->getScene()->getGlGraphComposite()->getRenderingParameters();
+    //param.setGraph(0);
+    glgw->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     glWidget = 0;
+    updateCurrentGraphInfos();
   }
-  delete navigate;
+  delete glgw;
+
+  // if needed the graph must be deleted after
+  // the GlGraphWidget because this one has to remove itself
+  // from the graph observers list
+  if (root)
+    delete root;
   
   if(windows.count() == 1)
     enableElements(false);
-} 
+}
 //**********************************************************************
-///Make a new clustering of the view graph
-void viewGl::makeClustering(int id) {
+/// Apply a general algorithm
+void viewGl::applyAlgorithm(int id) {
   clearObservers();
   if (glWidget==0) return;
   Observable::holdObservers();
-  string name(clusteringMenu->text(id).ascii());
+  string name = findMenuItemText(generalMenu, id);
   string erreurMsg;
   DataSet dataSet;
-  SuperGraph *graph=glWidget->getSuperGraph();
-  StructDef parameter = ClusteringFactory::factory->getParam(name);
-  parameter.buildDefaultDataSet( dataSet, graph );
-  tlp::openDataSetDialog(dataSet, parameter, &dataSet, "Tulip Parameter Editor", graph );
-  QtProgress myProgress(this,name);
-  myProgress.hide();
-  if (!tlp::clusterizeGraph(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-    QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
+  StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
+  params->buildDefaultDataSet(dataSet, graph );
+  bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
+				   "Tulip Parameter Editor", graph, this);
+  if (ok) {
+    QtProgress myProgress(this,name);
+    myProgress.hide();
+    if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
+      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+    }
+    clusterTreeWidget->update();
+    clusterTreeWidget->setGraph(graph);
   }
-  clusterTreeWidget->update();
-  clusterTreeWidget->setSuperGraph(graph);
   Observable::unholdObservers();
   initObservers();
 }
@@ -1506,26 +1909,37 @@ void viewGl::makeClustering(int id) {
 template<typename PROPERTY>
 bool viewGl::changeProperty(string name, string destination, bool query, bool redraw) {
   if( !glWidget ) return false;
-  SuperGraph *graph = glWidget->getSuperGraph();
+  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if(graph == 0) return false;
   Observable::holdObservers();
-  overviewWidget->setObservedView(0);    
+  overviewWidget->setObservedView(0);
+  GlGraphRenderingParameters param;
   QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
   bool   resultBool=true;  
   DataSet *dataSet =0;
   if (query) {
     dataSet = new DataSet();
-    StructDef parameter = PROPERTY::factory->getParam(name);
-    parameter.buildDefaultDataSet( *dataSet, graph );
-    resultBool = tlp::openDataSetDialog(*dataSet, parameter, dataSet, "Tulip Parameter Editor", graph );
+    StructDef *params = getPluginParameters(PROPERTY::factory, name);
+    StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
+    params->buildDefaultDataSet( *dataSet, graph );
+    resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet,
+					"Tulip Parameter Editor", graph, this);
   }
 
   if (resultBool) {
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+      //cam = param.getCamera();
+      param.setInputLayout(name);
+      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+    }
+
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
     if (!resultBool) {
-      QMessageBox::critical( 0, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
+      QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
     }
     else 
       switch(myProgress.state()){
@@ -1537,10 +1951,18 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	resultBool=false;
       };
     graph->delLocalProperty(name);
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+      param.setInputLayout("viewLayout");
+      //param.setCamera(cam);
+      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+    }
+    //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
   if (dataSet!=0) delete dataSet;
 
-  propertiesWidget->setSuperGraph(graph);
+  propertiesWidget->setGlGraphWidget(glWidget);
   overviewWidget->setObservedView(glWidget);
   Observable::unholdObservers();
   return resultBool;
@@ -1549,7 +1971,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 void viewGl::changeString(int id) {
   clearObservers();
   string name = findMenuItemText(stringMenu, id);
-  if (changeProperty<StringProxy>(name,"viewLabel"))
+  if (changeProperty<StringProperty>(name,"viewLabel"))
     redrawView();
   initObservers();
 }
@@ -1557,7 +1979,7 @@ void viewGl::changeString(int id) {
 void viewGl::changeSelection(int id) {
   clearObservers();
   string name = findMenuItemText(selectMenu, id);
-  if (changeProperty<SelectionProxy>(name,"viewSelection"))
+  if (changeProperty<BooleanProperty>(name,"viewSelection"))
     redrawView();
   initObservers();
 }
@@ -1565,9 +1987,9 @@ void viewGl::changeSelection(int id) {
 void viewGl::changeMetric(int id) {
   clearObservers();
   string name = findMenuItemText(metricMenu, id);
-  bool result = changeProperty<MetricProxy>(name,"viewMetric", true);
+  bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
   if (result && map_metric->isOn()) {
-    if (changeProperty<ColorsProxy>("Metric Mapping","viewColor", false))
+    if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
       redrawView();
   }
   initObservers();
@@ -1579,31 +2001,24 @@ void viewGl::changeLayout(int id) {
   GraphState * g0 = 0;
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
-  Camera cam = glWidget->getCamera();
-  Coord scTrans = glWidget->getSceneTranslation();
-  Coord scRot = glWidget->getSceneRotation();
-  glWidget->setInputLayout(name);
-  bool result = changeProperty<LayoutProxy>(name, "viewLayout", true, true);
-  glWidget->setInputLayout("viewLayout");
-  glWidget->setCamera(cam);
-  glWidget->setSceneTranslation(scTrans);
-  glWidget->setSceneRotation(scRot);
+
+  bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
   if (result) {
     if( force_ratio->isOn() )
-      glWidget->getSuperGraph()->getLocalProperty<LayoutProxy>("viewLayout")->perfectAspectRatio();
-    //SuperGraph *graph=glWidget->getSuperGraph();
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
+    //Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     Observable::holdObservers();
-    glWidget->centerScene();
+    glWidget->getScene()->centerScene();
     overviewWidget->setObservedView(glWidget);
-    updateStatusBar();
     Observable::unholdObservers();
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
@@ -1617,7 +2032,7 @@ void viewGl::changeLayout(int id) {
 void viewGl::changeInt(int id) {
   clearObservers();
   string name = findMenuItemText(intMenu, id);
-  changeProperty<IntProxy>(name,"viewInt");
+  changeProperty<IntegerProperty>(name, "viewInt");
   initObservers();
 }
   //**********************************************************************
@@ -1627,15 +2042,16 @@ void viewGl::changeColors(int id) {
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
   string name = findMenuItemText(colorsMenu, id);
-  bool result = changeProperty<ColorsProxy>(name,"viewColor");
+  bool result = changeProperty<ColorProperty>(name,"viewColor");
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
@@ -1652,15 +2068,16 @@ void viewGl::changeSizes(int id) {
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
   string name = findMenuItemText(sizesMenu, id);
-  bool result = changeProperty<SizesProxy>(name,"viewSize");
+  bool result = changeProperty<SizeProperty>(name,"viewSize");
   if( result ) {
     if( enable_morphing->isOn() ) {
       GraphState * g1 = new GraphState( glWidget );
-      bool morphable = morph->start( glWidget, g0, g1);
+      bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
 	delete g1;
 	g1 = 0;
       } else {
+	morph->start(glWidget);
 	g0 = 0;	// state remains in morph data ...
       }
     }
@@ -1675,23 +2092,14 @@ void viewGl::gridOptions() {
   if (gridOptionsWidget == 0)
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentGraphWidget(glWidget);
+  gridOptionsWidget->setCurrentLayerManagerWidget(layerWidget);
   gridOptionsWidget->show();
-}
-//**********************************************************************
-void viewGl::mouseChanged(MouseInterface *m) {
-}
-//**********************************************************************
-void viewGl::showElementProperties() {
-  // show 'Element' tab in 'Info Editor'
-  QWidget *tab = nodeProperties->parentWidget();
-  QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
-  tabWidget->showPage(tab);
 }
 //**********************************************************************
 #include <tulip/AcyclicTest.h>
 void viewGl::isAcyclic() {
   if (glWidget == 0) return;
-  if (AcyclicTest::isAcyclic(glWidget->getSuperGraph()))
+  if (AcyclicTest::isAcyclic(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is acyclic"
 			   );
@@ -1705,14 +2113,14 @@ void viewGl::makeAcyclic() {
   Observable::holdObservers();
   vector<tlp::SelfLoops> tmpSelf;
   vector<edge> tmpReversed;
-  AcyclicTest::makeAcyclic(glWidget->getSuperGraph(), tmpReversed, tmpSelf);
+  AcyclicTest::makeAcyclic(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmpReversed, tmpSelf);
   Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/SimpleTest.h>
 void viewGl::isSimple() {
   if (glWidget == 0) return;
-  if (SimpleTest::isSimple(glWidget->getSuperGraph()))
+  if (SimpleTest::isSimple(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is simple"
 			   );
@@ -1725,14 +2133,14 @@ void viewGl::makeSimple() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> removed;
-  SimpleTest::makeSimple(glWidget->getSuperGraph(), removed);
+  SimpleTest::makeSimple(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), removed);
   Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/ConnectedTest.h>
 void viewGl::isConnected() {
   if (glWidget == 0) return;
-  if (ConnectedTest::isConnected(glWidget->getSuperGraph()))
+  if (ConnectedTest::isConnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is connected"
 			   );
@@ -1745,14 +2153,14 @@ void viewGl::makeConnected() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> tmp;
-  ConnectedTest::makeConnected(glWidget->getSuperGraph(), tmp);
+  ConnectedTest::makeConnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmp);
   Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/BiconnectedTest.h>
 void viewGl::isBiconnected() {
   if (glWidget == 0) return;
-  if (BiconnectedTest::isBiconnected(glWidget->getSuperGraph()))
+  if (BiconnectedTest::isBiconnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is biconnected"
 			   );
@@ -1765,14 +2173,14 @@ void viewGl::makeBiconnected() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> tmp;
-  BiconnectedTest::makeBiconnected(glWidget->getSuperGraph(), tmp);
+  BiconnectedTest::makeBiconnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmp);
   Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/TriconnectedTest.h>
 void viewGl::isTriconnected() {
   if (glWidget == 0) return;
-  if (TriconnectedTest::isTriconnected(glWidget->getSuperGraph()))
+  if (TriconnectedTest::isTriconnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is triconnected"
 			   );
@@ -1785,21 +2193,57 @@ void viewGl::isTriconnected() {
 #include <tulip/TreeTest.h>
 void viewGl::isTree() {
   if (glWidget == 0) return;
-  if (TreeTest::isTree(glWidget->getSuperGraph()))
+  if (TreeTest::isTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
-			   "The graph is a tree"
+			   "The graph is a rooted tree"
 			   );
   else
     QMessageBox::information( this, "Tulip test",
-			   "The graph is not a tree"
+			   "The graph is not a rooted tree"
 			   );
+}
+//**********************************************************************
+void viewGl::isFreeTree() {
+  if (glWidget == 0) return;
+  if (TreeTest::isFreeTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is a free tree"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not a free tree"
+			   );
+}
+#include <tulip/GraphTools.h>
+void viewGl::makeRooted() {
+  if (glWidget == 0) return;
+  if (!TreeTest::isFreeTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
+    QMessageBox::information( this, "Tulip test",
+			      "The graph is not a free tree"
+			      );
+  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  node n, root;
+  forEach(n, graph->getProperty<BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
+    if (root.isValid()) {
+      QMessageBox::critical( this, "Make Rooted",
+			     "Only one root node must be selected.");
+      breakForEach;
+    }
+    root = n;
+  }
+  if (!root.isValid())
+    root = graphCenterHeuristic(graph);
+      
+  Observable::holdObservers();
+  TreeTest::makeRootedTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), root);
+  Observable::unholdObservers();
 }
 //**********************************************************************
 #include <tulip/PlanarityTest.h>
 void viewGl::isPlanar() {
   if (glWidget == 0) return;
   Observable::holdObservers();
-  if (PlanarityTest::isPlanar(glWidget->getSuperGraph()))
+  if (PlanarityTest::isPlanar(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
 			   "The graph is planar"
 			   );
@@ -1810,3 +2254,61 @@ void viewGl::isPlanar() {
   Observable::unholdObservers();
 }
 //**********************************************************************
+void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
+  if (glWidget == 0) return;
+  if (isNode)
+    eltProperties->setCurrentNode(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(),  tlp::node(eltId));
+  else
+    eltProperties->setCurrentEdge(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(),  tlp::edge(eltId));
+  // show 'Element' tab in 'Info Editor'
+  QWidget *tab = eltProperties->parentWidget();
+  QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
+  tabWidget->showPage(tab);
+}
+//**********************************************************************
+// management of interactors
+void viewGl::setCurrentInteractors(vector<tlp::GWInteractor *> *interactors) {
+  if (currentInteractors == interactors)
+    return;
+  currentInteractors = interactors;
+  if (glWidget)
+    glWidget->resetInteractors(*currentInteractors);
+}
+
+// deletion of registered interactors
+void viewGl::deleteInteractors(vector<tlp::GWInteractor *> &interactors) {
+  for(vector<GWInteractor *>::iterator it =
+	interactors.begin(); it != interactors.end(); ++it)
+    delete *it;
+}
+
+void viewGl::setAddEdge() {
+  setCurrentInteractors(&addEdgeInteractors);
+}
+void viewGl::setAddNode() {
+  setCurrentInteractors(&addNodeInteractors);
+}
+void viewGl::setDelete() {
+  setCurrentInteractors(&deleteEltInteractors);
+}
+void viewGl::setGraphNavigate() {
+  setCurrentInteractors(&graphNavigateInteractors);
+}
+void viewGl::setMagicSelection() {
+  setCurrentInteractors(&magicSelectionInteractors);
+}
+void viewGl::setMoveSelection() {
+  setCurrentInteractors(&editSelectionInteractors);
+}
+void viewGl::setEditEdgeBend() {
+  setCurrentInteractors(&editEdgeBendInteractors);
+}
+void viewGl::setSelect() {
+  setCurrentInteractors(&selectInteractors);
+}
+void viewGl::setSelection() {
+  setCurrentInteractors(&selectionInteractors);
+}
+void viewGl::setZoomBox() {
+  setCurrentInteractors(&zoomBoxInteractors);
+}

@@ -4,13 +4,17 @@
 #include "MetaGraphProxyTest.h"
 
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
+
+// Warning MetaGraphProxy has been renamed in GraphAlgorithm
+
 CPPUNIT_TEST_SUITE_REGISTRATION( MetaGraphProxyTest );
 
 //==========================================================
 void MetaGraphProxyTest::setUp() {
-  graph    = tlp::newSuperGraph();
+  graph    = tlp::newGraph();
   //add three nodes
   node n1=graph->addNode();
   node n2=graph->addNode();
@@ -27,11 +31,11 @@ void MetaGraphProxyTest::tearDown() {
 //==========================================================
 void MetaGraphProxyTest::testDestroyGraph() {
   //build the hierarchy
-  SuperGraph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy * proxy1 = meta1->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
-  MetaGraphProxy proxy3(meta1);
+  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
+  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
+  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
+  GraphProperty proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -52,12 +56,12 @@ void MetaGraphProxyTest::testDestroyGraph() {
 //==========================================================
 void MetaGraphProxyTest::testSetGet() {
   //build the hierarchy
-  SuperGraph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  SuperGraph * g3 = tlp::newCloneSubGraph(graph, "G3");
-  SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy * proxy1 = meta1->getLocalProperty<MetaGraphProxy>("viewMetaGraph");
-  MetaGraphProxy proxy3(meta1);
+  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
+  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
+  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
+  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
+  GraphProperty proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
@@ -74,11 +78,11 @@ void MetaGraphProxyTest::testSetGet() {
 //==========================================================
 void MetaGraphProxyTest::testSetAll() {
   //build the hierarchy
-  SuperGraph * g1 = tlp::newCloneSubGraph(graph, "G1");
-  SuperGraph * g2 = tlp::newCloneSubGraph(graph, "G2");
-  SuperGraph * g3 = tlp::newCloneSubGraph(graph, "G3");
-  SuperGraph * meta1 = tlp::newSubGraph(graph, "META1");
-  MetaGraphProxy proxy(meta1);
+  Graph * g1 = tlp::newCloneSubGraph(graph, "G1");
+  Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
+  Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
+  Graph * meta1 = tlp::newSubGraph(graph, "META1");
+  GraphProperty proxy(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   node mnode3 = meta1->addNode();
@@ -98,7 +102,7 @@ void MetaGraphProxyTest::testSetAll() {
 }
 //==========================================================
 CppUnit::Test * MetaGraphProxyTest::suite() {
-  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MetaGraphProxy" );
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : GraphProperty" );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test graph destruction", 
 								      &MetaGraphProxyTest::testDestroyGraph ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set/get", 

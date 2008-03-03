@@ -6,7 +6,10 @@
 #include <tulip/Glyph.h>
 
 using namespace std;
+using namespace tlp;
 
+/** \addtogroup glyph */
+/*@{*/
 /// - An implementation of square with variable border glyph.
 /** 
  * This glyph is an implementation of a square with a variable border.
@@ -45,7 +48,7 @@ private:
   static float 	   borderProportion;
   const static float BORDER_COLOR[3];
   const static float MAX_BORDER_COEF;
-  SuperGraph*        tree;
+  Graph*        tree;
   float calculateDepth(node n);
   float calculateBorderSize(node n);
 };
@@ -55,7 +58,7 @@ GLYPHPLUGIN(SquareBorder, "SquareBorder",
             "Julien Testut, Antony Durand, Pascal Ollier,"
             "Yashvin Nababsing, Sebastien Leclerc, Ruchon Thibault,"
             "Eric Dauchier",
-            "09/07/2004", "Textured square22", "1", "1", 100);
+            "09/07/2004", "Textured square22", "1.0", 100);
 
 const float SquareBorder::MAX_BORDER_COEF = 0.8;
 float SquareBorder::borderProportion = 0;
@@ -73,15 +76,14 @@ SquareBorder::~SquareBorder() {
 }
 //====================================================================
 void SquareBorder::draw(node n) {
-  tree = (*superGraph);
+  tree = (*graph);
   borderProportion  = calculateBorderSize(n);
   Color borderColor = glGraph->elementColor->getNodeValue(n);
   setMaterial(borderColor);
   string texFile = glGraph->elementTexture->getNodeValue(n);
     
   if (texFile != "") {
-    if (glGraph->activateTexture(texFile))
-      setMaterial(Color(255, 255, 255, 0));
+    glGraph->activateTexture(texFile);
   }
   
   drawSquare();
@@ -222,3 +224,4 @@ float SquareBorder::calculateBorderSize(node n) {
     return 0;
   return (profondeur / nbNoeuds) * MAX_BORDER_COEF;
 }
+/*@}*/

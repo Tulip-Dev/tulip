@@ -1,16 +1,11 @@
 !include "MUI.nsh"
-!include "WriteEnvStr.nsh"
+; no more env variables needed
+;!include "WriteEnvStr.nsh"
 
-
-
-;--------------------------------
 ;General
 
 Name "Tulip @VERSION@"
 OutFile "TulipSetup_@WIN_EXE_VERSION@.exe"
-InstallDir "$PROGRAMFILES\Tulip_@VERSION@\"
-
-
 
 ;--------------------------------
 ;Pages
@@ -46,45 +41,64 @@ Function CheckPreviousVersion
 CheckPrev_no: 
 FunctionEnd
 
+Function GetParentDir
+  Exch $R0
+  Push $R1
+  Push $R2
+  Push $R3
+   
+  StrCpy $R1 0
+  StrLen $R2 $R0
+   
+  loop:
+    IntOp $R1 $R1 + 1
+    IntCmp $R1 $R2 get 0 get
+    StrCpy $R3 $R0 1 -$R1
+    StrCmp $R3 "\" get
+    Goto loop
+
+  get:
+    StrCpy $R0 $R0 -$R1
+    
+    Pop $R3
+    Pop $R2
+    Pop $R1
+    Exch $R0
+FunctionEnd
+
 ; initialization
 Function .onInit
-InitPluginsDir ;on initialise le répertoire de démarrage des plugins
+InitPluginsDir ;on initialise le rï¿½ertoire de dï¿½arrage des plugins
 File /oname=$PLUGINSDIR\splash.bmp "@prefix@\lib\tlp\bitmaps\logo.bmp" ;on copie l'image dans l'exe final et on on la met dans le dossier temporaire.
 advsplash::show 1800 350 187 2 $PLUGINSDIR\splash
-Pop $R0 ;on récupère la valeur de retour : 1, si l'utilisateur a fermé l'écran, 0 si tout s'est bien passé, et -1 si un problème est survenu
+Pop $R0 ;on rï¿½upï¿½e la valeur de retour : 1, si l'utilisateur a fermï¿½l'ï¿½ran, 0 si tout s'est bien passï¿½ et -1 si un problï¿½e est survenu
 Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
+
+; we try to avoid to have a space in the install dir path
+; in order to ease the compilation of customer plugins using g++
+; so we remove Program Files from the proposed installation path
+Push $PROGRAMFILES
+Call GetParentDir
+Pop $R0
+StrCpy $INSTDIR "$R0\Tulip_@VERSION@\"
+
 Call CheckPreviousVersion
 FunctionEnd
 
-Section "-Programme (requis)"
-; Initialize TLP_DIR
-Push TLP_DIR
-StrCpy $R0 "$INSTDIR\lib"
-Push $R0
-Call WriteEnvStr
-Push PATH
-ReadEnvStr $R0 "PATH" 
-StrCpy $R0 "$R0;$INSTDIR;$INSTDIR\lib"
-Push $R0
-Call WriteEnvStr
+Section "-Programs (required)"
 SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 File @prefix@\bin\Tulip.exe
-SectionEnd
-
-Section "-Install Plugins"
-setOutPath $INSTDIR
+File @prefix@\bin\tulip-config
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
 File "@MINDIR@\bin\freetype*.dll"
+File "@MINDIR@\bin\glew*.dll"
 File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
-!ifdef QT3
-File "@qt_libraries@\qt-mt*.dll"
-!else
 File "@qt_libraries@\Qt3Support4.dll"
 File "@qt_libraries@\QtCore4.dll"
 File "@qt_libraries@\QtGui4.dll"
@@ -92,34 +106,22 @@ File "@qt_libraries@\QtNetWork4.dll"
 File "@qt_libraries@\QtOpenGL4.dll"
 File "@qt_libraries@\QtSql4.dll"
 File "@qt_libraries@\QtXml4.dll"
-!endif
+File "@qt_libraries@\QtAssistantClient4.dll"
 File  "@qt_libraries@\..\bin\assistant.exe"
-setOutPath $INSTDIR\lib
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
-File "@prefix@\bin\libtulip-qt@QT_VERSION@-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
+setOutPath $INSTDIR\imageformats
+File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
-setOutPath $INSTDIR\lib\tlp\plugins\clustering
-File @prefix@\lib\tlp\plugins\clustering\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\colors
-File @prefix@\lib\tlp\plugins\colors\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\designer
-File @prefix@\lib\tlp\plugins\designer\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\export
-File @prefix@\lib\tlp\plugins\export\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\glyph
-File @prefix@\lib\tlp\plugins\glyph\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\import
-File @prefix@\lib\tlp\plugins\import\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\layout
-File @prefix@\lib\tlp\plugins\layout\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\metric
-File @prefix@\lib\tlp\plugins\metric\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\selection
-File @prefix@\lib\tlp\plugins\selection\*.dll
-setOutPath $INSTDIR\lib\tlp\plugins\sizes
-File @prefix@\lib\tlp\plugins\sizes\*.dll
+SectionEnd
+
+Section "-Install Plugins and Docs"
+setOutPath $INSTDIR\lib\tlp
+File @prefix@\lib\tlp\*.dll
+setOutPath $INSTDIR\lib\tlp\glyphs
+File @prefix@\lib\tlp\glyphs\*.dll
 setOutPath $INSTDIR\share
 ; Try to save doc files if any
 File /nonfatal /r @prefix@\share\*
@@ -156,12 +158,10 @@ SectionEnd
 UninstallText "Do you really want to remove Tulip @VERSION@ from your system ?"
 
 Section "Uninstall"
-; Delete TLP_DIR variable
-Push TLP_DIR
-Call un.DeleteEnvStr
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
 Delete "$INSTDIR\Tulip.exe"
+Delete "$INSTDIR\tulip-config"
 ;Delete "$INSTDIR\Tulip.txt"
 Delete "$INSTDIR\uninst-Tulip.exe"
 Delete "$INSTDIR\logo32x32.ico"
@@ -169,30 +169,15 @@ Delete "$INSTDIR\win-uninstall.ico"
 Delete "$DESKTOP\Tulip @VERSION@.lnk"
 Delete "$SMPROGRAMS\Tulip @VERSION@\*.*"
 RMDir "$SMPROGRAMS\Tulip @VERSION@"
-Delete $INSTDIR\*.dll
+Delete "$INSTDIR\*.dll"
+Delete "$INSTDIR\imageformats\*.dll"
+RMDir "$INSTDIR\imageformats"
 Delete "$INSTDIR\lib\tlp\bitmaps\*"
 RMDir "$INSTDIR\lib\tlp\bitmaps"
-Delete "$INSTDIR\lib\tlp\plugins\clustering\*"
-RMDir "$INSTDIR\lib\tlp\plugins\clustering"
-Delete "$INSTDIR\lib\tlp\plugins\colors\*"
-RMDir "$INSTDIR\lib\tlp\plugins\colors"
-Delete "$INSTDIR\lib\tlp\plugins\designer\*"
-RMDir "$INSTDIR\lib\tlp\plugins\designer"
-Delete "$INSTDIR\lib\tlp\plugins\export\*"
-RMDir "$INSTDIR\lib\tlp\plugins\export"
-Delete "$INSTDIR\lib\tlp\plugins\glyph\*"
-RMDir "$INSTDIR\lib\tlp\plugins\glyph"
-Delete "$INSTDIR\lib\tlp\plugins\import\*"
-RMDir "$INSTDIR\lib\tlp\plugins\import"
-Delete "$INSTDIR\lib\tlp\plugins\layout\*"
-RMDir "$INSTDIR\lib\tlp\plugins\layout"
-Delete "$INSTDIR\lib\tlp\plugins\metric\*"
-RMDir "$INSTDIR\lib\tlp\plugins\metric"
-Delete "$INSTDIR\lib\tlp\plugins\selection\*"
-RMDir "$INSTDIR\lib\tlp\plugins\selection"
-Delete "$INSTDIR\lib\tlp\plugins\sizes\*"
-RMDir "$INSTDIR\lib\tlp\plugins\sizes"
-RMDir "$INSTDIR\lib\tlp\plugins"
+Delete "$INSTDIR\lib\tlp\designer\*"
+RMDir "$INSTDIR\lib\tlp\designer"
+Delete "$INSTDIR\lib\tlp\glyphs\*"
+RMDir "$INSTDIR\lib\tlp\glyphs"
 Delete "$INSTDIR\lib\tlp\*"
 RMDir "$INSTDIR\lib\tlp"
 Delete "$INSTDIR\lib\*"

@@ -1,37 +1,36 @@
-#include <tulip/AcyclicTest.h>
-#include <tulip/ForEach.h>
 #include "LeafMetric.h"
 
-METRICPLUGINOFGROUP(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","0","1","Tree");
+DOUBLEPLUGINOFGROUP(LeafMetric,"Leaf","David Auber","20/12/1999","Alpha","1.0","Tree");
 
 using namespace std;
+using namespace tlp;
 
 //=======================================================================
-LeafMetric::LeafMetric(const PropertyContext &context):Metric(context) {}
+LeafMetric::LeafMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 //=======================================================================
 double LeafMetric::getNodeValue(const node n) {
-  if (metricProxy->getNodeValue(n) != 0) 
-    return metricProxy->getNodeValue(n);
+  if (doubleResult->getNodeValue(n) != 0) 
+    return doubleResult->getNodeValue(n);
   double result=0;
   node _n;
-  forEach(_n, superGraph->getOutNodes(n)) 
+  forEach(_n, graph->getOutNodes(n)) 
     result += getNodeValue(_n);
   if (result==0) result=1.0;
-  metricProxy->setNodeValue(n, result);
+  doubleResult->setNodeValue(n, result);
   return result;
 }
 //=======================================================================
 bool LeafMetric::run() {
-  metricProxy->setAllNodeValue(0);
-  metricProxy->setAllEdgeValue(0);
+  doubleResult->setAllNodeValue(0);
+  doubleResult->setAllEdgeValue(0);
   node n;
-  forEach(n, superGraph->getNodes())
-    metricProxy->setNodeValue(n, getNodeValue(n));
-  
+  forEach(n, graph->getNodes())
+    doubleResult->setNodeValue(n, getNodeValue(n));
+  return true;
 }
 //=======================================================================
 bool LeafMetric::check(string &erreurMsg) {
-  if (AcyclicTest::isAcyclic(superGraph))
+  if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
     erreurMsg="The Graph must be a Acyclic";

@@ -3,6 +3,7 @@
 # This script is MAC specific, it intents to create an internet deliverable
 # disk image of a tulip MAC 'bundle' in the current directory
 APP_DIR=Tulip-@PACKAGE_VERSION@.app
+QT_DIR=@QTDIR@
 
 if [ -d $APP_DIR ]; then
   rm -rf $APP_DIR
@@ -12,6 +13,8 @@ BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
 BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
 LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
+BUNDLE_LIB_PATH=@executable_path/../Frameworks
+SHLIBS_REGEXP="dylib \|lib/Qt"
 
 # copy the tulip app installed in @prefix@/bin
 echo installing $APP_DIR
@@ -37,15 +40,16 @@ function make_bundle_lib() {
     if [ ! -f $slibdir/`basename $slib` ]; then
        cp $slib $slibdir
        slib=`basename $slib`
+       chmod 755 $slibdir/$slib
        echo installing $slib in $slibdir
        # update the name of the current bundle lib
-       install_name_tool -id @executable_path/../Frameworks/$slib $slibdir/$slib
+       install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
     else
        slib=`basename $slib`
     fi
     echo renaming $slib in `basename $bbin`
     # package tulip bundle binary with the current bundle lib
-    install_name_tool -change $oldlib @executable_path/../Frameworks/$slib $bbin
+    install_name_tool -change $oldlib $BUNDLE_LIB_PATH/$slib $bbin
   else
     echo `basename $slib` not found... exiting
     exit
@@ -54,8 +58,13 @@ function make_bundle_lib() {
 
 function package_bundle_libs() {
   blibdir=$1
-  blibs=`find $blibdir -name $2 -print`
-  if [ $# -eq 2 ]; then
+  if [ $# -eq 1 ]; then
+    name_regexp='*'
+  else
+    name_regexp=$2
+  fi
+  blibs=$(find $blibdir  -name "$name_regexp" -a -type f -print)
+  if [ $# -lt 3 ]; then
     fdir=$1
   else
     fdir=$3
@@ -63,12 +72,15 @@ function package_bundle_libs() {
   for blib in $blibs
   do
     blibname=`basename $blib`
-    slibs=`otool -L $blib | grep 'dylib ' | awk '{print $1}'`
+    slibs=$(otool -L $blib | grep "$SHLIBS_REGEXP" | awk '{print $1}')
     for lib in $slibs
     do
       libname=`basename $lib`
       if [ "$libname" = "$blibname" ]; then
 	continue
+      fi
+      if [ "/$libname" = "${lib#$BUNDLE_LIB_PATH}" ]; then
+        continue
       fi
       make_bundle_lib $lib $fdir $blib
     done
@@ -78,23 +90,21 @@ function package_bundle_libs() {
 # create the tulip shared libs bundle directory
 mkdir -p $LIBS_BUNDLE_DIR
 # look for shared libs
-SHARED_LIBS=`otool -L $BIN_BUNDLE | grep dylib | awk '{print $1}'`
+SHARED_LIBS=$(otool -L $BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
 # copy libs in shared libs bundle directory
 for LIB in $SHARED_LIBS
 do
   make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE
 done
-# package tulip shared libs
-package_bundle_libs $LIBS_BUNDLE_DIR "*.dylib"
 
 # clean up the plugins bundle dir
-TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp/plugins
+TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp
 # remove lib*.a and lib*.la files
-find $TLP_PLUGINS_BUNDLE_DIR -name "lib*.*a" -print | xargs rm
+find $TLP_PLUGINS_BUNDLE_DIR -name 'lib*.*a' -print | xargs rm
 # remove the plugins designer bundle dir
-rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
+# rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
 # package the lib*.so files
-package_bundle_libs $TLP_PLUGINS_BUNDLE_DIR "*.so" $LIBS_BUNDLE_DIR
+package_bundle_libs $TLP_PLUGINS_BUNDLE_DIR '*.so' $LIBS_BUNDLE_DIR
 
 # copy Qt assistant application
 ASSISTANT_BUNDLE_DIR=$APP_DIR/Contents/assistant.app
@@ -103,14 +113,26 @@ ASSISTANT_BIN_BUNDLE=$ASSISTANT_BUNDLE_DIR/Contents/MacOS/assistant
 echo packaging $ASSISTANT_BUNDLE_DIR
 mkdir $ASSISTANT_LIBS_BUNDLE_DIR
 #update assistant binary and libs
-SHARED_LIBS=`otool -L $ASSISTANT_BIN_BUNDLE | grep dylib | awk '{print $1}'`
+SHARED_LIBS=$(otool -L $ASSISTANT_BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
 # copy libs in shared libs bundle directory
 for LIB in $SHARED_LIBS
 do
   make_bundle_lib $LIB $ASSISTANT_LIBS_BUNDLE_DIR $ASSISTANT_BIN_BUNDLE
 done
 # package assistant shared libs
-package_bundle_libs $ASSISTANT_LIBS_BUNDLE_DIR "*.dylib"
+package_bundle_libs $ASSISTANT_LIBS_BUNDLE_DIR
+
+# copy Qt imageformats plugins
+QT_IMG_PLUGINS_LIBDIR=$APP_DIR/Contents/imageformats
+mkdir $QT_IMG_PLUGINS_LIBDIR
+cp $QT_DIR/plugins/imageformats/libqjpeg.dylib $QT_DIR/plugins/imageformats/libqmng.dylib  $QT_IMG_PLUGINS_LIBDIR
+package_bundle_libs $QT_IMG_PLUGINS_LIBDIR '*.dylib' $LIBS_BUNDLE_DIR
+
+# package tulip shared libs
+package_bundle_libs $LIBS_BUNDLE_DIR
+# do it twice because of possibly newly installed files
+# during first try 
+package_bundle_libs $LIBS_BUNDLE_DIR
 
 # create disk image with our bundle
 echo creating Tulip-@PACKAGE_VERSION@.dmg disk image

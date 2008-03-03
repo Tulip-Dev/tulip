@@ -15,19 +15,12 @@
 
 #include "TulipStatsData.h"
 #include <tulip/GlGraphWidget.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/GlADComposite.h>
+#include <tulip/Graph.h>
 #include <tulip/StatisticsNodeModule.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Plane.h>
-
-#include <tulip/GlADAxisPoint.h>
-#include <tulip/GlADLine.h>
-#include <tulip/GlADQuad.h>
-#include <tulip/GlADBox.h>
-#include <tulip/GlADGrid.h>
 
 
 #define N_STATS_GLAD 7
@@ -41,11 +34,12 @@
 #define GLAD_GRID              6
 
 
-class MetricProxy;
 class GlGraphWidget;
-class ClusterTree;
+class SGHierarchyWidget;
 
 namespace tlp {
+class DoubleProperty;
+
 /** \brief Panel widget using tulip data to compute statistical results.
  *
  * This class is a widget which takes places in the main interface of tulip, in the tabwidget of properties.
@@ -61,26 +55,26 @@ class TulipStats : public TulipStatsData, public GraphObserver
 
  protected:
   GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
-  SuperGraph *supergraph; /**< A reference to the supergraph we are considering */
+  Graph *graph; /**< A reference to the graph we are considering */
   tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
-  ClusterTree *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
+  SGHierarchyWidget *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
 
-  tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
+  //tlp::GlADAxisPoint *averagePoint; /**< An augmented display for the average point */
 
-  tlp::GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
-  tlp::GlADBox *AABB; /**< An augmented display for the bounding box */
+  //tlp::GlADBox *stdDeviationBox; /**< An augmented display for the standard deviation */
+  //tlp::GlADBox *AABB; /**< An augmented display for the bounding box */
 
-  tlp::GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
-  tlp::GlADLine *linearRegression; /**< An augmented display for the linear regression */
+  //tlp::GlADLine *eigenVectors[3]; /**< An augmented display for the eigenvectors */
+  //tlp::GlADLine *linearRegression; /**< An augmented display for the linear regression */
 
-  tlp::GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
+  //tlp::GlADQuad *clusteringPlane; /**< An augmented display for the clustering plane */
 
   // GRID_REGION
   //  GlADGrid *grid; /**< An augmented display for the gris \attention This will be removed soon */
 
   int histoMax; /**< The value of the biggest column in the case of an histogram. Used to fit correctly the augmented displays */
 
-  std::vector<MetricProxy*> metrics; /**< The metrics used for the computation */
+  std::vector<DoubleProperty*> metrics; /**< The metrics used for the computation */
   int nMetrics; /**< The number of metrics used. \f$ 1 \leq nMetrics \leq \f$ 3 */
 
   float discretizationStep[3]; /**< The discretization step used to regroup informations */
@@ -100,7 +94,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void resetDisplayTab();
 
   /**
-   * Function used to reset the Clustering tab.
+   * Function used to reset the Algorithm tab.
    *
    * It resets mainly the combobox of the tab.
    */
@@ -124,7 +118,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void updateMetrics();
 
   /**
-   * Function used to update the displayed Clustering plane when the user changes the coordinates.
+   * Function used to update the displayed Algorithm plane when the user changes the coordinates.
    */
   void updateClusteringPlane();
 
@@ -153,12 +147,12 @@ class TulipStats : public TulipStatsData, public GraphObserver
   /**
    * Function used by viewGl to set the reference to the clusterTree.
    */
-  void setClusterTreeWidget(ClusterTree *);
+  void setSGHierarchyWidgetWidget(SGHierarchyWidget *);
 
   /**
-   * Accessor in reading to the supergraph.
+   * Accessor in reading to the graph.
    */
-  SuperGraph* getSuperGraph();
+  Graph* getGraph();
 
   /**
    * Accessor in reading to the glGraphWidget.
@@ -171,9 +165,9 @@ class TulipStats : public TulipStatsData, public GraphObserver
   void setGlGraphWidget(GlGraphWidget *);
 
   /**
-   * Overriden function used to notify when the supergraph is going to be destroyed :
+   * Overriden function used to notify when the graph is going to be destroyed :
    */
-  void destroy(SuperGraph *);
+  void destroy(Graph *);
 
  private slots:
 

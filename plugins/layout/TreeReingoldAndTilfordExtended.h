@@ -45,24 +45,22 @@ struct LR {
  *  (at your option) any later version.
  *
  */
-class TreeReingoldAndTilfordExtended:public Layout { 
+class TreeReingoldAndTilfordExtended:public tlp::LayoutAlgorithm { 
 public:
-  TreeReingoldAndTilfordExtended(const PropertyContext &);
+  TreeReingoldAndTilfordExtended(const tlp::PropertyContext &);
   ~TreeReingoldAndTilfordExtended();
-                      bool run();
-  bool check(std::string &);
-  void reset();
-
+  bool run();
 
 private:
-  void calcLayout(node, stdext::hash_map<node,double> *,double, double, int ,std::map<int,double> &);
+  void calcLayout(tlp::node, stdext::hash_map<tlp::node,double> *,double, double, int ,std::map<int,double> &);
   double  calcDecal(const std::list<LR>& , const std::list<LR>&);
   std::list<LR>* mergeLRList(std::list<LR>*,std::list<LR>*,double decal);
-  std::list<LR>* TreePlace(node, stdext::hash_map<node,double>*);
-  void TreeLevelSizing(node ,std::map<int,double> &,int , std::map<node,int> &levels);
+  std::list<LR>* TreePlace(tlp::node, stdext::hash_map<tlp::node,double>*);
+  void TreeLevelSizing(tlp::node ,std::map<int,double> &,int , std::map<tlp::node,int> &levels);
 
-  SizesProxy *sizesProxy;
-  IntProxy   *lengthMetric;
+  tlp::Graph *tree;
+  tlp::SizeProperty *sizes;
+  tlp::IntegerProperty *lengthMetric;
   bool ortho;
   bool useLength;
   std::string orientation;

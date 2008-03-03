@@ -5,184 +5,105 @@
 #include <tulip/AcyclicTest.h>
 #include <tulip/TreeTest.h>
 #include <tulip/MethodFactory.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/TlpTools.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/GraphTools.h>
 
 #include "GeneralGraph3D.h"
+#include "DatasetTools.h"
 
 
 using namespace std;
+using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","0","1","Hierarchical")
+LAYOUTPLUGINOFGROUP(GeneralGraph3D,"Hierarchical Graph 3D","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
 
 namespace {
   const char * paramHelp[] = {
-    // nodeSize
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "SizeProxy" ) \
-    HTML_HELP_DEF( "values", "An existing size property" ) \
-    HTML_HELP_DEF( "default", "viewSize" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the property used for node's sizes." \
-    HTML_HELP_CLOSE(),
     //Orientation
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
     HTML_HELP_DEF( "default", "horizontal" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the orientation of the drawing"	\
-    HTML_HELP_CLOSE()
+    HTML_HELP_CLOSE(),
   };
 }
 
-#define ORIENTATION "vertical;horizontal;"
+#define ORIENTATION "horizontal;vertical;"
 
-GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):Layout(context) {
-  addParameter<SizesProxy>("nodeSize",paramHelp[0],"viewSize");
-  addParameter<StringCollection> ("orientation", paramHelp[1], ORIENTATION );
+GeneralGraph3D::GeneralGraph3D(const PropertyContext &context):LayoutAlgorithm(context) {
+  addNodeSizePropertyParameter(this);
+  addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addDependency<BooleanAlgorithm>("Spanning Dag", "1.0");
+  addDependency<DoubleAlgorithm>("Dag Level", "1.0");
+  addDependency<LayoutAlgorithm>("Cone Tree", "1.0");
 }
 
 GeneralGraph3D::~GeneralGraph3D() {}
 
-void GeneralGraph3D::DagLevelSpanningTree(SuperGraph* superGraph,node n) {
-  assert(AcyclicTest::isAcyclic(superGraph));
+void GeneralGraph3D::DagLevelSpanningTree(Graph* graph,node n) {
+  assert(AcyclicTest::isAcyclic(graph));
   stack<edge> toDelete;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    if (superGraph->indeg(itn)>1) {
-      int tmpI=superGraph->indeg(itn)-1;
-      Iterator<edge> *itE=superGraph->getInEdges(itn);
+    if (graph->indeg(itn)>1) {
+      int tmpI=graph->indeg(itn)-1;
+      Iterator<edge> *itE=graph->getInEdges(itn);
       for (;tmpI>0;--tmpI) toDelete.push(itE->next());
       delete itE;
     }
   } delete itN;
   while (!toDelete.empty()) {
-    superGraph->delEdge(toDelete.top());
+    graph->delEdge(toDelete.top());
     toDelete.pop();
   }
-  assert(TreeTest::isTree(superGraph));
+  assert(TreeTest::isTree(graph));
 }
 
-void GeneralGraph3D::makeAcyclic(SuperGraph* superGraph,set<edge> &reversed,list<SelfLoops> &selfLoops) {
-  if (!AcyclicTest::isAcyclic(superGraph)) {
+void GeneralGraph3D::makeAcyclic(Graph* graph,set<edge> &reversed,list<SelfLoops> &selfLoops) {
+  if (!AcyclicTest::isAcyclic(graph)) {
     bool resultBool;
     string erreurMsg;
-    SelectionProxy *spanningDag= new SelectionProxy(superGraph);
-    resultBool = superGraph->computeProperty("SpanningDag",spanningDag,erreurMsg);
+    BooleanProperty spanningDag(graph);
+    resultBool = graph->computeProperty("Spanning Dag", &spanningDag,erreurMsg);
     if (!resultBool) {
       cerr << __PRETTY_FUNCTION__ << endl;
       cerr << erreurMsg << endl;
     }
     assert(resultBool);
     
-    //sauvegarde information
-    vector<edge> graphEdges(superGraph->numberOfEdges());
-    int i=0;
-    Iterator<edge> *itE=superGraph->getEdges();
-    while (itE->hasNext()) {
-      graphEdges[i]=itE->next();
-      i++;
-    }delete itE;
-    
     //We replace self loops by three edges an two nodes.
-    for (vector<edge>::const_iterator itEdge=graphEdges.begin();itEdge!=graphEdges.end();++itEdge) {
-      edge ite=*itEdge;
-      if ((spanningDag->getEdgeValue(ite))==false) {
-	if (superGraph->source(ite)==superGraph->target(ite)) {
-	  node n1=superGraph->addNode();
-	  node n2=superGraph->addNode();
+    StableIterator<edge> itE(graph->getEdges());
+    while (itE.hasNext()) {
+      edge ite=itE.next();
+      if ((spanningDag.getEdgeValue(ite))==false) {
+	if (graph->source(ite)==graph->target(ite)) {
+	  node n1=graph->addNode();
+	  node n2=graph->addNode();
 	  selfLoops.push_back(SelfLoops(n1 ,
 					n2 , 
-					superGraph->addEdge(superGraph->source(ite),n1) , 
-					superGraph->addEdge(n1,n2) , 
-					superGraph->addEdge(superGraph->source(ite),n2) , 
+					graph->addEdge(graph->source(ite),n1) , 
+					graph->addEdge(n1,n2) , 
+					graph->addEdge(graph->source(ite),n2) , 
 					ite ));
+	  graph->delEdge(ite);
 	}
 	else {
 	  reversed.insert(ite);
-	  superGraph->reverse(ite);
+	  graph->reverse(ite);
 	}
       }
     }
-    
-    delete spanningDag;
-    //We remove all self loops from the graph
-    list<SelfLoops>::iterator itSelf;
-    for (itSelf=selfLoops.begin();itSelf!=selfLoops.end();++itSelf) {
-      superGraph->delEdge((*itSelf).oldEdge);
-    }
   }
-  assert(AcyclicTest::isAcyclic(superGraph));
-}
-
-node GeneralGraph3D::makeSimpleSource(SuperGraph* superGraph) {
-  assert(AcyclicTest::isAcyclic(superGraph));
-  node startNode=superGraph->addNode();
-  Iterator<node> *itN=superGraph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    if ((superGraph->indeg(itn)==0) && (itn!=startNode)) {
-      superGraph->addEdge(startNode,itn);
-    }
-  } delete itN;
-  assert(AcyclicTest::isAcyclic(superGraph));
-  return startNode;
-}
-
-void GeneralGraph3D::makeProperDag(SuperGraph* superGraph, list<node> &addedNodes, stdext::hash_map<edge,edge> &replacedEdges) {
-  assert(AcyclicTest::isAcyclic(superGraph));
-  //We compute the dag level metric on resulting graph.
-  bool resultBool;
-  string erreurMsg;
-  MetricProxy *dagLevel= new MetricProxy(superGraph);
-  resultBool = superGraph->computeProperty("DagLevel",dagLevel,erreurMsg);
-  assert(resultBool);
-  //we now transform the dag in a proper Dag, two linked nodes of a proper dag
-  //must have a difference of one of dag level metric.
-  node tmp1,tmp2;
-  string tmpString;
-  //sauvegarde information
-  vector<edge> graphEdges(superGraph->numberOfEdges());
-  int i=0;
-  Iterator<edge> *itE=superGraph->getEdges();
-  while (itE->hasNext()) {
-    graphEdges[i]=itE->next();
-    i++;
-  } delete itE;
-  
-  for (vector<edge>::const_iterator itEdge=graphEdges.begin();itEdge!=graphEdges.end();++itEdge) {
-    edge ite=*itEdge;
-    double delta=dagLevel->getNodeValue(superGraph->target(ite))-dagLevel->getNodeValue(superGraph->source(ite));
-    double levelStartNode=dagLevel->getNodeValue(superGraph->source(ite))+1;
-    if (delta>1) {
-      tmp1=superGraph->addNode();
-      levelStartNode++;
-      replacedEdges[ite]=superGraph->addEdge(superGraph->source(ite),tmp1);
-      addedNodes.push_back(tmp1);
-      while (delta>2) {
-	tmp2=superGraph->addNode();
-	levelStartNode++;
-	addedNodes.push_back(tmp2);
-	superGraph->addEdge(tmp1,tmp2);
-	tmp1=tmp2;
-	delta--;
-      }
-      superGraph->addEdge(tmp1,superGraph->target(ite));
-    }
-  }
-  delete dagLevel;
-  for (stdext::hash_map<edge,edge>::iterator it=replacedEdges.begin();it!=replacedEdges.end();++it) {
-    superGraph->delEdge((*it).first);
-  }
-  assert(AcyclicTest::isAcyclic(superGraph));
+  assert(AcyclicTest::isAcyclic(graph));
 }
 
 bool GeneralGraph3D::run() {
   //=======================================================================
   // Build a clone of this graph
-  SuperGraph *mySGraph=tlp::newCloneSubGraph(superGraph);
+  Graph *mySGraph=tlp::newCloneSubGraph(graph);
 
   //========================================================================
   //if the graph is not acyclic we reverse edges to make it acyclic
@@ -204,7 +125,7 @@ bool GeneralGraph3D::run() {
   //We draw the tree using a tree drawing algorithm
   bool resultBool;
   string erreurMsg;
-  LayoutProxy *tmpLayout= new LayoutProxy(mySGraph);
+  LayoutProperty *tmpLayout= new LayoutProperty(mySGraph);
   resultBool = mySGraph->computeProperty("Cone Tree",tmpLayout,erreurMsg,0, dataSet);
   assert(resultBool);
   if (!resultBool) {
@@ -212,10 +133,10 @@ bool GeneralGraph3D::run() {
     cerr << erreurMsg << endl;
   }
   //  cerr << "End Tree Walker box" << endl;
-  Iterator<node> *itN=superGraph->getNodes();
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    layoutProxy->setNodeValue(itn,tmpLayout->getNodeValue(itn));
+    layoutResult->setNodeValue(itn,tmpLayout->getNodeValue(itn));
   } delete itN;
   
 
@@ -226,11 +147,11 @@ bool GeneralGraph3D::run() {
     edge end=start;
     Coord p1,p2;
     //we take the first and last point of the replaced edges
-    while (superGraph->target(end)!=superGraph->target(toUpdate)) {
-      Iterator<edge> *itE=mySGraph->getOutEdges(superGraph->target(end));end=itE->next();delete itE;
+    while (graph->target(end)!=graph->target(toUpdate)) {
+      Iterator<edge> *itE=mySGraph->getOutEdges(graph->target(end));end=itE->next();delete itE;
     }
-    node firstN=superGraph->target(start);
-    node endN=superGraph->source(end);
+    node firstN=graph->target(start);
+    node endN=graph->source(end);
     LineType::RealType edgeLine;
     if (reversedEdges.find(toUpdate)!=reversedEdges.end()) {
       p1=tmpLayout->getNodeValue(endN);
@@ -241,7 +162,7 @@ bool GeneralGraph3D::run() {
       p2=tmpLayout->getNodeValue(endN);
     }
     if (p1==p2) edgeLine.push_back(p1); else {edgeLine.push_back(p1); edgeLine.push_back(p2);}
-    layoutProxy->setEdgeValue(toUpdate,edgeLine);
+    layoutResult->setEdgeValue(toUpdate,edgeLine);
   }
   
   //cerr << "We compute self loops" << endl;
@@ -255,29 +176,29 @@ bool GeneralGraph3D::run() {
     LineType::RealType::const_iterator it;
     for (it=edge1.begin();it!=edge1.end();++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode1));
+    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n1));
     for (it=edge2.begin();it!=edge2.end();++it)
       tmpLCoord.push_back(*it);
-    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.ghostNode2));
+    tmpLCoord.push_back(tmpLayout->getNodeValue(tmp.n2));
     for (it=edge3.begin();it!=edge3.end();++it)
       tmpLCoord.push_back(*it);
-    layoutProxy->setEdgeValue(tmp.oldEdge,tmpLCoord);
-    mySGraph->delAllNode(tmp.ghostNode1);
-    mySGraph->delAllNode(tmp.ghostNode2);
+    layoutResult->setEdgeValue(tmp.old,tmpLCoord);
+    mySGraph->delAllNode(tmp.n1);
+    mySGraph->delAllNode(tmp.n2);
   }
   
   //  cerr << "we clean every added nodes and edges" << endl;
   //  mySGraph->delLocalProperty("Cone Tree Extended");
   delete tmpLayout;
   //  mySGraph->delLocalProperty("viewSize");
-  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllNodeValue(Size(1,1,1));
-  //  superGraph->getLocalProperty<SizesProxy>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
+  //  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
+  //  graph->getLocalProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   for (set<edge>::const_iterator it=reversedEdges.begin();it!=reversedEdges.end();++it) {
-    superGraph->reverse(*it);
+    graph->reverse(*it);
   }
   mySGraph->delAllNode(startNode);
   for (list<node>::const_iterator it=properAddedNodes.begin();it!=properAddedNodes.end();++it)
     mySGraph->delAllNode(*it);
-  superGraph->delSubGraph(mySGraph);
+  graph->delSubGraph(mySGraph);
   return true;
 }

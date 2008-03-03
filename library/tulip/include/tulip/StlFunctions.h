@@ -1,9 +1,11 @@
 //-*-c++-*-
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLPSTLFUNCTIONS_H
 #define _TLPSTLFUNCTIONS_H
-//#include "SuperGraph.h"
-//#include "MetricProxy.h"
-class MetricProxy;
+
+namespace tlp {
+
+class DoubleProperty;
 class node;
 class edge;
 /**
@@ -12,11 +14,13 @@ class edge;
  */
 class LessByMetric {
  public:
-  LessByMetric(MetricProxy *metric):metric(metric){}
+  LessByMetric(DoubleProperty *metric):metric(metric){}
   bool operator() (node n1,node n2);
   bool operator() (edge e1,edge e2);
 private:
-  MetricProxy *metric;
+  DoubleProperty *metric;
 };
 
+}
 #endif
+#endif // DOXYGEN_NOTFOR_DEVEL

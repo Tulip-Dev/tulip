@@ -32,13 +32,13 @@
  *  (at your option) any later version.
  *
  */
-class NodeMetric:public Metric { 
+class NodeMetric:public tlp::DoubleAlgorithm { 
 public:
-  NodeMetric(const PropertyContext &);
+  NodeMetric(const tlp::PropertyContext &);
   bool run();
   bool check(std::string &);
 private:
-  double getNodeValue(const node n);
+  double getNodeValue(const tlp::node n);
 };
 /*@}*/
 #endif

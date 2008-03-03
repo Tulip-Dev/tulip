@@ -1,6 +1,7 @@
 SHELL=bash
 TARGET= libtulip_test
 SRCS=   tuliplibtest.cpp \
+	ExtendedClusterOperationTest.cpp \
 	VectorTest.cpp \
 	MatrixTest.cpp \
 	TestAlgorithmTest.cpp \
@@ -8,17 +9,18 @@ SRCS=   tuliplibtest.cpp \
 	SelectionProxyTest.cpp \
 	MetaGraphProxyTest.cpp \
 	SuperGraphTest.cpp \
+	TlpImportExportTest.cpp \
 	PluginsTest.cpp \
-	ExtendedClusterOperationTest.cpp \
 	IdManagerTest.cpp \
-	PlanarConMapTest.cpp \
+	DataSetTest.cpp \
+#	PlanarConMapTest.cpp 
 
 
 
 #CXXFLAGS =  -g -Wall `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
-CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
+CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
 CXX=g++
-LDFLAGS= `../../../tulip-config --libs` `cppunit-config --libs` -lGL -lGLU -L/usr/X11R6/lib -L$(QTDIR)/lib/ -lqt-mt
+LDFLAGS= `../../../tulip-config --libs` `cppunit-config --libs`
 
 OBJS=$(SRCS:.cpp=.o)
 
@@ -31,10 +33,10 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS) $(LIBS)
 
 testPlugin.so:
-	$(CXX) $(CXXFLAGS) testPlugin.cpp -shared -o testPlugin.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin.cpp -fPIC -shared -o testPlugin.so $(LDFLAGS) $(LIBS)
 
 testPlugin2.so:
-	$(CXX) $(CXXFLAGS) testPlugin2.cpp -shared -o testPlugin2.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin2.cpp -fPIC -shared -o testPlugin2.so $(LDFLAGS) $(LIBS)
 
 
 

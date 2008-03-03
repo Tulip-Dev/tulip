@@ -1,5 +1,6 @@
 #ifndef _PARAGRAPH_H_
 #define _PARAGRAPH_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "Context.h"
 #include "Frame.h"
@@ -8,6 +9,8 @@
 #include <vector>
 
 
+
+namespace tlp {
 
 typedef enum Align{LEFT, RIGHT, CENTER, JUSTIFIED}; // défini l'alignement du texte
 
@@ -24,7 +27,7 @@ class C_String{  // la classe utilisée pour le stockage un texte à afficher
 };
 
 
-class Paragraph : public Frame{
+class Paragraph : public Frame {
   std::vector<C_String> myString; // le texte à afficher
   std::vector<Context*> listOfcontexts; // tableau de contextes à utiliser
   Context* findContext(Context& c);  // recherche un contexte dans le vecteur
@@ -45,4 +48,7 @@ class Paragraph : public Frame{
   std::vector<C_String>* getMyString(){return &myString;}
 };
 
+}
+
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

@@ -1,3 +1,3 @@
-SUBDIRS = bitmaps src include
-DIST_SUBDIRS = bitmaps src include
+SUBDIRS = bitmaps include src
+DIST_SUBDIRS = bitmaps include src
 EXTRA_DIST = mainpage.dox

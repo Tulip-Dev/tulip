@@ -9,8 +9,16 @@
             <x>0</x>
             <y>0</y>
             <width>503</width>
-            <height>217</height>
+            <height>299</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
     </property>
     <property name="caption">
         <string>About Tulip</string>
@@ -30,7 +38,7 @@
                 <cstring>PixmapLabel2</cstring>
             </property>
             <property name="frameShape">
-                <enum>WinPanel</enum>
+                <enum>NoFrame</enum>
             </property>
             <property name="frameShadow">
                 <enum>Raised</enum>
@@ -39,7 +47,7 @@
                 <pixmap>image0</pixmap>
             </property>
             <property name="scaledContents">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
         </widget>
         <widget class="QTabWidget" row="1" column="1">
@@ -48,7 +56,7 @@
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabAbout</cstring>
                 </property>
                 <attribute name="title">
                     <string>About</string>
@@ -75,9 +83,8 @@ of Bordeaux I.
 The Tulip project is under GPL licence and
 everyone can give his contribution to this software.
 
-Visit the Tulip Web Site for more Information about 
-Tulip.
- http://www.tulip-softaware.org
+Visit the Tulip Web Site for more Information about Tulip.
+ http://www.tulip-software.org
 Forum, mailing list, and bug report are accessible at :
 http://sourceforge.net/projects/auber</string>
                         </property>
@@ -89,7 +96,7 @@ http://sourceforge.net/projects/auber</string>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>tab</cstring>
+                    <cstring>tabBugs</cstring>
                 </property>
                 <attribute name="title">
                     <string>Bugs or wishes</string>
@@ -109,10 +116,8 @@ http://sourceforge.net/projects/auber</string>
                             <cstring>MultiLineEdit2</cstring>
                         </property>
                         <property name="text">
-                            <string>Software can always be improved, and the Tulip team
-is ready to do so. However you - the user - must tell
-us when something does not work as expected or 
-could be improved.
+                            <string>Software can always be improved, and the Tulip team is ready to do so.
+However you - the user - must tell us when something does not work as expected or could be improved.
 
 Tulip has a mailing list and bug report system at :
 http://sourceforge.net/projects/auber
@@ -148,23 +153,27 @@ http://sourceforge.net/projects/auber
                         <property name="text">
                             <string>The Tulip Team :
 
-Original Author and maintainers : Auber David.
+Original Author and maintainers : David Auber, Patrick Mary.
 Contributors :
-  - Jean Pilippe Domenger
-  - Sébastien Grivet
- - Maylis Delest
- - Sophie Bardet
- - Gérald Gainant
- - Bertrand Mathieu.
- - David Duke.
- - Chris Myers.
+ - Daniel Archambault
  - Robert Auber
+ - Sophie Bardet
+ - Romain Bourqui
+ - Maylis Delest
+ - Jean Philippe Domenger
+ - David Duke
+ - Sébastien Grivet
+ - Gérald Gainant
  - Loïc Jézéquel
+ - Morgan Mathiaut
+ - Bertrand Mathieu
+ - Chris Myers
+ - Vincent Rabeux
+ - Martin Schaffner
 
 The Tulip Project is young and a lot of work 
-need to be done. Every participation is welcome, 
-(graphism, plug-ins,  documentation, Low level 
-library improvements)
+need to be done.
+Every participation is welcome, (graphism, plug-ins,  documentation, low level library improvements)
 
 To contact us send email to : 
 auber@tulip-software.org

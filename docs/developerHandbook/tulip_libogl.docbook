@@ -2,69 +2,41 @@
     <sect1 id="gl-intro"><title>Introduction</title>
         <para></para>
     </sect1>
-    <sect1 id="augm-disply"><title>Augmented Displays for Tulip</title>
-	<sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlAD</title>
-	    <para>GlAD(GlAugmentedDisplay) is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays. Based upon the now obsolete GlDrawable system this library offers more efficient services.
+    <sect1 id="augm-disply"><title>2D/3D for Tulip</title>
+	<sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlEntity system</title>
+	    <para>Tulip-ogl is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays.
 	    </para>
 	</sect2>
     
-	<sect2 id="glAugmentedDisplay"><title>GlAugmentedDisplay</title>
-	    <para> GlAugmentedDisplay is the mother-class of every augmented display. It provides one important virtual function : draw. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The only real implementation in this class is the link with the rendering options. You can recognize the other classes of the library with the prefix "GlAD".
+	<sect2 id="glSimpleEntity"><title>GlSimpleEntity</title>
+	    <para> GlSimpleEntity is the mother-class of every 2D/3D shape. It provides one important virtual functions : draw, and one important data field : boundingBox. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The other classes of the library are : GlLine, GlPolygon, GlBox, GlCircle, GlGrid, GlMultiPolygon, GlQuad, GlRect, GlRectTextured, GlSphere.
 	    </para>
 	</sect2>
     
-	<sect2 id="glADRenderOptions"><title>GlADRenderOptions</title>
-	    <para>GlADRenderOptions is a class used to store the rendering options of every GlAugmentedDisplay instance. It is working on a basis of 32-bits integer where every bit represent a different render state.</para>
-		
-	    <sect3 id="glADRenderOptions-List"><title>List of available render states</title>
-		<para> These are the different available render states you can use with GlADRenderOptions. It is to note that some of these render states are only descriptive and have no use in the <emphasis>setup()</emphasis> function.</para>
-    
-		<itemizedlist>
-		    <listitem><para><emphasis>GlAD_Wireframe</emphasis> : Enables the rendering with wireframe. This option can be combined with <emphasis>GlAD_Solid</emphasis> in order to render Wired-Solid geometry. <emphasis>At least one of these two options must be activated.</emphasis> Default = off.</para></listitem>
-		    <listitem><para><emphasis>GlAD_Solid</emphasis> : Enables the rendering of solid geometry. This option can be combines with <emphasis>GlAD_Wireframe</emphasis> in order to render Wired-Solid geometry. <emphasis>At least one of these two options must be activated.</emphasis> Default = on.</para></listitem>
-		    <listitem><para><emphasis>GlAD_AlphaBlending</emphasis> : Enables the use of Alpha-Blending. The Blending functions are the responsibility of the developer in the draw function of the considered GlAugmentedDisplay. Default = off; Default AlphaBlending : src=<emphasis>GL_SRC_ALPHA</emphasis>; dest=<emphasis>GL_ONE_MINUS_SRC_ALPHA</emphasis></para></listitem>
-		    <listitem><para><emphasis>GlAD_ZEnable</emphasis> : Enables the Depth Test during the rendering. Default = on.</para></listitem>
-		    <listitem><para><emphasis>GlAD_Lighting</emphasis> : Enables the basic OpenGL Per Vertex Lighting (PVL). Default = off.</para></listitem>
-		    <listitem><para><emphasis>GlAD_Culling</emphasis> : Enables the backface culling during the render. Default = on.</para></listitem>
-		</itemizedlist>
-	    </sect3>
-	</sect2>
-    
-	<sect2 id="glAD3D-basic"><title>Basic GlAD 3D classes</title>
-	    <para>There are 3 basic GlAD classes which display in 3D. Each of them represents a different primitive.</para>
+	<sect2 id="gl-class"><title>Gl 2D/3D classes</title>
+	    <para>There are 4 basic Gl classes which display in 2D or 3D. Each of them represents a different primitive.</para>
 	    <itemizedlist>
-		<listitem><para><emphasis>GlADPoint</emphasis> : Describes a point according to a position and a color.</para></listitem>
-		<listitem><para><emphasis>GlADLine</emphasis> : Describes a line according to a start position, a start color, an end position and an end color.</para></listitem>
-		<listitem><para><emphasis>GlADQuad</emphasis> : Describes a quad according to a position and a size, or according to four points.</para></listitem>
+		<listitem><para><emphasis>GlLine</emphasis> : Describes a line according to a start position, a start color, an end position and an end color.</para></listitem>
+		<listitem><para><emphasis>GlQuad</emphasis> : Describes a quad according to a position and a size, or according to four points.</para></listitem>
+		<listitem><para><emphasis>GlRect</emphasis> : Describes a rectangle according to a position and a size, or according to two points.</para></listitem>
+		<listitem><para><emphasis>GlPolygon</emphasis> : Describes a polygon according to a vector of positions.</para></listitem>
+		<listitem><para><emphasis>GlADBox</emphasis> : Displays a box. This augmented display is built with 6 GlQuad.</para></listitem>
+		<listitem><para><emphasis>GlADGrid</emphasis> : Displays a 3D or a 2D projection of a grid. This augmented display is built with GlLine.</para></listitem>
+		<listitem><para><emphasis>GlCircle</emphasis> : Describes a circle according to a position and a size.</para></listitem>
+		<listitem><para><emphasis>GlMultiPolygon</emphasis> : Describes a set of polygon.</para></listitem>
+		<listitem><para><emphasis>GlRectTextured</emphasis> : Describes a textured rectangle according to a position and a size, or according to two points.</para></listitem>
+		<listitem><para><emphasis>GlSphere</emphasis> : Describes a sphere according to a position and a size.</para></listitem>
 	    </itemizedlist>
 	</sect2>
     
-	<sect2 id="glAD3D-advanced"><title>Advanced GlAD 3D classes</title>
-	    <para>Based upon the basic GlAD 3D classes, there are 3 other classes in the default GlAD package.</para>
-	    <itemizedlist>
-		<listitem><para><emphasis>GlADAxisPoint</emphasis> : Displays a point with three axis (aligned with the world axis) according to a position, a color and a length. This augmented display is built with a GlADPoint and 6 GlADLine</para></listitem>
-		<listitem><para><emphasis>GlADBox</emphasis> : Displays a box. This augmented display is built with 6 GlADQuad.</para></listitem>
-		<listitem><para><emphasis>GlADGrid</emphasis> : Displays a 3D or a 2D projection of a grid. This augmented display is built with GlADLine.</para></listitem>
-	    </itemizedlist>
-	</sect2>
-    
-	<sect2 id="glAD2D-basic"><title>Basic GlAD 2D classes(GlHud)</title>
-	    <para>Based upon the general GlHud class, there are 3 HUD classes in the default GlHud package.</para>
-	    <itemizedlist>
-		<listitem><para><emphasis>GlHudLine</emphasis> : Displays a line according to a start position and an end position (and a color). The coordinates of the position must be given in screen space !</para></listitem>
-		<listitem><para><emphasis>GlHudRect</emphasis> : Displays a rectangle according to two position, the TopLeft corner and the BottomRight corner. These positions are in screen coordinates. Color must also be specified per corner.</para></listitem>
-		<listitem><para><emphasis>GlHudCircle</emphasis> : Displays a circle according to a center position, a radius and a number of segment. The position and the radius must be given in screen coordinates. The color must also be specified in the constructor.</para></listitem>
-	    </itemizedlist> 
-	</sect2>
-    
-	<sect2 id="glAD-Examples"><title>Examples of GlAD uses</title>
-	    <para>This section contains three small examples of use of the augmented displays with tulip. We admit the user has a GlGraphWidget already defined in the variable <emphasis>glGraphWidget</emphasis>.</para>
+	<sect2 id="glAD-Examples"><title>Examples of Gl shape uses</title>
+	    <para>This section contains three small examples of use of the augmented displays with tulip. We admit the user has a GlLayer already defined in the variable <emphasis>glMainLayer</emphasis>.</para>
 	    <para>In the given screenshots, the scene is composed of two nodes placed at positions (-1, -1, -1) and (1, 1, 1). Their sizes are (1, 1, 1)</para>
 	    <para>Here is the base screenshot of the scene :</para>
 	    <graphic fileref="images/GlADBaseScene.png"/>
 	
-	    <sect3 id="glAD3D-BasicExample"><title>Example of Basic GlAD 3D uses : GlADLine</title>
-		<para>This simple example shows how to add a Line from the position (-1, -1, -1) to the position (1, 1, 1) as an augmented display in a GlGraphWidget, the line will be starting Blue and will finish transparent Red; the thickness of the line will be set to 1 pixel.</para>
+	    <sect3 id="gl3D-BasicExample"><title>Example of Basic Gl 3D uses : GlLine</title>
+		<para>This simple example shows how to add a Line from the position (-1, -1, -1) to the position (1, 1, 1) as an augmented display in a GlScene, the line will be starting Blue and will finish transparent Red; the thickness of the line will be set to 1 pixel.</para>
 		<programlisting>Coord startPos(-1, -1, -1);
 Coord endPos(1, 1, 1);
 Color startCol(0, 0, 255, 255);
@@ -72,25 +44,18 @@ Color endCol(255, 0, 0, 0);
 
 // We create the line, the last parameter is the thickness of the line
  (note : you can't exceed 10)
-GlADLine* line = new GlADLine(startPos, endPos, startCol, endCol, 1);
+GlLine* line = new GlLine(startPos, endPos, startCol, endCol, 1);
 
-// We set 2 render states : Firstly we activate Alpha-Blending so that
- transparency can be computed, 
-// and then we deactivate the z buffer, in order to see the line even if
- it crosses a node.
-line->setRenderState(GlAD_AlphaBlending, true);
-line->setRenderState(GlAD_ZEnable, false);
-
-// Finally we add the line to the GlGraphWidget, naming it "The famous
+// Finally we add the line to the GlLayer, naming it "The famous
  tutorial line"
-glGraphWidget->addGlAugmentedDisplay(line, "The famous tutorial Line");	
+glMainLayer->addGlEntity(line, "The famous tutorial Line");	
 		</programlisting>
 	
 		<para>Here is the screenshow of the result :</para>
 		<graphic fileref="images/GlADLineTut.png"/>
 	    </sect3>
-	    <sect3 id="glAD3D-AdvancedExample"><title>Example of Advanced GlAD 3D uses : GlADBox</title>
-		<para>This example shows how to add a Box from the position (-1.5, -1.5, -1.5) to the position (1.5, 1.5, 1.5) as an augmented display in a GlGraphWidget. The box will be blue and semi transparent (220, 220, 255, 80).</para>
+	    <sect3 id="gl3D-AdvancedExample"><title>Example of Advanced Gl 3D uses : GlBox</title>
+		<para>This example shows how to add a Box from the position (-1.5, -1.5, -1.5) to the position (1.5, 1.5, 1.5) as an augmented display in a GlLayer. The box will be blue and semi transparent (220, 220, 255, 80).</para>
 	
 		<programlisting>Coord topLeft(-1.5, -1.5, -1.5);
 Coord bottomRight(1.5, 1.5, 1.5);
@@ -98,78 +63,77 @@ Color boxColor(220, 220, 255, 80);
 
 // We create the box by giving the bounding box to the constructor
 // (topLeft and bottomRight) and the color of the box.
-GlADBox *box = new GlADBox(topLeft, bottomRight, boxColor);
+GlBox *box = new GlBox(topLeft, bottomRight, boxColor);
 
-// We activate Alpha-Blending so that transparency can be computed and
- we deactivate culling in order to avoid backface removal.
-box->setRenderState(GlAD_AlphaBlending, true);
-box->setRenderState(GlAD_Culling, false);
-
-// Finally we add the box to the GlGraphWidget, naming it 
-"GlAD Tutorial 2 : Box"
-glGraphWidget->addGlAugmentedDisplay(box, "GlAD Tutorial 2 : Box");
+// Finally we add the box to the GlLayer, naming it 
+"Gl Tutorial 2 : Box"
+glMainLayer->addGlEntity(box, "Gl Tutorial 2 : Box");
 		</programlisting>
 	
 		<para>Here is the screenshot of the result :</para>
 		<graphic fileref="images/GlADBoxTut.png"/>
 	    </sect3>
 	
-	    <sect3 id="glAD2D-BasicExample"><title>Example of GlAD 2D (GlHud) uses : GlHudCircle</title>
+	    <sect3 id="gl2D-BasicExample"><title>Example of Gl 2D uses : GlCircle</title>
 		<para>This example shows how to add a Circle centered at the middle of the screen, of a radius of 256 pixels(The screenshot has been scaled). The circle will be light blue and will have 50 segments</para>
 	
-		<programlisting>//We firstly get the viewport to guess the center of the window
-int viewport[4];
-glGetIntegerv(GL_VIEWPORT, viewport);
+		<programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
+GlLayer *layer2D=new GlLayer("2D layer");
+layer2D->set2DMode();
+glScene->addLayer(layer2D);
+
+//after, get the viewport to guess the center of the window
+Vector&lt;int, 4&gt; viewport;
+viewport = glScene->getViewport();
 
 // This is the position of the center of the circle 
 // (ScreenWidth / 2, ScreenHeight / 2, 1)
-Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
+Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 0);
 Color circleColor(220, 220, 255, 255);
 
 // We create the circle giving it's center position, it's color,
  it's radius and the number of segments
-GlHudCircle* circle = new GlHudCircle(circleCenter, circleColor,
+GlCircle* circle = new GlCircle(circleCenter, circleColor,
  256, 50);
 
-// Then we deactivate Z buffer : this is very important for GlHud classes !
-circle->setRenderState(GlAD_ZEnable, false);
-
-// Finally we add the circle to the GlGraphWidget.
-glGraphWidget->addGlAugmentedDisplay(circle, "GlAD Tutorial 3 : Circle");
+// Finally we add the circle to the GlLayer.
+layer2D->addGlEntity(circle, "Gl Tutorial 3 : Circle");
 		</programlisting>
 	
 		<para>Here is the screenshot of the result (the screenshot has been shrinked so the radius is not of 256 pixels) :</para>
 		<graphic fileref="images/GlADCircleTut.png"/>
 	    </sect3>
 	
-	    <sect3 id="glAD-Compositing"><title>Compositing with GlAD</title>
-		<para>This example shows how to use GlADComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
+	    <sect3 id="gl-Compositing"><title>Compositing with Gl shape</title>
+		<para>This example shows how to use GlComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
 	
 		<para>The circle will be positionned at the center of the screen. It will have a radius of 256 pixels and will be of a medium grey (128, 128, 128, 255).</para>
 		<para>The four squares will be positionned every 90° on the circle. They will also be in medium gray, and only wired</para>
 	
-		<programlisting>// We firstly create a new composite to store the final Augmented display :
-GlADComposite *composite = new GlADComposite();
+		<programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
+GlLayer *layer2D=new GlLayer("2D layer");
+layer2D->set2DMode();
+glScene->addLayer(layer2D);
 
-// This is the medium grey color that will be applied to every GlHud :
-Color hudColor(128, 128, 128, 255);
+// Create a new composite to store the final Augmented display :
+GlComposite *composite = new GlComposite();
+
+// This is the medium grey color that will be applied to every Gl shape :
+Color color(128, 128, 128, 255);
 
 // We get the viewport for the circle :
-int viewport[4];
-glGetIntegerv(GL_VIEWPORT, viewport);
+Vector&lt;int, 4&gt; viewport;
+viewport = glScene->getViewport();
 
 // This is the position of the center of the circle 
 // (ScreenWidth / 2, ScreenHeight / 2, 1)
-Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 1);
+Coord circleCenter(viewport[2] / 2, viewport[3] / 2, 0);
 
 // We create the circle. It still have 50 segments
-GlHudCircle* circle = new GlHudCircle(circleCenter, hudColor, 256, 50);
-
-// We deactivate the Z buffer for the rendering of the circle
-circle->setRenderState(GlAD_ZEnable, false);
+GlCircle* circle = new GlCircle(circleCenter, color, 256, 50);
 
 // A 4 entries table for the squares
-GlHudRect* rects[4];
+GlRect* rects[4];
 
 Coord center, topLeft, bottomRight;
 
@@ -182,33 +146,33 @@ for(int i=0; i &lt; 4; i++)
     center = center + circleCenter;
 
     // Then we find the position of the topLeft and the bottomRight corner
-    topLeft     = center - Coord(16, 16, 1);
+    topLeft     = center - Coord(16, 16, 0);
     bottomRight = center + Coord(16, 16, 0);
 
-    rects[i] = new GlHudRect(bottomRight, topLeft, hudColor, hudColor);
-
-    // We deactivate Backface culling and Z-buffer
-    rects[i]->setRenderState(GlAD_ZEnable, false);
-    rects[i]->setRenderState(GlAD_Culling, false);
-
-    // Then we activate Wireframe rendering
-    rects[i]->setRenderState(GlAD_Wireframe, true);
-    rects[i]->setRenderState(GlAD_Solid, false);
+    rects[i] = new GlRect(bottomRight, topLeft, color, color);
   }
 
-// We add the circle and the 5 squares to the composite
-composite->addGlAugmentedDisplay(rects[0], "GlAD Tutorial 4 : Rect1");
-composite->addGlAugmentedDisplay(rects[1], "GlAD Tutorial 4 : Rect2");
-composite->addGlAugmentedDisplay(rects[2], "GlAD Tutorial 4 : Rect3");
-composite->addGlAugmentedDisplay(rects[3], "GlAD Tutorial 4 : Rect4");
-composite->addGlAugmentedDisplay(circle, "GlAD Tutorial 4 : Circle");
+// We add the circle and the 4 squares to the composite
+composite->addGlEntity(rects[0], "Gl Tutorial 4 : Rect1");
+composite->addGlEntity(rects[1], "Gl Tutorial 4 : Rect2");
+composite->addGlEntity(rects[2], "Gl Tutorial 4 : Rect3");
+composite->addGlEntity(rects[3], "Gl Tutorial 4 : Rect4");
+composite->addGlEntity(circle, "Gl Tutorial 4 : Circle");
 
-// Finally we add the composite to the GlGraphWidget
-glGraphWidget->addGlAugmentedDisplay(composite, "Composite");
+// Finally we add the composite to the GlLayer
+layer2D->addGlEntity(composite, "Composite");
 	    </programlisting>
     
 		<para>Here is a screenshot of the result :</para>
 		<graphic fileref="images/GlADCompositeTut.png"/>
+		<para>This is very simple but you can do more simply : a GlLayer is composed with a GlComposite, so you can add rectangles and circle directly to the layer2D, like this :</para>
+		<programlisting>// We add the circle and the 4 squares to the GlLayer
+layer2D->addGlEntity(rects[0], "Gl Tutorial 4 : Rect1");
+layer2D->addGlEntity(rects[1], "Gl Tutorial 4 : Rect2");
+layer2D->addGlEntity(rects[2], "Gl Tutorial 4 : Rect3");
+layer2D->addGlEntity(rects[3], "Gl Tutorial 4 : Rect4");
+layer2D->addGlEntity(circle, "Gl Tutorial 4 : Circle");
+		</programlisting>
 	    </sect3>
 	</sect2>
     </sect1>

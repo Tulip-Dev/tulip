@@ -16,7 +16,9 @@
  * Copyright (c) 1991,1993,2003 Linas Vepstas <linas@linas.org>
  */
 
+#ifndef __STDC__
 #include <malloc.h>
+#endif
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>	/* for the memcpy() subroutine */

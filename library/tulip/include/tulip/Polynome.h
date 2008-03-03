@@ -11,6 +11,7 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TLP_POLYNOME_H
 #define TLP_POLYNOME_H
 
@@ -51,3 +52,4 @@ class Polynome
 };
 }
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

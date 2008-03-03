@@ -1,8 +1,9 @@
-#include <tulip/MetaGraphProxy.h>
-#include <tulip/TlpTools.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/StableIterator.h>
 #include <iostream>
 using namespace std;
+using namespace tlp;
 
 #include <tulip/TulipPlugin.h>
 /** \addtogroup metric */
@@ -32,83 +33,86 @@ using namespace std;
  *  (at your option) any later version.
  *
  */
-class ConnectedAndTreeComponent:public Metric { 
+class ConnectedAndTreeComponent:public DoubleAlgorithm { 
 public:
-  ConnectedAndTreeComponent(const PropertyContext &context):Metric(context){};
+  ConnectedAndTreeComponent(const PropertyContext &context):DoubleAlgorithm(context){
+    // Connected component metric dependency
+    addDependency<DoubleAlgorithm>("Connected Component", "1.0");
+  };
 
-  void dfsErase(node n, SuperGraph * graph, set<node> &deleted, MutableContainer<bool> &visited) {
+  void dfsErase(node n, Graph * sg, set<node> &deleted, MutableContainer<bool> &visited) {
     if (visited.get(n.id)) return;
     visited.set(n.id,true);
-    StableIterator<node> it(graph->getInOutNodes(n));
+    StableIterator<node> it(sg->getInOutNodes(n));
     while(it.hasNext()){
-      dfsErase(it.next(), graph, deleted, visited);
+      dfsErase(it.next(), sg, deleted, visited);
     }
-    if (graph->deg(n) < 2) {
+    if (sg->deg(n) < 2) {
       deleted.insert(n);
-      graph->delNode(n);
+      sg->delNode(n);
     }
   }
 
-  void startChainErase(node n, SuperGraph * graph, set<node> &deleted) {
-    while(graph->deg(n) == 1) {
+  void startChainErase(node n, Graph * sg, set<node> &deleted) {
+    while(sg->deg(n) == 1) {
       deleted.insert(n);
-      Iterator<node> *it = graph->getInOutNodes(n);
+      Iterator<node> *it = sg->getInOutNodes(n);
       node tmp = it->next();
       delete it;
       deleted.insert(n);
-      graph->delNode(n);
+      sg->delNode(n);
       n = tmp;
     }
   }
 
   bool run() {
-    SuperGraph *graph=tlp::newCloneSubGraph(superGraph);
+    Graph *sg=tlp::newCloneSubGraph(graph);
     string errMsg;    
     MutableContainer<bool> visited;
     visited.setAll(false);
     set<node> deleted;
-    StableIterator<node> it(graph->getNodes());
+    StableIterator<node> it(sg->getNodes());
     while(it.hasNext()) { 
       node n = it.next();
       if (!visited.get(n.id)) {
-	dfsErase(n, graph, deleted, visited);
+	dfsErase(n, sg, deleted, visited);
       }
     }
     
-    StableIterator<node> it2(graph->getNodes());
+    StableIterator<node> it2(sg->getNodes());
     while(it2.hasNext()) { 
       node n = it2.next();
-      if (graph->isElement(n))
-	startChainErase(n, graph, deleted);
+      if (sg->isElement(n))
+	startChainErase(n, sg, deleted);
     }
     
-    MetricProxy connectedcomponent(graph);
-    graph->computeProperty("Connected Component", &connectedcomponent, errMsg);
+    DoubleProperty connectedcomponent(sg);
+    sg->computeProperty("Connected Component", &connectedcomponent, errMsg);
     
-    SuperGraph * graph2 = tlp::inducedSubGraph(superGraph, deleted);
-    MetricProxy connectedcomponent2(graph2);
-    graph2->computeProperty("Connected Component", &connectedcomponent2, errMsg);
+    Graph * sg2 = tlp::inducedSubGraph(graph, deleted);
+    DoubleProperty connectedcomponent2(sg2);
+    sg2->computeProperty("Connected Component", &connectedcomponent2, errMsg);
     {
       double theMax = 0;
-      Iterator<node> *it = graph->getNodes();
+      Iterator<node> *it = sg->getNodes();
       while(it->hasNext()){
 	node n = it->next();
 	double nv = connectedcomponent.getNodeValue(n);
 	if (theMax < nv) theMax = nv;
-	metricProxy->setNodeValue(n, nv);
+	doubleResult->setNodeValue(n, nv);
       } delete it;
       theMax += 1.0;
-      it = graph2->getNodes();
+      it = sg2->getNodes();
       while(it->hasNext()){
 	node n = it->next();
-	metricProxy->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
+	doubleResult->setNodeValue(n, connectedcomponent2.getNodeValue(n) + theMax);
       }delete it;
     }
-    superGraph->delAllSubGraphs(graph);
-    superGraph->delAllSubGraphs(graph2);
+    graph->delAllSubGraphs(sg);
+    graph->delAllSubGraphs(sg2);
     
     return true;
   }
 };
 /*@}*/
-METRICPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected_Tree Component","David Auber","03/01/2005","Alpha","0","1","Component");
+DOUBLEPLUGINOFGROUP(ConnectedAndTreeComponent,"Connected Tree Component","David Auber","03/01/2005","Alpha","1.0","Component");

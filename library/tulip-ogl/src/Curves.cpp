@@ -8,6 +8,7 @@
 
 
 using namespace std;
+using namespace tlp;
 
 namespace {
   //================================================
@@ -66,13 +67,24 @@ namespace {
       return (Coord&)data[j*size*3+i*3];
     }
   };
-
-
   //================================================
   GLfloat* buildCurvePoints (const vector<Coord> &vertices, 
 			     const vector<float> &sizes,
 			     const Coord &startN,
 			     const Coord &endN) {
+
+    //    Camera cam = glGraph->getCamera();
+    /*
+    vector<float> zVal(vvertices.size());
+    vector<Coord> vertices(vvertices.size());
+    for (unsigned int i = 0; i< vvertices.size(); ++i) {
+      Coord tmp = vvertices[i];
+      //   glGraph->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
+      zVal[i] = tmp[2];
+      tmp[2] = 0;
+      vertices[i] = tmp;
+    }
+    */
     CurvePoints result(vertices.size());
     //start point
     Coord xu = startN - vertices[0];
@@ -119,6 +131,15 @@ namespace {
     result(vertices.size()-1,0) = vertices[vertices.size()-1] - dir*sizes[vertices.size()-1];
     result(vertices.size()-1,1) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
     //============
+    /*
+      for (unsigned int i = 0; i< vvertices.size(); ++i)
+      for (unsigned int j = 0; j < 2; ++j) {
+	Coord tmp = result(i,j);
+	tmp[2] = zVal[i];
+	//glGraph->screenTo3DWorld(tmp[0], tmp[1], tmp[2]);
+	result(i,j) = tmp;
+      }
+    */
     return result.data;
   }
   //==============================================
@@ -147,46 +168,89 @@ namespace {
     return curve;
   }
   bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-	       const GLdouble *transformMatrix, const GLint *viewportArray) {
+	       const MatrixGL &transformMatrix, const Vector<int, 4> &viewport) {
     if (bends.size() == 0) 
-      return segmentVisible(startPoint, endPoint, transformMatrix, viewportArray);
+      return segmentVisible(startPoint, endPoint, transformMatrix, viewport) > 0.;
     
     //first point
-    if (segmentVisible(startPoint, bends[0], transformMatrix, viewportArray))
+    if (segmentVisible(startPoint, bends[0], transformMatrix, viewport)>0.)
       return true;
     for (unsigned int i=1; i<bends.size(); ++i) 
-      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewportArray))
+      if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewport)>0.)
 	return true;
-    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewportArray))
+    if (segmentVisible(endPoint, bends.back(), transformMatrix, viewport)>0.)
       return true;
     return false;
   }
 }
 
 namespace tlp {  
-  
-  void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &drawPoly, bool &drawLine, const GLdouble *transformMatrix, const GLint *viewportArray) {
-    Size tmp(size[0], size[0], size[0]);
-    Size tmp2(size[1], size[1], size[1]);
-    float s1 = projectSize(startPoint, tmp,  transformMatrix, viewportArray);
-    float s2 = projectSize(endPoint,   tmp2, transformMatrix, viewportArray);
-    //    cerr << startPoint<< "/" << endPoint << "/" << size << "/" << s1 << "/" << s2 << endl;
-    drawLine = false;
-    drawPoly = false;
-    if (s1>0. || s2>0.) {
-      drawLine = true;
-      drawPoly = true;
-    } else {
-      if (visible(startPoint, bends, endPoint, transformMatrix, viewportArray)) {
-	drawLine = true;
-	drawPoly = true;
+  vector<Coord> computeCleanVertices(const vector<Coord> &bends,
+				     const Coord &startPoint, const Coord& endPoint,
+				     Coord &startN, Coord &endN) {
+    vector<Coord> result;
+    if (bends.size() > 0) {
+      result.push_back(startPoint);
+      Coord lastPoint = bends[0];
+      if ((startPoint - lastPoint).norm()> 1E-4)
+	result.push_back(lastPoint);
+      unsigned int i;
+      for(i = 1; i < bends.size(); ++i) {
+	Coord currentPoint = bends[i];
+	if ((currentPoint - lastPoint).norm() > 1E-4) {
+	  result.push_back(currentPoint);
+	}
+	lastPoint = currentPoint;
       }
+      if ((endPoint - lastPoint).norm() > 1E-4) {
+	lastPoint = endPoint;
+	result.push_back(endPoint);
+      }
+      if (result.size() < 2) { //only one valid point for a line
+	result.clear();
+	return result;
+      }
+      //Adjust tangent direction
+      if ((startN - startPoint).norm() < 1E-4) {
+	startN = startPoint - (result[1] - startPoint);
+      }
+      if ((endN - lastPoint).norm()<1E-4) {
+	endN = lastPoint + lastPoint - result[result.size()-2];
+      }
+      return result;
+    } else {
+      if ((startPoint - endPoint).norm()> 1E-4) {
+	result.push_back(startPoint);
+	result.push_back(endPoint);
+	if ((startN - startPoint).norm() < 1E-4) {
+	  startN = startPoint - (endPoint - startPoint);
+	}
+	if ((endN - endPoint).norm() < 1E-4) {
+	  endN = endPoint + endPoint - startPoint;
+	}
+      }
+      return result;
     }
-    if (fabs(s1)<2. && fabs(s2)<2.)
-      drawPoly = false;
-    if (fabs(s1)>2. && fabs(s2)>2.)
-      drawLine = false;
+  }
+  //=============================================
+  void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
+		       const Size &size, bool &drawPoly, bool &drawLine, const MatrixGL &projectionMatrix,
+		       const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
+    float s1 = projectSize(startPoint, Size(size[0], size[0], size[0]),
+			   projectionMatrix, modelviewMatrix, viewport);
+    float s2 = projectSize(endPoint, Size(size[1], size[1], size[1]),
+			   projectionMatrix, modelviewMatrix, viewport);
+    //    cerr << startPoint<< "/" << endPoint << "/" << size << "/" << s1 << "/" << s2 << endl;
+    drawLine = drawPoly = (s1 > 0.) || (s2 > 0.) ||
+      visible(startPoint, bends, endPoint,  modelviewMatrix * projectionMatrix, viewport);
+    if (drawLine) {
+      s1 = fabs(s1);
+      s2 = fabs(s2);
+      if (s1 < 2. && s2 < 2.)
+	drawPoly = false;
+      if (s1 > 2. && s2 > 2.)
+	drawLine = false;
+    }    
   }
   //=============================================
   void polyLine(const vector<Coord> & vertices, 
@@ -269,10 +333,10 @@ namespace tlp {
 		      const Color &c1, const Color &c2, 
 		      float s1, float s2,
 		      const Coord &startN, const Coord &endN) {
-    gleCoord  *point_array  = new gleCoord [30 + 2];
+    /* gleCoord  *point_array  = new gleCoord [30 + 2];
     gleColor  *color_array  = new gleColor [30 + 2];
     gleDouble *radius_array = new gleDouble[30 + 2];
-    /*
+
       for (unsigned int i = 0; i < 30; ++i) {
       Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu);
     }

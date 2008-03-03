@@ -30,7 +30,7 @@ private :
   
 public :
   void setUp(){
-    carte = new PlanarConMap(tlp::newSuperGraph());
+    carte = new PlanarConMap(tlp::newGraph());
     edges.clear();
     nodes.clear();
   }

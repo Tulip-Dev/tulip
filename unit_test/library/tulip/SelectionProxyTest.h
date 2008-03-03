@@ -2,15 +2,17 @@
 #define TLPSELECTIONPROXYTEST
 
 #include <string>
-#include <tulip/SelectionProxy.h>
-#include <tulip/SuperGraph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
+// Warning SelectionProxy has been renamed in BooleanAlgorithm
+
 class SelectionProxyTest : public CppUnit::TestFixture {
 private:
-  SuperGraph *graph;
-  SelectionProxy *selection;
+  tlp::Graph *graph;
+  tlp::BooleanProperty *selection;
 
 public:
   void setUp();

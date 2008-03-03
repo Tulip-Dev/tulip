@@ -2,7 +2,6 @@
 #define VIEW3DBSERVER_H
 #include <set>
 
-struct GlGraph;
 //=========================================================
 
 /**
@@ -11,6 +10,10 @@ struct GlGraph;
  * framework for handling state dependency between observer and observed 
  * object.
  */
+namespace tlp {
+
+struct GlGraph;
+
 class GlGraphObserver {
  public:
   virtual ~GlGraphObserver() {}
@@ -20,15 +23,21 @@ class GlGraphObserver {
   virtual void destroy(GlGraph *){}
 };
 /*@}*/
+}
 
+#ifndef DOXYGEN_NOTFOR_USER
 namespace std {
+  /// for use in some STL sets
   template<>
-  struct less<GlGraphObserver *> {
-    size_t operator()(const GlGraphObserver * obs1,const GlGraphObserver *obs2) const {
+    struct less<tlp::GlGraphObserver *> {
+    size_t operator()(const tlp::GlGraphObserver * obs1,const tlp::GlGraphObserver *obs2) const {
       return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
 }
+#endif //DOXYGEN_NOTFOR_USER
+
+namespace tlp {
 
 /** \addtogroup graphs */ 
 /*@{*/
@@ -42,7 +51,7 @@ class ObservableGlGraph {
    */
   void addObserver(GlGraphObserver *);
   /**
-   * Return the number of observers
+   * Returns the number of observers
    */
   unsigned int countObservers();
   /**
@@ -76,6 +85,8 @@ inline void ObservableGlGraph::removeObserver(GlGraphObserver *item) {
 
 inline void ObservableGlGraph::removeObservers() { 
   observers.clear(); 
+}
+
 }
 
 #endif

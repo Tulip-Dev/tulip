@@ -1,11 +1,16 @@
 #ifndef _TABLE_H_
 #define _TABLE_H_
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "FLayout.h"
 
 #include <vector>
+
+namespace tlp {
+
 typedef std::vector<Frame*, std::allocator<Frame*> > vFrame;
 typedef std::vector<vFrame, std::allocator<vFrame> > vvFrame;
+
 class Context;
 
 class Table : public FLayout{
@@ -24,4 +29,7 @@ class Table : public FLayout{
   void getColor(unsigned char& r, unsigned char& v, unsigned char& b) const;
   void setColor(unsigned char r, unsigned char v, unsigned char b);
 };
+
+}
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif

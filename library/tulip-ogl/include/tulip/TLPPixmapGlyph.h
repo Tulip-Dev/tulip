@@ -1,5 +1,6 @@
 #ifndef     __TLPPixmapGlyph__
 #define     __TLPPixmapGlyph__
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -11,6 +12,8 @@
 #else
 #include <FTGlyph.h>
 #endif
+
+namespace tlp {
 
 /**
  * TLPPixmapGlyph is a specialisation of FTGlyph for creating pixmaps.
@@ -64,5 +67,7 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
         unsigned char* data;
 };
 
+}
 
+#endif //DOXYGEN_NOTFOR_DEVEL
 #endif  //  __TLPPixmapGlyph__

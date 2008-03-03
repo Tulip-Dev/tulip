@@ -4,37 +4,85 @@
 
 #include <string>
 #include "tulip/Types.h"
-#include "tulip/PropertyProxy.h"
+#include "tulip/AbstractProperty.h"
 #include "tulip/Color.h"
-#include "tulip/MetricProxy.h"
-#include "tulip/StringProxy.h"
-#include "tulip/SelectionProxy.h"
-#include "tulip/LayoutProxy.h"
-#include "tulip/IntProxy.h"
-#include "tulip/ColorsProxy.h"
-#include "tulip/SizesProxy.h"
+#include "tulip/DoubleProperty.h"
+#include "tulip/StringProperty.h"
+#include "tulip/BooleanProperty.h"
+#include "tulip/LayoutProperty.h"
+#include "tulip/IntegerProperty.h"
+#include "tulip/ColorProperty.h"
+#include "tulip/SizeProperty.h"
 
 #include "tulip/Reflect.h"
 
 using namespace std;
+using namespace tlp;
 
-
-bool DataSet::exist(const string &str) const {
-  return data.find(str)!=data.end();
+DataSet::DataSet(const DataSet &set) {
+  *this = set;
 }
 
-Iterator< pair<string,DataType> >* DataSet::getValues() const {
-  return new StlMapIterator<string,DataType>(data.begin(),data.end());
+DataSet & DataSet::operator=(const DataSet &set) {
+  if (this != &set) {
+    data.clear();
+    for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+	   set.data.begin(); it != set.data.end(); ++it) {
+      data.push_back(std::pair<std::string, tlp::DataType*>((*it).first, (*it).second->clone()));
+    }
+  }
+  return *this;
+}
+
+DataSet::~DataSet() {
+   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+     delete (*it).second;
+   }
+}
+
+bool DataSet::exist(const string &str) const {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return true;
+  }
+  return false;
+}
+
+Iterator< pair<string, DataType*> >* DataSet::getValues() const {
+  list< pair<string, DataType*> >::const_iterator begin = data.begin();
+  list< pair<string, DataType*> >::const_iterator end = data.end();
+  
+  return new StlIterator<pair<string, DataType*>, list< pair<string, DataType*> >::const_iterator>(begin, end);
+}
+
+bool StructDef::hasField(string str) {
+  for (std::list< std::pair<std::string, std::string> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return true;
+  }
+  return false;
 }
 
 void StructDef::erase(string str) {
-  data.erase( data.find(str) );
+  for (std::list< std::pair<std::string, std::string> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str) {
+      data.erase(it);
+      break;
+    }
+  }
   help.erase( help.find(str) );
   defValue.erase( defValue.find(str) );
 }
 
-Iterator< pair<string,string> >* StructDef::getField() const {
-  return new StlMapIterator<string,string>( data.begin(), data.end() );
+Iterator< pair<string, string> >* StructDef::getField() const {
+  list< pair<string, string> >::const_iterator begin = data.begin();
+  list< pair<string, string> >::const_iterator end = data.end();
+  
+  return new StlIterator<pair<string, string>, list< pair<string, string> >::const_iterator>(begin, end);
 }
 
 string StructDef::getHelp( string str ) const {
@@ -53,10 +101,26 @@ string StructDef::getDefValue( string str ) const {
     return it->second;
 }
 
+void StructDef::setDefValue(string name, string value) {
+  map<string,string>::iterator it = defValue.find(name);
+  if( it == defValue.end() )
+    defValue[name] = value;
+  else
+    it->second = value;
+}
+
+bool StructDef::isMandatory( string str ) const {
+  map<string,bool>::const_iterator it = mandatory.find(str);
+  if( it == mandatory.end() )
+    return false;
+  else
+    return it->second;
+}
+
 #undef TN
 #define	TN( T )	typeid(T).name()
 
-void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
+void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
   Iterator< pair<string,string> > * defIt;
   defIt = getField();
 
@@ -83,7 +147,7 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
     // int
     else if( tname == TN(int) ) {
       int v;
-      bool res = IntType::fromString( v, defv );
+      bool res = IntegerType::fromString( v, defv );
       assert( res );
       if( res )
 	ioDataSet.set( name, v );
@@ -130,39 +194,40 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, SuperGraph *inG) {
       if( res )
 	ioDataSet.set( name, v );
     }
-    // SelectionProxy
-    else if( inG && tname == TN(SelectionProxy) ) {
-      ioDataSet.set( name, inG->getProperty<SelectionProxy>(defv) );
+    // BooleanProperty
+    else if( inG && tname == TN(BooleanProperty) ) {
+      ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
     }
-    // MetricProxy
-    else if( inG && tname == TN(MetricProxy) ) {
-      ioDataSet.set( name, inG->getProperty<MetricProxy>(defv) );
+    // DoubleProperty
+    else if( inG && tname == TN(DoubleProperty) ) {
+      ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
     }
-    // LayoutProxy
-    else if( inG && tname == TN(LayoutProxy) ) {
-      ioDataSet.set( name, inG->getProperty<LayoutProxy>(defv) );
+    // LayoutProperty
+    else if( inG && tname == TN(LayoutProperty) ) {
+      ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
     }
-    // StringProxy
-    else if( inG && tname == TN(StringProxy) ) {
-      ioDataSet.set( name, inG->getProperty<StringProxy>(defv) );
+    // StringProperty
+    else if( inG && tname == TN(StringProperty) ) {
+      ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
     }
-    // IntProxy
-    else if( inG && tname == TN(IntProxy) ) {
-      ioDataSet.set( name, inG->getProperty<IntProxy>(defv) );
+    // IntegerProperty
+    else if( inG && tname == TN(IntegerProperty) ) {
+      ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
     }
-    // SizesProxy
-    else if( inG && tname == TN(SizesProxy) ) {
-      ioDataSet.set( name, inG->getProperty<SizesProxy>(defv) );
+    // SizeProperty
+    else if( inG && tname == TN(SizeProperty) ) {
+      ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
     }
-    // ColorsProxy
-    else if( inG && tname == TN(ColorsProxy) ) {
-      ioDataSet.set( name, inG->getProperty<ColorsProxy>(defv) );
+    // ColorProperty
+    else if( inG && tname == TN(ColorProperty) ) {
+      ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
+    }
+    //
+    else if ( inG && tname == TN(PropertyInterface*) ) {
+      // look for an already existing property
+      if (inG->existProperty(defv))
+	ioDataSet.set( name, inG->getProperty(defv) );
     }
   }
   delete defIt;
 }
-
-
-
-
-

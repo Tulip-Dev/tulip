@@ -10,10 +10,11 @@
 #include <qlineedit.h>
 #include <qvalidator.h>
 
-#include <tulip/LayoutProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/hash_string.h>
 
 using namespace tlp;
 using namespace std;
@@ -26,7 +27,6 @@ namespace tlp
 
     connect(SubdivisionsRB, SIGNAL(clicked()), SLOT(chGridSubdivisions()));
     connect(SizeRB, SIGNAL(clicked()), SLOT(chGridSize()));
-    connect(HollowGridCB, SIGNAL(clicked()), SLOT(chHollowGrid()));
     connect(DisplayXCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
     connect(DisplayYCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
     connect(DisplayZCB, SIGNAL(clicked()), SLOT(chDisplayGrid()));
@@ -54,14 +54,18 @@ namespace tlp
     this->glGraphWidget = graphWidget;
 
     if (glGraphWidget != NULL && glGraphWidget != 0)
-      grid = (GlADGrid*)glGraphWidget->findGlAugmentedDisplay("Layout Grid");
+      grid = (GlGrid*)glGraphWidget->getScene()->getLayer("Main")->findGlEntity("Layout Grid");
+  }
+  //==============================================
+  void GridOptionsWidget::setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget) {
+    this->layerWidget=layerWidget;
   }
   //==============================================
   void GridOptionsWidget::validateGrid() {
     if (glGraphWidget != 0) {
       if (ActivatedCB->isChecked()) {
 	if (grid != NULL) {
-	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  glGraphWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
 	}
 	    
@@ -70,10 +74,10 @@ namespace tlp
 	Coord min, max;
 	    
 	// We get the min and the max of the Layout to display the grid
-	LayoutProxy *layout = glGraphWidget->getSuperGraph()->getProperty<LayoutProxy>("viewLayout");
-	SizesProxy *sizes = glGraphWidget->getSuperGraph()->getProperty<SizesProxy>("viewSize");
-	MetricProxy *rotation = glGraphWidget->getSuperGraph()->getProperty<MetricProxy>("viewRotation");
-	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getSuperGraph(), layout, 
+	LayoutProperty *layout = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<LayoutProperty>("viewLayout");
+	SizeProperty *sizes = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<SizeProperty>("viewSize");
+	DoubleProperty *rotation = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<DoubleProperty>("viewRotation");
+	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout, 
 							    sizes, rotation);
 	max = bboxes.first;	
 	min = bboxes.second;
@@ -110,17 +114,18 @@ namespace tlp
 	  for(int i=0; i < 3; i++)
 	    cell[i] = cellsize[i];
 	}
-	grid = new GlADGrid(min, max, cell, Color(0, 0, 0, 255), display, HollowGridCB->isChecked());
-	glGraphWidget->addGlAugmentedDisplay(grid, "Layout Grid");
-	    
+	grid = new GlGrid(min, max, cell, Color(0, 0, 0, 255), display);
+	glGraphWidget->getScene()->getLayer("Main")->addGlEntity(grid, "Layout Grid");   
+	layerWidget->updateLayer("Main",glGraphWidget->getScene()->getLayer("Main"));
       }
       else {
 	if (grid != NULL) {
-	  glGraphWidget->removeGlAugmentedDisplay(grid);
+	  glGraphWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
+	  layerWidget->updateLayer("Main",glGraphWidget->getScene()->getLayer("Main"));
 	}
       }
-      glGraphWidget->updateGL();   
+      glGraphWidget->draw();   
       close();
     }
   }
@@ -149,21 +154,12 @@ namespace tlp
     GridSizeZ->setEnabled(true);
   }
   //==============================================
-  void GridOptionsWidget::chHollowGrid() {
-    if (grid == NULL || !ActivatedCB->isChecked())
-      return;
-
-    grid->setHollowGrid(HollowGridCB->isChecked());
-
-    glGraphWidget->updateGL();
-  }
-  //==============================================
   void GridOptionsWidget::chDisplayGrid() {
     if (grid == NULL || !ActivatedCB->isChecked())
       return;
     bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
     grid->setDisplayDim(display);
-    glGraphWidget->updateGL();
+    glGraphWidget->draw();
   }
   //==============================================
 }

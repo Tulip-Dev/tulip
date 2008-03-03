@@ -1,17 +1,19 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
-#include <tulip/TlpTools.h>
-
-#include "tulip/TemplateFactory.h"
 #include "PluginsTest.h"
+#include <tulip/TlpTools.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/PluginLoaderTxt.h>
+
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
 //==========================================================
 void PluginsTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void PluginsTest::tearDown() {
@@ -19,15 +21,23 @@ void PluginsTest::tearDown() {
 }
 //==========================================================
 void PluginsTest::testloadPlugin() {
-  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") == SelectionProxy::factory->objMap.end());
-  tlp::loadPlugin("testPlugin.so");
-  CPPUNIT_ASSERT( SelectionProxy::factory->objMap.find("Test") != SelectionProxy::factory->objMap.end());
+  // plugin does not exist yet
+  CPPUNIT_ASSERT(!tlp::BooleanProperty::factory->pluginExists("Test"));
+  PluginLoaderTxt loader;
+  tlp::loadPlugin("./testPlugin.so", &loader);
+  // plugin should exist now
+  CPPUNIT_ASSERT(tlp::BooleanProperty::factory->pluginExists("Test"));
+  list<Dependency> deps = tlp::BooleanProperty::factory->getPluginDependencies("Test");
+  // only one dependency (see testPlugin.cpp)
+  CPPUNIT_ASSERT(deps.size() == 1);
+  CPPUNIT_ASSERT(deps.front().factoryName == tlp::demangleTlpClassName(typeid(BooleanAlgorithm).name()));
+  CPPUNIT_ASSERT(deps.front().pluginName == "Test");
 }
 //==========================================================
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
-  SelectionProxy sel(graph);
+  tlp::BooleanProperty sel(graph);
   CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
 //==========================================================
@@ -35,10 +45,10 @@ void PluginsTest::testAncestorGraph() {
   string name = "Test";
   string err = "Error";
   tlp::loadPlugin("testPlugin2.so");
-  SuperGraph *child = graph->addSubGraph();
-  SuperGraph *child2 = graph->addSubGraph();
-  SuperGraph *child3 = child->addSubGraph();
-  SelectionProxy sel(child);
+  Graph *child = graph->addSubGraph();
+  Graph *child2 = graph->addSubGraph();
+  Graph *child3 = child->addSubGraph();
+  BooleanProperty sel(child);
   CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));

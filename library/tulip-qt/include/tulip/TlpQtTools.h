@@ -8,9 +8,10 @@
 
 
 #include "tulip/Reflect.h"
-#include "tulip/SuperGraph.h"
-class QWidget;
+#include "tulip/Graph.h"
+#include "tulip/GlGraphWidget.h"
 
+class QWidget;
 
 namespace tlp {
 
@@ -22,11 +23,19 @@ namespace tlp {
    * [inSet		: Input (optional) set, containing some default values]
    */
 
-  TLP_QT_SCOPE bool openDataSetDialog	(	DataSet &			outSet,
-								const StructDef &	inDef,
-								const DataSet *		inSet	= NULL,
-								const char *		inName	= NULL,
-								SuperGraph *		inG		= NULL	);
+  TLP_QT_SCOPE bool openDataSetDialog	(DataSet & outSet,
+					 const StructDef *sysDef,
+					 StructDef *inDef,
+					 const DataSet *inSet	= NULL,
+					 const char *inName = NULL,
+					 Graph *inG = NULL,
+					 QWidget *parent = NULL);
+
+  /**
+   * Create a main layout in GlGraphWidget and display the graph on it 
+   */
+
+  TLP_QT_SCOPE void openGraphOnGlGraphWidget(Graph *graph,DataSet *dataSet,GlGraphWidget *glGraphWidget);
 
 }
 

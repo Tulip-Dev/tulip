@@ -1,5 +1,5 @@
 #include <string>
-#include <tulip/SuperGraph.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 
 #include <tulip/SimpleTest.h>
@@ -14,6 +14,7 @@
 #include "TestAlgorithmTest.h"
 
 using namespace std;
+using namespace tlp;
 
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
@@ -21,7 +22,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( TestAlgorithmTest );
 
 //==========================================================
 void TestAlgorithmTest::setUp() {
-  graph = tlp::newSuperGraph();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void TestAlgorithmTest::tearDown() {
@@ -98,7 +99,7 @@ void TestAlgorithmTest::testConnected() {
   CPPUNIT_ASSERT(ConnectedTest::isConnected(graph));
   CPPUNIT_ASSERT(addedEdge.size() == 1u);
   graph->delEdge(addedEdge[0]);
-  CPPUNIT_ASSERT(ConnectedTest::numberOfConnectedComponnents(graph) == 2u);
+  CPPUNIT_ASSERT(ConnectedTest::numberOfConnectedComponents(graph) == 2u);
 }
 //==========================================================
 const std::string GRAPHPATH = "./DATA/graphs/";
@@ -149,9 +150,9 @@ void TestAlgorithmTest::testBiconnected() {
   graph->delEdge(addedEdges[0]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
 
-  SuperGraph *tmpGraph;
+  Graph *tmpGraph;
   for (unsigned int i = 0; i<5; ++i) {
-    tmpGraph = tlp::load(GRAPHPATH + "planar/unbiconnected.tlp");
+    tmpGraph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     vector<edge> vEdges;
     BiconnectedTest::makeBiconnected(tmpGraph, vEdges);

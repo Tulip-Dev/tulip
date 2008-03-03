@@ -9,21 +9,20 @@
 
 using namespace std;
 
-#if (QT_REL == 4)
-Application *qApp = (Application *) NULL;
-#endif
-
 //**********************************************************************
 Application::Application(int& argc, char ** argv): QApplication(argc,argv) 
 {
-  qApp = this;
+#if defined(__APPLE__)
+  // allows to load qt imageformats plugin
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
   tlp::initTulipLib((char *) QApplication::applicationDirPath().ascii());
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
   while (end!=tlp::TulipPluginsPath.end())
     if ((*end)==tlp::PATH_DELIMITER) {
       if (begin!=end) {
-	string path = string(begin,end) + "/../bitmaps/";
+	string path = string(begin,end) + "/bitmaps/";
 	QDir *bitmapsDir= new QDir(path.c_str());
 	if(bitmapsDir->exists()) {
 	  bitmapPath = path.c_str();
@@ -38,7 +37,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
     else
       ++end;
   if (begin!=end) {
-    string path = string(begin,end) + "/../bitmaps/";
+    string path = string(begin,end) + "/bitmaps/";
     QDir *bitmapsDir= new QDir(path.c_str());
     if(bitmapsDir->exists()) {
       bitmapPath = path.c_str();

@@ -3,6 +3,7 @@
 #include <tulip/StableIterator.h>
 
 using namespace std;
+using namespace tlp;
 
 
 
@@ -29,23 +30,23 @@ namespace {
 }
 
 struct RandomTree:public ImportModule {
-  RandomTree(ClusterContext context):ImportModule(context) {
+  RandomTree(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("minsize",paramHelp[0],"100");
     addParameter<int>("maxsize",paramHelp[1],"1000");
   }
   ~RandomTree() {
   }
 
-  bool buildNode(node n,int sizeM) {
-    if (superGraph->numberOfNodes()>sizeM+2) return false;
+  bool buildNode(node n, unsigned int sizeM) {
+    if (graph->numberOfNodes()>sizeM+2) return false;
     bool result=true;
     int randNumber=rand();
     if (randNumber>RAND_MAX/2) {
       node n1,n2;
-      n1=superGraph->addNode();
-      n2=superGraph->addNode();
-      superGraph->addEdge(n,n1);
-      superGraph->addEdge(n,n2);
+      n1=graph->addNode();
+      n2=graph->addNode();
+      graph->addEdge(n,n1);
+      graph->addEdge(n,n2);
       result= result && buildNode(n1,sizeM);
       result= result && buildNode(n2,sizeM);
     }
@@ -54,24 +55,27 @@ struct RandomTree:public ImportModule {
 
   bool import(const string &name) {
     srand(clock()); 
-    int minSize  = 100;
-    int maxSize  = 1000;
+    unsigned int minSize  = 100;
+    unsigned int maxSize  = 1000;
     if (dataSet!=0) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);
     }
+
+    if (pluginProgress)
+      pluginProgress->showPreview(false);
 
     bool ok=true;
     int i=0;
     while (ok) {
       if (pluginProgress->progress(i%100,100)!=TLP_CONTINUE) break;
       i++;
-      superGraph->clear();
-      node n=superGraph->addNode();
+      graph->clear();
+      node n=graph->addNode();
       ok = !buildNode(n,maxSize);
-      if (superGraph->numberOfNodes()<minSize-2) ok=true;
+      if (graph->numberOfNodes()<minSize-2) ok=true;
     }
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }
 };
-IMPORTPLUGINOFGROUP(RandomTree,"Uniform Random Binary Tree","Auber","16/02/2001","0","0","1","Graphs")
+IMPORTPLUGINOFGROUP(RandomTree,"Uniform Random Binary Tree","Auber","16/02/2001","","1.0","Graphs")

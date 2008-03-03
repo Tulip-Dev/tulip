@@ -1,40 +1,51 @@
-if WIN32
+if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libplanar.la \
-	libgrid.la \
-	libdot.la \
-	libtlp.la \
-	libgml.la \
-	libfilesystem.la \
-	librandomgraph.la \
-	librandomsimplegraph.la \
-	libadjacencymatrix.la \
-	libcompletegraph.la \
-	librandomtree.la \
-	librandomtreegeneral.la \
-	libcompletetree.la \
-	libsmallworld.la 
+	libPlanarGraph-@VERSION@.la \
+	libGrid-@VERSION@.la \
+	libDotImport-@VERSION@.la \
+	libGMLImport-@VERSION@.la \
+	libFileSystem-@VERSION@.la \
+	libWebImport-@VERSION@.la \
+	libRandomGraph-@VERSION@.la \
+	libRandomSimpleGraph-@VERSION@.la \
+	libAdjacencyMatrixImport-@VERSION@.la \
+	libCompleteGraph-@VERSION@.la \
+	libRandomTree-@VERSION@.la \
+	libRandomTreeGeneral-@VERSION@.la \
+	libCompleteTree-@VERSION@.la \
+	libSmallWorldGraph-@VERSION@.la 
 
-pluginsdir = $(libdir)/tlp/plugins/import
+pluginsdir = $(libdir)/tlp
 
-libplanar_la_SOURCES = PlanarGraph.cpp
-libdot_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
-libgrid_la_SOURCES = Grid.cpp
-libtlp_la_SOURCES = TLPImport.cpp TLPParser.h
-libgml_la_SOURCES = GMLImport.cpp GMLParser.h
-librandomgraph_la_SOURCES = RandomGraph.cpp
-librandomsimplegraph_la_SOURCES = RandomSimpleGraph.cpp
-libadjacencymatrix_la_SOURCES = AdjacencyMatrixImport.cpp
-libcompletegraph_la_SOURCES = CompleteGraph.cpp
-librandomtree_la_SOURCES = RandomTree.cpp
-librandomtreegeneral_la_SOURCES = RandomTreeGeneral.cpp
-libcompletetree_la_SOURCES = CompleteTree.cpp
-libsmallworld_la_SOURCES = SmallWorldGraph.cpp
-libfilesystem_la_SOURCES = FileSystem.cpp
+BUILT_SOURCES =  moc_WebImport.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+libPlanarGraph_@VERSION@_la_SOURCES = PlanarGraph.cpp
+libDotImport_@VERSION@_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
+libGrid_@VERSION@_la_SOURCES = Grid.cpp
+libGMLImport_@VERSION@_la_SOURCES = GMLImport.cpp GMLParser.h
+libRandomGraph_@VERSION@_la_SOURCES = RandomGraph.cpp
+libRandomSimpleGraph_@VERSION@_la_SOURCES = RandomSimpleGraph.cpp
+libAdjacencyMatrixImport_@VERSION@_la_SOURCES = AdjacencyMatrixImport.cpp
+libCompleteGraph_@VERSION@_la_SOURCES = CompleteGraph.cpp
+libRandomTree_@VERSION@_la_SOURCES = RandomTree.cpp
+libRandomTreeGeneral_@VERSION@_la_SOURCES = RandomTreeGeneral.cpp
+libCompleteTree_@VERSION@_la_SOURCES = CompleteTree.cpp
+libSmallWorldGraph_@VERSION@_la_SOURCES = SmallWorldGraph.cpp
+libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
+libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
+nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
+
+AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
+
+moc_%.cpp: %.h 
+	$(MOC) -o $@ $<
+
+clean-generic:
+	rm -f moc_*

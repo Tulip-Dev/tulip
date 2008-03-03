@@ -39,9 +39,9 @@
  *  (at your option) any later version.
  *
  */
-class EccentricityMetric:public Metric { 
+class EccentricityMetric:public tlp::DoubleAlgorithm { 
 public:
-  EccentricityMetric(const PropertyContext &);
+  EccentricityMetric(const tlp::PropertyContext &);
   ~EccentricityMetric();
   bool run();
 };

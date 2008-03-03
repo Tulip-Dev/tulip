@@ -1,5 +1,5 @@
 /*
- * Authors: David Auber, Jérémy Compostella, Jean Darracq, Benjamin Muller,
+ * Authors: David Auber, Jï¿½ï¿½y Compostella, Jean Darracq, Benjamin Muller,
  *          Fabrice Rochambeau, Fabiani Simplice, Jyl Cristoff Zobeide
  * 
  * Last modification : $id $
@@ -11,13 +11,14 @@
  */
 
 #include <vector>
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/SimpleTest.h"
 #include "tulip/MutableContainer.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/BooleanProperty.h"
 #include "tulip/StableIterator.h"
 
 using namespace std;
+using namespace tlp;
 //=================================================================
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
@@ -30,7 +31,7 @@ SimpleTest * SimpleTest::instance=0;
 SimpleTest::SimpleTest () {
 }
 //=================================================================
-bool SimpleTest::isSimple(SuperGraph *graph) {
+bool SimpleTest::isSimple(Graph *graph) {
   if(instance == 0 )
     instance = new SimpleTest();
 
@@ -42,7 +43,7 @@ bool SimpleTest::isSimple(SuperGraph *graph) {
   return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
-void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
+void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
   if (SimpleTest::isSimple(graph)) return;
   SimpleTest::simpleTest(graph, &removed, &removed);
   vector<edge>::const_iterator it;
@@ -52,7 +53,7 @@ void SimpleTest::makeSimple(SuperGraph* graph,vector<edge> &removed) {
   assert(SimpleTest::isSimple(graph));
 }
 //=================================================================
-bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
+bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<edge> *loops) {
  bool result = true;
  bool computeAll = (loops != 0) || (multipleEdges != 0);
  Iterator<node> *itNode = graph->getNodes();
@@ -99,22 +100,22 @@ bool SimpleTest::simpleTest(SuperGraph *graph, vector<edge> *multipleEdges, vect
  return result;
 }
 //=================================================================
-void SimpleTest::deleteResult(SuperGraph *graph) {
+void SimpleTest::deleteResult(Graph *graph) {
   resultsBuffer.erase((unsigned long)graph);
   graph->removeObserver(this);
 }
 //=================================================================
-void SimpleTest::addEdge(SuperGraph *graph, const edge) {
+void SimpleTest::addEdge(Graph *graph, const edge) {
   if (resultsBuffer[(unsigned long)graph] == true)
     deleteResult(graph);
 }
 //=================================================================
-void SimpleTest::delEdge(SuperGraph *graph, const edge) {
+void SimpleTest::delEdge(Graph *graph, const edge) {
   if (resultsBuffer[(unsigned long)graph] == false)
     deleteResult(graph);
 }
 //=================================================================
-void SimpleTest::destroy(SuperGraph *graph) {
+void SimpleTest::destroy(Graph *graph) {
   deleteResult(graph);
 }
 //=================================================================

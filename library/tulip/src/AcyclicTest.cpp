@@ -1,9 +1,10 @@
-#include "tulip/SuperGraph.h"
+#include "tulip/Graph.h"
 #include "tulip/AcyclicTest.h"
-#include "tulip/SelectionProxy.h"
+#include "tulip/BooleanProperty.h"
 #include "tulip/StableIterator.h"
 
 using namespace std;
+using namespace tlp;
 
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
@@ -16,7 +17,7 @@ AcyclicTest * AcyclicTest::instance=0;
 AcyclicTest::AcyclicTest(){
 }
 //**********************************************************************
-bool AcyclicTest::isAcyclic(const SuperGraph *graph) {
+bool AcyclicTest::isAcyclic(const Graph *graph) {
   if (instance==0)
     instance = new AcyclicTest();
 
@@ -28,7 +29,7 @@ bool AcyclicTest::isAcyclic(const SuperGraph *graph) {
   return instance->resultsBuffer[(unsigned long)graph];
 }
 //**********************************************************************
-void AcyclicTest::makeAcyclic(SuperGraph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
+void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
   if (AcyclicTest::isAcyclic(graph)) return;
 
   //replace self loops by three edges and two nodes.
@@ -63,7 +64,7 @@ void AcyclicTest::makeAcyclic(SuperGraph* graph,vector<edge> &reversed, vector<t
  }
 
 //=================================================================
-bool AcyclicTest::dfsAcyclicTest(const SuperGraph *graph, const node n, 
+bool AcyclicTest::dfsAcyclicTest(const Graph *graph, const node n, 
 				 MutableContainer<bool> &visited, 
 				 MutableContainer<bool> &finished,
 				 vector<edge> *obstructionEdges) {
@@ -93,7 +94,7 @@ bool AcyclicTest::dfsAcyclicTest(const SuperGraph *graph, const node n,
   return result;
 }
 //**********************************************************************
-bool AcyclicTest::acyclicTest(const SuperGraph *graph, vector<edge> *obstructionEdges) {
+bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges) {
   MutableContainer<bool> visited;
   MutableContainer<bool> finished;
   visited.setAll(false);
@@ -114,23 +115,23 @@ bool AcyclicTest::acyclicTest(const SuperGraph *graph, vector<edge> *obstruction
   return result;
 }
 //**********************************************************************
-void AcyclicTest::destroy(SuperGraph *graph) {
+void AcyclicTest::destroy(Graph *graph) {
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::reverseEdge(SuperGraph *graph,const edge e) {
+void AcyclicTest::reverseEdge(Graph *graph,const edge e) {
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::addEdge(SuperGraph *graph,const edge e) {
+void AcyclicTest::addEdge(Graph *graph,const edge e) {
   if (resultsBuffer[(unsigned long)graph]==false) return;
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::delEdge(SuperGraph *graph,const edge e) {
+void AcyclicTest::delEdge(Graph *graph,const edge e) {
   if (resultsBuffer[(unsigned long)graph]==true) return;
   graph->removeObserver(this);
   resultsBuffer.erase((unsigned long)graph);

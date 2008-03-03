@@ -1,516 +1,604 @@
 #include <tulip/StatisticsNodeModule.h>
-#include <tulip/SuperGraph.h>
-#include <tulip/MetricProxy.h>
+#include <tulip/Graph.h>
+#include <tulip/DoubleProperty.h>
 #include <tulip/Coord.h>
 #include <math.h>
 
 using namespace std;
+using namespace tlp;
 
-namespace tlp
-{
-  void StatsNodeModule::ComputeAveragePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-    vector<float> average(nDimensions);
+void CorrelationMatrix::caracteristicPolynome(Polynome &result) const {
+  // This is quite an ugly function but ... well ... it works :)
+  // If P is the caracteristic Polynome of the matrix M
+  // with :
+  //     ( a-Lambda  b         c       )
+  // M = ( d         e-Lambda  f       )
+  //     ( g         h         i-Lambda)
+  //
+  // Then we deduce that P = A * Lambda³ + B * Lambda² + C * Lambda + D
+  // Where :
+  //  
+  //  A = -1
+  //  B = a + e + i
+  //  C = -ae -ai -ei + hf + bd + cg
+  //  D = aei - ahf - bdi + bgf + cdh - cge
 
-    for(int i=0; i < nDimensions; i++)
-      average[i] = 0;
+  float a, b, c, d, e, f, g, h, i;
 
-    while (itN->hasNext())
-      {
-	node n = itN->next();
+  a = (*this)[0][0];
+  b = (*this)[0][1];
+  c = (*this)[0][2];
+  d = (*this)[1][0];
+  e = (*this)[1][1];
+  f = (*this)[1][2];
+  g = (*this)[2][0];
+  h = (*this)[2][1];
+  i = (*this)[2][2];
 
-	for(int i=0; i < nDimensions; i++)
-	  average[i] += metrics[i]->getNodeValue(n);
-      }
+  // A = -1
+  result.a = -1;
 
-    for(int i=0; i < nDimensions; i++)
-      average[i] /= superGraph->numberOfNodes();
+  // B = a + e + i
+  result.b = a + e + i;
 
-    delete itN;
+  // C = -ae -ai -ei + hf + bd + cg
+  result.c = -(a * e) - (a * i) - (e * i) + (h * f) + (b * d) + (c * g);
 
-    result = average;
-  }
+  // D = aei - ahf - bdi + bgf + cdh - cge
+  result.d = (a * e * i) - (a * h * f) - (b * d * i) + (b * g * f) + (c * d * h) - (c * g * e);
+}
 
-  float StatsNodeModule::ComputeAverage(SuperGraph *superGraph, MetricProxy *metricProxy)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
+
+bool CorrelationMatrix::computeEigenVectors(Matrix<float, 3> &eigenVectors) const {
+  // To compute the EigenVectors of the matrix, we first need to find the EigenValues
   
-    float average = 0.0f;
+  // We compute, firstly, the Caracteristic Polynome of the Matrix :
+  Polynome cara;
 
-    while (itN->hasNext())
-      {
-	node n = itN->next();
+  caracteristicPolynome(cara);
 
-	average += metricProxy->getNodeValue(n);
-      }
+  // EigenValues are given by the roots of the Polynome :
+  float EigenValues[3];
+  int nRes;
 
-    delete itN;
+  cara.resolv(EigenValues, nRes);
 
-    average /= superGraph->numberOfNodes();
+  if (nRes != 3)
+    {
+      std::cerr << "Non Symmetric Matrix !!!" << std::endl;
 
-    return average;
-  }
+      return false;
+    }
 
-  void StatsNodeModule::ComputeVariancePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
+  /* ==== DEBUG ====
+     std:: cout << "EigenValues = ";
+     for(int i=0; i < 3; i++) 
+     std::cout << EigenValues[i] << "; "; 
+     std::cout << std::endl; */
 
-    vector<float> average(nDimensions);
-    vector<float> variance(nDimensions);
-    float nodeVal;
+  for(int i=0; i < 3; i++)
+    {
+      // We compute the equation system :
+      Matrix<float, 3> eQSys(*this);
 
-    for(int i=0; i < nDimensions; i++)
-      variance[i] = 0;
+      for(int j=0; j < 3; j++)
+	eQSys[j][j] -= EigenValues[i];
 
-    StatsNodeModule::ComputeAveragePoint(superGraph, metrics, nDimensions, average);
+      /*  ==== DEBUG ====
+	  std::cout << "\nEQSYS =\n"; 
+	  for(int j=0; j < 3; j++)
+	  std::cout << eQSys[j] << std::endl;*/
 
-    while (itN->hasNext())
-      {
-	node n = itN->next();
+      // And we simplify it :
+      Matrix<float, 2> eVSys;
 
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    nodeVal = metrics[i]->getNodeValue(n);
+      if (!eQSys.simplify(eVSys))
+	{
+	  std::cerr << "Couldn't Simplify matrix for " << i << "th EigenValue\n";
 
-	    variance[i] += (nodeVal - average[i]) * (nodeVal - average[i]);
-	  }
-      }
-    delete itN;
+	  return false;
+	}
 
-    int nNodes = superGraph->numberOfNodes();
+      /* ==== DEBUG ====
+	 std::cout << "\nEVQYQ =\n";
+	 for(int j=0; j < 2; j++)
+	 std::cout << eVSys[j] << std::endl; */
 
-    for(int i=0; i < nDimensions; i++)
-      variance[i] /= nNodes;
+      // And finally, we find the matching EigenVector
+      if (!eVSys.computeEigenVector(1, eigenVectors[i]))
+	{
+	  std::cerr << "Couldn't compute EigenVector for " << i << "th EigenValue\n";
 
-    result = variance;
-  }
-
-  float StatsNodeModule::ComputeVariance(SuperGraph *superGraph, MetricProxy *metricProxy)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    float average;
-    float variance = 0.0f;
-    float nodeVal;
-
-    average = StatsNodeModule::ComputeAverage(superGraph, metricProxy);
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	nodeVal = metricProxy->getNodeValue(n);
-
-	variance += (nodeVal - average) * (nodeVal - average);
-      }
-
-    delete itN;
-
-    variance /= superGraph->numberOfNodes();
-
-    return variance;
-  }
-
-  void StatsNodeModule::ComputeStandardDeviationPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
-  {
-    ComputeVariancePoint(superGraph, metrics, nDimensions, result);
-
-    for(int i=0; i < nDimensions; i++)
-      result[i] = sqrt(result[i]);
-  }
-
-  void StatsNodeModule::ComputeStandardDeviationPoint(const std::vector<float> &variances, int nDimensions, std::vector<float> &result)
-  {
-    result.resize(nDimensions);
-
-    for(int i=0; i < nDimensions; i++)
-      result[i] = sqrt(variances[i]);
-  }
-
-  float StatsNodeModule::ComputeStandardDeviation(SuperGraph *superGraph, MetricProxy *metricProxy)
-  {
-    float variance = ComputeVariance(superGraph, metricProxy);
-
-    return sqrt(variance);
-  }
-
-  float StatsNodeModule::ComputeStandardDeviation(float variance)
-  {
-    return sqrt(variance);
-  }
-
-
-  float StatsNodeModule::ComputeCovariance(SuperGraph *superGraph, MetricProxy* metric1, MetricProxy* metric2)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    float ave1, ave2, ave3;
-    float sum1, sum2, sum3;
-
-    ave1 = ave2 = ave3 = 0;
-    sum1 = sum2 = sum3 = 0;
-
-    while(itN->hasNext())
-      {
-	node n = itN->next();
-
-	float v1 = metric1->getNodeValue(n);
-	float v2 = metric2->getNodeValue(n);
-
-	sum1 += v1;
-	sum2 += v2;
-	sum3 += (v1 * v2);
-      }
-
-    delete itN;
-
-    ave1 = sum1 / superGraph->numberOfNodes();
-    ave2 = sum2 / superGraph->numberOfNodes();
-    ave3 = sum3 / superGraph->numberOfNodes();
-
-    return (ave3) - (ave1 * ave2);
-  }
-
-  void StatsNodeModule::ComputeCovariancePoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<std::vector<float> > &result)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    std::vector<float> ave(nDimensions);
-    std::vector<float> sum(nDimensions);
-    std::vector<float> bigsum(nDimensions * nDimensions);
-    std::vector<float> val(nDimensions);
-
-    result.resize(nDimensions);
-
-    for(int i=0; i < nDimensions; i++)
-      {
-	sum[i] = 0;
-
-	for(int j=0; j < nDimensions; j++)
-	  bigsum[i * nDimensions + j] = 0;
-
-	result[i].resize(nDimensions);
-      }
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    val[i] = metrics[i]->getNodeValue(n);
-	    sum[i] += val[i];
-	  }
-
-	for(int i=0; i < nDimensions; i++)
-	  for(int j=0; j < nDimensions; j++)
-	    bigsum[i*nDimensions + j] += (val[i] * val[j]);
-      }
-
-    float nNode = superGraph->numberOfNodes();
-
-    for(int i=0; i < nDimensions; i++)
-      ave[i] = sum[i] / nNode;
-
-
-    for(int i=0; i < nDimensions; i++)
-      for(int j=0; j < nDimensions; j++)
-	result[i][j] = (bigsum[i * nDimensions + j] / nNode) - (ave[i] * ave[j]);
-  }
-
-  void StatsNodeModule::ComputeMinPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-    vector<float> min(nDimensions);
-    float nodeVal;
-
-    for(int i=0; i < nDimensions; i++)
-      min[i] = INT_MAX;
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    nodeVal = metrics[i]->getNodeValue(n);
-
-	    if (nodeVal < min[i])
-	      min[i] = nodeVal;
-	  }
-      }
-
-    delete itN;
-
-    result = min;
-  }
-
-  float StatsNodeModule::ComputeMin(SuperGraph *superGraph, MetricProxy *metricProxy)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    float min = INT_MAX;
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	float nodeVal = metricProxy->getNodeValue(n);
-
-	if (nodeVal < min)
-	  min = nodeVal;
-      }
-
-    delete itN;
-
-    return min;
-  }
-
-  void StatsNodeModule::ComputeMaxPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-    vector<float> max(nDimensions);
-    float nodeVal;
-
-    for(int i=0; i < nDimensions; i++)
-      max[i] = INT_MIN;
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    nodeVal = metrics[i]->getNodeValue(n);
-
-	    if (nodeVal > max[i])
-	      max[i] = nodeVal;
-	  }
-      }
-
-    delete itN;
-
-    result = max;
-  }
-
-
-  float StatsNodeModule::ComputeMax(SuperGraph *superGraph, MetricProxy *metricProxy)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    float max = INT_MIN;
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	float nodeVal = metricProxy->getNodeValue(n);
-
-	if (nodeVal > max)
-	  max = nodeVal;
-      }
-
-    delete itN;
-
-    return max;
-  }
-
-  void StatsNodeModule::ComputeMinMaxPoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    vector<float> min(nDimensions);
-    vector<float> max(nDimensions);
-
-    for(int i=0; i < nDimensions; i++)
-      {
-	min[i] = INT_MAX;
-	max[i] = INT_MIN;
-      }
-
-    float nodeVal;
-
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    nodeVal = metrics[i]->getNodeValue(n);
-
-	    if (nodeVal > max[i])
-	      max[i] = nodeVal;
-
-	    if (nodeVal < min[i])
-	      min[i] = nodeVal;
-	  }
-      }
-
-    delete itN;
-
-    resMin = min;
-    resMax = max;
-  }
-
-  void StatsNodeModule::ComputeMinMax(SuperGraph *superGraph, MetricProxy *metricProxy, float &resMin, float &resMax)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
-
-    float min = INT_MAX;
-    float max = INT_MIN;
-
-    float nodeVal;
- 
-    while (itN->hasNext())
-      {
-	node n = itN->next();
-
-	nodeVal = metricProxy->getNodeValue(n);
+	  return false;
+	}
       
-	if (nodeVal > max)
-	  max = nodeVal;
+    }
 
-	if (nodeVal < min)
-	  min = nodeVal;
-      }
+  return true;
+}
 
-    delete itN;
 
-    resMin = min;
-    resMax = max;
-  }
+void StatsNodeModule::ComputeAveragePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result) {
+  Iterator<node> *itN = graph->getNodes();
+  vector<float> average(nDimensions);
 
-  void StatsNodeModule::ComputeLinearRegressionFunction(SuperGraph *superGraph, MetricProxy *xk, MetricProxy *yk, float &b0, float &b1)
-  {
-    Iterator<node> *itN = superGraph->getNodes();
+  for(int i=0; i < nDimensions; i++)
+    average[i] = 0;
 
-    float nodeValx, nodeValy;
-    float sxk, syk, sxkxk, sxkyk;
+  while (itN->hasNext())
+    {
+      node n = itN->next();
 
-    sxk   = 0;
-    syk   = 0;
-    sxkxk = 0;
-    sxkyk = 0;
+      for(int i=0; i < nDimensions; i++)
+	average[i] += metrics[i]->getNodeValue(n);
+    }
 
-    while(itN->hasNext())
-      {
-	node n = itN->next();
+  for(int i=0; i < nDimensions; i++)
+    average[i] /= graph->numberOfNodes();
 
-	nodeValx = xk->getNodeValue(n);
-	nodeValy = yk->getNodeValue(n);
+  delete itN;
 
-	// We compute the sum of xk, yk, xk² and xkyk for the whole set of nodes
-	sxk   += nodeValx;
-	sxkxk += (nodeValx * nodeValx);
-	syk   += nodeValy;
-	sxkyk += (nodeValx * nodeValy);
-      }
+  result = average;
+}
 
-    delete itN;
-
-    int n = superGraph->numberOfNodes();
-
-    // Then we compute b0 and b1 :
-    // The equation used is equation #6 on : http://www.unilim.fr/pages_perso/jean.debord/math/reglin/reglin.htm
-    b0 = (sxkxk * syk - sxk * sxkyk) / (n * sxkxk - sxk * sxk);
-    b1 = (n * sxkyk - sxk * syk)     / (n * sxkxk - sxk * sxk);
-  }
-
-  StatisticResults* StatsNodeModule::ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions)
-  {
-    StatisticResults *res = new StatisticResults;
-
-    res->nDimensions = nDimensions;
-
-    res->averagePoint.resize(nDimensions);
-    res->variancePoint.resize(nDimensions);
-    res->standardDeviationPoint.resize(nDimensions);
-    res->minPoint.resize(nDimensions);
-    res->maxPoint.resize(nDimensions);
-    res->covariancePoints.resize(nDimensions);
-
-    float sxk, syk, sxkxk, sxkyk;
-    sxk = syk = sxkxk = sxkyk = 0;
-
-    for(int i=0; i < nDimensions; i++)
-      {
-	res->covariancePoints[i].resize(nDimensions);
-
-	res->minPoint[i] = INT_MAX;
-	res->maxPoint[i] = INT_MIN;
-      }
-
-    Iterator<node> *itN = superGraph->getNodes();
+float StatsNodeModule::ComputeAverage(Graph *graph, DoubleProperty *metric) {
+  Iterator<node> *itN = graph->getNodes();
   
-    vector<float> bigsum(nDimensions * nDimensions);
-    vector<float> vals(nDimensions);
+  float average = 0.0f;
 
-    while(itN->hasNext())
-      {
-	node n = itN->next();
+  while (itN->hasNext())
+    {
+      node n = itN->next();
 
-	for(int i=0; i < nDimensions; i++)
-	  {
-	    vals[i] = metrics[i]->getNodeValue(n);
+      average += metric->getNodeValue(n);
+    }
 
-	    res->averagePoint[i] += vals[i];
+  delete itN;
 
-	    if (vals[i] < res->minPoint[i])
-	      res->minPoint[i] = vals[i];
-	    if (vals[i] > res->maxPoint[i])
-	      res->maxPoint[i] = vals[i];
-	  }
+  average /= graph->numberOfNodes();
 
-	for(int i=0; i < nDimensions; i++)
-	  for(int j=0; j < nDimensions; j++)
-	    bigsum[i * nDimensions + j] += (vals[i] * vals[j]);
+  return average;
+}
 
-	if (nDimensions == 2)
-	  {
-	    sxk   += vals[0];
-	    syk   += vals[1];
-	    sxkxk += (vals[0] * vals[0]);
-	    sxkyk += (vals[0] * vals[1]);
-	  }
-      }
+void StatsNodeModule::ComputeVariancePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result) {
+  Iterator<node> *itN = graph->getNodes();
 
-    delete itN;
+  vector<float> average(nDimensions);
+  vector<float> variance(nDimensions);
+  float nodeVal;
 
-    float nNodes = superGraph->numberOfNodes();
+  for(int i=0; i < nDimensions; i++)
+    variance[i] = 0;
 
-    for(int i=0; i < nDimensions; i++)
-      res->averagePoint[i] /= nNodes;
+  StatsNodeModule::ComputeAveragePoint(graph, metrics, nDimensions, average);
 
+  while (itN->hasNext())
+    {
+      node n = itN->next();
 
-    for(int i=0; i < nDimensions; i++)
-      {
+      for(int i=0; i < nDimensions; i++)
+	{
+	  nodeVal = metrics[i]->getNodeValue(n);
+
+	  variance[i] += (nodeVal - average[i]) * (nodeVal - average[i]);
+	}
+    }
+  delete itN;
+
+  int nNodes = graph->numberOfNodes();
+
+  for(int i=0; i < nDimensions; i++)
+    variance[i] /= nNodes;
+
+  result = variance;
+}
+
+float StatsNodeModule::ComputeVariance(Graph *graph, DoubleProperty *metric) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float average;
+  float variance = 0.0f;
+  float nodeVal;
+
+  average = StatsNodeModule::ComputeAverage(graph, metric);
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      nodeVal = metric->getNodeValue(n);
+
+      variance += (nodeVal - average) * (nodeVal - average);
+    }
+
+  delete itN;
+
+  variance /= graph->numberOfNodes();
+
+  return variance;
+}
+
+void StatsNodeModule::ComputeStandardDeviationPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result) {
+  ComputeVariancePoint(graph, metrics, nDimensions, result);
+
+  for(int i=0; i < nDimensions; i++)
+    result[i] = sqrt(result[i]);
+}
+
+void StatsNodeModule::ComputeStandardDeviationPoint(const std::vector<float> &variances, int nDimensions, std::vector<float> &result) {
+  result.resize(nDimensions);
+
+  for(int i=0; i < nDimensions; i++)
+    result[i] = sqrt(variances[i]);
+}
+
+float StatsNodeModule::ComputeStandardDeviation(Graph *graph, DoubleProperty *metric) {
+  float variance = ComputeVariance(graph, metric);
+
+  return sqrt(variance);
+}
+
+float StatsNodeModule::ComputeStandardDeviation(float variance) {
+  return sqrt(variance);
+}
+
+float StatsNodeModule::ComputeCovariance(Graph *graph, DoubleProperty* metric1, DoubleProperty* metric2) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float ave1, ave2, ave3;
+  float sum1, sum2, sum3;
+
+  ave1 = ave2 = ave3 = 0;
+  sum1 = sum2 = sum3 = 0;
+
+  while(itN->hasNext())
+    {
+      node n = itN->next();
+
+      float v1 = metric1->getNodeValue(n);
+      float v2 = metric2->getNodeValue(n);
+
+      sum1 += v1;
+      sum2 += v2;
+      sum3 += (v1 * v2);
+    }
+
+  delete itN;
+
+  ave1 = sum1 / graph->numberOfNodes();
+  ave2 = sum2 / graph->numberOfNodes();
+  ave3 = sum3 / graph->numberOfNodes();
+
+  return (ave3) - (ave1 * ave2);
+}
+
+void StatsNodeModule::ComputeCovariancePoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<std::vector<float> > &result) {
+  Iterator<node> *itN = graph->getNodes();
+
+  std::vector<float> ave(nDimensions);
+  std::vector<float> sum(nDimensions);
+  std::vector<float> bigsum(nDimensions * nDimensions);
+  std::vector<float> val(nDimensions);
+
+  result.resize(nDimensions);
+
+  for(int i=0; i < nDimensions; i++)
+    {
+      sum[i] = 0;
+
+      for(int j=0; j < nDimensions; j++)
+	bigsum[i * nDimensions + j] = 0;
+
+      result[i].resize(nDimensions);
+    }
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      for(int i=0; i < nDimensions; i++)
+	{
+	  val[i] = metrics[i]->getNodeValue(n);
+	  sum[i] += val[i];
+	}
+
+      for(int i=0; i < nDimensions; i++)
 	for(int j=0; j < nDimensions; j++)
-	  res->covariancePoints[i][j] = (bigsum[i * nDimensions + j] / nNodes) - (res->averagePoint[i] * res->averagePoint[j]);
+	  bigsum[i*nDimensions + j] += (val[i] * val[j]);
+    }
 
-	res->variancePoint[i] = res->covariancePoints[i][i];
-	res->standardDeviationPoint[i] = sqrt(res->variancePoint[i]);
-      }
+  float nNode = graph->numberOfNodes();
+
+  for(int i=0; i < nDimensions; i++)
+    ave[i] = sum[i] / nNode;
+
+
+  for(int i=0; i < nDimensions; i++)
+    for(int j=0; j < nDimensions; j++)
+      result[i][j] = (bigsum[i * nDimensions + j] / nNode) - (ave[i] * ave[j]);
+}
+
+void StatsNodeModule::ComputeMinPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result) {
+  Iterator<node> *itN = graph->getNodes();
+  vector<float> min(nDimensions);
+  float nodeVal;
+
+  for(int i=0; i < nDimensions; i++)
+    min[i] = INT_MAX;
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      for(int i=0; i < nDimensions; i++)
+	{
+	  nodeVal = metrics[i]->getNodeValue(n);
+
+	  if (nodeVal < min[i])
+	    min[i] = nodeVal;
+	}
+    }
+
+  delete itN;
+
+  result = min;
+}
+
+float StatsNodeModule::ComputeMin(Graph *graph, DoubleProperty *metric) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float min = INT_MAX;
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      float nodeVal = metric->getNodeValue(n);
+
+      if (nodeVal < min)
+	min = nodeVal;
+    }
+
+  delete itN;
+
+  return min;
+}
+
+void StatsNodeModule::ComputeMaxPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result) {
+  Iterator<node> *itN = graph->getNodes();
+  vector<float> max(nDimensions);
+  float nodeVal;
+
+  for(int i=0; i < nDimensions; i++)
+    max[i] = INT_MIN;
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      for(int i=0; i < nDimensions; i++)
+	{
+	  nodeVal = metrics[i]->getNodeValue(n);
+
+	  if (nodeVal > max[i])
+	    max[i] = nodeVal;
+	}
+    }
+
+  delete itN;
+
+  result = max;
+}
+
+float StatsNodeModule::ComputeMax(Graph *graph, DoubleProperty *metric) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float max = INT_MIN;
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      float nodeVal = metric->getNodeValue(n);
+
+      if (nodeVal > max)
+	max = nodeVal;
+    }
+
+  delete itN;
+
+  return max;
+}
+
+void StatsNodeModule::ComputeMinMaxPoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax) {
+  Iterator<node> *itN = graph->getNodes();
+
+  vector<float> min(nDimensions);
+  vector<float> max(nDimensions);
+
+  for(int i=0; i < nDimensions; i++)
+    {
+      min[i] = INT_MAX;
+      max[i] = INT_MIN;
+    }
+
+  float nodeVal;
+
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      for(int i=0; i < nDimensions; i++)
+	{
+	  nodeVal = metrics[i]->getNodeValue(n);
+
+	  if (nodeVal > max[i])
+	    max[i] = nodeVal;
+
+	  if (nodeVal < min[i])
+	    min[i] = nodeVal;
+	}
+    }
+
+  delete itN;
+
+  resMin = min;
+  resMax = max;
+}
+
+void StatsNodeModule::ComputeMinMax(Graph *graph, DoubleProperty *metric, float &resMin, float &resMax) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float min = INT_MAX;
+  float max = INT_MIN;
+
+  float nodeVal;
+ 
+  while (itN->hasNext())
+    {
+      node n = itN->next();
+
+      nodeVal = metric->getNodeValue(n);
+      
+      if (nodeVal > max)
+	max = nodeVal;
+
+      if (nodeVal < min)
+	min = nodeVal;
+    }
+
+  delete itN;
+
+  resMin = min;
+  resMax = max;
+}
+
+void StatsNodeModule::ComputeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &b0, float &b1) {
+  Iterator<node> *itN = graph->getNodes();
+
+  float nodeValx, nodeValy;
+  float sxk, syk, sxkxk, sxkyk;
+
+  sxk   = 0;
+  syk   = 0;
+  sxkxk = 0;
+  sxkyk = 0;
+
+  while(itN->hasNext())
+    {
+      node n = itN->next();
+
+      nodeValx = xk->getNodeValue(n);
+      nodeValy = yk->getNodeValue(n);
+
+      // We compute the sum of xk, yk, xk² and xkyk for the whole set of nodes
+      sxk   += nodeValx;
+      sxkxk += (nodeValx * nodeValx);
+      syk   += nodeValy;
+      sxkyk += (nodeValx * nodeValy);
+    }
+
+  delete itN;
+
+  int n = graph->numberOfNodes();
+
+  // Then we compute b0 and b1 :
+  // The equation used is equation #6 on : http://www.unilim.fr/pages_perso/jean.debord/math/reglin/reglin.htm
+  b0 = (sxkxk * syk - sxk * sxkyk) / (n * sxkxk - sxk * sxk);
+  b1 = (n * sxkyk - sxk * syk)     / (n * sxkxk - sxk * sxk);
+}
+
+StatisticResults* StatsNodeModule::ComputeStatisticsResults(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions) {
+  StatisticResults *res = new StatisticResults;
+
+  res->nDimensions = nDimensions;
+
+  res->averagePoint.resize(nDimensions);
+  res->variancePoint.resize(nDimensions);
+  res->standardDeviationPoint.resize(nDimensions);
+  res->minPoint.resize(nDimensions);
+  res->maxPoint.resize(nDimensions);
+  res->covariancePoints.resize(nDimensions);
+
+  float sxk, syk, sxkxk, sxkyk;
+  sxk = syk = sxkxk = sxkyk = 0;
+
+  for(int i=0; i < nDimensions; i++)
+    {
+      res->covariancePoints[i].resize(nDimensions);
+
+      res->minPoint[i] = INT_MAX;
+      res->maxPoint[i] = INT_MIN;
+    }
+
+  Iterator<node> *itN = graph->getNodes();
+  
+  vector<float> bigsum(nDimensions * nDimensions);
+  vector<float> vals(nDimensions);
+
+  while(itN->hasNext())
+    {
+      node n = itN->next();
+
+      for(int i=0; i < nDimensions; i++)
+	{
+	  vals[i] = metrics[i]->getNodeValue(n);
+
+	  res->averagePoint[i] += vals[i];
+
+	  if (vals[i] < res->minPoint[i])
+	    res->minPoint[i] = vals[i];
+	  if (vals[i] > res->maxPoint[i])
+	    res->maxPoint[i] = vals[i];
+	}
+
+      for(int i=0; i < nDimensions; i++)
+	for(int j=0; j < nDimensions; j++)
+	  bigsum[i * nDimensions + j] += (vals[i] * vals[j]);
+
+      if (nDimensions == 2)
+	{
+	  sxk   += vals[0];
+	  syk   += vals[1];
+	  sxkxk += (vals[0] * vals[0]);
+	  sxkyk += (vals[0] * vals[1]);
+	}
+    }
+
+  delete itN;
+
+  float nNodes = graph->numberOfNodes();
+
+  for(int i=0; i < nDimensions; i++)
+    res->averagePoint[i] /= nNodes;
+
+
+  for(int i=0; i < nDimensions; i++)
+    {
+      for(int j=0; j < nDimensions; j++)
+	res->covariancePoints[i][j] = (bigsum[i * nDimensions + j] / nNodes) - (res->averagePoint[i] * res->averagePoint[j]);
+
+      res->variancePoint[i] = res->covariancePoints[i][i];
+      res->standardDeviationPoint[i] = sqrt(res->variancePoint[i]);
+    }
 	
-    if (nDimensions == 2)
-      {
-	res->linearRegressionFunctionb0 = (sxkxk * syk - sxk * sxkyk)  / (nNodes * sxkxk - sxk * sxk);
-	res->linearRegressionFunctionb1 = (nNodes * sxkyk - sxk * syk) / (nNodes * sxkxk - sxk * sxk);
-      }
+  if (nDimensions == 2)
+    {
+      res->linearRegressionFunctionb0 = (sxkxk * syk - sxk * sxkyk)  / (nNodes * sxkxk - sxk * sxk);
+      res->linearRegressionFunctionb1 = (nNodes * sxkyk - sxk * syk) / (nNodes * sxkxk - sxk * sxk);
+    }
 
-    if (nDimensions == 3)
-      {
-	res->correlationMatrix = tlp::Matrix<float, 3>(res->covariancePoints);
-	if (!res->correlationMatrix.computeEigenVectors(res->eigenVectors))
-	  {
-	    cerr << "Couldn't Compute Eigen Vectors :(\n";
-	    return NULL;
-	  }
-      }
+  if (nDimensions == 3)
+    {
+      res->correlationMatrix = CorrelationMatrix(res->covariancePoints);
+      if (!res->correlationMatrix.computeEigenVectors(res->eigenVectors))
+	{
+	  cerr << "Couldn't Compute Eigen Vectors :(\n";
+	  return NULL;
+	}
+    }
 
-    return res;
-  }
-
+  return res;
 }
 
 

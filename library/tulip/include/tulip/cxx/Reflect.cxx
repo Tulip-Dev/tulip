@@ -1,13 +1,20 @@
 
 //=======================================================================
 //Strucdef implementation
-template<typename T> void StructDef::add(const char* str, const char* inHelp, const char* inDefValue) {
-  if (data.find(str)==data.end()) {
-    data[str]= std::string(typeid(T).name());
+template<typename T> void tlp::StructDef::add(const char* str, const char* inHelp,
+					      const char* inDefValue, bool isMandatory) {
+  std::list< std::pair<std::string, std::string> >::const_iterator it;
+  for (it = data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      break;
+  }
+  if (it == data.end()) {
+    data.push_back(std::pair<std::string, std::string>(std::string(str), std::string(typeid(T).name())));
     if (inHelp)
       help[str] = std::string(inHelp);
     if (inDefValue)
       defValue[str] = std::string(inDefValue);
+    mandatory[str] = isMandatory;
   }
 #ifndef NDEBUG
   else {
@@ -17,34 +24,54 @@ template<typename T> void StructDef::add(const char* str, const char* inHelp, co
 }
 //=======================================================================
 //DataSet implementation
-template<typename T> bool DataSet::get(const std::string str,T& value) const {
-  if (data.find(str)!=data.end()) {
-    //     Do not work if T do not contain a virtual function
-    //     DataType dt = (*(data.find(str))).second;
-    //     std::cerr << __PRETTY_FUNCTION__ << ": data.find.typeName=" << dt.typeName;
-    //     std::cerr << "; typeid(T).name()=" << typeid(T).name() << std::endl;
-    //    assert((*(data.find(str))).second.typeName==typeid(T).name());
-    value=*((T*)((*(data.find(str))).second.value));
-    return true;
+template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    const std::pair<std::string, tlp::DataType*> &p = *it;
+    if (p.first == str) {
+      value = *((T*) p.second->value);
+      return true;
+    }
   }
-  else
-    return false;
+  return false;
 }
-template<typename T> bool DataSet::getAndFree(const std::string &str,T& value) {
-  if (get(str,value)) {
-    delete ((T*)(data[str].value));
-    data.erase(str);
-    return true;
+
+template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    std::pair<std::string, tlp::DataType *> &p = *it;
+    if (p.first == str) {
+      value = *((T*) p.second->value);
+      delete p.second;
+      data.erase(it);
+      return true;
+    }
   }
-  else
-    return false;
+  return false;
 }
-template<typename T> void DataSet::set(const std::string &str,const T& value) {
-  if (data.find(str)!=data.end()) {
-    //    assert(data[str].typeName==typeid(T).name()); Do not work if T do not contain a virtual function
-    delete (T*)(data[str].value);
+
+template<typename T>
+struct DataTypeContainer :public tlp::DataType {
+  DataTypeContainer(void *value, std::string str) :DataType(value, str) {}
+  ~DataTypeContainer() {
+    delete (T*) value;
   }
-  T* tmp=new T(value);
-  data[str]=DataType((void *)tmp,typeid(T).name());
+  DataType* clone() {
+    return new DataTypeContainer<T>(new T(*(T*)value), typeName);
+  }
+};
+
+template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
+  DataTypeContainer<T> *tmp= new DataTypeContainer<T>(new T(value), typeid(T).name());
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    std::pair<std::string, tlp::DataType*> &p = *it;
+    if (p.first == str) {
+      delete p.second;
+      p.second = tmp;
+      return;
+    }
+  }
+  data.push_back(std::pair<std::string, tlp::DataType*>(str, tmp));
 }
 //=======================================================================

@@ -9,6 +9,7 @@
 #define H 3
 
 using namespace std;
+using namespace tlp;
 
 //***************************************************************************
 // CLASSE C_String
@@ -31,32 +32,30 @@ Paragraph::~Paragraph(){
     delete listOfcontexts[i];
   }
 }
-
 //---------------------------------------------------------------------------
 void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
-  int j, val;
-  float decal= 0;
-  Context* c_current;
-
-  for(j = debut; j<=fin; j++){  // on affiche chaque mot sur la ligne
-    c_current = myString.at(j).getContext();
+  int val;
+  float decal = 0;
+  
+  for(int j = debut; j<=fin; ++j){  // on affiche chaque mot sur la ligne
+    Context* c_current = myString.at(j).getContext();
     Renderer &renderer = c_current->getRenderer();
     val = renderer.searchFont(renderer.getMode(), c_current->getSize(),c_current->getFontName(), renderer.getDepth());
     assert(val != -1);
     
     unsigned char r, v, b;
     c_current->getColor(r, v, b);
-    renderer.setColor(r, v, b);
-    
+    renderer.setColor(r, v, b);    
     renderer.ActiveFont(val);
+    
     if(myString.at(j).getString() != ""){
        renderer.drawString(myString.at(j).getString());
-       decal = renderer.getAdvance(myString.at(j).getString().c_str());
+       decal = renderer.getAdvance(myString.at(j).getString());
+       renderer.translate(-decal, 0, 0);
     }
-    renderer.translate(decal, 0, 0);
+
   }      
 }
-
 //---------------------------------------------------------------------------
 void Paragraph::drawRight(float w_max, float x_depl, int debut, int fin) const{
   int j, val;
@@ -85,7 +84,6 @@ void Paragraph::drawRight(float w_max, float x_depl, int debut, int fin) const{
       renderer.translate(-(w_max - x_depl), 0, 0);
   }
 }
-
 //---------------------------------------------------------------------------
 void Paragraph::drawCenter(float w_max, float x_depl, int debut, int fin) const{
   int j, val;
@@ -170,7 +168,8 @@ void Paragraph::draw(float w_max, float& w) const{
 	case JUSTIFIED: drawLeft(w_max, x_depl, i_deb, i-taille); // A FAIRE       !!!!!!!!!!!!!!!!!!!!!!!!!!!
 	}
 	// retour à la ligne
-	renderer.translate(-x_depl,-(sav_inf+H),0);
+	// renderer.translate(-x_depl,-(sav_inf+H),0);
+	renderer.translate(0,-(sav_inf+H),0);
 	if(x_depl > w) w = x_depl;	
 	i_deb = i-taille+1; // maj du valeur
 	x_depl = size_s;
@@ -193,7 +192,7 @@ void Paragraph::draw(float w_max, float& w) const{
   }
   
   // retour à la ligne
-  _context.getRenderer().translate(-x_depl,-(maxHeightInf+H),0);
+  _context.getRenderer().translate(0 ,-(maxHeightInf+H),0);
   if(x_depl > w) w = x_depl;
 }
 
@@ -281,4 +280,4 @@ Context* Paragraph::findContext(Context& c){
       return listOfcontexts[i];
   }
   return 0;
-} 
+}

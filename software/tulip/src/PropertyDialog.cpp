@@ -6,19 +6,8 @@
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
+#include <vector>
 
-#if (QT_REL == 3)
-#include <qlistview.h>
-#include <qtable.h>
-#include <qpushbutton.h>
-#include <qmessagebox.h>
-#include <qinputdialog.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qlabel.h>
-#include <qcolordialog.h>
-#include <qtabwidget.h>
-#else
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -34,50 +23,35 @@
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
 #include "tulip/Qt3ForTulip.h"
-#endif
 
-#include <tulip/SuperGraph.h>
-#include <tulip/PropertyManager.h>
-#include <tulip/MetricProxy.h>
-#include <tulip/StringProxy.h>
-#include <tulip/SelectionProxy.h>
-#include <tulip/LayoutProxy.h>
-#include <tulip/IntProxy.h>
-#include <tulip/ColorsProxy.h>
-#include <tulip/SizesProxy.h>
-#include <tulip/GlGraph.h>
-#include <tulip/PropertyWidgets.h>
-#include <tulip/ClusterTree.h>
+#include <tulip/Graph.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/PropertyWidget.h>
+#include <tulip/SGHierarchyWidget.h>
+#include <tulip/GlGraphWidget.h>
+#include <tulip/ForEach.h>
+#include <tulip/hash_string.h>
 
 #include "PropertyDialog.h"
+#include "CopyPropertyDialog.h"
 
 using namespace std;
+using namespace tlp;
 
 //==================================================================================================
-void PropertyDialog::setGlGraphWidget(GlGraph *glwidget) {
-  glWidget=glwidget;
-  tableNodes->selectNodeOrEdge(true);
-  tableEdges->selectNodeOrEdge(false);
-  //  tableEdges->filterSelection(_filterSelection);
-  // tableNodes->filterSelection(_filterSelection);
-}
-
 PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-#if (QT_REL == 3)
-  : PropertyDialogData(parent, name, modal) {
-#else
   : PropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
-#endif
   _filterSelection=false;
   glWidget=0;
-  supergraph=0;
-#if (QT_REL == 3)
-  connect(localProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-  connect(inheritedProperties, SIGNAL(selectionChanged(QListViewItem *)), SLOT(changePropertyName(QListViewItem *)));
-#else
+  graph=0;
   connect(localProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
   connect(inheritedProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
-#endif
   connect(removeButton , SIGNAL(clicked()) , SLOT(removeProperty()) );
   connect(newButton,SIGNAL(clicked()),SLOT(newProperty()));
   connect(cloneButton,SIGNAL(clicked()),SLOT(cloneProperty()));
@@ -96,15 +70,15 @@ void PropertyDialog::changePropertyName(QListViewItem *item) {
 
   tableNodes->selectNodeOrEdge(true);
   tableEdges->selectNodeOrEdge(false);
-  tableNodes->changeProperty(supergraph,item->text(0).ascii());
-  tableEdges->changeProperty(supergraph,item->text(0).ascii());
+  tableNodes->changeProperty(graph,item->text(0).ascii());
+  tableEdges->changeProperty(graph,item->text(0).ascii());
 
-  PProxy *tmpProxy=supergraph->getProperty(item->text(0).ascii());
+  PropertyInterface *tmpProxy=graph->getProperty(item->text(0).ascii());
   editedProperty=tmpProxy;
   editedPropertyName=item->text(0).ascii();
   propertyName->setText(item->text(0));
   
-  if (supergraph->existLocalProperty(item->text(0).ascii()))
+  if (graph->existLocalProperty(item->text(0).ascii()))
     inheritedProperties->clearSelection();
   else
     localProperties->clearSelection();
@@ -137,16 +111,22 @@ void PropertyDialog::setAllValue() {
   setAllButton->setDown(false);
 }
 //=================================================
-void PropertyDialog::setSuperGraph(SuperGraph *sg) {
-  supergraph=sg;
+void PropertyDialog::setGlGraphWidget(GlGraphWidget *gw) {
+  glWidget = gw;
+  Graph* sg = NULL;
+  if (gw)
+    sg = gw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  graph=sg;
   editedProperty=0;
 
   localProperties->clear();
   inheritedProperties->clear();
   propertyName->setText(QString("Select a Property"));
   //Build the property list
-  tableNodes->setSuperGraph(sg);
-  tableEdges->setSuperGraph(sg);
+  tableNodes->selectNodeOrEdge(true);
+  tableEdges->selectNodeOrEdge(false);
+  tableNodes->setGraph(sg);
+  tableEdges->setGraph(sg);
   tableEdges->filterSelection(_filterSelection);
   tableNodes->filterSelection(_filterSelection);
   if (sg==0) return;
@@ -166,23 +146,23 @@ void PropertyDialog::setSuperGraph(SuperGraph *sg) {
 }
 //=================================================
 void PropertyDialog::newProperty() {
-  if (!supergraph) return;
+  if (!graph) return;
   QStringList lst;
-  lst << "Selection" << "Metric" << "Layout" << "String" << "Integer" << "Sizes" << "Color";
+  lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String";
   bool ok = FALSE;
-  QString res = QInputDialog::getItem( "Property type","Please select your property type", lst, 1, FALSE, &ok, this );
+  QString res = QInputDialog::getItem( "Property type","Please select the property type", lst, 3, FALSE, &ok, this );
   if ( ok ) {
       QString text = QInputDialog::getText("Property name", "Please enter the property name", QLineEdit::Normal, QString::null, &ok, this );
       if (ok) {
 	string erreurMsg;
-	if (strcmp(res.ascii(),"Selection")==0) supergraph->getLocalProperty<SelectionProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Metric")==0) supergraph->getLocalProperty<MetricProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Layout")==0) supergraph->getLocalProperty<LayoutProxy>(text.ascii());
-	if (strcmp(res.ascii(),"String")==0) supergraph->getLocalProperty<StringProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Integer")==0) supergraph->getLocalProperty<IntProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Sizes")==0) supergraph->getLocalProperty<SizesProxy>(text.ascii());
-	if (strcmp(res.ascii(),"Color")==0) supergraph->getLocalProperty<ColorsProxy>(text.ascii());
-	setSuperGraph(supergraph);
+	if (strcmp(res.ascii(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.ascii());
+	if (strcmp(res.ascii(),"String")==0) graph->getLocalProperty<StringProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
+	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
+	setGlGraphWidget(glWidget);
       }
   }
 }
@@ -192,9 +172,8 @@ void PropertyDialog::toStringProperty() {
   string name=editedPropertyName;
   if (name == "viewLabel") return;
   Observable::holdObservers();
-  SuperGraph *graph=supergraph;
-  PProxy *newLabels=graph->getProperty(name);
-  StringProxy *labels=graph->getProperty<StringProxy>("viewLabel");
+  PropertyInterface *newLabels=graph->getProperty(name);
+  StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
   if (tabWidget->currentPageIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
@@ -211,14 +190,16 @@ void PropertyDialog::toStringProperty() {
       labels->setEdgeValue(ite,newLabels->getEdgeStringValue(ite));
     } delete itE;
   }
-    Observable::unholdObservers();
+  glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLabelProperty();
+  glWidget->draw();
+  Observable::unholdObservers();
 }
 //=================================================
 void PropertyDialog::removeProperty() {
   if (editedProperty==0) return;
-  if(supergraph->existLocalProperty(editedPropertyName)) {
-    supergraph->delLocalProperty(editedPropertyName);
-    setSuperGraph(supergraph);
+  if(graph->existLocalProperty(editedPropertyName)) {
+    graph->delLocalProperty(editedPropertyName);
+    setGlGraphWidget(glWidget);
     editedProperty=0;
   }
   else
@@ -228,33 +209,87 @@ void PropertyDialog::removeProperty() {
 }
 //=================================================
 void PropertyDialog::cloneProperty() {
-  if (!supergraph) return;
-  bool ok=false;
-  QString text = QInputDialog::getText( "Property name" ,  "Please enter the property name" , QLineEdit::Normal,QString::null, &ok, this );
-  if (ok) {
-    Observable::holdObservers();
-    if (supergraph->existProperty(text.ascii())) {
-      if (typeid(*supergraph->getProperty(text.ascii()))!=typeid(*editedProperty)) {
-	QMessageBox::critical( 0, "Tulip Warning" ,"Property are not of the same type");
-	return;
-      }
+  if (!graph || !editedProperty) return;
+  CopyPropertyDialog dialog(parentWidget());
+  vector<string> localProps;
+  vector<string> inheritedProps;
+  string prop;
+  Graph *parent = graph->getSuperGraph();
+  if (parent == graph)
+    parent = 0;
+  forEach(prop, graph->getLocalProperties()) {
+    if (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)) {
+      if (prop != editedPropertyName)
+	localProps.push_back(prop);
+      if (parent && parent->existProperty(prop))
+	inheritedProps.push_back(prop);
     }
-    string erreurMsg;
-    if (typeid((*editedProperty)) == typeid(MetricProxy))
-      {*supergraph->getLocalProperty<MetricProxy>(text.ascii())=*((MetricProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(LayoutProxy))
-      {*supergraph->getLocalProperty<LayoutProxy>(text.ascii())=*((LayoutProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(StringProxy))
-      {*supergraph->getLocalProperty<StringProxy>(text.ascii())=*((StringProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(SelectionProxy))
-      {*supergraph->getLocalProperty<SelectionProxy>(text.ascii())=*((SelectionProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(IntProxy))
-      {*supergraph->getLocalProperty<IntProxy>(text.ascii())=*((IntProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(ColorsProxy))
-      {*supergraph->getLocalProperty<ColorsProxy>(text.ascii())=*((ColorsProxy*)editedProperty);}
-    if (typeid((*editedProperty)) == typeid(SizesProxy))
-      {*supergraph->getLocalProperty<SizesProxy>(text.ascii())=*((SizesProxy*)editedProperty);}
-    setSuperGraph(supergraph);
+  }
+  forEach(prop, graph->getInheritedProperties()) {
+    if ((prop != editedPropertyName) &&
+	(typeid(*graph->getProperty(prop)) == typeid(*editedProperty)))
+      inheritedProps.push_back(prop);
+  }
+  dialog.setProperties(editedPropertyName, localProps, inheritedProps);
+  CopyPropertyDialog::destType type;
+  std::string text = dialog.getDestinationProperty(type);
+  if (text.size() > 0) {
+    if (type != CopyPropertyDialog::INHERITED) {
+      if (graph->existProperty(text)) {
+	if (typeid(*graph->getProperty(text))!=typeid(*editedProperty)) {
+	  QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
+	  return;
+	}
+	if (type == CopyPropertyDialog::NEW &&
+	    graph->existLocalProperty(text)) {
+	  if (text == editedPropertyName) {
+	    QMessageBox::critical(parentWidget(), "Tulip Warning",
+				  "Properties are the same.");
+	    return;
+	  } else if (QMessageBox::question(parentWidget(),
+					   "Copy confirmation",
+					   (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(),
+					   QMessageBox::Ok,
+					   QMessageBox::Cancel)
+		     == QDialog::Rejected)
+	    return;
+	}
+      }
+      Observable::holdObservers();
+      if (typeid((*editedProperty)) == typeid(DoubleProperty))
+	{*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(LayoutProperty))
+	{*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(StringProperty))
+	{*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(BooleanProperty))
+	{*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(IntegerProperty))
+	{*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(ColorProperty))
+	{*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(SizeProperty))
+	{*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+      //}
+    } else {
+      Graph *parent = graph->getSuperGraph();
+      Observable::holdObservers();
+      if (typeid((*editedProperty)) == typeid(DoubleProperty))
+	{*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(LayoutProperty))
+	{*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(StringProperty))
+	{*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(BooleanProperty))
+	{*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(IntegerProperty))
+	{*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(ColorProperty))
+	{*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+      if (typeid((*editedProperty)) == typeid(SizeProperty))
+	{*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+    }
+    setGlGraphWidget(glWidget);
     Observable::unholdObservers();
   }
 }

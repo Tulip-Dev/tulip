@@ -1,5 +1,5 @@
 SUBDIRS = thirdparty library plugins software docs
-DIST_SUBDIRS =  thirdparty library plugins software samples docs
+DIST_SUBDIRS =  thirdparty library plugins software docs
 EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     INSTALL.mac \
 	     INSTALL.win \
@@ -11,7 +11,8 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     tulip.spec.in \
 	     tulip-config.in \
 	     tulip.m4 \
-	     libxml.m4
+	     libxml.m4 \
+	     WriteEnvStr.nsh
 
 bin_SCRIPTS = tulip-config
 
@@ -26,6 +27,8 @@ install-data-am :
 		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/Resources ;\
 		ln -s $(abs_srcdir)/Info.plist $(exec_prefix)/bin/tulip.app/Contents/Info.plist ;\
 		ln -s $(abs_srcdir)/tulip_mac.icns $(exec_prefix)/bin/tulip.app/Contents/Resources/tulip.icns ;\
+		mkdir $(exec_prefix)/bin/tulip.app/Contents/include ;\
+		ln -s $(includedir)/tulip $(exec_prefix)/bin/tulip.app/Contents/include/tulip ;\
 	fi;
 
 macinst: install-data-am
@@ -43,13 +46,8 @@ srcrpm:
 	rm -rf RPM/ RPMMACROS RPMRC $(top_builddir)/$(PACKAGE)-$(VERSION).tar.gz
 
 if WIN32
-if QT3
-wininst:
-	makensis.exe //DQT3 ${PACKAGE}-${VERSION}.nsi
-else
 wininst:
 	makensis.exe ${PACKAGE}-${VERSION}.nsi
-endif
 endif
 
 dist-hook:

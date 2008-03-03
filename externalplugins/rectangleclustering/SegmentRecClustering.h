@@ -32,20 +32,20 @@
  *  (at your option) any later version.
  *
  */
-class SegmentRecClustering:public Clustering { 
+class SegmentRecClustering:public tlp::Algorithm { 
 public:
-  SegmentRecClustering(ClusterContext);
+  SegmentRecClustering(tlp::AlgorithmContext);
   ~SegmentRecClustering();
   bool run();
   bool check(std::string &);
   void reset();
 
 private:
-  bool DfsClustering (node ,SelectionProxy *,SelectionProxy *);
-  void getRecurseChild(node,SelectionProxy *,SelectionProxy *);
-  MetricProxy *segmentM;
-  MetricProxy *leafM;
-  MetricProxy *nodeM;
+  bool DfsClustering (tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
+  void getRecurseChild(tlp::node, tlp::BooleanProperty *, tlp::BooleanProperty *);
+  tlp::DoubleProperty *segmentM;
+  tlp::DoubleProperty *leafM;
+  tlp::DoubleProperty *nodeM;
   int mResult;
   double inter;
 };

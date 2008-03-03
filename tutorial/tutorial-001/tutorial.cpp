@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tulip/TlpTools.h>
+#include <tulip/Graph.h>
 
 /**
  *
@@ -13,10 +13,11 @@
  */
 
 using namespace std;
+using namespace tlp;
 
 int main() {
   //create an empty graph
-  SuperGraph *graph = tlp::newSuperGraph();
+  Graph *graph = tlp::newGraph();
 
   //add three nodes
   node n1 = graph->addNode();

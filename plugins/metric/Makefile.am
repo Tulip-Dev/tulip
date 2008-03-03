@@ -1,49 +1,51 @@
-if WIN32
+if !MACOSX
 DLL_FLAGS = -no-undefined
+else
+DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
 plugins_LTLIBRARIES = \
-	libdepth.la \
-	libarity.la \
-	libcluster.la \
-	libstrength.la \
-	libbiconnectedcomponents.la \
-	libconnectedcomponnents.la \
-	libstrongcomponnet.la \
-	libconnectedandtreecomponnents.la \
-	libdaglevel.la \
-	libid.la \
-	libleaf.la \
-	libnode.la \
-	libpathlength.la \
-	libsegment.la \
-	libstrahler.la \
-	libtreearitymax.la \
-	libeccentricity.la \
-	libetweennesscentrality.la \
-        librandom.la	
+	libDepthMetric-@VERSION@.la \
+	libArityMetric-@VERSION@.la \
+	libClusterMetric-@VERSION@.la \
+	libStrengthMetric-@VERSION@.la \
+	libBiconnectedComponent-@VERSION@.la \
+	libConnectedComponent-@VERSION@.la \
+	libStrongComponent-@VERSION@.la \
+	libConnectedAndTreeComponent-@VERSION@.la \
+	libDagLevelMetric-@VERSION@.la \
+	libIdMetric-@VERSION@.la \
+	libLeafMetric-@VERSION@.la \
+	libNodeMetric-@VERSION@.la \
+	libPathLengthMetric-@VERSION@.la \
+	libSegmentMetric-@VERSION@.la \
+	libStrahlerMetric-@VERSION@.la \
+	libTreeArityMax-@VERSION@.la \
+	libEccentricity-@VERSION@.la \
+	libBetweennessCentrality-@VERSION@.la \
+        libRandomMetric-@VERSION@.la	
 
-pluginsdir = $(libdir)/tlp/plugins/metric
+pluginsdir = $(libdir)/tlp
 
-libeccentricity_la_SOURCES = Eccentricity.h Eccentricity.cpp
-libarity_la_SOURCES = ArityMetric.cpp ArityMetric.h
-libcluster_la_SOURCES = ClusterMetric.cpp ClusterMetric.h
-libstrength_la_SOURCES = StrengthMetric.cpp StrengthMetric.h
-libbiconnectedcomponents_la_SOURCES =  BiconnectedComponent.cpp
-libconnectedcomponnents_la_SOURCES =  ConnectedComponent.cpp  ConnectedComponent.h
-libconnectedandtreecomponnents_la_SOURCES =  ConnectedAndTreeComponent.cpp
-libstrongcomponnet_la_SOURCES = StrongComponent.cpp StrongComponent.h
-libdaglevel_la_SOURCES = DagLevelMetric.cpp DagLevelMetric.h
-libid_la_SOURCES = IdMetric.cpp IdMetric.h
-libleaf_la_SOURCES = LeafMetric.cpp LeafMetric.h
-libnode_la_SOURCES = NodeMetric.cpp NodeMetric.h
-libdepth_la_SOURCES = DepthMetric.cpp DepthMetric.h
-libpathlength_la_SOURCES = PathLengthMetric.cpp PathLengthMetric.h
-libsegment_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
-libstrahler_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
-libtreearitymax_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
-librandom_la_SOURCES = Random.cpp  Random.h
-libetweennesscentrality_la_SOURCES = BetweennessCentrality.cpp
+libEccentricity_@VERSION@_la_SOURCES = Eccentricity.h Eccentricity.cpp
+libArityMetric_@VERSION@_la_SOURCES = ArityMetric.cpp ArityMetric.h
+libClusterMetric_@VERSION@_la_SOURCES = ClusterMetric.cpp ClusterMetric.h
+libStrengthMetric_@VERSION@_la_SOURCES = StrengthMetric.cpp StrengthMetric.h
+libBiconnectedComponent_@VERSION@_la_SOURCES =  BiconnectedComponent.cpp
+libConnectedComponent_@VERSION@_la_SOURCES =  ConnectedComponent.cpp  ConnectedComponent.h
+libConnectedAndTreeComponent_@VERSION@_la_SOURCES =  ConnectedAndTreeComponent.cpp
+libStrongComponent_@VERSION@_la_SOURCES = StrongComponent.cpp StrongComponent.h
+libDagLevelMetric_@VERSION@_la_SOURCES = DagLevelMetric.cpp DagLevelMetric.h
+libIdMetric_@VERSION@_la_SOURCES = IdMetric.cpp IdMetric.h
+libLeafMetric_@VERSION@_la_SOURCES = LeafMetric.cpp LeafMetric.h
+libNodeMetric_@VERSION@_la_SOURCES = NodeMetric.cpp NodeMetric.h
+libDepthMetric_@VERSION@_la_SOURCES = DepthMetric.cpp DepthMetric.h
+libPathLengthMetric_@VERSION@_la_SOURCES = PathLengthMetric.cpp PathLengthMetric.h
+libSegmentMetric_@VERSION@_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
+libStrahlerMetric_@VERSION@_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
+libTreeArityMax_@VERSION@_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
+libRandomMetric_@VERSION@_la_SOURCES = Random.cpp  Random.h
+libBetweennessCentrality_@VERSION@_la_SOURCES = BetweennessCentrality.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

@@ -1,5 +1,7 @@
 #include "tulip/PluginProgress.h"
 
+using namespace tlp;
+
 //====================================================
 PluginProgress::PluginProgress() :
   _state(TLP_CONTINUE),
@@ -28,6 +30,9 @@ bool PluginProgress::isPreviewMode() const {
 //====================================================
 void PluginProgress::setPreviewMode(bool b) {
   _preview = b;
+}
+//====================================================
+void PluginProgress::showPreview(bool b) {
 }
 //====================================================
 ProgressState PluginProgress::state() const {

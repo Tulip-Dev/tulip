@@ -14,7 +14,7 @@ static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, un
 /*
   Redefined in order to output char in numerical format
 */
-std::ostream& operator<<(std::ostream &os,const Color &a) {
+std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
   const unsigned int SIZE =4;
   os << "(" ;
   for ( unsigned int i=0 ; i<SIZE ; ++i ) {
@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream &os,const Color &a) {
 /*
   Redefined in order to input char in numerical format
 */
-std::istream & operator>> (std::istream &is, Color & outA) {
+std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   const unsigned int SIZE =4;
   char c;
   int pos = is.tellg();
@@ -64,7 +64,7 @@ std::istream & operator>> (std::istream &is, Color & outA) {
 }
 //=================================================================
 
-long Color::getTrueColor()
+long tlp::Color::getTrueColor()
 {
   long ret=0;long tmp;
   unsigned int RR=array[0],BB=array[1],GG=array[2];
@@ -78,7 +78,7 @@ long Color::getTrueColor()
 
 // HSV accessors
 #define HSVGet(P)                               \
-int Color::get##P() const {                     \
+int tlp::Color::get##P() const {                     \
   int H,S,V;                                    \
   RGBtoHSV(array[0],array[1],array[2],H,S,V);   \
   return P;                                     \
@@ -90,7 +90,7 @@ HSVGet(V);
 #undef HSVGet
 
 #define HSVSet(P)                               \
-void Color::set##P(int val) {                   \
+void tlp::Color::set##P(int val) {                   \
   int H,S,V;                                    \
   RGBtoHSV(array[0],array[1],array[2],H,S,V);   \
   P = val;                                      \

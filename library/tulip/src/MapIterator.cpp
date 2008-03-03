@@ -5,8 +5,9 @@
 #include "tulip/MapIterator.h"
 
 using namespace std;
+using namespace tlp;
 
-edge tlp::nextFaceEdge(SuperGraph *g, edge e, node n) {
+edge tlp::nextFaceEdge(Graph *g, edge e, node n) {
   EdgeMapIterator it(g, e, n);
   edge result;
   if (it.hasNext())
@@ -14,7 +15,7 @@ edge tlp::nextFaceEdge(SuperGraph *g, edge e, node n) {
   return result;
 }
 
-NodeMapIterator::NodeMapIterator(SuperGraph *sg, node source, node target) {
+NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
   assert(cloneIt.empty());
   bool start=true;
   Iterator<node> *itIn=sg->getInOutNodes(target);
@@ -48,7 +49,7 @@ bool NodeMapIterator::hasNext() {
 
 //=========================================
 
-EdgeMapIterator::EdgeMapIterator(SuperGraph *sg, edge source, node target) {
+EdgeMapIterator::EdgeMapIterator(Graph *sg, edge source, node target) {
   adj.resize(sg->deg(target));
   finished = false;
   treat =0;

@@ -11,17 +11,39 @@
  (at your option) any later version.
 */
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef STATISTICS_MODULE
 #define STATISTICS_MODULE
 
 #include <vector>
 #include <tulip/Matrix.h>
-
-class SuperGraph;
-class MetricProxy;
-class Coord;
+#include <tulip/Polynome.h>
 
 namespace tlp {
+
+class Graph;
+class DoubleProperty;
+class Coord;
+
+class CorrelationMatrix: public tlp::Matrix<float, 3> {
+public:
+  CorrelationMatrix() {}
+  CorrelationMatrix(std::vector<std::vector<float> > v):
+    tlp::Matrix<float, 3>(v) {
+  }
+  /**
+   * Returns a Polynome representing the caracteristic polynome of the matrix.
+   * For the moment, this function only computes a 3x3 matrix caracteristic polynome.
+   */
+  void caracteristicPolynome(Polynome &result) const;
+
+      /**
+       * Returns every EigenVectors of a 3x3 matrix !
+       * To be used only on symmetric matrices
+       */
+  bool computeEigenVectors(Matrix<float, 3> &eigenVectors) const;
+};
+
 /** \brief Structure used to store statistic results
  *
  *  This structure is designed to store statistic results computed by the class StatsNodeModule.
@@ -39,7 +61,7 @@ struct StatisticResults
   std::vector<float> minPoint;
   std::vector<float> maxPoint;
 
-  tlp::Matrix<float, 3> correlationMatrix;
+  CorrelationMatrix correlationMatrix;
   tlp::Matrix<float, 3> eigenVectors;
 
   float linearRegressionFunctionb0;
@@ -55,7 +77,7 @@ struct StatisticResults
  *  There is two types of functions for the common statistic results. \n
  *
  *  The first type has 4 parameters which are the following :
- *   \param superGraph The supergraph structure that will be used to retrieve the list of nodes.
+ *   \param graph The Graph structure that will be used to retrieve the list of nodes.
  *   \param metrics The metrics that will be treated by the algorithm. There can be up to 3 metrics.
  *   \param nDimensions The number of dimensions that will be treated. This integer ranges from 1 to 3
  *   \param result The vector containing the result of the algorithm.
@@ -63,8 +85,8 @@ struct StatisticResults
  *  That kind of function computes the result for many dimensions (1 to 3)
  *
  *  The second one has only two parameters :
- *   \param superGraph The supergraph structure that will be used to retrieve the list of nodes
- *   \param metricProxy The metric that will be treated by the algorithm
+ *   \param graph The Graph structure that will be used to retrieve the list of nodes
+ *   \param metric The metric that will be treated by the algorithm
  *
  */
 
@@ -74,27 +96,27 @@ class TLP_SCOPE StatsNodeModule
   /**
    * Computes the Average point.
    */
-  static void ComputeAveragePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result);
+  static void ComputeAveragePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result);
 
   /**
    * Computes the Average on only one metric.
    */
-  static float ComputeAverage(SuperGraph *superGraph, MetricProxy *metricProxy);
+  static float ComputeAverage(Graph *graph, DoubleProperty *metric);
 
   /**
    * Computes the Variance point.
    */
-  static void ComputeVariancePoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result);
+  static void ComputeVariancePoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result);
 
   /**
    * Computes the Variance on only one metric.
    */
-  static float ComputeVariance(SuperGraph *superGraph, MetricProxy *metricProxy);
+  static float ComputeVariance(Graph *graph, DoubleProperty *metric);
 
   /**
    * Computes the Standard deviation point
    */
-  static void ComputeStandardDeviationPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result);
+  static void ComputeStandardDeviationPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result);
 
   /**
    * Computes the Standard deviation point given a vector of variances
@@ -104,7 +126,7 @@ class TLP_SCOPE StatsNodeModule
   /**
    * Computes the Standard deviation on only one metric
    */
-  static float ComputeStandardDeviation(SuperGraph *superGraph, MetricProxy *metricProxy);
+  static float ComputeStandardDeviation(Graph *graph, DoubleProperty *metric);
 
   /**
    * Computes the Standard deviation on only one metric given a variance
@@ -114,52 +136,53 @@ class TLP_SCOPE StatsNodeModule
   /**
    * Computes the Covariance point
    */
-  static void ComputeCovariancePoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<std::vector<float> > &result);
+  static void ComputeCovariancePoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<std::vector<float> > &result);
 
   /**
    * Computes the Covariance of a set of nodes on two metrics
    */
-  static float ComputeCovariance(SuperGraph *superGraph, MetricProxy* metric1, MetricProxy* metric2);
+  static float ComputeCovariance(Graph *graph, DoubleProperty* metric1, DoubleProperty* metric2);
   
   /**
    * Computes the Minimum point
    */
-  static void ComputeMinPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result); 
+  static void ComputeMinPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result); 
 
   /**
    * Computes the Minimum of a metric
    */
-  static float ComputeMin(SuperGraph *superGraph, MetricProxy *metricProxy);
+  static float ComputeMin(Graph *graph, DoubleProperty *metric);
 
   /**
    * Computes the Maximum point
    */
-  static void ComputeMaxPoint(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &result);
+  static void ComputeMaxPoint(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &result);
 
   /**
    * Computes the Maximum of a metric
    */
-  static float ComputeMax(SuperGraph *superGraph, MetricProxy *metricProxy);
+  static float ComputeMax(Graph *graph, DoubleProperty *metric);
 
   /**
    * Computes the Bounding box of a graph
    */
-  static void ComputeMinMaxPoints(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax);
+  static void ComputeMinMaxPoints(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions, std::vector<float> &resMin, std::vector<float> &resMax);
 
   /**
    * Computes the range of a metric in a graph
    */
-  static void ComputeMinMax(SuperGraph *superGraph, MetricProxy *metricProxy, float &min, float &max);
+  static void ComputeMinMax(Graph *graph, DoubleProperty *metric, float &min, float &max);
 
   /**
    * Computes the Linear regression function of a graph on two metrics
    */
-  static void ComputeLinearRegressionFunction(SuperGraph *superGraph, MetricProxy *xk, MetricProxy *yk, float &b0, float &b1);
+  static void ComputeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &b0, float &b1);
 
   /**
    * Computes every statistic results and store it in a StatisticResults structure
    */
-  static StatisticResults* ComputeStatisticsResults(SuperGraph *superGraph, const std::vector<MetricProxy*> &metrics, int nDimensions);
+  static StatisticResults* ComputeStatisticsResults(Graph *graph, const std::vector<DoubleProperty*> &metrics, int nDimensions);
 };
 }
 #endif
+#endif //DOXYGEN_NOTFOR_DEVEL

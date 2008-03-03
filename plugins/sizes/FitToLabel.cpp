@@ -23,9 +23,9 @@
 
 #include <cmath>
 #include <tulip/TulipPlugin.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
+using namespace tlp;
 
 /** \addtogroup size */
 /*@{*/
@@ -41,10 +41,10 @@ using namespace std;
  *
  *  \author Maintainer : David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class FitToLabel: public Sizes { 
+class FitToLabel: public SizeAlgorithm { 
 public:
-  //====================================================
-  FitToLabel(const PropertyContext &context):Sizes(context){}
+  //==============================================Algorithm======
+  FitToLabel(const PropertyContext &context):SizeAlgorithm(context){}
   //====================================================
   ~FitToLabel(){}
   //====================================================
@@ -52,23 +52,23 @@ public:
     TextRenderer textRender;
     textRender.setMode(TLP_POLYGON);
     textRender.setContext(tlp::TulipLibDir + "tlp/bitmaps/font.ttf", 12, 255, 255, 255); // valeur par défault pour l'affichage
-    sizesProxy->setAllNodeValue(Size(18,18,1));
-    StringProxy *entryLabel = superGraph->getProperty<StringProxy>("viewLabel");
+    sizeResult->setAllNodeValue(Size(18,18,1));
+    StringProperty *entryLabel = graph->getProperty<StringProperty>("viewLabel");
     node n;
-    forEach(n, superGraph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       const string &str = entryLabel->getNodeValue(n);
       if (str != "") {
 	float w_max, h, w;
 	w_max = 256.0;
 	textRender.setString(str, VERBATIM);
 	textRender.getBoundingBox(w_max, h, w);
-	sizesProxy->setNodeValue(n, Size(int(w), int(h), 1));
+	sizeResult->setNodeValue(n, Size(int(w), int(h), 1));
       }
     }
-    sizesProxy->setAllEdgeValue(Size(1,1,8));
+    sizeResult->setAllEdgeValue(Size(1,1,8));
     return true;
   }
   //====================================================
 };
 /*@}*/
-SIZESPLUGIN(FitToLabel,"Fit to label","Carceles,Niotout,Bardet,Mercadal,Ng Sing Kwong","25/01/2006","0","0","1");
+SIZEPLUGIN(FitToLabel,"Fit to label","Carceles,Niotout,Bardet,Mercadal,Ng Sing Kwong","25/01/2006","","1.0");

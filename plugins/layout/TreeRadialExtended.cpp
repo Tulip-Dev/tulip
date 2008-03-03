@@ -14,18 +14,18 @@ struct angle {
 };
 
 struct LessThanNodos {
-  MetricProxy *metric;
+  Metric *metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) > metric->getNodeValue(n2));
   } 
 };
 
-struct TreeRadialExtended:public Layout {
+struct TreeRadialExtended:public LayoutAlgorithm {
 
 
-  TreeRadialExtended(const PropertyContext &context):Layout(context)  {}
+  TreeRadialExtended(const PropertyContext &context):LayoutAlgorithm(context)  {}
   void dfsPlacement(node n, int depth,double alphaStart,double alphaEnd) {
-    if (superGraph->outdeg(n)==0) return;
+    if (graph->outdeg(n)==0) return;
 
 
     //calcul le nombre de feuille des sous-arbres
@@ -33,10 +33,10 @@ struct TreeRadialExtended:public Layout {
     stack<node> leaves;
     double nbLeafSubTrees=0;
     unsigned int nbChild=0;
-    Iterator<node> *itN=superGraph->getOutNodes(n);
+    Iterator<node> *itN=graph->getOutNodes(n);
     for (;itN->hasNext();) {
       node itn=itN->next();
-      if (superGraph->outdeg(itn)>0) {
+      if (graph->outdeg(itn)>0) {
 	nbLeafSubTrees+=m->getNodeValue(itn);
 	++nbChild;
       }
@@ -52,10 +52,10 @@ struct TreeRadialExtended:public Layout {
     double deltaAlpha;
     list<node> tmpMap;
     if (nbChild>0) {
-      itN=superGraph->getOutNodes(n);
+      itN=graph->getOutNodes(n);
       for (;itN->hasNext();) {
 	node itn=itN->next();
-	if (superGraph->outdeg(itn)>0) {
+	if (graph->outdeg(itn)>0) {
 	  tmpMap.push_back(itn);
 	}
       }delete itN;
@@ -79,30 +79,30 @@ struct TreeRadialExtended:public Layout {
       }
     }
     alphaStart=ta;
-    deltaAlpha=(alphaEnd-alphaStart)/(superGraph->outdeg(n));
+    deltaAlpha=(alphaEnd-alphaStart)/(graph->outdeg(n));
     double midle;
     unsigned int index=0;
     counto=0;
-    for (int i=0;i<superGraph->outdeg(n);++i) {
+    for (int i=0;i<graph->outdeg(n);++i) {
       midle=alphaStart+((double)counto)*deltaAlpha;
       counto++;
       if (index<nbChild) {
 	if (leaves.empty()) {
-	  layoutProxy->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	  layoutResult->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	  dfsPlacement(angles[index].n,depth+2,angles[index].start,angles[index].end);
 	  ++index;
 	}
 	else {
 	  double midle2=alphaStart+((double)counto)*deltaAlpha;
 	  if (fabs(midle-angles[index].midle)<fabs(midle2-angles[index].midle)){
-	    layoutProxy->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	    layoutResult->setNodeValue(angles[index].n,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	    dfsPlacement(angles[index].n,depth+2,angles[index].start,angles[index].end);
 	    ++index;
 	  }
 	  else {
 	    node no=leaves.top();
 	    leaves.pop();
-	    layoutProxy->setNodeValue(no,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
+	    layoutResult->setNodeValue(no,Coord(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0));
 	  }
 	}
       }
@@ -110,8 +110,8 @@ struct TreeRadialExtended:public Layout {
 	node no=leaves.top();
 	leaves.pop();
 	Coord tmp(((double)depth+1)*cos(midle),((double)depth+1)*sin(midle),0);
-	layoutProxy->setNodeValue(no,tmp);
-	tmp=layoutProxy->getNodeValue(no);
+	layoutResult->setNodeValue(no,tmp);
+	tmp=layoutResult->getNodeValue(no);
       }
     }
     
@@ -121,22 +121,22 @@ struct TreeRadialExtended:public Layout {
   bool run() {
     bool cached,resultBool;
     string erreurMsg;
-    m=getLocalProperty<MetricProxy>(superGraph,"Leaf",cached,resultBool,erreurMsg);
-    Iterator<node> *itN=superGraph->getNodes();
+    m=getLocalProperty<DoubleProperty>(graph,"Leaf",cached,resultBool,erreurMsg);
+    Iterator<node> *itN=graph->getNodes();
     node startNode;
     for (;itN->hasNext();) {
       startNode=itN->next();
-      if (superGraph->indeg(startNode)==0) break;
+      if (graph->indeg(startNode)==0) break;
     } delete itN;
-    getLocalProperty<SizesProxy>(superGraph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
-    layoutProxy->setAllNodeValue(Coord(0,0,0));
+    getLocalProperty<SizeProperty>(graph,"viewSize")->setAllNodeValue( Size(0.5,0.5,0.5));
+    layoutResult->setAllNodeValue(Coord(0,0,0));
     dfsPlacement(startNode,0,0,6.283);
-    superGraph->getPropertyManager()->delLocalProperty("Leaf");
+    graph->delLocalProperty("Leaf");
     return true;
   }
 
   bool check(string &erreurMsg) {
-    if (superGraph->isTree()) {
+    if (graph->isTree()) {
       erreurMsg="";
       return true;
     }
@@ -147,7 +147,7 @@ struct TreeRadialExtended:public Layout {
   }
   void reset() {}
 private:
-  MetricProxy *m;
+  Metric *m;
 };
 
 LAYOUTPLUGINOFGROUP(TreeRadialExtended,"Tree Radial Extended","David Auber","03/03/2001","developpement","0","1","Tree")

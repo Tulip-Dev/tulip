@@ -14,7 +14,7 @@
 #ifndef GL_HUD_RECT_H
 #define GL_HUD_RECT_H
 
-#include <tulip/GlHud.h>
+#include <tulip/GlHudPolygon.h>
 
 #define N_RECT_POINTS 4
 
@@ -24,7 +24,7 @@ namespace tlp {
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
  */
 
-class TLP_GL_SCOPE GlHudRect : public GlHud {
+class TLP_GL_SCOPE GlHudRect : public GlHudPolygon {
  protected:
 
   Coord topLeftPos; /**< Top Left coordinate of the rectangle */
@@ -33,28 +33,21 @@ class TLP_GL_SCOPE GlHudRect : public GlHud {
   Color topLeftCol; /**< Top Left color of the rectangle */
   Color bottomRightCol; /**< Bottom Right color of the rectangle */
 
-
-
  public:
-
-  /**
-   * Default constructor 
-   */
-  GlHudRect();
   /**
    * Constructor
    */
   GlHudRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol);
-
+  GlHudRect();
   /**
    * Destructor
    */
   virtual ~GlHudRect();
 
   /**
-   * Virtual function used to draw the rectangle
+   * Accessor in reading to the Top Left Corner of the rectangle
    */
-  virtual void draw(GlGraph*);
+  virtual Coord getCenter();
 
   /**
    * Accessor in reading to the Top Left Corner of the rectangle

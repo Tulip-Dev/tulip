@@ -6,9 +6,10 @@
 #endif
 
 #include <set>
+#include <string>
 #include <tulip/Node.h>
-
-class SuperGraph;
+#include <tulip/Graph.h>
+#include <tulip/GraphProperty.h>
 
 namespace tlp {
   /**
@@ -19,44 +20,56 @@ namespace tlp {
    * the subgraph will be replaced.
    * \param n The meta node to open.
    * \param groupUnderSubgraph The subgraph where the groups are placed 
-   * \param metagraphProperty The name of the metagraph property used
-   * to store the subgraphs.
+   * \param metaGraphProperty The metagraph property used to associate 
+   * the subgraph to metanodes
    */
-  TLP_SCOPE void openMetaNode(SuperGraph *graph, node n,
-			      SuperGraph *groupUnderSubGraph,
-			      const std::string &metagraphProperty);
-  TLP_SCOPE inline void openMetaNode(SuperGraph *graph, node n) {
-    const std::string viewMetaGraph ("viewMetaGraph");
-    return openMetaNode (graph, n, graph->getFather(), viewMetaGraph);
-  }
+  TLP_SCOPE void openMetaNode(Graph *graph, node metaNode,
+			      Graph *groupUnderSubGraph,
+			      GraphProperty *metaGraphProperty);
+
+  /**
+   * Function to open a metanode and replace all edges between that
+   * meta node and other nodes in the graph.  Provided for backwards
+   * compatability with groupUnderSubGraph set to graph->getSuperGraph(),
+   * and metaGraphs set to viewMetaGraph.
+   */
+  TLP_SCOPE void openMetaNode(Graph *graph, node n);
+
   /**
    * Function to close a subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
    *
-   * \param graph The supergraph where the meta node will be placed.
+   * \param graph The graph where the meta node will be placed.
    * \param subGraph The set of nodes to be contracted into a metanode.
    * \param groupUnderSubgraph The subgraph where the groups are placed. 
-   * \param multiEdges When true, the multiplicity of the edges from the
-   * metanode to the other node n is equal to the number of edges between
-   * the nodes in the subgraph and n.  Otherwise one edge is placed
-   * \param metagraphProperty The name of the metagraph property used
-   * to store the subgraphs.
+   * \param metaGraphProperty The metagraph property used to associate
+   * the subgraph to the new metanode.
    */
-  TLP_SCOPE node createMetaNode(SuperGraph *graph, std::set<node> &subGraph,
-				SuperGraph *groupUnderSubGraph,
-				bool multiEdges,
-				const std::string &metagraphProperty);
-  TLP_SCOPE inline node createMetaNode(SuperGraph *graph, 
-				       std::set<node> &subGraph) {
-    const std::string viewMetaGraph ("viewMetaGraph");
-    return createMetaNode(graph, subGraph, graph->getFather(), 
-			  true, viewMetaGraph);
-  }//end create meta node
+  TLP_SCOPE node createMetaNode(Graph *graph, std::set<node> &subGraph,
+				Graph *groupUnderSubGraph, 
+				GraphProperty *metaInfo);
+
+  /**
+   * Function to close a subgraph into a metanode.  Edges from nodes
+   * in the subgraph to nodes outside the subgraph are replaced with
+   * edges from the metanode to the nodes outside the subgraph.
+   * Version for backwards compatibility with groupUnderSubGraph set
+   * to graph->getSuperGraph(), multiEdges set to true,
+   * metaInfo set to viewMetaGraph, and delAllEdge set to true.
+   */
+  TLP_SCOPE node createMetaNode(Graph *graph, 
+				std::set<node> &subGraph);
   /**
    *  Return a subgraph induced by a set of nodes
    */
-  TLP_SCOPE SuperGraph *inducedSubGraph(SuperGraph *, const std::set<node> &, std::string name = "induced subgraph");
-};
+  TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &, std::string name = "induced subgraph");
+
+  /**
+   * Update the layout of metanode in cluster according to the layout of underlying nodes in graph
+   *
+   */
+  TLP_SCOPE void updateGroupLayout(Graph *graph, Graph *cluster, node metanode);
+}
 
 #endif

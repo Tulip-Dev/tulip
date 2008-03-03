@@ -23,32 +23,64 @@
 #endif
 #include "tulip/ObservableGraph.h"
 #include "tulip/MutableContainer.h"
+#include "tulip/PluginProgress.h"
 
-class SuperGraph;
-class SelectionProxy;
+namespace tlp {
+
+class Graph;
 
 /** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is a tree
 class TLP_SCOPE TreeTest : private GraphObserver {
 public:
-  static bool isTree(SuperGraph *graph);
-  static bool isTopologicalTree(SuperGraph *graph);
-  static void makeRootedTree(SuperGraph *graph, node root);
+  // check if the graph is a rooted tree
+  static bool isTree(Graph *graph);
+  // check if the graph is a free tree
+  static bool isFreeTree(Graph *graph);
+  // turns a free tree into a rooted tree
+  static void makeRootedTree(Graph *freeTree, node root);
+  // synonymous of the makeRootedTree
+  static void makeDirectedTree(Graph *freeTree, node root) {
+    makeRootedTree(freeTree, root);
+  };
+
+  /**
+   * Compute a rooted tree from the graph.
+   * The algorithm is the following
+   * - if the graph is a rooted tree, return the graph
+   * - if the graph is a free tree, return a rooted copy
+   * - if the graph is connected, make a copy
+   *   return a rooted spanning tree of that copy
+   * - if the graph is not connected, make a copy,
+   *   compute a tree for each of its connected components,
+   *   add a simple source and return the copy.
+   */  
+  static Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false,
+			    PluginProgress *pluginProgress = 0);
+  
+  /**
+   * Clean the graph from a tree previously computed
+   * with the computeRootedTree function
+   */
+  static void cleanComputedTree(Graph *graph, Graph *tree);
+
 private:
-  bool compute(SuperGraph *);
-  void addEdge(SuperGraph *,const edge);
-  void delEdge(SuperGraph *,const edge);
-  void reverseEdge(SuperGraph *,const edge);
-  void addNode(SuperGraph *,const node);
-  void delNode(SuperGraph *,const node);
-  void destroy(SuperGraph *);
+  bool compute(Graph *);
+  void addEdge(Graph *,const edge);
+  void delEdge(Graph *,const edge);
+  void reverseEdge(Graph *,const edge);
+  void addNode(Graph *,const node);
+  void delNode(Graph *,const node);
+  void destroy(Graph *);
   TreeTest();
   static TreeTest * instance;
-  bool isTopologicalTree (SuperGraph *graph, node curRoot, node cameFrom,
-			  MutableContainer<bool> &visited);
-  void makeRootedTree (SuperGraph *graph, node curRoot, node cameFrom);
+  bool isFreeTree (Graph *graph, node curRoot, node cameFrom,
+		   MutableContainer<bool> &visited);
+  void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
   stdext::hash_map<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
+
+}
 #endif

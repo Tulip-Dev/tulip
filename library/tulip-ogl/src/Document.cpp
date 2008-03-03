@@ -1,13 +1,13 @@
-
-
-#include "tulip/Document.h"
-
 #include <iostream>
 #include <cassert>
 
-using namespace std;
+#include "tulip/Document.h"
+#include "tulip/Renderer.h"
 
-const Align DEFAULT_ALIGN=LEFT;
+using namespace std;
+using namespace tlp;
+
+const Align DEFAULT_ALIGN = LEFT;
 
 FLayout::~FLayout(){}
 Frame::~Frame(){}
@@ -69,9 +69,10 @@ Align Document::getAlign() const{
 //---------------------------------------------------------------------------
 void Document::draw(float w_max, float&w) const{
   w = 0;
-  float w_global;
+
   int n = blocks.size();
   for(int i = 0; i<n; i++){
+    float w_global = 0;
     blocks[i]->draw(w_max, w_global);
     if( w_global > w) w = w_global;
   }

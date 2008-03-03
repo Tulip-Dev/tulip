@@ -19,8 +19,6 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-#include <tulip/TlpTools.h>
-
 template <typename TYPE> struct BmdList;
 template <typename TYPE> struct BmdListTest;
 
@@ -40,7 +38,7 @@ namespace tlp {
     BmdLink *succ(){
       return suc;
     }
-  protected:
+    //protected:
     TYPE data;
     BmdLink *pre;
     BmdLink *suc;

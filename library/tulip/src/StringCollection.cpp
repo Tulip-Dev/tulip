@@ -2,6 +2,7 @@
 #include<tulip/StringCollection.h>
 
 using namespace std;
+using namespace tlp;
 
 StringCollection::StringCollection() {     
 }
@@ -23,6 +24,8 @@ StringCollection::StringCollection(const string param) {
       temp += *itChar;
     itChar++;        
   }
+  if (temp.size())
+    this->push_back(temp);
   current = 0;
 } 
      

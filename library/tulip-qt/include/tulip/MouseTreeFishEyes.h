@@ -2,8 +2,12 @@
 #ifndef MOUSETREEFISHEYES_H
 #define MOUSETREEFISHEYES_H
 
+#ifndef DOXYGEN_NOTFOR_USER
+
 #include <tulip/MouseInterface.h>
 ///
+namespace tlp {
+
 class MouseTreeFishEyes:public MouseInterface
 {
 public:
@@ -19,4 +23,7 @@ public:
   void wheelEvent(GlGraphWidget *, QWheelEvent *){}
   MouseInterface * clone() { return new MouseTreeFishEyes();}
 };
+
+}
+#endif //DOXYGEN_NOTFOR_USER
 #endif
