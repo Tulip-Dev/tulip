@@ -708,7 +708,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   string sceneOut;
   glWidget->getScene()->getXML(sceneOut);
   string dir=TulipLibDir;
-  while(sceneOut.find(dir)!=-1) {
+  while(sceneOut.find(dir) != std::string::npos) {
     int pos=sceneOut.find(dir);
     sceneOut.replace(pos,dir.length()-1,"TulipLibDir");
   }
