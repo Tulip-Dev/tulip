@@ -1,7 +1,7 @@
 #ifndef _GL_INTERACTOR_H
 #define _GL_INTERACTOR_H
 
-#include <Qt/qobject.h>
+#include <QtCore/qobject.h>
 
 class GlGraphWidget;
 

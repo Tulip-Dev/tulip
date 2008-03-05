@@ -9,7 +9,7 @@
 #include <string>
 
 #include <Qt3Support/q3button.h>
-#include <Qt/qpainter.h>
+#include <QtGui/qpainter.h>
 #include <Qt3Support/q3table.h>
 #include "tulip/Qt3ForTulip.h"
 
