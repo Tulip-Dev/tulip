@@ -2195,11 +2195,11 @@ void viewGl::isTree() {
   if (glWidget == 0) return;
   if (TreeTest::isTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",
-			   "The graph is a rooted tree"
+			   "The graph is a directed tree"
 			   );
   else
     QMessageBox::information( this, "Tulip test",
-			   "The graph is not a rooted tree"
+			   "The graph is not a directed tree"
 			   );
 }
 //**********************************************************************
