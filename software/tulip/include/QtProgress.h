@@ -4,14 +4,14 @@
 #include <tulip/PluginProgress.h>
 #include "QtProgressData.h"
 
-class GlGraphWidget;
+class GlMainWidget;
 
 class QtProgress:public QtProgressData, public tlp::PluginProgress {
 
   Q_OBJECT
 
 public:
-  QtProgress(QWidget* parent,std::string text, GlGraphWidget * =0);
+  QtProgress(QWidget* parent,std::string text, GlMainWidget * =0);
   virtual ~QtProgress();
   void progress_handler(int i,int j);
   void setComment(std::string msg);
@@ -25,7 +25,7 @@ public:
   bool firstCall;
   std::string label;
   QWidget* parent;
-  GlGraphWidget *glGraphWidget;
+  GlMainWidget *glMainWidget;
 };
 
 #endif

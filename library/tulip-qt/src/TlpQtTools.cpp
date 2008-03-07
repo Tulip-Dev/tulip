@@ -16,7 +16,7 @@ using namespace std;
 
 namespace tlp {
 
-  void openGraphOnGlGraphWidget(Graph *graph,DataSet *dataSet,GlGraphWidget *glGraphWidget){
+  void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget){
     GlGraphComposite* glGraphComposite = new GlGraphComposite(graph);
     GlGraphRenderingParameters param =
       glGraphComposite->getRenderingParameters();
@@ -27,8 +27,8 @@ namespace tlp {
     }
     GlLayer *layer = new GlLayer("Main");
     layer->addGlEntity(glGraphComposite, "graph");
-    glGraphWidget->getScene()->addLayer(layer);
-    glGraphWidget->getScene()->addGlGraphCompositeInfo(layer, glGraphComposite);
+    glMainWidget->getScene()->addLayer(layer);
+    glMainWidget->getScene()->addGlGraphCompositeInfo(layer, glGraphComposite);
   }
 
 }

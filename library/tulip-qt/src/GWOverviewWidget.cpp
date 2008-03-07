@@ -11,7 +11,7 @@
 #include <tulip/GlSimpleEntity.h>
 
 #include "tulip/GWOverviewWidget.h"
-#include "tulip/GlGraphWidget.h"
+#include "tulip/GlMainWidget.h"
 #include "tulip/RenderingParametersDialogData.h"
 #include "tulip/GlTools.h"
 
@@ -21,16 +21,16 @@ using namespace tlp;
 
 struct RectPosition : public tlp::GlSimpleEntity {
   void draw(float lod,Camera *camera);
-  RectPosition(GlGraphWidget *, GlGraphWidget *);
-  void setObservedView(GlGraphWidget *glG) {
+  RectPosition(GlMainWidget *, GlMainWidget *);
+  void setObservedView(GlMainWidget *glG) {
     _observedView = glG;
   }
 
   virtual void getXML(xmlNodePtr node) {}
   virtual void setWithXML(xmlNodePtr node) {}
 private :
-  GlGraphWidget * _observedView;
-  GlGraphWidget * _view;
+  GlMainWidget * _observedView;
+  GlMainWidget * _view;
 };
 
 class RenderingParametersDialog : public RenderingParametersDialogData {
@@ -60,12 +60,12 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent,
   : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
   _observedView = 0;
   _glDraw = 0;
-  _view = new GlGraphWidget( frame8, "view" );
+  _view = new GlMainWidget( frame8, "view" );
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
-  //GlGraphComposite* graphComposite=new GlGraphComposite();
+  //GlMainComposite* graphComposite=new GlMainComposite();
   //layer->addGlEntity(graphComposite,"graphComposite");
-  //_view->getScene()->setGlGraphComposite(graphComposite);
+  //_view->getScene()->setGlMainComposite(graphComposite);
   _view->getScene()->addLayer(layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
@@ -92,12 +92,12 @@ GWOverviewWidget::~GWOverviewWidget() {
   delete paramDialog;
 }
 //=============================================================================
-GlGraphWidget *GWOverviewWidget::getObservedView() {
+GlMainWidget *GWOverviewWidget::getObservedView() {
   return _observedView;
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
-  if ( obj->inherits("GlGraphWidget") &&
+  if ( obj->inherits("GlMainWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
 	(e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
@@ -113,7 +113,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 	paramDialog->show();
 	return true;
       }
-      GlGraphWidget *glw = (GlGraphWidget *) obj;
+      GlMainWidget *glw = (GlMainWidget *) obj;
       assert(glw == _view);
       double mouseClicX = me->x();
       double mouseClicY = me->y();
@@ -147,7 +147,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   return false;
 }
 //=============================================================================
-void GWOverviewWidget::draw(GlGraphWidget *glG) {
+void GWOverviewWidget::draw(GlMainWidget *glG) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
   if (isVisible()) {
@@ -165,13 +165,13 @@ void GWOverviewWidget::draw(GlGraphWidget *glG) {
   }
 }
 //=============================================================================
-void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
+void GWOverviewWidget::setObservedView(GlMainWidget *glWidget){
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
   if (_observedView != 0) {
-    disconnect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)), 
-	       this, SLOT(draw(GlGraphWidget *)));
+    disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *)), 
+	       this, SLOT(draw(GlMainWidget *)));
     disconnect(_observedView, SIGNAL(destroyed(QObject *)), 
 	       this, SLOT(observedViewDestroyed(QObject *)));
     //_observedView->getScene()->getSelectionLayout()->clear();
@@ -204,8 +204,8 @@ void GWOverviewWidget::setObservedView(GlGraphWidget *glWidget){
     
     //_observedView->getScene()->setViewport(_view->getScene()->getViewport());
     syncFromView();
-    connect(_observedView, SIGNAL(graphRedrawn(GlGraphWidget *)),
-	   this, SLOT(draw(GlGraphWidget *)));
+    connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *)),
+	   this, SLOT(draw(GlMainWidget *)));
     connect(_observedView, SIGNAL(destroyed(QObject *)), 
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
@@ -409,7 +409,7 @@ void RectPosition::draw(float lod,Camera *camera) {
   glPopAttrib();
 }
 //=============================================================================
-RectPosition::RectPosition(GlGraphWidget *view, GlGraphWidget *observedView) : 
+RectPosition::RectPosition(GlMainWidget *view, GlMainWidget *observedView) : 
   _observedView(observedView), _view(view) {
   setCheckByBoundingBoxVisitor(false);
   boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));

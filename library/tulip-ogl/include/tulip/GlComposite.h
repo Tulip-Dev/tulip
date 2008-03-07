@@ -81,6 +81,11 @@ namespace tlp {
     }
 
     /**
+     * translate the composite with children
+     */
+    virtual void translate(const Coord &mouvement); 
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);

@@ -12,7 +12,7 @@
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 
 #include <tulip/MouseEdgeBuilder.h>
 
@@ -24,77 +24,77 @@ MouseEdgeBuilder::MouseEdgeBuilder():started(false){}
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     ElementType type;
     node tmpNode;
     edge tmpEdge;
-    Graph * _graph = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    Graph * _graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>("viewLayout");
     if (qMouseEv->button()==Qt::LeftButton) {
       if (!started) {
-	bool result=glGraphWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
+	bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
 	if (result && (type == NODE)) {
 	  started=true;
 	  source=tmpNode;
-	  glGraphWidget->setMouseTracking(true);
+	  glMainWidget->setMouseTracking(true);
 	  curPos=startPos=mLayout->getNodeValue(source);
 	  return true;
 	}
 	return false;
       }
       else {
-	bool result = glGraphWidget->doSelect(qMouseEv->x(),qMouseEv->y(),type,tmpNode,tmpEdge);
+	bool result = glMainWidget->doSelect(qMouseEv->x(),qMouseEv->y(),type,tmpNode,tmpEdge);
 	if (result && (type == NODE)) {
 	  Observable::holdObservers();
 	  started=false;
-	  glGraphWidget->setMouseTracking(false);
-	  edge newEdge = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->addEdge(source, tmpNode);
+	  glMainWidget->setMouseTracking(false);
+	  edge newEdge = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->addEdge(source, tmpNode);
 	  mLayout->setEdgeValue(newEdge, bends);
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
 	  bends.clear();
-	  glGraphWidget->draw();
+	  glMainWidget->draw();
 	  Observable::unholdObservers(); 
 	}
 	else {
-	  Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
+	  Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
 		 (double) qMouseEv->y(),
 		 0);
-	  bends.push_back(glGraphWidget->getScene()->getCamera()->screenTo3DWorld(point));
-	  glGraphWidget->draw();
+	  bends.push_back(glMainWidget->getScene()->getCamera()->screenTo3DWorld(point));
+	  glMainWidget->draw();
 	  }
       }
       return true;
     }
     if (qMouseEv->button()==Qt::MidButton) {
       bends.clear();
-      glGraphWidget->setMouseTracking(false);
+      glMainWidget->setMouseTracking(false);
       started=false;
-      glGraphWidget->draw();
+      glMainWidget->draw();
       return true;
     }
   }
   if  (e->type() == QEvent::MouseMove) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (!started) return false;
     
-    Coord point((double) glGraphWidget->width() - (double) qMouseEv->x(),
+    Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
 		(double) qMouseEv->y(),
 		0);
-    point = glGraphWidget->getScene()->getCamera()->screenTo3DWorld(point);
+    point = glMainWidget->getScene()->getCamera()->screenTo3DWorld(point);
     curPos.set(point[0], point[1], point[2]);
-    glGraphWidget->draw();
+    glMainWidget->draw();
     return true;
   }
 
   return false;
 }
 
-bool MouseEdgeBuilder::draw(GlGraphWidget *glGraphWidget) {
+bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
   glStencilFunc(GL_LEQUAL,0,0xFFFF);
-  glGraphWidget->getScene()->getGraphLayer()->getCamera()->initGl();
+  glMainWidget->getScene()->getGraphLayer()->getCamera()->initGl();
   glDisable(GL_LIGHTING);
   float color[4];
   color[0]=1; color[1]=0;  color[2]=0;  color[3]=1;

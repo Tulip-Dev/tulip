@@ -1,5 +1,5 @@
 #include <tulip/Morphing.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -50,7 +50,7 @@ static bool HaveSameValues( Graph * inG,
   return true;
 }
 //====================================================
-GraphState::GraphState( GlGraphWidget * glgw ) {
+GraphState::GraphState( GlMainWidget * glgw ) {
   assert( glgw );
   g = glgw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   layout = new LayoutProperty( g );

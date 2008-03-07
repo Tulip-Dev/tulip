@@ -5,16 +5,29 @@
 
 #include "tulip/GlLayer.h"
 
-class TLP_GL_SCOPE GlHierarchyConvexHulls {
+namespace tlp {
 
- public:
-  GlHierarchyConvexHulls(bool fatherHullsIsDeducedFromChilds = true) {
-    deducedFromChilds = fatherHullsIsDeducedFromChilds;
-  }
-  virtual ~GlHierarchyConvexHulls() {}
-  virtual void compute(tlp::GlLayer*,tlp::Graph *);
-
-  bool deducedFromChilds;
-};
+  /**
+   * Build a hierarchy of convex hulls
+   */
+  class TLP_GL_SCOPE GlHierarchyConvexHulls {
+    
+  public:
+    /**
+     * Basic constructor
+     */
+    GlHierarchyConvexHulls(bool fatherHullsIsDeducedFromChilds = true) {
+      deducedFromChilds = fatherHullsIsDeducedFromChilds;
+    }
+    virtual ~GlHierarchyConvexHulls() {}
+    
+    /**
+     * Build the hierarchy for the given graph in GlLayer
+     */
+    virtual void compute(tlp::GlLayer*,tlp::Graph *);
+    
+    bool deducedFromChilds;
+  };
+}
 
 #endif

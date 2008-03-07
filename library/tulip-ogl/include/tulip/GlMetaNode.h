@@ -15,14 +15,26 @@
 
 namespace tlp {
   
+  /**
+   * Class who represent a meta-node
+   */
   class TLP_GL_SCOPE GlMetaNode : public GlNode{
   
   public:
 
+    /**
+     * Create a meta-node with the given id
+     */
     GlMetaNode(unsigned int id):GlNode(id) {}
 
+    /**
+     * Draw the meta-node
+     */
     virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
 
+    /**
+     * Draw label of the meta-node
+     */
     virtual void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
     
   };

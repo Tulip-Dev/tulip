@@ -16,34 +16,80 @@
 #include "tulip/GlEntity.h"
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/Camera.h"
+#include "tulip/GlXMLTools.h"
+#include <tulip/BoundingBox.h>
 
 namespace tlp {
 
+  /**
+   * Base class for all simple entity (entity who not need GraphInputData
+   */
   class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
 
   public:
 
     GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
 
+    /**
+     * Draw function
+     */
     virtual void draw(float lod,Camera* camera) = 0;
     
+    /**
+     * Accept visitor function
+     */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       visitor->visit(this);
     }
 
+    /**
+     * Set if entity is visible
+     */
     void setVisible(bool visible) {this->visible=visible;}
+    /**
+     * Return if entity is visible
+     */
     bool isVisible() {return visible;}
+    /**
+     * Set stencil number of the entity
+     */
     virtual void setStencil(int stencil) {this->stencil=stencil;}
+    /**
+     * Return stencil number of entity
+     */
     int getStencil() {return stencil;}
+    /**
+     * Set if the entity is check by boundingbox visitor
+     */
     void setCheckByBoundingBoxVisitor(bool check) {checkByBoundingBoxVisitor=check;}
+    /**
+     * Return if entity is check by boudingbox visitor
+     */
     bool isCheckByBoundingBoxVisitor() {return checkByBoundingBoxVisitor;}
 
+    /**
+     * Return the entity boundingbox 
+     */
     virtual BoundingBox getBoundingBox() {return boundingBox;}
 
+    /**
+     * Add a parent to this entity
+     */
     void addParent(GlLayer *layer) {parents.push_back(layer);}
 
+    /**
+     * virtual fucntion : Translate entity 
+     */
+    virtual void translate(const Coord &mouvement){};
+
+    /**
+     * Save the entity in Xml
+     */
     virtual void getXML(xmlNodePtr rootNode) =0;
     
+    /**
+     * Load entity with Xml
+     */
     virtual void setWithXML(xmlNodePtr rootNode) =0;
 
   protected:

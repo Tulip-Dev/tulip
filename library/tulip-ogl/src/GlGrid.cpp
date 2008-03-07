@@ -87,6 +87,14 @@ namespace tlp {
       this->displayDim[i] = displayDim[i];
   }
   //============================================================
+  void GlGrid::translate(const Coord& mouvement){
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
+
+    frontTopLeft+=mouvement;
+    backBottomRight+=mouvement;
+  }
+  //============================================================
   void GlGrid::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;
 

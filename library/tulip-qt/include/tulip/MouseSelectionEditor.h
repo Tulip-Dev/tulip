@@ -20,9 +20,9 @@ namespace tlp {
   public:
 
     MouseSelectionEditor();
-    ~MouseSelectionEditor() {if(glGraphWidget)glGraphWidget->getScene()->getSelectionLayer()->deleteGlEntity("selectionComposite");}
-    bool compute(GlGraphWidget *glGraphWidget);
-    bool draw(GlGraphWidget *);
+    ~MouseSelectionEditor() {if(glMainWidget)glMainWidget->getScene()->getSelectionLayer()->deleteGlEntity("selectionComposite");}
+    bool compute(GlMainWidget *glMainWidget);
+    bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
     GWInteractor *clone() { return new MouseSelectionEditor(); }
 
@@ -31,7 +31,7 @@ namespace tlp {
     enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
     Graph *_graph;
-    GlGraphWidget *glGraphWidget;
+    GlMainWidget *glMainWidget;
     LayoutProperty *_layout;
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
@@ -40,7 +40,7 @@ namespace tlp {
     SizeProperty *_copySizes;
     DoubleProperty *_copyRotation;
 
-    void initProxies(GlGraphWidget *glGraphWidget);
+    void initProxies(GlMainWidget *glMainWidget);
     void saveInfo();
     void restoreInfo();
     void initEdition();
@@ -63,10 +63,10 @@ namespace tlp {
     GlRect centerRect;
     Coord _layoutCenter;
 
-    bool computeFFD(GlGraphWidget*);
-    void mMouseTranslate(double, double, GlGraphWidget*);
-    void mMouseRotate(double, double, GlGraphWidget*);
-    void mMouseStretchAxis(double, double, GlGraphWidget*); 
+    bool computeFFD(GlMainWidget*);
+    void mMouseTranslate(double, double, GlMainWidget*);
+    void mMouseRotate(double, double, GlMainWidget*);
+    void mMouseStretchAxis(double, double, GlMainWidget*); 
 
 
   };

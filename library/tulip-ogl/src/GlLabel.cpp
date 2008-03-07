@@ -74,6 +74,10 @@ namespace tlp {
       glEnable(GL_STENCIL_TEST);
   }
   //===========================================================
+  void GlLabel::translate(const Coord& mouvement){
+    centerPosition+=mouvement;
+  }
+  //===========================================================
   void GlLabel::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 

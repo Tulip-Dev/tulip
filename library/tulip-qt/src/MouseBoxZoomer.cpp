@@ -8,7 +8,7 @@
 #include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 
 #include "tulip/MouseBoxZoomer.h"
 
@@ -23,7 +23,7 @@ MouseBoxZoomer::~MouseBoxZoomer() {}
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glw = (GlGraphWidget *) widget;
+    GlMainWidget *glw = (GlMainWidget *) widget;
     if (qMouseEv->button() == mButton &&
 	(kModifier == Qt::NoModifier ||
 	 ((QMouseEvent *) e)->state() & kModifier)) {
@@ -57,7 +57,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
        	(kModifier == Qt::NoModifier ||
 	 ((QMouseEvent *) e)->state() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glw = (GlGraphWidget *) widget;
+    GlMainWidget *glw = (GlMainWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;
       started = false;
@@ -76,7 +76,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       (((QMouseEvent *) e)->button() == mButton &&
        	(kModifier == Qt::NoModifier ||
 	 ((QMouseEvent *) e)->state() & kModifier))) {
-    GlGraphWidget *glw = (GlGraphWidget *) widget;
+    GlMainWidget *glw = (GlMainWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;
       started = false;
@@ -108,7 +108,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //=====================================================================
-bool MouseBoxZoomer::draw(GlGraphWidget *glw) {
+bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   if (!started) return false;
   if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
     graph = NULL;

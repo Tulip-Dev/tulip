@@ -16,8 +16,6 @@
 
 #include <tulip/tulipconf.h>
 
-#include <tulip/BoundingBox.h>
-
 namespace tlp {
 
   class GlSceneVisitor;

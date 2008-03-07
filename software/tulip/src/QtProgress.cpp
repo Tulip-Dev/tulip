@@ -5,15 +5,15 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include "QtProgress.h"
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <qprogressbar.h>
 using namespace std;
 using namespace tlp;
 
 //=====================================
-QtProgress::QtProgress(QWidget* parent,string text,GlGraphWidget *glGraphWidget):
+QtProgress::QtProgress(QWidget* parent,string text,GlMainWidget *glMainWidget):
   QtProgressData( parent, text.c_str(), true),
-  firstCall(true),label(text),parent(parent),glGraphWidget(glGraphWidget) {
+  firstCall(true),label(text),parent(parent),glMainWidget(glMainWidget) {
 }
 //=====================================
 QtProgress::~QtProgress() {
@@ -29,9 +29,9 @@ void QtProgress::progress_handler(int i,int j) {
   qApp->processEvents();
   if (firstCall) show();
   firstCall=false;
-  if (glGraphWidget!=0 && preview->isChecked()) {
-    glGraphWidget->getScene()->centerScene();
-    glGraphWidget->draw();
+  if (glMainWidget!=0 && preview->isChecked()) {
+    glMainWidget->getScene()->centerScene();
+    glMainWidget->draw();
   }
 }
 //=====================================

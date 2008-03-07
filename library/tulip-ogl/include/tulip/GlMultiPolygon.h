@@ -25,15 +25,32 @@
 
 namespace tlp {
 
+  /**
+   * Entity who represent a vector of polygons
+   */
   class TLP_GL_SCOPE GlMultiPolygon : public GlSimpleEntity {
   
   public:
     
+    /**
+     * Constructor same as GlPolygon
+     */
     GlMultiPolygon(bool filled=true,bool outlined=true,const Color& fillColor=Color(0,0,0,255),const Color& outlineColor=Color(0,0,0,255));
 
+    /**
+     * Add a polygon with the Coord poly
+     */
     void addPolygon(const std::vector<Coord> &poly);
 
+    /**
+     * Draw all polygons
+     */
     virtual void draw(float lod,Camera *camera);
+
+    /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
 
     /**
      * Get the data in XML form

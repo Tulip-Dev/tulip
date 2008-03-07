@@ -27,8 +27,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _metaNodesStencil(0xFFFF),
   _edgesStencil(0xFFFF),
   _nodesLabelStencil(0xFFFF),
-  _edgesLabelStencil(0xFFFF),
   _metaNodesLabelStencil(0xFFFF),
+  _edgesLabelStencil(0xFFFF),
   _FontsType(0),
   _labelsBorder(2),
   _layoutName("viewLayout") {
@@ -38,10 +38,12 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
-  TRACE_EXEC();
   DataSet data;
   //bool
   data.set("arrow", _viewArrow);
+  data.set("displayNodes", _displayNodes);
+  data.set("displayEdges", _displayEdges);
+  data.set("displayMetaNodes", _displayMetaNodes);
   data.set("nodeLabel", _viewNodeLabel);
   data.set("edgeLabel", _viewEdgeLabel);
   data.set("metaLabel", _viewMetaLabel);
@@ -54,6 +56,12 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   //unsigned int
   data.set("fontType", _FontsType);
   //int
+  data.set("nodesStencil", _nodesStencil);
+  data.set("metaNodesStencil", _metaNodesStencil);
+  data.set("edgesStencil", _edgesStencil);
+  data.set("nodesLabelStencil", _nodesLabelStencil);
+  data.set("metaNodesLabelStencil", _metaNodesLabelStencil);
+  data.set("edgesLabelStencil", _edgesLabelStencil);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
@@ -70,10 +78,15 @@ static Graph *findGraphById(Graph *sg, const int id) {
 
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
-  TRACE_EXEC();
   bool b;
   if (data.get<bool>("arrow", b))
     setViewArrow(b);
+  if (data.get<bool>("displayNodes", b))
+    setDisplayNodes(b);
+  if (data.get<bool>("displayMetaNodes", b))
+    setDisplayMetaNodes(b);
+  if (data.get<bool>("displayEdges", b))
+    setDisplayEdges(b);
   if (data.get<bool>("nodeLabel", b))
     setViewNodeLabel(b);
   if (data.get<bool>("edgeLabel", b))
@@ -95,6 +108,19 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   unsigned int ui;
   if (data.get<unsigned int>("fontType", ui)) 
     _FontsType = ui;
+  int i;
+  if (data.get<int>("nodesStencil", i)) 
+    setNodesStencil(i);
+  if (data.get<int>("metaNodesStencil", i)) 
+    setMetaNodesStencil(i);
+  if (data.get<int>("edgesStencil", i)) 
+    setEdgesStencil(i);
+  if (data.get<int>("nodesLabelStencil", i)) 
+    setNodesLabelStencil(i);
+  if (data.get<int>("metaNodesLabelStencil", i)) 
+    setMetaNodesLabelStencil(i);
+  if (data.get<int>("edgesLabelStencil", i)) 
+    setEdgesLabelStencil(i);
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {

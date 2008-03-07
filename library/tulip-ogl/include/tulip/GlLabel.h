@@ -19,24 +19,45 @@
 #include <tulip/Color.h>
 
 #include "tulip/GlSimpleEntity.h"
-#include "tulip/Camera.h"
 #include "tulip/TextRenderer.h"
 
 namespace tlp {
 
+  class Camera;
+
+  /**
+   * Create a entity Label
+   */
   class TLP_GL_SCOPE GlLabel : public GlSimpleEntity
   {
   public :
     
     GlLabel() {}
 
+    /**
+     * Contructor with fontPath, centerPosition, size and fontColor
+     */
     GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor);
 
+    /**
+     * Set the text of the label
+     */
     void setText(const std::string& text);
 
+    /**
+     * Return the bounding box of the label
+     */
     virtual BoundingBox getBoundingBox();
 
+    /**
+     * Draw the Label
+     */
     virtual void draw(float lod, Camera *camera);
+
+    /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
 
     /**
      * Function to export data in XML

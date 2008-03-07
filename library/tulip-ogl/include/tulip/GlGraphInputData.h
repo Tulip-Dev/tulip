@@ -17,7 +17,6 @@
 
 #include "tulip/GlGraphRenderingParameters.h"
 
-
 namespace tlp {
 
   class LayoutProperty;

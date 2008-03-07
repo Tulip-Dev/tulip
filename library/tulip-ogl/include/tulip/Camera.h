@@ -13,6 +13,9 @@
 
 namespace tlp {
 
+  /**
+   * Class use to store OpenGl camera 
+   */
   class GlScene;
 
   class TLP_GL_SCOPE Camera {

@@ -10,7 +10,7 @@
 
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
-#include "tulip/GlGraphWidget.h"
+#include "tulip/GlMainWidget.h"
 #include "tulip/ElementPropertiesWidget.h"
 #include <tulip/Observable.h>
 
@@ -24,7 +24,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 #define WHEEL_DELTA 120
   if (e->type() == QEvent::Wheel &&
       (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
-    GlGraphWidget *g = (GlGraphWidget *) widget;
+    GlMainWidget *g = (GlMainWidget *) widget;
     g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
       ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
     g->draw();
@@ -38,18 +38,18 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress &&
       ((QMouseEvent *) e)->button()==Qt::LeftButton) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     ElementType type;
     node tmpNode;
     edge tmpEdge;
-    bool result = glGraphWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
+    bool result = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
     if(result == true) {
       Observable::holdObservers();
       switch(type) {
-	case NODE: glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delNode(tmpNode); break;
-	case EDGE: glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delEdge(tmpEdge); break;
+	case NODE: glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delNode(tmpNode); break;
+	case EDGE: glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delEdge(tmpEdge); break;
       }
-      glGraphWidget->redraw();
+      glMainWidget->redraw();
       Observable::unholdObservers();
     }
     return true;
@@ -74,7 +74,7 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   }
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     int deltaX,deltaY;
     deltaX=qMouseEv->x()-x;
     deltaY=qMouseEv->y()-y;
@@ -82,11 +82,11 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
       deltaY=0;
     else
       deltaX=0;  
-    if (deltaY!=0) glGraphWidget->getScene()->rotateScene(deltaY,0,0);
-    if (deltaX!=0) glGraphWidget->getScene()->rotateScene(0,deltaX,0);
+    if (deltaY!=0) glMainWidget->getScene()->rotateScene(deltaY,0,0);
+    if (deltaX!=0) glMainWidget->getScene()->rotateScene(0,deltaX,0);
     x=qMouseEv->x();
     y=qMouseEv->y();
-    glGraphWidget->draw();
+    glMainWidget->draw();
     return true;
   }
   return false;
@@ -109,21 +109,21 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   }
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 #define NO_ZOOM -1
 #define NO_ROTATION -1
     int deltaX,deltaY;
     if (x == NO_ROTATION) {
       // Zoom
       deltaY = qMouseEv->y() - y;
-      glGraphWidget->getScene()->zoom(-deltaY/2);
+      glMainWidget->getScene()->zoom(-deltaY/2);
       y = qMouseEv->y();
     }
     else {
       deltaX = qMouseEv->x() - x;
       if (y == NO_ZOOM) {
 	// Rotation
-	glGraphWidget->getScene()->rotateScene(0,0,deltaX);
+	glMainWidget->getScene()->rotateScene(0,0,deltaX);
 	x = qMouseEv->x();
       }
       else {
@@ -143,7 +143,7 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
     }
-    glGraphWidget->draw();
+    glMainWidget->draw();
     return true;
   }
   return false;
@@ -166,14 +166,14 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
   }
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (qMouseEv->x() != x)
-      glGraphWidget->getScene()->translateCamera(qMouseEv->x()-x,0,0);
+      glMainWidget->getScene()->translateCamera(qMouseEv->x()-x,0,0);
     if (qMouseEv->y() != y)
-    glGraphWidget->getScene()->translateCamera(0,y-qMouseEv->y(),0);
+    glMainWidget->getScene()->translateCamera(0,y-qMouseEv->y(),0);
     x = qMouseEv->x();
     y = qMouseEv->y();
-    glGraphWidget->draw();
+    glMainWidget->draw();
     return true;
   }
   return false;
@@ -184,7 +184,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     if (((QMouseEvent *) e)->button() == Qt::LeftButton) {
       GWInteractor *currentMouse;
       // give focus so we can catch key events
-      ((GlGraphWidget *)widget)->setFocus();
+      ((GlMainWidget *)widget)->setFocus();
       if (((QMouseEvent *) e)->state() &
 #if defined(__APPLE__)
 	  Qt::AltButton
@@ -198,7 +198,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       else
 	currentMouse = new MouseMove();
       bool result = currentMouse->eventFilter(widget, e);
-      currentMouseID = ((GlGraphWidget *)widget)->pushInteractor(currentMouse);
+      currentMouseID = ((GlMainWidget *)widget)->pushInteractor(currentMouse);
       return result;
     }
     currentMouseID = GWInteractor::invalidID;
@@ -206,13 +206,13 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
   if (e->type() == QEvent::MouseButtonRelease &&
       currentMouseID != GWInteractor::invalidID) {
-    ((GlGraphWidget *)widget)->removeInteractor(currentMouseID);
+    ((GlMainWidget *)widget)->removeInteractor(currentMouseID);
     currentMouseID = GWInteractor::invalidID;
     return true;
   }
   if (e->type() == QEvent::KeyPress) {
     int delta = (((QKeyEvent *) e)->isAutoRepeat() ? 3 : 1);
-    GlGraphWidget *g = (GlGraphWidget *) widget;
+    GlMainWidget *g = (GlMainWidget *) widget;
     switch(((QKeyEvent *) e)->key()) {
     case Qt::Key_Left: g->getScene()->translateCamera(delta * 2,0,0); break;
     case Qt::Key_Right: g->getScene()->translateCamera(-1 * delta * 2,0,0); break;

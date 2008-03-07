@@ -11,7 +11,7 @@ endif
 endif
 
 lib_LTLIBRARIES = libtulip-qt4.la
-qtplugin_LTLIBRARIES = libPropertyWidgetPlugin.la libElementPropertiesWidgetPlugin.la libGlGraphWidgetPlugin.la libSGHierarchyWidgetPlugin.la libGWOverviewWidgetPlugin.la
+qtplugin_LTLIBRARIES = libPropertyWidgetPlugin.la libElementPropertiesWidgetPlugin.la libGlMainWidgetPlugin.la libSGHierarchyWidgetPlugin.la libGWOverviewWidgetPlugin.la
 
 INCLUDES = ${DLL_TULIP_QT} @GL_INCLUDES@ @TULIP_QT_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
@@ -26,20 +26,20 @@ qtplugindir = $(libdir)/tlp/designer
 
 libPropertyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libElementPropertiesWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libGlGraphWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libGlMainWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libGWOverviewWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 libSGHierarchyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
 
 libPropertyWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 libElementPropertiesWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
-libGlGraphWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
+libGlMainWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 libGWOverviewWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 libSGHierarchyWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 
 libSGHierarchyWidgetPlugin_la_SOURCES = SGHierarchyWidgetPlugin.cpp
 nodist_libSGHierarchyWidgetPlugin_la_SOURCES = moc_SGHierarchyWidgetPlugin.cpp
-libGlGraphWidgetPlugin_la_SOURCES = GlGraphWidgetPlugin.cpp
-nodist_libGlGraphWidgetPlugin_la_SOURCES = moc_GlGraphWidgetPlugin.cpp 
+libGlMainWidgetPlugin_la_SOURCES = GlMainWidgetPlugin.cpp
+nodist_libGlMainWidgetPlugin_la_SOURCES = moc_GlMainWidgetPlugin.cpp 
 libGWOverviewWidgetPlugin_la_SOURCES = GWOverviewWidgetPlugin.cpp
 nodist_libGWOverviewWidgetPlugin_la_SOURCES = moc_GWOverviewWidgetPlugin.cpp 
 libElementPropertiesWidgetPlugin_la_SOURCES = ElementPropertiesWidgetPlugin.cpp
@@ -49,7 +49,7 @@ nodist_libPropertyWidgetPlugin_la_SOURCES = moc_PropertyWidgetPlugin.cpp
 
 BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
-	moc_GlGraphWidget.cpp \
+	moc_GlMainWidget.cpp \
 	moc_PropertyWidget.cpp \
 	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
@@ -70,7 +70,7 @@ nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
 dist_libtulip_qt4_la_SOURCES = \
 	TulipTableWidget.cpp \
-	GlGraphWidget.cpp \
+	GlMainWidget.cpp \
 	PropertyWidget.cpp \
 	ElementPropertiesWidgetUI.cpp \
 	ElementPropertiesWidget.cpp \

@@ -15,9 +15,10 @@
 
 #include "tulip/GlSceneVisitor.h"
 
-#include "tulip/GlGraphInputData.h"
-
 namespace tlp {
+
+  class GlGraphInputData;
+
   /** \brief Visitor to collect boundingBox of all GlEntities
    *
    * Visitor to collect boundingBox of all GlEntities

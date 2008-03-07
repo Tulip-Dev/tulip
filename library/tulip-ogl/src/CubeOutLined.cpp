@@ -11,6 +11,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlDisplayListManager.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 

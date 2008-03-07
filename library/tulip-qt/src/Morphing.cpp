@@ -1,4 +1,4 @@
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -57,7 +57,7 @@ namespace tlp {
     glWidget = 0;
   }
   //===========================================================
-  bool Morphing::init( GlGraphWidget * outGlgw, 
+  bool Morphing::init( GlMainWidget * outGlgw, 
 		       GraphState * inG0, 
 		       GraphState * inG1) {
     assert( outGlgw );
@@ -102,7 +102,7 @@ namespace tlp {
     return true;
   }
   //===========================================================
-  bool Morphing::start(GlGraphWidget * outGlgw) {
+  bool Morphing::start(GlMainWidget * outGlgw) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     tid = startTimer(1000/MORPHING_MAX_FPS);
     frameCpt = 0;
@@ -126,7 +126,7 @@ namespace tlp {
     return float(frameCpt) / dt;
   }
   //===========================================================
-  void Morphing::interpolate( GlGraphWidget * outGlgw, float inT) {
+  void Morphing::interpolate( GlMainWidget * outGlgw, float inT) {
     frameCpt++;
 
     assert( outGlgw );

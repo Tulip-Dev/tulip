@@ -37,17 +37,10 @@ namespace tlp {
 
     for (;it != convexHullIdxs.end(); ++it) {
       points.push_back(_points[*it]);
+      boundingBox.check(_points[*it]);
     }
     _points = points;
   }
-}
-
-BoundingBox GlConvexHull::getBoundingBox() {
-  BoundingBox bb;
-  for(vector<tlp::Coord>::iterator it= _points.begin();it!=_points.end();++it) {
-    bb.check(*it);
-  }
-  return bb;
 }
 
 void GlConvexHull::draw(float lod,Camera *camera) {
@@ -311,7 +304,15 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 			 
   return convexHulls;
 }
+  //====================================================
+  void GlConvexHull::translate(const Coord& mouvement){
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
 
+    for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it){
+      (*it)+=mouvement;
+    }
+  }
   //====================================================
   void GlConvexHull::getXML(xmlNodePtr rootNode){
     xmlNodePtr dataNode= NULL;

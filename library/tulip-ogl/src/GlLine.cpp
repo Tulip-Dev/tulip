@@ -63,6 +63,15 @@ namespace tlp {
     glTest(__PRETTY_FUNCTION__);
   }
   //=====================================================
+  void GlLine::translate(const Coord& mouvement){
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
+    
+    for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it) {
+      (*it)+=mouvement;
+    }
+  }
+  //=====================================================
   void GlLine::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 

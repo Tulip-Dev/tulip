@@ -9,7 +9,7 @@
 
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"
-#include "tulip/GlGraphWidget.h"
+#include "tulip/GlMainWidget.h"
 
 class QWidget;
 
@@ -32,10 +32,10 @@ namespace tlp {
 					 QWidget *parent = NULL);
 
   /**
-   * Create a main layout in GlGraphWidget and display the graph on it 
+   * Create a main layout in GlMainWidget and display the graph on it 
    */
 
-  TLP_QT_SCOPE void openGraphOnGlGraphWidget(Graph *graph,DataSet *dataSet,GlGraphWidget *glGraphWidget);
+  TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
 
 }
 

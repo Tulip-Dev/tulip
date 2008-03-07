@@ -18,6 +18,8 @@
 #include "tulip/OcclusionTest.h"
 #include "tulip/TextRenderer.h"
 #include "tulip/GlTLPFeedBackBuilder.h"
+#include "tulip/GlSceneVisitor.h"
+#include "tulip/GlGraphRenderingParameters.h"
 
 #include <iostream>
 
@@ -31,6 +33,10 @@ namespace tlp {
     node n=node(id);
     //cout << data->elementLayout->getNodeValue(n) << endl;
     return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n),data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n));
+  }
+
+  void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
+    visitor->visit(this);
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {

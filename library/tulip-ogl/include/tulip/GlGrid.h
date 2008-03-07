@@ -63,6 +63,12 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
    * Accessor in writing to the dimensions to display.
    */
   void setDisplayDim(bool displayDim[3]);
+
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
+
   /**
    * Get the data in XML form
    */

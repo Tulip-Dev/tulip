@@ -134,6 +134,15 @@ namespace tlp {
     glTest(__PRETTY_FUNCTION__);
   }
   //===========================================================
+  void GlPolygon::translate(const Coord& mouvement) {
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
+    
+    for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it){
+      (*it)+=mouvement;
+    }
+  } 
+  //===========================================================
   void GlPolygon::getXML(xmlNodePtr rootNode) {
 
     GlXMLTools::createProperty(rootNode, "type", "GlPolygon");

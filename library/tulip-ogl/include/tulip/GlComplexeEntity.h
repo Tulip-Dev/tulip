@@ -13,15 +13,16 @@
 
 #include <vector>
 
+#include <tulip/BoundingBox.h>
+
 #include "tulip/GlEntity.h"
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/Camera.h"
-#include "tulip/GlGraphInputData.h"
 
 namespace tlp {
 
   class OcclusionTest;
   class TextRenderer;
+  class GlGraphInputData;
+  class Camera;
 
   /** \brief Virtual class used by GlNode, GlMetaNode and GlEdge 
    *

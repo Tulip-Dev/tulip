@@ -14,7 +14,7 @@
 
 #define	MORPHING_MAX_FPS	30
 
-class GlGraphWidget;
+class GlMainWidget;
 
 namespace tlp {
 
@@ -34,7 +34,7 @@ namespace tlp {
     std::vector<std::vector<Coord> > curInterpolation;
     std::vector<Coord> interpolateCenters;
 
-    GraphState( GlGraphWidget * glgw );
+    GraphState( GlMainWidget * glgw );
     ~GraphState();
     static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );
     void EdgeEnds( Coord & outC0, Coord & outC1, edge e );
@@ -43,11 +43,11 @@ namespace tlp {
   class TLP_QT_SCOPE Morphing : public QObject {
   public:
     Morphing();
-    bool init(GlGraphWidget * outGlgw, 
+    bool init(GlMainWidget * outGlgw, 
 	      GraphState * inG0, 
 	      GraphState * inG1);
-    void interpolate( GlGraphWidget *, float inT);
-    bool start(GlGraphWidget * outGlgw);
+    void interpolate( GlMainWidget *, float inT);
+    bool start(GlMainWidget * outGlgw);
     
   protected:
     void timerEvent( QTimerEvent * );
@@ -57,7 +57,7 @@ namespace tlp {
   private: 
     GraphState *g0, *g1;
     LayoutProperty *e0, *e1;
-    GlGraphWidget *glWidget;
+    GlMainWidget *glWidget;
     QTime qt0;
     int frameCpt; 
     int tid;

@@ -76,6 +76,12 @@ namespace tlp {
     return (*ite).second;
   }
   //============================================================
+  void GlComposite::translate(const Coord &mouvement) {
+    for(ITM it = elements.begin(); it != elements.end(); ++it) {
+      (*it).second->translate(mouvement);
+    }
+  }
+  //============================================================
   void GlComposite::getXML(xmlNodePtr rootNode) {
     xmlNodePtr node=NULL;
     xmlNodePtr dataNode=NULL;

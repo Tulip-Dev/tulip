@@ -28,7 +28,15 @@ namespace tlp {
       (*it).draw(lod,camera);
     }
   }
-  
+  //=====================================================
+  void GlMultiPolygon::translate(const Coord& mouvement) {
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
+    
+    for(vector<GlPolygon>::iterator it=polygons.begin();it!=polygons.end();++it) {
+      (*it).translate(mouvement);
+    }
+  }
   //=====================================================
   void GlMultiPolygon::getXML(xmlNodePtr rootNode) {
   }

@@ -8,7 +8,6 @@
 #include <tulip/Coord.h>
 
 #include "tulip/GlSimpleEntity.h"
-#include "tulip/GlComposite.h"
 
 namespace tlp {
 
@@ -37,11 +36,6 @@ namespace tlp {
     std::string getName() {return _name;}
     
     /**
-     * Return the boundingBox of the convexHull
-     */
-    virtual BoundingBox getBoundingBox();
-    
-    /**
      * Draw the convexHull
      */
     virtual void draw(float lod,Camera *camera);
@@ -55,6 +49,11 @@ namespace tlp {
 								     bool deduceFromChilds = true,
 								     Graph *root = 0,
 								     unsigned int depth = 0);
+
+    /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
     
     /**
      * Get the data in XML form

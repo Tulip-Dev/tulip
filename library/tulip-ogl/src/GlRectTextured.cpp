@@ -77,6 +77,18 @@ namespace tlp {
     GlTextureManager::getInst().desactivateTexture();
   }
   //===========================================================
+  void GlRectTextured::translate(const Coord& mouvement) {
+    if(!inPercent) {
+      boundingBox.first+=mouvement;
+      boundingBox.second+=mouvement;
+      
+      top+=mouvement[1];
+      bottom+=mouvement[1];
+      left+=mouvement[0];
+      right+=mouvement[0];
+    }
+  }
+  //===========================================================
   void GlRectTextured::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 

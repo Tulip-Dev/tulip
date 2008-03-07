@@ -297,6 +297,14 @@ namespace tlp {
     }
   }
   //====================================================
+  float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& viewport) {
+    if(!(bb.first[0]<viewport[0]+viewport[2] && bb.second[0]>viewport[0] && bb.first[1]<viewport[1]+viewport[3] && bb.second[1]>viewport[1])){
+      return -1.;
+    }else{
+      return 1.;
+    }
+  }
+  //====================================================
   void solidCone() {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

@@ -34,7 +34,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/PropertyWidget.h>
 #include <tulip/SGHierarchyWidget.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
 #include <tulip/hash_string.h>
 
@@ -111,7 +111,7 @@ void PropertyDialog::setAllValue() {
   setAllButton->setDown(false);
 }
 //=================================================
-void PropertyDialog::setGlGraphWidget(GlGraphWidget *gw) {
+void PropertyDialog::setGlMainWidget(GlMainWidget *gw) {
   glWidget = gw;
   Graph* sg = NULL;
   if (gw)
@@ -162,7 +162,7 @@ void PropertyDialog::newProperty() {
 	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
 	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
-	setGlGraphWidget(glWidget);
+	setGlMainWidget(glWidget);
       }
   }
 }
@@ -199,7 +199,7 @@ void PropertyDialog::removeProperty() {
   if (editedProperty==0) return;
   if(graph->existLocalProperty(editedPropertyName)) {
     graph->delLocalProperty(editedPropertyName);
-    setGlGraphWidget(glWidget);
+    setGlMainWidget(glWidget);
     editedProperty=0;
   }
   else
@@ -289,7 +289,7 @@ void PropertyDialog::cloneProperty() {
       if (typeid((*editedProperty)) == typeid(SizeProperty))
 	{*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
     }
-    setGlGraphWidget(glWidget);
+    setGlMainWidget(glWidget);
     Observable::unholdObservers();
   }
 }

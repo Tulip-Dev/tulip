@@ -1,6 +1,6 @@
 nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
-	tulip/GlGraphWidget.h \
+	tulip/GlMainWidget.h \
 	tulip/GWInteractor.h \
 	tulip/MouseBoxZoomer.h\
 	tulip/MouseEdgeBuilder.h\
@@ -24,7 +24,7 @@ nobase_include_HEADERS = \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
 	tulip/SGHierarchyWidgetQt3.h \
-	tulip/GlGraphWidgetPlugin.h \
+	tulip/GlMainWidgetPlugin.h \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h
@@ -44,7 +44,7 @@ BUILT_SOURCES = \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \
-	tulip/glgraphwidget.h \
+	tulip/glmainwidget.h \
 	tulip/layermanagerwidget.h \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
@@ -53,7 +53,7 @@ BUILT_SOURCES = \
 tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@
 
-tulip/glgraphwidget.h : tulip/GlGraphWidget.h
+tulip/glmainwidget.h : tulip/GlMainWidget.h
 	cp -f $< $@
 
 tulip/layermanagerwidget.h : tulip/LayerManagerWidget.h

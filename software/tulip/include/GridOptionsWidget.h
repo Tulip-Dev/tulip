@@ -15,7 +15,7 @@
 
 #include "GridOptionsData.h"
 
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/LayerManagerWidget.h>
 #include <tulip/GlGrid.h>
 
@@ -39,7 +39,7 @@ class GridOptionsWidget : public GridOptionsData {
   Q_OBJECT
 
  protected:
-  GlGraphWidget *glGraphWidget; /**< The considered GlGraphWidget */
+  GlMainWidget *glMainWidget; /**< The considered GlMainWidget */
   LayerManagerWidget *layerWidget; /**< The considered LayerManagerWidget */
   tlp::GlGrid *grid; /**< The considered GlADGrid */
 
@@ -55,9 +55,9 @@ class GridOptionsWidget : public GridOptionsData {
   ~GridOptionsWidget();
 
   /**
-   * Function used to define on which GlGraphWidget we are working
+   * Function used to define on which GlMainWidget we are working
    */
-  void setCurrentGraphWidget(GlGraphWidget *graphWidget);
+  void setCurrentMainWidget(GlMainWidget *graphWidget);
 
   /**
    * Function used to define on which LayerManagerWidget we are working

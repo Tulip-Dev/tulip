@@ -11,12 +11,15 @@
 #ifndef Tulip_GLNODE_H
 #define Tulip_GLNODE_H
 
+#include <tulip/Color.h>
+
 #include "tulip/GlComplexeEntity.h"
 
 namespace tlp {
 
   class OcclusionTest;
   class TextRenderer;
+  class GlSceneVisitor;
   
   class TLP_GL_SCOPE GlNode : public GlComplexeEntity{
   
@@ -24,9 +27,7 @@ namespace tlp {
 
     GlNode(unsigned int id):id(id) {}
 
-    virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
-    }
+    virtual void acceptVisitor(GlSceneVisitor *visitor);
 
     virtual BoundingBox getBoundingBox(GlGraphInputData* data);
 

@@ -19,7 +19,7 @@ namespace tlp {
 class PropertyInterface;
 }
 
-class GlGraphWidget;
+class GlMainWidget;
 
 class PropertyDialog : public PropertyDialogData
 { 
@@ -28,11 +28,11 @@ class PropertyDialog : public PropertyDialogData
 public:
   PropertyDialog(QWidget *parent = 0, const char *name = 0, bool modal = FALSE, WFlags fl = 0);
   ~PropertyDialog();
-  void setGlGraphWidget(GlGraphWidget *);
+  void setGlMainWidget(GlMainWidget *);
 
 private:
   tlp::Graph *graph;
-  GlGraphWidget *glWidget;
+  GlMainWidget *glWidget;
   tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;

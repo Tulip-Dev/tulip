@@ -25,7 +25,7 @@ public:
   MouseSelector(Qt::MouseButton button = Qt::LeftButton,
 		Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseSelector() {}
-  bool draw(GlGraphWidget *);
+  bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   GWInteractor *clone() { return new MouseSelector(mButton, kModifier); }
 };

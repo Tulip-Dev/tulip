@@ -119,6 +119,11 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   Size* getSize() const;
 
   /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
+
+  /**
    * Function to export data in XML
    */
   virtual void getXML(xmlNodePtr rootNode);

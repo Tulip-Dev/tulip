@@ -17,9 +17,9 @@ namespace tlp {
   public:
 
     MouseEdgeBendEditor();
-    ~MouseEdgeBendEditor() {if(glGraphWidget)glGraphWidget->getScene()->getSelectionLayer()->deleteGlEntity("EdgeBendEditorComposite");}
-    bool compute(GlGraphWidget *glGraphWidget);
-    bool draw(GlGraphWidget *);
+    ~MouseEdgeBendEditor() {if(glMainWidget)glMainWidget->getScene()->getSelectionLayer()->deleteGlEntity("EdgeBendEditorComposite");}
+    bool compute(GlMainWidget *glMainWidget);
+    bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
     GWInteractor *clone() { return new MouseEdgeBendEditor(); }
 
@@ -28,7 +28,7 @@ namespace tlp {
     enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
     Graph *_graph;
-    GlGraphWidget* glGraphWidget;
+    GlMainWidget* glMainWidget;
     LayoutProperty *_layout;
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
@@ -37,7 +37,7 @@ namespace tlp {
     SizeProperty *_copySizes;
     DoubleProperty *_copyRotation;
 
-    void initProxies(GlGraphWidget *glGraphWidget);
+    void initProxies(GlMainWidget *glMainWidget);
     void saveInfo();
     void restoreInfo();
     void initEdition();
@@ -57,11 +57,11 @@ namespace tlp {
     edge mEdge;
     Coord start, end;
     std::string theCircle;
-    bool belong(Coord, Coord, Coord, GlGraphWidget*);
-    bool computeBendsCircles(GlGraphWidget*);
-    void mMouseTranslate(double, double, GlGraphWidget*);
+    bool belong(Coord, Coord, Coord, GlMainWidget*);
+    bool computeBendsCircles(GlMainWidget*);
+    void mMouseTranslate(double, double, GlMainWidget*);
     void mMouseDelete();
-    void mMouseCreate(double, double, GlGraphWidget*);
+    void mMouseCreate(double, double, GlMainWidget*);
   };
 
 }

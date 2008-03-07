@@ -42,7 +42,7 @@ class GlLayer;
 
 class SGHierarchyWidget;
 class ElementPropertiesWidget;
-class GlGraphWidget;
+class GlMainWidget;
 class TulipStats;
 class PropertyDialog;
 class QWorkspace;
@@ -81,7 +81,7 @@ protected:
   QWidget *aboutWidget;
   QDockWindow *overviewDock;
   QDockWindow *tabWidgetDock;
-  GlGraphWidget *glWidget;
+  GlMainWidget *glWidget;
   PropertyDialog *propertiesWidget;
   ElementPropertiesWidget *eltProperties;
   tlp::Graph * copyCutPasteGraph;
@@ -184,7 +184,7 @@ protected slots:
   void new3DView();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
-  void glGraphWidgetClosing(GlGraphWidget *, QCloseEvent *);
+  void glMainWidgetClosing(GlMainWidget *, QCloseEvent *);
   void group();  
   void gridOptions();
   void isAcyclic();
@@ -202,11 +202,11 @@ protected slots:
   void makeRooted();
 
 private:
-  void deleteElement(unsigned int , unsigned int , GlGraphWidget *);
-  void selectElement(unsigned int , unsigned int , GlGraphWidget *, bool);
+  void deleteElement(unsigned int , unsigned int , GlMainWidget *);
+  void selectElement(unsigned int , unsigned int , GlMainWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlGraphWidget *newOpenGlView(tlp::Graph *graph,const QString &);
-  void constructDefaultScene(GlGraphWidget *glWidget);
+  GlMainWidget *newOpenGlView(tlp::Graph *graph,const QString &);
+  void constructDefaultScene(GlMainWidget *glWidget);
   std::string newName();
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();

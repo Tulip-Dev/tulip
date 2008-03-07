@@ -20,6 +20,9 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
+  /**
+   * Create a rectangle with a texture
+   */
   class TLP_GL_SCOPE GlRectTextured : public GlSimpleEntity {
 
   public:
@@ -31,11 +34,25 @@ namespace tlp {
     
     virtual ~GlRectTextured() {}
 
+    /**
+     * Reload data of the rectangle
+     */
     void reloadData();
 
+    /**
+     * Return the bounding box
+     */
     virtual BoundingBox getBoundingBox();
 
+    /**
+     * Draw the rectangle
+     */
     virtual void draw(float lod,Camera *camera);
+
+    /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
 
     /**
      * Function to export data in XML

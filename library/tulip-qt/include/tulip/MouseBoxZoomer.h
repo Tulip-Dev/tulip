@@ -25,7 +25,7 @@ public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
 		 Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseBoxZoomer();
-  bool draw(GlGraphWidget *);
+  bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   GWInteractor *clone() { return new MouseBoxZoomer(mButton, kModifier); }
 private:

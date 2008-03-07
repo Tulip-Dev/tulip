@@ -10,7 +10,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ForEach.h>
 
@@ -23,7 +23,7 @@ using namespace tlp;
 using namespace std;
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor() 
-  :glGraphWidget(NULL){
+  :glMainWidget(NULL){
   operation = NONE_OP;
   _copyLayout = 0;
   _copySizes = 0;
@@ -45,9 +45,9 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    initProxies(glGraphWidget);
-    bool hasSelection = computeBendsCircles(glGraphWidget);
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    initProxies(glMainWidget);
+    bool hasSelection = computeBendsCircles(glMainWidget);
 				
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
@@ -77,10 +77,10 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	//int newY = qMouseEv->y();
 	//cout << "C R E A T E   C A L L : " << endl;
 	//cout << "===================================" << endl;
-	mMouseCreate(editPosition[0], editPosition[1], glGraphWidget);
+	mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
       } else {
 	bool circleSelected =
-	  glGraphWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, glGraphWidget->getScene()->getSelectionLayer());
+	  glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, glMainWidget->getScene()->getSelectionLayer());
 	if (circleSelected) {
 	  theCircle=circleString.findKey((GlSimpleEntity*)(select[0]));
 	  //(&circles[i])->fcolor(0) = Color(40,255,40,200);
@@ -98,7 +98,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	  else
 	    {
 	      operation = TRANSLATE_OP;
-	      glGraphWidget->setCursor(QCursor(Qt::SizeAllCursor));
+	      glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
 	      initEdition();
 	      mode = COORD;
 	    }
@@ -111,30 +111,30 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     }
     case Qt::MidButton :
       undoEdition();
-      glGraphWidget->setCursor(QCursor(Qt::ArrowCursor));
+      glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;
     default: return false;
     }
-    glGraphWidget->redraw();
+    glMainWidget->redraw();
     return true;
   }
   if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton && operation != NONE_OP) {
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
-    glGraphWidget->setCursor(QCursor(Qt::ArrowCursor));
-    glGraphWidget->redraw();
+    glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
+    glMainWidget->redraw();
     return true;
   }
   if  (e->type() == QEvent::MouseMove && ((QMouseEvent *) e)->state() & Qt::LeftButton && operation != NONE_OP) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     int newX = qMouseEv->x();
     int newY = qMouseEv->y();
     //int i=0;
     //while(&circles[i] != select[0].second) i++;
     switch (operation) {
     case TRANSLATE_OP:
-      mMouseTranslate(newX, newY, glGraphWidget);
+      mMouseTranslate(newX, newY, glMainWidget);
       return true;
     case NONE_OP:
       cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
@@ -145,16 +145,16 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //========================================================================================
-bool MouseEdgeBendEditor::compute(GlGraphWidget *glGraphWidget) {
-  if (computeBendsCircles(glGraphWidget)) {
-    glGraphWidget->getScene()->getSelectionLayer()->addGlEntity(&circleString,"EdgeBendEditorComposite");
-    this->glGraphWidget=glGraphWidget;
+bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
+  if (computeBendsCircles(glMainWidget)) {
+    glMainWidget->getScene()->getSelectionLayer()->addGlEntity(&circleString,"EdgeBendEditorComposite");
+    this->glMainWidget=glMainWidget;
     return true;
   }
   return false;
 }
 //========================================================================================
-bool MouseEdgeBendEditor::draw(GlGraphWidget *glGraphWidget) {
+bool MouseEdgeBendEditor::draw(GlMainWidget *glMainWidget) {
   return true;
 }
 //========================================================================================
@@ -208,8 +208,8 @@ void MouseEdgeBendEditor::stopEdition() {
   delete _copyRotation; _copyRotation = 0;
 }
 //========================================================================================
-void MouseEdgeBendEditor::initProxies(GlGraphWidget *glGraphWidget) {
-  _graph     = glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
+  _graph     = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   _layout    = _graph->getProperty<LayoutProperty>("viewLayout");
   _selection = _graph->getProperty<BooleanProperty>("viewSelection");
   _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
@@ -217,28 +217,28 @@ void MouseEdgeBendEditor::initProxies(GlGraphWidget *glGraphWidget) {
 }
 //========================================================================================
 //Does the point p belong to the segment [u,v]? 
-bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlGraphWidget *glGraphWidget)
+bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMainWidget)
 {
-  int W = glGraphWidget->width();
-  int H = glGraphWidget->height();
-  Coord m=glGraphWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(u);
+  int W = glMainWidget->width();
+  int H = glMainWidget->height();
+  Coord m=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(u);
   m[0] = W - m[0];
   m[1] = H - m[1];
-  Coord n=glGraphWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(v);
+  Coord n=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(v);
   n[0] = W - n[0];
   n[1] = H - n[1];
   double mnDist = m.dist(n);
   double mpDist = m.dist(p);
   double pnDist = p.dist(n);
   return ((mpDist + pnDist) - mnDist)/mnDist < 1E-3;
-  /*int W = glGraphWidget->width();
-  int H = glGraphWidget->height();
-  Coord m=glGraphWidget->worldTo2DScreen(u);
+  /*int W = glMainWidget->width();
+  int H = glMainWidget->height();
+  Coord m=glMainWidget->worldTo2DScreen(u);
   //m[0] = (double)W - m[0];
   m[1] = (double)H - m[1];
   m[2] = 0;
   cout << PointType::toString(m) << endl;
-  Coord n=glGraphWidget->worldTo2DScreen(v);
+  Coord n=glMainWidget->worldTo2DScreen(v);
   //n[0] = (double)W - n[0];
   n[1] = (double)H - n[1];
   n[2] = 0;
@@ -250,14 +250,14 @@ bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlGraphWidget *glGra
   return(abs(mu)<=1); */
 }
 //========================================================================================
-void MouseEdgeBendEditor::mMouseTranslate(double newX, double newY, GlGraphWidget *glGraphWidget) {
+void MouseEdgeBendEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {
   // cerr << __PRETTY_FUNCTION__ << endl;
-initProxies(glGraphWidget);
+initProxies(glMainWidget);
 	
   Coord v0(0,0,0);
   Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
-  v0 = glGraphWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(v0);
-  v1 = glGraphWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(v1);
+  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(v0);
+  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(v1);
   v1 -= v0;
   //cout << "T R A N S L A T E : " << theCircle << endl;
   //cout << "===================================" << endl;
@@ -290,17 +290,17 @@ void MouseEdgeBendEditor::mMouseDelete()
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGraphWidget) {
-  Coord screenClick(glGraphWidget->width() - (double) x, (double) y, 0);
+void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainWidget) {
+  Coord screenClick(glMainWidget->width() - (double) x, (double) y, 0);
   //cout << PointType::toString(screenClick) << endl;
-  Coord worldLocation= glGraphWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(screenClick);
+  Coord worldLocation= glMainWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(screenClick);
   if(coordinates.empty())
     coordinates.push_back(worldLocation);
   else{
     Coord first=coordinates[0];
     Coord last=coordinates[coordinates.size() - 1];
-    bool firstSeg=belong(start, first, screenClick, glGraphWidget);
-    bool lastSeg=belong(end, last, screenClick, glGraphWidget);
+    bool firstSeg=belong(start, first, screenClick, glMainWidget);
+    bool lastSeg=belong(end, last, screenClick, glMainWidget);
     if(firstSeg)
       coordinates.insert(coordinates.begin(),worldLocation);
     if(lastSeg)
@@ -314,7 +314,7 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGrap
 	{
 	  first=last;
 	  last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-	  midSeg=belong(first, last, screenClick, glGraphWidget);
+	  midSeg=belong(first, last, screenClick, glMainWidget);
 	  if(midSeg){
 	    coordinates.insert(CoordIt, worldLocation);
 	    break;
@@ -331,8 +331,8 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlGraphWidget *glGrap
   Observable::unholdObservers();
 }
 //========================================================================================
-bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
-  initProxies(glGraphWidget);
+bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
+  initProxies(glMainWidget);
   Coord tmp;
   bool hasSelection=false;
   coordinates.clear();
@@ -340,8 +340,8 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
   select.clear();
   edge ite;
   circleString.reset(false);
-  //int W = glGraphWidget->width();
-  //int H = glGraphWidget->height();
+  //int W = glMainWidget->width();
+  //int H = glMainWidget->height();
   Iterator<edge> *itE=_graph->getEdges();
   while (itE->hasNext()) {
     ite=itE->next();
@@ -354,7 +354,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlGraphWidget *glGraphWidget) {
       vector<Coord>::iterator CoordIt=coordinates.begin();
       while(CoordIt!=coordinates.end()) {
 	tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-	tmp=glGraphWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
+	tmp=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
 	//tmp[1] = (double)H - tmp[1];
 	//tmp[0] = (double)W - tmp[0];
 	basicCircle.set(tmp, 5, 0.);

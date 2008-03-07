@@ -16,9 +16,6 @@
 #include <sstream>
 #include <vector>
 
-/*#include <libxml/tree.h>
-  #include <libxml/parser.h>*/
-
 #include <tulip/Array.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -28,25 +25,67 @@ typedef xmlNode * xmlNodePtr;
 
 namespace tlp {
 
+  /**
+   * static tools class use to store/load xml data 
+   */
   class GlSimpleEntity;
 
   class TLP_GL_SCOPE GlXMLTools {
 
   public :
 
+    /**
+     * Create a data and a child node in rootNode
+     */
     static void createDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode);
+    /**
+     * Create a data node in rootNode
+     */
     static void createDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
+    /**
+     * Create a child node with a given name in rootNode
+     */
     static void createChild(xmlNodePtr rootNode, const std::string &name, xmlNodePtr &childNode);
+    /**
+     * Create a property with name and value in rootNode
+     */
     static void createProperty(xmlNodePtr rootNode, const std::string &name, const std::string &value);
+    /**
+     * Add a text content in rootNode
+     */
     static void addContent(xmlNodePtr rootNode,const std::string &content);
+    /**
+     * Get the data and child node of rootNode
+     */
     static void getDataAndChildrenNodes(xmlNodePtr rootNode,xmlNodePtr &dataNode, xmlNodePtr &childrenNode);
+    /**
+     * Get the data node of rootNode
+     */
     static void getDataNode(xmlNodePtr rootNode,xmlNodePtr &dataNode);
+    /**
+     * Get the data node in the same level of rootNode
+     */
     static void getDataNodeDirectly(xmlNodePtr rootNode,xmlNodePtr &dataNode);
+    /**
+     * Get the data with name of dataNode
+     */
     static void getData(const std::string &name, xmlNodePtr dataNode, xmlNodePtr &outNode);
+    /**
+     * Get the property with name of node
+     */
     static std::string getProperty(const std::string &name, xmlNodePtr node);
+    /**
+     * Get the text content of the rootNode
+     */
     static void getContent(xmlNodePtr rootNode,std::string &content);
+    /**
+     * Create a GlEntity with the given name
+     */
     static GlSimpleEntity *createEntity(const std::string &name);
 
+    /**
+     * Get the XML output for a vector of Object
+     */
     template <typename Obj>
       static void getXML(xmlNodePtr rootNode,const std::string &name,const typename std::vector<Obj> &vect)
     {
@@ -64,6 +103,9 @@ namespace tlp {
       addContent(node,str.str());
     }
     
+    /**
+     * Set vector of Object with the given XML
+     */
     template <typename Obj>
       static void setWithXML(xmlNodePtr rootNode,const std::string &name,std::vector<Obj> &vect)
     {
@@ -81,6 +123,9 @@ namespace tlp {
       }
     }
     
+    /**
+     * Get the XML output for an Object
+     */
     template <typename Obj>
       static void getXML(xmlNodePtr rootNode, const std::string &name, const Obj &value)
     {
@@ -91,6 +136,9 @@ namespace tlp {
       addContent(node,str.str());
     }
     
+    /**
+     * Set an Object with the given XML
+     */
     template <typename Obj>
       static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value) {
       xmlNodePtr node;

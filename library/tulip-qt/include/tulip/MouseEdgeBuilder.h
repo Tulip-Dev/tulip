@@ -21,7 +21,7 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public GWInteractor
  public:
   MouseEdgeBuilder();
   ~MouseEdgeBuilder(){}
-  bool draw(GlGraphWidget *);
+  bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   GWInteractor *clone() { return new MouseEdgeBuilder(); }
 };

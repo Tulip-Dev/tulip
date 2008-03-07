@@ -12,6 +12,7 @@
 #include <tulip/GraphProperty.h>
 
 #include "tulip/GlyphManager.h"
+#include "tulip/GlGraphRenderingParameters.h"
 
 namespace tlp {
   

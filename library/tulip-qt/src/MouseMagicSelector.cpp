@@ -24,7 +24,7 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 
 #include <tulip/MouseMagicSelector.h>
 
@@ -40,19 +40,19 @@ bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     if (qMouseEv->button()==Qt::LeftButton) {
       QMouseEvent * qMouseEv = (QMouseEvent *) e;
-      GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+      GlMainWidget *glMainWidget = (GlMainWidget *) widget;
       x=qMouseEv->x();
       y=qMouseEv->y();
       ElementType type;
       node tmpNode;
       edge tmpEdge;
-      glGraphWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+      glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
       if (type != NODE) {
 	//cerr << __PRETTY_FUNCTION__ << ": type != NODE" << endl;
 	return true;
       }
       Observable::holdObservers();
-      graph=glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+      graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       BooleanProperty* selection=graph->getProperty<BooleanProperty>("viewSelection");
       BooleanProperty* visited=graph->getProperty<BooleanProperty>("tmpVisited");
       DoubleProperty* metric=graph->getProperty<DoubleProperty>("viewMetric");

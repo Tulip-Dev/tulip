@@ -15,12 +15,12 @@ using namespace std;
 using namespace tlp;
 
 /*******************************************************************/
-void importGraph(const string &filename, GlGraphWidget *glw) {
+void importGraph(const string &filename, GlMainWidget *glw) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph != 0) {
-    openGraphOnGlGraphWidget(newGraph,&dataSet,glw);
+    openGraphOnGlMainWidget(newGraph,&dataSet,glw);
   }
 }
 /*******************************************************************/
@@ -43,7 +43,7 @@ int main(int argc,char ** argv ){
   GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
   //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
-  GlGraphWidget MainWin;
+  GlMainWidget MainWin;
   
   MainApp.setMainWidget(&MainWin);
   MainWin.resize(640,480);

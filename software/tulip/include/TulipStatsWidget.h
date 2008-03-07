@@ -14,7 +14,7 @@
 #define _STATS_WIDGET_H_
 
 #include "TulipStatsData.h"
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/StatisticsNodeModule.h>
 #include <tulip/Color.h>
@@ -34,7 +34,7 @@
 #define GLAD_GRID              6
 
 
-class GlGraphWidget;
+class GlMainWidget;
 class SGHierarchyWidget;
 
 namespace tlp {
@@ -54,7 +54,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   Q_OBJECT
 
  protected:
-  GlGraphWidget *glGraphWidget; /**< A reference to the graphwidget we are currently editing */
+  GlMainWidget *glMainWidget; /**< A reference to the graphwidget we are currently editing */
   Graph *graph; /**< A reference to the graph we are considering */
   tlp::StatisticResults *statsResults; /**< A structure to store the results of the calculus */
   SGHierarchyWidget *clusterTreeWidget; /**< A reference to the clusterTree widget of the properties panel, to make an up to date */
@@ -155,14 +155,14 @@ class TulipStats : public TulipStatsData, public GraphObserver
   Graph* getGraph();
 
   /**
-   * Accessor in reading to the glGraphWidget.
+   * Accessor in reading to the glMainWidget.
    */
-  GlGraphWidget* getGlGraphWidget();
+  GlMainWidget* getGlMainWidget();
 
   /**
-   * Accessor in writing to the glGraphWidget.
+   * Accessor in writing to the glMainWidget.
    */
-  void setGlGraphWidget(GlGraphWidget *);
+  void setGlMainWidget(GlMainWidget *);
 
   /**
    * Overriden function used to notify when the graph is going to be destroyed :
@@ -172,7 +172,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
  private slots:
 
   /**
-   * Reset the panel or update the available metrics in function of the state of the glGraphWidget.
+   * Reset the panel or update the available metrics in function of the state of the glMainWidget.
    */
   void refreshMetricsSlot();
 

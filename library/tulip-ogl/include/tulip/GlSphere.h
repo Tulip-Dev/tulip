@@ -35,6 +35,11 @@ namespace tlp {
     virtual void draw(float lod,Camera *camera);
 
     /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);

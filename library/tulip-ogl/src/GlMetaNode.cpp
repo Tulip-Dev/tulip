@@ -17,6 +17,8 @@
 #include "tulip/DrawingTools.h"
 #include "tulip/GlEdge.h"
 #include "tulip/GlComplexeEntity.h"
+#include "tulip/GlGraphRenderingParameters.h"
+#include "tulip/Camera.h"
 
 #include <iostream>
 

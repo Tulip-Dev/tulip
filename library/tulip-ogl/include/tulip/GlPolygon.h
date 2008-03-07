@@ -61,6 +61,11 @@ namespace tlp {
     void setOutlineMode(const bool);
 
     /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
+
+    /**
      * Function to export data and type in XML
      */
     virtual void getXML(xmlNodePtr rootNode);

@@ -12,7 +12,7 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 
 #include <tulip/MouseSelector.h>
 
@@ -29,7 +29,7 @@ MouseSelector::MouseSelector(Qt::MouseButton button,
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (qMouseEv->button()== mButton &&
 	(kModifier == Qt::NoModifier ||
 	 ((QMouseEvent *) e)->state() & kModifier)) {
@@ -39,14 +39,14 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	w = 0;
 	h = 0;
 	started = true;
-	glGraphWidget->setMouseTracking(true);
-	graph=glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+	glMainWidget->setMouseTracking(true);
+	graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       }
       else {
-	if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+	if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
 	  graph = 0;
 	  started = false;
-	  glGraphWidget->setMouseTracking(false);
+	  glMainWidget->setMouseTracking(false);
 	  return false;
 	}
       }
@@ -54,8 +54,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     }
     if (qMouseEv->button()==Qt::MidButton){
       started = false;
-      glGraphWidget->setMouseTracking(false);
-      glGraphWidget->redraw();
+      glMainWidget->setMouseTracking(false);
+      glMainWidget->redraw();
       return true;
     }
   }
@@ -64,35 +64,35 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
        (kModifier == Qt::NoModifier ||
 	((QMouseEvent *) e)->state() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
-      glGraphWidget->setMouseTracking(false);
+      glMainWidget->setMouseTracking(false);
     }
     if (started){
-      if ((qMouseEv->x()>0) && (qMouseEv->x()<glGraphWidget->width()))
+      if ((qMouseEv->x()>0) && (qMouseEv->x()<glMainWidget->width()))
 	w = qMouseEv->x() - x;
-      if ((qMouseEv->y()>0) && (qMouseEv->y()<glGraphWidget->height()))
+      if ((qMouseEv->y()>0) && (qMouseEv->y()<glMainWidget->height()))
 	h = qMouseEv->y() - y;
-      glGraphWidget->redraw();
+      glMainWidget->redraw();
       return true;
     }
     return false;
   }
   if  (e->type() == QEvent::MouseButtonRelease) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlGraphWidget *glGraphWidget = (GlGraphWidget *) widget;
-    if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
-      glGraphWidget->setMouseTracking(false);
+      glMainWidget->setMouseTracking(false);
       return false;
     }
     if (started) {
-      glGraphWidget->setMouseTracking(false);
+      glMainWidget->setMouseTracking(false);
       Observable::holdObservers();
-      BooleanProperty* selection=glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
+      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
       bool boolVal = true; // add to selection
       if (qMouseEv->stateAfter() != Qt::ShiftButton) {
 	if (qMouseEv->stateAfter() !=
@@ -111,7 +111,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	node tmpNode;
 	edge tmpEdge;
 	ElementType type;
-	bool result = glGraphWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+	bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
 	if (result){
 	  switch(type) {
 	  case NODE: selection->setNodeValue(tmpNode, boolVal); break;
@@ -129,7 +129,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	  h *= -1;
 	  y -= h;
 	}
-	glGraphWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
+	glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
 	vector<node>::const_iterator it;
 	for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
 	  selection->setNodeValue(*it, boolVal);
@@ -140,7 +140,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
       started = false;
-      glGraphWidget->redraw();
+      glMainWidget->redraw();
       Observable::unholdObservers();
       return true;
     }
@@ -148,19 +148,19 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //==================================================================
-bool MouseSelector::draw(GlGraphWidget *glGraphWidget){
+bool MouseSelector::draw(GlMainWidget *glMainWidget){
   if (!started) return false;
-  if (glGraphWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+  if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
     graph = 0;
     started = false;
-    glGraphWidget->setMouseTracking(false);
+    glMainWidget->setMouseTracking(false);
   }
-  float yy = glGraphWidget->height() - y;
+  float yy = glMainWidget->height() - y;
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity ();
-  gluOrtho2D (0.0, (GLdouble) glGraphWidget->width(), 0.0, (GLdouble) glGraphWidget->height());
+  gluOrtho2D (0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height());
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

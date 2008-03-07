@@ -22,7 +22,7 @@ private:
 public:
   MouseEdgeSelector();
   ~MouseEdgeSelector(){}
-  bool draw(GlGraphWidget *);
+  bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   GWInteractor *clone() { return new MouseEdgeSelector(); }
 };

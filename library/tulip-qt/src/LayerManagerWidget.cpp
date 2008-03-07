@@ -21,10 +21,10 @@ LayerManagerWidget::LayerManagerWidget(QWidget* parent,
 LayerManagerWidget::~LayerManagerWidget() {
 }
 //=============================================================================
-void LayerManagerWidget::attachGraphWidget(GlGraphWidget* graphWidget) {
+void LayerManagerWidget::attachMainWidget(GlMainWidget* graphWidget) {
   treeWidget->invisibleRootItem()->takeChildren();
     
-  observedGraphWidget=graphWidget;
+  observedMainWidget=graphWidget;
 
   vector<pair<string, GlLayer*> >* layers=graphWidget->getScene()->getLayersList();
   if(layers->size()!=0) {
@@ -167,17 +167,17 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
   if(column==1) {
     if(!item->parent()) {
       //Layer
-      if(!observedGraphWidget->getScene()->getLayer(item->data(0,0).toString().toStdString()))
+      if(!observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString()))
 	return;
       if(item->checkState(column)==Qt::Unchecked){
-	observedGraphWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(false);
+	observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(false);
       }else{
-	observedGraphWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(true);
+	observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(true);
       }
     }else{
       QList<string> hierarchie;
       buildHierarchie(item,hierarchie);
-      GlLayer* layer=observedGraphWidget->getScene()->getLayer(hierarchie[0]);
+      GlLayer* layer=observedMainWidget->getScene()->getLayer(hierarchie[0]);
       if(!layer)
 	return;
       GlSimpleEntity* entity=layer->getComposite();
@@ -217,7 +217,7 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
   }else{
     QList<string> hierarchie;
     buildHierarchie(item,hierarchie);
-    GlLayer* layer=observedGraphWidget->getScene()->getLayer(hierarchie[0]);
+    GlLayer* layer=observedMainWidget->getScene()->getLayer(hierarchie[0]);
     GlSimpleEntity* entity=layer->getComposite();
     bool isGraphComposite=false;
     for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
@@ -256,7 +256,7 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
     }
   }
     
-  observedGraphWidget->draw();
+  observedMainWidget->draw();
 }
 //=============================================================================
 void LayerManagerWidget::buildHierarchie(QTreeWidgetItem *item,QList<string>& hierarchie) {

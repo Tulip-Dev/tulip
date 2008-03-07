@@ -135,6 +135,15 @@ void GlQuad::draw(float lod, Camera *camera)
       */
 }
 //===========================================================
+void GlQuad::translate(const Coord& mouvement) {
+  boundingBox.first+=mouvement;
+  boundingBox.second+=mouvement;
+  
+  for(int i=0; i < N_QUAD_POINTS; i++) {
+    positions[i]+=mouvement;
+  }
+}
+//===========================================================
 void GlQuad::getXML(xmlNodePtr rootNode) {
   xmlNodePtr dataNode=NULL;
   

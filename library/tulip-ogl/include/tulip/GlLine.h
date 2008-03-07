@@ -43,6 +43,11 @@ namespace tlp {
     virtual Color& color(const unsigned int i);
 
     /**
+     * Translate entity
+     */
+    virtual void translate(const Coord& mouvement);
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);

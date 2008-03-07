@@ -15,7 +15,7 @@
 
 #include <QtGui/QButtonGroup>
 
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
 
@@ -31,7 +31,7 @@ public:
   LayerManagerWidget(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   ~LayerManagerWidget();
   
-  void attachGraphWidget(GlGraphWidget *graphWidget);
+  void attachMainWidget(GlMainWidget *graphWidget);
 						    
   void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
   void addComposite(tlp::GlComposite *composite,QTreeWidgetItem *parent);
@@ -47,7 +47,7 @@ protected slots:
 
 private:
 
-  GlGraphWidget* observedGraphWidget;
+  GlMainWidget* observedMainWidget;
  
 };
 /*@}*/

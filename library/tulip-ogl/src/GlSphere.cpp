@@ -45,7 +45,13 @@ namespace tlp {
     GlTextureManager::getInst().desactivateTexture();
     glPopMatrix();
   }
-
+  //===========================================================
+  void GlSphere::translate(const Coord& mouvement) {
+    boundingBox.first+=mouvement;
+    boundingBox.second+=mouvement;
+    
+    position+=mouvement;
+  }
   //===========================================================
   void GlSphere::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;

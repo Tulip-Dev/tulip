@@ -21,6 +21,9 @@
 #include "tulip/GlLayer.h"
 #include "tulip/GlGraphComposite.h"
 #include "tulip/GlSelectSceneVisitor.h"
+#include "tulip/GlDisplayListManager.h"
+#include "tulip/GlyphManager.h"
+#include "tulip/GlTextureManager.h"
 
 namespace tlp {
 

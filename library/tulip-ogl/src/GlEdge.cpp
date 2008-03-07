@@ -21,6 +21,9 @@
 #include "tulip/OcclusionTest.h"
 #include "tulip/TextRenderer.h"
 #include "tulip/GlTLPFeedBackBuilder.h"
+#include "tulip/GlSceneVisitor.h"
+#include "tulip/GlGraphRenderingParameters.h"
+#include "tulip/Camera.h"
 
 #include <iostream>
 
@@ -76,6 +79,10 @@ namespace tlp {
 
     //cout << bb.first << " * " << bb.second << endl;
     return bb;
+  }
+
+  void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
+    visitor->visit(this);
   }
 
   void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {

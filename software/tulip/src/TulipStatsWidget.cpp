@@ -41,7 +41,7 @@ using namespace std;
 
 namespace tlp
 {
-  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glGraphWidget(0), graph(0)
+  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glMainWidget(0), graph(0)
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 
@@ -118,14 +118,14 @@ namespace tlp
     return graph;
   }
 
-  GlGraphWidget* TulipStats::getGlGraphWidget()
+  GlMainWidget* TulipStats::getGlMainWidget()
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
     //  cout << " ...[END]" << endl;
-    return glGraphWidget;
+    return glMainWidget;
   }
 
-  void TulipStats::setGlGraphWidget(GlGraphWidget *g)
+  void TulipStats::setGlMainWidget(GlMainWidget *g)
   {
     // cout << "[START]..." << __PRETTY_FUNCTION__ ;
     if (graph != 0)
@@ -133,7 +133,7 @@ namespace tlp
 
     resetComposite(true);
 
-    glGraphWidget = g;
+    glMainWidget = g;
 
     if (g == 0)
       return;
@@ -289,31 +289,31 @@ namespace tlp
     //cout << "[START] ... " << __PRETTY_FUNCTION__;
 
     /*if (AverageDisplayCB->isChecked())
-      glGraphWidget->removeGlAugmentedDisplay(averagePoint);
+      glMainWidget->removeGlAugmentedDisplay(averagePoint);
 
     if (StdDeviationDisplayCB->isChecked())
-      glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
+      glMainWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
     if (AABBDisplayCB->isChecked())
-      glGraphWidget->removeGlAugmentedDisplay(AABB);
+      glMainWidget->removeGlAugmentedDisplay(AABB);
 
     if (LinearDisplayCB->isChecked())
-      glGraphWidget->removeGlAugmentedDisplay(linearRegression);
+      glMainWidget->removeGlAugmentedDisplay(linearRegression);
 
     if (EigenDisplayCB->isChecked())
       {
 	for(int i=0; i < 3; i++)
-	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]);
+	  glMainWidget->removeGlAugmentedDisplay(eigenVectors[i]);
       }
 
     if (resetGlComposite)
       {
 	if (DisplayCPCB->isChecked())
-	  glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+	  glMainWidget->removeGlAugmentedDisplay(clusteringPlane);
 	  }*/
   
-    /*  if (glGraphWidget != 0 && glGraphWidget != NULL)
-	glGraphWidget->UpdateGL();*/
+    /*  if (glMainWidget != 0 && glMainWidget != NULL)
+	glMainWidget->UpdateGL();*/
 
     //cout << " ...[END]" << endl;
   }
@@ -423,7 +423,7 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    //glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    //glMainWidget->removeGlAugmentedDisplay(clusteringPlane);
     chDisplayClusteringPlaneSlot();
 
     // cout << " ...[END]" << endl;
@@ -435,7 +435,7 @@ namespace tlp
 
   void TulipStats::refreshMetricsSlot()
   {
-    if (glGraphWidget != 0)
+    if (glMainWidget != 0)
       updateMetrics();
     else
       reset();
@@ -680,10 +680,10 @@ namespace tlp
     else {
       *graph->getLocalProperty<LayoutProperty>("viewLayout") = dest;
     }
-    GlGraphRenderingParameters param = glGraphWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters param = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setDisplayEdges(false);
-    glGraphWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-    //glGraphWidget->centerScene();
+    glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    //glMainWidget->centerScene();
 
     if (dataSet != 0) 
       delete dataSet;
@@ -796,13 +796,13 @@ namespace tlp
 	averagePoint->setRenderState(GlAD_ZEnable, false);
 	averagePoint->setDisplayDim(disp);*/
 
-	//glGraphWidget->addGlAugmentedDisplay(averagePoint, "Average");
+	//glMainWidget->addGlAugmentedDisplay(averagePoint, "Average");
       }
     //else
-    //glGraphWidget->removeGlAugmentedDisplay(averagePoint);
+    //glMainWidget->removeGlAugmentedDisplay(averagePoint);
 
 
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     //  cout << " ...[END]" << endl;
   }
@@ -850,13 +850,13 @@ namespace tlp
 	stdDeviationBox->setRenderState(GlAD_Wireframe, true);
 	stdDeviationBox->setRenderState(GlAD_Solid, true);*/
 
-	//glGraphWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
+	//glMainWidget->addGlAugmentedDisplay(stdDeviationBox, "StdDeviation");
       }
     //else
-    //glGraphWidget->removeGlAugmentedDisplay(stdDeviationBox);
+    //glMainWidget->removeGlAugmentedDisplay(stdDeviationBox);
 
 
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -905,12 +905,12 @@ namespace tlp
 
 	// cout << "Solid ? " << AABB->getRenderState(GlAD_Solid) << endl;
 
-	//glGraphWidget->addGlAugmentedDisplay(AABB, "AABB");
+	//glMainWidget->addGlAugmentedDisplay(AABB, "AABB");
       }
     //else
-    //glGraphWidget->removeGlAugmentedDisplay(AABB);
+    //glMainWidget->removeGlAugmentedDisplay(AABB);
 
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -935,12 +935,12 @@ namespace tlp
 	/*linearRegression = new GlADLine(start, end, Color(255, 0, 255, 255), Color(255, 0, 255, 255), 1);
 	  linearRegression->setRenderState(GlAD_ZEnable, false);*/
 
-	//glGraphWidget->addGlAugmentedDisplay(linearRegression, "Regression");
+	//glMainWidget->addGlAugmentedDisplay(linearRegression, "Regression");
       }
     //else
-    //glGraphWidget->removeGlAugmentedDisplay(linearRegression);
+    //glMainWidget->removeGlAugmentedDisplay(linearRegression);
 
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -983,15 +983,15 @@ namespace tlp
 	    char key[13] = "EigenVector0";
 	    key[11] = n;
 
-	    //glGraphWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
+	    //glMainWidget->addGlAugmentedDisplay(eigenVectors[i], key);   
 	  }
       }
     /*else 
       {
 	for(int i=0; i < 3; i++)
-	  glGraphWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
+	  glMainWidget->removeGlAugmentedDisplay(eigenVectors[i]); 
 	  }*/
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     // cout << " ...[END]" << endl;
   }
@@ -1071,12 +1071,12 @@ namespace tlp
 	clusteringPlane->setRenderState(GlAD_ZEnable, false);
 	clusteringPlane->setRenderState(GlAD_Culling, false);*/
       
-	//glGraphWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
+	//glMainWidget->addGlAugmentedDisplay(clusteringPlane, "Clustering Plane");
       }
     //else
-    // glGraphWidget->removeGlAugmentedDisplay(clusteringPlane);
+    // glMainWidget->removeGlAugmentedDisplay(clusteringPlane);
 
-    glGraphWidget->draw();
+    glMainWidget->draw();
 
     // cout << " ...[END]" << endl;
   }

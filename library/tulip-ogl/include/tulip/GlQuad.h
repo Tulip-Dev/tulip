@@ -106,6 +106,11 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   Color* getColor(int idColor) const;
 
   /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
+
+  /**
    * Function to export data in XML
    */
   virtual void getXML(xmlNodePtr rootNode);

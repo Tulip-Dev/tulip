@@ -11,17 +11,8 @@
 #ifndef Tulip_GLGRAPHRENDERINGPARAMETERS_H
 #define Tulip_GLGRAPHRENDERINGPARAMETERS_H
 
-#ifndef NDEBUG
-#define TRACE_EXEC()	
-//	cerr << __PRETTY_FUNCTION__ << endl;
-#else
-#define TRACE_EXEC()
-#endif
-
-
 #include <string>
 #include <tulip/Color.h>
-#include <tulip/Camera.h>
 #include <tulip/Reflect.h>
 #include <tulip/DoubleProperty.h>
 

@@ -10,7 +10,7 @@
 #include <qlabel.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlyphManager.h>
 #include <qapplication.h>

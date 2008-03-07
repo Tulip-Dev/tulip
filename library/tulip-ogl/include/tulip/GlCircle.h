@@ -42,7 +42,7 @@ namespace tlp {
      * Accessor in writing to the center, the radius and the startAngle of the circle
      */
     void set(const Coord &center, float radius, float startAngle);
-    
+
     /**
      * Function to export data in XML
      */

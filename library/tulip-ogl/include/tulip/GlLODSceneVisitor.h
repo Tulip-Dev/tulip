@@ -18,21 +18,40 @@
 #include <tulip/BoundingBox.h>
 
 #include "tulip/GlSceneVisitor.h"
-#include "tulip/GlGraphInputData.h"
-#include "tulip/GlLODCalculator.h"
 
 namespace tlp {
 
+  class GlGraphInputData;
+  class GlLODCalculator;
+
+  /**
+   * Visitor to colect the Bounding box of entities in the scene
+   */
   class TLP_GL_SCOPE GlLODSceneVisitor : public GlSceneVisitor{
 
   public:
 
+    /**
+     * Basic constructor 
+     */
     GlLODSceneVisitor(GlLODCalculator *calculator,GlGraphInputData* inputData)
       : calculator(calculator),inputData(inputData) {}
 
+    /**
+     * Visit a GlSimpleEntity
+     */
     virtual void visit(GlSimpleEntity *entity);
+    /**
+     * Visit a node
+     */
     virtual void visit(GlNode *glNode);
+    /**
+     * Visit an Edge
+     */
     virtual void visit(GlEdge *glEdge);
+    /**
+     * Visit a layer
+     */
     virtual void visit(GlLayer *layer);
 
   private:

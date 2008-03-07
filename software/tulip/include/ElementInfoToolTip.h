@@ -1,15 +1,15 @@
 //-*-c++-*-
 #include <qtooltip.h>
 
-class GlGraphWidget;
+class GlMainWidget;
 class viewGl;
 
 struct ElementInfoToolTip : public QToolTip {
   virtual ~ElementInfoToolTip(){}
-  ElementInfoToolTip(GlGraphWidget *glWidget, viewGl *viewWidget);
+  ElementInfoToolTip(GlMainWidget *glWidget, viewGl *viewWidget);
   void maybeTip ( const QPoint & );
 
  private:
-  GlGraphWidget *glWidget;
+  GlMainWidget *glWidget;
   viewGl *viewWidget;
 };

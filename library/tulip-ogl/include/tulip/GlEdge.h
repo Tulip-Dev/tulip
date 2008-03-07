@@ -36,9 +36,7 @@ namespace tlp {
     /**
      * Virtual function to accept GlSceneVisitor on this class
      */
-    virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
-    }
+    virtual void acceptVisitor(GlSceneVisitor *visitor);
 
     /**
      * Return the edge bounding box

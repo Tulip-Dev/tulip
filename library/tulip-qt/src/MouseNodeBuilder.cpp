@@ -12,7 +12,7 @@
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 
 
 #include <tulip/MouseNodeBuilder.h>
@@ -23,7 +23,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     if (qMouseEv->button() == Qt::LeftButton) {
-      GlGraphWidget *glw = (GlGraphWidget *) widget;
+      GlMainWidget *glw = (GlMainWidget *) widget;
 
       Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");

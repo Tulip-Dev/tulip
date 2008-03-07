@@ -11,6 +11,7 @@
 #include "tulip/GlLayer.h"
 #include "tulip/Camera.h"
 #include "tulip/GlTools.h"
+#include "tulip/GlLODCalculator.h"
 
 using namespace std;
 
