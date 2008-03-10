@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.38 $)
+AC_REVISION($Revision: 1.39 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -340,6 +340,12 @@ thirdparty/ftgl/Makefile
 thirdparty/gle/Makefile
 thirdparty/libgpugraph/Makefile
 software/Makefile
+software/plugins-manager/Makefile
+software/plugins-manager/src/Makefile
+software/plugins-manager/include/Makefile
+software/plugins-manager/server/Makefile
+software/plugins-manager/server/src/Makefile
+software/plugins-manager/server/include/Makefile
 software/tulip/Makefile
 software/tulip/include/Makefile
 software/tulip/src/Makefile
@@ -348,12 +354,6 @@ software/tulip/designer/Makefile
 software/tlprender/Makefile
 software/tlprender/include/Makefile
 software/tlprender/src/Makefile
-software/plugins-manager/Makefile
-software/plugins-manager/src/Makefile
-software/plugins-manager/include/Makefile
-software/plugins-manager/server/Makefile
-software/plugins-manager/server/src/Makefile
-software/plugins-manager/server/include/Makefile
 plugins/Makefile
 plugins/layout/Makefile
 plugins/metric/Makefile

@@ -124,7 +124,7 @@ namespace tlp {
 
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
-    settings.setValue("serverNumber",serversAddrs.size());
+    settings.setValue("serverNumber",(unsigned int)(serversAddrs.size()));
     int i=0;
     for(vector<string>::iterator it=serversAddrs.begin();it!=serversAddrs.end();++it) {
       settings.setValue("server"+QString::number(i),(*it).c_str());
