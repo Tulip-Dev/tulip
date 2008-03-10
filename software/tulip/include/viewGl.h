@@ -27,6 +27,8 @@
 #include <tulip/Observable.h>
 #include <tulip/GlSceneObserver.h>
 #include <tulip/GWInteractor.h>
+#include <PluginsUpdateChecker.h>
+#include "TulipPluginLoader.h"
 #include "TulipData.h"
 
 namespace tlp {
@@ -85,6 +87,9 @@ protected:
   PropertyDialog *propertiesWidget;
   ElementPropertiesWidget *eltProperties;
   tlp::Graph * copyCutPasteGraph;
+  tlp::TulipPluginLoader pluginLoader;
+  tlp::PluginsUpdateChecker *pluginsUpdateChecker;
+  tlp::MultiServerManager *multiServerManager;
   bool elementsDisabled;
 
   QPopupMenu layoutMenu;
@@ -143,6 +148,7 @@ protected slots:
   void helpIndex();
   void helpContents();
   void helpAbout();
+  void plugins();
   void helpAssistantError(const QString &msg);
   void fileExit();
   void fileSave();
@@ -200,6 +206,7 @@ protected slots:
   void makeSimple();
   void makeConnected();
   void makeRooted();
+  void deletePluginsUpdateChecker();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlMainWidget *);

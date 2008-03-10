@@ -540,7 +540,7 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGL -framework QtNetwork"
+    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtXml"
     if test -d ${QTDIR}/lib/QtAssistantClient.framework
     then
       LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"

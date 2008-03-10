@@ -90,6 +90,9 @@
 #include <tulip/GlRectTextured.h>
 #include <tulip/hash_string.h>
 
+#include <PluginsManagerDialog.h>
+#include <UpdatePlugin.h>
+
 #include "TulipStatsWidget.h"
 #include "PropertyDialog.h"
 #include "viewGl.h"
@@ -452,11 +455,13 @@ void viewGl::startTulip() {
   this->setGeometry(wRect.x(), wRect.y(),
 		    wRect.width(), wRect.height());
 
+  UpdatePlugin::installWhenRestartTulip();
+
   AppStartUp *appStart=new AppStartUp(this);
   QDialog *errorDlg;
   std::string errors;
   appStart->show();
-  appStart->initTulip(errors);
+  appStart->initTulip(&pluginLoader,errors);
   delete appStart;
   buildMenus();
   this->show();
@@ -492,6 +497,10 @@ void viewGl::startTulip() {
       fileOpen(0, s);
     }
   }
+
+  pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
+  connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
+
 }
 //**********************************************************************
 void viewGl::changeGraph(Graph *graph) {
@@ -1753,6 +1762,33 @@ void viewGl::graphAboutToBeRemoved(Graph *sg) {
   //param.setGraph(0);
   glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   overviewWidget->setObservedView(glWidget);
+}
+//==============================================================
+void viewGl::plugins() {
+  PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
+  
+  /*QDialog dialog;
+  QVBoxLayout layout;
+  layout.setContentsMargins(0,0,0,0);
+  PluginsManagerMainWindow pluginsManager(pluginLoader.pluginsList);
+  
+  layout.addWidget(&pluginsManager);
+
+  dialog.setLayout(&layout);*/
+  pluginsManager->exec();
+  int result = QMessageBox::warning(this, 
+				    tr("Update plugins"), 
+				    tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+				    QMessageBox::Yes | QMessageBox::Default,
+				    QMessageBox::No);
+  if(result == QMessageBox::Yes)
+    fileExit();
+}
+//==============================================================
+void viewGl::deletePluginsUpdateChecker(){
+  disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
+  multiServerManager = pluginsUpdateChecker->getMultiServerManager();
+  delete pluginsUpdateChecker;
 }
 //==============================================================
 void viewGl::helpAbout() {

@@ -16,64 +16,32 @@
 #include <qapplication.h>
 #include "AppStartUp.h"
 
+#include "TulipPluginLoader.h"
+
 using namespace std;
 using namespace tlp;
 
 static std::string errorMsgs;
 
-//==============================================================
-struct PluginLoaderQt:public PluginLoader {
-  AppStartUp *appStartUp;
-  int progress;
-  virtual void start(const string &path,const string &type) {
-    appStartUp->setProgress(0);
-    progress=0;
-  }
-  virtual void numberOfFiles(int nbFile) {
-    appStartUp->setTotalSteps(nbFile);
-    qApp->processEvents();
-  }
-  virtual void loading(const string &filename){}
-  virtual void loaded(const string &name,
-		      const string &author,
-		      const string &date, 
-		      const string &info,
-		      const string &release,
-		      const string &version,
-		      const list <Dependency> &deps)
-  {
-    progress++;
-    appStartUp->setLabel(name);
-    appStartUp->setProgress(progress);
-    qApp->processEvents();
-  }
-  virtual void aborted(const string &filename,const  string &errormsg) {
-    progress++;
-    // accumulate error messages
-    errorMsgs += errormsg + '\n';
-    cerr << "Loading error: " << errormsg << endl;
-    appStartUp->setLabel("Error");
-    appStartUp->setProgress(progress);
-    qApp->processEvents();
-  }
-  virtual void finished(bool state,const string &msg){}
-};
 
-void AppStartUp::initTulip(std::string &errors) {
+
+void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
   setTotalSteps(0);
   setProgress(0);
   setLabel("Tulip");
 
-  #ifndef NDEBUG
+  loader->appStartUp = this;
+
+  /*#ifndef NDEBUG
   PluginLoaderTxt plug;
   #else
   PluginLoaderQt plug;
   plug.appStartUp = this;
-  #endif
+  #endif*/
   
   //tlp::initTulipLib(); already done in Application.cpp
-  tlp::loadPlugins(&plug);   // library side plugins
-  GlyphManager::getInst().loadPlugins(&plug);   // software side plugins, i.e. glyphs
+  tlp::loadPlugins(loader);   // library side plugins
+  GlyphManager::getInst().loadPlugins(loader);   // software side plugins, i.e. glyphs
 
   errors = errorMsgs;
   // free memory

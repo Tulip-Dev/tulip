@@ -109,6 +109,8 @@
     <item text="&amp;Help" name="helpMenu">
         <action name="helpContentsAction"/>
         <action name="helpIndexAction"/>
+	<separator/>
+	<action name="pluginsAction"/>
         <separator/>
         <action name="helpAboutAction"/>
     </item>
@@ -387,6 +389,17 @@
         </property>
         <property name="accel">
             <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>pluginsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Plugins</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Plugins...</string>
         </property>
     </action>
     <action>
@@ -1125,6 +1138,12 @@
         <slot>helpContents()</slot>
     </connection>
     <connection>
+        <sender>pluginsAction</sender>
+        <signal>activated()</signal>
+        <receiver>TulipData</receiver>
+        <slot>plugins()</slot>
+    </connection>
+    <connection>
         <sender>helpAboutAction</sender>
         <signal>activated()</signal>
         <receiver>TulipData</receiver>
@@ -1332,6 +1351,7 @@
     <slot>helpIndex()</slot>
     <slot>helpContents()</slot>
     <slot>helpAbout()</slot>
+    <slot>plugins()</slot>
     <slot>gridOptions()</slot>
     <slot>makeAcyclic()</slot>
     <slot>makeSimple()</slot>

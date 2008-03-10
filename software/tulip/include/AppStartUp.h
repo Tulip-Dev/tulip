@@ -3,6 +3,10 @@
 #include <string>
 #include "AppStartUpData.h"
 
+namespace tlp {
+  struct TulipPluginLoader;
+}
+
 class AppStartUp : public AppStartUpForm
 { 
     Q_OBJECT
@@ -17,7 +21,7 @@ public slots:
     void setProgress(int);
     ///Change the total step of the progress bar.
     void setTotalSteps(int);
-    void initTulip(std::string& errors);
+    void initTulip(tlp::TulipPluginLoader *loader,std::string& errors);
 };
 
 #endif // APPSTARTUP_H
