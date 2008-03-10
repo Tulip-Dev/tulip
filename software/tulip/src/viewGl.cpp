@@ -500,7 +500,7 @@ void viewGl::startTulip() {
 
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
   connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
-
+  multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 }
 //**********************************************************************
 void viewGl::changeGraph(Graph *graph) {
@@ -1787,7 +1787,6 @@ void viewGl::plugins() {
 //==============================================================
 void viewGl::deletePluginsUpdateChecker(){
   disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
-  multiServerManager = pluginsUpdateChecker->getMultiServerManager();
   delete pluginsUpdateChecker;
 }
 //==============================================================

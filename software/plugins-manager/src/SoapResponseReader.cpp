@@ -46,7 +46,9 @@ namespace tlp {
       return false;
     if(doc.isNull())
       return false;
-    *data=(doc.documentElement().firstChild().firstChild().toElement().text().toAscii()).data();
+    QString result=doc.documentElement().firstChild().firstChild().toElement().text();
+    *data=new char[result.length()];
+    strcpy(*data,result.toStdString().c_str());
     return true;
   }
 
