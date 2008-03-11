@@ -19,6 +19,7 @@ int main(int argc,char **argv)
     cout << "How to use :" << endl;
     cout << " First arg : doc source directory (where directory \"doxygen\" are)" << endl;
     cout << " Second arg : target directory" << endl;
+    cout << " Third arg : source directory for mac/windows plugins" << endl;
     exit(1);
   }
 
@@ -73,7 +74,12 @@ int main(int argc,char **argv)
 
     QString path=(*it).fileName.c_str();
 
-    QDir srcDir("/home/morgan/install/tulip.3.0.1/lib/tlp/");
+    QDir srcDir((TulipLibDir+"tlp/").c_str());
+    QDir secondSrcDir;
+    if(argc==4) {
+      secondSrcDir=QDir(argv[3]);
+    }
+     
     QDir dstDir(targetPath+"/plugins/"+path);
     dstDir.mkpath(targetPath+"/plugins/"+path);
 
@@ -88,8 +94,17 @@ int main(int argc,char **argv)
     }
     pluginXmlFile.write(stringDoc.toStdString().c_str(),strlen(stringDoc.toStdString().c_str()));
     pluginXmlFile.close();
-    UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".i386");
-
+    if(srcDir.exists(QString((*it).fileName.c_str())+".so")) {
+      UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".i386");
+    }
+    if(argc==4) {
+      if(secondSrcDir.exists(QString((*it).fileName.c_str())+".so")) {
+	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".mac");
+      }
+      if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dll")) {
+	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",dstDir,QString((*it).fileName.c_str())+".dll."+QString((*it).version.c_str()).replace(" ","."));
+      }
+    }
     // Documentation :
     QDir pluginsDocDir(docPath+"/doxygen/xml");
 
@@ -128,9 +143,9 @@ int main(int argc,char **argv)
       }
       ++iter;
     }
-  }
+    }
     
     
   return 0;
-}
-
+  
+  }

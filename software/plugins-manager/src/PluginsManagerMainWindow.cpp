@@ -11,7 +11,7 @@ using namespace std;
 
 namespace tlp {
 
-  void PluginsManagerMainWindow::createWidget(){
+  void PluginsManagerMainWindow::createWidget(QWidget *parent){
     w = new QWidget(this);
     setCentralWidget(w);
 
@@ -19,7 +19,7 @@ namespace tlp {
     vbox->addWidget(widg);
     w->setLayout(vbox);
 
-    createActions();
+    createActions(parent);
     createMenus();
     statusBar()->showMessage("");
 
@@ -47,15 +47,15 @@ namespace tlp {
     for(vector<string>::iterator it=serversAddr.begin();it!=serversAddr.end();++it) 
       widg->addServer(*it);
     
-    createWidget();
+    createWidget(parent);
   }
 
   PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent):QMainWindow(parent){
     widg=new PluginsWidget(msm,this);
-    createWidget();
+    createWidget(parent);
   }
 
-  void PluginsManagerMainWindow::createActions(){
+  void PluginsManagerMainWindow::createActions(QWidget *parent){
   
     exitAct = new QAction(tr("E&xit"), vbox);
     exitAct->setShortcut(tr("Ctrl+X"));
@@ -169,6 +169,10 @@ namespace tlp {
 
   void PluginsManagerMainWindow::showLatestPlugins(){ 
     widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+  }
+
+  void PluginsManagerMainWindow::close() {
+    emit closeSignal();
   }
 
 }

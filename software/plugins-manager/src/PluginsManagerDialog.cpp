@@ -10,6 +10,7 @@ using namespace std;
 namespace tlp {
 
   void PluginsManagerDialog::createWidget(PluginsManagerMainWindow *pluginsManager) {
+    connect(pluginsManager, SIGNAL(closeSignal()), this, SLOT(close()));
     QVBoxLayout *layout=new QVBoxLayout(this);
     layout->setContentsMargins(0,0,0,0);
     layout->addWidget(pluginsManager);

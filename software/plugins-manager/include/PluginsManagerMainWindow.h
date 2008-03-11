@@ -31,7 +31,7 @@ namespace tlp {
       
   protected:
 
-    void createActions();
+    void createActions(QWidget *parent);
     void createMenus();
 
     QWidget *w;
@@ -55,10 +55,13 @@ namespace tlp {
     
   public:
     
-    void createWidget();
+    void createWidget(QWidget *parent);
     PluginsManagerMainWindow(std::vector<LocalPluginInfo> &plugins,QWidget *parent=0);
     PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
 
+  signals:
+
+    void closeSignal();
     
   private slots:
     void serverView();
@@ -69,6 +72,7 @@ namespace tlp {
     void applyChange();
     void restore();
     void servers();  
+    void close();
 
   };
 
