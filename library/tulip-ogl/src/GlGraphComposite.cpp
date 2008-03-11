@@ -112,7 +112,13 @@ namespace tlp {
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
       if((*it).id==n.id) {
 	nodes.erase(it);
-	return;
+	break;
+      }
+    }
+    for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
+      if((*it)==n.id) {
+	nodesToAdd.erase(it);
+	break;
       }
     }
   }
