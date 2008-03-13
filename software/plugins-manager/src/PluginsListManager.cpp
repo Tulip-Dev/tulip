@@ -346,22 +346,4 @@ namespace tlp {
     return *it;
   }
 
-  bool PluginsListManager::pluginsIsCompatible(const string& path){
-    setenv("TLP_DIR", path.c_str() , 1);
-
-    QProcess pluginsQtVersion;
-    pluginsQtVersion.start("../PluginsQtVersionDetector/PluginQtVersionDetector");
-
-    if(!pluginsQtVersion.waitForStarted()){
-      if(!errorIsDisplayed){
-	errorIsDisplayed=true;
-    	QMessageBox::critical(0, "Caption", "Qt Version detector not here", QMessageBox::Ok,  QMessageBox::NoButton, QMessageBox::NoButton);
-      }
-    }
-
-    pluginsQtVersion.waitForFinished();
-
-    return pluginsQtVersion.error() != QProcess::Crashed;
-  }
-
 }

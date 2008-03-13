@@ -43,7 +43,6 @@ namespace tlp {
     
     void addServerListRecursion(const std::string& serverName, const QDomElement& xmlElem);
     void modifyListWithInstalledPlugins();
-    bool pluginsIsCompatible(const std::string& path);
     void clearInstalledPluginsList();
     
     bool LocalInstalledPluginsListIsCharged;
