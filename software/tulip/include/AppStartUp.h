@@ -1,6 +1,7 @@
 #ifndef APPSTARTUP_H
 #define APPSTARTUP_H
 #include <string>
+#include <QtGui/QMovie>
 #include "AppStartUpData.h"
 
 namespace tlp {
@@ -10,6 +11,10 @@ namespace tlp {
 class AppStartUp : public AppStartUpForm
 { 
     Q_OBJECT
+
+   QMovie *movie;
+    int totalSteps;
+    int currentFrame;
 
 public:
   AppStartUp( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );

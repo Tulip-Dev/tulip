@@ -60,6 +60,12 @@ AppStartUp::AppStartUp( QWidget* parent,  const char* name, bool modal, WFlags f
   string tmp="Tulip V. ";
   tmp+=VERSION;
   tulipVersion->setText(tmp.c_str());
+  string dir=TulipLibDir;
+  dir += "tlp/bitmaps/";
+  movie=new QMovie(string(dir+"startup.gif").c_str());
+  PixmapLabel1->setMovie(movie);
+  movie->start();
+  movie->stop();
 }
 
 /*  
@@ -71,9 +77,19 @@ AppStartUp::~AppStartUp() {
 
 void AppStartUp::setProgress(int progress) {
   progressBar->setProgress(progress);
+  if(progress!=0 && currentFrame!=100) {
+    if(currentFrame!=(int)(((float)progress/(float)totalSteps)*100)) {
+      int nextFrame=(int)(((float)progress/(float)totalSteps)*100);
+      for(int i=0;i<nextFrame-currentFrame;++i) {
+	movie->jumpToNextFrame();
+      }
+      currentFrame=nextFrame;
+    }
+  }
 }
  
 void AppStartUp::setTotalSteps(int totalSteps) {
+  this->totalSteps=totalSteps;
   progressBar->setTotalSteps(totalSteps);
 }
  
