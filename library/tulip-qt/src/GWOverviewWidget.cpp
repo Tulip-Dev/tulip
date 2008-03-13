@@ -386,6 +386,7 @@ void RectPosition::draw(float lod,Camera *camera) {
   glDisable(GL_BLEND);
   glColor3ub(0,0,0);
   glLineWidth(1);
+  glStencilFunc(GL_LEQUAL,0x0001,0xFFFF);
   glBegin(GL_LINE_LOOP);
   for (int i=0;i<4;++i)
     glVertex3fv((float *)&points[i]);
