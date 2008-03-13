@@ -58,7 +58,7 @@ namespace tlp {
     virtual ~SOAPRequest();
 
     virtual void getXml(std::string &xml) const = 0;
-    virtual void applyResponseTreatment(char **data) const;
+    virtual void applyResponseTreatment(const std::string &data) const;
     
   protected :  
     SOAPRequest():respTreatment(0){post=true;};
@@ -104,7 +104,7 @@ namespace tlp {
   public :
     ServerNameTreatment(std::string addr);
     
-  void operator()(char **response);
+  void operator()(const std::string &data);
     
   signals:
     void nameReceived(ServerNameTreatment*,std::string,std::string);

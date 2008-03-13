@@ -23,7 +23,7 @@ namespace tlp {
 
   public:
     virtual ~ResponseTreatment(){};
-    virtual void operator()(char **data)= 0;
+    virtual void operator()(const std::string &data)= 0;
   };
 
   class TLP_PLUGINSMANAGER_SCOPE  RequestFinish {

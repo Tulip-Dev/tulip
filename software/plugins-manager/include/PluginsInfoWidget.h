@@ -68,8 +68,8 @@ namespace tlp {
     GetPluginInfoTreatment(PluginsInfoWidget *p):piw(p){
     }
     
-    void operator()(char **response){
-      piw->addPluginInfoXML(*response); 
+    void operator()(const std::string &data){
+      piw->addPluginInfoXML(data); 
       piw->setText((htmlBegin+piw->pluginInfoXML+htmlEnd).c_str());
     }
     
@@ -85,8 +85,8 @@ namespace tlp {
     GetPluginDocTreatment(PluginsInfoWidget *p):piw(p){
     }
     
-    void operator()(char **response){
-      piw->addPluginDocXML(*response);  
+    void operator()(const std::string &data){
+      piw->addPluginDocXML(data);  
       piw->setText((htmlBegin+piw->pluginInfoXML+piw->pluginDocXML+htmlEnd).c_str());
     }
     

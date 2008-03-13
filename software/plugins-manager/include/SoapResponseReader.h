@@ -30,7 +30,7 @@ namespace tlp {
     
     void attachXML();
     bool getFunctionName(std::string &functionName);
-    bool getReturnedData(char **data);
+    bool getReturnedData(std::string &data);
     
   private :
     void extractSoapEnv(const std::string &XML,std::string &result);

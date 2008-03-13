@@ -77,10 +77,6 @@ namespace tlp {
   }
   
   void AuthorizationInstallDependencies::annule(){
-    if(install)
-      toInstall->clear();
-    else
-      toRemove->clear();
     close();
   }
 

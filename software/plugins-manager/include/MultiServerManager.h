@@ -91,7 +91,7 @@ namespace tlp {
     GetXmlListTreatment(MultiServerManager* msm, std::string serverAddr) : msm(msm), serverAddr(serverAddr){
     };
     
-    void operator()(char **response){
+    void operator()(const std::string &data){
       std::string serverName;
       foreach(PluginsServer *ps,msm->pluginsServersList){
 	std::string address;
@@ -100,8 +100,7 @@ namespace tlp {
 	  serverName=ps->name;
 	}
       }
-      std::string str=*response;
-      msm->addServerList(serverName,str);
+      msm->addServerList(serverName,data);
       msm->getResponse();
     };
     

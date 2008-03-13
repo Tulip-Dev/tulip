@@ -52,14 +52,12 @@ namespace tlp {
 
       http->getServerName(server);
     
-      char **returnedData = new char*[1];
+      string returnedData;
       if(!srr.getReturnedData(returnedData)) {
-	requests.pop_front();
 	send(lastRequest);
+      }else{
+	((SOAPRequest*)lastRequest)->applyResponseTreatment(returnedData);
       }
-
-      ((SOAPRequest*)lastRequest)->applyResponseTreatment(returnedData);
-      delete[] returnedData;
     }else{
       ((GetRequest*)lastRequest)->applyRequestFinish();
     }

@@ -26,7 +26,7 @@ namespace tlp {
     }
   }
 
-  void SOAPRequest::applyResponseTreatment(char **data) const { // Response as returned data, not complete XML. 
+  void SOAPRequest::applyResponseTreatment(const string &data) const { // Response as returned data, not complete XML. 
     bool noResponseTreatment = (respTreatment == 0);
     if(noResponseTreatment)
       return;
@@ -61,8 +61,8 @@ namespace tlp {
   ServerNameTreatment::ServerNameTreatment(std::string addr):addr(addr){
   }
     
-  void ServerNameTreatment::operator()(char **response) {
-    std::string str=*response;
+  void ServerNameTreatment::operator()(const std::string &data) {
+    string str=data;
     int returnPos=str.find("\n");
     if(returnPos!=-1)
       str.erase(returnPos,returnPos+1);

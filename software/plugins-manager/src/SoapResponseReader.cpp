@@ -41,14 +41,10 @@ namespace tlp {
     return true;
   }
   
-  bool SoapResponseReader::getReturnedData(char **data){
-    if(!(*data))
-      return false;
+  bool SoapResponseReader::getReturnedData(string &data){
     if(doc.isNull())
       return false;
-    QString result=doc.documentElement().firstChild().firstChild().toElement().text();
-    *data=new char[result.length()];
-    strcpy(*data,result.toStdString().c_str());
+    data=doc.documentElement().firstChild().firstChild().toElement().text().toStdString();
     return true;
   }
 
