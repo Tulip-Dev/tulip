@@ -33,6 +33,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
  protected:
   Coord* positions[N_QUAD_POINTS]; /**< The position of the points of the Quad */
   Color* colors[N_QUAD_POINTS]; /**< The colors of the points of the Quad */
+  std::string textureName;
 
   /**
    * Accessor in writing to the basic position of GlAugmentedDisplay
@@ -46,7 +47,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   /**
    * Constructor
    */
-  GlQuad() {}
+  GlQuad();
 
   /**
    * Constructor
@@ -104,6 +105,16 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * \param idColor Indicates which point we want to get the color.
    */
   Color* getColor(int idColor) const;
+
+  /**
+   * Accessor in reading to the texture.
+   */
+  void setTextureName(const std::string &name);
+
+  /**
+   * Accessor in reading to the texture.
+   */
+  std::string getTextureName() const;
 
   /**
    * Translate entity

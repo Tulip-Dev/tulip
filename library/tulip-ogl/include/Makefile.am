@@ -42,6 +42,8 @@ nobase_include_HEADERS = \
 	tulip/GlHierarchyConvexHulls.h \
 	tulip/GlSceneObserver.h \
 	tulip/GlLine.h \
+	tulip/GlCurve.h \
+	tulip/GlQuad.h \
 	tulip/libgpugraph.h \
 	tulip/tulipgpu.h \
 	tulip/GlXMLTools.h

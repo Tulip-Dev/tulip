@@ -381,12 +381,25 @@ namespace tlp {
 	    vertices.size()*3, 2, pointsIt );
     glEnable(GL_MAP2_VERTEX_3);
     glBegin(GL_QUAD_STRIP);
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    
     for (unsigned int i = 0; i <= steps; ++i) {
+      /*
+      color[3] = 255;
+
+      if (i < 5)
+	color[3] = double(i) / 5.0 * 255.0 ;
+      if (i > steps - 5) 
+	color[3] = double(steps - i) / 5.0 * 255.0 ;
+      */
+
       glColor4ub((unsigned char)color[0], (unsigned char)color[1], 
 		 (unsigned char)color[2], (unsigned char)color[3]); 
+      glTexCoord2f(0.0f, 0.0f);
       glEvalCoord2f((GLfloat) i/steps,0);
       glColor4ub((unsigned char)color[0], (unsigned char)color[1],  //Need to be done, bug of opengl ???
 		 (unsigned char)color[2], (unsigned char)color[3]); 
+      glTexCoord2f(1.0f, 1.0f);
       glEvalCoord2f((GLfloat) i/steps,1);
       color += delta;
     }

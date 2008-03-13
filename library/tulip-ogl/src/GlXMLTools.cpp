@@ -14,6 +14,7 @@
 #include "tulip/GlPolygon.h"
 #include "tulip/GlRect.h"
 #include "tulip/GlSphere.h"
+#include "tulip/GlCurve.h"
 
 using namespace std;
 
@@ -122,6 +123,8 @@ namespace tlp {
       return new GlLabel();
     }else if(name=="GlLine"){
       return new GlLine();
+    }else if(name=="GlCurve") {
+      return new GlCurve();
     }else if(name=="GlMultiPolygon"){
       return new GlMultiPolygon();
     }else if(name=="GlPolygon"){
