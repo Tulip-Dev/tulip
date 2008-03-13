@@ -653,7 +653,6 @@ namespace tlp {
 	set<LocalPluginInfo,PluginCmp>::iterator iter2=find_if(pluginsToRemove.begin(),pluginsToRemove.end(),pred);
 	if(iter2 != pluginsToRemove.end()){
 	  pluginsToRemove.erase(iter2);
-	  cout << "erase ok" << endl;
 	}else{
 	  //adding the element in the list of plugins to Install        
 	  set<DistPluginInfo,PluginCmp>::iterator iter=find_if(pluginsToInstall.begin(),pluginsToInstall.end(),pred);
@@ -667,7 +666,6 @@ namespace tlp {
 	set<DistPluginInfo,PluginCmp>::iterator iter2=find_if(pluginsToInstall.begin(),pluginsToInstall.end(),pred);
 	if(iter2 != pluginsToInstall.end()){
 	  pluginsToInstall.erase(iter2);
-	  cout << "install ok" << endl;
 	}else{
 	  //Adding the element in the list of plugin to remove
 	  set<LocalPluginInfo,PluginCmp>::iterator iter=find_if(pluginsToRemove.begin(),pluginsToRemove.end(),pred);

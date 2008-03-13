@@ -15,7 +15,6 @@ namespace tlp {
 
   void MultiServerManager::addServer(const string& addr){
     //TODO: ajouter test de validité du serveur (connexion possible)
-    cout << "MultiServerManager::addServer " << endl;
     if(!(addr=="")){
       PluginsServer *plugServer=new PluginsServer;
       plugServer->name = addr;
@@ -118,7 +117,6 @@ namespace tlp {
   bool MultiServerManager::requestServerName(Server* serv){
     string address;
     serv->getAddress(address);
-    cout << "MultiServerManager::requestServerName : " << address << endl;
     ServerNameTreatment* treatment = new ServerNameTreatment(address);
     connect(treatment,SIGNAL(nameReceived(ServerNameTreatment*,std::string,std::string)),this,SLOT(changeName(ServerNameTreatment*,std::string,std::string)));
     GetServerNameRequest* request = new GetServerNameRequest(treatment);
@@ -146,12 +144,10 @@ namespace tlp {
   
   
   void MultiServerManager::changeName(ServerNameTreatment* treatment,string addr,string name){
-    cout << "MultiServerManager::changeName : " << name << endl;
     string address;
     
     for (list<PluginsServer*>::iterator iter=pluginsServersList.begin(); iter != pluginsServersList.end() ; ++iter){
       ((*iter)->serv)->getAddress(address);
-      cout << address << " # " << addr << endl;
       if( address.compare(addr) == 0 && ((*iter)->name).compare(name)!=0 ){
 	(*iter)->name = name;
 	break;

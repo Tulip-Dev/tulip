@@ -48,7 +48,6 @@ namespace tlp {
 						       dependencyElement.attribute("version").toStdString()));
 	    }
 	  }
-	  cout << xmlElem.attribute("linuxVersion").toStdString() << endl;
 	  pluginsList.push_back(new DistPluginInfo(childElement.attribute("name").toStdString(), 
 						   childElement.attribute("type").toStdString(), 
 						   childElement.attribute("displayType").toStdString(), 
@@ -73,7 +72,6 @@ namespace tlp {
   }
   
   void PluginsListManager::addServerList(const string& serverName, const string& xml){
-    cout << xml << endl;
     QDomDocument xmlDoc;
     xmlDoc.setContent(QString(xml.c_str()));
     

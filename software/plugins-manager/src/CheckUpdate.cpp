@@ -22,8 +22,5 @@ namespace tlp {
 
   void PluginsUpdateChecker::getResponse() {
     serverNumber--;
-    if(serverNumber==0) {
-      cout << "All Response" << endl;
-    }
   }
 }
