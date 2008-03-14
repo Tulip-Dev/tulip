@@ -56,7 +56,8 @@ void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
  *  TRUE to construct a modal dialog.
  */
 AppStartUp::AppStartUp( QWidget* parent,  const char* name, bool modal, WFlags fl )
-    : AppStartUpForm( parent, name, modal, fl ) {
+  : AppStartUpForm( parent, name, modal, fl ),
+    currentFrame(0){
   string tmp="Tulip V. ";
   tmp+=VERSION;
   tulipVersion->setText(tmp.c_str());
