@@ -19,11 +19,11 @@
 #include <tulip/Color.h>
 
 #include "tulip/GlSimpleEntity.h"
-#include "tulip/TextRenderer.h"
 
 namespace tlp {
 
   class Camera;
+  class TextRenderer;
 
   /**
    * Create a entity Label
@@ -32,12 +32,14 @@ namespace tlp {
   {
   public :
     
-    GlLabel() {}
+    GlLabel();
 
     /**
      * Contructor with fontPath, centerPosition, size and fontColor
      */
     GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor);
+
+    ~GlLabel();
 
     /**
      * Set the text of the label
@@ -73,7 +75,7 @@ namespace tlp {
   private :
 
     std::string text;
-    TextRenderer renderer;
+    TextRenderer *renderer;
     Coord centerPosition;
     Coord size;
     Color color;

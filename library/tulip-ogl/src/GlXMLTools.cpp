@@ -2,6 +2,9 @@
 
 #include <string>
 
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+
 #include "tulip/GlSimpleEntity.h"
 #include "tulip/GlRectTextured.h"
 #include "tulip/GlComposite.h"

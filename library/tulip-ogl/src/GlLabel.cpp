@@ -25,14 +25,19 @@ using namespace std;
 
 namespace tlp {
 
-  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor):centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath) {
-    renderer.setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-    renderer.setMode(TLP_POLYGON);
-    renderer.setColor(fontColor[0], fontColor[1], fontColor[2]);
+  GlLabel::GlLabel() :renderer(new TextRenderer) {
+  }
+  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath) {
+    renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
+    renderer->setMode(TLP_POLYGON);
+    renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+  }
+  GlLabel::~GlLabel() {
+    delete renderer;
   }
   //============================================================
   void GlLabel::setText(const string& text) {
-    renderer.setString(text, VERBATIM);
+    renderer->setString(text, VERBATIM);
     this->text=text;
   }
   //============================================================
@@ -53,7 +58,7 @@ namespace tlp {
     float w,h;
     float div_w, div_h;
 
-    renderer.getBoundingBox(w_max, h, w);
+    renderer->getBoundingBox(w_max, h, w);
 
     glPushMatrix();
     glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
@@ -63,7 +68,7 @@ namespace tlp {
       glScalef(div_w, div_w, 1);
     else
       glScalef(div_h, div_h, 1);  
-    renderer.draw(w,w, 0);
+    renderer->draw(w,w, 0);
     glPopMatrix();
 
     if(lightingOn)
@@ -106,10 +111,10 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode, "size", size);
       GlXMLTools::setWithXML(dataNode,"color",color);
 
-      renderer.setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-      renderer.setMode(TLP_POLYGON);
-      renderer.setColor(color[0], color[1], color[2]);
-      renderer.setString(text, VERBATIM);
+      renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
+      renderer->setMode(TLP_POLYGON);
+      renderer->setColor(color[0], color[1], color[2]);
+      renderer->setString(text, VERBATIM);
     }
   }
   
