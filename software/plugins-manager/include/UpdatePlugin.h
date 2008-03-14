@@ -13,6 +13,7 @@
 
 #include <iostream>
 
+#include <QtCore/QDir>
 #include "Server.h"
 #include "Request.h"
 #include "PluginInfo.h"

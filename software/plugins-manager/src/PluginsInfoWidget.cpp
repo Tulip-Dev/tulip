@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 
 #include "PluginsInfoWidget.h"

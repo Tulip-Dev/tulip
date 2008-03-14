@@ -13,6 +13,7 @@
 
 #include <list>
 
+#include <QtCore/QTimer>
 #include "SoapResponseReader.h"
 #include "SoapRequestBuilder.h"
 #include "HttpRequest.h"

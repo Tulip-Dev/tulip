@@ -3,6 +3,7 @@
 #include "MultiServerManager.h"
 
 #include <iostream>
+#include <QtCore/QSettings>
 #include <QtGui/QMessageBox>
 
 using namespace std;

@@ -17,7 +17,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include <Qt/QtXml>
+#include <QtXml/QDomDocument>
 
 namespace tlp {
 

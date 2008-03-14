@@ -1,5 +1,6 @@
 #include "ServersOptionDialog.h"
 
+#include <QtCore/QSettings>
 #include <QtGui/QMessageBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>

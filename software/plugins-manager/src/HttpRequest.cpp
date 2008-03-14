@@ -2,6 +2,7 @@
 #include "SoapResponseReader.h"
 
 #include <iostream>
+#include <QtCore/QUrl>
 
 using namespace std;
 

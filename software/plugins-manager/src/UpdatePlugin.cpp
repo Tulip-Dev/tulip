@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <QtCore/QDir>
+#include <QtCore/QTextStream>
 
 using namespace std;
 

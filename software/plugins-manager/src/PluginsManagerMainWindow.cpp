@@ -1,5 +1,6 @@
 #include "PluginsManagerMainWindow.h"
 
+#include <QtCore/QSettings>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStatusBar>
 #include <QtGui/QMenuBar>
