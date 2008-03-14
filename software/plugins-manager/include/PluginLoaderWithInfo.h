@@ -45,7 +45,7 @@ namespace tlp {
       plugin.author=author;
       plugin.date=date;
       plugin.info=info;
-      plugin.server="Local";
+      plugin.server="Installed";
       
       for(std::list<Dependency>::const_iterator it=deps.begin();it!=deps.end();++it) {
 	PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);

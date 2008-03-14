@@ -103,7 +103,7 @@ namespace tlp {
   //}
 
   void PluginsListManager::addLocalPlugin(const DistPluginInfo *pluginInfo){
-    LocalPluginInfo *newPlugin=new LocalPluginInfo(pluginInfo->name,pluginInfo->type,pluginInfo->displayType,"Local",pluginInfo->version,pluginInfo->fileName,"","","",pluginInfo->dependencies);
+    LocalPluginInfo *newPlugin=new LocalPluginInfo(pluginInfo->name,pluginInfo->type,pluginInfo->displayType,"Installed",pluginInfo->version,pluginInfo->fileName,"","","",pluginInfo->dependencies);
     localPluginsList.push_back(newPlugin);
     pluginsList.push_back(newPlugin);
     modifyListWithInstalledPlugins();
