@@ -14,7 +14,6 @@
 #define Tulip_GraphDecorator_H
 
 #include <tulip/Graph.h>
-#include <tulip/Face.h>
 
 namespace tlp {
 
