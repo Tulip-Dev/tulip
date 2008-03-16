@@ -111,6 +111,7 @@ File  "@qt_libraries@\..\bin\assistant.exe"
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
+File "@prefix@\bin\libtulip-pluginsmanager-@WIN_VERSION@.dll" 
 setOutPath $INSTDIR\imageformats
 File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib\tlp\bitmaps
