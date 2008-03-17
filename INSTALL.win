@@ -7,7 +7,7 @@ Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
 from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
 and accept the proposed mount point during the installation process of MSYS.
 
-2- Build the Qt/Windows Commercial or Open Source Edition
+2- Build the Qt/Windows Open Source Edition
 ----------------------------------------------------------
 You first have to download the corresponding Qt source code
 from http://www.trolltech.com/download/qt/windows.html.
@@ -25,7 +25,12 @@ using the MinGW installation directory as the root installation directory.
 - iconv (iconv-*.win32.zip) and xml2 (libxml2-*.win32.zip) libraries have to be
 downloaded from http://www.zlatkovic.com/pub/libxml/ and installed using the
 MinGW installation as root installation directory for the contents of the
-bin, include and lib directories of the .win32 directory contained in the zip files.
+bin, include and lib directories of the .win32 directory contained in the zip archive.
+- glew (glew-1.*-win32.zip) has to be downloaded from the Windows binaries
+link on http://glew.sourceforge.net and installed using the
+MinGW installation as root installation directory for the contents
+of the bin, include and lib directories of the glew directory contained
+in the zip archive.
 
 4- Configure Tulip
 ------------------
