@@ -26,7 +26,6 @@ namespace tlp {
       QFile pluginInfoFile(pluginInfoPath.c_str());
 
       if (!pluginInfoFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-	setText((htmlBegin+"No information avalaible"+htmlEnd).c_str());
 	return;
       }
       
@@ -56,6 +55,20 @@ namespace tlp {
       GetPluginDocTreatment *docTreat = new GetPluginDocTreatment(this);
       GetPluginDocRequest* docReq = new GetPluginDocRequest(distPlugin->fileName,versionStr,docTreat);
       sm->send(docReq);
+    }
+  }
+
+  bool PluginsInfoWidget::haveInfo(const PluginInfo *plugin) {
+    if(!plugin->local)
+      return true;
+    else {
+      LocalPluginInfo *localPlugin=(LocalPluginInfo*)plugin;
+      QString pluginFileNameQStr=localPlugin->fileName.c_str();
+     
+      string pluginInfoPath(string(tlp::TulipLibDir+"tlp/")+pluginFileNameQStr.split("/").last().toStdString()+".doc");
+      QFile pluginInfoFile(pluginInfoPath.c_str());
+      
+      return pluginInfoFile.exists();
     }
   }
   

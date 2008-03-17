@@ -49,6 +49,8 @@ namespace tlp {
     
     PluginsInfoWidget(QWidget *parent=0);
     void setPluginInfo(const PluginInfo *pluginInfo, std::string addrWS);
+
+    static bool haveInfo(const PluginInfo *pluginInfo);
     
     
   private:

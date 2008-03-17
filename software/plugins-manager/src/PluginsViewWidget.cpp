@@ -10,6 +10,7 @@
 
 #include "AuthorizationInstallDependencies.h"
 #include "ChooseServerDialog.h"
+#include "PluginsInfoWidget.h"
 
 using namespace std;
 
@@ -561,7 +562,16 @@ namespace tlp {
       if(isAVersionItem(ti)){
 	const PluginInfo *actualPlugin;
 	actualPlugin=_msm->getPluginInformation(getNthParent(ti,(versionPosition-namePosition))->text(0).toStdString(),getNthParent(ti,(versionPosition-typePosition))->text(0).toStdString(),ti->text(0).toStdString());
-	emit pluginInfoSignal(actualPlugin);
+	if(!PluginsInfoWidget::haveInfo(actualPlugin)) {
+	  vector<const PluginInfo *> resultList;
+	  _msm->getPluginsInformation(actualPlugin->name,actualPlugin->type,resultList);
+	  for(vector<const PluginInfo *>::const_iterator it=resultList.begin();it!=resultList.end();++it) {
+	    if(!(*it)->local)
+	      emit pluginInfoSignal(*it);
+	  }
+	}else{
+	  emit pluginInfoSignal(actualPlugin);
+	}
       }
     }
   }
