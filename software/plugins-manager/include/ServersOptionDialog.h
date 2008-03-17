@@ -32,6 +32,7 @@ namespace tlp {
     QPushButton* addButton;
     QPushButton* removeButton;
     QPushButton* propertiesButton;
+    QPushButton* exitButton;
     QBoxLayout* boxLayout;
     QBoxLayout* subBoxLayout;
     QListWidget* serversList;

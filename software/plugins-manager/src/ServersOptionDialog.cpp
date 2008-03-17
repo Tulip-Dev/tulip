@@ -28,6 +28,7 @@ namespace tlp {
     removeButton = new QPushButton("Remove",this);
     removeButton->setObjectName("remove");
     propertiesButton = new QPushButton("Properties",this);
+    exitButton = new QPushButton("Exit",this);
 
     // Buttons widget
     buttonsWidget = new QWidget(this);
@@ -36,6 +37,8 @@ namespace tlp {
     subBoxLayout->addWidget(addButton);
     subBoxLayout->addWidget(removeButton);
     subBoxLayout->addWidget(propertiesButton);
+    subBoxLayout->insertStretch(3);
+    subBoxLayout->addWidget(exitButton);
     
     // Big widget
     boxLayout = new QHBoxLayout(this);
@@ -47,6 +50,7 @@ namespace tlp {
     connect(addButton, SIGNAL(clicked()), this, SLOT(addServer()));
     connect(propertiesButton, SIGNAL(clicked()), this, SLOT(serverProperties()));
     connect(msm,SIGNAL(nameReceived(MultiServerManager*,std::string,std::string)),this,SLOT(serverNameReceived(MultiServerManager*,std::string,std::string)));
+    connect(exitButton, SIGNAL(clicked()), this, SLOT(close()));
 
   }
 

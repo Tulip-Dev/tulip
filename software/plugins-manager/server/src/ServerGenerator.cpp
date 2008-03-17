@@ -6,6 +6,7 @@
 #include <QtCore/QString>
 #include <QtCore/QFile>
 #include <QtCore/QDir>
+#include <QtCore/QTextStream>
 
 #include <tulip/TlpTools.h>
 #include <tulip/GlyphManager.h>
@@ -34,10 +35,11 @@ int main(int argc,char **argv)
   vector<LocalPluginInfo> pluginsList=plug.pluginsList;
 
   for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
-    if((*it).type!="Glyph")
+    if((*it).type!="Glyph"){
       (*it).displayType=PluginInfo::getPluginDisplayType((*it).name);
-    else
+    }else{
       (*it).displayType=(*it).type;
+    }
   }
 
   QDir dir;
@@ -74,10 +76,17 @@ int main(int argc,char **argv)
 
     QString path=(*it).fileName.c_str();
 
-    QDir srcDir((TulipLibDir+"tlp/").c_str());
+    QDir srcDir;
+    if((*it).type!="Glyph")
+      srcDir = QDir((TulipLibDir+"tlp/").c_str());
+    else
+      srcDir = QDir((TulipLibDir+"tlp/glyphs/").c_str());
     QDir secondSrcDir;
     if(argc==4) {
-      secondSrcDir=QDir(argv[3]);
+      if((*it).type!="Glyph")
+	secondSrcDir=QDir(argv[3]);
+      else
+	secondSrcDir=QDir((string(argv[3])+"glyphs/").c_str());
     }
      
     QDir dstDir(targetPath+"/plugins/"+path);
