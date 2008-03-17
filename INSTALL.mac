@@ -3,13 +3,13 @@ How to build Tulip on MacOSX platform
 
 1- Build Qt/Mac Open Source Edition
 ------------------------------------
-Download the Qt 4.3.3 source code
-  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.3.3.tar.gz
+Download the last Qt 4.3.* source code
+  ftp://ftp.trolltech.com/qt/source/qt-mac-opensource-src-4.3.*.tar.gz
 
-To install Qt-4.3.3 into its default install directory ( /usr/local/Trolltech/Qt-4.3.3 ),
+To install Qt-4.3.* into its default install directory (/usr/local/Trolltech/Qt-4.3.*),
 do (for example in your home directory)
-  tar xzvf qt-mac-opensource-src-4.3.3.tar.gz
-  cd qt-mac-opensource-src-4.3.3
+  tar xzvf qt-mac-opensource-src-4.3.*.tar.gz
+  cd qt-mac-opensource-src-4.3.*
   ./configure
   make
   make install
@@ -42,7 +42,7 @@ then run
 
   sh gen-conf.sh
 
-  ./configure --with-qt-dir=/usr/local/Trolltech/Qt-4.3.3
+  ./configure --with-qt-dir=/usr/local/Trolltech/Qt-4.3.*
 
 More configuration flags are available; use ./configure --help to see them.
 
