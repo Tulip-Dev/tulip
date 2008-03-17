@@ -125,7 +125,7 @@ package_bundle_libs $ASSISTANT_LIBS_BUNDLE_DIR
 # copy Qt imageformats plugins
 QT_IMG_PLUGINS_LIBDIR=$APP_DIR/Contents/imageformats
 mkdir $QT_IMG_PLUGINS_LIBDIR
-cp $QT_DIR/plugins/imageformats/libqjpeg.dylib $QT_DIR/plugins/imageformats/libqmng.dylib  $QT_IMG_PLUGINS_LIBDIR
+cp $QT_DIR/plugins/imageformats/lib*.dylib $QT_IMG_PLUGINS_LIBDIR
 package_bundle_libs $QT_IMG_PLUGINS_LIBDIR '*.dylib' $LIBS_BUNDLE_DIR
 
 # package tulip shared libs
