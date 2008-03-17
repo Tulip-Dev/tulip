@@ -653,7 +653,7 @@ AC_MSG_CHECKING(for MinGW needed libraries)
 MINGWDIR=$(grep mingw /etc/fstab)
 MINGWDIR=$(echo $MINGWDIR | sed 's/ \/mingw//')
 GLDIR=/mingw/lib
-libraries="iconv.dll freetype*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
+libraries="iconv.dll freetype*.dll glew*.dll jpeg*.dll libpng*.dll libxml*.dll mingwm*.dll zlib1.dll"
 for lib in $libraries; do
 try="ls -1 /mingw/bin/$lib"
 if !(test=`eval $try 2> /dev/null`)
@@ -675,6 +675,10 @@ dnl in ${MINGWDIR}/lib if needed
 if !(test -f /mingw/lib/libfreetype.dll); then
    library=$(ls -1 /mingw/bin/freetype*.dll)
    cp ${library} /mingw/lib/libfreetype.dll
+fi
+if !(test -f /mingw/lib/libglew32.dll); then
+   library=$(ls -1 /mingw/bin/glew32.dll)
+   cp ${library} /mingw/lib/libglew32.dll
 fi
 if !(test -f /mingw/lib/libjpeg.dll); then
    library=$(ls -1 /mingw/bin/jpeg*.dll)
