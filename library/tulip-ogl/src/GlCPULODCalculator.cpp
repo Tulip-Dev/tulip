@@ -107,7 +107,7 @@ namespace tlp {
 	if(camera->is3D()){
 	  lod=calculateAABBSize((*itV).second,eye,transformMatrix,viewport);
 	}else{
-	  lod=calculate2DLod((*itV).second,viewport);
+	  lod=1.;
 	}
 	if(lod>=0)
 	  (*itSE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
@@ -116,7 +116,7 @@ namespace tlp {
 	if(camera->is3D()){
 	  lod=calculateAABBSize((*itV).second,eye,transformMatrix,viewport);
 	}else{
-	  lod=calculate2DLod((*itV).second,viewport);
+	  lod=1.;
 	}
 	if(lod>=0)
 	  (*itCE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
