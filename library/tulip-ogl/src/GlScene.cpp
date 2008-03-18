@@ -26,11 +26,15 @@ using namespace std;
 
 namespace tlp {
   
-  GlScene::GlScene():backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
+  GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
     selectionLayer= new GlLayer("Selection");
     selectionLayer->setCamera(camera);
     selectionLayer->setScene(this);
+    if(calculator!=NULL)
+      lodCalculator=calculator;
+    else
+      lodCalculator=new GlCPULODCalculator();
   }
 
   void GlScene::initGlParameters() {
@@ -65,8 +69,7 @@ namespace tlp {
   void GlScene::draw() {
     initGlParameters();
     
-    GlCPULODCalculator calculator;
-    GlLODSceneVisitor lodVisitor(&calculator,glGraphComposite->getInputData());
+    GlLODSceneVisitor lodVisitor(lodCalculator,glGraphComposite->getInputData());
 
     //cout << ">>> Check bounding box" << endl ;
     
@@ -79,15 +82,15 @@ namespace tlp {
     
     //cout << "<<< End Check bounding box" << endl;
     //cout << ">>> Begin LOD compute" << endl;
-    calculator.compute(viewport);
+    lodCalculator->compute(viewport,viewport);
     //cout << "<<< End LOD compute" << endl;
-    //calculator.compute();
+    //lodCalculator->compute();
 
     TextRenderer fontRenderer;
     OcclusionTest occlusionTest;
 
-    LODResultVector* ceVector=calculator.getResultForComplexeEntities();
-    LODResultVector* seVector=calculator.getResultForSimpleEntities();
+    LODResultVector* ceVector=lodCalculator->getResultForComplexeEntities();
+    LODResultVector* seVector=lodCalculator->getResultForSimpleEntities();
     LODResultVector::iterator itCE=ceVector->begin();
     LODResultVector::iterator itSE=seVector->begin();
     
@@ -215,6 +218,7 @@ namespace tlp {
       //cout << "<<< End draw CE" << endl;
     }
     //cout << "<<< End draw" << endl;
+    lodCalculator->clear();
   }
 
   void GlScene::addLayer(GlLayer *layer) {
@@ -312,8 +316,7 @@ namespace tlp {
       w=1;
     if(h==0)
       h=1;
-    GlCPULODCalculator calculator;
-    GlSelectSceneVisitor visitor(type,glGraphComposite->getInputData(),&calculator);
+    GlSelectSceneVisitor visitor(type,glGraphComposite->getInputData(),lodCalculator);
 
     if(layer) {
       layer->acceptVisitor(&visitor);
@@ -334,15 +337,15 @@ namespace tlp {
 
     glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
 
-    calculator.compute(selectionViewport);
-    //calculator.compute();
+    lodCalculator->compute(viewport,selectionViewport);
+    //lodCalculator->compute();
 
     LODResultVector* lodResultVector;
 
     if(type==SelectSimpleEntities) {
-      lodResultVector=calculator.getResultForSimpleEntities();
+      lodResultVector=lodCalculator->getResultForSimpleEntities();
     }else{
-      lodResultVector=calculator.getResultForComplexeEntities();
+      lodResultVector=lodCalculator->getResultForComplexeEntities();
     }
 
 
@@ -394,10 +397,12 @@ namespace tlp {
 	idToEntity[id]=(*itE).first;
 	glLoadName(id);
 	id++;
-	if(type==SelectSimpleEntities) {
-	  ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
-	}else{
-	  ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
+	if((*itE).second>0) {
+	  if(type==SelectSimpleEntities) {
+	    ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
+	  }else{
+	    ((GlComplexeEntity*)((*itE).first))->draw(20.,glGraphComposite->getInputData(),camera);
+	  }
 	}
       }
       
@@ -421,7 +426,7 @@ namespace tlp {
       delete[] selectBuf;
     }
     
-    
+    lodCalculator->clear();
     return (selectedEntities.size()!=0);
   }
   //====================================================

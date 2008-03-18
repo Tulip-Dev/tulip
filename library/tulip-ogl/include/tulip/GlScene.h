@@ -35,7 +35,7 @@ namespace tlp {
   
   public:
      
-    GlScene();
+    GlScene(GlLODCalculator *calculator=NULL);
 
     /**
      * Init scene's OpenGL parameters
@@ -180,6 +180,7 @@ namespace tlp {
 
     std::vector<std::pair<std::string,GlLayer *> > layersList;
     GlLayer* selectionLayer;
+    GlLODCalculator *lodCalculator;
     Vector<int, 4> viewport;
     Color backgroundColor;
     bool viewLabel;

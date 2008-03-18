@@ -144,7 +144,7 @@ namespace tlp {
       }
     }
 
-    calculator.compute(camera->getViewport());
+    calculator.compute(camera->getViewport(),camera->getViewport());
     
     LODResultVector* result=calculator.getResultForComplexeEntities();
 

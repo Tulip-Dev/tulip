@@ -247,7 +247,7 @@ namespace tlp {
     //    cerr << "s: " << nSize << " => " << minx << "," << miny << "/" << maxx << "," << maxy << endl;
   }
   //====================================================
-  float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& viewport) {
+  float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
     //float lod=0.;
     Coord src[8];
     Coord dst[8];
@@ -265,12 +265,13 @@ namespace tlp {
     if(num==0)
       return -1;
     for(int i=0;i<num;i++) {
-      dst[i] = projectPoint(src[hullVertexTable[pos][i+1]],transformMatrix,viewport);
+      dst[i] = projectPoint(src[hullVertexTable[pos][i+1]],transformMatrix,globalViewport);
+      dst[i][1] = globalViewport[3] - dst[i][1];
     }
     bool inScreen=false;
     int bbBox[4];
     for(int i=0;i<num;i++) {
-      if((dst[i][0]>= viewport[0]) && (dst[i][0]<=viewport[0]+viewport[2]) && (dst[i][1] >= viewport[1]) && (dst[i][1]<=viewport[1]+viewport[3])){
+      if((dst[i][0]>= currentViewport[0]) && (dst[i][0]<=currentViewport[0]+currentViewport[2]) && (dst[i][1] >= currentViewport[1]) && (dst[i][1]<=currentViewport[1]+currentViewport[3])){
 	inScreen=true;
       }
       if(i==0){
@@ -285,7 +286,7 @@ namespace tlp {
 	if(dst[i][1]>bbBox[3])
 	  bbBox[3]=dst[i][1];
       }
-      if(bbBox[0]<viewport[0]+viewport[2] && bbBox[2]>viewport[0] && bbBox[1]<viewport[1]+viewport[3] && bbBox[3]>viewport[1]){
+      if(bbBox[0]<currentViewport[0]+currentViewport[2] && bbBox[2]>currentViewport[0] && bbBox[1]<currentViewport[1]+currentViewport[3] && bbBox[3]>currentViewport[1]){
 	inScreen=true;
       }
     }

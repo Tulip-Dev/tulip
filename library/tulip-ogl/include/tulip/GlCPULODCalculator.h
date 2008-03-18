@@ -47,7 +47,7 @@ namespace tlp {
     /**
      * Compute all bounding boxs with the given viewport
      */
-    virtual void compute(const Vector<int,4>& viewport);
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
     
     /**
      * Return the result vector for simpleEntities
@@ -57,6 +57,11 @@ namespace tlp {
      * Return the result vector for complexeEntities
      */
     virtual LODResultVector* getResultForComplexeEntities();
+
+    /**
+     * Clear the class data
+     */
+    virtual void clear();
 
   protected:
     

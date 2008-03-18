@@ -56,7 +56,7 @@ namespace tlp {
     /**
      * Compute all lod
      */
-    virtual void compute(const Vector<int,4>& viewport)=0;
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport)=0;
     
     /**
      * Return lod result for simple entities
@@ -66,6 +66,10 @@ namespace tlp {
      * Return lod result for complexe entities
      */
     virtual LODResultVector* getResultForComplexeEntities() = 0;
+    /**
+     * Clear class data
+     */
+    virtual void clear() = 0;
   };
  
 }
