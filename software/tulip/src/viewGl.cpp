@@ -587,7 +587,7 @@ GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(*currentInteractors);
-  connect(glWidget, SIGNAL(closing(GlMainWidget *, QCloseEvent *)), this, SLOT(glGraphWidgetClosing(GlMainWidget *, QCloseEvent *)));
+  connect(glWidget, SIGNAL(closing(GlMainWidget *, QCloseEvent *)), this, SLOT(glMainWidgetClosing(GlMainWidget *, QCloseEvent *)));
 
   if(elementsDisabled)
     enableElements(true);
