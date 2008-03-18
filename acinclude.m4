@@ -381,7 +381,13 @@ then
 else
   try="ls -1 $dir/libGL*"
 fi
-  if test=`eval $try 2> /dev/null`; then gl_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
+  if test=`eval $try 2> /dev/null`; then 
+    gl_libdir=$dir
+    try="ls -1 $gl_libdir/libGLEW.*"
+    if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi
+  else 
+    echo "tried $dir" >&AC_FD_CC
+  fi
 done
 ac_gl_libraries="$gl_libdir"
 ])
@@ -610,7 +616,14 @@ AC_DEFUN([AC_PATH_QT_MOC],
    else
      $MOC -v 2>&1 | grep 'Qt 4' > /dev/null
      if test $? -eq 1; then
-       MOC_ERROR_MESSAGE
+       qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
+       AC_FIND_FILE(moc-qt4, $qt_bin_dirs, qt_bin_dir)
+       MOC=$qt_bin_dir/moc-qt4
+       if test ! -x $MOC; then
+         MOC_ERROR_MESSAGE
+       else
+         AC_MSG_RESULT([ for QT 4 found $MOC ])
+       fi
      fi
    fi
    AC_SUBST(MOC)
