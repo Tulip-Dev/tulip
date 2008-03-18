@@ -48,7 +48,7 @@ struct IteratorInfos {
   TCHAR currentDirectory[BUFSIZE];
 };
 
-PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *) {
+PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *loader) {
   DWORD dwRet;
   IteratorInfos *_infos = new IteratorInfos();
 
@@ -61,8 +61,19 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *
     msg = std::string("Scandir error");//perror("scandir");
     delete _infos;
   } else {
-    SetCurrentDirectory (_pluginPath.c_str()); 
+    SetCurrentDirectory (_pluginPath.c_str());
     _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
+    if (loader != 0) {
+      // count files loop
+      unsigned int nbFiles = 0;
+      if (_infos->hFind != INVALID_HANDLE_VALUE)
+	nbFiles = 1;
+      while (FindNextFile (_infos->hFind, &_infos->FindData)) {
+	++nbFiles;
+      }
+      loader->numberOfFiles(nbFiles);
+      _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
+      }
     infos = (void *) _infos;
   }
 }
