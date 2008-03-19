@@ -66,7 +66,8 @@ namespace tlp {
     // install
     unsigned int index=0;
     if(namePluginsInstall.size()==0) {
-      installBox->setEnabled(false);
+      QLabel *newLabel=new QLabel("None",this);
+      installLabelBox->addWidget(newLabel);
     }else{
       for(vector<string>::const_iterator it=namePluginsInstall.begin();it!=namePluginsInstall.end();++it) {
 	pluginsInstallIndex[*it]=index;
@@ -85,7 +86,8 @@ namespace tlp {
     // remove
     index=0;
     if(namePluginsRemove.size()==0) {
-      removeBox->setEnabled(false);
+      QLabel *newLabel=new QLabel("None",this);
+      removeLabelBox->addWidget(newLabel);
     }else{
       for(vector<string>::const_iterator it=namePluginsRemove.begin();it!=namePluginsRemove.end();++it) {
 	pluginsRemoveIndex[*it]=index;
