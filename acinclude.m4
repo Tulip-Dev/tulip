@@ -383,8 +383,12 @@ else
 fi
   if test=`eval $try 2> /dev/null`; then 
     gl_libdir=$dir
-    try="ls -1 $gl_libdir/libGLEW.*"
-    if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi
+    if test ${VAR_WIN32} = 0 ; then
+      try="ls -1 $gl_libdir/libGLEW.*"
+      if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi
+    else
+      break
+    fi
   else 
     echo "tried $dir" >&AC_FD_CC
   fi
