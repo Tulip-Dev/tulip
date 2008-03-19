@@ -265,7 +265,7 @@ namespace tlp {
     if(num==0)
       return -1;
     for(int i=0;i<num;i++) {
-      dst[i] = projectPoint(src[hullVertexTable[pos][i+1]],transformMatrix,globalViewport);
+      dst[i] = projectPoint(src[(int)hullVertexTable[pos][i+1]],transformMatrix,globalViewport);
       dst[i][1] = globalViewport[3] - dst[i][1];
     }
     bool inScreen=false;
@@ -298,8 +298,13 @@ namespace tlp {
     }
   }
   //====================================================
-  float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& viewport) {
-    if(!(bb.first[0]<viewport[0]+viewport[2] && bb.second[0]>viewport[0] && bb.first[1]<viewport[1]+viewport[3] && bb.second[1]>viewport[1])){
+  float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
+    Coord first=bb.first;
+    Coord second=bb.second;
+    first[1]=globalViewport[3]-bb.second[1];
+    second[1]=globalViewport[3]-bb.first[1];
+    
+    if(!(first[0]<currentViewport[0]+currentViewport[2] && second[0]>currentViewport[0] && first[1]<currentViewport[1]+currentViewport[3] && second[1]>currentViewport[1])){
       return -1.;
     }else{
       return 1.;
