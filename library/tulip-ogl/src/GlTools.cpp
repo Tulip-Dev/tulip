@@ -275,16 +275,16 @@ namespace tlp {
 	inScreen=true;
       }
       if(i==0){
-	bbBox[0]=dst[i][0];bbBox[2]=dst[i][0];bbBox[1]=dst[i][1];bbBox[3]=dst[i][1];
+	bbBox[0]= (int) dst[i][0];bbBox[2]= (int) dst[i][0];bbBox[1]= (int) dst[i][1];bbBox[3]= (int) dst[i][1];
       }else{
 	if(dst[i][0]<bbBox[0])
-	  bbBox[0]=dst[i][0];
+	  bbBox[0]= (int) dst[i][0];
 	if(dst[i][0]>bbBox[2])
-	  bbBox[2]=dst[i][0];
+	  bbBox[2]= (int) dst[i][0];
 	if(dst[i][1]<bbBox[1])
-	  bbBox[1]=dst[i][1];
+	  bbBox[1]= (int) dst[i][1];
 	if(dst[i][1]>bbBox[3])
-	  bbBox[3]=dst[i][1];
+	  bbBox[3]= (int) dst[i][1];
       }
       if(bbBox[0]<currentViewport[0]+currentViewport[2] && bbBox[2]>currentViewport[0] && bbBox[1]<currentViewport[1]+currentViewport[3] && bbBox[3]>currentViewport[1]){
 	inScreen=true;
