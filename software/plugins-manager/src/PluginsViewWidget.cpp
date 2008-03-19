@@ -453,10 +453,10 @@ namespace tlp {
     pluginDialog->installFinished(pluginInfo.name);
     pluginUpdaters.removeAll(terminatedUpdater);
     disconnect(terminatedUpdater, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
-    delete terminatedUpdater;
     _msm->addLocalPlugin(&pluginInfo);
     // in a distant future, we might like to pass the plugin's name to this signal
     emit pluginInstalled();
+    delete terminatedUpdater;
     changeList();
   }
 

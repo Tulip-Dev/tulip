@@ -69,7 +69,7 @@ namespace tlp {
 	       const std::string &displayType,
 	       const std::string& server,
 	       const std::string& version,
-	       std::vector<PluginDependency> dependencies,
+	       const std::vector<PluginDependency> &dependencies,
 	       bool local)
       :name(name), 
       type(type), 
@@ -123,7 +123,7 @@ namespace tlp {
 		   const std::string& version,
 		   const std::string& fileName,
 		   const std::string& localVersion,
-		   std::vector<PluginDependency> dependencies,
+		   const std::vector<PluginDependency>& dependencies,
 		   bool linuxVersion,
 		   bool macVersion,
 		   bool windowsVersion)
@@ -156,7 +156,7 @@ namespace tlp {
 	       const std::string& author,
 	       const std::string& date,
 	       const std::string& info,
-	       std::vector<PluginDependency> dependencies)
+	       const std::vector<PluginDependency> &dependencies)
       :PluginInfo(name,type,displayType,server,version,dependencies,true),
       fileName(fileName), 
       author(author), 
