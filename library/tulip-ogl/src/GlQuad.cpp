@@ -8,6 +8,7 @@
 
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlXMLTools.h"
+#include "tulip/GlTools.h"
 
 using namespace std;
 
@@ -106,59 +107,31 @@ string GlQuad::getTextureName() const {
 void GlQuad::draw(float lod, Camera *camera)
 {
 
-  GLfloat* cols[N_QUAD_POINTS];
-
-  for(int i=0; i < N_QUAD_POINTS; i++)
-    cols[i] = colors[i]->getGL();
-
   if(textureName!="") {
     GlTextureManager::getInst().activateTexture(textureName);
   }
 
-  glEnable(GL_COLOR_MATERIAL);
+  glDisable(GL_CULL_FACE);
   glBegin(GL_QUADS);
-  
+  glNormal3f(0.0f, 0.0f, 1.0f);
   glTexCoord2f(0.0f, 0.0f);
-  glColor4fv(cols[0]);
+  setMaterial(*colors[0]);
   glVertex3f(positions[0]->getX(), positions[0]->getY(), positions[0]->getZ());
   glTexCoord2f(1.0f, 0.0f);
-  glColor4fv(cols[1]);
+  setMaterial(*colors[1]);
   glVertex3f(positions[1]->getX(), positions[1]->getY(), positions[1]->getZ());
   glTexCoord2f(1.0f, 1.0f);
-  glColor4fv(cols[2]);
+  setMaterial(*colors[2]);
   glVertex3f(positions[2]->getX(), positions[2]->getY(), positions[2]->getZ());
   glTexCoord2f(0.0f, 1.0f);
-  glColor4fv(cols[3]);
+  setMaterial(*colors[3]);
   glVertex3f(positions[3]->getX(), positions[3]->getY(), positions[3]->getZ());
   
   glEnd();
+  glEnable(GL_CULL_FACE);
 
   GlTextureManager::getInst().desactivateTexture();
- 
-  /*  
-  if (renderOptions.getRenderState(GlAD_Wireframe))
-    {
-	
-      if (Solid)
-	{
-	  GLfloat colBk[4] = {0.0f, 0.0f, 0.0f, 255.0f};
 
-	  for (int i=0; i < N_QUAD_POINTS; i++)
-	    cols[i] = colBk;
-	}
-
-      glBegin(GL_LINE_STRIP);
-	   
-      for(int i=0; i <= N_QUAD_POINTS; i++)
-	{
-	  int id = i % N_QUAD_POINTS;
-	    
-	  glColor4fv(cols[id]);
-	  glVertex3f(positions[id]->getX(), positions[id]->getY(), positions[id]->getZ());
-	}
-	
-      glEnd();
-      */
 }
 //===========================================================
 void GlQuad::translate(const Coord& mouvement) {
