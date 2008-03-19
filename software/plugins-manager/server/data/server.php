@@ -41,10 +41,12 @@ function buildPluginsListForOneFilePHP5($outDoc,$outNode,$file){
   $linuxFileName=str_replace("xml","so",$file).".i386";
   $macFileName=str_replace("xml","so",$file).".mac";
   $windobFileName=str_replace("xml","dll",$file);
+  $i64FileName=str_replace("xml","so",$file).".i64";
 
   $linuxVersion="false";
   $macVersion="false";
-  $windowVersion="false";
+  $windobVersion="false";
+  $i64Version="false";
   if(file_exists($linuxFileName)){
     $linuxVersion="true";
   }
@@ -53,6 +55,9 @@ function buildPluginsListForOneFilePHP5($outDoc,$outNode,$file){
   }
   if(file_exists($windobFileName)){
     $windobVersion="true";
+  }
+  if(file_exists($i64FileName)){
+    $i64Version="true";
   }
 
   $doc = new DOMDocument();
@@ -71,6 +76,7 @@ function buildPluginsListForOneFilePHP5($outDoc,$outNode,$file){
   $outNode->setAttribute("linuxVersion",$linuxVersion);
   $outNode->setAttribute("macVersion",$macVersion);
   $outNode->setAttribute("windowsVersion",$windobVersion);
+  $outNode->setAttribute("i64Version",$i64Version);
 
   $deps = $node->getElementsByTagname("dependency");
   foreach($deps as $dep) {
@@ -87,10 +93,12 @@ function buildPluginsListForOneFilePHP4($outDoc,$outNode,$file){
   $linuxFileName=str_replace("xml","so",$file).".i386";
   $macFileName=str_replace("xml","so",$file).".mac";
   $windobFileName=str_replace("xml","dll",$file);
+  $i64FileName=str_replace("xml","so",$file).".i64";
 
   $linuxVersion="false";
   $macVersion="false";
-  $windowVersion="false";
+  $windobVersion="false";
+  $i64Version="false";
   if(file_exists($linuxFileName)){
     $linuxVersion="true";
   }
@@ -99,6 +107,9 @@ function buildPluginsListForOneFilePHP4($outDoc,$outNode,$file){
   }
   if(file_exists($windobFileName)){
     $windobVersion="true";
+  }
+  if(file_exists($i64FileName)){
+    $i64Version="true";
   }
 
   if(!$doc = domxml_open_file($file)) {
@@ -116,7 +127,8 @@ function buildPluginsListForOneFilePHP4($outDoc,$outNode,$file){
   $outNode->set_attribute("fileName",$node->get_attribute("fileName"));
   $outNode->set_attribute("linuxVersion",$linuxVersion);
   $outNode->set_attribute("macVersion",$macVersion);
-  $outNode->set_attribute("windowsVersion",$windowVersion);
+  $outNode->set_attribute("windowsVersion",$windobVersion);
+  $outNode->set_attribute("i64Version",$i64Version);
 
   $deps = $node->get_elements_by_tagname("dependency");
   foreach($deps as $key => $dep) {
