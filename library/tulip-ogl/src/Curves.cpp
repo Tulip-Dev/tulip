@@ -63,6 +63,14 @@ namespace {
     CurvePoints(unsigned int size):size(size) {
       data = new GLfloat[2*size*3];
     }
+    void addPoint(){
+      GLfloat *newData=new GLfloat[2*(size+1)*3];
+      memcpy(newData,data,sizeof(GLfloat)*size*3);
+      memcpy(newData+((size+1)*3),data+(size*3),sizeof(GLfloat)*size*3);
+      delete[] data;
+      data=newData;
+      ++size;
+    }
     Coord& operator()(unsigned int i, unsigned int j) {
       return (Coord&)data[j*size*3+i*3];
     }
@@ -71,20 +79,11 @@ namespace {
   GLfloat* buildCurvePoints (const vector<Coord> &vertices, 
 			     const vector<float> &sizes,
 			     const Coord &startN,
-			     const Coord &endN) {
-
-    //    Camera cam = glGraph->getCamera();
-    /*
-    vector<float> zVal(vvertices.size());
-    vector<Coord> vertices(vvertices.size());
-    for (unsigned int i = 0; i< vvertices.size(); ++i) {
-      Coord tmp = vvertices[i];
-      //   glGraph->worldTo2DScreen(tmp[0], tmp[1], tmp[2]);
-      zVal[i] = tmp[2];
-      tmp[2] = 0;
-      vertices[i] = tmp;
-    }
-    */
+			     const Coord &endN,
+			     unsigned int &resultSize,
+			     vector<unsigned int> *dec=NULL){
+    unsigned int resultDec=0;
+    bool inversion=false;
     CurvePoints result(vertices.size());
     //start point
     Coord xu = startN - vertices[0];
@@ -102,23 +101,53 @@ namespace {
       float n_xv = xv.norm();
       xu /= n_xu;
       xv /= n_xv;
-      if ((xu^xv).norm() < 1E-3) {
-	Coord xv = Coord(0,0,1);
-	xu /= xu.norm();
-	Coord dir = xu^xv;
-	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-	result(i,0) = vertices[i] - dir*sizes[i];
-	result(i,1) = vertices[i] + dir*sizes[i];
-      } 
-      else {
-	Coord bi_xu_xv = xu+xv;
-	bi_xu_xv /= bi_xu_xv.norm();
+  
+      Coord bi_xu_xv = xu+xv;
+      bi_xu_xv /= bi_xu_xv.norm();
+      float newSize=sizes[i];
+      Coord u=vertices[i-1]-vertices[i];
+      Coord v=vertices[i+1]-vertices[i];
+      float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+      newSize=newSize/cos(angle/2.);
+      
+      if(angle<M_PI/2+M_PI/4) {
 	if ((xu^xv)[2] > 0) {
-	  result(i,0) = vertices[i] + bi_xu_xv*sizes[i];
-	  result(i,1) = vertices[i] - bi_xu_xv*sizes[i];
+	  result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	  result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
 	} else {
-	  result(i,0) = vertices[i] - bi_xu_xv*sizes[i];
-	  result(i,1) = vertices[i] + bi_xu_xv*sizes[i];
+	  result(i+resultDec,0 + inversion) = vertices[i] - bi_xu_xv*newSize;
+	  result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	}
+      }else{
+	
+	Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
+	
+	if(!(newSize>u.norm() || newSize>v.norm())) {
+	  result.addPoint();
+	  if(dec)
+	    dec->push_back(i); 
+	  if ((xu^xv)[2] > 0) {
+	    result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	    result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
+	  }else{
+	    result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	    result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
+	  }
+	  ++resultDec;
+	}else{
+	  if ((xu^xv)[2] > 0) {
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	    inversion=!inversion;
+	  }else{
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	    inversion=!inversion;
+	  }
 	}
       }
     }
@@ -128,18 +157,9 @@ namespace {
     xv = Coord(0,0,-1);
     dir = xu^xv;
     if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-    result(vertices.size()-1,0) = vertices[vertices.size()-1] - dir*sizes[vertices.size()-1];
-    result(vertices.size()-1,1) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
-    //============
-    /*
-      for (unsigned int i = 0; i< vvertices.size(); ++i)
-      for (unsigned int j = 0; j < 2; ++j) {
-	Coord tmp = result(i,j);
-	tmp[2] = zVal[i];
-	//glGraph->screenTo3DWorld(tmp[0], tmp[1], tmp[2]);
-	result(i,j) = tmp;
-      }
-    */
+    result(vertices.size()-1+resultDec,0 + inversion) = vertices[vertices.size()-1] - dir*sizes[vertices.size()-1];
+    result(vertices.size()-1+resultDec,1 - inversion) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
+    resultSize=vertices.size()+resultDec;
     return result.data;
   }
   //==============================================
@@ -271,12 +291,21 @@ namespace tlp {
 		const vector<Color> &colors, 
 		const vector<float> &sizes,
 		const Coord & startN, const Coord &endN) {
-    GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN);
+    unsigned int size;
+    vector<unsigned int> decTab;
+    unsigned int dec=0;
+    GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN,size,&decTab);
     glBegin(GL_QUAD_STRIP);
-    for (unsigned int i = 0; i < vertices.size(); ++i) {
-      glColor4ubv(((const GLubyte *)&colors[i]));
+    for (unsigned int i = 0; i < size; ++i) {
+      if(!decTab.empty()){
+	if(i==decTab[0]) {
+	  dec++;
+	  decTab.erase(decTab.begin());
+	}
+      }
+      glColor4ubv(((const GLubyte *)&colors[i-dec]));
       glVertex3fv(&points[i*3]);
-      glVertex3fv(&points[i*3 + vertices.size()*3]);
+      glVertex3fv(&points[i*3 + size*3]);
     } 
     glEnd();
     delete [] points;
@@ -375,10 +404,11 @@ namespace tlp {
       delta[i] = float(c2[i]) - float(c1[i]);
     }
     delta /= steps;
-    GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN);
+    unsigned int size;
+    GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN,size);
     GLfloat *pointsIt  = points;
-    glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, vertices.size() , 0.0, 1.0, 
-	    vertices.size()*3, 2, pointsIt );
+    glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size , 0.0, 1.0, 
+	    size*3, 2, pointsIt );
     glEnable(GL_MAP2_VERTEX_3);
     glBegin(GL_QUAD_STRIP);
     glNormal3f(0.0f, 0.0f, 1.0f);
