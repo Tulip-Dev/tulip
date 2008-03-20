@@ -472,7 +472,7 @@ if test ! "$ac_qt_dir" = "NO"; then
    QTDIR=$ac_qt_dir
 fi
 
-qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
+qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/include/qt4 /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
 AC_FIND_FILE(QtCore, $qt_incdirs, qt_incdir)
 QT_PACKAGE=qt4
 qtlib_prefix=libQt
