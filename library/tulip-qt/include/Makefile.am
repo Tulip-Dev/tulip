@@ -15,7 +15,6 @@ nobase_include_HEADERS = \
 	tulip/ElementPropertiesWidgetUI.h \
 	tulip/ElementPropertiesWidget.h \
 	tulip/FindSelectionWidget.h \
-	tulip/SGHierarchyWidgetUI.h \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidget.h \
 	tulip/LayerManagerWidget.h \
@@ -23,7 +22,6 @@ nobase_include_HEADERS = \
 	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
-	tulip/SGHierarchyWidgetQt3.h \
 	tulip/GlMainWidgetPlugin.h \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \

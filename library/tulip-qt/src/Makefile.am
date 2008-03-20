@@ -56,7 +56,6 @@ BUILT_SOURCES = \
 	moc_FindSelectionWidget.cpp \
 	moc_FindSelectionData.cpp \
 	moc_RenderingParametersDialogData.cpp \
-	moc_SGHierarchyWidgetUI.cpp \
 	FindSelectionData.cpp \
 	RenderingParametersDialogData.cpp \
 	GWOverviewWidgetData.cpp \
@@ -76,7 +75,6 @@ dist_libtulip_qt4_la_SOURCES = \
 	ElementPropertiesWidgetUI.cpp \
 	ElementPropertiesWidget.cpp \
 	FindSelectionWidget.cpp \
-	SGHierarchyWidgetUI.cpp \
 	SGHierarchyWidget.cpp \
 	GWOverviewWidget.cpp \
 	LayerManagerWidget.cpp \
@@ -101,7 +99,7 @@ CLEANFILES = $(BUILT_SOURCES)
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
-moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidgetQt3.h 
+moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidget.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
 FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h

@@ -5,16 +5,14 @@
 #include <config.h>
 #endif
 
-#include <qobject.h>
-#include <qpoint.h>
+#include <QtCore/qobject.h>
+#include <QtCore/qpoint.h>
+#include <QtGui/qtreewidget.h>
 
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
-#include "tulip/SGHierarchyWidgetUI.h"
 
-class QListViewItem;
-class QListView;
-class QPopupMenu;
+class QTreeWidgetItem;
 
 namespace tlp {
 class Graph;
@@ -22,12 +20,11 @@ class Graph;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public tlp::SGHierarchyWidgetUI { 
+class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget { 
   Q_OBJECT;
   
 public:
-  SGHierarchyWidget(tlp::Graph *rootGraph, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
-  SGHierarchyWidget(QWidget* parent = 0, const char *name = 0, Qt::WFlags fl = 0);
+  SGHierarchyWidget(QWidget* parent = 0, tlp::Graph *rootGraph = 0);
   tlp::Graph *getGraph() const;
   
 public slots:
@@ -44,22 +41,20 @@ private slots:
   void contextRemoveCluster();
   void contextRemoveAllCluster();
   void contextCloneSubgraphCluster();
-  void contextMoveUpCluster();
   void contextRenameCluster();
   void contextCloneCluster();
   void currentGraphChanged(const tlp::Graph *);
-  void rightButtonSGHierarchyWidget(QListViewItem *item, const QPoint &p, int c);
-  void changeGraph(QListViewItem *item,const QPoint &p, int i);
-  void changeGraph(QListViewItem *item);
-  void setItemInfos(QListViewItem *item, tlp::Graph *, unsigned int nbNodes, unsigned int nbEdges);
+  void displayContextMenu(const QPoint &p);
+  void changeGraph(QTreeWidgetItem *item, const QPoint &p, int i);
+  void changeGraph(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+  void setItemInfos(QTreeWidgetItem *item, tlp::Graph *, unsigned int nbNodes, unsigned int nbEdges);
 
  protected:
-  void buildTreeView(QListView *item, tlp::Graph *p);
-  void buildTreeView(QListViewItem *item, tlp::Graph *p);
+  void buildTreeView(tlp::Graph *p, QTreeWidgetItem *item = NULL);
   void removeSubgraph(tlp::Graph *graph, bool recursive);
 
 private:
-  tlp::MutableContainer<QListViewItem *> graphItems;
+  tlp::MutableContainer<QTreeWidgetItem *> graphItems;
   tlp::Graph *_currentGraph;
 };
 /*@}*/
