@@ -64,7 +64,8 @@ BUILT_SOURCES = \
 	moc_GWOverviewWidget.cpp \
 	moc_GWOverviewWidgetData.cpp \
 	moc_LayerManagerWidget.cpp \
-	moc_LayerManagerWidgetData.cpp 
+	moc_LayerManagerWidgetData.cpp \
+	moc_QtCPULODCalculator.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -92,7 +93,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	MouseEdgeSelector.cpp \
 	MouseEdgeBendEditor.cpp \
 	DataSetDialog.cpp \
-	TlpQtTools.cpp
+	TlpQtTools.cpp \
+	QtCPULODCalculator.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 

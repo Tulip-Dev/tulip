@@ -27,7 +27,8 @@ nobase_include_HEADERS = \
 	tulip/GlMainWidgetPlugin.h \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \
-	tulip/PropertyWidgetPlugin.h
+	tulip/PropertyWidgetPlugin.h \
+	tulip/QtCPULODCalculator.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h

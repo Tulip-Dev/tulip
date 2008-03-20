@@ -174,12 +174,12 @@ namespace tlp {
 
       #if defined(__APPLE__)
         havePlugin=((DistPluginInfo*)pluginInfo)->macVersion;
+      #elif defined(_WIN32)
+	havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
+      #elif defined(I64)
+	havePlugin=((DistPluginInfo*)pluginInfo)->i64Version;
       #else
-        #if defined(_WIN32)
-	  havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
-        #else
-	  havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
-	#endif
+	havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
       #endif
 
       if(created) {

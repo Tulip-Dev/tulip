@@ -31,12 +31,12 @@ namespace tlp {
     serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".doc.")+version,installPath+pluginInfo.fileName+std::string(".doc")));
     #if defined(__APPLE__)
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".mac",installPath+pluginInfo.fileName+std::string(".so")));
-    #else
-      #if defined(_WIN32)
-	serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dll.")+version+".win",installPath+pluginInfo.fileName+std::string(".dll")));
-      #else
-	serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i386",installPath+pluginInfo.fileName+std::string(".so")));
-      #endif
+    #elif defined(_WIN32)
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dll.")+version+".win",installPath+pluginInfo.fileName+std::string(".dll")));
+    #elif defined(I64)
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i64",installPath+pluginInfo.fileName+std::string(".so")));
+    #else 
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i386",installPath+pluginInfo.fileName+std::string(".so")));
     #endif
     
     QFile installFile(QString(installPath.c_str())+"toInstall.dat");
@@ -49,7 +49,7 @@ namespace tlp {
     out << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
     if(pluginInfo.type=="Glyph")
       out << "glyphs/" ;
-    #if defined(__WIN32)
+    #if defined(_WIN32)
       out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
     #else
       out << pluginInfo.fileName.c_str() << ".so" << "\n" ;
@@ -72,7 +72,7 @@ namespace tlp {
     out << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
     if(pluginInfo.type=="Glyph")
       out << "glyphs/" ;
-    #if defined(__WIN32)
+    #if defined(_WIN32)
       out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
     #else
       out << pluginInfo.fileName.c_str() << ".so" << "\n" ;

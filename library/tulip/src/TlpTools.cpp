@@ -34,6 +34,7 @@ string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
 string tlp::TulipDocProfile;
 string tlp::TulipUserHandBookIndex;
+string tlp::TulipBitmapDir;
 #ifdef _WIN32
 const char tlp::PATH_DELIMITER = ';';
 #else
@@ -96,6 +97,8 @@ void tlp::initTulipLib(char* appDirPath) {
   tulipDocDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
   TulipDocProfile=tulipDocDir+"profile.adp";
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
+
+  TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";
 }
 //=========================================================
 istream *tlp::getIgzstream(const char *name, int open_mode) {

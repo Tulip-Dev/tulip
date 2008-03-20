@@ -27,6 +27,13 @@ namespace tlp {
    */
   class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
   
+  protected:
+
+    typedef std::pair<unsigned long, BoundingBox> BoundingBoxUnit;
+    typedef std::vector<BoundingBoxUnit> BoundingBoxVector;
+    typedef std::pair<unsigned long, std::pair<BoundingBoxVector*,BoundingBoxVector*> > CameraAndBoundingBoxUnit;
+    typedef std::vector<CameraAndBoundingBoxUnit> CameraAndBoundingBoxVector;
+
   public:
 
     virtual ~GlCPULODCalculator();
@@ -48,6 +55,20 @@ namespace tlp {
      * Compute all bounding boxs with the given viewport
      */
     virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+
+    virtual void computeFor3DCamera(const std::pair<BoundingBoxVector*,BoundingBoxVector*> &entities,
+				    const LODResultVector::iterator &itSEOutput, 
+				    const LODResultVector::iterator &itCEOutput,
+				    const Coord &eye,
+				    const Matrix<float, 4> transformMatrix,
+				    const Vector<int,4>& globalViewport,
+				    const Vector<int,4>& currentViewport);
+
+    void computeFor2DCamera(const std::pair<BoundingBoxVector*,BoundingBoxVector*> &entities,
+			    const LODResultVector::iterator &itSEOutput, 
+			    const LODResultVector::iterator &itCEOutput,
+			    const Vector<int,4>& globalViewport,
+			    const Vector<int,4>& currentViewport);
     
     /**
      * Return the result vector for simpleEntities
@@ -64,11 +85,6 @@ namespace tlp {
     virtual void clear();
 
   protected:
-    
-    typedef std::pair<unsigned long, BoundingBox> BoundingBoxUnit;
-    typedef std::vector<BoundingBoxUnit> BoundingBoxVector;
-    typedef std::pair<unsigned long, std::pair<BoundingBoxVector*,BoundingBoxVector*> > CameraAndBoundingBoxUnit;
-    typedef std::vector<CameraAndBoundingBoxUnit> CameraAndBoundingBoxVector;
     
     BoundingBoxVector* actualSEBoundingBoxVector;
     BoundingBoxVector* actualCEBoundingBoxVector;

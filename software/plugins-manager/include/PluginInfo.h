@@ -112,6 +112,7 @@ namespace tlp {
     bool linuxVersion;
     bool macVersion;
     bool windowsVersion;
+    bool i64Version;
 
     virtual ~DistPluginInfo() {};
     
@@ -126,13 +127,15 @@ namespace tlp {
 		   const std::vector<PluginDependency>& dependencies,
 		   bool linuxVersion,
 		   bool macVersion,
-		   bool windowsVersion)
+		   bool windowsVersion,
+		   bool i64Version)
       : PluginInfo(name,type,displayType,server,version,dependencies,false),
       fileName(fileName), 
       localVersion(localVersion),
       linuxVersion(linuxVersion),
       macVersion(macVersion),
-      windowsVersion(windowsVersion){
+      windowsVersion(windowsVersion),
+      i64Version(i64Version){
 	local=false;};
   };
   

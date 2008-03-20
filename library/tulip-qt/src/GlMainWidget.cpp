@@ -19,6 +19,7 @@
 #include <tulip/StlIterator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
+#include "tulip/QtCPULODCalculator.h"
 
 using namespace std;
 using namespace tlp;
@@ -71,7 +72,8 @@ static QGLFormat GlInit() {
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
   QGLWidget(GlInit(), parent, name),
-  _id(GWInteractor::invalidID) {
+  _id(GWInteractor::invalidID),
+  scene(new QtCPULODCalculator()){
   setObjectName(name);
   //  cerr << __PRETTY_FUNCTION__ << endl;
   setFocusPolicy(StrongFocus);
@@ -348,7 +350,7 @@ void GlMainWidget::doSelect(const int x, const int y,
   vector<GlEntity*> selectedElements;
   scene.selectEntities(SelectNodes, x, y, width, height, layer, selectedElements);
   for(vector<GlEntity*>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
- sNode.push_back(node( ((GlNode*)(*it))->id ));
+    sNode.push_back(node( ((GlNode*)(*it))->id ));
   }
   selectedElements.clear();
   scene.selectEntities(SelectEdges, x, y, width, height, layer, selectedElements);

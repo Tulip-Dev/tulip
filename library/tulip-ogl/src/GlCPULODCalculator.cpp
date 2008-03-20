@@ -48,34 +48,56 @@ namespace tlp {
       LODResultVector::iterator itSE=--seResultVector.end();
       LODResultVector::iterator itCE=--ceResultVector.end();
       
-      Matrix<float,4> tmp;
-      camera->getTransformMatrix(globalViewport,tmp);
-      MatrixGL transformMatrix(tmp);
-      float lod;
+      Matrix<float,4> transformMatrix;
+      camera->getTransformMatrix(globalViewport,transformMatrix);
 
       Coord eye;
-      if(camera->is3D())
+      if(camera->is3D()) {
 	eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / camera->getZoomFactor();
+	computeFor3DCamera((*itM).second,itSE,itCE,eye,transformMatrix,globalViewport,currentViewport);
+      }else{
+	computeFor2DCamera((*itM).second,itSE,itCE,globalViewport,currentViewport);
+      }
       
-      for(BoundingBoxVector::iterator itV=(*itM).second.first->begin();itV!=(*itM).second.first->end();++itV){
-	if(camera->is3D()){
-	  lod=calculateAABBSize((*itV).second,eye,transformMatrix,globalViewport,currentViewport);
-	}else{
-	  lod=calculate2DLod((*itV).second,globalViewport,currentViewport);
-	}
-	if(lod>=0)
-	  (*itSE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
-      }
-      for(BoundingBoxVector::iterator itV=(*itM).second.second->begin();itV!=(*itM).second.second->end();++itV){
-	if(camera->is3D()){
-	  lod=calculateAABBSize((*itV).second,eye,transformMatrix,globalViewport,currentViewport);
-	}else{
-	  lod=calculate2DLod((*itV).second,globalViewport,currentViewport);
-	}
-	if(lod>=0)
-	  (*itCE).second.push_back(pair<unsigned long,float>((*itV).first,lod));
-      }
       glMatrixMode(GL_MODELVIEW);
+    }
+  }
+
+  void GlCPULODCalculator::computeFor3DCamera(const pair<BoundingBoxVector*,BoundingBoxVector*> &entities,
+					      const LODResultVector::iterator &itSEOutput, 
+					      const LODResultVector::iterator &itCEOutput,
+					      const Coord &eye,
+					      const Matrix<float, 4> transformMatrix,
+					      const Vector<int,4>& globalViewport,
+					      const Vector<int,4>& currentViewport) {
+    float lod;
+    for(BoundingBoxVector::iterator itV=entities.first->begin();itV!=entities.first->end();++itV){
+      lod=calculateAABBSize((*itV).second,eye,transformMatrix,globalViewport,currentViewport);
+      if(lod>=0)
+	(*itSEOutput).second.push_back(pair<unsigned long,float>((*itV).first,lod));
+    }
+    for(BoundingBoxVector::iterator itV=entities.second->begin();itV!=entities.second->end();++itV){
+      lod=calculateAABBSize((*itV).second,eye,transformMatrix,globalViewport,currentViewport);
+      if(lod>=0)
+	(*itCEOutput).second.push_back(pair<unsigned long,float>((*itV).first,lod));
+    }
+  }
+
+  void GlCPULODCalculator::computeFor2DCamera(const pair<BoundingBoxVector*,BoundingBoxVector*> &entities,
+					      const LODResultVector::iterator &itSEOutput, 
+					      const LODResultVector::iterator &itCEOutput,
+					      const Vector<int,4>& globalViewport,
+					      const Vector<int,4>& currentViewport) {
+    float lod;
+    for(BoundingBoxVector::iterator itV=entities.first->begin();itV!=entities.first->end();++itV){
+      lod=calculate2DLod((*itV).second,globalViewport,currentViewport);
+      if(lod>=0)
+	(*itSEOutput).second.push_back(pair<unsigned long,float>((*itV).first,lod));
+    }
+    for(BoundingBoxVector::iterator itV=entities.second->begin();itV!=entities.second->end();++itV){
+      lod=calculate2DLod((*itV).second,globalViewport,currentViewport);
+      if(lod>=0)
+	(*itCEOutput).second.push_back(pair<unsigned long,float>((*itV).first,lod));
     }
   }
   
