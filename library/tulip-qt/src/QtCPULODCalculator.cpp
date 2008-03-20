@@ -37,20 +37,15 @@ namespace tlp {
       boundingBoxTab[index]=(*itV).second;
       ++index;
     }
-	
-    QMutex mutexThread1;
-    QMutex mutexThread2;
 
-    QtCPULODCalculatorThread thread1(&mutexThread1,boundingBoxTab,resultTab,index/2,eye,transformMatrix,globalViewport,currentViewport);
-    QtCPULODCalculatorThread thread2(&mutexThread2,boundingBoxTab+index/2,resultTab+index/2,index-(index/2),eye,transformMatrix,globalViewport,currentViewport);
+    QtCPULODCalculatorThread thread1(boundingBoxTab,resultTab,index/2,eye,transformMatrix,globalViewport,currentViewport);
+    QtCPULODCalculatorThread thread2(boundingBoxTab+index/2,resultTab+index/2,index-(index/2),eye,transformMatrix,globalViewport,currentViewport);
 	  
     thread1.start();
     thread2.start();
     
-    mutexThread1.lock();
-    while(!thread1.isFinished()) {}
-    mutexThread2.lock();
-    while(!thread2.isFinished()) {}
+    thread1.wait();
+    thread2.wait();
 	
     index=0;
     for(BoundingBoxVector::iterator itV=entities.first->begin();itV!=entities.first->end();++itV){
@@ -68,16 +63,14 @@ namespace tlp {
     delete[] resultTab;
   }
  
-  QtCPULODCalculatorThread::QtCPULODCalculatorThread(QMutex *mutex,BoundingBox *boundingBoxTab,float *resultTab,unsigned int size,const Coord &eye,const Matrix<float,4> &transformMatrix, const Vector<int,4> &globalViewport, const Vector<int,4> &currentViewport)
-    :mutex(mutex),boundingBoxTab(boundingBoxTab),resultTab(resultTab),size(size),eye(eye),transformMatrix(transformMatrix),globalViewport(globalViewport),currentViewport(currentViewport){
-    mutex->lock();
+  QtCPULODCalculatorThread::QtCPULODCalculatorThread(BoundingBox *boundingBoxTab,float *resultTab,unsigned int size,const Coord &eye,const Matrix<float,4> &transformMatrix, const Vector<int,4> &globalViewport, const Vector<int,4> &currentViewport)
+    :boundingBoxTab(boundingBoxTab),resultTab(resultTab),size(size),eye(eye),transformMatrix(transformMatrix),globalViewport(globalViewport),currentViewport(currentViewport){
   }
 
   void QtCPULODCalculatorThread::run() {
     for(unsigned int i=0;i<size;++i){
       resultTab[i]=calculateAABBSize(boundingBoxTab[i],eye,transformMatrix,globalViewport,currentViewport);
     }
-    mutex->unlock();
   }
 
 }
