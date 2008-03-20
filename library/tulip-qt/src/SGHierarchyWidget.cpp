@@ -92,6 +92,7 @@ void SGHierarchyWidget::buildTreeView(Graph *graph, QTreeWidgetItem *parentItem)
     buildTreeView(itS->next(), item);
   delete itS;
   if (!parentItem) {
+    setCurrentItem(item);
     addTopLevelItem(item);
     expandItem(item);
   }
@@ -223,7 +224,9 @@ void SGHierarchyWidget::changeGraph(QTreeWidgetItem *item, const QPoint &p, int 
 //**********************************************************************
     void SGHierarchyWidget::changeGraph(QTreeWidgetItem* current, QTreeWidgetItem*) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  _currentGraph = ((SGHierarchyWidgetItem*)current)->getGraph();
-  emit graphChanged(_currentGraph);
+  if (current) {
+    _currentGraph = ((SGHierarchyWidgetItem*)current)->getGraph();
+    emit graphChanged(_currentGraph);
+  }
 }
 //=======================================================
