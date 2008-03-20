@@ -2,7 +2,7 @@
 // when building Tulip with Qt 3
 #include "tulip/SGHierarchyWidgetPlugin.h"
 #include <QtCore/QtPlugin>
-#include "tulip/SGHierarchyWidgetQt3.h"
+#include "tulip/SGHierarchyWidget.h"
 
 #include "../designer/sghierarchywidget.xpm"
 
@@ -29,7 +29,7 @@ bool SGHierarchyWidgetPlugin::isInitialized() const {
 }
 
 QWidget* SGHierarchyWidgetPlugin::createWidget(QWidget *parent) {
-  return new SGHierarchyWidget(graph, parent, name());
+  return new SGHierarchyWidget(parent, graph);
 }
 
 QString SGHierarchyWidgetPlugin::name() const {
