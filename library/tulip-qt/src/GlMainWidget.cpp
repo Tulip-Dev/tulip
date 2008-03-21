@@ -131,8 +131,6 @@ void GlMainWidget::initializeGL() {
 }
 //==================================================
 void GlMainWidget::redraw() {
-  GlDisplayListManager::getInst().changeContext((unsigned long)this);
-  GlTextureManager::getInst().changeContext((unsigned long)this);
   if (isDrawing()) return; //the graph drawn should be tested 
   //when multithreading will be enable.
   checkIfGlAuxBufferAvailable();
@@ -175,8 +173,6 @@ bool GlMainWidget::isDrawing() {
 //==================================================
 void GlMainWidget::draw() {
   if (isVisible()) {
-    GlDisplayListManager::getInst().changeContext((unsigned long)this);
-    GlTextureManager::getInst().changeContext((unsigned long)this);
     checkIfGlAuxBufferAvailable();
     makeCurrent();
 
@@ -320,10 +316,17 @@ void GlMainWidget::resizeGL(int w, int h) {
   scene.setViewport(0,0,w,h);
 }
 //==================================================
+void GlMainWidget::makeCurrent() {
+  QGLWidget::makeCurrent();
+  GlDisplayListManager::getInst().changeContext((unsigned long)this);
+  GlTextureManager::getInst().changeContext((unsigned long)this);
+}
+//==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y, 
 				     const int width, const int height,
 				     std::vector<GlEntity *> &pickedEntities,
 				     GlLayer* layer) {
+  makeCurrent();
   return scene.selectEntities(SelectSimpleEntities,x, y, 
 			      width, height, 
 			      layer,
@@ -333,6 +336,7 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
 bool GlMainWidget::selectGlEntities(const int x, const int y,
 				     std::vector <GlEntity *> &pickedEntities,
 				     GlLayer* layer) {
+  makeCurrent();
   return scene.selectEntities(SelectSimpleEntities,x, y, 
 			      2, 2,
 			      layer,

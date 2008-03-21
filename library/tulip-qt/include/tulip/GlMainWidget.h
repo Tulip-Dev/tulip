@@ -98,21 +98,30 @@ public:
 			&pickedEntities,
 			tlp::GlLayer* layer=NULL);
 
-  // allows to iterate on installed interactors
+  /**
+   * return list of interactor installed on this widget
+   */
   tlp::Iterator<tlp::GWInteractor *> *getInteractors() const;
+
+  /**
+   * Grab the image of this widget
+   */
   virtual QImage grabFrameBuffer(bool withAlpha = false);
 
+  /**
+   * return the scene of this glMainWidget
+   */
   tlp::GlScene* getScene(){return &scene;}
 
+  /**
+   * set if the label is rendered in this widget
+   */
   void setViewLabel(bool viewLabel) {scene.setViewLabel(viewLabel);}
 
-  //GlGraphRenderingParameters getRenderingParameters() {return scene.getRenderingParameters();}
-  //void setRenderingParameters(const GlGraphRenderingParameters& param) {scene.setRenderingParameters(param);}
-
-  /*void setBackgroundColor(const Color& color) {scene.setBackgroundColor(color);}
-    Color getBackgroundColor() {return scene.getBackgroundColor();}*/
-
-  //Graph* getGraph() {return scene.getGraph();}
+  /**
+   * reimplement makeCuurent function of QGLWidget to inform TextureManager and DisplayListManager of context changement
+   */
+  virtual void makeCurrent();
 
 public slots:
   /** 
