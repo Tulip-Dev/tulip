@@ -26,11 +26,10 @@ using the MinGW installation directory as the root installation directory.
 downloaded from http://www.zlatkovic.com/pub/libxml/ and installed using the
 MinGW installation as root installation directory for the contents of the
 bin, include and lib directories of the .win32 directory contained in the zip archive.
-- glew (glew-1.*-win32.zip) has to be downloaded from the Windows binaries
-link on http://glew.sourceforge.net and installed using the
-MinGW installation as root installation directory for the contents
-of the bin, include and lib directories of the glew directory contained
-in the zip archive.
+- glew 1.4 or higher (glew-1.*-win32.zip) has to be downloaded from the Windows
+binaries link on http://glew.sourceforge.net and installed using the MinGW
+installation as root installation directory for the contents of the bin,
+include and lib directories of the glew directory contained in the zip archive.
 
 4- Configure Tulip
 ------------------

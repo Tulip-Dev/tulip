@@ -23,8 +23,8 @@ then
   make
   make install
 
-3- Install glew
--------------
+3- Install glew 1.4 or higher
+-----------------------------
 Download the last MacOS X AGL version of glew from http://glew.sourceforge.net
 Install the librairies libGLEW*.dylib in /usr/lib, 
 the binaries in /usr/local/bin and
