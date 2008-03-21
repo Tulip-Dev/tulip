@@ -18,7 +18,7 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qlabel.h>
-#include <Qt3Support/q3popupmenu.h>
+#include <QtGui/qmenu.h>
 #include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
@@ -475,38 +475,38 @@ void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
     std::string textId(text(row, 0).latin1());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
-      QPopupMenu contextMenu(this,"dd");
+      QMenu contextMenu(this);
       string title;
       title += displayNode ? "Node " : "Edge ";
       title += textId;
-      contextMenu.setItemEnabled(contextMenu.insertItem(tr(title.c_str())), false);
-      contextMenu.insertSeparator();
-      contextMenu.insertItem(tr("Add to/Remove from selection"));
-      int selectId = contextMenu.insertItem(tr("Select"));
-      int deleteId = contextMenu.insertItem(tr("Delete"));
-      int propId = -1;
+      contextMenu.addAction(tr(title.c_str()))->setEnabled(false);
+      contextMenu.addSeparator();
+      contextMenu.addAction(tr("Add to/Remove from selection"));
+      QAction* selectAction = contextMenu.addAction(tr("Select"));
+      QAction* deleteAction = contextMenu.addAction(tr("Delete"));
+      QAction* propAction = NULL;
       if (showProperties) {
-	contextMenu.insertSeparator();
-	propId = contextMenu.insertItem(tr("Properties"));
+	contextMenu.addSeparator();
+	propAction = contextMenu.addAction(tr("Properties"));
       }
-      int menuId = contextMenu.exec(pos, 2);
+      QAction* action = contextMenu.exec(pos, selectAction);
       clearSelection();
-      if (menuId == -1)
+      if (!action)
 	return;
       unsigned int itemId = (unsigned int) atoi(textId.c_str());
       Observable::holdObservers();
-      if (menuId == deleteId) { // Delete
+      if (action == deleteAction) { // Delete
 	// delete graph item
 	if (displayNode)
 	  graph->delNode(node(itemId));
 	else
 	  graph->delEdge(edge(itemId));
       }
-      if (showProperties && menuId == propId) {
+      if (showProperties && action == propAction) {
 	emit showElementProperties(itemId, displayNode);
       }	else {
 	BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-	if (menuId == selectId) { // Select
+	if (action == selectAction) { // Select
 	  // empty selection
 	  elementSelected->setAllNodeValue(false);
 	  elementSelected->setAllEdgeValue(false);
