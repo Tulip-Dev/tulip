@@ -102,15 +102,23 @@ namespace {
       xu /= n_xu;
       xv /= n_xv;
   
-      if((xu^xv).norm() < 1E-3) {
+      /*if((xu^xv).norm() < 1E-3) {
+	cout << "Warning " << endl;
   	Coord xv = Coord(0,0,1);
 	xu /= xu.norm();
 	Coord dir = xu^xv;
 	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-	result(i,0) = vertices[i] - dir*sizes[i];
-	result(i,1) = vertices[i] + dir*sizes[i];
-      } else {
+	result(i+resultDec,0 + inversion) = vertices[i] - dir*sizes[i];
+	result(i+resultDec,1 - inversion) = vertices[i] + dir*sizes[i];
+	inversion=!inversion;
+	} else {*/
 	Coord bi_xu_xv = xu+xv;
+	if(bi_xu_xv ==Coord(0,0,0)) {
+	  //two point at the same coord
+	  result(i+resultDec,0)=result(i+resultDec-1,0);
+	  result(i+resultDec,1)=result(i+resultDec-1,1);
+	  continue;
+	}
 	bi_xu_xv /= bi_xu_xv.norm();
 	float newSize=sizes[i];
 	Coord u=vertices[i-1]-vertices[i];
@@ -119,6 +127,7 @@ namespace {
 	newSize=newSize/cos(angle/2.);
 	
 	if(angle<M_PI/2+M_PI/4) {
+	  //normal form
 	  if ((xu^xv)[2] > 0) {
 	    result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
 	    result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
@@ -127,10 +136,10 @@ namespace {
 	    result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
 	  }
 	}else{
-	  
+	  //broken form
 	  Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
-	  
-	  if(!(newSize>u.norm() || newSize>v.norm())) {
+
+	  if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
 	    result.addPoint();
 	    if(dec)
 	      dec->push_back(i); 
@@ -157,7 +166,7 @@ namespace {
 	      inversion=!inversion;
 	    }
 	  }
-	}
+	  //}
       }
     }
     //end point
