@@ -94,7 +94,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
   glStencilFunc(GL_LEQUAL,0,0xFFFF);
-  glMainWidget->getScene()->getGraphLayer()->getCamera()->initGl();
+  glMainWidget->getScene()->getCamera()->initGl();
   glDisable(GL_LIGHTING);
   float color[4];
   color[0]=1; color[1]=0;  color[2]=0;  color[3]=1;
