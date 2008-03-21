@@ -102,51 +102,60 @@ namespace {
       xu /= n_xu;
       xv /= n_xv;
   
-      Coord bi_xu_xv = xu+xv;
-      bi_xu_xv /= bi_xu_xv.norm();
-      float newSize=sizes[i];
-      Coord u=vertices[i-1]-vertices[i];
-      Coord v=vertices[i+1]-vertices[i];
-      float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
-      newSize=newSize/cos(angle/2.);
-      
-      if(angle<M_PI/2+M_PI/4) {
-	if ((xu^xv)[2] > 0) {
-	  result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	  result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
-	} else {
-	  result(i+resultDec,0 + inversion) = vertices[i] - bi_xu_xv*newSize;
-	  result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	}
-      }else{
+      if((xu^xv).norm() < 1E-3) {
+  	Coord xv = Coord(0,0,1);
+	xu /= xu.norm();
+	Coord dir = xu^xv;
+	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
+	result(i,0) = vertices[i] - dir*sizes[i];
+	result(i,1) = vertices[i] + dir*sizes[i];
+      } else {
+	Coord bi_xu_xv = xu+xv;
+	bi_xu_xv /= bi_xu_xv.norm();
+	float newSize=sizes[i];
+	Coord u=vertices[i-1]-vertices[i];
+	Coord v=vertices[i+1]-vertices[i];
+	float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+	newSize=newSize/cos(angle/2.);
 	
-	Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
-	
-	if(!(newSize>u.norm() || newSize>v.norm())) {
-	  result.addPoint();
-	  if(dec)
-	    dec->push_back(i); 
+	if(angle<M_PI/2+M_PI/4) {
 	  if ((xu^xv)[2] > 0) {
 	    result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
-	    result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	    result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
-	  }else{
+	    result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
+	  } else {
+	    result(i+resultDec,0 + inversion) = vertices[i] - bi_xu_xv*newSize;
 	    result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
-	    result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	    result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
 	  }
-	  ++resultDec;
 	}else{
-	  if ((xu^xv)[2] > 0) {
-	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
-	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
-	    inversion=!inversion;
+	  
+	  Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
+	  
+	  if(!(newSize>u.norm() || newSize>v.norm())) {
+	    result.addPoint();
+	    if(dec)
+	      dec->push_back(i); 
+	    if ((xu^xv)[2] > 0) {
+	      result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	      result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	      result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
+	    }else{
+	      result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	      result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	      result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
+	    }
+	    ++resultDec;
 	  }else{
-	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
-	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
-	    inversion=!inversion;
+	    if ((xu^xv)[2] > 0) {
+	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
+	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	      inversion=!inversion;
+	    }else{
+	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
+	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	      inversion=!inversion;
+	    }
 	  }
 	}
       }
