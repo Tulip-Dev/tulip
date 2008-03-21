@@ -5,6 +5,9 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#include <limits>
+
 #include <tulip/tulipconf.h>
 #include <tulip/Vector.h>
 
@@ -31,6 +34,9 @@ namespace tlp {
     inline Coord operator/(const  tlp::Vector<float,3> &) const;
     inline Coord operator/(const float &) const;
     inline Coord operator^(const  tlp::Vector<float,3> &) const;
+
+    inline bool operator!=(const Coord &) const;
+    inline bool operator==(const Coord &) const;
   };
   inline Coord operator*(const Coord &, const Vector<float,3> &);
   inline Coord operator*(const Coord &, const float &) ;
@@ -70,6 +76,19 @@ tlp::Coord tlp::Coord::operator/(const float& scalaire) const {
 //======================================================
 tlp::Coord tlp::Coord::operator^(const  tlp::Vector<float,3> &v) const {
   return tlp::Coord(*this) ^= v;
+}
+
+bool tlp::Coord::operator!=(const tlp::Coord &p) const {
+  for (int i=0;i<3;++i)
+    if((p[i]-(*this)[i]>std::numeric_limits<float>::epsilon()) || (p[i]-(*this)[i]<-std::numeric_limits<float>::epsilon()))
+      return true;
+  return false;
+}
+bool tlp::Coord::operator==(const tlp::Coord &p) const {
+  for (int i=0;i<3;++i)
+    if((p[i]-(*this)[i]>std::numeric_limits<float>::epsilon()) || (p[i]-(*this)[i]<-std::numeric_limits<float>::epsilon()))
+      return false;
+  return true;
 }
 
 tlp::Coord::Coord(const float xx, const float yy, const float zz) {
