@@ -28,13 +28,9 @@ namespace tlp {
   
   class Camera;
 
-  class TLP_GL_SCOPE QtCPULODCalculatorThread : public QThread {
+  class QtCPULODCalculatorThread : public QThread {
     
     Q_OBJECT
-
-  public:
-    
-    QtCPULODCalculatorThread(BoundingBox *boundingBoxTab,float *resultTab,unsigned int size,const Coord &eye,const Matrix<float,4> &transformMatrix, const Vector<int,4> &globalViewport, const Vector<int,4> &currentViewport); 
 
   protected:
 
@@ -47,12 +43,17 @@ namespace tlp {
     Matrix<float, 4> transformMatrix;
     Vector<int,4> globalViewport;
     Vector<int,4> currentViewport;
+
+  public:
+    
+    QtCPULODCalculatorThread(BoundingBox *bbTab, float *rTab,unsigned int sz,const Coord &e,const Matrix<float,4> &tfMatrix, const Vector<int,4> &global, const Vector<int,4> &current)
+    :boundingBoxTab(bbTab), resultTab(rTab), size(sz), eye(e),transformMatrix(tfMatrix), globalViewport(global),currentViewport(current){}
   };
 
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_QT_SCOPE QtCPULODCalculator : public GlCPULODCalculator {
+  class QtCPULODCalculator : public GlCPULODCalculator {
   
   public:
 

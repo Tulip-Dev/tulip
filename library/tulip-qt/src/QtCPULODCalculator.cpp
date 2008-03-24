@@ -63,10 +63,6 @@ namespace tlp {
     delete[] resultTab;
   }
  
-  QtCPULODCalculatorThread::QtCPULODCalculatorThread(BoundingBox *boundingBoxTab,float *resultTab,unsigned int size,const Coord &eye,const Matrix<float,4> &transformMatrix, const Vector<int,4> &globalViewport, const Vector<int,4> &currentViewport)
-    :boundingBoxTab(boundingBoxTab),resultTab(resultTab),size(size),eye(eye),transformMatrix(transformMatrix),globalViewport(globalViewport),currentViewport(currentViewport){
-  }
-
   void QtCPULODCalculatorThread::run() {
     for(unsigned int i=0;i<size;++i){
       resultTab[i]=calculateAABBSize(boundingBoxTab[i],eye,transformMatrix,globalViewport,currentViewport);
