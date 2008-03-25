@@ -1,47 +1,35 @@
-Tulip version 1.2.2 Readme file.
+Tulip version 3.0.0 Readme file.
 
 This software is under GPL licence,(see COPYING file).
 It has been designed and implmented by David Auber.
 
 The installation procedure is described in the file : INSTALL.
 
-//=============================================================
-                   !!!!! Warning !!!!!!
-If you use NVidia driver you need to have the Mesa library (libGl.so) if
-you want to compile tlprender. OffScreen rendering of tlprender
-uses lib OSMesa, a Mesa-specific lib.
-//=============================================================
-x=1;
-
-Quick install :
-
-with RedHat 7.3, install qt package, Mesa package(included in Xfree4), glut and
-glut-devel package
-Verify QTDIR is properly set: QTDIR/bin should contain moc,qtconfig,... QTDIR/lib
-the libs and QTDIR/include the Qt headers.
-
-tar xzvf tulip-1.2.2.tgz
-cd tulip-1.2.2
+tar jxvf tulip-3.0.0.tar.bz2
+cd tulip-3.0.0
+sh gen-conf.sh
 ./configure [--prefix=<install_path>]    (Default=/usr/local/)
-make clean
 make
 make install
 
 
 Requirements :
 
-- QT 3.x 
-- OpenGl library : MesaGl package
-- Glut library : MesaDemo package
+- autotools
+- libxml2
+- freetype2
+- Qt 4.3.x
+- OpenGl 2.0
+- glew 1.4 or higher
 - g++ 2.95, 2.96 or 3.2. Gcc versions 3.0 up to 3.2 excluded are not supported,
 use them at your own risks!!!
 
 Join the Tulip Team :
 
 If you want to support our project, all new plug-ins and bug fixes are
-welcome. "mailto:dev@tulip-software.org"
+welcome.
 
-Bug reports : www.tulip-software.org
+for bug reports use www.tulip-software.org (Software => Bug Report)
 
 Auber David
 LaBRI , Université Bordeaux I, 
