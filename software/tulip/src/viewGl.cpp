@@ -1499,7 +1499,6 @@ void viewGl::group() {
 }
 //**********************************************************************
 bool viewGl::eventFilter(QObject *obj, QEvent *e) {
-#if (QT_REL == 4)
   // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
@@ -1538,7 +1537,6 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       return true;
     }
   }
-#endif
   if ( obj->inherits("GlMainWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
