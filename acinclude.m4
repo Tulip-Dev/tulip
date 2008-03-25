@@ -472,7 +472,7 @@ if test ! "$ac_qt_dir" = "NO"; then
    QTDIR=$ac_qt_dir
 fi
 
-qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/include/qt4 /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
+qt_incdirs="$ac_qt_includes $ac_qt_includes/Qt ${QTDIR}/include ${QTDIR}/include/qt ${QTDIR}/include/Qt  /usr/include/qt /usr/include/qt4 /usr/lib/qt4/include /usr/lib/qt/include /usr/local/qt/include /usr/include /usr/local/lib/qt/include "
 AC_FIND_FILE(QtCore, $qt_incdirs, qt_incdir)
 QT_PACKAGE=qt4
 qtlib_prefix=libQt
@@ -637,7 +637,7 @@ AC_DEFUN([AC_PATH_QT_UIC],
 [
 dnl we use uic3
    FIND_PATH(uic3, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
-             /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
+             /usr/bin /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt4/bin\
 	     /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
    if test -z "$UIC"; then
      if test -n "$ac_cv_path_uic"; then
