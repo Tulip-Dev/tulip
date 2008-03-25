@@ -7,7 +7,7 @@ Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
 from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
 and accept the proposed mount point during the installation process of MSYS.
 
-2- Build the Qt/Windows Open Source Edition
+2- Build the Qt 4.3.X Windows Open Source Edition
 ----------------------------------------------------------
 You first have to download the corresponding Qt source code
 from http://www.trolltech.com/download/qt/windows.html.
