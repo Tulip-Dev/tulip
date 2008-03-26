@@ -7,6 +7,7 @@
 <!ENTITY Functions SYSTEM "functions.docbook">
 <!ENTITY Algorithms SYSTEM "algorithms.docbook">
 <!ENTITY Subgraphs SYSTEM "subgraphs.docbook">
+<!ENTITY Plugins_Management SYSTEM "plugins_management.docbook">
 ]>
 <book><title>Tulip User Manual</title>
 
@@ -30,5 +31,6 @@ Managing the colors of nodes in the interface is done by mapping attribute value
 </chapter>
 &Graph_Interface;
 &Functions;
+&Plugins_Management;
 &Tutorials;
 </book>
