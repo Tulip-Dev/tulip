@@ -149,7 +149,7 @@ namespace tlp {
 	toParse.push_back(child);
     }
     for(vector<QTreeWidgetItem *>::iterator it=toRemove.begin();it!=toRemove.end();++it) {
-      parent->removeChild(*it);
+      //parent->removeChild(*it);
       delete (*it);
     }
     for(vector<QTreeWidgetItem *>::iterator it=toParse.begin();it!=toParse.end();++it) {

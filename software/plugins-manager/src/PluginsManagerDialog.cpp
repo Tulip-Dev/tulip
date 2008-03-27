@@ -12,7 +12,7 @@ namespace tlp {
   void PluginsManagerDialog::createWidget(PluginsManagerMainWindow *pluginsManager) {
     connect(pluginsManager, SIGNAL(closeSignal()), this, SLOT(close()));
     QVBoxLayout *layout=new QVBoxLayout(this);
-    layout->setContentsMargins(0,0,0,0);
+    layout->setMargin(0);
     layout->addWidget(pluginsManager);
     QDialog::setLayout(layout);
   }
