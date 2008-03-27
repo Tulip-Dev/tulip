@@ -1,2 +1,2 @@
-SUBDIRS = plugins-manager tulip
-DIST_SUBDIRS = plugins-manager tulip
+SUBDIRS = plugins-manager tulip tlprender
+DIST_SUBDIRS = plugins-manager tulip tlprender

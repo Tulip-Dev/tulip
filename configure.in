@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.40 $)
+AC_REVISION($Revision: 1.41 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -202,8 +202,8 @@ AC_ARG_ENABLE(stats-gui,
 
 dnl check if we build tlprender, option and presence of OSMesa
 AC_ARG_ENABLE(tlprender,
-[  --disable-tlprender     Disable compilation of tlprender (tlprender requires OSMesa)],
-  CONFIGURE_tlprender="", CONFIGURE_tlprender="tlprender"
+[  --enable-tlprender      Enable compilation of tlprender (tlprender requires OSMesa)],
+  CONFIGURE_tlprender="tlprender", CONFIGURE_tlprender=""
 )
 
 if test ${VAR_MACOSX} = 1
