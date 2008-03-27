@@ -31,7 +31,9 @@
 #include <tulip/ExportModule.h>
 #include <tulip/ImportModule.h>
 #include <tulip/Glyph.h>
-#include <tulip/GlGraph.h>
+#include <tulip/GlScene.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include "ImageWriter.h"
 #include "Shape.h"
@@ -71,17 +73,24 @@ static void parseCommandLine(int, char **);
 static void help() __attribute__ ((noreturn));
 
 //==============================================================================
-class GLOffscreen: public GlGraph {
+class GLOffscreen {
 private:
   int width,height;
   OSMesaContext osContext;
   GLubyte *buffer;
 public:
+  GlScene scene;
   //GlGraph *glgraph;
   GLOffscreen(const int width=640, const int height=480):
-    GlGraph(),
     width(width), height(height)
   {
+    Vector<int, 4> viewport;
+    viewport[0] = 0;
+    viewport[1] = 0;
+    viewport[2] = width;
+    viewport[3] = height;
+    scene.setViewport(viewport);
+
     buffer = new GLubyte [width * height * 4];
     osContext = OSMesaCreateContext(OSMESA_RGBA, NULL);
     if (!osContext) {
@@ -158,13 +167,13 @@ public:
 //load software side plugins
 static void loadGlyphPlugins(PluginLoader *plug)
 {
-  string getEnvVar=tlp::TulipLibDir + "/tlp/plugins/";
+  string getEnvVar=tlp::TulipLibDir + "/tlp/";
   
-  tlp::loadPluginsFromDir(getEnvVar + "glyph", "Glyph", plug);
+  tlp::loadPluginsFromDir(getEnvVar + "glyphs", "Glyph", plug);
 }
 
 //==============================================================================
-void importGraph(const string &filename, const string &importPluginName, GlGraph &glGraph)
+void importGraph(const string &filename, const string &importPluginName, GlScene *glScene)
 {
   DataSet dataSet;
 
@@ -180,23 +189,28 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
     }
   }delete itP;
   
-  Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
-  
+  //Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
+  Graph *newGraph=tlp::loadGraph(filename);
+
   if (newGraph!=0) {
-    GlGraphRenderingParameters params = glGraph.getRenderingParameters();
-    params.setGraph(newGraph);
-    glGraph.setRenderingParameters(params);
+    GlGraphComposite* glGraphComposite = new GlGraphComposite(newGraph);
+    GlGraphRenderingParameters param =glGraphComposite->getRenderingParameters();
+    GlLayer *layer = new GlLayer("Main");
+    glScene->addLayer(layer);
+    glScene->addGlGraphCompositeInfo(glScene->getLayer("Main"),glGraphComposite);
+    glScene->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+
     LayoutProperty *layout =
-      glGraph.getGraph()->getProperty<LayoutProperty>("viewLayout");
+      newGraph->getProperty<LayoutProperty>("viewLayout");
     layout->resetBoundingBox();
     layout->center();
     layout->notifyObservers();
-    glGraph.centerScene();
+    glScene->centerScene();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData))
     {
-      params.setParameters(glGraphData);
-      glGraph.setRenderingParameters(params);
+      param.setParameters(glGraphData);
+      glGraphComposite->setRenderingParameters(param);
     }
   }
 }
@@ -204,7 +218,7 @@ void importGraph(const string &filename, const string &importPluginName, GlGraph
 /*
  *
  */
-void outputPolygons(const int size, const GlGraph &glgraph)
+void outputPolygons(const int size, GlScene &glScene)
 {
   priority_queue<tlprender::Shape *> shapeQueue;
   ofstream of((filename+".html").c_str(), ios::out | ios::trunc);
@@ -288,8 +302,8 @@ void outputPolygons(const int size, const GlGraph &glgraph)
   } //end while(count)
 
   /* write HTML AREA MAP */
-  StringProperty *hrefp = glgraph.getGraph()->getProperty<StringProperty>("href");
-  StringProperty *altp = glgraph.getGraph()->getProperty<StringProperty>("alt");
+  StringProperty *hrefp = glScene.getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("href");
+  StringProperty *altp = glScene.getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("alt");
 
   if (outputHtmlBody) {
     of << "<html><body>" << endl;
@@ -346,14 +360,16 @@ int main (int argc, char **argv) {
 
   GLOffscreen glOffscreen(width, height);
 
-  importGraph(graphFile, importPluginName, glOffscreen);
+  importGraph(graphFile, importPluginName, &glOffscreen.scene);
   
+  Graph *graph=glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph();
+
   if (layoutSpecified) {
     bool resultBool=false;
     string errorMsg;
     if (LayoutProperty::factory->pluginExists(layoutName)) {
-      LayoutProperty *myLayout = glOffscreen.getGraph()->getProperty<LayoutProperty>("viewLayout");
-      resultBool = glOffscreen.getGraph()->computeProperty(layoutName, myLayout, errorMsg);
+      LayoutProperty *myLayout = graph->getProperty<LayoutProperty>("viewLayout");
+      resultBool = graph->computeProperty(layoutName, myLayout, errorMsg);
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;
         exit(LAYOUT_ERROR);
@@ -362,7 +378,7 @@ int main (int argc, char **argv) {
         myLayout->resetBoundingBox();
         myLayout->center();
         myLayout->notifyObservers();
-        glOffscreen.centerScene();
+        glOffscreen.scene.centerScene();
       }
     }
     else {
@@ -371,10 +387,19 @@ int main (int argc, char **argv) {
     }
   }
   
-  GlGraphRenderingParameters params = glOffscreen.getRenderingParameters();
+  glOffscreen.setupOpenGlContext();
+  glOffscreen.updateGL();
+
+  GlDisplayListManager::getInst().changeContext(0);
+  GlTextureManager::getInst().changeContext(0);
+
+  GlGraphRenderingParameters params = glOffscreen.scene.getGlGraphComposite()->getRenderingParameters();
   params.setIncrementalRendering(false);
-  glOffscreen.setRenderingParameters(params);
-  glOffscreen.draw();
+  glOffscreen.scene.getGlGraphComposite()->setRenderingParameters(params);
+  glOffscreen.scene.draw();
+
+  glOffscreen.setupOpenGlContext();
+  glOffscreen.updateGL();
 
   //write image
   imageWriter = tlprender::ImageWriter::getImageWriter(imageFormat, glOffscreen.getImageBuffer(), width, height);
@@ -394,7 +419,7 @@ int main (int argc, char **argv) {
   }
   
   //create HTML map
-  if (outputMap) {
+  /*if (outputMap) {
     buffer = new GLfloat[BUFFERSIZE];
     glFeedbackBuffer(BUFFERSIZE, GL_3D, buffer);
     glRenderMode(GL_FEEDBACK);
@@ -422,7 +447,7 @@ int main (int argc, char **argv) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }
-  }
+    }*/
   
   return EXIT_SUCCESS;
 }
