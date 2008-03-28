@@ -25,5 +25,7 @@ tlprender_SOURCES = \
 	tlprender.cpp \
 	Shape.h \
 	Shape.cpp \
+	GlHTMLFeedBackBuilder.h \
+	GlHTMLFeedBackBuilder.cpp \
 	ImageWriter.h \
 	ImageWriter.cpp $(PNG) $(JPEG)

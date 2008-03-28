@@ -26,7 +26,3 @@ BUILT_SOURCES = \
 	PluginsUpdateChecker.h
 
 nodist_noinst_HEADERS = $(BUILT_SOURCES)
-
-noinst_HEADERS =
-
-CLEANFILES = $(BUILT_SOURCES)

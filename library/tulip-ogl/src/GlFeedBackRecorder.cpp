@@ -51,17 +51,17 @@ namespace tlp {
       switch (token) {
       case GL_LINE_TOKEN:
       case GL_LINE_RESET_TOKEN:
-	loc += 14;
+	loc += pointSize*2;
 	nprimitives++;
 	break;
       case GL_POLYGON_TOKEN:
 	nvertices = (int)*loc;
 	loc++;
-	loc += (7 * nvertices);
+	loc += (pointSize * nvertices);
 	nprimitives++;
 	break;
       case GL_POINT_TOKEN:
-	loc += 7;
+	loc += pointSize;
 	nprimitives++;
 	break;
       case GL_PASS_THROUGH_TOKEN:
@@ -92,7 +92,7 @@ namespace tlp {
 	vertex = (Feedback3Dcolor *) loc;
 	depthSum = vertex[0].z + vertex[1].z;
 	prims[item].depth = depthSum / 2.0;
-	loc += 14;
+	loc += pointSize*2;
 	item++;
 	break;
       case GL_POLYGON_TOKEN:
@@ -104,13 +104,13 @@ namespace tlp {
 	  depthSum += vertex[i].z;
 	}
 	prims[item].depth = depthSum / nvertices;
-	loc += (7 * nvertices);
+	loc += (pointSize * nvertices);
 	item++;
 	break;
       case GL_POINT_TOKEN:
 	vertex = (Feedback3Dcolor *) loc;
 	prims[item].depth = vertex[0].z;
-	loc += 7;
+	loc += pointSize;
 	item++;
 	break;
       case GL_PASS_THROUGH_TOKEN:
@@ -158,30 +158,30 @@ namespace tlp {
     switch (token) {
     case GL_LINE_RESET_TOKEN:
       feedBackBuilder->lineResetToken(loc);
-      return loc+14;
+      return loc+pointSize*2;
     case GL_LINE_TOKEN:
       feedBackBuilder->lineToken(loc);
-      return loc+14;
+      return loc+pointSize*2;
     case GL_POLYGON_TOKEN:
       int nvertices;
       nvertices = (int)*loc;
       feedBackBuilder->polygonToken(loc);
-      return loc+(7 * nvertices)+1;
+      return loc+(pointSize * nvertices)+1;
     case GL_POINT_TOKEN:
       feedBackBuilder->pointToken(loc);
-      return loc+7;
+      return loc+pointSize;
     case GL_PASS_THROUGH_TOKEN:
       feedBackBuilder->passThroughToken(loc);
       return loc+1;
     case GL_BITMAP_TOKEN:
       feedBackBuilder->bitmapToken(loc);
-      return loc+7;
+      return loc+pointSize;
     case GL_DRAW_PIXEL_TOKEN:
       feedBackBuilder->drawPixelToken(loc);
-      return loc+7;
+      return loc+pointSize;
     case GL_COPY_PIXEL_TOKEN:
       feedBackBuilder->copyPixelToken(loc);
-      return loc+7;
+      return loc+pointSize;
     default:
       /* XXX Left as an excersie to the reader. */
       printf("Incomplete implementation.  Unexpected token (%d).\n", token);

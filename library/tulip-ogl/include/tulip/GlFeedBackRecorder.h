@@ -31,8 +31,9 @@ namespace tlp {
     /**
      * Constructor : the recorder use GlFeedBackBuilder : builder
      */
-    GlFeedBackRecorder(GlFeedBackBuilder *builder):
-      feedBackBuilder(builder) {}
+    GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize=7):
+      feedBackBuilder(builder),
+      pointSize(pointSize){}
     /**
      * Record a new feedback buffer 
      * \param doSort : sort the feedback buffer
@@ -49,7 +50,8 @@ namespace tlp {
     GLfloat* recordPrimitive(GLfloat *loc);
     
     GlFeedBackBuilder *feedBackBuilder;
-    
+    unsigned int pointSize;
+
   };
  
 }
