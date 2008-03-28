@@ -2304,8 +2304,10 @@ void viewGl::setCurrentInteractors(vector<tlp::GWInteractor *> *interactors) {
   if (currentInteractors == interactors)
     return;
   currentInteractors = interactors;
-  if (glWidget)
+  if (glWidget){
     glWidget->resetInteractors(*currentInteractors);
+    glWidget->draw();
+  }
 }
 
 // deletion of registered interactors

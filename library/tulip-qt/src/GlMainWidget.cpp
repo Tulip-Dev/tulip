@@ -245,6 +245,7 @@ GWInteractor::ID GlMainWidget::pushInteractor(GWInteractor* interactor) {
     interactor->setID(++_id);
     _interactors.push_back(interactor);
     installEventFilter(interactor);
+    interactor->compute(this);
     updateGL();
   }
   return _id;
