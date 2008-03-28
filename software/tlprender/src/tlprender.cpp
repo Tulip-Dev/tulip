@@ -221,8 +221,8 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
       layout->resetBoundingBox();
       layout->center();
       layout->notifyObservers();
-      glScene->centerScene();
     }
+    glScene->centerScene();
     GlGraphRenderingParameters param =glScene->getGlGraphComposite()->getRenderingParameters();
     DataSet glGraphData;
     if (dataSet.get<DataSet>("displaying", glGraphData)) {
