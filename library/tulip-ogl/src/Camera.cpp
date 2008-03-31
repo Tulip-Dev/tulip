@@ -127,9 +127,9 @@ namespace tlp {
 	pos[i] += (eyes[i]-center[i])/zoomFactor;*/
       pos[3]=1;
       GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
-      GLfloat dif[4] = {1,1,1,1};
+      GLfloat dif[4] = {0.5,0.5,0.5,1};
       GLfloat specular[4] = {0,0,0,1};
-      GLfloat attC[3] = {1,1,1};
+      GLfloat attC[3] = {1.,1.,1.};
       GLfloat attL[3] = {0,0,0};
       GLfloat attQ[3] = {0,0,0};
       
