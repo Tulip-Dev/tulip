@@ -14,10 +14,10 @@
 #include <Qt3Support/q3listview.h>
 #include <Qt3Support/q3textview.h>
 #include <Qt3Support/q3dockwindow.h>
-#include <Qt3Support/q3popupmenu.h>
 #include <QtGui/qsplitter.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
+#include <QtGui/qmenu.h>
 #include <QtAssistant/qassistantclient.h>
 #include "tulip/Qt3ForTulip.h"
 #include <string>
@@ -92,27 +92,27 @@ protected:
   tlp::MultiServerManager *multiServerManager;
   bool elementsDisabled;
 
-  QPopupMenu layoutMenu;
-  QPopupMenu metricMenu;
-  QPopupMenu colorsMenu;
-  QPopupMenu generalMenu;
-  QPopupMenu sizesMenu;
-  QPopupMenu intMenu;
-  QPopupMenu stringMenu;
-  QPopupMenu importGraphMenu;
-  QPopupMenu exportGraphMenu;
-  QPopupMenu optionMenu;
-  QPopupMenu selectMenu;
-  QPopupMenu exportImageMenu;
+  QMenu layoutMenu;
+  QMenu metricMenu;
+  QMenu colorsMenu;
+  QMenu generalMenu;
+  QMenu sizesMenu;
+  QMenu intMenu;
+  QMenu stringMenu;
+  QMenu importGraphMenu;
+  QMenu exportGraphMenu;
+  QMenu optionMenu;
+  QMenu selectMenu;
+  QMenu exportImageMenu;
 
-  //QPopupMenu* windowsMenu;
+  //QMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );
   typedef std::set< tlp::Observable * >::iterator ObserverIterator;
   void update ( ObserverIterator begin, ObserverIterator end);
   void observableDestroyed(tlp::Observable *);
   void initObservers();
   void clearObservers();
-  void enableQPopupMenu(QPopupMenu *, bool);
+  void enableQMenu(QMenu *, bool);
   void enableElements(bool);
   void setNavigateCaption(std::string);
   void initializeGraph(tlp::Graph *);
@@ -162,20 +162,20 @@ protected slots:
   void editCopy();
   void editPaste();
   void editFind();
-  void changeMetric(int);
-  void changeString(int);
-  void changeSizes(int);
-  void changeColors(int);
-  void changeInt(int);
-  void changeSelection(int);
-  void changeLayout(int);
-  void importGraph(int);
-  void exportGraph(int);
-  void exportImage(int);
-  void applyAlgorithm(int );
+  void changeMetric(QAction*);
+  void changeString(QAction*);
+  void changeSizes(QAction*);
+  void changeColors(QAction*);
+  void changeInt(QAction*);
+  void changeSelection(QAction*);
+  void changeLayout(QAction*);
+  void importGraph(QAction*);
+  void exportGraph(QAction*);
+  void exportImage(QAction*);
+  void applyAlgorithm(QAction*);
   void outputEPS();
   void outputSVG();
-  void showDialog(int);
+  void showDialog(QAction*);
   void redrawView();
   void centerView();
   void updateCurrentGraphInfos();
@@ -186,7 +186,7 @@ protected slots:
   void newSubgraph();
   void reverseSelectedEdgeDirection();
   void windowsMenuAboutToShow();
-  void windowsMenuActivated( int id );
+  void windowsMenuActivated(QAction*);
   void new3DView();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);

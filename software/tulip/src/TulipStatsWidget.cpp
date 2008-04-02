@@ -41,7 +41,7 @@ using namespace std;
 
 namespace tlp
 {
-  TulipStats::TulipStats(QWidget *parent, const char *name, WFlags fl) : TulipStatsData(parent, name, fl), glMainWidget(0), graph(0)
+  TulipStats::TulipStats(QWidget *parent, const char *name, Qt::WFlags fl) : TulipStatsData(parent, name, fl), glMainWidget(0), graph(0)
   {
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 

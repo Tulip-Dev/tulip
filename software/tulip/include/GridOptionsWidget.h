@@ -47,7 +47,7 @@ class GridOptionsWidget : public GridOptionsData {
   /**
    * Constructor.
    */
-  GridOptionsWidget(QWidget *parent = 0, const char *name = 0, WFlags fl = 0);
+  GridOptionsWidget(QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
 
   /**
    * Destructor.

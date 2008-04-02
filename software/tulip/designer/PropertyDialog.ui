@@ -108,20 +108,8 @@
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
-                        <property name="vScrollBarMode">
-                            <enum>AlwaysOn</enum>
-                        </property>
-                        <property name="numRows">
-                            <number>10</number>
-                        </property>
-                        <property name="numCols">
-                            <number>2</number>
-                        </property>
                         <property name="showGrid">
                             <bool>true</bool>
-                        </property>
-                        <property name="focusStyle">
-                            <enum>SpreadSheet</enum>
                         </property>
                     </widget>
                 </grid>
@@ -146,15 +134,6 @@
                     <widget class="PropertyWidget" row="0" column="0">
                         <property name="name">
                             <cstring>tableEdges</cstring>
-                        </property>
-                        <property name="vScrollBarMode">
-                            <enum>AlwaysOn</enum>
-                        </property>
-                        <property name="numRows">
-                            <number>10</number>
-                        </property>
-                        <property name="numCols">
-                            <number>2</number>
                         </property>
                     </widget>
                 </grid>

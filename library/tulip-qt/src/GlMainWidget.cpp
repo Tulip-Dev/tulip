@@ -6,7 +6,6 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtooltip.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include "tulip/GlMainWidget.h"
 
@@ -76,7 +75,7 @@ GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
   scene(new QtCPULODCalculator()){
   setObjectName(name);
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  setFocusPolicy(StrongFocus);
+  setFocusPolicy(Qt::StrongFocus);
   //_composite = new GlADComposite();
 }
 //==================================================

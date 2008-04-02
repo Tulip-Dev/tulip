@@ -2,7 +2,7 @@
 ** Form interface generated from reading ui file 'ElementPropertiesWidget.ui'
 **
 ** Created: lun sep 29 12:43:34 2003
-**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.h,v 1.2 2008-03-03 15:30:57 pmary Exp $)
+**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.h,v 1.3 2008-04-02 13:12:28 pmary Exp $)
 **
 ****************************************************************************/
 
@@ -10,7 +10,6 @@
 #define ELEMENTPROPERTIESDATA_H
 
 #include <QtGui/qwidget.h>
-#include "tulip/Qt3ForTulip.h"
 
 class QGridLayout;
 class QLabel;
@@ -24,7 +23,7 @@ class ElementPropertiesWidgetUI : public QWidget
     Q_OBJECT
 
 public:
-    ElementPropertiesWidgetUI( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    ElementPropertiesWidgetUI( QWidget* parent = 0);
     ~ElementPropertiesWidgetUI();
 
     QLabel* label;

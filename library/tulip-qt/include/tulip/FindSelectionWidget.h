@@ -5,8 +5,6 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
-#include "tulip/Qt3ForTulip.h"
-
 #include "tulip/FindSelectionData.h"
 
 namespace tlp {

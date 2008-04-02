@@ -21,7 +21,6 @@
 
 #include <QtOpenGL/qgl.h>
 #include <QtCore/qpoint.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include "tulip/GWInteractor.h"
 #include <tulip/GlHierarchyConvexHulls.h>

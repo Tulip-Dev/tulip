@@ -102,7 +102,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 	(e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->state()==LeftButton || me->button()==LeftButton) {
+    if (me->state()==Qt::LeftButton || me->button()==Qt::LeftButton) {
       if  (me->state() &
 #if defined(__APPLE__)
 	   Qt::AltButton

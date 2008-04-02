@@ -6,17 +6,15 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
+#include <QtCore/qstring.h>
+#include <QtCore/qstringlist.h>
 #include <QtGui/qlistview.h>
-#include <Qt3Support/q3table.h>
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
 #include <QtGui/qlabel.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include "CopyPropertyDialog.h"
 #include "tulip/ForEach.h"

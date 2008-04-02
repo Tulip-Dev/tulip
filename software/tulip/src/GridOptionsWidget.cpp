@@ -21,7 +21,7 @@ using namespace std;
 
 namespace tlp
 {
-  GridOptionsWidget::GridOptionsWidget(QWidget *parent, const char *name, WFlags fl) : GridOptionsData(parent, name, fl), glMainWidget(0) {
+  GridOptionsWidget::GridOptionsWidget(QWidget *parent, const char *name, Qt::WFlags fl) : GridOptionsData(parent, name, fl), glMainWidget(0) {
     connect(CancelBtn, SIGNAL(clicked()), SLOT(close()));
     connect(OkBtn, SIGNAL(clicked()), SLOT(validateGrid()));
 

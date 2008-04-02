@@ -24,7 +24,7 @@ bool ElementPropertiesWidgetPlugin::isInitialized() const {
 }
 
 QWidget* ElementPropertiesWidgetPlugin::createWidget(QWidget *parent) {
-  return new ElementPropertiesWidget(NULL, QStringList(), QStringList(), parent, name());
+  return new ElementPropertiesWidget(NULL, QStringList(), QStringList(), parent);
 }
 
 QString ElementPropertiesWidgetPlugin::name() const {
@@ -53,7 +53,7 @@ QString ElementPropertiesWidgetPlugin::toolTip() const {
 }
 
 QString ElementPropertiesWidgetPlugin::whatsThis() const {
-  return "A widget to display the properties of a Tulip graph node";
+  return "A widget to display the properties of a Tulip graph element (node or edge)";
 }
 
 bool ElementPropertiesWidgetPlugin::isContainer() const {

@@ -7,7 +7,6 @@
 
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsize.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
 #include <tulip/ObservableGraph.h>
@@ -37,9 +36,10 @@ protected:
 
   
 public:
-  ElementPropertiesWidget(tlp::Graph *, const QStringList &nodeListedProperties, const QStringList &edgeListedProperties,
-                         QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
-  ElementPropertiesWidget(QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
+  ElementPropertiesWidget(tlp::Graph *, const QStringList &nodeListedProperties,
+			  const QStringList &edgeListedProperties,
+			  QWidget *parent = 0);
+  ElementPropertiesWidget(QWidget *parent = 0);
   ~ElementPropertiesWidget();
     
   QStringList getCurrentListedProperties() const;

@@ -19,7 +19,8 @@
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qlabel.h>
 #include <QtGui/qmenu.h>
-#include "tulip/Qt3ForTulip.h"
+#include <QtGui/qheaderview.h>
+#include <QtGui/qscrollbar.h>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -45,17 +46,19 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   resetBackColor1();
   resetBackColor2();
   editedProperty=0;
-  vScroll=verticalScrollBar();
-  setColumnReadOnly(0, true);
-  setNumRows(0);
-  QHeader *header = horizontalHeader();
-  header->setLabel(0, "Id");
-  header->setLabel(1, "");
+  setRowCount(0);
+  setColumnCount(2);
+  setHorizontalHeaderItem(0, new QTableWidgetItem("Id"));
+  setHorizontalHeaderItem(1, new QTableWidgetItem(""));
+  horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+  horizontalHeader()->setStretchLastSection(true);
   showProperties = false;
-  connect(vScroll,SIGNAL(valueChanged(int)),SLOT(scroll(int)));
-  connect(this,SIGNAL(valueChanged(int,int)),SLOT(changePropertyValue(int,int)));
-  connect(this,SIGNAL(contextMenuRequested (int, int, const QPoint&)),
-	  SLOT(showContextMenu(int, int, const QPoint&)));
+  connect(verticalScrollBar(), SIGNAL(valueChanged(int)), SLOT(scroll(int)));
+  connect(this,SIGNAL(cellChanged(int,int)),SLOT(changePropertyValue(int,int)));
+  // enable context menu
+  setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this,SIGNAL(customContextMenuRequested (const QPoint &)),
+	  SLOT(showContextMenu(const QPoint&)));
   vScrollPos=0;
 }
 
@@ -64,14 +67,11 @@ PropertyWidget::~PropertyWidget() {}
 Graph *PropertyWidget::getGraph() const {return graph;}
 void PropertyWidget::setGraph(Graph *s) {
   editedProperty=0;
-  for (int i=0;i<numRows();++i) {
-    clearCell(i,0);
-    clearCell(i,1);
-  }
-  setNumRows(0);
-  QHeader *header = horizontalHeader();
-  header->setLabel(0, "Id");
-  header->setLabel(1, "Property");
+  clearContents();
+  setRowCount(0);
+  setColumnCount(2);
+  horizontalHeaderItem(0)->setText("Id");
+  horizontalHeaderItem(1)->setText("Property");
   vScrollPos = 0;
   graph = s;
   update();
@@ -86,11 +86,9 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
     editedProperty=graph->getProperty(name);
     editedPropertyName=name;
   }
-  setNumCols(2);
-  QHeader *header = horizontalHeader();
-  header->setLabel(0, "Id");
-  header->setLabel(1, name.c_str());
-  setColumnStretchable(1, true);
+  setColumnCount(2);
+  horizontalHeaderItem(0)->setText("Id");
+  horizontalHeaderItem(1)->setText(name.c_str());
   updateNbElements();
   update();
 }
@@ -111,7 +109,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   if (editedProperty==0) return;
   Observable::holdObservers();
   bool result=true;
-  string str=this->text(i,j).ascii();
+  string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().ascii();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<edge> *it=graph->getEdges();
   edge tmp;
@@ -137,17 +135,17 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
     emit tulipEdgePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
   }
   
-  this->setColumnWidth(1, this->horizontalHeader()->width() - this->columnWidth(0));
+  this->setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
   Observable::unholdObservers();
 }
 
-void PropertyWidget::changePropertyNodeValue(int i,int j) {
+void PropertyWidget::changePropertyNodeValue(int i, int j) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (editedProperty==0) return;
   Observable::holdObservers();
   bool result=true;
-  string str=(this->text(i,j).latin1());
-  
+  string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().ascii();
+  //cout << "value = " << str << endl;
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<node> *it=graph->getNodes();
   node tmp;
@@ -185,7 +183,7 @@ void PropertyWidget::filterSelection(bool b) {
 
 void PropertyWidget::scroll(int i) {
   if (editedProperty==0) return;
-  int curId = i/20;
+  int curId = i;
   bool toUpdate = false;
   if (curId > (vScrollPos + TABLEBUFSIZE/4)) {
     if ((vScrollPos + TABLEBUFSIZE/2) != (int) nbElement) {
@@ -203,16 +201,22 @@ void PropertyWidget::scroll(int i) {
       toUpdate=true;
     }
   }
-  if (toUpdate){update();}
+  if (toUpdate){
+    update();
+  }
 }
 
 void PropertyWidget::update() {
   if (graph==0) return;
+  disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
+  clearContents();
   if (displayNode)
     updateNodes();
   else
     updateEdges();
-  QTable::repaint();
+  connect(this,SIGNAL(cellChanged(int,int)),SLOT(changePropertyValue(int,int)));
+  horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+  QTableWidget::repaint();
 }
 
 void PropertyWidget::updateEdges() {
@@ -221,7 +225,7 @@ void PropertyWidget::updateEdges() {
   }
   updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
-  setNumRows(nbElement);
+  setRowCount(nbElement);
   Iterator<edge> *it=graph->getEdges();
   for (int i=0; it->hasNext();) {
     char buf[16];
@@ -229,22 +233,24 @@ void PropertyWidget::updateEdges() {
     if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
       if ((i>=vScrollPos-TABLEBUFSIZE/2) && (i<=vScrollPos+TABLEBUFSIZE/2)) {
 	sprintf (buf,"%d", tmp.id );
-	setText(i,0,buf );
+	QTableWidgetItem* idItem = new QTableWidgetItem(buf);
+	idItem->setFlags(Qt::ItemIsEnabled);
+	setItem(i, 0, idItem);
 	setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
       else if (i>vScrollPos+TABLEBUFSIZE/2) break;
       ++i;
     }
   } delete it;
-  adjustColumn(0);
-  setColumnWidth(1, horizontalHeader()->width() - columnWidth(0));
+  //adjustColumn(0);
+  setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
 }
 
 void PropertyWidget::updateNodes() {
   if (editedProperty==0) return;
   updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
-  setNumRows(nbElement);
+  setRowCount(nbElement);
   Iterator<node> *it=graph->getNodes();
   for (int i=0; it->hasNext();) {
     char buf[16];
@@ -252,15 +258,17 @@ void PropertyWidget::updateNodes() {
     if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
       if ((i>=vScrollPos-TABLEBUFSIZE/2) && (i<=vScrollPos+TABLEBUFSIZE/2)) {
 	sprintf (buf,"%d", tmp.id );
-	setText(i,0,buf );
+	QTableWidgetItem* idItem = new QTableWidgetItem(buf);
+	idItem->setFlags(Qt::ItemIsEnabled);
+	setItem(i, 0, idItem);
 	setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
       else if (i>vScrollPos+TABLEBUFSIZE/2) break;
       ++i;
     }
   } delete it;
-  adjustColumn(0);
-  setColumnWidth(1, horizontalHeader()->width() - columnWidth(0));
+  //adjustColumn(0);
+  setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
 }
 
 void PropertyWidget::updateNbElements() {
@@ -291,7 +299,7 @@ void PropertyWidget::setAll() {
    setAllNodeValue();
   else
    setAllEdgeValue();
-  QTable::update();
+  QTableWidget::update();
 }
 
 void PropertyWidget::setAllNodeValue() {
@@ -373,7 +381,7 @@ void PropertyWidget::setAllNodeValue() {
           if (!result) break;
         }
         if (_filterSelection && tmpSel->getNodeValue(tmp)) {
-          this->setText(nbNode, 1, tmpStr.c_str());
+          item(nbNode, 1)->setText(tmpStr.c_str());
           nbNode++;
         }
       }
@@ -445,7 +453,7 @@ void  PropertyWidget::setAllEdgeValue() {
           if (!result) break;
         }
         if (_filterSelection && tmpSel->getEdgeValue(tmp)) {
-          this->setText(nbEdge, 1, tmpStr.c_str());
+          item(nbEdge, 1)->setText(tmpStr.c_str());
           nbEdge++;
         }
       }
@@ -470,9 +478,12 @@ void PropertyWidget::connectNotify ( const char * signal ) {
     showProperties = true;
 }
 
-void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
+void PropertyWidget::showContextMenu(const QPoint & pos) {
+  QModelIndex index = indexAt(pos);
+  int row = index.row();
+  int col = index.column();
   if (row < nbElement) {
-    std::string textId(text(row, 0).latin1());
+    std::string textId(item(row, 0)->text().ascii());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QMenu contextMenu(this);
@@ -489,7 +500,7 @@ void PropertyWidget::showContextMenu(int row, int col, const QPoint & pos) {
 	contextMenu.addSeparator();
 	propAction = contextMenu.addAction(tr("Properties"));
       }
-      QAction* action = contextMenu.exec(pos, selectAction);
+      QAction* action = contextMenu.exec(mapToGlobal(pos), selectAction);
       clearSelection();
       if (!action)
 	return;

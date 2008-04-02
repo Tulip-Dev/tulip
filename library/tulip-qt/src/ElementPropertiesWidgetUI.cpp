@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'ElementPropertiesWidget.ui'
 **
 ** Created: lun sep 29 12:43:35 2003
-**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.2 2008-03-03 15:31:47 pmary Exp $)
+**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.3 2008-04-02 13:12:35 pmary Exp $)
 **
 ****************************************************************************/
 
@@ -11,7 +11,6 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qwhatsthis.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include <tulip/PropertyWidget.h>
 
@@ -21,11 +20,9 @@ using namespace tlp;
  *  Constructs a ElementPropertiesWidgetUI as a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f'.
  */
-ElementPropertiesWidgetUI::ElementPropertiesWidgetUI( QWidget* parent, const char* name, Qt::WFlags fl )
-    : QWidget( parent, name, fl )
+ElementPropertiesWidgetUI::ElementPropertiesWidgetUI( QWidget* parent)
+    : QWidget(parent)
 {
-    if ( !name )
-	setName( "ElementPropertiesWidgetUI" );
     ElementPropertiesWidgetUILayout = new QGridLayout( this, 1, 1, 0, 6, "ElementPropertiesWidgetUILayout"); 
 
     label = new QLabel( this, "label" );
@@ -39,10 +36,10 @@ ElementPropertiesWidgetUI::ElementPropertiesWidgetUI( QWidget* parent, const cha
 
     propertyTable = new PropertyWidget( this, "propertyTable" );
     /* propertyTable->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, propertyTable->sizePolicy().hasHeightForWidth() ) ); */
-    propertyTable->setVScrollBarMode( PropertyWidget::Auto );
-    propertyTable->setNumRows( 7 );
-    propertyTable->setNumCols( 2 );
-    propertyTable->setSelectionMode( PropertyWidget::NoSelection );
+    // propertyTable->setVScrollBarMode( PropertyWidget::Auto );
+    propertyTable->setRowCount( 7 );
+    propertyTable->setColumnCount( 2 );
+    propertyTable->setSelectionMode(QAbstractItemView::NoSelection);
 
     ElementPropertiesWidgetUILayout->addWidget( propertyTable, 1, 0 );
     languageChange();

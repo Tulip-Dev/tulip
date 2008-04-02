@@ -6,7 +6,6 @@
 #endif
 #include <QtGui/qcursor.h>
 #include <QtGui/qevent.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"

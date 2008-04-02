@@ -26,7 +26,6 @@
 #include <QtGui/qtoolbutton.h>
 #include <QtGui/qtooltip.h>
 #include <QtGui/qtextbrowser.h>
-#include "tulip/Qt3ForTulip.h"
 
 
 using namespace std;

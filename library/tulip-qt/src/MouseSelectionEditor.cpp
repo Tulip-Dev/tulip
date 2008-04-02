@@ -16,7 +16,6 @@
 #include <tulip/MouseSelectionEditor.h>
 
 #include <QtGui/qevent.h>
-#include "tulip/Qt3ForTulip.h"
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50

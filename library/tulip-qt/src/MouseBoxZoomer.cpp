@@ -5,7 +5,6 @@
 #include <windows.h>
 #endif
 #include <QtGui/qevent.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>

@@ -7,7 +7,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <QtCore/qregexp.h>
-#include "tulip/Qt3ForTulip.h"
 
 using namespace tlp;
 

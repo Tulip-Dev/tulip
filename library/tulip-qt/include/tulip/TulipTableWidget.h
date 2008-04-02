@@ -8,10 +8,11 @@
 #endif
 #include <string>
 
-#include <Qt3Support/q3button.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qcombobox.h>
 #include <QtGui/qpainter.h>
-#include <Qt3Support/q3table.h>
-#include "tulip/Qt3ForTulip.h"
+#include <QtGui/qitemdelegate.h>
+#include <QtGui/qtablewidget.h>
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>
@@ -19,7 +20,6 @@
 
 class QLineEdit;
 class QPaintEvent;
-class QPushButton;
 
 namespace tlp {
 
@@ -27,7 +27,7 @@ class PropertyInterface;
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-class ColorButton : public QButton {
+class ColorButton : public QPushButton {
 
   Q_OBJECT;
   Q_PROPERTY(QRgb color READ getColor);
@@ -107,102 +107,26 @@ private:
   
 private slots:
   void changeX(const QString &);
- void changeY(const QString &);
- void changeZ(const QString &);
+  void changeY(const QString &);
+  void changeZ(const QString &);
 };
 
 /* table items */
-class ColorTableItem : public QTableItem {
-private:
-  QRgb color;
+class TulipTableWidgetItem : public QTableWidgetItem {
 public:
-  ColorTableItem(QTable *table, const QRgb &color);
-  ~ColorTableItem();
-  QRgb getColor() const;
-  // void setPixmap(const QPixmap &p);
-  // void setText(const QString &str);
-  // QString text() const;
-  
-  QWidget *createEditor() const;
-  void setContentFromEditor(QWidget *w);
-  void paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected);  
-  //  QSize sizeHint() const;
-  int rtti() const;
+  TulipTableWidgetItem(int type) : QTableWidgetItem(type) {}
+    TulipTableWidgetItem(QString s, int type = QTableWidgetItem::Type) : QTableWidgetItem(s, type) {}
+  virtual QString textForTulip() const {
+    return text();
+  }
 };
 
-class FileTableItem : public QTableItem {
-public:
-  FileTableItem(QTable *table);
-  ~FileTableItem();
-  int rtti() const;
-  QWidget *createEditor() const;
-  void setContentFromEditor(QWidget *w);
-};
-
-class SizeTableItem : public QTableItem {
-private:
-  Size size;
-public:
-  SizeTableItem(QTable *table);
-  ~SizeTableItem();
-  int rtti() const;
-  
-  void setSize(const Size &s);
-  QWidget *createEditor() const;
-  void setContentFromEditor(QWidget *w);
-};
-
-class CoordTableItem : public QTableItem {
-private:
-  Coord coord;
-public:
-  CoordTableItem(QTable *table);
-  ~CoordTableItem();
-  int rtti() const;
-  
-  void setCoord(const Coord &c);
-  QWidget *createEditor() const;
-  void setContentFromEditor(QWidget *w);
-};
-
-class GlyphTableItem : public QComboTableItem {
-public:
-  GlyphTableItem(QTable *, bool editable = false);
-  ~GlyphTableItem();
-  int rtti() const;
-  QString text() const;
-};
-
-class EdgeShapeTableItem : public QComboTableItem {
-public:
-  EdgeShapeTableItem(QTable *, bool editable = false);
-  ~EdgeShapeTableItem();
-  int rtti() const;
-  QString text() const;
-};
-
-class LabelPositionTableItem : public QComboTableItem {
-public:
-  LabelPositionTableItem(QTable *, bool editable = false);
-  ~LabelPositionTableItem();
-  int rtti() const;
-  QString text() const;
-};
-
-class SelectionTableItem : public QCheckTableItem {
-public:
-  SelectionTableItem(QTable *table, const QString &txt);
-  ~SelectionTableItem();
-  int rtti() const;
-
-  QString text() const;
-};
 #endif //DOXYGEN_NOTFOR_USER
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
-class TulipTableWidget : public QTable {
+ class TulipTableWidget : public QTableWidget {
   Q_OBJECT;
   Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1);
   Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2);
@@ -225,7 +149,7 @@ public:
   QColor getBackColor2() const;
   bool getUpdateColumnTitle() const;
   QColor backgroundColor(const int row) const;
-  void paintCell(QPainter *, int row, int col, const QRect &, bool selected, const QColorGroup &);
+  //void paintCell(QPainter *, int row, int col, const QRect &, bool selected, const QColorGroup &);
 
 public slots:
   void setBackColor1(const QColor &);

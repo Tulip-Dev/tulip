@@ -13,8 +13,6 @@
 #include <string>
 
 #include <QtGui/qwidget.h>
-#include <QtGui/qscrollbar.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>
@@ -49,7 +47,6 @@ protected:
   virtual void connectNotify (const char * signal);
 
 private :
-  QScrollBar *vScroll;
   int vScrollPos;
   bool displayNode;
   bool _filterSelection;
@@ -60,7 +57,7 @@ private :
   std::string editedPropertyName;
   
 private slots:
-  void showContextMenu(int row, int col, const QPoint & pos); 
+  void showContextMenu(const QPoint & pos); 
 
 public slots:  
   void changeProperty(tlp::Graph *,const std::string &name);

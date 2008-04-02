@@ -232,20 +232,24 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   //+++++++++++++++++++++++++++
   //Connection of the menus
-  connect(&stringMenu     , SIGNAL(activated(int)), SLOT(changeString(int)));
-  connect(&metricMenu     , SIGNAL(activated(int)), SLOT(changeMetric(int)));
-  connect(&layoutMenu     , SIGNAL(activated(int)), SLOT(changeLayout(int)));
-  connect(&selectMenu     , SIGNAL(activated(int)), SLOT(changeSelection(int)));
-  connect(&generalMenu  , SIGNAL(activated(int)), SLOT(applyAlgorithm(int)));
-  connect(&sizesMenu      , SIGNAL(activated(int)), SLOT(changeSizes(int)));
-  connect(&intMenu        , SIGNAL(activated(int)), SLOT(changeInt(int)));
-  connect(&colorsMenu     , SIGNAL(activated(int)), SLOT(changeColors(int)));
-  connect(&exportGraphMenu, SIGNAL(activated(int)), SLOT(exportGraph(int)));
-  connect(&importGraphMenu, SIGNAL(activated(int)), SLOT(importGraph(int)));
-  connect(&exportImageMenu, SIGNAL(activated(int)), SLOT(exportImage(int)));
-  connect(dialogMenu     , SIGNAL(activated(int)), SLOT(showDialog(int)));
+  connect(&stringMenu     , SIGNAL(triggered(QAction*)), SLOT(changeString(QAction*)));
+  connect(&metricMenu     , SIGNAL(triggered(QAction*)), SLOT(changeMetric(QAction*)));
+  connect(&layoutMenu     , SIGNAL(triggered(QAction*)), SLOT(changeLayout(QAction*)));
+  connect(&selectMenu     , SIGNAL(triggered(QAction*)), SLOT(changeSelection(QAction*)));
+  connect(&generalMenu  , SIGNAL(triggered(QAction*)), SLOT(applyAlgorithm(QAction*)));
+  connect(&sizesMenu      , SIGNAL(triggered(QAction*)), SLOT(changeSizes(QAction*)));
+  connect(&intMenu        , SIGNAL(triggered(QAction*)), SLOT(changeInt(QAction*)));
+  connect(&colorsMenu     , SIGNAL(triggered(QAction*)), SLOT(changeColors(QAction*)));
+  connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
+  connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
+  connect(&exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
+  connect(dialogMenu     , SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
   windowsMenu->setCheckable( TRUE );
-  connect(windowsMenu, SIGNAL( aboutToShow() ), this, SLOT( windowsMenuAboutToShow() ) );
+  connect(windowsMenu, SIGNAL( aboutToShow() ),
+	  this, SLOT( windowsMenuAboutToShow() ) );
+  connect(windowsMenu, SIGNAL(triggered(QAction*)),
+	  this, SLOT( windowsMenuActivated(QAction*)));
+
   Observable::unholdObservers();
   morph = new Morphing();
 
@@ -286,26 +290,26 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
 }
 //**********************************************************************
-void viewGl::enableQPopupMenu(QPopupMenu *popupMenu, bool enabled) {
-  int nbElements = popupMenu->count();
+void viewGl::enableQMenu(QMenu *popupMenu, bool enabled) {
+  QList <QAction *> actions = popupMenu->actions();
+  int nbElements = actions.size();
   for(int i = 0 ; i < nbElements ; i++) {
-    int currentId = popupMenu->idAt(i);
-    popupMenu->setItemEnabled(currentId, enabled);
+    actions.at(i)->setEnabled(enabled);
   }
 }
 //**********************************************************************
 void viewGl::enableElements(bool enabled) {
-  enableQPopupMenu((QPopupMenu *) editMenu, enabled);
-  enableQPopupMenu(&stringMenu, enabled);
-  enableQPopupMenu(&layoutMenu, enabled);
-  enableQPopupMenu(&metricMenu, enabled);
-  enableQPopupMenu(&selectMenu, enabled);
-  enableQPopupMenu(&intMenu, enabled);
-  enableQPopupMenu(&sizesMenu, enabled);
-  enableQPopupMenu(&colorsMenu, enabled);
-  enableQPopupMenu(&generalMenu, enabled);
-  enableQPopupMenu(&exportGraphMenu, enabled);
-  enableQPopupMenu(&exportImageMenu, enabled);
+  enableQMenu((QMenu *) editMenu, enabled);
+  enableQMenu(&stringMenu, enabled);
+  enableQMenu(&layoutMenu, enabled);
+  enableQMenu(&metricMenu, enabled);
+  enableQMenu(&selectMenu, enabled);
+  enableQMenu(&intMenu, enabled);
+  enableQMenu(&sizesMenu, enabled);
+  enableQMenu(&colorsMenu, enabled);
+  enableQMenu(&generalMenu, enabled);
+  enableQMenu(&exportGraphMenu, enabled);
+  enableQMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
@@ -1022,22 +1026,8 @@ void viewGl::fileOpen(string *plugin, QString &s) {
   Observable::unholdObservers();
 }
 //**********************************************************************
-static string findMenuItemText(QPopupMenu &menu, int id) {
-  string name(menu.text(id).ascii());
-
-  if (name.length() == 0) {
-    QList<QPopupMenu *> popups = menu.findChildren<QPopupMenu *>();
-    for (int i = 0; i < popups.size(); ++i) {
-      name = popups.at(i)->text(id).ascii();
-      if (name.length() != 0)
-	break;
-    }
-  }
-  return name;
-}
-//**********************************************************************
-void viewGl::importGraph(int id) {
-  string name = findMenuItemText(importGraphMenu, id);
+void viewGl::importGraph(QAction* action) {
+  string name = action->text().toStdString();
   QString s;
   fileOpen(&name,s);
 }
@@ -1204,13 +1194,13 @@ static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
   }
 }
 //**********************************************************************
-static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
-			 std::vector<QPopupMenu*> &groupMenus, std::string::size_type &nGroups) {
+static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
+			 std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups) {
   std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
-  QPopupMenu *subMenu = &menu;
+  QMenu *subMenu = &menu;
   std::string::size_type nGroupNames = itemGroupNames.size();
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
-    QPopupMenu *groupMenu = (QPopupMenu *) 0;
+    QMenu *groupMenu = (QMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
       if (itemGroupNames[i] == groupMenus[j]->objectName().ascii()) {
 	subMenu = groupMenu = groupMenus[j];
@@ -1218,59 +1208,60 @@ static void insertInMenu(QPopupMenu &menu, string itemName, string itemGroup,
       }
     }
     if (!groupMenu) {
-      groupMenu = new QPopupMenu(subMenu, itemGroupNames[i].c_str());
+      groupMenu = new QMenu(itemGroupNames[i].c_str(), subMenu);
       groupMenu->setObjectName(QString(itemGroupNames[i].c_str()));
-      subMenu->insertItem(itemGroupNames[i].c_str(), groupMenu);
+      subMenu->addMenu(groupMenu);
       groupMenus.push_back(groupMenu);
       nGroups++;
       subMenu = groupMenu;
     }
   }
   //cout << subMenu->name() << "->" << itemName << endl;
-  subMenu->insertItem(itemName.c_str());
+  subMenu->addAction(itemName.c_str());
 }
   
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
-void buildPropertyMenu(QPopupMenu &menu, QObject *receiver, const char *slot) {
+void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
   typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
-  std::vector<QPopupMenu*> groupMenus;
+  std::vector<QMenu*> groupMenus;
   std::string::size_type nGroups = 0;
   it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
   for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
 #if defined(__APPLE__) && (QT_MINOR_REL > 1)
   for (std::string::size_type i = 0; i < nGroups; i++)
-    receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+    receiver->connect(groupMenus[i],
+		      SIGNAL(triggered(QAction * action)), slot);
 #endif
 }
 
 template <typename TFACTORY, typename TMODULE>
-void buildMenuWithContext(QPopupMenu &menu, QObject *receiver, const char *slot) {
+void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
   typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
-  std::vector<QPopupMenu*> groupMenus;
+  std::vector<QMenu*> groupMenus;
   std::string::size_type nGroups = 0;
   for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
  #if defined(__APPLE__) && (QT_MINOR_REL > 1)
    for (std::string::size_type i = 0; i < nGroups; i++)
-     receiver->connect(groupMenus[i], SIGNAL(activated(int)), slot);
+     receiver->connect(groupMenus[i], SIGNAL(triggered(QAction*)), slot);
  #endif
 }
 //**********************************************************************
 void viewGl::buildMenus() {
   //Properties PopMenus
-  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(int)));
-  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu, this, SLOT(changeString(int)));
-  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu, this, SLOT(changeSize(int)));
-  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu, this, SLOT(changeColor(int)));
-  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu, this, SLOT(changeLayout(int)));
-  buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(metricMenu, this, SLOT(changeMetric(int)));
-  buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(selectMenu, this, SLOT(changeSelection(int)));
+  buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(intMenu, this, SLOT(changeInt(QAction*)));
+  buildPropertyMenu<StringType, StringType, StringAlgorithm>(stringMenu, this, SLOT(changeString(QAction*)));
+  buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(sizesMenu, this, SLOT(changeSize(QAction*)));
+  buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(colorsMenu, this, SLOT(changeColor(QAction*)));
+  buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(layoutMenu, this, SLOT(changeLayout(QAction*)));
+  buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(metricMenu, this, SLOT(changeMetric(QAction*)));
+  buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(selectMenu, this, SLOT(changeSelection(QAction*)));
 
-  buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(int)));
-  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(int)));
-  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(int)));
+  buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(QAction*)));
+  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(QAction*)));
+  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(QAction*)));
   // Tulip known formats (see GlGraph)
   // formats are sorted, "~" is just an end marker
   char *tlpFormats[] = {"EPS", "SVG", "~"};
@@ -1291,43 +1282,64 @@ void viewGl::buildMenus() {
   // sort before inserting in exportImageMenu
   formats.sort();
   foreach(QString str, formats)
-    exportImageMenu.insertItem(str);
+    exportImageMenu.addAction(str);
   //Windows
-  dialogMenu->insertItem("3D &Overview");
-  dialogMenu->insertItem("&Info Editor");
-  dialogMenu->insertItem("&Layer Manager");
-  dialogMenu->insertItem("&Rendering Parameters", 1000);
-  dialogMenu->setAccel(tr("Ctrl+R"), 1000);
+  dialogMenu->addAction("3D &Overview");
+  dialogMenu->addAction("&Info Editor");
+  dialogMenu->addAction("&Layer Manager");
+  dialogMenu->addAction("&Rendering Parameters")->setShortcut(tr("Ctrl+R"));
   //==============================================================
   //File Menu 
-  fileMenu->insertSeparator();
-  if (importGraphMenu.count()>0)
-    fileMenu->insertItem("&Import", &importGraphMenu );
-  if (exportGraphMenu.count()>0)
-    fileMenu->insertItem("&Export", &exportGraphMenu );
-  if (exportImageMenu.count()>0)
-    fileMenu->insertItem("&Save Picture as " , &exportImageMenu); //this , SLOT( outputImage() ));
+  fileMenu->addSeparator();
+  if (importGraphMenu.count()>0) {
+    importGraphMenu.setTitle("&Import");
+    fileMenu->addMenu(&importGraphMenu);
+  }
+  if (exportGraphMenu.count()>0) {
+    exportGraphMenu.setTitle("&Export");
+    fileMenu->addMenu(&exportGraphMenu);
+  }
+  if (exportImageMenu.count()>0) {
+    exportImageMenu.setTitle("&Save Picture as ");
+    fileMenu->addMenu(&exportImageMenu); //this , SLOT( outputImage() ));
+  }
   //View Menu
-  viewMenu->insertItem("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
-  viewMenu->insertItem("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
-  viewMenu->insertItem("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
+  viewMenu->addAction("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
+  viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
+  viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
   //Property Menu
-  if (selectMenu.count()>0)
-    propertyMenu->insertItem("&Selection", &selectMenu );
-  if (colorsMenu.count()>0)
-    propertyMenu->insertItem("&Color", &colorsMenu );
-  if (metricMenu.count()>0)
-    propertyMenu->insertItem("&Measure", &metricMenu );
-  if (intMenu.count()>0)
-    propertyMenu->insertItem("&Integer", &intMenu );
-  if (layoutMenu.count()>0)
-    propertyMenu->insertItem("&Layout", &layoutMenu );
-  if (sizesMenu.count()>0)
-    propertyMenu->insertItem("S&ize", &sizesMenu );
-  if (stringMenu.count()>0)
-    propertyMenu->insertItem("L&abel", &stringMenu );
-  if (generalMenu.count()>0)
-    propertyMenu->insertItem("&General", &generalMenu );
+  if (selectMenu.count()>0) {
+    selectMenu.setTitle("&Selection");
+    propertyMenu->addMenu(&selectMenu);
+  }
+  if (colorsMenu.count()>0) {
+    colorsMenu.setTitle("&Color");
+    propertyMenu->addMenu(&colorsMenu);
+  }
+  if (metricMenu.count()>0) {
+    metricMenu.setTitle("&Measure");
+    propertyMenu->addMenu(&metricMenu);
+  }
+  if (intMenu.count()>0) {
+    intMenu.setTitle("&Integer");
+    propertyMenu->addMenu(&intMenu);
+  }
+  if (layoutMenu.count()>0) {
+    layoutMenu.setTitle("&Layout");
+    propertyMenu->addMenu(&layoutMenu);
+  }
+  if (sizesMenu.count()>0) {
+    sizesMenu.setTitle("S&ize");
+    propertyMenu->addMenu(&sizesMenu);
+  }
+  if (stringMenu.count()>0) {
+    stringMenu.setTitle("L&abel");
+    propertyMenu->addMenu(&stringMenu);
+  }
+  if (generalMenu.count()>0) {
+    generalMenu.setTitle("&General");
+    propertyMenu->addMenu(&generalMenu);
+  }
 }
 //**********************************************************************
 void viewGl::outputEPS() {
@@ -1356,9 +1368,9 @@ void viewGl::outputSVG() {
   }
 }
 //**********************************************************************
-void viewGl::exportImage(int id) {
+void viewGl::exportImage(QAction* action) {
   if (!glWidget) return;
-  string name = findMenuItemText(exportImageMenu, id);
+  string name = action->text().toStdString();
   if (name=="EPS") {
     outputEPS();
     return;
@@ -1388,13 +1400,14 @@ void viewGl::exportImage(int id) {
   statusBar()->message(s + " saved.");
 }
 //**********************************************************************
-void viewGl::exportGraph(int id) {
+void viewGl::exportGraph(QAction* action) {
   if (!glWidget) return;
-  doFileSave(findMenuItemText(exportGraphMenu,id), "", "", "");
+  doFileSave(action->text().toStdString(), "", "", "");
 }
 //**********************************************************************
-void viewGl::windowsMenuActivated( int id ) {
-  QWidget* w = workspace->windowList().at( id );
+void viewGl::windowsMenuActivated(QAction* action) {
+  int id = action->data().toInt();
+  QWidget* w = workspace->windowList().at(id);
   if ( w ) {
     w->setFocus();
     w->show();
@@ -1403,19 +1416,18 @@ void viewGl::windowsMenuActivated( int id ) {
 //**********************************************************************
 void viewGl::windowsMenuAboutToShow() {
   windowsMenu->clear();
-  int cascadeId = windowsMenu->insertItem("&Cascade", workspace, SLOT(cascade() ) );
-  int tileId = windowsMenu->insertItem("&Tile", workspace, SLOT(tile() ) );
+  QAction* cascadeAction = windowsMenu->addAction("&Cascade", workspace, SLOT(cascade() ) );
+  QAction* tileAction = windowsMenu->addAction("&Tile", workspace, SLOT(tile() ) );
   if ( workspace->windowList().isEmpty() ) {
-    windowsMenu->setItemEnabled( cascadeId, FALSE );
-    windowsMenu->setItemEnabled( tileId, FALSE );
+    cascadeAction->setEnabled(false);
+    tileAction->setEnabled(false);
   }
-  windowsMenu->insertSeparator();
+  windowsMenu->addSeparator();
   QWidgetList windows = workspace->windowList();
   for ( int i = 0; i < int(windows.count()); ++i ) {
-    int id = windowsMenu->insertItem(windows.at(i)->caption(),
-				     this, SLOT( windowsMenuActivated( int ) ) );
-    windowsMenu->setItemParameter( id, i );
-    windowsMenu->setItemChecked( id, workspace->activeWindow() == windows.at(i) );
+    QAction* action = windowsMenu->addAction(windows.at(i)->caption());
+    action->setChecked(workspace->activeWindow() == windows.at(i));
+    action->setData(QVariant(i));
   }
 }
 //**********************************************************************
@@ -1552,53 +1564,53 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       // Display a context menu
       bool isNode = type == NODE;
       int itemId = isNode ? tmpNode.id : tmpEdge.id;
-      QPopupMenu contextMenu(this,"dd");
+      QMenu contextMenu(this);
       stringstream sstr;
       sstr << (isNode ? "Node " : "Edge ") << itemId;
-      contextMenu.setItemEnabled(contextMenu.insertItem(tr(sstr.str().c_str())), false);
-      contextMenu.insertSeparator();
-      contextMenu.insertItem(tr("Add to/Remove from selection"));
-      int selectId = contextMenu.insertItem(tr("Select"));
-      int deleteId = contextMenu.insertItem(tr("Delete"));
-      contextMenu.insertSeparator();
+      contextMenu.addAction(tr(sstr.str().c_str()))->setEnabled(false);
+      contextMenu.addSeparator();
+      contextMenu.addAction(tr("Add to/Remove from selection"));
+      QAction* selectAction = contextMenu.addAction(tr("Select"));
+      QAction* deleteAction = contextMenu.addAction(tr("Delete"));
+      contextMenu.addSeparator();
       Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      int goId = -1;
-      int ungroupId = -1;
+      QAction* goAction = NULL;
+      QAction* ungroupAction = NULL;
       if (isNode) {
 	GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
 	if (meta->getNodeValue(tmpNode)!=0) {
-	  goId = contextMenu.insertItem(tr("Go inside"));
-	  ungroupId = contextMenu.insertItem(tr("Ungroup"));
+	  goAction = contextMenu.addAction(tr("Go inside"));
+	  ungroupAction = contextMenu.addAction(tr("Ungroup"));
 	}
       }
-      if (goId != -1)
-	contextMenu.insertSeparator();
-      int propId = contextMenu.insertItem(tr("Properties"));
-      int menuId = contextMenu.exec(me->globalPos(), 2);
-      if (menuId == -1)
+      if (goAction != NULL)
+	contextMenu.addSeparator();
+      QAction* propAction = contextMenu.addAction(tr("Properties"));
+      QAction* menuAction = contextMenu.exec(me->globalPos(), selectAction);
+      if (menuAction == NULL)
 	return true;
       Observable::holdObservers();
-      if (menuId == deleteId) { // Delete
+      if (menuAction == deleteAction) { // Delete
 	// delete graph item
 	if (isNode)
 	  graph->delNode(node(itemId));
 	else
 	  graph->delEdge(edge(itemId));
       } else {
-	if (menuId == propId) // Properties
+	if (menuAction == propAction) // Properties
 	  showElementProperties(itemId, isNode);
 	else  {
-	  if (menuId == goId) { // Go inside
+	  if (menuAction == goAction) { // Go inside
 	    GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
 	    changeGraph(meta->getNodeValue(tmpNode));
 	  }
 	  else  {
-	    if (menuId == ungroupId) { // Ungroup
+	    if (menuAction == ungroupAction) { // Ungroup
 	      tlp::openMetaNode(graph, tmpNode);
 	      clusterTreeWidget->update();
 	    } else {
 	      BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-	      if (menuId == selectId) { // Select
+	      if (menuAction == selectAction) { // Select
 		// empty selection
 		elementSelected->setAllNodeValue(false);
 		elementSelected->setAllEdgeValue(false);
@@ -1623,8 +1635,8 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 void viewGl::focusInEvent ( QFocusEvent * ) {
 }
 //**********************************************************************
-void viewGl::showDialog(int id){
-  string name(dialogMenu->text(id).ascii());
+void viewGl::showDialog(QAction* action){
+  string name(action->text().toStdString());
   if (name=="&Info Editor") {
     tabWidgetDock->show();
     tabWidgetDock->raise();
@@ -1636,7 +1648,7 @@ void viewGl::showDialog(int id){
   if (name=="&Layer Manager") {
     layerWidget->show();
   }
-  if (id == 1000 && glWidget != 0) {
+  if (name=="&Rendering Parameters" && glWidget != 0) {
     overviewWidget->showRenderingParametersDialog();
   }
 }
@@ -1911,11 +1923,11 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
 }
 //**********************************************************************
 /// Apply a general algorithm
-void viewGl::applyAlgorithm(int id) {
+void viewGl::applyAlgorithm(QAction* action) {
   clearObservers();
   if (glWidget==0) return;
   Observable::holdObservers();
-  string name = findMenuItemText(generalMenu, id);
+  string name = action->text().toStdString();
   string erreurMsg;
   DataSet dataSet;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -2001,25 +2013,25 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   return resultBool;
 }
 //**********************************************************************
-void viewGl::changeString(int id) {
+void viewGl::changeString(QAction* action) {
   clearObservers();
-  string name = findMenuItemText(stringMenu, id);
+  string name = action->text().toStdString();
   if (changeProperty<StringProperty>(name,"viewLabel"))
     redrawView();
   initObservers();
 }
 //**********************************************************************
-void viewGl::changeSelection(int id) {
+void viewGl::changeSelection(QAction* action) {
   clearObservers();
-  string name = findMenuItemText(selectMenu, id);
+  string name = action->text().toStdString();
   if (changeProperty<BooleanProperty>(name,"viewSelection"))
     redrawView();
   initObservers();
 }
 //**********************************************************************
-void viewGl::changeMetric(int id) {
+void viewGl::changeMetric(QAction* action) {
   clearObservers();
-  string name = findMenuItemText(metricMenu, id);
+  string name = action->text().toStdString();
   bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
   if (result && map_metric->isOn()) {
     if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
@@ -2028,9 +2040,9 @@ void viewGl::changeMetric(int id) {
   initObservers();
 }
 //**********************************************************************
-void viewGl::changeLayout(int id) {
+void viewGl::changeLayout(QAction* action) {
   clearObservers();
-  string name = findMenuItemText(layoutMenu, id);
+  string name = action->text().toStdString();
   GraphState * g0 = 0;
   if( enable_morphing->isOn() ) 
     g0 = new GraphState(glWidget);
@@ -2062,19 +2074,19 @@ void viewGl::changeLayout(int id) {
   initObservers();
 }
   //**********************************************************************
-void viewGl::changeInt(int id) {
+void viewGl::changeInt(QAction* action) {
   clearObservers();
-  string name = findMenuItemText(intMenu, id);
+  string name = action->text().toStdString();
   changeProperty<IntegerProperty>(name, "viewInt");
   initObservers();
 }
   //**********************************************************************
-void viewGl::changeColors(int id) {
+void viewGl::changeColors(QAction* action) {
   clearObservers();
   GraphState * g0 = 0;
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
-  string name = findMenuItemText(colorsMenu, id);
+  string name = action->text().toStdString();
   bool result = changeProperty<ColorProperty>(name,"viewColor");
   if( result ) {
     if( enable_morphing->isOn() ) {
@@ -2095,12 +2107,12 @@ void viewGl::changeColors(int id) {
   initObservers();
 }
 //**********************************************************************
-void viewGl::changeSizes(int id) {
+void viewGl::changeSizes(QAction* action) {
   clearObservers();
   GraphState * g0 = 0;
   if( enable_morphing->isOn() )
     g0 = new GraphState( glWidget );
-  string name = findMenuItemText(sizesMenu, id);
+  string name = action->text().toStdString();
   bool result = changeProperty<SizeProperty>(name,"viewSize");
   if( result ) {
     if( enable_morphing->isOn() ) {

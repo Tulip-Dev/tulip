@@ -1,6 +1,6 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qmessagebox.h>
-#include "tulip/Qt3ForTulip.h"
+#include <QtGui/qheaderview.h>
 
 #include <tulip/AbstractProperty.h>
 
@@ -10,10 +10,10 @@
 using namespace tlp;
 //==========================================
 ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
-                                               const QStringList &nodeListedProperties,
-                                               const QStringList &edgeListedProperties,
-                                               QWidget *parent, const char *name, Qt::WFlags fl) :
-  ElementPropertiesWidgetUI(parent, name, fl), 
+						 const QStringList &nodeListedProperties,
+						 const QStringList &edgeListedProperties,
+						 QWidget *parent) :
+  ElementPropertiesWidgetUI(parent), 
   displayMode(NODE), 
   nodeSet(false), 
   edgeSet(false),
@@ -22,25 +22,26 @@ ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
   setGraph(graph);
   setNodeListedProperties(nodeListedProperties);
   setEdgeListedProperties(edgeListedProperties);
-  propertyTable->horizontalHeader()->setLabel(0, tr("Property"));
-  propertyTable->horizontalHeader()->setLabel(1, tr("Value"));
-  propertyTable->setColumnStretchable(1, true);
+  propertyTable->horizontalHeaderItem(0)->setText("Property");
+  propertyTable->horizontalHeaderItem(1)->setText("Value");
   displayAllProperties=false;
-  connect(propertyTable,SIGNAL(valueChanged(int,int)),this,SLOT(propertyTableValueChanged(int,int)));
+  connect(propertyTable,SIGNAL(cellChanged(int,int)),
+	  this,SLOT(propertyTableValueChanged(int,int)));
 }
 //==========================================
-ElementPropertiesWidget::ElementPropertiesWidget(QWidget *parent, const char *name, Qt::WFlags fl) :
-  ElementPropertiesWidgetUI(parent, name, fl), 
+ElementPropertiesWidget::ElementPropertiesWidget(QWidget *parent) :
+  ElementPropertiesWidgetUI(parent), 
   displayMode(NODE), 
   nodeSet(false), 
   edgeSet(false),
   graph(0)
 {
   setGraph(0);
-  propertyTable->horizontalHeader()->setLabel(0, tr("Property"));
-  propertyTable->horizontalHeader()->setLabel(1, tr("Value"));
+  propertyTable->horizontalHeaderItem(0)->setText("Property");
+  propertyTable->horizontalHeaderItem(1)->setText("Value");
   displayAllProperties=true;
-  connect(propertyTable,SIGNAL(valueChanged(int,int)),this,SLOT(propertyTableValueChanged(int,int)));
+  connect(propertyTable,SIGNAL(cellChanged(int,int)),
+	  this,SLOT(propertyTableValueChanged(int,int)));
 }
 //==========================================
 ElementPropertiesWidget::~ElementPropertiesWidget() {
@@ -128,11 +129,11 @@ void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
   edgeSet = false;
   this->setCaption("");
   label->setText("No element selected");
-  for (int i=0;i<propertyTable->numRows();++i) {
+  /*for (int i=0;i<propertyTable->rowCount();++i) {
     propertyTable->clearCell(i,0);
     propertyTable->clearCell(i,1);
-  }
-  propertyTable->setNumRows(0);
+    }*/
+  propertyTable->setRowCount(0);
   if (graph!=0)
     graph->addObserver(this);
 }
@@ -146,26 +147,30 @@ void ElementPropertiesWidget::setCurrentListedProperties(const QStringList &l) {
 //==========================================
 void ElementPropertiesWidget::setNodeListedProperties(const QStringList &l) {
   nodeListedProperties = l;
-  propertyTable->setNumRows(nodeListedProperties.size());
+  propertyTable->setRowCount(nodeListedProperties.size());
   updateTable();
 }
 //==========================================
 void ElementPropertiesWidget::setEdgeListedProperties(const QStringList &l) {
   edgeListedProperties = l;
-  propertyTable->setNumRows(edgeListedProperties.size());
+  propertyTable->setRowCount(edgeListedProperties.size());
   updateTable();
 }
 //==========================================
 void ElementPropertiesWidget::updateTable() {
   if (graph == NULL) return;
   int i=0;
+  disconnect(propertyTable, SIGNAL(cellChanged(int,int)),
+	     this, SLOT(propertyTableValueChanged(int,int)));
   if (displayAllProperties) {
-    propertyTable->setNumRows(0);    
+    propertyTable->setRowCount(0);    
     Iterator<std::string> *it=graph->getLocalProperties();
     while(it->hasNext()) {
-      propertyTable->setNumRows(i + 1);
+      propertyTable->setRowCount(i + 1);
       std::string pname=it->next();
-      propertyTable->setText(i, 0, QString(pname.c_str()));
+      QTableWidgetItem* nameItem = new QTableWidgetItem(pname.c_str());
+      nameItem->setFlags(Qt::ItemIsEnabled);
+      propertyTable->setItem(i, 0, nameItem);
       PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
@@ -183,9 +188,11 @@ void ElementPropertiesWidget::updateTable() {
     } delete it;
     it=graph->getInheritedProperties();
     while(it->hasNext()) {
-      propertyTable->setNumRows(i + 1);
+      propertyTable->setRowCount(i + 1);
       std::string pname=it->next();
-      propertyTable->setText(i, 0, QString(pname.c_str()));
+      QTableWidgetItem* nameItem = new QTableWidgetItem(pname.c_str());
+      nameItem->setFlags(Qt::ItemIsEnabled);
+      propertyTable->setItem(i, 0, nameItem);
       PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
@@ -209,11 +216,13 @@ void ElementPropertiesWidget::updateTable() {
     case NODE: listedProperties = &nodeListedProperties; break;
     case EDGE: listedProperties = &edgeListedProperties; break;
     }
-    propertyTable->setNumRows(listedProperties->count());
+    propertyTable->setRowCount(listedProperties->count());
     for (QStringList::const_iterator it=listedProperties->begin();
 	 it != listedProperties->end();
 	 ++it, ++i) {
-      propertyTable->setText(i, 0, *it);
+      QTableWidgetItem* nameItem = new QTableWidgetItem(*it);
+      nameItem->setFlags(Qt::ItemIsEnabled);
+      propertyTable->setItem(i, 0, nameItem);
       if (graph->existProperty((*it).latin1())) {
         switch(displayMode) {
         case NODE:
@@ -231,10 +240,12 @@ void ElementPropertiesWidget::updateTable() {
       }
     }
   }
-  propertyTable->adjustColumn(0);
+  connect(propertyTable,SIGNAL(cellChanged(int,int)),
+	  this, SLOT(propertyTableValueChanged(int,int)));
+  //propertyTable->adjustColumn(0);
   // Ugly hack to avoid resizing
   if (propertyTable->isVisible()) {
-    propertyTable->setColumnWidth(1, propertyTable->horizontalHeader()->size().width()
+    propertyTable->setColumnWidth(1, propertyTable->horizontalHeader()->length()
 				  - propertyTable->columnWidth(0) - 5);
   }
   //propertyTable->adjustColumn(1);
@@ -250,19 +261,18 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
   case EDGE: elementSet = &edgeSet; listedProperties = &edgeListedProperties; break;
   }
 
-  QString property = propertyTable->text(row, 0);
-  QString value = propertyTable->text(row, col);
+  QString property = propertyTable->item(row, 0)->text();
+  QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
   PropertyInterface *editedProperty = graph->getProperty(property.latin1());
   if (editedProperty==0) return;
-  std::string tmp = value.latin1();
-  //  cerr << "Value :" << value << endl;
+  //cerr << "Value :" << value.ascii() << endl;
   bool result=true;
   switch(displayMode) {
   case NODE:
-    result=editedProperty->setNodeStringValue( currentNode, tmp);
+    result=editedProperty->setNodeStringValue(currentNode, value.ascii());
     break;
   case EDGE:
-    result=editedProperty->setEdgeStringValue( currentEdge, tmp);
+    result=editedProperty->setEdgeStringValue(currentEdge, value.ascii());
     break;
   }
   

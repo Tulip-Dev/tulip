@@ -17,7 +17,6 @@
 #include <tulip/MouseEdgeBendEditor.h>
 
 #include <QtGui/qevent.h>
-#include "tulip/Qt3ForTulip.h"
 
 using namespace tlp;
 using namespace std;

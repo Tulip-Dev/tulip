@@ -55,7 +55,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-AppStartUp::AppStartUp( QWidget* parent,  const char* name, bool modal, WFlags fl )
+AppStartUp::AppStartUp( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
   : AppStartUpForm( parent, name, modal, fl ),
     currentFrame(0){
   string tmp="Tulip V. ";
