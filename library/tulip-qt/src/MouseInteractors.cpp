@@ -10,7 +10,6 @@
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
 #include "tulip/GlMainWidget.h"
-#include "tulip/ElementPropertiesWidget.h"
 #include <tulip/Observable.h>
 
 using namespace tlp;
