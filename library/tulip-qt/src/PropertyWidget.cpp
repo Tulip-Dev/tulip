@@ -42,7 +42,7 @@ using namespace tlp;
 
 //================================================================================
 PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
-  TulipTableWidget(parent, name), graph(0) {
+  TulipTableWidget(parent, name), graph(0), vScrollPos(0) {
   resetBackColor1();
   resetBackColor2();
   editedProperty=0;
@@ -59,7 +59,6 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this,SIGNAL(customContextMenuRequested (const QPoint &)),
 	  SLOT(showContextMenu(const QPoint&)));
-  vScrollPos=0;
 }
 
 PropertyWidget::~PropertyWidget() {}
