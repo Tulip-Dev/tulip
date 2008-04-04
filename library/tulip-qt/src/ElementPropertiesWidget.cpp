@@ -1,12 +1,14 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qheaderview.h>
+#include <QtGui/qscrollbar.h>
 
 #include <tulip/AbstractProperty.h>
 
 #include "tulip/TulipTableWidget.h"
 #include "tulip/ElementPropertiesWidget.h"
 
+using namespace std;
 using namespace tlp;
 //==========================================
 ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
@@ -26,7 +28,7 @@ ElementPropertiesWidget::ElementPropertiesWidget(Graph *graph,
   propertyTable->horizontalHeaderItem(1)->setText("Value");
   displayAllProperties=false;
   connect(propertyTable,SIGNAL(cellChanged(int,int)),
-	  this,SLOT(propertyTableValueChanged(int,int)));
+	  this, SLOT(propertyTableValueChanged(int,int)));
 }
 //==========================================
 ElementPropertiesWidget::ElementPropertiesWidget(QWidget *parent) :
@@ -163,10 +165,25 @@ void ElementPropertiesWidget::updateTable() {
   disconnect(propertyTable, SIGNAL(cellChanged(int,int)),
 	     this, SLOT(propertyTableValueChanged(int,int)));
   if (displayAllProperties) {
-    propertyTable->setRowCount(0);    
     Iterator<std::string> *it=graph->getLocalProperties();
+    propertyTable->setRowCount(0);
+    // first count number properties
+    // to avoid too much calls to setRowCount
     while(it->hasNext()) {
-      propertyTable->setRowCount(i + 1);
+      it->next();
+      ++i;
+    }
+    delete it;
+    it=graph->getInheritedProperties();
+    while(it->hasNext()) {
+      it->next();
+      ++i;
+    }
+    delete it;
+    propertyTable->setRowCount(i);
+    i = 0;
+    it=graph->getLocalProperties();
+    while(it->hasNext()) {
       std::string pname=it->next();
       QTableWidgetItem* nameItem = new QTableWidgetItem(pname.c_str());
       nameItem->setFlags(Qt::ItemIsEnabled);
@@ -188,7 +205,6 @@ void ElementPropertiesWidget::updateTable() {
     } delete it;
     it=graph->getInheritedProperties();
     while(it->hasNext()) {
-      propertyTable->setRowCount(i + 1);
       std::string pname=it->next();
       QTableWidgetItem* nameItem = new QTableWidgetItem(pname.c_str());
       nameItem->setFlags(Qt::ItemIsEnabled);
@@ -216,7 +232,6 @@ void ElementPropertiesWidget::updateTable() {
     case NODE: listedProperties = &nodeListedProperties; break;
     case EDGE: listedProperties = &edgeListedProperties; break;
     }
-    propertyTable->setRowCount(listedProperties->count());
     for (QStringList::const_iterator it=listedProperties->begin();
 	 it != listedProperties->end();
 	 ++it, ++i) {
@@ -224,35 +239,34 @@ void ElementPropertiesWidget::updateTable() {
       nameItem->setFlags(Qt::ItemIsEnabled);
       propertyTable->setItem(i, 0, nameItem);
       if (graph->existProperty((*it).latin1())) {
-        switch(displayMode) {
-        case NODE:
-          if (nodeSet) {
-            PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
-            propertyTable->setTulipNodeItem(editedProperty, (*it).latin1(), currentNode, i, 1);
-          }
-          break;
-        case EDGE:
-          if (edgeSet) {
-            PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
-            propertyTable->setTulipEdgeItem(editedProperty, (*it).latin1(), currentEdge, i, 1);
-          }
-        }
+	switch(displayMode) {
+	case NODE:
+	  if (nodeSet) {
+	    PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
+	    propertyTable->setTulipNodeItem(editedProperty, (*it).latin1(), currentNode, i, 1);
+	  }
+	  break;
+	case EDGE:
+	  if (edgeSet) {
+	    PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
+	    propertyTable->setTulipEdgeItem(editedProperty, (*it).latin1(), currentEdge, i, 1);
+	  }
+	}
       }
     }
   }
   connect(propertyTable,SIGNAL(cellChanged(int,int)),
 	  this, SLOT(propertyTableValueChanged(int,int)));
-  //propertyTable->adjustColumn(0);
   // Ugly hack to avoid resizing
   if (propertyTable->isVisible()) {
     propertyTable->setColumnWidth(1, propertyTable->horizontalHeader()->length()
 				  - propertyTable->columnWidth(0) - 5);
   }
-  //propertyTable->adjustColumn(1);
 }
-using namespace std;
 //==========================================
 void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
+  if (col == 0)
+    return;
   //  cerr << __PRETTY_FUNCTION__ << endl;
   bool *elementSet;
   QStringList *listedProperties;
