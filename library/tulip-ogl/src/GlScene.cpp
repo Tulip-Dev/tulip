@@ -539,8 +539,8 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"background",backgroundColor);
 
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      GlXMLTools::createChild(childrenNode, (*it).first, node);
-      GlXMLTools::createProperty(node, "type", "GlLayer");
+      GlXMLTools::createChild(childrenNode, "GlLayer", node);
+      GlXMLTools::createProperty(node, "name", (*it).first);
       (*it).second->getXML(node);
     }
 
@@ -609,14 +609,28 @@ namespace tlp {
     // Parse children
     for (node = childrenNode->children; node; node = node->next) {
       if(node->type == XML_ELEMENT_NODE) {
-	string propName=(char*)node->properties->name;
-	string propValue=(char*)node->properties->children->content;
-	if(propName=="type" && propValue=="GlLayer") {
-	  GlLayer *newLayer=new GlLayer((char*)node->name);
-	  addLayer(newLayer);
-	  newLayer->setWithXML(node);
+	if(string((char*)node->name)=="GlLayer") {
+	  //New version
+	  string propName=(char*)node->properties->name;
+	  string propValue=(char*)node->properties->children->content;
+	  if(propName=="name") {
+	    GlLayer *newLayer=new GlLayer(propValue);
+	    addLayer(newLayer);
+	    newLayer->setWithXML(node);
+	  }else{
+	    assert(false);
+	  }
 	}else{
-	  assert(false);
+	  //Previous version compatibility
+	  string propName=(char*)node->properties->name;
+	  string propValue=(char*)node->properties->children->content;
+	  if(propName=="type" && propValue=="GlLayer") {
+	    GlLayer *newLayer=new GlLayer((char*)node->name);
+	    addLayer(newLayer);
+	    newLayer->setWithXML(node);
+	  }else{
+	    assert(false);
+	  }
 	}
       }
     }

@@ -95,7 +95,8 @@ namespace tlp {
 
     for(list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
       name=findKey(*it);
-      GlXMLTools::createChild(childrenNode,name,node);
+      GlXMLTools::createChild(childrenNode,"GlEntity",node);
+      GlXMLTools::createProperty(node,"name",name);
       GlXMLTools::createDataNode(node,dataNode);
       GlXMLTools::getXML(dataNode,"visible",(*it)->isVisible());
       GlXMLTools::getXML(dataNode,"stencil",(*it)->getStencil());
@@ -114,23 +115,31 @@ namespace tlp {
     for (node = childrenNode->children; node; node = node->next) {
       if(node->type == XML_ELEMENT_NODE) {
 	string type = GlXMLTools::getProperty("type",node);
-	
+	string name;
+
+	if(string((char*)node->name)=="GlEntity") {
+	  //New version
+	  name = GlXMLTools::getProperty("name",node);
+	}else{
+	  //previous version compatibility
+	  name=(char*)node->name;
+	}
 	if(type!="") {
 	  GlSimpleEntity *entity=GlXMLTools::createEntity(type);
 	  if(entity) {
 	    bool visible;
 	    int stencil;
-
+	    
 	    entity->setWithXML(node);
 	    GlXMLTools::getDataNode(node,dataNode);
-
+	      
 	    GlXMLTools::setWithXML(dataNode, "visible", visible);
 	    GlXMLTools::setWithXML(dataNode, "stencil", stencil);
 	    entity->setVisible(visible);
 	    entity->setStencil(stencil );
-	    addGlEntity(entity,(char*)node->name);
+	    addGlEntity(entity,name);
+	    }
 	  }
-	}
       }
     }
   }
