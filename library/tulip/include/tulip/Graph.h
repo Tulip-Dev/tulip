@@ -100,7 +100,7 @@ public:
   Graph();
   virtual ~Graph();
   //=========================================================================  
-  // Graph hierarrchy acces and building
+  // Graph hierarchy acces and building
   //=========================================================================
   /**
    *  Remove all nodes, edges and subgraphs of the supergraph 
@@ -290,9 +290,16 @@ public:
   template<typename ATTRIBUTETYPE> 
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /**
-   * Returns a pointer to a propertyProxy which is in the pool.
-   * The real type of the propertyproxy is tested with the template parameter.
-   * If the propertyProxy is not in the pool, a new one is created and returned.
+   *  add a property to the graph
+   *  Be aware that the PropertyInterface will now belong to the graph object;
+   *  and so it will be deleted automatically. Using of delete on that property
+   *  will cause a segmentation violation (use delLocalProperty instead).
+   */
+  virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+  /**
+   * Returns a pointer to a PropertyInterface which is in the pool.
+   * The real type of the PropertyInterface is tested with the template parameter.
+   * If the PropertyInterface is not in the pool, a new one is created and returned.
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
@@ -311,47 +318,33 @@ public:
   bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
 		       PluginProgress *progress=0, DataSet *data=0);
   /**
-   * Returns a pointer to a propertyProxy which is in the pool or in the pool of an ascendant
-   * The real type of the propertyproxy is tested with the template parameter.
-   * If the propertyProxy is not the pool it creates a new one and return it.
+   * Returns a pointer to a PropertyInterface which is in the pool or in the pool of an ascendant
+   * The real type of the PropertyInterface is tested with the template parameter.
+   * If the PropertyInterface is not the pool it creates a new one and return it.
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
   template<typename Proxytype>
   Proxytype* getProperty(const std::string &name);
   /**
-   * Returns a pointer to a propertyProxy which is in the pool or in the pool of an ascendant.
-   * The real type of the propertyproxy is tested with the template parameter.
-   * If the propertyProxy is in the pool the cached value return true else false.
-   * The resultBool value indicate if the check algorithm of the associated property was ok;
-   * The resultStr is the error message which has been return by the Property.
-   */
-  /**
    * Returns a pointer on an existing property. If the property does not 
-   * exist return 0.
+   * exist return NULL.
    * In DEBUG the existence of a property is checked using an assertion.
    */
-  virtual PropertyInterface* getProperty(const std::string &name)=0;  
+  virtual PropertyInterface* getProperty(const std::string& name)=0;  
   /**
    *  Return true if a property of that name exists
    *  in the graph or in an ancestor
    */
-  virtual  bool existProperty(const std::string&name)=0;
+  virtual  bool existProperty(const std::string& name)=0;
   /**
-   * Returns true if the propertyProxy is in the graph
+   * Returns true if a property of that name exists is in the graph
    */
-  virtual  bool existLocalProperty(const std::string&name)=0;
+  virtual  bool existLocalProperty(const std::string& name)=0;
   /**
-   * Remove a AbstractProperty from the graph
+   * Remove a property from the graph
    */
-  virtual  void delLocalProperty(const std::string&name)=0;
-  /**
-   *  add a property to the graph
-   *  Be aware that the PropertyInterface will now belong to the graph object;
-   *  and so it will be deleted automatically. Using of delete on that property
-   *  will cause a segmentation violation (use delLocalProperty instead).
-   */
-  virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+  virtual  void delLocalProperty(const std::string& name)=0;
   /**
    * Returns an iterator on the local properties
    */
@@ -361,7 +354,7 @@ public:
    */
   virtual Iterator<std::string>* getInheritedProperties()=0;
   /**
-   * Returns an iterator on the properties
+   * Returns an iterator on all the properties
    */
   virtual Iterator<std::string>* getProperties()=0;
 
