@@ -1,3 +1,6 @@
+
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #ifndef LIBGPUGRAPH_H
 #define LIBGPUGRAPH_H
 
@@ -88,7 +91,6 @@ delGpuGraph(gpuGraph);
 delGpuProperty(gpuLayout);
 
 */
-
 // define some macros to add some useful types
 #define VEC2(type, eltType)			\
   union type {					\
@@ -398,3 +400,5 @@ TLP_GPU_SCOPE bool getGpuOutPropertyValues(ivec3 *values, unsigned int nbValues)
 TLP_GPU_SCOPE bool getGpuOutPropertyValues(ivec4 *values, unsigned int nbValues);
 
 #endif
+
+#endif //DOXYGEN_NOTFOR_DEVEL

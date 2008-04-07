@@ -8,6 +8,8 @@
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #ifndef Tulip_GLXMLTOOLS_H
 #define Tulip_GLXMLTOOLS_H
 
@@ -152,5 +154,6 @@ namespace tlp {
   };
 
 }
-
 #endif
+
+#endif //DOXYGEN_NOTFOR_DEVEL
