@@ -12,6 +12,8 @@
 #ifndef GLLINE_H
 #define GLLINE_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <vector>
 
 #include <tulip/Color.h>
@@ -62,4 +64,7 @@ namespace tlp {
     std::vector<Color> _colors;
   };
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
+
 #endif

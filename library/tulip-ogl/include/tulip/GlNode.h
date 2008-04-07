@@ -11,6 +11,8 @@
 #ifndef Tulip_GLNODE_H
 #define Tulip_GLNODE_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <tulip/Color.h>
 
 #include "tulip/GlComplexeEntity.h"
@@ -41,5 +43,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLNODE_H

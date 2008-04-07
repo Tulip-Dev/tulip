@@ -11,6 +11,8 @@
 #ifndef Tulip_GLMETANODE_H
 #define Tulip_GLMETANODE_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include "tulip/GlNode.h"
 
 namespace tlp {
@@ -40,5 +42,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLMETANODE_H

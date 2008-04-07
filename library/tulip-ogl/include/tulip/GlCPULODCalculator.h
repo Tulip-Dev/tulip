@@ -10,6 +10,7 @@
 */
 #ifndef Tulip_GLCPULODCALCULATOR_H
 #define Tulip_GLCPULODCALCULATOR_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <map>
 #include <vector>
@@ -96,5 +97,7 @@ namespace tlp {
   };
  
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLCPULODCALCULATOR_H

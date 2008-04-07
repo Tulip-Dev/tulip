@@ -15,7 +15,6 @@ nobase_include_HEADERS = \
 	tulip/GlSphere.h \
 	tulip/GlLayer.h \
 	tulip/GlLODCalculator.h \
-	tulip/GlCPULODCalculator.h \
 	tulip/GlBox.h \
 	tulip/GlScene.h \
 	tulip/GlTextureManager.h \
@@ -23,16 +22,12 @@ nobase_include_HEADERS = \
 	tulip/ObservableGlGraph.h \
 	tulip/GlSimpleEntity.h \
 	tulip/GlComplexeEntity.h \
-	tulip/GlLODSceneVisitor.h \
-	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlSelectSceneVisitor.h \
 	tulip/GlSceneVisitor.h \
 	tulip/GlFeedBackRecorder.h \
 	tulip/GlFeedBackBuilder.h \
-	tulip/GlTLPFeedBackBuilder.h \
-	tulip/GlSVGFeedBackBuilder.h \
-	tulip/GlEPSFeedBackBuilder.h \
 	tulip/GlGraphInputData.h \
+	tulip/GlTLPFeedBackBuilder.h \
 	tulip/GlyphManager.h \
 	tulip/GlNode.h \
 	tulip/GlMetaNode.h \
@@ -52,7 +47,6 @@ noinst_HEADERS = \
 	tulip/Bezier.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
-	tulip/Bezier.h \
 	tulip/Spline.h \
 	tulip/Fonts.h \
 	tulip/Document.h \
@@ -70,8 +64,13 @@ noinst_HEADERS = \
 	tulip/TextRenderer.h \
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\
+	tulip/GlCPULODCalculator.h \
+	tulip/GlLODSceneVisitor.h \
+	tulip/GlBoundingBoxSceneVisitor.h \
+	tulip/GlSVGFeedBackBuilder.h \
+	tulip/GlEPSFeedBackBuilder.h \
 	tulip/OcclusionTest.h \
-	tulip/GlLines.h
+	tulip/GlLines.h 
 
 tulip/libgpugraph.h : ../../../thirdparty/libgpugraph/libgpugraph.h
 	cp -f $< $@

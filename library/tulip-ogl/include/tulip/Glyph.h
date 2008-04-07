@@ -2,6 +2,8 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -129,5 +131,7 @@ extern "C" {                                            \
 
 #define GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,G) GPLUGINFACTORY(Glyph,C,N,A,D,I,R,ID,G)
 #define GLYPHPLUGIN(C,N,A,D,I,R,ID) GLYPHPLUGINOFGROUP(C,N,A,D,I,R,ID,"") 
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif //GLYPH_H

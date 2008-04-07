@@ -10,6 +10,7 @@
 */
 #ifndef Tulip_GLEPSFEEDBACKBUILDER_H
 #define Tulip_GLEPSFEEDBACKBUILDER_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <tulip/tulipconf.h>
 
@@ -110,5 +111,7 @@ namespace tlp {
   };
  
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLEPSFEEDBACKBUILDER_H

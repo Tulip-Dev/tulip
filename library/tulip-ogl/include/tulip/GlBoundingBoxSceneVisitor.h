@@ -10,6 +10,7 @@
 */
 #ifndef Tulip_GLBOUNDINGBOXSCENEVISITOR_H
 #define Tulip_GLBOUNDINGBOXSCENEVISITOR_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <tulip/BoundingBox.h>
 
@@ -59,5 +60,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLLODSCENEVISITOR_H

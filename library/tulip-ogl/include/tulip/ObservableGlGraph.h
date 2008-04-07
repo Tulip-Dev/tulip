@@ -1,5 +1,8 @@
 #ifndef VIEW3DBSERVER_H
 #define VIEW3DBSERVER_H
+
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <set>
 
 //=========================================================
@@ -88,6 +91,8 @@ inline void ObservableGlGraph::removeObservers() {
 }
 
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
 

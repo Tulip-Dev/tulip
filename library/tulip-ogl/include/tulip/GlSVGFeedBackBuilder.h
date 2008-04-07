@@ -11,6 +11,8 @@
 #ifndef Tulip_GLSVGFEEDBACKBUILDER_H
 #define Tulip_GLSVGFEEDBACKBUILDER_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <sstream>
 
 #include "tulip/GlTLPFeedBackBuilder.h"
@@ -60,5 +62,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLFEEDBACKBUILDER_H

@@ -11,6 +11,8 @@
 #ifndef Tulip_GLEDGE_H
 #define Tulip_GLEDGE_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <tulip/Types.h>
 
 #include "tulip/GlComplexeEntity.h"
@@ -67,5 +69,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLEDGE_H

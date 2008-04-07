@@ -10,6 +10,7 @@
 */
 #ifndef Tulip_GLLODCALCULATOR_H
 #define Tulip_GLLODCALCULATOR_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <tulip/tulipconf.h>
 
@@ -73,5 +74,7 @@ namespace tlp {
   };
  
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLLODCALCULATOR_H

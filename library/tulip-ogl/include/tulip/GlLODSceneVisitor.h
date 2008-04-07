@@ -10,6 +10,7 @@
 */
 #ifndef Tulip_GLLODSCENEVISITOR_H
 #define Tulip_GLLODSCENEVISITOR_H
+#ifndef DOXYGEN_NOTFOR_DEVEL
 
 
 #include <vector>
@@ -62,5 +63,7 @@ namespace tlp {
   };
   
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLLODSCENEVISITOR_H

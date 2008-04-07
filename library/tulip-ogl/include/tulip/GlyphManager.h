@@ -11,6 +11,8 @@
 #ifndef Tulip_GLYPHMANAGER_H
 #define Tulip_GLYPHMANAGER_H
 
+#ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <string>
 #include <cassert>
 
@@ -46,5 +48,7 @@ namespace tlp {
   };
  
 }
+
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLYPHMANAGER_H
