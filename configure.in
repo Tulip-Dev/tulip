@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.41 $)
+AC_REVISION($Revision: 1.42 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -132,6 +132,7 @@ AM_CONDITIONAL(I64, test $VAR_I64 = 1)
 dnl
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_PICMODE(no)
+AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 dnl Checks for header files.
