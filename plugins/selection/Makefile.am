@@ -22,7 +22,7 @@ libLoopSelection_@VERSION@_la_SOURCES = LoopSelection.cpp LoopSelection.h
 libMultipleSelection_@VERSION@_la_SOURCES = MultipleEdgeSelection.cpp MultipleEdgeSelection.h
 libKruskal_@VERSION@_la_SOURCES = Kruskal.cpp Kruskal.h
 
-AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
 

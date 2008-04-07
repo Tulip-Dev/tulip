@@ -123,14 +123,20 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
   return true;
 }
 
-// accepts only file whose name matches *.so
-int __tulip_selectSO(struct dirent *ent) {
-  const char *SO = ".so";
-  int idx = strlen(ent->d_name) - 3;
+// accepts only file whose name matches *.so or *.dylib
+int __tulip_select_libs(struct dirent *ent) {
+#if !defined(__APPLE__)
+  const char *suffix = ".so";
+  const unsigned int suffix_len = 3;
+#else
+  const char *suffix = ".dylib";
+  const unsigned int suffix_len = 6;
+#endif
+  int idx = strlen(ent->d_name) - suffix_len;
   if (idx < 0) return 0;
   
-  for (int i=0; i<3; ++i) {
-    if ((ent->d_name[idx + i]) != SO[i]) return 0;
+  for (int i=0; i < suffix_len; ++i) {
+    if ((ent->d_name[idx + i]) != suffix[i]) return 0;
   }
   return 1;
 }
@@ -143,7 +149,7 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath,
 #if !(defined(__APPLE__) || defined(__FreeBSD__))
 	      (int (*) (const dirent *))
 #endif
-	      __tulip_selectSO,
+	      __tulip_select_libs,
 	      alphasort);
   pluginPath = _pluginPath;
   if (loader!=0)

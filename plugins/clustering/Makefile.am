@@ -33,7 +33,7 @@ nodist_libConvolutionClustering_@VERSION@_la_SOURCES = \
 libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
 libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -module -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 UIC = @UIC@ -L @TULIP_QTDESIGNERPLUGIN@

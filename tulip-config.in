@@ -20,6 +20,7 @@ LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 
 # check for MacOS or Windows installation
 if [ $MACOSX -eq 0 ] ; then
+  libextension=dylib
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
   if [ -d $(dirname $thisdir)/lib ] ; then
 # MacOS bundle
