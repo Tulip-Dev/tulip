@@ -2,7 +2,7 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/GlGraphWidget.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/GlyphManager.h>
