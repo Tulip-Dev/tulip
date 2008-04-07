@@ -39,7 +39,7 @@ function scandirPHP4($dir) {
 
 function buildPluginsListForOneFilePHP5($outDoc,$outNode,$file){
   $linuxFileName=str_replace("xml","so",$file).".i386";
-  $macFileName=str_replace("xml","so",$file).".mac";
+  $macFileName=str_replace("xml","dylib",$file);
   $windobFileName=str_replace("xml","dll",$file);
   $i64FileName=str_replace("xml","so",$file).".i64";
 
@@ -91,7 +91,7 @@ function buildPluginsListForOneFilePHP5($outDoc,$outNode,$file){
 
 function buildPluginsListForOneFilePHP4($outDoc,$outNode,$file){
   $linuxFileName=str_replace("xml","so",$file).".i386";
-  $macFileName=str_replace("xml","so",$file).".mac";
+  $macFileName=str_replace("xml","dylib",$file);
   $windobFileName=str_replace("xml","dll",$file);
   $i64FileName=str_replace("xml","so",$file).".i64";
 

@@ -107,8 +107,8 @@ int main(int argc,char **argv)
       UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".i386");
     }
     if(argc==4) {
-      if(secondSrcDir.exists(QString((*it).fileName.c_str())+".so")) {
-	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".mac");
+      if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dylib")) {
+	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",dstDir,QString((*it).fileName.c_str())+".dylib."+QString((*it).version.c_str()).replace(" ","."));
       }
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dll")) {
 	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",dstDir,QString((*it).fileName.c_str())+".dll."+QString((*it).version.c_str()).replace(" ","."));

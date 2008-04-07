@@ -30,7 +30,7 @@ namespace tlp {
     serverWS->send(new DownloadPluginRequest(pluginInfo.name));
     serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".doc.")+version,installPath+pluginInfo.fileName+std::string(".doc")));
     #if defined(__APPLE__)
-      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".mac",installPath+pluginInfo.fileName+std::string(".so")));
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dylib.")+version,installPath+pluginInfo.fileName+std::string(".dylib")));
     #elif defined(_WIN32)
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dll.")+version+".win",installPath+pluginInfo.fileName+std::string(".dll")));
     #elif defined(I64)
