@@ -90,7 +90,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n lib%{name}
 %defattr(-,root,root)
 %{prefix}/bin/tulip-config
-%{prefix}/lib/libtulip.a
 %{prefix}/lib/libtulip.la
 %{prefix}/lib/libtulip.so
 %{prefix}/lib/libtulip-%{tulip_version}.so*
@@ -99,7 +98,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib%{name}-ogl
 %defattr(-,root,root)
-%{prefix}/lib/libtulip-ogl.a
 %{prefix}/lib/libtulip-ogl.la
 %{prefix}/lib/libtulip-ogl.so
 %{prefix}/lib/libtulip-ogl-%{tulip_version}.so*
@@ -109,7 +107,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib%{name}-qt4
 %defattr(-,root,root)
-%{prefix}/lib/libtulip-qt4.a
 %{prefix}/lib/libtulip-qt4.la
 %{prefix}/lib/libtulip-qt4.so
 %{prefix}/lib/libtulip-qt4-%{tulip_version}.so*
