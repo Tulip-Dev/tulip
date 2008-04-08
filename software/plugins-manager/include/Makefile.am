@@ -2,6 +2,7 @@ UIC = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs:$(top_builddir)/li
 
 BUILT_SOURCES = \
 	PluginLoaderWithInfo.h \
+	PluginInfo.h \
 	PluginsManagerMainWindow.h \
 	PluginsManagerDialog.h \
 	PluginsWidget.h \
@@ -23,6 +24,7 @@ BUILT_SOURCES = \
 	ChooseServerDialog.h \
 	ServersOptionDialog.h \
 	ModifyServerDialog.h \
+	CheckUpdate.h \
 	PluginsUpdateChecker.h
 
-nodist_noinst_HEADERS = $(BUILT_SOURCES)
+noinst_HEADERS = $(BUILT_SOURCES)
