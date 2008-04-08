@@ -51,6 +51,8 @@ namespace tlp {
       out << "glyphs/" ;
     #if defined(_WIN32)
       out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
+    #elif defined(__APPLE__)
+      out << pluginInfo.fileName.c_str() << ".dylib" << "\n" ;
     #else
       out << pluginInfo.fileName.c_str() << ".so" << "\n" ;
     #endif
@@ -74,6 +76,8 @@ namespace tlp {
       out << "glyphs/" ;
     #if defined(_WIN32)
       out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
+    #elif defined(__APPLE__)
+      out << pluginInfo.fileName.c_str() << ".dylib" << "\n" ;
     #else
       out << pluginInfo.fileName.c_str() << ".so" << "\n" ;
     #endif
