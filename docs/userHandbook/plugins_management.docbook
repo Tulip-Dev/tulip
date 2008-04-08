@@ -8,7 +8,7 @@
       <graphic fileref="images/plugins_main.png"/>
     </para>
     <para>
-      The main window is divised in two side :
+      The main window is divided in two sides :
       <itemizedlist>
         <listitem>
 	  Left side : Plugins list view
@@ -20,19 +20,19 @@
     </para>
     <sect2 id="plugins_list"><title>Plugins List</title>
       <para>
-	The "Installed" group contain local installed plugins. The others group contain available plugins on server.
+	The "Installed" group displays the locally installed plugins. The others group displays the plugins available on server.
       </para>
       <para>
 	At the version level you can see the status of the plugin : nothing, version or installed.
 	<itemizedlist>
           <listitem>
-	    Nothing : Plugin isn't be installed.
+	    Nothing : Plugin is not installed.
 	  </listitem>
 	  <listitem>
-	    Version number : Plugin is installed, the version number you can see is the local installed version. 
+	    Version number : Plugin is installed, the version number you can see is the locally installed version. 
 	  </listitem>
 	  <listitem>
-	    Installed : Plugin is installed and the version is the same on the server. 
+	    Installed : Plugin is installed and its version is the same on the server. 
 	  </listitem>
 	</itemizedlist>
       </para>
@@ -42,13 +42,13 @@
 	If you want to see the plugin's documentation, click on the version number of a plugin (not on the checkbox : this is to install/remove plugin).
       </para>
       <para>
-	Documentation is compose in two group :
+	Documentation is composed in two groups :
 	<itemizedlist>
           <listitem>
 	    On the top : brief description of the plugin (version, author, info ...) 
 	  </listitem>
 	  <listitem>
-	    On the bottom : detailled description of the plugin.
+	    At the bottom : detailed description of the plugin.
 	  </listitem>
 	</itemizedlist>
       </para>
@@ -56,7 +56,7 @@
   </sect1>
   <sect1 id="setup"><title>Setup</title>
     <para>
-      To setup plugins manager click on "Configure->Servers" button of menu.
+      To setup plugins manager click on <code>Configure->Servers</code> button of menu.
     </para>
     <para>
       Servers configuration :
@@ -64,20 +64,20 @@
     </para>
     <sect2 id="add_server"><title>Add a server</title>
       <para>
-	To add a server, click on "Add Server" button.
-	After that you have a window to enter the server adress.
+	To add a server, click on <code>Add Server</code> button.
+	After that you have a window to enter the server address.
 	<graphic fileref="images/plugins_editserver.png"/>
 	And example of server address is : "http://tulip.labri.fr/pluginsServer/server.php".
       </para>
     </sect2>
     <sect2 id="modify_remove_server"><title>Modify/Remove a server</title>
       <para>
-	To modify a server : click on his name and "Modify" button.
+	To modify a server : select it then click on <code>Modify</code> button.
 	After that you can change the server address.
-	The server name can't be changed because the name is send by the server.
+	The server name cannot be changed because it is managed by the server.
       </para>
       <para>
-	To remove a server : click on his name and "Remove" button.
+	To remove a server : select it then click on <code>Remove</code> button.
       </para>
     </sect2>
   </sect1>
@@ -87,10 +87,10 @@
 	If you want to install a plugin, just click on the check box at the version level.
       </para>
       <para>
-	After that click on "Apply Change" in "File" menu.
-	A new window appear :
+	After that click on <code>Apply Change</code> in <code>File</code> menu.
+	A new window appears :
 	<graphic fileref="images/plugins_installremove.png"/>
-	When all plugins are installed/removed you can click on "Ok" button.
+	When all plugins are installed/removed you can click on <code>Ok</code> button.
       </para>
       <para>
 	After plugin installation/remove you have to restart tulip to see the modification.
@@ -98,12 +98,12 @@
     </sect2>
     <sect2 id="dep_installation"><title>Installation/Remove with dependencies</title>
       <para>
-	At installation, if the plugin need dependencies a new window appear with the list of dependencies.
-	If you click on "Yes", the dependencies plugins will be installed too.
-	If you click on "No", the dependencies plugins won't be installed.
+	At installation, if the plugin depends on other plugins a new window appears with the list of needed plugins.
+	If you click on <code>Yes</code>, the needed plugins will be installed too.
+	If you click on <code>No</code>, the needed plugins won't be installed.
       </para>
       <para>
-	When you remove plugin, this is alike.
+	When you remove plugin, this is alike with plugins needing the one you want to remove.
       </para>
     </sect2>
   </sect1>
