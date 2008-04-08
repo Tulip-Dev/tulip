@@ -1,5 +1,5 @@
 /**
- Authors: David Auber, Romain Bourqui, Patrick Mary
+ Authors: David Auber, Romain Bourqui, Patrick Mary, Morgan Mathiaut
  from the LaBRI Visualization Team
  Email : auber@tulip-software.org
  Last modification : dd/mm/yyyy 
