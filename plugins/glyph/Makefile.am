@@ -38,5 +38,6 @@ libCylinder_@VERSION@_la_SOURCES = cylinder.cpp
 libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp 
 libSquareBorderTextured_@VERSION@_la_SOURCES = squarebordertextured.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @LIB_GL@ @GL_LDFLAGS@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
+
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@
