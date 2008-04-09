@@ -1679,6 +1679,7 @@ void viewGl::selectAll() {
   Observable::holdObservers();
   graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
   graph->getLocalProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+  glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
   Observable::unholdObservers();
 }
 ///Deselect all entries in the glGraph current selection 
@@ -1718,6 +1719,7 @@ void viewGl::reverseSelection() {
   if (graph==0) return;
   Observable::holdObservers();
   graph->getLocalProperty<BooleanProperty>("viewSelection")->reverse();
+  glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
   Observable::unholdObservers();
 }
 //==============================================================
@@ -2024,8 +2026,10 @@ void viewGl::changeString(QAction* action) {
 void viewGl::changeSelection(QAction* action) {
   clearObservers();
   string name = action->text().toStdString();
-  if (changeProperty<BooleanProperty>(name,"viewSelection"))
+  if (changeProperty<BooleanProperty>(name, "viewSelection")) {
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
     redrawView();
+  }
   initObservers();
 }
 //**********************************************************************

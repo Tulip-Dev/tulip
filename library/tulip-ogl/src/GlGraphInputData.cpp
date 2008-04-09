@@ -42,4 +42,8 @@ namespace tlp {
     elementLabel = graph->getProperty<StringProperty>("viewLabel");
   }
   
+  void GlGraphInputData::reloadSelectionProperty() {
+    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+  }
+  
 }

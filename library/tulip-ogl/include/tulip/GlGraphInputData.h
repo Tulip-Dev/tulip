@@ -58,6 +58,11 @@ namespace tlp {
      */
     void reloadLabelProperty();
     
+    /**
+     * Reload viewSelection Property of the graph
+     */
+    void reloadSelectionProperty();
+    
   public:
 
     ColorProperty    *elementColor;
