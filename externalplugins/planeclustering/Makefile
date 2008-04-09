@@ -6,8 +6,8 @@ TARGET=libplaneclustering-$(TULIP_VERSION).$(LIB_EXTENSION)
 SRCS=PlaneClustering.cpp
 
 CXX=g++
-CXXFLAGS = -O3 -Wall -DNDEBUG `${TULIP_CONFIG} --plugincxxflags` `${TULIP_CONFIG} --qtincludes` `${TULIP_CONFIG} --cxxflags`
-LDFLAGS= `${TULIP_CONFIG} --pluginldflags` `${TULIP_CONFIG} --libs` `${TULIP_CONFIG} --qtlibs`
+CXXFLAGS = -O3 -Wall -DNDEBUG `${TULIP_CONFIG} --plugincxxflags` `${TULIP_CONFIG} --cxxflags`
+LDFLAGS= `${TULIP_CONFIG} --pluginldflags` `${TULIP_CONFIG} --libs`
 
 OBJS=$(SRCS:.cpp=.o)
 
