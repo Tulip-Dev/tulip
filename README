@@ -3,7 +3,18 @@ Tulip version 3.0.0 Readme file.
 This software is under GPL licence,(see COPYING file).
 It has been designed and implmented by David Auber.
 
-The installation procedure is described in the file : INSTALL.
+Requirements :
+
+- autotools
+- libxml2
+- freetype2
+- Qt 4.2 or higher
+- OpenGl 2.0
+- glew 1.4 or higher
+- gcc, g++ >= 3.4.2
+
+The installation procedure is described in the files :
+INSTALL, INSTALL.mac, INSTALL.win
 
 tar jxvf tulip-3.0.0.tar.bz2
 cd tulip-3.0.0
@@ -12,19 +23,10 @@ sh gen-conf.sh
 make
 make install
 
+The tlprender tool is built only if you specified
+the --enable-tlprender option; it needs the OSmesa library.
 
-Requirements :
-
-- autotools
-- libxml2
-- freetype2
-- Qt 4.3.x
-- OpenGl 2.0
-- glew 1.4 or higher
-- g++ 2.95, 2.96 or 3.2. Gcc versions 3.0 up to 3.2 excluded are not supported,
-use them at your own risks!!!
-
-Join the Tulip Team :
+Join the Tulip Team:
 
 If you want to support our project, all new plug-ins and bug fixes are
 welcome.
