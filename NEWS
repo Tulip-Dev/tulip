@@ -1,13 +1,18 @@
-Release 2.0.3 Tulip
+Tulip release 3.0.0
 
-tulip-lib : 
-	- Management of Planar Maps
-	- Several graph test algorithm
+This is the final release of the 3.0.0 version: new APIs for Tulip libraries, new OpenGL rendering engine, new tlp format, new interactor mechanism, new 2D glyphs, SVG format support, Qt 3 no longer supported, Qt 4.2 or higher supported, GUI improvements, mouse interaction improvements, plugins improvements, new plugin dependencies mechanism, new plugin librairies naming convention, new plugins manager tool added, many bug fixes, code refactoring and documentation improvements, built and tested on top linux distributions.
 
-tulip-ogl :
-	
-tulip-qt :
-
-tulip-software :
-
-plugins :
+details :
+- new APIs: the main classes have been renamed in order to ease code writing; all classes, except the widget classes, are members of tlp namespace.
+- OpenGL rendering engine: it has been fully redesigned to allow the management of layers in order to improve the display and the selection of non graph elements and allow the display of convex hulls. The detection of non visible elements and the the transformation of coordinates have beed improved (use tulip matrix classes); a better management of alpha channel, and the use of GL_AUX_BUFFER (needs graphic card support) have bee added. The 'too complicated' incremental rendering mechanism has been suppressed, and thus the display of a huge graph may take a while. A more powerful multithreaded rendering mechanism will be integrated in a near future. The Qt 4 version (>= 4.2) is the only one supported on all platforms.
+- new tlp format (version 2.0): file informations have been added (author, date, comments); old file format still supported as input.
+- 2D glyphs: new circle, hexagone, pentagone, ring, square and triangle glyphs have been added with user specified border color.
+- SVG format support: picture of graph can be saved in SVG format.
+- GUI improvements: the mouse interaction toolbar, the 3D rendering parameters dialog, the properties editor contextual menu and the graphics view contextual menu have been redesigned; a new dialog for the management of layers has been added.
+- mouse interaction improvements: pan & zoom is always accessible. Selection edition uses image manipulation standard ergonomy. Edge bends edition has been added.
+- Plugins improvements: GEM plugin has been rewritten to support edge length (2D & 3D). Degree plugin has been extended to compute In/0ut/InOut degree. Strahler has been extended to compute values for registers, stacks or both. Equal Value plugin has been extended to property of any type. More feedback has been added to Strength clustering plugin, layout parameters have been added too. Most of tree layout plugins have been rewritten to take into account spacing parameters and can now be applied to any kind of graph. Quotient clustering plugin has been extended to allow aggregation of metric values of underlying nodes or edges to meta-nodes and meta-edges. A new color plugin for the mapping enumerated values has been added.
+- A mechanism to describe the dependencies between plugins has been added. It allows to specify what other plugins a plugin depends on and what parameters of these plugins it intends to use. These dependencies are checked at load time enforcing the reliability of the Tulip GUI.
+- A naming convention of plugin librairies has been adopted. It allows to enforce the identification of librairies which can be safely loaded into the current Tulip version.
+- A powerful plugins manager tool is accessible through the Tulip GUI. It allows to interactively install/remove the plugins and to check new versions of the plugins available on web service based repositories.
+- Documentation improvements: the user's manual has been rewritten, and some tutorials added. The developer handbook has been rewritten and some tutorials added.
+- This version of Tulip has been successfully built on the following linux distributions: Fedora Core 7, 8 & 9 alpha, Mandriva 2007 spring & 2008, OpenSUSE 10.3, Ubuntu 7.10 & 8.04 beta.
