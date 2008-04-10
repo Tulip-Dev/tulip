@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{prefix}/bin/tulip
 #%{prefix}/bin/tlprender
+%{prefix}/lib/libtulip-pluginsmanager.la
+%{prefix}/lib/libtulip-pluginsmanager.so
+%{prefix}/lib/libtulip-pluginsmanager-%{tulip_version}.so*
 %{prefix}/lib/tlp/bitmaps/logo32x32.bmp
 %{prefix}/lib/tlp/bitmaps/logo.bmp
 %{prefix}/lib/tlp/bitmaps/logo32x32.ico
