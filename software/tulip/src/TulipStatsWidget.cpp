@@ -32,8 +32,6 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qradiobutton.h>
 
-//#include "../../../thirdparty/ftgl/FTGLPixmapFont.h"
-
 #include <GL/glu.h> 
 
 using namespace tlp; 
@@ -41,8 +39,9 @@ using namespace std;
 
 namespace tlp
 {
-  TulipStats::TulipStats(QWidget *parent, const char *name, Qt::WFlags fl) : TulipStatsData(parent, name, fl), glMainWidget(0), graph(0)
-  {
+  TulipStats::TulipStats(QWidget *parent)
+    : QDialog(parent), glMainWidget(0), graph(0) {
+    setupUi(this);
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 
     reset();

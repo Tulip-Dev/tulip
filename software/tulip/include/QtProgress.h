@@ -6,12 +6,13 @@
 
 class GlMainWidget;
 
-class QtProgress:public QtProgressData, public tlp::PluginProgress {
+class QtProgress:
+public QDialog, public Ui::QtProgressData, public tlp::PluginProgress {
 
   Q_OBJECT
 
 public:
-  QtProgress(QWidget* parent,std::string text, GlMainWidget * =0);
+  QtProgress(QWidget* parent, std::string text, GlMainWidget * =0);
   virtual ~QtProgress();
   void progress_handler(int i,int j);
   void setComment(std::string msg);

@@ -45,8 +45,9 @@ using namespace std;
 using namespace tlp;
 
 //==================================================================================================
-PropertyDialog::PropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-  : PropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
+PropertyDialog::PropertyDialog(QWidget* parent)
+  : QWidget(parent) {
+  setupUi(this);
   _filterSelection=false;
   glWidget=0;
   graph=0;

@@ -12,7 +12,6 @@
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
-#include "tulip/RenderingParametersDialogData.h"
 #include "tulip/GlTools.h"
 
 
@@ -33,31 +32,27 @@ private :
   GlMainWidget * _view;
 };
 
-class RenderingParametersDialog : public RenderingParametersDialogData {
-  GWOverviewWidget *overview;
-public:
-  RenderingParametersDialog(GWOverviewWidget* parent) : RenderingParametersDialogData(parent->parentWidget()) {
+RenderingParametersDialog::RenderingParametersDialog(GWOverviewWidget* parent) : QDialog(parent->parentWidget()) {
+    setupUi(this);
     overview = parent;
-  }
+}
 
-  void windowActivationChange(bool oldActive) {
+void RenderingParametersDialog::windowActivationChange(bool oldActive) {
     if (!oldActive)
       buttonClose->setFocus();
-  }
+}
 
-  void updateView() {
+void RenderingParametersDialog::updateView() {
     overview->updateView();
-  }
+}
 
-  void backColor() {
+void RenderingParametersDialog::backColor() {
     overview->backColor();
-  }
-};
+}
 
 //=============================================================================
-GWOverviewWidget::GWOverviewWidget(QWidget* parent,  
-				   const char* name, bool modal, Qt::WFlags fl )
-  : GWOverviewWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
+GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
+  setupUi(this);
   _observedView = 0;
   _glDraw = 0;
   _view = new GlMainWidget( frame8, "view" );

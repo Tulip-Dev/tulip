@@ -23,8 +23,9 @@ using namespace std;
 using namespace tlp;
 
 //=============================================================================
-CopyPropertyDialog::CopyPropertyDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-  : CopyPropertyDialogData(parent, name, (Qt::WFlags) (fl | Qt::Widget)) {
+CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
+  : QDialog(parent) {
+  setupUi(this);
   connect((QObject *) buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
   connect((QObject *) buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
 }

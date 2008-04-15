@@ -8,8 +8,7 @@ namespace tlp {
   struct TulipPluginLoader;
 }
 
-class AppStartUp : public AppStartUpForm
-{ 
+class AppStartUp : public QDialog, public Ui::AppStartUpData { 
     Q_OBJECT
 
    QMovie *movie;
@@ -17,7 +16,7 @@ class AppStartUp : public AppStartUpForm
     int currentFrame;
 
 public:
-  AppStartUp( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  AppStartUp( QWidget* parent = 0);
     ~AppStartUp();
 public slots:
     ///Change the label in the widget

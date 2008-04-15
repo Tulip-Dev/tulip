@@ -54,14 +54,8 @@ BUILT_SOURCES = \
 	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
 	moc_FindSelectionWidget.cpp \
-	moc_FindSelectionData.cpp \
-	moc_RenderingParametersDialogData.cpp \
-	FindSelectionData.cpp \
-	RenderingParametersDialogData.cpp \
-	GWOverviewWidgetData.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
-	moc_GWOverviewWidgetData.cpp \
 	moc_LayerManagerWidget.cpp \
 	moc_LayerManagerWidgetData.cpp \
 	moc_QtCPULODCalculator.cpp
@@ -101,12 +95,3 @@ moc_%.cpp: $(srcdir)/../include/tulip/%.h
 
 moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidget.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
-FindSelectionData.cpp: $(srcdir)/../designer/FindSelection.ui ../include/tulip/FindSelectionData.h
-	$(UIC) -o $@ -impl ../include/tulip/FindSelectionData.h $<
-
-RenderingParametersDialogData.cpp: $(srcdir)/../designer/RenderingParametersDialog.ui ../include/tulip/RenderingParametersDialogData.h
-	$(UIC) -o $@ -impl ../include/tulip/RenderingParametersDialogData.h $<
-
-GWOverviewWidgetData.cpp: $(srcdir)/../designer/GWOverviewWidget.ui ../include/tulip/GWOverviewWidgetData.h
-	$(UIC) -o $@ -impl ../include/tulip/GWOverviewWidgetData.h $<

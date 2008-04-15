@@ -63,11 +63,11 @@ struct viewGlFile {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
+class viewGl : public Q3MainWindow, public Ui::TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
   Q_OBJECT;
 
 public:
-  viewGl(QWidget *parent=NULL, const char *name=NULL);
+  viewGl(QWidget *parent=NULL);
   virtual ~viewGl();
   void setParameters(const tlp::DataSet &);
   bool eventFilter(QObject *, QEvent *);
@@ -205,7 +205,7 @@ protected slots:
   void makeBiconnected();
   void makeSimple();
   void makeConnected();
-  void makeRooted();
+  void makeDirected();
   void deletePluginsUpdateChecker();
 
 private:

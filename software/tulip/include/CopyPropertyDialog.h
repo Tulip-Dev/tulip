@@ -11,12 +11,12 @@
 #include "CopyPropertyDialogData.h"
 #include "tulip/Iterator.h"
 
-class CopyPropertyDialog : public CopyPropertyDialogData
+class CopyPropertyDialog : public QDialog, public Ui::CopyPropertyDialogData
 { 
   Q_OBJECT;
 
 public:
-  CopyPropertyDialog(QWidget *parent = 0, const char *name = 0, bool modal = TRUE, Qt::WFlags fl = 0);
+  CopyPropertyDialog(QWidget *parent = 0);
   void setProperties(std::string& srcProp,
 		     std::vector<std::string>& localProps,
 		     std::vector<std::string>& inheritedProps);

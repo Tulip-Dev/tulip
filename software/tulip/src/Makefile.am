@@ -21,38 +21,13 @@ endif
 endif
 AM_CPPFLAGS= @QT_CPPFLAGS@
 
-if !WIN32
-UIC_MAKE = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$LD_LIBRARY_PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
-else
-UIC_MAKE = PATH=$(top_builddir)/library/tulip/src/.libs/:$(top_builddir)/library/tulip-ogl/src/.libs/:$(top_builddir)/library/tulip-qt/src/.libs/:$$PATH @UIC@ -L $(top_builddir)/library/tulip-qt/src/.libs/
-endif
-
-MOC = @MOC@
-
 BUILT_SOURCES = \
-	QtProgressData.cpp \
-	moc_QtProgressData.cpp \
-	TulipData.cpp\
-	moc_TulipData.cpp\
-	TabWidgetData.cpp \
-	moc_TabWidgetData.cpp \
-	InfoDialogData.cpp \
-	AppStartUpData.cpp \
-	PropertyDialogData.cpp \
-	TulipStatsData.cpp \
-	GridOptionsData.cpp \
-	CopyPropertyDialogData.cpp \
-	moc_TulipStatsData.cpp \
-	moc_GridOptionsData.cpp \
+	TulipResource.cpp \
 	moc_CopyPropertyDialog.cpp \
-	moc_CopyPropertyDialogData.cpp \
 	moc_AppStartUp.cpp \
-	moc_AppStartUpData.cpp \
-	moc_InfoDialogData.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
 	moc_PropertyDialog.cpp \
-	moc_PropertyDialogData.cpp \
 	moc_QtProgress.cpp \
 	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
@@ -77,11 +52,11 @@ moc_%.cpp: ../include/%.h
 
 CLEANFILES = $(BUILT_SOURCES)
 
-%Data.cpp: ../designer/%.ui ../include/%Data.h
-	$(UIC_MAKE) -o $@ -impl ../include/$*Data.h $<
-
 ../include/%Data.h: ../designer/%.ui
-	$(UIC_MAKE) -o $@ $<
+	$(UIC) -o $@ $<
+
+TulipResource.cpp: ../designer/TulipResource.qrc
+	$(RCC) -o $@ $<
 
 if MACOSX
 install-data-am :

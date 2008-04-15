@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.42 $)
+AC_REVISION($Revision: 1.43 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.0)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -176,8 +176,9 @@ then
 AC_PATH_X
 fi
 AC_PATH_QT
-AC_PATH_QT_UIC
 AC_PATH_QT_MOC
+AC_PATH_QT_UIC
+AC_PATH_QT_RCC
 AC_PATH_GL
 
 dnl 2.5.4 is libxml2 shipped with RedHat 9.0

@@ -28,7 +28,7 @@ bool GWOverviewWidgetPlugin::isInitialized() const {
 }
 
 QWidget* GWOverviewWidgetPlugin::createWidget(QWidget *parent) {
-  return new GWOverviewWidget(parent, name());
+  return new GWOverviewWidget(parent);
 }
 
 QString GWOverviewWidgetPlugin::name() const {

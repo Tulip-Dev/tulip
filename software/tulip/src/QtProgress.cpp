@@ -12,8 +12,9 @@ using namespace tlp;
 
 //=====================================
 QtProgress::QtProgress(QWidget* parent,string text,GlMainWidget *glMainWidget):
-  QtProgressData( parent, text.c_str(), true),
-  firstCall(true),label(text),parent(parent),glMainWidget(glMainWidget) {
+  QDialog(parent),
+  firstCall(true),label(text), parent(parent), glMainWidget(glMainWidget) {
+  setupUi(this);
 }
 //=====================================
 QtProgress::~QtProgress() {

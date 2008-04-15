@@ -14,6 +14,7 @@
 #define _STATS_WIDGET_H_
 
 #include "TulipStatsData.h"
+#include <QtGui/qdialog.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Graph.h>
 #include <tulip/StatisticsNodeModule.h>
@@ -49,7 +50,8 @@ class DoubleProperty;
  *  -Secondly : It computes and display some basic statistics results on the graph : average, variance, standard deviation, bounding box, linear regression and eigenvectors.
  *  -Thirdly : It clusterize the graph by a plane which is based upon statistic results calculated above.
  */
-class TulipStats : public TulipStatsData, public GraphObserver
+  class TulipStats
+    : public QDialog, public Ui::TulipStatsData, public GraphObserver
 {
   Q_OBJECT
 
@@ -137,7 +139,7 @@ class TulipStats : public TulipStatsData, public GraphObserver
   /**
    * Base constructor.
    */
-  TulipStats(QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
+  TulipStats(QWidget *parent = 0);
   
   /**
    * Destructor.

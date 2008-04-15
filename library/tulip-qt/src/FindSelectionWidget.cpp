@@ -11,9 +11,10 @@
 using namespace tlp;
 
 FindSelectionWidget::FindSelectionWidget(Graph *graph, std::string& currentProperty,
-					 QWidget *parent, const char *name, Qt::WFlags fl) : 
-  FindSelectionData(parent, name, fl), 
+					 QWidget *parent) : 
+  QDialog(parent),
   graph(graph){
+  setupUi(this);
   insertProperties(currentProperty);
   propertyChanged(-1);
 }
@@ -170,7 +171,7 @@ void FindSelectionWidget::insertProperties(std::string &currentProperty) {
 
 int FindSelectionWidget::exec() {
   nbItemsFound = -1;
-  FindSelectionData::exec();
+  QDialog::exec();
   return nbItemsFound;
 }
 

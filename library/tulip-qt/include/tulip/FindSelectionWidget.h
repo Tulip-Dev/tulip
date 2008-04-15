@@ -13,17 +13,17 @@ class Graph;
 class PropertyInterface;
 class BooleanProperty;
 
-class TLP_QT_SCOPE FindSelectionWidget : FindSelectionData {
+class TLP_QT_SCOPE FindSelectionWidget : public QDialog,
+  public Ui::FindSelectionData {
   Q_OBJECT
-    public:
+public:
   FindSelectionWidget(Graph *graph, std::string &currentProperty,
-		      QWidget *parent = 0, const char *name = 0,
-		      Qt::WFlags fl = 0);
+		      QWidget *parent = 0);
   // returns -1 if cancelled, the number of found items if accepted
   int exec();
   std::string getCurrentProperty();
 
- private:
+private:
   Graph *graph;
   int nbItemsFound;
   void insertProperties(std::string& currentProperty);
@@ -33,12 +33,12 @@ class TLP_QT_SCOPE FindSelectionWidget : FindSelectionData {
   void evalNodes(PropertyInterface *, int, std::string, int, BooleanProperty *);
   void evalEdges(PropertyInterface *, int, std::string, int, BooleanProperty *);
 
-  virtual void propertyChanged( int no );
   PropertyInterface *getProperty();
   void find(BooleanProperty *);
   
-  protected slots:
-    virtual void accept();
+protected slots:
+  virtual void propertyChanged( int no );
+  virtual void accept();
 };
 
 }

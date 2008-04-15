@@ -110,6 +110,12 @@
 using namespace std;
 using namespace tlp;
 
+class TabWidget : public QWidget, public Ui::TabWidgetData {
+public:
+  TabWidget(QWidget* parent) : QWidget(parent) {
+    setupUi(this);
+  }
+};
 
 // we define a specific interactor to show element graph infos in eltProperties
 class MouseShowElementInfos : public GWInteractor {
@@ -152,14 +158,15 @@ static vector<tlp::GWInteractor *>zoomBoxInteractors;
 
 //**********************************************************************
 ///Constructor of ViewGl
-viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
+viewGl::viewGl(QWidget* parent): Q3MainWindow(parent)  {
+  setupUi(this);
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
   // remove strange scories from designer/Tulip.ui
   graphMenu->removeAction(Action);
   graphMenu->removeAction(menunew_itemAction);
   // set workspace background
-  workspace->setBackground(QBrush(Ui_TulipData::icon(image1_ID)));
+  workspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
   Observable::holdObservers();
   glWidget=0;
@@ -181,7 +188,7 @@ viewGl::viewGl(QWidget* parent,	const char* name):TulipData( parent, name )  {
   tabWidgetDock->setCaption("Info Editor");
   tabWidgetDock->setCloseMode(QDockWindow::Always);
   tabWidgetDock->setResizeEnabled(true);
-  TabWidgetData *tabWidget = new TabWidgetData(tabWidgetDock);
+  TabWidget *tabWidget = new TabWidget(tabWidgetDock);
 #ifndef STATS_UI
   // remove Statistics tab if not needed
   tabWidget->tabWidget2->removePage(tabWidget->StatsTab);
@@ -1133,7 +1140,7 @@ void viewGl::editFind() {
   if( !g ) return;
   
   static string currentProperty;
-  FindSelectionWidget *sel = new FindSelectionWidget(g, currentProperty);
+  FindSelectionWidget *sel = new FindSelectionWidget(g, currentProperty, this);
   Observable::holdObservers();
   int nbItemsFound = sel->exec();
   Observable::unholdObservers();
@@ -2264,7 +2271,7 @@ void viewGl::isFreeTree() {
 			   );
 }
 #include <tulip/GraphTools.h>
-void viewGl::makeRooted() {
+void viewGl::makeDirected() {
   if (glWidget == 0) return;
   if (!TreeTest::isFreeTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
     QMessageBox::information( this, "Tulip test",

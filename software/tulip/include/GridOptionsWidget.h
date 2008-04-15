@@ -34,7 +34,7 @@ namespace tlp {
  *  - Display Dimensions : Allows the user to choose on which dimensions the grid will be displayed.
  *
  */
-class GridOptionsWidget : public GridOptionsData {
+  class GridOptionsWidget : public QDialog, public Ui::GridOptionsData {
 
   Q_OBJECT
 
@@ -47,7 +47,7 @@ class GridOptionsWidget : public GridOptionsData {
   /**
    * Constructor.
    */
-  GridOptionsWidget(QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
+  GridOptionsWidget(QWidget *parent = 0);
 
   /**
    * Destructor.

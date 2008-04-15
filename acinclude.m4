@@ -573,7 +573,7 @@ AC_SUBST(QTDIR)
 
 AC_DEFUN([MOC_ERROR_MESSAGE],
 [
-    AC_MSG_ERROR([No Qt meta object compiler (moc) found!
+    AC_MSG_ERROR([No Qt 4 meta object compiler (moc) found!
 Please check whether you installed Qt correctly. 
 You need to have a running moc binary.
 configure tried to run $ac_cv_path_moc and the test didn't
@@ -583,9 +583,21 @@ configure.
 ])
 ])
 
+AC_DEFUN([RCC_ERROR_MESSAGE],
+[
+    AC_MSG_ERROR([No Qt 4 resource compiler (rcc) found!
+Please check whether you installed Qt correctly. 
+You need to have a running rcc binary.
+configure tried to run $ac_cv_path_rcc and the test didn't
+succeed. If configure shouldn't have tried this one, set
+the environment variable RCC to the right one before running
+configure.
+])
+])
+
 AC_DEFUN([UIC_ERROR_MESSAGE],
 [
-    AC_MSG_ERROR([No Qt user interface compiler (uic) found!
+    AC_MSG_ERROR([No Qt 4 user interface compiler (uic) found!
 Please check whether you installed Qt correctly. 
 You need to have a running uic binary.
 configure tried to run $ac_cv_path_uic and the test didn't
@@ -626,17 +638,41 @@ AC_DEFUN([AC_PATH_QT_MOC],
        if test ! -x $MOC; then
          MOC_ERROR_MESSAGE
        else
-         AC_MSG_RESULT([ for QT 4 found $MOC ])
+         AC_MSG_RESULT([ for Qt 4 found $MOC ])
        fi
      fi
    fi
    AC_SUBST(MOC)
 ])
 
+dnl ------------------------------------------------------------------------
+dnl Find the Qt resource compiler in the PATH, in $QTDIR/bin, and some
+dnl more usual places
+dnl ------------------------------------------------------------------------
+dnl
+AC_DEFUN([AC_PATH_QT_RCC],
+[
+   FIND_PATH(rcc, RCC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/rcc \
+	    /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin \
+	    /usr/local/qt/bin], [RCC_ERROR_MESSAGE])
+ 
+   if test -z "$RCC"; then
+     if test -n "$ac_cv_path_rcc"; then
+       output=`eval "$ac_cv_path_rcc --help 2>&1 | sed -e '1q' | grep Qt"`
+     fi
+     echo "configure:__oline__: tried to call $ac_cv_path_rcc --help 2>&1 | sed -e '1q' | grep Qt" >&AC_FD_CC
+     echo "configure:__oline__: rcc output: $output" >&AC_FD_CC
+
+     if test -z "$output"; then
+       RCC_ERROR_MESSAGE
+     fi
+   fi
+   AC_SUBST(RCC)
+])
+
 AC_DEFUN([AC_PATH_QT_UIC],
 [
-dnl we use uic3
-   FIND_PATH(uic3, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
+   FIND_PATH(uic, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
              /usr/bin /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt4/bin\
 	     /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
    if test -z "$UIC"; then
@@ -650,12 +686,17 @@ dnl we use uic3
        UIC_ERROR_MESSAGE
     fi
    fi
-   AC_MSG_CHECKING([whether $UIC runs])
-   if test `$UIC -version 2>&1 | grep -c version` -ne 0; then
-     AC_MSG_RESULT([yes])
-   else
-     AC_MSG_RESULT([no])
-     UIC_ERROR_MESSAGE
+   $UIC -version 2>&1 | grep "version 4" > /dev/null
+   if test $? -eq 1; then
+     qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
+     AC_FIND_FILE(uic-qt4, $qt_bin_dirs, qt_bin_dir)
+     UIC=$qt_bin_dir/uic-qt4
+     if test ! -x $UIC; then
+      AC_MSG_RESULT([no])
+      UIC_ERROR_MESSAGE
+     else
+       AC_MSG_RESULT([ for Qt 4 found $UIC ])
+     fi
    fi
    AC_SUBST(UIC)
 dnl look for Qt minor version and add QT_MINOR_REL

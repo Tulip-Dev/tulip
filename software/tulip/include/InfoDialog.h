@@ -2,12 +2,11 @@
 #define INFODIALOG_H
 #include "InfoDialogData.h"
 
-class InfoDialog : public InfoDialogForm
-{ 
+class InfoDialog : public QDialog, public Ui::InfoDialogData { 
     Q_OBJECT
 
 public:
-  InfoDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  InfoDialog( QWidget* parent = 0);
     ~InfoDialog();
 
 };

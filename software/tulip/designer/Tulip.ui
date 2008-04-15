@@ -1,1391 +1,1807 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>TulipData</class>
-<widget class="QMainWindow">
-    <property name="name">
-        <cstring>TulipData</cstring>
+<ui version="4.0" >
+ <class>TulipData</class>
+ <widget class="Q3MainWindow" name="TulipData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1005</width>
+    <height>889</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Tulip</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="TulipResource.qrc" >:/logo32x32.png</iconset>
+  </property>
+  <widget class="QWidget" name="widget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>66</y>
+     <width>1005</width>
+     <height>823</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <property name="spacing" >
+     <number>0</number>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>1005</width>
-            <height>889</height>
-        </rect>
+    <property name="leftMargin" >
+     <number>0</number>
     </property>
-    <property name="caption">
-        <string>Tulip</string>
+    <property name="topMargin" >
+     <number>0</number>
     </property>
-    <property name="icon">
-        <pixmap>image0</pixmap>
+    <property name="rightMargin" >
+     <number>0</number>
     </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <property name="spacing">
-            <number>0</number>
-        </property>
-        <widget class="QWorkspace">
-            <property name="name">
-                <cstring>workspace</cstring>
-            </property>
-            <property name="paletteBackgroundPixmap">
-                <pixmap>image1</pixmap>
-            </property>
-        </widget>
-    </vbox>
-</widget>
-<menubar>
-    <property name="name">
-        <cstring>menubar</cstring>
+    <property name="bottomMargin" >
+     <number>0</number>
     </property>
-    <item text="&amp;File" name="fileMenu">
-        <action name="fileNewAction"/>
-        <action name="fileOpenAction"/>
-        <action name="fileSaveAction"/>
-        <action name="fileSaveAsAction"/>
-        <separator/>
-        <action name="filePrintAction"/>
-        <separator/>
-        <action name="fileExitAction"/>
+    <item>
+     <widget class="QWorkspace" name="workspace" />
     </item>
-    <item text="&amp;Edit" name="editMenu">
-        <separator/>
-        <action name="editCutAction"/>
-        <action name="editCopyAction"/>
-        <action name="editPasteAction"/>
-        <separator/>
-        <action name="editFindAction"/>
-        <separator/>
-        <action name="editSelect_AllAction"/>
-        <action name="editDelete_selectionAction"/>
-        <action name="editDeselect_allAction"/>
-        <action name="editReverse_selectionAction"/>
-        <separator/>
-        <action name="editCreate_groupAction"/>
-        <action name="editCreate_subgraphAction"/>
-    </item>
-    <item text="&amp;Algorithm" name="propertyMenu">
-    </item>
-    <item text="&amp;Graph" name="graphMenu">
-        <action name="Action"/>
-        <item text="Tests" name="popupMenu_23" accel="">
-            <action name="is_simple"/>
-            <action name="is_directed_tree"/>
-            <action name="is_free_tree"/>
-            <action name="is_acyclic"/>
-            <action name="is_connected"/>
-            <action name="is_biconnected"/>
-            <action name="is_triconnected"/>
-            <action name="is_planar"/>
-        </item>
-        <action name="menunew_itemAction"/>
-        <item text="&amp;Modify" name="popupMenu_32" accel="">
-            <action name="make_simple"/>
-            <action name="make_acyclic"/>
-            <action name="make_connected"/>
-            <action name="make_biconnected"/>
-            <action name="make_directed"/>
-            <separator/>
-            <action name="Reverse_selected_edgesAction"/>
-        </item>
-    </item>
-    <item text="&amp;View" name="viewMenu">
-    </item>
-    <item text="&amp;Dialogs" name="dialogMenu">
-    </item>
-    <item text="&amp;Options" name="Options">
-        <action name="force_ratio"/>
-        <action name="map_metric"/>
-        <action name="enable_morphing"/>
-        <action name="tooltips"/>
-        <action name="grid_option"/>
-    </item>
-    <item text="&amp;Windows" name="windowsMenu">
-    </item>
-    <item text="&amp;Help" name="helpMenu">
-        <action name="helpContentsAction"/>
-        <action name="helpIndexAction"/>
-	<separator/>
-	<action name="pluginsAction"/>
-        <separator/>
-        <action name="helpAboutAction"/>
-    </item>
-</menubar>
-<toolbars>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>toolBar</cstring>
-        </property>
-        <property name="label">
-            <string>Standard Tools</string>
-        </property>
-        <action name="fileOpenAction"/>
-        <action name="fileSaveAction"/>
-        <action name="filePrintAction"/>
-    </toolbar>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>graphToolBar</cstring>
-        </property>
-        <property name="label">
-            <string>Mouse Interaction Tools</string>
-        </property>
-        <action name="navigateAction"/>
-        <action name="selectAction"/>
-        <action name="selectionAction"/>
-        <action name="moveSelectionAction"/>
-        <action name="magicSelectionAction"/>
-        <action name="zoomAction"/>
-        <action name="deleteAction"/>
-        <action name="addNodeAction"/>
-        <action name="addEdgeAction"/>
-        <action name="editEdgeBendAction"/>
-    </toolbar>
-</toolbars>
-<customwidgets>
-    <customwidget>
-        <class>QWorkspace</class>
-        <header location="global">qworkspace.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>1</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image2</pixmap>
-    </customwidget>
-</customwidgets>
-<actions>
-    <action>
-        <property name="name">
-            <cstring>fileNewAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image3</iconset>
-        </property>
-        <property name="text">
-            <string>New</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;New</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+N</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileOpenAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image4</iconset>
-        </property>
-        <property name="text">
-            <string>Open</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Open...</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+O</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileSaveAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image5</iconset>
-        </property>
-        <property name="text">
-            <string>Save</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Save</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+S</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileSaveAsAction</cstring>
-        </property>
-        <property name="text">
-            <string>Save As</string>
-        </property>
-        <property name="menuText">
-            <string>Save &amp;As...</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Shift+S</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>filePrintAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image6</iconset>
-        </property>
-        <property name="text">
-            <string>Print</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Print...</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+P</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileExitAction</cstring>
-        </property>
-        <property name="text">
-            <string>Exit</string>
-        </property>
-        <property name="menuText">
-            <string>E&amp;xit</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Q</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editUndoAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image7</iconset>
-        </property>
-        <property name="text">
-            <string>Undo</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Undo</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Z</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editRedoAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image8</iconset>
-        </property>
-        <property name="text">
-            <string>Redo</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Redo</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Y</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editCutAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image9</iconset>
-        </property>
-        <property name="text">
-            <string>Cut</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Cut</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+X</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editCopyAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image10</iconset>
-        </property>
-        <property name="text">
-            <string>Copy</string>
-        </property>
-        <property name="menuText">
-            <string>C&amp;opy</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+C</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editPasteAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image11</iconset>
-        </property>
-        <property name="text">
-            <string>Paste</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Paste</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+V</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editFindAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>image12</iconset>
-        </property>
-        <property name="text">
-            <string>Find</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Find...</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+F</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>helpContentsAction</cstring>
-        </property>
-        <property name="text">
-            <string>Contents</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Contents...</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>helpIndexAction</cstring>
-        </property>
-        <property name="text">
-            <string>Index</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Index...</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>pluginsAction</cstring>
-        </property>
-        <property name="text">
-            <string>Plugins</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Plugins...</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>helpAboutAction</cstring>
-        </property>
-        <property name="text">
-            <string>About</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;About</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>force_ratio</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="on">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Force ratio</string>
-        </property>
-        <property name="menuText">
-            <string>Force ratio</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>map_metric</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="on">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Map Metric</string>
-        </property>
-        <property name="menuText">
-            <string>Map Metric</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>enable_morphing</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Morphing</string>
-        </property>
-        <property name="menuText">
-            <string>Morphing</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>grid_option</cstring>
-        </property>
-        <property name="text">
-            <string>Grid</string>
-        </property>
-        <property name="menuText">
-            <string>Grid</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>Action</cstring>
-        </property>
-        <property name="text">
-            <string>Unnamed</string>
-        </property>
-        <property name="menuText">
-            <string>Tests</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_acyclic</cstring>
-        </property>
-        <property name="text">
-            <string>Acyclicity</string>
-        </property>
-        <property name="menuText">
-            <string>Acyclic</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks is the current graph is acyclic</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_biconnected</cstring>
-        </property>
-        <property name="text">
-            <string>Biconnected</string>
-        </property>
-        <property name="menuText">
-            <string>Biconnected</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks is the current graph is biconnected</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_triconnected</cstring>
-        </property>
-        <property name="text">
-            <string>Triconnected</string>
-        </property>
-        <property name="menuText">
-            <string>Triconnected</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks is the current graph is triconnected</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_planar</cstring>
-        </property>
-        <property name="text">
-            <string>Planarity</string>
-        </property>
-        <property name="menuText">
-            <string>Planar</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks is the current graph is planar</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_simple</cstring>
-        </property>
-        <property name="text">
-            <string>Simple</string>
-        </property>
-        <property name="menuText">
-            <string>Simple</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks is the current graph is simple</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_directed_tree</cstring>
-        </property>
-        <property name="text">
-            <string>Directed Tree</string>
-        </property>
-        <property name="menuText">
-            <string>Directed Tree</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks if the current graph is a directed tree</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>menunew_itemAction</cstring>
-        </property>
-        <property name="text">
-            <string>&amp;Modify</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Modify</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>make_acyclic</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Make acyclic</string>
-        </property>
-        <property name="menuText">
-            <string>Make acyclic</string>
-        </property>
-        <property name="toolTip">
-            <string>Makes the current graph acyclic</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>make_simple</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Make simple</string>
-        </property>
-        <property name="menuText">
-            <string>Make simple</string>
-        </property>
-        <property name="toolTip">
-            <string>Makes the current graph simple</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>make_biconnected</cstring>
-        </property>
-        <property name="text">
-            <string>Make biconnected</string>
-        </property>
-        <property name="menuText">
-            <string>Make biconnected</string>
-        </property>
-        <property name="toolTip">
-            <string>Makes the current graph biconnected</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>make_connected</cstring>
-        </property>
-        <property name="text">
-            <string>new item</string>
-        </property>
-        <property name="menuText">
-            <string>Make connected</string>
-        </property>
-        <property name="toolTip">
-            <string>Makes the current graph connected</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_connected</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset></iconset>
-        </property>
-        <property name="text">
-            <string>new item</string>
-        </property>
-        <property name="menuText">
-            <string>Connected</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>Reverse_selected_edgesAction</cstring>
-        </property>
-        <property name="text">
-            <string>Reverse selected edges</string>
-        </property>
-        <property name="menuText">
-            <string>Reverse selected edges</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editDeselect_allAction</cstring>
-        </property>
-        <property name="text">
-            <string>Deselect All</string>
-        </property>
-        <property name="menuText">
-            <string>Deselect All</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Shift+A</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editReverse_selectionAction</cstring>
-        </property>
-        <property name="text">
-            <string>Invert selection</string>
-        </property>
-        <property name="menuText">
-            <string>Invert selection</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+I</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editAction</cstring>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-        <property name="menuText">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editDelete_selectionAction</cstring>
-        </property>
-        <property name="text">
-            <string>Delete selection</string>
-        </property>
-        <property name="menuText">
-            <string>Delete selection</string>
-        </property>
-        <property name="accel">
-            <string>Del</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editCreate_subgraphAction</cstring>
-        </property>
-        <property name="text">
-            <string>Create subgraph</string>
-        </property>
-        <property name="menuText">
-            <string>Create subgraph</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Shift+G</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editCreate_groupAction</cstring>
-        </property>
-        <property name="text">
-            <string>Create group</string>
-        </property>
-        <property name="menuText">
-            <string>Create group</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+G</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editSelect_AllAction</cstring>
-        </property>
-        <property name="text">
-            <string>Select All</string>
-        </property>
-        <property name="menuText">
-            <string>Select All</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+A</string>
-        </property>
-    </action>
-    <actiongroup>
-        <property name="name">
-            <cstring>mouseActionGroup</cstring>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-        <property name="usesDropDown">
-            <bool>false</bool>
-        </property>
-        <action>
-            <property name="name">
-                <cstring>addEdgeAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image13</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Add edges</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>addNodeAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image14</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Add nodes</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>deleteAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image15</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Delete nodes or edges</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>zoomAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image16</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Zoom on rectangle</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>navigateAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="on">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image17</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Navigate in graph</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>moveSelectionAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image18</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Move/Reshape selection</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>selectionAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image19</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Select nodes/edges in a rectangle</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>magicSelectionAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image20</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Selection of reachable elements with equal value</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>selectAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image21</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Get information on nodes/edges</string>
-            </property>
-        </action>
-        <action>
-            <property name="name">
-                <cstring>editEdgeBendAction</cstring>
-            </property>
-            <property name="toggleAction">
-                <bool>true</bool>
-            </property>
-            <property name="iconSet">
-                <iconset>image22</iconset>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toolTip">
-                <string>Edit edge bends</string>
-            </property>
-        </action>
-    </actiongroup>
-    <action>
-        <property name="name">
-            <cstring>tooltips</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Tooltips</string>
-        </property>
-        <property name="menuText">
-            <string>Tooltips</string>
-        </property>
-        <property name="toolTip">
-            <string>Enable/disable the display of tooltips on graph nodes or edges</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>is_free_tree</cstring>
-        </property>
-        <property name="text">
-            <string>Unnamed</string>
-        </property>
-        <property name="menuText">
-            <string>Free Tree</string>
-        </property>
-        <property name="toolTip">
-            <string>Checks if the current graph is a free tree</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>make_directed</cstring>
-        </property>
-        <property name="text">
-            <string>Unnamed</string>
-        </property>
-        <property name="menuText">
-            <string>Make directed</string>
-        </property>
-        <property name="toolTip">
-            <string>Tranforms the current graph into a directed tree</string>
-        </property>
-    </action>
-</actions>
-<images>
-    <image name="image0">
-        <data format="PNG" length="2629">89504e470d0a1a0a0000000d4948445200000020000000200806000000737a7af400000a0c4944415458853d975f881ed779c67fda8cc23be9a89c13be853974053b651734aa16fc8918ba4b74e1a52ed5521b246342257c61ab378e20e0da7756c117ce4d1af7a244374d94d0269b5e18af2f0cab4060d744663720f37d265634022d9e6db5c919ea0fce219a326feda1db8b1199b918cecb99f3e7fdf33cef73e2f8f8f8982f6172043e82cb00407ba88e80761857358881f515900448a09e81ea30b75340c0ca600b9f77f8997276d9b2b800690292819361ae33501f4c4e24dd97c3460a14f9b09846087d4dfdc8604e0974291d1dc494a0105b50ed902465520554056d23921944148d42d408bda0ada77bec50026b2b964ec08e40750fb7343e4e621c6e7e7e117c03b7de079b75ac162f402c814d620f674fa7745fc2feee7d260fa638518c09b81ca2464214ea4a885a009672b964fa302222348d677cc65137600c84760fd7bf03f233923a0eeea9236cdf86a6e988d2a05ad0f597094d405bc53fd882760f970b6be71455a5184168153120d2b1f154498c151a2b04611ad709c91a2098d136617a191261bcb4469402e9534efcf6b3e3e3a8105a981e427c04f501980ca27630db22373749478e0ae8661067014643cc5d9e12661d82a5a96a8c1a621b3146b87609261f17ec3f82d5d529cdec47ac7e630d3b0fe325d01848623f2414c9609c3e06124fdd28a9de62bcb845d51460947aeae1b490ff95c35a4144e191d21d426c6b2405b5110982241022dc786d879b3f2cd8bc7d1d9b19483ce5a2c3641d36814412f02d9c5f82ad8f20ce3c21421a36f9f62bdb9c3f23544781777605f36241319f038acbc05711ff71a0f8a6c35a8baf03da829f2971063fdf578abce0cd573db0cde6ee22a6b178d331ee53bc2a892aa40c25d57d0e934f6a34545cbd748bf56fa64c0f726efc3285338215c16443c5983e92b735572e76fcfc2e74e7043129920b66119a46e9da8e7f7c3f323d705c7fb966677f8bfaa1c52d943451c90d242681aa0522ecfffa3e692794cbb7b8f2aca3fef506550d6ea9266f055716b89145758ffb1f04de7e312009d8ace6d61d87bb9022187cab2ce686a88acb0bb63f9ce23e80eb2f4d79e39f6ab42da03768af24510185addb01ff48a1dfe247af2afb3f2928eeee7379658c7952d7d75e7d8349fb1eaac2f60c6c2ef8a348b1246c206cdded8811c2d11a3180d880c92bcc92e1e66ec3cffe2120c90ef5c331fe293046989bdef54c2bf0951067156b654588abec7ce011c08ac165968dc7cafd77dfc3250332960b0e7f046e244c0e4b6efe73c1defb57f1d555480c861ce92ea3b31fd07cba8e48cef69d94f36794101b0483f6f095bd3dde3af927cb1ccd5af8e2573cbf52d16efe0fb18dac8f4ed3ff99e3cf47058f424dd1d4d4e379b24ca99b883dd992c83c6fbcb54c75f83cf3a33dd65faa58b93863f9c211d9d7777830bd8bf9ea153effc3942646e64f1d31fbe21592f47f192f0b73d75fbb8e8881d821494d9e58a631e012a1ea9594142eacc1a824edc17d0cda0bf694c1c7c0cd9f9454f7d6597f7a9b37bf7348d7460a816221e7ecaae5f2b741f5c7b8ec3251c188811e7406b18739931b82826f6a2451a60f3cbe55a4576c2274023c55502c1578b1e82f77b038ea870d1a2cb77eea70f90e6fbeb6cff9331d4de32111b46d287303598759aea90f239d0a8741e95aa5f60101e6d2c40e4c2596f555883548afd00b9c84b4176821bdb00e8990b770ffc30a01b63f0491822b2fee737651d8de6dc81706e2c93383f48a33166b40f0a44941981948407a61faa932e7db8e7cc18204c60b91d046521114a5037c53c1510db920a382ba57a69fd6a8d64ca70e3baab876c9e023ecddcb494f832416ed15ed0d210ea5aaaa43f666161054225dabcc499222c280e551869b3fe1f8fa730f2d84ffd884798b7d7695699253b7caea8a12da92e2740e7dc4378698c0382f90276fdd44d0143f53c0415f613168ab14ce717645988bdad11c75a446082d441962e37b455b65f2a8225615ddf7be0fc6327d7c886a40a4832447b28864c2addbcaea8b05920d9b373325a8e2db403305554f3e0adc3f0450b40f988cc103da83f4963a968ccb14faa1bda95551ed98b491e9ee3eef7de7ef292ee6944b1e8b4524a5c80dd34321cd0b9c714862399c354822c408f10ef8c331c654142e45b50402468650cc691f1081d07754d598f21b1d3e01df07a6aa6c1fd5c41898ce3cfadc98ba8fac958a6f3d20f856d9bc2dc8b22099617a709f2e117c0bd56dcfce0782488d1deda11114878823f601233067324bb19852940e1f2dae70540292592401278e1d55e4b9d7d93bacc84d4efd08044135406b396cc188a53e8a387396f850d8fe6164b2eb2089c868cac6d3c2f46189f40e5545740845a2da518c522a519082cd5d8b2c7aa627739ca4947fb34afcc594bda8687b99dd5fdc4210ca250b7d6467bfe2ec45cbfe1d8fa861e720503f2c888de016f748a5613c1f20b184b881261dc40993a9f2ca4b57f9caf3df7afbad760e4e25a76866cad17f8dd878e60ebffacf0cfd8b53b45f5396570dcd6f3e25c956c8cdb778f8bb53d4076be817cb909ca6ff83430f56687ebf4cfc6f4bff7fbb94e387f473911579cc954b3dfffa6f2fd07fedafb17f7a8a9e9af9afce13c949940e4953c83ac663477db8c6fe27abacb97df60e7470b338f24b06adb6680e0cceade1bda247f590d14474e4c94f4734e930ad12bd52bac0f59722dffd9712afcf50ac38dc8292e7d7a08fbc70c190d83485ee06e81554cfe27287eaf729b21b48b2cbf6ae30691477cee18c505e4c29b29aed9f56d4f704491cc5b313c458ea7b01096093c8e5e73a8a22b2f96ec9e4c135dc99f340a05c744806c56943b92024a10bb8c411da1a939f25053ab560de460edfe1c6cb3bd07aea594df589b0d33bdc1947f997257bbb01c4d345c5df9db05ac2c6df2a8553ea9970f3df4bf61e5cc52eac63e6a13ce34022ce1a4091cc92486209e975ca2548edd00dfb4737a90f3c76e96dee1fec41bf4931dae7f2cb1e93d56cdf89ec7f0c90938a50e0b9f13da56b41d5b2b56bd8b9b341dd6e20892059c7f9733965fe5df2798366d7b1220890681f06ec3e09e5e8894272cfb0ff518d35d03026cfd768929a9bef4f90fec76c3c35a1190526d918636a5eff3bb8f56ec1cedd123fb3c0339058b487f34fa71863c81794bc789dd82bcea4746da08970e2075bc7c724b09843b13834a83bf7a09a4207a4fdf075063419b4e2de477bf0654d332bc8b300c9364dbc8a3f5224c907845c3134de933b47b124ac3d9d922f804d801ea063bc909288741849e189a854a030100a7023984ebb8150dae110beedb0a3315050ac98272cb74e41c41a4375144141324fb168718be0b214c93aaca498acc39994ea08d20c4e7cf6fbe3636150c7360391412119e18f4f33837201f2d170fafaa8c33e51d12410dac8f9730e7932f611e26c505bc5c26073d9602b8ae137ef07a57ce2b7bff9ecd8e539751307784d142b02bd6232836f23b135b8912289105449334ba7012b16ed039d422a4353433f104d6c03ce5842df21a47f54d3241de9a994ee7147dac3ff0326053c300876b7840000000049454e44ae426082</data>
-    </image>
-    <image name="image1">
-        <data format="XPM.GZ" length="25592">789ccd9d4d8f1cb71186effa150bf166046b08862c05417e42801c03043990c50592832f89730882fcf70cebf32d7ef4f4ca069286a5dd9e61934fbf55c52ab267e4efbf7bf9d31ffff0f2ddf71ffef173fdf96ff4427fad7f7ff9aefff3a79ffef5e7bffcfedf1f3e7efafce5e5d3e7af2f8fbf3ffee6c3c7b7177a293fd61ffb8f759cb671fae5872f9fbefc304ebb9e7e9653e2d3f6e5b75fda38ad7adae5b48cd3af3f7cfdf4951bbfeae9673de5a3c051cb7a5439e0573fd7d71e7f353ec619362be947dd5d7e3cf68067be5acae5084792edab5b254e804f086ba555be8d025bb6d3f1140f009f35b4fe9e8df0bf04dc8c6fef5d03967a30fb3b009f36acd9ef7104f87921d6376aa880dfc8f70ec0a7c725e01338f3c06db709f4de41749f90012f74b371f77dee659d68662e1ac7af01e85741e75b235fd1390a9181111cdf0ef87c7c6d77e6236119bf6422a21de3c18807c0aa9679825700457e1943f618bdd37c3c2edd03be4b41e33b4d0e59598381c34e9a9c4d44ef21e4526263df434c4467c116548b5bf1db0dc1fd5e767e7817b09ac59e1cae5b1a2a77a4ed44cce68de5679fefa8ac8c7bc088bd677c93adb6569ab50e40fe3b5be606a0f6770db87723e8c37b9a29a923275f7de5862ba0013cd1ce19f72d826773f5123b17121e0197d1b276f2cbfa46df1f20d4f0a0deda2f05c461414f52bb1877d190328f8fa965b4320477c0132288f0147015253454bca9857bfae3371b162d88930bdf9ce44e693b75770bb0a4e1299d74ea90f27d6876ac794a366fc0836f4187504231500c5432e52520f09904f6022598340b8be2841938f963eba4966244b3d0c1112740bb05a5c8b68e592b0984710017e4b71f8b51fed315aaf030c427dad71dc0ec0e15e4abe2f20ecb3f7b4e73d3a56e533e982c30cd139590dc7566c48d82d58b1898cd329ffc4809b62e87e0c12d74b6819dca7803dbcd7303309362f5e6a6305f83526585138115652e67e4fe641899b4518089f002303b1a9bd9754bae77c6cb5c0cebed7518c92b807e1ff07177e6e9e1c9de510a9a95af5bc44f80a4de0a03ad05d15d057b783a678dc872dc2d51caf3937a3e5802f4f4824b7d82a4b248b82fb7ccc431bdf0157eebf5c2f76acde9811642bd38c613232bb94fd8d780c5259219a0f06bdee305def0a9f426654677e289702ec8cf80556ce86ea7064e26b9e2ebeb7b3a361222a2c67236f335e08350e236ec1b7c1778960237bee90e433b42ad1cfa0d407d1b6c4289efcabc95a651b64aba8c40e8b50d5c7a09583bf09589ef84a7f65d6ab295d023c6fa4e46be03487dcf37e74c3864ee71d0f35d0061b7decdc84ba09c0ad61070f1bf6b3eede4a2a133664230f215a0f510cbd7593fd5680b085e7f9bb0573772bb0f0802c29b61b96570c18f35265d9bd92081d02359fb96e9ee006802c69062055f2e6d008768b0081e33e93b099b49e880a6605d006dc6ca02dad281d4c4a1b8da1f01e5862e096b220c09e1b677800f869e2378b30be793b7f33dfaaf0501eb730d27c2759da7db6fb9fa61ed1e3f1a28429a4eb457bf3f4d8c5b40498ad780325a134258e75d00729eea354d81e17256c81a82ea2b722d807b23a799ce00897dc8d62b1780ee7c1406c690f029eef1063e1d182f23a0fd324988e913cf4f122e809ecfb993645f2794c9fe1e608189c9e120e9465221056c11c7016851e777249754e743409d82768070e6bfe9ca1cd7ee6e215f3c9b84d4deb28409b066401430214a3d5007e06b06dc28586dd90b7c206628a8126e01ad020417e9cd3dd0d739ee476c029a011f214b09501dc25680b43b7a00f662cb13b03102261f0e01934fa337d5c5c601586ab1098166dd26c210b86ee66a05a4ccd7785911024e7385f24d5ef878a3f509d0cbfb131eaea3d8c67bc0dab23663ff84d74955d66f7dc9bd92ef1e1809109c90b58f9dfda844d76d86205c0b0605ec2dcf044d0464c2ba1491418934a32d25c08a4f48a806d0632a8153dd70686ce35afb0ef071018b6a2e6b801cb25ac4af7c13e10c185ba8d36a4dfd7226641b3fc67bf3391201874d5d419e2dc9763f12e05c33cc80847c69676bbeb7c468cd2aac903320efcb264065999eb57839b64ab80184a96f237f6f7d03486f0d7d0a0043414d3c9e00ce8059420444be4369bd211c0c0740b66347408954f320302a02523d004280d09820378033e1f85361cb9512208585b9759512eb041884182703446121406a9d4b1a3ffa4dc0f15e021c332e3788183c01d61d20cc305c98a98d23a50621274292ed9e2320bb9f0176005c37321ec923136e01c1c0dca237a9c7cb985c25a29070f89700d21ed0d4b02cfce8cf2c4c33e0ebebd1c6d500c1c0c22516aa5a7c23a225e33aaa1396b26f004b34964300bd6ad0cc66802709c7a204ebe2e6db12b5e9162dc614100e22969034193be10ca877dec68c49350009005ff36c1d128e5c5c41bfe6db260658f0863260e774d6a2de424055849f2cf0b3a047106bd1bac448002e1256ad8a6d6131ec5a3260d9006afd3ea6bac715512d90ac7c02904dda6c4a8f2228cf3252a4ee24ac0258ed2661dbc416770740d19b01cb1190aa0372a293e8427770c0d709d064929d055d3a4a7532014e3e9b3d7f00b6332034e5c47c022cf2614304240434015b18f819206714059cf782f780dd00fb3d409f9db960e0e7861db6250aec8a953d601340ba04240b92c679b9e31320b8fbd7c5c82a61d572c9e6182009be358ec1f51d30623303aa695808074c5152ca4ec2ae18c3c2cd1e0a8380d51f9c9c261a534da7199c3c261373ef65644fdb00c81a6e0149964863f6e4f5cc9002042cd442c1359bf8530906b4bd741f16018d0900292be880af0990d405cdc22371a50c83162833a01978fc771b901c303ba145094a486ce32ab5082f891e8e84490d57910b9f97b66a5c03ec2ba07aa1cc6619b05e02f282b172912b16eeb042460bef0195b08682be62a93320710cab82695d331366c02a938c589897fe81517aef71f1c2873ed827c07a04acfd085827409242532c3c26409ed830126096861881fb731f7c34d48f30c44a683531ef29f81527c0572b8d1d906b7b29e620866b7a1c710d388cc037a88bdd67803d01e6742c25038f4ff2649ecdd8cc4049c0e48275e2c3e54153c07e02ec7bc0be95f0550522720177809380b37e15720f71b5e529f608d801b0ef004bf14fff57893d2d14ac1c9e16f0b950b0ba7005e472309e77af80951c90dc098d72bcedc324c00100bb7bc307639af61001ed72b9a66cd4baaeee1260c9808264802994a391123ae0d8abe2c9533f2c868020a003660165eaecba8481f5fe11508ca557a88a14ab12b96cf0bd6a8c9a8563e707005dc00a02ee00c70e16eed86d4cacf1dd40419a348ca2e195b7572b2f816dbd599bec9dc534587dc109c191f9b8760c176cb1e339294846980009f8d274537401aab7a0801ac4fe3c22162318bc53884811da68cc1fef04f4273a51348086afe662b67e5b004dc03439a70861af901a9c7db9c1a667062407ec96ebccc87bc0ca9b20141e08803d0b58ce80ea74f68cce0bfefb80ee89ea865836705491245b07e44ce702a629a62e877960630b57d8333901ca7b629cd661fbd805940bed6f71070dda98065dc00a802b5fb5c700f69073dd354e3b0b5eb24a41e80bbb2460fccd3fd48e3bc07b0276f9d0a8786b5b002b2e9a10b01aa093523a94af6a9c6c019ff08d96767088a00b6e266a2e49fa04e86be30c2874a4f9cd8aab9c8a9f1998e48991f2757dc87f0948fea64e206e630d9f1e8122cc9ceb0e804f0c8c7ce3d91b55cc2306b82cdcf528b62ad130913a1eb733ed3e2aace092892be6e08dfb510f3eddaaf37d991e05f5b4f5814ea8847cde2c2199a1956f03a8f3608e10442b3a564f1fb166a3581209c0790bd8541440dbe6c383fc5b0fccc726368a0498cbe855bf4ecec7f95c347da2e0707b73c2f88443e25309c72f458a7e7e14b900a63a3f09a8259085b0908a809e869f00927d48a4cf07447323c5e20de33a017a081ff8649b45015b08e8929c00495daf169dab57402d0e9beee057de72e75f7d03bc7b084fc555b11a3cec6b02caed41a6db14ac92cbc4cf0aefcf38945bb8cb04a0961d23729000e0e81b2cbc372f253e56bbcf80340789e606b731c14e5db036491c95cbb7d103e9a351ab66f8eab6028a923a2b643e17109ea059a5bb002a0b8f179a996dbb7c5a608cd66ccf8a778a4667c41535f7dd680694252a5a37f1a980cd2b567b309000ab2aa871dc7b0b36312dacf9c908f5f14875130fbf9ff88a8967c1212516e9667608d84cc523204848b21564cc3c5026d4beb56cf67ab8b50c68bee7f2a97294052467b327d80b60b5b2a0f3642b79d256236248eaee5f64cf999b136b329e3f2c4ff21c84ccfd0ccff8547c5f3fb5b7d6a458da005a06ae23402d2c35f154994fa55a65f7b3405215d4c60688f9ddb39bad9ef5c31155e604013403bc49b31530241c195f6af879e12e9f9bd2dfed5b4a44b166f42796306550f0f94b6edf828520b77a7b63e3ed012d2854c2f87ea1b7e99e273c26a5df397d43ed088076ea7c58eac3247404249550ae249a012b59a0b07b7a528059b65b3771e8c8cea7bad7c8fa199037a5ea1e503b9440866192861a18a23954de001876269d5f7ad68f300399f41ee93cc20c1884b282470913e1942bc08c6edc9e8f500ff8a460f36bbae5411bb79f01b5a4ef7b0979f4335f87d3783959db9fd0e237355c1b2f9b7680311c4d46c676ddcd3c03360a43a64c1e8d7c1e2e15ca401e398944ab897577487baaf0ddc10c58bd7200c2494193034f91af66be5a69bae34d14a70642d80e84d57711fd1a1bccb2866e1910baf681af6ffadfa4ba0ce8460ef75edba1cf354ff93e3b7a4a91162477a17c91befbaefb51b19f006f13ba94b2f4f36a2189124e4d1ebe5a8e679f58f82e0135eff1022f226dd3560bf9e6806f0def27acab139d5fd561bf722fe03a51a3825a62967890be2594251d7379ce8b309cc2039e9ac4feefde3cd78055372ba9db231037db51c237ab97bcdc4a7016ab3e82fbc4de7df68051a868d02361c32963227cb47b7b9b0013db84679b6f5a52dc06ac7eeffcc7f6a18b152e699a8bfb91ad0800b4db8da099086cc2e974002c271393ff56c91613648b9e58ef744a63b2a33aa009d88d6259e5f9ce6af8e826862fa2b87ad9cc0391aec061d7670a9ac2df65b0050f59a1dfa47a9d3bef86be85bb051894d2a12e6cab214375a73d56fbb2852e55cc25d6c1adae3ac6c76d40ec9212a2a6ebe45c04803677c6d0f618a220df11b0bc0b70740d336c266ffe7563fd3688ee77b6963e5ceb9b341ed630c36c86bc002c89413712aa95d1651acf3e6e5cc933bf2d713dc20b74690b64980eea7b014b9900a36fd21d193d624c8e0a07d499a6e8b652744899af6fe4e3d6e5196010620f94f616ad5db1cf1bdbde47d31d2b95ceba2b2e5faeb177a33f07047de6c587cd2ed051f54a857716784f376e207b1ffd7a806591505fe8163199b0db04def0eb4de92a5cadd0c6c2653ede0188691e19f520dffcd14f0f56c023880a3331ed04fc25803b19f17130c5fea36f60877078f80c0d7d4bf3856f0708ef5e003aa44775f5f4679f409716b4635437866243477c0e98debe061400fd40773cc9f21d74045b1e19505ac6add229c035a042e870b91530dade9f6d697799eb7d3bd0ab34b0b06c4c1f74b9025c04dc1f189ee167b6522715d71fc8cd2e986a98937a3b13cffc370ef325f219d24f88a268c8027e0b60d9357d0227612aab0384b289648d8fe9365c962326026ede36233e9170568d3668cac7cfa5a3d1d1781bc0ddf16e405866eef9e282fa4ec06d0b37e44d401acbfc4418a27a99316b77c5875f783903968a696ba2cb80636982f6cedbc0d8f016de53c0026f9c00eb326e9cad2fe1ec7c83cf0019e008385588d1af5a1f8a092052ed35cbeadc784b3afc62f5e99fb50ac00cbbf40c1eaa6d7677aa6fdf516efad7b19f0082810f804e7e759b05ed7383ef36e0d4cb3daf797e3ce57b8f826bcf7b679d2ffcb6f75f9f006e92f1dc5b5d3b5fa3e79b55be02f4ef0105e86e985d41916d1fa5ceb7136e00effcc3e802f4e4dc5fbf041cc3ed079c080df0f43f0fb0976fd223e06e70ed67b5e43ca2bf35011e8ee9aa8bee8fc7eb7688cd8d1f14fcbf3d3efee7771ffe0bb62d9675</data>
-    </image>
-    <image name="image2">
-        <data format="PNG" length="1002">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003b149444154388dad945f4c5b551cc73fe7dc4b7b4bcba0762d45c43114323599ee6192609c51d883892ce083f1718b3ebb185f8dc91e972cf39d2d2a2f1af664b6f1e0fe3863a0718969700eb0c52142da0242a1bd6d696f7bcff101585203ceb8fd9ece39f99dcff9fe7edf939f88c562ec465f5f9fe609442c161362173c3e3eae7b7a7ac8e7f36432196cdbfe4f907c3e4f2291201e8fe338cec3737357e9e8e828aded1e229d650e1f2d51754b082110124c13a4dc5ea341eb9dc284c0558a853f3ce8cb0677ef500fde7d39d2596679e326597b8e9abb85d7a770ab16ab6983ec5a05b487a70e36f0f4e10afe408d6a558310980108478dba4a1e8233990c5d474b64ed39aa3a8fe5f3317fbf81dbd70bccfeb205947632fd74f6589c1c6ea2f70d03a58ba0c1f2c9bdc1b66de3b8256a6e11cbe7e3ee1d181b590124fe2693aeee08d223c82c3a2c24b7b874bec8f26288774f7bd054504aef0dde6e99c0eb83f9fb266323cb80a27fb0958141836044605a2ee5523393371cc646fee2da37195aa35d0c0c5b4859ac03d7e91712dcaac5adab3650a3ff9d08ef7dd8404bb48869e5d958b5b87dadc4c9a1464e9f0d0326df7ebd86bd2e310cb1bf62d384d59441f2d70a070e1c60e09489929b988681bdd9cc97170bcc4c65595f71f8e0e3301337fc24a7732467831875a47f289652b0be5e4151e6d07316c1b0c0340d8ab92023e76d66a6b2840e36d2fb7a13fee632475e6edc367ea98a90fb98b7dd6310ca0328a44761582e1bab41befabcc0ec940d28bc5e93b68e064cab84e1d9beaeb48934eac1f53b01c1b000fca496aa54b61a99fcde61662a4b4b4b23d1680be9d426173e4df3602a48ea411989a4fd590f52a8fd156b05ed9d350e3defe3cfdf4b4c7ce770ea7d3fb9f520afbe1620daeee5c26735d20b9b9cfb6811a754a439e4e5c5639a4caa1e5caf586bfc0197b78702005cb9b4cae4cd3267ce8638fe964bd72b393e39d74928d242617303a756a37f284447770dcdbffc6384a05a85de1306e9a52057c7527c7131c3c42d3f475eb2303c82d4fc3276d6811db37efeb148723082d9b08f79f97c1e5729109a9a28307cc622d2d6cdf52b2b24efe548dedb00142009862cfa879ee1a71f6cec928353511472fbf4389148b0b0e0c108081412458dfe21c9f11351e67e7358595468246d1d1e5e38a6e9e851bc39d84ab502a669331dafec0d8ec7e3e8cb06e1a881d727d1ae40180a434a8c9db129a54126ad48a7358c2b4c5352c8c374bcccdab2bb37d8719cba79fab8211f9df218e0582c261e95f8bfc04f1a1e8bc5c4dfe0a190172af6a9690000000049454e44ae426082</data>
-    </image>
-    <image name="image3">
-        <data format="PNG" length="295">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ee49444154388ded95bb8ac3301045cf181553aa4dbf8db11b19b6b1abe4a3f3074999ceffa1723a6d91f53a28f6467975b920c420863973b920194f2318a06066a8ea4b6a172de2d533dd4dd7240a74381ee4b22fbf2baf1e33c3ab3f4f06524aab0720b481a11f120679ff5457d122aa4ab4085ac20a2104eab6a6e99b94f74fb5cb2795a86e6bd4298a32f4431a8fa3e4e4553ea944bbed8ecdd7e65f72b7e4f12d75df1d8ab277fb55f2ab54944844961f7e37f7eaeff7784ac6d2b0a73d5ed3a5c78b397e58cfe6781d79debc7a24c7abc01f8f67e48fc77fc8373c1691bbcf1979de5cdef5e75d79fcaafa07e8043320ab9f03ce0000000049454e44ae426082</data>
-    </image>
-    <image name="image4">
-        <data format="PNG" length="366">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000013549444154388dad95317283301045df32145be273b88b3bfb4a69332952657236e8a0d3394cb9856794028411160a64d8666767c5d7e36b11e23a0706289819aa7a485df4d683426f3daaca51b5b8ce1d4a1aeab2b79e4a2bb6e6f3dbd9338bbaa965d9779d93b2d20a0c2aad3033727578684e76b95e3c80eb9c4c9beef5d8754e96fdbaa9251265d8b4d842bae54de6f64c1edfaeb7a811c8fee33980aa2280f71ec0c3502222cbb5c9689b5656e77858f21405c17b8ff76473205b3b9351585ec4ffce64cf2049bc2d939da6a4c77bbd4e45b9461c447fbee154c2fd015a823df2f5c7d7a098f43812d5e1a1938e22993a88b64d2ba315c79186bb23223e82344cc734152fa43690dc2d5fbf7f3e49a3fb98697666a4b62d07d1d4175844a207904673bc6b406791bb2bcae51f604f0ea4a9fe2f0871cb55475648f90000000049454e44ae426082</data>
-    </image>
-    <image name="image5">
-        <data format="PNG" length="402">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000015949444154388dad95bf6ac33010873f070fd7cd1ef30c190d1d6ac81375ef544a08194ad63e5140193a64d3337829c45b6f10a483ffc496e3582e3930e287b8bb4f3fce52644f161410505544e431da1c0dc0e5919f3d59e2441200be3ee1acf0fe01e660482441555b927b3a7bceb0df1655255b67a82a8b524ba02a9ac60020b1506a09717dbc090db41a4044aec4a954c50170d56697ccd74bb7a4a0a0c9cfd7396d287d62a93b76c9f40744d301691117570d6c37b0dfd5f9028b2eb1babaa1abc87090ca13ea7e5b2d22bd7d1119e687785cc405243ae9712f5fa44f7c769ec71ed9a8f6f3433c0e9a0e3f3fc4e310f25b1ec7bec7db8d373a01b1df0d3d1ecc712a55f1ae9eb38e7adc74feaf6e3cbe49fcfa36cb09e07ad78c7adc1e6722ccc1547fa653f2753e3dc7a984159e3dc7a1c4b3e7389478f65d114a3c755744cd9bb77a595dc24ade0f7bb2110a913956cf50a9e543d73f7c349d193da732590000000049454e44ae426082</data>
-    </image>
-    <image name="image6">
-        <data format="PNG" length="964">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000038b49444154388d8d94ad8f1c4710c57fbb6a502b1da8960266d82dcb5a0938cb20b61260331fdca0f890cf30ff82cdc24203131a949c99c3cc6e2f20f6594ace0b2c791644ee91724a1758690b8cd401b3bbbe8f58f2909a373dd5fdfabdaa1a9cbd3c030704dc1d110107732b8e33aec6dbf595af00c0c171cc0d1c541451195ccc0fe6868a7235ba3bf7beb847b68c88606e5452e1ee448d64cf4489346d43fe3b5fcb1f9cbd3cbbc474c31c28826c71d4080e2b5697fe771c0011195ccc1f9adb9611021b9c2ce19dd35a0b1d346d433a4f97b02d8da66da0e35afee0031a97d65a54b5677381f9466364fdea8e8a0eae7a34bc7a92b9e19df71b2d7d8b374ccd0d422f8188903d5fcb4760b8314a45b70e5b670882eee816ab2874fd3a617d0b8711a36bf91fd4b8d20ac7f1ae67ac41b74ccd6dcbdc3b67c5ea7f3d0a574f52519a45c38d4f6f507d52f5b26c34bd101d4710d2abc47c3e2f31d6b8fa60b3dfa53a964ecac9e909e95502615b1db5d6a4f672dc68bc6816cc7e9f91fe494c3e9f94fdfbfb8cabf1605bc74039393d8573272d331aa4d736e8b5e801ea50938361e799e727cff173272d13773ebbc9f4e1b4672c9d94d337a73cb83fc5a537c6ac4544c96ec44d44c8eecce53547fe33fbec539f2ab33f212d1202ccfe989196195ecc5e941f7ffaa5947fcb473defcabb3229932245caa44ccadbd76fcbf74f7e287bb7f64a55ed16552dbbd56e19364dc3a3c3af21f2518f204cb9cb840953a68c27631e3d3c64ffab7d00cc0c8020a3489ae7bee7cd41a56faa75078982b8e0c276fd5bfb8ea934d456d348626599f1ee04d69de9405834736210529789ab11898c7ac424a32e188e123149a8d71809a5c6c9349e686911175efe355b8fa3be22871a94dc419448f28c8e224e463bc13024084e463aa525214169c9d009464b153606bfd7d27186160cb293524211da9c1084b63384bec470c1ba1675c5962deaf4988a76d932a29f19ebb9c4cd5b77186aa7fdb583e038da292d2dda29e6eb282dda55182d1aaaf54d94d61748505664a2d63850551587870f08168cd54248642235591aa2d734cc8952d3f88288d0c88288d2b2e86f42cf38752d919ac66688c0e3278f99ec4e0683e3e7c7e5e8e911bffef60c5faea87722b97346817e9a05c582231bbc53635dde6209115b26d8111e3d3ce0eeedbb031c06c7b3635494f9625e8e9e3e23bd69b606f4d5e3ef4d5997d3cac13df7dfccd9fb728f836f0eb8bd777bb0993dff01cab5b02a5446dedd0000000049454e44ae426082</data>
-    </image>
-    <image name="image7">
-        <data format="PNG" length="332">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000011349444154388ded94316ec3300c45bf8c0c1c95737872bac953ae90fb049d3275ed39bcf4009ae26ecea473582337760868d98ed3b8a83214e8247c80fc7afa2268421700064000338388b2e822720408881c4144c8a54de8425652d5456e52d5e659196f224758b25873d6ae95abcb16407f7503e3fdb445b5afccb87ec8f8c57d4a68f76689a4dc3592ccee9fe3fe8118e8513a2fe736dd5cbb8b24b21ea13b98fb2fe9e1bd17251f322e9d97f1cd73fd2853ad0fddc14ce6784c964c09e7b6326ba641eb556f2c5930f3c3cc2c598001ad9f6bed533dccf1d43491af9d5bed575de8cd53e24450bb8b7c473aef57bd98f14fc9f54fde4e997645f3d1c8f175f94f7eb52b92e9edf43c6d57fcefe33f9cf117ee4652090af6075b0000000049454e44ae426082</data>
-    </image>
-    <image name="image8">
-        <data format="PNG" length="331">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000011249444154388ded94314ec4301045bf238a29bde748b7540451ec15720e7a2a8410153de770b33d747498cae788cbdf99229a8d6d1176858c041295f5953fa3973fa331c10780000420091169a2bbc808081019212268a54df0a129a9eaae35a96af353199f454658b1d0d7ed5dbabddb009866370860d6c18fa6f6afbd45c6fdd6256df2d5fbf67a613e23edb72e053f1a920bb1db2f4dd7c82e87f7044c381f9e13c0c2a750053108f4c34bd2a6c732ccff2cf8d1d4bad863cdf494e9073f1af597f12dfece8a05a90322545bb100b1aae7e6ac66b0d41ff6583f9ebaa735695ddf29899a8e91e683ca49ebfa43c60ff75966df20ad335edde3a7c70d76573bd3e456e4d3bebe997ee7adf8bfc77f38e30ff0b051a77540fd050000000049454e44ae426082</data>
-    </image>
-    <image name="image9">
-        <data format="PNG" length="392">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000014f49444154388dad94319683300c44bff3b65049cee12ad039b7e0a029b90194a4f23942e94e5b38ce0231c49b84863792b047c348c68f1e022010424044be820f539840600a1322c21c37aed15cde3aabb9fa393e54521142a0920a022c302b7ccfa7f853fd0c1f766f26df498a6f752a2291f1d6cd39666777d6ad4ee6785763005b5b9de701fce8cd471afbc11b60915fe3f7348e041feeb0ce2ab05b9fb029f1b1ade38149868f7d3c77477a8aea85c8b864a21ad7a81fbc299dc0971ac709ec14c0baeee5c415f938faf6aa0f6d89d8d617fdc8c78debb41f4e06feb4ee8793f1636b6c7dd1b77c7c7657f5436be2043eef8e74f8bf7cfc60bade0d77e6a97e8ff9cf16d3f477173b836766702cd3186e191f2f19beaccf690cc7cc96cbe76d7d513fb6a64863b82d70fa38e17e3899c6753a8f17ef0a5b5f148ec00d3fb645bb618d4d3ff454523185e9abef5ffff067bdb537e4820000000049454e44ae426082</data>
-    </image>
-    <image name="image10">
-        <data format="PNG" length="388">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000014b49444154388dad943d6ec3300c853f1a1ed8cd3987a77aee92b540979c25e894ad193bb6d7c82d92d19bcf118fdcd84151632bb283fc10101e6852f4d31329e9da0e0c50303354f5297ed15b0f0abdf5a82acff2057066ac6b3bb9877901e0eed9055037b5dfc35c425d4744464ce3b788b7322f868552b6c3d8adccaf32861fe0082cb2d8b5abec49fe0be72c14fec27d3311ff068cae5d496f3d9556442c8645d2157eb8c8c68319ef6f1bea66e7955698199556f31a9f4f719cbd83e5072c4fc5871a97e3638f2d657c1983f52750c20b1bea66eb51f3324dbcb4e34c5c11d98efcbad979d7aee421c6eeeb8b3d22bf603cca7822ff118d7316f39fa0713e5f5543bbe57af8dcaff93ecee712f20dcafd612fc38949b16e767e2b6314ca746252ff5e8d8b6bafd4d4e4cd4daaaa06c639a6d187c56908f2af5b160dca296d23ee0fafb377904314fe007d2bae327b681b220000000049454e44ae426082</data>
-    </image>
-    <image name="image11">
-        <data format="PNG" length="481">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000001a849444154388dad953d6edc3010853f1a2ca6a4cee12a109042be45ae11b5420adb0802af8b40299523490102783b9e432aa710c0149436b2c4fdc37a006134e4e0cde3d38863fcde830202aa8a887c486c071d70e248f987e221b0b2b66bcdb1fca5377eef5155f222df800084c5aa31a90c78ebdecc9af9dda0c345a0a978b6bcc8c3a003080c3a2022182000343f1b7a2dc9a4a1fc561e80962c97712a7fc9dc00a1796de8c712b135d56385ffebcf6a78fff99efab546c78acc36948f257eefcdbc7f07d08fb1b28e15003a2a4e1c8ce0c425e398579149241517a67d552c80d83a1ecb3640495ee469315796d92887d81aa80e1a3b7111f85059cb77da5de321768313074a94625979667e6d0c2022ccdd6180f0f283a34c9ebf37400f6467fc33bef366eee38dc65b263d213c1dd5d9981d213cc5363ca5f156bb6602f8bd611ac2d7296602df05bfff625022f0290d23081348cafac3db12dcc2ff3ebe85f11afc228dcf3136e617f1069a8bcaed1aa73eac31bb8fd038651937699cf2f1043db45d0bf1ea3cf2bc846b0dea60cecdbcbcf8132efbf3defb9333cf89a3ed3e5d34e3d6fe1fce790a1a366d83200000000049454e44ae426082</data>
-    </image>
-    <image name="image12">
-        <data format="PNG" length="813">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002f449444154388dcd95b16b1c4714c67f7ba878072a6641c52ea4b885b838438abbca27707122297ca92c7023e34aff496aab7665d23985412e42e4222005124bddad205cc660c31ce860a710ec831cec2b0e36851d2576224b1015a91edf14331f3fe67d5f329bcec000013343446e4477d41404d41411e1a674329bce2e5ed2a86d380bf885879550af94623d23fd2c65d01f2048725de7c9abe3573871f8b96f7d19a0d7657334a616239514ff7aca6f4725e90a26e309ac933871a8299f9ac96c3a23cc437bf0fd01b7bf1c32d9d905a0a121fe6ec89a512d6bcaef0eb04564e7feceb59c77a2c6b62c4b868f268cee6f5335354d05d177716f53c24f869d2bf95743c8320e4f0eafc5b8539fd5d04b998cbf8615e49a125ed7340402819c023b2a108362d4272e941043ebc48181138799f1b1ee940bcfe6784c45832d617a1ad0cc135d40255011c810aa79857329cd06586557fe8e8eac04b79e02865f0b70a7c1441013b00c2705a57a2413546bf28d1c1ffda54effd41d354557465557b815448d0886cd1dd9f96dbcff01f922a066c81274d590925ecdd889506b4d972e510d8750694d468eff750a034337de9fafbdbbbc91e652a7178c655dd04545a5150254b102e9e2b5a49b29d1145b0ad122b2841003c35bc3ab190ffb43fccf2788099506ba2268acc929a8e70d18344b457084334f5f72dcbabb9ab13849faaee0f0e53e268e4a15b706657388ba08185a43a802761ac83fcf497b297eee5b56b49f60ec280605c5d251bf382247b0a551141952408623b71af74bc5e69d4d468351323d9d72f2e3097b4ff630b5f6df9c5f6445d4d8863270fc768a6c7441841447751e90156c8db7e8f7fac9fb2c689f3d7fc6fe8b7d9c73ec3ed8a51814642e4b3ec88abfefba99b53e785882ad19bdbc47911520241f6743e9cb76ffdb7dfcc2b37d6f9bc1dd01fd5e3fc1f8cbf1556975d98c1adbe397c73c7dfe943ccb79f8e821e3d138f9208fff4b738437a1dd7bb247755e31b93779b77937d11cf9ad3c79fccd63b6ee6ea1aaff64fcbfefbc3f004cfca890af0c20980000000049454e44ae426082</data>
-    </image>
-    <image name="image13">
-        <data format="PNG" length="357">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000012c49444154388dbd93314b033118869fbba647ef0615c445844ec2890e4510840ec5ae76ed24b84a870efe09577f43057f4441872a85fe00876ed2dbb45089508a434997f62a479adc1de20319f2e5cd9b2fc9f7c11fe3e4dd580f6bea7026017805b60e8e19f41f1d6113e8ccda174dd5f2be21fa8428e26c3a65e4f90c006113e8d8f17d8e764b309940a1c010182dd7844db011a5d60390bf0d4d021d43779bbb8f31b87bb0efd12d06bcbc3d39b0fc9466a3ad2a3f639012a4a45b0c989f5e02d07fb8d5be63f5fa5e99d663d14aa89bdbe200aee166f1e9c9434c99190d571b03e1530f6beaa65c5127bd0e5fbd0ee7d52b6d8642174c12be3fd32a975295552ac32c6565bd724ccab24a95a1a9ee92c4c12cbd6c22572f5b0d73f5f206d69f92a197ad196679f47f67018ca6ae9f317b831f0000000049454e44ae426082</data>
-    </image>
-    <image name="image14">
-        <data format="PNG" length="293">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000ec49444154388de594310a023110459f626167a3a508622762ab8d0710d28b6710b1f216b61ec10be400769ec003085662b7bbe5e25818259b8d9155bbfd30ece4c33cfe40b2503a557c66136418183a029737ac9aed28a5446b4d175806801b031c032d600fc46ec206c83400b175003ac016e8038347ea6cc236b05bad204d218a208e4d4510278fdef8f3db8d9981b9aae61c11ab7f9664fd80f2c00c58f2de07b03fa13bf4b784be9485816e1ab1be5fad9c8163017e59f9b5a9811458dd0314abccd9be3e8e16c029087467c467c21a180157a548ac17f76aea203ddf0e1e9d81895268adbd3f9792e90ed89068fc076f740e0000000049454e44ae426082</data>
-    </image>
-    <image name="image15">
-        <data format="PNG" length="362">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000013149444154388ded93b18bc23018c59f22e2dcc5c1dda5e36dfe01b738fb4764cfdebfe566a92024507470912c45b2e874c36d07158c48a4229c7c37dcd533d7d62aaebe31213fdef7bd17e02900586f0ff4c8bd23a51471ce293169e1a3c4a4c43927a55435d418439ee71100628cd17f27ebed81186304803ccf2363cc75e878b622210401384333a78949cf30002484a0f16c55ed723459e4a05fa7530e369a2caa61afeced0500c22876a0beef3bb0308a6f0f25d374be74a0196c3a5f5e85d5cb2efc6e07524ae74c4a09bfdbb9db1c92cdded95910046e509bfded235f5603bf63be7f7ce682baa9dc45d518ca9f020fa52aadd4a59c1db69a75586b010042081c1b6d0cfabd1a000cfabddab1d18610020060ad45ab591ac19f763625ad756935c22826ad35ed6cf1d77cea717d03dc78fca1d0ca823b0000000049454e44ae426082</data>
-    </image>
-    <image name="image16">
-        <data format="PNG" length="724">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000029b49444154388dadd44d48d3711cc7f1f7ffef1efe66cbd49c64ae70963d6196a3a22288ea10158125f480594a8b121112f2dca17ba343e4a1c22e1d3c847810bb649d7ac0ca32b4959a5be53637da967bf261df0e913dd116b3cff9c78befeff7fd7e7ff08f396ab7cbf2ca7d02088a2245abb6495d5393fc7e4e970e3a73e182dcbe7e03bf2fce8143fbd18ed5a066e989c762bc7cd28bce982375e7eddc74381400251da8d74c72fcdc4536566e607dd9322cc5661455cfd32137cef75ec6de0e70e7da65661251256d85ab77d64971de2cb6aa4decdeba9e32cb524451998c4db3795d29e1e80c3a7d15bb0e9ee043202943bd37153515181c77b276d336d6584bb05a8a99e11be6fb3c89d3ed271c89b330db40e5f6bd4c8cf4019012f4be7b84c1a8b1ce5a8c4ea723129b622214c1ed0be1744f2002d99a81bcdcc5045cfde94180a9448270348e3f14c51f8ce0f204191cf3313b9b24994c62ca36a0283f9a9d12cc2d5a493432c9c33e27e3fe202eef675e8f7a989e9e0111f24c1aa61c233e7f80821595409aa6142caf60e8f9237216e5110c47995535445131e8b2589463c4ba2c9f81779f78f5f83e05960a0263fda92b1c797a5779dcdbc58791378c8eb9201142531298730d2cc9d518fde8e7c5b33eee77b6b3a32a1f80acbf61f69616f17e597029ec1d6678b01f9dc14896219bc4d4346e4f8051978707f7bae8ba7d85ea93b5dc696b4b39d8a2d7eb515515bda988c2521b53b130937e1721cfdbb9f72db4dad8b9b9885b57affe7d41cacbcba5a7a7471c0e8798cd66b16e39f2c7befe734c26937476764a7373f3b74f00c4ded27236534fbabbbb7fc18ed4d7675c9d747474486b6beb1c76f8f4e9ccaf5adbd8289aa6494949890052d3d09039f63dd5a74e092047edf6f9633f67cff976db7f05e79baf979615d18af3d67a0000000049454e44ae426082</data>
-    </image>
-    <image name="image17">
-        <data format="PNG" length="291">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000ea49444154388d63601800f01f8dc60b98081976fffa59149a90c1840cc400840c26d9402c06936ea0bfaf270a8d0f1065200b330b0a8dcf606c0662844f4f7b030a0d33181b6044370c1a360c8a9ac60cfebe9e0c13ba5a703b1daa0ed91c0c17be7cf59a81810112e8f85c42ac0b19181818fe9f38b883415c4c94280308ba90818181d1c2de83e1e6addb24bb0e97810c0c0c0c0ccf5fbc26ca80e0005f54d7e051fb7fcfd6350cca4a8a38151c38748c21313d17c50c7c061234143dfc181808276cc6e9b317e2741d3607117221030352da24e43a0606060662121ae393a7cfb1952cc4386610020077ef492769917c7a0000000049454e44ae426082</data>
-    </image>
-    <image name="image18">
-        <data format="PNG" length="489">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000001b049444154388dad94318b134114c77f231b37fb252c22683a0f246c21889c7b4d209d04d3d8257247aeb1085aa5b5ba14e709ba5fc042b04db16b1b5610b4f2c44efc0c373b97856791ecba43925d0feec114f39f3fbf796fdf9b856b0e059024895c07ccf77de5e49b0f9f7fef349ebc7cc28bd71f2b614ff76f01e094c52f3ffe6c18e3f018a514a9c9783c3cad05dea8ba350ac7dcbd739be9744ad37588de8f2bb3ac0446e118cf6dd0eff799cfe70078cd0651580d75761d04c33768930182e736d0e965a15f29c37206c1f094f520acf6a3b3adbe9dc0bccc721438a52cdd732bca4f92445293092093c944b4598a3699a4eb05acb565a175bbdd427ff06c26d62c8b8800329bcda4d7eb0950bb068381b4db6d012435990d2c6708884e2f576b9dd5362d080201e422355686c5377c75f2096d96c525c1e86ca3a3652d8a22746a3818bdb53c565356a3b2b4baa9f2b6949af2cf67c33680b9398f383cb6ceec91da3e8f952fa5e93a1c1d8ee8743aec3f7a583d2a75c0bcac388e69b55a2c160b746a6a5fcacea79743cf7ffec26bdee4421b0e9ebfab84c17ffe60efeddde7fbb7afb530dff755ade9aaf117ede7017fd166f7090000000049454e44ae426082</data>
-    </image>
-    <image name="image19">
-        <data format="PNG" length="194">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000008949444154388d6360187180114aff67606060f8ffff3f449011224c2a9f818101cefa5fd8be9ae12f428224f0f9d32786f96d490c0c0c0c8c2c309b8a3ad6309cbdf6982c03fffefacef0ffff7f064646460626b24cc00398181850c2806c003383362e84c516250066c66818920f681f869f3e7d66f8fbeb3b79f8f74f781852bd70a0b68f8700000095306a05387185530000000049454e44ae426082</data>
-    </image>
-    <image name="image20">
-        <data format="PNG" length="595">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000021a49444154388dd5d23d4c536114c6f1ff7bfbb6de0285044ab051c3808932397477d138b8a126184d1c1848747161a22361234417874eba68a8316d62621d19544a4c6f34d49ad036312ed434a54249bfeeed3d0ea021825284c5673cc32fe7e4398a43662d9711e5d45062a3105c34e2f1133a774101a8c360c5d58f62381b60d440db2805627b10c704ddc7d0f9b0ea185c2b7c16a35946e9ef78cc0a1e5f09a445db19c4ad07715bbd882f88ee783da781520d0c730baf59c067fa50b834eb595aee28caf122ed3a46a79e216d500ecaa8468526763d806bf7a30c014a082d94eb7406e65657270540606bb336b9f46e91ae1e8def844b3e9fa1bad9c06ed988703098cbe5c2e572392a4ab351a971e3ea7dae5cbe85c8175c29f0fa558af59297664d7095fe3bb883a58bc5a2ac57eb5cbc748d278f9ff166b18221616e8f3f6064789c66b51b57fc69b4ffcfa5ecc63e65b35c1f1b23fd76919789a7c416a2048270e7e63d067bced2dd750a6f6028acdb15b52fb81bcbe7f3442211ac749a17cf1778f4304a9f099377239c3e334c6ff02481c1107edd54aeeedbfbd8bf635353535896453c1e67666606af820fef97547fc0cfd76f15191808d2ad1d8536098d8ceec552a9148944426667670510cbb2647a7a5ab63b46322b2b07f5b8179b9b9bdb1fcb64fe770c607979f9f830806432c9fcfcfcf1603f41402626268e8ec1f6c9808442a15fd8ceecdf52281488c56247df6c273f00be4878faa7759b100000000049454e44ae426082</data>
-    </image>
-    <image name="image21">
-        <data format="PNG" length="301">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d000000f449444154388dad93310e824010453fc6d0714d2bcfa1b1b1066e61e509ac6c4c2c3496da61a5091ac5e5db0059969d459049b6d9ccbc79c32cc0c0e1752d20c91ac0f39a0c33498a7bfa2600fabe4f002c4a9bb52cc205cb735610f3e8b5234d5d349dce56137d309270f62f40f208961ca96664164aa64992d4cc6cbbb076ef626acb6b18b699ea57249dcfa675837abe34816828996659c620089cafc269589ec7f34533d7061cbbec48e2a3729cce376c0f4969ec9520ebf713ba1200c330fce997148165e7288a2ae8225e77879a5bd32de7cbb81fd0bcd32d37fb6bbfd12d4d0880bbe3e57f200028a598a6e930b0bef10560531a01acb34b4e0000000049454e44ae426082</data>
-    </image>
-    <image name="image22">
-        <data format="PNG" length="382">89504e470d0a1a0a0000000d494844520000001200000012080600000056ce8e570000014549444154388d9d93bf4ac35014c67f27694b528a16c50ee22a185c44706a4174d5b56bc78243217d09d776ce58f0210a4e9a800fe0d0b5ddb4508850ac835c1793a6699236fde0c2bd97f3fd39078e00dc9e5dabd36f1f805760efe49c37ef49c88142e7a6a91e4a5f30f984c984abf99c71c9446ff554b4d035ecf02e8eac996855d3c4aad5b02a152c5de7600bf77acc04a0008052cb03f88037e84a8408b042aeb77a2a5a23cdfb8ebaf89982ef83ef332c96f9bdbc136fd0cd4a140abb862de2081a200927284e8437e8e21a7630374540ca70259e2cf8770d3b6c551c112dcb359e2c4d3c335100d55eceb8b1e88722aaad682cfaea5f383d5156ca24e4128aa2b1e8afbc0b9b08e26cb7293b275a33dc8594b4e41b5b8b236dc9730b554d13ebd080d90c749d113066d719252c79ee44236d9fc78f296847705c62582cf3f2fe2c7fa0977c054fd7d5cf0000000049454e44ae426082</data>
-    </image>
-</images>
-<connections>
-    <connection>
-        <sender>fileNewAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>fileNew()</slot>
-    </connection>
-    <connection>
-        <sender>fileOpenAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>fileOpen()</slot>
-    </connection>
-    <connection>
-        <sender>fileSaveAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>fileSave()</slot>
-    </connection>
-    <connection>
-        <sender>fileSaveAsAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>fileSaveAs()</slot>
-    </connection>
-    <connection>
-        <sender>filePrintAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>filePrint()</slot>
-    </connection>
-    <connection>
-        <sender>fileExitAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>fileExit()</slot>
-    </connection>
-    <connection>
-        <sender>editCutAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>editCut()</slot>
-    </connection>
-    <connection>
-        <sender>editCopyAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>editCopy()</slot>
-    </connection>
-    <connection>
-        <sender>editPasteAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>editPaste()</slot>
-    </connection>
-    <connection>
-        <sender>editFindAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>editFind()</slot>
-    </connection>
-    <connection>
-        <sender>helpIndexAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>helpIndex()</slot>
-    </connection>
-    <connection>
-        <sender>helpContentsAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>helpContents()</slot>
-    </connection>
-    <connection>
-        <sender>pluginsAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>plugins()</slot>
-    </connection>
-    <connection>
-        <sender>helpAboutAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>helpAbout()</slot>
-    </connection>
-    <connection>
-        <sender>grid_option</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>gridOptions()</slot>
-    </connection>
-    <connection>
-        <sender>make_acyclic</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeAcyclic()</slot>
-    </connection>
-    <connection>
-        <sender>make_simple</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeSimple()</slot>
-    </connection>
-    <connection>
-        <sender>make_biconnected</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeBiconnected()</slot>
-    </connection>
-    <connection>
-        <sender>is_biconnected</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isBiconnected()</slot>
-    </connection>
-    <connection>
-        <sender>is_triconnected</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isTriconnected()</slot>
-    </connection>
-    <connection>
-        <sender>is_planar</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isPlanar()</slot>
-    </connection>
-    <connection>
-        <sender>is_simple</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isSimple()</slot>
-    </connection>
-    <connection>
-        <sender>is_directed_tree</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isTree()</slot>
-    </connection>
-    <connection>
-        <sender>is_acyclic</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isAcyclic()</slot>
-    </connection>
-    <connection>
-        <sender>make_connected</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeConnected()</slot>
-    </connection>
-    <connection>
-        <sender>is_connected</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isConnected()</slot>
-    </connection>
-    <connection>
-        <sender>Reverse_selected_edgesAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>reverseSelectedEdgeDirection()</slot>
-    </connection>
-    <connection>
-        <sender>editCreate_groupAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>group()</slot>
-    </connection>
-    <connection>
-        <sender>editCreate_subgraphAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>newSubgraph()</slot>
-    </connection>
-    <connection>
-        <sender>editDelete_selectionAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>delSelection()</slot>
-    </connection>
-    <connection>
-        <sender>editReverse_selectionAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>reverseSelection()</slot>
-    </connection>
-    <connection>
-        <sender>editSelect_AllAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>selectAll()</slot>
-    </connection>
-    <connection>
-        <sender>editDeselect_allAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>deselectAll()</slot>
-    </connection>
-    <connection>
-        <sender>addEdgeAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setAddEdge()</slot>
-    </connection>
-    <connection>
-        <sender>addNodeAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setAddNode()</slot>
-    </connection>
-    <connection>
-        <sender>deleteAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setDelete()</slot>
-    </connection>
-    <connection>
-        <sender>zoomAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setZoomBox()</slot>
-    </connection>
-    <connection>
-        <sender>navigateAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setGraphNavigate()</slot>
-    </connection>
-    <connection>
-        <sender>moveSelectionAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setMoveSelection()</slot>
-    </connection>
-    <connection>
-        <sender>magicSelectionAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setMagicSelection()</slot>
-    </connection>
-    <connection>
-        <sender>selectionAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setSelection()</slot>
-    </connection>
-    <connection>
-        <sender>selectAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setSelect()</slot>
-    </connection>
-    <connection>
-        <sender>is_free_tree</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>isFreeTree()</slot>
-    </connection>
-    <connection>
-        <sender>make_directed</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>makeDirected()</slot>
-    </connection>
-    <connection>
-        <sender>editEdgeBendAction</sender>
-        <signal>activated()</signal>
-        <receiver>TulipData</receiver>
-        <slot>setEditEdgeBend()</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>setEditEdgeBend()</slot>
-    <slot>fileNew()</slot>
-    <slot>fileOpen()</slot>
-    <slot>fileSave()</slot>
-    <slot>fileSaveAs()</slot>
-    <slot>filePrint()</slot>
-    <slot>fileExit()</slot>
-    <slot>editCut()</slot>
-    <slot>editCopy()</slot>
-    <slot>editPaste()</slot>
-    <slot>editFind()</slot>
-    <slot>helpIndex()</slot>
-    <slot>helpContents()</slot>
-    <slot>helpAbout()</slot>
-    <slot>plugins()</slot>
-    <slot>gridOptions()</slot>
-    <slot>makeAcyclic()</slot>
-    <slot>makeSimple()</slot>
-    <slot>makeBiconnected()</slot>
-    <slot>makeTriangulated()</slot>
-    <slot>isBiconnected()</slot>
-    <slot>isPlanar()</slot>
-    <slot>isSimple()</slot>
-    <slot>isTree()</slot>
-    <slot>isTriconnected()</slot>
-    <slot>isAcyclic()</slot>
-    <slot>makeConnected()</slot>
-    <slot>isConnected()</slot>
-    <slot>reverseSelectedEdgeDirection()</slot>
-    <slot>reverseSelection()</slot>
-    <slot>delSelection()</slot>
-    <slot>newSubgraph()</slot>
-    <slot>group()</slot>
-    <slot>selectAll()</slot>
-    <slot>deselectAll()</slot>
-    <slot>setAddEdge()</slot>
-    <slot>setAddNode()</slot>
-    <slot>setDelete()</slot>
-    <slot>setZoomBox()</slot>
-    <slot>setGraphNavigate()</slot>
-    <slot>setMoveSelection()</slot>
-    <slot>setMagicSelection()</slot>
-    <slot>setSelect()</slot>
-    <slot>setSelection()</slot>
-    <slot>isFreeTree()</slot>
-    <slot>makeDirected()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>qworkspace.h</includehint>
-</includehints>
-</UI>
+   </layout>
+  </widget>
+  <widget class="Q3ToolBar" name="toolBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>122</width>
+     <height>37</height>
+    </rect>
+   </property>
+   <property name="label" >
+    <string>Standard Tools</string>
+   </property>
+   <addaction name="fileOpenAction" />
+   <addaction name="fileSaveAction" />
+   <addaction name="filePrintAction" />
+  </widget>
+  <widget class="Q3ToolBar" name="graphToolBar" >
+   <property name="geometry" >
+    <rect>
+     <x>122</x>
+     <y>0</y>
+     <width>327</width>
+     <height>37</height>
+    </rect>
+   </property>
+   <property name="label" >
+    <string>Mouse Interaction Tools</string>
+   </property>
+   <addaction name="navigate_action" />
+   <addaction name="selectAction" />
+   <addaction name="selectionAction" />
+   <addaction name="moveSelectionAction" />
+   <addaction name="magicSelectionAction" />
+   <addaction name="zoomAction" />
+   <addaction name="deleteAction" />
+   <addaction name="addNodeAction" />
+   <addaction name="addEdgeAction" />
+   <addaction name="editEdgeBendAction" />
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1005</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="fileNewAction" />
+    <addaction name="fileOpenAction" />
+    <addaction name="fileSaveAction" />
+    <addaction name="fileSaveAsAction" />
+    <addaction name="separator" />
+    <addaction name="filePrintAction" />
+    <addaction name="separator" />
+    <addaction name="fileExitAction" />
+   </widget>
+   <widget class="QMenu" name="editMenu" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="separator" />
+    <addaction name="editCutAction" />
+    <addaction name="editCopyAction" />
+    <addaction name="editPasteAction" />
+    <addaction name="separator" />
+    <addaction name="editFindAction" />
+    <addaction name="separator" />
+    <addaction name="editSelect_AllAction" />
+    <addaction name="editDelete_selectionAction" />
+    <addaction name="editDeselect_allAction" />
+    <addaction name="editReverse_selectionAction" />
+    <addaction name="separator" />
+    <addaction name="editCreate_groupAction" />
+    <addaction name="editCreate_subgraphAction" />
+   </widget>
+   <widget class="QMenu" name="propertyMenu" >
+    <property name="title" >
+     <string>&amp;Algorithm</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="graphMenu" >
+    <property name="title" >
+     <string>&amp;Graph</string>
+    </property>
+    <widget class="QMenu" name="popupMenu_23" >
+     <property name="title" >
+      <string>Tests</string>
+     </property>
+     <addaction name="is_simple" />
+     <addaction name="is_directed_tree" />
+     <addaction name="is_free_tree" />
+     <addaction name="is_acyclic" />
+     <addaction name="is_connected" />
+     <addaction name="is_biconnected" />
+     <addaction name="is_triconnected" />
+     <addaction name="is_planar" />
+    </widget>
+    <widget class="QMenu" name="popupMenu_32" >
+     <property name="title" >
+      <string>&amp;Modify</string>
+     </property>
+     <addaction name="make_simple" />
+     <addaction name="make_acyclic" />
+     <addaction name="make_connected" />
+     <addaction name="make_biconnected" />
+     <addaction name="make_directed" />
+     <addaction name="separator" />
+     <addaction name="Reverse_selected_edgesAction" />
+    </widget>
+    <addaction name="Action" />
+    <addaction name="popupMenu_23" />
+    <addaction name="menunew_itemAction" />
+    <addaction name="popupMenu_32" />
+   </widget>
+   <widget class="QMenu" name="viewMenu" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="dialogMenu" >
+    <property name="title" >
+     <string>&amp;Dialogs</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="Options" >
+    <property name="title" >
+     <string>&amp;Options</string>
+    </property>
+    <addaction name="force_ratio" />
+    <addaction name="map_metric" />
+    <addaction name="enable_morphing" />
+    <addaction name="tooltips" />
+    <addaction name="grid_option" />
+   </widget>
+   <widget class="QMenu" name="windowsMenu" >
+    <property name="title" >
+     <string>&amp;Windows</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="helpMenu" >
+    <property name="title" >
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="helpContentsAction" />
+    <addaction name="helpIndexAction" />
+    <addaction name="separator" />
+    <addaction name="pluginsAction" />
+    <addaction name="separator" />
+    <addaction name="helpAboutAction" />
+   </widget>
+   <addaction name="fileMenu" />
+   <addaction name="editMenu" />
+   <addaction name="propertyMenu" />
+   <addaction name="graphMenu" />
+   <addaction name="viewMenu" />
+   <addaction name="dialogMenu" />
+   <addaction name="Options" />
+   <addaction name="windowsMenu" />
+   <addaction name="helpMenu" />
+  </widget>
+  <action name="fileNewAction" >
+   <property name="icon" >
+    <iconset>image3</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;New</string>
+   </property>
+   <property name="iconText" >
+    <string>New</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileNewAction</string>
+   </property>
+  </action>
+  <action name="fileOpenAction" >
+   <property name="icon" >
+    <iconset resource="TulipResource.qrc" >:/i_open.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Open...</string>
+   </property>
+   <property name="iconText" >
+    <string>Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileOpenAction</string>
+   </property>
+  </action>
+  <action name="fileSaveAction" >
+   <property name="icon" >
+    <iconset resource="TulipResource.qrc" >:/i_save.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Save</string>
+   </property>
+   <property name="iconText" >
+    <string>Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileSaveAction</string>
+   </property>
+  </action>
+  <action name="fileSaveAsAction" >
+   <property name="text" >
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="iconText" >
+    <string>Save As</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+S</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileSaveAsAction</string>
+   </property>
+  </action>
+  <action name="filePrintAction" >
+   <property name="icon" >
+    <iconset resource="TulipResource.qrc" >:/i_print.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Print...</string>
+   </property>
+   <property name="iconText" >
+    <string>Print</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+P</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>filePrintAction</string>
+   </property>
+  </action>
+  <action name="fileExitAction" >
+   <property name="text" >
+    <string>E&amp;xit</string>
+   </property>
+   <property name="iconText" >
+    <string>Exit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileExitAction</string>
+   </property>
+  </action>
+  <action name="editUndoAction" >
+   <property name="icon" >
+    <iconset>image7</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Undo</string>
+   </property>
+   <property name="iconText" >
+    <string>Undo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editUndoAction</string>
+   </property>
+  </action>
+  <action name="editRedoAction" >
+   <property name="icon" >
+    <iconset>image8</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Redo</string>
+   </property>
+   <property name="iconText" >
+    <string>Redo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Y</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editRedoAction</string>
+   </property>
+  </action>
+  <action name="editCutAction" >
+   <property name="icon" >
+    <iconset>image9</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Cut</string>
+   </property>
+   <property name="iconText" >
+    <string>Cut</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+X</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCutAction</string>
+   </property>
+  </action>
+  <action name="editCopyAction" >
+   <property name="icon" >
+    <iconset>image10</iconset>
+   </property>
+   <property name="text" >
+    <string>C&amp;opy</string>
+   </property>
+   <property name="iconText" >
+    <string>Copy</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+C</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCopyAction</string>
+   </property>
+  </action>
+  <action name="editPasteAction" >
+   <property name="icon" >
+    <iconset>image11</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Paste</string>
+   </property>
+   <property name="iconText" >
+    <string>Paste</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editPasteAction</string>
+   </property>
+  </action>
+  <action name="editFindAction" >
+   <property name="icon" >
+    <iconset>image12</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Find...</string>
+   </property>
+   <property name="iconText" >
+    <string>Find</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editFindAction</string>
+   </property>
+  </action>
+  <action name="helpContentsAction" >
+   <property name="text" >
+    <string>&amp;Contents...</string>
+   </property>
+   <property name="iconText" >
+    <string>Contents</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpContentsAction</string>
+   </property>
+  </action>
+  <action name="helpIndexAction" >
+   <property name="text" >
+    <string>&amp;Index...</string>
+   </property>
+   <property name="iconText" >
+    <string>Index</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpIndexAction</string>
+   </property>
+  </action>
+  <action name="pluginsAction" >
+   <property name="text" >
+    <string>&amp;Plugins...</string>
+   </property>
+   <property name="iconText" >
+    <string>Plugins</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>pluginsAction</string>
+   </property>
+  </action>
+  <action name="helpAboutAction" >
+   <property name="text" >
+    <string>&amp;About</string>
+   </property>
+   <property name="iconText" >
+    <string>About</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpAboutAction</string>
+   </property>
+  </action>
+  <action name="force_ratio" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Force ratio</string>
+   </property>
+   <property name="iconText" >
+    <string>Force ratio</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>force_ratio</string>
+   </property>
+  </action>
+  <action name="map_metric" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Map Metric</string>
+   </property>
+   <property name="iconText" >
+    <string>Map Metric</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>map_metric</string>
+   </property>
+  </action>
+  <action name="enable_morphing" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Morphing</string>
+   </property>
+   <property name="iconText" >
+    <string>Morphing</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>enable_morphing</string>
+   </property>
+  </action>
+  <action name="grid_option" >
+   <property name="text" >
+    <string>Grid</string>
+   </property>
+   <property name="iconText" >
+    <string>Grid</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>grid_option</string>
+   </property>
+  </action>
+  <action name="Action" >
+   <property name="text" >
+    <string>Tests</string>
+   </property>
+   <property name="iconText" >
+    <string>Unnamed</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>Action</string>
+   </property>
+  </action>
+  <action name="is_acyclic" >
+   <property name="text" >
+    <string>Acyclic</string>
+   </property>
+   <property name="iconText" >
+    <string>Acyclicity</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is acyclic</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_acyclic</string>
+   </property>
+  </action>
+  <action name="is_biconnected" >
+   <property name="text" >
+    <string>Biconnected</string>
+   </property>
+   <property name="iconText" >
+    <string>Biconnected</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is biconnected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_biconnected</string>
+   </property>
+  </action>
+  <action name="is_triconnected" >
+   <property name="text" >
+    <string>Triconnected</string>
+   </property>
+   <property name="iconText" >
+    <string>Triconnected</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is triconnected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_triconnected</string>
+   </property>
+  </action>
+  <action name="is_planar" >
+   <property name="text" >
+    <string>Planar</string>
+   </property>
+   <property name="iconText" >
+    <string>Planarity</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is planar</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_planar</string>
+   </property>
+  </action>
+  <action name="is_simple" >
+   <property name="text" >
+    <string>Simple</string>
+   </property>
+   <property name="iconText" >
+    <string>Simple</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is simple</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_simple</string>
+   </property>
+  </action>
+  <action name="is_directed_tree" >
+   <property name="text" >
+    <string>Directed Tree</string>
+   </property>
+   <property name="iconText" >
+    <string>Directed Tree</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks if the current graph is a directed tree</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_directed_tree</string>
+   </property>
+  </action>
+  <action name="menunew_itemAction" >
+   <property name="text" >
+    <string>&amp;Modify</string>
+   </property>
+   <property name="iconText" >
+    <string>&amp;Modify</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>menunew_itemAction</string>
+   </property>
+  </action>
+  <action name="make_acyclic" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Make acyclic</string>
+   </property>
+   <property name="iconText" >
+    <string>Make acyclic</string>
+   </property>
+   <property name="toolTip" >
+    <string>Makes the current graph acyclic</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_acyclic</string>
+   </property>
+  </action>
+  <action name="make_simple" >
+   <property name="enabled" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Make simple</string>
+   </property>
+   <property name="iconText" >
+    <string>Make simple</string>
+   </property>
+   <property name="toolTip" >
+    <string>Makes the current graph simple</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_simple</string>
+   </property>
+  </action>
+  <action name="make_biconnected" >
+   <property name="text" >
+    <string>Make biconnected</string>
+   </property>
+   <property name="iconText" >
+    <string>Make biconnected</string>
+   </property>
+   <property name="toolTip" >
+    <string>Makes the current graph biconnected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_biconnected</string>
+   </property>
+  </action>
+  <action name="make_connected" >
+   <property name="text" >
+    <string>Make connected</string>
+   </property>
+   <property name="iconText" >
+    <string>new item</string>
+   </property>
+   <property name="toolTip" >
+    <string>Makes the current graph connected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_connected</string>
+   </property>
+  </action>
+  <action name="is_connected" >
+   <property name="icon" >
+    <iconset/>
+   </property>
+   <property name="text" >
+    <string>Connected</string>
+   </property>
+   <property name="iconText" >
+    <string>new item</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_connected</string>
+   </property>
+  </action>
+  <action name="Reverse_selected_edgesAction" >
+   <property name="text" >
+    <string>Reverse selected edges</string>
+   </property>
+   <property name="iconText" >
+    <string>Reverse selected edges</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>Reverse_selected_edgesAction</string>
+   </property>
+  </action>
+  <action name="editDeselect_allAction" >
+   <property name="text" >
+    <string>Deselect All</string>
+   </property>
+   <property name="iconText" >
+    <string>Deselect All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+A</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editDeselect_allAction</string>
+   </property>
+  </action>
+  <action name="editReverse_selectionAction" >
+   <property name="text" >
+    <string>Invert selection</string>
+   </property>
+   <property name="iconText" >
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+I</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editReverse_selectionAction</string>
+   </property>
+  </action>
+  <action name="editAction" >
+   <property name="text" >
+    <string/>
+   </property>
+   <property name="iconText" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editAction</string>
+   </property>
+  </action>
+  <action name="editDelete_selectionAction" >
+   <property name="text" >
+    <string>Delete selection</string>
+   </property>
+   <property name="iconText" >
+    <string>Delete selection</string>
+   </property>
+   <property name="shortcut" >
+    <string>Del</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editDelete_selectionAction</string>
+   </property>
+  </action>
+  <action name="editCreate_subgraphAction" >
+   <property name="text" >
+    <string>Create subgraph</string>
+   </property>
+   <property name="iconText" >
+    <string>Create subgraph</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_subgraphAction</string>
+   </property>
+  </action>
+  <action name="editCreate_groupAction" >
+   <property name="text" >
+    <string>Create group</string>
+   </property>
+   <property name="iconText" >
+    <string>Create group</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+G</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_groupAction</string>
+   </property>
+  </action>
+  <action name="editSelect_AllAction" >
+   <property name="text" >
+    <string>Select All</string>
+   </property>
+   <property name="iconText" >
+    <string>Select All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editSelect_AllAction</string>
+   </property>
+  </action>
+  <action name="tooltips" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Tooltips</string>
+   </property>
+   <property name="iconText" >
+    <string>Tooltips</string>
+   </property>
+   <property name="toolTip" >
+    <string>Enable/disable the display of tooltips on graph nodes or edges</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>tooltips</string>
+   </property>
+  </action>
+  <action name="is_free_tree" >
+   <property name="text" >
+    <string>Free Tree</string>
+   </property>
+   <property name="iconText" >
+    <string>Unnamed</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks if the current graph is a free tree</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_free_tree</string>
+   </property>
+  </action>
+  <action name="make_directed" >
+   <property name="text" >
+    <string>Make directed</string>
+   </property>
+   <property name="iconText" >
+    <string>Unnamed</string>
+   </property>
+   <property name="toolTip" >
+    <string>Tranforms the current graph into a directed tree</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_directed</string>
+   </property>
+  </action>
+  <actiongroup name="mouseActionGroup" >
+   <action name="addEdgeAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_addedge.png</iconset>
+    </property>
+    <property name="text" >
+     <string>addEdge</string>
+    </property>
+    <property name="iconText" >
+     <string>addEdge</string>
+    </property>
+    <property name="toolTip" >
+     <string>Add edges</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>addEdgeAction</string>
+    </property>
+   </action>
+   <action name="addNodeAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_addnode.png</iconset>
+    </property>
+    <property name="text" >
+     <string>addNode</string>
+    </property>
+    <property name="iconText" >
+     <string>addNode</string>
+    </property>
+    <property name="toolTip" >
+     <string>Add nodes</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>addNodeAction</string>
+    </property>
+   </action>
+   <action name="deleteAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_del.png</iconset>
+    </property>
+    <property name="text" >
+     <string>delete</string>
+    </property>
+    <property name="iconText" >
+     <string>delete</string>
+    </property>
+    <property name="toolTip" >
+     <string>Delete nodes or edges</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>deleteAction</string>
+    </property>
+   </action>
+   <action name="zoomAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_zoom.png</iconset>
+    </property>
+    <property name="text" >
+     <string>zoom</string>
+    </property>
+    <property name="iconText" >
+     <string>zoom</string>
+    </property>
+    <property name="toolTip" >
+     <string>Zoom on rectangle</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>zoomAction</string>
+    </property>
+   </action>
+   <action name="navigate_action" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="checked" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_navigation.png</iconset>
+    </property>
+    <property name="text" >
+     <string>navigate</string>
+    </property>
+    <property name="iconText" >
+     <string>navigate</string>
+    </property>
+    <property name="toolTip" >
+     <string>Navigate in graph</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>navigateAction</string>
+    </property>
+   </action>
+   <action name="moveSelectionAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_move.png</iconset>
+    </property>
+    <property name="text" >
+     <string>moveSelection</string>
+    </property>
+    <property name="iconText" >
+     <string>moveSelection</string>
+    </property>
+    <property name="toolTip" >
+     <string>Move/Reshape selection</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>moveSelectionAction</string>
+    </property>
+   </action>
+   <action name="selectionAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_selection.png</iconset>
+    </property>
+    <property name="text" >
+     <string>selection</string>
+    </property>
+    <property name="iconText" >
+     <string>selection</string>
+    </property>
+    <property name="toolTip" >
+     <string>Select nodes/edges in a rectangle</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>selectionAction</string>
+    </property>
+   </action>
+   <action name="magicSelectionAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_magic.png</iconset>
+    </property>
+    <property name="text" >
+     <string>magicSelection</string>
+    </property>
+    <property name="iconText" >
+     <string>magicSelection</string>
+    </property>
+    <property name="toolTip" >
+     <string>Selection of reachable elements with equal value</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>magicSelectionAction</string>
+    </property>
+   </action>
+   <action name="selectAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_select.png</iconset>
+    </property>
+    <property name="text" >
+     <string>select</string>
+    </property>
+    <property name="iconText" >
+     <string>select</string>
+    </property>
+    <property name="toolTip" >
+     <string>Get information on nodes/edges</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>selectAction</string>
+    </property>
+   </action>
+   <action name="editEdgeBendAction" >
+    <property name="checkable" >
+     <bool>true</bool>
+    </property>
+    <property name="icon" >
+     <iconset resource="TulipResource.qrc" >:/i_bends.png</iconset>
+    </property>
+    <property name="text" >
+     <string>editedgeBend</string>
+    </property>
+    <property name="iconText" >
+     <string>editedgeBend</string>
+    </property>
+    <property name="toolTip" >
+     <string>Edit edge bends</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>editEdgeBendAction</string>
+    </property>
+   </action>
+   <property name="name" stdset="0" >
+    <string>mouseActionGroup</string>
+   </property>
+  </actiongroup>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>Q3ToolBar</class>
+   <extends>Q3Frame</extends>
+   <header>q3listview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Q3MainWindow</class>
+   <extends>QWidget</extends>
+   <header>q3mainwindow.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >qworkspace.h</include>
+ </includes>
+ <resources>
+  <include location="TulipResource.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>fileNewAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileNew()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileOpenAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileOpen()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileSaveAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileSave()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileSaveAsAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileSaveAs()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filePrintAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>filePrint()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileExitAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileExit()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCutAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCut()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCopyAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCopy()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editPasteAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editPaste()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editFindAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editFind()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpIndexAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>helpIndex()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpContentsAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>helpContents()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginsAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>plugins()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpAboutAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>helpAbout()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grid_option</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>gridOptions()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_acyclic</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>makeAcyclic()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_simple</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>makeSimple()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_biconnected</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>makeBiconnected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_biconnected</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isBiconnected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_triconnected</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isTriconnected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_planar</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isPlanar()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_simple</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isSimple()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_directed_tree</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isTree()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_acyclic</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isAcyclic()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_connected</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>makeConnected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_connected</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isConnected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Reverse_selected_edgesAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>reverseSelectedEdgeDirection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCreate_groupAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>group()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCreate_subgraphAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>newSubgraph()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDelete_selectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>delSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editReverse_selectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>reverseSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editSelect_AllAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>selectAll()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDeselect_allAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>deselectAll()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addEdgeAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setAddEdge()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addNodeAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setAddNode()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>deleteAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setDelete()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setZoomBox()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>navigate_action</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setGraphNavigate()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>moveSelectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setMoveSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>magicSelectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setMagicSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>selectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>selectAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setSelect()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_free_tree</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isFreeTree()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_directed</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>makeDirected()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editEdgeBendAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>setEditEdgeBend()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

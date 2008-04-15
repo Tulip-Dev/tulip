@@ -3,6 +3,7 @@
 #define GWOVERVIEW_H
 
 #include "tulip/GWOverviewWidgetData.h"
+#include "tulip/RenderingParametersDialogData.h"
 #include <tulip/Camera.h>
 #include <qcolor.h>
 #include <string>
@@ -16,15 +17,29 @@ namespace tlp {
 class GlMainWidget;
 class QEvent;
 class RectPosition;
-class RenderingParametersDialogData;
+class GWOverviewWidget;
+
+class RenderingParametersDialog : public QDialog,
+				  public Ui::RenderingParametersDialogData {
+  Q_OBJECT
+
+  GWOverviewWidget *overview;
+public:
+  RenderingParametersDialog(GWOverviewWidget* parent);
+  void windowActivationChange(bool oldActive);
+public slots:
+  void updateView();
+  void backColor();
+};
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public GWOverviewWidgetData { 
+class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public QWidget,
+					     public Ui::GWOverviewWidgetData { 
   Q_OBJECT
   
 public:
-  GWOverviewWidget(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  GWOverviewWidget(QWidget* parent = 0);
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();
@@ -50,7 +65,7 @@ private :
   bool _synchronizing;
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
-  RenderingParametersDialogData *paramDialog;
+  RenderingParametersDialog* paramDialog;
   void setBackgroundColor(QColor);
 };
 /*@}*/
