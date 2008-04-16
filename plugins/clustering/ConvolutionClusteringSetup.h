@@ -3,11 +3,12 @@
 #include "ConvolutionClusteringSetupData.h"
 #include "ConvolutionClustering.h"
 
-class ConvolutionClusteringSetup : public ConvolutionClusteringSetupData { 
+class ConvolutionClusteringSetup
+: public QDialog, public Ui::ConvolutionClusteringSetupData { 
     Q_OBJECT
 
 public:
-  ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = 0);
     ~ConvolutionClusteringSetup();
 
   ConvolutionClustering *getPlugin() { return convolPlugin; }

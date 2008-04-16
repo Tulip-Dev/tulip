@@ -100,11 +100,11 @@ private:
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin,QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
-  : ConvolutionClusteringSetupData( parent, name, modal, fl ), 
+ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin, QWidget* parent)
+  : QDialog( parent), 
     convolPlugin(convolPlugin),
-    useLogarithmicScale(false)
-{
+    useLogarithmicScale(false) {
+  setupUi(this);
   histogramWidget = new HistogramWidget(this, Frame3);
   QGridLayout *flayout = new QGridLayout(Frame3, 1, 1, 1);
   flayout->addWidget(histogramWidget, 0, 0);
