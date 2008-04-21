@@ -16,7 +16,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
-  tlp::initTulipLib((char *) QApplication::applicationDirPath().ascii());
+  tlp::initTulipLib((char *) QApplication::applicationDirPath().toAscii().data());
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
   while (end!=tlp::TulipPluginsPath.end())
