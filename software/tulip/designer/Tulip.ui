@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>TulipData</class>
- <widget class="Q3MainWindow" name="TulipData" >
+ <widget class="QMainWindow" name="TulipData" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -16,14 +16,6 @@
    <iconset resource="TulipResource.qrc" >:/logo32x32.png</iconset>
   </property>
   <widget class="QWidget" name="widget" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>66</y>
-     <width>1005</width>
-     <height>823</height>
-    </rect>
-   </property>
    <layout class="QVBoxLayout" >
     <property name="spacing" >
      <number>0</number>
@@ -45,34 +37,30 @@
     </item>
    </layout>
   </widget>
-  <widget class="Q3ToolBar" name="toolBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>122</width>
-     <height>37</height>
-    </rect>
-   </property>
-   <property name="label" >
+  <widget class="QToolBar" name="toolBar" >
+   <property name="label" stdset="0" >
     <string>Standard Tools</string>
    </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
   </widget>
-  <widget class="Q3ToolBar" name="graphToolBar" >
-   <property name="geometry" >
-    <rect>
-     <x>122</x>
-     <y>0</y>
-     <width>327</width>
-     <height>37</height>
-    </rect>
-   </property>
-   <property name="label" >
+  <widget class="QToolBar" name="graphToolBar" >
+   <property name="label" stdset="0" >
     <string>Mouse Interaction Tools</string>
    </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
    <addaction name="navigate_action" />
    <addaction name="selectAction" />
    <addaction name="selectionAction" />
@@ -1063,19 +1051,6 @@
   </actiongroup>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <customwidgets>
-  <customwidget>
-   <class>Q3ToolBar</class>
-   <extends>Q3Frame</extends>
-   <header>q3listview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Q3MainWindow</class>
-   <extends>QWidget</extends>
-   <header>q3mainwindow.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <includes>
   <include location="local" >qworkspace.h</include>
  </includes>

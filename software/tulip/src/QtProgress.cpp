@@ -22,8 +22,8 @@ QtProgress::~QtProgress() {
 //=====================================
 void QtProgress::progress_handler(int i,int j) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  progressBar->setTotalSteps(j);
-  progressBar->setProgress (i);
+  progressBar->setMaximum(j);
+  progressBar->setValue(i);
   if (state()!=TLP_CONTINUE) { 
     return;
   }

@@ -33,30 +33,30 @@ CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
 void CopyPropertyDialog::setProperties(std::string& srcProp,
 				       std::vector<std::string>& localProps,
 				       std::vector<std::string>& inheritedProps) {
-  setCaption((std::string("Copy property ") + srcProp).c_str());
+  setWindowTitle((std::string("Copy property ") + srcProp).c_str());
   unsigned int i = 0;
   if (localProps.size() == 0)
     localPropertyButton->setEnabled(false);
   else
     for (; i < localProps.size(); ++i)
-      localProperties->insertItem(QString(localProps[i].c_str()));
+      localProperties->addItem(QString(localProps[i].c_str()));
   if (inheritedProps.size() == 0)
     inheritedPropertyButton->setEnabled(false);
   else
     for (i = 0; i < inheritedProps.size(); ++i)
-      inheritedProperties->insertItem(QString(inheritedProps[i].c_str()));
+      inheritedProperties->addItem(QString(inheritedProps[i].c_str()));
 }
 
 std::string CopyPropertyDialog::getDestinationProperty(CopyPropertyDialog::destType& type) {
   type = CopyPropertyDialog::NEW;
   if (exec() == QDialog::Accepted) {
     if (newPropertyText->isEnabled())
-      return newPropertyText->text().ascii();
+      return newPropertyText->text().toAscii().data();
     type = CopyPropertyDialog::LOCAL;
     if (localProperties->isEnabled())
-      return localProperties->currentText().ascii();
+      return localProperties->currentText().toAscii().data();
     type = CopyPropertyDialog::INHERITED;
-      return inheritedProperties->currentText().ascii();
+      return inheritedProperties->currentText().toAscii().data();
   }
   return std::string();
 }

@@ -19,7 +19,6 @@ nobase_include_HEADERS = \
 	tulip/GWOverviewWidget.h \
 	tulip/LayerManagerWidget.h \
 	tulip/LayerManagerWidgetData.h \
-	tulip/Qt3ForTulip.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
 	tulip/GlMainWidgetPlugin.h \

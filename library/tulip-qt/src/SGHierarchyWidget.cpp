@@ -161,11 +161,11 @@ void SGHierarchyWidget::contextCloneCluster() {
     return;
   }
   bool ok;
-  QString text = QInputDialog::getText( "Cluster name" , "Please enter the cluster name" ,
-                                        QLineEdit::Normal,QString::null, &ok, this);
+  QString text = QInputDialog::getText(this, "Cluster name" , "Please enter the cluster name" ,
+                                        QLineEdit::Normal,QString::null, &ok);
   if (ok) {
     Graph *tmp=_currentGraph->getSuperGraph()->addSubGraph();
-    tmp->setAttribute("name",string(text.latin1()));
+    tmp->setAttribute("name",string(text.toAscii().data()));
     Iterator<node> *itN=_currentGraph->getNodes();
     while (itN->hasNext())
       tmp->addNode(itN->next());
@@ -180,14 +180,14 @@ void SGHierarchyWidget::contextCloneCluster() {
 //=======================================================
 void SGHierarchyWidget::contextCloneSubgraphCluster() {
   bool ok;
-  QString text = QInputDialog::getText( "Cluster name" , "Please enter the cluster name" ,
-                                        QLineEdit::Normal,QString::null, &ok, this);
+  QString text = QInputDialog::getText(this, "Cluster name" , "Please enter the cluster name" ,
+                                        QLineEdit::Normal,QString::null, &ok);
   if (ok) {
     BooleanProperty sel1(_currentGraph);
     sel1.setAllNodeValue(true);
     sel1.setAllEdgeValue(true);
     _currentGraph = _currentGraph->addSubGraph(&sel1);
-    _currentGraph->setAttribute("name",string(text.latin1()));
+    _currentGraph->setAttribute("name",string(text.toAscii().data()));
     update();
     emit graphChanged(_currentGraph);
   }
@@ -196,13 +196,13 @@ void SGHierarchyWidget::contextCloneSubgraphCluster() {
 void SGHierarchyWidget::contextRenameCluster() {
   bool ok;
   QString text =
-    QInputDialog::getText("Cluster Name",
+    QInputDialog::getText(this, "Cluster Name",
 			  "Please enter the cluster name",
 			  QLineEdit::Normal,
 			  _currentGraph->getAttribute<string>("name").c_str(),
-			  &ok, this);
+			  &ok);
   if (ok) {
-    _currentGraph->setAttribute("name",string(text.latin1()));
+    _currentGraph->setAttribute("name",string(text.toAscii().data()));
     graphItems.get(_currentGraph->getId())->setText(0, text);
   }
 }

@@ -6,7 +6,7 @@
  *  name 'name' and widget flags set to 'f'.
  */
 LayerManagerWidgetData::LayerManagerWidgetData(QWidget* parent, const char* name, Qt::WindowFlags fl)
-    : QDialog(parent, name, fl)
+    : QDialog(parent)
 {
     setupUi(this);
 

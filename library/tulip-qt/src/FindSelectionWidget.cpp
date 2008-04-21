@@ -89,39 +89,39 @@ void FindSelectionWidget::propertyChanged( int no ) {
   PropertyInterface * p = getProperty();
   if( dynamic_cast<DoubleProperty*>(p) ) {
     filterOp->clear();
-    filterOp->insertItem( "<" );
-    filterOp->insertItem( "<=" );
-    filterOp->insertItem( "=" );
-    filterOp->insertItem( ">=" );
-    filterOp->insertItem( ">" );
-    filterOp->insertItem( "!=" );
+    filterOp->addItem( "<" );
+    filterOp->addItem( "<=" );
+    filterOp->addItem( "=" );
+    filterOp->addItem( ">=" );
+    filterOp->addItem( ">" );
+    filterOp->addItem( "!=" );
     filterValue->setText( QString() );
     filterValue->setValidator( new QDoubleValidator(this) );
     filterValue->show();
   }
   else   if( dynamic_cast<IntegerProperty*>(p) ) {
     filterOp->clear();
-    filterOp->insertItem( "<" );
-    filterOp->insertItem( "<=" );
-    filterOp->insertItem( "=" );
-    filterOp->insertItem( ">=" );
-    filterOp->insertItem( ">" );
-    filterOp->insertItem( "!=" );
+    filterOp->addItem( "<" );
+    filterOp->addItem( "<=" );
+    filterOp->addItem( "=" );
+    filterOp->addItem( ">=" );
+    filterOp->addItem( ">" );
+    filterOp->addItem( "!=" );
     filterValue->setText( QString() );
     filterValue->setValidator( new QIntValidator(this) );
     filterValue->show();
   }
   else if( dynamic_cast<StringProperty*>(p) ) {
     filterOp->clear();
-    filterOp->insertItem( "=" );
-    filterOp->insertItem( "!=" );
+    filterOp->addItem( "=" );
+    filterOp->addItem( "!=" );
     filterValue->setValidator( 0 );
     filterValue->show();
   }
   else if( dynamic_cast<BooleanProperty*>(p) ) {
     filterOp->clear();
-    filterOp->insertItem( "False" );
-    filterOp->insertItem( "True" );
+    filterOp->addItem( "False" );
+    filterOp->addItem( "True" );
     filterValue->hide();
     filterValue->setValidator( 0 );
       filterValue->setText( QString() );
@@ -131,13 +131,13 @@ void FindSelectionWidget::propertyChanged( int no ) {
 int FindSelectionWidget::getMode() {
   if( filterOp->count() == 2 )
     // == -> 2 & != -> 5
-    return filterOp->currentItem() == 0 ? 2 : 5;
+    return filterOp->currentIndex() == 0 ? 2 : 5;
   else
-    return filterOp->currentItem();
+    return filterOp->currentIndex();
 }
 
 std::string FindSelectionWidget::getCurrentProperty() {
-  return std::string(inputProp->currentText().latin1());
+  return std::string(inputProp->currentText().toAscii().data());
 }
 
 PropertyInterface * FindSelectionWidget::getProperty() {
@@ -145,25 +145,25 @@ PropertyInterface * FindSelectionWidget::getProperty() {
 }
 
 int FindSelectionWidget::getOperation() {
-  if(setToSelectionOpt->isOn())		return 0;
-  if(addToSelectionOpt->isOn())		return 1;
-  if(rmvFromSelectionOpt->isOn())	return 2;
+  if(setToSelectionOpt->isChecked())		return 0;
+  if(addToSelectionOpt->isChecked())		return 1;
+  if(rmvFromSelectionOpt->isChecked())	return 2;
   return 3;
 }
 
 int FindSelectionWidget::getSource() {
-  return srcOpt->currentItem();
+  return srcOpt->currentIndex();
 }
 
 void FindSelectionWidget::insertProperties(std::string &currentProperty) {
   Iterator<std::string> * propIt = graph->getProperties();
   while( propIt->hasNext() ) {
     std::string n = propIt->next();
-    PropertyInterface * p = graph->getProperty( n );
+    PropertyInterface* p = graph->getProperty( n );
     if (IsEvaluableProxy(p)) {
-      inputProp->insertItem(QString(n.c_str()));
+      inputProp->addItem(QString(n.c_str()));
       if (currentProperty == n)
-	inputProp->setCurrentItem(inputProp->count() - 1);
+	inputProp->setCurrentIndex(inputProp->count() - 1);
     }
   } delete propIt;
     
@@ -226,7 +226,7 @@ void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode, std::string 
 void FindSelectionWidget::find(BooleanProperty *selP) {
   PropertyInterface * p = getProperty();
   int mode  = getMode();
-  std::string fv = filterValue->text().latin1();
+  std::string fv = filterValue->text().toAscii().data();
   int op = getOperation();
   nbItemsFound = 0;
   if( (getSource()+1) & 1 ) 

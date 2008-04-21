@@ -14,7 +14,7 @@ int main( int argc, char **argv ) {
   Application tulip( argc, argv );
   viewGl *mainWindow = new viewGl();
 
-  tulip.setMainWidget(mainWindow);
+  //tulip.setMainWidget(mainWindow);
   QTimer::singleShot(0, mainWindow, SLOT(startTulip()) );
 
   return tulip.exec();

@@ -261,12 +261,12 @@ class DoubleProperty;
   /**
    * Enables the usage of the "Add Metric" button.
    */
-  void enableAddMetricBtn();
+  void enableAddMetricBtn(int);
 
   /**
    * Enables the usage of the "Remove Metric" button.
    */
-  void enableRemoveMetricBtn();
+  void enableRemoveMetricBtn(int);
 };
 }
 #endif

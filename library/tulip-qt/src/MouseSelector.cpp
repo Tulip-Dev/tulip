@@ -29,9 +29,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    if (qMouseEv->button()== mButton &&
+    if (qMouseEv->buttons()== mButton &&
 	(kModifier == Qt::NoModifier ||
-	 ((QMouseEvent *) e)->state() & kModifier)) {
+	 ((QMouseEvent *) e)->modifiers() & kModifier)) {
       if (!started) {
 	x = qMouseEv->x();
 	y = qMouseEv->y();
@@ -51,7 +51,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       }
       return true;
     }
-    if (qMouseEv->button()==Qt::MidButton){
+    if (qMouseEv->buttons()==Qt::MidButton){
       started = false;
       glMainWidget->setMouseTracking(false);
       glMainWidget->redraw();
@@ -59,9 +59,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     }
   }
   if  (e->type() == QEvent::MouseMove &&
-      ((((QMouseEvent *) e)->state() & mButton) &&
+      ((((QMouseEvent *) e)->buttons() & mButton) &&
        (kModifier == Qt::NoModifier ||
-	((QMouseEvent *) e)->state() & kModifier))) {
+	((QMouseEvent *) e)->modifiers() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
@@ -93,12 +93,12 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       Observable::holdObservers();
       BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
       bool boolVal = true; // add to selection
-      if (qMouseEv->stateAfter() != Qt::ShiftButton) {
-	if (qMouseEv->stateAfter() !=
+      if (qMouseEv->modifiers() != Qt::ShiftModifier) {
+	if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
-	    Qt::AltButton
+	    Qt::AltModifier
 #else
-	    Qt::ControlButton
+	    Qt::ControlModifier
 #endif
 	    ) {
 	  selection->setAllNodeValue(false);

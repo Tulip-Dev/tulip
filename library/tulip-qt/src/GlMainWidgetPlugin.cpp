@@ -24,7 +24,7 @@ bool GlMainWidgetPlugin::isInitialized() const {
 }
 
 QWidget* GlMainWidgetPlugin::createWidget(QWidget *parent) {
-  return new GlMainWidget(parent, name());
+  return new GlMainWidget(parent);
 }
 
 QString GlMainWidgetPlugin::name() const {

@@ -28,23 +28,19 @@
 #include <QtGui/qworkspace.h>
 #include <QtGui/qmenubar.h>
 #include <QtGui/qdesktopwidget.h>
-#include <Qt3Support/q3table.h>
-#include <Qt3Support/q3vbox.h>
 #include <QtGui/qstatusbar.h>
 #include <QtGui/qpixmap.h>
-#include <Qt3Support/q3strlist.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qimagewriter.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qprogressdialog.h>
-#include <Qt3Support/q3dockwindow.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qcombobox.h>
 #include <QtGui/qcursor.h>
 #include <QtGui/qaction.h>
 #include <QtGui/qradiobutton.h>
 #include <QtGui/qprinter.h>
-#include <tulip/Qt3ForTulip.h>
+#include <QtGui/qprintdialog.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
 
@@ -158,7 +154,7 @@ static vector<tlp::GWInteractor *>zoomBoxInteractors;
 
 //**********************************************************************
 ///Constructor of ViewGl
-viewGl::viewGl(QWidget* parent): Q3MainWindow(parent)  {
+viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   setupUi(this);
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
@@ -183,37 +179,43 @@ viewGl::viewGl(QWidget* parent): Q3MainWindow(parent)  {
   //Create layer widget
   layerWidget = new LayerManagerWidget(parent);
 
-  //Create Data information editor (Hierarchy, Element info, Property Info)
-  tabWidgetDock = new QDockWindow(this,"Data manipulation");
-  tabWidgetDock->setCaption("Info Editor");
-  tabWidgetDock->setCloseMode(QDockWindow::Always);
-  tabWidgetDock->setResizeEnabled(true);
-  TabWidget *tabWidget = new TabWidget(tabWidgetDock);
-#ifndef STATS_UI
-  // remove Statistics tab if not needed
-  tabWidget->tabWidget2->removePage(tabWidget->StatsTab);
-#endif
-  tabWidgetDock->boxLayout()->add(tabWidget);
-  this->addDockWindow(tabWidgetDock,"Data manipulation", Qt::DockLeft);
-  tabWidget->show();
-  tabWidgetDock->show();
-
   // Create overview widget after the tabWidgetDock
   // because of a bug with full docked GlMainWidget
   // In doing this the overviewDock will be the first
   // sibling candidate when the tabWidgetDock will loose the focus
   // and Qt will not try to give the focus to the first GlMainWidget
-  overviewDock = new QDockWindow(this,"Overview");
-  overviewDock->setCaption("3D Overview");
-  overviewDock->setCloseMode(QDockWindow::Always);
-  overviewDock->setResizeEnabled(true);
+  overviewDock = new QDockWidget("Overview", this);
+  overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  overviewDock->setWindowTitle("3D Overview");
+  overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
+			    QDockWidget::DockWidgetMovable |
+			    QDockWidget::DockWidgetFloatable);
+  //overviewDock->setResizeEnabled(true);
   overviewWidget = new GWOverviewWidget(overviewDock);
-  overviewDock->boxLayout()->add(overviewWidget);
-  this->addDockWindow(overviewDock, "Overview", Qt::DockLeft);
+  overviewDock->setWidget(overviewWidget);
+  this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
   // move it to ensure it is the first one
-  this->moveDockWindow(overviewDock, Qt::DockLeft, false, 0);
+  //this->moveDockWindow(overviewDock, Qt::DockLeft, false, 0);
   overviewWidget->show(); 
   overviewDock->show();
+
+  //Create Data information editor (Hierarchy, Element info, Property Info)
+  tabWidgetDock = new QDockWidget("Data manipulation", this);
+  tabWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  tabWidgetDock->setWindowTitle("Info Editor");
+  tabWidgetDock->setFeatures(QDockWidget::DockWidgetClosable |
+			     QDockWidget::DockWidgetMovable |
+			     QDockWidget::DockWidgetFloatable);
+  //tabWidgetDock->setResizeEnabled(true);
+  TabWidget *tabWidget = new TabWidget(tabWidgetDock);
+#ifndef STATS_UI
+  // remove Statistics tab if not needed
+  tabWidget->tabWidget2->removeTab(tabWidget->tabWidget2->indexOf(tabWidget->StatsTab));
+#endif
+  tabWidgetDock->setWidget(tabWidget);
+  this->addDockWidget(Qt::LeftDockWidgetArea, tabWidgetDock);
+  tabWidget->show();
+  tabWidgetDock->show();
 
   //Init hierarchy visualization widget
   clusterTreeWidget=tabWidget->clusterTree;
@@ -251,7 +253,6 @@ viewGl::viewGl(QWidget* parent): Q3MainWindow(parent)  {
   connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   connect(&exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
   connect(dialogMenu     , SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-  windowsMenu->setCheckable( TRUE );
   connect(windowsMenu, SIGNAL( aboutToShow() ),
 	  this, SLOT( windowsMenuAboutToShow() ) );
   connect(windowsMenu, SIGNAL(triggered(QAction*)),
@@ -304,6 +305,7 @@ void viewGl::enableQMenu(QMenu *popupMenu, bool enabled) {
     actions.at(i)->setEnabled(enabled);
   }
 }
+
 //**********************************************************************
 void viewGl::enableElements(bool enabled) {
   enableQMenu((QMenu *) editMenu, enabled);
@@ -322,7 +324,7 @@ void viewGl::enableElements(bool enabled) {
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
   grid_option->setEnabled(enabled);
-  dialogMenu->setItemEnabled(1000, enabled);
+  renderingParametersDialogAction->setEnabled(enabled);
 
   elementsDisabled = !enabled;
 }
@@ -477,11 +479,15 @@ void viewGl::startTulip() {
   buildMenus();
   this->show();
   if (errors.size() > 0) {
-    errorDlg = new QDialog(this, "errorDlg", true);
-    errorDlg->setCaption("Errors when loading Tulip plugins !!!");
-    QVBoxLayout* errorDlgLayout = new QVBoxLayout( errorDlg, 11, 6, "errorDlgLayout"); 
-    QFrame *frame = new QFrame( errorDlg, "frame" );
-    QHBoxLayout* frameLayout = new QHBoxLayout( frame, 0, 0, "frameLayout"); 
+    errorDlg = new QDialog(this);
+    errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
+    QVBoxLayout* errorDlgLayout = new QVBoxLayout(errorDlg);
+    errorDlgLayout->setMargin(11);
+    errorDlgLayout->setSpacing(6);
+    QFrame *frame = new QFrame(errorDlg);
+    QHBoxLayout* frameLayout = new QHBoxLayout(frame);
+    frameLayout->setMargin(0);
+    frameLayout->setSpacing(0);
     QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     frameLayout->addItem( spacer );
     QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
@@ -504,7 +510,7 @@ void viewGl::startTulip() {
     char ** argv = qApp->argv();
     for (int i=1;i<argc;++i) {
       QFileInfo info(argv[i]);
-      QString s = info.absFilePath();
+      QString s = info.absoluteFilePath();
       fileOpen(0, s);
     }
   }
@@ -519,9 +525,9 @@ void viewGl::changeGraph(Graph *graph) {
   clearObservers();
   QFileInfo tmp(openFiles[(unsigned long)glWidget].name.c_str());
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-  param.setTexturePath(string(tmp.dirPath().latin1()) + "/");
+  param.setTexturePath(string(tmp.dir().path().toAscii().data()) + "/");
   glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-  QDir::setCurrent(tmp.dirPath() + "/");
+  QDir::setCurrent(tmp.dir().path() + "/");
   clusterTreeWidget->setGraph(graph);
   eltProperties->setGraph(graph);
   overviewWidget->setObservedView(glWidget);
@@ -581,7 +587,7 @@ GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
     errorDlg = (QDialog *) NULL;
   }
   //Create 3D graph view
-  GlMainWidget *glWidget = new GlMainWidget(workspace, name);
+  GlMainWidget *glWidget = new GlMainWidget(workspace, name.toAscii().data());
   glWidget->getScene()->addObserver(this);
   layerWidget->attachMainWidget(glWidget);
   //GlMainWidget *glWidget = new GlMainWidget();
@@ -591,11 +597,11 @@ GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //Camera *camera=new Camera(glWidget->getScene());
   
   glWidget->move(0,0);
-  glWidget->setCaption(name);
+  glWidget->setWindowTitle(name);
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
-  glWidget->setBackgroundMode(Qt::PaletteBackground);  
+  //glWidget->setBackgroundMode(Qt::PaletteBackground);  
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(*currentInteractors);
   connect(glWidget, SIGNAL(closing(GlMainWidget *, QCloseEvent *)), this, SLOT(glMainWidgetClosing(GlMainWidget *, QCloseEvent *)));
@@ -649,7 +655,7 @@ void viewGl::new3DView() {
   if (!glWidget) return;
   GlMainWidget *newGlWidget =
     newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
-		  glWidget->parentWidget()->caption());
+		  glWidget->parentWidget()->windowTitle());
   constructDefaultScene(newGlWidget);
   newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
   newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
@@ -683,7 +689,7 @@ void viewGl::setNavigateCaption(string newCaption) {
      if (typeid(*win)==typeid(GlMainWidget)) {
        GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
        if(tmpNavigate == glWidget) {
-	 tmpNavigate->setCaption(newCaption.c_str());
+	 tmpNavigate->setWindowTitle(newCaption.c_str());
 	 return;
        }
      }
@@ -706,9 +712,9 @@ void viewGl::fileSave() {
 //**********************************************************************
 static void setGraphName(Graph *g, QString s) {
   QString cleanName=s.section('/',-1);
-  QStringList fields = QStringList::split('.', cleanName);
+  QStringList fields = cleanName.split('.');
   cleanName=cleanName.section('.', -fields.count(), -2);
-  g->setAttribute("name", string(cleanName.latin1()));
+  g->setAttribute("name", string(cleanName.toAscii().data()));
 }
 //**********************************************************************
 bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
@@ -736,15 +742,16 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   if (filename.length() == 0) {
     QString name;
     if (plugin == "tlp")
-      name = QFileDialog::getSaveFileName( QString::null,
-					   tr("Tulip graph (*.tlp *.tlp.gz)"),
-					   this,
-					   tr("open file dialog"),
-					   tr("Choose a file to save" ));
+      name =
+	QFileDialog::getSaveFileName(this, tr("Choose a file to save" ),
+				     QString(),
+				     tr("Tulip graph (*.tlp *.tlp.gz)"));
     else
-      name = QFileDialog::getSaveFileName(this->caption().ascii());
+      name =
+	QFileDialog::getSaveFileName(this,
+				     this->windowTitle().toAscii().data());
     if (name == QString::null) return false;
-    filename = name.latin1();
+    filename = name.toAscii().data();
   }
   bool result;
   ostream *os;
@@ -767,7 +774,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
 			   "The file has not been saved"
 			   );
   } else {
-    statusBar()->message((filename + " saved.").c_str());
+    statusBar()->showMessage((filename + " saved.").c_str());
   }
   setNavigateCaption(filename);
   setGraphName(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), QString(filename.c_str()));
@@ -852,16 +859,14 @@ void viewGl::fileOpen(string *plugin, QString &s) {
   if (s == QString::null) {
     if (plugin==0) {
       plugin = &tmpStr;
-      s = QFileDialog::getOpenFileName( QString::null,
-					tr("Tulip graph (*.tlp *.tlp.gz)"),
-					this,
-					tr("open file dialog"),
-					tr("Choose a file to open" ));
+      s = QFileDialog::getOpenFileName(this, tr("Choose a file to open" ),
+				       QString(),
+				       tr("Tulip graph (*.tlp *.tlp.gz)"));
 
       if (s == QString::null)
 	cancel=true;
       else
-	dataSet.set("file::filename", string(s.latin1()));
+	dataSet.set("file::filename", string(s.toAscii().data()));
     }
     else {
       noPlugin = false;
@@ -874,7 +879,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
   } else {
     plugin = &tmpStr;
-    dataSet.set("file::filename", string(s.latin1()));
+    dataSet.set("file::filename", string(s.toAscii().data()));
     noPlugin = true;
   }
   if (!cancel) {
@@ -884,7 +889,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	QWidget *win = windows.at(i);
 	if (typeid(*win)==typeid(GlMainWidget)) {
 	  GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
-	  if(openFiles[((unsigned long)tmpNavigate)].name == s.latin1()) {
+	  if(openFiles[((unsigned long)tmpNavigate)].name == s.toAscii().data()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -902,10 +907,10 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       s = newGraph->getAttribute<string>("name").c_str();
     bool result=true;
     QFileInfo tmp(s);
-    QDir::setCurrent(tmp.dirPath() + "/");
+    QDir::setCurrent(tmp.dir().path() + "/");
     GlMainWidget *glW = newOpenGlView(newGraph, s);
     //    changeGraph(0);
-    QtProgress *progressBar = new QtProgress(this,string("Loading : ")+ s.section('/',-1).ascii(), glW );
+    QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toAscii().data(), glW );
     // this will avoid too much notification when
     // importing a graph (see changeGraph)
     importedGraph = newGraph;
@@ -920,7 +925,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       QApplication::restoreOverrideCursor();
       // qWarning("Canceled import/Open");
       std::string errorTitle("Canceled import/Open: ");
-      errorTitle += s.section('/',-1).ascii();
+      errorTitle += s.section('/',-1).toAscii().data();
       std::string errorMsg = progressBar->getError();
       delete progressBar;
       Observable::unholdObservers();
@@ -937,7 +942,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if(!sceneData.empty()) {
       string dir=TulipLibDir;
       string name="TulipLibDir";
-      while(sceneData.find(name)!=-1) {
+      while(sceneData.find(name)!= string::npos) {
 	int pos=sceneData.find(name);
 	sceneData.replace(pos,name.length(),dir);
       }
@@ -963,7 +968,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 
     if(noPlugin) {
       viewGlFile vFile;
-      vFile.name = s.latin1();
+      vFile.name = s.toAscii().data();
       dataSet.get<std::string>("author", vFile.author);
       dataSet.get<std::string>("text::comments", vFile.comments);
       openFiles[((unsigned long)glW)] = vFile;
@@ -1149,11 +1154,11 @@ void viewGl::editFind() {
   delete sel;
   switch(nbItemsFound) {
   case -1: break;
-  case 0: statusBar()->message("No item found."); break;
+  case 0: statusBar()->showMessage("No item found."); break;
   default:
     stringstream sstr;
     sstr << nbItemsFound << " item(s) found.";
-    statusBar()->message(sstr.str().c_str());
+    statusBar()->showMessage(sstr.str().c_str());
   }
 }
 //**********************************************************************
@@ -1209,7 +1214,7 @@ static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
   for (std::string::size_type i = 0; i < nGroupNames; i++) {
     QMenu *groupMenu = (QMenu *) 0;
     for (std::string::size_type j = 0; j < nGroups; j++) {
-      if (itemGroupNames[i] == groupMenus[j]->objectName().ascii()) {
+      if (itemGroupNames[i] == groupMenus[j]->objectName().toAscii().data()) {
 	subMenu = groupMenu = groupMenus[j];
 	break;
       }
@@ -1294,19 +1299,20 @@ void viewGl::buildMenus() {
   dialogMenu->addAction("3D &Overview");
   dialogMenu->addAction("&Info Editor");
   dialogMenu->addAction("&Layer Manager");
-  dialogMenu->addAction("&Rendering Parameters")->setShortcut(tr("Ctrl+R"));
+  renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
+  renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
   //==============================================================
   //File Menu 
   fileMenu->addSeparator();
-  if (importGraphMenu.count()>0) {
+  if (importGraphMenu.actions().count()>0) {
     importGraphMenu.setTitle("&Import");
     fileMenu->addMenu(&importGraphMenu);
   }
-  if (exportGraphMenu.count()>0) {
+  if (exportGraphMenu.actions().count()>0) {
     exportGraphMenu.setTitle("&Export");
     fileMenu->addMenu(&exportGraphMenu);
   }
-  if (exportImageMenu.count()>0) {
+  if (exportImageMenu.actions().count()>0) {
     exportImageMenu.setTitle("&Save Picture as ");
     fileMenu->addMenu(&exportImageMenu); //this , SLOT( outputImage() ));
   }
@@ -1315,35 +1321,35 @@ void viewGl::buildMenus() {
   viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
   viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
   //Property Menu
-  if (selectMenu.count()>0) {
+  if (selectMenu.actions().count()>0) {
     selectMenu.setTitle("&Selection");
     propertyMenu->addMenu(&selectMenu);
   }
-  if (colorsMenu.count()>0) {
+  if (colorsMenu.actions().count()>0) {
     colorsMenu.setTitle("&Color");
     propertyMenu->addMenu(&colorsMenu);
   }
-  if (metricMenu.count()>0) {
+  if (metricMenu.actions().count()>0) {
     metricMenu.setTitle("&Measure");
     propertyMenu->addMenu(&metricMenu);
   }
-  if (intMenu.count()>0) {
+  if (intMenu.actions().count()>0) {
     intMenu.setTitle("&Integer");
     propertyMenu->addMenu(&intMenu);
   }
-  if (layoutMenu.count()>0) {
+  if (layoutMenu.actions().count()>0) {
     layoutMenu.setTitle("&Layout");
     propertyMenu->addMenu(&layoutMenu);
   }
-  if (sizesMenu.count()>0) {
+  if (sizesMenu.actions().count()>0) {
     sizesMenu.setTitle("S&ize");
     propertyMenu->addMenu(&sizesMenu);
   }
-  if (stringMenu.count()>0) {
+  if (stringMenu.actions().count()>0) {
     stringMenu.setTitle("L&abel");
     propertyMenu->addMenu(&stringMenu);
   }
-  if (generalMenu.count()>0) {
+  if (generalMenu.actions().count()>0) {
     generalMenu.setTitle("&General");
     propertyMenu->addMenu(&generalMenu);
   }
@@ -1353,8 +1359,8 @@ void viewGl::outputEPS() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    if (glWidget->outputEPS(64000000,true,s.ascii()))
-      statusBar()->message(s + " saved.");
+    if (glWidget->outputEPS(64000000,true,s.toAscii().data()))
+      statusBar()->showMessage(s + " saved.");
     else
       QMessageBox::critical( 0, "Save Picture Failed",
 			     "The file has not been saved."
@@ -1366,8 +1372,8 @@ void viewGl::outputSVG() {
   if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
-    if (glWidget->outputSVG(64000000,s.ascii()))
-      statusBar()->message(s + " saved.");
+    if (glWidget->outputSVG(64000000,s.toAscii().data()))
+      statusBar()->showMessage(s + " saved.");
     else
       QMessageBox::critical( 0, "Save Picture Failed",
 			     "The file has not been saved."
@@ -1404,7 +1410,7 @@ void viewGl::exportImage(QAction* action) {
   painter.end();
   free(image);
   pm.save( s, name.c_str());
-  statusBar()->message(s + " saved.");
+  statusBar()->showMessage(s + " saved.");
 }
 //**********************************************************************
 void viewGl::exportGraph(QAction* action) {
@@ -1432,7 +1438,7 @@ void viewGl::windowsMenuAboutToShow() {
   windowsMenu->addSeparator();
   QWidgetList windows = workspace->windowList();
   for ( int i = 0; i < int(windows.count()); ++i ) {
-    QAction* action = windowsMenu->addAction(windows.at(i)->caption());
+    QAction* action = windowsMenu->addAction(windows.at(i)->windowTitle());
     action->setChecked(workspace->activeWindow() == windows.at(i));
     action->setData(QVariant(i));
   }
@@ -1522,7 +1528,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
   // is no longer needed; the tooltip implementation must take place
   // in the event() method inherited from QWidget.
   if (obj->inherits("GlMainWidget") &&
-      e->type() == QEvent::ToolTip && tooltips->isOn()) {
+      e->type() == QEvent::ToolTip && tooltips->isChecked()) {
     node tmpNode;
     edge tmpEdge;
     ElementType type;
@@ -1559,7 +1565,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
   if ( obj->inherits("GlMainWidget") &&
        (e->type() == QEvent::MouseButtonRelease)) {
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->button()==RightButton) {
+    if (me->button()==Qt::RightButton) {
       bool result;
       ElementType type;
       node tmpNode;
@@ -1751,11 +1757,14 @@ void viewGl::newSubgraph() {
   
   if(!verifGraph) 
     QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
-  QString text = QInputDialog::getText( "Creation of subgraph" ,  "Please enter the subgraph name" , QLineEdit::Normal,QString::null, &ok, this );
+  QString text = QInputDialog::getText(this,
+				       "Creation of subgraph" ,
+				       "Please enter the subgraph name" ,
+				       QLineEdit::Normal, QString::null, &ok);
   if (ok && !text.isEmpty()) {
     sel1 = graph->getProperty<BooleanProperty>("viewSelection");
     Graph *tmp = graph->addSubGraph(sel1);
-    tmp->setAttribute("name",string(text.latin1()));
+    tmp->setAttribute("name",string(text.toAscii().data()));
     clusterTreeWidget->update();
   }
   else if (ok) {
@@ -1844,7 +1853,7 @@ void viewGl::helpContents() {
 }
 //==============================================================
 void viewGl::helpAssistantError(const QString &msg) {
-  cerr << msg.ascii() << endl;
+  cerr << msg.toAscii().data() << endl;
 }
 //==============================================================
 void viewGl::fileExit() {
@@ -1854,11 +1863,13 @@ void viewGl::fileExit() {
 //==============================================================
 void viewGl::filePrint() {
   if (!glWidget) return;
-  Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph=
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   
   QPrinter printer;
-  if (!printer.setup(this)) 
+  QPrintDialog dialog(&printer, this);
+  if (!dialog.exec())
     return;
   int width,height;
   width = glWidget->width();
@@ -2044,7 +2055,7 @@ void viewGl::changeMetric(QAction* action) {
   clearObservers();
   string name = action->text().toStdString();
   bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
-  if (result && map_metric->isOn()) {
+  if (result && map_metric->isChecked()) {
     if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
       redrawView();
   }
@@ -2055,19 +2066,19 @@ void viewGl::changeLayout(QAction* action) {
   clearObservers();
   string name = action->text().toStdString();
   GraphState * g0 = 0;
-  if( enable_morphing->isOn() ) 
+  if( enable_morphing->isChecked() ) 
     g0 = new GraphState(glWidget);
 
   bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
   if (result) {
-    if( force_ratio->isOn() )
+    if( force_ratio->isChecked() )
       glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
     //Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
     Observable::holdObservers();
     glWidget->getScene()->centerScene();
     overviewWidget->setObservedView(glWidget);
     Observable::unholdObservers();
-    if( enable_morphing->isOn() ) {
+    if( enable_morphing->isChecked() ) {
       GraphState * g1 = new GraphState( glWidget );
       bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
@@ -2095,12 +2106,12 @@ void viewGl::changeInt(QAction* action) {
 void viewGl::changeColors(QAction* action) {
   clearObservers();
   GraphState * g0 = 0;
-  if( enable_morphing->isOn() )
+  if( enable_morphing->isChecked() )
     g0 = new GraphState( glWidget );
   string name = action->text().toStdString();
   bool result = changeProperty<ColorProperty>(name,"viewColor");
   if( result ) {
-    if( enable_morphing->isOn() ) {
+    if( enable_morphing->isChecked() ) {
       GraphState * g1 = new GraphState( glWidget );
       bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
@@ -2121,12 +2132,12 @@ void viewGl::changeColors(QAction* action) {
 void viewGl::changeSizes(QAction* action) {
   clearObservers();
   GraphState * g0 = 0;
-  if( enable_morphing->isOn() )
+  if( enable_morphing->isChecked() )
     g0 = new GraphState( glWidget );
   string name = action->text().toStdString();
   bool result = changeProperty<SizeProperty>(name,"viewSize");
   if( result ) {
-    if( enable_morphing->isOn() ) {
+    if( enable_morphing->isChecked() ) {
       GraphState * g1 = new GraphState( glWidget );
       bool morphable = morph->init( glWidget, g0, g1);
       if( !morphable ) {
@@ -2319,7 +2330,7 @@ void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
   // show 'Element' tab in 'Info Editor'
   QWidget *tab = eltProperties->parentWidget();
   QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
-  tabWidget->showPage(tab);
+  tabWidget->setCurrentIndex(tabWidget->indexOf(tab));
 }
 //**********************************************************************
 // management of interactors

@@ -2,7 +2,7 @@
 ** Form implementation generated from reading ui file 'ElementPropertiesWidget.ui'
 **
 ** Created: lun sep 29 12:43:35 2003
-**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.3 2008-04-02 13:12:35 pmary Exp $)
+**      by: The User Interface Compiler ($Id: ElementPropertiesWidgetUI.cpp,v 1.4 2008-04-21 12:16:28 pmary Exp $)
 **
 ****************************************************************************/
 
@@ -23,13 +23,14 @@ using namespace tlp;
 ElementPropertiesWidgetUI::ElementPropertiesWidgetUI( QWidget* parent)
     : QWidget(parent)
 {
-    ElementPropertiesWidgetUILayout = new QGridLayout( this, 1, 1, 0, 6, "ElementPropertiesWidgetUILayout"); 
-
-    label = new QLabel( this, "label" );
-    label->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );
+    ElementPropertiesWidgetUILayout = new QGridLayout(this); 
+    
+    ElementPropertiesWidgetUILayout->setSpacing(6);
+    label = new QLabel(this);
+    /*label->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );*/
     label->setFrameShape( QLabel::NoFrame );
     label->setScaledContents( FALSE );
-    label->setAlignment( int( Qt::AlignCenter ) );
+    label->setAlignment(Qt::AlignCenter);
     label->setIndent( -1 );
 
     ElementPropertiesWidgetUILayout->addWidget( label, 0, 0 );
@@ -63,7 +64,6 @@ ElementPropertiesWidgetUI::~ElementPropertiesWidgetUI()
  */
 void ElementPropertiesWidgetUI::languageChange()
 {
-    setCaption( tr( "Element Properties", "test" ) );
     label->setText( tr( "Node" ) );
 }
 

@@ -108,7 +108,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   if (editedProperty==0) return;
   Observable::holdObservers();
   bool result=true;
-  string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().ascii();
+  string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toAscii().data();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<edge> *it=graph->getEdges();
   edge tmp;
@@ -143,7 +143,7 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   if (editedProperty==0) return;
   Observable::holdObservers();
   bool result=true;
-  string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().ascii();
+  string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
   //cout << "value = " << str << endl;
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<node> *it=graph->getNodes();
@@ -315,12 +315,12 @@ void PropertyWidget::setAllNodeValue() {
       tmp.append(QString(itS->next().c_str()));
     }delete itS;
     
-    QString shapeName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a shape",
-                                              tmp, 0, false, &ok, this);
+                                              tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlyphManager::getInst().glyphId(shapeName.ascii());
+      ss << GlyphManager::getInst().glyphId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
   } else if (editedPropertyName == "viewLabelPosition") {
@@ -328,20 +328,20 @@ void PropertyWidget::setAllNodeValue() {
     for (int i = 0; i < 5; i++)
       tmp.append(QString(GlGraphStaticData::labelPositionName(i).c_str()));
     
-    QString labelPosName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    QString labelPosName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a position",
-                                              tmp, 0, false, &ok, this);
+                                              tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlGraphStaticData::labelPositionId(labelPosName.ascii());
+      ss << GlGraphStaticData::labelPositionId(labelPosName.toAscii().data());
       tmpStr = ss.str();
     }
   }
   else if (typeid((*editedProperty)) == typeid(DoubleProperty)) {
-    double d = QInputDialog::getDouble(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    double d = QInputDialog::getDouble(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                        "Please enter your value",
                                        0, -2147483647, 2147483647, 10,
-                                       &ok, this);
+                                       &ok);
     if (ok) {
       stringstream ss;
       ss << d;
@@ -357,10 +357,10 @@ void PropertyWidget::setAllNodeValue() {
     }
   }
   else {
-    QString text = QInputDialog::getText(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                          "Please enter your value",
-                                         QLineEdit::Normal,QString::null, &ok, this);
-    if (ok) tmpStr = text.ascii();
+                                         QLineEdit::Normal,QString::null, &ok);
+    if (ok) tmpStr = text.toAscii().data();
     else ok = false;
   }
   
@@ -420,20 +420,20 @@ void  PropertyWidget::setAllEdgeValue() {
     for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++)
       tmp.append(QString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i]).c_str()));
     
-    QString shapeName = QInputDialog::getItem(string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a shape",
-                                              tmp, 0, false, &ok, this);
+                                              tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlGraphStaticData::edgeShapeId(shapeName.ascii());
+      ss << GlGraphStaticData::edgeShapeId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
   }
   else {
-    QString text = QInputDialog::getText(string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
+    QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
                                          "Please enter your value",
-                                         QLineEdit::Normal, QString::null, &ok, this);
-    if (ok) tmpStr = text.ascii();
+                                         QLineEdit::Normal, QString::null, &ok);
+    if (ok) tmpStr = text.toAscii().data();
     else ok = false;
   }
   
@@ -482,7 +482,7 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
   int row = index.row();
   int col = index.column();
   if (row < nbElement) {
-    std::string textId(item(row, 0)->text().ascii());
+    std::string textId(item(row, 0)->text().toAscii().data());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QMenu contextMenu(this);

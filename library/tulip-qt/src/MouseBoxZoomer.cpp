@@ -23,9 +23,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glw = (GlMainWidget *) widget;
-    if (qMouseEv->button() == mButton &&
+    if (qMouseEv->buttons() == mButton &&
 	(kModifier == Qt::NoModifier ||
-	 ((QMouseEvent *) e)->state() & kModifier)) {
+	 ((QMouseEvent *) e)->modifiers() & kModifier)) {
       if (!started) {
 	x = qMouseEv->x();
 	y =  glw->height() - qMouseEv->y();
@@ -43,7 +43,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       }
       return true;
     }
-    if (qMouseEv->button()==Qt::MidButton){
+    if (qMouseEv->buttons()==Qt::MidButton){
       started = false;
       glw->setMouseTracking(false);
       glw->redraw();
@@ -52,9 +52,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if (e->type() == QEvent::MouseMove &&
-      ((((QMouseEvent *) e)->state() & mButton) &&
+      ((((QMouseEvent *) e)->buttons() & mButton) &&
        	(kModifier == Qt::NoModifier ||
-	 ((QMouseEvent *) e)->state() & kModifier))) {
+	 ((QMouseEvent *) e)->modifiers() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glw = (GlMainWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
@@ -74,7 +74,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease &&
       (((QMouseEvent *) e)->button() == mButton &&
        	(kModifier == Qt::NoModifier ||
-	 ((QMouseEvent *) e)->state() & kModifier))) {
+	 ((QMouseEvent *) e)->modifiers() & kModifier))) {
     GlMainWidget *glw = (GlMainWidget *) widget;
     if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
       graph = NULL;

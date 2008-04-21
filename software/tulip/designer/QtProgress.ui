@@ -50,18 +50,12 @@
       </widget>
      </item>
      <item>
-      <widget class="Q3ProgressBar" name="progressBar" >
+      <widget class="QProgressBar" name="progressBar" >
        <property name="maximumSize" >
         <size>
          <width>800</width>
          <height>32767</height>
         </size>
-       </property>
-       <property name="frameShape" >
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
        </property>
       </widget>
      </item>
@@ -129,14 +123,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3ProgressBar</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3ProgressBar</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -54,7 +54,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
     //  cerr << "edit pos:" << editPosition << endl;
 
-    switch(qMouseEv->button()) {
+    switch(qMouseEv->buttons()) {
     case Qt::LeftButton : {
       // first ensure that something is selected
       /* bool hasSelection = false;
@@ -70,7 +70,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	operation = NONE_OP;
 	return false;
       }
-      if (qMouseEv->state() & Qt::ShiftButton){//vérifier que le lieu du clic est sur l'arête
+      if (qMouseEv->modifiers() & Qt::ShiftModifier){//vérifier que le lieu du clic est sur l'arête
 	operation = NEW_OP;
 	//int newX = qMouseEv->x();
 	//int newY = qMouseEv->y();
@@ -84,11 +84,11 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	  theCircle=circleString.findKey((GlSimpleEntity*)(select[0]));
 	  //(&circles[i])->fcolor(0) = Color(40,255,40,200);
 	  //(&circles[i])->ocolor(0) = Color(20,128,20,200);
-	  if (qMouseEv->state() &
+	  if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	      Qt::AltButton
+	      Qt::AltModifier
 #else
-	      Qt::ControlButton
+	      Qt::ControlModifier
 #endif
 	      ){
 	    operation = DELETE_OP;
@@ -117,14 +117,18 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     glMainWidget->redraw();
     return true;
   }
-  if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton && operation != NONE_OP) {
+  if (e->type() == QEvent::MouseButtonRelease &&
+      ((QMouseEvent *) e)->button() == Qt::LeftButton &&
+      operation != NONE_OP) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
     glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
     glMainWidget->redraw();
     return true;
   }
-  if  (e->type() == QEvent::MouseMove && ((QMouseEvent *) e)->state() & Qt::LeftButton && operation != NONE_OP) {
+  if  (e->type() == QEvent::MouseMove &&
+       ((QMouseEvent *) e)->buttons() == Qt::LeftButton &&
+       operation != NONE_OP) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     int newX = qMouseEv->x();

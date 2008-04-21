@@ -11,15 +11,12 @@
 #endif
 
 #include <vector>
-#include <Qt3Support/q3listview.h>
-#include <Qt3Support/q3textview.h>
-#include <Qt3Support/q3dockwindow.h>
+#include <QtGui/qdockwidget.h>
 #include <QtGui/qsplitter.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
 #include <QtGui/qmenu.h>
 #include <QtAssistant/qassistantclient.h>
-#include "tulip/Qt3ForTulip.h"
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
@@ -63,7 +60,7 @@ struct viewGlFile {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public Q3MainWindow, public Ui::TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
+class viewGl : public QMainWindow, public Ui::TulipData, tlp::Observer, tlp::GraphObserver, tlp::GlSceneObserver {
   Q_OBJECT;
 
 public:
@@ -81,8 +78,8 @@ protected:
   GWOverviewWidget *overviewWidget;
   LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
-  QDockWindow *overviewDock;
-  QDockWindow *tabWidgetDock;
+  QDockWidget *overviewDock;
+  QDockWidget *tabWidgetDock;
   GlMainWidget *glWidget;
   PropertyDialog *propertiesWidget;
   ElementPropertiesWidget *eltProperties;
@@ -104,6 +101,7 @@ protected:
   QMenu optionMenu;
   QMenu selectMenu;
   QMenu exportImageMenu;
+  QAction *renderingParametersDialogAction;
 
   //QMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );

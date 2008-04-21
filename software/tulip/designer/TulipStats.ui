@@ -15,6 +15,9 @@
   <layout class="QGridLayout" >
    <item row="0" column="0" >
     <widget class="QTabWidget" name="StatsTab" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>Computation</string>
@@ -32,7 +35,7 @@
         <string>Auto Shape Conversion (Cube)</string>
        </property>
       </widget>
-      <widget class="Q3GroupBox" name="groupBox14" >
+      <widget class="QGroupBox" name="groupBox14" >
        <property name="geometry" >
         <rect>
          <x>11</x>
@@ -66,7 +69,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="Q3ListBox" name="AvaiMetricsList" >
+       <widget class="QListWidget" name="AvaiMetricsList" >
         <property name="geometry" >
          <rect>
           <x>10</x>
@@ -181,7 +184,7 @@
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="Q3ListBox" name="UsedMetricsList" >
+       <widget class="QListWidget" name="UsedMetricsList" >
         <property name="geometry" >
          <rect>
           <x>10</x>
@@ -263,7 +266,7 @@
       </attribute>
       <layout class="QHBoxLayout" >
        <item>
-        <widget class="Q3GroupBox" name="StatsResultsFrame" >
+        <widget class="QGroupBox" name="StatsResultsFrame" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -279,10 +282,10 @@
          <property name="alignment" >
           <set>Qt::AlignVCenter</set>
          </property>
-         <property name="midLineWidth" >
+         <property name="midLineWidth" stdset="0" >
           <number>1</number>
          </property>
-         <widget class="Q3GroupBox" name="StdDeviationBox" >
+         <widget class="QGroupBox" name="StdDeviationBox" >
           <property name="geometry" >
            <rect>
             <x>10</x>
@@ -324,7 +327,7 @@
            <string/>
           </property>
          </widget>
-         <widget class="Q3GroupBox" name="VarianceBox" >
+         <widget class="QGroupBox" name="VarianceBox" >
           <property name="geometry" >
            <rect>
             <x>10</x>
@@ -353,7 +356,7 @@
            </property>
           </widget>
          </widget>
-         <widget class="Q3GroupBox" name="AverageBox" >
+         <widget class="QGroupBox" name="AverageBox" >
           <property name="geometry" >
            <rect>
             <x>10</x>
@@ -395,7 +398,7 @@
            <string/>
           </property>
          </widget>
-         <widget class="Q3GroupBox" name="BoundsBox" >
+         <widget class="QGroupBox" name="BoundsBox" >
           <property name="geometry" >
            <rect>
             <x>10</x>
@@ -443,7 +446,7 @@
            </property>
           </widget>
          </widget>
-         <widget class="Q3GroupBox" name="LinearRegressionBox" >
+         <widget class="QGroupBox" name="LinearRegressionBox" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -517,7 +520,7 @@
            <string/>
           </property>
          </widget>
-         <widget class="Q3GroupBox" name="EigenBox" >
+         <widget class="QGroupBox" name="EigenBox" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
@@ -604,7 +607,7 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <item>
-        <widget class="Q3Frame" name="ClusteringFrame" >
+        <widget class="QFrame" name="ClusteringFrame" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
@@ -614,7 +617,7 @@
          <property name="frameShadow" >
           <enum>QFrame::Plain</enum>
          </property>
-         <widget class="Q3GroupBox" name="groupBox9" >
+         <widget class="QGroupBox" name="groupBox9" >
           <property name="geometry" >
            <rect>
             <x>10</x>
@@ -746,26 +749,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
-   <header>q3listbox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

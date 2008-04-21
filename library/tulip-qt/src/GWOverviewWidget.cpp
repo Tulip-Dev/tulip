@@ -55,7 +55,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   setupUi(this);
   _observedView = 0;
   _glDraw = 0;
-  _view = new GlMainWidget( frame8, "view" );
+  _view = new GlMainWidget( frame, "view" );
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
   //GlMainComposite* graphComposite=new GlMainComposite();
@@ -64,7 +64,10 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   _view->getScene()->addLayer(layer);
   _view->setMinimumSize( QSize( 128, 128 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
+  QGridLayout* gridLayout = new QGridLayout;
+  gridLayout->setMargin(0);
   gridLayout->addWidget( _view, 0, 0 );
+  frame->setLayout(gridLayout);
   _view->installEventFilter(this);
   _glDraw = new RectPosition(_view, 0);
   layer->addGlEntity(_glDraw,"RectPosition");
@@ -97,12 +100,12 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 	(e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->state()==Qt::LeftButton || me->button()==Qt::LeftButton) {
-      if  (me->state() &
+    if (me->buttons()==Qt::LeftButton || me->button()==Qt::LeftButton) {
+      if  (me->modifiers() &
 #if defined(__APPLE__)
-	   Qt::AltButton
+	   Qt::AltModifier
 #else
-	   Qt::ControlButton
+	   Qt::ControlModifier
 #endif
 	   ) {
 	paramDialog->show();
@@ -174,12 +177,12 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget){
   }
   if (glWidget)
 #if defined(__APPLE__)
-    QToolTip::add(_view, "Click+Alt show rendering parameters");
+    _view->setToolTip(QString("Click+Alt show rendering parameters"));
 #else
-    QToolTip::add(_view, "Click Left+Ctrl to show rendering parameters");
+  _view->setToolTip(QString("Click Left+Ctrl to show rendering parameters"));
 #endif
   else
-    QToolTip::remove(_view);
+    _view->setToolTip(QString());
   _observedView = glWidget;
   _glDraw->setObservedView(_observedView);
   
@@ -220,19 +223,20 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
 //=============================================================================
 void GWOverviewWidget::setBackgroundColor(QColor tmp) {
   if (tmp.isValid()) {
-    paramDialog->background->setPaletteBackgroundColor(tmp);
+    QPalette palette;
+    palette.setColor(QPalette::Button, tmp);
     int h,s,v;
     tmp.getHsv(&h, &s, &v);
     if (v < 128)
-      paramDialog->background->setPaletteForegroundColor(QColor(255, 255, 255));
+      palette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
     else
-      paramDialog->background->setPaletteForegroundColor(QColor(0, 0, 0));
+      palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));
+    paramDialog->background->setPalette(palette);
   }
 }
 //=============================================================================
 void GWOverviewWidget::backColor() {
-  setBackgroundColor(QColorDialog::getColor(paramDialog->background->paletteBackgroundColor(),
-					    this, tr("Choose background color")));
+  setBackgroundColor(QColorDialog::getColor(paramDialog->background->palette().color(QPalette::Button), this));
   updateView();
 }
 //=============================================================================
@@ -248,7 +252,7 @@ void GWOverviewWidget::syncFromView() {
     paramDialog->edge3D->setChecked( param.isEdge3D());
     Color tmp = _observedView->getScene()->getBackgroundColor();
     setBackgroundColor(QColor(tmp[0],tmp[1],tmp[2]));
-    paramDialog->fonts->setCurrentItem(param.getFontsType());
+    paramDialog->fonts->setCurrentIndex(param.getFontsType());
     paramDialog->density->setValue(param.getLabelsBorder());
     //((RenderingParametersDialog *) paramDialog)->updateEdgeOptions();
 
@@ -277,8 +281,8 @@ void GWOverviewWidget::updateView() {
     paramObservedViev.setElementOrdered(paramDialog->ordering->isChecked());
     _observedView->getScene()->setViewOrtho(paramDialog->orthogonal->isChecked());
     paramObservedViev.setEdge3D(paramDialog->edge3D->isChecked());
-    paramObservedViev.setFontsType(paramDialog->fonts->currentItem());
-    QColor tmp = paramDialog->background->paletteBackgroundColor();
+    paramObservedViev.setFontsType(paramDialog->fonts->currentIndex());
+    QColor tmp = paramDialog->background->palette().color(QPalette::Button);
     _observedView->getScene()->setBackgroundColor(Color(tmp.red(),tmp.green(),tmp.blue()));
     paramObservedViev.setLabelsBorder(paramDialog->density->value());
     _observedView->getScene()->getGlGraphComposite()->setRenderingParameters(paramObservedViev);

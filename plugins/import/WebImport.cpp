@@ -86,7 +86,7 @@ void HttpContext::headerReceived(const QHttpResponseHeader & resp) {
 	     (code < 305 || code == 307)) {
       /* redirection codes */
       redirected = true;
-      newLocation = resp.value(QString("Location")).ascii();
+      newLocation = resp.value(QString("Location")).toAscii().data();
     } else /* normal codes */
       isHtml = resp.hasContentType() &&
 	resp.contentType().contains(QString("text/html"));
@@ -184,8 +184,9 @@ bool UrlElement::siteconnect(const string &server, const string &url,const int s
   // block until the request is finished
   // or there is timeout
   QTimer timer;
+  timer.setSingleShot(true);
   context->setTimer(&timer);
-  timer.start(2000, true);
+  timer.start(2000);
   while(!context->processed) {
     QCoreApplication::processEvents();
   }

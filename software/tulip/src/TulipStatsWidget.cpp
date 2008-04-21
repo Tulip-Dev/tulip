@@ -51,8 +51,8 @@ namespace tlp
 
     connect(StatsTab, SIGNAL(currentChanged(QWidget *)), SLOT(refreshMetricsSlot()));
 
-    connect(AvaiMetricsList, SIGNAL(selectionChanged()), SLOT(enableAddMetricBtn()));
-    connect(UsedMetricsList, SIGNAL(selectionChanged()), SLOT(enableRemoveMetricBtn()));
+    connect(AvaiMetricsList, SIGNAL(currentRowChanged(int)), SLOT(enableAddMetricBtn(int)));
+    connect(UsedMetricsList, SIGNAL(currentRowChanged(int)), SLOT(enableRemoveMetricBtn(int)));
 
     connect(AddMetricBtn, SIGNAL(clicked()), SLOT(addMetricSlot()));
     connect(DelMetricBtn, SIGNAL(clicked()), SLOT(delMetricSlot()));
@@ -323,30 +323,30 @@ namespace tlp
 
     ClusteringComboBox->clear();
 
-    ClusteringComboBox->insertItem("Custom");
+    ClusteringComboBox->addItem("Custom");
   
-    ClusteringComboBox->insertItem("Average (X)");
+    ClusteringComboBox->addItem("Average (X)");
 
     if (nMetrics > 1)
       {
-	ClusteringComboBox->insertItem("Average (Y)");
+	ClusteringComboBox->addItem("Average (Y)");
       }
 
     if (nMetrics > 2)
       {
-	ClusteringComboBox->insertItem("Average (Z)");
+	ClusteringComboBox->addItem("Average (Z)");
       }
 
     if (nMetrics == 2)
       {
-	ClusteringComboBox->insertItem("Linear Regression Plane");
+	ClusteringComboBox->addItem("Linear Regression Plane");
       }
 
     if (nMetrics == 3)
       {
-	ClusteringComboBox->insertItem("Eigenvectors plane (XY)");
-	ClusteringComboBox->insertItem("Eigenvectors plane (XZ)");
-	ClusteringComboBox->insertItem("Eigenvectors plane (YZ)");
+	ClusteringComboBox->addItem("Eigenvectors plane (XY)");
+	ClusteringComboBox->addItem("Eigenvectors plane (XZ)");
+	ClusteringComboBox->addItem("Eigenvectors plane (YZ)");
       }
 
     aEdit->setText("1");
@@ -359,12 +359,12 @@ namespace tlp
     // cout << " ...[END]" << endl;
   }
 
-  void TulipStats::enableAddMetricBtn()
+  void TulipStats::enableAddMetricBtn(int)
   {
     AddMetricBtn->setEnabled(true);
   }
 
-  void TulipStats::enableRemoveMetricBtn()
+  void TulipStats::enableRemoveMetricBtn(int)
   {
     DelMetricBtn->setEnabled(true);
   }
@@ -383,8 +383,10 @@ namespace tlp
 
 	PropertyInterface* proxy = graph->getProperty(proxyName);
 
-	if (dynamic_cast<DoubleProperty*>(proxy) != 0)
-	  AvaiMetricsList->insertItem(proxyName.c_str());	
+	if (dynamic_cast<DoubleProperty*>(proxy) != 0) {
+	  QListWidgetItem *item = new QListWidgetItem(AvaiMetricsList);
+	  item->setText(proxyName.c_str());
+	}
       }
 
     delete properties;
@@ -395,13 +397,13 @@ namespace tlp
     while (i < nMetrics)
       {
 	bool found = false;
-	QString item = UsedMetricsList->text(i);
+	QString item = UsedMetricsList->item(i)->text();
 
-	for(unsigned int j=0; j < AvaiMetricsList->count(); j++)
+	for(int j=0; j < AvaiMetricsList->count(); j++)
 	  {
-	    QString avai = AvaiMetricsList->text(j);
+	    QString avai = AvaiMetricsList->item(j)->text();
 
-	    if (item == AvaiMetricsList->text(j))
+	    if (item == AvaiMetricsList->item(j)->text())
 	      {
 		found = true;
 		break;
@@ -444,7 +446,8 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    std::string proxyName = AvaiMetricsList->currentText().toStdString();
+    std::string proxyName =
+      AvaiMetricsList->currentItem()->text().toStdString();
 
     // We limit the number of proxy to 3 maximum :
     if (nMetrics == 3) 
@@ -480,7 +483,8 @@ namespace tlp
     if (nMetrics >= 3)
       DiscStep3->setEnabled(true);
 
-    UsedMetricsList->insertItem(proxyName.c_str());
+    QListWidgetItem* item = new QListWidgetItem(UsedMetricsList);
+    item->setText(proxyName.c_str());
 
     //  // cout << " ...[END]" << endl;
   }
@@ -489,7 +493,7 @@ namespace tlp
   void TulipStats::delMetricSlot(int metricID)
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
-    UsedMetricsList->removeItem(metricID);
+    delete UsedMetricsList->takeItem(metricID);
 
     nMetrics--;
 
@@ -524,8 +528,8 @@ namespace tlp
   {
     // cout << "[START] ... " << __PRETTY_FUNCTION__;
 
-    int metricID = UsedMetricsList->currentItem();
-    UsedMetricsList->removeItem(metricID);
+    int metricID = UsedMetricsList->currentRow();
+    delete UsedMetricsList->takeItem(metricID);
 
     nMetrics--;
 

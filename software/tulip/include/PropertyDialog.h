@@ -11,7 +11,7 @@
 
 #include "PropertyDialogData.h"
 
-class QListViewItem;
+class QListWidgetItem;
 class QStringList;
 class QScrollBar;
 
@@ -42,7 +42,7 @@ public slots:
   void update();
   void selectNode(tlp::node);
   void selectEdge(tlp::edge);
-  void changePropertyName(Q3ListViewItem *);
+  void changePropertyName(QListWidgetItem *, QListWidgetItem *);
   void newProperty();
   void removeProperty();
   void cloneProperty();

@@ -26,6 +26,7 @@
 #include <QtGui/qtoolbutton.h>
 #include <QtGui/qtooltip.h>
 #include <QtGui/qtextbrowser.h>
+#include <QtGui/qevent.h>
 
 
 using namespace std;
@@ -119,8 +120,8 @@ namespace {
     StructDef *inDef;
 
     QParamDialog(const StructDef *sDef, StructDef *iDef,
-		 QWidget * parent = 0, const char * name = 0, bool modal = FALSE, Qt::WFlags f = 0 )
-      : QDialog( parent, name, modal, f ), sysDef(sDef), inDef(iDef) {
+		 QWidget * parent = 0)
+      : QDialog( parent), sysDef(sDef), inDef(iDef) {
       helpBrowser = 0;
       curHelpParam = -1;
     }
@@ -134,7 +135,7 @@ namespace {
 #define NONE_PROP " None"
 
     void setDefaults() {
-      for( uint i = 0 ; i < iparamA.size(); i++ ) {
+      for( unsigned int i = 0 ; i < iparamA.size(); i++ ) {
 	IParam & ip = iparamA[i];
 
 	// bool
@@ -152,17 +153,17 @@ namespace {
 		ip.typeName == TN(float) ||
 		ip.typeName == TN(double)) {
 	  QLineEdit * le = (QLineEdit *) ip.wA[0];
-	  inDef->setDefValue(ip.name, le->text().ascii());
+	  inDef->setDefValue(ip.name, le->text().toAscii().data());
 	}
 
 	// string
 	else if(ip.typeName == TN(string)) {
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    inDef->setDefValue(ip.name, te->text().ascii());
+	    inDef->setDefValue(ip.name, te->toPlainText().toAscii().data());
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    inDef->setDefValue( ip.name, le->text().ascii() );
+	    inDef->setDefValue( ip.name, le->text().toAscii().data() );
 	  }
 	}
 
@@ -201,7 +202,7 @@ namespace {
 		 || ip.typeName == TN(SizeProperty)
 		 || ip.typeName == TN(ColorProperty)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string value = cb->currentText().ascii();
+	  string value = cb->currentText().toAscii().data();
 	  if (value != NONE_PROP)
 	    inDef->setDefValue(ip.name, value);
 	}
@@ -209,12 +210,12 @@ namespace {
 	// StringCollection
 	else if (ip.typeName == TN(StringCollection)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string current = cb->currentText().ascii();
+	  string current = cb->currentText().toAscii().data();
 	  string value(current);
 	  for ( int i = 0; i < cb->count(); i++)
-	    if (current != cb->text(i).ascii()){
+	    if (current != cb->itemText(i).toAscii().data()){
 	      value += ";";
-	      value += cb->text(i).ascii();
+	      value += cb->itemText(i).toAscii().data();
 	    }
 	  inDef->setDefValue(ip.name, value);
 	}
@@ -222,7 +223,7 @@ namespace {
     }
 
     void restoreSystemDefaults() {
-      for( uint i = 0 ; i < iparamA.size(); i++ ) {
+      for( unsigned int i = 0 ; i < iparamA.size(); i++ ) {
 	IParam & ip = iparamA[i];
 
 	// bool
@@ -267,7 +268,9 @@ namespace {
 	  leG->setText(QString("%1").arg(c.getG()));
 	  leB->setText(QString("%1").arg(c.getB()));
 	  leA->setText(QString("%1").arg(c.getA()));
-	  ip.opt->setPaletteBackgroundColor(QColor(c.getR(), c.getG(), c.getB()));
+	  QPalette palette;
+	  palette.setColor(QPalette::Button, QColor(c.getR(), c.getG(), c.getB()));
+	  ip.opt->setPalette(palette);
 	}
 
 	// Size
@@ -294,14 +297,14 @@ namespace {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
 	  string value = sysDef->getDefValue(ip.name);
 	  if (sysDef->isMandatory(ip.name))
-	    cb->setCurrentItem(0);
+	    cb->setCurrentIndex(0);
 	  else {
 	    if (value.empty())
 	      value = NONE_PROP;
 	  
 	    for (int i = 0; i <  cb->count(); i++)
-	      if (value == cb->text(i).ascii()) {
-		cb->setCurrentItem(i);
+	      if (value == cb->itemText(i).toAscii().data()) {
+		cb->setCurrentIndex(i);
 		break;
 	      }
 	  }
@@ -313,8 +316,8 @@ namespace {
 	  StringCollection coll(sysDef->getDefValue(ip.name));
 	  string current = coll.getCurrentString();
 	  for ( int i = 0; i < cb->count(); i++)
-	    if (current == cb->text(i).ascii()){
-	      cb->setCurrentItem(i);
+	    if (current == cb->itemText(i).toAscii().data()){
+	      cb->setCurrentIndex(i);
 	      break;
 	    }
 	}
@@ -334,7 +337,7 @@ namespace {
       }	
       if( e->type() == QEvent::MouseMove ) {
 	IParam * ip = 0;
-	for( uint i = 0 ; i < iparamA.size(); i++ ) {
+	for( unsigned int i = 0 ; i < iparamA.size(); i++ ) {
 	  if( iparamA[i].label == obj ) {
 	    ip = &iparamA[i];
 	    break;
@@ -356,7 +359,7 @@ namespace {
 
       if( e->type() == QEvent::MouseButtonRelease ) {
 	IParam * ip = 0;
-	for( uint i = 0 ; i < iparamA.size(); i++ ) {
+	for( unsigned int i = 0 ; i < iparamA.size(); i++ ) {
 	  if( iparamA[i].opt == obj ) {
 	    ip = &iparamA[i];
 	    break;
@@ -383,7 +386,9 @@ namespace {
 	    leB->setText( QString("%1").arg(qBlue(rgb)));
 	    leA->setText( QString("%1").arg(qAlpha(rgb)));
 	  }
-	  ((QWidget *)obj)->setPaletteBackgroundColor(QColor(rgb));
+	  QPalette palette;
+	  palette.setColor(QPalette::Button, QColor(rgb));
+	  ((QWidget *)obj)->setPalette(palette);
 	  return false;
 	} else if( ip->typeName == TN(string) ) {
 	  QString s = QFileDialog::getOpenFileName();
@@ -583,7 +588,9 @@ namespace {
 	  leG->setText( QString("%1").arg(v.getG()) );
 	  leB->setText( QString("%1").arg(v.getB()) );
 	  leA->setText( QString("%1").arg(v.getA()) );
-	  opt->setPaletteBackgroundColor( QColor( v.getR(), v.getG(), v.getB() ) );
+	  QPalette palette;
+	  palette.setColor(QPalette::Button, QColor(v.getR(), v.getG(), v.getB()));
+	  opt->setPalette(palette);
 	}
 
 	// Size
@@ -644,19 +651,19 @@ namespace {
 	    curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
-	    for( uint i = 0 ; i < proxyA.size() ; i++ )
-	      cb->insertItem( proxyA[i].c_str() );
+	    for( unsigned int i = 0 ; i < proxyA.size() ; i++ )
+	      cb->addItem(QString(proxyA[i].c_str()));
 	    ip.wA.push_back( cb );
 	    // if property is not mandatory, insert None
 	    if (!inDef->isMandatory(ip.name)) {
-	      cb->insertItem(NONE_PROP, 0);
+	      cb->insertItem(0, QString(NONE_PROP));
 	      if ( curIdx >= 0 )
 		++curIdx;
 	    }
 	    if (curIdx >= 0)
-	      cb->setCurrentItem( curIdx );
+	      cb->setCurrentIndex( curIdx );
 	    else
-	      cb->setCurrentItem(0);
+	      cb->setCurrentIndex(0);
 	  }
 	}
 	// StringCollection
@@ -665,9 +672,9 @@ namespace {
 	  StringCollection stringCol(valueCollection);
 	  QComboBox * cb = new QComboBox( this );
 	  for(unsigned int i=0; i < stringCol.size(); i++ ) {
-            cb->insertItem( stringCol[i].c_str());
+            cb->addItem(QString(stringCol[i].c_str()));
 	  }
-	  cb->setCurrentItem(0);
+	  cb->setCurrentIndex(0);
 	  ip.wA.push_back( cb );       
 	}
 	
@@ -685,7 +692,7 @@ namespace {
       // Layout'ing
 
       int labelWidthMax = 0;
-      for( uint i = 0 ; i < iparamA.size() ; i++ ) {
+      for( unsigned int i = 0 ; i < iparamA.size() ; i++ ) {
 	iparamA[i].label->adjustSize();
 	int lWidth = iparamA[i].label->width();
 	if (labelWidthMax < lWidth)
@@ -701,7 +708,7 @@ namespace {
       size.setWidth(size.width() - 10);
       cancelB->resize(size);
       setDefB = new QPushButton("Set as Defaults", this);
-      QToolTip::add(setDefB, "Set the current values as the default ones for future use");
+      setDefB->setToolTip("Set the current values as the default ones for future use");
       setDefB->installEventFilter(this);
       size = setDefB->size();
 #if defined(__APPLE__)
@@ -711,7 +718,7 @@ namespace {
 #endif
       setDefB->resize(size);
       restoreSysDefB = new QPushButton("Restore System Defaults", this);
-      QToolTip::add(restoreSysDefB, "ReInitialize the dialog with the original default values");
+      restoreSysDefB->setToolTip("ReInitialize the dialog with the original default values");
       restoreSysDefB->installEventFilter(this);
       size = restoreSysDefB->size();
 #if defined(__APPLE__)
@@ -735,12 +742,12 @@ namespace {
       info->move( ix, y );
       y += info->height() + iy*4;
 
-      for( uint i = 0 ; i < iparamA.size() ; i++ ) {
+      for( unsigned int i = 0 ; i < iparamA.size() ; i++ ) {
 	IParam & ip = iparamA[i];
 
 	int x = labelWidthMax+ix*2;
 	int maxHeight = 0;
-	for( uint j = 0 ; j < ip.wA.size() ; j++ ) {
+	for( unsigned int j = 0 ; j < ip.wA.size() ; j++ ) {
 	  ip.wA[j]->move( x, y + ip.offY[j]);
 	  x += ip.wA[j]->width() + ix;
 	  if (ip.wA[j]->height() > maxHeight)
@@ -797,7 +804,7 @@ namespace {
 
     void fillOut(	DataSet &			outSet,
 			Graph *		inG			) {
-      for( uint i = 0 ; i < iparamA.size(); i++ ) {
+      for( unsigned int i = 0 ; i < iparamA.size(); i++ ) {
 	IParam & ip = iparamA[i];
 
 	// bool
@@ -834,10 +841,10 @@ namespace {
 	else if(	ip.typeName == TN(string)	) {
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    outSet.set<string>(ip.name, te->text().ascii());
+	    outSet.set<string>(ip.name, te->toPlainText().toAscii().data());
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    outSet.set<string>( ip.name, le->text().ascii() );
+	    outSet.set<string>( ip.name, le->text().toAscii().data() );
 	  }
 	}
 
@@ -877,7 +884,7 @@ namespace {
 		  || ip.typeName == TN(SizeProperty)
 		  || ip.typeName == TN(ColorProperty))) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string propName(cb->currentText().latin1());
+	  string propName(cb->currentText().toAscii().data());
 	  if (propName != NONE_PROP)
 	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
 	  else {
@@ -891,10 +898,10 @@ namespace {
         QComboBox * cb = (QComboBox*) ip.wA[0];
         std::vector<string> vectorTemp;
         for ( int i = 0; i < cb->count(); i++) {
-            vectorTemp.push_back(cb->text(i).ascii());
+            vectorTemp.push_back(cb->itemText(i).toAscii().data());
         }
         outSet.set<StringCollection>( ip.name,
-                StringCollection( vectorTemp, cb->currentText().latin1()));
+                StringCollection( vectorTemp, cb->currentText().toAscii().data()));
         StringCollection toto;
         outSet.get<StringCollection>( ip.name,toto);
 	}
@@ -924,7 +931,7 @@ tlp::openDataSetDialog(	DataSet & outSet,
   if( !inName )
     inName = "Parameter's Dialog";
   QParamDialog *dlg = new QParamDialog(sysDef, inDef, parent);
-  dlg->setCaption( inName );
+  dlg->setWindowTitle( inName );
 
   if( !dlg->fillIn(inSet, inG) )
     return true;

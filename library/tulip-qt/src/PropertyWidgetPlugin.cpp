@@ -24,7 +24,7 @@ bool PropertyWidgetPlugin::isInitialized() const {
 }
 
 QWidget* PropertyWidgetPlugin::createWidget(QWidget *parent) {
-  return new PropertyWidget(parent, name());
+  return new PropertyWidget(parent);
 }
 
 QString PropertyWidgetPlugin::name() const {

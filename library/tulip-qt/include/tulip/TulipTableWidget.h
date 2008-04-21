@@ -51,8 +51,7 @@ class FilenameEditor : public QWidget {
   Q_PROPERTY(QString filter READ filter WRITE setFilter);
   
 public:
-  FilenameEditor(QWidget *, const char *);
-  FilenameEditor(const QString &filter, QWidget *, const char *);
+  FilenameEditor(QWidget *);
   ~FilenameEditor();
   
   QString fileName() const;
@@ -81,7 +80,7 @@ private:
   QLineEdit *edit[3];
 
 public:
-  SizeEditor(const Size &, QWidget *, const char *);
+  SizeEditor(const Size &, QWidget *);
   ~SizeEditor();
   Size getSize() const;
   void setFocus();
@@ -100,7 +99,7 @@ private:
   QLineEdit *edit[3];
 
  public:
-  CoordEditor(const Coord &, QWidget *, const char *);
+  CoordEditor(const Coord &, QWidget *);
   ~CoordEditor();
   Coord getCoord() const;
   void setFocus();

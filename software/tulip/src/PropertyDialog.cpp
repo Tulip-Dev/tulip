@@ -13,7 +13,6 @@
 #include <windows.h>
 #endif
 #include <QtGui/qlistview.h>
-#include <Qt3Support/q3table.h>
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
@@ -22,7 +21,6 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
-#include "tulip/Qt3ForTulip.h"
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -51,8 +49,8 @@ PropertyDialog::PropertyDialog(QWidget* parent)
   _filterSelection=false;
   glWidget=0;
   graph=0;
-  connect(localProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
-  connect(inheritedProperties, SIGNAL(selectionChanged(Q3ListViewItem *)), SLOT(changePropertyName(Q3ListViewItem *)));
+  connect(localProperties, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), SLOT(changePropertyName(QListWidgetItem *, QListWidgetItem *)));
+  connect(inheritedProperties, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), SLOT(changePropertyName(QListWidgetItem *, QListWidgetItem *)));
   connect(removeButton , SIGNAL(clicked()) , SLOT(removeProperty()) );
   connect(newButton,SIGNAL(clicked()),SLOT(newProperty()));
   connect(cloneButton,SIGNAL(clicked()),SLOT(cloneProperty()));
@@ -62,7 +60,7 @@ PropertyDialog::PropertyDialog(QWidget* parent)
 PropertyDialog::~PropertyDialog() {
 }
 //=================================================
-void PropertyDialog::changePropertyName(QListViewItem *item) {
+void PropertyDialog::changePropertyName(QListWidgetItem *item, QListWidgetItem *) {
   if (item==0) {
     editedProperty=0;
     return;
@@ -71,15 +69,15 @@ void PropertyDialog::changePropertyName(QListViewItem *item) {
 
   tableNodes->selectNodeOrEdge(true);
   tableEdges->selectNodeOrEdge(false);
-  tableNodes->changeProperty(graph,item->text(0).ascii());
-  tableEdges->changeProperty(graph,item->text(0).ascii());
+  tableNodes->changeProperty(graph,item->text().toAscii().data());
+  tableEdges->changeProperty(graph,item->text().toAscii().data());
 
-  PropertyInterface *tmpProxy=graph->getProperty(item->text(0).ascii());
+  PropertyInterface *tmpProxy=graph->getProperty(item->text().toAscii().data());
   editedProperty=tmpProxy;
-  editedPropertyName=item->text(0).ascii();
-  propertyName->setText(item->text(0));
+  editedPropertyName=item->text().toAscii().data();
+  //propertyName->setText(item->text());
   
-  if (graph->existLocalProperty(item->text(0).ascii()))
+  if (graph->existLocalProperty(item->text().toAscii().data()))
     inheritedProperties->clearSelection();
   else
     localProperties->clearSelection();
@@ -105,7 +103,7 @@ void PropertyDialog::selectNode(node n){}
 void PropertyDialog::selectEdge(edge e){}
 //=================================================
 void PropertyDialog::setAllValue() {
-  if (tabWidget->currentPageIndex()==0)
+  if (tabWidget->currentIndex()==0)
     tableNodes->setAll();
   else
     tableEdges->setAll();
@@ -122,7 +120,7 @@ void PropertyDialog::setGlMainWidget(GlMainWidget *gw) {
 
   localProperties->clear();
   inheritedProperties->clear();
-  propertyName->setText(QString("Select a Property"));
+  //propertyName->setText(QString("Select a Property"));
   //Build the property list
   tableNodes->selectNodeOrEdge(true);
   tableEdges->selectNodeOrEdge(false);
@@ -135,14 +133,14 @@ void PropertyDialog::setGlMainWidget(GlMainWidget *gw) {
   Iterator<string> *it=sg->getLocalProperties();
   while (it->hasNext()) {
     string tmp=it->next();
-    QListViewItem *tmpItem=new QListViewItem(localProperties);
-    tmpItem->setText(0,QString(tmp.c_str()));
+    QListWidgetItem* tmpItem = new QListWidgetItem(localProperties);
+    tmpItem->setText(QString(tmp.c_str()));
   } delete it;
   it=sg->getInheritedProperties();
   while (it->hasNext()) {
     string tmp=it->next();
-    QListViewItem *tmpItem=new QListViewItem(inheritedProperties);
-    tmpItem->setText(0,QString(tmp.c_str()));
+    QListWidgetItem *tmpItem = new QListWidgetItem(inheritedProperties);
+    tmpItem->setText(QString(tmp.c_str()));
   } delete it;
 }
 //=================================================
@@ -150,19 +148,24 @@ void PropertyDialog::newProperty() {
   if (!graph) return;
   QStringList lst;
   lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String";
-  bool ok = FALSE;
-  QString res = QInputDialog::getItem( "Property type","Please select the property type", lst, 3, FALSE, &ok, this );
+  bool ok = false;
+  QString res = QInputDialog::getItem(this, "Property type",
+				      "Please select the property type",
+				      lst, 3, false, &ok);
   if ( ok ) {
-      QString text = QInputDialog::getText("Property name", "Please enter the property name", QLineEdit::Normal, QString::null, &ok, this );
+    QString text = QInputDialog::getText(this, "Property name",
+					 "Please enter the property name",
+					 QLineEdit::Normal, QString::null,
+					 &ok);
       if (ok) {
 	string erreurMsg;
-	if (strcmp(res.ascii(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.ascii());
-	if (strcmp(res.ascii(),"String")==0) graph->getLocalProperty<StringProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.ascii());
-	if (strcmp(res.ascii(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.ascii());
+	if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"String")==0) graph->getLocalProperty<StringProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.toAscii().data());
+	if (strcmp(res.toAscii().data(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.toAscii().data());
 	setGlMainWidget(glWidget);
       }
   }
@@ -175,7 +178,7 @@ void PropertyDialog::toStringProperty() {
   Observable::holdObservers();
   PropertyInterface *newLabels=graph->getProperty(name);
   StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
-  if (tabWidget->currentPageIndex()==0) {
+  if (tabWidget->currentIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
     while(itN->hasNext()) {

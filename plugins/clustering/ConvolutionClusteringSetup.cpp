@@ -106,16 +106,17 @@ ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *c
     useLogarithmicScale(false) {
   setupUi(this);
   histogramWidget = new HistogramWidget(this, Frame3);
-  QGridLayout *flayout = new QGridLayout(Frame3, 1, 1, 1);
+  QGridLayout *flayout = new QGridLayout(Frame3);
+  flayout->setMargin(1);
   flayout->addWidget(histogramWidget, 0, 0);
 
   int a,b,c;
   convolPlugin->getParameters(a,b,c);
-  widthSlider->setMinValue(1);
-  widthSlider->setMaxValue(a);
+  widthSlider->setMinimum(1);
+  widthSlider->setMaximum(a);
   widthSlider->setValue(c);
-  discretizationSlider->setMinValue(1);
-  discretizationSlider->setMaxValue(2*a);
+  discretizationSlider->setMinimum(1);
+  discretizationSlider->setMaximum(2*a);
   discretizationSlider->setValue(a);
 }
 
@@ -138,7 +139,7 @@ void ConvolutionClusteringSetup::setlog(bool b) {
 void ConvolutionClusteringSetup::update() {
   // GC 4.2: >? is no longer supported
   //widthSlider->setMaxValue(discretizationSlider->value() / 2 >? 1);
-  widthSlider->setMaxValue(std::max(discretizationSlider->value() / 2, 1));
+  widthSlider->setMaximum(std::max(discretizationSlider->value() / 2, 1));
   convolPlugin->setParameters(discretizationSlider->value(),0,widthSlider->value());
   if (histogramWidget)
     histogramWidget->update();

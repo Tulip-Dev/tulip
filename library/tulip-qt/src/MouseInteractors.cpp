@@ -34,7 +34,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 //===============================================================
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress &&
-      ((QMouseEvent *) e)->button()==Qt::LeftButton) {
+      ((QMouseEvent *) e)->buttons()==Qt::LeftButton) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     ElementType type;
@@ -179,19 +179,19 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
-    if (((QMouseEvent *) e)->button() == Qt::LeftButton) {
+    if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
       GWInteractor *currentMouse;
       // give focus so we can catch key events
       ((GlMainWidget *)widget)->setFocus();
-      if (((QMouseEvent *) e)->state() &
+      if (((QMouseEvent *) e)->modifiers() &
 #if defined(__APPLE__)
-	  Qt::AltButton
+	  Qt::AltModifier
 #else
-	  Qt::ControlButton
+	  Qt::ControlModifier
 #endif
 	  )
 	currentMouse = new MouseZoomRotZ();
-      else if (((QMouseEvent *) e)->state() & Qt::ShiftButton)
+      else if (((QMouseEvent *) e)->modifiers() & Qt::ShiftModifier)
 	currentMouse = new MouseRotXRotY();
       else
 	currentMouse = new MouseMove();
@@ -216,8 +216,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     case Qt::Key_Right: g->getScene()->translateCamera(-1 * delta * 2,0,0); break;
     case Qt::Key_Up: g->getScene()->translateCamera(0,-1 * delta * 2,0); break;
     case Qt::Key_Down: g->getScene()->translateCamera(0,delta * 2,0); break;
-    case Qt::Key_Prior: g->getScene()->zoom(delta); break;
-    case Qt::Key_Next: g->getScene()->zoom(-1 * delta); break;
+    case Qt::Key_PageUp: g->getScene()->zoom(delta); break;
+    case Qt::Key_PageDown: g->getScene()->zoom(-1 * delta); break;
     case Qt::Key_Home: g->getScene()->translateCamera(0,0,-1 * delta * 2); break;
     case Qt::Key_End: g->getScene()->translateCamera(0,0,delta * 2); break;
     case Qt::Key_Insert: g->getScene()->rotateScene(0,0,-1 * delta * 2); break;
@@ -234,8 +234,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     case Qt::Key_Right:
     case Qt::Key_Up:
     case Qt::Key_Down:
-    case Qt::Key_Prior:
-    case Qt::Key_Next:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
     case Qt::Key_Home:
     case Qt::Key_End:
     case Qt::Key_Insert:

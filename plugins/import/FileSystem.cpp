@@ -143,12 +143,12 @@ public:
 
     struct stat infoEntry;
     #ifdef _WIN32
-    stat(dirName.ascii(),&infoEntry);
+    stat(dirName.toAscii().data(),&infoEntry);
     #else
-    lstat(dirName.ascii(),&infoEntry);
+    lstat(dirName.toAscii().data(),&infoEntry);
     #endif
     if (infoEntry.st_dev!=true)  {
-      label->setNodeValue(newNode,dirName.ascii());
+      label->setNodeValue(newNode,dirName.toAscii().data());
       if (infoEntry.st_size<1)
 	size->setNodeValue(newNode,1);
       else
@@ -164,7 +164,7 @@ public:
       pluginProgress->showPreview(false);
 
     unsigned int x = 0, y = 2;
-    readDir(newNode,string(dirName.ascii())+"/", x , y);
+    readDir(newNode,string(dirName.toAscii().data())+"/", x , y);
     double newSize=0;
     Coord tmp(0,0,0);
     if (pluginProgress->state()!=TLP_CANCEL) {

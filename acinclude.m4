@@ -480,10 +480,8 @@ AC_SUBST(QT_PACKAGE)
 
 ac_qt_includes="$qt_incdir -I$qt_incdir/Qt"
 
-dnl we add QT3_SUPPORT compilation flag as indicated 
-dnl in http://doc.trolltech.com/4.0/porting4.html
-dnl an QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
-  QT_CPPFLAGS="$QT_CPPFLAGS -DQT3_SUPPORT  -DQT_NO_DEBUG"
+dnl we add QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
+QT_CPPFLAGS="$QT_CPPFLAGS -DQT_NO_DEBUG"
 
 qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt4/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
 test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib ${QTDIR} $qt_libdirs"
@@ -522,11 +520,10 @@ AC_SUBST(QT_INCLUDES)
 AC_SUBST(QT_LDFLAGS)
 AC_SUBST(QT_CPPFLAGS)
 dnl With the version 4 of Qt, its features are splitted in many libs
-dnl Qt3Support lib is for Qt 3 compatibility purpose
 if test ${VAR_WIN32} = 1
 then
   LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient4"
-  LIB_QT="-lQtCore4 -lQtGui4 -lQt3Support4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
+  LIB_QT="-lQtCore4 -lQtGui4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
 dnl For linking purpose, we need to copy some libs
 dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
   if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
@@ -534,9 +531,6 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
   fi
   if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
     cp ${QTDIR}/lib/QtGui4.dll ${QTDIR}/lib/libQtGui4.dll
-  fi
-  if test ! -f ${QTDIR}/lib/libQt3Support4.dll ; then
-    cp ${QTDIR}/lib/Qt3Support4.dll ${QTDIR}/lib/libQt3Support4.dll
   fi
   if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
     cp ${QTDIR}/lib/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
@@ -550,7 +544,7 @@ dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework Qt3Support -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtXml"
+    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtXml"
     if test -d ${QTDIR}/lib/QtAssistantClient.framework
     then
       LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"
@@ -562,7 +556,7 @@ else
     fi
   else
     LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
-    LIB_QT="-lQtCore -lQt3Support -lQtGui -lQtOpenGL"
+    LIB_QT="-lQtCore -lQtGui -lQtOpenGL"
   fi
 fi
 

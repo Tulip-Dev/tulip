@@ -14,6 +14,7 @@
         <file>i_select.png</file>
         <file>i_selection.png</file>
         <file>i_zoom.png</file>
+        <file>logo160x145.png</file>
         <file>logo32x32.png</file>
     </qresource>
 </RCC>

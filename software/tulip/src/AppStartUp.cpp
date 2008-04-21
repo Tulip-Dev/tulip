@@ -79,7 +79,7 @@ AppStartUp::~AppStartUp() {
 }
 
 void AppStartUp::setProgress(int progress) {
-  progressBar->setProgress(progress);
+  progressBar->setValue(progress);
   if(progress!=0 && currentFrame!=99) {
     currentFrame=(int)(((float)progress/((float)totalSteps*0.75))*100);
     if(currentFrame>99)
@@ -90,7 +90,7 @@ void AppStartUp::setProgress(int progress) {
  
 void AppStartUp::setTotalSteps(int totalSteps) {
   this->totalSteps=totalSteps;
-  progressBar->setTotalSteps(totalSteps);
+  progressBar->setMaximum(totalSteps);
 }
  
 void AppStartUp::setLabel(string str) {

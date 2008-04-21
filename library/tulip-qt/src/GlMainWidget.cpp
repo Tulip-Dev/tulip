@@ -70,7 +70,7 @@ static QGLFormat GlInit() {
 }
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
-  QGLWidget(GlInit(), parent, name),
+  QGLWidget(GlInit(), parent),
   _id(GWInteractor::invalidID),
   scene(new QtCPULODCalculator()){
   setObjectName(name);

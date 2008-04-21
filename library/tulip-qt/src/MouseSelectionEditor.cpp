@@ -114,7 +114,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     //  cerr << "edit pos:" << editPosition << endl;
 
     vector < GlEntity *> select;
-    switch(qMouseEv->button()) {
+    switch(qMouseEv->buttons()) {
     case Qt::LeftButton : {
       // first ensure that something is selected
       bool hasSelection = false;
@@ -184,11 +184,11 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
       else {
-	if (qMouseEv->state() &
+	if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	    Qt::AltButton
+	    Qt::AltModifier
 #else
-	    Qt::ControlButton
+	    Qt::ControlModifier
 #endif
 	    ) {
 	  operation = ROTATE_XY;
@@ -201,13 +201,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       mode = COORD_AND_SIZE;    
-      if (qMouseEv->state() & Qt::ShiftButton)
+      if (qMouseEv->modifiers() & Qt::ShiftModifier)
 	mode = COORD;
-      if (qMouseEv->state() &
+      if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	  Qt::AltButton
+	  Qt::AltModifier
 #else
-	  Qt::ControlButton
+	  Qt::ControlModifier
 #endif
 	  )
 	mode = SIZE;
@@ -237,7 +237,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&
-       ((QMouseEvent *) e)->state() & Qt::LeftButton &&
+       ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
       operation != NONE) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;

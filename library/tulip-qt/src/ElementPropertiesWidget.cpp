@@ -54,7 +54,9 @@ QStringList ElementPropertiesWidget::getCurrentListedProperties() const{
   case NODE: return nodeListedProperties;
   case EDGE: return edgeListedProperties;
   default:
-    qWarning(QString(__PRETTY_FUNCTION__) + ": current displayMode is invalid!");
+    std::string str(__PRETTY_FUNCTION__);
+    str += ": current displayMode is invalid!";
+    qWarning(str.c_str());
     return QStringList();
   }
 }
@@ -108,7 +110,6 @@ void ElementPropertiesWidget::setCurrentNode(Graph *sg, const node &n) {
   displayMode = NODE;
   nodeSet = true;
   currentNode = n;
-  this->setCaption(QString("Node %1").arg(n.id));
   label->setText(QString("Node %1").arg(n.id));
   updateTable();
 }
@@ -118,7 +119,6 @@ void ElementPropertiesWidget::setCurrentEdge(Graph *sg,const edge &e) {
   displayMode = EDGE;
   edgeSet = true;
   currentEdge = e;
-  this->setCaption(QString("Edge %1").arg(e.id));
   label->setText(QString("Edge %1").arg(e.id));
   updateTable();
 }
@@ -129,7 +129,6 @@ void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
   graph = s;
   nodeSet = false;
   edgeSet = false;
-  this->setCaption("");
   label->setText("No element selected");
   /*for (int i=0;i<propertyTable->rowCount();++i) {
     propertyTable->clearCell(i,0);
@@ -238,18 +237,18 @@ void ElementPropertiesWidget::updateTable() {
       QTableWidgetItem* nameItem = new QTableWidgetItem(*it);
       nameItem->setFlags(Qt::ItemIsEnabled);
       propertyTable->setItem(i, 0, nameItem);
-      if (graph->existProperty((*it).latin1())) {
+      if (graph->existProperty((*it).toAscii().data())) {
 	switch(displayMode) {
 	case NODE:
 	  if (nodeSet) {
-	    PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
-	    propertyTable->setTulipNodeItem(editedProperty, (*it).latin1(), currentNode, i, 1);
+	    PropertyInterface *editedProperty = graph->getProperty((*it).toAscii().data());
+	    propertyTable->setTulipNodeItem(editedProperty, (*it).toAscii().data(), currentNode, i, 1);
 	  }
 	  break;
 	case EDGE:
 	  if (edgeSet) {
-	    PropertyInterface *editedProperty = graph->getProperty((*it).latin1());
-	    propertyTable->setTulipEdgeItem(editedProperty, (*it).latin1(), currentEdge, i, 1);
+	    PropertyInterface *editedProperty = graph->getProperty((*it).toAscii().data());
+	    propertyTable->setTulipEdgeItem(editedProperty, (*it).toAscii().data(), currentEdge, i, 1);
 	  }
 	}
       }
@@ -277,16 +276,16 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
 
   QString property = propertyTable->item(row, 0)->text();
   QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
-  PropertyInterface *editedProperty = graph->getProperty(property.latin1());
+  PropertyInterface *editedProperty = graph->getProperty(property.toAscii().data());
   if (editedProperty==0) return;
-  //cerr << "Value :" << value.ascii() << endl;
+  //cerr << "Value :" << value.toAscii().data() << endl;
   bool result=true;
   switch(displayMode) {
   case NODE:
-    result=editedProperty->setNodeStringValue(currentNode, value.ascii());
+    result=editedProperty->setNodeStringValue(currentNode, value.toAscii().data());
     break;
   case EDGE:
-    result=editedProperty->setEdgeStringValue(currentEdge, value.ascii());
+    result=editedProperty->setEdgeStringValue(currentEdge, value.toAscii().data());
     break;
   }
   

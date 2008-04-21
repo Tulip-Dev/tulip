@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>329</height>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,7 +19,7 @@
    <item row="0" column="0" >
     <layout class="QVBoxLayout" >
      <item>
-      <widget class="Q3GroupBox" name="labels" >
+      <widget class="QGroupBox" name="labels" >
        <property name="title" >
         <string>Labels</string>
        </property>
@@ -146,7 +146,7 @@
       </widget>
      </item>
      <item>
-      <widget class="Q3GroupBox" name="edgesGroup" >
+      <widget class="QGroupBox" name="edgesGroup" >
        <property name="title" >
         <string>Edges</string>
        </property>
@@ -225,7 +225,7 @@
       </widget>
      </item>
      <item>
-      <widget class="Q3GroupBox" name="others" >
+      <widget class="QGroupBox" name="others" >
        <property name="title" >
         <string>Others</string>
        </property>
@@ -338,15 +338,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

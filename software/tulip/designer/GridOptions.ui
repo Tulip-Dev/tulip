@@ -37,7 +37,7 @@
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <item row="0" column="0" >
-      <widget class="Q3GroupBox" name="groupBox10" >
+      <widget class="QGroupBox" name="groupBox10" >
        <property name="title" >
         <string>Grid :</string>
        </property>
@@ -72,7 +72,7 @@
         <item row="1" column="0" >
          <layout class="QHBoxLayout" >
           <item>
-           <widget class="Q3GroupBox" name="groupBox11" >
+           <widget class="QGroupBox" name="groupBox11" >
             <property name="title" >
              <string>Cells size :</string>
             </property>
@@ -84,7 +84,7 @@
               <number>0</number>
              </property>
              <item row="1" column="0" >
-              <widget class="Q3Frame" name="SubdivisionsFrame" >
+              <widget class="QFrame" name="SubdivisionsFrame" >
                <property name="enabled" >
                 <bool>true</bool>
                </property>
@@ -247,7 +247,7 @@
               </widget>
              </item>
              <item row="4" column="0" >
-              <widget class="Q3Frame" name="SizeFrame" >
+              <widget class="QFrame" name="SizeFrame" >
                <property name="enabled" >
                 <bool>false</bool>
                </property>
@@ -429,7 +429,7 @@
            </widget>
           </item>
           <item>
-           <widget class="Q3GroupBox" name="groupBox12" >
+           <widget class="QGroupBox" name="groupBox12" >
             <property name="title" >
              <string>Display Dimensions :</string>
             </property>
@@ -584,21 +584,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
