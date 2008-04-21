@@ -556,7 +556,7 @@ else
     fi
   else
     LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
-    LIB_QT="-lQtCore -lQtGui -lQtOpenGL"
+    LIB_QT="-lQtCore -lQtGui -lQtOpenGL -lQtXml"
   fi
 fi
 
