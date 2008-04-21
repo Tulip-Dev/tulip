@@ -8,6 +8,8 @@ using namespace std;
 
 namespace tlp {
 
+#define SET_PARENT_LAYOUT(child, parent) child->setParent(parent); parent->addItem(child)
+
   InstallPluginDialog::InstallPluginDialog(const std::vector<string> &namePluginsInstall,const std::vector<string> &namePluginsRemove,QWidget *parent)
     :QDialog(parent),processNumber(0){
 
@@ -35,8 +37,10 @@ namespace tlp {
 
     mainBox->addWidget(labelTitle);
 
-    installBox = new QVBoxLayout(mainBox);
-    removeBox = new QVBoxLayout(mainBox);
+    installBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(installBox, mainBox);
+    removeBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(removeBox, mainBox);
 
     QLabel *installLabel=new QLabel("Install : ",this);
     installLabel->setFont(blodFont);
@@ -45,14 +49,21 @@ namespace tlp {
     removeLabel->setFont(blodFont);
     removeBox->addWidget(removeLabel);
 
-    QHBoxLayout *subInstallBox= new QHBoxLayout(installBox);
-    QHBoxLayout *subRemoveBox= new QHBoxLayout(removeBox);
-    installLabelBox = new QVBoxLayout(subInstallBox);
-    installBarBox = new QVBoxLayout(subInstallBox);
-    removeLabelBox = new QVBoxLayout(subRemoveBox);
-    removeBarBox = new QVBoxLayout(subRemoveBox);
+    QHBoxLayout *subInstallBox= new QHBoxLayout();
+    SET_PARENT_LAYOUT(subInstallBox, installBox);
+    QHBoxLayout *subRemoveBox= new QHBoxLayout();
+    SET_PARENT_LAYOUT(subRemoveBox, removeBox);
+    installLabelBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(installLabelBox, subInstallBox);
+    installBarBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(installBarBox, subInstallBox);
+    removeLabelBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(removeLabelBox, subRemoveBox);
+    removeBarBox = new QVBoxLayout();
+    SET_PARENT_LAYOUT(removeBarBox, subRemoveBox);
 
-    buttonBox = new QHBoxLayout(mainBox);
+    buttonBox = new QHBoxLayout();
+    SET_PARENT_LAYOUT(buttonBox, mainBox);
     cancel = new QPushButton("Cancel",this);
     ok = new QPushButton("Ok",this);
     buttonBox->addWidget(ok);

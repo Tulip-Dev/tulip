@@ -23,7 +23,9 @@ namespace tlp {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     setLayout(mainLayout);
 
-    QHBoxLayout* boxLayout = new QHBoxLayout(mainLayout);
+    QHBoxLayout* boxLayout = new QHBoxLayout();
+    boxLayout->setParent(mainLayout);
+    mainLayout->addItem(boxLayout);
 
     connect(serverManager, SIGNAL(newPluginList()), this, SLOT(updatePluginsTree()));
 
