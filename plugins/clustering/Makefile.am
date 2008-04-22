@@ -17,7 +17,7 @@ EXTRA_DIST = ConvolutionClusteringSetup.ui
 
 libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
 libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
-BUILT_SOURCES = moc_ConvolutionClusteringSetup.cpp 
+BUILT_SOURCES = ConvolutionClusteringSetupData.h moc_ConvolutionClusteringSetup.cpp 
 libConvolutionClustering_@VERSION@_la_SOURCES = \
 			ConvolutionClustering.h \
 			ConvolutionClustering.cpp \
@@ -34,9 +34,6 @@ INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 
 moc_%.cpp: %.h 
 	$(MOC) -o $@ $<
-
-%Data.cpp: %.ui %Data.h
-	$(UIC) -o $@ $*Data.h $<
 
 %Data.h: %.ui
 	$(UIC) -o $@ $<
