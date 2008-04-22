@@ -2,8 +2,8 @@
 #include <config.h>
 #endif
 
-#include <qfileinfo.h>
 #include <qtimer.h>
+#include <QtGui/qdesktopwidget.h>
 
 #include "AppStartUp.h"
 #include "Application.h"
@@ -13,8 +13,15 @@ using namespace std;
 int main( int argc, char **argv ) {
   Application tulip( argc, argv );
   viewGl *mainWindow = new viewGl();
-
-  //tulip.setMainWidget(mainWindow);
+  QDesktopWidget desktop;
+  QRect screenRect = desktop.availableGeometry();
+  if (screenRect.height() > 890) {
+    QRect wRect = mainWindow->geometry();
+    int delta = (870 - wRect.height())/2;
+    wRect.setTop(wRect.top() - delta);
+    wRect.setBottom(wRect.bottom() + delta);
+    mainWindow->setGeometry(wRect);
+  }
   QTimer::singleShot(0, mainWindow, SLOT(startTulip()) );
 
   return tulip.exec();
