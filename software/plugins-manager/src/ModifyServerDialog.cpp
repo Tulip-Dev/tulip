@@ -21,8 +21,8 @@ namespace tlp {
     
     // Big widget
     boxVLayout = new QVBoxLayout(this);
-    boxHLayout1 = new QHBoxLayout(this);
-    boxHLayout2 = new QHBoxLayout(this);
+    boxHLayout1 = new QHBoxLayout();
+    boxHLayout2 = new QHBoxLayout();
     
     boxHLayout1->addWidget(labelAddr);  
     boxHLayout1->addWidget(textAddr);

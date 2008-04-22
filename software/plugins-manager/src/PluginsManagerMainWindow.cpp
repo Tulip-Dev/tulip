@@ -16,7 +16,7 @@ namespace tlp {
     w = new QWidget(this);
     setCentralWidget(w);
 
-    vbox = new QVBoxLayout(this);
+    vbox = new QVBoxLayout();
     vbox->addWidget(widg);
     w->setLayout(vbox);
 
