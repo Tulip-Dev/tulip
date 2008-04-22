@@ -249,18 +249,28 @@ namespace tlp {
   //====================================================
   float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
     //float lod=0.;
+    BoundingBox bbTmp=bb;
     Coord src[8];
     Coord dst[8];
     int pos;
     int num;
+ 
+    for(int i=0;i<3;i++) {
+      if(bbTmp.first[i]>bbTmp.second[i]) {
+	float tmp=bbTmp.first[i];
+	bbTmp.first[i]=bbTmp.second[i];
+	bbTmp.second[i]=tmp;
+      }
+    }
 
-    bb.getCompleteBB(src);
+    bbTmp.getCompleteBB(src);
     pos = ((eye[0] < src[0][0])   )
       + ((eye[0] > src[6][0]) << 1)
       + ((eye[1] < src[0][1]) << 2)
       + ((eye[1] > src[6][1]) << 3)
       + ((eye[2] < src[0][2]) << 4)
       + ((eye[2] > src[6][2]) << 5);
+    assert(pos<=42);
     num=hullVertexTable[pos][0];
     if(num==0)
       return -1;
