@@ -1241,11 +1241,6 @@ void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
   it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
   for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
-#if defined(__APPLE__) && (QT_MINOR_REL > 1)
-  for (std::string::size_type i = 0; i < nGroups; i++)
-    receiver->connect(groupMenus[i],
-		      SIGNAL(triggered(QAction * action)), slot);
-#endif
 }
 
 template <typename TFACTORY, typename TMODULE>
@@ -1255,10 +1250,6 @@ void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
   std::string::size_type nGroups = 0;
   for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
     insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
- #if defined(__APPLE__) && (QT_MINOR_REL > 1)
-   for (std::string::size_type i = 0; i < nGroups; i++)
-     receiver->connect(groupMenus[i], SIGNAL(triggered(QAction*)), slot);
- #endif
 }
 //**********************************************************************
 void viewGl::buildMenus() {
@@ -1858,7 +1849,7 @@ void viewGl::helpAssistantError(const QString &msg) {
 //==============================================================
 void viewGl::fileExit() {
   if (closeWin())
-    delete this;
+    exit(EXIT_SUCCESS);
 }
 //==============================================================
 void viewGl::filePrint() {
