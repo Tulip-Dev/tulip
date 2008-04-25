@@ -77,6 +77,9 @@ GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
   //  cerr << __PRETTY_FUNCTION__ << endl;
   setFocusPolicy(Qt::StrongFocus);
   //_composite = new GlADComposite();
+  // the following lines are for use in designer
+  setMinimumWidth(50);
+  setMinimumHeight(50);
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
