@@ -40,9 +40,9 @@ libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
 libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
 nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 
 moc_%.cpp: %.h 
 	$(MOC) -o $@ $<

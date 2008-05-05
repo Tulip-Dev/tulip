@@ -8,5 +8,5 @@ plugins_LTLIBRARIES =
 
 pluginsdir = $(libdir)/tlp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+INCLUDES = @TULIP_INCLUDE@

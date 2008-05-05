@@ -47,5 +47,5 @@ libTreeArityMax_@VERSION@_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
 libRandomMetric_@VERSION@_la_SOURCES = Random.cpp  Random.h
 libBetweennessCentrality_@VERSION@_la_SOURCES = BetweennessCentrality.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+INCLUDES = @TULIP_INCLUDE@

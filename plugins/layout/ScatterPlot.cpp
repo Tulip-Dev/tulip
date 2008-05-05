@@ -1,6 +1,5 @@
 #include <map>
 #include <cmath>
-#include <qmessagebox.h>
 #include "ScatterPlot.h"
 
 LAYOUTPLUGINOFGROUP(ScatterPlot, "Scatter Plot", "M.Delorme", "25/07/2005", "Alpha", "1.0", "Misc");

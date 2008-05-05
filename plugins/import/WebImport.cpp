@@ -2,7 +2,6 @@
 #include <qtimer.h>
 #include <iostream>
 #include <tulip/TulipPlugin.h>
-#include <tulip/GlyphManager.h>
 #include "WebImport.h"
 
 using namespace std;
@@ -586,7 +585,7 @@ struct WebImport:public ImportModule {
     redirectionColor = &rColor;
 
     graph->getProperty<IntegerProperty>("viewShape")
-      ->setAllNodeValue(GlyphManager::getInst().glyphId("2D - Circle"));
+      ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
     node n;
     toVisit.push_back(mySite);
     addNode(mySite, n);

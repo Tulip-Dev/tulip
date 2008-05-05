@@ -22,9 +22,9 @@ libLoopSelection_@VERSION@_la_SOURCES = LoopSelection.cpp LoopSelection.h
 libMultipleSelection_@VERSION@_la_SOURCES = MultipleEdgeSelection.cpp MultipleEdgeSelection.h
 libKruskal_@VERSION@_la_SOURCES = Kruskal.cpp Kruskal.h
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
 
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
+INCLUDES = @TULIP_INCLUDE@
 
 UIC = LD_LIBRARY_PATH=$(top_builddir)/library/tulip/src/.libs:$(top_builddir)/library/tulip-ogl/src/.libs:$(top_builddir)/library/tulip-qt/src/.libs:$$LD_LIBRARY_PATH @UIC@ -L @TULIP_QTDESIGNERPLUGIN@
 MOC = @MOC@

@@ -47,5 +47,5 @@ libDendrogram_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h
 libImprovedWalker_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp Orientation.cpp
 libSquarifiedTreeMap_@VERSION@_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ et @LIB_QT@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+INCLUDES = @TULIP_INCLUDE@

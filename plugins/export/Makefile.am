@@ -10,4 +10,4 @@ pluginsdir = $(libdir)/tlp
 libGMLExport_@VERSION@_la_SOURCES = GMLExport.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@
