@@ -127,9 +127,9 @@ TemplateFactory<PropertyFactory<BooleanAlgorithm>, BooleanAlgorithm, PropertyCon
 TemplateFactory<PropertyFactory<SizeAlgorithm>, SizeAlgorithm, PropertyContext> *AbstractProperty<SizeType,SizeType, SizeAlgorithm>::factory = 0;
 TemplateFactory<PropertyFactory<StringAlgorithm>, StringAlgorithm, PropertyContext> *AbstractProperty<StringType, StringType, StringAlgorithm>::factory = 0;
 #endif
-//=========================================================
-PluginLoader *TemplateFactoryInterface::currentLoader;
-//=========================================================
+//==========================================================
+PluginLoader *TemplateFactoryInterface::currentLoader = NULL;
+//==========================================================
 void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
   if (loader!=0)
     loader->start(dir.c_str(), type);
@@ -224,7 +224,10 @@ void tlp::loadPlugins(PluginLoader *plug) {
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-    return PluginLibraryLoader::loadPluginLibrary(filename, plug);
+  TemplateFactoryInterface::currentLoader = plug;
+  if (plug)
+    plug->loading(filename);
+  return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }
 
 //=========================================================
