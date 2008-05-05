@@ -152,6 +152,33 @@ void SelectionProxyTest::testSetGet() {
   testSetGet(true);
 }
 //==========================================================
+void SelectionProxyTest::testDelete(bool value) {
+  selection->setAllNodeValue(value);
+  selection->setAllEdgeValue(value);
+  Iterator<node> *itN=graph->getNodes();
+  node n;
+  while(itN->hasNext()) {
+    n = itN->next();
+  } delete itN;
+  selection->setNodeValue(n, !value);
+  CPPUNIT_ASSERT(selection->getNodeValue(n) == !value);
+  graph->delNode(n);
+  n = graph->addNode();
+  CPPUNIT_ASSERT(selection->getNodeValue(n) == value);
+  edge e = graph->addEdge(n, n);
+  selection->setEdgeValue(e, !value);
+  CPPUNIT_ASSERT(selection->getEdgeValue(e) == !value);
+  graph->delEdge(e);
+  e = graph->addEdge(n, n);
+  CPPUNIT_ASSERT(selection->getEdgeValue(e) == value);
+}
+//==========================================================
+void SelectionProxyTest::testDelete() {
+  testDelete(false);
+  testDelete(true);
+}
+//==========================================================
+
 CppUnit::Test * SelectionProxyTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : BooleanProperty" );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test iterators", 
@@ -162,5 +189,7 @@ CppUnit::Test * SelectionProxyTest::suite() {
 								      &SelectionProxyTest::testSetGet ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test copy operator", 
 								      &SelectionProxyTest::testCopy ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SelectionProxyTest>( "test delete", 
+								      &SelectionProxyTest::testDelete ) );
   return suiteOfTests;
 }

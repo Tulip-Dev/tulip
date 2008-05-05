@@ -23,6 +23,8 @@ public:
   void testSetGet(bool);
   void testCopy();
   void testIterators();
+  void testDelete(bool value);
+  void testDelete();
   static CppUnit::Test *suite();
 };
 
