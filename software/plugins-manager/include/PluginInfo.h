@@ -82,23 +82,30 @@ namespace tlp {
   public :
     
     static std::string getPluginDisplayType(const std::string &name) {
-      if(SizeProperty::factory->pluginExists(name))
+      if(SizeProperty::factory && SizeProperty::factory->pluginExists(name))
 	return "Size";
-      if(IntegerProperty::factory->pluginExists(name))
+      if(IntegerProperty::factory &&
+	 IntegerProperty::factory->pluginExists(name))
 	return "Integer";
-      if(LayoutProperty::factory->pluginExists(name))
+      if(LayoutProperty::factory &&
+	 LayoutProperty::factory->pluginExists(name))
 	return "Layout";
-      if(ColorProperty::factory->pluginExists(name))
+      if(ColorProperty::factory && ColorProperty::factory->pluginExists(name))
 	return "Color";
-      if(DoubleProperty::factory->pluginExists(name))
+      if(DoubleProperty::factory &&
+	 DoubleProperty::factory->pluginExists(name))
 	return "Metric";
-      if(StringProperty::factory->pluginExists(name))
+      if(StringProperty::factory &&
+	 StringProperty::factory->pluginExists(name))
 	return "Label";
-      if(BooleanProperty::factory->pluginExists(name))
+      if(BooleanProperty::factory &&
+	 BooleanProperty::factory->pluginExists(name))
 	return "Selection";
-      if(ImportModuleFactory::factory->pluginExists(name))
+      if(ImportModuleFactory::factory &&
+	 ImportModuleFactory::factory->pluginExists(name))
 	return "Import";
-      if(ExportModuleFactory::factory->pluginExists(name))
+      if(ExportModuleFactory::factory &&
+	 ExportModuleFactory::factory->pluginExists(name))
 	return "Export";
       return "General";
     }

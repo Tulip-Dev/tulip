@@ -6,7 +6,7 @@ ADDLDFLAGS = `xml2-config --libs`
 ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
-bin_PROGRAMS = serverGenerator
+bin_PROGRAMS = serverGenerator pluginInstaller
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 
@@ -33,14 +33,13 @@ endif
 
 MOC = @MOC@
 
-BUILT_SOURCES = 
-
-nodist_serverGenerator_SOURCES = $(BUILT_SOURCES)
-
 dist_serverGenerator_SOURCES = \
+	PluginGenerate.cpp \
 	ServerGenerator.cpp
+
+dist_pluginInstaller_SOURCES = \
+	PluginGenerate.cpp \
+	PluginInstaller.cpp
 
 moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-
-CLEANFILES = $(BUILT_SOURCES)

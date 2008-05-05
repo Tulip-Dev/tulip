@@ -7,6 +7,7 @@
 #include <tulip/PluginLoaderTxt.h>
 
 #include "PluginInfo.h"
+#include <QtCore/QFileInfo>
 
 namespace tlp {
 
@@ -26,7 +27,7 @@ namespace tlp {
 
     virtual void loading(const std::string &filename)
     {
-      currentFileName=filename;
+      currentFileName = QFileInfo(filename.c_str()).fileName().toStdString();
     }
 
     virtual void loaded(const std::string &name,
@@ -57,7 +58,6 @@ namespace tlp {
 
     virtual void aborted(const std::string &filename,const  std::string &errormsg) {
       errorMsgs += errormsg + '\n';
-      std::cerr << "Loading error: " << errormsg << std::endl;
     }
 
     virtual void finished(bool state,const std::string &msg){}
