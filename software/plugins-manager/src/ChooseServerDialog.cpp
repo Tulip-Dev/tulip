@@ -23,7 +23,7 @@ namespace tlp {
     serverList->clear();
     serverList->insertItems(0, (*serverNames));  
     
-    label = new QLabel("Please choose the server on witch you want to download the plugin",this);
+    label = new QLabel("Please choose the server from which you want to download the plugin", this);
     QPalette pal;
     pal.setColor(label->foregroundRole(), Qt::blue);
     label->setAutoFillBackground(true);
