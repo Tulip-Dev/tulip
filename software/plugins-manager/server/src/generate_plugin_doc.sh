@@ -5,10 +5,10 @@ fi
 
 INPUT_FILE=$1
 
-if [ $# -eq 1 ]; then
-  OUPUT_DIR=$2
+if [ $# -eq 2 ]; then
+  OUTPUT_DIR=$2
 else
-  OUTPUT_DIR = "."
+  OUTPUT_DIR="."
 fi
 
 CONFIG_FILE=/tmp/plugin_doc_config.doxygen

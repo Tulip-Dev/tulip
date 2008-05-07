@@ -37,11 +37,11 @@ int main(int argc,char **argv) {
 
   LocalPluginInfo pluginInfo = plug.pluginsList[0];
 
-  if(pluginInfo.type != "Glyph"){
-    pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
-  } else {
-    pluginInfo.displayType = pluginInfo.type;
-  }
+  pluginInfo.displayType= PluginInfo::getPluginDisplayType(pluginInfo.name);
+  if(pluginInfo.displayType != "Glyph")
+    pluginInfo.type = "Algorithm";
+  else
+    pluginInfo.type = "Glyph";
 
   QDir dir;
   dir.mkpath(targetPath);

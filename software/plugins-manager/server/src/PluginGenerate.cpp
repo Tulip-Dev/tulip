@@ -67,7 +67,7 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   pluginXmlFile.close();
   xmlFree(xmlbuff);
   
-  cout << "Plugin : " << pInfo.fileName.c_str() << " created" << endl;
+  cout << "Plugin : " << pInfo.fileName.c_str() << " installed" << endl;
 
   return true;
 }

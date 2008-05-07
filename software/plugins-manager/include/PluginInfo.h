@@ -107,7 +107,10 @@ namespace tlp {
       if(ExportModuleFactory::factory &&
 	 ExportModuleFactory::factory->pluginExists(name))
 	return "Export";
-      return "General";
+      if (AlgorithmFactory::factory &&
+	  AlgorithmFactory::factory->pluginExists(name))
+	return "General";
+      return "Glyph";
     }
   };
 
