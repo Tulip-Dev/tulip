@@ -700,7 +700,8 @@ namespace tlp {
 	  if(iter == pluginsToRemove.end()){
 	    const PluginInfo *actualPlugin=_msm->getPluginInformation(pluginName,pluginType,pluginVersion,pluginServer); 
 	    const PluginInfo *localPlugin=_msm->getLocalPlugin(actualPlugin);
-	    pluginsToRemove.insert(*(LocalPluginInfo*)localPlugin); 
+	    if (localPlugin)
+	      pluginsToRemove.insert(*(LocalPluginInfo*)localPlugin); 
 	  }
 	}
       }

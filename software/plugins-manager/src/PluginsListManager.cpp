@@ -344,7 +344,9 @@ namespace tlp {
   LocalPluginInfo *PluginsListManager::getLocalPlugin(const PluginInfo *plugin) {
     PluginMatchNameTypeAndVersionPred pred(plugin->name,plugin->type,plugin->version);
     vector<LocalPluginInfo *>::iterator it=find_if(localPluginsList.begin(),localPluginsList.end(),pred);
-    return *it;
+    if(it!=localPluginsList.end())
+      return *it;
+    return NULL;
   }
 
 }
