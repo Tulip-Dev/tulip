@@ -82,6 +82,7 @@ nobase_include_HEADERS = \
 	tulip/DrawingTools.h \
 	tulip/Face.h \
 	tulip/PlanarityTest.h \
+	tulip/OuterPlanarTest.h \
 	tulip/FaceIterator.h \
         tulip/PlanarConMap.h \
         tulip/GraphDecorator.h \

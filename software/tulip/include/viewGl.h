@@ -199,6 +199,7 @@ protected slots:
   void isTree();
   void isFreeTree();
   void isPlanar();
+  void isOuterPlanar();
   void makeAcyclic();
   void makeBiconnected();
   void makeSimple();

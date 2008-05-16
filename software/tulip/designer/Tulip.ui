@@ -134,6 +134,7 @@
      <addaction name="is_biconnected" />
      <addaction name="is_triconnected" />
      <addaction name="is_planar" />
+     <addaction name="is_outer_planar" />
     </widget>
     <widget class="QMenu" name="popupMenu_32" >
      <property name="title" >
@@ -573,6 +574,20 @@
    </property>
    <property name="name" stdset="0" >
     <string>is_planar</string>
+   </property>
+  </action>
+  <action name="is_outer_planar" >
+   <property name="text" >
+    <string>Outer Planar</string>
+   </property>
+   <property name="iconText" >
+    <string>Outer Planarity</string>
+   </property>
+   <property name="toolTip" >
+    <string>Checks is the current graph is outer planar</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_outer_planar</string>
    </property>
   </action>
   <action name="is_simple" >
@@ -1383,6 +1398,22 @@
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isPlanar()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>is_outer_planar</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>isOuterPlanar()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>-1</x>

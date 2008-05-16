@@ -2312,6 +2312,21 @@ void viewGl::isPlanar() {
   Observable::unholdObservers();
 }
 //**********************************************************************
+#include <tulip/OuterPlanarTest.h>
+void viewGl::isOuterPlanar() {
+  if (glWidget == 0) return;
+  Observable::holdObservers();
+  if (OuterPlanarTest::isOuterPlanar(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()))
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is outer planar"
+			   );
+  else
+    QMessageBox::information( this, "Tulip test",
+			   "The graph is not outer planar"
+			   );
+  Observable::unholdObservers();
+}
+//**********************************************************************
 void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
   if (glWidget == 0) return;
   if (isNode)
