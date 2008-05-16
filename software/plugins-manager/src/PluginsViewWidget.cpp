@@ -32,6 +32,7 @@ namespace tlp {
     _msm = msm;
     lastVersion = false;
     compatibleVersion = false;
+    notInstalledVersion = false;
     openDialog = false;
     
     connect(this,SIGNAL(itemSelectionChanged()),this,SLOT(getPluginInfoSlot()));
@@ -82,14 +83,14 @@ namespace tlp {
 
 	QTreeWidgetItem *twi=findChildrenWithText(parent,text);
 	if(!twi) {
-	  twi = new QTreeWidgetItem(parent);
-	  twi->setText(0, text.c_str());
-
-	  if(i!=versionPosition){ 	
+	  if(i!=versionPosition){
+	    twi = new QTreeWidgetItem(0);
 	    twi->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	  }else{
+	    twi = new QTreeWidgetItem(1);
 	    setItemCheckability(pluginInfo,true,twi);
 	  }
+	  twi->setText(0, text.c_str());
 
 	  parent->addChild(twi);
 	  
@@ -101,8 +102,9 @@ namespace tlp {
 	      setItemCheckability(pluginInfo,false,twi);
 	    }
 	  }
-	  if(twi->isHidden())
+	  if(twi->isHidden()) {
 	    twi->setHidden(false);
+	  }
 	}
 
 	/*if(distPluginInfo->linuxVersion)
@@ -118,10 +120,13 @@ namespace tlp {
       }
     }
 
+    applyFilter(root);
+
     //Remove Hidden
     removeHiddenChild(root);
 
-    applyFilter(root);
+    root->setHidden(false);
+
     root->setExpanded(true);
     listIsChanging=false;
   }
@@ -138,22 +143,24 @@ namespace tlp {
 
   void PluginsViewWidget::removeHiddenChild(QTreeWidgetItem *parent) {
     QTreeWidgetItem *child;
-    vector<QTreeWidgetItem *> toRemove;
-    vector<QTreeWidgetItem *> toParse;
     int childNumber=parent->childCount();
     for(int i=0;i<childNumber;i++) {
       child=parent->child(i);
-      if(child->isHidden())
-	toRemove.push_back(child);
-      else
-	toParse.push_back(child);
+      removeHiddenChild(child);
     }
-    for(vector<QTreeWidgetItem *>::iterator it=toRemove.begin();it!=toRemove.end();++it) {
-      //parent->removeChild(*it);
-      delete (*it);
+    bool toHidden=true;
+    if(childNumber==0){
+      toHidden=false;
+    }else{
+      for(int i=0;i<childNumber;i++) {
+	child=parent->child(i);
+	if(!child->isHidden()) {
+	  toHidden=false;
+	}
+      }
     }
-    for(vector<QTreeWidgetItem *>::iterator it=toParse.begin();it!=toParse.end();++it) {
-      removeHiddenChild(*it);
+    if(toHidden) {
+      parent->setHidden(true);
     }
   }
 
@@ -169,7 +176,7 @@ namespace tlp {
   }
 
   void PluginsViewWidget::setItemCheckability(const PluginInfo *pluginInfo,bool created, QTreeWidgetItem *twi) {
-    if(!pluginInfo->local) {
+    if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
       bool havePlugin=false;
 
       #if defined(__APPLE__)
@@ -203,7 +210,7 @@ namespace tlp {
 
     QTreeWidgetItemIterator it(tree);
     while (*it) {
-      if (((*it)->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable){ //We are on a version Number
+      if ((*it)->type() == 1){ //We are on a version Number
       
 	//Filter only compatibles versions
 	if(compatibleVersion){ 
@@ -231,7 +238,7 @@ namespace tlp {
       
 	// Filter only last version
 	if(lastVersion){ 
-	  string version = "0.0";
+	  string version = "0.0.0 0.0";
 	  for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
 	    if (isMoreRecent((*it)->parent()->child(i)->text(0).toStdString(), version)){
 	      version = (*it)->parent()->child(i)->text(0).toStdString();
@@ -242,7 +249,14 @@ namespace tlp {
 	      (*it)->parent()->child(i)->setHidden(true);
 	    }
 	  }
-	}		    
+	}
+
+	// Filter not installed
+	if(notInstalledVersion) {
+	  if((*it)->checkState(0)!=Qt::Unchecked) {
+	    (*it)->setHidden(true);
+	  }
+	}
       
 	bool removeParent = true;
 	for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
@@ -256,14 +270,15 @@ namespace tlp {
       
       }
       ++it;
-    }
+      }
   };
 
 
   bool PluginsViewWidget::isCompatible(const string & version){
     QStringList list = QString(version.c_str()).split(' ');
-    string tulipCompatibilityNumber = "3.0.0B4"; 
-    return (list[0].toStdString().compare(tulipCompatibilityNumber) == 0);
+    QString tulipCompatibilityNumber(VERSION);
+    tulipCompatibilityNumber = tulipCompatibilityNumber.left(tulipCompatibilityNumber.lastIndexOf("."));
+    return (list[0].startsWith(tulipCompatibilityNumber));
   };
 
   bool PluginsViewWidget::isMoreRecent(const string & version1, const string & version2){
@@ -541,13 +556,16 @@ namespace tlp {
   }
 
   void PluginsViewWidget::setLastVersion(bool version){
-    //lastVersion = version;
+    lastVersion = version;
   }
 
   void PluginsViewWidget::setCompatiblesVersion(bool version){
-    //compatibleVersion = version;
+    compatibleVersion = version;
   }
 
+  void PluginsViewWidget::setNotinstalledVersion(bool version){
+    notInstalledVersion = version;
+  }
 
   void PluginsViewWidget::getPluginInfoSlot(){
   

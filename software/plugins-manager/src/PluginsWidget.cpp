@@ -80,23 +80,24 @@ namespace tlp {
     updatePluginsTree();
   }
 
-  void PluginsWidget::modifyTreeView(int viewNumber, bool lastVersion, bool compatiblesVersion){
+  void PluginsWidget::modifyTreeView(int viewNumber, bool lastVersion, bool compatiblesVersion, bool notinstalledVersion){
     serverManager->modifyTreeView(viewNumber);
     pluginsList->setLastVersion(lastVersion);
     pluginsList->setCompatiblesVersion(compatiblesVersion);
+    pluginsList->setNotinstalledVersion(notinstalledVersion);
     pluginsList->changeList();
   }
   
   void PluginsWidget::serverViewSlot(){
-    modifyTreeView(VIEW_BY_SERVER, true, true);
+    modifyTreeView(VIEW_BY_SERVER, true, true, true);
   }
 
   void PluginsWidget::groupViewSlot(){
-    modifyTreeView(VIEW_BY_TYPE, true, true);
+    modifyTreeView(VIEW_BY_TYPE, true, true, true);
   }
 
   void PluginsWidget::pluginViewSlot(){
-    modifyTreeView(VIEW_BY_NAME, true, true);
+    modifyTreeView(VIEW_BY_NAME, true, true, true);
   }
 
   void PluginsWidget::clickOnPluginSlot(const PluginInfo *pi){

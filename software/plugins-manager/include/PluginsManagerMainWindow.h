@@ -50,6 +50,7 @@ namespace tlp {
     QAction* serverAct;
     QAction* lastPluginsAct;
     QAction* compatiblesPluginsAct;
+    QAction* notinstalledPluginsAct;
     QActionGroup* sortActionGroup;
     int currentView;
     
@@ -69,6 +70,7 @@ namespace tlp {
     void pluginView();
     void showCompatiblesPlugins();
     void showLatestPlugins();
+    void showNotinstalledPlugins();
     void applyChange();
     void restore();
     void servers();  

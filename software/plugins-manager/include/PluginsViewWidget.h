@@ -50,7 +50,7 @@ namespace tlp {
     QList<UpdatePlugin*> pluginUpdaters;
     std::set<DistPluginInfo,PluginCmp> pluginsToInstall;
     std::set<LocalPluginInfo,PluginCmp> pluginsToRemove;
-    bool lastVersion ,compatibleVersion;
+    bool lastVersion ,compatibleVersion, notInstalledVersion;
     InstallPluginDialog *pluginDialog;
     bool openDialog;
     bool listIsChanging;
@@ -86,6 +86,7 @@ namespace tlp {
     void changeList();
     void setLastVersion(bool version);
     void setCompatiblesVersion(bool version);
+    void setNotinstalledVersion(bool version);
     bool setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi);
     void applyChange();
     void restore();

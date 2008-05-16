@@ -101,6 +101,12 @@ namespace tlp {
     compatiblesPluginsAct->setCheckable(true);
     connect(compatiblesPluginsAct, SIGNAL(triggered()), this, SLOT(showCompatiblesPlugins()));
 
+    notinstalledPluginsAct = new QAction(tr("Show not installed plugins"), vbox);
+    notinstalledPluginsAct->setShortcut(tr("Ctrl+C"));
+    notinstalledPluginsAct->setStatusTip(tr("Enable/Disable the display of not installed plugins"));
+    notinstalledPluginsAct->setCheckable(true);
+    connect(notinstalledPluginsAct, SIGNAL(triggered()), this, SLOT(showNotinstalledPlugins()));
+
     applyAct = new QAction(tr("&Apply Change"), vbox);
     applyAct->setShortcut(tr("Ctrl+A"));
     applyAct->setStatusTip(tr("Apply the change"));
@@ -135,21 +141,22 @@ namespace tlp {
     viewMenu->addSeparator();
     viewMenu->addAction(lastPluginsAct);
     viewMenu->addAction(compatiblesPluginsAct);  
+    viewMenu->addAction(notinstalledPluginsAct);  
   }
 
   void PluginsManagerMainWindow::serverView(){
     currentView = VIEW_BY_SERVER;
-    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
   void PluginsManagerMainWindow::groupView(){
     currentView = VIEW_BY_TYPE;
-    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
   void PluginsManagerMainWindow::pluginView(){
     currentView = VIEW_BY_NAME;
-    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+    widg->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
   void PluginsManagerMainWindow::applyChange(){
@@ -165,11 +172,15 @@ namespace tlp {
   }
 
   void PluginsManagerMainWindow::showCompatiblesPlugins(){ 
-    widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+    widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
   void PluginsManagerMainWindow::showLatestPlugins(){ 
-    widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked());
+    widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
+  }
+
+  void PluginsManagerMainWindow::showNotinstalledPlugins(){ 
+    widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
   void PluginsManagerMainWindow::close() {
