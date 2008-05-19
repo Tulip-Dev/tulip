@@ -1,7 +1,5 @@
 lib_LTLIBRARIES = libtulip.la
 
-RELEASE = ${VERSION}
-
 if WIN32 
 DLL_TULIP = -DDLL_TULIP
 DLL_FLAGS = -no-undefined
@@ -14,9 +12,9 @@ endif
 INCLUDES = ${DLL_TULIP} @TULIP_INCLUDE@ @GZSTREAM_INCLUDE@ -I$(top_srcdir)
 AM_CXXFLAGS = -D_TULIP_LIB_DIR=\"$(libdir)"/"\"
 if !MACOSX
-AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} @GZSTREAM_LDFLAGS@ -release @MAJOR_VERSION@.@MINOR_VERSION@
 else
-AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/*.lo` -lz -release ${RELEASE}
+AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/*.lo` -lz -release @MAJOR_VERSION@.@MINOR_VERSION@
 endif
 
 libtulip_la_SOURCES = \

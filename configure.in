@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.43 $)
+AC_REVISION($Revision: 1.44 $)
 AC_PREREQ(2.53)
-AC_INIT(tulip, 3.0.0)
+AC_INIT(tulip, 3.0.1)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)
@@ -98,10 +98,16 @@ dnl lex/yacc needed by thirdparty/lp_solve
 dnl AC_PROG_YACC
 dnl AM_PROG_LEX
 
+MAJOR_VERSION=`echo ${VERSION} | tail -n 1 | awk -F'.' '{print $1}'`
+MINOR_VERSION=`echo ${VERSION} | tail -n 1 | awk -F'.' '{print $2}'`
+AC_SUBST(MAJOR_VERSION)
+AC_SUBST(MINOR_VERSION)
+
 VAR_WIN32=0
 VAR_MACOSX=0
 VAR_MACOSX_7=0
 VAR_I64=0
+
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
