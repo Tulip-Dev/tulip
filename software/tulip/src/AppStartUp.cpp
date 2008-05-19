@@ -48,12 +48,13 @@ void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
   errorMsgs.resize(0);
 }
 
+// accumulate error messages
+void AppStartUp::addErrorMsg(const std::string& errMsg)  {
+  errorMsgs += errMsg + '\n';
+}
+
 /* 
- *  Constructs a AppStartUp which is a child of 'parent', with the 
- *  name 'name' and widget flags set to 'f' 
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  Constructs a AppStartUp which is a child of 'parent'
  */
 AppStartUp::AppStartUp( QWidget* parent)
   : QDialog(parent),

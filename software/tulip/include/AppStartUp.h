@@ -9,15 +9,18 @@ namespace tlp {
 }
 
 class AppStartUp : public QDialog, public Ui::AppStartUpData { 
-    Q_OBJECT
+  Q_OBJECT
 
-   QMovie *movie;
-    int totalSteps;
-    int currentFrame;
+  QMovie *movie;
+  int totalSteps;
+  int currentFrame;
+  std::string errorMgs;
 
 public:
   AppStartUp( QWidget* parent = 0);
-    ~AppStartUp();
+  ~AppStartUp();
+  void addErrorMsg(const std::string &errMsg);
+  
 public slots:
     ///Change the label in the widget
     void setLabel(std::string label);
