@@ -72,9 +72,18 @@ class IntegerProperty;
 					   PluginProgress *pluginProgress = 0);
 
   /**
-   * Compute the subgraphs whom elements have the same value for property
+   * Compute the subgraphs whose elements have the same value for property
    */
   TLP_SCOPE bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
-					     bool onNodes = true, PluginProgress *pluginProgress = 0);
+					     bool onNodes = true, bool connected = false,
+					     PluginProgress *pluginProgress = 0);
+
+  /**
+   * Compute the subgraphs whose elements have the same value for property
+   * This one is an obsolete version (should be remove in 3.1); use the previous one
+   */
+  TLP_SCOPE bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
+					     bool onNodes = true,
+					     PluginProgress *pluginProgress = 0);
 }
 #endif

@@ -9,6 +9,7 @@
 #include "tulip/DoubleProperty.h"
 #include "tulip/ForEach.h"
 #include "tulip/ConnectedTest.h"
+#include "tulip/ExtendedClusterOperation.h"
 #include "tulip/Ordering.h"
 #include "tulip/hash_string.h"
 
@@ -333,15 +334,27 @@ namespace tlp {
   }
 
   //=======================================================================
+  // should be removed in 3.1
   bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
-				   bool onNodes, PluginProgress *pluginProgress) {
+				   bool onNodes,
+				   PluginProgress *pluginProgress) {
+    return computeEqualValueClustering(graph, property, onNodes, false, pluginProgress);
+  }
+
+  //=======================================================================
+  bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
+					bool onNodes, bool connected,
+					PluginProgress *pluginProgress) {
     StableIterator<node> itN(graph->getNodes());
     StableIterator<edge> itE(graph->getEdges());
     int step = 0, maxSteps = graph->numberOfNodes();
+
     if (maxSteps < 100)
       maxSteps = 100;
     if (pluginProgress)
       pluginProgress->setComment(onNodes ? "Partitioning nodes..." : "Partitioning edges");
+
+    vector<Graph *> subGraphs;
 
     // try to work with double value if it's a DoubleProperty
     if (typeid(*property) == typeid(DoubleProperty)) {
@@ -358,6 +371,7 @@ namespace tlp {
 	    sstr << "value = " << tmp;
 	    sg->setAttribute("name", sstr.str());
 	    partitions[tmp]=sg;
+	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(n);
@@ -396,6 +410,7 @@ namespace tlp {
 	    sstr << "value = " << tmp;
 	    sg->setAttribute("name", sstr.str());
 	    partitions[tmp]=sg;
+	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(graph->source(e));
@@ -419,6 +434,7 @@ namespace tlp {
 	    sg = graph->addSubGraph();
 	    sg->setAttribute("name", string("value = ") + tmp);
 	    partitions[tmp]=sg;
+	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(n);
@@ -455,6 +471,7 @@ namespace tlp {
 	    sg = graph->addSubGraph();
 	    sg->setAttribute("name", string("value = ") + tmp);
 	    partitions[tmp]=sg;
+	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(graph->source(e));
@@ -464,6 +481,27 @@ namespace tlp {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
+	  }
+	}
+      }
+    }
+    if (connected) {
+      // loop on subgraphs to only have connected components
+      for (unsigned int i = 0; i < subGraphs.size(); ++i) {
+	Graph* sg = subGraphs[i];
+	std::vector<std::set<node> > components;
+	// compute the connected components's subgraph
+	ConnectedTest::computeConnectedComponents(sg, components);
+	if (components.size() > 1) {
+	  string name = sg->getAttribute<string>("name");
+	  // remove the orginal subgraph
+	  graph->delSubGraph(sg);
+	  // create new subgraphs with same name
+	  for (unsigned int i = 0; i < components.size(); ++i) {
+	    sg = tlp::inducedSubGraph(graph, components[i]);
+	    stringstream sstr;
+	    sstr << name << " [" << i << ']';
+	    sg->setAttribute("name", sstr.str());
 	  }
 	}
       }

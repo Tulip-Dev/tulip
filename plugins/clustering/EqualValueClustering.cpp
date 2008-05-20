@@ -9,7 +9,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","13/06/2001","Alpha","1.0");
+ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","20/05/2008","Beta","1.1");
 
 namespace {
   const char * paramHelp[] = {
@@ -21,10 +21,17 @@ namespace {
     HTML_HELP_CLOSE(),
     HTML_HELP_OPEN()				 \
     HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("Values", "nodes <BR> edges") \
+    HTML_HELP_DEF("values", "nodes <BR> edges") \
     HTML_HELP_DEF( "default", "nodes" )	 \
     HTML_HELP_BODY() \
     "This parameter enables to choose the type of graph elements to partition"	\
+    HTML_HELP_CLOSE(),
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the subgraphs have to be connected." \
     HTML_HELP_CLOSE()
   };
 }
@@ -36,23 +43,25 @@ namespace {
 EqualValueClustering::EqualValueClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
   addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
+  addParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================
 bool EqualValueClustering::run() {
   string tmp1,tmp2;
   PropertyInterface *property=0;
   StringCollection eltTypes(ELT_TYPES);
+  bool connected = false;
   eltTypes.setCurrent(0);
   if (dataSet!=0) {
     dataSet->get("Property", property);  
     dataSet->get(ELT_TYPE, eltTypes);
+    dataSet->get("Connected", connected);
   }
 
   if (property == 0)
     property = graph->getProperty("viewMetric");
 
-  return computeEqualValueClustering(graph, property,
-				     eltTypes.getCurrent() == NODE_ELT,
-				     pluginProgress);
+  return computeEqualValueClustering(graph, property, eltTypes.getCurrent() == NODE_ELT,
+				     connected, pluginProgress);
 }
 //================================================================================
