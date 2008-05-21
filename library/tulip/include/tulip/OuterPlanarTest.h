@@ -17,7 +17,7 @@ class node;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing the outerplanarity of a graph
-class OuterPlanarTest  : private GraphObserver {
+class TLP_SCOPE OuterPlanarTest  : private GraphObserver {
 public:
   static bool isOuterPlanar(Graph *graph);
   
