@@ -527,19 +527,19 @@ then
 dnl For linking purpose, we need to copy some libs
 dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
   if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
-    cp ${QTDIR}/lib/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
+    cp ${QTDIR}/bin/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
   fi
   if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
-    cp ${QTDIR}/lib/QtGui4.dll ${QTDIR}/lib/libQtGui4.dll
+    cp ${QTDIR}/bin/QtCore4.dll ${QTDIR}/lib/libQtGui4.dll
   fi
   if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
-    cp ${QTDIR}/lib/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
+    cp ${QTDIR}/bin/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
   fi
   if test ! -f ${QTDIR}/lib/libQtNetwork4.dll ; then
-    cp ${QTDIR}/lib/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
+    cp ${QTDIR}/bin/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
   fi
   if test ! -f ${QTDIR}/lib/libQtXml4.dll ; then
-    cp ${QTDIR}/lib/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
+    cp ${QTDIR}/bin/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
   fi
 else
   if test ${VAR_MACOSX} = 1
