@@ -99,13 +99,12 @@ File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
-File "@qt_libraries@\QtCore4.dll"
-File "@qt_libraries@\QtGui4.dll"
-File "@qt_libraries@\QtNetWork4.dll"
-File "@qt_libraries@\QtOpenGL4.dll"
-File "@qt_libraries@\QtSql4.dll"
-File "@qt_libraries@\QtXml4.dll"
-File "@qt_libraries@\QtAssistantClient4.dll"
+File "@qt_libraries@\..\bin\QtCore4.dll"
+File "@qt_libraries@\..\bin\QtGui4.dll"
+File "@qt_libraries@\..\bin\QtNetWork4.dll"
+File "@qt_libraries@\..\bin\QtOpenGL4.dll"
+File "@qt_libraries@\..\bin\QtXml4.dll"
+File "@qt_libraries@\..\bin\QtAssistantClient4.dll"
 File  "@qt_libraries@\..\bin\assistant.exe"
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
@@ -119,9 +118,9 @@ SectionEnd
 
 Section "-Install Plugins and Docs"
 setOutPath $INSTDIR\lib\tlp
-File @prefix@\lib\tlp\*.dll
+File @prefix@\lib\bin\*.dll
 setOutPath $INSTDIR\lib\tlp\glyphs
-File @prefix@\lib\tlp\glyphs\*.dll
+File @prefix@\lib\tlp\bin\*.dll
 setOutPath $INSTDIR\share
 ; Try to save doc files if any
 File /nonfatal /r @prefix@\share\*
