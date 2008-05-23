@@ -4,6 +4,6 @@ BUILT_SOURCES =
 
 nodist_noinst_HEADERS = $(BUILT_SOURCES)
 
-noinst_HEADERS = ServerGenerator.h
+dist_noinst_HEADERS = PluginGenerate.h
 
 CLEANFILES = $(BUILT_SOURCES)

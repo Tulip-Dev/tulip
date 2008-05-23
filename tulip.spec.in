@@ -1,6 +1,6 @@
 %define name	@PACKAGE@
 %define version	@VERSION@
-%define tulip_version @VERSION@
+%define tulip_version @MAJOR_VERSION@.@MINOR_VERSION@
 %define release 1
 %define serial  1
 %define prefix	@prefix@
@@ -96,7 +96,73 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip.la
 %{prefix}/lib/libtulip.so
 %{prefix}/lib/libtulip-%{tulip_version}.so*
-%{prefix}/lib/tlp/lib*.*
+%{prefix}/lib/tlp/libAdjacencyMatrixImport-%{version}.*
+%{prefix}/lib/tlp/libArityMetric-%{version}.*
+%{prefix}/lib/tlp/libAutoSize-%{version}.*
+%{prefix}/lib/tlp/libBetweennessCentrality-%{version}.*
+%{prefix}/lib/tlp/libBiconnectedComponent-%{version}.*
+%{prefix}/lib/tlp/libBubbleTree-%{version}.*
+%{prefix}/lib/tlp/libCircular-%{version}.*
+%{prefix}/lib/tlp/libClusterMetric-%{version}.*
+%{prefix}/lib/tlp/libCompleteGraph-%{version}.*
+%{prefix}/lib/tlp/libCompleteTree-%{version}.*
+%{prefix}/lib/tlp/libConeTreeExtended-%{version}.*
+%{prefix}/lib/tlp/libConnectedAndTreeComponent-%{version}.*
+%{prefix}/lib/tlp/libConnectedComponent-%{version}.*
+%{prefix}/lib/tlp/libConnectedComponentPacking-%{version}.*
+%{prefix}/lib/tlp/libConvolutionClustering-%{version}.*
+%{prefix}/lib/tlp/libDagLevelMetric-%{version}.*
+%{prefix}/lib/tlp/libDendrogram-%{version}.*
+%{prefix}/lib/tlp/libDepthMetric-%{version}.*
+%{prefix}/lib/tlp/libDotImport-%{version}.*
+%{prefix}/lib/tlp/libEccentricity-%{version}.*
+%{prefix}/lib/tlp/libEmbedder-%{version}.*
+%{prefix}/lib/tlp/libEnumColorValuesMapping-%{version}.*
+%{prefix}/lib/tlp/libEqualValueClustering-%{version}.*
+%{prefix}/lib/tlp/libGemLayout-%{version}.*
+%{prefix}/lib/tlp/libGeneralGraph3D-%{version}.*
+%{prefix}/lib/tlp/libGMLExport-%{version}.*
+%{prefix}/lib/tlp/libGMLImport-%{version}.*
+%{prefix}/lib/tlp/libGrid-%{version}.*
+%{prefix}/lib/tlp/libHierarchicalClustering-%{version}.*
+%{prefix}/lib/tlp/libHierarchicalGraph-%{version}.*
+%{prefix}/lib/tlp/libIdMetric-%{version}.*
+%{prefix}/lib/tlp/libImprovedWalker-%{version}.*
+%{prefix}/lib/tlp/libInducedSubGraphSelection-%{version}.*
+%{prefix}/lib/tlp/libKruskal-%{version}.*
+%{prefix}/lib/tlp/libLeafMetric-%{version}.*
+%{prefix}/lib/tlp/libLoopSelection-%{version}.*
+%{prefix}/lib/tlp/libMetricColorMapping-%{version}.*
+%{prefix}/lib/tlp/libMetricSizeMapping-%{version}.*
+%{prefix}/lib/tlp/libMixedModel-%{version}.*
+%{prefix}/lib/tlp/libMultipleSelection-%{version}.*
+%{prefix}/lib/tlp/libNodeMetric-%{version}.*
+%{prefix}/lib/tlp/libPathLengthMetric-%{version}.*
+%{prefix}/lib/tlp/libPlanarGraph-%{version}.*
+%{prefix}/lib/tlp/libQuotientClustering-%{version}.*
+%{prefix}/lib/tlp/libRandom-%{version}.*
+%{prefix}/lib/tlp/libRandomGraph-%{version}.*
+%{prefix}/lib/tlp/libRandomMetric-%{version}.*
+%{prefix}/lib/tlp/libRandomSimpleGraph-%{version}.*
+%{prefix}/lib/tlp/libRandomTree-%{version}.*
+%{prefix}/lib/tlp/libRandomTreeGeneral-%{version}.*
+%{prefix}/lib/tlp/libReachableSubGraphSelection-%{version}.*
+%{prefix}/lib/tlp/libScatterPlot-%{version}.*
+%{prefix}/lib/tlp/libSegmentMetric-%{version}.*
+%{prefix}/lib/tlp/libSmallWorldGraph-%{version}.*
+%{prefix}/lib/tlp/libSpanningDagSelection-%{version}.*
+%{prefix}/lib/tlp/libSpanningTreeSelection-%{version}.*
+%{prefix}/lib/tlp/libSquarifiedTreeMap-%{version}.*
+%{prefix}/lib/tlp/libStrahlerMetric-%{version}.*
+%{prefix}/lib/tlp/libStrengthClustering-%{version}.*
+%{prefix}/lib/tlp/libStrengthMetric-%{version}.*
+%{prefix}/lib/tlp/libStrongComponent-%{version}.*
+%{prefix}/lib/tlp/libTreeArityMax-%{version}.*
+%{prefix}/lib/tlp/libTreeLeaf-%{version}.*
+%{prefix}/lib/tlp/libTreeMap-%{version}.*
+%{prefix}/lib/tlp/libTreeRadial-%{version}.*
+%{prefix}/lib/tlp/libTreeReingoldAndTilforExtended-%{version}.*
+%{prefix}/lib/tlp/libTutte-%{version}.*
 %{datadir}/aclocal/tulip.m4
 
 %files -n lib%{name}-ogl
@@ -104,7 +170,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-ogl.la
 %{prefix}/lib/libtulip-ogl.so
 %{prefix}/lib/libtulip-ogl-%{tulip_version}.so*
-%{prefix}/lib/tlp/glyphs/lib*.*
+%{prefix}/lib/tlp/glyphs/lib*-%{version}.*
+%{prefix}/lib/tlp/libFitToLabels-%{version}.*
 %{prefix}/lib/tlp/bitmaps/fontb.ttf
 %{prefix}/lib/tlp/bitmaps/font.ttf
 
@@ -113,6 +180,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-qt4.la
 %{prefix}/lib/libtulip-qt4.so
 %{prefix}/lib/libtulip-qt4-%{tulip_version}.so*
+%{prefix}/lib/tlp/libFileSystem-%{version}.*
+%{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
 
 %changelog
