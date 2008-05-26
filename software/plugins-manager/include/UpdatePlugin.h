@@ -37,9 +37,7 @@ namespace tlp {
 
   public :
   
-    virtual void endInstallation(){
-      emit pluginInstalled(this,distPluginInfo);
-    }
+    virtual void endInstallation();
     virtual void endUninstallation(){
       emit pluginUninstalled(this,localPluginInfo);
     }

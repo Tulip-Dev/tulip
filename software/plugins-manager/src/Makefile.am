@@ -1,5 +1,6 @@
 if WIN32 
 DLL_FLAGS = -no-undefined
+MWINDOWS = -mwindows
 DLL_TULIP_PLUGINSMANAGER = -DDLL_TULIP_PLUGINSMANAGER
 else 
 if MACOSX
@@ -9,13 +10,14 @@ endif
 
 lib_LTLIBRARIES = libtulip-pluginsmanager.la
 
+bin_PROGRAMS = tulip_check_pl
+
 INCLUDES = ${DLL_TULIP_PLUGINSMANAGER} @TULIP_PLUGINSMANAGER_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@
-if MACOSX_7
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @TULIP_LDFLAGS@
-else
-AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ -release @MAJOR_VERSION@.@MINOR_VERSION@
-endif
+
+libtulip_pluginsmanager_la_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ -release @MAJOR_VERSION@.@MINOR_VERSION@
+
+tulip_check_pl_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@
 
 AM_CPPFLAGS= @QT_CPPFLAGS@
 
@@ -61,6 +63,8 @@ dist_libtulip_pluginsmanager_la_SOURCES = \
 	ServersOptionDialog.cpp \
 	ModifyServerDialog.cpp \
 	PluginsUpdateChecker.cpp
+
+dist_tulip_check_pl_SOURCES = TulipCheckPluginLoad.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 

@@ -114,6 +114,10 @@ namespace tlp {
     }
   };
 
+  // we define a specific code to return (must be < 256)
+  // from tulip_check_pl
+#define TLP_CHECK_PL_RETURN_SUCCESS 222
+
   class TLP_PLUGINSMANAGER_SCOPE DistPluginInfo : public PluginInfo{
     
   public :
@@ -123,6 +127,7 @@ namespace tlp {
     bool macVersion;
     bool windowsVersion;
     bool i64Version;
+    bool loadIsOK;
 
     virtual ~DistPluginInfo() {};
     

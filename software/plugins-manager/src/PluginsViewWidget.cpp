@@ -464,8 +464,8 @@ namespace tlp {
     return ret;
     }*/
 
-  void PluginsViewWidget::terminatePluginInstall(UpdatePlugin* terminatedUpdater,const DistPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name);
+  void PluginsViewWidget::terminatePluginInstall(UpdatePlugin* terminatedUpdater, const DistPluginInfo &pluginInfo){
+    pluginDialog->installFinished(pluginInfo.name, pluginInfo.loadIsOK);
     pluginUpdaters.removeAll(terminatedUpdater);
     disconnect(terminatedUpdater, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
     _msm->addLocalPlugin(&pluginInfo);
@@ -476,7 +476,7 @@ namespace tlp {
   }
 
   void PluginsViewWidget::terminatePluginUninstall(UpdatePlugin* terminatedUpdater,const LocalPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name);
+    pluginDialog->installFinished(pluginInfo.name, true);
     disconnect(terminatedUpdater, SIGNAL(pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &)), this, SLOT(terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &)));
     _msm->removeLocalPlugin(&pluginInfo);
     delete terminatedUpdater;

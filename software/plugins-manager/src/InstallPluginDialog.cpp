@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <QtGui/QCloseEvent>
+#include <QtGui/QMessageBox>
 
 #include "InstallPluginDialog.h"
 
@@ -125,7 +126,8 @@ namespace tlp {
       }  */
   }
   
-  void InstallPluginDialog::installFinished(const string &name){
+  void InstallPluginDialog::installFinished(const string &name,
+					    bool loadCheckOK){
     /*std::vector<string>::iterator it;
     for(it=install.begin(); it!=install.end(); it++){
       if( (*(it)).compare(name)==0 ){
@@ -136,6 +138,10 @@ namespace tlp {
     /*if(install.size()==0 && remove.size()==0 ){
       terminated();
       }*/
+    if (!loadCheckOK) {
+      installErrors += "The check of the '" + name + "' plugin loading failed,\n";
+      installErrors += "the file has not be installed.";
+    }
     installPart(name,1.);
     processNumber--;
     if(processNumber==0)
@@ -202,6 +208,12 @@ namespace tlp {
 
     cancel->setEnabled(false);
     ok->setEnabled(true);
+
+    if (installErrors.size() > 0) {
+      QMessageBox::critical(this,
+			    "Errors when trying to load Tulip plugins",
+			    installErrors.c_str());
+    }
   }
 
   void InstallPluginDialog::installPart(const std::string &name, float percent) {

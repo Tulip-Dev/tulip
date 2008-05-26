@@ -31,7 +31,7 @@ namespace tlp {
     InstallPluginDialog(const std::vector<std::string> &namePluginsInstall,const std::vector<std::string> &namePluginsRemove,QWidget *parent=0);
     
     void installStart(const std::string &name);
-    void installFinished(const std::string &name);
+    void installFinished(const std::string &name, bool loadCheckOK);
 
     void stopInstall();
     void addPlugin(bool install,const std::string &name);
@@ -59,6 +59,7 @@ namespace tlp {
     InstallExitDialog *exitDialog;
 
     unsigned int processNumber;
+    std::string installErrors;
     
     void closeEvent(QCloseEvent *e);
     void terminated();

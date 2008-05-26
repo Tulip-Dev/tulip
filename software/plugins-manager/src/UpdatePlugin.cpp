@@ -4,6 +4,8 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QTextStream>
+#include <QtCore/QProcess>
+#include <QtGui/QApplication>
 
 using namespace std;
 
@@ -38,28 +40,57 @@ namespace tlp {
     #else 
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i386",installPath+pluginInfo.fileName+std::string(".so")));
     #endif
-    
-    QFile installFile(QString(installPath.c_str())+"toInstall.dat");
-    if(!installFile.open(QIODevice::ReadWrite | QIODevice::Text))
-      return;
-    QTextStream out(&installFile);
-    out.readAll();
-    if(pluginInfo.type=="Glyph")
-      out << "glyphs/" ;
-    out << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
-    if(pluginInfo.type=="Glyph")
-      out << "glyphs/" ;
-    #if defined(_WIN32)
-      out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
-    #elif defined(__APPLE__)
-      out << pluginInfo.fileName.c_str() << ".dylib" << "\n" ;
-    #else
-      out << pluginInfo.fileName.c_str() << ".so" << "\n" ;
-    #endif
-    
-    installFile.close();
   }
-  
+
+  void UpdatePlugin::endInstallation() {
+    // check if plugin can be loaded
+    QString tlp_check_pl_path = QCoreApplication::applicationDirPath() + "/"
+      "tulip_check_pl";
+    string pluginInstallPath = installPath + distPluginInfo.fileName +
+    #if defined(_WIN32)
+      ".dll";
+    #elif defined(__APPLE__)
+      ".dylib";
+    #else
+      ".so";
+    #endif
+
+    int returnCode =
+      QProcess::execute(tlp_check_pl_path,
+			QStringList(pluginInstallPath.c_str()));
+
+    bool loadCheckOK = returnCode == TLP_CHECK_PL_RETURN_SUCCESS;
+
+    if (loadCheckOK) {
+      QFile installFile(QString(installPath.c_str())+"toInstall.dat");
+      if(!installFile.open(QIODevice::ReadWrite | QIODevice::Text))
+	return;
+      QTextStream out(&installFile);
+      out.readAll();
+      if(distPluginInfo.type=="Glyph")
+	out << "glyphs/" ;
+      out << distPluginInfo.fileName.c_str() << ".doc" << "\n" ;
+      if(distPluginInfo.type=="Glyph")
+	out << "glyphs/" ;
+#if defined(_WIN32)
+      out << distPluginInfo.fileName.c_str() << ".dll" << "\n" ;
+#elif defined(__APPLE__)
+      out << distPluginInfo.fileName.c_str() << ".dylib" << "\n" ;
+#else
+      out << distPluginInfo.fileName.c_str() << ".so" << "\n" ;
+#endif
+    
+      installFile.close();
+    } else {
+      // remove downloaded files
+      QFile::remove(pluginInstallPath.c_str());
+      string pluginsDocPath = installPath + distPluginInfo.fileName + ".doc";
+      QFile::remove(QString(pluginsDocPath.c_str()));
+    }      
+    distPluginInfo.loadIsOK = loadCheckOK;
+    emit pluginInstalled(this, distPluginInfo);
+  }
+
   
   bool UpdatePlugin::uninstall(const LocalPluginInfo &pluginInfo){
     //string fileName = pluginName.split('.')[0];
