@@ -89,7 +89,8 @@ Section "-Programs (required)"
 SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
-File @prefix@\bin\Tulip.exe
+File @prefix@\bin\tulip.exe
+File @prefix@\bin\tulip_check_pl.exe
 File @prefix@\bin\tulip-config
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
@@ -159,7 +160,8 @@ UninstallText "Do you really want to remove Tulip @VERSION@ from your system ?"
 Section "Uninstall"
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
-Delete "$INSTDIR\Tulip.exe"
+Delete "$INSTDIR\tulip.exe"
+Delete "$INSTDIR\tulip_check_pl.exe"
 Delete "$INSTDIR\tulip-config"
 ;Delete "$INSTDIR\Tulip.txt"
 Delete "$INSTDIR\uninst-Tulip.exe"
@@ -177,6 +179,8 @@ Delete "$INSTDIR\lib\tlp\designer\*"
 RMDir "$INSTDIR\lib\tlp\designer"
 Delete "$INSTDIR\lib\tlp\glyphs\*"
 RMDir "$INSTDIR\lib\tlp\glyphs"
+Delete "$INSTDIR\lib\tlp\toInstall\*"
+RMDir "$INSTDIR\lib\tlp\toInstall"
 Delete "$INSTDIR\lib\tlp\*"
 RMDir "$INSTDIR\lib\tlp"
 Delete "$INSTDIR\lib\*"
