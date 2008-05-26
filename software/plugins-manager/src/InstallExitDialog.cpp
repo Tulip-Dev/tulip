@@ -13,7 +13,7 @@ namespace tlp {
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setMargin(20);
     vbox->setSpacing(20);
-    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QHBoxLayout *hbox = new QHBoxLayout();
     label = new QLabel("Are you sure to want stopping the installation?",this);
     QFont font;
     font.setBold(true);
