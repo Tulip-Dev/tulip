@@ -1,5 +1,5 @@
 //-*-c++-*-
-#include <qtooltip.h>
+#include <QtGui/qtooltip.h>
 
 class GlMainWidget;
 class viewGl;

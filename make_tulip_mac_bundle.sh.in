@@ -34,8 +34,13 @@ function make_bundle_lib() {
    return
   fi
   if [ ! -f $slib ]; then
-    slib=/usr/lib/$slib
+    if [ -f /usr/lib/$slib ]; then
+      slib=/usr/lib/$slib
+    else
+      slib=/Library/Frameworks/$slib
+    fi
   fi
+
   if [ -f $slib ]; then
     if [ ! -f $slibdir/`basename $slib` ]; then
        cp $slib $slibdir
@@ -96,6 +101,15 @@ for LIB in $SHARED_LIBS
 do
   make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE
 done
+# same for tulip_check_pl
+# look for shared libs
+SHARED_LIBS=$(otool -L $BIN_BUNDLE_DIR/tulip_check_pl | grep "$SHLIBS_REGEXP" | awk '{print $1}')
+# copy libs in shared libs bundle directory
+for LIB in $SHARED_LIBS
+do
+  make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE_DIR/tulip_check_pl
+done
+
 
 # clean up the plugins bundle dir
 TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp
@@ -107,9 +121,13 @@ find $TLP_PLUGINS_BUNDLE_DIR -name 'lib*.*a' -print | xargs rm
 package_bundle_libs $TLP_PLUGINS_BUNDLE_DIR '*.dylib' $LIBS_BUNDLE_DIR
 
 # copy Qt assistant application
-ASSISTANT_BUNDLE_DIR=$APP_DIR/Contents/assistant.app
+if [ "$QT_DIR" == "" ]; then
+  QT_DIR=/Developer/Applications/Qt
+  QT_ASSISTANT=Assistant
+fi
+ASSISTANT_BUNDLE_DIR=$APP_DIR/Contents/@QT_ASSISTANT@.app
 ASSISTANT_LIBS_BUNDLE_DIR=$ASSISTANT_BUNDLE_DIR/Contents/Frameworks
-ASSISTANT_BIN_BUNDLE=$ASSISTANT_BUNDLE_DIR/Contents/MacOS/assistant
+ASSISTANT_BIN_BUNDLE=$ASSISTANT_BUNDLE_DIR/Contents/MacOS/@QT_ASSISTANT@
 echo packaging $ASSISTANT_BUNDLE_DIR
 mkdir $ASSISTANT_LIBS_BUNDLE_DIR
 #update assistant binary and libs

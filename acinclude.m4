@@ -478,7 +478,13 @@ QT_PACKAGE=qt4
 qtlib_prefix=libQt
 AC_SUBST(QT_PACKAGE)
 
-ac_qt_includes="$qt_incdir -I$qt_incdir/Qt"
+ac_qt_includes="$qt_incdir -I$qt_incdir/Qt -I$qt_incdir/QtDesigner"
+if test ${VAR_MACOSX} = 1
+then
+  if test "$qt_incdir" = NO; then
+    ac_qt_includes="/Library/Frameworks/QtCore.framework/Headers -I/Library/Frameworks/QtDesigner.framework/Headers"
+  fi
+fi
 
 dnl we add QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
 QT_CPPFLAGS="$QT_CPPFLAGS -DQT_NO_DEBUG"
@@ -552,6 +558,8 @@ else
       if test -d ${QTDIR}/lib/QtAssistant.framework
       then
         LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistant"
+      else
+        LIB_QT_ASSISTANT="-framework QtAssistant"
       fi
     fi
   else

@@ -4,11 +4,11 @@
 
 #include "GridOptionsWidget.h"
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qlineedit.h>
-#include <qvalidator.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qradiobutton.h>
+#include <QtGui/qlineedit.h>
+#include <QtGui/qvalidator.h>
 
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>

@@ -1,5 +1,5 @@
 #include <QtGui/qapplication.h>
-#include <qtimer.h>
+#include <QtCore/qtimer.h>
 #include <iostream>
 #include <tulip/TulipPlugin.h>
 #include "WebImport.h"

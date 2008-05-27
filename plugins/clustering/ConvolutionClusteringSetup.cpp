@@ -1,11 +1,11 @@
 #include "ConvolutionClusteringSetup.h"
 #include <iostream>
-#include <qpainter.h>
-#include <qpaintdevice.h>
-#include <qlayout.h>
+#include <QtGui/qpainter.h>
+#include <QtGui/qpaintdevice.h>
+#include <QtGui/qlayout.h>
 #include <vector>
 #include <cstdlib>
-#include <qslider.h>
+#include <QtGui/qslider.h>
 #include <cmath>
 
 using namespace std;

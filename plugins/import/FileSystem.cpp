@@ -1,4 +1,4 @@
-#include <qfiledialog.h>
+#include <QtGui/qfiledialog.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <tulip/TulipPlugin.h>

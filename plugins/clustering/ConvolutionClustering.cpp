@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <sstream>
-#include <qinputdialog.h>
+#include <QtGui/qinputdialog.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <fstream>

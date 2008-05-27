@@ -4,7 +4,7 @@ endif
 
 bin_PROGRAMS = tulip
 
-tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT -DQT_ASSISTANT="@QT_ASSISTANT@"
+tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT -DQT_ASSISTANT='"@QT_ASSISTANT@"'
 
 INCLUDES = -I$(srcdir)/../include -I../include \
 	   @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@ @TULIP_QT_INCLUDE@/tulip @TULIP_PLUGINSMANAGER_INCLUDE@
@@ -62,6 +62,6 @@ if MACOSX
 install-data-am :
 	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/assistant.app; then \
 		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/ ;\
-		ln -s @QTDIR@/bin/assistant.app $(exec_prefix)/bin/tulip.app/Contents/assistant.app ;\
+		ln -s @QTDIR@/bin/@QT_ASSISTANT@.app $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app ;\
 	fi;
 endif

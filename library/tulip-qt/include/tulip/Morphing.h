@@ -7,9 +7,9 @@
 #include <tulip/Coord.h>
 #include <tulip/Edge.h>
 
-#include <qevent.h>
-#include <qdatetime.h>
-#include <qobject.h>
+#include <QtGui/qevent.h>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qobject.h>
 #include <tulip/tulipconf.h>
 
 #define	MORPHING_MAX_FPS	30

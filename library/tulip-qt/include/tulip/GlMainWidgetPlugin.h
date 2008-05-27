@@ -1,9 +1,7 @@
-// Warning !!! this file does not have to be used
-// when building Tulip with Qt 3
 #ifndef GLGRAPHWIDGETPLUGIN_H
 #define GLGRAPHWIDGETPLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <customwidget.h>
     
 namespace tlp {
 

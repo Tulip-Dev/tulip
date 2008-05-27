@@ -1,9 +1,7 @@
-// Warning !!! this file does not have to be used
-// when building Tulip with Qt 3
 #ifndef CLUSTERTREEPLUGIN_H
 #define CLUSTERTREEPLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <customwidget.h>
 #include "tulip/Graph.h"
 
 namespace tlp {

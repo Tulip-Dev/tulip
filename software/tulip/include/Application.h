@@ -3,7 +3,7 @@
 #define Tulip_APPLICATION_H
 
 #include <string>
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 #include <tulip/Color.h>
 
 class ElementPropertiesWidget;

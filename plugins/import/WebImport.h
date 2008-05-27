@@ -1,7 +1,7 @@
 #include <string>
-#include <qhttp.h>
-#include <qeventloop.h>
-#include <qtimer.h>
+#include <QtNetwork/qhttp.h>
+#include <QtCore/qeventloop.h>
+#include <QtCore/qtimer.h>
 
 class HttpContext :public QHttp {
   Q_OBJECT

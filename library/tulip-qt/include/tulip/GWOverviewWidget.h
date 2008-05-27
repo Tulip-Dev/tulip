@@ -5,10 +5,10 @@
 #include "tulip/GWOverviewWidgetData.h"
 #include "tulip/RenderingParametersDialogData.h"
 #include <tulip/Camera.h>
-#include <qcolor.h>
+#include <QtGui/qcolor.h>
 #include <string>
-#include <qstring.h>
-#include <qlayout.h>
+#include <QtCore/qstring.h>
+#include <QtGui/qlayout.h>
 
 namespace tlp {
   class GlGraph;

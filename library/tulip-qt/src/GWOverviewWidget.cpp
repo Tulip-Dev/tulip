@@ -1,12 +1,12 @@
-#include <qcolor.h>
-#include <qslider.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qcolordialog.h>
-#include <qframe.h>
-#include <qevent.h>
-#include <qtooltip.h>
+#include <QtGui/qcolor.h>
+#include <QtGui/qslider.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qcombobox.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qcolordialog.h>
+#include <QtGui/qframe.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qtooltip.h>
 
 #include <tulip/GlSimpleEntity.h>
 

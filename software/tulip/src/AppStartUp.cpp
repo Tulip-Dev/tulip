@@ -3,17 +3,17 @@
 #endif
 
 #include <string>
-#include <qprogressbar.h>
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qtextedit.h>
-#include <qlabel.h>
+#include <QtGui/qprogressbar.h>
+#include <QtGui/qdialog.h>
+#include <QtGui/qpushbutton.h>
+#include <QtGui/qtextedit.h>
+#include <QtGui/qlabel.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlyphManager.h>
-#include <qapplication.h>
+#include <QtGui/qapplication.h>
 #include "AppStartUp.h"
 
 #include "TulipPluginLoader.h"

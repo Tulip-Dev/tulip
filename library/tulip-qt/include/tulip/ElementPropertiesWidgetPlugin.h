@@ -1,9 +1,7 @@
-// Warning !!! this file does not have to be used
-// when building Tulip with Qt 3
 #ifndef TULIPELEMENTPROPERTIESPLUGIN_H
 #define TULIPELEMENTPROPERTIESPLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <customwidget.h>
     
 namespace tlp {
 

@@ -3,7 +3,7 @@
 #endif
 
 #include <string>
-#include <qlabel.h>
+#include <QtGui/qlabel.h>
 #include "InfoDialog.h"
 
 using namespace std;

@@ -1,9 +1,7 @@
-// Warning !!! this file does not have to be used
-// when building Tulip with Qt 3
 #ifndef TULIPPROPERTYTABLEPLUGIN_H
 #define TULIPPROPERTYTABLEPLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <customwidget.h>
     
 class PropertyWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {

@@ -1,12 +1,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <qapplication.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QtGui/qapplication.h>
+#include <QtGui/qcheckbox.h>
+#include <QtGui/qlabel.h>
 #include "QtProgress.h"
 #include <tulip/GlMainWidget.h>
-#include <qprogressbar.h>
+#include <QtGui/qprogressbar.h>
 using namespace std;
 using namespace tlp;
 
