@@ -72,6 +72,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %{prefix}/bin/tulip
+%{prefix}/bin/tulip_check_pl
 #%{prefix}/bin/tlprender
 %{prefix}/lib/libtulip-pluginsmanager.la
 %{prefix}/lib/libtulip-pluginsmanager.so
@@ -110,14 +111,12 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libConnectedAndTreeComponent-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponent-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponentPacking-%{version}.*
-%{prefix}/lib/tlp/libConvolutionClustering-%{version}.*
 %{prefix}/lib/tlp/libDagLevelMetric-%{version}.*
 %{prefix}/lib/tlp/libDendrogram-%{version}.*
 %{prefix}/lib/tlp/libDepthMetric-%{version}.*
 %{prefix}/lib/tlp/libDotImport-%{version}.*
 %{prefix}/lib/tlp/libEccentricity-%{version}.*
 %{prefix}/lib/tlp/libEmbedder-%{version}.*
-%{prefix}/lib/tlp/libEnumColorValuesMapping-%{version}.*
 %{prefix}/lib/tlp/libEqualValueClustering-%{version}.*
 %{prefix}/lib/tlp/libGemLayout-%{version}.*
 %{prefix}/lib/tlp/libGeneralGraph3D-%{version}.*
@@ -180,6 +179,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-qt4.la
 %{prefix}/lib/libtulip-qt4.so
 %{prefix}/lib/libtulip-qt4-%{tulip_version}.so*
+%{prefix}/lib/tlp/libConvolutionClustering-%{version}.*
+%{prefix}/lib/tlp/libEnumColorValuesMapping-%{version}.*
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
