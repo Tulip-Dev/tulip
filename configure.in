@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
-AC_REVISION($Revision: 1.45 $)
+AC_REVISION($Revision: 1.46 $)
 AC_PREREQ(2.53)
 AC_INIT(tulip, 3.0.1)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
@@ -107,6 +107,7 @@ VAR_WIN32=0
 VAR_MACOSX=0
 VAR_MACOSX_7=0
 VAR_I64=0
+VAR_LINUX=0
 
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
@@ -127,6 +128,9 @@ case "`uname -s`" in
 	;;
     *i64*)
         VAR_I64=1
+	;;
+    *Linux*)
+	VAR_LINUX=1
 	;;	
 esac
 
@@ -134,6 +138,7 @@ AM_CONDITIONAL(WIN32, test $VAR_WIN32 = 1)
 AM_CONDITIONAL(MACOSX, test $VAR_MACOSX = 1)
 AM_CONDITIONAL(MACOSX_7, test $VAR_MACOSX_7 = 1)
 AM_CONDITIONAL(I64, test $VAR_I64 = 1)
+AM_CONDITIONAL(LINUX, test $VAR_LINUX = 1)
 
 dnl
 AC_LIBTOOL_DLOPEN
