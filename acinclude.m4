@@ -697,6 +697,17 @@ dnl look for Qt minor version and add QT_MINOR_REL
    QT_MINOR_VERSION=`$UIC -version 2>&1 | tail -n 1 | awk -F'.' '{print $(NF - 1)}'`
    QT_CPPFLAGS="$QT_CPPFLAGS -DQT_MINOR_REL=$QT_MINOR_VERSION"
    AC_SUBST(QT_MINOR_VERSION)
+dnl set QtAssistant exe name
+   QT_ASSISTANT="assistant"
+   if test $QT_MINOR_VERSION -eq 4; then
+     if test ${VAR_MACOSX} = 1
+     then
+       QT_ASSISTANT="Assistant_adp"
+     else
+       QT_ASSISTANT="assistant_adp"
+     fi
+   fi
+   AC_SUBST(QT_ASSISTANT)
 ])
 
 AC_DEFUN([AC_PATH_MINGW],

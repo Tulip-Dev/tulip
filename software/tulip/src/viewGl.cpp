@@ -290,7 +290,7 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   // initialization of Qt Assistant, the path should be in $PATH
 #if defined(__APPLE__)
   std::string assistantPath(tlp::TulipLibDir);
-  assistantPath += "../assistant";
+  assistantPath += "../" + QT_ASSISTANT;
   assistant = new QAssistantClient(assistantPath.c_str(), this);
 #else
   assistant = new QAssistantClient("", this);
