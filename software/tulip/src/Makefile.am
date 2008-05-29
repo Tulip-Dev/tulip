@@ -60,7 +60,7 @@ TulipResource.cpp: ../designer/TulipResource.qrc
 
 if MACOSX
 install-data-am :
-	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/assistant.app; then \
+	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app; then \
 		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/ ;\
 		ln -s @QTDIR@/bin/@QT_ASSISTANT@.app $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app ;\
 	fi;
