@@ -32,6 +32,8 @@ namespace tlp {
     PluginsManagerDialog(std::vector<LocalPluginInfo> &plugins,QWidget *parent);
     PluginsManagerDialog(MultiServerManager *msm,QWidget *parent);
 
+    static bool pluginUpdatesPending();
+
   };
 
 }

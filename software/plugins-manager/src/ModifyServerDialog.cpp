@@ -12,7 +12,7 @@ namespace tlp {
 
   ModifyServerDialog::ModifyServerDialog(QWidget *parent):QDialog(parent){
     
-    labelAddr = new QLabel("Server address",this);
+    labelAddr = new QLabel("Server url",this);
     textAddr = new QLineEdit(this); 
     valid = new QPushButton("Ok",this);
     cancel = new QPushButton("Cancel",this);

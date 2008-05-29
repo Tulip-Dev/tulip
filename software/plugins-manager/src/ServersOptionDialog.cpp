@@ -28,7 +28,7 @@ namespace tlp {
     removeButton = new QPushButton("Remove",this);
     removeButton->setObjectName("remove");
     propertiesButton = new QPushButton("Properties",this);
-    exitButton = new QPushButton("Exit",this);
+    exitButton = new QPushButton("Close",this);
 
     // Buttons widget
     buttonsWidget = new QWidget(this);

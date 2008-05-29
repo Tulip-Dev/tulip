@@ -50,6 +50,8 @@ namespace tlp {
 
     static void copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName);
     static void installWhenRestartTulip();
+    static bool isInstallDirWritable();
+    static bool pluginUpdatesPending();
 
   signals :
 

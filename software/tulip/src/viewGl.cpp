@@ -1795,13 +1795,15 @@ void viewGl::plugins() {
 
   dialog.setLayout(&layout);*/
   pluginsManager->exec();
-  int result = QMessageBox::warning(this, 
-				    tr("Update plugins"), 
-				    tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
-				    QMessageBox::Yes | QMessageBox::Default,
-				    QMessageBox::No);
-  if(result == QMessageBox::Yes)
-    fileExit();
+  if (pluginsManager->pluginUpdatesPending()) {
+    int result = QMessageBox::warning(this, 
+				      tr("Update plugins"), 
+				      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+				      QMessageBox::Yes | QMessageBox::Default,
+				      QMessageBox::No);
+    if(result == QMessageBox::Yes)
+      fileExit();
+  }
 }
 //==============================================================
 void viewGl::deletePluginsUpdateChecker(){

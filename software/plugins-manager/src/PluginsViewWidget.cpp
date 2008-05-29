@@ -4,6 +4,7 @@
 
 #include <QtGui/QHeaderView>
 #include <QtGui/QDialog>
+#include <QtGui/QMessageBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
@@ -24,6 +25,9 @@ namespace tlp {
     ls.push_back(QString("Installed Version"));
     setHeaderLabels(ls);
     header()->setResizeMode(QHeaderView::ResizeToContents);
+    pluginsDirIsWritable = UpdatePlugin::isInstallDirWritable();
+    if (!pluginsDirIsWritable)
+      QMessageBox::warning(parent, "Unable to manage plugins", "The plugins installation directory is not writable,\nyou are not allowed to install/remove plugins.");
     //header()->setStretchLastSection(false);
   }
 
@@ -176,6 +180,10 @@ namespace tlp {
   }
 
   void PluginsViewWidget::setItemCheckability(const PluginInfo *pluginInfo,bool created, QTreeWidgetItem *twi) {
+    if (!pluginsDirIsWritable) {
+      twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+      return;
+    }
     if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
       bool havePlugin=false;
 
@@ -465,10 +473,11 @@ namespace tlp {
     }*/
 
   void PluginsViewWidget::terminatePluginInstall(UpdatePlugin* terminatedUpdater, const DistPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name, pluginInfo.loadIsOK);
+    pluginDialog->installFinished(pluginInfo.name, pluginInfo.installIsOK);
     pluginUpdaters.removeAll(terminatedUpdater);
     disconnect(terminatedUpdater, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
-    _msm->addLocalPlugin(&pluginInfo);
+    if (pluginInfo.installIsOK)
+      _msm->addLocalPlugin(&pluginInfo);
     // in a distant future, we might like to pass the plugin's name to this signal
     emit pluginInstalled();
     delete terminatedUpdater;

@@ -1,4 +1,5 @@
 #include "PluginsManagerDialog.h"
+#include "UpdatePlugin.h"
 
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMessageBox>
@@ -25,5 +26,9 @@ namespace tlp {
   PluginsManagerDialog::PluginsManagerDialog(MultiServerManager *msm,QWidget *parent):QDialog(parent){
     PluginsManagerMainWindow *pluginsManager=new PluginsManagerMainWindow(msm,parent);
     createWidget(pluginsManager);
+  }
+
+  bool PluginsManagerDialog::pluginUpdatesPending() {
+    return UpdatePlugin::pluginUpdatesPending();
   }
 }

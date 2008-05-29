@@ -127,7 +127,7 @@ namespace tlp {
     bool macVersion;
     bool windowsVersion;
     bool i64Version;
-    bool loadIsOK;
+    bool installIsOK;
 
     virtual ~DistPluginInfo() {};
     

@@ -87,7 +87,7 @@ namespace tlp {
       string pluginsDocPath = installPath + distPluginInfo.fileName + ".doc";
       QFile::remove(QString(pluginsDocPath.c_str()));
     }      
-    distPluginInfo.loadIsOK = loadCheckOK;
+    distPluginInfo.installIsOK = loadCheckOK;
     emit pluginInstalled(this, distPluginInfo);
   }
 
@@ -167,4 +167,16 @@ namespace tlp {
     }
   }
 
+  bool UpdatePlugin::isInstallDirWritable() {
+    std::string installDir(tlp::TulipLibDir);
+    installDir += "/tlp";
+    return QFileInfo(installDir.c_str()).isWritable();
+  }
+
+  bool UpdatePlugin::pluginUpdatesPending() {
+    std::string installChangeDir(tlp::TulipLibDir);
+    installChangeDir += "/tlp/toInstall/";
+    return QFileInfo(QString(installChangeDir.c_str()) + "toInstall.dat").exists()
+      || QFileInfo(QString(installChangeDir.c_str()) + "toRemove.dat").exists();
+  }
 }

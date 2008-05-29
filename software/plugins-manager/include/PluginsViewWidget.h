@@ -54,6 +54,7 @@ namespace tlp {
     InstallPluginDialog *pluginDialog;
     bool openDialog;
     bool listIsChanging;
+    bool pluginsDirIsWritable;
     
     bool activate;
     
