@@ -13,7 +13,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.0");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.1");
 
 struct Edge {
   unsigned int source,target;
@@ -42,6 +42,14 @@ namespace {
     HTML_HELP_BODY() \
     "This parameter indicates whether the graph has to be considered as oriented or not." \
     HTML_HELP_CLOSE(),
+    // recursive
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the algorithm has to be applied along the entire hierarchy of subgraphs." \
+    HTML_HELP_CLOSE(),
     // node aggregation function
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "String Collection" ) \
@@ -56,11 +64,26 @@ namespace {
     HTML_HELP_BODY() \
     "This parameter enables to choose the function used to compute a measure value for a meta-edge using the values of its underlying edges." \
     HTML_HELP_CLOSE(),
+    // meta-node label
+    HTML_HELP_OPEN()							\
+    HTML_HELP_DEF( "type", "StringProperty" )				\
+    HTML_HELP_DEF( "value", "An existing string property" )		\
+    HTML_HELP_BODY()							\
+    "This parameter defines the property used to compute the label of the meta-nodes. An arbitrary underlying node is choosen and its associated value for the given property becomes the meta-node label."\
+    HTML_HELP_CLOSE(),
+    // use name of subgraphs
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the meta-node label has to be the same as the name of the subgraph it represents." \
+    HTML_HELP_CLOSE(),
     // edge cardinality
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "bool" ) \
     HTML_HELP_DEF( "values", "[true, false]" ) \
-    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
     "This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph." \
     HTML_HELP_CLOSE()
@@ -74,9 +97,12 @@ namespace {
 //================================================================================
 QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<bool>("oriented", paramHelp[0], "true");
-  addParameter<StringCollection>("node function", paramHelp[1], AGGREGATION_FUNCTIONS);
-  addParameter<StringCollection>("edge function", paramHelp[2], AGGREGATION_FUNCTIONS);
-  addParameter<bool>("edge cardinality", paramHelp[3], "false");
+  addParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
+  addParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
+  addParameter<StringProperty>("meta-node label", paramHelp[4], 0, false);
+  addParameter<bool>("use name of subgraph", paramHelp[5], "false");
+  addParameter<bool>("recursive", paramHelp[1], "false");
+  addParameter<bool>("edge cardinality", paramHelp[6], "false");
 }
 //================================================================================
 QuotientClustering::~QuotientClustering(){}
@@ -180,6 +206,8 @@ static void computeMEdgeMetric(Graph* graph, edge mE, Graph *sGraph, Graph *tGra
 //===============================================================================
 bool QuotientClustering::run() {
   bool oriented = true, edgeCardinality = true;
+  bool recursive = false, useSubGraphName = false;
+  StringProperty *metaLabel = NULL;
   StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
   nodeFunctions.setCurrent(0);
   StringCollection edgeFunctions(AGGREGATION_FUNCTIONS);
@@ -189,7 +217,16 @@ bool QuotientClustering::run() {
     dataSet->get("node function", nodeFunctions);
     dataSet->get("edge function", edgeFunctions);
     dataSet->get("edge cardinality", edgeCardinality);
+    dataSet->get("recursive", recursive);
+    dataSet->get("meta-node label", metaLabel);
+    dataSet->get("use name of subgraph", useSubGraphName);
   }
+
+  Iterator<Graph *> *itS= graph->getSubGraphs();
+  // do nothing if there is no subgraph
+  if (!itS->hasNext())
+    return true;
+  delete itS;
 
   IntegerProperty *opProp = 0, *cardProp = 0;
   Graph *quotientGraph = tlp::newSubGraph(graph->getRoot());
@@ -205,6 +242,10 @@ bool QuotientClustering::run() {
   }
   quotientGraph->setAttribute(string("name"), sstr.str());
   GraphProperty *meta = quotientGraph->getProperty<GraphProperty>("viewMetaGraph");
+
+  StringProperty *label = NULL;
+  if (useSubGraphName || metaLabel)
+    label = quotientGraph->getProperty<StringProperty>("viewLabel");
   if (!oriented) {
     opProp = quotientGraph->getLocalProperty<IntegerProperty>("opposite edge");
     opProp->setAllEdgeValue(edge().id);
@@ -212,15 +253,22 @@ bool QuotientClustering::run() {
   if (edgeCardinality)
     cardProp = quotientGraph->getLocalProperty<IntegerProperty>("edgeCardinality");
   //Create one metanode for each subgraph(cluster) of current graph.
-  Graph *sg= graph;
   map<Graph*,node> mapping;
-  Iterator<Graph *> *itS=sg->getSubGraphs();
+  itS=graph->getSubGraphs();
   while (itS->hasNext()) {
     Graph *its=itS->next();
     if (its!=quotientGraph) {
       node n = quotientGraph->addNode();
       quotientGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(255,255,255,100));
       meta->setNodeValue(n,its);
+      if (label) {
+	string mLabel;
+	if (useSubGraphName)
+	  mLabel = its->getAttribute<string>("name");
+	else
+	  mLabel = label->getNodeValue(its->getOneNode());
+	label->setNodeValue(n, mLabel);
+      }
       mapping[its]=n;
     }
   } delete itS;
@@ -235,7 +283,7 @@ bool QuotientClustering::run() {
     list<Graph *> clusterTarget;
     clusterSource.clear();
     clusterTarget.clear();
-    itS=sg->getSubGraphs();
+    itS=graph->getSubGraphs();
     while (itS->hasNext()) {
       Graph *its=itS->next();
       if (its!=quotientGraph) {
@@ -352,12 +400,34 @@ bool QuotientClustering::run() {
   //SizeProperty *size  = quotientGraph->getProperty<SizeProperty>("viewSize");
   Iterator<node> *itN = quotientGraph->getNodes();
   while (itN->hasNext()) {
-    updateGroupLayout(sg, quotientGraph, itN->next());
+    updateGroupLayout(graph, quotientGraph, itN->next());
   } delete itN;
 
   if (dataSet!=0) {
     dataSet->set("quotientGraph", quotientGraph);
   }
+
+  // recursive call if needed
+  if (recursive) {
+    DataSet dSet;
+    dSet.set("oriented", oriented);
+    dSet.set("node function", nodeFunctions);
+    dSet.set("edge function", edgeFunctions);
+    dSet.set("edge cardinality", edgeCardinality);
+    dSet.set("recursive", recursive);
+    dSet.set("meta-node label", metaLabel);
+    dSet.set("use name of subgraph", useSubGraphName);
+    StableIterator<Graph *> sitS(graph->getSubGraphs());
+    while (sitS.hasNext()) {
+      Graph* sg = sitS.next();
+      if (sg!=quotientGraph) {
+	string eMsg;
+	tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
+			    pluginProgress);
+      }
+    }
+  }
+
   return true;
 
 }

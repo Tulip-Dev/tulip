@@ -506,7 +506,7 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 		<para>Convolution clustering is an approach to partitioning a graph that gives the user interactive control over how many clusters to create. Tulip calculates a density function based on the chosen metric, displays a convolution of its histogram, and partitions the graph according to the humps in the histogram. </para>
         </sect3>
         <sect3 id="equal-value"><title>Equal Value</title>
-		<para>This algorithm will create sub-graphs in which all nodes or all edges (not both at the same time), have the same value.</para>
+		<para>This algorithm will create sub-graphs in which all nodes or all edges (not both at the same time), have the same value. The 'Connected' parameter indicates whether the subgraphs have to be connected or not.</para>
         </sect3>
         <sect3 id="hierarchical-general"><title>Hierarchical</title>
 		<para>This algorithm will divide the graph in 2 different subgraphs; the first one will contain nodes  that have the viewMetric value under than a certain limit, and, the other one, in which nodes will have a the viewMetric value higher than the limit. Then, the algorithm will be re-applied to the subgraph (the one with higher viewMetrics) until the subgraph contains less than 10 nodes.</para>
@@ -524,6 +524,15 @@ Each graph can be modified with algorithms for the layout, the set of selected e
 			</listitem>
 			<listitem><code>edge function :</code>
 				<para>This parameter enables to choose the function used to compute a measure value for a meta-edge using the values of its underlying edges.</para>
+			</listitem>
+			<listitem><code>meta-node label :</code>
+				<para>This parameter enables to choose the string property used to compute the label of the meta-nodes. An arbitrary underlying node is choosen and its associated value for the given property becomes the meta-node label.This parameter enables to choose the string property to use when naming mete-node.</para>
+			</listitem>
+			<listitem><code>use name of subgraph :</code>
+				<para>This parameter indicates whether the meta-node label has to be the same as the name of the subgraph it represents. When checked, it superseeds the choice of the previous parameter.</para>
+			</listitem>
+			<listitem><code>recursive :</code>
+				<para>This parameter indicates whether the algorithm has to be applied along the entire hierarchy of subgraphs.</para>
 			</listitem>
 			<listitem><code>edge cardinality :</code>
 				<para>This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph.</para>
