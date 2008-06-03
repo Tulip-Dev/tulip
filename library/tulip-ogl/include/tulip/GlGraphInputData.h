@@ -43,6 +43,8 @@ namespace tlp {
      */
     GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters);
 
+    ~GlGraphInputData();
+
     /**
      * Return the graph of this inputData
      */

@@ -38,6 +38,7 @@ namespace tlp {
     void loadPlugins(PluginLoader *plug=0);
 
     void initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
+    void clearGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs);
 
   private:
 

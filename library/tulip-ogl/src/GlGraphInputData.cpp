@@ -34,6 +34,10 @@ namespace tlp {
     GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
   }
 
+  GlGraphInputData::~GlGraphInputData() {
+    GlyphManager::getInst().clearGlyphList(&this->graph,this,glyphs);
+  }
+
   void GlGraphInputData::reloadLayoutProperty() {
     elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
   }
