@@ -179,26 +179,6 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   //Create layer widget
   layerWidget = new LayerManagerWidget(parent);
 
-  // Create overview widget after the tabWidgetDock
-  // because of a bug with full docked GlMainWidget
-  // In doing this the overviewDock will be the first
-  // sibling candidate when the tabWidgetDock will loose the focus
-  // and Qt will not try to give the focus to the first GlMainWidget
-  overviewDock = new QDockWidget("Overview", this);
-  overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-  overviewDock->setWindowTitle("3D Overview");
-  overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
-			    QDockWidget::DockWidgetMovable |
-			    QDockWidget::DockWidgetFloatable);
-  //overviewDock->setResizeEnabled(true);
-  overviewWidget = new GWOverviewWidget(overviewDock);
-  overviewDock->setWidget(overviewWidget);
-  this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
-  // move it to ensure it is the first one
-  //this->moveDockWindow(overviewDock, Qt::DockLeft, false, 0);
-  overviewWidget->show(); 
-  overviewDock->show();
-
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWidget("Data manipulation", this);
   tabWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -216,6 +196,26 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   this->addDockWidget(Qt::LeftDockWidgetArea, tabWidgetDock);
   tabWidget->show();
   tabWidgetDock->show();
+
+  // Create overview widget after the tabWidgetDock
+  // because of a bug with full docked GlMainWidget
+  // In doing this the overviewDock will be the first
+  // sibling candidate when the tabWidgetDock will loose the focus
+  // and Qt will not try to give the focus to the first GlMainWidget
+  overviewDock = new QDockWidget("Overview", this);
+  overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  overviewDock->setWindowTitle("3D Overview");
+  overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
+			    QDockWidget::DockWidgetMovable |
+			    QDockWidget::DockWidgetFloatable);
+  //overviewDock->setResizeEnabled(true);
+  overviewWidget = new GWOverviewWidget(overviewDock);
+  overviewDock->setWidget(overviewWidget);
+  this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
+  // move it to ensure it is the first one
+  this->splitDockWidget(overviewDock, tabWidgetDock, Qt::Vertical);
+  overviewWidget->show(); 
+  overviewDock->show();
 
   //Init hierarchy visualization widget
   clusterTreeWidget=tabWidget->clusterTree;
