@@ -1953,7 +1953,7 @@ void viewGl::applyAlgorithm(QAction* action) {
     QtProgress myProgress(this,name);
     myProgress.hide();
     if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + "::" + erreurMsg).c_str()));
+      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
     }
     clusterTreeWidget->update();
     clusterTreeWidget->setGraph(graph);
@@ -1997,7 +1997,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
     if (!resultBool) {
-      QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + "::" + erreurMsg).c_str()) );
+      QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
     }
     else 
       switch(myProgress.state()){
