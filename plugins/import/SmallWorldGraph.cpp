@@ -63,6 +63,7 @@ struct SmallWorldGraph:public ImportModule {
     srand(clock()); 
     LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
     SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
+    newSize->setAllNodeValue(Size(1, 1, 1));
 
     vector<node> sg(nbNodes);
 
@@ -83,7 +84,7 @@ struct SmallWorldGraph:public ImportModule {
 	if (i!=j) {
 	  double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
 	  minSize = std::min(distance, minSize);
-	  newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
+	  //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
 	  if ( distance  < (double)maxDistance)
 	    graph->addEdge(sg[i],sg[j]);
 	  else 
