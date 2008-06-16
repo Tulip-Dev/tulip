@@ -41,6 +41,7 @@ if [ $WINNT -eq 0 ] ; then
     libdir=${thisdir}
     pluginpath=${libdir}/lib/tlp
   else
+    pluginpath=${libdir}/bin
     libdir=${exec_prefix}/bin
   fi
 fi
