@@ -92,7 +92,6 @@ namespace tlp {
     bool selected = data->elementSelected->getEdgeValue(e);
 
     if(selected) {
-      cout << "selected" << endl;
       glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
     }else{
       glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);

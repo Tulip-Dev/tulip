@@ -75,6 +75,10 @@ namespace tlp {
       glPassThrough(TLP_FB_BEGIN_NODE);
       glPassThrough(id); //id of the node for the feed back mode 
     }
+
+    if (data->elementSelected->getNodeValue(n)) {
+      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
+    }
   
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
@@ -104,12 +108,16 @@ namespace tlp {
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
       
       if (data->elementSelected->getNodeValue(n)) {
-	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
 	GlDisplayListManager::getInst().callDisplayList("selection");
-	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
       }
       glPopMatrix();
     }
+
+    if (data->elementSelected->getNodeValue(n)) {
+      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+    }
+  
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);
     }
