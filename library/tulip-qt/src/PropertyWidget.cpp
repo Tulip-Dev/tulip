@@ -380,7 +380,9 @@ void PropertyWidget::setAllNodeValue() {
           if (!result) break;
         }
         if (_filterSelection && tmpSel->getNodeValue(tmp)) {
-          item(nbNode, 1)->setText(tmpStr.c_str());
+	  QTableWidgetItem *twi = item(nbNode, 1);
+	  if (twi) // there is no twi if the line is not visible
+	    twi->setText(tmpStr.c_str());
           nbNode++;
         }
       }
@@ -452,7 +454,9 @@ void  PropertyWidget::setAllEdgeValue() {
           if (!result) break;
         }
         if (_filterSelection && tmpSel->getEdgeValue(tmp)) {
-          item(nbEdge, 1)->setText(tmpStr.c_str());
+	  QTableWidgetItem *twi = item(nbEdge, 1);
+	  if (twi) // there is no twi if the line is not visible
+	    twi->setText(tmpStr.c_str());
           nbEdge++;
         }
       }
