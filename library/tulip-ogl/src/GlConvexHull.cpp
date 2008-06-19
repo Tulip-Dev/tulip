@@ -109,12 +109,12 @@ vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 
   if (fColors.size() == 0) {
     // use default colors
-    fColors.push_back(Color(255, 148, 169, 100));
-    fColors.push_back(Color(255, 152, 248, 100));
-    fColors.push_back(Color(157, 152, 255, 100));
-    fColors.push_back(Color(153, 250, 255, 100));
-    fColors.push_back(Color(155, 255, 170, 100));
-    fColors.push_back(Color(252, 255, 158, 100));
+    fColors.push_back(Color(255, 148, 169, 200));
+    fColors.push_back(Color(153, 250, 255, 200));
+    fColors.push_back(Color(255, 152, 248, 200));
+    fColors.push_back(Color(157, 152, 255, 200));
+    fColors.push_back(Color(255, 220, 0, 200));
+    fColors.push_back(Color(252, 255, 158, 200));
   }
   if (oColors.size() == 0) {
     // use default color

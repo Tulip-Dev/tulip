@@ -52,7 +52,7 @@ namespace tlp {
     vector<GlConvexHull *> convexHulls=GlConvexHull::buildConvexHullsFromHierarchy(graph,
 										   vector<Color>(),
 										   vector<Color>(),
-										   deducedFromChilds,
+										   false,
 										   graph,
 										   depth);
 
@@ -71,7 +71,7 @@ namespace tlp {
       }
 
       if(oldGlHulls->findGlEntity(sstr.str())){
-	GlSimpleEntity *oldEntity=oldGlHulls->findGlEntity((*it)->getName());
+	GlSimpleEntity *oldEntity=oldGlHulls->findGlEntity(sstr.str());
 	(*it)->setVisible(oldEntity->isVisible());
 	(*it)->setStencil(oldEntity->getStencil());
       }else{
