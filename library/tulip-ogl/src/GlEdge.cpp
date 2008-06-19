@@ -92,6 +92,7 @@ namespace tlp {
     bool selected = data->elementSelected->getEdgeValue(e);
 
     if(selected) {
+      glDisable(GL_DEPTH_TEST);
       glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
     }else{
       glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);

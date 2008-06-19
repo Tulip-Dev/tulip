@@ -52,11 +52,18 @@ namespace tlp {
     }
 
     node n=node(id);
-
+    
     if(data->elementGraph->getNodeValue(n) == 0) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }else{
       glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
+    }
+
+    if (data->elementSelected->getNodeValue(n)) {
+      glDisable(GL_DEPTH_TEST);
+      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
+    }else{
+      glEnable(GL_DEPTH_TEST);
     }
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
@@ -74,10 +81,6 @@ namespace tlp {
 
       glPassThrough(TLP_FB_BEGIN_NODE);
       glPassThrough(id); //id of the node for the feed back mode 
-    }
-
-    if (data->elementSelected->getNodeValue(n)) {
-      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
     }
   
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
