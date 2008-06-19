@@ -23,6 +23,9 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _displayEdges(true),
   _displayNodes(true),
   _displayMetaNodes(true),
+  _selectedNodesStencil(0xFFFF),
+  _selectedMetaNodesStencil(0xFFFF),
+  _selectedEdgesStencil(0xFFFF),
   _nodesStencil(0xFFFF),
   _metaNodesStencil(0xFFFF),
   _edgesStencil(0xFFFF),
@@ -56,6 +59,9 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   //unsigned int
   data.set("fontType", _FontsType);
   //int
+  data.set("selectedNodesStencil", _selectedNodesStencil);
+  data.set("selectedMetaNodesStencil", _selectedMetaNodesStencil);
+  data.set("selectedEdgesStencil", _selectedEdgesStencil);
   data.set("nodesStencil", _nodesStencil);
   data.set("metaNodesStencil", _metaNodesStencil);
   data.set("edgesStencil", _edgesStencil);
@@ -109,6 +115,12 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   if (data.get<unsigned int>("fontType", ui)) 
     _FontsType = ui;
   int i;
+  if (data.get<int>("selectedNodesStencil", i)) 
+    setSelectedNodesStencil(i);
+  if (data.get<int>("selectedMetaNodesStencil", i)) 
+    setSelectedMetaNodesStencil(i);
+  if (data.get<int>("selectedEdgesStencil", i)) 
+    setSelectedEdgesStencil(i);
   if (data.get<int>("nodesStencil", i)) 
     setNodesStencil(i);
   if (data.get<int>("metaNodesStencil", i)) 
@@ -220,6 +232,27 @@ bool GlGraphRenderingParameters::isViewEdgeLabel()const {
 void GlGraphRenderingParameters::setViewEdgeLabel(const bool b) {
   _viewEdgeLabel=b;
 }
+//====================================================
+void GlGraphRenderingParameters::setSelectedNodesStencil(const int stencil) {
+  _selectedNodesStencil=stencil;
+}
+int GlGraphRenderingParameters::getSelectedNodesStencil() {
+  return _selectedNodesStencil;
+} 
+//====================================================
+void GlGraphRenderingParameters::setSelectedMetaNodesStencil(const int stencil) {
+  _selectedMetaNodesStencil=stencil;
+}
+int GlGraphRenderingParameters::getSelectedMetaNodesStencil() {
+  return _selectedMetaNodesStencil;
+} 
+//====================================================
+void GlGraphRenderingParameters::setSelectedEdgesStencil(const int stencil) {
+  _selectedEdgesStencil=stencil;
+}
+int GlGraphRenderingParameters::getSelectedEdgesStencil() {
+  return _selectedEdgesStencil;
+} 
 //====================================================
 void GlGraphRenderingParameters::setNodesStencil(const int stencil) {
   _nodesStencil=stencil;

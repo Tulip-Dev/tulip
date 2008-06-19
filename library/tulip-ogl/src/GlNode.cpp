@@ -40,6 +40,7 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
+    GLenum error = glGetError();
     if(GlDisplayListManager::getInst().beginNewDisplayList("selection")) {
       glPushAttrib(GL_ALL_ATTRIB_BITS);
       glDisable(GL_LIGHTING);
@@ -52,18 +53,20 @@ namespace tlp {
     }
 
     node n=node(id);
-    
-    if(data->elementGraph->getNodeValue(n) == 0) {
-      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-    }else{
-      glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
-    }
-
     if (data->elementSelected->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
-      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
+      if(data->elementGraph->getNodeValue(n) == 0) {
+	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
+      }else{
+	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
+      }
     }else{
       glEnable(GL_DEPTH_TEST);
+      if(data->elementGraph->getNodeValue(n) == 0) {
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+      }else{
+	glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
+      }
     }
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
@@ -124,6 +127,8 @@ namespace tlp {
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);
     }
+    if ( error != GL_NO_ERROR)
+    cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
   void GlNode::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {

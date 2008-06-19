@@ -141,6 +141,27 @@ void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphCompo
     edgesLabel->setCheckState(2,Qt::Checked);
   else
     edgesLabel->setCheckState(2,Qt::Unchecked);
+  //Selected Nodes
+  QTreeWidgetItem* selectedNodes=new QTreeWidgetItem(item,QStringList("Selected nodes"));
+  selectedNodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  if(glGraphComposite->getSelectedNodesStencil()!=0xFFFF)
+    selectedNodes->setCheckState(2,Qt::Checked);
+  else
+    selectedNodes->setCheckState(2,Qt::Unchecked);
+  //Selected Nodes
+  QTreeWidgetItem* selectedMetaNodes=new QTreeWidgetItem(item,QStringList("Selected meta-nodes"));
+  selectedMetaNodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  if(glGraphComposite->getSelectedMetaNodesStencil()!=0xFFFF)
+    selectedMetaNodes->setCheckState(2,Qt::Checked);
+  else
+    selectedMetaNodes->setCheckState(2,Qt::Unchecked);
+  //Selected Edges
+  QTreeWidgetItem* selectedEdges=new QTreeWidgetItem(item,QStringList("Selected edges"));
+  selectedEdges->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+  if(glGraphComposite->getSelectedEdgesStencil()!=0xFFFF)
+    selectedEdges->setCheckState(2,Qt::Checked);
+  else
+    selectedEdges->setCheckState(2,Qt::Unchecked);
 }
 //=============================================================================
 void LayerManagerWidget::updateLayer(const string& name,GlLayer *layer) {
@@ -218,6 +239,8 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
     QList<string> hierarchie;
     buildHierarchie(item,hierarchie);
     GlLayer* layer=observedMainWidget->getScene()->getLayer(hierarchie[0]);
+    if(!layer)
+      return;
     GlSimpleEntity* entity=layer->getComposite();
     bool isGraphComposite=false;
     for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
@@ -240,8 +263,14 @@ void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
       if(item->checkState(column)==Qt::Checked) 
 	value=2;
       else
-	value=0xFFF;
-      if(item->data(0,0).toString().toStdString()=="Nodes") 
+	value=0xFFFF;
+      if(item->data(0,0).toString().toStdString()=="Selected nodes") 
+	composite->setSelectedNodesStencil(value);
+      if(item->data(0,0).toString().toStdString()=="Selected meta-nodes") 
+	composite->setSelectedMetaNodesStencil(value);
+      if(item->data(0,0).toString().toStdString()=="Selected edges") 
+	composite->setSelectedEdgesStencil(value);
+      else if(item->data(0,0).toString().toStdString()=="Nodes") 
 	composite->setNodesStencil(value);
       else if (item->data(0,0).toString().toStdString()=="Edges")
 	  composite->setEdgesStencil(value);

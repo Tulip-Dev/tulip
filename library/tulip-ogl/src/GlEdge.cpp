@@ -86,15 +86,14 @@ namespace tlp {
   }
 
   void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
-    glEnable(GL_DEPTH_TEST);
-
     edge e=edge(id);
     bool selected = data->elementSelected->getEdgeValue(e);
 
     if(selected) {
       glDisable(GL_DEPTH_TEST);
-      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
+      glStencilFunc(GL_LEQUAL,data->parameters->getSelectedEdgesStencil(),0xFFFF);
     }else{
+      glEnable(GL_DEPTH_TEST);
       glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);
     }
 
@@ -298,8 +297,8 @@ namespace tlp {
     //================================
 
     glDisable(GL_CULL_FACE);
-    /*glDepthFunc(GL_LESS);
-      glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);*/
+    /*glDepthFunc(GL_LESS);*/
+    //glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
    
     if (edge3D)
       shape |= L3D_BIT;

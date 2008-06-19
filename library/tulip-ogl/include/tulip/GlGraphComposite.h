@@ -118,6 +118,9 @@ namespace tlp {
     void setDisplayNodesLabel(bool display) {parameters.setViewNodeLabel(display);}
     void setDisplayMetaNodesLabel(bool display) {parameters.setViewMetaLabel(display);}
     void setDisplayEdgesLabel(bool display) {parameters.setViewEdgeLabel(display);}
+    void setSelectedNodesStencil(int stencil) {parameters.setSelectedNodesStencil(stencil);}
+    void setSelectedMetaNodesStencil(int stencil) {parameters.setSelectedMetaNodesStencil(stencil);}
+    void setSelectedEdgesStencil(int stencil) {parameters.setSelectedEdgesStencil(stencil);}
     void setNodesStencil(int stencil) {parameters.setNodesStencil(stencil);}
     void setMetaNodesStencil(int stencil) {parameters.setMetaNodesStencil(stencil);}
     void setEdgesStencil(int stencil) {parameters.setEdgesStencil(stencil);}
@@ -131,6 +134,9 @@ namespace tlp {
     bool isDisplayNodesLabel() {return parameters.isViewNodeLabel();}
     bool isDisplayMetaNodesLabel() {return parameters.isViewMetaLabel();}
     bool isDisplayEdgesLabel() {return parameters.isViewEdgeLabel();}
+    int getSelectedNodesStencil() {return parameters.getSelectedNodesStencil();}
+    int getSelectedMetaNodesStencil() {return parameters.getSelectedMetaNodesStencil();}
+    int getSelectedEdgesStencil() {return parameters.getSelectedEdgesStencil();}
     int getNodesStencil() {return parameters.getNodesStencil();}
     int getMetaNodesStencil() {return parameters.getMetaNodesStencil();}
     int getEdgesStencil() {return parameters.getEdgesStencil();}

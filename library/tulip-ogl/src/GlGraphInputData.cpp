@@ -17,19 +17,7 @@
 namespace tlp {
   
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters):graph(graph),parameters(parameters) {
-    elementRotation = graph->getProperty<DoubleProperty>("viewRotation");
-    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-    elementLabel = graph->getProperty<StringProperty>("viewLabel");
-    elementLabelColor = graph->getProperty<ColorProperty>("viewLabelColor");
-    elementLabelPosition = graph->getProperty<IntegerProperty>("viewLabelPosition");
-    elementColor = graph->getProperty<ColorProperty>("viewColor");
-    elementShape = graph->getProperty<IntegerProperty>("viewShape");
-    elementSize = graph->getProperty<SizeProperty>("viewSize");
-    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
-    elementGraph = graph->getProperty<GraphProperty>("viewMetaGraph");
-    elementTexture = graph->getProperty<StringProperty>("viewTexture");
-    elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
-    elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
+    reloadAllProperties();
 
     GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
   }
@@ -48,6 +36,22 @@ namespace tlp {
   
   void GlGraphInputData::reloadSelectionProperty() {
     elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+  }
+
+  void GlGraphInputData::reloadAllProperties() {
+    elementRotation = graph->getProperty<DoubleProperty>("viewRotation");
+    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+    elementLabel = graph->getProperty<StringProperty>("viewLabel");
+    elementLabelColor = graph->getProperty<ColorProperty>("viewLabelColor");
+    elementLabelPosition = graph->getProperty<IntegerProperty>("viewLabelPosition");
+    elementColor = graph->getProperty<ColorProperty>("viewColor");
+    elementShape = graph->getProperty<IntegerProperty>("viewShape");
+    elementSize = graph->getProperty<SizeProperty>("viewSize");
+    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
+    elementGraph = graph->getProperty<GraphProperty>("viewMetaGraph");
+    elementTexture = graph->getProperty<StringProperty>("viewTexture");
+    elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
+    elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
   }
   
 }

@@ -59,6 +59,11 @@ namespace tlp {
      * Reload viewLabel Property of the graph
      */
     void reloadLabelProperty();
+
+    /**
+     * Reload viewLabel Property of the graph
+     */
+    void reloadAllProperties();
     
     /**
      * Reload viewSelection Property of the graph
