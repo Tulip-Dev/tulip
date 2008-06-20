@@ -1722,7 +1722,7 @@ void viewGl::reverseSelection() {
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getLocalProperty<BooleanProperty>("viewSelection")->reverse();
+  graph->getProperty<BooleanProperty>("viewSelection")->reverse();
   glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
   Observable::unholdObservers();
 }
