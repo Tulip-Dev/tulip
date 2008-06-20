@@ -102,71 +102,63 @@ namespace {
       xu /= n_xu;
       xv /= n_xv;
   
-      /*if((xu^xv).norm() < 1E-3) {
-	cout << "Warning " << endl;
-  	Coord xv = Coord(0,0,1);
-	xu /= xu.norm();
-	Coord dir = xu^xv;
-	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-	result(i+resultDec,0 + inversion) = vertices[i] - dir*sizes[i];
-	result(i+resultDec,1 - inversion) = vertices[i] + dir*sizes[i];
-	inversion=!inversion;
-	} else {*/
-	Coord bi_xu_xv = xu+xv;
-	if(bi_xu_xv ==Coord(0,0,0)) {
-	  //two point at the same coord
-	  result(i+resultDec,0)=result(i+resultDec-1,0);
-	  result(i+resultDec,1)=result(i+resultDec-1,1);
-	  continue;
+      
+      Coord bi_xu_xv = xu+xv;
+      if(bi_xu_xv ==Coord(0,0,0)) {
+	//two point at the same coord
+	result(i+resultDec,0)=result(i+resultDec-1,0);
+	result(i+resultDec,1)=result(i+resultDec-1,1);
+	continue;
+      }
+      bi_xu_xv /= bi_xu_xv.norm();
+      float newSize=sizes[i];
+      Coord u=vertices[i-1]-vertices[i];
+      Coord v=vertices[i+1]-vertices[i];
+      float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+      if(isnan(angle))
+	angle=M_PI;
+      newSize=newSize/cos(angle/2.);
+      
+      if(angle<M_PI/2+M_PI/4) {
+	//normal form
+	if ((xu^xv)[2] > 0) {
+	  result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	  result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
+	} else {
+	  result(i+resultDec,0 + inversion) = vertices[i] - bi_xu_xv*newSize;
+	  result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
 	}
-	bi_xu_xv /= bi_xu_xv.norm();
-	float newSize=sizes[i];
-	Coord u=vertices[i-1]-vertices[i];
-	Coord v=vertices[i+1]-vertices[i];
-	float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
-	newSize=newSize/cos(angle/2.);
+      }else{
+	//broken form
+	Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
 	
-	if(angle<M_PI/2+M_PI/4) {
-	  //normal form
+	if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
+	  result.addPoint();
+	  if(dec)
+	    dec->push_back(i); 
 	  if ((xu^xv)[2] > 0) {
 	    result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	    result(i+resultDec,1 - inversion) = vertices[i] - bi_xu_xv*newSize;
-	  } else {
-	    result(i+resultDec,0 + inversion) = vertices[i] - bi_xu_xv*newSize;
-	    result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	  }
-	}else{
-	  //broken form
-	  Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
-
-	  if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
-	    result.addPoint();
-	    if(dec)
-	      dec->push_back(i); 
-	    if ((xu^xv)[2] > 0) {
-	      result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
-	      result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-	      result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
-	    }else{
-	      result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
-	      result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
-	      result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
-	    }
-	    ++resultDec;
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	    result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
 	  }else{
-	    if ((xu^xv)[2] > 0) {
-	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
-	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
-	      inversion=!inversion;
-	    }else{
-	      result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
-	      result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
-	      inversion=!inversion;
-	    }
+	    result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	    result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+	    result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
 	  }
-	  //}
+	  ++resultDec;
+	}else{
+	  if ((xu^xv)[2] > 0) {
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+	    inversion=!inversion;
+	  }else{
+	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
+	    result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+	    inversion=!inversion;
+	  }
+	}
       }
     }
     //end point
