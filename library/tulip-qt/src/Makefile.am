@@ -44,7 +44,12 @@ nodist_libPropertyWidgetPlugin_la_SOURCES = moc_PropertyWidgetPlugin.cpp
 BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlMainWidget.cpp \
+	moc_GlMainView.cpp \
 	moc_PropertyWidget.cpp \
+	moc_PropertyDialog.cpp \
+	moc_CopyPropertyDialog.cpp \
+	moc_TulipStatsWidget.cpp \
+	moc_RenderingParametersDialog.cpp \
 	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
 	moc_FindSelectionWidget.cpp \
@@ -52,13 +57,21 @@ BUILT_SOURCES = \
 	moc_GWOverviewWidget.cpp \
 	moc_LayerManagerWidget.cpp \
 	moc_LayerManagerWidgetData.cpp \
-	moc_QtCPULODCalculator.cpp
+	moc_QtCPULODCalculator.cpp \
+	moc_PropertyDialogData.cpp \
+	moc_CopyPropertyDialogData.cpp \
+	moc_TulipStatsData.cpp \
+	moc_RenderingParametersDialogData.cpp \
+	moc_View.cpp 
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
 dist_libtulip_qt4_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlMainWidget.cpp \
+	GlMainView.cpp \
+	PropertyDialog.cpp \
+	CopyPropertyDialog.cpp \
 	PropertyWidget.cpp \
 	ElementPropertiesWidgetUI.cpp \
 	ElementPropertiesWidget.cpp \
@@ -69,18 +82,25 @@ dist_libtulip_qt4_la_SOURCES = \
 	LayerManagerWidgetData.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
+	MouseSelector.cpp \
 	MouseBoxZoomer.cpp \
 	MouseEdgeBuilder.cpp \
 	MouseInteractors.cpp \
 	MouseMagicSelector.cpp \
 	MouseNodeBuilder.cpp \
 	MouseSelectionEditor.cpp \
-	MouseSelector.cpp \
 	MouseEdgeSelector.cpp \
 	MouseEdgeBendEditor.cpp \
+	MouseShowElementInfos.cpp \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
-	QtCPULODCalculator.cpp
+	QtCPULODCalculator.cpp \
+	GWInteractor.cpp \
+	InteractorManager.cpp \
+	View.cpp \
+	ViewPluginsManager.cpp \
+	TulipStatsWidget.cpp \
+	RenderingParametersDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 
@@ -89,3 +109,4 @@ moc_%.cpp: $(srcdir)/../include/tulip/%.h
 
 moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidget.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
+

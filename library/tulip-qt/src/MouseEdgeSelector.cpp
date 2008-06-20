@@ -18,6 +18,8 @@
 using namespace std;
 using namespace tlp;
 
+INTERACTORPLUGIN(MouseEdgeSelector, "MouseEdgeSelector", "Tulip Team", "16/04/2008", "Mouse Edge Selector", "1.0", 6);
+
 //==================================================================
 MouseEdgeSelector::MouseEdgeSelector():
   x(0),y(0),w(0),h(0),started(false),graph(0) {

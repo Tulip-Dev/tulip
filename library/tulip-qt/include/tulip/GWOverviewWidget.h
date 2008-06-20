@@ -10,27 +10,14 @@
 #include <QtCore/qstring.h>
 #include <QtGui/qlayout.h>
 
+class QEvent;
+
 namespace tlp {
   class GlGraph;
-}
 
-class GlMainWidget;
-class QEvent;
-class RectPosition;
-class GWOverviewWidget;
-
-class RenderingParametersDialog : public QDialog,
-				  public Ui::RenderingParametersDialogData {
-  Q_OBJECT
-
-  GWOverviewWidget *overview;
-public:
-  RenderingParametersDialog(GWOverviewWidget* parent);
-  void windowActivationChange(bool oldActive);
-public slots:
-  void updateView();
-  void backColor();
-};
+  class GlMainWidget;
+  class RectPosition;
+  class GWOverviewWidget;
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
@@ -45,11 +32,11 @@ public:
   GlMainWidget *getObservedView();
 
 public slots:
-  void syncFromView();
+  /*void syncFromView();*/
   void setObservedView(GlMainWidget *);
-  void updateView();
+  /*void updateView();
   void backColor(); //background color button
-  void showRenderingParametersDialog();
+  void showRenderingParametersDialog();*/
   
 private slots:
   //Used to catch graphRedrawn signal from view of which
@@ -65,8 +52,9 @@ private :
   bool _synchronizing;
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
-  RenderingParametersDialog* paramDialog;
-  void setBackgroundColor(QColor);
+  //void setBackgroundColor(QColor);
 };
+
+}
 /*@}*/
 #endif // GWOVERVIEW_H

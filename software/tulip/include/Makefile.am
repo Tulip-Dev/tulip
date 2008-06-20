@@ -1,13 +1,9 @@
 BUILT_SOURCES = \
 	QtProgressData.h \
 	TulipData.h\
-	TabWidgetData.h\
 	AppStartUpData.h\
 	InfoDialogData.h\
-	PropertyDialogData.h\
-	TulipStatsData.h\
-	GridOptionsData.h \
-	CopyPropertyDialogData.h
+	GridOptionsData.h
 
 nodist_noinst_HEADERS = $(BUILT_SOURCES)
 
@@ -18,11 +14,8 @@ noinst_HEADERS = \
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
-	CopyPropertyDialog.h \
-	PropertyDialog.h\
 	QtProgress.h\
 	viewGl.h \
-	TulipStatsWidget.h\
 	GridOptionsWidget.h
 
 CLEANFILES = $(BUILT_SOURCES)

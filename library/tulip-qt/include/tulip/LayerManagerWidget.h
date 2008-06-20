@@ -24,6 +24,9 @@
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
+
+namespace tlp {
+
 class TLP_QT_SIMPLE_SCOPE LayerManagerWidget : public LayerManagerWidgetData { //, public SceneObserver { 
   Q_OBJECT
   
@@ -50,5 +53,8 @@ private:
   GlMainWidget* observedMainWidget;
  
 };
+
+}
+
 /*@}*/
 #endif // Tulip_LAYERMANAGERWIDGET_H

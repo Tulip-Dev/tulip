@@ -12,7 +12,7 @@ namespace tlp {
 class Graph;
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
-class TLP_QT_SCOPE MouseSelector:public GWInteractor
+class MouseSelector:public Interactor
 {
 private:
   Qt::MouseButton mButton;
@@ -27,7 +27,7 @@ public:
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseSelector(mButton, kModifier); }
+  Interactor *clone() { return new MouseSelector(mButton, kModifier); }
 };
 /*@}*/
 

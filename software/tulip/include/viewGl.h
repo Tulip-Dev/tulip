@@ -29,28 +29,28 @@
 #include "TulipData.h"
 
 namespace tlp {
-class GlGraph;
-class Morphing;
-class GridOptionsWidget;
+  class GlGraph;
+  class Morphing;
+  class GridOptionsWidget;
+  /*class GlMainWidget;
+  class GlScene;
+  class GlLayer;*/  
+  class LayerManagerWidget;
+  class View;
+  class GlMainView;
+  class SGHierarchyWidget;
+  class PropertyDialog;
+  class ElementPropertiesWidget;
 #ifdef STATS_UI
-class TulipStats;
+  class TulipStat;
 #endif
-class GlScene;
-class GlLayer;  
 }
 
-class SGHierarchyWidget;
-class ElementPropertiesWidget;
-class GlMainWidget;
-class TulipStats;
-class PropertyDialog;
-class QWorkspace;
+//class QWorkspace;
 class QProgressDialog;
 class QEvent;
 class View3DSetup;
 class Cluster;
-class GWOverviewWidget;
-class LayerManagerWidget;
 
 // minimal structure to keep open files infos
 struct viewGlFile {
@@ -71,19 +71,9 @@ public:
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
-  SGHierarchyWidget *clusterTreeWidget;
-#ifdef STATS_UI
-  tlp::TulipStats *statsWidget;
-#endif
-  GWOverviewWidget *overviewWidget;
-  LayerManagerWidget *layerWidget;
+  tlp::LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
-  QDockWidget *overviewDock;
-  QDockWidget *tabWidgetDock;
-  GlMainWidget *glWidget;
-  PropertyDialog *propertiesWidget;
-  ElementPropertiesWidget *eltProperties;
-  tlp::Graph * copyCutPasteGraph;
+  //tlp::GlMainWidget *glWidget;
   tlp::TulipPluginLoader pluginLoader;
   tlp::PluginsUpdateChecker *pluginsUpdateChecker;
   tlp::MultiServerManager *multiServerManager;
@@ -101,7 +91,14 @@ protected:
   QMenu optionMenu;
   QMenu selectMenu;
   QMenu exportImageMenu;
-  QAction *renderingParametersDialogAction;
+
+  QDockWidget *tabWidgetDock;
+  tlp::SGHierarchyWidget *clusterTreeWidget;
+  tlp::PropertyDialog *propertiesWidget;
+  tlp::ElementPropertiesWidget *eltProperties;
+#ifdef STATS_UI
+  tlp::TulipStat *statsWidget;
+#endif
 
   //QMenu* windowsMenu;
   void focusInEvent ( QFocusEvent * );
@@ -116,31 +113,20 @@ protected:
   void initializeGraph(tlp::Graph *);
   void initializeGlScene(tlp::GlScene *);
   // GraphObserver interface
-  void addNode (tlp::Graph *, const tlp::node);
+  /*void addNode (tlp::Graph *, const tlp::node);
   void addEdge (tlp::Graph *, const tlp::edge);
   void delNode (tlp::Graph *, const tlp::node);
   void delEdge (tlp::Graph *, const tlp::edge);
   void reverseEdge (tlp::Graph *, const tlp::edge);
-  void destroy (tlp::Graph *);
+  void destroy (tlp::Graph *);*/
   // GlSceneObserver interface
-  void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
-  void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+  /*void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+    void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);*/
 
 public slots:
   void startTulip();
   void fileOpen(std::string *,QString &);
   void closeEvent(QCloseEvent *e); 
-  void setSelect();
-  void setAddEdge();
-  void setEditEdgeBend();
-  void setAddNode();
-  void setDelete();
-  void setZoomBox();
-  void setMoveSelection();
-  void setSelection();
-  void setMagicSelection();
-  void setGraphNavigate();
-  void showElementProperties(unsigned int eltId, bool isNode);
   
 protected slots:
   void helpIndex();
@@ -156,10 +142,6 @@ protected slots:
   void fileNew();
   void fileOpen();  
   void filePrint();
-  void editCut();
-  void editCopy();
-  void editPaste();
-  void editFind();
   void changeMetric(QAction*);
   void changeString(QAction*);
   void changeSizes(QAction*);
@@ -173,23 +155,17 @@ protected slots:
   void applyAlgorithm(QAction*);
   void outputEPS();
   void outputSVG();
-  void showDialog(QAction*);
-  void redrawView();
-  void centerView();
+  tlp::View* createView(const std::string &name,tlp::Graph *graph,std::string *xmlData=NULL);
+  void addView(QAction *action);
+  void displayView(tlp::View *view,const std::string &name);
+  void changeInteractor(QAction*);
   void updateCurrentGraphInfos();
-  void selectAll();
-  void deselectAll();
-  void reverseSelection();
-  void delSelection();
-  void newSubgraph();
-  void reverseSelectedEdgeDirection();
   void windowsMenuAboutToShow();
   void windowsMenuActivated(QAction*);
   void new3DView();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
-  void glMainWidgetClosing(GlMainWidget *, QCloseEvent *);
-  void group();  
+  //void glMainWidgetClosing(GlMainWidget *, QCloseEvent *);
   void gridOptions();
   void isAcyclic();
   void isSimple();
@@ -206,14 +182,14 @@ protected slots:
   void makeConnected();
   void makeDirected();
   void deletePluginsUpdateChecker();
+  void showElementProperties(unsigned int eltId, bool isNode);
 
 private:
-  void deleteElement(unsigned int , unsigned int , GlMainWidget *);
-  void selectElement(unsigned int , unsigned int , GlMainWidget *, bool);
+  //void deleteElement(unsigned int , unsigned int , GlMainWidget *);
+  //void selectElement(unsigned int , unsigned int , GlMainWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlMainWidget *newOpenGlView(tlp::Graph *graph,const QString &);
-  void constructDefaultScene(GlMainWidget *glWidget);
-  std::string newName();
+  //GlMainWidget *newOpenGlView(tlp::Graph *graph,const QString &);
+  //void constructDefaultScene(GlMainWidget *glWidget);
   stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
   bool doFileSave();
@@ -224,13 +200,16 @@ private:
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
   tlp::Morphing *morph;
-  std::vector<tlp::GWInteractor *> *currentInteractors;
-  void setCurrentInteractors(std::vector<tlp::GWInteractor *> *interactors);
-  void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
+  std::vector<tlp::Interactor *> *currentInteractors;
+  tlp::GlMainView* initMainView(std::string *in=NULL);
+  void installInteractors(tlp::View *view);
+  void installEditMenu(tlp::View *view);
 
   QAssistantClient* assistant;
   unsigned int currentGraphNbNodes, currentGraphNbEdges;
   tlp::Graph* importedGraph;
+  tlp::Graph* currentGraph;
+  tlp::View *currentView;
 };
 
 #endif // viewGl_included

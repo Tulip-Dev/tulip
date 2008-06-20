@@ -23,13 +23,10 @@ AM_CPPFLAGS= @QT_CPPFLAGS@
 
 BUILT_SOURCES = \
 	TulipResource.cpp \
-	moc_CopyPropertyDialog.cpp \
 	moc_AppStartUp.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
-	moc_PropertyDialog.cpp \
 	moc_QtProgress.cpp \
-	moc_TulipStatsWidget.cpp \
 	moc_GridOptionsWidget.cpp
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
@@ -40,10 +37,7 @@ dist_tulip_SOURCES = \
 	geometrie2D.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
-	PropertyDialog.cpp \
-	CopyPropertyDialog.cpp \
 	QtProgress.cpp \
-	TulipStatsWidget.cpp \
 	GridOptionsWidget.cpp \
 	main.cpp
 

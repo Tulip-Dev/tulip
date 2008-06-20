@@ -21,9 +21,13 @@
 
 #include <QtOpenGL/qgl.h>
 #include <QtCore/qpoint.h>
+#include <QtGui/qaction.h>
 
 #include "tulip/GWInteractor.h"
+#include "tulip/View.h"
 #include <tulip/GlHierarchyConvexHulls.h>
+
+namespace tlp {
 
 //class QTextView;
 
@@ -32,10 +36,12 @@
 class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   Q_OBJECT;
   
-public:
+ public:
   GlMainWidget(QWidget *parent=NULL, const char *name=NULL);
   ~GlMainWidget();
-  
+
+  void setData(Graph *graph,std::string *in);
+  Graph *getGraph();
   
   /**************************************
    * inherited methods overloading
@@ -100,7 +106,7 @@ public:
   /**
    * return list of interactor installed on this widget
    */
-  tlp::Iterator<tlp::GWInteractor *> *getInteractors() const;
+  tlp::Iterator<tlp::Interactor *> *getInteractors() const;
 
   /**
    * Grab the image of this widget
@@ -138,15 +144,15 @@ public slots:
 
   void closeEvent(QCloseEvent *e);
   /// install a clone of the interactor as event filter and assign the returned id
-  tlp::GWInteractor::ID pushInteractor(tlp::GWInteractor *interactor);
+  tlp::Interactor::ID pushInteractor(tlp::Interactor *interactor);
   /// remove the last added interactor from the event filters list and delete it
   void popInteractor();
   /// remove the interactor with id from the event filters list and delete it
-  void removeInteractor(tlp::GWInteractor::ID id);
+  void removeInteractor(tlp::Interactor::ID id);
   ///  remove all interactors and delete them, push a new one if any
-  tlp::GWInteractor::ID resetInteractors(tlp::GWInteractor *interactor = NULL);
+  tlp::Interactor::ID resetInteractors(tlp::Interactor *interactor = NULL);
   /// remove all iteractors and delete them, then install clones of the interactors
-  std::vector<tlp::GWInteractor::ID> resetInteractors(const std::vector<tlp::GWInteractor *>&interactors);
+  std::vector<tlp::Interactor::ID> resetInteractors(const std::vector<tlp::Interactor *>&interactors);
 
 signals:
   void closing(GlMainWidget *, QCloseEvent *);
@@ -170,10 +176,12 @@ private:
   tlp::GlHierarchyConvexHulls hulls;
   bool _firstStepOfIncrementalRendering;
   QRegion _visibleArea;
-  tlp::GWInteractor::ID _id;
-  std::vector<tlp::GWInteractor *> _interactors;
+  tlp::Interactor::ID _id;
+  std::vector<tlp::Interactor *> _interactors;
 
 };
+
+}
 
 /*@}*/
 #endif

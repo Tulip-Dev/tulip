@@ -13,6 +13,8 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/InteractorManager.h>
+#include <tulip/ViewPluginsManager.h>
 #include <QtGui/qapplication.h>
 #include "AppStartUp.h"
 
@@ -42,6 +44,8 @@ void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
   //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(loader);   // library side plugins
   GlyphManager::getInst().loadPlugins(loader);   // software side plugins, i.e. glyphs
+  InteractorManager::getInst().loadPlugins(loader); // interactors plugins
+  ViewPluginsManager::getInst().loadPlugins(loader); // view plugins
 
   errors = errorMsgs;
   // free memory

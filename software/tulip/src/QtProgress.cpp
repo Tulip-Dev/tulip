@@ -11,9 +11,9 @@ using namespace std;
 using namespace tlp;
 
 //=====================================
-QtProgress::QtProgress(QWidget* parent,string text,GlMainWidget *glMainWidget):
+QtProgress::QtProgress(QWidget* parent,string text):
   QDialog(parent),
-  firstCall(true),label(text), parent(parent), glMainWidget(glMainWidget) {
+  firstCall(true),label(text), parent(parent) {//, glMainWidget(glMainWidget) {
   setupUi(this);
 }
 //=====================================
@@ -30,10 +30,10 @@ void QtProgress::progress_handler(int i,int j) {
   qApp->processEvents();
   if (firstCall) show();
   firstCall=false;
-  if (glMainWidget!=0 && preview->isChecked()) {
+  /*if (glMainWidget!=0 && preview->isChecked()) {
     glMainWidget->getScene()->centerScene();
     glMainWidget->draw();
-  }
+    }*/
 }
 //=====================================
 void QtProgress::setComment(string msg) {

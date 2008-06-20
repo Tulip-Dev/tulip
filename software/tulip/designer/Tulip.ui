@@ -13,7 +13,7 @@
    <string>Tulip</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="TulipResource.qrc" >:/logo32x32.png</iconset>
+   <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/logo32x32.png</iconset>
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
@@ -61,16 +61,6 @@
    <attribute name="toolBarBreak" >
     <bool>false</bool>
    </attribute>
-   <addaction name="navigate_action" />
-   <addaction name="selectAction" />
-   <addaction name="selectionAction" />
-   <addaction name="moveSelectionAction" />
-   <addaction name="magicSelectionAction" />
-   <addaction name="zoomAction" />
-   <addaction name="deleteAction" />
-   <addaction name="addNodeAction" />
-   <addaction name="addEdgeAction" />
-   <addaction name="editEdgeBendAction" />
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
@@ -78,7 +68,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>29</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu" >
@@ -153,16 +143,6 @@
     <addaction name="menunew_itemAction" />
     <addaction name="popupMenu_32" />
    </widget>
-   <widget class="QMenu" name="viewMenu" >
-    <property name="title" >
-     <string>&amp;View</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="dialogMenu" >
-    <property name="title" >
-     <string>&amp;Dialogs</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="Options" >
     <property name="title" >
      <string>&amp;Options</string>
@@ -189,19 +169,23 @@
     <addaction name="separator" />
     <addaction name="helpAboutAction" />
    </widget>
+   <widget class="QMenu" name="toolsMenu" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+   </widget>
    <addaction name="fileMenu" />
    <addaction name="editMenu" />
    <addaction name="propertyMenu" />
    <addaction name="graphMenu" />
-   <addaction name="viewMenu" />
-   <addaction name="dialogMenu" />
    <addaction name="Options" />
+   <addaction name="toolsMenu" />
    <addaction name="windowsMenu" />
    <addaction name="helpMenu" />
   </widget>
   <action name="fileNewAction" >
    <property name="icon" >
-    <iconset>image3</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image3</iconset>
    </property>
    <property name="text" >
     <string>&amp;New</string>
@@ -218,7 +202,7 @@
   </action>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_open.png</iconset>
+    <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_open.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -235,7 +219,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_save.png</iconset>
+    <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_save.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -266,7 +250,7 @@
   </action>
   <action name="filePrintAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_print.png</iconset>
+    <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_print.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Print...</string>
@@ -297,7 +281,7 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset>image7</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image7</iconset>
    </property>
    <property name="text" >
     <string>&amp;Undo</string>
@@ -314,7 +298,7 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset>image8</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image8</iconset>
    </property>
    <property name="text" >
     <string>&amp;Redo</string>
@@ -331,7 +315,7 @@
   </action>
   <action name="editCutAction" >
    <property name="icon" >
-    <iconset>image9</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image9</iconset>
    </property>
    <property name="text" >
     <string>&amp;Cut</string>
@@ -348,7 +332,7 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset>image10</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image10</iconset>
    </property>
    <property name="text" >
     <string>C&amp;opy</string>
@@ -365,7 +349,7 @@
   </action>
   <action name="editPasteAction" >
    <property name="icon" >
-    <iconset>image11</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image11</iconset>
    </property>
    <property name="text" >
     <string>&amp;Paste</string>
@@ -382,7 +366,7 @@
   </action>
   <action name="editFindAction" >
    <property name="icon" >
-    <iconset>image12</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image12</iconset>
    </property>
    <property name="text" >
     <string>&amp;Find...</string>
@@ -693,7 +677,7 @@
   </action>
   <action name="is_connected" >
    <property name="icon" >
-    <iconset/>
+    <iconset>../../../../tulip/software/tulip/designer</iconset>
    </property>
    <property name="text" >
     <string>Connected</string>
@@ -862,7 +846,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_addedge.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_addedge.png</iconset>
     </property>
     <property name="text" >
      <string>addEdge</string>
@@ -882,7 +866,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_addnode.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_addnode.png</iconset>
     </property>
     <property name="text" >
      <string>addNode</string>
@@ -902,7 +886,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_del.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_del.png</iconset>
     </property>
     <property name="text" >
      <string>delete</string>
@@ -922,7 +906,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_zoom.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_zoom.png</iconset>
     </property>
     <property name="text" >
      <string>zoom</string>
@@ -945,7 +929,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_navigation.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_navigation.png</iconset>
     </property>
     <property name="text" >
      <string>navigate</string>
@@ -965,7 +949,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_move.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_move.png</iconset>
     </property>
     <property name="text" >
      <string>moveSelection</string>
@@ -985,7 +969,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_selection.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_selection.png</iconset>
     </property>
     <property name="text" >
      <string>selection</string>
@@ -1005,7 +989,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_magic.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_magic.png</iconset>
     </property>
     <property name="text" >
      <string>magicSelection</string>
@@ -1025,7 +1009,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_select.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_select.png</iconset>
     </property>
     <property name="text" >
      <string>select</string>
@@ -1045,7 +1029,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_bends.png</iconset>
+     <iconset resource="../../../../tulip/software/tulip/designer/TulipResource.qrc" >:/i_bends.png</iconset>
     </property>
     <property name="text" >
      <string>editedgeBend</string>
@@ -1070,7 +1054,7 @@
   <include location="local" >qworkspace.h</include>
  </includes>
  <resources>
-  <include location="TulipResource.qrc" />
+  <include location="../../../../tulip/software/tulip/designer/TulipResource.qrc" />
  </resources>
  <connections>
   <connection>

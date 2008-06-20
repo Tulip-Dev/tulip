@@ -1,3 +1,5 @@
+#include "tulip/MouseSelector.h"
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -13,10 +15,10 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>
 
-#include <tulip/MouseSelector.h>
-
 using namespace std;
 using namespace tlp;
+
+INTERACTORPLUGIN(MouseSelector, "MouseSelector", "Tulip Team", "16/04/2008", "Mouse Selector", "1.0", 1);
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,

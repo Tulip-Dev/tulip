@@ -1,4 +1,4 @@
-SUBDIRS = clustering  colors  import  layout  metric  selection  sizes  string int export glyph
+SUBDIRS = clustering  colors  import  layout  metric  selection  sizes  string int export glyph interactor view
 EXTRA_DIST = mainpage.dox
 
 if MACOSX

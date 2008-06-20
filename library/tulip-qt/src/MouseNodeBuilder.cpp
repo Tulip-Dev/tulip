@@ -17,8 +17,12 @@
 #include <tulip/MouseNodeBuilder.h>
 
 using namespace tlp;
+using namespace std;
+
+INTERACTORPLUGIN(MouseNodeBuilder, "MouseNodeBuilder", "Tulip Team", "16/04/2008", "Mouse Node Builder", "1.0", 11);
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
+  cout << "Node builder event filter" << endl;
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     if (qMouseEv->button() == Qt::LeftButton) {

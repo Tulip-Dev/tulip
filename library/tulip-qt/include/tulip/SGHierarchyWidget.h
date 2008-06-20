@@ -15,47 +15,49 @@
 class QTreeWidgetItem;
 
 namespace tlp {
-class Graph;
+ 
+ class Graph;
+
+  /** \addtogroup Tulip_Widgets */ 
+  /*@{*/
+  class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget { 
+    Q_OBJECT;
+    
+  public:
+    SGHierarchyWidget(QWidget* parent = 0, Graph *rootGraph = 0);
+    Graph *getGraph() const;
+    
+    public slots:
+    void setGraph(Graph *);
+    void update();
+    void updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges);
+    
+  signals:
+    void aboutToRemoveView(Graph *);
+    void aboutToRemoveAllView(Graph *);
+    void graphChanged(Graph *);
+    
+  private slots:
+    void contextRemoveCluster();
+    void contextRemoveAllCluster();
+    void contextCloneSubgraphCluster();
+    void contextRenameCluster();
+    void contextCloneCluster();
+    void currentGraphChanged(const Graph *);
+    void displayContextMenu(const QPoint &p);
+    void changeGraph(QTreeWidgetItem *item, const QPoint &p, int i);
+    void changeGraph(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void setItemInfos(QTreeWidgetItem *item, Graph *, unsigned int nbNodes, unsigned int nbEdges);
+    
+  protected:
+    void buildTreeView(Graph *p, QTreeWidgetItem *item = NULL);
+    void removeSubgraph(Graph *graph, bool recursive);
+    
+  private:
+    MutableContainer<QTreeWidgetItem *> graphItems;
+    Graph *_currentGraph;
+  };
+  /*@}*/
 }
 
-/** \addtogroup Tulip_Widgets */ 
-/*@{*/
-class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget { 
-  Q_OBJECT;
-  
-public:
-  SGHierarchyWidget(QWidget* parent = 0, tlp::Graph *rootGraph = 0);
-  tlp::Graph *getGraph() const;
-  
-public slots:
-  void setGraph(tlp::Graph *);
-  void update();
-  void updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges);
-
-signals:
-  void aboutToRemoveView(tlp::Graph *);
-  void aboutToRemoveAllView(tlp::Graph *);
-  void graphChanged(tlp::Graph *);
-
-private slots:
-  void contextRemoveCluster();
-  void contextRemoveAllCluster();
-  void contextCloneSubgraphCluster();
-  void contextRenameCluster();
-  void contextCloneCluster();
-  void currentGraphChanged(const tlp::Graph *);
-  void displayContextMenu(const QPoint &p);
-  void changeGraph(QTreeWidgetItem *item, const QPoint &p, int i);
-  void changeGraph(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-  void setItemInfos(QTreeWidgetItem *item, tlp::Graph *, unsigned int nbNodes, unsigned int nbEdges);
-
- protected:
-  void buildTreeView(tlp::Graph *p, QTreeWidgetItem *item = NULL);
-  void removeSubgraph(tlp::Graph *graph, bool recursive);
-
-private:
-  tlp::MutableContainer<QTreeWidgetItem *> graphItems;
-  tlp::Graph *_currentGraph;
-};
-/*@}*/
 #endif // CLUSTERTREE_H

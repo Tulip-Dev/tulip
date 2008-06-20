@@ -10,7 +10,7 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public GWInteractor
+class TLP_QT_SCOPE MouseEdgeBuilder:public Interactor
 {
  private:
   node source;
@@ -23,7 +23,7 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public GWInteractor
   ~MouseEdgeBuilder(){}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseEdgeBuilder(); }
+  Interactor *clone() { return new MouseEdgeBuilder(); }
 };
 /*@}*/
 

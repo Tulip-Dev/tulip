@@ -4,7 +4,6 @@
 #include <tulip/PluginProgress.h>
 #include "QtProgressData.h"
 
-class GlMainWidget;
 
 class QtProgress:
 public QDialog, public Ui::QtProgressData, public tlp::PluginProgress {
@@ -12,7 +11,7 @@ public QDialog, public Ui::QtProgressData, public tlp::PluginProgress {
   Q_OBJECT
 
 public:
-  QtProgress(QWidget* parent, std::string text, GlMainWidget * =0);
+  QtProgress(QWidget* parent, std::string text);
   virtual ~QtProgress();
   void progress_handler(int i,int j);
   void setComment(std::string msg);
@@ -26,7 +25,7 @@ public:
   bool firstCall;
   std::string label;
   QWidget* parent;
-  GlMainWidget *glMainWidget;
+  //GlMainWidget *glMainWidget;
 };
 
 #endif

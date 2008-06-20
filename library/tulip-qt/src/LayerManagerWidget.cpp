@@ -9,7 +9,8 @@
 #include <tulip/GlLayer.h>
 
 using namespace std;
-using namespace tlp;
+
+namespace tlp {
 
 //=============================================================================
 LayerManagerWidget::LayerManagerWidget(QWidget* parent,  
@@ -292,4 +293,6 @@ void LayerManagerWidget::buildHierarchie(QTreeWidgetItem *item,QList<string>& hi
   if(item->parent())
     buildHierarchie(item->parent(),hierarchie);
   hierarchie.push_back(item->data(0,0).toString().toStdString());
+}
+
 }

@@ -18,6 +18,8 @@
 using namespace std;
 using namespace tlp;
 
+INTERACTORPLUGIN(MouseEdgeBuilder, "MouseEdgeBuilder", "Tulip Team", "16/04/2008", "Mouse Edge Builder", "1.0", 5);
+
 MouseEdgeBuilder::MouseEdgeBuilder():started(false){}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {

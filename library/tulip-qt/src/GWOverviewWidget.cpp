@@ -16,7 +16,8 @@
 
 
 using namespace std;
-using namespace tlp;
+
+namespace tlp {
 
 struct RectPosition : public tlp::GlSimpleEntity {
   void draw(float lod,Camera *camera);
@@ -31,24 +32,6 @@ private :
   GlMainWidget * _observedView;
   GlMainWidget * _view;
 };
-
-RenderingParametersDialog::RenderingParametersDialog(GWOverviewWidget* parent) : QDialog(parent->parentWidget()) {
-    setupUi(this);
-    overview = parent;
-}
-
-void RenderingParametersDialog::windowActivationChange(bool oldActive) {
-    if (!oldActive)
-      buttonClose->setFocus();
-}
-
-void RenderingParametersDialog::updateView() {
-    overview->updateView();
-}
-
-void RenderingParametersDialog::backColor() {
-    overview->backColor();
-}
 
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
@@ -72,11 +55,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   _glDraw = new RectPosition(_view, 0);
   layer->addGlEntity(_glDraw,"RectPosition");
   //_view->addGlAugmentedDisplay(_glDraw, "Overview");
-  paramDialog = new RenderingParametersDialog(this);
-}
-//=============================================================================
-void GWOverviewWidget::showRenderingParametersDialog() {
-  paramDialog->exec();
+  //paramDialog = new RenderingParametersDialog(this);
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
@@ -87,7 +66,7 @@ GWOverviewWidget::~GWOverviewWidget() {
   // of frame8, and so it will be deleted further
   //delete _view;
   delete _glDraw;
-  delete paramDialog;
+  //delete paramDialog;
 }
 //=============================================================================
 GlMainWidget *GWOverviewWidget::getObservedView() {
@@ -101,16 +80,6 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->buttons()==Qt::LeftButton || me->button()==Qt::LeftButton) {
-      if  (me->modifiers() &
-#if defined(__APPLE__)
-	   Qt::AltModifier
-#else
-	   Qt::ControlModifier
-#endif
-	   ) {
-	paramDialog->show();
-	return true;
-      }
       GlMainWidget *glw = (GlMainWidget *) obj;
       assert(glw == _view);
       double mouseClicX = me->x();
@@ -201,7 +170,7 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget){
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
     
     //_observedView->getScene()->setViewport(_view->getScene()->getViewport());
-    syncFromView();
+    //syncFromView();
     connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *)),
 	   this, SLOT(draw(GlMainWidget *)));
     connect(_observedView, SIGNAL(destroyed(QObject *)), 
@@ -221,7 +190,7 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   draw(0); 	 
 } 	 
 //=============================================================================
-void GWOverviewWidget::setBackgroundColor(QColor tmp) {
+/*void GWOverviewWidget::setBackgroundColor(QColor tmp) {
   if (tmp.isValid()) {
     QPalette palette;
     palette.setColor(QPalette::Button, tmp);
@@ -233,14 +202,14 @@ void GWOverviewWidget::setBackgroundColor(QColor tmp) {
       palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));
     paramDialog->background->setPalette(palette);
   }
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::backColor() {
+/*void GWOverviewWidget::backColor() {
   setBackgroundColor(QColorDialog::getColor(paramDialog->background->palette().color(QPalette::Button), this));
   updateView();
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::syncFromView() {
+/*void GWOverviewWidget::syncFromView() {
   if (_observedView!=0) {
     _synchronizing = true;
     GlGraphRenderingParameters param = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -269,9 +238,9 @@ void GWOverviewWidget::syncFromView() {
 
     _synchronizing=false;
   }
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::updateView() {
+/*void GWOverviewWidget::updateView() {
   if (_observedView!=0 && !_synchronizing) {
     GlGraphRenderingParameters paramObservedViev = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
 
@@ -299,7 +268,7 @@ void GWOverviewWidget::updateView() {
 
     _observedView->draw();
   }
-}
+  }*/
 //=============================================================================
 void RectPosition::draw(float lod,Camera *camera) {
   //assert (_view == target);
@@ -415,3 +384,5 @@ RectPosition::RectPosition(GlMainWidget *view, GlMainWidget *observedView) :
   boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));
 }
 //=============================================================================
+
+}
