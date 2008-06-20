@@ -33,15 +33,14 @@ if [ $WINNT -eq 0 ] ; then
   libversion=-@WIN_VERSION@
   libextension=dll
   plugincxxflags=-DPIC
-  if [ -f "$thisdir/uninst-Tulip.exe" ] ; then
+  if [ -f "$thisdir/assistant.exe" ] ; then
 #   Windows installation
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
     thisdir=${thisdir/\/$drive\//$drive:/}
     includedir=${thisdir}/include
-    libdir=${thisdir}
-    pluginpath=${libdir}/lib/tlp
+    libdir=${thisdir}/lib
+    pluginpath=${libdir}/tlp
   else
-    pluginpath=${libdir}/bin
     libdir=${exec_prefix}/bin
   fi
 fi

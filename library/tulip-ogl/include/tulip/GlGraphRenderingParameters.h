@@ -151,30 +151,6 @@ namespace tlp {
      */
     bool isDisplayMetaNodes() const;
     /**
-     * set stencil number for selected nodes
-     */
-    void setSelectedNodesStencil(const int stencil);
-    /**
-     * get stencil number for selected nodes
-     */
-    int getSelectedNodesStencil();
-    /**
-     * set stencil number for selected meta-nodes
-     */
-    void setSelectedMetaNodesStencil(const int stencil);
-    /**
-     * get stencil number for selected meta-nodes
-     */
-    int getSelectedMetaNodesStencil();
-    /**
-     * set stencil number for selected edges
-     */
-    void setSelectedEdgesStencil(const int stencil);
-    /**
-     * get stencil number for selected edges
-     */
-    int getSelectedEdgesStencil();
-    /**
      * set stencil number for nodes
      */
     void setNodesStencil(const int stencil);
@@ -283,9 +259,6 @@ namespace tlp {
     bool _displayEdges;
     bool _displayNodes;
     bool _displayMetaNodes;
-    int _selectedNodesStencil;
-    int _selectedMetaNodesStencil;
-    int _selectedEdgesStencil;
     int _nodesStencil;
     int _metaNodesStencil;
     int _edgesStencil;

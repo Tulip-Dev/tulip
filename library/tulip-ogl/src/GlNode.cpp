@@ -40,7 +40,6 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
-    GLenum error = glGetError();
     if(GlDisplayListManager::getInst().beginNewDisplayList("selection")) {
       glPushAttrib(GL_ALL_ATTRIB_BITS);
       glDisable(GL_LIGHTING);
@@ -53,20 +52,11 @@ namespace tlp {
     }
 
     node n=node(id);
-    if (data->elementSelected->getNodeValue(n)) {
-      glDisable(GL_DEPTH_TEST);
-      if(data->elementGraph->getNodeValue(n) == 0) {
-	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
-      }else{
-	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
-      }
+
+    if(data->elementGraph->getNodeValue(n) == 0) {
+      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }else{
-      glEnable(GL_DEPTH_TEST);
-      if(data->elementGraph->getNodeValue(n) == 0) {
-	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-      }else{
-	glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
-      }
+      glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
     }
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
@@ -114,21 +104,15 @@ namespace tlp {
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
       
       if (data->elementSelected->getNodeValue(n)) {
-	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
 	GlDisplayListManager::getInst().callDisplayList("selection");
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
       }
       glPopMatrix();
     }
-
-    if (data->elementSelected->getNodeValue(n)) {
-      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-    }
-  
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);
     }
-    if ( error != GL_NO_ERROR)
-    cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
   void GlNode::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {

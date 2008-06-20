@@ -115,7 +115,6 @@ void PropertyDialog::setGlMainWidget(GlMainWidget *gw) {
   Graph* sg = NULL;
   if (gw)
     sg = gw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-    
   graph=sg;
   editedProperty=0;
 
@@ -143,7 +142,6 @@ void PropertyDialog::setGlMainWidget(GlMainWidget *gw) {
     QListWidgetItem *tmpItem = new QListWidgetItem(inheritedProperties);
     tmpItem->setText(QString(tmp.c_str()));
   } delete it;
-
 }
 //=================================================
 void PropertyDialog::newProperty() {
@@ -206,9 +204,6 @@ void PropertyDialog::removeProperty() {
   if(graph->existLocalProperty(editedPropertyName)) {
     graph->delLocalProperty(editedPropertyName);
     setGlMainWidget(glWidget);
-    glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadAllProperties();
-    glWidget->getScene()->centerScene();
-    glWidget->redraw();
     editedProperty=0;
   }
   else

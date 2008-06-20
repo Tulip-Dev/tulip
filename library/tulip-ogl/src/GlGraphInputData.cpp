@@ -17,28 +17,6 @@
 namespace tlp {
   
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters):graph(graph),parameters(parameters) {
-    reloadAllProperties();
-
-    GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
-  }
-
-  GlGraphInputData::~GlGraphInputData() {
-    GlyphManager::getInst().clearGlyphList(&this->graph,this,glyphs);
-  }
-
-  void GlGraphInputData::reloadLayoutProperty() {
-    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
-  }
-  
-  void GlGraphInputData::reloadLabelProperty() {
-    elementLabel = graph->getProperty<StringProperty>("viewLabel");
-  }
-  
-  void GlGraphInputData::reloadSelectionProperty() {
-    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-  }
-
-  void GlGraphInputData::reloadAllProperties() {
     elementRotation = graph->getProperty<DoubleProperty>("viewRotation");
     elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
     elementLabel = graph->getProperty<StringProperty>("viewLabel");
@@ -52,6 +30,20 @@ namespace tlp {
     elementTexture = graph->getProperty<StringProperty>("viewTexture");
     elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
     elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
+
+    GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
+  }
+
+  void GlGraphInputData::reloadLayoutProperty() {
+    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
+  }
+  
+  void GlGraphInputData::reloadLabelProperty() {
+    elementLabel = graph->getProperty<StringProperty>("viewLabel");
+  }
+  
+  void GlGraphInputData::reloadSelectionProperty() {
+    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
   }
   
 }

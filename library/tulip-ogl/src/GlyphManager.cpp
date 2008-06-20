@@ -90,12 +90,4 @@ namespace tlp
     //    cerr << glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId()) << endl;
     } delete itS;
   }
-
-  void GlyphManager::clearGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
-    Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string glyphName=itS->next();
-      delete glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId());
-    } delete itS;
-  }
 } 

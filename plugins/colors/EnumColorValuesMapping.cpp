@@ -40,14 +40,7 @@ char *defColors[12] = {
   "(0,255,255,255)", "(255,0,255,255)", "(96,159,191,255)", "(0,191,112,255)",
   "(255,106,0,255)",  "(238,255,170,255)", "(255,205,205,255)", "(191,143,0,255)"};
 
-class EnumColorValuesMapping: public ColorAlgorithm {
-  // the property
-  PropertyInterface *property;
-  // flag for element type
-  bool onNodes;
-  // user choosen colors
-  stdext::hash_map<string, Color> colors;
-  
+class EnumColorValuesMapping: public ColorAlgorithm { 
 public:
   //================================================================================
   EnumColorValuesMapping(const PropertyContext &context):ColorAlgorithm(context) {
@@ -55,9 +48,9 @@ public:
     addParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
   }
   //==============================================================================
-  bool check(string &err) {
+  bool run() {
     string tmp1,tmp2;
-    property=0;
+    PropertyInterface *property=0;
     StringCollection eltTypes(ELT_TYPES);
     eltTypes.setCurrent(0);
     if (dataSet!=0) {
@@ -68,14 +61,12 @@ public:
     if (property == 0)
       property = graph->getProperty("viewMetric");
 
-    onNodes = eltTypes.getCurrent() == NODE_ELT;
+    bool onNodes = eltTypes.getCurrent() == NODE_ELT;
 
-    // check the number of different values
+    // first check the number of different values
     int step = 0, maxSteps;
-    if (pluginProgress) {
-      pluginProgress->showPreview(false);
+    if (pluginProgress)
       pluginProgress->setComment(onNodes ? "Partitioning nodes..." : "Partitioning edges");
-    }
 
     set<string> partitions;
     if (onNodes) {
@@ -88,15 +79,14 @@ public:
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
 	  if (partitions.size() > 12) {
-	    err = "too much different values found (> 12)";
+	    QMessageBox::critical(0, "Enumerated Values Mapping failure",
+				  QString("More than 12 different values found !!!"));
 	    return false;
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
 	    pluginProgress->progress(step, maxSteps);
-	    if (pluginProgress->state() !=TLP_CONTINUE) {
-	      err = "stopped by user";
-	      return false;
-	    }
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
 	  }
 	}
       }
@@ -111,15 +101,14 @@ public:
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
 	  if (partitions.size() > 12) {
-	    err = "too much different values found (> 12)";
+	    QMessageBox::critical(0, "Enumerated Values Mapping failure",
+				  QString("More than 12 different values found !!!"));
 	    return false;
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
 	    pluginProgress->progress(step, maxSteps);
-	    if (pluginProgress->state() !=TLP_CONTINUE) {
-	      err = "stopped by user";
-	      return false;
-	    }
+	    if (pluginProgress->state() !=TLP_CONTINUE)
+	      return pluginProgress->state()!= TLP_CANCEL;
 	  }
 	}
       }
@@ -141,6 +130,7 @@ public:
     if (tlp::openDataSetDialog(dSet, 0, &dParams,
 			       &dSet, "Enter Color values")) {
       // get user choosen colors
+      stdext::hash_map<string, Color> colors;
       for (i = 0, it = partitions.begin(); it != partitions.end(); ++it, ++i) {
 	stringstream sstr;
 	sstr << "Color #" << i;
@@ -149,23 +139,19 @@ public:
 	  cerr << sstr.str().c_str() << " not found" << endl;
 	colors[*it] = color;
       }
+      
+      if (onNodes) {
+	node n;
+	forEach(n, graph->getNodes())
+	  colorResult->setNodeValue(n, colors[property->getNodeStringValue(n)]);
+      } else {
+	edge e;
+	forEach(e, graph->getEdges())
+	  colorResult->setEdgeValue(e, colors[property->getEdgeStringValue(e)]);
+      }
       return true;
     }
-    err = "stopped by user";
     return false;
-  }
-
-  bool run() {
-    if (onNodes) {
-      node n;
-      forEach(n, graph->getNodes())
-	colorResult->setNodeValue(n, colors[property->getNodeStringValue(n)]);
-    } else {
-      edge e;
-      forEach(e, graph->getEdges())
-	colorResult->setEdgeValue(e, colors[property->getEdgeStringValue(e)]);
-    }
-    return true;
   }
   //================================================================================
 };
