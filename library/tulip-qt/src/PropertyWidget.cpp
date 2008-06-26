@@ -373,20 +373,13 @@ void PropertyWidget::setAllNodeValue() {
     }
     else {
       Iterator<node> *it=graph->getNodes();
-      for (int nbNode=0; it->hasNext();) {
+      while (it->hasNext()) {
         node tmp=it->next();
         if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
-          result=editedProperty->setNodeStringValue(tmp,tmpStr);
+          result = editedProperty->setNodeStringValue(tmp,tmpStr);
           if (!result) break;
         }
-        if (_filterSelection && tmpSel->getNodeValue(tmp)) {
-	  QTableWidgetItem *twi = item(nbNode, 1);
-	  if (twi) // there is no twi if the line is not visible
-	    twi->setText(tmpStr.c_str());
-          nbNode++;
-        }
-      }
-      delete it;
+      } delete it;
     }
 
     if (!result) {
@@ -447,20 +440,13 @@ void  PropertyWidget::setAllEdgeValue() {
     }
     else {
       Iterator<edge> *itE=graph->getEdges();
-      for (int nbEdge=0; itE->hasNext();) {
+      while (itE->hasNext()) {
         edge tmp=itE->next();
         if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
-          result=editedProperty->setEdgeStringValue(tmp, tmpStr);
+          result = editedProperty->setEdgeStringValue(tmp, tmpStr);
           if (!result) break;
         }
-        if (_filterSelection && tmpSel->getEdgeValue(tmp)) {
-	  QTableWidgetItem *twi = item(nbEdge, 1);
-	  if (twi) // there is no twi if the line is not visible
-	    twi->setText(tmpStr.c_str());
-          nbEdge++;
-        }
-      }
-      delete itE;
+      } delete itE;
     }
     
     if (!result) {
