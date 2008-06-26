@@ -46,7 +46,7 @@ namespace tlp {
   
   void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearColor,GLfloat pointSize,GLfloat lineWidth) {
     /* Emit EPS header. */
-    stream_out << "%!PS-Adobe-2.0 EPSF-2.0" << endl;
+    stream_out << "%%!PS-Adobe-2.0 EPSF-2.0" << endl;
     /* Notice %% for a single % in the fprintf calls. */
     stream_out << "%%%%Creator: " << "rendereps" << " (using OpenGL feedback) " << endl ;
     stream_out << "%%%%BoundingBox: " << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << endl;
@@ -55,8 +55,8 @@ namespace tlp {
     
     /* Output Frederic Delhoume's "gouraudtriangle" PostScript
        fragment. */
-    stream_out << "% the gouraudtriangle PostScript fragement below is free" << endl;
-    stream_out << "% written by Frederic Delhoume (delhoume@ilog.fr)" << endl ;
+    stream_out << "%% the gouraudtriangle PostScript fragement below is free" << endl;
+    stream_out << "%% written by Frederic Delhoume (delhoume@ilog.fr)" << endl ;
     stream_out << "/threshold " << EPS_GOURAUD_THRESHOLD << " def" << endl;
     for (int i = 0; gouraudtriangleEPS[i]; i++) {
       stream_out << gouraudtriangleEPS[i] << endl;
@@ -217,7 +217,7 @@ namespace tlp {
   }
   void GlEPSFeedBackBuilder::end() {
     stream_out << "grestore "<< endl << endl ;
-    stream_out << "%Add `showpage' to the end of this file to be able to print to a printer." << endl;
+    stream_out << "%%Add `showpage' to the end of this file to be able to print to a printer." << endl;
   }
 
   void GlEPSFeedBackBuilder::getResult(string* str) {
