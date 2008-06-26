@@ -541,7 +541,7 @@ Coord maxCoord(const Coord &v1, const Coord &v2) {
 }
 //========================================================================================
 bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
-  if (!glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
+  if (!glMainWidget->getScene()->getGlGraphComposite() || !glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
     return false;
   // We calculate the bounding box for the selection :
   initProxies(glMainWidget);

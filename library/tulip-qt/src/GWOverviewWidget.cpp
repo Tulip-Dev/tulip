@@ -402,9 +402,8 @@ void RectPosition::draw(float lod,Camera *camera) {
   glEnd();
 
   boundingBox=BoundingBox();
-  for(int i=0;i<4;++i) {
-    boundingBox.check(points[i]);
-  }
+  boundingBox.check(points2[0]+(points2[2]-points2[0])/2.1);
+  boundingBox.check(points2[2]-(points2[2]-points2[0])/2.1);
 
   glPopAttrib();
 }
@@ -412,6 +411,6 @@ void RectPosition::draw(float lod,Camera *camera) {
 RectPosition::RectPosition(GlMainWidget *view, GlMainWidget *observedView) : 
   _observedView(observedView), _view(view) {
   setCheckByBoundingBoxVisitor(false);
-  boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));
+  boundingBox=BoundingBox(Coord(-10,-10,-10),Coord(10,10,10));
 }
 //=============================================================================
