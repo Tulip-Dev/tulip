@@ -166,6 +166,16 @@ void ElementPropertiesWidget::updateTable() {
   if (displayAllProperties) {
     Iterator<std::string> *it=graph->getLocalProperties();
     propertyTable->setRowCount(0);
+    // check if currentNode or currentEdge is valid
+    switch(displayMode) {
+    case NODE:
+      if (!nodeSet)
+	return;
+      break;
+    case EDGE:
+      if (!edgeSet)
+	return;
+    }
     // first count number properties
     // to avoid too much calls to setRowCount
     while(it->hasNext()) {
@@ -190,42 +200,43 @@ void ElementPropertiesWidget::updateTable() {
       PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
-	if (nodeSet) {
-	  propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
-	}
+	propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
 	break;
       case EDGE:
-	if (edgeSet) {
-	  propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
-	}
+	propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
 	break;
       }
       ++i;
     } delete it;
     it=graph->getInheritedProperties();
     while(it->hasNext()) {
-      std::string pname=it->next();
+      std::string pname = it->next();
       QTableWidgetItem* nameItem = new QTableWidgetItem(pname.c_str());
       nameItem->setFlags(Qt::ItemIsEnabled);
       propertyTable->setItem(i, 0, nameItem);
       PropertyInterface *editedProperty = graph->getProperty(pname);
       switch(displayMode) {
       case NODE:
-	if (nodeSet) {
-	  propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
-	}
+	propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
 	break;
       case EDGE:
-	if (edgeSet) {
-	  PropertyInterface *editedProperty = graph->getProperty(pname);
-	  propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
-	}
+	propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
 	break;
       }
       ++i;
     }delete it;
   }
   else {
+    // check if currentNode or currentEdge is valid
+    switch(displayMode) {
+    case NODE:
+      if (!nodeSet)
+	return;
+      break;
+    case EDGE:
+      if (!edgeSet)
+	return;
+    }
     QStringList *listedProperties = NULL;
     switch(displayMode) {
     case NODE: listedProperties = &nodeListedProperties; break;
@@ -237,19 +248,15 @@ void ElementPropertiesWidget::updateTable() {
       QTableWidgetItem* nameItem = new QTableWidgetItem(*it);
       nameItem->setFlags(Qt::ItemIsEnabled);
       propertyTable->setItem(i, 0, nameItem);
-      if (graph->existProperty((*it).toAscii().data())) {
+      string pname = (*it).toAscii().data();
+	if (graph->existProperty(pname)) {
+	PropertyInterface *editedProperty = graph->getProperty(pname);
 	switch(displayMode) {
 	case NODE:
-	  if (nodeSet) {
-	    PropertyInterface *editedProperty = graph->getProperty((*it).toAscii().data());
-	    propertyTable->setTulipNodeItem(editedProperty, (*it).toAscii().data(), currentNode, i, 1);
-	  }
+	  propertyTable->setTulipNodeItem(editedProperty, pname, currentNode, i, 1);
 	  break;
 	case EDGE:
-	  if (edgeSet) {
-	    PropertyInterface *editedProperty = graph->getProperty((*it).toAscii().data());
-	    propertyTable->setTulipEdgeItem(editedProperty, (*it).toAscii().data(), currentEdge, i, 1);
-	  }
+	  propertyTable->setTulipEdgeItem(editedProperty, pname, currentEdge, i, 1);
 	}
       }
     }
