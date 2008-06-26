@@ -15,6 +15,9 @@ namespace tlp {
     this->clearColor[2]=clearColor[2];
     this->pointSize=pointSize;
     this->lineWidth=lineWidth;
+
+    width=viewport[2] - viewport[0];
+    height=viewport[3] - viewport[1];
 	
     stream_out << "<?xml version=\"1.0\" standalone=\"no\" ?>" << endl ;
     stream_out << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
@@ -63,7 +66,7 @@ namespace tlp {
   void GlSVGFeedBackBuilder::pointToken(GLfloat *data) {
     Feedback3DColor *vertex = (Feedback3DColor *)data;
     stream_out << "<circle cx=\"" << vertex->x 
-	       << "\" cy=\"" << vertex->y 
+	       << "\" cy=\"" << height-vertex->y 
 	       << "\" r=\"" << pointSize 
 	       << "\" fill=\"rgb(" << (int)strokeColor.getR() 
 	       << ", " << (int)strokeColor.getG() 
@@ -77,9 +80,9 @@ namespace tlp {
     Feedback3DColor *vertex1 = (Feedback3DColor *)data;
     Feedback3DColor *vertex2 = (Feedback3DColor *)(data+7);
     stream_out << "<line x1=\"" << vertex1->x 
-	       << "\" y1=\"" << vertex1->y
+	       << "\" y1=\"" << height-vertex1->y
 	       << "\" x2=\"" << vertex2->x
-	       << "\" y2=\"" << vertex2->y
+	       << "\" y2=\"" << height-vertex2->y
 	       << "\" fill=\"none\" stroke=\"rgb(" << (int)strokeColor.getR()
 	       << ", " << (int)strokeColor.getG()
 	       << ", " << (int)strokeColor.getB()
@@ -93,7 +96,7 @@ namespace tlp {
     unsigned int nbvertices = (unsigned int)(*data);
     for(unsigned int i = 0; i < nbvertices; i++) {
       Feedback3DColor *vertex = (Feedback3DColor *)(data+7*i+1);
-      stream_out << ((i == 0) ? "" : " ") << vertex->x << "," << vertex->y;
+      stream_out << ((i == 0) ? "" : " ") << vertex->x << "," << height-vertex->y;
     }
     stream_out << "\" fill=\"rgb(" << (int)fillColor.getR() 
 	       << ", " << (int)fillColor.getG() 

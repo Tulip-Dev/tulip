@@ -1349,6 +1349,25 @@ void viewGl::buildMenus() {
 //**********************************************************************
 void viewGl::outputEPS() {
   if (!glWidget) return;
+  
+  bool nodeLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewNodeLabel();
+  bool edgeLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewEdgeLabel();
+  bool metaLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewMetaLabel();
+
+  if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
+    if(QMessageBox::warning( 0, "Font can't be rendered",
+			     "Bitmap font can't be rendered in EPS export.",
+			     QMessageBox::Ok | QMessageBox::Cancel,
+			     QMessageBox::Ok)!=QMessageBox::Ok)
+      return;
+    
+    GlGraphRenderingParameters param= glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    param.setViewNodeLabel(false);
+    param.setViewEdgeLabel(false);
+    param.setViewMetaLabel(false);
+    glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  }
+  
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
     if (glWidget->outputEPS(64000000,true,s.toAscii().data()))
@@ -1358,10 +1377,25 @@ void viewGl::outputEPS() {
 			     "The file has not been saved."
 			     );
   }
+  
+  if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
+    GlGraphRenderingParameters param= glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    param.setViewNodeLabel(nodeLabel);
+    param.setViewEdgeLabel(edgeLabel);
+    param.setViewMetaLabel(metaLabel);
+    glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+  }
 }
 //**********************************************************************
 void viewGl::outputSVG() {
   if (!glWidget) return;
+  if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
+    if(QMessageBox::warning( 0, "Font can't be rendered",
+			     "Bitmap font can't be rendered in SVG export.",
+			     QMessageBox::Ok | QMessageBox::Cancel,
+			     QMessageBox::Ok)!=QMessageBox::Ok)
+      return;
+  }
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
     if (glWidget->outputSVG(64000000,s.toAscii().data()))

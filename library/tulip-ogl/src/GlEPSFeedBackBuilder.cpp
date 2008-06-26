@@ -71,7 +71,6 @@ namespace tlp {
     stream_out << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << " rectfill" << endl << endl;
   }
   void GlEPSFeedBackBuilder::colorInfo(GLfloat* data) {
-    cout << "Color" << endl;
     fillColor[0]=data[0];fillColor[1]=data[1];fillColor[2]=data[2];
     strokeColor[0]=data[3];strokeColor[1]=data[4];strokeColor[2]=data[5];
     textColor[0]=data[6];textColor[1]=data[7];textColor[2]=data[8];
@@ -95,7 +94,7 @@ namespace tlp {
   void GlEPSFeedBackBuilder::pointToken(GLfloat *data) {
     Feedback3Dcolor *vertex = (Feedback3Dcolor *) data;
     stream_out << vertex[0].red << " " << vertex[0].green << " " << vertex[0].blue << " setrgbcolor" << endl;
-    stream_out << vertex[0].x << " " <<  vertex[0].y << " " <<  pointSize / 2.0 << "0 360 arc fill" << endl << endl;
+    stream_out << vertex[0].x << " " <<  vertex[0].y << " " <<  pointSize / 2.0 << " 0 360 arc fill" << endl << endl;
   }
   void GlEPSFeedBackBuilder::lineToken(GLfloat *data) {
     Feedback3Dcolor *vertex = (Feedback3Dcolor *) data;

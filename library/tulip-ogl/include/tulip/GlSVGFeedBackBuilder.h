@@ -59,6 +59,9 @@ namespace tlp {
     Color strokeColor;
     Color textColor;
 
+    int width;
+    int height;
+
   };
   
 }
