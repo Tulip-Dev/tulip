@@ -657,8 +657,9 @@ void viewGl::new3DView() {
     newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
 		  glWidget->parentWidget()->windowTitle());
   constructDefaultScene(newGlWidget);
-  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
-  newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
+  GlGraphComposite *newGlGraphComposite=new GlGraphComposite(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
+  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),newGlGraphComposite);
+  newGlWidget->getScene()->getLayer("Main")->addGlEntity(newGlGraphComposite,"graph");
   newGlWidget->getScene()->getGlGraphComposite()->setRenderingParameters(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters());
   newGlWidget->getScene()->setBackgroundColor(glWidget->getScene()->getBackgroundColor());
   newGlWidget->getScene()->centerScene();
