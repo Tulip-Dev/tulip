@@ -92,20 +92,23 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget->setMouseTracking(false);
       Observable::holdObservers();
       BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
-      bool boolVal = true; // add to selection
-      if (qMouseEv->modifiers() != Qt::ShiftModifier) {
-	if (qMouseEv->modifiers() !=
+      bool revertSelection = false; // add to selection
+      bool boolVal = true;
+      if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
-	    Qt::AltModifier
+	  Qt::AltModifier
 #else
-	    Qt::ControlModifier
+	  Qt::ControlModifier
 #endif
-	    ) {
+	  ) {
+	if (qMouseEv->modifiers() == Qt::ShiftModifier)
+	  boolVal = false;
+	else {
 	  selection->setAllNodeValue(false);
 	  selection->setAllEdgeValue(false);
+	}
 	} else
-	  boolVal = false; // remove from selection
-      }
+	  revertSelection = true; // revert selection
       if ((w==0) && (h==0)) {
 	node tmpNode;
 	edge tmpEdge;
@@ -113,8 +116,14 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
 	if (result){
 	  switch(type) {
-	  case NODE: selection->setNodeValue(tmpNode, boolVal); break;
-	  case EDGE: selection->setEdgeValue(tmpEdge, boolVal); break;
+	  case NODE: selection->setNodeValue(tmpNode,
+					     revertSelection ?
+					     !selection->getNodeValue(tmpNode)
+					     : boolVal); break;
+	  case EDGE: selection->setEdgeValue(tmpEdge,
+					     revertSelection ?
+					     !selection->getEdgeValue(tmpEdge)
+					     : boolVal); break;
 	  }
 	}
       } else {
@@ -131,11 +140,17 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
 	vector<node>::const_iterator it;
 	for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-	  selection->setNodeValue(*it, boolVal);
+	  selection->setNodeValue(*it, 
+				  revertSelection ?
+				  !selection->getNodeValue(*it)
+				  : boolVal);
 	}
 	vector<edge>::const_iterator ite;
 	for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-	  selection->setEdgeValue(*ite, boolVal);
+	  selection->setEdgeValue(*ite, 
+				  revertSelection ?
+				  !selection->getEdgeValue(*ite)
+				  : boolVal);
 	}
       }
       started = false;
