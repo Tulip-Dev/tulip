@@ -121,7 +121,7 @@ namespace tlp {
       
       if((Camera*)((*itSE).first)==camera) {
 	for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	  if((*itE).second>0) {
+	  if((*itE).second>=0) {
 	    glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*itE).first))->getStencil(),0xFFFF);
 	    ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	  }
@@ -133,7 +133,7 @@ namespace tlp {
       if((Camera*)((*itCE).first)==camera) {
 	// Draw Nodes and Edges
 	for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	  if((*itE).second>0) {
+	  if((*itE).second>=0) {
 	    ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
 	  }
 	}
@@ -151,7 +151,7 @@ namespace tlp {
 	    glStencilFunc(GL_LEQUAL,glGraphComposite->getNodesLabelStencil(),0xFFFF);
 	    // Draw Label for selected Nodes
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>0) {
+	      if((*itE).second>=0) {
 		((GlComplexeEntity*)((*itE).first))->drawLabel(true,
 							       true,
 							       false,
@@ -161,7 +161,7 @@ namespace tlp {
 	    }
 	    // Draw Label for others Nodes
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>0) {
+	      if((*itE).second>=0) {
 		((GlComplexeEntity*)((*itE).first))->drawLabel(false,
 							       true,
 							       false,
@@ -176,7 +176,7 @@ namespace tlp {
 	    glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
 	    // Draw Label for selected Edges
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>0) {
+	      if((*itE).second>=0) {
 		((GlComplexeEntity*)((*itE).first))->drawLabel(true,
 							       false,
 							       true,
@@ -186,7 +186,7 @@ namespace tlp {
 	    }
 	    // Draw Label for others Edges
 	    for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>0) {
+	      if((*itE).second>=0) {
 		((GlComplexeEntity*)((*itE).first))->drawLabel(false,
 							       false,
 							       true,
@@ -208,7 +208,7 @@ namespace tlp {
 	  if((Camera*)((*itSE).first)==camera) {
 	    camera->initGl();
 	    for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	      if((*itE).second>0) {
+	      if((*itE).second>=0) {
 		((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	      }
 	    }
@@ -399,7 +399,7 @@ namespace tlp {
 	idToEntity[id]=(*itE).first;
 	glLoadName(id);
 	id++;
-	if((*itE).second>0) {
+	if((*itE).second>=0) {
 	  if(type==SelectSimpleEntities) {
 	    ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
 	  }else{
