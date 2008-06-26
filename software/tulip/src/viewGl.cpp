@@ -711,18 +711,24 @@ void viewGl::fileSave() {
   doFileSave();
 }
 //**********************************************************************
-static void setGraphName(Graph *g, QString s) {
-  QString cleanName=s.section('/',-1);
-  QStringList fields = cleanName.split('.');
-  cleanName=cleanName.section('.', -fields.count(), -2);
-  g->setAttribute("name", string(cleanName.toAscii().data()));
-}
-//**********************************************************************
 bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
   if (!glWidget) return false;
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
+  // the graph to save
+  Graph* graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (plugin == "tlp" && graph->getRoot() != graph) {
+    // tlp export plugin save only root graph
+    // so ask the user
+    int answer = QMessageBox::question(this, "Save", "The root graph will be saved.\n Do you want to continue ?",  
+				       QMessageBox::Yes,  QMessageBox::No);
+    if(answer == QMessageBox::No)
+      return false;
+  }
+
+  string graphName = graph->getRoot()->getAttribute<string>("name");
+  dataSet.set("name", graphName);
   if (author.length() > 0)
     dataSet.set<string>("author", author);
   if (comments.length() > 0)
@@ -767,19 +773,23 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   // keep trace of file infos
   viewGlFile &vFile = openFiles[(unsigned long)glWidget];
   vFile.name = filename;
+  dataSet.get<string>("name", graphName);
   dataSet.get<string>("author", vFile.author);
   dataSet.get<string>("text::comments", vFile.comments);
 
-  if (!(result=tlp::exportGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), *os, plugin, dataSet, NULL))) {
+  if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
 			   );
   } else {
     statusBar()->showMessage((filename + " saved.").c_str());
   }
-  setNavigateCaption(filename);
-  setGraphName(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), QString(filename.c_str()));
   delete os;
+
+  setNavigateCaption(filename);
+  // because graph name may have changed
+  updateCurrentGraphInfos();
+
   return result;
 }
 //**********************************************************************
@@ -934,8 +944,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       return;
     }
     delete progressBar;
-    if(noPlugin)
-      setGraphName(newGraph, s);
 
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
@@ -1355,8 +1363,8 @@ void viewGl::outputEPS() {
   bool metaLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewMetaLabel();
 
   if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
-    if(QMessageBox::warning( 0, "Font can't be rendered",
-			     "Bitmap font can't be rendered in EPS export.",
+    if(QMessageBox::warning( 0, "Labels can't be rendered",
+			     "Bitmap labels can't be rendered when saving in EPS format.\nIf needed, display the 'Rendering parameters' dialog\nand choose '3D' label type instead.\n\nDo you want to save anyway ?",
 			     QMessageBox::Ok | QMessageBox::Cancel,
 			     QMessageBox::Ok)!=QMessageBox::Ok)
       return;
@@ -1390,8 +1398,8 @@ void viewGl::outputEPS() {
 void viewGl::outputSVG() {
   if (!glWidget) return;
   if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
-    if(QMessageBox::warning( 0, "Font can't be rendered",
-			     "Bitmap font can't be rendered in SVG export.",
+    if(QMessageBox::warning( 0, "Labels can't be rendered",
+			     "Bitmap labels can't be rendered when saving in SVG format.\nIf needed, display the 'Rendering parameters' dialog\nand choose '3D' label type instead.\n\nDo you want to save anyway ?",
 			     QMessageBox::Ok | QMessageBox::Cancel,
 			     QMessageBox::Ok)!=QMessageBox::Ok)
       return;
