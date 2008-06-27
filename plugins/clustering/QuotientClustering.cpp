@@ -252,65 +252,73 @@ bool QuotientClustering::run() {
   }
   if (edgeCardinality)
     cardProp = quotientGraph->getLocalProperty<IntegerProperty>("edgeCardinality");
-  //Create one metanode for each subgraph(cluster) of current graph.
-  map<Graph*,node> mapping;
-  itS=graph->getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *its=itS->next();
-    if (its!=quotientGraph) {
-      node n = quotientGraph->addNode();
-      quotientGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(n,Color(255,255,255,100));
-      meta->setNodeValue(n,its);
-      if (label) {
-	string mLabel;
-	if (useSubGraphName)
-	  mLabel = its->getAttribute<string>("name");
-	else
-	  mLabel = label->getNodeValue(its->getOneNode());
-	label->setNodeValue(n, mLabel);
-      }
-      mapping[its]=n;
-    }
-  } delete itS;
-  //
-  set<Edge> myQuotientGraph;
-  Iterator<edge>*itE=graph->getEdges();
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-    node source=graph->source(ite);
-    node target=graph->target(ite);
-    list<Graph *> clusterSource;
-    list<Graph *> clusterTarget;
-    clusterSource.clear();
-    clusterTarget.clear();
+
+  // populate quotient graph
+  {
+    map<node, set<node> > mapping;
     itS=graph->getSubGraphs();
     while (itS->hasNext()) {
       Graph *its=itS->next();
       if (its!=quotientGraph) {
-	Graph *tmp=its;
-	if (tmp->isElement(source)) clusterSource.push_back(its);
-	if (tmp->isElement(target)) clusterTarget.push_back(its);
+	// Create one metanode for each subgraph(cluster) of current graph.
+	node metaN = quotientGraph->addNode();
+	// set meta node properties
+	// according to parameters
+	quotientGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaN, Color(255,255,255,100));
+	meta->setNodeValue(metaN, its);
+	if (label) {
+	  string mLabel;
+	  if (useSubGraphName)
+	    mLabel = its->getAttribute<string>("name");
+	  else
+	    mLabel = label->getNodeValue(its->getOneNode());
+	  label->setNodeValue(metaN, mLabel);
+	}
+	node n;
+	forEach(n, its->getNodes()) {
+	  // map each subgraph's node to a set of meta nodes
+	  // in order to deal consistently with overlapping clusters
+	  if (mapping.find(n) == mapping.end())
+	    mapping[n] = set<node>();
+	  mapping[n].insert(metaN);
+	}
       }
     } delete itS;
-    
-    for (std::list<Graph *>::iterator it1=clusterSource.begin(); it1!=clusterSource.end(); ++it1)
-      for (std::list<Graph *>::iterator it2=clusterTarget.begin(); it2!=clusterTarget.end(); ++it2) {
-	Edge tmp;
-	tmp.source=mapping[*it1].id;
-	tmp.target=mapping[*it2].id;
-	if ( (tmp.source!=tmp.target) && (myQuotientGraph.find(tmp)==myQuotientGraph.end()) ) {
-	  myQuotientGraph.insert(tmp);
-	  edge e = quotientGraph->addEdge(mapping[*it1],mapping[*it2]);
-	  edge op;
-	  if (!oriented &&
-	      (op = quotientGraph->existEdge(node(tmp.target),
-					     node(tmp.source))).isValid()) {
-	    opProp->setEdgeValue(op, e.id);
-	    opProp->setEdgeValue(e, op.id);
+
+    {
+      set<Edge> myQuotientGraph;
+      edge e;
+      // for each existing edge in the current graph
+      // add a meta edge for each couple of meta source
+      // and meta target if it does not already exists   
+      stableForEach(e, graph->getEdges()) {
+	set<node> metaSources = mapping[graph->source(e)];
+	set<node> metaTargets = mapping[graph->target(e)];
+	for(set<node>::const_iterator itms = metaSources.begin();
+	    itms != metaSources.end(); ++itms) {
+	  node mSource = *itms;
+	  for(set<node>::const_iterator itmt = metaTargets.begin();
+	      itmt != metaTargets.end(); ++itmt) {
+	    node mTarget = *itmt;
+	    if (mSource != mTarget) {
+	      Edge tmp;
+	      tmp.source = mSource.id, tmp.target = mTarget.id;
+	      if (myQuotientGraph.find(tmp) == myQuotientGraph.end()) {
+		myQuotientGraph.insert(tmp);
+		edge mE = quotientGraph->addEdge(mSource, mTarget);
+		edge op;
+		if (!oriented &&
+		    (op = quotientGraph->existEdge(mTarget, mSource)).isValid()) {
+		  opProp->setEdgeValue(op, mE.id);
+		  opProp->setEdgeValue(mE, op.id);
+		}
+	      }
+	    }
 	  }
 	}
       }
-  } delete itE;
+    }
+  }
 
   // compute metrics
   string pName;
@@ -327,20 +335,22 @@ bool QuotientClustering::run() {
 	node mN = itN->next();
 	computeMNodeMetric(meta->getNodeValue(mN), mN, metric, nodeFn);
       } delete itN;
-      itE = quotientGraph->getEdges();
+      Iterator<edge>* itE = quotientGraph->getEdges();
       while (itE->hasNext()) {
 	edge mE = itE->next();
-	computeMEdgeMetric(graph, mE, meta->getNodeValue(quotientGraph->source(mE)),
-			   meta->getNodeValue(quotientGraph->target(mE)), metric,
-			   edgeFn, cardProp);
+	computeMEdgeMetric(graph, mE,
+			   meta->getNodeValue(quotientGraph->source(mE)),
+			   meta->getNodeValue(quotientGraph->target(mE)),
+			   metric, edgeFn, cardProp);
       } delete itE;
     }
   }
   // orientation
   if (!oriented) {
     set<edge> edgesToDel;
-    DoubleProperty* viewMetric = quotientGraph->getProperty<DoubleProperty>("viewMetric");
-    itE = quotientGraph->getEdges();
+    DoubleProperty* viewMetric =
+      quotientGraph->getProperty<DoubleProperty>("viewMetric");
+    Iterator<edge>* itE = quotientGraph->getEdges();
     while (itE->hasNext()) {
       edge mE = itE->next();
       edge op(opProp->getEdgeValue(mE));
@@ -349,7 +359,8 @@ bool QuotientClustering::run() {
 	  edgesToDel.find(op) == edgesToDel.end()) {
 	// if the opposite edge viewMetric associated value is greater
 	// than the mE associated value than we will keep it instead of mE
-	bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
+	bool opOK =
+	  viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 	forEach(pName, graph->getProperties()) {
 	  PropertyInterface *property = graph->getProperty(pName);
 	  if (dynamic_cast<DoubleProperty *>(property) &&
@@ -381,7 +392,8 @@ bool QuotientClustering::run() {
 	}
 	// compute cardinaly if needed
 	if (cardProp) {
-	  unsigned int card = cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
+	  unsigned int card =
+	    cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
 	  if (opOK)
 	    cardProp->setEdgeValue(op, card);
 	  else
@@ -431,6 +443,7 @@ bool QuotientClustering::run() {
   return true;
 
 }
+
 //================================================================================
 bool QuotientClustering::check(string &erreurMsg) {
   erreurMsg="";
