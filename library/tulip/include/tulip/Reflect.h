@@ -94,7 +94,7 @@ private:
 // Standard structDef's HTML Help
 
 #define	HTML_HELP_OPEN()	"<table><tr><td>" \
-							"<table CELLSPACING=1 bgcolor=\"#EEEEEE\">"
+							"<table CELLSPACING=5 bgcolor=\"#EEEEEE\">"
 #define	HTML_HELP_DEF(A,B)	"<tr><td><b>" A "</b></td><td><FONT COLOR=\"red\">" B "</td></tr>"
 #define	HTML_HELP_BODY()	"</table></td><td>"
 #define	HTML_HELP_CLOSE()	"</td></tr></table>"
