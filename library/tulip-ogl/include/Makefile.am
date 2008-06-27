@@ -19,7 +19,6 @@ nobase_include_HEADERS = \
 	tulip/GlScene.h \
 	tulip/GlTextureManager.h \
 	tulip/Glyph.h \
-	tulip/ObservableGlGraph.h \
 	tulip/GlSimpleEntity.h \
 	tulip/GlComplexeEntity.h \
 	tulip/GlSelectSceneVisitor.h \

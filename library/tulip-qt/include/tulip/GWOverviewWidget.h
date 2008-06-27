@@ -10,10 +10,6 @@
 #include <QtCore/qstring.h>
 #include <QtGui/qlayout.h>
 
-namespace tlp {
-  class GlGraph;
-}
-
 class GlMainWidget;
 class QEvent;
 class RectPosition;

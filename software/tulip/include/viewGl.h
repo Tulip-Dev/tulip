@@ -29,7 +29,6 @@
 #include "TulipData.h"
 
 namespace tlp {
-class GlGraph;
 class Morphing;
 class GridOptionsWidget;
 #ifdef STATS_UI

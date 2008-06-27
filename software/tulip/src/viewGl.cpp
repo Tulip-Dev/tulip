@@ -1274,15 +1274,15 @@ void viewGl::buildMenus() {
   buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(QAction*)));
   buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(QAction*)));
   buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(QAction*)));
-  // Tulip known formats (see GlGraph)
-  // formats are sorted, "~" is just an end marker
-  char *tlpFormats[] = {"EPS", "SVG", "~"};
+  // Tulip known formats
+  // formats are sorted, NULL is just an end marker
+  char *tlpFormats[] = {"EPS", "SVG", NULL};
   unsigned int i = 0;
   //Image PopuMenu
   // int Qt 4, output formats are not yet sorted and uppercased
   list<QString> formats;
   // first add Tulip known formats
-  while (strcmp(tlpFormats[i], "~") != 0)
+  while (tlpFormats[i])
     formats.push_back(tlpFormats[i++]);
   // uppercase and insert all Qt formats
   foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
@@ -1718,7 +1718,7 @@ void viewGl::centerView() {
 //===========================================================
 //Menu Edit : functions
 //===========================================================
-///Deselect all entries in the glGraph current selection 
+///Deselect all entries in the current selection 
 void viewGl::selectAll() {
   if (!glWidget) return;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -1729,7 +1729,7 @@ void viewGl::selectAll() {
   glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
   Observable::unholdObservers();
 }
-///Deselect all entries in the glGraph current selection 
+///Deselect all entries in the current selection 
 void viewGl::deselectAll() {
   if (!glWidget) return;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -1760,7 +1760,7 @@ void viewGl::delSelection() {
   Observable::unholdObservers();
 }
 //==============================================================
-///Reverse all entries in the glGraph current selection 
+///Reverse all entries in the current selection 
 void viewGl::reverseSelection() {
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
@@ -1969,7 +1969,7 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
   delete glgw;
 
   // if needed the graph must be deleted after
-  // the GlGraphWidget because this one has to remove itself
+  // the GlMainWidget because this one has to remove itself
   // from the graph observers list
   if (root)
     delete root;

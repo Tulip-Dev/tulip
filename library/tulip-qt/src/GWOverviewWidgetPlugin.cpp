@@ -57,7 +57,7 @@ QString GWOverviewWidgetPlugin::toolTip() const {
 }
 
 QString GWOverviewWidgetPlugin::whatsThis() const {
-  return "A widget displaying the overview of the GlGraph associated to a GlGraphWidget";
+  return "A widget displaying the overview of the Graph associated to a GlMainWidget";
 }
 
 bool GWOverviewWidgetPlugin::isContainer() const {

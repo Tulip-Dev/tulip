@@ -33,7 +33,6 @@ libtulip_ogl_la_SOURCES = \
 	Table.cpp \
 	Context.cpp \
 	Document.cpp \
-	ObservableGlGraph.cpp \
 	Glyph.cpp \
 	CubeOutLined.cpp \
 	Camera.cpp \
