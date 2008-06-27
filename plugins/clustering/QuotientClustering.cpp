@@ -13,7 +13,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.1");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.2");
 
 struct Edge {
   unsigned int source,target;
@@ -53,16 +53,16 @@ namespace {
     // node aggregation function
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF( "default", "average" )	 \
+    HTML_HELP_DEF( "default", "none" )	 \
     HTML_HELP_BODY() \
-    "This parameter enables to choose the function used to compute a measure value for a meta-node using the values of its underlying nodes." \
+    "This parameter indicates the function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none' is choosen no value will be computed" \
     HTML_HELP_CLOSE(),
     // edge aggregation function
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF( "default", "average" )	 \
+    HTML_HELP_DEF( "default", "none" )	 \
     HTML_HELP_BODY() \
-    "This parameter enables to choose the function used to compute a measure value for a meta-edge using the values of its underlying edges." \
+    "This parameter indicates the function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none' is choosen no value will be computed." \
     HTML_HELP_CLOSE(),
     // meta-node label
     HTML_HELP_OPEN()							\
@@ -89,11 +89,12 @@ namespace {
     HTML_HELP_CLOSE()
   };
 }
-#define AGGREGATION_FUNCTIONS "average;sum;max;min"
-#define AVG_FN 0
-#define SUM_FN 1
-#define MAX_FN 2
-#define MIN_FN 3
+#define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
+#define NO_FN 0
+#define AVG_FN 1
+#define SUM_FN 2
+#define MAX_FN 3
+#define MIN_FN 4
 //================================================================================
 QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
   addParameter<bool>("oriented", paramHelp[0], "true");
@@ -176,30 +177,34 @@ static void computeMEdgeMetric(Graph* graph, edge mE, Graph *sGraph, Graph *tGra
   unsigned int nbEdges = 0;
   forEach(e, graph->getEdges()) {
     if (sGraph->isElement(graph->source(e)) && tGraph->isElement(graph->target(e))) {
-      double eVal = metric->getEdgeValue(e);
       ++nbEdges;
-      switch(edgeFn) {
-      case AVG_FN:
-      case SUM_FN: {
-	value += eVal;
-	break;
-      }
-      case MAX_FN: {
-	if (eVal > value)
-	  value = eVal;
-	break;
-      }
-      case MIN_FN: {
-	if (eVal < value)
-	  value = eVal;
-	break;
-      }
+      if (edgeFn != NO_FN) {
+	double eVal = metric->getEdgeValue(e);
+	switch(edgeFn) {
+	case AVG_FN:
+	case SUM_FN: {
+	  value += eVal;
+	  break;
+	}
+	case MAX_FN: {
+	  if (eVal > value)
+	    value = eVal;
+	  break;
+	}
+	case MIN_FN: {
+	  if (eVal < value)
+	    value = eVal;
+	  break;
+	}
+	}
       }
     }
   }
-  if (edgeFn == AVG_FN)
-    value /= nbEdges;
-  metric->setEdgeValue(mE, value);
+  if (edgeFn != NO_FN) {
+    if (edgeFn == AVG_FN)
+      value /= nbEdges;
+    metric->setEdgeValue(mE, value);
+  }
   if (cardProp)
     cardProp->setEdgeValue(mE, nbEdges);
 }
@@ -330,19 +335,23 @@ bool QuotientClustering::run() {
 	// try to avoid view... properties
 	(pName.find("view") != 0 || pName == "viewMetric")) {
       DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
-      Iterator<node> *itN = quotientGraph->getNodes();
-      while (itN->hasNext()) {
-	node mN = itN->next();
-	computeMNodeMetric(meta->getNodeValue(mN), mN, metric, nodeFn);
-      } delete itN;
-      Iterator<edge>* itE = quotientGraph->getEdges();
-      while (itE->hasNext()) {
-	edge mE = itE->next();
-	computeMEdgeMetric(graph, mE,
-			   meta->getNodeValue(quotientGraph->source(mE)),
-			   meta->getNodeValue(quotientGraph->target(mE)),
-			   metric, edgeFn, cardProp);
-      } delete itE;
+      if (nodeFn != NO_FN) {
+	Iterator<node> *itN = quotientGraph->getNodes();
+	while (itN->hasNext()) {
+	  node mN = itN->next();
+	  computeMNodeMetric(meta->getNodeValue(mN), mN, metric, nodeFn);
+	} delete itN;
+      }
+      if (edgeFn != NO_FN || edgeCardinality) {
+	Iterator<edge>* itE = quotientGraph->getEdges();
+	while (itE->hasNext()) {
+	  edge mE = itE->next();
+	  computeMEdgeMetric(graph, mE,
+			     meta->getNodeValue(quotientGraph->source(mE)),
+			     meta->getNodeValue(quotientGraph->target(mE)),
+			     metric, edgeFn, cardProp);
+	} delete itE;
+      }
     }
   }
   // orientation
@@ -361,33 +370,35 @@ bool QuotientClustering::run() {
 	// than the mE associated value than we will keep it instead of mE
 	bool opOK =
 	  viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
-	forEach(pName, graph->getProperties()) {
-	  PropertyInterface *property = graph->getProperty(pName);
-	  if (dynamic_cast<DoubleProperty *>(property) &&
-	      // try to avoid view... properties
-	      (pName.find("view") != 0 || pName == "viewMetric")) {
-	    DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
-	    double value = metric->getEdgeValue(mE);	    
-	    switch(edgeFn) {
-	    case AVG_FN:
-	      value = (value + metric->getEdgeValue(op))/2;
-	      break;
-	    case SUM_FN:
-	      value += metric->getEdgeValue(op);
-	      break;
-	    case MAX_FN:
-	      if (value < metric->getEdgeValue(op))
-		value = metric->getEdgeValue(op);
-	      break;
-	    case MIN_FN:
-	      if (value > metric->getEdgeValue(op))
-		value = metric->getEdgeValue(op);
-	      break;
+	if (edgeFn != NO_FN) {
+	  forEach(pName, graph->getProperties()) {
+	    PropertyInterface *property = graph->getProperty(pName);
+	    if (dynamic_cast<DoubleProperty *>(property) &&
+		// try to avoid view... properties
+		(pName.find("view") != 0 || pName == "viewMetric")) {
+	      DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
+	      double value = metric->getEdgeValue(mE);	    
+	      switch(edgeFn) {
+	      case AVG_FN:
+		value = (value + metric->getEdgeValue(op))/2;
+		break;
+	      case SUM_FN:
+		value += metric->getEdgeValue(op);
+		break;
+	      case MAX_FN:
+		if (value < metric->getEdgeValue(op))
+		  value = metric->getEdgeValue(op);
+		break;
+	      case MIN_FN:
+		if (value > metric->getEdgeValue(op))
+		  value = metric->getEdgeValue(op);
+		break;
+	      }
+	      if (opOK)
+		metric->setEdgeValue(op, value);
+	      else
+		metric->setEdgeValue(mE, value);
 	    }
-	    if (opOK)
-	      metric->setEdgeValue(op, value);
-	    else
-	      metric->setEdgeValue(mE, value);
 	  }
 	}
 	// compute cardinaly if needed
