@@ -123,7 +123,7 @@ public:
     if (e->type() == QEvent::MouseButtonPress &&
 	((QMouseEvent *) e)->button()==Qt::LeftButton) {
       QMouseEvent *qMouseEv = (QMouseEvent *) e;
-      GlMainWidget *g = (GlMainWidget *) widget;
+      viewGlWidget *g = (viewGlWidget *) widget;
       node tmpNode;
       edge tmpEdge;
       ElementType type;  
@@ -198,10 +198,10 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   tabWidgetDock->show();
 
   // Create overview widget after the tabWidgetDock
-  // because of a bug with full docked GlMainWidget
+  // because of a bug with full docked viewGlWidget
   // In doing this the overviewDock will be the first
   // sibling candidate when the tabWidgetDock will loose the focus
-  // and Qt will not try to give the focus to the first GlMainWidget
+  // and Qt will not try to give the focus to the first viewGlWidget
   overviewDock = new QDockWidget("Overview", this);
   overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   overviewDock->setWindowTitle("3D Overview");
@@ -235,7 +235,7 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
 #endif
 
   //connect signals related to graph replacement
-  connect(clusterTreeWidget, SIGNAL(graphChanged(tlp::Graph *)), 
+  connect(clusterTreeWidget, SIGNAL(graphChanged(tlp::Graph *)),
 	  this, SLOT(hierarchyChangeGraph(tlp::Graph *)));
   connect(clusterTreeWidget, SIGNAL(aboutToRemoveView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
   connect(clusterTreeWidget, SIGNAL(aboutToRemoveAllView(tlp::Graph *)), this, SLOT(graphAboutToBeRemoved(tlp::Graph *)));
@@ -523,7 +523,7 @@ void viewGl::startTulip() {
 void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
   clearObservers();
-  QFileInfo tmp(openFiles[(unsigned long)glWidget].name.c_str());
+  QFileInfo tmp(glWidget->name.c_str());
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   param.setTexturePath(string(tmp.dir().path().toAscii().data()) + "/");
   glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
@@ -551,8 +551,20 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
   cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
 #endif
   if( glWidget == 0 ) return;
-  if (glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == graph)  return;
+  Graph* currentGraph =
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (currentGraph == graph)  return;
   //clearObservers();
+  if (currentGraph) {
+    if (glWidget->goingPrev) {
+      glWidget->nextGraphs.push_front(currentGraph);
+    } else {
+      glWidget->prevGraphs.push_front(currentGraph);
+      if (!glWidget->goingNext) {
+	glWidget->nextGraphs.clear();
+      }
+    }
+  }
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   delete glWidget->getScene()->getGlGraphComposite();
   glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
@@ -572,14 +584,14 @@ void viewGl::windowActivated(QWidget *w) {
     glWidget = 0;
     return;
   }
-  if (typeid(*w)==typeid(GlMainWidget)) {
-    glWidget=((GlMainWidget *)w);
+  if (typeid(*w)==typeid(viewGlWidget)) {
+    glWidget=((viewGlWidget *)w);
     glWidget->resetInteractors(*currentInteractors);
     changeGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
   }
 }
 //**********************************************************************
-GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
+viewGlWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   assert(graph != 0);
   // delete plugins loading errors dialog if needed
   if (errorDlg) {
@@ -587,7 +599,7 @@ GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
     errorDlg = (QDialog *) NULL;
   }
   //Create 3D graph view
-  GlMainWidget *glWidget = new GlMainWidget(workspace, name.toAscii().data());
+  viewGlWidget *glWidget = new viewGlWidget(workspace, name.toAscii().data());
   glWidget->getScene()->addObserver(this);
   layerWidget->attachMainWidget(glWidget);
   //GlMainWidget *glWidget = new GlMainWidget();
@@ -613,7 +625,7 @@ GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   return glWidget;
 }
 //**********************************************************************
-void viewGl::constructDefaultScene(GlMainWidget *glWidget) {
+void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
   GlLayer* layer=new GlLayer("Main");
   GlLayer *backgroundLayer=new GlLayer("Background");
   backgroundLayer->setVisible(false);
@@ -653,7 +665,7 @@ std::string viewGl::newName() {
 void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
-  GlMainWidget *newGlWidget =
+  viewGlWidget *newGlWidget =
     newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
 		  glWidget->parentWidget()->windowTitle());
   constructDefaultScene(newGlWidget);
@@ -671,7 +683,7 @@ void viewGl::fileNew() {
   Observable::holdObservers();
   Graph *newGraph=tlp::newGraph();
   initializeGraph(newGraph);
-  GlMainWidget *glW =
+  viewGlWidget *glW =
     newOpenGlView(newGraph,
 		  newGraph->getAttribute<string>(std::string("name")).c_str());
   constructDefaultScene(glW);
@@ -687,8 +699,8 @@ void viewGl::setNavigateCaption(string newCaption) {
    QWidgetList windows = workspace->windowList();
    for( int i = 0; i < int(windows.count()); ++i ) {
      QWidget *win = windows.at(i);
-     if (typeid(*win)==typeid(GlMainWidget)) {
-       GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
+     if (typeid(*win)==typeid(viewGlWidget)) {
+       viewGlWidget *tmpNavigate = dynamic_cast<viewGlWidget *>(win);
        if(tmpNavigate == glWidget) {
 	 tmpNavigate->setWindowTitle(newCaption.c_str());
 	 return;
@@ -699,12 +711,11 @@ void viewGl::setNavigateCaption(string newCaption) {
 //**********************************************************************
 bool viewGl::doFileSave() {
   if (!glWidget) return false;
-  if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
-      (openFiles[(unsigned long)glWidget].name == "")) {
+  if (glWidget->name == "") {
     return doFileSaveAs();
   }
-  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
-  return doFileSave("tlp", vFile.name, vFile.author, vFile.comments);
+  return doFileSave("tlp", glWidget->name, glWidget->author,
+		    glWidget->comments);
 }
 //**********************************************************************
 void viewGl::fileSave() {
@@ -771,11 +782,10 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   }
 
   // keep trace of file infos
-  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
-  vFile.name = filename;
+  glWidget->name = filename;
   dataSet.get<string>("name", graphName);
-  dataSet.get<string>("author", vFile.author);
-  dataSet.get<string>("text::comments", vFile.comments);
+  dataSet.get<string>("author", glWidget->author);
+  dataSet.get<string>("text::comments", glWidget->comments);
 
   if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
@@ -898,9 +908,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       QWidgetList windows = workspace->windowList();
       for( int i = 0; i < int(windows.count()); ++i ) {
 	QWidget *win = windows.at(i);
-	if (typeid(*win)==typeid(GlMainWidget)) {
-	  GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
-	  if(openFiles[((unsigned long)tmpNavigate)].name == s.toAscii().data()) {
+	if (typeid(*win)==typeid(viewGlWidget)) {
+	  viewGlWidget *tmpNavigate = dynamic_cast<viewGlWidget *>(win);
+	  if(tmpNavigate->name == s.toAscii().data()) {
 	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
@@ -919,7 +929,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     bool result=true;
     QFileInfo tmp(s);
     QDir::setCurrent(tmp.dir().path() + "/");
-    GlMainWidget *glW = newOpenGlView(newGraph, s);
+    viewGlWidget *glW = newOpenGlView(newGraph, s);
     //    changeGraph(0);
     QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toAscii().data(), glW );
     // this will avoid too much notification when
@@ -976,11 +986,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     
 
     if(noPlugin) {
-      viewGlFile vFile;
-      vFile.name = s.toAscii().data();
-      dataSet.get<std::string>("author", vFile.author);
-      dataSet.get<std::string>("text::comments", vFile.comments);
-      openFiles[((unsigned long)glW)] = vFile;
+      glW->name = s.toAscii().data();
+      dataSet.get<std::string>("author", glW->author);
+      dataSet.get<std::string>("text::comments", glW->comments);
     }
     QApplication::restoreOverrideCursor();
     //    changeGraph(0);
@@ -997,7 +1005,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     //if (!displayingInfoFound)
       glW->getScene()->centerScene();
 
-    // glWidget will be bind to that new GlMainWidget
+    // glWidget will be bind to that new viewGlWidget
     // in the windowActivated method,
     // so let it be activated
     glW->show();
@@ -1498,8 +1506,8 @@ bool viewGl::closeWin() {
   QWidgetList windows = workspace->windowList();
   for(int i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
-    if (typeid(*win)==typeid(GlMainWidget)) {
-      GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
+    if (typeid(*win)==typeid(viewGlWidget)) {
+      viewGlWidget *tmpNavigate = dynamic_cast<viewGlWidget *>(win);
       Graph *graph = tmpNavigate->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot();
       if(!alreadyTreated(treatedGraph, graph)) {
         glWidget = tmpNavigate;
@@ -1606,8 +1614,38 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       edge tmpEdge;
       // look if the mouse pointer is over a node or edge
       result = glWidget->doSelect(me->x(), me->y(), type, tmpNode, tmpEdge);
-      if (!result)
-      return false;
+      if (!result) {
+	QMenu contextMenu(this);
+	bool menuHasAction = false;
+	QAction* prevAction = NULL;
+	// allow to return to previous graph
+	if (!glWidget->prevGraphs.empty()) {
+	  prevAction = contextMenu.addAction(tr("Back to previous"));
+	  menuHasAction = true;
+	}
+	if (!glWidget->nextGraphs.empty()) {
+	  // allow to return to next graph
+	  contextMenu.addAction(tr("Go to next"));
+	  menuHasAction = true;
+	}
+	if (!menuHasAction)
+	  return false;
+	QAction* menuAction = contextMenu.exec(me->globalPos(), prevAction);
+	if (menuAction == NULL)
+	  return true;
+	if (menuAction == prevAction) {
+	  glWidget->goingPrev = true;
+	  changeGraph(glWidget->prevGraphs.front());
+	  glWidget->prevGraphs.pop_front();
+	  glWidget->goingPrev = false;
+	} else {
+	  glWidget->goingNext = true;
+	  changeGraph(glWidget->nextGraphs.front());
+	  glWidget->nextGraphs.pop_front();
+	  glWidget->goingNext = false;
+	}
+	return true;
+      }
       // Display a context menu
       bool isNode = type == NODE;
       int itemId = isNode ? tmpNode.id : tmpEdge.id;
@@ -1929,7 +1967,7 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
   int i;
   for( i = 0; i < int(windows.count()); ++i ) {
     QWidget *win = windows.at(i);
-    if (typeid(*win)==typeid(GlMainWidget)) {
+    if (typeid(*win)==typeid(viewGlWidget)) {
       GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
       int graph1 = root->getId();
       int graph2 = tmpNavigate->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot()->getId();
@@ -1956,9 +1994,6 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
     // no graph to delete
     root = (Graph *) 0;
   
-  if (openFiles.find((unsigned long)glgw) != openFiles.end())   
-    openFiles.erase((unsigned long)glgw);
-  
   if(glgw == glWidget) {
     GlGraphRenderingParameters param = glgw->getScene()->getGlGraphComposite()->getRenderingParameters();
     //param.setGraph(0);
@@ -1969,7 +2004,7 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
   delete glgw;
 
   // if needed the graph must be deleted after
-  // the GlMainWidget because this one has to remove itself
+  // the viewGlWidget because this one has to remove itself
   // from the graph observers list
   if (root)
     delete root;

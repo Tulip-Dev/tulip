@@ -27,6 +27,7 @@
 #include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
+#include "GlMainWidget.h"
 
 namespace tlp {
 class Morphing;
@@ -40,7 +41,6 @@ class GlLayer;
 
 class SGHierarchyWidget;
 class ElementPropertiesWidget;
-class GlMainWidget;
 class TulipStats;
 class PropertyDialog;
 class QWorkspace;
@@ -51,11 +51,26 @@ class Cluster;
 class GWOverviewWidget;
 class LayerManagerWidget;
 
-// minimal structure to keep open files infos
-struct viewGlFile {
+// a class to handle additional infos
+// associated to GlMainWidget objects
+class viewGlWidget : public GlMainWidget {
+public:
+  // additional infos
+  // to deal with open files
   std::string name;
   std::string author;
   std::string comments;
+  // additional infos to allow prev & next navigation
+  std::deque<tlp::Graph *> prevGraphs;
+  std::deque<tlp::Graph *> nextGraphs;
+  bool goingPrev, goingNext;
+
+  viewGlWidget(QWidget* parent, const char* name) :
+    GlMainWidget(parent, name) {
+    goingPrev = goingNext = false;
+  }
+    
+  ~viewGlWidget() {}
 };
 
 ///Widget for manipulation and visualization of a graph
@@ -79,7 +94,7 @@ protected:
   QWidget *aboutWidget;
   QDockWidget *overviewDock;
   QDockWidget *tabWidgetDock;
-  GlMainWidget *glWidget;
+  viewGlWidget *glWidget;
   PropertyDialog *propertiesWidget;
   ElementPropertiesWidget *eltProperties;
   tlp::Graph * copyCutPasteGraph;
@@ -210,10 +225,9 @@ private:
   void deleteElement(unsigned int , unsigned int , GlMainWidget *);
   void selectElement(unsigned int , unsigned int , GlMainWidget *, bool);
   template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
-  GlMainWidget *newOpenGlView(tlp::Graph *graph,const QString &);
-  void constructDefaultScene(GlMainWidget *glWidget);
+  viewGlWidget *newOpenGlView(tlp::Graph *graph,const QString &);
+  void constructDefaultScene(viewGlWidget *glWidget);
   std::string newName();
-  stdext::hash_map<unsigned int, viewGlFile> openFiles;
   void buildMenus();
   bool doFileSave();
   bool doFileSaveAs();
