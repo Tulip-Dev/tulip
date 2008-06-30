@@ -16,7 +16,6 @@ public:
   ~StrengthClustering();
   bool run();
   bool check(std::string &);
-  void reset();
 private:
   std::vector< std::set<tlp::node> > computeNodePartition(double threshold);
   double computeMQValue(const std::vector< std::set<tlp::node> > & partition, tlp::Graph *);

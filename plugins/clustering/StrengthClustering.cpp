@@ -123,23 +123,11 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   DoubleProperty *connected= new DoubleProperty(tmpGraph); 
   tmpGraph->computeProperty("Connected Component", connected, errMsg);
 
-  //Put isolated nodes in the same cluster
-  double val=-1;
-  Iterator<node> *itN2 = tmpGraph->getNodes();
-  while (itN2->hasNext()) {
-    node itn=itN2->next();
-    if (tmpGraph->deg(itn)==0) {
-      if (val==-1) val=connected->getNodeValue(itn);
-      else
-	connected->setNodeValue(itn,val);
-    }
-  } delete itN2;
-
   //Compute the node partition
   int index=0;
   vector< set<node > > result;
   map<double,int> resultIndex;
-  itN2=tmpGraph->getNodes();
+  Iterator<node> *itN2=tmpGraph->getNodes();
   while (itN2->hasNext()) {
     node itn=itN2->next();
     double val=connected->getNodeValue(itn);
@@ -433,10 +421,14 @@ bool StrengthClustering::run() {
 }
 //================================================================================
 bool StrengthClustering::check(string &erreurMsg) {
-  erreurMsg="";
+  if (!SimpleTest::isSimple(graph)) {
+    erreurMsg ="The graph must be simple";
+    return false;
+  }
+  if (!ConnectedTest::isConnected(graph)) {
+    erreurMsg ="The graph must be connected";
+    return false;
+  }
+  
   return true;
 }
-//================================================================================
-void StrengthClustering::reset() {
-}
-//================================================================================
