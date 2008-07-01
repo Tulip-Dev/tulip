@@ -97,6 +97,8 @@ namespace tlp {
       glStencilFunc(GL_LEQUAL,data->parameters->getEdgesStencil(),0xFFFF);
     }
 
+    glDisable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
 
     const node source = data->graph->source(e);
     const node target = data->graph->target(e);
@@ -117,6 +119,29 @@ namespace tlp {
       glPassThrough(id); //id of the node for the feed back mode
     }
 
+    Color srcCol,tgtCol;
+    if (selected) {
+      srcCol = COLORSELECT;
+      tgtCol = COLORSELECT;
+    } else {
+      if (data->parameters->isEdgeColorInterpolate()) {
+	srcCol = data->elementColor->getNodeValue(source);
+	tgtCol = data->elementColor->getNodeValue(target);
+      }
+      else {
+	srcCol = tgtCol = data->elementColor->getEdgeValue(e);
+      }
+    }
+
+    if(lod<5) {
+      setColor(srcCol);
+      glPointSize(1);
+      glBegin(GL_POINTS);
+        glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
+      glEnd();
+      return;
+    }
+
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
     unsigned nbBends = bends.size();
   
@@ -126,18 +151,10 @@ namespace tlp {
       return;
     }
 
-    /*if(lod<10)
-      return;*/
-
     if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
       return; //two nodes very closed
     Matrix<float,4> transformMatrix;
     camera->getTransformMatrix(transformMatrix);
-    /*if (nbBends == 0 && 
-    	(segmentVisible(srcCoord, tgtCoord, transformMatrix, camera->getViewport()) < 15.)) {
-    //cerr << ".";
-      return;
-      }*/
     //take source and target information for edge clipping
     const Size &srcSize  = data->elementSize->getNodeValue(source);
     const Size &tgtSize  = data->elementSize->getNodeValue(target);
@@ -156,32 +173,19 @@ namespace tlp {
     Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
 
     //compute anchor, (clip line with the glyph)
-    /*float lod;
-    lod = projectSize(srcCoord, srcSize, getLayout()->getCamera()->projectionMatrix, getLayout()->getCamera()->modelviewMatrix, getLayout()->getCamera()->getViewport());
-    */
-    /*if (lod > 10) { //clip edges with the glyph*/
     int srcGlyphId = data->elementShape->getNodeValue(source);
     Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
     tmpAnchor = (nbBends > 0) ? bends.front() : tgtCoord;
     srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
-      /*} else {
-	srcAnchor = srcCoord;*/
-      //}
 
     //compute anchor, (clip line with the glyph)
-    /*lod = projectSize(tgtCoord, tgtSize, getLayout()->getCamera()->projectionMatrix, getLayout()->getCamera()->modelviewMatrix, getLayout()->getCamera()->getViewport()); 
-      if (lod > 10) { //clip edges with the glyph*/
-      int tgtGlyphId = 1; //cube outlined
-      if (data->elementGraph->getNodeValue(target)==0)
+    int tgtGlyphId = 1; //cube outlined
+    if (data->elementGraph->getNodeValue(target)==0)
       tgtGlyphId = data->elementShape->getNodeValue(target);
-      Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
-      //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
-      tmpAnchor = (nbBends > 0) ? bends.back() : srcAnchor;
-      tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
-      /*} 
-      else {*/
-      //tgtAnchor = tgtCoord;
-    //}
+    Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
+    //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
+    tmpAnchor = (nbBends > 0) ? bends.back() : srcAnchor;
+    tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
     Size edgeSize; //the edge radius and arrow radius
     if (data->parameters->isEdgeSizeInterpolate()) {
@@ -195,28 +199,10 @@ namespace tlp {
       edgeSize = data->elementSize->getEdgeValue(e);
     }
 
-    Color srcCol,tgtCol;
     if (selected) {
-      srcCol = COLORSELECT;
-      tgtCol = COLORSELECT;
       edgeSize[0] += 0.05;
       edgeSize[1] += 0.05;
-    } else {
-      if (data->parameters->isEdgeColorInterpolate()) {
-	srcCol = data->elementColor->getNodeValue(source);
-	tgtCol = data->elementColor->getNodeValue(target);
-      }
-      else {
-	srcCol = tgtCol = data->elementColor->getEdgeValue(e);
-      }
     }
-
-    bool lightingOn=glIsEnabled(GL_LIGHTING);
-    bool colorMaterialOn=glIsEnabled(GL_COLOR_MATERIAL);
-    if(lightingOn)
-      glDisable(GL_LIGHTING);
-    if(!colorMaterialOn)
-      glEnable(GL_COLOR_MATERIAL);
 
     //draw Arrow
     if(data->parameters->isViewArrow()) {
@@ -263,42 +249,31 @@ namespace tlp {
     else {
       endLineAnchor = tgtAnchor;
     }
+
+    Matrix<float, 4u> projectionMatrix;
+    Matrix<float, 4u> modelviewMatrix;
+    camera->getProjectionMatrix(projectionMatrix);
+    camera->getModelviewMatrix(modelviewMatrix);
+    float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix, camera->getViewport());
     
-    //  cerr << "DRAW EDGE" << endl;
     //draw Edge
-    drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D());
-    //  cerr << this << "::" << "[END]" << endl;
+    drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
+
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_EDGE);
-    }
-
-    if(lightingOn != glIsEnabled(GL_LIGHTING)) {
-      if(lightingOn)
-	glEnable(GL_LIGHTING);
-      else
-	glDisable(GL_LIGHTING);
-    }
-    
-    if(colorMaterialOn != glIsEnabled(GL_COLOR_MATERIAL)) {
-      if(colorMaterialOn)
-	glEnable(GL_COLOR_MATERIAL);
-      else
-	glDisable(GL_COLOR_MATERIAL);
     }
   }
 
   #define L3D_BIT (1<<9)
   void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 			const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
-			const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D) {
+			const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D, float lod) {
     bool drawLine = true;
     bool drawPoly = true;
 
     //================================
 
     glDisable(GL_CULL_FACE);
-    /*glDepthFunc(GL_LESS);*/
-    //glStencilFunc(GL_LEQUAL,0x0000,0xFFFF);
    
     if (edge3D)
       shape |= L3D_BIT;
@@ -318,23 +293,21 @@ namespace tlp {
 
     switch (shape) {
     case POLYLINESHAPE:
-      //glAlphaFunc(GL_LESS);
-      if (drawPoly) {
+      if (drawPoly && (lod>0.5 || lod<-0.5)) {
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       }
       if (drawLine) {
 	tlp::polyLine(tmp, startColor, endColor);
       }
-      //glBlendEquation( GL_FUNC_ADD);
       break;
     case BEZIERSHAPE:
-      if (drawPoly)
+      if (drawPoly && (lod>0.5 || lod<-0.5))
 	tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::bezierLine(tmp, startColor, endColor);
       break;
     case SPLINESHAPE:
-      if (drawPoly)
+      if (drawPoly && (lod>0.5 || lod<-0.5))
 	tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::splineLine(tmp, startColor, endColor);
@@ -352,7 +325,7 @@ namespace tlp {
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,
 			       GlLines::SPLINE3, startColor, endColor); break;
     default:
-      if (drawPoly)
+      if (drawPoly && (lod>0.5 || lod<-0.5))
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::polyLine(tmp,startColor,endColor);
@@ -360,7 +333,6 @@ namespace tlp {
     }
 
     glDepthFunc(GL_LEQUAL);
-    glEnable(GL_CULL_FACE); 
   }
 
   void GlEdge::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {

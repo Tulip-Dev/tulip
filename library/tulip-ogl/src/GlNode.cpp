@@ -94,14 +94,14 @@ namespace tlp {
 	setColor(fillColor);
 	glPointSize(sqrt(lod));
 	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
 	 glEnd();
       }
       else {
 	setColor(colorSelect2);
 	glPointSize(sqrt(lod)+1);
 	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
 	glEnd();
       }
       glEnable(GL_LIGHTING);

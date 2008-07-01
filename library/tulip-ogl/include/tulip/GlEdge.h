@@ -64,7 +64,7 @@ namespace tlp {
      */
     void drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 		  const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
-		  const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D);
+		  const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D, float lod);
     
   };
   
