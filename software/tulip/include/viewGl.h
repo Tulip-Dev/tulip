@@ -220,6 +220,7 @@ protected slots:
   void makeConnected();
   void makeDirected();
   void deletePluginsUpdateChecker();
+  void setAntialiasing(bool);
 
 private:
   void deleteElement(unsigned int , unsigned int , GlMainWidget *);

@@ -78,7 +78,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>29</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu" >
@@ -169,6 +169,7 @@
     </property>
     <addaction name="force_ratio" />
     <addaction name="map_metric" />
+    <addaction name="antialiasing" />
     <addaction name="enable_morphing" />
     <addaction name="tooltips" />
     <addaction name="grid_option" />
@@ -455,7 +456,7 @@
     <bool>true</bool>
    </property>
    <property name="checked" >
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text" >
     <string>Force ratio</string>
@@ -854,6 +855,20 @@
    </property>
    <property name="name" stdset="0" >
     <string>make_directed</string>
+   </property>
+  </action>
+  <action name="antialiasing" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Antialiasing</string>
    </property>
   </action>
   <actiongroup name="mouseActionGroup" >
@@ -1806,6 +1821,22 @@
     <hint type="destinationlabel" >
      <x>20</x>
      <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>antialiasing</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TulipData</receiver>
+   <slot>setAntialiasing(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>502</x>
+     <y>349</y>
     </hint>
    </hints>
   </connection>

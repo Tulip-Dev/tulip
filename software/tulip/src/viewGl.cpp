@@ -324,6 +324,7 @@ void viewGl::enableElements(bool enabled) {
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
   grid_option->setEnabled(enabled);
+  antialiasing->setEnabled(enabled);
   renderingParametersDialogAction->setEnabled(enabled);
 
   elementsDisabled = !enabled;
@@ -525,6 +526,7 @@ void viewGl::changeGraph(Graph *graph) {
   clearObservers();
   QFileInfo tmp(glWidget->name.c_str());
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+  antialiasing->setChecked(param.isAntialiased());
   param.setTexturePath(string(tmp.dir().path().toAscii().data()) + "/");
   glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   QDir::setCurrent(tmp.dir().path() + "/");
@@ -1735,6 +1737,14 @@ void viewGl::showDialog(QAction* action){
   }
   if (name=="&Rendering Parameters" && glWidget != 0) {
     overviewWidget->showRenderingParametersDialog();
+  }
+}
+//**********************************************************************
+void viewGl::setAntialiasing(bool antialiased) {
+  if(glWidget) {
+    GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    param.setAntialiasing(antialiased);
+    glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   }
 }
 //======================================================================

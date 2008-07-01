@@ -47,6 +47,13 @@ namespace tlp {
     DataSet getParameters() const;
     void    setParameters(const DataSet &);
     /** 
+     * activate or deactivate anlialiasing
+     */
+    void setAntialiasing(const bool state);
+    /** return true if antialiasing is activated else false.
+     */
+    bool isAntialiased()const;
+    /** 
      * activate or deactivate displaying of arrows along the graph's edges.
      */
     void setViewArrow(const bool state);
@@ -270,6 +277,7 @@ namespace tlp {
     bool getFeedbackRender();
   private:
     //tlp::Graph  *_graph;
+    bool _antialiased;
     bool _viewArrow;
     bool _viewNodeLabel;
     bool _viewEdgeLabel;

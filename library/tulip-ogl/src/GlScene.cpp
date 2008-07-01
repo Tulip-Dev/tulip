@@ -39,15 +39,26 @@ namespace tlp {
 
   void GlScene::initGlParameters() {
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-    glEnable(GL_LINE_SMOOTH);
+    bool antialiased = true;
+    if(glGraphComposite) {
+      antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
+    }
+      
+    if(antialiased) {
+      glEnable(GL_LINE_SMOOTH);
+      glEnable(GL_POLYGON_SMOOTH);
+      glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
+      glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
+      glShadeModel(GL_SMOOTH);
+    }else{
+      glDisable(GL_LINE_SMOOTH);
+      glDisable(GL_POLYGON_SMOOTH);
+    }
+
     glDisable(GL_POINT_SMOOTH);
-    glEnable(GL_POLYGON_SMOOTH);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
-    glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
     glLineWidth(1.0);
     glPointSize(1.0);
-    glShadeModel(GL_SMOOTH);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_STENCIL_TEST);

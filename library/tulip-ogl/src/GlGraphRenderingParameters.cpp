@@ -11,6 +11,7 @@ using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
   //_graph(0),
+  _antialiased(true),
   _viewArrow(false), 
   _viewNodeLabel(false),
   _viewEdgeLabel(false),
@@ -43,6 +44,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
 DataSet GlGraphRenderingParameters::getParameters() const {
   DataSet data;
   //bool
+  data.set("antialiased", _antialiased);
   data.set("arrow", _viewArrow);
   data.set("displayNodes", _displayNodes);
   data.set("displayEdges", _displayEdges);
@@ -85,6 +87,8 @@ static Graph *findGraphById(Graph *sg, const int id) {
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   bool b;
+  if (data.get<bool>("antialiased", b))
+    setAntialiasing(b);
   if (data.get<bool>("arrow", b))
     setViewArrow(b);
   if (data.get<bool>("displayNodes", b))
@@ -196,6 +200,13 @@ bool GlGraphRenderingParameters::isDisplayMetaNodes() const {
 }
 void GlGraphRenderingParameters::setDisplayMetaNodes(const bool b) {
   _displayMetaNodes=b;
+}
+//====================================================
+bool GlGraphRenderingParameters::isAntialiased() const {
+  return (_antialiased);
+}
+void GlGraphRenderingParameters::setAntialiasing(const bool b) {
+  _antialiased=b;
 }
 //====================================================
 bool GlGraphRenderingParameters::isViewArrow() const {
