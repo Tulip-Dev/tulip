@@ -15,14 +15,15 @@ using namespace tlp;
 
 ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.2");
 
-struct Edge {
+struct MetaEdge {
   unsigned int source,target;
+  edge mE;
 };
 
 namespace std {
   template<>
-  struct less<Edge> {
-    bool operator()(const Edge &c,const Edge &d) const {
+  struct less<MetaEdge> {
+    bool operator()(const MetaEdge &c,const MetaEdge &d) const {
       if (c.source<d.source) return true;
       if (c.source>d.source) return false;
       if (c.target<d.target) return true;
@@ -133,20 +134,17 @@ static void computeMNodeMetric(Graph *mGraph, node mN, DoubleProperty *metric,
     switch(nodeFn) {
     case AVG_FN:
       ++nbNodes;
-    case SUM_FN: {
+    case SUM_FN:
       value += nVal;
       break;
-    }
-    case MAX_FN: {
+    case MAX_FN:
       if (nVal > value)
 	value = nVal;
       break;
-    }
-    case MIN_FN: {
+    case MIN_FN:
       if (nVal < value)
 	value = nVal;
       break;
-    }
     }
   }
   if (nodeFn == AVG_FN)
@@ -154,59 +152,51 @@ static void computeMNodeMetric(Graph *mGraph, node mN, DoubleProperty *metric,
   metric->setNodeValue(mN, value);
 }
 //===============================================================================
-static void computeMEdgeMetric(Graph* graph, edge mE, Graph *sGraph, Graph *tGraph,
+static void computeMEdgeMetric(Graph* graph, edge mE, const set<edge>* edges,
 			       DoubleProperty *metric, unsigned int edgeFn,
 			       IntegerProperty *cardProp) {
-  double value;
-  switch(edgeFn) {
-  case AVG_FN:
-  case SUM_FN: {
-    value = 0;
-    break;
-  }
-  case MAX_FN: {
-    value = DBL_MIN;
-    break;
-  }
-  case MIN_FN:
-    value = DBL_MAX;
-    break;
-  }
+  unsigned int nbEdges = edges->size();
+  if (cardProp)
+    cardProp->setEdgeValue(mE, nbEdges);
 
-  edge e;
-  unsigned int nbEdges = 0;
-  forEach(e, graph->getEdges()) {
-    if (sGraph->isElement(graph->source(e)) && tGraph->isElement(graph->target(e))) {
-      ++nbEdges;
-      if (edgeFn != NO_FN) {
-	double eVal = metric->getEdgeValue(e);
-	switch(edgeFn) {
-	case AVG_FN:
-	case SUM_FN: {
-	  value += eVal;
-	  break;
-	}
-	case MAX_FN: {
-	  if (eVal > value)
-	    value = eVal;
-	  break;
-	}
-	case MIN_FN: {
-	  if (eVal < value)
-	    value = eVal;
-	  break;
-	}
-	}
+  if (edgeFn != NO_FN) {
+    double value;
+    switch(edgeFn) {
+    case AVG_FN:
+    case SUM_FN:
+      value = 0;
+      break;
+    case MAX_FN:
+      value = DBL_MIN;
+      break;
+    case MIN_FN:
+      value = DBL_MAX;
+      break;
+    }
+   
+    edge e;
+    for(set<edge>::const_iterator ite = edges->begin();
+	ite != edges->end(); ++ite) {
+      double eVal = metric->getEdgeValue(*ite);
+      switch(edgeFn) {
+      case AVG_FN:
+      case SUM_FN:
+	value += eVal;
+	break;
+      case MAX_FN:
+	if (eVal > value)
+	  value = eVal;
+	break;
+      case MIN_FN:
+	if (eVal < value)
+	  value = eVal;
+	break;
       }
     }
-  }
-  if (edgeFn != NO_FN) {
     if (edgeFn == AVG_FN)
       value /= nbEdges;
     metric->setEdgeValue(mE, value);
   }
-  if (cardProp)
-    cardProp->setEdgeValue(mE, nbEdges);
 }
 //===============================================================================
 bool QuotientClustering::run() {
@@ -259,8 +249,9 @@ bool QuotientClustering::run() {
     cardProp = quotientGraph->getLocalProperty<IntegerProperty>("edgeCardinality");
 
   // populate quotient graph
+  map <edge, set<edge> > eMapping;
   {
-    map<node, set<node> > mapping;
+    map<node, set<node> > nMapping;
     itS=graph->getSubGraphs();
     while (itS->hasNext()) {
       Graph *its=itS->next();
@@ -283,22 +274,23 @@ bool QuotientClustering::run() {
 	forEach(n, its->getNodes()) {
 	  // map each subgraph's node to a set of meta nodes
 	  // in order to deal consistently with overlapping clusters
-	  if (mapping.find(n) == mapping.end())
-	    mapping[n] = set<node>();
-	  mapping[n].insert(metaN);
+	  if (nMapping.find(n) == nMapping.end())
+	    nMapping[n] = set<node>();
+	  nMapping[n].insert(metaN);
 	}
       }
     } delete itS;
 
     {
-      set<Edge> myQuotientGraph;
+      set<MetaEdge> myQuotientGraph;
       edge e;
       // for each existing edge in the current graph
-      // add a meta edge for each couple of meta source
-      // and meta target if it does not already exists   
+      // add a meta edge for the corresponding couple
+      // (meta source, meta target) if it does not already exists
+      // and register the edge as associated to this meta edge
       stableForEach(e, graph->getEdges()) {
-	set<node> metaSources = mapping[graph->source(e)];
-	set<node> metaTargets = mapping[graph->target(e)];
+	set<node> metaSources = nMapping[graph->source(e)];
+	set<node> metaTargets = nMapping[graph->target(e)];
 	for(set<node>::const_iterator itms = metaSources.begin();
 	    itms != metaSources.end(); ++itms) {
 	  node mSource = *itms;
@@ -306,17 +298,23 @@ bool QuotientClustering::run() {
 	      itmt != metaTargets.end(); ++itmt) {
 	    node mTarget = *itmt;
 	    if (mSource != mTarget) {
-	      Edge tmp;
+	      MetaEdge tmp;
 	      tmp.source = mSource.id, tmp.target = mTarget.id;
-	      if (myQuotientGraph.find(tmp) == myQuotientGraph.end()) {
-		myQuotientGraph.insert(tmp);
+	      set<MetaEdge>::const_iterator itm = myQuotientGraph.find(tmp);
+	      if (itm == myQuotientGraph.end()) {
 		edge mE = quotientGraph->addEdge(mSource, mTarget);
+		tmp.mE = mE;
+		myQuotientGraph.insert(tmp);
+		(eMapping[mE] = set<edge>()).insert(e);
 		edge op;
 		if (!oriented &&
 		    (op = quotientGraph->existEdge(mTarget, mSource)).isValid()) {
 		  opProp->setEdgeValue(op, mE.id);
 		  opProp->setEdgeValue(mE, op.id);
 		}
+	      } else {
+		// add edge
+		eMapping[(*itm).mE].insert(e);
 	      }
 	    }
 	  }
@@ -343,14 +341,14 @@ bool QuotientClustering::run() {
 	} delete itN;
       }
       if (edgeFn != NO_FN || edgeCardinality) {
-	Iterator<edge>* itE = quotientGraph->getEdges();
-	while (itE->hasNext()) {
-	  edge mE = itE->next();
-	  computeMEdgeMetric(graph, mE,
-			     meta->getNodeValue(quotientGraph->source(mE)),
-			     meta->getNodeValue(quotientGraph->target(mE)),
+	map<edge, set<edge> >::const_iterator itm = eMapping.begin();
+	while(itm != eMapping.end()) {
+	  const set<edge>* edges = &((*itm).second);
+	  if (edgeCardinality)
+	  computeMEdgeMetric(graph, (*itm).first, edges,
 			     metric, edgeFn, cardProp);
-	} delete itE;
+	  ++itm;
+	}
       }
     }
   }
