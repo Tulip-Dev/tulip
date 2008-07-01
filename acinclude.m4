@@ -715,7 +715,13 @@ dnl set QtAssistant exe name
        QT_ASSISTANT="assistant_adp"
      fi
    fi
+   if test -d ${QTDIR}/bin/${QT_ASSISTANT}.app; then
+     QT_ASSISTANT_DIR=${QTDIR}/bin
+   else
+     QT_ASSISTANT_DIR=/Developer/Applications/Qt
+   fi
    AC_SUBST(QT_ASSISTANT)
+   AC_SUBST(QT_ASSISTANT_DIR)
 ])
 
 AC_DEFUN([AC_PATH_MINGW],
