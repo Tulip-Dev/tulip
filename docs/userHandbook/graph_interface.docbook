@@ -140,6 +140,8 @@
                 	</listitem> 
                 	<listitem> Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
                 	</listitem> 
+                	<listitem> Antialiasing : Enables a smoother but costly drawing of the graph.
+                	</listitem> 
                 	<listitem>Morphing : Enables the Morphing from a layout to an other.
                 	</listitem> 
                 	<listitem>Tooltips : Enables the display of tooltips on nodes or edges
@@ -334,9 +336,9 @@
             <graphic fileref="images/3d-view.png"/>
             The 3D graph view subwindow is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node/edge, a tooltip window displays its id and label (use <quote>Options</quote> menu to enable tooltips).
         </para>
-        <sect2 id="pop-up"><title>Pop-up menu of graph view</title>
+        <sect2 id="pop-up"><title>Contextual pop-up menu</title>
                 <graphic fileref="images/view-contextmenu.png"/>
-		<para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) while on a graph element, and allows to perform simple actions on this element : 
+		<para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) while on a graph element (node 599 in the example), and allows to perform simple actions on this element : 
                 <itemizedlist>
                    <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
                    </listitem>
@@ -352,11 +354,20 @@
 	          </listitem>
                 </itemizedlist>
                </para>
+                <graphic fileref="images/navigation-contextmenu.png"/>
+		<para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) while outside any graph element, and allows to navigate among the already visited subgraphs : 
+                <itemizedlist>
+                   <listitem><para><code>Back to previous</code> : this allows to return to the parent graph or the quotient graph pointing to the current subgraph,</para>
+                   </listitem>
+                   <listitem><para><code>Go to next</code> : this allows to return to the previously visited subgraph after viewing the current graph using <code>Back to previous</code>.</para>
+                   </listitem>
+                </itemizedlist>
+               </para>
         </sect2>
     </sect1>
    <sect1 id="New-3D-view"><title>New 3D View</title>
 	<para>
-		<para>A very useful tool in Tulip is the <code>View->New 3D View</code>. This tool will create a new window with the same name, and the same graph as before. But this window, is not a copy of the original one. It is just another view of the graph.</para>
+		<para>A very useful tool in Tulip is the <code>View->New 3D View</code>. This tool will create a new window with the same name, and the same graph as the one currently displayed. But this window doest not display a copy of the original one, it is just another view of the current graph.</para>
 		<para>For example, if you zoom in forward a node on the second window. nothing will change on the other one. But if you delete a node on the second window, it will be deleted in the original window.</para>
 		<graphic fileref="images/interface_new3d-view_ex.png" />
 	</para>
