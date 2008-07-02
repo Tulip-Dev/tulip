@@ -45,6 +45,9 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=================================================================================================
 void Cylinder::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
+
   if(GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

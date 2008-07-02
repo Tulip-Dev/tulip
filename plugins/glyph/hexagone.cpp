@@ -54,6 +54,9 @@ void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Hexagone::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
+
   if(GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagone")) {
     drawHexagone();
     GlDisplayListManager::getInst().endNewDisplayList();

@@ -53,6 +53,8 @@ void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Circle::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
   if(GlDisplayListManager::getInst().beginNewDisplayList("Circle_circle")) {
     drawCircle();
     GlDisplayListManager::getInst().endNewDisplayList();
@@ -62,6 +64,7 @@ void Circle::draw(node n) {
     GlDisplayListManager::getInst().endNewDisplayList();
   }
   setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+  setColor(glGraphInputData->elementColor->getNodeValue(n));
   string texFile = glGraphInputData->elementTexture->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();

@@ -41,6 +41,9 @@ CubeOutLinedTransparent::~CubeOutLinedTransparent() {
 }
 
 void CubeOutLinedTransparent::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
+
   if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLinedTransparent_cube")) {
     drawCubeSimple(GL_LINE_LOOP);
     GlDisplayListManager::getInst().endNewDisplayList();

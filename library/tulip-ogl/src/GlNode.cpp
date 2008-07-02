@@ -91,7 +91,7 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
       if (!data->elementSelected->getNodeValue(n)) {
-	setColor(fillColor);
+	setColor(strokeColor);
 	glPointSize(sqrt(lod));
 	glBegin(GL_POINTS);
 	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);

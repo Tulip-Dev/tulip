@@ -53,6 +53,9 @@ void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Pentagone::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
+
   if(GlDisplayListManager::getInst().beginNewDisplayList("Pentagone_pentagone")) {
     drawPentagone();
     GlDisplayListManager::getInst().endNewDisplayList();

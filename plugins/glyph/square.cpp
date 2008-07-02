@@ -47,6 +47,9 @@ Square::~Square() {
 }
 //=====================================================
 void Square::draw(node n) {
+  glEnable(GL_LIGHTING);
+  glDisable(GL_COLOR_MATERIAL);
+
   if(GlDisplayListManager::getInst().beginNewDisplayList("Square_square")) {
     drawSquare();
     GlDisplayListManager::getInst().endNewDisplayList();
