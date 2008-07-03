@@ -28,7 +28,7 @@ public:
   Cone(GlyphContext *gc=NULL);
   virtual ~Cone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
 private:
@@ -47,7 +47,7 @@ void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
   boundingBox.second=Coord(0.75,0.75,0.5);
 }
 //===========================================================
-void Cone::draw(node n) {
+void Cone::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

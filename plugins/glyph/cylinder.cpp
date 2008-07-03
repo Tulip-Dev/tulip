@@ -26,7 +26,7 @@ public:
   Cylinder(GlyphContext *gc=NULL);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
 private:
@@ -44,7 +44,7 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.second=Coord(0.85,0.85,1);
 }
 //=================================================================================================
-void Cylinder::draw(node n) {
+void Cylinder::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

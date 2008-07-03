@@ -36,7 +36,7 @@ public:
   virtual string getName() {
     return string("SquareBorder");
   }
-  virtual void  draw(node n);
+  virtual void  draw(node n,float lod);
   virtual Coord getAnchor(const Coord& vector) const;
   
 protected:
@@ -75,7 +75,7 @@ SquareBorder::~SquareBorder() {
       glDeleteLists(LList, 1);
 }
 //====================================================================
-void SquareBorder::draw(node n) {
+void SquareBorder::draw(node n,float lod) {
   tree = (*graph);
   borderProportion  = calculateBorderSize(n);
   Color borderColor = glGraph->elementColor->getNodeValue(n);

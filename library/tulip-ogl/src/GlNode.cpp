@@ -91,7 +91,7 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
       if (!data->elementSelected->getNodeValue(n)) {
-	setColor(strokeColor);
+	setColor(fillColor);
 	glPointSize(sqrt(lod));
 	glBegin(GL_POINTS);
 	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
@@ -111,7 +111,7 @@ namespace tlp {
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
       
-      data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n);
+      data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
       
       if (data->elementSelected->getNodeValue(n)) {
 	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);

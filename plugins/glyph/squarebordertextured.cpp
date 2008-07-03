@@ -58,7 +58,7 @@ class SquareBorderTextured: public Glyph, public GraphObserver {
 public:
     SquareBorderTextured(GlyphContext* gc = NULL);
     virtual ~SquareBorderTextured();
-    virtual void draw(node n);
+    virtual void draw(node n,float lod);
     virtual Coord getAnchor(const Coord& vector) const;
 
 protected:
@@ -195,7 +195,7 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
 }
 
 //====================================================================
-void SquareBorderTextured::draw(node n) {
+void SquareBorderTextured::draw(node n,float lod) {
   tree = glGraphInputData->getGraph();
   
   if (mapTree.find(tree) == mapTree.end())

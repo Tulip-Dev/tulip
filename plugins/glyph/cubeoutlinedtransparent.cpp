@@ -24,7 +24,7 @@ class CubeOutLinedTransparent : public Glyph {
 public:
   CubeOutLinedTransparent(GlyphContext *gc=NULL);
   virtual ~CubeOutLinedTransparent();
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord & vector) const;
 
 private:
@@ -40,7 +40,7 @@ CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc): Glyph(gc) {
 CubeOutLinedTransparent::~CubeOutLinedTransparent() {
 }
 
-void CubeOutLinedTransparent::draw(node n) {
+void CubeOutLinedTransparent::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

@@ -47,7 +47,7 @@ namespace tlp {
       boundingBox.first=Coord(0,0,0);
       boundingBox.second=Coord(1,1,1);
     }
-    virtual void draw(node)=0;
+    virtual void draw(node,float)=0;
     /*
      * return a point where an edge coming from "from" can be attached
      * by default, the point will be on the surface of the largest sphere contained

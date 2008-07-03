@@ -29,7 +29,7 @@ class Cube : public Glyph {
 public:
   Cube(GlyphContext *gc=NULL);
   virtual ~Cube();
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord & vector) const;
 
 protected:
@@ -52,7 +52,7 @@ Cube::~Cube() {
 }
 //=======================================================
 void
-Cube::draw(node n) {
+Cube::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

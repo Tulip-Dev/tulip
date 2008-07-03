@@ -32,7 +32,7 @@ public:
   Hexagone(GlyphContext *gc=NULL);
   virtual ~Hexagone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
 
 protected:
   void drawHexagone();
@@ -53,7 +53,7 @@ void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.second=Coord(0.85,0.85,1);
 }
 //=====================================================
-void Hexagone::draw(node n) {
+void Hexagone::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 
@@ -73,24 +73,28 @@ void Hexagone::draw(node n) {
   }
   
   GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagone");
-    
-  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
-  DoubleProperty *borderWidth = 0;
-  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
-    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+
   GlTextureManager::getInst().desactivateTexture();
-  Color c = borderColor->getNodeValue(n);
-  //  setMaterial(c);
-  if (borderWidth == 0) glLineWidth(2);
-  else {
-    double lineWidth = borderWidth->getNodeValue (n);
-    if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
-    else glLineWidth (lineWidth);
+    
+  if(lod>20) {
+    ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+    DoubleProperty *borderWidth = 0;
+    if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+      borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+    
+    Color c = borderColor->getNodeValue(n);
+    //  setMaterial(c);
+    if (borderWidth == 0) glLineWidth(2);
+    else {
+      double lineWidth = borderWidth->getNodeValue (n);
+      if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
+      else glLineWidth (lineWidth);
+    }
+    glDisable(GL_LIGHTING);
+    glColor4ub(c[0],c[1],c[2],c[3]);
+    GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagoneborder");
+    glEnable(GL_LIGHTING);
   }
-  glDisable(GL_LIGHTING);
-  glColor4ub(c[0],c[1],c[2],c[3]);
-  GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagoneborder");
-  glEnable(GL_LIGHTING);
 }
 //=====================================================
 void Hexagone::drawHexagone() {

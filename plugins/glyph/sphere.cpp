@@ -28,7 +28,7 @@ public:
   Sphere(GlyphContext *gc=NULL);
   virtual ~Sphere();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
 
 private:
 };
@@ -47,7 +47,7 @@ void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.second=Coord(0.85,0.85,0.85);
 }
 //=====================================================
-void Sphere::draw(node n) {
+void Sphere::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

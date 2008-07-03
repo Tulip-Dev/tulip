@@ -29,7 +29,7 @@ class HalfCylinder : public Glyph {
 public:
   HalfCylinder(GlyphContext *gc=NULL);
   virtual ~HalfCylinder();
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
 private:
@@ -43,7 +43,7 @@ HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc) {
 HalfCylinder::~HalfCylinder() {
 }
 //=================================================================================================
-void HalfCylinder::draw(node n) {
+void HalfCylinder::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 

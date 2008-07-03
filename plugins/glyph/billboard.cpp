@@ -32,7 +32,7 @@ class Billboard : public Glyph {
 public:
   Billboard(GlyphContext *gc=NULL);
   virtual ~Billboard();
-  virtual void draw(node n);
+  virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
 protected:
@@ -48,7 +48,7 @@ Billboard::Billboard(GlyphContext *gc): Glyph(gc){
 Billboard::~Billboard() {
 }
 //========================================================
-void Billboard::draw(node n) {
+void Billboard::draw(node n,float lod) {
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
 
