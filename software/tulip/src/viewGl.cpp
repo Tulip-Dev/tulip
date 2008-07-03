@@ -1733,7 +1733,7 @@ void viewGl::showDialog(QAction* action){
     overviewDock->raise();
   }
   if (name=="&Layer Manager") {
-    layerWidget->show();
+    layerWidget->exec();
   }
   if (name=="&Rendering Parameters" && glWidget != 0) {
     overviewWidget->showRenderingParametersDialog();
