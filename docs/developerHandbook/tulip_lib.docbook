@@ -170,9 +170,9 @@ set of functions is accessible through the graph interface.
     <itemizedlist>
     <title>List of available operations</title>
     <listitem><para><methodname>Iterator * getLocalProperties()</methodname> : returns an iterator on all properties of this graph.</para></listitem>
-    <listitem><para><methodname>void delLocalProperty(std::string)</methodname> : deletes a property.</para></listitem>
-    <listitem><para><methodname>bool existLocalProperty(std::string)</methodname> : returns true if the property exists.</para></listitem>
-    <listitem><para><methodname>PropertyType * getLocalProperty (std::string)</methodname> : returns the property. 
+    <listitem><para><methodname>void delLocalProperty(const std::string&amp;)</methodname> : deletes a property.</para></listitem>
+    <listitem><para><methodname>bool existLocalProperty(const std::string&amp;)</methodname> : returns true if the property exists.</para></listitem>
+    <listitem><para><methodname>PropertyType * getLocalProperty (const std::string&amp;)</methodname> : returns the property. 
     If it did not exist, creates it first </para></listitem>
     </itemizedlist>
     </para>
@@ -183,8 +183,8 @@ In order to facilitate the navigation/edition of properties, a set of function i
     <itemizedlist>
     <title>List of available operations</title>
     <listitem><para><methodname>Iterators * getInheritedProperties()</methodname> : returns an iterator on all properties (both inherited and local).</para></listitem>
-    <listitem><para><methodname>bool existProperty(std::string)</methodname> : returns true if the property exists (inherited or local).</para></listitem>
-    <listitem><para><methodname>PropertyType * getProperty(std::string)</methodname> : returns the property (inherited or local). 
+    <listitem><para><methodname>bool existProperty(const std::string&amp;)</methodname> : returns true if the property exists (inherited or local).</para></listitem>
+    <listitem><para><methodname>PropertyType * getProperty(const std::string&amp;)</methodname> : returns the property (inherited or local). 
     If it did not exist, creates it first (locally)</para></listitem>
     </itemizedlist>
     </para>
@@ -1410,11 +1410,6 @@ int main() {
      		<para>Each class of graph has its own header file. Following is a list of those header files and an example of their use :</para>
      		<itemizedlist>
      			<listitem>
-     				tulip/TreeTest.h
-     				<programlisting> <![CDATA[ TreeTest::isTree(graph);]]>
-        	    		</programlisting>
-     			</listitem>
-     			<listitem>
      				tulip/AcyclicTest.h
      				<programlisting> <![CDATA[AcyclicTest::isAcyclic(graph);]]>
         	    		</programlisting>
@@ -1425,13 +1420,13 @@ int main() {
         	    		</programlisting>
      			</listitem>
      			<listitem>
-     				tulip/TriconnectedTest.h
-     				<programlisting> <![CDATA[TriconnectedTest::isTriconnected(graph);]]>
+     				tulip/ConnectedTest.h
+     				<programlisting> <![CDATA[ConnectedTest::isConnected(graph);]]>
         	    		</programlisting>
      			</listitem>
      			<listitem>
-     				tulip/SimpleTest.h
-     				<programlisting> <![CDATA[SimpleTest::isSimple(graph);]]>
+     				tulip/OuterPlanarTest.h
+     				<programlisting> <![CDATA[PlanarityTest::isOuterPlanar(graph);]]>
         	    		</programlisting>
      			</listitem>
      			<listitem>
@@ -1440,8 +1435,18 @@ int main() {
         	    		</programlisting>
      			</listitem>
      			<listitem>
-     				tulip/ConnectedTest.h
-     				<programlisting> <![CDATA[ConnectedTest::isConnected(graph);]]>
+     				tulip/SimpleTest.h
+     				<programlisting> <![CDATA[SimpleTest::isSimple(graph);]]>
+        	    		</programlisting>
+     			</listitem>
+     			<listitem>
+     				tulip/TreeTest.h
+     				<programlisting> <![CDATA[ TreeTest::isTree(graph);]]>
+        	    		</programlisting>
+     			</listitem>
+     			<listitem>
+     				tulip/TriconnectedTest.h
+     				<programlisting> <![CDATA[TriconnectedTest::isTriconnected(graph);]]>
         	    		</programlisting>
      			</listitem>
      		</itemizedlist>

@@ -104,7 +104,7 @@
 	    	    	</para>
 	    		<itemizedlist>
 	    			<listitem>
-	    				<methodname>PropertyAlgorithm (const PropertyContext context)</methodname> :  
+	    				<methodname>PropertyAlgorithm (const PropertyContext&amp; context)</methodname> :  
 	    					<para>The constructor is the right place to declare the parameters needed by the algorithm.</para>
 	    					<para><code> addParameter&lt;DoubleProperty&gt;("metric", paramHelp[0], 0, false);</code></para>
 	    					<para> And to declare the algorithm dependencies.</para> <para><code>addDependency&lt;Algorithm&gt;("Quotient Clustering", "1.0");</code></para>
@@ -119,7 +119,7 @@
 					<para> The returned value must be true if your algorithm succeeded.</para>
 	    			</listitem>
 	    			<listitem>
-	    				<methodname>bool check (std::string)</methodname> : <para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
+	    				<methodname>bool check (std::string&amp; errMsg)</methodname> : <para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
 	    			</listitem>
 	    		</itemizedlist>
 	    	</sect3>
@@ -163,7 +163,8 @@
 	    		</itemizedlist>
 	    		<para>On the following example, we declare a character buffer that will contain the documentation of our parameters. </para>
 	    		<programlisting role="C">
- <![CDATA[namespace {
+ <![CDATA[
+namespace {
   const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
@@ -211,7 +212,8 @@
     	    		</programlisting>
     	    		<para>Then, we can add the parameters in the constructor by writing the following lines:</para>
     	    		<programlisting role="C">
- <![CDATA[    addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
+ <![CDATA[
+    addParameter<DoubleProperty>("property",paramHelp[0],"viewMetric");
     addParameter<int>("colormodel",paramHelp[1],"1");
     addParameter<bool>("type",paramHelp[4],"true");
     addParameter<Color>("color1",paramHelp[2],"(255,255,0,128)");
@@ -225,19 +227,19 @@
 	    	<para>The class PropertyAlgorithm has a protected member called <emphasis>dataSet</emphasis> that contains all the parameters value.The DataSet class implements a container which allows insertion of values of different types and implements the following methods :</para>
     		<itemizedlist>
     			<listitem>
-    				<methodname>template&lt;typename T&gt; bool get (const std::string name, T value) const</methodname> :  
+    				<methodname>template&lt;typename T&gt; bool get (const std::string&amp; name, T value) const</methodname> :  
     					<para>Returns a copy of the value of the variable with name name. If the variable name doesn't exist return false else true. </para>				
     			</listitem>
     			<listitem>
-    				<methodname>template&lt;typename T&gt; bool getAndFree (const std::string name, T value)</methodname> :
+    				<methodname>template&lt;typename T&gt; bool getAndFree (const std::string&amp; name, T value)</methodname> :
     				<para> Returns a copy of the value of the variable with name name. If the variable name doesn't exist return false else true. The data is removed after the call. </para> 
     			</listitem>
     			<listitem>
-    				<methodname>template&lt;typename T&gt; void set (const std::string name, const T value)</methodname> :
+    				<methodname>template&lt;typename T&gt; void set (const std::string&amp; name, const T value)</methodname> :
     				<para>Set the value of the variable name.</para>
     			</listitem>
     			<listitem>
-    			    	<methodname>bool exist (const std::string name) const</methodname> :
+    			    	<methodname>bool exist (const std::string&amp; name) const</methodname> :
     				<para>Returns true if name exists else false.</para>
     			</listitem>
     			<listitem>
@@ -247,19 +249,20 @@
     		</itemizedlist>
     	    	<para>Has you could have guess, the one important to access a parameter is get() which allows to access to a specific parameter. Following is an example of its use :</para>
     	    	<programlisting role="C">
- <![CDATA[  DoubleProperty* metricS;
+ <![CDATA[
+  DoubleProperty* metricS;
   int colorModel;
   Color color1;
   Color color2;
   bool mappingType = true;
   
   if ( dataSet!=0 ) {
-      dataSet->get("property", metricS);
-      dataSet->get("colormodel", colorModel);
-      dataSet->get("color1", color1);
-      dataSet->get("color2", color2);
-      dataSet->get("type", mappingType);
-    }]]>
+    dataSet->get("property", metricS);
+    dataSet->get("colormodel", colorModel);
+    dataSet->get("color1", color1);
+    dataSet->get("color2", color2);
+    dataSet->get("type", mappingType);
+  }]]>
     	    	</programlisting>
     	      </sect3>
 	</sect2>
@@ -314,7 +317,8 @@
     	    	<sect3 id="exemple-pluginprogress"><title>PluginProgress example</title>
     	    		<para>In following small example, we will iterate over all nodes and notify the user of the progression. </para>
     	    		<programlisting role="C">
- <![CDATA[  unsigned int i=0;
+ <![CDATA[
+  unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
   
   const unsigned int STEP = 10;
@@ -347,7 +351,8 @@
     		<para>Following is an example of a dummy color algorithm ( you can find more example in the tulip tarball ):</para>
 
    	    		<programlisting role="C">
- <![CDATA[#include <tulip/TulipPlugin.h>
+ <![CDATA[
+#include <tulip/TulipPlugin.h>
 #include <string>
 
 using namespace std;
@@ -367,7 +372,7 @@ public:
   // addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   // and declare the algorithm dependencies too.
   // addDependency<Algorithm>("Quotient Clustering", "1.0");
-  MyColorAlgorithm(PropertyContext context):ColorAlgorithm(context) {
+  MyColorAlgorithm(PropertyContext& context):ColorAlgorithm(context) {
   }
 
   // Define the destructor only if needed 
@@ -377,7 +382,7 @@ public:
   // Define the check method only if needed.
   // It can be used to check topological properties of the graph,
   // metric properties on graph elements or anything else you need.
-  // bool check(string &errorMsg) {
+  // bool check(string& errorMsg) {
   //   errorMsg="";
   //   return true;
   // }
