@@ -104,7 +104,9 @@
             					</listitem>
             					<listitem> <code>Tri-connected </code> : <para>If it is always possible to establish a path from any node to an other one even after removing any 2 nodes, then the graph is said to be Tri-connected. </para><para>For more information please visit : <ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
             					</listitem>
-            					<listitem> <code>Planar </code>: A  graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. <para>  <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
+            					<listitem> <code>Planar </code>: A graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. <para>  <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
+            					</listitem>
+            					<listitem> <code>Outer Planar </code>: A graph is said to be outer planar if it has an embedding in the plane such that its nodes lie on a fixed circle and its edges lie inside the disk without any crossing. <para>  <ulink url="http://en.wikipedia.org/wiki/Planar_graph#Outerplanar_graphs">Wikipedia : Outerplanar Graphs</ulink></para>
             					</listitem>
             				</itemizedlist>
             			</listitem>
