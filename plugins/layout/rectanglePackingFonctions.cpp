@@ -1,4 +1,5 @@
 #include "rectanglePackingFonctions.h"
+#include <stdlib.h>
 
 vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<float> > & v, const char * quality, PluginProgress * progress){
 

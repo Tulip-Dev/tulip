@@ -1,18 +1,9 @@
-//-*-c++-*-
-/**
- Author: David Auber
- Email : auber@labri.fr
- Last modification : 20/08/2001
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
- (at your option) any later version.
-*/
 #include <fstream>
 #include <string>
 #include <errno.h>
 #include <locale.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #if (__GNUC__ < 3)
 #include <hash_map>

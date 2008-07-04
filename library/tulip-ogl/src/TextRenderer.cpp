@@ -11,6 +11,7 @@
 #include <iostream>
 #include <cassert>
 #include <stack>
+#include <string.h>
 
 using namespace std;
 using namespace tlp;
@@ -27,7 +28,7 @@ const int DEFAULT_SIZE = 20;
 
 const string FONT_FILE(tlp::TulipLibDir + "tlp/bitmaps/" + "font.ttf");
 
-typedef struct Cell{
+struct Cell{
   bool new_context;  // si vrai : ordonne un dépilement de contexte du Document courant
   xmlNodePtr pt; // contient le noeud à traiter de l'arbre
 };

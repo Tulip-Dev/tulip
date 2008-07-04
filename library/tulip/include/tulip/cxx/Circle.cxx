@@ -1,3 +1,4 @@
+#include <stdlib.h>
 
 template<typename Obj>
 tlp::Circle<Obj> & tlp::Circle<Obj>::merge(const tlp::Circle<Obj> &c) {
