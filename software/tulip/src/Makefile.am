@@ -62,6 +62,6 @@ if MACOSX
 install-data-am :
 	if test ! -d  $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app; then \
 		mkdir -p $(exec_prefix)/bin/tulip.app/Contents/ ;\
-		ln -s @QTDIR@/bin/@QT_ASSISTANT@.app $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app ;\
+		ln -s @QT_ASSISTANT_DIR@/@QT_ASSISTANT@.app $(exec_prefix)/bin/tulip.app/Contents/@QT_ASSISTANT@.app ;\
 	fi;
 endif
