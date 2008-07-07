@@ -274,7 +274,8 @@ namespace tlp {
     //================================
 
     glDisable(GL_CULL_FACE);
-   
+    glDepthFunc(GL_LESS);
+
     if (edge3D)
       shape |= L3D_BIT;
     if (shape & L3D_BIT) {
@@ -293,7 +294,7 @@ namespace tlp {
 
     switch (shape) {
     case POLYLINESHAPE:
-      if (drawPoly && (lod>0.5 || lod<-0.5)) {
+      if (drawPoly && (lod>0.05 || lod<-0.05)) {
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       }
       if (drawLine) {
@@ -301,13 +302,13 @@ namespace tlp {
       }
       break;
     case BEZIERSHAPE:
-      if (drawPoly && (lod>0.5 || lod<-0.5))
+      if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::bezierLine(tmp, startColor, endColor);
       break;
     case SPLINESHAPE:
-      if (drawPoly && (lod>0.5 || lod<-0.5))
+      if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::splineLine(tmp, startColor, endColor);
@@ -325,7 +326,7 @@ namespace tlp {
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,
 			       GlLines::SPLINE3, startColor, endColor); break;
     default:
-      if (drawPoly && (lod>0.5 || lod<-0.5))
+      if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       if (drawLine) 
 	tlp::polyLine(tmp,startColor,endColor);
