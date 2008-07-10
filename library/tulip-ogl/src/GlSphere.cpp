@@ -24,6 +24,9 @@ namespace tlp {
 
   void GlSphere::draw(float lod, Camera *camera){
 
+    glEnable(GL_LIGHTING);
+    glDisable(GL_COLOR_MATERIAL);
+
     glPushMatrix();
     glTranslatef(position[0],position[1],position[2]);
     glRotatef(rot[0],1,0,0);
