@@ -587,6 +587,9 @@ void viewGl::windowActivated(QWidget *w) {
     glWidget=((viewGlWidget *)w);
     glWidget->resetInteractors(*currentInteractors);
     changeGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
+    // Grid widget
+    if(gridOptionsWidget)
+      gridOptionsWidget->ActivatedCB->setChecked(glWidget->getScene()->getLayer("Main")->findGlEntity("Layout Grid")!=NULL);
   }
 }
 //**********************************************************************
