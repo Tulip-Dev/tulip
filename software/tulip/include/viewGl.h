@@ -49,7 +49,6 @@ class QEvent;
 class View3DSetup;
 class Cluster;
 class GWOverviewWidget;
-class LayerManagerWidget;
 
 // a class to handle additional infos
 // associated to GlMainWidget objects
@@ -90,7 +89,6 @@ protected:
   tlp::TulipStats *statsWidget;
 #endif
   GWOverviewWidget *overviewWidget;
-  LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
   QDockWidget *overviewDock;
   QDockWidget *tabWidgetDock;

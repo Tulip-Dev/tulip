@@ -32,24 +32,6 @@ private :
   GlMainWidget * _view;
 };
 
-RenderingParametersDialog::RenderingParametersDialog(GWOverviewWidget* parent) : QDialog(parent->parentWidget()) {
-    setupUi(this);
-    overview = parent;
-}
-
-void RenderingParametersDialog::windowActivationChange(bool oldActive) {
-    if (!oldActive)
-      buttonClose->setFocus();
-}
-
-void RenderingParametersDialog::updateView() {
-    overview->updateView();
-}
-
-void RenderingParametersDialog::backColor() {
-    overview->backColor();
-}
-
 //=============================================================================
 GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   setupUi(this);

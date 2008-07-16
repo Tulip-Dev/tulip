@@ -3,7 +3,7 @@
 #define GWOVERVIEW_H
 
 #include "tulip/GWOverviewWidgetData.h"
-#include "tulip/RenderingParametersDialogData.h"
+#include "tulip/RenderingParametersDialog.h"
 #include <tulip/Camera.h>
 #include <QtGui/qcolor.h>
 #include <string>
@@ -14,19 +14,6 @@ class GlMainWidget;
 class QEvent;
 class RectPosition;
 class GWOverviewWidget;
-
-class RenderingParametersDialog : public QDialog,
-				  public Ui::RenderingParametersDialogData {
-  Q_OBJECT
-
-  GWOverviewWidget *overview;
-public:
-  RenderingParametersDialog(GWOverviewWidget* parent);
-  void windowActivationChange(bool oldActive);
-public slots:
-  void updateView();
-  void backColor();
-};
 
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
@@ -39,6 +26,8 @@ public:
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();
+
+  tlp::RenderingParametersDialog* paramDialog;				 
 
 public slots:
   void syncFromView();
@@ -61,7 +50,6 @@ private :
   bool _synchronizing;
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
-  RenderingParametersDialog* paramDialog;
   void setBackgroundColor(QColor);
 };
 /*@}*/

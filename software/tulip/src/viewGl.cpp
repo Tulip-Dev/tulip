@@ -70,7 +70,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/GWInteractor.h>
 #include <tulip/GWOverviewWidget.h>
-#include <tulip/LayerManagerWidget.h>
+#include <tulip/RenderingParametersDialog.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelectionEditor.h>
 #include <tulip/MouseEdgeBendEditor.h>
@@ -175,9 +175,6 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   //MDI
   workspace->setScrollBarsEnabled( true );
   connect (workspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
-
-  //Create layer widget
-  layerWidget = new LayerManagerWidget(parent);
 
   //Create Data information editor (Hierarchy, Element info, Property Info)
   tabWidgetDock = new QDockWidget("Data manipulation", this);
@@ -416,12 +413,12 @@ void  viewGl::destroy (Graph *) {
 // GlSceneObserver interface
 void viewGl::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
   if(glWidget->getScene()==scene)
-    layerWidget->addLayer(scene,name,layer);
+    overviewWidget->paramDialog->addLayer(scene,name,layer);
 }
 void viewGl::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
   //cout << "modify layer" << endl;
   if(glWidget->getScene()==scene)
-    layerWidget->updateLayer(name,layer);
+    overviewWidget->paramDialog->updateLayer(name,layer);
 }
 
 //**********************************************************************
@@ -533,7 +530,7 @@ void viewGl::changeGraph(Graph *graph) {
   clusterTreeWidget->setGraph(graph);
   eltProperties->setGraph(graph);
   overviewWidget->setObservedView(glWidget);
-  layerWidget->attachMainWidget(glWidget);
+  overviewWidget->paramDialog->attachMainWidget(glWidget);
 #ifdef STATS_UI
   statsWidget->setGlMainWidget(glWidget);
 #endif
@@ -603,7 +600,7 @@ viewGlWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //Create 3D graph view
   viewGlWidget *glWidget = new viewGlWidget(workspace, name.toAscii().data());
   glWidget->getScene()->addObserver(this);
-  layerWidget->attachMainWidget(glWidget);
+  overviewWidget->paramDialog->attachMainWidget(glWidget);
   //GlMainWidget *glWidget = new GlMainWidget();
   workspace->addWindow(glWidget);
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -1308,7 +1305,6 @@ void viewGl::buildMenus() {
   //Windows
   dialogMenu->addAction("3D &Overview");
   dialogMenu->addAction("&Info Editor");
-  dialogMenu->addAction("&Layer Manager");
   renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
   renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
   //==============================================================
@@ -1731,9 +1727,6 @@ void viewGl::showDialog(QAction* action){
   if (name=="3D &Overview") {
     overviewDock->show();
     overviewDock->raise();
-  }
-  if (name=="&Layer Manager") {
-    layerWidget->exec();
   }
   if (name=="&Rendering Parameters" && glWidget != 0) {
     overviewWidget->showRenderingParametersDialog();
@@ -2240,7 +2233,7 @@ void viewGl::gridOptions() {
   if (gridOptionsWidget == 0)
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentMainWidget(glWidget);
-  gridOptionsWidget->setCurrentLayerManagerWidget(layerWidget);
+  gridOptionsWidget->setCurrentLayerManagerWidget(overviewWidget->paramDialog);
   gridOptionsWidget->show();
 }
 //**********************************************************************
