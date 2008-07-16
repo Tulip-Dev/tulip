@@ -2233,7 +2233,7 @@ void viewGl::gridOptions() {
   if (gridOptionsWidget == 0)
     gridOptionsWidget = new GridOptionsWidget(this);
   gridOptionsWidget->setCurrentMainWidget(glWidget);
-  gridOptionsWidget->setCurrentLayerManagerWidget(overviewWidget->paramDialog);
+  gridOptionsWidget->setCurrentRenderingParametersDialog(overviewWidget->paramDialog);
   gridOptionsWidget->show();
 }
 //**********************************************************************
