@@ -57,8 +57,11 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
     Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
+    //cout << "include scale : " << includeScale << endl;
     Coord size=(maxC + minC)/-1.;
     Coord translate=(maxC+minC)/-2 - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2) +(maxC-minC)*includeScale ;
+    //cout << "translate : " << translate << endl;
+    //cout << "nodeCoord : " << nodeCoord << endl;
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
@@ -66,12 +69,6 @@ namespace tlp {
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
     Coord scale(1/width,1/height,1/dept);
-
-    Camera newCamera=*camera;
-    newCamera.addObjectTransformation(nodeCoord+translate,nodeSize*scale);
-
-    Coord bbScale, bbTranslate;
-    newCamera.getObjectTransformation(bbTranslate,bbScale);
 
     vector<GlNode> nodes;
     vector<GlMetaNode> metaNodes;
@@ -96,18 +93,36 @@ namespace tlp {
       delete itE;
     }
 
+    Camera *activeCamera;
+
+    vector<Coord> objectScale, objectTranslate, objectCoord;
+    if(metaNodes.size()>0) {
+      activeCamera=new Camera(*camera);
+      activeCamera->addObjectTransformation(nodeCoord+translate,nodeSize*scale,nodeCoord);
+      activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
+    }else{
+      activeCamera=camera;
+      activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
+      objectTranslate.push_back(nodeCoord+translate);
+      objectScale.push_back(nodeSize*scale);
+      objectCoord.push_back(nodeCoord);
+    }
+
+
     GlCPULODCalculator calculator;
 
-    calculator.beginNewCamera(&newCamera);
+    calculator.beginNewCamera(activeCamera);
 
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
       BoundingBox bb = (*it).getBoundingBox(&metaData);
-      Coord size=bb.second-bb.first;
+      Coord size=(bb.second-bb.first);
       Coord middle=bb.first+size/2;
 
-      middle+=bbTranslate;
-      middle=nodeCoord - ((nodeCoord-middle)*bbScale);
-      size=(size*bbScale)/2;
+      for(int i=objectScale.size()-1; i>=0;--i) {
+	middle+=objectTranslate[i];
+	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
+	size*=objectScale[i];
+      }
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
@@ -119,14 +134,16 @@ namespace tlp {
       Coord size=bb.second-bb.first;
       Coord middle=bb.first+size/2;
 
-      middle+=bbTranslate;
-      middle=nodeCoord - ((nodeCoord-middle)*bbScale);
-      size=(size*bbScale)/2;
+      for(int i=objectScale.size()-1; i>=0;--i) {
+	middle+=objectTranslate[i];
+	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
+	size*=objectScale[i];
+      }
       
       bb.first=middle-size/2;
       bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
-    }
+      }
 
     if (metaData.parameters->isDisplayEdges()) {
       for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
@@ -134,9 +151,11 @@ namespace tlp {
 	Coord size=bb.second-bb.first;
 	Coord middle=bb.first+(size)/2;
 	
-	middle+=bbTranslate;
-	middle=nodeCoord - ((nodeCoord-middle)*bbScale);
-	size=(size*bbScale)/2;
+	for(int i=objectScale.size()-1; i>=0;--i) {
+	  middle+=objectTranslate[i];
+	  middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
+	  size*=objectScale[i];
+	}
 	
 	bb.first=middle-size/2;
 	bb.second=middle+size/2;
@@ -154,12 +173,15 @@ namespace tlp {
     
     for(LODResultVector::iterator it=result->begin();it!=result->end();++it) {
       for(std::vector<LODResultEntity>::iterator itM=(*it).second.begin();itM!=(*it).second.end();++itM) {
-	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,&newCamera);
+	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,activeCamera);
       }
     }
 
     glPopMatrix();
     glPopMatrix();
+
+    if(metaNodes.size()>0)
+      delete activeCamera;
 
     GlNode::draw(lod,data,camera);
   }

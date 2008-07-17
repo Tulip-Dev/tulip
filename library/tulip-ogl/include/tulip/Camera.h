@@ -141,13 +141,13 @@ namespace tlp {
      * Set translate/scale transformation of object 
      * It use to compute lod of nodes/edges in metanodes
      */
-    void addObjectTransformation(const Coord &translation,const Coord &scale);
+    void addObjectTransformation(const Coord &translation,const Coord &scale, const Coord &baseCoord);
 
     /**
      * Get translate/scale transformation of object 
      * It use to compute lod of nodes/edges in metanodes
      */
-    void getObjectTransformation(Coord &translation, Coord &scale);
+    void getObjectTransformation(std::vector<Coord> &translation, std::vector<Coord> &scale, std::vector<Coord> &objectCoord);
 
     /**
      * Return true if object transformation is set
@@ -213,8 +213,9 @@ namespace tlp {
     Matrix<float, 4> projectionMatrix;
     Matrix<float, 4> transformMatrix;
 
-    Coord objectTranslation;
-    Coord objectScale;
+    std::vector<Coord> objectTranslation;
+    std::vector<Coord> objectScale;
+    std::vector<Coord> objectCoord;
     bool objectTransformation;
 
     bool d3;
