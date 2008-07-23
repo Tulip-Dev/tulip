@@ -22,7 +22,8 @@ libSpreadSheet_@VERSION@_la_SOURCES = \
 			SpreadCalculator.h \
 			SpreadValue.h \
 			SpreadItemDelegate.h \
-			SpreadCommands.h
+			SpreadCommands.h \
+			SpreadLineEdit.h
 
 nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
 			moc_SpreadWidget.cpp \
@@ -31,10 +32,13 @@ nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
 			moc_SpreadCalculator.cpp \
 			moc_SpreadValue.cpp \
 			moc_SpreadItemDelegate.cpp \
-			moc_SpreadCommands.cpp
+			moc_SpreadCommands.cpp \
+			moc_SpreadLineEdit.cpp
 
 BUILT_SOURCES = \
-			SpreadInsertColumnDialogData.h
+			SpreadInsertColumnDialogData.h\
+			SpreadMainWidgetData.h
+
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

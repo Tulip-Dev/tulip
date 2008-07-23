@@ -111,7 +111,8 @@ namespace tlp {
       EdgesView
     };
 
-    SpreadTable(View, QWidget* = 0);
+    SpreadTable(QWidget* = 0);
+    void setView(View view);
 
     //*************************************************************************************************
     void setGraph(Graph *graph);

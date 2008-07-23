@@ -16,19 +16,23 @@ namespace tlp {
 
   SpreadWidget::SpreadWidget(QWidget *parent) :
     View(parent),currentCell(NULL),editingLine(false),nodeTab(true) {
-    vboxLayout = new QVBoxLayout(this);
+    setupUi(this);
+    spreadNodesTable->setView(SpreadTable::NodesView);
+    spreadEdgesTable->setView(SpreadTable::EdgesView);
+    /*vboxLayout = new QVBoxLayout(this);
+    setCentralWidget(vboxLayout);
     vboxLayout->setContentsMargins(0, 0, 0, 0);
-    lineEdit = new SpreadLineEdit(this);
+    lineEdit = new SpreadLineEdit();
     vboxLayout->addWidget(lineEdit);
-    tabWidget = new QTabWidget(this);
-    spreadNodesTable = new SpreadTable(SpreadTable::NodesView,this);
+    tabWidget = new QTabWidget();
+    spreadNodesTable = new SpreadTable(SpreadTable::NodesView);
     spreadNodesTable->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    spreadEdgesTable = new SpreadTable(SpreadTable::EdgesView,this);
+    spreadEdgesTable = new SpreadTable(SpreadTable::EdgesView);
     spreadEdgesTable->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     vboxLayout->addWidget(tabWidget);
     tabWidget->addTab(spreadNodesTable,"Nodes");
     tabWidget->addTab(spreadEdgesTable,"Edges");
-    //connect(spreadTable, SIGNAL(cellPressed(int,int)), this, SLOT(cellPressedSlot(int,int)));
+    //connect(spreadTable, SIGNAL(cellPressed(int,int)), this, SLOT(cellPressedSlot(int,int)));*/
     connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(returnPressedSlot()));
     connect(lineEdit, SIGNAL(widgetActivate()), this, SLOT(beginEditLineSlot()));
     connect(spreadNodesTable, SIGNAL(mouseReleasedSignal(SpreadTable*)), this, SLOT(tableMouseReleasedSlot(SpreadTable*)));

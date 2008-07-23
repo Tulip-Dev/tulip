@@ -1,0 +1,69 @@
+<ui version="4.0" >
+ <class>SpreadMainWidgetData</class>
+ <widget class="QMainWindow" name="SpreadMainWidgetData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QHBoxLayout" >
+    <item>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="tlp::SpreadLineEdit" name="lineEdit" />
+      </item>
+      <item>
+       <widget class="QTabWidget" name="tabWidget" >
+        <property name="currentIndex" >
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="tab" >
+         <attribute name="title" >
+          <string>Nodes</string>
+         </attribute>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="tlp::SpreadTable" name="spreadNodesTable" />
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2" >
+         <attribute name="title" >
+          <string>Edges</string>
+         </attribute>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="tlp::SpreadTable" name="spreadEdgesTable" />
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::SpreadLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="local" >SpreadLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>tlp::SpreadTable</class>
+   <extends>QTableView</extends>
+   <header location="local" >SpreadTable.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

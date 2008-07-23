@@ -52,8 +52,8 @@ namespace tlp {
     isClicked=false;
   }
 
-  SpreadTable::SpreadTable(View view,QWidget *parent)
-    : QTableWidget(parent),view(view),selectZone(NULL),verticalBufferBegin(0) {
+  SpreadTable::SpreadTable(QWidget *parent)
+    : QTableWidget(parent),selectZone(NULL),verticalBufferBegin(0) {
     undoStack = new QUndoStack(this);
     setSelectionMode(QAbstractItemView::ContiguousSelection);
     setItemPrototype(new SpreadCell);
@@ -64,6 +64,10 @@ namespace tlp {
     connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(someThingChanged()));
     connect(this, SIGNAL(userChangedItemDataSignal(int, int, QString&, QString&)), this, SLOT(userChangedItemDataSlot(int, int, QString&, QString&)));
     //connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(verticalScroll(int)));
+  }
+
+  void SpreadTable::setView(View view) {
+    this->view=view;
   }
 
   ///===================================================================
