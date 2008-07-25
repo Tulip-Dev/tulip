@@ -132,7 +132,7 @@ void cube(GLenum type) {
     glRotatef(data->elementRotation->getNodeValue(nodeId), 0., 0., 1.);
     glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
     
-    data->glyphs.get(data->elementShape->getNodeValue(nodeId))->draw(nodeId);
+    data->glyphs.get(data->elementShape->getNodeValue(nodeId))->draw(nodeId,lod);
     
     if (data->elementSelected->getNodeValue(nodeId)) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
