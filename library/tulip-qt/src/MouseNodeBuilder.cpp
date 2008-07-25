@@ -22,7 +22,6 @@ using namespace std;
 INTERACTORPLUGIN(MouseNodeBuilder, "MouseNodeBuilder", "Tulip Team", "16/04/2008", "Mouse Node Builder", "1.0", 11);
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
-  cout << "Node builder event filter" << endl;
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     if (qMouseEv->button() == Qt::LeftButton) {
@@ -30,16 +29,13 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
       Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
-      //  Colors* mColors=_graph->getProperty<ColorProperty>("viewColor");
       node newNode;
       newNode = _graph->addNode();
-      //if (isViewStrahler()) orderedNode.push_front(newNode);
       Coord point((double) glw->width() - (double) qMouseEv->x(),
 		  (double) qMouseEv->y(),
 		  0);
       point = glw->getScene()->getCamera()->screenTo3DWorld(point);
       mLayout->setNodeValue(newNode, point);
-      //      mColors->setNodeValue(newNode,((Application *)qApp)->nodeColor);
       glw->redraw();
       return true;
     }
