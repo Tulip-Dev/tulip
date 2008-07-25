@@ -439,9 +439,10 @@ namespace tlp {
     return ss.str();
   }
   //==================================================
-  void GlMainView::showElementProperties(unsigned int eltId, bool isNode) {
+  /*void GlMainView::showElementProperties(unsigned int eltId, bool isNode) {
+    cout << "GlMainView::showElementProperties" << endl;
     emit showElementPropertiesSignal(eltId, isNode);
-  }
+    }*/
   //==================================================
   // GlSceneObserver interface
   void GlMainView::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {

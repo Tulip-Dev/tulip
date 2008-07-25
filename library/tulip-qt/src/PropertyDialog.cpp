@@ -48,7 +48,6 @@ namespace tlp {
     : QWidget(parent) {
     setupUi(this);
     _filterSelection=false;
-    //glWidget=0;
     graph=0;
     connect(localProperties, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), SLOT(changePropertyName(QListWidgetItem *, QListWidgetItem *)));
     connect(inheritedProperties, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), SLOT(changePropertyName(QListWidgetItem *, QListWidgetItem *)));
@@ -112,18 +111,11 @@ namespace tlp {
   }
   //=================================================
   void PropertyDialog::setGraph(Graph *graph) {
-    cout << "PropertyDialog::setGraph" << endl;
-    /*glWidget = gw;
-    Graph* sg = NULL;
-    if (gw)
-    sg = gw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-    graph=sg;*/
     this->graph=graph;
     editedProperty=0;
 
     localProperties->clear();
     inheritedProperties->clear();
-    //propertyName->setText(QString("Select a Property"));
     //Build the property list
     tableNodes->selectNodeOrEdge(true);
     tableEdges->selectNodeOrEdge(false);
@@ -169,7 +161,7 @@ namespace tlp {
 	if (strcmp(res.toAscii().data(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.toAscii().data());
 	if (strcmp(res.toAscii().data(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.toAscii().data());
 	if (strcmp(res.toAscii().data(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.toAscii().data());
-	//setGlMainWidget(glWidget);
+	setGraph(graph);
       }
     }
   }
@@ -296,7 +288,7 @@ namespace tlp {
 	if (typeid((*editedProperty)) == typeid(SizeProperty))
 	  {*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
       }
-      //setGlMainWidget(glWidget);
+      setGraph(graph);
       Observable::unholdObservers();
     }
   }

@@ -284,24 +284,24 @@ static const string viewed_properties[NB_VIEWED_PROPERTIES]=
       graph->getProperty(viewed_properties[i])->removeObserver(this);
   }
   graph->removeObserver(this);
-}
+  }
 //**********************************************************************
 // GraphObserver interface
 void viewGl::addNode (Graph *graph, const node) {
   ++currentGraphNbNodes;
-  updateCurrentGraphInfos();
+    updateCurrentGraphInfos();
 }
 void  viewGl::addEdge (Graph *graph, const edge) {
   ++currentGraphNbEdges;
-  updateCurrentGraphInfos();
+    updateCurrentGraphInfos();
 }
 void  viewGl::delNode (Graph *graph, const node) {
   --currentGraphNbNodes;
-  updateCurrentGraphInfos();
+    updateCurrentGraphInfos();
 }
 void  viewGl::delEdge (Graph *graph, const edge) {
   --currentGraphNbEdges;
-  updateCurrentGraphInfos();
+    updateCurrentGraphInfos();
 }
 void  viewGl::reverseEdge (Graph *, const edge) {
 }
@@ -419,10 +419,15 @@ void viewGl::changeGraph(Graph *graph) {
   // see fileOpen
   if (importedGraph != graph)
   initObservers();*/
-  cout << "viewGl::changeGraph" << endl;
-  propertiesWidget->setGraph(graph);
+  clusterTreeWidget->setGraph(graph);
+  eltProperties->setGraph(graph);
+  //layerWidget->attachMainWidget(glWidget);
+#ifdef STATS_UI
+  //statsWidget->setGlMainWidget(glWidget);
+#endif
   currentGraph=graph;
   initMainView();
+  propertiesWidget->setGraph(graph);
 }
 //**********************************************************************
 void viewGl::hierarchyChangeGraph(Graph *graph) {
@@ -504,6 +509,7 @@ GlMainView* viewGl::initMainView(string *in) {
 }
 //==================================================
 void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
+  cout << "show element property" << endl;
   if (isNode)
     eltProperties->setCurrentNode(currentGraph,  tlp::node(eltId));
   else
@@ -604,8 +610,8 @@ void viewGl::fileNew() {
   initializeGlScene(glW->getScene());
   Observable::unholdObservers();
   glW->show();*/
-  propertiesWidget->setGraph(newGraph);
   currentGraph=newGraph;
+  changeGraph(currentGraph);
   initMainView();
 }
 //**********************************************************************
@@ -887,6 +893,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       }
     }
 
+    changeGraph(newGraph);
     //initializeGlScene(glW->getScene());
     
 
@@ -973,10 +980,10 @@ void viewGl::setParameters(const DataSet& data) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   /*GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   param.setParameters(data);
-  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-  clusterTreeWidget->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
-  eltProperties->setGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
-  propertiesWidget->setGlMainWidget(glWidget);*/
+  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);*/
+  clusterTreeWidget->setGraph(currentGraph);
+  eltProperties->setGraph(currentGraph);
+  propertiesWidget->setGraph(currentGraph);
   }
 //**********************************************************************
 void viewGl::updateCurrentGraphInfos() {
@@ -986,13 +993,10 @@ void viewGl::updateCurrentGraphInfos() {
     currentGraphInfosLabel = new QLabel(statusBar());
     statusBar()->addWidget(currentGraphInfosLabel);
   }
-  /*if (glWidget) {
-    char tmp[255];
-    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
-    currentGraphInfosLabel->setText(tmp);
-    clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
-  } else
-  currentGraphInfosLabel->setText("");*/
+  char tmp[255];
+  sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
+  currentGraphInfosLabel->setText(tmp);
+  clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
 }
 //*********************************************************************
 static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
@@ -1424,7 +1428,7 @@ View* viewGl::createView(const string &name,Graph *graph,string *xmlData){
   MutableContainer<ViewCreator *> views;
   ViewPluginsManager::getInst().initViewPluginsList(views);
   View *newView=views.get(ViewPluginsManager::getInst().viewPluginId(name))->create(workspace);
-  connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),propertiesWidget,SLOT(showElementProperties(unsigned int, bool)));
+  connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
 
 
   newView->setData(graph,xmlData);
@@ -1648,8 +1652,8 @@ void viewGl::applyAlgorithm(QAction* action) {
     if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
     }
-    /*clusterTreeWidget->update();
-      clusterTreeWidget->setGraph(graph);*/
+    clusterTreeWidget->update();
+    clusterTreeWidget->setGraph(graph);
   }
   /*Observable::unholdObservers();
   initObservers();*/
@@ -1662,8 +1666,8 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   /*if( !glWidget ) return false;*/
   Graph *graph = currentGraph;
   if(graph == 0) return false;
-  /*Observable::holdObservers();
-    overviewWidget->setObservedView(0);*/
+  Observable::holdObservers();
+  /*overviewWidget->setObservedView(0);*/
   GlGraphRenderingParameters param;
   /*QtProgress myProgress(this, name, redraw ? glWidget : 0);*/
   QtProgress myProgress(this, name);
@@ -1715,8 +1719,8 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   if (dataSet!=0) delete dataSet;
 
   propertiesWidget->setGraph(graph);
-  /*overviewWidget->setObservedView(glWidget);
-  Observable::unholdObservers();*/
+  /*overviewWidget->setObservedView(glWidget);*/
+  Observable::unholdObservers();
   return resultBool;
 }
 //**********************************************************************

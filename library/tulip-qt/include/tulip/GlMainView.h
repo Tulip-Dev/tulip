@@ -99,10 +99,9 @@ namespace tlp {
     void reverseSelectedEdgeDirection();
     void group();  
     void changeGraph(Graph *graph);
-    void showElementProperties(unsigned int eltId, bool isNode);
 
-  signals:
-    void showElementPropertiesSignal(unsigned int eltId, bool isNode);
+    /*signals:
+      void showElementPropertiesSignal(unsigned int eltId, bool isNode);*/
 
   };
 

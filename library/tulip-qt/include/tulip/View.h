@@ -37,6 +37,12 @@ namespace tlp {
 
     std::map<std::string,std::vector<Interactor *> > interactorsMap;
 
+  public slots:
+
+    void showElementProperties(unsigned int eltId, bool isNode) {
+      emit showElementPropertiesSignal(eltId, isNode);
+    }
+
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);
     
