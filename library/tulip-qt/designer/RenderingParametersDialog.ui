@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>439</width>
-    <height>587</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -61,7 +61,7 @@
            </property>
            <layout class="QGridLayout" >
             <property name="margin" >
-             <number>11</number>
+             <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -248,7 +248,7 @@
            </property>
            <layout class="QGridLayout" >
             <property name="margin" >
-             <number>11</number>
+             <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -256,7 +256,7 @@
             <item row="0" column="0" >
              <layout class="QVBoxLayout" >
               <property name="margin" >
-               <number>11</number>
+               <number>0</number>
               </property>
               <property name="spacing" >
                <number>6</number>
@@ -264,7 +264,7 @@
               <item>
                <layout class="QHBoxLayout" >
                 <property name="margin" >
-                 <number>11</number>
+                 <number>0</number>
                 </property>
                 <property name="spacing" >
                  <number>6</number>
@@ -300,7 +300,7 @@
               <item>
                <layout class="QHBoxLayout" >
                 <property name="margin" >
-                 <number>11</number>
+                 <number>0</number>
                 </property>
                 <property name="spacing" >
                  <number>6</number>
@@ -351,7 +351,7 @@
            </property>
            <layout class="QGridLayout" >
             <property name="margin" >
-             <number>9</number>
+             <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
@@ -359,7 +359,7 @@
             <item row="0" column="0" >
              <layout class="QHBoxLayout" >
               <property name="margin" >
-               <number>11</number>
+               <number>0</number>
               </property>
               <property name="spacing" >
                <number>6</number>
@@ -421,12 +421,6 @@
            <property name="orientation" >
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" >
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
           </spacer>
          </item>
         </layout>
@@ -481,7 +475,7 @@
    <item row="1" column="0" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
-      <number>11</number>
+      <number>0</number>
      </property>
      <property name="spacing" >
       <number>6</number>

@@ -5,12 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
+    <width>512</width>
     <height>299</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -18,50 +20,100 @@
   <property name="windowTitle" >
    <string>About Tulip</string>
   </property>
-  <widget class="QTabWidget" name="TabWidget2" >
-   <property name="geometry" >
-    <rect>
-     <x>201</x>
-     <y>49</y>
-     <width>321</width>
-     <height>239</height>
-    </rect>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
    </property>
-   <property name="currentIndex" >
-    <number>0</number>
+   <property name="spacing" >
+    <number>6</number>
    </property>
-   <widget class="QWidget" name="tabAbout" >
-    <attribute name="title" >
-     <string>About</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <property name="leftMargin" >
-      <number>11</number>
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
      </property>
-     <property name="topMargin" >
-      <number>11</number>
-     </property>
-     <property name="rightMargin" >
-      <number>11</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>11</number>
-     </property>
-     <property name="horizontalSpacing" >
+     <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="verticalSpacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QTextEdit" name="MultiLineEdit3" >
-       <property name="readOnly" >
-        <bool>true</bool>
+     <item>
+      <widget class="QLabel" name="TextLabel2" >
+       <property name="font" >
+        <font>
+         <family>times</family>
+         <pointsize>18</pointsize>
+        </font>
        </property>
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Sunken</enum>
+       </property>
+       <property name="text" >
+        <string>Tulip</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>0</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" >
+          <pixmap resource="TulipResource.qrc" >:/logo160x145.png</pixmap>
+         </property>
+         <property name="scaledContents" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="TabWidget2" >
+         <property name="currentIndex" >
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tabAbout" >
+          <attribute name="title" >
+           <string>About</string>
+          </attribute>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>11</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="0" column="0" >
+            <widget class="QTextEdit" name="MultiLineEdit3" >
+             <property name="readOnly" >
+              <bool>true</bool>
+             </property>
+             <property name="html" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Tulip is a Graph Visualisation Software&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">written and maintained by the University&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">of Bordeaux I.&lt;/p>
@@ -73,103 +125,58 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"> http://www.tulip-software.org&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Forum, mailing list, and bug report are accessible at :&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">http://sourceforge.net/projects/auber&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" stdset="0" >
-        <string>Tulip is a Graph Visualisation Software
-written and maintained by the University
-of Bordeaux I.
-
-The Tulip project is under GPL licence and
-everyone can give his contribution to this software.
-
-Visit the Tulip Web Site for more Information about Tulip.
- http://www.tulip-software.org
-Forum, mailing list, and bug report are accessible at :
-http://sourceforge.net/projects/auber</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tabBugs" >
-    <attribute name="title" >
-     <string>Bugs or wishes</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <property name="leftMargin" >
-      <number>11</number>
-     </property>
-     <property name="topMargin" >
-      <number>11</number>
-     </property>
-     <property name="rightMargin" >
-      <number>11</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>11</number>
-     </property>
-     <property name="horizontalSpacing" >
-      <number>6</number>
-     </property>
-     <property name="verticalSpacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QTextEdit" name="MultiLineEdit2" >
-       <property name="readOnly" >
-        <bool>true</bool>
-       </property>
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tabBugs" >
+          <attribute name="title" >
+           <string>Bugs or wishes</string>
+          </attribute>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>11</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="0" column="0" >
+            <widget class="QTextEdit" name="MultiLineEdit2" >
+             <property name="readOnly" >
+              <bool>true</bool>
+             </property>
+             <property name="html" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Software can always be improved, and the Tulip team is ready to do so.&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">However you - the user - must tell us when something does not work as expected or could be improved.&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Tulip has a mailing list and bug report system at :&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">http://sourceforge.net/projects/auber&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" stdset="0" >
-        <string>Software can always be improved, and the Tulip team is ready to do so.
-However you - the user - must tell us when something does not work as expected or could be improved.
-
-Tulip has a mailing list and bug report system at :
-http://sourceforge.net/projects/auber
-</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tab" >
-    <attribute name="title" >
-     <string>Join the TULIP team</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <property name="leftMargin" >
-      <number>11</number>
-     </property>
-     <property name="topMargin" >
-      <number>11</number>
-     </property>
-     <property name="rightMargin" >
-      <number>11</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>11</number>
-     </property>
-     <property name="horizontalSpacing" >
-      <number>6</number>
-     </property>
-     <property name="verticalSpacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QTextEdit" name="MultiLineEdit1" >
-       <property name="html" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab" >
+          <attribute name="title" >
+           <string>Join the TULIP team</string>
+          </attribute>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>11</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="0" column="0" >
+            <widget class="QTextEdit" name="MultiLineEdit1" >
+             <property name="html" >
+              <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The Tulip Team :&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Original Author and maintainers : David Auber, Patrick Mary.&lt;/p>
@@ -198,92 +205,18 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">auber@tulip-software.org&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Or use sourceforge system :&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">http://sourceforge.net/projects/auber&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-       <property name="text" stdset="0" >
-        <string>The Tulip Team :
-
-Original Author and maintainers : David Auber, Patrick Mary.
-Contributors :
- - Daniel Archambault
- - Robert Auber
- - Sophie Bardet
- - Romain Bourqui
- - Maylis Delest
- - Jean Philippe Domenger
- - David Duke
- - Sébastien Grivet
- - Gérald Gainant
- - Loïc Jézéquel
- - Morgan Mathiaut
- - Bertrand Mathieu
- - Chris Myers
- - Vincent Rabeux
- - Martin Schaffner
-
-The Tulip Project is young and a lot of work 
-need to be done.
-Every participation is welcome, (graphism, plug-ins,  documentation, low level library improvements)
-
-To contact us send email to : 
-auber@tulip-software.org
-Or use sourceforge system :
-http://sourceforge.net/projects/auber</string>
-       </property>
-      </widget>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
-   </widget>
-  </widget>
-  <widget class="QLabel" name="TextLabel2" >
-   <property name="geometry" >
-    <rect>
-     <x>11</x>
-     <y>11</y>
-     <width>511</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="font" >
-    <font>
-     <family>times</family>
-     <pointsize>18</pointsize>
-    </font>
-   </property>
-   <property name="frameShape" >
-    <enum>QFrame::NoFrame</enum>
-   </property>
-   <property name="frameShadow" >
-    <enum>QFrame::Sunken</enum>
-   </property>
-   <property name="text" >
-    <string>Tulip</string>
-   </property>
-   <property name="alignment" >
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="wordWrap" >
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
-    <rect>
-     <x>20</x>
-     <y>90</y>
-     <width>160</width>
-     <height>145</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string/>
-   </property>
-   <property name="pixmap" >
-    <pixmap resource="TulipResource.qrc" >:/logo160x145.png</pixmap>
-   </property>
-   <property name="scaledContents" >
-    <bool>false</bool>
-   </property>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <resources>

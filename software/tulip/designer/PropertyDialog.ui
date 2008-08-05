@@ -5,12 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>332</width>
-    <height>470</height>
+    <width>314</width>
+    <height>323</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+   <sizepolicy>
+    <hsizetype>0</hsizetype>
+    <vsizetype>0</vsizetype>
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -31,14 +33,34 @@
    <string>Property Editor</string>
   </property>
   <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
    <item row="0" column="0" >
     <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
      <item>
       <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
        <item>
         <widget class="QTabWidget" name="tabWidget" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>2</verstretch>
           </sizepolicy>
@@ -60,28 +82,18 @@
            <string>Nodes</string>
           </attribute>
           <layout class="QGridLayout" >
-           <property name="leftMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <property name="horizontalSpacing" >
-            <number>0</number>
-           </property>
-           <property name="verticalSpacing" >
-            <number>0</number>
+           <property name="spacing" >
+            <number>6</number>
            </property>
            <item row="0" column="0" >
             <widget class="PropertyWidget" name="tableNodes" >
              <property name="sizePolicy" >
-              <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>7</vsizetype>
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -90,8 +102,12 @@
               <bool>true</bool>
              </property>
              <property name="rowCount" >
-              <number>4</number>
+              <number>8</number>
              </property>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
              <row/>
              <row/>
              <row/>
@@ -115,23 +131,11 @@
            <string>Edges</string>
           </attribute>
           <layout class="QGridLayout" >
-           <property name="leftMargin" >
+           <property name="margin" >
             <number>0</number>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
-           </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <property name="horizontalSpacing" >
-            <number>0</number>
-           </property>
-           <property name="verticalSpacing" >
-            <number>0</number>
+           <property name="spacing" >
+            <number>6</number>
            </property>
            <item row="0" column="0" >
             <widget class="PropertyWidget" name="tableEdges" >
@@ -160,6 +164,12 @@
        </item>
        <item>
         <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
          <item>
           <widget class="QCheckBox" name="CheckBox1" >
            <property name="toolTip" >
@@ -173,7 +183,9 @@
          <item>
           <widget class="QPushButton" name="removeButton_2" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -208,12 +220,26 @@
      </item>
      <item>
       <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
        <item row="0" column="0" >
         <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="localLabel" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -232,7 +258,9 @@
          <item>
           <widget class="QListWidget" name="localProperties" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -240,13 +268,13 @@
            <property name="minimumSize" >
             <size>
              <width>0</width>
-             <height>100</height>
+             <height>110</height>
             </size>
            </property>
            <property name="maximumSize" >
             <size>
              <width>150</width>
-             <height>100</height>
+             <height>110</height>
             </size>
            </property>
            <property name="resizeMode" >
@@ -261,10 +289,18 @@
        </item>
        <item row="0" column="1" >
         <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="inheritedLabel" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -283,7 +319,9 @@
          <item>
           <widget class="QListWidget" name="inheritedProperties" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -291,13 +329,13 @@
            <property name="minimumSize" >
             <size>
              <width>0</width>
-             <height>100</height>
+             <height>110</height>
             </size>
            </property>
            <property name="maximumSize" >
             <size>
              <width>150</width>
-             <height>100</height>
+             <height>110</height>
             </size>
            </property>
            <property name="resizeMode" >
@@ -311,12 +349,26 @@
      </item>
      <item>
       <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>4</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
          <item>
           <widget class="QPushButton" name="removeButton" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -349,10 +401,18 @@
        </item>
        <item>
         <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>9</number>
+         </property>
          <item>
           <widget class="QPushButton" name="cloneButton" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -371,7 +431,9 @@
          <item>
           <widget class="QPushButton" name="newButton" >
            <property name="sizePolicy" >
-            <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
