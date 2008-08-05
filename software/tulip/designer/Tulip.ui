@@ -18,7 +18,7 @@
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
     <property name="margin" >
-     <number>11</number>
+     <number>0</number>
     </property>
     <property name="spacing" >
      <number>0</number>
