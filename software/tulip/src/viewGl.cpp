@@ -636,12 +636,10 @@ void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
 
   backgroundLayer->set2DMode();
   foregroundLayer->set2DMode();
-  string dir=TulipLibDir;
-  dir += "tlp/bitmaps/";
-  GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
+  GlRectTextured *background=new GlRectTextured(0,1.,0,1., TulipBitmapDir + "tex_back.png",true);
   backgroundLayer->addGlEntity(background,"background");
 
-  GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
+  GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55., TulipBitmapDir + "logolabri.jpg");
   foregroundLayer->addGlEntity(labri,"labrilogo");
 
   GlComposite *hulls=new GlComposite;
