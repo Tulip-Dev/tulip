@@ -31,7 +31,7 @@ namespace tlp {
   class GlComposite;
   class GlGraphComposite;
 
-  class RenderingParametersDialog : public QDialog, public Ui::RenderingParametersDialogData {
+  class TLP_QT_SIMPLE_SCOPE RenderingParametersDialog : public QDialog, public Ui::RenderingParametersDialogData {
     Q_OBJECT
       
     GWOverviewWidget *overview;
