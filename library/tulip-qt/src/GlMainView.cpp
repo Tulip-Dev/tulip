@@ -153,10 +153,6 @@ namespace tlp {
     mainWidget->resetInteractors(interactorsMap[name]);
     return mainWidget->getInteractors();
   }
-  
-  void GlMainView::getEditMenuFlags(Vector<bool, 10> &flags) {
-    flags.fill(true);
-  }
 
   //==================================================
   // GUI functions
@@ -274,7 +270,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::reverseSelection() {
+  void GlMainView::invertSelection() {
     Graph *graph=mainWidget->getGraph();
     if (graph==0) return;
     Observable::holdObservers();
@@ -283,7 +279,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //=================================================
-  void GlMainView::newSubgraph() {
+  void GlMainView::createSubgraph() {
     //if (!glWidget) return;
     Graph *graph=mainWidget->getGraph();
     if (graph==0) return;
@@ -331,7 +327,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::editCut() {
+  void GlMainView::cut() {
     Graph * g = mainWidget->getGraph();
     if( !g ) return;
     // free the previous ccpGraph
@@ -354,7 +350,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::editCopy() {
+  void GlMainView::copy() {
     Graph * g = mainWidget->getGraph();
     if( !g ) return;
     // free the previous ccpGraph
@@ -370,7 +366,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::editPaste() {
+  void GlMainView::paste() {
     //if( !glWidget ) return;
     Graph * g = mainWidget->getGraph();
     if( !g ) return;
@@ -381,7 +377,7 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::editFind() {
+  void GlMainView::find() {
     //if(!glWidget) return;
     Graph * g = mainWidget->getGraph();
     if( !g ) return;
@@ -404,7 +400,7 @@ namespace tlp {
     }
   }
   //==================================================
-  void GlMainView::group() {
+  void GlMainView::createGroup() {
     set<node> tmp;
     Graph *graph=mainWidget->getGraph();
     Iterator<node> *it=graph->getNodes();

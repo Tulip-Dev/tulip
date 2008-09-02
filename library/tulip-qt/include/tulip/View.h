@@ -30,7 +30,17 @@ namespace tlp {
     virtual QWidget *getWidget() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
     virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
-    virtual void getEditMenuFlags(Vector<bool, 10> &flags) {flags.fill(0);}
+
+    virtual bool cutIsEnable() {return false;}
+    virtual bool copyIsEnable() {return false;}
+    virtual bool pasteIsEnable() {return false;}
+    virtual bool findIsEnable() {return false;}
+    virtual bool selectAllIsEnable() {return false;}
+    virtual bool delSelectionIsEnable() {return false;}
+    virtual bool deselectAllIsEnable() {return false;}
+    virtual bool invertSelectionIsEnable() {return false;}
+    virtual bool createGroupIsEnable() {return false;}
+    virtual bool createSubgraphIsEnable() {return false;}
 
   protected:
     virtual void constructInteractorsMap() {}
@@ -43,9 +53,20 @@ namespace tlp {
       emit showElementPropertiesSignal(eltId, isNode);
     }
 
+    virtual void cut() {}
+    virtual void copy() {}
+    virtual void paste() {}
+    virtual void find() {}
+    virtual void selectAll() {}
+    virtual void delSelection() {}
+    virtual void deselectAll() {}
+    virtual void invertSelection() {}
+    virtual void createGroup() {}
+    virtual void createSubgraph() {}
+
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);
-    
+  
   };
 
   /** \brief Tulip view creator interface class

@@ -61,7 +61,17 @@ namespace tlp {
     void constructInteractorsMap();
     void getInteractorsActionList(std::list<QAction*> &);
     Iterator<Interactor *> *installInteractor(const std::string &);
-    void getEditMenuFlags(Vector<bool, 10> &flags);
+
+    virtual bool cutIsEnable() {return true;}
+    virtual bool copyIsEnable() {return true;}
+    virtual bool pasteIsEnable() {return true;}
+    virtual bool findIsEnable() {return true;}
+    virtual bool selectAllIsEnable() {return true;}
+    virtual bool delSelectionIsEnable() {return true;}
+    virtual bool deselectAllIsEnable() {return true;}
+    virtual bool invertSelectionIsEnable() {return true;}
+    virtual bool createGroupIsEnable() {return true;}
+    virtual bool createSubgraphIsEnable() {return true;}
 
   protected :
 
@@ -83,21 +93,21 @@ namespace tlp {
 
   protected slots:
     void centerView();
-    void showDialog(QAction*);		     
+    void showDialog(QAction*);	
 
   public slots:
     void redrawView();
-    void editCut();
-    void editCopy();
-    void editPaste();
-    void editFind();
+    void cut();
+    void copy();
+    void paste();
+    void find();
     void selectAll();
     void deselectAll();
-    void reverseSelection();
+    void invertSelection();
     void delSelection();
-    void newSubgraph();
+    void createSubgraph();
     void reverseSelectedEdgeDirection();
-    void group();  
+    void createGroup();  
     void changeGraph(Graph *graph);
 
     /*signals:
