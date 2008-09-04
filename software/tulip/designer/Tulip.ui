@@ -1154,6 +1154,70 @@
    </hints>
   </connection>
   <connection>
+   <sender>editCutAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCut()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCopyAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCopy()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editPasteAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editPaste()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editFindAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editFind()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>helpIndexAction</sender>
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
@@ -1430,6 +1494,102 @@
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>reverseSelectedEdgeDirection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCreate_groupAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCreateGroup()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editCreate_subgraphAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editCreateSubgraph()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDelete_selectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editDelSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editReverse_selectionAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editReverseSelection()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editSelect_AllAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editSelectAll()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDeselect_allAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>editDeselectAll()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>-1</x>

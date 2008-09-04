@@ -142,6 +142,16 @@ protected slots:
   void fileNew();
   void fileOpen();  
   void filePrint();
+  void editCut();
+  void editCopy();
+  void editPaste();
+  void editFind();
+  void editCreateGroup();
+  void editCreateSubGraph();
+  void editDelSelection();
+  void editReverseSelection();
+  void editSelectAll();
+  void editDeselectAll();
   void changeMetric(QAction*);
   void changeString(QAction*);
   void changeSizes(QAction*);

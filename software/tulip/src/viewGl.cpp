@@ -491,67 +491,34 @@ void viewGl::installEditMenu(View *view) {
 
   for(int i=0;i<actions.size();i++) {
     if(!actions.at(i)->isSeparator()) {
-
-      actions.at(i)->disconnect();
       
       string actionName=actions.at(i)->text().toStdString();
-      if(actionName=="&Cut") {
+      if(actionName=="&Cut")
 	activate=view->cutIsEnable();
-	if(activate) {
-	  connect(editCutAction,SIGNAL(activated()),view,SLOT(cut()));
-	}
-      }else if(actionName=="C&opy") {
+      else if(actionName=="C&opy")
 	activate=view->copyIsEnable();
-	if(activate) {
-	  connect(editCopyAction,SIGNAL(activated()),view,SLOT(copy()));
-	}
-      }else if(actionName=="&Paste") {
+      else if(actionName=="&Paste") 
 	activate=view->pasteIsEnable();
-	if(activate) {
-	  connect(editPasteAction,SIGNAL(activated()),view,SLOT(paste()));
-	}
-      }else if(actionName=="&Find...") {
+      else if(actionName=="&Find...")
 	activate=view->findIsEnable();
-	if(activate) {
-	  connect(editFindAction,SIGNAL(activated()),view,SLOT(find()));
-	}
-      }else if(actionName=="Select All") {
+      else if(actionName=="Select All")
 	activate=view->selectAllIsEnable();
-	if(activate) {
-	  connect(editSelect_AllAction,SIGNAL(activated()),view,SLOT(selectAll()));
-	}
-      }else if(actionName=="Delete selection") {
+      else if(actionName=="Delete selection")
 	activate=view->delSelectionIsEnable();
-	if(activate) {
-	  connect(editDelete_selectionAction,SIGNAL(activated()),view,SLOT(delSelection()));
-	}
-      }else if(actionName=="Deselect All") {
+      else if(actionName=="Deselect All")
 	activate=view->deselectAllIsEnable();
-	if(activate) {
-	  connect(editDeselect_allAction,SIGNAL(activated()),view,SLOT(deselectAll()));
-	}
-      }else if(actionName=="Invert selection") {
+      else if(actionName=="Invert selection")
 	activate=view->invertSelectionIsEnable();
-	if(activate) {
-	  connect(editReverse_selectionAction,SIGNAL(activated()),view,SLOT(invertSelection()));
-	}
-      }else if(actionName=="Create group") {
+      else if(actionName=="Create group")
 	activate=view->createGroupIsEnable();
-	if(activate) {
-	  connect(editCreate_groupAction,SIGNAL(activated()),view,SLOT(createGroup()));
-	}
-      }else if(actionName=="Create subgraph") {
+      else if(actionName=="Create subgraph")
 	activate=view->createSubgraphIsEnable();
-	if(activate) {
-	  connect(editCreate_subgraphAction,SIGNAL(activated()),view,SLOT(createSubgraph()));
-	}
-      }else{
+      else{
 	activate=false;
 	cout << "ERROR : edit action " << actionName << " unknow" << endl;
       }
 
       actions.at(i)->setEnabled(activate);
-
     }
   }
 }
@@ -1563,6 +1530,56 @@ void viewGl::plugins() {
 void viewGl::deletePluginsUpdateChecker(){
   disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   delete pluginsUpdateChecker;
+}
+//==============================================================
+void viewGl::editCut() {
+  if(currentView)
+    currentView->cut();
+}
+//==============================================================
+void viewGl::editCopy() {
+  if(currentView)
+    currentView->copy();
+}
+//==============================================================
+void viewGl::editPaste() {
+  if(currentView)
+    currentView->paste();
+}
+//==============================================================
+void viewGl::editFind() {
+  if(currentView)
+    currentView->find();
+}
+//==============================================================
+void viewGl::editCreateGroup() {
+  if(currentView)
+    currentView->createGroup();
+}
+//==============================================================
+void viewGl::editCreateSubGraph() {
+  if(currentView)
+    currentView->createSubgraph();
+}
+//==============================================================
+void viewGl::editDelSelection() {
+  if(currentView)
+    currentView->delSelection();
+}
+//==============================================================
+void viewGl::editReverseSelection() {
+  if(currentView)
+    currentView->invertSelection();
+}
+//==============================================================
+void viewGl::editSelectAll() {
+  if(currentView)
+    currentView->selectAll();
+}
+//==============================================================
+void viewGl::editDeselectAll() {
+  if(currentView)
+    currentView->deselectAll();
 }
 //==============================================================
 void viewGl::helpAbout() {
