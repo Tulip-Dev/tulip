@@ -1490,22 +1490,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>Reverse_selected_edgesAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>reverseSelectedEdgeDirection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>editCreate_groupAction</sender>
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
@@ -1602,150 +1586,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>addEdgeAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setAddEdge()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>addNodeAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setAddNode()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>deleteAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setDelete()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zoomAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setZoomBox()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>navigate_action</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setGraphNavigate()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>moveSelectionAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setMoveSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>magicSelectionAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setMagicSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>selectionAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>selectAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setSelect()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>is_free_tree</sender>
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
@@ -1766,22 +1606,6 @@
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeDirected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editEdgeBendAction</sender>
-   <signal>activated()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setEditEdgeBend()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>-1</x>
