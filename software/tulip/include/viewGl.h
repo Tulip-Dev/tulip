@@ -147,7 +147,7 @@ protected slots:
   void editPaste();
   void editFind();
   void editCreateGroup();
-  void editCreateSubGraph();
+  void editCreateSubgraph();
   void editDelSelection();
   void editReverseSelection();
   void editSelectAll();

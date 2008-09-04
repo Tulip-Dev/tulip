@@ -1557,7 +1557,7 @@ void viewGl::editCreateGroup() {
     currentView->createGroup();
 }
 //==============================================================
-void viewGl::editCreateSubGraph() {
+void viewGl::editCreateSubgraph() {
   if(currentView)
     currentView->createSubgraph();
 }
