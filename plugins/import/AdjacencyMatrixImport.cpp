@@ -130,12 +130,14 @@ public:
 	    ++itemFound;
 	    continue;
 	  } else if (valString == "@") {
-	    if (itemFound)
+	    if (itemFound && type == TLP_AND)
 	      return formatError(valString.c_str(), curLine);
 	    type = TLP_NOVAL;
+	    itemFound = 0;
 	  } else if (valString == "#") {
-	    if (itemFound)
+	    if (itemFound && type == TLP_AND)
 	      return formatError(valString.c_str(), curLine);
+	    itemFound = 0;
 	    type = TLP_NOTHING;
 	  } else {
 	    itemFound = (itemFound == 2) ? 0 : itemFound + 1;
