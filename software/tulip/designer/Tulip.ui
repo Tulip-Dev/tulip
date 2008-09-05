@@ -150,7 +150,6 @@
     <addaction name="force_ratio" />
     <addaction name="map_metric" />
     <addaction name="enable_morphing" />
-    <addaction name="tooltips" />
     <addaction name="grid_option" />
    </widget>
    <widget class="QMenu" name="windowsMenu" >

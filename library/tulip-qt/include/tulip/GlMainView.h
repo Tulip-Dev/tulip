@@ -62,6 +62,8 @@ namespace tlp {
     void getInteractorsActionList(std::list<QAction*> &);
     Iterator<Interactor *> *installInteractor(const std::string &);
 
+    bool eventFilter(QObject *, QEvent *);
+
     virtual bool cutIsEnable() {return true;}
     virtual bool copyIsEnable() {return true;}
     virtual bool pasteIsEnable() {return true;}

@@ -3,10 +3,13 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QToolTip>
 
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/StableIterator.h>
 
 #include "tulip/FindSelectionWidget.h"
@@ -32,6 +35,9 @@ namespace tlp {
   GlMainView::GlMainView(QWidget *parent, const char *name):
     View(parent) {
     setupUi(this);
+
+    installEventFilter(this);
+
     copyCutPasteGraph=0;
 
     mainWidget=new GlMainWidget(this,"mainWidget");
@@ -117,7 +123,6 @@ namespace tlp {
     interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseEdgeBuilder")));
     interactorsMap["addNode"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
     interactorsMap["addNode"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNodeBuilder")));
-    cout << "Size: " << interactorsMap["addNode"].size() << endl;
     interactorsMap["deleteElt"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
     interactorsMap["deleteElt"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseElementDeleter")));
     interactorsMap["graphNavigate"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNKeysNavigator")));
@@ -154,6 +159,132 @@ namespace tlp {
     return mainWidget->getInteractors();
   }
 
+
+  bool GlMainView::eventFilter(QObject *object, QEvent *event) {
+    // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
+    // is no longer needed; the tooltip implementation must take place
+    // in the event() method inherited from QWidget.
+    if (object->inherits("tlp::GlMainView") &&
+	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
+      node tmpNode;
+      edge tmpEdge;
+      ElementType type;
+      QString tmp;
+      QHelpEvent *he = static_cast<QHelpEvent *>(event);
+      QRect rect=mainWidget->frameGeometry();
+      if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), type, tmpNode, tmpEdge)) {
+	// try to show the viewLabel if any
+	StringProperty *labels = mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
+	std::string label;
+	QString ttip;
+	switch(type) {
+	case NODE:
+	  label = labels->getNodeValue(tmpNode);
+	  if (!label.empty())
+	    ttip += (label + " (").c_str();
+	  ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
+	  if (!label.empty())
+	    ttip += ")";
+	  QToolTip::showText(he->globalPos(), ttip);
+	  break;
+	case EDGE: 
+	  label = labels->getEdgeValue(tmpEdge);
+	  if (!label.empty())
+	    ttip += (label + "(").c_str();
+	  ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
+	  if (!label.empty())
+	    ttip += ")";
+	  QToolTip::showText(he->globalPos(), ttip);
+	  break;
+	}
+	return true;
+      }
+    }
+    //cout << object->metaObject()->className() << endl;
+    //cout << true << " : " << object->inherits("tlp::GlMainWiew") << " : " << (event->type() == QEvent::MouseButtonRelease) << endl;
+    if ( object->inherits("tlp::GlMainView") &&
+	 (event->type() == QEvent::MouseButtonRelease)) {
+      QMouseEvent *me = (QMouseEvent *) event;
+      if (me->button()==Qt::RightButton) {
+	bool result;
+	ElementType type;
+	node tmpNode;
+	edge tmpEdge;
+	// look if the mouse pointer is over a node or edge
+	QRect rect=mainWidget->frameGeometry();
+	result = mainWidget->doSelect(me->x()-rect.x(), me->y()-rect.y(), type, tmpNode, tmpEdge);
+	if (!result)
+	  return false;
+	// Display a context menu
+	bool isNode = type == NODE;
+	int itemId = isNode ? tmpNode.id : tmpEdge.id;
+	QMenu contextMenu(this);
+	stringstream sstr;
+	sstr << (isNode ? "Node " : "Edge ") << itemId;
+	contextMenu.addAction(tr(sstr.str().c_str()))->setEnabled(false);
+	contextMenu.addSeparator();
+	contextMenu.addAction(tr("Add to/Remove from selection"));
+	QAction* selectAction = contextMenu.addAction(tr("Select"));
+	QAction* deleteAction = contextMenu.addAction(tr("Delete"));
+	contextMenu.addSeparator();
+	Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+	QAction* goAction = NULL;
+	QAction* ungroupAction = NULL;
+	if (isNode) {
+	  GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	  if (meta->getNodeValue(tmpNode)!=0) {
+	    goAction = contextMenu.addAction(tr("Go inside"));
+	    ungroupAction = contextMenu.addAction(tr("Ungroup"));
+	  }
+	}
+	if (goAction != NULL)
+	  contextMenu.addSeparator();
+	QAction* propAction = contextMenu.addAction(tr("Properties"));
+	QAction* menuAction = contextMenu.exec(me->globalPos(), selectAction);
+	if (menuAction == NULL)
+	  return true;
+	Observable::holdObservers();
+	if (menuAction == deleteAction) { // Delete
+	  // delete graph item
+	  if (isNode)
+	    graph->delNode(node(itemId));
+	  else
+	    graph->delEdge(edge(itemId));
+	} else {
+	  if (menuAction == propAction) // Properties
+	    showElementProperties(itemId, isNode);
+	  else  {
+	    if (menuAction == goAction) { // Go inside
+	      GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	      changeGraph(meta->getNodeValue(tmpNode));
+	    }
+	    else  {
+	      if (menuAction == ungroupAction) { // Ungroup
+		tlp::openMetaNode(graph, tmpNode);
+		//clusterTreeWidget->update();
+	      } else {
+		BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+		if (menuAction == selectAction) { // Select
+		  // empty selection
+		  elementSelected->setAllNodeValue(false);
+		  elementSelected->setAllEdgeValue(false);
+		}
+		// selection add/remove graph item
+		if (isNode)
+		  elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+		else
+		  elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
+	      }
+	    }
+	  }
+	}
+	Observable::unholdObservers();
+	return true;
+      }
+      return false;
+    }
+    return false;
+  }
   //==================================================
   // GUI functions
   //==================================================

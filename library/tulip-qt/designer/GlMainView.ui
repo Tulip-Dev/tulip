@@ -56,8 +56,15 @@
      <string>&amp;Dialogs</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuOptions" >
+    <property name="title" >
+     <string>Options</string>
+    </property>
+    <addaction name="actionTooltips" />
+   </widget>
    <addaction name="viewMenu" />
    <addaction name="dialogMenu" />
+   <addaction name="menuOptions" />
   </widget>
   <action name="editCutAction" >
    <property name="icon" >
@@ -231,6 +238,14 @@
    </property>
    <property name="name" stdset="0" >
     <string>editSelect_AllAction</string>
+   </property>
+  </action>
+  <action name="actionTooltips" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Tooltips</string>
    </property>
   </action>
  </widget>

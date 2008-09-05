@@ -67,7 +67,6 @@ public:
   viewGl(QWidget *parent=NULL);
   virtual ~viewGl();
   void setParameters(const tlp::DataSet &);
-  bool eventFilter(QObject *, QEvent *);
 
 protected:
   tlp::GridOptionsWidget *gridOptionsWidget;
