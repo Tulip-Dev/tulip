@@ -907,7 +907,7 @@
  <connections>
   <connection>
    <sender>fileNewAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileNew()</slot>
    <hints>
@@ -923,7 +923,7 @@
   </connection>
   <connection>
    <sender>fileOpenAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileOpen()</slot>
    <hints>
@@ -939,7 +939,7 @@
   </connection>
   <connection>
    <sender>fileSaveAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSave()</slot>
    <hints>
@@ -955,7 +955,7 @@
   </connection>
   <connection>
    <sender>fileSaveAsAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSaveAs()</slot>
    <hints>
@@ -971,7 +971,7 @@
   </connection>
   <connection>
    <sender>filePrintAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>filePrint()</slot>
    <hints>
@@ -987,7 +987,7 @@
   </connection>
   <connection>
    <sender>fileExitAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>fileExit()</slot>
    <hints>
@@ -1003,7 +1003,7 @@
   </connection>
   <connection>
    <sender>editCutAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>editCut()</slot>
    <hints>
@@ -1019,7 +1019,7 @@
   </connection>
   <connection>
    <sender>editCopyAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>editCopy()</slot>
    <hints>
@@ -1035,7 +1035,7 @@
   </connection>
   <connection>
    <sender>editPasteAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>editPaste()</slot>
    <hints>
@@ -1051,7 +1051,7 @@
   </connection>
   <connection>
    <sender>editFindAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>editFind()</slot>
    <hints>
@@ -1067,7 +1067,7 @@
   </connection>
   <connection>
    <sender>helpIndexAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>helpIndex()</slot>
    <hints>
@@ -1083,7 +1083,7 @@
   </connection>
   <connection>
    <sender>helpContentsAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>helpContents()</slot>
    <hints>
@@ -1099,7 +1099,7 @@
   </connection>
   <connection>
    <sender>pluginsAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>plugins()</slot>
    <hints>
@@ -1115,7 +1115,7 @@
   </connection>
   <connection>
    <sender>helpAboutAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>helpAbout()</slot>
    <hints>
@@ -1131,7 +1131,7 @@
   </connection>
   <connection>
    <sender>grid_option</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>gridOptions()</slot>
    <hints>
@@ -1147,7 +1147,7 @@
   </connection>
   <connection>
    <sender>make_acyclic</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>makeAcyclic()</slot>
    <hints>
@@ -1163,7 +1163,7 @@
   </connection>
   <connection>
    <sender>make_simple</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>makeSimple()</slot>
    <hints>
@@ -1179,7 +1179,7 @@
   </connection>
   <connection>
    <sender>make_biconnected</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>makeBiconnected()</slot>
    <hints>
@@ -1195,7 +1195,7 @@
   </connection>
   <connection>
    <sender>is_biconnected</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isBiconnected()</slot>
    <hints>
@@ -1211,7 +1211,7 @@
   </connection>
   <connection>
    <sender>is_triconnected</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isTriconnected()</slot>
    <hints>
@@ -1227,7 +1227,7 @@
   </connection>
   <connection>
    <sender>is_planar</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isPlanar()</slot>
    <hints>
@@ -1243,7 +1243,7 @@
   </connection>
   <connection>
    <sender>is_outer_planar</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isOuterPlanar()</slot>
    <hints>
@@ -1259,7 +1259,7 @@
   </connection>
   <connection>
    <sender>is_simple</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isSimple()</slot>
    <hints>
@@ -1275,7 +1275,7 @@
   </connection>
   <connection>
    <sender>is_directed_tree</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isTree()</slot>
    <hints>
@@ -1291,7 +1291,7 @@
   </connection>
   <connection>
    <sender>is_acyclic</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isAcyclic()</slot>
    <hints>
@@ -1307,7 +1307,7 @@
   </connection>
   <connection>
    <sender>make_connected</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>makeConnected()</slot>
    <hints>
@@ -1323,7 +1323,7 @@
   </connection>
   <connection>
    <sender>is_connected</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isConnected()</slot>
    <hints>
@@ -1339,7 +1339,7 @@
   </connection>
   <connection>
    <sender>Reverse_selected_edgesAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>reverseSelectedEdgeDirection()</slot>
    <hints>
@@ -1355,7 +1355,7 @@
   </connection>
   <connection>
    <sender>editCreate_groupAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>group()</slot>
    <hints>
@@ -1371,7 +1371,7 @@
   </connection>
   <connection>
    <sender>editCreate_subgraphAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>newSubgraph()</slot>
    <hints>
@@ -1387,7 +1387,7 @@
   </connection>
   <connection>
    <sender>editDelete_selectionAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>delSelection()</slot>
    <hints>
@@ -1403,7 +1403,7 @@
   </connection>
   <connection>
    <sender>editReverse_selectionAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>reverseSelection()</slot>
    <hints>
@@ -1419,7 +1419,7 @@
   </connection>
   <connection>
    <sender>editSelect_AllAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>selectAll()</slot>
    <hints>
@@ -1435,7 +1435,7 @@
   </connection>
   <connection>
    <sender>editDeselect_allAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>deselectAll()</slot>
    <hints>
@@ -1451,7 +1451,7 @@
   </connection>
   <connection>
    <sender>addEdgeAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setAddEdge()</slot>
    <hints>
@@ -1467,7 +1467,7 @@
   </connection>
   <connection>
    <sender>addNodeAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setAddNode()</slot>
    <hints>
@@ -1483,7 +1483,7 @@
   </connection>
   <connection>
    <sender>deleteAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setDelete()</slot>
    <hints>
@@ -1499,7 +1499,7 @@
   </connection>
   <connection>
    <sender>zoomAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setZoomBox()</slot>
    <hints>
@@ -1515,7 +1515,7 @@
   </connection>
   <connection>
    <sender>navigate_action</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setGraphNavigate()</slot>
    <hints>
@@ -1531,7 +1531,7 @@
   </connection>
   <connection>
    <sender>moveSelectionAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setMoveSelection()</slot>
    <hints>
@@ -1547,7 +1547,7 @@
   </connection>
   <connection>
    <sender>magicSelectionAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setMagicSelection()</slot>
    <hints>
@@ -1563,7 +1563,7 @@
   </connection>
   <connection>
    <sender>selectionAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setSelection()</slot>
    <hints>
@@ -1579,7 +1579,7 @@
   </connection>
   <connection>
    <sender>selectAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setSelect()</slot>
    <hints>
@@ -1595,7 +1595,7 @@
   </connection>
   <connection>
    <sender>is_free_tree</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>isFreeTree()</slot>
    <hints>
@@ -1611,7 +1611,7 @@
   </connection>
   <connection>
    <sender>make_directed</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>makeDirected()</slot>
    <hints>
@@ -1627,7 +1627,7 @@
   </connection>
   <connection>
    <sender>editEdgeBendAction</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>TulipData</receiver>
    <slot>setEditEdgeBend()</slot>
    <hints>
