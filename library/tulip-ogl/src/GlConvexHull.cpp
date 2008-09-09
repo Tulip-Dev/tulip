@@ -108,7 +108,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   graph->getAttributes().get("name",convexHullItem->name);
   if(convexHullItem->name=="") {
     std::stringstream s;
-    s << (unsigned int)graph;
+    s << graph->getId();
     convexHullItem->name=s.str();
   }
 
