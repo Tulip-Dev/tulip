@@ -45,7 +45,7 @@ namespace tlp {
     glHulls=buildComposite(convexHull,(GlConvexHull*)oldGlHulls);
     setToOld(convexHull,(GlConvexHull*)oldGlHulls);
 
-    layer->addGlEntity(glHulls,"Hulls");   
+    layer->addGlEntity(glHulls,"Hulls");  
 
     oldGlHulls->reset(true);
   }
@@ -53,7 +53,12 @@ namespace tlp {
   GlComposite *GlHierarchyConvexHulls::buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull) {
     GlComposite *child;
     for(vector<ConvexHullItem *>::iterator it=convexHull->children.begin();it!=convexHull->children.end();++it) {
-      GlConvexHull *oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
+      GlConvexHull *oldChild;
+      if(oldHull)
+	oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
+      else
+	oldChild=NULL;
+
       child=buildComposite(*it,oldChild);
       convexHull->hull->addGlEntity(child,(*it)->name);
     }
@@ -66,7 +71,12 @@ namespace tlp {
       convexHull->hull->setStencil(oldHull->getStencil());
     }
     for(vector<ConvexHullItem *>::iterator it=convexHull->children.begin();it!=convexHull->children.end();++it) {
-      GlConvexHull *oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
+      GlConvexHull *oldChild;
+      if(oldHull) 
+	oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
+      else
+	oldChild=NULL;
+      
       setToOld(*it,oldChild);
     }
   }

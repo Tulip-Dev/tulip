@@ -106,6 +106,11 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   ConvexHullItem *convexHullItem=new ConvexHullItem;
 
   graph->getAttributes().get("name",convexHullItem->name);
+  if(convexHullItem->name=="") {
+    std::stringstream s;
+    s << (unsigned int)graph;
+    convexHullItem->name=s.str();
+  }
 
   if (root == 0)
     root = graph;
