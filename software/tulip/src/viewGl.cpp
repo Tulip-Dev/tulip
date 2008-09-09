@@ -426,7 +426,6 @@ void viewGl::changeGraph(Graph *graph) {
   //statsWidget->setGlMainWidget(glWidget);
 #endif
   currentGraph=graph;
-  initMainView();
   propertiesWidget->setGraph(graph);
 }
 //**********************************************************************
@@ -526,7 +525,7 @@ void viewGl::installEditMenu(View *view) {
 GlMainView* viewGl::initMainView(string *in) {
   workspace->closeAllWindows();
 
-  View* newView=createView("MainView",currentGraph);
+  View* newView=createView("MainView",currentGraph,DataSet());
   
   return (GlMainView*)newView;
   
@@ -654,13 +653,13 @@ void viewGl::setNavigateCaption(string newCaption) {
 }
 //**********************************************************************
 bool viewGl::doFileSave() {
-  /*if (!glWidget) return false;
-  if (openFiles.find((unsigned long)glWidget)==openFiles.end() || 
-      (openFiles[(unsigned long)glWidget].name == "")) {
+  if(!currentGraph) return false;
+  if (openFiles.find((unsigned long)currentGraph)==openFiles.end() || 
+      (openFiles[(unsigned long)currentGraph].name == "")) {
     return doFileSaveAs();
   }
-  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
-  return doFileSave("tlp", vFile.name, vFile.author, vFile.comments);*/
+  viewGlFile &vFile = openFiles[(unsigned long)currentGraph];
+  return doFileSave("tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
 void viewGl::fileSave() {
@@ -675,7 +674,7 @@ static void setGraphName(Graph *g, QString s) {
 }
 //**********************************************************************
 bool viewGl::doFileSave(string plugin, string filename, string author, string comments) {
-  /*if (!glWidget) return false;
+  if(!currentGraph) return false;
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
@@ -685,17 +684,16 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
     dataSet.set<string>("text::comments", comments);
   if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
 			      &dataSet, "Enter Export parameters", NULL,
-			      this)) //, glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
+			      this))
     return false;
-  dataSet.set("displaying", glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
-  string sceneOut;
-  glWidget->getScene()->getXML(sceneOut);
-  string dir=TulipLibDir;
-  while(sceneOut.find(dir) != std::string::npos) {
-    int pos=sceneOut.find(dir);
-    sceneOut.replace(pos,dir.length()-1,"TulipLibDir");
+
+  DataSet views;
+  QWidgetList widgetList=workspace->windowList();
+  for(int i=0;i<widgetList.size();++i) {
+    views.set<DataSet>(((View*)(widgetList[i]))->getPluginName(),((View*)(widgetList[i]))->getData());
   }
-  dataSet.set<string>("scene", sceneOut);
+  dataSet.set<DataSet>("views",views);
+  
   if (filename.length() == 0) {
     QString name;
     if (plugin == "tlp")
@@ -721,12 +719,12 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   }
 
   // keep trace of file infos
-  viewGlFile &vFile = openFiles[(unsigned long)glWidget];
+  viewGlFile &vFile = openFiles[(unsigned long)currentGraph];
   vFile.name = filename;
   dataSet.get<string>("author", vFile.author);
   dataSet.get<string>("text::comments", vFile.comments);
 
-  if (!(result=tlp::exportGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), *os, plugin, dataSet, NULL))) {
+  if (!(result=tlp::exportGraph(currentGraph, *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
 			   );
@@ -734,15 +732,15 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
     statusBar()->showMessage((filename + " saved.").c_str());
   }
   setNavigateCaption(filename);
-  setGraphName(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), QString(filename.c_str()));
+  setGraphName(currentGraph, QString(filename.c_str()));
   delete os;
-  return result;*/
+  return result;
 }
 //**********************************************************************
 bool viewGl::doFileSaveAs() {
-  //if (!glWidget || !glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
-    return false;
-    //return doFileSave("tlp", "", "", "");
+  if(!currentGraph) return false;
+  
+  return doFileSave("tlp", "", "", "");
 }
 //**********************************************************************
 void viewGl::fileSaveAs() {
@@ -894,30 +892,46 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if(noPlugin)
       setGraphName(newGraph, s);
 
+    changeGraph(newGraph);
+
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
 
-    if(!sceneData.empty()) {
-      string dir=TulipLibDir;
-      string name="TulipLibDir";
-      while(sceneData.find(name)!= string::npos) {
-	int pos=sceneData.find(name);
-	sceneData.replace(pos,name.length(),dir);
-      }
-      initMainView(&sceneData);
-    } else {
-      GlMainView *mainView=initMainView();
 
-      DataSet displaying;
-      Color color;
-      if(dataSet.get<DataSet>("displaying", displaying)) {
-	if(displaying.get<Color>("backgroundColor", color)) {
-	  mainView->getGlMainWidget()->getScene()->setBackgroundColor(color);
+    DataSet views;
+    if(dataSet.exist("views")) 
+      dataSet.get<DataSet>("views", views);
+    
+    Iterator< std::pair<std::string, DataType*> > *it=views.getValues();
+    if(it->hasNext()) {
+      // Last version of tlp file
+      pair<string, DataType*> p;
+      p = it->next();
+      createView(p.first,currentGraph,*(DataSet*)p.second->value);
+    }else{
+      // Tlp file with scene system
+      if(!sceneData.empty()) {
+	string dir=TulipLibDir;
+	string name="TulipLibDir";
+	while(sceneData.find(name)!= string::npos) {
+	  int pos=sceneData.find(name);
+	  sceneData.replace(pos,name.length(),dir);
+	}
+	initMainView(&sceneData);
+      } else {
+	// Tlp file with old system
+	GlMainView *mainView=initMainView();
+	
+	DataSet displaying;
+	Color color;
+	if(dataSet.get<DataSet>("displaying", displaying)) {
+	  if(displaying.get<Color>("backgroundColor", color)) {
+	    mainView->getGlMainWidget()->getScene()->setBackgroundColor(color);
+	  }
 	}
       }
     }
 
-    changeGraph(newGraph);
     //initializeGlScene(glW->getScene());
     
 
@@ -986,10 +1000,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       }*/
 
     // synchronize overview display parameters
-  }
-  /* else {
+  } else {
     qWarning("Canceled  Open/import");
-  } */
+  } 
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -1174,9 +1187,7 @@ void viewGl::buildMenus() {
   ViewPluginsManager::getInst().initViewPluginsList(views);
   TemplateFactory<ViewCreatorFactory, ViewCreator, ViewCreatorContext>::ObjectCreator::const_iterator it;
   for (it=ViewCreatorFactory::factory->objMap.begin();it != ViewCreatorFactory::factory->objMap.end();++it) {
-    toolsMenu->addAction(it->first.c_str());/*QMenu *newTool = new QMenu(it->first.c_str(), toolsMenu);
-    newTool->setObjectName(QString(it->first.c_str()));
-    toolsMenu->addMenu(newTool);*/
+    toolsMenu->addAction(it->first.c_str());
   }
 }
 //**********************************************************************
@@ -1325,15 +1336,13 @@ void viewGl::closeEvent(QCloseEvent *e) {
 void viewGl::focusInEvent ( QFocusEvent * ) {
 }
 //**********************************************************************
-View* viewGl::createView(const string &name,Graph *graph,string *xmlData){
+View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
   
-  MutableContainer<ViewCreator *> views;
-  ViewPluginsManager::getInst().initViewPluginsList(views);
-  View *newView=views.get(ViewPluginsManager::getInst().viewPluginId(name))->create(workspace);
+  View *newView=ViewPluginsManager::getInst().createView(name,workspace);
   connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
 
 
-  newView->setData(graph,xmlData);
+  newView->setData(graph,dataSet);
   graph->addObserver(newView);
 
   if(elementsDisabled)
@@ -1344,7 +1353,7 @@ View* viewGl::createView(const string &name,Graph *graph,string *xmlData){
 }
 //**********************************************************************
 void viewGl::addView(QAction *action) {
-  createView(action->text().toStdString(),currentGraph);
+  createView(action->text().toStdString(),currentGraph,DataSet());
 }
 //**********************************************************************
 void viewGl::displayView(View *view,const string &name){

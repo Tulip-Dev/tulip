@@ -53,8 +53,6 @@ namespace tlp {
   getScene()->addLayer(mainLayer);
   getScene()->addGlGraphCompositeInfo(mainLayer, glGraphComposite);
   
-  navigator = new MouseNKeysNavigator();
-  pushInteractor(navigator);
   installEventFilter(this);
   
 }
@@ -116,7 +114,7 @@ void ParallelCoordinatesWidget::clearObservers() {
   
 }
 
-  void ParallelCoordinatesWidget::setData(Graph *graph,string *in) {
+  void ParallelCoordinatesWidget::setData(Graph *graph,DataSet dataSet) {
   this->graph=graph;
   if (viewLayer == NULL) {
     viewLayer = new GlLayer("Parallel Coordinates View");
@@ -139,6 +137,11 @@ void ParallelCoordinatesWidget::clearObservers() {
   getScene()->centerScene();
   draw();
 }
+
+  DataSet ParallelCoordinatesWidget::getData() {
+    return DataSet();
+  }
+
 
   Graph* ParallelCoordinatesWidget::getGraph() {
     return graph;
@@ -166,7 +169,7 @@ void ParallelCoordinatesWidget::createView(viewType vType) {
 
   void ParallelCoordinatesWidget::showConfigDialog() {
     vcd->exec();
-    setData(graph);
+    setData(graph,DataSet());
   }
 
 void ParallelCoordinatesWidget::delNode(Graph *g, const node n) {
@@ -304,7 +307,6 @@ bool ParallelCoordinatesWidget::eventFilter(QObject *obj, QEvent *e) {
 
       }
     }
-    pushInteractor(navigator);
       
     return true;
   }

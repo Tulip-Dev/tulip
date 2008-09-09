@@ -10,12 +10,12 @@ namespace tlp {
 
   VIEWPLUGIN(SpreadView, "SpreadSheetView", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0", 1);
 
-  View* SpreadView::create(QWidget *parent) {
-    return new SpreadWidget(parent);
+  View* SpreadView::create(const string &pluginName,QWidget *parent) {
+    return new SpreadWidget(pluginName,parent);
   }
 
-  SpreadWidget::SpreadWidget(QWidget *parent) :
-    View(parent),currentCell(NULL),editingLine(false),nodeTab(true) {
+  SpreadWidget::SpreadWidget(const string &pluginName,QWidget *parent) :
+    View(pluginName,parent),currentCell(NULL),editingLine(false),nodeTab(true) {
     setupUi(this);
     spreadNodesTable->setView(SpreadTable::NodesView);
     spreadEdgesTable->setView(SpreadTable::EdgesView);
@@ -41,10 +41,14 @@ namespace tlp {
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
   }
 
-  void SpreadWidget::setData(Graph *graph,string *in) {
+  void SpreadWidget::setData(Graph *graph,DataSet dataSet) {
     this->graph=graph;
     spreadNodesTable->setGraph(graph);
     spreadEdgesTable->setGraph(graph);
+  }
+  
+  DataSet SpreadWidget::getData() {
+    return DataSet();
   }
   
   Graph* SpreadWidget::getGraph() {
@@ -112,7 +116,7 @@ namespace tlp {
     spreadEdgesTable->delRow(e.id);
   }
   void SpreadWidget::destroy(Graph *graph) {
-    setData(NULL);
+    setData(NULL,DataSet());
   }
 
 }

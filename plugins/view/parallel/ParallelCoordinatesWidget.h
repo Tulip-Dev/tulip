@@ -34,7 +34,9 @@ namespace tlp {
     ParallelCoordinatesWidget(QWidget *parent = 0);
     ~ParallelCoordinatesWidget();
     
-    void setData(Graph *graph,std::string *in=NULL);
+    void setData(Graph *graph,DataSet dataSet);
+    DataSet getData();
+
     Graph *getGraph();
     QWidget* getWidget() {return this;}
     

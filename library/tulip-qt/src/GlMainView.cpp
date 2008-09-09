@@ -27,13 +27,13 @@ namespace tlp {
 
   VIEWPLUGIN(GlMainViewCreator, "MainView", "Tulip Team", "16/04/2008", "Main view", "1.0", 0);  
 
-  View* GlMainViewCreator::create(QWidget *parent){
-    return new GlMainView(parent);
+  View* GlMainViewCreator::create(const string &pluginName,QWidget *parent){
+    return new GlMainView(pluginName,parent);
   }
 
   //==================================================
-  GlMainView::GlMainView(QWidget *parent, const char *name):
-    View(parent) {
+  GlMainView::GlMainView(const string &pluginName,QWidget *parent, const char *name):
+    View(pluginName,parent) {
     setupUi(this);
 
     installEventFilter(this);
@@ -86,12 +86,22 @@ namespace tlp {
   //==================================================
   // Accessor and set 
   //==================================================
-  void GlMainView::setData(Graph *graph,string *in) {
-    mainWidget->setData(graph,in);
+  void GlMainView::setData(Graph *graph,DataSet dataSet) {
+    DataSet data;
+    if(dataSet.exist("data")){
+      dataSet.get("data",data);
+    }
+    mainWidget->setData(graph,data);
     overviewWidget->setObservedView(mainWidget);
     mainWidget->getScene()->centerScene();
     layerWidget->attachMainWidget(mainWidget);
     redrawView();
+  }
+  //==================================================
+  DataSet GlMainView::getData() {
+    DataSet dataSet;
+    dataSet.set<DataSet>("data",mainWidget->getData());
+    return dataSet;
   }
   //==================================================
   Graph *GlMainView::getGraph() {
@@ -108,8 +118,7 @@ namespace tlp {
   //==================================================
   void GlMainView::changeGraph(Graph *graph) {
     if(mainWidget->getGraph()!=graph)
-      setData(graph);
-    
+      setData(graph,DataSet());
   }
 
   //==================================================

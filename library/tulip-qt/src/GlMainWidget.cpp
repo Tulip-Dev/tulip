@@ -89,8 +89,8 @@ namespace tlp {
       delete _interactors[i];
   }
   //==================================================
-  void GlMainWidget::setData(Graph *graph,string *in) {
-    if(in==NULL) {
+  void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
+    if(!dataSet.exist("scene")) {
       //Default scene
       GlLayer* layer=new GlLayer("Main");
       scene.addLayer(layer);
@@ -98,9 +98,23 @@ namespace tlp {
       scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
       scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
     }else{
-      //Construct with xml
-      scene.setWithXML(*in,graph);
+      string sceneInput;
+      dataSet.get("scene",sceneInput);
+      scene.setWithXML(sceneInput,graph);
+      DataSet renderingParameters;
+      dataSet.get("Display",renderingParameters);
+      GlGraphRenderingParameters rp=scene.getGlGraphComposite()->getRenderingParameters();
+      rp.setParameters(renderingParameters);
     }
+  }
+  //==================================================
+  DataSet GlMainWidget::getData() {
+    DataSet outDataSet;
+    outDataSet.set<DataSet>("Display",scene.getGlGraphComposite()->getRenderingParameters().getParameters());
+    string out;
+    scene.getXML(out);
+    outDataSet.set<string>("scene",out);
+    return outDataSet;
   }
   //==================================================
   Graph *GlMainWidget::getGraph() {

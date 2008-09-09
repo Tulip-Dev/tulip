@@ -164,7 +164,7 @@ protected slots:
   void applyAlgorithm(QAction*);
   void outputEPS();
   void outputSVG();
-  tlp::View* createView(const std::string &name,tlp::Graph *graph,std::string *xmlData=NULL);
+  tlp::View* createView(const std::string &name,tlp::Graph *graph,tlp::DataSet dataSet);
   void addView(QAction *action);
   void displayView(tlp::View *view,const std::string &name);
   void changeInteractor(QAction*);

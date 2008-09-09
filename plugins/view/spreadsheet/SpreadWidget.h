@@ -38,7 +38,7 @@ namespace tlp {
 
   class TLP_QT_SCOPE SpreadView : public ViewCreator {
   public :
-    virtual View* create(QWidget *parent);
+    virtual View* create(const std::string &pluginName,QWidget *parent);
   };
 
   class TLP_QT_SCOPE SpreadWidget : public View, public Ui::SpreadMainWidgetData 
@@ -47,10 +47,11 @@ namespace tlp {
       
   public:
 
-    SpreadWidget(QWidget *parent=0);
+    SpreadWidget(const std::string &pluginName,QWidget *parent=0);
     virtual ~SpreadWidget() {}
 
-    void setData(Graph *graph,std::string *in=NULL);
+    void setData(Graph *graph,DataSet dataSet);
+    DataSet getData();
     Graph *getGraph();
 
     QWidget *getWidget() {return this;}

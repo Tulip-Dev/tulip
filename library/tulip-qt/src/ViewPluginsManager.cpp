@@ -73,10 +73,10 @@ namespace tlp
     }
     loadViewPlugins();
   }
-  //
-  void ViewPluginsManager::initViewPluginsList(MutableContainer<ViewCreator *>& view) {
+  //====================================================
+  void ViewPluginsManager::initViewPluginsList(MutableContainer<ViewCreator *> &views) {
     ViewCreatorContext ic;
-    view.setAll(0);
+    views.setAll(0);
     
     Iterator<string> *itS = ViewCreatorFactory::factory->availablePlugins();
     while (itS->hasNext()) {
@@ -87,8 +87,14 @@ namespace tlp
       //if (InteractorFactory::factory->objMap[interactorName]->getId() == 0) 
       //  interactors.setAll(newInteractor);
       //    cerr << " id:" << InteractorFactory::factory->objMap[interactorName]->getId() << endl;
-      view.set(ViewCreatorFactory::factory->objMap[viewPluginName]->getId(), newViewPlugin);
+      views.set(ViewCreatorFactory::factory->objMap[viewPluginName]->getId(), newViewPlugin);
     //    cerr << interactors.get(InteractorFactory::factory->objMap[interactorName]->getId()) << endl;
     } delete itS;
+  }
+  //====================================================
+  View* ViewPluginsManager::createView(const string &name,QWidget *parent) {
+    MutableContainer<ViewCreator *> views;
+    initViewPluginsList(views);
+    return views.get(viewPluginId(name))->create(name,parent);
   }
 } 

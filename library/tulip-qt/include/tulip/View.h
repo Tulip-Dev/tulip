@@ -23,9 +23,11 @@ namespace tlp {
 
   public:
 
-    View(QWidget *parent=NULL);
+    View(const std::string &name,QWidget *parent=NULL);
     virtual ~View() {}
-    virtual void setData(Graph *graph,std::string *in=NULL) = 0;
+    std::string getPluginName() {return pluginName;}
+    virtual void setData(Graph *graph,DataSet dataSet) = 0;
+    virtual DataSet getData() = 0;
     virtual Graph *getGraph() = 0;
     virtual QWidget *getWidget() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
@@ -66,6 +68,10 @@ namespace tlp {
 
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);
+
+  private :
+    
+    std::string pluginName;
   
   };
 
@@ -78,7 +84,7 @@ namespace tlp {
     ViewCreator() {}
     virtual ~ViewCreator() {}
 
-    virtual View* create(QWidget *parent) = 0;
+    virtual View* create(const std::string &name,QWidget *parent) = 0;
   
   };
 

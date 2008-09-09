@@ -40,7 +40,8 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   GlMainWidget(QWidget *parent=NULL, const char *name=NULL);
   ~GlMainWidget();
 
-  void setData(Graph *graph,std::string *in);
+  void setData(Graph *graph,DataSet dataSet);
+  DataSet getData();
   Graph *getGraph();
   
   /**************************************

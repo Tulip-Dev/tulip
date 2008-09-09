@@ -39,7 +39,8 @@ namespace tlp {
     void loadViewPlugins();
     void loadPlugins(PluginLoader *plug=0);
 
-    void initViewPluginsList(MutableContainer<ViewCreator *>& views);
+    void initViewPluginsList(MutableContainer<ViewCreator *> &views);
+    View *createView(const std::string &name,QWidget *parent);
 
   private:
 
