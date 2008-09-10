@@ -30,7 +30,7 @@ namespace tlp {
      */
     virtual void compute(tlp::GlLayer*,tlp::Graph *);
 
-    GlComposite *buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
+    ConvexHullItem *buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
     void setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull);
     
     bool deducedFromChilds;

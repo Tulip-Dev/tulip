@@ -254,7 +254,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	  // add points of rotated bounding box
 	  float cosA = cos(alpha);
 	  float sinA = sin(alpha);
-	  Coord vect;
+	  Coord vect(0,0,-0.01);
 	  vect.setX(-hw * cosA + hh * sinA);
 	  vect.setY(-hw * sinA - hh * cosA);
 	  gConvexHull.push_back(point + vect);
