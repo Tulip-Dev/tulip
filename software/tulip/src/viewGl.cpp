@@ -895,8 +895,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     if(noPlugin)
       setGraphName(newGraph, s);
 
-    changeGraph(newGraph);
-
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
 
@@ -912,7 +910,6 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	pair<string, DataType*> p;
 	p = it->next();
 	createView(p.first,currentGraph,*(DataSet*)p.second->value);
-	cout << "Create view  : " << p.first << endl;
       }
     }else{
       // Tlp file with scene system
@@ -1006,6 +1003,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       }*/
 
     // synchronize overview display parameters
+    changeGraph(newGraph);
   } else {
     qWarning("Canceled  Open/import");
   } 
