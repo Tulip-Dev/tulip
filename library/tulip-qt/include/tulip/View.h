@@ -54,6 +54,7 @@ namespace tlp {
     void showElementProperties(unsigned int eltId, bool isNode) {
       emit showElementPropertiesSignal(eltId, isNode);
     }
+    virtual void changeGraph(Graph *) {}
 
     virtual void cut() {}
     virtual void copy() {}
@@ -68,6 +69,7 @@ namespace tlp {
 
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);
+    void clusterTreeNeedUpdate();
 
   private :
     

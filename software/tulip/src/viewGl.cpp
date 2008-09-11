@@ -453,9 +453,12 @@ void viewGl::windowActivated(QWidget *w) {
   //cerr << __PRETTY_FUNCTION__ << " (QWidget = " << (int)w << ")" << endl;
   View *view = dynamic_cast<View*>(w);
   if(view){
+    disconnect(clusterTreeWidget,SIGNAL(graphChanged(Graph *)),currentView,SLOT(changeGraph(Graph*)));
     currentView=view;
+    connect(clusterTreeWidget,SIGNAL(graphChanged(Graph *)),view,SLOT(changeGraph(Graph*)));
     installInteractors(view);
     installEditMenu(view);
+    clusterTreeWidget->setGraph(currentView->getGraph());
     //view->getWidget()->installEventFilter(this);
   }
   /*if (w==0)  {
@@ -905,9 +908,12 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     Iterator< std::pair<std::string, DataType*> > *it=views.getValues();
     if(it->hasNext()) {
       // Last version of tlp file
-      pair<string, DataType*> p;
-      p = it->next();
-      createView(p.first,currentGraph,*(DataSet*)p.second->value);
+      while(it->hasNext()) {
+	pair<string, DataType*> p;
+	p = it->next();
+	createView(p.first,currentGraph,*(DataSet*)p.second->value);
+	cout << "Create view  : " << p.first << endl;
+      }
     }else{
       // Tlp file with scene system
       if(!sceneData.empty()) {
@@ -1340,6 +1346,7 @@ View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
   
   View *newView=ViewPluginsManager::getInst().createView(name,workspace);
   connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
+  connect(newView, SIGNAL(clusterTreeNeedUpdate()),this,SLOT(updateClusterTree()));
 
 
   newView->setData(graph,dataSet);
@@ -1381,7 +1388,10 @@ void viewGl::changeInteractor(QAction* action){
     }
   }
 }
-
+//==============================================================
+void viewGl::updateClusterTree() {
+  clusterTreeWidget->update();
+}
 //==============================================================
 void viewGl::graphAboutToBeRemoved(Graph *sg) {
   //  cerr << __PRETTY_FUNCTION__ <<  "Possible bug" << endl;

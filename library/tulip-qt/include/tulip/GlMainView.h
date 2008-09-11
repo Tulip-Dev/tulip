@@ -96,7 +96,7 @@ namespace tlp {
 
   protected slots:
     void centerView();
-    void showDialog(QAction*);	
+    void showDialog(QAction*);
 
   public slots:
     void redrawView();
@@ -111,7 +111,7 @@ namespace tlp {
     void createSubgraph();
     void reverseSelectedEdgeDirection();
     void createGroup();  
-    void changeGraph(Graph *graph);
+    void changeGraph(Graph *);
 
     /*signals:
       void showElementPropertiesSignal(unsigned int eltId, bool isNode);*/

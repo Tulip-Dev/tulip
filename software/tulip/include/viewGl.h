@@ -128,6 +128,7 @@ public slots:
   void closeEvent(QCloseEvent *e); 
   
 protected slots:
+  void updateClusterTree();
   void helpIndex();
   void helpContents();
   void helpAbout();

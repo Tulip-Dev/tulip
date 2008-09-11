@@ -270,7 +270,6 @@ namespace tlp {
 	    else  {
 	      if (menuAction == ungroupAction) { // Ungroup
 		tlp::openMetaNode(graph, tmpNode);
-		//clusterTreeWidget->update();
 	      } else {
 		BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
 		if (menuAction == selectAction) { // Select
@@ -448,13 +447,13 @@ namespace tlp {
       sel1 = graph->getProperty<BooleanProperty>("viewSelection");
       Graph *tmp = graph->addSubGraph(sel1);
       tmp->setAttribute("name",string(text.toAscii().data()));
-      //clusterTreeWidget->update();
+      emit clusterTreeNeedUpdate();
     }
     else if (ok) {
       sel1 = graph->getProperty<BooleanProperty>("viewSelection");
       Graph *tmp=graph->addSubGraph(sel1);
       tmp->setAttribute("name", newName());
-      //clusterTreeWidget->update();
+      emit clusterTreeNeedUpdate();
     }
   }
   //================================================
@@ -560,8 +559,6 @@ namespace tlp {
     Color metaNodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
     metaNodeColor[3]=127;
     graph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaNode,metaNodeColor);
-    //clusterTreeWidget->update();
-    //changeGraph(graph);
   }
   //==================================================
   std::string GlMainView::newName() {

@@ -71,9 +71,6 @@ namespace tlp {
   //==================================================
   void ParallelView::getInteractorsActionList(list<QAction*> &interactorsList) {
     interactorsList.push_back(new QAction(QIcon(":/i_navigation.png"),"graphNavigate",this));
-    interactorsList.push_back(new QAction(QIcon(":/i_select.png"),"select",this));
-    interactorsList.push_back(new QAction(QIcon(":/i_selection.png"),"selection",this));
-    interactorsList.push_back(new QAction(QIcon(":/i_magic.png"),"magicSelection",this));
     interactorsList.push_back(new QAction(QIcon(":/i_zoom.png"),"zoomBox",this));
   }
   Iterator<Interactor *> *ParallelView::installInteractor(const string &name) {
