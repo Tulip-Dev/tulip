@@ -637,8 +637,8 @@ void viewGl::fileNew() {
   Observable::unholdObservers();
   glW->show();*/
   currentGraph=newGraph;
-  changeGraph(currentGraph);
   initMainView();
+  changeGraph(currentGraph);
 }
 //**********************************************************************
 void viewGl::setNavigateCaption(string newCaption) {
