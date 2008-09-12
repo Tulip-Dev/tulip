@@ -20,6 +20,8 @@
 #include <QtGui/QDialog>
 #include <QtGui/QRadioButton>
 
+#include <tulip/Reflect.h>
+
 #include "ParallelCoordinatesGraphProxy.h"
 #include "ItemsDialogList.h"
 
@@ -32,6 +34,9 @@ class ViewConfigDialog : public QDialog {
 public :
   
   ViewConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent = 0);
+
+  void setData(DataSet dataSet,ParallelCoordinatesGraphProxy *data);
+  DataSet getData();
 
   std::list<std::string> &getSelectedProperties();
 

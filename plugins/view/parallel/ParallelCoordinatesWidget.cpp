@@ -123,13 +123,36 @@ void ParallelCoordinatesWidget::clearObservers() {
 
   graphProxy = new ParallelCoordinatesGraphProxy(graph);
 
+  if(dataSet.exist("selectedProperties")) {
+    list<string> selectedProperties;
+    DataSet items;
+    dataSet.get("selectedProperties",items);
+    int i=0;
+    stringstream ss;
+    ss<<i;
+    while(items.exist(ss.str())) {
+      string item;
+      items.get(ss.str(),item);
+      selectedProperties.push_back(item);
+      ss.str("");
+      ++i;
+      ss << i;
+    }
+    graphProxy->setSelectedProperties(selectedProperties);
+  }
+
   if(!vcd) {
     vcd=new ViewConfigDialog(graphProxy, this);
     vcd->setModal(true);
   }
-  //vcd.exec();
   
-  graphProxy->setSelectedProperties(vcd->getSelectedProperties());
+  if(dataSet.exist("vcd")) {
+    DataSet vcdData;
+    dataSet.get("vcd",vcdData);
+    vcd->setData(vcdData,graphProxy);
+  }else{
+    graphProxy->setSelectedProperties(vcd->getSelectedProperties());
+  }
   graphProxy->setDataLocation(vcd->getDataLocation());
   
   createView(vcd->getViewType());
@@ -139,7 +162,23 @@ void ParallelCoordinatesWidget::clearObservers() {
 }
 
   DataSet ParallelCoordinatesWidget::getData() {
-    return DataSet();
+    DataSet data;
+
+    DataSet vcdData=vcd->getData();
+    data.set("vcd",vcdData);
+    
+    list<string> selectedProperties=graphProxy->getSelectedProperties();
+    DataSet selectedPropertiesData;
+    int i=0;
+    for(list<string>::iterator it=selectedProperties.begin();it!=selectedProperties.end();++it) {
+      std::stringstream s;
+      s << i ;
+      selectedPropertiesData.set<string>(s.str(),*it);
+      i++;
+    }
+    data.set("selectedProperties",selectedPropertiesData);
+
+    return data;
   }
 
 
