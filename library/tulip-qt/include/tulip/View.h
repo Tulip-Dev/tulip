@@ -44,6 +44,10 @@ namespace tlp {
     virtual bool createGroupIsEnable() {return false;}
     virtual bool createSubgraphIsEnable() {return false;}
 
+    //For plugin progress handler
+    virtual bool doProgressUpdate() {return false;}
+    virtual void progressUpdate() {}
+
   protected:
     virtual void constructInteractorsMap() {}
 

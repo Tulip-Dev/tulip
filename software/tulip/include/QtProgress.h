@@ -2,6 +2,7 @@
 #define QtProgress_TULIP
 #include <string>
 #include <tulip/PluginProgress.h>
+#include <tulip/View.h>
 #include "QtProgressData.h"
 
 
@@ -11,7 +12,7 @@ public QDialog, public Ui::QtProgressData, public tlp::PluginProgress {
   Q_OBJECT
 
 public:
-  QtProgress(QWidget* parent, std::string text);
+  QtProgress(QWidget* parent, std::string text, tlp::View *view=0);
   virtual ~QtProgress();
   void progress_handler(int i,int j);
   void setComment(std::string msg);
@@ -25,7 +26,7 @@ public:
   bool firstCall;
   std::string label;
   QWidget* parent;
-  //GlMainWidget *glMainWidget;
+  tlp::View *view;
 };
 
 #endif

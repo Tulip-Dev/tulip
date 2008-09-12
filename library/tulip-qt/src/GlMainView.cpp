@@ -294,6 +294,11 @@ namespace tlp {
     return false;
   }
   //==================================================
+  void GlMainView::progressUpdate() {
+    centerView();
+    redrawView();
+  }
+  //==================================================
   // GUI functions
   //==================================================
   void  GlMainView::redrawView() {

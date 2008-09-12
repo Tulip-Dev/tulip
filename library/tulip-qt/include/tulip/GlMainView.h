@@ -76,6 +76,9 @@ namespace tlp {
     virtual bool createGroupIsEnable() {return true;}
     virtual bool createSubgraphIsEnable() {return true;}
 
+    virtual bool doProgressUpdate() {return true;}
+    virtual void progressUpdate();
+
   protected :
 
     std::string newName();

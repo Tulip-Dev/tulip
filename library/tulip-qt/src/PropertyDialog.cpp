@@ -199,6 +199,7 @@ namespace tlp {
     if(graph->existLocalProperty(editedPropertyName)) {
       graph->delLocalProperty(editedPropertyName);
       //setGlMainWidget(glWidget);
+      setGraph(graph);
       editedProperty=0;
     }
     else

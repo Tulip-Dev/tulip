@@ -1638,8 +1638,12 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   Observable::holdObservers();
   /*overviewWidget->setObservedView(0);*/
   GlGraphRenderingParameters param;
-  /*QtProgress myProgress(this, name, redraw ? glWidget : 0);*/
-  QtProgress myProgress(this, name);
+  QtProgress *myProgress;
+  if(currentView->doProgressUpdate()) {
+    myProgress=new QtProgress(((QWidget*)this), name,redraw ? currentView : 0);
+  }else{
+    myProgress=new QtProgress(((QWidget*)this), name, 0);
+  }
   string erreurMsg;
   bool   resultBool=true;  
   DataSet *dataSet =0;
@@ -1653,21 +1657,23 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
 
   if (resultBool) {
-    /*if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-      //cam = param.getCamera();
-      param.setInputLayout(name);
-      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-      }*/
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      if(currentView->getPluginName()=="MainView") {
+	GlMainWidget *glWidget=((GlMainView*)currentView)->getGlMainWidget();
+	param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+	param.setInputLayout(name);
+	glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+	glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
+    }
 
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
-    resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
+    resultBool = graph->computeProperty(name, dest, erreurMsg, myProgress, dataSet);
     if (!resultBool) {
       QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
     }
     else 
-      switch(myProgress.state()){
+      switch(myProgress->state()){
       case TLP_CONTINUE:
       case TLP_STOP:
 	*graph->template getLocalProperty<PROPERTY>(destination) = *dest;
@@ -1676,13 +1682,16 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	resultBool=false;
       };
     graph->delLocalProperty(name);
-    /*if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-      param.setInputLayout("viewLayout");
-      //param.setCamera(cam);
-      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-      glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-      }*/
+    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+      if(currentView->getPluginName()=="MainView") {
+	GlMainWidget *glWidget=((GlMainView*)currentView)->getGlMainWidget();
+	param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+	param.setInputLayout("viewLayout");
+	//param.setCamera(cam);
+	glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+	glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
+    }
     //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
   if (dataSet!=0) delete dataSet;
@@ -1690,6 +1699,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   propertiesWidget->setGraph(graph);
   /*overviewWidget->setObservedView(glWidget);*/
   Observable::unholdObservers();
+  delete myProgress;
   return resultBool;
 }
 //**********************************************************************
