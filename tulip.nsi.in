@@ -192,6 +192,6 @@ RMDir "$INSTDIR\include\tulip"
 RMDir "$INSTDIR\include"
 IfFileExists "$INSTDIR\share\*.*" 0 +2
 RMDir /r "$INSTDIR\share"
-Delete "$INSTDIR\assistant.exe"
+Delete "$INSTDIR\@QT_ASSISTANT@.exe"
 RMDir "$INSTDIR"
 SectionEnd
