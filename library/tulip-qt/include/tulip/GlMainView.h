@@ -18,7 +18,6 @@
 #endif
 
 #include "tulip/View.h"
-#include "tulip/GlMainViewData.h"
 
 #include <QtGui/QMainWindow>
 
@@ -45,7 +44,7 @@ namespace tlp {
     View* create(const std::string &name,QWidget *parent);
   };
 
-  class TLP_QT_SIMPLE_SCOPE GlMainView : public View, public Ui::GlMainViewData, public GlSceneObserver {
+  class TLP_QT_SIMPLE_SCOPE GlMainView : public View, public GlSceneObserver {
 
     Q_OBJECT;
   

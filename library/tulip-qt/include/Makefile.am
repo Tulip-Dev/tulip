@@ -47,7 +47,6 @@ BUILT_SOURCES = \
 	tulip/PropertyDialogData.h \
 	tulip/CopyPropertyDialogData.h \
 	tulip/TulipStatsData.h \
-	tulip/GlMainViewData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h
@@ -59,7 +58,6 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
-	tulip/GlMainViewData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \

@@ -34,14 +34,17 @@ namespace tlp {
   //==================================================
   GlMainView::GlMainView(const string &pluginName,QWidget *parent, const char *name):
     View(pluginName,parent) {
-    setupUi(this);
 
     installEventFilter(this);
 
     copyCutPasteGraph=0;
 
     mainWidget=new GlMainWidget(this,"mainWidget");
-    setCentralWidget(mainWidget);
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(0);
+    gridLayout->setMargin(0);
+    gridLayout->addWidget(mainWidget, 0, 0, 1, 1);
+
     constructInteractorsMap();
 
     // Create overview widget after the tabWidgetDock
@@ -58,21 +61,21 @@ namespace tlp {
     //overviewDock->setResizeEnabled(true);
     overviewWidget = new GWOverviewWidget(overviewDock);
     overviewDock->setWidget(overviewWidget);
-    this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
+    //this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
     overviewWidget->show(); 
     overviewDock->show();
-
+    /*
     //View Menu
     viewMenu->addAction("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
     viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
-    //viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
+    viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
     //Dialogs Menu
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-    dialogMenu->addAction("3D &Overview");
-    //dialogMenu->addAction("&Info Editor");
+    //dialogMenu->addAction("3D &Overview");
+    dialogMenu->addAction("&Info Editor");
     dialogMenu->addAction("&Layer Manager");
     renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
-    renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
+    renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));*/
 
     renderingParametersDialog=new RenderingParametersDialog(this);
     layerWidget = new LayerManagerWidget(this);
@@ -173,7 +176,7 @@ namespace tlp {
     // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
     // is no longer needed; the tooltip implementation must take place
     // in the event() method inherited from QWidget.
-    if (object->inherits("tlp::GlMainView") &&
+    /*if (object->inherits("tlp::GlMainView") &&
 	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
       node tmpNode;
       edge tmpEdge;
@@ -290,7 +293,7 @@ namespace tlp {
 	return true;
       }
       return false;
-    }
+      }*/
     return false;
   }
   //==================================================
@@ -523,7 +526,7 @@ namespace tlp {
   //==================================================
   void GlMainView::find() {
     //if(!glWidget) return;
-    Graph * g = mainWidget->getGraph();
+    /*Graph * g = mainWidget->getGraph();
     if( !g ) return;
     
     static string currentProperty;
@@ -541,7 +544,7 @@ namespace tlp {
       stringstream sstr;
       sstr << nbItemsFound << " item(s) found.";
       statusBar()->showMessage(sstr.str().c_str());
-    }
+      }*/
   }
   //==================================================
   void GlMainView::createGroup() {

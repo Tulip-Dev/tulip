@@ -17,7 +17,7 @@ namespace tlp {
   /** \brief Tulip view interface class
    * 
    */
-  class View : public QMainWindow, public GraphObserver {
+  class View : public QWidget, public GraphObserver {
     
     Q_OBJECT;
 

@@ -18,7 +18,6 @@
 #include <tulip/View.h>
 
 #include "ParallelCoordinatesWidget.h"
-#include "ParallelViewData.h"
 
 namespace tlp {
 
@@ -27,7 +26,7 @@ namespace tlp {
     virtual View* create(const std::string &pluginName,QWidget *parent);
   };
 
-  class ParallelView : public View, public Ui::ParallelViewData {
+  class ParallelView : public View {
 
     Q_OBJECT;
 

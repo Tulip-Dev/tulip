@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>SpreadMainWidgetData</class>
- <widget class="QMainWindow" name="SpreadMainWidgetData" >
+ <widget class="QWidget" name="SpreadMainWidgetData" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -12,45 +12,42 @@
   <property name="windowTitle" >
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QHBoxLayout" >
-    <item>
-     <layout class="QVBoxLayout" >
-      <item>
-       <widget class="tlp::SpreadLineEdit" name="lineEdit" />
-      </item>
-      <item>
-       <widget class="QTabWidget" name="tabWidget" >
-        <property name="currentIndex" >
-         <number>1</number>
-        </property>
-        <widget class="QWidget" name="tab" >
-         <attribute name="title" >
-          <string>Nodes</string>
-         </attribute>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="tlp::SpreadTable" name="spreadNodesTable" />
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="tab_2" >
-         <attribute name="title" >
-          <string>Edges</string>
-         </attribute>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="tlp::SpreadTable" name="spreadEdgesTable" />
-          </item>
-         </layout>
-        </widget>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" name="verticalLayout" >
+     <item>
+      <widget class="tlp::SpreadLineEdit" name="lineEdit" />
+     </item>
+     <item>
+      <widget class="QTabWidget" name="tabWidget" >
+       <property name="currentIndex" >
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="tab" >
+        <attribute name="title" >
+         <string>Nodes</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2" >
+         <item row="0" column="0" >
+          <widget class="tlp::SpreadTable" name="spreadNodesTable" />
+         </item>
+        </layout>
        </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusbar" />
+       <widget class="QWidget" name="tab_2" >
+        <attribute name="title" >
+         <string>Edges</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3" >
+         <item row="0" column="0" >
+          <widget class="tlp::SpreadTable" name="spreadEdgesTable" />
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>

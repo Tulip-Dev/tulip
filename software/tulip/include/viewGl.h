@@ -167,7 +167,6 @@ protected slots:
   void outputSVG();
   tlp::View* createView(const std::string &name,tlp::Graph *graph,tlp::DataSet dataSet);
   void addView(QAction *action);
-  void displayView(tlp::View *view,const std::string &name);
   void changeInteractor(QAction*);
   void updateCurrentGraphInfos();
   void windowsMenuAboutToShow();

@@ -45,8 +45,7 @@ nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
 			moc_ItemsDialogList.cpp \
 			moc_NominalParallelAxis.cpp 
 
-BUILT_SOURCES = \
-			ParallelViewData.h
+BUILT_SOURCES = 
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

@@ -2,7 +2,6 @@ dist_noinst_DATA = \
 	FindSelection.ui \
 	GWOverviewWidget.ui \
 	RenderingParametersDialog.ui \
-	GlMainView.ui \
 	TabWidget.ui \
 	PropertyDialog.ui \
 	CopyPropertyDialog.ui \
@@ -12,7 +11,6 @@ SOURCES = \
 	FindSelection.ui \
 	GWOverviewWidget.ui \
 	RenderingParametersDialog.ui \
-	GlMainView.ui \
 	TabWidget.ui \
 	PropertyDialog.ui \
 	CopyPropertyDialog.ui \

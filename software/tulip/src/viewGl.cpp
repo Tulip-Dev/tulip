@@ -450,8 +450,12 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
 }
 //**********************************************************************
 void viewGl::windowActivated(QWidget *w) {
-  //cerr << __PRETTY_FUNCTION__ << " (QWidget = " << (int)w << ")" << endl;
-  View *view = dynamic_cast<View*>(w);
+  QObjectList childrenList=w->children();
+  View *view=NULL;
+  for(int i=0;i<childrenList.size() && !view;++i) {
+    view=dynamic_cast<View*>(childrenList[i]);
+  }
+
   if(view){
     disconnect(clusterTreeWidget,SIGNAL(graphChanged(Graph *)),currentView,SLOT(changeGraph(Graph*)));
     currentView=view;
@@ -459,17 +463,7 @@ void viewGl::windowActivated(QWidget *w) {
     installInteractors(view);
     installEditMenu(view);
     clusterTreeWidget->setGraph(currentView->getGraph());
-    //view->getWidget()->installEventFilter(this);
   }
-  /*if (w==0)  {
-    glWidget = 0;
-    return;
-  }
-  if (typeid(*w)==typeid(GlMainWidget)) {
-    glWidget=((GlMainWidget *)w);
-    glWidget->resetInteractors(*currentInteractors);
-    changeGraph(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
-    }*/
 }
 //**********************************************************************
 void viewGl::installInteractors(View *view) {
@@ -1342,33 +1336,45 @@ void viewGl::focusInEvent ( QFocusEvent * ) {
 //**********************************************************************
 View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
   
+  QWidget *newWidget=new QWidget(workspace);
+  workspace->addWindow(newWidget);
+  newWidget->setWindowTitle(name.c_str());
+  newWidget->resize(500,500);
+  newWidget->setMaximumSize(32767, 32767);
+  newWidget->show();
+
+  QGridLayout *gridLayout = new QGridLayout(newWidget);
+  gridLayout->setSpacing(0);
+  gridLayout->setMargin(0);
+
+  QVBoxLayout *layout=new QVBoxLayout;
+
+  QMenuBar *newMenu=new QMenuBar;
+  newMenu->addMenu("test");
+  layout->addWidget(newMenu);
+
   View *newView=ViewPluginsManager::getInst().createView(name,workspace);
+  newView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  layout->addWidget(newView);
+
+  gridLayout->addLayout(layout, 0, 0, 1, 1);
+
   connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
   connect(newView, SIGNAL(clusterTreeNeedUpdate()),this,SLOT(updateClusterTree()));
-
 
   newView->setData(graph,dataSet);
   graph->addObserver(newView);
 
   if(elementsDisabled)
     enableElements(true);
- 
-  displayView(newView,name);
+
+  windowActivated(newWidget);
+
   return newView;
 }
 //**********************************************************************
 void viewGl::addView(QAction *action) {
   createView(action->text().toStdString(),currentGraph,DataSet());
-}
-//**********************************************************************
-void viewGl::displayView(View *view,const string &name){
-  workspace->addWindow(view->getWidget());
-  view->getWidget()->move(0,0);
-  view->getWidget()->setWindowTitle(name.c_str());
-  view->getWidget()->setMinimumSize(0, 0);
-  view->getWidget()->resize(500,500);
-  view->getWidget()->setMaximumSize(32767, 32767);
-  view->getWidget()->show();
 }
 //**********************************************************************
 void viewGl::changeInteractor(QAction* action){

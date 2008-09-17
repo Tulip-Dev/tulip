@@ -28,14 +28,16 @@ namespace tlp {
   }
 
   ParallelView::ParallelView(const std::string &pluginName,QWidget *parent) : View(pluginName,parent){
-    setupUi(this);
 
     mainWidget=new ParallelCoordinatesWidget(this);
-    setCentralWidget(mainWidget);
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(0);
+    gridLayout->setMargin(0);
+    gridLayout->addWidget(mainWidget, 0, 0, 1, 1);
 
-    dialogMenu->addAction("Config");
+    /*dialogMenu->addAction("Config");
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-
+    */
     constructInteractorsMap();
   }
 
