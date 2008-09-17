@@ -20,8 +20,8 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
-#ifndef Tulip_SPREADWIDGET_H
-#define Tulip_SPREADWIDGET_H
+#ifndef Tulip_SPREADVIEW_H
+#define Tulip_SPREADVIEW_H
 
 #include <QtGui/QWidget>
 
@@ -29,49 +29,35 @@
 
 #include <tulip/View.h>
 
-#include "SpreadTable.h"
-#include "SpreadMainWidgetData.h"
+#include "SpreadWidget.h"
 
 namespace tlp {
   
   class Graph;
 
-  class TLP_QT_SCOPE SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData 
+  class TLP_QT_SCOPE SpreadViewCreator : public ViewCreator {
+  public :
+    virtual View* create(const std::string &pluginName,QWidget *parent);
+  };
+
+  class TLP_QT_SCOPE SpreadView : public View
   {
     Q_OBJECT
       
   public:
 
-    SpreadWidget(QWidget *parent=0);
-    virtual ~SpreadWidget() {}
+    SpreadView(const std::string &pluginName,QWidget *parent=0);
+    virtual ~SpreadView() {}
 
     void setData(Graph *graph,DataSet dataSet);
     DataSet getData();
     Graph *getGraph();
-      
-    void addNode(Graph *,const node );
-    void addEdge(Graph *,const edge );
-    void delNode(Graph *,const node );
-    void delEdge(Graph *,const edge );
-    void destroy(Graph *);
 
-  protected:
-    
-    SpreadTable *activeSpread;
-    QTableWidgetItem *currentCell;
-    Graph *graph;
-    
-    bool editingLine;
-    QString currentText;
-    bool nodeTab;
+    QWidget *getWidget() {return this;}
 
-  protected slots :
+  protected :
     
-    void tableMouseReleasedSlot(SpreadTable*);
-    void returnPressedSlot();
-    void beginEditLineSlot();
-    void textChangedSlot(const QString &);
-    void tabChanged(int);
+    SpreadWidget *mainWidget;
     
   };
 

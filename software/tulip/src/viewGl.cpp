@@ -450,11 +450,7 @@ void viewGl::hierarchyChangeGraph(Graph *graph) {
 }
 //**********************************************************************
 void viewGl::windowActivated(QWidget *w) {
-  QObjectList childrenList=w->children();
-  View *view=NULL;
-  for(int i=0;i<childrenList.size() && !view;++i) {
-    view=dynamic_cast<View*>(childrenList[i]);
-  }
+  View *view=dynamic_cast<View*>(w);
 
   if(view){
     disconnect(clusterTreeWidget,SIGNAL(graphChanged(Graph *)),currentView,SLOT(changeGraph(Graph*)));
@@ -1335,29 +1331,10 @@ void viewGl::focusInEvent ( QFocusEvent * ) {
 }
 //**********************************************************************
 View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
-  
-  QWidget *newWidget=new QWidget(workspace);
-  workspace->addWindow(newWidget);
-  newWidget->setWindowTitle(name.c_str());
-  newWidget->resize(500,500);
-  newWidget->setMaximumSize(32767, 32767);
-  newWidget->show();
-
-  QGridLayout *gridLayout = new QGridLayout(newWidget);
-  gridLayout->setSpacing(0);
-  gridLayout->setMargin(0);
-
-  QVBoxLayout *layout=new QVBoxLayout;
-
-  QMenuBar *newMenu=new QMenuBar;
-  newMenu->addMenu("test");
-  layout->addWidget(newMenu);
 
   View *newView=ViewPluginsManager::getInst().createView(name,workspace);
-  newView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-  layout->addWidget(newView);
-
-  gridLayout->addLayout(layout, 0, 0, 1, 1);
+  newView->setWindowFlags(Qt::Dialog);
+  workspace->addWindow(newView);
 
   connect(newView, SIGNAL(showElementPropertiesSignal(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
   connect(newView, SIGNAL(clusterTreeNeedUpdate()),this,SLOT(updateClusterTree()));
@@ -1368,7 +1345,12 @@ View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
   if(elementsDisabled)
     enableElements(true);
 
-  windowActivated(newWidget);
+  newView->setWindowTitle(name.c_str());
+  newView->resize(500,500);
+  newView->setMaximumSize(32767, 32767);
+  newView->show();
+
+  windowActivated(newView);
 
   return newView;
 }

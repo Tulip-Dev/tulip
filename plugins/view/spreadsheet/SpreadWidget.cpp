@@ -8,14 +8,8 @@ using namespace std;
 
 namespace tlp {
 
-  VIEWPLUGIN(SpreadView, "SpreadSheetView", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0", 1);
-
-  View* SpreadView::create(const string &pluginName,QWidget *parent) {
-    return new SpreadWidget(pluginName,parent);
-  }
-
-  SpreadWidget::SpreadWidget(const string &pluginName,QWidget *parent) :
-    View(pluginName,parent),currentCell(NULL),editingLine(false),nodeTab(true) {
+  SpreadWidget::SpreadWidget(QWidget *parent) :
+    currentCell(NULL),editingLine(false),nodeTab(true) {
     setupUi(this);
     spreadNodesTable->setView(SpreadTable::NodesView);
     spreadEdgesTable->setView(SpreadTable::EdgesView);

@@ -9,6 +9,7 @@ plugins_LTLIBRARIES = libSpreadSheet-@VERSION@.la
 pluginsdir = $(libdir)/tlp/view
 
 libSpreadSheet_@VERSION@_la_SOURCES = \
+			SpreadView.cpp \
 			SpreadWidget.cpp \
 			SpreadTable.cpp \
 			SpreadCell.cpp \
@@ -26,6 +27,7 @@ libSpreadSheet_@VERSION@_la_SOURCES = \
 			SpreadLineEdit.h
 
 nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
+			moc_SpreadView.cpp \
 			moc_SpreadWidget.cpp \
 			moc_SpreadTable.cpp \
 			moc_SpreadCell.cpp \

@@ -19,6 +19,8 @@
 
 #include "ParallelCoordinatesWidget.h"
 
+class QMenu;
+
 namespace tlp {
 
   class ParallelCoordinatesViewCreator : public ViewCreator {
@@ -48,6 +50,9 @@ namespace tlp {
 
   public slots:
     void showDialog(QAction*);
+
+  protected :
+    QMenu *dialogMenu;
     
   };
 

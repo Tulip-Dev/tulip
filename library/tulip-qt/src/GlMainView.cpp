@@ -5,6 +5,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QToolTip>
+#include <QtGui/QMenuBar>
 
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
@@ -40,10 +41,8 @@ namespace tlp {
     copyCutPasteGraph=0;
 
     mainWidget=new GlMainWidget(this,"mainWidget");
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setSpacing(0);
-    gridLayout->setMargin(0);
-    gridLayout->addWidget(mainWidget, 0, 0, 1, 1);
+
+    setCentralWidget(mainWidget);
 
     constructInteractorsMap();
 
@@ -52,7 +51,7 @@ namespace tlp {
     // In doing this the overviewDock will be the first
     // sibling candidate when the tabWidgetDock will loose the focus
     // and Qt will not try to give the focus to the first GlMainWidget
-    overviewDock = new QDockWidget("Overview", this);
+    overviewDock = new QDockWidget("Overview", mainWidget);
     overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     overviewDock->setWindowTitle("3D Overview");
     overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
@@ -64,21 +63,26 @@ namespace tlp {
     //this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
     overviewWidget->show(); 
     overviewDock->show();
-    /*
+    
     //View Menu
+    viewMenu=menuBar->addMenu("View");
     viewMenu->addAction("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
     viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
     viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
     //Dialogs Menu
+    dialogMenu=menuBar->addMenu("Dialog");
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-    //dialogMenu->addAction("3D &Overview");
+    dialogMenu->addAction("3D &Overview");
     dialogMenu->addAction("&Info Editor");
-    dialogMenu->addAction("&Layer Manager");
     renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
-    renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));*/
-
+    renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
     renderingParametersDialog=new RenderingParametersDialog(this);
     layerWidget = new LayerManagerWidget(this);
+    //Options Menu
+    optionsMenu=menuBar->addMenu("Options");
+    actionTooltips=optionsMenu->addAction("Tooltips");
+    actionTooltips->setCheckable(true);
+    actionTooltips->setChecked(false);
     
   }
   //==================================================
@@ -171,12 +175,11 @@ namespace tlp {
     return mainWidget->getInteractors();
   }
 
-
   bool GlMainView::eventFilter(QObject *object, QEvent *event) {
     // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
     // is no longer needed; the tooltip implementation must take place
     // in the event() method inherited from QWidget.
-    /*if (object->inherits("tlp::GlMainView") &&
+    if (object->inherits("tlp::GlMainView") &&
 	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
       node tmpNode;
       edge tmpEdge;
@@ -293,7 +296,7 @@ namespace tlp {
 	return true;
       }
       return false;
-      }*/
+    }
     return false;
   }
   //==================================================

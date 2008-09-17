@@ -89,6 +89,10 @@ namespace tlp {
 
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
+    QMenu *viewMenu;
+    QMenu *dialogMenu;
+    QMenu *optionsMenu;
+    QAction *actionTooltips;
 
     QAction *renderingParametersDialogAction;
     RenderingParametersDialog *renderingParametersDialog;

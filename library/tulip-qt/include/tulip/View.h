@@ -10,6 +10,9 @@
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
 
+class QMenuBar;
+class QVBoxLayout;
+
 namespace tlp {
 
   class Interactor;
@@ -50,7 +53,10 @@ namespace tlp {
 
   protected:
     virtual void constructInteractorsMap() {}
+    void setCentralWidget(QWidget *widget);
 
+    QVBoxLayout *mainLayout;
+    QMenuBar *menuBar;
     std::map<std::string,std::vector<Interactor *> > interactorsMap;
 
   public slots:
