@@ -16,7 +16,11 @@ namespace tlp {
   /// Class for coordinates in 3D
   class TLP_SCOPE Coord : public tlp::Vector<float,3> {
   public:
-    inline Coord(const float=0,const float=0,const float=0);
+    // default constructor (no initialization)
+    inline Coord();
+    // this constructor gives the same value to x,y,z
+    inline Coord(const float);
+    inline Coord(const float,const float,const float=0);
     inline Coord(const tlp::Vector<float,3> &);
     inline void set(const float=0,const float=0,const float=0);
     inline void set(const Coord&);
@@ -91,6 +95,10 @@ bool tlp::Coord::operator==(const tlp::Coord &p) const {
   return true;
 }
 
+tlp::Coord::Coord() {}
+tlp::Coord::Coord(const float val) {
+  (*this)[0]= (*this)[1]= (*this)[2]= val;
+}
 tlp::Coord::Coord(const float xx, const float yy, const float zz) {
   (*this)[0]=xx;(*this)[1]=yy,(*this)[2]=zz;
 }
