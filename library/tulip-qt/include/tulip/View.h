@@ -51,12 +51,16 @@ namespace tlp {
     virtual bool doProgressUpdate() {return false;}
     virtual void progressUpdate() {}
 
+    //eventFilter 
+    virtual void specificEventFilter(QObject *object,QEvent *event) {}
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
+    virtual void computeContextMenuAction(QAction *action) {}
+
   protected:
     virtual void constructInteractorsMap() {}
     void setCentralWidget(QWidget *widget);
 
     QVBoxLayout *mainLayout;
-    QMenuBar *menuBar;
     std::map<std::string,std::vector<Interactor *> > interactorsMap;
 
   public slots:
@@ -65,6 +69,8 @@ namespace tlp {
       emit showElementPropertiesSignal(eltId, isNode);
     }
     virtual void changeGraph(Graph *) {}
+
+    bool eventFilter(QObject *object, QEvent *event);
 
     virtual void cut() {}
     virtual void copy() {}

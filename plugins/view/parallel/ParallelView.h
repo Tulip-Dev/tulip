@@ -48,6 +48,8 @@ namespace tlp {
     Iterator<Interactor *> *installInteractor(const std::string &);
     void constructInteractorsMap();
 
+    void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);			  
+
   public slots:
     void showDialog(QAction*);
 

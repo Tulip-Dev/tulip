@@ -62,7 +62,7 @@ namespace tlp {
     void getInteractorsActionList(std::list<QAction*> &);
     Iterator<Interactor *> *installInteractor(const std::string &);
 
-    bool eventFilter(QObject *, QEvent *);
+    //bool eventFilter(QObject *, QEvent *);
 
     virtual bool cutIsEnable() {return true;}
     virtual bool copyIsEnable() {return true;}
@@ -77,6 +77,10 @@ namespace tlp {
 
     virtual bool doProgressUpdate() {return true;}
     virtual void progressUpdate();
+
+    virtual void specificEventFilter(QObject *object,QEvent *event);
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+    virtual void computeContextMenuAction(QAction *action);
 
   protected :
 
@@ -98,7 +102,16 @@ namespace tlp {
     RenderingParametersDialog *renderingParametersDialog;
     LayerManagerWidget *layerWidget;
 
-    tlp::Graph * copyCutPasteGraph;				    
+    tlp::Graph * copyCutPasteGraph;
+
+    QAction* selectAction;
+    QAction* deleteAction;
+    QAction* goAction;	
+    QAction* ungroupAction;
+    QAction* propAction;
+    bool isNode;
+    int itemId;
+			 
 
   protected slots:
     void centerView();

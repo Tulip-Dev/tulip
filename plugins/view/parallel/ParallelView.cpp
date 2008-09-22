@@ -36,7 +36,7 @@ namespace tlp {
     
     setCentralWidget(mainWidget);
 
-    dialogMenu=menuBar->addMenu("Dialog");
+    dialogMenu=new QMenu("Dialog");
     dialogMenu->addAction("Config");
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
     
@@ -84,6 +84,10 @@ namespace tlp {
 
   void ParallelView::showDialog(QAction *action) {
     mainWidget->showConfigDialog();
+  }
+
+  void ParallelView::buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {
+    contextMenu->addMenu(dialogMenu);
   }
 
 }

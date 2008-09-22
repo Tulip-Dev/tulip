@@ -45,7 +45,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   //layer->addGlEntity(graphComposite,"graphComposite");
   //_view->getScene()->setGlMainComposite(graphComposite);
   _view->getScene()->addLayer(layer);
-  _view->setMinimumSize( QSize( 128, 128 ) );
+  _view->setMinimumSize( QSize( 80, 80 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
   QGridLayout* gridLayout = new QGridLayout;
   gridLayout->setMargin(0);

@@ -36,8 +36,6 @@ namespace tlp {
   GlMainView::GlMainView(const string &pluginName,QWidget *parent, const char *name):
     View(pluginName,parent) {
 
-    installEventFilter(this);
-
     copyCutPasteGraph=0;
 
     mainWidget=new GlMainWidget(this,"mainWidget");
@@ -51,35 +49,44 @@ namespace tlp {
     // In doing this the overviewDock will be the first
     // sibling candidate when the tabWidgetDock will loose the focus
     // and Qt will not try to give the focus to the first GlMainWidget
-    overviewDock = new QDockWidget("Overview", mainWidget);
+    /*overviewDock = new QDockWidget("Overview", mainWidget);
     overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     overviewDock->setWindowTitle("3D Overview");
     overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
 			      QDockWidget::DockWidgetMovable |
-			      QDockWidget::DockWidgetFloatable);
+			      QDockWidget::DockWidgetFloatable);*/
     //overviewDock->setResizeEnabled(true);
-    overviewWidget = new GWOverviewWidget(overviewDock);
-    overviewDock->setWidget(overviewWidget);
+    QFrame *frame = new QFrame(mainWidget);
+    frame->setGeometry(QRect(0, 0, 100, 100));
+    frame->setFrameShape(QFrame::StyledPanel);
+    frame->setFrameShadow(QFrame::Raised);
+    QGridLayout *gridLayout_2 = new QGridLayout(frame);
+    overviewWidget = new GWOverviewWidget(frame);
+    overviewWidget->setGeometry(0,0,80,80);
+    gridLayout_2->addWidget(overviewWidget, 0, 0, 1, 1);
+    //overviewDock->setWidget(overviewWidget);
     //this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
-    overviewWidget->show(); 
-    overviewDock->show();
+    //overviewWidget->show(); 
+    //overviewDock->show();
     
     //View Menu
-    viewMenu=menuBar->addMenu("View");
+    viewMenu=new QMenu("View");
     viewMenu->addAction("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
     viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
     viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
     //Dialogs Menu
-    dialogMenu=menuBar->addMenu("Dialog");
+    dialogMenu=new QMenu("Dialog");
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-    dialogMenu->addAction("3D &Overview");
+    QAction *overview=dialogMenu->addAction("3D &Overview");
+    overview->setCheckable(true);
+    overview->setChecked(true);
     dialogMenu->addAction("&Info Editor");
     renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
     renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
     renderingParametersDialog=new RenderingParametersDialog(this);
     layerWidget = new LayerManagerWidget(this);
     //Options Menu
-    optionsMenu=menuBar->addMenu("Options");
+    optionsMenu=new QMenu("Options");
     actionTooltips=optionsMenu->addAction("Tooltips");
     actionTooltips->setCheckable(true);
     actionTooltips->setChecked(false);
@@ -175,10 +182,8 @@ namespace tlp {
     return mainWidget->getInteractors();
   }
 
-  bool GlMainView::eventFilter(QObject *object, QEvent *event) {
-    // With Qt4 software/src/tulip/ElementTooltipInfo.cpp
-    // is no longer needed; the tooltip implementation must take place
-    // in the event() method inherited from QWidget.
+
+  void GlMainView::specificEventFilter(QObject *object,QEvent *event) {
     if (object->inherits("tlp::GlMainView") &&
 	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
       node tmpNode;
@@ -212,92 +217,94 @@ namespace tlp {
 	  QToolTip::showText(he->globalPos(), ttip);
 	  break;
 	}
-	return true;
       }
     }
-    //cout << object->metaObject()->className() << endl;
-    //cout << true << " : " << object->inherits("tlp::GlMainWiew") << " : " << (event->type() == QEvent::MouseButtonRelease) << endl;
-    if ( object->inherits("tlp::GlMainView") &&
-	 (event->type() == QEvent::MouseButtonRelease)) {
-      QMouseEvent *me = (QMouseEvent *) event;
-      if (me->button()==Qt::RightButton) {
-	bool result;
-	ElementType type;
-	node tmpNode;
-	edge tmpEdge;
-	// look if the mouse pointer is over a node or edge
-	QRect rect=mainWidget->frameGeometry();
-	result = mainWidget->doSelect(me->x()-rect.x(), me->y()-rect.y(), type, tmpNode, tmpEdge);
-	if (!result)
-	  return false;
-	// Display a context menu
-	bool isNode = type == NODE;
-	int itemId = isNode ? tmpNode.id : tmpEdge.id;
-	QMenu contextMenu(this);
-	stringstream sstr;
-	sstr << (isNode ? "Node " : "Edge ") << itemId;
-	contextMenu.addAction(tr(sstr.str().c_str()))->setEnabled(false);
-	contextMenu.addSeparator();
-	contextMenu.addAction(tr("Add to/Remove from selection"));
-	QAction* selectAction = contextMenu.addAction(tr("Select"));
-	QAction* deleteAction = contextMenu.addAction(tr("Delete"));
-	contextMenu.addSeparator();
-	Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-	QAction* goAction = NULL;
-	QAction* ungroupAction = NULL;
-	if (isNode) {
+  }
+
+  void GlMainView::buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {
+    if ( object->inherits("tlp::GlMainView")) {
+      contextMenu->addMenu(viewMenu);
+      contextMenu->addMenu(dialogMenu);
+      contextMenu->addMenu(optionsMenu);
+
+      node tmpNode;
+      edge tmpEdge;
+      Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+      bool result;
+      ElementType type;
+      // look if the mouse pointer is over a node or edge
+      QRect rect=mainWidget->frameGeometry();
+      result = mainWidget->doSelect(event->x()-rect.x(), event->y()-rect.y(), type, tmpNode, tmpEdge);
+      if (!result)
+	return;
+      contextMenu->addSeparator();
+      contextMenu->addSeparator();
+      // Display a context menu
+      isNode = type == NODE;
+      itemId = isNode ? tmpNode.id : tmpEdge.id;
+      stringstream sstr;
+      sstr << (isNode ? "Node " : "Edge ") << itemId;
+      contextMenu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
+      contextMenu->addSeparator();
+      contextMenu->addAction(tr("Add to/Remove from selection"));
+      selectAction = contextMenu->addAction(tr("Select"));
+      deleteAction = contextMenu->addAction(tr("Delete"));
+      contextMenu->addSeparator();
+      goAction = NULL;
+      ungroupAction = NULL;
+      if (isNode) {
+	GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
+	if (meta->getNodeValue(tmpNode)!=0) {
+	  goAction = contextMenu->addAction(tr("Go inside"));
+	  ungroupAction = contextMenu->addAction(tr("Ungroup"));
+	}
+      }
+      if (goAction != NULL)
+	contextMenu->addSeparator();
+      propAction = contextMenu->addAction(tr("Properties"));
+    }
+  }
+  
+  void GlMainView::computeContextMenuAction(QAction *action) {
+    Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    node tmpNode;
+    edge tmpEdge;
+
+    Observable::holdObservers();
+    if (action == deleteAction) { // Delete
+      // delete graph item
+      if (isNode)
+	graph->delNode(node(itemId));
+      else
+	graph->delEdge(edge(itemId));
+    } else {
+      if (action == propAction) // Properties
+	showElementProperties(itemId, isNode);
+      else  {
+	if (action == goAction) { // Go inside
 	  GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	  if (meta->getNodeValue(tmpNode)!=0) {
-	    goAction = contextMenu.addAction(tr("Go inside"));
-	    ungroupAction = contextMenu.addAction(tr("Ungroup"));
+	  changeGraph(meta->getNodeValue(tmpNode));
+	}
+	else  {
+	  if (action == ungroupAction) { // Ungroup
+	    tlp::openMetaNode(graph, tmpNode);
+	  } else {
+	    BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+	    if (action == selectAction) { // Select
+	      // empty selection
+	      elementSelected->setAllNodeValue(false);
+	      elementSelected->setAllEdgeValue(false);
+	    }
+	    // selection add/remove graph item
+	    if (isNode)
+	      elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+	    else
+	      elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
 	  }
 	}
-	if (goAction != NULL)
-	  contextMenu.addSeparator();
-	QAction* propAction = contextMenu.addAction(tr("Properties"));
-	QAction* menuAction = contextMenu.exec(me->globalPos(), selectAction);
-	if (menuAction == NULL)
-	  return true;
-	Observable::holdObservers();
-	if (menuAction == deleteAction) { // Delete
-	  // delete graph item
-	  if (isNode)
-	    graph->delNode(node(itemId));
-	  else
-	    graph->delEdge(edge(itemId));
-	} else {
-	  if (menuAction == propAction) // Properties
-	    showElementProperties(itemId, isNode);
-	  else  {
-	    if (menuAction == goAction) { // Go inside
-	      GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	      changeGraph(meta->getNodeValue(tmpNode));
-	    }
-	    else  {
-	      if (menuAction == ungroupAction) { // Ungroup
-		tlp::openMetaNode(graph, tmpNode);
-	      } else {
-		BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-		if (menuAction == selectAction) { // Select
-		  // empty selection
-		  elementSelected->setAllNodeValue(false);
-		  elementSelected->setAllEdgeValue(false);
-		}
-		// selection add/remove graph item
-		if (isNode)
-		  elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
-		else
-		  elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
-	      }
-	    }
-	  }
-	}
-	Observable::unholdObservers();
-	return true;
       }
-      return false;
     }
-    return false;
+    Observable::unholdObservers();
   }
   //==================================================
   void GlMainView::progressUpdate() {
@@ -326,8 +333,12 @@ namespace tlp {
       }*/
 
     if (name=="3D &Overview") {
-      overviewDock->show();
-      overviewDock->raise();
+      if(overviewWidget->isVisible()) 
+	overviewWidget->hide();
+      else
+	overviewWidget->show();
+      //overviewDock->show();
+      //overviewDock->raise();
     }
 
     if (name=="&Layer Manager") {
