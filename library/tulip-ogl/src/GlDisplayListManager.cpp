@@ -20,6 +20,10 @@ namespace tlp
     currentContext=context;
   }
   //====================================================================
+  void GlDisplayListManager::removeContext(unsigned long context) {
+    displayListMap.erase(context);
+  }
+  //====================================================================
   bool GlDisplayListManager::beginNewDisplayList(const string& name) {
     if(displayListMap[currentContext].find(name)!=displayListMap[currentContext].end()) {
       return false;
