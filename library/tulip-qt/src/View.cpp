@@ -5,6 +5,8 @@
 #include <QtGui/QMenuBar>
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QFrame>
+#include <QtOpenGL/QGLWidget>
 
 using namespace std;
 
@@ -20,6 +22,13 @@ namespace tlp {
     mainLayout=new QVBoxLayout;
 
     gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
+
+    // Add this to by-pass a bug in Qt 4.4.1
+    // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
+    QFrame *frame = new QFrame(this);
+    frame->setGeometry(QRect(0, 0, 0, 0));
+    QGridLayout *gridLayout_2 = new QGridLayout(frame);
+    QWidget *widget_2 = new QGLWidget(frame);
 
     installEventFilter(this);
   }
