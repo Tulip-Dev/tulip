@@ -25,6 +25,8 @@
 
 #include "tulip/GlMainWidget.h"
 
+class QFrame;
+
 namespace tlp {
 
   class GWOverviewWidget;
@@ -93,6 +95,7 @@ namespace tlp {
 
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
+    QFrame *overviewFrame;
     QMenu *viewMenu;
     QMenu *dialogMenu;
     QMenu *optionsMenu;
@@ -104,6 +107,7 @@ namespace tlp {
 
     tlp::Graph * copyCutPasteGraph;
 
+    QAction* overviewAction;
     QAction* selectAction;
     QAction* deleteAction;
     QAction* goAction;	
@@ -119,6 +123,7 @@ namespace tlp {
 
   public slots:
     void redrawView();
+    void hideOverview(bool);
     void cut();
     void copy();
     void paste();

@@ -31,6 +31,10 @@ public:
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();
 
+signals:
+
+  void hideOverview(bool);
+
 public slots:
   /*void syncFromView();*/
   void setObservedView(GlMainWidget *);

@@ -44,30 +44,17 @@ namespace tlp {
 
     constructInteractorsMap();
 
-    // Create overview widget after the tabWidgetDock
-    // because of a bug with full docked GlMainWidget
-    // In doing this the overviewDock will be the first
-    // sibling candidate when the tabWidgetDock will loose the focus
-    // and Qt will not try to give the focus to the first GlMainWidget
-    /*overviewDock = new QDockWidget("Overview", mainWidget);
-    overviewDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    overviewDock->setWindowTitle("3D Overview");
-    overviewDock->setFeatures(QDockWidget::DockWidgetClosable |
-			      QDockWidget::DockWidgetMovable |
-			      QDockWidget::DockWidgetFloatable);*/
-    //overviewDock->setResizeEnabled(true);
-    QFrame *frame = new QFrame(mainWidget);
-    frame->setGeometry(QRect(0, 0, 100, 100));
-    frame->setFrameShape(QFrame::StyledPanel);
-    frame->setFrameShadow(QFrame::Raised);
-    QGridLayout *gridLayout_2 = new QGridLayout(frame);
-    overviewWidget = new GWOverviewWidget(frame);
-    overviewWidget->setGeometry(0,0,80,80);
+    // Create overview widget
+    overviewFrame = new QFrame(mainWidget);
+    overviewFrame->setContentsMargins(0,0,0,0);
+    overviewFrame->setGeometry(QRect(0, 0, 100, 100));
+    overviewFrame->setFrameShape(QFrame::StyledPanel);
+    overviewFrame->setFrameShadow(QFrame::Raised);
+    QGridLayout *gridLayout_2 = new QGridLayout(overviewFrame);
+    gridLayout_2->setMargin(0);
+    overviewWidget = new GWOverviewWidget(overviewFrame);
     gridLayout_2->addWidget(overviewWidget, 0, 0, 1, 1);
-    //overviewDock->setWidget(overviewWidget);
-    //this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
-    //overviewWidget->show(); 
-    //overviewDock->show();
+    connect(overviewWidget,SIGNAL(hideOverview(bool)),this,SLOT(hideOverview(bool)));
     
     //View Menu
     viewMenu=new QMenu("View");
@@ -77,9 +64,9 @@ namespace tlp {
     //Dialogs Menu
     dialogMenu=new QMenu("Dialog");
     connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-    QAction *overview=dialogMenu->addAction("3D &Overview");
-    overview->setCheckable(true);
-    overview->setChecked(true);
+    overviewAction=dialogMenu->addAction("3D &Overview");
+    overviewAction->setCheckable(true);
+    overviewAction->setChecked(true);
     dialogMenu->addAction("&Info Editor");
     renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
     renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
@@ -324,21 +311,23 @@ namespace tlp {
     redrawView();
   }
   //==================================================
+  void GlMainView::hideOverview(bool hide) {
+    if(hide) {
+      overviewFrame->hide();
+    }else{
+      overviewFrame->show();
+    }
+    overviewAction->setChecked(!hide);
+  }
+  //==================================================
   void GlMainView::showDialog(QAction* action){
     string name(action->text().toStdString());
 
-    /*if (name=="&Info Editor") {
-      tabWidgetDock->show();
-      tabWidgetDock->raise();
-      }*/
-
     if (name=="3D &Overview") {
-      if(overviewWidget->isVisible()) 
-	overviewWidget->hide();
+      if(overviewFrame->isVisible()) 
+	overviewFrame->hide();
       else
-	overviewWidget->show();
-      //overviewDock->show();
-      //overviewDock->raise();
+	overviewFrame->show();
     }
 
     if (name=="&Layer Manager") {

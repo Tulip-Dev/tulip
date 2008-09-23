@@ -7,6 +7,7 @@
 #include <QtGui/qframe.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qtooltip.h>
+#include <QtGui/QMenu>
 
 #include <tulip/GlSimpleEntity.h>
 
@@ -45,7 +46,7 @@ GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
   //layer->addGlEntity(graphComposite,"graphComposite");
   //_view->getScene()->setGlMainComposite(graphComposite);
   _view->getScene()->addLayer(layer);
-  _view->setMinimumSize( QSize( 80, 80 ) );
+  _view->setMinimumSize( QSize( 2, 2 ) );
   _view->setMaximumSize( QSize( 2000, 2000 ) );
   QGridLayout* gridLayout = new QGridLayout;
   gridLayout->setMargin(0);
@@ -74,12 +75,12 @@ GlMainWidget *GWOverviewWidget::getObservedView() {
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
-  if ( obj->inherits("GlMainWidget") &&
+  if ( obj->inherits("tlp::GlMainWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
 	(e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->buttons()==Qt::LeftButton || me->button()==Qt::LeftButton) {
+    if (me->buttons()==Qt::LeftButton) {
       GlMainWidget *glw = (GlMainWidget *) obj;
       assert(glw == _view);
       double mouseClicX = me->x();
@@ -107,7 +108,15 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       _observedView->draw();
       return true;
     }
-    else {
+    else if (me->buttons()==Qt::RightButton) {
+      QMenu contextMenu(this);
+      QAction *hide=contextMenu.addAction("Hide");
+      QAction* menuAction=contextMenu.exec(me->globalPos());
+      if(menuAction==hide) {
+	emit hideOverview(true);
+      }
+      return true;
+    }else{
       return false;
     }
   }
