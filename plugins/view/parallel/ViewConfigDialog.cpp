@@ -73,8 +73,8 @@ namespace tlp {
     globalSearch->addLayout(buttons2);
     QVBoxLayout *global = new QVBoxLayout();
     QHBoxLayout *globalButtons = new QHBoxLayout;
-    QPushButton *ok = new QPushButton(QIcon("icons/tick.png"),"");
-    QPushButton *cancel = new QPushButton(QIcon("icons/cross.png"),"");
+    QPushButton *ok = new QPushButton(QIcon(":/tick.png"),"");
+    QPushButton *cancel = new QPushButton(QIcon(":/cross.png"),"");
 
     view3D = new QCheckBox("3D View");
     view3D->setChecked(true);
@@ -93,10 +93,10 @@ namespace tlp {
     global->addLayout(globalButtons);
     setLayout(global);
 
-    QPushButton* add = new QPushButton(QIcon("icons/droite.png"),"");
-    QPushButton* remove = new QPushButton(QIcon("icons/gauche.png"),"");
-    QPushButton* up = new QPushButton(QIcon("icons/haut.png"),"");
-    QPushButton *down = new QPushButton(QIcon("icons/bas.png"),"");
+    QPushButton* add = new QPushButton(QIcon(":/right.png"),"");
+    QPushButton* remove = new QPushButton(QIcon(":/left.png"),"");
+    QPushButton* up = new QPushButton(QIcon(":/up.png"),"");
+    QPushButton *down = new QPushButton(QIcon(":/down.png"),"");
     up->setMaximumSize(30,40);
     down->setMaximumSize(30,40);
     buttons->addWidget(add);

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>down.png</file>
+	<file>cross.png</file>
+	<file>right.png</file>
+	<file>up.png</file>
+	<file>left.png</file>
+	<file>tick.png</file>
+    </qresource>
+</RCC>
