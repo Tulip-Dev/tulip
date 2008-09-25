@@ -230,84 +230,49 @@ void viewGl::observableDestroyed(Observable *) {
 }
 //**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
-  /*Observable::holdObservers();
-    clearObservers();*/
+  Observable::holdObservers();
+  clearObservers();
   eltProperties->updateTable();
   propertiesWidget->update();
+  
+  QList<QWidget *> widgetList=workspace->windowList();
+  for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
+    if(*it!=currentView)
+      ((View*)(*it))->redrawView();
+  }
+
   if (gridOptionsWidget !=0 )
     gridOptionsWidget->validateGrid();
   //redrawView();
-  /*Observable::unholdObservers();
-    initObservers();*/
+  Observable::unholdObservers();
+  initObservers();
 }
 //**********************************************************************
-static const unsigned int NB_VIEWED_PROPERTIES=13;
-static const string viewed_properties[NB_VIEWED_PROPERTIES]=
-  {"viewLabel",
-   "viewLabelColor",
-   "viewLabelPosition",
-   "viewBorderColor",
-   "viewBorderWidth",
-   "viewColor",
-   "viewSelection",
-   "viewMetaGraph",
-   "viewShape",
-   "viewSize",
-   "viewTexture",
-   "viewLayout",
-   "viewRotation" };
+void viewGl::initObservers() {
+  if (currentGraph==0) return;
+  Iterator<string> *it=currentGraph->getLocalProperties();
+  while (it->hasNext()) {
+    string tmp=it->next();
+    currentGraph->getProperty(tmp)->addObserver(this);
+  } delete it;
+  it=currentGraph->getInheritedProperties();
+  while (it->hasNext()) {
+    string tmp=it->next();
+    currentGraph->getProperty(tmp)->addObserver(this);
+  } delete it;
+}
 //**********************************************************************
-/*void viewGl::initObservers() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (!glWidget) return;
-  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  if (graph==0) return;
-  for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    if (graph->existProperty(viewed_properties[i]))
-      graph->getProperty(viewed_properties[i])->addObserver(this);
-  }
-  graph->addObserver(this);
-  // initialize the number of nodes ans edges
-  currentGraphNbNodes = graph->numberOfNodes();
-  currentGraphNbEdges = graph->numberOfEdges();
-  // show the infos
-  updateCurrentGraphInfos();
-  }*/
-//**********************************************************************
-/*void viewGl::clearObservers() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (glWidget == 0) return;
-  Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  if (graph == 0) return;
-  for (unsigned int i=0; i<NB_VIEWED_PROPERTIES; ++i) {
-    if (graph->existProperty(viewed_properties[i]))
-      graph->getProperty(viewed_properties[i])->removeObserver(this);
-  }
-  graph->removeObserver(this);
-  }
-//**********************************************************************
-// GraphObserver interface
-void viewGl::addNode (Graph *graph, const node) {
-  ++currentGraphNbNodes;
-    updateCurrentGraphInfos();
+void viewGl::clearObservers() {
+  if (currentGraph == 0) return;
+  Iterator<string> *it=currentGraph->getLocalProperties();
+  while (it->hasNext()) {
+    currentGraph->getProperty(it->next())->removeObserver(this);
+  } delete it;
+  it=currentGraph->getInheritedProperties();
+  while (it->hasNext()) {
+    currentGraph->getProperty(it->next())->removeObserver(this);
+  } delete it;
 }
-void  viewGl::addEdge (Graph *graph, const edge) {
-  ++currentGraphNbEdges;
-    updateCurrentGraphInfos();
-}
-void  viewGl::delNode (Graph *graph, const node) {
-  --currentGraphNbNodes;
-    updateCurrentGraphInfos();
-}
-void  viewGl::delEdge (Graph *graph, const edge) {
-  --currentGraphNbEdges;
-    updateCurrentGraphInfos();
-}
-void  viewGl::reverseEdge (Graph *, const edge) {
-}
-void  viewGl::destroy (Graph *) {
-}*/
-
 //**********************************************************************
 ///Destructor of viewGl
 viewGl::~viewGl() {
@@ -421,12 +386,12 @@ void viewGl::changeGraph(Graph *graph) {
   initObservers();*/
   clusterTreeWidget->setGraph(graph);
   eltProperties->setGraph(graph);
-  //layerWidget->attachMainWidget(glWidget);
 #ifdef STATS_UI
   //statsWidget->setGlMainWidget(glWidget);
 #endif
   currentGraph=graph;
   propertiesWidget->setGraph(graph);
+  initObservers();
 }
 //**********************************************************************
 void viewGl::hierarchyChangeGraph(Graph *graph) {
@@ -469,7 +434,6 @@ void viewGl::installInteractors(View *view) {
   view->getInteractorsActionList(interactorsList);
 
   for(list<QAction *>::iterator it=interactorsList.begin();it!=interactorsList.end();++it) {
-    cout << "Install action : " << (*it)->text().toStdString() << endl;
     graphToolBar->addAction(*it);
   }
 
@@ -507,7 +471,6 @@ void viewGl::installEditMenu(View *view) {
 	activate=view->createSubgraphIsEnable();
       else{
 	activate=false;
-	cout << "ERROR : edit action " << actionName << " unknow" << endl;
       }
 
       actions.at(i)->setEnabled(activate);
@@ -525,7 +488,6 @@ GlMainView* viewGl::initMainView(string *in) {
 }
 //==================================================
 void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
-  cout << "show element property" << endl;
   if (isNode)
     eltProperties->setCurrentNode(currentGraph,  tlp::node(eltId));
   else
@@ -623,9 +585,9 @@ void viewGl::fileNew() {
   GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
   glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
   glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
-  initializeGlScene(glW->getScene());
+  initializeGlScene(glW->getScene());*/
   Observable::unholdObservers();
-  glW->show();*/
+  //glW->show();
   currentGraph=newGraph;
   initMainView();
   changeGraph(currentGraph);
@@ -866,7 +828,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
     importedGraph = 0;
     // now ensure notification
-    //initObservers();
+    initObservers();
     if (progressBar->state()==TLP_CANCEL || !result ) {
       //      changeGraph(0);
       //delete glW;
@@ -1591,9 +1553,8 @@ void viewGl::filePrint() {
 //**********************************************************************
 /// Apply a general algorithm
 void viewGl::applyAlgorithm(QAction* action) {
-  /*clearObservers();
-  if (glWidget==0) return;
-  Observable::holdObservers();*/
+  clearObservers();
+  Observable::holdObservers();
   string name = action->text().toStdString();
   string erreurMsg;
   DataSet dataSet;
@@ -1612,8 +1573,8 @@ void viewGl::applyAlgorithm(QAction* action) {
     clusterTreeWidget->update();
     clusterTreeWidget->setGraph(graph);
   }
-  /*Observable::unholdObservers();
-  initObservers();*/
+  Observable::unholdObservers();
+  initObservers();
 }
 //**********************************************************************
 //Management of properties
@@ -1692,27 +1653,27 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 }
 //**********************************************************************
 void viewGl::changeString(QAction* action) {
-  //clearObservers();
+  clearObservers();
   string name = action->text().toStdString();
   /*if (changeProperty<StringProperty>(name,"viewLabel"))
     redrawView();*/
   changeProperty<StringProperty>(name,"viewLabel");
-  //initObservers();
+  initObservers();
 }
 //**********************************************************************
 void viewGl::changeSelection(QAction* action) {
-  //clearObservers();
+  clearObservers();
   string name = action->text().toStdString();
   changeProperty<BooleanProperty>(name, "viewSelection");
   /*if (changeProperty<BooleanProperty>(name, "viewSelection")) {
     //glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
     redrawView();
     }*/
-  //initObservers();
+  initObservers();
 }
 //**********************************************************************
 void viewGl::changeMetric(QAction* action) {
-  //clearObservers();
+  clearObservers();
   string name = action->text().toStdString();
   bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
   if (result && map_metric->isChecked()) {
@@ -1720,11 +1681,11 @@ void viewGl::changeMetric(QAction* action) {
     /*if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
       redrawView();*/
   }
-  //initObservers();
+  initObservers();
 }
 //**********************************************************************
 void viewGl::changeLayout(QAction* action) {
-  //clearObservers();
+  clearObservers();
   string name = action->text().toStdString();
   GraphState * g0 = 0;
   /*if( enable_morphing->isChecked() ) 
@@ -1754,18 +1715,18 @@ void viewGl::changeLayout(QAction* action) {
   //redrawView();
   if( g0 )
     delete g0;
-  //initObservers();
+  initObservers();
 }
   //**********************************************************************
 void viewGl::changeInt(QAction* action) {
-  //clearObservers();
+  clearObservers();
   string name = action->text().toStdString();
   changeProperty<IntegerProperty>(name, "viewInt");
-  //initObservers();
+  initObservers();
 }
   //**********************************************************************
 void viewGl::changeColors(QAction* action) {
-  //clearObservers();
+  clearObservers();
   GraphState * g0 = 0;
   /*if( enable_morphing->isChecked() )
   g0 = new GraphState( glWidget );*/
@@ -1787,11 +1748,11 @@ void viewGl::changeColors(QAction* action) {
   }
   if( g0 )
     delete g0;
-  //initObservers();
+  initObservers();
 }
 //**********************************************************************
 void viewGl::changeSizes(QAction* action) {
-  //clearObservers();
+  clearObservers();
   GraphState * g0 = 0;
   /*if( enable_morphing->isChecked() )
     g0 = new GraphState( glWidget );*/
@@ -1813,7 +1774,7 @@ void viewGl::changeSizes(QAction* action) {
   }
   if( g0 )
     delete g0;
-  //initObservers();
+  initObservers();
 }
 //**********************************************************************
 void viewGl::gridOptions() {

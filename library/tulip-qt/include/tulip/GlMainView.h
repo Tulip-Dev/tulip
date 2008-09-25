@@ -57,32 +57,36 @@ namespace tlp {
     void setData(Graph *graph,DataSet dataSet);
     DataSet getData();
     Graph *getGraph();
-    QWidget *getWidget();
     GlMainWidget *getGlMainWidget();
 
     void constructInteractorsMap();
     void getInteractorsActionList(std::list<QAction*> &);
     Iterator<Interactor *> *installInteractor(const std::string &);
 
+    void addNode(Graph *,const node );
+    void addEdge(Graph *,const edge );
+    void delNode(Graph *,const node );
+    void delEdge(Graph *,const edge );
+
     //bool eventFilter(QObject *, QEvent *);
 
-    virtual bool cutIsEnable() {return true;}
-    virtual bool copyIsEnable() {return true;}
-    virtual bool pasteIsEnable() {return true;}
-    virtual bool findIsEnable() {return true;}
-    virtual bool selectAllIsEnable() {return true;}
-    virtual bool delSelectionIsEnable() {return true;}
-    virtual bool deselectAllIsEnable() {return true;}
-    virtual bool invertSelectionIsEnable() {return true;}
-    virtual bool createGroupIsEnable() {return true;}
-    virtual bool createSubgraphIsEnable() {return true;}
+    bool cutIsEnable() {return true;}
+    bool copyIsEnable() {return true;}
+    bool pasteIsEnable() {return true;}
+    bool findIsEnable() {return true;}
+    bool selectAllIsEnable() {return true;}
+    bool delSelectionIsEnable() {return true;}
+    bool deselectAllIsEnable() {return true;}
+    bool invertSelectionIsEnable() {return true;}
+    bool createGroupIsEnable() {return true;}
+    bool createSubgraphIsEnable() {return true;}
 
-    virtual bool doProgressUpdate() {return true;}
-    virtual void progressUpdate();
+    bool doProgressUpdate() {return true;}
+    void progressUpdate();
 
-    virtual void specificEventFilter(QObject *object,QEvent *event);
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
-    virtual void computeContextMenuAction(QAction *action);
+    void specificEventFilter(QObject *object,QEvent *event);
+    void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+    void computeContextMenuAction(QAction *action);
 
   protected :
 

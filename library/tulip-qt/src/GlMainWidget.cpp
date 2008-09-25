@@ -146,6 +146,27 @@ namespace tlp {
     makeCurrent();
   }
   //==================================================
+  void GlMainWidget::addNode(Graph *graph,const node n){
+    scene.getGlGraphComposite()->addNode(graph,n);
+    draw();
+  }
+  //==================================================
+  void GlMainWidget::addEdge(Graph *graph,const edge e){
+    scene.getGlGraphComposite()->addEdge(graph,e);
+    draw();
+  }
+  //==================================================
+  void GlMainWidget::delNode(Graph *graph,const node n){
+    scene.getGlGraphComposite()->delNode(graph,n);
+    draw();
+  }
+  //==================================================
+  void GlMainWidget::delEdge(Graph *graph,const edge e){
+    scene.getGlGraphComposite()->delEdge(graph,e);
+    draw();
+  }
+
+  //==================================================
   void GlMainWidget::paintGL() { 
     //  cerr << __PRETTY_FUNCTION__ << endl;
   }
@@ -309,7 +330,6 @@ namespace tlp {
   }
   //==================================================
   Interactor::ID GlMainWidget::resetInteractors(Interactor *interactor) {
-    cout << "Reset interactors : " << interactor << endl;
     for(vector<Interactor *>::iterator it =
 	  _interactors.begin(); it != _interactors.end(); ++it) {
       removeEventFilter(*it);
@@ -320,7 +340,6 @@ namespace tlp {
   }
   //==================================================
   std::vector<tlp::Interactor::ID> GlMainWidget::resetInteractors(const std::vector<Interactor *> &new_interactors) {
-    cout << "Reset interactors : " << new_interactors.size() << endl;
     for(vector<Interactor *>::iterator it =
 	  _interactors.begin(); it != _interactors.end(); ++it) {
       removeEventFilter(*it);

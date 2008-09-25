@@ -53,7 +53,6 @@ namespace tlp {
     void addEdge(Graph *,const edge );
     void delNode(Graph *,const node );
     void delEdge(Graph *,const edge );
-    void destroy(Graph *);
 
   protected:
     
@@ -64,6 +63,10 @@ namespace tlp {
     bool editingLine;
     QString currentText;
     bool nodeTab;
+
+  public slots :
+
+    void redrawView();
 
   protected slots :
     

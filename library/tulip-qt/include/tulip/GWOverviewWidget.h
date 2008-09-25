@@ -38,8 +38,8 @@ signals:
 public slots:
   /*void syncFromView();*/
   void setObservedView(GlMainWidget *);
-  /*void updateView();
-  void backColor(); //background color button
+  void updateView();
+  /*void backColor(); //background color button
   void showRenderingParametersDialog();*/
   
 private slots:

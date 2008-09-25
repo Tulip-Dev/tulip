@@ -49,6 +49,11 @@ namespace tlp {
     return graph;
   }
 
+  void SpreadWidget::redrawView() {
+    spreadEdgesTable->redrawView();
+    spreadNodesTable->redrawView();
+  }
+
   void SpreadWidget::tableMouseReleasedSlot(SpreadTable* table) {
     QString right=currentText.right(1);
     if(editingLine && (right=="(" || right=="+" || right=="-" || right=="*" || right=="/" || right=="=")) {
@@ -108,9 +113,6 @@ namespace tlp {
   }
   void SpreadWidget::delEdge(Graph *graph,const edge e) {
     spreadEdgesTable->delRow(e.id);
-  }
-  void SpreadWidget::destroy(Graph *graph) {
-    setData(NULL,DataSet());
   }
 
 }

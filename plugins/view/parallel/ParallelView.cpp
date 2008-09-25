@@ -58,6 +58,10 @@ namespace tlp {
     return mainWidget->getGraph();
   }
 
+  void ParallelView::redrawView() {
+    mainWidget->redrawView();
+  }
+
   //==================================================
   // Interactor functions
   //==================================================

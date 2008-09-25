@@ -57,6 +57,7 @@ namespace tlp {
     
     void update(set<Observable *>::iterator begin ,set<Observable *>::iterator end);
     void observableDestroyed(Observable *) {}
+    void redrawView();
 
  private :
 

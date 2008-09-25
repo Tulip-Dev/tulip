@@ -129,6 +129,26 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    */
   virtual void makeCurrent();
 
+  /**
+   * Functions to update GraphComposite when a node is add
+   */
+  void addNode(Graph *,const node );
+
+  /**
+   * Functions to update GraphComposite when an edge is add
+   */
+  void addEdge(Graph *,const edge );
+
+  /**
+   * Functions to update GraphComposite when a node is remove
+   */
+  void delNode(Graph *,const node );
+
+  /**
+   * Functions to update GraphComposite when an edge is remove
+   */
+  void delEdge(Graph *,const edge );
+
 public slots:
   /** 
    * Draw the graph, the augmented dispaly and the interactors

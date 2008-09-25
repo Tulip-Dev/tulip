@@ -249,6 +249,11 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   }
   }*/
 //=============================================================================
+  void GWOverviewWidget::updateView() {
+    if (_observedView!=0) {
+      draw(_observedView);
+    }
+  }
 /*void GWOverviewWidget::updateView() {
   if (_observedView!=0 && !_synchronizing) {
     GlGraphRenderingParameters paramObservedViev = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();

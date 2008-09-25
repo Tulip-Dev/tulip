@@ -32,10 +32,17 @@ namespace tlp {
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
     virtual DataSet getData() = 0;
     virtual Graph *getGraph() = 0;
-    virtual QWidget *getWidget() = 0;
+    virtual void redrawView() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
     virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
 
+    //GraphObserver
+    virtual void addNode(Graph *,const node ) {};
+    virtual void addEdge(Graph *,const edge ) {};
+    virtual void delNode(Graph *,const node ) {};
+    virtual void delEdge(Graph *,const edge ) {};
+
+    //edit menu
     virtual bool cutIsEnable() {return false;}
     virtual bool copyIsEnable() {return false;}
     virtual bool pasteIsEnable() {return false;}

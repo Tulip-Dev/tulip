@@ -145,7 +145,7 @@ namespace tlp {
       numberOfRow=graph->numberOfNodes();
     else
       numberOfRow=graph->numberOfEdges();
-    setRowCount(numberOfRow);
+    setRowCount(numberOfRow-1);
 
     reloadView();
   }
@@ -160,8 +160,6 @@ namespace tlp {
       numberOfRow=graph->numberOfNodes();
     else
       numberOfRow=graph->numberOfEdges();
-
-    cout << numberOfRow << endl;
 
     Iterator<std::string> *it=graph->getLocalProperties();
     while(it->hasNext()) {
@@ -200,7 +198,6 @@ namespace tlp {
   }
 
   void SpreadTable::loadCell(int minRow,int maxRow, int minColumn, int maxColumn) {
-    cout << minRow << " => " << maxRow << " !! " << minColumn << " => " << maxColumn << endl;
     int i;
     Iterator<std::string> *it=graph->getLocalProperties();
     for(i=0;i<=minColumn;++i){
@@ -909,6 +906,10 @@ namespace tlp {
   {
     viewport() -> update();
     emit modified();
+  }
+
+  void SpreadTable::redrawView() {
+    reloadView();
   }
 
   QTableWidgetSelectionRange SpreadTable::getSelectedRange()

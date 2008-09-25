@@ -193,6 +193,7 @@ namespace tlp {
     void selectCurrentColumn();
     void userChangedItemDataSlot(int, int, QString&, QString&);
     void verticalScroll(int);
+    void redrawView();
     
   private slots:
     void someThingChanged();

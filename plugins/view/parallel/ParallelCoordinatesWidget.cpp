@@ -232,6 +232,13 @@ void ParallelCoordinatesWidget::update(set<Observable *>::iterator begin ,set<Ob
   }
 }
 
+  void ParallelCoordinatesWidget::redrawView() {
+    if (parallelCoordsView != NULL) {
+      parallelCoordsView->redrawView();
+      draw();
+    }
+  }
+
 void ParallelCoordinatesWidget::swapAxis(string axisName1, string axisName2){
   parallelCoordsView->swapAxis(axisName1, axisName2);
   draw();

@@ -42,7 +42,7 @@ namespace tlp {
     void setData(Graph *graph,DataSet dataSet);
     DataSet getData();
     Graph *getGraph();
-    QWidget* getWidget() {return this;}
+    void redrawView();
 
     void getInteractorsActionList(std::list<QAction*> &interactorsList);
     Iterator<Interactor *> *installInteractor(const std::string &);

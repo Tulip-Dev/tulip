@@ -53,7 +53,13 @@ namespace tlp {
     DataSet getData();
     Graph *getGraph();
 
-    QWidget *getWidget() {return this;}
+    void redrawView();
+
+    //GraphObserver
+    void addNode(Graph *,const node );
+    void addEdge(Graph *,const edge );
+    void delNode(Graph *,const node );
+    void delEdge(Graph *,const edge );
 
   protected :
     
