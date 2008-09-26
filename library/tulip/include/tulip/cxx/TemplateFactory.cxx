@@ -27,7 +27,6 @@ bool tlp::TemplateFactory<ObjectFactory, ObjectType, Context>::pluginExists(cons
 template<class ObjectFactory, class ObjectType, class Context>
 void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(ObjectFactory *objectFactory) {
   std::string pluginName = objectFactory->getName();
-  if (!pluginExists(pluginName)) {
   objNames.insert(pluginName);
   objMap[pluginName]=objectFactory;
   ObjectType *withParam=objectFactory->createPluginObject(Context());
@@ -51,13 +50,6 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
 					      objectFactory->getTulipRelease(),
 					      dependencies
 					      );
-  } else {
-    if (currentLoader != 0) {
-      std::string tmpStr;
-      tmpStr += "'" + pluginName + "' " + getPluginsClassName() + " plugin";
-      currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
-    }
-  }
 }
 
 template<class ObjectFactory, class ObjectType, class Context>

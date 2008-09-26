@@ -6,13 +6,11 @@
     <x>0</x>
     <y>0</y>
     <width>440</width>
-    <height>155</height>
+    <height>162</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -27,20 +25,8 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>5</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item rowspan="2" row="0" column="0" colspan="2" >
     <layout class="QVBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <item>
       <widget class="QLabel" name="label" >
        <property name="text" >
@@ -56,19 +42,10 @@
      </item>
      <item>
       <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item>
         <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
+         <property name="verticalSpacing" >
+          <number>5</number>
          </property>
          <item row="0" column="0" >
           <widget class="QRadioButton" name="newPropertyButton" >
@@ -108,9 +85,7 @@
          <item row="2" column="0" >
           <widget class="QRadioButton" name="inheritedPropertyButton" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -133,12 +108,6 @@
        </item>
        <item>
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
          <item>
           <widget class="QLineEdit" name="newPropertyText" >
            <property name="toolTip" >
@@ -152,9 +121,7 @@
             <bool>false</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -173,9 +140,7 @@
             <bool>false</bool>
            </property>
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -194,12 +159,6 @@
      </item>
      <item>
       <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item>
         <spacer>
          <property name="orientation" >

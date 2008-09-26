@@ -130,14 +130,12 @@ public:
 	    ++itemFound;
 	    continue;
 	  } else if (valString == "@") {
-	    if (itemFound && type == TLP_AND)
+	    if (itemFound)
 	      return formatError(valString.c_str(), curLine);
 	    type = TLP_NOVAL;
-	    itemFound = 0;
 	  } else if (valString == "#") {
-	    if (itemFound && type == TLP_AND)
+	    if (itemFound)
 	      return formatError(valString.c_str(), curLine);
-	    itemFound = 0;
 	    type = TLP_NOTHING;
 	  } else {
 	    itemFound = (itemFound == 2) ? 0 : itemFound + 1;
@@ -192,5 +190,5 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(AdjacencyMatrixImport, "Adjacency Matrix", "Auber David", "05/09/2008","","1.1","File")
+IMPORTPLUGINOFGROUP(AdjacencyMatrixImport,"Adjacency Matrix","Auber David", "9/02/2004","","1.0","File")
 

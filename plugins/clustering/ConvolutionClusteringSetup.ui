@@ -13,10 +13,22 @@
    <string>Convolution Clustering Parameters</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>5</number>
+   <property name="leftMargin" >
+    <number>11</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>11</number>
+   </property>
+   <property name="rightMargin" >
+    <number>11</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>11</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="1" column="0" >

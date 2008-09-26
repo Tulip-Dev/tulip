@@ -7,10 +7,6 @@
 
 namespace tlp {
 
-  class GlComposite;
-  class ConvexHullItem;
-  class GlConvexHull;
-
   /**
    * Build a hierarchy of convex hulls
    */
@@ -29,9 +25,6 @@ namespace tlp {
      * Build the hierarchy for the given graph in GlLayer
      */
     virtual void compute(tlp::GlLayer*,tlp::Graph *);
-
-    ConvexHullItem *buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
-    void setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull);
     
     bool deducedFromChilds;
   };

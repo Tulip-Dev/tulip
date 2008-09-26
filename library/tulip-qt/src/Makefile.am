@@ -50,7 +50,8 @@ BUILT_SOURCES = \
 	moc_FindSelectionWidget.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
-	moc_RenderingParametersDialog.cpp \
+	moc_LayerManagerWidget.cpp \
+	moc_LayerManagerWidgetData.cpp \
 	moc_QtCPULODCalculator.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
@@ -64,7 +65,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	FindSelectionWidget.cpp \
 	SGHierarchyWidget.cpp \
 	GWOverviewWidget.cpp \
-	RenderingParametersDialog.cpp \
+	LayerManagerWidget.cpp \
+	LayerManagerWidgetData.cpp \
 	Morphing.cpp \
 	GraphState.cpp \
 	MouseBoxZoomer.cpp \

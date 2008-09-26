@@ -83,8 +83,6 @@ GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
-  GlDisplayListManager::getInst().removeContext((unsigned long)this);
-  GlTextureManager::getInst().removeContext((unsigned long)this);
   for (unsigned int i = 0; i > _interactors.size(); ++i)
     delete _interactors[i];
 }

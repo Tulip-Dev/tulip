@@ -52,11 +52,6 @@ namespace tlp {
      */
     void changeContext(unsigned long context);
 
-    /**
-     * remove context
-     */
-    void removeContext(unsigned long context);
-
     /** 
      * Begin to record a new display list with name : name
      */

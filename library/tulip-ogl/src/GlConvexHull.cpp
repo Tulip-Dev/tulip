@@ -94,23 +94,15 @@ static Color darkerColor(Color c) {
   return dc;
 }
 
-ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
-							   std::vector<Color> fColors,
-							   std::vector<Color> oColors,
-							   bool deducedFromChilds,
-							   Graph *root,
-							   unsigned int depth) {
-  //vector<GlConvexHull *> convexHulls;
+vector<GlConvexHull *> GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
+								   std::vector<Color> fColors,
+								   std::vector<Color> oColors,
+								   bool deducedFromChilds,
+								   Graph *root,
+								   unsigned int depth) {
+  vector<GlConvexHull *> convexHulls;
   Graph *sg;
-  //vector<GlConvexHull *> sgConvexHulls;
-  ConvexHullItem *convexHullItem=new ConvexHullItem;
-
-  graph->getAttributes().get("name",convexHullItem->name);
-  if(convexHullItem->name=="") {
-    std::stringstream s;
-    s << graph->getId();
-    convexHullItem->name=s.str();
-  }
+  vector<GlConvexHull *> sgConvexHulls;
 
   if (root == 0)
     root = graph;
@@ -137,24 +129,22 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     //if(sg->numberOfNodes() <= 1) continue;
 
     ////
-    ConvexHullItem *child=
+    vector<GlConvexHull *> sgAllConvexHulls =
       buildConvexHullsFromHierarchy(sg, fColors, oColors,
 				    deducedFromChilds, root, depth + 1);
-    ///vector<GlConvexHull *>::const_iterator it = sgAllConvexHulls.begin();
+    vector<GlConvexHull *>::const_iterator it = sgAllConvexHulls.begin();
 
     // first one (if any) is the direct subgraph convex hull
     // (others are for subgraphs of this subgraph)
     // and it will be used if needed to find this graph convex hull
-    /*if (deducedFromChilds) {
+    if (deducedFromChilds) {
       if (it != sgAllConvexHulls.end())
 	sgConvexHulls.push_back(*it);
-	}*/
+    }
     // add all
-    convexHullItem->children.push_back(child);
-    /*for (;it != sgAllConvexHulls.end(); it++) {
+    for (;it != sgAllConvexHulls.end(); it++) {
       convexHulls.push_back(*it);
-      }*/
-    
+    }
   }
 
   // filled and outline colors determination
@@ -181,7 +171,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     // compute this graph convex hull
     vector<Coord> gConvexHull;
 
-    /*if (sgConvexHulls.size() > 0) {
+    if (sgConvexHulls.size() > 0) {
       vector<GlConvexHull *>::const_iterator it = sgConvexHulls.begin();
 
       // initialize convex hull with the first one
@@ -189,6 +179,23 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 
       // merge loop
       for (++it; it != sgConvexHulls.end(); it++) {
+	// merge of convex hulls do not seem to work
+	/* vector<unsigned int> hull1;
+	vector<unsigned int> hull2;
+	vector<Coord>::const_iterator itCoord = (*it)->_points.begin();
+
+	// build second arg of mergeHulls
+	unsigned int i = 0;
+	for (; i < gConvexHull.size(); i++)
+	  hull1.push_back(i);
+	// build first and third arg of mergeHulls
+	for (; itCoord != (*it)->_points.end(); itCoord++, i++) {
+	  gConvexHull.push_back(*itCoord);
+	  hull2.push_back(i);
+	}
+	// merge
+	vector<unsigned int> gConvexHullIdxs;
+	mergeHulls(gConvexHull, hull1, hull2, gConvexHullIdxs); */
 
 	// add points from current sg convex hull
 	// to computed graph convex hull
@@ -215,7 +222,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 			 new GlConvexHull(gConvexHull, filledColors, outColors, true, true,graph->getAttribute<string>("name"),
 			                  // convex hull is already computed
 					  false));
-    } else {*/
+      } else {
       // no subgraphs
       // the convex hull will be build directly with the graph nodes and edges
       // if there is some
@@ -254,7 +261,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	  // add points of rotated bounding box
 	  float cosA = cos(alpha);
 	  float sinA = sin(alpha);
-	  Coord vect(0,0,-0.01);
+	  Coord vect;
 	  vect.setX(-hw * cosA + hh * sinA);
 	  vect.setY(-hw * sinA - hh * cosA);
 	  gConvexHull.push_back(point + vect);
@@ -289,12 +296,13 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	  }
 	}
 	// add a GlConvexHull for this graph in front of convexHulls
-	convexHullItem->hull=new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+	convexHulls.insert(convexHulls.begin(), 1,
+			   new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name")));
       }
-      //}
+    }
   }
 			 
-  return convexHullItem;
+  return convexHulls;
 }
   //====================================================
   void GlConvexHull::translate(const Coord& mouvement){

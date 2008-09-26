@@ -17,7 +17,8 @@ nobase_include_HEADERS = \
 	tulip/FindSelectionWidget.h \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidget.h \
-	tulip/RenderingParametersDialog.h \
+	tulip/LayerManagerWidget.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
 	tulip/GlMainWidgetPlugin.h \
@@ -42,6 +43,7 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
+	tulip/layermanagerwidget.h \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
 	tulip/propertywidget.h

@@ -6,34 +6,55 @@
     <x>0</x>
     <y>0</y>
     <width>304</width>
-    <height>422</height>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form1</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing" >
+    <number>0</number>
    </property>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget2" >
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
      <widget class="QWidget" name="tabProperty" >
       <attribute name="title" >
        <string>Property</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>6</number>
+       <property name="leftMargin" >
+        <number>0</number>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>0</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>0</number>
        </property>
        <item row="0" column="0" >
         <widget class="PropertyDialog" native="1" name="propertyDialog" />
@@ -45,18 +66,28 @@
        <string>Element</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>0</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>0</number>
        </property>
        <item row="0" column="0" >
         <widget class="ElementPropertiesWidget" native="1" name="elementInfo" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>13</hsizetype>
-           <vsizetype>13</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -70,11 +101,23 @@
        <string>Hierarchy</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
+       <property name="leftMargin" >
         <number>0</number>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>0</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>0</number>
        </property>
        <item row="0" column="0" >
         <widget class="SGHierarchyWidget" native="1" name="clusterTree" />
@@ -86,12 +129,6 @@
        <string>Statistics</string>
       </attribute>
       <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>11</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <item row="0" column="0" >
         <widget class="tlp::TulipStats" native="1" name="tulipStats" />
        </item>
@@ -104,14 +141,14 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>tlp::TulipStats</class>
+   <class>PropertyDialog</class>
    <extends>QWidget</extends>
-   <header>../include/TulipStatsWidget.h</header>
+   <header location="global" >../include/PropertyDialog.h</header>
   </customwidget>
   <customwidget>
-   <class>SGHierarchyWidget</class>
+   <class>tlp::TulipStats</class>
    <extends>QWidget</extends>
-   <header>sghierarchywidget.h</header>
+   <header location="global" >../include/TulipStatsWidget.h</header>
   </customwidget>
   <customwidget>
    <class>ElementPropertiesWidget</class>
@@ -119,9 +156,9 @@
    <header>elementpropertieswidget.h</header>
   </customwidget>
   <customwidget>
-   <class>PropertyDialog</class>
+   <class>SGHierarchyWidget</class>
    <extends>QWidget</extends>
-   <header>../include/PropertyDialog.h</header>
+   <header>sghierarchywidget.h</header>
   </customwidget>
  </customwidgets>
  <includes>

@@ -251,10 +251,6 @@ static bool loadPNG(const string &filename, textureImage *texture)
     currentContext=context;
   }
 //====================================================================
-  void GlTextureManager::removeContext(unsigned long context) {
-    texturesMap.erase(context);
-  }
-//====================================================================
 GlTexture GlTextureManager::getTextureInfo(const string& filename) {
   if(texturesMap[currentContext].find(filename) != texturesMap[currentContext].end())
     return (texturesMap[currentContext])[filename];

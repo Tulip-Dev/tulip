@@ -1,39 +1,27 @@
-#include "tulip/RenderingParametersDialog.h"
+#include "tulip/LayerManagerWidget.h"
 
-#include <QtGui/QHeaderView>
+#include <QtCore/QStringList>
+#include <QtGui/QStringListModel>
+#include <QtGui/QTableView>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
 
-#include "tulip/GWOverviewWidget.h"
-#include "tulip/GlMainWidget.h"
+#include <tulip/GlLayer.h>
 
 using namespace std;
+using namespace tlp;
 
-namespace tlp {
+//=============================================================================
+LayerManagerWidget::LayerManagerWidget(QWidget* parent,  
+			 const char* name, bool modal, Qt::WFlags fl )
+  : LayerManagerWidgetData( parent, name, (Qt::WFlags) (fl | Qt::Widget) ) {
 
-  RenderingParametersDialog::RenderingParametersDialog(GWOverviewWidget* parent) : QDialog(parent->parentWidget()) {
-    setupUi(this);
-
-    treeWidget->header()->resizeSection(0,205);
-    treeWidget->header()->resizeSection(1,70);
-    treeWidget->header()->resizeSection(2,70);
-
-    overview = parent;
-  }
-  
-  void RenderingParametersDialog::windowActivationChange(bool oldActive) {
-    if (!oldActive)
-      buttonClose->setFocus();
-  }
-  
-  void RenderingParametersDialog::updateView() {
-    overview->updateView();
-  }
-  
-  void RenderingParametersDialog::backColor() {
-    overview->backColor();
-  }
-
-  //=============================================================================
-void RenderingParametersDialog::attachMainWidget(GlMainWidget* graphWidget) {
+}
+//=============================================================================
+LayerManagerWidget::~LayerManagerWidget() {
+}
+//=============================================================================
+void LayerManagerWidget::attachMainWidget(GlMainWidget* graphWidget) {
   treeWidget->invisibleRootItem()->takeChildren();
     
   observedMainWidget=graphWidget;
@@ -48,7 +36,7 @@ void RenderingParametersDialog::attachMainWidget(GlMainWidget* graphWidget) {
   connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)),this, SLOT(checkBoxClicked(QTreeWidgetItem*, int)));
 }
 //=============================================================================
-void RenderingParametersDialog::addLayer(GlScene* scene, const string& name, GlLayer* layer){
+void LayerManagerWidget::addLayer(GlScene* scene, const string& name, GlLayer* layer){
   QTreeWidgetItem *item=new QTreeWidgetItem(treeWidget,QStringList(name.c_str()));
   item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
   if(layer->isVisible())
@@ -59,7 +47,7 @@ void RenderingParametersDialog::addLayer(GlScene* scene, const string& name, GlL
   treeWidget->expandAll();
 }
 //=============================================================================
-void RenderingParametersDialog::addComposite(GlComposite *composite,QTreeWidgetItem *parent) {
+void LayerManagerWidget::addComposite(GlComposite *composite,QTreeWidgetItem *parent) {
   map<string, GlSimpleEntity*> *entities=composite->getDisplays();
   for(map<string, GlSimpleEntity*>::iterator it=entities->begin();it!=entities->end();++it) {
     QTreeWidgetItem* item=new QTreeWidgetItem(parent,QStringList((*it).first.c_str()));
@@ -86,7 +74,7 @@ void RenderingParametersDialog::addComposite(GlComposite *composite,QTreeWidgetI
   }
 }
 //=============================================================================
-void RenderingParametersDialog::createGraphCompositeItem(GlGraphComposite *glGraphComposite,QTreeWidgetItem *item) {
+void LayerManagerWidget::createGraphCompositeItem(GlGraphComposite *glGraphComposite,QTreeWidgetItem *item) {
   //Nodes
   QTreeWidgetItem* nodes=new QTreeWidgetItem(item,QStringList("Nodes"));
   nodes->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -176,7 +164,7 @@ void RenderingParametersDialog::createGraphCompositeItem(GlGraphComposite *glGra
     selectedEdges->setCheckState(2,Qt::Unchecked);
 }
 //=============================================================================
-void RenderingParametersDialog::updateLayer(const string& name,GlLayer *layer) {
+void LayerManagerWidget::updateLayer(const string& name,GlLayer *layer) {
   QTreeWidgetItem* root=treeWidget->invisibleRootItem();
   for(int i=0;i<root->childCount();i++) {
     QTreeWidgetItem *child=root->child(i);
@@ -189,11 +177,11 @@ void RenderingParametersDialog::updateLayer(const string& name,GlLayer *layer) {
   treeWidget->expandAll();
 }
 //=============================================================================
-void RenderingParametersDialog::delLayer(GlScene*, const string&, GlLayer*){
+void LayerManagerWidget::delLayer(GlScene*, const string&, GlLayer*){
   assert(false);
 }
 //=============================================================================
-void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int column) {
+void LayerManagerWidget::checkBoxClicked(QTreeWidgetItem* item, int column) {
   if(column!=1 && column!=2)
     return;
 
@@ -300,10 +288,8 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
   observedMainWidget->draw();
 }
 //=============================================================================
-void RenderingParametersDialog::buildHierarchie(QTreeWidgetItem *item,QList<string>& hierarchie) {
+void LayerManagerWidget::buildHierarchie(QTreeWidgetItem *item,QList<string>& hierarchie) {
   if(item->parent())
     buildHierarchie(item->parent(),hierarchie);
   hierarchie.push_back(item->data(0,0).toString().toStdString());
-}
-
 }

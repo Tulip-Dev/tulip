@@ -58,7 +58,7 @@ namespace tlp {
     /**
      * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
      */
-    virtual void draw(float lod,Camera *camera) {}
+    void draw(float lod,Camera *camera) {}
 
     /**
      * Set stencil number for all composite's children
@@ -74,7 +74,6 @@ namespace tlp {
      * Function used to visit composite's children
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
 	if((*it)->isVisible())
 	  (*it)->acceptVisitor(visitor);

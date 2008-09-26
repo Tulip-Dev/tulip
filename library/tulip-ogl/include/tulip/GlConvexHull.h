@@ -7,19 +7,16 @@
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 
-#include "tulip/GlComposite.h"
+#include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
-
-  class ConvexHullItem;
 
   /** \brief Class used to represent ConvexHull
    *
    * Class used to represent ConvexHull. GlHierarchyConvexHull class use this to create all convexHull of the graph
    */
-  class TLP_GL_SCOPE GlConvexHull: public GlComposite {
+  class TLP_GL_SCOPE GlConvexHull: public GlSimpleEntity {
   public:
-
     /**
      * Build a Polygon with the convex hull of points
      */
@@ -46,12 +43,12 @@ namespace tlp {
     /**
      * Static function who build a hierarchy of convexHull with the given graph
      */
-    static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph,
-							std::vector<Color> fColors,
-							std::vector<Color> oColors,
-							bool deduceFromChilds = true,
-							Graph *root = 0,
-							unsigned int depth = 0);
+    static std::vector<GlConvexHull *> buildConvexHullsFromHierarchy(Graph *graph,
+								     std::vector<Color> fColors,
+								     std::vector<Color> oColors,
+								     bool deduceFromChilds = true,
+								     Graph *root = 0,
+								     unsigned int depth = 0);
 
     /**
      * Translate entity
@@ -76,12 +73,5 @@ namespace tlp {
     bool _outlined;
     std::string _name;
   };
-
-  struct ConvexHullItem {
-    GlConvexHull* hull;
-    std::string name;
-    std::vector<ConvexHullItem *> children;
-  };
-
 }
 #endif

@@ -32,7 +32,7 @@ namespace tlp {
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
     //cout << data->elementLayout->getNodeValue(n) << endl;
-    return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2);
+    return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n),data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n));
   }
 
   void GlNode::acceptVisitor(GlSceneVisitor *visitor) {

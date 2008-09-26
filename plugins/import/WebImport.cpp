@@ -113,7 +113,7 @@ UrlElement::UrlElement(const UrlElement &c):
 
 void UrlElement::setUrl(const string& theUrl) {
   url = theUrl;
-  size_t len = theUrl.find_first_of("?", 0);
+  unsigned int len = theUrl.find_first_of("?", 0);
   if (len != string::npos)
     clean_url = theUrl.substr(0, len);
   else
@@ -149,8 +149,8 @@ static char* not_html_extensions[] = {
 
 bool UrlElement::isHtmlPage() {
   string lowercase(url);
-  size_t len = lowercase.length();
-  for (size_t i = 0; i < len; ++i)
+  unsigned int len = lowercase.length();
+  for (unsigned int i = 0; i < len; ++i)
     lowercase[i] = tolower(lowercase[i]);
   for (unsigned int i = 0; not_html_extensions[i]; i++)
     if (lowercase.rfind(not_html_extensions[i], len) != string::npos)
@@ -201,7 +201,7 @@ static char * rejected_protocols[] = {
 UrlElement UrlElement::parseUrl (const string &href) {
   UrlElement newUrl;
   string lowercase(href);
-  size_t i, len = lowercase.length();
+  unsigned int i, len = lowercase.length();
   for (i = 0; i < len; ++i)
     lowercase[i] = tolower(lowercase[i]);
   for (i = 0; rejected_protocols[i] != 0; i++) {
@@ -214,7 +214,7 @@ UrlElement UrlElement::parseUrl (const string &href) {
       newUrl.server = href;
     return newUrl;
   }
-  size_t pos=0;
+  unsigned int pos=0;
   bool host = false;
   pos = lowercase.rfind("http://", len);
   if (pos == string::npos)
@@ -224,14 +224,14 @@ UrlElement UrlElement::parseUrl (const string &href) {
     pos+=7;
   }
   if (host) {
-    size_t endhost = lowercase.find_first_of("/ ",pos);
+    unsigned int endhost = lowercase.find_first_of("/ ",pos);
     if (endhost == string::npos)
       endhost=len;
     string hostname = href.substr(pos,endhost-pos);
     newUrl.server = hostname;
     newUrl.setUrl(href.substr(endhost));
   } else {
-    size_t querystart = lowercase.find_first_of("#",pos); /* previously ?#  instead of # */
+    unsigned int querystart = lowercase.find_first_of("#",pos); /* previously ?#  instead of # */
     if (querystart != string::npos)
       len = querystart;
     string theUrl = href.substr(pos,len-pos);
@@ -240,7 +240,7 @@ UrlElement UrlElement::parseUrl (const string &href) {
     //Manage relative urls
     if (theUrl[0]!='/') {
       string urlreference(this->url);
-      size_t findUp = urlreference.rfind("/", urlreference.length());
+      unsigned int findUp = urlreference.rfind("/", urlreference.length());
       if (findUp==string::npos) {
 	urlreference.clear();
 	urlreference.append(1, '/');
@@ -425,14 +425,14 @@ struct WebImport:public ImportModule {
   //========================================================
   void findAndTreatUrls(const string&lowercase,
 			const string&balise, UrlElement &url) {
-    size_t llen = lowercase.length();
-    size_t len = llen;
+    unsigned int llen = lowercase.length();
+    unsigned int len = llen;
     while ( len != string::npos ) {
       len = lowercase.rfind(balise, len);
       bool urlFound = true;
       if( len != string::npos ) {
 	// find the next '=' then the first '"'
-	size_t start = len + balise.length();
+	unsigned int start = len + balise.length();
 	len--;
 	char c = '=';
 	for (; start < llen; start++) {
@@ -455,7 +455,7 @@ struct WebImport:public ImportModule {
 	}
 	if (urlFound) {
 	  ++start;
-	  size_t end = start;
+	  unsigned int end = start;
 	  // find the end of the string
 	  for (; end < llen; end++) {
 	    if (lowercase[end] == '"')
@@ -475,7 +475,7 @@ struct WebImport:public ImportModule {
     //cerr << __PRETTY_FUNCTION__ << endl << flush;
     if (url.data.empty()) return;
     string lowercase(url.data);
-    for (size_t i = 0; i< lowercase.length(); ++i)
+    for (unsigned int i = 0; i< lowercase.length(); ++i)
       lowercase[i] = tolower(lowercase[i]);
     findAndTreatUrls(lowercase," href",url);
     findAndTreatUrls(lowercase," src",url);
@@ -518,7 +518,7 @@ struct WebImport:public ImportModule {
 	    return pluginProgress->state()!= TLP_CANCEL;
 	}
 #ifndef NDEBUG
-	cerr << "Visiting: " << url.server << url.url << " ..." << flush;
+	cerr << "Visiting : " << url.server << url.url << " ..." << flush;
 #endif
 	if (url.isRedirected()) {
 	  UrlElement redirection = url.getRedirection();

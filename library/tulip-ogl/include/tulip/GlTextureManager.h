@@ -47,7 +47,6 @@ namespace tlp {
     }
 
     void changeContext(unsigned long context);
-    void removeContext(unsigned long context);
 
     GlTexture getTextureInfo(const std::string&);
     bool loadTexture(const std::string&);

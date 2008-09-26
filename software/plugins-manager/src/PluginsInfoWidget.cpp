@@ -97,7 +97,6 @@ namespace tlp {
 	  str.replace("</bold>","</b>");
 	  str.replace("<simplesect","<blockquote><");
 	  str.replace("</simplesect>","</blockquote><br>");
-	  str.replace("<linebreak/>", "<br>");
 	}
       }
       n = n.nextSibling();

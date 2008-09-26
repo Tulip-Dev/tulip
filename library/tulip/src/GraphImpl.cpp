@@ -25,7 +25,7 @@ using namespace tlp;
 /* 
  * function to test if an edge e exist in the adjacency of a node
  */
-static bool existEdgeE(Graph *g, const node n1, const node n2, edge e) {
+bool existEdgeE(Graph *g, const node n1, const node n2, edge e) {
   Iterator<edge> *it = g->getOutEdges(n1);
   while (it->hasNext()) {
     edge e1(it->next());
@@ -39,8 +39,7 @@ static bool existEdgeE(Graph *g, const node n1, const node n2, edge e) {
 /* 
  * function to test the integrity of the graph structure
  */
-/* no needed for the moment
-static bool integrityTest(Graph *graph) {
+bool integrityTest(Graph *graph) {
   Iterator<edge> *itE = graph->getEdges();
   set<edge> edgesTest;
   while(itE->hasNext()) {
@@ -82,7 +81,6 @@ static bool integrityTest(Graph *graph) {
   }delete itN;
   return true;
 }
-*/
 //----------------------------------------------------------------
 GraphImpl::GraphImpl():GraphAbstract(this) {
   nbNodes=0;

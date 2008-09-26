@@ -16,7 +16,7 @@
 #include "GridOptionsData.h"
 
 #include <tulip/GlMainWidget.h>
-#include <tulip/RenderingParametersDialog.h>
+#include <tulip/LayerManagerWidget.h>
 #include <tulip/GlGrid.h>
 
 namespace tlp {
@@ -40,7 +40,7 @@ namespace tlp {
 
  protected:
   GlMainWidget *glMainWidget; /**< The considered GlMainWidget */
-  RenderingParametersDialog *paramDialog; /**< The considered RenderingParametersDialog */
+  LayerManagerWidget *layerWidget; /**< The considered LayerManagerWidget */
   tlp::GlGrid *grid; /**< The considered GlADGrid */
 
  public:
@@ -60,9 +60,9 @@ namespace tlp {
   void setCurrentMainWidget(GlMainWidget *graphWidget);
 
   /**
-   * Function used to define on which RenderingParametersDialog we are working
+   * Function used to define on which LayerManagerWidget we are working
    */
-  void setCurrentRenderingParametersDialog(RenderingParametersDialog *paramDialog);						
+  void setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget);						
 
  public slots:
  

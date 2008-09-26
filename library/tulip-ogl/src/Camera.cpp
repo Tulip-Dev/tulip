@@ -212,18 +212,20 @@ namespace tlp {
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
   //====================================================
-  void Camera::addObjectTransformation(const Coord &translation,const Coord &scale,const Coord &baseCoord ) {
-    objectScale.push_back(scale);
-    objectTranslation.push_back(translation);
-    objectCoord.push_back(baseCoord);
-   
+  void Camera::addObjectTransformation(const Coord &translation,const Coord &scale) {
+    if(objectTransformation){
+      objectTranslation+=translation;
+      objectScale*=scale;
+    }else{
+      objectTranslation=translation;
+      objectScale=scale;
+    }
     objectTransformation=true;
   }
   //====================================================
-  void Camera::getObjectTransformation(vector<Coord> &translation,vector<Coord> &scale,vector<Coord> &objectCoord) {
+  void Camera::getObjectTransformation(Coord &translation,Coord &scale) {
     translation=objectTranslation;
     scale=objectScale;
-    objectCoord=this->objectCoord;
   }
   //====================================================
   bool Camera::haveObjectTransformation() {

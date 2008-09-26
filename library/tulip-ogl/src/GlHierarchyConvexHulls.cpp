@@ -29,70 +29,60 @@ namespace tlp {
       depth++;
     }
   
-    ConvexHullItem* glHulls;
+    GlComposite* glHulls;
     GlComposite* oldGlHulls=NULL;
-    GlComposite* oldRootGraphHull=NULL;
     if(layer->findGlEntity("Hulls")){
       oldGlHulls=(GlComposite*)(layer->findGlEntity("Hulls"));
-
-      string rootGraphName;
-      graph->getAttributes().get("name",rootGraphName);
-      
-      if(oldGlHulls->findGlEntity(rootGraphName)) {
-	oldRootGraphHull=(GlComposite*)(oldGlHulls->findGlEntity(rootGraphName));
-	oldGlHulls->deleteGlEntity(oldRootGraphHull);
-      }
       layer->deleteGlEntity(oldGlHulls);
     }
  
-    ConvexHullItem* convexHull=GlConvexHull::buildConvexHullsFromHierarchy(graph,
-									   vector<Color>(),
-									   vector<Color>(),
-									   false,
-									   graph,
-									   depth);
-    glHulls=buildComposite(convexHull,(GlConvexHull*)oldGlHulls);
-    
-    string rootGraphName;
-    graph->getAttributes().get("name",rootGraphName);
-    GlComposite *hullsComposite=new GlComposite;
-    hullsComposite->addGlEntity(glHulls->hull,rootGraphName);
-    setToOld(glHulls,(GlConvexHull*)oldRootGraphHull);
+    glHulls=new GlComposite;
+    if(oldGlHulls) {
+      glHulls->setVisible(oldGlHulls->isVisible());
+      glHulls->setStencil(oldGlHulls->getStencil());
+    }else{
+      glHulls->setVisible(false);
+      glHulls->setStencil(0xFFFF);
+    }
 
-    layer->addGlEntity(hullsComposite,"Hulls");  
+    layer->addGlEntity(glHulls,"Hulls");
+  
+
+    // build convex hulls
+    vector<GlConvexHull *> convexHulls=GlConvexHull::buildConvexHullsFromHierarchy(graph,
+										   vector<Color>(),
+										   vector<Color>(),
+										   false,
+										   graph,
+										   depth);
+
+    // add convex hulls in gl composite
+    vector<GlConvexHull *>::const_iterator it = convexHulls.begin();
+    unsigned int i = 0;
+    unsigned int noname=0;
+
+    for (; it != convexHulls.end(); it++, i++) {
+      stringstream sstr;
+      if((*it)->getName()!="") {
+	sstr << (*it)->getName();
+      }else{
+	sstr << "noname_" << noname ;
+	noname++;
+      }
+
+      if(oldGlHulls->findGlEntity(sstr.str())){
+	GlSimpleEntity *oldEntity=oldGlHulls->findGlEntity(sstr.str());
+	(*it)->setVisible(oldEntity->isVisible());
+	(*it)->setStencil(oldEntity->getStencil());
+      }else{
+	(*it)->setStencil(glHulls->getStencil());
+	(*it)->setVisible(glHulls->isVisible());
+      }
+    
+      glHulls->addGlEntity(*it, sstr.str());
+    }
 
     oldGlHulls->reset(true);
-  }
-
-  ConvexHullItem *GlHierarchyConvexHulls::buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull) {
-    GlComposite *child;
-    for(vector<ConvexHullItem *>::iterator it=convexHull->children.begin();it!=convexHull->children.end();++it) {
-      GlConvexHull *oldChild;
-      if(oldHull)
-	oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
-      else
-	oldChild=NULL;
-
-      child=buildComposite(*it,oldChild)->hull;
-      convexHull->hull->addGlEntity(child,(*it)->name);
-    }
-    return convexHull;
-  }
-
-  void GlHierarchyConvexHulls::setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull) {
-    if(oldHull) {
-      convexHull->hull->setVisible(oldHull->isVisible());
-      convexHull->hull->setStencil(oldHull->getStencil());
-    }
-    for(vector<ConvexHullItem *>::iterator it=convexHull->children.begin();it!=convexHull->children.end();++it) {
-      GlConvexHull *oldChild;
-      if(oldHull) 
-	oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
-      else
-	oldChild=NULL;
-      
-      setToOld(*it,oldChild);
-    }
   }
 
 }

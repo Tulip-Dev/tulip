@@ -10,9 +10,7 @@
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>7</hsizetype>
-    <vsizetype>7</vsizetype>
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -26,18 +24,35 @@
   <property name="windowTitle" >
    <string>OverviewWidget</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" >
    <property name="spacing" >
     <number>0</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QFrame" name="frame" />
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frame" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
+ <layoutdefault spacing="6" margin="11" />
  <resources/>
  <connections/>
 </ui>

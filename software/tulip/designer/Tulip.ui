@@ -17,10 +17,19 @@
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
-    <property name="margin" >
+    <property name="spacing" >
      <number>0</number>
     </property>
-    <property name="spacing" >
+    <property name="leftMargin" >
+     <number>0</number>
+    </property>
+    <property name="topMargin" >
+     <number>0</number>
+    </property>
+    <property name="rightMargin" >
+     <number>0</number>
+    </property>
+    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
@@ -29,22 +38,28 @@
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar" >
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
+   <property name="label" stdset="0" >
+    <string>Standard Tools</string>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
   </widget>
   <widget class="QToolBar" name="graphToolBar" >
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
+   <property name="label" stdset="0" >
+    <string>Mouse Interaction Tools</string>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="navigate_action" />
    <addaction name="selectAction" />
@@ -63,7 +78,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>29</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu" >
@@ -198,6 +213,9 @@
    <property name="shortcut" >
     <string>Ctrl+N</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>fileNewAction</string>
+   </property>
   </action>
   <action name="fileOpenAction" >
    <property name="icon" >
@@ -211,6 +229,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+O</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileOpenAction</string>
    </property>
   </action>
   <action name="fileSaveAction" >
@@ -226,6 +247,9 @@
    <property name="shortcut" >
     <string>Ctrl+S</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>fileSaveAction</string>
+   </property>
   </action>
   <action name="fileSaveAsAction" >
    <property name="text" >
@@ -236,6 +260,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Shift+S</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileSaveAsAction</string>
    </property>
   </action>
   <action name="filePrintAction" >
@@ -251,6 +278,9 @@
    <property name="shortcut" >
     <string>Ctrl+P</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>filePrintAction</string>
+   </property>
   </action>
   <action name="fileExitAction" >
    <property name="text" >
@@ -261,6 +291,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Q</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>fileExitAction</string>
    </property>
   </action>
   <action name="editUndoAction" >
@@ -276,6 +309,9 @@
    <property name="shortcut" >
     <string>Ctrl+Z</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editUndoAction</string>
+   </property>
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
@@ -289,6 +325,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Y</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editRedoAction</string>
    </property>
   </action>
   <action name="editCutAction" >
@@ -304,6 +343,9 @@
    <property name="shortcut" >
     <string>Ctrl+X</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editCutAction</string>
+   </property>
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
@@ -317,6 +359,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+C</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCopyAction</string>
    </property>
   </action>
   <action name="editPasteAction" >
@@ -332,6 +377,9 @@
    <property name="shortcut" >
     <string>Ctrl+V</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editPasteAction</string>
+   </property>
   </action>
   <action name="editFindAction" >
    <property name="icon" >
@@ -346,6 +394,9 @@
    <property name="shortcut" >
     <string>Ctrl+F</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editFindAction</string>
+   </property>
   </action>
   <action name="helpContentsAction" >
    <property name="text" >
@@ -356,6 +407,9 @@
    </property>
    <property name="shortcut" >
     <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpContentsAction</string>
    </property>
   </action>
   <action name="helpIndexAction" >
@@ -368,6 +422,9 @@
    <property name="shortcut" >
     <string/>
    </property>
+   <property name="name" stdset="0" >
+    <string>helpIndexAction</string>
+   </property>
   </action>
   <action name="pluginsAction" >
    <property name="text" >
@@ -375,6 +432,9 @@
    </property>
    <property name="iconText" >
     <string>Plugins</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>pluginsAction</string>
    </property>
   </action>
   <action name="helpAboutAction" >
@@ -386,6 +446,9 @@
    </property>
    <property name="shortcut" >
     <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>helpAboutAction</string>
    </property>
   </action>
   <action name="force_ratio" >
@@ -401,6 +464,9 @@
    <property name="iconText" >
     <string>Force ratio</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>force_ratio</string>
+   </property>
   </action>
   <action name="map_metric" >
    <property name="checkable" >
@@ -415,6 +481,9 @@
    <property name="iconText" >
     <string>Map Metric</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>map_metric</string>
+   </property>
   </action>
   <action name="enable_morphing" >
    <property name="checkable" >
@@ -426,6 +495,9 @@
    <property name="iconText" >
     <string>Morphing</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>enable_morphing</string>
+   </property>
   </action>
   <action name="grid_option" >
    <property name="text" >
@@ -434,6 +506,9 @@
    <property name="iconText" >
     <string>Grid</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>grid_option</string>
+   </property>
   </action>
   <action name="Action" >
    <property name="text" >
@@ -441,6 +516,9 @@
    </property>
    <property name="iconText" >
     <string>Unnamed</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>Action</string>
    </property>
   </action>
   <action name="is_acyclic" >
@@ -453,6 +531,9 @@
    <property name="toolTip" >
     <string>Checks is the current graph is acyclic</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_acyclic</string>
+   </property>
   </action>
   <action name="is_biconnected" >
    <property name="text" >
@@ -463,6 +544,9 @@
    </property>
    <property name="toolTip" >
     <string>Checks is the current graph is biconnected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_biconnected</string>
    </property>
   </action>
   <action name="is_triconnected" >
@@ -475,6 +559,9 @@
    <property name="toolTip" >
     <string>Checks is the current graph is triconnected</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_triconnected</string>
+   </property>
   </action>
   <action name="is_planar" >
    <property name="text" >
@@ -485,6 +572,9 @@
    </property>
    <property name="toolTip" >
     <string>Checks is the current graph is planar</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_planar</string>
    </property>
   </action>
   <action name="is_outer_planar" >
@@ -497,6 +587,9 @@
    <property name="toolTip" >
     <string>Checks is the current graph is outer planar</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_outer_planar</string>
+   </property>
   </action>
   <action name="is_simple" >
    <property name="text" >
@@ -507,6 +600,9 @@
    </property>
    <property name="toolTip" >
     <string>Checks is the current graph is simple</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>is_simple</string>
    </property>
   </action>
   <action name="is_directed_tree" >
@@ -519,6 +615,9 @@
    <property name="toolTip" >
     <string>Checks if the current graph is a directed tree</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_directed_tree</string>
+   </property>
   </action>
   <action name="menunew_itemAction" >
    <property name="text" >
@@ -526,6 +625,9 @@
    </property>
    <property name="iconText" >
     <string>&amp;Modify</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>menunew_itemAction</string>
    </property>
   </action>
   <action name="make_acyclic" >
@@ -541,6 +643,9 @@
    <property name="toolTip" >
     <string>Makes the current graph acyclic</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>make_acyclic</string>
+   </property>
   </action>
   <action name="make_simple" >
    <property name="enabled" >
@@ -555,6 +660,9 @@
    <property name="toolTip" >
     <string>Makes the current graph simple</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>make_simple</string>
+   </property>
   </action>
   <action name="make_biconnected" >
    <property name="text" >
@@ -565,6 +673,9 @@
    </property>
    <property name="toolTip" >
     <string>Makes the current graph biconnected</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_biconnected</string>
    </property>
   </action>
   <action name="make_connected" >
@@ -577,6 +688,9 @@
    <property name="toolTip" >
     <string>Makes the current graph connected</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>make_connected</string>
+   </property>
   </action>
   <action name="is_connected" >
    <property name="icon" >
@@ -588,6 +702,9 @@
    <property name="iconText" >
     <string>new item</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_connected</string>
+   </property>
   </action>
   <action name="Reverse_selected_edgesAction" >
    <property name="text" >
@@ -595,6 +712,9 @@
    </property>
    <property name="iconText" >
     <string>Reverse selected edges</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>Reverse_selected_edgesAction</string>
    </property>
   </action>
   <action name="editDeselect_allAction" >
@@ -607,6 +727,9 @@
    <property name="shortcut" >
     <string>Ctrl+Shift+A</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editDeselect_allAction</string>
+   </property>
   </action>
   <action name="editReverse_selectionAction" >
    <property name="text" >
@@ -618,6 +741,9 @@
    <property name="shortcut" >
     <string>Ctrl+I</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editReverse_selectionAction</string>
+   </property>
   </action>
   <action name="editAction" >
    <property name="text" >
@@ -625,6 +751,9 @@
    </property>
    <property name="iconText" >
     <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editAction</string>
    </property>
   </action>
   <action name="editDelete_selectionAction" >
@@ -637,6 +766,9 @@
    <property name="shortcut" >
     <string>Del</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editDelete_selectionAction</string>
+   </property>
   </action>
   <action name="editCreate_subgraphAction" >
    <property name="text" >
@@ -647,6 +779,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_subgraphAction</string>
    </property>
   </action>
   <action name="editCreate_groupAction" >
@@ -659,6 +794,9 @@
    <property name="shortcut" >
     <string>Ctrl+G</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_groupAction</string>
+   </property>
   </action>
   <action name="editSelect_AllAction" >
    <property name="text" >
@@ -669,6 +807,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+A</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editSelect_AllAction</string>
    </property>
   </action>
   <action name="tooltips" >
@@ -684,6 +825,9 @@
    <property name="toolTip" >
     <string>Enable/disable the display of tooltips on graph nodes or edges</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>tooltips</string>
+   </property>
   </action>
   <action name="is_free_tree" >
    <property name="text" >
@@ -695,6 +839,9 @@
    <property name="toolTip" >
     <string>Checks if the current graph is a free tree</string>
    </property>
+   <property name="name" stdset="0" >
+    <string>is_free_tree</string>
+   </property>
   </action>
   <action name="make_directed" >
    <property name="text" >
@@ -705,6 +852,9 @@
    </property>
    <property name="toolTip" >
     <string>Tranforms the current graph into a directed tree</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>make_directed</string>
    </property>
   </action>
   <action name="antialiasing" >
@@ -738,6 +888,9 @@
     <property name="toolTip" >
      <string>Add edges</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>addEdgeAction</string>
+    </property>
    </action>
    <action name="addNodeAction" >
     <property name="checkable" >
@@ -754,6 +907,9 @@
     </property>
     <property name="toolTip" >
      <string>Add nodes</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>addNodeAction</string>
     </property>
    </action>
    <action name="deleteAction" >
@@ -772,6 +928,9 @@
     <property name="toolTip" >
      <string>Delete nodes or edges</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>deleteAction</string>
+    </property>
    </action>
    <action name="zoomAction" >
     <property name="checkable" >
@@ -788,6 +947,9 @@
     </property>
     <property name="toolTip" >
      <string>Zoom on rectangle</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>zoomAction</string>
     </property>
    </action>
    <action name="navigate_action" >
@@ -809,6 +971,9 @@
     <property name="toolTip" >
      <string>Navigate in graph</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>navigateAction</string>
+    </property>
    </action>
    <action name="moveSelectionAction" >
     <property name="checkable" >
@@ -825,6 +990,9 @@
     </property>
     <property name="toolTip" >
      <string>Move/Reshape selection</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>moveSelectionAction</string>
     </property>
    </action>
    <action name="selectionAction" >
@@ -843,6 +1011,9 @@
     <property name="toolTip" >
      <string>Select nodes/edges in a rectangle</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>selectionAction</string>
+    </property>
    </action>
    <action name="magicSelectionAction" >
     <property name="checkable" >
@@ -859,6 +1030,9 @@
     </property>
     <property name="toolTip" >
      <string>Selection of reachable elements with equal value</string>
+    </property>
+    <property name="name" stdset="0" >
+     <string>magicSelectionAction</string>
     </property>
    </action>
    <action name="selectAction" >
@@ -877,6 +1051,9 @@
     <property name="toolTip" >
      <string>Get information on nodes/edges</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>selectAction</string>
+    </property>
    </action>
    <action name="editEdgeBendAction" >
     <property name="checkable" >
@@ -894,7 +1071,13 @@
     <property name="toolTip" >
      <string>Edit edge bends</string>
     </property>
+    <property name="name" stdset="0" >
+     <string>editEdgeBendAction</string>
+    </property>
    </action>
+   <property name="name" stdset="0" >
+    <string>mouseActionGroup</string>
+   </property>
   </actiongroup>
  </widget>
  <layoutdefault spacing="6" margin="11" />
@@ -907,7 +1090,7 @@
  <connections>
   <connection>
    <sender>fileNewAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileNew()</slot>
    <hints>
@@ -923,7 +1106,7 @@
   </connection>
   <connection>
    <sender>fileOpenAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileOpen()</slot>
    <hints>
@@ -939,7 +1122,7 @@
   </connection>
   <connection>
    <sender>fileSaveAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSave()</slot>
    <hints>
@@ -955,7 +1138,7 @@
   </connection>
   <connection>
    <sender>fileSaveAsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSaveAs()</slot>
    <hints>
@@ -971,7 +1154,7 @@
   </connection>
   <connection>
    <sender>filePrintAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>filePrint()</slot>
    <hints>
@@ -987,7 +1170,7 @@
   </connection>
   <connection>
    <sender>fileExitAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileExit()</slot>
    <hints>
@@ -1003,7 +1186,7 @@
   </connection>
   <connection>
    <sender>editCutAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>editCut()</slot>
    <hints>
@@ -1019,7 +1202,7 @@
   </connection>
   <connection>
    <sender>editCopyAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>editCopy()</slot>
    <hints>
@@ -1035,7 +1218,7 @@
   </connection>
   <connection>
    <sender>editPasteAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>editPaste()</slot>
    <hints>
@@ -1051,7 +1234,7 @@
   </connection>
   <connection>
    <sender>editFindAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>editFind()</slot>
    <hints>
@@ -1067,7 +1250,7 @@
   </connection>
   <connection>
    <sender>helpIndexAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpIndex()</slot>
    <hints>
@@ -1083,7 +1266,7 @@
   </connection>
   <connection>
    <sender>helpContentsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpContents()</slot>
    <hints>
@@ -1099,7 +1282,7 @@
   </connection>
   <connection>
    <sender>pluginsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>plugins()</slot>
    <hints>
@@ -1115,7 +1298,7 @@
   </connection>
   <connection>
    <sender>helpAboutAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpAbout()</slot>
    <hints>
@@ -1131,7 +1314,7 @@
   </connection>
   <connection>
    <sender>grid_option</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>gridOptions()</slot>
    <hints>
@@ -1147,7 +1330,7 @@
   </connection>
   <connection>
    <sender>make_acyclic</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeAcyclic()</slot>
    <hints>
@@ -1163,7 +1346,7 @@
   </connection>
   <connection>
    <sender>make_simple</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeSimple()</slot>
    <hints>
@@ -1179,7 +1362,7 @@
   </connection>
   <connection>
    <sender>make_biconnected</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeBiconnected()</slot>
    <hints>
@@ -1195,7 +1378,7 @@
   </connection>
   <connection>
    <sender>is_biconnected</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isBiconnected()</slot>
    <hints>
@@ -1211,7 +1394,7 @@
   </connection>
   <connection>
    <sender>is_triconnected</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isTriconnected()</slot>
    <hints>
@@ -1227,7 +1410,7 @@
   </connection>
   <connection>
    <sender>is_planar</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isPlanar()</slot>
    <hints>
@@ -1243,7 +1426,7 @@
   </connection>
   <connection>
    <sender>is_outer_planar</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isOuterPlanar()</slot>
    <hints>
@@ -1259,7 +1442,7 @@
   </connection>
   <connection>
    <sender>is_simple</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isSimple()</slot>
    <hints>
@@ -1275,7 +1458,7 @@
   </connection>
   <connection>
    <sender>is_directed_tree</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isTree()</slot>
    <hints>
@@ -1291,7 +1474,7 @@
   </connection>
   <connection>
    <sender>is_acyclic</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isAcyclic()</slot>
    <hints>
@@ -1307,7 +1490,7 @@
   </connection>
   <connection>
    <sender>make_connected</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeConnected()</slot>
    <hints>
@@ -1323,7 +1506,7 @@
   </connection>
   <connection>
    <sender>is_connected</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isConnected()</slot>
    <hints>
@@ -1339,7 +1522,7 @@
   </connection>
   <connection>
    <sender>Reverse_selected_edgesAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>reverseSelectedEdgeDirection()</slot>
    <hints>
@@ -1355,7 +1538,7 @@
   </connection>
   <connection>
    <sender>editCreate_groupAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>group()</slot>
    <hints>
@@ -1371,7 +1554,7 @@
   </connection>
   <connection>
    <sender>editCreate_subgraphAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>newSubgraph()</slot>
    <hints>
@@ -1387,7 +1570,7 @@
   </connection>
   <connection>
    <sender>editDelete_selectionAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>delSelection()</slot>
    <hints>
@@ -1403,7 +1586,7 @@
   </connection>
   <connection>
    <sender>editReverse_selectionAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>reverseSelection()</slot>
    <hints>
@@ -1419,7 +1602,7 @@
   </connection>
   <connection>
    <sender>editSelect_AllAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>selectAll()</slot>
    <hints>
@@ -1435,7 +1618,7 @@
   </connection>
   <connection>
    <sender>editDeselect_allAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>deselectAll()</slot>
    <hints>
@@ -1451,7 +1634,7 @@
   </connection>
   <connection>
    <sender>addEdgeAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setAddEdge()</slot>
    <hints>
@@ -1467,7 +1650,7 @@
   </connection>
   <connection>
    <sender>addNodeAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setAddNode()</slot>
    <hints>
@@ -1483,7 +1666,7 @@
   </connection>
   <connection>
    <sender>deleteAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setDelete()</slot>
    <hints>
@@ -1499,7 +1682,7 @@
   </connection>
   <connection>
    <sender>zoomAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setZoomBox()</slot>
    <hints>
@@ -1515,7 +1698,7 @@
   </connection>
   <connection>
    <sender>navigate_action</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setGraphNavigate()</slot>
    <hints>
@@ -1531,7 +1714,7 @@
   </connection>
   <connection>
    <sender>moveSelectionAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setMoveSelection()</slot>
    <hints>
@@ -1547,7 +1730,7 @@
   </connection>
   <connection>
    <sender>magicSelectionAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setMagicSelection()</slot>
    <hints>
@@ -1563,7 +1746,7 @@
   </connection>
   <connection>
    <sender>selectionAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setSelection()</slot>
    <hints>
@@ -1579,7 +1762,7 @@
   </connection>
   <connection>
    <sender>selectAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setSelect()</slot>
    <hints>
@@ -1595,7 +1778,7 @@
   </connection>
   <connection>
    <sender>is_free_tree</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>isFreeTree()</slot>
    <hints>
@@ -1611,7 +1794,7 @@
   </connection>
   <connection>
    <sender>make_directed</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>makeDirected()</slot>
    <hints>
@@ -1627,7 +1810,7 @@
   </connection>
   <connection>
    <sender>editEdgeBendAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>setEditEdgeBend()</slot>
    <hints>
