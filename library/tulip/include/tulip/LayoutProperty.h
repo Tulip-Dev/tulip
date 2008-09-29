@@ -23,7 +23,6 @@ class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, Layo
 
 public:
   LayoutProperty (Graph *);
-  ~LayoutProperty();
 
   PropertyInterface* clonePrototype(Graph *, std::string );
   void copy( const node, const node, PropertyInterface * );

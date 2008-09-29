@@ -22,7 +22,6 @@ class TLP_SCOPE DoubleProperty:public AbstractProperty<DoubleType,DoubleType,Dou
 
 public :
   DoubleProperty (Graph *);
-  ~DoubleProperty();
   DoubleType::RealType  getNodeMin(Graph *sg=0);
   DoubleType::RealType  getNodeMax(Graph *sg=0);
   DoubleType::RealType  getEdgeMin(Graph *sg=0);

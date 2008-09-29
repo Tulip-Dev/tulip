@@ -81,10 +81,6 @@ bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compute(const std::string &al
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::~AbstractProperty() {
-}
-//=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
 typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeDefaultValue() { 
   return nodeDefaultValue; 
 }
@@ -108,14 +104,14 @@ template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const node n,const typename Tnode::RealType &v) {
   setNodeValue_handler(n, v);
   nodeProperties.set(n.id,v);
-  notifyObservers();
+  notifySetNodeValue(this, n);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const edge e,const typename Tedge::RealType &v) {
   setEdgeValue_handler(e, v);
   edgeProperties.set(e.id,v);
-  notifyObservers();
+  notifySetEdgeValue(this, e);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
@@ -123,7 +119,7 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllNodeValue(const typenam
   setAllNodeValue_handler(v);
   nodeDefaultValue = v;
   nodeProperties.setAll(v);
-  notifyObservers();
+  notifySetAllNodeValue(this);
 }
 //============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
@@ -131,7 +127,7 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typenam
   setAllEdgeValue_handler(v);
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
-  notifyObservers();
+  notifySetAllEdgeValue(this);
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>

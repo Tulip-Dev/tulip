@@ -19,7 +19,6 @@ class TLP_SCOPE ColorProperty:public AbstractProperty<ColorType,ColorType, Color
   friend class ColorAlgorithm;
 public :
   ColorProperty (Graph *);
-  ~ColorProperty();
   PropertyInterface* clonePrototype(Graph *, std::string );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );

@@ -13,10 +13,6 @@ using namespace tlp;
 ColorProperty::ColorProperty (Graph *sg):AbstractProperty<ColorType,ColorType, ColorAlgorithm>(sg) {
   //  propertyProxy=this;
 }
-//==============================
-ColorProperty::~ColorProperty() {
-  notifyDestroy();
-}    
 //=================================================================================
 PropertyInterface* ColorProperty::clonePrototype(Graph * g, std::string n) {
   if( !g )

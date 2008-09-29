@@ -25,7 +25,7 @@ GraphProperty::~GraphProperty() {
   if (getNodeDefaultValue() != 0) {
     getNodeDefaultValue()->removeObserver(this);
   }
-  notifyDestroy();
+  notifyDestroy(this);
 }
 //==============================
 void GraphProperty::setAllNodeValue_handler(const GraphType::RealType &sg) {

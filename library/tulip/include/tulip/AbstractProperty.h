@@ -4,7 +4,7 @@
  Email : auber@labri.fr
  Last modification : 26/09/2001
  This program is free software; you can redistribute it and/or modify  *
- it under the terms of the GNU General Public License as published by  
+ it under the terms of the GNU General bAb Public License as published by  
  the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
@@ -16,6 +16,8 @@
 #endif
 
 #include "tulip/Observable.h"
+#include "tulip/ObservableProperty.h"
+
 #include "tulip/Types.h"
 #include "tulip/PropertyAlgorithm.h"
 #include "tulip/MutableContainer.h"
@@ -30,9 +32,10 @@ namespace tlp {
  */ 
 /*@{*/
 //=============================================================
-class TLP_SCOPE PropertyInterface: public Observable {
+class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
 public:
-  virtual ~PropertyInterface(){}
+  virtual ~PropertyInterface();
+
   virtual void erase(const node) =0;
   virtual void erase(const edge) =0;
   virtual void copy(const node, const node, PropertyInterface *) =0;
@@ -53,6 +56,14 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
+
+ protected:
+  // redefinitions of ObservableProperty methods
+  void notifySetNodeValue(PropertyInterface*,const node n);
+  void notifySetEdgeValue(PropertyInterface*,const edge e);
+  void notifySetAllNodeValue(PropertyInterface*);
+  void notifySetAllEdgeValue(PropertyInterface*);
+  void notifyDestroy(PropertyInterface*);
 };
 
 /**
@@ -78,7 +89,6 @@ public:
     }
   }
   AbstractProperty(Graph *);
-  virtual ~AbstractProperty() ;
   /** 
    * Returns the node default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory

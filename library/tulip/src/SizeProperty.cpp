@@ -14,10 +14,6 @@ using namespace tlp;
 SizeProperty::SizeProperty (Graph *sg):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg) {
 }
-//==============================
-SizeProperty::~SizeProperty() {
-  notifyDestroy();
-}
 //====================================================================
 void SizeProperty::reset_handler() {
   resetMinMax();

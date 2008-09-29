@@ -23,7 +23,6 @@ class TLP_SCOPE SizeProperty:public AbstractProperty<SizeType,SizeType, SizeAlgo
 
 public :
   SizeProperty (Graph *);
-  ~SizeProperty();
 
   Size getMax(Graph *sg=0);
   Size getMin(Graph *sg=0);

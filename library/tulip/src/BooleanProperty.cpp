@@ -15,10 +15,6 @@ BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,Boolea
   //  propertyProxy=this;
 }
 //=================================================================================
-BooleanProperty::~BooleanProperty() {
-  notifyDestroy();
-}  
-//=================================================================================
 ///Poign� permettnet le reset des variables du Metric par le AbstractProperty
 void BooleanProperty::reset_handler() {
 }

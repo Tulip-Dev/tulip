@@ -34,6 +34,7 @@ void GraphAbstract::clear() {
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
   Graph *tmp = new GraphView(this, selection);
   subgraphs.push_back(tmp);
+  notifyAddSubGraph(this, tmp);
   return tmp;
 }
 //=========================================================================
@@ -62,6 +63,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       break;
     }
   }
+  notifyDelSubGraph(this, toRemove);
   delete toRemove;
 }
 //=========================================================================
@@ -75,6 +77,7 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
       break;
     }
   }
+  notifyDelSubGraph(this, toRemove);
   delete toRemove;
 }
 //=========================================================================
@@ -178,7 +181,7 @@ node GraphAbstract::opposite(const edge e, const node n)const {
 }
 //=========================================================================
 void GraphAbstract::reverse(const edge e) {
-  notifyReverseEdge(this,e);
+  notifyReverseEdge(this, e);
   getSuperGraph()->reverse(e);
 }
 //=========================================================================
@@ -194,11 +197,11 @@ edge GraphAbstract::existEdge(const node n1, const node n2)const {
   return edge();
 }
 //=========================================================================
-bool GraphAbstract::existProperty(const std::string&name) {
+bool GraphAbstract::existProperty(const std::string &name) {
   return propertyContainer->existProperty(name);
 }
 //=========================================================================
-bool GraphAbstract::existLocalProperty(const std::string&name) {
+bool GraphAbstract::existLocalProperty(const std::string &name) {
   return propertyContainer->existLocalProperty(name);
 }
 //=========================================================================
@@ -206,13 +209,15 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
   return propertyContainer->getProperty(str);
 }
 //=========================================================================
-void GraphAbstract::delLocalProperty(const std::string&name) {
+void GraphAbstract::delLocalProperty(const std::string &name) {
+  notifyDelLocalProperty(this, name);
   propertyContainer->delLocalProperty(name);
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   assert(!existLocalProperty(name));
   propertyContainer->setLocalProxy(name, prop);
+  notifyAddLocalProperty(this, name);
 }
 //=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {

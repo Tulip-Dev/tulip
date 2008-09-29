@@ -53,6 +53,7 @@ libtulip_la_SOURCES = \
 	GraphDecorator.cpp \
 	Observable.cpp \
 	ObservableGraph.cpp \
+	ObservableProperty.cpp \
 	PluginLoaderTxt.cpp \
 	PropertyManager.cpp \
 	BooleanProperty.cpp \

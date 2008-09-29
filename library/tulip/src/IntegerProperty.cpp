@@ -15,13 +15,6 @@ IntegerProperty::IntegerProperty (Graph *sg):AbstractProperty<IntegerType,Intege
   minMaxOk=false;
   //  propertyProxy=this;
 }
-//==============================
-///Destructeur d'un int   
-///Vide pour l'instant, cela peut
-///provoquer des fuites m�moires
-IntegerProperty::~IntegerProperty() {
-  notifyDestroy();
-}    
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
 int IntegerProperty::getNodeMin() {

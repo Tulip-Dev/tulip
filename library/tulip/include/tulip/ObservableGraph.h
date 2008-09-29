@@ -7,6 +7,7 @@
 namespace tlp {
 
 struct Graph;
+ struct PropertyInterface;
 //=========================================================
 
 /** \addtogroup graphs */ 
@@ -27,19 +28,23 @@ class GraphObserver {
   virtual void delEdge(Graph *,const edge ){}
   virtual void reverseEdge(Graph *,const edge ){}
   virtual void destroy(Graph *){}
+  virtual void addSubGraph(Graph*, Graph *){}
+  virtual void delSubGraph(Graph*, Graph*){}
+  virtual void addLocalProperty(Graph*, const std::string&){}
+  virtual void delLocalProperty(Graph*, const std::string&){}
 };
 /*@}*/
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-namespace std {
+/*namespace std {
   template <>
     struct less<tlp::GraphObserver *> {
     size_t operator()(const tlp::GraphObserver * obs1,const tlp::GraphObserver *obs2) const {
       return (unsigned long)obs1<(unsigned long)obs2;
     }
   };
-}
+  }*/
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
@@ -75,6 +80,10 @@ class ObservableGraph {
   void notifyDelNode(Graph *,const node n);
   void notifyDelEdge(Graph *,const edge e);
   void notifyReverseEdge(Graph *,const edge e);
+  void notifyAddSubGraph(Graph*, Graph*);
+  void notifyDelSubGraph(Graph*, Graph*);
+  void notifyAddLocalProperty(Graph*, const std::string&);
+  void notifyDelLocalProperty(Graph*, const std::string&);
   void notifyDestroy(Graph *);
   mutable std::set<GraphObserver*> observers;
 };

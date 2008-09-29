@@ -56,6 +56,7 @@ nobase_include_HEADERS = \
 	tulip/IntegerAlgorithm.h \
 	tulip/Observable.h \
 	tulip/ObservableGraph.h \
+	tulip/ObservableProperty.h \
 	tulip/AbstractProperty.h \
 	tulip/StringAlgorithm.h \
 	tulip/TlpTools.h \

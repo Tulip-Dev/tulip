@@ -21,7 +21,7 @@ class TLP_SCOPE StringProperty:public AbstractProperty<StringType,StringType, St
 
 public :
   StringProperty (Graph *);
-  ~StringProperty();
+
   PropertyInterface* clonePrototype(Graph *, std::string );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );

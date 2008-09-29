@@ -20,7 +20,6 @@ class TLP_SCOPE BooleanProperty:public AbstractProperty<BooleanType,BooleanType,
 
 public :
   BooleanProperty (Graph *);
-  ~BooleanProperty();
   PropertyInterface* clonePrototype(Graph *, std::string );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );

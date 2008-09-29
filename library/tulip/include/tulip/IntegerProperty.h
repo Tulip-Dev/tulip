@@ -23,7 +23,6 @@ class TLP_SCOPE IntegerProperty:public AbstractProperty<IntegerType,IntegerType,
 
 public :
   IntegerProperty (Graph *);
-  ~IntegerProperty();
   IntegerType::RealType  getNodeMin();
   IntegerType::RealType  getNodeMax();
   IntegerType::RealType  getEdgeMin();

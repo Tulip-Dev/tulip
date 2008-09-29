@@ -15,10 +15,6 @@ LayoutProperty::LayoutProperty (Graph *sg):AbstractProperty<PointType,LineType,L
   minMaxOk[(unsigned long)graph]=false;
 }
 //======================================================
-LayoutProperty::~LayoutProperty() {
-  notifyDestroy();
-}
-//======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
   unsigned long sgi=(unsigned long)sg;

@@ -22,6 +22,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservablePropertyTest );
 
 // this class will capture
 // everything that will happen to our properties
+// synchronously or asynchronously
 class ObserverTest :public Observer {
 public:
   std::set<Observable*> observables;
@@ -40,6 +41,7 @@ public:
     return observables.find(obs) != observables.end();
   }
 
+  // Observable methods
   void update(std::set<Observable *>::iterator begin,
 	      std::set<Observable *>::iterator end) {
     reset();
@@ -56,6 +58,55 @@ public:
 };
 
 ObserverTest* observer;
+
+// this class will capture
+// everything that will happen to our properties
+class PropertyObserverTest :public PropertyObserver {
+public:
+  std::set<PropertyInterface*> properties;
+  node lastNode;
+  edge lastEdge;
+
+  PropertyObserverTest() {}
+
+  void reset() {
+    properties.clear();
+  }
+
+  unsigned int nbProperties() {
+    return properties.size();
+  }
+
+  bool found(PropertyInterface *prop) {
+    return properties.find(prop) != properties.end();
+  }
+
+  node getNode() { return lastNode; }
+  
+  edge getEdge() { return lastEdge; }
+
+  void setNodeValue(PropertyInterface* prop, const node n) {
+    properties.insert(prop);
+    lastNode = n;
+  }
+    
+  virtual void setEdgeValue(PropertyInterface* prop, const edge e ){
+    properties.insert(prop);
+    lastEdge = e;
+  }
+    
+  virtual void setAllNodeValue(PropertyInterface* prop){
+    properties.insert(prop);
+  }    
+  virtual void setAllEdgeValue(PropertyInterface* prop){
+    properties.insert(prop);
+  }
+  virtual void destroy(PropertyInterface* prop){
+    properties.insert(prop);
+  }
+};
+
+PropertyObserverTest* pObserver;
 
 //==========================================================
 void ObservablePropertyTest::setUp() {
@@ -76,6 +127,7 @@ void ObservablePropertyTest::setUp() {
     graph->addEdge(nodes[rand()%NB_NODES], nodes[rand()%NB_NODES]);
 
   observer = new ObserverTest();
+  pObserver = new PropertyObserverTest();
 
   addObservers();
 }
@@ -87,40 +139,60 @@ void ObservablePropertyTest::tearDown() {
     if (props[i])
       delete props[i];
   }
+
+  delete observer;
+  delete pObserver;
 }
 
 void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, char* val,
-					  bool all, bool found) {
+					  bool all, bool found1,
+					  bool found2) {
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  pObserver->reset();
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
+  
   if (all) {
     prop->setAllNodeStringValue(string(val));
-    CPPUNIT_ASSERT(observer->nbObservables() == (found ? 1 : 0));
-    CPPUNIT_ASSERT(observer->found(prop) == found);
+    CPPUNIT_ASSERT(observer->nbObservables() == (found1 ? 1 : 0));
+    CPPUNIT_ASSERT(observer->found(prop) == found1);
+    CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
+    CPPUNIT_ASSERT(pObserver->found(prop) == found2);
   } else {
     node n;
     forEach(n, graph->getNodes()) {
       prop->setNodeStringValue(n, string(val));
-      CPPUNIT_ASSERT(observer->nbObservables() == (found ? 1 : 0));
-      CPPUNIT_ASSERT(observer->found(prop) == found);
+      CPPUNIT_ASSERT(observer->nbObservables() == (found1 ? 1 : 0));
+      CPPUNIT_ASSERT(observer->found(prop) == found1);
+      CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
+      CPPUNIT_ASSERT(pObserver->found(prop) == found2);
+      CPPUNIT_ASSERT(!found2 || pObserver->getNode() == n);
     }
   }
 }
 
 void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, char* val,
-					  bool all, bool found) {
+					  bool all, bool found1,
+					  bool found2) {
   observer->reset();
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  pObserver->reset();
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   if (all) {
     prop->setAllEdgeStringValue(string(val));
-    CPPUNIT_ASSERT(observer->nbObservables() == (found ? 1 : 0));
-    CPPUNIT_ASSERT(observer->found(prop) == found);
+    CPPUNIT_ASSERT(observer->nbObservables() == (found1 ? 1 : 0));
+    CPPUNIT_ASSERT(observer->found(prop) == found1);
+    CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
+    CPPUNIT_ASSERT(pObserver->found(prop) == found2);
   } else {
     edge e;
     forEach(e, graph->getEdges()) {
       prop->setEdgeStringValue(e, string(val));
-      CPPUNIT_ASSERT(observer->nbObservables() == (found ?  1 : 0));
-      CPPUNIT_ASSERT(observer->found(prop) == found);
+      CPPUNIT_ASSERT(observer->nbObservables() == (found1 ?  1 : 0));
+      CPPUNIT_ASSERT(observer->found(prop) == found1);
+      CPPUNIT_ASSERT(pObserver->nbProperties() == (found2 ? 1 : 0));
+      CPPUNIT_ASSERT(pObserver->found(prop) == found2);
+      CPPUNIT_ASSERT(!found2 || pObserver->getEdge() == e);
     }
   }
 }
@@ -128,18 +200,23 @@ void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, char* val,
 //==========================================================
 void ObservablePropertyTest::addObservers() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   for (unsigned int i = 0; i < 7; ++i) {
     props[i]->addObserver(observer);
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
+    props[i]->addPropertyObserver(pObserver);
+    CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   }
 }
 //==========================================================
 void ObservablePropertyTest::testAddObserver() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  for (unsigned int i = 0; i < 7; ++i)
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
+  for (unsigned int i = 0; i < 7; ++i) {
     CPPUNIT_ASSERT(props[i]->countObservers() == 1);
+    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
+  }
 }
-
 //==========================================================
 void ObservablePropertyTest::testSynchronousSetNodeValue() {
   setNodeValue(props[0], "true", false, true);
@@ -251,10 +328,13 @@ void ObservablePropertyTest::testAsynchronousSetAllEdgeValue() {
 //==========================================================
 void ObservablePropertyTest::testSynchronousDelete() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
     CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
     CPPUNIT_ASSERT(observer->found(props[i]));
+    CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
+    CPPUNIT_ASSERT(pObserver->found(props[i]));
     props[i] = NULL;
   }
 }
@@ -262,12 +342,15 @@ void ObservablePropertyTest::testSynchronousDelete() {
 //==========================================================
 void ObservablePropertyTest::testAsynchronousDelete() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   Observable::holdObservers();
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
     // deletion is not asynchronous
     CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
     CPPUNIT_ASSERT(observer->found(props[i]));
+    CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
+    CPPUNIT_ASSERT(pObserver->found(props[i]));
     props[i] = NULL;
   }
   Observable::unholdObservers();
@@ -276,26 +359,32 @@ void ObservablePropertyTest::testAsynchronousDelete() {
 //==========================================================
 void ObservablePropertyTest::testRemoveObserver() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
-  for(unsigned int i = 0; i < 7; ++i)
+  CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
+  for(unsigned int i = 0; i < 7; ++i) {
     props[i]->removeObserver(observer);
-  // no more notification
-  setNodeValue(props[0], "true", true, false);
-  setNodeValue(props[1], "(255, 255, 255, 0)", true, false);
-  setNodeValue(props[2], "1.0", true, false);
-  setNodeValue(props[3], "1", true, false);
-  setNodeValue(props[4], "(0.0, 0.0, 0.0)", true, false);
-  setNodeValue(props[5], "(0.0, 0.0, 0.0)", true, false);
-  setNodeValue(props[6], "tulip", true, false);
-  setEdgeValue(props[0], "true", true, false);
-  setEdgeValue(props[1], "(255, 255, 255, 0)", true, false);
-  setEdgeValue(props[2], "1.0", true, false);
-  setEdgeValue(props[3], "1", true, false);
-  setEdgeValue(props[4], "()", true, false);
-  setEdgeValue(props[5], "(0.0, 0.0, 0.0)", true, false);
-  setEdgeValue(props[6], "tulip", true, false);
+    props[i]->removePropertyObserver(pObserver);
+    CPPUNIT_ASSERT(props[i]->countObservers() == 0);
+    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
+  }
+// no more notification
+  setNodeValue(props[0], "true", true, false, false);
+  setNodeValue(props[1], "(255, 255, 255, 0)", true, false, false);
+  setNodeValue(props[2], "1.0", true, false, false);
+  setNodeValue(props[3], "1", true, false, false);
+  setNodeValue(props[4], "(0.0, 0.0, 0.0)", true, false, false);
+  setNodeValue(props[5], "(0.0, 0.0, 0.0)", true, false, false);
+  setNodeValue(props[6], "tulip", true, false, false);
+  setEdgeValue(props[0], "true", true, false, false);
+  setEdgeValue(props[1], "(255, 255, 255, 0)", true, false, false);
+  setEdgeValue(props[2], "1.0", true, false, false);
+  setEdgeValue(props[3], "1", true, false, false);
+  setEdgeValue(props[4], "()", true, false, false);
+  setEdgeValue(props[5], "(0.0, 0.0, 0.0)", true, false, false);
+  setEdgeValue(props[6], "tulip", true, false, false);
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
+    CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
     props[i] = NULL;
   }
 }

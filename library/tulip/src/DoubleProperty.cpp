@@ -16,13 +16,6 @@ DoubleProperty::DoubleProperty (Graph *sg):AbstractProperty<DoubleType,DoubleTyp
   minMaxOkNode(false),minMaxOkEdge(false) {
   //  propertyProxy=this;
 }
-//==============================
-///Destructeur d'un metric   
-///Vide pour l'instant, cela peut
-///provoquer des fuites m�moires
-DoubleProperty::~DoubleProperty() {
-  notifyDestroy();
-}    
 
 void DoubleProperty::uniformQuantification(unsigned int k) {
   std::map<double,double> nodeMapping;

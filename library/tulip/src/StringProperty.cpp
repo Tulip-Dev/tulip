@@ -13,10 +13,6 @@ StringProperty::StringProperty (Graph *sg):AbstractProperty<StringType,StringTyp
   //  propertyProxy=this;
 }
   
-StringProperty::~StringProperty() {
-  notifyDestroy();
-}
-
 void StringProperty::reset_handler() {
 }
 

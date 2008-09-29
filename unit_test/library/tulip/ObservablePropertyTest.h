@@ -30,8 +30,8 @@ public:
   void testAsynchronousDelete();
   void testRemoveObserver();
 
-  void setNodeValue(tlp::PropertyInterface*, char*, bool, bool);
-  void setEdgeValue(tlp::PropertyInterface*, char*, bool, bool);
+  void setNodeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);
+  void setEdgeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);
   void addObservers();
 
   static CppUnit::Test *suite();
