@@ -235,14 +235,18 @@ namespace tlp {
 	      (*it)->parent()->setHidden(true);
 	    }
 	  }
+	}else{
+	  if(!isCompatible((*it)->text(0).toStdString())){
+	    (*it)->setFlags((*it)->flags()&(!Qt::ItemIsUserCheckable));
+	  }
 	}
 
 	//Filter only compatibles versions
-	if(compatibleVersion){ 
+	/*if(compatibleVersion){ 
 	  if(!isCompatible((*it)->text(0).toStdString())){
 	    (*it)->setHidden(true);  //if the version is not compatible hide it
 	  }
-	}
+	  }*/
       
 	// Filter only last version
 	if(lastVersion){ 
