@@ -125,10 +125,13 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
-                           QString("The value entered for this edge is not correct,\n"
-                                   "The change won't be applied\n"
-                                   "Modify the entered value to apply the changes.")
+                           QString("The input value for this edge is not correct,\n"
+                                   "The change won't be applied.")
                            );
+    // restore old value
+    disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
+    setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
+    connect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
   }
   else {
     emit tulipEdgePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
@@ -161,10 +164,13 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
-                           QString("The value entered for this node is not correct,\n"
-                                   "The change won't be applied\n"
-                                   "Modify the entered value to apply the changes.")
+                           QString("The input value for this node is not correct,\n"
+                                   "The change won't be applied.")
                            );
+    // restore old value
+    disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
+    setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
+    connect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
   }
   else {
     emit tulipNodePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
@@ -384,8 +390,8 @@ void PropertyWidget::setAllNodeValue() {
 
     if (!result) {
       QMessageBox::critical(0, "Tulip Property Editor : set all node value Failed",
-                            QString("The value entered for the nodes is not correct,\n"
-                                    "The change won't be applied\n")
+                            QString("The input value for the nodes is not correct,\n"
+                                    "The change won't be applied.")
                             );
     }
     else {
@@ -451,8 +457,8 @@ void  PropertyWidget::setAllEdgeValue() {
     
     if (!result) {
       QMessageBox::critical(0, "Tulip Property Editor set all node value Failed",
-                            QString("The value entered for the edges is not correct,\n"
-                                    "change won't be applied\n")
+                            QString("The input value for the edges is not correct,\n"
+                                    "change won't be applied.")
                             );
     }
     else {
