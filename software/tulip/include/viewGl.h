@@ -31,7 +31,6 @@
 namespace tlp {
   class GlGraph;
   class Morphing;
-  class GridOptionsWidget;
   /*class GlMainWidget;
   class GlScene;
   class GlLayer;*/  
@@ -69,8 +68,6 @@ public:
   void setParameters(const tlp::DataSet &);
 
 protected:
-  tlp::GridOptionsWidget *gridOptionsWidget;
-  tlp::LayerManagerWidget *layerWidget;
   QWidget *aboutWidget;
   //tlp::GlMainWidget *glWidget;
   tlp::TulipPluginLoader pluginLoader;
@@ -138,7 +135,6 @@ protected slots:
   void fileSave();
   void fileSaveAs();
   void windowActivated(QWidget *);
-  void hierarchyChangeGraph(tlp::Graph *);
   void fileNew();
   void fileOpen();  
   void filePrint();
@@ -161,21 +157,16 @@ protected slots:
   void changeLayout(QAction*);
   void importGraph(QAction*);
   void exportGraph(QAction*);
-  void exportImage(QAction*);
   void applyAlgorithm(QAction*);
-  void outputEPS();
-  void outputSVG();
   tlp::View* createView(const std::string &name,tlp::Graph *graph,tlp::DataSet dataSet);
   void addView(QAction *action);
   void changeInteractor(QAction*);
   void updateCurrentGraphInfos();
   void windowsMenuAboutToShow();
   void windowsMenuActivated(QAction*);
-  void new3DView();
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
   //void glMainWidgetClosing(GlMainWidget *, QCloseEvent *);
-  void gridOptions();
   void isAcyclic();
   void isSimple();
   void isConnected();
@@ -209,7 +200,6 @@ private:
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
   tlp::Morphing *morph;
-  std::vector<tlp::Interactor *> *currentInteractors;
   tlp::GlMainView* initMainView(std::string *in=NULL);
   void installInteractors(tlp::View *view);
   void installEditMenu(tlp::View *view);

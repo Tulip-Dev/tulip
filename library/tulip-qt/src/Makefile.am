@@ -62,6 +62,8 @@ BUILT_SOURCES = \
 	moc_CopyPropertyDialogData.cpp \
 	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialogData.cpp \
+	moc_GridOptionsWidget.cpp \
+	moc_GridOptionsData.cpp \
 	moc_View.cpp 
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
@@ -100,7 +102,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	View.cpp \
 	ViewPluginsManager.cpp \
 	TulipStatsWidget.cpp \
-	RenderingParametersDialog.cpp
+	RenderingParametersDialog.cpp \
+	GridOptionsWidget.cpp
 
 CLEANFILES = $(BUILT_SOURCES)
 

@@ -2,7 +2,7 @@
 #include <config.h>
 #endif
 
-#include "GridOptionsWidget.h"
+#include "tulip/GridOptionsWidget.h"
 
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qcheckbox.h>
@@ -59,8 +59,8 @@ namespace tlp
       grid = (GlGrid*)glMainWidget->getScene()->getLayer("Main")->findGlEntity("Layout Grid");
   }
   //==============================================
-  void GridOptionsWidget::setCurrentLayerManagerWidget(LayerManagerWidget *layerWidget) {
-    this->layerWidget=layerWidget;
+  void GridOptionsWidget::setCurrentRenderingParametersDialog(RenderingParametersDialog *paramDialog) {
+    this->paramDialog=paramDialog;
   }
   //==============================================
   void GridOptionsWidget::validateGrid() {
@@ -118,13 +118,13 @@ namespace tlp
 	}
 	grid = new GlGrid(min, max, cell, Color(0, 0, 0, 255), display);
 	glMainWidget->getScene()->getLayer("Main")->addGlEntity(grid, "Layout Grid");   
-	layerWidget->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
+	paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
       }
       else {
 	if (grid != NULL) {
 	  glMainWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
-	  layerWidget->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
+	  paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
 	}
       }
       glMainWidget->draw();   

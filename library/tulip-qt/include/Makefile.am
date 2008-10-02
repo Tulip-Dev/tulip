@@ -6,6 +6,7 @@ nobase_include_HEADERS = \
 	tulip/CopyPropertyDialog.h \
 	tulip/TulipStatsWidget.h \
 	tulip/RenderingParametersDialog.h \
+	tulip/GridOptionsWidget.h \
 	tulip/GlMainView.h \	
 	tulip/GWInteractor.h \
 	tulip/MouseSelector.h \
@@ -49,7 +50,8 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
-	tulip/GWOverviewWidgetData.h
+	tulip/GWOverviewWidgetData.h \
+	tulip/GridOptionsData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -59,6 +61,7 @@ BUILT_SOURCES = \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/GWOverviewWidgetData.h \
+	tulip/GridOptionsData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/layermanagerwidget.h \

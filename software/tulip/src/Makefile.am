@@ -26,8 +26,7 @@ BUILT_SOURCES = \
 	moc_AppStartUp.cpp \
 	moc_InfoDialog.cpp \
 	moc_viewGl.cpp \
-	moc_QtProgress.cpp \
-	moc_GridOptionsWidget.cpp
+	moc_QtProgress.cpp
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
@@ -38,7 +37,6 @@ dist_tulip_SOURCES = \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	QtProgress.cpp \
-	GridOptionsWidget.cpp \
 	main.cpp
 
 moc_%.cpp: ../include/%.h

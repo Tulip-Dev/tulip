@@ -17,6 +17,7 @@
 #include <tulip/StlIterator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/GlRectTextured.h>
 #include "tulip/QtCPULODCalculator.h"
 #include "tulip/InteractorManager.h"
 
@@ -93,7 +94,28 @@ namespace tlp {
     if(!dataSet.exist("scene")) {
       //Default scene
       GlLayer* layer=new GlLayer("Main");
+      GlLayer *backgroundLayer=new GlLayer("Background");
+      backgroundLayer->setVisible(false);
+      GlLayer *foregroundLayer=new GlLayer("Foreground");
+      foregroundLayer->setVisible(false);
+
+      backgroundLayer->set2DMode();
+      foregroundLayer->set2DMode();
+      string dir=TulipLibDir;
+      dir += "tlp/bitmaps/";
+      GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
+      backgroundLayer->addGlEntity(background,"background");
+      
+      GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
+      foregroundLayer->addGlEntity(labri,"labrilogo");
+      
+      GlComposite *hulls=new GlComposite;
+      hulls->setVisible(false);
+      layer->addGlEntity(hulls,"Hulls");
+      
+      scene.addLayer(backgroundLayer);
       scene.addLayer(layer);
+      scene.addLayer(foregroundLayer);
       GlGraphComposite* graphComposite=new GlGraphComposite(graph);
       scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
       scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
@@ -231,6 +253,7 @@ namespace tlp {
   void GlMainWidget::draw() {
     if (isVisible()) {
       checkIfGlAuxBufferAvailable();
+      cout << "=>  GlMainWidget::draw()" << endl;
       makeCurrent();
 
       computeInteractors();
@@ -275,7 +298,6 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::computeInteractors() {
-    makeCurrent();
     for(vector<Interactor *>::iterator it =
 	  _interactors.begin(); it != _interactors.end(); ++it) {
       if ((*it)->compute(this))
@@ -284,7 +306,6 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::drawInteractors() {
-    makeCurrent();
     for(vector<Interactor *>::iterator it =
 	  _interactors.begin(); it != _interactors.end(); ++it) {
       if ((*it)->draw(this))

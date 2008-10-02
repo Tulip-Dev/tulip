@@ -6,6 +6,7 @@ dist_noinst_DATA = \
 	PropertyDialog.ui \
 	CopyPropertyDialog.ui \
 	TulipStats.ui \
+	GridOptions.ui \
 	GlMainWidgetResource.qrc
 SOURCES = \
 	FindSelection.ui \
@@ -15,6 +16,7 @@ SOURCES = \
 	PropertyDialog.ui \
 	CopyPropertyDialog.ui \
 	TulipStats.ui \
+	GridOptions.ui \
 	elementtable.xpm \
 	GlMainWidget.xpm \
 	gwoverviewwidget.xpm \

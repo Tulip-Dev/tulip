@@ -86,7 +86,6 @@
 #include "Application.h"
 #include "QtProgress.h"
 #include "ElementInfoToolTip.h"
-#include "GridOptionsWidget.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
 
@@ -107,7 +106,6 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
 
   Observable::holdObservers();
   //glWidget=0;
-  gridOptionsWidget=0;
   aboutWidget=0;
   //copyCutPasteGraph = 0;
   elementsDisabled = false;
@@ -170,7 +168,6 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   connect(&colorsMenu     , SIGNAL(triggered(QAction*)), SLOT(changeColors(QAction*)));
   connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
   connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
-  connect(&exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
   connect(windowsMenu, SIGNAL( aboutToShow() ),
 	  this, SLOT( windowsMenuAboutToShow() ) );
   connect(windowsMenu, SIGNAL(triggered(QAction*)),
@@ -215,13 +212,10 @@ void viewGl::enableElements(bool enabled) {
   enableQMenu(&colorsMenu, enabled);
   enableQMenu(&generalMenu, enabled);
   enableQMenu(&exportGraphMenu, enabled);
-  enableQMenu(&exportImageMenu, enabled);
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
-  grid_option->setEnabled(enabled);
-
   elementsDisabled = !enabled;
 }
 //**********************************************************************
@@ -241,8 +235,7 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
       ((View*)(*it))->redrawView();
   }
 
-  if (gridOptionsWidget !=0 )
-    gridOptionsWidget->validateGrid();
+  
   //redrawView();
   Observable::unholdObservers();
   initObservers();
@@ -362,56 +355,11 @@ void viewGl::startTulip() {
 }
 //**********************************************************************
 void viewGl::changeGraph(Graph *graph) {
-  //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
-  /*clearObservers();
-  QFileInfo tmp(openFiles[(unsigned long)glWidget].name.c_str());
-  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-  param.setTexturePath(string(tmp.dir().path().toAscii().data()) + "/");
-  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-  QDir::setCurrent(tmp.dir().path() + "/");
   clusterTreeWidget->setGraph(graph);
   eltProperties->setGraph(graph);
-  layerWidget->attachMainWidget(glWidget);
-#ifdef STATS_UI
-  statsWidget->setGlMainWidget(glWidget);
-#endif
-  redrawView();
-  // this line has been moved after the call to redrawView to ensure
-  // that a new created graph has all its view... properties created
-  // (call to initProxies())
-  propertiesWidget->setGraph(graph);
-  // avoid too much notification when importing a graph
-  // see fileOpen
-  if (importedGraph != graph)
-  initObservers();*/
-  clusterTreeWidget->setGraph(graph);
-  eltProperties->setGraph(graph);
-#ifdef STATS_UI
-  //statsWidget->setGlMainWidget(glWidget);
-#endif
   currentGraph=graph;
   propertiesWidget->setGraph(graph);
   initObservers();
-}
-//**********************************************************************
-void viewGl::hierarchyChangeGraph(Graph *graph) {
-  /*#ifndef NDEBUG
-  cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
-#endif
-  if( glWidget == 0 ) return;
-  if (glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == graph)  return;
-  //clearObservers();
-  GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-  delete glWidget->getScene()->getGlGraphComposite();
-  glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
-  GlGraphComposite* graphComposite=new GlGraphComposite(graph);
-  glWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),graphComposite);
-  glWidget->getScene()->getLayer("Main")->addGlEntity(graphComposite,"graph");
-  glWidget->getScene()->centerScene();
-  //glWidget->getScene()->getGlGraphComposite()->getInputData()->setGraph(graph);
-  glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);*/
-  changeGraph(graph);
-  //initObservers();
 }
 //**********************************************************************
 void viewGl::windowActivated(QWidget *w) {
@@ -445,30 +393,32 @@ void viewGl::installEditMenu(View *view) {
   bool activate;
   QList <QAction *> actions = editMenu->actions();
 
+  int editMenuFlag = view->getEditMenuFlag();
+
   for(int i=0;i<actions.size();i++) {
     if(!actions.at(i)->isSeparator()) {
       
       string actionName=actions.at(i)->text().toStdString();
       if(actionName=="&Cut")
-	activate=view->cutIsEnable();
+	activate=(editMenuFlag & EDITMENU_CUT);
       else if(actionName=="C&opy")
-	activate=view->copyIsEnable();
+	activate=(editMenuFlag & EDITMENU_COPY);
       else if(actionName=="&Paste") 
-	activate=view->pasteIsEnable();
+	activate=(editMenuFlag & EDITMENU_PASTE);
       else if(actionName=="&Find...")
-	activate=view->findIsEnable();
+	activate=(editMenuFlag & EDITMENU_FIND);
       else if(actionName=="Select All")
-	activate=view->selectAllIsEnable();
+	activate=(editMenuFlag & EDITMENU_SELECTALL);
       else if(actionName=="Delete selection")
-	activate=view->delSelectionIsEnable();
+	activate=(editMenuFlag & EDITMENU_DELSELECTION);
       else if(actionName=="Deselect All")
-	activate=view->deselectAllIsEnable();
+	activate=(editMenuFlag & EDITMENU_DESELECTALL);
       else if(actionName=="Invert selection")
-	activate=view->invertSelectionIsEnable();
+	activate=(editMenuFlag & EDITMENU_INVERTSELECTION);
       else if(actionName=="Create group")
-	activate=view->createGroupIsEnable();
+	activate=(editMenuFlag & EDITMENU_CREATEGROUP);
       else if(actionName=="Create subgraph")
-	activate=view->createSubgraphIsEnable();
+	activate=(editMenuFlag & EDITMENU_CREATESUBGRAPH);
       else{
 	activate=false;
       }
@@ -498,96 +448,11 @@ void viewGl::showElementProperties(unsigned int eltId, bool isNode) {
   tabWidget->setCurrentIndex(tabWidget->indexOf(tab));
 }
 //**********************************************************************
-/*GlMainWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
-  assert(graph != 0);
-  // delete plugins loading errors dialog if needed
-  if (errorDlg) {
-    delete errorDlg;
-    errorDlg = (QDialog *) NULL;
-  }
-  //Create 3D graph view
-  GlMainWidget *glWidget = new GlMainWidget(workspace, name.toAscii().data());
-  glWidget->getScene()->addObserver(this);
-  layerWidget->attachMainWidget(glWidget);
-  //GlMainWidget *glWidget = new GlMainWidget();
-  workspace->addWindow(glWidget);
-  //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-  //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
-  //Camera *camera=new Camera(glWidget->getScene());
-  
-  glWidget->move(0,0);
-  glWidget->setWindowTitle(name);
-  glWidget->setMinimumSize(0, 0);
-  glWidget->resize(500,500);
-  glWidget->setMaximumSize(32767, 32767);
-  //glWidget->setBackgroundMode(Qt::PaletteBackground);  
-  glWidget->installEventFilter(this);
-  glWidget->resetInteractors(*currentInteractors);
-  connect(glWidget, SIGNAL(closing(GlMainWidget *, QCloseEvent *)), this, SLOT(glMainWidgetClosing(GlMainWidget *, QCloseEvent *)));
-
-  if(elementsDisabled)
-    enableElements(true);
-
-  //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
-  return glWidget;
-  }*/
-//**********************************************************************
-/*void viewGl::constructDefaultScene(GlMainWidget *glWidget) {
-  GlLayer* layer=new GlLayer("Main");
-  GlLayer *backgroundLayer=new GlLayer("Background");
-  backgroundLayer->setVisible(false);
-  GlLayer *foregroundLayer=new GlLayer("Foreground");
-  foregroundLayer->setVisible(false);
-
-  backgroundLayer->set2DMode();
-  foregroundLayer->set2DMode();
-  string dir=TulipLibDir;
-  dir += "tlp/bitmaps/";
-  GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
-  backgroundLayer->addGlEntity(background,"background");
-
-  GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
-  foregroundLayer->addGlEntity(labri,"labrilogo");
-
-  GlComposite *hulls=new GlComposite;
-  hulls->setVisible(false);
-  layer->addGlEntity(hulls,"Hulls");
-
-  glWidget->getScene()->addLayer(backgroundLayer);
-  glWidget->getScene()->addLayer(layer);
-  glWidget->getScene()->addLayer(foregroundLayer);
-  }*/
-//**********************************************************************
-void viewGl::new3DView() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  /*if (!glWidget) return;
-  GlMainWidget *newGlWidget =
-    newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
-		  glWidget->parentWidget()->windowTitle());
-  constructDefaultScene(newGlWidget);
-  newGlWidget->getScene()->addGlGraphCompositeInfo(glWidget->getScene()->getLayer("Main"),glWidget->getScene()->getGlGraphComposite());
-  newGlWidget->getScene()->getLayer("Main")->addGlEntity(glWidget->getScene()->getGlGraphComposite(),"graph");
-  newGlWidget->getScene()->getGlGraphComposite()->setRenderingParameters(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters());
-  newGlWidget->getScene()->setBackgroundColor(glWidget->getScene()->getBackgroundColor());
-  newGlWidget->getScene()->centerScene();
-  newGlWidget->show();
-  //  cerr << __PRETTY_FUNCTION__ << "...END" << endl;*/
-}
-//**********************************************************************
 void viewGl::fileNew() {
   Observable::holdObservers();
   Graph *newGraph=tlp::newGraph();
   initializeGraph(newGraph);
-  /*GlMainWidget *glW =
-    newOpenGlView(newGraph,
-		  newGraph->getAttribute<string>(std::string("name")).c_str());
-  constructDefaultScene(glW);
-  GlGraphComposite* glGraphComposite=new GlGraphComposite(newGraph);
-  glW->getScene()->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-  glW->getScene()->addGlGraphCompositeInfo(glW->getScene()->getLayer("Main"),glGraphComposite);
-  initializeGlScene(glW->getScene());*/
   Observable::unholdObservers();
-  //glW->show();
   currentGraph=newGraph;
   initMainView();
   changeGraph(currentGraph);
@@ -597,13 +462,6 @@ void viewGl::setNavigateCaption(string newCaption) {
    QWidgetList windows = workspace->windowList();
    for( int i = 0; i < int(windows.count()); ++i ) {
      QWidget *win = windows.at(i);
-     /*if (typeid(*win)==typeid(GlMainWidget)) {
-       GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
-       if(tmpNavigate == glWidget) {
-	 tmpNavigate->setWindowTitle(newCaption.c_str());
-	 return;
-       }
-       }*/
    }
 }
 //**********************************************************************
@@ -716,27 +574,6 @@ void viewGl::initializeGraph(Graph *graph) {
   graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
 }
-//**********************************************************************
-/*void viewGl::initializeGlScene(GlScene *scene) {
-  GlGraphRenderingParameters param = scene->getGlGraphComposite()->getRenderingParameters();
-  param.setViewArrow(true);
-  param.setDisplayEdges(true);
-  param.setFontsType(1);
-  param.setFontsPath(((Application *)qApp)->bitmapPath);
-  param.setViewNodeLabel(true);
-  //scene->setBackgroundColor(Color(255,255,255));
-  scene->setViewOrtho(true);
-  param.setElementOrdered(false);
-  param.setEdgeColorInterpolate(false);
-  Camera cam = *scene->getCamera(); //default value for drawing small graph in the window
-  cam.setCenter(Coord(0, 0,  0));
-  cam.setEyes(Coord(0, 0, 10));
-  cam.setUp(Coord(0, 1,  0));
-  cam.setZoomFactor(0.5);
-  cam.setSceneRadius(10);
-  scene->setCamera(&cam);
-  //scene->setRenderingParameters(param);
-  }*/
 //**********************************************************************
 static Graph* getCurrentSubGraph(Graph *graph, int id) {
   if (graph->getId() == id) {
@@ -1069,27 +906,6 @@ void viewGl::buildMenus() {
   buildMenuWithContext<AlgorithmFactory, Algorithm>(generalMenu, this, SLOT(applyAlgorithm(QAction*)));
   buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(QAction*)));
   buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(QAction*)));
-  // Tulip known formats (see GlGraph)
-  // formats are sorted, "~" is just an end marker
-  char *tlpFormats[] = {"EPS", "SVG", "~"};
-  unsigned int i = 0;
-  //Image PopuMenu
-  // int Qt 4, output formats are not yet sorted and uppercased
-  list<QString> formats;
-  // first add Tulip known formats
-  while (strcmp(tlpFormats[i], "~") != 0)
-    formats.push_back(tlpFormats[i++]);
-  // uppercase and insert all Qt formats
-  foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-    char* tmp = format.data();
-    for (int i = strlen(tmp) - 1; i >= 0; --i)
-      tmp[i] = toupper(tmp[i]);
-    formats.push_back(QString(tmp));
-  }
-  // sort before inserting in exportImageMenu
-  formats.sort();
-  foreach(QString str, formats)
-    exportImageMenu.addAction(str);
   //==============================================================
   //File Menu 
   fileMenu->addSeparator();
@@ -1100,10 +916,6 @@ void viewGl::buildMenus() {
   if (exportGraphMenu.actions().count()>0) {
     exportGraphMenu.setTitle("&Export");
     fileMenu->addMenu(&exportGraphMenu);
-  }
-  if (exportImageMenu.actions().count()>0) {
-    exportImageMenu.setTitle("&Save Picture as ");
-    fileMenu->addMenu(&exportImageMenu); //this , SLOT( outputImage() ));
   }
   //Property Menu
   if (selectMenu.actions().count()>0) {
@@ -1146,9 +958,9 @@ void viewGl::buildMenus() {
     toolsMenu->addAction(it->first.c_str());
   }
 }
-//**********************************************************************
+/*
 void viewGl::outputEPS() {
-  /*if (!glWidget) return;
+  if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
     if (glWidget->outputEPS(64000000,true,s.toAscii().data()))
@@ -1157,11 +969,10 @@ void viewGl::outputEPS() {
       QMessageBox::critical( 0, "Save Picture Failed",
 			     "The file has not been saved."
 			     );
-			     }*/
+			     }
 }
-//**********************************************************************
 void viewGl::outputSVG() {
-  /*if (!glWidget) return;
+  if (!glWidget) return;
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
     if (glWidget->outputSVG(64000000,s.toAscii().data()))
@@ -1170,40 +981,8 @@ void viewGl::outputSVG() {
       QMessageBox::critical( 0, "Save Picture Failed",
 			     "The file has not been saved."
 			     );
+			     }
 			     }*/
-}
-//**********************************************************************
-void viewGl::exportImage(QAction* action) {
-  /*if (!glWidget) return;
-  string name = action->text().toStdString();
-  if (name=="EPS") {
-    outputEPS();
-    return;
-  } else if (name=="SVG") {
-    outputSVG();
-    return;
-  }
-  QString s(QFileDialog::getSaveFileName());
-  if (s.isNull()) return;    
-  int width,height;
-  width = glWidget->width();
-  height = glWidget->height();
-  unsigned char* image= glWidget->getImage();
-  QPixmap pm(width,height);
-  QPainter painter;
-  painter.begin(&pm);
-  for (int y=0; y<height; y++)
-    for (int x=0; x<width; x++) {
-      painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-			    image[(height-y-1)*width*3+(x)*3+1],
-			    image[(height-y-1)*width*3+(x)*3+2]));
-      painter.drawPoint(x,y);
-    }
-  painter.end();
-  free(image);
-  pm.save( s, name.c_str());
-  statusBar()->showMessage(s + " saved.");*/
-}
 //**********************************************************************
 void viewGl::exportGraph(QAction* action) {
   /*if (!glWidget) return;*/
@@ -1775,14 +1554,6 @@ void viewGl::changeSizes(QAction* action) {
   if( g0 )
     delete g0;
   initObservers();
-}
-//**********************************************************************
-void viewGl::gridOptions() {
-  /*if (gridOptionsWidget == 0)
-    gridOptionsWidget = new GridOptionsWidget(this);
-  gridOptionsWidget->setCurrentMainWidget(glWidget);
-  gridOptionsWidget->setCurrentLayerManagerWidget(layerWidget);
-  gridOptionsWidget->show();*/
 }
 //**********************************************************************
 #include <tulip/AcyclicTest.h>

@@ -38,6 +38,7 @@ namespace tlp {
 #ifdef STATS_UI
   class TulipStats;
 #endif
+  class GridOptionsWidget;
 
   class TLP_QT_SIMPLE_SCOPE GlMainViewCreator : public ViewCreator {
 
@@ -68,18 +69,7 @@ namespace tlp {
     void delNode(Graph *,const node );
     void delEdge(Graph *,const edge );
 
-    //bool eventFilter(QObject *, QEvent *);
-
-    bool cutIsEnable() {return true;}
-    bool copyIsEnable() {return true;}
-    bool pasteIsEnable() {return true;}
-    bool findIsEnable() {return true;}
-    bool selectAllIsEnable() {return true;}
-    bool delSelectionIsEnable() {return true;}
-    bool deselectAllIsEnable() {return true;}
-    bool invertSelectionIsEnable() {return true;}
-    bool createGroupIsEnable() {return true;}
-    bool createSubgraphIsEnable() {return true;}
+    int getEditMenuFlag() {return EDITMENU_ALL;}
 
     bool doProgressUpdate() {return true;}
     void progressUpdate();
@@ -96,6 +86,7 @@ namespace tlp {
     void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
 
     GlMainWidget *mainWidget;
+    GridOptionsWidget *gridOptionsWidget;
 
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
@@ -103,7 +94,9 @@ namespace tlp {
     QMenu *viewMenu;
     QMenu *dialogMenu;
     QMenu *optionsMenu;
+    QMenu *exportImageMenu;
     QAction *actionTooltips;
+    QAction *actionsGridOptions;
 
     QAction *renderingParametersDialogAction;
     RenderingParametersDialog *renderingParametersDialog;
@@ -122,8 +115,10 @@ namespace tlp {
 			 
 
   protected slots:
+    void exportImage(QAction*);
     void centerView();
     void showDialog(QAction*);
+    void gridOptions();
 
   public slots:
     void redrawView();
