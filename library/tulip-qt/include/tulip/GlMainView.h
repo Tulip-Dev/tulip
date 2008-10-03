@@ -80,7 +80,6 @@ namespace tlp {
 
   protected :
 
-    std::string newName();
     // GlSceneObserver interface
     void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
@@ -102,8 +101,6 @@ namespace tlp {
     RenderingParametersDialog *renderingParametersDialog;
     LayerManagerWidget *layerWidget;
 
-    tlp::Graph * copyCutPasteGraph;
-
     QAction* overviewAction;
     QAction* selectAction;
     QAction* deleteAction;
@@ -124,17 +121,6 @@ namespace tlp {
   public slots:
     void redrawView();
 
-    void cut();
-    void copy();
-    void paste();
-    void find();
-    void selectAll();
-    void deselectAll();
-    void invertSelection();
-    void delSelection();
-    void createSubgraph();
-    void reverseSelectedEdgeDirection();
-    void createGroup();  
     void changeGraph(Graph *);
 
     /*signals:

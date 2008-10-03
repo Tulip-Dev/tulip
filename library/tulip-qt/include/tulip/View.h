@@ -79,20 +79,9 @@ namespace tlp {
     void showElementProperties(unsigned int eltId, bool isNode) {
       emit showElementPropertiesSignal(eltId, isNode);
     }
-    virtual void changeGraph(Graph *) = 0;
+    virtual void changeGraph(Graph *) {};
 
     bool eventFilter(QObject *object, QEvent *event);
-
-    virtual void cut() {}
-    virtual void copy() {}
-    virtual void paste() {}
-    virtual void find() {}
-    virtual void selectAll() {}
-    virtual void delSelection() {}
-    virtual void deselectAll() {}
-    virtual void invertSelection() {}
-    virtual void createGroup() {}
-    virtual void createSubgraph() {}
 
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);

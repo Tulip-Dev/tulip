@@ -209,6 +209,8 @@ private:
   tlp::Graph* importedGraph;
   tlp::Graph* currentGraph;
   tlp::View *currentView;
+
+  tlp::Graph * copyCutPasteGraph;
 };
 
 #endif // viewGl_included
