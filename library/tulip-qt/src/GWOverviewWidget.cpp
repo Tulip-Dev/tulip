@@ -386,7 +386,7 @@ void RectPosition::draw(float lod,Camera *camera) {
 
   boundingBox=BoundingBox();
   for(int i=0;i<4;++i) {
-    boundingBox.check(points[i]);
+    boundingBox.check(points2[i]);
   }
 
   glPopAttrib();
