@@ -10,6 +10,19 @@
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
 
+#define EDITMENU_CLEAR           0x0000
+#define EDITMENU_CUT             0x0001
+#define EDITMENU_COPY            0x0002
+#define EDITMENU_PASTE           0x0004
+#define EDITMENU_FIND            0x0008
+#define EDITMENU_SELECTALL       0x0010
+#define EDITMENU_DELSELECTION    0x0020
+#define EDITMENU_DESELECTALL     0x0040
+#define EDITMENU_INVERTSELECTION 0x0080
+#define EDITMENU_CREATEGROUP     0x0100
+#define EDITMENU_CREATESUBGRAPH  0x0200
+#define EDITMENU_ALL             0xffff
+
 class QMenuBar;
 class QVBoxLayout;
 
@@ -20,7 +33,7 @@ namespace tlp {
   /** \brief Tulip view interface class
    * 
    */
-  class View : public QWidget, public GraphObserver {
+  class TLP_QT_SIMPLE_SCOPE View : public QWidget, public GraphObserver {
     
     Q_OBJECT;
 
@@ -43,27 +56,18 @@ namespace tlp {
     virtual void delEdge(Graph *,const edge ) {};
 
     //edit menu
-    virtual bool cutIsEnable() {return false;}
-    virtual bool copyIsEnable() {return false;}
-    virtual bool pasteIsEnable() {return false;}
-    virtual bool findIsEnable() {return false;}
-    virtual bool selectAllIsEnable() {return false;}
-    virtual bool delSelectionIsEnable() {return false;}
-    virtual bool deselectAllIsEnable() {return false;}
-    virtual bool invertSelectionIsEnable() {return false;}
-    virtual bool createGroupIsEnable() {return false;}
-    virtual bool createSubgraphIsEnable() {return false;}
+    virtual int getEditMenuFlag() {return EDITMENU_CLEAR;} 
 
     //For plugin progress handler
     virtual bool doProgressUpdate() {return false;}
     virtual void progressUpdate() {}
 
+  protected:
     //eventFilter 
     virtual void specificEventFilter(QObject *object,QEvent *event) {}
     virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
     virtual void computeContextMenuAction(QAction *action) {}
 
-  protected:
     virtual void constructInteractorsMap() {}
     void setCentralWidget(QWidget *widget);
 
@@ -75,7 +79,7 @@ namespace tlp {
     void showElementProperties(unsigned int eltId, bool isNode) {
       emit showElementPropertiesSignal(eltId, isNode);
     }
-    virtual void changeGraph(Graph *) {}
+    virtual void changeGraph(Graph *) = 0;
 
     bool eventFilter(QObject *object, QEvent *event);
 

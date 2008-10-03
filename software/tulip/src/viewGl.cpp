@@ -231,7 +231,7 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   
   QList<QWidget *> widgetList=workspace->windowList();
   for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
-    if(*it!=currentView)
+    //if(*it!=currentView)
       ((View*)(*it))->redrawView();
   }
 

@@ -119,10 +119,11 @@ namespace tlp {
     void centerView();
     void showDialog(QAction*);
     void gridOptions();
+    void hideOverview(bool);	     
 
   public slots:
     void redrawView();
-    void hideOverview(bool);
+
     void cut();
     void copy();
     void paste();

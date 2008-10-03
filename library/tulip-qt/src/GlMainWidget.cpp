@@ -253,7 +253,6 @@ namespace tlp {
   void GlMainWidget::draw() {
     if (isVisible()) {
       checkIfGlAuxBufferAvailable();
-      cout << "=>  GlMainWidget::draw()" << endl;
       makeCurrent();
 
       computeInteractors();

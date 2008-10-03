@@ -43,7 +43,37 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   void setData(Graph *graph,DataSet dataSet);
   DataSet getData();
   Graph *getGraph();
+
+  /**
+   * return list of interactor installed on this widget
+   */
+  tlp::Iterator<tlp::Interactor *> *getInteractors() const;
   
+  /**
+   * return the scene of this glMainWidget
+   */
+  tlp::GlScene* getScene(){return &scene;}
+
+  /**
+   * Functions to update GraphComposite when a node is add
+   */
+  void addNode(Graph *,const node );
+
+  /**
+   * Functions to update GraphComposite when an edge is add
+   */
+  void addEdge(Graph *,const edge );
+
+  /**
+   * Functions to update GraphComposite when a node is remove
+   */
+  void delNode(Graph *,const node );
+
+  /**
+   * Functions to update GraphComposite when an edge is remove
+   */
+  void delEdge(Graph *,const edge );
+
   /**************************************
    * inherited methods overloading
    **************************************/
@@ -105,19 +135,9 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
 			tlp::GlLayer* layer=NULL);
 
   /**
-   * return list of interactor installed on this widget
-   */
-  tlp::Iterator<tlp::Interactor *> *getInteractors() const;
-
-  /**
    * Grab the image of this widget
    */
   virtual QImage grabFrameBuffer(bool withAlpha = false);
-
-  /**
-   * return the scene of this glMainWidget
-   */
-  tlp::GlScene* getScene(){return &scene;}
 
   /**
    * set if the label is rendered in this widget
@@ -129,25 +149,23 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    */
   virtual void makeCurrent();
 
-  /**
-   * Functions to update GraphComposite when a node is add
-   */
-  void addNode(Graph *,const node );
+private:
+  void  updateGL();
+  void  glInit();
+  void  glDraw();
+  void  paintGL();
+  void  resizeGL(int w, int h);
+  void  setupOpenGlContext();
+  void  initializeGL();
+  void  computeInteractors();
+  void  drawInteractors();
 
-  /**
-   * Functions to update GraphComposite when an edge is add
-   */
-  void addEdge(Graph *,const edge );
-
-  /**
-   * Functions to update GraphComposite when a node is remove
-   */
-  void delNode(Graph *,const node );
-
-  /**
-   * Functions to update GraphComposite when an edge is remove
-   */
-  void delEdge(Graph *,const edge );
+  tlp::GlScene scene;
+  tlp::GlHierarchyConvexHulls hulls;
+  bool _firstStepOfIncrementalRendering;
+  QRegion _visibleArea;
+  tlp::Interactor::ID _id;
+  std::vector<tlp::Interactor *> _interactors;
 
 public slots:
   /** 
@@ -175,30 +193,12 @@ public slots:
   /// remove all iteractors and delete them, then install clones of the interactors
   std::vector<tlp::Interactor::ID> resetInteractors(const std::vector<tlp::Interactor *>&interactors);
 
-signals:
-  void closing(GlMainWidget *, QCloseEvent *);
-  void graphRedrawn(GlMainWidget *glWidget);
-
 protected slots:
   void paintEvent( QPaintEvent* );
 
-private:
-  void  updateGL();
-  void  glInit();
-  void  glDraw();
-  void  paintGL();
-  void  resizeGL(int w, int h);
-  void  setupOpenGlContext();
-  void  initializeGL();
-  void  computeInteractors();
-  void  drawInteractors();
-
-  tlp::GlScene scene;
-  tlp::GlHierarchyConvexHulls hulls;
-  bool _firstStepOfIncrementalRendering;
-  QRegion _visibleArea;
-  tlp::Interactor::ID _id;
-  std::vector<tlp::Interactor *> _interactors;
+signals:
+  void closing(GlMainWidget *, QCloseEvent *);
+  void graphRedrawn(GlMainWidget *glWidget);
 
 };
 
