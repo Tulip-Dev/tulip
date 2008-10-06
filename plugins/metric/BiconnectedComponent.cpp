@@ -1,6 +1,7 @@
 #include <iostream>
-#include <tulip/GraphProperty.h>
 #include <stack>
+
+#include <tulip/TulipPlugin.h>
 
 using namespace std;
 using namespace tlp;

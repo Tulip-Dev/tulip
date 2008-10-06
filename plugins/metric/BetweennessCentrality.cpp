@@ -1,5 +1,4 @@
 #include <iostream>
-#include <tulip/GraphProperty.h>
 #include <stack>
 #include <queue>
 #include <ext/hash_map>

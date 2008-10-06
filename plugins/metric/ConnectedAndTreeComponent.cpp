@@ -1,4 +1,3 @@
-#include <tulip/GraphProperty.h>
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/StableIterator.h>
 #include <iostream>
