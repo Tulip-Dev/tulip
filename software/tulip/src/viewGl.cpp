@@ -224,21 +224,7 @@ void viewGl::observableDestroyed(Observable *) {
 }
 //**********************************************************************
 void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
-  Observable::holdObservers();
-  clearObservers();
-  eltProperties->updateTable();
-  propertiesWidget->update();
-  
-  QList<QWidget *> widgetList=workspace->windowList();
-  for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
-    //if(*it!=currentView)
-      ((View*)(*it))->redrawView();
-  }
-
-  
-  //redrawView();
-  Observable::unholdObservers();
-  initObservers();
+  redrawViews();
 }
 //**********************************************************************
 void viewGl::initObservers() {
@@ -574,6 +560,35 @@ void viewGl::initializeGraph(Graph *graph) {
   graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
 }
+//**********************************************************************
+void viewGl::redrawViews() {
+  Observable::holdObservers();
+  clearObservers();
+  eltProperties->updateTable();
+  propertiesWidget->update();
+  
+  QList<QWidget *> widgetList=workspace->windowList();
+  for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
+    ((View*)(*it))->redrawView();
+  }
+  
+  Observable::unholdObservers();
+  initObservers();
+}
+
+void viewGl::addNode(Graph *graph,const node n) {
+  redrawViews();
+}
+void viewGl::addEdge(Graph *graph,const edge e) {
+  redrawViews();
+}
+void viewGl::delNode(Graph *graph,const node n) {
+  redrawViews();
+}
+void viewGl::delEdge(Graph *graph,const edge e) {
+  redrawViews();
+}
+
 //**********************************************************************
 static Graph* getCurrentSubGraph(Graph *graph, int id) {
   if (graph->getId() == id) {
@@ -1081,7 +1096,6 @@ View* viewGl::createView(const string &name,Graph *graph,DataSet dataSet){
   //connect(newView, SIGNAL(clusterTreeNeedUpdate()),this,SLOT(updateClusterTree()));
 
   newView->setData(graph,dataSet);
-  graph->addObserver(newView);
 
   if(elementsDisabled)
     enableElements(true);

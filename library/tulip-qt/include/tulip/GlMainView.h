@@ -64,11 +64,6 @@ namespace tlp {
     void getInteractorsActionList(std::list<QAction*> &);
     Iterator<Interactor *> *installInteractor(const std::string &);
 
-    void addNode(Graph *,const node );
-    void addEdge(Graph *,const edge );
-    void delNode(Graph *,const node );
-    void delEdge(Graph *,const edge );
-
     int getEditMenuFlag() {return EDITMENU_ALL;}
 
     bool doProgressUpdate() {return true;}

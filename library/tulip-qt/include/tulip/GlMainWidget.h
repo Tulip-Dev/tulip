@@ -54,26 +54,6 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    */
   tlp::GlScene* getScene(){return &scene;}
 
-  /**
-   * Functions to update GraphComposite when a node is add
-   */
-  void addNode(Graph *,const node );
-
-  /**
-   * Functions to update GraphComposite when an edge is add
-   */
-  void addEdge(Graph *,const edge );
-
-  /**
-   * Functions to update GraphComposite when a node is remove
-   */
-  void delNode(Graph *,const node );
-
-  /**
-   * Functions to update GraphComposite when an edge is remove
-   */
-  void delEdge(Graph *,const edge );
-
   /**************************************
    * inherited methods overloading
    **************************************/

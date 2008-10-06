@@ -193,23 +193,6 @@ namespace tlp {
     return mainWidget->getInteractors();
   }
 
-  void GlMainView::addNode(Graph *graph,const node n) {
-    mainWidget->addNode(graph,n);
-    redrawView();
-  }
-  void GlMainView::addEdge(Graph *graph,const edge e) {
-    mainWidget->addEdge(graph,e);
-    redrawView();
-  }
-  void GlMainView::delNode(Graph *graph,const node n) {
-    mainWidget->delNode(graph,n);
-    redrawView();
-  }
-  void GlMainView::delEdge(Graph *graph,const edge e) {
-    mainWidget->delEdge(graph,e);
-    redrawView();
-  }
-
   void GlMainView::specificEventFilter(QObject *object,QEvent *event) {
     if (object->inherits("tlp::GlMainView") &&
 	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {

@@ -102,17 +102,4 @@ namespace tlp {
       nodeTab=false;
   }
 
-  void SpreadWidget::addNode(Graph *graph,const node n) {
-    spreadNodesTable->addRow(n.id);
-  }
-  void SpreadWidget::addEdge(Graph *graph,const edge e) {
-    spreadEdgesTable->addRow(e.id);
-  }
-  void SpreadWidget::delNode(Graph *graph,const node n) {
-    spreadNodesTable->delRow(n.id);
-  }
-  void SpreadWidget::delEdge(Graph *graph,const edge e) {
-    spreadEdgesTable->delRow(e.id);
-  }
-
 }

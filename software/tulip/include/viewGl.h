@@ -108,13 +108,16 @@ protected:
   void setNavigateCaption(std::string);
   void initializeGraph(tlp::Graph *);
   void initializeGlScene(tlp::GlScene *);
+
+  void redrawViews();
+
   // GraphObserver interface
-  /*void addNode (tlp::Graph *, const tlp::node);
+  void addNode (tlp::Graph *, const tlp::node);
   void addEdge (tlp::Graph *, const tlp::edge);
   void delNode (tlp::Graph *, const tlp::node);
   void delEdge (tlp::Graph *, const tlp::edge);
-  void reverseEdge (tlp::Graph *, const tlp::edge);
-  void destroy (tlp::Graph *);*/
+  void reverseEdge (tlp::Graph *, const tlp::edge) {}
+  void destroy (tlp::Graph *) {}
   // GlSceneObserver interface
   /*void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);*/

@@ -151,7 +151,6 @@ namespace tlp {
   }
   
   void SpreadTable::reloadView() {
-    clearContents();
 
     int currentPropId=0;
 
@@ -160,6 +159,10 @@ namespace tlp {
       numberOfRow=graph->numberOfNodes();
     else
       numberOfRow=graph->numberOfEdges();
+
+    //setRowCount(numberOfRow);
+
+    clearContents();
 
     Iterator<std::string> *it=graph->getLocalProperties();
     while(it->hasNext()) {

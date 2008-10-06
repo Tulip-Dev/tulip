@@ -38,17 +38,4 @@ namespace tlp {
     mainWidget->redrawView();
   }
 
-  void SpreadView::addNode(Graph *graph,const node n) {
-    mainWidget->addNode(graph,n);
-  }
-  void SpreadView::addEdge(Graph *graph,const edge e) {
-    mainWidget->addEdge(graph,e);
-  }
-  void SpreadView::delNode(Graph *graph,const node n) {
-    mainWidget->delNode(graph,n);
-  }
-  void SpreadView::delEdge(Graph *graph,const edge e) {
-    mainWidget->delEdge(graph,e);
-  }
-
 }

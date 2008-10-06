@@ -48,11 +48,6 @@ namespace tlp {
     void setData(Graph *graph,DataSet dataSet);
     DataSet getData();
     Graph *getGraph();
-      
-    void addNode(Graph *,const node );
-    void addEdge(Graph *,const edge );
-    void delNode(Graph *,const node );
-    void delEdge(Graph *,const edge );
 
   protected:
     

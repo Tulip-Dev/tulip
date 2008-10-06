@@ -33,7 +33,7 @@ namespace tlp {
   /** \brief Tulip view interface class
    * 
    */
-  class TLP_QT_SIMPLE_SCOPE View : public QWidget, public GraphObserver {
+  class TLP_QT_SIMPLE_SCOPE View : public QWidget {
     
     Q_OBJECT;
 
@@ -48,12 +48,6 @@ namespace tlp {
     virtual void redrawView() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
     virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
-
-    //GraphObserver
-    virtual void addNode(Graph *,const node ) {};
-    virtual void addEdge(Graph *,const edge ) {};
-    virtual void delNode(Graph *,const node ) {};
-    virtual void delEdge(Graph *,const edge ) {};
 
     //edit menu
     virtual int getEditMenuFlag() {return EDITMENU_CLEAR;} 
