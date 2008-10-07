@@ -49,7 +49,7 @@ GraphType::RealType GraphType::undefinedValue() {
 }
 
 GraphType::RealType GraphType::defaultValue() {
-	return 0;
+  return 0;
 }
 
 void GraphType::del(GraphType::RealType element) {
@@ -69,6 +69,53 @@ bool GraphType::fromString( RealType & v, const string & s ) {
   return false;
 }
 
+//
+// EdgeSetType
+
+set<edge> EdgeSetType::undefinedValue() {
+  return set<edge>();
+}
+
+set<edge> EdgeSetType::defaultValue() {
+  return set<edge>();
+}
+
+void EdgeSetType::del(EdgeSetType::RealType &element) {
+  element.clear();
+}
+
+string EdgeSetType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  set<edge>::const_iterator it;
+  for(it = v.begin() ; it != v.end() ; ++it)
+    oss << (*it).id;
+  oss << ')';
+  return oss.str();
+}
+
+bool EdgeSetType::fromString( RealType & v, const string & s ) {
+  v.clear();
+  // for compatibility with older version (3.0)
+  if (s.empty())
+    return true;
+  istringstream iss;
+  iss.str( s );
+  char c;
+  if( !(iss >> c) || c!='(' )
+    return false;
+  edge e;
+  for( ;; ) {
+    if( !(iss >> c) )
+      return false;
+    if( c == ')' )
+      return true;
+    iss.unget();
+    if( !(iss >> e.id) )
+      return false;
+    v.insert( e );
+  }
+}
 
 //
 // DoubleType
@@ -99,7 +146,7 @@ bool DoubleType::fromString( RealType & v, const string & s ) {
 //
 // IntegerType
 int IntegerType::undefinedValue() {
-	return INT_MIN;
+  return INT_MIN;
 }
 
 int IntegerType::defaultValue() {
@@ -156,17 +203,15 @@ bool BooleanType::fromString( RealType & v, const string & s ) {
 // LineType
 
 vector<Coord> LineType::undefinedValue() {
-  vector<Coord> tmp;
-  return tmp;
+  return vector<Coord>();
 }
 
 vector<Coord> LineType::defaultValue() {
-  vector<Coord> tmpList;
-  return tmpList;
+  return vector<Coord>();
 }
 
 void LineType::del(LineType::RealType &element) {
-	element.clear();
+  element.clear();
 }
 
 string LineType::toString( const RealType & v ) {
@@ -210,9 +255,7 @@ Coord PointType::undefinedValue() {
 
 Coord
 PointType::defaultValue() {
-  Coord tmp;
-  tmp.set(rand()%1024,rand()%1024,rand()%1024);
-  return tmp;
+  return Coord(rand()%1024,rand()%1024,rand()%1024);
 }
 
 void PointType::del(PointType::RealType element) {
@@ -287,7 +330,7 @@ Color ColorType::undefinedValue() {
 }
 
 Color ColorType::defaultValue() {
-	return Color();
+  return Color();
 }
 
 void ColorType::del(ColorType::RealType element) {

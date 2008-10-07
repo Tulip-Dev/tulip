@@ -40,6 +40,7 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   virtual unsigned int deg(const node n)const;
   virtual unsigned int indeg(const node n)const;
   virtual unsigned int outdeg(const node n)const;
+  virtual Graph* getNodeMetaInfo(const node n)const;
 
   //============================================================
   virtual node getOneNode() const;
@@ -52,7 +53,9 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
 
   //============================================================
   virtual bool isElement(const node n) const;
+  virtual bool isMetaNode(const node n) const;
   virtual bool isElement(const edge e) const;
+  virtual bool isMetaEdge(const edge e) const;
   virtual node addNode();
   virtual void addNode(const node n);
   virtual edge addEdge(const node n, const node n2);
@@ -73,7 +76,7 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<edge>* getOutEdges(const node n) const;
   virtual Iterator<edge>* getInOutEdges(const node n) const;
   virtual Iterator<edge>* getInEdges(const node n) const;
-
+  virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
   virtual DataSet & getAttributes();
   virtual PropertyInterface* getProperty(const std::string &name);

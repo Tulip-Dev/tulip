@@ -10,9 +10,9 @@ using namespace tlp;
 
 //==============================
 GraphProperty::GraphProperty (Graph *sg) : 
-  AbstractProperty<GraphType,GraphType>(sg) {
+  AbstractProperty<GraphType, EdgeSetType>(sg) {
   setAllNodeValue(0);
-  setAllEdgeValue(0);
+  //setAllEdgeValue(0);
 }
 //==============================
 GraphProperty::~GraphProperty() {
@@ -127,3 +127,26 @@ void GraphProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) 
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=============================================================
+// disabled, use setNodeValue instead
+bool GraphProperty::setNodeStringValue(const node, const std::string &) {
+  return false;
+}
+//=============================================================
+// disabled use setAllNodeValue instead
+bool GraphProperty::setAllNodeStringValue(const std::string &) {
+  return false;
+}
+//=============================================================
+// disabled, use setEdgeValue instead
+bool GraphProperty::setEdgeStringValue(const edge e, const std::string & v) {
+  return false;
+}
+//=============================================================
+// disabled use setAllEdgeValue instead
+bool GraphProperty::setAllEdgeStringValue(const std::string & v) {
+  return false;
+}
+//=============================================================
+const set<edge>& GraphProperty::getReferencedEdges(const edge e) const{
+  return ((GraphProperty *) this)->edgeProperties.getReference(e.id);
+}

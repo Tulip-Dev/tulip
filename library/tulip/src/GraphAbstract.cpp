@@ -4,6 +4,7 @@
 
 #include "tulip/GraphAbstract.h"
 #include "tulip/BooleanProperty.h"
+#include "tulip/GraphProperty.h"
 #include "tulip/StlIterator.h"
 #include "tulip/StableIterator.h"
 #include "tulip/GraphView.h"
@@ -11,6 +12,8 @@
 
 using namespace std;
 using namespace tlp;
+
+const string metaGraphProperty = "viewMetaGraph";
 
 //=========================================================================
 GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph){
@@ -51,6 +54,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   assert(find);
 #endif
 
+  notifyDelSubGraph(this, toRemove);
+
   Iterator<Graph *> *itS = toRemove->getSubGraphs();
   while (itS->hasNext()) {
     Graph *tmp = itS->next();
@@ -63,11 +68,11 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       break;
     }
   }
-  notifyDelSubGraph(this, toRemove);
   delete toRemove;
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
+  notifyDelSubGraph(this, toRemove);
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
   while (itS.hasNext())
     toRemove->delAllSubGraphs(itS.next());
@@ -77,7 +82,6 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
       break;
     }
   }
-  notifyDelSubGraph(this, toRemove);
   delete toRemove;
 }
 //=========================================================================
@@ -251,4 +255,59 @@ unsigned int GraphAbstract::numberOfEdges() const {
   } delete it;
   return result;
 }
+//----------------------------------------------------------------
+bool GraphAbstract::isMetaNode(const node n) const {
+  assert(isElement(n));
+  return getNodeMetaInfo(n) != NULL;
+}
+//----------------------------------------------------------------
+bool GraphAbstract::isMetaEdge(const edge e) const {
+  assert(isElement(e));
+  return getReferencedEdges(e).size() != 0;
+}
 //=========================================================================
+Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
+  if (((GraphAbstract *) this)->existProperty(metaGraphProperty)) {
+    tlp::PropertyInterface* prop =
+      ((GraphAbstract *) this)->getProperty(metaGraphProperty);
+    assert(typeid((*prop)) == typeid(GraphProperty));
+    return ((GraphProperty *) prop)->getNodeValue(n);
+  }
+  return NULL;
+}
+
+// only used to return a reference on an empty vector of edges
+static set<edge> noReferencedEdges;
+//=========================================================================
+const set<edge>& GraphAbstract::getReferencedEdges(const edge e) const {
+  if (((GraphAbstract *) this)->existProperty(metaGraphProperty)) {
+    tlp::PropertyInterface* prop =
+      ((GraphAbstract *) this)->getProperty(metaGraphProperty);
+    assert(typeid((*prop)) == typeid(GraphProperty));
+    return ((GraphProperty *) prop)->getReferencedEdges(e);
+  }
+  return noReferencedEdges;
+}
+//=========================================================================
+// Iterator on a vector of edges
+// used for the edge associated value of a GraphProperty
+class EdgeSetIterator:public Iterator<edge> {
+  set<edge>::const_iterator it, itEnd;
+public:
+  EdgeSetIterator(const set<edge>& edges):
+    it(edges.begin()), itEnd(edges.end()) {}
+  ~EdgeSetIterator() {}
+  edge next() {
+    edge tmp=(*it);
+    ++it;
+    return tmp;
+  }
+
+  bool hasNext() {
+    return (it!=itEnd);
+  }
+};
+
+Iterator<edge>* GraphAbstract::getEdgeMetaInfo(const edge e) const {
+  return new EdgeSetIterator(getReferencedEdges(e));
+}

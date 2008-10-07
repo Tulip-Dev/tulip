@@ -26,17 +26,21 @@ public:
   virtual void delAllSubGraphs(Graph *);
   virtual Graph* getSuperGraph()const;
   virtual Graph* getRoot() const;
-  virtual Iterator<Graph *> * getSubGraphs() const;
+  virtual Iterator<Graph *>* getSubGraphs() const;
 
   //=======================================
   virtual unsigned int deg(const node) const;
   virtual unsigned int indeg(const node) const;
   virtual unsigned int outdeg(const node) const;
+  virtual bool isMetaNode(const node) const;
+  virtual Graph* getNodeMetaInfo(const node) const;
   virtual node source(const edge) const;
   virtual node target(const edge) const;
   virtual node opposite(const edge, const node)const;
   virtual edge existEdge(const node , const node)const;
   virtual void reverse(const edge);
+  virtual bool isMetaEdge(const edge) const;
+  virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //=======================================
   virtual node getOneNode() const;
   virtual node getInNode(const node,unsigned int ) const;
@@ -60,7 +64,8 @@ protected:
   PropertyManager *propertyContainer;
   PropertyManager *getPropertyManager() {
     return propertyContainer;
-  }  
+  }
+  const std::set<edge>& getReferencedEdges(const edge) const;
 
 private:
   DataSet attributes;

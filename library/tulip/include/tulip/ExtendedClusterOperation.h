@@ -36,19 +36,17 @@ namespace tlp {
   TLP_SCOPE void openMetaNode(Graph *graph, node n);
 
   /**
-   * Function to close a subgraph into a metanode.  Edges from nodes
+   * Function to close an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
    *
    * \param graph The graph where the meta node will be placed.
-   * \param subGraph The set of nodes to be contracted into a metanode.
+   * \param subGraph an existing subgraph
    * \param groupUnderSubgraph The subgraph where the groups are placed. 
-   * \param metaGraphProperty The metagraph property used to associate
    * the subgraph to the new metanode.
    */
   TLP_SCOPE node createMetaNode(Graph *graph, std::set<node> &subGraph,
-				Graph *groupUnderSubGraph, 
-				GraphProperty *metaInfo);
+				Graph *groupUnderSubGraph);
 
   /**
    * Function to close a subgraph into a metanode.  Edges from nodes

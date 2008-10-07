@@ -6,6 +6,7 @@
 #include <config.h>
 #endif
 
+#include <set>
 #include <vector>
 #include <string>
 #include <list>
@@ -16,6 +17,7 @@
 #include "tulip/Size.h"
 #include "tulip/Color.h"
 #include "tulip/StringCollection.h"
+#include "tulip/Edge.h"
 
 namespace tlp {
 
@@ -39,6 +41,17 @@ public:
   static GraphType::RealType undefinedValue();
   static GraphType::RealType defaultValue();
   static void  del(GraphType::RealType element);
+  static std::string toString( const RealType & v );
+  static bool fromString( RealType & v, const std::string & s );
+};
+
+class TLP_SCOPE EdgeSetType:public Type
+{
+public:
+  typedef std::set<edge> RealType;
+  static std::set<edge> undefinedValue();
+  static std::set<edge> defaultValue();
+  static void del(EdgeSetType::RealType &element);
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };

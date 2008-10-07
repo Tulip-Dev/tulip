@@ -238,6 +238,8 @@ public:
   virtual Iterator<node>* getOutNodes(const node) const =0;
   /// Return an iterator on the neighbours of a node.
   virtual Iterator<node>* getInOutNodes(const node) const =0;
+  /// Returns the underlying graph of a meta node
+  virtual Graph* getNodeMetaInfo(const node) const = 0;
   /// Return an iterator on the edges.
   virtual Iterator<edge>* getEdges() const =0;
   /// Return an existing edge of the graph
@@ -248,6 +250,8 @@ public:
   virtual Iterator<edge>* getInOutEdges(const node) const =0;
   /// Return an iterator on the in--edges of a node.
   virtual Iterator<edge>* getInEdges(const node) const =0;
+  /// Return an iterator on the underlying edges of a meta edge
+  virtual Iterator<edge>* getEdgeMetaInfo(const edge) const =0;
   //================================================================================
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
@@ -271,8 +275,12 @@ public:
   virtual node opposite(const edge, const node)const =0;
   /// Return true if the node is element of the graph.
   virtual bool isElement(const node ) const =0;
+  /// Return true if the node is a meta node.
+  virtual bool isMetaNode(const node ) const =0;
   /// Return true if the edge is element of the graph.
   virtual bool isElement(const edge ) const =0;
+  /// Return true if the edge is a meta edge.
+  virtual bool isMetaEdge(const edge ) const =0;
   /** Returns the edge if it exists an edge between two node 
    *  sens of the edge is not taken into account)
    *  If no edge is found return an invalid edge.

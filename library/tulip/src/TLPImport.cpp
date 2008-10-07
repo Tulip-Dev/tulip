@@ -154,17 +154,11 @@ struct TLPGraphBuilder:public TLPTrue {
       //cerr << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
       bool result=false;
 
-      if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-	char *endPtr=0;
-	const char *startPtr=value.c_str();
-	int result=strtol(startPtr,&endPtr,10);
-	if (endPtr==startPtr) return false;
-	if (clusterIndex.find(result)==clusterIndex.end()) return false;
-	if (result==0) 
-	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(edgeIndex[edgeId],0);
-	else
-	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(edgeIndex[edgeId],clusterIndex[result]);
-	return true;
+      if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
+	set<edge> v;
+	result = EdgeSetType::fromString(v, value);
+	if (result)
+	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue( edgeIndex[edgeId], v);
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	result= clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
@@ -224,17 +218,11 @@ struct TLPGraphBuilder:public TLPTrue {
       //cerr << "setAllEdgeValue.." << endl;
       bool result=false;
 
-      if (propertyType==GRAPH|| propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-	char *endPtr=0;
-	const char *startPtr=value.c_str();
-	int result=strtol(startPtr,&endPtr,10);
-	if (endPtr==startPtr) result = 0; //return false;
-	if (clusterIndex.find(result)==clusterIndex.end()) return false;
-	if (result==0)
-	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(0);
-	else
-	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(clusterIndex[result]);
-	return true;
+      if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
+	set<edge> v;
+	result = EdgeSetType::fromString(v, value);
+	if (result)
+	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(v);
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	result= clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllEdgeStringValue( value );

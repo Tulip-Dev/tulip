@@ -84,6 +84,11 @@ unsigned int GraphDecorator::outdeg(const node n)const {
 }
 
 //============================================================
+Graph* GraphDecorator::getNodeMetaInfo(const node n)const {
+  return graph_component->getNodeMetaInfo(n);
+}
+
+//============================================================
 node GraphDecorator::getOneNode() const{
   return graph_component->getOneNode();
 }
@@ -118,8 +123,18 @@ bool GraphDecorator::isElement(const node n) const{
 }
 
 //============================================================
+bool GraphDecorator::isMetaNode(const node n) const{
+  return graph_component->isMetaNode(n);
+}
+
+//============================================================
 bool GraphDecorator::isElement(const edge e) const{
   return graph_component->isElement(e);
+}
+
+//============================================================
+bool GraphDecorator::isMetaEdge(const edge e) const{
+  return graph_component->isMetaEdge(e);
 }
 
 //============================================================
@@ -209,6 +224,11 @@ Iterator<edge>* GraphDecorator::getInOutEdges(const node n) const {
 //============================================================
 Iterator<edge>* GraphDecorator::getInEdges(const node n) const {
   return graph_component->getInEdges(n);
+}
+
+//============================================================
+Iterator<edge>* GraphDecorator::getEdgeMetaInfo(const edge e) const {
+  return graph_component->getEdgeMetaInfo(e);
 }
 
 //============================================================

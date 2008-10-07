@@ -13,11 +13,13 @@
 namespace tlp {
 
 class PropertyContext;
+class GraphAbstract;
 
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,GraphType>, public GraphObserver { 
+class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,EdgeSetType>, public GraphObserver { 
   friend class GraphAlgorithm;
+  friend class GraphAbstract;
 
 public :
   GraphProperty (Graph *);
@@ -26,12 +28,17 @@ public :
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void destroy(Graph *);
-  
+  bool setNodeStringValue(const node n, const std::string & v);
+  bool setAllNodeStringValue(const std::string & v);
+  bool setEdgeStringValue( const edge e, const std::string & v);
+  bool setAllEdgeStringValue(const std::string & v);
+
 private:
   MutableContainer<std::set<node> > referencedGraph;
   void setNodeValue_handler(const node n, const GraphType::RealType &);
   void setAllNodeValue_handler(const GraphType::RealType &);
-
+  const std::set<edge>& getReferencedEdges(const edge) const;
+  
 };
 /*@}*/
 
