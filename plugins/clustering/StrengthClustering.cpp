@@ -276,24 +276,6 @@ Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   return quotientGraph;
 }
 //==============================================================================
-/**
-  Create a new metagraph property in order to have in the "viewMetagraph" the result
-  of recursive clustering, and in "strengthMetaGraph" the graphs before without recursive clustering.
-*/
-void StrengthClustering::adjustMetaGraphProperty(Graph *quotientGraph, map<Graph *,Graph *> &mapGraph) {
-  if (quotientGraph != graph) {
-    Graph *rootGraph = graph->getRoot();
-    GraphProperty *meta = rootGraph->getLocalProperty<GraphProperty>("viewMetaGraph");
-    GraphProperty *meta2 = rootGraph->getLocalProperty<GraphProperty>("strengthMetaGraph");
-    Iterator<node> *itN = quotientGraph->getNodes();
-    while (itN->hasNext()) {
-      node itn=itN->next();
-      meta2->setNodeValue(itn,meta->getNodeValue(itn));
-      meta->setNodeValue(itn,mapGraph[meta->getNodeValue(itn)]);
-    } delete itN;
-  }
-}
-//==============================================================================
 namespace {
   const char * paramHelp[] = {
     // metric
@@ -410,8 +392,6 @@ bool StrengthClustering::run() {
   quotientGraph = buildQuotientGraph(tmpGraph);
   if (!quotientGraph)
     return pluginProgress->state()!= TLP_CANCEL;
-
-  adjustMetaGraphProperty(quotientGraph, mapGraph);
 
   if (dataSet!=0) {
     dataSet->set("strengthGraph", quotientGraph);
