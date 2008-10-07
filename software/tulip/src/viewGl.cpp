@@ -492,7 +492,10 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
     DataSet tmp;
     stringstream str;
     str << "view" << i ;
-    tmp.set<DataSet>(((View*)(widgetList[i]))->getPluginName(),((View*)(widgetList[i]))->getData());
+    DataSet viewData;
+    Graph *graph;
+    ((View*)(widgetList[i]))->getData(&graph,&viewData);
+    tmp.set<DataSet>(((View*)(widgetList[i]))->getPluginName(),viewData);
     views.set<DataSet>(str.str(),tmp);
   }
   dataSet.set<DataSet>("views",views);

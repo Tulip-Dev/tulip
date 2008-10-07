@@ -26,12 +26,17 @@ namespace tlp {
     mainWidget->setData(graph,dataSet);
   }
   
-  DataSet SpreadView::getData() {
-    return DataSet();
+  void SpreadView::getData(Graph **graph,DataSet *dataSet) {
+    dataSet->set<DataSet>("data",DataSet());
+    *graph=mainWidget->getGraph();
   }
   
   Graph* SpreadView::getGraph() {
     return mainWidget->getGraph();
+  }
+
+  void SpreadView::setGraph(Graph *graph) {
+    mainWidget->setData(graph,DataSet());
   }
 
   void SpreadView::draw() {

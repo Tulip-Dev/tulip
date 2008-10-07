@@ -51,11 +51,14 @@ namespace tlp {
     mainWidget->setData(graph,dataSet);
   }
   //==================================================
-  DataSet ParallelView::getData() {
-    return mainWidget->getData();
+  void ParallelView::getData(Graph **graph,DataSet *dataSet) {
+    mainWidget->getData(graph,dataSet);
   }
   Graph* ParallelView::getGraph() {
     return mainWidget->getGraph();
+  }
+  void ParallelView::setGraph(Graph *graph) {
+    mainWidget->setData(graph,DataSet());
   }
 
   void ParallelView::draw() {

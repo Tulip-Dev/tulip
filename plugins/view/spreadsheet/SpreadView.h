@@ -50,7 +50,7 @@ namespace tlp {
     virtual ~SpreadView() {}
 
     void setData(Graph *graph,DataSet dataSet);
-    DataSet getData();
+    void getData(Graph **graph,DataSet *dataSet);
     Graph *getGraph();
 
   protected :
@@ -61,6 +61,7 @@ namespace tlp {
 
     void draw();
     void reinitAndDraw();
+    void setGraph(Graph *graph);
 
   };
 

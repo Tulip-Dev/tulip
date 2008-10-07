@@ -126,10 +126,9 @@ namespace tlp {
     reinitAndDraw();
   }
   //==================================================
-  DataSet GlMainView::getData() {
-    DataSet dataSet;
-    dataSet.set<DataSet>("data",mainWidget->getData());
-    return dataSet;
+  void GlMainView::getData(Graph **graph,DataSet *dataSet) {
+    dataSet->set<DataSet>("data",mainWidget->getData());
+    *graph=mainWidget->getGraph();
   }
   //==================================================
   Graph *GlMainView::getGraph() {
@@ -140,9 +139,10 @@ namespace tlp {
     return mainWidget;
   }
   //==================================================
-  void GlMainView::changeGraph(Graph *graph) {
-    if(mainWidget->getGraph()!=graph)
+  void GlMainView::setGraph(Graph *graph) {
+    if(mainWidget->getGraph()!=graph) {
       setData(graph,DataSet());
+    }
   }
 
   //==================================================

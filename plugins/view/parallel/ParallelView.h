@@ -40,7 +40,7 @@ namespace tlp {
     ~ParallelView();
     
     void setData(Graph *graph,DataSet dataSet);
-    DataSet getData();
+    void getData(Graph **graph,DataSet *dataSet);
     Graph *getGraph();
 
     void getInteractorsActionList(std::list<QAction*> &interactorsList);
@@ -53,6 +53,7 @@ namespace tlp {
     void showDialog(QAction*);
     void draw();
     void reinitAndDraw();
+    void setGraph(Graph *graph);
 
   protected :
     QMenu *dialogMenu;

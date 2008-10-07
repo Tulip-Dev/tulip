@@ -56,7 +56,7 @@ namespace tlp {
     ~GlMainView();
 
     void setData(Graph *graph,DataSet dataSet);
-    DataSet getData();
+    void getData(Graph **graph,DataSet *dataSet);
     Graph *getGraph();
     GlMainWidget *getGlMainWidget();
 
@@ -114,7 +114,7 @@ namespace tlp {
     void draw();
     void reinitAndDraw();
 
-    void changeGraph(Graph *);
+    void setGraph(Graph *graph);
 
     /*signals:
       void showElementPropertiesSignal(unsigned int eltId, bool isNode);*/

@@ -162,11 +162,10 @@ void ParallelCoordinatesWidget::clearObservers() {
   draw();
 }
 
-  DataSet ParallelCoordinatesWidget::getData() {
-    DataSet data;
+  void ParallelCoordinatesWidget::getData(Graph **graph,DataSet *dataSet) {
 
     DataSet vcdData=vcd->getData();
-    data.set("vcd",vcdData);
+    dataSet->set("vcd",vcdData);
     
     list<string> selectedProperties=graphProxy->getSelectedProperties();
     DataSet selectedPropertiesData;
@@ -177,9 +176,8 @@ void ParallelCoordinatesWidget::clearObservers() {
       selectedPropertiesData.set<string>(s.str(),*it);
       i++;
     }
-    data.set("selectedProperties",selectedPropertiesData);
-
-    return data;
+    dataSet->set("selectedProperties",selectedPropertiesData);
+    *graph=this->graph;
   }
 
 

@@ -44,7 +44,8 @@ namespace tlp {
     virtual ~View() {}
     std::string getPluginName() {return pluginName;}
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
-    virtual DataSet getData() = 0;
+    virtual void getData(Graph **graph,DataSet *dataSet) = 0;
+    virtual void setGraph(Graph *graph) = 0;
     virtual Graph *getGraph() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
     virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
