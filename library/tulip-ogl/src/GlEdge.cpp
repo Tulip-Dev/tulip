@@ -10,7 +10,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"
@@ -60,7 +59,7 @@ namespace tlp {
       srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
       
       int tgtGlyphId = 1; //cube outlined
-      if (data->elementGraph->getNodeValue(target)==0)
+      if (!data->getGraph()->isMetaNode(target))
 	tgtGlyphId = data->elementShape->getNodeValue(target);
       Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
       //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
@@ -180,7 +179,7 @@ namespace tlp {
 
     //compute anchor, (clip line with the glyph)
     int tgtGlyphId = 1; //cube outlined
-    if (data->elementGraph->getNodeValue(target)==0)
+    if (!data->getGraph()->isMetaNode(target))
       tgtGlyphId = data->elementShape->getNodeValue(target);
     Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
     //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from

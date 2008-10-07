@@ -9,7 +9,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GraphProperty.h>
 
 #include "tulip/GlyphManager.h"
 #include "tulip/GlGraphRenderingParameters.h"
@@ -48,7 +47,6 @@ namespace tlp {
     elementShape = graph->getProperty<IntegerProperty>("viewShape");
     elementSize = graph->getProperty<SizeProperty>("viewSize");
     elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
-    elementGraph = graph->getProperty<GraphProperty>("viewMetaGraph");
     elementTexture = graph->getProperty<StringProperty>("viewTexture");
     elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
     elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");

@@ -10,7 +10,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"
@@ -55,17 +54,17 @@ namespace tlp {
     node n=node(id);
     if (data->elementSelected->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
-      if(data->elementGraph->getNodeValue(n) == 0) {
-	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
-      }else{
+      if(data->getGraph()->isMetaNode(n)) {
 	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
+      }else{
+	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
       }
     }else{
       glEnable(GL_DEPTH_TEST);
-      if(data->elementGraph->getNodeValue(n) == 0) {
-	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-      }else{
+      if(data->getGraph()->isMetaNode(n)) {
 	glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
+      }else{
+	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
       }
     }
 

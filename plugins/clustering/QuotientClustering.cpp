@@ -236,7 +236,8 @@ bool QuotientClustering::run() {
       sstr << " " << graph->getId();
   }
   quotientGraph->setAttribute(string("name"), sstr.str());
-  GraphProperty *meta = quotientGraph->getProperty<GraphProperty>("viewMetaGraph");
+  GraphProperty *meta =
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
 
   StringProperty *label = NULL;
   if (useSubGraphName || metaLabel)

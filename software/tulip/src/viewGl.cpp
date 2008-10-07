@@ -54,7 +54,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -369,7 +368,7 @@ void viewGl::initObservers() {
       graph->getProperty(viewed_properties[i])->addObserver(this);
   }
   graph->addObserver(this);
-  // initialize the number of nodes ans edges
+  // initialize the number of nodes and edges
   currentGraphNbNodes = graph->numberOfNodes();
   currentGraphNbEdges = graph->numberOfEdges();
   // show the infos
@@ -1661,8 +1660,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
       QAction* goAction = NULL;
       QAction* ungroupAction = NULL;
       if (isNode) {
-	GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	if (meta->getNodeValue(tmpNode)!=0) {
+	if (graph->isMetaNode(tmpNode)) {
 	  goAction = contextMenu.addAction(tr("Go inside"));
 	  ungroupAction = contextMenu.addAction(tr("Ungroup"));
 	}
@@ -1685,8 +1683,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 	  showElementProperties(itemId, isNode);
 	else  {
 	  if (menuAction == goAction) { // Go inside
-	    GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	    changeGraph(meta->getNodeValue(tmpNode));
+	    changeGraph(graph->getNodeMetaInfo(tmpNode));
 	  }
 	  else  {
 	    if (menuAction == ungroupAction) { // Ungroup

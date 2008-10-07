@@ -4,7 +4,6 @@
 
 
 #include <tulip/Graph.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -42,7 +41,7 @@ namespace tlp {
     glRotatef(data->elementRotation->getNodeValue(node(id)), 0., 0., 1.);
     glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
-    Graph *metaGraph = data->elementGraph->getNodeValue(node(id));
+    Graph *metaGraph = data->getGraph()->getNodeMetaInfo(node(id));
     GlGraphRenderingParameters metaParameters = *data->parameters;
     /*metaParameters.setTexturePath(data->parameters->getTexturePath());
     metaParameters.setNodesStencil(data->parameters->getNodesStencil());
@@ -78,10 +77,10 @@ namespace tlp {
     unsigned int id;
     while (itN->hasNext()) {
       id=itN->next().id;
-      if(metaData.elementGraph->getNodeValue(node(id)) == 0)
-	nodes.push_back(GlNode(id));
-      else
+      if(metaData.getGraph()->isMetaNode(node(id)))
 	metaNodes.push_back(GlMetaNode(id));
+      else
+	nodes.push_back(GlNode(id));
     }
     delete itN;
 
@@ -195,7 +194,7 @@ namespace tlp {
       return;
     }
 
-    Graph *metaGraph = data->elementGraph->getNodeValue(n);
+    Graph *metaGraph = data->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *data->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
     
@@ -207,10 +206,10 @@ namespace tlp {
     unsigned int id;
     while (itN->hasNext()) {
       id=itN->next().id;
-      if(metaData.elementGraph->getNodeValue(node(id)) == 0)
-	nodes.push_back(GlNode(id));
-      else
+      if(metaData.getGraph()->isMetaNode(node(id)))
 	metaNodes.push_back(GlMetaNode(id));
+      else
+	nodes.push_back(GlNode(id));
     }
     delete itN;
 

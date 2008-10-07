@@ -26,7 +26,6 @@ namespace tlp {
   class BooleanProperty;
   class SizeProperty;
   class ColorProperty;
-  class GraphProperty;
   class PropertyManager;
   class Graph;
   class Glyph;
@@ -81,7 +80,6 @@ namespace tlp {
     BooleanProperty  *elementSelected;
     StringProperty   *elementLabel;
     LayoutProperty   *elementLayout;
-    GraphProperty    *elementGraph;
     StringProperty   *elementTexture;
     ColorProperty    *elementBorderColor;
     DoubleProperty   *elementBorderWidth;

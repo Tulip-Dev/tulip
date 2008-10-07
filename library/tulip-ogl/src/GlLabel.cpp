@@ -10,7 +10,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include <tulip/GraphProperty.h>
 #include <tulip/ForEach.h>
 
 #include "tulip/GlTools.h"
@@ -45,10 +44,10 @@ namespace tlp {
       orderedEdge.sort(comp2);
       
       for(list<node>::iterator itN=orderedNode.begin();itN!=orderedNode.end();++itN) {
-	if(inputData.elementGraph->getNodeValue(*itN) == 0){
-	  nodes.push_back(GlNode((*itN).id));
-	}else{
+	if(inputData.getGraph()->isMetaNode(*itN)){
 	  metaNodes.push_back(GlMetaNode((*itN).id));
+	}else{
+	  nodes.push_back(GlNode((*itN).id));
 	}
       }
       
@@ -67,10 +66,10 @@ namespace tlp {
       while ((drawNodesIterator->hasNext()) && (number >0)) {
 	--number;
 	unsigned int id=drawNodesIterator->next().id;
-	if(inputData.elementGraph->getNodeValue(node(id)) == 0){
-	  nodes.push_back(GlNode(id));
-	}else{
+	if(inputData.getGraph()->isMetaNode(node(id))){
 	  metaNodes.push_back(GlMetaNode(id));
+	}else{
+	  nodes.push_back(GlNode(id));
 	}
       }
       
@@ -141,11 +140,11 @@ namespace tlp {
   void GlGraphComposite::addNodes() {
     if(!nodesToAdd.empty()) {
       for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
-	if(inputData.elementGraph->getNodeValue(node(*it))==0){
-	  nodes.push_back(GlNode(*it)); 
+	if(inputData.getGraph()->isMetaNode(node(*it))){
+	  metaNodes.push_back(GlMetaNode(*it));
 	}
 	else{
-	  metaNodes.push_back(GlMetaNode(*it));
+	  nodes.push_back(GlNode(*it)); 
 	}
       }
       nodesToAdd.clear();
