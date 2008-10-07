@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <string.h>
 
 /*
   Il faut ajouter la gestion correcte des erreurs et cest nikel.

@@ -15,7 +15,7 @@
 
 #include <QtGui/QMainWindow>
 
-#include <tulip/View.h>
+#include <tulip/AbstractView.h>
 
 #include "ParallelCoordinatesWidget.h"
 
@@ -28,7 +28,7 @@ namespace tlp {
     virtual View* create(const std::string &pluginName,QWidget *parent);
   };
 
-  class ParallelView : public View {
+  class ParallelView : public AbstractView {
 
     Q_OBJECT;
 
@@ -42,7 +42,6 @@ namespace tlp {
     void setData(Graph *graph,DataSet dataSet);
     DataSet getData();
     Graph *getGraph();
-    void redrawView();
 
     void getInteractorsActionList(std::list<QAction*> &interactorsList);
     Iterator<Interactor *> *installInteractor(const std::string &);
@@ -52,6 +51,8 @@ namespace tlp {
 
   public slots:
     void showDialog(QAction*);
+    void draw();
+    void reinitAndDraw();
 
   protected :
     QMenu *dialogMenu;

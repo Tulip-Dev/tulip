@@ -18,6 +18,7 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlRectTextured.h>
+
 #include "tulip/QtCPULODCalculator.h"
 #include "tulip/InteractorManager.h"
 
@@ -72,9 +73,8 @@ namespace tlp {
   }
 
   //==================================================
-  GlMainWidget::GlMainWidget(QWidget *parent, const char *name):
-    QGLWidget(GlInit(), parent),
-    _id(Interactor::invalidID) {
+  GlMainWidget::GlMainWidget(QWidget *parent, const char *name,AbstractView *view):
+    QGLWidget(GlInit(), parent),view(view){
     //  scene(new QtCPULODCalculator()){
     setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -86,8 +86,6 @@ namespace tlp {
   }
   //==================================================
   GlMainWidget::~GlMainWidget() {
-    for (unsigned int i = 0; i > _interactors.size(); ++i)
-      delete _interactors[i];
   }
   //==================================================
   void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
@@ -214,11 +212,7 @@ namespace tlp {
     //draw the glAugmented on top of the graph
     //_composite->draw(this);
     //draw the interactors on top of graph and augmented display
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->draw(this))
-	break;
-    }
+    drawInteractors();
     tlp::glTest(__PRETTY_FUNCTION__);
     swapBuffers();
   }
@@ -277,80 +271,25 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::computeInteractors() {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->compute(this))
+    if(!view)
+      return;
+    Iterator<Interactor *> *it=view->getInteractors();
+    while (it->hasNext()) {
+      Interactor *interactor=it->next();
+      if (interactor->compute(this))
 	break;
     }
   }
   //==================================================
   void GlMainWidget::drawInteractors() {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->draw(this))
+    if(!view)
+      return;
+    Iterator<Interactor *> *it=view->getInteractors();
+    while (it->hasNext()) {
+      Interactor *interactor=it->next();
+      if (interactor->draw(this))
 	break;
     }
-  }
-  //==================================================
-  Iterator<Interactor *> *GlMainWidget::getInteractors() const {
-    return new StlIterator<Interactor *, vector<Interactor *>::const_iterator>(_interactors.begin(), _interactors.end());
-  }
-  //==================================================
-  Interactor::ID GlMainWidget::pushInteractor(Interactor* interactor) {
-    if (interactor) {
-      interactor = interactor->clone();
-      interactor->setID(++_id);
-      _interactors.push_back(interactor);
-      installEventFilter(interactor);
-      interactor->compute(this);
-      updateGL();
-    }
-    return _id;
-  }
-  //==================================================
-  void GlMainWidget::popInteractor() {
-    if (_interactors.size()) {
-      Interactor *interactor = _interactors[_interactors.size() - 1];
-      _interactors.pop_back();
-      removeEventFilter(interactor);
-      delete interactor;
-    }
-  }
-  //==================================================
-  void GlMainWidget::removeInteractor(Interactor::ID i) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->getID() == i) {
-	removeEventFilter(*it);
-	delete *it;
-	_interactors.erase(it);
-	break;
-      }
-    }
-  }
-  //==================================================
-  Interactor::ID GlMainWidget::resetInteractors(Interactor *interactor) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    return pushInteractor(interactor);
-  }
-  //==================================================
-  std::vector<tlp::Interactor::ID> GlMainWidget::resetInteractors(const std::vector<Interactor *> &new_interactors) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    vector<Interactor::ID> ids;
-    for (vector<Interactor *>::const_iterator it =
-	   new_interactors.begin(); it != new_interactors.end(); ++it)
-      ids.push_back(pushInteractor(*it));
-    return ids;
   }
   //==================================================
   //QGLWidget

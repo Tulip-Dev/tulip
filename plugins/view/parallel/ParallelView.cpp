@@ -30,7 +30,7 @@ namespace tlp {
     return new ParallelView(pluginName,parent);
   }
 
-  ParallelView::ParallelView(const std::string &pluginName,QWidget *parent) : View(pluginName,parent){
+  ParallelView::ParallelView(const std::string &pluginName,QWidget *parent) : AbstractView(pluginName,parent){
 
     mainWidget=new ParallelCoordinatesWidget(this);
     
@@ -58,7 +58,11 @@ namespace tlp {
     return mainWidget->getGraph();
   }
 
-  void ParallelView::redrawView() {
+  void ParallelView::draw() {
+    mainWidget->redrawView();
+  }
+
+  void ParallelView::reinitAndDraw() {
     mainWidget->redrawView();
   }
 
@@ -82,8 +86,8 @@ namespace tlp {
     interactorsList.push_back(new QAction(QIcon(":/i_zoom.png"),"zoomBox",this));
   }
   Iterator<Interactor *> *ParallelView::installInteractor(const string &name) {
-    mainWidget->resetInteractors(interactorsMap[name]);
-    return mainWidget->getInteractors();
+    resetInteractors(interactorsMap[name]);
+    return getInteractors();
   }
 
   void ParallelView::showDialog(QAction *action) {

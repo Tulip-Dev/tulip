@@ -15,7 +15,7 @@ namespace tlp {
   }
 
   SpreadView::SpreadView(const string &pluginName,QWidget *parent) :
-    View(pluginName,parent){
+    AbstractView(pluginName,parent){
 
     mainWidget=new SpreadWidget(this);
     
@@ -34,8 +34,12 @@ namespace tlp {
     return mainWidget->getGraph();
   }
 
-  void SpreadView::redrawView() {
+  void SpreadView::draw() {
     mainWidget->redrawView();
+  }
+  
+  void SpreadView::reinitAndDraw() {
+    draw();
   }
 
 }

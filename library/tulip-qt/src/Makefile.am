@@ -64,7 +64,8 @@ BUILT_SOURCES = \
 	moc_RenderingParametersDialogData.cpp \
 	moc_GridOptionsWidget.cpp \
 	moc_GridOptionsData.cpp \
-	moc_View.cpp 
+	moc_View.cpp \
+	moc_AbstractView.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -100,6 +101,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	GWInteractor.cpp \
 	InteractorManager.cpp \
 	View.cpp \
+	AbstractView.cpp \
 	ViewPluginsManager.cpp \
 	TulipStatsWidget.cpp \
 	RenderingParametersDialog.cpp \

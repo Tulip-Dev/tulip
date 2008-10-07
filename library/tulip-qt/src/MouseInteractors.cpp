@@ -10,6 +10,7 @@
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/AbstractView.h"
 #include <tulip/Observable.h>
 
 using namespace tlp;
@@ -183,6 +184,8 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 }
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
+  GlMainWidget *mainWidget=(GlMainWidget *)widget;
+  AbstractView *abstractView=(AbstractView *)mainWidget->getView();
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
       Interactor *currentMouse;
@@ -201,7 +204,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       else
 	currentMouse = new MouseMove();
       bool result = currentMouse->eventFilter(widget, e);
-      currentMouseID = ((GlMainWidget *)widget)->pushInteractor(currentMouse);
+      
+      currentMouseID = abstractView->pushInteractor(currentMouse);
       return result;
     }
     currentMouseID = Interactor::invalidID;
@@ -209,7 +213,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
   if (e->type() == QEvent::MouseButtonRelease &&
       currentMouseID != Interactor::invalidID) {
-    ((GlMainWidget *)widget)->removeInteractor(currentMouseID);
+    abstractView->removeInteractor(currentMouseID);
     currentMouseID = Interactor::invalidID;
     return true;
   }

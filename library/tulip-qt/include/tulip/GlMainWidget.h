@@ -24,7 +24,7 @@
 #include <QtGui/qaction.h>
 
 #include "tulip/GWInteractor.h"
-#include "tulip/View.h"
+#include "tulip/AbstractView.h"
 #include <tulip/GlHierarchyConvexHulls.h>
 
 namespace tlp {
@@ -37,17 +37,14 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   Q_OBJECT;
   
  public:
-  GlMainWidget(QWidget *parent=NULL, const char *name=NULL);
+  GlMainWidget(QWidget *parent=NULL, const char *name=NULL,AbstractView *view=NULL);
   ~GlMainWidget();
 
   void setData(Graph *graph,DataSet dataSet);
   DataSet getData();
   Graph *getGraph();
 
-  /**
-   * return list of interactor installed on this widget
-   */
-  tlp::Iterator<tlp::Interactor *> *getInteractors() const;
+  View *getView() {return view;}
   
   /**
    * return the scene of this glMainWidget
@@ -144,8 +141,8 @@ private:
   tlp::GlHierarchyConvexHulls hulls;
   bool _firstStepOfIncrementalRendering;
   QRegion _visibleArea;
-  tlp::Interactor::ID _id;
-  std::vector<tlp::Interactor *> _interactors;
+  AbstractView *view;
+  
 
 public slots:
   /** 
@@ -162,16 +159,6 @@ public slots:
   void redraw();
 
   void closeEvent(QCloseEvent *e);
-  /// install a clone of the interactor as event filter and assign the returned id
-  tlp::Interactor::ID pushInteractor(tlp::Interactor *interactor);
-  /// remove the last added interactor from the event filters list and delete it
-  void popInteractor();
-  /// remove the interactor with id from the event filters list and delete it
-  void removeInteractor(tlp::Interactor::ID id);
-  ///  remove all interactors and delete them, push a new one if any
-  tlp::Interactor::ID resetInteractors(tlp::Interactor *interactor = NULL);
-  /// remove all iteractors and delete them, then install clones of the interactors
-  std::vector<tlp::Interactor::ID> resetInteractors(const std::vector<tlp::Interactor *>&interactors);
 
 protected slots:
   void paintEvent( QPaintEvent* );

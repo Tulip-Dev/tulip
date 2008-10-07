@@ -62,9 +62,6 @@ struct SmallWorldGraph:public ImportModule {
 			      / (double (nbNodes) * M_PI));
     srand(clock()); 
     LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
-    SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
-    newSize->setAllNodeValue(Size(1, 1, 1));
-
     vector<node> sg(nbNodes);
 
     pluginProgress->showPreview(false);
@@ -98,6 +95,10 @@ struct SmallWorldGraph:public ImportModule {
 	}
       }
     }
+    SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
+    newSize->setAllNodeValue(Size(1, 1, 1));
+    newSize->setAllEdgeValue(Size(1, 1, 1));
+
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };

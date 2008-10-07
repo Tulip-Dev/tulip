@@ -9,6 +9,7 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
+#include "GWInteractor.h"
 
 #define EDITMENU_CLEAR           0x0000
 #define EDITMENU_CUT             0x0001
@@ -45,28 +46,21 @@ namespace tlp {
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
     virtual DataSet getData() = 0;
     virtual Graph *getGraph() = 0;
-    virtual void redrawView() = 0;
     virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
     virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
 
     //edit menu
     virtual int getEditMenuFlag() {return EDITMENU_CLEAR;} 
 
-    //For plugin progress handler
-    virtual bool doProgressUpdate() {return false;}
-    virtual void progressUpdate() {}
-
   protected:
-    //eventFilter 
-    virtual void specificEventFilter(QObject *object,QEvent *event) {}
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
-    virtual void computeContextMenuAction(QAction *action) {}
 
     virtual void constructInteractorsMap() {}
     void setCentralWidget(QWidget *widget);
 
     QVBoxLayout *mainLayout;
+    QWidget *centralWidget;
     std::map<std::string,std::vector<Interactor *> > interactorsMap;
+    
 
   public slots:
 
@@ -75,7 +69,10 @@ namespace tlp {
     }
     virtual void changeGraph(Graph *) {};
 
-    bool eventFilter(QObject *object, QEvent *event);
+    virtual void draw() = 0;
+    virtual void reinitAndDraw() = 0;
+
+    virtual bool eventFilter(QObject *object, QEvent *event) = 0;
 
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);

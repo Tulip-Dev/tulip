@@ -31,7 +31,7 @@ namespace tlp {
 
   public :
     
-    ParallelCoordinatesWidget(QWidget *parent = 0);
+    ParallelCoordinatesWidget(View *parent);
     ~ParallelCoordinatesWidget();
     
     void setData(Graph *graph,DataSet dataSet);
@@ -75,6 +75,7 @@ namespace tlp {
     MouseNKeysNavigator *navigator;
     ParallelCoordinatesView *parallelCoordsView;
     Graph *graph;
+    View *view;
     
   };
 

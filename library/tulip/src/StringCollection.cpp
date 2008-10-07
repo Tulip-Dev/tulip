@@ -40,13 +40,14 @@ StringCollection::StringCollection(const vector<string>&  vectorParam,
 
 StringCollection::StringCollection(const vector<string>& vectorParam, 
                         string currentString) 
-  : vector<string>(vectorParam)  {
-
-  iterator itString = find(begin(),end(),currentString);
-  if (itString != end())
-    current = itString-begin();
-  else
-    current = 0;
+  : vector<string>(vectorParam) {
+  current = 0;
+  for (vector<string>::const_iterator itS = begin();
+       itS != end(); ++itS, ++current) {
+    if ((*itS) == currentString)
+      return;
+  }
+  current = 0;
 }
 
     

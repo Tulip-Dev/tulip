@@ -12,6 +12,7 @@
 #define Tulip_GLFEEDBACKRECORDER_H
 
 #include <tulip/tulipconf.h>
+#include <stdlib.h>
 
 #include <tulip/Vector.h>
 

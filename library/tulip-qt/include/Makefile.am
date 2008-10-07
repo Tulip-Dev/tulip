@@ -36,6 +36,7 @@ nobase_include_HEADERS = \
 	tulip/QtCPULODCalculator.h \
 	tulip/InteractorManager.h \
 	tulip/View.h \
+	tulip/AbstractView.h \
 	tulip/ViewPluginsManager.h
 
 noinst_HEADERS = \

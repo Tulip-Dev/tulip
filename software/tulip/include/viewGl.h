@@ -107,7 +107,6 @@ protected:
   void enableElements(bool);
   void setNavigateCaption(std::string);
   void initializeGraph(tlp::Graph *);
-  void initializeGlScene(tlp::GlScene *);
 
   void redrawViews();
 

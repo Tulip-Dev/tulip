@@ -17,7 +17,7 @@
 #include <config.h>
 #endif
 
-#include "tulip/View.h"
+#include "tulip/AbstractView.h"
 
 #include <QtGui/QMainWindow>
 
@@ -47,7 +47,7 @@ namespace tlp {
     View* create(const std::string &name,QWidget *parent);
   };
 
-  class TLP_QT_SIMPLE_SCOPE GlMainView : public View, public GlSceneObserver {
+  class TLP_QT_SIMPLE_SCOPE GlMainView : public AbstractView, public GlSceneObserver {
 
     Q_OBJECT;
   
@@ -65,9 +65,6 @@ namespace tlp {
     Iterator<Interactor *> *installInteractor(const std::string &);
 
     int getEditMenuFlag() {return EDITMENU_ALL;}
-
-    bool doProgressUpdate() {return true;}
-    void progressUpdate();
 
     void specificEventFilter(QObject *object,QEvent *event);
     void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
@@ -114,7 +111,8 @@ namespace tlp {
     void hideOverview(bool);	     
 
   public slots:
-    void redrawView();
+    void draw();
+    void reinitAndDraw();
 
     void changeGraph(Graph *);
 

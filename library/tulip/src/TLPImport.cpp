@@ -1,18 +1,9 @@
-//-*-c++-*-
-/**
- Author: David Auber
- Email : auber@labri.fr
- Last modification : 20/08/2001
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
- (at your option) any later version.
-*/
 #include <fstream>
 #include <string>
 #include <errno.h>
 #include <locale.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #if (__GNUC__ < 3)
 #include <hash_map>
@@ -51,6 +42,7 @@
 #define FLOAT "float"
 #define STRING "string"
 #define BOOL "bool"
+#define DATASET "DataSet"
 #define NODESVALUE "node"
 #define EDGESVALUE "edge"
 #define DEFAULTVALUE "default"
@@ -60,6 +52,7 @@
 #define PLUGIN "plugin"
 #define ATTRIBUTES "attributes"
 #define SCENE "scene"
+#define VIEWS "views"
 
 using namespace std;
 using namespace tlp;
@@ -346,18 +339,27 @@ struct TLPClusterEdgeBuilder:public TLPFalse {
 struct TLPDataSetBuilder: public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   DataSet dataSet;
+  DataSet *currentDataSet;
   char* dataSetName;
+  string dataSetNameStr;
   
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder){
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet){
     dataSetName = (char *) 0;
   }
-  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder){
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet){
     dataSetName = name;
     graphBuilder->dataSet->get(dataSetName, dataSet);
+  }
+  TLPDataSetBuilder(TLPGraphBuilder *graphBuilder,DataSet *currentDataSet):graphBuilder(graphBuilder),currentDataSet(currentDataSet){
   }
   virtual ~TLPDataSetBuilder(){
   }
   bool addStruct(const string& structName, TLPBuilder*&newBuilder);
+  bool addString(const string &str) {
+    dataSetName = (char *) 0;
+    dataSetNameStr = str;
+    return true;
+  }
   bool close(){
     if (dataSetName) {
       // handle old displaying properties
@@ -395,6 +397,14 @@ struct TLPDataSetBuilder: public TLPFalse {
       if (dataSet.get<unsigned int>("_FontsType", ui)) 
 	dataSet.set("fontType", ui);
       graphBuilder->dataSet->set<DataSet>(dataSetName, dataSet);
+    }
+    if(dataSetNameStr!="") {
+      currentDataSet->set<DataSet>(dataSetNameStr.c_str(), dataSet);
+      Iterator< std::pair<std::string, DataType*> > *it=dataSet.getValues();
+      while(it->hasNext()) {
+	pair<string, DataType*> p;
+	p = it->next();
+      }
     }
     return true;
   }
@@ -449,7 +459,7 @@ struct TLPDataBuilder : public TLPFalse
   TLPDataBuilder(TLPDataSetBuilder *dataSetBuilder, const string& type): dataSetBuilder(dataSetBuilder),
 											     type(type), prop(""),
 											     token(0) {
-    if (dataSetBuilder->dataSetName)
+    if (dataSetBuilder->dataSetName || dataSetBuilder->dataSetNameStr!="")
       dataSet = &(dataSetBuilder->dataSet);
     else
       dataSet = &(dataSetBuilder->graphBuilder->_graph->getAttributes());
@@ -669,6 +679,8 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
     newBuilder=new TLPDataSetBuilder(this);
   } else if (structName==SCENE) {
     newBuilder=new TLPSceneBuilder(this);
+  } else if (structName==VIEWS) {
+    newBuilder=new TLPDataSetBuilder(this, VIEWS);
   }
   else
     newBuilder=new TLPFileInfoBuilder(this, structName);
@@ -680,8 +692,9 @@ bool TLPDataSetBuilder::addStruct(const string& structName,TLPBuilder*&newBuilde
       structName==INT || structName==UINT || structName==FLOAT ||
       structName==DOUBLE || structName==STRING) {
     newBuilder= new TLPDataBuilder(this, structName);
-  }
-  else
+  }else if(structName==DATASET) {
+    newBuilder = new TLPDataSetBuilder(this->graphBuilder,&this->dataSet);
+  }else
     newBuilder= new TLPTrue();
   return true;
 }

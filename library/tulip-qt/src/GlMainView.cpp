@@ -35,9 +35,9 @@ namespace tlp {
 
   //==================================================
   GlMainView::GlMainView(const string &pluginName,QWidget *parent, const char *name):
-    View(pluginName,parent) {
+    AbstractView(pluginName,parent) {
 
-    mainWidget=new GlMainWidget(this,"mainWidget");
+    mainWidget=new GlMainWidget(this,"mainWidget",this);
 
     setCentralWidget(mainWidget);
 
@@ -57,7 +57,7 @@ namespace tlp {
     
     //View Menu
     viewMenu=new QMenu("View");
-    viewMenu->addAction("&Redraw View", this, SLOT(redrawView()), tr("Ctrl+Shift+R"));
+    viewMenu->addAction("&Redraw View", this, SLOT(draw()), tr("Ctrl+Shift+R"));
     viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
     viewMenu->addAction("&New 3D View", this, SLOT(new3DView()), tr("Ctrl+Shift+N"));
     //Dialogs Menu
@@ -122,9 +122,8 @@ namespace tlp {
     }
     mainWidget->setData(graph,data);
     overviewWidget->setObservedView(mainWidget);
-    mainWidget->getScene()->centerScene();
     layerWidget->attachMainWidget(mainWidget);
-    redrawView();
+    reinitAndDraw();
   }
   //==================================================
   DataSet GlMainView::getData() {
@@ -189,8 +188,8 @@ namespace tlp {
     interactorsList.push_back(new QAction(QIcon(":/i_bends.png"),"editEdgeBend",this));
   }
   Iterator<Interactor *> *GlMainView::installInteractor(const string &name) {
-    mainWidget->resetInteractors(interactorsMap[name]);
-    return mainWidget->getInteractors();
+    resetInteractors(interactorsMap[name]);
+    return getInteractors();
   }
 
   void GlMainView::specificEventFilter(QObject *object,QEvent *event) {
@@ -318,10 +317,6 @@ namespace tlp {
     Observable::unholdObservers();
   }
   //==================================================
-  void GlMainView::progressUpdate() {
-    centerView();
-    redrawView();
-  }
   void GlMainView::exportImage(QAction* action) {
     string name = action->text().toStdString();
     QString s(QFileDialog::getSaveFileName());
@@ -358,17 +353,21 @@ namespace tlp {
   //==================================================
   // GUI functions
   //==================================================
-  void  GlMainView::redrawView() {
+  void  GlMainView::draw() {
     if (gridOptionsWidget !=0) 
       gridOptionsWidget->validateGrid();
     mainWidget->draw();
     overviewWidget->updateView();
   }
   //==================================================
+  void GlMainView::reinitAndDraw() {
+    centerView();
+  }
+  //==================================================
   void GlMainView::centerView() {
     mainWidget->getScene()->centerScene();
     overviewWidget->setObservedView(mainWidget);
-    redrawView();
+    draw();
   }
   //==================================================
   void GlMainView::hideOverview(bool hide) {

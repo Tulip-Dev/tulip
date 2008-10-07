@@ -30,7 +30,7 @@ namespace tlp {
     virtual ~Interactor() {}
     /// an interactor may do some drawing feedback on the GlMainWidget it interacts with
     virtual bool compute(GlMainWidget *glMainWidget) { return false; }
-    virtual bool draw(GlMainWidget *){ return false; }
+    virtual bool draw(GlMainWidget *glMainWidget){ return false; }
     virtual Interactor *clone() = 0;
     ID getID() { return id; }
     void setID(ID i) { id = i; }

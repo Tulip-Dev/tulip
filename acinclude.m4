@@ -489,7 +489,7 @@ fi
 dnl we add QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
 QT_CPPFLAGS="$QT_CPPFLAGS -DQT_NO_DEBUG"
 
-qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt4/lib /usr/local/lib/qt/lib /usr/lib/ /usr/local/lib/"
+qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt4/lib /usr/local/lib/qt/lib /usr/lib/ /usr/lib64 /usr/local/lib/"
 test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib ${QTDIR} $qt_libdirs"
 if test ! "$ac_qt_libraries" = "NO"; then
   qt_libdirs="$ac_qt_libraries $qt_libdirs"
@@ -715,7 +715,13 @@ dnl set QtAssistant exe name
        QT_ASSISTANT="assistant_adp"
      fi
    fi
+   if test -d ${QTDIR}/bin/${QT_ASSISTANT}.app; then
+     QT_ASSISTANT_DIR=${QTDIR}/bin
+   else
+     QT_ASSISTANT_DIR=/Developer/Applications/Qt
+   fi
    AC_SUBST(QT_ASSISTANT)
+   AC_SUBST(QT_ASSISTANT_DIR)
 ])
 
 AC_DEFUN([AC_PATH_MINGW],

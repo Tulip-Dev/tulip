@@ -19,6 +19,7 @@
 #include <tulip/GlBox.h>
 #include <tulip/GlPolygon.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/AbstractView.h>
 //#include <tulip/Qt3ForTulip.h>
 
 #include <QtCore/QEvent>
@@ -36,8 +37,8 @@ using namespace std;
 
 namespace tlp {
 
-  ParallelCoordinatesWidget::ParallelCoordinatesWidget(QWidget *parent) : GlMainWidget(parent), viewLayer(NULL), 
-									  parallelCoordsView(NULL),vcd(NULL)  {
+  ParallelCoordinatesWidget::ParallelCoordinatesWidget(View *parent) : GlMainWidget(parent), viewLayer(NULL), 
+									  parallelCoordsView(NULL),vcd(NULL),view(parent)  {
   
   glGraphComposite = new GlGraphComposite(tlp::newGraph());
   GlGraphRenderingParameters param = glGraphComposite->getRenderingParameters();
@@ -255,7 +256,7 @@ bool ParallelCoordinatesWidget::eventFilter(QObject *obj, QEvent *e) {
   if (obj == this && graphProxy != NULL &&
       (e->type() == QEvent::MouseButtonRelease)) {
     
-    popInteractor();
+    ((AbstractView*)view)->popInteractor();
     
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button()==Qt::RightButton) {
@@ -322,7 +323,7 @@ bool ParallelCoordinatesWidget::eventFilter(QObject *obj, QEvent *e) {
 	  
 	  Observable::unholdObservers();*/
 	  
-	  pushInteractor(navigator);
+	  ((AbstractView*)view)->pushInteractor(navigator);
 
 	  return true;
 	}

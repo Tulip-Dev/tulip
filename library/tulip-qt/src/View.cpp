@@ -14,7 +14,7 @@ namespace tlp {
 
   TemplateFactory<ViewCreatorFactory,ViewCreator, ViewCreatorContext *> *ViewCreatorFactory::factory;  
 
-  View::View(const std::string &pluginName,QWidget *parent) :pluginName(pluginName),QWidget(parent) {
+  View::View(const std::string &pluginName,QWidget *parent) :pluginName(pluginName),QWidget(parent),centralWidget(NULL) {
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(0);
     gridLayout->setMargin(0);
@@ -36,23 +36,7 @@ namespace tlp {
   void View::setCentralWidget(QWidget *widget) {
     widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     mainLayout->addWidget(widget);
-  }
-
-  bool View::eventFilter(QObject *object, QEvent *event) {
-    specificEventFilter(object,event);
-
-    if(event->type() == QEvent::MouseButtonPress) {
-      QMouseEvent *me = (QMouseEvent *) event;
-      if(me->button() ==Qt::RightButton) {
-	QMenu contextMenu(this);
-	buildContextMenu(object,me,&contextMenu);
-	if(!contextMenu.actions().isEmpty()) {
-	  QAction* menuAction=contextMenu.exec(me->globalPos());
-	  if(menuAction)
-	    computeContextMenuAction(menuAction);
-	}
-      }
-    }
+    centralWidget=widget;
   }
 
 }

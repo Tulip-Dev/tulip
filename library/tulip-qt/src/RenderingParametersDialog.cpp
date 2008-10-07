@@ -66,7 +66,7 @@ namespace tlp {
     param.setLabelsBorder(density->value());
     
     mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-    mainView->redrawView();
+    mainView->draw();
   }
   
   void RenderingParametersDialog::backColor() {

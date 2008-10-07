@@ -489,7 +489,11 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   DataSet views;
   QWidgetList widgetList=workspace->windowList();
   for(int i=0;i<widgetList.size();++i) {
-    views.set<DataSet>(((View*)(widgetList[i]))->getPluginName(),((View*)(widgetList[i]))->getData());
+    DataSet tmp;
+    stringstream str;
+    str << "view" << i ;
+    tmp.set<DataSet>(((View*)(widgetList[i]))->getPluginName(),((View*)(widgetList[i]))->getData());
+    views.set<DataSet>(str.str(),tmp);
   }
   dataSet.set<DataSet>("views",views);
   
@@ -569,7 +573,7 @@ void viewGl::redrawViews() {
   
   QList<QWidget *> widgetList=workspace->windowList();
   for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
-    ((View*)(*it))->redrawView();
+    ((View*)(*it))->draw();
   }
   
   Observable::unholdObservers();
@@ -713,7 +717,9 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       while(it->hasNext()) {
 	pair<string, DataType*> p;
 	p = it->next();
-	createView(p.first,currentGraph,*(DataSet*)p.second->value);
+	Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
+	pair<string, DataType*> v=it2->next();
+	createView(v.first,currentGraph,*(DataSet*)v.second->value);
       }
     }else{
       // Tlp file with scene system
@@ -1564,11 +1570,8 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   /*overviewWidget->setObservedView(0);*/
   GlGraphRenderingParameters param;
   QtProgress *myProgress;
-  if(currentView->doProgressUpdate()) {
-    myProgress=new QtProgress(((QWidget*)this), name,redraw ? currentView : 0);
-  }else{
-    myProgress=new QtProgress(((QWidget*)this), name, 0);
-  }
+  myProgress=new QtProgress(((QWidget*)this), name,redraw ? currentView : 0);
+ 
   string erreurMsg;
   bool   resultBool=true;  
   DataSet *dataSet =0;

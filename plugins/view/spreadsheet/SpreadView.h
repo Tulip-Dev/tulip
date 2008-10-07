@@ -27,7 +27,7 @@
 
 #include <tulipconf.h>
 
-#include <tulip/View.h>
+#include <tulip/AbstractView.h>
 
 #include "SpreadWidget.h"
 
@@ -40,7 +40,7 @@ namespace tlp {
     virtual View* create(const std::string &pluginName,QWidget *parent);
   };
 
-  class TLP_QT_SCOPE SpreadView : public View
+  class TLP_QT_SCOPE SpreadView : public AbstractView
   {
     Q_OBJECT
       
@@ -53,12 +53,15 @@ namespace tlp {
     DataSet getData();
     Graph *getGraph();
 
-    void redrawView();
-
   protected :
     
     SpreadWidget *mainWidget;
     
+  public slots :
+
+    void draw();
+    void reinitAndDraw();
+
   };
 
 }

@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <ext/hash_map>
+#include <string.h>
 #include <dotImportCLUT.h>
 
 using namespace std;
