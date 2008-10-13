@@ -48,68 +48,31 @@ namespace tlp {
     GlMainView(const std::string &pluginName,QWidget *parent=NULL, const char *name=NULL);
     ~GlMainView();
 
-    void setData(Graph *graph,DataSet dataSet);
-    void getData(Graph **graph,DataSet *dataSet);
     Graph *getGraph();
     GlMainWidget *getGlMainWidget();
-
-    void constructInteractorsMap();
-    void getInteractorsActionList(std::list<QAction*> &);
-    void installInteractor(QAction *);
-
-    void specificEventFilter(QObject *object,QEvent *event);
-    void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
-    void computeContextMenuAction(QAction *action);
 
   protected :
 
     // GlSceneObserver interface
-    void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
-    void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+    virtual void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*) {}
+    virtual void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*) {}
 
     GlMainWidget *mainWidget;
-    GridOptionsWidget *gridOptionsWidget;
-
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
     QFrame *overviewFrame;
-    QMenu *viewMenu;
-    QMenu *dialogMenu;
-    QMenu *optionsMenu;
-    QMenu *exportImageMenu;
-    QAction *actionTooltips;
-    QAction *actionsGridOptions;
 
-    QAction *renderingParametersDialogAction;
-    RenderingParametersDialog *renderingParametersDialog;
-    LayerManagerWidget *layerWidget;
-
-    QAction* overviewAction;
-    QAction* selectAction;
-    QAction* deleteAction;
-    QAction* goAction;	
-    QAction* ungroupAction;
-    QAction* propAction;
-    bool isNode;
-    int itemId;
-			 
+    QAction* overviewAction;		 
 
   protected slots:
     void exportImage(QAction*);
-    void centerView();
-    void showDialog(QAction*);
-    void gridOptions();
     void hideOverview(bool);	     
 
   public slots:
     void draw();
     void refresh();
-    void init();
 
     void setGraph(Graph *graph);
-
-    /*signals:
-      void showElementPropertiesSignal(unsigned int eltId, bool isNode);*/
 
   };
 
