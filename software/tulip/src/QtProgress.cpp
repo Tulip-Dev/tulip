@@ -31,7 +31,7 @@ void QtProgress::progress_handler(int i,int j) {
   if (firstCall) show();
   firstCall=false;
   if (view!=0 && preview->isChecked()) {
-    view->reinitAndDraw();
+    view->init();
   }
 }
 //=====================================

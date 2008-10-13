@@ -123,7 +123,7 @@ namespace tlp {
     mainWidget->setData(graph,data);
     overviewWidget->setObservedView(mainWidget);
     layerWidget->attachMainWidget(mainWidget);
-    reinitAndDraw();
+    init();
   }
   //==================================================
   void GlMainView::getData(Graph **graph,DataSet *dataSet) {
@@ -187,9 +187,8 @@ namespace tlp {
     interactorsList.push_back(new QAction(QIcon(":/i_addedge.png"),"addEdge",this));
     interactorsList.push_back(new QAction(QIcon(":/i_bends.png"),"editEdgeBend",this));
   }
-  Iterator<Interactor *> *GlMainView::installInteractor(const string &name) {
-    resetInteractors(interactorsMap[name]);
-    return getInteractors();
+  void GlMainView::installInteractor(QAction *action) {
+    resetInteractors(interactorsMap[action->text().toStdString()]);
   }
 
   void GlMainView::specificEventFilter(QObject *object,QEvent *event) {
@@ -293,7 +292,7 @@ namespace tlp {
       else  {
 	if (action == goAction) { // Go inside
 	  GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-	  changeGraph(meta->getNodeValue(tmpNode));
+	  setGraph(meta->getNodeValue(tmpNode));
 	}
 	else  {
 	  if (action == ungroupAction) { // Ungroup
@@ -360,7 +359,11 @@ namespace tlp {
     overviewWidget->updateView();
   }
   //==================================================
-  void GlMainView::reinitAndDraw() {
+  void GlMainView::refresh() {
+    draw();
+  }
+  //==================================================
+  void GlMainView::init() {
     centerView();
   }
   //==================================================

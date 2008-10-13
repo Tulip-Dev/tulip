@@ -44,7 +44,7 @@ namespace tlp {
     Graph *getGraph();
 
     void getInteractorsActionList(std::list<QAction*> &interactorsList);
-    Iterator<Interactor *> *installInteractor(const std::string &);
+    void installInteractor(QAction *);
     void constructInteractorsMap();
 
     void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);			  
@@ -52,7 +52,8 @@ namespace tlp {
   public slots:
     void showDialog(QAction*);
     void draw();
-    void reinitAndDraw();
+    void refresh();
+    void init();
     void setGraph(Graph *graph);
 
   protected :

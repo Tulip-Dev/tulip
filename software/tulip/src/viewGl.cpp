@@ -379,37 +379,9 @@ void viewGl::installEditMenu(View *view) {
   bool activate;
   QList <QAction *> actions = editMenu->actions();
 
-  int editMenuFlag = view->getEditMenuFlag();
-
   for(int i=0;i<actions.size();i++) {
     if(!actions.at(i)->isSeparator()) {
-      
-      string actionName=actions.at(i)->text().toStdString();
-      if(actionName=="&Cut")
-	activate=(editMenuFlag & EDITMENU_CUT);
-      else if(actionName=="C&opy")
-	activate=(editMenuFlag & EDITMENU_COPY);
-      else if(actionName=="&Paste") 
-	activate=(editMenuFlag & EDITMENU_PASTE);
-      else if(actionName=="&Find...")
-	activate=(editMenuFlag & EDITMENU_FIND);
-      else if(actionName=="Select All")
-	activate=(editMenuFlag & EDITMENU_SELECTALL);
-      else if(actionName=="Delete selection")
-	activate=(editMenuFlag & EDITMENU_DELSELECTION);
-      else if(actionName=="Deselect All")
-	activate=(editMenuFlag & EDITMENU_DESELECTALL);
-      else if(actionName=="Invert selection")
-	activate=(editMenuFlag & EDITMENU_INVERTSELECTION);
-      else if(actionName=="Create group")
-	activate=(editMenuFlag & EDITMENU_CREATEGROUP);
-      else if(actionName=="Create subgraph")
-	activate=(editMenuFlag & EDITMENU_CREATESUBGRAPH);
-      else{
-	activate=false;
-      }
-
-      actions.at(i)->setEnabled(activate);
+      actions.at(i)->setEnabled(true);
     }
   }
 }
@@ -1131,11 +1103,7 @@ void viewGl::changeInteractor(QAction* action){
     }
     action->setCheckable(true);
     action->setChecked(true);
-    Iterator<Interactor *> *interactors=currentView->installInteractor(action->text().toStdString());
-    while(interactors->hasNext()) {
-      Interactor *interactor=interactors->next();
-      interactor->setView(currentView);
-    }
+    currentView->installInteractor(action);
   }
 }
 //==============================================================

@@ -11,19 +11,6 @@
 #include <tulip/Vector.h>
 #include "GWInteractor.h"
 
-#define EDITMENU_CLEAR           0x0000
-#define EDITMENU_CUT             0x0001
-#define EDITMENU_COPY            0x0002
-#define EDITMENU_PASTE           0x0004
-#define EDITMENU_FIND            0x0008
-#define EDITMENU_SELECTALL       0x0010
-#define EDITMENU_DELSELECTION    0x0020
-#define EDITMENU_DESELECTALL     0x0040
-#define EDITMENU_INVERTSELECTION 0x0080
-#define EDITMENU_CREATEGROUP     0x0100
-#define EDITMENU_CREATESUBGRAPH  0x0200
-#define EDITMENU_ALL             0xffff
-
 class QMenuBar;
 class QVBoxLayout;
 
@@ -45,35 +32,20 @@ namespace tlp {
     std::string getPluginName() {return pluginName;}
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
     virtual void getData(Graph **graph,DataSet *dataSet) = 0;
-    virtual void setGraph(Graph *graph) = 0;
     virtual Graph *getGraph() = 0;
-    virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
-    virtual Iterator<Interactor *> *installInteractor(const std::string &) {return NULL;}
-
-    //edit menu
-    virtual int getEditMenuFlag() {return EDITMENU_CLEAR;} 
-
-  protected:
-
-    virtual void constructInteractorsMap() {}
-    void setCentralWidget(QWidget *widget);
-
-    QVBoxLayout *mainLayout;
-    QWidget *centralWidget;
-    std::map<std::string,std::vector<Interactor *> > interactorsMap;
-    
+    virtual void getInteractorsActionList(std::list<QAction*> &interactorsList) = 0;
+    virtual void installInteractor(QAction *) = 0;    
 
   public slots:
 
     void showElementProperties(unsigned int eltId, bool isNode) {
       emit showElementPropertiesSignal(eltId, isNode);
     }
-    virtual void changeGraph(Graph *) {};
+    virtual void setGraph(Graph *graph) = 0;
 
     virtual void draw() = 0;
-    virtual void reinitAndDraw() = 0;
-
-    virtual bool eventFilter(QObject *object, QEvent *event) = 0;
+    virtual void refresh() = 0;
+    virtual void init() = 0;
 
   signals:
     void showElementPropertiesSignal(unsigned int eltId, bool isNode);

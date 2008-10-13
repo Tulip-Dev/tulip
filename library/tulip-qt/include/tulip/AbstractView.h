@@ -40,8 +40,15 @@ namespace tlp {
     virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
     virtual void computeContextMenuAction(QAction *action) {}
 
+    virtual void constructInteractorsMap() {}
+    void setCentralWidget(QWidget *widget);
+
     tlp::Interactor::ID _id;
     std::vector<tlp::Interactor *> _interactors;
+    std::map<std::string,std::vector<Interactor *> > interactorsMap;
+
+    QVBoxLayout *mainLayout;
+    QWidget *centralWidget;
 
   public slots:
 

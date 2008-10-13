@@ -62,9 +62,7 @@ namespace tlp {
 
     void constructInteractorsMap();
     void getInteractorsActionList(std::list<QAction*> &);
-    Iterator<Interactor *> *installInteractor(const std::string &);
-
-    int getEditMenuFlag() {return EDITMENU_ALL;}
+    void installInteractor(QAction *);
 
     void specificEventFilter(QObject *object,QEvent *event);
     void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
@@ -112,7 +110,8 @@ namespace tlp {
 
   public slots:
     void draw();
-    void reinitAndDraw();
+    void refresh();
+    void init();
 
     void setGraph(Graph *graph);
 

@@ -42,8 +42,12 @@ namespace tlp {
   void SpreadView::draw() {
     mainWidget->redrawView();
   }
+
+  void SpreadView::refresh() {
+    draw();
+  }
   
-  void SpreadView::reinitAndDraw() {
+  void SpreadView::init() {
     draw();
   }
 

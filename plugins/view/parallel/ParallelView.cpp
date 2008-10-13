@@ -65,8 +65,12 @@ namespace tlp {
     mainWidget->redrawView();
   }
 
-  void ParallelView::reinitAndDraw() {
-    mainWidget->redrawView();
+  void ParallelView::refresh() {
+    draw();
+  }
+
+  void ParallelView::init() {
+    draw();
   }
 
   //==================================================
@@ -88,9 +92,8 @@ namespace tlp {
     interactorsList.push_back(new QAction(QIcon(":/i_navigation.png"),"graphNavigate",this));
     interactorsList.push_back(new QAction(QIcon(":/i_zoom.png"),"zoomBox",this));
   }
-  Iterator<Interactor *> *ParallelView::installInteractor(const string &name) {
-    resetInteractors(interactorsMap[name]);
-    return getInteractors();
+  void ParallelView::installInteractor(QAction *action) {
+    resetInteractors(interactorsMap[action->text().toStdString()]);
   }
 
   void ParallelView::showDialog(QAction *action) {

@@ -53,6 +53,10 @@ namespace tlp {
     void getData(Graph **graph,DataSet *dataSet);
     Graph *getGraph();
 
+    void getInteractorsActionList(std::list<QAction*> &interactorsList) {}
+    void installInteractor(QAction*) {}
+
+
   protected :
     
     SpreadWidget *mainWidget;
@@ -60,7 +64,8 @@ namespace tlp {
   public slots :
 
     void draw();
-    void reinitAndDraw();
+    void refresh();
+    void init();
     void setGraph(Graph *graph);
 
   };
