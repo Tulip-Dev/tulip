@@ -36,7 +36,7 @@ namespace tlp {
   class GlLayer;*/  
   class LayerManagerWidget;
   class View;
-  class GlMainView;
+  class NodeLinkDiagramComponent;
   class SGHierarchyWidget;
   class PropertyDialog;
   class ElementPropertiesWidget;
@@ -202,7 +202,7 @@ private:
   int alreadyTreated(std::set<unsigned int>, tlp::Graph *);
   unsigned int mouseClicX,mouseClicY;
   tlp::Morphing *morph;
-  tlp::GlMainView* initMainView(std::string *in=NULL);
+  tlp::NodeLinkDiagramComponent* initMainView(std::string *in=NULL);
   void installInteractors(tlp::View *view);
   void installEditMenu(tlp::View *view);
 

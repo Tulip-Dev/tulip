@@ -75,7 +75,7 @@
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/GraphView.h>
-#include <tulip/GlMainView.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/hash_string.h>
 #include <tulip/TabWidget.h>
 
@@ -386,12 +386,12 @@ void viewGl::installEditMenu(View *view) {
   }
 }
 //**********************************************************************
-GlMainView* viewGl::initMainView(string *in) {
+NodeLinkDiagramComponent* viewGl::initMainView(string *in) {
   workspace->closeAllWindows();
 
-  View* newView=createView("MainView",currentGraph,DataSet());
+  View* newView=createView("NodeLinkDiagramComponent",currentGraph,DataSet());
   
-  return (GlMainView*)newView;
+  return (NodeLinkDiagramComponent*)newView;
   
 }
 //==================================================
@@ -708,7 +708,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	initMainView(&sceneData);
       } else {
 	// Tlp file with old system
-	GlMainView *mainView=initMainView();
+	NodeLinkDiagramComponent *mainView=initMainView();
 	
 	DataSet displaying;
 	Color color;
@@ -1556,7 +1556,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
 
   if (resultBool) {
-    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+    /*if (typeid(PROPERTY) == typeid(LayoutProperty)) {
       if(currentView->getPluginName()=="MainView") {
 	GlMainWidget *glWidget=((GlMainView*)currentView)->getGlMainWidget();
 	param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -1564,7 +1564,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 	glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
       }
-    }
+      }*/
 
     PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
     resultBool = graph->computeProperty(name, dest, erreurMsg, myProgress, dataSet);
@@ -1581,7 +1581,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	resultBool=false;
       };
     graph->delLocalProperty(name);
-    if (typeid(PROPERTY) == typeid(LayoutProperty)) {
+    /*if (typeid(PROPERTY) == typeid(LayoutProperty)) {
       if(currentView->getPluginName()=="MainView") {
 	GlMainWidget *glWidget=((GlMainView*)currentView)->getGlMainWidget();
 	param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -1590,7 +1590,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 	glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
       }
-    }
+      }*/
     //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
   if (dataSet!=0) delete dataSet;

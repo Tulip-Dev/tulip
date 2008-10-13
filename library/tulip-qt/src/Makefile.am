@@ -45,6 +45,7 @@ BUILT_SOURCES = \
 	moc_TulipTableWidget.cpp \
 	moc_GlMainWidget.cpp \
 	moc_GlMainView.cpp \
+	moc_NodeLinkDiagramComponent.cpp \
 	moc_PropertyWidget.cpp \
 	moc_PropertyDialog.cpp \
 	moc_CopyPropertyDialog.cpp \
@@ -73,6 +74,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	TulipTableWidget.cpp \
 	GlMainWidget.cpp \
 	GlMainView.cpp \
+	NodeLinkDiagramComponent.cpp \
 	PropertyDialog.cpp \
 	CopyPropertyDialog.cpp \
 	PropertyWidget.cpp \

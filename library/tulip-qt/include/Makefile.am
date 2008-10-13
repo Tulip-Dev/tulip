@@ -8,6 +8,7 @@ nobase_include_HEADERS = \
 	tulip/RenderingParametersDialog.h \
 	tulip/GridOptionsWidget.h \
 	tulip/GlMainView.h \	
+	tulip/NodeLinkDiagramComponent.h \
 	tulip/GWInteractor.h \
 	tulip/MouseSelector.h \
 	tulip/MouseBoxZoomer.h\

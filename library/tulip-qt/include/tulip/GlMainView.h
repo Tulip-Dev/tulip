@@ -40,13 +40,6 @@ namespace tlp {
 #endif
   class GridOptionsWidget;
 
-  class TLP_QT_SIMPLE_SCOPE GlMainViewCreator : public ViewCreator {
-
-  public :
-  
-    View* create(const std::string &name,QWidget *parent);
-  };
-
   class TLP_QT_SIMPLE_SCOPE GlMainView : public AbstractView, public GlSceneObserver {
 
     Q_OBJECT;

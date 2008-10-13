@@ -27,12 +27,6 @@ using namespace std;
 
 namespace tlp {
 
-  VIEWPLUGIN(GlMainViewCreator, "MainView", "Tulip Team", "16/04/2008", "Main view", "1.0", 0);  
-
-  View* GlMainViewCreator::create(const string &pluginName,QWidget *parent){
-    return new GlMainView(pluginName,parent);
-  }
-
   //==================================================
   GlMainView::GlMainView(const string &pluginName,QWidget *parent, const char *name):
     AbstractView(pluginName,parent) {
