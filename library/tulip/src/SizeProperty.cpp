@@ -15,10 +15,6 @@ SizeProperty::SizeProperty (Graph *sg):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg) {
 }
 //====================================================================
-void SizeProperty::reset_handler() {
-  resetMinMax();
-}
-//====================================================================
 void SizeProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, Iterator<edge> *itE) {
   Observable::holdObservers();
   while (itN->hasNext()) {

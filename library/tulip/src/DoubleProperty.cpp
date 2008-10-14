@@ -176,20 +176,6 @@ void DoubleProperty::computeMinMaxEdge(Graph *sg) {
   minE[sgi]=minE2;
   maxE[sgi]=maxE2;
 }
-//=============================================================================
-///Poign� permettnet le reset des variables du DoubleProperty par le AbstractProperty
-void DoubleProperty::reset_handler() {
-  minMaxOkNode.clear();
-  minMaxOkEdge.clear();
-}
-//=============================================================================
-///Poign� permettnet le recompute il faut absolument mettre le sgProperties
-///currentMetricProxy � this sinon le r�sultat est impr�visible
-void DoubleProperty::recompute_handler() {
-  //  graph->getPropertyManager()->currentAbstractProperty=this;
-  minMaxOkNode.clear();
-  minMaxOkEdge.clear();
-}
 //=================================================================================
 void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType> &proxyC) {
   DoubleProperty *proxy=(DoubleProperty *)&proxyC;

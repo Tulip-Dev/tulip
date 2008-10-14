@@ -25,10 +25,6 @@ public :
   PropertyInterface* clonePrototype(Graph *, std::string );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
-
-protected:
-  void reset_handler();
-  void recompute_handler();  
 };
 /*\@}*/
 }

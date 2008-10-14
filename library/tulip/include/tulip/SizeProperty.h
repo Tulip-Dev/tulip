@@ -32,7 +32,6 @@ public :
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
 protected:
-  void reset_handler();
   void resetMinMax();
   virtual void setNodeValue_handler(const node n, const SizeType::RealType &);
   virtual void setEdgeValue_handler(const edge e, const SizeType::RealType &);

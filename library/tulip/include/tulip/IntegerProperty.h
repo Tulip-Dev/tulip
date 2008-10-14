@@ -33,8 +33,6 @@ public :
 
 
 protected:
-  void reset_handler();
-  void recompute_handler();
   void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
 
 private:

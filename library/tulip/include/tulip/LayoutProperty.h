@@ -91,8 +91,6 @@ public:
   unsigned int crossingNumber();
 
 protected:
-  void recompute_handler();
-  void reset_handler();
   void clone_handler(AbstractProperty<PointType,LineType> &);
   virtual void setNodeValue_handler(const node n, const PointType::RealType &);
   virtual void setEdgeValue_handler(const edge e, const LineType::RealType &);

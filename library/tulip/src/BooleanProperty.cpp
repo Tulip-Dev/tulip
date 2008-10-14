@@ -15,10 +15,6 @@ BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,Boolea
   //  propertyProxy=this;
 }
 //=================================================================================
-///Poign� permettnet le reset des variables du Metric par le AbstractProperty
-void BooleanProperty::reset_handler() {
-}
-//=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it = 0;

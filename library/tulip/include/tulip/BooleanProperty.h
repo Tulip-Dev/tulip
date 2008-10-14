@@ -28,8 +28,6 @@ public :
   void reverseEdgeDirection();
   Iterator<node> *getNodesEqualTo(const bool val, Graph * = 0);
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph * = 0);
-protected:
-  void reset_handler();
 };
 
 }

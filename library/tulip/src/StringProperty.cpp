@@ -13,14 +13,6 @@ StringProperty::StringProperty (Graph *sg):AbstractProperty<StringType,StringTyp
   //  propertyProxy=this;
 }
   
-void StringProperty::reset_handler() {
-}
-
-//=============================================================================
-void StringProperty::recompute_handler() {
-  //  graph->getPropertyManager()->currentAbstractProperty=this;
-}
-
 //=================================================================================
 PropertyInterface* StringProperty::clonePrototype(Graph * g, std::string n)
 {

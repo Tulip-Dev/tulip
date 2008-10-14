@@ -80,18 +80,6 @@ void IntegerProperty::computeMinMax() {
   delete itE;
   minMaxOk=true;
 }
-//=============================================================================
-///Poign� permettnet le reset des variables du IntegerProperty par le AbstractProperty
-void IntegerProperty::reset_handler() {
-  minMaxOk=false;
-}
-//=============================================================================
-///Poign� permettnet le recompute il faut absolument mettre le sgProperties
-///currentIntProxy � this sinon le r�sultat est impr�visible
-void IntegerProperty::recompute_handler() {
-  //  graph->getPropertyManager()->currentAbstractProperty=this;
-  minMaxOk=false;
-}
 //=================================================================================
 void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {

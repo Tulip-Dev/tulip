@@ -36,8 +36,6 @@ protected:
   virtual void setEdgeValue_handler(const edge e, const DoubleType::RealType &);
   virtual void setAllNodeValue_handler(const DoubleType::RealType &);
   virtual void setAllEdgeValue_handler(const DoubleType::RealType &);
-  void reset_handler();
-  void recompute_handler();
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
 
 private:

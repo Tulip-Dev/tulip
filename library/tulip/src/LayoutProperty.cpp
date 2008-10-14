@@ -284,10 +284,6 @@ void LayoutProperty::computeMinMax(Graph *sg) {
   //  cerr << "LayoutProperty::computeMinMax end" << endl;
 }
 //=================================================================================
-void LayoutProperty::reset_handler() {
-  resetBoundingBox();
-}
-//=================================================================================
 void LayoutProperty::clone_handler(AbstractProperty<PointType,LineType> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
