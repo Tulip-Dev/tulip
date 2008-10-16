@@ -16,7 +16,7 @@ using namespace stdext;
 
 /** \addtogroup layout */
 /*@{*/
-/// GEM3D.h - An implementation of a spring-embedder layout.
+/// An implementation of a spring-embedder layout.
 /** This plugin is an implementation of the GEM-2d layout
  *  algorithm first published as:
  *
@@ -34,7 +34,7 @@ using namespace stdext;
  *  www.frick-consulting.de/publications.html
  *
  *  The core "embedder" part of the algorithm was used in the
- *  implementation of a Java plugin for the CWI "Royere"  tool,
+ *  implementation of a Java plugin for the CWI "Royere" tool,
  *  and then this code was ported to C++ to make the 
  *  implementation given here.
  *
@@ -55,7 +55,7 @@ using namespace stdext;
  *  giving the index (integer) of each node.
  *
  * \note The new version has been reimplemented to manage edge length
- * it merges the 3D stuff and removes the use if integers (new CPU do not
+ * it merges the 3D stuff and removes the use of integers (new CPU do not
  * require it anymore).
  *
  *  \author David Duke, University of Bath, UK: Email: D.Duke@bath.ac.uk
@@ -150,6 +150,7 @@ private:
     unsigned int _nbNodes; //number of nodes in the graph
     bool _useLength; //if we manage edge length
     tlp::DoubleProperty * metric; //metric for edge length
+    unsigned int max_iter; // the max number of iterations
 
 };
 /*@}*/

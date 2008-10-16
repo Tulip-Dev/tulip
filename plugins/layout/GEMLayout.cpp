@@ -30,6 +30,13 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
   HTML_HELP_CLOSE(),
+  // max iterations
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned integer" ) \
+  HTML_HELP_DEF( "default", "0" ) \
+  HTML_HELP_BODY() \
+  "This parameter allows to limit the number of iterations. The default value of 0 corresponds to 10 * nb_nodes * nb_nodes." \
+  HTML_HELP_CLOSE(),
 };
 
 /*
@@ -62,12 +69,13 @@ static const float AROTATIONDEF    = 1.;
 static const float ASHAKEDEF       = 0.3;
 
 
-LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","David Duke","29/09/2006","Alpha","1.0","Force Directed")
+LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","David Duke","16/10/2008","Stable","1.1","Force Directed")
 
 GEMLayout::GEMLayout(const PropertyContext &context) : LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "false");
   addParameter<DoubleProperty>("edge length", paramHelp[1], 0, false);
   addParameter<LayoutProperty>("initial layout", paramHelp[2], 0, false);
+  addParameter<unsigned int>("max iterations", paramHelp[3], 0);
   
   i_maxtemp      = IMAXTEMPDEF;
   a_maxtemp      = AMAXTEMPDEF;
@@ -279,7 +287,6 @@ void GEMLayout::a_round() {
 //============================================================================
 void GEMLayout::arrange() {
   float stop_temperature;
-  unsigned int stop_iteration;
   
   double  maxEdgeLength;
   if (_useLength)
@@ -295,12 +302,11 @@ void GEMLayout::arrange() {
   _rotation         = a_rotation;
   _maxtemp          = a_maxtemp;
   stop_temperature  = a_finaltemp * a_finaltemp * maxEdgeLength * _nbNodes;
-  stop_iteration    = a_maxiter * _nbNodes * _nbNodes;
   Iteration         = 0;
 
-  while (_temperature > stop_temperature && Iteration < stop_iteration) {
+  while (_temperature > stop_temperature && Iteration < max_iter) {
     //    cerr << "t°:"<< _temperature << "/" << stop_temperature << " it:" << Iteration << endl;
-    if (pluginProgress->progress(Iteration, stop_iteration/2)!=TLP_CONTINUE) return;
+    if (pluginProgress->progress(Iteration, max_iter/2)!=TLP_CONTINUE) return;
     if (pluginProgress->isPreviewMode()) updateLayout();
     this->a_round();
   }
@@ -314,10 +320,12 @@ bool GEMLayout::run() {
   bool is3D = false;
   bool initLayout = false;
   _useLength = false;
+  max_iter = 0;
   
   if ( dataSet!=0 ) {
     dataSet->get("3D layout", is3D);
     _useLength = dataSet->get("edge length", metric);
+    dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
   }
 
@@ -326,6 +334,9 @@ bool GEMLayout::run() {
   _nbNodes = graph->numberOfNodes();
   
   layoutResult->setAllEdgeValue(vector<Coord>(0));
+
+  if (max_iter == 0)
+    max_iter = a_maxiter * _nbNodes * _nbNodes;
   
   _particules.resize(_nbNodes);
   /* Max Edge to scale actual edges lentgh to preferres lentgh */     
