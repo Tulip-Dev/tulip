@@ -40,6 +40,7 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
+    glEnable(GL_CULL_FACE);
     GLenum error = glGetError();
     if(GlDisplayListManager::getInst().beginNewDisplayList("selection")) {
       glPushAttrib(GL_ALL_ATTRIB_BITS);
