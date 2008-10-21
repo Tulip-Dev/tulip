@@ -102,32 +102,32 @@ typename tlp::ReturnType<typename Tedge::RealType>::Value tlp::AbstractProperty<
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const node n,const typename Tnode::RealType &v) {
-  setNodeValue_handler(n, v);
+  notifyBeforeSetNodeValue(this, n);
   nodeProperties.set(n.id,v);
-  notifySetNodeValue(this, n);
+  notifyAfterSetNodeValue(this, n);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const edge e,const typename Tedge::RealType &v) {
-  setEdgeValue_handler(e, v);
+  notifyBeforeSetEdgeValue(this, e);
   edgeProperties.set(e.id,v);
-  notifySetEdgeValue(this, e);
+  notifyAfterSetEdgeValue(this, e);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllNodeValue(const typename Tnode::RealType &v) {
-  setAllNodeValue_handler(v);
+  notifyBeforeSetAllNodeValue(this);
   nodeDefaultValue = v;
   nodeProperties.setAll(v);
-  notifySetAllNodeValue(this);
+  notifyAfterSetAllNodeValue(this);
 }
 //============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typename Tedge::RealType &v) {
-  setAllEdgeValue_handler(v);
+  notifyBeforeSetAllEdgeValue(this);
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
-  notifySetAllEdgeValue(this);
+  notifyAfterSetAllEdgeValue(this);
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>

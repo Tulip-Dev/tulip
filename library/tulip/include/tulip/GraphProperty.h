@@ -8,7 +8,6 @@
 
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
-#include "tulip/GraphAlgorithm.h"
 
 namespace tlp {
 
@@ -17,8 +16,7 @@ class GraphAbstract;
 
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,EdgeSetType>, public GraphObserver { 
-  friend class GraphAlgorithm;
+  class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,EdgeSetType>, public GraphObserver, public PropertyObserver { 
   friend class GraphAbstract;
 
 public :
@@ -33,10 +31,14 @@ public :
   bool setEdgeStringValue( const edge e, const std::string & v);
   bool setAllEdgeStringValue(const std::string & v);
 
+  // redefinition of some PropertyObserver methods 
+  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
+  virtual void afterSetNodeValue(PropertyInterface* prop, const node n);
+  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
+  virtual void afterSetAllNodeValue(PropertyInterface* prop);
+
 private:
   MutableContainer<std::set<node> > referencedGraph;
-  void setNodeValue_handler(const node n, const GraphType::RealType &);
-  void setAllNodeValue_handler(const GraphType::RealType &);
   const std::set<edge>& getReferencedEdges(const edge) const;
   
 };

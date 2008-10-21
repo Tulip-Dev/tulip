@@ -18,7 +18,7 @@ class Graph;
 
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, LayoutAlgorithm> {
+  class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, LayoutAlgorithm>, public PropertyObserver {
   friend class LayoutAlgorithm;
 
 public:
@@ -90,12 +90,14 @@ public:
    */
   unsigned int crossingNumber();
 
+  // redefinition of some PropertyObserver methods 
+  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
+  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
+  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
+  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+
 protected:
   void clone_handler(AbstractProperty<PointType,LineType> &);
-  virtual void setNodeValue_handler(const node n, const PointType::RealType &);
-  virtual void setEdgeValue_handler(const edge e, const LineType::RealType &);
-  virtual void setAllNodeValue_handler(const PointType::RealType &);
-  virtual void setAllEdgeValue_handler(const LineType::RealType &);
 
 private:
   stdext::hash_map<unsigned long,Coord> max,min;

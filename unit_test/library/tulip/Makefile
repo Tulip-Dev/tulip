@@ -22,7 +22,7 @@ SRCS=   tuliplibtest.cpp \
 CXXFLAGS =  -g -Wall `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
 #CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
 CXX=g++
-LDFLAGS= `../../../tulip-config --libs` `cppunit-config --libs`
+LDFLAGS= `../../../tulip-config --lib_tulip` `cppunit-config --libs`
 
 OBJS=$(SRCS:.cpp=.o)
 

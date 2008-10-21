@@ -16,7 +16,7 @@ class PropertyContext;
 
 /** \addtogroup properties */ 
 /*\@{*/
-class TLP_SCOPE DoubleProperty:public AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm> { 
+  class TLP_SCOPE DoubleProperty:public AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>, public PropertyObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -31,12 +31,13 @@ public :
   void copy( const edge, const edge, PropertyInterface * );
   void uniformQuantification(unsigned int);
 
-protected:
-  virtual void setNodeValue_handler(const node n, const DoubleType::RealType &);
-  virtual void setEdgeValue_handler(const edge e, const DoubleType::RealType &);
-  virtual void setAllNodeValue_handler(const DoubleType::RealType &);
-  virtual void setAllEdgeValue_handler(const DoubleType::RealType &);
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
+
+  // redefinition of some PropertyObserver methods 
+  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
+  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
+  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
+  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
 
 private:
   stdext::hash_map<unsigned long, double> maxN,minN,maxE,minE;

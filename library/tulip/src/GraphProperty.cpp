@@ -2,7 +2,6 @@
 #include "tulip/GraphProperty.h"
 #include "tulip/PluginContext.h"
 #include "tulip/Observable.h"
-#include "tulip/GraphAlgorithm.h"
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
@@ -12,7 +11,8 @@ using namespace tlp;
 GraphProperty::GraphProperty (Graph *sg) : 
   AbstractProperty<GraphType, EdgeSetType>(sg) {
   setAllNodeValue(0);
-  //setAllEdgeValue(0);
+  // the property observes itself; see beforeSet... methods
+  addPropertyObserver(this);
 }
 //==============================
 GraphProperty::~GraphProperty() {
@@ -28,7 +28,7 @@ GraphProperty::~GraphProperty() {
   notifyDestroy(this);
 }
 //==============================
-void GraphProperty::setAllNodeValue_handler(const GraphType::RealType &sg) {
+void GraphProperty::beforeSetAllNodeValue(PropertyInterface*) {
   //remove all observed graphs
   Iterator<node> *it = graph->getNodes();
   while(it->hasNext()) {
@@ -41,15 +41,18 @@ void GraphProperty::setAllNodeValue_handler(const GraphType::RealType &sg) {
   if (getNodeDefaultValue() != 0) {
     getNodeDefaultValue()->removeObserver(this);
   }
-  if (sg == 0) return;
-  sg->addObserver(this);
+}
+void GraphProperty::afterSetAllNodeValue(PropertyInterface*) {
+  if (getNodeDefaultValue() != 0) {
+    getNodeDefaultValue()->addObserver(this);
+  }
 }
 //==============================
-void GraphProperty::setNodeValue_handler(const node n, const GraphType::RealType &sg) {
+void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   //gestion désabonnement
   Graph * oldGraph = getNodeValue(n); 
-  if (oldGraph != 0) {
+  if (oldGraph != NULL) {
     //gestion du désabonnement
     set<node> &refs = referencedGraph.getReference(oldGraph->getId()); //use of reference in order to prevent cloninf of the set (Dangerous)
     refs.erase(n);
@@ -58,7 +61,11 @@ void GraphProperty::setNodeValue_handler(const node n, const GraphType::RealType
     if (refs.empty())
       referencedGraph.set(oldGraph->getId(), set<node>());
   }
-  if (sg == 0) return;
+}
+void GraphProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
+  Graph* sg = getNodeValue(n);
+  if (sg == NULL)
+    return;
   //Gestion de l'abonnement
   sg->addObserver(this);
   if ( sg != getNodeDefaultValue() ) {

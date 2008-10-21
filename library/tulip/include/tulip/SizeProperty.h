@@ -17,7 +17,8 @@ class PropertyContext;
  * \addtogroup properties
  */ 
 /*@{*/
-class TLP_SCOPE SizeProperty:public AbstractProperty<SizeType,SizeType, SizeAlgorithm> { 
+  class TLP_SCOPE SizeProperty:public AbstractProperty<SizeType,SizeType, SizeAlgorithm>,
+  public PropertyObserver { 
 
   friend class SizeAlgorithm;
 
@@ -31,12 +32,15 @@ public :
   void copy( const edge, const edge, PropertyInterface * );
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
+
+  // redefinition of some PropertyObserver methods 
+  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
+  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
+  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
+  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+
 protected:
   void resetMinMax();
-  virtual void setNodeValue_handler(const node n, const SizeType::RealType &);
-  virtual void setEdgeValue_handler(const edge e, const SizeType::RealType &);
-  virtual void setAllNodeValue_handler( const SizeType::RealType &);
-  virtual void setAllEdgeValue_handler( const SizeType::RealType &);
 
 private:
   stdext::hash_map<unsigned long, Size> max,min;

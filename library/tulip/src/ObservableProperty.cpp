@@ -9,30 +9,56 @@
 using namespace std;
 using namespace tlp;
 
-void ObservableProperty::notifySetNodeValue(PropertyInterface* p,
-					    const node n) {
+void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
+						  const node n) {
   set<PropertyObserver *> copy(observers); //Used to preserve iterators
   for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->setNodeValue(p, n);
+    (*itlObs)->beforeSetNodeValue(p, n);
 }
 
-void ObservableProperty::notifySetEdgeValue(PropertyInterface* p,
+void ObservableProperty::notifyAfterSetNodeValue(PropertyInterface* p,
+						  const node n) {
+  set<PropertyObserver *> copy(observers); //Used to preserve iterators
+  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+    (*itlObs)->afterSetNodeValue(p, n);
+}
+
+void ObservableProperty::notifyBeforeSetEdgeValue(PropertyInterface* p,
 					    const edge e) {
   set<PropertyObserver *> copy(observers); //Used to preserve iterators
   for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->setEdgeValue(p, e);
+    (*itlObs)->beforeSetEdgeValue(p, e);
 }
 
-void ObservableProperty::notifySetAllNodeValue(PropertyInterface* p) {
+void ObservableProperty::notifyAfterSetEdgeValue(PropertyInterface* p,
+					    const edge e) {
   set<PropertyObserver *> copy(observers); //Used to preserve iterators
   for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->setAllNodeValue(p);
+    (*itlObs)->afterSetEdgeValue(p, e);
 }
 
-void ObservableProperty::notifySetAllEdgeValue(PropertyInterface* p) {
+void ObservableProperty::notifyBeforeSetAllNodeValue(PropertyInterface* p) {
   set<PropertyObserver *> copy(observers); //Used to preserve iterators
   for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->setAllEdgeValue(p);
+    (*itlObs)->beforeSetAllNodeValue(p);
+}
+
+void ObservableProperty::notifyAfterSetAllNodeValue(PropertyInterface* p) {
+  set<PropertyObserver *> copy(observers); //Used to preserve iterators
+  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+    (*itlObs)->afterSetAllNodeValue(p);
+}
+
+void ObservableProperty::notifyBeforeSetAllEdgeValue(PropertyInterface* p) {
+  set<PropertyObserver *> copy(observers); //Used to preserve iterators
+  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+    (*itlObs)->beforeSetAllEdgeValue(p);
+}
+
+void ObservableProperty::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
+  set<PropertyObserver *> copy(observers); //Used to preserve iterators
+  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+    (*itlObs)->afterSetAllEdgeValue(p);
 }
 
 void ObservableProperty::notifyDestroy(PropertyInterface* p) {

@@ -13,6 +13,8 @@ using namespace tlp;
 //==============================
 SizeProperty::SizeProperty (Graph *sg):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg) {
+  // the property observes itself; see beforeSet... methods
+  addPropertyObserver(this);
 }
 //====================================================================
 void SizeProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, Iterator<edge> *itE) {
@@ -91,13 +93,21 @@ void SizeProperty::resetMinMax() {
   max.clear();
 }
 //=============================================================================
-void SizeProperty::setNodeValue_handler(const node n, const SizeType::RealType &){resetMinMax();}
+void SizeProperty::beforeSetNodeValue(PropertyInterface*, const node) {
+  resetMinMax();
+}
 //=============================================================================
-void SizeProperty::setEdgeValue_handler(const edge e, const SizeType::RealType &){resetMinMax();}
+void SizeProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+  resetMinMax();
+}
 //=============================================================================
-void SizeProperty::setAllNodeValue_handler(const SizeType::RealType &){resetMinMax();}
+void SizeProperty::beforeSetAllNodeValue(PropertyInterface*) {
+  resetMinMax();
+}
 //=============================================================================
-void SizeProperty::setAllEdgeValue_handler(const SizeType::RealType &){resetMinMax();}
+void SizeProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+  resetMinMax();
+}
 //=============================================================================
 PropertyInterface* SizeProperty::clonePrototype(Graph * g, std::string n) {
   if( !g )

@@ -14,7 +14,8 @@ using namespace tlp;
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *sg):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg),
   minMaxOkNode(false),minMaxOkEdge(false) {
-  //  propertyProxy=this;
+  // the property observes itself; see beforeSet... methods
+  addPropertyObserver(this);
 }
 
 void DoubleProperty::uniformQuantification(unsigned int k) {
@@ -187,19 +188,18 @@ void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType> &prox
   maxE=proxy->maxE;
 }
 //=================================================================================
-void DoubleProperty::setNodeValue_handler(const node n, const DoubleType::RealType &) {
+void DoubleProperty::beforeSetNodeValue(PropertyInterface*, const node) {
   minMaxOkNode.clear();
 }
-void DoubleProperty::setEdgeValue_handler(const edge e, const DoubleType::RealType &) {
+void DoubleProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
   minMaxOkEdge.clear();
 }
-void DoubleProperty::setAllNodeValue_handler(const DoubleType::RealType &) {
+void DoubleProperty::beforeSetAllNodeValue(PropertyInterface*) {
   minMaxOkNode.clear();
 }
-void DoubleProperty::setAllEdgeValue_handler(const DoubleType::RealType &) {
+void DoubleProperty::beforeSetAllEdgeValue(PropertyInterface*) {
   minMaxOkEdge.clear();
 }
-
 //=================================================================================
 PropertyInterface* DoubleProperty::clonePrototype(Graph * g, std::string n) {
   if( !g )

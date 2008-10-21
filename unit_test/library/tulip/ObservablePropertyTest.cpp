@@ -85,20 +85,20 @@ public:
   
   edge getEdge() { return lastEdge; }
 
-  void setNodeValue(PropertyInterface* prop, const node n) {
+  void beforeSetNodeValue(PropertyInterface* prop, const node n) {
     properties.insert(prop);
     lastNode = n;
   }
     
-  virtual void setEdgeValue(PropertyInterface* prop, const edge e ){
+  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e ){
     properties.insert(prop);
     lastEdge = e;
   }
     
-  virtual void setAllNodeValue(PropertyInterface* prop){
+  virtual void beforeSetAllNodeValue(PropertyInterface* prop){
     properties.insert(prop);
   }    
-  virtual void setAllEdgeValue(PropertyInterface* prop){
+  virtual void beforeSetAllEdgeValue(PropertyInterface* prop){
     properties.insert(prop);
   }
   virtual void destroy(PropertyInterface* prop){
@@ -108,6 +108,9 @@ public:
 
 PropertyObserverTest* pObserver;
 
+#define DOUBLE_PROP 2
+#define LAYOUT_PROP 4
+#define SIZE_PROP 5
 //==========================================================
 void ObservablePropertyTest::setUp() {
   graph = tlp::newGraph();
@@ -214,7 +217,16 @@ void ObservablePropertyTest::testAddObserver() {
   CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   for (unsigned int i = 0; i < 7; ++i) {
     CPPUNIT_ASSERT(props[i]->countObservers() == 1);
-    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
+    switch(i) {
+    case DOUBLE_PROP:
+    case LAYOUT_PROP:
+    case SIZE_PROP:
+      // some properties are self-observed
+      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 2);
+      break;
+    default:
+      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
+    }
   }
 }
 //==========================================================
@@ -364,7 +376,16 @@ void ObservablePropertyTest::testRemoveObserver() {
     props[i]->removeObserver(observer);
     props[i]->removePropertyObserver(pObserver);
     CPPUNIT_ASSERT(props[i]->countObservers() == 0);
-    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
+    switch(i) {
+    case DOUBLE_PROP:
+    case LAYOUT_PROP:
+    case SIZE_PROP:
+      // some properties are self-observed
+      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
+      break;
+    default:
+      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
+    }
   }
 // no more notification
   setNodeValue(props[0], "true", true, false, false);

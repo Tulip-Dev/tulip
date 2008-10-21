@@ -13,6 +13,8 @@ inline double sqr(double x){return (x*x);}
 //======================================================
 LayoutProperty::LayoutProperty (Graph *sg):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg) {
   minMaxOk[(unsigned long)graph]=false;
+  // the property observes itself; see beforeSet... methods
+  addPropertyObserver(this);
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
@@ -299,12 +301,18 @@ void LayoutProperty::resetBoundingBox() {
   max.clear();
 }
 //================================================================================
-void LayoutProperty::setNodeValue_handler(const node, const PointType::RealType &) {
+void LayoutProperty::beforeSetNodeValue(PropertyInterface*, const node) {
   resetBoundingBox();
 }
-void LayoutProperty::setEdgeValue_handler(const edge e, const LineType::RealType &) {resetBoundingBox();}
-void LayoutProperty::setAllNodeValue_handler(const PointType::RealType &) {resetBoundingBox();}
-void LayoutProperty::setAllEdgeValue_handler(const LineType::RealType &) {resetBoundingBox();}
+void LayoutProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+  resetBoundingBox();
+}
+void LayoutProperty::beforeSetAllNodeValue(PropertyInterface*) {
+  resetBoundingBox();
+}
+void LayoutProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+  resetBoundingBox();
+}
 //=================================================================================
 double LayoutProperty::averageAngularResolution(Graph *sg) {
   if (sg==0) sg=graph;

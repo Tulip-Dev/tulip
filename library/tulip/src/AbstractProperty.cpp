@@ -26,29 +26,29 @@ PropertyInterface::~PropertyInterface() {
     notifyDestroy(this);
 }
 
-void PropertyInterface::notifySetNodeValue(PropertyInterface* p,
+void PropertyInterface::notifyAfterSetNodeValue(PropertyInterface* p,
 					   const node n) {
   // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifySetNodeValue(p, n);
+  ObservableProperty::notifyAfterSetNodeValue(p, n);
   Observable::notifyObservers();
 }
 
-void PropertyInterface::notifySetEdgeValue(PropertyInterface* p,
+void PropertyInterface::notifyAfterSetEdgeValue(PropertyInterface* p,
 					   const edge e) {
   // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifySetEdgeValue(p, e);
+  ObservableProperty::notifyAfterSetEdgeValue(p, e);
   Observable::notifyObservers();
 }
 
-void PropertyInterface::notifySetAllNodeValue(PropertyInterface* p) {
+void PropertyInterface::notifyAfterSetAllNodeValue(PropertyInterface* p) {
   // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifySetAllNodeValue(p);
+  ObservableProperty::notifyAfterSetAllNodeValue(p);
   Observable::notifyObservers();
 }
 
-void PropertyInterface::notifySetAllEdgeValue(PropertyInterface* p) {
+void PropertyInterface::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
   // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifySetAllEdgeValue(p);
+  ObservableProperty::notifyAfterSetAllEdgeValue(p);
   Observable::notifyObservers();
 }
 

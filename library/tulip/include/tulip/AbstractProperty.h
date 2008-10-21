@@ -59,10 +59,10 @@ public:
 
  protected:
   // redefinitions of ObservableProperty methods
-  void notifySetNodeValue(PropertyInterface*,const node n);
-  void notifySetEdgeValue(PropertyInterface*,const edge e);
-  void notifySetAllNodeValue(PropertyInterface*);
-  void notifySetAllEdgeValue(PropertyInterface*);
+  void notifyAfterSetNodeValue(PropertyInterface*,const node n);
+  void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);
+  void notifyAfterSetAllNodeValue(PropertyInterface*);
+  void notifyAfterSetAllEdgeValue(PropertyInterface*);
   void notifyDestroy(PropertyInterface*);
 };
 
@@ -208,26 +208,6 @@ protected:
   //=================================================================================
   ///Enable to clone part of sub_class
   virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &){};
-  /**
-   * Handler function for inherited AbstractProperty. This function
-   * is called after a setAllNodeValue operation.
-   */
-  virtual void setAllNodeValue_handler(const typename Tnode::RealType &){};
-  /**
-   * Handler function for inherited AbstractProperty. This function
-   * is called after a setAllEdgeValue operation.
-   */
-  virtual void setAllEdgeValue_handler(const typename Tedge::RealType &){};
-  /**
-   * Handler function for inherited AbstractProperty. This function
-   * is called after a setEdgeValue operation.
-   */
-  virtual void setEdgeValue_handler(const edge, const typename Tedge::RealType &){};
-  /**
-   * Handler function for inherited AbstractProperty. This function
-   * is called after a setNodeValue operation.
-   */
-  virtual void setNodeValue_handler(const node, const typename Tnode::RealType &){};
 
 protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;

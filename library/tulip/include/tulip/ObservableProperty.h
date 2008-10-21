@@ -21,10 +21,14 @@ struct PropertyInterface;
 class PropertyObserver {
  public:
   virtual ~PropertyObserver() {}
-  virtual void setNodeValue(PropertyInterface*, const node){}
-  virtual void setEdgeValue(PropertyInterface*, const edge){}
-  virtual void setAllNodeValue(PropertyInterface*){}
-  virtual void setAllEdgeValue(PropertyInterface*){}
+  virtual void beforeSetNodeValue(PropertyInterface*, const node){}
+  virtual void afterSetNodeValue(PropertyInterface*, const node){}
+  virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
+  virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
+  virtual void beforeSetAllNodeValue(PropertyInterface*){}
+  virtual void afterSetAllNodeValue(PropertyInterface*){}
+  virtual void beforeSetAllEdgeValue(PropertyInterface*){}
+  virtual void afterSetAllEdgeValue(PropertyInterface*){}
   virtual void destroy(PropertyInterface*){}
 };
 /*@}*/
@@ -69,10 +73,14 @@ class ObservableProperty {
   void removePropertyObservers();
 
  protected:
-  void notifySetNodeValue(PropertyInterface*,const node n);
-  void notifySetEdgeValue(PropertyInterface*,const edge e);
-  void notifySetAllNodeValue(PropertyInterface*);
-  void notifySetAllEdgeValue(PropertyInterface*);
+  void notifyBeforeSetNodeValue(PropertyInterface*,const node n);
+  void notifyAfterSetNodeValue(PropertyInterface*,const node n);
+  void notifyBeforeSetEdgeValue(PropertyInterface*,const edge e);
+  void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);
+  void notifyBeforeSetAllNodeValue(PropertyInterface*);
+  void notifyAfterSetAllNodeValue(PropertyInterface*);
+  void notifyBeforeSetAllEdgeValue(PropertyInterface*);
+  void notifyAfterSetAllEdgeValue(PropertyInterface*);
   void notifyDestroy(PropertyInterface*);
   mutable std::set<PropertyObserver*> observers;
 };
