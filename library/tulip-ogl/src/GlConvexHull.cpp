@@ -3,7 +3,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
-#include <GL/gl.h>
 #include <tulip/GlTools.h>
 #include "tulip/GlConvexHull.h"
 

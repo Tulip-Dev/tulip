@@ -1,5 +1,3 @@
-#include <GL/gl.h>
-//#include <tulip/GlTools.h>
 #include <tulip/Size.h>
 #include "tulip/Curves.h"
 #include "tulip/GlCurve.h"

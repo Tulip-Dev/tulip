@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-
 #include "tulip/Camera.h"
 #include "tulip/GlEntity.h"
 #include "tulip/GlSceneVisitor.h"

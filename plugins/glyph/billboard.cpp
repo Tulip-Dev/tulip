@@ -1,7 +1,6 @@
 #include <cmath>
 
 #include <string>
-#include <GL/gl.h>
 
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>

@@ -1,7 +1,5 @@
 #include "tulip/GlSphere.h"
 
-#include <GL/gl.h>
-
 #include <tulip/Color.h>
 
 #include "tulip/GlDisplayListManager.h"

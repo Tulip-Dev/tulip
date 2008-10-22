@@ -1,8 +1,6 @@
 #include "tulip/Camera.h"
 
 #include <cmath>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlScene.h"

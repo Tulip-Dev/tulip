@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include <GL/glu.h>
-#include <GL/gl.h>
-
 #include "tulip/GlGraphInputData.h"
 #include "tulip/GlSimpleEntity.h"
 #include "tulip/GlNode.h"

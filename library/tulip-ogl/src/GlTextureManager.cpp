@@ -4,7 +4,13 @@
 
 extern "C" {
 #include <stdio.h>
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #ifdef HAVE_LIBJPEG
 #include <jpeglib.h>
 #endif

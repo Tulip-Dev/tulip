@@ -2,8 +2,6 @@
 #include <string>
 #include <utility>
 #include <algorithm>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <tulip/TulipPlugin.h>
 #include <tulip/Glyph.h>
 #include <tulip/TreeTest.h>

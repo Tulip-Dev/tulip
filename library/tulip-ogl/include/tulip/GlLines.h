@@ -1,7 +1,6 @@
 #ifndef _TLP_GLLINES
 #define _TLP_GLLINES
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include <GL/gl.h>
 #include <vector>
 
 #include <tulip/Size.h>

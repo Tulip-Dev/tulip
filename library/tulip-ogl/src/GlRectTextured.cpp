@@ -1,6 +1,5 @@
 #include "tulip/GlRectTextured.h"
 
-#include <GL/gl.h>
 #include <limits>
 
 #include <tulip/Color.h>

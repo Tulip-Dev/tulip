@@ -20,8 +20,11 @@
 #include <tulip/tulipconf.h>
 
 #include <cassert>
-#include <GL/gl.h>
+#if defined(__APPLE__)
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 #include <string>
 
 namespace tlp {

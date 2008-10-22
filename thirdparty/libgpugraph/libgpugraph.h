@@ -11,7 +11,11 @@
 #include <iostream>
 #include <string>
 #include <GL/glew.h>
+#if defined(__APPLE__) 
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #ifdef _WIN32
 # 	ifdef DLL_TULIP_GL
