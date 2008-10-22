@@ -28,7 +28,6 @@
 #include "tulip/LayoutAlgorithm.h"
 #include "tulip/StringAlgorithm.h"
 #include "tulip/BooleanAlgorithm.h"
-#include "tulip/GraphAlgorithm.h"
 #include "tulip/Algorithm.h"
 #include "tulip/ImportModule.h"
 #include "tulip/ExportModule.h"

@@ -2,7 +2,6 @@
 #include "tulip/GraphProperty.h"
 #include "tulip/PluginContext.h"
 #include "tulip/Observable.h"
-#include "tulip/GraphAlgorithm.h"
 #include "tulip/AbstractProperty.h"
 
 using namespace std;
