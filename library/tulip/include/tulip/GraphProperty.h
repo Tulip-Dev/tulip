@@ -8,7 +8,6 @@
 
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
-#include "tulip/GraphAlgorithm.h"
 
 namespace tlp {
 
@@ -17,7 +16,6 @@ class PropertyContext;
 /** \addtogroup properties */ 
 /*@{*/
 class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,GraphType>, public GraphObserver { 
-  friend class GraphAlgorithm;
 
 public :
   GraphProperty (Graph *);
