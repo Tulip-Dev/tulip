@@ -1,7 +1,5 @@
 #include "tulip/GlLabel.h"
 
-#include <GL/gl.h>
-
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>

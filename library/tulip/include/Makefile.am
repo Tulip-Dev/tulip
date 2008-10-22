@@ -26,7 +26,6 @@ nobase_include_HEADERS = \
 	tulip/cxx/Reflect.cxx \
 	tulip/cxx/Graph.cxx \
 	tulip/GraphProperty.h \
-	tulip/GraphAlgorithm.h \
 	tulip/LayoutProperty.h \
 	tulip/Plugin.h \
 	tulip/Algorithm.h \

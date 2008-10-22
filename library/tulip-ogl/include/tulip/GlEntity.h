@@ -11,7 +11,6 @@
 #ifndef Tulip_GLENTITY_H
 #define Tulip_GLENTITY_H
 
-#include <GL/gl.h>
 #include <utility>
 
 #include <tulip/tulipconf.h>

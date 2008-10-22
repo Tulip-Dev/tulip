@@ -1,6 +1,10 @@
 #include <cmath>
 #include <string>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 #include <tulip/TulipPlugin.h>
 #include <tulip/GlGraph.h> 
 #include <tulip/Glyph.h>

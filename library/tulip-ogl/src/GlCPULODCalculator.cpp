@@ -1,8 +1,5 @@
 #include "tulip/GlCPULODCalculator.h"
 
-#include <GL/glu.h>
-#include <GL/gl.h>
-
 #include <tulip/Matrix.h>
 
 #include "tulip/Camera.h"

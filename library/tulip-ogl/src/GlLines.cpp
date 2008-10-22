@@ -5,7 +5,11 @@
 #include <iostream>
 #include <cmath>
 extern "C" {
-#include <GL/glu.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 #include <gle.h>
 }
 #include "tulip/GlLines.h"

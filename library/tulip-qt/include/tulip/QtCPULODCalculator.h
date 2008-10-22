@@ -16,8 +16,6 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #include <tulip/BoundingBox.h>
 #include <tulip/GlCPULODCalculator.h>

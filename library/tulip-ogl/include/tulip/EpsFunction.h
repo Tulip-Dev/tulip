@@ -4,7 +4,11 @@
 //====================================================
 #include <stdio.h>
 #include <tulip/Color.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 namespace tlp {
 

@@ -1,4 +1,4 @@
-#include <GL/gl.h>
+
 #include <cmath>
 
 #include <tulip/StringProperty.h>

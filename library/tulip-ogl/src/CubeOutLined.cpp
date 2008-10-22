@@ -1,5 +1,4 @@
-#include <GL/gl.h>
-#include <GL/glu.h>
+
 #include <cmath>
 
 #include <tulip/ColorProperty.h>

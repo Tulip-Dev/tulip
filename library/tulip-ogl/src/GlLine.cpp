@@ -1,4 +1,4 @@
-#include <GL/gl.h>
+
 #include "tulip/GlLine.h"
 #include "tulip/GlTools.h"
 

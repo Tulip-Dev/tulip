@@ -1,7 +1,10 @@
 #include "tulip/GlMetaNode.h"
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
-
+#endif
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>

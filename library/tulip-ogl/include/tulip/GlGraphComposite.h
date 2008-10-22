@@ -54,16 +54,17 @@ namespace tlp {
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       addNodes();
-      if(isDisplayNodes()) {
-	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-	  (*it).acceptVisitor(visitor);
-	}
-      }
       
       if(isDisplayEdges()) {
 	for(std::vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
 	  if(parameters.isDisplayEdges() || parameters.isViewEdgeLabel())
 	    (*it).acceptVisitor(visitor);
+	}
+      }
+
+      if(isDisplayNodes()) {
+	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
+	  (*it).acceptVisitor(visitor);
 	}
       }
       

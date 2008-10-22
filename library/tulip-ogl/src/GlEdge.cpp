@@ -1,7 +1,5 @@
 #include "tulip/GlEdge.h"
 
-#include <GL/gl.h>
-
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -385,7 +383,7 @@ namespace tlp {
 
     glRasterPos3f(position[0], position[1], position[2]);
 
-    glGetIntegerv(GL_CURRENT_RASTER_POSITION, rastPos);
+    glGetIntegerv(GL_CURRENT_RASTER_POSITION, (GLint *) rastPos);
 
     if(test->testRectangle(RectangleInt2D(rastPos[0] - labelsBorder - 5,
 					  rastPos[1]  - labelsBorder - 5,
