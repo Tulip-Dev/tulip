@@ -631,7 +631,6 @@ void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
   GlLayer *backgroundLayer=new GlLayer("Background");
   backgroundLayer->setVisible(false);
   GlLayer *foregroundLayer=new GlLayer("Foreground");
-  foregroundLayer->setVisible(false);
 
   backgroundLayer->set2DMode();
   foregroundLayer->set2DMode();
@@ -639,6 +638,7 @@ void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
   backgroundLayer->addGlEntity(background,"background");
 
   GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55., TulipBitmapDir + "logolabri.jpg");
+  labri->setVisible(false);
   foregroundLayer->addGlEntity(labri,"labrilogo");
 
   GlComposite *hulls=new GlComposite;
@@ -2094,6 +2094,24 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       //param.setCamera(cam);
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+    }
+
+    if(dataSet->exist("entities")) {
+      DataSet entityDataSet;
+      dataSet->get<DataSet>("entities", entityDataSet);
+      Iterator< std::pair<std::string, DataType*> > *it=entityDataSet.getValues();
+      while(it->hasNext()) {
+	pair<string, DataType*> layerIt;
+	layerIt = it->next();
+	GlLayer *layer=glWidget->getScene()->getLayer(layerIt.first);
+
+	Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)layerIt.second->value).getValues();
+	while(it2->hasNext()) {
+	  pair<string, DataType*> entityIt;
+	  entityIt = it2->next();
+	  layer->addGlEntity((GlSimpleEntity *)(*((int*)entityIt.second->value)),entityIt.first);
+	}
+      }
     }
     //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
