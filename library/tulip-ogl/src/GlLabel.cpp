@@ -65,18 +65,20 @@ namespace tlp {
     renderer->getBoundingBox(w_max, h, w);
 
     glPushMatrix();
-    if(leftAlign)
-      glTranslatef(centerPosition[0]+size[0]/4,centerPosition[1], centerPosition[2]);
-    else
-      glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
 
     div_w = size[0]/w;
-    
     div_h = size[1]/h;
-    if(div_h > div_w) 
-      glScalef(div_w, div_w, 1);
-    else
-      glScalef(div_h, div_h, 1); 
+
+    if(!leftAlign) {
+      glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
+      if(div_h > div_w) 
+	glScalef(div_w, div_w, 1);
+      else
+	glScalef(div_h, div_h, 1);
+    }else{
+      glTranslatef(centerPosition[0]+size[0]/2,centerPosition[1], centerPosition[2]);
+      glScalef(div_w, div_h, 1);
+    }
     renderer->draw(w,w, 0);
     glPopMatrix();
 

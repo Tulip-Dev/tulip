@@ -179,7 +179,7 @@ public:
     int xMax=0;
     for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
       GlRect *rect=new GlRect(Coord(15,25+i*15,0),Coord(25,15+i*15,0),(*it).second,(*it).second);
-      GlLabel *label=new GlLabel(TulipBitmapDir,Coord(40,20+i*15,0),16,Color(0,0,0,255));
+      GlLabel *label=new GlLabel(TulipBitmapDir,Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
       label->setText((*it).first);
       if(30+label->getSize()[0]>xMax)
 	xMax=30+label->getSize()[0];

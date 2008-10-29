@@ -11,6 +11,10 @@
 #include <tulip/Color.h>
 #include <tulip/Vector.h>
 
+#include <tulip/GlComposite.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlLabel.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -228,6 +232,46 @@ public:
     }
     computeNodeColor();
     computeEdgeColor();
+
+    *dataSet = DataSet();
+    GlComposite *composite=new GlComposite();
+    DataSet mainDataSet;
+    DataSet entityDataSet;
+
+    int xMax=0;
+    double minN,maxN;
+    minN=entryMetric->getNodeMin(graph);
+    maxN=entryMetric->getNodeMax(graph);
+    stringstream sstr1;
+    stringstream sstr2;
+    sstr1 << minN;
+    sstr2 << maxN;
+
+    GlRect *rect=new GlRect(Coord(15,95,0),Coord(25,15,0),color2,color1);
+    composite->addGlEntity(rect,"rect");
+    
+    GlLabel *label1=new GlLabel(TulipBitmapDir,Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
+    label1->setText(sstr1.str());
+    GlLabel *label2=new GlLabel(TulipBitmapDir,Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
+    label2->setText(sstr2.str());
+
+    if(sstr1.str().size()>sstr2.str().size()) {
+      xMax=30+label1->getSize()[0];
+    }else{
+      xMax=30+label2->getSize()[0];
+    }
+    
+    GlRect *backRect=new GlRect(Coord(5,105,0),Coord(xMax+5,5,0),Color(0,0,0,50),Color(0,0,0,50));
+    composite->addGlEntity(backRect,"backRect");
+
+    composite->addGlEntity(rect,"rect");
+    composite->addGlEntity(label1,"min");
+    composite->addGlEntity(label2,"max");
+
+    mainDataSet.set<int>("caption",(int)composite);
+    entityDataSet.set<DataSet>("Foreground",mainDataSet);
+    dataSet->set<DataSet>("entities",entityDataSet);
+
     if (!mappingType) delete entryMetric;
     return true;
   }

@@ -2054,9 +2054,8 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
   bool   resultBool=true;  
-  DataSet *dataSet =0;
+  DataSet *dataSet = new DataSet();
   if (query) {
-    dataSet = new DataSet();
     StructDef *params = getPluginParameters(PROPERTY::factory, name);
     StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
     params->buildDefaultDataSet( *dataSet, graph );
@@ -2095,21 +2094,22 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
-
-    if(dataSet->exist("entities")) {
-      DataSet entityDataSet;
-      dataSet->get<DataSet>("entities", entityDataSet);
-      Iterator< std::pair<std::string, DataType*> > *it=entityDataSet.getValues();
-      while(it->hasNext()) {
-	pair<string, DataType*> layerIt;
-	layerIt = it->next();
-	GlLayer *layer=glWidget->getScene()->getLayer(layerIt.first);
-
-	Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)layerIt.second->value).getValues();
-	while(it2->hasNext()) {
-	  pair<string, DataType*> entityIt;
-	  entityIt = it2->next();
-	  layer->addGlEntity((GlSimpleEntity *)(*((int*)entityIt.second->value)),entityIt.first);
+    if(dataSet) {
+      if(dataSet->exist("entities")) {
+	DataSet entityDataSet;
+	dataSet->get<DataSet>("entities", entityDataSet);
+	Iterator< std::pair<std::string, DataType*> > *it=entityDataSet.getValues();
+	while(it->hasNext()) {
+	  pair<string, DataType*> layerIt;
+	  layerIt = it->next();
+	  GlLayer *layer=glWidget->getScene()->getLayer(layerIt.first);
+	  
+	  Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)layerIt.second->value).getValues();
+	  while(it2->hasNext()) {
+	    pair<string, DataType*> entityIt;
+	    entityIt = it2->next();
+	    layer->addGlEntity((GlSimpleEntity *)(*((int*)entityIt.second->value)),entityIt.first);
+	  }
 	}
       }
     }
