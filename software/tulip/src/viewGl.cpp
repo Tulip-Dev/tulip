@@ -2108,7 +2108,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
 	  while(it2->hasNext()) {
 	    pair<string, DataType*> entityIt;
 	    entityIt = it2->next();
-	    layer->addGlEntity((GlSimpleEntity *)(*((int*)entityIt.second->value)),entityIt.first);
+	    layer->addGlEntity((GlSimpleEntity *)(*((long*)entityIt.second->value)),entityIt.first);
 	  }
 	}
       }

@@ -157,6 +157,11 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
       unsigned int v = atol( defv.c_str() );
       ioDataSet.set( name, v );
     }
+    // unsigned int
+    else if( tname == TN(long) ) {
+      long v = atol( defv.c_str() );
+      ioDataSet.set( name, v );
+    }
     // fp
     else if( tname == TN(double) ) {
       double v;

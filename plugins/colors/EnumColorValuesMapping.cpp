@@ -198,7 +198,7 @@ public:
       composite->addGlEntity(labelVector[i],"label"+sstr.str());
       i++;
     }
-    mainDataSet.set<int>("caption",(int)composite);
+    mainDataSet.set<int>("caption",(long)composite);
     entityDataSet.set<DataSet>("Foreground",mainDataSet);
     dataSet->set<DataSet>("entities",entityDataSet);
 
