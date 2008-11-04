@@ -45,39 +45,54 @@ namespace tlp {
     glVertex3dv((GLdouble *)vertex);
   }
 
-  GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,vector<Color> &fcolors,int bezier,const string &textureName):
-    filled(true),
+  GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,int bezier,const string &textureName):
+    currentVector(0),
     outlined(false),
+    fillColor(fcolor),
     textureName(textureName){
-    createPolygon(coords,fcolors,bezier);
+    createPolygon(coords,bezier);
   }
   //=====================================================
-  GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,vector<Color> &fcolors,Color ocolor,int bezier,const string &textureName):
-    filled(true),
+  GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+    currentVector(0),
     outlined(true),
+    fillColor(fcolor),
+    outlineColor(ocolor),
     textureName(textureName) {
-    outlineColors.push_back(ocolor);
-    createPolygon(coords,fcolors,bezier);
+    createPolygon(coords,bezier);
   }
   //=====================================================
-  GlComplexPolygon::GlComplexPolygon(const bool filled,
-				     const bool outlined,
-				     const std::string &textureName):
-    filled(filled),
-    outlined(outlined),
-    textureName(textureName){ 
+  GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,int bezier,const string &textureName):
+    currentVector(0),
+    outlined(false),
+    fillColor(fcolor),
+    textureName(textureName){
+    for(int i=0;i<coords.size();++i) {
+      createPolygon(coords[i],bezier);
+      beginNewHole();
+    }
+  }
+  //=====================================================
+  GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+    currentVector(0),
+    outlined(true),
+    fillColor(fcolor),
+    outlineColor(ocolor),
+    textureName(textureName) {
+    for(int i=0;i<coords.size();++i) {
+      createPolygon(coords[i],bezier);
+      beginNewHole();
+    }
   }
   //=====================================================
   GlComplexPolygon::~GlComplexPolygon() {
   }
   //=====================================================
-  void GlComplexPolygon::createPolygon(vector<Coord> &coords,vector<Color> &fcolors,int bezier) {
-    assert(coords.size()==fcolors.size());
+  void GlComplexPolygon::createPolygon(vector<Coord> &coords,int bezier) {
+    points.push_back(vector<Coord>());
     if(bezier==0) {
-      vector<Color>::iterator itFC=fcolors.begin();
       for(vector<Coord>::iterator it=coords.begin();it!=coords.end();++it) {
-	addPoint(*it,*itFC);
-	++itFC;
+	addPoint(*it);
       }
     }else{
       double dCoords[coords.size()][3];
@@ -86,121 +101,83 @@ namespace tlp {
 	dCoords[i][0]=(*it)[0];dCoords[i][1]=(*it)[1];dCoords[i][2]=(*it)[2];
 	i++;
       }
+      addPoint(coords[0]);
+
       double result[3];
       double dec=1./(bezier*coords.size());
-      int ci=0;
-      i=-1;
-      addPoint(coords[0],fcolors[0]);
-      for(double j=0;j<1;j+=dec) {
-	if(i>=bezier){
-	  ci++;
-	  i=0;
-	}
+      for(double j=dec;j<1;j+=dec) {
 	Bezier(result,dCoords,coords.size(),j);
-	addPoint(Coord(result[0],result[1],result[2]),fcolors[ci]);
-	i++;
+	addPoint(Coord(result[0],result[1],result[2]));
       }
-      addPoint(coords[coords.size()-1],fcolors[fcolors.size()-1]);
+      addPoint(coords[coords.size()-1]);
     }
-  }
-  //=====================================================
-  void GlComplexPolygon::setFillMode(const bool filled) {
-    this->filled = filled;
   }
   //=====================================================
   void GlComplexPolygon::setOutlineMode(const bool outlined) {
     this->outlined = outlined;
   }
   //=====================================================
-  const tlp::Coord& GlComplexPolygon::point(const unsigned int i) const {
-    return points[i];
-  }
-  //=====================================================
-  tlp::Coord& GlComplexPolygon::point(const unsigned int i) {
-    return points[i];
-  }
-  //=====================================================
-  void GlComplexPolygon::addPoint(const Coord& point,const Color& fcolor,const Color& ocolor) {
-    points.push_back(point);
-    fillColors.push_back(fcolor);
-    outlineColors.push_back(ocolor);
+  void GlComplexPolygon::addPoint(const Coord& point) {
+    points[currentVector].push_back(point);
     boundingBox.check(point);
   }
   //=====================================================
-  void GlComplexPolygon::addPoint(const Coord& point,const Color& fcolor) {
-    points.push_back(point);
-    fillColors.push_back(fcolor);
-    boundingBox.check(point);
-  }
-  //=====================================================
-  const tlp::Color& GlComplexPolygon::fcolor(const unsigned int i) const {
-    return fillColors[i];
-  }
-  //=====================================================
-  tlp::Color& GlComplexPolygon::fcolor(const unsigned int i) {
-    return fillColors[i];
-  }
-  //=====================================================
-  const tlp::Color& GlComplexPolygon::ocolor(const unsigned int i) const {
-    return outlineColors[i];
-  }
-  //=====================================================
-  tlp::Color& GlComplexPolygon::ocolor(const unsigned int i) {
-    return outlineColors[i];
+  void GlComplexPolygon::beginNewHole() {
+    currentVector++;
   }
   //=====================================================
   void GlComplexPolygon::draw(float lod,Camera *camera) {
     glDisable(GL_CULL_FACE);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_BLEND);
 
-    if(filled) {
-      if(GlTextureManager::getInst().activateTexture(textureName));
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    if(GlTextureManager::getInst().activateTexture(textureName));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    
+    GLUtesselator *tobj;
+    tobj = gluNewTess();
+    
+    gluTessCallback(tobj, GLU_TESS_VERTEX, 
+		    (void (*)())vertexCallback);
+    gluTessCallback(tobj, GLU_TESS_BEGIN, 
+		    (void (*)())beginCallback);
+    gluTessCallback(tobj, GLU_TESS_END, 
+		    (void (*)())endCallback);
+    gluTessCallback(tobj, GLU_TESS_ERROR, 
+		    (void (*)())errorCallback);
       
-      GLUtesselator *tobj;
-      tobj = gluNewTess();
+    glShadeModel(GL_SMOOTH);  
       
-      gluTessCallback(tobj, GLU_TESS_VERTEX, 
-		      (void (*)())vertexCallback);
-      gluTessCallback(tobj, GLU_TESS_BEGIN, 
-		      (void (*)())beginCallback);
-      gluTessCallback(tobj, GLU_TESS_END, 
-		      (void (*)())endCallback);
-      gluTessCallback(tobj, GLU_TESS_ERROR, 
-		      (void (*)())errorCallback);
-      
-      glShadeModel(GL_SMOOTH);  
-      gluTessProperty(tobj, GLU_TESS_WINDING_RULE,
-		      GLU_TESS_WINDING_POSITIVE);
-      
-      gluTessBeginPolygon(tobj, NULL);
+    gluTessBeginPolygon(tobj, NULL);
+    for(int v=0;v<points.size();++v) {
       gluTessBeginContour(tobj);
-      for(unsigned int i=0; i < points.size(); ++i) {
+      for(unsigned int i=0; i < points[v].size(); ++i) {
 	GLdouble *tmp=new GLdouble[7];
-	tmp[0]=points[i][0];
-	tmp[1]=points[i][1];
-	tmp[2]=points[i][2];
-	tmp[3]=fillColors[i][0];
-	tmp[4]=fillColors[i][1];
-	tmp[5]=fillColors[i][2];
-	tmp[6]=fillColors[i][3];
+	tmp[0]=points[v][i][0];
+	tmp[1]=points[v][i][1];
+	tmp[2]=points[v][i][2];
+	tmp[3]=fillColor[0];
+	tmp[4]=fillColor[1];
+	tmp[5]=fillColor[2];
+	tmp[6]=fillColor[3];
 	gluTessVertex(tobj,tmp,tmp);
       }
       gluTessEndContour(tobj);
-      gluTessEndPolygon(tobj);
-      gluDeleteTess(tobj);
-      GlTextureManager::getInst().desactivateTexture();
     }
+    gluTessEndPolygon(tobj);
+    gluDeleteTess(tobj);
+    GlTextureManager::getInst().desactivateTexture();
+    
     if (outlined) {
-      glBegin(GL_LINE_LOOP);
-      for(unsigned int i=0; i < points.size(); ++i) {
-	if (i < outlineColors.size()) {
-	  setMaterial(outlineColors[i]);
-	  glColor4ubv((unsigned char *)&outlineColors[i]);
+      for(int v=0;v<points.size();++v) {
+	glBegin(GL_LINE_LOOP);
+	for(unsigned int i=0; i < points[v].size(); ++i) {
+	  setMaterial(outlineColor);
+	  glColor4ubv((unsigned char *)&outlineColor);
+	  glVertex3fv((float *)&points[v][i]);
 	}
-	glVertex3fv((float *)&points[i]);
+	glEnd();
       }
-      glEnd();
     }
     
     glTest(__PRETTY_FUNCTION__);
@@ -210,8 +187,10 @@ namespace tlp {
     boundingBox.first+=mouvement;
     boundingBox.second+=mouvement;
     
-    for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
-      (*it)+=mouvement;
+    for(vector<vector<Coord> >::iterator it=points.begin();it!=points.end();++it){
+      for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
+	(*it2)+=mouvement;
+      }
     }
   } 
   //===========================================================
@@ -228,10 +207,13 @@ namespace tlp {
     
     GlXMLTools::getDataNode(rootNode,dataNode);
     
-    GlXMLTools::getXML(dataNode,"points",points);
-    GlXMLTools::getXML(dataNode,"fillColors",fillColors);
-    GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
-    GlXMLTools::getXML(dataNode,"filled",filled);
+    for(int i=0;i<points.size();++i){
+      stringstream str;
+      str << i ;
+      GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);
+    }
+    GlXMLTools::getXML(dataNode,"fillColor",fillColor);
+    GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
     GlXMLTools::getXML(dataNode,"outlined",outlined);
   }
   //============================================================
@@ -242,14 +224,15 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      GlXMLTools::setWithXML(dataNode,"points",points);
+      /*GlXMLTools::setWithXML(dataNode,"points",points);
       GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
-      GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
-      GlXMLTools::setWithXML(dataNode,"filled",filled);
+      GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);*/
       GlXMLTools::setWithXML(dataNode,"outlined",outlined);
 
-      for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
-	boundingBox.check(*it);
+      for(vector<vector<Coord> >::iterator it= points.begin();it!=points.end();++it) {
+	for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2)
+	  boundingBox.check(*it2);
+      }
     }
   }
 }
