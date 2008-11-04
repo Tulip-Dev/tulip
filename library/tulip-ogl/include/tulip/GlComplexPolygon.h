@@ -26,6 +26,8 @@ namespace tlp {
    */
   class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
   public:
+    GlComplexPolygon(std::vector<Coord> &coords,std::vector<Color> &fcolors,int bezier=0,const std::string &textureName = "");
+    GlComplexPolygon(std::vector<Coord> &coords,std::vector<Color> &fcolors,Color ocolor,int bezier=0,const std::string &textureName = "");
     GlComplexPolygon(const bool filled = true,
 		     const bool outlined= true,
 		     const std::string &textureName = "");
@@ -37,6 +39,7 @@ namespace tlp {
     virtual const Coord& point(const unsigned int i) const;
     virtual Coord& point(const unsigned int i);
     virtual void addPoint(const Coord& point, const Color& fcolor,const Color& ocolor);
+    virtual void addPoint(const Coord& point, const Color& fcolor);
     
     //return the ith color used for filling the polygon
     virtual const Color& fcolor(const unsigned int i) const;
@@ -70,11 +73,13 @@ namespace tlp {
     virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
-    std::vector<Coord> _points;
-    std::vector<Color> _fillColors;
-    std::vector<Color> _outlineColors;
-    bool _filled;
-    bool _outlined;
+    void createPolygon(std::vector<Coord> &coords,std::vector<Color> &fcolors,int bezier);
+
+    std::vector<Coord> points;
+    std::vector<Color> fillColors;
+    std::vector<Color> outlineColors;
+    bool filled;
+    bool outlined;
     std::string textureName;
   };
 }
