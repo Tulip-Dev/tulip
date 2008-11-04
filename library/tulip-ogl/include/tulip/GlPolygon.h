@@ -27,17 +27,20 @@ namespace tlp {
   class TLP_GL_SCOPE GlPolygon : public GlSimpleEntity {
   public:
     GlPolygon(const bool filled = true,
-	      const bool outlined= true);
+	      const bool outlined= true,
+	      const int outlineSize = 1);
     GlPolygon(const std::vector<Coord> &points, 
 	      const std::vector<Color> &fillColors,
 	      const std::vector<Color> &outlineColors,
-		 const bool filled,
-		 const bool outlined);
+	      const bool filled,
+	      const bool outlined,
+	      const int outlineSize = 1);
     GlPolygon(const unsigned int nbPoints, 
-		 const unsigned int nbFillColors, 
-		 const unsigned int nbOutlineColors, 
-		 const bool filled = true,
-		 const bool outlined = true);
+	      const unsigned int nbFillColors, 
+	      const unsigned int nbOutlineColors, 
+	      const bool filled = true,
+	      const bool outlined = true,
+	      const int outlineSize = 1);
     virtual ~GlPolygon();
 
     void draw(float lod,Camera *camera);
@@ -81,11 +84,12 @@ namespace tlp {
     virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
-    std::vector<Coord> _points;
-    std::vector<Color> _fillColors;
-    std::vector<Color> _outlineColors;
-    bool _filled;
-    bool _outlined;
+    std::vector<Coord> points;
+    std::vector<Color> fillColors;
+    std::vector<Color> outlineColors;
+    bool filled;
+    bool outlined;
+    int outlineSize;
   };
 }
 #endif
