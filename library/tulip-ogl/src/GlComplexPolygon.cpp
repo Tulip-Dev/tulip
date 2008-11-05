@@ -18,11 +18,11 @@ namespace tlp {
   {
     glBegin(which);
   }
-  
+
   void errorCallback(GLenum errorCode)
   {
     const GLubyte *estring;
-    
+
     estring = gluErrorString(errorCode);
     cout << "Tessellation Error: " << estring << endl;
   }
@@ -35,7 +35,7 @@ namespace tlp {
   void vertexCallback(GLvoid *vertex)
   {
     const GLdouble *pointer;
-    
+
     pointer = (GLdouble *) vertex;
     Color color=Color(pointer[3],pointer[4],pointer[5],pointer[6]);
     setMaterial(color);
@@ -133,21 +133,21 @@ namespace tlp {
 
     /*if(GlTextureManager::getInst().activateTexture(textureName));
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);*/
-    
+
     GLUtesselator *tobj;
     tobj = gluNewTess();
-    
-    gluTessCallback(tobj, GLU_TESS_VERTEX, 
+
+    gluTessCallback(tobj, GLU_TESS_VERTEX,
 		    (void (*)())vertexCallback);
-    gluTessCallback(tobj, GLU_TESS_BEGIN, 
+    gluTessCallback(tobj, GLU_TESS_BEGIN,
 		    (void (*)())beginCallback);
-    gluTessCallback(tobj, GLU_TESS_END, 
+    gluTessCallback(tobj, GLU_TESS_END,
 		    (void (*)())endCallback);
-    gluTessCallback(tobj, GLU_TESS_ERROR, 
+    gluTessCallback(tobj, GLU_TESS_ERROR,
 		    (void (*)())errorCallback);
-      
-    glShadeModel(GL_SMOOTH);  
-      
+
+    glShadeModel(GL_SMOOTH);
+
     gluTessBeginPolygon(tobj, NULL);
     for(int v=0;v<points.size();++v) {
       gluTessBeginContour(tobj);
@@ -167,7 +167,7 @@ namespace tlp {
     gluTessEndPolygon(tobj);
     gluDeleteTess(tobj);
     //GlTextureManager::getInst().desactivateTexture();
-    
+
     if (outlined) {
       for(int v=0;v<points.size();++v) {
 	glBegin(GL_LINE_LOOP);
@@ -179,34 +179,35 @@ namespace tlp {
 	glEnd();
       }
     }
-    
+
     glTest(__PRETTY_FUNCTION__);
   }
   //===========================================================
   void GlComplexPolygon::translate(const Coord& mouvement) {
     boundingBox.first+=mouvement;
     boundingBox.second+=mouvement;
-    
+
     for(vector<vector<Coord> >::iterator it=points.begin();it!=points.end();++it){
       for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
 	(*it2)+=mouvement;
       }
     }
-  } 
+  }
   //===========================================================
   void GlComplexPolygon::getXML(xmlNodePtr rootNode) {
 
     GlXMLTools::createProperty(rootNode, "type", "GlComplexPolygon");
 
     getXMLOnlyData(rootNode);
-    
+
   }
   //===========================================================
   void GlComplexPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
-    
+
+    GlXMLTools::getXML(dataNode,"numberOfVector",points.size());
     for(int i=0;i<points.size();++i){
       stringstream str;
       str << i ;
@@ -215,6 +216,7 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"fillColor",fillColor);
     GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
     GlXMLTools::getXML(dataNode,"outlined",outlined);
+    GlXMLTools::getXML(dataNode,"textureName",textureName);
   }
   //============================================================
   void GlComplexPolygon::setWithXML(xmlNodePtr rootNode) {
@@ -224,14 +226,24 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      /*GlXMLTools::setWithXML(dataNode,"points",points);
-      GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
-      GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);*/
+      int numberOfVector;
+      GlXMLTools::setWithXML(dataNode,"numberOfVector",numberOfVector);
+      for(int i=0;i<numberOfVector;++i) {
+        stringstream str;
+        str << i ;
+        points.push_back(vector<Coord>());
+        GlXMLTools::setWithXML(dataNode,"points"+str.str(),points[i]);
+      }
+
+      GlXMLTools::setWithXML(dataNode,"fillColor",fillColor);
+      GlXMLTools::setWithXML(dataNode,"outlineColor",outlineColor);
       GlXMLTools::setWithXML(dataNode,"outlined",outlined);
+      GlXMLTools::setWithXML(dataNode,"textureName",textureName);
 
       for(vector<vector<Coord> >::iterator it= points.begin();it!=points.end();++it) {
-	for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2)
-	  boundingBox.check(*it2);
+        for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
+          boundingBox.check(*it2);
+        }
       }
     }
   }
