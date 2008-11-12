@@ -60,19 +60,19 @@ class ObservableGraph {
   /**
    * Register a new observer
    */
-  void addObserver(GraphObserver *) const;
+  void addGraphObserver(GraphObserver *) const;
   /**
    * Returns the number of observers
    */
-  unsigned int countObservers();
+  unsigned int countGraphObservers();
   /**
    * Remove an observer
    */
-  void removeObserver(GraphObserver *) const;
+  void removeGraphObserver(GraphObserver *) const;
   /**
    * Remove all observers
    */
-  void removeObservers();
+  void removeGraphObservers();
 
  protected:
   void notifyAddNode(Graph *,const node n);
@@ -89,19 +89,19 @@ class ObservableGraph {
 };
 /*@}*/
 
-inline void ObservableGraph::addObserver(GraphObserver *obs) const {
+inline void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
   observers.insert(obs); 
 }
 
-inline unsigned int ObservableGraph::countObservers() { 
+inline unsigned int ObservableGraph::countGraphObservers() { 
   return observers.size(); 
 }
 
-inline void ObservableGraph::removeObserver(GraphObserver *item) const{  
+inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const{  
   observers.erase(item);
 }
 
-inline void ObservableGraph::removeObservers() { 
+inline void ObservableGraph::removeGraphObservers() { 
   observers.clear(); 
 }
 

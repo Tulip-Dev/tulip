@@ -70,21 +70,21 @@ bool PlanarityTest::compute(Graph *graph) {
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
     graph->delAllEdge(*it);
-  graph->addObserver(this);
+  graph->addGraphObserver(this);
   return resultsBuffer[(unsigned long)graph];
 }
 //=================================================================
 void PlanarityTest::addEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void PlanarityTest::delEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -97,12 +97,12 @@ void PlanarityTest::addNode(Graph *graph,const node) {
 void PlanarityTest::delNode(Graph *graph,const node) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void PlanarityTest::destroy(Graph *graph) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================

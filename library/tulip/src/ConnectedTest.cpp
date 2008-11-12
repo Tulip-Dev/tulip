@@ -24,7 +24,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   if (instance==0)
     instance=new ConnectedTest();
-  graph->removeObserver(instance);
+  graph->removeGraphObserver(instance);
   instance->resultsBuffer.erase((unsigned long)graph);  
   vector<node> toLink;  
   instance->connect(graph, toLink);
@@ -37,7 +37,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(Graph *graph) {
   if (graph->numberOfNodes()==0) return 0u;
   if (instance==0)
     instance=new ConnectedTest();
-  graph->removeObserver(instance);
+  graph->removeGraphObserver(instance);
   vector<node> toLink;
   instance->connect(graph, toLink);
   unsigned int result;
@@ -46,7 +46,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(Graph *graph) {
   else 
     result = 1u;
   instance->resultsBuffer[(unsigned long)graph] = (result == 1u);
-  graph->addObserver(instance);
+  graph->addGraphObserver(instance);
   return result;
 }
 //======================================================================
@@ -97,7 +97,7 @@ bool ConnectedTest::compute(Graph *graph) {
   connectedTest(graph, graph->getOneNode(), visited, count);
   bool result = (count == graph->numberOfNodes());
   resultsBuffer[(unsigned long)graph]=result;
-  graph->addObserver(this);
+  graph->addGraphObserver(this);
   return result;
 }
 //=================================================================
@@ -123,7 +123,7 @@ void ConnectedTest::connect(Graph *graph, vector<node> &toLink) {
 void ConnectedTest::addEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -131,7 +131,7 @@ void ConnectedTest::delEdge(Graph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -143,13 +143,13 @@ void ConnectedTest::addNode(Graph *graph,const node) {
 }
 //=================================================================
 void ConnectedTest::delNode(Graph *graph,const node) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void ConnectedTest::destroy(Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================

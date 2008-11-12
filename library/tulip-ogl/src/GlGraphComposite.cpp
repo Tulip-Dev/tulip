@@ -12,7 +12,7 @@ using namespace std;
 namespace tlp {
 
   GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters) {
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
     
     buildLists();
   }

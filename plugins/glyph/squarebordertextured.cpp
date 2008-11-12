@@ -117,7 +117,7 @@ bool SquareBorderTextured::initializeNewGraph(Graph* sg, node n) {
     TreeCache& treec = mapTree[sg];          
     treec.isTree     = TreeTest::isTree(sg);
      
-    sg->addObserver(this);
+    sg->addGraphObserver(this);
     
     if (treec.isTree) {
         treec.root     = findRoot(n);
@@ -141,7 +141,7 @@ void SquareBorderTextured::unInitializeNewGraph(Graph* sg) {
 
         mapTree.erase(itMap);
     }
-    sg->removeObserver(this);
+    sg->removeGraphObserver(this);
 }
 
 //====================================================================

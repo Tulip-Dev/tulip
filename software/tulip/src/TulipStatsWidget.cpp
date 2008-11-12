@@ -145,7 +145,7 @@ namespace tlp
     if (graph != 0 && graph != NULL)
       {
 	updateMetrics();
-	graph->addObserver(this);
+	graph->addGraphObserver(this);
       }
 
     // cout << " ...[END]" << endl;
@@ -154,7 +154,7 @@ namespace tlp
   void TulipStats::destroy(Graph *sg)
   {
     if (graph == sg)
-      graph->removeObserver(this);
+      graph->removeGraphObserver(this);
   }
 
   //************************************************************

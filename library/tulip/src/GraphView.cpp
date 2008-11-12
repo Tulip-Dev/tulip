@@ -64,8 +64,10 @@ GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
-  notifyDestroy(this);
+  ObservableGraph::notifyDestroy(this);
+  Observable::notifyDestroy();
   delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
+  removeGraphObservers();
   removeObservers();
 }
 //----------------------------------------------------------------
@@ -109,6 +111,7 @@ node GraphView::addNode() {
   //  inDegree.set(tmp.id,0);
   //  outDegree.set(tmp.id,0);
   notifyAddNode(this, tmp);
+  notifyObservers();
   return tmp;
 }
 //----------------------------------------------------------------
@@ -121,6 +124,7 @@ void GraphView::addNode(const node n) {
     //    inDegree.set(n.id,0);
     //    outDegree.set(n.id,0);
     notifyAddNode(this, n);
+    notifyObservers();
   }
 }
 //----------------------------------------------------------------
@@ -133,6 +137,7 @@ edge GraphView::addEdge(const node n1,const node n2) {
   //  outDegree.set(n1.id, outDegree.get(n1.id)+1);
   //  inDegree.set(n2.id, inDegree.get(n2.id)+1);
   notifyAddEdge(this, tmp);
+  notifyObservers();
   return tmp;
 }
 //----------------------------------------------------------------
@@ -147,6 +152,7 @@ void GraphView::addEdge(const edge e) {
     //    outDegree.set(source(e).id, outDegree.get(source(e).id)+1);
     //    inDegree.set(target(e).id, inDegree.get(target(e).id)+1);
     notifyAddEdge(this, e);
+    notifyObservers();
   }
 }
 //----------------------------------------------------------------
@@ -189,23 +195,25 @@ void GraphView::delNode(const node n) {
   getPropertyManager()->erase(n);
   --nNodes;
   nEdges -= toRemove;
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e) {
   assert(isElement(e));
   //  if (isElement(e)) {
-    notifyDelEdge(this,e);
-    Iterator<Graph *>*itS=getSubGraphs();
-    while (itS->hasNext()) {
-      Graph *subGraph = itS->next();
-      if (subGraph->isElement(e)) subGraph->delEdge(e);
-    } delete itS;
-    edgeAdaptativeFilter.set(e.id,false);
-    getPropertyManager()->erase(e);
-    --nEdges;
-    //    outDegree.set(source(e).id, outDegree.get(source(e).id)-1);
-    //    inDegree.set(target(e).id, inDegree.get(target(e).id)-1);
-    //  }
+  notifyDelEdge(this,e);
+  Iterator<Graph *>*itS=getSubGraphs();
+  while (itS->hasNext()) {
+    Graph *subGraph = itS->next();
+    if (subGraph->isElement(e)) subGraph->delEdge(e);
+  } delete itS;
+  edgeAdaptativeFilter.set(e.id,false);
+  getPropertyManager()->erase(e);
+  --nEdges;
+  //    outDegree.set(source(e).id, outDegree.get(source(e).id)-1);
+  //    inDegree.set(target(e).id, inDegree.get(target(e).id)-1);
+  //  }
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphView::delAllNode(const node n){

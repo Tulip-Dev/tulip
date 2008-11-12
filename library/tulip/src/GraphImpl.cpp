@@ -91,11 +91,13 @@ GraphImpl::GraphImpl():GraphAbstract(this) {
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
-  notifyDestroy(this);
+  ObservableGraph::notifyDestroy(this);
+  Observable::notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphs(itS.next());
   delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
+  removeGraphObservers();
   removeObservers();
   for (Nodes::iterator i=nodes.begin();i!=nodes.end();++i) {
     i->deallocateAll();
@@ -126,6 +128,7 @@ node GraphImpl::addNode() {
   assert(nodes[newNode.id].empty());
   nbNodes++;
   notifyAddNode(this,newNode);
+  notifyObservers();
   return newNode;
 }
 //----------------------------------------------------------------
@@ -146,6 +149,7 @@ edge GraphImpl::addEdge(const node s,const node t) {
   nodes[t.id].push_back(newEdge);
   nbEdges++;
   notifyAddEdge(this,newEdge);
+  notifyObservers();
   return newEdge;
 }
 //----------------------------------------------------------------
@@ -188,6 +192,7 @@ void GraphImpl::delNode(const node n) {
   }
   nbEdges -= toRemove;
   nodes[n.id].clear();
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e) {
@@ -204,6 +209,7 @@ void GraphImpl::delEdge(const edge e) {
   externRemove(e);
   removeEdge(nodes[s.id], e);
   removeEdge(nodes[t.id], e);
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delAllNode(const node n){delNode(n);}
@@ -317,6 +323,7 @@ void GraphImpl::reverse(const edge e) {
     }
   }
   notifyReverseEdge(this,e);
+  notifyObservers();
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::numberOfEdges()const{return nbEdges;}

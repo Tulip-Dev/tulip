@@ -45,7 +45,7 @@ bool TreeTest::isFreeTree(Graph *graph) {
 //the node root.
 void TreeTest::makeRootedTree(Graph *graph, node root) {
   if (instance==0) instance=new TreeTest();
-  graph->removeObserver(instance);
+  graph->removeGraphObserver(instance);
   instance->resultsBuffer.erase((unsigned long)graph);
   if (!graph->isElement (root)) {
     cerr << "makeRootedTree:  Passed root is not element of graph" << endl;
@@ -194,7 +194,7 @@ bool TreeTest::compute(Graph *graph) {
   }
   if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
     resultsBuffer[(unsigned long)graph]=false;
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
     return false;
   }
   bool rootNodeFound=false;
@@ -204,14 +204,14 @@ bool TreeTest::compute(Graph *graph) {
     if (graph->indeg(tmp)>1) {
       delete it;
       resultsBuffer[(unsigned long)graph]=false;
-      graph->addObserver(this);
+      graph->addGraphObserver(this);
       return false;
     }
     if (graph->indeg(tmp)==0) {
       if (rootNodeFound) {
 	delete it;
 	resultsBuffer[(unsigned long)graph]=false;
-	graph->addObserver(this);
+	graph->addGraphObserver(this);
 	return false;
       }
       else
@@ -220,38 +220,38 @@ bool TreeTest::compute(Graph *graph) {
   } delete it;
   if (AcyclicTest::isAcyclic(graph)) {
     resultsBuffer[(unsigned long)graph]=true;
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
     return true;
   }
   else {
     resultsBuffer[(unsigned long)graph]=false;
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
     return false;
   }
 }
 
 void TreeTest::addEdge(Graph *graph,const edge) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 void TreeTest::delEdge(Graph *graph,const edge) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 void TreeTest::reverseEdge(Graph *graph,const edge) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 void TreeTest::addNode(Graph *graph,const node) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 void TreeTest::delNode(Graph *graph,const node) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 
 void TreeTest::destroy(Graph *graph) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }

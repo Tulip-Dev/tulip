@@ -37,7 +37,7 @@ bool SimpleTest::isSimple(Graph *graph) {
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
     instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
-    graph->addObserver(instance);
+    graph->addGraphObserver(instance);
   }
   
   return instance->resultsBuffer[(unsigned long)graph];
@@ -102,7 +102,7 @@ bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<ed
 //=================================================================
 void SimpleTest::deleteResult(Graph *graph) {
   resultsBuffer.erase((unsigned long)graph);
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
 }
 //=================================================================
 void SimpleTest::addEdge(Graph *graph, const edge) {

@@ -20,14 +20,14 @@ const unsigned int NB_EDGES = EDGE_RATIO * NB_NODES;
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( ObservablePropertyTest );
 
-// this class will capture
+// these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverTest :public Observer {
+class ObserverPTest :public Observer {
 public:
   std::set<Observable*> observables;
 
-  ObserverTest() {}
+  ObserverPTest() {}
 
   void reset() {
     observables.clear();
@@ -57,7 +57,7 @@ public:
   }    
 };
 
-ObserverTest* observer;
+static ObserverPTest* observer;
 
 // this class will capture
 // everything that will happen to our properties
@@ -106,7 +106,7 @@ public:
   }
 };
 
-PropertyObserverTest* pObserver;
+static PropertyObserverTest* pObserver;
 
 #define DOUBLE_PROP 2
 #define LAYOUT_PROP 4
@@ -129,7 +129,7 @@ void ObservablePropertyTest::setUp() {
   for (unsigned int i=0; i< NB_EDGES; ++i)
     graph->addEdge(nodes[rand()%NB_NODES], nodes[rand()%NB_NODES]);
 
-  observer = new ObserverTest();
+  observer = new ObserverPTest();
   pObserver = new PropertyObserverTest();
 
   addObservers();

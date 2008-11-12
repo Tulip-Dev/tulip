@@ -40,7 +40,7 @@ bool OuterPlanarTest::compute(Graph *graph) {
     }
     resultsBuffer[(unsigned long)graph] = planarTest.isPlanar(true);
     graph->delNode(n);
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
     return resultsBuffer[(unsigned long)graph];
   }
 }
@@ -48,14 +48,14 @@ bool OuterPlanarTest::compute(Graph *graph) {
 void OuterPlanarTest::addEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void OuterPlanarTest::delEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -68,12 +68,12 @@ void OuterPlanarTest::addNode(Graph *graph,const node) {
 void OuterPlanarTest::delNode(Graph *graph,const node) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void OuterPlanarTest::destroy(Graph *graph) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================

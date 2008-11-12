@@ -38,6 +38,7 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
   Graph *tmp = new GraphView(this, selection);
   subgraphs.push_back(tmp);
   notifyAddSubGraph(this, tmp);
+  notifyObservers();
   return tmp;
 }
 //=========================================================================
@@ -69,6 +70,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     }
   }
   delete toRemove;
+  notifyObservers();
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
@@ -83,6 +85,7 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
     }
   }
   delete toRemove;
+  notifyObservers();
 }
 //=========================================================================
 Graph* GraphAbstract::getSuperGraph()const {
@@ -216,12 +219,14 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 void GraphAbstract::delLocalProperty(const std::string &name) {
   notifyDelLocalProperty(this, name);
   propertyContainer->delLocalProperty(name);
+  notifyObservers();
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   assert(!existLocalProperty(name));
   propertyContainer->setLocalProxy(name, prop);
   notifyAddLocalProperty(this, name);
+  notifyObservers();
 }
 //=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {

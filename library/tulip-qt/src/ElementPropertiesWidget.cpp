@@ -125,7 +125,7 @@ void ElementPropertiesWidget::setCurrentEdge(Graph *sg,const edge &e) {
 //==========================================
 void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
   if (graph!=0 && !destroy)
-    graph->removeObserver(this);
+    graph->removeGraphObserver(this);
   graph = s;
   nodeSet = false;
   edgeSet = false;
@@ -136,7 +136,7 @@ void ElementPropertiesWidget::setGraph(Graph *s, bool destroy) {
     }*/
   propertyTable->setRowCount(0);
   if (graph!=0)
-    graph->addObserver(this);
+    graph->addGraphObserver(this);
 }
 //==========================================
 void ElementPropertiesWidget::setCurrentListedProperties(const QStringList &l) {
@@ -328,13 +328,13 @@ void ElementPropertiesWidget::edgePropertyChanged(Graph *s, edge const &e, QStri
 //==========================================
 void ElementPropertiesWidget::delNode(Graph *sg, node n) {
   if (sg!=graph && graph!=0 )
-    graph->removeObserver(this);
+    graph->removeGraphObserver(this);
   if (displayMode==NODE && currentNode==n)
     setGraph(sg);
 }
 void ElementPropertiesWidget::delEdge(Graph *sg, edge e) {
   if (sg!=graph && graph!=0)
-    graph->removeObserver(this);
+    graph->removeGraphObserver(this);
   if (displayMode==EDGE && currentEdge==e)
     setGraph(sg);
 }

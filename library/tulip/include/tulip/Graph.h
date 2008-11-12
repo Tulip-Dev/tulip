@@ -30,6 +30,7 @@
 #include "tulip/PluginProgress.h"
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
+#include "tulip/Observable.h"
 #include "tulip/ObservableGraph.h"
 
 namespace tlp {
@@ -94,7 +95,7 @@ template<class C>class Iterator;
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
-class TLP_SIMPLE_SCOPE Graph : public ObservableGraph {
+  class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
 public:  
   Graph();

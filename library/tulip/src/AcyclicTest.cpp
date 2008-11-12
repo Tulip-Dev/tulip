@@ -23,7 +23,7 @@ bool AcyclicTest::isAcyclic(const Graph *graph) {
 
   if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
     instance->resultsBuffer[(unsigned long)graph] = acyclicTest(graph);
-    graph->addObserver(instance);
+    graph->addGraphObserver(instance);
   }
   
   return instance->resultsBuffer[(unsigned long)graph];
@@ -116,24 +116,24 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
 }
 //**********************************************************************
 void AcyclicTest::destroy(Graph *graph) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::reverseEdge(Graph *graph,const edge e) {
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::addEdge(Graph *graph,const edge e) {
   if (resultsBuffer[(unsigned long)graph]==false) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
 void AcyclicTest::delEdge(Graph *graph,const edge e) {
   if (resultsBuffer[(unsigned long)graph]==true) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************

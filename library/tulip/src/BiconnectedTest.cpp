@@ -26,7 +26,7 @@ void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
   //  cerr << __PRETTY_FUNCTION__ << " : " << graph->getAttribute<string>("name") << endl;
   //  if (BiconnectedTest::isBiconnected(graph)) return;
   if (instance==0) instance=new BiconnectedTest();
-  graph->removeObserver(instance);
+  graph->removeGraphObserver(instance);
   instance->resultsBuffer.erase((unsigned long)graph);  
   instance->connect(graph, addedEdges);
   assert(BiconnectedTest::isBiconnected(graph));
@@ -144,7 +144,7 @@ bool BiconnectedTest::compute(Graph *graph) {
     result=false;
   } //connected test
   resultsBuffer[(unsigned long)graph]=result;
-  graph->addObserver(this);
+  graph->addGraphObserver(this);
   return result;
 }
 //=================================================================
@@ -152,7 +152,7 @@ void BiconnectedTest::addEdge(Graph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -160,7 +160,7 @@ void BiconnectedTest::delEdge(Graph *graph,const edge) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (!resultsBuffer[(unsigned long)graph]) return;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
@@ -174,14 +174,14 @@ void BiconnectedTest::addNode(Graph *graph,const node) {
 //=================================================================
 void BiconnectedTest::delNode(Graph *graph,const node) {
   //  cerr << __PRETTY_FUNCTION__  << (unsigned)graph << endl;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
 void BiconnectedTest::destroy(Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << (unsigned)graph << endl;
   //  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================

@@ -20,10 +20,10 @@ GraphProperty::~GraphProperty() {
   while(it->hasNext()) {
     node n = it->next();
     if (getNodeValue(n) != 0)
-      getNodeValue(n)->removeObserver(this);
+      getNodeValue(n)->removeGraphObserver(this);
   } delete it;
   if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->removeObserver(this);
+    getNodeDefaultValue()->removeGraphObserver(this);
   }
   notifyDestroy(this);
 }
@@ -34,17 +34,17 @@ void GraphProperty::beforeSetAllNodeValue(PropertyInterface*) {
   while(it->hasNext()) {
     node n = it->next();
     if (getNodeValue(n) != 0)
-      getNodeValue(n)->removeObserver(this);
+      getNodeValue(n)->removeGraphObserver(this);
   } delete it;
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
   if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->removeObserver(this);
+    getNodeDefaultValue()->removeGraphObserver(this);
   }
 }
 void GraphProperty::afterSetAllNodeValue(PropertyInterface*) {
   if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->addObserver(this);
+    getNodeDefaultValue()->addGraphObserver(this);
   }
 }
 //==============================
@@ -57,7 +57,7 @@ void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
     set<node> &refs = referencedGraph.getReference(oldGraph->getId()); //use of reference in order to prevent cloninf of the set (Dangerous)
     refs.erase(n);
     if (refs.empty() && oldGraph != getNodeDefaultValue())
-      oldGraph->removeObserver(this);
+      oldGraph->removeGraphObserver(this);
     if (refs.empty())
       referencedGraph.set(oldGraph->getId(), set<node>());
   }
@@ -67,7 +67,7 @@ void GraphProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
   if (sg == NULL)
     return;
   //Gestion de l'abonnement
-  sg->addObserver(this);
+  sg->addGraphObserver(this);
   if ( sg != getNodeDefaultValue() ) {
     set<node> &refs = referencedGraph.getReference(sg->getId()); //use of reference in order to prevent cloninf of the set (Dangerous)
     if (refs.empty()) { //Man
