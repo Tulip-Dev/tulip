@@ -99,7 +99,7 @@
 #include "InfoDialog.h"
 #include "AppStartUp.h"
 
-          
+
 #define UNNAMED "unnamed"
 
 using namespace std;
@@ -125,7 +125,7 @@ public:
       viewGlWidget *g = (viewGlWidget *) widget;
       node tmpNode;
       edge tmpEdge;
-      ElementType type;  
+      ElementType type;
       if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
 	switch(type) {
 	case NODE: vWidget->showElementProperties(tmpNode.id, true); break;
@@ -156,7 +156,6 @@ static vector<tlp::GWInteractor *>zoomBoxInteractors;
 viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   setupUi(this);
   //  cerr << __PRETTY_FUNCTION__ << endl;
-
   // remove strange scories from designer/Tulip.ui
   graphMenu->removeAction(Action);
   graphMenu->removeAction(menunew_itemAction);
@@ -210,7 +209,7 @@ viewGl::viewGl(QWidget* parent): QMainWindow(parent)  {
   this->addDockWidget(Qt::LeftDockWidgetArea, overviewDock);
   // move it to ensure it is the first one
   this->splitDockWidget(overviewDock, tabWidgetDock, Qt::Vertical);
-  overviewWidget->show(); 
+  overviewWidget->show();
   overviewDock->show();
 
   //Init hierarchy visualization widget
@@ -432,7 +431,7 @@ viewGl::~viewGl() {
   deleteInteractors(editSelectionInteractors);
   deleteInteractors(selectInteractors);
   deleteInteractors(selectionInteractors);
-  deleteInteractors(zoomBoxInteractors);  
+  deleteInteractors(zoomBoxInteractors);
   //  cerr << __PRETTY_FUNCTION__ << endl;
 }
 //**********************************************************************
@@ -452,14 +451,14 @@ void viewGl::startTulip() {
     wRect.setWidth(sRect.width() - deltaWidth);
   }
   // screen width centering
-  wRect.moveLeft(sRect.left() + 
+  wRect.moveLeft(sRect.left() +
 		 (sRect.width() - wRect.width())/2);
   // adjust height
   if (fRect.height() > sRect.height()) {
     wRect.setHeight(sRect.height() - deltaHeight);
   }
   // screen height centering
-  wRect.moveTop(sRect.top() + (deltaHeight - deltaWidth)/2 + 
+  wRect.moveTop(sRect.top() + (deltaHeight - deltaWidth)/2 +
 		(sRect.height() - wRect.height())/2);
   // adjust geometry
   this->setGeometry(wRect.x(), wRect.y(),
@@ -608,13 +607,13 @@ viewGlWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   //assert(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() == 0);
   //Camera *camera=new Camera(glWidget->getScene());
-  
+
   glWidget->move(0,0);
   glWidget->setWindowTitle(name);
   glWidget->setMinimumSize(0, 0);
   glWidget->resize(500,500);
   glWidget->setMaximumSize(32767, 32767);
-  //glWidget->setBackgroundMode(Qt::PaletteBackground);  
+  //glWidget->setBackgroundMode(Qt::PaletteBackground);
   glWidget->installEventFilter(this);
   glWidget->resetInteractors(*currentInteractors);
   connect(glWidget, SIGNAL(closing(GlMainWidget *, QCloseEvent *)), this, SLOT(glMainWidgetClosing(GlMainWidget *, QCloseEvent *)));
@@ -625,6 +624,7 @@ viewGlWidget * viewGl::newOpenGlView(Graph *graph, const QString &name) {
   //cerr << __PRETTY_FUNCTION__ << "...END" << endl;
   return glWidget;
 }
+
 //**********************************************************************
 void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
   GlLayer* layer=new GlLayer("Main");
@@ -655,7 +655,7 @@ std::string viewGl::newName() {
 
   if (idx++ == 0)
     return std::string(UNNAMED);
-  
+
   stringstream ss;
   ss << UNNAMED << '_' << idx - 1;
   return ss.str();
@@ -665,7 +665,7 @@ void viewGl::new3DView() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (!glWidget) return;
   viewGlWidget *newGlWidget =
-    newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), 
+    newOpenGlView(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(),
 		  glWidget->parentWidget()->windowTitle());
   constructDefaultScene(newGlWidget);
   GlGraphComposite *newGlGraphComposite=new GlGraphComposite(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph());
@@ -731,7 +731,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   if (plugin == "tlp" && graph->getRoot() != graph) {
     // tlp export plugin save only root graph
     // so ask the user
-    int answer = QMessageBox::question(this, "Save", "The root graph will be saved.\n Do you want to continue ?",  
+    int answer = QMessageBox::question(this, "Save", "The root graph will be saved.\n Do you want to continue ?",
 				       QMessageBox::Yes,  QMessageBox::No);
     if(answer == QMessageBox::No)
       return false;
@@ -772,7 +772,7 @@ bool viewGl::doFileSave(string plugin, string filename, string author, string co
   }
   bool result;
   ostream *os;
-  if (filename.rfind(".gz") == (filename.length() - 3)) 
+  if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename.c_str());
   else {
     if ((plugin == "tlp") && (filename.rfind(".tlp") == std::string::npos))
@@ -910,7 +910,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	if (typeid(*win)==typeid(viewGlWidget)) {
 	  viewGlWidget *tmpNavigate = dynamic_cast<viewGlWidget *>(win);
 	  if(tmpNavigate->name == s.toAscii().data()) {
-	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",  
+	    int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",
 					       QMessageBox::Yes,  QMessageBox::No);
 	    if(answer == QMessageBox::No)
 	      return;
@@ -919,7 +919,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
 	}
       }
     }
-    
+
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Graph *newGraph = tlp::newGraph();
     initializeGraph(newGraph);
@@ -982,7 +982,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
 
     initializeGlScene(glW->getScene());
-    
+
 
     if(noPlugin) {
       glW->name = s.toAscii().data();
@@ -1017,7 +1017,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       if (subGraph)
 	hierarchyChangeGraph(subGraph);
     }
-    
+
     // Ugly hack to handle old Tulip 2 file
     // to remove in future version
     Coord sr;
@@ -1159,7 +1159,7 @@ void viewGl::editFind() {
   if(!glWidget) return;
   Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if( !g ) return;
-  
+
   static string currentProperty;
   FindSelectionWidget *sel = new FindSelectionWidget(g, currentProperty, this);
   Observable::holdObservers();
@@ -1247,7 +1247,7 @@ static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
   //cout << subMenu->name() << "->" << itemName << endl;
   subMenu->addAction(itemName.c_str());
 }
-  
+
 //**********************************************************************
 template <typename TYPEN, typename TYPEE, typename TPROPERTY>
 void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
@@ -1308,7 +1308,7 @@ void viewGl::buildMenus() {
   renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
   renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
   //==============================================================
-  //File Menu 
+  //File Menu
   fileMenu->addSeparator();
   if (importGraphMenu.actions().count()>0) {
     importGraphMenu.setTitle("&Import");
@@ -1363,7 +1363,7 @@ void viewGl::buildMenus() {
 //**********************************************************************
 void viewGl::outputEPS() {
   if (!glWidget) return;
-  
+
   bool nodeLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewNodeLabel();
   bool edgeLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewEdgeLabel();
   bool metaLabel=glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().isViewMetaLabel();
@@ -1374,14 +1374,14 @@ void viewGl::outputEPS() {
 			     QMessageBox::Ok | QMessageBox::Cancel,
 			     QMessageBox::Ok)!=QMessageBox::Ok)
       return;
-    
+
     GlGraphRenderingParameters param= glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setViewNodeLabel(false);
     param.setViewEdgeLabel(false);
     param.setViewMetaLabel(false);
     glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   }
-  
+
   QString s( QFileDialog::getSaveFileName());
   if (!s.isNull()) {
     if (glWidget->outputEPS(64000000,true,s.toAscii().data()))
@@ -1391,7 +1391,7 @@ void viewGl::outputEPS() {
 			     "The file has not been saved."
 			     );
   }
-  
+
   if(glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getFontsType()==1) {
     GlGraphRenderingParameters param= glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setViewNodeLabel(nodeLabel);
@@ -1432,7 +1432,7 @@ void viewGl::exportImage(QAction* action) {
     return;
   }
   QString s(QFileDialog::getSaveFileName());
-  if (s.isNull()) return;    
+  if (s.isNull()) return;
   int width,height;
   width = glWidget->width();
   height = glWidget->height();
@@ -1498,7 +1498,7 @@ bool viewGl::askSaveGraph(const std::string name) {
   }
 }
 //**********************************************************************
-/* returns true if window agrees to be closed */ 
+/* returns true if window agrees to be closed */
 bool viewGl::closeWin() {
   set<unsigned int> treatedGraph;
   QWidgetList windows = workspace->windowList();
@@ -1515,7 +1515,7 @@ bool viewGl::closeWin() {
 	treatedGraph.insert((unsigned long)graph);
       }
     }
-  } 
+  }
   return true;
 }
 //**********************************************************************
@@ -1549,7 +1549,7 @@ void viewGl::group() {
   }delete it;
   if (tmp.empty()) return;
   if (graph == graph->getRoot()) {
-    QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");    
+    QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
     graph = tlp::newCloneSubGraph(graph, "groups");
   }
   node metaNode = tlp::createMetaNode(graph, tmp);
@@ -1589,7 +1589,7 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 	  ttip += ")";
 	QToolTip::showText(he->globalPos(), ttip);
 	break;
-      case EDGE: 
+      case EDGE:
 	label = labels->getEdgeValue(tmpEdge);
 	if (!label.empty())
 	  ttip += (label + "(").c_str();
@@ -1757,7 +1757,7 @@ void viewGl::centerView() {
 //===========================================================
 //Menu Edit : functions
 //===========================================================
-///Deselect all entries in the current selection 
+///Deselect all entries in the current selection
 void viewGl::selectAll() {
   if (!glWidget) return;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -1768,7 +1768,7 @@ void viewGl::selectAll() {
   glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
   Observable::unholdObservers();
 }
-///Deselect all entries in the current selection 
+///Deselect all entries in the current selection
 void viewGl::deselectAll() {
   if (!glWidget) return;
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
@@ -1793,13 +1793,13 @@ void viewGl::delSelection() {
   StableIterator<edge> itE(graph->getEdges());
   while(itE.hasNext()) {
     edge ite=itE.next();
-    if (elementSelected->getEdgeValue(ite)==true)   
+    if (elementSelected->getEdgeValue(ite)==true)
       graph->delEdge(ite);
   }
   Observable::unholdObservers();
 }
 //==============================================================
-///Reverse all entries in the current selection 
+///Reverse all entries in the current selection
 void viewGl::reverseSelection() {
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
@@ -1816,7 +1816,7 @@ void viewGl::newSubgraph() {
   bool ok = FALSE;
   string tmp;
   bool verifGraph = true;
-  BooleanProperty *sel1 = graph->getProperty<BooleanProperty>("viewSelection");  
+  BooleanProperty *sel1 = graph->getProperty<BooleanProperty>("viewSelection");
   Observable::holdObservers();
   Iterator<edge>*itE = graph->getEdges();
   while (itE->hasNext()) {
@@ -1827,8 +1827,8 @@ void viewGl::newSubgraph() {
     }
   } delete itE;
   Observable::unholdObservers();
-  
-  if(!verifGraph) 
+
+  if(!verifGraph)
     QMessageBox::critical( 0, "Tulip Warning" ,"The selection wasn't a graph, missing nodes have been added");
   QString text = QInputDialog::getText(this,
 				       "Creation of subgraph" ,
@@ -1853,7 +1853,7 @@ void viewGl::reverseSelectedEdgeDirection() {
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
-  graph->getProperty<BooleanProperty>("viewSelection")->reverseEdgeDirection();  
+  graph->getProperty<BooleanProperty>("viewSelection")->reverseEdgeDirection();
   Observable::unholdObservers();
 }
 //==============================================================
@@ -1867,19 +1867,19 @@ void viewGl::graphAboutToBeRemoved(Graph *sg) {
 //==============================================================
 void viewGl::plugins() {
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
-  
+
   /*QDialog dialog;
   QVBoxLayout layout;
   layout.setContentsMargins(0,0,0,0);
   PluginsManagerMainWindow pluginsManager(pluginLoader.pluginsList);
-  
+
   layout.addWidget(&pluginsManager);
 
   dialog.setLayout(&layout);*/
   pluginsManager->exec();
   if (pluginsManager->pluginUpdatesPending()) {
-    int result = QMessageBox::warning(this, 
-				      tr("Update plugins"), 
+    int result = QMessageBox::warning(this,
+				      tr("Update plugins"),
 				      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
 				      QMessageBox::Yes | QMessageBox::Default,
 				      QMessageBox::No);
@@ -1901,29 +1901,29 @@ void viewGl::helpAbout() {
 //==============================================================
 void viewGl::helpIndex() {
   QStringList cmdList;
-  cmdList << "-profile" 
+  cmdList << "-profile"
 	  << QString( (tlp::TulipDocProfile).c_str());
-  
+
   assistant->setArguments(cmdList);
   if ( !assistant->isOpen() ){
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
     assistant->openAssistant();
   }
-  else	
+  else
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
 }
 //==============================================================
 void viewGl::helpContents() {
   QStringList cmdList;
-  cmdList << "-profile" 
+  cmdList << "-profile"
 	  << QString( (tlp::TulipDocProfile).c_str());
-  
+
   assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() ){ 
+  if ( !assistant->isOpen() ){
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
     assistant->openAssistant();
   }
-  else	
+  else
     assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
 }
 //==============================================================
@@ -1941,7 +1941,7 @@ void viewGl::filePrint() {
   Graph *graph=
     glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
-  
+
   QPrinter printer;
   QPrintDialog dialog(&printer, this);
   if (!dialog.exec())
@@ -1994,7 +1994,7 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
   } else
     // no graph to delete
     root = (Graph *) 0;
-  
+
   if(glgw == glWidget) {
     GlGraphRenderingParameters param = glgw->getScene()->getGlGraphComposite()->getRenderingParameters();
     //param.setGraph(0);
@@ -2009,9 +2009,30 @@ void viewGl::glMainWidgetClosing(GlMainWidget *glgw, QCloseEvent *event) {
   // from the graph observers list
   if (root)
     delete root;
-  
+
   if(windows.count() == 1)
     enableElements(false);
+}
+void viewGl::addAlgorithmDataSetResultToView(DataSet *dataSet){
+  if(dataSet) {
+    if(dataSet->exist("entities")) {
+      DataSet entityDataSet;
+      dataSet->get<DataSet>("entities", entityDataSet);
+      Iterator< std::pair<std::string, DataType*> > *it=entityDataSet.getValues();
+      while(it->hasNext()) {
+        pair<string, DataType*> layerIt;
+        layerIt = it->next();
+        GlLayer *layer=glWidget->getScene()->getLayer(layerIt.first);
+
+        Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)layerIt.second->value).getValues();
+        while(it2->hasNext()) {
+          pair<string, DataType*> entityIt;
+          entityIt = it2->next();
+          layer->addGlEntity((GlSimpleEntity *)(*((long*)entityIt.second->value)),entityIt.first);
+        }
+      }
+    }
+  }
 }
 //**********************************************************************
 /// Apply a general algorithm
@@ -2036,6 +2057,7 @@ void viewGl::applyAlgorithm(QAction* action) {
     }
     clusterTreeWidget->update();
     clusterTreeWidget->setGraph(graph);
+    addAlgorithmDataSetResultToView(&dataSet);
   }
   Observable::unholdObservers();
   initObservers();
@@ -2053,7 +2075,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   GlGraphRenderingParameters param;
   QtProgress myProgress(this, name, redraw ? glWidget : 0);
   string erreurMsg;
-  bool   resultBool=true;  
+  bool   resultBool=true;
   DataSet *dataSet = new DataSet();
   if (query) {
     StructDef *params = getPluginParameters(PROPERTY::factory, name);
@@ -2077,7 +2099,7 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
     if (!resultBool) {
       QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
     }
-    else 
+    else
       switch(myProgress.state()){
       case TLP_CONTINUE:
       case TLP_STOP:
@@ -2094,25 +2116,9 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
-    if(dataSet) {
-      if(dataSet->exist("entities")) {
-	DataSet entityDataSet;
-	dataSet->get<DataSet>("entities", entityDataSet);
-	Iterator< std::pair<std::string, DataType*> > *it=entityDataSet.getValues();
-	while(it->hasNext()) {
-	  pair<string, DataType*> layerIt;
-	  layerIt = it->next();
-	  GlLayer *layer=glWidget->getScene()->getLayer(layerIt.first);
-	  
-	  Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)layerIt.second->value).getValues();
-	  while(it2->hasNext()) {
-	    pair<string, DataType*> entityIt;
-	    entityIt = it2->next();
-	    layer->addGlEntity((GlSimpleEntity *)(*((long*)entityIt.second->value)),entityIt.first);
-	  }
-	}
-      }
-    }
+
+    addAlgorithmDataSetResultToView(dataSet);
+
     //glWidget->getScene()->getGlGraphComposite()->getInputData()->loadProperties();
   }
   if (dataSet!=0) delete dataSet;
@@ -2156,7 +2162,7 @@ void viewGl::changeLayout(QAction* action) {
   clearObservers();
   string name = action->text().toStdString();
   GraphState * g0 = 0;
-  if( enable_morphing->isChecked() ) 
+  if( enable_morphing->isChecked() )
     g0 = new GraphState(glWidget);
 
   bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
@@ -2390,7 +2396,7 @@ void viewGl::makeDirected() {
   }
   if (!root.isValid())
     root = graphCenterHeuristic(graph);
-      
+
   Observable::holdObservers();
   TreeTest::makeRootedTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), root);
   Observable::unholdObservers();
