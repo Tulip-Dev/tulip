@@ -67,8 +67,10 @@ void IntegerProperty::computeMinMax() {
   for (;itN->hasNext();) {
     node itn=itN->next();
     tmp=getNodeValue(itn);
-    if (tmp>maxN) maxN=tmp;
-    if (tmp<minN) minN=tmp;
+    if (tmp>maxN)
+      maxN=tmp;
+    else if (tmp<minN)
+      minN=tmp;
   }
   delete itN;
   Iterator<edge> *itE=graph->getEdges();
@@ -81,8 +83,10 @@ void IntegerProperty::computeMinMax() {
   for (;itE->hasNext();) {
     edge ite=itE->next();
     tmp=getEdgeValue(ite);
-    if (tmp>maxE) maxE=tmp;
-    if (tmp<minE) minE=tmp;
+    if (tmp>maxE)
+      maxE=tmp;
+    else if (tmp<minE)
+      minE=tmp;
   }
   delete itE;
   minMaxOk=true;
@@ -98,6 +102,31 @@ void IntegerProperty::reset_handler() {
 void IntegerProperty::recompute_handler() {
   //  graph->getPropertyManager()->currentAbstractProperty=this;
   minMaxOk=false;
+}
+//=================================================================================
+void IntegerProperty::setNodeValue_handler(const node n, const IntegerType::RealType &val) {
+  if (minMaxOk) {
+    if (val > maxN)
+      maxN = val;
+    else if (val < minN)
+      minN = val;
+  }
+}
+void IntegerProperty::setEdgeValue_handler(const edge e, const IntegerType::RealType &val) {
+  if (minMaxOk) {
+    if (val > maxE)
+      maxE = val;
+    else if (val < minE)
+      minE = val;
+  }
+}
+void IntegerProperty::setAllNodeValue_handler(const IntegerType::RealType &val) {
+  if (minMaxOk)
+    minN = maxN = val;
+}
+void IntegerProperty::setAllEdgeValue_handler(const IntegerType::RealType &val) {
+  if (minMaxOk)
+    minE = maxE = val;
 }
 //=================================================================================
 void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType> &proxyC) {

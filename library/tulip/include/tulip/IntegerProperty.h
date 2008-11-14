@@ -34,6 +34,12 @@ public :
 
 
 protected:
+  virtual void setNodeValue_handler(const node n,
+				    const IntegerType::RealType &);
+  virtual void setEdgeValue_handler(const edge e,
+				    const IntegerType::RealType &);
+  virtual void setAllNodeValue_handler(const IntegerType::RealType &);
+  virtual void setAllEdgeValue_handler(const IntegerType::RealType &);
   void reset_handler();
   void recompute_handler();
   void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
