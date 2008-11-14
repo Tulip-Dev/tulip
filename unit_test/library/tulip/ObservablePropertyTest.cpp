@@ -109,6 +109,7 @@ public:
 static PropertyObserverTest* pObserver;
 
 #define DOUBLE_PROP 2
+#define INTEGER_PROP 3
 #define LAYOUT_PROP 4
 #define SIZE_PROP 5
 //==========================================================
@@ -219,6 +220,7 @@ void ObservablePropertyTest::testAddObserver() {
     CPPUNIT_ASSERT(props[i]->countObservers() == 1);
     switch(i) {
     case DOUBLE_PROP:
+    case INTEGER_PROP:
     case LAYOUT_PROP:
     case SIZE_PROP:
       // some properties are self-observed
@@ -378,6 +380,7 @@ void ObservablePropertyTest::testRemoveObserver() {
     CPPUNIT_ASSERT(props[i]->countObservers() == 0);
     switch(i) {
     case DOUBLE_PROP:
+    case INTEGER_PROP:
     case LAYOUT_PROP:
     case SIZE_PROP:
       // some properties are self-observed

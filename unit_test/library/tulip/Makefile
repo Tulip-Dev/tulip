@@ -14,7 +14,8 @@ SRCS=   tuliplibtest.cpp \
 	IdManagerTest.cpp \
 	DataSetTest.cpp \
 	ObservablePropertyTest.cpp \
-	ObservableGraphTest.cpp
+	ObservableGraphTest.cpp \
+	IntegerPropertyMinMaxUpdateTest.cpp
 #	PlanarConMapTest.cpp 
 
 

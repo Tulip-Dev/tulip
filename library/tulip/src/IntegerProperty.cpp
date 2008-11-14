@@ -13,7 +13,8 @@ using namespace tlp;
 ///Constructeur d'un IntegerProperty
 IntegerProperty::IntegerProperty (Graph *sg):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg) {
   minMaxOk=false;
-  //  propertyProxy=this;
+  // the property observes itself; see afterSet... methods
+  addPropertyObserver(this);
 }
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
@@ -126,7 +127,33 @@ void IntegerProperty::copy( const edge e0, const edge e1, PropertyInterface * p 
 	setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 
-
+//===============================================================
+void IntegerProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
+  if (minMaxOk) {
+    IntegerType::RealType val = getNodeValue(n);
+    if (val > maxN)
+      maxN = val;
+    else if (val < minN)
+      minN = val;
+  }
+}
+void IntegerProperty::afterSetEdgeValue(PropertyInterface* prop, const edge e) {
+  if (minMaxOk) {
+    IntegerType::RealType val = getEdgeValue(e);
+    if (val > maxE)
+      maxE = val;
+    else if (val < minE)
+      minE = val;
+  }
+}
+void IntegerProperty::afterSetAllNodeValue(PropertyInterface* prop) {
+  if (minMaxOk)
+    minN = maxN = getNodeDefaultValue();
+}
+void IntegerProperty::afterSetAllEdgeValue(PropertyInterface* prop) {
+  if (minMaxOk)
+    minE = maxE = getEdgeDefaultValue();
+}
 
 
 
