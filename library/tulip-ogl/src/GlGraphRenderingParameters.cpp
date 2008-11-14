@@ -12,28 +12,28 @@ using namespace tlp;
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
   //_graph(0),
   _antialiased(true),
-  _viewArrow(false), 
-  _viewNodeLabel(false),
+  _viewArrow(false),
+  _viewNodeLabel(true),
   _viewEdgeLabel(false),
-  _viewMetaLabel(false), 
+  _viewMetaLabel(false),
   _elementOrdered(false),
   _incrementalRendering(true),
-  _edgeColorInterpolate(false), 
+  _edgeColorInterpolate(false),
   _edge3D(false),
-  _edgeSizeInterpolate(false), 
+  _edgeSizeInterpolate(false),
   _displayEdges(true),
   _displayNodes(true),
   _displayMetaNodes(true),
-  _selectedNodesStencil(0xFFFF),
-  _selectedMetaNodesStencil(0xFFFF),
-  _selectedEdgesStencil(0xFFFF),
+  _selectedNodesStencil(0x0002),
+  _selectedMetaNodesStencil(0x0002),
+  _selectedEdgesStencil(0x0002),
   _nodesStencil(0xFFFF),
   _metaNodesStencil(0xFFFF),
   _edgesStencil(0xFFFF),
   _nodesLabelStencil(0xFFFF),
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
-  _FontsType(0),
+  _FontsType(1),
   _labelsBorder(2),
   _layoutName("viewLayout") {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
@@ -101,41 +101,41 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setViewNodeLabel(b);
   if (data.get<bool>("edgeLabel", b))
     setViewEdgeLabel(b);
-  if (data.get<bool>("metaLabel", b)) 
+  if (data.get<bool>("metaLabel", b))
     setViewMetaLabel(b);
-  if (data.get<bool>("elementOrdered", b)) 
+  if (data.get<bool>("elementOrdered", b))
     setElementOrdered(b);
-  if (data.get<bool>("autoScale", b)) 
+  if (data.get<bool>("autoScale", b))
     _viewAutoScale=b;
-  if (data.get<bool>("incrementalRendering", b)) 
+  if (data.get<bool>("incrementalRendering", b))
     setIncrementalRendering(b);
-  if (data.get<bool>("edgeColorInterpolation", b)) 
+  if (data.get<bool>("edgeColorInterpolation", b))
     setEdgeColorInterpolate(b);
-  if (data.get<bool>("edgeSizeInterpolation", b)) 
+  if (data.get<bool>("edgeSizeInterpolation", b))
     setEdgeSizeInterpolate(b);
-  if (data.get<bool>("edge3D", b)) 
+  if (data.get<bool>("edge3D", b))
     setEdge3D(b);
   unsigned int ui;
-  if (data.get<unsigned int>("fontType", ui)) 
+  if (data.get<unsigned int>("fontType", ui))
     _FontsType = ui;
   int i;
-  if (data.get<int>("selectedNodesStencil", i)) 
+  if (data.get<int>("selectedNodesStencil", i))
     setSelectedNodesStencil(i);
-  if (data.get<int>("selectedMetaNodesStencil", i)) 
+  if (data.get<int>("selectedMetaNodesStencil", i))
     setSelectedMetaNodesStencil(i);
-  if (data.get<int>("selectedEdgesStencil", i)) 
+  if (data.get<int>("selectedEdgesStencil", i))
     setSelectedEdgesStencil(i);
-  if (data.get<int>("nodesStencil", i)) 
+  if (data.get<int>("nodesStencil", i))
     setNodesStencil(i);
-  if (data.get<int>("metaNodesStencil", i)) 
+  if (data.get<int>("metaNodesStencil", i))
     setMetaNodesStencil(i);
-  if (data.get<int>("edgesStencil", i)) 
+  if (data.get<int>("edgesStencil", i))
     setEdgesStencil(i);
-  if (data.get<int>("nodesLabelStencil", i)) 
+  if (data.get<int>("nodesLabelStencil", i))
     setNodesLabelStencil(i);
-  if (data.get<int>("metaNodesLabelStencil", i)) 
+  if (data.get<int>("metaNodesLabelStencil", i))
     setMetaNodesLabelStencil(i);
-  if (data.get<int>("edgesLabelStencil", i)) 
+  if (data.get<int>("edgesLabelStencil", i))
     setEdgesLabelStencil(i);
 }
 //====================================================
@@ -249,32 +249,32 @@ void GlGraphRenderingParameters::setSelectedNodesStencil(const int stencil) {
 }
 int GlGraphRenderingParameters::getSelectedNodesStencil() {
   return _selectedNodesStencil;
-} 
+}
 //====================================================
 void GlGraphRenderingParameters::setSelectedMetaNodesStencil(const int stencil) {
   _selectedMetaNodesStencil=stencil;
 }
 int GlGraphRenderingParameters::getSelectedMetaNodesStencil() {
   return _selectedMetaNodesStencil;
-} 
+}
 //====================================================
 void GlGraphRenderingParameters::setSelectedEdgesStencil(const int stencil) {
   _selectedEdgesStencil=stencil;
 }
 int GlGraphRenderingParameters::getSelectedEdgesStencil() {
   return _selectedEdgesStencil;
-} 
+}
 //====================================================
 void GlGraphRenderingParameters::setNodesStencil(const int stencil) {
   _nodesStencil=stencil;
 }
 int GlGraphRenderingParameters::getNodesStencil() {
   return _nodesStencil;
-} 
+}
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesStencil(const int stencil) {
   _metaNodesStencil=stencil;
-}   
+}
 int GlGraphRenderingParameters::getMetaNodesStencil() {
   return _metaNodesStencil;
 }
@@ -291,11 +291,11 @@ void GlGraphRenderingParameters::setNodesLabelStencil(const int stencil) {
 }
 int GlGraphRenderingParameters::getNodesLabelStencil() {
   return _nodesLabelStencil;
-} 
+}
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesLabelStencil(const int stencil) {
   _metaNodesLabelStencil=stencil;
-}   
+}
 int GlGraphRenderingParameters::getMetaNodesLabelStencil() {
   return _metaNodesLabelStencil;
 }

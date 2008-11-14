@@ -48,15 +48,15 @@ namespace tlp {
       const Size &tgtSize  = data->elementSize->getNodeValue(target);
       double srcRot = data->elementRotation->getNodeValue(source);
       double tgtRot = data->elementRotation->getNodeValue(target);
-      
+
       // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
       Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
-      
+
       int srcGlyphId = data->elementShape->getNodeValue(source);
       Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
       tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
       srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
-      
+
       int tgtGlyphId = 1; //cube outlined
       if (data->elementGraph->getNodeValue(target)==0)
 	tgtGlyphId = data->elementShape->getNodeValue(target);
@@ -64,10 +64,10 @@ namespace tlp {
       //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
       tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
       tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
-      
+
       vector<Coord> tmp =
 	tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor, tgtAnchor);
-      
+
       for(vector<Coord>::iterator it=tmp.begin();it!=tmp.end();++it)
 	bb.check(*it);
     }
@@ -102,7 +102,7 @@ namespace tlp {
     const node target = data->graph->target(e);
     Coord srcCoord = data->elementLayout->getNodeValue(source);
     Coord tgtCoord = data->elementLayout->getNodeValue(target);
-    
+
     Color fillColor = data->elementColor->getEdgeValue(e);
     Color strokeColor = data->elementBorderColor->getEdgeValue(e);
     Color textColor = data->elementLabelColor->getEdgeValue(e);
@@ -112,7 +112,7 @@ namespace tlp {
       glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
       glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
       glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
-      
+
       glPassThrough(TLP_FB_BEGIN_EDGE);
       glPassThrough(id); //id of the node for the feed back mode
     }
@@ -142,14 +142,14 @@ namespace tlp {
 
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
     unsigned nbBends = bends.size();
-  
+
     if (nbBends==0 && (source==target)) { //a loop without bends
       //draw a nice loop;
       //TODO !!
       return;
     }
 
-    if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4) 
+    if (bends.size()==0 && (srcCoord - tgtCoord).norm() < 1E-4)
       return; //two nodes very closed
     Matrix<float,4> transformMatrix;
     camera->getTransformMatrix(transformMatrix);
@@ -158,7 +158,7 @@ namespace tlp {
     const Size &tgtSize  = data->elementSize->getNodeValue(target);
     double srcRot = data->elementRotation->getNodeValue(source);
     double tgtRot = data->elementRotation->getNodeValue(target);
-    
+
     //if first bend is inside the glyph (srcCoord is an anchor point it must be  replaced the node position)
     //if last bend is in the glyph (Coord is an anchor point it should replace the node position)
     //Be carefull if there is only one node.
@@ -166,7 +166,7 @@ namespace tlp {
       Coord firstBend = bends.front();
       Coord lastBend  = bends.back();
     }
-    
+
     // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
     Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
 
@@ -242,7 +242,7 @@ namespace tlp {
       }
       tgtCoord = tgtAnchor; //this defines in drawEdge the arrow head as being the final node
 
-      
+
     }
     else {
       endLineAnchor = tgtAnchor;
@@ -253,7 +253,7 @@ namespace tlp {
     camera->getProjectionMatrix(projectionMatrix);
     camera->getModelviewMatrix(modelviewMatrix);
     float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix, camera->getViewport());
-    
+
     //draw Edge
     drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
 
@@ -272,7 +272,7 @@ namespace tlp {
     //================================
 
     glDisable(GL_CULL_FACE);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
 
     if (edge3D)
       shape |= L3D_BIT;
@@ -284,7 +284,7 @@ namespace tlp {
     Coord srcDir(srcNodePos);
     Coord tgtDir(tgtNodePos);
     vector<Coord> tmp =
-      tlp::computeCleanVertices(bends, startPoint, endPoint, srcDir, tgtDir);  
+      tlp::computeCleanVertices(bends, startPoint, endPoint, srcDir, tgtDir);
 
     if (tmp.size()<2) {
       return;
@@ -295,6 +295,7 @@ namespace tlp {
       if (drawPoly && (lod>0.05 || lod<-0.05)) {
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       }
+      glDepthFunc(GL_LESS);
       if (drawLine) {
 	tlp::polyLine(tmp, startColor, endColor);
       }
@@ -302,19 +303,22 @@ namespace tlp {
     case BEZIERSHAPE:
       if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      if (drawLine) 
+      glDepthFunc(GL_LESS);
+      if (drawLine)
 	tlp::bezierLine(tmp, startColor, endColor);
       break;
     case SPLINESHAPE:
       if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      if (drawLine) 
+      glDepthFunc(GL_LESS);
+      if (drawLine)
 	tlp::splineLine(tmp, startColor, endColor);
       break;
       //3D lines
-    case L3D_BIT + POLYLINESHAPE: 
+    case L3D_BIT + POLYLINESHAPE:
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,
-			       GlLines::LINEAR, startColor, endColor); 
+			       GlLines::LINEAR, startColor, endColor);
+      glDepthFunc(GL_LESS);
       if (drawLine) tlp::polyLine(tmp, startColor, endColor);
       break;
     case L3D_BIT + BEZIERSHAPE:
@@ -326,7 +330,8 @@ namespace tlp {
     default:
       if (drawPoly && (lod>0.05 || lod<-0.05))
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      if (drawLine) 
+      glDepthFunc(GL_LESS);
+      if (drawLine)
 	tlp::polyLine(tmp,startColor,endColor);
       break;
     }
@@ -351,7 +356,7 @@ namespace tlp {
 
     if(select)
       renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
-    else	
+    else
       renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 18, 255, 255, 255);
 
     const Coord & srcCoord = data->elementLayout->getNodeValue(data->graph->source(e));
@@ -374,7 +379,7 @@ namespace tlp {
     else {
       fontColor = data->elementLabelColor->getEdgeValue(e);
     }
-    
+
     float w_max = 300;
     float w,h;
     int rastPos[4];
@@ -396,7 +401,7 @@ namespace tlp {
     renderer->setMode(TLP_PIXMAP);
     renderer->setString(tmp, VERBATIM);
     //fontRenderer->setString(str, XML);
-    
+
     renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
     //  w_max = width;
     renderer->getBoundingBox(w_max, h, w);

@@ -10,14 +10,14 @@ using namespace std;
 
 namespace tlp {
 
-  GlConvexHull::GlConvexHull(const vector<Coord> &points, 
+  GlConvexHull::GlConvexHull(const vector<Coord> &points,
 			     const vector<Color> &fcolors,
 			     const vector<Color> &ocolors,
 			     const bool filled,
 			     const bool outlined,
 			     const string &name,
 			     const bool computeHull):
-    
+
     _points(points),
     _fillColors(fcolors),
     _outlineColors(ocolors),
@@ -47,11 +47,13 @@ void GlConvexHull::draw(float lod,Camera *camera) {
   if (_filled){
     if (_points.size() == 3)
       glBegin(GL_TRIANGLES);
-    else 
+    else
       if (_points.size() == 4)
 	glBegin(GL_QUADS);
       else
 	glBegin(GL_POLYGON);
+
+    glNormal3f(0.0f, 0.0f, 1.0f);
 
     for(unsigned int i=0; i < _points.size(); ++i) {
       if (i < _fillColors.size()) {
@@ -63,7 +65,7 @@ void GlConvexHull::draw(float lod,Camera *camera) {
     }
     glEnd();
   }
-    
+
   if (_outlined) {
     glBegin(GL_LINE_LOOP);
     for(unsigned int i=0; i < _points.size(); ++i) {
@@ -75,7 +77,7 @@ void GlConvexHull::draw(float lod,Camera *camera) {
     }
     glEnd();
   }
-    
+
   glTest(__PRETTY_FUNCTION__);
 }
 
@@ -128,7 +130,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     oColors.push_back(Color(100, 100, 100, 120));
   }
 
-  
+
 
   // build convex hulls from subgraphs
   forEach(sg, graph->getSubGraphs()) {
@@ -153,7 +155,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     /*for (;it != sgAllConvexHulls.end(); it++) {
       convexHulls.push_back(*it);
       }*/
-    
+
   }
 
   // filled and outline colors determination
@@ -194,7 +196,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	vector<Coord>::const_iterator itCoord = (*it)->_points.begin();
 
 	for (; itCoord != (*it)->_points.end(); itCoord++)
-	  gConvexHull.push_back(*itCoord);	
+	  gConvexHull.push_back(*itCoord);
 
 	vector<unsigned int> gConvexHullIdxs;
 	// compute convex hull with new set of points
@@ -245,7 +247,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	    hl = hh/10.;
 	  else
 	    hl = hw/10.;
-	  
+
 	  hh += hl;
 	  hw += hl;
 	  if (bendsl > hl)
@@ -292,7 +294,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       }
       //}
   }
-			 
+
   return convexHullItem;
 }
   //====================================================
@@ -332,7 +334,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       GlXMLTools::setWithXML(dataNode, "outlined", _outlined);
     }
   }
-  
+
 }
 
 
