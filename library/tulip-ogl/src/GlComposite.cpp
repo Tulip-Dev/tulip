@@ -30,7 +30,7 @@ namespace tlp {
     if(elements.find(key)==elements.end()) {
       elements[key] = entity;
       _sortedElements.push_back(entity);
-      
+
       for(vector<GlLayer*>::iterator it=parents.begin();it!=parents.end();++it) {
 	entity->addParent(*it);
 	if((*it)->getScene())
@@ -41,7 +41,7 @@ namespace tlp {
 	_sortedElements.remove(elements[key]);
 	_sortedElements.push_back(entity);
 	elements[key] = entity;
-      } 
+      }
     }
   }
   //============================================================
@@ -121,7 +121,7 @@ namespace tlp {
 	  //New version
 	  name = GlXMLTools::getProperty("name",node);
 	}else{
-	  //previous version compatibility
+	  //previous version comglStencilFunc(GL_LEQUAL,0x0002,0xFFFF);patibility
 	  name=(char*)node->name;
 	}
 	if(type!="") {
@@ -129,10 +129,10 @@ namespace tlp {
 	  if(entity) {
 	    bool visible;
 	    int stencil;
-	    
+
 	    entity->setWithXML(node);
 	    GlXMLTools::getDataNode(node,dataNode);
-	      
+
 	    GlXMLTools::setWithXML(dataNode, "visible", visible);
 	    GlXMLTools::setWithXML(dataNode, "stencil", stencil);
 	    entity->setVisible(visible);

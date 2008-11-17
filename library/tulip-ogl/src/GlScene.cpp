@@ -30,7 +30,7 @@
 using namespace std;
 
 namespace tlp {
-  
+
   GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
     selectionLayer= new GlLayer("Selection");
@@ -48,7 +48,7 @@ namespace tlp {
     if(glGraphComposite) {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
     }
-      
+
     if(antialiased) {
       glEnable(GL_LINE_SMOOTH);
       glEnable(GL_POLYGON_SMOOTH);
@@ -78,7 +78,7 @@ namespace tlp {
     glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
-    
+
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
@@ -86,18 +86,19 @@ namespace tlp {
 
   void GlScene::draw() {
     initGlParameters();
-    
+
     GlLODSceneVisitor lodVisitor(lodCalculator,glGraphComposite->getInputData());
 
     //cout << ">>> Check bounding box" << endl ;
-    
+
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       (*it).second->acceptVisitor(&lodVisitor);
-      if((*it).first=="Main")
-	selectionLayer->acceptVisitor(&lodVisitor);
+      if((*it).first=="Main"){
+        selectionLayer->acceptVisitor(&lodVisitor);
+      }
     }
-    
+
     //cout << "<<< End Check bounding box" << endl;
     //cout << ">>> Begin LOD compute" << endl;
     lodCalculator->compute(viewport,viewport);
@@ -111,7 +112,7 @@ namespace tlp {
     LODResultVector* seVector=lodCalculator->getResultForSimpleEntities();
     LODResultVector::iterator itCE=ceVector->begin();
     LODResultVector::iterator itSE=seVector->begin();
-    
+
 
     //cout << ">>> Begin draw" << endl;
     /*Camera *camera=selectionLayer->getCamera();
@@ -128,13 +129,13 @@ namespace tlp {
     Camera *camera;
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-   
+
       //cout << ">>> Draw SE" << endl;
       //selection layout Draw
 
       camera=(*it).second->getCamera();
       camera->initGl();
-      
+
       if((Camera*)((*itSE).first)==camera) {
 	for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
 	  if((*itE).second>=0) {
@@ -219,13 +220,14 @@ namespace tlp {
       }
 
       if((*it).first=="Main") {
-	if((*it).second->isVisible()) {
-	  camera=selectionLayer->getCamera();
-	  if((Camera*)((*itSE).first)==camera) {
-	    camera->initGl();
-	    for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	      if((*itE).second>=0) {
-		((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
+        if((*it).second->isVisible()) {
+          camera=selectionLayer->getCamera();
+          if((Camera*)((*itSE).first)==camera) {
+            camera->initGl();
+            glStencilFunc(GL_LEQUAL,0x0002,0xFFFF);
+            for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
+              if((*itE).second>=0) {
+                ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
 	      }
 	    }
 	  }
@@ -255,7 +257,7 @@ namespace tlp {
 
     Coord maxC = visitor.getBoundingBox().second;
     Coord minC = visitor.getBoundingBox().first;
-    
+
     double dx = maxC[0] - minC[0];
     double dy = maxC[1] - minC[1];
     double dz = maxC[2] - minC[2];
@@ -266,7 +268,7 @@ namespace tlp {
 
       if ((dx==0) && (dy==0) && (dz==0))
 	dx = dy = dz = 10.0;
-  
+
       camera->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.0); //radius of the sphere hull of the layer bounding box
 
       camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
@@ -274,10 +276,10 @@ namespace tlp {
       camera->setUp(Coord(0, 1., 0));
       camera->setZoomFactor(0.5);
     }
-  } 
+  }
 
   void GlScene::zoomXY(int step, const int x, const int y) {
-    
+
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D())
 	(*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1,step));
@@ -318,7 +320,7 @@ namespace tlp {
       }
     }
   }
-  
+
   void GlScene::rotateScene(const int x, const int y, const int z) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D()) {
@@ -341,7 +343,7 @@ namespace tlp {
     }else {
       if(type==SelectSimpleEntities)
 	selectionLayer->acceptVisitor(&visitor);
-      
+
       for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
 	(*it).second->acceptVisitor(&visitor);
       }
@@ -385,24 +387,24 @@ namespace tlp {
       glRenderMode(GL_SELECT);
       glInitNames();
       glPushName(0);
-      
+
       glMatrixMode(GL_PROJECTION);
       glPushMatrix(); //save previous projection matrix
-      
+
       //initialize picking matrix
       glLoadIdentity();
       x += w/2;
       y =  viewport[3] - (y + h/2);
       gluPickMatrix(x, y, w, h, (GLint *)&viewport);
- 
+
 
       camera->initProjection(false);
 
       glMatrixMode(GL_MODELVIEW);
       glPushMatrix(); //save previous model view matrix
-      
+
       camera->initModelView();
-      
+
       glPolygonMode(GL_FRONT, GL_FILL);
       glDisable(GL_LIGHTING);
       glDisable(GL_BLEND);
@@ -423,9 +425,9 @@ namespace tlp {
 	  }
 	}
       }
-      
+
       glPopMatrix();
-      
+
       glMatrixMode(GL_PROJECTION);
       glPopMatrix();
       //glLoadIdentity();
@@ -443,8 +445,9 @@ namespace tlp {
 
       delete[] selectBuf;
     }
-    
+
     lodCalculator->clear();
+    glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
     return (selectedEntities.size()!=0);
   }
   //====================================================
@@ -481,7 +484,7 @@ namespace tlp {
 	fclose(file);
       } else {
 	perror(filename.c_str());
-      } 
+      }
     }
   }
   //====================================================
@@ -518,7 +521,7 @@ namespace tlp {
 	fclose(file);
       } else {
 	perror(filename.c_str());
-      } 
+      }
     }
   }
   //====================================================
@@ -562,7 +565,7 @@ namespace tlp {
       (*it).second->getXML(node);
     }
 
-    /* 
+    /*
      * Dumping document to stdio or file
      */
     xmlChar *xmlbuff;
@@ -570,7 +573,7 @@ namespace tlp {
 
     xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
     out.append((char *)xmlbuff);
-    
+
     int lastPos=0;
     int current=out.find("\"",lastPos);
     while(current!=-1){
