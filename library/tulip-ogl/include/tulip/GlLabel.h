@@ -37,7 +37,7 @@ namespace tlp {
     /**
      * Contructor with fontPath, centerPosition, size and fontColor
      */
-    GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor);
+    GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
     ~GlLabel();
 
@@ -50,6 +50,11 @@ namespace tlp {
      * Return the bounding box of the label
      */
     virtual BoundingBox getBoundingBox();
+
+    /**
+     * return the size of the text
+     */
+    virtual Coord getSize();
 
     /**
      * Draw the Label
@@ -80,6 +85,7 @@ namespace tlp {
     Coord size;
     Color color;
     std::string fontPath;
+    bool leftAlign;
   };
 }
 #endif

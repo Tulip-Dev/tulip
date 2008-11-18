@@ -8,7 +8,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"
@@ -25,7 +24,7 @@ namespace tlp {
 
   GlLabel::GlLabel() :renderer(new TextRenderer) {
   }
-  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath) {
+  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath),leftAlign(leftAlign) {
     renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
     renderer->setMode(TLP_POLYGON);
     renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
@@ -40,7 +39,14 @@ namespace tlp {
   }
   //============================================================
   BoundingBox GlLabel::getBoundingBox() {
-    return BoundingBox(centerPosition-size/2,centerPosition+size/2);
+    if(!leftAlign)
+      return BoundingBox(centerPosition-size/2,centerPosition+size/2);
+    else
+      return BoundingBox(centerPosition-Coord(0,size[1]/2,0),centerPosition+Coord(size[0],size[1]/2,0));
+  }
+  //============================================================
+  Coord GlLabel::getSize() {
+    return size;
   }
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
@@ -59,13 +65,20 @@ namespace tlp {
     renderer->getBoundingBox(w_max, h, w);
 
     glPushMatrix();
-    glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
+
     div_w = size[0]/w;
     div_h = size[1]/h;
-    if(div_h > div_w) 
-      glScalef(div_w, div_w, 1);
-    else
-      glScalef(div_h, div_h, 1);  
+
+    if(!leftAlign) {
+      glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
+      if(div_h > div_w) 
+	glScalef(div_w, div_w, 1);
+      else
+	glScalef(div_h, div_h, 1);
+    }else{
+      glTranslatef(centerPosition[0]+size[0]/2,centerPosition[1], centerPosition[2]);
+      glScalef(div_w, div_h, 1);
+    }
     renderer->draw(w,w, 0);
     glPopMatrix();
 
