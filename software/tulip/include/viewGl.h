@@ -36,7 +36,8 @@ class GridOptionsWidget;
 class TulipStats;
 #endif
 class GlScene;
-class GlLayer;  
+class GlLayer;
+class DataSet;
 }
 
 class SGHierarchyWidget;
@@ -68,7 +69,7 @@ public:
     GlMainWidget(parent, name) {
     goingPrev = goingNext = false;
   }
-    
+
   ~viewGlWidget() {}
 };
 
@@ -141,7 +142,7 @@ protected:
 public slots:
   void startTulip();
   void fileOpen(std::string *,QString &);
-  void closeEvent(QCloseEvent *e); 
+  void closeEvent(QCloseEvent *e);
   void setSelect();
   void setAddEdge();
   void setEditEdgeBend();
@@ -153,7 +154,7 @@ public slots:
   void setMagicSelection();
   void setGraphNavigate();
   void showElementProperties(unsigned int eltId, bool isNode);
-  
+
 protected slots:
   void helpIndex();
   void helpContents();
@@ -166,7 +167,7 @@ protected slots:
   void windowActivated(QWidget *);
   void hierarchyChangeGraph(tlp::Graph *);
   void fileNew();
-  void fileOpen();  
+  void fileOpen();
   void filePrint();
   void editCut();
   void editCopy();
@@ -201,7 +202,7 @@ protected slots:
   void changeGraph(tlp::Graph *);
   void graphAboutToBeRemoved(tlp::Graph *);
   void glMainWidgetClosing(GlMainWidget *, QCloseEvent *);
-  void group();  
+  void group();
   void gridOptions();
   void isAcyclic();
   void isSimple();
@@ -239,6 +240,7 @@ private:
   std::vector<tlp::GWInteractor *> *currentInteractors;
   void setCurrentInteractors(std::vector<tlp::GWInteractor *> *interactors);
   void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
+  void addAlgorithmDataSetResultToView(tlp::DataSet *dataSet);
 
   QAssistantClient* assistant;
   unsigned int currentGraphNbNodes, currentGraphNbEdges;
