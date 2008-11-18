@@ -197,7 +197,9 @@ public:
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
       colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
+#if !defined(NDEBUG)
       cout << dd << endl;
+#endif
     } delete itN;
   }
   //=========================================================
