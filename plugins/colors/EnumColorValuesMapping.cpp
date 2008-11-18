@@ -9,6 +9,9 @@
 #include <tulip/TlpQtTools.h>
 #include <QtGui/qmessagebox.h>
 
+#include <tulip/GlRect.h>
+#include <tulip/GlLabel.h>
+
 //================================================================================
 using namespace std;
 using namespace tlp;
@@ -165,6 +168,40 @@ public:
       forEach(e, graph->getEdges())
 	colorResult->setEdgeValue(e, colors[property->getEdgeStringValue(e)]);
     }
+    
+    *dataSet = DataSet();
+    GlComposite *composite=new GlComposite();
+    DataSet mainDataSet;
+    DataSet entityDataSet;
+    vector<GlRect *> rectVector;
+    vector<GlLabel *> labelVector;
+    int i=0;
+    int xMax=0;
+    for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
+      GlRect *rect=new GlRect(Coord(15,25+i*15,0),Coord(25,15+i*15,0),(*it).second,(*it).second);
+      GlLabel *label=new GlLabel(TulipBitmapDir,Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
+      label->setText((*it).first);
+      if(30+label->getSize()[0]>xMax)
+	xMax=30+label->getSize()[0];
+      
+      rectVector.push_back(rect);
+      labelVector.push_back(label);
+      i++;
+    }
+    GlRect *rect=new GlRect(Coord(10,15+i*15,0),Coord(xMax+5,10,0),Color(0,0,0,50),Color(0,0,0,50));
+    composite->addGlEntity(rect,"rect");
+    i=0;
+    for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
+      stringstream sstr;
+      sstr << i ;
+      composite->addGlEntity(rectVector[i],"color"+sstr.str());
+      composite->addGlEntity(labelVector[i],"label"+sstr.str());
+      i++;
+    }
+    mainDataSet.set<int>("caption",(long)composite);
+    entityDataSet.set<DataSet>("Foreground",mainDataSet);
+    dataSet->set<DataSet>("entities",entityDataSet);
+
     return true;
   }
   //================================================================================
