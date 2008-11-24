@@ -189,7 +189,7 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     nodeBuilder(nodeBuilder),
     coord(Coord(0,0,0)),
     size(Size(1,1,1)),
-    color(Color(0,0,0,0))
+    color(Color(0,0,0,255))
   {}
 
   bool addInt(const string &st,const int integer) {
