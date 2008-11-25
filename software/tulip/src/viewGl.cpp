@@ -642,6 +642,10 @@ void viewGl::constructDefaultScene(viewGlWidget *glWidget) {
   labri->setVisible(false);
   foregroundLayer->addGlEntity(labri,"labrilogo");
 
+  GlComposite *hulls=new GlComposite;
+  hulls->setVisible(false);
+  layer->addGlEntity(hulls,"Hulls");
+
   glWidget->getScene()->addLayer(backgroundLayer);
   glWidget->getScene()->addLayer(layer);
   glWidget->getScene()->addLayer(foregroundLayer);
