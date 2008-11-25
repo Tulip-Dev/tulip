@@ -28,7 +28,7 @@ namespace tlp {
       newGraph = tmp;
       depth++;
     }
-  
+
     ConvexHullItem* glHulls;
     GlComposite* oldGlHulls=NULL;
     GlComposite* oldRootGraphHull=NULL;
@@ -37,14 +37,14 @@ namespace tlp {
 
       string rootGraphName;
       graph->getAttributes().get("name",rootGraphName);
-      
+
       if(oldGlHulls->findGlEntity(rootGraphName)) {
 	oldRootGraphHull=(GlComposite*)(oldGlHulls->findGlEntity(rootGraphName));
 	oldGlHulls->deleteGlEntity(oldRootGraphHull);
       }
       layer->deleteGlEntity(oldGlHulls);
     }
- 
+
     ConvexHullItem* convexHull=GlConvexHull::buildConvexHullsFromHierarchy(graph,
 									   vector<Color>(),
 									   vector<Color>(),
@@ -52,14 +52,16 @@ namespace tlp {
 									   graph,
 									   depth);
     glHulls=buildComposite(convexHull,(GlConvexHull*)oldGlHulls);
-    
+
     string rootGraphName;
     graph->getAttributes().get("name",rootGraphName);
     GlComposite *hullsComposite=new GlComposite;
-    hullsComposite->addGlEntity(glHulls->hull,rootGraphName);
-    setToOld(glHulls,(GlConvexHull*)oldRootGraphHull);
+    if(glHulls->hull!=NULL){
+      hullsComposite->addGlEntity(glHulls->hull,rootGraphName);
+      setToOld(glHulls,(GlConvexHull*)oldRootGraphHull);
+    }
 
-    layer->addGlEntity(hullsComposite,"Hulls");  
+    layer->addGlEntity(hullsComposite,"Hulls");
 
     oldGlHulls->reset(true);
   }
@@ -86,11 +88,11 @@ namespace tlp {
     }
     for(vector<ConvexHullItem *>::iterator it=convexHull->children.begin();it!=convexHull->children.end();++it) {
       GlConvexHull *oldChild;
-      if(oldHull) 
+      if(oldHull)
 	oldChild=(GlConvexHull*)oldHull->findGlEntity((*it)->name);
       else
 	oldChild=NULL;
-      
+
       setToOld(*it,oldChild);
     }
   }

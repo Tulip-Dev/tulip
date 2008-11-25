@@ -220,79 +220,81 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       // no subgraphs
       // the convex hull will be build directly with the graph nodes and edges
       // if there is some
-      if (graph->numberOfNodes()) {
-	LayoutProperty *layout = root->getProperty<LayoutProperty>("viewLayout");
-	SizeProperty *size = root->getProperty<SizeProperty>("viewSize");
-	DoubleProperty *rot = root->getProperty<DoubleProperty>("viewRotation");
-	node n;
-	// the variable below will be used to compute
-	// the box around the bends of edges
-	float bendsl = FLT_MAX;
-	forEach(n, graph->getNodes()) {
-	  // get node coordinates
-	  Coord point = layout->getNodeValue(n);
-	  // get size of bounding box
-	  Size box = size->getNodeValue(n);
-	  // get box rotation in degree
-	  double alpha = rot->getNodeValue(n);
-	  // convert in radian
-	  alpha = M_PI * alpha / 180.0;
-	  // get half height of bounding box
-	  float hh = box.getH() / 2.0;
-	  // get half width of bounding box
-	  float hw = box.getW() / 2.0;
-	  // add 10%
-	  float hl;
-	  if (hh/10. < hw/10.)
-	    hl = hh/10.;
-	  else
-	    hl = hw/10.;
+    if (graph->numberOfNodes()) {
+      LayoutProperty *layout = root->getProperty<LayoutProperty>("viewLayout");
+      SizeProperty *size = root->getProperty<SizeProperty>("viewSize");
+      DoubleProperty *rot = root->getProperty<DoubleProperty>("viewRotation");
+      node n;
+      // the variable below will be used to compute
+      // the box around the bends of edges
+      float bendsl = FLT_MAX;
+      forEach(n, graph->getNodes()) {
+        // get node coordinates
+        Coord point = layout->getNodeValue(n);
+        // get size of bounding box
+        Size box = size->getNodeValue(n);
+        // get box rotation in degree
+        double alpha = rot->getNodeValue(n);
+        // convert in radian
+        alpha = M_PI * alpha / 180.0;
+        // get half height of bounding box
+        float hh = box.getH() / 2.0;
+        // get half width of bounding box
+        float hw = box.getW() / 2.0;
+        // add 10%
+        float hl;
+        if (hh/10. < hw/10.)
+          hl = hh/10.;
+        else
+          hl = hw/10.;
 
-	  hh += hl;
-	  hw += hl;
-	  if (bendsl > hl)
-	    bendsl = hl;
-	  // add points of rotated bounding box
-	  float cosA = cos(alpha);
-	  float sinA = sin(alpha);
-	  Coord vect(0,0,-0.01);
-	  vect.setX(-hw * cosA + hh * sinA);
-	  vect.setY(-hw * sinA - hh * cosA);
-	  gConvexHull.push_back(point + vect);
-	  vect.setX(-hw * cosA - hh * sinA);
-	  vect.setY(-hw * sinA + hh * cosA);
-	  gConvexHull.push_back(point + vect);
-	  vect.setX(hw * cosA - hh * sinA);
-	  vect.setY(hw * sinA + hh * cosA);
-	  gConvexHull.push_back(point + vect);
-	  vect.setX(hw * cosA + hh * sinA);
-	  vect.setY(hw * sinA - hh * cosA);
-	  gConvexHull.push_back(point + vect);
-	}
-	// add bends of edges
-	edge e;
-	forEach(e, graph->getEdges()) {
-	  // get bends of the edge
-	  std::vector<Coord> bends = layout->getEdgeValue(e);
-	  unsigned int nbBends = bends.size();
-	  for (unsigned int i = 0; i < nbBends; i++) {
-	    Coord point(bends[i]);
-	    double x = point.getX(), y = point.getY();
-	    point.setX(x - bendsl);
-	    point.setY(y - bendsl);
-	    gConvexHull.push_back(point);
-	    point.setY(y + bendsl);
-	    gConvexHull.push_back(point);
-	    point.setX(x + bendsl);
-	    gConvexHull.push_back(point);
-	    point.setY(y - bendsl);
-	    gConvexHull.push_back(point);
-	  }
-	}
-	// add a GlConvexHull for this graph in front of convexHulls
-	convexHullItem->hull=new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+        hh += hl;
+        hw += hl;
+        if (bendsl > hl)
+          bendsl = hl;
+        // add points of rotated bounding box
+        float cosA = cos(alpha);
+        float sinA = sin(alpha);
+        Coord vect(0,0,-0.01);
+        vect.setX(-hw * cosA + hh * sinA);
+        vect.setY(-hw * sinA - hh * cosA);
+        gConvexHull.push_back(point + vect);
+        vect.setX(-hw * cosA - hh * sinA);
+        vect.setY(-hw * sinA + hh * cosA);
+        gConvexHull.push_back(point + vect);
+        vect.setX(hw * cosA - hh * sinA);
+        vect.setY(hw * sinA + hh * cosA);
+        gConvexHull.push_back(point + vect);
+        vect.setX(hw * cosA + hh * sinA);
+        vect.setY(hw * sinA - hh * cosA);
+        gConvexHull.push_back(point + vect);
       }
-      //}
+      // add bends of edges
+      edge e;
+      forEach(e, graph->getEdges()) {
+        // get bends of the edge
+        std::vector<Coord> bends = layout->getEdgeValue(e);
+        unsigned int nbBends = bends.size();
+        for (unsigned int i = 0; i < nbBends; i++) {
+          Coord point(bends[i]);
+          double x = point.getX(), y = point.getY();
+          point.setX(x - bendsl);
+          point.setY(y - bendsl);
+          gConvexHull.push_back(point);
+          point.setY(y + bendsl);
+          gConvexHull.push_back(point);
+          point.setX(x + bendsl);
+          gConvexHull.push_back(point);
+          point.setY(y - bendsl);
+          gConvexHull.push_back(point);
+        }
+      }
+      // add a GlConvexHull for this graph in front of convexHulls
+      convexHullItem->hull=new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+    }else{
+      convexHullItem->hull=NULL;
+    }
+    //}
   }
 
   return convexHullItem;
