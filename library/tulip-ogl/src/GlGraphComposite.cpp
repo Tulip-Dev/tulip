@@ -13,7 +13,7 @@ namespace tlp {
 
   GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters) {
     graph->addGraphObserver(this);
-    
+
     buildLists();
   }
   void GlGraphComposite::buildLists() {
@@ -36,13 +36,13 @@ namespace tlp {
       comp.metric=metric;
       orderedNode.sort(comp);
       edge e;
-      forEach(e, graph->getEdges()) 
+      forEach(e, graph->getEdges())
 	orderedEdge.push_back(e);
       LessThanEdge comp2;
       comp2.metric = metric;
       comp2.sp = graph;
       orderedEdge.sort(comp2);
-      
+
       for(list<node>::iterator itN=orderedNode.begin();itN!=orderedNode.end();++itN) {
 	if(inputData.getGraph()->isMetaNode(*itN)){
 	  metaNodes.push_back(GlMetaNode((*itN).id));
@@ -50,19 +50,19 @@ namespace tlp {
 	  nodes.push_back(GlNode((*itN).id));
 	}
       }
-      
+
       for(list<edge>::iterator itE=orderedEdge.begin();itE!=orderedEdge.end();++itE) {
 	edges.push_back(GlEdge((*itE).id));
       }
-      
+
     } else {
       Iterator<node>* drawNodesIterator = graph->getNodes();
       Iterator<edge>* drawEdgesIterator = graph->getEdges();
-      
+
       if (!drawNodesIterator->hasNext() || graph->numberOfNodes()==0) return;
-      
-      unsigned int number = graph->numberOfNodes(); 
-      
+
+      unsigned int number = graph->numberOfNodes();
+
       while ((drawNodesIterator->hasNext()) && (number >0)) {
 	--number;
 	unsigned int id=drawNodesIterator->next().id;
@@ -72,9 +72,9 @@ namespace tlp {
 	  nodes.push_back(GlNode(id));
 	}
       }
-      
-      number = graph->numberOfEdges(); 
-      
+
+      number = graph->numberOfEdges();
+
       while ((drawEdgesIterator->hasNext()) && (number >0)) {
 	--number;
 	edges.push_back(GlEdge(drawEdgesIterator->next().id));
@@ -104,20 +104,26 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::addEdge(Graph *graph,const edge e) {
-    edges.push_back(GlEdge(e.id)); 
+    edges.push_back(GlEdge(e.id));
   }
   //===================================================================
   void GlGraphComposite::delNode(Graph *graph,const node n) {
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
       if((*it).id==n.id) {
-	nodes.erase(it);
-	break;
+        nodes.erase(it);
+        break;
+      }
+    }
+    for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
+      if((*it).id==n.id) {
+        metaNodes.erase(it);
+        break;
       }
     }
     for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
       if((*it)==n.id) {
-	nodesToAdd.erase(it);
-	break;
+        nodesToAdd.erase(it);
+        break;
       }
     }
   }
@@ -144,7 +150,7 @@ namespace tlp {
 	  metaNodes.push_back(GlMetaNode(*it));
 	}
 	else{
-	  nodes.push_back(GlNode(*it)); 
+	  nodes.push_back(GlNode(*it));
 	}
       }
       nodesToAdd.clear();
