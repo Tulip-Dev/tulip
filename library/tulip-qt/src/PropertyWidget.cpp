@@ -105,7 +105,7 @@ void PropertyWidget::changePropertyValue(int i,int j) {
 
 void PropertyWidget::changePropertyEdgeValue(int i,int j) {  
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
   string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toAscii().data();
@@ -143,7 +143,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
 
 void PropertyWidget::changePropertyNodeValue(int i, int j) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
   string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
@@ -187,7 +187,7 @@ void PropertyWidget::filterSelection(bool b) {
 }
 
 void PropertyWidget::scroll(int i) {
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   int curId = i;
   bool toUpdate = false;
   if (curId > (vScrollPos + TABLEBUFSIZE/4)) {
@@ -212,7 +212,11 @@ void PropertyWidget::scroll(int i) {
 }
 
 void PropertyWidget::update() {
-  if (graph==0) return;
+  if (graph == NULL) return;
+  // check editedProperty
+  if (editedProperty && !graph->existProperty(editedPropertyName))
+    editedProperty = NULL;
+    
   disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
   clearContents();
   if (displayNode)
@@ -225,7 +229,7 @@ void PropertyWidget::update() {
 }
 
 void PropertyWidget::updateEdges() {
-  if (editedProperty==0) {
+  if (editedProperty == NULL) {
     return;
   }
   updateNbElements();
@@ -252,7 +256,7 @@ void PropertyWidget::updateEdges() {
 }
 
 void PropertyWidget::updateNodes() {
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   setRowCount(nbElement);
@@ -277,7 +281,7 @@ void PropertyWidget::updateNodes() {
 }
 
 void PropertyWidget::updateNbElements() {
-  if (graph==0) return;
+  if (graph == NULL) return;
   unsigned int nbNode,nbEdge;
   if (!_filterSelection) {
     nbNode=graph->numberOfNodes();
@@ -308,7 +312,7 @@ void PropertyWidget::setAll() {
 }
 
 void PropertyWidget::setAllNodeValue() {
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool ok=false;
   string tmpStr;
@@ -403,7 +407,7 @@ void PropertyWidget::setAllNodeValue() {
 }
 
 void  PropertyWidget::setAllEdgeValue() {
-  if (editedProperty==0) return;
+  if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool ok=false;
   string tmpStr;
