@@ -1,6 +1,5 @@
 #include <vector>
 #include <string.h>
-#include <GL/gl.h>
 #include <gle.h>
 #include <tulip/Vector.h>
 #include <tulip/Size.h>

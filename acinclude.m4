@@ -418,7 +418,8 @@ fi
 dnl MAC PORT
 if test ${VAR_MACOSX} = 1
 then
-  GL_INCLUDES="$GL_INCLUDES -I/usr/include/malloc"
+  GL_INCLUDES="-I/usr/include/malloc"
+  GL_LDFLAGS=""
 fi
 AC_SUBST(gl_libraries)
 AC_SUBST(gl_includes)

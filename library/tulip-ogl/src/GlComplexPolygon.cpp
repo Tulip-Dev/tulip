@@ -1,5 +1,24 @@
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+#ifndef CALLBACK
+#define CALLBACK
+#endif
+
+#ifdef __APPLE_CC__
+    typedef GLvoid (*GLUTesselatorFunction)(...);
+#elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
+    typedef GLvoid (*GLUTesselatorFunction)();
+#elif defined ( WIN32)
+    typedef GLvoid (CALLBACK *GLUTesselatorFunction)( );
+#else
+    #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
+#endif
+
 #include "tulip/GlComplexPolygon.h"
 #include "tulip/GlTools.h"
 #include "tulip/GlLayer.h"
@@ -138,13 +157,13 @@ namespace tlp {
     tobj = gluNewTess();
 
     gluTessCallback(tobj, GLU_TESS_VERTEX,
-		    (void (*)())vertexCallback);
+		    (GLUTesselatorFunction)vertexCallback);
     gluTessCallback(tobj, GLU_TESS_BEGIN,
-		    (void (*)())beginCallback);
+		    (GLUTesselatorFunction)beginCallback);
     gluTessCallback(tobj, GLU_TESS_END,
-		    (void (*)())endCallback);
+		    (GLUTesselatorFunction)endCallback);
     gluTessCallback(tobj, GLU_TESS_ERROR,
-		    (void (*)())errorCallback);
+		    (GLUTesselatorFunction)errorCallback);
 
     glShadeModel(GL_SMOOTH);
 
