@@ -97,6 +97,8 @@ template<class C>class Iterator;
  */
   class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
+  friend class GraphUpdatesRecorder;
+  
 public:  
   Graph();
   virtual ~Graph();
@@ -292,12 +294,20 @@ public:
   //================================================================================
   ///Return graph attributes
   virtual DataSet & getAttributes() =0;
-  ///Get an attribute of the graph
+  ///Get an attribute of the graph; returns true if a value was found
+  ///false if not
+  template<typename ATTRIBUTETYPE> 
+  bool getAttribute(const std::string &name, ATTRIBUTETYPE& value);
+  ///deprecated version of the previous method
   template<typename ATTRIBUTETYPE> 
   ATTRIBUTETYPE getAttribute(const std::string &name);
   ///Set an attribute of the graph
   template<typename ATTRIBUTETYPE> 
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
+  /// remove an existing attribute
+  void removeAttribute(const std::string &name) {
+    getAttributes().remove(name);
+  }
   /**
    *  add a property to the graph
    *  Be aware that the PropertyInterface will now belong to the graph object;
@@ -366,6 +376,30 @@ public:
    * Returns an iterator on all the properties
    */
   virtual Iterator<std::string>* getProperties()=0;
+
+  // updates management
+  virtual void push()=0;
+  virtual void pop()=0;
+  virtual void unpop()=0;
+  virtual bool canPop()=0;
+    virtual bool canUnpop()=0;
+
+protected:
+  // designed to reassign an id to a previously deleted elt
+  // used by GraphUpdatesRecorder
+  virtual node restoreNode(node)=0;
+  virtual edge restoreEdge(edge, node source, node target)=0;
+  // designed to only update own structures
+  // used by GraphUpdatesRecorder
+  virtual void removeNode(const node)=0;
+  virtual void removeEdge(const edge, const node=node())=0;
+
+  // to deal with sub graph deletion
+  virtual void removeSubGraph(Graph*)=0;
+  virtual void clearSubGraphs()=0;
+  // only called by GraphUpdatesRecorder
+  virtual void restoreSubGraph(Graph*, bool restoreSubGraphs = false)=0;
+  virtual void setSubGraphToKeep(Graph*)=0;
 
 private:
 

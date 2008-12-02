@@ -26,7 +26,8 @@ namespace tlp {
   }
 
   void GlGraphInputData::reloadLayoutProperty() {
-    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
+    if (!graph->getAttribute("viewLayout", elementLayout))
+      elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
   }
   
   void GlGraphInputData::reloadLabelProperty() {
@@ -46,7 +47,7 @@ namespace tlp {
     elementColor = graph->getProperty<ColorProperty>("viewColor");
     elementShape = graph->getProperty<IntegerProperty>("viewShape");
     elementSize = graph->getProperty<SizeProperty>("viewSize");
-    elementLayout = graph->getProperty<LayoutProperty>(parameters->getInputLayout());
+    reloadLayoutProperty();
     elementTexture = graph->getProperty<StringProperty>("viewTexture");
     elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
     elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");

@@ -289,9 +289,13 @@ void ElementPropertiesWidget::propertyTableValueChanged(int row, int col) {
   bool result=true;
   switch(displayMode) {
   case NODE:
+    // allow to undo
+    graph->push();
     result=editedProperty->setNodeStringValue(currentNode, value.toAscii().data());
     break;
   case EDGE:
+    // allow to undo
+    graph->push();
     result=editedProperty->setEdgeStringValue(currentEdge, value.toAscii().data());
     break;
   }

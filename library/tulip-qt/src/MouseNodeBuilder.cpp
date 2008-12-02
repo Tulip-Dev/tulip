@@ -27,6 +27,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       //  Colors* mColors=_graph->getProperty<ColorProperty>("viewColor");
+      // allow to undo
+      _graph->push();
       node newNode;
       newNode = _graph->addNode();
       //if (isViewStrahler()) orderedNode.push_front(newNode);

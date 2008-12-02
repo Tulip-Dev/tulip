@@ -17,10 +17,19 @@
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
-    <property name="margin" >
+    <property name="spacing" >
      <number>0</number>
     </property>
-    <property name="spacing" >
+    <property name="leftMargin" >
+     <number>0</number>
+    </property>
+    <property name="topMargin" >
+     <number>0</number>
+    </property>
+    <property name="rightMargin" >
+     <number>0</number>
+    </property>
+    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
@@ -33,18 +42,26 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
+   <addaction name="undoAction" />
+   <addaction name="redoAction" />
   </widget>
   <widget class="QToolBar" name="graphToolBar" >
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <number>4</number>
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
    </attribute>
    <addaction name="navigate_action" />
    <addaction name="selectAction" />
@@ -63,7 +80,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>29</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu" >
@@ -84,6 +101,9 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="separator" />
+    <addaction name="editUndoAction" />
+    <addaction name="editRedoAction" />
+    <addaction name="separator" />
     <addaction name="editCutAction" />
     <addaction name="editCopyAction" />
     <addaction name="editPasteAction" />
@@ -97,6 +117,7 @@
     <addaction name="separator" />
     <addaction name="editCreate_groupAction" />
     <addaction name="editCreate_subgraphAction" />
+    <addaction name="separator" />
    </widget>
    <widget class="QMenu" name="propertyMenu" >
     <property name="title" >
@@ -261,34 +282,6 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="editUndoAction" >
-   <property name="icon" >
-    <iconset>image7</iconset>
-   </property>
-   <property name="text" >
-    <string>&amp;Undo</string>
-   </property>
-   <property name="iconText" >
-    <string>Undo</string>
-   </property>
-   <property name="shortcut" >
-    <string>Ctrl+Z</string>
-   </property>
-  </action>
-  <action name="editRedoAction" >
-   <property name="icon" >
-    <iconset>image8</iconset>
-   </property>
-   <property name="text" >
-    <string>&amp;Redo</string>
-   </property>
-   <property name="iconText" >
-    <string>Redo</string>
-   </property>
-   <property name="shortcut" >
-    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="editCutAction" >
@@ -719,6 +712,44 @@
    </property>
    <property name="text" >
     <string>Antialiasing</string>
+   </property>
+  </action>
+  <action name="undoAction" >
+   <property name="icon" >
+    <iconset resource="TulipResource.qrc" >:/i_undo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>undo</string>
+   </property>
+  </action>
+  <action name="redoAction" >
+   <property name="icon" >
+    <iconset resource="TulipResource.qrc" >:/i_redo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>redo</string>
+   </property>
+  </action>
+  <action name="editUndoAction" >
+   <property name="text" >
+    <string>&amp;Undo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+U</string>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="editRedoAction" >
+   <property name="text" >
+    <string>&amp;Redo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+R</string>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
    </property>
   </action>
   <actiongroup name="mouseActionGroup" >
@@ -1646,6 +1677,70 @@
    <signal>toggled(bool)</signal>
    <receiver>TulipData</receiver>
    <slot>setAntialiasing(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>502</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>undoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>undo()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>502</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>redoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>redo()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>502</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editUndoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>undo()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>502</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editRedoAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>redo()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>-1</x>

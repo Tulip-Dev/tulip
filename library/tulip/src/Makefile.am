@@ -85,4 +85,5 @@ libtulip_la_SOURCES = \
 	RectangleArea.cpp \
 	Border.cpp \
 	TLPImport.cpp \
-	TLPExport.cpp
+	TLPExport.cpp \
+	GraphUpdatesRecorder.cpp

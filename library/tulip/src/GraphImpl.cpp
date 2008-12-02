@@ -18,6 +18,8 @@
 #include "tulip/LayoutProperty.h"
 #include "tulip/GraphIterator.h"
 #include "tulip/StableIterator.h"
+#include "tulip/ForEach.h"
+#include "tulip/GraphUpdatesRecorder.h"
 
 using namespace std;
 using namespace tlp;
@@ -84,9 +86,8 @@ static bool integrityTest(Graph *graph) {
 }
 */
 //----------------------------------------------------------------
-GraphImpl::GraphImpl():GraphAbstract(this) {
-  nbNodes=0;
-  nbEdges=0;
+GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0),
+		       lastRecorder(NULL) {
   outDegree.setAll(0);
 }
 //----------------------------------------------------------------
@@ -95,7 +96,7 @@ GraphImpl::~GraphImpl() {
   Observable::notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
-    delAllSubGraphs(itS.next());
+    delAllSubGraphsInternal(itS.next(), true);
   delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeGraphObservers();
   removeObservers();
@@ -119,8 +120,7 @@ bool GraphImpl::isElement(const edge e) const {
   return !edgeIds.is_free(e.id);
 }
 //----------------------------------------------------------------
-node GraphImpl::addNode() {
-  node newNode(nodeIds.get());
+node GraphImpl::restoreNode(node newNode) {
   outDegree.set(newNode.id, 0);
   while (nodes.size() <= newNode.id){
     nodes.push_back(EdgeContainer());
@@ -132,25 +132,46 @@ node GraphImpl::addNode() {
   return newNode;
 }
 //----------------------------------------------------------------
+node GraphImpl::addNode() {
+  return restoreNode(node(nodeIds.get()));
+}
+//----------------------------------------------------------------
 void GraphImpl::addNode(const node n) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
-edge GraphImpl::addEdge(const node s,const node t) {
+edge GraphImpl::addEdgeInternal(edge newEdge, const node s,
+				const node t, bool updateContainers) {
   assert(isElement(s) && isElement(t));
   pair< node , node > tmp(s,t);
   outDegree.set(s.id, outDegree.get(s.id) + 1);
-  edge newEdge(edgeIds.get());
   while (edges.size()<=newEdge.id){
     edges.push_back(tmp);
   }
   edges[newEdge.id] = tmp;
-  nodes[s.id].push_back(newEdge);
-  nodes[t.id].push_back(newEdge);
+  if (updateContainers) {
+    nodes[s.id].push_back(newEdge);
+    nodes[t.id].push_back(newEdge);
+  }
   nbEdges++;
-  notifyAddEdge(this,newEdge);
+  notifyAddEdge(this, newEdge);
   notifyObservers();
   return newEdge;
+}
+//----------------------------------------------------------------
+void GraphImpl::restoreContainer(node n, vector<edge>& edges) {
+  EdgeContainer& container = nodes[n.id];
+  container.clear();
+  for(unsigned int i = 0; i < edges.size(); ++i)
+    container.push_back(edges[i]);
+}
+//----------------------------------------------------------------
+edge GraphImpl::restoreEdge(edge newEdge, const node s,const node t) {
+  return addEdgeInternal(newEdge, s, t, false);
+}
+//----------------------------------------------------------------
+edge GraphImpl::addEdge(const node s,const node t) {
+  return addEdgeInternal(edge(edgeIds.get()), s, t, true);
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
@@ -158,23 +179,39 @@ void GraphImpl::addEdge(const edge e) {
   cerr << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")" << endl;
 }
 //----------------------------------------------------------------
+void GraphImpl::delNodeInternal(const node n) {
+  getPropertyManager()->erase(n);
+  nodes[n.id].clear();
+  nodeIds.free(n.id);
+  nbNodes--;
+}
+//----------------------------------------------------------------
+void GraphImpl::removeNode(const node n) {
+  assert (isElement(n));
+  notifyDelNode(this, n);
+  delNodeInternal(n);
+  notifyObservers();
+}
+//----------------------------------------------------------------
 void GraphImpl::delNode(const node n) {
   assert (isElement(n));
   notifyDelNode(this, n);
-  externRemove(n);
+  // propagate to subgraphs
+  Iterator<Graph *>*itS=getSubGraphs();
+  while (itS->hasNext()) {
+    Graph *subgraph = itS->next();
+    assert(subgraph != this);
+    if (subgraph->isElement(n))
+      subgraph->delNode(n);
+  } delete itS;
   set<edge> loops;
   bool haveLoops = false;
-  unsigned int toRemove = 0;
   for(EdgeContainer::iterator i=nodes[n.id].begin(); i!=nodes[n.id].end(); ++i) {
     node s = opposite(*i, n);
     if (s!=n) {
-      notifyDelEdge(this, *i);
       if (source(*i) == s)
 	outDegree.set(s.id, outDegree.get(s.id) - 1);
-      removeEdge(nodes[s.id], *i);
-      getPropertyManager()->erase(*i);
-      edgeIds.free(i->id);
-      ++toRemove;
+      removeEdge(*i, n);
     }
     else {
       loops.insert(*i);
@@ -184,19 +221,14 @@ void GraphImpl::delNode(const node n) {
   if (haveLoops) {
     set<edge>::const_iterator it;
     for ( it = loops.begin(); it!=loops.end(); ++it) {
-      notifyDelEdge(this, *it);
-      getPropertyManager()->erase(*it);
-      edgeIds.free(it->id);
-      ++toRemove;
+      removeEdge(*it, n);
     }
   }
-  nbEdges -= toRemove;
-  nodes[n.id].clear();
+  delNodeInternal(n);
   notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e) {
-  notifyDelEdge(this,e);
   assert(existEdgeE(this, source(e),target(e), e));
   if (!isElement(e)) {
     return;
@@ -206,10 +238,14 @@ void GraphImpl::delEdge(const edge e) {
   node s = source(e);
   node t = target(e);
   outDegree.set(s.id, outDegree.get(s.id)-1);
-  externRemove(e);
-  removeEdge(nodes[s.id], e);
-  removeEdge(nodes[t.id], e);
-  notifyObservers();
+  Iterator<Graph *>*itS=getSubGraphs();
+  while (itS->hasNext()) {
+    Graph *subgraph = itS->next();
+    assert(subgraph != this);
+    if (subgraph->isElement(e))
+      subgraph->delEdge(e);
+  } delete itS;
+  removeEdge(e);
 }
 //----------------------------------------------------------------
 void GraphImpl::delAllNode(const node n){delNode(n);}
@@ -330,6 +366,24 @@ unsigned int GraphImpl::numberOfEdges()const{return nbEdges;}
 //----------------------------------------------------------------
 unsigned int GraphImpl::numberOfNodes()const{return nbNodes;}
 //----------------------------------------------------------------
+void GraphImpl::removeEdge(const edge e, node dontUpdateNode) {
+  assert(isElement(e));
+  notifyDelEdge(this,e);
+  getPropertyManager()->erase(e);
+  edgeIds.free(e.id);
+  nbEdges--;
+  pair<node, node>edgeNodes = edges[e.id];
+  // remove from source's edges
+  node n = edgeNodes.first;
+  if (n != dontUpdateNode)
+    removeEdge(nodes[n.id], e);
+  // remove from target's edges
+  n = edgeNodes.second;
+  if (n != dontUpdateNode)
+    removeEdge(nodes[n.id], e);
+  notifyObservers();
+}
+//----------------------------------------------------------------
 void GraphImpl::removeEdge(EdgeContainer &c, const edge e) {
   bool copy = false;
   EdgeContainer::iterator previous;
@@ -341,34 +395,112 @@ void GraphImpl::removeEdge(EdgeContainer &c, const edge e) {
     if (e1 == e)  
       copy = true;
   }
-  c.pop_back();
+  if (copy)
+    c.pop_back();
 }
 //----------------------------------------------------------------
-void GraphImpl::externRemove(const edge e) {
-  assert(isElement(e));
-  Iterator<Graph *>*itS=getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *subgraph = itS->next();
-    assert(subgraph != this);
-    if (subgraph->isElement(e))
-      subgraph->delEdge(e);
-  } delete itS;
-  getPropertyManager()->erase(e);
-  edgeIds.free(e.id);
-  nbEdges--;
+bool GraphImpl::canPop() {
+  return (recorders.size() != 0);
 }
 //----------------------------------------------------------------
-void GraphImpl::externRemove(const node n) {
-  assert(isElement(n));
-  Iterator<Graph *>*itS=getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *subgraph = itS->next();
-    assert(subgraph != this);
-    if (subgraph->isElement(n))
-      subgraph->delNode(n);
-  } delete itS;
-  getPropertyManager()->erase(n);
-  nodeIds.free(n.id);
-  nbNodes--;
+bool GraphImpl::canUnpop() {
+  return (lastRecorder != NULL);
 }
 //----------------------------------------------------------------
+void GraphImpl::delLastRecorder() {
+  if (lastRecorder != NULL) {
+    unobserveUpdates();
+    delete lastRecorder;
+    lastRecorder = NULL;
+  }
+}
+//----------------------------------------------------------------
+void GraphImpl::update(std::set<Observable *>::iterator,
+		       std::set<Observable *>::iterator) {
+  delLastRecorder();
+}
+//----------------------------------------------------------------
+void GraphImpl::observableDestroyed(Observable*) {
+  delLastRecorder();
+}
+//----------------------------------------------------------------
+void GraphImpl::observeUpdates(Graph *g) {
+  g->addObserver(this);
+  observedGraphs.push_front(g);
+
+  // loop on local properties
+  string pName;
+  forEach(pName, g->getLocalProperties()) {
+    PropertyInterface *prop = g->getProperty(pName);
+    prop->addObserver(this);
+    observedProps.push_front(prop);
+  }
+
+  // loop on subgraphs
+  Graph* sg;
+  forEach(sg, g->getSubGraphs()) {
+    observeUpdates(sg);
+  }
+}  
+//----------------------------------------------------------------
+void GraphImpl::unobserveUpdates() {
+  // loop on observed graphs
+  while(!observedGraphs.empty()) {
+    observedGraphs.front()->removeObserver(this);
+    observedGraphs.pop_front();
+  }
+
+  // loop on observed properties
+  while(!observedProps.empty()) {
+    observedProps.front()->removeObserver(this);
+    observedProps.pop_front();
+  }
+}  
+//----------------------------------------------------------------
+void GraphImpl::push() {
+  // from now if a last recorder exists
+  // it cannot be unpop
+  // so delete it
+  delLastRecorder();
+
+  if (!recorders.empty())
+    // stop recording for current recorder
+    recorders.front()->stopRecording(this);
+  GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder();
+  recorder->startRecording(this);
+  recorders.push_front(recorder);
+}
+//----------------------------------------------------------------
+void GraphImpl::pop() {
+  // if needed delete the last recorder
+  delLastRecorder();
+
+  // save the front recorder
+  // to allow unpop
+  if (!recorders.empty()) {
+    lastRecorder = recorders.front();
+    lastRecorder->stopRecording(this);
+    // undo all recorded updates
+    lastRecorder->doUpdates(this, true);
+    recorders.pop_front();
+    // observe any updates
+    // in order to remove lastRecorder if needed
+    observeUpdates(this);
+    // restart the front recorder
+    if (!recorders.empty())
+      recorders.front()->restartRecording(this);
+  }
+}
+//----------------------------------------------------------------
+void GraphImpl::unpop() {
+  if (lastRecorder != NULL) {
+    unobserveUpdates();
+    if (!recorders.empty())
+      recorders.front()->stopRecording(this);
+    recorders.push_front(lastRecorder);
+    // redo all recorded updates
+    lastRecorder->doUpdates(this, false);
+    lastRecorder->restartRecording(this);
+    lastRecorder = NULL;
+  }
+}

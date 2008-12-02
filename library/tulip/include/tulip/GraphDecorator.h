@@ -87,11 +87,30 @@ class GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<std::string>* getLocalProperties();
   virtual Iterator<std::string>* getInheritedProperties();
   virtual Iterator<std::string>* getProperties();
-
+  // updates management
+  virtual void push();
+  virtual void pop();
+  virtual void unpop();
+  virtual bool canPop();
+  virtual bool canUnpop();
   //============================================================
 
 protected:
   Graph* graph_component;
+  // designed to reassign an id to a previously deleted elt
+  // called by GraphUpdatesRecorder
+  virtual node restoreNode(node);
+  virtual edge restoreEdge(edge, node source, node target);
+  // designed to only update own structures
+  // used by GraphUpdatesRecorder
+  virtual void removeNode(const node);
+  virtual void removeEdge(const edge, const node = node());
+  // to deal with sub graph deletion
+  virtual void removeSubGraph(Graph*);
+  virtual void clearSubGraphs();
+  // only called by GraphUpdatesRecorder
+  virtual void restoreSubGraph(Graph*, bool);
+  virtual void setSubGraphToKeep(Graph*);
 };
 
 }

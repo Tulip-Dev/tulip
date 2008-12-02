@@ -13,6 +13,7 @@
 #endif
 
 #include <vector>
+#include <ext/slist>
 #include "tulip/GraphAbstract.h"
 #include "tulip/IdManager.h"
 #include "tulip/SimpleVector.h"
@@ -21,11 +22,12 @@
 namespace tlp {
 
 class GraphView;
+class GraphUpdatesRecorder;
 template<class C>class Iterator;
 class Int;
 
 ///Implementation of the graph support of the Graph.
-class GraphImpl:public GraphAbstract {
+class GraphImpl:public GraphAbstract, public Observer {
 
   friend class xSGraphNodeIterator;
   friend class xSGraphEdgeIterator;
@@ -33,6 +35,8 @@ class GraphImpl:public GraphAbstract {
   friend class xOutEdgesIterator;
   friend class xInEdgesIterator;
   friend class xInOutNodesIterator;
+  friend class GraphUpdatesRecorder;
+  
 
 public:
   GraphImpl();
@@ -72,6 +76,26 @@ public:
   unsigned int numberOfEdges()const;
   unsigned int numberOfNodes()const;
   //================================================================================
+  // updates management
+  virtual void push();
+  virtual void pop();
+  virtual void unpop();
+  virtual bool canPop();
+  virtual bool canUnpop();
+
+  // observer interface
+  void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
+  void observableDestroyed(Observable*);
+
+protected:
+  // designed to reassign an id to a previously deleted elt
+  // used by GraphUpdatesRecorder
+  virtual node restoreNode(node);
+  virtual edge restoreEdge(edge, node source, node target);
+  // designed to only update own structures
+  // used by GraphUpdatesRecorder
+  virtual void removeNode(const node);
+  virtual void removeEdge(const edge, const node = node());
 
 private :
   typedef SimpleVector<edge> EdgeContainer;
@@ -84,10 +108,20 @@ private :
   IdManager edgeIds;
   unsigned int nbNodes;
   unsigned int nbEdges;
+  GraphUpdatesRecorder* lastRecorder;
+  stdext::slist<Graph *> observedGraphs;
+  stdext::slist<PropertyInterface*> observedProps;
+  stdext::slist<GraphUpdatesRecorder*> recorders;
 
+  // methods used in push/pop implementation
   static void removeEdge(EdgeContainer &, const edge);
-  void externRemove(const edge);
-  void externRemove(const node);
+  edge addEdgeInternal(edge, node source, node target,
+		       bool updateContainers);
+  void delNodeInternal(const node);
+  void restoreContainer(node, std::vector<edge>&);
+  void observeUpdates(Graph*);
+  void unobserveUpdates();
+  void delLastRecorder();
 };
 
 }

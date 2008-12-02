@@ -160,6 +160,8 @@ void PropertyDialog::newProperty() {
 					 QLineEdit::Normal, QString::null,
 					 &ok);
       if (ok) {
+	// allow undo
+	graph->push();
 	string erreurMsg;
 	if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
 	if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
@@ -180,6 +182,8 @@ void PropertyDialog::toStringProperty() {
   Observable::holdObservers();
   PropertyInterface *newLabels=graph->getProperty(name);
   StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
+  // allow undo
+  graph->push();
   if (tabWidget->currentIndex()==0) {
     labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
     Iterator<node> *itN=graph->getNodes();
@@ -204,6 +208,8 @@ void PropertyDialog::toStringProperty() {
 void PropertyDialog::removeProperty() {
   if (editedProperty==0) return;
   if(graph->existLocalProperty(editedPropertyName)) {
+    // allow undo
+    graph->push();
     graph->delLocalProperty(editedPropertyName);
     setGlMainWidget(glWidget);
     glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadAllProperties();
@@ -265,6 +271,8 @@ void PropertyDialog::cloneProperty() {
 	}
       }
       Observable::holdObservers();
+      // allow undo
+      graph->push();
       if (typeid((*editedProperty)) == typeid(DoubleProperty))
 	{*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
       if (typeid((*editedProperty)) == typeid(LayoutProperty))
@@ -283,6 +291,8 @@ void PropertyDialog::cloneProperty() {
     } else {
       Graph *parent = graph->getSuperGraph();
       Observable::holdObservers();
+      // allow undo
+      parent->push();
       if (typeid((*editedProperty)) == typeid(DoubleProperty))
 	{*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
       if (typeid((*editedProperty)) == typeid(LayoutProperty))

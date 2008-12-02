@@ -198,3 +198,13 @@ tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeStringValue( const std::
   setAllEdgeValue( v );
   return true;
 }
+
+template <class Tnode, class Tedge, class TPROPERTY>
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedNodes() {
+  return new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+}
+
+template <class Tnode, class Tedge, class TPROPERTY>
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedEdges() {
+  return new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+}

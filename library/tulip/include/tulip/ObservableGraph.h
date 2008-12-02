@@ -1,6 +1,6 @@
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
-#include <set>
+#include <ext/slist>
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 
@@ -84,13 +84,13 @@ class ObservableGraph {
   void notifyDelSubGraph(Graph*, Graph*);
   void notifyAddLocalProperty(Graph*, const std::string&);
   void notifyDelLocalProperty(Graph*, const std::string&);
-  void notifyDestroy(Graph *);
-  mutable std::set<GraphObserver*> observers;
+  void notifyDestroy(Graph*);
+  mutable stdext::slist<GraphObserver*> observers;
 };
 /*@}*/
 
 inline void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
-  observers.insert(obs); 
+  observers.push_front(obs); 
 }
 
 inline unsigned int ObservableGraph::countGraphObservers() { 
@@ -98,11 +98,11 @@ inline unsigned int ObservableGraph::countGraphObservers() {
 }
 
 inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const{  
-  observers.erase(item);
+  observers.remove(item);
 }
 
 inline void ObservableGraph::removeGraphObservers() { 
-  observers.clear(); 
+  observers.clear();
 }
 
 }

@@ -34,8 +34,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
   _FontsType(0),
-  _labelsBorder(2),
-  _layoutName("viewLayout") {
+  _labelsBorder(2) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
   _feedbackRender=false;
@@ -319,13 +318,6 @@ bool GlGraphRenderingParameters::isEdgeSizeInterpolate()const {
 }
 void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b){
   _edgeSizeInterpolate=b;
-}
-//====================================================
-void GlGraphRenderingParameters::setInputLayout(const std::string &layoutName) {
-  _layoutName = layoutName;
-}
-std::string GlGraphRenderingParameters::getInputLayout() const {
-  return _layoutName;
 }
 //====================================================
 void GlGraphRenderingParameters::setFeedbackRender(bool feedback){

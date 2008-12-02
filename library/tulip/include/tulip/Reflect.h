@@ -45,7 +45,9 @@ struct TLP_SIMPLE_SCOPE DataSet {
   template<typename T> void set(const std::string &str,const T& value);
   /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
-  /**Return an iterator on all values*/
+  /** remove a named pair */
+  void remove(const std::string &str);
+  /** Return an iterator on all values */
   Iterator< std::pair<std::string, DataType*> > *getValues() const;
 private:
   std::list< std::pair<std::string, DataType*> > data;

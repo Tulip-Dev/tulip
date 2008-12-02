@@ -112,6 +112,8 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<edge> *it=graph->getEdges();
   edge tmp;
+  // allow to undo
+  graph->push();
   for (int pos=0; it->hasNext();) {
     tmp=it->next();
     if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
@@ -151,6 +153,8 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
   Iterator<node> *it=graph->getNodes();
   node tmp;
+  // allow to undo
+  graph->push();
   for (int pos=0; it->hasNext();) {
       tmp=it->next();
       if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
@@ -374,6 +378,8 @@ void PropertyWidget::setAllNodeValue() {
     else ok = false;
   }
   
+  // allow to undo
+  graph->push();
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
@@ -441,7 +447,9 @@ void  PropertyWidget::setAllEdgeValue() {
     if (ok) tmpStr = text.toAscii().data();
     else ok = false;
   }
-  
+
+  // allow to undo
+  graph->push();
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");

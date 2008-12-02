@@ -7,7 +7,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include <list>
+#include <ext/slist>
 #include <map>
 #include <set>
 
@@ -86,12 +86,12 @@ class TLP_SCOPE Observable {
  protected:
   static int holdCounter;
   static ObserverMap holdMap;
-  std::list<Observer*> observersList;
+  stdext::slist<Observer*> observersList;
 };
 
 
 inline void Observable::addObserver(Observer *obs) {
-  observersList.push_back(obs); 
+  observersList.push_front(obs);
 }
 
 inline unsigned int Observable::countObservers() { 

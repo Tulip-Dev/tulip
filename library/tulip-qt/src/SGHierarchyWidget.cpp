@@ -138,6 +138,8 @@ void SGHierarchyWidget::removeSubgraph(Graph *graph, bool recursive) {
   } 
   emit aboutToRemoveView(graph);
   _currentGraph = graph->getSuperGraph();
+  // allow to undo
+  _currentGraph->push();
   if (!recursive)
     _currentGraph->delSubGraph(graph);
   else
@@ -164,6 +166,8 @@ void SGHierarchyWidget::contextCloneCluster() {
   QString text = QInputDialog::getText(this, "Cluster name" , "Please enter the cluster name" ,
                                         QLineEdit::Normal,QString::null, &ok);
   if (ok) {
+    // allow to undo
+    _currentGraph->push();
     Graph *tmp=_currentGraph->getSuperGraph()->addSubGraph();
     tmp->setAttribute("name",string(text.toAscii().data()));
     Iterator<node> *itN=_currentGraph->getNodes();
@@ -183,6 +187,8 @@ void SGHierarchyWidget::contextCloneSubgraphCluster() {
   QString text = QInputDialog::getText(this, "Cluster name" , "Please enter the cluster name" ,
                                         QLineEdit::Normal,QString::null, &ok);
   if (ok) {
+    // allow to undo
+    _currentGraph->push();
     BooleanProperty sel1(_currentGraph);
     sel1.setAllNodeValue(true);
     sel1.setAllEdgeValue(true);

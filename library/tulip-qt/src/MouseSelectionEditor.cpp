@@ -28,9 +28,6 @@ using namespace std;
 //========================================================================================
 MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
   operation = NONE;
-  _copyLayout = 0;
-  _copySizes = 0;
-  _copyRotation = 0;
 
   //composite.addGlEntity(&centerRect, "CenterRectangle");
   //composite.addGlEntity(&_controls[0], "left");
@@ -290,73 +287,25 @@ bool MouseSelectionEditor::draw(GlMainWidget *glMainWidget) {
   return true;
 }
 //========================================================================================
-void MouseSelectionEditor::restoreInfo() {
-  assert(_copyLayout != 0);
-  assert(_copySizes != 0);
-  assert(_copyRotation != 0);
-  node n;
-  forEach(n, _selection->getNodesEqualTo(true, _graph)) {
-    _rotation->setNodeValue(n, _copyRotation->getNodeValue(n));
-    _layout->setNodeValue(n, _copyLayout->getNodeValue(n));
-    _sizes->setNodeValue(n, _copySizes->getNodeValue(n));
-  }
-  edge e;
-  forEach(e, _selection->getEdgesEqualTo(true, _graph)) {
-    _rotation->setEdgeValue(e, _copyRotation->getEdgeValue(e));
-    _layout->setEdgeValue(e, _copyLayout->getEdgeValue(e));
-    _sizes->setEdgeValue(e, _copySizes->getEdgeValue(e));
-  }
-}
-//========================================================================================
-void MouseSelectionEditor::saveInfo() {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  assert(_copyLayout == 0);
-  assert(_copySizes == 0);
-  assert(_copyRotation == 0);
-  _copyRotation = new DoubleProperty(_graph);
-  _copyLayout   = new LayoutProperty(_graph);
-  _copySizes    = new SizeProperty(_graph);
-  node n;
-  forEach(n, _selection->getNodesEqualTo(true, _graph)) {
-    _copyRotation->setNodeValue(n, _rotation->getNodeValue(n));
-    _copyLayout->setNodeValue(n, _layout->getNodeValue(n));
-    _copySizes->setNodeValue(n, _sizes->getNodeValue(n));
-  }
-  edge e;
-  forEach(e, _selection->getEdgesEqualTo(true, _graph)) {
-    _copyRotation->setEdgeValue(e, _rotation->getEdgeValue(e));
-    _copyLayout->setEdgeValue(e, _layout->getEdgeValue(e));
-    _copySizes->setEdgeValue(e, _sizes->getEdgeValue(e));
-  }
-}
-//========================================================================================
 void MouseSelectionEditor::initEdition() {
-  saveInfo();
+  _graph->push();
 }
 //========================================================================================
 void MouseSelectionEditor::undoEdition() {
   if (operation == NONE) return;
-  restoreInfo();
+  _graph->pop();
   operation = NONE;
-  delete _copyLayout;   _copyLayout = 0;
-  delete _copySizes;    _copySizes = 0;
-  delete _copyRotation; _copyRotation = 0;
 }
 //========================================================================================
 void MouseSelectionEditor::stopEdition() {
   //cerr << __PRETTY_FUNCTION__ << endl;
   glMainWidget->getScene()->getSelectionLayer()->clear();
-  
-  if (operation == NONE) return;
   operation = NONE;
-  delete _copyLayout;   _copyLayout = 0;
-  delete _copySizes;    _copySizes = 0;
-  delete _copyRotation; _copyRotation = 0;
 }
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
   _graph     = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  _layout    = _graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getInputLayout());
+  _layout    = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getLayoutProperty();
   _selection = _graph->getProperty<BooleanProperty>("viewSelection");
   _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
   _sizes     = _graph->getProperty<SizeProperty>("viewSize");
@@ -395,7 +344,6 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   //  cerr << "stretch : << "<< stretch << endl;
 
   Observable::holdObservers();  
-  restoreInfo();
   //stretch layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
@@ -443,10 +391,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     double deltaAngle = sign * acos(cosalpha);
   
     Observable::holdObservers();
-  
     initProxies(glMainWidget);
-    restoreInfo();
-
     double degAngle = (deltaAngle * 180.0 / M_PI);
     //rotate layout
     if (mode == COORD_AND_SIZE || mode == COORD) {
@@ -500,10 +445,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     }
     
     Observable::holdObservers();
-  
     initProxies(glMainWidget);
-    restoreInfo();
-
     Coord center(editLayoutCenter);
     center *= -1.;
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);

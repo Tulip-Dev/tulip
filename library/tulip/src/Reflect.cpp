@@ -50,6 +50,17 @@ bool DataSet::exist(const string &str) const {
   return false;
 }
 
+void DataSet::remove(const string &str) {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str) {
+      delete (*it).second;
+      data.erase(it);
+      break;
+    }
+  }
+}
+
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {
   list< pair<string, DataType*> >::const_iterator begin = data.begin();
   list< pair<string, DataType*> >::const_iterator end = data.end();

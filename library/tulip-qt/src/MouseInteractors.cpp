@@ -43,9 +43,12 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
     bool result = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
     if(result == true) {
       Observable::holdObservers();
+      Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+      // allow to undo
+      graph->push();
       switch(type) {
-	case NODE: glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delNode(tmpNode); break;
-	case EDGE: glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->delEdge(tmpEdge); break;
+	case NODE: graph->delNode(tmpNode); break;
+	case EDGE: graph->delEdge(tmpEdge); break;
       }
       glMainWidget->redraw();
       Observable::unholdObservers();

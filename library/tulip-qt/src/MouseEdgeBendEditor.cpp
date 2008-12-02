@@ -268,6 +268,8 @@ initProxies(glMainWidget);
   IntegerType::fromString(i, theCircle);
   coordinates[i]+=v1;
   Observable::holdObservers();
+  // allow to undo
+  _graph->push();
   _layout->setEdgeValue(mEdge, coordinates);
   Observable::unholdObservers();
   editPosition[0]  = newX;
@@ -289,6 +291,8 @@ void MouseEdgeBendEditor::mMouseDelete()
   coordinates.erase(CoordIt);
   circles.erase(circleIt);
   Observable::holdObservers();
+  // allow to undo
+  _graph->push();
   _layout->setEdgeValue(mEdge, coordinates);
   Observable::unholdObservers();
 }
@@ -330,6 +334,8 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
   //cout << "C R E A T E : " << endl;
   //cout << "===================================" << endl;
   Observable::holdObservers();
+  // allow to undo
+  _graph->push();
   _layout->setEdgeValue(mEdge, coordinates);
   Observable::unholdObservers();
 }

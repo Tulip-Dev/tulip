@@ -112,4 +112,5 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/Plane.h \
 	tulip/Polynome.h \
 	tulip/PluginLibraryLoader.h \
-	tulip/StatisticsNodeModule.h
+	tulip/StatisticsNodeModule.h \
+	tulip/GraphUpdatesRecorder.h

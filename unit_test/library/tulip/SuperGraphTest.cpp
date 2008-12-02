@@ -332,16 +332,17 @@ void SuperGraphTest::testDeleteSubgraph() {
 //==========================================================
 void SuperGraphTest::testSubgraphId() {
   graph->clear();
-  CPPUNIT_ASSERT(graph->getId() == 0);
   BooleanProperty sel(graph);
+  Graph *g1 = graph->addSubGraph(&sel);
+  int id = g1->getId();
   for (unsigned int i = 1; i<1000; ++i) {
-    Graph *g1 = graph->addSubGraph(&sel);
-    CPPUNIT_ASSERT(g1->getId() == i);
+    g1 = graph->addSubGraph(&sel);
+    CPPUNIT_ASSERT(g1->getId() == id + i);
   }
   Graph *g;
-  unsigned int i = 1; //if the graph are not ordered that test can fail.
+  unsigned int i = 0; //if the graph are not ordered that test can fail.
   forEach(g, graph->getSubGraphs()) {
-    CPPUNIT_ASSERT(g->getId() == i);
+    CPPUNIT_ASSERT(g->getId() == id + i);
     ++i;
   }
 }

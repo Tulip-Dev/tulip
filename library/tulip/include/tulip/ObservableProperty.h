@@ -1,6 +1,6 @@
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
-#include <set>
+#include <ext/slist>
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 
@@ -82,12 +82,12 @@ class ObservableProperty {
   void notifyBeforeSetAllEdgeValue(PropertyInterface*);
   void notifyAfterSetAllEdgeValue(PropertyInterface*);
   void notifyDestroy(PropertyInterface*);
-  mutable std::set<PropertyObserver*> observers;
+  mutable stdext::slist<PropertyObserver*> observers;
 };
 /*@}*/
 
 inline void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
-  observers.insert(obs); 
+  observers.push_front(obs); 
 }
 
 inline unsigned int ObservableProperty::countPropertyObservers() { 
@@ -95,7 +95,7 @@ inline unsigned int ObservableProperty::countPropertyObservers() {
 }
 
 inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{  
-  observers.erase(item);
+  observers.remove(item);
 }
 
 inline void ObservableProperty::removePropertyObservers() { 

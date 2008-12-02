@@ -25,6 +25,26 @@ template<class itType> struct Iterator {
   virtual bool hasNext()=0;
 };
 
+//template<class C>class Iterator;
+#ifndef DOXYGEN_NOTFOR_DEVEL
+template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
+public:
+  UINTIterator(Iterator<unsigned int> *it):it(it) {
+  }
+  ~UINTIterator(){
+    delete it;
+  }
+  bool hasNext() {
+    return it->hasNext();
+  }
+  TYPE next() {
+    return TYPE(it->next());
+  }
+private:
+  Iterator<unsigned int> *it;
+};
+#endif // DOXYGEN_NOTFOR_DEVEL
+
 }
 #endif
 

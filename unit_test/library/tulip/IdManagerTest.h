@@ -17,6 +17,7 @@ public:
   void testIsFree();
   void testFragmentation();
   void testGetFree();
+  void testIterate();
 
   static CppUnit::Test *suite();
 

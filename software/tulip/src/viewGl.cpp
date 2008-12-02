@@ -103,6 +103,7 @@
 #define UNNAMED "unnamed"
 
 using namespace std;
+using namespace stdext;
 using namespace tlp;
 
 class TabWidget : public QWidget, public Ui::TabWidgetData {
@@ -297,7 +298,9 @@ void viewGl::enableQMenu(QMenu *popupMenu, bool enabled) {
   QList <QAction *> actions = popupMenu->actions();
   int nbElements = actions.size();
   for(int i = 0 ; i < nbElements ; i++) {
-    actions.at(i)->setEnabled(enabled);
+    QAction* action = actions.at(i);
+    if (action != editUndoAction && action != editRedoAction)
+      actions.at(i)->setEnabled(enabled);
   }
 }
 
@@ -321,7 +324,15 @@ void viewGl::enableElements(bool enabled) {
   grid_option->setEnabled(enabled);
   antialiasing->setEnabled(enabled);
   renderingParametersDialogAction->setEnabled(enabled);
-
+  if (glWidget) {
+    Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    undoAction->setEnabled(graph->canPop());
+    redoAction->setEnabled(graph->canUnpop());
+  } else {
+    undoAction->setEnabled(false);
+    redoAction->setEnabled(false);
+  }
+  
   elementsDisabled = !enabled;
 }
 //**********************************************************************
@@ -336,6 +347,7 @@ void viewGl::update ( ObserverIterator begin, ObserverIterator end) {
   propertiesWidget->update();
   if (gridOptionsWidget !=0 )
     gridOptionsWidget->validateGrid();
+  updateUndoRedoInfos();
   redrawView();
   Observable::unholdObservers();
   initObservers();
@@ -366,12 +378,10 @@ void viewGl::initObservers() {
     if (graph->existProperty(viewed_properties[i]))
       graph->getProperty(viewed_properties[i])->addObserver(this);
   }
-  graph->addObserver(this);
+  graph->addGraphObserver(this);
   // initialize the number of nodes and edges
   currentGraphNbNodes = graph->numberOfNodes();
   currentGraphNbEdges = graph->numberOfEdges();
-  // show the infos
-  updateCurrentGraphInfos();
 }
 //**********************************************************************
 void viewGl::clearObservers() {
@@ -383,7 +393,7 @@ void viewGl::clearObservers() {
     if (graph->existProperty(viewed_properties[i]))
       graph->getProperty(viewed_properties[i])->removeObserver(this);
   }
-  graph->removeObserver(this);
+  graph->removeGraphObserver(this);
 }
 //**********************************************************************
 // GraphObserver interface
@@ -397,15 +407,10 @@ void  viewGl::addEdge (Graph *graph, const edge) {
 }
 void  viewGl::delNode (Graph *graph, const node) {
   --currentGraphNbNodes;
-  updateCurrentGraphInfos();
 }
 void  viewGl::delEdge (Graph *graph, const edge) {
   --currentGraphNbEdges;
   updateCurrentGraphInfos();
-}
-void  viewGl::reverseEdge (Graph *, const edge) {
-}
-void  viewGl::destroy (Graph *) {
 }
 //**********************************************************************
 // GlSceneObserver interface
@@ -518,7 +523,10 @@ void viewGl::startTulip() {
 //**********************************************************************
 void viewGl::changeGraph(Graph *graph) {
   //cerr << __PRETTY_FUNCTION__ << " (Graph = " << (int)graph << ")" << endl;
-  clearObservers();
+  Graph* currentGraph =
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (currentGraph != graph)
+    clearObservers();
   QFileInfo tmp(glWidget->name.c_str());
   GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
   antialiasing->setChecked(param.isAntialiased());
@@ -532,6 +540,7 @@ void viewGl::changeGraph(Graph *graph) {
 #ifdef STATS_UI
   statsWidget->setGlMainWidget(glWidget);
 #endif
+  updateUndoRedoInfos();
   redrawView();
   // this line has been moved after the call to redrawView to ensure
   // that a new created graph has all its view... properties created
@@ -539,7 +548,7 @@ void viewGl::changeGraph(Graph *graph) {
   propertiesWidget->setGlMainWidget(glWidget);
   // avoid too much notification when importing a graph
   // see fileOpen
-  if (importedGraph != graph)
+  if (currentGraph != graph && importedGraph != graph)
     initObservers();
 }
 //**********************************************************************
@@ -1673,6 +1682,8 @@ bool viewGl::eventFilter(QObject *obj, QEvent *e) {
 	return true;
       Observable::holdObservers();
       if (menuAction == deleteAction) { // Delete
+	// allow undo
+	graph->push();
 	// delete graph item
 	if (isNode)
 	  graph->delNode(node(itemId));
@@ -2052,9 +2063,12 @@ void viewGl::applyAlgorithm(QAction* action) {
   if (ok) {
     QtProgress myProgress(this,name);
     myProgress.hide();
+    graph->push();
     if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
+      graph->pop();
     }
+    undoAction->setEnabled(graph->canPop());
     clusterTreeWidget->update();
     clusterTreeWidget->setGraph(graph);
     addAlgorithmDataSetResultToView(&dataSet);
@@ -2066,7 +2080,7 @@ void viewGl::applyAlgorithm(QAction* action) {
 //Management of properties
 //**********************************************************************
 template<typename PROPERTY>
-bool viewGl::changeProperty(string name, string destination, bool query, bool redraw) {
+bool viewGl::changeProperty(string name, string destination, bool query, bool redraw, bool push) {
   if( !glWidget ) return false;
   Graph *graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if(graph == 0) return false;
@@ -2086,16 +2100,19 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
   }
 
   if (resultBool) {
+    PROPERTY* tmp = new PROPERTY(graph);
     if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-      //cam = param.getCamera();
-      param.setInputLayout(name);
-      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      graph->setAttribute("viewLayout", tmp);
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
 
-    PROPERTY *dest = graph->template getLocalProperty<PROPERTY>(name);
-    resultBool = graph->computeProperty(name, dest, erreurMsg, &myProgress, dataSet);
+    PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
+    tmp->setAllNodeValue(dest->getNodeDefaultValue());
+    tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
+    graph->push();
+    resultBool = graph->computeProperty(name, tmp, erreurMsg, &myProgress, dataSet);
+
+    graph->pop();
     if (!resultBool) {
       QMessageBox::critical(this, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
     }
@@ -2103,17 +2120,18 @@ bool viewGl::changeProperty(string name, string destination, bool query, bool re
       switch(myProgress.state()){
       case TLP_CONTINUE:
       case TLP_STOP:
-	*graph->template getLocalProperty<PROPERTY>(destination) = *dest;
+	if (push) {
+	  graph->push();
+	  undoAction->setEnabled(true);
+	}
+	*dest = *tmp;
 	break;
       case TLP_CANCEL:
 	resultBool=false;
       };
-    graph->delLocalProperty(name);
+    delete tmp;
     if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-      param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-      param.setInputLayout("viewLayout");
-      //param.setCamera(cam);
-      glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      graph->removeAttribute("viewLayout");
       glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
     }
 
@@ -2152,7 +2170,8 @@ void viewGl::changeMetric(QAction* action) {
   string name = action->text().toStdString();
   bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
   if (result && map_metric->isChecked()) {
-    if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false))
+    if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false,
+				      true, false))
       redrawView();
   }
   initObservers();
@@ -2276,7 +2295,11 @@ void viewGl::makeAcyclic() {
   Observable::holdObservers();
   vector<tlp::SelfLoops> tmpSelf;
   vector<edge> tmpReversed;
-  AcyclicTest::makeAcyclic(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmpReversed, tmpSelf);
+  Graph* graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  graph->push();
+  undoAction->setEnabled(true);
+
+  AcyclicTest::makeAcyclic(graph, tmpReversed, tmpSelf);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -2296,7 +2319,11 @@ void viewGl::makeSimple() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> removed;
-  SimpleTest::makeSimple(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), removed);
+  Graph* graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  graph->push();
+  undoAction->setEnabled(true);
+
+  SimpleTest::makeSimple(graph, removed);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -2316,7 +2343,12 @@ void viewGl::makeConnected() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> tmp;
-  ConnectedTest::makeConnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmp);
+  Graph* graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+
+  graph->push();
+  undoAction->setEnabled(true);
+
+  ConnectedTest::makeConnected(graph, tmp);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -2336,7 +2368,12 @@ void viewGl::makeBiconnected() {
   if (glWidget == 0) return;
   Observable::holdObservers();
   vector<edge> tmp;
-  BiconnectedTest::makeBiconnected(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), tmp);
+  Graph* graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+
+  graph->push();
+  undoAction->setEnabled(true);
+
+  BiconnectedTest::makeBiconnected(graph, tmp);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -2398,7 +2435,11 @@ void viewGl::makeDirected() {
     root = graphCenterHeuristic(graph);
 
   Observable::holdObservers();
-  TreeTest::makeRootedTree(glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), root);
+
+  graph->push();
+  undoAction->setEnabled(true);
+
+  TreeTest::makeRootedTree(graph, root);
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -2491,4 +2532,43 @@ void viewGl::setSelection() {
 }
 void viewGl::setZoomBox() {
   setCurrentInteractors(&zoomBoxInteractors);
+}
+
+void viewGl::updateUndoRedoInfos() {
+  if (glWidget != NULL) {
+    Graph* graph =
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    undoAction->setEnabled(graph->canPop());
+    editUndoAction->setEnabled(graph->canPop());
+    redoAction->setEnabled(graph->canUnpop());
+    editRedoAction->setEnabled(graph->canUnpop());
+  }
+}
+
+void viewGl::undo() {
+  if (glWidget != NULL) {
+    Graph* root =
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot();
+    root->pop();
+    changeGraph(root);
+    // force clusterTreeWidget to update
+    clusterTreeWidget->update();
+    // forget previous/next graphs
+    glWidget->prevGraphs.clear();
+    glWidget->nextGraphs.clear();
+  }  
+}
+
+void viewGl::redo() {
+  if (glWidget != NULL) {
+    Graph* root =
+      glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getRoot();
+    root->unpop();
+    changeGraph(root);
+    // force clusterTreeWidget to update
+    clusterTreeWidget->update();
+    // forget previous/next graphs
+    glWidget->prevGraphs.clear();
+    glWidget->nextGraphs.clear();
+  }
 }

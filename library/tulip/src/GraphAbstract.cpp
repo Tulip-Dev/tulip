@@ -16,13 +16,12 @@ using namespace tlp;
 const string metaGraphProperty = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph){
+GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph),subGraphToKeep(NULL){
   if (supergraph==0) supergraph=this;
   propertyContainer=new PropertyManagerImpl(this);
 }
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
-
 }
 //=========================================================================
 void GraphAbstract::clear() {
@@ -32,6 +31,23 @@ void GraphAbstract::clear() {
   StableIterator<node> itN(getNodes());
   while(itN.hasNext())
     delNode(itN.next());
+}
+//=========================================================================
+void GraphAbstract::restoreSubGraph(Graph* sg, bool restoreSubGraphs){
+  subgraphs.push_back(sg);
+  sg->setSuperGraph(this);
+  if (restoreSubGraphs) {
+    Iterator<Graph *> *itS = sg->getSubGraphs();
+    while (itS->hasNext()) {
+      Graph* ssg = itS->next();
+      removeSubGraph(ssg);
+      ssg->setSuperGraph(sg);
+    }
+  }
+}
+//=========================================================================
+void GraphAbstract::setSubGraphToKeep(Graph* sg){
+  subGraphToKeep = sg;
 }
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
@@ -55,37 +71,52 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   assert(find);
 #endif
 
+  subGraphToKeep = NULL;
   notifyDelSubGraph(this, toRemove);
 
   Iterator<Graph *> *itS = toRemove->getSubGraphs();
   while (itS->hasNext()) {
-    Graph *tmp = itS->next();
-    subgraphs.push_back(tmp);
-    tmp->setSuperGraph(this);
+    restoreSubGraph(itS->next());
   } delete itS;
-  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
-    if (*it == toRemove) {
-      subgraphs.erase(it);
-      break;
-    }
+  removeSubGraph(toRemove);
+  if (toRemove != subGraphToKeep) {
+    delete toRemove;
   }
-  delete toRemove;
   notifyObservers();
 }
 //=========================================================================
-void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
-  notifyDelSubGraph(this, toRemove);
-  StableIterator<Graph *> itS(toRemove->getSubGraphs());
-  while (itS.hasNext())
-    toRemove->delAllSubGraphs(itS.next());
+void GraphAbstract::removeSubGraph(Graph * toRemove) {
   for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
     if (*it == toRemove) {
       subgraphs.erase(it);
       break;
     }
   }
-  delete toRemove;
+}
+//=========================================================================
+void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
+					    bool deleteSubGraphs) {
+  if (this != toRemove->getSuperGraph())
+    return;
+  notifyDelSubGraph(this, toRemove);
+  removeSubGraph(toRemove);
   notifyObservers();
+  StableIterator<Graph *> itS(toRemove->getSubGraphs());
+  while (itS.hasNext())
+    ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
+							 deleteSubGraphs);
+  if (deleteSubGraphs) {
+    ((GraphAbstract *)toRemove)->clearSubGraphs();
+    delete toRemove;
+  }
+}
+//=========================================================================
+void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
+  delAllSubGraphsInternal(toRemove, !canPop());
+}
+//=========================================================================
+void GraphAbstract::clearSubGraphs() {
+  subgraphs.clear();
 }
 //=========================================================================
 Graph* GraphAbstract::getSuperGraph()const {
@@ -218,7 +249,9 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
   notifyDelLocalProperty(this, name);
-  propertyContainer->delLocalProperty(name);
+  PropertyInterface* prop = propertyContainer->delLocalProperty(name);
+  if (prop && !canPop())
+    delete prop;
   notifyObservers();
 }
 //=========================================================================

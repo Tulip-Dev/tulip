@@ -64,9 +64,16 @@ string GraphType::toString( const RealType & v ) {
   return oss.str();
 }
 
-bool GraphType::fromString( RealType & v, const string & s ) {
-  v = 0;
-  return false;
+bool GraphType::fromString(RealType & v, const string & s ) {
+  istringstream iss;
+  iss.str( s );
+  unsigned long lv;
+  bool ok = iss >> lv;
+  if (ok)
+    v = (RealType) lv;
+  else
+    v = 0;
+  return ok;
 }
 
 //

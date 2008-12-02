@@ -15,12 +15,13 @@ SRCS=   tuliplibtest.cpp \
 	DataSetTest.cpp \
 	ObservablePropertyTest.cpp \
 	ObservableGraphTest.cpp \
+	PushPopTest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp
 #	PlanarConMapTest.cpp 
 
 
 
-CXXFLAGS =  -g -Wall `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags` -I$(QTDIR)/include/
+CXXFLAGS =  -g -Wall `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
 #CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
 CXX=g++
 LDFLAGS= `../../../tulip-config --lib_tulip` `cppunit-config --libs`

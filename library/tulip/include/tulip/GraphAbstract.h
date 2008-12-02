@@ -67,11 +67,20 @@ protected:
   }
   const std::set<edge>& getReferencedEdges(const edge) const;
 
+  // to deal with sub graph deletion
+  virtual void clearSubGraphs();
+  virtual void removeSubGraph(Graph*);
+  virtual void delAllSubGraphsInternal(Graph*, bool deleteSubGraph);
+  // reinstall a previously deleted subgraph
+  // only called by GraphUpdatesRecorder
+  virtual void restoreSubGraph(Graph*, bool restoreSubGraphs = false);
+  virtual void setSubGraphToKeep(Graph*);
+
 private:
   DataSet attributes;
   Graph *supergraph;
   GRAPH_SEQ subgraphs;
-
+  Graph* subGraphToKeep;
 };
 
 }

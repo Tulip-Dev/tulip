@@ -36,13 +36,8 @@ namespace tlp {
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
     SizeProperty *_sizes;
-    LayoutProperty *_copyLayout;
-    SizeProperty *_copySizes;
-    DoubleProperty *_copyRotation;
 
     void initProxies(GlMainWidget *glMainWidget);
-    void saveInfo();
-    void restoreInfo();
     void initEdition();
     void undoEdition();
     void stopEdition();

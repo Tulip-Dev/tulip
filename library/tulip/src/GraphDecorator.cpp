@@ -1,4 +1,3 @@
-//-*-c++-*-
 #include <tulip/GraphDecorator.h>
 
 using namespace tlp;
@@ -16,6 +15,26 @@ Graph *GraphDecorator::addSubGraph(BooleanProperty *selection){
 //============================================================
 void GraphDecorator::delSubGraph(Graph * s){
   graph_component->delSubGraph(s);
+}
+
+//============================================================
+void GraphDecorator::restoreSubGraph(Graph *, bool){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
+void GraphDecorator::setSubGraphToKeep(Graph * s){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
+void GraphDecorator::removeSubGraph(Graph*){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
+void GraphDecorator::clearSubGraphs(){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -148,6 +167,17 @@ void GraphDecorator::addNode(const node n){
 }
 
 //============================================================
+node GraphDecorator::restoreNode(node n){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+  return n;
+}
+
+//============================================================
+void GraphDecorator::removeNode(const node){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
 edge GraphDecorator::addEdge(const node n, const node n2){
   return graph_component->addEdge(n, n2);
 }
@@ -155,6 +185,17 @@ edge GraphDecorator::addEdge(const node n, const node n2){
 //============================================================
 void GraphDecorator::addEdge(const edge e){
   graph_component->addEdge(e);
+}
+
+//============================================================
+edge GraphDecorator::restoreEdge(edge e, node source, node target){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+  return e;
+}
+
+//============================================================
+void GraphDecorator::removeEdge(const edge, const node){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -274,4 +315,23 @@ Iterator<std::string>* GraphDecorator::getInheritedProperties(){
 //============================================================
 Iterator<std::string>* GraphDecorator::getProperties(){
   return graph_component->getProperties();
+}
+//----------------------------------------------------------------
+bool GraphDecorator::canPop() {
+  graph_component->canPop();
+}
+bool GraphDecorator::canUnpop() {
+  return graph_component->canUnpop();
+}
+//----------------------------------------------------------------
+void GraphDecorator::push() {
+  return graph_component->push();
+}
+//----------------------------------------------------------------
+void GraphDecorator::pop() {
+  return graph_component->pop();
+}
+//----------------------------------------------------------------
+void GraphDecorator::unpop() {
+  return graph_component->unpop();
 }

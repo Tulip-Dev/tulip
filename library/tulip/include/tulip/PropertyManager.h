@@ -45,13 +45,13 @@ public:
   virtual  bool existLocalProperty(const std::string&)=0;
   /**Add a AbstractProperty in the pool*/
   virtual  void setLocalProxy(const std::string&,PropertyInterface *)=0;
-  /**Return a pointer to a propertyProxy which is in the pool or
+  /**Return a pointer to a PropertyInterface which is in the pool or
      in a pool of an ascendant Graph*/
   virtual  PropertyInterface* getProperty(const std::string&)=0;
-  /**Return a pointer to a propertyProxy which is in the pool*/
+  /**Return a pointer to a PropertyInterface which is in the pool*/
   virtual  PropertyInterface* getLocalProperty(const std::string&)=0;
-  /**Remove a AbstractProperty from the pool*/
-  virtual  void delLocalProperty(const std::string&)=0;
+  /**if any remove the returned PropertyInterface from the pool*/
+  virtual  PropertyInterface* delLocalProperty(const std::string&)=0;
   /**Used to inform the pool that a node doesn't belong anymore to the
      associated Graph*/
   virtual void erase(const node )=0;
@@ -113,7 +113,7 @@ public:
   PropertyInterface* getProperty(const std::string&);
   PropertyInterface* getLocalProperty(const std::string&);
   void delProxy(const std::string&);
-  void delLocalProperty(const std::string&);
+  PropertyInterface* delLocalProperty(const std::string&);
   void erase(const node );
   void erase(const edge );
   //======================================================================================

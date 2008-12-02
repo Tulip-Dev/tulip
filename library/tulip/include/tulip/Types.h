@@ -42,7 +42,7 @@ public:
   static GraphType::RealType defaultValue();
   static void  del(GraphType::RealType element);
   static std::string toString( const RealType & v );
-  static bool fromString( RealType & v, const std::string & s );
+  static bool fromString(RealType & v, const std::string & s );
 };
 
 class TLP_SCOPE EdgeSetType:public Type

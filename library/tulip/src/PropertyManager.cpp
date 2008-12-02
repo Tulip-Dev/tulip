@@ -67,15 +67,15 @@ PropertyInterface* PropertyManagerImpl::getLocalProperty(const string &str) {
   return (propertyProxyMap[str]);
 }
 //==============================================================
-void PropertyManagerImpl::delLocalProperty(const string &str) {
+PropertyInterface* PropertyManagerImpl::delLocalProperty(const string &str) {
   PropertyInterface *tmpM;
   map<string,PropertyInterface *>::iterator it;
   it=propertyProxyMap.find(str);
   if (it!=propertyProxyMap.end()) {
-    tmpM=(*it).second;
     propertyProxyMap.erase(it);
-    delete tmpM;
+    return (*it).second;
   }
+  return NULL;
 }
 Iterator<string>*  PropertyManagerImpl::getLocalProperties() {
   return (new LocalPropertiesIterator(this));

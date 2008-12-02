@@ -6,64 +6,127 @@
 #include <iostream>
 #include "tulip/ObservableProperty.h"
 
-using namespace std;
+using namespace stdext;
 using namespace tlp;
 
 void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
 						  const node n) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->beforeSetNodeValue(p, n);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetNodeValue(p, n);
+  }
 }
 
 void ObservableProperty::notifyAfterSetNodeValue(PropertyInterface* p,
-						  const node n) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->afterSetNodeValue(p, n);
+						 const node n) {
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetNodeValue(p, n);
+  }
 }
 
 void ObservableProperty::notifyBeforeSetEdgeValue(PropertyInterface* p,
 					    const edge e) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->beforeSetEdgeValue(p, e);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetEdgeValue(p, e);
+  }
 }
 
 void ObservableProperty::notifyAfterSetEdgeValue(PropertyInterface* p,
 					    const edge e) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->afterSetEdgeValue(p, e);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetEdgeValue(p, e);
+  }
 }
 
 void ObservableProperty::notifyBeforeSetAllNodeValue(PropertyInterface* p) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->beforeSetAllNodeValue(p);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetAllNodeValue(p);
+  }
 }
 
 void ObservableProperty::notifyAfterSetAllNodeValue(PropertyInterface* p) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->afterSetAllNodeValue(p);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetAllNodeValue(p);
+  }
 }
 
 void ObservableProperty::notifyBeforeSetAllEdgeValue(PropertyInterface* p) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->beforeSetAllEdgeValue(p);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetAllEdgeValue(p);
+  }
 }
 
 void ObservableProperty::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->afterSetAllEdgeValue(p);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetAllEdgeValue(p);
+  }
 }
 
 void ObservableProperty::notifyDestroy(PropertyInterface* p) {
-  set<PropertyObserver *> copy(observers); //Used to preserve iterators
-  for (set<PropertyObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-    (*itlObs)->destroy(p);
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    PropertyObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->destroy(p);
+  }
 }
 

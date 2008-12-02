@@ -18,6 +18,7 @@
 #include "tulip/Observable.h"
 #include "tulip/ObservableProperty.h"
 
+#include "tulip/Iterator.h"
 #include "tulip/Types.h"
 #include "tulip/PropertyAlgorithm.h"
 #include "tulip/MutableContainer.h"
@@ -56,6 +57,9 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
+  virtual Iterator<node>* getNonDefaultValuatedNodes()=0;
+  virtual Iterator<edge>* getNonDefaultValuatedEdges()=0;
+
 
  protected:
   // redefinitions of ObservableProperty methods
@@ -145,48 +149,59 @@ public:
   // Because of compilation pb on Windows platform (g++ bug ???)
   // we include the code of the method below instead of having it
   // included in AbstractProperty.cpp
-  virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &proxy) {
-      if (this!= &proxy) {
+  virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
+      if (this!= &prop) {
     //=============================================================
     //The backup is necessary, if a proxy is a function which use the value of "*this"
     //Future implementation should take into account : recursive or not
     //It will enable to presserve the backup cost in a lot of case.
     //=============================================================
-    if (graph==0) graph = proxy.graph;
-    MutableContainer<typename Tnode::RealType> backupNode;
-    MutableContainer<typename Tedge::RealType> backupEdge;
-    backupNode.setAll(proxy.nodeDefaultValue);
-    backupEdge.setAll(proxy.edgeDefaultValue);
-    Iterator<node> *itN=graph->getNodes();
-    while (itN->hasNext()) {
-      node itn=itN->next();
-      if (proxy.graph->isElement(itn))
-	backupNode.set(itn.id,proxy.getNodeValue(itn));
-    } delete itN;
-    Iterator<edge> *itE=graph->getEdges();
-    while (itE->hasNext()) {
-      edge ite=itE->next();
-      if (proxy.graph->isElement(ite))
-	backupEdge.set(ite.id,proxy.getEdgeValue(ite));
-    } delete itE;
-    //==============================================================*
-    if (graph==proxy.graph) {
-      setAllNodeValue(proxy.getNodeDefaultValue());
-      setAllEdgeValue(proxy.getEdgeDefaultValue());
-    }
-    itN=graph->getNodes();
-    while (itN->hasNext()) {
-      node itn=itN->next();
-      if (proxy.graph->isElement(itn))
+    if (graph == 0) graph = prop.graph;
+    if (graph == prop.graph) {
+      setAllNodeValue(prop.getNodeDefaultValue());
+      setAllEdgeValue(prop.getEdgeDefaultValue());
+      Iterator<node> *itN = prop.getNonDefaultValuatedNodes();
+      while (itN->hasNext()) {
+	node itn = itN->next();
+	setNodeValue(itn, prop.getNodeValue(itn));
+      } delete itN;
+      Iterator<edge> *itE = prop.getNonDefaultValuatedEdges();
+      while (itE->hasNext()) {
+	edge ite = itE->next();
+	setEdgeValue(ite, prop.getEdgeValue(ite));
+      } delete itE;
+    } else {
+      MutableContainer<typename Tnode::RealType> backupNode;
+      MutableContainer<typename Tedge::RealType> backupEdge;
+      backupNode.setAll(prop.nodeDefaultValue);
+      backupEdge.setAll(prop.edgeDefaultValue);
+      Iterator<node> *itN=graph->getNodes();
+      while (itN->hasNext()) {
+	node itn=itN->next();
+	if (prop.graph->isElement(itn))
+	  backupNode.set(itn.id,prop.getNodeValue(itn));
+      } delete itN;
+      Iterator<edge> *itE=graph->getEdges();
+      while (itE->hasNext()) {
+	edge ite=itE->next();
+	if (prop.graph->isElement(ite))
+	  backupEdge.set(ite.id,prop.getEdgeValue(ite));
+      } delete itE;
+      //==============================================================*
+      itN=graph->getNodes();
+      while (itN->hasNext()) {
+	node itn=itN->next();
+	if (prop.graph->isElement(itn))
 	  setNodeValue(itn,backupNode.get(itn.id));
-    } delete itN;
-    itE=graph->getEdges();
-    while (itE->hasNext()) {
-      edge ite=itE->next();
-      if (proxy.graph->isElement(ite))
-	setEdgeValue(ite,backupEdge.get(ite.id));
-    } delete itE;
-    clone_handler(proxy);
+      } delete itN;
+      itE=graph->getEdges();
+      while (itE->hasNext()) {
+	edge ite=itE->next();
+	if (prop.graph->isElement(ite))
+	  setEdgeValue(ite,backupEdge.get(ite.id));
+      } delete itE;
+    }
+    clone_handler(prop);
   }
   return *this;
   }
@@ -203,6 +218,12 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v );
   virtual bool setAllNodeStringValue( const std::string & v );
   virtual bool setAllEdgeStringValue( const std::string & v );
+  // returns an iterator on all nodes whose value is different
+  // from the default value
+  virtual Iterator<node>* getNonDefaultValuatedNodes();
+  // returns an iterator on all edges whose value is different
+  // from the default value
+  virtual Iterator<edge>* getNonDefaultValuatedEdges();
 
 protected:
   //=================================================================================

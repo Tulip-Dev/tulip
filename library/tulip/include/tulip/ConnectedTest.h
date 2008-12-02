@@ -16,11 +16,7 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
+#include <set>
 #include "tulip/ObservableGraph.h"
 
 namespace tlp {

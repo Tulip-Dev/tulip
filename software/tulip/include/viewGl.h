@@ -10,6 +10,7 @@
 #include <ext/hash_map>
 #endif
 
+#include <ext/slist>
 #include <vector>
 #include <QtGui/qdockwidget.h>
 #include <QtGui/qsplitter.h>
@@ -133,8 +134,6 @@ protected:
   void addEdge (tlp::Graph *, const tlp::edge);
   void delNode (tlp::Graph *, const tlp::node);
   void delEdge (tlp::Graph *, const tlp::edge);
-  void reverseEdge (tlp::Graph *, const tlp::edge);
-  void destroy (tlp::Graph *);
   // GlSceneObserver interface
   void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
   void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
@@ -220,11 +219,13 @@ protected slots:
   void makeDirected();
   void deletePluginsUpdateChecker();
   void setAntialiasing(bool);
+  void undo();
+  void redo();
 
 private:
   void deleteElement(unsigned int , unsigned int , GlMainWidget *);
   void selectElement(unsigned int , unsigned int , GlMainWidget *, bool);
-  template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false );
+  template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false, bool = true);
   viewGlWidget *newOpenGlView(tlp::Graph *graph,const QString &);
   void constructDefaultScene(viewGlWidget *glWidget);
   std::string newName();
@@ -241,10 +242,12 @@ private:
   void setCurrentInteractors(std::vector<tlp::GWInteractor *> *interactors);
   void deleteInteractors(std::vector<tlp::GWInteractor *> &interactors);
   void addAlgorithmDataSetResultToView(tlp::DataSet *dataSet);
+  void updateUndoRedoInfos();
 
   QAssistantClient* assistant;
   unsigned int currentGraphNbNodes, currentGraphNbEdges;
   tlp::Graph* importedGraph;
+  
 };
 
 #endif // viewGl_included

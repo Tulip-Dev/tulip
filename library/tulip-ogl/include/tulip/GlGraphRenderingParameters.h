@@ -258,16 +258,6 @@ namespace tlp {
      */
     void setLabelsBorder(const unsigned int);
     /**
-     * Define the name of the layout that is used
-     * for rendering the graph (default is "viewLayout")
-     */
-    void setInputLayout(const std::string &layoutName);
-    /**
-     * Return the name of the layout that is used
-     * for rendering the graph (default is "viewLayout")
-     */
-    std::string getInputLayout() const;
-    /**
      * if true draw graph with feedback information (very low) 
      */
     void setFeedbackRender(bool feedback);
@@ -302,7 +292,6 @@ namespace tlp {
     int _edgesLabelStencil;
     unsigned int _FontsType;
     unsigned int _labelsBorder;
-    std::string _layoutName;
     std::string _fontsPath;
     std::string _texturePath;
     bool _feedbackRender;

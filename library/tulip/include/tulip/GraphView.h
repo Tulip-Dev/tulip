@@ -60,6 +60,22 @@ public:
   Iterator<edge>* getOutEdges(const node) const;
   Iterator<edge>* getInOutEdges(const node) const;
   //=========================================================================
+  // updates management
+  virtual void push();
+  virtual void pop();
+  virtual void unpop();
+  virtual bool canPop();
+  virtual bool canUnpop();
+
+protected:
+  // designed to reassign an id to a previously deleted elt
+  // used by GraphUpdatesRecorder
+  virtual node restoreNode(node);
+  virtual edge restoreEdge(edge, node source, node target);
+  // designed to only update own structures
+  // used by GraphUpdatesRecorder
+  virtual void removeNode(const node);
+  virtual void removeEdge(const edge, const node= node());
 
 private:
   MutableContainer<bool> nodeAdaptativeFilter;
@@ -68,6 +84,9 @@ private:
   //  MutableContainer<unsigned int> inDegree;
   mutable int nNodes;
   mutable int nEdges;
+  edge addEdgeInternal(edge);
+  void delEdgeInternal(const edge);
+  void delNodeInternal(const node);
 };
 
 }

@@ -243,7 +243,7 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //============================================================
 xSGraphNodeIterator::xSGraphNodeIterator(const Graph *sG):
-  itId(((GraphImpl *)sG)->nodeIds.getUsedId()) {
+  itId(((GraphImpl *)sG)->nodeIds.getIds()) {
 }
 xSGraphNodeIterator::~xSGraphNodeIterator(){
   delete itId;
@@ -297,7 +297,7 @@ bool xInOutNodesIterator::hasNext() {
 }
 //===============================================================
 xSGraphEdgeIterator::xSGraphEdgeIterator(const Graph *sG):
-  itId(((GraphImpl *)sG)->edgeIds.getUsedId()) {
+  itId(((GraphImpl *)sG)->edgeIds.getIds()) {
 }
 xSGraphEdgeIterator::~xSGraphEdgeIterator(){
   delete itId;

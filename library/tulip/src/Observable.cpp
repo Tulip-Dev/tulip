@@ -4,6 +4,7 @@
 
 
 using namespace std;
+using namespace stdext;
 using namespace tlp;
 
 #ifdef _WIN32 
@@ -21,29 +22,44 @@ static bool unholdLock=false;
 //===============================================================
 void Observable::notifyDestroy() {
   //  cerr << "Observable::notifyObservers" << endl;
-  std::list<Observer*> tmpList(observersList);
-  list<Observer*>::iterator itlObs;
-  for (itlObs=tmpList.begin(); itlObs!=tmpList.end(); ++itlObs)
-    (*itlObs)->observableDestroyed(this);
+  slist<Observer*>::iterator itlObs = observersList.begin();
+  slist<Observer*>::iterator itle = observersList.end();
+  while (itlObs != itle) {
+    Observer* observer = *itlObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the observableDestroyed method
+    ++itlObs;
+    observer->observableDestroyed(this);
+  }
 }
 //===============================================================
 void Observable::notifyObservers() {
+  slist<Observer*>::iterator itlObs = observersList.begin();
+  slist<Observer*>::iterator itle = observersList.end();
+  if (itlObs == itle)
+    return;
+
   if (unholdLock) {
     cerr << "Cannot notifyObservers during unholdings" << endl;
     return;
   }
   //  cerr << "Observable::notifyObservers" << endl;
-  list<Observer*>::iterator itlObs;
   assert(holdCounter>=0);
   if (holdCounter)
-    for (itlObs=observersList.begin();itlObs!=observersList.end();++itlObs)
+    for (;itlObs != itle; ++itlObs)
       holdMap[*itlObs].insert(this);
   else {
     set<Observable *> tmpSet;
-    std::list<Observer*> tmpList(observersList);
     tmpSet.insert(this);
-    for (itlObs=tmpList.begin();itlObs!=tmpList.end();++itlObs)
-      (*itlObs)->update(tmpSet.begin(),tmpSet.end());
+    while(itlObs != itle) {
+      Observer* observer = *itlObs;
+      // iterator is incremented before
+      // to ensure it will not be invalidated
+      // during the call to the update method
+      ++itlObs;
+      observer->update(tmpSet.begin(),tmpSet.end());
+    }
   }
 }
 //===============================================================

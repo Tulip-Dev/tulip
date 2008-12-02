@@ -48,7 +48,9 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  Observable::holdObservers();
 	  started=false;
 	  glMainWidget->setMouseTracking(false);
-	  edge newEdge = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->addEdge(source, tmpNode);
+	  // allow to undo
+	  _graph->push();
+	  edge newEdge = _graph->addEdge(source, tmpNode);
 	  mLayout->setEdgeValue(newEdge, bends);
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
 	  bends.clear();

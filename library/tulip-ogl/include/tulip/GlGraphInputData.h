@@ -55,6 +55,14 @@ namespace tlp {
     void reloadLayoutProperty();
     
     /**
+     * Return the layout of this inputData
+     */
+    LayoutProperty* getLayoutProperty() {
+      reloadLayoutProperty();
+      return elementLayout;
+    }
+
+    /**
      * Reload viewLabel Property of the graph
      */
     void reloadLabelProperty();

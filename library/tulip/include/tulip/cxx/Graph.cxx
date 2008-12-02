@@ -9,6 +9,11 @@ ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) {
 }
 //================================================================================
 template<typename ATTRIBUTETYPE>
+bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) {
+  return getAttributes().get(name, value);
+}
+//================================================================================
+template<typename ATTRIBUTETYPE>
 void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value) {
   tlp::DataSet &data=getAttributes();
   data.set(name,value);

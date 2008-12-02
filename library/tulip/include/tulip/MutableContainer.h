@@ -25,12 +25,14 @@ class ImpossibleOperation : public std::exception {
 template <typename TYPE> 
 class IteratorVector : public Iterator<unsigned int> {
  public:
-  IteratorVector(const TYPE &value, std::deque<TYPE> *vData, unsigned int minIndex):
+  IteratorVector(const TYPE &value, bool equal, std::deque<TYPE> *vData, unsigned int minIndex):
     _value(value),
+    _equal(equal),
     _pos(minIndex),
     vData(vData),
     it(vData->begin()) {
-    while (it!=(*vData).end() && (*it)!=_value) {
+      while (it!=(*vData).end() &&
+	     (_equal ? ((*it) !=_value) : ((*it) == _value))) {
       ++it;
       ++_pos;
     }
@@ -43,11 +45,13 @@ class IteratorVector : public Iterator<unsigned int> {
     do {
       ++it;
       ++_pos;
-    } while (it!=(*vData).end() && !((*it)==_value));
+    } while (it!=(*vData).end() &&
+	     (_equal ? ((*it) !=_value) : ((*it) == _value)));
     return tmp;
   }
  private:
   const TYPE _value;
+  bool _equal;
   unsigned int _pos;
   std::deque<TYPE> *vData;
   typename std::deque<TYPE>::const_iterator it;
@@ -56,11 +60,13 @@ class IteratorVector : public Iterator<unsigned int> {
 template <typename TYPE> 
 class IteratorHash : public Iterator<unsigned int> {
  public:
-  IteratorHash(const TYPE &value, stdext::hash_map<unsigned int,TYPE> *hData):
+  IteratorHash(const TYPE &value, bool equal, stdext::hash_map<unsigned int,TYPE> *hData):
     _value(value),
+    _equal(equal),
     hData(hData) {
     it=(*hData).begin();
-    while (it!=(*hData).end() && (*it).second!=_value)
+    while (it!=(*hData).end() &&
+	   (_equal ? ((*it).second !=_value) : ((*it).second == _value)))
       ++it;
   }
   bool hasNext() {
@@ -70,11 +76,13 @@ class IteratorHash : public Iterator<unsigned int> {
     unsigned int tmp = (*it).first;
     do {
       ++it;
-    } while (it!=(*hData).end() && (*it).second!=_value);
+    } while (it!=(*hData).end() &&
+	     (_equal ? ((*it).second !=_value) : ((*it).second == _value)));
     return tmp;
   }
  private:
   const TYPE _value;
+  bool _equal;
   stdext::hash_map<unsigned int,TYPE> *hData;
   typename stdext::hash_map<unsigned int,TYPE>::const_iterator it;
 };
@@ -94,7 +102,7 @@ public:
    * devalidate this reference.
    */
   const typename ReturnType<TYPE>::Value get(const unsigned int i) const;
-  Iterator<unsigned int>* findAll(const TYPE &value) const throw (ImpossibleOperation) ;
+  Iterator<unsigned int>* findAll(const TYPE &value, bool equal = true) const throw (ImpossibleOperation) ;
   /**
    * This function is available only for optimisation purpose, one must be sure the 
    * the referenced element is not the default value. Use this function extremely carefully
@@ -172,16 +180,17 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
 }
 //===================================================================
 template <typename TYPE> 
-Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value) const throw (ImpossibleOperation)  {
-  if (value == defaultValue) 
+  Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value,
+							  bool equal) const throw (ImpossibleOperation)  {
+  if (equal && value == defaultValue) 
     throw ImpossibleOperation();
   else {
     switch (state) {
     case VECT: 
-      return new IteratorVector<TYPE>(value, vData, minIndex);
+      return new IteratorVector<TYPE>(value, equal, vData, minIndex);
       break;
     case HASH:
-      return new IteratorHash<TYPE>(value, hData);
+      return new IteratorHash<TYPE>(value, equal, hData);
       break;
     default:
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;

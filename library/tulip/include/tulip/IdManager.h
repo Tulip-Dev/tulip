@@ -40,11 +40,11 @@ public:
    */
   unsigned int get();
   /**
-   * Returns an iterator on all the used id. Warning, if
+   * Returns an iterator on all the used ids. Warning, if
    * the idManager is modified (free, get) this iterator 
    * will be invalidate.
    */
-  Iterator<unsigned int>* getUsedId() const;
+  Iterator<unsigned int>* getIds() const;
 
   friend std::ostream& operator<<(std::ostream &,const IdManager &);
   friend class IdManagerIterator;
@@ -52,8 +52,8 @@ public:
 
   private:
   std::set<unsigned int> freeIds;  
-  unsigned int maxId;
-  unsigned int minId;
+  unsigned int nextId;
+  unsigned int firstId;
 };
 //======================================================
 /// Iterator for id managers
@@ -65,9 +65,10 @@ public:
   unsigned int next();
   bool hasNext();
 private:
-  unsigned int index;
+  unsigned int current;
   std::set<unsigned int>::const_iterator it;
-  const IdManager &idMan;
+  unsigned int last;
+  const IdManager &idManager;
 };
 #endif
 //======================================================
