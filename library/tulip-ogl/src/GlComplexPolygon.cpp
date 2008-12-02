@@ -14,6 +14,9 @@
 #elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
     typedef GLvoid (*GLUTesselatorFunction)();
 #elif defined ( WIN32)
+// inspired from ftgl/FTGL.h & ftgl/FTVectoriser.cpp
+    #define  WIN32_LEAN_AND_MEAN
+    #include <windows.h>
     typedef GLvoid (CALLBACK *GLUTesselatorFunction)( );
 #else
     #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
