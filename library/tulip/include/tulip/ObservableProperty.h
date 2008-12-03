@@ -18,7 +18,7 @@ struct PropertyInterface;
  * framework for handling state dependency between observer and observed 
  * object.
  */
-class PropertyObserver {
+class  TLP_SCOPE PropertyObserver {
  public:
   virtual ~PropertyObserver() {}
   virtual void beforeSetNodeValue(PropertyInterface*, const node){}
@@ -52,7 +52,7 @@ namespace tlp {
 /**
  */
 /// Observable object for Property
-class ObservableProperty {
+class  TLP_SCOPE ObservableProperty {
  public:
   virtual ~ObservableProperty() {}
   /**

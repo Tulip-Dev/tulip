@@ -19,7 +19,7 @@ struct Graph;
  * framework for handling state dependency between observer and observed 
  * object.
  */
-class GraphObserver {
+class  TLP_SCOPE GraphObserver {
  public:
   virtual ~GraphObserver() {}
   virtual void addNode(Graph *,const node ){}
@@ -54,7 +54,7 @@ namespace tlp {
 /**
  */
 /// Observable object for graph
-class ObservableGraph {
+class  TLP_SCOPE ObservableGraph {
  public:
   virtual ~ObservableGraph() {}
   /**
