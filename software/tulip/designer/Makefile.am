@@ -9,4 +9,5 @@ dist_noinst_DATA = AppStartUp.ui PropertyDialog.ui \
 		i_open.png i_print.png \
 		i_save.png i_select.png \
 		i_selection.png i_zoom.png \
+		i_undo.png i_redo.png \
 		logo160x145.png logo32x32.png
