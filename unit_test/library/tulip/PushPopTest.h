@@ -20,6 +20,7 @@ public:
   void testSubgraph();
   void testTests();
   void testAddDelProps();
+  void testMetaNode();
   /*void testOrderEdgeAndSwap();
   void testSubgraphId();
   void testDeleteSubgraph();

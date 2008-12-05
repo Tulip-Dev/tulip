@@ -5,7 +5,9 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/ExtendedClusterOperation.h>
 
 using namespace std;
 using namespace tlp;
@@ -413,6 +415,37 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
 }
 
+void PushPopTest::testMetaNode() {
+  node n0 = graph->addNode();
+  LayoutProperty* layout = graph->getProperty<LayoutProperty>("viewLayout");
+  Coord coord0(0, 0, 0);
+  layout->setNodeValue(n0, coord0);
+
+  set<node> tmp;
+  tmp.insert(n0);
+
+  graph->push();
+
+  // create clone graph
+  Graph* clone = tlp::newCloneSubGraph(graph, "groups");
+
+  // create meta node
+  node metaNode = tlp::createMetaNode(clone, tmp);
+
+  CPPUNIT_ASSERT(graph->isElement(metaNode));
+  CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
+  CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
+
+  graph->pop();
+  CPPUNIT_ASSERT(!graph->isElement(metaNode));
+  CPPUNIT_ASSERT(coord0 != layout->getNodeValue(metaNode));
+
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->isElement(metaNode));
+  CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
+  CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
+}
+
 //==========================================================
 CppUnit::Test * PushPopTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Push/Pop" );
@@ -426,6 +459,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testTests) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations", 
 								  &PushPopTest::testAddDelProps) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "MetaNode operations", 
+								  &PushPopTest::testMetaNode) );
   return suiteOfTests;
 }
 //==========================================================
