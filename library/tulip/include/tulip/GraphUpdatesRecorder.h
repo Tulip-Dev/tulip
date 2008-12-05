@@ -136,6 +136,12 @@ namespace tlp {
     // remove an edge from a node's edges container
     void removeFromEdgeContainer(stdext::hash_map<node, std::vector<edge> >& containers, edge e, node n);
 
+    // record a node value in a node values container
+    void recordNodeValue(PropertyInterface*, const node, stdext::hash_map<unsigned long, stdext::hash_map<node, std::string> >&);
+
+    // same for edge
+    void recordEdgeValue(PropertyInterface*, const edge, stdext::hash_map<unsigned long, stdext::hash_map<edge, std::string> >&);
+
     // start of recording (push)
     void startRecording(GraphImpl*); 
     // end of recording
