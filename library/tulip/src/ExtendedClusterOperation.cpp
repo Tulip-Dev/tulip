@@ -87,7 +87,7 @@ node createMNode (Graph *graph, Graph* subGraph,
   Observable::holdObservers();
   updateGroupLayout(graph, subGraph, metaNode);
   ColorProperty *colors = graph->getProperty<ColorProperty>(colorProperty);
-  colors->setNodeValue(metaNode, Color(255, 255, 255));
+  colors->setNodeValue(metaNode, Color(255, 255, 255, 127));
 
   // keep track of graph existing edges
   MutableContainer<bool> graphEdges;

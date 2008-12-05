@@ -554,7 +554,8 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
 void GraphUpdatesRecorder::recordNodeValue(PropertyInterface* p, node n,
 					   stdext::hash_map<unsigned long,
 					   stdext::hash_map<node,
-					   std::string> >& values) {
+					   std::string> >& values,
+					   bool always) {
   // create values[(unsigned long) p] if needed
   hash_map<unsigned long, hash_map<node, string> >::iterator it = 
     values.find((unsigned long) p);
@@ -570,7 +571,7 @@ void GraphUpdatesRecorder::recordNodeValue(PropertyInterface* p, node n,
       pv[n] = p->getNodeStringValue(n);
     values[(unsigned long) p] = pv;
   } else {
-    if ((*it).second.find(n) == (*it).second.end()) {
+    if (always || ((*it).second.find(n) == (*it).second.end())) {
       if (typeid(*p) == typeid(GraphProperty)) {
 	// GraphProperty dos not allow to set value as string
 	// see GraphProperty.cpp
@@ -588,11 +589,11 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
   // don't record old values for newly added nodes
   if (ita != addedNodes.end())
     return;
-  recordNodeValue(p, n, oldNodeValues);
+  recordNodeValue(p, n, oldNodeValues, false);
 }
             
 void GraphUpdatesRecorder::afterSetNodeValue(PropertyInterface* p, node n) {
-  recordNodeValue(p, n, newNodeValues);
+  recordNodeValue(p, n, newNodeValues, true);
 }
 
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
@@ -619,7 +620,8 @@ void GraphUpdatesRecorder::afterSetAllNodeValue(PropertyInterface* p) {
 void GraphUpdatesRecorder::recordEdgeValue(PropertyInterface* p, edge e,
 					   stdext::hash_map<unsigned long,
 					   stdext::hash_map<edge,
-					   std::string> >& values) {
+					   std::string> >& values,
+					   bool always) {
   hash_map<unsigned long, hash_map<edge, string> >::iterator it = 
     values.find((unsigned long) p);
   if (it == values.end()) {
@@ -627,7 +629,7 @@ void GraphUpdatesRecorder::recordEdgeValue(PropertyInterface* p, edge e,
     pv[e] = p->getEdgeStringValue(e);
     values[(unsigned long) p] = pv;
   } else {
-    if ((*it).second.find(e) == (*it).second.end())
+    if (always || ((*it).second.find(e) == (*it).second.end()))
       (*it).second[e]= p->getEdgeStringValue(e);
   }
 }
@@ -637,11 +639,11 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
   // dont record old value for newly added edge
   if (ita != addedEdges.end())
     return;
-  recordEdgeValue(p, e, oldEdgeValues);
+  recordEdgeValue(p, e, oldEdgeValues, false);
 }
             
 void GraphUpdatesRecorder::afterSetEdgeValue(PropertyInterface* p, edge e) {
-  recordEdgeValue(p, e, newEdgeValues);
+  recordEdgeValue(p, e, newEdgeValues, true);
 }
 
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
