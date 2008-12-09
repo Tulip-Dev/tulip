@@ -1113,54 +1113,64 @@ namespace {
 }
 //**********************************************************************
 void viewGl::editCut() {
-  if( !glWidget ) return;
-  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  if( !g ) return;
+  if (!glWidget) return;
+  Graph * graph =
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (!graph) return;
   // free the previous ccpGraph
-  if( copyCutPasteGraph ) {
+  if (copyCutPasteGraph) {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
-  if( !selP ) return;
+  BooleanProperty* selP =
+    graph->getProperty<BooleanProperty>("viewSelection");
+  if(!selP) return;
   // Save selection
   NodeA nodeA;
   EdgeA edgeA;
-  GetSelection( nodeA, edgeA, g, selP );
+  GetSelection(nodeA, edgeA, graph, selP);
   Observable::holdObservers();
   copyCutPasteGraph = tlp::newGraph();
-  tlp::copyToGraph( copyCutPasteGraph, g, selP );
+  tlp::copyToGraph(copyCutPasteGraph, graph, selP);
+  // allow undo
+  graph->push();
   // Restore selection
-  SetSelection( selP, nodeA, edgeA, g );
-  tlp::removeFromGraph( g, selP );
+  SetSelection(selP, nodeA, edgeA, graph);
+  tlp::removeFromGraph(graph, selP);
   Observable::unholdObservers();
 }
 //**********************************************************************
 void viewGl::editCopy() {
-  if( !glWidget ) return;
-  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  if( !g ) return;
+  if(!glWidget) return;
+  Graph * graph =
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (!graph) return;
   // free the previous ccpGraph
-  if( copyCutPasteGraph ) {
+  if (copyCutPasteGraph) {
     delete copyCutPasteGraph;
     copyCutPasteGraph = 0;
   }
-  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
-  if( !selP ) return;
+  BooleanProperty * selP =
+    graph->getProperty<BooleanProperty>("viewSelection");
+  if (!selP) return;
   Observable::holdObservers();
   copyCutPasteGraph = tlp::newGraph();
-  tlp::copyToGraph( copyCutPasteGraph, g, selP );
+  tlp::copyToGraph(copyCutPasteGraph, graph, selP);
   Observable::unholdObservers();
 }
 //**********************************************************************
 void viewGl::editPaste() {
-  if( !glWidget ) return;
-  Graph * g = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  if( !g ) return;
-  if( !copyCutPasteGraph ) return;
+  if (!glWidget) return;
+  Graph * graph =
+    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  if (!graph) return;
+  if (!copyCutPasteGraph) return;
   Observable::holdObservers();
-  BooleanProperty * selP = g->getProperty<BooleanProperty>("viewSelection");
-  tlp::copyToGraph( g, copyCutPasteGraph, 0, selP );
+  BooleanProperty * selP =
+    graph->getProperty<BooleanProperty>("viewSelection");
+  // allow undo
+  graph->push();
+  tlp::copyToGraph(graph, copyCutPasteGraph, 0, selP );
   Observable::unholdObservers();
 }
 //**********************************************************************
@@ -1557,17 +1567,13 @@ void viewGl::group() {
 	tmp.insert(itn);
   }delete it;
   if (tmp.empty()) return;
+  // allow undo
+  graph->push();
   if (graph == graph->getRoot()) {
     QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
     graph = tlp::newCloneSubGraph(graph, "groups");
   }
   node metaNode = tlp::createMetaNode(graph, tmp);
-  // set metanode viewColor to glWidget background color
-  Color metaNodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
-  metaNodeColor[3]=127;
-  graph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaNode,metaNodeColor);
-  /*graph->getProperty<ColorProperty>("viewColor")->
-    setNodeValue(metaNode, glWidget->getScene()->getGlGraphComposite()->getRenderingParameters().getBackgroundColor());  */
   clusterTreeWidget->update();
   changeGraph(graph);
 }
@@ -1853,6 +1859,8 @@ void viewGl::newSubgraph() {
   }
   else if (ok) {
     sel1 = graph->getProperty<BooleanProperty>("viewSelection");
+    // allow undo
+    graph->push();
     Graph *tmp=graph->addSubGraph(sel1);
     tmp->setAttribute("name", newName());
     clusterTreeWidget->update();
@@ -1864,6 +1872,8 @@ void viewGl::reverseSelectedEdgeDirection() {
   Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   if (graph==0) return;
   Observable::holdObservers();
+  // allow undo
+  graph->push();
   graph->getProperty<BooleanProperty>("viewSelection")->reverseEdgeDirection();
   Observable::unholdObservers();
 }
