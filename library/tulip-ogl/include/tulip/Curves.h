@@ -27,13 +27,15 @@ namespace tlp {
 		const Color &,            /* end color */
 		const float,              /* start size */
 		const float,              /* end size */
-		const Coord &,            /* nomal to the begin of the curve */
-		const Coord &);           /* nomal to the end curve */
+		const Coord &,            /* normal to the begin of the curve */
+		const Coord &,            /* normal to the end curve */
+		const std::string &textureName="");			/* textureName */
   void polyQuad(const std::vector<Coord> &, /* polyline vertces */
 		const std::vector<Color> &, /* colors at polyline verts */
 		const std::vector<float> &, /* size at polyline verts */
 		const Coord &,            /* nomal to the begin of the curve */
-		const Coord &);           /* nomal to the end curve */    
+		const Coord &,            /* nomal to the end curve */
+		const std::string &textureName="");			/* textureName */
   void polyCylinder(const std::vector<Coord> &,    /* polyline vertces */
 		    const std::vector<Color> &,    /* colors at polyline verts */
 		    const std::vector<float> &,    /* size at polyline verts */
@@ -45,7 +47,7 @@ namespace tlp {
 		    const float,              /* start size */
 		    const float,              /* end size */
 		    const Coord &,            /* nomal to the begin of the curve */
-		    const Coord &);           /* nomal to the end curve */        
+		    const Coord &);           /* nomal to the end curve */
   //====================================================================
   void bezierCylinder(const std::vector<Coord> &,  /* polyline vertces */
 		      const Color &,          /* start color */
@@ -53,14 +55,14 @@ namespace tlp {
 		      const float,            /* start size */
 		      const float,            /* end size */
 		      const Coord &,          /* nomal to the begin of the curve */
-		      const Coord &);         /* nomal to the end curve */    
+		      const Coord &);         /* nomal to the end curve */
   void bezierQuad(const std::vector<Coord> &,  /* polyline vertces */
 		  const Color &,          /* start color */
 		  const Color &,          /* end color */
 		  const float,            /* start size */
 		  const float,            /* end size */
 		  const Coord &,          /* nomal to the begin of the curve */
-		  const Coord &);         /* nomal to the end curve */    
+		  const Coord &);         /* nomal to the end curve */
   void bezierLine(const std::vector<Coord> &,  /* polyline vertces */
 		  const Color &,          /* start color */
 		  const Color &);          /* end color */
@@ -71,7 +73,7 @@ namespace tlp {
 		      const float,            /* start size */
 		      const float,            /* end size */
 		      const Coord &,          /* nomal to the begin of the curve */
-		      const Coord &);         /* nomal to the end curve */    
+		      const Coord &);         /* nomal to the end curve */
   void splineQuad(const std::vector<Coord> &,  /* polyline vertces */
 		  const Color &,          /* start color */
 		  const Color &,          /* end color */

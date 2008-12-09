@@ -16,20 +16,20 @@
 
 namespace tlp {
 
-  /** \brief Class use to represent a graph 
-   * 
+  /** \brief Class use to represent a graph
+   *
    * GlComposite use to represent a graph with nodes, metanodes and edges
    */
   class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver {
 
-  
+
   public:
 
     /**
      * Build a GlGraphComposite with the graph data
-     */ 
+     */
     GlGraphComposite(Graph* graph);
-    ~GlGraphComposite() {if(inputData.graph) {inputData.graph->removeGraphObserver(this);}}
+    ~GlGraphComposite();
 
     /**
      * Build list of Nodes, Edges and MetaNodes
@@ -54,7 +54,7 @@ namespace tlp {
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       addNodes();
-      
+
       if(isDisplayEdges()) {
 	for(std::vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
 	  if(parameters.isDisplayEdges() || parameters.isViewEdgeLabel())
@@ -67,7 +67,7 @@ namespace tlp {
 	  (*it).acceptVisitor(visitor);
 	}
       }
-      
+
       if(isDisplayMetaNodes()) {
 	for(std::vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
 	  (*it).acceptVisitor(visitor);
@@ -112,7 +112,7 @@ namespace tlp {
      */
     void setWithXML(xmlNodePtr rootNode);
 
-    //Delegate 
+    //Delegate
     void setDisplayNodes(bool display) {parameters.setDisplayNodes(display);}
     void setDisplayMetaNodes(bool display) {parameters.setDisplayMetaNodes(display);}
     void setDisplayEdges(bool display) {parameters.setDisplayEdges(display);}

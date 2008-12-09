@@ -73,7 +73,11 @@ namespace tlp {
   }
   //====================================================
   void setColor(const Color &c) {
-    glColor3ubv((unsigned char *) &c);
+    glColor4ubv((unsigned char *) &c);
+  }
+  //====================================================
+  void setColor(GLfloat *c){
+    glColor4fv(c);
   }
   //====================================================
   void setMaterial(const Color &c) {
@@ -82,10 +86,15 @@ namespace tlp {
     colorMat[1] = ((float)c[1])/255.0;
     colorMat[2] = ((float)c[2])/255.0;
     colorMat[3] = ((float)c[3])/255.0;
+    setColor(c);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
+    /*if(colorMat[3]<255)
+      glDepthMask ( GL_FALSE ) ;
+    else
+      glDepthMask ( GL_TRUE ) ;*/
   }
   //====================================================
-  Coord projectPoint(const Coord &obj, 
+  Coord projectPoint(const Coord &obj,
 		     const MatrixGL &transform,
 		     const Vector<int, 4> &viewport) {
     Vector<float, 4> point;
@@ -100,13 +109,13 @@ namespace tlp {
     result /= point[3];
     result *= 0.5;
     result += 0.5;
-    
+
     result[0] = result[0] * viewport[2] + viewport[0];
     result[1] = result[1] * viewport[3] + viewport[1];
     return result;
   }
   //====================================================
-  Coord unprojectPoint(const Coord &obj, 
+  Coord unprojectPoint(const Coord &obj,
 		       const MatrixGL &invtransform,
 		       const Vector<int, 4> &viewport) {
     Vector<float, 4> point;
@@ -116,31 +125,31 @@ namespace tlp {
 
     point[0] = (point[0] - viewport[0]) / viewport[2];
     point[1] = (point[1] - viewport[1]) / viewport[3];
-    
+
     point *= 2.;
     point -= 1.;
-    
+
     point[3] = 1.;
 
     point = point * invtransform;
     assert(fabs(point[3]) > 1E-6);
-  
+
     Coord result(point[0], point[1], point[2]);
     result /= point[3];
 
     return result;
   }
   //====================================================
-  double segmentSize(const Coord &u, const Coord &v, 
-		     const tlp::MatrixGL &transform, 
+  double segmentSize(const Coord &u, const Coord &v,
+		     const tlp::MatrixGL &transform,
 		     const Vector<int, 4> &viewport) {
     Coord p1 = projectPoint(u, transform, viewport);
     Coord p2 = projectPoint(v, transform, viewport);
     return sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
   }
   //====================================================
-  double segmentVisible(const Coord &u, const Coord &v, 
-			const tlp::MatrixGL &transform, 
+  double segmentVisible(const Coord &u, const Coord &v,
+			const tlp::MatrixGL &transform,
 			const Vector<int, 4> &viewport) {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     Coord p1 = projectPoint(u, transform, viewport);
@@ -152,26 +161,26 @@ namespace tlp {
     //    cerr << p1 << endl;
     //    cerr << p2 << endl;
     double size = sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
-    if (( (p1[0]<minx && p2[0]<minx) || 
-	  (p1[1]<miny && p2[1]<miny) || 
-	  (p1[0]>maxx && p2[0]>maxx) || 
+    if (( (p1[0]<minx && p2[0]<minx) ||
+	  (p1[1]<miny && p2[1]<miny) ||
+	  (p1[0]>maxx && p2[0]>maxx) ||
 	  (p1[1]>maxy && p2[1]>maxy) ) ) {
       //      cerr << "not visible" << endl;
       //      cerr << p1 << " *** " << p2 << endl;
       return -size;
     }
-    else 
+    else
       return size;
   }
   //====================================================
-  GLfloat projectSize(const Coord &position,const Coord& size, 
-		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
+  GLfloat projectSize(const Coord &position,const Coord& size,
+		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix,
 		      const Vector<int, 4> &viewport) {
     return projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
   }
   //====================================================
-  GLfloat projectSize(const BoundingBox &bb, 
-		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix, 
+  GLfloat projectSize(const BoundingBox &bb,
+		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix,
 		      const Vector<int, 4> &viewport) {
     Coord bbSize=bb.second-bb.first;
     float  nSize = bbSize.norm(); //Enclosing bounding box
@@ -185,9 +194,9 @@ namespace tlp {
 
     MatrixGL tmp(translate * modelviewMatrix);
     //MatrixGL tmp(modelviewMatrix);
-    tmp[0][0] = nSize; tmp[0][1] = 0;     tmp[0][2] = 0;     
-    tmp[1][0] = 0;     tmp[1][1] = 0;     tmp[1][2] = 0;     
-    tmp[2][0] = 0;     tmp[2][1] = 0;     tmp[2][2] = 0;     
+    tmp[0][0] = nSize; tmp[0][1] = 0;     tmp[0][2] = 0;
+    tmp[1][0] = 0;     tmp[1][1] = 0;     tmp[1][2] = 0;
+    tmp[2][0] = 0;     tmp[2][1] = 0;     tmp[2][2] = 0;
 
     //    cerr << modelviewMatrix << endl;
     //    cerr << projectionMatrix << endl;
@@ -223,7 +232,7 @@ namespace tlp {
     Rectangle<float> r1;
     r1[0] = upleft;
     r1[1] = downright;
-    
+
     Vector<float, 2> upleftV;
     upleftV[0] = viewport[0];
     upleftV[1] = viewport[1];
@@ -231,7 +240,7 @@ namespace tlp {
     Vector<float, 2> downrightV;
     downrightV[0] = viewport[0] + viewport[2];
     downrightV[1] = viewport[1] + viewport[3];
-    
+
     Rectangle<float> r2;
     r2[0] = upleftV;
     r2[1] = downrightV;
@@ -248,7 +257,7 @@ namespace tlp {
       size *= -1.0;
     }
     return size;
-    
+
     //    cerr << "s: " << nSize << " => " << minx << "," << miny << "/" << maxx << "," << maxy << endl;
   }
   //====================================================
@@ -259,7 +268,7 @@ namespace tlp {
     Coord dst[8];
     int pos;
     int num;
- 
+
     for(int i=0;i<3;i++) {
       if(bbTmp.first[i]>bbTmp.second[i]) {
 	float tmp=bbTmp.first[i];
@@ -318,7 +327,7 @@ namespace tlp {
     Coord second=bb.second;
     first[1]=globalViewport[3]-bb.second[1];
     second[1]=globalViewport[3]-bb.first[1];
-    
+
     if(!(first[0]<currentViewport[0]+currentViewport[2] && second[0]>currentViewport[0] && first[1]<currentViewport[1]+currentViewport[3] && second[1]>currentViewport[1])){
       return -1.;
     }else{
@@ -330,12 +339,12 @@ namespace tlp {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();
     gluQuadricNormals(quadratic, GLU_SMOOTH);
-    gluQuadricTexture(quadratic, GL_TRUE);  
+    gluQuadricTexture(quadratic, GL_TRUE);
     glTranslatef(0.0f, 0.0f, -1.0f);
     gluQuadricOrientation(quadratic, GLU_INSIDE);
     gluDisk(quadratic, 0.0f, 0.5f, 8, 1);
     gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 8, 1);  
+    gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 8, 1);
     gluDeleteQuadric(quadratic);
   }
   //====================================================
@@ -345,7 +354,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
@@ -357,7 +366,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 0.0f, -1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f); 
+    glVertex3f(-0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -369,7 +378,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(1.0f, 0.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -381,7 +390,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(-1.0f, 0.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-0.5f, 0.5f, 0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -393,7 +402,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); 
+    glVertex3f(0.5f, 0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -405,7 +414,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, -1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -418,29 +427,29 @@ namespace tlp {
   //=======================================================
   //Calcul 3D,
   //=======================================================
-  //Calcul de la matrice de transformation pour 
+  //Calcul de la matrice de transformation pour
   //le positionnement des flèches sur les arètes
   MatrixGL makeArrowMatrix(const Coord &A, const Coord &B) {
     MatrixGL matrix;
-    
+
     //Vecteur AB
     Vector<float, 3> vAB;
     //Vecteur V
     Vector<float, 3> vV;
   //Vecteur W
     Vector<float, 3> vW;
-    
+
     vAB = B - A;
     float nAB; //|AB|
     nAB = vAB.norm();
     if (fabs(nAB) > 1E-6)
       vAB /= nAB;
-    
+
   //vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
     if (fabs(vAB[2]) < 1E-6) {
       vV[0] = 0; vV[1] = 0; vV[2] = 1.0;
     }
-    else 
+    else
     if (fabs(vAB[1]) < 1E-6) {
       vV[0] = 0; vV[1] = 1.0; vV[2] = 0;
     }
@@ -450,23 +459,23 @@ namespace tlp {
       vV[2] = -1./vAB[2];
       vV /= vV.norm();
     }
-    
+
     vW = vAB ^ vV;
     float nW = vW.norm();
     if (fabs(nW) > 1E-6)
       vW /= nW;
- 
+
     for (unsigned int i = 0; i < 3; ++i) {
       matrix[0][i] = vW[i];
       matrix[1][i] = vV[i];
       matrix[2][i] = vAB[i];
       matrix[3][i] = B[i];
     }
-    matrix[0][3]=0; 
+    matrix[0][3]=0;
     matrix[1][3]=0;
     matrix[2][3]=0;
     matrix[3][3]=1;
-    
+
     return matrix;
   }
 }

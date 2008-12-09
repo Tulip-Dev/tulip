@@ -4,8 +4,8 @@
  Email : auber@labri.fr
  Last modification : 06/09/2005
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLGRAPHRENDERINGPARAMETERS_H
@@ -17,13 +17,13 @@
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {
-  
+
   class TLP_GL_SCOPE LessThanNode {
   public:
     DoubleProperty *metric;
     bool operator() (node n1,node n2)  {
       return (metric->getNodeValue(n1) > metric->getNodeValue(n2));
-    } 
+    }
   };
   //====================================================
   class TLP_GL_SCOPE LessThanEdge {
@@ -32,7 +32,7 @@ namespace tlp {
     Graph *sp;
     bool operator() (edge e1,edge e2) {
       return (metric->getNodeValue(sp->target(e1))>metric->getNodeValue(sp->target(e2)));
-    } 
+    }
   };
 
   /**
@@ -40,20 +40,20 @@ namespace tlp {
    * during the rendering of a graph.
    */
   class TLP_GL_SCOPE GlGraphRenderingParameters {
-  
+
   public:
     GlGraphRenderingParameters();
     //============================================
     DataSet getParameters() const;
     void    setParameters(const DataSet &);
-    /** 
+    /**
      * activate or deactivate anlialiasing
      */
     void setAntialiasing(const bool state);
     /** return true if antialiasing is activated else false.
      */
     bool isAntialiased()const;
-    /** 
+    /**
      * activate or deactivate displaying of arrows along the graph's edges.
      */
     void setViewArrow(const bool state);
@@ -61,51 +61,51 @@ namespace tlp {
      * \sa setViewArrow
      */
     bool isViewArrow()const;
-    /** 
+    /**
      * activate or deactivate displaying of labels on nodes.
      */
     void setViewNodeLabel(const bool state);
-    /** 
+    /**
      * return true if drawing of nodes' labels is activated.
      */
     bool isViewNodeLabel() const;
-    /** 
+    /**
      * activate or deactivate displaying of labels on nodes.
      */
     void setViewEdgeLabel(const bool state);
-    /** 
+    /**
      * return true if drawing of nodes' labels is activated.
      */
     bool isViewEdgeLabel() const;
-    /** 
+    /**
      *activate or deactivate interpolation of nodes colors along edge
      */
     void setEdgeColorInterpolate(const bool state);
-    /** 
+    /**
      * return true if color interpolation is activated
      */
     bool isEdgeColorInterpolate() const;
-    /** 
+    /**
      * activate or deactivate interpolation of nodes colors along edge
      */
     void setEdgeSizeInterpolate(const bool state);
-    /** 
+    /**
      * return true if color interpolation is activated
      */
     bool isEdgeSizeInterpolate() const;
-    /** 
+    /**
      * return the type of fonts used in the renderer(0=3D,1=bitmap,2=texture)
      */
     unsigned int getFontsType() const;
-    /** 
+    /**
      * set fonts type used in the renderer (0=3D,1=bitmap,2=texture)
      */
     void setFontsType(unsigned int type);
-    /** 
+    /**
      * set the path for the texture loading
      */
     void setTexturePath(const std::string& path);
-    /** 
+    /**
      * return the absolute path used for texture loading
      */
     std::string getTexturePath() const;
@@ -117,16 +117,16 @@ namespace tlp {
      * return the absolute path used for the fonts loading
      */
     std::string getFontsPath();
-    /** 
+    /**
      * if true glgraph use the incremental rendering else display all elements in one pass
      */
     void setIncrementalRendering(const bool state);
-    /** 
+    /**
      * return the incremental rendering state
      */
     bool isIncrementalRendering() const;
     /**
-     * If true and if labels are activated label inside meta nodes will be displayed 
+     * If true and if labels are activated label inside meta nodes will be displayed
      */
     void setViewMetaLabel(const bool state);
     /**
@@ -229,28 +229,36 @@ namespace tlp {
      * get stencil number for edges label
      */
     int getEdgesLabelStencil();
-    /** 
+    /**
      * If true node and edges are ordered according to the viewMetric property
      */
     void setElementOrdered(const bool state);
-    /** 
+    /**
      * return true if element ordering is activated
      */
     bool isElementOrdered() const;
-    /** 
+    /**
+     * If true node and edges are ordered according to the distance with camera
+     */
+    void setElementZOrdered(const bool state);
+    /**
+     * return true if element Z ordering is activated
+     */
+    bool isElementZOrdered() const;
+    /**
      * if true use 3D displaying of edges instead of 2D lines on ALL edges
      */
     void setEdge3D(const bool state);
-    /** 
+    /**
      * return true if 3D drawing of edges is activated
      */
     bool isEdge3D() const;
-    /** 
+    /**
      * Get the size of the border that is added to any label when
      * using bitmap fonts.
      */
     unsigned int getLabelsBorder() const;
-    /** 
+    /**
      * Get the size of the border that is added to any label when
      * using bitmap fonts. Setting this parameter to a high value
      * enables de reduce the label density in the final drawing.
@@ -258,7 +266,7 @@ namespace tlp {
      */
     void setLabelsBorder(const unsigned int);
     /**
-     * if true draw graph with feedback information (very low) 
+     * if true draw graph with feedback information (very low)
      */
     void setFeedbackRender(bool feedback);
     /**
@@ -281,6 +289,7 @@ namespace tlp {
     bool _displayEdges;
     bool _displayNodes;
     bool _displayMetaNodes;
+    bool _elementZOrdered;
     int _selectedNodesStencil;
     int _selectedMetaNodesStencil;
     int _selectedEdgesStencil;
@@ -295,7 +304,7 @@ namespace tlp {
     std::string _fontsPath;
     std::string _texturePath;
     bool _feedbackRender;
-  }; 
+  };
 }
 
 #endif // Tulip_GLGRAPH_H

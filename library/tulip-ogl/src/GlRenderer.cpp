@@ -17,6 +17,7 @@
 #include <FTGLTextureFont.h>
 #include <FTGLPixmapFont.h>
 #include <FTGLBitmapFont.h>
+#include "tulip/GlTools.h"
 #include "tulip/TLPPixmapFont.h"
 #include "tulip/GlRenderer.h"
 
@@ -71,13 +72,13 @@ int t_GlFonts::Add(FontMode t, int s, float d, const string f) {
     tmp.font = new TLPPixmapFont (f.c_str());
     break;
   }
-  assert(!tmp.font->Error());  
+  assert(!tmp.font->Error());
   if (!tmp.font->FaceSize(s))
     cerr << __PRETTY_FUNCTION__ << " FaceSize error" << endl;
   tmp.font->Depth(d);
   if (!tmp.font->CharMap(ft_encoding_unicode))
-    cerr << __PRETTY_FUNCTION__ << " CharMap error" << endl; 
-  
+    cerr << __PRETTY_FUNCTION__ << " CharMap error" << endl;
+
   fonts.push_back(tmp);
   fontsIndex[tmp] = fonts.size()-1;
   return fonts.size()-1;
@@ -108,7 +109,7 @@ bool _GlFonts::operator< (const _GlFonts &dest) const {
   if (file < dest.file) return true;
   if (file > dest.file) return false;
   if (depth < dest.depth) return true;
-  //  if (depth < dest->depth) return false;  
+  //  if (depth < dest->depth) return false;
   return false;
 }
 //***************************************************************************
@@ -126,11 +127,11 @@ void GlRenderer::drawString(const string &str, int index) const{
     ftfonts[index].font->Render(str.c_str());
   }
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 void GlRenderer::getBBox(const std::string &s, float& x1, float& y1, float& z1, float& x2, float& y2, float& z2){
   getBBox(s.c_str(), x1, y1, z1, x2, y2, z2);
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 float GlRenderer::getAdvance(const string &str, int index) const{
   //  cerr << __PRETTY_FUNCTION__ << " " << index << " " << str << endl;
   if(index == -1){
@@ -144,7 +145,7 @@ float GlRenderer::getAdvance(const string &str, int index) const{
   else
     return ftfonts[index].font->Advance(str.c_str());
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 float GlRenderer::getAscender(int index) const{
   if(index == -1){
     if(active)
@@ -156,7 +157,7 @@ float GlRenderer::getAscender(int index) const{
     return ftfonts[index].font->Ascender();
   }
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 float GlRenderer::getDescender(int index) const{
   if(index == -1){
     if(active)
@@ -168,13 +169,13 @@ float GlRenderer::getDescender(int index) const{
     return ftfonts[index].font->Descender();
   }
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 bool GlRenderer::ActiveFont(int index){
   current_font = index;
   active = true;
   return true;
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 bool GlRenderer::ActiveFont(FontMode t, int s, const string &f, float d){
   int val = ftfonts.searchFont(t, s, f, d);
   if(val != -1) return false;
@@ -186,46 +187,46 @@ bool GlRenderer::ActiveFont(FontMode t, int s, const string &f, float d){
 int GlRenderer::searchFont(FontMode type, int size, const std::string &f, float depth)const {
   return ftfonts.searchFont(type,size,f.c_str(),depth);
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 const char* GlRenderer::getFontFilename(int index)const{
   if(index == -1){
     if(active)
       return ftfonts[current_font].getFileName();
     else{
       cerr<<" GlRenderer error : getFontFilename, font non active "<<endl;
-      return 0;      
+      return 0;
     }
   }
   else{
     return ftfonts[index].getFileName();
   }
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 int GlRenderer::getFontType(int index)const{
   if(index == -1){
     if(active)
       return ftfonts[current_font].getType();
     else{
       cerr<<" GlRenderer error : getFontType, font non active "<<endl;
-      return 0;      
+      return 0;
     }
   }
   else{
     return ftfonts[index].getType();
   }
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 int GlRenderer::AddFont(FontMode type, int size, const string &f, float depth){
   //  cerr << __PRETTY_FUNCTION__ << " " << size << " " << f << " " << depth << endl;
   int val = ftfonts.searchFont(type, size, f, depth);
   if(val != -1) {
     cerr << __PRETTY_FUNCTION__ << " Font already loaded" << endl;
     return val;
-  } 
+  }
   val = ftfonts.Add(type, size, depth, f);  // ne renvoie qu'une valeur juste
   return val;
 }
-//--------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------
 void GlRenderer::translate(float x, float y, float z) const {
   switch(mode){
   case TLP_BITMAP:
@@ -243,8 +244,7 @@ void GlRenderer::translate(float x, float y, float z) const {
 }
 
 void GlRenderer::setColor(unsigned char r, unsigned char v, unsigned char b) const {
-  glColor4ub(r, v, b ,255);
-  
+  tlp::setColor(Color(r,v,b,255));
 }
 
 void GlRenderer::drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const {
@@ -277,10 +277,10 @@ void GlRenderer::drawLine(float x1, float y1, float z1, float x2, float y2, floa
       for(int i=0; i<dx; i++){
 	glDrawPixels(1, 1, GL_RGB, GL_FLOAT, color);
 	glBitmap(0, 0, 0, 0, inc, 0, 0);
-      } 
+      }
       glBitmap(0, 0, 0, 0, -1*inc*dx,0, 0);
     }
-    
+
     glBitmap(0, 0, 0, 0, -x1, -y1, 0);
 
     break;

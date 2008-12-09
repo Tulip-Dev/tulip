@@ -61,7 +61,6 @@ namespace tlp {
     pointer = (GLdouble *) vertex;
     Color color=Color(pointer[3],pointer[4],pointer[5],pointer[6]);
     setMaterial(color);
-    glColor4ubv((unsigned char *)&color);
     glNormal3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(pointer[0], pointer[1]);
     glVertex3dv((GLdouble *)vertex);
@@ -194,8 +193,7 @@ namespace tlp {
       for(int v=0;v<points.size();++v) {
 	glBegin(GL_LINE_LOOP);
 	for(unsigned int i=0; i < points[v].size(); ++i) {
-	  setMaterial(outlineColor);
-	  glColor4ubv((unsigned char *)&outlineColor);
+	  setColor(outlineColor);
 	  glVertex3fv((float *)&points[v][i]);
 	}
 	glEnd();

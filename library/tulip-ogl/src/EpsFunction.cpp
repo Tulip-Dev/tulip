@@ -7,19 +7,16 @@
 #include <cassert>
 
 #include "tulip/EpsFunction.h"
+#include "tulip/GlTools.h"
 
 using namespace tlp;
 
 //====================================================
-static inline void SetColor(const Color &c) {
-  glColor4ub(c[0],c[1],c[2],c[3]);
-}
-//====================================================
 void tlp::Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2) {
   glBegin(GL_LINES);
-  SetColor(C1);
+  setColor(C1);
   glVertex3f(x1, y1, z1);
-  SetColor(C2);
+  setColor(C2);
   glVertex3f(x2, y2 , z2);
   glEnd();
 }
@@ -111,18 +108,18 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
 
 #define Max(a,b) (((a)>(b))?(a):(b))
 
-#define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth 
+#define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth
 					 lines. */
       colormax = Max(absR, Max(absG, absB));
       steps =(int) rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR));
 
       xstep = dx / steps;
       ystep = dy / steps;
-      
+
       rstep = dr / steps;
       gstep = dg / steps;
       bstep = db / steps;
-      
+
       xnext = vertex[0].x;
       ynext = vertex[0].y;
       rnext = vertex[0].red;
@@ -245,7 +242,7 @@ int tlp::compare(const void *a, const void *b) {
   DepthIndex *p1 = (DepthIndex *) a;
   DepthIndex *p2 = (DepthIndex *) b;
   GLfloat diff = p2->depth - p1->depth;
-  
+
   if (diff > 0.0) {
     return 1;
   } else if (diff < 0.0) {
@@ -263,9 +260,9 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
   int nprimitives, item;
   DepthIndex *prims;
   int nvertices, i;
-  
+
   end = buffer + size;
-  
+
   /* Count how many primitives there are. */
   nprimitives = 0;
   loc = buffer;
@@ -297,14 +294,14 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
 	     token);
     }
   }
-  
+
   /* Allocate an array of pointers that will point back at
      primitives in the feedback buffer.  There will be one
      entry per primitive.  This array is also where we keep the
      primitive's average depth.  There is one entry per
      primitive  in the feedback buffer. */
   prims = (DepthIndex *) malloc(sizeof(DepthIndex) * nprimitives);
-  
+
   item = 0;
   loc = buffer;
   while (loc < end) {
@@ -341,34 +338,34 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
     case GL_PASS_THROUGH_TOKEN:
       loc++;
       break;
-      
+
     default:
       /* XXX Left as an excersie to the reader. */
       return;
     }
   }
   assert(item == nprimitives);
-  
+
   /* Sort the primitives back to front. */
   qsort(prims, nprimitives, sizeof(DepthIndex), compare);
-  
+
   /* Understand that sorting by a primitives average depth
      doesn't allow us to disambiguate some cases like self
      intersecting polygons.  Handling these cases would require
      breaking up the primitives.  That's too involved for this
      example.  Sorting by depth is good enough for lots of
      applications. */
-  
+
   /* Emit the Encapsulated PostScript for the primitives in
      back to front order. */
   for (item = 0; item < nprimitives; item++) {
     (void) spewPrimitiveEPS(file, prims[item].ptr);
   }
-  
+
   free(prims);
 }
 //====================================================
-#define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower) 
+#define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower)
 
 smooth shading. */
 
@@ -377,7 +374,7 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   GLfloat clearColor[4], viewport[4];
   GLfloat lineWidth;
   int i;
-  
+
   /* Read back a bunch of OpenGL state to help make the EPS
      consistent with the OpenGL clear color, line width, point
      size, and viewport. */
@@ -385,7 +382,7 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
   glGetFloatv(GL_LINE_WIDTH, &lineWidth);
   glGetFloatv(GL_POINT_SIZE, &pointSize);
-  
+
   /* Emit EPS header. */
   fputs("%!PS-Adobe-2.0 EPSF-2.0\n", file);
   /* Notice %% for a single % in the fprintf calls. */
@@ -395,7 +392,7 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   fputs("\n", file);
   fputs("gsave\n", file);
   fputs("\n", file);
-  
+
   /* Output Frederic Delhoume's "gouraudtriangle" PostScript
      fragment. */
   fputs("% the gouraudtriangle PostScript fragement below is free\n", file);
@@ -404,9 +401,9 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
   for (i = 0; gouraudtriangleEPS[i]; i++) {
     fprintf(file, "%s\n", gouraudtriangleEPS[i]);
   }
-  
+
   fprintf(file, "\n%g setlinewidth\n", lineWidth);
-  
+
   /* Clear the background like OpenGL had it. */
   //  fprintf(file, "%g %g %g setrgbcolor\n",
   //	  clearColor[0], clearColor[1], clearColor[2]);
@@ -414,21 +411,21 @@ void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer
 	  1.0 , 1.0 , 1.0);
   fprintf(file, "%g %g %g %g rectfill\n\n",
 	  viewport[0], viewport[1], viewport[2], viewport[3]);
-  
-  if (doSort) 
+
+  if (doSort)
     {
       spewSortedFeedback(file, size, buffer);
-    } 
+    }
   else
     {
       spewUnsortedFeedback(file, size, buffer);
     }
-  
+
   /* Emit EPS trailer. */
   fputs("grestore\n\n", file);
   fputs("%Add `showpage' to the end of this file to be able to print to a printer.\n",
 	file);
-  
+
   fclose(file);
 }
 //====================================================

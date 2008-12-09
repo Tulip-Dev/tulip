@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLSCENE_H
@@ -27,14 +27,28 @@
 
 namespace tlp {
 
+  /** /brief Storage class for Z ordering
+   *
+   */
+  struct EntityWithDistance {
+
+    EntityWithDistance(const double &dist,LODResultEntity *entity,bool complexEntity)
+      :distance(dist),entity(entity),complexEntity(complexEntity){
+    }
+
+    double distance;
+    LODResultEntity *entity;
+    bool complexEntity;
+  };
+
   /** /brief Tulip scene class
-   * 
+   *
    * Tulip scene class
    */
   class TLP_GL_SCOPE GlScene : public GlObservableScene {
-  
+
   public:
-     
+
     GlScene(GlLODCalculator *calculator=NULL);
 
     /**
@@ -56,12 +70,12 @@ namespace tlp {
      * Zoom to x,y
      */
     void zoomXY(int step, const int x, const int y);
-    
+
     /**
      * Zoom
      */
     void zoom(float factor,const Coord& dest);
-    
+
     /**
      * Zoom
      */
@@ -86,12 +100,12 @@ namespace tlp {
     bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<GlEntity *>& selectedEntities);
 
     /**
-     * Output the scene in SVG 
+     * Output the scene in SVG
      */
     void outputSVG(unsigned int size,const std::string& filename);
-    
+
     /**
-     * Output the scene in SVG 
+     * Output the scene in SVG
      */
     void outputEPS(unsigned int size,const std::string& filename);
 
@@ -109,27 +123,27 @@ namespace tlp {
      * Set the viewport of the scene with 4 int
      */
     void setViewport(int x, int y, int width, int height) {viewport[0]=x;viewport[1]=y;viewport[2]=width;viewport[3]=height;}
-    
+
     /**
      * Get the viewport of the scene
      */
     Vector<int, 4> getViewport() {return viewport;}
-    
+
     /**
      * Set the background color of the scene
      */
     void setBackgroundColor(const Color& color) {backgroundColor=color;}
-    
-    /** 
+
+    /**
      * Get the background color of the scene
      */
     Color getBackgroundColor() {return backgroundColor;}
-    
+
     /**
      * Set if scene is render in orthogonal mode
      */
     void setViewOrtho(bool viewOrtho){this->viewOrtho=viewOrtho;}
-    
+
     /**
      * Scene is render in orthogonal mode ?
      */
@@ -149,7 +163,7 @@ namespace tlp {
      * Return the layer with name : name
      */
     GlLayer* getLayer(const std::string& name);
-    
+
     /**
      * Return the layer list
      */
@@ -161,7 +175,7 @@ namespace tlp {
     void getXML(std::string &out);
 
     /**
-     * Set scene's data and children with a XML 
+     * Set scene's data and children with a XML
      */
     void setWithXML(std::string &in,Graph *graph);
 
@@ -188,9 +202,9 @@ namespace tlp {
 
     GlGraphComposite *glGraphComposite;
     GlLayer *graphLayer;
-    
+
   };
-  
+
 }
 
 #endif // Tulip_GLSCENE_H

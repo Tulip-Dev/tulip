@@ -20,7 +20,7 @@ extern "C" {
 };
 
 //====================================================
-#ifdef _WIN32 
+#ifdef _WIN32
 #ifdef DLL_EXPORT
 tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
 #endif
@@ -49,7 +49,7 @@ static bool loadBMP(const string &filename, textureImage *texture) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
-  
+
   FILE *file;
   unsigned short int bfType;
   long int bfOffBits;
@@ -76,7 +76,7 @@ static bool loadBMP(const string &filename, textureImage *texture) {
       cerr << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
       fclose(file);
       return false;
-    }        
+    }
   /* get the file size */
   /* skip file size and reserved fields of bitmap file header */
   fseek(file, 8, SEEK_CUR);
@@ -91,7 +91,7 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   fseek(file, 4, SEEK_CUR);
   fread(&texture->width, sizeof(int), 1, file);
   fread(&texture->height, sizeof(int), 1, file);
-  
+
   /* get the number of planes (must be set to 1) */
   fread(&biPlanes, sizeof(short int), 1, file);
   if (biPlanes != 1)
@@ -155,7 +155,7 @@ static bool loadJPEG(const string &filename, textureImage *texture) {
   jpeg_create_decompress(&cinfo);
   jpeg_stdio_src(&cinfo, file);
   jpeg_read_header(&cinfo, TRUE);
-  
+
   cinfo.out_color_components = 3;
   cinfo.out_color_space = JCS_RGB;
   cinfo.dct_method = JDCT_FLOAT;
@@ -166,7 +166,7 @@ static bool loadJPEG(const string &filename, textureImage *texture) {
   texture->width    = cinfo.output_width;
   texture->height   = cinfo.output_height;
   texture->data = new unsigned char[texture->width * texture->height * 3];
-  
+
   JSAMPROW row_pointer = new JSAMPLE[texture->width * 3];
   while (cinfo.output_scanline < cinfo.output_height) {
     jpeg_read_scanlines(&cinfo, &row_pointer, 1);
@@ -186,7 +186,7 @@ static bool loadPNG(const string &filename, textureImage *texture)
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
-  
+
   FILE *file;
 
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
@@ -225,9 +225,9 @@ static bool loadPNG(const string &filename, textureImage *texture)
 
   png_init_io(png_ptr, file);
   png_read_info(png_ptr, info_ptr);
-/*  
+/*
   png_uint_32 width, height;
-  int bit_depth, color_type, interlace_method, compression_method, filter_method; 
+  int bit_depth, color_type, interlace_method, compression_method, filter_method;
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
 	       &color_type, &interlace_method, &compression_method, &filter_method);
 */
@@ -236,7 +236,7 @@ static bool loadPNG(const string &filename, textureImage *texture)
   texture->hasAlpha = ( ctype == PNG_COLOR_TYPE_GRAY_ALPHA ) || ( ctype == PNG_COLOR_TYPE_RGB_ALPHA );
   texture->width    = png_get_image_width( png_ptr, info_ptr );
   texture->height   = png_get_image_height( png_ptr, info_ptr );
-  int linestride = texture->width * (texture->hasAlpha ? 4 : 3);  
+  int linestride = texture->width * (texture->hasAlpha ? 4 : 3);
   texture->data = new unsigned char[linestride * texture->height];
   png_bytep row_pointers[texture->height];
   for (int i=0; i < texture->height; ++i)
@@ -277,11 +277,11 @@ bool GlTextureManager::loadTexture(const string& filename)
 
   GLuint textureNum;
   textureImage texti;
-  
+
   string extension = filename.substr(filename.find_last_of('.') + 1);
   for (int i=0; i < (int)extension.length(); ++i)
     extension[i] = (char) toupper(extension[i]);
-  
+
   TextureLoader_t *loader = NULL;
   if (extension == "BMP") loader = &loadBMP;
 #ifdef HAVE_LIBJPEG
@@ -293,23 +293,23 @@ bool GlTextureManager::loadTexture(const string& filename)
   else {
     cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
   }
-  
+
   if ((loader == NULL) || !(*loader)(filename, &texti)) {
     glDisable(GL_TEXTURE_2D);
     return false;
   }
 
   int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
-  
+
   GlTexture texture;
   texture.width=texti.width;
   texture.height=texti.height;
-  
+
   glGenTextures(1, &textureNum);	//FIXME: handle case where no memory is available to load texture
   glBindTexture(GL_TEXTURE_2D, textureNum);
 
   texture.id=textureNum;
-  
+
   glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, texti.width, texti.height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data);
   /* use no filtering */
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -318,6 +318,16 @@ bool GlTextureManager::loadTexture(const string& filename)
   (texturesMap[currentContext])[filename] = texture;
 
   return true;
+}
+//====================================================================
+void GlTextureManager::deleteTexture(const string& name){
+  for(ContextAndTextureMap::iterator it=texturesMap.begin();it!=texturesMap.end();++it){
+    TextureUnit::iterator it2=(*it).second.find(name);
+    if(it2!=(*it).second.end()){
+      glDeleteTextures(1,&((*it2).second.id));
+      (*it).second.erase(name);
+    }
+  }
 }
 //====================================================================
 void GlTextureManager::beginNewTexture(const string& name)
@@ -332,7 +342,7 @@ void GlTextureManager::beginNewTexture(const string& name)
 }
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename) {
-  if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end()) 
+  if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end())
     loadTexture(filename);
   else
     glEnable(GL_TEXTURE_2D);
@@ -346,4 +356,4 @@ void GlTextureManager::desactivateTexture() {
   glDisable(GL_TEXTURE_2D);
 }
 
-} 
+}

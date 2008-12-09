@@ -16,6 +16,12 @@ namespace tlp {
 
     buildLists();
   }
+
+  GlGraphComposite::~GlGraphComposite(){
+    if(inputData.graph)
+      inputData.graph->removeGraphObserver(this);
+  }
+
   void GlGraphComposite::buildLists() {
     if(!nodes.empty())
       nodes.clear();

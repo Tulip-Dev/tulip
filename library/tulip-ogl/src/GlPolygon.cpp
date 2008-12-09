@@ -16,7 +16,7 @@ namespace tlp {
     outlineSize(outlineSize){ 
   }
   //=====================================================
-  GlPolygon::GlPolygon(const vector<Coord> &points, 
+  GlPolygon::GlPolygon(const vector<Coord> &points,
 		       const vector<Color> &fcolors,
 		       const vector<Color> &ocolors,
 		       const bool filled,
@@ -116,15 +116,14 @@ namespace tlp {
 	}
       }
       for(unsigned int i=0; i < points.size(); ++i) {
-	if (i < fillColors.size()) {
+	if (i < fillColors.size()) {	
 	  setMaterial(fillColors[i]);
-	  glColor4ubv((unsigned char *)&fillColors[i]);
 	}
 	glVertex3fv((float *)&newPoints[i]);
       }
       glEnd();
     }
-    
+
     if (outlined) {
       if(outlineSize!=1)
 	glLineWidth(outlineSize);
@@ -132,7 +131,6 @@ namespace tlp {
       for(unsigned int i=0; i < points.size(); ++i) {
 	if (i < outlineColors.size()) {
 	  setMaterial(outlineColors[i]);
-	  glColor4ubv((unsigned char *)&outlineColors[i]);
 	}
 	glVertex3fv((float *)&newPoints[i]);
       }
@@ -147,30 +145,31 @@ namespace tlp {
   void GlPolygon::translate(const Coord& mouvement) {
     boundingBox.first+=mouvement;
     boundingBox.second+=mouvement;
-    
+
     for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
       (*it)+=mouvement;
     }
-  } 
+  }
   //===========================================================
   void GlPolygon::getXML(xmlNodePtr rootNode) {
 
     GlXMLTools::createProperty(rootNode, "type", "GlPolygon");
 
     getXMLOnlyData(rootNode);
-    
+
   }
   //===========================================================
   void GlPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
-    
+
     GlXMLTools::getXML(dataNode,"points",points);
     GlXMLTools::getXML(dataNode,"fillColors",fillColors);
     GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
     GlXMLTools::getXML(dataNode,"filled",filled);
     GlXMLTools::getXML(dataNode,"outlined",outlined);
+    GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
   }
   //============================================================
   void GlPolygon::setWithXML(xmlNodePtr rootNode) {
@@ -185,6 +184,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
       GlXMLTools::setWithXML(dataNode,"filled",filled);
       GlXMLTools::setWithXML(dataNode,"outlined",outlined);
+      GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
 
       for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
 	boundingBox.check(*it);

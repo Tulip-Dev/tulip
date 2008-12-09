@@ -10,14 +10,14 @@ using namespace std;
 
 namespace tlp {
 
-  GlConvexHull::GlConvexHull(const vector<Coord> &points, 
+  GlConvexHull::GlConvexHull(const vector<Coord> &points,
 			     const vector<Color> &fcolors,
 			     const vector<Color> &ocolors,
 			     const bool filled,
 			     const bool outlined,
 			     const string &name,
 			     const bool computeHull):
-    
+
     _points(points),
     _fillColors(fcolors),
     _outlineColors(ocolors),
@@ -47,7 +47,7 @@ void GlConvexHull::draw(float lod,Camera *camera) {
   if (_filled){
     if (_points.size() == 3)
       glBegin(GL_TRIANGLES);
-    else 
+    else
       if (_points.size() == 4)
 	glBegin(GL_QUADS);
       else
@@ -55,27 +55,26 @@ void GlConvexHull::draw(float lod,Camera *camera) {
 
     for(unsigned int i=0; i < _points.size(); ++i) {
       if (i < _fillColors.size()) {
-	setMaterial(_fillColors[i]);
-	glColor4ubv((unsigned char *)&_fillColors[i]);
+        setMaterial(_fillColors[i]);
       }
       //_points[i][2] = 0;
       glVertex3fv((float *)&_points[i]);
     }
     glEnd();
   }
-    
+
   if (_outlined) {
     glBegin(GL_LINE_LOOP);
     for(unsigned int i=0; i < _points.size(); ++i) {
       if (i < _outlineColors.size()) {
-	glColor4ubv((unsigned char *)&_outlineColors[i]);
+        setColor(_outlineColors[i]);
       }
       //_points[i][2] = 0;
       glVertex3fv((float *)&_points[i]);
     }
     glEnd();
   }
-    
+
   glTest(__PRETTY_FUNCTION__);
 }
 
@@ -94,11 +93,11 @@ static Color darkerColor(Color c) {
 }
 
 ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
-							   std::vector<Color> fColors,
-							   std::vector<Color> oColors,
-							   bool deducedFromChilds,
-							   Graph *root,
-							   unsigned int depth) {
+								   std::vector<Color> fColors,
+								   std::vector<Color> oColors,
+								   bool deducedFromChilds,
+								   Graph *root,
+								   unsigned int depth) {
   //vector<GlConvexHull *> convexHulls;
   Graph *sg;
   //vector<GlConvexHull *> sgConvexHulls;
@@ -128,7 +127,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     oColors.push_back(Color(100, 100, 100, 120));
   }
 
-  
+
 
   // build convex hulls from subgraphs
   forEach(sg, graph->getSubGraphs()) {
@@ -194,7 +193,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	vector<Coord>::const_iterator itCoord = (*it)->_points.begin();
 
 	for (; itCoord != (*it)->_points.end(); itCoord++)
-	  gConvexHull.push_back(*itCoord);	
+	  gConvexHull.push_back(*itCoord);
 
 	vector<unsigned int> gConvexHullIdxs;
 	// compute convex hull with new set of points
@@ -245,7 +244,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	    hl = hh/10.;
 	  else
 	    hl = hw/10.;
-	  
+
 	  hh += hl;
 	  hw += hl;
 	  if (bendsl > hl)
@@ -289,10 +288,10 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	}
 	// add a GlConvexHull for this graph in front of convexHulls
 	convexHullItem->hull=new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
-      }
+    }
       //}
   }
-			 
+
   return convexHullItem;
 }
   //====================================================
@@ -332,7 +331,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       GlXMLTools::setWithXML(dataNode, "outlined", _outlined);
     }
   }
-  
+
 }
 
 

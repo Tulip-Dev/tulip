@@ -36,13 +36,8 @@ namespace tlp {
   }
 
   void GlRectTextured::draw(float lod,Camera *camera) {
-    glDisable(GL_COLOR_MATERIAL);
-    //glEnable(GL_LIGHTING);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
-    glColor3ub(255,255,255);
     if(GlTextureManager::getInst().activateTexture(textureName))
-      setMaterial(Color(255,255,255,0));
+      setMaterial(Color(255,255,255,255));
     if(!inPercent) {
       glBegin(GL_QUADS);
         glNormal3f(0.0f, 0.0f, 1.0f);
@@ -80,7 +75,7 @@ namespace tlp {
     if(!inPercent) {
       boundingBox.first+=mouvement;
       boundingBox.second+=mouvement;
-      
+
       top+=mouvement[1];
       bottom+=mouvement[1];
       left+=mouvement[0];
@@ -94,14 +89,14 @@ namespace tlp {
     GlXMLTools::createProperty(rootNode, "type", "GlRectTextured");
 
     GlXMLTools::getDataNode(rootNode,dataNode);
-    
+
     GlXMLTools::getXML(dataNode,"top",top);
     GlXMLTools::getXML(dataNode,"bottom",bottom);
     GlXMLTools::getXML(dataNode,"left",left);
     GlXMLTools::getXML(dataNode,"right",right);
     GlXMLTools::getXML(dataNode,"inPercent",inPercent);
     GlXMLTools::getXML(dataNode,"textureName",textureName);
-    
+
   }
   //============================================================
   void GlRectTextured::setWithXML(xmlNodePtr rootNode) {

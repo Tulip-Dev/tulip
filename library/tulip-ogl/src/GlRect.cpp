@@ -11,7 +11,7 @@ namespace tlp {
     point(1)[0] = bottomRightPos[0];
     point(2) = bottomRightPos ;
     point(3) = topLeftPos;
-    point(3)[1] = bottomRightPos[1]; 
+    point(3)[1] = bottomRightPos[1];
 
     boundingBox.check(topLeftPos);
     boundingBox.check(bottomRightPos);
@@ -51,14 +51,18 @@ namespace tlp {
     point(0) = _topLeftPos;
     point(1)[1] = _topLeftPos[1];
     point(3)[0] = _topLeftPos[0];
-    boundingBox.check(_topLeftPos);
+    boundingBox = BoundingBox();
+    boundingBox.check(point(0));
+    boundingBox.check(point(2));
   }
   //=====================================================
   void GlRect::setBottomRightPos(const Coord &_bottomRightPos) {
     point(2) = _bottomRightPos;
     point(1)[0] = _bottomRightPos[0];
     point(3)[1] = _bottomRightPos[1];
-    boundingBox.check(_bottomRightPos);
+    boundingBox = BoundingBox();
+    boundingBox.check(point(0));
+    boundingBox.check(point(2));
   }
   //=====================================================
   void GlRect::setTopLeftColor(const Color &_topLeftCol) {
@@ -76,9 +80,9 @@ namespace tlp {
     double maxX = std::max(point(0).getX(), point(2).getX());
     double minY = std::min(point(0).getY(), point(2).getY());
     double maxY = std::max(point(0).getY(), point(2).getY());
-    return ((x >= minX) && 
-	    (x <= maxX) && 
-	    (y >= minY) && 
+    return ((x >= minX) &&
+	    (x <= maxX) &&
+	    (y >= minY) &&
 	    (y <= maxY));
   }
   //=====================================================
@@ -92,14 +96,14 @@ namespace tlp {
     GlXMLTools::createProperty(rootNode, "type", "GlRect");
 
     GlPolygon::getXMLOnlyData(rootNode);
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"topLeftPos",topLeftPos);
     GlXMLTools::getXML(dataNode,"bottomRightPos",bottomRightPos);
     GlXMLTools::getXML(dataNode,"topLeftCol",topLeftCol);
     GlXMLTools::getXML(dataNode,"bottomRightCol",bottomRightCol);
-    
+
   }
   //============================================================
   void GlRect::setWithXML(xmlNodePtr rootNode) {

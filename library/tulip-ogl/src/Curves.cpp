@@ -5,6 +5,7 @@
 #include <tulip/Size.h>
 #include "tulip/Curves.h"
 #include "tulip/GlTools.h"
+#include "tulip/GlTextureManager.h"
 
 
 using namespace std;
@@ -101,8 +102,8 @@ namespace {
       float n_xv = xv.norm();
       xu /= n_xu;
       xv /= n_xv;
-  
-      
+
+
       Coord bi_xu_xv = xu+xv;
       if(bi_xu_xv ==Coord(0,0,0)) {
 	//two point at the same coord
@@ -118,7 +119,7 @@ namespace {
       if(isnan(angle))
 	angle=M_PI;
       newSize=newSize/cos(angle/2.);
-      
+
       if(angle<M_PI/2+M_PI/4) {
 	//normal form
 	if ((xu^xv)[2] > 0) {
@@ -131,11 +132,11 @@ namespace {
       }else{
 	//broken form
 	Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
-	
+
 	if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
 	  result.addPoint();
 	  if(dec)
-	    dec->push_back(i); 
+	    dec->push_back(i);
 	  if ((xu^xv)[2] > 0) {
 	    result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
 	    result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
@@ -163,7 +164,7 @@ namespace {
     }
     //end point
     xu = endN - vertices[vertices.size()-1];
-    xu /= xu.norm();    
+    xu /= xu.norm();
     xv = Coord(0,0,-1);
     dir = xu^xv;
     if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
@@ -199,13 +200,13 @@ namespace {
   }
   bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
 	       const MatrixGL &transformMatrix, const Vector<int, 4> &viewport) {
-    if (bends.size() == 0) 
+    if (bends.size() == 0)
       return segmentVisible(startPoint, endPoint, transformMatrix, viewport) > 0.;
-    
+
     //first point
     if (segmentVisible(startPoint, bends[0], transformMatrix, viewport)>0.)
       return true;
-    for (unsigned int i=1; i<bends.size(); ++i) 
+    for (unsigned int i=1; i<bends.size(); ++i)
       if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewport)>0.)
 	return true;
     if (segmentVisible(endPoint, bends.back(), transformMatrix, viewport)>0.)
@@ -214,7 +215,7 @@ namespace {
   }
 }
 
-namespace tlp {  
+namespace tlp {
   vector<Coord> computeCleanVertices(const vector<Coord> &bends,
 				     const Coord &startPoint, const Coord& endPoint,
 				     Coord &startN, Coord &endN) {
@@ -280,72 +281,82 @@ namespace tlp {
 	drawPoly = false;
       if (s1 > 2. && s2 > 2.)
 	drawLine = false;
-    }    
+    }
   }
   //=============================================
-  void polyLine(const vector<Coord> & vertices, 
+  void polyLine(const vector<Coord> & vertices,
 		const vector<Color> & colors) {
     glBegin(GL_LINE_STRIP);
     for (unsigned int i = 0; i < vertices.size(); ++i) {
-      glColor4ubv(((const GLubyte *)&colors[i]));
+      setColor(colors[i]);
       glVertex3fv((float *)&vertices[i]);
-    } 
+    }
     glEnd();
   }
-  void polyLine(const vector<Coord> &vertices, 
+  void polyLine(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2) {
     polyLine(vertices, getColors(vertices, c1, c2));
   }
   //=============================================
-  void polyQuad(const vector<Coord> &vertices, 
-		const vector<Color> &colors, 
-		const vector<float> &sizes,
-		const Coord & startN, const Coord &endN) {
+  void polyQuad(const vector<Coord> &vertices,
+		const vector<Color> &colors,
+		const vector<float> &sizes,	
+		const Coord & startN, const Coord &endN,
+		const string &textureName) {
     unsigned int size;
     vector<unsigned int> decTab;
     unsigned int dec=0;
     GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN,size,&decTab);
+    if(textureName!="") {
+    	GlTextureManager::getInst().activateTexture(textureName);
+		}
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
-      if(!decTab.empty()){
-	if(i==decTab[0]) {
-	  dec++;
-	  decTab.erase(decTab.begin());
-	}
-      }
-      glColor4ubv(((const GLubyte *)&colors[i-dec]));
+    	if(!decTab.empty()){
+    		if(i==decTab[0]) {
+    			dec++;
+    			decTab.erase(decTab.begin());
+    		}
+    	}
+      setColor(colors[i-dec]);
+      glTexCoord2f(1.0*i, 0.);
       glVertex3fv(&points[i*3]);
+      glTexCoord2f(1.0*i, 1.);
       glVertex3fv(&points[i*3 + size*3]);
-    } 
+    }
     glEnd();
+    if(textureName!="") {
+    	GlTextureManager::getInst().desactivateTexture();
+    }
     delete [] points;
   }
-  void polyQuad(const vector<Coord> &vertices, 
-		const Color &c1, const Color &c2, 
+  void polyQuad(const vector<Coord> &vertices,
+		const Color &c1, const Color &c2,
 		float s1, float s2,
-		const Coord &startN, const Coord &endN) {
-    polyQuad(vertices, 
-	     getColors(vertices, c1, c2), 
+		const Coord &startN, const Coord &endN,
+		const string &textureName) {
+    polyQuad(vertices,
+	     getColors(vertices, c1, c2),
 	     getSizes(vertices, s1, s2),
-	     startN, endN); 
+	     startN, endN,textureName);
   }
   //=============================================
   typedef gleDouble gleCoord[3];
-  void polyCylinder(const vector<Coord> &vertices, 
-		    const vector<Color> &colors, 
+  void polyCylinder(const vector<Coord> &vertices,
+		    const vector<Color> &colors,
 		    const vector<float> &sizes,
 		    const Coord & startN, const Coord &endN) {
 
-    
+
     gleCoord  *point_array  = new gleCoord [vertices.size() + 2];
     gleColor  *color_array  = new gleColor [vertices.size() + 2];
     gleDouble *radius_array = new gleDouble[vertices.size() + 2];
-    
+
     for (unsigned int i = 0; i < vertices.size(); ++i) {
       gleColor col;
-      col[0] = (float)colors[i][0]/255.; 
-      col[1] = (float)colors[i][1]/255.; 
-      col[2] = (float)colors[i][2]/255.; 
+      col[0] = (float)colors[i][0]/255.;
+      col[1] = (float)colors[i][1]/255.;
+      col[2] = (float)colors[i][2]/255.;
       for (unsigned int j=0; j < 3; ++j) {
 	color_array[i+1][j]   = col[j];
 	point_array[i+1][j] = vertices[i][j];
@@ -358,18 +369,18 @@ namespace tlp {
     }
     glePolyCone(vertices.size()+2, point_array, color_array, radius_array);
   }
-  void polyCylinder(const vector<Coord> &vertices, 
-		    const Color &c1, const Color &c2, 
+  void polyCylinder(const vector<Coord> &vertices,
+		    const Color &c1, const Color &c2,
 		    float s1, float s2,
 		    const Coord &startN, const Coord &endN) {
-    polyCylinder(vertices, 
-		 getColors(vertices, c1, c2), 
+    polyCylinder(vertices,
+		 getColors(vertices, c1, c2),
 		 getSizes(vertices, s1, s2),
-		 startN, endN); 
+		 startN, endN);
   }
   //=============================================
-  void bezierCylinder(const vector<Coord> &vertices, 
-		      const Color &c1, const Color &c2, 
+  void bezierCylinder(const vector<Coord> &vertices,
+		      const Color &c1, const Color &c2,
 		      float s1, float s2,
 		      const Coord &startN, const Coord &endN) {
     /* gleCoord  *point_array  = new gleCoord [30 + 2];
@@ -381,8 +392,8 @@ namespace tlp {
     }
     */
   }
-  void bezierQuad(const vector<Coord> &vertices, 
-		  const Color &c1, const Color &c2, 
+  void bezierQuad(const vector<Coord> &vertices,
+		  const Color &c1, const Color &c2,
 		  float s1, float s2,
 		  const Coord &startN, const Coord &endN) {
     unsigned int MAX_BENDS = 8;
@@ -401,8 +412,8 @@ namespace tlp {
       newCurve[1] = vertices[MAX_BENDS - 1] + dir;
       for (unsigned int i = MAX_BENDS; i<vertices.size(); ++i)
        newCurve[i-(MAX_BENDS) + 2] = vertices[i];
-      bezierQuad(newCurve, colors[MAX_BENDS-1], c2, sizes[MAX_BENDS-1], s2, 
-		 vertices[MAX_BENDS - 2], 
+      bezierQuad(newCurve, colors[MAX_BENDS-1], c2, sizes[MAX_BENDS-1], s2,
+		 vertices[MAX_BENDS - 2],
 		 endN);
       return;
     }
@@ -417,28 +428,26 @@ namespace tlp {
     unsigned int size;
     GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN,size);
     GLfloat *pointsIt  = points;
-    glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size , 0.0, 1.0, 
+    glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size , 0.0, 1.0,
 	    size*3, 2, pointsIt );
     glEnable(GL_MAP2_VERTEX_3);
     glBegin(GL_QUAD_STRIP);
     glNormal3f(0.0f, 0.0f, 1.0f);
-    
+
     for (unsigned int i = 0; i <= steps; ++i) {
       /*
       color[3] = 255;
 
       if (i < 5)
 	color[3] = double(i) / 5.0 * 255.0 ;
-      if (i > steps - 5) 
+      if (i > steps - 5)
 	color[3] = double(steps - i) / 5.0 * 255.0 ;
       */
 
-      glColor4ub((unsigned char)color[0], (unsigned char)color[1], 
-		 (unsigned char)color[2], (unsigned char)color[3]); 
+      setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
       glTexCoord2f(0.0f, 0.0f);
       glEvalCoord2f((GLfloat) i/steps,0);
-      glColor4ub((unsigned char)color[0], (unsigned char)color[1],  //Need to be done, bug of opengl ???
-		 (unsigned char)color[2], (unsigned char)color[3]); 
+      //setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
       glTexCoord2f(1.0f, 1.0f);
       glEvalCoord2f((GLfloat) i/steps,1);
       color += delta;
@@ -448,9 +457,9 @@ namespace tlp {
     delete [] points;
   }
 
-  void bezierLine(const vector<Coord> &vertices, 
+  void bezierLine(const vector<Coord> &vertices,
 		  const Color &c1, const Color &c2) {
-    
+
     unsigned int MAX_BENDS = 8;
     if (vertices.size()>MAX_BENDS) {
       vector<Coord> points(MAX_BENDS);
@@ -458,11 +467,11 @@ namespace tlp {
       for (unsigned int i=0;i<MAX_BENDS;++i)
 	points[i]=vertices[i];
       bezierLine(points, c1, colors[MAX_BENDS - 1]);
-      
+
       Coord dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
       dir /= dir.norm();
       dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.);
-      
+
       vector<Coord> newCurve(vertices.size()-(MAX_BENDS - 2));
       newCurve[0] = vertices[MAX_BENDS - 1];
       newCurve[1] = vertices[MAX_BENDS - 1] + dir;
@@ -488,8 +497,7 @@ namespace tlp {
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(GL_LINE_STRIP);
     for (unsigned int i = 0; i <= steps; ++i) {
-      glColor4ub((unsigned char)color[0], (unsigned char)color[1],
-		 (unsigned char)color[2], (unsigned char)color[3]); 
+      setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
       glEvalCoord1f((GLfloat) i/steps);
       color += delta;
     }
@@ -498,19 +506,19 @@ namespace tlp {
     delete [] data;
   }
   //==================================================================
-  void splineCylinder(const vector<Coord> &vertices, 
-		      const Color &c1, const Color &c2, 
+  void splineCylinder(const vector<Coord> &vertices,
+		      const Color &c1, const Color &c2,
 		      float s1, float s2,
 		      const Coord &startN, const Coord &endN) {
     tlp::bezierCylinder(splineCurve(vertices), c1, c2, s1, s2, startN, endN);
   }
-  void splineQuad(const vector<Coord> &vertices, 
-		  const Color &c1, const Color &c2, 
+  void splineQuad(const vector<Coord> &vertices,
+		  const Color &c1, const Color &c2,
 		  float s1, float s2,
 		  const Coord &startN, const Coord &endN) {
     tlp::bezierQuad(splineCurve(vertices), c1, c2, s1, s2, startN, endN);
   }
-  void splineLine(const vector<Coord> &vertices, 
+  void splineLine(const vector<Coord> &vertices,
 		  const Color &c1, const Color &c2) {
     tlp::bezierLine(splineCurve(vertices), c1, c2);
   }

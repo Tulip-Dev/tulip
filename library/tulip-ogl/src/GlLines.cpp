@@ -15,6 +15,7 @@ extern "C" {
 #include "tulip/GlLines.h"
 #include "tulip/Bezier.h"
 #include "tulip/Spline.h"
+#include "tulip/GlTools.h"
 
 using namespace std;
 using namespace tlp;
@@ -31,9 +32,9 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
   glBegin(GL_LINES);
-  glColor3ub(startColor.getR(),startColor.getG(),startColor.getB());
+  setColor(startColor);
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
-  glColor3ub(endColor.getR(),endColor.getG(),endColor.getB()); //endColor.getA());
+  setColor(endColor);
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
   GlLines::glDisableLineStipple(stippleType);
@@ -49,29 +50,28 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   }
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
-  
+
   GLfloat *colorStart = startColor.getGL();
   colorStart[3] = 1.0;
   GLfloat *colorEnd = endColor.getGL();
   colorEnd[3] = 1.0;
   GLfloat colorDelta[4];
-  for (int i=0;i<4;i++) 
+  for (int i=0;i<4;i++)
     colorDelta[i] = (colorEnd[i]-colorStart[i])/(bends.size()+2);
-  
+
   glBegin(GL_LINE_STRIP);
-  glColor4fv(colorStart);
+  setColor(colorStart);
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
-  
-  for (int i=0;i<4;i++) 
+
+  for (int i=0;i<4;i++)
     colorStart[i] += colorDelta[i];
   for (unsigned int i = 0; i < bends.size(); i++) {
-    glColor4fv(colorStart);
+    setColor(colorStart);
     glVertex3f(bends[i][0],bends[i][1],bends[i][2]);
-    for (int i=0;i<4;i++) 
+    for (int i=0;i<4;i++)
       colorStart[i] += colorDelta[i];
   }
-
-  glColor4fv(colorEnd);
+  setColor(colorEnd);
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
   delete [] colorStart;
@@ -102,9 +102,9 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, bends.size()+2, bendsCoordinates);
   glEnable(GL_MAP1_VERTEX_3);
   glBegin(GL_LINE_STRIP);
-  for (unsigned int i = 0; i <= steps; i++) 
+  for (unsigned int i = 0; i <= steps; i++)
     {
-      glColor4fv(colorStart);
+      setColor(colorStart);
       glEvalCoord1f((GLfloat) i/steps);
       for (unsigned int j=0;j<4;j++)
 	colorStart[j]+=colorDelta[j];
@@ -168,7 +168,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(GL_LINE_STRIP);
     for (unsigned int i = 0; i <= steps; i++) {
-      glColor4fv(colorStart);
+      setColor(colorStart);
       glEvalCoord1f((GLfloat) i/steps);
       for (unsigned int j=0;j<4;j++)
 	colorStart[j]+=colorDelta[j];
@@ -177,7 +177,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     glDisable(GL_MAP1_VERTEX_3);
     delete [] bendsCoordinates;
   }
-  
+
   for (unsigned int i=1;i<bends.size();++i) {
     p0=bends[i-1];
     p1=p1next;
@@ -206,7 +206,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(GL_LINE_STRIP);
     for (unsigned int i = 0; i <= steps; i++) {
-      glColor4fv(colorStart);
+      setColor(colorStart);
       glEvalCoord1f((GLfloat) i/steps);
       for (unsigned int j=0;j<4;j++)
 	colorStart[j]+=colorDelta[j];
@@ -228,7 +228,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     glEnable(GL_MAP1_VERTEX_3);
     glBegin(GL_LINE_STRIP);
     for (unsigned int i = 0; i <= steps; i++) {
-      glColor4fv(colorStart);
+      setColor(colorStart);
       glEvalCoord1f((GLfloat) i/steps);
       for (unsigned int j=0;j<4;j++)
 	colorStart[j]+=colorDelta[j];
@@ -260,7 +260,7 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
     p3=bends[0];
     if (bends.size()>1) p4=bends[1]; else p4=endPoint;
     Coord v03=p3-p0;
-    Coord v34=p4-p3;   
+    Coord v34=p4-p3;
     double scalaireTmp=v03.dotProduct(v34)/(v03.norm()*v34.norm());
     if ((scalaireTmp<0.99999) && (scalaireTmp>-0.9999999)) {
       v03=v03/v03.norm();
@@ -308,7 +308,7 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
     tmpVect[tmpVectIdx++]=p1;
     tmpVect[tmpVectIdx++]=p2;
   }
-  
+
   //Drawing last curve's segment
   {
     p0=bends[bends.size()-1];
@@ -350,7 +350,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     controlPoints[i+2][1] = bends[i].getY();
     controlPoints[i+2][2] = bends[i].getZ();
   }
-  
+
   gleSetNumSides(8);
   gleSetJoinStyle(TUBE_JN_ANGLE |  TUBE_JN_CAP | TUBE_NORM_MASK);
 
@@ -362,13 +362,13 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     if (size.getH() != size.getW()) {
       radiusArray = buildRadiusArray(size.getW(), size.getH(), pathSize-1, true);
     }
-    Coord tmp = gleComputeAngle(Coord(path[1][0], path[1][1], path[1][2]), 
+    Coord tmp = gleComputeAngle(Coord(path[1][0], path[1][1], path[1][2]),
 				startPoint, startNode);
     controlPoints[0][0] = tmp.getX();
     controlPoints[0][1] = tmp.getY();
     controlPoints[0][2] = tmp.getZ();
 
-    tmp = gleComputeAngle(Coord(path[pathSize-2][0], path[pathSize-2][1], path[pathSize-2][2]), 
+    tmp = gleComputeAngle(Coord(path[pathSize-2][0], path[pathSize-2][1], path[pathSize-2][2]),
 			  endPoint, finalNode);
     controlPoints[cpSize-1][0] = tmp.getX();
     controlPoints[cpSize-1][1] = tmp.getY();
@@ -378,7 +378,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     else glePolyCone(cpSize, controlPoints, colorArray, radiusArray);
     break;
   }
-    
+
   case BEZIER:
   case SPLINE3:
   case SPLINE4: {
@@ -390,13 +390,13 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
       case SPLINE4: curvefn = &Spline4; break;
       default: curvefn = NULL;
       }
-    
+
     double (*pointArray)[3] = new double[steps+1+2][3]; //steps+1 points + 2 to define angles at end of polycylinder
     colorArray = buildColorArray(startColor, endColor, steps, true);
     if (size.getH() != size.getW()) {
-      radiusArray = buildRadiusArray(size.getW(), size.getH(), steps, true);    
+      radiusArray = buildRadiusArray(size.getW(), size.getH(), steps, true);
     }
-    
+
     for (unsigned int i=1; i < steps; ++i) {
       (*curvefn)(pointArray[i+1], path, pathSize, (double)i/(double)steps);
     }
@@ -406,7 +406,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
       pointArray[steps+1][i] = path[pathSize-1][i];       //endPoint
     }
 
-    Coord tmp = gleComputeAngle(Coord(pointArray[2][0], pointArray[2][1], pointArray[2][2]), 
+    Coord tmp = gleComputeAngle(Coord(pointArray[2][0], pointArray[2][1], pointArray[2][2]),
 				startPoint, startNode);
 
     pointArray[0][0] = tmp.getX();
@@ -419,17 +419,17 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     pointArray[steps+2][1] = tmp.getY();
     pointArray[steps+2][2] = tmp.getZ();
 
-     if (radiusArray == NULL) 
+     if (radiusArray == NULL)
        glePolyCylinder(steps+1+2, pointArray, colorArray, size.getW());
-     else 
+     else
        glePolyCone(steps+1+2, pointArray, colorArray, radiusArray);
-    
+
     delete [] pointArray;
     break;
   }
   default: break;
   }
-  
+
   delete [] controlPoints;
   delete [] colorArray;
   if (radiusArray != NULL) delete radiusArray;
@@ -437,7 +437,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
 //=============================================================
 void GlLines::glDrawPoint(const Coord &p) {
   glPointSize(5.0);
-  glColor3f(1.0, 1.0, 0.0);
+  setColor(Color(255,255,0,255));
   glBegin(GL_POINTS);
   glVertex3f(p[0],p[1],p[2]);
   glEnd();
@@ -465,7 +465,7 @@ void GlLines::glEnableLineStipple(unsigned int stippleType) {
       stippleType=0;
       cerr << "unrecognizedStippleType" << endl;
       break;
-    } 
+    }
   }
 }
 //=============================================================
@@ -502,7 +502,7 @@ GLfloat *GlLines::buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &
 static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3] {
   float (*colorArray)[3] =  new float[steps+1+(gleColor ? 2 : 0)][3];
   float (*tmp)[3] = (gleColor ? &(colorArray[1]) : colorArray);
-  
+
   float Rs=startColor.getRGL(), Gs=startColor.getGGL(), Bs=startColor.getBGL();
   float R = (endColor.getRGL()-Rs) / (float)steps;
   float G = (endColor.getGGL()-Gs) / (float)steps;

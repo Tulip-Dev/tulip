@@ -26,7 +26,7 @@ namespace tlp {
   }
   GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath),leftAlign(leftAlign) {
     renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-    renderer->setMode(TLP_POLYGON);
+    renderer->setMode(TLP_TEXTURE);
     renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
   }
   GlLabel::~GlLabel() {
@@ -50,10 +50,8 @@ namespace tlp {
   }
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPolygonMode(GL_FRONT, GL_FILL);
-    bool lightingOn=glIsEnabled(GL_LIGHTING);
-    bool blendOn=glIsEnabled(GL_BLEND);
-    bool stencilTestOn=glIsEnabled(GL_STENCIL_TEST);
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
@@ -71,7 +69,7 @@ namespace tlp {
 
     if(!leftAlign) {
       glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
-      if(div_h > div_w) 
+      if(div_h > div_w)
 	glScalef(div_w, div_w, 1);
       else
 	glScalef(div_h, div_h, 1);
@@ -79,15 +77,13 @@ namespace tlp {
       glTranslatef(centerPosition[0]+size[0]/2,centerPosition[1], centerPosition[2]);
       glScalef(div_w, div_h, 1);
     }
-    renderer->draw(w,w, 0);
-    glPopMatrix();
 
-    if(lightingOn)
-      glEnable(GL_LIGHTING);
-    if(blendOn)
-      glEnable(GL_BLEND);
-    if(stencilTestOn)
-      glEnable(GL_STENCIL_TEST);
+    glEnable( GL_TEXTURE_2D);
+    glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
+    renderer->draw(w, w, 0);
+    glDisable( GL_TEXTURE_2D);
+    glPopMatrix();
+    glPopAttrib();
   }
   //===========================================================
   void GlLabel::translate(const Coord& mouvement){
@@ -98,7 +94,7 @@ namespace tlp {
     xmlNodePtr dataNode=NULL;
 
     xmlNewProp(rootNode,BAD_CAST "type",BAD_CAST "GlLabel");
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"fontPath",text);
@@ -106,7 +102,7 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
     GlXMLTools::getXML(dataNode,"size",size);
     GlXMLTools::getXML(dataNode,"color",color);
-    
+
   }
   //============================================================
   void GlLabel::setWithXML(xmlNodePtr rootNode) {
@@ -128,5 +124,5 @@ namespace tlp {
       renderer->setString(text, VERBATIM);
     }
   }
-  
+
 }

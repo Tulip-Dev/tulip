@@ -49,24 +49,24 @@ namespace tlp {
   }
   //=====================================================
   void GlLine::draw(float lod,Camera *camera) {
+    glDisable(GL_LIGHTING);
     glBegin(GL_LINE_STRIP);
-      
+
     for(unsigned int i=0; i < _points.size(); ++i) {
       if (i < _colors.size()) {
-	setMaterial(_colors[i]);
-	glColor4ubv((unsigned char *)&_colors[i]);
+        setColor(_colors[i]);
       }
       glVertex3fv((float *)&_points[i]);
     }
     glEnd();
-    
+
     glTest(__PRETTY_FUNCTION__);
   }
   //=====================================================
   void GlLine::translate(const Coord& mouvement){
     boundingBox.first+=mouvement;
     boundingBox.second+=mouvement;
-    
+
     for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it) {
       (*it)+=mouvement;
     }
@@ -76,12 +76,12 @@ namespace tlp {
     xmlNodePtr dataNode=NULL;
 
     GlXMLTools::createProperty(rootNode, "type", "GlLine");
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"points",_points);
     GlXMLTools::getXML(dataNode,"colors",_colors);
-    
+
   }
   //============================================================
   void GlLine::setWithXML(xmlNodePtr rootNode) {
