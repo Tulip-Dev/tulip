@@ -3,6 +3,7 @@
 #include <tulip/ForEach.h>
 #include "PushPopTest.h"
 #include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
@@ -431,10 +432,14 @@ void PushPopTest::testMetaNode() {
 
   // create meta node
   node metaNode = tlp::createMetaNode(clone, tmp);
+  Color mColor(255, 255, 255, 127);
+  ColorProperty* color = graph->getProperty<ColorProperty>("viewColor");
+  color->setNodeValue(metaNode, mColor);
 
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
   CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT(mColor == color->getNodeValue(metaNode));
 
   graph->pop();
   CPPUNIT_ASSERT(!graph->isElement(metaNode));
@@ -444,6 +449,7 @@ void PushPopTest::testMetaNode() {
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
   CPPUNIT_ASSERT(coord0 == layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT(mColor == color->getNodeValue(metaNode));
 }
 
 //==========================================================
