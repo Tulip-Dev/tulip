@@ -53,6 +53,7 @@
 #define ATTRIBUTES "attributes"
 #define SCENE "scene"
 #define VIEWS "views"
+#define CONTROLLER "controller"
 
 using namespace std;
 using namespace tlp;
@@ -69,7 +70,7 @@ struct TLPGraphBuilder:public TLPTrue {
   DataSet *dataSet;
   bool inTLP;
   float version;
-  
+
   TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(graph),
 						   dataSet(dataSet) {
     clusterIndex[0]=graph;
@@ -124,7 +125,7 @@ struct TLPGraphBuilder:public TLPTrue {
 	int result=strtol(startPtr,&endPtr,10);
 	if (endPtr==startPtr) return false;
 	if (clusterIndex.find(result)==clusterIndex.end()) return false;
-	if (result==0) 
+	if (result==0)
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],0);
 	else
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],clusterIndex[result]);
@@ -132,23 +133,23 @@ struct TLPGraphBuilder:public TLPTrue {
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==LAYOUT) 
+      if (propertyType==LAYOUT)
 	return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==SIZE) 
+      if (propertyType==SIZE)
 	return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==COLOR) 
+      if (propertyType==COLOR)
 	return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==INT) 
+      if (propertyType==INT)
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==BOOL) 
+      if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==STRING) 
+      if (propertyType==STRING)
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
     }
     return false;
     //cer << "..ok" << endl;
   }
-  
+
   bool setEdgeValue(int edgeId, int clusterId, const string &propertyType, const string &propertyName, string value) {
     if (_graph->isElement(edgeIndex[edgeId]) && clusterIndex[clusterId]) {
       //cerr << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
@@ -162,17 +163,17 @@ struct TLPGraphBuilder:public TLPTrue {
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	result= clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==LAYOUT) 
+      if (propertyType==LAYOUT)
 	result= clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==SIZE) 
+      if (propertyType==SIZE)
 	result= clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==COLOR) 
+      if (propertyType==COLOR)
 	result= clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==INT) 
+      if (propertyType==INT)
 	result= clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==BOOL) 
+      if (propertyType==BOOL)
 	result= clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==STRING) 
+      if (propertyType==STRING)
 	result= clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
       //cer<< "..ok result=" << result<< endl;
       return result;
@@ -189,7 +190,7 @@ struct TLPGraphBuilder:public TLPTrue {
 	int result=strtol(startPtr,&endPtr,10);
 	if (endPtr==startPtr) result =0; //return false;
 	if (clusterIndex.find(result)==clusterIndex.end()) return false;
-	if (result==0) 
+	if (result==0)
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllNodeValue(0);
 	else
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllNodeValue(clusterIndex[result]);
@@ -197,17 +198,17 @@ struct TLPGraphBuilder:public TLPTrue {
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==LAYOUT) 
+      if (propertyType==LAYOUT)
 	return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==SIZE) 
+      if (propertyType==SIZE)
 	return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==COLOR) 
+      if (propertyType==COLOR)
 	return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==INT) 
+      if (propertyType==INT)
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==BOOL) 
+      if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==STRING) 
+      if (propertyType==STRING)
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllNodeStringValue( value );
     }
     return false;
@@ -226,17 +227,17 @@ struct TLPGraphBuilder:public TLPTrue {
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	result= clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==LAYOUT) 
+      if (propertyType==LAYOUT)
 	result= clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==SIZE) 
+      if (propertyType==SIZE)
 	result= clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==COLOR) 
+      if (propertyType==COLOR)
 	result= clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==INT) 
+      if (propertyType==INT)
 	result= clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==BOOL) 
+      if (propertyType==BOOL)
 	result= clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==STRING) 
+      if (propertyType==STRING)
 	result= clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllEdgeStringValue( value );
       //cer<< "..ok result=" << result<< endl;
       return result;
@@ -275,7 +276,7 @@ struct TLPEdgeBuilder:public TLPFalse {
       nbParameter++;
       return true;
     }
-    else 
+    else
       return false;
   }
   bool close()  {
@@ -330,7 +331,7 @@ struct TLPDataSetBuilder: public TLPFalse {
   DataSet *currentDataSet;
   char* dataSetName;
   string dataSetNameStr;
-  
+
   TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet){
     dataSetName = (char *) 0;
   }
@@ -363,26 +364,26 @@ struct TLPDataSetBuilder: public TLPFalse {
 	dataSet.set("nodeLabel", b);
       if (dataSet.get<bool>("_viewEdgeLabel", b))
 	dataSet.set("edgeLabel", b);
-      if (dataSet.get<bool>("_viewMetaLabel", b)) 
+      if (dataSet.get<bool>("_viewMetaLabel", b))
 	dataSet.set("metaLabel", b);
-      if (dataSet.get<bool>("_viewElementOrdered", b)) 
+      if (dataSet.get<bool>("_viewElementOrdered", b))
 	dataSet.set("elementOrdered", b);
-      if (dataSet.get<bool>("_viewStrahler", b)) 
+      if (dataSet.get<bool>("_viewStrahler", b))
 	dataSet.set("elementOrdered", b);
-      if (dataSet.get<bool>("_viewAutoScale", b)) 
+      if (dataSet.get<bool>("_viewAutoScale", b))
 	dataSet.set("autoScale", b);
-      if (dataSet.get<bool>("_incrementalRendering", b)) 
+      if (dataSet.get<bool>("_incrementalRendering", b))
 	dataSet.set("incrementalRendering", b);
-      if (dataSet.get<bool>("_edgeColorInterpolate", b)) 
+      if (dataSet.get<bool>("_edgeColorInterpolate", b))
 	dataSet.set("edgeColorInterpolation", b);
-      if (dataSet.get<bool>("_edgeSizeInterpolate", b)) 
+      if (dataSet.get<bool>("_edgeSizeInterpolate", b))
 	dataSet.set("edgeSizeInterpolation", b);
-      if (dataSet.get<bool>("_edge3D", b)) 
+      if (dataSet.get<bool>("_edge3D", b))
 	dataSet.set("edge3D", b);
       unsigned int ui;
-      if (dataSet.get<unsigned int>("_viewOrtho", ui)) 
+      if (dataSet.get<unsigned int>("_viewOrtho", ui))
 	dataSet.set("orthogonalProjection", ui ? true : false);
-      if (dataSet.get<unsigned int>("_FontsType", ui)) 
+      if (dataSet.get<unsigned int>("_FontsType", ui))
 	dataSet.set("fontType", ui);
       graphBuilder->dataSet->set<DataSet>(dataSetName, dataSet);
     }
@@ -452,7 +453,7 @@ struct TLPDataBuilder : public TLPFalse
     else
       dataSet = &(dataSetBuilder->graphBuilder->_graph->getAttributes());
   }
-  
+
   ~TLPDataBuilder(){}
   bool addString(const string &val) {
     switch(token++) {
@@ -488,7 +489,7 @@ struct TLPDataBuilder : public TLPFalse
     if ((type==BOOL) && (token++ == 1)) dataSet->set(prop, val);
     return true;
   }
-  
+
   bool addInt(const int val) {
     if ((type==INT) && (token == 1)) {
       if (prop == "SupergraphId") {
@@ -511,7 +512,7 @@ struct TLPDataBuilder : public TLPFalse
     token++;
     return true;
   }
-  
+
   bool addDouble(const double val) {
     if ((type==DOUBLE) && (token == 1)) {
       dataSet->set<double>(prop, val);
@@ -528,7 +529,7 @@ struct TLPDataBuilder : public TLPFalse
   bool close() {return (token==2);}
 };
 //=================================================================================
-bool TLPClusterBuilder::addStruct(const string& structName, TLPBuilder*&newBuilder)   { 
+bool TLPClusterBuilder::addStruct(const string& structName, TLPBuilder*&newBuilder)   {
     if (structName==CLUSTERNODES) {
       newBuilder=new TLPClusterNodeBuilder(this);
     }
@@ -544,7 +545,7 @@ bool TLPClusterBuilder::addStruct(const string& structName, TLPBuilder*&newBuild
 	  newBuilder=new TLPFalse();
 	  return false;
 	}
-    return true; 
+    return true;
 }
 //=================================================================================
 struct TLPPropertyBuilder:public TLPFalse {
@@ -560,10 +561,10 @@ struct TLPPropertyBuilder:public TLPFalse {
   }
   bool addString(const string &str)
   {
-    if (!typeOk) 
+    if (!typeOk)
       {propertyType=str;typeOk=true;}
     else
-      if (!nameOk) 
+      if (!nameOk)
 	{propertyName=str;nameOk=true;}
       else
 	return false;
@@ -589,7 +590,7 @@ struct TLPNodePropertyBuilder:public TLPFalse {
   TLPPropertyBuilder *propertyBuilder;
   int nodeId;
   TLPNodePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder){}
-  bool addInt(const int id) 
+  bool addInt(const int id)
   {nodeId=id;return true;}
   bool addString(const string&val)
   {return propertyBuilder->setNodeValue(nodeId,val);}
@@ -602,7 +603,7 @@ struct TLPEdgePropertyBuilder:public TLPFalse {
   string nodeValue;
   TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder){}
   virtual ~TLPEdgePropertyBuilder(){}
-  bool addInt(const int id) 
+  bool addInt(const int id)
   {edgeId=id;return true;}
   bool addString(const string &val)
   {return propertyBuilder->setEdgeValue(edgeId,val);}
@@ -641,7 +642,7 @@ bool TLPPropertyBuilder::addStruct(const string& structName,TLPBuilder*&newBuild
 	newBuilder=new TLPEdgePropertyBuilder(this);
 	return true;
       }
-  return false; 
+  return false;
 }
 //=================================================================================
 bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder) {
@@ -669,6 +670,8 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
     newBuilder=new TLPSceneBuilder(this);
   } else if (structName==VIEWS) {
     newBuilder=new TLPDataSetBuilder(this, VIEWS);
+  } else if (structName==CONTROLLER) {
+    newBuilder=new TLPDataSetBuilder(this, CONTROLLER);
   }
   else
     newBuilder=new TLPFileInfoBuilder(this, structName);

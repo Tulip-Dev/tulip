@@ -23,6 +23,7 @@ namespace tlp {
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
   TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
+  TLP_SCOPE void loadPluginsCheckDependencies(PluginLoader* loader=0);
 
   /**
    * returns the demangled name of a C++ class defines in the tlp namespace.

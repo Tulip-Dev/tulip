@@ -148,19 +148,7 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
   }
 }  
 
-static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* loader) {
-  SizeProperty::initFactory();
-  IntegerProperty::initFactory();
-  LayoutProperty::initFactory();
-  ColorProperty::initFactory();
-  DoubleProperty::initFactory();
-  StringProperty::initFactory();
-  BooleanProperty::initFactory();
-  AlgorithmFactory::initFactory();
-  ImportModuleFactory::initFactory();
-  ExportModuleFactory::initFactory();
-  // plugins load
-  loadPluginsFromDir(dir, "Algorithm", loader);
+void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
   do {
@@ -206,6 +194,23 @@ static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* load
       } delete itP;
     }
   } while (depsNeedCheck);
+}
+  
+
+static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* loader) {
+  SizeProperty::initFactory();
+  IntegerProperty::initFactory();
+  LayoutProperty::initFactory();
+  ColorProperty::initFactory();
+  DoubleProperty::initFactory();
+  StringProperty::initFactory();
+  BooleanProperty::initFactory();
+  AlgorithmFactory::initFactory();
+  ImportModuleFactory::initFactory();
+  ExportModuleFactory::initFactory();
+  // plugins load
+  loadPluginsFromDir(dir, "Algorithm", loader);
+
 }
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {

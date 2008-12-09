@@ -4,8 +4,8 @@
  Email : auber@labri.fr
  Last modification : 22/05/2003
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_SUPERGRAPH_H
@@ -57,7 +57,7 @@ template<class C>class Iterator;
    */
   TLP_SCOPE Graph* newGraph();
   /**
-   *  Return an empty subgraph 
+   *  Return an empty subgraph
    */
   TLP_SCOPE Graph *newSubGraph(Graph *, std::string name = "unnamed");
   /**
@@ -89,7 +89,7 @@ template<class C>class Iterator;
 
 /**
  * \defgroup graphs
- */ 
+ */
 /*@{*/
 /// Interface for a graph
 /**
@@ -98,15 +98,15 @@ template<class C>class Iterator;
   class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
   friend class GraphUpdatesRecorder;
-  
-public:  
+
+public:
   Graph();
   virtual ~Graph();
-  //=========================================================================  
+  //=========================================================================
   // Graph hierarchy acces and building
   //=========================================================================
   /**
-   *  Remove all nodes, edges and subgraphs of the supergraph 
+   *  Remove all nodes, edges and subgraphs of the supergraph
    */
   virtual  void clear()=0;
   /**
@@ -131,7 +131,7 @@ public:
   virtual Graph* getSuperGraph()const =0;
   /**
    * Deprecated function, use getSuperGraph() instead.
-   */  
+   */
   Graph* getFather()const {
     std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use getSuperGraph() instead." << std::endl;
     return getSuperGraph();
@@ -159,20 +159,20 @@ public:
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
-  /** 
-   * Add a new node in the graph and return it. This node is also added in all 
+  /**
+   * Add a new node in the graph and return it. This node is also added in all
    * the graph ancestors to maintain the sub_graph relation between graphs.
    */
   virtual node addNode()=0;
-  /** 
-   * Add an existing node in the graph. this node is also added in all 
+  /**
+   * Add an existing node in the graph. this node is also added in all
    * the graph ancestors to maintain the sub_graph relation between graphs.
-   * Warning, the node must be element of the graph hierarchy, thus it must be 
+   * Warning, the node must be element of the graph hierarchy, thus it must be
    * element of the root graph.
    */
   virtual void addNode(const node)=0;
   /**
-   * Delete a node in the graph. this node is also removed in all 
+   * Delete a node in the graph. this node is also removed in all
    * the sub-graph of the graph to maintain the sub-graph relation between graphs.
    * Warning : One can't add an existing node to the root graph
    */
@@ -181,35 +181,35 @@ public:
    * Delete a node in all the hierarchy of graphs.
    */
   virtual void delAllNode(const node)=0;
-  /** 
-   * Add a new edge in the graph and return it. This edge is also added in all 
-   * the super-graph of the graph to maintain the sub-graph relation between graphs. 
+  /**
+   * Add a new edge in the graph and return it. This edge is also added in all
+   * the super-graph of the graph to maintain the sub-graph relation between graphs.
    * If the second parameter is true the ordering of edges will be preserved.
    */
   virtual edge addEdge(const node, const node )=0;
-  /** 
-   * Add an existing edge in the graph. this edge is also added in all 
+  /**
+   * Add an existing edge in the graph. this edge is also added in all
    * the super-graph of the graph to maintain the sub-graph relation between graphs.
-   * Warning, the edge must be element of the graph hierarchy, thus it must be 
+   * Warning, the edge must be element of the graph hierarchy, thus it must be
    * element of the root graph.
    * Warning : One can't add an existing edge to the root graph
    */
   virtual void addEdge(const edge )=0;
   /**
-   * Delete an edge in the graph. this edge is also removed in all 
+   * Delete an edge in the graph. this edge is also removed in all
    * the sub-graph of the graph to maintain the sub-graph relation between graphs.
    * The ordering of edges is preserved.
    */
   virtual  void delEdge(const edge )=0;
   /**
-   * Delete an edge in all the hierarchy of graphs. 
+   * Delete an edge in all the hierarchy of graphs.
    * The ordering of edges around the node
    * is preserved.
    */
   virtual  void delAllEdge(const edge)=0;
   /**
    * Set the order of the edges around a node. This operation
-   * ensure that adjacent edges of a node will 
+   * ensure that adjacent edges of a node will
    * be odered and consecutive as they are in the vector given in parameter.
    */
   virtual void setEdgeOrder(const node,const std::vector<edge> & )=0;
@@ -233,7 +233,7 @@ public:
   virtual Iterator<node>* getNodes() const =0;
   /// Return the ith successor of a node
   virtual node getInNode(const node,unsigned int )const =0;
-  /// Return an iterator on the predecessors of a node. 
+  /// Return an iterator on the predecessors of a node.
   virtual Iterator<node>* getInNodes(const node) const =0;
   /// Return the ith predecessor of a node
   virtual node getOutNode(const node,unsigned int) const =0;
@@ -284,7 +284,7 @@ public:
   virtual bool isElement(const edge ) const =0;
   /// Return true if the edge is a meta edge.
   virtual bool isMetaEdge(const edge ) const =0;
-  /** Returns the edge if it exists an edge between two node 
+  /** Returns the edge if it exists an edge between two node
    *  sens of the edge is not taken into account)
    *  If no edge is found return an invalid edge.
    */
@@ -296,17 +296,21 @@ public:
   virtual DataSet & getAttributes() =0;
   ///Get an attribute of the graph; returns true if a value was found
   ///false if not
-  template<typename ATTRIBUTETYPE> 
+  template<typename ATTRIBUTETYPE>
   bool getAttribute(const std::string &name, ATTRIBUTETYPE& value);
   ///deprecated version of the previous method
-  template<typename ATTRIBUTETYPE> 
+  template<typename ATTRIBUTETYPE>
   ATTRIBUTETYPE getAttribute(const std::string &name);
   ///Set an attribute of the graph
-  template<typename ATTRIBUTETYPE> 
+  template<typename ATTRIBUTETYPE>
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /// remove an existing attribute
   void removeAttribute(const std::string &name) {
     getAttributes().remove(name);
+  }
+  /// return if the attribute exist
+  bool attributeExist(const std::string &name) {
+    return getAttributes().exist(name);
   }
   /**
    *  add a property to the graph
@@ -322,19 +326,19 @@ public:
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
-  template<typename Proxytype> 
+  template<typename Proxytype>
   Proxytype* getLocalProperty(const std::string &name);
   /**
-   * Compute a property on this graph using an external algorithm (plug-in) 
+   * Compute a property on this graph using an external algorithm (plug-in)
    * The result is stored in result, Warning all information in result will be deleted
    * If the function return false error message are stored in msg.
    * One can give a PluginProgress to the algortihm in order to have feed back or to stop
-   * the algorithm during its computation. One can give parameter to the algorithm 
-   * using the DataSet. In some cases algorithms can use this DataSet in order 
+   * the algorithm during its computation. One can give parameter to the algorithm
+   * using the DataSet. In some cases algorithms can use this DataSet in order
    * to give as result external information (not stored in result).
    */
   template<typename Proxytype>
-  bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
+  bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg,
 		       PluginProgress *progress=0, DataSet *data=0);
   /**
    * Returns a pointer to a PropertyInterface which is in the pool or in the pool of an ascendant
@@ -346,11 +350,11 @@ public:
   template<typename Proxytype>
   Proxytype* getProperty(const std::string &name);
   /**
-   * Returns a pointer on an existing property. If the property does not 
+   * Returns a pointer on an existing property. If the property does not
    * exist return NULL.
    * In DEBUG the existence of a property is checked using an assertion.
    */
-  virtual PropertyInterface* getProperty(const std::string& name)=0;  
+  virtual PropertyInterface* getProperty(const std::string& name)=0;
   /**
    *  Return true if a property of that name exists
    *  in the graph or in an ancestor
