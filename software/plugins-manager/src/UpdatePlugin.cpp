@@ -11,6 +11,18 @@ using namespace std;
 
 namespace tlp {
 
+  static QString getSubDir(const string &str) {
+    if(str=="Glyph")
+      return "glyphs/";
+    if(str=="Interactor")
+      return "interactors/" ;
+    if(str=="View")
+      return "view/" ;
+    if(str=="Controller")
+      return "controller/" ;
+    return "";
+  }
+
   UpdatePlugin::UpdatePlugin(QObject *parent):QObject(parent),partNumber(0),currentPart(0){
     std::string installPathStr(tlp::TulipLibDir);
     installPathStr+="tlp/toInstall/";
@@ -18,7 +30,7 @@ namespace tlp {
     QDir tmp(installPath.c_str());
     tmp.mkpath(installPath.c_str());
   }
-  
+
   void UpdatePlugin::install(const string &serverAddr,const DistPluginInfo &pluginInfo){
     distPluginInfo=pluginInfo;
     version=pluginInfo.version;
@@ -67,17 +79,15 @@ namespace tlp {
 	return;
       QTextStream out(&installFile);
       out.readAll();
-      if(distPluginInfo.type=="Glyph")
-	out << "glyphs/" ;
-      out << distPluginInfo.fileName.c_str() << ".doc" << "\n" ;
-      if(distPluginInfo.type=="Glyph")
-	out << "glyphs/" ;
+      QString subDir=getSubDir(distPluginInfo.type);
+      
+      out << subDir << distPluginInfo.fileName.c_str() << ".doc" << "\n" ;
 #if defined(_WIN32)
-      out << distPluginInfo.fileName.c_str() << ".dll" << "\n" ;
+      out << subDir << distPluginInfo.fileName.c_str() << ".dll" << "\n" ;
 #elif defined(__APPLE__)
-      out << distPluginInfo.fileName.c_str() << ".dylib" << "\n" ;
+      out << subDir << distPluginInfo.fileName.c_str() << ".dylib" << "\n" ;
 #else
-      out << distPluginInfo.fileName.c_str() << ".so" << "\n" ;
+      out << subDir << distPluginInfo.fileName.c_str() << ".so" << "\n" ;
 #endif
     
       installFile.close();
@@ -99,18 +109,15 @@ namespace tlp {
     if(!removeFile.open(QIODevice::ReadWrite | QIODevice::Text))
       return 1;
     QTextStream out(&removeFile);
+    QString subDir = getSubDir(pluginInfo.type);
     out.readAll();
-    if(pluginInfo.type=="Glyph")
-      out << "glyphs/" ;
-    out << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
-    if(pluginInfo.type=="Glyph")
-      out << "glyphs/" ;
+    out << subDir << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
     #if defined(_WIN32)
-      out << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
+    out << subDir << pluginInfo.fileName.c_str() << ".dll" << "\n" ;
     #elif defined(__APPLE__)
-      out << pluginInfo.fileName.c_str() << ".dylib" << "\n" ;
+    out << subDir << pluginInfo.fileName.c_str() << ".dylib" << "\n" ;
     #else
-      out << pluginInfo.fileName.c_str() << ".so" << "\n" ;
+    out << subDir << pluginInfo.fileName.c_str() << ".so" << "\n" ;
     #endif
     removeFile.close();
     endUninstallation();

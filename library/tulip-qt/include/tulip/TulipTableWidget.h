@@ -27,7 +27,7 @@ class PropertyInterface;
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-class ColorButton : public QPushButton {
+class TLP_QT_SCOPE ColorButton : public QPushButton {
 
   Q_OBJECT;
   Q_PROPERTY(QRgb color READ getColor);
@@ -45,7 +45,7 @@ public slots:
   void colorDialog();
 };
 
-class FilenameEditor : public QWidget {
+class TLP_QT_SCOPE FilenameEditor : public QWidget {
   Q_OBJECT;
   Q_PROPERTY(QString fileName READ fileName WRITE setFileName);
   Q_PROPERTY(QString filter READ filter WRITE setFilter);
@@ -73,7 +73,7 @@ private:
   QString fileFilter;
 };
 
-class SizeEditor : public QWidget {
+class TLP_QT_SCOPE SizeEditor : public QWidget {
   Q_OBJECT;
 private:
   Size size;
@@ -111,7 +111,7 @@ private slots:
 };
 
 /* table items */
-class TulipTableWidgetItem : public QTableWidgetItem {
+class TLP_QT_SCOPE TulipTableWidgetItem : public QTableWidgetItem {
 public:
   TulipTableWidgetItem(int type) : QTableWidgetItem(type) {}
     TulipTableWidgetItem(QString s, int type = QTableWidgetItem::Type) : QTableWidgetItem(s, type) {}
@@ -125,7 +125,7 @@ public:
 /** \addtogroup Tulip_Widgets */ 
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
- class TulipTableWidget : public QTableWidget {
+ class TLP_QT_SCOPE TulipTableWidget : public QTableWidget {
   Q_OBJECT;
   Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1);
   Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2);

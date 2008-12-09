@@ -1,30 +1,48 @@
 nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlMainWidget.h \
+	tulip/TabWidget.h \
+	tulip/PropertyDialog.h \	
+	tulip/CopyPropertyDialog.h \
+	tulip/TulipStatsWidget.h \
+	tulip/RenderingParametersDialog.h \
+	tulip/AugmentedDisplayDialog.h \
+	tulip/GridOptionsWidget.h \
+	tulip/GlMainView.h \	
+	tulip/NodeLinkDiagramComponent.h \
 	tulip/GWInteractor.h \
+	tulip/ForegroundEntity.h \
+	tulip/MouseSelector.h \
 	tulip/MouseBoxZoomer.h\
 	tulip/MouseEdgeBuilder.h\
 	tulip/MouseInteractors.h \
 	tulip/MouseMagicSelector.h\
 	tulip/MouseNodeBuilder.h\
 	tulip/MouseSelectionEditor.h\
-	tulip/MouseSelector.h\
 	tulip/MouseEdgeSelector.h \
 	tulip/MouseEdgeBendEditor.h \
+	tulip/MouseShowElementInfos.h \
 	tulip/PropertyWidget.h \
 	tulip/ElementPropertiesWidgetUI.h \
 	tulip/ElementPropertiesWidget.h \
 	tulip/FindSelectionWidget.h \
 	tulip/SGHierarchyWidget.h \
 	tulip/GWOverviewWidget.h \
-	tulip/RenderingParametersDialog.h \
 	tulip/TlpQtTools.h \
 	tulip/SGHierarchyWidgetPlugin.h \
 	tulip/GlMainWidgetPlugin.h \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
-	tulip/QtCPULODCalculator.h
+	tulip/QtCPULODCalculator.h \
+	tulip/InteractorManager.h \
+	tulip/QtProgress.h \
+	tulip/Controller.h \
+	tulip/MainController.h \
+	tulip/ControllerPluginsManager.h \
+	tulip/View.h \
+	tulip/AbstractView.h \
+	tulip/ViewPluginsManager.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h
@@ -32,14 +50,28 @@ noinst_HEADERS = \
 
 if WIN32 
 BUILT_SOURCES = \
+	tulip/TabWidgetData.h \
+	tulip/PropertyDialogData.h \
+	tulip/CopyPropertyDialogData.h \
+	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
-	tulip/GWOverviewWidgetData.h 
+	tulip/AugmentedDisplayDialogData.h \
+	tulip/GWOverviewWidgetData.h \
+	tulip/GridOptionsData.h \
+	tulip/QtProgressData.h
 else
 BUILT_SOURCES = \
+	tulip/TabWidgetData.h \
+	tulip/PropertyDialogData.h \
+	tulip/CopyPropertyDialogData.h \
+	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
+	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
+	tulip/GridOptionsData.h \
+	tulip/QtProgressData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \
@@ -52,9 +84,6 @@ tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 tulip/glmainwidget.h : tulip/GlMainWidget.h
 	cp -f $< $@
 
-tulip/layermanagerwidget.h : tulip/LayerManagerWidget.h
-	cp -f $< $@
-
 tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h
 	cp -f $< $@
 
@@ -63,6 +92,8 @@ tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
 
 tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
+
+
 endif
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)

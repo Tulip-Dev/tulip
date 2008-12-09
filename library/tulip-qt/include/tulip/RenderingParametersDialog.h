@@ -21,26 +21,27 @@
 
 #include <QtGui/QTreeWidgetItem>
 
-class GlMainWidget;
-class GWOverviewWidget;
-
 namespace tlp {
 
   class GlScene;
   class GlLayer;
   class GlComposite;
   class GlGraphComposite;
+  class GlMainView;
+  class GlMainWidget;
 
-  class TLP_QT_SIMPLE_SCOPE RenderingParametersDialog : public QDialog, public Ui::RenderingParametersDialogData {
+  class TLP_QT_SCOPE RenderingParametersDialog : public QDialog, public Ui::RenderingParametersDialogData {
     Q_OBJECT
       
-    GWOverviewWidget *overview;
+    GlMainView *mainView;
     GlMainWidget* observedMainWidget;
+    bool holdUpdateView;
 
   public:
-    RenderingParametersDialog(GWOverviewWidget* parent);
+    RenderingParametersDialog(QWidget* parent);
     void windowActivationChange(bool oldActive);
 
+    void setGlMainView(GlMainView *view);
     void attachMainWidget(GlMainWidget *graphWidget);
 						    
     void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
@@ -53,8 +54,8 @@ namespace tlp {
   public slots:
 
     void updateView();
-    void backColor();						 
-    
+    void backColor();	
+    void setBackgroundColor(QColor tmp);
     
   protected slots:
     

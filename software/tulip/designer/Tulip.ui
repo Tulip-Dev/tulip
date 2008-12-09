@@ -17,19 +17,10 @@
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
     <property name="spacing" >
-     <number>0</number>
-    </property>
-    <property name="leftMargin" >
-     <number>0</number>
-    </property>
-    <property name="topMargin" >
-     <number>0</number>
-    </property>
-    <property name="rightMargin" >
-     <number>0</number>
-    </property>
-    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
@@ -42,37 +33,19 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
+    <number>4</number>
    </attribute>
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
-   <addaction name="undoAction" />
-   <addaction name="redoAction" />
   </widget>
   <widget class="QToolBar" name="graphToolBar" >
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
+    <number>4</number>
    </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
-   </attribute>
-   <addaction name="navigate_action" />
-   <addaction name="selectAction" />
-   <addaction name="selectionAction" />
-   <addaction name="moveSelectionAction" />
-   <addaction name="magicSelectionAction" />
-   <addaction name="zoomAction" />
-   <addaction name="deleteAction" />
-   <addaction name="addNodeAction" />
-   <addaction name="addEdgeAction" />
-   <addaction name="editEdgeBendAction" />
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
@@ -80,14 +53,13 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>31</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu" >
     <property name="title" >
      <string>&amp;File</string>
     </property>
-    <addaction name="fileNewAction" />
     <addaction name="fileOpenAction" />
     <addaction name="fileSaveAction" />
     <addaction name="fileSaveAsAction" />
@@ -95,90 +67,6 @@
     <addaction name="filePrintAction" />
     <addaction name="separator" />
     <addaction name="fileExitAction" />
-   </widget>
-   <widget class="QMenu" name="editMenu" >
-    <property name="title" >
-     <string>&amp;Edit</string>
-    </property>
-    <addaction name="separator" />
-    <addaction name="editUndoAction" />
-    <addaction name="editRedoAction" />
-    <addaction name="separator" />
-    <addaction name="editCutAction" />
-    <addaction name="editCopyAction" />
-    <addaction name="editPasteAction" />
-    <addaction name="separator" />
-    <addaction name="editFindAction" />
-    <addaction name="separator" />
-    <addaction name="editSelect_AllAction" />
-    <addaction name="editDelete_selectionAction" />
-    <addaction name="editDeselect_allAction" />
-    <addaction name="editReverse_selectionAction" />
-    <addaction name="separator" />
-    <addaction name="editCreate_groupAction" />
-    <addaction name="editCreate_subgraphAction" />
-    <addaction name="separator" />
-   </widget>
-   <widget class="QMenu" name="propertyMenu" >
-    <property name="title" >
-     <string>&amp;Algorithm</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="graphMenu" >
-    <property name="title" >
-     <string>&amp;Graph</string>
-    </property>
-    <widget class="QMenu" name="popupMenu_23" >
-     <property name="title" >
-      <string>Tests</string>
-     </property>
-     <addaction name="is_simple" />
-     <addaction name="is_directed_tree" />
-     <addaction name="is_free_tree" />
-     <addaction name="is_acyclic" />
-     <addaction name="is_connected" />
-     <addaction name="is_biconnected" />
-     <addaction name="is_triconnected" />
-     <addaction name="is_planar" />
-     <addaction name="is_outer_planar" />
-    </widget>
-    <widget class="QMenu" name="popupMenu_32" >
-     <property name="title" >
-      <string>&amp;Modify</string>
-     </property>
-     <addaction name="make_simple" />
-     <addaction name="make_acyclic" />
-     <addaction name="make_connected" />
-     <addaction name="make_biconnected" />
-     <addaction name="make_directed" />
-     <addaction name="separator" />
-     <addaction name="Reverse_selected_edgesAction" />
-    </widget>
-    <addaction name="Action" />
-    <addaction name="popupMenu_23" />
-    <addaction name="menunew_itemAction" />
-    <addaction name="popupMenu_32" />
-   </widget>
-   <widget class="QMenu" name="viewMenu" >
-    <property name="title" >
-     <string>&amp;View</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="dialogMenu" >
-    <property name="title" >
-     <string>&amp;Dialogs</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="Options" >
-    <property name="title" >
-     <string>&amp;Options</string>
-    </property>
-    <addaction name="force_ratio" />
-    <addaction name="map_metric" />
-    <addaction name="antialiasing" />
-    <addaction name="enable_morphing" />
-    <addaction name="tooltips" />
-    <addaction name="grid_option" />
    </widget>
    <widget class="QMenu" name="windowsMenu" >
     <property name="title" >
@@ -197,32 +85,12 @@
     <addaction name="helpAboutAction" />
    </widget>
    <addaction name="fileMenu" />
-   <addaction name="editMenu" />
-   <addaction name="propertyMenu" />
-   <addaction name="graphMenu" />
-   <addaction name="viewMenu" />
-   <addaction name="dialogMenu" />
-   <addaction name="Options" />
    <addaction name="windowsMenu" />
    <addaction name="helpMenu" />
   </widget>
-  <action name="fileNewAction" >
-   <property name="icon" >
-    <iconset>image3</iconset>
-   </property>
-   <property name="text" >
-    <string>&amp;New</string>
-   </property>
-   <property name="iconText" >
-    <string>New</string>
-   </property>
-   <property name="shortcut" >
-    <string>Ctrl+N</string>
-   </property>
-  </action>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_open.png</iconset>
+    <iconset>:/i_open.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -236,7 +104,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_save.png</iconset>
+    <iconset>:/i_save.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -261,7 +129,7 @@
   </action>
   <action name="filePrintAction" >
    <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_print.png</iconset>
+    <iconset>:/i_print.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Print...</string>
@@ -284,9 +152,37 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
+  <action name="editUndoAction" >
+   <property name="icon" >
+    <iconset>../../../../tulip/software/tulip/designer/image7</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Undo</string>
+   </property>
+   <property name="iconText" >
+    <string>Undo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="editRedoAction" >
+   <property name="icon" >
+    <iconset>../../../../tulip/software/tulip/designer/image8</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Redo</string>
+   </property>
+   <property name="iconText" >
+    <string>Redo</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
   <action name="editCutAction" >
    <property name="icon" >
-    <iconset>image9</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image9</iconset>
    </property>
    <property name="text" >
     <string>&amp;Cut</string>
@@ -300,7 +196,7 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset>image10</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image10</iconset>
    </property>
    <property name="text" >
     <string>C&amp;opy</string>
@@ -314,7 +210,7 @@
   </action>
   <action name="editPasteAction" >
    <property name="icon" >
-    <iconset>image11</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image11</iconset>
    </property>
    <property name="text" >
     <string>&amp;Paste</string>
@@ -328,7 +224,7 @@
   </action>
   <action name="editFindAction" >
    <property name="icon" >
-    <iconset>image12</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image12</iconset>
    </property>
    <property name="text" >
     <string>&amp;Find...</string>
@@ -386,7 +282,7 @@
     <bool>true</bool>
    </property>
    <property name="checked" >
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text" >
     <string>Force ratio</string>
@@ -573,7 +469,7 @@
   </action>
   <action name="is_connected" >
    <property name="icon" >
-    <iconset/>
+    <iconset>../../../../tulip/software/tulip/designer</iconset>
    </property>
    <property name="text" >
     <string>Connected</string>
@@ -700,65 +596,13 @@
     <string>Tranforms the current graph into a directed tree</string>
    </property>
   </action>
-  <action name="antialiasing" >
-   <property name="checkable" >
-    <bool>true</bool>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-   <property name="text" >
-    <string>Antialiasing</string>
-   </property>
-  </action>
-  <action name="undoAction" >
-   <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_undo.png</iconset>
-   </property>
-   <property name="text" >
-    <string>undo</string>
-   </property>
-  </action>
-  <action name="redoAction" >
-   <property name="icon" >
-    <iconset resource="TulipResource.qrc" >:/i_redo.png</iconset>
-   </property>
-   <property name="text" >
-    <string>redo</string>
-   </property>
-  </action>
-  <action name="editUndoAction" >
-   <property name="text" >
-    <string>&amp;Undo</string>
-   </property>
-   <property name="shortcut" >
-    <string>Ctrl+U</string>
-   </property>
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="editRedoAction" >
-   <property name="text" >
-    <string>&amp;Redo</string>
-   </property>
-   <property name="shortcut" >
-    <string>Ctrl+R</string>
-   </property>
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-  </action>
   <actiongroup name="mouseActionGroup" >
    <action name="addEdgeAction" >
     <property name="checkable" >
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_addedge.png</iconset>
+     <iconset>../../../../../../../:/i_addedge.png</iconset>
     </property>
     <property name="text" >
      <string>addEdge</string>
@@ -775,7 +619,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_addnode.png</iconset>
+     <iconset>../../../../../../../:/i_addnode.png</iconset>
     </property>
     <property name="text" >
      <string>addNode</string>
@@ -792,7 +636,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_del.png</iconset>
+     <iconset>../../../../../../../:/i_del.png</iconset>
     </property>
     <property name="text" >
      <string>delete</string>
@@ -809,7 +653,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_zoom.png</iconset>
+     <iconset>../../../../../../../:/i_zoom.png</iconset>
     </property>
     <property name="text" >
      <string>zoom</string>
@@ -829,7 +673,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_navigation.png</iconset>
+     <iconset>../../../../../../../:/i_navigation.png</iconset>
     </property>
     <property name="text" >
      <string>navigate</string>
@@ -846,7 +690,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_move.png</iconset>
+     <iconset>../../../../../../../:/i_move.png</iconset>
     </property>
     <property name="text" >
      <string>moveSelection</string>
@@ -863,7 +707,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_selection.png</iconset>
+     <iconset>../../../../../../../:/i_selection.png</iconset>
     </property>
     <property name="text" >
      <string>selection</string>
@@ -880,7 +724,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_magic.png</iconset>
+     <iconset>../../../../../../../:/i_magic.png</iconset>
     </property>
     <property name="text" >
      <string>magicSelection</string>
@@ -897,7 +741,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_select.png</iconset>
+     <iconset>../../../../../../../:/i_select.png</iconset>
     </property>
     <property name="text" >
      <string>select</string>
@@ -914,7 +758,7 @@
      <bool>true</bool>
     </property>
     <property name="icon" >
-     <iconset resource="TulipResource.qrc" >:/i_bends.png</iconset>
+     <iconset>../../../../../../../:/i_bends.png</iconset>
     </property>
     <property name="text" >
      <string>editedgeBend</string>
@@ -932,29 +776,11 @@
  <includes>
   <include location="local" >qworkspace.h</include>
  </includes>
- <resources>
-  <include location="TulipResource.qrc" />
- </resources>
+ <resources/>
  <connections>
   <connection>
-   <sender>fileNewAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileNew()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>fileOpenAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileOpen()</slot>
    <hints>
@@ -970,7 +796,7 @@
   </connection>
   <connection>
    <sender>fileSaveAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSave()</slot>
    <hints>
@@ -986,7 +812,7 @@
   </connection>
   <connection>
    <sender>fileSaveAsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileSaveAs()</slot>
    <hints>
@@ -1002,7 +828,7 @@
   </connection>
   <connection>
    <sender>filePrintAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>filePrint()</slot>
    <hints>
@@ -1018,7 +844,7 @@
   </connection>
   <connection>
    <sender>fileExitAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileExit()</slot>
    <hints>
@@ -1033,72 +859,8 @@
    </hints>
   </connection>
   <connection>
-   <sender>editCutAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>editCut()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editCopyAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>editCopy()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editPasteAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>editPaste()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editFindAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>editFind()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>helpIndexAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpIndex()</slot>
    <hints>
@@ -1114,7 +876,7 @@
   </connection>
   <connection>
    <sender>helpContentsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpContents()</slot>
    <hints>
@@ -1130,7 +892,7 @@
   </connection>
   <connection>
    <sender>pluginsAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>plugins()</slot>
    <hints>
@@ -1146,7 +908,7 @@
   </connection>
   <connection>
    <sender>helpAboutAction</sender>
-   <signal>triggered()</signal>
+   <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>helpAbout()</slot>
    <hints>
@@ -1157,598 +919,6 @@
     <hint type="destinationlabel" >
      <x>20</x>
      <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>grid_option</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>gridOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_acyclic</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>makeAcyclic()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_simple</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>makeSimple()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_biconnected</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>makeBiconnected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_biconnected</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isBiconnected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_triconnected</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isTriconnected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_planar</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isPlanar()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_outer_planar</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isOuterPlanar()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_simple</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isSimple()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_directed_tree</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isTree()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_acyclic</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isAcyclic()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_connected</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>makeConnected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_connected</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isConnected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Reverse_selected_edgesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>reverseSelectedEdgeDirection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editCreate_groupAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>group()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editCreate_subgraphAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>newSubgraph()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editDelete_selectionAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>delSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editReverse_selectionAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>reverseSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editSelect_AllAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>selectAll()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editDeselect_allAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>deselectAll()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>addEdgeAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setAddEdge()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>addNodeAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setAddNode()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>deleteAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setDelete()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zoomAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setZoomBox()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>navigate_action</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setGraphNavigate()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>moveSelectionAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setMoveSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>magicSelectionAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setMagicSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>selectionAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setSelection()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>selectAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setSelect()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>is_free_tree</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>isFreeTree()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>make_directed</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>makeDirected()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editEdgeBendAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>setEditEdgeBend()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>antialiasing</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>TulipData</receiver>
-   <slot>setAntialiasing(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>502</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>undoAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>undo()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>502</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>redoAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>redo()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>502</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editUndoAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>undo()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>502</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>editRedoAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>redo()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>502</x>
-     <y>349</y>
     </hint>
    </hints>
   </connection>

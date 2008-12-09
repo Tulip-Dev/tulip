@@ -197,6 +197,8 @@ namespace tlp {
 	havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
       #endif
 
+	cout << pluginInfo->name << " : " << havePlugin  << endl;
+
       if(created) {
 	if(havePlugin) {
 	  twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);

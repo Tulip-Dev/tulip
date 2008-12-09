@@ -47,9 +47,6 @@ void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Sphere::draw(node n,float lod) {
-  glEnable(GL_LIGHTING);
-  glDisable(GL_COLOR_MATERIAL);
-
   if(GlDisplayListManager::getInst().beginNewDisplayList("Sphere_sphere")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

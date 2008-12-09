@@ -381,6 +381,11 @@ plugins/colors/Makefile
 plugins/int/Makefile
 plugins/string/Makefile
 plugins/glyph/Makefile
+plugins/interactor/Makefile
+plugins/view/Makefile
+plugins/view/spreadsheet/Makefile
+plugins/view/parallel/Makefile
+plugins/controller/Makefile
 docs/Makefile
 docs/devTeamDoxygen/Makefile
 docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in

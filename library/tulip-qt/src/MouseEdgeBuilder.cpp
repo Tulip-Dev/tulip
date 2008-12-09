@@ -12,11 +12,14 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlTools.h>
 
 #include <tulip/MouseEdgeBuilder.h>
 
 using namespace std;
 using namespace tlp;
+
+INTERACTORPLUGIN(MouseEdgeBuilder, "MouseEdgeBuilder", "Tulip Team", "16/04/2008", "Mouse Edge Builder", "1.0", 5);
 
 MouseEdgeBuilder::MouseEdgeBuilder():started(false){}
 
@@ -55,7 +58,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 	  //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
 	  bends.clear();
 	  glMainWidget->draw();
-	  Observable::unholdObservers(); 
+	  Observable::unholdObservers();
 	}
 	else {
 	  Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
@@ -79,7 +82,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (!started) return false;
-    
+
     Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
 		(double) qMouseEv->y(),
 		0);
@@ -97,10 +100,8 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   glStencilFunc(GL_LEQUAL,0,0xFFFF);
   glMainWidget->getScene()->getCamera()->initGl();
   glDisable(GL_LIGHTING);
-  float color[4];
-  color[0]=1; color[1]=0;  color[2]=0;  color[3]=1;
   vector<Coord>::iterator lCoordIt=bends.begin();
-  glColor4fv(color);
+  setColor(Color(255,0,0,255));
   glBegin(GL_LINE_STRIP);{
     glVertex3f(startPos.getX(),startPos.getY(),startPos.getZ());
     while(lCoordIt!=bends.end()) {

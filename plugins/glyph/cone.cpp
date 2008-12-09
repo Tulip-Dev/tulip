@@ -46,9 +46,6 @@ void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
 }
 //===========================================================
 void Cone::draw(node n,float lod) {
-  glEnable(GL_LIGHTING);
-  glDisable(GL_COLOR_MATERIAL);
-
   if(GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

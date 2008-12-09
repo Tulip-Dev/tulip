@@ -5,8 +5,9 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 
-using namespace tlp;
 using namespace std;
+
+namespace tlp {
 
 //====================================================
 static bool HaveSameValues( const vector<vector <Coord> > &v1,
@@ -108,3 +109,5 @@ GraphState::EdgeEnds( Coord & outC0,
   outC1   = layout->getNodeValue( n1 );
 }
 //====================================================
+
+}

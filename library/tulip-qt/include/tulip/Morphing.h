@@ -14,10 +14,10 @@
 
 #define	MORPHING_MAX_FPS	30
 
-class GlMainWidget;
 
 namespace tlp {
 
+  class GlMainWidget;
   class Graph;
   class LayoutProperty;
   class SizeProperty;

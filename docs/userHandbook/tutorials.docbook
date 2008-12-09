@@ -62,7 +62,7 @@
      			<para>This layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
      			The bubble tree layout is very useful to notice directories that have the same structure.
      			In this section, we will try to locate those directories.</para>
-     			<para>To have a better view on the tree, we will create a new 3D view. Menu : View->New 3D view or press <keycap>Ctrl+Shift+N</keycap>. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
+     			<para>To have a better view on the tree, we will create a new NodeLinkDiagramComponent. Menu : View->NodeLinkDiagramComponent. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
      			<para>Now that we can see the both views at the same time, we will zoom in (right window). Select the magnifying glass tool, and draw a bounding box on the left side of the graph. Just like this :</para>
      			<graphic fileref="images/tutorials_improvelayout_bubble_1.png" />
      			<para>As you can see, two nodes looks very alike. By using the "Get Information " tool, we can get there ids : Node 1965 and node 2009. Indeed, those to directories have the same structure since they both contains plug-ins source files.</para>
@@ -129,11 +129,11 @@
      		</sect3>
      	</sect2>
      	<sect2 id="improve-layout-labels"><title>Showing Labels</title>
-     		<para>First, in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>), check the <code>nodes</code> box for the <code>Visibility</code> option.</para>
+     		<para>First, right click on the view and select Dialog->Rendering parameters. In the <code>Rendering Parameters</code> dialog go in Layers tab and check the <code>Nodes Label</code> <code>visibles</code> box</para>
      		<para>We will now try to add labels to the nodes. To do so, select the node property called "name" in the info editor window, click on the button <code>To Labels</code>.</para>
      		<para>You should now see a graph looking like that :</para>
      		<graphic fileref="images/tutorials_improvelayout_3.png" />
-     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem, press <keycap>Ctrl+R</keycap> , in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
+     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem go on rendering parameters dialog and in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
      		
      		<para>You should obtain something like this.</para>
      		<graphic fileref="images/tutorials_improvelayout_4.png" />
@@ -239,7 +239,7 @@
     		 </sect3>
     		 In the last section, we will use an other graph. Please download <ulink url="http://tulip.labri.fr/samples/ConfAuthRecSmallWorld.tlp.gz">it</ulink> and open it in tulip.
     		 <sect3 id="interauthor-cons"><title>Hierarchical Structure of Interauthor Connections</title>
-    		 	<para>To be able to see the labels within metanode check the "metanode" option in the <code>Rendering Parameters</code> dialog (<keycap>Ctrl+R</keycap>).</para>
+    		 	<para>To be able to see the labels within metanode check the "metanode label" visible box in the Layers tab in <code>Rendering Parameters</code> dialog.</para>
     		 	<para>The clusters have been computed using the <code>Algorithm->General->Strength</code> clustering algorithm.</para>
     		 	<para>The overview image from the previous section, showing the graph of all authors and papers, is extremely cluttered. In the previous task we show one way to extricate more information, by finding the most important items via convolution clustering. Another clustering approach, small-worlds clustering, allows us to instead navigate through a hierarchical subdivision of the entire dataset. The simplified overview allows us to understand the graph's high level structure. The strength metric computes the number of cycles of length 3 and 4 passing through each edge, normalized by the maximum possible value. The first image shows the clustered dataset. Small-world navigation is useful when exploring an unfamiliar graph to quickly find the structure of complex components. The eccentricity metric (<code>Algorithm->Measure->Graph->Eccentricity</code>), which measures whether nodes are peripheral (here in yellow) or central (here in blue), guides us to complexity immediately. This metric is O(n^3), but the small-world decomposition simplifies the graph, making the computation tractable.
     		 	</para>
@@ -368,7 +368,7 @@
 		</figure>
 	    </para>
 
-	    <para>In order to have the good clustering, you can modify the plane equation (not really smooth : will be enhanced in the next versions of Tulip) to move the plane. Finally, to clusterize, just click on the <emphasis>Clusterize</emphasis> button. That's it ! The graph is now clusterized. In order to ensure, just check the <emphasis>Cluster Tree</emphasis>.
+	    <para>In order to have the good clustering, you can modify the plane equation to move the plane. Finally, to clusterize, just click on the <emphasis>Clusterize</emphasis> button. That's it ! The graph is now clusterized. In order to ensure, just check the <emphasis>Cluster Tree</emphasis>.
 
 		<figure>
 		    <title>The new clusters after statistic clustering</title>

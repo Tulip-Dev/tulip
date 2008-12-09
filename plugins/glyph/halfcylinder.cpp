@@ -42,9 +42,6 @@ HalfCylinder::~HalfCylinder() {
 }
 //=================================================================================================
 void HalfCylinder::draw(node n,float lod) {
-  glEnable(GL_LIGHTING);
-  glDisable(GL_COLOR_MATERIAL);
-
   if(GlDisplayListManager::getInst().beginNewDisplayList("Halfcylinder_halfcylinder")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

@@ -30,6 +30,9 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
+#include <tulip/GWInteractor.h>
+#include <tulip/View.h>
+#include <tulip/Controller.h>
 
 namespace tlp {
 
@@ -40,11 +43,16 @@ namespace tlp {
     std::string version;
     
     PluginDependency(const std::string &name,const std::string &type,const std::string& version):name(name),version(version){
-      if(type=="Glyph") {
+      if(type=="Glyph")
 	this->type="Glyph";
-      }else{
+      else if(type=="Interactor")
+	this->type="Interactor";
+      else if(type=="View")
+	this->type="View";
+      else if(type=="Controller")
+	this->type="Controller";
+      else
 	this->type="Algorithm";
-      }
     };
     
   };
@@ -110,6 +118,16 @@ namespace tlp {
       if (AlgorithmFactory::factory &&
 	  AlgorithmFactory::factory->pluginExists(name))
 	return "General";
+      if (InteractorFactory::factory &&
+	  InteractorFactory::factory->pluginExists(name))
+	return "Interactor";
+      if (ViewFactory::factory &&
+	  ViewFactory::factory->pluginExists(name))
+	return "View";
+      if (ControllerFactory::factory &&
+	  ControllerFactory::factory->pluginExists(name))
+	return "Controller";
+      
       return "Glyph";
     }
   };

@@ -10,6 +10,9 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/InteractorManager.h>
+#include <tulip/ViewPluginsManager.h>
+#include <tulip/ControllerPluginsManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -30,6 +33,9 @@ int main(int argc,char **argv) {
   initTulipLib(NULL);
   loadPlugins(&plug);    // library side plugins
   GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins 
+  InteractorManager::getInst().loadPlugins(&plug);
+  ViewPluginsManager::getInst().loadPlugins(&plug);
+  ControllerPluginsManager::getInst().loadPlugins(&plug);
 
   vector<LocalPluginInfo> pluginsList=plug.pluginsList;
 
@@ -56,16 +62,18 @@ int main(int argc,char **argv) {
       return EXIT_FAILURE;
 
     QDir srcDir;
-    if((*it).type!="Glyph")
-      srcDir = QDir((TulipLibDir+"tlp/").c_str());
-    else
-      srcDir = QDir((TulipLibDir+"tlp/glyphs/").c_str());
+    string subDir;
+    if((*it).type=="Glyph")
+      subDir="glyphs/";
+    else if((*it).type=="Interactor")
+      subDir="interactors/";
+    else if((*it).type=="View")
+      subDir="view/";
+
+    srcDir = QDir((TulipLibDir+"tlp/"+subDir).c_str());
     QDir secondSrcDir;
     if(argc==4) {
-      if((*it).type!="Glyph")
-	secondSrcDir=QDir(argv[3]);
-      else
-	secondSrcDir=QDir((string(argv[3])+"glyphs/").c_str());
+      secondSrcDir=QDir((string(argv[3])+subDir).c_str());
     }
      
     if(srcDir.exists(QString((*it).fileName.c_str())+".so")) {

@@ -26,7 +26,7 @@ namespace tlp {
   
   class Camera;
 
-  class QtCPULODCalculatorThread : public QThread {
+  class TLP_QT_SCOPE QtCPULODCalculatorThread : public QThread {
     
     Q_OBJECT
 
@@ -51,7 +51,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class QtCPULODCalculator : public GlCPULODCalculator {
+  class TLP_QT_SCOPE QtCPULODCalculator : public GlCPULODCalculator {
   
   public:
 

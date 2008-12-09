@@ -1,41 +1,98 @@
 #include "tulip/RenderingParametersDialog.h"
 
 #include <QtGui/QHeaderView>
+#include <QtGui/QColorDialog>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/GlMainView.h"
 
 using namespace std;
 
 namespace tlp {
 
-  RenderingParametersDialog::RenderingParametersDialog(GWOverviewWidget* parent) : QDialog(parent->parentWidget()) {
+  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QDialog(parent) {
     setupUi(this);
+
+    holdUpdateView=false;
 
     treeWidget->header()->resizeSection(0,205);
     treeWidget->header()->resizeSection(1,70);
     treeWidget->header()->resizeSection(2,70);
-
-    overview = parent;
   }
-  
+
   void RenderingParametersDialog::windowActivationChange(bool oldActive) {
     if (!oldActive)
       buttonClose->setFocus();
   }
-  
+
+  void RenderingParametersDialog::setGlMainView(GlMainView *view){
+    mainView=view;
+
+    GlGraphRenderingParameters param = mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
+
+    holdUpdateView=true;
+    arrows->setChecked( param.isViewArrow());
+    colorInterpolation->setChecked( param.isEdgeColorInterpolate());
+    sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
+    ordering->setChecked( param.isElementOrdered());
+    orthogonal->setChecked(mainView->getGlMainWidget()->getScene()->isViewOrtho());
+    edge3D->setChecked( param.isEdge3D());
+    Color inColor = mainView->getGlMainWidget()->getScene()->getBackgroundColor();
+    setBackgroundColor(QColor(inColor[0],inColor[1],inColor[2]));
+    fonts->setCurrentIndex(param.getFontsType());
+    density->setValue(param.getLabelsBorder());
+
+    holdUpdateView=false;
+
+    attachMainWidget(view->getGlMainWidget());
+  }
+
   void RenderingParametersDialog::updateView() {
-    overview->updateView();
+    if(holdUpdateView)
+      return;
+
+    GlGraphRenderingParameters param = mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
+
+    param.setViewArrow(arrows->isChecked());
+    param.setEdgeColorInterpolate(colorInterpolation->isChecked());
+    param.setEdgeSizeInterpolate(sizeInterpolation->isChecked());
+    param.setElementOrdered(ordering->isChecked());
+    mainView->getGlMainWidget()->getScene()->setViewOrtho(orthogonal->isChecked());
+    param.setEdge3D(edge3D->isChecked());
+    param.setFontsType(fonts->currentIndex());
+    QColor outColor = background->palette().color(QPalette::Button);
+    mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(outColor.red(),outColor.green(),outColor.blue()));
+    param.setLabelsBorder(density->value());
+
+    mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    mainView->draw();
   }
-  
+
   void RenderingParametersDialog::backColor() {
-    overview->backColor();
+    setBackgroundColor(QColorDialog::getColor(background->palette().color(QPalette::Button), this));
+    updateView();
   }
+
+  void RenderingParametersDialog::setBackgroundColor(QColor tmp) {
+    if (tmp.isValid()) {
+      QPalette palette;
+      palette.setColor(QPalette::Button, tmp);
+      int h,s,v;
+      tmp.getHsv(&h, &s, &v);
+      if (v < 128)
+	palette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+      else
+	palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));
+      background->setPalette(palette);
+    }
+  }
+
 
   //=============================================================================
 void RenderingParametersDialog::attachMainWidget(GlMainWidget* graphWidget) {
   treeWidget->invisibleRootItem()->takeChildren();
-    
+
   observedMainWidget=graphWidget;
 
   vector<pair<string, GlLayer*> >* layers=graphWidget->getScene()->getLayersList();
@@ -110,7 +167,7 @@ void RenderingParametersDialog::createGraphCompositeItem(GlGraphComposite *glGra
   else
     metaNodes->setCheckState(2,Qt::Unchecked);
   //Edges
-  QTreeWidgetItem* edges=new QTreeWidgetItem(item,QStringList("Edges")); 
+  QTreeWidgetItem* edges=new QTreeWidgetItem(item,QStringList("Edges"));
   edges->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
   if(glGraphComposite->isDisplayEdges())
     edges->setCheckState(1,Qt::Checked);
@@ -217,12 +274,12 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
       bool isGraphComposite=false;
       for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
 	GlSimpleEntity* newEntity=(GlSimpleEntity*)((GlComposite*)entity)->findGlEntity(*it);
-	if(newEntity) 
+	if(newEntity)
 	  entity=newEntity;
 	else
 	  isGraphComposite=true;
       }
-      
+
       if(!isGraphComposite) {
 	if(item->checkState(column)==Qt::Unchecked){
 	  entity->setVisible(false);
@@ -231,7 +288,7 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
 	}
       }else{
 	GlGraphComposite *composite=(GlGraphComposite*) entity;
-	if(item->data(0,0).toString().toStdString()=="Nodes") 
+	if(item->data(0,0).toString().toStdString()=="Nodes")
 	  composite->setDisplayNodes(item->checkState(column)==Qt::Checked);
 	else if (item->data(0,0).toString().toStdString()=="Edges")
 	  composite->setDisplayEdges(item->checkState(column)==Qt::Checked);
@@ -257,12 +314,12 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
     bool isGraphComposite=false;
     for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
       GlSimpleEntity* newEntity=(GlSimpleEntity*)((GlComposite*)entity)->findGlEntity(*it);
-      if(newEntity) 
+      if(newEntity)
 	entity=newEntity;
       else
 	isGraphComposite=true;
     }
-      
+
     if(!isGraphComposite) {
       if(item->checkState(column)==Qt::Unchecked){
 	entity->setStencil(0xFFFF);
@@ -272,17 +329,17 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
     }else{
       GlGraphComposite *composite=(GlGraphComposite*) entity;
       int value;
-      if(item->checkState(column)==Qt::Checked) 
+      if(item->checkState(column)==Qt::Checked)
 	value=2;
       else
 	value=0xFFFF;
-      if(item->data(0,0).toString().toStdString()=="Selected nodes") 
+      if(item->data(0,0).toString().toStdString()=="Selected nodes")
 	composite->setSelectedNodesStencil(value);
-      if(item->data(0,0).toString().toStdString()=="Selected meta-nodes") 
+      if(item->data(0,0).toString().toStdString()=="Selected meta-nodes")
 	composite->setSelectedMetaNodesStencil(value);
-      if(item->data(0,0).toString().toStdString()=="Selected edges") 
+      if(item->data(0,0).toString().toStdString()=="Selected edges")
 	composite->setSelectedEdgesStencil(value);
-      else if(item->data(0,0).toString().toStdString()=="Nodes") 
+      else if(item->data(0,0).toString().toStdString()=="Nodes")
 	composite->setNodesStencil(value);
       else if (item->data(0,0).toString().toStdString()=="Edges")
 	  composite->setEdgesStencil(value);
@@ -296,7 +353,7 @@ void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int colum
 	composite->setEdgesLabelStencil(value);
     }
   }
-    
+
   observedMainWidget->draw();
 }
 //=============================================================================

@@ -20,6 +20,9 @@
 
 using namespace tlp;
 using namespace std;
+
+INTERACTORPLUGIN(MouseEdgeBendEditor, "MouseEdgeBendEditor", "Tulip Team", "16/04/2008", "Mouse Edge Bend Editor", "1.0", 4);
+
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor() 
   :glMainWidget(NULL){

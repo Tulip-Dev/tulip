@@ -12,67 +12,71 @@
 #include <tulip/ObservableGraph.h>
 #include "tulip/ElementPropertiesWidgetUI.h"
 
-class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget : public tlp::ElementPropertiesWidgetUI, public tlp::GraphObserver
-{
-  Q_OBJECT;
-  // moc as of qt 3.0.5 doesn't understand '::'... silly
-  //  Q_ENUMS(Tulip::AtomType);
-  //  Q_PROPERTY(Tulip::AtomType displayMode READ getDisplayMode WRITE setDisplayMode);
-  Q_PROPERTY(QStringList nodeListedProperties READ getNodeListedProperties WRITE setNodeListedProperties);
-  Q_PROPERTY(QStringList edgeListedProperties READ getEdgeListedProperties WRITE setEdgeListedProperties);
-  Q_PROPERTY(bool elementDisplayed READ isElementDisplayed);
-protected:
-  tlp::ElementType displayMode;
-  tlp::node currentNode;
-  tlp::edge currentEdge;
-  bool nodeSet;
-  bool edgeSet;
-  bool displayAllProperties;
-  tlp::Graph *graph;
-  QStringList nodeListedProperties;
-  QStringList edgeListedProperties;
+namespace tlp {
 
-  //inherited slots
+  class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget : public ElementPropertiesWidgetUI, public GraphObserver
+    {
+      Q_OBJECT;
+      // moc as of qt 3.0.5 doesn't understand '::'... silly
+      //  Q_ENUMS(Tulip::AtomType);
+      //  Q_PROPERTY(Tulip::AtomType displayMode READ getDisplayMode WRITE setDisplayMode);
+      Q_PROPERTY(QStringList nodeListedProperties READ getNodeListedProperties WRITE setNodeListedProperties);
+      Q_PROPERTY(QStringList edgeListedProperties READ getEdgeListedProperties WRITE setEdgeListedProperties);
+      Q_PROPERTY(bool elementDisplayed READ isElementDisplayed);
+    protected:
+      ElementType displayMode;
+      node currentNode;
+      edge currentEdge;
+      bool nodeSet;
+      bool edgeSet;
+      bool displayAllProperties;
+      Graph *graph;
+      QStringList nodeListedProperties;
+      QStringList edgeListedProperties;
+
+      //inherited slots
 
   
-public:
-  ElementPropertiesWidget(tlp::Graph *, const QStringList &nodeListedProperties,
-			  const QStringList &edgeListedProperties,
-			  QWidget *parent = 0);
-  ElementPropertiesWidget(QWidget *parent = 0);
-  ~ElementPropertiesWidget();
+    public:
+      ElementPropertiesWidget(Graph *, const QStringList &nodeListedProperties,
+			      const QStringList &edgeListedProperties,
+			      QWidget *parent = 0);
+      ElementPropertiesWidget(QWidget *parent = 0);
+      ~ElementPropertiesWidget();
     
-  QStringList getCurrentListedProperties() const;
-  QStringList getNodeListedProperties() const;
-  QStringList getEdgeListedProperties() const;
-  tlp::Graph *getGraph() const;
-  tlp::node getCurrentNode() const;
-  tlp::edge getCurrentEdge() const;
-  tlp::ElementType getDisplayMode() const;
-  bool isElementDisplayed() const;
+      QStringList getCurrentListedProperties() const;
+      QStringList getNodeListedProperties() const;
+      QStringList getEdgeListedProperties() const;
+      Graph *getGraph() const;
+      node getCurrentNode() const;
+      edge getCurrentEdge() const;
+      ElementType getDisplayMode() const;
+      bool isElementDisplayed() const;
   
-public slots:
-  void updateTable();
-  void propertyTableValueChanged(int, int);
-  void setDisplayMode(const tlp::ElementType);
-  void setCurrentNode(tlp::Graph *, const tlp::node &);
-  void setCurrentEdge(tlp::Graph *, const tlp::edge &);
-  void setGraph(tlp::Graph *, bool distroy = true);
-  void setCurrentListedProperties(const QStringList &);
-  void setNodeListedProperties(const QStringList &);
-  void setEdgeListedProperties(const QStringList &);
-  void nodePropertyChanged(tlp::Graph *, const tlp::node &, const QString &, const QString &);
-  void edgePropertyChanged(tlp::Graph *, const tlp::edge &, const QString &, const QString &);
+      public slots:
+      void updateTable();
+      void propertyTableValueChanged(int, int);
+      void setDisplayMode(const ElementType);
+      void setCurrentNode(Graph *, const node &);
+      void setCurrentEdge(Graph *, const edge &);
+      void setGraph(Graph *, bool distroy = true);
+      void setCurrentListedProperties(const QStringList &);
+      void setNodeListedProperties(const QStringList &);
+      void setEdgeListedProperties(const QStringList &);
+      void nodePropertyChanged(Graph *, const node &, const QString &, const QString &);
+      void edgePropertyChanged(Graph *, const edge &, const QString &, const QString &);
   
-signals:
-  void tulipNodePropertyChanged(tlp::Graph *, const tlp::node &, const QString &property, const QString &value);
-  void tulipEdgePropertyChanged(tlp::Graph *, const tlp::edge &, const QString &property, const QString &value);
+    signals:
+      void tulipNodePropertyChanged(Graph *, const node &, const QString &property, const QString &value);
+      void tulipEdgePropertyChanged(Graph *, const edge &, const QString &property, const QString &value);
 
 
- private:
-  void delNode(tlp::Graph *, tlp::node);
-  void delEdge(tlp::Graph *, tlp::edge);
-  void destroy(tlp::Graph *);
-};
+    private:
+      void delNode(Graph *, node);
+      void delEdge(Graph *, edge);
+      void destroy(Graph *);
+    };
+
+}
 
 #endif //TULIPELEMENTPROPERTIES_H

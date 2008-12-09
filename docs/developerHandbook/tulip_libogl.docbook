@@ -1,43 +1,45 @@
 <chapter id="opengl-library"><title>Tulip Open GL Library</title>
-    <sect1 id="gl-intro"><title>Introduction</title>
-        <para></para>
-    </sect1>
-    <sect1 id="augm-disply"><title>2D/3D for Tulip</title>
-	<sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlEntity system</title>
-	    <para>Tulip-ogl is a library for OpenGL allowing the developper to add augmented displays on the graph. The objective of this class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays.
-	    </para>
-	</sect2>
-    
-	<sect2 id="glSimpleEntity"><title>GlSimpleEntity</title>
-	    <para> GlSimpleEntity is the mother-class of every 2D/3D shape. It provides one important virtual functions : draw, and one important data field : boundingBox. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The other classes of the library are : GlLine, GlPolygon, GlBox, GlCircle, GlGrid, GlMultiPolygon, GlQuad, GlRect, GlRectTextured, GlSphere.
-	    </para>
-	</sect2>
-    
-	<sect2 id="gl-class"><title>Gl 2D/3D classes</title>
-	    <para>There are 4 basic Gl classes which display in 2D or 3D. Each of them represents a different primitive.</para>
-	    <itemizedlist>
-		<listitem><para><emphasis>GlLine</emphasis> : Describes a line according to a start position, a start color, an end position and an end color.</para></listitem>
-		<listitem><para><emphasis>GlQuad</emphasis> : Describes a quad according to a position and a size, or according to four points.</para></listitem>
-		<listitem><para><emphasis>GlRect</emphasis> : Describes a rectangle according to a position and a size, or according to two points.</para></listitem>
-		<listitem><para><emphasis>GlPolygon</emphasis> : Describes a polygon according to a vector of positions.</para></listitem>
-		<listitem><para><emphasis>GlADBox</emphasis> : Displays a box. This augmented display is built with 6 GlQuad.</para></listitem>
-		<listitem><para><emphasis>GlADGrid</emphasis> : Displays a 3D or a 2D projection of a grid. This augmented display is built with GlLine.</para></listitem>
-		<listitem><para><emphasis>GlCircle</emphasis> : Describes a circle according to a position and a size.</para></listitem>
-		<listitem><para><emphasis>GlMultiPolygon</emphasis> : Describes a set of polygon.</para></listitem>
-		<listitem><para><emphasis>GlRectTextured</emphasis> : Describes a textured rectangle according to a position and a size, or according to two points.</para></listitem>
-		<listitem><para><emphasis>GlSphere</emphasis> : Describes a sphere according to a position and a size.</para></listitem>
-	    </itemizedlist>
-	</sect2>
-    
-	<sect2 id="glAD-Examples"><title>Examples of Gl shape uses</title>
-	    <para>This section contains three small examples of use of the augmented displays with tulip. We admit the user has a GlLayer already defined in the variable <emphasis>glMainLayer</emphasis>.</para>
-	    <para>In the given screenshots, the scene is composed of two nodes placed at positions (-1, -1, -1) and (1, 1, 1). Their sizes are (1, 1, 1)</para>
-	    <para>Here is the base screenshot of the scene :</para>
-	    <graphic fileref="images/GlADBaseScene.png"/>
-	
-	    <sect3 id="gl3D-BasicExample"><title>Example of Basic Gl 3D uses : GlLine</title>
-		<para>This simple example shows how to add a Line from the position (-1, -1, -1) to the position (1, 1, 1) as an augmented display in a GlScene, the line will be starting Blue and will finish transparent Red; the thickness of the line will be set to 1 pixel.</para>
-		<programlisting>Coord startPos(-1, -1, -1);
+  <sect1 id="gl-intro"><title>Introduction</title>
+    <para>Tulip-ogl is a library for OpenGL allowing the developper to add augmented displays on the graph</para>
+  </sect1>
+  <sect1 id="augm-disply"><title>2D/3D for Tulip</title>
+    <sect2 id="glAugmentedDisplay-main"><title>Augmented Displays with GlEntity system</title>
+      <para>The objective of tulip-ogl's class is to be as modular as possible, giving the user a full scalable and Tulip-compatible engine to render custom augmented displays.</para>
+    </sect2>
+    <sect2 id="glSimpleEntity"><title>GlSimpleEntity</title>
+      <para> GlSimpleEntity is the mother-class of every 2D/3D shape. It provides one important virtual functions : draw, and one important data field : boundingBox. By generalizing this class, you can have classes making calls to OpenGL functions within the draw function. The other classes of the library are : GlLine, GlPolygon, GlBox, GlCircle, GlGrid, GlMultiPolygon, GlQuad, GlRect, GlRectTextured, GlSphere.</para>
+    </sect2>
+    <sect2 id="gl-class"><title>Gl 2D/3D classes</title>
+      <para>There are 4 basic Gl classes which display in 2D or 3D. Each of them represents a different primitive.</para>
+        <itemizedlist>
+          <listitem><para><emphasis>GlLine</emphasis> : Describes a line according to a start position, a start color, an end position and an end color.</para></listitem>
+          <listitem><para><emphasis>GlQuad</emphasis> : Describes a quad according to a position and a size, or according to four points.</para></listitem>
+          <listitem><para><emphasis>GlRect</emphasis> : Describes a rectangle according to a position and a size, or according to two points.</para></listitem>
+          <listitem><para><emphasis>GlPolygon</emphasis> : Describes a polygon according to a vector of positions.</para></listitem>
+          <listitem><para><emphasis>GlBox</emphasis> : Displays a box. This augmented display is built with 6 GlQuad.</para></listitem>
+          <listitem><para><emphasis>GlGrid</emphasis> : Displays a 3D or a 2D projection of a grid. This augmented display is built with GlLine.</para></listitem>
+          <listitem><para><emphasis>GlCircle</emphasis> : Describes a circle according to a position and a size.</para></listitem>
+          <listitem><para><emphasis>GlMultiPolygon</emphasis> : Describes a set of polygon.</para></listitem>
+          <listitem><para><emphasis>GlComplexPolygon</emphasis> : Describe a convex or concav polygon with color texture and hole</para></listitem>
+          <listitem><para><emphasis>GlRectTextured</emphasis> : Describes a textured rectangle according to a position and a size, or according to two points.</para></listitem>
+          <listitem><para><emphasis>GlSphere</emphasis> : Describes a sphere according to a position and a size.</para></listitem>
+        </itemizedlist>
+    </sect2>
+    <sect2 id="gl_sceneandlayer"><title>Scene and layers</title>
+      <para>The core of a view is the scene. A scene contain all opengl information and hierarchy of GlEntity to display graph and augmented displays</para>
+      <para>In the scene you have one or N layers</para>
+      <para>A layer contain a camera and a hierarchy of GlEntity</para>
+      <para>In NodeLinkDiagramComponent you have three layers : background (2D layer), Main (graph layer) and Foreground (2D layer).</para>
+      <para>In following example you construct GlEntity and add it in the Main layer. To get this main layer you just need to call <code>scene->getLayer("Main")</code></para>
+    </sect2>
+    <sect2 id="glAD-Examples"><title>Examples of Gl shape uses</title>
+      <para>This section contains three small examples of use of the augmented displays with tulip. We admit the user has a GlLayer already defined in the variable <emphasis>glMainLayer</emphasis>.</para>
+      <para>In the given screenshots, the scene is composed of two nodes placed at positions (-1, -1, -1) and (1, 1, 1). Their sizes are (1, 1, 1)</para>
+      <para>Here is the base screenshot of the scene :</para>
+      <graphic fileref="images/GlADBaseScene.png"/><para>You can download plugins skeletons  <ulink url="http://tulip.labri.fr/samples/plugintemplates.tar.gz">here</ulink> .</para>
+      <sect3 id="gl3D-BasicExample"><title>Example of Basic Gl 3D uses : GlLine</title>
+        <para>This simple example shows how to add a Line from the position (-1, -1, -1) to the position (1, 1, 1) as an augmented display in a GlScene, the line will be starting Blue and will finish transparent Red; the thickness of the line will be set to 1 pixel.</para>
+        <programlisting>Coord startPos(-1, -1, -1);
 Coord endPos(1, 1, 1);
 Color startCol(0, 0, 255, 255);
 Color endCol(255, 0, 0, 0);
@@ -49,15 +51,13 @@ GlLine* line = new GlLine(startPos, endPos, startCol, endCol, 1);
 // Finally we add the line to the GlLayer, naming it "The famous
  tutorial line"
 glMainLayer->addGlEntity(line, "The famous tutorial Line");	
-		</programlisting>
-	
-		<para>Here is the screenshow of the result :</para>
-		<graphic fileref="images/GlADLineTut.png"/>
-	    </sect3>
-	    <sect3 id="gl3D-AdvancedExample"><title>Example of Advanced Gl 3D uses : GlBox</title>
-		<para>This example shows how to add a Box from the position (-1.5, -1.5, -1.5) to the position (1.5, 1.5, 1.5) as an augmented display in a GlLayer. The box will be blue and semi transparent (220, 220, 255, 80).</para>
-	
-		<programlisting>Coord topLeft(-1.5, -1.5, -1.5);
+        </programlisting>
+        <para>Here is the screenshow of the result :</para>
+        <graphic fileref="images/GlADLineTut.png"/>
+      </sect3>
+      <sect3 id="gl3D-AdvancedExample"><title>Example of Advanced Gl 3D uses : GlBox</title>
+        <para>This example shows how to add a Box from the position (-1.5, -1.5, -1.5) to the position (1.5, 1.5, 1.5) as an augmented display in a GlLayer. The box will be blue and semi transparent (220, 220, 255, 80).</para>
+        <programlisting>Coord topLeft(-1.5, -1.5, -1.5);
 Coord bottomRight(1.5, 1.5, 1.5);
 Color boxColor(220, 220, 255, 80);
 
@@ -68,16 +68,13 @@ GlBox *box = new GlBox(topLeft, bottomRight, boxColor);
 // Finally we add the box to the GlLayer, naming it 
 "Gl Tutorial 2 : Box"
 glMainLayer->addGlEntity(box, "Gl Tutorial 2 : Box");
-		</programlisting>
-	
-		<para>Here is the screenshot of the result :</para>
-		<graphic fileref="images/GlADBoxTut.png"/>
-	    </sect3>
-	
-	    <sect3 id="gl2D-BasicExample"><title>Example of Gl 2D uses : GlCircle</title>
-		<para>This example shows how to add a Circle centered at the middle of the screen, of a radius of 256 pixels(The screenshot has been scaled). The circle will be light blue and will have 50 segments</para>
-	
-		<programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
+        </programlisting>
+        <para>Here is the screenshot of the result :</para>
+        <graphic fileref="images/GlADBoxTut.png"/>
+      </sect3>
+      <sect3 id="gl2D-BasicExample"><title>Example of Gl 2D uses : GlCircle</title>
+        <para>This example shows how to add a Circle centered at the middle of the screen, of a radius of 256 pixels(The screenshot has been scaled). The circle will be light blue and will have 50 segments</para>
+        <programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
 GlLayer *layer2D=new GlLayer("2D layer");
 layer2D->set2DMode();
 glScene->addLayer(layer2D);
@@ -98,19 +95,15 @@ GlCircle* circle = new GlCircle(circleCenter, circleColor,
 
 // Finally we add the circle to the GlLayer.
 layer2D->addGlEntity(circle, "Gl Tutorial 3 : Circle");
-		</programlisting>
-	
-		<para>Here is the screenshot of the result (the screenshot has been shrinked so the radius is not of 256 pixels) :</para>
-		<graphic fileref="images/GlADCircleTut.png"/>
-	    </sect3>
-	
-	    <sect3 id="gl-Compositing"><title>Compositing with Gl shape</title>
-		<para>This example shows how to use GlComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
-	
-		<para>The circle will be positionned at the center of the screen. It will have a radius of 256 pixels and will be of a medium grey (128, 128, 128, 255).</para>
-		<para>The four squares will be positionned every 90° on the circle. They will also be in medium gray, and only wired</para>
-	
-		<programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
+          </programlisting>
+          <para>Here is the screenshot of the result (the screenshot has been shrinked so the radius is not of 256 pixels) :</para>
+          <graphic fileref="images/GlADCircleTut.png"/>
+        </sect3>
+      <sect3 id="gl-Compositing"><title>Compositing with Gl shape</title>
+        <para>This example shows how to use GlComposite to compose multiple effects in a scene. The scene will be composed of a sphere and 4 rectangles, to simulate an ArcBall</para>
+        <para>The circle will be positionned at the center of the screen. It will have a radius of 256 pixels and will be of a medium grey (128, 128, 128, 255).</para>
+        <para>The four squares will be positionned every 90° on the circle. They will also be in medium gray, and only wired</para>
+        <programlisting>//We firstly add a new GlLayer (with name "2D layer") in the scene and set layer to 2D mode
 GlLayer *layer2D=new GlLayer("2D layer");
 layer2D->set2DMode();
 glScene->addLayer(layer2D);
@@ -120,7 +113,6 @@ GlComposite *composite = new GlComposite();
 
 // This is the medium grey color that will be applied to every Gl shape :
 Color color(128, 128, 128, 255);
-
 // We get the viewport for the circle :
 Vector&lt;int, 4&gt; viewport;
 viewport = glScene->getViewport();
@@ -161,19 +153,18 @@ composite->addGlEntity(circle, "Gl Tutorial 4 : Circle");
 
 // Finally we add the composite to the GlLayer
 layer2D->addGlEntity(composite, "Composite");
-	    </programlisting>
-    
-		<para>Here is a screenshot of the result :</para>
-		<graphic fileref="images/GlADCompositeTut.png"/>
-		<para>This is very simple but you can do more simply : a GlLayer is composed with a GlComposite, so you can add rectangles and circle directly to the layer2D, like this :</para>
-		<programlisting>// We add the circle and the 4 squares to the GlLayer
+        </programlisting>
+        <para>Here is a screenshot of the result :</para>
+        <graphic fileref="images/GlADCompositeTut.png"/>
+        <para>This is very simple but you can do more simply : a GlLayer is composed with a GlComposite, so you can add rectangles and circle directly to the layer2D, like this :</para>
+        <programlisting>// We add the circle and the 4 squares to the GlLayer
 layer2D->addGlEntity(rects[0], "Gl Tutorial 4 : Rect1");
 layer2D->addGlEntity(rects[1], "Gl Tutorial 4 : Rect2");
 layer2D->addGlEntity(rects[2], "Gl Tutorial 4 : Rect3");
 layer2D->addGlEntity(rects[3], "Gl Tutorial 4 : Rect4");
 layer2D->addGlEntity(circle, "Gl Tutorial 4 : Circle");
-		</programlisting>
-	    </sect3>
-	</sect2>
-    </sect1>
+        </programlisting>
+      </sect3>
+    </sect2>
+  </sect1>
 </chapter>

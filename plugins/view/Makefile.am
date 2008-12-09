@@ -1,0 +1,2 @@
+SUBDIRS = spreadsheet parallel
+

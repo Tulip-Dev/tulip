@@ -6,6 +6,10 @@
 
 #include <tulip/Reflect.h>
 
+#include "tulip/GWInteractor.h"
+#include "tulip/View.h"
+#include "tulip/Controller.h"
+
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -29,6 +33,19 @@ namespace tlp {
     layer->addGlEntity(glGraphComposite, "graph");
     glMainWidget->getScene()->addLayer(layer);
     glMainWidget->getScene()->addGlGraphCompositeInfo(layer, glGraphComposite);
+  }
+
+  void loadInteractorPluginsFromDir(std::string dir,PluginLoader *loader) {
+    InteractorFactory::initFactory();
+    loadPluginsFromDir(dir, "Interactor", loader);
+  }
+  void loadViewPluginsFromDir(std::string dir,PluginLoader *loader) {
+    ViewFactory::initFactory();
+    loadPluginsFromDir(dir, "View", loader);
+  }
+  void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader) {
+    ControllerFactory::initFactory();
+    loadPluginsFromDir(dir, "Controller", loader);
   }
 
 }

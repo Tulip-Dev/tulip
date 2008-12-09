@@ -9,7 +9,7 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
-class TLP_QT_SCOPE MouseMagicSelector:public GWInteractor
+class TLP_QT_SCOPE MouseMagicSelector:public Interactor
 {
 private:
   unsigned int x,y;
@@ -19,7 +19,7 @@ public:
   MouseMagicSelector();
   ~MouseMagicSelector(){}
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseMagicSelector(); }};
+  Interactor *clone() { return new MouseMagicSelector(); }};
 /*@}*/
 
 }

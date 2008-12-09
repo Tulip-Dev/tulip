@@ -7,6 +7,7 @@
 #include <QtGui/qframe.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qtooltip.h>
+#include <QtGui/QMenu>
 
 #include <tulip/GlSimpleEntity.h>
 
@@ -16,49 +17,42 @@
 
 
 using namespace std;
-using namespace tlp;
 
-struct RectPosition : public tlp::GlSimpleEntity {
-  void draw(float lod,Camera *camera);
+namespace tlp {
+
+struct RectPosition : public ForegroundEntity {
+  void draw(GlMainWidget *widget);
   RectPosition(GlMainWidget *, GlMainWidget *);
   void setObservedView(GlMainWidget *glG) {
     _observedView = glG;
   }
 
-  virtual void getXML(xmlNodePtr node) {}
-  virtual void setWithXML(xmlNodePtr node) {}
 private :
   GlMainWidget * _observedView;
   GlMainWidget * _view;
 };
 
 //=============================================================================
-GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent) {
+  GWOverviewWidget::GWOverviewWidget(QWidget* parent) : QWidget(parent),_initialCamera(NULL){
   setupUi(this);
   _observedView = 0;
   _glDraw = 0;
-  _view = new GlMainWidget( frame, "view" );
+  _view = new GlMainWidget(frame);
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
   //GlMainComposite* graphComposite=new GlMainComposite();
   //layer->addGlEntity(graphComposite,"graphComposite");
   //_view->getScene()->setGlMainComposite(graphComposite);
   _view->getScene()->addLayer(layer);
-  _view->setMinimumSize( QSize( 128, 128 ) );
-  _view->setMaximumSize( QSize( 2000, 2000 ) );
-  QGridLayout* gridLayout = new QGridLayout;
+  QGridLayout* gridLayout = new QGridLayout(frame);
   gridLayout->setMargin(0);
-  gridLayout->addWidget( _view, 0, 0 );
-  frame->setLayout(gridLayout);
+  gridLayout->setSpacing(0);
+  gridLayout->addWidget( _view, 0, 0, 1, 1);
   _view->installEventFilter(this);
   _glDraw = new RectPosition(_view, 0);
-  layer->addGlEntity(_glDraw,"RectPosition");
+  _view->addForegroundEntity(_glDraw);
   //_view->addGlAugmentedDisplay(_glDraw, "Overview");
-  paramDialog = new RenderingParametersDialog(this);
-}
-//=============================================================================
-void GWOverviewWidget::showRenderingParametersDialog() {
-  paramDialog->exec();
+  //paramDialog = new RenderingParametersDialog(this);
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
@@ -69,7 +63,7 @@ GWOverviewWidget::~GWOverviewWidget() {
   // of frame8, and so it will be deleted further
   //delete _view;
   delete _glDraw;
-  delete paramDialog;
+  //delete paramDialog;
 }
 //=============================================================================
 GlMainWidget *GWOverviewWidget::getObservedView() {
@@ -77,22 +71,12 @@ GlMainWidget *GWOverviewWidget::getObservedView() {
 }
 //=============================================================================
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
-  if ( obj->inherits("GlMainWidget") &&
+  if ( obj->inherits("tlp::GlMainWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
 	(e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
-    if (me->buttons()==Qt::LeftButton || me->button()==Qt::LeftButton) {
-      if  (me->modifiers() &
-#if defined(__APPLE__)
-	   Qt::AltModifier
-#else
-	   Qt::ControlModifier
-#endif
-	   ) {
-	paramDialog->show();
-	return true;
-      }
+    if (me->buttons()==Qt::LeftButton) {
       GlMainWidget *glw = (GlMainWidget *) obj;
       assert(glw == _view);
       double mouseClicX = me->x();
@@ -101,8 +85,8 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       double widgetHeight = _view->height();
       Vector<int, 4> viewport = _observedView->getScene()->getViewport();
       Coord upperLeftCorner(viewport[0], viewport[1],0);
-      Coord lowerRightCorner(viewport[0] + viewport[2], 
-			     viewport[1] + viewport[3], 
+      Coord lowerRightCorner(viewport[0] + viewport[2],
+			     viewport[1] + viewport[3],
 			     0);
       Coord middle = (upperLeftCorner + lowerRightCorner) / 2.0;
       middle[2] = 0.;
@@ -120,39 +104,56 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       _observedView->draw();
       return true;
     }
-    else {
+    else if (me->buttons()==Qt::RightButton) {
+      QMenu contextMenu(this);
+      QAction *hide=contextMenu.addAction("Hide");
+      QAction* menuAction=contextMenu.exec(me->globalPos());
+      if(menuAction==hide) {
+	emit hideOverview(true);
+      }
+      return true;
+    }else{
       return false;
     }
   }
   return false;
 }
 //=============================================================================
-void GWOverviewWidget::draw(GlMainWidget *glG) {
+  void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
   if (isVisible()) {
-    if (_observedView != 0) {
+  	if (_observedView != 0) {
+  		if(_initialCamera && !graphChanged) {
+  			Camera *currentCamera=_observedView->getScene()->getCamera();
+  			if((currentCamera->getUp()==_initialCamera->getUp())) {
+  				if((currentCamera->getCenter()-currentCamera->getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
+  					_view->redraw();
+  					return;
+  				}
+  			}
+      }
       _view->getScene()->centerScene();
-      _initialCamera = _view->getScene()->getCamera();   
+      _initialCamera = _view->getScene()->getCamera();
       Camera cam = *_observedView->getScene()->getCamera();
       cam.setScene(_initialCamera->getScene());
       cam.setZoomFactor(0.5);
       cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
       cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setCamera(&cam);
-    }
+  	}
     _view->draw();
   }
 }
 //=============================================================================
-void GWOverviewWidget::setObservedView(GlMainWidget *glWidget){
+  void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *observedEntity){
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
   if (_observedView != 0) {
-    disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *)), 
-	       this, SLOT(draw(GlMainWidget *)));
-    disconnect(_observedView, SIGNAL(destroyed(QObject *)), 
+    disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
+	       this, SLOT(draw(GlMainWidget *,bool)));
+    disconnect(_observedView, SIGNAL(destroyed(QObject *)),
 	       this, SLOT(observedViewDestroyed(QObject *)));
     //_observedView->getScene()->getSelectionLayout()->clear();
     _observedView = 0;
@@ -167,43 +168,44 @@ void GWOverviewWidget::setObservedView(GlMainWidget *glWidget){
     _view->setToolTip(QString());
   _observedView = glWidget;
   _glDraw->setObservedView(_observedView);
-  
+
   if (_observedView != 0) {
-    _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
-    _view->getScene()->getLayer("Main")->addGlEntity(_observedView->getScene()->getGlGraphComposite(),"graphComposite");
-    _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),_observedView->getScene()->getGlGraphComposite());
+    _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
+    _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"entity");
+
+    GlGraphComposite *p_subclass = dynamic_cast<GlGraphComposite *>( observedEntity );
+    if(p_subclass)
+      _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),p_subclass);
     _view->getScene()->centerScene();
-    _view->getScene()->getLayer("Main")->deleteGlEntity("RectPosition");
-    _view->getScene()->getLayer("Main")->addGlEntity(_glDraw,"RectPosition");
     _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
 
     if(isVisible())
-      _glDraw->draw(1,NULL);
-    
+      _glDraw->draw(_view);
+
     //_observedView->getScene()->setRenderingParameters(_view->getScene()->getRenderingParameters());
-    
+
     //_observedView->getScene()->setViewport(_view->getScene()->getViewport());
-    syncFromView();
-    connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *)),
-	   this, SLOT(draw(GlMainWidget *)));
-    connect(_observedView, SIGNAL(destroyed(QObject *)), 
+    //syncFromView();
+    connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
+	   this, SLOT(draw(GlMainWidget *,bool)));
+    connect(_observedView, SIGNAL(destroyed(QObject *)),
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
     _view->getScene()->addGlGraphCompositeInfo(0,0);
-    _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
+    _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
   }
 }
 //=============================================================================
-void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) { 	 
-  assert(_observedView == glWidget); 	 
-  _observedView = 0; 	 
-  _glDraw->setObservedView(0); 	
-  _view->getScene()->getLayer("Main")->deleteGlEntity("graphComposite");
+void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
+  assert(_observedView == glWidget);
+  _observedView = 0;
+  _glDraw->setObservedView(0);
+  _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
   _view->getScene()->addGlGraphCompositeInfo(0,0);
-  draw(0); 	 
-} 	 
+  draw(0);
+}
 //=============================================================================
-void GWOverviewWidget::setBackgroundColor(QColor tmp) {
+/*void GWOverviewWidget::setBackgroundColor(QColor tmp) {
   if (tmp.isValid()) {
     QPalette palette;
     palette.setColor(QPalette::Button, tmp);
@@ -215,14 +217,14 @@ void GWOverviewWidget::setBackgroundColor(QColor tmp) {
       palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));
     paramDialog->background->setPalette(palette);
   }
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::backColor() {
+/*void GWOverviewWidget::backColor() {
   setBackgroundColor(QColorDialog::getColor(paramDialog->background->palette().color(QPalette::Button), this));
   updateView();
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::syncFromView() {
+/*void GWOverviewWidget::syncFromView() {
   if (_observedView!=0) {
     _synchronizing = true;
     GlGraphRenderingParameters param = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -251,9 +253,14 @@ void GWOverviewWidget::syncFromView() {
 
     _synchronizing=false;
   }
-}
+  }*/
 //=============================================================================
-void GWOverviewWidget::updateView() {
+  void GWOverviewWidget::updateView() {
+    if (_observedView!=0) {
+      draw(_observedView);
+    }
+  }
+/*void GWOverviewWidget::updateView() {
   if (_observedView!=0 && !_synchronizing) {
     GlGraphRenderingParameters paramObservedViev = _observedView->getScene()->getGlGraphComposite()->getRenderingParameters();
 
@@ -281,9 +288,9 @@ void GWOverviewWidget::updateView() {
 
     _observedView->draw();
   }
-}
+  }*/
 //=============================================================================
-void RectPosition::draw(float lod,Camera *camera) {
+void RectPosition::draw(GlMainWidget *widget) {
   //assert (_view == target);
   if(_observedView == 0) {
     return ;
@@ -308,7 +315,7 @@ void RectPosition::draw(float lod,Camera *camera) {
   points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
     points2[i] = _view->getScene()->getCamera()->screenTo3DWorld(points2[i]);
-  
+
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);
   glDisable(GL_LIGHT0);
@@ -330,42 +337,31 @@ void RectPosition::draw(float lod,Camera *camera) {
 #define BVAL  180
 #define ALPHA 120
 
-  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
+  setColor(Color(RVAL,GVAL,BVAL,ALPHA));
   glVertex3fv((float *)&points2[0]);
-  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[0]);
   glVertex3fv((float *)&points[1]);
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[1]);
 
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[1]);
-  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[1]);
   glVertex3fv((float *)&points[2]);
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[2]);
-  
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
+
   glVertex3fv((float *)&points2[2]);
-  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[2]);
   glVertex3fv((float *)&points[3]);
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[3]);
 
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[3]);
-  //  glColor4ub(255,255,255,0);
   glVertex3fv((float *)&points[3]);
   glVertex3fv((float *)&points[0]);
-  //  glColor4ub(RVAL,GVAL,BVAL,ALPHA);
   glVertex3fv((float *)&points2[0]);
 
   glEnd();
 
   glDisable(GL_BLEND);
-  glColor3ub(0,0,0);
+  setColor(Color(0,0,0,255));
   glLineWidth(1);
   glStencilFunc(GL_LEQUAL,0x0001,0xFFFF);
   glBegin(GL_LINE_LOOP);
@@ -383,16 +379,19 @@ void RectPosition::draw(float lod,Camera *camera) {
   }
   glEnd();
 
-  boundingBox=BoundingBox();
-  boundingBox.check(points2[0]+(points2[2]-points2[0])/2.1);
-  boundingBox.check(points2[2]-(points2[2]-points2[0])/2.1);
+  /*boundingBox=BoundingBox();
+  for(int i=0;i<4;++i) {
+    boundingBox.check(points2[i]);
+    }*/
 
   glPopAttrib();
 }
 //=============================================================================
-RectPosition::RectPosition(GlMainWidget *view, GlMainWidget *observedView) : 
+RectPosition::RectPosition(GlMainWidget *view, GlMainWidget *observedView) :
   _observedView(observedView), _view(view) {
-  setCheckByBoundingBoxVisitor(false);
-  boundingBox=BoundingBox(Coord(-10,-10,-10),Coord(10,10,10));
+  //setCheckByBoundingBoxVisitor(false);
+  //boundingBox=BoundingBox(Coord(-1,-1,-1),Coord(1,1,1));
 }
 //=============================================================================
+
+}

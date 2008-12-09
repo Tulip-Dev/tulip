@@ -48,9 +48,6 @@ Billboard::~Billboard() {
 }
 //========================================================
 void Billboard::draw(node n,float lod) {
-  glEnable(GL_LIGHTING);
-  glDisable(GL_COLOR_MATERIAL);
-
   if(GlDisplayListManager::getInst().beginNewDisplayList("Billboard_billboard")) {
     drawBillboard();
     GlDisplayListManager::getInst().endNewDisplayList();

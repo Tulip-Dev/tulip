@@ -39,7 +39,7 @@ void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
   else
     *h = 4 + ( r - g ) / delta;     // between magenta & cyan
   *h *= 60;                               // degreesxk
-  if( *h < 0 ) 
+  if( *h < 0 )
     *h += 360;
 }
 
@@ -124,7 +124,7 @@ namespace {
   };
 }
 
-class MetricColorMapping: public ColorAlgorithm { 
+class MetricColorMapping: public ColorAlgorithm {
 private:
   DoubleProperty *entryMetric;
   int colorModel;
@@ -156,7 +156,7 @@ public:
       return Color((int)(r*255.0f),
 		   (int)(g*255.0f),
 		   (int)(b*255.0f),
-		   (int)(color1[3] + deltaRGBA[3]*value)); 
+		   (int)(color1[3] + deltaRGBA[3]*value));
     case 1: //RGB interpolation
     default:
       Vector<float,4> tmp(deltaRGBA);
@@ -233,23 +233,36 @@ public:
     computeNodeColor();
     computeEdgeColor();
 
-    *dataSet = DataSet();
     GlComposite *composite=new GlComposite();
-    DataSet mainDataSet;
-    DataSet entityDataSet;
 
     int xMax=0;
     double minN,maxN;
+
     minN=entryMetric->getNodeMin(graph);
     maxN=entryMetric->getNodeMax(graph);
+
     stringstream sstr1;
     stringstream sstr2;
     sstr1 << minN;
     sstr2 << maxN;
 
-    GlRect *rect=new GlRect(Coord(15,95,0),Coord(25,15,0),color2,color1);
-    composite->addGlEntity(rect,"rect");
-    
+    GlRect *rect;
+    GlRect *rect1;
+    GlRect *rect2;
+    GlRect *rect3;
+    GlRect *rect4;
+    GlRect *rect5;
+
+    if(colorModel){
+      rect=new GlRect(Coord(15,95,0),Coord(25,15,0),color2,color1);
+    }else{
+      rect1=new GlRect(Coord(15,31,0),Coord(25,15,0),Color(0,255,0,255),Color(255,255,0,255));
+      rect2=new GlRect(Coord(15,47,0),Coord(25,31,0),Color(0,255,255,255),Color(0,255,0,255));
+      rect3=new GlRect(Coord(15,63,0),Coord(25,47,0),Color(0,0,255,255),Color(0,255,255,255));
+      rect4=new GlRect(Coord(15,79,0),Coord(25,63,0),Color(255,0,255,255),Color(0,0,255,255));
+      rect5=new GlRect(Coord(15,95,0),Coord(25,79,0),Color(255,0,0,255),Color(255,0,255,255));
+    }
+
     GlLabel *label1=new GlLabel(TulipBitmapDir,Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
     label1->setText(sstr1.str());
     GlLabel *label2=new GlLabel(TulipBitmapDir,Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
@@ -260,17 +273,43 @@ public:
     }else{
       xMax=30+label2->getSize()[0];
     }
-    
+
     GlRect *backRect=new GlRect(Coord(5,105,0),Coord(xMax+5,5,0),Color(0,0,0,50),Color(0,0,0,50));
     composite->addGlEntity(backRect,"backRect");
 
-    composite->addGlEntity(rect,"rect");
     composite->addGlEntity(label1,"min");
     composite->addGlEntity(label2,"max");
 
-    mainDataSet.set<int>("caption",(long)composite);
-    entityDataSet.set<DataSet>("Foreground",mainDataSet);
-    dataSet->set<DataSet>("entities",entityDataSet);
+    if(colorModel){
+      composite->addGlEntity(rect,"rect");
+    }else{
+      composite->addGlEntity(rect1,"rect1");
+      composite->addGlEntity(rect2,"rect2");
+      composite->addGlEntity(rect3,"rect3");
+      composite->addGlEntity(rect4,"rect4");
+      composite->addGlEntity(rect5,"rect5");
+    }
+
+    DataSet nodeLinkDiagramComponentDataSet;
+    DataSet infoDataSet;
+    string infoName="MetricMapping 0";
+    if(graph->attributeExist("NodeLinkDiagramComponent")){
+      graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
+      int i=1;
+      while(nodeLinkDiagramComponentDataSet.exist(infoName)){
+        stringstream str;
+        str << "MetricMapping " << i << endl;
+        infoName=str.str();
+        i++;
+      }
+    }else{
+
+    }
+
+    infoDataSet.set<long>("composite",(long)composite);
+    infoDataSet.set<string>("layer","Foreground");
+    nodeLinkDiagramComponentDataSet.set<DataSet>(infoName,infoDataSet);
+    graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
 
     if (!mappingType) delete entryMetric;
     return true;

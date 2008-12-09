@@ -1,0 +1,258 @@
+<ui version="4.0" >
+ <class>GlMainViewData</class>
+ <widget class="QMainWindow" name="GlMainViewData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1005</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>GraphView</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../../../software/tulip/designer/TulipResource.qrc" >:/logo32x32.png</iconset>
+  </property>
+  <widget class="QWidget" name="widget" >
+   <layout class="QVBoxLayout" >
+    <property name="spacing" >
+     <number>0</number>
+    </property>
+    <property name="leftMargin" >
+     <number>0</number>
+    </property>
+    <property name="topMargin" >
+     <number>0</number>
+    </property>
+    <property name="rightMargin" >
+     <number>0</number>
+    </property>
+    <property name="bottomMargin" >
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWorkspace" name="workspace" />
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1005</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="viewMenu" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="dialogMenu" >
+    <property name="title" >
+     <string>&amp;Dialogs</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuOptions" >
+    <property name="title" >
+     <string>Options</string>
+    </property>
+    <addaction name="actionTooltips" />
+   </widget>
+   <addaction name="viewMenu" />
+   <addaction name="dialogMenu" />
+   <addaction name="menuOptions" />
+  </widget>
+  <action name="editCutAction" >
+   <property name="icon" >
+    <iconset>../../../software/tulip/designer/image9</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Cut</string>
+   </property>
+   <property name="iconText" >
+    <string>Cut</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+X</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCutAction</string>
+   </property>
+  </action>
+  <action name="editCopyAction" >
+   <property name="icon" >
+    <iconset>../../../software/tulip/designer/image10</iconset>
+   </property>
+   <property name="text" >
+    <string>C&amp;opy</string>
+   </property>
+   <property name="iconText" >
+    <string>Copy</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+C</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCopyAction</string>
+   </property>
+  </action>
+  <action name="editPasteAction" >
+   <property name="icon" >
+    <iconset>../../../software/tulip/designer/image11</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Paste</string>
+   </property>
+   <property name="iconText" >
+    <string>Paste</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+V</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editPasteAction</string>
+   </property>
+  </action>
+  <action name="editFindAction" >
+   <property name="icon" >
+    <iconset>../../../software/tulip/designer/image12</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Find...</string>
+   </property>
+   <property name="iconText" >
+    <string>Find</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editFindAction</string>
+   </property>
+  </action>
+  <action name="Reverse_selected_edgesAction" >
+   <property name="text" >
+    <string>Reverse selected edges</string>
+   </property>
+   <property name="iconText" >
+    <string>Reverse selected edges</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>Reverse_selected_edgesAction</string>
+   </property>
+  </action>
+  <action name="editDeselect_allAction" >
+   <property name="text" >
+    <string>Deselect All</string>
+   </property>
+   <property name="iconText" >
+    <string>Deselect All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+A</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editDeselect_allAction</string>
+   </property>
+  </action>
+  <action name="editReverse_selectionAction" >
+   <property name="text" >
+    <string>Invert selection</string>
+   </property>
+   <property name="iconText" >
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+I</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editReverse_selectionAction</string>
+   </property>
+  </action>
+  <action name="editAction" >
+   <property name="text" >
+    <string/>
+   </property>
+   <property name="iconText" >
+    <string/>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editAction</string>
+   </property>
+  </action>
+  <action name="editDelete_selectionAction" >
+   <property name="text" >
+    <string>Delete selection</string>
+   </property>
+   <property name="iconText" >
+    <string>Delete selection</string>
+   </property>
+   <property name="shortcut" >
+    <string>Del</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editDelete_selectionAction</string>
+   </property>
+  </action>
+  <action name="editCreate_subgraphAction" >
+   <property name="text" >
+    <string>Create subgraph</string>
+   </property>
+   <property name="iconText" >
+    <string>Create subgraph</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+G</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_subgraphAction</string>
+   </property>
+  </action>
+  <action name="editCreate_groupAction" >
+   <property name="text" >
+    <string>Create group</string>
+   </property>
+   <property name="iconText" >
+    <string>Create group</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+G</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editCreate_groupAction</string>
+   </property>
+  </action>
+  <action name="editSelect_AllAction" >
+   <property name="text" >
+    <string>Select All</string>
+   </property>
+   <property name="iconText" >
+    <string>Select All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
+   <property name="name" stdset="0" >
+    <string>editSelect_AllAction</string>
+   </property>
+  </action>
+  <action name="actionTooltips" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Tooltips</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <includes>
+  <include location="local" >qworkspace.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

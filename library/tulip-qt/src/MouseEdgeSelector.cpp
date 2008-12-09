@@ -12,11 +12,14 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlTools.h>
 
 #include <tulip/MouseEdgeSelector.h>
 
 using namespace std;
 using namespace tlp;
+
+INTERACTORPLUGIN(MouseEdgeSelector, "MouseEdgeSelector", "Tulip Team", "16/04/2008", "Mouse Edge Selector", "1.0", 6);
 
 //==================================================================
 MouseEdgeSelector::MouseEdgeSelector():
@@ -152,7 +155,7 @@ bool MouseEdgeSelector::draw(GlMainWidget *glMainWidget){
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
   float col[4]={0.8,0.8,0.7,0.2};
-  glColor4fv(col);
+  setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, yy);
   glVertex2f(x+w, yy);

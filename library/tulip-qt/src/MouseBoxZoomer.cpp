@@ -8,11 +8,14 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlTools.h>
 
 #include "tulip/MouseBoxZoomer.h"
 
 using namespace std;
 using namespace tlp;
+
+INTERACTORPLUGIN(MouseBoxZoomer, "MouseBoxZoomer", "Tulip Team", "16/04/2008", "Mouse Box Zoomer", "1.0", 3);
 
 MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
 			       Qt::KeyboardModifier modifier)
@@ -99,7 +102,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	  cam.setZoomFactor(cam.getZoomFactor() * ((double) height / (double) h));
 	}
 	glw->getScene()->setCamera(&cam);
-	glw->draw();
+	glw->draw(false);
       }
     }
     return true;
@@ -127,9 +130,9 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-  
+
   float col[4] = {0.8, 0.4, 0.4, 0.2};
-  glColor4fv(col);
+  setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, y);
   glVertex2f(x+w, y);
@@ -137,7 +140,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glVertex2f(x, y-h);
   glEnd();
   glDisable(GL_BLEND);
-  
+
   glLineWidth(2);
   glLineStipple(2, 0xAAAA);
   glEnable(GL_LINE_STIPPLE);
@@ -149,7 +152,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glEnd();
   /*
   glLineWidth(1);
-  glDisable(GL_LINE_STIPPLE);  
+  glDisable(GL_LINE_STIPPLE);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glEnable(GL_LIGHTING);

@@ -10,10 +10,15 @@
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/AbstractView.h"
 #include <tulip/Observable.h>
 
 using namespace tlp;
 using namespace std;
+
+INTERACTORPLUGIN(MousePanNZoomNavigator, "MousePanNZoomNavigator", "Tulip Team", "16/04/2008", "Mouse Pan N Zoom Navigator", "1.0", 7);
+INTERACTORPLUGIN(MouseElementDeleter, "MouseElementDeleter", "Tulip Team", "16/04/2008", "Mouse Element Deleter", "1.0", 8);
+INTERACTORPLUGIN(MouseNKeysNavigator, "MouseNKeysNavigator", "Tulip Team", "16/04/2008", "Mouse N Keys navigator", "1.0", 9);
 
 //===============================================================
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
@@ -25,12 +30,13 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *g = (GlMainWidget *) widget;
     g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
       ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
-    g->draw();
+    g->draw(false);
     return true;
   }
-    
+
   return false;
 }
+
 //===============================================================
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress &&
@@ -58,14 +64,14 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseRotXRotY:public GWInteractor
+class MouseRotXRotY:public Interactor
 {
  public:
   MouseRotXRotY(){}
   ~MouseRotXRotY(){}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return this; }};
+  Interactor *clone() { return this; }};
 
 bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -79,10 +85,10 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
     int deltaX,deltaY;
     deltaX=qMouseEv->x()-x;
     deltaY=qMouseEv->y()-y;
-    if (abs(deltaX)>abs(deltaY)) 
+    if (abs(deltaX)>abs(deltaY))
       deltaY=0;
     else
-      deltaX=0;  
+      deltaX=0;
     if (deltaY!=0) glMainWidget->getScene()->rotateScene(deltaY,0,0);
     if (deltaX!=0) glMainWidget->getScene()->rotateScene(0,deltaX,0);
     x=qMouseEv->x();
@@ -93,14 +99,14 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseZoomRotZ:public GWInteractor
+class MouseZoomRotZ:public Interactor
 {
  public:
   MouseZoomRotZ(){}
   ~MouseZoomRotZ(){}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return this; }};
+  Interactor *clone() { return this; }};
 
 bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -136,7 +142,7 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
 	  // X axis => rotation
 	  y = NO_ZOOM;
 	  x = qMouseEv->x();
-	}	
+	}
 	else if (deltaX && abs(deltaY) >=  3 * abs(deltaX)) {
 	  // Y axis => zoom
 	  x = NO_ROTATION;
@@ -150,14 +156,14 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseMove:public GWInteractor
+class MouseMove:public Interactor
 {
  public:
   int x,y;
   MouseMove(){}
   ~MouseMove(){}
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return this; }};
+  Interactor *clone() { return this; }};
 
 bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -181,9 +187,11 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 }
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
+  GlMainWidget *mainWidget=(GlMainWidget *)widget;
+  AbstractView *abstractView=(AbstractView *)mainWidget->getView();
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
-      GWInteractor *currentMouse;
+      Interactor *currentMouse;
       // give focus so we can catch key events
       ((GlMainWidget *)widget)->setFocus();
       if (((QMouseEvent *) e)->modifiers() &
@@ -199,16 +207,17 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       else
 	currentMouse = new MouseMove();
       bool result = currentMouse->eventFilter(widget, e);
-      currentMouseID = ((GlMainWidget *)widget)->pushInteractor(currentMouse);
+
+      currentMouseID = abstractView->pushInteractor(currentMouse);
       return result;
     }
-    currentMouseID = GWInteractor::invalidID;
+    currentMouseID = Interactor::invalidID;
     return false;
   }
   if (e->type() == QEvent::MouseButtonRelease &&
-      currentMouseID != GWInteractor::invalidID) {
-    ((GlMainWidget *)widget)->removeInteractor(currentMouseID);
-    currentMouseID = GWInteractor::invalidID;
+      currentMouseID != Interactor::invalidID) {
+    abstractView->removeInteractor(currentMouseID);
+    currentMouseID = Interactor::invalidID;
     return true;
   }
   if (e->type() == QEvent::KeyPress) {

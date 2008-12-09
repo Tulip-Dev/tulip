@@ -2,14 +2,9 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/GlMainWidget.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlLayer.h>
 
 using namespace std;
 using namespace tlp;
@@ -25,9 +20,9 @@ void importGraph(const string &filename, GlMainWidget *glw) {
 }
 /*******************************************************************/
 int main(int argc,char ** argv ){
-  
+
   QApplication MainApp(argc,argv);
-  
+
   if (argc<2) {
     cerr << "usage :" << endl;
     cerr << "\t " << argv[0] << " <filename>" << endl;
@@ -43,17 +38,17 @@ int main(int argc,char ** argv ){
   GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
   //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
-  GlMainWidget MainWin;
-  
-  MainApp.setMainWidget(&MainWin);
-  MainWin.resize(640,480);
-  MainWin.show();
+  NodeLinkDiagramComponent MainWin;
+  QWidget *widget=MainWin.construct(NULL);
+  //MainApp.setMainWidget(&MainWin);
+  widget->resize(640,480);
+  widget->show();
 
   if( argv[1][0] !='g' || argv[1][1] !='r' || argv[1][2] !='i' || argv[1][3] !='d'){
-    importGraph(argv[1], &MainWin);
+    importGraph(argv[1], MainWin.getGlMainWidget());
   }
 
-  MainWin.getScene()->centerScene();
+  MainWin.init();
   MouseNKeysNavigator m;
   MainWin.pushInteractor(&m);
   return MainApp.exec();

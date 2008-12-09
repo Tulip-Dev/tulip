@@ -3,54 +3,64 @@
 #define GWOVERVIEW_H
 
 #include "tulip/GWOverviewWidgetData.h"
-#include "tulip/RenderingParametersDialog.h"
+#include "tulip/RenderingParametersDialogData.h"
 #include <tulip/Camera.h>
+#include <tulip/ObservableGraph.h>
 #include <QtGui/qcolor.h>
 #include <string>
 #include <QtCore/qstring.h>
 #include <QtGui/qlayout.h>
 
-class GlMainWidget;
 class QEvent;
-class RectPosition;
-class GWOverviewWidget;
 
-/** \addtogroup Tulip_Widgets */ 
+namespace tlp {
+  class GlGraph;
+
+  class GlMainWidget;
+  class RectPosition;
+  class GWOverviewWidget;
+
+/** \addtogroup Tulip_Widgets */
 /*@{*/
-class TLP_QT_SIMPLE_SCOPE GWOverviewWidget : public QWidget,
-					     public Ui::GWOverviewWidgetData { 
+  class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
+    public QWidget,public Ui::GWOverviewWidgetData {
   Q_OBJECT
-  
+
 public:
   GWOverviewWidget(QWidget* parent = 0);
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();
 
-  tlp::RenderingParametersDialog* paramDialog;				 
+signals:
+
+  void hideOverview(bool);
 
 public slots:
-  void syncFromView();
-  void setObservedView(GlMainWidget *);
+  /*void syncFromView();*/
+  void setObservedView(GlMainWidget *,GlSimpleEntity *entity);
   void updateView();
-  void backColor(); //background color button
-  void showRenderingParametersDialog();
-  
+  /*void backColor(); //background color button
+  void showRenderingParametersDialog();*/
+
 private slots:
   //Used to catch graphRedrawn signal from view of which
   //we are showing an overview
-  void draw(GlMainWidget *glWidget);
+  void draw(GlMainWidget *glWidget,bool graphChanged=true);
+
   //Used to catch the destroyed signal from view of which
   //we are showing an overview
   void observedViewDestroyed(QObject *glWidget);
-  
+
 private :
   GlMainWidget *_observedView;
   GlMainWidget *_view;
   bool _synchronizing;
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
-  void setBackgroundColor(QColor);
+  //void setBackgroundColor(QColor);
 };
+
+}
 /*@}*/
 #endif // GWOVERVIEW_H

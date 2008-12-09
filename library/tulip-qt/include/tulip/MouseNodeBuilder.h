@@ -8,13 +8,13 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
-class TLP_QT_SCOPE MouseNodeBuilder:public GWInteractor
+class TLP_QT_SCOPE MouseNodeBuilder:public Interactor
 {
 public:
   MouseNodeBuilder(){}
   ~MouseNodeBuilder(){}
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseNodeBuilder(); }};
+  Interactor *clone() { return new MouseNodeBuilder(); }};
 /*@}*/
 
 }

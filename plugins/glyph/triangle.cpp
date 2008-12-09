@@ -43,9 +43,6 @@ void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Triangle::draw(node n,float lod) {
-  glEnable(GL_LIGHTING);
-  glDisable(GL_COLOR_MATERIAL);
-
   if(GlDisplayListManager::getInst().beginNewDisplayList("Triangle_triangle")) {
     drawTriangle();
     GlDisplayListManager::getInst().endNewDisplayList();
@@ -60,36 +57,34 @@ void Triangle::draw(node n,float lod) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
-  
+
   GlDisplayListManager::getInst().callDisplayList("Triangle_triangle");
 
   GlTextureManager::getInst().desactivateTexture();
 
   if(lod>20) {
-    ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
-    DoubleProperty *borderWidth = 0;
-    if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
-      borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-    Color c = borderColor->getNodeValue(n);
-    //  setMaterial(c);
-    if (borderWidth == 0) glLineWidth(2);
-    else {
-      double lineWidth = borderWidth->getNodeValue (n);
-      if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
-      else glLineWidth (lineWidth);
-    }
-    glDisable(GL_LIGHTING);
-    glColor4ub(c[0],c[1],c[2],c[3]);
-    GlDisplayListManager::getInst().callDisplayList("Triangle_triangleborder");
-    glEnable(GL_LIGHTING);
+  ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
+  DoubleProperty *borderWidth = 0;
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+    borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+  if (borderWidth == 0) glLineWidth(2);
+  else {
+    double lineWidth = borderWidth->getNodeValue (n);
+    if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
+    else glLineWidth (lineWidth);
   }
+  glDisable(GL_LIGHTING);
+  setColor(borderColor->getNodeValue(n));
+  GlDisplayListManager::getInst().callDisplayList("Triangle_triangleborder");
+  glEnable(GL_LIGHTING);
+}
 }
 //=====================================================
 void Triangle::drawTriangle() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);  
+  gluQuadricTexture(quadratic, GL_TRUE);
   gluQuadricOrientation(quadratic, GLU_OUTSIDE);
   gluDisk(quadratic, 0.0f, 0.5f, 3, 1);
   gluQuadricOrientation(quadratic, GLU_INSIDE);

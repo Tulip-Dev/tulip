@@ -450,6 +450,8 @@ void  PropertyWidget::setAllEdgeValue() {
 
   // allow to undo
   graph->push();
+  // allow to undo
+  graph->push();
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");

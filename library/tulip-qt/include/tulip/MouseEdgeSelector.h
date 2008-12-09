@@ -12,7 +12,7 @@ namespace tlp {
 class Graph;
 /** \addtogroup Mouse_interactor */ 
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeSelector:public GWInteractor
+class TLP_QT_SCOPE MouseEdgeSelector:public Interactor
 {
 private:
   unsigned int x,y;
@@ -24,7 +24,7 @@ public:
   ~MouseEdgeSelector(){}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  GWInteractor *clone() { return new MouseEdgeSelector(); }
+  Interactor *clone() { return new MouseEdgeSelector(); }
 };
 /*@}*/
 

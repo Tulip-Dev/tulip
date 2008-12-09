@@ -12,11 +12,13 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>
-
+#include <tulip/GlTools.h>
 #include <tulip/MouseSelector.h>
 
 using namespace std;
 using namespace tlp;
+
+INTERACTORPLUGIN(MouseSelector, "MouseSelector", "Tulip Team", "16/04/2008", "Mouse Selector", "1.0", 1);
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
@@ -96,11 +98,11 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       bool boolVal = true;
       if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
-	  Qt::AltModifier
+	    Qt::AltModifier
 #else
-	  Qt::ControlModifier
+	    Qt::ControlModifier
 #endif
-	  ) {
+	    ) {
 	if (qMouseEv->modifiers() == Qt::ShiftModifier)
 	  boolVal = false;
 	else {
@@ -154,7 +156,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
       started = false;
-      glMainWidget->redraw();
+      //glMainWidget->draw();
       Observable::unholdObservers();
       return true;
     }
@@ -184,7 +186,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget){
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
   float col[4]={0.8,0.8,0.7,0.2};
-  glColor4fv(col);
+  setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, yy);
   glVertex2f(x+w, yy);

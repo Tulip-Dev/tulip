@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>i_addedge.png</file>
+        <file>i_addnode.png</file>
+        <file>i_bends.png</file>
+        <file>i_del.png</file>
+        <file>i_magic.png</file>
+        <file>i_move.png</file>
+        <file>i_navigation.png</file>
+        <file>i_select.png</file>
+        <file>i_selection.png</file>
+        <file>i_zoom.png</file>
+        <file>i_redo.png</file>
+        <file>i_undo.png</file>
+    </qresource>
+</RCC>

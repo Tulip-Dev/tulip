@@ -50,7 +50,7 @@ class EnumColorValuesMapping: public ColorAlgorithm {
   bool onNodes;
   // user choosen colors
   stdext::hash_map<string, Color> colors;
-  
+
 public:
   //================================================================================
   EnumColorValuesMapping(const PropertyContext &context):ColorAlgorithm(context) {
@@ -64,7 +64,7 @@ public:
     StringCollection eltTypes(ELT_TYPES);
     eltTypes.setCurrent(0);
     if (dataSet!=0) {
-      dataSet->get("Property", property);  
+      dataSet->get("Property", property);
       dataSet->get(ELT_TYPE, eltTypes);
     }
 
@@ -168,11 +168,13 @@ public:
       forEach(e, graph->getEdges())
 	colorResult->setEdgeValue(e, colors[property->getEdgeStringValue(e)]);
     }
-    
-    *dataSet = DataSet();
+
+
     GlComposite *composite=new GlComposite();
     DataSet mainDataSet;
-    DataSet entityDataSet;
+    DataSet layerDataSet;
+    DataSet viewDataSet;
+    DataSet algoTypeDataSet;
     vector<GlRect *> rectVector;
     vector<GlLabel *> labelVector;
     int i=0;
@@ -183,7 +185,7 @@ public:
       label->setText((*it).first);
       if(30+label->getSize()[0]>xMax)
 	xMax=30+label->getSize()[0];
-      
+
       rectVector.push_back(rect);
       labelVector.push_back(label);
       i++;
@@ -198,9 +200,28 @@ public:
       composite->addGlEntity(labelVector[i],"label"+sstr.str());
       i++;
     }
-    mainDataSet.set<int>("caption",(long)composite);
-    entityDataSet.set<DataSet>("Foreground",mainDataSet);
-    dataSet->set<DataSet>("entities",entityDataSet);
+
+    DataSet nodeLinkDiagramComponentDataSet;
+    DataSet infoDataSet;
+    string infoName="Enum Color Values Mapping 0";
+    if(graph->attributeExist("NodeLinkDiagramComponent")){
+      graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
+      int i=1;
+      while(nodeLinkDiagramComponentDataSet.exist(infoName)){
+        stringstream str;
+        str << "Enum Color Values Mapping " << i << endl;
+        infoName=str.str();
+        i++;
+      }
+    }else{
+
+    }
+
+    infoDataSet.set<long>("composite",(long)composite);
+    infoDataSet.set<string>("layer","Foreground");
+    nodeLinkDiagramComponentDataSet.set<DataSet>(infoName,infoDataSet);
+    graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
+
 
     return true;
   }

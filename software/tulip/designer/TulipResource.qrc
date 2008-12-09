@@ -1,21 +1,9 @@
 <RCC>
     <qresource prefix="/" >
         <file>background_logo.png</file>
-        <file>i_addedge.png</file>
-        <file>i_addnode.png</file>
-        <file>i_bends.png</file>
-        <file>i_del.png</file>
-        <file>i_magic.png</file>
-        <file>i_move.png</file>
-        <file>i_navigation.png</file>
         <file>i_open.png</file>
         <file>i_print.png</file>
-        <file>i_redo.png</file>
         <file>i_save.png</file>
-        <file>i_select.png</file>
-        <file>i_selection.png</file>
-        <file>i_undo.png</file>
-        <file>i_zoom.png</file>
         <file>logo160x145.png</file>
         <file>logo32x32.png</file>
     </qresource>

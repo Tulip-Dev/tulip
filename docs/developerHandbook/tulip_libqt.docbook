@@ -1,3 +1,237 @@
 <chapter id="qt-library"><title>Tulip QT Library</title>
-    <para></para>
+  <sect1 id="qtintro"><title>Introduction</title>
+    <para>From version 3.1 of Tulip the plugin system is extend to views and interactors</para>
+    <para>An interactor provide a mechanisme to modify view and/or data</para>
+    <para>A view is a way to visualize graph data (and others data if you want)</para>
+    <para>You can three class : View, AbstractView and GlMainView, so your class (plugin) must implement one of this three class</para>
+    <graphic fileref="images/view-inheritance.png"/>
+    <itemizedlist>
+      <listitem>
+        <para>View : is the main interface without implementation</para>
+      </listitem>
+      <listitem>
+        <para>AbstractView : provide a basic implementation of interactor system</para>
+      </listitem>
+      <listitem>
+        <para>GlMainView : provide a OpenGl view with overview</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 id="qtplugin-skeleton"><title>Compilation ( Makefiles )</title>
+    <para>You can download view plugins skeletons  <ulink url="http://tulip.labri.fr/samples/viewplugintemplates.tar.gz">here</ulink> .</para>
+    <para>In tar.gz you have three files : </para>
+    <itemizedlist>
+      <listitem>
+        <para>PluginEx.cpp and .h : skeleton of plugin</para>
+      </listitem>
+      <listitem>
+        <para>MakeExemple.pro : qmake pro file</para>
+      </listitem>
+    </itemizedlist>
+    <para>To create a new plugin : </para>
+    <itemizedlist>
+      <listitem>
+        <para>Modify PluginEx.cpp, PluginEx.h and MakeExemple.pro</para>
+      </listitem>
+      <listitem>
+        <para>Run qmake-qt4 and make</para>
+      </listitem>
+      <listitem>
+        <para>Copy .so files to you tulip installation dir</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 id="qtview-class"><title>The View class</title>
+    <para>If you need to create a new view, you have to create a new class who implement View interface</para>
+    <para>View interface (in library/tulip-qt/include/tulip/View.h) can be split in 3 parts</para>
+    <itemizedlist>
+      <listitem>
+        <para>Data part : </para>
+        <programlisting>void setData(Graph *,DataSet); 
+// This function is call when we load a new graph or when we create a new one
+// In the DataSet you can have nothing when you create a new graph or you can have old data when you load a tlp file
+void getData(Graph **, DataSet *);
+// This function is call when you save your graph
+// You must store the graph and the view data
+voif setGraph(graph *);
+// This function is call when you change the visualized graph in hierarchical view (for example)
+Graph *getGraph();
+        </programlisting>
+      </listitem>
+      <listitem>
+        <para>Interactors part : </para>
+        <programlisting>std::list&lt;QAction *&gt; *getInteractorsActionList();
+// Action of the list will be put in graphToolBar on top of Tulip window
+void installInteractor(QAction *);
+// The QAction passed to this function is one of the getInteractorActionList(), in this function you have to put interactor in your view
+        </programlisting>
+      </listitem>
+      <listitem>
+        <para>Display part : </para>
+        <programlisting>void draw(); 
+// Call when the graph is modified or by interactors
+void redraw();
+// Mainly call by Qt when a menu is open in front of the view
+// Data is not modified so the view is unchanged
+void init();
+// Call when the graph is modified and when the view need to be completely init and draw
+// For example this function is call when a layout algorithm is running, in NodeLinkDiagramComponent this function call centerView() and draw()
+        </programlisting> 
+      </listitem>
+    </itemizedlist>
+    <sect2 id="qtview_example"><title>An example of view plugin</title>
+      <para>This is an example of a simple view. This view display number of nodes/edges on the graph</para>
+      <graphic fileref="images/tuto_view.png"/>
+      <para>This example provide just a view without interactor</para>
+      <para>.h file</para>
+      <programlisting>
+class TutoView : public tlp::View {
+  Q_OBJECT
+
+public:
+
+  QWidget *construct(QWidget *parent) {
+    //Construct Qt part of the view
+    widget= new QWidget(parent);
+    widget->resize(230, 60);
+    QGridLayout *gridLayout = new QGridLayout(widget);
+    gridLayout->setSpacing(0);
+    gridLayout->setMargin(0);
+
+    nodeNumber = new QLineEdit(widget);
+    nodeNumber->setReadOnly(true);
+    gridLayout->addWidget(nodeNumber, 0, 0, 1, 1);
+
+    edgeNumber = new QLineEdit(widget);
+    edgeNumber->setReadOnly(true);
+    gridLayout->addWidget(edgeNumber, 1, 0, 1, 1);
+
+    return widget;
+  }
+
+  //In this example we don't read DataSet parameters because this view doesn't need to be saved
+  void setData(tlp::Graph *graph,tlp::DataSet dataSet) {
+    this->graph=graph;
+    draw();
+  }
+  void getData(tlp::Graph **graph,tlp::DataSet *dataSet) {
+    *graph=this->graph;
+  }
+  tlp::Graph *getGraph() {return graph;}
+
+  //In this example we have no interactor so we return empty list
+  std::list&lt;QAction *&gt; *getInteractorsActionList() {
+    return new std::list&lt;QAction*&gt;;
+  }
+  void installInteractor(QAction*) {}
+
+protected :
+
+  tlp::Graph *graph;
+  QWidget *widget;
+  QLineEdit *nodeNumber;
+  QLineEdit *edgeNumber;
+
+public slots :
+  
+  //Display function, we get back nodes/edges number
+  void draw() {
+    nodeNumber->setText(QString("Number of nodes : ")+QString::number(graph->numberOfNodes()));
+    edgeNumber->setText(QString("Number of edges : ")+QString::number(graph->numberOfEdges()));
+  }
+  //refresh and init is automatically do by Qt
+  void refresh() {}
+  void init() {}
+  void setGraph(tlp::Graph *graph) {this->graph=graph;}
+
+};
+      </programlisting>
+      <para>.cpp file</para>
+      <programlisting>
+// This line is need to register plugin to Tulip
+// Warning : last parameter(42) is the id of the plugin, it must be unique
+VIEWPLUGIN(TutoView, "TutorielView", "Tulip Team", "21/11/2008", "Tutoriel view", "1.0", 42);
+      </programlisting>
+    </sect2>
+  </sect1>
+  <sect1 id="qtabstractview-class"><title>The AbstractView class</title>
+    <para>This class provide a basic implementation of interactor system and a right click context menu</para>
+    <para>AbstractView can be separate in 3 parts : </para>
+    <itemizedlist>
+      <listitem>
+        <para>Interactor functions : with in one hand get, push, pop, reset and remove interactor functions. And in other hand constructInteractorsMap and constructInteractorsActionList</para>
+        <para>In constructInteractorsMap you have to construct Chain-of-responsability of interactors and store it in interactorsMap variable : An interactor is a list of basic interactor. For example in Tulip createEdge interactor is the list of createNodeInteractor and createEdgeInteractor, if the user click on an node, the createEdgeInteractor catch signal and begin an edge and if user doesn'nt click on node createEdgeInteractor doesn't catch the signal and createNodeNode catch it.</para>
+        <para>So in constrcutInteractorsMap you have a code like this : </para>
+        <programlisting>
+interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNodeBuilder")));
+interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseEdgeBuilder")));
+        </programlisting>
+        <para>The name of interactor ("addEdge" in this example) must be the same in constructInteractorsActionList function. In this function you contruct list of QAction who will be add to graphToolBar</para>
+        <para>An example of implementation of this function is : </para>
+        <programlisting>
+interactorsActionList.push_back(new QAction(QIcon(":/i_addedge.png"),"addEdge",this));
+        </programlisting> 
+        <para>Finaly when the user click on an interactor in graphToolBar the installInteractor function is call with in parameter the QAction</para>
+        <para>An example of implementation of installInteractor function is : </para>
+        <programlisting>
+resetInteractors(interactorsMap[action->text().toStdString()]);
+        </programlisting> 
+      </listitem>
+      <listitem>
+        <para>ContextMenu functions : </para>
+        <para>In this part you have 3 different functions : </para>
+        <itemizedlist>
+          <listitem>
+            <para>buildContextMenu function : here you construct your menu, to do that you add QMenu in contextMenu parameters, for example : </para>
+            <programlisting>
+contextMenu->addMenu(new QMenu("viewMenu"));
+            </programlisting>
+          </listitem>
+          <listitem>
+            <para>computeContextMenu function : this function is call when the user click on a menu in context menu. In this function you have to threat this action</para>
+          </listitem>
+          <listitem>
+            <para>Finaly you have specificEventFilter function : this function is call before all others function if the user move/click the mouse. You have to implement (if you want) your specific mouse mechanism on this function</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>Widget function : AbstractView automaticaly construct a QWidget who will be returned by construct function so in your constrcut function you will be have something like this : </para>
+        <programlisting>
+QWidget *YouViewClass::construct(QWidget *parent) {
+  QWidget *widget=GlMainView::construct(parent);
+  Qwidget *yourWidget=new QWidget;
+  ...
+  setCentralWidget(yourWidget);
+  return widget;
+}
+        </programlisting>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+  <sect1 id="qtglmainview-class"><title>The GlMainView class</title>
+    <para>GlMainView provide an OpenGL view with overview</para>
+    <para>Is the more simple view to implement</para>
+    <para>You just have to implement : </para>
+    <itemizedlist>
+      <listitem>
+        <para>constructInteractorsMap and constructInteractorsActionList if you want some interators</para>
+      </listitem>
+      <listitem>
+        <para>specificEventFilter, buildContextMenu and computeContextMenuAction if you want contextMenu and specific event filter</para>
+      </listitem>
+      <listitem>
+        <para>setData and getData functions</para>
+      </listitem>
+      <listitem>
+        <para>draw, refresh and init if you want an other draw system (GlMainView provide a basic draw system)</para>
+      </listitem>
+    </itemizedlist>
+    <para>If you use GlMainView, more important functions are setData and getData</para>
+    <para>GlMainView use a GlMainWidget to do the rendering, and in setData you must specify what you want to render</para>
+    <para>In setData you have some code like this : mainWidget->setData(Graph *,DataSet); This code specify what you want to be rendered. if the DataSet is empty GlMainWidget construct a default scene with 3 layers : Foreground, Main and Background</para>
+    <para>The last element you need to create your OpenGl View is the overview mechanism</para>
+    <para>In the overview, you can display only one composite (in NodeLinkDiagramComponent is the GlGraphComposite with the graph). To specify this composite you have to call overviewWidget->setObservedView(mainWidget,youComposite);</para>
+  </sect1>
+
 </chapter>

@@ -12,7 +12,7 @@
 namespace tlp {
 
   /// This interactor allows to move/add/delete EdgeBends
-  class TLP_QT_SCOPE MouseEdgeBendEditor:public GWInteractor {
+  class TLP_QT_SCOPE MouseEdgeBendEditor:public Interactor {
 
   public:
 
@@ -21,7 +21,7 @@ namespace tlp {
     bool compute(GlMainWidget *glMainWidget);
     bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
-    GWInteractor *clone() { return new MouseEdgeBendEditor(); }
+    Interactor *clone() { return new MouseEdgeBendEditor(); }
 
   private:
     enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
