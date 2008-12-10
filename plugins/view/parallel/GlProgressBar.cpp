@@ -1,10 +1,3 @@
-/*
- * GlProgressBar.cpp
- *
- *  Created on: 16 nov. 2008
- *      Author: Antoine Lambert
- */
-
 #include "GlProgressBar.h"
 #include "ParallelTools.h"
 

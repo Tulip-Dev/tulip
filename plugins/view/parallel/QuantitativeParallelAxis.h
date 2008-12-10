@@ -1,10 +1,10 @@
 //-*-c++-*-
 /*
- Author: Didier Bathily, Nicolas Bellino, Jonathan Dubois, Christelle Jolly, Antoine Lambert, Nicolas Sorraing
+ Author: Antoine Lambert
 
- Email : didier.bathily@etu.u-bordeaux1.fr, nicolas.bellino@etu.u-bordeaux1.fr, jonathan.dubois@etu.u-bordeaux1.fr, christelle.jolly@etu.u-bordeaux1.fr, antoine.lambert@etu.u-bordeaux1.fr, nicolas.sorraing@etu.u-bordeaux1.fr
+ Email : antoine.lambert@labri.fr
 
- Last modification : 03/08
+ Last modification : 12/08
 
  This program is free software; you can redistribute it and/or modify  *
  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,9 @@ const unsigned int DEFAULT_NB_AXIS_GRAD = 20;
 
 namespace tlp {
 
+
+enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3, TOP_OUTLIER = 4, NO_VALUE = 5};
+
 // Class which allows to render a quantitative axis
 // Associated datatypes can be real or integer
 class TLP_GL_SCOPE QuantitativeParallelAxis : public ParallelAxis {
@@ -58,18 +61,38 @@ public :
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getValueForAxisCoord(const Coord &axisCoord);
 
+  template<typename PROPERTY, typename PROPERTYTYPE>
+  Coord getAxisCoordForValue(typename PROPERTYTYPE::RealType value);
+
   std::string getTopSliderTextValue();
   std::string getBottomSliderTextValue();
 
   std::set<unsigned int> getDataInSlidersRange();
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
 
+  void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {boxPlotLowBound = lowBound ; boxPlotHighBound = highBound;}
+  std::set<unsigned int> getDataBetweenBoxPlotBounds();
+
   bool hasAscendindOrder() const {return ascendingOrder;}
   void setAscendindOrder(const bool ascendingOrder);
+
+  // Axis BoxPlot methods
+  Coord getBottomOutlierCoord() const {return boxPlotValuesCoord[BOTTOM_OUTLIER];}
+  Coord getFirstQuartileCoord() const {return boxPlotValuesCoord[FIRST_QUARTILE];}
+  Coord getMedianCoord() const {return boxPlotValuesCoord[MEDIAN];}
+  Coord getThirdQuartileCoord() const {return boxPlotValuesCoord[THIRD_QUARTILE];}
+  Coord getTopOutlierCoord() const {return boxPlotValuesCoord[TOP_OUTLIER];}
+  std::string getBottomOutlierStringValue() const {return boxPlotStringValues[BOTTOM_OUTLIER];}
+  std::string getFirstQuartileStringValue() const {return boxPlotStringValues[FIRST_QUARTILE];}
+  std::string getMedianStringValue() const {return boxPlotStringValues[MEDIAN];}
+  std::string getThirdQuartileStringValue() const {return boxPlotStringValues[THIRD_QUARTILE];}
+  std::string getTopOutlierStringValue() const {return boxPlotStringValues[TOP_OUTLIER];}
 
  private:
 
   void setLabelsAndComputeDataCoords();
+
+  std::set<unsigned int> getDataInRange(float yLowBound, float yHighBound);
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   void computeDataPointsCoord();
@@ -83,6 +106,9 @@ public :
   template<typename PROPERTY, typename PROPERTYTYPE>
   void setLabelsWithLog10Scale();
 
+  template<typename PROPERTY, typename PROPERTYTYPE>
+  void computeBoxPlotCoords(std::set<typename PROPERTYTYPE::RealType> propertyValuesSet);
+
   void showAxisConfigDialog();
 
 
@@ -92,6 +118,10 @@ public :
   ParallelCoordinatesGraphProxy *graphProxy;
   std::map<unsigned int, Coord> dataCoords;
   bool log10Scale;
+
+  std::vector<Coord> boxPlotValuesCoord;
+  std::vector<std::string> boxPlotStringValues;
+  BoxPlotValue boxPlotLowBound, boxPlotHighBound;
 
 };
 

@@ -1,10 +1,10 @@
 //-*-c++-*-
 /*
- Author: Didier Bathily, Nicolas Bellino, Jonathan Dubois, Christelle Jolly, Antoine Lambert, Nicolas Sorraing
+ Author: Antoine Lambert
 
- Email : didier.bathily@etu.u-bordeaux1.fr, nicolas.bellino@etu.u-bordeaux1.fr, jonathan.dubois@etu.u-bordeaux1.fr, christelle.jolly@etu.u-bordeaux1.fr, antoine.lambert@etu.u-bordeaux1.fr, nicolas.sorraing@etu.u-bordeaux1.fr
+ Email : antoine.lambert@labri.fr
 
- Last modification : 03/08
+ Last modification : 12/08
 
  This program is free software; you can redistribute it and/or modify  *
  it under the terms of the GNU General Public License as published by
@@ -39,14 +39,14 @@ public :
 
   unsigned int getNumberOfSelectedProperties() const;
   std::vector<std::string> getAllProperties();
-  const std::vector<std::string>& getSelectedProperties() const;
+  const std::vector<std::string>& getSelectedProperties() ;
   void setSelectedProperties(const std::vector<std::string>& properties);
   void removePropertyFromSelection(const std::string &propertyName);
 
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location) {dataLocation = location;}
 
-  Iterator<unsigned int> *getDataIterator(const bool allData = false);
+  Iterator<unsigned int> *getDataIterator();
   unsigned int getDataCount() const;
   Color getDataColor(const unsigned int dataId);
   std::string getDataTexture(const unsigned int dataId);
@@ -60,9 +60,7 @@ public :
 
   void deleteData(const unsigned int dataId);
 
-  Graph * getRootGraph() const {return graph_component;}
-  Graph * getCurrentGraphInHierarchy() const {return selectedGraphInHierarchy;}
-  void setGraphInHierarchy(Graph *graph) {selectedGraphInHierarchy = graph;}
+  Graph * getGraph() const {return graph_component;}
 
   void addOrRemoveEltToHighlight(const unsigned int eltId);
   void unsetHighlightedElts();
@@ -105,18 +103,18 @@ public :
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getPropertyMinValue(const std::string &propertyName) {
 	  if (getDataLocation() == NODE) {
-		  return selectedGraphInHierarchy->getProperty<PROPERTY>(propertyName)->getNodeMin();
+		  return graph_component->getProperty<PROPERTY>(propertyName)->getNodeMin();
 	  } else {
-		  return selectedGraphInHierarchy->getProperty<PROPERTY>(propertyName)->getEdgeMin();
+		  return graph_component->getProperty<PROPERTY>(propertyName)->getEdgeMin();
 	  }
   }
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getPropertyMaxValue(const std::string &propertyName) {
 	  if (getDataLocation() == NODE) {
-		  return selectedGraphInHierarchy->getProperty<PROPERTY>(propertyName)->getNodeMax();
+		  return graph_component->getProperty<PROPERTY>(propertyName)->getNodeMax();
 	  } else {
-		  return selectedGraphInHierarchy->getProperty<PROPERTY>(propertyName)->getEdgeMax();
+		  return graph_component->getProperty<PROPERTY>(propertyName)->getEdgeMax();
 	  }
   }
 
@@ -130,7 +128,6 @@ private:
   std::vector<std::string> selectedProperties;
   std::vector<std::string> propertiesList;
   ElementType dataLocation;
-  Graph *selectedGraphInHierarchy;
 };
 
 template <typename GraphDataSource>

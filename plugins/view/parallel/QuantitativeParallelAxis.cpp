@@ -1,5 +1,3 @@
-using namespace std;
-
 #include "QuantitativeParallelAxis.h"
 #include "AxisConfigDialogs.h"
 
@@ -8,14 +6,17 @@ using namespace std;
 
 #include <cmath>
 
+using namespace std;
+
 namespace tlp {
 
 QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
 																		   const string &graphPropertyName, const bool ascendingOrder, const Color &axisColor) :
   ParallelAxis(baseCoord, height, axisAreaWidth, graphPropertyName, axisColor), ascendingOrder(ascendingOrder),
   nbAxisGrad(DEFAULT_NB_AXIS_GRAD), graphProxy(graphProxy), log10Scale(false) {
-
-	setLabelsAndComputeDataCoords();
+  boxPlotValuesCoord.resize(5);
+  boxPlotStringValues.resize(5);
+  setLabelsAndComputeDataCoords();
 }
 
 void QuantitativeParallelAxis::setLabelsAndComputeDataCoords() {
@@ -72,7 +73,11 @@ void QuantitativeParallelAxis::setLabels(){
 	      addLabelDrawing(getStringFromNumber(min), (float) labelCoord + axisHeight);
 	  }
 
-	  for (float i = labelCoord + (increment * scale) ; i < (labelCoord + axisHeight) ; i += (increment * scale)) {
+	  for (float i = labelCoord + (increment * scale) ; i < (labelCoord + axisHeight); i += (increment * scale)) {
+
+		  if ((labelCoord + axisHeight - i) < ((increment * scale) / (2.5)))
+			  break;
+
 	      addLabelDrawing(getStringFromNumber(label), i);
 	      if (ascendingOrder) {
 	        label += increment;
@@ -80,6 +85,7 @@ void QuantitativeParallelAxis::setLabels(){
 	        label -= increment;
 	      }
 	  }
+
 }
 
 template<typename PROPERTY, typename PROPERTYTYPE>
@@ -119,7 +125,9 @@ void QuantitativeParallelAxis::setLabelsWithLog10Scale(){
 	      addLabelDrawing(getStringFromNumber(min), (float) labelCoord + axisHeight);
 	  }
 
-	  for (float i = labelCoord + (increment * scale) ; i < (labelCoord + axisHeight) ; i += (increment * scale)) {
+	  for (float i = labelCoord + (increment * scale) ; i < (labelCoord + axisHeight); i += (increment * scale)) {
+		  if (typeid(min) == typeid(int) && (labelCoord + axisHeight - i) < (increment * scale))
+			  break;
 		  double labelValue = pow(10, label);
 		  if (min < 1) {
 			  labelValue -= (1 - min);
@@ -139,6 +147,8 @@ void QuantitativeParallelAxis::computeDataPointsCoord() {
 	typename PROPERTYTYPE::RealType min = getAxisMinValue<PROPERTY, PROPERTYTYPE>();
 	typename PROPERTYTYPE::RealType max = getAxisMaxValue<PROPERTY, PROPERTYTYPE>();
 
+	set<typename PROPERTYTYPE::RealType> propertyValuesSet;
+
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
 	while (dataIt->hasNext()) {
@@ -147,6 +157,8 @@ void QuantitativeParallelAxis::computeDataPointsCoord() {
 		Coord c = Coord(baseCoord.getX(), 0, 0);
 		typename PROPERTYTYPE::RealType propertyValue =
 				graphProxy->getPropertyValueForData<PROPERTY, PROPERTYTYPE> (axisName, dataId);
+
+		propertyValuesSet.insert(propertyValue);
 
 		if (ascendingOrder)
 			c.setY(baseCoord.getY() + (propertyValue - min) * scale);
@@ -158,6 +170,10 @@ void QuantitativeParallelAxis::computeDataPointsCoord() {
 	}
 
 	delete dataIt;
+
+	computeBoxPlotCoords<PROPERTY, PROPERTYTYPE>(propertyValuesSet);
+
+
 }
 
 template<typename PROPERTY, typename PROPERTYTYPE>
@@ -175,13 +191,18 @@ void QuantitativeParallelAxis::computeDataPointsCoordWithLog10scale() {
 		logMax = log10((double)((max - min) + 1));
 	}
 
+	set<typename PROPERTYTYPE::RealType> propertyValuesSet;
+
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
 
 		Coord c = Coord(baseCoord.getX(), 0, 0);
-		double propertyValue = (double) graphProxy->getPropertyValueForData<PROPERTY, PROPERTYTYPE> (axisName, dataId);
+		typename PROPERTYTYPE::RealType value = graphProxy->getPropertyValueForData<PROPERTY, PROPERTYTYPE> (axisName, dataId);
+		propertyValuesSet.insert(value);
+
+		double propertyValue = (double) value;
 		if (min < 1) {
 			propertyValue += (1 - min);
 		}
@@ -196,11 +217,74 @@ void QuantitativeParallelAxis::computeDataPointsCoordWithLog10scale() {
 	}
 
 	delete dataIt;
+
+	computeBoxPlotCoords<PROPERTY, PROPERTYTYPE>(propertyValuesSet);
 }
 
 template<typename PROPERTY, typename PROPERTYTYPE>
+void QuantitativeParallelAxis::computeBoxPlotCoords(set<typename PROPERTYTYPE::RealType> propertyValuesSet) {
+
+	vector<typename PROPERTYTYPE::RealType> propertyValuesVector(propertyValuesSet.begin(), propertyValuesSet.end());
+	unsigned int vectorSize = propertyValuesVector.size();
+
+	typename PROPERTYTYPE::RealType median;
+	if (vectorSize % 2 == 1) {
+		median = propertyValuesVector[vectorSize / 2];
+	} else {
+		median = (propertyValuesVector[(vectorSize / 2) - 1] + propertyValuesVector[vectorSize / 2]) / 2;
+	}
+
+	typename PROPERTYTYPE::RealType firstQuartile;
+	if (vectorSize % 2 == 1) {
+		firstQuartile = propertyValuesVector[vectorSize / 4];
+	} else {
+		firstQuartile = (propertyValuesVector[(vectorSize / 4) - 1] + propertyValuesVector[vectorSize / 4]) / 2;
+	}
+
+	typename PROPERTYTYPE::RealType thirdQuartile;
+	if (vectorSize % 2 == 1) {
+		thirdQuartile = propertyValuesVector[3 *(vectorSize / 4)];
+	} else {
+		thirdQuartile = (propertyValuesVector[3 *(vectorSize / 4) - 1] + propertyValuesVector[3 *(vectorSize / 4)]) / 2;
+	}
+
+	typename PROPERTYTYPE::RealType lowBorder = (typename PROPERTYTYPE::RealType) (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
+	typename PROPERTYTYPE::RealType bottomOutlier;
+	typename vector<typename PROPERTYTYPE::RealType>::iterator it;
+	for (it = propertyValuesVector.begin() ; it != propertyValuesVector.end() ; ++it) {
+		if (*it > lowBorder) {
+			bottomOutlier = *it;
+			break;
+		}
+	}
+
+	typename PROPERTYTYPE::RealType highBorder = (typename PROPERTYTYPE::RealType) (thirdQuartile + (1.5 * (thirdQuartile - firstQuartile)));
+	typename PROPERTYTYPE::RealType topOutlier;
+	typename vector<typename PROPERTYTYPE::RealType>::reverse_iterator itr;
+	for (itr = propertyValuesVector.rbegin() ; itr != propertyValuesVector.rend() ; ++itr) {
+		if (*itr < highBorder) {
+			topOutlier = *itr;
+			break;
+		}
+	}
+
+	boxPlotValuesCoord[BOTTOM_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(bottomOutlier);
+	boxPlotValuesCoord[FIRST_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(firstQuartile);
+	boxPlotValuesCoord[MEDIAN] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(median);
+	boxPlotValuesCoord[THIRD_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(thirdQuartile);
+	boxPlotValuesCoord[TOP_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(topOutlier);
+
+	boxPlotStringValues[BOTTOM_OUTLIER] = getStringFromNumber(bottomOutlier);
+	boxPlotStringValues[FIRST_QUARTILE] = getStringFromNumber(firstQuartile);
+	boxPlotStringValues[MEDIAN] = getStringFromNumber(median);
+	boxPlotStringValues[THIRD_QUARTILE] = getStringFromNumber(thirdQuartile);
+	boxPlotStringValues[TOP_OUTLIER] = getStringFromNumber(topOutlier);
+}
+
+
+template<typename PROPERTY, typename PROPERTYTYPE>
 typename PROPERTYTYPE::RealType QuantitativeParallelAxis::getAxisMinValue() {
-	if (graphProxy->getRootGraph() == graphProxy->getCurrentGraphInHierarchy()) {
+	if (graphProxy->getGraph()->getRoot() == graphProxy->getGraph()) {
 		return graphProxy->getPropertyMinValue<PROPERTY, PROPERTYTYPE>(axisName);
 	} else {
 		Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
@@ -220,7 +304,7 @@ typename PROPERTYTYPE::RealType QuantitativeParallelAxis::getAxisMinValue() {
 
 template<typename PROPERTY, typename PROPERTYTYPE>
 typename PROPERTYTYPE::RealType QuantitativeParallelAxis::getAxisMaxValue() {
-	if (graphProxy->getRootGraph() == graphProxy->getCurrentGraphInHierarchy()) {
+	if (graphProxy->getGraph()->getRoot() == graphProxy->getGraph()) {
 		return graphProxy->getPropertyMaxValue<PROPERTY, PROPERTYTYPE>(axisName);
 	} else {
 		Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
@@ -244,14 +328,53 @@ void QuantitativeParallelAxis::translate(const Coord &c) {
 	for (it = dataCoords.begin() ; it != dataCoords.end() ; ++ it) {
 		(it->second) += c;
 	}
+	boxPlotValuesCoord[BOTTOM_OUTLIER] += c;
+	boxPlotValuesCoord[FIRST_QUARTILE] += c;
+	boxPlotValuesCoord[MEDIAN] += c;
+	boxPlotValuesCoord[THIRD_QUARTILE] += c;
+	boxPlotValuesCoord[TOP_OUTLIER] += c;
+
 }
 
 Coord QuantitativeParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
   return dataCoords[dataIdx];
 }
 
+template<typename PROPERTY, typename PROPERTYTYPE>
+Coord QuantitativeParallelAxis::getAxisCoordForValue(typename PROPERTYTYPE::RealType value) {
+	typename PROPERTYTYPE::RealType min = getAxisMinValue<PROPERTY, PROPERTYTYPE>();
+	typename PROPERTYTYPE::RealType max = getAxisMaxValue<PROPERTY, PROPERTYTYPE>();
+	if (!log10Scale) {
+		if (ascendingOrder) {
+			return Coord(baseCoord.getX(), baseCoord.getY() + (value - min) * scale, 0);
+		} else {
+			return Coord(baseCoord.getX(), baseCoord.getY() + (max - value) * scale, 0);
+		}
+	} else {
+		double logMin, logMax;
+		double logPropertyValue;
+		if (min >= 1) {
+			logMin = log10((double)min);
+			logMax = log10((double)max);
+		} else {
+			logMin = 0;
+			logMax = log10((double)((max - min) + 1));
+		}
+		if (min < 1) {
+			logPropertyValue = log10(value + (1 - min));
+		} else {
+			logPropertyValue = log10(value);
+		}
+
+		if (ascendingOrder) {
+			return Coord(baseCoord.getX(), baseCoord.getY() + (logPropertyValue - logMin) * scale, 0);
+		} else {
+			return Coord(baseCoord.getX(), baseCoord.getY() + (logMax - logPropertyValue) * scale, 0);
+		}
+	}
+}
+
 void QuantitativeParallelAxis::redraw() {
-	//reset(false);
 	drawAxisLine();
 	setLabelsAndComputeDataCoords();
 	addCaption(axisName);
@@ -323,15 +446,27 @@ std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
 	}
 }
 
-set<unsigned int> QuantitativeParallelAxis::getDataInSlidersRange() {
+set<unsigned int> QuantitativeParallelAxis::getDataInRange(float yLowBound, float yHighBound) {
 	set<unsigned int> dataSubset;
 	map<unsigned int, Coord>::iterator it;
 	for (it = dataCoords.begin() ; it != dataCoords.end() ; ++it) {
-		if ((it->second).getY() <= topSliderCoord.getY() && (it->second).getY() >= bottomSliderCoord.getY()) {
+		if ((it->second).getY() <= yHighBound && (it->second).getY() >= yLowBound) {
 			dataSubset.insert(it->first);
 		}
 	}
 	return dataSubset;
+}
+
+set<unsigned int> QuantitativeParallelAxis::getDataInSlidersRange() {
+	return getDataInRange(bottomSliderCoord.getY(), topSliderCoord.getY());
+}
+
+set<unsigned int> QuantitativeParallelAxis::getDataBetweenBoxPlotBounds() {
+	if (boxPlotLowBound != NO_VALUE && boxPlotHighBound != NO_VALUE) {
+		return getDataInRange(boxPlotValuesCoord[boxPlotLowBound].getY(), boxPlotValuesCoord[boxPlotHighBound].getY());
+	} else {
+		return set<unsigned int>();
+	}
 }
 
 void QuantitativeParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {

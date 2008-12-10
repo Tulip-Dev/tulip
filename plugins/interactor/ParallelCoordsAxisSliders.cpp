@@ -1,9 +1,16 @@
+//-*-c++-*-
 /*
- * ParallelCoordsAxisSliders.cpp
- *
- *  Created on: 5 nov. 2008
- *      Author: antoine
- */
+ Author: Antoine Lambert
+
+ Email : antoine.lambert@labri.fr
+
+ Last modification : 12/08
+
+ This program is free software; you can redistribute it and/or modify  *
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+*/
 
 #include "../view/parallel/ParallelCoordinatesView.h"
 #include "../view/parallel/ParallelTools.h"
@@ -143,10 +150,12 @@ public :
 	}
 
 	void draw(float lod,Camera *camera) {
+		glEnable(GL_LIGHTING);
 		arrowPolygon->draw(lod, camera);
 		sliderQuad->draw(lod, camera);
-		sliderPolygon->draw(lod, camera);
 		sliderLabel->draw(lod, camera);
+		glDisable(GL_LIGHTING);
+		sliderPolygon->draw(lod, camera);
 	}
 
 	void computeBoundingBox() {
@@ -225,10 +234,6 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 	GlMainWidget *glWidget = (GlMainWidget *) widget;
 	ParallelCoordinatesView *parallelView = (ParallelCoordinatesView *) view;
 
-	if (!glWidget->hasMouseTracking()) {
-		glWidget->setMouseTracking(true);
-	}
-
 	drawSliders = false;
 
 	vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
@@ -238,6 +243,8 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 		buildGlSliders(allAxis);
 		drawSliders = true;
 		parallelView->refresh();
+		drawSliders = false;
+		return true;
 	}
 
 
@@ -250,6 +257,9 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 		selectedAxis = NULL;
 		lastSelectedAxis = NULL;
 		parallelView->refresh();
+		drawSliders = false;
+		lastNbAxis = allAxis.size();
+		return true;
 	}
 
 	lastNbAxis = allAxis.size();

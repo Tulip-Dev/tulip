@@ -33,8 +33,6 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelResource.cpp \
 			AxisConfigDialogs.cpp  \
 			QuantitativeParallelAxis.cpp \
-			Thread.h \
-			Thread.cpp \
 			GlProgressBar.h \
 			GlProgressBar.cpp 
 
@@ -62,7 +60,7 @@ moc_%.cpp: %.h
 	$(UIC) -o $@ $<
 
 ParallelResource.cpp: ParallelResource.qrc
-	$(RCC) -name ParallelView -o $@ $<
+	$(RCC) -name parallel -o $@ $<
 
 clean-generic:
 	rm -f moc_* *Data.*

@@ -1,27 +1,14 @@
-//-*-c++-*-
-/*
- Author: Didier Bathily, Nicolas Bellino, Jonathan Dubois, Christelle Jolly, Antoine Lambert, Nicolas Sorraing
-
- Email : didier.bathily@etu.u-bordeaux1.fr, nicolas.bellino@etu.u-bordeaux1.fr, jonathan.dubois@etu.u-bordeaux1.fr, christelle.jolly@etu.u-bordeaux1.fr, antoine.lambert@etu.u-bordeaux1.fr, nicolas.sorraing@etu.u-bordeaux1.fr
-
- Last modification : 03/08
-
- This program is free software; you can redistribute it and/or modify  *
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- */
-
 #include "ParallelCoordinatesView.h"
 #include "AxisConfigDialogs.h"
 #include "NominalParallelAxis.h"
-#include "Thread.h"
 #include "GlProgressBar.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
 #include <QtGui/QToolTip>
 #include <QtGui/QImageWriter>
+#include <QtCore/QThread>
+#include <QtCore/QDir>
 
 #include <tulip/GWInteractor.h>
 #include <tulip/InteractorManager.h>
@@ -34,7 +21,7 @@ using namespace std;
 
 namespace tlp {
 
-class ParallelDrawingUpdateThread : public Thread {
+class ParallelDrawingUpdateThread : public QThread {
 
 public :
 
@@ -139,6 +126,7 @@ void ParallelCoordinatesView::initGlWidget() {
 	mainLayer->addGlEntity(glGraphComposite, "graph");
 	mainWidget->getScene()->addLayer(mainLayer);
 	mainWidget->getScene()->addGlGraphCompositeInfo(mainLayer, glGraphComposite);
+	mainWidget->setMouseTracking(true);
 
 }
 
@@ -163,67 +151,60 @@ void ParallelCoordinatesView::buildMenuEntries() {
 void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 
 	// if the graph to set is the same as the current one, do nothing
-	if (graphProxy != NULL && graphProxy->getCurrentGraphInHierarchy() == graph) {
+	if (graphProxy != NULL && graphProxy->getGraph() == graph) {
 		return;
 	}
 
-
 	center = true;
+	vector<string> selectedPropertiesBak;
 
 	// test if the graph to set belongs to the same hierarchy as the current graph
 	bool sameGraphRoot = false;
 	if (graphProxy != NULL && (graph->getRoot() == graphProxy->getRoot())) {
 		sameGraphRoot = true;
+		selectedPropertiesBak = graphProxy->getSelectedProperties();
 		center = false;
 	}
 
-	// if the graph to set dont't belong to the same hierarchy as the previous one
-	// delete the graph proxy
-	if (graphProxy != NULL && !sameGraphRoot) {
-		graphProxy->getRootGraph()->removeGraphObserver(parallelCoordsDrawing);
+	if (graphProxy != NULL) {
+		graphProxy->removeGraphObserver(parallelCoordsDrawing);
 		delete graphProxy;
 		graphProxy = NULL;
 	}
 
-	// if the graph to set dont't belong to the same hierarchy as the previous one
-	// create a new graph proxy
-	if (!sameGraphRoot) {
-		graphProxy = new ParallelCoordinatesGraphProxy(graph);
-	} else {
-		// otherwise, set the subgraph in current hierarchy to use
-		graphProxy->setGraphInHierarchy(graph);
-		parallelCoordsDrawing->deleteAxisGlEntities();
+	graphProxy = new ParallelCoordinatesGraphProxy(graph);
+	if (sameGraphRoot) {
+		graphProxy->setSelectedProperties(selectedPropertiesBak);
 	}
 
-	// if the graph to set dont't belong to the same hierarchy as the previous one
+	// if the graph to set don't belong to the same hierarchy as the previous one
 	// delete the config dialog
 	if (configDialog != NULL && !sameGraphRoot) {
 		delete configDialog;
 		configDialog = NULL;
 	}
 
-	// if the graph to set dont't belong to the same hierarchy as the previous one
-	// delete the parallel coordinates drawing
-	if (parallelCoordsDrawing != NULL && !sameGraphRoot) {
+	if (parallelCoordsDrawing != NULL) {
 		mainLayer->deleteGlEntity(parallelCoordsDrawing);
 		delete parallelCoordsDrawing;
 		parallelCoordsDrawing = NULL;
 	}
 
-	// if the graph to set dont't belong to the same hierarchy as the previous one
-	// create the drawing and the config dialog
-	if (!sameGraphRoot) {
-		parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy);
-		graph->addGraphObserver(parallelCoordsDrawing);
-		mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
-		overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
+	parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy);
+	graphProxy->addGraphObserver(parallelCoordsDrawing);
+	mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
+	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
+
+
+
+	if (configDialog == NULL) {
+
+		configDialog = new ParallelCoordinatesConfigDialog(graphProxy);
+		configDialog->setModal(true);
 
 		unsigned int axisHeight = DEFAULT_AXIS_HEIGHT;
 		unsigned int spaceBetweenAxis = DEFAULT_AXIS_HEIGHT / 2;
 		unsigned int linesColorAlphaValue = DEFAULT_LINES_COLOR_ALPHA_VALUE;
-
-		configDialog = new ParallelCoordinatesConfigDialog(graphProxy);
-		configDialog->setModal(true);
 
 		if (dataSet.exist("selectedProperties")) {
 			vector<string> selectedProperties;
@@ -308,6 +289,7 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		configDialog->setAxisHeight(axisHeight);
 		configDialog->setSpaceBetweenAxis(spaceBetweenAxis);
 		configDialog->setLinesColorAlphaValue(linesColorAlphaValue);
+
 	}
 
 	if (graphProxy->getNumberOfSelectedProperties() > 0) {
@@ -354,15 +336,13 @@ void ParallelCoordinatesView::getData(Graph **graph, DataSet *dataSet) {
 	}
 
 
-	*graph = graphProxy->getCurrentGraphInHierarchy();
+	*graph = graphProxy->getGraph();
 }
 
 Graph* ParallelCoordinatesView::getGraph() {
-	if (graphProxy != NULL) {
-		return graphProxy->getCurrentGraphInHierarchy();
-	} else {
-		return NULL;
-	}
+
+	return graphProxy->getGraph();
+
 }
 
 void ParallelCoordinatesView::setGraph(Graph *graph) {
@@ -425,7 +405,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	GlMainView::draw();
 
 	// join the drawing update thread to main process
-	drawingUpdateThread.join();
+	drawingUpdateThread.wait();
 
 	// remove progress bar from main layer and delete it
 	mainLayer->deleteGlEntity(progressBar);
@@ -450,6 +430,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 }
 
 void ParallelCoordinatesView::draw() {
+
 	if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
 		updateWithProgressBar();
 	} else {
@@ -490,6 +471,8 @@ void ParallelCoordinatesView::constructInteractorsMap() {
 	interactorsMap["Axis Swapper"].push_back(interactors.get(InteractorManager::getInst().interactorId("ParallelCoordsAxisSwapper")));
 	interactorsMap["Axis Sliders"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
 	interactorsMap["Axis Sliders"].push_back(interactors.get(InteractorManager::getInst().interactorId("ParallelCoordsAxisSliders")));
+	interactorsMap["Axis Box Plot"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
+	interactorsMap["Axis Box Plot"].push_back(interactors.get(InteractorManager::getInst().interactorId("ParallelCoordsAxisBoxPlot")));
 }
 //==================================================
 void ParallelCoordinatesView::constructInteractorsActionList() {
@@ -501,6 +484,7 @@ void ParallelCoordinatesView::constructInteractorsActionList() {
 	interactorsActionList.push_back(new QAction(QIcon(":/i_element_highlighter.png"),"Elements Highlighter",this));
 	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_swapper.png"),"Axis Swapper",this));
 	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_sliders.png"),"Axis Sliders",this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_boxplot.png"),"Axis Box Plot",this));
 }
 
 void ParallelCoordinatesView::installInteractor(QAction *action) {
@@ -774,6 +758,15 @@ void ParallelCoordinatesView::updateWithAxisSlidersRange(ParallelAxis *axis) {
 
 bool ParallelCoordinatesView::highlightedElementsSet() const {
 	return graphProxy->highlightedEltsSet();
+}
+
+void ParallelCoordinatesView::highlightDataInAxisBoxPlotRange(QuantitativeParallelAxis *axis) {
+	set<unsigned int> eltToHighlight = axis->getDataBetweenBoxPlotBounds();
+	if (eltToHighlight.size() > 0) {
+		graphProxy->resetHighlightedElts(eltToHighlight);
+		graphProxy->colorDataAccordingToHighlightedElts();
+		updateAxisSlidersPosition();
+	}
 }
 
 }

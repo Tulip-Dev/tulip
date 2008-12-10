@@ -1,7 +1,5 @@
 #include "ParallelCoordsGlEntitiesSelector.h"
 
-#include <iostream>
-
 using namespace std;
 
 namespace tlp {
@@ -24,7 +22,6 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 				w = 0;
 				h = 0;
 				started = true;
-				glMainWidget->setMouseTracking(true);
 				graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 			}
 			return true;
@@ -50,7 +47,6 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
 		QMouseEvent * qMouseEv = (QMouseEvent *) e;
 		if (started) {
-			glMainWidget->setMouseTracking(false);
 			Observable::holdObservers();
 			bool boolVal = true; // add to selection
 

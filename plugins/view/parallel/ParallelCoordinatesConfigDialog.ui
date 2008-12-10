@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
+    <width>436</width>
     <height>393</height>
    </rect>
   </property>
@@ -219,7 +219,6 @@
            </layout>
           </item>
          </layout>
-         <zorder>buttonBox</zorder>
         </widget>
        </item>
       </layout>
@@ -596,7 +595,6 @@
  </customwidgets>
  <resources>
   <include location="ParallelResource.qrc" />
-  <include location="../../../software/tulip/designer/TulipResource.qrc" />
  </resources>
  <connections>
   <connection>

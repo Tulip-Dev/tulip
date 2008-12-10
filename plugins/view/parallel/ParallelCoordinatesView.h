@@ -1,8 +1,10 @@
 //-*-c++-*-
 /*
- Author: Morgan MATHIAUT
- Email : mathiaut@labri.fr
- Last modification : 06/08
+ Author: Antoine Lambert
+
+ Email : antoine.lambert@labri.fr
+
+ Last modification : 12/08
 
  This program is free software; you can redistribute it and/or modify  *
  it under the terms of the GNU General Public License as published by
@@ -74,6 +76,8 @@ namespace tlp {
 
     void updateWithAxisSlidersRange(ParallelAxis *axis);
     void updateAxisSlidersPosition();
+
+    void highlightDataInAxisBoxPlotRange(QuantitativeParallelAxis *axis);
 
 
   public slots:

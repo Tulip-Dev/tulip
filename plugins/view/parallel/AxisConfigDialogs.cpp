@@ -1,10 +1,3 @@
-/*
- * AxisConfigDialogs.cpp
- *
- *  Created on: 3 nov. 2008
- *      Author: antoine
- */
-
 #include "AxisConfigDialogs.h"
 
 #include <tulip/IntegerProperty.h>

@@ -9,7 +9,8 @@ plugins_LTLIBRARIES = libParallelCoordsElementShowInfos-@VERSION@.la \
 					  libParallelCoordsElementDeleter-@VERSION@.la \
 					  libParallelCoordsElementHighlighter-@VERSION@.la \
 					  libParallelCoordsAxisSwapper-@VERSION@.la \
-					  libParallelCoordsAxisSliders-@VERSION@.la
+					  libParallelCoordsAxisSliders-@VERSION@.la \
+					  libParallelCoordsAxisBoxPlot-@VERSION@.la 
 
 libParallelCoordsElementShowInfos_@VERSION@_la_SOURCES = ParallelCoordsElementShowInfos.cpp 
 
@@ -21,10 +22,13 @@ libParallelCoordsElementDeleter_@VERSION@_la_SOURCES = ParallelCoordsElementDele
 
 libParallelCoordsElementHighlighter_@VERSION@_la_SOURCES = ParallelCoordsElementHighlighter.cpp \
 							   ParallelCoordsGlEntitiesSelector.h \ 
-							   ParallelCoordsGlEntitiesSelector.cpp 																						
+							   ParallelCoordsGlEntitiesSelector.cpp
+							    																						
 libParallelCoordsAxisSwapper_@VERSION@_la_SOURCES = ParallelCoordsAxisSwapper.cpp 
 
 libParallelCoordsAxisSliders_@VERSION@_la_SOURCES = ParallelCoordsAxisSliders.cpp 
+
+libParallelCoordsAxisBoxPlot_@VERSION@_la_SOURCES = ParallelCoordsAxisBoxPlot.cpp
 
 pluginsdir = $(libdir)/tlp/interactors
 

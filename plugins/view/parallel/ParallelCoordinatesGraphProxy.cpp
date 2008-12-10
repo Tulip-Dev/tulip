@@ -1,17 +1,3 @@
-//-*-c++-*-
-/*
- Author: Didier Bathily, Nicolas Bellino, Jonathan Dubois, Christelle Jolly, Antoine Lambert, Nicolas Sorraing
-
- Email : didier.bathily@etu.u-bordeaux1.fr, nicolas.bellino@etu.u-bordeaux1.fr, jonathan.dubois@etu.u-bordeaux1.fr, christelle.jolly@etu.u-bordeaux1.fr, antoine.lambert@etu.u-bordeaux1.fr, nicolas.sorraing@etu.u-bordeaux1.fr
-
- Last modification : 03/08
-
- This program is free software; you can redistribute it and/or modify  *
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-*/
-
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/SizeProperty.h>
@@ -28,7 +14,7 @@ using namespace std;
 namespace tlp {
 
 ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const ElementType location):
-	GraphDecorator(g), dataLocation(location), selectedGraphInHierarchy(graph_component) {
+	GraphDecorator(g), dataLocation(location) {
   fillPropertiesVector();
   Observable::holdObservers();
   originalDataColors = new ColorProperty(graph_component);
@@ -68,7 +54,17 @@ unsigned int ParallelCoordinatesGraphProxy::getNumberOfSelectedProperties() cons
 	return selectedProperties.size();
 }
 
-const vector<string> &ParallelCoordinatesGraphProxy::getSelectedProperties() const {
+const vector<string> &ParallelCoordinatesGraphProxy::getSelectedProperties() {
+  vector<string> selectedPropertiesTmp;
+  vector<string>::iterator it;
+
+  // check if one of the selected properties has not been deleted by an undo operation
+  for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
+	  if (existProperty(*it)) {
+		  selectedPropertiesTmp.push_back(*it);
+	  }
+  }
+  selectedProperties = selectedPropertiesTmp;
   return selectedProperties;
 }
 
@@ -93,9 +89,9 @@ ElementType ParallelCoordinatesGraphProxy::getDataLocation() const {
 
 unsigned int ParallelCoordinatesGraphProxy::getDataCount() const {
   if (getDataLocation() == NODE) {
-    return selectedGraphInHierarchy->numberOfNodes();
+    return numberOfNodes();
   } else {
-    return selectedGraphInHierarchy->numberOfEdges();
+    return numberOfEdges();
   }
 }
 
@@ -140,19 +136,11 @@ void ParallelCoordinatesGraphProxy::deleteData(const unsigned int dataId) {
 	}
 }
 
-Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getDataIterator(const bool allData) {
+Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getDataIterator() {
 	if (getDataLocation() == NODE) {
-		if (allData) {
-			return new ParallelCoordinatesDataIterator<node>(graph_component->getNodes());
-		} else {
-			return new ParallelCoordinatesDataIterator<node>(selectedGraphInHierarchy->getNodes());
-		}
+		return new ParallelCoordinatesDataIterator<node>(getNodes());
 	} else {
-		if (allData) {
-			return new ParallelCoordinatesDataIterator<edge>(graph_component->getEdges());
-		} else {
-			return new ParallelCoordinatesDataIterator<edge>(selectedGraphInHierarchy->getEdges());
-		}
+		return new ParallelCoordinatesDataIterator<edge>(getEdges());
 	}
 }
 
@@ -214,7 +202,7 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 
 	// If new colors have been set for the graph elements, backup the change to restore the correct ones
 	// when unhighlighting
-	Iterator<unsigned int> *dataIt = getDataIterator(true);
+	Iterator<unsigned int> *dataIt = getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
 		Color currentColor = getPropertyValueForData<ColorProperty, ColorType>("viewColor", dataId);
@@ -239,7 +227,7 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 		return;
 	}
 
-	dataIt = getDataIterator(true);
+	dataIt = getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
 		if (isDataHighlighted(dataId)) {
@@ -261,7 +249,7 @@ Color ParallelCoordinatesGraphProxy::getOriginalDataColor(const unsigned int dat
 
 bool ParallelCoordinatesGraphProxy::unhighlightedEltsColorOk() {
 	bool ret = true;
-	Iterator<unsigned int> *dataIt = getDataIterator(true);
+	Iterator<unsigned int> *dataIt = getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
 		if (highlightedElts.find(dataId) == highlightedElts.end()) {

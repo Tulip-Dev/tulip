@@ -1,10 +1,10 @@
 //-*-c++-*-
 /*
- Author: Didier Bathily, Nicolas Bellino, Jonathan Dubois, Christelle Jolly, Antoine Lambert, Nicolas Sorraing
+ Author: Antoine Lambert
 
- Email : didier.bathily@etu.u-bordeaux1.fr, nicolas.bellino@etu.u-bordeaux1.fr, jonathan.dubois@etu.u-bordeaux1.fr, christelle.jolly@etu.u-bordeaux1.fr, antoine.lambert@etu.u-bordeaux1.fr, nicolas.sorraing@etu.u-bordeaux1.fr
+ Email : antoine.lambert@labri.fr
 
- Last modification : 03/08
+ Last modification : 12/08
 
  This program is free software; you can redistribute it and/or modify  *
  it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ class TLP_GL_SCOPE ParallelAxis : public GlComposite {
 
   float getAxisHeight() const {return axisHeight;}
   float getAxisGradWidth() const {return gradsWidth;}
+  float getLabelHeight() const {return labelHeight;}
   void setAxisHeight(const float axisHeight);
   Color getAxisColor() const {return axisColor;}
   void setAxisColor(const Color &axisColor) {this->axisColor = axisColor;}
@@ -94,6 +95,8 @@ class TLP_GL_SCOPE ParallelAxis : public GlComposite {
   float gradsWidth;
   float gradsHeight;
   float spaceBetweenAxisGrads;
+  float labelHeight;
+
   Color axisColor;
 
   bool slidersActivated;

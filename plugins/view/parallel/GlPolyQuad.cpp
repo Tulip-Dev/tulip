@@ -1,10 +1,3 @@
-/*
- * GlPolyQuad.cpp
- *
- *  Created on: 30 oct. 2008
- *      Author: antoine
- */
-
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
 
