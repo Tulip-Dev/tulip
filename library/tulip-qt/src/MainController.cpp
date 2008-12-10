@@ -758,7 +758,6 @@ namespace tlp {
   void MainController::editCut() {
     if( !currentGraph )
     	return;
-    currentGraph->push();
     // free the previous ccpGraph
     if( copyCutPasteGraph ) {
       delete copyCutPasteGraph;
@@ -773,6 +772,7 @@ namespace tlp {
     Observable::holdObservers();
     copyCutPasteGraph = tlp::newGraph();
     tlp::copyToGraph( copyCutPasteGraph, currentGraph, selP );
+    currentGraph->push();
     // Restore selection
     SetSelection( selP, nodeA, edgeA, currentGraph );
     tlp::removeFromGraph( currentGraph, selP );
@@ -839,16 +839,12 @@ namespace tlp {
         tmp.insert(itn);
     }delete it;
     if (tmp.empty()) return;
+    currentGraph->push();
     if (currentGraph == currentGraph->getRoot()) {
       QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
-      currentGraph->push();
       currentGraph = tlp::newCloneSubGraph(currentGraph, "groups");
     }
     node metaNode = tlp::createMetaNode(currentGraph, tmp);
-    // set metanode viewColor to glWidget background color
-    Color metaNodeColor = currentGraph->getProperty<ColorProperty>("viewColor")->getNodeValue(metaNode);
-    metaNodeColor[3]=127;
-    currentGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaNode,metaNodeColor);
     clusterTreeWidget->update();
   }
   //==============================================================
@@ -876,16 +872,16 @@ namespace tlp {
         "Please enter the subgraph name" ,
         QLineEdit::Normal, QString::null, &ok);
     if (ok && !text.isEmpty()) {
-      currentGraph->push();
       sel1 = currentGraph->getProperty<BooleanProperty>("viewSelection");
+      currentGraph->push();
       Graph *tmp = currentGraph->addSubGraph(sel1);
       tmp->setAttribute("name",string(text.toAscii().data()));
       clusterTreeWidget->update();
       //emit clusterTreeNeedUpdate();
     }
     else if (ok) {
-      currentGraph->push();
       sel1 = currentGraph->getProperty<BooleanProperty>("viewSelection");
+      currentGraph->push();
       Graph *tmp=currentGraph->addSubGraph(sel1);
       tmp->setAttribute("name", newName());
       clusterTreeWidget->update();
@@ -1324,6 +1320,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::reverseSelectedEdgeDirection() {
     Observable::holdObservers();
+    currentGraph->push();
     currentGraph->getProperty<BooleanProperty>("viewSelection")->reverseEdgeDirection();
     Observable::unholdObservers();
   }

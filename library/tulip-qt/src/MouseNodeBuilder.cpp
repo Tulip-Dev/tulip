@@ -31,8 +31,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       // allow to undo
       _graph->push();
-      // allow to undo
-      _graph->push();
       node newNode;
       newNode = _graph->addNode();
       Coord point((double) glw->width() - (double) qMouseEv->x(),

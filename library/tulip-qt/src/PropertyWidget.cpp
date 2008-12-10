@@ -80,7 +80,7 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
   graph=sg;
   if (!graph->existProperty(name)) {
     editedProperty=0;
-  } 
+  }
   else {
     editedProperty=graph->getProperty(name);
     editedPropertyName=name;
@@ -103,13 +103,13 @@ void PropertyWidget::changePropertyValue(int i,int j) {
     changePropertyEdgeValue(i,j);
 }
 
-void PropertyWidget::changePropertyEdgeValue(int i,int j) {  
+void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
   string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toAscii().data();
-  BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
+  BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<edge> *it=graph->getEdges();
   edge tmp;
   // allow to undo
@@ -124,7 +124,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
       ++pos;
     }
   } delete it;
-  
+
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
                            QString("The input value for this edge is not correct,\n"
@@ -138,7 +138,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   else {
     emit tulipEdgePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
   }
-  
+
   this->setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
   Observable::unholdObservers();
 }
@@ -150,7 +150,7 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   bool result=true;
   string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
   //cout << "value = " << str << endl;
-  BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");  
+  BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<node> *it=graph->getNodes();
   node tmp;
   // allow to undo
@@ -165,7 +165,7 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
         ++pos;
       }
   } delete it;
-  
+
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
                            QString("The input value for this node is not correct,\n"
@@ -178,7 +178,7 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   }
   else {
     emit tulipNodePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
-  }  
+  }
   this->setColumnWidth(1, this->horizontalHeader()->width() - this->columnWidth(0));
   Observable::unholdObservers();
 }
@@ -220,7 +220,7 @@ void PropertyWidget::update() {
   // check editedProperty
   if (editedProperty && !graph->existProperty(editedPropertyName))
     editedProperty = NULL;
-    
+
   disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
   clearContents();
   if (displayNode)
@@ -328,7 +328,7 @@ void PropertyWidget::setAllNodeValue() {
     while (itS->hasNext()){
       tmp.append(QString(itS->next().c_str()));
     }delete itS;
-    
+
     QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a shape",
                                               tmp, 0, false, &ok);
@@ -341,7 +341,7 @@ void PropertyWidget::setAllNodeValue() {
     QStringList tmp;
     for (int i = 0; i < 5; i++)
       tmp.append(QString(GlGraphStaticData::labelPositionName(i).c_str()));
-    
+
     QString labelPosName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a position",
                                               tmp, 0, false, &ok);
@@ -377,7 +377,7 @@ void PropertyWidget::setAllNodeValue() {
     if (ok) tmpStr = text.toAscii().data();
     else ok = false;
   }
-  
+
   // allow to undo
   graph->push();
   if (ok) {
@@ -408,7 +408,7 @@ void PropertyWidget::setAllNodeValue() {
       this->update();
     }
   }
-  
+
   Observable::unholdObservers();
 }
 
@@ -430,7 +430,7 @@ void  PropertyWidget::setAllEdgeValue() {
     QStringList tmp;
     for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++)
       tmp.append(QString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i]).c_str()));
-    
+
     QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                               "Please choose a shape",
                                               tmp, 0, false, &ok);
@@ -450,8 +450,6 @@ void  PropertyWidget::setAllEdgeValue() {
 
   // allow to undo
   graph->push();
-  // allow to undo
-  graph->push();
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
@@ -468,7 +466,7 @@ void  PropertyWidget::setAllEdgeValue() {
         }
       } delete itE;
     }
-    
+
     if (!result) {
       QMessageBox::critical(0, "Tulip Property Editor set all node value Failed",
                             QString("The input value for the edges is not correct,\n"
@@ -540,7 +538,7 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
 	  elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
 	}
       }
-      Observable::unholdObservers();	  
+      Observable::unholdObservers();
     }
   }
 }
