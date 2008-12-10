@@ -45,7 +45,7 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       glDepthFunc(GL_LEQUAL);
       glLineWidth(3);
-      glColor4ub(colorSelect2[0], colorSelect2[1],  colorSelect2[2], colorSelect2[3]); 
+      glColor4ub(colorSelect2[0], colorSelect2[1],  colorSelect2[2], colorSelect2[3]);
       tlp::cube(GL_LINE_LOOP);
       glPopAttrib();
       GlDisplayListManager::getInst().endNewDisplayList();
@@ -82,9 +82,9 @@ namespace tlp {
       glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
 
       glPassThrough(TLP_FB_BEGIN_NODE);
-      glPassThrough(id); //id of the node for the feed back mode 
+      glPassThrough(id); //id of the node for the feed back mode
     }
-  
+
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
       glDisable(GL_LIGHTING);
@@ -109,9 +109,9 @@ namespace tlp {
       glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
-      
+
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
-      
+
       if (data->elementSelected->getNodeValue(n)) {
 	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
 	GlDisplayListManager::getInst().callDisplayList("selection");
@@ -122,7 +122,7 @@ namespace tlp {
     if (data->elementSelected->getNodeValue(n)) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }
-  
+
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);
     }
@@ -136,18 +136,30 @@ namespace tlp {
 
     node n=node(id);
 
+    bool select=data->elementSelected->getNodeValue(n);
+        if(drawSelect!=select)
+          return;
+
     const string &tmp = data->elementLabel->getNodeValue(n);
     if (tmp.length() < 1) {
       return;
     }
 
-    bool select=data->elementSelected->getNodeValue(n);
-    if(drawSelect!=select)
-      return;
+    if(data->elementGraph->getNodeValue(n) == 0){
+      if(select)
+        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil() ,0xFFFF);
+      else
+        glStencilFunc(GL_LEQUAL,data->parameters->getNodesLabelStencil(),0xFFFF);
+    }else{
+      if(select)
+        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil() ,0xFFFF);
+      else
+        glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
+    }
 
     if(select)
       renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
-    else	
+    else
       renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 18, 255, 255, 255);
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
@@ -169,16 +181,17 @@ namespace tlp {
     default:
       break;
     }
-    //if (elementSelected->getNodeValue(n) != mode) return; 
-    
+    //if (elementSelected->getNodeValue(n) != mode) return;
+
     Color fontColor = data->elementLabelColor->getNodeValue(n);
-    
+
     if (select)
       fontColor = colorSelect2;
-    
+
     float w_max = 300;
     float w,h;
     float div_w, div_h;
+    BoundingBox includeBB;
 
     switch(data->parameters->getFontsType()){
     case 0:
@@ -188,14 +201,16 @@ namespace tlp {
       //      w_max = nodeSize.getW()*50.0;
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
-      glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
+      data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
+      glTranslatef(nodePos[0], nodePos[1], nodePos[2]+(nodeSize[2]*includeBB.second[2])/2.+0.01);
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
-      if(div_h > div_w) 
+      if(div_h > div_w)
 	glScalef(div_w, div_w, 1);
       else
-	glScalef(div_h, div_h, 1);  
+	glScalef(div_h, div_h, 1);
+      glDepthFunc(GL_LEQUAL );
       renderer->draw(w,w, labelPos);
       glPopMatrix();
       break;
@@ -216,9 +231,9 @@ namespace tlp {
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
-      if(div_h > div_w) 
+      if(div_h > div_w)
 	glScalef(div_w, div_w, 1);
-      else 
+      else
 	glScalef(div_h, div_h, 1);
       glEnable( GL_TEXTURE_2D);
       glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
@@ -238,27 +253,27 @@ namespace tlp {
     float w_max = 300;
     float w,h;
     unsigned int labelsBorder = data->parameters->getLabelsBorder();
-    //need to be done before glRasterPos3f to set GL_RASTER_COLOR correctly  
+    //need to be done before glRasterPos3f to set GL_RASTER_COLOR correctly
     //Gl_RASTER_COLOR is used by FTGL in BITMAP and PIXMAP mode instead of GL_COLOR
     glColor4ub(col[0], col[1], col[2], 255);
-    
+
     glRasterPos3f(position[0], position[1], position[2]);
-    
+
     glGetIntegerv(GL_CURRENT_RASTER_POSITION, (GLint *) rastPos);
     if(test->testRectangle(RectangleInt2D(rastPos[0] - labelsBorder - 5,
 					  rastPos[1]  - labelsBorder - 5,
 					  rastPos[0]  + labelsBorder + 5,
 					  rastPos[1]  + labelsBorder + 5)))
       return;
-    
+
     renderer->setMode(TLP_PIXMAP);
     renderer->setString(str, VERBATIM);
     //renderer->setString(str, XML);
-    
+
     renderer->setColor(col[0], col[1], col[2]);
     //  w_max = width;
     renderer->getBoundingBox(w_max, h, w);
-    
+
     if(!test->addRectangle(RectangleInt2D(rastPos[0]-(int)(w/2.0) - labelsBorder,
 					  rastPos[1]-(int)(h/2.0) - labelsBorder,
 					  rastPos[0]+(int)(w/2.0) + labelsBorder,

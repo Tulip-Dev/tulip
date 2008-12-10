@@ -21,13 +21,14 @@ void importGraph(const string &filename, GlMainWidget *glw) {
   Graph *newGraph = tlp::importGraph("tlp", dataSet, NULL);
   if (newGraph != 0) {
     openGraphOnGlMainWidget(newGraph,&dataSet,glw);
+    openGraphOnGlMainWidget(newGraph,&dataSet,glw);
   }
 }
 /*******************************************************************/
 int main(int argc,char ** argv ){
-  
+
   QApplication MainApp(argc,argv);
-  
+
   if (argc<2) {
     cerr << "usage :" << endl;
     cerr << "\t " << argv[0] << " <filename>" << endl;
@@ -44,8 +45,8 @@ int main(int argc,char ** argv ){
   //  GlGraph::loadPlugins(); //Glyoh plugins */
   /****************************************************/
   GlMainWidget MainWin;
-  
-  MainApp.setMainWidget(&MainWin);
+
+  //MainApp.setMainWidget(&MainWin);
   MainWin.resize(640,480);
   MainWin.show();
 

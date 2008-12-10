@@ -49,7 +49,7 @@ Ring::~Ring() {
 //=====================================================
 void Ring::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.first=Coord(0.15,0.15,0);
-  boundingBox.second=Coord(0.85,0.85,1);
+  boundingBox.second=Coord(0.85,0.85,0);
 }
 //=====================================================
 void Ring::draw(node n,float lod) {
@@ -70,11 +70,11 @@ void Ring::draw(node n,float lod) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
-  
+
   GlDisplayListManager::getInst().callDisplayList("Ring_ring");
 
   GlTextureManager::getInst().desactivateTexture();
-    
+
   if(lod>20) {
     ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
     DoubleProperty *borderWidth = 0;
@@ -99,7 +99,7 @@ void Ring::drawRing() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);  
+  gluQuadricTexture(quadratic, GL_TRUE);
   gluQuadricOrientation(quadratic, GLU_OUTSIDE);
   gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
   gluQuadricOrientation(quadratic, GLU_INSIDE);

@@ -39,7 +39,7 @@ Triangle::~Triangle() {
 //=====================================================
 void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.first=Coord(0.25,0,0);
-  boundingBox.second=Coord(0.75,0.5,1);
+  boundingBox.second=Coord(0.75,0.5,0);
 }
 //=====================================================
 void Triangle::draw(node n,float lod) {
@@ -60,7 +60,7 @@ void Triangle::draw(node n,float lod) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
-  
+
   GlDisplayListManager::getInst().callDisplayList("Triangle_triangle");
 
   GlTextureManager::getInst().desactivateTexture();
@@ -89,7 +89,7 @@ void Triangle::drawTriangle() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);  
+  gluQuadricTexture(quadratic, GL_TRUE);
   gluQuadricOrientation(quadratic, GLU_OUTSIDE);
   gluDisk(quadratic, 0.0f, 0.5f, 3, 1);
   gluQuadricOrientation(quadratic, GLU_INSIDE);

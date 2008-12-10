@@ -6,7 +6,7 @@
 #include <GL/gl.h>
 #endif
 #include <tulip/TulipPlugin.h>
-#include <tulip/GlGraph.h> 
+#include <tulip/GlGraph.h>
 #include <tulip/Glyph.h>
 
 using namespace std;
@@ -15,10 +15,10 @@ using namespace tlp;
 /** \addtogroup glyph */
 /*@{*/
 /// - An implementation of square with variable border glyph.
-/** 
+/**
  * This glyph is an implementation of a square with a variable border.
- * The size of the border depend on the depth of the node, decreasing from the 
- * root. 
+ * The size of the border depend on the depth of the node, decreasing from the
+ * root.
  *
  * AUTHOR:
  *
@@ -40,14 +40,15 @@ public:
   virtual string getName() {
     return string("SquareBorder");
   }
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void  draw(node n,float lod);
   virtual Coord getAnchor(const Coord& vector) const;
-  
+
 protected:
   GLuint LList;
   bool   listOk;
   void   drawSquare();
-  
+
 private:
   static float 	   borderProportion;
   const static float BORDER_COLOR[3];
@@ -78,6 +79,11 @@ SquareBorder::~SquareBorder() {
     if (glIsList(LList))
       glDeleteLists(LList, 1);
 }
+//=====================================================
+void SquareBorder::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0,0,0);
+  boundingBox.second=Coord(1,1,0);
+}
 //====================================================================
 void SquareBorder::draw(node n,float lod) {
   tree = (*graph);
@@ -85,11 +91,11 @@ void SquareBorder::draw(node n,float lod) {
   Color borderColor = glGraph->elementColor->getNodeValue(n);
   setMaterial(borderColor);
   string texFile = glGraph->elementTexture->getNodeValue(n);
-    
+
   if (texFile != "") {
     glGraph->activateTexture(texFile);
   }
-  
+
   drawSquare();
 }
 
@@ -108,7 +114,7 @@ Coord SquareBorder::getAnchor(const Coord& vector) const {
 
 //====================================================================
 void SquareBorder::drawSquare() {
-  float borderCalc = borderProportion;     
+  float borderCalc = borderProportion;
   float relatifBorderCalc = 0.5f * borderCalc;
   glPushAttrib(GL_LIGHTING_BIT);
 
@@ -118,92 +124,92 @@ void SquareBorder::drawSquare() {
 
   glNormal3f(0.0f, 0.0f, 1.0f);
 
-  // front face 
-  glVertex2f(0.5f, 0.5f);                             
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(0.5f, -0.5f);                            
+  // front face
+  glVertex2f(0.5f, 0.5f);
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(0.5f, -0.5f);
 
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(0.5f, -0.5f);                            
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(0.5f, -0.5f);
 
-  glVertex2f(0.5f, -0.5f);                            
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(-0.5f, -0.5f);                           
+  glVertex2f(0.5f, -0.5f);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-0.5f, -0.5f);
 
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-0.5f, -0.5f);                           
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-0.5f, -0.5f);
 
-  glVertex2f(-0.5f, -0.5f);                           
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-0.5f, 0.5f);                            
+  glVertex2f(-0.5f, -0.5f);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-0.5f, 0.5f);
 
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(-0.5f, 0.5f);                            
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(-0.5f, 0.5f);
 
-  glVertex2f(-0.5f, 0.5f);                            
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(0.5f, 0.5f);                             
+  glVertex2f(-0.5f, 0.5f);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(0.5f, 0.5f);
 
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(0.5f, 0.5f);                             
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(0.5f, 0.5f);
 
   glNormal3f(0.0f, 0.0f, -1.0f);
 
-  // back face  
+  // back face
   // -------------------------------------------------------
-  glVertex2f(0.5f, 0.5f);                             
-  glVertex2f(0.5f, -0.5f);                            
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
+  glVertex2f(0.5f, 0.5f);
+  glVertex2f(0.5f, -0.5f);
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
 
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(0.5f, -0.5f);                            
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(0.5f, -0.5f);
   // ---------------------------------------------------------
-  glVertex2f(0.5f, -0.5f);                            
-  glVertex2f(-0.5f, -0.5f);                           
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
+  glVertex2f(0.5f, -0.5f);
+  glVertex2f(-0.5f, -0.5f);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
 
-  glVertex2f(-0.5f, -0.5f);                           
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
+  glVertex2f(-0.5f, -0.5f);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
   // ---------------------------------------------------------
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-0.5f, -0.5f);                           
-  glVertex2f(-0.5f, 0.5f);                             
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-0.5f, -0.5f);
+  glVertex2f(-0.5f, 0.5f);
 
-  glVertex2f(-0.5f, 0.5f);                            
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
+  glVertex2f(-0.5f, 0.5f);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
   // ---------------------------------------------------------
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(-0.5f, 0.5f);                            
-  glVertex2f(0.5f, 0.5f);                             
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(-0.5f, 0.5f);
+  glVertex2f(0.5f, 0.5f);
 
-  glVertex2f(0.5f, 0.5f);                             
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
+  glVertex2f(0.5f, 0.5f);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
 
   glEnd();
 
-  // ---------------------------------------------------------    
+  // ---------------------------------------------------------
   glPopAttrib();
 
   glBegin(GL_QUADS);
   glNormal3f(0.0f, 0.0f, -1.0f);
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
 
   glNormal3f(0.0f, 0.0f, 1.0f);
-  glVertex2f(relatifBorderCalc, relatifBorderCalc);   
-  glVertex2f(-relatifBorderCalc, relatifBorderCalc);  
-  glVertex2f(-relatifBorderCalc, -relatifBorderCalc); 
-  glVertex2f(relatifBorderCalc, -relatifBorderCalc);  
+  glVertex2f(relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, relatifBorderCalc);
+  glVertex2f(-relatifBorderCalc, -relatifBorderCalc);
+  glVertex2f(relatifBorderCalc, -relatifBorderCalc);
   glEnd();
 }
 //====================================================================

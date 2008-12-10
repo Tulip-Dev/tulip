@@ -33,34 +33,35 @@ typedef GLfloat Point3[3];
 /** \addtogroup glyph */
 /*@{*/
 /// - An implementation of square with variable border glyph.
-/** 
+/**
  * This glyph is an implementation of a square with a variable border.
- * The size of the border depend on the depth of the node, decreasing from the 
- * root. 
+ * The size of the border depend on the depth of the node, decreasing from the
+ * root.
  *
  * AUTHOR:
  *
- * Julien Testut, 
- * Antony Durand, 
- * Pascal Ollier, 
- * Yashvin Nababsing, 
- * Sebastien Leclerc, 
- * Ruchon Thibault, 
+ * Julien Testut,
+ * Antony Durand,
+ * Pascal Ollier,
+ * Yashvin Nababsing,
+ * Sebastien Leclerc,
+ * Ruchon Thibault,
  * Eric Dauchier,
  * University Bordeaux I France
  */
- 
+
 //====================================================================
 class SquareBorderTextured: public Glyph, public GraphObserver {
 
 public:
     SquareBorderTextured(GlyphContext* gc = NULL);
     virtual ~SquareBorderTextured();
+    virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
     virtual void draw(node n,float lod);
     virtual Coord getAnchor(const Coord& vector) const;
 
 protected:
-    typedef stdext::hash_map<node, int> mapNodeLevel_t; 
+    typedef stdext::hash_map<node, int> mapNodeLevel_t;
 
     struct TreeCache {
         bool           isTree;
@@ -70,7 +71,7 @@ protected:
         GLuint         texObj;
         float          paramA;
         float          paramB;
-        float          paramBorderMaxWidth;      
+        float          paramBorderMaxWidth;
 
         TreeCache():texObj(0){
         }
@@ -79,7 +80,7 @@ protected:
     mapGraphCache_t mapTree;
 
     inline node findRoot(node n);
-    
+
   bool  initializeNewGraph(Graph*, node);
     void  unInitializeNewGraph(Graph*);
     void  drawSquare(node n, float borderSize);
@@ -104,7 +105,7 @@ GLYPHPLUGIN(SquareBorderTextured, "2D - Square Border Textured",
             "Yashvin Nababsing, Sebastien Leclerc, Ruchon Thibault,"
             "Eric Dauchier",
             "09/07/2004", "Textured square22", "1.0", 101);
-            
+
 //====================================================================
 SquareBorderTextured::SquareBorderTextured(GlyphContext* gc):Glyph(gc){
 }
@@ -114,27 +115,27 @@ SquareBorderTextured::~SquareBorderTextured() {
 }
 //====================================================================
 bool SquareBorderTextured::initializeNewGraph(Graph* sg, node n) {
-    TreeCache& treec = mapTree[sg];          
+    TreeCache& treec = mapTree[sg];
     treec.isTree     = TreeTest::isTree(sg);
-     
+
     sg->addObserver(this);
-    
+
     if (treec.isTree) {
         treec.root     = findRoot(n);
-        treec.maxDepth = attributeNodeLevel(treec.root, 1, treec.mapNodeLevel);   
+        treec.maxDepth = attributeNodeLevel(treec.root, 1, treec.mapNodeLevel);
         generateTexture(sg);
     }
     else {
         treec.root = NOTATREE;
         treec.mapNodeLevel.clear();
-    }   
+    }
     return treec.isTree;
 }
 
 //===================================================================
 void SquareBorderTextured::unInitializeNewGraph(Graph* sg) {
     mapGraphCache_t::iterator itMap = mapTree.find(sg);
-    
+
     if (itMap != mapTree.end()) {
         if (glIsTexture(itMap->second.texObj))
             glDeleteTextures(1, &(itMap->second.texObj));
@@ -147,10 +148,10 @@ void SquareBorderTextured::unInitializeNewGraph(Graph* sg) {
 //====================================================================
 float SquareBorderTextured::calcBorderSum(int level) {
     float sumBorder = 0;
-    
+
     for (int i = 1; i < level; i++)
         sumBorder += evaluateBorderSize(i);
-    
+
     return sumBorder;
 }
 //====================================================================
@@ -159,19 +160,19 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
 
     const float MAXCOLOR = 255.f;
 
-    treec.paramBorderMaxWidth = calcBorderSum(treec.maxDepth + 1);            
+    treec.paramBorderMaxWidth = calcBorderSum(treec.maxDepth + 1);
     treec.paramB              = 4 * MAXCOLOR / treec.paramBorderMaxWidth;
     treec.paramA              = -treec.paramB / treec.paramBorderMaxWidth;
 
     const int TEXTURE_SIZE = 256;
-    /* 
+    /*
      * Define linear texture of 1x 256+2 for border (for trilinear filtering)
      */
     unsigned int texture[TEXTURE_SIZE + 2][3];
 
     for (int i = 0 ; i < TEXTURE_SIZE ; i++) {
         const float r     = float(i) / TEXTURE_SIZE* treec.paramBorderMaxWidth;
-        const float color = treec.paramA * r * r + treec.paramB * r; 
+        const float color = treec.paramA * r * r + treec.paramB * r;
 
         texture[i][0] = (unsigned int) color;
         texture[i][1] = (unsigned int) color;
@@ -179,7 +180,7 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
     }
 
     glEnable(GL_TEXTURE_2D);
-    glGenTextures(1, &treec.texObj);    
+    glGenTextures(1, &treec.texObj);
     glBindTexture(GL_TEXTURE_2D, treec.texObj);
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_TRUE);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, TEXTURE_SIZE, 1, 0, GL_RGB,
@@ -189,37 +190,41 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    glBindTexture(GL_TEXTURE_2D, 0);        
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
-
+//=====================================================
+void SquareBorderTextured::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0,0,0);
+  boundingBox.second=Coord(1,1,0);
+}
 //====================================================================
 void SquareBorderTextured::draw(node n,float lod) {
   tree = glGraphInputData->getGraph();
-  
+
   if (mapTree.find(tree) == mapTree.end())
-    initializeNewGraph(tree, n);    
+    initializeNewGraph(tree, n);
   TreeCache& treecache = mapTree[tree];
-  
+
   if (treecache.isTree) {
-    Size size = 
+    Size size =
       tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
     const float borderSize = evaluateBorderSize(treecache.mapNodeLevel[n],
-						RectangleArea(size));                                                    
+						RectangleArea(size));
         drawSquare(n, borderSize);
   }
   else
-    drawSquare(n, 0);       
+    drawSquare(n, 0);
 }
 
 //====================================================================
 Coord SquareBorderTextured::getAnchor(const Coord& vector) const {
     Coord v(vector);
     float x, y, z, fmax;
-    
+
     v.get(x, y, z);
     v.setZ(0.0f);
     fmax = max(fabsf(x), fabsf(y));
-    
+
     if (fmax > 0.0f)
         return v * (0.5f / fmax);
     else
@@ -230,7 +235,7 @@ Coord SquareBorderTextured::getAnchor(const Coord& vector) const {
 void SquareBorderTextured::setTulipGLState(node n) {
     setMaterial(glGraphInputData->elementColor->getNodeValue(n));
     string texFile = glGraphInputData->elementTexture->getNodeValue(n);
-    
+
     if (texFile != "") {
       string texturePath=glGraphInputData->parameters->getTexturePath();
       GlTextureManager::getInst().activateTexture(texturePath+texFile);
@@ -242,7 +247,7 @@ void SquareBorderTextured::drawSquare(node n, float borderSizePixel) {
     Size size = tree->getLocalProperty<SizeProperty>("viewSize")->getNodeValue(n);
 
     float widthBorderRatio = borderSizePixel / size.getW();
-    const float posX       = min(widthBorderRatio, 0.45f);  
+    const float posX       = min(widthBorderRatio, 0.45f);
     const float posXL      = -0.5f + posX;
     const float posXR      = 0.5f - posX;
 
@@ -278,16 +283,16 @@ void SquareBorderTextured::drawSquare(node n, float borderSizePixel) {
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     const int level  = mapTree[tree].mapNodeLevel[n];
-    const float sl   = calcBorderSum(level);    
-    const float bm   = mapTree[tree].paramBorderMaxWidth; 
-    const float minu = 0 + sl / bm;  
+    const float sl   = calcBorderSum(level);
+    const float bm   = mapTree[tree].paramBorderMaxWidth;
+    const float minu = 0 + sl / bm;
     const float maxu = (evaluateBorderSize(level) + sl) / bm;
 
     glBegin(GL_TRIANGLE_STRIP);
     glNormal3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(minu, 0);
     glVertex3fv(b1);
-    glTexCoord2f(maxu, 0); 
+    glTexCoord2f(maxu, 0);
     glVertex3fv(p1);
     glTexCoord2f(minu, 0);
     glVertex3fv(b2);
@@ -298,13 +303,13 @@ void SquareBorderTextured::drawSquare(node n, float borderSizePixel) {
     glTexCoord2f(maxu, 0);
     glVertex3fv(p4);
     glTexCoord2f(minu, 0);
-    glVertex3fv(b3);         
+    glVertex3fv(b3);
     glTexCoord2f(maxu, 0);
-    glVertex3fv(p3);         
+    glVertex3fv(p3);
     glTexCoord2f(minu, 0);
-    glVertex3fv(b1);         
+    glVertex3fv(b1);
     glTexCoord2f(maxu, 0);
-    glVertex3fv(p1);         
+    glVertex3fv(p1);
     glEnd();
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -314,11 +319,11 @@ void SquareBorderTextured::drawSquare(node n, float borderSizePixel) {
     glVertex2fv(p3);
     glTexCoord2f(1, 0);
     glVertex2fv(p4);
-    glTexCoord2f(1, 1); 
+    glTexCoord2f(1, 1);
     glVertex2fv(p2);
     glTexCoord2f(0, 1);
     glVertex2fv(p1);
-    glEnd();        
+    glEnd();
     glEnable(GL_CULL_FACE);
     glDisable(GL_TEXTURE_2D);
 }
@@ -333,12 +338,12 @@ inline node SquareBorderTextured::findRoot(node n) {
 //====================================================================
 int SquareBorderTextured::attributeNodeLevel(node n, int depth,
                                         mapNodeLevel_t& mapnodelevel) {
-    int maxDepth    = 0;   
+    int maxDepth    = 0;
     mapnodelevel[n] = depth;
 
     Iterator<node>* itNode = tree->getOutNodes(n);
     while (itNode->hasNext()) {
-        int nodeLevel = attributeNodeLevel(itNode->next(), depth + 1, 
+        int nodeLevel = attributeNodeLevel(itNode->next(), depth + 1,
                                            mapnodelevel);
         maxDepth      = max(nodeLevel, maxDepth);
     }
@@ -356,7 +361,7 @@ void SquareBorderTextured::addEdge(Graph* sg, const edge) {
     unInitializeNewGraph(sg);
 }
 
-//====================================================================  
+//====================================================================
 void SquareBorderTextured::delNode(Graph* sg, const node) {
     unInitializeNewGraph(sg);
 }

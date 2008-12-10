@@ -28,6 +28,7 @@ class Square : public Glyph {
 public:
   Square(GlyphContext *gc=NULL);
   virtual ~Square();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -42,6 +43,11 @@ Square::Square(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Square::~Square() {
+}
+//=====================================================
+void Square::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0,0,0);
+  boundingBox.second=Coord(1,1,0);
 }
 //=====================================================
 void Square::draw(node n,float lod) {
@@ -67,13 +73,13 @@ void Square::draw(node n,float lod) {
   GlDisplayListManager::getInst().callDisplayList("Square_square");
 
   GlTextureManager::getInst().desactivateTexture();
-  
+
   if(lod>20) {
     ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
     DoubleProperty *borderWidth = 0;
     if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
       borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-    
+
     Color c = borderColor->getNodeValue(n);
     //  setMaterial(c);
     if (borderWidth == 0) glLineWidth(2);
@@ -82,7 +88,7 @@ void Square::draw(node n,float lod) {
       if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
       else glLineWidth (lineWidth);
     }
-    
+
     glDisable(GL_LIGHTING);
     glColor4ub(c[0],c[1],c[2],c[3]);
     GlDisplayListManager::getInst().callDisplayList("Square_squareborder");
@@ -107,7 +113,7 @@ void Square::drawSquare() {
   /* front face */
   glNormal3f(0.0f, 0.0f, 1.0f);
   glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(-0.5f, -0.5f); 
+  glVertex2f(-0.5f, -0.5f);
   glTexCoord2f(1.0f, 0.0f);
   glVertex2f(0.5f, -0.5f);
   glTexCoord2f(1.0f, 1.0f);
@@ -117,7 +123,7 @@ void Square::drawSquare() {
   /* back face */
   glNormal3f(0.0f, 0.0f,-1.0f);
   glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(-0.5f, -0.5f); 
+  glVertex2f(-0.5f, -0.5f);
   glTexCoord2f(1.0f, 1.0f);
   glVertex2f(-0.5f, 0.5f);
   glTexCoord2f(0.0f, 1.0f);
@@ -130,7 +136,7 @@ void Square::drawSquare() {
 void Square::drawSquareBorder() {
   glBegin(GL_LINE_LOOP);
   /* front face */
-  glVertex2f(-0.5f, -0.5f); 
+  glVertex2f(-0.5f, -0.5f);
   glVertex2f(0.5f, -0.5f);
   glVertex2f(0.5f, 0.5f);
   glVertex2f(-0.5f, 0.5f);
