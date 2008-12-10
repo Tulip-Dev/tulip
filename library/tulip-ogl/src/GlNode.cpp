@@ -135,14 +135,26 @@ namespace tlp {
 
     node n=node(id);
 
+    bool select=data->elementSelected->getNodeValue(n);
+        if(drawSelect!=select)
+          return;
+
     const string &tmp = data->elementLabel->getNodeValue(n);
     if (tmp.length() < 1) {
       return;
     }
 
-    bool select=data->elementSelected->getNodeValue(n);
-    if(drawSelect!=select)
-      return;
+    if(!data->getGraph()->isMetaNode(n)){
+      if(select)
+        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil() ,0xFFFF);
+      else
+        glStencilFunc(GL_LEQUAL,data->parameters->getNodesLabelStencil(),0xFFFF);
+    }else{
+      if(select)
+        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil() ,0xFFFF);
+      else
+        glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
+    }
 
     if(select)
       renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
@@ -178,6 +190,7 @@ namespace tlp {
     float w_max = 300;
     float w,h;
     float div_w, div_h;
+    BoundingBox includeBB;
 
     switch(data->parameters->getFontsType()){
     case 0:
@@ -187,7 +200,8 @@ namespace tlp {
       //      w_max = nodeSize.getW()*50.0;
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
-      glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
+      data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
+      glTranslatef(nodePos[0], nodePos[1], nodePos[2]+(nodeSize[2]*includeBB.second[2])/2.+0.01);
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
@@ -195,6 +209,7 @@ namespace tlp {
 	glScalef(div_w, div_w, 1);
       else
 	glScalef(div_h, div_h, 1);
+      glDepthFunc(GL_LEQUAL );
       renderer->draw(w,w, labelPos);
       glPopMatrix();
       break;

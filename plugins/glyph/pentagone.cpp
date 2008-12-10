@@ -47,7 +47,7 @@ Pentagone::~Pentagone() {
 //=====================================================
 void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox.first=Coord(0.15,0.15,0);
-  boundingBox.second=Coord(0.85,0.85,1);
+  boundingBox.second=Coord(0.85,0.85,0);
 }
 //=====================================================
 void Pentagone::draw(node n, float lod) {
@@ -69,7 +69,7 @@ void Pentagone::draw(node n, float lod) {
   GlDisplayListManager::getInst().callDisplayList("Pentagone_pentagone");
 
   GlTextureManager::getInst().desactivateTexture();
-    
+
   if(lod>20) {
   ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
   DoubleProperty *borderWidth = 0;

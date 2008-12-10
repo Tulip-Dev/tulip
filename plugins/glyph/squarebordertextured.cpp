@@ -56,6 +56,7 @@ class SquareBorderTextured: public Glyph, public GraphObserver {
 public:
     SquareBorderTextured(GlyphContext* gc = NULL);
     virtual ~SquareBorderTextured();
+    virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
     virtual void draw(node n,float lod);
     virtual Coord getAnchor(const Coord& vector) const;
 
@@ -191,7 +192,11 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
+//=====================================================
+void SquareBorderTextured::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0,0,0);
+  boundingBox.second=Coord(1,1,0);
+}
 //====================================================================
 void SquareBorderTextured::draw(node n,float lod) {
   tree = glGraphInputData->getGraph();

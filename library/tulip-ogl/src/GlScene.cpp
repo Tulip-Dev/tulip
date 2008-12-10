@@ -243,7 +243,6 @@ namespace tlp {
 
           // Draw Nodes Label
           if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
-            glStencilFunc(GL_LEQUAL,glGraphComposite->getNodesLabelStencil(),0xFFFF);
             // Draw Label for selected Nodes
             for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
 	      if((*itE).second>=0) {

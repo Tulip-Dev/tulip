@@ -28,6 +28,7 @@ class Square : public Glyph {
 public:
   Square(GlyphContext *gc=NULL);
   virtual ~Square();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -42,6 +43,11 @@ Square::Square(GlyphContext *gc): Glyph(gc) {
 }
 //=====================================================
 Square::~Square() {
+}
+//=====================================================
+void Square::getIncludeBoundingBox(BoundingBox &boundingBox) {
+  boundingBox.first=Coord(0,0,0);
+  boundingBox.second=Coord(1,1,0);
 }
 //=====================================================
 void Square::draw(node n,float lod) {

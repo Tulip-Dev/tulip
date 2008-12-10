@@ -312,16 +312,32 @@ namespace tlp {
 		}
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
-    	if(!decTab.empty()){
-    		if(i==decTab[0]) {
+      if(dec<decTab.size())
+        if(i==decTab[dec])
     			dec++;
-    			decTab.erase(decTab.begin());
-    		}
-    	}
-      setColor(colors[i-dec]);
-      glTexCoord2f(1.0*i, 0.);
+      glColor4ubv(((const GLubyte *)&colors[i-dec]));
       glVertex3fv(&points[i*3]);
-      glTexCoord2f(1.0*i, 1.);
+      glVertex3fv(&points[i*3 + size*3]);
+    		}
+    glEnd();
+
+    dec=0;
+    glBegin(GL_LINE_STRIP);
+    for (unsigned int i = 0; i < size; ++i) {
+      if(dec<decTab.size())
+        if(i==decTab[dec])
+          dec++;
+      glColor4ubv(((const GLubyte *)&colors[i-dec]));
+      glVertex3fv(&points[i*3]);
+    	}
+    glEnd();
+    dec=0;
+    glBegin(GL_LINE_STRIP);
+    for (unsigned int i = 0; i < size; ++i) {
+      if(dec<decTab.size())
+        if(i==decTab[dec])
+          dec++;
+      glColor4ubv(((const GLubyte *)&colors[i-dec]));
       glVertex3fv(&points[i*3 + size*3]);
     }
     glEnd();
@@ -419,9 +435,9 @@ namespace tlp {
     }
 
     unsigned int steps = 40;
-    Vector<float, 4> color, delta;
+    Vector<float, 4> baseColor, delta;
     for(unsigned int i = 0; i<4; ++i) {
-      color[i] = c1[i];
+      baseColor[i] = c1[i];
       delta[i] = float(c2[i]) - float(c1[i]);
     }
     delta /= steps;
@@ -434,25 +450,39 @@ namespace tlp {
     glBegin(GL_QUAD_STRIP);
     glNormal3f(0.0f, 0.0f, 1.0f);
 
+    Vector<float, 4> color=baseColor;
     for (unsigned int i = 0; i <= steps; ++i) {
-      /*
-      color[3] = 255;
-
-      if (i < 5)
-	color[3] = double(i) / 5.0 * 255.0 ;
-      if (i > steps - 5)
-	color[3] = double(steps - i) / 5.0 * 255.0 ;
-      */
-
-      setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
+      glColor4ub((unsigned char)color[0], (unsigned char)color[1],
+          (unsigned char)color[2], (unsigned char)color[3]);
       glTexCoord2f(0.0f, 0.0f);
       glEvalCoord2f((GLfloat) i/steps,0);
-      //setColor(Color((unsigned char)color[0], (unsigned char)color[1],(unsigned char)color[2], (unsigned char)color[3]));
+      glColor4ub((unsigned char)color[0], (unsigned char)color[1],  //Need to be done, bug of opengl ???
+          (unsigned char)color[2], (unsigned char)color[3]);
       glTexCoord2f(1.0f, 1.0f);
       glEvalCoord2f((GLfloat) i/steps,1);
       color += delta;
     }
     glEnd();
+
+    color=baseColor;
+    glBegin(GL_LINE_STRIP);
+    for (unsigned int i = 0; i <= steps; ++i) {
+      glColor4ub((unsigned char)color[0], (unsigned char)color[1],
+          (unsigned char)color[2], (unsigned char)color[3]);
+      glEvalCoord2f((GLfloat) i/steps,0);
+      color += delta;
+    }
+    glEnd();
+    color=baseColor;
+    glBegin(GL_LINE_STRIP);
+    for (unsigned int i = 0; i <= steps; ++i) {
+      glColor4ub((unsigned char)color[0], (unsigned char)color[1],
+          (unsigned char)color[2], (unsigned char)color[3]);
+      glEvalCoord2f((GLfloat) i/steps,1);
+      color += delta;
+    }
+    glEnd();
+
     glDisable(GL_MAP2_VERTEX_3);
     delete [] points;
   }
