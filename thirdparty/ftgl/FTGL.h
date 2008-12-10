@@ -37,8 +37,13 @@ typedef float    FTGL_FLOAT;
 
     // Non windows platforms - don't require nonsense as seen above :-)    
     #ifndef __gl_h_
-       #include <GL/gl.h>
-       #include <GL/glu.h>
+       #if defined(__APPLE__)
+         #include <OpenGL/gl.h>
+         #include <OpenGL/glu.h>
+       #else
+         #include <GL/gl.h>
+         #include <GL/glu.h>
+       #endif
     #endif
 
     // Required for compatibility with glext.h style function definitions of 

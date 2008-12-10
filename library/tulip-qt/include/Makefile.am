@@ -2,23 +2,23 @@ nobase_include_HEADERS = \
 	tulip/TulipTableWidget.h \
 	tulip/GlMainWidget.h \
 	tulip/TabWidget.h \
-	tulip/PropertyDialog.h \	
+	tulip/PropertyDialog.h  \
 	tulip/CopyPropertyDialog.h \
 	tulip/TulipStatsWidget.h \
 	tulip/RenderingParametersDialog.h \
 	tulip/AugmentedDisplayDialog.h \
 	tulip/GridOptionsWidget.h \
-	tulip/GlMainView.h \	
+	tulip/GlMainView.h \
 	tulip/NodeLinkDiagramComponent.h \
 	tulip/GWInteractor.h \
 	tulip/ForegroundEntity.h \
 	tulip/MouseSelector.h \
-	tulip/MouseBoxZoomer.h\
-	tulip/MouseEdgeBuilder.h\
+	tulip/MouseBoxZoomer.h \
+	tulip/MouseEdgeBuilder.h \
 	tulip/MouseInteractors.h \
-	tulip/MouseMagicSelector.h\
-	tulip/MouseNodeBuilder.h\
-	tulip/MouseSelectionEditor.h\
+	tulip/MouseMagicSelector.h \
+	tulip/MouseNodeBuilder.h \
+	tulip/MouseSelectionEditor.h \
 	tulip/MouseEdgeSelector.h \
 	tulip/MouseEdgeBendEditor.h \
 	tulip/MouseShowElementInfos.h \
@@ -92,7 +92,6 @@ tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
 
 tulip/propertywidget.h : tulip/PropertyWidget.h
 	cp -f $< $@
-
 
 endif
 

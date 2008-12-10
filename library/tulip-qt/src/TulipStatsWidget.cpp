@@ -32,8 +32,6 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qradiobutton.h>
 
-#include <GL/glu.h>
-
 using namespace tlp;
 using namespace std;
 
