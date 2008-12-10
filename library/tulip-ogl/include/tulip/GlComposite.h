@@ -11,14 +11,14 @@
 
 namespace tlp {
 
-  /** \brief GlSimpleEntity used to agregate other GlEntity 
+  /** \brief GlSimpleEntity used to agregate other GlEntity
    *
    * GlSimpleEntity used to agregate other GlEntity
    * This class provide basic function to manage other entity
    */
   class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 
-  
+
   public:
     GlComposite();
     ~GlComposite();
@@ -36,7 +36,7 @@ namespace tlp {
      */
     void deleteGlEntity(const std::string &key);
     /**
-     * Detele given entity 
+     * Detele given entity
      */
     void deleteGlEntity(GlSimpleEntity *entity);
     /**
@@ -74,7 +74,7 @@ namespace tlp {
      * Function used to visit composite's children
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
+      //visitor->visit(this);
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
 	if((*it)->isVisible())
 	  (*it)->acceptVisitor(visitor);
@@ -84,7 +84,7 @@ namespace tlp {
     /**
      * translate the composite with children
      */
-    virtual void translate(const Coord &mouvement); 
+    virtual void translate(const Coord &mouvement);
 
     /**
      * Function to export data in XML
