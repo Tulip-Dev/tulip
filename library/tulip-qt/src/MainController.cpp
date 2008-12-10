@@ -664,11 +664,12 @@ namespace tlp {
   		View *view=(*it).second;
 
       currentView=view;
+      currentGraph=currentView->getGraph();
       installInteractors(view);
       //installEditMenu(view);
-      clusterTreeWidget->setGraph(currentView->getGraph());
-      eltProperties->setGraph(currentView->getGraph());
-      propertiesWidget->setGraph(currentView->getGraph());
+      clusterTreeWidget->setGraph(currentGraph);
+      eltProperties->setGraph(currentGraph);
+      propertiesWidget->setGraph(currentGraph);
     }
   }
   //**********************************************************************
