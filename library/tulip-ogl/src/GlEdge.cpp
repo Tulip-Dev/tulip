@@ -178,7 +178,7 @@ namespace tlp {
 
     //compute anchor, (clip line with the glyph)
     int tgtGlyphId = 1; //cube outlined
-    if (data->elementGraph->getNodeValue(target)==0)
+    //if (data->elementGraph->getNodeValue(target)==0)
       tgtGlyphId = data->elementShape->getNodeValue(target);
     Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
     //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
@@ -292,27 +292,26 @@ namespace tlp {
 
     switch (shape) {
     case POLYLINESHAPE:
-      if (drawPoly && (lod>0.05 || lod<-0.05)) {
-	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      }
-      glDepthFunc(GL_LESS);
-      if (drawLine) {
+      if(lod>0.05 || lod<-0.05)
+        tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+      else
+        tlp::polyLine(tmp, startColor, endColor);
+      //glDepthFunc(GL_LESS);
+      /*if (drawLine) {
 	tlp::polyLine(tmp, startColor, endColor);
-      }
+      }*/
       break;
     case BEZIERSHAPE:
-      if (drawPoly && (lod>0.05 || lod<-0.05))
-	tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      glDepthFunc(GL_LESS);
-      if (drawLine)
-	tlp::bezierLine(tmp, startColor, endColor);
+      if(lod>0.05 || lod<-0.05)
+        tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+      else
+        tlp::bezierLine(tmp, startColor, endColor);
       break;
     case SPLINESHAPE:
-      if (drawPoly && (lod>0.05 || lod<-0.05))
-	tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      glDepthFunc(GL_LESS);
-      if (drawLine)
-	tlp::splineLine(tmp, startColor, endColor);
+      if (lod>0.05 || lod<-0.05)
+        tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+      else
+        tlp::splineLine(tmp, startColor, endColor);
       break;
       //3D lines
     case L3D_BIT + POLYLINESHAPE:
@@ -328,11 +327,10 @@ namespace tlp {
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,
 			       GlLines::SPLINE3, startColor, endColor); break;
     default:
-      if (drawPoly && (lod>0.05 || lod<-0.05))
-	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
-      glDepthFunc(GL_LESS);
-      if (drawLine)
-	tlp::polyLine(tmp,startColor,endColor);
+      if (lod>0.05 || lod<-0.05)
+        tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+      else
+        tlp::polyLine(tmp,startColor,endColor);
       break;
     }
 
