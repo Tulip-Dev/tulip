@@ -19,6 +19,7 @@ namespace tlp {
     treeWidget->header()->resizeSection(0,205);
     treeWidget->header()->resizeSection(1,70);
     treeWidget->header()->resizeSection(2,70);
+    applyButton->setEnabled(false);
   }
 
   void RenderingParametersDialog::windowActivationChange(bool oldActive) {
@@ -102,7 +103,8 @@ void RenderingParametersDialog::attachMainWidget(GlMainWidget* graphWidget) {
     }
   }
   treeWidget->expandAll();
-  connect(treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)),this, SLOT(checkBoxClicked(QTreeWidgetItem*, int)));
+  connect(treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
+  connect(applyButton, SIGNAL(clicked()),this, SLOT(applyVisibility()));
 }
 //=============================================================================
 void RenderingParametersDialog::addLayer(GlScene* scene, const string& name, GlLayer* layer){
@@ -250,117 +252,77 @@ void RenderingParametersDialog::delLayer(GlScene*, const string&, GlLayer*){
   assert(false);
 }
 //=============================================================================
-void RenderingParametersDialog::checkBoxClicked(QTreeWidgetItem* item, int column) {
-  if(column!=1 && column!=2)
-    return;
-
-  if(column==1) {
-    if(!item->parent()) {
-      //Layer
-      if(!observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString()))
-	return;
-      if(item->checkState(column)==Qt::Unchecked){
-	observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(false);
-      }else{
-	observedMainWidget->getScene()->getLayer(item->data(0,0).toString().toStdString())->setVisible(true);
-      }
-    }else{
-      QList<string> hierarchie;
-      buildHierarchie(item,hierarchie);
-      GlLayer* layer=observedMainWidget->getScene()->getLayer(hierarchie[0]);
-      if(!layer)
-	return;
-      GlSimpleEntity* entity=layer->getComposite();
-      bool isGraphComposite=false;
-      for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
-	GlSimpleEntity* newEntity=(GlSimpleEntity*)((GlComposite*)entity)->findGlEntity(*it);
-	if(newEntity)
-	  entity=newEntity;
-	else
-	  isGraphComposite=true;
-      }
-
-      if(!isGraphComposite) {
-	if(item->checkState(column)==Qt::Unchecked){
-	  entity->setVisible(false);
-	}else{
-	  entity->setVisible(true);
-	}
-      }else{
-	GlGraphComposite *composite=(GlGraphComposite*) entity;
-	if(item->data(0,0).toString().toStdString()=="Nodes")
-	  composite->setDisplayNodes(item->checkState(column)==Qt::Checked);
-	else if (item->data(0,0).toString().toStdString()=="Edges")
-	  composite->setDisplayEdges(item->checkState(column)==Qt::Checked);
-	else if (item->data(0,0).toString().toStdString()=="Meta-Nodes")
-	  composite->setDisplayMetaNodes(item->checkState(column)==Qt::Checked);
-	else if (item->data(0,0).toString().toStdString()=="Nodes Label")
-	  composite->setDisplayNodesLabel(item->checkState(column)==Qt::Checked);
-	else if (item->data(0,0).toString().toStdString()=="Meta-Nodes Label")
-	  composite->setDisplayMetaNodesLabel(item->checkState(column)==Qt::Checked);
-	else if (item->data(0,0).toString().toStdString()=="Edges Label")
-	  composite->setDisplayEdgesLabel(item->checkState(column)==Qt::Checked);
-	else
-	  assert(false);
-      }
-    }
-  }else{
-    QList<string> hierarchie;
-    buildHierarchie(item,hierarchie);
-    GlLayer* layer=observedMainWidget->getScene()->getLayer(hierarchie[0]);
-    if(!layer)
-      return;
-    GlSimpleEntity* entity=layer->getComposite();
-    bool isGraphComposite=false;
-    for(QList<string>::iterator it=(++hierarchie.begin());it!=hierarchie.end();++it) {
-      GlSimpleEntity* newEntity=(GlSimpleEntity*)((GlComposite*)entity)->findGlEntity(*it);
-      if(newEntity)
-	entity=newEntity;
-      else
-	isGraphComposite=true;
-    }
-
-    if(!isGraphComposite) {
-      if(item->checkState(column)==Qt::Unchecked){
-	entity->setStencil(0xFFFF);
-      }else{
-	entity->setStencil(2);
-      }
-    }else{
-      GlGraphComposite *composite=(GlGraphComposite*) entity;
-      int value;
-      if(item->checkState(column)==Qt::Checked)
-	value=2;
-      else
-	value=0xFFFF;
-      if(item->data(0,0).toString().toStdString()=="Selected nodes")
-	composite->setSelectedNodesStencil(value);
-      if(item->data(0,0).toString().toStdString()=="Selected meta-nodes")
-	composite->setSelectedMetaNodesStencil(value);
-      if(item->data(0,0).toString().toStdString()=="Selected edges")
-	composite->setSelectedEdgesStencil(value);
-      else if(item->data(0,0).toString().toStdString()=="Nodes")
-	composite->setNodesStencil(value);
-      else if (item->data(0,0).toString().toStdString()=="Edges")
-	  composite->setEdgesStencil(value);
-      else if (item->data(0,0).toString().toStdString()=="Meta-Nodes")
-	composite->setMetaNodesStencil(value);
-      else if (item->data(0,0).toString().toStdString()=="Nodes Label")
-	composite->setNodesLabelStencil(value);
-      else if (item->data(0,0).toString().toStdString()=="Meta-Nodes Label")
-	composite->setMetaNodesLabelStencil(value);
-      else if (item->data(0,0).toString().toStdString()=="Edges Label")
-	composite->setEdgesLabelStencil(value);
-    }
-  }
-
-  observedMainWidget->draw();
+void RenderingParametersDialog::itemClicked(QTreeWidgetItem *item,int column){
+  if((column==1) || (column==2))
+    applyButton->setEnabled(true);
 }
 //=============================================================================
-void RenderingParametersDialog::buildHierarchie(QTreeWidgetItem *item,QList<string>& hierarchie) {
-  if(item->parent())
-    buildHierarchie(item->parent(),hierarchie);
-  hierarchie.push_back(item->data(0,0).toString().toStdString());
+void RenderingParametersDialog::applyVisibility() {
+  GlScene *scene=observedMainWidget->getScene();
+  for(int i=0;i<treeWidget->topLevelItemCount();i++){
+    QTreeWidgetItem *layerItem=treeWidget->topLevelItem(i);
+    GlLayer *layer=scene->getLayer(layerItem->text(0).toStdString());
+    layer->setVisible(layerItem->checkState(1)==Qt::Checked);
+    applyVisibility(layerItem,layer->getComposite());
+  }
+  observedMainWidget->draw();
+  applyButton->setEnabled(false);
+}
+//=============================================================================
+void RenderingParametersDialog::applyVisibility(QTreeWidgetItem *item,GlComposite *composite) {
+  for(int i=0;i<item->childCount();++i){
+    QTreeWidgetItem *child=item->child(i);
+    GlSimpleEntity *entity=composite->findGlEntity(child->text(0).toStdString());
+
+    GlGraphComposite *graphComposite=dynamic_cast<GlGraphComposite *>(entity);
+
+    if(!graphComposite){
+      entity->setVisible(child->checkState(1)==Qt::Checked);
+      entity->setStencil(child->checkState(2)==Qt::Checked?2:0xFFFF);
+      GlComposite *childComposite=dynamic_cast<GlComposite *>(entity);
+      if(childComposite)
+        applyVisibility(child,childComposite);
+    }else{
+      graphComposite->setVisible(child->checkState(1)==Qt::Checked);
+      for(int j=0;j<child->childCount();++j){
+        QTreeWidgetItem *graphCompositeChild=child->child(j);
+        string graphCompositeChildText=graphCompositeChild->text(0).toStdString();
+        if(graphCompositeChildText=="Nodes"){
+          graphComposite->setDisplayNodes(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Meta-Nodes"){
+          graphComposite->setDisplayMetaNodes(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Edges"){
+          graphComposite->setDisplayEdges(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Nodes Label"){
+          graphComposite->setDisplayNodesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Meta-Nodes Label"){
+          graphComposite->setDisplayMetaNodesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setMetaNodesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Edges Label"){
+          graphComposite->setDisplayEdgesLabel(graphCompositeChild->checkState(1)==Qt::Checked);
+          graphComposite->setEdgesLabelStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Selected nodes"){
+          graphComposite->setSelectedNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Selected meta-nodes"){
+          graphComposite->setSelectedMetaNodesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else if(graphCompositeChildText=="Selected edges"){
+          graphComposite->setSelectedEdgesStencil((graphCompositeChild->checkState(2)==Qt::Checked)?2:0xFFFF);
+        }else{
+          assert(false);
+        }
+      }
+    }
+  }
+}
+//=============================================================================
+void RenderingParametersDialog::accept() {
+  if(applyButton->isEnabled())
+    applyVisibility();
+  QDialog::accept();
 }
 
 }

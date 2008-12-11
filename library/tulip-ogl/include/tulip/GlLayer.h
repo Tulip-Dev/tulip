@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLLAYER_H
@@ -23,14 +23,14 @@ namespace tlp {
 
   class GlScene;
   class GlSceneVisitor;
-  
+
   /**
    * Layer class
    */
   class TLP_GL_SCOPE GlLayer {
-  
+
   public:
-    
+
     /**
      * Layer constructor : construct a layer with his name
      */
@@ -40,12 +40,12 @@ namespace tlp {
      * Set the scene where the layer is
      */
     void setScene(GlScene *scene) {this->scene=scene;camera.setScene(scene);}
-    
+
     /**
      * Return the scene where the layer is
      */
     GlScene *getScene() {return scene;}
-    
+
     /**
      * Return the layer's name
      */
@@ -55,17 +55,17 @@ namespace tlp {
      * Set the layer's camera with a pointer to a camera
      */
     void setCamera(Camera *camera) {this->camera=*camera;}
-    
+
     /**
      * Set the layer's camera
      */
-    void setCamera(const Camera& camera) {this->camera=camera;} 
-    
+    void setCamera(const Camera& camera) {this->camera=camera;}
+
     /**
      * Replace the layer's camera with a new 2D one
      */
     void set2DMode() {this->camera=Camera(NULL,false);}
-    
+
     /**
      * Return the layer's camera
      */
@@ -74,33 +74,33 @@ namespace tlp {
     /**
      * Set if the layer is visible
      */
-    void setVisible(bool visible) {this->visible=visible;}
-    
+    void setVisible(bool visible) {composite.setVisible(visible);}
+
     /**
      * Return if the layer is visible
      */
-    bool isVisible() {return visible;}
-    
+    bool isVisible() {return composite.isVisible();}
+
     /**
      * Add an entity to GlComposite of the layer
      */
     void addGlEntity(GlSimpleEntity *entity,const std::string& name);
-    
+
     /**
      * Delete entity with name : key
      */
     void deleteGlEntity(const std::string &key);
-    
+
     /**
-     * Delete entity 
+     * Delete entity
      */
     void deleteGlEntity(GlSimpleEntity *entity);
-    
+
     /**
      * Return entity with name : key
      */
     GlSimpleEntity* findGlEntity(const std::string &key);
-    
+
     /**
      * Return the map of layer's entities
      */
@@ -143,7 +143,7 @@ namespace tlp {
     Camera camera;
 
   };
-  
+
 }
 
 #endif // Tulip_GLLAYER_H

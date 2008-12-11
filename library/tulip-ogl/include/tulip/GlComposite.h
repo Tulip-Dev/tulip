@@ -76,8 +76,8 @@ namespace tlp {
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       //visitor->visit(this);
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
-	if((*it)->isVisible())
-	  (*it)->acceptVisitor(visitor);
+        if((*it)->isVisible())
+          (*it)->acceptVisitor(visitor);
       }
     }
 

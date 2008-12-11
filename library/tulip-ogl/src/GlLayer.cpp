@@ -11,18 +11,18 @@ using namespace std;
 
 namespace tlp {
 
-  GlLayer::GlLayer(const std::string& name) 
+  GlLayer::GlLayer(const std::string& name)
     :name(name),visible(true),scene(0),camera(0){
     composite.addParent(this);
   }
 
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
-    if(visible) {
+    if(composite.isVisible()) {
       visitor->visit(this);
       composite.acceptVisitor(visitor);
     }
   }
-  
+
   void GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name){
     composite.addGlEntity(entity,name);
     if(scene)
@@ -34,17 +34,17 @@ namespace tlp {
     if(scene)
       scene->notifyModifyLayer(scene,this->name,this);
   }
-  
+
   void GlLayer::deleteGlEntity(GlSimpleEntity *entity) {
     composite.deleteGlEntity(entity);
     if(scene)
       scene->notifyModifyLayer(scene,this->name,this);
   }
-  
+
   GlSimpleEntity* GlLayer::findGlEntity(const std::string &key) {
     return composite.findGlEntity(key);
   }
-  
+
   std::map<std::string, GlSimpleEntity*> *GlLayer::getDisplays() {
     return composite.getDisplays();
   }
@@ -61,7 +61,7 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"visible",visible);
 
     composite.getXML(childrenNode);
-    
+
   }
 
   void GlLayer::setWithXML(xmlNodePtr rootNode){
@@ -84,8 +84,8 @@ namespace tlp {
     if(childrenNode){
       composite.setWithXML(childrenNode);
     }
-    
+
   }
 
-  
+
 }
