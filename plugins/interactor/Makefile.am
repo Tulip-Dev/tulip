@@ -15,13 +15,13 @@ plugins_LTLIBRARIES = libParallelCoordsElementShowInfos-@VERSION@.la \
 libParallelCoordsElementShowInfos_@VERSION@_la_SOURCES = ParallelCoordsElementShowInfos.cpp 
 
 libParallelCoordsElementsSelector_@VERSION@_la_SOURCES = ParallelCoordsElementsSelector.cpp \
-							 ParallelCoordsGlEntitiesSelector.h \ 
+							 ParallelCoordsGlEntitiesSelector.h \
 							 ParallelCoordsGlEntitiesSelector.cpp
 
 libParallelCoordsElementDeleter_@VERSION@_la_SOURCES = ParallelCoordsElementDeleter.cpp 	
 
 libParallelCoordsElementHighlighter_@VERSION@_la_SOURCES = ParallelCoordsElementHighlighter.cpp \
-							   ParallelCoordsGlEntitiesSelector.h \ 
+							   ParallelCoordsGlEntitiesSelector.h \
 							   ParallelCoordsGlEntitiesSelector.cpp
 							    																						
 libParallelCoordsAxisSwapper_@VERSION@_la_SOURCES = ParallelCoordsAxisSwapper.cpp 

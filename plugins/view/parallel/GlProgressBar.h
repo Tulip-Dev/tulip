@@ -19,7 +19,7 @@
 
 namespace tlp {
 
-class TLP_GL_SCOPE GlProgressBar : public GlComposite {
+class GlProgressBar : public GlComposite {
 
 public :
 

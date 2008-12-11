@@ -62,7 +62,7 @@ namespace tlp {
 
   class SpreadTable;
 
-  class TLP_QT_SCOPE SpreadCalculator {
+  class SpreadCalculator {
   public:
     static SpreadCalculator* calculator();
     //returns true if the string is a formula (a formula should start with '=')

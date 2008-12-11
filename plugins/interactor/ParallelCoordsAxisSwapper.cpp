@@ -43,7 +43,7 @@ static Color axisHighlight(14,241,212,0);
 
 static Color axisToSwapHighlight(0,255,0,0);
 
-class TLP_QT_SCOPE ParallelCoordsAxisSwapper : public Interactor {
+class ParallelCoordsAxisSwapper : public Interactor {
 public :
 	ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false) {}
 	~ParallelCoordsAxisSwapper() {}

@@ -30,7 +30,7 @@ namespace tlp {
    *
    * This class is a generic class to render cylinders as GlEntity.
    */
-  class TLP_GL_SCOPE GlCylinder : public GlSimpleEntity {
+  class GlCylinder : public GlSimpleEntity {
 
   public :
 

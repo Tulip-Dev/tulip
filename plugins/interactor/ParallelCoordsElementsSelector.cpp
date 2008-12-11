@@ -18,7 +18,7 @@ using namespace std;
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParallelCoordsElementsSelector : public ParallelCoordsGlEntitiesSelector {
+class ParallelCoordsElementsSelector : public ParallelCoordsGlEntitiesSelector {
 	public :
 		ParallelCoordsElementsSelector(Qt::MouseButton button = Qt::LeftButton,
 									   Qt::KeyboardModifier modifier = Qt::NoModifier) : ParallelCoordsGlEntitiesSelector(button, modifier) {}

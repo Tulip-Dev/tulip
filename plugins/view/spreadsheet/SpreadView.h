@@ -35,7 +35,7 @@ namespace tlp {
 
   class Graph;
 
-  class TLP_QT_SCOPE SpreadView : public AbstractView
+  class SpreadView : public AbstractView
   {
     Q_OBJECT
 

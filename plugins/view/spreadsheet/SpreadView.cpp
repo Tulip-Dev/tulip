@@ -8,10 +8,7 @@ using namespace std;
 
 namespace tlp {
 
-  VIEWPLUGIN(SpreadView, "SpreadSheetView", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0", 1);
-
-  SpreadView::SpreadView() :
-    AbstractView(){
+  SpreadView::SpreadView() :AbstractView() {
   }
 
   QWidget *SpreadView::construct(QWidget *parent) {
@@ -49,5 +46,7 @@ namespace tlp {
   void SpreadView::init() {
     draw();
   }
+
+  VIEWPLUGIN(SpreadView, "SpreadSheetView", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0", 1);
 
 }

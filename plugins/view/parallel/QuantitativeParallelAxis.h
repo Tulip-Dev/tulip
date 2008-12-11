@@ -37,7 +37,7 @@ enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUA
 
 // Class which allows to render a quantitative axis
 // Associated datatypes can be real or integer
-class TLP_GL_SCOPE QuantitativeParallelAxis : public ParallelAxis {
+class QuantitativeParallelAxis : public ParallelAxis {
 
 public :
 

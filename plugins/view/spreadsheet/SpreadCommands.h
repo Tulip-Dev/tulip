@@ -57,7 +57,7 @@
 
 namespace tlp {
 
-  class TLP_QT_SCOPE DataChanged : public QUndoCommand
+  class DataChanged : public QUndoCommand
   {
   public:
     DataChanged(SpreadTable*, int, int, const QString&, const QString&);
@@ -72,7 +72,7 @@ namespace tlp {
     QString newData;
   };
 
-  class TLP_QT_SCOPE InsertRowsCommand : public QUndoCommand
+  class InsertRowsCommand : public QUndoCommand
   {
   public:
     InsertRowsCommand(SpreadTable*, int, int);
@@ -85,7 +85,7 @@ namespace tlp {
     int position;
   };
 
-  class TLP_QT_SCOPE InsertColumnsCommand : public QUndoCommand
+  class InsertColumnsCommand : public QUndoCommand
   {
   public:
     InsertColumnsCommand(SpreadTable*, int, int);
@@ -98,7 +98,7 @@ namespace tlp {
     int position;
   };
 
-  class TLP_QT_SCOPE DeleteContents : public QUndoCommand
+  class DeleteContents : public QUndoCommand
   {
   public:
     DeleteContents(SpreadTable*);
@@ -111,7 +111,7 @@ namespace tlp {
     QMimeData oldData;
   };
 
-  class TLP_QT_SCOPE DeleteEntireRows : public QUndoCommand
+  class DeleteEntireRows : public QUndoCommand
   {
   public:
     DeleteEntireRows(SpreadTable*, int, int);
@@ -125,7 +125,7 @@ namespace tlp {
     QMimeData oldData;
   };
 
-  class TLP_QT_SCOPE DeleteEntireColumns : public QUndoCommand
+  class DeleteEntireColumns : public QUndoCommand
   {
   public:
     DeleteEntireColumns(SpreadTable*, int, int);
@@ -139,7 +139,7 @@ namespace tlp {
     QMimeData oldData;
   };
 
-  class TLP_QT_SCOPE CutCommand : public QUndoCommand
+  class CutCommand : public QUndoCommand
   {
   public:
     CutCommand(SpreadTable*);
@@ -152,7 +152,7 @@ namespace tlp {
     QTableWidgetSelectionRange selectedRange;
   };
 
-  class TLP_QT_SCOPE PasteCommand : public QUndoCommand
+  class PasteCommand : public QUndoCommand
   {
   public:
     PasteCommand(SpreadTable*);
@@ -167,7 +167,7 @@ namespace tlp {
     int column;
   };
 
-  class TLP_QT_SCOPE ChangeCellsEditor : public QUndoCommand
+  class ChangeCellsEditor : public QUndoCommand
   {
   public:
     ChangeCellsEditor(SpreadTable*, QTableWidgetSelectionRange, int);
@@ -181,7 +181,7 @@ namespace tlp {
     int newEditor;
   };
 
-  class TLP_QT_SCOPE ChangeCellsFont : public QUndoCommand
+  class ChangeCellsFont : public QUndoCommand
   {
   public:
     ChangeCellsFont(SpreadTable*, QTableWidgetSelectionRange, QFont);
@@ -195,7 +195,7 @@ namespace tlp {
     QFont newFont;
   };
 
-  class TLP_QT_SCOPE ChangeCellsAlignment : public QUndoCommand
+  class ChangeCellsAlignment : public QUndoCommand
   {
   public:
     ChangeCellsAlignment(SpreadTable*, QTableWidgetSelectionRange, int);
@@ -209,7 +209,7 @@ namespace tlp {
     int newAlignment;
   };
 
-  class TLP_QT_SCOPE ChangeCellsBackground : public QUndoCommand
+  class ChangeCellsBackground : public QUndoCommand
   {
   public:
     ChangeCellsBackground(SpreadTable*, QTableWidgetSelectionRange, QColor);
@@ -223,7 +223,7 @@ namespace tlp {
     QColor newBackground;
   };
 
-  class TLP_QT_SCOPE ChangeCellsForeground : public QUndoCommand
+  class ChangeCellsForeground : public QUndoCommand
   {
   public:
     ChangeCellsForeground(SpreadTable*, QTableWidgetSelectionRange, QColor);
@@ -237,7 +237,7 @@ namespace tlp {
     QColor newForeground;
   };
 
-  class TLP_QT_SCOPE SortCommand : public QUndoCommand
+  class SortCommand : public QUndoCommand
   {
   public:
     SortCommand(SpreadTable*, const SpreadTableSort&);

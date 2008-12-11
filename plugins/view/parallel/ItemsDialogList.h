@@ -34,7 +34,7 @@ struct itemInfo {
 };
 
 // A Custom List Widget which supports drag and drop
-class TLP_QT_SCOPE ItemsDialogList : public QListWidget {
+class ItemsDialogList : public QListWidget {
 
   Q_OBJECT
 

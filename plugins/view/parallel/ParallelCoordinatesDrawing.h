@@ -33,7 +33,7 @@
 
 namespace tlp {
 
-class TLP_GL_SCOPE ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
+class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
 
 public :
 

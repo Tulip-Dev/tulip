@@ -9,7 +9,7 @@
 
 namespace tlp {
 
-struct GlLines
+struct TLP_GL_SCOPE GlLines
 {
   //Curves types: linear, bezier, spline order 3, spline order 4
   enum InterpolationMethod {LINEAR=0, BEZIER, SPLINE3, SPLINE4};

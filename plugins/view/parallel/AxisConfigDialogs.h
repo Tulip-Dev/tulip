@@ -34,7 +34,7 @@ namespace tlp {
 
 // A really simple dialog which allows user to set number of graduations
 // and data ordering (ascendent or not) for a particular quantitative axis
-class TLP_QT_SCOPE QuantitativeAxisConfigDialog : public QDialog {
+class QuantitativeAxisConfigDialog : public QDialog {
 
 	Q_OBJECT
 
@@ -57,7 +57,7 @@ private :
 
 // A really simple dialog which allows user to set labels order
 // on a particular nominative axis
-class TLP_QT_SCOPE NominalAxisConfigDialog : public QDialog {
+class NominalAxisConfigDialog : public QDialog {
 
 	Q_OBJECT
 

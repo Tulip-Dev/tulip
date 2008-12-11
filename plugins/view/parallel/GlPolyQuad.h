@@ -32,7 +32,7 @@ namespace tlp {
    *
    * This generic class is used  to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
    */
-  class TLP_GL_SCOPE GlPolyQuad : public GlSimpleEntity {
+  class GlPolyQuad : public GlSimpleEntity {
 
   public :
 

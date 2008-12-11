@@ -60,7 +60,7 @@ class QAbstractItemModel;
 
 namespace tlp {
 
-  class TLP_QT_SCOPE SpreadItemDelegate : public QItemDelegate
+  class SpreadItemDelegate : public QItemDelegate
   {
     Q_OBJECT
    

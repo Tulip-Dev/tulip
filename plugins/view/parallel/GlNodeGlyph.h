@@ -26,7 +26,7 @@ namespace tlp {
 
   // Class which allows to draw the glyph associated to a particular node
   // at a specific position with a specific size
-  class TLP_GL_SCOPE GlNodeGlyph : public GlSimpleEntity {
+  class GlNodeGlyph : public GlSimpleEntity {
 
   public :
 

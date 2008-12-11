@@ -36,7 +36,7 @@ namespace tlp {
   
   class Graph;
 
-  class TLP_QT_SCOPE SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData 
+  class SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData 
   {
     Q_OBJECT
       

@@ -38,7 +38,7 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParallelCoordsGlEntitiesSelector : public MouseSelector {
+class ParallelCoordsGlEntitiesSelector : public MouseSelector {
 	public :
 		ParallelCoordsGlEntitiesSelector(Qt::MouseButton button = Qt::LeftButton,
 									     Qt::KeyboardModifier modifier = Qt::NoModifier) : MouseSelector(button, modifier){}

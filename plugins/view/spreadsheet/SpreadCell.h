@@ -56,7 +56,7 @@
 
 namespace tlp {
 
-  class TLP_QT_SCOPE SpreadCell : public QTableWidgetItem
+  class SpreadCell : public QTableWidgetItem
   {
     friend QDataStream& operator<<(QDataStream&, const SpreadCell&);
     friend QDataStream& operator>>(QDataStream&, SpreadCell&);

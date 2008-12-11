@@ -35,7 +35,7 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParallelCoordinatesConfigDialog : public QDialog, public Ui::Dialog {
+class ParallelCoordinatesConfigDialog : public QDialog, public Ui::Dialog {
 
   Q_OBJECT
 

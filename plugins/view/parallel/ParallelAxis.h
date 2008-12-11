@@ -33,7 +33,7 @@
 
 namespace tlp {
 
-class TLP_GL_SCOPE ParallelAxis : public GlComposite {
+class ParallelAxis : public GlComposite {
 
  public:
 

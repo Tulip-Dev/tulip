@@ -46,7 +46,7 @@ namespace tlp {
 const Color lightBlue(0, 217, 255, 100);
 const Color darkBlue(0, 0, 255, 50);
 
-class TLP_GL_SCOPE GlAxisBoxPlot : GlSimpleEntity {
+class GlAxisBoxPlot : GlSimpleEntity {
 
 public :
 
@@ -281,7 +281,7 @@ private :
 
 };
 
-class TLP_QT_SCOPE ParallelCoordsAxisBoxPlot : public Interactor {
+class ParallelCoordsAxisBoxPlot : public Interactor {
 
 public :
 

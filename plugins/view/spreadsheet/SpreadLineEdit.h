@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-  class TLP_QT_SCOPE SpreadLineEdit : public QLineEdit 
+  class SpreadLineEdit : public QLineEdit 
   {
     Q_OBJECT
 

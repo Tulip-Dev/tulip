@@ -196,7 +196,7 @@ private :
 	Coord sliderCoord;
 };
 
-class TLP_QT_SCOPE ParallelCoordsAxisSliders : public Interactor {
+class ParallelCoordsAxisSliders : public Interactor {
 
 public :
 

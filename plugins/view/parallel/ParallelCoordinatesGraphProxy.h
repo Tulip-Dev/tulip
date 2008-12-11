@@ -30,7 +30,7 @@
 
 namespace tlp {
 
-class TLP_SCOPE ParallelCoordinatesGraphProxy : public GraphDecorator {
+class ParallelCoordinatesGraphProxy : public GraphDecorator {
 
 public :
 

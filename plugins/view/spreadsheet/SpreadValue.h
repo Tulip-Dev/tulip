@@ -30,7 +30,7 @@
 
 namespace tlp {
   
-  struct TLP_QT_SCOPE SpreadValue {
+  struct SpreadValue {
     
     enum Type{none=-1,doublev=0,coordv,colorv};
     

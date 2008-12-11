@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParallelCoordsElementShowInfos : public Interactor {
+class ParallelCoordsElementShowInfos : public Interactor {
 	public :
 		ParallelCoordsElementShowInfos(){}
 		~ParallelCoordsElementShowInfos(){}

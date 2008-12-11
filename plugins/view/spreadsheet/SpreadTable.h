@@ -67,7 +67,7 @@ namespace tlp {
   class SpreadTableSort;
   class SpreadTable;
   
-  class TLP_QT_SCOPE Graphic: public QWidget
+  class Graphic: public QWidget
   {
     Q_OBJECT
       
@@ -86,7 +86,7 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE InsertColumnDialog : public QDialog, public Ui::InsertColumnDialogData {
+  class InsertColumnDialog : public QDialog, public Ui::InsertColumnDialogData {
     Q_OBJECT
   public:
     InsertColumnDialog(QWidget *parent=0):QDialog(parent) {
@@ -100,7 +100,7 @@ namespace tlp {
     }
   };
 
-  class TLP_QT_SCOPE SpreadTable : public QTableWidget
+  class SpreadTable : public QTableWidget
   {
     Q_OBJECT
     
@@ -234,7 +234,7 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE SpreadTableSort {
+  class SpreadTableSort {
   public:
     enum SortDirection {SortRows, SortColumns};
     SpreadTableSort(const QTableWidgetSelectionRange&, const QList<int>&,

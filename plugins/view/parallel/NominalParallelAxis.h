@@ -23,7 +23,7 @@
 namespace tlp {
 
 // Class which allow to render a nominal axis (labels are string)
-class TLP_GL_SCOPE NominalParallelAxis : public ParallelAxis {
+class NominalParallelAxis : public ParallelAxis {
 
  public :
 

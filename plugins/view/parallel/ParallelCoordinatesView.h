@@ -37,7 +37,7 @@ namespace tlp {
   //    -> the parallel coordinates drawing (updated each times the data and their properties changed or when the drawing parameters are modified by the user)
   //    -> the view config dialog
   //    -> the OpenGL rendering widget
-  class TLP_QT_SCOPE ParallelCoordinatesView : public GlMainView {
+  class ParallelCoordinatesView : public GlMainView {
 
     Q_OBJECT;
 

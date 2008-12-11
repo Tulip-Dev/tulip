@@ -36,7 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-class TLP_QT_SCOPE ParallelCoordsElementDeleter : public Interactor {
+class ParallelCoordsElementDeleter : public Interactor {
 public :
 	ParallelCoordsElementDeleter() {}
 	~ParallelCoordsElementDeleter() {}
