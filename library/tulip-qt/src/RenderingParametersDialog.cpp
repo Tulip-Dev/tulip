@@ -267,6 +267,7 @@ void RenderingParametersDialog::applyVisibility() {
   }
   observedMainWidget->draw();
   applyButton->setEnabled(false);
+  attachMainWidget(observedMainWidget);
 }
 //=============================================================================
 void RenderingParametersDialog::applyVisibility(QTreeWidgetItem *item,GlComposite *composite) {

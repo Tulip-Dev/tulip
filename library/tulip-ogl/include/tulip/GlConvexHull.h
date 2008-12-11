@@ -23,26 +23,35 @@ namespace tlp {
     /**
      * Build a Polygon with the convex hull of points
      */
-    GlConvexHull(const std::vector<Coord> &points, 
+    GlConvexHull(const std::vector<Coord> &points,
 		 const std::vector<Color> &fillColors,
 		 const std::vector<Color> &outlineColors,
 		 const bool filled,
 		 const bool outlined,
 		 const std::string &name,
 		 bool computeHull=true);
-    
+
     virtual ~GlConvexHull() {}
+
+    /**
+     * Function used to visit composite's children
+     */
+    virtual void acceptVisitor(GlSceneVisitor *visitor) {
+      visitor->visit(this);
+      GlComposite::acceptVisitor(visitor);
+    }
+
 
     /**
      * Retrun the name of this convex hull
      */
     std::string getName() {return _name;}
-    
+
     /**
      * Draw the convexHull
      */
     virtual void draw(float lod,Camera *camera);
-    
+
     /**
      * Static function who build a hierarchy of convexHull with the given graph
      */
@@ -57,7 +66,7 @@ namespace tlp {
      * Translate entity
      */
     virtual void translate(const Coord& mouvement);
-    
+
     /**
      * Get the data in XML form
      */
@@ -67,7 +76,7 @@ namespace tlp {
      * Set the data with XML
      */
     void setWithXML(xmlNodePtr rootNode);
-    
+
   protected:
     std::vector<Coord> _points;
     std::vector<Color> _fillColors;
