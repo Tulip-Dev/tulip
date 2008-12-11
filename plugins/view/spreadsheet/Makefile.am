@@ -9,6 +9,7 @@ plugins_LTLIBRARIES = libSpreadSheet-@VERSION@.la
 pluginsdir = $(libdir)/tlp/view
 
 libSpreadSheet_@VERSION@_la_SOURCES = \
+			SpreadView.h \
 			SpreadView.cpp \
 			SpreadWidget.cpp \
 			SpreadTable.cpp \
@@ -37,10 +38,9 @@ nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
 			moc_SpreadCommands.cpp \
 			moc_SpreadLineEdit.cpp
 
-BUILT_SOURCES = \
-			SpreadInsertColumnDialogData.h\
-			SpreadMainWidgetData.h
+BUILT_SOURCES = SpreadInsertColumnDialogData.h SpreadMainWidgetData.h
 
+dist_noinst_DATA = SpreadInsertColumnDialog.ui SpreadMainWidget.ui
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

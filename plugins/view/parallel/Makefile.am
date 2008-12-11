@@ -47,7 +47,10 @@ BUILT_SOURCES = ParallelCoordinatesConfigDialogData.h
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
 dist_noinst_DATA = ParallelResource.qrc \
-				   ParallelCoordinatesConfigDialog.ui	
+		   cross.png down.png left.png right.png up.png
+		   i_axis_boxplot.png i_axis_sliders.png \
+		   i_axis_swapper.png i_element_highlighter.png \
+		   ParallelCoordinatesConfigDialog.ui	
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@  @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@ 
