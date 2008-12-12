@@ -122,6 +122,10 @@ namespace tlp {
      */
     virtual Graph *getGraph() =0;
 
+  signals:
+
+    void willBeClosed();
+
   protected :
 
     MainWindowFacade mainWindowFacade;

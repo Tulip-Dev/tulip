@@ -3,11 +3,11 @@
  Author: Delorme Maxime and Mathiaut Morgan
  Email : Maxime.Delorme@gmail.com and mathiaut@labri.fr
 
- Last modification : 05/11/2007 
+ Last modification : 05/11/2007
 
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -98,12 +98,15 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    * Function to export data in XML
    */
   virtual void getXML(xmlNodePtr rootNode);
-  
+
   /**
    * Function to set data with XML
    */
   virtual void setWithXML(xmlNodePtr rootNode);
 
+  /**
+   * Draw the GlRect
+   */
   virtual void draw(float lod,Camera *camera);
 };
 }

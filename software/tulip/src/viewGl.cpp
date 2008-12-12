@@ -279,17 +279,18 @@ void viewGl::fileNew(bool checked) {
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
-  createController(name);
-  currentController->setData();
-  enableElements(true);
+  if(createController(name)) {
+    currentController->setData();
+    enableElements(true);
+  }
 }
 //**********************************************************************
-void viewGl::createController(const string &name) {
+bool viewGl::createController(const string &name) {
   if(!controllerAutoLoad){
     if(currentController) {
       Graph *graph=currentController->getGraph();
       if(askSaveGraph(graph->getAttribute<string>("name")))
-        return;
+        return false;
     }
     delete currentController;
     workspace->closeAllWindows();
@@ -297,9 +298,11 @@ void viewGl::createController(const string &name) {
     newController->attachMainWindow(MainWindowFacade(this,toolBar,graphToolBar,workspace));
     currentController=newController;
     currentControllerName=name;
+    connect(currentController,SIGNAL(willBeClosed()),this, SLOT(controllerWillBeClosed()));
   }else{
     controllerAutoLoad=false;
   }
+  return true;
 }
 //**********************************************************************
 bool viewGl::doFileSave() {
@@ -737,6 +740,10 @@ void viewGl::plugins() {
 void viewGl::deletePluginsUpdateChecker(){
   disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   delete pluginsUpdateChecker;
+}
+//==============================================================
+void viewGl::controllerWillBeClosed(){
+  fileNew(true);
 }
 //==============================================================
 void viewGl::helpAbout() {

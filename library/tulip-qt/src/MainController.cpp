@@ -629,21 +629,25 @@ namespace tlp {
     viewNames[newView]=name;
     viewWidget[widget]=newView;
     //newView->setWindowFlags(Qt::Dialog);
+    widget->setAttribute(Qt::WA_DeleteOnClose,true);
     mainWindowFacade.getWorkspace()->addWindow(widget);
 
     connect(newView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
+    connect(widget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
 
     newView->setData(graph,dataSet);
     viewGraph[newView]=graph;
 
-    /*if(elementsDisabled)
-      enableElements(true);*/
-
     string windowTitle=name +" : " + graph->getAttribute<string>("name");
     widget->setWindowTitle(windowTitle.c_str());
     if(rect.width()==0 && rect.height()==0){
-      if(widget->size().height()<10 || widget->size().width()<10)
-        widget->resize(500,500);
+      QRect newRect;
+      if(widget->size().height()<10 || widget->size().width()<10){
+        newRect = QRect(QPoint((viewWidget.size()-1)*20,(viewWidget.size()-1)*20),QSize(500,500));
+      }else{
+        newRect = QRect(QPoint((viewWidget.size()-1)*20,(viewWidget.size()-1)*20),widget->size());
+      }
+      ((QWidget*)(widget->parent()))->setGeometry(newRect);
     }else{
       ((QWidget*)(widget->parent()))->setGeometry(rect);
     }
@@ -754,6 +758,14 @@ namespace tlp {
     QWidget *tab = eltProperties->parentWidget();
     QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
     tabWidget->setCurrentIndex(tabWidget->indexOf(tab));
+  }
+  //==================================================
+  void MainController::widgetWillBeClosed(QObject *object) {
+    QWidget *widget=(QWidget*)object;
+    if(viewWidget.size()==1){
+      emit willBeClosed();
+    }
+    viewWidget.erase(widget);
   }
   //==============================================================
   void MainController::editCut() {

@@ -86,7 +86,7 @@ protected slots:
   void fileSaveAs();
   void fileNew(QAction *action);
   void fileNew(bool);
-  void createController(const std::string &name);
+  bool createController(const std::string &name);
   void fileOpen();
   void filePrint();
   void importGraph(QAction*);
@@ -94,6 +94,7 @@ protected slots:
   void windowsMenuAboutToShow();
   void windowsMenuActivated(QAction*);
   void deletePluginsUpdateChecker();
+  void controllerWillBeClosed();
 
 private:
   void buildMenus();

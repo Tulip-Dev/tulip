@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLSPHERE_H
@@ -25,13 +25,22 @@
 namespace tlp {
 
   class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
-  
+
   public:
-     
+
     GlSphere() {}
+    /**
+     * Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
+     */
     GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
+    /**
+        * Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
+        */
     GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
 
+    /**
+     * Draw the sphere
+     */
     virtual void draw(float lod,Camera *camera);
 
     /**
@@ -43,14 +52,14 @@ namespace tlp {
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);
-    
+
     /**
      * Function to set data with XML
      */
     virtual void setWithXML(xmlNodePtr rootNode);
-    
+
   private:
-    
+
     Coord position;
     float radius;
     Color color;
@@ -58,7 +67,7 @@ namespace tlp {
     Coord rot;
 
   };
-  
+
 }
 
 #endif // Tulip_GLSCENE_H

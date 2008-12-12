@@ -208,6 +208,11 @@ namespace tlp {
      */
     void showElementProperties(unsigned int eltId, bool isNode);
 
+    /**
+     * This slot is call went a view will be closed
+     */
+    void widgetWillBeClosed(QObject *object);
+
     void editCut();
     void editCopy();
     void editPaste();
