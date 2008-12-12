@@ -192,6 +192,7 @@ namespace tlp {
   //**********************************************************************
   MainController::MainController():
     clusterTreeWidget(NULL),currentView(NULL) {
+    morph = new Morphing();
   }
   //**********************************************************************
   MainController::~MainController() {
@@ -339,14 +340,17 @@ namespace tlp {
     return currentGraph;
   }
   //**********************************************************************
-  void MainController::redrawViews() {
+  void MainController::redrawViews(bool init) {
     Observable::holdObservers();
     eltProperties->updateTable();
     propertiesWidget->update();
 
     QList<QWidget *> widgetList=mainWindowFacade.getWorkspace()->windowList();
     for(QList<QWidget *>::iterator it=widgetList.begin();it!=widgetList.end();++it) {
-    	viewWidget[*it]->draw();
+      if(!init)
+        viewWidget[*it]->draw();
+      else
+        viewWidget[*it]->init();
     }
 
     Observable::unholdObservers();
@@ -790,7 +794,7 @@ namespace tlp {
     SetSelection( selP, nodeA, edgeA, currentGraph );
     tlp::removeFromGraph( currentGraph, selP );
     Observable::unholdObservers();
-    redrawViews();
+    redrawViews(true);
   }
   //==============================================================
   void MainController::editCopy() {
@@ -818,7 +822,7 @@ namespace tlp {
     currentGraph->push();
     tlp::copyToGraph( currentGraph, copyCutPasteGraph, 0, selP );
     Observable::unholdObservers();
-    redrawViews();
+    redrawViews(true);
   }
   //==============================================================
   void MainController::editFind() {
@@ -920,7 +924,7 @@ namespace tlp {
 	currentGraph->delEdge(ite);
     }
     Observable::unholdObservers();
-    redrawViews();
+    redrawViews(true);
   }
   //==============================================================
   void MainController::editReverseSelection() {
@@ -1077,31 +1081,31 @@ namespace tlp {
   void MainController::changeLayout(QAction* action) {
     string name = action->text().toStdString();
     GraphState * g0 = 0;
-    /*if( enable_morphing->isChecked() )
-      g0 = new GraphState(glWidget);*/
+    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
+    if( morphingAction->isChecked() && mainView!=NULL)
+      g0 = new GraphState(mainView->getGlMainWidget());
 
     bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
     if (result) {
       if( forceRatioAction->isChecked() )
         currentGraph->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
-      //Graph *graph=glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      /*Observable::holdObservers();
-	glWidget->getScene()->centerScene();
-	overviewWidget->setObservedView(glWidget);
-	Observable::unholdObservers();*/
-      /*if( morphingAction->isChecked() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->init( glWidget, g0, g1);
-	if( !morphable ) {
-	delete g1;
-	g1 = 0;
-	} else {
-	morph->start(glWidget);
-	g0 = 0;	// state remains in morph data ...
-	}
-	}*/
+
+      if( morphingAction->isChecked() && mainView!=NULL) {
+        clearObservers();
+        mainView->getGlMainWidget()->getScene()->centerScene();
+        GraphState * g1 = new GraphState(mainView->getGlMainWidget());
+        bool morphable = morph->init(mainView->getGlMainWidget(), g0, g1);
+        if( !morphable ) {
+          delete g1;
+          g1 = 0;
+        } else {
+          morph->start(mainView->getGlMainWidget());
+          g0 = 0;	// state remains in morph data ...
+        }
+        initObservers();
+      }
     }
-    redrawViews();
+    redrawViews(true);
     if( g0 )
       delete g0;
   }
@@ -1114,23 +1118,27 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeColors(QAction* action) {
     GraphState * g0 = 0;
-    /*if( morphingAction->isChecked() )
-      g0 = new GraphState( glWidget );*/
+    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
+    if( morphingAction->isChecked() && mainView!=NULL)
+      g0 = new GraphState(mainView->getGlMainWidget());
     string name = action->text().toStdString();
     bool result = changeProperty<ColorProperty>(name,"viewColor");
     if( result ) {
-      /*if( morphingAction->isChecked() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->init( glWidget, g0, g1);
-	if( !morphable ) {
-	  delete g1;
-	  g1 = 0;
-	} else {
-	  morph->start(glWidget);
-	  g0 = 0;	// state remains in morph data ...
-	}
-	}*/
-      redrawViews();
+      if( morphingAction->isChecked() && mainView!=NULL) {
+        clearObservers();
+        mainView->getGlMainWidget()->getScene()->centerScene();
+        GraphState * g1 = new GraphState( mainView->getGlMainWidget() );
+        bool morphable = morph->init( mainView->getGlMainWidget(), g0, g1);
+        if( !morphable ) {
+          delete g1;
+          g1 = 0;
+        } else {
+          morph->start(mainView->getGlMainWidget());
+          g0 = 0;	// state remains in morph data ...
+        }
+        initObservers();
+      }
+      redrawViews(true);
     }
     if( g0 )
       delete g0;
@@ -1138,23 +1146,27 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeSizes(QAction* action) {
     GraphState * g0 = 0;
-    /*if( enable_morphing->isChecked() )
-      g0 = new GraphState( glWidget );*/
+    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
+    if( morphingAction->isChecked() && mainView!=NULL)
+      g0 = new GraphState(mainView->getGlMainWidget());
     string name = action->text().toStdString();
     bool result = changeProperty<SizeProperty>(name,"viewSize");
     if( result ) {
-      /*if( enable_morphing->isChecked() ) {
-	GraphState * g1 = new GraphState( glWidget );
-	bool morphable = morph->init( glWidget, g0, g1);
-	if( !morphable ) {
-	delete g1;
-	g1 = 0;
-	} else {
-	morph->start(glWidget);
-	g0 = 0;	// state remains in morph data ...
-	}
-	}*/
-      redrawViews();
+      if( morphingAction->isChecked() && mainView!=NULL) {
+        clearObservers();
+        mainView->getGlMainWidget()->getScene()->centerScene();
+        GraphState * g1 = new GraphState( mainView->getGlMainWidget() );
+        bool morphable = morph->init( mainView->getGlMainWidget(), g0, g1);
+        if( !morphable ) {
+          delete g1;
+          g1 = 0;
+        } else {
+          morph->start(mainView->getGlMainWidget());
+          g0 = 0; // state remains in morph data ...
+        }
+        initObservers();
+      }
+      redrawViews(true);
     }
     if( g0 )
       delete g0;
