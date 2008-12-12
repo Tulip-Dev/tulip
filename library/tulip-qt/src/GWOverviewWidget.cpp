@@ -141,6 +141,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
       cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setCamera(&cam);
+      _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
     _view->draw();
   }

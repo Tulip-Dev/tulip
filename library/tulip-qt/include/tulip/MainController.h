@@ -42,6 +42,7 @@ namespace tlp {
 #ifdef STATS_UI
   class TulipStat;
 #endif
+  class Morphing;
 
   /** \brief Default controller of Tulip
    *
@@ -112,7 +113,7 @@ namespace tlp {
     /**
      * Redraw all views
      */
-    void redrawViews();
+    void redrawViews(bool init=false);
     /**
      * This function is call when an observable is destroyed
      */
@@ -151,6 +152,8 @@ namespace tlp {
     std::map<QWidget *,View*> viewWidget;
     std::map<View *, QAction *> lastInteractorOnView;
     std::map<View *,Graph* > viewGraph;
+
+    Morphing *morph;
 
     QDockWidget *tabWidgetDock;
     SGHierarchyWidget *clusterTreeWidget;
