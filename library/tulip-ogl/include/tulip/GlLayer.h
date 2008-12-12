@@ -135,8 +135,6 @@ namespace tlp {
 
     std::string name;
 
-    bool visible;
-
     GlComposite composite;
     GlScene *scene;
 

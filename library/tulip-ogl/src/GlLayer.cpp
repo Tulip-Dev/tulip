@@ -12,7 +12,7 @@ using namespace std;
 namespace tlp {
 
   GlLayer::GlLayer(const std::string& name)
-    :name(name),visible(true),scene(0),camera(0){
+    :name(name),scene(0),camera(0){
     composite.addParent(this);
   }
 
@@ -58,6 +58,7 @@ namespace tlp {
 
     GlXMLTools::createChild(dataNode,"camera",node);
     camera.getXML(node);
+    bool visible=composite.isVisible();
     GlXMLTools::getXML(dataNode,"visible",visible);
 
     composite.getXML(childrenNode);
@@ -77,7 +78,9 @@ namespace tlp {
       if(node) {
 	camera.setWithXML(node);
       }
+      bool visible;
       GlXMLTools::setWithXML(dataNode,"visible",visible);
+      composite.setVisible(visible);
     }
 
     // Parse children
