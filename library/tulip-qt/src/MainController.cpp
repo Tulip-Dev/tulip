@@ -191,7 +191,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL) {
+    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -310,6 +310,7 @@ namespace tlp {
     clusterTreeWidget->setGraph(lastViewedGraph);
     eltProperties->setGraph(lastViewedGraph);
     propertiesWidget->setGraph(lastViewedGraph);
+    updateCurrentGraphInfos();
     initObservers();
   }
   //**********************************************************************
@@ -416,6 +417,26 @@ namespace tlp {
         (*it).second=g;
       }
     }
+  }
+  //**********************************************************************
+  void MainController::addNode (Graph *graph, const node) {
+    ++currentGraphNbNodes;
+    updateCurrentGraphInfos();
+  }
+  //**********************************************************************
+  void  MainController::addEdge (Graph *graph, const edge) {
+    ++currentGraphNbEdges;
+    updateCurrentGraphInfos();
+  }
+  //**********************************************************************
+  void  MainController::delNode (Graph *graph, const node) {
+    --currentGraphNbNodes;
+    updateCurrentGraphInfos();
+  }
+  //**********************************************************************
+  void  MainController::delEdge (Graph *graph, const edge) {
+    --currentGraphNbEdges;
+    updateCurrentGraphInfos();
   }
   //**********************************************************************
   void MainController::initializeGraph(Graph *graph) {
@@ -780,6 +801,20 @@ namespace tlp {
     if(viewWidget.size()==0){
       emit willBeClosed();
     }
+  }
+  //**********************************************************************
+  void MainController::updateCurrentGraphInfos() {
+    static QLabel *currentGraphInfosLabel = 0;
+    if (!currentGraphInfosLabel) {
+      //mainWindowFacade.getStatusBar()->addWidget(new QLabel(mainWindowFacade.getStatusBar()), true);
+      currentGraphInfosLabel = new QLabel(mainWindowFacade.getStatusBar());
+      mainWindowFacade.getStatusBar()->addPermanentWidget(currentGraphInfosLabel);
+    }
+
+    char tmp[255];
+    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
+    currentGraphInfosLabel->setText(tmp);
+    clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
   }
   //==============================================================
   void MainController::editCut() {

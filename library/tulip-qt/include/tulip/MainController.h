@@ -138,6 +138,26 @@ namespace tlp {
      * Call when a subgraph is remove
      */
     void delSubGraph(Graph*, Graph*);
+    /**
+     * Call when a node is add
+     */
+    void addNode(Graph *graph, const node);
+    /**
+     * Call when an edge is add
+     */
+    void addEdge(Graph *graph, const edge);
+    /**
+     * Call when a node is delete
+     */
+    void delNode(Graph *graph, const node);
+    /**
+     * Call when an edge is delete
+     */
+    void delEdge(Graph *graph, const edge);
+    /**
+     * Call to update number of nodes/edges
+     */
+    void updateCurrentGraphInfos();
 
     /**
      * Change a property
@@ -153,6 +173,8 @@ namespace tlp {
     std::map<View *, QAction *> lastInteractorOnView;
     std::map<View *,Graph* > viewGraph;
     QWidget *lastWidget;
+    unsigned int currentGraphNbNodes;
+    unsigned int currentGraphNbEdges;
 
     Morphing *morph;
 
