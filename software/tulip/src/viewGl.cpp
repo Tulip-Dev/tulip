@@ -505,25 +505,23 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       createController(controllerName);
       currentController->setData(newGraph,*controllerData);
       enableElements(true);
-    }else if(dataSet.exist("scene")) {
-      // Tlp file with scene system
-      string sceneDataStr;
-      DataSet sceneData;
-      dataSet.get<string>("scene", sceneDataStr);
-      sceneData.set<string>("scene",sceneDataStr);
-      createController("MainController");
-      currentController->setData(newGraph,sceneData);
-    }else if(dataSet.exist("displaying")) {
-      // Tlp file with old system
-      DataSet glGraphData;
-      dataSet.get<DataSet>("displaying", glGraphData);
-      DataSet displayingData;
-      displayingData.set<DataSet>("displaying",glGraphData);
-      createController("MainController");
-      currentController->setData(newGraph,displayingData);
     }else{
+      DataSet newDataSet;
+
+      if(dataSet.exist("scene")) {
+        // Tlp file with scene system
+        string sceneDataStr;
+        dataSet.get<string>("scene", sceneDataStr);
+        newDataSet.set<string>("scene",sceneDataStr);
+      }
+      if(dataSet.exist("displaying")) {
+        // Tlp file with old system
+        DataSet glGraphData;
+        dataSet.get<DataSet>("displaying", glGraphData);
+        newDataSet.set<DataSet>("displaying",glGraphData);
+      }
       createController("MainController");
-      currentController->setData(newGraph);
+      currentController->setData(newGraph,newDataSet);
     }
 
     if(noPlugin) {
