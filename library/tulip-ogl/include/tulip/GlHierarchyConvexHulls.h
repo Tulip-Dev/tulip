@@ -15,7 +15,7 @@ namespace tlp {
    * Build a hierarchy of convex hulls
    */
   class TLP_GL_SCOPE GlHierarchyConvexHulls {
-    
+
   public:
     /**
      * Basic constructor
@@ -24,15 +24,18 @@ namespace tlp {
       deducedFromChilds = fatherHullsIsDeducedFromChilds;
     }
     virtual ~GlHierarchyConvexHulls() {}
-    
+
     /**
      * Build the hierarchy for the given graph in GlLayer
      */
     virtual void compute(tlp::GlLayer*,tlp::Graph *);
 
+    /**
+     * Create the hierarchy of ConvexHullItem
+     */
     ConvexHullItem *buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
     void setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull);
-    
+
     bool deducedFromChilds;
   };
 }

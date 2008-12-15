@@ -2,10 +2,10 @@
 /*
  Author: Morgan Mathiaut
  Email : mathiaut@labri.fr
- 
+
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -23,25 +23,54 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
+  /** \brief This is a general class to render an OpenGL laine
+   * This class is use to render an OpenGl line
+   */
   class TLP_GL_SCOPE GlLine : public GlSimpleEntity {
   public:
+    /**
+     * Enpty constructor
+     */
     GlLine() {}
-    GlLine(const std::vector<Coord> &points, 
+    /**
+     * Constructor with a list of coord and a list of color
+     */
+    GlLine(const std::vector<Coord> &points,
 	   const std::vector<Color> &colors);
 
     virtual ~GlLine();
 
+    /**
+     * Render the line
+     */
     void draw(float lod,Camera *camera);
-    
+
+    /**
+     * Change number of points
+     */
     virtual void resizePoints(const unsigned int nbPoints);
+    /**
+     * Change number of colors
+     */
     virtual void resizeColors(const unsigned int nbColors);
-    
+
     virtual const Coord& point(const unsigned int i) const;
+    /**
+     * Return the coord of point with given id
+     */
     virtual Coord& point(const unsigned int i);
+    /**
+     * Add a new point with given coord and given color
+     */
     virtual void addPoint(const Coord& point, const Color& color);
-    
-    //return the ith color used for draw the line
+
+    /**
+     * return the ith color used for draw the line
+     */
     virtual const Color& color(const unsigned int i) const;
+    /**
+     * return the ith color used for draw the line
+     */
     virtual Color& color(const unsigned int i);
 
     /**
@@ -53,7 +82,7 @@ namespace tlp {
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);
-    
+
     /**
      * Function to set data with XML
      */

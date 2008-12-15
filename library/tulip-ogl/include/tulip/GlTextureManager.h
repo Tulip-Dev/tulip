@@ -35,6 +35,9 @@ namespace tlp {
     int width;
   };
 
+  /** \brief Class to manage textures
+   * Singleton class to load/store textures need by OpenGL rendering
+   */
   class TLP_GL_SCOPE GlTextureManager {
 
     typedef std::map<std::string,GlTexture> TextureUnit;
@@ -42,25 +45,58 @@ namespace tlp {
 
   public:
 
+    /**
+     * Create the texture manager singleton
+     */
     static void createInst();
+    /**
+     * Return the texture manager singleton, il singleton doesn't exist this function create it
+     */
     static GlTextureManager &getInst() {
       if(!inst)
-	inst=new GlTextureManager();
+        inst=new GlTextureManager();
       return *inst;
     }
 
+    /**
+     * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
+     */
     void changeContext(unsigned long context);
+    /**
+     * Remove all textures of an OpenGl context and remove this context
+     */
     void removeContext(unsigned long context);
 
+    /**
+     * Return texture info (id, width and height) for the given name
+     */
     GlTexture getTextureInfo(const std::string&);
+    /**
+     * Load texture with given name
+     */
     bool loadTexture(const std::string&);
+    /**
+     * Remove texture with given name
+     */
     void deleteTexture(const std::string &);
+    /**
+     * Begin a new texture with given name
+     */
     void beginNewTexture(const std::string&);
+    /**
+     * Activate a texture with given name
+     */
     bool activateTexture(const std::string&);
+    /**
+     * Disable texture with given name
+     */
     void desactivateTexture();
 
   private:
 
+    /**
+     * empty private constructor for singleton
+     */
     GlTextureManager() {}
 
     static GlTextureManager* inst;
