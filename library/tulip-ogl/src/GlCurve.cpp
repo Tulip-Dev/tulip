@@ -9,7 +9,7 @@
 using namespace std;
 
 namespace tlp {
-  GlCurve::GlCurve(const vector<Coord> &points, 
+  GlCurve::GlCurve(const vector<Coord> &points,
 		   const Color &beginFColor,
 		   const Color &endFColor ,
 		   const float &beginSize,
@@ -60,7 +60,7 @@ namespace tlp {
     }
     glLineWidth(2);
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-    tlp::splineLine(newPoints, 
+    tlp::splineLine(newPoints,
 		    _beginFillColor,
 		    _endFillColor);
     glPopAttrib();
@@ -69,7 +69,7 @@ namespace tlp {
       GlTextureManager::getInst().activateTexture(texture);
     }
 
-    tlp::splineQuad(newPoints, 
+    tlp::splineQuad(newPoints,
 		    _beginFillColor,
 		    _endFillColor,
 		    _beginSize,
@@ -78,7 +78,8 @@ namespace tlp {
 		    newPoints[3] + Coord(1.  , 0.0, 0.));
 
     GlTextureManager::getInst().desactivateTexture();
-
+    glEnable(GL_LIGHTING);
+    glEnable(GL_CULL_FACE);
   }
   //=====================================================
   void GlCurve::setTexture(const std::string &texture) {
@@ -88,7 +89,7 @@ namespace tlp {
   void GlCurve::translate(const Coord& mouvement){
     boundingBox.first+=mouvement;
     boundingBox.second+=mouvement;
-    
+
     for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it) {
       (*it)+=mouvement;
     }
@@ -98,7 +99,7 @@ namespace tlp {
     xmlNodePtr dataNode=NULL;
 
     GlXMLTools::createProperty(rootNode, "type", "GlCurve");
-    
+
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"points",_points);

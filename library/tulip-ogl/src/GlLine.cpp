@@ -60,6 +60,7 @@ namespace tlp {
     }
     glEnd();
 
+    glEnable(GL_LIGHTING);
     glTest(__PRETTY_FUNCTION__);
   }
   //=====================================================

@@ -201,7 +201,10 @@ namespace tlp {
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
       data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
-      glTranslatef(nodePos[0], nodePos[1], nodePos[2]+(nodeSize[2]*includeBB.second[2])/2.+0.01);
+      if(includeBB.second[2]==0.)
+        glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
+      else
+        glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;

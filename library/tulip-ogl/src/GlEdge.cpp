@@ -251,13 +251,15 @@ namespace tlp {
     camera->getProjectionMatrix(projectionMatrix);
     camera->getModelviewMatrix(modelviewMatrix);
     float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix, camera->getViewport());
-    
+
     //draw Edge
     drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_EDGE);
     }
+
+    glEnable(GL_LIGHTING);
 
   }
 
