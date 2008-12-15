@@ -152,6 +152,7 @@ namespace tlp {
     std::map<QWidget *,View*> viewWidget;
     std::map<View *, QAction *> lastInteractorOnView;
     std::map<View *,Graph* > viewGraph;
+    QWidget *lastWidget;
 
     Morphing *morph;
 

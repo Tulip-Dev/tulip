@@ -191,7 +191,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentView(NULL) {
+    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -210,11 +210,6 @@ namespace tlp {
 #ifdef STATS_UI
     delete statsWidget;
 #endif
-
-    QWidgetList views=mainWindowFacade.getWorkspace()->windowList();
-    for(int i=0;i<views.size();++i){
-    	delete views[i];
-    }
 
     delete tabWidgetDock;
   }
@@ -313,7 +308,14 @@ namespace tlp {
   //**********************************************************************
   void MainController::getData(Graph **graph,DataSet *dataSet) {
     DataSet views;
-    QWidgetList widgetList=mainWindowFacade.getWorkspace()->windowList();
+    QWidgetList widgetList;
+    if(lastWidget!=NULL){
+      widgetList.append(lastWidget);
+      lastWidget=NULL;
+    }else{
+      widgetList=mainWindowFacade.getWorkspace()->windowList();
+    }
+
     for(int i=0;i<widgetList.size();++i) {
       QRect rect=((QWidget *)(widgetList[i]->parent()))->geometry();
       DataSet tmp;
@@ -766,10 +768,11 @@ namespace tlp {
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
     QWidget *widget=(QWidget*)object;
-    if(viewWidget.size()==1){
+    lastWidget = widget;
+    viewWidget.erase(widget);
+    if(viewWidget.size()==0){
       emit willBeClosed();
     }
-    viewWidget.erase(widget);
   }
   //==============================================================
   void MainController::editCut() {
