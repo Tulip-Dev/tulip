@@ -387,6 +387,9 @@ namespace tlp {
       string tmp=it->next();
       currentGraph->getProperty(tmp)->addObserver(this);
     } delete it;
+    currentGraphNbNodes=currentGraph->numberOfNodes();
+    currentGraphNbEdges=currentGraph->numberOfEdges();
+    updateCurrentGraphInfos();
   }
   //**********************************************************************
   void MainController::clearObservers() {
