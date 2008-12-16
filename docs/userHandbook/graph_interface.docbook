@@ -120,7 +120,7 @@
                   </listitem>
                   <listitem> <code>Make Bi-connected </code>: <para>For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
                   </listitem>
-                  <listitem> <code>Make directed </code>: If the graph is a free tree, make it directed. If a node and only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
+                  <listitem> <code>Make directed </code>: If the graph is a free tree, make it directed. If only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
                   </listitem>
                   <listitem> Reverse selected edges : Exchange source and target of an edge.
                   </listitem>
@@ -128,7 +128,7 @@
               </listitem>
             </itemizedlist>
           </para>
-          <para><code>View</code>: this menu display all available view type. Click on one and a new view will be create (<xref linkend="Main-views" /> )</para>
+          <para><code>View</code>: this menu display all available view types. Click on one and a new view on the current graph will be created (<xref linkend="Main-views" /> )</para>
         </listitem>
         <listitem>
           <para><code>Windows</code>: this menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
@@ -251,7 +251,7 @@
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a simple left click. The deleted node or edge is the one under the mouse when you clicked.
+              <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a single left click. The deleted node or edge is the one under the mouse when you click.
               </para>
             </listitem>
             <listitem>
@@ -355,7 +355,7 @@
         <sect4 id="layermanager"><title>Layer Manager</title>
         <para>All actions in this dialog are just performed for the current view window.
                 <graphic fileref="images/layermanager.png"/>
-            This dialog is displayed when clicking on the <code>Dialogs->Layer Manager</code>. Enables to configure the elements visibility and priority. The available options are grouped in two column :
+            This dialog is displayed when clicking on the <code>Dialogs->Layer Manager</code>. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
             <itemizedlist>
               <listitem><para><code>Visible</code> : Visibility of the entity
                 </para></listitem>
@@ -363,8 +363,8 @@
                 </para></listitem>
             </itemizedlist>
           </para>
-          <para>In this menu, you see Hull entity, this is convex hulls of the graph. When you click on visible, hierarchy of convex hulls are build. The name of a hull is the name of the coresponding subgraph.</para>   
-          <para>In futur version you could add/modify/remove entity</para>
+          <para>In this menu, you see Hull entity, it represents the convex hulls of the graph. When you click on visible, a hierarchy of convex hulls is build. The name of a hull is the name of the coresponding subgraph.</para>   
+          <para>In a future version you could add/modify/remove entity</para>
         </sect4>
       </sect3>
     </sect2>
@@ -373,13 +373,13 @@
     <sect2 id="SpreadsheetComponent"><title>Spreadsheet component</title>
       <graphic fileref="images/spreadsheet_view.png"/>
       <para>
-        In this view you can visualize graph properties on spreadsheet form.
+        In this view you can visualize graph properties in a spreadsheet form.
       </para>
       <para>
         You have two tabs : Node and Edge.
       </para>
       <para>
-        Color of a cell depend on viewColor property of the node/edge and color of the text depend on viewLabelColor property of the edge/node.
+        Color of a cell depends on the value of the viewColor property of the node/edge and the color of the text depends on the value of the viewLabelColor property of the node./edge
 	</para>
     </sect2>
   </sect1>
