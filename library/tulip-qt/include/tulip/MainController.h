@@ -197,6 +197,8 @@ namespace tlp {
     QAction *morphingAction;
     QAction *undoAction;
     QAction *redoAction;
+    QAction *editUndoAction;
+    QAction *editRedoAction;
 
     QMenu *intMenu;
     QMenu *stringMenu;

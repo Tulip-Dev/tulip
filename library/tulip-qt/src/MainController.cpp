@@ -520,19 +520,24 @@ namespace tlp {
     editMenu = new QMenu("&Edit");
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
 
-    tmpAction=editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
-    tmpAction=editMenu->addAction("C&opy",this,SLOT(editCopy()),QKeySequence(tr("Ctrl+C")));
-    tmpAction=editMenu->addAction("&Paste",this,SLOT(editPaste()),QKeySequence(tr("Ctrl+V")));
+    editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
+    editMenu->addAction("C&opy",this,SLOT(editCopy()),QKeySequence(tr("Ctrl+C")));
+    editMenu->addAction("&Paste",this,SLOT(editPaste()),QKeySequence(tr("Ctrl+V")));
     editMenu->addSeparator();
-    tmpAction=editMenu->addAction("&Find...",this,SLOT(editFind()),QKeySequence(tr("Ctrl+F")));
+    editMenu->addAction("&Find...",this,SLOT(editFind()),QKeySequence(tr("Ctrl+F")));
     editMenu->addSeparator();
-    tmpAction=editMenu->addAction("Select all",this,SLOT(editSelectAll()),QKeySequence(tr("Ctrl+A")));
-    tmpAction=editMenu->addAction("Delete selection",this,SLOT(editDelSelection()),QKeySequence(tr("Del")));
-    tmpAction=editMenu->addAction("Deselect all",this,SLOT(editDeselectAll()),QKeySequence(tr("Ctrl+Shift+A")));
-    tmpAction=editMenu->addAction("Invert selection",this,SLOT(editReverseSelection()),QKeySequence(tr("Ctrl+I")));
+    editMenu->addAction("Select all",this,SLOT(editSelectAll()),QKeySequence(tr("Ctrl+A")));
+    editMenu->addAction("Delete selection",this,SLOT(editDelSelection()),QKeySequence(tr("Del")));
+    editMenu->addAction("Deselect all",this,SLOT(editDeselectAll()),QKeySequence(tr("Ctrl+Shift+A")));
+    editMenu->addAction("Invert selection",this,SLOT(editReverseSelection()),QKeySequence(tr("Ctrl+I")));
     editMenu->addSeparator();
-    tmpAction=editMenu->addAction("Create group",this,SLOT(editCreateGroup()),QKeySequence(tr("Ctrl+G")));
-    tmpAction=editMenu->addAction("Create subgraph",this,SLOT(editCreateSubgraph()),QKeySequence(tr("Ctrl+Shift+G")));
+    editMenu->addAction("Create group",this,SLOT(editCreateGroup()),QKeySequence(tr("Ctrl+G")));
+    editMenu->addAction("Create subgraph",this,SLOT(editCreateSubgraph()),QKeySequence(tr("Ctrl+Shift+G")));
+    editMenu->addSeparator();
+    editUndoAction=editMenu->addAction("Undo",this,SLOT(undo()),QKeySequence(tr("Ctrl+U")));
+    editUndoAction->setEnabled(false);
+    editRedoAction=editMenu->addAction("Redo",this,SLOT(redo()),QKeySequence(tr("Ctrl+R")));
+    editRedoAction->setEnabled(false);
 
      //Algorithm Menu
     algorithmMenu = new QMenu("Algorithm");
@@ -1019,6 +1024,7 @@ namespace tlp {
         graph->pop();
       }
       undoAction->setEnabled(graph->canPop());
+      editUndoAction->setEnabled(graph->canPop());
       clusterTreeWidget->update();
       clusterTreeWidget->setGraph(graph);
     }
@@ -1075,6 +1081,7 @@ namespace tlp {
           if (push) {
             graph->push();
             undoAction->setEnabled(true);
+            editUndoAction->setEnabled(true);
           }
           *dest = *tmp;
 
@@ -1236,6 +1243,7 @@ namespace tlp {
     vector<edge> tmpReversed;
     currentGraph->push();
     undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);
 
     AcyclicTest::makeAcyclic(currentGraph, tmpReversed, tmpSelf);
     Observable::unholdObservers();
@@ -1257,6 +1265,7 @@ namespace tlp {
     vector<edge> removed;
     currentGraph->push();
     undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);
 
     SimpleTest::makeSimple(currentGraph, removed);
     Observable::unholdObservers();
@@ -1279,6 +1288,7 @@ namespace tlp {
 
     currentGraph->push();
     undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);
 
     ConnectedTest::makeConnected(currentGraph, tmp);
     Observable::unholdObservers();
@@ -1300,6 +1310,7 @@ namespace tlp {
     vector<edge> tmp;
     currentGraph->push();
     undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);
 
     BiconnectedTest::makeBiconnected(currentGraph, tmp);
     Observable::unholdObservers();
@@ -1358,6 +1369,7 @@ namespace tlp {
 
     currentGraph->push();
     undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);
 
     TreeTest::makeRootedTree(currentGraph, root);
     Observable::unholdObservers();
@@ -1401,6 +1413,8 @@ namespace tlp {
   void MainController::updateUndoRedoInfos() {
     undoAction->setEnabled(currentGraph->canPop());
     redoAction->setEnabled(currentGraph->canUnpop());
+    editUndoAction->setEnabled(currentGraph->canPop());
+    editRedoAction->setEnabled(currentGraph->canUnpop());
   }
   //**********************************************************************
   void MainController::undo() {
