@@ -96,8 +96,6 @@ namespace tlp {
     virtual ~ViewFactory() {}
     ///
     virtual View *createPluginObject(ViewContext *ic)=0;
-    ///
-    virtual int getId() const=0;
 
     virtual  std::string getMajor() const {
       return tlp::getMajor(getRelease());
@@ -122,7 +120,7 @@ namespace tlp {
 
 }
 
-#define VIEWPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
+#define VIEWPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
 class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
@@ -137,7 +135,6 @@ public:                                          \
   string getInfo() const {return string(I);}	 \
   string getRelease() const {return string(R);}\
   string getTulipRelease() const {return string(TULIP_RELEASE);} \
-  int    getId() const {return ID;}		 \
   tlp::T * createPluginObject(ViewContext *ic)		 \
   {						 \
   	C *tmp = new C();				 \
@@ -148,8 +145,8 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define VIEWPLUGINOFGROUP(C,N,A,D,I,R,ID,G) VIEWPLUGINFACTORY(View,C,N,A,D,I,R,ID,G)
-#define VIEWPLUGIN(C,N,A,D,I,R,ID) VIEWPLUGINOFGROUP(C,N,A,D,I,R,ID,"")
+#define VIEWPLUGINOFGROUP(C,N,A,D,I,R,G) VIEWPLUGINFACTORY(View,C,N,A,D,I,R,G)
+#define VIEWPLUGIN(C,N,A,D,I,R) VIEWPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif
 

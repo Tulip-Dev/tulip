@@ -39,7 +39,7 @@ private :
 	ParallelCoordinatesDrawing *parallelDrawing;
 };
 
-VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates", "Tulip Team", "16/04/2008", "Parallel Coordinates View", "1.0", 2);
+VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates", "Tulip Team", "16/04/2008", "Parallel Coordinates View", "1.0");
 
 
 ParallelCoordinatesView::ParallelCoordinatesView() :

@@ -11,8 +11,6 @@
 #ifndef Tulip_VIEWPLUGINSMANAGER_H
 #define Tulip_VIEWPLUGINSMANAGER_H
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
 #include <string>
 #include <cassert>
 
@@ -41,18 +39,7 @@ namespace tlp {
       return *inst;
     }
 
-    /**
-     * Get the name of plugin with id : id
-     */
-    std::string viewPluginName(int id);
-    /**
-     * Get the id of plugin with name : name
-     */
-    int viewPluginId(std::string name);
-    /**
-     * Create internal maps of plugins
-     */
-    void loadViewPlugins();
+
     /**
      * Load all view's plugins available
      * \param plug : Use this plugin loader
@@ -81,7 +68,5 @@ namespace tlp {
   };
 
 }
-
-#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_VIEWPLUGINSMANAGER_H
