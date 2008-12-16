@@ -18,7 +18,7 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseSelector, "MouseSelector", "Tulip Team", "16/04/2008", "Mouse Selector", "1.0", 1);
+INTERACTORPLUGIN(MouseSelector, "MouseSelector", "Tulip Team", "16/04/2008", "Mouse Selector", "1.0");
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
@@ -142,14 +142,14 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 	glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
 	vector<node>::const_iterator it;
 	for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-	  selection->setNodeValue(*it, 
+	  selection->setNodeValue(*it,
 				  revertSelection ?
 				  !selection->getNodeValue(*it)
 				  : boolVal);
 	}
 	vector<edge>::const_iterator ite;
 	for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
-	  selection->setEdgeValue(*ite, 
+	  selection->setEdgeValue(*ite,
 				  revertSelection ?
 				  !selection->getEdgeValue(*ite)
 				  : boolVal);

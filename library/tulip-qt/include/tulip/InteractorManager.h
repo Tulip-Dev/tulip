@@ -38,18 +38,6 @@ namespace tlp {
     }
 
     /**
-     * return the name of plugin with id : id
-     */
-    std::string interactorName(int id);
-    /**
-     * return id of plugin with name : name
-     */
-    int interactorId(std::string name);
-    /**
-     * Create map of pair<id,name> and pair<name,id>
-     */
-    void loadInteractorPlugins();
-    /**
      * Load interactor plugins with PluginLoader : plug
      */
     void loadPlugins(PluginLoader *plug=0);
@@ -58,6 +46,11 @@ namespace tlp {
      * Get the list of available plugins
      */
     void initInteractorList(MutableContainer<Interactor *>& interactors);
+
+    /**
+     * Get interactor with given name
+     */
+    Interactor* getInteractor(const std::string &name);
 
   private:
 

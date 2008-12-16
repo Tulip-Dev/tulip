@@ -21,10 +21,10 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseEdgeBendEditor, "MouseEdgeBendEditor", "Tulip Team", "16/04/2008", "Mouse Edge Bend Editor", "1.0", 4);
+INTERACTORPLUGIN(MouseEdgeBendEditor, "MouseEdgeBendEditor", "Tulip Team", "16/04/2008", "Mouse Edge Bend Editor", "1.0");
 
 //========================================================================================
-MouseEdgeBendEditor::MouseEdgeBendEditor() 
+MouseEdgeBendEditor::MouseEdgeBendEditor()
   :glMainWidget(NULL){
   operation = NONE_OP;
   _copyLayout = 0;
@@ -36,7 +36,7 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
   basicCircle.setOutlineMode(true);
   basicCircle.fcolor(0) = Color(255, 102, 255, 200);
   basicCircle.ocolor(0) = Color(128, 20, 20, 200);
-    
+
   /*basicCircle.setRenderState(GlAD_ZEnable, false);
   basicCircle.setRenderState(GlAD_Culling, false);
   basicCircle.setRenderState(GlAD_AlphaBlending, true);
@@ -50,7 +50,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     initProxies(glMainWidget);
     bool hasSelection = computeBendsCircles(glMainWidget);
-				
+
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
     editPosition[2] = 0;
@@ -222,7 +222,7 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
   _sizes     = _graph->getProperty<SizeProperty>("viewSize");
 }
 //========================================================================================
-//Does the point p belong to the segment [u,v]? 
+//Does the point p belong to the segment [u,v]?
 bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMainWidget)
 {
   int W = glMainWidget->width();
@@ -259,7 +259,7 @@ bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMain
 void MouseEdgeBendEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {
   // cerr << __PRETTY_FUNCTION__ << endl;
 initProxies(glMainWidget);
-	
+
   Coord v0(0,0,0);
   Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
   v0 = glMainWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(v0);

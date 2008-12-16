@@ -227,7 +227,7 @@ private :
 	unsigned int lastNbAxis;
 };
 
-INTERACTORPLUGIN(ParallelCoordsAxisSliders, "ParallelCoordsAxisSliders", "Tulip Team", "05/11/2008", "Parallel Coordinates Axis Sliders", "1.0", 31);
+INTERACTORPLUGIN(ParallelCoordsAxisSliders, "ParallelCoordsAxisSliders", "Tulip Team", "05/11/2008", "Parallel Coordinates Axis Sliders", "1.0");
 
 bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 

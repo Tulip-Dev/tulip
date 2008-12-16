@@ -19,7 +19,7 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseNodeBuilder, "MouseNodeBuilder", "Tulip Team", "16/04/2008", "Mouse Node Builder", "1.0", 11);
+INTERACTORPLUGIN(MouseNodeBuilder, "MouseNodeBuilder", "Tulip Team", "16/04/2008", "Mouse Node Builder", "1.0");
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {

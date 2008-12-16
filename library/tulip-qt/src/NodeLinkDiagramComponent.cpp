@@ -122,30 +122,29 @@ namespace tlp {
   // Interactor functions
   //==================================================
   void NodeLinkDiagramComponent::constructInteractorsMap() {
-    MutableContainer<Interactor *> interactors;
-    InteractorManager::getInst().initInteractorList(interactors);
-    interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNodeBuilder")));
-    interactorsMap["addEdge"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseEdgeBuilder")));
-    interactorsMap["addNode"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["addNode"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNodeBuilder")));
-    interactorsMap["deleteElt"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["deleteElt"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseElementDeleter")));
-    interactorsMap["graphNavigate"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseNKeysNavigator")));
-    interactorsMap["magicSelection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["magicSelection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseMagicSelector")));
-    interactorsMap["editSelection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["editSelection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseSelector")));
-    interactorsMap["editSelection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseSelectionEditor")));
-    interactorsMap["editEdgeBend"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["editEdgeBend"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseEdgeSelector")));
-    interactorsMap["editEdgeBend"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseEdgeBendEditor")));
-    interactorsMap["select"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["select"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseShowElementInfos")));
-    interactorsMap["selection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["selection"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseSelector")));
-    interactorsMap["zoomBox"].push_back(interactors.get(InteractorManager::getInst().interactorId("MousePanNZoomNavigator")));
-    interactorsMap["zoomBox"].push_back(interactors.get(InteractorManager::getInst().interactorId("MouseBoxZoomer")));
+
+    interactorsMap["addEdge"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["addEdge"].push_back(InteractorManager::getInst().getInteractor("MouseNodeBuilder"));
+    interactorsMap["addEdge"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeBuilder"));
+    interactorsMap["addNode"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["addNode"].push_back(InteractorManager::getInst().getInteractor("MouseNodeBuilder"));
+    interactorsMap["deleteElt"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["deleteElt"].push_back(InteractorManager::getInst().getInteractor("MouseElementDeleter"));
+    interactorsMap["graphNavigate"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
+    interactorsMap["magicSelection"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["magicSelection"].push_back(InteractorManager::getInst().getInteractor("MouseMagicSelector"));
+    interactorsMap["editSelection"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["editSelection"].push_back(InteractorManager::getInst().getInteractor("MouseSelector"));
+    interactorsMap["editSelection"].push_back(InteractorManager::getInst().getInteractor("MouseSelectionEditor"));
+    interactorsMap["editEdgeBend"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["editEdgeBend"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeSelector"));
+    interactorsMap["editEdgeBend"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeBendEditor"));
+    interactorsMap["select"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["select"].push_back(InteractorManager::getInst().getInteractor("MouseShowElementInfos"));
+    interactorsMap["selection"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["selection"].push_back(InteractorManager::getInst().getInteractor("MouseSelector"));
+    interactorsMap["zoomBox"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+    interactorsMap["zoomBox"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
   }
   //==================================================
   void NodeLinkDiagramComponent::constructInteractorsActionList(){

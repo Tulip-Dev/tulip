@@ -29,7 +29,7 @@ class ParallelCoordsElementsSelector : public ParallelCoordsGlEntitiesSelector {
 		void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection);
 };
 
-INTERACTORPLUGIN(ParallelCoordsElementsSelector, "ParallelCoordsElementsSelector", "Tulip Team", "16/10/2008", "Parallel Coordinates Elements Selector", "1.0", 25);
+INTERACTORPLUGIN(ParallelCoordsElementsSelector, "ParallelCoordsElementsSelector", "Tulip Team", "16/10/2008", "Parallel Coordinates Elements Selector", "1.0");
 
 void ParallelCoordsElementsSelector::unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) {
 	parallelView->resetSelection();

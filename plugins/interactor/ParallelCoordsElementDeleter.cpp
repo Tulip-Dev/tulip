@@ -44,7 +44,7 @@ public :
 	Interactor *clone() { return new ParallelCoordsElementDeleter(); }
 };
 
-INTERACTORPLUGIN(ParallelCoordsElementDeleter, "ParallelCoordsElementDeleter", "Tulip Team", "16/10/2008", "Parallel Coordinates Element Deleter", "1.0", 26);
+INTERACTORPLUGIN(ParallelCoordsElementDeleter, "ParallelCoordsElementDeleter", "Tulip Team", "16/10/2008", "Parallel Coordinates Element Deleter", "1.0");
 
 bool ParallelCoordsElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 

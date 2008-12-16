@@ -62,7 +62,7 @@ private :
 	bool axisSwapStarted;
 };
 
-INTERACTORPLUGIN(ParallelCoordsAxisSwapper, "ParallelCoordsAxisSwapper", "Tulip Team", "16/10/2008", "Parallel Coordinates Axis Swapper", "1.0", 30);
+INTERACTORPLUGIN(ParallelCoordsAxisSwapper, "ParallelCoordsAxisSwapper", "Tulip Team", "16/10/2008", "Parallel Coordinates Axis Swapper", "1.0");
 
 bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 

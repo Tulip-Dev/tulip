@@ -4,8 +4,8 @@
  Email : auber@labri.fr
  Last modification : 06/09/2005
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifdef HAVE_CONFIG_H
@@ -30,7 +30,7 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseMagicSelector, "MouseMagicSelector", "Tulip Team", "16/04/2008", "Mouse Magic Selector", "1.0", 10);
+INTERACTORPLUGIN(MouseMagicSelector, "MouseMagicSelector", "Tulip Team", "16/04/2008", "Mouse Magic Selector", "1.0");
 
 MouseMagicSelector::MouseMagicSelector():
   x(0),y(0),w(0),h(0),graph(0)

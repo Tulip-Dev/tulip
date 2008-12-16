@@ -80,8 +80,6 @@ namespace tlp {
     virtual ~InteractorFactory() {}
     ///
     virtual Interactor *createPluginObject(InteractorContext *ic)=0;
-    ///
-    virtual int getId() const=0;
 
     virtual  std::string getMajor() const {
       return tlp::getMajor(getRelease());
@@ -106,7 +104,7 @@ namespace tlp {
 
 }
 
-#define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
+#define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
 class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
@@ -121,7 +119,6 @@ public:                                          \
   string getInfo() const {return string(I);}	 \
   string getRelease() const {return string(R);}\
   string getTulipRelease() const {return string(TULIP_RELEASE);} \
-  int    getId() const {return ID;}		 \
   tlp::T * createPluginObject(InteractorContext *ic)		 \
   {						 \
     C *tmp = new C();				 \
@@ -132,8 +129,8 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,ID,G) INTERACTORPLUGINFACTORY(Interactor,C,N,A,D,I,R,ID,G)
-#define INTERACTORPLUGIN(C,N,A,D,I,R,ID) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,ID,"")
+#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) INTERACTORPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
+#define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif
 

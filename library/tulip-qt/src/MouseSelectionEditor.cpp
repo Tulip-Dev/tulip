@@ -25,7 +25,7 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseSelectionEditor, "MouseSelectionEditor", "Tulip Team", "16/04/2008", "Mouse Selection Editor", "1.0", 2);
+INTERACTORPLUGIN(MouseSelectionEditor, "MouseSelectionEditor", "Tulip Team", "16/04/2008", "Mouse Selection Editor", "1.0");
 
 //========================================================================================
 MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
@@ -59,15 +59,15 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
 
   centerRect.setStencil(0);
 
-  
+
   //widget->getScene()->getLayout()->addGlEntity(&composite);
-  
+
   /*centerRect.setRenderState(GlAD_ZEnable, false);
   centerRect.setRenderState(GlAD_Culling, false);
   centerRect.setRenderState(GlAD_Wireframe, false);
   centerRect.setRenderState(GlAD_Solid, true);
   centerRect.setRenderState(GlAD_AlphaBlending, true);
-  centerRect.setRenderState(GlAD_Lighting, false);*/	
+  centerRect.setRenderState(GlAD_Lighting, false);*/
 
   Color hudColor(128,128,128,128);
   centerRect.setFillMode(true);
@@ -76,13 +76,13 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
   centerRect.fcolor(1) =  hudColor;
   centerRect.fcolor(2) =  hudColor;
   centerRect.fcolor(3) =  hudColor;
-  
+
   for(unsigned int i=0; i < 8; ++i) {
     _controls[i].setFillMode(true);
     _controls[i].setOutlineMode(true);
     _controls[i].fcolor(0) = Color(255,40,40,200);
     _controls[i].ocolor(0) = Color(128,20,20,200);
-    
+
     /*_controls[i].setRenderState(GlAD_ZEnable, false);
     _controls[i].setRenderState(GlAD_Culling, false);
     _controls[i].setRenderState(GlAD_AlphaBlending, true);
@@ -143,7 +143,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       int shapeId=-1;
-      
+
       for (unsigned int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
 	for(int j=0 ; j<8;++j) {
 	  if(select[i]==&_controls[j]){
@@ -174,7 +174,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	      operation = ROTATE_Z;
 	    }
 	    else
-	      //Corner anchor top-right bottom-left 
+	      //Corner anchor top-right bottom-left
 	      //stretch_xy
 	      if (select[shapeId] == &_controls[1] || select[shapeId] == &_controls[5]) {
 		operation = STRETCH_XY;
@@ -199,7 +199,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 	}
       }
 
-      mode = COORD_AND_SIZE;    
+      mode = COORD_AND_SIZE;
       if (qMouseEv->modifiers() & Qt::ShiftModifier)
 	mode = COORD;
       if (qMouseEv->modifiers() &
@@ -345,7 +345,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   }
   //  cerr << "stretch : << "<< stretch << endl;
 
-  Observable::holdObservers();  
+  Observable::holdObservers();
   //stretch layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
@@ -377,7 +377,7 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *glMainWidget) { 
+void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *glMainWidget) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (operation == ROTATE_Z) {
     Coord curPos(newX, newY, 0);
@@ -391,7 +391,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     sign /= fabs(sign);
     double cosalpha = vCS.dotProduct(vCP);
     double deltaAngle = sign * acos(cosalpha);
-  
+
     Observable::holdObservers();
     initProxies(glMainWidget);
     double degAngle = (deltaAngle * 180.0 / M_PI);
@@ -434,7 +434,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta)/initDelta;
- 
+
       yAngle = (acos(cosa) + (nbPI * M_PI)) * 180.0 / M_PI;
     } else {
       delta = abs(newY - editPosition[1]);
@@ -442,10 +442,10 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta)/initDelta;
-      
+
       xAngle = (acos(cosa) + (nbPI * M_PI)) * 180.0 / M_PI;
     }
-    
+
     Observable::holdObservers();
     initProxies(glMainWidget);
     Coord center(editLayoutCenter);
@@ -491,7 +491,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
   pair<Coord, Coord> boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
 
-  if (boundingBox.first[0] == -FLT_MAX) 
+  if (boundingBox.first[0] == -FLT_MAX)
     return false;
   Coord min2D, max2D;
   _layoutCenter = (boundingBox.first + boundingBox.second) / 2.0;
@@ -540,16 +540,16 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   max2D = maxCoord(tmp, max2D);
 
   ffdCenter = (boundingBox.first + boundingBox.second) / 2.0;
-  
+
   Coord tmpCenter = glMainWidget->getScene()->getCamera()->worldTo2DScreen(ffdCenter);
-  
+
   //  cerr << tmpCenter << endl;
-  
+
   //tmpCenter[0] = (double)glMainWidget->width() - tmpCenter[0];
   //tmpCenter[1] = (double)glMainWidget->height() - tmpCenter[1];
 
   //  tmpCenter[1] = tmpCenter[1];
-  
+
   int x = int(max2D[0] - min2D[0]) / 2 + 1; // (+1) because selection use glLineWidth=3 thus
   int y = int(max2D[1] - min2D[1]) / 2 + 1; //the rectangle can be too small.
 
@@ -572,11 +572,11 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   for(int i=0;i<8;i++){
     positions[i][2]=0;
   }
-  
+
   //Parameters of the rectangle that shows the selected area.
   centerRect.setTopLeftPos(positions[1]);
   centerRect.setBottomRightPos(positions[5]);
-  
+
   _controls[0].set(positions[0], 7, 0.0); //t
   _controls[1].set(positions[1], 6, M_PI/4.); //c
   _controls[2].set(positions[2], 7, -M_PI/2.); //t

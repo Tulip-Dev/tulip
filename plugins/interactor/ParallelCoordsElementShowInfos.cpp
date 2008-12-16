@@ -44,7 +44,7 @@ class ParallelCoordsElementShowInfos : public Interactor {
 		Interactor *clone() { return new ParallelCoordsElementShowInfos(); }
 };
 
-INTERACTORPLUGIN(ParallelCoordsElementShowInfos, "ParallelCoordsElementShowInfos", "Tulip Team", "15/10/2008", "Parallel Coordinates Element Show Infos", "1.0", 24);
+INTERACTORPLUGIN(ParallelCoordsElementShowInfos, "ParallelCoordsElementShowInfos", "Tulip Team", "15/10/2008", "Parallel Coordinates Element Show Infos", "1.0");
 
 bool ParallelCoordsElementShowInfos::eventFilter(QObject *widget, QEvent *e) {
 

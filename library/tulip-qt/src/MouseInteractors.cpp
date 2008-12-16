@@ -16,9 +16,9 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MousePanNZoomNavigator, "MousePanNZoomNavigator", "Tulip Team", "16/04/2008", "Mouse Pan N Zoom Navigator", "1.0", 7);
-INTERACTORPLUGIN(MouseElementDeleter, "MouseElementDeleter", "Tulip Team", "16/04/2008", "Mouse Element Deleter", "1.0", 8);
-INTERACTORPLUGIN(MouseNKeysNavigator, "MouseNKeysNavigator", "Tulip Team", "16/04/2008", "Mouse N Keys navigator", "1.0", 9);
+INTERACTORPLUGIN(MousePanNZoomNavigator, "MousePanNZoomNavigator", "Tulip Team", "16/04/2008", "Mouse Pan N Zoom Navigator", "1.0");
+INTERACTORPLUGIN(MouseElementDeleter, "MouseElementDeleter", "Tulip Team", "16/04/2008", "Mouse Element Deleter", "1.0");
+INTERACTORPLUGIN(MouseNKeysNavigator, "MouseNKeysNavigator", "Tulip Team", "16/04/2008", "Mouse N Keys navigator", "1.0");
 
 //===============================================================
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {

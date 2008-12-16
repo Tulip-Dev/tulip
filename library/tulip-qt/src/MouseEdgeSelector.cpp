@@ -19,7 +19,7 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseEdgeSelector, "MouseEdgeSelector", "Tulip Team", "16/04/2008", "Mouse Edge Selector", "1.0", 6);
+INTERACTORPLUGIN(MouseEdgeSelector, "MouseEdgeSelector", "Tulip Team", "16/04/2008", "Mouse Edge Selector", "1.0");
 
 //==================================================================
 MouseEdgeSelector::MouseEdgeSelector():

@@ -29,7 +29,7 @@ class ParallelCoordsElementHighlighter : public ParallelCoordsGlEntitiesSelector
 		void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection);
 };
 
-INTERACTORPLUGIN(ParallelCoordsElementHighlighter, "ParallelCoordsElementHighlighter", "Tulip Team", "17/10/2008", "Parallel Coordinates Element Highlighter", "1.0", 27);
+INTERACTORPLUGIN(ParallelCoordsElementHighlighter, "ParallelCoordsElementHighlighter", "Tulip Team", "17/10/2008", "Parallel Coordinates Element Highlighter", "1.0");
 
 void ParallelCoordsElementHighlighter::unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) {
 	parallelView->resetHighlightedElements();

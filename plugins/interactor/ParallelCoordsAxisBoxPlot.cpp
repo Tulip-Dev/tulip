@@ -301,7 +301,7 @@ private :
 
 };
 
-INTERACTORPLUGIN(ParallelCoordsAxisBoxPlot, "ParallelCoordsAxisBoxPlot", "Tulip Team", "25/11/2008", "Parallel Coordinates Axis Box Plot", "1.0", 32);
+INTERACTORPLUGIN(ParallelCoordsAxisBoxPlot, "ParallelCoordsAxisBoxPlot", "Tulip Team", "25/11/2008", "Parallel Coordinates Axis Box Plot", "1.0");
 
 void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAxis) {
 	for (unsigned int i = 0 ; i < currentAxis.size() ; ++i) {

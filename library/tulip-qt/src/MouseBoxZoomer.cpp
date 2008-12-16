@@ -15,7 +15,7 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseBoxZoomer, "MouseBoxZoomer", "Tulip Team", "16/04/2008", "Mouse Box Zoomer", "1.0", 3);
+INTERACTORPLUGIN(MouseBoxZoomer, "MouseBoxZoomer", "Tulip Team", "16/04/2008", "Mouse Box Zoomer", "1.0");
 
 MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
 			       Qt::KeyboardModifier modifier)
