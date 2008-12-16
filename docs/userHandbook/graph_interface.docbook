@@ -368,7 +368,424 @@
         </sect4>
       </sect3>
     </sect2>
-    <sect2 id="ParallelCoordinatesComponent"><title>Parallel coordinates component</title>
+    <sect2 id="ParallelCoordinatesComponent"><title>Parallel Coordinates component</title>
+    
+      <sect3 id="parallel coordinates intro"><title>Introduction to Parallel Coordinates</title>
+
+	<sect4 id="parallel coordinates concept"><title>Concept</title>
+	  <para>Parallel coordinates is a common way of visualizing high-dimensional geometry and analyzing multivariate data.
+
+	  The idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point. The image below shows an example of a parallel coordinates plot for visualizing a set of 5-dimensions data.
+	  
+
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="images/parallel_coordinates_example.png" align="left" valign="bottom"/>
+	    </imageobject>
+	  </mediaobject>  
+	  
+	 </para>
+	</sect4>
+
+	<sect4 id="parallel coordinates concept"><title>History</title>
+	  <para>
+	  Parallel Coordinates were firstly studied by Maurice d'Ocagne in 1885 <citation>Ocagne1885</citation> (mostly for 2-D use in Nomography) and were popularised by Al Inselberg <citation>Inselberg85</citation>. The first Multidimensional Coordinate System was developed by this last one in 1977 based on his independent rediscovery in 1959. 
+
+	  Many people contributed to the development and popularization of Parallel Coordinates. Among them, Ed Wegman applied Parallel Coordinates to data exploration, and particularly visualize correlations in datasets. His landmark paper entitled "Hyperdimensional Data Analysis Using Parallel Coordinates" <citation>Wegman90</citation>, published in 1990, is the starting point of concrete parellel coordinates applications. 
+
+	  Today applications of Parallel Coordinates are in Collision Avoidance Algorithms for Air Traffic Control, Data Mining , Computer Vision, Optimization, Process Control, more recently in Intrusion Detection and elsewhere. 
+	  </para>
+
+	  <bibliolist>
+
+	  <biblioentry>
+	    <abbrev>Ocagne1885</abbrev>
+	    <biblioset relation='article'>
+	      <title>Coordonnées parallèles et axiales: Méthode de transformation géométrique et procédé nouveau de calcul graphique déduits de la considération des coordonnées parallèlles</title>
+	      <author><personname>
+		<firstname>Maurice</firstname><surname>d'Ocagne</surname>
+	      </personname></author>
+	    <biblioid class="isbn">1429700971</biblioid>
+	    <publisher>
+	      <publishername>Cornell University Library</publishername>
+	    </publisher>
+	    <copyright><year>1885</year></copyright>
+	    </biblioset>
+	  </biblioentry>
+
+	  <biblioentry>
+	    <abbrev>Inselberg85</abbrev>
+	    <biblioset relation='journal'>
+	      <title>The Visual Computer</title>
+	      <biblioid class="issn">0178-2789</biblioid>
+	      <publisher>
+		<publishername>Springer Berlin / Heidelberg</publishername>
+	      </publisher>
+	      <copyright><year>1985</year></copyright>
+	      <volumenum>1</volumenum><issuenum>4</issuenum>.
+	    </biblioset>
+	    <biblioset relation='article'>
+	      <title>The Plane with Parallel Coordinates</title>
+	      <author><personname>
+		<firstname>Al</firstname><surname>Inselberg</surname>
+	      </personname></author>
+	    <pagenums>69-91</pagenums>
+	    </biblioset>
+	  </biblioentry>
+
+	  <biblioentry>
+	    <abbrev>Wegman90</abbrev>
+	    <biblioset relation='journal'>
+	      <title>Journal of the American Statistical Association</title>
+	      <biblioid class="issn">0162-1459</biblioid>
+	      <publisher>
+		<publishername>American Statistical Association</publishername>
+	      </publisher>
+	      <copyright><year>1990</year></copyright>
+	      <volumenum>85</volumenum><issuenum>411</issuenum>.
+	    </biblioset>
+	    <biblioset relation='article'>
+	      <title>Hyperdimensional data analysis using parallel coordinates</title>
+	      <author><personname>
+		<firstname>Ed</firstname><surname>Wegman</surname>
+	      </personname></author>
+	    <pagenums>664-675</pagenums>
+	    </biblioset>
+	  </biblioentry>
+
+	  </bibliolist>
+
+	</sect4>
+      </sect3>
+      
+	
+	<sect3 id="parallel coordinates view window"><title>The Parallel Coordinates View main window</title>
+	  <para> This is the main window of the view where the parallel coordinates drawing is displayed. It is created as soon as the parallel coordinates view is requested via the Tulip main menu bar. After the view creation, the content of this window is empty and the view has to be setup via the configuration dialog.
+	  
+	  
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="images/parallel_view_main_window.png" align="left" valign="bottom"/>
+	    </imageobject>
+	  </mediaobject>  
+	  </para>
+	  
+	</sect3>
+
+	<sect3 id="parallel coordinates view config dialog"><title>The Parallel Coordinates View Configuration Dialog</title>
+	  <para> The view configuration dialog is reachable via the view popup menu. To display it, do a right-click in the view window and select <code>Dialog -> Configuration</code> in the popup menu which appears. The configuration dialog is composed of two tabs entitled:
+	    <itemizedlist>
+              <listitem><para><code>Data Configuration</code></para>
+              </listitem>
+              <listitem><para><code>Draw Configuration</code></para>
+              </listitem>
+            </itemizedlist>
+	  </para>
+	  
+	  <sect4 id="data configuration tab"><title>The Data Configuration tab</title>
+	  
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="images/parallel_config_dialog1.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject>  
+	    
+	    <para> This tab allows to configure the data to plot. Because the data source is a Tulip graph, the first thing to do is to precize from which graph elements, the nodes or the edges, the data will be retrieved. To do so, click on the appropriate radio button in the upper part of the tab. Next, the dimensions of the data to plot have to be selected. In our case, the data dimensions corresponds to the properties associated with the graph. At the present time, the graph properties that can be selected to be visualized with the parallel coordinates representation must have one of the following types : <emphasis role='strong'>Metric</emphasis>, <emphasis role='strong'>Integer</emphasis> or <emphasis role='strong'>String</emphasis>. Each selected dimension will be mapped to an axis in the parallel coordinates representation. The dimensions selection is done  on the lower part of the tab. To add a dimension to plot, click on one of them in the list on the left (entitled "Properties to hide") and move it in the list on the right (entitled "Properties to display") by clicking in the right arrow button or by drag and drop it. To remove a dimension, click on one of them in the list on the right and move it in the list on the left by clicking on the left arrow button or by drag and drop it. The selected dimensions can also be ordered by picking one of them in the list on the right and then by clicking on the up arrow button or the down arrow button to change the property position in the list. In the drawing that will be generated, the colors of the lines between axis will be those stored in the "viewColor" graph property. If the data source is the nodes of the graph, the shapes of the points on axis will be those stored in the "viewShape" graph property.
+	    </para>
+	    
+	  </sect4>
+	  
+	  <sect4 id="draw configuration tab"><title>The Draw Configuration tab</title>
+	    
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="images/parallel_config_dialog2.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject>  
+	    
+	    <para> In this tab, many parameters relative to the parallel coordinates drawing can be set. Let's make a review of them.
+	      
+	      <itemizedlist>
+              <listitem><para><code>General draw parameters</code></para>
+		  <itemizedlist>
+		    <listitem><para><code>Background color</code> : allow to set the view background color. To do so, click on the colored button and pick a color in the color dialog which appears</para>
+		    </listitem>
+		    <listitem><para><code>Axis Height</code> : allow to set the height of the different axis</para>
+		    </listitem>
+		    <listitem><para><code>Space between axis</code> : allow to set the space between the different axis</para>
+		    </listitem>
+		    <listitem><para><code>Lines color alpha value</code> : allow to set the transparency level of lines representing data. The minimum value is 0 (totally transparent) and the maximum is 255 (opaque) </para>
+		    </listitem>
+		  </itemizedlist>
+              </listitem>
+              <listitem><para><code>Draw points on axis</code></para>
+		<para> If this group box is checked, points corresponding to dimensions values on axis will be drawn. This option is desactivated by default when the number of data to plot is greater than 5000 in order to speed up the rendering process. The size of points on axis is proportionnal to the "viewSize" property value. The minimum and maximum point size can be set freely by using the spinbox contained in the group box. The minimum "viewSize" value will be mapped to the minimum point size and the maximum "viewSize" value will be mapped to the maximum point size.
+		</para>
+              </listitem>
+	      <listitem><para><code>Apply texture on lines</code></para>
+		If this group box is checked, a texture will be applied on the lines representing data. Two choices are proposed :
+		  <itemizedlist>
+		    <listitem><para><code>Use Tulip default texture</code> : use the default parallel coordinates view texture proposed by Tulip. This texture is applied on the alpha channel of the lines colors.</para>
+		    </listitem>
+		    <listitem><para><code>Use texture from file</code> : apply a personnal texture from an image file (width and height of the image must be a power of 2)</para>
+		    </listitem>
+		  </itemizedlist>
+              </listitem>
+            </itemizedlist>
+	      
+	    </para>
+	    
+	  </sect4>
+	  
+	</sect3>
+
+	<sect3 id="parallel coordinates view interactors"><title>Tulip Parallel Coordinates View Interactors</title>
+	
+	  <para>To play with the view, a few number of interactors can be found in the following toolbar :
+	      <mediaobject>
+		<imageobject>
+		  <imagedata fileref="images/parallel_view_toolbar.png" align="left" valign="bottom"/>
+		</imageobject>
+	      </mediaobject>  
+	      
+	      Let's introduce them and their functionnalities.
+	      
+	      <itemizedlist>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_navigation.png"/><code>View Navigator</code> : This interactor enables the 3D navigation on the view using the mouse movements (left button pressed). Its working is the same as the <code>3D Navigator</code> interactor from the Node Link Diagram Component (see <xref linkend="3dnavigator"/>).
+		  </para>
+		</listitem>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : This interactor enables to define a zoom area with the mouse. Its working is the same as the <code>Zoom Box</code> interactor from the Node Link Diagram Component (see <xref linkend="zoom box"/>).
+		  </para>
+		</listitem>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_select.png"/><code>Show Element Properties</code> : This interactor allows to view the properties associated to an element by clicking on it. Tulip will display all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window (see <xref linkend="infoeditor"/>)
+		  </para>
+		</listitem>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_selection.png"/><code>Elements Selector</code> : This interactor allows to select elements in the parallel coordinates view. Its working is the same as the <code>Rectangle Selection</code> interactor from the Node Link Diagram Component (see <xref linkend="rectangle selection"/>).
+		  </para>
+		</listitem>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_del.png"/><code>Element Deleter</code> : This interactor allows to remove from the parallel coordinates view all the elements under the mouse pointer after a left-click.
+		  </para>
+		</listitem>
+		<listitem>
+		  <para><inlinegraphic fileref="images/i_element_highlighter.png"/><code>Element Highlighter</code> : This interactor allows to highlight elements in the parallel coordinates view. When an element is highlighted, it keeps its original color and the other elements are colored in gray. A left-click in the view will highlight all the elements under the mouse pointer. It is also possible to define a rectangular region with the mouse to highlight all elements in that region. If there is no elements under the mouse pointer while clicking, the whole highlighted elements set will be reseted and all elements will get back its original color. By maintaining the <keycap>Shift</keycap> key while clicking, the elements under the mouse pointer will be add/remove from the current highlighted elements. 
+		  </para>
+		  
+		  <para>Below is an example of the element highlighter interactor result. Image on the left shows a parallel coordinates view without highlighted elements. By clicking on the element that has the maximum value for the "#hands" dimension, it will be highlighted and the result is shown on the image on the right.
+		  </para>
+		  
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="images/parallel_element_highlighter_example.png" align="left" valign="bottom"/>
+		    </imageobject>
+		  </mediaobject>  
+		    
+		</listitem>  
+		 
+		<listitem>
+		 
+		  <para><inlinegraphic fileref="images/i_axis_swapper.png"/><code>Axis Swapper</code> : This interactor allows to swap two axis with the mouse in the parallel coordinates drawing. To do so, put the mouse pointer under the axis you want to swap, a translucent blue rectangle will be drawn to indicate that you can click to move the axis. Once the pointer is under the axis, do a left click and keep the mouse button pressed while you're dragging the axis. To swap the axis with an other, release the mouse button when a translucent green rectangle appears around the other axis to swap. The image below illustrates this process.
+		  </para>
+		  
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="images/parallel_axis_swapper.png" align="left" valign="bottom"/>
+		    </imageobject>
+		  </mediaobject>  
+		  
+		</listitem> 
+		  
+		  
+		<listitem>
+		 
+		  <para><inlinegraphic fileref="images/i_axis_sliders.png"/><code>Axis Sliders</code> : This interactor allows to select a range on a particular axis with the help of sliders and highlight all the data located in that range. This operation allows to filter data according to a certain dimension. To use the axis sliders, put the mouse pointer under the one you want to move (the slider outline color will change), do a left-click and drag the slider along the axis. Release the mouse button when the slider is at the wanted position, the data located between the two axis sliders will be automatically highlighted. The sliders of the axis whose range has been modified will be colored in blue to indicate on which dimension the data filtering is made. The other axis sliders will also move automatically to show in which ranges the highlighted data are included on the other dimensions. It is also possible to drag the range defined by two axis sliders, by putting the mouse pointer between them (a translucent rectangle will appear) and drag and drop it along the axis. The image below shows the result of this interactor after filtering data on the "#hands" dimension.
+		  </para>
+		  
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="images/parallel_axis_sliders.png" align="left" valign="bottom"/>
+		    </imageobject>
+		  </mediaobject>  
+		  
+		</listitem>   
+		
+		<listitem>
+		 
+		  <para><inlinegraphic fileref="images/i_axis_boxplot.png"/><code>Axis Box Plot</code> : By enabling this interactor, a box plot will be drawn above each quantitative axis. In descriptive statistics, a boxplot (also known as a box-and-whisker diagram or plot) is a convenient way of graphically depicting groups of numerical data through their five-number summaries (the bottom outlier, first quartile (Q1), median (Q2), third (Q3), and the top outlier). The image below illustrates the way to read a box plot.
+		      
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="images/boxplot_legend.png" align="left" valign="bottom"/>
+		    </imageobject>
+		  </mediaobject>
+		  
+		  A boxplot may also indicate which observations, if any, might be considered outliers. The boxplot was invented in 1977 by the American statistician John Tukey.
+		  Boxplots can be useful to display differences between populations without making any assumptions of the underlying statistical distribution. The spacings between the different parts of the box help indicate the degree of dispersion (spread) and skewness in the data, and identify outliers.</para>
+		  
+		  <para>It is possible to highlight data included in the following axis box plot range :
+		  <itemizedlist>
+		    <listitem><para>[Bottom Outlier, First Quartile]</para>   
+		    </listitem>   
+		    <listitem><para>[First Quartile, Median]</para>   
+		    </listitem>   
+		    <listitem><para>[Median, Third Quartile]</para>   
+		    </listitem>
+		    <listitem><para>[First Quartile, Third Quartile] (= interquartile range) </para>   
+		    </listitem>   
+		    <listitem><para>[Third Quartile, Top Outlier]</para>   
+		    </listitem>   
+		  </itemizedlist>
+		  
+		  To do so, put the mouse pointer between the two bounds of the wanted range, a translucent rectangle will be drawn to indicate it is selected, and do a left-click to highlight data. To highlight the data included in the interquartile range, put the mouse pointer near the median line and the interquartile range will be selected.
+		  
+		  The following screenshot illustrates this interactor.
+		  
+		  </para>
+		  
+		  <mediaobject>
+		    <imageobject>
+		      <imagedata fileref="images/parallel_axis_boxplot.png" align="left" valign="bottom"/>
+		    </imageobject>
+		  </mediaobject>
+		  
+		</listitem>   
+	      </itemizedlist>
+	      
+	  </para>
+	
+	</sect3>
+
+	<sect3 id="parallel coordinates view popup menu"><title>The Parallel Coordinates View popup menu</title>  
+	
+	  <para>By right-clicking in the parallel coordinates main window, a popup menu will be displayed. The content of it depends on the location of the mouse pointer. By default, the following menu is displayed :
+	    <mediaobject>
+	      <imageobject>
+		  <imagedata fileref="images/parallel_basic_popup_menu.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject>  
+	    
+	    The entries it contained are the following :
+	    <itemizedlist>
+	      <listitem>
+		<para><code>Dialog -> Configuration</code> : Display the parallel coordinates view configuration dialog
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>View Setup -> Center View</code> : Center the parallel coordinates drawing inside the view main window
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>View Setup -> Classic View</code> : By clicking on this menu entry, the parallel coordinates will be drawn the classic way with straight lines between axis. This view mode is the default one.
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>View Setup -> Spline View</code> : By clicking on this menu entry, the parallel coordinates will be drawn with bezier curves between axis. Beware because this view mode is not optimized for performance, the drawing computing and the rendering process can be really slow if there's more than a thousand of data to plot.   
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Options -> Tooltips</code> : By enabling this option, when the mouse pointer is under an element a tooltip message will be displayed containing the element label (if there is one set in the "viewLabel" property) and the element id. 
+		</para>
+	      </listitem>
+	    </itemizedlist>
+	  </para>
+	  
+	  <para>
+	    If there is highlighted elements in the drawing (set with the elements highlighter or the axis sliders interactors), the following menu entries will be add to the view popup menu.
+	    <mediaobject>
+	      <imageobject>
+		  <imagedata fileref="images/parallel_highlight_popup_menu.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject> 
+	    
+	    <itemizedlist>
+	      <listitem>
+		<para><code>Select Highlighted Elements</code> : By clicking on this entry, all the current highlighted elements will be added to the selected elements set.
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Reset Highlighted Elements</code> : Empty the highlighted elements set. All elements will get back their original colors.
+		</para>
+	      </listitem>
+	    </itemizedlist>  
+	  </para>
+	  
+	  <para>
+	    If there is an element under the mouse pointer when right-clicking, the popup menu will contain additional entries introduced below.
+	    <mediaobject>
+	      <imageobject>
+		  <imagedata fileref="images/parallel_element_popup_menu.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject> 
+	    
+	  <itemizedlist>
+	      <listitem>
+		<para><code>Add / Remove From Selection</code> : Add or Remove the pointed element to the selected data set.
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Select</code> : Empty the selected data set then add the pointed element to it.
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Delete</code> : Delete the pointed data.
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Properties</code> : Display all the available properties of the pointed data in the <code>Element</code> tab of the <code>Info Editor</code> sub-window (see <xref linkend="infoeditor"/>).
+		</para>
+	      </listitem>
+	    </itemizedlist>    
+	  </para>
+	  
+	  <para>
+	    Eventually, if there is an axis under the mouse pointer, the popup menu will contain the following menu entries.
+	    <mediaobject>
+	      <imageobject>
+		  <imagedata fileref="images/parallel_axis_popup_menu.png" align="left" valign="bottom"/>
+	      </imageobject>
+	    </mediaobject> 
+	    
+	    <itemizedlist>
+	      <listitem>
+		<para><code>Axis Configuration</code> : By clicking on this entry, a dialog will appear to set some axis parameters. The content of this dialog depends on the axis type.</para>
+		   <itemizedlist>
+		    <listitem>
+		      <para>For the <code>Quantitative Axis</code> (axis associated to a property whose type is Integer or Metric), the displayed dialog is the following : </para>
+		      
+			<mediaobject>
+			  <imageobject>
+			    <imagedata fileref="images/parallel_quantitative_axis_dialog.png" align="left" valign="bottom"/>
+			  </imageobject>
+			</mediaobject> 
+			
+		      <para>This dialog allows to set the number of axis graduations, the axis order (if it is ascending, the minimum value will be at the bottom of the axis and the maximum one at the top) and it is also possible to set a logarithmic scale (in base 10) for the axis.</para>
+		      
+		    </listitem>
+		    <listitem>
+		      <para>For the <code>Nominative Axis</code> (axis associated to a property of type String), the dialog is the one below :</para>
+		      
+			<mediaobject>
+			  <imageobject>
+			    <imagedata fileref="images/parallel_nominative_axis_dialog.png" align="left" valign="bottom"/>
+			  </imageobject>
+			</mediaobject> 
+	
+		      <para>This dialog allows to define the axis labels order. To move a label at a certain position, click on it in the list at the center of the dialog and move it to the wanted position with the help of the arrow buttons on the right side of the dialog.</para>
+		      </listitem>
+		     </itemizedlist> 		
+	      </listitem>	 
+	      <listitem>
+		<para><code>Remove Axis</code> : Remove the axis from the parallel coordinates drawing.</para>
+	      </listitem>
+	    </itemizedlist>    
+	    
+	  </para>
+	</sect3>
+
     </sect2>
     <sect2 id="SpreadsheetComponent"><title>Spreadsheet component</title>
       <graphic fileref="images/spreadsheet_view.png"/>
