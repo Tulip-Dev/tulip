@@ -36,7 +36,7 @@
           </para>
         </listitem>
         <listitem>
-          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>), Copy(<keycap>Ctrl+C</keycap>), Paste(<keycap>Ctrl+V</keycap>) and Find(<keycap>Ctrl+F</keycap>), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>), Invert Selection(<keycap>Ctrl+I</keycap>), Create group(<keycap>Ctrl+G</keycap>), Create subgraph(<keycap>Ctrl+Shift+G</keycap>).</para>
+          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>), Copy(<keycap>Ctrl+C</keycap>), Paste(<keycap>Ctrl+V</keycap>), and Find(<keycap>Ctrl+F</keycap>), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>), Invert Selection(<keycap>Ctrl+I</keycap>), Create group(<keycap>Ctrl+G</keycap>), Create subgraph(<keycap>Ctrl+Shift+G</keycap>), Undo(<keycap>Ctrl+U</keycap>), Redo(<keycap>Ctrl+R</keycap>).</para>
           <para>More details on the <code>Find</code> tool : The find tool has 4 options :</para>
           <itemizedlist>
             <listitem>Replace : Replace the current selection (nodes or edges already selected).
@@ -150,6 +150,34 @@
         </listitem>
       </itemizedlist>
     </para>
+  </sect1>
+  <sect1 id="main-window-toolsbar"><title>Main window : Tools bar</title>
+    <para>
+      <graphic fileref="images/tools_bar.png"/>
+      The tool bar contains 5 tools : 
+      <itemizedlist>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_open.png"/><code> Open file</code> : Open a new graph.
+            </para>
+      	</listitem>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_save.png"/><code> Save file</code> : Save current graph.
+            </para>
+      	</listitem>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_print.png"/><code> Print</code> : Print the current graph.
+            </para>
+      	</listitem>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_undo.png"/><code> Undo</code> : Undo the last operation on the graph.
+            </para>
+      	</listitem>
+      	<listitem>
+      		<para><inlinegraphic fileref="images/i_redo.png"/><code> Redo</code> : Redo the last undo operation.
+            </para>
+      	</listitem>
+      </itemizedlist>
+   	</para>
   </sect1>
   <sect1 id="infoeditor"><title>Info Editor</title>
     <para>
