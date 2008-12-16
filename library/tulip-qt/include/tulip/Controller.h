@@ -141,8 +141,6 @@ namespace tlp {
     virtual ~ControllerFactory() {}
     ///
     virtual Controller *createPluginObject(ControllerContext *ic)=0;
-    ///
-    virtual int getId() const=0;
 
     virtual  std::string getMajor() const {
       return tlp::getMajor(getRelease());
@@ -167,7 +165,7 @@ namespace tlp {
 
 }
 
-#define CONTROLLERPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
+#define CONTROLLERPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
 class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
@@ -182,7 +180,6 @@ public:                                          \
   string getInfo() const {return string(I);}	 \
   string getRelease() const {return string(R);}\
   string getTulipRelease() const {return string(TULIP_RELEASE);} \
-  int    getId() const {return ID;}		 \
   tlp::T * createPluginObject(ControllerContext *ic)		 \
   {						 \
     C *tmp = new C();				 \
@@ -193,8 +190,8 @@ extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \
 }
 
-#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,ID,G) CONTROLLERPLUGINFACTORY(Controller,C,N,A,D,I,R,ID,G)
-#define CONTROLLERPLUGIN(C,N,A,D,I,R,ID) CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,ID,"")
+#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) CONTROLLERPLUGINFACTORY(Controller,C,N,A,D,I,R,G)
+#define CONTROLLERPLUGIN(C,N,A,D,I,R) CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif
 

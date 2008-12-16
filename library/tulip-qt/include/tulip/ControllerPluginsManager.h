@@ -36,21 +36,6 @@ namespace tlp {
       return *inst;
     }
 
-    /**
-     * return the name of plugin with id : id
-     */
-    std::string controllerPluginName(int id);
-    /**
-     * return id of plugin with name : name
-     */
-    int controllerPluginId(std::string name);
-    /**
-     * Create map of pair<id,name> and pair<name,id>
-     */
-    void loadControllerPlugins();
-    /**
-     * Load controller plugins with PluginLoader : plug
-     */
     void loadPlugins(PluginLoader *plug=0);
 
     /**

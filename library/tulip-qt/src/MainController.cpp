@@ -187,7 +187,7 @@ namespace tlp {
   //**********************************************************************
   //**********************************************************************
   //**********************************************************************
-  CONTROLLERPLUGIN(MainController, "MainController", "Tulip Team", "16/04/2008", "Main controller", "1.0", 0);
+  CONTROLLERPLUGIN(MainController, "MainController", "Tulip Team", "16/04/2008", "Main controller", "1.0");
 
   //**********************************************************************
   MainController::MainController():
