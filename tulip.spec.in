@@ -86,6 +86,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/logolabri.jpg
 %{prefix}/lib/tlp/bitmaps/tex_back.png
 %{prefix}/lib/tlp/bitmaps/startup.gif
+%{prefix}/lib/tlp/bitmaps/parallel_sliders_texture.png
+%{prefix}/lib/tlp/bitmaps/parallel_texture.png
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
 
@@ -184,6 +186,15 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsAxisBoxPlot-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsAxisSliders-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsAxisSwapper-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsElementDeleter-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsElementHighlighter-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsElementShowInfos-%{version}.*
+%{prefix}/lib/tlp/interactors/libParallelCoordsElementsSelector-%{version}.*
+%{prefix}/lib/tlp/view/libParallelCoordinates-%{version}.*
+%{prefix}/lib/tlp/view/libSpreadSheet-%{version}.*
 
 %changelog
 * Wed Jul 23 2003 Bertrand Mathieu <mathieu@labri.fr>
