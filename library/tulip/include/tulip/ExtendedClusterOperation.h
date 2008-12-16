@@ -40,9 +40,9 @@ namespace tlp {
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
    *
-   * \param graph The graph where the meta node will be placed.
-   * \param subGraph an existing subgraph
-   * \param groupUnderSubgraph The subgraph where the groups are placed. 
+   * \param graph: The graph where the meta node will be placed.
+   * \param subGraph: an existing subgraph
+   * \param groupUnderSubgraph: The subgraph where the groups are placed. 
    * the subgraph to the new metanode.
    */
   TLP_SCOPE node createMetaNode(Graph *graph, std::set<node> &subGraph,
@@ -53,15 +53,14 @@ namespace tlp {
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
    * Version for backwards compatibility with groupUnderSubGraph set
-   * to graph->getSuperGraph(), multiEdges set to true,
-   * metaInfo set to viewMetaGraph, and delAllEdge set to true.
+   * to graph->getSuperGraph()
    */
   TLP_SCOPE node createMetaNode(Graph *graph, 
 				std::set<node> &subGraph);
   /**
-   *  Return a subgraph induced by a set of nodes
+   *  Return the subgraph induced by a set of nodes
    */
-  TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &, std::string name = "induced subgraph");
+  TLP_SCOPE Graph *inducedSubGraph(Graph *, const std::set<node> &);
 
   /**
    * Update the layout of metanode in cluster according to the layout of underlying nodes in graph

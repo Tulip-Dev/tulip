@@ -184,24 +184,24 @@ node createMNode (Graph *graph, Graph* subGraph,
   return metaNode;
 }
 //====================================================================================
-node createMNode (Graph *graph, set<node> &subGraph,
+node createMNode (Graph *graph, set<node> &nodeSet,
 		  Graph *groupUnderSubGraph, bool multiEdges, bool delAllEdge) {
   if (graph->getRoot()==graph) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not group a set of nodes in the root graph" << endl;
     return node();
   }
-  if (subGraph.empty()) {
+  if (nodeSet.empty()) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
 
-  Graph *metaGraph = 
-    tlp::inducedSubGraph(groupUnderSubGraph, subGraph, "cluster");
+  Graph *subGraph = tlp::inducedSubGraph(groupUnderSubGraph, nodeSet);
   stringstream st;
-  st << "grp_" << setfill('0') << setw(5) << metaGraph->getId(); 
-  metaGraph->setAttribute("name", st.str());
-  return createMNode(graph, metaGraph, groupUnderSubGraph, multiEdges, delAllEdge);
+  st << "grp_" << setfill('0') << setw(5) << subGraph->getId(); 
+  subGraph->setAttribute("name", st.str());
+  return createMNode(graph, subGraph, groupUnderSubGraph,
+		     multiEdges, delAllEdge);
 }
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode, 
@@ -386,7 +386,7 @@ void tlp::openMetaNode(Graph *graph, node metaNode,
 }
 
 //=========================================================
-Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes, string name) {
+Graph * tlp::inducedSubGraph(Graph *graph, const std::set<node> &nodes) {
   Graph *result = graph->addSubGraph();
   set<node>::const_iterator itNodeSet = nodes.begin();
   for(;itNodeSet!=nodes.end(); ++itNodeSet) {
@@ -416,14 +416,14 @@ void tlp::openMetaNode(Graph *graph, node n) {
   }*/
 
 //====================================================================================
-node tlp::createMetaNode (Graph *graph, std::set<node> &subGraph) {
-  return createMNode(graph, subGraph, graph->getSuperGraph(), true, true);
+node tlp::createMetaNode (Graph *graph, std::set<node> &nodeSet) {
+  return createMNode(graph, nodeSet, graph->getSuperGraph(), true, true);
 }
 
 //====================================================================================
-node tlp::createMetaNode (Graph *graph, std::set<node> &subGraph,
+node tlp::createMetaNode (Graph *graph, std::set<node> &nodeSet,
 			  Graph *groupUnderSubGraph) {
-  return createMNode(graph, subGraph, groupUnderSubGraph, false, false);
+  return createMNode(graph, nodeSet, groupUnderSubGraph, false, false);
 }
 
 //====================================================================================
