@@ -18,6 +18,9 @@
 #include "tulip/GlRect.h"
 #include "tulip/GlSphere.h"
 #include "tulip/GlCurve.h"
+#include "tulip/GlComplexPolygon.h"
+#include "tulip/GlConvexHull.h"
+#include "tulip/GlQuad.h"
 
 using namespace std;
 
@@ -114,31 +117,37 @@ namespace tlp {
   }
 
   GlSimpleEntity *GlXMLTools::createEntity(const string &name) {
-    if(name=="GlRectTextured"){
-      return new GlRectTextured();
-    }else if(name=="GlBox"){
+    if(name=="GlBox"){
       return new GlBox();
     }else if(name=="GlCircle"){
       return new GlCircle();
+    }else if(name=="GlComplexPolygon"){
+      return new GlComplexPolygon();
+    }else if(name=="GlComposite"){
+      return new GlComposite();
+    }else if(name=="GlConvexHull"){
+      return new GlConvexHull;
+    }else if(name=="GlCurve") {
+      return new GlCurve();
+    }else if(name=="GlGraphComposite"){
     }else if(name=="GlGrid"){
       return new GlGrid();
     }else if(name=="GlLabel"){
       return new GlLabel();
     }else if(name=="GlLine"){
       return new GlLine();
-    }else if(name=="GlCurve") {
-      return new GlCurve();
     }else if(name=="GlMultiPolygon"){
       return new GlMultiPolygon();
     }else if(name=="GlPolygon"){
       return new GlPolygon();
+    }else if(name=="GlQuad"){
+      return new GlQuad();
     }else if(name=="GlRect"){
       return new GlRect();
+    }else if(name=="GlRectTextured"){
+      return new GlRectTextured();
     }else if(name=="GlSphere"){
       return new GlSphere();
-    }else if(name=="GlComposite"){
-      return new GlComposite();
-    }else if(name=="GlGraphComposite"){
     }else{
       cout << "Unknow entity type : " << name << ". Can't create it !" << endl;
     }

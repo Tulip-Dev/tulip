@@ -27,6 +27,10 @@ namespace tlp {
   class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
   public:
     /**
+     * Default constructor
+     */
+    GlComplexPolygon() {}
+    /**
      * Constructor with a vector of coords, a fill color, a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode)
      * and a textureName if you want
      */

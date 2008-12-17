@@ -21,6 +21,11 @@ namespace tlp {
   public:
 
     /**
+     * Default constructor
+     */
+    GlConvexHull() {}
+
+    /**
      * Build a Polygon with the convex hull of points
      */
     GlConvexHull(const std::vector<Coord> &points,
