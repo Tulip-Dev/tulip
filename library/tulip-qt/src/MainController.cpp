@@ -420,6 +420,7 @@ namespace tlp {
         (*it).second=g;
       }
     }
+    currentGraph=g;
   }
   //**********************************************************************
   void MainController::addNode (Graph *graph, const node) {
