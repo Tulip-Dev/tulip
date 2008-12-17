@@ -48,23 +48,23 @@ namespace tlp {
      * return the fill color of the circle (i parameters is not use)
      * This function is write to overload the GlPolygon function
      */
-    virtual const Color& fcolor(const unsigned int i) const {return fcolor(0);}
+    virtual const Color& fcolor(const unsigned int i) const {return GlPolygon::fcolor(0);}
     /**
      * return the fill color of the circle (i parameters is not use)
      * This function is write to overload the GlPolygon function
      */
-    virtual Color& fcolor(const unsigned int i) {return fcolor(0);}
+    virtual Color& fcolor(const unsigned int i) {return GlPolygon::fcolor(0);}
 
     /**
      * return the outline color of the circle (i parameters is not use)
      * This function is write to overload the GlPolygon function
      */
-    virtual const Color& ocolor(const unsigned int i) const {return ocolor(0);}
+    virtual const Color& ocolor(const unsigned int i) const {return GlPolygon::ocolor(0);}
     /**
      * return the outline color of the circle (i parameters is not use)
      * This function is write to overload the GlPolygon function
      */
-    virtual Color& ocolor(const unsigned int i) {return ocolor(0);}
+    virtual Color& ocolor(const unsigned int i) {return GlPolygon::ocolor(0);}
 
     /**
      * Function to export data in XML
