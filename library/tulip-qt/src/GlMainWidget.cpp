@@ -101,7 +101,11 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
-    if(!dataSet.exist("scene")) {
+    string sceneInput="";
+    if(dataSet.exist("scene")) {
+      dataSet.get("scene",sceneInput);
+    }
+    if(sceneInput=="") {
       //Default scene
       GlLayer* layer=new GlLayer("Main");
       GlLayer *backgroundLayer=new GlLayer("Background");
@@ -130,9 +134,6 @@ namespace tlp {
       scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
       scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
     }else{
-      string sceneInput;
-      dataSet.get("scene",sceneInput);
-
       size_t pos=sceneInput.find("TulipBitmapDir/");
       while(pos!=string::npos){
         sceneInput.replace(pos,15,TulipBitmapDir);
