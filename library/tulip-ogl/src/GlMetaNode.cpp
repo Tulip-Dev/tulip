@@ -36,34 +36,25 @@ namespace tlp {
       GlNode::draw(lod,data,camera);
       return;
     }
-    //glDepthFunc(GL_LESS);
     glPushMatrix();
     const Coord &nodeCoord = data->elementLayout->getNodeValue(node(id));
     const Size &nodeSize = data->elementSize->getNodeValue(node(id));
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(data->elementRotation->getNodeValue(node(id)), 0., 0., 1.);
-    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
+    // We remove nodeSize[N]/100. to be sure that includes nodes are in meta node
+    glScalef(nodeSize[0]-nodeSize[0]/100., nodeSize[1]-nodeSize[1]/100., nodeSize[2]-nodeSize[2]/100.);
 
     Graph *metaGraph = data->getGraph()->getNodeMetaInfo(node(id));
     GlGraphRenderingParameters metaParameters = *data->parameters;
-    /*metaParameters.setTexturePath(data->parameters->getTexturePath());
-    metaParameters.setNodesStencil(data->parameters->getNodesStencil());
-    metaParameters.setMetaNodesStencil(data->parameters->getMetaNodesStencil());
-    metaParameters.setEdgesStencil(data->parameters->getEdgesStencil());*/
     GlGraphInputData metaData(metaGraph,&metaParameters);
     pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
-    //  cerr << bboxes.first << "/" << bboxes.second << endl;
     Coord maxC = bboxes.first;
     Coord minC = bboxes.second;
-    //MatrixGL saveMatrix(modelviewMatrix);
     BoundingBox includeBoundingBox;
     data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
     Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
-    //cout << "include scale : " << includeScale << endl;
     Coord size=(maxC + minC)/-1.;
     Coord translate=(maxC+minC)/-2 - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2) +(maxC-minC)*includeScale ;
-    //cout << "translate : " << translate << endl;
-    //cout << "nodeCoord : " << nodeCoord << endl;
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
@@ -125,7 +116,7 @@ namespace tlp {
 	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
 	size*=objectScale[i];
       }
-      
+
       bb.first=middle-size/2;
       bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
@@ -141,7 +132,7 @@ namespace tlp {
 	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
 	size*=objectScale[i];
       }
-      
+
       bb.first=middle-size/2;
       bb.second=middle+size/2;
       calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
@@ -152,13 +143,13 @@ namespace tlp {
 	BoundingBox bb = (*it).getBoundingBox(&metaData);
 	Coord size=bb.second-bb.first;
 	Coord middle=bb.first+(size)/2;
-	
+
 	for(int i=objectScale.size()-1; i>=0;--i) {
 	  middle+=objectTranslate[i];
 	  middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
 	  size*=objectScale[i];
 	}
-	
+
 	bb.first=middle-size/2;
 	bb.second=middle+size/2;
 	calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
@@ -166,13 +157,13 @@ namespace tlp {
     }
 
     calculator.compute(camera->getViewport(),camera->getViewport());
-    
+
     LODResultVector* result=calculator.getResultForComplexeEntities();
 
     glPushMatrix();
     glScalef(scale[0],scale[1],scale[2]);
     glTranslatef(translate[0],translate[1],translate[2]);
-    
+
     for(LODResultVector::iterator it=result->begin();it!=result->end();++it) {
       for(std::vector<LODResultEntity>::iterator itM=(*it).second.begin();itM!=(*it).second.end();++itM) {
 	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,activeCamera);
@@ -200,7 +191,7 @@ namespace tlp {
     Graph *metaGraph = data->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *data->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
-    
+
     vector<GlNode> nodes;
     vector<GlMetaNode> metaNodes;
     vector<GlEdge> edges;
@@ -253,16 +244,16 @@ namespace tlp {
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
       (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
     }
-    
+
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
       (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
     }
-    
+
     for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
       (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
     }
 
     glPopMatrix();
-    
+
   }
 }
