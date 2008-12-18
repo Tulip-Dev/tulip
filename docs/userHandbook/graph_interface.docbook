@@ -238,14 +238,14 @@
           <graphic fileref="images/mouse-tool.png"/>
           This toolbar allows to select the mouse operation you want to perform. Operations are listed and explained, from left to right of the toolbar :
           <itemizedlist>
-            <listitem>
+            <listitem id="3dnavigator" xreflabel="Node Link Diagram 3D Navigator">
               <para><inlinegraphic fileref="images/i_navigation.png"/><code>3D Navigation</code> : This tool enables the 3D navigation on a graph using the mouse movements (left button pressed); the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>Shift</keycap> key, zoom is activated using <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
               </para>
             </listitem>
             <listitem>
               <para><inlinegraphic fileref="images/i_select.png"/><code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window (see <xref linkend="infoeditor"/>).</para>
             </listitem>
-            <listitem>
+            <listitem id="rectangle selection" xreflabel="Node Link Diagram Rectangle Selection">
               <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code> : Allows multiple elements selection. Elements within the selection box are selected. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
               </para>
             </listitem>
@@ -278,7 +278,7 @@
               <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : It enables to zoom on a defined rectangle area. The first corner of the rectangle is defined when pressing the mouse left button, the opposite corner is defined when moving the mouse and the zoom operation is performed on the desired rectangle when the button is released.
               </para>
             </listitem>
-            <listitem>
+            <listitem id="zoom box" xreflabel="Node Link Diagram Zoom Box">
               <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a single left click. The deleted node or edge is the one under the mouse when you click.
               </para>
             </listitem>
