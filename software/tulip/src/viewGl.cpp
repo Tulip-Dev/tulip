@@ -273,7 +273,7 @@ void viewGl::fileNew(QAction *action) {
   enableElements(true);
 }
 //**********************************************************************
-void viewGl::fileNew(bool checked) {
+bool viewGl::fileNew(bool checked) {
   MutableContainer<Controller *> controllers;
   ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
@@ -282,9 +282,9 @@ void viewGl::fileNew(bool checked) {
   if(createController(name)) {
     currentController->setData();
     enableElements(true);
-  }else{
-    currentController->setData(currentController->getGraph());
-  }
+  } else
+    return false;
+  return true;
 }
 //**********************************************************************
 bool viewGl::createController(const string &name) {
@@ -743,7 +743,9 @@ void viewGl::deletePluginsUpdateChecker(){
 }
 //==============================================================
 void viewGl::controllerWillBeClosed(){
-  fileNew(true);
+  if(!fileNew(true)){
+    currentController->setData(currentController->getGraph());
+  }
 }
 //==============================================================
 void viewGl::helpAbout() {

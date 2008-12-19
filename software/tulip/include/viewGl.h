@@ -85,7 +85,7 @@ protected slots:
   void fileSave();
   void fileSaveAs();
   void fileNew(QAction *action);
-  void fileNew(bool);
+  bool fileNew(bool);
   bool createController(const std::string &name);
   void fileOpen();
   void filePrint();
