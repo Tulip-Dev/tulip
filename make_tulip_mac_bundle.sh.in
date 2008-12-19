@@ -115,6 +115,7 @@ done
 TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp
 # remove lib*.a and lib*.la files
 find $TLP_PLUGINS_BUNDLE_DIR -name 'lib*.*a' -print | xargs rm
+find $TLP_PLUGINS_BUNDLE_DIR -name "lib*-@PACKAGE_VERSION@" -print | xargs rm
 # remove the plugins designer bundle dir
 # rm -rf $TLP_PLUGINS_BUNDLE_DIR/designer
 # package the lib*.dylib files
