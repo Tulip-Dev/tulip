@@ -199,7 +199,7 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 
 	if (configDialog == NULL) {
 
-		configDialog = new ParallelCoordinatesConfigDialog(graphProxy);
+		configDialog = new ParallelCoordinatesConfigDialog(graphProxy, mainWidget);
 		configDialog->setModal(true);
 
 		unsigned int axisHeight = DEFAULT_AXIS_HEIGHT;
@@ -294,6 +294,8 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 
 	if (graphProxy->getNumberOfSelectedProperties() > 0) {
 		setUpAndDrawView();
+	} else {
+		showConfigDialog();
 	}
 }
 
