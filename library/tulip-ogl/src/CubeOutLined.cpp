@@ -49,7 +49,7 @@ namespace tlp {
 
   void CubeOutLined::draw(node n, float lod) {
     glEnable(GL_LIGHTING);
-    glDisable(GL_COLOR_MATERIAL);
+    //glDisable(GL_COLOR_MATERIAL);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_cube")) {
       drawCube(GL_QUADS);
@@ -59,7 +59,7 @@ namespace tlp {
       drawCubeSimple(GL_LINE_LOOP);
       GlDisplayListManager::getInst().endNewDisplayList();
     }
-  
+
     setMaterial(glGraphInputData->elementColor->getNodeValue(n));
     string texFile = glGraphInputData->elementTexture->getNodeValue(n);
     if (texFile != "") {
@@ -107,7 +107,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
@@ -119,7 +119,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 0.0f, -1.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f); 
+    glVertex3f(-0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -131,7 +131,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(1.0f, 0.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -143,7 +143,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(-1.0f, 0.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-0.5f, 0.5f, 0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -155,7 +155,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); 
+    glVertex3f(0.5f, 0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -167,7 +167,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, -1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -179,28 +179,28 @@ namespace tlp {
   void CubeOutLined::drawCubeSimple(GLenum type) {
     /* front face */
     glBegin(type);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glVertex3f(0.5f, 0.5f, 0.5f);
     glVertex3f(-0.5f, 0.5f, 0.5f);
     glEnd();
     /* back face */
     glBegin(type);
-    glVertex3f(-0.5f, -0.5f, -0.5f); 
+    glVertex3f(-0.5f, -0.5f, -0.5f);
     glVertex3f(-0.5f, 0.5f, -0.5f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glVertex3f(0.5f, -0.5f, -0.5f);
     glEnd();
     /* right face */
     glBegin(type);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glVertex3f(0.5f, 0.5f, 0.5f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glEnd();
     /* left face */
     glBegin(type);
-    glVertex3f(-0.5f, -0.5f, 0.5f); 
+    glVertex3f(-0.5f, -0.5f, 0.5f);
     glVertex3f(-0.5f, 0.5f, 0.5f);
     glVertex3f(-0.5f, 0.5f, -0.5f);
     glVertex3f(-0.5f, -0.5f, -0.5f);
@@ -209,7 +209,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, 1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); 
+    glVertex3f(0.5f, 0.5f, 0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, 0.5f, -0.5f);
     glTexCoord2f(0.0f, 1.0f);
@@ -221,7 +221,7 @@ namespace tlp {
     glBegin(type);
     glNormal3f(0.0f, -1.0f, 0.0f);
     glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); 
+    glVertex3f(0.5f, -0.5f, -0.5f);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(0.5f, -0.5f, 0.5f);
     glTexCoord2f(0.0f, 1.0f);
