@@ -186,13 +186,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsAxisBoxPlot-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsAxisSliders-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsAxisSwapper-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsElementDeleter-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsElementHighlighter-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsElementShowInfos-%{version}.*
-%{prefix}/lib/tlp/interactors/libParallelCoordsElementsSelector-%{version}.*
 %{prefix}/lib/tlp/view/libParallelCoordinates-%{version}.*
 %{prefix}/lib/tlp/view/libSpreadSheet-%{version}.*
 
