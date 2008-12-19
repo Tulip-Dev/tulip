@@ -20,6 +20,7 @@ namespace tlp {
     fcolor(1) = topLeftCol;
     fcolor(2) = bottomRightCol ;
     fcolor(3) = bottomRightCol;
+
   }
   GlRect::GlRect(bool filled, bool outlined):GlPolygon(4u,4u,4u,filled,outlined) {
   }
@@ -99,10 +100,10 @@ namespace tlp {
 
     GlXMLTools::getDataNode(rootNode,dataNode);
 
-    GlXMLTools::getXML(dataNode,"topLeftPos",topLeftPos);
+    /*GlXMLTools::getXML(dataNode,"topLeftPos",topLeftPos);
     GlXMLTools::getXML(dataNode,"bottomRightPos",bottomRightPos);
     GlXMLTools::getXML(dataNode,"topLeftCol",topLeftCol);
-    GlXMLTools::getXML(dataNode,"bottomRightCol",bottomRightCol);
+    GlXMLTools::getXML(dataNode,"bottomRightCol",bottomRightCol);*/
 
   }
   //============================================================
@@ -114,11 +115,11 @@ namespace tlp {
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     // Parse Data
-    if(dataNode) {
+    /*if(dataNode) {
       GlXMLTools::setWithXML(dataNode,"topLeftPos",topLeftPos);
       GlXMLTools::setWithXML(dataNode,"bottomRightPos",bottomRightPos);
       GlXMLTools::setWithXML(dataNode,"topLeftCol",topLeftCol);
       GlXMLTools::setWithXML(dataNode,"bottomRightCol",bottomRightCol);
-    }
+    }*/
   }
 }

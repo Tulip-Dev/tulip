@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/01/2008
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -28,7 +28,7 @@ typedef xmlNode * xmlNodePtr;
 namespace tlp {
 
   /**
-   * static tools class use to store/load xml data 
+   * static tools class use to store/load xml data
    */
   class GlSimpleEntity;
 
@@ -93,18 +93,19 @@ namespace tlp {
     {
       xmlNodePtr node;
       createChild(rootNode,name,node);
-    
+
       std::stringstream str;
       str << "(" ;
       typename std::vector<Obj>::const_iterator it=vect.begin();
       str << *it ;
+      ++it;
       for(;it!=vect.end();++it) {
 	str << "," << *it ;
       }
       str << ")" ;
       addContent(node,str.str());
     }
-    
+
     /**
      * Set vector of Object with the given XML
      */
@@ -124,7 +125,7 @@ namespace tlp {
 	c=is.get();
       }
     }
-    
+
     /**
      * Get the XML output for an Object
      */
@@ -137,7 +138,7 @@ namespace tlp {
       str << value ;
       addContent(node,str.str());
     }
-    
+
     /**
      * Set an Object with the given XML
      */

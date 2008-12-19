@@ -97,11 +97,12 @@ namespace tlp {
 
     GlXMLTools::getDataNode(rootNode,dataNode);
 
-    GlXMLTools::getXML(dataNode,"fontPath",text);
+    GlXMLTools::getXML(dataNode,"fontPath",fontPath);
     GlXMLTools::getXML(dataNode,"text",text);
     GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
     GlXMLTools::getXML(dataNode,"size",size);
     GlXMLTools::getXML(dataNode,"color",color);
+    GlXMLTools::getXML(dataNode,"leftAlign",leftAlign);
 
   }
   //============================================================
@@ -112,11 +113,12 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      GlXMLTools::setWithXML(dataNode,"fontPath",text);
+      GlXMLTools::setWithXML(dataNode,"fontPath",fontPath);
       GlXMLTools::setWithXML(dataNode,"text",text);
       GlXMLTools::setWithXML(dataNode,"centerPosition",centerPosition);
       GlXMLTools::setWithXML(dataNode, "size", size);
       GlXMLTools::setWithXML(dataNode,"color",color);
+      GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
 
       renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
       renderer->setMode(TLP_POLYGON);

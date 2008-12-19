@@ -13,7 +13,7 @@ namespace tlp {
 		       const int outlineSize):
     filled(filled),
     outlined(outlined),
-    outlineSize(outlineSize){ 
+    outlineSize(outlineSize){
   }
   //=====================================================
   GlPolygon::GlPolygon(const vector<Coord> &points,
@@ -116,7 +116,7 @@ namespace tlp {
 	}
       }
       for(unsigned int i=0; i < points.size(); ++i) {
-	if (i < fillColors.size()) {	
+	if (i < fillColors.size()) {
 	  setMaterial(fillColors[i]);
 	}
 	glVertex3fv((float *)&newPoints[i]);
@@ -138,7 +138,7 @@ namespace tlp {
       if(outlineSize!=1)
 	glLineWidth(1);
     }
-    
+
     glTest(__PRETTY_FUNCTION__);
   }
   //===========================================================
@@ -179,15 +179,18 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
+      points.clear();
       GlXMLTools::setWithXML(dataNode,"points",points);
+      fillColors.clear();
       GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
+      outlineColors.clear();
       GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
       GlXMLTools::setWithXML(dataNode,"filled",filled);
       GlXMLTools::setWithXML(dataNode,"outlined",outlined);
       GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
 
       for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
-	boundingBox.check(*it);
+        boundingBox.check(*it);
     }
   }
 }
