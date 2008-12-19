@@ -685,7 +685,7 @@ bool viewGl::askSaveGraph(const std::string name) {
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool viewGl::closeWin() {
-  if(currentController) {
+  if(currentController && !controllerAutoLoad) {
     Graph *graph=currentController->getGraph();
     bool canceled = askSaveGraph(graph->getAttribute<string>("name"));
     if (canceled)
