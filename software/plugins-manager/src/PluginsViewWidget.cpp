@@ -38,11 +38,11 @@ namespace tlp {
     compatibleVersion = false;
     notInstalledVersion = false;
     openDialog = false;
-    
+
     connect(this,SIGNAL(itemSelectionChanged()),this,SLOT(getPluginInfoSlot()));
     connect(this,SIGNAL(itemChanged(QTreeWidgetItem*, int)),this,SLOT(changed(QTreeWidgetItem*)));
     connect(_msm,SIGNAL(nameReceived(MultiServerManager*,std::string,std::string)),this,SLOT(serverNameReceived(MultiServerManager*,std::string,std::string)));
-    
+
   }
 
   PluginsViewWidget::~PluginsViewWidget(){
@@ -76,7 +76,7 @@ namespace tlp {
       QTreeWidgetItem *parent=root;
       vector<string> *subList=&((*it).second);
       const PluginInfo *pluginInfo=(*it).first;
-    
+
       for(int i=0;i<(int)(subList->size());i++){
 	string text;
 	if(i!=serverPosition){
@@ -97,9 +97,9 @@ namespace tlp {
 	  twi->setText(0, text.c_str());
 
 	  parent->addChild(twi);
-	  
+
 	}else{
-	  if(i==versionPosition){ 
+	  if(i==versionPosition){
 	    if(twi->isHidden()){
 	      setItemCheckability(pluginInfo,true,twi);
 	    }else{
@@ -116,7 +116,7 @@ namespace tlp {
       else
       twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);*/
 
-	if(i==versionPosition){ 	
+	if(i==versionPosition){
 	  setPluginDisplayInTree(pluginInfo,twi);
 	}
 
@@ -197,8 +197,6 @@ namespace tlp {
 	havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
       #endif
 
-	cout << pluginInfo->name << " : " << havePlugin  << endl;
-
       if(created) {
 	if(havePlugin) {
 	  twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
@@ -221,12 +219,12 @@ namespace tlp {
     QTreeWidgetItemIterator it(tree);
     while (*it) {
       if ((*it)->type() == 1){ //We are on a version Number
-      
+
 	//Filter only compatibles versions
-	if(compatibleVersion){ 
+	if(compatibleVersion){
 	  if(!isCompatible((*it)->text(0).toStdString())){
 	    (*it)->setHidden(true);  //if the version is not compatible hide it
-	  
+
 	    bool removeParent = true;
 	    for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
 	      if (!((*it)->parent()->child(i)->isHidden())){
@@ -244,14 +242,14 @@ namespace tlp {
 	}
 
 	//Filter only compatibles versions
-	/*if(compatibleVersion){ 
+	/*if(compatibleVersion){
 	  if(!isCompatible((*it)->text(0).toStdString())){
 	    (*it)->setHidden(true);  //if the version is not compatible hide it
 	  }
 	  }*/
-      
+
 	// Filter only last version
-	if(lastVersion){ 
+	if(lastVersion){
 	  string version = "0.0.0 0.0";
 	  for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
 	    if (isMoreRecent((*it)->parent()->child(i)->text(0).toStdString(), version)){
@@ -271,7 +269,7 @@ namespace tlp {
 	    (*it)->setHidden(true);
 	  }
 	}
-      
+
 	bool removeParent = true;
 	for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
 	  if (!((*it)->parent()->child(i)->isHidden())){
@@ -281,7 +279,7 @@ namespace tlp {
 	if(removeParent){
 	  (*it)->parent()->setHidden(true);
 	}
-      
+
       }
       ++it;
       }
@@ -325,7 +323,7 @@ namespace tlp {
     }
 
     return false;
-  } 
+  }
 
 
   bool PluginsViewWidget::setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi){
@@ -356,7 +354,7 @@ namespace tlp {
   }
 
   void  PluginsViewWidget::applyChange(){
-  
+
     if(openDialog==true)delete pluginDialog;
     std::vector<string>pluginsToInstallNames;
     std::vector<string>pluginsToRemoveNames;
@@ -370,7 +368,7 @@ namespace tlp {
       if(ok==false){
 	windowToDisplayError((*it).name);
 	return;
-   
+
       }
     }
 
@@ -381,7 +379,7 @@ namespace tlp {
     }
 
     if(depNoInstalled.size()>0){
-      // Ask the user if he wants to install all dependancy 
+      // Ask the user if he wants to install all dependancy
       AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depNoInstalled,&pluginsToInstall);
       authoriz->exec();
     }
@@ -402,7 +400,7 @@ namespace tlp {
     }
 
     if(depToRemove.size()>0){
-      // Ask the user if he wants to install all dependancy 
+      // Ask the user if he wants to install all dependancy
       AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depToRemove,&pluginsToRemove);
       authoriz->exec();
     }
@@ -415,13 +413,13 @@ namespace tlp {
     pluginDialog = new InstallPluginDialog(pluginsToInstallNames,pluginsToRemoveNames,this);
     openDialog = true;
     pluginDialog->show();
-  
+
     for (set<LocalPluginInfo,PluginCmp>::iterator it= pluginsToRemove.begin(); it!=pluginsToRemove.end(); ++it) {
       UpdatePlugin *plug=new UpdatePlugin();
       connect(plug, SIGNAL(pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &)), this, SLOT(terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &)));
       //pluginDialog->addPlugin(false,(*it).name);
-      plug->uninstall((*it));    
-    }	
+      plug->uninstall((*it));
+    }
 
     for (set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
       // Installing current plugin
@@ -432,10 +430,10 @@ namespace tlp {
 
       string serverAddr = getAddr((*it).server);
       //pluginDialog->addPlugin(true,(*it).name);
-      
-      plug->install(serverAddr,(*it)); 
+
+      plug->install(serverAddr,(*it));
     }
-    
+
     pluginsToInstall.clear();
     pluginsToRemove.clear();
   }
@@ -451,15 +449,15 @@ namespace tlp {
     vector<string> addrs;
     _msm->getNames(names);
     _msm->getAddrs(addrs);
-    vector<string>::iterator itNames=names.begin(); 
-    vector<string>::iterator itAddrs=addrs.begin(); 
+    vector<string>::iterator itNames=names.begin();
+    vector<string>::iterator itAddrs=addrs.begin();
 
     for(;itNames!=names.end();++itNames) {
       if((*itNames) == name)
 	return (*itAddrs);
       ++itAddrs;
     }
-  
+
     return "ERROR";
   }
 
@@ -469,7 +467,7 @@ namespace tlp {
     string plugA = plugpath + ".a";
     string plugLA = plugpath + ".la";
     QFile* f1 = new QFile(plugSO.c_str());
-    QFile* f2 = new QFile(plugA.c_str());  
+    QFile* f2 = new QFile(plugA.c_str());
     QFile* f3 = new QFile(plugLA.c_str());
     bool ret = f1->exists() && f2->exists() && f3->exists();
     delete f1;
@@ -504,28 +502,28 @@ namespace tlp {
     QDialog* dia = new QDialog(this);
     QVBoxLayout* box = new QVBoxLayout(dia);
     QLabel* labelName = new QLabel(pluginName.c_str(),dia);
-    QLabel* label=new QLabel("Toutes les dependances n'ont pas été trouvées\nAnnulation de l'installation",dia);
+    QLabel* label=new QLabel("Toutes les dependances n'ont pas ï¿½tï¿½ trouvï¿½es\nAnnulation de l'installation",dia);
     box->addWidget(labelName);
     box->addWidget(label);
-  
+
     QPushButton* ok = new QPushButton("Yes",dia);
     box->addWidget(ok);
     connect(ok, SIGNAL(clicked()),dia, SLOT(reject()));
-  
+
     //dia->setLayout(box);
     dia->exec();
-  
+
   }
 
   /*void PluginsViewWidget::installAllDependencies(vector<DistPluginInfo> depNoInstall){
-  
+
     std::vector<string> namePlugins;
     for(unsigned int i=0;i<depNoInstall.size();i++){
       namePlugins.push_back(depNoInstall[i].name);
     }
-  
+
     pluginDialog->addInstallPlugins(namePlugins);
-  
+
       for(unsigned int i=0;i<depNoInstall.size();i++){
 	//string fileName = depNoInstall[i].fileName;
       string name = depNoInstall[i].name;
@@ -545,12 +543,12 @@ namespace tlp {
       serverName = infos[0]->server; // Le premier serveur de la liste
       _msm->getAddr(serverName,serverAddr);
       // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   
-      pluginDialog->installStart(depNoInstall[i].name);	  
+
+      pluginDialog->installStart(depNoInstall[i].name);
       plug->install(serverAddr,depNoInstall[i]);
-    
+
       }
-  
+
       }*/
 
   bool PluginsViewWidget::isAVersionItem(QTreeWidgetItem *item){
@@ -583,13 +581,13 @@ namespace tlp {
   }
 
   void PluginsViewWidget::getPluginInfoSlot(){
-  
+
     QList<QTreeWidgetItem*> tmpList=selectedItems();
 
     int namePosition = (_msm->getListPosition())[NAME_POSITION_IN_V];
     int typePosition = (_msm->getListPosition())[TYPE_POSITION_IN_V];
     int versionPosition = (_msm->getListPosition())[VERSION_POSITION_IN_V];
-  
+
     if(!tmpList.empty()){
       QTreeWidgetItem* ti = tmpList.first();
       if(isAVersionItem(ti)){
@@ -645,17 +643,17 @@ namespace tlp {
 
 
   void PluginsViewWidget::updateToInstallList(QTreeWidgetItem *it){
- 
+
     int namePosition = (_msm->getListPosition())[NAME_POSITION_IN_V];
     int typePosition = (_msm->getListPosition())[TYPE_POSITION_IN_V];
     int versionPosition = (_msm->getListPosition())[VERSION_POSITION_IN_V];
     int serverPosition = (_msm->getListPosition())[SERVER_POSITION_IN_V];
-  
+
     string pluginName = getNthParent(it->parent(),(versionPosition-namePosition)-1)->text(0).toStdString();
     string pluginType = getNthParent(it->parent(),(versionPosition-typePosition)-1)->text(0).toStdString();
 
     string pluginVersion = it->text(0).toStdString();
-    string pluginServer;  
+    string pluginServer;
 
     bool operationCancelled = false;
 
@@ -667,7 +665,7 @@ namespace tlp {
 	  QStringList * serverList = new QStringList();
 	  for (int i = 0; i < it->childCount(); i++)
 	    serverList->append(it->child(i)->text(0));
-	
+
 	  //    serverList->append("serverTest1");
 	  //serverList->append("serverTest1");
 	  ChooseServerDialog * chooseServer= new ChooseServerDialog(serverList);
@@ -678,11 +676,11 @@ namespace tlp {
 	      operationCancelled = true;
 	    }
 	}
-      
+
       }else{
 	pluginServer = it->child(0)->text(0).toStdString();
       }
-    
+
     }else{
       pluginServer = getNthParent(it->parent(),(versionPosition-serverPosition)-1)->text(0).toStdString();
     }
@@ -690,17 +688,17 @@ namespace tlp {
     if(operationCancelled){
       it->setCheckState(0,Qt::Unchecked);
     }else{
- 
+
       if(it->checkState(0)==Qt::Checked){
 	PluginMatchNameTypeAndVersionPred pred(pluginName,pluginType,pluginVersion);
 	set<LocalPluginInfo,PluginCmp>::iterator iter2=find_if(pluginsToRemove.begin(),pluginsToRemove.end(),pred);
 	if(iter2 != pluginsToRemove.end()){
 	  pluginsToRemove.erase(iter2);
 	}else{
-	  //adding the element in the list of plugins to Install        
+	  //adding the element in the list of plugins to Install
 	  set<DistPluginInfo,PluginCmp>::iterator iter=find_if(pluginsToInstall.begin(),pluginsToInstall.end(),pred);
 	  if(iter == pluginsToInstall.end()){
-	    const PluginInfo *actualPlugin=_msm->getPluginInformation(pluginName,pluginType,pluginVersion,pluginServer);  
+	    const PluginInfo *actualPlugin=_msm->getPluginInformation(pluginName,pluginType,pluginVersion,pluginServer);
 	    pluginsToInstall.insert(*(DistPluginInfo*)actualPlugin);
 	  }
 	}
@@ -713,27 +711,27 @@ namespace tlp {
 	  //Adding the element in the list of plugin to remove
 	  set<LocalPluginInfo,PluginCmp>::iterator iter=find_if(pluginsToRemove.begin(),pluginsToRemove.end(),pred);
 	  if(iter == pluginsToRemove.end()){
-	    const PluginInfo *actualPlugin=_msm->getPluginInformation(pluginName,pluginType,pluginVersion,pluginServer); 
+	    const PluginInfo *actualPlugin=_msm->getPluginInformation(pluginName,pluginType,pluginVersion,pluginServer);
 	    const PluginInfo *localPlugin=_msm->getLocalPlugin(actualPlugin);
 	    if (localPlugin)
-	      pluginsToRemove.insert(*(LocalPluginInfo*)localPlugin); 
+	      pluginsToRemove.insert(*(LocalPluginInfo*)localPlugin);
 	  }
 	}
       }
     }
-  
+
   }
 
   void PluginsViewWidget::changed(QTreeWidgetItem *it){
     if(listIsChanging)
       return;
-  
+
     if(isAVersionItem(it)){
       int namePosition = (_msm->getListPosition())[NAME_POSITION_IN_V];
       int typePosition = (_msm->getListPosition())[TYPE_POSITION_IN_V];
 
       updateToInstallList(it);
-  
+
       string namePlugin;
       string typePlugin;
       string version = it->text(0).toStdString();
@@ -763,5 +761,5 @@ namespace tlp {
   void PluginsViewWidget::serverNameReceived(MultiServerManager* msm, string addr, string name){
     changeList();
   }
-  
+
 }
