@@ -34,7 +34,17 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			AxisConfigDialogs.cpp  \
 			QuantitativeParallelAxis.cpp \
 			GlProgressBar.h \
-			GlProgressBar.cpp 
+			GlProgressBar.cpp \
+			ParallelCoordsElementShowInfos.cpp \
+			ParallelCoordsElementsSelector.cpp \
+			ParallelCoordsGlEntitiesSelector.h \
+			ParallelCoordsGlEntitiesSelector.cpp \
+			ParallelCoordsElementDeleter.cpp \
+			ParallelCoordsElementHighlighter.cpp \
+			ParallelCoordsAxisSwapper.cpp \
+			ParallelCoordsAxisSliders.cpp \
+			ParallelCoordsAxisBoxPlot.cpp
+
 
 nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
 			moc_ParallelCoordinatesView.cpp \

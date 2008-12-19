@@ -15,8 +15,8 @@
 #ifndef PARALLELCOORDSGLENTITIESSELECTOR_H_
 #define PARALLELCOORDSGLENTITIESSELECTOR_H_
 
-#include "../view/parallel/ParallelTools.h"
-#include "../view/parallel/ParallelCoordinatesView.h"
+#include "ParallelTools.h"
+#include "ParallelCoordinatesView.h"
 
 #ifdef  _WIN32
 // compilation pb workaround

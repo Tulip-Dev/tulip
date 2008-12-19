@@ -12,9 +12,9 @@
  (at your option) any later version.
 */
 
-#include "../view/parallel/ParallelCoordinatesView.h"
-#include "../view/parallel/ParallelTools.h"
-#include "../view/parallel/QuantitativeParallelAxis.h"
+#include "ParallelCoordinatesView.h"
+#include "ParallelTools.h"
+#include "QuantitativeParallelAxis.h"
 
 #ifdef  _WIN32
 // compilation pb workaround
