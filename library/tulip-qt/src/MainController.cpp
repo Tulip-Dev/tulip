@@ -191,7 +191,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0) {
+    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -223,6 +223,12 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::setData(Graph *graph,DataSet dataSet) {
+    editMenu->setEnabled(true);
+    algorithmMenu->setEnabled(true);
+    viewMenu->setEnabled(true);
+    optionsMenu->setEnabled(true);
+    graphMenu->setEnabled(true);
+
     Observable::holdObservers();
     Graph *newGraph=graph;
     if(graph==NULL) {
@@ -528,9 +534,10 @@ namespace tlp {
     assert(windowAction);
 
     editMenu = new QMenu("&Edit");
+    editMenu->setEnabled(false);
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
 
-    editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
+    tmpAction=editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
     editMenu->addAction("C&opy",this,SLOT(editCopy()),QKeySequence(tr("Ctrl+C")));
     editMenu->addAction("&Paste",this,SLOT(editPaste()),QKeySequence(tr("Ctrl+V")));
     editMenu->addSeparator();
@@ -551,6 +558,7 @@ namespace tlp {
 
      //Algorithm Menu
     algorithmMenu = new QMenu("Algorithm");
+    algorithmMenu->setEnabled(false);
     intMenu=new QMenu("&Integer");
     stringMenu=new QMenu("L&abel");
     sizesMenu=new QMenu("S&ize");
@@ -599,6 +607,7 @@ namespace tlp {
 
     //Graph menu
     graphMenu = new QMenu("&Graph");
+    graphMenu->setEnabled(false);
     QMenu *testGraphMenu=graphMenu->addMenu("Test");
     tmpAction=testGraphMenu->addAction("Simple");
     connect(tmpAction,SIGNAL(triggered()),this,SLOT(isSimple()));
@@ -639,6 +648,7 @@ namespace tlp {
 
     //View menu
     viewMenu = new QMenu("View");
+    viewMenu->setEnabled(false);
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(addView(QAction*)));
     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
     for (it=ViewFactory::factory->objMap.begin();it != ViewFactory::factory->objMap.end();++it) {
@@ -648,6 +658,7 @@ namespace tlp {
 
     //Options menu
     optionsMenu = new QMenu("&Options");
+    optionsMenu->setEnabled(false);
     forceRatioAction = optionsMenu->addAction("Force ratio");
     forceRatioAction->setCheckable(true);
     forceRatioAction->setChecked(true);
