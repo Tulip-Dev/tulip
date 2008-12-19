@@ -149,6 +149,7 @@ void ParallelCoordinatesView::buildMenuEntries() {
 }
 
 void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
+  overviewWidget->setObservedView(NULL,NULL);
 
 	// if the graph to set is the same as the current one, do nothing
 	if (graphProxy != NULL && graphProxy->getGraph() == graph) {

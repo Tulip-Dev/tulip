@@ -429,13 +429,13 @@ namespace tlp {
       Graph *subgraph = itS->next();
       delSubGraph(sg,subgraph);
     }
+    currentGraph=g;
     for(map<View *,Graph *>::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
       if((*it).second==sg){
         (*it).first->setGraph(g);
         (*it).second=g;
       }
     }
-    currentGraph=g;
   }
   //**********************************************************************
   void MainController::addNode (Graph *graph, const node) {
