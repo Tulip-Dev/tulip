@@ -1433,6 +1433,7 @@ namespace tlp {
     changeGraph(root);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
+    updateUndoRedoInfos();
     // forget previous/next graphs
     /*glWidget->prevGraphs.clear();
       glWidget->nextGraphs.clear();*/
