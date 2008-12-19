@@ -101,6 +101,8 @@ namespace tlp
 
   TulipStats::~TulipStats()
   {
+    if(graph)
+      graph->removeGraphObserver(this);
   }
 
   void TulipStats::setSGHierarchyWidgetWidget(SGHierarchyWidget *clusterTree)

@@ -9,12 +9,12 @@
 
 #include "tulip/NodeLinkDiagramComponent.h"
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
 
-/** 
+/**
  * We define a specific interactor to show element graph infos in eltProperties
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public Interactor {
@@ -27,15 +27,15 @@ public:
       GlMainWidget *g = (GlMainWidget *) widget;
       node tmpNode;
       edge tmpEdge;
-      ElementType type;  
+      ElementType type;
       NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
       if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
-	switch(type) {
-	case NODE: nodeLinkView->elementSelectedSlot(tmpNode.id, true); break;
-	case EDGE: nodeLinkView->elementSelectedSlot(tmpEdge.id, false); break;
-	}
-	return true;
-	}
+        switch(type) {
+        case NODE: nodeLinkView->elementSelectedSlot(tmpNode.id, true); break;
+        case EDGE: nodeLinkView->elementSelectedSlot(tmpEdge.id, false); break;
+        }
+        return true;
+      }
     }
     return false;
   }

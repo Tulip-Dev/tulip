@@ -196,6 +196,9 @@ namespace tlp {
   }
   //**********************************************************************
   MainController::~MainController() {
+    clearObservers();
+    currentGraph->removeObserver(this);
+    currentGraph->removeGraphObserver(this);
   	delete editMenu;
 		delete algorithmMenu;
   	delete viewMenu;
@@ -236,25 +239,29 @@ namespace tlp {
       DataSet views;
       dataSet.get<DataSet>("views", views);
       Iterator< std::pair<std::string, DataType*> > *it=views.getValues();
-      while(it->hasNext()) {
-      	pair<string, DataType*> p;
-      	p = it->next();
-      	Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
-      	pair<string, DataType*> v=it2->next();
-      	int id,x,y,width,height;
-      	(*(DataSet*)p.second->value).get("id",id);
-      	(*(DataSet*)p.second->value).get("x",x);
-      	(*(DataSet*)p.second->value).get("y",y);
-      	(*(DataSet*)p.second->value).get("width",width);
-      	(*(DataSet*)p.second->value).get("height",height);
-      	Graph *lastViewedGraph=newGraph;
-      	if(id!=0){
-      	  lastViewedGraph=getCurrentSubGraph(newGraph, id);
-      	  if(!lastViewedGraph)
-      	    lastViewedGraph=newGraph;
-      	}
-      	createView(v.first,lastViewedGraph,*(DataSet*)v.second->value,QRect(x,y,width,height));
+      if(!it->hasNext()){
+        initMainView(DataSet());
+      }else{
+        while(it->hasNext()) {
+          pair<string, DataType*> p;
+          p = it->next();
+          Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
+          pair<string, DataType*> v=it2->next();
+          int id,x,y,width,height;
+          (*(DataSet*)p.second->value).get("id",id);
+          (*(DataSet*)p.second->value).get("x",x);
+          (*(DataSet*)p.second->value).get("y",y);
+          (*(DataSet*)p.second->value).get("width",width);
+          (*(DataSet*)p.second->value).get("height",height);
+          Graph *lastViewedGraph=newGraph;
+          if(id!=0){
+            lastViewedGraph=getCurrentSubGraph(newGraph, id);
+            if(!lastViewedGraph)
+              lastViewedGraph=newGraph;
+          }
+          createView(v.first,lastViewedGraph,*(DataSet*)v.second->value,QRect(x,y,width,height));
 
+        }
       }
     }else{
       NodeLinkDiagramComponent *view;
@@ -332,14 +339,16 @@ namespace tlp {
       DataSet viewData;
       Graph *graph;
       View *view =viewWidget[widgetList[i]];
-      view->getData(&graph,&viewData);
-      tmp.set<DataSet>(viewNames[view],viewData);
-      tmp.set<int>("id",graph->getId());
-      tmp.set<int>("x",rect.left());
-      tmp.set<int>("y",rect.top());
-      tmp.set<int>("width",rect.width());
-      tmp.set<int>("height",rect.height());
-      views.set<DataSet>(str.str(),tmp);
+      if(view){
+        view->getData(&graph,&viewData);
+        tmp.set<DataSet>(viewNames[view],viewData);
+        tmp.set<int>("id",graph->getId());
+        tmp.set<int>("x",rect.left());
+        tmp.set<int>("y",rect.top());
+        tmp.set<int>("width",rect.width());
+        tmp.set<int>("height",rect.height());
+        views.set<DataSet>(str.str(),tmp);
+      }
     }
     dataSet->set<DataSet>("views",views);
 

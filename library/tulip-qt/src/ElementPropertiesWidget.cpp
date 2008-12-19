@@ -49,6 +49,8 @@ namespace tlp {
   }
   //==========================================
   ElementPropertiesWidget::~ElementPropertiesWidget() {
+    if(graph)
+      graph->removeGraphObserver(this);
   }
   //==========================================
   QStringList ElementPropertiesWidget::getCurrentListedProperties() const{

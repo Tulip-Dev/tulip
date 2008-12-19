@@ -282,6 +282,8 @@ void viewGl::fileNew(bool checked) {
   if(createController(name)) {
     currentController->setData();
     enableElements(true);
+  }else{
+    currentController->setData(currentController->getGraph());
   }
 }
 //**********************************************************************
