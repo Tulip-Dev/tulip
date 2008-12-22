@@ -1,5 +1,5 @@
 #include "ItemsDialogList.h"
-#include <Qt/qapplication.h>
+#include <QtGui/qapplication.h>
 
 ItemsDialogList::ItemsDialogList(QWidget *parent) :
 	QListWidget(parent) {
