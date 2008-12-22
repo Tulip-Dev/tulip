@@ -369,7 +369,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
     float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
     if (minLayerSpacing + nodeSpacing > spacing)
-      spacing = minLayerSpacing + nodeSpacing;
+      spacing = minLayerSpacing + spacing;
   }
   
   list<LR> *tmpList = TreePlace(startNode,&posRelative);
