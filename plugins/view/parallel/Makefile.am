@@ -30,7 +30,6 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			NominalParallelAxis.cpp \
 			GlNodeGlyph.cpp \
 			GlPolyQuad.cpp \
-			ParallelResource.cpp \
 			AxisConfigDialogs.cpp  \
 			QuantitativeParallelAxis.cpp \
 			GlProgressBar.h \
@@ -47,6 +46,7 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 
 
 nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
+			ParallelResource.cpp \
 			moc_ParallelCoordinatesView.cpp \
 			moc_ParallelCoordinatesConfigDialog.cpp \
 			moc_ItemsDialogList.cpp \
@@ -57,7 +57,7 @@ BUILT_SOURCES = ParallelCoordinatesConfigDialogData.h
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
 dist_noinst_DATA = ParallelResource.qrc \
-		   cross.png down.png left.png right.png up.png \
+		   cross.png down.png left.png right.png tick.png up.png \
 		   i_axis_boxplot.png i_axis_sliders.png \
 		   i_axis_swapper.png i_element_highlighter.png \
 		   ParallelCoordinatesConfigDialog.ui	
