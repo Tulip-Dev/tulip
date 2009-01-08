@@ -70,6 +70,7 @@ namespace tlp {
 	}
       }
     }
+    return false;
   }
   //==================================================
   std::list<QAction *> *AbstractView::getInteractorsActionList(){
