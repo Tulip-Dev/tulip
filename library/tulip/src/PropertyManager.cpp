@@ -34,10 +34,11 @@ bool PropertyManagerImpl::existProperty(const string &str) {
   if (existLocalProperty(str)) 
     return true;
   else {
-    if (graph->getSuperGraph()==graph)
-        return false;
+    Graph* super = graph->getSuperGraph();
+    if (super == graph)
+      return false;
     else 
-      return (graph->getSuperGraph()->existProperty(str));
+      return (super->existProperty(str));
   }
 }
 //==============================================================
@@ -57,9 +58,11 @@ PropertyInterface* PropertyManagerImpl::getProperty(const string &str) {
   if (existLocalProperty(str))
     return this->getLocalProperty(str);
   else {
-      return (graph->getSuperGraph()->getProperty(str));
-    }
-  return 0;
+    Graph* super = graph->getSuperGraph();
+    if (super != graph)
+      return (super->getProperty(str));
+  }
+  return NULL;
 }
 //==============================================================
 PropertyInterface* PropertyManagerImpl::getLocalProperty(const string &str) {
