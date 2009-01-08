@@ -121,7 +121,7 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   if (!fread(texture->data, biSizeImage, 1, file))
     {
       cerr << __PRETTY_FUNCTION__ << ": Error loading file: " << filename << endl;
-      delete texture->data;
+      delete [] texture->data;
       texture->data=NULL;
       fclose(file);
       return false;
