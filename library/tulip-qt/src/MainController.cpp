@@ -668,6 +668,9 @@ namespace tlp {
     morphingAction = optionsMenu->addAction("Morphing");
     morphingAction->setCheckable(true);
     morphingAction->setChecked(false);
+    optionsMenu->addSeparator();
+    QAction *propertiesDockAction = optionsMenu->addAction("Show properties dock");
+    connect(propertiesDockAction,SIGNAL(triggered()),tabWidgetDock,SLOT(show()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
