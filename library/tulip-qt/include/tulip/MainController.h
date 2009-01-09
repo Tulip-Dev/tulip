@@ -40,7 +40,7 @@ namespace tlp {
   class PropertyDialog;
   class ElementPropertiesWidget;
 #ifdef STATS_UI
-  class TulipStat;
+  class TulipStats;
 #endif
   class Morphing;
 
@@ -183,7 +183,7 @@ namespace tlp {
     PropertyDialog *propertiesWidget;
     ElementPropertiesWidget *eltProperties;
 #ifdef STATS_UI
-    TulipStat *statsWidget;
+    TulipStats *statsWidget;
 #endif
 
     QMenu *editMenu;

@@ -51,7 +51,7 @@ namespace tlp {
  *  -Thirdly : It clusterize the graph by a plane which is based upon statistic results calculated above.
  */
   class TLP_QT_SCOPE TulipStats
-    : public QDialog, public Ui::TulipStatsData, public GraphObserver
+    : public QWidget, public Ui::TulipStatsData, public GraphObserver
 {
   Q_OBJECT
 

@@ -38,7 +38,7 @@ using namespace std;
 namespace tlp
 {
   TulipStats::TulipStats(QWidget *parent)
-    : QDialog(parent), glMainWidget(0), graph(0) {
+    : QWidget(parent), glMainWidget(0), graph(0) {
     setupUi(this);
     //  cout << "[START]..." << __PRETTY_FUNCTION__ ;
 

@@ -51,6 +51,7 @@ BUILT_SOURCES = \
 	moc_PropertyDialog.cpp \
 	moc_CopyPropertyDialog.cpp \
 	moc_TulipStatsWidget.cpp \
+	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialog.cpp \
 	moc_AugmentedDisplayDialog.cpp \
 	moc_ElementPropertiesWidgetUI.cpp \
@@ -120,10 +121,13 @@ CLEANFILES = $(BUILT_SOURCES)
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<
 
+../include/%Data.h: ../designer/%.ui
+	$(UIC) -o $@ $<
+
 moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidget.h 
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
-	
+
 TulipQtResource.cpp: ../designer/TulipQtResource.qrc
 	$(RCC) -name TulipQt -o $@ $<
-	
+
 
