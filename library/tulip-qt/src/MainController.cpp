@@ -231,11 +231,6 @@ namespace tlp {
 
     Observable::holdObservers();
     Graph *newGraph=graph;
-    if(graph==NULL) {
-      // createGraph
-      newGraph = tlp::newGraph();
-      initializeGraph(newGraph);
-    }
     newGraph->addObserver(this);
     newGraph->addGraphObserver(this);
     Graph *lastViewedGraph=newGraph;
@@ -458,16 +453,6 @@ namespace tlp {
     updateCurrentGraphInfos();
   }
   //**********************************************************************
-  void MainController::initializeGraph(Graph *graph) {
-    graph->setAttribute("name", newName());
-    graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
-    graph->getProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
-    graph->getProperty<ColorProperty>("viewColor")->setAllNodeValue(Color(255,0,0));
-    graph->getProperty<ColorProperty>("viewColor")->setAllEdgeValue(Color(0,0,0));
-    graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
-    graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
-  }
-  //**********************************************************************
   void MainController::loadGUI() {
 
   	mainWindowFacade.getWorkspace()->setScrollBarsEnabled( true );
@@ -534,6 +519,7 @@ namespace tlp {
     assert(windowAction);
 
     editMenu = new QMenu("&Edit");
+    editMenu->setParent(mainWindowFacade.getMenuBar());
     editMenu->setEnabled(false);
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
 
