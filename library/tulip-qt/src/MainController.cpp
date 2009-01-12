@@ -519,7 +519,6 @@ namespace tlp {
     assert(windowAction);
 
     editMenu = new QMenu("&Edit");
-    editMenu->setParent(mainWindowFacade.getMenuBar());
     editMenu->setEnabled(false);
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
 
