@@ -16,6 +16,7 @@
 #include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
 #include <QtGui/qmenu.h>
+#include <QtGui/QTabWidget>
 #include <QtAssistant/qassistantclient.h>
 #include <string>
 #include <tulip/Reflect.h>
@@ -56,6 +57,7 @@ public:
 
 protected:
   QWidget *aboutWidget;
+  QTabWidget *tabWidget;
   //tlp::GlMainWidget *glWidget;
   tlp::TulipPluginLoader pluginLoader;
   tlp::PluginsUpdateChecker *pluginsUpdateChecker;
@@ -86,7 +88,8 @@ protected slots:
   void fileSaveAs();
   void fileNew(QAction *action);
   bool fileNew(bool);
-  bool createController(const std::string &name);
+  void fileCloseTab();
+  bool createController(const std::string &name,const std::string &graphName);
   void fileOpen();
   void filePrint();
   void importGraph(QAction*);
@@ -95,26 +98,39 @@ protected slots:
   void windowsMenuActivated(QAction*);
   void deletePluginsUpdateChecker();
   void controllerWillBeClosed();
+  void tabChanged(int index);
 
 private:
   void buildMenus();
   stdext::hash_map<unsigned long, viewGlFile> openFiles;
-  bool doFileSave();
+  bool doFileSave(int);
   bool doFileSaveAs();
-  bool doFileSave(std::string plugin, std::string filename, std::string author, std::string comments);
-  bool askSaveGraph(const std::string name);
+  bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);
+  bool askSaveGraph(const std::string name,int index);
   bool closeWin();
   int alreadyTreated(std::set<unsigned long>, tlp::Graph *);
+  void saveActions(QWidget *widget,int index,std::map<int,std::vector<QAction *> > &mapToSave);
+  void clearInterface();
+  void loadInterface(int index);
+  void saveInterface(int index);
 
   QMenu *newMenu;
   QAction *newAction;
   unsigned int mouseClicX,mouseClicY;
 
   QAssistantClient* assistant;
-	std::string currentControllerName;
-  tlp::Controller *currentController;
+	/*std::string currentControllerName;
+  tlp::Controller *currentController;*/
   bool controllerAutoLoad;
-};
+  int currentTabIndex;
+  std::map<int,tlp::Controller *> tabIndexToController;
+  std::map<tlp::Controller *, std::string> controllerToControllerName;
+  std::map<int,QWorkspace *> tabIndexToWorkspace;
+  std::map<int,std::vector<QAction *> > tabIndexToMenu;
+  std::map<int,std::vector<QAction *> > tabIndexToToolBar;
+  std::map<int,std::vector<QAction *> > tabIndexToGraphToolBar;
+  std::map<int,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > tabIndexToDockWidget;
+ };
 
 #endif // viewGl_included
 

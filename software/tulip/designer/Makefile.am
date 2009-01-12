@@ -6,6 +6,7 @@ dist_noinst_DATA = AppStartUp.ui \
 		i_redo.png \
 		i_save.png \
 		i_undo.png \
+		i_deltab.png \
 		TulipResource.qrc \
 		background_logo.png \
 		logo160x145.png \

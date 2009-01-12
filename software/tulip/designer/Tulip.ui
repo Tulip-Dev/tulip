@@ -38,6 +38,7 @@
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
+   <addaction name="fileCloseTabAction" />
   </widget>
   <widget class="QToolBar" name="graphToolBar" >
    <property name="orientation" >
@@ -66,6 +67,7 @@
     <addaction name="separator" />
     <addaction name="filePrintAction" />
     <addaction name="separator" />
+    <addaction name="fileCloseTabAction" />
     <addaction name="fileExitAction" />
    </widget>
    <widget class="QMenu" name="windowsMenu" >
@@ -100,6 +102,17 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="fileCloseTabAction" >
+   <property name="icon" >
+    <iconset>:/i_deltab.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Close tab</string>
+   </property>
+   <property name="iconText" >
+    <string>Close tab</string>
    </property>
   </action>
   <action name="fileSaveAction" >
@@ -779,10 +792,26 @@
  <resources/>
  <connections>
   <connection>
-   <sender>fileOpenAction</sender>
+   <sender>penAction</sender>
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileOpen()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileCloseTabAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileCloseTab()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>-1</x>

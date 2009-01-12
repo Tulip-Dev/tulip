@@ -4,6 +4,7 @@
         <file>i_open.png</file>
         <file>i_print.png</file>
         <file>i_save.png</file>
+        <file>i_deltab.png</file>
         <file>logo160x145.png</file>
         <file>logo32x32.png</file>
     </qresource>
