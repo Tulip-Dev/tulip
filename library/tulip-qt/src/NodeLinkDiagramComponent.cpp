@@ -282,6 +282,8 @@ namespace tlp {
     Observable::unholdObservers();
   }
   void NodeLinkDiagramComponent::checkAlgorithmResult() {
+    if(!mainWidget->getScene()->getGlGraphComposite())
+      return;
     Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
     if(graph->attributeExist("NodeLinkDiagramComponent")){
