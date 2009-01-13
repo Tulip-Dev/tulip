@@ -730,34 +730,48 @@ public:
     setlocale(LC_NUMERIC, "C");
 
     string filename;
-    dataSet->get<string>("file::filename", filename);
-    struct stat infoEntry;
-    bool result = (stat(filename.c_str(),&infoEntry) == 0);
-    if (!result) {
-      std::stringstream ess;
-      ess << filename.c_str() << ": " << strerror(errno);
-      pluginProgress->setError(ess.str());
-      std::cerr << pluginProgress->getError() << std::endl;
-      return false;
-    }
-    int size=infoEntry.st_size;
+    string data;
+    stringstream *tmpss=NULL;
+    int size;
     istream *input;
-    if (filename.rfind(".gz") == (filename.length() - 3)) {
-      input = tlp::getIgzstream(filename.c_str());
-      size *= 4;
+    bool result;
+
+    if(dataSet->exist("file::filename")){
+      dataSet->get<string>("file::filename", filename);
+      struct stat infoEntry;
+      result = (stat(filename.c_str(),&infoEntry) == 0);
+      if (!result) {
+        std::stringstream ess;
+        ess << filename.c_str() << ": " << strerror(errno);
+        pluginProgress->setError(ess.str());
+        std::cerr << pluginProgress->getError() << std::endl;
+        return false;
+      }
+      size=infoEntry.st_size;
+      if (filename.rfind(".gz") == (filename.length() - 3)) {
+        input = tlp::getIgzstream(filename.c_str());
+        size *= 4;
+      }
+      else
+        input = new ifstream(filename.c_str());
+    }else{
+      dataSet->get<string>("file::data", data);
+      size=data.size();
+      stringstream *tmpss=new stringstream;
+      (*tmpss) << data;
+      input = tmpss;
     }
-    else
-      input = new ifstream(filename.c_str());
 
     pluginProgress->showPreview(false);
     pluginProgress->setComment(string("Loading ") + filename + "...");
-
     TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet), pluginProgress, size);
     result = myParser.parse();
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
       std::cerr << pluginProgress->getError() << std::endl;
     }
+    if(tmpss)
+      delete tmpss;
     delete input;
     return result;
   }
