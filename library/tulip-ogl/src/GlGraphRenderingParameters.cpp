@@ -13,7 +13,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   //_graph(0),
   _antialiased(true),
   _viewArrow(false),
-  _viewNodeLabel(false),
+  _viewNodeLabel(true),
   _viewEdgeLabel(false),
   _viewMetaLabel(false),
   _elementOrdered(false),
@@ -34,7 +34,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _nodesLabelStencil(0xFFFF),
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
-  _FontsType(0),
+  _FontsType(1),
   _labelsBorder(2) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
@@ -110,7 +110,7 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setElementZOrdered(b);
   if (data.get<bool>("autoScale", b))
     _viewAutoScale=b;
-  if (data.get<bool>("incrementalRendering", b)) 
+  if (data.get<bool>("incrementalRendering", b))
     setIncrementalRendering(b);
   if (data.get<bool>("edgeColorInterpolation", b))
     setEdgeColorInterpolate(b);
