@@ -248,7 +248,7 @@ void viewGl::startTulip() {
   ++it;
   if(it==ControllerFactory::factory->objMap.end()){
     controllerAutoLoad=false;
-    createController(name,UNNAMED);
+    createController(name,newName());
     controllerAutoLoad=true;
   }else{
     controllerAutoLoad=false;
@@ -479,6 +479,7 @@ bool viewGl::doFileSave(Controller *controllerToSave,string plugin, string filen
   } else {
     statusBar()->showMessage((filename + " saved.").c_str());
   }
+  tabWidget->setTabText(tabWidget->currentIndex(),filename.c_str());
   //setNavigateCaption(filename);
   //setGraphName(graph, QString(filename.c_str()));
   delete os;
@@ -953,6 +954,10 @@ void viewGl::loadInterface(int index){
 }
 //==============================================================
 void viewGl::tabChanged(int index){
+  if(index==-1){
+    fileNew(false);
+    return;
+  }
   if(currentTabIndex==-1){
     currentTabIndex=index;
     return;
