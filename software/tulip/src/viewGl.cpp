@@ -887,6 +887,13 @@ void viewGl::clearInterface() {
     }
   }
 
+  /*objectList=statusBar()->children();
+  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+    QLabel *widget=dynamic_cast<QLabel*>(*it);
+    if(widget)
+      statusBar()->removeWidget(widget);
+  }*/
+
   graphToolBar->clear();
 }
 //==============================================================
@@ -908,9 +915,19 @@ void viewGl::saveInterface(int index) {
       }
     }
   }
+
+  pair<string,string > tmp(statusBar()->currentMessage().toStdString(),string());
+  objectList=statusBar()->children();
+  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+    QLabel *widget=dynamic_cast<QLabel*>(*it);
+    if(widget)
+      tmp.second=widget->text().toStdString();
+  }
+  controllerToStatusBar[tabIndexToController[index]]=tmp;
 }
 //==============================================================
 void viewGl::loadInterface(int index){
+  Controller *controller=tabIndexToController[index];
   if(tabIndexToMenu.count(index)!=0){
     menuBar()->clear();
     vector<QAction *> actionsToAdd=tabIndexToMenu[index];
@@ -950,6 +967,16 @@ void viewGl::loadInterface(int index){
     for(vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.begin();it!=tmp.end();++it){
       addDockWidget((*it).first,(*it).second);
       (*it).second->show();
+    }
+  }
+
+  if(controllerToStatusBar.count(controller)!=0){
+    statusBar()->showMessage(controllerToStatusBar[controller].first.c_str());
+    QObjectList objectList=statusBar()->children();
+    for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
+      QLabel *widget=dynamic_cast<QLabel*>(*it);
+      if(widget)
+        widget->setText(controllerToStatusBar[controller].second.c_str());
     }
   }
 }

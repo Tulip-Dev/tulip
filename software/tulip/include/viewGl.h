@@ -130,6 +130,7 @@ private:
   std::map<int,std::vector<QAction *> > tabIndexToToolBar;
   std::map<int,std::vector<QAction *> > tabIndexToGraphToolBar;
   std::map<int,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > tabIndexToDockWidget;
+  std::map<tlp::Controller *,std::pair<std::string,std::string > > controllerToStatusBar;
  };
 
 #endif // viewGl_included
