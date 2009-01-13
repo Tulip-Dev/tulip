@@ -7,6 +7,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QStatusBar>
 #include <QtGui/QInputDialog>
+#include <QtGui/QClipboard>
 
 #include <tulip/hash_string.h>
 #include <tulip/Graph.h>
@@ -849,8 +850,13 @@ namespace tlp {
     EdgeA edgeA;
     GetSelection( nodeA, edgeA, currentGraph, selP );
     Observable::holdObservers();
-    copyCutPasteGraph = tlp::newGraph();
-    tlp::copyToGraph( copyCutPasteGraph, currentGraph, selP );
+    Graph* newGraph = tlp::newGraph();
+    tlp::copyToGraph( newGraph, currentGraph, selP );
+    stringstream tmpss;
+    DataSet dataSet;
+    tlp::exportGraph(newGraph, tmpss, "tlp", dataSet, NULL);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(tmpss.str().c_str());
     currentGraph->push();
     // Restore selection
     SetSelection( selP, nodeA, edgeA, currentGraph );
@@ -869,20 +875,29 @@ namespace tlp {
     BooleanProperty * selP = currentGraph->getProperty<BooleanProperty>("viewSelection");
     if( !selP ) return;
     Observable::holdObservers();
-    copyCutPasteGraph = tlp::newGraph();
-    tlp::copyToGraph( copyCutPasteGraph, currentGraph, selP );
+    Graph* newGraph = tlp::newGraph();
+    tlp::copyToGraph( newGraph, currentGraph, selP );
+    stringstream tmpss;
+    DataSet dataSet;
+    tlp::exportGraph(newGraph, tmpss, "tlp", dataSet, NULL);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(tmpss.str().c_str());
     Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editPaste() {
     if( !currentGraph ) return;
-    if( !copyCutPasteGraph ) return;
 
     Observable::holdObservers();
     BooleanProperty * selP = currentGraph->getProperty<BooleanProperty>("viewSelection");
 
     currentGraph->push();
-    tlp::copyToGraph( currentGraph, copyCutPasteGraph, 0, selP );
+    Graph *newGraph=tlp::newGraph();
+    DataSet dataSet;
+    QClipboard *clipboard = QApplication::clipboard();
+    dataSet.set<string>("file::data",clipboard->text().toStdString());
+    tlp::importGraph("tlp", dataSet, NULL ,newGraph);
+    tlp::copyToGraph( currentGraph, newGraph, 0, selP );
     Observable::unholdObservers();
     redrawViews(true);
   }
