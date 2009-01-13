@@ -206,6 +206,7 @@ void viewGl::startTulip() {
   QWidget *centralwidget = new QWidget(this);
   QGridLayout *gridLayout = new QGridLayout(centralwidget);
   tabWidget=new QTabWidget(centralwidget);
+  //tabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
   connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tabChanged(int)));
   gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
 
@@ -603,7 +604,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
       DataSet *controllerData=(DataSet*)p.second->value;
       string controllerName=p.first;
 
-      createController(controllerName,newGraph->getAttribute<string>("name"));
+      createController(controllerName,s.toStdString());
       tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,*controllerData);
       enableElements(true);
     }else{
@@ -621,7 +622,7 @@ void viewGl::fileOpen(string *plugin, QString &s) {
         dataSet.get<DataSet>("displaying", glGraphData);
         newDataSet.set<DataSet>("displaying",glGraphData);
       }
-      createController("MainController",newGraph->getAttribute<string>("name").c_str());
+      createController("MainController",s.toStdString());
       tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,newDataSet);
     }
 

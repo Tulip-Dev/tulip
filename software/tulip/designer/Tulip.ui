@@ -38,7 +38,6 @@
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
    <addaction name="filePrintAction" />
-   <addaction name="fileCloseTabAction" />
   </widget>
   <widget class="QToolBar" name="graphToolBar" >
    <property name="orientation" >
@@ -105,9 +104,6 @@
    </property>
   </action>
   <action name="fileCloseTabAction" >
-   <property name="icon" >
-    <iconset>:/i_deltab.png</iconset>
-   </property>
    <property name="text" >
     <string>Close tab</string>
    </property>
@@ -792,7 +788,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>penAction</sender>
+   <sender>fileOpenAction</sender>
    <signal>activated()</signal>
    <receiver>TulipData</receiver>
    <slot>fileOpen()</slot>
