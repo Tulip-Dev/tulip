@@ -934,11 +934,13 @@ namespace tlp {
     }delete it;
     if (tmp.empty()) return;
     currentGraph->push();
+    Observable::holdObservers();
     if (currentGraph == currentGraph->getRoot()) {
       QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
       currentGraph = tlp::newCloneSubGraph(currentGraph, "groups");
     }
     node metaNode = tlp::createMetaNode(currentGraph, tmp);
+    Observable::unholdObservers();
     clusterTreeWidget->update();
   }
   //==============================================================
