@@ -168,6 +168,8 @@ namespace tlp {
     colorProperty=graph->getProperty<ColorProperty>("viewColor");
     ColorProperty *labelColorProperty;
     labelColorProperty=graph->getProperty<ColorProperty>("viewLabelColor");
+    BooleanProperty *selectionProperty;
+    selectionProperty=graph->getProperty<BooleanProperty>("viewSelection");
 
     Iterator<std::string> *it=graph->getLocalProperties();
     while(it->hasNext()) {
@@ -181,10 +183,18 @@ namespace tlp {
           Color color;
           Color labelColor;
           if(view==NodesView){
-            color=colorProperty->getNodeValue(node(i));
+            if(!selectionProperty->getNodeValue(node(i)))
+              color=colorProperty->getNodeValue(node(i));
+            else
+              color=Color(255, 102, 255, 255);
+
             labelColor=labelColorProperty->getNodeValue(node(i));
           }else{
-            color=colorProperty->getEdgeValue(edge(i));
+            if(!selectionProperty->getEdgeValue(edge(i)))
+              color=colorProperty->getEdgeValue(edge(i));
+            else
+              color=Color(255,102,255,255);
+
             labelColor=labelColorProperty->getEdgeValue(edge(i));
           }
           curCell->setBackground(QBrush(QColor(color[0],color[1],color[2],color[3])));
