@@ -78,6 +78,7 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/hash_string.h>
 #include <tulip/TabWidget.h>
+#include <tulip/MainController.h>
 
 #include <PluginsManagerDialog.h>
 #include <UpdatePlugin.h>
@@ -1014,27 +1015,42 @@ void viewGl::fileExit() {
 }
 //==============================================================
 void viewGl::filePrint() {
-  /*if (!glWidget) return;
-  Graph *graph=
-    glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph= tabIndexToController[tabWidget->currentIndex()]->getGraph();
   if (graph==0) return;
 
-  QPrinter printer;
-  QPrintDialog dialog(&printer, this);
-  if (!dialog.exec())
-    return;
-  int width,height;
-  width = glWidget->width();
-  height = glWidget->height();
-  unsigned char* image= glWidget->getImage();
-  QPainter painter(&printer);
-  for (int y=0; y<height; y++)
-    for (int x=0; x<width; x++) {
-      painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-			    image[(height-y-1)*width*3+(x)*3+1],
-			    image[(height-y-1)*width*3+(x)*3+2]));
-      painter.drawPoint(x,y);
+  NodeLinkDiagramComponent *nldc;
+  QWidget *widget=tabWidget->widget(tabWidget->currentIndex());
+  QObjectList tmp=widget->children();
+  for(QObjectList::iterator it=tmp.begin();it!=tmp.end();++it){
+    QWorkspace *workspace=dynamic_cast<QWorkspace*>(*it);
+    if(workspace){
+      QWidget *viewWidget=workspace->activeWindow();
+      MainController *mainController=(MainController*)tabIndexToController[tabWidget->currentIndex()];
+      View *view=mainController->getView(viewWidget);
+      nldc=dynamic_cast<NodeLinkDiagramComponent*>(view);
     }
-  painter.end();
-  delete image;*/
+  }
+
+  if(nldc){
+    GlMainWidget *glWidget=nldc->getGlMainWidget();
+    QPrinter printer;
+    QPrintDialog dialog(&printer, this);
+    if (!dialog.exec())
+      return;
+    int width,height;
+    width = glWidget->width();
+    height = glWidget->height();
+
+    unsigned char* image= glWidget->getImage();
+    QPainter painter(&printer);
+    for (int y=0; y<height; y++)
+      for (int x=0; x<width; x++) {
+        painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
+            image[(height-y-1)*width*3+(x)*3+1],
+            image[(height-y-1)*width*3+(x)*3+2]));
+        painter.drawPoint(x,y);
+      }
+    painter.end();
+    delete image;
+  }
 }
