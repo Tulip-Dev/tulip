@@ -164,8 +164,17 @@ namespace tlp {
   }
 
   void NodeLinkDiagramComponent::specificEventFilter(QObject *object,QEvent *event) {
+    if (event->type() == QEvent::KeyPress){
+      QKeyEvent *keyEvent=(QKeyEvent*)event;
+      if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() == Qt::ControlModifier))
+        showDialog(renderingParametersDialogAction);
+      if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+        draw();
+      if((keyEvent->key()==Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+        centerView();
+    }
     if (object->inherits("tlp::GlMainView") &&
-	event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
+        event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
       node tmpNode;
       edge tmpEdge;
       ElementType type;
@@ -173,30 +182,30 @@ namespace tlp {
       QHelpEvent *he = static_cast<QHelpEvent *>(event);
       QRect rect=mainWidget->frameGeometry();
       if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), type, tmpNode, tmpEdge)) {
-	// try to show the viewLabel if any
-	StringProperty *labels = mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
-	std::string label;
-	QString ttip;
-	switch(type) {
-	case NODE:
-	  label = labels->getNodeValue(tmpNode);
-	  if (!label.empty())
-	    ttip += (label + " (").c_str();
-	  ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
-	  if (!label.empty())
-	    ttip += ")";
-	  QToolTip::showText(he->globalPos(), ttip);
-	  break;
-	case EDGE:
-	  label = labels->getEdgeValue(tmpEdge);
-	  if (!label.empty())
-	    ttip += (label + "(").c_str();
-	  ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
-	  if (!label.empty())
-	    ttip += ")";
-	  QToolTip::showText(he->globalPos(), ttip);
-	  break;
-	}
+        // try to show the viewLabel if any
+        StringProperty *labels = mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
+        std::string label;
+        QString ttip;
+        switch(type) {
+        case NODE:
+          label = labels->getNodeValue(tmpNode);
+          if (!label.empty())
+            ttip += (label + " (").c_str();
+          ttip += QString("node: ")+ tmp.setNum(tmpNode.id);
+          if (!label.empty())
+            ttip += ")";
+          QToolTip::showText(he->globalPos(), ttip);
+          break;
+        case EDGE:
+          label = labels->getEdgeValue(tmpEdge);
+          if (!label.empty())
+            ttip += (label + "(").c_str();
+          ttip += QString("edge: ")+ tmp.setNum(tmpEdge.id);
+          if (!label.empty())
+            ttip += ")";
+          QToolTip::showText(he->globalPos(), ttip);
+          break;
+        }
       }
     }
   }
