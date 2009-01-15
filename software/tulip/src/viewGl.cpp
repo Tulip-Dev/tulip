@@ -251,6 +251,7 @@ void viewGl::startTulip() {
   if(it==ControllerFactory::factory->objMap.end()){
     controllerAutoLoad=false;
     createController(name,newName());
+    currentTabIndex=0;
     controllerAutoLoad=true;
   }else{
     controllerAutoLoad=false;
