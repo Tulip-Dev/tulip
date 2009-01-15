@@ -749,11 +749,11 @@ void viewGl::exportGraph(QAction* action) {
 //**********************************************************************
 void viewGl::windowsMenuActivated(QAction* action) {
   int id = action->data().toInt();
-  /*QWidget* w = newWorkspace->windowList().at(id);
+  QWidget* w = tabIndexToWorkspace[tabWidget->currentIndex()]->windowList().at(id);
   if ( w ) {
     w->setFocus();
     w->show();
-  }*/
+  }
 }
 //**********************************************************************
 void viewGl::windowsMenuAboutToShow() {
