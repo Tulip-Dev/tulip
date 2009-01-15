@@ -57,7 +57,6 @@ public:
 
 protected:
   QWidget *aboutWidget;
-  QTabWidget *tabWidget;
   //tlp::GlMainWidget *glWidget;
   tlp::TulipPluginLoader pluginLoader;
   tlp::PluginsUpdateChecker *pluginsUpdateChecker;

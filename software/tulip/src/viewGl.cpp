@@ -204,14 +204,14 @@ void viewGl::startTulip() {
   connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 
-  QWidget *centralwidget = new QWidget(this);
+  /*QWidget *centralwidget = new QWidget(this);
   QGridLayout *gridLayout = new QGridLayout(centralwidget);
   tabWidget=new QTabWidget(centralwidget);
-  //tabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+  centralwidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred));
+  tabWidget->setGeometry(0,0,800,600);
+  //tabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));*/
+  tabWidget->removeTab(0);
   connect(tabWidget,SIGNAL(currentChanged(int)),this,SLOT(tabChanged(int)));
-  gridLayout->addWidget(tabWidget, 0, 0, 1, 1);
-
-  setCentralWidget(centralwidget);
   // set workspace background
   //newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
