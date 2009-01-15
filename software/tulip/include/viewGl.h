@@ -109,7 +109,7 @@ private:
   bool askSaveGraph(const std::string name,int index);
   bool closeWin();
   int alreadyTreated(std::set<unsigned long>, tlp::Graph *);
-  void saveActions(QWidget *widget,int index,std::map<int,std::vector<QAction *> > &mapToSave);
+  void saveActions(QWidget *widget,tlp::Controller *controller,std::map<tlp::Controller *,std::vector<QAction *> > &mapToSave);
   void clearInterface();
   void loadInterface(int index);
   void saveInterface(int index);
@@ -125,11 +125,11 @@ private:
   int currentTabIndex;
   std::map<int,tlp::Controller *> tabIndexToController;
   std::map<tlp::Controller *, std::string> controllerToControllerName;
-  std::map<int,QWorkspace *> tabIndexToWorkspace;
-  std::map<int,std::vector<QAction *> > tabIndexToMenu;
-  std::map<int,std::vector<QAction *> > tabIndexToToolBar;
-  std::map<int,std::vector<QAction *> > tabIndexToGraphToolBar;
-  std::map<int,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > tabIndexToDockWidget;
+  std::map<tlp::Controller *,QWorkspace *> controllerToWorkspace;
+  std::map<tlp::Controller *,std::vector<QAction *> > controllerToMenu;
+  std::map<tlp::Controller *,std::vector<QAction *> > controllerToToolBar;
+  std::map<tlp::Controller *,std::vector<QAction *> > controllerToGraphToolBar;
+  std::map<tlp::Controller *,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > controllerToDockWidget;
   std::map<tlp::Controller *,std::pair<std::string,std::string > > controllerToStatusBar;
  };
 

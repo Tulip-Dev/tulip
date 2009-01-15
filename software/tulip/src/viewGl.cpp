@@ -237,8 +237,9 @@ void viewGl::startTulip() {
 #endif
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
 
-  saveActions(menuBar(),-1,tabIndexToMenu);
-  saveActions(toolBar,-1,tabIndexToToolBar);
+  saveActions(menuBar(),NULL,controllerToMenu);
+  saveActions(toolBar,NULL,controllerToToolBar);
+  tabIndexToController[-1]=NULL;
 
   // if we have only one controller : auto load it
   MutableContainer<Controller *> controllers;
@@ -314,6 +315,7 @@ void viewGl::fileCloseTab(){
   Graph *graph=tabIndexToController[index]->getGraph();
   bool cancle=askSaveGraph(graph->getAttribute<string>("name"),index);
   if(!cancle){
+    Controller *controller;
     tabWidget->setCurrentIndex(index-1);
 
     map<int,Controller *> newTabIndexToController;
@@ -325,50 +327,13 @@ void viewGl::fileCloseTab(){
     }
     tabIndexToController=newTabIndexToController;
 
-    map<int,QWorkspace *> newTabIndexToWorkspace;
-    for(map<int,QWorkspace *>::iterator it=tabIndexToWorkspace.begin();it!=tabIndexToWorkspace.end();++it){
-      if((*it).first<index)
-        newTabIndexToWorkspace[(*it).first]=(*it).second;
-      else if((*it).first>index)
-        newTabIndexToWorkspace[(*it).first-1]=(*it).second;
-    }
-    tabIndexToWorkspace=newTabIndexToWorkspace;
+    controllerToWorkspace.erase(controller);
+    controllerToMenu.erase(controller);
+    controllerToToolBar.erase(controller);
+    controllerToGraphToolBar.erase(controller);
+    controllerToDockWidget.erase(controller);
 
-    map<int,vector<QAction *> > newTabIndexToMenu;
-    for(map<int,vector<QAction *> >::iterator it=tabIndexToMenu.begin();it!=tabIndexToMenu.end();++it){
-      if((*it).first<index)
-        newTabIndexToMenu[(*it).first]=(*it).second;
-      else if((*it).first>index)
-        newTabIndexToMenu[(*it).first-1]=(*it).second;
-    }
-    tabIndexToMenu=newTabIndexToMenu;
-
-    map<int,vector<QAction *> > newTabIndexToToolBar;
-    for(map<int,vector<QAction *> >::iterator it=tabIndexToToolBar.begin();it!=tabIndexToToolBar.end();++it){
-      if((*it).first<index)
-        newTabIndexToToolBar[(*it).first]=(*it).second;
-      else if((*it).first>index)
-        newTabIndexToToolBar[(*it).first-1]=(*it).second;
-    }
-    tabIndexToToolBar=newTabIndexToToolBar;
-
-    map<int,vector<QAction *> > newTabIndexToGraphToolBar;
-    for(map<int,vector<QAction *> >::iterator it=tabIndexToGraphToolBar.begin();it!=tabIndexToGraphToolBar.end();++it){
-      if((*it).first<index)
-        newTabIndexToGraphToolBar[(*it).first]=(*it).second;
-      else if((*it).first>index)
-        newTabIndexToGraphToolBar[(*it).first-1]=(*it).second;
-    }
-    tabIndexToGraphToolBar=newTabIndexToGraphToolBar;
-
-    map<int,vector<pair<Qt::DockWidgetArea,QDockWidget *> > > newTabIndexToDockWidget;
-    for(map<int,vector<pair<Qt::DockWidgetArea,QDockWidget *> > >::iterator it=tabIndexToDockWidget.begin();it!=tabIndexToDockWidget.end();++it){
-      if((*it).first<index)
-        newTabIndexToDockWidget[(*it).first]=(*it).second;
-      else if((*it).first>index)
-        newTabIndexToDockWidget[(*it).first-1]=(*it).second;
-    }
-    tabIndexToDockWidget=newTabIndexToDockWidget;
+    currentTabIndex=-1;
 
     tabWidget->removeTab(index);
   }
@@ -390,14 +355,14 @@ bool viewGl::createController(const string &name,const string &graphName) {
     gridLayout->addWidget(newWorkspace, 0, 0, 1, 1);
     int index=tabWidget->addTab(tab, graphName.c_str());
     tabWidget->setCurrentIndex(index);
-    tabIndexToWorkspace[index]=newWorkspace;
 
-    clearInterface();
+    loadInterface(-1);
 
     Controller *newController=ControllerPluginsManager::getInst().createController(name);
     newController->attachMainWindow(MainWindowFacade(this,toolBar,graphToolBar,newWorkspace));
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;
+    controllerToWorkspace[newController]=newWorkspace;
     //todo
     //connect(currentController,SIGNAL(willBeClosed()),this, SLOT(controllerWillBeClosed()));
 
@@ -749,7 +714,7 @@ void viewGl::exportGraph(QAction* action) {
 //**********************************************************************
 void viewGl::windowsMenuActivated(QAction* action) {
   int id = action->data().toInt();
-  QWidget* w = tabIndexToWorkspace[tabWidget->currentIndex()]->windowList().at(id);
+  QWidget* w = controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().at(id);
   if ( w ) {
     w->setFocus();
     w->show();
@@ -758,7 +723,7 @@ void viewGl::windowsMenuActivated(QAction* action) {
 //**********************************************************************
 void viewGl::windowsMenuAboutToShow() {
   windowsMenu->clear();
-  QWorkspace *currentWorkspace=tabIndexToWorkspace[tabWidget->currentIndex()];
+  QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   QAction* cascadeAction = windowsMenu->addAction("&Cascade", currentWorkspace, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
   if ( currentWorkspace->windowList().isEmpty() ) {
@@ -792,10 +757,12 @@ bool viewGl::askSaveGraph(const std::string name,int index) {
 /* returns true if window agrees to be closed */
 bool viewGl::closeWin() {
   for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
-    Graph *graph=((*it).second)->getGraph();
-    bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
-    if(canceled)
-      return false;
+    if((*it).second){
+      Graph *graph=((*it).second)->getGraph();
+      bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
+      if(canceled)
+        return false;
+    }
   }
   return true;
 }
@@ -853,10 +820,11 @@ void viewGl::controllerWillBeClosed(){
   }*/
 }
 //==============================================================
-void viewGl::saveActions(QWidget *widget,int index,map<int,vector<QAction *> > &mapToSave){
+void viewGl::saveActions(QWidget *widget,Controller *controller,map<Controller *,vector<QAction *> > &mapToSave){
+  mapToSave[controller].clear();
   QList<QAction *> actions=widget->actions();
   for(QList<QAction *>::iterator it=actions.begin();it!=actions.end();++it){
-    mapToSave[index].push_back(*it);
+    mapToSave[controller].push_back(*it);
   }
 }
 //==============================================================
@@ -867,51 +835,29 @@ void viewGl::clearInterface() {
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
     if(widget){
       removeDockWidget(widget);
-      widget->close();
+      widget->hide();
     }
   }
-  //Menu bar
+
   menuBar()->clear();
-  vector<QAction *> actionsToAdd=tabIndexToMenu[-1];
-  if(actionsToAdd.size()!=0){
-    for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
-      menuBar()->addAction(*it);
-    }
-  }
-  //Tool bar
   toolBar->clear();
-  actionsToAdd=tabIndexToToolBar[-1];
-  if(actionsToAdd.size()!=0){
-    for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
-      toolBar->addAction(*it);
-    }
-  }
-
-  /*objectList=statusBar()->children();
-  for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
-    QLabel *widget=dynamic_cast<QLabel*>(*it);
-    if(widget)
-      statusBar()->removeWidget(widget);
-  }*/
-
   graphToolBar->clear();
 }
 //==============================================================
 void viewGl::saveInterface(int index) {
-  saveActions(menuBar(),index,tabIndexToMenu);
-  saveActions(graphToolBar,index,tabIndexToGraphToolBar);
-  saveActions(toolBar,index,tabIndexToToolBar);
+  Controller *controller=tabIndexToController[index];
+  saveActions(menuBar(),controller,controllerToMenu);
+  saveActions(graphToolBar,controller,controllerToGraphToolBar);
+  saveActions(toolBar,controller,controllerToToolBar);
 
-  tabIndexToDockWidget[index].clear();
+  controllerToDockWidget[controller].clear();
   QObjectList objectList=this->children();
   for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
     if(widget){
       Qt::DockWidgetArea area=dockWidgetArea(widget);
       if(area!=Qt::NoDockWidgetArea){
-        tabIndexToDockWidget[currentTabIndex].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
-        removeDockWidget(widget);
-        widget->close();
+        controllerToDockWidget[controller].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
       }
     }
   }
@@ -927,10 +873,12 @@ void viewGl::saveInterface(int index) {
 }
 //==============================================================
 void viewGl::loadInterface(int index){
+  clearInterface();
+
   Controller *controller=tabIndexToController[index];
-  if(tabIndexToMenu.count(index)!=0){
-    menuBar()->clear();
-    vector<QAction *> actionsToAdd=tabIndexToMenu[index];
+
+  if(controllerToMenu.count(controller)!=0){
+    vector<QAction *> actionsToAdd=controllerToMenu[controller];
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         menuBar()->addAction(*it);
@@ -938,9 +886,8 @@ void viewGl::loadInterface(int index){
     }
   }
 
-  if(tabIndexToToolBar.count(index)!=0){
-    toolBar->clear();
-    vector<QAction *> actionsToAdd=tabIndexToToolBar[index];
+  if(controllerToToolBar.count(controller)!=0){
+    vector<QAction *> actionsToAdd=controllerToToolBar[controller];
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         toolBar->addAction(*it);
@@ -948,9 +895,8 @@ void viewGl::loadInterface(int index){
     }
   }
 
-  if(tabIndexToGraphToolBar.count(index)!=0){
-    graphToolBar->clear();
-    vector<QAction *> actionsToAdd=tabIndexToGraphToolBar[index];
+  if(controllerToGraphToolBar.count(controller)!=0){
+    vector<QAction *> actionsToAdd=controllerToGraphToolBar[controller];
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
@@ -958,12 +904,12 @@ void viewGl::loadInterface(int index){
     }
   }
 
-  if(tabIndexToWorkspace.count(index)!=0){
-    tabIndexToWorkspace[index]->setActiveWindow(tabIndexToWorkspace[index]->activeWindow());
+  if(controllerToWorkspace.count(controller)!=0){
+    controllerToWorkspace[controller]->setActiveWindow(controllerToWorkspace[controller]->activeWindow());
   }
 
-  if(tabIndexToDockWidget.count(index)!=0){
-    vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=tabIndexToDockWidget[index];
+  if(controllerToDockWidget.count(controller)!=0){
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
     for(vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.begin();it!=tmp.end();++it){
       addDockWidget((*it).first,(*it).second);
       (*it).second->show();
@@ -986,12 +932,9 @@ void viewGl::tabChanged(int index){
     fileNew(false);
     return;
   }
-  if(currentTabIndex==-1){
-    currentTabIndex=index;
-    return;
-  }
 
-  saveInterface(currentTabIndex);
+  if(currentTabIndex!=-1)
+    saveInterface(currentTabIndex);
 
   loadInterface(index);
 
