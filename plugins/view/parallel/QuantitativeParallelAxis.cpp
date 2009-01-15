@@ -227,58 +227,76 @@ void QuantitativeParallelAxis::computeBoxPlotCoords(set<typename PROPERTYTYPE::R
 	vector<typename PROPERTYTYPE::RealType> propertyValuesVector(propertyValuesSet.begin(), propertyValuesSet.end());
 	unsigned int vectorSize = propertyValuesVector.size();
 
-	typename PROPERTYTYPE::RealType median;
-	if (vectorSize % 2 == 1) {
-		median = propertyValuesVector[vectorSize / 2];
-	} else {
-		median = (propertyValuesVector[(vectorSize / 2) - 1] + propertyValuesVector[vectorSize / 2]) / 2;
-	}
+	if (vectorSize < 4) {
 
-	typename PROPERTYTYPE::RealType firstQuartile;
-	if (vectorSize % 2 == 1) {
-		firstQuartile = propertyValuesVector[vectorSize / 4];
-	} else {
-		firstQuartile = (propertyValuesVector[(vectorSize / 4) - 1] + propertyValuesVector[vectorSize / 4]) / 2;
-	}
+		boxPlotValuesCoord[BOTTOM_OUTLIER] = Coord(-1,-1,-1);
+		boxPlotValuesCoord[FIRST_QUARTILE] = Coord(-1,-1,-1);
+		boxPlotValuesCoord[MEDIAN] = Coord(-1,-1,-1);
+		boxPlotValuesCoord[THIRD_QUARTILE] = Coord(-1,-1,-1);
+		boxPlotValuesCoord[TOP_OUTLIER] = Coord(-1,-1,-1);
 
-	typename PROPERTYTYPE::RealType thirdQuartile;
-	if (vectorSize % 2 == 1) {
-		thirdQuartile = propertyValuesVector[3 *(vectorSize / 4)];
-	} else {
-		thirdQuartile = (propertyValuesVector[3 *(vectorSize / 4) - 1] + propertyValuesVector[3 *(vectorSize / 4)]) / 2;
-	}
+		boxPlotStringValues[BOTTOM_OUTLIER] = "KO";
+		boxPlotStringValues[FIRST_QUARTILE] = "KO";
+		boxPlotStringValues[MEDIAN] = "KO";
+		boxPlotStringValues[THIRD_QUARTILE] = "KO";
+		boxPlotStringValues[TOP_OUTLIER] = "KO";
 
-	typename PROPERTYTYPE::RealType lowBorder = (typename PROPERTYTYPE::RealType) (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
-	typename PROPERTYTYPE::RealType bottomOutlier;
-	typename vector<typename PROPERTYTYPE::RealType>::iterator it;
-	for (it = propertyValuesVector.begin() ; it != propertyValuesVector.end() ; ++it) {
-		if (*it > lowBorder) {
-			bottomOutlier = *it;
-			break;
+	} else {
+
+		typename PROPERTYTYPE::RealType median;
+		if (vectorSize % 2 == 1) {
+			median = propertyValuesVector[vectorSize / 2];
+		} else {
+			median = (propertyValuesVector[(vectorSize / 2) - 1] + propertyValuesVector[vectorSize / 2]) / 2;
 		}
-	}
 
-	typename PROPERTYTYPE::RealType highBorder = (typename PROPERTYTYPE::RealType) (thirdQuartile + (1.5 * (thirdQuartile - firstQuartile)));
-	typename PROPERTYTYPE::RealType topOutlier;
-	typename vector<typename PROPERTYTYPE::RealType>::reverse_iterator itr;
-	for (itr = propertyValuesVector.rbegin() ; itr != propertyValuesVector.rend() ; ++itr) {
-		if (*itr < highBorder) {
-			topOutlier = *itr;
-			break;
+		typename PROPERTYTYPE::RealType firstQuartile;
+		if (vectorSize % 2 == 1) {
+			firstQuartile = propertyValuesVector[vectorSize / 4];
+		} else {
+			firstQuartile = (propertyValuesVector[(vectorSize / 4) - 1] + propertyValuesVector[vectorSize / 4]) / 2;
 		}
+
+		typename PROPERTYTYPE::RealType thirdQuartile;
+		if (vectorSize % 2 == 1) {
+			thirdQuartile = propertyValuesVector[3 *(vectorSize / 4)];
+		} else {
+			thirdQuartile = (propertyValuesVector[3 *(vectorSize / 4) - 1] + propertyValuesVector[3 *(vectorSize / 4)]) / 2;
+		}
+
+		typename PROPERTYTYPE::RealType lowBorder = (typename PROPERTYTYPE::RealType) (firstQuartile - (1.5 * (thirdQuartile - firstQuartile)));
+		typename PROPERTYTYPE::RealType bottomOutlier;
+		typename vector<typename PROPERTYTYPE::RealType>::iterator it;
+		for (it = propertyValuesVector.begin() ; it != propertyValuesVector.end() ; ++it) {
+			if (*it > lowBorder) {
+				bottomOutlier = *it;
+				break;
+			}
+		}
+
+		typename PROPERTYTYPE::RealType highBorder = (typename PROPERTYTYPE::RealType) (thirdQuartile + (1.5 * (thirdQuartile - firstQuartile)));
+		typename PROPERTYTYPE::RealType topOutlier;
+		typename vector<typename PROPERTYTYPE::RealType>::reverse_iterator itr;
+		for (itr = propertyValuesVector.rbegin() ; itr != propertyValuesVector.rend() ; ++itr) {
+			if (*itr < highBorder) {
+				topOutlier = *itr;
+				break;
+			}
+		}
+
+		boxPlotValuesCoord[BOTTOM_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(bottomOutlier);
+		boxPlotValuesCoord[FIRST_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(firstQuartile);
+		boxPlotValuesCoord[MEDIAN] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(median);
+		boxPlotValuesCoord[THIRD_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(thirdQuartile);
+		boxPlotValuesCoord[TOP_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(topOutlier);
+
+		boxPlotStringValues[BOTTOM_OUTLIER] = getStringFromNumber(bottomOutlier);
+		boxPlotStringValues[FIRST_QUARTILE] = getStringFromNumber(firstQuartile);
+		boxPlotStringValues[MEDIAN] = getStringFromNumber(median);
+		boxPlotStringValues[THIRD_QUARTILE] = getStringFromNumber(thirdQuartile);
+		boxPlotStringValues[TOP_OUTLIER] = getStringFromNumber(topOutlier);
+
 	}
-
-	boxPlotValuesCoord[BOTTOM_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(bottomOutlier);
-	boxPlotValuesCoord[FIRST_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(firstQuartile);
-	boxPlotValuesCoord[MEDIAN] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(median);
-	boxPlotValuesCoord[THIRD_QUARTILE] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(thirdQuartile);
-	boxPlotValuesCoord[TOP_OUTLIER] = getAxisCoordForValue<PROPERTY, PROPERTYTYPE>(topOutlier);
-
-	boxPlotStringValues[BOTTOM_OUTLIER] = getStringFromNumber(bottomOutlier);
-	boxPlotStringValues[FIRST_QUARTILE] = getStringFromNumber(firstQuartile);
-	boxPlotStringValues[MEDIAN] = getStringFromNumber(median);
-	boxPlotStringValues[THIRD_QUARTILE] = getStringFromNumber(thirdQuartile);
-	boxPlotStringValues[TOP_OUTLIER] = getStringFromNumber(topOutlier);
 }
 
 

@@ -306,7 +306,9 @@ INTERACTORPLUGIN(ParallelCoordsAxisBoxPlot, "ParallelCoordsAxisBoxPlot", "Tulip 
 void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAxis) {
 	for (unsigned int i = 0 ; i < currentAxis.size() ; ++i) {
 		if (dynamic_cast<QuantitativeParallelAxis *>(currentAxis[i])) {
-			axisBoxPlotMap[(QuantitativeParallelAxis *) currentAxis[i]] = new GlAxisBoxPlot((QuantitativeParallelAxis *) currentAxis[i], lightBlue, darkBlue);
+			QuantitativeParallelAxis *quantitativeAxis = (QuantitativeParallelAxis *) currentAxis[i];
+			if (quantitativeAxis->getMedianStringValue() != "KO")
+				axisBoxPlotMap[quantitativeAxis] = new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);
 		}
 	}
 }
@@ -358,7 +360,8 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 		Coord sceneCoords = glWidget->getScene()->getCamera()->screenTo3DWorld(screenCoords);
 		selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 		if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
-			axisBoxPlotMap[(QuantitativeParallelAxis *)selectedAxis]->setHighlightRangeIfAny(sceneCoords);
+			if (axisBoxPlotMap.find((QuantitativeParallelAxis *)selectedAxis) != axisBoxPlotMap.end())
+				axisBoxPlotMap[(QuantitativeParallelAxis *)selectedAxis]->setHighlightRangeIfAny(sceneCoords);
 		}
 		drawAxisBoxPlot = true;
 		parallelView->refresh();
@@ -374,7 +377,8 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 		if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
 			drawAxisBoxPlot = false;
 			Observable::holdObservers();
-			parallelView->highlightDataInAxisBoxPlotRange((QuantitativeParallelAxis *) selectedAxis);
+			if (axisBoxPlotMap.find((QuantitativeParallelAxis *)selectedAxis) != axisBoxPlotMap.end())
+				parallelView->highlightDataInAxisBoxPlotRange((QuantitativeParallelAxis *) selectedAxis);
 			Observable::unholdObservers();
 			selectedAxis = NULL;
 			drawAxisBoxPlot = true;
