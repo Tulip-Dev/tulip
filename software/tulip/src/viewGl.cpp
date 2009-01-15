@@ -688,6 +688,7 @@ void viewGl::buildMenus() {
     }
   }else{
     newAction = new QAction("New",fileMenu);
+    newAction->setShortcut(QKeySequence(tr("Ctrl+N")));
     connect(newAction,SIGNAL(triggered(bool)), SLOT(fileNew(bool)));
     fileMenu->insertAction(fileOpenAction,newAction);
   }
