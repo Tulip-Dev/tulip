@@ -230,8 +230,10 @@ public:
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
-    computeNodeColor();
-    computeEdgeColor();
+    if(graph->numberOfNodes()!=0)
+      computeNodeColor();
+    if(graph->numberOfEdges()!=0)
+      computeEdgeColor();
 
     GlComposite *composite=new GlComposite();
 
@@ -298,7 +300,7 @@ public:
       int i=1;
       while(nodeLinkDiagramComponentDataSet.exist(infoName)){
         stringstream str;
-        str << "MetricMapping " << i << endl;
+        str << "MetricMapping " << i ;
         infoName=str.str();
         i++;
       }
