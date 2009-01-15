@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1058</width>
-    <height>902</height>
+    <width>1005</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -21,11 +21,11 @@
      <number>0</number>
     </property>
     <property name="leftMargin" >
-     <number>0</number>
+ 	 <number>0</number>
     </property>
-    <property name="topMargin" >
-     <number>0</number>
-    </property>
+ 	<property name="topMargin" >
+ 	 <number>0</number>
+ 	</property>
     <property name="rightMargin" >
      <number>0</number>
     </property>
@@ -51,10 +51,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
+    <number>4</number>
    </attribute>
    <addaction name="fileOpenAction" />
    <addaction name="fileSaveAction" />
@@ -65,10 +62,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
+    <number>4</number>
    </attribute>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -76,7 +70,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1058</width>
+     <width>1005</width>
      <height>25</height>
     </rect>
    </property>
@@ -115,7 +109,7 @@
   </widget>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset>../../../../../../../:/i_open.png</iconset>
+    <iconset>:/i_open.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -137,7 +131,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset>../../../../../../../:/i_save.png</iconset>
+    <iconset>:/i_save.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -162,7 +156,7 @@
   </action>
   <action name="filePrintAction" >
    <property name="icon" >
-    <iconset>../../../../../../../:/i_print.png</iconset>
+    <iconset>:/i_print.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Print...</string>
@@ -187,7 +181,7 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset>image7</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image7</iconset>
    </property>
    <property name="text" >
     <string>&amp;Undo</string>
@@ -201,7 +195,7 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset>image8</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image8</iconset>
    </property>
    <property name="text" >
     <string>&amp;Redo</string>
@@ -215,7 +209,7 @@
   </action>
   <action name="editCutAction" >
    <property name="icon" >
-    <iconset>image9</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image9</iconset>
    </property>
    <property name="text" >
     <string>&amp;Cut</string>
@@ -229,7 +223,7 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset>image10</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image10</iconset>
    </property>
    <property name="text" >
     <string>C&amp;opy</string>
@@ -243,7 +237,7 @@
   </action>
   <action name="editPasteAction" >
    <property name="icon" >
-    <iconset>image11</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image11</iconset>
    </property>
    <property name="text" >
     <string>&amp;Paste</string>
@@ -257,7 +251,7 @@
   </action>
   <action name="editFindAction" >
    <property name="icon" >
-    <iconset>image12</iconset>
+    <iconset>../../../../tulip/software/tulip/designer/image12</iconset>
    </property>
    <property name="text" >
     <string>&amp;Find...</string>
@@ -442,7 +436,7 @@
     <string>Checks if the current graph is a directed tree</string>
    </property>
   </action>
-  <action name="menu_itemAction" >
+  <action name="menunew_itemAction" >
    <property name="text" >
     <string>&amp;Modify</string>
    </property>
@@ -502,7 +496,7 @@
   </action>
   <action name="is_connected" >
    <property name="icon" >
-    <iconset/>
+    <iconset>../../../../tulip/software/tulip/designer</iconset>
    </property>
    <property name="text" >
     <string>Connected</string>
