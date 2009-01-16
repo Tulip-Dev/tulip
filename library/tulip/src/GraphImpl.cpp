@@ -86,8 +86,7 @@ static bool integrityTest(Graph *graph) {
 }
 */
 //----------------------------------------------------------------
-GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0),
-		       lastRecorder(NULL) {
+GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0) {
   outDegree.setAll(0);
 }
 //----------------------------------------------------------------
@@ -400,28 +399,34 @@ void GraphImpl::removeEdge(EdgeContainer &c, const edge e) {
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {
-  return (recorders.size() != 0);
+  return (!recorders.empty());
 }
 //----------------------------------------------------------------
 bool GraphImpl::canUnpop() {
-  return (lastRecorder != NULL);
+  return (!previousRecorders.empty());
 }
 //----------------------------------------------------------------
-void GraphImpl::delLastRecorder() {
-  if (lastRecorder != NULL) {
-    unobserveUpdates();
-    delete lastRecorder;
-    lastRecorder = NULL;
+void GraphImpl::delPreviousRecorders() {
+  stdext::slist<GraphUpdatesRecorder*>::iterator it =
+    previousRecorders.begin();
+  while(it != previousRecorders.end()) {
+    delete (*it);
+    it++;
   }
+  previousRecorders.clear();
 }
 //----------------------------------------------------------------
 void GraphImpl::update(std::set<Observable *>::iterator,
 		       std::set<Observable *>::iterator) {
-  delLastRecorder();
+  // an update occurs in the grap hierarchy
+  // so delete the previous recorders
+  delPreviousRecorders();
 }
 //----------------------------------------------------------------
 void GraphImpl::observableDestroyed(Observable*) {
-  delLastRecorder();
+  // a sub graph has been removed
+  // so delete the previous recorders
+  delPreviousRecorders();
 }
 //----------------------------------------------------------------
 void GraphImpl::observeUpdates(Graph *g) {
@@ -457,11 +462,12 @@ void GraphImpl::unobserveUpdates() {
   }
 }  
 //----------------------------------------------------------------
+#define NB_MAX_RECORDERS 10
 void GraphImpl::push() {
-  // from now if a last recorder exists
-  // it cannot be unpop
-  // so delete it
-  delLastRecorder();
+  // from now if previous recorders exist
+  // they cannot be unpop
+  // so delete them
+  delPreviousRecorders();
 
   if (!recorders.empty())
     // stop recording for current recorder
@@ -469,22 +475,37 @@ void GraphImpl::push() {
   GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder();
   recorder->startRecording(this);
   recorders.push_front(recorder);
+
+  // delete first pushed recorder if needed
+  int nb = 0;
+  stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+  while(it != recorders.end()) {
+    if (nb == NB_MAX_RECORDERS) {
+      GraphUpdatesRecorder* recorder = (*it);
+      delete recorder;
+      recorders.erase(it);
+      break;
+    }
+    nb++;
+    it++;
+  }
 }
 //----------------------------------------------------------------
 void GraphImpl::pop() {
-  // if needed delete the last recorder
-  delLastRecorder();
-
   // save the front recorder
   // to allow unpop
   if (!recorders.empty()) {
-    lastRecorder = recorders.front();
-    lastRecorder->stopRecording(this);
+    if (!previousRecorders.empty())
+      unobserveUpdates();
+    GraphUpdatesRecorder* prevRecorder = recorders.front();
+    prevRecorder->stopRecording(this);
     // undo all recorded updates
-    lastRecorder->doUpdates(this, true);
+    prevRecorder->doUpdates(this, true);
+    // push it
+    previousRecorders.push_front(prevRecorder);
     recorders.pop_front();
     // observe any updates
-    // in order to remove lastRecorder if needed
+    // in order to remove previous recorders if needed
     observeUpdates(this);
     // restart the front recorder
     if (!recorders.empty())
@@ -493,14 +514,21 @@ void GraphImpl::pop() {
 }
 //----------------------------------------------------------------
 void GraphImpl::unpop() {
-  if (lastRecorder != NULL) {
+  int nbPrev = previousRecorders.size();
+  if (nbPrev != 0) {
     unobserveUpdates();
     if (!recorders.empty())
       recorders.front()->stopRecording(this);
-    recorders.push_front(lastRecorder);
+    GraphUpdatesRecorder* prevRecorder = previousRecorders.front();
+    previousRecorders.pop_front();
+    recorders.push_front(prevRecorder);
     // redo all recorded updates
-    lastRecorder->doUpdates(this, false);
-    lastRecorder->restartRecording(this);
-    lastRecorder = NULL;
+    prevRecorder->doUpdates(this, false);
+    prevRecorder->restartRecording(this);
+    // if previous recorders can be unpop
+    // ensure they will be removed
+    // with the next update
+    if (nbPrev > 1)
+      observeUpdates(this);
   }
 }

@@ -108,7 +108,7 @@ private :
   IdManager edgeIds;
   unsigned int nbNodes;
   unsigned int nbEdges;
-  GraphUpdatesRecorder* lastRecorder;
+  stdext::slist<GraphUpdatesRecorder*> previousRecorders;
   stdext::slist<Graph *> observedGraphs;
   stdext::slist<PropertyInterface*> observedProps;
   stdext::slist<GraphUpdatesRecorder*> recorders;
@@ -121,7 +121,7 @@ private :
   void restoreContainer(node, std::vector<edge>&);
   void observeUpdates(Graph*);
   void unobserveUpdates();
-  void delLastRecorder();
+  void delPreviousRecorders();
 };
 
 }
