@@ -75,7 +75,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   //  cout << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
   restore();
   //  displayMap(sg);
-#ifndef DNDEBUG
+#ifndef NDEBUG
   if (planar && embedsg)
     checkEmbedding(sg);
 #endif
