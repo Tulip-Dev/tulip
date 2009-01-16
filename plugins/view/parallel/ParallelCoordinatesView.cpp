@@ -479,12 +479,12 @@ void ParallelCoordinatesView::constructInteractorsMap() {
 }
 //==================================================
 void ParallelCoordinatesView::constructInteractorsActionList() {
-	interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"),"View Navigator",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"),"Zoom Box",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"),"Show Element Properties",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"),"Elements Selector",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"),"Element Deleter",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_element_highlighter.png"),"Elements Highlighter",this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"), "Zoom on rectangle", this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
+	interactorsActionList.push_back(new QAction(QIcon(":/i_element_highlighter.png"), "Highlight elements",this));
 	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_swapper.png"),"Axis Swapper",this));
 	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_sliders.png"),"Axis Sliders",this));
 	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_boxplot.png"),"Axis Box Plot",this));
