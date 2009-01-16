@@ -148,16 +148,16 @@ namespace tlp {
   }
   //==================================================
   void NodeLinkDiagramComponent::constructInteractorsActionList(){
-    interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"),"graphNavigate",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"),"select",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"),"selection",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_move.png"),"editSelection",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_magic.png"),"magicSelection",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"),"zoomBox",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"),"deleteElt",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_addnode.png"),"addNode",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_addedge.png"),"addEdge",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_bends.png"),"editEdgeBend",this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_move.png"), "Move/Reshape selection", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_magic.png"), "Selection of reachable elements with equal value", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"), "Zoom on rectangle", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_addnode.png"), "Add nodes", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_addedge.png"),"Add edges", this));
+    interactorsActionList.push_back(new QAction(QIcon(":/i_bends.png"), "Edit edge bends", this));
   }
   void NodeLinkDiagramComponent::installInteractor(QAction *action) {
     resetInteractors(interactorsMap[action->text().toStdString()]);
