@@ -11,14 +11,32 @@
 #ifndef TULIP_ITERATOR_H
 #define TULIP_ITERATOR_H
 
+#include <tulip/tulipconf.h>
+
 namespace tlp {
+  
+#ifndef DOXYGEN_NOTFOR_DEVEL
+#ifndef NDEBUG
+extern TLP_SCOPE void incrNumIterators();
+extern TLP_SCOPE void decrNumIterators();
+#endif
+extern TLP_SCOPE int getNumIterators();
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 ///Interface of Iterators
 template<class itType> struct Iterator {
   ///
-  Iterator(){}
+  Iterator(){
+#ifndef NDEBUG
+    incrNumIterators();
+#endif
+}
   ///
-  virtual ~Iterator(){};
+  virtual ~Iterator() {
+#ifndef NDEBUG
+    decrNumIterators();
+#endif
+  }
   ///Return the next element
   virtual itType next()=0;
   ///Return true if it exist a next element

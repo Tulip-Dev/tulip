@@ -21,25 +21,71 @@
 #endif
 
 #include "tulip/tulipconf.h"
+#include <iostream>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
+class NodeIterator :public Iterator<node> {
+};
+
+class EdgeIterator :public Iterator<edge> {
+};
+
+#ifndef NDEBUG
+class NodeIteratorObserver :public NodeIterator, public GraphObserver {
+public:
+  // GraphObserver interface
+  void addNode(Graph* g, node n);
+  void delNode(Graph* g, node n);
+};
+
+class EdgeIteratorObserver :public EdgeIterator, public GraphObserver {
+public:
+  bool nodeIteration;
+  // GraphObserver interface
+  void addEdge(Graph* g, edge e);
+  void delEdge(Graph* g, edge e);
+};
+#endif
 //===========================================================
 ///Factorization of code for iterators
-template<class itType> class FactorIterator:public Iterator<itType> {
+class FactorNodeIterator
+#ifdef NDEBUG
+  :public NodeIterator
+#else
+  :public NodeIteratorObserver
+#endif
+ {
  protected:
   Graph *_parentGraph;
   const MutableContainer<bool>& _filter;
  public:
-  FactorIterator(const Graph *sG,const MutableContainer<bool>& filter):
+  FactorNodeIterator(const Graph *sG,const MutableContainer<bool>& filter):
+    _parentGraph(sG->getSuperGraph()),
+    _filter(filter)
+  {}
+};
+
+class FactorEdgeIterator
+#ifdef NDEBUG
+  :public EdgeIterator
+#else
+  :public EdgeIteratorObserver
+#endif
+ {
+ protected:
+  Graph *_parentGraph;
+  const MutableContainer<bool>& _filter;
+ public:
+  FactorEdgeIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getSuperGraph()),
     _filter(filter)
   {}
 };
 //============================================================
 ///Node iterator for GraphView
-class SGraphNodeIterator:public FactorIterator<node> {
+class SGraphNodeIterator:public FactorNodeIterator {
  private:
   Iterator<node> *it;
   node curNode;
@@ -53,7 +99,7 @@ class SGraphNodeIterator:public FactorIterator<node> {
 };
 //============================================================
 ///Out node iterator for GraphView
-class OutNodesIterator:public FactorIterator<node> {
+class OutNodesIterator:public FactorNodeIterator {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
@@ -67,7 +113,7 @@ class OutNodesIterator:public FactorIterator<node> {
 };
 //============================================================
 ///In node iterator for GraphView
-class InNodesIterator:public FactorIterator<node> {
+class InNodesIterator:public FactorNodeIterator {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
@@ -81,7 +127,7 @@ class InNodesIterator:public FactorIterator<node> {
 };
 //============================================================
 ///In Out node iterator for GraphView
-class InOutNodesIterator:public FactorIterator<node> {
+class InOutNodesIterator:public FactorNodeIterator {
  private:
   Iterator<edge> *it;
   node n;
@@ -96,7 +142,7 @@ class InOutNodesIterator:public FactorIterator<node> {
 };
 //=============================================================
 ///Edge iterator for GraphView
-class SGraphEdgeIterator:public FactorIterator<edge>
+class SGraphEdgeIterator:public FactorEdgeIterator
 {
  private:
   Iterator<edge> *it;
@@ -111,7 +157,7 @@ class SGraphEdgeIterator:public FactorIterator<edge>
 };
 //============================================================
 ///Out edge iterator for GraphView
-class OutEdgesIterator:public FactorIterator<edge> {
+class OutEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -125,7 +171,7 @@ class OutEdgesIterator:public FactorIterator<edge> {
 };
 //============================================================
 ///In edge iterator for GraphView
-class InEdgesIterator:public FactorIterator<edge> {
+class InEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -139,7 +185,7 @@ class InEdgesIterator:public FactorIterator<edge> {
 };
 //============================================================
 ///In Out edge iterator for GraphView
-class InOutEdgesIterator:public FactorIterator<edge> {
+class InOutEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -158,8 +204,17 @@ class InOutEdgesIterator:public FactorIterator<edge> {
 //Iterator for the GraphImpl
 //============================================================
 ///Node iterator for data sg
-class xSGraphNodeIterator:public Iterator<node> {
+class xSGraphNodeIterator
+#ifdef NDEBUG
+  :public NodeIterator
+#else
+  :public NodeIteratorObserver
+#endif
+ {
  private:
+#ifndef NDEBUG
+  GraphImpl *spG;
+#endif
   Iterator<unsigned int> *itId;
  public:
   xSGraphNodeIterator(const Graph *sG);
@@ -169,7 +224,13 @@ class xSGraphNodeIterator:public Iterator<node> {
 };
 //============================================================
 ///Out Node iterator for data sg
-class xOutNodesIterator:public Iterator<node> {
+class xOutNodesIterator
+#ifdef NDEBUG
+  :public NodeIterator
+#else
+  :public NodeIteratorObserver
+#endif
+ {
  private:
   Iterator<edge> *it;
   GraphImpl *spG;
@@ -181,7 +242,13 @@ class xOutNodesIterator:public Iterator<node> {
 };
 //============================================================
 ///In Node iterator for data sg
-class xInNodesIterator:public Iterator<node> {
+class xInNodesIterator
+#ifdef NDEBUG
+  :public NodeIterator
+#else
+  :public NodeIteratorObserver
+#endif
+ {
  private:
   Iterator<edge> *it;
   const GraphImpl *spG;
@@ -193,7 +260,13 @@ class xInNodesIterator:public Iterator<node> {
 };
 //============================================================
 ///In Out Node iterator for data sg
-class xInOutNodesIterator:public Iterator<node> {
+class xInOutNodesIterator
+#ifdef NDEBUG
+  :public NodeIterator
+#else
+  :public NodeIteratorObserver
+#endif
+ {
   GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
   const GraphImpl *spG;
@@ -205,8 +278,17 @@ class xInOutNodesIterator:public Iterator<node> {
 };
 //=============================================================
 ///Edge iterator for data sg
-class xSGraphEdgeIterator:public Iterator<edge> {
+class xSGraphEdgeIterator
+#ifdef NDEBUG
+  :public EdgeIterator
+#else
+  :public EdgeIteratorObserver
+#endif
+ {
  private:
+#ifndef NDEBUG
+  GraphImpl *spG;
+#endif
   Iterator<unsigned int> *itId;
  public:
   xSGraphEdgeIterator(const Graph *sG);
@@ -216,7 +298,13 @@ class xSGraphEdgeIterator:public Iterator<edge> {
 };
 //============================================================
 ///Out edge iterator for data sg
-class xOutEdgesIterator:public Iterator<edge> {
+class xOutEdgesIterator
+#ifdef NDEBUG
+  :public EdgeIterator
+#else
+  :public EdgeIteratorObserver
+#endif
+ {
  private:
   GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
@@ -231,7 +319,13 @@ class xOutEdgesIterator:public Iterator<edge> {
 };
 //============================================================
 ///In edge iterator for data sg
-class xInEdgesIterator:public Iterator<edge> {
+class xInEdgesIterator
+#ifdef NDEBUG
+  :public EdgeIterator
+#else
+  :public EdgeIteratorObserver
+#endif
+ {
   GraphImpl::EdgeContainer::iterator it,itEnd;
   node n;
   edge curEdge;
@@ -245,8 +339,18 @@ class xInEdgesIterator:public Iterator<edge> {
 };
 //============================================================
 ///In out edge iterator for data sg
-class xInOutEdgesIterator:public Iterator<edge> {
+class xInOutEdgesIterator
+#ifdef NDEBUG
+  :public EdgeIterator
+#else
+  :public EdgeIteratorObserver
+#endif
+ {
   GraphImpl::EdgeContainer::iterator it,itEnd;
+#ifndef NDEBUG
+private:
+  GraphImpl *spG;
+#endif
 public:
   xInOutEdgesIterator(const Graph *sG,const node n);
   ~xInOutEdgesIterator();
