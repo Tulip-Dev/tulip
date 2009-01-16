@@ -27,6 +27,12 @@ class Graph;
 /// class for testing the planarity of a graph
 class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
+  /*
+    The set of edges of the graph is modified during the execution of
+    the methods below. If you call one of them while iterating
+    on the edges of the graph, be careful to use a StableIterator
+    to avoid any possible invalidation of the iterator.
+  */
   static bool isPlanar(Graph *graph);
   static bool planarEmbedding(Graph *graph);
   static std::list<edge> getObstructionsEdges(Graph *graph);
