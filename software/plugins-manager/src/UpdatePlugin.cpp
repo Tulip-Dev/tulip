@@ -49,7 +49,7 @@ namespace tlp {
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dll.")+version,installPath+pluginInfo.fileName+std::string(".dll")));
     #elif defined(I64)
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i64",installPath+pluginInfo.fileName+std::string(".so")));
-    #else 
+    #else
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i386",installPath+pluginInfo.fileName+std::string(".so")));
     #endif
   }
@@ -67,11 +67,18 @@ namespace tlp {
       ".so";
     #endif
 
-    int returnCode =
-      QProcess::execute(tlp_check_pl_path,
+    QProcess process;
+
+    process.start(tlp_check_pl_path,
 			QStringList(pluginInstallPath.c_str()));
 
-    bool loadCheckOK = returnCode == TLP_CHECK_PL_RETURN_SUCCESS;
+    if(!process.waitForStarted()){
+      assert(false);
+    }
+    process.waitForFinished();
+    QString result=QString(process.readAll());
+
+    bool loadCheckOK = result.contains("pluginLoaded");
 
     if (loadCheckOK) {
       QFile installFile(QString(installPath.c_str())+"toInstall.dat");
@@ -80,7 +87,7 @@ namespace tlp {
       QTextStream out(&installFile);
       out.readAll();
       QString subDir=getSubDir(distPluginInfo.type);
-      
+
       out << subDir << distPluginInfo.fileName.c_str() << ".doc" << "\n" ;
 #if defined(_WIN32)
       out << subDir << distPluginInfo.fileName.c_str() << ".dll" << "\n" ;
@@ -89,19 +96,19 @@ namespace tlp {
 #else
       out << subDir << distPluginInfo.fileName.c_str() << ".so" << "\n" ;
 #endif
-    
+
       installFile.close();
     } else {
       // remove downloaded files
       QFile::remove(pluginInstallPath.c_str());
       string pluginsDocPath = installPath + distPluginInfo.fileName + ".doc";
       QFile::remove(QString(pluginsDocPath.c_str()));
-    }      
+    }
     distPluginInfo.installIsOK = loadCheckOK;
     emit pluginInstalled(this, distPluginInfo);
   }
 
-  
+
   bool UpdatePlugin::uninstall(const LocalPluginInfo &pluginInfo){
     //string fileName = pluginName.split('.')[0];
     localPluginInfo=pluginInfo;
