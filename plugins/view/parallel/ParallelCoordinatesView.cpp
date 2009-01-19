@@ -459,17 +459,17 @@ void ParallelCoordinatesView::init() {
 void ParallelCoordinatesView::constructInteractorsMap() {
 	MutableContainer<Interactor *> interactors;
 	InteractorManager::getInst().initInteractorList(interactors);
-	interactorsMap["View Navigator"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
-	interactorsMap["Zoom Box"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Zoom Box"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
-	interactorsMap["Show Element Properties"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementShowInfos"));
-	interactorsMap["Show Element Properties"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Elements Selector"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementsSelector"));
-	interactorsMap["Elements Selector"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Element Deleter"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementDeleter"));
-	interactorsMap["Element Deleter"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Elements Highlighter"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementHighlighter"));
-	interactorsMap["Elements Highlighter"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
+	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
+	interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementShowInfos"));
+	interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementsSelector"));
+	interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementDeleter"));
+	interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementHighlighter"));
+	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSwapper"));
 	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
