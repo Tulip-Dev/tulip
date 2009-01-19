@@ -352,6 +352,7 @@ bool viewGl::createController(const string &name,const string &graphName) {
     QWidget *tab=new QWidget();
     QGridLayout *gridLayout = new QGridLayout(tab);
     QWorkspace *newWorkspace=new QWorkspace(tab);
+    newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
     gridLayout->addWidget(newWorkspace, 0, 0, 1, 1);
     int index=tabWidget->addTab(tab, graphName.c_str());
