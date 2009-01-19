@@ -903,6 +903,9 @@ void viewGl::loadInterface(int index){
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
+        if((*it)->isChecked()){
+          (*it)->activate(QAction::Trigger);
+        }
       }
     }
   }
