@@ -23,11 +23,10 @@ using namespace std;
 
 namespace tlp {
 
-  VIEWPLUGIN(NodeLinkDiagramComponent, "NodeLinkDiagramComponent", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
+  VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram Component", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
 
   //==================================================
   NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView() {
-  	addDependency<View>("NodeLinkDiagramComponent","1.0");
   }
   //==================================================
   NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
