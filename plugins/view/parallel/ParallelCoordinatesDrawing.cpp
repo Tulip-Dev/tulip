@@ -308,8 +308,8 @@ ParallelAxis *ParallelCoordinatesDrawing::getAxisUnderPoint(const Coord &coord) 
 }
 
 void ParallelCoordinatesDrawing::computeResizeFactor() {
-	Size eltMinSize = graphProxy->getLocalProperty<SizeProperty>("viewSize")->getMin();
-	Size eltMaxSize = graphProxy->getLocalProperty<SizeProperty>("viewSize")->getMax();
+	Size eltMinSize = ((SizeProperty*)(graphProxy->getProperty("viewSize")))->getMin();
+	Size eltMaxSize = ((SizeProperty*)(graphProxy->getProperty("viewSize")))->getMax();
 
 	Size deltaSize = eltMaxSize - eltMinSize;
 	for (unsigned int i = 0 ; i < 3 ; ++i) {
