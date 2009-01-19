@@ -17,6 +17,7 @@ ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const Ele
 	GraphDecorator(g), dataLocation(location) {
   fillPropertiesVector();
   Observable::holdObservers();
+  dataColors = graph_component->getProperty<ColorProperty>("viewColor");
   originalDataColors = new ColorProperty(graph_component);
   *originalDataColors = *(graph_component->getProperty<ColorProperty>("viewColor"));
   Observable::unholdObservers();
@@ -24,7 +25,7 @@ ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const Ele
 
 ParallelCoordinatesGraphProxy::~ParallelCoordinatesGraphProxy() {
 	Observable::holdObservers();
-	*(graph_component->getProperty<ColorProperty>("viewColor")) = *originalDataColors;
+	*dataColors = *originalDataColors;
 	delete originalDataColors;
 	originalDataColors = NULL;
 	Observable::unholdObservers();

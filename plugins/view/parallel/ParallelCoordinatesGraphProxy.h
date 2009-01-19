@@ -123,6 +123,7 @@ private:
   void fillPropertiesVector();
   Color getOriginalDataColor(const unsigned int dataId);
 
+  ColorProperty *dataColors;
   ColorProperty *originalDataColors;
   std::set<unsigned int> highlightedElts;
   std::vector<std::string> selectedProperties;
