@@ -755,13 +755,6 @@ bool viewGl::askSaveGraph(const std::string name,int index) {
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool viewGl::closeWin() {
-<<<<<<< .mine
-  for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
-    if((*it).second) {
-      Graph *graph = ((*it).second)->getGraph();
-      if (graph)
-	return !askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
-=======
   if(!controllerAutoLoad){
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).second){
@@ -770,7 +763,6 @@ bool viewGl::closeWin() {
         if(canceled)
           return false;
       }
->>>>>>> .r1657
     }
   }
   return true;
