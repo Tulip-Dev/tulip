@@ -107,7 +107,6 @@ private:
   bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);
   bool askSaveGraph(const std::string name,int index);
   bool closeWin();
-  int alreadyTreated(std::set<unsigned long>, tlp::Graph *);
   void saveActions(QWidget *widget,tlp::Controller *controller,std::map<tlp::Controller *,std::vector<QAction *> > &mapToSave);
   void clearInterface();
   void loadInterface(int index);

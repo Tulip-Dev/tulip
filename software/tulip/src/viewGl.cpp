@@ -125,10 +125,6 @@ void viewGl::enableElements(bool enabled) {
 viewGl::~viewGl() {
 }
 //**********************************************************************
-// the dialog below is used to show plugins loading errors
-// if needed it will be deleted when showing first graph
-static QDialog *errorDlg = (QDialog *) NULL;
-
 void viewGl::startTulip() {
   // adjust size if needed
   QRect sRect = QApplication::desktop()->availableGeometry();
@@ -759,6 +755,13 @@ bool viewGl::askSaveGraph(const std::string name,int index) {
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool viewGl::closeWin() {
+<<<<<<< .mine
+  for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+    if((*it).second) {
+      Graph *graph = ((*it).second)->getGraph();
+      if (graph)
+	return !askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
+=======
   if(!controllerAutoLoad){
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).second){
@@ -767,20 +770,10 @@ bool viewGl::closeWin() {
         if(canceled)
           return false;
       }
+>>>>>>> .r1657
     }
   }
   return true;
-}
-//**********************************************************************
-int viewGl::alreadyTreated(set<unsigned long> treatedGraph, Graph *graph) {
-  /*set<unsigned int>::iterator iterator = treatedGraph.begin();
-  while(iterator != treatedGraph.end()) {
-    unsigned int currentGraph = *iterator;
-    if(currentGraph == (unsigned long)graph)
-      return true;
-    iterator++;
-  }
-  return false;*/
 }
 //**********************************************************************
 void viewGl::closeEvent(QCloseEvent *e) {
