@@ -193,6 +193,8 @@ void MouseEdgeBendEditor::saveInfo() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::initEdition() {
+  // allow to undo
+  _graph->push();
   saveInfo();
 }
 //========================================================================================
@@ -271,8 +273,6 @@ initProxies(glMainWidget);
   IntegerType::fromString(i, theCircle);
   coordinates[i]+=v1;
   Observable::holdObservers();
-  // allow to undo
-  _graph->push();
   _layout->setEdgeValue(mEdge, coordinates);
   Observable::unholdObservers();
   editPosition[0]  = newX;
