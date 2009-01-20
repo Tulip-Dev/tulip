@@ -9,7 +9,7 @@
 #include <tulip/Observable.h>
 #include <tulip/GWInteractor.h>
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
@@ -36,6 +36,9 @@ namespace tlp {
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
     SizeProperty *_sizes;
+    LayoutProperty *_copyLayout;
+    SizeProperty *_copySizes;
+    DoubleProperty *_copyRotation;
 
     void initProxies(GlMainWidget *glMainWidget);
     void initEdition();
@@ -51,7 +54,7 @@ namespace tlp {
 
     //    int x,y;
     //    double centerX, centerY;
-    Coord ffdCenter; 
+    Coord ffdCenter;
 
     GlComposite composite;
     GlCircle _controls[8];
@@ -61,7 +64,7 @@ namespace tlp {
     bool computeFFD(GlMainWidget*);
     void mMouseTranslate(double, double, GlMainWidget*);
     void mMouseRotate(double, double, GlMainWidget*);
-    void mMouseStretchAxis(double, double, GlMainWidget*); 
+    void mMouseStretchAxis(double, double, GlMainWidget*);
 
 
   };
