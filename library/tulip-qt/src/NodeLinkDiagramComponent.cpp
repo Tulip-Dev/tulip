@@ -267,7 +267,7 @@ namespace tlp {
       emit elementSelected(itemId, isNode);
     }else if (action == goAction) { // Go inside
       GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-      setGraph(meta->getNodeValue(node(itemId)));
+      emit requestChangeGraph(this,meta->getNodeValue(node(itemId)));
     } else if (action == ungroupAction) { // Ungroup
       tlp::openMetaNode(graph, node(itemId));
     } else if(action == selectAction || action == addRemoveAction) {

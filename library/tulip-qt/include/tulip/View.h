@@ -86,6 +86,11 @@ namespace tlp {
      */
     void elementSelected(unsigned int eltId, bool isNode);
 
+    /**
+     * This signal is emit when the view want to change its graph
+     */
+    void requestChangeGraph(View *,Graph *);
+
   };
 
   class TLP_QT_SCOPE ViewContext {

@@ -235,6 +235,10 @@ namespace tlp {
      * Show the element in left part of the GUI
      */
     void showElementProperties(unsigned int eltId, bool isNode);
+    /**
+     * This slot is call when a view want to change its graph
+     */
+    void viewRequestChangeGraph(View *view, Graph *graph);
 
     /**
      * This slot is call went a view will be closed

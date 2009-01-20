@@ -685,6 +685,7 @@ namespace tlp {
     mainWindowFacade.getWorkspace()->addWindow(widget);
 
     connect(newView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
+    connect(newView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
     connect(widget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
 
     newView->setData(graph,dataSet);
@@ -810,6 +811,11 @@ namespace tlp {
     QWidget *tab = eltProperties->parentWidget();
     QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
     tabWidget->setCurrentIndex(tabWidget->indexOf(tab));
+  }
+  //==================================================
+  void MainController::viewRequestChangeGraph(View *view,Graph *graph) {
+    assert(view==currentView);
+    changeGraph(graph);
   }
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
