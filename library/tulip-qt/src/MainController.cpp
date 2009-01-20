@@ -192,7 +192,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
+    clusterTreeWidget(NULL),currentGraph(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
