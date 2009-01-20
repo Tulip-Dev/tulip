@@ -119,97 +119,97 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       bool hasSelection = false;
       node no;
       forEach(no, _selection->getNodesEqualTo(true, _graph)) {
-	hasSelection = true;
-	breakForEach;
+        hasSelection = true;
+        breakForEach;
       }
       if (!hasSelection) {
-	edge ed;
-	forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
-	  hasSelection = true;
-	  breakForEach;
-	}
+        edge ed;
+        forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+          hasSelection = true;
+          breakForEach;
+        }
       }
       if (!hasSelection ||
-	  (!glMainWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
-					    6, 6, select,glMainWidget->getScene()->getSelectionLayer()) &&
-	   !centerRect.inRect((double) qMouseEv->x(),
-			      (double) qMouseEv->y()))) {
-	// event occurs outside the selection rectangle
-	// so from now we delegate the job to a MouseSelector object
-	// which should intercept the event
-	operation = NONE;
-	glMainWidget->getScene()->getSelectionLayer()->clear();
-	return false;
+          (!glMainWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
+              6, 6, select,glMainWidget->getScene()->getSelectionLayer()) &&
+              !centerRect.inRect((double) qMouseEv->x(),
+                  (double) qMouseEv->y()))) {
+        // event occurs outside the selection rectangle
+        // so from now we delegate the job to a MouseSelector object
+        // which should intercept the event
+        operation = NONE;
+        glMainWidget->getScene()->getSelectionLayer()->clear();
+        return false;
       }
 
       int shapeId=-1;
 
       for (unsigned int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
-	for(int j=0 ; j<8;++j) {
-	  if(select[i]==&_controls[j]){
-	    shapeId=i;
-	  }
-	}
+        for(int j=0 ; j<8;++j) {
+          if(select[i]==&_controls[j]){
+            shapeId=i;
+          }
+        }
       }
       if (shapeId != -1) {
-	((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
-	((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
-	//left <-> right anchor
-	// stretch_x
-	if (select[shapeId] == &_controls[0] || select[shapeId] == &_controls[4]) {
-	  operation = STRETCH_X;
-	  glMainWidget->setCursor(QCursor(Qt::SizeHorCursor));
-	}else
-	  //top <-> bottom anchor
-	  // stretch_y
-	  if (select[shapeId] == &_controls[2] || select[shapeId] == &_controls[6]) {
-	    operation = STRETCH_Y;
-	    glMainWidget->setCursor(QCursor(Qt::SizeVerCursor));
-	  }
-	  else
-	    //Corner anchor bottom-right top-left
-	    // rotate
-	    if (select[shapeId] == &_controls[3] || select[shapeId] == &_controls[7]) {
-	      glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
-	      operation = ROTATE_Z;
-	    }
-	    else
-	      //Corner anchor top-right bottom-left
-	      //stretch_xy
-	      if (select[shapeId] == &_controls[1] || select[shapeId] == &_controls[5]) {
-		operation = STRETCH_XY;
-		glMainWidget->setCursor(QCursor(Qt::SizeFDiagCursor));
+        ((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
+        ((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
+        //left <-> right anchor
+        // stretch_x
+        if (select[shapeId] == &_controls[0] || select[shapeId] == &_controls[4]) {
+          operation = STRETCH_X;
+          glMainWidget->setCursor(QCursor(Qt::SizeHorCursor));
+        }else
+          //top <-> bottom anchor
+          // stretch_y
+          if (select[shapeId] == &_controls[2] || select[shapeId] == &_controls[6]) {
+            operation = STRETCH_Y;
+            glMainWidget->setCursor(QCursor(Qt::SizeVerCursor));
+          }
+          else
+            //Corner anchor bottom-right top-left
+            // rotate
+            if (select[shapeId] == &_controls[3] || select[shapeId] == &_controls[7]) {
+              glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+              operation = ROTATE_Z;
+            }
+            else
+              //Corner anchor top-right bottom-left
+              //stretch_xy
+              if (select[shapeId] == &_controls[1] || select[shapeId] == &_controls[5]) {
+                operation = STRETCH_XY;
+                glMainWidget->setCursor(QCursor(Qt::SizeFDiagCursor));
 
-	}
+              }
       }
       else {
-	if (qMouseEv->modifiers() &
+        if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	    Qt::AltModifier
+            Qt::AltModifier
 #else
-	    Qt::ControlModifier
+            Qt::ControlModifier
 #endif
-	    ) {
-	  operation = ROTATE_XY;
-	  glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
-	}
-	else {
-	  operation = TRANSLATE;
-	  glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
-	}
+        ) {
+          operation = ROTATE_XY;
+          glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+        }
+        else {
+          operation = TRANSLATE;
+          glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
+        }
       }
 
       mode = COORD_AND_SIZE;
       if (qMouseEv->modifiers() & Qt::ShiftModifier)
-	mode = COORD;
+        mode = COORD;
       if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	  Qt::AltModifier
+          Qt::AltModifier
 #else
-	  Qt::ControlModifier
+          Qt::ControlModifier
 #endif
-	  )
-	mode = SIZE;
+      )
+        mode = SIZE;
       initEdition();
       break;
     }
@@ -236,7 +236,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&
-       ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
+      ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
       operation != NONE) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
@@ -302,6 +302,7 @@ void MouseSelectionEditor::undoEdition() {
 void MouseSelectionEditor::stopEdition() {
   //cerr << __PRETTY_FUNCTION__ << endl;
   glMainWidget->getScene()->getSelectionLayer()->clear();
+
   operation = NONE;
 }
 //========================================================================================
@@ -346,6 +347,8 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   //  cerr << "stretch : << "<< stretch << endl;
 
   Observable::holdObservers();
+  _graph->pop();
+  _graph->push();
   //stretch layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
@@ -393,7 +396,11 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     double deltaAngle = sign * acos(cosalpha);
 
     Observable::holdObservers();
+
     initProxies(glMainWidget);
+    _graph->pop();
+    _graph->push();
+
     double degAngle = (deltaAngle * 180.0 / M_PI);
     //rotate layout
     if (mode == COORD_AND_SIZE || mode == COORD) {
@@ -416,9 +423,9 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     if (mode == COORD_AND_SIZE || mode == SIZE) {
       Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
       while(itN->hasNext()) {
-	node n = itN->next();
-	double rotation = _rotation->getNodeValue(n);
-	_rotation->setNodeValue(n, rotation - degAngle);
+  node n = itN->next();
+  double rotation = _rotation->getNodeValue(n);
+  _rotation->setNodeValue(n, rotation - degAngle);
       } delete itN;
     }
 
@@ -447,7 +454,11 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     }
 
     Observable::holdObservers();
+
     initProxies(glMainWidget);
+    _graph->pop();
+    _graph->push();
+
     Coord center(editLayoutCenter);
     center *= -1.;
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
@@ -486,7 +497,7 @@ Coord maxCoord(const Coord &v1, const Coord &v2) {
 //========================================================================================
 bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   if (!glMainWidget->getScene()->getGlGraphComposite() || !glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
-    return false;
+      return false;
   // We calculate the bounding box for the selection :
   initProxies(glMainWidget);
   pair<Coord, Coord> boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
