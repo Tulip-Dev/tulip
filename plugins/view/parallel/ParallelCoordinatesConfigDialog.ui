@@ -153,9 +153,7 @@
                <string/>
               </property>
               <property name="icon" >
-               <iconset>
-                <normalon>:/right.png</normalon>
-               </iconset>
+               <iconset>:/right.png</iconset>
               </property>
              </widget>
             </item>
@@ -165,9 +163,7 @@
                <string/>
               </property>
               <property name="icon" >
-               <iconset>
-                <normalon>:/left.png</normalon>
-               </iconset>
+               <iconset>:/left.png</iconset>
               </property>
              </widget>
             </item>
@@ -198,9 +194,7 @@
                <string/>
               </property>
               <property name="icon" >
-               <iconset>
-                <normalon>:/up.png</normalon>
-               </iconset>
+               <iconset>:/up.png</iconset>
               </property>
              </widget>
             </item>
@@ -210,9 +204,7 @@
                <string/>
               </property>
               <property name="icon" >
-               <iconset>
-                <normalon>:/down.png</normalon>
-               </iconset>
+               <iconset>:/down.png</iconset>
               </property>
              </widget>
             </item>
