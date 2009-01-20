@@ -232,7 +232,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       _controls[i].ocolor(0) = Color(128,20,20,200);
     }
     glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
-    glMainWidget->redraw();
+    glMainWidget->draw();
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&
