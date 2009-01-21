@@ -145,10 +145,13 @@ namespace tlp {
         pos=sceneInput.find("TulipLibDir/");
       }
       scene.setWithXML(sceneInput,graph);
+    }
+    if(dataSet.exist("Display")){
       DataSet renderingParameters;
       dataSet.get("Display",renderingParameters);
       GlGraphRenderingParameters rp=scene.getGlGraphComposite()->getRenderingParameters();
       rp.setParameters(renderingParameters);
+      scene.getGlGraphComposite()->setRenderingParameters(renderingParameters);
     }
   }
   //==================================================
