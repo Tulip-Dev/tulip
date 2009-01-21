@@ -113,7 +113,7 @@ case "`uname -m`" in
      x86_64  | ia64)
         VAR_I64=1
 	;;
-esac    
+esac
 
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
@@ -211,10 +211,15 @@ AC_ARG_ENABLE(debug,
   CXXFLAGS="-DNDEBUG -O3 -funroll-loops -pipe " 
 )
 
+if test ${VAR_I64} = 1
+then
+  CPPFLAGS="$CPPFLAGS -DI64"
+fi
+
 dnl statistics flag
 AC_ARG_ENABLE(stats-gui,
 [  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface],
-   CXXFLAGS="$CXXFLAGS -DSTATS_UI")
+   CPPFLAGS="$CPPFLAGS -DSTATS_UI")
 
 dnl check if we build tlprender, option and presence of OSMesa
 AC_ARG_ENABLE(tlprender,
