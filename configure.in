@@ -109,6 +109,12 @@ VAR_MACOSX_7=0
 VAR_I64=0
 VAR_LINUX=0
 
+case "`uname -m`" in
+     x86_64  | ia64)
+        VAR_I64=1
+	;;
+esac    
+
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
@@ -125,9 +131,6 @@ case "`uname -s`" in
         if test "$(uname -r)" = "7.9.0"; then
 	  VAR_MACOSX_7=1
         fi
-	;;
-    *i64*)
-        VAR_I64=1
 	;;
     *Linux*)
 	VAR_LINUX=1
