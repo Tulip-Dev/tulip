@@ -80,6 +80,8 @@ bool TreeMap::run() {
       break;
     }
   } delete itN;
+  // to ensure that modifs on viewSize will remain
+  graph->push();
   return true;
 }
 
