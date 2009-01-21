@@ -39,8 +39,6 @@ nobase_include_HEADERS = \
 	tulip/GlLine.h \
 	tulip/GlCurve.h \
 	tulip/GlQuad.h \
-	tulip/libgpugraph.h \
-	tulip/tulipgpu.h \
 	tulip/GlXMLTools.h
 
 noinst_HEADERS = \
@@ -71,6 +69,3 @@ noinst_HEADERS = \
 	tulip/GlEPSFeedBackBuilder.h \
 	tulip/OcclusionTest.h \
 	tulip/GlLines.h 
-
-tulip/libgpugraph.h : ../../../thirdparty/libgpugraph/libgpugraph.h
-	cp -f $< $@
