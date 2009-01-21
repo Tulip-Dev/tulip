@@ -12,15 +12,12 @@ plugins_LTLIBRARIES = \
 	libBiconnectedComponent-@VERSION@.la \
 	libConnectedComponent-@VERSION@.la \
 	libStrongComponent-@VERSION@.la \
-	libConnectedAndTreeComponent-@VERSION@.la \
 	libDagLevelMetric-@VERSION@.la \
 	libIdMetric-@VERSION@.la \
 	libLeafMetric-@VERSION@.la \
 	libNodeMetric-@VERSION@.la \
 	libPathLengthMetric-@VERSION@.la \
-	libSegmentMetric-@VERSION@.la \
 	libStrahlerMetric-@VERSION@.la \
-	libTreeArityMax-@VERSION@.la \
 	libEccentricity-@VERSION@.la \
 	libBetweennessCentrality-@VERSION@.la \
         libRandomMetric-@VERSION@.la	
@@ -33,7 +30,6 @@ libClusterMetric_@VERSION@_la_SOURCES = ClusterMetric.cpp ClusterMetric.h
 libStrengthMetric_@VERSION@_la_SOURCES = StrengthMetric.cpp StrengthMetric.h
 libBiconnectedComponent_@VERSION@_la_SOURCES =  BiconnectedComponent.cpp
 libConnectedComponent_@VERSION@_la_SOURCES =  ConnectedComponent.cpp  ConnectedComponent.h
-libConnectedAndTreeComponent_@VERSION@_la_SOURCES =  ConnectedAndTreeComponent.cpp
 libStrongComponent_@VERSION@_la_SOURCES = StrongComponent.cpp StrongComponent.h
 libDagLevelMetric_@VERSION@_la_SOURCES = DagLevelMetric.cpp DagLevelMetric.h
 libIdMetric_@VERSION@_la_SOURCES = IdMetric.cpp IdMetric.h
@@ -41,9 +37,7 @@ libLeafMetric_@VERSION@_la_SOURCES = LeafMetric.cpp LeafMetric.h
 libNodeMetric_@VERSION@_la_SOURCES = NodeMetric.cpp NodeMetric.h
 libDepthMetric_@VERSION@_la_SOURCES = DepthMetric.cpp DepthMetric.h
 libPathLengthMetric_@VERSION@_la_SOURCES = PathLengthMetric.cpp PathLengthMetric.h
-libSegmentMetric_@VERSION@_la_SOURCES = SegmentMetric.cpp SegmentMetric.h
 libStrahlerMetric_@VERSION@_la_SOURCES = StrahlerMetric.cpp StrahlerMetric.h
-libTreeArityMax_@VERSION@_la_SOURCES = TreeArityMax.cpp  TreeArityMax.h
 libRandomMetric_@VERSION@_la_SOURCES = Random.cpp  Random.h
 libBetweennessCentrality_@VERSION@_la_SOURCES = BetweennessCentrality.cpp
 
