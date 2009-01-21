@@ -1149,9 +1149,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeSelection(QAction* action) {
     string name = action->text().toStdString();
-    changeProperty<BooleanProperty>(name, "viewSelection");
     if (changeProperty<BooleanProperty>(name, "viewSelection")) {
-    //glWidget->getScene()->getGlGraphComposite()->getInputData()->reloadSelectionProperty();
       redrawViews();
     }
   }
