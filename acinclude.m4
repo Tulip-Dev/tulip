@@ -422,7 +422,7 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-  LIB_GL="-lglew32 -lglu32 -lopengl32"
+  LIB_GL="-lglu32 -lopengl32"
 else
   if test ${VAR_MACOSX} = 1
   then

@@ -95,7 +95,6 @@ File @prefix@\bin\tulip-config
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
 File "@MINDIR@\bin\freetype*.dll"
-File "@MINDIR@\bin\glew*.dll"
 File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
