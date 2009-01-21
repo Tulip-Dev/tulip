@@ -353,7 +353,6 @@ thirdparty/Makefile
 thirdparty/gzstream/Makefile
 thirdparty/ftgl/Makefile
 thirdparty/gle/Makefile
-thirdparty/libgpugraph/Makefile
 software/Makefile
 software/plugins-manager/Makefile
 software/plugins-manager/src/Makefile
