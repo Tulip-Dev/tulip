@@ -1,3 +1,3 @@
-SUBDIRS = gle gzstream ftgl libgpugraph
-DIST_SUBDIRS = gle gzstream ftgl libgpugraph
+SUBDIRS = gle gzstream ftgl
+DIST_SUBDIRS = gle gzstream ftgl
 EXTRA_DIST = saxon xml-commons
