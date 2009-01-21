@@ -23,14 +23,7 @@ then
   make
   make install
 
-3- Install glew 1.4 or higher
------------------------------
-Download the last MacOS X AGL version of glew from http://glew.sourceforge.net
-Install the librairies libGLEW*.dylib in /usr/lib, 
-the binaries in /usr/local/bin and
-the include/GL directory in /usr/local/include
-
-4- Install libpng and libjpeg
+3- Install libpng and libjpeg
 ---------------------------
 Ease your installation in downloading the MacOS X ports of these libraries
 from http://ethan.tira-thompson.com/Mac%20OS%20X%20Ports.html
