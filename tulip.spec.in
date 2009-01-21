@@ -110,7 +110,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libCompleteGraph-%{version}.*
 %{prefix}/lib/tlp/libCompleteTree-%{version}.*
 %{prefix}/lib/tlp/libConeTreeExtended-%{version}.*
-%{prefix}/lib/tlp/libConnectedAndTreeComponent-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponent-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponentPacking-%{version}.*
 %{prefix}/lib/tlp/libDagLevelMetric-%{version}.*
@@ -126,7 +125,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libGMLImport-%{version}.*
 %{prefix}/lib/tlp/libGrid-%{version}.*
 %{prefix}/lib/tlp/libHierarchicalClustering-%{version}.*
-%{prefix}/lib/tlp/libHierarchicalGraph-%{version}.*
 %{prefix}/lib/tlp/libIdMetric-%{version}.*
 %{prefix}/lib/tlp/libImprovedWalker-%{version}.*
 %{prefix}/lib/tlp/libInducedSubGraphSelection-%{version}.*
@@ -148,8 +146,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libRandomTree-%{version}.*
 %{prefix}/lib/tlp/libRandomTreeGeneral-%{version}.*
 %{prefix}/lib/tlp/libReachableSubGraphSelection-%{version}.*
-%{prefix}/lib/tlp/libScatterPlot-%{version}.*
-%{prefix}/lib/tlp/libSegmentMetric-%{version}.*
 %{prefix}/lib/tlp/libSmallWorldGraph-%{version}.*
 %{prefix}/lib/tlp/libSpanningDagSelection-%{version}.*
 %{prefix}/lib/tlp/libSpanningTreeSelection-%{version}.*
@@ -158,7 +154,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libStrengthClustering-%{version}.*
 %{prefix}/lib/tlp/libStrengthMetric-%{version}.*
 %{prefix}/lib/tlp/libStrongComponent-%{version}.*
-%{prefix}/lib/tlp/libTreeArityMax-%{version}.*
 %{prefix}/lib/tlp/libTreeLeaf-%{version}.*
 %{prefix}/lib/tlp/libTreeMap-%{version}.*
 %{prefix}/lib/tlp/libTreeRadial-%{version}.*
