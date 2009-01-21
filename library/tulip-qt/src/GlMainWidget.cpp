@@ -151,7 +151,7 @@ namespace tlp {
       dataSet.get("Display",renderingParameters);
       GlGraphRenderingParameters rp=scene.getGlGraphComposite()->getRenderingParameters();
       rp.setParameters(renderingParameters);
-      scene.getGlGraphComposite()->setRenderingParameters(renderingParameters);
+      scene.getGlGraphComposite()->setRenderingParameters(rp);
     }
   }
   //==================================================
