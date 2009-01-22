@@ -13,16 +13,17 @@ qtplugin_LTLIBRARIES = libPropertyWidgetPlugin.la libElementPropertiesWidgetPlug
 
 INCLUDES = ${DLL_TULIP_QT} @GL_INCLUDES@ @TULIP_QT_INCLUDE@ -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED \
 	   @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
+PLUGINS_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ -avoid-version
 AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @QT_LDFLAGS@ @LIB_QT@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ -release @MAJOR_VERSION@.@MINOR_VERSION@
 
 AM_CPPFLAGS= @QT_CPPFLAGS@
 qtplugindir = $(libdir)/tlp/designer
 
-libPropertyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libElementPropertiesWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libGlMainWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libGWOverviewWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
-libSGHierarchyWidgetPlugin_la_LDFLAGS = @TULIP_QT_LDFLAGS@ -module -avoid-version
+libPropertyWidgetPlugin_la_LDFLAGS = ${PLUGINS_LDFLAGS}
+libElementPropertiesWidgetPlugin_la_LDFLAGS = ${PLUGINS_LDFLAGS}
+libGlMainWidgetPlugin_la_LDFLAGS = ${PLUGINS_LDFLAGS}
+libGWOverviewWidgetPlugin_la_LDFLAGS = ${PLUGINS_LDFLAGS}
+libSGHierarchyWidgetPlugin_la_LDFLAGS = ${PLUGINS_LDFLAGS}
 
 libPropertyWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
 libElementPropertiesWidgetPlugin_laINCLUDES = ${DLL_TULIP_QT2}
