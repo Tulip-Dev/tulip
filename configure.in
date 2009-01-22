@@ -193,7 +193,10 @@ AC_PATH_QT
 AC_PATH_QT_MOC
 AC_PATH_QT_UIC
 AC_PATH_QT_RCC
+if test ${VAR_MACOSX} = 0
+then
 AC_PATH_GL
+fi
 
 dnl 2.5.4 is libxml2 shipped with RedHat 9.0
 dnl import plugin XML needs libxml/xmlreader.h, not present in redhat 8 libxml2
