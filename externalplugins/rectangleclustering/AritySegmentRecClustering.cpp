@@ -1,5 +1,5 @@
 #include <math.h>
-#include <qmessagebox.h>
+#include <QtGui/qmessagebox.h>
 
 #include "AritySegmentRecClustering.h"
 #include "TableAritySegment.h"
