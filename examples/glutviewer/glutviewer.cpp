@@ -1,8 +1,14 @@
 #include <iostream>
 
 #include <stdio.h>
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glut.h>
+#else
 #include <GL/gl.h>
 #include <GL/glut.h>
+#endif
 
 #include <tulip/Graph.h>
 #include <tulip/GlyphManager.h>
