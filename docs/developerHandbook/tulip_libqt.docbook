@@ -42,19 +42,19 @@
     </itemizedlist>
   </sect1>
   <sect1 id="qtview-class"><title>The View class</title>
-    <para>If you need to create a new view, you have to create a new class who implement View interface</para>
-    <para>View interface (in library/tulip-qt/include/tulip/View.h) can be split in 3 parts</para>
+    <para>If you need to create a new view, you have to create a new class that implements the View interface</para>
+    <para>View interface (in library/tulip-qt/include/tulip/View.h) can be split into 3 parts</para>
     <itemizedlist>
       <listitem>
         <para>Data part : </para>
         <programlisting>void setData(Graph *,DataSet); 
-// This function is call when we load a new graph or when we create a new one
+// This function is called when we load a new graph or when we create a new one
 // In the DataSet you can have nothing when you create a new graph or you can have old data when you load a tlp file
 void getData(Graph **, DataSet *);
-// This function is call when you save your graph
+// This function is called when you save your graph
 // You must store the graph and the view data
 voif setGraph(graph *);
-// This function is call when you change the visualized graph in hierarchical view (for example)
+// This function is called when you change the visualized graph in hierarchical view (for example)
 Graph *getGraph();
         </programlisting>
       </listitem>
@@ -80,9 +80,9 @@ void init();
       </listitem>
     </itemizedlist>
     <sect2 id="qtview_example"><title>An example of view plugin</title>
-      <para>This is an example of a simple view. This view display number of nodes/edges on the graph</para>
+      <para>This is an example of a simple view. This view displays the number of nodes/edges on the graph</para>
       <graphic fileref="images/tuto_view.png"/>
-      <para>This example provide just a view without interactor</para>
+      <para>This example provides just a view without interactors</para>
       <para>.h file</para>
       <programlisting>
 class TutoView : public tlp::View {
@@ -139,7 +139,7 @@ public slots :
     nodeNumber->setText(QString("Number of nodes : ")+QString::number(graph->numberOfNodes()));
     edgeNumber->setText(QString("Number of edges : ")+QString::number(graph->numberOfEdges()));
   }
-  //refresh and init is automatically do by Qt
+  //refresh and init is automatically done by Qt
   void refresh() {}
   void init() {}
   void setGraph(tlp::Graph *graph) {this->graph=graph;}
@@ -148,15 +148,15 @@ public slots :
       </programlisting>
       <para>.cpp file</para>
       <programlisting>
-// This line is need to register plugin to Tulip
+// This line is needed to register the plugin in Tulip
 // Warning : last parameter(42) is the id of the plugin, it must be unique
 VIEWPLUGIN(TutoView, "TutorielView", "Tulip Team", "21/11/2008", "Tutoriel view", "1.0", 42);
       </programlisting>
     </sect2>
   </sect1>
   <sect1 id="qtabstractview-class"><title>The AbstractView class</title>
-    <para>This class provide a basic implementation of interactor system and a right click context menu</para>
-    <para>AbstractView can be separate in 3 parts : </para>
+    <para>This class provides a basic implementation of an interactor system and a right click context menu</para>
+    <para>AbstractView can be separated into 3 parts : </para>
     <itemizedlist>
       <listitem>
         <para>Interactor functions : with in one hand get, push, pop, reset and remove interactor functions. And in other hand constructInteractorsMap and constructInteractorsActionList</para>
