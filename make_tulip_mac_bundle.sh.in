@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# This script is MAC specific, it intents to create an internet deliverable
+# This script is MAC specific:
+# with no parameter it intents to create an internet deliverable
 # disk image of a tulip MAC 'bundle' in the current directory
+# with 1 parameter, it considers $1
+# as a plugin lib we want to package for a further
+# download with the plugins server
+
 APP_DIR=Tulip-@PACKAGE_VERSION@.app
 QT_DIR=@QTDIR@
-
-if [ -d $APP_DIR ]; then
-  rm -rf $APP_DIR
-fi
 
 BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
 BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
@@ -16,15 +17,22 @@ RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
 BUNDLE_LIB_PATH=@executable_path/../Frameworks
 SHLIBS_REGEXP="dylib \|/4/Qt"
 
-# copy the tulip app installed in @prefix@/bin
-echo installing $APP_DIR
-cp -RL @prefix@/bin/tulip.app .
-mv tulip.app $APP_DIR
-
+# the first parameter $slib is a library
+# the third parameter $bbin depends on
+# if $slib does not already exists in
+# $slibdir (second parameter) and we are not
+# in check mode (fourth parameter), it is copied in it
+# and internally renamed
+# finally the corresponding dependance in $bbin is updated
 function make_bundle_lib() {
   slib=$1
   slibdir=$2
   bbin=$3
+  if [ $# -eq 3 ]; then
+   check_slib=0
+  else
+   check_slib=$4
+  fi
 
   oldlib=$slib
   if [ "$slib" = "*System*" ]; then
@@ -43,12 +51,17 @@ function make_bundle_lib() {
 
   if [ -f $slib ]; then
     if [ ! -f $slibdir/`basename $slib` ]; then
-       cp $slib $slibdir
-       slib=`basename $slib`
-       chmod 755 $slibdir/$slib
-       echo installing $slib in $slibdir
-       # update the name of the current bundle lib
-       install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
+      if [ $check_slib -eq 0 ]; then
+        cp $slib $slibdir
+	slib=`basename $slib`
+	chmod 755 $slibdir/$slib
+	echo installing $slib in $slibdir
+        # update the name of the current bundle lib
+        install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
+      else
+	echo `basename $slib` not found... exiting
+        exit
+      fi
     else
        slib=`basename $slib`
     fi
@@ -59,6 +72,30 @@ function make_bundle_lib() {
     echo `basename $slib` not found... exiting
     exit
   fi
+}
+
+function package_bundle_lib() {
+  fdir=$1
+  blib=$2
+  if [ $# -eq 2 ]; then
+   check_slib=0
+  else
+   check_slib=$3
+  fi
+
+  blibname=`basename $blib`
+  slibs=$(otool -L $blib | grep "$SHLIBS_REGEXP" | awk '{print $1}')
+  for slib in $slibs
+  do
+    slibname=`basename $slib`
+    if [ "$slibname" = "$blibname" ]; then
+	continue
+    fi
+    if [ "/$slibname" = "${slib#$BUNDLE_LIB_PATH}" ]; then
+	continue
+    fi
+    make_bundle_lib $slib $fdir $blib $check_slib
+  done
 }
 
 function package_bundle_libs() {
@@ -76,21 +113,26 @@ function package_bundle_libs() {
   fi
   for blib in $blibs
   do
-    blibname=`basename $blib`
-    slibs=$(otool -L $blib | grep "$SHLIBS_REGEXP" | awk '{print $1}')
-    for lib in $slibs
-    do
-      libname=`basename $lib`
-      if [ "$libname" = "$blibname" ]; then
-	continue
-      fi
-      if [ "/$libname" = "${lib#$BUNDLE_LIB_PATH}" ]; then
-        continue
-      fi
-      make_bundle_lib $lib $fdir $blib
-    done
+    package_bundle_lib $fdir $blib
   done
 }
+
+# if $1 exists it has to be a plugin lib
+# to package for further download with the
+# plugins server
+if [ $# -eq 1 ]; then
+  package_bundle_lib $LIBS_BUNDLE_DIR $1
+  exit
+fi
+
+if [ -d $APP_DIR ]; then
+  rm -rf $APP_DIR
+fi
+
+# copy the tulip app installed in @prefix@/bin
+echo installing $APP_DIR
+cp -RL @prefix@/bin/tulip.app .
+mv tulip.app $APP_DIR
 
 # create the tulip shared libs bundle directory
 mkdir -p $LIBS_BUNDLE_DIR
