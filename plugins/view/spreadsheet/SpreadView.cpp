@@ -47,6 +47,6 @@ namespace tlp {
     draw();
   }
 
-  VIEWPLUGIN(SpreadView, "Table View", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0");
+  VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0");
 
 }
