@@ -670,7 +670,7 @@ namespace tlp {
   }
   //**********************************************************************
   View* MainController::initMainView(DataSet dataSet) {
-    View* newView=createView("Node Link Diagram Component",currentGraph,dataSet);
+    View* newView=createView("Node Link Diagram view",currentGraph,dataSet);
     return newView;
   }
   //**********************************************************************
@@ -1090,7 +1090,7 @@ namespace tlp {
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
       if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram Component") {
+        if(viewNames[currentView]=="Node Link Diagram view") {
           graph->setAttribute("viewLayout", tmp);
           ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
         }
@@ -1123,7 +1123,7 @@ namespace tlp {
         };
         delete tmp;
       if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram Component") {
+        if(viewNames[currentView]=="Node Link Diagram view") {
           graph->removeAttribute("viewLayout");
           ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
         }
