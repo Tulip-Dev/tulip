@@ -232,7 +232,7 @@
     </sect2>
   </sect1>
   <sect1 id="Main-views"><title>Standards views</title>
-    <sect2 id="NodeLinkDiagramComponent"><title>Node link diagram component</title>
+    <sect2 id="NodeLinkDiagramComponent"><title>Node Link Diagram view</title>
       <sect3 id="mouse"><title>Mouse Interaction Toolbar</title>
         <para>
           <graphic fileref="images/mouse-tool.png"/>
@@ -396,7 +396,7 @@
         </sect4>
       </sect3>
     </sect2>
-    <sect2 id="ParallelCoordinatesComponent"><title>Parallel Coordinates component</title>
+    <sect2 id="ParallelCoordinatesComponent"><title>Parallel Coordinates view</title>
     
       <sect3 id="parallel coordinates intro"><title>Introduction to Parallel Coordinates</title>
 
@@ -815,10 +815,10 @@
 	</sect3>
 
     </sect2>
-    <sect2 id="SpreadsheetComponent"><title>Spreadsheet component</title>
+    <sect2 id="SpreadsheetComponent"><title>Table view</title>
       <graphic fileref="images/spreadsheet_view.png"/>
       <para>
-        In this view you can visualize graph properties in a spreadsheet form.
+        In this view you can visualize graph properties in a table form.
       </para>
       <para>
         You have two tabs : Node and Edge.
