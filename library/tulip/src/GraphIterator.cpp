@@ -40,15 +40,24 @@ void EdgeIteratorObserver::delEdge(Graph* g, edge e) {
     std::cerr << "Warning: edge deleted while iterating !!!" << std::endl;
 }
 
-#endif
+int getNumIterators() {
+  return NumIterators;
+}
+
+#else
+
+void incrNumIterators() {
+}
+
+void decrNumIterators() {
+}
 
 int getNumIterators() {
-#ifndef NDEBUG
-  return NumIterators;
-#else
   return 0;
-#endif
 }
+
+#endif
+
 
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter):FactorNodeIterator(sG,filter) {

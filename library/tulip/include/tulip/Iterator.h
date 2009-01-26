@@ -16,10 +16,8 @@
 namespace tlp {
   
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#ifndef NDEBUG
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
-#endif
 extern TLP_SCOPE int getNumIterators();
 #endif // DOXYGEN_NOTFOR_DEVEL
 
@@ -27,15 +25,11 @@ extern TLP_SCOPE int getNumIterators();
 template<class itType> struct Iterator {
   ///
   Iterator(){
-#ifndef NDEBUG
     incrNumIterators();
-#endif
 }
   ///
   virtual ~Iterator() {
-#ifndef NDEBUG
     decrNumIterators();
-#endif
   }
   ///Return the next element
   virtual itType next()=0;
