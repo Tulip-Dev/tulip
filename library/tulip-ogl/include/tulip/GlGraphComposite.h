@@ -16,6 +16,23 @@
 
 namespace tlp {
 
+struct ltnode
+{
+  bool operator()(GlNode n1,GlNode n2) const
+  {
+    return n1.id<n2.id;
+  }
+};
+
+struct ltedge
+{
+  bool operator()(GlEdge e1, GlEdge e2) const
+  {
+    return e1.id<e2.id;
+  }
+};
+
+
   /** \brief Class use to represent a graph
    *
    * GlComposite use to represent a graph with nodes, metanodes and edges
@@ -52,28 +69,29 @@ namespace tlp {
     /**
      * Function used to visit composite's children
      */
-    virtual void acceptVisitor(GlSceneVisitor *visitor) {
+    virtual void acceptVisitor(GlSceneVisitor *visitor){
       addNodes();
 
-      if(isDisplayEdges()) {
-	for(std::vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-	  if(parameters.isDisplayEdges() || parameters.isViewEdgeLabel())
-	    (*it).acceptVisitor(visitor);
-	}
+      if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
+        for(std::set<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
+          GlEdge *tmp=(GlEdge*)(&(*it));
+          tmp->acceptVisitor(visitor);
+        }
       }
 
       if(isDisplayNodes()) {
-	for(std::vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-	  (*it).acceptVisitor(visitor);
-	}
+        for(std::set<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
+          GlNode *tmp=(GlNode*)(&(*it));
+          tmp->acceptVisitor(visitor);
+        }
       }
 
       if(isDisplayMetaNodes()) {
-	for(std::vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-	  (*it).acceptVisitor(visitor);
-	}
+        for(std::set<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
+          GlMetaNode *tmp=(GlMetaNode*)(&(*it));
+          tmp->acceptVisitor(visitor);
+        }
       }
-
     }
 
     /**
@@ -150,9 +168,9 @@ namespace tlp {
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData;
 
-    std::vector<GlNode> nodes;
-    std::vector<GlMetaNode> metaNodes;
-    std::vector<GlEdge> edges;
+    std::set<GlNode,ltnode> nodes;
+    std::set<GlMetaNode,ltnode> metaNodes;
+    std::set<GlEdge,ltedge> edges;
 
     std::vector<unsigned int> nodesToAdd;
 

@@ -51,14 +51,14 @@ namespace tlp {
 
       for(list<node>::iterator itN=orderedNode.begin();itN!=orderedNode.end();++itN) {
 	if(inputData.getGraph()->isMetaNode(*itN)){
-	  metaNodes.push_back(GlMetaNode((*itN).id));
+	  metaNodes.insert(GlMetaNode((*itN).id));
 	}else{
-	  nodes.push_back(GlNode((*itN).id));
+	  nodes.insert(GlNode((*itN).id));
 	}
       }
 
       for(list<edge>::iterator itE=orderedEdge.begin();itE!=orderedEdge.end();++itE) {
-	edges.push_back(GlEdge((*itE).id));
+	edges.insert(GlEdge((*itE).id));
       }
 
     } else {
@@ -73,9 +73,9 @@ namespace tlp {
 	--number;
 	unsigned int id=drawNodesIterator->next().id;
 	if(inputData.getGraph()->isMetaNode(node(id))){
-	  metaNodes.push_back(GlMetaNode(id));
+	  metaNodes.insert(GlMetaNode(id));
 	}else{
-	  nodes.push_back(GlNode(id));
+	  nodes.insert(GlNode(id));
 	}
       }
 
@@ -83,7 +83,7 @@ namespace tlp {
 
       while ((drawEdgesIterator->hasNext()) && (number >0)) {
 	--number;
-	edges.push_back(GlEdge(drawEdgesIterator->next().id));
+	edges.insert(GlEdge(drawEdgesIterator->next().id));
       }
     }
   }
@@ -110,22 +110,18 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::addEdge(Graph *graph,const edge e) {
-    edges.push_back(GlEdge(e.id));
+    edges.insert(GlEdge(e.id));
   }
   //===================================================================
   void GlGraphComposite::delNode(Graph *graph,const node n) {
-    for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      if((*it).id==n.id) {
-        nodes.erase(it);
-        break;
-      }
-    }
-    for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      if((*it).id==n.id) {
-        metaNodes.erase(it);
-        break;
-      }
-    }
+    set<GlMetaNode>::iterator it1=metaNodes.find(GlMetaNode(n.id));
+    if(it1!=metaNodes.end())
+      metaNodes.erase(it1);
+
+    set<GlNode>::iterator it2=nodes.find(GlNode(n.id));
+    if(it2!=nodes.end())
+      nodes.erase(it2);
+
     for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
       if((*it)==n.id) {
         nodesToAdd.erase(it);
@@ -135,12 +131,7 @@ namespace tlp {
   }
   //===================================================================
   void GlGraphComposite::delEdge(Graph *graph,const edge e) {
-    for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-      if((*it).id==e.id) {
-	edges.erase(it);
-	return;
-      }
-    }
+    edges.erase(GlEdge(e.id));
   }
   //===================================================================
   void GlGraphComposite::destroy(Graph *graph) {
@@ -153,10 +144,10 @@ namespace tlp {
     if(!nodesToAdd.empty()) {
       for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
 	if(inputData.getGraph()->isMetaNode(node(*it))){
-	  metaNodes.push_back(GlMetaNode(*it));
+	  metaNodes.insert(GlMetaNode(*it));
 	}
 	else{
-	  nodes.push_back(GlNode(*it));
+	  nodes.insert(GlNode(*it));
 	}
       }
       nodesToAdd.clear();
