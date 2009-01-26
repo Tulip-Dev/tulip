@@ -894,6 +894,7 @@ namespace tlp {
   void MainController::editPaste() {
     if( !currentGraph ) return;
 
+    currentGraph->removeObserver(this);
     Observable::holdObservers();
     BooleanProperty * selP = currentGraph->getProperty<BooleanProperty>("viewSelection");
 
@@ -905,6 +906,11 @@ namespace tlp {
     tlp::importGraph("tlp", dataSet, NULL ,newGraph);
     tlp::copyToGraph( currentGraph, newGraph, 0, selP );
     Observable::unholdObservers();
+    currentGraph->addObserver(this);
+    currentGraphNbNodes=currentGraph->numberOfNodes();
+    currentGraphNbEdges=currentGraph->numberOfEdges();
+    updateCurrentGraphInfos();
+
     redrawViews(true);
   }
   //==============================================================
@@ -994,6 +1000,7 @@ namespace tlp {
   void MainController::editDelSelection() {
     if (currentGraph==0) return;
     currentGraph->push();
+    currentGraph->removeObserver(this);
     Observable::holdObservers();
     BooleanProperty *elementSelected=currentGraph->getProperty<BooleanProperty>("viewSelection");
     StableIterator<node> itN(currentGraph->getNodes());
@@ -1009,6 +1016,11 @@ namespace tlp {
 	currentGraph->delEdge(ite);
     }
     Observable::unholdObservers();
+    currentGraph->addObserver(this);
+    currentGraphNbNodes=currentGraph->numberOfNodes();
+    currentGraphNbEdges=currentGraph->numberOfEdges();
+    updateCurrentGraphInfos();
+
     redrawViews(true);
   }
   //==============================================================
