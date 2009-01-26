@@ -18,7 +18,7 @@ namespace tlp {
 
 struct ltnode
 {
-  bool operator()(GlNode n1,GlNode n2) const
+  bool operator()(const GlNode& n1, const GlNode& n2) const
   {
     return n1.id<n2.id;
   }
@@ -26,7 +26,7 @@ struct ltnode
 
 struct ltedge
 {
-  bool operator()(GlEdge e1, GlEdge e2) const
+  bool operator()(const GlEdge& e1, const GlEdge& e2) const
   {
     return e1.id<e2.id;
   }
