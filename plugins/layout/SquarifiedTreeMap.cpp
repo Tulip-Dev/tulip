@@ -123,6 +123,9 @@ bool SquarifiedTreeMap::run() {
   size->setNodeValue(root, initialSpaceSize);
   squarify(root, initialSpace, 1);
 
+  // hach:to ensure that modifs on viewSize will remain
+  graph->push();
+
   return true;
 }
 
