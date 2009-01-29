@@ -293,32 +293,32 @@ namespace tlp {
       dst[i][1] = globalViewport[3] - dst[i][1];
     }
     bool inScreen=false;
-    int bbBox[4];
+    float bbBox[4];
     for(int i=0;i<num;i++) {
       if((dst[i][0]>= currentViewport[0]) && (dst[i][0]<=currentViewport[0]+currentViewport[2]) && (dst[i][1] >= currentViewport[1]) && (dst[i][1]<=currentViewport[1]+currentViewport[3])){
-	inScreen=true;
+        inScreen=true;
       }
       if(i==0){
-	bbBox[0]= (int) dst[i][0];bbBox[2]= (int) dst[i][0];bbBox[1]= (int) dst[i][1];bbBox[3]= (int) dst[i][1];
+        bbBox[0]= dst[i][0];bbBox[2]= dst[i][0];bbBox[1]= dst[i][1];bbBox[3]= dst[i][1];
       }else{
-	if(dst[i][0]<bbBox[0])
-	  bbBox[0]= (int) dst[i][0];
-	if(dst[i][0]>bbBox[2])
-	  bbBox[2]= (int) dst[i][0];
-	if(dst[i][1]<bbBox[1])
-	  bbBox[1]= (int) dst[i][1];
-	if(dst[i][1]>bbBox[3])
-	  bbBox[3]= (int) dst[i][1];
+        if(dst[i][0]<bbBox[0])
+          bbBox[0]= dst[i][0];
+        if(dst[i][0]>bbBox[2])
+          bbBox[2]= dst[i][0];
+        if(dst[i][1]<bbBox[1])
+          bbBox[1]= dst[i][1];
+        if(dst[i][1]>bbBox[3])
+          bbBox[3]= dst[i][1];
       }
       if(bbBox[0]<currentViewport[0]+currentViewport[2] && bbBox[2]>currentViewport[0] && bbBox[1]<currentViewport[1]+currentViewport[3] && bbBox[3]>currentViewport[1]){
-	inScreen=true;
+        inScreen=true;
       }
     }
 
     if(!inScreen){
       return -1;
     }else{
-      return sqrt((double)(bbBox[2]-bbBox[0])*(double)(bbBox[2]-bbBox[0])+(double)(bbBox[3]-bbBox[1])*(double)(bbBox[3]-bbBox[1])) * 2;
+      return sqrt((bbBox[2]-bbBox[0])*(bbBox[2]-bbBox[0])+(bbBox[3]-bbBox[1])*(bbBox[3]-bbBox[1])) * 2;
     }
   }
   //====================================================
