@@ -9,6 +9,8 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTools.h>
 
+#include <iostream>
+
 namespace tlp {
 
   GlNodeGlyph::GlNodeGlyph(const Coord &position, const Size &glyphSize, GlGraphInputData *dat, node n) : data(dat), glyphPosition(position), glyphSize(glyphSize), nodeId(n) {
@@ -35,13 +37,30 @@ namespace tlp {
     glRotatef(data->elementRotation->getNodeValue(nodeId), 0., 0., 1.);
     glScalef(glyphSize[0], glyphSize[1], glyphSize[2]);
 
-    data->glyphs.get(data->elementShape->getNodeValue(nodeId))->draw(nodeId, lod);
+    if(lod>=4){
+      data->glyphs.get(data->elementShape->getNodeValue(nodeId))->draw(nodeId, lod);
 
-    if (data->elementSelected->getNodeValue(nodeId)) {
-    	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
-    	GlDisplayListManager::getInst().callDisplayList("selection");
-    	glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+      if (data->elementSelected->getNodeValue(nodeId)) {
+        glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+        GlDisplayListManager::getInst().callDisplayList("selection");
+        glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+      }
+    }else{
+      glDisable(GL_LIGHTING);
+
+      Color color=data->elementColor->getNodeValue(nodeId);
+      if(data->elementSelected->getNodeValue(nodeId))
+        color=COLOR_SELECT;
+
+      setColor(color);
+      glPointSize(lod);
+      glBegin(GL_POINTS);
+      glVertex3f(0,0,0.1);
+      glEnd();
+
+      glEnable(GL_LIGHTING);
     }
+
     glPopMatrix();
   }
 
