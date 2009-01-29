@@ -368,6 +368,7 @@ software/Makefile
 software/plugins-manager/Makefile
 software/plugins-manager/src/Makefile
 software/plugins-manager/include/Makefile
+software/plugins-manager/designer/Makefile
 software/plugins-manager/server/Makefile
 software/plugins-manager/server/src/Makefile
 software/plugins-manager/server/include/Makefile

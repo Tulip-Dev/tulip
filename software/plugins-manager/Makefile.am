@@ -1,3 +1,3 @@
-SUBDIRS = include src
-DIST_SUBDIRS = include src server
+SUBDIRS = include src designer
+DIST_SUBDIRS = include src server designer
 

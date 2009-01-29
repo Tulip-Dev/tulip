@@ -3,8 +3,8 @@
  Author: Morgan Mathiaut
  Email : mathiaut@labri.fr
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -28,14 +28,14 @@ namespace tlp {
 
   class TLP_PLUGINSMANAGER_SCOPE PluginsManagerMainWindow : public QMainWindow{
     Q_OBJECT
-      
+
   protected:
 
     void createActions(QWidget *parent);
     void createMenus();
 
     QWidget *w;
-    QVBoxLayout *vbox; 
+    QVBoxLayout *vbox;
     PluginsWidget* widg;
     QMenu* fileMenu;
     QMenu* configureMenu;
@@ -48,14 +48,15 @@ namespace tlp {
     QAction* applyAct;
     QAction* restoreAct;
     QAction* serverAct;
+    QAction* proxyAct;
     QAction* lastPluginsAct;
     QAction* compatiblesPluginsAct;
     QAction* notinstalledPluginsAct;
     QActionGroup* sortActionGroup;
     int currentView;
-    
+
   public:
-    
+
     void createWidget(QWidget *parent);
     PluginsManagerMainWindow(std::vector<LocalPluginInfo> &plugins,QWidget *parent=0);
     PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
@@ -63,7 +64,7 @@ namespace tlp {
   signals:
 
     void closeSignal();
-    
+
   private slots:
     void serverView();
     void groupView();
@@ -73,7 +74,8 @@ namespace tlp {
     void showNotinstalledPlugins();
     void applyChange();
     void restore();
-    void servers();  
+    void servers();
+    void proxy();
     void close();
 
   };

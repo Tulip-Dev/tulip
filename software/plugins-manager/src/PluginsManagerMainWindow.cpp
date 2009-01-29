@@ -8,6 +8,8 @@
 #include <QtGui/QMessageBox>
 #include <iostream>
 
+#include "ProxyConfigurationDialog.h"
+
 using namespace std;
 
 namespace tlp {
@@ -26,7 +28,7 @@ namespace tlp {
 
     setWindowTitle("Plugins Manager");
     setMinimumSize(800, 600);
-    
+
     serverViewAct->setChecked(true);
     serverView();
   }
@@ -45,9 +47,9 @@ namespace tlp {
 
     widg=new PluginsWidget(plugins,this);
 
-    for(vector<string>::iterator it=serversAddr.begin();it!=serversAddr.end();++it) 
+    for(vector<string>::iterator it=serversAddr.begin();it!=serversAddr.end();++it)
       widg->addServer(*it);
-    
+
     createWidget(parent);
   }
 
@@ -57,7 +59,7 @@ namespace tlp {
   }
 
   void PluginsManagerMainWindow::createActions(QWidget *parent){
-  
+
     exitAct = new QAction(tr("E&xit"), vbox);
     exitAct->setShortcut(tr("Ctrl+X"));
     exitAct->setStatusTip(tr("Exit the window"));
@@ -66,9 +68,9 @@ namespace tlp {
     serverViewAct = new QAction(tr("Sort by S&erver"), vbox);
     serverViewAct->setShortcut(tr("Ctrl+E"));
     serverViewAct->setStatusTip(tr("Display plugins by server"));
-    serverViewAct->setCheckable(true);  
+    serverViewAct->setCheckable(true);
     connect(serverViewAct, SIGNAL(triggered()), this, SLOT(serverView()));
-  
+
     groupViewAct = new QAction(tr("Sort by Gro&up"), vbox);
     groupViewAct->setShortcut(tr("Ctrl+U"));
     groupViewAct->setStatusTip(tr("Display plugins by group"));
@@ -94,7 +96,7 @@ namespace tlp {
     lastPluginsAct->setStatusTip(tr("Enable/Disable the display of the more recent plugins"));
     lastPluginsAct->setCheckable(true);
     connect(lastPluginsAct, SIGNAL(triggered()), this, SLOT(showLatestPlugins()));
-  
+
     compatiblesPluginsAct = new QAction(tr("Show only &compatibles plugins"), vbox);
     compatiblesPluginsAct->setShortcut(tr("Ctrl+C"));
     compatiblesPluginsAct->setStatusTip(tr("Enable/Disable the display of compatibles plugins"));
@@ -121,6 +123,10 @@ namespace tlp {
     serverAct->setShortcut(tr("Ctrl+S"));
     serverAct->setStatusTip(tr("Open the Servers configuration windows"));
     connect(serverAct, SIGNAL(triggered()), this, SLOT(servers()));
+
+    proxyAct = new QAction(tr("&Http proxy"), vbox);
+    proxyAct->setStatusTip(tr("Open the http proxy configuration windows"));
+    connect(proxyAct, SIGNAL(triggered()), this, SLOT(proxy()));
   }
 
   void PluginsManagerMainWindow::createMenus(){
@@ -132,16 +138,17 @@ namespace tlp {
 
     configureMenu = menuBar()->addMenu(tr("&Configure"));
     configureMenu->addAction(serverAct);
+    configureMenu->addAction(proxyAct);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction(serverViewAct);
     viewMenu->addAction(groupViewAct);
     viewMenu->addAction(pluginViewAct);
-    
+
     viewMenu->addSeparator();
     viewMenu->addAction(lastPluginsAct);
-    viewMenu->addAction(compatiblesPluginsAct);  
-    viewMenu->addAction(notinstalledPluginsAct);  
+    viewMenu->addAction(compatiblesPluginsAct);
+    viewMenu->addAction(notinstalledPluginsAct);
   }
 
   void PluginsManagerMainWindow::serverView(){
@@ -171,15 +178,27 @@ namespace tlp {
     widg->serverPopup();
   }
 
-  void PluginsManagerMainWindow::showCompatiblesPlugins(){ 
+  void PluginsManagerMainWindow::proxy(){
+    ProxyConfigurationDialog proxyDialog(this);
+    int result=proxyDialog.exec();
+    if(result==QDialog::Accepted){
+      proxyDialog.saveProxy();
+      QMessageBox::warning(this,
+              tr("Http proxy configuration"),
+              tr("To finish http proxy configuration \nTulip must be restart."),
+              QMessageBox::Ok | QMessageBox::Default);
+    }
+  }
+
+  void PluginsManagerMainWindow::showCompatiblesPlugins(){
     widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
-  void PluginsManagerMainWindow::showLatestPlugins(){ 
+  void PluginsManagerMainWindow::showLatestPlugins(){
     widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
-  void PluginsManagerMainWindow::showNotinstalledPlugins(){ 
+  void PluginsManagerMainWindow::showNotinstalledPlugins(){
     widg->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 

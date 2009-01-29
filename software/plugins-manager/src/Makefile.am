@@ -42,7 +42,8 @@ BUILT_SOURCES = \
 	moc_ChooseServerDialog.cpp \
 	moc_ServersOptionDialog.cpp \
 	moc_ModifyServerDialog.cpp \
-	moc_PluginsUpdateChecker.cpp
+	moc_PluginsUpdateChecker.cpp \
+	moc_ProxyConfigurationDialog.cpp
 
 nodist_libtulip_pluginsmanager_la_SOURCES = $(BUILT_SOURCES)
 
@@ -66,7 +67,8 @@ dist_libtulip_pluginsmanager_la_SOURCES = \
 	ChooseServerDialog.cpp \
 	ServersOptionDialog.cpp \
 	ModifyServerDialog.cpp \
-	PluginsUpdateChecker.cpp
+	PluginsUpdateChecker.cpp \
+	ProxyConfigurationDialog.cpp
 
 dist_tulip_check_pl_SOURCES = TulipCheckPluginLoad.cpp
 
