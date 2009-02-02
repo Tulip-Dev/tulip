@@ -122,7 +122,7 @@ public :
 		arrowPolygon = new GlPolygon(arrowPolygonCoords, arrowPolygonColors, arrowPolygonColors, true, false);
 		addGlEntity(arrowPolygon, "arrow polygon");
 
-		sliderLabel = new GlLabel(TulipBitmapDir, Coord(sliderCoord.getX(), sliderCoord.getY()+ n * 1.75 * halfHeight), Coord(3 * halfWidth, 1.5 * halfHeight), labelColor);
+		sliderLabel = new GlLabel(Coord(sliderCoord.getX(), sliderCoord.getY()+ n * 1.75 * halfHeight), Coord(3 * halfWidth, 1.5 * halfHeight), labelColor);
 		addGlEntity(sliderLabel, "slider label");
 
 		computeBoundingBox();

@@ -258,7 +258,7 @@ private :
 			labelWidth *= 2;
 		}
 
-		GlLabel labelToDraw(TulipBitmapDir, Coord(position.getX() - boxWidth / 2 - labelWidth /2, position.getY(), 0),
+		GlLabel labelToDraw(Coord(position.getX() - boxWidth / 2 - labelWidth /2, position.getY(), 0),
 							Coord(labelWidth, labelHeight), outlineColor);
 		labelToDraw.setText(labelName);
 		labelToDraw.draw(0, 0);

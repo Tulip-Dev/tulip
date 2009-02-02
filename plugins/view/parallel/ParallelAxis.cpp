@@ -66,7 +66,7 @@ ParallelAxis::addLabelDrawing(const string &labelName, const float yCoord) {
     	labelWidth *= 2;
     }
 
-    GlLabel *axisGradLabel = new GlLabel(TulipBitmapDir, Coord(xCoord + gradsWidth, yCoord), Coord (labelWidth, labelHeight), axisColor);
+    GlLabel *axisGradLabel = new GlLabel(Coord(xCoord + gradsWidth, yCoord), Coord (labelWidth, labelHeight), axisColor);
     axisGradLabel->setText(labelName);
     float axisGradLabelWidth = axisGradLabel->getBoundingBox().second.getX() - axisGradLabel->getBoundingBox().first.getX();
     axisGradLabel->translate(Coord(axisGradLabelWidth / 2, 0, 0));
@@ -79,7 +79,7 @@ void ParallelAxis::addCaption(const string &caption) {
 	float captionHeight = axisAreaWidth / 6;
 	float captionVOffset = (float) ((DEFAULT_CAPTION_VERTICAl_OFFSET * axisHeight) / (float) DEFAULT_AXIS_HEIGHT);
 
-	GlLabel *axisCaption = new GlLabel(TulipBitmapDir, Coord(baseCoord.getX(), baseCoord.getY() - captionVOffset - (captionHeight / 2)), Coord (captionWidth, captionHeight), axisColor);
+	GlLabel *axisCaption = new GlLabel(Coord(baseCoord.getX(), baseCoord.getY() - captionVOffset - (captionHeight / 2)), Coord (captionWidth, captionHeight), axisColor);
 	axisCaption->setText(caption);
 	addGlEntity(axisCaption, "caption " + caption);
 
@@ -100,7 +100,7 @@ void ParallelAxis::addCaption(const string &caption) {
 	addGlEntity(axisCaptionOuterFrame, "caption outer frame" + caption);
 
 	// just a way to make axis bounding box grow in Y direction, needed for correct work of axis sliders interactor
-	GlLabel *emptyAxisCaption = new GlLabel(TulipBitmapDir, Coord(baseCoord.getX(), baseCoord.getY() + axisHeight + captionVOffset), Coord (captionWidth, captionHeight), axisColor);
+	GlLabel *emptyAxisCaption = new GlLabel(Coord(baseCoord.getX(), baseCoord.getY() + axisHeight + captionVOffset), Coord (captionWidth, captionHeight), axisColor);
 	addGlEntity(emptyAxisCaption, "empty caption " + caption);
 }
 
