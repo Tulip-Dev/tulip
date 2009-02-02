@@ -265,9 +265,9 @@ public:
       rect5=new GlRect(Coord(15,95,0),Coord(25,79,0),Color(255,0,0,255),Color(255,0,255,255));
     }
 
-    GlLabel *label1=new GlLabel(TulipBitmapDir,Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
+    GlLabel *label1=new GlLabel(Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
     label1->setText(sstr1.str());
-    GlLabel *label2=new GlLabel(TulipBitmapDir,Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
+    GlLabel *label2=new GlLabel(Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
     label2->setText(sstr2.str());
 
     if(sstr1.str().size()>sstr2.str().size()) {
