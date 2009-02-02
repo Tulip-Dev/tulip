@@ -20,21 +20,36 @@
 
 using namespace std;
 
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+tlp::TextRenderer* tlp::GlLabel::renderer=0;
+#endif
+#else
+tlp::TextRenderer *tlp::GlLabel::renderer=0;
+#endif
+
 namespace tlp {
 
-  GlLabel::GlLabel() :renderer(new TextRenderer) {
+  GlLabel::GlLabel() {
+    if(!renderer){
+      renderer=new TextRenderer;
+      renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
+      renderer->setMode(TLP_TEXTURE);
+    }
   }
-  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath),leftAlign(leftAlign) {
-    renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-    renderer->setMode(TLP_TEXTURE);
-    renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+    GlLabel();
   }
+
+  GlLabel::GlLabel(const string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign){
+    GlLabel();
+  }
+
   GlLabel::~GlLabel() {
-    delete renderer;
   }
   //============================================================
   void GlLabel::setText(const string& text) {
-    renderer->setString(text, VERBATIM);
     this->text=text;
   }
   //============================================================
@@ -50,6 +65,10 @@ namespace tlp {
   }
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
+
+    renderer->setString(text, VERBATIM);
+    renderer->setColor(color[0], color[1], color[2]);
+
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_LIGHTING);
@@ -97,7 +116,6 @@ namespace tlp {
 
     GlXMLTools::getDataNode(rootNode,dataNode);
 
-    GlXMLTools::getXML(dataNode,"fontPath",fontPath);
     GlXMLTools::getXML(dataNode,"text",text);
     GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
     GlXMLTools::getXML(dataNode,"size",size);
@@ -113,17 +131,11 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      GlXMLTools::setWithXML(dataNode,"fontPath",fontPath);
       GlXMLTools::setWithXML(dataNode,"text",text);
       GlXMLTools::setWithXML(dataNode,"centerPosition",centerPosition);
       GlXMLTools::setWithXML(dataNode, "size", size);
       GlXMLTools::setWithXML(dataNode,"color",color);
       GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
-
-      renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-      renderer->setMode(TLP_POLYGON);
-      renderer->setColor(color[0], color[1], color[2]);
-      renderer->setString(text, VERBATIM);
     }
   }
 

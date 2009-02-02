@@ -37,7 +37,13 @@ namespace tlp {
     /**
      * Contructor with fontPath, centerPosition, size, fontColor and alignment
      */
-    GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+    GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+
+    /**
+     * Contructor with fontPath, centerPosition, size, fontColor and alignment
+     * \deprecate this constructor will be remove on Tulip 4 version
+     */
+    GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
     ~GlLabel();
 
@@ -80,11 +86,10 @@ namespace tlp {
   private :
 
     std::string text;
-    TextRenderer *renderer;
+    static TextRenderer *renderer;
     Coord centerPosition;
     Coord size;
     Color color;
-    std::string fontPath;
     bool leftAlign;
   };
 }
