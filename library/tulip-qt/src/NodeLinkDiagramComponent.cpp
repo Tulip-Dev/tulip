@@ -328,7 +328,7 @@ namespace tlp {
     GlMainView::draw();
     if (gridOptionsWidget !=0)
       gridOptionsWidget->validateGrid();
-    overviewWidget->updateView();
+    //overviewWidget->updateView();
   }
   //==================================================
   void NodeLinkDiagramComponent::refresh() {

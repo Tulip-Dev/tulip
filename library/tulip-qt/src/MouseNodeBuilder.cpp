@@ -31,6 +31,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
       // allow to undo
       _graph->push();
+      Observable::holdObservers();
       node newNode;
       newNode = _graph->addNode();
       Coord point((double) glw->width() - (double) qMouseEv->x(),
@@ -38,7 +39,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 		  0);
       point = glw->getScene()->getCamera()->screenTo3DWorld(point);
       mLayout->setNodeValue(newNode, point);
-      glw->redraw();
+      Observable::unholdObservers();
+      //glw->redraw();
       return true;
     }
   }
