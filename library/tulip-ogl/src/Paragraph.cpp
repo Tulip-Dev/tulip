@@ -36,25 +36,25 @@ Paragraph::~Paragraph(){
 void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
   int val;
   float decal = 0;
-  
+
   for(int j = debut; j<=fin; ++j){  // on affiche chaque mot sur la ligne
     Context* c_current = myString.at(j).getContext();
     Renderer &renderer = c_current->getRenderer();
     val = renderer.searchFont(renderer.getMode(), c_current->getSize(),c_current->getFontName(), renderer.getDepth());
     assert(val != -1);
-    
+
     unsigned char r, v, b;
     c_current->getColor(r, v, b);
-    renderer.setColor(r, v, b);    
+    renderer.setColor(r, v, b);
     renderer.ActiveFont(val);
-    
+
     if(myString.at(j).getString() != ""){
        renderer.drawString(myString.at(j).getString());
        decal = renderer.getAdvance(myString.at(j).getString());
        renderer.translate(-decal, 0, 0);
     }
 
-  }      
+  }
 }
 //---------------------------------------------------------------------------
 void Paragraph::drawRight(float w_max, float x_depl, int debut, int fin) const{
@@ -69,11 +69,11 @@ void Paragraph::drawRight(float w_max, float x_depl, int debut, int fin) const{
 
     val = renderer.searchFont(renderer.getMode(), c_current->getSize(), c_current->getFontName(), renderer.getDepth());
     assert(val != -1);
-    
+
     unsigned char r, v, b;
     c_current->getColor(r, v, b);
     renderer.setColor(r, v, b);
-    
+
     renderer.ActiveFont(val);
     if(myString.at(j).getString() != ""){
       renderer.drawString(myString.at(j).getString());
@@ -98,7 +98,7 @@ void Paragraph::drawCenter(float w_max, float x_depl, int debut, int fin) const{
     unsigned char r, v, b;
     c_current->getColor(r, v, b);
     renderer.setColor(r, v, b);
-    
+
     renderer.ActiveFont(val);
     if(myString.at(j).getString() != ""){
       renderer.drawString(myString.at(j).getString());
@@ -126,13 +126,15 @@ void Paragraph::draw(float w_max, float& w) const{
     Renderer &renderer = c_current->getRenderer();
     // recherche de la police
     val = renderer.searchFont(renderer.getMode(), c_current->getSize(), c_current->getFontName(), renderer.getDepth());
-    if(val == -1) // jout de la police si elle n'existe pas
+    if(val == -1) // ajout de la police si elle n'existe pas
       val = renderer.AddFont(renderer.getMode(), c_current->getSize(), c_current->getFontName(), renderer.getDepth());
+    if(val == -1)
+      return;
     s = myString.at(i).getString(); // on récupère le mot;
-    
+
     if(s != ""){
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
-            
+
       int length_s = s.size();
       if(s[length_s-1] == ' ')
 	do_test = true;
@@ -143,7 +145,7 @@ void Paragraph::draw(float w_max, float& w) const{
     }
     else
       do_test = true;
-      
+
     if(HeightSup<renderer.getAscender(val))
       HeightSup = renderer.getAscender(val);
     if(HeightInf<fabs(renderer.getDescender(val)))
@@ -157,10 +159,10 @@ void Paragraph::draw(float w_max, float& w) const{
 	x_depl += size_s;
       }
       else{
-	renderer.translate(0,-(maxHeightSup),0); 
+	renderer.translate(0,-(maxHeightSup),0);
 	float sav_inf = maxHeightInf;
 	maxHeightSup =  HeightSup;
-	maxHeightInf =  HeightInf;      
+	maxHeightInf =  HeightInf;
 	switch(alignement){
 	case LEFT:      drawLeft(w_max, x_depl, i_deb, i-taille);   break;
 	case RIGHT:     drawRight(w_max, x_depl, i_deb, i-taille);  break;
@@ -170,7 +172,7 @@ void Paragraph::draw(float w_max, float& w) const{
 	// retour à la ligne
 	// renderer.translate(-x_depl,-(sav_inf+H),0);
 	renderer.translate(0,-(sav_inf+H),0);
-	if(x_depl > w) w = x_depl;	
+	if(x_depl > w) w = x_depl;
 	i_deb = i-taille+1; // maj du valeur
 	x_depl = size_s;
       }
@@ -180,17 +182,17 @@ void Paragraph::draw(float w_max, float& w) const{
       HeightInf = 0;
     }
   }
-  
+
   // derniere ligne à afficher ou première s'il y en a eu qu'une ...
   _context.getRenderer().translate(0,-(maxHeightSup),0);
-  
+
   switch(alignement){
   case LEFT:      drawLeft(w_max, x_depl, i_deb, n-1);    break;
   case RIGHT:     drawRight(w_max, x_depl, i_deb, n-1);   break;
   case CENTER:    drawCenter(w_max, x_depl, i_deb, n-1);  break;
   case JUSTIFIED: drawLeft(w_max, x_depl, i_deb, i-1); // A FAIRE         !!!!!!!!!!!!!!!!!!!!!!!!!!!
   }
-  
+
   // retour à la ligne
   _context.getRenderer().translate(0 ,-(maxHeightInf+H),0);
   if(x_depl > w) w = x_depl;
@@ -228,12 +230,12 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
       }
     }
     else
-      do_test = true;    
+      do_test = true;
     if(HeightSup<renderer.getAscender(val))
       HeightSup = renderer.getAscender(val);
     if(HeightInf<fabs(renderer.getDescender(val)))
       HeightInf = fabs(renderer.getDescender(val));
-    
+
     if(do_test){
       size_s = cumul_s;
       if((x_depl + size_s <= w_max) && (s != "")){ // test si la longeur cumulée va dépasser
@@ -243,9 +245,9 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
 
       }
       else{
-	h += maxHeightSup+maxHeightInf+H; 
+	h += maxHeightSup+maxHeightInf+H;
 	maxHeightSup = HeightSup;
-	maxHeightInf = HeightInf;      
+	maxHeightInf = HeightInf;
 	if(x_depl > w) w = x_depl;
 	i_deb = i-taille+1; // maj du valeur
 	x_depl = size_s;
@@ -257,13 +259,13 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
     }
   }
   // derniere ligne à afficher ou première s'il y en a eu qu'une ...
-  h += maxHeightSup+maxHeightInf+H; 
-  if(x_depl > w) w = x_depl; 
+  h += maxHeightSup+maxHeightInf+H;
+  if(x_depl > w) w = x_depl;
 }
 //---------------------------------------------------------------------------
 bool Paragraph::addString(string s, Context c){
   Context* ctr;
-  ctr = findContext(c); 
+  ctr = findContext(c);
   if(!ctr) {
     ctr = new Context(c);
     listOfcontexts.push_back(ctr);

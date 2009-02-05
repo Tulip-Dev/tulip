@@ -73,6 +73,10 @@ int t_GlFonts::Add(FontMode t, int s, float d, const string f) {
     break;
   }
   assert(!tmp.font->Error());
+  if(tmp.font->Error()){
+    cerr << __PRETTY_FUNCTION__ << " Font error" << endl;
+    return -1;
+  }
   if (!tmp.font->FaceSize(s))
     cerr << __PRETTY_FUNCTION__ << " FaceSize error" << endl;
   tmp.font->Depth(d);
