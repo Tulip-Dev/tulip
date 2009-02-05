@@ -186,16 +186,6 @@ void viewGl::startTulip() {
   }
   enableElements(false);
 
-  int argc = qApp->argc();
-  if (argc>1) {
-    char ** argv = qApp->argv();
-    for (int i=1;i<argc;++i) {
-      QFileInfo info(argv[i]);
-      QString s = info.absoluteFilePath();
-      fileOpen(0, s);
-    }
-  }
-
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
   connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
@@ -252,6 +242,16 @@ void viewGl::startTulip() {
   }else{
     controllerAutoLoad=false;
   }
+
+  int argc = qApp->argc();
+   if (argc>1) {
+     char ** argv = qApp->argv();
+     for (int i=1;i<argc;++i) {
+       QFileInfo info(argv[i]);
+       QString s = info.absoluteFilePath();
+       fileOpen(0, s);
+     }
+   }
 
 }
 //**********************************************************************
