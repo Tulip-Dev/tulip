@@ -218,7 +218,8 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
     val = renderer.searchFont(renderer.getMode(), c_current->getSize(), c_current->getFontName(), renderer.getDepth());
     if(val == -1) // ajoute de la police si elle n'existe pas
       val = renderer.AddFont(renderer.getMode(), c_current->getSize(), c_current->getFontName(), renderer.getDepth());
-    if (val == -1) {cerr << __PRETTY_FUNCTION__ << " ==> Add font failed" << endl;return;}
+    if (val == -1)
+      return;
     s = myString.at(i).getString(); // on récupère le mot;
     if(s != ""){
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
