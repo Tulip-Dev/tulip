@@ -23,7 +23,12 @@
 // inspired from ftgl/FTGL.h & ftgl/FTVectoriser.cpp
     #define  WIN32_LEAN_AND_MEAN
     #include <windows.h>
-    typedef GLvoid (CALLBACK *GLUTesselatorFunction)( );
+    namespace tlp {
+      void CALLBACK beginCallback(GLenum which);
+      void CALLBACK endCallback(void);
+      void CALLBACK errorCallback(GLenum errorCode);
+      void CALLBACK vertexCallback(GLvoid *vertex);
+    }
 #else
     #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
 #endif
@@ -164,6 +169,16 @@ namespace tlp {
     GLUtesselator *tobj;
     tobj = gluNewTess();
 
+#ifdef WIN32
+    gluTessCallback(tobj, GLU_TESS_VERTEX,
+        (void (__stdcall*)(void))vertexCallback);
+    gluTessCallback(tobj, GLU_TESS_BEGIN,
+        (void (__stdcall*)(void))beginCallback);
+    gluTessCallback(tobj, GLU_TESS_END,
+        (void (__stdcall*)(void))endCallback);
+    gluTessCallback(tobj, GLU_TESS_ERROR,
+        (void (__stdcall*)(void))errorCallback);
+#else
     gluTessCallback(tobj, GLU_TESS_VERTEX,
 		    (GLUTesselatorFunction)vertexCallback);
     gluTessCallback(tobj, GLU_TESS_BEGIN,
@@ -172,6 +187,7 @@ namespace tlp {
 		    (GLUTesselatorFunction)endCallback);
     gluTessCallback(tobj, GLU_TESS_ERROR,
 		    (GLUTesselatorFunction)errorCallback);
+#endif
 
     glShadeModel(GL_SMOOTH);
 
