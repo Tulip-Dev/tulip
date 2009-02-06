@@ -223,9 +223,10 @@ void viewGl::startTulip() {
 #endif
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
 
-  saveActions(menuBar(),NULL,controllerToMenu);
-  saveActions(toolBar,NULL,controllerToToolBar);
+  /*saveActions(menuBar(),NULL,controllerToMenu);
+  saveActions(toolBar,NULL,controllerToToolBar);*/
   tabIndexToController[-1]=NULL;
+  saveInterface(-1);
 
   // if we have only one controller : auto load it
   MutableContainer<Controller *> controllers;
@@ -312,7 +313,7 @@ void viewGl::fileCloseTab(){
   Graph *graph=tabIndexToController[index]->getGraph();
   bool cancle=askSaveGraph(graph->getAttribute<string>("name"),index);
   if(!cancle){
-    Controller *controller;
+    Controller *controller=tabIndexToController[index];
     tabWidget->setCurrentIndex(index-1);
 
     map<int,Controller *> newTabIndexToController;
@@ -361,8 +362,6 @@ bool viewGl::createController(const string &name,const string &graphName) {
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;
     controllerToWorkspace[newController]=newWorkspace;
-    //todo
-    //connect(currentController,SIGNAL(willBeClosed()),this, SLOT(controllerWillBeClosed()));
 
   }else{
     controllerAutoLoad=false;
@@ -806,13 +805,6 @@ void viewGl::deletePluginsUpdateChecker(){
   plugins();
 }
 //==============================================================
-void viewGl::controllerWillBeClosed(){
-  //todo
-  /*if(!fileNew(true)){
-    currentController->setData(currentController->getGraph());
-  }*/
-}
-//==============================================================
 void viewGl::saveActions(QWidget *widget,Controller *controller,map<Controller *,vector<QAction *> > &mapToSave){
   mapToSave[controller].clear();
   QList<QAction *> actions=widget->actions();
@@ -866,6 +858,9 @@ void viewGl::saveInterface(int index) {
 }
 //==============================================================
 void viewGl::loadInterface(int index){
+  if(tabIndexToController.count(index)==0)
+      return;
+
   clearInterface();
 
   Controller *controller=tabIndexToController[index];

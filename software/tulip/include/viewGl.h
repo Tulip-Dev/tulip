@@ -96,7 +96,6 @@ protected slots:
   void windowsMenuAboutToShow();
   void windowsMenuActivated(QAction*);
   void deletePluginsUpdateChecker();
-  void controllerWillBeClosed();
   void tabChanged(int index);
 
 private:
