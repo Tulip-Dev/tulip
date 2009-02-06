@@ -675,12 +675,22 @@ namespace tlp {
   }
   //**********************************************************************
   View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,const QRect &rect){
-
+    string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
-    QWidget *widget=newView->construct(mainWindowFacade.getWorkspace());
-    viewNames[newView]=name;
+    QWidget *widget;
+    if(newView){
+      widget=newView->construct(mainWindowFacade.getWorkspace());
+      newView->setData(graph,dataSet);
+    }else{
+      verifiedName="Node Link Diagram view";
+      newView=ViewPluginsManager::getInst().createView("Node Link Diagram view");
+      widget=newView->construct(mainWindowFacade.getWorkspace());
+      newView->setData(graph,DataSet());
+    }
+    viewGraph[newView]=graph;
+    viewNames[newView]=verifiedName;
     viewWidget[widget]=newView;
-    //newView->setWindowFlags(Qt::Dialog);
+
     widget->setAttribute(Qt::WA_DeleteOnClose,true);
     mainWindowFacade.getWorkspace()->addWindow(widget);
 
@@ -688,10 +698,7 @@ namespace tlp {
     connect(newView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
     connect(widget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
 
-    newView->setData(graph,dataSet);
-    viewGraph[newView]=graph;
-
-    string windowTitle=name +" : " + graph->getAttribute<string>("name");
+    string windowTitle=verifiedName +" : " + graph->getAttribute<string>("name");
     widget->setWindowTitle(windowTitle.c_str());
     if(rect.width()==0 && rect.height()==0){
       QRect newRect;
