@@ -722,6 +722,8 @@ void viewGl::windowsMenuActivated(QAction* action) {
 //**********************************************************************
 void viewGl::windowsMenuAboutToShow() {
   windowsMenu->clear();
+  if(tabWidget->currentIndex()==-1)
+    return;
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   QAction* cascadeAction = windowsMenu->addAction("&Cascade", currentWorkspace, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
