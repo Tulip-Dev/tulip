@@ -803,6 +803,7 @@ void viewGl::plugins() {
 void viewGl::deletePluginsUpdateChecker(){
   disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   delete pluginsUpdateChecker;
+  plugins();
 }
 //==============================================================
 void viewGl::controllerWillBeClosed(){

@@ -35,12 +35,7 @@ namespace tlp {
   }
 
   void PluginsUpdateChecker::displayPopup(const vector<DistPluginInfo*> &pluginsOutOfDate) {
-    QString text="Update available for plugins : \n\n";
-    for(vector<DistPluginInfo*>::const_iterator it=pluginsOutOfDate.begin();it!=pluginsOutOfDate.end();++it) {
-      text.append((*it)->name.c_str());
-      text.append("\n");
-    }
-    QMessageBox messageBox(QMessageBox::Information,"Update avalaible",text,QMessageBox::Ok,parent);
+    QMessageBox messageBox(QMessageBox::Information,"Update avalaible","Update available for plugins",QMessageBox::Ok,parent);
     messageBox.exec();
     emit checkFinished();
   }
@@ -59,9 +54,9 @@ namespace tlp {
 	  }
 	}
       }
-      
+
       if(pluginsOutOfDate.size()!=0) {
-	displayPopup(pluginsOutOfDate);
+        displayPopup(pluginsOutOfDate);
       }
     }
   }
