@@ -19,6 +19,7 @@
 
 #include <tulip/GlComposite.h>
 #include <tulip/GlRect.h>
+#include <tulip/GlAxis.h>
 
 #include <vector>
 #include <set>
@@ -37,31 +38,25 @@ class ParallelAxis : public GlComposite {
 
  public:
 
-  ~ParallelAxis();
-
-  const Coord &getBaseCoord() const;
-  void setBaseCoord(const Coord &newCoord);
+  virtual ~ParallelAxis();
 
   void translate(const Coord &c);
   void computeBoundingBox();
-
-  const std::string &getAxisName() const {return axisName;}
-  void drawAxisLine();
-  void addCaption(const std::string &caption);
+  void draw(float lod,Camera *camera);
+  virtual void redraw();
 
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;
-  virtual void redraw() = 0;
   virtual void showConfigDialog() = 0;
 
-  void draw(float lod,Camera *camera);
-
-  float getAxisHeight() const {return axisHeight;}
-  float getAxisGradWidth() const {return gradsWidth;}
-  float getLabelHeight() const {return labelHeight;}
+  Coord getBaseCoord() const {return glAxis->getAxisBaseCoord();}
+  std::string getAxisName() const {return glAxis->getAxisName();}
+  float getAxisHeight() const {return glAxis->getAxisLength();}
+  float getAxisGradsWidth() {return glAxis->getAxisGradsWidth();}
+  float getLabelHeight() {return glAxis->getLabelHeight();}
   void setAxisHeight(const float axisHeight);
-  Color getAxisColor() const {return axisColor;}
-  void setAxisColor(const Color &axisColor) {this->axisColor = axisColor;}
-  void setAxisAreaWidth(const float axisAreaWidth) {this->axisAreaWidth = axisAreaWidth;}
+  Color getAxisColor() const {return glAxis->getAxisColor();}
+  void setAxisColor(const Color &axisColor) {glAxis->setAxisColor(axisColor);}
+  void setMaxCaptionWidth(const float maxCaptionWidth) {glAxis->setMaxCaptionWidth(maxCaptionWidth);}
 
   void setSlidersActivated(const bool slidersActivated) {this->slidersActivated = slidersActivated;}
   bool isSlidersActivated() {return slidersActivated;}
@@ -69,6 +64,7 @@ class ParallelAxis : public GlComposite {
   void setTopSliderCoord(const Coord &topSliderCoord) {this->topSliderCoord = topSliderCoord;}
   Coord getBottomSliderCoord() {return bottomSliderCoord;}
   void setBottomSliderCoord(const Coord &bottomSliderCoord) {this->bottomSliderCoord = bottomSliderCoord;}
+
   virtual std::string getTopSliderTextValue() = 0;
   virtual std::string getBottomSliderTextValue() = 0;
   void resetSlidersPosition();
@@ -81,28 +77,13 @@ class ParallelAxis : public GlComposite {
 
  protected :
 
-  ParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, const std::string &name, const Color &axisColor);
+  ParallelAxis(GlAxis *glAxis, const float 	axisAreaWidth);
 
-  void addLabelDrawing(const std::string &labelName, const float yCoord);
-
-  void computeLabelsHeight(const unsigned int dataCount);
-
-  std::string axisName;
-
-  Coord baseCoord;
-  float axisHeight;
-  float axisAreaWidth;
-  float gradsWidth;
-  float gradsHeight;
-  float spaceBetweenAxisGrads;
-  float labelHeight;
-
-  Color axisColor;
+  GlAxis *glAxis;
 
   bool slidersActivated;
   Coord topSliderCoord;
   Coord bottomSliderCoord;
-
   bool visible;
 
 };

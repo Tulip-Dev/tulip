@@ -41,10 +41,15 @@ namespace tlp {
 
   private :
 
-    GlGraphInputData *data;
     Coord glyphPosition;
     Size glyphSize;
     node nodeId;
+    float glyphRotation;
+    Glyph *nodeGlyph;
+    bool nodeSelected;
+    Color nodeColor;
+    float nodeRotation;
+    int nodeStencil;
 
   };
 

@@ -72,10 +72,6 @@ public :
 
 public slots:
 
-  void pressButtonAdd();
-  void pressButtonRem();
-  void pressButtonUp();
-  void pressButtonDown();
   void pressButtonBrowse();
   void accept();
   void reject();

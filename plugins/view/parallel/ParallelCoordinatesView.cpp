@@ -1,7 +1,6 @@
 #include "ParallelCoordinatesView.h"
 #include "AxisConfigDialogs.h"
 #include "NominalParallelAxis.h"
-#include "GlProgressBar.h"
 
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -15,6 +14,7 @@
 #include <tulip/GWOverviewWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlProgressBar.h>
 
 
 using namespace std;
@@ -27,7 +27,6 @@ public :
 
 	ParallelDrawingUpdateThread(ParallelCoordinatesDrawing *parallelDrawing) : parallelDrawing(parallelDrawing) {
 		parallelDrawing->resetNbDataProcessed();
-		parallelDrawing->deleteAxisGlEntities();
 	}
 
 	void run() {
@@ -86,7 +85,7 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 	exportImageMenu=new QMenu("&Save Picture as ");
 	// Tulip known formats (see GlGraph)
 	// formats are sorted, "~" is just an end marker
-	char *tlpFormats[] = {"EPS", "SVG", "~"};
+	const char *tlpFormats[] = {"EPS", "SVG", "~"};
 	unsigned int i = 0;
 	//Image PopuMenu
 	// int Qt 4, output formats are not yet sorted and uppercased
@@ -113,21 +112,11 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 
 void ParallelCoordinatesView::initGlWidget() {
 	mainLayer = new GlLayer("Main");
-
 	glGraphComposite = new GlGraphComposite(tlp::newGraph());
-	GlGraphRenderingParameters param = glGraphComposite->getRenderingParameters();
-	DataSet glGraphData;
-	dataSet = new DataSet();
-	if (dataSet->get<DataSet>("displaying", glGraphData)) {
-		param.setParameters(glGraphData);
-		glGraphComposite->setRenderingParameters(param);
-	}
-
 	mainLayer->addGlEntity(glGraphComposite, "graph");
 	mainWidget->getScene()->addLayer(mainLayer);
 	mainWidget->getScene()->addGlGraphCompositeInfo(mainLayer, glGraphComposite);
 	mainWidget->setMouseTracking(true);
-
 }
 
 void ParallelCoordinatesView::buildMenuEntries() {
@@ -355,7 +344,7 @@ void ParallelCoordinatesView::setGraph(Graph *graph) {
 
 void ParallelCoordinatesView::updateWithoutProgressBar() {
 	parallelCoordsDrawing->resetNbDataProcessed();
-	parallelCoordsDrawing->deleteAxisGlEntities();
+	//parallelCoordsDrawing->deleteAxisGlEntities();
 	parallelCoordsDrawing->update();
 	if (center) {
 		centerView();
@@ -388,7 +377,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	// GlProgressBar creation and setup
 	GlProgressBar *progressBar = new GlProgressBar(Coord(0, 0, 0), 600, 100, PROGRESS_BAR_COLOR);
 	progressBar->setComment("Updating parallel coordinates view, please wait ...");
-	progressBar->setProgress(0, nbData);
+	progressBar->progress(0, nbData);
 	// add the progress bar to main layer, center scene on it and draw
 	mainLayer->addGlEntity(progressBar, "progress bar");
 	centerView();
@@ -400,12 +389,12 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	// get the drawing update progress running in background and update progress bar
 	unsigned int nbDataProcessed = parallelCoordsDrawing->getNbDataProcessed();
 	while (nbDataProcessed < nbData) {
-		progressBar->setProgress(nbDataProcessed, nbData);
+		progressBar->progress(nbDataProcessed, nbData);
 		GlMainView::draw();
 		nbDataProcessed = parallelCoordsDrawing->getNbDataProcessed();
 	}
 
-	progressBar->setProgress(nbData, nbData);
+	progressBar->progress(nbData, nbData);
 	GlMainView::draw();
 
 	// join the drawing update thread to main process
@@ -451,7 +440,7 @@ void ParallelCoordinatesView::refresh() {
 }
 
 void ParallelCoordinatesView::init() {
-	centerView();
+	draw();
 }
 
 //==================================================
@@ -755,8 +744,8 @@ void ParallelCoordinatesView::updateAxisSlidersPosition() {
 	}
 }
 
-void ParallelCoordinatesView::updateWithAxisSlidersRange(ParallelAxis *axis) {
-	parallelCoordsDrawing->updateWithAxisSlidersRange(axis);
+void ParallelCoordinatesView::updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering) {
+	parallelCoordsDrawing->updateWithAxisSlidersRange(axis, multiFiltering);
 	graphProxy->colorDataAccordingToHighlightedElts();
 }
 

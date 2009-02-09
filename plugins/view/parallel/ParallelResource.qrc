@@ -1,9 +1,5 @@
 <RCC>
     <qresource prefix="/" >
-        <file>down.png</file>
-	<file>right.png</file>
-	<file>up.png</file>
-	<file>left.png</file>
 	<file>i_axis_swapper.png</file>
 	<file>i_axis_sliders.png</file>
 	<file>i_element_highlighter.png</file>

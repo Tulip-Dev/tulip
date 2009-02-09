@@ -26,9 +26,10 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QCheckBox>
 
+#include <tulip/ItemsListWidget.h>
+
 #include "QuantitativeParallelAxis.h"
 #include "NominalParallelAxis.h"
-#include "ItemsDialogList.h"
 
 namespace tlp {
 
@@ -70,13 +71,14 @@ public slots :
 
 	void pressButtonUp();
 	void pressButtonDown();
+	void pressButtonLexOrder();
 
 private :
 
 	NominalParallelAxis *axis;
 	QPushButton *okButton;
 	QHash<QString,itemInfo > hashDataBase;
-	ItemsDialogList *axisLabelsOrder;
+	ItemsListWidget *axisLabelsOrder;
 };
 
 }

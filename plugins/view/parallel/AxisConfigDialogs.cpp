@@ -35,7 +35,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 	axisOrder->addItem("ascending");
 	axisOrder->addItem("descending");
 
-	if (axis->hasAscendindOrder()) {
+	if (axis->hasAscendingOrder()) {
 		axisOrder->setCurrentIndex(0);
 	} else {
 		axisOrder->setCurrentIndex(1);
@@ -61,7 +61,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
 void QuantitativeAxisConfigDialog::closeEvent (QCloseEvent * event) {
 	axis->setNbAxisGrad(nbGrads->value());
-	axis->setAscendindOrder(axisOrder->currentText() == "ascending");
+	axis->setAscendingOrder(axisOrder->currentText() == "ascending");
 	axis->setLog10Scale(log10Scale->isChecked());
 	axis->redraw();
 }
@@ -76,11 +76,14 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	QHBoxLayout *okButtonLayout = new QHBoxLayout();
 
 	okButton = new QPushButton("OK");
-	axisLabelsOrder = new ItemsDialogList(this);
+	axisLabelsOrder = new ItemsListWidget(this);
 	QPushButton* up = new QPushButton(QIcon(":/up.png"),"");
+	QPushButton* lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +  QString("     order"));
 	QPushButton *down = new QPushButton(QIcon(":/down.png"),"");
 
+
 	buttonsUpDownLayout->addWidget(up);
+	buttonsUpDownLayout->addWidget(lexOrder);
 	buttonsUpDownLayout->addWidget(down);
 
 	labelsOrderLayout->addWidget(axisLabelsOrder);
@@ -94,8 +97,8 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	dialogLayout->addLayout(okButtonLayout);
 
 	vector<string> labelsOrder = axis->getLabelsOrder();
-	vector<string>::iterator it;
-	for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+	vector<string>::reverse_iterator it;
+	for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
 		axisLabelsOrder->addItem(QString((*it).c_str()));
 	}
 
@@ -104,6 +107,7 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	connect(okButton,SIGNAL(clicked()),this,SLOT(close()));
 	connect(up,SIGNAL(clicked()),this,SLOT(pressButtonUp()));
 	connect(down,SIGNAL(clicked()),this,SLOT(pressButtonDown()));
+	connect(lexOrder,SIGNAL(clicked()),this,SLOT(pressButtonLexOrder()));
 }
 
 void NominalAxisConfigDialog::closeEvent (QCloseEvent * event) {
@@ -111,6 +115,7 @@ void NominalAxisConfigDialog::closeEvent (QCloseEvent * event) {
 	for	(int i = 0; i < axisLabelsOrder->count(); ++i) {
 		labelsOrder.push_back(axisLabelsOrder->item(i)->text().toStdString());
 	}
+	reverse(labelsOrder.begin(), labelsOrder.end());
 	axis->setLabelsOrder(labelsOrder);
 	axis->redraw();
 }
@@ -143,6 +148,25 @@ void NominalAxisConfigDialog::pressButtonDown() {
 			axisLabelsOrder->setCurrentRow(row + 1);
 		}
 	}
+}
+
+void NominalAxisConfigDialog::pressButtonLexOrder() {
+	axisLabelsOrder->clear();
+	static unsigned int clickCount = 0;
+	vector<string> labelsOrder = axis->getLabelsOrder();
+	std::sort(labelsOrder.begin(), labelsOrder.end());
+	if (++clickCount % 2 == 1) {
+		vector<string>::iterator it;
+		for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+			axisLabelsOrder->addItem(QString((*it).c_str()));
+		}
+	} else {
+		vector<string>::reverse_iterator it;
+		for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
+			axisLabelsOrder->addItem(QString((*it).c_str()));
+		}
+	}
+
 }
 
 }

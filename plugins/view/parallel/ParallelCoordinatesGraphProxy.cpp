@@ -15,12 +15,9 @@ namespace tlp {
 
 ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const ElementType location):
 	GraphDecorator(g), dataLocation(location) {
-  fillPropertiesVector();
-  Observable::holdObservers();
   dataColors = graph_component->getProperty<ColorProperty>("viewColor");
   originalDataColors = new ColorProperty(graph_component);
   *originalDataColors = *(graph_component->getProperty<ColorProperty>("viewColor"));
-  Observable::unholdObservers();
 }
 
 ParallelCoordinatesGraphProxy::~ParallelCoordinatesGraphProxy() {
@@ -29,26 +26,6 @@ ParallelCoordinatesGraphProxy::~ParallelCoordinatesGraphProxy() {
 	delete originalDataColors;
 	originalDataColors = NULL;
 	Observable::unholdObservers();
-}
-void ParallelCoordinatesGraphProxy::fillPropertiesVector() {
-  Iterator<string> * it = getProperties();
-  string propertyName, propertyType;
-
-  vector<string> graphViewProperties(viewPropertiesName, viewPropertiesName + NB_VIEW_PROPERTIES);
-
-  propertiesList.clear();
-  while (it->hasNext()) {
-    propertyName = it->next();
-    propertyType = getProperty(propertyName)->getTypename();
-
-    // don't select graph view properties
-    if (std::find(graphViewProperties.begin(), graphViewProperties.end(), propertyName) == graphViewProperties.end()) {
-    	// select properties with compatible datatypes
-    	if (propertyType == "string" || propertyType == "int" || propertyType == "double") {
-    		propertiesList.push_back(propertyName);
-    	}
-    }
-  }
 }
 
 unsigned int ParallelCoordinatesGraphProxy::getNumberOfSelectedProperties() const {
@@ -102,11 +79,6 @@ Color ParallelCoordinatesGraphProxy::getDataColor(const unsigned int dataId) {
 
 string ParallelCoordinatesGraphProxy::getDataTexture(const unsigned int dataId) {
 	return getPropertyValueForData<StringProperty, StringType>("viewTexture", dataId);
-}
-
-vector<string> ParallelCoordinatesGraphProxy::getAllProperties() {
-  fillPropertiesVector();
-  return propertiesList;
 }
 
 bool ParallelCoordinatesGraphProxy::isDataSelected(const unsigned int dataId) {
@@ -170,6 +142,7 @@ void ParallelCoordinatesGraphProxy::addOrRemoveEltToHighlight(const unsigned int
 
 void ParallelCoordinatesGraphProxy::unsetHighlightedElts() {
 	highlightedElts.clear();
+
 }
 
 void ParallelCoordinatesGraphProxy::resetHighlightedElts(const set<unsigned int> &highlightedData) {

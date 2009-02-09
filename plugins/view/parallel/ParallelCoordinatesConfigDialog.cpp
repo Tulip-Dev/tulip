@@ -23,68 +23,59 @@ namespace tlp {
   ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent) : QDialog(parent), graphProxy(data) {
 	  setupUi(this);
 
-	  connect(addButton,SIGNAL(clicked()),this,SLOT(pressButtonAdd()));
-	  connect(removeButton,SIGNAL(clicked()),this,SLOT(pressButtonRem()));
+	  vector<string> propertyTypesFilter;
+	  propertyTypesFilter.push_back("double");
+	  propertyTypesFilter.push_back("int");
+	  propertyTypesFilter.push_back("string");
+	  graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
 
-	  connect(upButton,SIGNAL(clicked()),this,SLOT(pressButtonUp()));
-	  connect(downButton,SIGNAL(clicked()),this,SLOT(pressButtonDown()));
+	  // if number of data to plot is consequent, don't draw points on axis
+	  // by default to speed up rendering
+	  if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
+		  setDrawPointOnAxis(false);
+	  }
 
 	  connect(browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
 	  connect(userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
-
 	  connect(minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
 	  connect(maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
-
 	  connect(bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
-
   }
 
   void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
-  	  vector<string> properties = graphProxy->getAllProperties();
+  	  Iterator<string> *properties = graphProxy->getProperties();
   	  selectedProperties = graphProxy->getSelectedProperties();
+  	  vector<string> stringList;
   	  vector<string>::iterator it;
   	  string propertyName;
 
-  	  items->clear();
-  	  choices->clear();
+  	  graphPropertiesSelectionWidget->clearLists();
 
-  	  for (it = properties.begin() ; it != properties.end() ; ++it) {
-  		  propertyName = *it;
+  	  while (properties->hasNext()) {
+  		  propertyName = properties->next();
   		  if (std::find(selectedProperties.begin(), selectedProperties.end(), propertyName) == selectedProperties.end()) {
-  			  items->addItem(QString(propertyName.c_str()));
+  			  stringList.push_back(propertyName);
   		  }
   	  }
+  	  delete properties;
 
+  	  graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+
+  	  stringList.clear();
   	  for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
-  		  choices->addItem(QString((*it).c_str()));
+  		  stringList.push_back(*it);
   	  }
+  	  graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+
     }
 
   vector<string> ParallelCoordinatesConfigDialog::getSelectedProperties()  const {
     return selectedProperties;
   }
 
-  void ParallelCoordinatesConfigDialog::pressButtonAdd(){
-
-    if (items->currentItem()!=NULL) {
-      choices->addItemList(items->currentItem()->text());
-      items->deleteItemList(items->currentItem());
-    }
-  }
-
-  void ParallelCoordinatesConfigDialog::pressButtonRem(){
-
-    if (choices->currentItem()!=NULL) {
-      items->addItemList(choices->currentItem()->text());
-      choices->deleteItemList(choices->currentItem());
-    }
-  }
 
   void ParallelCoordinatesConfigDialog::accept(){
-    selectedProperties.clear();
-    for(int i = 0; i < choices->count(); ++i) {
-      selectedProperties.push_back(choices->item(i)->text().toStdString());
-    }
+    selectedProperties = graphPropertiesSelectionWidget->getSelectedProperties();
     graphProxy->setSelectedProperties(selectedProperties);
     graphProxy->setDataLocation(getDataLocation());
     QDialog::accept();
@@ -93,37 +84,6 @@ namespace tlp {
   void ParallelCoordinatesConfigDialog::reject(){
       restoreBackupConfiguration();
       QDialog::reject();
-  }
-
-  void ParallelCoordinatesConfigDialog::pressButtonUp() {
-    if (choices->count() > 0) {
-      int row = choices->currentRow();
-      if ( row > 0) {
-    	  QString s = choices->currentItem()->text();
-    	  QString s2 = choices->item(row - 1)->text();
-    	  choices->deleteItemList(choices->item(row - 1));
-    	  choices->deleteItemList(choices->item(row - 1));
-    	  choices->insertItem(row - 1, s2);
-    	  choices->insertItem(row - 1, s);
-    	  choices->setCurrentRow(row - 1);
-      }
-    }
-  }
-
-  void ParallelCoordinatesConfigDialog::pressButtonDown() {
-
-    if (choices->count() > 0) {
-      int row = choices->currentRow();
-      if ( row < (choices->count() - 1)) {
-    	  QString s = choices->currentItem()->text();
-    	  QString s2 = choices->item(row + 1)->text();
-    	  choices->deleteItemList(choices->item(row));
-    	  choices->deleteItemList(choices->item(row));
-    	  choices->insertItem(row, s);
-    	  choices->insertItem(row, s2);
-    	  choices->setCurrentRow(row + 1);
-      }
-    }
   }
 
   void ParallelCoordinatesConfigDialog::pressButtonBrowse() {
@@ -191,11 +151,7 @@ namespace tlp {
 	  updateSelectedProperties();
 	  backupConfiguration();
 
-	  // if number of data to plot is consequent, don't draw points on axis
-	  // by default to speed up rendering
-	  if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
-		  setDrawPointOnAxis(false);
-	  }
+
 	  tabWidget->setCurrentIndex(0);
 	  QWidget::showEvent(event);
   }

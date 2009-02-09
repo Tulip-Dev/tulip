@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>393</height>
+    <width>474</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -129,86 +129,7 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4" >
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5" >
-            <item>
-             <widget class="QLabel" name="label" >
-              <property name="text" >
-               <string>  Properties to hide :  </string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ItemsDialogList" name="items" />
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3" >
-            <item>
-             <widget class="QPushButton" name="addButton" >
-              <property name="text" >
-               <string/>
-              </property>
-              <property name="icon" >
-               <iconset>:/right.png</iconset>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="removeButton" >
-              <property name="text" >
-               <string/>
-              </property>
-              <property name="icon" >
-               <iconset>:/left.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6" >
-            <item>
-             <widget class="QLabel" name="label_2" >
-              <property name="text" >
-               <string>Properties to display :</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="ItemsDialogList" name="choices" />
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4" >
-            <item>
-             <widget class="QPushButton" name="upButton" >
-              <property name="text" >
-               <string/>
-              </property>
-              <property name="icon" >
-               <iconset>:/up.png</iconset>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="downButton" >
-              <property name="text" >
-               <string/>
-              </property>
-              <property name="icon" >
-               <iconset>:/down.png</iconset>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="tlp::GraphPropertiesSelectionWidget" native="1" name="graphPropertiesSelectionWidget" />
           </item>
          </layout>
         </widget>
@@ -407,6 +328,9 @@
          <property name="title" >
           <string>Draw points on axis : </string>
          </property>
+         <property name="alignment" >
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
          <property name="checkable" >
           <bool>true</bool>
          </property>
@@ -580,9 +504,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ItemsDialogList</class>
-   <extends>QListView</extends>
-   <header>ItemsDialogList.h</header>
+   <class>tlp::GraphPropertiesSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>GraphPropertiesSelectionWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

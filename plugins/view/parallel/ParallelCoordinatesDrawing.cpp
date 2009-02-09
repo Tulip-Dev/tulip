@@ -7,12 +7,12 @@
 #include <tulip/Iterator.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlPolyQuad.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
 #include "GlNodeGlyph.h"
-#include "GlPolyQuad.h"
 #include "ParallelTools.h"
 
 #include <sstream>
@@ -66,6 +66,8 @@ void ParallelCoordinatesDrawing::createAxis() {
 		axisColor = Color(0,0,0);
 	}
 
+	double maxCaptionWidth = (8./10.) * spaceBetweenAxis;
+
 	for (it = l.begin(); it != l.end() ; ++it) {
 
 		ParallelAxis *axis = NULL;
@@ -81,17 +83,16 @@ void ParallelCoordinatesDrawing::createAxis() {
 			axis = (parallelAxis.find(*it))->second;
 			axis->translate(coord - axis->getBaseCoord());
 			axis->setAxisHeight(height);
-			axis->setAxisAreaWidth(spaceBetweenAxis);
+			axis->setMaxCaptionWidth(maxCaptionWidth);
 			axis->setAxisColor(axisColor);
 			axis->redraw();
 			axis->setVisible(true);
-
 		} else {
 			string typeName = (graphProxy->getProperty(*it))->getTypename();
 			if (typeName == "string") {
-				axis = new NominalParallelAxis(coord, height, spaceBetweenAxis, graphProxy, *it, axisColor);
+				axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, axisColor);
 			} else if (typeName == "int" || typeName == "double") {
-				axis = new QuantitativeParallelAxis(coord, height, spaceBetweenAxis, graphProxy, *it, true, axisColor);
+				axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, true, axisColor);
 			}
 		}
 
@@ -108,12 +109,6 @@ void ParallelCoordinatesDrawing::createAxis() {
 void ParallelCoordinatesDrawing::plotAllData() {
 	Color color;
 	computeResizeFactor();
-
-	if (!elementDeleted && ((graphProxy->getHighlightedElts() != lastHighlightedElements) ||
-							(graphProxy->highlightedEltsSet() && !graphProxy->unhighlightedEltsColorOk()))) {
-		graphProxy->colorDataAccordingToHighlightedElts();
-	}
-
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
@@ -332,8 +327,20 @@ vector<ParallelAxis *> ParallelCoordinatesDrawing::getAllAxis() {
 	return axis;
 }
 
-void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(ParallelAxis *axis) {
-	set<unsigned int> dataSubset = axis->getDataInSlidersRange();
+void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering) {
+	set<unsigned int> dataSubset;
+	if (multiFiltering) {
+		set<unsigned int> eltsInSlidersRange = axis->getDataInSlidersRange();
+		set<unsigned int> currentHighlightedElts = graphProxy->getHighlightedElts();
+		unsigned int size = eltsInSlidersRange.size() > currentHighlightedElts.size() ? eltsInSlidersRange.size() : currentHighlightedElts.size();
+		vector<unsigned int> intersection(size);
+		vector<unsigned int>::iterator intersectionEnd = std::set_intersection(eltsInSlidersRange.begin(), eltsInSlidersRange.end(),
+																			   currentHighlightedElts.begin(), currentHighlightedElts.end(),
+																			   intersection.begin());
+		dataSubset = set<unsigned int>(intersection.begin(), intersectionEnd);
+	} else {
+		dataSubset = axis->getDataInSlidersRange();
+	}
 	if (dataSubset.size() > 0) {
 		graphProxy->unsetHighlightedElts();
 		set<unsigned int>::iterator it;

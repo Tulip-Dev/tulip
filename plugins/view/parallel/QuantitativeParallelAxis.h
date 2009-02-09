@@ -20,7 +20,9 @@
 #include "ParallelAxis.h"
 #include "ParallelTools.h"
 #include "ParallelCoordinatesGraphProxy.h"
+
 #include <tulip/Color.h>
+#include <tulip/GlQuantitativeAxis.h>
 
 #include <vector>
 #include <algorithm>
@@ -33,7 +35,8 @@ const unsigned int DEFAULT_NB_AXIS_GRAD = 20;
 namespace tlp {
 
 
-enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3, TOP_OUTLIER = 4, NO_VALUE = 5};
+enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3,
+				   TOP_OUTLIER = 4, NO_VALUE = 5};
 
 // Class which allows to render a quantitative axis
 // Associated datatypes can be real or integer
@@ -42,27 +45,27 @@ class QuantitativeParallelAxis : public ParallelAxis {
 public :
 
   QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0));
+
   void setNbAxisGrad(const unsigned int nbAxisGrad) {this->nbAxisGrad = nbAxisGrad;}
   unsigned int getNbAxisGrad() const {return nbAxisGrad;}
-  void translate(const Coord &c);
+
   Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
+
+  void translate(const Coord &c);
   void redraw();
+
   void showConfigDialog();
+
   std::string getAxisDataTypeName() const;
+
   void setLog10Scale(const bool log10Scale) {this->log10Scale = log10Scale;}
   bool hasLog10Scale() const {return log10Scale;}
 
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  typename PROPERTYTYPE::RealType getAxisMinValue();
+  double getAxisMinValue();
+  double getAxisMaxValue();
 
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  typename PROPERTYTYPE::RealType getAxisMaxValue();
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  typename PROPERTYTYPE::RealType getValueForAxisCoord(const Coord &axisCoord);
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  Coord getAxisCoordForValue(typename PROPERTYTYPE::RealType value);
+  double getValueForAxisCoord(const Coord &axisCoord);
+  Coord getAxisCoordForValue(double value);
 
   std::string getTopSliderTextValue();
   std::string getBottomSliderTextValue();
@@ -73,8 +76,8 @@ public :
   void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {boxPlotLowBound = lowBound ; boxPlotHighBound = highBound;}
   std::set<unsigned int> getDataBetweenBoxPlotBounds();
 
-  bool hasAscendindOrder() const {return ascendingOrder;}
-  void setAscendindOrder(const bool ascendingOrder);
+  bool hasAscendingOrder() const {return glQuantitativeAxis->hasAscendingOrder();}
+  void setAscendingOrder(const bool ascendingOrder);
 
   // Axis BoxPlot methods
   Coord getBottomOutlierCoord() const {return boxPlotValuesCoord[BOTTOM_OUTLIER];}
@@ -90,33 +93,18 @@ public :
 
  private:
 
-  void setLabelsAndComputeDataCoords();
-
   std::set<unsigned int> getDataInRange(float yLowBound, float yHighBound);
 
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  void computeDataPointsCoord();
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  void setLabels();
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  void computeDataPointsCoordWithLog10scale();
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  void setLabelsWithLog10Scale();
-
-  template<typename PROPERTY, typename PROPERTYTYPE>
-  void computeBoxPlotCoords(std::set<typename PROPERTYTYPE::RealType> propertyValuesSet);
+  void computeBoxPlotCoords();
 
   void showAxisConfigDialog();
 
+  void setAxisLabels();
 
-  double scale;
-  bool ascendingOrder;
+  GlQuantitativeAxis *glQuantitativeAxis;
+
   unsigned int nbAxisGrad;
   ParallelCoordinatesGraphProxy *graphProxy;
-  std::map<unsigned int, Coord> dataCoords;
   bool log10Scale;
 
   std::vector<Coord> boxPlotValuesCoord;

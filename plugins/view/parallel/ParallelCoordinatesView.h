@@ -74,9 +74,9 @@ namespace tlp {
     void addAxis(ParallelAxis *axis);
     std::vector<ParallelAxis *> getAllAxis();
 
-    void updateWithAxisSlidersRange(ParallelAxis *axis);
+    void updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering);
     void updateAxisSlidersPosition();
-
+    bool hasHighlightedElts() const {return graphProxy->highlightedEltsSet();}
     void highlightDataInAxisBoxPlotRange(QuantitativeParallelAxis *axis);
 
 

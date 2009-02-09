@@ -41,7 +41,7 @@ const Color PROGRESS_BAR_COLOR(109, 97, 158);
 // when creating or refreshing the view
 const unsigned int PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD = 5000;
 
-const unsigned int DEFAULT_LINES_COLOR_ALPHA_VALUE = 20;
+const unsigned int DEFAULT_LINES_COLOR_ALPHA_VALUE = 200;
 
 const float DEFAULT_AXIS_HEIGHT = 400;
 
@@ -56,10 +56,6 @@ const float DEFAULT_BITMAPS_ZOOM_FACTOR = 5;
 const float DEFAULT_CAPTION_HEIGHT = 30;
 
 const float DEFAULT_CAPTION_VERTICAl_OFFSET = 20;
-
-const unsigned int NB_VIEW_PROPERTIES = 14;
-
-const std::string viewPropertiesName[NB_VIEW_PROPERTIES] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewLabel", "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph", "viewMetric", "viewRotation", "viewSelection", "viewShape", "viewSize", "viewTexture"};
 
 template <typename T>
 std::string getStringFromNumber(T number) {

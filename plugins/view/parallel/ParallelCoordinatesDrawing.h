@@ -63,7 +63,7 @@ public :
   std::vector<ParallelAxis *> getAllAxis();
 
   void update();
-  void updateWithAxisSlidersRange(ParallelAxis *axis);
+  void updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering);
 
   void resetAxisSlidersPosition();
 

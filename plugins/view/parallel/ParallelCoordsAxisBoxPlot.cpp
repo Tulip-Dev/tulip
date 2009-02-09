@@ -51,7 +51,7 @@ class GlAxisBoxPlot : GlSimpleEntity {
 public :
 
 	GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color& fillColor, const Color& outlineColor) :
-		axis(axis), boxWidth(5 * axis->getAxisGradWidth()), fillColor(fillColor), outlineColor(outlineColor),
+		axis(axis), boxWidth(5 * axis->getAxisGradsWidth()), fillColor(fillColor), outlineColor(outlineColor),
 		highlightRangeLowBound(NULL), highlightRangeHighBound(NULL) {}
 	~GlAxisBoxPlot() {}
 
@@ -64,7 +64,7 @@ public :
 
 		Coord interQuartileRangeBoxCoords[4];
 
-		if (axis->hasAscendindOrder()) {
+		if (axis->hasAscendingOrder()) {
 			boundingBox.check(Coord(bottomOutlierCoord.getX() - boxWidth / 2, bottomOutlierCoord.getY(), 0));
 			boundingBox.check(Coord(topOutlierCoord.getX() + boxWidth / 2, topOutlierCoord.getY(), 0));
 
@@ -133,7 +133,7 @@ public :
 	void setWithXML(xmlNodePtr rootNode) {}
 
 	void setHighlightRangeIfAny(Coord sceneCoords) {
-		if (axis->hasAscendindOrder()) {
+		if (axis->hasAscendingOrder()) {
 			if (sceneCoords.getY() < topOutlierCoord.getY() &&
 				sceneCoords.getY() > thirdQuartileCoord.getY() &&
 				sceneCoords.getX() > (medianCoord.getX() - (boxWidth / 2)) &&
@@ -239,10 +239,10 @@ public :
 private :
 
 	void drawLabel(Coord position, string labelName) {
-		float labelHeight = axis->getLabelHeight();
+		float labelHeight = axis->getLabelHeight();;
 
 		float heightRef;
-		if (axis->hasAscendindOrder()) {
+		if (axis->hasAscendingOrder()) {
 			heightRef = topOutlierCoord.getY() - thirdQuartileCoord.getY();
 		} else {
 			heightRef = thirdQuartileCoord.getY() - topOutlierCoord.getY();

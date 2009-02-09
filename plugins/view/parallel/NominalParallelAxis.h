@@ -17,8 +17,11 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#include <tulip/GlNominativeAxis.h>
+
 #include "ParallelAxis.h"
 #include "ParallelCoordinatesGraphProxy.h"
+
 
 namespace tlp {
 
@@ -33,11 +36,13 @@ class NominalParallelAxis : public ParallelAxis {
 
   Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
 
-  void translate(const Coord &c);
+  //void translate(const Coord &c);
+
+  void showConfigDialog();
 
   void redraw();
 
-  void showConfigDialog();
+  void setLabels();
 
   const std::vector<std::string> &getLabelsOrder() const {return labelsOrder;}
   void setLabelsOrder(const std::vector<std::string> &labelsOrder) {this->labelsOrder = labelsOrder;}
@@ -50,12 +55,9 @@ class NominalParallelAxis : public ParallelAxis {
 
 private :
 
-  void setLabels();
-
-  std::vector<std::string> labelsOrder;
-  std::map<std::string, Coord> labelsCoords;
-
+  GlNominativeAxis *glNominativeAxis;
   ParallelCoordinatesGraphProxy *graphProxy;
+  std::vector<std::string> labelsOrder;
 
 };
 
