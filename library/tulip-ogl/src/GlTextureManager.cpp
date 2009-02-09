@@ -251,7 +251,41 @@ static bool loadPNG(const string &filename, textureImage *texture)
   return true;
 }
 #endif
+//====================================================================
+bool GlTextureManager::loadTextureFromRawData(const string &textureName, int width, int height, bool hasAlpha, unsigned char *data)
+{
+  glEnable(GL_TEXTURE_2D);
+  if (texturesMap[currentContext].find(textureName) != texturesMap[currentContext].end())
+      return true;
 
+  GLuint textureNum;
+  textureImage texti;
+
+  texti.width = width;
+  texti.height = height;
+  texti.hasAlpha = hasAlpha;
+  texti.data = data;
+
+  int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
+
+  GlTexture texture;
+  texture.width=texti.width;
+  texture.height=texti.height;
+
+  glGenTextures(1, &textureNum);  //FIXME: handle case where no memory is available to load texture
+  glBindTexture(GL_TEXTURE_2D, textureNum);
+
+  texture.id=textureNum;
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, texti.width, texti.height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data);
+  /* use no filtering */
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  //delete [] texti.data;
+  (texturesMap[currentContext])[textureName] = texture;
+
+  return true;
+}
 //====================================================================
   void GlTextureManager::changeContext(unsigned long context) {
     currentContext=context;
