@@ -2,20 +2,17 @@
 
 #include <tulip/Graph.h>
 
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
-
 #include "tulip/GlyphManager.h"
 #include "tulip/GlGraphRenderingParameters.h"
 
 namespace tlp {
-  
-  GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters):graph(graph),parameters(parameters) {
+
+  GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters):
+    elementColorPropName("viewColor"),elementLabelColorPropName("viewLabelColor"),elementSizePropName("viewSize"),elementLabelPositionPropName("viewLabelPosition"),
+    elementShapePropName("viewShape"),elementRotationPropName("viewRotation"),elementSelectedPropName("viewSelection"),elementLabelPropName("viewLabel"),
+    elementTexturePropName("viewTexture"),elementBorderColorPropName("viewBorderColor"),elementBorderWidthPropName("viewBorderWidth"),
+    elementLayoutPropName(""),
+    graph(graph),parameters(parameters) {
     reloadAllProperties();
 
     GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
@@ -26,31 +23,28 @@ namespace tlp {
   }
 
   void GlGraphInputData::reloadLayoutProperty() {
-    if (!graph->getAttribute("viewLayout", elementLayout))
-      elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
-  }
-  
-  void GlGraphInputData::reloadLabelProperty() {
-    elementLabel = graph->getProperty<StringProperty>("viewLabel");
-  }
-  
-  void GlGraphInputData::reloadSelectionProperty() {
-    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+    if(elementLayoutPropName==""){
+      if (!graph->getAttribute("viewLayout", elementLayout))
+        elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
+    }else{
+      elementLayout = graph->getProperty<LayoutProperty>(elementLayoutPropName);
+    }
   }
 
   void GlGraphInputData::reloadAllProperties() {
-    elementRotation = graph->getProperty<DoubleProperty>("viewRotation");
-    elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-    elementLabel = graph->getProperty<StringProperty>("viewLabel");
-    elementLabelColor = graph->getProperty<ColorProperty>("viewLabelColor");
-    elementLabelPosition = graph->getProperty<IntegerProperty>("viewLabelPosition");
-    elementColor = graph->getProperty<ColorProperty>("viewColor");
-    elementShape = graph->getProperty<IntegerProperty>("viewShape");
-    elementSize = graph->getProperty<SizeProperty>("viewSize");
     reloadLayoutProperty();
-    elementTexture = graph->getProperty<StringProperty>("viewTexture");
-    elementBorderColor = graph->getProperty<ColorProperty>("viewBorderColor");
-    elementBorderWidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
+
+    elementRotation = graph->getProperty<DoubleProperty>(elementRotationPropName);
+    elementSelected = graph->getProperty<BooleanProperty>(elementSelectedPropName);
+    elementLabel = graph->getProperty<StringProperty>(elementLabelPropName);
+    elementLabelColor = graph->getProperty<ColorProperty>(elementLabelColorPropName);
+    elementLabelPosition = graph->getProperty<IntegerProperty>(elementLabelPositionPropName);
+    elementColor = graph->getProperty<ColorProperty>(elementColorPropName);
+    elementShape = graph->getProperty<IntegerProperty>(elementShapePropName);
+    elementSize = graph->getProperty<SizeProperty>(elementSizePropName);
+    elementTexture = graph->getProperty<StringProperty>(elementTexturePropName);
+    elementBorderColor = graph->getProperty<ColorProperty>(elementBorderColorPropName);
+    elementBorderWidth = graph->getProperty<DoubleProperty>(elementBorderWidthPropName);
   }
-  
+
 }
