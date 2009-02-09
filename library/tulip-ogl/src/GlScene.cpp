@@ -123,20 +123,13 @@ namespace tlp {
 
     GlLODSceneVisitor lodVisitor(lodCalculator,glGraphComposite->getInputData());
 
-    //cout << ">>> Check bounding box" << endl ;
-
-
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       (*it).second->acceptVisitor(&lodVisitor);
       if((*it).first=="Main")
-	selectionLayer->acceptVisitor(&lodVisitor);
+        selectionLayer->acceptVisitor(&lodVisitor);
     }
 
-    //cout << "<<< End Check bounding box" << endl;
-    //cout << ">>> Begin LOD compute" << endl;
     lodCalculator->compute(viewport,viewport);
-    //cout << "<<< End LOD compute" << endl;
-    //lodCalculator->compute();
 
     TextRenderer fontRenderer;
     OcclusionTest occlusionTest;
@@ -146,19 +139,6 @@ namespace tlp {
     LODResultVector::iterator itCE=ceVector->begin();
     LODResultVector::iterator itSE=seVector->begin();
 
-
-    //cout << ">>> Begin draw" << endl;
-    /*Camera *camera=selectionLayer->getCamera();
-    if((Camera*)((*itSE).first)==camera) {
-      camera->initGl();
-      for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	if((*itE).second>0) {
-	  ((GlSimpleEntity*)((*itE).first))->draw((*itE).second);
-	}
-      }
-      ++itSE;
-      ++itCE;
-      }*/
     Camera *camera;
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
@@ -172,7 +152,7 @@ namespace tlp {
       if(!zOrdering){
         if((Camera*)((*itSE).first)==camera) {
           for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	  if((*itE).second>=0) {
+            if((*itE).second>=0) {
               glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*itE).first))->getStencil(),0xFFFF);
               ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
             }
@@ -182,7 +162,7 @@ namespace tlp {
 
         if((Camera*)((*itCE).first)==camera) {
           for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	  if((*itE).second>=0) {
+            if((*itE).second>=0) {
               ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
             }
           }
@@ -233,7 +213,6 @@ namespace tlp {
       }
 
       if((Camera*)((*itCE).first)==camera) {
-        // Draw Label
         if(viewLabel) {
           glPushAttrib(GL_ALL_ATTRIB_BITS);
           glDisable(GL_LIGHTING);
@@ -245,7 +224,7 @@ namespace tlp {
           if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
             // Draw Label for selected Nodes
             for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>=0) {
+              if((*itE).second>=0) {
                 ((GlComplexeEntity*)((*itE).first))->drawLabel(true,
                     true,
                     false,
@@ -255,7 +234,7 @@ namespace tlp {
             }
             // Draw Label for others Nodes
             for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>=0) {
+              if((*itE).second>=0) {
                 ((GlComplexeEntity*)((*itE).first))->drawLabel(false,
                     true,
                     false,
@@ -270,7 +249,7 @@ namespace tlp {
             glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
             // Draw Label for selected Edges
             for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>=0) {
+              if((*itE).second>=0) {
                 ((GlComplexeEntity*)((*itE).first))->drawLabel(true,
                     false,
                     true,
@@ -280,7 +259,7 @@ namespace tlp {
             }
             // Draw Label for others Edges
             for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-	      if((*itE).second>=0) {
+              if((*itE).second>=0) {
                 ((GlComplexeEntity*)((*itE).first))->drawLabel(false,
                     false,
                     true,
@@ -302,7 +281,7 @@ namespace tlp {
           if((Camera*)((*itSE).first)==camera) {
             camera->initGl();
             for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-	      if((*itE).second>=0) {
+              if((*itE).second>=0) {
                 ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
               }
             }
@@ -311,9 +290,8 @@ namespace tlp {
         ++itSE;
         ++itCE;
       }
-      //cout << "<<< End draw CE" << endl;
     }
-    //cout << "<<< End draw" << endl;
+
     lodCalculator->clear();
   }
 
