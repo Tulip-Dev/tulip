@@ -192,7 +192,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentGraph(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
+    clusterTreeWidget(NULL),currentGraph(NULL),currentView(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -326,12 +326,9 @@ namespace tlp {
   void MainController::getData(Graph **graph,DataSet *dataSet) {
     DataSet views;
     QWidgetList widgetList;
-    if(lastWidget!=NULL){
-      widgetList.append(lastWidget);
-      lastWidget=NULL;
-    }else{
-      widgetList=mainWindowFacade.getWorkspace()->windowList();
-    }
+
+    widgetList=mainWindowFacade.getWorkspace()->windowList();
+
 
     for(int i=0;i<widgetList.size();++i) {
       QRect rect=((QWidget *)(widgetList[i]->parent()))->geometry();
@@ -827,7 +824,6 @@ namespace tlp {
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
     QWidget *widget=(QWidget*)object;
-    lastWidget = widget;
     viewWidget.erase(widget);
     if(viewWidget.size()==0){
       emit willBeClosed();
@@ -1014,13 +1010,13 @@ namespace tlp {
     while(itN.hasNext()) {
       node itv = itN.next();
       if (elementSelected->getNodeValue(itv)==true)
-	currentGraph->delNode(itv);
+        currentGraph->delNode(itv);
     }
     StableIterator<edge> itE(currentGraph->getEdges());
     while(itE.hasNext()) {
       edge ite=itE.next();
       if (elementSelected->getEdgeValue(ite)==true)
-	currentGraph->delEdge(ite);
+        currentGraph->delEdge(ite);
     }
     Observable::unholdObservers();
     currentGraph->addObserver(this);

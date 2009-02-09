@@ -71,7 +71,10 @@ BUILT_SOURCES = \
 	moc_Controller.cpp \
 	moc_MainController.cpp \
 	moc_View.cpp \
-	moc_AbstractView.cpp
+	moc_AbstractView.cpp \
+	moc_GraphPropertiesSelectionWidget.cpp \
+	moc_ItemsListWidget.cpp \
+	moc_StringListSelectionWidget.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -115,7 +118,10 @@ dist_libtulip_qt4_la_SOURCES = \
 	TulipStatsWidget.cpp \
 	RenderingParametersDialog.cpp \
 	AugmentedDisplayDialog.cpp \
-	GridOptionsWidget.cpp
+	GridOptionsWidget.cpp \
+	GraphPropertiesSelectionWidget.cpp \
+	ItemsListWidget.cpp \
+	StringListSelectionWidget.cpp 
 
 CLEANFILES = $(BUILT_SOURCES)
 

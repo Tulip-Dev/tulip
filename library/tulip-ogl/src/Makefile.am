@@ -78,5 +78,10 @@ libtulip_ogl_la_SOURCES = \
 	GlLine.cpp \
 	GlCurve.cpp \
 	GlQuad.cpp \
+	GlPolyQuad.cpp \
+	GlAxis.cpp \
+	GlQuantitativeAxis.cpp \
+	GlNominativeAxis.cpp \
+	GlProgressBar.cpp \
 	GlXMLTools.cpp
 

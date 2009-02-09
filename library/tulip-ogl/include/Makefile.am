@@ -39,6 +39,11 @@ nobase_include_HEADERS = \
 	tulip/GlLine.h \
 	tulip/GlCurve.h \
 	tulip/GlQuad.h \
+	tulip/GlPolyQuad.h \
+	tulip/GlAxis.h \
+	tulip/GlQuantitativeAxis.h \
+	tulip/GlNominativeAxis.h \
+	tulip/GlProgressBar.h \
 	tulip/GlXMLTools.h
 
 noinst_HEADERS = \

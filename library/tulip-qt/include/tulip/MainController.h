@@ -172,7 +172,6 @@ namespace tlp {
     std::map<QWidget *,View*> viewWidget;
     std::map<View *, QAction *> lastInteractorOnView;
     std::map<View *,Graph* > viewGraph;
-    QWidget *lastWidget;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
 

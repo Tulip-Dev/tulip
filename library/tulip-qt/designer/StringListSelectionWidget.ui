@@ -1,0 +1,115 @@
+<ui version="4.0" >
+ <class>StringListSelectionData</class>
+ <widget class="QWidget" name="StringListSelectionData" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>395</width>
+    <height>284</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout" >
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_8" >
+     <item>
+      <widget class="QLabel" name="inputListLabel" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="tlp::ItemsListWidget" name="inputList" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_6" >
+     <item>
+      <widget class="QPushButton" name="addButton" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset resource="StringListSelectionWidgetResource.qrc" >
+         <normaloff>:/right.png</normaloff>:/right.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeButton" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset resource="StringListSelectionWidgetResource.qrc" >
+         <normaloff>:/left.png</normaloff>:/left.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_7" >
+     <item>
+      <widget class="QLabel" name="outputListLabel" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="tlp::ItemsListWidget" name="outputList" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_5" >
+     <item>
+      <widget class="QPushButton" name="upButton" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset resource="StringListSelectionWidgetResource.qrc" >
+         <normaloff>:/up.png</normaloff>:/up.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="downButton" >
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset resource="StringListSelectionWidgetResource.qrc" >
+         <normaloff>:/down.png</normaloff>:/down.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ItemsListWidget</class>
+   <extends>QListView</extends>
+   <header>ItemsListWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="StringListSelectionWidgetResource.qrc" />
+ </resources>
+ <connections/>
+</ui>

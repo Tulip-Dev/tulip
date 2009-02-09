@@ -42,6 +42,9 @@ nobase_include_HEADERS = \
 	tulip/ControllerPluginsManager.h \
 	tulip/View.h \
 	tulip/AbstractView.h \
+	tulip/GraphPropertiesSelectionWidget.h \
+	tulip/ItemsListWidget.h \
+	tulip/StringListSelectionWidget.h \
 	tulip/ViewPluginsManager.h
 
 noinst_HEADERS = \
@@ -59,7 +62,8 @@ BUILT_SOURCES = \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
-	tulip/QtProgressData.h
+	tulip/QtProgressData.h \
+	tulip/StringListSelectionWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -72,6 +76,7 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
+	tulip/StringListSelectionWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \

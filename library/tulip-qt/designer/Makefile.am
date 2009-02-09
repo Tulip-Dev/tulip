@@ -20,7 +20,11 @@ dist_noinst_DATA = FindSelection.ui \
 	i_select.png \
 	i_undo.png \
 	i_zoom.png \
+	down.png \
+	left.png \
+	up.png \
+	right.png \
 	TulipQtResource.qrc 
 
-SOURCES = FindSelection.ui GWOverviewWidget.ui RenderingParametersDialog.ui AugmentedDisplayDialog.ui TabWidget.ui PropertyDialog.ui CopyPropertyDialog.ui TulipStats.ui GridOptions.ui QtProgress.ui elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm
+SOURCES = FindSelection.ui GWOverviewWidget.ui RenderingParametersDialog.ui AugmentedDisplayDialog.ui TabWidget.ui PropertyDialog.ui CopyPropertyDialog.ui TulipStats.ui GridOptions.ui QtProgress.ui StringListSelectionWidget.ui elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm
 EXTRA_DIST = $(SOURCES)
