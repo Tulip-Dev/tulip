@@ -6,5 +6,5 @@ QMAKE_CXXFLAGS += `$$TULIPCONFIG_PATH --cxxflags`
 QMAKE_LFLAGS += `$$TULIPCONFIG_PATH --libs`
 
 HEADERS += MainControllerProfile.h
-SOURCES += maincontrollerprofile.cpp
+SOURCES += MainControllerProfile.cpp
 CONFIG  += qt
