@@ -19,7 +19,7 @@ namespace tlp {
  *  This widget allows the user to select a subset of graph properties. The properties
  *  to select can be filtered according to their datatypes.
  */
-class GraphPropertiesSelectionWidget : public StringListSelectionWidget {
+class TLP_QT_SCOPE GraphPropertiesSelectionWidget : public StringListSelectionWidget {
 
 public :
 
