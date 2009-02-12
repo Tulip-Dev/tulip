@@ -39,15 +39,27 @@ namespace tlp {
       if(e1.distance<e2.distance)
         return false;
       BoundingBox bb1,bb2;
-      if(e1.complexEntity)
-        bb1=((GlComplexeEntity*)(e1.entity->first))->getBoundingBox(inputData);
+      if(e1.isComplexEntity)
+        if(e1.isNode){
+          GlNode glNode(e1.complexEntity->first);
+          bb1=glNode.getBoundingBox(inputData);
+        }else{
+          GlEdge glEdge(e1.complexEntity->first);
+          bb1=glEdge.getBoundingBox(inputData);
+        }
       else
-        bb1=((GlSimpleEntity*)(e1.entity->first))->getBoundingBox();
+        bb1=((GlSimpleEntity*)(e1.simpleEntity->first))->getBoundingBox();
 
-      if(e2.complexEntity)
-        bb2=((GlComplexeEntity*)(e2.entity->first))->getBoundingBox(inputData);
+      if(e2.isComplexEntity)
+        if(e2.isNode){
+          GlNode glNode(e2.complexEntity->first);
+          bb2=glNode.getBoundingBox(inputData);
+        }else{
+          GlEdge glEdge(e2.complexEntity->first);
+          bb2=glEdge.getBoundingBox(inputData);
+        }
       else
-        bb2=((GlSimpleEntity*)(e2.entity->first))->getBoundingBox();
+        bb2=((GlSimpleEntity*)(e2.simpleEntity->first))->getBoundingBox();
 
       if(bb1.second[0]-bb1.first[0] > bb2.second[0]-bb2.first[0])
         return false;
@@ -134,15 +146,24 @@ namespace tlp {
     TextRenderer fontRenderer;
     OcclusionTest occlusionTest;
 
-    LODResultVector* ceVector=lodCalculator->getResultForComplexeEntities();
-    LODResultVector* seVector=lodCalculator->getResultForSimpleEntities();
-    LODResultVector::iterator itCE=ceVector->begin();
-    LODResultVector::iterator itSE=seVector->begin();
+    VectorOfCamera* cameraVector=lodCalculator->getVectorOfCamera();
+    VectorOfSimpleLODResultVector* simpleVector=lodCalculator->getResultForSimpleEntities();
+    VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
+    VectorOfComplexLODResultVector* edgesVector=lodCalculator->getResultForEdges();
+    VectorOfSimpleLODResultVector::iterator itSimple=simpleVector->begin();
+    VectorOfComplexLODResultVector::iterator itNodes=nodesVector->begin();
+    VectorOfComplexLODResultVector::iterator itEdges=edgesVector->begin();
 
     Camera *camera;
+    Graph *graph=NULL;
+    if(glGraphComposite)
+      graph=glGraphComposite->getInputData()->graph;
+    GlNode glNode(0);
+    GlMetaNode glMetaNode(0);
+    GlEdge glEdge(0);
 
-    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      camera=(*it).second->getCamera();
+    for(VectorOfCamera::iterator itCamera=cameraVector->begin();itCamera!=cameraVector->end();++itCamera){
+      camera=(Camera*)(*itCamera);
       camera->initGl();
 
       bool zOrdering=false;
@@ -150,23 +171,25 @@ namespace tlp {
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
 
       if(!zOrdering){
-        if((Camera*)((*itSE).first)==camera) {
-          for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-            if((*itE).second>=0) {
-              glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*itE).first))->getStencil(),0xFFFF);
-              ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
-            }
+          for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
+            glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).first))->getStencil(),0xFFFF);
+            ((GlSimpleEntity*)((*it).first))->draw((*it).second,camera);
           }
-          ++itSE;
-        }
 
-        if((Camera*)((*itCE).first)==camera) {
-          for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-            if((*itE).second>=0) {
-              ((GlComplexeEntity*)((*itE).first))->draw((*itE).second,glGraphComposite->getInputData(),camera);
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            assert(graph);
+            if(!graph->isMetaNode(node((*it).first))){
+              glNode.id=(*it).first;
+              glNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+            }else{
+              glMetaNode.id=(*it).first;
+              glMetaNode.draw((*it).second,glGraphComposite->getInputData(),camera);
             }
           }
-        }
+          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+            glEdge.id=(*it).first;
+            glEdge.draw((*it).second,glGraphComposite->getInputData(),camera);
+          }
       }else{
         entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
         vector<EntityWithDistance> entitiesVector;
@@ -175,106 +198,119 @@ namespace tlp {
         Coord middle;
         double dist;
 
-        if((Camera*)((*itSE).first)==camera) {
-          for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-            if((*itE).second>=0) {
-              bb=((GlSimpleEntity*)((*itE).first))->getBoundingBox();
-              middle=bb.first+(bb.second-bb.first)/2;
-              dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-              dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-              dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-              entitiesVector.push_back(EntityWithDistance(dist,&(*itE),false));
-            }
-          }
+        for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
+          bb=((GlSimpleEntity*)((*it).first))->getBoundingBox();
+          middle=bb.first+(bb.second-bb.first)/2;
+          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+          entitiesVector.push_back(EntityWithDistance(dist,&(*it)));
         }
-        if((Camera*)((*itCE).first)==camera) {
-          for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-            if((*itE).second>=0) {
-              bb=((GlComplexeEntity*)((*itE).first))->getBoundingBox(glGraphComposite->getInputData());
-              middle=bb.first+(bb.second-bb.first)/2;
-              dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-              dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-              dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-              entitiesVector.push_back(EntityWithDistance(dist,&(*itE),true));
-            }
-          }
+
+        GlNode glNode(0);
+        for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+          glNode.id=(*it).first;
+          bb=glNode.getBoundingBox(glGraphComposite->getInputData());
+          middle=bb.first+(bb.second-bb.first)/2;
+          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+          entitiesVector.push_back(EntityWithDistance(dist,&(*it),true));
+        }
+        GlEdge glEdge(0);
+        for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+          glEdge.id=(*it).first;
+          bb=glEdge.getBoundingBox(glGraphComposite->getInputData());
+          middle=bb.first+(bb.second-bb.first)/2;
+          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+          entitiesVector.push_back(EntityWithDistance(dist,&(*it),false));
         }
 
         sort(entitiesVector.begin(),entitiesVector.end(),entityWithDistanceCompare::compare);
 
         for(vector<EntityWithDistance>::iterator it=entitiesVector.begin();it!=entitiesVector.end();++it){
-          if((*it).complexEntity){
-            ((GlComplexeEntity*)((*it).entity->first))->draw((*it).entity->second,glGraphComposite->getInputData(),camera);
+          if(!(*it).isComplexEntity){
+            glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).simpleEntity->first))->getStencil(),0xFFFF);
+            ((GlSimpleEntity*)((*it).simpleEntity->first))->draw((*it).simpleEntity->second,camera);
           }else{
-            glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).entity->first))->getStencil(),0xFFFF);
-            ((GlSimpleEntity*)((*it).entity->first))->draw((*it).entity->second,camera);
+            if((*it).isNode){
+              if(!graph->isMetaNode(node((*it).complexEntity->first))){
+                glNode.id=(*it).complexEntity->first;
+                glNode.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+              }else{
+                glMetaNode.id=(*it).complexEntity->first;
+                glMetaNode.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+              }
+            }else{
+              glEdge.id=(*it).complexEntity->first;
+              glEdge.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+            }
           }
         }
       }
 
-      if((Camera*)((*itCE).first)==camera) {
-        if(viewLabel) {
-          glPushAttrib(GL_ALL_ATTRIB_BITS);
-          glDisable(GL_LIGHTING);
-          glDepthFunc(GL_ALWAYS );
-          glDisable(GL_CULL_FACE);
-          glDisable(GL_COLOR_MATERIAL);
+      if(viewLabel) {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glDisable(GL_LIGHTING);
+        glDepthFunc(GL_ALWAYS );
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_COLOR_MATERIAL);
 
-          // Draw Nodes Label
-          if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
-            // Draw Label for selected Nodes
-            for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-              if((*itE).second>=0) {
-                ((GlComplexeEntity*)((*itE).first))->drawLabel(true,
-                    true,
-                    false,
-                    &occlusionTest,
-                    &fontRenderer,glGraphComposite->getInputData());
-              }
-            }
-            // Draw Label for others Nodes
-            for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-              if((*itE).second>=0) {
-                ((GlComplexeEntity*)((*itE).first))->drawLabel(false,
-                    true,
-                    false,
-                    &occlusionTest,
-                    &fontRenderer,glGraphComposite->getInputData());
-              }
+        // Draw Nodes Label
+        if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
+          // Draw Label for selected Nodes
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            if(!graph->isMetaNode(node((*it).first))){
+              glNode.id=(*it).first;
+              glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
             }
           }
-
-          // Draw Edges Label
-          if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
-            glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
-            // Draw Label for selected Edges
-            for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-              if((*itE).second>=0) {
-                ((GlComplexeEntity*)((*itE).first))->drawLabel(true,
-                    false,
-                    true,
-                    &occlusionTest,
-                    &fontRenderer,glGraphComposite->getInputData());
-              }
-            }
-            // Draw Label for others Edges
-            for(vector<LODResultEntity>::iterator itE=(*itCE).second.begin();itE!=(*itCE).second.end();++itE) {
-              if((*itE).second>=0) {
-                ((GlComplexeEntity*)((*itE).first))->drawLabel(false,
-                    false,
-                    true,
-                    &occlusionTest,
-                    &fontRenderer,glGraphComposite->getInputData());
-              }
+          // Draw Label for others Nodes
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            if(!graph->isMetaNode(node((*it).first))){
+              glNode.id=(*it).first;
+              glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
             }
           }
-
-          glPopAttrib();
+        }
+        // Draw MetaNodes Label
+        if(glGraphComposite->getInputData()->parameters->isViewMetaLabel()) {
+          // Draw Label for selected MetaNodes
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            if(graph->isMetaNode(node((*it).first))){
+              glMetaNode.id=(*it).first;
+              glMetaNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }
+          }
+          // Draw Label for others MetaNodes
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            if(graph->isMetaNode(node((*it).first))){
+              glMetaNode.id=(*it).first;
+              glMetaNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }
+          }
+        }
+        // Draw Edges Label
+        if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
+          glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
+          // Draw Label for selected Edges
+          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+            glEdge.id=(*it).first;
+            glEdge.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+          }
+          // Draw Label for others Edges
+          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+            glEdge.id=(*it).first;
+            glEdge.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+          }
         }
 
-        ++itCE;
+        glPopAttrib();
       }
 
+      /*
       if((*it).first=="Main") {
         if((*it).second->isVisible()) {
           camera=selectionLayer->getCamera();
@@ -289,7 +325,10 @@ namespace tlp {
         }
         ++itSE;
         ++itCE;
-      }
+      }*/
+      ++itSimple;
+      ++itNodes;
+      ++itEdges;
     }
 
     lodCalculator->clear();
@@ -385,7 +424,7 @@ namespace tlp {
     }
   }
 
-  bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLayer* layer, vector<GlEntity*>& selectedEntities) {
+  bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLayer* layer, vector<unsigned long>& selectedEntities) {
     if(w==0)
       w=1;
     if(h==0)
@@ -414,29 +453,34 @@ namespace tlp {
     lodCalculator->compute(viewport,selectionViewport);
     //lodCalculator->compute();
 
-    LODResultVector* lodResultVector;
+    VectorOfCamera* cameraVector=lodCalculator->getVectorOfCamera();
+    VectorOfSimpleLODResultVector* simpleVector=lodCalculator->getResultForSimpleEntities();
+    VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
+    VectorOfComplexLODResultVector* edgesVector=lodCalculator->getResultForEdges();
+    VectorOfSimpleLODResultVector::iterator itSimple=simpleVector->begin();
+    VectorOfComplexLODResultVector::iterator itNodes=nodesVector->begin();
+    VectorOfComplexLODResultVector::iterator itEdges=edgesVector->begin();
 
-    if(type==SelectSimpleEntities) {
-      lodResultVector=lodCalculator->getResultForSimpleEntities();
-    }else{
-      lodResultVector=lodCalculator->getResultForComplexeEntities();
-    }
+    for(VectorOfCamera::iterator it=cameraVector->begin();it!=cameraVector->end();++it) {
 
-
-    for(LODResultVector::iterator it=lodResultVector->begin();it!=lodResultVector->end();++it) {
-      if((*it).second.size()==0)
-        continue;
-
-      Camera *camera=(Camera*)((*it).first);
+      Camera *camera=(Camera*)(*it);;
 
       Vector<int, 4> viewport = camera->getViewport();
 
       glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
       glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
 
+      unsigned int size;
+      if(type==SelectSimpleEntities) {
+        size=(*itSimple).size();
+      }else if(type==SelectNodes){
+        size=(*itNodes).size();
+      }else{
+        size=(*itEdges).size();
+      }
       //Allocate memory to store the result oh the selection
-      GLuint (*selectBuf)[4] = new GLuint[(*it).second.size()][4];
-      glSelectBuffer((*it).second.size()*4 , (GLuint *)selectBuf);
+      GLuint (*selectBuf)[4] = new GLuint[size][4];
+      glSelectBuffer(size*4 , (GLuint *)selectBuf);
       //Activate Open Gl Selection mode
       glRenderMode(GL_SELECT);
       glInitNames();
@@ -467,16 +511,30 @@ namespace tlp {
       map<unsigned int, unsigned long> idToEntity;
       unsigned int id=1;
 
-      for(vector<LODResultEntity>::iterator itE=(*it).second.begin();itE!=(*it).second.end();++itE) {
-        idToEntity[id]=(*itE).first;
-        glLoadName(id);
-        id++;
-	if((*itE).second>=0) {
-          if(type==SelectSimpleEntities) {
-            ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
-          }else{
-            ((GlComplexeEntity*)((*itE).first))->draw(20.,glGraphComposite->getInputData(),camera);
-          }
+      if(type==SelectSimpleEntities) {
+        for(vector<LODResultSimpleEntity>::iterator itE=(*itSimple).begin();itE!=(*itSimple).end();++itE){
+          idToEntity[id]=(*itE).first;
+          glLoadName(id);
+          id++;
+          ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
+        }
+      }else if(type==SelectNodes){
+        GlNode glNode(0);
+        for(vector<LODResultComplexEntity>::iterator itE=(*itNodes).begin();itE!=(*itNodes).end();++itE){
+          idToEntity[id]=(*itE).first;
+          glLoadName(id);
+          id++;
+          glNode.id=(*itE).first;
+          glNode.draw(20.,glGraphComposite->getInputData(),camera);
+        }
+      }else{
+        GlEdge glEdge(0);
+        for(vector<LODResultComplexEntity>::iterator itE=(*itEdges).begin();itE!=(*itEdges).end();++itE){
+          idToEntity[id]=(*itE).first;
+          glLoadName(id);
+          id++;
+          glEdge.id=(*itE).first;
+          glEdge.draw(20.,glGraphComposite->getInputData(),camera);
         }
       }
 
@@ -490,7 +548,7 @@ namespace tlp {
       GLint hits = glRenderMode(GL_RENDER);
 
       while(hits>0) {
-        selectedEntities.push_back((GlEntity*)(idToEntity[selectBuf[hits-1][3]]));
+        selectedEntities.push_back(idToEntity[selectBuf[hits-1][3]]);
         hits--;
       }
 
@@ -498,6 +556,9 @@ namespace tlp {
       glPopAttrib();
 
       delete[] selectBuf;
+      ++itSimple;
+      ++itNodes;
+      ++itEdges;
     }
 
     lodCalculator->clear();

@@ -244,18 +244,6 @@ namespace tlp {
      */
     void widgetWillBeClosed(QObject *object);
 
-    void editCut();
-    void editCopy();
-    void editPaste();
-    void editFind();
-    void editCreateGroup();
-    void editCreateSubgraph();
-    void editDelSelection();
-    void editReverseSelection();
-    void editSelectAll();
-    void editDeselectAll();
-
-
     void isAcyclic();
     void isSimple();
     void isConnected();
@@ -284,6 +272,18 @@ namespace tlp {
     void updateUndoRedoInfos();
     void undo();
     void redo();
+
+  public slots :
+      void editCut();
+      void editCopy();
+      void editPaste();
+      void editFind();
+      void editCreateGroup();
+      void editCreateSubgraph();
+      void editDelSelection();
+      void editReverseSelection();
+      void editSelectAll();
+      void editDeselectAll();
 
   public :
 

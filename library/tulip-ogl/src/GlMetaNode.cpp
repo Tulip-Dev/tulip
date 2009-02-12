@@ -63,126 +63,98 @@ namespace tlp {
     if (dept<0.0001) dept=1;
     Coord scale(1/width,1/height,1/dept);
 
-    vector<GlNode> nodes;
-    vector<GlMetaNode> metaNodes;
-    vector<GlEdge> edges;
-
-    Iterator<node> *itN=metaGraph->getNodes();
-    unsigned int id;
-    while (itN->hasNext()) {
-      id=itN->next().id;
-      if(metaData.getGraph()->isMetaNode(node(id)))
-	metaNodes.push_back(GlMetaNode(id));
-      else
-	nodes.push_back(GlNode(id));
-    }
-    delete itN;
-
-    if (metaData.parameters->isDisplayEdges()) {
-      Iterator<edge> *itE=metaGraph->getEdges();
-      while (itE->hasNext()) {
-	edges.push_back(GlEdge(itE->next().id));
-      }
-      delete itE;
-    }
-
     Camera *activeCamera;
 
     vector<Coord> objectScale, objectTranslate, objectCoord;
-    if(metaNodes.size()>0) {
-      activeCamera=new Camera(*camera);
-      activeCamera->addObjectTransformation(nodeCoord+translate,nodeSize*scale,nodeCoord);
-      activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
-    }else{
-      activeCamera=camera;
-      activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
-      objectTranslate.push_back(nodeCoord+translate);
-      objectScale.push_back(nodeSize*scale);
-      objectCoord.push_back(nodeCoord);
-    }
+    activeCamera=new Camera(*camera);
+    activeCamera->addObjectTransformation(nodeCoord+translate,nodeSize*scale,nodeCoord);
+    activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
 
 
     GlCPULODCalculator calculator;
 
     calculator.beginNewCamera(activeCamera);
 
-    for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      BoundingBox bb = (*it).getBoundingBox(&metaData);
+    Iterator<node> *itN=metaGraph->getNodes();
+    GlNode glNode(0);
+    while (itN->hasNext()) {
+      glNode.id=itN->next().id;
+      BoundingBox bb = glNode.getBoundingBox(&metaData);
+
       Coord size=(bb.second-bb.first);
       Coord middle=bb.first+size/2;
 
       for(int i=objectScale.size()-1; i>=0;--i) {
-	middle+=objectTranslate[i];
-	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
-	size*=objectScale[i];
+        middle+=objectTranslate[i];
+        middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
+        size*=objectScale[i];
       }
 
       bb.first=middle-size/2;
       bb.second=middle+size/2;
-      calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
+      calculator.addNodeBoundingBox(glNode.id,bb);
     }
-
-    for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      BoundingBox bb = (*it).getBoundingBox(&metaData);
-      Coord size=bb.second-bb.first;
-      Coord middle=bb.first+size/2;
-
-      for(int i=objectScale.size()-1; i>=0;--i) {
-	middle+=objectTranslate[i];
-	middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
-	size*=objectScale[i];
-      }
-
-      bb.first=middle-size/2;
-      bb.second=middle+size/2;
-      calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
-      }
+    delete itN;
 
     if (metaData.parameters->isDisplayEdges()) {
-      for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-	BoundingBox bb = (*it).getBoundingBox(&metaData);
-	Coord size=bb.second-bb.first;
-	Coord middle=bb.first+(size)/2;
+      Iterator<edge> *itE=metaGraph->getEdges();
+      GlEdge glEdge(0);
+      while (itE->hasNext()) {
+        glEdge.id=itE->next().id;
+        BoundingBox bb = glEdge.getBoundingBox(&metaData);
+        Coord size=bb.second-bb.first;
+        Coord middle=bb.first+(size)/2;
 
-	for(int i=objectScale.size()-1; i>=0;--i) {
-	  middle+=objectTranslate[i];
-	  middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
-	  size*=objectScale[i];
-	}
+        for(int i=objectScale.size()-1; i>=0;--i) {
+          middle+=objectTranslate[i];
+          middle=objectCoord[i] - (objectCoord[i]-middle)*objectScale[i];
+          size*=objectScale[i];
+        }
 
-	bb.first=middle-size/2;
-	bb.second=middle+size/2;
-	calculator.addComplexeEntityBoundingBox((unsigned long)(&(*it)),bb);
+        bb.first=middle-size/2;
+        bb.second=middle+size/2;
+        calculator.addEdgeBoundingBox(glEdge.id,bb);
       }
+      delete itE;
     }
 
     calculator.compute(camera->getViewport(),camera->getViewport());
 
-    LODResultVector* result=calculator.getResultForComplexeEntities();
+    ComplexLODResultVector* nodesResult=&((calculator.getResultForNodes())->front());
+    ComplexLODResultVector* edgesResult=&((calculator.getResultForEdges())->front());
 
     glPushMatrix();
     glScalef(scale[0],scale[1],scale[2]);
     glTranslatef(translate[0],translate[1],translate[2]);
 
-    for(LODResultVector::iterator it=result->begin();it!=result->end();++it) {
-      for(std::vector<LODResultEntity>::iterator itM=(*it).second.begin();itM!=(*it).second.end();++itM) {
-	((GlComplexeEntity*)(*itM).first)->draw((*itM).second,&metaData,activeCamera);
+    GlMetaNode glMetaNode(0);
+    GlEdge glEdge(0);
+    for(ComplexLODResultVector::iterator it=nodesResult->begin();it!=nodesResult->end();++it){
+      if(!metaData.getGraph()->isMetaNode(node((*it).first))){
+        glNode.id=(*it).first;
+        glNode.draw((*it).second,&metaData,activeCamera);
+      }else{
+        glMetaNode.id=(*it).first;
+        glMetaNode.draw((*it).second,&metaData,activeCamera);
       }
+    }
+    for(ComplexLODResultVector::iterator it=edgesResult->begin();it!=edgesResult->end();++it){
+      glEdge.id=(*it).first;
+      glEdge.draw((*it).second,&metaData,activeCamera);
     }
 
     glPopMatrix();
     glPopMatrix();
 
-    if(metaNodes.size()>0)
-      delete activeCamera;
+    delete activeCamera;
 
     GlNode::draw(lod,data,camera);
   }
 
-  void GlMetaNode::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
+  void GlMetaNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
     node n=node(id);
 
-    GlNode::drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,data);
+    GlNode::drawLabel(drawSelect,test,renderer,data);
 
     if((data->elementColor->getNodeValue(n))[3]==255){
       return;
@@ -242,15 +214,15 @@ namespace tlp {
     glTranslatef(translate[0],translate[1],translate[2]);
 
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
+      (*it).drawLabel(drawSelect,test,renderer,&metaData);
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
+      (*it).drawLabel(drawSelect,test,renderer,&metaData);
     }
 
     for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-      (*it).drawLabel(drawSelect,drawNodesLabel,drawEdgesLabel,test,renderer,&metaData);
+      (*it).drawLabel(drawSelect,test,renderer,&metaData);
     }
 
     glPopMatrix();

@@ -338,9 +338,7 @@ namespace tlp {
     glDepthFunc(GL_LEQUAL);
   }
 
-  void GlEdge::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    if(!drawEdgesLabel)
-      return;
+  void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
 
     edge e=edge(id);
 

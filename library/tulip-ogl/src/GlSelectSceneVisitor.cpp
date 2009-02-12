@@ -15,12 +15,12 @@ namespace tlp {
 
   void GlSelectSceneVisitor::visit(GlNode *glNode) {
     if(selectionFlag == SelectNodes)
-      calculator->addComplexeEntityBoundingBox((unsigned long)glNode,glNode->getBoundingBox(inputData));
+      calculator->addNodeBoundingBox(glNode->id,glNode->getBoundingBox(inputData));
   }
-  
+
   void GlSelectSceneVisitor::visit(GlEdge *glEdge) {
     if(selectionFlag == SelectEdges)
-      calculator->addComplexeEntityBoundingBox((unsigned long)glEdge,glEdge->getBoundingBox(inputData));
+      calculator->addEdgeBoundingBox(glEdge->id,glEdge->getBoundingBox(inputData));
   }
 
   void GlSelectSceneVisitor::visit(GlLayer *layer) {

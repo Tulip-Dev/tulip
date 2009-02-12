@@ -16,23 +16,6 @@
 
 namespace tlp {
 
-struct ltnode
-{
-  bool operator()(const GlNode& n1, const GlNode& n2) const
-  {
-    return n1.id<n2.id;
-  }
-};
-
-struct ltedge
-{
-  bool operator()(const GlEdge& e1, const GlEdge& e2) const
-  {
-    return e1.id<e2.id;
-  }
-};
-
-
   /** \brief Class use to represent a graph
    *
    * GlComposite use to represent a graph with nodes, metanodes and edges
@@ -48,10 +31,6 @@ struct ltedge
     GlGraphComposite(Graph* graph);
     ~GlGraphComposite();
 
-    /**
-     * Build list of Nodes, Edges and MetaNodes
-     */
-    void buildLists();
     /**
      * Return the rendering parameters use for rendering
      */
@@ -69,56 +48,36 @@ struct ltedge
     /**
      * Function used to visit composite's children
      */
-    virtual void acceptVisitor(GlSceneVisitor *visitor){
-      addNodes();
-
-      if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
-        for(std::set<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-          GlEdge *tmp=(GlEdge*)(&(*it));
-          tmp->acceptVisitor(visitor);
-        }
-      }
-
-      if(isDisplayNodes()) {
-        for(std::set<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-          GlNode *tmp=(GlNode*)(&(*it));
-          tmp->acceptVisitor(visitor);
-        }
-      }
-
-      if(isDisplayMetaNodes()) {
-        for(std::set<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-          GlMetaNode *tmp=(GlMetaNode*)(&(*it));
-          tmp->acceptVisitor(visitor);
-        }
-      }
-    }
+    virtual void acceptVisitor(GlSceneVisitor *visitor);
 
     /**
      * Function use by the GraphObserver when a node is create in the graph
      */
-    virtual void addNode(Graph *,const node );
+    virtual void addNode(Graph *,const node ){
+      haveToSort=true;
+    }
     /**
      * Function use by the GraphObserver when an edge is create in the graph
      */
-    virtual void addEdge(Graph *,const edge );
+    virtual void addEdge(Graph *,const edge ){
+      haveToSort=true;
+    }
     /**
      * Function use by the GraphObserver when a node is delete in the graph
      */
-    virtual void delNode(Graph *,const node );
+    virtual void delNode(Graph *,const node ){
+      haveToSort=true;
+    }
     /**
      * Function use by the GraphObserver when an edge is delete in the graph
      */
-    virtual void delEdge(Graph *,const edge );
+    virtual void delEdge(Graph *,const edge ){
+      haveToSort=true;
+    }
     /**
      * Function use by the GraphObserver when the graph is delete
      */
-    virtual void destroy(Graph *);
-
-    /**
-     * Function used to add new nodes
-     */
-    void addNodes();
+    virtual void destroy(Graph *) {}
 
     /**
      * Get the data in XML form
@@ -165,15 +124,14 @@ struct ltedge
 
   protected:
 
+    void buildSortedList();
+
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData;
 
-    std::set<GlNode,ltnode> nodes;
-    std::set<GlMetaNode,ltnode> metaNodes;
-    std::set<GlEdge,ltedge> edges;
-
-    std::vector<unsigned int> nodesToAdd;
-
+    bool haveToSort;
+    std::list<node> sortedNodes;
+    std::list<edge> sortedEdges;
   };
 }
 

@@ -18,13 +18,13 @@ namespace tlp {
     if(entity->isVisible())
       calculator->addSimpleEntityBoundingBox((unsigned long)entity,entity->getBoundingBox());
   }
-  
+
   void GlLODSceneVisitor::visit(GlNode *glNode) {
-    calculator->addComplexeEntityBoundingBox((unsigned long)glNode,glNode->getBoundingBox(inputData));
+    calculator->addNodeBoundingBox(glNode->id,glNode->getBoundingBox(inputData));
   }
 
   void GlLODSceneVisitor::visit(GlEdge *glEdge) {
-    calculator->addComplexeEntityBoundingBox((unsigned long)glEdge,glEdge->getBoundingBox(inputData));
+    calculator->addEdgeBoundingBox(glEdge->id,glEdge->getBoundingBox(inputData));
   }
 
   void GlLODSceneVisitor::visit(GlLayer *layer) {

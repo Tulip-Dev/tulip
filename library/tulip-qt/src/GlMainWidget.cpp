@@ -368,20 +368,21 @@ namespace tlp {
 				      std::vector<GlEntity *> &pickedEntities,
 				      GlLayer* layer) {
     makeCurrent();
-    return scene.selectEntities(SelectSimpleEntities,x, y,
+    vector<unsigned long> entities;
+    unsigned int number=scene.selectEntities(SelectSimpleEntities,x, y,
 				width, height,
 				layer,
-				pickedEntities);
+				entities);
+    for(vector<unsigned long>::iterator it=entities.begin();it!=entities.end();++it){
+      pickedEntities.push_back((GlEntity*)(*it));
+    }
+    return number;
   }
   //==================================================
   bool GlMainWidget::selectGlEntities(const int x, const int y,
 				      std::vector <GlEntity *> &pickedEntities,
 				      GlLayer* layer) {
-    makeCurrent();
-    return scene.selectEntities(SelectSimpleEntities,x, y,
-				2, 2,
-				layer,
-				pickedEntities);
+   return selectGlEntities(x,y,2,2,pickedEntities,layer);
   }
   //==================================================
   void GlMainWidget::doSelect(const int x, const int y,
@@ -392,15 +393,15 @@ namespace tlp {
     cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << endl;
 #endif
     makeCurrent();
-    vector<GlEntity*> selectedElements;
+    vector<unsigned long> selectedElements;
     scene.selectEntities(SelectNodes, x, y, width, height, layer, selectedElements);
-    for(vector<GlEntity*>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-      sNode.push_back(node( ((GlNode*)(*it))->id ));
+    for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+      sNode.push_back(node((unsigned int)(*it)));
     }
     selectedElements.clear();
     scene.selectEntities(SelectEdges, x, y, width, height, layer, selectedElements);
-    for(vector<GlEntity*>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-      sEdge.push_back(edge( ((GlEdge*)(*it))->id ));
+    for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+      sEdge.push_back(edge((unsigned int)(*it)));
     }
   }
   //=====================================================
@@ -409,17 +410,17 @@ namespace tlp {
     cerr << __PRETTY_FUNCTION__ << endl;
 #endif
     makeCurrent();
-    vector<GlEntity*> selectedElements;
+    vector<unsigned long> selectedElements;
     scene.selectEntities(SelectNodes, x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=NODE;
-      n=node(((GlNode*)selectedElements[0])->id);
+      n=node((unsigned int)(selectedElements[0]));
       return true;
     }
     scene.selectEntities(SelectEdges, x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=EDGE;
-      e=edge(((GlEdge*)selectedElements[0])->id);
+      e=edge((unsigned int)(selectedElements[0]));
       return true;
     }
     return false;

@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLCOMPLEXEENTITY_H
@@ -24,7 +24,7 @@ namespace tlp {
   class GlGraphInputData;
   class Camera;
 
-  /** \brief Virtual class used by GlNode, GlMetaNode and GlEdge 
+  /** \brief Virtual class used by GlNode, GlMetaNode and GlEdge
    *
    * This class is a virtual class used by GlNode, GlMetaNode and GlEdge
    * Define draw function for entities who need GlGraphInputData variable
@@ -33,12 +33,12 @@ namespace tlp {
   class TLP_GL_SCOPE GlComplexeEntity : public GlEntity {
 
   public:
-    
+
     /**
      * return the bounding box of this entity
      */
     virtual BoundingBox getBoundingBox(GlGraphInputData* data) = 0;
-    
+
     /**
      * Draw this entity with GlGraphInputData and Camera
      */
@@ -47,9 +47,9 @@ namespace tlp {
     /**
      * Draw label of this entity
      */
-    virtual void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) = 0;
+    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) = 0;
   };
-  
+
 }
 
 #endif // Tulip_GLCOMPLEXEENTITY_H

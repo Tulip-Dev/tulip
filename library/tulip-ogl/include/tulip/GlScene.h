@@ -32,13 +32,20 @@ namespace tlp {
    */
   struct EntityWithDistance {
 
-    EntityWithDistance(const double &dist,LODResultEntity *entity,bool complexEntity)
-      :distance(dist),entity(entity),complexEntity(complexEntity){
+    EntityWithDistance(const double &dist,LODResultSimpleEntity *entity)
+      :distance(dist),isComplexEntity(false){
+      simpleEntity=entity;
+    }
+    EntityWithDistance(const double &dist,LODResultComplexEntity *entity,bool isNode)
+      :distance(dist),isComplexEntity(true),isNode(isNode){
+      complexEntity=entity;
     }
 
     double distance;
-    LODResultEntity *entity;
-    bool complexEntity;
+    LODResultSimpleEntity *simpleEntity;
+    LODResultComplexEntity *complexEntity;
+    bool isComplexEntity;
+    bool isNode;
   };
 
   /** /brief Tulip scene class
@@ -97,7 +104,7 @@ namespace tlp {
      * Select in GlLayer : layer
      * And store result in selectedEntities vector
      */
-    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<GlEntity *>& selectedEntities);
+    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<unsigned long>& selectedEntities);
 
     /**
      * Output the scene in SVG
