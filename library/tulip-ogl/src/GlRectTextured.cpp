@@ -83,6 +83,14 @@ namespace tlp {
     }
   }
   //===========================================================
+  void GlRectTextured::setTexture(const std::string &name){
+    textureName=name;
+  }
+  //===========================================================
+  string GlRectTextured::getTexture(){
+    return textureName;
+  }
+  //===========================================================
   void GlRectTextured::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
