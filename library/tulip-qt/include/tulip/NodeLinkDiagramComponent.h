@@ -18,7 +18,7 @@ namespace tlp {
   public:
 
     NodeLinkDiagramComponent();
-    ~NodeLinkDiagramComponent();
+    virtual ~NodeLinkDiagramComponent();
 
     QWidget *construct(QWidget *parent);
 
