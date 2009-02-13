@@ -75,6 +75,8 @@ namespace tlp {
   void GlGraphComposite::buildSortedList() {
     haveToSort=false;
 
+    sortedNodes.clear();
+    sortedEdges.clear();
     DoubleProperty *metric = inputData.getGraph()->getProperty<DoubleProperty>("viewMetric");
     node n;
     forEach(n, inputData.getGraph()->getNodes())
