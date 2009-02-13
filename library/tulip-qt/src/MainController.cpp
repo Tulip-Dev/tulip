@@ -111,7 +111,6 @@ namespace tlp {
 	subMenu = groupMenu;
       }
     }
-    //cout << subMenu->name() << "->" << itemName << endl;
     subMenu->addAction(itemName.c_str());
   }
   //**********************************************************************
@@ -824,8 +823,11 @@ namespace tlp {
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
     QWidget *widget=(QWidget*)object;
+    delete viewWidget[widget];
     viewWidget.erase(widget);
+    currentView=NULL;
     if(viewWidget.size()==0){
+      mainWindowFacade.getInteractorsToolBar()->clear();
       emit willBeClosed();
     }
   }

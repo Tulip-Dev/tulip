@@ -18,8 +18,10 @@ namespace tlp {
   }
 
   AbstractView::~AbstractView() {
-    for (unsigned int i = 0; i > _interactors.size(); ++i)
+    for (unsigned int i = 0; i > _interactors.size(); ++i){
+      removeEventFilter(_interactors[i]);
       delete _interactors[i];
+    }
     for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it){
       delete *it;
     }
@@ -61,13 +63,13 @@ namespace tlp {
     if(event->type() == QEvent::MouseButtonPress) {
       QMouseEvent *me = (QMouseEvent *) event;
       if(me->button() ==Qt::RightButton) {
-	QMenu contextMenu(getWidget());
-	buildContextMenu(object,me,&contextMenu);
-	if(!contextMenu.actions().isEmpty()) {
-	  QAction* menuAction=contextMenu.exec(me->globalPos());
-	  if(menuAction)
-	    computeContextMenuAction(menuAction);
-	}
+        QMenu contextMenu(getWidget());
+        buildContextMenu(object,me,&contextMenu);
+        if(!contextMenu.actions().isEmpty()) {
+          QAction* menuAction=contextMenu.exec(me->globalPos());
+          if(menuAction)
+            computeContextMenuAction(menuAction);
+        }
       }
     }
     return false;
@@ -84,6 +86,7 @@ namespace tlp {
   Interactor::ID AbstractView::pushInteractor(Interactor* interactor) {
     if (interactor) {
       interactor = interactor->clone();
+      interactor->moveToThread(this->thread());
       interactor->setView(this);
       interactor->setID(++_id);
       _interactors.push_back(interactor);

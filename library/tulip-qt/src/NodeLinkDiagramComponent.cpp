@@ -30,7 +30,6 @@ namespace tlp {
   }
   //==================================================
   NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
-    delete renderingParametersDialog;
   }
   //==================================================
   QWidget *NodeLinkDiagramComponent::construct(QWidget *parent) {
