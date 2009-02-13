@@ -31,7 +31,7 @@ namespace tlp {
     /**
      * Enpty constructor
      */
-    GlLine() {}
+    GlLine():width(1.0),factor(1),pattern(0) {}
     /**
      * Constructor with a list of coord and a list of color
      */
