@@ -25,6 +25,7 @@
 #include "tulip/ReturnType.h"
 #include "tulip/tulipconf.h"
 #include "tulip/TemplateFactory.h"
+#include "tulip/Reflect.h"
 
 namespace tlp {
 
@@ -57,9 +58,19 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
+  // the ones below are used by GraphUpdatesRecorder
   virtual Iterator<node>* getNonDefaultValuatedNodes()=0;
   virtual Iterator<edge>* getNonDefaultValuatedEdges()=0;
-
+  virtual DataMem* getNodeDefaultDataMemValue() = 0;
+  virtual DataMem* getEdgeDefaultDataMemValue() = 0;
+  virtual DataMem* getNodeDataMemValue( const node n ) = 0;
+  virtual DataMem* getEdgeDataMemValue( const edge e ) = 0;
+  virtual DataMem* getNonDefaultDataMemValue( const node n ) = 0;
+  virtual DataMem* getNonDefaultDataMemValue( const edge e ) = 0;
+  virtual void setNodeDataMemValue( const node n, const DataMem* v) = 0;
+  virtual void setEdgeDataMemValue( const edge e, const DataMem* v) = 0;
+  virtual void setAllNodeDataMemValue(const DataMem* v ) = 0;
+  virtual void setAllEdgeDataMemValue(const DataMem* v ) = 0;
 
  protected:
   // redefinitions of ObservableProperty methods
@@ -224,6 +235,17 @@ public:
   // returns an iterator on all edges whose value is different
   // from the default value
   virtual Iterator<edge>* getNonDefaultValuatedEdges();
+  // for performance reason and use in GraphUpdatesRecorder
+  virtual DataMem* getNodeDefaultDataMemValue();
+  virtual DataMem* getEdgeDefaultDataMemValue();
+  virtual DataMem* getNodeDataMemValue(const node n);
+  virtual DataMem* getEdgeDataMemValue(const edge e);
+  virtual DataMem* getNonDefaultDataMemValue( const node n );
+  virtual DataMem* getNonDefaultDataMemValue( const edge e );
+  virtual void setNodeDataMemValue( const node n, const DataMem* v);
+  virtual void setEdgeDataMemValue( const edge e, const DataMem* v);
+  virtual void setAllNodeDataMemValue(const DataMem* v);
+  virtual void setAllEdgeDataMemValue(const DataMem* v);
 
 protected:
   //=================================================================================

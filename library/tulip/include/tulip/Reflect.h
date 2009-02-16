@@ -16,10 +16,14 @@ namespace tlp {
 
 struct Graph;
 
- struct TLP_SIMPLE_SCOPE DataType {
+ struct TLP_SIMPLE_SCOPE DataMem {
+   DataMem(){}
+   virtual ~DataMem() {};
+ };
+
+ struct TLP_SIMPLE_SCOPE DataType :public DataMem {
    DataType(){}
    DataType(void *value,const std::string typeName):value(value),typeName(typeName){}
-   virtual ~DataType() {};
    virtual DataType *clone() = 0;
    void *value;
    std::string typeName;

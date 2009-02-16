@@ -22,8 +22,25 @@ class ImpossibleOperation : public std::exception {
 };
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //===================================================================
+ struct AnyValueContainer {
+   AnyValueContainer() {}
+ };
+
+ template<typename TYPE> struct TypedValueContainer: public AnyValueContainer {
+   TYPE value;
+   TypedValueContainer() {}
+   TypedValueContainer(const TYPE& val) : value(val) {}
+ };
+   
+// add class to allow iteration on values
+class IteratorValue: public Iterator<unsigned int> {
+ public:
+  IteratorValue() {}
+  virtual ~IteratorValue() {}
+  virtual unsigned int nextValue(AnyValueContainer&) = 0;
+};
 template <typename TYPE> 
-class IteratorVector : public Iterator<unsigned int> {
+class IteratorVector : public IteratorValue {
  public:
   IteratorVector(const TYPE &value, bool equal, std::deque<TYPE> *vData, unsigned int minIndex):
     _value(value),
@@ -49,6 +66,16 @@ class IteratorVector : public Iterator<unsigned int> {
 	     (_equal ? ((*it) !=_value) : ((*it) == _value)));
     return tmp;
   }
+  unsigned int nextValue(AnyValueContainer& val) {
+    ((TypedValueContainer<TYPE>&) val).value = *it;
+    unsigned int pos = _pos;
+    do {
+      ++it;
+      ++_pos;
+    } while (it!=(*vData).end() &&
+	     (_equal ? ((*it) !=_value) : ((*it) == _value)));
+    return pos;
+  }
  private:
   const TYPE _value;
   bool _equal;
@@ -58,7 +85,7 @@ class IteratorVector : public Iterator<unsigned int> {
 };
 //===================================================================
 template <typename TYPE> 
-class IteratorHash : public Iterator<unsigned int> {
+class IteratorHash : public IteratorValue {
  public:
   IteratorHash(const TYPE &value, bool equal, stdext::hash_map<unsigned int,TYPE> *hData):
     _value(value),
@@ -80,6 +107,24 @@ class IteratorHash : public Iterator<unsigned int> {
 	     (_equal ? ((*it).second !=_value) : ((*it).second == _value)));
     return tmp;
   }
+  const void* nextValuePtr(unsigned int& pos) {
+    pos = (*it).first;
+    const TYPE* valPtr = &((*it).second);
+    do {
+      ++it;
+    } while (it!=(*hData).end() &&
+	     (_equal ? ((*it).second !=_value) : ((*it).second == _value)));
+    return valPtr;
+  }
+  unsigned nextValue(AnyValueContainer& val) {
+    ((TypedValueContainer<TYPE>&) val).value = (*it).second;
+    unsigned int pos = (*it).first;
+    do {
+      ++it;
+    } while (it!=(*hData).end() &&
+	     (_equal ? ((*it).second !=_value) : ((*it).second == _value)));
+    return pos;
+  }
  private:
   const TYPE _value;
   bool _equal;
@@ -97,12 +142,19 @@ public:
   void setAll(const TYPE &value);
   void set(const unsigned int i,const TYPE &value);  
   /**
-   * This function return a reference instead of a copy in order to minimize the
-   * the number copy of objects, user must be aware that calling the set function can 
-   * devalidate this reference.
+   * get a copy of the value associated to i 
    */
   const typename ReturnType<TYPE>::Value get(const unsigned int i) const;
-  Iterator<unsigned int>* findAll(const TYPE &value, bool equal = true) const throw (ImpossibleOperation) ;
+  /**
+   * get the value associated to i if it is not the default value as
+   * indicated by the boolean returned value
+   */
+  bool getIfNotDefaultValue(const unsigned int i, TYPE& value) const;
+  /**
+   * return an iterator for all the elements whose associated value
+   * if equal to a given value or different from the default value
+   */
+  IteratorValue* findAll(const TYPE &value, bool equal = true) const throw (ImpossibleOperation) ;
   /**
    * This function is available only for optimisation purpose, one must be sure the 
    * the referenced element is not the default value. Use this function extremely carefully
@@ -180,7 +232,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
 }
 //===================================================================
 template <typename TYPE> 
-  Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value,
+  IteratorValue* MutableContainer<TYPE>::findAll(const TYPE &value,
 							  bool equal) const throw (ImpossibleOperation)  {
   if (equal && value == defaultValue) 
     throw ImpossibleOperation();
@@ -296,6 +348,30 @@ const typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigne
     return defaultValue;
     break;
   }
+}
+//===================================================================
+template <typename TYPE>   
+  bool MutableContainer<TYPE>::getIfNotDefaultValue(const unsigned int i, TYPE& value) const {
+  //  cerr << __PRETTY_FUNCTION__ << endl;
+  if (maxIndex == UINT_MAX)
+    return false;
+  typename stdext::hash_map<unsigned int,TYPE>::iterator it;
+  switch (state) {
+  case VECT:
+    if (i>maxIndex || i<minIndex) 
+      return false;
+    value = ((*vData)[i - minIndex]);
+    break;
+  case HASH:
+    if ((it=hData->find(i)) == hData->end())
+      return false;
+    value = (*it).second;
+    break;
+  default:
+    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    return false;
+  }
+  return true;
 }
 //===================================================================
 //const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
