@@ -391,7 +391,11 @@ namespace {
 	  ((QWidget *)obj)->setPalette(palette);
 	  return false;
 	} else if( ip->typeName == TN(string) ) {
-	  QString s = QFileDialog::getOpenFileName();
+	  QString s;
+	  if (ip->name.find("file::") == 0)
+	    s = QFileDialog::getOpenFileName();
+	  else // dir::
+	    s = QFileDialog::getExistingDirectory();
 	  if( s != QString::null ) {
 	    QLineEdit * le = (QLineEdit*) ip->wA[0];
 	    le->setText( s );
@@ -519,7 +523,8 @@ namespace {
 		  (ip.name, v) )
 		le->setText( v.c_str() );
 	    }
-	    if (ip.name.find("file::") == 0) {
+	    if ((ip.name.find("file::") == 0) ||
+		(ip.name.find("dir::") == 0)) {
 	      QToolButton * opt = new QToolButton( this );
 	      opt->setText( "..." );
 	      opt->adjustSize();
