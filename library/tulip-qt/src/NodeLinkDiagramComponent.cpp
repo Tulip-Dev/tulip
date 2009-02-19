@@ -297,6 +297,8 @@ namespace tlp {
       DataSet nodeLinkDiagramComponentDataSet;
       graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
 
+      vector<string> toRemove;
+
       Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
       while(infoDataSetIt->hasNext()) {
         pair<string, DataType*> infoData;
@@ -314,8 +316,26 @@ namespace tlp {
           composite=(GlComposite*)compositeLong;
 
           mainWidget->getScene()->getLayer(layerName)->addGlEntity(composite,infoData.first);
+        }else{
+          if(infoData.second->typeName==typeid(string).name()){
+            if(*((string*)infoData.second->value) =="toRemove"){
+              DataSet layerAndCompositeDataSet=algorithmInfoDataSet[infoData.first];
+              algorithmInfoDataSet.erase(infoData.first);
+              string layerName;
+              long compositeLong;
+              layerAndCompositeDataSet.get("layer",layerName);
+              layerAndCompositeDataSet.get("composite",compositeLong);
+              mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+              toRemove.push_back(infoData.first);
+            }
+          }
         }
       }
+
+      for(vector<string>::iterator it=toRemove.begin();it!=toRemove.end();++it){
+        nodeLinkDiagramComponentDataSet.remove(*it);
+      }
+      graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
     }
   }
   //==================================================
