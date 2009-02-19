@@ -28,7 +28,7 @@ libtulip_ogl_la_SOURCES = \
 	Parser.cpp \
 	Paragraph.cpp \
 	Renderer.cpp \
-        GlRenderer.cpp \
+    GlRenderer.cpp \
 	TextRenderer.cpp \
 	Table.cpp \
 	Context.cpp \
@@ -60,10 +60,10 @@ libtulip_ogl_la_SOURCES = \
 	GlHierarchyConvexHulls.cpp \
 	Bezier.cpp \
 	Spline.cpp \
-        GlLines.cpp \
+    GlLines.cpp \
 	TLPPixmapFont.cpp \
 	TLPPixmapGlyph.cpp \
-        EpsFunction.cpp \
+    EpsFunction.cpp \
 	GlSVGFeedBackBuilder.cpp \
 	GlEPSFeedBackBuilder.cpp \
 	GlTLPFeedBackBuilder.cpp \
@@ -74,6 +74,7 @@ libtulip_ogl_la_SOURCES = \
 	GlMetaNode.cpp \
 	GlEdge.cpp \
 	GlDisplayListManager.cpp \
+	GlewManager.cpp \
 	GlSceneObserver.cpp \
 	GlLine.cpp \
 	GlCurve.cpp \

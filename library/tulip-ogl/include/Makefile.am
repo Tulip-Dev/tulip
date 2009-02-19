@@ -73,4 +73,5 @@ noinst_HEADERS = \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
 	tulip/OcclusionTest.h \
-	tulip/GlLines.h 
+	tulip/GlLines.h \
+	tulip/GlewManager.h

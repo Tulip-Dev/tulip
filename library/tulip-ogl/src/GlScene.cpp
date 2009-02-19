@@ -1,12 +1,6 @@
-#include "tulip/GlScene.h"
+#include "tulip/GlewManager.h"
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include "tulip/GlScene.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -89,6 +83,8 @@ namespace tlp {
   }
 
   void GlScene::initGlParameters() {
+    if(!GlewManager::getInst().glewIsInit())
+      GlewManager::getInst().initGlew();
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     bool antialiased = true;
     if(glGraphComposite) {
