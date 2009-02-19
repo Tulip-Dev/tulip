@@ -109,7 +109,6 @@ public:
       if (maxSteps < 100)
 	maxSteps = 100;
       while(itE.hasNext()) {
-	edge ite = itE.next();
 	string tmp = property->getEdgeStringValue(itE.next());
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
