@@ -202,19 +202,15 @@ public:
     }
 
     DataSet nodeLinkDiagramComponentDataSet;
+    DataSet oldNodeLinkDiagramComponentDataSet;
     DataSet infoDataSet;
-    string infoName="Enum Color Values Mapping 0";
-    if(graph->attributeExist("NodeLinkDiagramComponent")){
-      graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
-      int i=1;
-      while(nodeLinkDiagramComponentDataSet.exist(infoName)){
-        stringstream str;
-        str << "Enum Color Values Mapping " << i << endl;
-        infoName=str.str();
-        i++;
-      }
-    }else{
+    string infoName="Enum Color Values Mapping";
 
+    if(graph->attributeExist("NodeLinkDiagramComponent")){
+      graph->getAttribute("NodeLinkDiagramComponent",oldNodeLinkDiagramComponentDataSet);
+      if(oldNodeLinkDiagramComponentDataSet.exist("MetricMapping")){
+        nodeLinkDiagramComponentDataSet.set<string>("MetricMapping","toRemove");
+      }
     }
 
     infoDataSet.set<long>("composite",(long)composite);
