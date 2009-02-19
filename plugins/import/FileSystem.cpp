@@ -1,6 +1,6 @@
-#include <QtGui/qfiledialog.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <tulip/TulipPlugin.h>
 
 #ifdef _WIN32
@@ -12,6 +12,17 @@
 using namespace std;
 using namespace tlp;
 
+namespace {
+  static const char * paramHelp[] = {
+    // directory
+    HTML_HELP_OPEN()				    \
+    HTML_HELP_DEF( "type", "directory pathname" )		    \
+    HTML_HELP_BODY()						      \
+    "This parameter indicates the directory to import."	      \
+    HTML_HELP_CLOSE(),
+  };
+}
+
 /** \addtogroup import */
 /*@{*/
 /// Import a tree representation of a file system directory.
@@ -20,7 +31,9 @@ using namespace tlp;
  */
 class FileSystem:public ImportModule {
 public:
-  FileSystem(AlgorithmContext context):ImportModule(context) {}
+  FileSystem(AlgorithmContext context):ImportModule(context) {
+    addParameter<string>("dir::directory", paramHelp[0]);
+  }
   ~FileSystem(){}
 
   DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
@@ -45,25 +58,25 @@ public:
     dirent *entry;
     #else
     HANDLE hFind; 
-  	WIN32_FIND_DATA FindData; 
-  	SetCurrentDirectory (directory.c_str()); 
-  	hFind=FindFirstFile ("*.*", &FindData); 
-  	bool endOfDirectory = (hFind == NULL) || (hFind == INVALID_HANDLE_VALUE);
-  	if(endOfDirectory) {
-    pluginProgress->stop();
-    return pluginProgress->state();
-  	}
+    WIN32_FIND_DATA FindData; 
+    SetCurrentDirectory (directory.c_str()); 
+    hFind=FindFirstFile ("*.*", &FindData); 
+    bool endOfDirectory = (hFind == NULL) || (hFind == INVALID_HANDLE_VALUE);
+    if (endOfDirectory) {
+      pluginProgress->stop();
+      return pluginProgress->state();
+    }
     #endif
     struct stat infoEntry;
     #ifdef _WIN32
      while (!endOfDirectory) {
-   	  if (!strcmp("..",FindData.cFileName) || !strcmp(".",FindData.cFileName)) {
-   	  	endOfDirectory = !(FindNextFile (hFind, &FindData));
-   	  	continue;
-   	  }
-      string entryName=FindData.cFileName;
-      string pathEntry=directory+entryName;
-	  stat(pathEntry.c_str(),&infoEntry);
+       if (!strcmp("..",FindData.cFileName) || !strcmp(".",FindData.cFileName)) {
+   	 endOfDirectory = !(FindNextFile (hFind, &FindData));
+   	 continue;
+       }
+       string entryName=FindData.cFileName;
+       string pathEntry=directory+entryName;
+       stat(pathEntry.c_str(),&infoEntry);
      #else
     while ((entry = readdir(dir))!=0) {
       if (!strcmp("..",entry->d_name) || !strcmp(".",entry->d_name)) continue;
@@ -138,17 +151,25 @@ public:
     type->setAllNodeValue(0);
     layout->setAllNodeValue(Coord(0,0,0));
     node newNode=graph->addNode();
-    QString dirName=QFileDialog::getExistingDirectory ();
-    if (dirName.isNull()) return false;
+    string dirName;
+    if (!dataSet->get("dir::directory", dirName) || dirName.empty()) {
+      pluginProgress->setError("No directory");
+      return false;
+    }
 
     struct stat infoEntry;
+    int result;
     #ifdef _WIN32
-    stat(dirName.toAscii().data(),&infoEntry);
+    result = stat(dirName.c_str(),&infoEntry);
     #else
-    lstat(dirName.toAscii().data(),&infoEntry);
+    result = lstat(dirName.c_str(),&infoEntry);
     #endif
+    if (result == -1) {
+      pluginProgress->setError(strerror(errno));
+      return false;
+    }
     if (infoEntry.st_dev!=true)  {
-      label->setNodeValue(newNode,dirName.toAscii().data());
+      label->setNodeValue(newNode,dirName.c_str());
       if (infoEntry.st_size<1)
 	size->setNodeValue(newNode,1);
       else
@@ -160,11 +181,10 @@ public:
       lastchange->setNodeValue(newNode,infoEntry.st_ctime);
     }
 
-    if (pluginProgress)
-      pluginProgress->showPreview(false);
+    pluginProgress->showPreview(false);
 
     unsigned int x = 0, y = 2;
-    readDir(newNode,string(dirName.toAscii().data())+"/", x , y);
+    readDir(newNode,string(dirName.c_str())+"/", x , y);
     double newSize=0;
     Coord tmp(0,0,0);
     if (pluginProgress->state()!=TLP_CANCEL) {
@@ -189,4 +209,4 @@ public:
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(FileSystem,"File System Directory", "Auber", "16/12/2002", "", "1.0", "Misc")
+IMPORTPLUGINOFGROUP(FileSystem, "File System Directory", "Auber", "16/12/2002", "", "1.1", "Misc")

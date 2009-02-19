@@ -1,3 +1,6 @@
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 #include <fstream>
 #include <tulip/TulipPlugin.h>
 #include <tulip/AbstractProperty.h>
@@ -447,7 +450,20 @@ public:
   ~GMLImport(){}
   bool import(const string &dummy) {
     string filename;
-    dataSet->get<string>("file::filename", filename);
+    if (!dataSet->get<string>("file::filename", filename))
+      return false;
+
+    struct stat infoEntry;
+    int result;
+    #ifdef _WIN32
+    result = stat(filename.c_str(),&infoEntry);
+    #else
+    result = lstat(filename.c_str(),&infoEntry);
+    #endif
+    if (result == -1) {
+      pluginProgress->setError(strerror(errno));
+      return false;
+    }
     ifstream myFile(filename.c_str());
     GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();

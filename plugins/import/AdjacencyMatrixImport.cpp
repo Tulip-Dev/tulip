@@ -1,3 +1,6 @@
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 #include <fstream>
 #include <sstream>
 #include <math.h>
@@ -100,7 +103,20 @@ public:
 
   bool import(const string &name) {
     string name2;
-    dataSet->get("file::name",name2);
+    if (!dataSet->get("file::name", name2))
+      return false;
+
+    struct stat infoEntry;
+    int result;
+    #ifdef _WIN32
+    result = stat(name2.c_str(), &infoEntry);
+    #else
+    result = lstat(name2.c_str(), &infoEntry);
+    #endif
+    if (result == -1) {
+      pluginProgress->setError(strerror(errno));
+      return false;
+    }
     std::ifstream in(name2.c_str());
     unsigned int curLine = 0;
     DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
@@ -193,4 +209,3 @@ public:
 };
 /*@}*/
 IMPORTPLUGINOFGROUP(AdjacencyMatrixImport, "Adjacency Matrix", "Auber David", "05/09/2008","","1.1","File")
-

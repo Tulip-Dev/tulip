@@ -1,12 +1,7 @@
-#include <fstream>
-#include <sstream>
-#include <math.h>
+#include <string.h>
+#include <errno.h>
 #include <tulip/TulipPlugin.h>
 #include <tulip/hash_string.h>
-#include <vector>
-#include <string>
-#include <ext/hash_map>
-#include <string.h>
 #include <dotImportCLUT.h>
 
 using namespace std;
@@ -26,7 +21,7 @@ namespace {
 }
 
 namespace {
-  const char * paramHelp[] = {
+  static const char * paramHelp[] = {
     // filename
     HTML_HELP_OPEN()				    \
     HTML_HELP_DEF( "type", "pathname" )		    \
@@ -73,8 +68,10 @@ public:
     string fn;
     dataSet->get( "file::filename", fn );
     FILE * fd = fopen( fn.c_str(), "r" );
-    if( !fd )
+    if( !fd ) {
+      pluginProgress->setError(strerror(errno));
       return false;
+    }
 
     // Create & Init YY global data 
     DOT_YY _dotyy;
