@@ -383,6 +383,12 @@ else
 fi
   if test=`eval $try 2> /dev/null`; then 
     gl_libdir=$dir
+     if test ${VAR_WIN32} = 0 ; then 	 
+	   try="ls -1 $gl_libdir/libGLEW.*" 	 
+	     if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi 	 
+	 else 	 
+	   break 	 
+	 fi
   else 
     echo "tried $dir" >&AC_FD_CC
   fi
@@ -422,13 +428,13 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-  LIB_GL="-lglu32 -lopengl32"
+  LIB_GL="-lglew32 -lglu32 -lopengl32"
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="-framework OpenGL"
+    LIB_GL="/usr/local/lib/libGLEW.dylib -framework OpenGL"
   else
-    LIB_GL="-lGLU -lGL"
+    LIB_GL="-lGLEW -lGLU -lGL"
   fi
 fi
 AC_SUBST(LIB_GL)
