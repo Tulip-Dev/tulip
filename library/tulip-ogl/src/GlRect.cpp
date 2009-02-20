@@ -1,7 +1,5 @@
 #include "tulip/GlRect.h"
 
-#include "tulip/GlTools.h"
-
 using namespace std;
 
 namespace tlp {
@@ -90,37 +88,7 @@ namespace tlp {
   }
   //=====================================================
   void GlRect::draw(float lod,Camera *camera) {
-    glDisable(GL_CULL_FACE);
-    Coord normal=points[1]-points[0];
-    normal^=(points[3]-points[0]);
-    normal/=normal.norm();
-    if (filled){
-      glBegin(GL_QUADS);
-      glNormal3fv((float*)&normal);
-      setMaterial(fillColors[0]);
-      glVertex3fv((float *)&points[0]);
-      setMaterial(fillColors[1]);
-      glVertex3fv((float *)&points[1]);
-      setMaterial(fillColors[2]);
-      glVertex3fv((float *)&points[2]);
-      setMaterial(fillColors[3]);
-      glVertex3fv((float *)&points[3]);
-      glEnd();
-    }
-    if (outlined) {
-      if(outlineSize!=1)
-        glLineWidth(outlineSize);
-      glBegin(GL_LINE_LOOP);
-      setMaterial(outlineColors[0]);
-      glVertex3fv((float *)&points[0]);
-      setMaterial(outlineColors[1]);
-      glVertex3fv((float *)&points[1]);
-      setMaterial(outlineColors[2]);
-      glVertex3fv((float *)&points[2]);
-      setMaterial(outlineColors[3]);
-      glVertex3fv((float *)&points[3]);
-      glEnd();
-    }
+    GlPolygon::draw(lod,camera);
   }
   //===========================================================
   void GlRect::getXML(xmlNodePtr rootNode) {

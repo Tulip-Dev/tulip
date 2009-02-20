@@ -101,11 +101,14 @@ namespace tlp {
   //=====================================================
   void GlPolygon::draw(float lod,Camera *camera) {
     glDisable(GL_CULL_FACE);
-    vector<Coord> newPoints(points.size());
-    for(unsigned int i=0; i < points.size(); ++i) {
-      newPoints[i] = points[i];
-    }
+
     if (filled){
+      Coord normal=points[0]-points[1];
+      normal^=(points[2]-points[1]);
+      normal/=normal.norm();
+      if(normal[2]<0)
+        normal=Coord(-normal[0],-normal[1],-normal[2]);
+
       if (points.size() == 3) {
         glBegin(GL_TRIANGLES);
       }else{
@@ -115,11 +118,12 @@ namespace tlp {
           glBegin(GL_POLYGON);
         }
       }
+      glNormal3fv((float*)&normal);
       for(unsigned int i=0; i < points.size(); ++i) {
         if (i < fillColors.size()) {
           setMaterial(fillColors[i]);
         }
-        glVertex3fv((float *)&newPoints[i]);
+        glVertex3fv((float *)&points[i]);
       }
       glEnd();
     }
@@ -132,7 +136,7 @@ namespace tlp {
         if (i < outlineColors.size()) {
           setMaterial(outlineColors[i]);
         }
-        glVertex3fv((float *)&newPoints[i]);
+        glVertex3fv((float *)&points[i]);
       }
       glEnd();
       if(outlineSize!=1)
