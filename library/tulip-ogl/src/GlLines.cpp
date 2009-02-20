@@ -59,6 +59,7 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   for (int i=0;i<4;i++)
     colorDelta[i] = (colorEnd[i]-colorStart[i])/(bends.size()+2);
 
+  glEnable(GL_LINE_SMOOTH);
   glBegin(GL_LINE_STRIP);
   setColor(colorStart);
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);

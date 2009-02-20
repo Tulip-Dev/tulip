@@ -75,7 +75,6 @@ libtulip_ogl_la_SOURCES = \
 	GlEdge.cpp \
 	GlDisplayListManager.cpp \
 	GlewManager.cpp \
-	GlPointManager.cpp \
 	GlSceneObserver.cpp \
 	GlLine.cpp \
 	GlCurve.cpp \
