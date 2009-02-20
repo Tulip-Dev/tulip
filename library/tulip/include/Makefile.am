@@ -88,7 +88,8 @@ nobase_include_HEADERS = \
         tulip/GraphDecorator.h \
 	tulip/ForEach.h \
 	tulip/MapIterator.h \
-	tulip/BoundingBox.h
+	tulip/BoundingBox.h \
+	tulip/ColorScale.h
 
 nobase_nodist_include_HEADERS = tulip/TulipRelease.h
 
