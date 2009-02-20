@@ -69,7 +69,6 @@ public :
 
   unsigned int getNbDataProcessed() const {return nbDataProcessed;}
   void resetNbDataProcessed() {nbDataProcessed = 0;}
-  void deleteAxisGlEntities();
 
   void addNode(Graph *,const node ){}
   void addEdge(Graph *,const edge ){}

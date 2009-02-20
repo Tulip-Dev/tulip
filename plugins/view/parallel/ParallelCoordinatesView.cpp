@@ -79,7 +79,6 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 	QWidget *widget=GlMainView::construct(parent);
 	initGlWidget();
 	buildMenuEntries();
-	constructInteractorsMap();
 
 	//Export Menu
 	exportImageMenu=new QMenu("&Save Picture as ");
@@ -449,6 +448,7 @@ void ParallelCoordinatesView::init() {
 void ParallelCoordinatesView::constructInteractorsMap() {
 	MutableContainer<Interactor *> interactors;
 	InteractorManager::getInst().initInteractorList(interactors);
+	interactorsMap.clear();
 	interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
 	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
@@ -709,7 +709,7 @@ void ParallelCoordinatesView::resetHighlightedElements() {
 ParallelAxis *ParallelCoordinatesView::getAxisUnderPointer(const int x, const int y) const {
 
 	Coord screenCoords((double) mainWidget->width() - (double) x, (double) y, 0);
-	Coord sceneCoords = mainWidget->getScene()->getCamera()->screenTo3DWorld(screenCoords);
+	Coord sceneCoords = mainWidget->getScene()->getLayer("Main")->getCamera()->screenTo3DWorld(screenCoords);
 
 	return parallelCoordsDrawing->getAxisUnderPoint(sceneCoords);
 

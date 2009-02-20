@@ -205,7 +205,7 @@ public :
 	~ParallelCoordsAxisSliders() { deleteGlSliders();}
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
-	Interactor *clone() { return new ParallelCoordsAxisSliders(); }
+	Interactor *clone() {return new ParallelCoordsAxisSliders(); }
 
 private :
 

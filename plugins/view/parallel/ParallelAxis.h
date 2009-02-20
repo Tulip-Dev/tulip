@@ -17,8 +17,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/GlComposite.h>
-#include <tulip/GlRect.h>
+#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlAxis.h>
 
 #include <vector>
@@ -34,17 +33,20 @@
 
 namespace tlp {
 
-class ParallelAxis : public GlComposite {
+class ParallelAxis : public GlSimpleEntity {
 
  public:
 
   virtual ~ParallelAxis();
 
-  void translate(const Coord &c);
-  void computeBoundingBox();
+  BoundingBox getBoundingBox() {return glAxis->getBoundingBox();}
+  void setStencil(int stencil) {glAxis->setStencil(stencil);}
   void draw(float lod,Camera *camera);
-  virtual void redraw();
+  void translate(const Coord &c);
+  void getXML(xmlNodePtr rootNode) {}
+  void setWithXML(xmlNodePtr rootNode) {}
 
+  virtual void redraw();
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;
   virtual void showConfigDialog() = 0;
 
@@ -69,8 +71,8 @@ class ParallelAxis : public GlComposite {
   virtual std::string getBottomSliderTextValue() = 0;
   void resetSlidersPosition();
 
-  void setVisible(const bool visible) {this->visible = visible;}
-  bool isVisible() const {return visible;}
+  void setHidden(const bool hidden) {this->hidden = hidden;}
+  bool isHidden() const {return hidden;}
 
   virtual std::set<unsigned int> getDataInSlidersRange() = 0;
   virtual void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
@@ -84,7 +86,7 @@ class ParallelAxis : public GlComposite {
   bool slidersActivated;
   Coord topSliderCoord;
   Coord bottomSliderCoord;
-  bool visible;
+  bool hidden;
 
 };
 

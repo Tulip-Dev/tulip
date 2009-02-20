@@ -9,7 +9,7 @@ using namespace std;
 namespace tlp {
 
 NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor) :
-  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, VERTICAL_AXIS, axisColor), axisAreaWidth), graphProxy(graph) {
+  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth), graphProxy(graph) {
 	glNominativeAxis = dynamic_cast<GlNominativeAxis *>(glAxis);
   setLabels();
   ParallelAxis::redraw();
@@ -33,7 +33,7 @@ NominalParallelAxis::setLabels() {
 		labelsOrder = labels;
 	}
 
-	glNominativeAxis->setAxisGraduationsLabels(labelsOrder, RIGHT_OR_ABOVE);
+	glNominativeAxis->setAxisGraduationsLabels(labelsOrder, GlAxis::RIGHT_OR_ABOVE);
 }
 
 Coord NominalParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {

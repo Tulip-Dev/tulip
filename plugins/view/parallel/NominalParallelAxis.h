@@ -36,8 +36,6 @@ class NominalParallelAxis : public ParallelAxis {
 
   Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
 
-  //void translate(const Coord &c);
-
   void showConfigDialog();
 
   void redraw();

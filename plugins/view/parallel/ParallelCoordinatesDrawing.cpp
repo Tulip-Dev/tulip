@@ -47,7 +47,7 @@ void ParallelCoordinatesDrawing::createAxis() {
 
 	map<string, ParallelAxis *>::iterator it2;
 	for (it2 = parallelAxis.begin() ; it2 != parallelAxis.end() ; ++it2) {
-		(it2->second)->setVisible(false);
+		(it2->second)->setHidden(true);
 	}
 
 	nbAxis = graphProxy->getNumberOfSelectedProperties();
@@ -86,7 +86,7 @@ void ParallelCoordinatesDrawing::createAxis() {
 			axis->setMaxCaptionWidth(maxCaptionWidth);
 			axis->setAxisColor(axisColor);
 			axis->redraw();
-			axis->setVisible(true);
+			axis->setHidden(false);
 		} else {
 			string typeName = (graphProxy->getProperty(*it))->getTypename();
 			if (typeName == "string") {
@@ -97,7 +97,6 @@ void ParallelCoordinatesDrawing::createAxis() {
 		}
 
 		if (axis != NULL) {
-			axis->computeBoundingBox();
 			axisPlotComposite->addGlEntity(axis, *it);
 			axisOrder.push_back(*it);
 			parallelAxis[*it] = axis;
@@ -227,9 +226,6 @@ void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1, ParallelAxis *axi
 	parallelAxis[axis1->getAxisName()]->translate(cj - ci);
 	parallelAxis[axis2->getAxisName()]->translate(ci - cj);
 
-	parallelAxis[axis1->getAxisName()]->computeBoundingBox();
-	parallelAxis[axis2->getAxisName()]->computeBoundingBox();
-
 	graphProxy->setSelectedProperties(axisOrder);
 
 	createAxisFlag = false;
@@ -273,12 +269,14 @@ void ParallelCoordinatesDrawing::erase() {
 
 void ParallelCoordinatesDrawing::removeAxis(ParallelAxis *axis) {
 	if (axisPlotComposite->findKey(axis) != "") {
+		axis->setHidden(true);
 		axisPlotComposite->deleteGlEntity(axis);
 	}
 }
 
 void ParallelCoordinatesDrawing::addAxis(ParallelAxis *axis) {
 	if (axisPlotComposite->findKey(axis) == "") {
+		axis->setHidden(false);
 		axisPlotComposite->addGlEntity(axis, axis->getAxisName());
 	}
 }
@@ -291,7 +289,7 @@ ParallelAxis *ParallelCoordinatesDrawing::getAxisUnderPoint(const Coord &coord) 
 	map<string, ParallelAxis *>::iterator it;
 	ParallelAxis *axis = NULL;
 	for (it = parallelAxis.begin() ; it != parallelAxis.end() ; ++it) {
-		if ((it->second)->isVisible()) {
+		if (!(it->second)->isHidden()) {
 			BoundingBox axisBB = (it->second)->getBoundingBox();
 			if (coord.getX() >= axisBB.first.getX() && coord.getX() <= axisBB.second.getX()) { //&& coord.getY() >= axisBB.first.getY() && coord.getY() <= axisBB.second.getY()) {
 				axis = it->second;
@@ -320,7 +318,7 @@ vector<ParallelAxis *> ParallelCoordinatesDrawing::getAllAxis() {
 	vector<ParallelAxis *> axis;
 	map<string, ParallelAxis *>::iterator it;
 	for (it = parallelAxis.begin() ; it != parallelAxis.end() ; ++it) {
-		if ((it->second)->isVisible()) {
+		if (!(it->second)->isHidden()) {
 			axis.push_back(it->second);
 		}
 	}
@@ -362,17 +360,6 @@ void ParallelCoordinatesDrawing::resetAxisSlidersPosition() {
 	vector<ParallelAxis *>::iterator it;
 	for (it = axis.begin() ; it != axis.end() ; ++it) {
 		(*it)->resetSlidersPosition();
-	}
-}
-
-void ParallelCoordinatesDrawing::deleteAxisGlEntities() {
-
-	if (!createAxisFlag)
-		return;
-
-	map<string, ParallelAxis *>::iterator it;
-	for (it = parallelAxis.begin() ; it != parallelAxis.end() ; ++it) {
-		(it->second)->reset(true);
 	}
 }
 

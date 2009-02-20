@@ -124,6 +124,8 @@ bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
 
 	if (selectedAxis != NULL) {
 
+		glMainWidget->getScene()->getLayer("Main")->getCamera()->initGl();
+
 		GlRect *axisHighlightRect = NULL;
 		BoundingBox axisBB;
 

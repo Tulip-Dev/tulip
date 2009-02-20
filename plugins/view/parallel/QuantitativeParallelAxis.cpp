@@ -12,7 +12,7 @@ namespace tlp {
 
 QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
 													const string &graphPropertyName, const bool ascendingOrder, const Color &axisColor) :
-  ParallelAxis(new GlQuantitativeAxis(graphPropertyName, baseCoord, height, VERTICAL_AXIS, axisColor, true, ascendingOrder), axisAreaWidth),
+  ParallelAxis(new GlQuantitativeAxis(graphPropertyName, baseCoord, height, GlAxis::VERTICAL_AXIS, axisColor, true, ascendingOrder), axisAreaWidth),
   nbAxisGrad(DEFAULT_NB_AXIS_GRAD), graphProxy(graphProxy), log10Scale(false) {
   glQuantitativeAxis = dynamic_cast<GlQuantitativeAxis *>(glAxis);
   boxPlotValuesCoord.resize(5);
@@ -23,7 +23,7 @@ QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const
 void QuantitativeParallelAxis::setAxisLabels() {
 	double min = getAxisMinValue();
 	double max = getAxisMaxValue();
-	glQuantitativeAxis->setAxisParameters(min, max, nbAxisGrad, RIGHT_OR_ABOVE, true);
+	glQuantitativeAxis->setAxisParameters(min, max, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
 	glQuantitativeAxis->setLogScale(log10Scale);
 }
 

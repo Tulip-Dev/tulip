@@ -26,14 +26,13 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
 	}
 }
 
-ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth) : glAxis(glAxis), slidersActivated(false), visible(true) {
+ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth) : glAxis(glAxis), slidersActivated(false), hidden(false) {
 	glAxis->setStencil(1);
-	glAxis->addCaption(LEFT_OR_BELOW, true, 3, axisAreaWidth);
-	addGlEntity(glAxis, glAxis->getAxisName() + " axis");
+	glAxis->addCaption(GlAxis::LEFT_OR_BELOW, 30, true, axisAreaWidth, glAxis->getAxisLength() / 20.);
 }
 
 ParallelAxis::~ParallelAxis() {
-	reset(true);
+	delete glAxis;
 }
 
 void ParallelAxis::setAxisHeight(const float height) {
@@ -45,15 +44,9 @@ void ParallelAxis::setAxisHeight(const float height) {
 }
 
 void ParallelAxis::translate(const Coord &c) {
-	GlComposite::translate(c);
+	glAxis->translate(c);
 	topSliderCoord += c;
 	bottomSliderCoord += c;
-}
-
-void ParallelAxis::computeBoundingBox() {
-	GlBoundingBoxSceneVisitor glBBSV(NULL);
-	glAxis->acceptVisitor(&glBBSV);
-	boundingBox = glBBSV.getBoundingBox();
 }
 
 void ParallelAxis::draw(float lod,Camera *camera) {
