@@ -45,7 +45,8 @@ nobase_include_HEADERS = \
 	tulip/GraphPropertiesSelectionWidget.h \
 	tulip/ItemsListWidget.h \
 	tulip/StringListSelectionWidget.h \
-	tulip/ViewPluginsManager.h
+	tulip/ViewPluginsManager.h \
+	tulip/ColorScaleConfigDialog.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h
@@ -63,7 +64,8 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
-	tulip/StringListSelectionWidgetData.h
+	tulip/StringListSelectionWidgetData.h \
+	tulip/ColorScaleConfigDialogData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -77,6 +79,7 @@ BUILT_SOURCES = \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
 	tulip/StringListSelectionWidgetData.h \
+	tulip/ColorScaleConfigDialogData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \

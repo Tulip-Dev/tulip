@@ -8,6 +8,7 @@ dist_noinst_DATA = FindSelection.ui \
 	TulipStats.ui \
 	GridOptions.ui \
 	QtProgress.ui \
+	ColorScaleConfigDialog.ui \
 	i_addedge.png \
 	i_addnode.png \
 	i_bends.png \

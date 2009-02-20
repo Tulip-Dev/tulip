@@ -76,7 +76,7 @@ namespace tlp {
     editedProperty=tmpProxy;
     editedPropertyName=item->text().toAscii().data();
     //propertyName->setText(item->text());
-  
+
     if (graph->existLocalProperty(item->text().toAscii().data()))
       inheritedProperties->clearSelection();
     else
@@ -153,15 +153,16 @@ namespace tlp {
 					   QLineEdit::Normal, QString::null,
 					   &ok);
       if (ok) {
-	string erreurMsg;
-	if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"String")==0) graph->getLocalProperty<StringProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.toAscii().data());
-	if (strcmp(res.toAscii().data(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.toAscii().data());
-	setGraph(graph);
+        string erreurMsg;
+        if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"String")==0) graph->getLocalProperty<StringProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.toAscii().data());
+        if (strcmp(res.toAscii().data(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.toAscii().data());
+        setGraph(graph);
+        emit newPropertySignal(graph,text.toAscii().data());
       }
     }
   }
@@ -201,6 +202,7 @@ namespace tlp {
       //setGlMainWidget(glWidget);
       setGraph(graph);
       editedProperty=0;
+      emit removePropertySignal(graph,editedPropertyName);
     }
     else
       QMessageBox::critical( 0, "Tulip Property Editor Remove Failed",
