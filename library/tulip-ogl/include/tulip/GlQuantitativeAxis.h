@@ -46,7 +46,12 @@ public :
 	 * \param drawFirstLabel If false, the first graduation label will not be drawn (usefull when some axis have the same base coord to avoid labels overlapping)
 	 */
 	void setAxisParameters(const double min, const double max, const unsigned int nbGraduations,
-						   const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFistLabel = true);
+						   const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true);
+
+
+	void setAxisParameters(const int min, const int max, const unsigned int incrementStep,
+						   const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true);
+
 
 	/**
 	 * Method to set a logarithmic scale on the axis. A call to updateAxis has to be done after calling this method to build or update the axis graduations
@@ -101,6 +106,9 @@ private :
 	Coord captionCenterCoord;
 	bool logScale;
 	unsigned int logBase;
+	bool integerScale;
+	unsigned int incrementStep;
+	bool minMaxSet;
 
 };
 

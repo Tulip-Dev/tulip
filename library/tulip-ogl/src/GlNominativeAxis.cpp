@@ -61,8 +61,8 @@ void GlNominativeAxis::translate(const Coord &c) {
 }
 
 void GlNominativeAxis::updateAxis() {
-	GlAxis::updateAxis();
 	buildAxisGraduations();
+	GlAxis::updateAxis();
 }
 
 }

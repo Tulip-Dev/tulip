@@ -13,10 +13,9 @@
 #include <tulip/GlLine.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 
 #include "tulip/GlAxis.h"
-
-
 
 using namespace std;
 
@@ -26,11 +25,14 @@ GlAxis::GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const fl
 			   const AxisOrientation &axisOrientation, const Color &axisColor)  :
 			   axisName(axisName), axisBaseCoord(axisBaseCoord), axisLength(axisLength),
 			   axisOrientation(axisOrientation), axisColor(axisColor),
-			   captionText(axisName), captionOffset(axisLength / 15.),
-			   captionComposite(new GlComposite()), gradsComposite(new GlComposite()), captionSet(false), maxCaptionWidth(axisLength / 4.) {
+			   captionText(axisName), captionOffset(0),
+			   axisLinesComposite(new GlComposite()), captionComposite(new GlComposite()),
+			   gradsComposite(new GlComposite()), captionSet(false), maxCaptionWidth(0),
+			   maxGraduationLabelWidth(0) {
 	buildAxisLine();
 	addGlEntity(captionComposite, "caption composite");
 	addGlEntity(gradsComposite, "grads composite");
+	addGlEntity(axisLinesComposite, "axis lines composite");
 	axisGradsWidth = (DEFAULT_GRAD_WIDTH * axisLength) / 200.;
 }
 
@@ -39,18 +41,24 @@ GlAxis::~GlAxis() {
 }
 
 void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels, const LabelPosition &axisGradsPosition) {
+
 	spaceBetweenAxisGrads = axisLength / (axisGradsLabels.size() - 1);
+	if (captionOffset == 0) {
+		captionOffset = spaceBetweenAxisGrads;
+	}
 	gradsComposite->reset(true);
 	ostringstream oss;
+	maxGraduationLabelWidth = 0;
 	unsigned int gradsCpt = 0;
 	for (unsigned int i = 0 ; i < axisGradsLabels.size() ; ++i) {
 		GlLine *axisGraduation = new GlLine();
 		axisGraduation->setStencil(1);
+		axisGraduation->setLineWidth(2.0);
 		GlLabel *graduationLabel = NULL;
 		float labelWidth = spaceBetweenAxisGrads;
-
+		maxGraduationLabelWidth = labelWidth;
 		if (axisOrientation == HORIZONTAL_AXIS) {
-			labelHeight = axisGradsWidth;
+			labelHeight = labelWidth / 3.;
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2), axisColor);
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
@@ -72,6 +80,10 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 				labelWidth *= 2.;
 			}
 
+			if (labelWidth > maxGraduationLabelWidth) {
+				maxGraduationLabelWidth = labelWidth;
+			}
+
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() - axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
@@ -91,6 +103,7 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 		graduationLabel->setStencil(1);
 		gradsComposite->addGlEntity(graduationLabel, oss.str());
 	}
+	computeBoundingBox();
 }
 
 void GlAxis::buildAxisLine() {
@@ -102,7 +115,8 @@ void GlAxis::buildAxisLine() {
 		axisLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()), axisColor);
 	}
 	axisLine->setStencil(1);
-	addGlEntity(axisLine, axisName + " axis");
+	axisLine->setLineWidth(2.0);
+	axisLinesComposite->addGlEntity(axisLine, axisName + " axis");
 }
 
 Coord GlAxis::computeCaptionCenter() {
@@ -115,7 +129,7 @@ Coord GlAxis::computeCaptionCenter() {
 		}
 	} else if (axisOrientation == HORIZONTAL_AXIS) {
 		if (captionPosition == RIGHT_OR_ABOVE) {
-			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 2.), axisBaseCoord.getY());
+			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 4.), axisBaseCoord.getY());
 		} else {
 			captionCenter = Coord(axisBaseCoord.getX() - captionOffset - (captionWidth / 2.) , axisBaseCoord.getY());
 		}
@@ -123,17 +137,18 @@ Coord GlAxis::computeCaptionCenter() {
 	return captionCenter;
 }
 
-void GlAxis::addCaption(const LabelPosition &captionPos, const bool frame,
-						const float sizeFactor, const float maxCapWidth, const std::string caption) {
+void GlAxis::addCaption(const LabelPosition &captionPos, const float captionHeight, const bool frame,
+						const float maxCapWidth, const float offset, const std::string caption) {
 	if (caption != "")
 		captionText = caption;
 	captionPosition = captionPos;
 	captionFrame = frame;
-	captionSizeFactor = sizeFactor;
 	if (maxCapWidth != 0)
 		maxCaptionWidth = maxCapWidth;
-	computeCaptionSize(captionSizeFactor);
-	captionOffset = axisLength / 15.;
+	if (offset !=0) {
+		captionOffset = offset;
+	}
+	computeCaptionSize(captionHeight);
 	Coord captionCenter = computeCaptionCenter();
 	addAxisCaption(captionCenter, captionFrame);
 }
@@ -167,10 +182,11 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
 	}
 }
 
-void GlAxis::computeCaptionSize(float sizeFactor) {
-	captionHeight = sizeFactor * axisGradsWidth;
-	captionWidth = sizeFactor * captionText.size() * (captionHeight / 2.);
-	if (captionWidth > maxCaptionWidth) {
+void GlAxis::computeCaptionSize(float height) {
+	captionHeight = height;
+	captionWidth = height * captionText.size();
+
+	if (maxCaptionWidth != 0 && captionWidth > maxCaptionWidth) {
 		captionWidth = maxCaptionWidth;
 	}
 }
@@ -178,18 +194,22 @@ void GlAxis::computeCaptionSize(float sizeFactor) {
 void GlAxis::translate(const Coord &c) {
 	axisBaseCoord += c;
 	GlComposite::translate(c);
+	computeBoundingBox();
 }
 
 void GlAxis::updateAxis() {
-	reset(true);
-	gradsComposite = new GlComposite();
-	addGlEntity(gradsComposite, "grads composite");
+	axisLinesComposite->reset(true);
 	buildAxisLine();
 	if (captionSet) {
-		captionComposite = new GlComposite();
-		addGlEntity(captionComposite, "caption composite");
-		addCaption(captionPosition, captionFrame, captionSizeFactor, maxCaptionWidth, captionText);
+		addCaption(captionPosition, captionHeight, captionFrame, maxCaptionWidth, captionOffset, captionText);
 	}
+	computeBoundingBox();
+}
+
+void GlAxis::computeBoundingBox() {
+	GlBoundingBoxSceneVisitor glBBSV(NULL);
+	acceptVisitor(&glBBSV);
+	boundingBox = glBBSV.getBoundingBox();
 }
 
 }

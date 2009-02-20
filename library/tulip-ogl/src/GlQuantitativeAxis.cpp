@@ -28,7 +28,8 @@ GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord 
 					   const AxisOrientation &axisOrientation, const Color &axisColor,
 					   const bool addArrow, const bool ascendingOrder)
 	: GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) ,
-	  ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10) {
+	  ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
+	  integerScale(false), incrementStep(0), minMaxSet(false) {
 	if (addArrow) {
 		addArrowDrawing();
 	}
@@ -36,6 +37,7 @@ GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord 
 
 void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV, const unsigned int nbGrads,
 										   const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+	integerScale = false;
 	min = minV;
 	max = maxV;
 	nbGraduations = nbGrads;
@@ -44,6 +46,22 @@ void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
 	}
 	axisGradsLabelsPosition = axisGradsLabelsPos;
 	drawFistLabel = firstLabel;
+	minMaxSet = true;
+}
+
+
+void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const unsigned int incrementStepV,
+										   const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+	integerScale = true;
+	min = minV;
+	max = maxV;
+	if (min == max) {
+		max += incrementStep;
+	}
+	incrementStep = incrementStepV;
+	axisGradsLabelsPosition = axisGradsLabelsPos;
+	drawFistLabel = firstLabel;
+	minMaxSet = true;
 }
 
 void GlQuantitativeAxis::buildAxisGraduations() {
@@ -63,14 +81,23 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 		}
 	}
 
-	increment = (maxV - minV) / nbGraduations;
+	if (!integerScale) {
+		increment = (maxV - minV) / (nbGraduations - 1);
+	} else {
+		increment = incrementStep;
+		nbGraduations = 2;
+	}
 
     scale = axisLength / (maxV - minV);
 
     vector<string> axisLabels;
 
 	axisLabels.push_back(getStringFromNumber(min));
-	for (double i = minV + increment ; i <= (maxV - increment) ; i += increment) {
+	for (double i = minV + increment ; i < max ; i += increment) {
+
+		if (!integerScale && axisLabels.size() == nbGraduations - 1)
+			break;
+
 		string gradLabel;
 		if (!logScale) {
 			gradLabel = getStringFromNumber(i);
@@ -82,6 +109,9 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 			gradLabel = getStringFromNumber(labelValue);
 		}
 		axisLabels.push_back(gradLabel);
+		if (integerScale) {
+			++nbGraduations;
+		}
 	}
 	axisLabels.push_back(getStringFromNumber(max));
 
@@ -169,10 +199,13 @@ void GlQuantitativeAxis::addArrowDrawing() {
 	GlLine *arrowLine2 = new GlLine();
 	GlLine *arrowLine3 = new GlLine();
 	arrowLine1->setStencil(1);
+	arrowLine1->setLineWidth(2.0);
 	arrowLine2->setStencil(1);
+	arrowLine2->setLineWidth(2.0);
 	arrowLine3->setStencil(1);
-	float axisExtensionLength = axisLength / 20.;
-	float arrowWidth = axisLength / 20.;
+	arrowLine3->setLineWidth(2.0);
+	float axisExtensionLength = captionOffset;
+	float arrowWidth = axisGradsWidth;
 	float arrowLength = (1./2.) * axisExtensionLength;
 	Coord arrowEndCoord;
 	if (axisOrientation == HORIZONTAL_AXIS) {
@@ -214,21 +247,24 @@ void GlQuantitativeAxis::addArrowDrawing() {
 	}
 	ostringstream oss;
 	oss << axisName << " axis arrow line 1";
-	addGlEntity(arrowLine1, oss.str());
+	axisLinesComposite->addGlEntity(arrowLine1, oss.str());
 	oss.str("");
 	oss << axisName << " axis arrow line 2";
-	addGlEntity(arrowLine2, oss.str());
+	axisLinesComposite->addGlEntity(arrowLine2, oss.str());
 	oss.str("");
 	oss << axisName << " axis arrow line 3";
-	addGlEntity(arrowLine3, oss.str());
+	axisLinesComposite->addGlEntity(arrowLine3, oss.str());
+	computeBoundingBox();
 }
 
 void GlQuantitativeAxis::updateAxis() {
+	if (minMaxSet) {
+		buildAxisGraduations();
+	}
 	GlAxis::updateAxis();
 	if (addArrow) {
 		addArrowDrawing();
 	}
-	buildAxisGraduations();
 }
 
 void GlQuantitativeAxis::setLogScale(const bool log, const unsigned int base) {

@@ -44,7 +44,10 @@ nobase_include_HEADERS = \
 	tulip/GlQuantitativeAxis.h \
 	tulip/GlNominativeAxis.h \
 	tulip/GlProgressBar.h \
-	tulip/GlXMLTools.h
+	tulip/GlXMLTools.h \
+	tulip/GlBoundingBoxSceneVisitor.h \
+	tulip/GlLines.h \
+	tulip/GlColorScale.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
@@ -69,9 +72,8 @@ noinst_HEADERS = \
 	tulip/TLPPixmapGlyph.h\
 	tulip/GlCPULODCalculator.h \
 	tulip/GlLODSceneVisitor.h \
-	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
 	tulip/OcclusionTest.h \
-	tulip/GlLines.h \
-	tulip/GlewManager.h
+	tulip/GlewManager.h \
+	tulip/GlPointManager.h

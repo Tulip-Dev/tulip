@@ -75,6 +75,7 @@ libtulip_ogl_la_SOURCES = \
 	GlEdge.cpp \
 	GlDisplayListManager.cpp \
 	GlewManager.cpp \
+	GlPointManager.cpp \
 	GlSceneObserver.cpp \
 	GlLine.cpp \
 	GlCurve.cpp \
@@ -84,5 +85,6 @@ libtulip_ogl_la_SOURCES = \
 	GlQuantitativeAxis.cpp \
 	GlNominativeAxis.cpp \
 	GlProgressBar.cpp \
-	GlXMLTools.cpp
+	GlXMLTools.cpp \
+	GlColorScale.cpp
 

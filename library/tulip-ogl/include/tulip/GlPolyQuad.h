@@ -44,7 +44,7 @@ namespace tlp {
 	   *
 	   *
 	   */
-	  GlPolyQuad(const string &textureName = "");
+	  GlPolyQuad(const string &textureName = "", const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
 	   * Constructor for building a polyquad with spefific colors for each edges
@@ -65,7 +65,8 @@ namespace tlp {
 	   * \param polyQuadEdgesColor A vector containing the edges's colors, its size must be equal to the number of edges defined by the polyQuadEdges vector
 	   * \param  textureName The absolute path of the texture image file to use
 	   */
-	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColor, const string &textureName = "");
+	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColor, const string &textureName = "",
+				 const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
 	   * Constructor for building a polyquad with a single color
@@ -74,7 +75,8 @@ namespace tlp {
 	   * \param polyQuadColor The polyquad color
 	   * \param  textureName The absolute path of the texture image file to use
 	   */
-	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const string &textureName = "");
+	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const string &textureName = "",
+			     const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
 	   * Method to add a polyquad edge
@@ -97,6 +99,21 @@ namespace tlp {
 	  void setColor(const Color &color);
 
 	  /**
+	   * Method to set the polyquad outline color
+	   */
+	  void setOutlineColor(const Color &color) {outlineColor = color;}
+
+	  /**
+	   * Method to toggle polyquad outline
+	   */
+	  void setOutlined(const bool outline) {outlined = outline;}
+
+	  /**
+	   * Method to set the polyquad outline width
+	   */
+	  void setOutlineWidth(const int width) {outlineWidth = width;}
+
+	  /**
 	   *  Method to translate entity
 	   */
 	  void translate(const Coord &move);
@@ -116,6 +133,9 @@ namespace tlp {
 	  vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined by a pair of Coord
 	  vector<Color> polyQuadEdgesColors; // vector which contains polyquad edges colors
 	  string textureName;
+	  bool outlined;
+	  int outlineWidth;
+	  Color outlineColor;
 
   };
 

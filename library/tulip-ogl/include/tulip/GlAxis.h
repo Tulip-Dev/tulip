@@ -16,10 +16,6 @@ const float MAGIG_FACTOR = (1. / (1.3));
 
 namespace tlp {
 
-enum AxisOrientation {HORIZONTAL_AXIS, VERTICAL_AXIS};
-
-enum LabelPosition {LEFT_OR_BELOW, RIGHT_OR_ABOVE};
-
 /**
  * \brief A base class to draw an axis with graduations
  *
@@ -30,6 +26,10 @@ enum LabelPosition {LEFT_OR_BELOW, RIGHT_OR_ABOVE};
 class TLP_GL_SCOPE GlAxis : public GlComposite {
 
 public :
+
+	enum AxisOrientation {HORIZONTAL_AXIS, VERTICAL_AXIS};
+
+	enum LabelPosition {LEFT_OR_BELOW, RIGHT_OR_ABOVE};
 
 	/**
 	 * GlAxis constructor
@@ -76,11 +76,16 @@ public :
 	 * Method which returns the axis graduations labels height
 	 */
 	float getLabelHeight() const {return labelHeight;}
+
+	/**
+	 * Method which returns the max axis graduations labels width
+	 */
+	float getMaxLabelWidth() const {return maxGraduationLabelWidth;}
+
 	/**
 	 * Method which returns the color of the axis
 	 */
 	Color getAxisColor() const {return axisColor;}
-
 
 	/**
 	 * Method to set the axis name
@@ -125,13 +130,14 @@ public :
 	 * Method which adds a caption to the axis. No need to call updateAxis after calling this method.
 	 *
 	 * \param captionPos the relative position of the caption. Two possible values : LEFT_OR_BELOW (if the axis is vertical, caption will be below of the axis, otherwise on the left) or RIGHT_OR_ABOVE
+	 * \param captionHeight the caption text height
 	 * \param captionFrame if true the caption will be framed
-	 * \param sizefactor use this paramater to enlarge the caption size
 	 * \param maxCaptionWidth fill this parameter if you want to restrain the caption width
+	 * \param captionOffset fill this parameter if you want to fix the offset between the axis and the caption
 	 * \param caption if this parameter is filled, use this value as caption text, otherwise the caption text will be the axis name
 	 */
-	void addCaption(const LabelPosition &captionPos, const bool captionFrame = false,
-				    const float sizeFactor = 1., const float maxCaptionWidth = 0, const std::string caption = "");
+	void addCaption(const LabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
+					const float maxCaptionWidth = 0, const float captionOffset = 0, const std::string caption = "");
 
 
 
@@ -141,10 +147,12 @@ private :
 
 	void buildAxisLine();
 
+
 protected :
 
+	void computeBoundingBox();
 	virtual Coord computeCaptionCenter();
-	virtual void computeCaptionSize(float sizeFactor);
+	virtual void computeCaptionSize(float height);
 	void addAxisCaption(const Coord &captionLabelCenter, const bool captionFrame);
 
 	std::string axisName;
@@ -160,12 +168,13 @@ protected :
 	std::string captionText;
 	float labelHeight;
 	float captionOffset;
+	GlComposite *axisLinesComposite;
 	GlComposite *captionComposite;
 	GlComposite *gradsComposite;
 	bool captionSet;
-	float captionSizeFactor;
 	LabelPosition captionPosition;
 	float maxCaptionWidth;
+	float maxGraduationLabelWidth;
 };
 
 }

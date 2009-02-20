@@ -7,9 +7,12 @@ using namespace std;
 
 namespace tlp {
 
-GlPolyQuad::GlPolyQuad(const string &textureName) :textureName(textureName) {}
+GlPolyQuad::GlPolyQuad(const string &textureName, const bool outlined, const int outlineWidth, const Color &outlineColor)
+	: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {}
 
-GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColors, const string &textureName) :textureName(textureName) {
+GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColors, const string &textureName,
+		               const bool outlined, const int outlineWidth, const Color &outlineColor)
+	: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
 	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
@@ -18,7 +21,9 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &
 	}
 }
 
-GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const std::string &textureName) :textureName(textureName) {
+GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const std::string &textureName,
+					   const bool outlined, const int outlineWidth, const Color &outlineColor)
+	: textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
 	assert(polyQuadEdges.size() % 2 == 0);
 
@@ -45,6 +50,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	}
 
 	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 	glBegin( GL_QUAD_STRIP);
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	for (unsigned int i = 0; i < (polyQuadEdges.size() / 2) ; ++i) {
@@ -55,7 +61,26 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 		glVertex3fv((float *) &polyQuadEdges[2*i+1]);
 	}
 	glEnd();
+
+
+	if (outlined) {
+		glLineWidth(outlineWidth);
+		glBegin(GL_LINE_LOOP);
+		setMaterial(outlineColor);
+		for(unsigned int i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
+	        glVertex3fv((float *)&polyQuadEdges[2*i]);
+		}
+		for(unsigned int i = (polyQuadEdges.size() / 2) ; i > 0 ; --i) {
+			glVertex3fv((float *)&polyQuadEdges[2*i-1]);
+		}
+		glEnd();
+		if (outlineWidth != 1) {
+			glLineWidth(1);
+		}
+	}
+
 	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
 
 	if(textureName != "") {
 		GlTextureManager::getInst().desactivateTexture();
