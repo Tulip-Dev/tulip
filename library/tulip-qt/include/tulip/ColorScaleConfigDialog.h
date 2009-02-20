@@ -23,7 +23,7 @@
 
 namespace tlp {
 
-class ColorScaleConfigDialog : public QDialog, public Ui::ColorScaleDialog {
+class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog, public Ui::ColorScaleDialog {
 
 	Q_OBJECT
 
