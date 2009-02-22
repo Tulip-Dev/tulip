@@ -95,6 +95,7 @@ node createMNode (Graph *graph, Graph* subGraph,
   Iterator<edge>* itE = graph->getEdges();
   while(itE->hasNext())
     graphEdges.set(itE->next().id, true);
+  delete itE;
 
   //we can now Remove nodes from graph
   StableIterator<node> itN(subGraph->getNodes());
@@ -174,7 +175,7 @@ node createMNode (Graph *graph, Graph* subGraph,
 	}
       }
     }
-  }
+  } delete subGraphNodes;
   // update metaInfo of new meta edges
   hash_map<edge, set<edge> >::const_iterator it;
   for(it = subEdges.begin(); it != subEdges.end(); ++it)
@@ -315,7 +316,7 @@ void tlp::openMetaNode(Graph *graph, node metaNode,
 	if (!graph->isElement(metaEdge))
 	  graph->delEdge(e);
 	graphColors->setEdgeValue(e, metaColor);
-      }
+      } delete subEdges;
     }
     graph->getRoot()->delAllNode(metaNode);
   } else {

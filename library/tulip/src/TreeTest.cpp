@@ -70,7 +70,8 @@ bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
   node curNode;
   forEach (curNode, graph->getInOutNodes(curRoot)) { 
     if (curNode != cameFrom)
-      if (!isFreeTree (graph, curNode, curRoot, visited)) return false;
+      if (!isFreeTree (graph, curNode, curRoot, visited))
+	returnForEach(false);
   }//end forEach
   return true;
 }//end isFreeTree 

@@ -26,7 +26,7 @@ int Ordering::infFaceSize() {
   while(itn->hasNext()){
     itn->next();
     cpt++;
-  }
+  } delete itn;
   return cpt;
 }
 
@@ -42,7 +42,7 @@ int Ordering::seqp(Face f) {
     node no = it->next();
     if(contour.get(no.id))
       seq_p.set(no.id,true);
-  }
+  } delete it;
   int cpt = 0;
   node n = v1[v1.size()-1];
   node n2 = right.get(n.id);;
@@ -277,12 +277,12 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f){
     nod = nod2;
     nod2 = right.get(nod.id);
     pos++;
-  }
+  } delete it;
   while(nod2 != v1[1]) {
     if(nod2 == n_f && !found_ff)
       f_was_first = true;
     it = Gp->getFaceNodes(f);
-    while(it->hasNext()){
+    while(it->hasNext()) {
       if(it->next() == nod2) {
 	if(pos<small) {
 	  found_ff = true;
@@ -301,7 +301,7 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f){
 	}
 	break;
       }
-    }
+    } delete it;
     if(nod2 == n_l)
       found_minl = true;
     if(!f_was_last)
@@ -379,7 +379,7 @@ void Ordering::minMarkedf() {
   if(!itf->hasNext()){
     existMarkedF = false;
   }
-  while(itf->hasNext()){
+  while(itf->hasNext()) {
     int i = 0;
     int small = contourSize;
     int big = 0;
@@ -413,7 +413,7 @@ void Ordering::minMarkedf() {
       first = small;
       last = big;
     }
-  }      
+  } delete itf;      
 }
 
 //==========================================================
@@ -1152,6 +1152,7 @@ Ordering::Ordering(PlanarConMap * G, PluginProgress* pluginProgress,
       selectAndUpdate(n);                                                    
       if(Gp->nbFaces()<=2)
 	break;
+      delete itn;
       itn = is_selectable_visited.findAll(true);
     } delete itn;
     
@@ -1223,7 +1224,7 @@ Ordering::Ordering(PlanarConMap * G, PluginProgress* pluginProgress,
 	    break;
 	  }
 	}
-      }
+      } delete itf;
     } 
   }
   if(nbTours == 1){

@@ -42,7 +42,7 @@ void GraphAbstract::restoreSubGraph(Graph* sg, bool restoreSubGraphs){
       Graph* ssg = itS->next();
       removeSubGraph(ssg);
       ssg->setSuperGraph(sg);
-    }
+    } delete itS;
   }
 }
 //=========================================================================

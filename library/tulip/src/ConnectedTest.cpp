@@ -117,7 +117,7 @@ void ConnectedTest::connect(Graph *graph, vector<node> &toLink) {
       toLink.push_back(n);
       connectedTest(graph, n, visited, count);
     }
-  }
+  } delete itN;
 }
 //=================================================================
 void ConnectedTest::addEdge(Graph *graph,const edge) {
