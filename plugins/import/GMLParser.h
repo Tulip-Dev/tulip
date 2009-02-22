@@ -141,7 +141,6 @@ struct GMLParser
 {
   std::list<GMLBuilder *> builderStack;
   std::istream &inputStream;
-  GMLTokenParser *tokenParser;
 
   GMLParser(std::istream &inputStream,GMLBuilder *builder):inputStream(inputStream)
   {
@@ -157,15 +156,15 @@ struct GMLParser
   }
   bool parse()
   {
-    tokenParser=new GMLTokenParser(inputStream);
+    GMLTokenParser tokenParser(inputStream);
     GMLToken currentToken;
     GMLToken nextToken;
     GMLValue currentValue;
     GMLValue nextValue;
-    while ((currentToken=tokenParser->nextToken(currentValue))!=ENDOFSTREAM) {
+    while ((currentToken=tokenParser.nextToken(currentValue))!=ENDOFSTREAM) {
       switch (currentToken) {
       case STRINGTOKEN:
-	nextToken=tokenParser->nextToken(nextValue);
+	nextToken=tokenParser.nextToken(nextValue);
 	switch (nextToken) {
 	case OPENTOKEN:
 	  GMLBuilder *newBuilder;
@@ -181,28 +180,28 @@ struct GMLParser
 	case BOOLTOKEN:
 	  if (!builderStack.front()->addBool(currentValue.str,nextValue.boolean)) 
 	    {
-	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	      return false;
 	    }
 	  break;
 	case INTTOKEN:
 	  if (!builderStack.front()->addInt(currentValue.str,nextValue.integer)) 
 	    {
-	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	      return false;
 	    }
 	  break;
 	case DOUBLETOKEN:
 	  if (!builderStack.front()->addDouble(currentValue.str,nextValue.real)) 
 	    {
-	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	      return false;
 	    }
 	  break;
 	case STRINGTOKEN:
 	  if (!builderStack.front()->addString(currentValue.str,nextValue.str)) 
 	    {
-	      std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	      std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	      return false;
 	    }
 	  break;
@@ -216,13 +215,13 @@ struct GMLParser
 	  delete builderStack.front();
 	else
 	  {
-	    std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	    std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	    return false;
 	  }
 	builderStack.pop_front();
 	break;
       default:
-	std::cerr << "Error parsing stream line :" << tokenParser->curLine << " char : " << tokenParser->curChar << std::endl;
+	std::cerr << "Error parsing stream line :" << tokenParser.curLine << " char : " << tokenParser.curChar << std::endl;
 	return false;
       }	    
     }

@@ -410,6 +410,10 @@ bool HierarchicalGraph::run() {
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
   resultBool = mySGraph->computeProperty("Hierarchical Tree (R-T Extended)", &tmpLayout, erreurMsg, 0, &tmp);
+
+  if (edgeLength)
+    delete edgeLength;
+
   assert(resultBool);
   
   
