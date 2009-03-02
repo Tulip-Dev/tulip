@@ -40,7 +40,7 @@ class View3DSetup;
 class Cluster;
 
 // minimal structure to keep open files infos
-struct viewGlFile {
+struct FileInfo {
   std::string name;
   std::string author;
   std::string comments;
@@ -100,7 +100,6 @@ protected slots:
 
 private:
   void buildMenus();
-  stdext::hash_map<unsigned long, viewGlFile> openFiles;
   bool doFileSave(int);
   bool doFileSaveAs();
   bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);
@@ -128,6 +127,7 @@ private:
   std::map<tlp::Controller *,std::vector<QAction *> > controllerToGraphToolBar;
   std::map<tlp::Controller *,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > controllerToDockWidget;
   std::map<tlp::Controller *,std::pair<std::string,std::string > > controllerToStatusBar;
+  std::map<tlp::Controller *,FileInfo> openFiles;
  };
 
 #endif // viewGl_included

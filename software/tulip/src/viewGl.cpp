@@ -372,11 +372,11 @@ bool viewGl::createController(const string &name,const string &graphName) {
 //**********************************************************************
 bool viewGl::doFileSave(int index) {
   Controller *controller=tabIndexToController[index];
-  if (openFiles.find((unsigned long)controller)==openFiles.end() ||
-      (openFiles[(unsigned long)controller].name == "")) {
+  if (openFiles.find(controller)==openFiles.end() ||
+      (openFiles[controller].name == "")) {
     return doFileSaveAs();
   }
-  viewGlFile &vFile = openFiles[(unsigned long)controller];
+  FileInfo &vFile = openFiles[controller];
   return doFileSave(controller,"tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
@@ -389,6 +389,8 @@ bool viewGl::doFileSave(Controller *controllerToSave,string plugin, string filen
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
+  if(filename.length())
+    dataSet.set<string>("name", filename);
   if (author.length() > 0)
     dataSet.set<string>("author", author);
   if (comments.length() > 0)
@@ -430,7 +432,7 @@ bool viewGl::doFileSave(Controller *controllerToSave,string plugin, string filen
   }
 
   // keep trace of file infos
-  viewGlFile &vFile = openFiles[(unsigned long)controllerToSave];
+  FileInfo &vFile = openFiles[controllerToSave];
   vFile.name = filename;
   dataSet.get<string>("author", vFile.author);
   dataSet.get<string>("text::comments", vFile.comments);
@@ -591,12 +593,11 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
 
     if(noPlugin) {
-      viewGlFile vFile;
+      FileInfo vFile;
       vFile.name = s.toAscii().data();
       dataSet.get<std::string>("author", vFile.author);
       dataSet.get<std::string>("text::comments", vFile.comments);
-      //todo
-      //openFiles[((unsigned long)currentController)] = vFile;
+      openFiles[tabIndexToController[tabWidget->currentIndex()]] = vFile;
     }
 
     enableElements(true);
