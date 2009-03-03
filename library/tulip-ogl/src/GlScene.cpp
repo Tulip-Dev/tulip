@@ -583,7 +583,7 @@ namespace tlp {
     GlSVGFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(true,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
@@ -622,7 +622,7 @@ namespace tlp {
     GlEPSFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(true,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {

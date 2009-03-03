@@ -109,9 +109,9 @@ namespace tlp {
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
-      glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
-      glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
-      glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
+      glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);glPassThrough(fillColor[3]);
+      glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);glPassThrough(strokeColor[3]);
+      glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);glPassThrough(textColor[3]);
 
       glPassThrough(TLP_FB_BEGIN_EDGE);
       glPassThrough(id); //id of the node for the feed back mode
