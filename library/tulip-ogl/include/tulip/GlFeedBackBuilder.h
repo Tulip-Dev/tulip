@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
+ it under the terms of the GNU General Public License as published by  
+ the Free Software Foundation; either version 2 of the License, or     
  (at your option) any later version.
 */
 #ifndef Tulip_GLFEEDBACKBUILDER_H
@@ -34,24 +34,23 @@ namespace tlp {
     GLfloat blue;
     GLfloat alpha;
   } Feedback3Dcolor;
-
+  
   //====================================================
   typedef struct _DepthIndex {
     GLfloat *ptr;
     GLfloat depth;
-    GLfloat *infoPtr;
   } DepthIndex;
-
-  //====================================================
+  
+  //====================================================  
   /**
    * Abstract class used to build a object with a OpenGl feedback buffer
    */
   class TLP_GL_SCOPE GlFeedBackBuilder {
-
+    
   public:
-
+    
     virtual ~GlFeedBackBuilder() {}
-
+    
     virtual void begin(const Vector<int, 4> &viewport) {}
     virtual void passThroughToken(GLfloat *data) {}
     virtual void pointToken(GLfloat *data) {}
@@ -62,11 +61,11 @@ namespace tlp {
     virtual void drawPixelToken(GLfloat *data) {}
     virtual void copyPixelToken(GLfloat *data) {}
     virtual void end() {}
-
+    
     virtual void getResult(std::string* str) = 0;
-
+    
   };
-
+ 
 }
 
 #endif // Tulip_GLFEEDBACKBUILDER_H
