@@ -221,6 +221,8 @@ namespace tlp {
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
       }
       glDisableClientState(GL_NORMAL_ARRAY);
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
   }
 
