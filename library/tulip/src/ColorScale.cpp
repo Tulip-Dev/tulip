@@ -1,14 +1,14 @@
 /*
-	  ColorScale.cpp
+ ColorScale.cpp
 
-   Created on: 18 févr. 2009
-       Author: Antoine Lambert
-       E-mail: antoine.lambert@labri.fr
+ Created on: 18 févr. 2009
+ Author: Antoine Lambert
+ E-mail: antoine.lambert@labri.fr
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
 
  */
 
@@ -18,9 +18,10 @@ using namespace std;
 
 namespace tlp {
 
-ColorScale::ColorScale() : gradient(true), colorScaleSet(false) {
-	colorMap[0.0f] = Color(255,255,255,255);
-	colorMap[1.0f] = Color(255,255,255,255);
+ColorScale::ColorScale() :
+  gradient(true), colorScaleSet(false) {
+  colorMap[0.0f] = Color(255, 255, 255, 255);
+  colorMap[1.0f] = Color(255, 255, 255, 255);
 }
 
 ColorScale::ColorScale(const ColorScale& scale) {
@@ -29,40 +30,40 @@ ColorScale::ColorScale(const ColorScale& scale) {
   colorScaleSet = scale.colorScaleSet;
 }
 
-ColorScale::~ColorScale() {}
+ColorScale::~ColorScale() {
+}
 
-void ColorScale::setColorScale(const std::vector<Color> colors, const bool gradientV) {
+void ColorScale::setColorScale(const std::vector<Color> colors,
+    const bool gradientV) {
   gradient = gradientV;
   colorMap.clear();
   if (!colors.empty()) {
-	  colorScaleSet = true;
-	if (colors.size() == 1) {
-		colorMap[0.0f] = colors[0];
-		colorMap[1.0f] = colors[0];
-	} else {
-		float shift;
-		if (gradient) {
-			shift = 1.0f / (colors.size() - 1);
-		} else {
-			shift = 1.0f / colors.size();
-		}
-		for (unsigned int i = 0; i < colors.size(); ++i) {
-			//Ensure that the last color will be set to 1
-			if (i == colors.size() - 1) {
-				if (!gradient) {
-					if (!gradient) {
-						colorMap[1.0f - shift] = colors[i];
-					}
-				}
-				colorMap[1.0f] = colors[i];
-			} else {
-				colorMap[(float) (i * shift)] = colors[i];
-				if (!gradient) {
-					colorMap[(float) (((i+1) * shift) - 1E-6)] = colors[i];
-				}
-			}
-		}
-	}
+    colorScaleSet = true;
+    if (colors.size() == 1) {
+      colorMap[0.0f] = colors[0];
+      colorMap[1.0f] = colors[0];
+    } else {
+      float shift;
+      if (gradient) {
+        shift = 1.0f / (colors.size() - 1);
+      } else {
+        shift = 1.0f / colors.size();
+      }
+      for (unsigned int i = 0; i < colors.size(); ++i) {
+        //Ensure that the last color will be set to 1
+        if (i == colors.size() - 1) {
+          if (!gradient) {
+            colorMap[1.0f - shift] = colors[i];
+          }
+          colorMap[1.0f] = colors[i];
+        } else {
+          colorMap[(float) (i * shift)] = colors[i];
+          if (!gradient) {
+            colorMap[(float) (((i + 1) * shift) - 1E-6)] = colors[i];
+          }
+        }
+      }
+    }
     notifyObservers();
   }
 }
@@ -90,12 +91,13 @@ Color ColorScale::getColorAtPos(const float pos) const {
 
     Color ret;
     if (gradient) {
-    	double ratio = (pos - startPos) / (endPos - startPos);
-    	for (unsigned int i = 0; i < 4; ++i) {
-    		ret[i] = (unsigned char) (double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * ratio);
-    	}
+      double ratio = (pos - startPos) / (endPos - startPos);
+      for (unsigned int i = 0; i < 4; ++i) {
+        ret[i] = (unsigned char) (double(startColor[i]) + (double(endColor[i])
+            - double(startColor[i])) * ratio);
+      }
     } else {
-    	return startColor;
+      return startColor;
     }
     return ret;
   }

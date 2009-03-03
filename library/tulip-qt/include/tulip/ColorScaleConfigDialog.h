@@ -33,7 +33,7 @@ public :
 
 	void setPredefinedGradientsDirectory(const std::string &gradientsDir);
 
-	void setColorScale(ColorScale *colorScale) {this->colorScale = colorScale;}
+	void setColorScale(ColorScale *colorScale);
 
 protected :
 

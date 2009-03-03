@@ -36,6 +36,7 @@ public:
 
   bool colorScaleInitialized() const {return colorScaleSet;}
   std::map<float, Color> getColorMap() const {return colorMap;}
+  bool isGradient(){return gradient;}
 
 protected:
 
