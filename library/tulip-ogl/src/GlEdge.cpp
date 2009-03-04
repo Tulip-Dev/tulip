@@ -1,3 +1,4 @@
+#include "tulip/GlewManager.h"
 #include "tulip/GlEdge.h"
 
 #include <tulip/Coord.h>
@@ -22,6 +23,7 @@
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/Camera.h"
+#include "tulip/GlPointManager.h"
 
 #include <iostream>
 
@@ -132,11 +134,15 @@ namespace tlp {
     }
 
     if(lod<5) {
-      setColor(srcCol);
-      glPointSize(1);
-      glBegin(GL_POINTS);
-        glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
-      glEnd();
+      if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
+        GlPointManager::getInst().addPoint(srcCoord,srcCol,false);
+      }else{
+        setColor(srcCol);
+        glPointSize(1);
+        glBegin(GL_POINTS);
+          glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
+        glEnd();
+      }
       return;
     }
 

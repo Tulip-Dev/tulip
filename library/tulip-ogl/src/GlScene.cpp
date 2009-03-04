@@ -20,6 +20,7 @@
 #include "tulip/GlFeedBackRecorder.h"
 #include "tulip/GlSVGFeedBackBuilder.h"
 #include "tulip/GlEPSFeedBackBuilder.h"
+#include "tulip/GlPointManager.h"
 
 using namespace std;
 
@@ -162,6 +163,8 @@ namespace tlp {
       camera=(Camera*)(*itCamera);
       camera->initGl();
 
+      GlPointManager::getInst().beginRendering();
+
       bool zOrdering=false;
       if(glGraphComposite)
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
@@ -246,6 +249,8 @@ namespace tlp {
           }
         }
       }
+
+      GlPointManager::getInst().endRendering();
 
       if(viewLabel) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);

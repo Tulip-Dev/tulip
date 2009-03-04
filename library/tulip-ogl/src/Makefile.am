@@ -85,5 +85,6 @@ libtulip_ogl_la_SOURCES = \
 	GlNominativeAxis.cpp \
 	GlProgressBar.cpp \
 	GlXMLTools.cpp \
-	GlColorScale.cpp
+	GlColorScale.cpp \
+	GlPointManager.cpp
 

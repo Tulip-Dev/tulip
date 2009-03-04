@@ -1,3 +1,5 @@
+#include "tulip/GlewManager.h"
+
 #include "tulip/GlNode.h"
 
 #include <tulip/Coord.h>
@@ -17,6 +19,7 @@
 #include "tulip/GlTLPFeedBackBuilder.h"
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
+#include "tulip/GlPointManager.h"
 
 #include <iostream>
 
@@ -86,23 +89,26 @@ namespace tlp {
 
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
-      glDisable(GL_LIGHTING);
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
+      Color color;
       if (!data->elementSelected->getNodeValue(n)) {
-	setColor(fillColor);
-	glPointSize(sqrt(lod));
-	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
-	 glEnd();
+        color=fillColor;
+      }else{
+        color=colorSelect2;
       }
-      else {
-	setColor(colorSelect2);
-	glPointSize(sqrt(lod)+1);
-	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
-	glEnd();
+
+      if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
+        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]),color,sqrt(lod)>1);
+      }else{
+        glDisable(GL_LIGHTING);
+        setColor(color);
+        glPointSize(sqrt(lod));
+        glBegin(GL_POINTS);
+        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
+        glEnd();
+        glEnable(GL_LIGHTING);
       }
-      glEnable(GL_LIGHTING);
+
     } else { //draw a glyph or make recursive call for meta nodes
       glPushMatrix();
       glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
@@ -112,8 +118,8 @@ namespace tlp {
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
 
       if (data->elementSelected->getNodeValue(n)) {
-	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
-	GlDisplayListManager::getInst().callDisplayList("selection");
+        //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+        GlDisplayListManager::getInst().callDisplayList("selection");
       }
       glPopMatrix();
     }
