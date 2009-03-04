@@ -1458,6 +1458,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::updateUndoRedoInfos() {
+    if(!currentGraph)
+      return;
+
     undoAction->setEnabled(currentGraph->canPop());
     redoAction->setEnabled(currentGraph->canUnpop());
     editUndoAction->setEnabled(currentGraph->canPop());
