@@ -151,9 +151,6 @@ public:
   }
 
   bool run() {
-    string metricS="viewMetric";
-    string sizeS="viewSize";
-
     DoubleProperty *tmp = 0;
     if (!mappingType) {
       tmp = new DoubleProperty(graph);
