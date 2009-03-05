@@ -736,6 +736,8 @@ namespace tlp {
   void MainController::changeGraph(Graph *graph) {
     if(currentGraph==graph)
       return;
+    if(!currentView)
+      return;
 
     clearObservers();
 
@@ -758,6 +760,7 @@ namespace tlp {
     updateUndoRedoInfos();
 
     initObservers();
+    graph->addObserver(this);
   }
   //**********************************************************************
    void MainController::graphAboutToBeRemove(Graph *graph){
