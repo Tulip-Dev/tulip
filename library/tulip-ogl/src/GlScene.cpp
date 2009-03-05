@@ -464,12 +464,9 @@ namespace tlp {
 
     for(VectorOfCamera::iterator it=cameraVector->begin();it!=cameraVector->end();++it) {
 
-      Camera *camera=(Camera*)(*it);;
+      Camera *camera=(Camera*)(*it);
 
       Vector<int, 4> viewport = camera->getViewport();
-
-      glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
-      glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
 
       unsigned int size;
       if(type==SelectSimpleEntities) {
@@ -479,6 +476,17 @@ namespace tlp {
       }else{
         size=(*itEdges).size();
       }
+
+      if(size==0){
+        itSimple++;
+        itNodes++;
+        itEdges++;
+        continue;
+      }
+
+      glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
+      glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
+
       //Allocate memory to store the result oh the selection
       GLuint (*selectBuf)[4] = new GLuint[size][4];
       glSelectBuffer(size*4 , (GLuint *)selectBuf);
@@ -557,9 +565,9 @@ namespace tlp {
       glPopAttrib();
 
       delete[] selectBuf;
-      ++itSimple;
-      ++itNodes;
-      ++itEdges;
+      itSimple++;
+      itNodes++;
+      itEdges++;
     }
 
     lodCalculator->clear();
