@@ -1,9 +1,14 @@
 //#include <cppunit/ui/qt/TestRunner.h>
+#include <string.h>
+#include <stdlib.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <tulip/TlpTools.h>
 
 int main( int argc, char** argv ) {
+  std::string tlpdir("@prefix@");
+  tlpdir += "/lib";
+  setenv("TLP_DIR", tlpdir.c_str(), 1);
   tlp::initTulipLib();
   tlp::loadPlugins();   // library side plugins  
 

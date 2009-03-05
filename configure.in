@@ -397,6 +397,7 @@ plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
 plugins/view/parallel/Makefile
 plugins/controller/Makefile
+unit_test/library/tulip/tuliplibtest.cpp
 docs/Makefile
 docs/devTeamDoxygen/Makefile
 docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in

@@ -74,45 +74,29 @@ void DataSetTest::testSetGetString() {
 struct Struct {
   static unsigned int nbInstances;
 
-  char *value;
+  std::string value;
 
   Struct& operator=(const Struct &st) {
-    if (value)
-      free(value);
-    if (st.value) {
-      value = (char *) malloc(strlen(st.value));
-      strcpy(value, st.value);
-    } else
-      value = 0;
+    value = st.value;
+    return *this;
   }
       
   Struct() {
     ++nbInstances;
-    value = 0;
   }
 
-  Struct(char *val) {
+  Struct(const std::string& val) {
     ++nbInstances;
-    value = 0;
-    if (val) {
-      value = (char *) malloc(strlen(val));
-      strcpy(value, val);
-    }
+    value = val;
   }
 
   ~Struct() {
     --nbInstances;
-    if (value)
-      free(value);
   }
 
   Struct(const Struct &st) {
     ++nbInstances;
-    if (st.value) {
-      value = (char *) malloc(strlen(st.value));
-      strcpy(value, st.value);
-    } else
-      value = 0;    
+    value = st.value;
   }
 };
 
@@ -126,8 +110,8 @@ void DataSetTest::testSetGetStruct() {
 
   unsigned int nbInstances = 2;
   CPPUNIT_ASSERT_EQUAL(Struct::nbInstances, nbInstances);
-  CPPUNIT_ASSERT_EQUAL(true, v1.value != 0);
-  CPPUNIT_ASSERT_EQUAL(true, v2.value == 0);
+  CPPUNIT_ASSERT(!v1.value.empty());
+  CPPUNIT_ASSERT(v2.value.empty());
   
   CPPUNIT_ASSERT_EQUAL(false, dSet.get("struct", v1));
 
@@ -136,8 +120,7 @@ void DataSetTest::testSetGetStruct() {
   CPPUNIT_ASSERT_EQUAL(Struct::nbInstances, nbInstances);
 
   CPPUNIT_ASSERT_EQUAL(true, dSet.get("struct", v2));
-  CPPUNIT_ASSERT_EQUAL(true, v1.value != v2.value);
-  CPPUNIT_ASSERT_EQUAL(true, strcmp(v1.value, v2.value) == 0);
+  CPPUNIT_ASSERT(v1.value == v2.value);
 }
 
 
