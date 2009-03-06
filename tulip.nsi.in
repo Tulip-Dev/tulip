@@ -120,7 +120,9 @@ Section "-Install Plugins and Docs"
 setOutPath $INSTDIR\lib\tlp
 File @prefix@\lib\bin\*.dll
 setOutPath $INSTDIR\lib\tlp\glyphs
-File @prefix@\lib\tlp\bin\*.dll
+File @prefix@\lib\tlp\bin\*-@VERSION@.dll
+setOutPath $INSTDIR\lib\tlp\designer
+File @prefix@\lib\tlp\bin\*-@WIN_VERSION@.dll
 setOutPath $INSTDIR\share
 ; Try to save doc files if any
 File /nonfatal /r @prefix@\share\*
