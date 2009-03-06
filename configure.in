@@ -324,7 +324,7 @@ AC_SUBST(GZSTREAM_LDFLAGS)
 AC_ARG_WITH([ftgl-includes],AS_HELP_STRING([--with-ftgl-includes=FLAGS],[cppflags for libftgl]),
  [FTGL_INCLUDE=$withval],
  [FTGL_INCLUDE='-I$(top_srcdir)/thirdparty/ftgl'])
-AC_ARG_WITH([ftgl-lib],AS_HELP_STRING([--with-ftgl-lib=FLAGS],[ldflags to link with gzstream]),
+AC_ARG_WITH([ftgl-lib],AS_HELP_STRING([--with-ftgl-lib=FLAGS],[ldflags to link with libftgl]),
  [FTGL_LDFLAGS=$withval],
  [FTGL_LDFLAGS='$(top_builddir)/thirdparty/ftgl/libftgl.la'])
 AC_SUBST(FTGL_INCLUDE)
