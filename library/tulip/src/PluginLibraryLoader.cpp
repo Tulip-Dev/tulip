@@ -66,7 +66,7 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *
     _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
     if (loader != 0) {
       // count files loop
-      unsigned int nbFiles = 0;
+      unsigned long nbFiles = 0;
       if (_infos->hFind != INVALID_HANDLE_VALUE)
 	nbFiles = 1;
       while (FindNextFile (_infos->hFind, &_infos->FindData)) {
@@ -87,7 +87,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     n++;
     std::string tmpStr = pluginPath +"/"+ _infos->FindData.cFileName;
     std::string lib(_infos->FindData.cFileName);
-    unsigned int idx = lib.rfind('-', lib.rfind('.') - 1);
+    unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
@@ -128,10 +128,10 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
 int __tulip_select_libs(struct dirent *ent) {
 #if !defined(__APPLE__)
   const char *suffix = ".so";
-  const unsigned int suffix_len = 3;
+  const unsigned long suffix_len = 3;
 #else
   const char *suffix = ".dylib";
-  const unsigned int suffix_len = 6;
+  const unsigned long suffix_len = 6;
 #endif
   int idx = strlen(ent->d_name) - suffix_len;
   if (idx < 0) return 0;
@@ -170,7 +170,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     tmpStr= pluginPath +"/"+ std::string(namelist[n]->d_name);  
     std::string lib(namelist[n]->d_name);
     // looking for a suffix matching -A.B.C
-    unsigned int idx = lib.rfind('-', lib.rfind('.') - 1);
+    unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
@@ -183,7 +183,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
       idx = suffix.find('.');
       if (idx != std::string::npos) {
 	bool isNumber = true;
-	for (unsigned int i = 0; i < idx; ++i) {
+	for (unsigned long i = 0; i < idx; ++i) {
 	  if (!isdigit(suffix[i])) {
 	    isNumber = false;
 	    break;
@@ -193,7 +193,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
 	  suffix = suffix.substr(idx + 1);
 	  idx = suffix.find('.');
 	  if (idx != std::string::npos) {
-	    for (unsigned int i = 0; i < idx; ++i) {
+	    for (unsigned long i = 0; i < idx; ++i) {
 	      if (!isdigit(suffix[i])) {
 		isNumber = false;
 		break;
