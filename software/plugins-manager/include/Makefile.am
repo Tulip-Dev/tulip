@@ -27,7 +27,7 @@ BUILT_SOURCES = \
 	ProxyConfigurationDialog.h \
 	ProxyConfigurationDialogData.h
 
-nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
+noinst_HEADERS = $(BUILT_SOURCES)
 
 %Data.h: ../designer/%.ui
 	$(UIC) -o $@ $<
