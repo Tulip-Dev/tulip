@@ -75,8 +75,9 @@ PropertyInterface* PropertyManagerImpl::delLocalProperty(const string &str) {
   map<string,PropertyInterface *>::iterator it;
   it=propertyProxyMap.find(str);
   if (it!=propertyProxyMap.end()) {
+    PropertyInterface* prop = (*it).second;
     propertyProxyMap.erase(it);
-    return (*it).second;
+    return prop;
   }
   return NULL;
 }
