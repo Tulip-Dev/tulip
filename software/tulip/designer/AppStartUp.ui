@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>327</width>
-    <height>398</height>
+    <height>407</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -93,9 +93,33 @@
    <property name="value" >
     <number>24</number>
    </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>270</y>
+     <width>71</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string/>
+   </property>
+   <property name="pixmap" >
+    <pixmap resource="TulipResource.qrc" >:/logolabri.jpg</pixmap>
+   </property>
+   <property name="scaledContents" >
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <resources/>
+ <resources>
+  <include location="TulipResource.qrc" />
+ </resources>
  <connections/>
 </ui>
