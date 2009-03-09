@@ -87,9 +87,9 @@ namespace tlp {
     if (interactor) {
       interactor = interactor->clone();
       interactor->moveToThread(this->thread());
-      interactor->setView(this);
       interactor->setID(++_id);
       _interactors.push_back(interactor);
+      interactor->setView(this);
       centralWidget->installEventFilter(interactor);
       //interactor->compute(centralWidget);
       //updateGL();
