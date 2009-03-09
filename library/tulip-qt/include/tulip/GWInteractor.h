@@ -60,7 +60,7 @@ namespace tlp {
     /**
      * Set interactor connected view
      */
-    void setView(View *view) {this->view=view;}
+    virtual void setView(View *view) {this->view=view;}
     /**
      * \return the interactor connected view
      */
