@@ -119,7 +119,7 @@ namespace tlp {
       GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
       backgroundLayer->addGlEntity(background,"background");
 
-      GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
+      GlRectTextured *labri=new GlRectTextured(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
       labri->setVisible(false);
       foregroundLayer->addGlEntity(labri,"labrilogo");
 
