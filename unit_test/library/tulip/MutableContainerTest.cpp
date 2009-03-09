@@ -108,6 +108,9 @@ void MutableContainerTest::testFindAll() {
   CPPUNIT_ASSERT( itD->next() == 17 );
   CPPUNIT_ASSERT( itS->next() == 17 );
 
+  delete itB;
+  delete itD;
+  delete itS;
   bool ok=false;
   try {
     itB = mutBool->findAll(false);
