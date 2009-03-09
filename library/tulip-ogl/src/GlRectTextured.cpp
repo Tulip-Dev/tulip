@@ -13,7 +13,13 @@ namespace tlp {
   GlRectTextured::GlRectTextured(float top,float bottom,float left, float right,
 				 const std::string& textureName,
 				 bool inPercent)
-    :top(top),bottom(bottom),left(left),right(right),inPercent(inPercent),textureName(textureName)
+    :top(top),bottom(bottom),left(left),right(right),inPercent(inPercent),textureName(textureName),xInv(false),yInv(false)
+  {
+    GlTextureManager::getInst().loadTexture(textureName);
+  }
+
+  GlRectTextured::GlRectTextured(float bottom,float left,float height, float width,const std::string& textureName,bool xInv, bool yInv)
+  :top(bottom),bottom(bottom+height),left(left),right(left+width),inPercent(false),textureName(textureName),xInv(xInv),yInv(yInv)
   {
     GlTextureManager::getInst().loadTexture(textureName);
   }
@@ -36,38 +42,48 @@ namespace tlp {
   }
 
   void GlRectTextured::draw(float lod,Camera *camera) {
+    Vector<int,4> viewport=camera->getViewport();
+    float xMin;
+    float xMax;
+    float yMin;
+    float yMax;
+    if(inPercent){
+      xMin=viewport[0]+left*(viewport[2]-viewport[0]);
+      xMax=viewport[0]+right*(viewport[2]-viewport[0]);
+      yMin=viewport[1]+bottom*(viewport[3]-viewport[1]);
+      yMax=viewport[1]+top*(viewport[3]-viewport[1]);
+    }else{
+      if(!xInv){
+        xMin=left;
+        xMax=right;
+      }else{
+        xMax=viewport[2]-left;
+        xMin=viewport[2]-right;
+      }
+      if(!yInv){
+        yMin=bottom;
+        yMax=top;
+      }else{
+        yMax=viewport[3]-bottom;
+        yMin=viewport[3]-top;
+      }
+    }
+
     if(GlTextureManager::getInst().activateTexture(textureName))
       setMaterial(Color(255,255,255,255));
-    if(!inPercent) {
-      glBegin(GL_QUADS);
-        glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(left, top, 0);				// Top Left
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(right, top, 0);			// Top Right
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(right, bottom, 0);			// Bottom Right
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(left, bottom, 0);			// Bottom Left
-      glEnd();
-    }else{
-      Vector<int,4> viewport=camera->getViewport();
-      float xMin=viewport[0]+left*(viewport[2]-viewport[0]);
-      float xMax=viewport[0]+right*(viewport[2]-viewport[0]);
-      float yMin=viewport[1]+bottom*(viewport[3]-viewport[1]);
-      float yMax=viewport[1]+top*(viewport[3]-viewport[1]);
-      glBegin(GL_QUADS);
-        glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(xMin, yMax, 0);				// Top Left
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(xMax, yMax, 0);			// Top Right
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(xMax, yMin, 0);			// Bottom Right
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(xMin, yMin, 0);			// Bottom Left
-      glEnd();
-    }
+
+    glBegin(GL_QUADS);
+    glNormal3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(xMin, yMax, 0);				// Top Left
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(xMax, yMax, 0);			// Top Right
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(xMax, yMin, 0);			// Bottom Right
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(xMin, yMin, 0);			// Bottom Left
+    glEnd();
+
     GlTextureManager::getInst().desactivateTexture();
   }
   //===========================================================

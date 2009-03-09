@@ -60,7 +60,14 @@ namespace tlp {
         glewIsOk=false;
         std::cout << "Glew init error: " << glewGetErrorString(err) << std::endl;
       }else{
-        glewIsOk=true;
+        std::string glewVersion=(const char*)glewGetString(GLEW_VERSION);
+        if(glewVersion=="1.5.0" || glewVersion=="1.5.1"){
+          glewIsOk=true;
+          std::cout << "ok" << std::endl;
+        }else{
+          glewIsOk=false;
+          std::cout << "version : " << glewVersion << std::endl;
+        }
       }
       _glewIsInit=true;
     }

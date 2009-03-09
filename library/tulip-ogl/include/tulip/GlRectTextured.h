@@ -28,9 +28,19 @@ namespace tlp {
   public:
     GlRectTextured() {}
 
+    /**
+     * Constructor : with top/bottom/left/right coords, textureName and if inPercent is true coords are in percent
+     */
     GlRectTextured(float top,float bottom,float left, float right,
-		   const std::string& textureName,
-		   bool inPercent=false);
+        const std::string& textureName,
+        bool inPercent=false);
+
+    /**
+     * Constructor : with bottom/left height,width coords, textureName and if xInv/yInv is true coords viewport - coord
+     */
+    GlRectTextured(float bottom,float left,float height, float width,
+           const std::string& textureName,
+           bool xInv, bool yInv);
 
     virtual ~GlRectTextured() {}
 
@@ -82,6 +92,8 @@ namespace tlp {
     float right;
     bool inPercent;
     std::string textureName;
+    bool xInv;
+    bool yInv;
 
   };
 }
