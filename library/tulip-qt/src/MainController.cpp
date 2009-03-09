@@ -1000,12 +1000,17 @@ namespace tlp {
     if (tmp.empty()) return;
     currentGraph->push();
     Observable::holdObservers();
-    if (currentGraph == currentGraph->getRoot()) {
+    bool haveToChangeGraph=false;
+    Graph *graphToAddTo=currentGraph;
+    if (graphToAddTo == graphToAddTo->getRoot()) {
       QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
-      currentGraph = tlp::newCloneSubGraph(currentGraph, "groups");
+      graphToAddTo = tlp::newCloneSubGraph(graphToAddTo, "groups");
+      haveToChangeGraph=true;
     }
-    node metaNode = tlp::createMetaNode(currentGraph, tmp);
+    node metaNode = tlp::createMetaNode(graphToAddTo, tmp);
     Observable::unholdObservers();
+    if(haveToChangeGraph)
+      changeGraph(graphToAddTo);
     clusterTreeWidget->update();
   }
   //==============================================================
