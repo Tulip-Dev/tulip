@@ -10,6 +10,7 @@
 #include <deque>
 #include <exception>
 #include <iostream>
+#include <string.h>
 #include <tulip/tulipconf.h>
 #include <tulip/ReturnType.h>
 #include <tulip/Iterator.h>
@@ -177,11 +178,48 @@ private:
   bool compressing;
 };
 //===================================================================
+// define a template function to hold default value
+template <typename TYPE> inline TYPE defaultTypeValue() {
+  return TYPE();
+}
+
+// macro for basic types instantiation
+#define DECL_DEFAULT_TYPE_VALUE(T)					\
+template<> inline T defaultTypeValue<T>() {				\
+  return (T) 0;								\
+}
+
+DECL_DEFAULT_TYPE_VALUE(void)
+
+DECL_DEFAULT_TYPE_VALUE(bool)
+DECL_DEFAULT_TYPE_VALUE(char)
+DECL_DEFAULT_TYPE_VALUE(signed char)
+DECL_DEFAULT_TYPE_VALUE(unsigned char)
+DECL_DEFAULT_TYPE_VALUE(wchar_t)
+
+DECL_DEFAULT_TYPE_VALUE(signed short)
+DECL_DEFAULT_TYPE_VALUE(unsigned short)
+DECL_DEFAULT_TYPE_VALUE(signed int)
+DECL_DEFAULT_TYPE_VALUE(unsigned int)
+DECL_DEFAULT_TYPE_VALUE(signed long)
+DECL_DEFAULT_TYPE_VALUE(unsigned long)
+#if LONGLONG_EXISTS
+  DECL_DEFAULT_TYPE_VALUE(signed long long)
+  DECL_DEFAULT_TYPE_VALUE(unsigned long long)
+#endif  // LONGLONG_EXISTS
+
+DECL_DEFAULT_TYPE_VALUE(float)
+DECL_DEFAULT_TYPE_VALUE(double)
+DECL_DEFAULT_TYPE_VALUE(long double)
 //===================================================================
 template<typename TYPE> 
-MutableContainer<TYPE>::MutableContainer() {
+  MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<TYPE>()),
+   hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(defaultTypeValue<TYPE>()), state(VECT), elementInserted(0),
+   ratio(double(sizeof(TYPE)) / (3.0*double(sizeof(void *))+double(sizeof(TYPE)))),
+   compressing(false)
+     {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  state = VECT;
+  /* state = VECT;
   vData = new std::deque<TYPE>();
   hData = 0;
   maxIndex = UINT_MAX;
@@ -190,7 +228,7 @@ MutableContainer<TYPE>::MutableContainer() {
   unsigned int phiP = sizeof(void *);
   unsigned int phi = sizeof(TYPE);
   ratio = double(phi) / (3.0*double(phiP)+double(phi));
-  compressing = false;
+  compressing = false; */
 }
 //===================================================================
 template <typename TYPE> 
