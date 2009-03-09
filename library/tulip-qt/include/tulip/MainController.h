@@ -155,6 +155,14 @@ namespace tlp {
      */
     void delEdge(Graph *graph, const edge);
     /**
+     * Call when a local property is add
+     */
+    void addLocalProperty(Graph*, const std::string&);
+    /**
+     * Call when a local property is delete
+     */
+    void delLocalProperty(Graph*, const std::string&);
+    /**
      * Call to update number of nodes/edges
      */
     void updateCurrentGraphInfos();
@@ -174,6 +182,7 @@ namespace tlp {
     std::map<View *,Graph* > viewGraph;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
+    Graph *graphToReload;
 
     Morphing *morph;
 

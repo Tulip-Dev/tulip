@@ -191,7 +191,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentGraph(NULL),currentView(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
+    currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -254,7 +254,7 @@ namespace tlp {
           (*(DataSet*)p.second->value).get("y",y);
           (*(DataSet*)p.second->value).get("width",width);
           (*(DataSet*)p.second->value).get("height",height);
-          Graph *lastViewedGraph=newGraph;
+          lastViewedGraph=newGraph;
           if(id!=0){
             lastViewedGraph=getCurrentSubGraph(newGraph, id);
             if(!lastViewedGraph)
@@ -378,7 +378,16 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::update ( ObserverIterator begin, ObserverIterator end) {
-    redrawViews();
+    if(graphToReload){
+      for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+        if((*it).second==graphToReload){
+          (*it).first->setGraph(graphToReload);
+        }
+      }
+      graphToReload=NULL;
+    }else{
+      redrawViews();
+    }
     updateUndoRedoInfos();
   }
   //**********************************************************************
@@ -412,10 +421,14 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::addSubGraph(Graph *g, Graph *sg){
+    if(currentGraph!=g)
+      return;
     sg->addObserver(this);
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
+    if(currentGraph!=g)
+      return;
     Iterator<Graph *> *itS=sg->getSubGraphs();
     while(itS->hasNext()) {
       Graph *subgraph = itS->next();
@@ -431,23 +444,43 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::addNode (Graph *graph, const node) {
+    if(currentGraph!=graph)
+      return;
     ++currentGraphNbNodes;
     updateCurrentGraphInfos();
   }
   //**********************************************************************
   void  MainController::addEdge (Graph *graph, const edge) {
+    if(currentGraph!=graph)
+      return;
     ++currentGraphNbEdges;
     updateCurrentGraphInfos();
   }
   //**********************************************************************
   void  MainController::delNode (Graph *graph, const node) {
+    if(currentGraph!=graph)
+      return;
     --currentGraphNbNodes;
     updateCurrentGraphInfos();
   }
   //**********************************************************************
   void  MainController::delEdge (Graph *graph, const edge) {
+    if(currentGraph!=graph)
+      return;
     --currentGraphNbEdges;
     updateCurrentGraphInfos();
+  }
+  //**********************************************************************
+  void  MainController::addLocalProperty(Graph *graph, const std::string&){
+    for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+      if((*it).second==graph){
+        (*it).first->setGraph(graph);
+      }
+    }
+  }
+  //**********************************************************************
+  void  MainController::delLocalProperty(Graph *graph, const std::string&){
+    graphToReload=graph;
   }
   //**********************************************************************
   void MainController::loadGUI() {
@@ -730,6 +763,13 @@ namespace tlp {
       clusterTreeWidget->setGraph(currentGraph);
       eltProperties->setGraph(currentGraph);
       propertiesWidget->setGraph(currentGraph);
+
+      //Remove observer (nothing if this not observe)
+      currentGraph->removeGraphObserver(this);
+      currentGraph->removeObserver(this);
+      //Add observer
+      currentGraph->addGraphObserver(this);
+      currentGraph->addObserver(this);
     }
   }
   //**********************************************************************
@@ -760,7 +800,12 @@ namespace tlp {
     updateUndoRedoInfos();
 
     initObservers();
-    graph->addObserver(this);
+    //Remove observer (nothing if this not observe)
+    currentGraph->removeGraphObserver(this);
+    currentGraph->removeObserver(this);
+    //Add observer
+    currentGraph->addGraphObserver(this);
+    currentGraph->addObserver(this);
   }
   //**********************************************************************
    void MainController::graphAboutToBeRemove(Graph *graph){
@@ -828,9 +873,9 @@ namespace tlp {
     QWidget *widget=(QWidget*)object;
     delete viewWidget[widget];
     viewWidget.erase(widget);
-    currentView=NULL;
     if(viewWidget.size()==0){
       mainWindowFacade.getInteractorsToolBar()->clear();
+      currentView=NULL;
       emit willBeClosed();
     }
   }
