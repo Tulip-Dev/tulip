@@ -1214,7 +1214,7 @@ namespace tlp {
   void MainController::changeString(QAction* action) {
     string name = action->text().toStdString();
     if (changeProperty<StringProperty>(name,"viewLabel"))
-      redrawViews();
+      redrawViews(true);
   }
   //**********************************************************************
   void MainController::changeSelection(QAction* action) {
@@ -1229,7 +1229,7 @@ namespace tlp {
     bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
     if (result && mapMetricAction->isChecked()) {
       if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false,true, false))
-        redrawViews();
+        redrawViews(true);
     }
   }
   //**********************************************************************
@@ -1268,7 +1268,7 @@ namespace tlp {
   void MainController::changeInt(QAction* action) {
     string name = action->text().toStdString();
     changeProperty<IntegerProperty>(name, "viewInt");
-    redrawViews();
+    redrawViews(true);
   }
   //**********************************************************************
   void MainController::changeColors(QAction* action) {
