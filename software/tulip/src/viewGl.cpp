@@ -311,6 +311,8 @@ void viewGl::fileCloseTab(){
     return;
   int index=tabWidget->currentIndex();
   Graph *graph=tabIndexToController[index]->getGraph();
+  while(graph->getRoot()!=graph)
+    graph=graph->getRoot();
   bool cancle=askSaveGraph(graph->getAttribute<string>("name"),index);
   if(!cancle){
     Controller *controller=tabIndexToController[index];
@@ -761,6 +763,8 @@ bool viewGl::closeWin() {
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).second){
         Graph *graph=((*it).second)->getGraph();
+        while(graph->getRoot()!=graph)
+          graph=graph->getRoot();
         bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
         if(canceled)
           return false;
