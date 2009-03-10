@@ -1131,6 +1131,7 @@ namespace tlp {
       clusterTreeWidget->setGraph(graph);
     }
     Observable::unholdObservers();
+    redrawViews(true);
   }
   //**********************************************************************
   //Management of properties
