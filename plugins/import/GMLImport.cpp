@@ -275,11 +275,12 @@ struct GMLEdgeBuilder:public GMLTrue {
     if (st==SOURCE) source=id;
     if (st==TARGET) target=id;
     if ((!edgeOk) && (source!=-1) && (target!=-1)) {edgeOk=true;curEdge=graphBuilder->addEdge(source,target);}
-    if ((st!=SOURCE) && (st!=TARGET))
+    if ((st!=SOURCE) && (st!=TARGET)) {
       if (edgeOk && curEdge.isValid())
 	result=graphBuilder->setEdgeValue(curEdge, st, id);
       else
 	edgeAttributeError();
+    }
     return result;
   }
   bool addDouble(const string &st,const double real) {
