@@ -63,6 +63,20 @@ namespace tlp {
     virtual Coord getSize();
 
     /**
+     * Set color of label
+     */
+    virtual void setColor(const Color &color) {
+      this->color=color;
+    }
+
+    /**
+     * Get color use to render the label
+     */
+    virtual Color getColor() {
+      return color;
+    }
+
+    /**
      * Draw the Label
      */
     virtual void draw(float lod, Camera *camera);
