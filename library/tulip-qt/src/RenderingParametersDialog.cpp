@@ -103,7 +103,12 @@ void RenderingParametersDialog::attachMainWidget(GlMainWidget* graphWidget) {
     }
   }
   treeWidget->expandAll();
+
+  //disconnect to make sure we have only one connection
+  disconnect(treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
   connect(treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
+  //disconnect to make sure we have only one connection
+  disconnect(applyButton, SIGNAL(clicked()),this, SLOT(applyVisibility()));
   connect(applyButton, SIGNAL(clicked()),this, SLOT(applyVisibility()));
 }
 //=============================================================================
