@@ -539,7 +539,7 @@ void GraphImpl::pop() {
 void GraphImpl::unpop() {
   int nbPrev = previousRecorders.size();
   if (nbPrev != 0) {
-    //unobserveUpdates();
+    unobserveUpdates();
     if (!recorders.empty())
       recorders.front()->stopRecording(this);
     GraphUpdatesRecorder* prevRecorder = previousRecorders.front();
