@@ -254,7 +254,6 @@ namespace tlp {
           (*(DataSet*)p.second->value).get("y",y);
           (*(DataSet*)p.second->value).get("width",width);
           (*(DataSet*)p.second->value).get("height",height);
-          lastViewedGraph=newGraph;
           if(id!=0){
             lastViewedGraph=getCurrentSubGraph(newGraph, id);
             if(!lastViewedGraph)
@@ -266,7 +265,6 @@ namespace tlp {
       }
     }else{
       NodeLinkDiagramComponent *view;
-
       if(dataSet.exist("scene")) {
         view=(NodeLinkDiagramComponent*)initMainView(dataSet);
       }else{
@@ -301,7 +299,6 @@ namespace tlp {
           camera->setZoomFactor(cameraZoomFactor);
           camera->setSceneRadius(distCam);
         }
-
         // show current subgraph if any
         int id = 0;
         if (displayingData.get<int>("SupergraphId", id) && id) {
@@ -1084,21 +1081,24 @@ namespace tlp {
   //==============================================================
   void MainController::editReverseSelection() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->reverse();
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->reverse();
     Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editSelectAll() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
     Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editDeselectAll() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
     currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(false);
     currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(false);
