@@ -89,7 +89,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),view(view),scene(new QtCPULODCalculator()){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator()),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);

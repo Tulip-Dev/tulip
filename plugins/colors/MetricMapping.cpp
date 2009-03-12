@@ -271,9 +271,9 @@ public:
     label2->setText(sstr2.str());
 
     if(sstr1.str().size()>sstr2.str().size()) {
-      xMax=30+label1->getSize()[0];
+      xMax=30 + (int) label1->getSize()[0];
     }else{
-      xMax=30+label2->getSize()[0];
+      xMax=30 + (int) label2->getSize()[0];
     }
 
     GlRect *backRect=new GlRect(Coord(5,105,0),Coord(xMax+5,5,0),Color(0,0,0,50),Color(0,0,0,50));

@@ -136,7 +136,7 @@ int __tulip_select_libs(struct dirent *ent) {
   int idx = strlen(ent->d_name) - suffix_len;
   if (idx < 0) return 0;
   
-  for (int i=0; i < suffix_len; ++i) {
+  for (unsigned long i=0; i < suffix_len; ++i) {
     if ((ent->d_name[idx + i]) != suffix[i]) return 0;
   }
   return 1;

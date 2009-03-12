@@ -186,7 +186,7 @@ public:
       GlLabel *label=new GlLabel(Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
       label->setText((*it).first);
       if(30+label->getSize()[0]>xMax)
-	xMax=30+label->getSize()[0];
+	xMax=30+ (int) label->getSize()[0];
 
       rectVector.push_back(rect);
       labelVector.push_back(label);

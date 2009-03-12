@@ -70,7 +70,8 @@ namespace tlp {
     const GLdouble *pointer;
 
     pointer = (GLdouble *) vertex;
-    Color color=Color(pointer[3],pointer[4],pointer[5],pointer[6]);
+    Color color=Color((unsigned char) pointer[3], (unsigned char)pointer[4],
+		      (unsigned char) pointer[5], (unsigned char)pointer[6]);
     setMaterial(color);
     glNormal3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(pointer[0], pointer[1]);
@@ -99,7 +100,7 @@ namespace tlp {
     outlined(false),
     fillColor(fcolor),
     textureName(textureName){
-    for(int i=0;i<coords.size();++i) {
+    for(unsigned int i=0;i<coords.size();++i) {
       createPolygon(coords[i],bezier);
       beginNewHole();
     }
@@ -111,7 +112,7 @@ namespace tlp {
     fillColor(fcolor),
     outlineColor(ocolor),
     textureName(textureName) {
-    for(int i=0;i<coords.size();++i) {
+    for(unsigned int i=0;i<coords.size();++i) {
       createPolygon(coords[i],bezier);
       beginNewHole();
     }
@@ -192,7 +193,7 @@ namespace tlp {
     glShadeModel(GL_SMOOTH);
 
     gluTessBeginPolygon(tobj, NULL);
-    for(int v=0;v<points.size();++v) {
+    for(unsigned int v=0;v<points.size();++v) {
       gluTessBeginContour(tobj);
       for(unsigned int i=0; i < points[v].size(); ++i) {
 	GLdouble *tmp=new GLdouble[7];
@@ -212,7 +213,7 @@ namespace tlp {
     GlTextureManager::getInst().desactivateTexture();
 
     if (outlined) {
-      for(int v=0;v<points.size();++v) {
+      for(unsigned int v=0;v<points.size();++v) {
 	glBegin(GL_LINE_LOOP);
 	for(unsigned int i=0; i < points[v].size(); ++i) {
 	  setColor(outlineColor);
@@ -250,7 +251,7 @@ namespace tlp {
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"numberOfVector",points.size());
-    for(int i=0;i<points.size();++i){
+    for(unsigned int i=0;i<points.size();++i){
       stringstream str;
       str << i ;
       GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);

@@ -273,11 +273,6 @@ namespace tlp {
   void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 			const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
 			const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D, float lod) {
-    bool drawLine = true;
-    bool drawPoly = true;
-
-    //================================
-
     glDisable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
 
@@ -303,10 +298,6 @@ namespace tlp {
 	tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
       else
         tlp::polyLine(tmp, startColor, endColor);
-      //glDepthFunc(GL_LESS);
-      /*if (drawLine) {
-	tlp::polyLine(tmp, startColor, endColor);
-      }*/
       break;
     case BEZIERSHAPE:
       if(lod>0.05 || lod<-0.05)
@@ -325,7 +316,7 @@ namespace tlp {
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,
 			       GlLines::LINEAR, startColor, endColor);
       glDepthFunc(GL_LESS);
-      if (drawLine) tlp::polyLine(tmp, startColor, endColor);
+      tlp::polyLine(tmp, startColor, endColor);
       break;
     case L3D_BIT + BEZIERSHAPE:
       GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size, GlLines::TLP_PLAIN,

@@ -318,7 +318,7 @@ Iterator<std::string>* GraphDecorator::getProperties(){
 }
 //----------------------------------------------------------------
 bool GraphDecorator::canPop() {
-  graph_component->canPop();
+  return graph_component->canPop();
 }
 bool GraphDecorator::canUnpop() {
   return graph_component->canUnpop();
