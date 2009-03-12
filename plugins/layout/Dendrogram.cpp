@@ -111,7 +111,6 @@ float Dendrogram::setAllNodesCoordX(node n, float rightMargin,
 void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout,
 				   OrientableSizeProxy *oriSize) {
   float maxYLeaf         = -FLT_MAX;
-  float maxHeightLeaf    = -FLT_MAX;
   setCoordY(root, &maxYLeaf, oriLayout, oriSize);
     
   Iterator<node>* itNode = tree->getNodes();

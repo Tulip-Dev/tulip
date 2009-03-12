@@ -123,8 +123,12 @@ bool SquarifiedTreeMap::run() {
   size->setNodeValue(root, initialSpaceSize);
   squarify(root, initialSpace, 1);
 
-  // hach:to ensure that modifs on viewSize will remain
-  graph->push();
+  // if in tulip gui, keep node size updates
+  // the test below indicates if we are invoked from the tulip gui
+  // cf viewGl.cpp & GlGraphInputData.cpp
+  LayoutProperty* elementLayout;
+  if (graph->getAttribute("viewLayout", elementLayout))
+    graph->push();
 
   return true;
 }

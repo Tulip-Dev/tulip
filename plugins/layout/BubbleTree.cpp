@@ -286,5 +286,13 @@ bool BubbleTree::run() {
   calcLayout(startNode, &relativePosition);
 
    TreeTest::cleanComputedTree(graph, tree);
+
+  // if in tulip gui, keep node size updates
+  // the test below indicates if we are invoked from the tulip gui
+  // cf viewGl.cpp & GlGraphInputData.cpp
+  LayoutProperty* elementLayout;
+  if (graph->getAttribute("viewLayout", elementLayout))
+    graph->push();
+
   return true;
 }
