@@ -46,12 +46,15 @@ static Color axisToSwapHighlight(0,255,0,0);
 class ParallelCoordsAxisSwapper : public Interactor {
 public :
 	ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false) {}
-	~ParallelCoordsAxisSwapper() {}
+	~ParallelCoordsAxisSwapper();
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
 	Interactor *clone() { return new ParallelCoordsAxisSwapper(); }
+	void setView(View *view);
 
 private :
+
+	ParallelCoordinatesView *parallelView;
 	ParallelAxis *selectedAxis;
 	ParallelAxis *otherAxisToSwap;
 	Coord initialSelectedAxisCoord;
@@ -64,10 +67,19 @@ private :
 
 INTERACTORPLUGIN(ParallelCoordsAxisSwapper, "ParallelCoordsAxisSwapper", "Tulip Team", "16/10/2008", "Parallel Coordinates Axis Swapper", "1.0");
 
+ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {
+	selectedAxis = NULL;
+	parallelView->refresh();
+}
+
+void ParallelCoordsAxisSwapper::setView(View *view) {
+	Interactor::setView(view);
+	parallelView = (ParallelCoordinatesView *) view;
+}
+
 bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 
 	GlMainWidget *glWidget = (GlMainWidget *) widget;
-	ParallelCoordinatesView *parallelView = (ParallelCoordinatesView *) view;
 
 	mouseMove = false;
 

@@ -17,13 +17,13 @@ QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const
   glQuantitativeAxis = dynamic_cast<GlQuantitativeAxis *>(glAxis);
   boxPlotValuesCoord.resize(5);
   boxPlotStringValues.resize(5);
+  axisMinValue = getAssociatedPropertyMinValue();
+  axisMaxValue = getAssociatedPropertyMaxValue();
   redraw();
 }
 
 void QuantitativeParallelAxis::setAxisLabels() {
-	double min = getAxisMinValue();
-	double max = getAxisMaxValue();
-	glQuantitativeAxis->setAxisParameters(min, max, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
+	glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
 	glQuantitativeAxis->setLogScale(log10Scale);
 }
 
@@ -122,7 +122,7 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
 
 
 
-double QuantitativeParallelAxis::getAxisMinValue() {
+double QuantitativeParallelAxis::getAssociatedPropertyMinValue() {
 	if (graphProxy->getGraph()->getRoot() == graphProxy->getGraph()) {
 		if (getAxisDataTypeName() == "double") {
 			return graphProxy->getPropertyMinValue<DoubleProperty, DoubleType>(getAxisName());
@@ -156,7 +156,7 @@ double QuantitativeParallelAxis::getAxisMinValue() {
 	}
 }
 
-double QuantitativeParallelAxis::getAxisMaxValue() {
+double QuantitativeParallelAxis::getAssociatedPropertyMaxValue() {
 	if (graphProxy->getGraph()->getRoot() == graphProxy->getGraph()) {
 		if (getAxisDataTypeName() == "double") {
 			return graphProxy->getPropertyMaxValue<DoubleProperty, DoubleType>(getAxisName());

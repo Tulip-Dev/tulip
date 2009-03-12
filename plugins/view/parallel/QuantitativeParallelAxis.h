@@ -61,8 +61,13 @@ public :
   void setLog10Scale(const bool log10Scale) {this->log10Scale = log10Scale;}
   bool hasLog10Scale() const {return log10Scale;}
 
-  double getAxisMinValue();
-  double getAxisMaxValue();
+  double getAssociatedPropertyMinValue();
+  double getAssociatedPropertyMaxValue();
+
+  void setAxisMinMaxValues(const double min, const double max) {axisMinValue = min ; axisMaxValue = max;}
+
+  double getAxisMinValue() const {return axisMinValue;}
+  double getAxisMaxValue() const {return axisMaxValue;}
 
   double getValueForAxisCoord(const Coord &axisCoord);
   Coord getAxisCoordForValue(double value);
@@ -102,6 +107,7 @@ public :
   void setAxisLabels();
 
   GlQuantitativeAxis *glQuantitativeAxis;
+  double axisMinValue, axisMaxValue;
 
   unsigned int nbAxisGrad;
   ParallelCoordinatesGraphProxy *graphProxy;

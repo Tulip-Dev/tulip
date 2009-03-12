@@ -150,8 +150,6 @@ namespace tlp {
   void ParallelCoordinatesConfigDialog::showEvent (QShowEvent * event) {
 	  updateSelectedProperties();
 	  backupConfiguration();
-
-
 	  tabWidget->setCurrentIndex(0);
 	  QWidget::showEvent(event);
   }
@@ -197,11 +195,15 @@ namespace tlp {
   }
 
   void ParallelCoordinatesConfigDialog::setLinesColorAlphaValue(unsigned int value) {
-	  linesColorAlphaValue->setValue(value);
+	  viewColorAlphaValue->setValue(value);
   }
 
   unsigned int ParallelCoordinatesConfigDialog::getLinesColorAlphaValue() const {
-	  return (unsigned int) linesColorAlphaValue->value();
+	  if (viewColorAlphaRb->isChecked()) {
+		  return 300;
+	  } else {
+		  return (unsigned int) viewColorAlphaValue->value();
+	  }
   }
 
   Color ParallelCoordinatesConfigDialog::getBackgroundColor() const {
@@ -235,10 +237,11 @@ namespace tlp {
 	  drawPointOnAxisBak = gBoxAxisPoints->isChecked();
 	  minAxisPointSizeBak = minAxisPointSize->value();
 	  maxAxisPointSizeBak = maxAxisPointSize->value();
-	  linesColorAlphaValueBak = linesColorAlphaValue->value();
+	  linesColorAlphaValueBak = viewColorAlphaValue->value();
 	  linesTextureBak = gBoxLineTexture->isChecked();
 	  userTextureBak = userTexture->isChecked();
 	  userTextureFileBak = userTextureFile->text().toStdString();
+	  unhighlightedEltsColorsAlphaValueBak = nonHighlightedEltsAlphaValue->value();
   }
 
   void ParallelCoordinatesConfigDialog::restoreBackupConfiguration() {
@@ -253,11 +256,12 @@ namespace tlp {
 	  gBoxAxisPoints->setChecked(drawPointOnAxisBak);
 	  minAxisPointSize->setValue(minAxisPointSizeBak);
 	  maxAxisPointSize->setValue(maxAxisPointSizeBak);
-	  linesColorAlphaValue->setValue(linesColorAlphaValueBak);
+	  viewColorAlphaValue->setValue(linesColorAlphaValueBak);
 	  gBoxLineTexture->setChecked(linesTextureBak);
 	  defaultTexture->setChecked(!userTextureBak);
 	  userTexture->setChecked(userTextureBak);
 	  userTextureFile->setText(QString(userTextureFileBak.c_str()));
+	  nonHighlightedEltsAlphaValue->setValue(unhighlightedEltsColorsAlphaValueBak);
   }
 
   unsigned int ParallelCoordinatesConfigDialog::getSpaceBetweenAxis() const {
@@ -270,6 +274,14 @@ namespace tlp {
 
   void ParallelCoordinatesConfigDialog::setDrawPointOnAxis(const bool drawPointOnAxis) {
 	  gBoxAxisPoints->setChecked(drawPointOnAxis);
+  }
+
+  unsigned int ParallelCoordinatesConfigDialog::getUnhighlightedEltsColorsAlphaValue() const {
+	  return (unsigned int) nonHighlightedEltsAlphaValue->value();
+  }
+
+  void ParallelCoordinatesConfigDialog::setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue) {
+	  nonHighlightedEltsAlphaValue->setValue(alphaValue);
   }
 
 }

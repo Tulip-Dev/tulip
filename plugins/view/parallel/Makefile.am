@@ -17,7 +17,6 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelCoordinatesConfigDialog.h \
 			NominalParallelAxis.h \
 			QuantitativeParallelAxis.h \
-			GlNodeGlyph.h \
 			AxisConfigDialogs.h \
 			ParallelCoordinatesView.cpp \
 			ParallelCoordinatesDrawing.cpp \
@@ -25,7 +24,6 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelAxis.cpp \
 			ParallelCoordinatesConfigDialog.cpp \
 			NominalParallelAxis.cpp \
-			GlNodeGlyph.cpp \
 			AxisConfigDialogs.cpp  \
 			QuantitativeParallelAxis.cpp \
 			ParallelCoordsElementShowInfos.cpp \

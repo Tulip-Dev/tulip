@@ -62,6 +62,8 @@ public :
   Color getBackgroundColor() const;
   void setBackgroundColor(const Color &color);
   void setGraphProxy(ParallelCoordinatesGraphProxy *graphProxy) {this->graphProxy = graphProxy;}
+  unsigned int getUnhighlightedEltsColorsAlphaValue() const;
+  void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
 
   std::string getLinesTextureFilename() const;
   void setLinesTextureFilename(const std::string &linesTextureFileName);
@@ -96,6 +98,7 @@ private :
   unsigned int minAxisPointSizeBak;
   unsigned int maxAxisPointSizeBak;
   unsigned int linesColorAlphaValueBak;
+  unsigned int unhighlightedEltsColorsAlphaValueBak;
   bool linesTextureBak;
   bool userTextureBak;
   std::string userTextureFileBak;

@@ -111,11 +111,26 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 
 void ParallelCoordinatesView::initGlWidget() {
 	mainLayer = new GlLayer("Main");
-	glGraphComposite = new GlGraphComposite(tlp::newGraph());
+	axisPointsGraph = tlp::newGraph();
+	glGraphComposite =new GlGraphComposite(axisPointsGraph);
 	mainLayer->addGlEntity(glGraphComposite, "graph");
 	mainWidget->getScene()->addLayer(mainLayer);
 	mainWidget->getScene()->addGlGraphCompositeInfo(mainLayer, glGraphComposite);
+	GlGraphRenderingParameters param = mainWidget->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
+	param.setAntialiasing (true);
+	param.setNodesStencil(2);
+	param.setSelectedNodesStencil(1);
+	param.setDisplayEdges(false);
+	param.setDisplayNodes(true);
+	param.setViewNodeLabel(false);
+	mainWidget->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
 	mainWidget->setMouseTracking(true);
+}
+
+void ParallelCoordinatesView::toggleGraphView(const bool displayGraph) {
+	GlGraphRenderingParameters param = mainWidget->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
+	param.setDisplayNodes(displayGraph);
+	mainWidget->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
 }
 
 void ParallelCoordinatesView::buildMenuEntries() {
@@ -174,12 +189,10 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		parallelCoordsDrawing = NULL;
 	}
 
-	parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy);
+	parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy, axisPointsGraph);
 	graphProxy->addGraphObserver(parallelCoordsDrawing);
 	mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
 	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
-
-
 
 	if (configDialog == NULL) {
 
@@ -343,7 +356,6 @@ void ParallelCoordinatesView::setGraph(Graph *graph) {
 
 void ParallelCoordinatesView::updateWithoutProgressBar() {
 	parallelCoordsDrawing->resetNbDataProcessed();
-	//parallelCoordsDrawing->deleteAxisGlEntities();
 	parallelCoordsDrawing->update();
 	if (center) {
 		centerView();
@@ -357,6 +369,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	// removal of the parallel coordinates drawing from the main layer
 	if (mainLayer->findGlEntity("Parallel Coordinates") != NULL) {
 		mainLayer->deleteGlEntity(parallelCoordsDrawing);
+		mainLayer->deleteGlEntity(glGraphComposite);
 		overviewWidget->setObservedView(NULL, NULL);
 	}
 
@@ -405,6 +418,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 
 	// add updated drawing to main layer
 	mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
+	mainLayer->addGlEntity(glGraphComposite, "graph");
 	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
 
 	if (center) {
@@ -448,7 +462,6 @@ void ParallelCoordinatesView::init() {
 void ParallelCoordinatesView::constructInteractorsMap() {
 	MutableContainer<Interactor *> interactors;
 	InteractorManager::getInst().initInteractorList(interactors);
-	interactorsMap.clear();
 	interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
 	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
@@ -460,12 +473,12 @@ void ParallelCoordinatesView::constructInteractorsMap() {
 	interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementHighlighter"));
 	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSwapper"));
-	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSliders"));
-	interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
+	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 	interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisBoxPlot"));
+	interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
 }
 //==================================================
 void ParallelCoordinatesView::constructInteractorsActionList() {
@@ -499,6 +512,12 @@ void ParallelCoordinatesView::specificEventFilter(QObject *object,QEvent *event)
 
 	if (event->type() == QEvent::Close) {
 		cleanup();
+	}
+
+	if (graphProxy != NULL && graphProxy->graphColorsModified()) {
+		Observable::holdObservers();
+		graphProxy->colorDataAccordingToHighlightedElts();
+		Observable::unholdObservers();
 	}
 }
 
@@ -595,6 +614,12 @@ void ParallelCoordinatesView::setUpAndDrawView() {
 	parallelCoordsDrawing->setLinesColorAlphaValue(configDialog->getLinesColorAlphaValue());
 	parallelCoordsDrawing->setViewType(getViewType());
 	graphProxy->setDataLocation(configDialog->getDataLocation());
+	if (graphProxy->getUnhighlightedEltsColorAlphaValue() != configDialog->getUnhighlightedEltsColorsAlphaValue()) {
+		graphProxy->setUnhighlightedEltsColorAlphaValue(configDialog->getUnhighlightedEltsColorsAlphaValue());
+		Observable::holdObservers();
+		graphProxy->colorDataAccordingToHighlightedElts();
+		Observable::unholdObservers();
+	}
 	draw();
 }
 
@@ -619,6 +644,8 @@ void ParallelCoordinatesView::setViewType(const viewType vType) {
 set<unsigned int> ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width, const unsigned int height) {
 
 	vector<GlEntity *> selectedEntities;
+	vector<node> selectedAxisPoints;
+	vector<edge> dummy;
 	set<unsigned int> mappedData;
 
 	bool result = mainWidget->selectGlEntities(x, y, width, height, selectedEntities, mainLayer);
@@ -631,6 +658,16 @@ set<unsigned int> ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int
 		    if (parallelCoordsDrawing->getDataIdFromGlEntity(entity, selectedEltId)) {
 		    	mappedData.insert(selectedEltId);
 		    }
+		}
+	}
+
+	mainWidget->doSelect(x, y, width , height, selectedAxisPoints, dummy, mainLayer);
+	vector<node>::iterator it;
+	for (it = selectedAxisPoints.begin(); it != selectedAxisPoints.end(); ++it) {
+		node n = *it;
+		unsigned int selectedEltId;
+		if (parallelCoordsDrawing->getDataIdFromAxisPoint(n, selectedEltId)) {
+			mappedData.insert(selectedEltId);
 		}
 	}
 

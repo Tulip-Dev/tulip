@@ -100,6 +100,7 @@ namespace tlp {
 	void showAxisConfigDialog(ParallelAxis *axis);
 
 	void setUpAndDrawView();
+	void toggleGraphView(const bool displayGraph);
 	void updateWithProgressBar();
 	void updateWithoutProgressBar();
 
@@ -124,6 +125,7 @@ namespace tlp {
     GlLayer *mainLayer;
 
     GlGraphComposite *glGraphComposite;
+    Graph *axisPointsGraph;
     DataSet *dataSet;
 
     ParallelCoordinatesConfigDialog *configDialog;

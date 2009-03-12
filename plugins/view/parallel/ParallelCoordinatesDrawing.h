@@ -37,11 +37,12 @@ class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
 
 public :
 
-  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy);
+  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
   ~ParallelCoordinatesDrawing();
 
   bool getDataIdFromGlEntity(GlEntity *glEntity, unsigned int &dataId);
+  bool getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId);
 
   unsigned int nbParallelAxis() const;
   const std::vector<std::string>& getAxisNames() const;
@@ -100,6 +101,7 @@ public :
   std::map<std::string, ParallelAxis *> parallelAxis;
 
   std::map<GlEntity *, unsigned int> glEntitiesDataMap;
+  std::map<node, unsigned int> axisPointsDataMap;
 
   ParallelCoordinatesGraphProxy *graphProxy;
 
@@ -110,15 +112,20 @@ public :
   Size axisPointMaxSize;
   Size resizeFactor;
 
-  GlGraphInputData *graphData;
-  GlGraphRenderingParameters graphRenderingParameters;
   GlComposite *dataPlotComposite;
   GlComposite *axisPlotComposite;
 
   unsigned int nbDataProcessed;
   bool createAxisFlag;
   std::set<unsigned int> lastHighlightedElements;
-  bool elementDeleted;
+
+  Graph *axisPointsGraph;
+  LayoutProperty *axisPointsGraphLayout;
+  SizeProperty *axisPointsGraphSize;
+  IntegerProperty *axisPointsGraphShape;
+  StringProperty *axisPointsGraphLabels;
+  ColorProperty *axisPointsGraphColors;
+  BooleanProperty *axisPointsGraphSelection;
 };
 
 }

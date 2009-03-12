@@ -18,6 +18,8 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
 	QVBoxLayout *dialogLayout = new QVBoxLayout();
 	QHBoxLayout *nbGradsLayout = new QHBoxLayout();
+	QHBoxLayout *axisMinLayout = new QHBoxLayout();
+	QHBoxLayout *axisMaxLayout = new QHBoxLayout();
 	QHBoxLayout *axisOrderLayout = new QHBoxLayout();
 	QHBoxLayout *okButtonLayout = new QHBoxLayout();
 
@@ -32,6 +34,36 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 	nbGradsLayout->addWidget(new QLabel("Number of graduations : "));
 	nbGradsLayout->addWidget(nbGrads);
 
+	axisMinLayout->addWidget(new QLabel("Axis min value : "));
+	if (axis->getAxisDataTypeName() == "int") {
+		intAxisMinValue = new QSpinBox();
+		intAxisMinValue->setMaximum((int)axis->getAssociatedPropertyMinValue());
+		intAxisMinValue->setMinimum(INT_MIN);
+		intAxisMinValue->setValue((int)axis->getAxisMinValue());
+		axisMinLayout->addWidget(intAxisMinValue);
+	} else {
+		doubleAxisMinValue = new QDoubleSpinBox();
+		doubleAxisMinValue->setMaximum(axis->getAssociatedPropertyMinValue());
+		doubleAxisMinValue->setMinimum(DBL_MIN);
+		doubleAxisMinValue->setValue(axis->getAxisMinValue());
+		axisMinLayout->addWidget(doubleAxisMinValue);
+	}
+
+	axisMaxLayout->addWidget(new QLabel("Axis max value : "));
+	if (axis->getAxisDataTypeName() == "int") {
+		intAxisMaxValue = new QSpinBox();
+		intAxisMaxValue->setMinimum((int)axis->getAssociatedPropertyMaxValue());
+		intAxisMaxValue->setMaximum(INT_MAX);
+		intAxisMaxValue->setValue((int)axis->getAxisMaxValue());
+		axisMaxLayout->addWidget(intAxisMaxValue);
+	} else {
+		doubleAxisMaxValue = new QDoubleSpinBox();
+		doubleAxisMaxValue->setMinimum(axis->getAssociatedPropertyMaxValue());
+		doubleAxisMaxValue->setMaximum(DBL_MAX);
+		doubleAxisMaxValue->setValue(axis->getAxisMaxValue());
+		axisMaxLayout->addWidget(doubleAxisMaxValue);
+	}
+
 	axisOrder->addItem("ascending");
 	axisOrder->addItem("descending");
 
@@ -45,6 +77,8 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 	axisOrderLayout->addWidget(axisOrder);
 
 	dialogLayout->addLayout(nbGradsLayout);
+	dialogLayout->addLayout(axisMinLayout);
+	dialogLayout->addLayout(axisMaxLayout);
 	dialogLayout->addLayout(axisOrderLayout);
 	dialogLayout->addWidget(log10Scale);
 	okButtonLayout->addStretch(1);
@@ -63,6 +97,11 @@ void QuantitativeAxisConfigDialog::closeEvent (QCloseEvent * event) {
 	axis->setNbAxisGrad(nbGrads->value());
 	axis->setAscendingOrder(axisOrder->currentText() == "ascending");
 	axis->setLog10Scale(log10Scale->isChecked());
+	if (axis->getAxisDataTypeName() == "int") {
+		axis->setAxisMinMaxValues(intAxisMinValue->value(), intAxisMaxValue->value());
+	} else {
+		axis->setAxisMinMaxValues(doubleAxisMinValue->value(), doubleAxisMaxValue->value());
+	}
 	axis->redraw();
 }
 

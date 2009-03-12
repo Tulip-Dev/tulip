@@ -285,15 +285,23 @@ class ParallelCoordsAxisBoxPlot : public Interactor {
 
 public :
 
-	ParallelCoordsAxisBoxPlot() : drawAxisBoxPlot(false), selectedAxis(NULL), lastNbAxis(0) {}
-	~ParallelCoordsAxisBoxPlot() {deleteGlAxisPlot();}
+	ParallelCoordsAxisBoxPlot() : currentGraph(NULL), drawAxisBoxPlot(false), selectedAxis(NULL), lastNbAxis(0) {}
+	~ParallelCoordsAxisBoxPlot();
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
+	bool compute(GlMainWidget *glMainWidget);
 	Interactor *clone() { return new ParallelCoordsAxisBoxPlot(); }
+	void setView(View *view);
 
 private :
+
 	void buildGlAxisPlot(vector<ParallelAxis *> currentAxis);
 	void deleteGlAxisPlot();
+
+	void initOrUpdateBoxPlots();
+
+	ParallelCoordinatesView *parallelView;
+	Graph *currentGraph;
 	map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
 	bool drawAxisBoxPlot;
 	ParallelAxis *selectedAxis;
@@ -302,6 +310,46 @@ private :
 };
 
 INTERACTORPLUGIN(ParallelCoordsAxisBoxPlot, "ParallelCoordsAxisBoxPlot", "Tulip Team", "25/11/2008", "Parallel Coordinates Axis Box Plot", "1.0");
+
+ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
+	deleteGlAxisPlot();
+	drawAxisBoxPlot = false;
+	parallelView->refresh();
+}
+
+void ParallelCoordsAxisBoxPlot::setView(View *view) {
+	Interactor::setView(view);
+	parallelView = (ParallelCoordinatesView *) view;
+	initOrUpdateBoxPlots();
+}
+
+bool ParallelCoordsAxisBoxPlot::compute(GlMainWidget *glWidget) {
+	initOrUpdateBoxPlots();
+	return true;
+}
+
+void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
+	vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
+
+	if (axisBoxPlotMap.size() == 0) {
+		buildGlAxisPlot(allAxis);
+		drawAxisBoxPlot = true;
+		lastNbAxis = allAxis.size();
+		parallelView->refresh();
+		return;
+	}
+
+	if ((lastNbAxis != 0 && lastNbAxis != allAxis.size()) || (currentGraph != parallelView->getGraph())) {
+		deleteGlAxisPlot();
+		buildGlAxisPlot(allAxis);
+		drawAxisBoxPlot = true;
+		selectedAxis = NULL;
+		parallelView->refresh();
+	}
+
+	lastNbAxis = allAxis.size();
+	currentGraph = parallelView->getGraph();
+}
 
 void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAxis) {
 	for (unsigned int i = 0 ; i < currentAxis.size() ; ++i) {
@@ -324,33 +372,8 @@ void ParallelCoordsAxisBoxPlot::deleteGlAxisPlot() {
 bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 
 	GlMainWidget *glWidget = (GlMainWidget *) widget;
-	ParallelCoordinatesView *parallelView = (ParallelCoordinatesView *) view;
 
-	vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
-
-	drawAxisBoxPlot = false;
-
-	if (axisBoxPlotMap.size() == 0) {
-		buildGlAxisPlot(allAxis);
-		drawAxisBoxPlot = true;
-		lastNbAxis = allAxis.size();
-		parallelView->refresh();
-		drawAxisBoxPlot = false;
-		return true;
-	}
-
-	if (lastNbAxis != 0 && lastNbAxis != allAxis.size()) {
-		deleteGlAxisPlot();
-		buildGlAxisPlot(allAxis);
-		drawAxisBoxPlot = true;
-		selectedAxis = NULL;
-		lastNbAxis = allAxis.size();
-		parallelView->refresh();
-		drawAxisBoxPlot = false;
-		return true;
-	}
-
-	lastNbAxis = allAxis.size();
+	initOrUpdateBoxPlots();
 
 	if (e->type() == QEvent::MouseMove) {
 		QMouseEvent *me = (QMouseEvent *) e;
@@ -369,13 +392,11 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 	}
 
 	if (e->type() == QEvent::MouseButtonPress) {
-		drawAxisBoxPlot = false;
 		return false;
 	}
 
 	if (e->type() == QEvent::MouseButtonRelease) {
 		if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
-			drawAxisBoxPlot = false;
 			Observable::holdObservers();
 			if (axisBoxPlotMap.find((QuantitativeParallelAxis *)selectedAxis) != axisBoxPlotMap.end())
 				parallelView->highlightDataInAxisBoxPlotRange((QuantitativeParallelAxis *) selectedAxis);
@@ -387,6 +408,7 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 		}
 	}
 
+	drawAxisBoxPlot = true;
 	return false;
 }
 
@@ -396,11 +418,15 @@ bool ParallelCoordsAxisBoxPlot::draw(GlMainWidget *glMainWidget) {
 		return false;
 	}
 
+	Camera *camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
+	camera->initGl();
+
 	map<QuantitativeParallelAxis *, GlAxisBoxPlot *>::iterator it;
 	for (it = axisBoxPlotMap.begin(); it != axisBoxPlotMap.end(); ++it) {
 		(it->second)->draw(0,0);
 	}
 
+	drawAxisBoxPlot = false;
 	return true;
 }
 

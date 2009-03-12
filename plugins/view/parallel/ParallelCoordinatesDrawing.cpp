@@ -12,7 +12,6 @@
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
-#include "GlNodeGlyph.h"
 #include "ParallelTools.h"
 
 #include <sstream>
@@ -20,13 +19,21 @@
 #include <algorithm>
 #include <ctime>
 
+const int CIRCLE_GLYPH_ID = 14;
+
 namespace tlp {
 
-ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph) :
+ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph, Graph *axisPointsGraph) :
 	firstAxisPos(Coord(0,0,0)), height(DEFAULT_AXIS_HEIGHT), spaceBetweenAxis(height/2), linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE), drawPointsOnAxis(true),
-	graphProxy(graph), vType(VIEW_2D), backgroundColor(Color(255,255,255)), createAxisFlag(true), elementDeleted(false) {
+	graphProxy(graph), vType(VIEW_2D), backgroundColor(Color(255,255,255)), createAxisFlag(true), axisPointsGraph(axisPointsGraph) {
 
-	graphData = new GlGraphInputData(graphProxy, &graphRenderingParameters);
+	axisPointsGraphLayout = axisPointsGraph->getProperty<LayoutProperty>("viewLayout");
+	axisPointsGraphSize = axisPointsGraph->getProperty<SizeProperty>("viewSize");
+	axisPointsGraphShape = axisPointsGraph->getProperty<IntegerProperty>("viewShape");
+	axisPointsGraphLabels = axisPointsGraph->getProperty<StringProperty>("viewLabel");
+	axisPointsGraphColors = axisPointsGraph->getProperty<ColorProperty>("viewColor");
+	axisPointsGraphSelection = axisPointsGraph->getProperty<BooleanProperty>("viewSelection");
+
 	dataPlotComposite = new GlComposite();
 	axisPlotComposite = new GlComposite();
 	addGlEntity(dataPlotComposite, "data plot composite");
@@ -106,25 +113,28 @@ void ParallelCoordinatesDrawing::createAxis() {
 }
 
 void ParallelCoordinatesDrawing::plotAllData() {
+
 	Color color;
 	computeResizeFactor();
-	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
-	while (dataIt->hasNext()) {
-		unsigned int dataId = dataIt->next();
-		if (graphProxy->isDataSelected(dataId)) {
-			color = COLOR_SELECT;
-		} else {
-			color = graphProxy->getDataColor(dataId);
-			color.setA(linesColorAlphaValue);
-		}
 
+	Iterator<unsigned int> *dataUnselIt = graphProxy->getDataIterator();
+	while (dataUnselIt->hasNext()) {
+		unsigned int dataId = dataUnselIt->next();
+		if (!graphProxy->isDataSelected(dataId)) {
+			color = graphProxy->getDataColor(dataId);
+			if (linesColorAlphaValue <= 255 &&
+				((graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId)) || (!graphProxy->highlightedEltsSet()))) {
+				color.setA(linesColorAlphaValue);
+			}
+		} else {
+			color = COLOR_SELECT;
+		}
 		plotData(dataId, color);
 		++nbDataProcessed;
 	}
-	delete dataIt;
+	delete dataUnselIt;
 
 	lastHighlightedElements = graphProxy->getHighlightedElts();
-	elementDeleted = false;
 }
 
 void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color &color) {
@@ -143,20 +153,21 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 
 		if (drawPointsOnAxis) {
 
-			GlSimpleEntity *point = NULL;
-
-			if (graphProxy->getDataLocation() == NODE) {
-				if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId))) {
-					point = new GlNodeGlyph(pointCoord, adjustedViewSize, graphData, node(dataId));
+			if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId))) {
+				node n = axisPointsGraph->addNode();
+				axisPointsDataMap[n] = dataId;
+				axisPointsGraphLayout->setNodeValue(n, pointCoord);
+				axisPointsGraphSize->setNodeValue(n, adjustedViewSize);
+				if (graphProxy->getDataLocation() == NODE) {
+					axisPointsGraphShape->setNodeValue(n, graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>("viewShape", dataId));
+				} else {
+					axisPointsGraphShape->setNodeValue(n, CIRCLE_GLYPH_ID);
 				}
-			} else {
-				point = new GlCircle(pointCoord, pointRadius, color, color, true, true);
-			}
-
-			if (point != NULL) {
-				point->setStencil(1);
-				dataPlotComposite->addGlEntity(point, oss.str());
-				glEntitiesDataMap[point] = dataId;
+				axisPointsGraphLabels->setNodeValue(n, graphProxy->getPropertyValueForData<StringProperty, StringType>("viewLabel", dataId));
+				axisPointsGraphColors->setNodeValue(n, graphProxy->getPropertyValueForData<ColorProperty, ColorType>("viewColor", dataId));
+				if (graphProxy->isDataSelected(dataId)) {
+					axisPointsGraphSelection->setNodeValue(n, true);
+				}
 			}
 		}
 
@@ -171,9 +182,13 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 			if (lineTextureFilename != "") {
 				((GlCurve *)line)->setTexture(lineTextureFilename);
 			}
-			if (graphProxy->isDataSelected(dataId) || graphProxy->isDataHighlighted(dataId)) {
-					line->setStencil(2);
+			if (graphProxy->isDataHighlighted(dataId)) {
+				line->setStencil(4);
 			}
+			if (graphProxy->isDataSelected(dataId)) {
+					line->setStencil(3);
+			}
+
 			ostringstream oss2;
 			oss2 << "data " << dataId << " line " << parallelAxis[axisOrder[j]]->getAxisName() << " -> " << parallelAxis[axisOrder[j+1]]->getAxisName();
 			dataPlotComposite->addGlEntity(line, oss2.str());
@@ -187,9 +202,12 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 	}
 
 	if (vType == VIEW_2D) {
-		GlSimpleEntity *line = new GlPolyQuad(lineCoords, color, lineTextureFilename);
-		if (graphProxy->isDataSelected(dataId) || graphProxy->isDataHighlighted(dataId)) {
-			line->setStencil(2);
+		GlSimpleEntity *line = new GlPolyQuad(lineCoords, color, lineTextureFilename, true, 1, color);
+		if (graphProxy->isDataHighlighted(dataId)) {
+			line->setStencil(4);
+		}
+		if (graphProxy->isDataSelected(dataId)) {
+			line->setStencil(3);
 		}
 		ostringstream oss2;
 		oss2 << "data " << dataId << " line ";
@@ -242,6 +260,17 @@ bool ParallelCoordinatesDrawing::getDataIdFromGlEntity(GlEntity *glEntity, unsig
 	return dataMatch;
 }
 
+bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId) {
+
+	bool dataMatch = axisPointsDataMap.find(axisPoint) != axisPointsDataMap.end();
+
+	if (dataMatch) {
+		dataId = axisPointsDataMap[axisPoint];
+	}
+
+	return dataMatch;
+}
+
 void ParallelCoordinatesDrawing::update() {
 	if (createAxisFlag) {
 		axisPlotComposite->reset(false);
@@ -254,7 +283,12 @@ void ParallelCoordinatesDrawing::update() {
 
 void ParallelCoordinatesDrawing::eraseDataPlot() {
 	dataPlotComposite->reset(true);
+	BooleanProperty *wholeGraphSelec = new BooleanProperty(axisPointsGraph);
+	wholeGraphSelec->setAllNodeValue(true);
+	removeFromGraph(axisPointsGraph, wholeGraphSelec);
+	delete wholeGraphSelec;
 	glEntitiesDataMap.clear();
+	axisPointsDataMap.clear();
 }
 
 void ParallelCoordinatesDrawing::eraseAxisPlot() {
@@ -365,14 +399,12 @@ void ParallelCoordinatesDrawing::resetAxisSlidersPosition() {
 
 void ParallelCoordinatesDrawing::delNode(Graph *,const node n) {
 	if (graphProxy->getDataLocation() == NODE) {
-		elementDeleted = true;
 		removeHighlightedElt(n.id);
 	}
 }
 
 void ParallelCoordinatesDrawing::delEdge(Graph *,const edge e) {
 	if (graphProxy->getDataLocation() == EDGE) {
-		elementDeleted = true;
 		removeHighlightedElt(e.id);
 	}
 }

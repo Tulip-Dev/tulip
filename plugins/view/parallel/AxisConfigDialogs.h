@@ -50,6 +50,8 @@ private :
 
 	QuantitativeParallelAxis *axis;
 	QSpinBox *nbGrads;
+	QDoubleSpinBox *doubleAxisMinValue, *doubleAxisMaxValue;
+	QSpinBox *intAxisMinValue, *intAxisMaxValue;
 	QComboBox *axisOrder;
 	QPushButton *okButton;
 	QCheckBox *log10Scale;

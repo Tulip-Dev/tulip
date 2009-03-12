@@ -199,16 +199,19 @@ class ParallelCoordsAxisSliders : public Interactor {
 
 public :
 
-	ParallelCoordsAxisSliders() : selectedAxis(NULL), selectedSlider(NULL),
-								  axisSliderDragStarted(false), drawSliders(true), slidersRangeDragStarted(false),
+	ParallelCoordsAxisSliders() : currentGraph(NULL), selectedAxis(NULL), selectedSlider(NULL),
+								  axisSliderDragStarted(false), drawSliders(false), slidersRangeDragStarted(false),
 								  lastAxisHeight(0), lastNbAxis(0), multiFilteringActivated(false) {}
-	~ParallelCoordsAxisSliders() { deleteGlSliders();}
+	~ParallelCoordsAxisSliders();
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
+	bool compute(GlMainWidget *glMainWidget);
 	Interactor *clone() {return new ParallelCoordsAxisSliders(); }
+	void setView(View *view);
 
 private :
 
+	void initOrUpdateSliders();
 	AxisSlider *getSliderUnderPointer(ParallelAxis *axis, Coord pointerSceneCoords);
 	void updateOtherAxisSliders();
 	void buildGlSliders(vector<ParallelAxis *> axis);
@@ -216,6 +219,8 @@ private :
 	void setSlidersColor(const Color &color);
 	void updateSlidersYBoundaries();
 
+	ParallelCoordinatesView *parallelView;
+	Graph *currentGraph;
 	map<ParallelAxis *, vector<AxisSlider *> > axisSlidersMap;
 	ParallelAxis *selectedAxis;
 	vector<ParallelAxis *> lastSelectedAxis;
@@ -234,13 +239,24 @@ private :
 
 INTERACTORPLUGIN(ParallelCoordsAxisSliders, "ParallelCoordsAxisSliders", "Tulip Team", "05/11/2008", "Parallel Coordinates Axis Sliders", "1.0");
 
-bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
-
-	GlMainWidget *glWidget = (GlMainWidget *) widget;
-	ParallelCoordinatesView *parallelView = (ParallelCoordinatesView *) view;
-
+ParallelCoordsAxisSliders::~ParallelCoordsAxisSliders() {
+	deleteGlSliders();
 	drawSliders = false;
+	parallelView->refresh();
+}
 
+void ParallelCoordsAxisSliders::setView(View *view) {
+	Interactor::setView(view);
+	parallelView = (ParallelCoordinatesView *) view;
+	initOrUpdateSliders();
+}
+
+bool ParallelCoordsAxisSliders::compute(GlMainWidget *glMainWidget) {
+	initOrUpdateSliders();
+	return true;
+}
+
+void ParallelCoordsAxisSliders::initOrUpdateSliders() {
 	vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
 
 	if (axisSlidersMap.size() == 0) {
@@ -248,26 +264,35 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 		buildGlSliders(allAxis);
 		drawSliders = true;
 		parallelView->refresh();
-		drawSliders = false;
-		return true;
+		return;
 	}
 
-
 	if ((lastAxisHeight != 0 && allAxis.size() > 0 && lastAxisHeight != allAxis[0]->getAxisHeight()) ||
-		(lastNbAxis != 0 && lastNbAxis != allAxis.size())) {
+		(lastNbAxis != 0 && lastNbAxis != allAxis.size()) || (currentGraph != parallelView->getGraph())) {
 		deleteGlSliders();
+		if (currentGraph != NULL && currentGraph != parallelView->getGraph()) {
+			vector<ParallelAxis *>::iterator it;
+			for (it = allAxis.begin() ; it != allAxis.end() ; ++it) {
+				(*it)->resetSlidersPosition();
+			}
+		}
 		buildGlSliders(allAxis);
 		drawSliders = true;
 		selectedSlider = NULL;
 		selectedAxis = NULL;
 		lastSelectedAxis.clear();
 		parallelView->refresh();
-		drawSliders = false;
-		lastNbAxis = allAxis.size();
-		return true;
 	}
 
 	lastNbAxis = allAxis.size();
+	currentGraph = parallelView->getGraph();
+}
+
+bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
+
+	GlMainWidget *glWidget = (GlMainWidget *) widget;
+
+	initOrUpdateSliders();
 
 	if (!parallelView->hasHighlightedElts()) {
 		lastSelectedAxis.clear();
@@ -378,6 +403,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 		drawSliders = false;
 	}
 
+	drawSliders = true;
 	return false;
 
 }
@@ -441,6 +467,9 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
 		return false;
 	}
 
+	Camera *camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
+	camera->initGl();
+
 	map<ParallelAxis *, vector<AxisSlider *> >::iterator it;
 	vector<AxisSlider *>::iterator it2;
 	for (it = axisSlidersMap.begin() ; it != axisSlidersMap.end() ; ++it) {
@@ -493,6 +522,7 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
 		glDisable(GL_LIGHTING);
 	}
 
+	drawSliders = false;
 	return true;
 }
 

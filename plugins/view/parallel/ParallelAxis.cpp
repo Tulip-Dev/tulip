@@ -28,7 +28,7 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
 
 ParallelAxis::ParallelAxis(GlAxis *glAxis, const float axisAreaWidth) : glAxis(glAxis), slidersActivated(false), hidden(false) {
 	glAxis->setStencil(1);
-	glAxis->addCaption(GlAxis::LEFT_OR_BELOW, 30, true, axisAreaWidth, glAxis->getAxisLength() / 20.);
+	glAxis->addCaption(GlAxis::LEFT_OR_BELOW, 30, true, axisAreaWidth, glAxis->getAxisLength() / 18.);
 }
 
 ParallelAxis::~ParallelAxis() {
