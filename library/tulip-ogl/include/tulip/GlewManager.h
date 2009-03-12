@@ -59,12 +59,11 @@ namespace tlp {
       if (GLEW_OK != err) {
         glewIsOk=false;
       }else{
-        std::string glewVersion=(const char*)glewGetString(GLEW_VERSION);
-        if(glewVersion.compare("1.4.0")>=0){
-          glewIsOk=true;
-        }else{
-          glewIsOk=false;
-        }
+	if(((void*)(glGenBuffers))!=NULL){
+	  glewIsOk=true;
+	}else{
+	  glewIsOk=false;
+	}
       }
       _glewIsInit=true;
     }
