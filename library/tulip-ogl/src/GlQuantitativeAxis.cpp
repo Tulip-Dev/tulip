@@ -54,14 +54,17 @@ void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const
 										   const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
 	integerScale = true;
 	min = minV;
-	max = maxV;
+	int maxVCp = maxV;
+	while ((maxVCp % incrementStepV) != 0) ++maxVCp;
+	max = maxVCp;
+	incrementStep = incrementStepV;
 	if (min == max) {
 		max += incrementStep;
 	}
-	incrementStep = incrementStepV;
 	axisGradsLabelsPosition = axisGradsLabelsPos;
 	drawFistLabel = firstLabel;
 	minMaxSet = true;
+	nbGraduations = (maxV - minV) / incrementStepV + 1;
 }
 
 void GlQuantitativeAxis::buildAxisGraduations() {
@@ -81,11 +84,10 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 		}
 	}
 
-	if (!integerScale) {
+	if (!integerScale || (integerScale && logScale)) {
 		increment = (maxV - minV) / (nbGraduations - 1);
 	} else {
 		increment = incrementStep;
-		nbGraduations = 2;
 	}
 
     scale = axisLength / (maxV - minV);
@@ -93,7 +95,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
     vector<string> axisLabels;
 
 	axisLabels.push_back(getStringFromNumber(min));
-	for (double i = minV + increment ; i < max ; i += increment) {
+	for (double i = minV + increment ; i < maxV ; i += increment) {
 
 		if (!integerScale && axisLabels.size() == nbGraduations - 1)
 			break;
@@ -109,9 +111,6 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 			gradLabel = getStringFromNumber(labelValue);
 		}
 		axisLabels.push_back(gradLabel);
-		if (integerScale) {
-			++nbGraduations;
-		}
 	}
 	axisLabels.push_back(getStringFromNumber(max));
 
@@ -121,9 +120,9 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 
 	if (!drawFistLabel) {
 		if (ascendingOrder) {
-			axisLabels[0] = "";
+			axisLabels[0] = " ";
 		} else {
-			axisLabels[axisLabels.size() - 1] = "";
+			axisLabels[axisLabels.size() - 1] = " ";
 		}
 	}
 
@@ -131,7 +130,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 }
 
 Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
-	double offset;
+	float offset;
 	Coord ret;
 	double minV, maxV;
 	if (!logScale) {
@@ -144,7 +143,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 
 	double val = value;
 	if (logScale) {
-		if (val < 1) {
+		if (min < 1) {
 			val += (1 - min);
 		}
 		val = log(val) / log(logBase);

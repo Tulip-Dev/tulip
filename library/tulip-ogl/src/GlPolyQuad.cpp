@@ -62,8 +62,8 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	}
 	glEnd();
 
-
 	if (outlined) {
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glLineWidth(outlineWidth);
 		glBegin(GL_LINE_LOOP);
 		setMaterial(outlineColor);
@@ -80,7 +80,6 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	}
 
 	glEnable(GL_CULL_FACE);
-	glDisable(GL_BLEND);
 
 	if(textureName != "") {
 		GlTextureManager::getInst().desactivateTexture();
