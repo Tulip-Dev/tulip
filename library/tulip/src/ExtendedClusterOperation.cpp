@@ -55,10 +55,13 @@ void tlp::updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
   Iterator<node> *itN= cluster->getNodes();
+  unsigned int nbNodes = 0;
   node viewMetricMaxNode;
   double vMax = DBL_MIN;
+  double vAvg = 0;
   DoubleProperty *graphMetric = graph->getProperty<DoubleProperty>("viewMetric");
   while (itN->hasNext()){
+    nbNodes++;
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
     clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
@@ -67,9 +70,30 @@ void tlp::updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
       vMax = value;
       viewMetricMaxNode = itn;
     }
+    vAvg += value;
   } delete itN;
   // set metanode label to label of viewMetric max corresponding node
   cluster->getProperty<StringProperty>("viewLabel")->setNodeValue(metanode, graph->getProperty<StringProperty>("viewLabel")->getNodeValue(viewMetricMaxNode));
+  // set metanode viewMetric to average value
+  cluster->getProperty<DoubleProperty>("viewMetric")->setNodeValue(metanode, vAvg/nbNodes);
+  // compute other metrics average value
+  string pName;
+  forEach(pName, graph->getProperties()) {
+    PropertyInterface *property = graph->getProperty(pName);
+    if (dynamic_cast<DoubleProperty *>(property) &&
+	// try to avoid view... properties
+	pName.find("view") != 0) {
+      graphMetric = graph->getProperty<DoubleProperty>(pName);
+      itN = cluster->getNodes();
+      vAvg = 0;
+      while (itN->hasNext()) {
+	vAvg += graphMetric->getNodeValue(itN->next());
+      } delete itN;
+      // set metanode value to average value
+      cluster->getProperty<DoubleProperty>(pName)->setNodeValue(metanode,
+								vAvg/nbNodes);
+    }
+  }
   Iterator<edge> *itE= cluster->getEdges();
   while (itE->hasNext()){
     edge ite = itE->next();
