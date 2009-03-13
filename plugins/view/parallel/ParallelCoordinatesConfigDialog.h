@@ -61,7 +61,7 @@ public :
   unsigned int getLinesColorAlphaValue() const;
   Color getBackgroundColor() const;
   void setBackgroundColor(const Color &color);
-  void setGraphProxy(ParallelCoordinatesGraphProxy *graphProxy) {this->graphProxy = graphProxy;}
+  void setGraphProxy(ParallelCoordinatesGraphProxy *graphProxy);
   unsigned int getUnhighlightedEltsColorsAlphaValue() const;
   void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
 
@@ -91,6 +91,7 @@ private :
   void restoreBackupConfiguration();
 
 
+  std::vector<std::string> propertyTypesFilter;
   ElementType dataLocationBak;
   Color bgColorBak;
   unsigned int axisHeightBak;

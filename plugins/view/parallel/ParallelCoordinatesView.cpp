@@ -42,7 +42,7 @@ VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates view", "Tulip Team", "
 
 
 ParallelCoordinatesView::ParallelCoordinatesView() :
-	GlMainView(), configDialog(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL)  {
+	GlMainView(), configDialog(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , firstSet(true), lastNbSelectedProperties(0) {
 	addDependency<Interactor>("ParallelCoordsElementShowInfos", "1.0");
 	addDependency<Interactor>("ParallelCoordsElementsSelector", "1.0");
 	addDependency<Interactor>("ParallelCoordsElementDeleter", "1.0");
@@ -152,9 +152,9 @@ void ParallelCoordinatesView::buildMenuEntries() {
 }
 
 void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
-  overviewWidget->setObservedView(NULL,NULL);
+	overviewWidget->setObservedView(NULL,NULL);
 
-	center = true;
+	//center = true;
 	vector<string> selectedPropertiesBak;
 
 	// test if the graph to set belongs to the same hierarchy as the current graph
@@ -162,7 +162,6 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 	if (graphProxy != NULL && (graph->getRoot() == graphProxy->getRoot())) {
 		sameGraphRoot = true;
 		selectedPropertiesBak = graphProxy->getSelectedProperties();
-		center = false;
 	}
 
 	if (graphProxy != NULL) {
@@ -194,8 +193,9 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 	mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
 	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
 
-	if (configDialog == NULL) {
-
+	if (configDialog != NULL) {
+		configDialog->setGraphProxy(graphProxy);
+	} else {
 		configDialog = new ParallelCoordinatesConfigDialog(graphProxy, mainWidget);
 		configDialog->setModal(true);
 
@@ -289,10 +289,11 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 
 	}
 
-	if (graphProxy->getNumberOfSelectedProperties() > 0) {
+	if (!firstSet) {
 		setUpAndDrawView();
 	} else {
 		showConfigDialog();
+		firstSet = false;
 	}
 
 	list<QAction *> *actions=getInteractorsActionList();
@@ -340,7 +341,6 @@ void ParallelCoordinatesView::getData(Graph **graph, DataSet *dataSet) {
 		dataSet->set<string>("viewType", "view2dSpline");
 	}
 
-
 	*graph = graphProxy->getGraph();
 }
 
@@ -357,11 +357,6 @@ void ParallelCoordinatesView::setGraph(Graph *graph) {
 void ParallelCoordinatesView::updateWithoutProgressBar() {
 	parallelCoordsDrawing->resetNbDataProcessed();
 	parallelCoordsDrawing->update();
-	if (center) {
-		centerView();
-		center = false;
-	}
-	GlMainView::draw();
 }
 
 void ParallelCoordinatesView::updateWithProgressBar() {
@@ -421,27 +416,25 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	mainLayer->addGlEntity(glGraphComposite, "graph");
 	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
 
-	if (center) {
-		centerView();
-		center = false;
-	} else {
-		// restore original camera parameters
-		mainWidget->getScene()->getCamera()->setSceneRadius(sceneRadiusBak);
-		mainWidget->getScene()->getCamera()->setZoomFactor(zoomFactorBak);
-		mainWidget->getScene()->getCamera()->setEyes(eyesBak);
-		mainWidget->getScene()->getCamera()->setCenter(centerBak);
-		mainWidget->getScene()->getCamera()->setUp(upBak);
-	}
-	GlMainView::draw();
+	// restore original camera parameters
+	mainWidget->getScene()->getCamera()->setSceneRadius(sceneRadiusBak);
+	mainWidget->getScene()->getCamera()->setZoomFactor(zoomFactorBak);
+	mainWidget->getScene()->getCamera()->setEyes(eyesBak);
+	mainWidget->getScene()->getCamera()->setCenter(centerBak);
+	mainWidget->getScene()->getCamera()->setUp(upBak);
 }
 
 void ParallelCoordinatesView::draw() {
-
 	if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
 		updateWithProgressBar();
 	} else {
 		updateWithoutProgressBar();
 	}
+	if (lastNbSelectedProperties != graphProxy->getNumberOfSelectedProperties()) {
+		centerView();
+	}
+	lastNbSelectedProperties = graphProxy->getNumberOfSelectedProperties();
+	GlMainView::draw();
 }
 
 void ParallelCoordinatesView::centerView() {
@@ -678,6 +671,7 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
 	set<unsigned int> dataUnderPointer = mapGlEntitiesInRegionToData(x, y, 1, 1);
 	set<unsigned int>::iterator it;
 	for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+		if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
 		graphProxy->setDataSelected(*it, selectFlag);
 	}
 }
@@ -686,7 +680,8 @@ void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y
 	set<unsigned int> dataUnderPointer = mapGlEntitiesInRegionToData(x, y, width, height);
 	set<unsigned int>::iterator it;
 	for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
-		graphProxy->setDataSelected(*it, selectFlag);
+		if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
+			graphProxy->setDataSelected(*it, selectFlag);
 	}
 }
 
@@ -698,17 +693,32 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
 	set<unsigned int> dataUnderPointer = mapGlEntitiesInRegionToData(x, y, 1, 1);
 	set<unsigned int>::iterator it;
 	for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
-		graphProxy->deleteData(*it);
+		if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
+			graphProxy->deleteData(*it);
 	}
 }
 
 void ParallelCoordinatesView::showDataUnderPointerProperties(const int x, const int y) {
 	set<unsigned int> dataUnderPointer = mapGlEntitiesInRegionToData(x, y, 1, 1);
 	if (dataUnderPointer.size() > 0) {
-		if (graphProxy->getDataLocation() == NODE) {
-			elementSelectedSlot(*(dataUnderPointer.begin()), true);
+		unsigned int dataId;
+		if (!graphProxy->highlightedEltsSet()) {
+			dataId = *(dataUnderPointer.begin());
 		} else {
-			elementSelectedSlot(*(dataUnderPointer.begin()), false);
+			set<unsigned int>::iterator it = dataUnderPointer.begin();
+			while (it != dataUnderPointer.end() && !graphProxy->isDataHighlighted(*it)) {
+				++it;
+			}
+			if (it == dataUnderPointer.end()) {
+				return;
+			} else {
+				dataId = *it;
+			}
+		}
+		if (graphProxy->getDataLocation() == NODE) {
+			elementSelectedSlot(dataId, true);
+		} else {
+			elementSelectedSlot(dataId, false);
 		}
 	}
 }

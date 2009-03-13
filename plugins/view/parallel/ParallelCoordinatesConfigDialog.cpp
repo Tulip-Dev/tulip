@@ -23,7 +23,6 @@ namespace tlp {
   ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent) : QDialog(parent), graphProxy(data) {
 	  setupUi(this);
 
-	  vector<string> propertyTypesFilter;
 	  propertyTypesFilter.push_back("double");
 	  propertyTypesFilter.push_back("int");
 	  propertyTypesFilter.push_back("string");
@@ -48,7 +47,6 @@ namespace tlp {
   	  vector<string> stringList;
   	  vector<string>::iterator it;
   	  string propertyName;
-
   	  graphPropertiesSelectionWidget->clearLists();
 
   	  while (properties->hasNext()) {
@@ -73,6 +71,10 @@ namespace tlp {
     return selectedProperties;
   }
 
+  void ParallelCoordinatesConfigDialog::setGraphProxy(ParallelCoordinatesGraphProxy *graphProx) {
+	  graphProxy = graphProx;
+	  graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
+  }
 
   void ParallelCoordinatesConfigDialog::accept(){
     selectedProperties = graphPropertiesSelectionWidget->getSelectedProperties();

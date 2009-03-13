@@ -17,12 +17,12 @@ QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const
   glQuantitativeAxis = dynamic_cast<GlQuantitativeAxis *>(glAxis);
   boxPlotValuesCoord.resize(5);
   boxPlotStringValues.resize(5);
-  axisMinValue = getAssociatedPropertyMinValue();
-  axisMaxValue = getAssociatedPropertyMaxValue();
   redraw();
 }
 
 void QuantitativeParallelAxis::setAxisLabels() {
+	axisMinValue = getAssociatedPropertyMinValue();
+	axisMaxValue = getAssociatedPropertyMaxValue();
 	glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
 	glQuantitativeAxis->setLogScale(log10Scale);
 }

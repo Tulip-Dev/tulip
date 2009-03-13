@@ -133,7 +133,8 @@ namespace tlp {
     ParallelCoordinatesDrawing *parallelCoordsDrawing;
     ParallelAxis *axisUnderPointer;
 
-    bool center;
+    bool firstSet;
+    unsigned int lastNbSelectedProperties;
   };
 
 }
