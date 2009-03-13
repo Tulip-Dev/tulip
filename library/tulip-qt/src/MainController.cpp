@@ -869,8 +869,12 @@ namespace tlp {
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
     QWidget *widget=(QWidget*)object;
+    View *view=viewWidget[widget];
     delete viewWidget[widget];
     viewWidget.erase(widget);
+    viewNames.erase(view);
+    lastInteractorOnView.erase(view);
+    viewGraph.erase(view);
     if(viewWidget.size()==0){
       mainWindowFacade.getInteractorsToolBar()->clear();
       currentView=NULL;
