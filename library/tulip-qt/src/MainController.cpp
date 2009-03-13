@@ -376,12 +376,13 @@ namespace tlp {
   //**********************************************************************
   void MainController::update ( ObserverIterator begin, ObserverIterator end) {
     if(graphToReload){
+      Graph *graph=graphToReload;
+      graphToReload=NULL;
       for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
-        if((*it).second==graphToReload){
-          (*it).first->setGraph(graphToReload);
+        if((*it).second==graph){
+          (*it).first->setGraph(graph);
         }
       }
-      graphToReload=NULL;
     }else{
       redrawViews();
     }
