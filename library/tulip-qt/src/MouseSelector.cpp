@@ -140,6 +140,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           y -= h;
         }
         glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
+        glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->push();
         vector<node>::const_iterator it;
         for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
           selection->setNodeValue(*it,
