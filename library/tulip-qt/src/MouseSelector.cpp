@@ -96,6 +96,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
       bool revertSelection = false; // add to selection
       bool boolVal = true;
+      bool needPush = true; // undo management
       if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
         Qt::AltModifier
@@ -106,8 +107,24 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (qMouseEv->modifiers() == Qt::ShiftModifier)
           boolVal = false;
         else {
-          selection->setAllNodeValue(false);
-          selection->setAllEdgeValue(false);
+	  Iterator<node>* itn = selection->getNonDefaultValuatedNodes();
+	  if (itn->hasNext()) {
+	    graph->push();
+	    needPush = false;
+	    delete itn;
+	    selection->setAllNodeValue(false);
+	  } else
+	    delete itn;
+	  Iterator<edge>* ite = selection->getNonDefaultValuatedEdges();
+	  if (ite->hasNext()) {
+	    if (needPush) {
+	      graph->push();
+	      needPush = false;
+	    }
+	    delete ite;
+	    selection->setAllEdgeValue(false);
+	  } else
+	    delete ite;
         }
       } else
         revertSelection = true; // revert selection
@@ -116,16 +133,28 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         edge tmpEdge;
         ElementType type;
         bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
-        if (result){
+        if (result) {
           switch(type) {
-          case NODE: selection->setNodeValue(tmpNode,
-              revertSelection ?
-                  !selection->getNodeValue(tmpNode)
-                  : boolVal); break;
-          case EDGE: selection->setEdgeValue(tmpEdge,
-              revertSelection ?
-                  !selection->getEdgeValue(tmpEdge)
-                  : boolVal); break;
+          case NODE:
+	    result = selection->getNodeValue(tmpNode);
+	    if (revertSelection || boolVal != result) {
+	      if (needPush) {
+		graph->push();
+		needPush = false;
+	      }
+	      selection->setNodeValue(tmpNode, !result);
+	    }		  
+	    break;
+          case EDGE:
+	    result = selection->getEdgeValue(tmpEdge);
+	    if (revertSelection || boolVal != result) {
+	      if (needPush) {
+		graph->push();
+		needPush = false;
+	      }
+	      selection->setEdgeValue(tmpEdge, !result);
+	    }		  
+	    break;	    
           }
         }
       } else {
@@ -140,8 +169,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           y -= h;
         }
         glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
-        glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->push();
-        vector<node>::const_iterator it;
+	if (needPush)
+	  graph->push();
+       vector<node>::const_iterator it;
         for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
           selection->setNodeValue(*it,
               revertSelection ?
