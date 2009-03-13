@@ -235,7 +235,8 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 	} else if (lastHighlightedElementsSet) {
 		*(graph_component->getProperty<ColorProperty>("viewColor")) = *originalDataColors;
 		lastHighlightedElementsSet = false;
-		return;
+	} else {
+		*originalDataColors = *dataColors;
 	}
 
 
