@@ -154,6 +154,7 @@ namespace tlp {
 					   &ok);
       if (ok) {
         string erreurMsg;
+        graph->push();
         if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
         if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
         if (strcmp(res.toAscii().data(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.toAscii().data());
@@ -198,6 +199,7 @@ namespace tlp {
   void PropertyDialog::removeProperty() {
     if (editedProperty==0) return;
     if(graph->existLocalProperty(editedPropertyName)) {
+      graph->push();
       graph->delLocalProperty(editedPropertyName);
       //setGlMainWidget(glWidget);
       setGraph(graph);
@@ -221,75 +223,77 @@ namespace tlp {
       parent = 0;
     forEach(prop, graph->getLocalProperties()) {
       if (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)) {
-	if (prop != editedPropertyName)
-	  localProps.push_back(prop);
-	if (parent && parent->existProperty(prop))
-	  inheritedProps.push_back(prop);
+        if (prop != editedPropertyName)
+          localProps.push_back(prop);
+        if (parent && parent->existProperty(prop))
+          inheritedProps.push_back(prop);
       }
     }
     forEach(prop, graph->getInheritedProperties()) {
       if ((prop != editedPropertyName) &&
-	  (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)))
-	inheritedProps.push_back(prop);
+          (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)))
+        inheritedProps.push_back(prop);
     }
     dialog.setProperties(editedPropertyName, localProps, inheritedProps);
     CopyPropertyDialog::destType type;
     std::string text = dialog.getDestinationProperty(type);
     if (text.size() > 0) {
       if (type != CopyPropertyDialog::INHERITED) {
-	if (graph->existProperty(text)) {
-	  if (typeid(*graph->getProperty(text))!=typeid(*editedProperty)) {
-	    QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
-	    return;
-	  }
-	  if (type == CopyPropertyDialog::NEW &&
-	      graph->existLocalProperty(text)) {
-	    if (text == editedPropertyName) {
-	      QMessageBox::critical(parentWidget(), "Tulip Warning",
-				    "Properties are the same.");
-	      return;
-	    } else if (QMessageBox::question(parentWidget(),
-					     "Copy confirmation",
-					     (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(),
-					     QMessageBox::Ok,
-					     QMessageBox::Cancel)
-		       == QDialog::Rejected)
-	      return;
-	  }
-	}
-	Observable::holdObservers();
-	if (typeid((*editedProperty)) == typeid(DoubleProperty))
-	  {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(LayoutProperty))
-	  {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(StringProperty))
-	  {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(BooleanProperty))
-	  {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(IntegerProperty))
-	  {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(ColorProperty))
-	  {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(SizeProperty))
-	  {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
-	//}
+        if (graph->existProperty(text)) {
+          if (typeid(*graph->getProperty(text))!=typeid(*editedProperty)) {
+            QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
+            return;
+          }
+          if (type == CopyPropertyDialog::NEW &&
+              graph->existLocalProperty(text)) {
+            if (text == editedPropertyName) {
+              QMessageBox::critical(parentWidget(), "Tulip Warning",
+                  "Properties are the same.");
+              return;
+            } else if (QMessageBox::question(parentWidget(),
+                "Copy confirmation",
+                (std::string("Property ") + text + " already exists,\ndo you really want to overwrite it ?").c_str(),
+                QMessageBox::Ok,
+                QMessageBox::Cancel)
+            == QDialog::Rejected)
+              return;
+          }
+        }
+        Observable::holdObservers();
+        graph->push();
+        if (typeid((*editedProperty)) == typeid(DoubleProperty))
+        {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(LayoutProperty))
+        {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(StringProperty))
+        {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(BooleanProperty))
+        {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(IntegerProperty))
+        {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(ColorProperty))
+        {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(SizeProperty))
+        {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+        //}
       } else {
-	Graph *parent = graph->getSuperGraph();
-	Observable::holdObservers();
-	if (typeid((*editedProperty)) == typeid(DoubleProperty))
-	  {*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(LayoutProperty))
-	  {*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(StringProperty))
-	  {*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(BooleanProperty))
-	  {*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(IntegerProperty))
-	  {*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(ColorProperty))
-	  {*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
-	if (typeid((*editedProperty)) == typeid(SizeProperty))
-	  {*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
+        Graph *parent = graph->getSuperGraph();
+        Observable::holdObservers();
+        parent->push();
+        if (typeid((*editedProperty)) == typeid(DoubleProperty))
+        {*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(LayoutProperty))
+        {*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(StringProperty))
+        {*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(BooleanProperty))
+        {*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(IntegerProperty))
+        {*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(ColorProperty))
+        {*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
+        if (typeid((*editedProperty)) == typeid(SizeProperty))
+        {*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
       }
       setGraph(graph);
       Observable::unholdObservers();

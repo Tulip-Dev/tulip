@@ -1532,6 +1532,8 @@ namespace tlp {
     changeGraph(root);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
+    propertiesWidget->setGraph(root);
+    eltProperties->setGraph(root,false);
     updateUndoRedoInfos();
     // forget previous/next graphs
     /*glWidget->prevGraphs.clear();
@@ -1545,6 +1547,8 @@ namespace tlp {
     changeGraph(root);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
+    propertiesWidget->setGraph(root);
+    eltProperties->setGraph(root,false);
     updateUndoRedoInfos();
     // forget previous/next graphs
     /*glWidget->prevGraphs.clear();
