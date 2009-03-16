@@ -66,8 +66,8 @@ namespace tlp {
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
 
-    renderer->setString(text, VERBATIM);
     renderer->setColor(color[0], color[1], color[2]);
+    renderer->setString(text, VERBATIM);
 
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPolygonMode(GL_FRONT, GL_FILL);
