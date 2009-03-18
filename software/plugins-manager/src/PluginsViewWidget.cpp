@@ -361,9 +361,10 @@ namespace tlp {
 
     set<DistPluginInfo,PluginCmp> depNoInstalled;
     set<LocalPluginInfo,PluginCmp> depToRemove;
+    set<LocalPluginInfo,PluginCmp> depToRemoveWithoutAsk;
 
     for(set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
-      bool ok=_msm->getPluginDependenciesToInstall(*it,depNoInstalled);
+      bool ok=_msm->getPluginDependenciesToInstall(*it,depNoInstalled,depToRemoveWithoutAsk);
 
       if(ok==false){
 	windowToDisplayError((*it).name);
@@ -403,6 +404,9 @@ namespace tlp {
       // Ask the user if he wants to install all dependancy
       AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depToRemove,&pluginsToRemove);
       authoriz->exec();
+    }
+    for(set<LocalPluginInfo,PluginCmp>::iterator it = depToRemoveWithoutAsk.begin(); it!=depToRemoveWithoutAsk.end(); ++it) {
+      pluginsToRemove.insert(*it);
     }
 
     for(set<DistPluginInfo,PluginCmp>::iterator it=pluginsToInstall.begin();it!=pluginsToInstall.end();++it)

@@ -169,9 +169,9 @@ namespace tlp {
       QTextStream installStream(&installFile);
       while(!installStream.atEnd()) {
 	QString line = installStream.readLine();
-	if(line.contains(QDir::separator())){
-	  QDir tmpDir=dstDir.absolutePath()+QDir::separator()+line.split(QDir::separator()).first();
-	  copyFile(srcDir,line.split(QDir::separator()).last(),tmpDir,line.split(QDir::separator()).last());
+	if(line.contains("/")){
+	  QDir tmpDir=dstDir.absolutePath()+"/"+line.split("/").first();
+	  copyFile(srcDir,line.split("/").last(),tmpDir,line.split("/").last());
 	}else{
 	  copyFile(srcDir,line,dstDir,line);
 	}
