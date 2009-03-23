@@ -139,7 +139,7 @@ File @prefix@\lib\tlp\bin\libSphere-@VERSION@.dll
 File @prefix@\lib\tlp\bin\libSquare-@VERSION@.dll
 File @prefix@\lib\tlp\bin\libSquareBorderTextured-@VERSION@.dll
 File @prefix@\lib\tlp\bin\libTriangle-@VERSION@.dll
-setOutPath $INSTDIR\lib\tlp\glyphs
+setOutPath $INSTDIR\lib\tlp\view
 File @prefix@\lib\tlp\bin\libParallelCoordinates-@VERSION@.dll
 File @prefix@\lib\tlp\bin\libSpreadSheet-@VERSION@.dll
 setOutPath $INSTDIR\lib\tlp\designer
