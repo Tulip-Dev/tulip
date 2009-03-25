@@ -28,7 +28,7 @@ GlAxis::GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const fl
 			   captionText(axisName), captionOffset(0),
 			   axisLinesComposite(new GlComposite()), captionComposite(new GlComposite()),
 			   gradsComposite(new GlComposite()), captionSet(false), maxCaptionWidth(0),
-			   maxGraduationLabelWidth(0) {
+			   maxGraduationLabelWidth(axisLength / 8.) {
 	buildAxisLine();
 	addGlEntity(captionComposite, "caption composite");
 	addGlEntity(gradsComposite, "grads composite");
@@ -41,23 +41,24 @@ GlAxis::~GlAxis() {
 }
 
 void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels, const LabelPosition &axisGradsPosition) {
-
 	spaceBetweenAxisGrads = axisLength / (axisGradsLabels.size() - 1);
 	if (captionOffset == 0) {
-		captionOffset = spaceBetweenAxisGrads;
+		captionOffset = axisLength / 10.;
 	}
 	gradsComposite->reset(true);
 	ostringstream oss;
-	maxGraduationLabelWidth = 0;
 	unsigned int gradsCpt = 0;
 	for (unsigned int i = 0 ; i < axisGradsLabels.size() ; ++i) {
 		GlLine *axisGraduation = new GlLine();
 		axisGraduation->setStencil(1);
 		axisGraduation->setLineWidth(2.0);
 		GlLabel *graduationLabel = NULL;
-		float labelWidth = spaceBetweenAxisGrads;
-		maxGraduationLabelWidth = labelWidth;
+		float labelWidth;
 		if (axisOrientation == HORIZONTAL_AXIS) {
+			labelWidth = spaceBetweenAxisGrads;
+			if (maxGraduationLabelWidth != 0 && labelWidth > maxGraduationLabelWidth) {
+				labelWidth = maxGraduationLabelWidth;
+			}
 			labelHeight = labelWidth / 3.;
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2), axisColor);
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2), axisColor);
@@ -72,16 +73,8 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 			labelHeight = spaceBetweenAxisGrads * MAGIG_FACTOR;
 			labelWidth = axisGradsLabels[i].length() * (labelHeight / 2.);
 
-			if (labelWidth > (axisLength / 8.)) {
-				labelWidth = (axisLength / 8.);
-			}
-
-			if (axisGradsLabels[i].length() == 1) {
-				labelWidth *= 2.;
-			}
-
-			if (labelWidth > maxGraduationLabelWidth) {
-				maxGraduationLabelWidth = labelWidth;
+			if (maxGraduationLabelWidth != 0 && labelWidth > maxGraduationLabelWidth) {
+				labelWidth = maxGraduationLabelWidth;
 			}
 
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() - axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
@@ -129,7 +122,7 @@ Coord GlAxis::computeCaptionCenter() {
 		}
 	} else if (axisOrientation == HORIZONTAL_AXIS) {
 		if (captionPosition == RIGHT_OR_ABOVE) {
-			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 4.), axisBaseCoord.getY());
+			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 2.), axisBaseCoord.getY());
 		} else {
 			captionCenter = Coord(axisBaseCoord.getX() - captionOffset - (captionWidth / 2.) , axisBaseCoord.getY());
 		}

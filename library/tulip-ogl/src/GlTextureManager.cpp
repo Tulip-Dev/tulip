@@ -353,6 +353,13 @@ bool GlTextureManager::loadTexture(const string& filename)
 
   return true;
 }
+
+void GlTextureManager::registerExternalTexture(const std::string &textureName, const GLuint textureId) {
+	GlTexture texture;
+	texture.id = textureId;
+	(texturesMap[currentContext])[textureName] = texture;
+}
+
 //====================================================================
 void GlTextureManager::deleteTexture(const string& name){
   for(ContextAndTextureMap::iterator it=texturesMap.begin();it!=texturesMap.end();++it){

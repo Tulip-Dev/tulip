@@ -53,6 +53,9 @@ public :
 						   const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true);
 
 
+	void setNbGraduations(const unsigned int nbGraduations) {this->nbGraduations = nbGraduations;}
+
+
 	/**
 	 * Method to set a logarithmic scale on the axis. A call to updateAxis has to be done after calling this method to build or update the axis graduations
 	 *
@@ -90,6 +93,10 @@ public :
 	 * Method to get the order of the values on the axis (ascending or descending)
 	 */
 	bool hasAscendingOrder() const {return ascendingOrder;}
+
+	double getAxisMinValue() const {return min;}
+
+	double getAxisMaxValue() const {return max;}
 
 private :
 

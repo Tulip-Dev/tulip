@@ -126,6 +126,9 @@ public :
 	void setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 						    const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW);
 
+
+	void setAxisGraduationsMaxLabelWidth(const float maxWidth) {maxGraduationLabelWidth = maxWidth;}
+
 	/**
 	 * Method which adds a caption to the axis. No need to call updateAxis after calling this method.
 	 *

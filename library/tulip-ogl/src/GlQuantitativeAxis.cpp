@@ -94,7 +94,11 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 
     vector<string> axisLabels;
 
-	axisLabels.push_back(getStringFromNumber(min));
+    string minStr = getStringFromNumber(min);
+    if (minStr.size() == 1) {
+    	minStr = " " + minStr;
+    }
+	axisLabels.push_back(minStr);
 	for (double i = minV + increment ; i < maxV ; i += increment) {
 
 		if (!integerScale && axisLabels.size() == nbGraduations - 1)
@@ -110,9 +114,16 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 			}
 			gradLabel = getStringFromNumber(labelValue);
 		}
+		if (gradLabel.size() == 1) {
+			gradLabel = " " + gradLabel;
+		}
 		axisLabels.push_back(gradLabel);
 	}
-	axisLabels.push_back(getStringFromNumber(max));
+	string maxStr = getStringFromNumber(max);
+	if (maxStr.size() == 1) {
+		maxStr = " " + maxStr;
+	}
+	axisLabels.push_back(maxStr);
 
 	if (!ascendingOrder && (min + max) > 0) {
 		reverse(axisLabels.begin(), axisLabels.end());

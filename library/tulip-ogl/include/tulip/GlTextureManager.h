@@ -96,6 +96,8 @@ namespace tlp {
      */
     void desactivateTexture();
 
+    void registerExternalTexture(const std::string &textureName, const GLuint textureId);
+
   private:
 
     /**
