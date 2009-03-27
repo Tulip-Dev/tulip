@@ -26,6 +26,15 @@ public :
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };
+
+class TLP_SCOPE StringVectorProperty:public AbstractProperty<StringVectorType,StringVectorType>{ 
+public :
+  StringVectorProperty(Graph *g):AbstractProperty<StringVectorType, StringVectorType>(g) {}
+
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
 /*\@}*/
 }
 #endif

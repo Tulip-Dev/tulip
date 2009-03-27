@@ -45,6 +45,14 @@ private:
   bool minMaxOk;
   void computeMinMax();
 };
+
+class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<IntegerVectorType,IntegerVectorType> { 
+public :
+  IntegerVectorProperty(Graph *g):AbstractProperty<IntegerVectorType, IntegerVectorType>(g) {}
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
 /*@}*/
 
 }

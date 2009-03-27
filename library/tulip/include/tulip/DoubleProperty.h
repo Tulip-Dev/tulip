@@ -46,6 +46,14 @@ private:
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
 };
+
+class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<DoubleVectorType,DoubleVectorType> { 
+public :
+  DoubleVectorProperty(Graph *g):AbstractProperty<DoubleVectorType, DoubleVectorType>(g) {}
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
 /*@}*/
 
 }

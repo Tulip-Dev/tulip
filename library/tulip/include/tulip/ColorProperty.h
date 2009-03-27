@@ -23,6 +23,14 @@ public :
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };
+
+class TLP_SCOPE ColorVectorProperty:public AbstractProperty<ColorVectorType,ColorVectorType> { 
+public :
+  ColorVectorProperty(Graph *g) :AbstractProperty<ColorVectorType, ColorVectorType>(g) {}
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
 /*@}*/
 
 }

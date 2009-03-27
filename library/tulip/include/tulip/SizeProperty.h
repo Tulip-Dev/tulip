@@ -47,6 +47,15 @@ private:
   stdext::hash_map<unsigned long, bool> minMaxOk;
   void computeMinMax(Graph * sg=NULL);
 };
+
+class TLP_SCOPE SizeVectorProperty:public AbstractProperty<SizeVectorType,SizeVectorType> { 
+public :
+  SizeVectorProperty(Graph *g):AbstractProperty<SizeVectorType, SizeVectorType>(g) {}
+
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
 /*@}*/
 
 }

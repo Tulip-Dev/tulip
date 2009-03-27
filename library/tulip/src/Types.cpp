@@ -2,13 +2,12 @@
 
 #include "tulip/Types.h"
 #include "tulip/Graph.h"
-#include "tulip/StringCollection.h"
 
 using namespace std;
 using namespace tlp;
 
 namespace {
-  int nocase_cmp(const string & s1, const string& s2) {
+  static int nocase_cmp(const string & s1, const string& s2) {
     string::const_iterator it1=s1.begin();
     string::const_iterator it2=s2.begin();
     
@@ -38,7 +37,55 @@ namespace {
     }
     return true;
   }
-  
+
+  template<typename T, int openParen>
+  bool vectorFromString(vector<T>& v, const string &s) {
+    v.clear();
+    unsigned long pos = s.find_first_not_of(' ', 0);
+    if (pos == string::npos)
+      return false;
+
+    istringstream iss;
+    iss.str(s.substr(pos));
+    char c;
+    if( !(iss >> c) || c!='(' )
+      return false;
+    T val;
+    bool endFound = false;
+    bool firstVal = true;
+    bool sepFound = false;
+    for(;;) {
+      if( !(iss >> c) )
+	return endFound;
+      if (isspace(c))
+	continue;
+      if (endFound)
+	return false;
+      if( c == ')' ) {
+	if (sepFound)
+	  return false;
+	endFound = true;
+	continue;
+      }
+      if (c == ',') {
+	if (sepFound)
+	  return false;
+	sepFound = true;
+      } else {
+	if (firstVal || sepFound) {
+	  if (openParen && c != '(')
+	    return false;	    
+	  iss.unget();
+	  if( !(iss >> val) )
+	    return false;
+	  v.push_back(val);
+	  firstVal = false;
+	  sepFound = false;
+	} else
+	  return false;
+      }
+    }
+  }
 }
 
 //
@@ -50,9 +97,6 @@ GraphType::RealType GraphType::undefinedValue() {
 
 GraphType::RealType GraphType::defaultValue() {
   return 0;
-}
-
-void GraphType::del(GraphType::RealType element) {
 }
 
 string GraphType::toString( const RealType & v ) {
@@ -85,10 +129,6 @@ set<edge> EdgeSetType::undefinedValue() {
 
 set<edge> EdgeSetType::defaultValue() {
   return set<edge>();
-}
-
-void EdgeSetType::del(EdgeSetType::RealType &element) {
-  element.clear();
 }
 
 string EdgeSetType::toString( const RealType & v ) {
@@ -135,9 +175,6 @@ double DoubleType::defaultValue() {
   return 0;
 }
 
-void DoubleType::del(DoubleType::RealType element) {
-}
-
 string DoubleType::toString( const RealType & v ) {
   ostringstream oss;
   oss << v;
@@ -151,6 +188,33 @@ bool DoubleType::fromString( RealType & v, const string & s ) {
 }
 
 //
+// DoubleVectorType
+
+vector<double> DoubleVectorType::undefinedValue() {
+  return vector<double>();
+}
+
+vector<double> DoubleVectorType::defaultValue() {
+  return vector<double>();
+}
+
+string DoubleVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << v[i];
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool DoubleVectorType::fromString( RealType & v, const string & s ) {
+  return vectorFromString<double, false>(v, s);
+}
+
+//
 // IntegerType
 int IntegerType::undefinedValue() {
   return INT_MIN;
@@ -158,9 +222,6 @@ int IntegerType::undefinedValue() {
 
 int IntegerType::defaultValue() {
   return 0;
-}
-
-void IntegerType::del(IntegerType::RealType element) {
 }
 
 string IntegerType::toString( const RealType & v ) {
@@ -175,7 +236,32 @@ bool IntegerType::fromString( RealType & v, const string & s ) {
   return (iss >> v);
 }
 
+//
+// IntegerVectorType
 
+vector<int> IntegerVectorType::undefinedValue() {
+  return vector<int>();
+}
+
+vector<int> IntegerVectorType::defaultValue() {
+  return vector<int>();
+}
+
+string IntegerVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << v[i];
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool IntegerVectorType::fromString( RealType & v, const string & s ) {
+  return vectorFromString<int,false>(v, s);
+}
 
 //
 // BooleanType
@@ -186,9 +272,6 @@ bool BooleanType::undefinedValue() {
 
 bool BooleanType::defaultValue() {
   return false;
-}
-
-void BooleanType::del(BooleanType::RealType element) {
 }
 
 string BooleanType::toString( const RealType & v ) {
@@ -206,6 +289,79 @@ bool BooleanType::fromString( RealType & v, const string & s ) {
   }
   return false;
 }
+
+//
+// BooleanVectorType
+
+vector<bool> BooleanVectorType::undefinedValue() {
+  return vector<bool>();
+}
+
+vector<bool> BooleanVectorType::defaultValue() {
+  return vector<bool>();
+}
+
+string BooleanVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << (v[i] ? "true" : "false");
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool BooleanVectorType::fromString( RealType & v, const string & s ) {
+  v.clear();
+  unsigned long pos = s.find_first_not_of(' ', 0);
+  if (pos == string::npos)
+    return false;
+
+  istringstream iss;
+  iss.str(s.substr(pos));
+  char c;
+  if( !(iss >> c) || c!='(' )
+    return false;
+  bool endFound = false;
+  bool needToken = false;
+  string token;
+  for( ;; ) {
+    bool sepFound = false;
+    if( !(iss >> c) )
+      return endFound;
+    if (isspace(c))
+      continue;
+    if (endFound)
+      return false;
+    if (c == ')')
+      endFound = true;
+    if (c == ',') {
+      sepFound = true;
+      needToken = true;
+    }
+    if (endFound || sepFound) {
+      if (token.empty() && !needToken)
+	continue;
+      if (nocase_cmp(token, "false") == 0) {
+	v.push_back(false);
+	token.clear();
+	continue;
+      }
+      if( nocase_cmp(token, "true") == 0) {
+ 	v.push_back(true);
+	token.clear();
+	continue;
+      }
+      return false;
+    } else {
+      token.push_back(c);
+      needToken = true;
+    }
+  }
+}
+
 //
 // LineType
 
@@ -217,36 +373,57 @@ vector<Coord> LineType::defaultValue() {
   return vector<Coord>();
 }
 
-void LineType::del(LineType::RealType &element) {
-  element.clear();
-}
-
 string LineType::toString( const RealType & v ) {
   ostringstream oss;
   oss << '(';
-  for( unsigned int i = 0 ; i < v.size() ; i++ )
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
     oss << v[i];
+  }
   oss << ')';
   return oss.str();
 }
 
 bool LineType::fromString( RealType & v, const string & s ) {
   v.clear();
+  unsigned long pos = s.find_first_not_of(' ', 0);
+  if (pos == string::npos)
+    return false;
+
   istringstream iss;
-  iss.str( s );
+  iss.str(s.substr(pos));
   char c;
   if( !(iss >> c) || c!='(' )
     return false;
   Coord co;
+  bool endFound = false;
+  bool sepFound = false;
   for( ;; ) {
     if( !(iss >> c) )
+      return endFound;
+    if (isspace(c))
+      continue;
+    if (endFound)
       return false;
-    if( c == ')' )
-      return true;
-    iss.unget();
-    if( !(iss >> co) )
-      return false;
-    v.push_back( co );
+    if( c == ')' ) {
+      endFound = true;
+      continue;
+    }
+    if (c == '(') {
+      sepFound = false;
+      iss.unget();
+      if( !(iss >> co) )
+	return false;
+      v.push_back( co );
+    } else {
+      if (c == ',') {
+	if (sepFound)
+	  return false;
+	sepFound = true;
+      } else if (c != ' ')
+	return false;
+    }
   }
 }
 
@@ -263,9 +440,6 @@ Coord PointType::undefinedValue() {
 Coord
 PointType::defaultValue() {
   return Coord(rand()%1024,rand()%1024,rand()%1024);
-}
-
-void PointType::del(PointType::RealType element) {
 }
 
 string PointType::toString( const RealType & v ) {
@@ -291,9 +465,6 @@ Size SizeType::defaultValue() {
   return Size(1,1,0);
 }
 
-void SizeType::del(SizeType::RealType element) {
-}
-
 string SizeType::toString( const RealType & v ) {
   ostringstream oss;
   oss << v;
@@ -307,6 +478,33 @@ bool SizeType::fromString( RealType & v, const string & s ) {
 }
 
 //
+// SizeVectorType
+
+vector<Size> SizeVectorType::undefinedValue() {
+  return vector<Size>();
+}
+
+vector<Size> SizeVectorType::defaultValue() {
+  return vector<Size>();
+}
+
+string SizeVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << v[i];
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool SizeVectorType::fromString( RealType & v, const string & s ) {
+  return vectorFromString<Size, true>(v, s);
+}
+
+//
 // StringType
 
 string StringType::undefinedValue() {
@@ -315,9 +513,6 @@ string StringType::undefinedValue() {
 
 string StringType::defaultValue() {
   return string("");
-}
-
-void StringType::del(StringType::RealType element) {
 }
 
 string StringType::toString( const RealType & v ) {
@@ -330,6 +525,101 @@ bool StringType::fromString( RealType & v, const string & s ) {
 }
 
 //
+// StringVectorType
+
+vector<string> StringVectorType::undefinedValue() {
+  return vector<string>();
+}
+
+vector<string> StringVectorType::defaultValue() {
+  return vector<string>();
+}
+
+string StringVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    string tmp = v[i];
+    oss << '"';
+    for (unsigned int j=0; j < tmp.length(); ++j) {
+      if (tmp[j]=='\"')
+	oss << "\\\"";
+      else {
+	if (tmp[j] == '\\')
+	  oss << "\\\\";
+	else
+	  oss << tmp[j];
+      }
+    }
+    oss << '"';
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool StringVectorType::fromString( RealType & v, const string & s ) {
+  v.clear();
+  unsigned long pos = s.find_first_not_of(' ', 0);
+  if (pos == string::npos)
+    return false;
+
+  istringstream iss;
+  iss.str(s.substr(pos));
+  char c;
+  if(!(iss >> c) || c!='(')
+    return false;
+  bool endFound = false;
+  bool firstVal = true;
+  bool sepFound = false;
+  for( ;; ) {
+    if( !(iss >> c) )
+      return endFound;
+    if (isspace(c))
+      continue;
+    if (endFound)
+      return false;
+    if( c == ')' ) {
+      if (sepFound)
+	return false;
+      endFound = true;
+      continue;
+    }
+    if (c == ',') {
+      if (sepFound)
+	return false;
+      sepFound = true;
+    } else {
+      if ((firstVal || sepFound) && c == '\"') {
+	bool bslashFound = false;
+	string str("");
+	for(;;) {
+	  if ( !(iss >> c) )
+	    return false;
+	  if (bslashFound) {
+	    str.push_back(c);
+	    bslashFound = false;
+	  } else {
+	    if (c == '\\')
+	      bslashFound = true;
+	    else {
+	      if (c == '\"')
+		break;
+	      str.push_back(c);
+	    }
+	  }
+	}
+	v.push_back(str);
+	firstVal = false;
+	sepFound = false;
+      } else
+	return false;
+    }
+  }
+}
+
+//
 // ColorType
 
 Color ColorType::undefinedValue() {
@@ -338,9 +628,6 @@ Color ColorType::undefinedValue() {
 
 Color ColorType::defaultValue() {
   return Color();
-}
-
-void ColorType::del(ColorType::RealType element) {
 }
 
 string ColorType::toString( const RealType & v ) {
@@ -356,27 +643,55 @@ bool ColorType::fromString( RealType & v, const string & s ) {
 }
 
 //
-// StringCollectionType
+// ColorVectorType
 
-StringCollection StringCollectionType::undefinedValue() {
-  return StringCollection();
+vector<Color> ColorVectorType::undefinedValue() {
+  return vector<Color>();
 }
 
-StringCollection StringCollectionType::defaultValue() {
-  return StringCollection();
+vector<Color> ColorVectorType::defaultValue() {
+  return vector<Color>();
 }
 
-void StringCollectionType::del(StringCollectionType::RealType element) {
+string ColorVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << v[i];
+  }
+  oss << ')';
+  return oss.str();
 }
 
-string
-StringCollectionType::toString( const RealType & v ) {
-    string result;
-    for (unsigned int i = 0; i < v.size(); i++)
-      result += v[i];
-    return result;
+bool ColorVectorType::fromString( RealType & v, const string & s ) {
+  return vectorFromString<Color, true>(v, s);
 }
 
-bool StringCollectionType::fromString( RealType & v, const string & s ){
-  return v.setCurrent(s);
+//
+// CoordVectorType
+
+vector<Coord> CoordVectorType::undefinedValue() {
+  return vector<Coord>();
+}
+
+vector<Coord> CoordVectorType::defaultValue() {
+  return vector<Coord>();
+}
+
+string CoordVectorType::toString( const RealType & v ) {
+  ostringstream oss;
+  oss << '(';
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      oss << ", ";
+    oss << v[i];
+  }
+  oss << ')';
+  return oss.str();
+}
+
+bool CoordVectorType::fromString( RealType & v, const string & s ) {
+  return vectorFromString<Coord, true>(v, s);
 }

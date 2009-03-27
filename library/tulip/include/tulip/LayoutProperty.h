@@ -105,6 +105,15 @@ private:
   void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
+
+class TLP_SCOPE CoordVectorProperty:public AbstractProperty<CoordVectorType,CoordVectorType> { 
+public :
+  CoordVectorProperty(Graph *g):AbstractProperty<CoordVectorType, CoordVectorType>(g) {}
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
+
 /*@}*/
 
 }

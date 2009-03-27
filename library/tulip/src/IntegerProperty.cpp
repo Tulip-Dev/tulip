@@ -126,7 +126,6 @@ void IntegerProperty::copy( const edge e0, const edge e1, PropertyInterface * p 
 	assert( tp );
 	setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
-
 //===============================================================
 void IntegerProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
   if (minMaxOk) {
@@ -137,6 +136,7 @@ void IntegerProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
       minN = val;
   }
 }
+//===============================================================
 void IntegerProperty::afterSetEdgeValue(PropertyInterface* prop, const edge e) {
   if (minMaxOk) {
     IntegerType::RealType val = getEdgeValue(e);
@@ -146,13 +146,40 @@ void IntegerProperty::afterSetEdgeValue(PropertyInterface* prop, const edge e) {
       minE = val;
   }
 }
+//===============================================================
 void IntegerProperty::afterSetAllNodeValue(PropertyInterface* prop) {
   if (minMaxOk)
     minN = maxN = getNodeDefaultValue();
 }
+//===============================================================
 void IntegerProperty::afterSetAllEdgeValue(PropertyInterface* prop) {
   if (minMaxOk)
     minE = maxE = getEdgeDefaultValue();
+}
+//=================================================================================
+PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, std::string n) {
+  if( !g )
+    return 0;
+  IntegerVectorProperty * p = g->getLocalProperty<IntegerVectorProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
+}
+//=============================================================
+void IntegerVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  IntegerVectorProperty * tp = dynamic_cast<IntegerVectorProperty*>(p);
+  assert( tp );
+  setNodeValue( n0, tp->getNodeValue(n1) );
+}
+//=============================================================
+void IntegerVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  IntegerVectorProperty * tp = dynamic_cast<IntegerVectorProperty*>(p);
+  assert( tp );
+  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 
 

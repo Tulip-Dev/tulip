@@ -30,6 +30,14 @@ public :
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph * = 0);
 };
 
+class TLP_SCOPE BooleanVectorProperty:public AbstractProperty<BooleanVectorType,BooleanVectorType> { 
+public :
+  BooleanVectorProperty(Graph *g) :AbstractProperty<BooleanVectorType, BooleanVectorType>(g) {}
+  PropertyInterface* clonePrototype(Graph *, std::string );
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
+
 }
 /*@}*/
 #endif

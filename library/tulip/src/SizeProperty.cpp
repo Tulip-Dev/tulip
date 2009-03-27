@@ -133,4 +133,29 @@ void SizeProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
   assert( tp );
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
+//=============================================================================
+PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, std::string n) {
+  if( !g )
+    return 0;
+  SizeVectorProperty * p = g->getLocalProperty<SizeVectorProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
+}
+//=============================================================
+void SizeVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  SizeVectorProperty * tp = dynamic_cast<SizeVectorProperty*>(p);
+  assert( tp );
+  setNodeValue( n0, tp->getNodeValue(n1) );
+}
+//=============================================================
+void SizeVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  SizeVectorProperty * tp = dynamic_cast<SizeVectorProperty*>(p);
+  assert( tp );
+  setEdgeValue( e0, tp->getEdgeValue(e1) );
+}
 //=============================================================
