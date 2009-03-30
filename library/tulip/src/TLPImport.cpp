@@ -181,6 +181,7 @@ struct TLPGraphBuilder:public TLPTrue {
 	result = EdgeSetType::fromString(v, value);
 	if (result)
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue( edgeIndex[edgeId], v);
+	return result;
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
@@ -271,6 +272,7 @@ struct TLPGraphBuilder:public TLPTrue {
 	result = EdgeSetType::fromString(v, value);
 	if (result)
 	  clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(v);
+	return result;
       }
       if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
 	return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllEdgeStringValue( value );
