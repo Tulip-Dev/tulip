@@ -170,9 +170,16 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       updatedPropsAddedNodes.begin();
     while(itan != updatedPropsAddedNodes.end()) {
       PropertyInterface* p = (PropertyInterface *) (*itan).first;
-      MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
-      nv->setAll(NULL);
+      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+	newNodeValues.find((unsigned long) p);
+      MutableContainer<DataMem*>*  nv;
+      bool created = itnv == newNodeValues.end();
       bool hasNewValues = false;
+      if (created) {
+	nv = new MutableContainer<DataMem*>;
+	nv->setAll(NULL);
+      } else
+	nv = (*itnv).second;
       set<node>::iterator itn = (*itan).second.begin();
       set<node>::iterator itne = (*itan).second.end();
       while(itn != itne) {
@@ -184,10 +191,12 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 	}
 	itn++;
       }
-      if (hasNewValues)
-	newNodeValues[(unsigned long) p] = nv;
-      else
-	delete nv;
+      if (created) {
+	if (hasNewValues)
+	  newNodeValues[(unsigned long) p] = nv;
+	else
+	  delete nv;
+      }
       itan++;
     }
     // loop on oldEdgeDefaultValues
@@ -213,9 +222,16 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       updatedPropsAddedEdges.begin();
     while(iten != updatedPropsAddedEdges.end()) {
       PropertyInterface* p = (PropertyInterface *) (*iten).first;
-      MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
-      nv->setAll(NULL);
+      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+	newEdgeValues.find((unsigned long) p);
+      MutableContainer<DataMem*>*  nv;
+      bool created = itnv == newEdgeValues.end();
       bool hasNewValues = false;
+      if (created) {
+	nv = new MutableContainer<DataMem*>;
+	nv->setAll(NULL);
+      } else
+	nv = (*itnv).second;
       set<edge>::iterator ite = (*iten).second.begin();
       set<edge>::iterator itee = (*iten).second.end();
       while(ite != itee) {
@@ -227,10 +243,12 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 	}
 	ite++;
       }
-      if (hasNewValues)
-	newEdgeValues[(unsigned long) p] = nv;
-      else
-	delete nv;
+      if (created) {
+	if (hasNewValues)
+	  newEdgeValues[(unsigned long) p] = nv;
+	else
+	  delete nv;
+      }
       iten++;
     }
   }
