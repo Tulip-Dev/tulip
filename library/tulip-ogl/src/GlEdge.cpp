@@ -39,8 +39,8 @@ namespace tlp {
 
     const node source = data->graph->source(e);
     const node target = data->graph->target(e);
-    Coord srcCoord = data->elementLayout->getNodeValue(source);
-    Coord tgtCoord = data->elementLayout->getNodeValue(target);
+    const Coord& srcCoord = data->elementLayout->getNodeValue(source);
+    const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
 
     const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
 
@@ -102,12 +102,12 @@ namespace tlp {
 
     const node source = data->graph->source(e);
     const node target = data->graph->target(e);
-    Coord srcCoord = data->elementLayout->getNodeValue(source);
-    Coord tgtCoord = data->elementLayout->getNodeValue(target);
+    const Coord& srcCoord = data->elementLayout->getNodeValue(source);
+    const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
 
-    Color fillColor = data->elementColor->getEdgeValue(e);
-    Color strokeColor = data->elementBorderColor->getEdgeValue(e);
-    Color textColor = data->elementLabelColor->getEdgeValue(e);
+    const Color& fillColor = data->elementColor->getEdgeValue(e);
+    const Color& strokeColor = data->elementBorderColor->getEdgeValue(e);
+    const Color& textColor = data->elementLabelColor->getEdgeValue(e);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
@@ -119,25 +119,25 @@ namespace tlp {
       glPassThrough(id); //id of the node for the feed back mode
     }
 
-    Color srcCol,tgtCol;
+    Color* srcCol,*tgtCol;
     if (selected) {
-      srcCol = COLORSELECT;
-      tgtCol = COLORSELECT;
+      srcCol = (Color *) &COLORSELECT;
+      tgtCol = (Color *) &COLORSELECT;
     } else {
       if (data->parameters->isEdgeColorInterpolate()) {
-	srcCol = data->elementColor->getNodeValue(source);
-	tgtCol = data->elementColor->getNodeValue(target);
+	srcCol = &(Color&)data->elementColor->getNodeValue(source);
+	tgtCol = &(Color&)data->elementColor->getNodeValue(target);
       }
       else {
-	srcCol = tgtCol = data->elementColor->getEdgeValue(e);
+	srcCol = tgtCol = &(Color&)data->elementColor->getEdgeValue(e);
       }
     }
 
     if(lod<5) {
       if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
-        GlPointManager::getInst().addPoint(srcCoord,srcCol,false);
+        GlPointManager::getInst().addPoint(srcCoord,*srcCol,false);
       }else{
-        setColor(srcCol);
+        setColor(*srcCol);
         glPointSize(1);
         glBegin(GL_POINTS);
           glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
@@ -209,7 +209,8 @@ namespace tlp {
     }
 
     //draw Arrow
-    if(data->parameters->isViewArrow()) {
+    bool viewArrow = data->parameters->isViewArrow();
+    if (viewArrow) {
       if(GlDisplayListManager::getInst().beginNewDisplayList("arrow")) {
 	tlp::solidCone();
 	GlDisplayListManager::getInst().endNewDisplayList();
@@ -221,7 +222,7 @@ namespace tlp {
       glPushMatrix();
       glMultMatrixf((GLfloat *)&matrix);
       glScalef(sizeT, sizeT, sizeT);
-      setColor(tgtCol);
+      setColor(*tgtCol);
       //tlp::solidCone();
       GlDisplayListManager::getInst().callDisplayList("arrow");
       glPopMatrix();
@@ -244,9 +245,7 @@ namespace tlp {
       } else {
 	endLineAnchor = tgtAnchor;
       }
-      tgtCoord = tgtAnchor; //this defines in drawEdge the arrow head as being the final node
-
-
+      //tgtCoord = tgtAnchor; //this defines in drawEdge the arrow head as being the final node
     }
     else {
       endLineAnchor = tgtAnchor;
@@ -259,7 +258,7 @@ namespace tlp {
     float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix, camera->getViewport());
 
     //draw Edge
-    drawEdge(srcCoord, tgtCoord, srcAnchor, endLineAnchor, bends, srcCol, tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
+    drawEdge(srcCoord, viewArrow ? tgtAnchor : tgtCoord, srcAnchor, endLineAnchor, bends, *srcCol, *tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_EDGE);

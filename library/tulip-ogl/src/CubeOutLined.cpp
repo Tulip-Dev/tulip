@@ -165,9 +165,9 @@ namespace tlp {
 
 
     setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-    string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+    const string& texFile = glGraphInputData->elementTexture->getNodeValue(n);
     if (texFile.size() != 0) {
-      string texturePath=glGraphInputData->parameters->getTexturePath();
+      const string& texturePath=glGraphInputData->parameters->getTexturePath();
       GlTextureManager::getInst().activateTexture(texturePath+texFile);
     }
 
@@ -196,11 +196,11 @@ namespace tlp {
       DoubleProperty *borderWidth = 0;
       if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
         borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-      Color c = borderColor->getNodeValue(n);
+      const Color& c = borderColor->getNodeValue(n);
       //  setMaterial(c);
       if (borderWidth == 0) glLineWidth(2);
       else {
-        double lineWidth = borderWidth->getNodeValue (n);
+        const double& lineWidth = borderWidth->getNodeValue (n);
         if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
         else glLineWidth (lineWidth);
       }

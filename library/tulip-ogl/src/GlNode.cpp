@@ -73,9 +73,9 @@ namespace tlp {
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size &nodeSize = data->elementSize->getNodeValue(n);
 
-    Color fillColor = data->elementColor->getNodeValue(n);
-    Color strokeColor = data->elementBorderColor->getNodeValue(n);
-    Color textColor = data->elementLabelColor->getNodeValue(n);
+    const Color& fillColor = data->elementColor->getNodeValue(n);
+    const Color& strokeColor = data->elementBorderColor->getNodeValue(n);
+    const Color& textColor = data->elementLabelColor->getNodeValue(n);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
@@ -186,10 +186,10 @@ namespace tlp {
     }
     //if (elementSelected->getNodeValue(n) != mode) return;
 
-    Color fontColor = data->elementLabelColor->getNodeValue(n);
+    Color* fontColor = &((Color &)data->elementLabelColor->getNodeValue(n));
 
     if (select)
-      fontColor = colorSelect2;
+      fontColor = (Color *) &colorSelect2;
 
     float w_max = 300;
     float w,h;
@@ -199,7 +199,7 @@ namespace tlp {
     switch(data->parameters->getFontsType()){
     case 0:
       renderer->setMode(TLP_POLYGON);
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
       renderer->setString(tmp, VERBATIM);
       //      w_max = nodeSize.getW()*50.0;
       renderer->getBoundingBox(w_max, h, w);
@@ -221,13 +221,13 @@ namespace tlp {
       glPopMatrix();
       break;
     case 1:
-      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, data->elementSelected->getNodeValue(n), nodeSize.getW());
+      drawPixmapFont(test,renderer,data,tmp, *fontColor, nodePos, labelPos, data->elementSelected->getNodeValue(n), nodeSize.getW());
       break;
     case 2:
       //if (projectSize(nodeCoord, nodeSize, camera->projectionMatrix, camera->modelviewMatrix, camera->getViewport()) < 8.0) return;
 
       renderer->setMode(TLP_TEXTURE);
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
       renderer->setString(tmp, VERBATIM);
 
       //      w_max = nodeSize.getW();
