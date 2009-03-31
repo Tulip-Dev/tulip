@@ -124,7 +124,7 @@ public:
 
     float nSpacing, lSpacing;
     SizeProperty* sizes;
-    if (getNodeSizePropertyParameter(dataSet, sizes))
+    if (!getNodeSizePropertyParameter(dataSet, sizes))
       sizes = graph->getProperty<SizeProperty>("viewSize");
     getSpacingParameters(dataSet, nSpacing, lSpacing);
 

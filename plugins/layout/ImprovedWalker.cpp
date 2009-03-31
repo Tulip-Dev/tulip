@@ -73,7 +73,7 @@ bool ImprovedWalker::run() {
   orientationType mask = getMask(dataSet);
   oriLayout = new OrientableLayout(layoutResult, mask);
   SizeProperty* size;
-  if (getNodeSizePropertyParameter(dataSet, size))
+  if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");
   getSpacingParameters(dataSet, nodeSpacing, spacing);
 
