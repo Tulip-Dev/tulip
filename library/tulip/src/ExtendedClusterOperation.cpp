@@ -235,9 +235,9 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *graphRot = graph->getProperty<DoubleProperty>(rotationProperty);
-  Size size = graphSize->getNodeValue(metanode);
-  Coord pos = graphLayout->getNodeValue(metanode);
-  double rot = graphRot->getNodeValue(metanode);
+  const Size& size = graphSize->getNodeValue(metanode);
+  const Coord& pos = graphLayout->getNodeValue(metanode);
+  const double& rot = graphRot->getNodeValue(metanode);
   Graph  *cluster = clusterInfo->getNodeValue(metanode);
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
