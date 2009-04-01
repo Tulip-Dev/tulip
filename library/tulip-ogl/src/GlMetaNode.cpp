@@ -21,6 +21,7 @@
 #include "tulip/GlComplexeEntity.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/Camera.h"
+#include "tulip/GlPointManager.h"
 
 #include <iostream>
 
@@ -36,6 +37,8 @@ namespace tlp {
       GlNode::draw(lod,data,camera);
       return;
     }
+    GlPointManager::getInst().endRendering();
+    GlPointManager::getInst().beginRendering();
     glPushMatrix();
     const Coord &nodeCoord = data->elementLayout->getNodeValue(node(id));
     const Size &nodeSize = data->elementSize->getNodeValue(node(id));
@@ -142,6 +145,9 @@ namespace tlp {
       glEdge.id=(*it).first;
       glEdge.draw((*it).second,&metaData,activeCamera);
     }
+
+    GlPointManager::getInst().endRendering();
+    GlPointManager::getInst().beginRendering();
 
     glPopMatrix();
     glPopMatrix();
