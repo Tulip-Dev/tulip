@@ -123,7 +123,7 @@ public:
    * If there is no value and no algorithms it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tnode::RealType>::Value getNodeValue(const node n );
+  typename ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n );
   /**
    * Returns the value associated to the node n in this property.
    * If the value is already fixed it is done in constant time.
@@ -131,7 +131,7 @@ public:
    * If there is no value and no algorithms it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tedge::RealType>::Value getEdgeValue(const edge e);
+  typename ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e);
   /**
    * Set the value of a node n and notify the observers of a modification.
    * Warning : When using computed property (plug-in), if one sets the value of

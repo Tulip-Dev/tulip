@@ -91,12 +91,12 @@ typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDe
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::ReturnType<typename Tnode::RealType>::Value tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeValue(const node n ) {
+typename tlp::ReturnType<typename Tnode::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeValue(const node n ) {
   return nodeProperties.get(n.id);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::ReturnType<typename Tedge::RealType>::Value tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeValue(const edge e) {
+typename tlp::ReturnType<typename Tedge::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeValue(const edge e) {
   return edgeProperties.get(e.id);
 } 
 //=============================================================
@@ -231,16 +231,18 @@ tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDataMemValue( const edge in
 
 template <class Tnode, class Tedge, class TPROPERTY>
 tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue(const node n) {
-  typename Tnode::RealType value;
-  if (nodeProperties.getIfNotDefaultValue(n.id, value))
+  bool notDefault;
+  typename ReturnType<typename Tnode::RealType>::Value value = nodeProperties.get(n.id, notDefault);
+  if (notDefault)
     return new PropertyValueContainer<typename Tnode::RealType>(value);
   return NULL;
 }
 
 template <class Tnode, class Tedge, class TPROPERTY>
 tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue( const edge e ) {
-  typename Tedge::RealType value;
-  if (edgeProperties.getIfNotDefaultValue(e.id, value))
+  bool notDefault;
+  typename ReturnType<typename Tedge::RealType>::Value value = edgeProperties.get(e.id, notDefault);
+  if (notDefault)
     return new PropertyValueContainer<typename Tedge::RealType>(value);
   return NULL;
 }

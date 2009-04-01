@@ -13,6 +13,7 @@
 #include <iostream>
 #include <sstream>
 #include <float.h>
+#include <tulip/ReturnType.h>
 #include "tulip/Coord.h"
 #include "tulip/Size.h"
 #include "tulip/Color.h"
@@ -35,6 +36,8 @@ public:
   ~Type();
 };
 
+DECL_STORED_STRUCT(std::set<node>);
+
 class TLP_SCOPE GraphType:public Type {
 public:
   typedef Graph* RealType;
@@ -43,6 +46,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString(RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(std::set<edge>);
 
 class TLP_SCOPE EdgeSetType:public Type
 {
@@ -63,6 +68,8 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+DECL_STORED_STRUCT(std::vector<double>);
+
 class TLP_SCOPE DoubleVectorType:public Type {
 public:
   typedef std::vector<double> RealType;
@@ -81,6 +88,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(std::vector<int>);
 
 class TLP_SCOPE IntegerVectorType:public Type
 {
@@ -101,6 +110,9 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+
+DECL_STORED_STRUCT(std::vector<bool>);
+
 class TLP_SCOPE BooleanVectorType:public Type {
 public:
   typedef std::vector<bool> RealType;
@@ -109,6 +121,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(std::vector<Coord>);
 
 class TLP_SCOPE LineType:public Type
 {
@@ -120,6 +134,8 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+DECL_STORED_STRUCT(Coord);
+
 class TLP_SCOPE PointType:public Type {
 public:
   typedef Coord RealType;
@@ -128,6 +144,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(Size);
 
 class TLP_SCOPE SizeType:public Type {
 public:
@@ -138,6 +156,8 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+DECL_STORED_STRUCT(std::vector<Size>);
+
 class TLP_SCOPE SizeVectorType:public Type {
 public:
   typedef std::vector<Size> RealType;
@@ -146,6 +166,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(std::string);
 
 class TLP_SCOPE StringType:public Type {
 public:
@@ -156,6 +178,8 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+DECL_STORED_STRUCT(std::vector<std::string>);
+
 class TLP_SCOPE StringVectorType:public Type {
 public:
   typedef std::vector<std::string> RealType;
@@ -165,6 +189,8 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
+DECL_STORED_STRUCT(Color);
+
 class TLP_SCOPE ColorType:public Type {
 public:
   typedef Color RealType;
@@ -173,6 +199,8 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
+
+DECL_STORED_STRUCT(std::vector<Color>);
 
 class TLP_SCOPE ColorVectorType:public Type {
 public:
