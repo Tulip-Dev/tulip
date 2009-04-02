@@ -90,7 +90,7 @@ void GraphProperty::destroy(Graph *sg) {
   //test si c'est la valeur par défaut;
   //  cerr << __PRETTY_FUNCTION__ << endl;
   //sinon
-#ifdef NDEBUG
+#ifndef NDEBUG
   cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
 #endif
   if (getNodeDefaultValue() == sg) {
