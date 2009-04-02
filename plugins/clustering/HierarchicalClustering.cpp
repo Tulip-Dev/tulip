@@ -46,9 +46,7 @@ bool HierarchicalClustering::split(DoubleProperty *metric,list<node> &orderedNod
   nbElement/=2;
   if (nbElement<10) return (true);
   itListNode=orderedNode.begin();
-  double tmpDblStart;
   tmpDbl=metric->getNodeValue(*itListNode);
-  tmpDblStart=tmpDbl;
   int n=0;
   ++itListNode;
   nbElement--;
