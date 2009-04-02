@@ -65,7 +65,7 @@ void tlp::updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
     clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
-    double value = graphMetric->getNodeValue(itn);
+    const double& value = graphMetric->getNodeValue(itn);
     if (value > vMax) {
       vMax = value;
       viewMetricMaxNode = itn;

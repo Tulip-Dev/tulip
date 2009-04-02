@@ -200,7 +200,7 @@ void LayoutProperty::normalize(Graph *sg) {
   Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())  {
     node itn=itN->next();
-    Coord tmpCoord(getNodeValue(itn));
+    const Coord& tmpCoord = getNodeValue(itn);
     dtmpMax  = std::max(dtmpMax, sqr(tmpCoord[0])+sqr(tmpCoord[1])+sqr(tmpCoord[2]));
   } delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
@@ -251,7 +251,6 @@ void LayoutProperty::computeMinMax(Graph *sg) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << endl;
 #endif
-  Coord tmpCoord;
   Coord maxT(0,0,0);
   Coord minT(0,0,0);
 
@@ -259,13 +258,13 @@ void LayoutProperty::computeMinMax(Graph *sg) {
   Iterator<node> *itN=sg->getNodes();
   if  (itN->hasNext()) {
     node itn=itN->next();
-    tmpCoord=getNodeValue(itn);
+    const Coord& tmpCoord=getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   }
   while (itN->hasNext()) {
     node itn=itN->next();
-    tmpCoord=getNodeValue(itn);
+    const Coord& tmpCoord=getNodeValue(itn);
     maxV(maxT, tmpCoord);
     minV(minT, tmpCoord);
   } delete itN;
@@ -274,7 +273,7 @@ void LayoutProperty::computeMinMax(Graph *sg) {
     edge ite=itE->next();
     LineType::RealType::const_iterator itCoord;
     for (itCoord=getEdgeValue(ite).begin();itCoord!=getEdgeValue(ite).end();++itCoord) {
-      tmpCoord = *itCoord;
+      const Coord& tmpCoord = *itCoord;
       maxV(maxT, tmpCoord);
       minV(minT, tmpCoord);
     }
@@ -369,7 +368,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, Graph *sg) {
   } delete itE;
   
   //Compute normalized vectors associated to incident edges.
-  Coord center=getNodeValue(n);
+  const Coord& center=getNodeValue(n);
   list<Coord>::iterator it;
   for (it=adjCoord.begin();it!=adjCoord.end();++it) {
     (*it)-=center;
@@ -433,7 +432,7 @@ double LayoutProperty::averageAngularResolution(const node n, Graph *sg) {
   } delete itE;
   
   //Compute normalized vectors associated to incident edges.
-  Coord center=getNodeValue(n);
+  const Coord& center=getNodeValue(n);
   list<Coord>::iterator it;
   for (it=adjCoord.begin();it!=adjCoord.end();++it) {
     (*it)-=center;
@@ -477,7 +476,7 @@ double LayoutProperty::averageAngularResolution(const node n, Graph *sg) {
 //=================================================================================
 double LayoutProperty::edgeLength(edge e) {
   Coord start=getNodeValue(graph->source(e));
-  Coord end=getNodeValue(graph->target(e));
+  const Coord& end=getNodeValue(graph->target(e));
   double result=0;
   const vector<Coord> & tmp=getEdgeValue(e);
   for (unsigned int i=0;i<tmp.size();++i) {

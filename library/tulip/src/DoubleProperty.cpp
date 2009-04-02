@@ -29,7 +29,7 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
     Iterator<node> *itN=graph->getNodes();
     while (itN->hasNext()) {
 	  node itn=itN->next();
-      double nodeValue=getNodeValue(itn);
+      const double& nodeValue=getNodeValue(itn);
       if (histogram.find(nodeValue)==histogram.end()) 
 	histogram[nodeValue]=1;
       else
@@ -54,7 +54,7 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
     Iterator<edge> *itE=graph->getEdges();
     while (itE->hasNext()) {
       edge ite=itE->next();
-      double value=getEdgeValue(ite);
+      const double& value=getEdgeValue(ite);
       if (histogram.find(value)==histogram.end()) 
 	histogram[value]=1;
       else
@@ -129,19 +129,18 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
-  double tmp;
   double maxN2,minN2;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
   if (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
+    const double& tmp=getNodeValue(itn);
     maxN2=tmp;
     minN2=tmp;
   }
   while (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
+    const double& tmp=getNodeValue(itn);
     if (tmp>maxN2) maxN2=tmp;
     if (tmp<minN2) minN2=tmp;
   } delete itN;
@@ -154,19 +153,18 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
-  double tmp;
   double maxE2,minE2;
   if (sg==0) sg=graph;
   Iterator<edge> *itE=sg->getEdges();
   if (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
+    const double& tmp=getEdgeValue(ite);
     maxE2=tmp;
     minE2=tmp;
   }
   while (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
+    const double& tmp=getEdgeValue(ite);
     if (tmp>maxE2) maxE2=tmp;
     if (tmp<minE2) minE2=tmp;
   } delete itE;

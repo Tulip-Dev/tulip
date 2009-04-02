@@ -62,12 +62,11 @@ Size  SizeProperty::getMin(Graph *sg) {
 }
 //=============================================================================
 void SizeProperty::computeMinMax(Graph *sg) {
-  Size tmpSize;
   Size maxS,minS;
   Iterator<node> *itN=sg->getNodes();
   if  (itN->hasNext()) {
     node itn=itN->next();
-    tmpSize=getNodeValue(itn);
+    const Size& tmpSize=getNodeValue(itn);
     for (int i=0;i<3;++i) {
       maxS[i]=tmpSize[i];
       minS[i]=tmpSize[i];
@@ -75,7 +74,7 @@ void SizeProperty::computeMinMax(Graph *sg) {
   }
   while (itN->hasNext()) {
     node itn=itN->next();
-    tmpSize=getNodeValue(itn);
+    const Size& tmpSize=getNodeValue(itn);
     for (int i=0;i<3;++i) {
       maxS[i] = std::max(maxS[i], tmpSize[i]);
       minS[i] = std::min(minS[i], tmpSize[i]);

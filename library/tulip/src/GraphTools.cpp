@@ -364,7 +364,7 @@ namespace tlp {
 	while (itN.hasNext()) {
 	  Graph *sg;
 	  node n = itN.next();
-	  double tmp = metric->getNodeValue(n);
+	  const double& tmp = metric->getNodeValue(n);
 	  if (partitions.find(tmp) == partitions.end()) {
 	    sg = graph->addSubGraph();
 	    stringstream sstr;
@@ -389,7 +389,7 @@ namespace tlp {
 	pluginProgress->setComment("Partitioning edges...");
 	while(itE.hasNext()) {
 	  edge ite = itE.next();
-	  double tmp = metric->getNodeValue(graph->source(ite));
+	  const double& tmp = metric->getNodeValue(graph->source(ite));
 	  if (tmp == metric->getNodeValue(graph->target(ite))) {
 	    partitions[tmp]->addEdge(ite);
 	  }
@@ -403,7 +403,7 @@ namespace tlp {
 	while (itE.hasNext()) {
 	  Graph *sg;
 	  edge e = itE.next();
-	  double tmp = metric->getEdgeValue(e);
+	  const double& tmp = metric->getEdgeValue(e);
 	  if (partitions.find(tmp) == partitions.end()) {
 	    sg = graph->addSubGraph();
 	    stringstream sstr;

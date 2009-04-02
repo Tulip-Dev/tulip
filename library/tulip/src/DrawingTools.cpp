@@ -63,9 +63,6 @@ namespace {
 }
 
 pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
-  Coord curCoord;
-  Size  curSize;
-  double curRot;
   pair<Coord, Coord> result;
   if (graph->numberOfNodes()==0) {
     result.first.set(0, 0, 0);
@@ -79,9 +76,9 @@ pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout,
     node itn=itN->next();
 
     if (selection == 0 || selection->getNodeValue(itn)) {
-	curCoord = layout->getNodeValue(itn);
-	curSize  = size->getNodeValue(itn) / 2.0;
-	curRot = rotation->getNodeValue(itn);
+	const Coord& curCoord = layout->getNodeValue(itn);
+	Size curSize  = size->getNodeValue(itn) / 2.0;
+	const double& curRot = rotation->getNodeValue(itn);
 	computePoint(result, curCoord, curSize, curRot);
       }
   } delete itN;
@@ -107,9 +104,6 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
 					      SizeProperty *size, 
 					      DoubleProperty *rotation, 
 					      BooleanProperty *selection) {
-  Coord curCoord;
-  Size  curSize;
-  double curRot;
   pair<Coord, Coord> result;
   result.first.set(0, 0, 0);
   result.second.set(0, 0, 0);
@@ -123,9 +117,8 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
   Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn = itN->next();
-    curCoord = layout->getNodeValue(itn);
-    curSize  = size->getNodeValue(itn) / 2.0;
-    curRot = rotation->getNodeValue(itn);
+    const Coord& curCoord = layout->getNodeValue(itn);
+    Size curSize  = size->getNodeValue(itn) / 2.0;
     if (selection == 0 || selection->getNodeValue(itn)) {
       double nodeRad = sqrt (curSize.getW()*curSize.getW() +
 			     curSize.getH()*curSize.getH());
