@@ -350,7 +350,7 @@ bool HierarchicalGraph::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size tmp = nodeSize->getNodeValue(n);
+      const Size& tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -446,7 +446,7 @@ bool HierarchicalGraph::run() {
       node n = grid[i][j];
       if(graph->isElement(n)) {
 	nodeLevel.set(n.id, i);
-	Size tmp = nodeSize->getNodeValue(n);
+	const Size& tmp = nodeSize->getNodeValue(n);
 	levelMaxSize[i] = std::max(levelMaxSize[i], tmp[1]);
       }
     }
@@ -492,7 +492,7 @@ bool HierarchicalGraph::run() {
   //post processing align nodes
   forEach(n, graph->getNodes()) {
     Coord tmp = layoutResult->getNodeValue(n);
-    Size tmpS = nodeSize->getNodeValue(n);
+    const Size& tmpS = nodeSize->getNodeValue(n);
     tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.0;
     layoutResult->setNodeValue(n, tmp);
   }
@@ -501,9 +501,9 @@ bool HierarchicalGraph::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size  tmp = nodeSize->getNodeValue(n);
+      const Size&  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutResult->getNodeValue(n);
+      const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;

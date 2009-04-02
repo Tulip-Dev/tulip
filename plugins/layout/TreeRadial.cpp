@@ -99,7 +99,7 @@ public:
     } else
       layoutResult->setNodeValue(n, Coord(0, 0, 0));
     node on;
-    double nSpread = angles->getNodeValue(n);
+    const double& nSpread = angles->getNodeValue(n);
     checkAngle = false;
     forEach(on, tree->getOutNodes(n)) {
       endAngle = startAngle + (sAngle * (angles->getNodeValue(on)/nSpread));
@@ -134,7 +134,7 @@ public:
     SizeProperty *circleSizes = 
       graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
     forEach(n, tree->getNodes()) {
-      Size boundingBox = sizes->getNodeValue (n);
+      const Size& boundingBox = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
 			    boundingBox.getH() * boundingBox.getH()/4.0);
       circleSizes->setNodeValue (n, Size (diam, diam, 1.0));

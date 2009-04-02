@@ -112,12 +112,12 @@ bool Tutte::run() {
     ok=false;
     for (itn=toMove.begin();itn!=toMove.end();++itn) {
       tmpCoord.set(0,0,0);
-      baseCoord=layoutResult->getNodeValue(*itn);
+      Coord baseCoord=layoutResult->getNodeValue(*itn);
       int i=0;
       itN=graph->getInOutNodes(*itn);
       while (itN->hasNext()) {
 	node itAdj=itN->next();
-	tmpCoord2=layoutResult->getNodeValue(itAdj);
+	const Coord& tmpCoord2=layoutResult->getNodeValue(itAdj);
 	tmpCoord.set(tmpCoord.getX()+tmpCoord2.getX(),tmpCoord.getY()+tmpCoord2.getY(),0);
 	++i;
       } delete itN;

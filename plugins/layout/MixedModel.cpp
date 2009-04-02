@@ -74,7 +74,7 @@ bool MixedModel::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size tmp = size->getNodeValue(n);
+      const Size& tmp = size->getNodeValue(n);
       size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -113,14 +113,14 @@ bool MixedModel::run() {
     else if(currentGraph->numberOfNodes() == 2 || currentGraph->numberOfNodes() == 3){
       Iterator<node> * itn = currentGraph->getNodes();
       node n = itn->next();
-      Coord c = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n);
+      const Coord& c = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(0,0,0));
       node n2 = itn->next();
       Coord c2 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
       layoutResult->setNodeValue(n2, Coord(spacing + c.getX()/2+c2.getX()/2,0,0));
       if(currentGraph->numberOfNodes() == 3){
 	node n3 = itn->next();
-	Coord c3 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
+	const Coord& c3 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
 	layoutResult->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
 	edge e = currentGraph->existEdge(n,n3).isValid() ? currentGraph->existEdge(n,n3) :currentGraph->existEdge(n3,n);
 	if(e.isValid()){
@@ -277,9 +277,9 @@ bool MixedModel::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size  tmp = size->getNodeValue(n);
+      const Size& tmp = size->getNodeValue(n);
       size->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutResult->getNodeValue(n);
+      const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
     edge e;

@@ -333,7 +333,7 @@ bool TreeReingoldAndTilfordExtended::run() {
     SizeProperty *circleSizes = 
       graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
     forEach(n, graph->getNodes()) {
-      Size boundCircle = sizes->getNodeValue (n);
+      const Size& boundCircle = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundCircle.getW()*boundCircle.getW()/4.0 +
 			    boundCircle.getH()*boundCircle.getH()/4.0);
       circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
@@ -346,7 +346,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size tmp = sizes->getNodeValue(n);
+      const Size& tmp = sizes->getNodeValue(n);
       sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -400,8 +400,8 @@ bool TreeReingoldAndTilfordExtended::run() {
       LineType::RealType tmp;
       node src = tree->source(e);
       node tgt = tree->target(e);
-      Coord srcPos = layoutResult->getNodeValue(src);
-      Coord tgtPos = layoutResult->getNodeValue(tgt);
+      const Coord& srcPos = layoutResult->getNodeValue(src);
+      const Coord& tgtPos = layoutResult->getNodeValue(tgt);
       double y = levelCoord[levels[tgt]-1];
       tmp.push_back(Coord(srcPos[0], -y, 0));
       tmp.push_back(Coord(tgtPos[0], -y, 0));
@@ -423,9 +423,9 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, tree->getNodes()) {
-      Size  tmp = sizes->getNodeValue(n);
+      const Size&  tmp = sizes->getNodeValue(n);
       sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutResult->getNodeValue(n);
+      const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }

@@ -130,7 +130,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
   Iterator<node> *itN2=tmpGraph->getNodes();
   while (itN2->hasNext()) {
     node itn=itN2->next();
-    double val=connected->getNodeValue(itn);
+    const double& val=connected->getNodeValue(itn);
     if (resultIndex.find(val)!=resultIndex.end())
       result[resultIndex[val]].insert(itn);
     else {

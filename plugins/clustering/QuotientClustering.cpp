@@ -130,7 +130,7 @@ static void computeMNodeMetric(Graph *mGraph, node mN, DoubleProperty *metric,
   unsigned int nbNodes = 0;
   node n;
   forEach(n, mGraph->getNodes()) {
-    double nVal = metric->getNodeValue(n);
+    const double& nVal = metric->getNodeValue(n);
     switch(nodeFn) {
     case AVG_FN:
       ++nbNodes;
@@ -177,7 +177,7 @@ static void computeMEdgeMetric(Graph* graph, edge mE, const set<edge>* edges,
     edge e;
     for(set<edge>::const_iterator ite = edges->begin();
 	ite != edges->end(); ++ite) {
-      double eVal = metric->getEdgeValue(*ite);
+      const double& eVal = metric->getEdgeValue(*ite);
       switch(edgeFn) {
       case AVG_FN:
       case SUM_FN:
