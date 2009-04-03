@@ -9,21 +9,19 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMenuBar>
 
+#include "tulip/Interactor.h"
+
 using namespace std;
 
 namespace tlp {
 
-  AbstractView::AbstractView() :View(),_id(Interactor::invalidID),centralWidget(NULL)  {
+  AbstractView::AbstractView() :View(),centralWidget(NULL),activeInteractor(NULL)  {
 
   }
 
   AbstractView::~AbstractView() {
-    for (unsigned int i = 0; i > _interactors.size(); ++i){
-      removeEventFilter(_interactors[i]);
-      delete _interactors[i];
-    }
-    for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it){
-      delete *it;
+    for(list<Interactor *>::iterator it=interactors.begin();it!=interactors.end();++it){
+      delete (*it);
     }
   }
 
@@ -46,9 +44,25 @@ namespace tlp {
 
   	widget->installEventFilter(this);
 
-  	constructInteractorsMap();
-  	constructInteractorsActionList();
   	return widget;
+  }
+
+  void AbstractView::setInteractors(const std::list<Interactor *> &interactorsList){
+    interactors=interactorsList;
+    for(list<Interactor *>::iterator it=interactors.begin();it!=interactors.end();++it){
+      (*it)->setView(this);
+    }
+  }
+
+  list<Interactor *> AbstractView::getInteractors() {
+    return interactors;
+  }
+
+  void AbstractView::setActiveInteractor(Interactor *interactor){
+    if(activeInteractor)
+      activeInteractor->remove();
+    interactor->install(centralWidget);
+    activeInteractor=interactor;
   }
 
   void AbstractView::setCentralWidget(QWidget *widget) {
@@ -73,73 +87,6 @@ namespace tlp {
       }
     }
     return false;
-  }
-  //==================================================
-  std::list<QAction *> *AbstractView::getInteractorsActionList(){
-    return &interactorsActionList;
-  }
-  //==================================================
-  Iterator<Interactor *> *AbstractView::getInteractors() const {
-    return new StlIterator<Interactor *, vector<Interactor *>::const_iterator>(_interactors.begin(), _interactors.end());
-  }
-  //==================================================
-  Interactor::ID AbstractView::pushInteractor(Interactor* interactor) {
-    if (interactor) {
-      interactor = interactor->clone();
-      interactor->moveToThread(this->thread());
-      interactor->setID(++_id);
-      _interactors.push_back(interactor);
-      interactor->setView(this);
-      centralWidget->installEventFilter(interactor);
-      //interactor->compute(centralWidget);
-      //updateGL();
-    }
-    return _id;
-  }
-  //==================================================
-  void AbstractView::popInteractor() {
-    if (_interactors.size()) {
-      Interactor *interactor = _interactors[_interactors.size() - 1];
-      _interactors.pop_back();
-      centralWidget->removeEventFilter(interactor);
-      delete interactor;
-    }
-  }
-  //==================================================
-  void AbstractView::removeInteractor(Interactor::ID i) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->getID() == i) {
-	removeEventFilter(*it);
-	delete *it;
-	_interactors.erase(it);
-	break;
-      }
-    }
-  }
-  //==================================================
-  Interactor::ID AbstractView::resetInteractors(Interactor *interactor) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    return pushInteractor(interactor);
-  }
-  //==================================================
-  std::vector<tlp::Interactor::ID> AbstractView::resetInteractors(const std::vector<Interactor *> &new_interactors) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    vector<Interactor::ID> ids;
-    for (vector<Interactor *>::const_iterator it =
-	   new_interactors.begin(); it != new_interactors.end(); ++it)
-      ids.push_back(pushInteractor(*it));
-    return ids;
   }
 
 }

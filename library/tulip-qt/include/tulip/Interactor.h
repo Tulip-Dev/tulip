@@ -1,0 +1,234 @@
+#ifndef _INTERACTOR_H
+#define _INTERACTOR_H
+
+#include <QtCore/qobject.h>
+#include <QtGui/QAction>
+
+#include <tulip/Plugin.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/TemplateFactory.h>
+#include "InteractorManager.h"
+
+class QAction;
+
+namespace tlp {
+
+  class GlMainWidget;
+  class View;
+  class Interactor;
+
+  /** \brief InteractorAction extend QAction to provide Interactor information
+   *
+   */
+  class TLP_QT_SCOPE InteractorAction : public QAction {
+
+    Q_OBJECT;
+
+  public:
+
+    InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text);
+
+    Interactor *getInteractor() {return interactor;}
+
+  protected :
+
+    Interactor *interactor;
+
+  };
+
+  /** \brief Tulip interactor main class
+   *
+   */
+  class TLP_QT_SCOPE Interactor  : public QObject, public WithParameter, public WithDependency {
+
+  protected :
+
+    int priority;
+
+  public:
+    /**
+     * Default constructor
+     */
+    Interactor():priority(0) {}
+
+    /*
+     * Default destructor
+     */
+    virtual ~Interactor() {}
+
+    /**
+     * Set the view attached with this interactor
+     */
+    virtual void setView(View *view) = 0;
+
+    /**
+     * Install eventFilters of interactor on given widget
+     */
+    virtual void install(QWidget *) = 0;
+
+    /**
+     * Remove eventFilters of interactor
+     */
+    virtual void remove() = 0;
+
+    /**
+     * return widget of configuration of this interactor
+     */
+    virtual QWidget *getConfigurationWidget() {return NULL;}
+
+    /**
+     * return if this interactor is compatible with given View
+     */
+    virtual bool isCompatible(const std::string &viewName) = 0;
+
+    /**
+     * Return the menu display priority
+     */
+    int getPriority() {
+      return priority;
+    }
+
+    /**
+     * Set the menu display priority
+     */
+    void setPriority(int number) {
+      priority=number;
+    }
+
+    /**
+     * return QAction of this interactor
+     */
+    virtual InteractorAction* getAction() = 0;
+
+    /**
+     * Compute InteractorComponents include in this interactor
+     */
+    virtual void compute(GlMainWidget *) = 0;
+
+    /**
+     * Draw InteractorComponents include in this interactor
+     */
+    virtual void draw(GlMainWidget *) = 0;
+
+
+  };
+
+  class TLP_QT_SCOPE InteractorContext {
+
+  public :
+    InteractorContext(){}
+
+  };
+
+  class TLP_QT_SCOPE InteractorFactory: public Plugin {
+  public:
+    virtual ~InteractorFactory() {}
+    ///
+    virtual Interactor *createPluginObject(InteractorContext *ic)=0;
+
+    virtual  std::string getMajor() const {
+      return tlp::getMajor(getRelease());
+    }
+    virtual  std::string getMinor() const  {
+      return tlp::getMinor(getRelease());
+    }
+    virtual  std::string getTulipMajor() const {
+      return tlp::getMajor(getTulipRelease());
+    }
+    virtual  std::string getTulipMinor() const  {
+      return tlp::getMinor(getTulipRelease());
+    }
+
+    static TemplateFactory<InteractorFactory,Interactor,InteractorContext *> *factory;
+    static void initFactory() {
+      if (!factory) {
+	factory = new TemplateFactory<InteractorFactory,Interactor,InteractorContext *>;
+      }
+    }
+  };
+
+}
+
+#define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
+class C##T##Factory:public T##Factory	 \
+{                                                \
+public:                                          \
+  C##T##Factory(){				 \
+    initFactory(); 			         \
+    factory->registerPlugin(this);	         \
+  }       					 \
+  string getName() const { return string(N);}	 \
+  string getGroup() const { return string(G);}	 \
+  string getAuthor() const {return string(A);}	 \
+  string getDate() const {return string(D);}	 \
+  string getInfo() const {return string(I);}	 \
+  string getRelease() const {return string(R);}\
+  string getTulipRelease() const {return string(TULIP_RELEASE);} \
+  T * createPluginObject(InteractorContext *ic)		 \
+  {						 \
+    C *tmp = new C();				 \
+    return ((T *) tmp);			 \
+  }						 \
+};                                               \
+extern "C" {                                            \
+  C##T##Factory C##T##FactoryInitializer;               \
+}
+
+#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) INTERACTORPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
+#define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
+
+/*
+CN : New interactor class name
+CNT : New interactor name
+BCNT : Extended interactor name
+VCN : View compatibility name
+A : Author
+D : Date
+I : Infor
+R : Revision
+*/
+#define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)     \
+class CN : public Interactor { \
+public : \
+  CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);setPriority(baseInteractor->getPriority());} \
+  void setView(View *view){baseInteractor->setView(view);} \
+  void install(QWidget *widget){baseInteractor->install(widget);} \
+  void remove(){baseInteractor->remove();} \
+  QWidget *getConfigurationWidget(){return baseInteractor->getConfigurationWidget();} \
+  bool isCompatible(const std::string &viewName){return viewName==VCN;} \
+  InteractorAction* getAction(){return baseInteractor->getAction();} \
+  void compute(GlMainWidget *widget){baseInteractor->compute(widget);} \
+  void draw(GlMainWidget *widget){baseInteractor->draw(widget);} \
+protected : \
+  Interactor *baseInteractor; \
+}; \
+INTERACTORPLUGIN(CN, CNT, A , D , I , R);
+
+/*
+Like INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R) with P
+P : Priority of this interactor (in ne menu)
+*/
+#define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)     \
+class CN : public Interactor { \
+public : \
+  CN() {setPriority(P);baseInteractor=InteractorManager::getInst().getInteractor(BCNT);} \
+  void setView(View *view){baseInteractor->setView(view);} \
+  void install(QWidget *widget){baseInteractor->install(widget);} \
+  void remove(){baseInteractor->remove();} \
+  QWidget *getConfigurationWidget(){return baseInteractor->getConfigurationWidget();} \
+  bool isCompatible(const std::string &viewName){return viewName==VCN;} \
+  InteractorAction* getAction(){return baseInteractor->getAction();} \
+  void compute(GlMainWidget *widget){baseInteractor->compute(widget);} \
+  void draw(GlMainWidget *widget){baseInteractor->draw(widget);} \
+protected : \
+  Interactor *baseInteractor; \
+}; \
+INTERACTORPLUGIN(CN, CNT, A , D , I , R);
+
+#endif
+
+
+
+
+
+

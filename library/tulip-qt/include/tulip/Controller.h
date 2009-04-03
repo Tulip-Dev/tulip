@@ -9,7 +9,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TemplateFactory.h>
 #include <tulip/Vector.h>
-#include "GWInteractor.h"
+#include "Interactor.h"
 
 class QMenuBar;
 class QToolBar;

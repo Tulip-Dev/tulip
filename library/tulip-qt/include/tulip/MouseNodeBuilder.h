@@ -2,19 +2,20 @@
 #ifndef MOUSEADDNODE_H
 #define MOUSEADDNODE_H
 
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseNodeBuilder:public Interactor
+class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent
 {
+
 public:
-  MouseNodeBuilder(){}
-  ~MouseNodeBuilder(){}
+  MouseNodeBuilder() {}
+  ~MouseNodeBuilder() {}
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseNodeBuilder(); }};
+  InteractorComponent *clone() { return new MouseNodeBuilder(); }};
 /*@}*/
 
 }

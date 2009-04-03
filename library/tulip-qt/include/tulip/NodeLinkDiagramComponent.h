@@ -25,7 +25,7 @@ namespace tlp {
     void setData(Graph *graph,DataSet dataSet);
     void getData(Graph **graph,DataSet *dataSet);
 
-    void installInteractor(QAction *);
+    std::list<std::pair<QWidget *,std::string> > getConfigurationWidget();
 
     void specificEventFilter(QObject *object,QEvent *event);
     void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
@@ -54,12 +54,10 @@ namespace tlp {
 
     GridOptionsWidget *gridOptionsWidget;
     RenderingParametersDialog *renderingParametersDialog;
-    LayerManagerWidget *layerWidget;
+    LayerManagerWidget *layerManagerWidget;
 
     std::map<std::string,DataSet> algorithmInfoDataSet;
 
-    void constructInteractorsActionList();
-    void constructInteractorsMap();
     void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void checkAlgorithmResult();

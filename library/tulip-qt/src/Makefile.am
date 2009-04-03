@@ -54,6 +54,7 @@ BUILT_SOURCES = \
 	moc_TulipStatsWidget.cpp \
 	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialog.cpp \
+	moc_LayerManagerWidget.cpp \
 	moc_AugmentedDisplayDialog.cpp \
 	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
@@ -61,6 +62,7 @@ BUILT_SOURCES = \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
 	moc_QtCPULODCalculator.cpp \
+	moc_Interactor.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_CopyPropertyDialogData.cpp \
 	moc_TulipStatsData.cpp \
@@ -107,8 +109,10 @@ dist_libtulip_qt4_la_SOURCES = \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
 	QtCPULODCalculator.cpp \
-	GWInteractor.cpp \
 	InteractorManager.cpp \
+	Interactor.cpp \
+	InteractorChainOfResponsibility.cpp \
+	GlMainViewInteractor.cpp \
 	QtProgress.cpp \
 	Controller.cpp \
 	MainController.cpp \
@@ -118,6 +122,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	ViewPluginsManager.cpp \
 	TulipStatsWidget.cpp \
 	RenderingParametersDialog.cpp \
+	LayerManagerWidget.cpp \
 	AugmentedDisplayDialog.cpp \
 	GridOptionsWidget.cpp \
 	GraphPropertiesSelectionWidget.cpp \

@@ -1,6 +1,7 @@
 dist_noinst_DATA = FindSelection.ui \
 	GWOverviewWidget.ui \
 	RenderingParametersDialog.ui \
+	LayerManagerWidget.ui \
 	AugmentedDisplayDialog.ui \
 	TabWidget.ui \
 	PropertyDialog.ui \

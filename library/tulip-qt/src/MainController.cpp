@@ -8,6 +8,7 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QInputDialog>
 #include <QtGui/QClipboard>
+#include <QtGui/QTabWidget>
 
 #include <tulip/hash_string.h>
 #include <tulip/Graph.h>
@@ -42,6 +43,7 @@
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/InteractorManager.h"
 
 using namespace std;
 
@@ -526,6 +528,25 @@ namespace tlp {
     statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
 #endif
 
+    configWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
+    configWidgetTab = new QTabWidget(configWidgetDock);
+
+    //create no plugins configuration widget
+    noInteractorConfigWidget = new QWidget(configWidgetTab);
+    QGridLayout *gridLayout = new QGridLayout(noInteractorConfigWidget);
+    QLabel *label = new QLabel(noInteractorConfigWidget);
+    label->setAlignment(Qt::AlignCenter);
+    gridLayout->addWidget(label, 0, 0, 1, 1);
+    label->setText("No interactor configuration");
+
+
+    configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
+    configWidgetDock->setWidget(configWidgetTab);
+    configWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    configWidgetDock->setWindowTitle("Info Editor");
+    configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
+
     buildMenu();
 
     //+++++++++++++++++++++++++++
@@ -718,6 +739,13 @@ namespace tlp {
     viewNames[newView]=verifiedName;
     viewWidget[widget]=newView;
 
+    multimap<int,string> interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+    list<Interactor *> interactorsList;
+    for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
+      interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
+      }
+    newView->setInteractors(interactorsList);
+
     widget->setAttribute(Qt::WA_DeleteOnClose,true);
     mainWindowFacade.getWorkspace()->addWindow(widget);
 
@@ -752,6 +780,12 @@ namespace tlp {
 
   	std::map<QWidget *,View*>::iterator it=viewWidget.find(w);
   	if(it!=viewWidget.end()) {
+
+  	  while(configWidgetTab->count()>1){
+  	    configWidgetTab->removeTab(1);
+  	  }
+
+
   		View *view=(*it).second;
 
       currentView=view;
@@ -761,6 +795,11 @@ namespace tlp {
       clusterTreeWidget->setGraph(currentGraph);
       eltProperties->setGraph(currentGraph);
       propertiesWidget->setGraph(currentGraph);
+
+      list<pair<QWidget *,string> > configWidgetsList=view->getConfigurationWidget();
+      for(list<pair<QWidget *,string> >::iterator it=configWidgetsList.begin();it!=configWidgetsList.end();++it){
+        configWidgetTab->addTab((*it).first,(*it).second.c_str());
+      }
 
       //Remove observer (nothing if this not observe)
       currentGraph->removeGraphObserver(this);
@@ -813,15 +852,16 @@ namespace tlp {
   void MainController::installInteractors(View *view) {
     mainWindowFacade.getInteractorsToolBar()->clear();
 
-    list<QAction *> *interactorsList=view->getInteractorsActionList();
-    if(!interactorsList)
-      return;
+    list<Interactor *> interactorsList=view->getInteractors();
+    list<QAction *> interactorsActionList;
+    for(list<Interactor *>::iterator it=interactorsList.begin();it!=interactorsList.end();++it)
+      interactorsActionList.push_back((*it)->getAction());
 
-    for(list<QAction *>::iterator it=interactorsList->begin();it!=interactorsList->end();++it) {
+    for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it) {
       mainWindowFacade.getInteractorsToolBar()->addAction(*it);
     }
 
-    if(!interactorsList->empty()) {
+    if(!interactorsActionList.empty()) {
       map<View*,QAction *>::iterator it=lastInteractorOnView.find(view);
       if(it!=lastInteractorOnView.end()){
         if(mainWindowFacade.getInteractorsToolBar()->actions().contains((*it).second)){
@@ -830,7 +870,7 @@ namespace tlp {
         }
       }
 
-      changeInteractor(interactorsList->front());
+      changeInteractor(interactorsActionList.front());
     }
   }
   //**********************************************************************
@@ -838,12 +878,22 @@ namespace tlp {
     if(currentView){
       QList<QAction*> actions=mainWindowFacade.getInteractorsToolBar()->actions();
       for(QList<QAction*>::iterator it=actions.begin();it!=actions.end();++it) {
-	(*it)->setChecked(false);
+        (*it)->setChecked(false);
       }
       action->setCheckable(true);
       action->setChecked(true);
-      currentView->installInteractor(action);
+      InteractorAction *interactorAction=(InteractorAction *)action;
+      currentView->setActiveInteractor(interactorAction->getInteractor());
       lastInteractorOnView[currentView]=action;
+      QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
+      configWidgetTab->removeTab(0);
+      if(interactorWidget){
+        configWidgetTab->insertTab(0,interactorWidget,"Interactor");
+      }else{
+        configWidgetTab->insertTab(0,noInteractorConfigWidget,"Interactor");
+      }
+
+      currentView->refresh();
     }
   }
   //**********************************************************************

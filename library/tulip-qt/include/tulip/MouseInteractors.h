@@ -10,43 +10,44 @@
 
 #include <QtGui/qcursor.h>
 
-#include "tulip/GWInteractor.h"
+#include "tulip/InteractorComponent.h"
+
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
 /** An interactor class allowing to zoom and pan using the mouse wheel.
  */
-class TLP_QT_SCOPE MousePanNZoomNavigator:public Interactor {
+class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
 public:
   MousePanNZoomNavigator(){}
   ~MousePanNZoomNavigator(){}
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MousePanNZoomNavigator(); }
+  InteractorComponent *clone() { return new MousePanNZoomNavigator(); }
 };
 
 /** An interactor class used to delete a graph element on mouse left click
  */
-class TLP_QT_SCOPE MouseElementDeleter:public Interactor {
+class TLP_QT_SCOPE MouseElementDeleter:public InteractorComponent {
 public:
   MouseElementDeleter(){}
   ~MouseElementDeleter(){}
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseElementDeleter(); }
+  InteractorComponent *clone() { return new MouseElementDeleter(); }
 };
-  
+
 /** An interactor class to translate/rotate using keys or mouse movements,
     or to zoom and pan using the mouse wheel or
  */
 class TLP_QT_SCOPE MouseNKeysNavigator: public MousePanNZoomNavigator {
 private:
-  Interactor::ID currentMouseID;
-  
+  InteractorComponent *currentSpecInteractorComponent;
+
 public:
-  MouseNKeysNavigator() : currentMouseID(Interactor::invalidID){}
+  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL){}
   ~MouseNKeysNavigator(){}
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseNKeysNavigator(); }
+  InteractorComponent *clone() { return new MouseNKeysNavigator(); }
 };
 /*@}*/
 

@@ -18,8 +18,6 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseSelector, "MouseSelector", "Tulip Team", "16/04/2008", "Mouse Selector", "1.0");
-
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
 			     Qt::KeyboardModifier modifier):
@@ -143,7 +141,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 		needPush = false;
 	      }
 	      selection->setNodeValue(tmpNode, !result);
-	    }		  
+	    }
 	    break;
           case EDGE:
 	    result = selection->getEdgeValue(tmpEdge);
@@ -153,8 +151,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 		needPush = false;
 	      }
 	      selection->setEdgeValue(tmpEdge, !result);
-	    }		  
-	    break;	    
+	    }
+	    break;
           }
         }
       } else {

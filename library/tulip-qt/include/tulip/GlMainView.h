@@ -17,13 +17,13 @@
 #include <config.h>
 #endif
 
+#include "tulip/GlSceneObserver.h"
+
 #include "tulip/AbstractView.h"
 
 #include <QtGui/QMainWindow>
 
 #include <QtGui/QDockWidget>
-
-#include "tulip/GlMainWidget.h"
 
 class QFrame;
 
@@ -39,6 +39,7 @@ namespace tlp {
   class TulipStats;
 #endif
   class GridOptionsWidget;
+  class GlMainWidget;
 
   /** \brief Provide an abstract view with OpenGl rendering
    *

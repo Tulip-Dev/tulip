@@ -7,7 +7,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
@@ -15,7 +15,7 @@
 namespace tlp {
 
   /// This interactor allows to move/rotate/stretch the current selection layout
-  class TLP_QT_SCOPE MouseSelectionEditor:public Interactor {
+  class TLP_QT_SCOPE MouseSelectionEditor:public InteractorComponent {
 
   public:
 
@@ -24,7 +24,7 @@ namespace tlp {
     bool compute(GlMainWidget *glMainWidget);
     bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
-    Interactor *clone() { return new MouseSelectionEditor(); }
+    InteractorComponent *clone() { return new MouseSelectionEditor(); }
 
   private:
     enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE};

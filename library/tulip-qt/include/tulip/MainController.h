@@ -31,6 +31,7 @@
 
 class QAction;
 class QMenu;
+class QTabWidget;
 
 namespace tlp {
 
@@ -187,6 +188,9 @@ namespace tlp {
     Morphing *morph;
 
     QDockWidget *tabWidgetDock;
+    QDockWidget *configWidgetDock;
+    QTabWidget *configWidgetTab;
+    QWidget *noInteractorConfigWidget;
     SGHierarchyWidget *clusterTreeWidget;
     PropertyDialog *propertiesWidget;
     ElementPropertiesWidget *eltProperties;

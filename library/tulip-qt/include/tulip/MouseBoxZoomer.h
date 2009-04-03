@@ -7,7 +7,7 @@
 #endif
 
 
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -15,9 +15,9 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseBoxZoomer : public Interactor {
+class TLP_QT_SCOPE MouseBoxZoomer : public InteractorComponent {
 private:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
@@ -27,7 +27,7 @@ public:
   ~MouseBoxZoomer();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseBoxZoomer(mButton, kModifier); }
+  InteractorComponent *clone() { return new MouseBoxZoomer(mButton, kModifier); }
 private:
   unsigned int x, y;
   int w, h;

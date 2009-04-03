@@ -15,6 +15,7 @@
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"
+#include "tulip/LayerManagerWidget.h"
 #include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
 #include "tulip/InteractorManager.h"
@@ -47,7 +48,8 @@ namespace tlp {
   	overviewAction->setChecked(true);
   	renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
   	renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
-  	renderingParametersDialog=new RenderingParametersDialog(widget);
+  	renderingParametersDialog=new RenderingParametersDialog();
+  	layerManagerWidget=new LayerManagerWidget();
   	augmentedDisplayDialogAction = dialogMenu->addAction("Augmented Display");
   	//Options Menu
   	optionsMenu=new QMenu("Options");
@@ -102,6 +104,8 @@ namespace tlp {
       data=dataSet;
     }
     mainWidget->setData(graph,data);
+    renderingParametersDialog->setGlMainView(this);
+    layerManagerWidget->setGlMainView(this);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
     init();
   }
@@ -117,18 +121,15 @@ namespace tlp {
     init();
   }
   //==================================================
-  // Interactor functions
-  //==================================================
-  void NodeLinkDiagramComponent::constructInteractorsMap() {
+  list<pair<QWidget *,string> > NodeLinkDiagramComponent::getConfigurationWidget() {
+    list<pair<QWidget *,string> > widgetList;
+    widgetList.push_back(pair<QWidget*,string>(renderingParametersDialog,"Rendering Parameters"));
+    widgetList.push_back(pair<QWidget*,string>(layerManagerWidget,"Layer Manager"));
+    return widgetList;
+  }
 
-    interactorsMap["Add edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Add edges"].push_back(InteractorManager::getInst().getInteractor("MouseNodeBuilder"));
-    interactorsMap["Add edges"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeBuilder"));
-    interactorsMap["Add nodes"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Add nodes"].push_back(InteractorManager::getInst().getInteractor("MouseNodeBuilder"));
-    interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MouseElementDeleter"));
-    interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
+
+    /*
     interactorsMap["Selection of reachable elements with equal value"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
     interactorsMap["Selection of reachable elements with equal value"].push_back(InteractorManager::getInst().getInteractor("MouseMagicSelector"));
     interactorsMap["Move/Reshape selection"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
@@ -142,11 +143,9 @@ namespace tlp {
     interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
     interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseSelector"));
     interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
-  }
-  //==================================================
-  void NodeLinkDiagramComponent::constructInteractorsActionList(){
-    interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
+    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));*/
+
+    /*interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
     interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
     interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
     interactorsActionList.push_back(new QAction(QIcon(":/i_move.png"), "Move/Reshape selection", this));
@@ -155,11 +154,8 @@ namespace tlp {
     interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
     interactorsActionList.push_back(new QAction(QIcon(":/i_addnode.png"), "Add nodes", this));
     interactorsActionList.push_back(new QAction(QIcon(":/i_addedge.png"),"Add edges", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_bends.png"), "Edit edge bends", this));
-  }
-  void NodeLinkDiagramComponent::installInteractor(QAction *action) {
-    resetInteractors(interactorsMap[action->text().toStdString()]);
-  }
+    interactorsActionList.push_back(new QAction(QIcon(":/i_bends.png"), "Edit edge bends", this));*/
+
 
   void NodeLinkDiagramComponent::specificEventFilter(QObject *object,QEvent *event) {
     if (event->type() == QEvent::KeyPress){
@@ -381,8 +377,7 @@ namespace tlp {
     }
 
     if (name=="&Rendering Parameters") {
-      renderingParametersDialog->setGlMainView(this);
-      renderingParametersDialog->exec();
+      renderingParametersDialog->show();
     }
 
     if(name =="Augmented Display") {
@@ -417,10 +412,10 @@ namespace tlp {
   //==================================================
   // GlSceneObserver interface
   void NodeLinkDiagramComponent::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
-    renderingParametersDialog->addLayer(scene,name,layer);
+    //renderingParametersDialog->addLayer(scene,name,layer);
   }
   void NodeLinkDiagramComponent::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
-    renderingParametersDialog->updateLayer(name,layer);
+    //renderingParametersDialog->updateLayer(name,layer);
   }
 }
 

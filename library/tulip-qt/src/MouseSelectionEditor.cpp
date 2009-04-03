@@ -25,8 +25,6 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseSelectionEditor, "MouseSelectionEditor", "Tulip Team", "16/04/2008", "Mouse Selection Editor", "1.0");
-
 //========================================================================================
 MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
   operation = NONE;

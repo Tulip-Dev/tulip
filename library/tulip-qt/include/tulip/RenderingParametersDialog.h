@@ -30,7 +30,7 @@ namespace tlp {
   class GlMainView;
   class GlMainWidget;
 
-  class TLP_QT_SCOPE RenderingParametersDialog : public QDialog, public Ui::RenderingParametersDialogData {
+  class TLP_QT_SCOPE RenderingParametersDialog : public QWidget, public Ui::RenderingParametersDialogData {
     Q_OBJECT
 
     GlMainView *mainView;
@@ -38,30 +38,16 @@ namespace tlp {
     bool holdUpdateView;
 
   public:
-    RenderingParametersDialog(QWidget* parent);
-    void windowActivationChange(bool oldActive);
+    RenderingParametersDialog(QWidget* parent=0);
 
     void setGlMainView(GlMainView *view);
-    void attachMainWidget(GlMainWidget *graphWidget);
-
-    void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
-    void addComposite(tlp::GlComposite *composite,QTreeWidgetItem *parent);
-    void createGraphCompositeItem(tlp::GlGraphComposite *glGraphComposite,QTreeWidgetItem *item);
-    void updateLayer(const std::string& name,tlp::GlLayer* layer);
-    void delLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
 
   public slots:
 
     void updateView();
     void backColor();
     void setBackgroundColor(QColor tmp);
-    virtual void accept();
 
-  protected slots:
-
-    void itemClicked(QTreeWidgetItem *,int);
-    void applyVisibility();
-    void applyVisibility(QTreeWidgetItem *item,GlComposite *composite);
   };
 
 }

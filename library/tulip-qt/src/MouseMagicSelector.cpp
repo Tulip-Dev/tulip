@@ -30,8 +30,6 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseMagicSelector, "MouseMagicSelector", "Tulip Team", "16/04/2008", "Mouse Magic Selector", "1.0");
-
 MouseMagicSelector::MouseMagicSelector():
   x(0),y(0),w(0),h(0),graph(0)
 {}

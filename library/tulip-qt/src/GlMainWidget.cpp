@@ -20,6 +20,7 @@
 #include <tulip/GlRectTextured.h>
 
 #include "tulip/QtCPULODCalculator.h"
+#include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 
 using namespace std;
@@ -88,7 +89,7 @@ namespace tlp {
  	}
 
   //==================================================
-  GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
+  GlMainWidget::GlMainWidget(QWidget *parent,GlMainView *view):
     QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator()),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
@@ -170,7 +171,18 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setGraph(Graph *graph){
+    if(!scene.getLayer("Main")){
+      setData(graph,DataSet());
+      return;
+    }
+
     GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
+
+    if(!oldGraphComposite){
+      setData(graph,DataSet());
+      return;
+    }
+
     GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     graphComposite->setRenderingParameters(param);
@@ -308,23 +320,23 @@ namespace tlp {
   void GlMainWidget::computeInteractors() {
     if(!view)
       return;
-    Iterator<Interactor *> *it=view->getInteractors();
-    while (it->hasNext()) {
-      Interactor *interactor=it->next();
-      if (interactor->compute(this))
-	break;
-    }
+
+    Interactor *interactor=view->getActiveInteractor();
+    if(!interactor)
+      return;
+
+    interactor->compute(this);
   }
   //==================================================
   void GlMainWidget::drawInteractors() {
     if(!view)
       return;
-    Iterator<Interactor *> *it=view->getInteractors();
-    while (it->hasNext()) {
-      Interactor *interactor=it->next();
-      if (interactor->draw(this))
-	break;
-    }
+
+    Interactor *interactor=view->getActiveInteractor();
+    if(!interactor)
+      return;
+
+    interactor->draw(this);
   }
   //==================================================
   void GlMainWidget::drawForegroundEntities() {

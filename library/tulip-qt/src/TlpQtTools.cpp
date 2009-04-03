@@ -6,7 +6,7 @@
 
 #include <tulip/Reflect.h>
 
-#include "tulip/GWInteractor.h"
+#include "tulip/Interactor.h"
 #include "tulip/View.h"
 #include "tulip/Controller.h"
 

@@ -6,11 +6,16 @@ nobase_include_HEADERS = \
 	tulip/CopyPropertyDialog.h \
 	tulip/TulipStatsWidget.h \
 	tulip/RenderingParametersDialog.h \
+	tulip/LayerManagerWidget.h \
 	tulip/AugmentedDisplayDialog.h \
 	tulip/GridOptionsWidget.h \
 	tulip/GlMainView.h \
 	tulip/NodeLinkDiagramComponent.h \
-	tulip/GWInteractor.h \
+	tulip/InteractorManager.h \
+	tulip/Interactor.h \
+	tulip/InteractorChainOfResponsibility.h \
+	tulip/InteractorComponent.h \
+	tulip/GlMainViewInteractor.h \
 	tulip/ForegroundEntity.h \
 	tulip/MouseSelector.h \
 	tulip/MouseBoxZoomer.h \
@@ -35,7 +40,6 @@ nobase_include_HEADERS = \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
 	tulip/QtCPULODCalculator.h \
-	tulip/InteractorManager.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/MainController.h \
@@ -60,6 +64,7 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
@@ -74,6 +79,7 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
