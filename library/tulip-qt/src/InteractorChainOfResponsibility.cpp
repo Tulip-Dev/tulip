@@ -17,15 +17,13 @@ InteractorChainOfResponsibility::~InteractorChainOfResponsibility() {
 void InteractorChainOfResponsibility::setView(View *view){
   construct();
   this->view=view;
-  for(vector<InteractorComponent *>::iterator it=interactorComponents.begin();it!=interactorComponents.end();++it)
-    (*it)->setView(view);
 }
 
 void InteractorChainOfResponsibility::install(QWidget *widget) {
   int id=0;
   for(vector<InteractorComponent *>::iterator it =interactorComponents.begin(); it != interactorComponents.end(); ++it) {
     InteractorComponent *newInteractor=(*it)->clone();
-    newInteractor->setView((*it)->getView());
+    newInteractor->setView(view);
     installedInteractorComponents.push_back(newInteractor);
     newInteractor->setID(++id);
     widget->installEventFilter(newInteractor);
