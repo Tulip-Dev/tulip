@@ -66,7 +66,7 @@
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/Interactor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>

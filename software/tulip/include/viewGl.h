@@ -24,7 +24,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/Observable.h>
 #include <tulip/GlSceneObserver.h>
-#include <tulip/GWInteractor.h>
 #include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
