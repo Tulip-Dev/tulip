@@ -180,6 +180,7 @@ namespace tlp {
     std::map<View *,std::string> viewNames;
     std::map<QWidget *,View*> viewWidget;
     std::map<View *, QAction *> lastInteractorOnView;
+    std::map<View *, int> lastConfigTabIndexOnView;
     std::map<View *,Graph* > viewGraph;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;

@@ -539,7 +539,6 @@ namespace tlp {
     gridLayout->addWidget(label, 0, 0, 1, 1);
     label->setText("No interactor configuration");
 
-
     configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
     configWidgetDock->setWidget(configWidgetTab);
     configWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -705,6 +704,8 @@ namespace tlp {
     optionsMenu->addSeparator();
     QAction *propertiesDockAction = optionsMenu->addAction("Show properties dock");
     connect(propertiesDockAction,SIGNAL(triggered()),tabWidgetDock,SLOT(show()));
+    QAction *configurationDockAction = optionsMenu->addAction("Show configuration dock");
+    connect(configurationDockAction,SIGNAL(triggered()),configWidgetDock,SLOT(show()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
@@ -781,6 +782,7 @@ namespace tlp {
   	std::map<QWidget *,View*>::iterator it=viewWidget.find(w);
   	if(it!=viewWidget.end()) {
 
+  	  lastConfigTabIndexOnView[currentView]=configWidgetTab->currentIndex();
   	  while(configWidgetTab->count()>1){
   	    configWidgetTab->removeTab(1);
   	  }
@@ -800,6 +802,8 @@ namespace tlp {
       for(list<pair<QWidget *,string> >::iterator it=configWidgetsList.begin();it!=configWidgetsList.end();++it){
         configWidgetTab->addTab((*it).first,(*it).second.c_str());
       }
+      if(lastConfigTabIndexOnView.count(currentView)!=0)
+        configWidgetTab->setCurrentIndex(lastConfigTabIndexOnView[currentView]);
 
       //Remove observer (nothing if this not observe)
       currentGraph->removeGraphObserver(this);
@@ -886,12 +890,15 @@ namespace tlp {
       currentView->setActiveInteractor(interactorAction->getInteractor());
       lastInteractorOnView[currentView]=action;
       QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
+      bool onInteractorConfigTab=configWidgetTab->currentIndex()==0;
       configWidgetTab->removeTab(0);
       if(interactorWidget){
         configWidgetTab->insertTab(0,interactorWidget,"Interactor");
       }else{
         configWidgetTab->insertTab(0,noInteractorConfigWidget,"Interactor");
       }
+      if(onInteractorConfigTab)
+        configWidgetTab->setCurrentIndex(0);
 
       currentView->refresh();
     }

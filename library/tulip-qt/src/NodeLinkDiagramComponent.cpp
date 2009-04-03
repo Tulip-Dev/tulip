@@ -46,8 +46,6 @@ namespace tlp {
   	overviewAction=dialogMenu->addAction("3D &Overview");
   	overviewAction->setCheckable(true);
   	overviewAction->setChecked(true);
-  	renderingParametersDialogAction = dialogMenu->addAction("&Rendering Parameters");
-  	renderingParametersDialogAction->setShortcut(tr("Ctrl+R"));
   	renderingParametersDialog=new RenderingParametersDialog();
   	layerManagerWidget=new LayerManagerWidget();
   	augmentedDisplayDialogAction = dialogMenu->addAction("Augmented Display");
@@ -160,8 +158,6 @@ namespace tlp {
   void NodeLinkDiagramComponent::specificEventFilter(QObject *object,QEvent *event) {
     if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent=(QKeyEvent*)event;
-      if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() == Qt::ControlModifier))
-        showDialog(renderingParametersDialogAction);
       if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
         draw();
       if((keyEvent->key()==Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
@@ -374,10 +370,6 @@ namespace tlp {
 	overviewFrame->hide();
       else
 	overviewFrame->show();
-    }
-
-    if (name=="&Rendering Parameters") {
-      renderingParametersDialog->show();
     }
 
     if(name =="Augmented Display") {
