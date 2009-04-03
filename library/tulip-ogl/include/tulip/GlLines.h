@@ -3,6 +3,12 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <vector>
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
@@ -14,7 +20,7 @@ struct TLP_GL_SCOPE GlLines
   //Curves types: linear, bezier, spline order 3, spline order 4
   enum InterpolationMethod {LINEAR=0, BEZIER, SPLINE3, SPLINE4};
   enum StippleType {TLP_PLAIN=0, TLP_DOT, TLP_DASHED, TLP_ALTERNATE};
-  
+
   static void glDrawPoint(const Coord &p);
 
   static void glDrawLine(const Coord &startPoint,const Coord &endPoint,const double width,const unsigned int stippleType,
@@ -38,7 +44,7 @@ struct TLP_GL_SCOPE GlLines
 			      unsigned int steps, const Size &size, const StippleType stippleType,
 			      InterpolationMethod interpolation,
 			      const Color &startColor,const Color &endColor);
-  
+
   private:
   static void glDisableLineStipple(unsigned int stippleType);
   static void glEnableLineStipple(unsigned int stippleType);
