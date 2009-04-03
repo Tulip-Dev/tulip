@@ -29,22 +29,20 @@
 #include <string>
 
 #include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/Interactor.h>
 #include <tulip/MouseSelector.h>
 
 using namespace std;
 
 namespace tlp {
 
-class ParallelCoordsElementShowInfos : public Interactor {
+class ParallelCoordsElementShowInfos : public InteractorComponent {
 	public :
 		ParallelCoordsElementShowInfos(){}
 		~ParallelCoordsElementShowInfos(){}
 		bool eventFilter(QObject *, QEvent *);
-		Interactor *clone() { return new ParallelCoordsElementShowInfos(); }
+		InteractorComponent *clone() { return new ParallelCoordsElementShowInfos(); }
 };
-
-INTERACTORPLUGIN(ParallelCoordsElementShowInfos, "ParallelCoordsElementShowInfos", "Tulip Team", "15/10/2008", "Parallel Coordinates Element Show Infos", "1.0");
 
 bool ParallelCoordsElementShowInfos::eventFilter(QObject *widget, QEvent *e) {
 

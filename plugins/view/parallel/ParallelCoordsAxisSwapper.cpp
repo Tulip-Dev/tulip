@@ -29,11 +29,14 @@
 #include <string>
 
 #include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlCircle.h>
+#include <tulip/GlMainWidget.h>
+
+#include "ParallelCoordsAxisSwapper.h"
 
 using namespace std;
 
@@ -43,37 +46,13 @@ static Color axisHighlight(14,241,212,0);
 
 static Color axisToSwapHighlight(0,255,0,0);
 
-class ParallelCoordsAxisSwapper : public Interactor {
-public :
-	ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false) {}
-	~ParallelCoordsAxisSwapper();
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	Interactor *clone() { return new ParallelCoordsAxisSwapper(); }
-	void setView(View *view);
-
-private :
-
-	ParallelCoordinatesView *parallelView;
-	ParallelAxis *selectedAxis;
-	ParallelAxis *otherAxisToSwap;
-	Coord initialSelectedAxisCoord;
-	bool dragStarted;
-	int x,y;
-	GlRect *axisHighlightRect;
-	bool mouseMove;
-	bool axisSwapStarted;
-};
-
-INTERACTORPLUGIN(ParallelCoordsAxisSwapper, "ParallelCoordsAxisSwapper", "Tulip Team", "16/10/2008", "Parallel Coordinates Axis Swapper", "1.0");
-
 ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {
 	selectedAxis = NULL;
 	parallelView->refresh();
 }
 
 void ParallelCoordsAxisSwapper::setView(View *view) {
-	Interactor::setView(view);
+	InteractorComponent::setView(view);
 	parallelView = (ParallelCoordinatesView *) view;
 }
 

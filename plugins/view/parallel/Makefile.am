@@ -18,6 +18,9 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			NominalParallelAxis.h \
 			QuantitativeParallelAxis.h \
 			AxisConfigDialogs.h \
+			ParallelCoordinatesInteractors.h \
+			ParallelCoordsElementHighlighter.h \
+			ParallelCoordsAxisSwapper.h \
 			ParallelCoordinatesView.cpp \
 			ParallelCoordinatesDrawing.cpp \
 			ParallelCoordinatesGraphProxy.cpp \
@@ -34,7 +37,8 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelCoordsElementHighlighter.cpp \
 			ParallelCoordsAxisSwapper.cpp \
 			ParallelCoordsAxisSliders.cpp \
-			ParallelCoordsAxisBoxPlot.cpp 
+			ParallelCoordsAxisBoxPlot.cpp \
+			ParallelCoordinatesInteractors.cpp
 
 nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelResource.cpp \

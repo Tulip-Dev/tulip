@@ -29,22 +29,20 @@
 #include <string>
 
 #include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 
 using namespace std;
 
 namespace tlp {
 
-class ParallelCoordsElementDeleter : public Interactor {
+class ParallelCoordsElementDeleter : public InteractorComponent {
 public :
 	ParallelCoordsElementDeleter() {}
 	~ParallelCoordsElementDeleter() {}
 	bool eventFilter(QObject *, QEvent *);
-	Interactor *clone() { return new ParallelCoordsElementDeleter(); }
+	InteractorComponent *clone() { return new ParallelCoordsElementDeleter(); }
 };
-
-INTERACTORPLUGIN(ParallelCoordsElementDeleter, "ParallelCoordsElementDeleter", "Tulip Team", "16/10/2008", "Parallel Coordinates Element Deleter", "1.0");
 
 bool ParallelCoordsElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 

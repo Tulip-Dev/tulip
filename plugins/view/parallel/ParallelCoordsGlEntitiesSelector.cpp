@@ -1,5 +1,7 @@
 #include "ParallelCoordsGlEntitiesSelector.h"
 
+#include <tulip/GlMainWidget.h>
+
 using namespace std;
 
 namespace tlp {

@@ -9,12 +9,11 @@
 #include <QtCore/QThread>
 #include <QtCore/QDir>
 
-#include <tulip/GWInteractor.h>
-#include <tulip/InteractorManager.h>
 #include <tulip/GWOverviewWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlProgressBar.h>
+#include <tulip/GlMainWidget.h>
 
 
 using namespace std;
@@ -43,12 +42,12 @@ VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates view", "Tulip Team", "
 
 ParallelCoordinatesView::ParallelCoordinatesView() :
 	GlMainView(), configDialog(NULL), graphProxy(NULL), parallelCoordsDrawing(NULL) , firstSet(true), lastNbSelectedProperties(0) {
-	addDependency<Interactor>("ParallelCoordsElementShowInfos", "1.0");
+	/*addDependency<Interactor>("ParallelCoordsElementShowInfos", "1.0");
 	addDependency<Interactor>("ParallelCoordsElementsSelector", "1.0");
 	addDependency<Interactor>("ParallelCoordsElementDeleter", "1.0");
 	addDependency<Interactor>("ParallelCoordsElementHighlighter", "1.0");
 	addDependency<Interactor>("ParallelCoordsAxisSwapper", "1.0");
-	addDependency<Interactor>("ParallelCoordsAxisSliders", "1.0");
+	addDependency<Interactor>("ParallelCoordsAxisSliders", "1.0");*/
 }
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
@@ -57,7 +56,7 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
 
 void ParallelCoordinatesView::cleanup() {
 
-	resetInteractors();
+	setActiveInteractor(NULL);
 
 	if (graphProxy != NULL) {
 		delete graphProxy;
@@ -296,11 +295,6 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		firstSet = false;
 	}
 
-	list<QAction *> *actions=getInteractorsActionList();
-	for(list<QAction *>::iterator it=actions->begin();it!=actions->end();++it){
-	  if((*it)->isChecked())
-	    (*it)->activate(QAction::Trigger);
-	}
 }
 
 void ParallelCoordinatesView::getData(Graph **graph, DataSet *dataSet) {
@@ -447,47 +441,6 @@ void ParallelCoordinatesView::refresh() {
 
 void ParallelCoordinatesView::init() {
 	draw();
-}
-
-//==================================================
-// Interactor functions
-//==================================================
-void ParallelCoordinatesView::constructInteractorsMap() {
-	MutableContainer<Interactor *> interactors;
-	InteractorManager::getInst().initInteractorList(interactors);
-	interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
-	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
-	interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementShowInfos"));
-	interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementsSelector"));
-	interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementDeleter"));
-	interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementHighlighter"));
-	interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSwapper"));
-	interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSliders"));
-	interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-	interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisBoxPlot"));
-	interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-}
-//==================================================
-void ParallelCoordinatesView::constructInteractorsActionList() {
-	interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"), "Zoom on rectangle", this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_element_highlighter.png"), "Highlight elements",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_swapper.png"),"Axis Swapper",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_sliders.png"),"Axis Sliders",this));
-	interactorsActionList.push_back(new QAction(QIcon(":/i_axis_boxplot.png"),"Axis Box Plot",this));
-}
-
-void ParallelCoordinatesView::installInteractor(QAction *action) {
-	resetInteractors(interactorsMap[action->text().toStdString()]);
 }
 
 void ParallelCoordinatesView::specificEventFilter(QObject *object,QEvent *event) {

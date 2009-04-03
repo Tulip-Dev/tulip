@@ -15,7 +15,7 @@
 #ifndef PARALLELCOORDSGLENTITIESSELECTOR_H_
 #define PARALLELCOORDSGLENTITIESSELECTOR_H_
 
-#include "ParallelTools.h"
+/*#include "ParallelTools.h"
 #include "ParallelCoordinatesView.h"
 
 #ifdef  _WIN32
@@ -31,10 +31,17 @@
 
 #include <string>
 
-#include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/GlMainView.h>
+*/
+
+#include <QtGui/QCursor>
+#include <QtCore/QEvent>
+
+#include <tulip/MouseSelector.h>
+
+#include "ParallelCoordinatesView.h"
 
 namespace tlp {
 
