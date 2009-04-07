@@ -20,8 +20,6 @@ namespace tlp {
 
 enum State { VECT=0, HASH=1 };
 
-class ImpossibleOperation : public std::exception {
-};
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //===================================================================
  struct AnyValueContainer {
@@ -144,15 +142,12 @@ public:
    */
   typename ReturnType<TYPE>::Value get(const unsigned int i, bool& isNotDefault);
   /**
-   * return an iterator for all the elements whose associated value
-   * if equal to a given value or different from the default value
+   * return a pointer on an iterator for all the elements whose associated value
+   * if equal to a given value or different from the default value.
+   * A null pointer is returned in case of an iteration on all the elements
+   * whose value is equal to the default value.
    */
-  IteratorValue* findAll(const TYPE &value, bool equal = true) const throw (ImpossibleOperation) ;
-  /**
-   * This operator is available only for optimisation purpose, one must be sure the 
-   * the referenced element is not the default value. Use this function extremely carefully
-   */
-  TYPE& operator[](const unsigned int i) throw (ImpossibleOperation);
+  IteratorValue* findAll(const TYPE &value, bool equal = true) const;
 private:
   MutableContainer(const MutableContainer<TYPE> &){}
   void operator=(const MutableContainer<TYPE> &){}
@@ -253,6 +248,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     delete hData; hData=0;
     break;
   default:
+    assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;  
   }
@@ -288,6 +284,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
     vData = new std::deque<typename StoredValueType<TYPE>::Value>();
     break;
   default:
+    assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break; 
   }
@@ -300,9 +297,10 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
 //===================================================================
 template <typename TYPE> 
   IteratorValue* MutableContainer<TYPE>::findAll(const TYPE &value,
-						 bool equal) const throw (ImpossibleOperation)  {
-  if (equal && value == defaultValue) 
-    throw ImpossibleOperation();
+						 bool equal) const {
+  if (equal && value == defaultValue)
+    // error
+    return NULL;
   else {
     switch (state) {
     case VECT: 
@@ -312,6 +310,7 @@ template <typename TYPE>
       return new IteratorHash<TYPE>(value, equal, hData);
       break;
     default:
+      assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       return 0;
       break; 
@@ -351,6 +350,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       }
       break;
     default:
+      assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break; 
     }
@@ -394,6 +394,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       (*hData)[i]= StoredValueType<TYPE>::copy(value);
       break;
     default:
+      assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break; 
     }
@@ -453,6 +454,7 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
       return defaultValue;
     break;
   default:
+    assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return defaultValue;
     break;
@@ -485,6 +487,7 @@ template <typename TYPE>
       return defaultValue;
     }
   default:
+    assert(false);
     notDefault = false;
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return defaultValue;
@@ -573,6 +576,7 @@ void MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsign
     }
     break;
   default:
+    assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break; 
   }

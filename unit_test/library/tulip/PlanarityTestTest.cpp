@@ -11,6 +11,7 @@
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/ExtendedClusterOperation.h>
 #include "PlanarityTestTest.h"
 
 using namespace std;
@@ -53,9 +54,9 @@ void PlanarityTestTest::notPlanarGraphs() {
   delete graph;
 }
 //==========================================================
-unsigned int eulerIdentity(SuperGraph *graph) {
+unsigned int eulerIdentity(Graph *graph) {
   return graph->numberOfEdges() - graph->numberOfNodes() 
-    + 1u + ConnectedTest::numberOfConnectedComponnents(graph);
+    + 1u + ConnectedTest::numberOfConnectedComponents(graph);
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
@@ -76,7 +77,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
    * The number of faces must be adapted because the Planarity Test split the 
    * external face into several faces (one by connected componnent).
    */
-  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponents(graph) - 1));  
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
@@ -96,7 +97,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
   cerr << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
-  SuperGraph * g= tlp::newCloneSubGraph(graph);
+  Graph * g= tlp::newCloneSubGraph(graph);
   set<node> toGroup;
   Iterator<node> * itn = g->getNodes();
   for(unsigned int i = 0; i < 10; ++i)
@@ -126,7 +127,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   graph->setAttribute("name", string("unconnected"));
   graphMap = new PlanarConMap(graph);
   cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  graphMap->makePlanar();
+  graphMap->makePlanar();*/
   /* 
    * The number of faces must be adapted because the Planarity Test split the 
    * external face into several faces (one by connected componnent).

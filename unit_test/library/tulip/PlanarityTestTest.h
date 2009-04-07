@@ -28,7 +28,7 @@ class PlanarityTestTest : public CppUnit::TestFixture {
   static CppUnit::Test *suite();
 
  private:
-  Graph *graph;
+  tlp::Graph *graph;
 };
 
 #endif 

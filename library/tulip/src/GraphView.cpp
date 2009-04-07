@@ -30,11 +30,8 @@ GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
   //  outDegree.setAll(0);
   if (filter == 0) return;
   Iterator<unsigned int> *it=0;
-  try {
-    it = filter->nodeProperties.findAll(true);
-  } catch (ImpossibleOperation &e) {
-    it=0;
-  }
+  it = filter->nodeProperties.findAll(true);
+
   Iterator<node> *iteN;
   if (it==0)
     iteN =getSuperGraph()->getNodes();
@@ -46,11 +43,8 @@ GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
     if (filter->getNodeValue(n)) addNode(n);
   } delete iteN;
 
-  try {
-    it = filter->edgeProperties.findAll(true);
-  } catch (ImpossibleOperation &e) {
-    it=0;
-  }
+  it = filter->edgeProperties.findAll(true);
+
   Iterator<edge> *iteE;
   if (it==0)
     iteE = getSuperGraph()->getEdges();
@@ -255,15 +249,9 @@ void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
   Iterator<unsigned int> *it=0;
-  try {
-    it = nodeAdaptativeFilter.findAll(true);
-  } catch (ImpossibleOperation &e) {
-    it=0;
-    //    if (numberOfNodes()<getSuperGraph()->numberOfNodes() / 2)
-    //      cerr << "GraphView : Optimization problem: " << numberOfNodes() << "/" << getSuperGraph()->numberOfNodes() << endl;
-  }
+  it = nodeAdaptativeFilter.findAll(true);
   if (it==0)
-    return (new SGraphNodeIterator(this, nodeAdaptativeFilter));
+    return new SGraphNodeIterator(this, nodeAdaptativeFilter);
   else
     return (new UINTIterator<node>(it));
 }
@@ -279,13 +267,9 @@ Iterator<node>* GraphView::getInOutNodes(const node n)const
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getEdges()const {
   Iterator<unsigned int> *it=0;
-  try {
-    it = edgeAdaptativeFilter.findAll(true);
-  } catch (ImpossibleOperation &e) {
-    it=0;
-  }
+  it = edgeAdaptativeFilter.findAll(true);
   if (it==0)
-    return (new SGraphEdgeIterator(this, edgeAdaptativeFilter));
+    return new SGraphEdgeIterator(this, edgeAdaptativeFilter);
   else
     return (new UINTIterator<edge>(it));
 }

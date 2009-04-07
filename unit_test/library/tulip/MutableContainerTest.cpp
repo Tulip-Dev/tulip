@@ -88,13 +88,9 @@ void MutableContainerTest::testFindAll() {
   Iterator<unsigned int> *itD;
   Iterator<unsigned int> *itS;
 
-  try {
-    itB = mutBool->findAll(true);
-    itD = mutDouble->findAll(13.0);
-    itS = mutString->findAll("Sophie");
-  } catch (ImpossibleOperation &e) {
-    std::cerr << "Impossible Operation" << std::endl;
-  }
+  itB = mutBool->findAll(true);
+  itD = mutDouble->findAll(13.0);
+  itS = mutString->findAll("Sophie");
   
   CPPUNIT_ASSERT( itB->next() == 10 );
   CPPUNIT_ASSERT( itD->next() == 10 );
@@ -111,29 +107,14 @@ void MutableContainerTest::testFindAll() {
   delete itB;
   delete itD;
   delete itS;
-  bool ok=false;
-  try {
-    itB = mutBool->findAll(false);
-  } catch (ImpossibleOperation &e) {
-    ok=true;
-  }
-  CPPUNIT_ASSERT( ok );
+  itB = mutBool->findAll(false);
+  CPPUNIT_ASSERT(itB == NULL);
 
-  ok=false;
-  try {
-    itD = mutDouble->findAll(10.0);
-  } catch (ImpossibleOperation &e) {
-    ok=true;
-  }
-  CPPUNIT_ASSERT( ok );
+  itD = mutDouble->findAll(10.0);
+  CPPUNIT_ASSERT(itD == NULL);
 
-  ok=false;
-  try {
-    itS = mutString->findAll("David");
-  } catch (ImpossibleOperation &e) {
-    ok=true;
-  }
-  CPPUNIT_ASSERT( ok );
+  itS = mutString->findAll("David");
+  CPPUNIT_ASSERT(itS == NULL);
 
 }
 //==========================================================

@@ -18,33 +18,21 @@ BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,Boolea
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it = 0;
-  if (sg == graph) {
-    try {
-      it = nodeProperties.findAll(val);
-    } catch (ImpossibleOperation &e) {
-      it=0;
-    }
-  }
-  if (it==0)
-    return (new SGraphNodeIterator(sg, nodeProperties));
-  else
-    return (new UINTIterator<node>(it));
+  if (sg == graph)
+    it = nodeProperties.findAll(val);
+  if (it == 0)
+    return new SGraphNodeIterator(sg, nodeProperties);
+  return (new UINTIterator<node>(it));
 }
 //=================================================================================
 Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it=0;
-  if (sg == graph) {
-    try {
-      it = edgeProperties.findAll(val);
-    } catch (ImpossibleOperation &e) {
-      it=0;
-    }
-  }
-  if (it==0)
-    return (new SGraphEdgeIterator(sg, edgeProperties));
-  else
-    return (new UINTIterator<edge>(it));
+  if (sg == graph)
+    it = edgeProperties.findAll(val);
+  if (it == 0)
+    return new SGraphEdgeIterator(sg, edgeProperties);
+  return (new UINTIterator<edge>(it));
 }
 //=================================================================================
 //Fonctionnalit� suppl�mentaire ajout� au seletion 
