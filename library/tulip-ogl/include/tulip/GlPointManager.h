@@ -54,8 +54,8 @@ namespace tlp {
 
     inline void beginRendering() {
       isBegin=true;
-      currentId1=0;
-      currentId2=0;
+      for(int i=0;i<3;i++)
+        currentId[i]=0;
     }
 
     inline void copyToNewTabs(GLuint **indices,Color **colors,Coord **coords,unsigned int oldSize, unsigned int newSize){
@@ -73,26 +73,20 @@ namespace tlp {
       *coords=newCoords;
     }
 
-    inline void addPoint(const Coord &coord,const Color &color,bool size) {
-      if(!size){
-        if(currentId1>=maxId1){
-          copyToNewTabs(&indices1,&colors1,&coords1,maxId1,maxId1*2);
-          maxId1=maxId1*2;
-        }
-        indices1[currentId1]=currentId1;
-        coords1[currentId1]=coord;
-        colors1[currentId1]=color;
-        currentId1++;
-      }else{
-        if(currentId2>=maxId2){
-          copyToNewTabs(&indices2,&colors2,&coords2,maxId2,maxId2*2);
-          maxId2=maxId2*2;
-        }
-        indices2[currentId2]=currentId2;
-        coords2[currentId2]=coord;
-        colors2[currentId2]=color;
-        currentId2++;
+    inline void addPoint(const Coord &coord,const Color &color,int size) {
+      assert(size==1 || size==2 || size==5);
+      int indice=size-1;
+      if(indice==4)
+        indice=2;
+
+      if(currentId[indice]>=maxId[indice]){
+        copyToNewTabs(&indices[indice],&colors[indice],&coords[indice],maxId[indice],maxId[indice]*2);
+        maxId[indice]=maxId[indice]*2;
       }
+      indices[indice][currentId[indice]]=currentId[indice];
+      coords[indice][currentId[indice]]=coord;
+      colors[indice][currentId[indice]]=color;
+      currentId[indice]++;
     }
 
     void endRendering();
@@ -103,31 +97,24 @@ namespace tlp {
      * Private constructor for singleton
      */
     GlPointManager():isBegin(false){
-      maxId1=1024;
-      maxId2=1024;
-      indices1 = new GLuint[1024];
-      colors1 = new Color[1024];
-      coords1 = new Coord[1024];
-      indices2 = new GLuint[1024];
-      colors2 = new Color[1024];
-      coords2 = new Coord[1024];
+      for(int i=0;i<3;i++){
+        maxId[i]=1024;
+        indices[i]= new GLuint[1024];
+        colors[i] = new Color[1024];
+        coords[i] = new Coord[1024];
+      }
     }
 
     static GlPointManager* inst;
 
     bool isBegin;
 
-    unsigned int currentId1;
-    unsigned int currentId2;
-    unsigned int maxId1;
-    unsigned int maxId2;
+    unsigned int currentId[3];
+    unsigned int maxId[3];
 
-    GLuint *indices1;
-    Color *colors1;
-    Coord *coords1;
-    GLuint *indices2;
-    Color *colors2;
-    Coord *coords2;
+    GLuint *indices[3];
+    Color *colors[3];
+    Coord *coords[3];
 
   };
 
