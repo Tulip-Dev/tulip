@@ -91,18 +91,23 @@ namespace tlp {
       if (lod < 1) lod = 1;
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
       Color color;
+      int size=sqrt(lod);
       if (!data->elementSelected->getNodeValue(n)) {
         color=fillColor;
+        if(size>2)
+          size=2;
       }else{
         color=colorSelect2;
+        if(size<5)
+          size=5;
       }
 
       if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
-        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]),color,sqrt(lod)>1);
+        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]),color,size);
       }else{
         glDisable(GL_LIGHTING);
         setColor(color);
-        glPointSize(sqrt(lod));
+        glPointSize(size);
         glBegin(GL_POINTS);
         glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
         glEnd();

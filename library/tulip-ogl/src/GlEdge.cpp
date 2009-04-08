@@ -135,7 +135,7 @@ namespace tlp {
 
     if(lod<5) {
       if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
-        GlPointManager::getInst().addPoint(srcCoord,*srcCol,false);
+        GlPointManager::getInst().addPoint(srcCoord,*srcCol,1);
       }else{
         setColor(*srcCol);
         glPointSize(1);
