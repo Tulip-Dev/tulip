@@ -540,9 +540,10 @@ namespace tlp {
     label->setText("No interactor configuration");
 
     configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
+    configWidgetTab->setTabPosition(QTabWidget::West);
     configWidgetDock->setWidget(configWidgetTab);
     configWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    configWidgetDock->setWindowTitle("Info Editor");
+    configWidgetDock->setWindowTitle("Configuration");
     configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
 
