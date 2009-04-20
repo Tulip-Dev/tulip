@@ -21,6 +21,9 @@
    </property>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget2" >
+     <property name="tabPosition" >
+      <enum>QTabWidget::West</enum>
+     </property>
      <property name="currentIndex" >
       <number>0</number>
      </property>
