@@ -112,17 +112,13 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libConeTreeExtended-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponent-%{version}.*
 %{prefix}/lib/tlp/libConnectedComponentPacking-%{version}.*
-%{prefix}/lib/tlp/libConvolutionClustering-%{version}.*
 %{prefix}/lib/tlp/libDagLevelMetric-%{version}.*
 %{prefix}/lib/tlp/libDendrogram-%{version}.*
 %{prefix}/lib/tlp/libDepthMetric-%{version}.*
 %{prefix}/lib/tlp/libDotImport-%{version}.*
 %{prefix}/lib/tlp/libEccentricity-%{version}.*
 %{prefix}/lib/tlp/libEmbedder-%{version}.*
-%{prefix}/lib/tlp/libEnumColorValuesMapping-%{version}.*
 %{prefix}/lib/tlp/libEqualValueClustering-%{version}.*
-%{prefix}/lib/tlp/libFileSystem-%{version}.*
-%{prefix}/lib/tlp/libFitToLabels-%{version}.*
 %{prefix}/lib/tlp/libGemLayout-%{version}.*
 %{prefix}/lib/tlp/libGMLExport-%{version}.*
 %{prefix}/lib/tlp/libGMLImport-%{version}.*
@@ -163,7 +159,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libTreeRadial-%{version}.*
 %{prefix}/lib/tlp/libTreeReingoldAndTilforExtended-%{version}.*
 %{prefix}/lib/tlp/libTutte-%{version}.*
-%{prefix}/lib/tlp/libWebImport-%{version}.*
 %{datadir}/aclocal/tulip.m4
 
 %files -n lib%{name}-ogl
