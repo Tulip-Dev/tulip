@@ -11,7 +11,7 @@ using namespace tlp;
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *sg):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg) {
+IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n) {
   minMaxOk=false;
   // the property observes itself; see afterSet... methods
   addPropertyObserver(this);
@@ -99,7 +99,7 @@ void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType> &p
 }
 
 //=================================================================================
-PropertyInterface* IntegerProperty::clonePrototype(Graph * g, std::string n)
+PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string& n)
 {
 	if( !g )
 		return 0;
@@ -157,7 +157,7 @@ void IntegerProperty::afterSetAllEdgeValue(PropertyInterface* prop) {
     minE = maxE = getEdgeDefaultValue();
 }
 //=================================================================================
-PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   IntegerVectorProperty * p = g->getLocalProperty<IntegerVectorProperty>( n );

@@ -12,7 +12,7 @@ using namespace tlp;
 
 //==============================
 ///Constructeur d'un DoubleProperty
-DoubleProperty::DoubleProperty (Graph *sg):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg),
+DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
@@ -199,7 +199,7 @@ void DoubleProperty::beforeSetAllEdgeValue(PropertyInterface*) {
   minMaxOkEdge.clear();
 }
 //=================================================================================
-PropertyInterface* DoubleProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   DoubleProperty * p = g->getLocalProperty<DoubleProperty>( n );
@@ -224,7 +224,7 @@ void DoubleProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=================================================================================
-PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   DoubleVectorProperty * p = g->getLocalProperty<DoubleVectorProperty>( n );

@@ -19,8 +19,8 @@ class TLP_SCOPE BooleanProperty:public AbstractProperty<BooleanType,BooleanType,
   friend class BooleanAlgorithm;
 
 public :
-  BooleanProperty (Graph *);
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void reverse();
@@ -32,8 +32,8 @@ public :
 
 class TLP_SCOPE BooleanVectorProperty:public AbstractProperty<BooleanVectorType,BooleanVectorType> { 
 public :
-  BooleanVectorProperty(Graph *g) :AbstractProperty<BooleanVectorType, BooleanVectorType>(g) {}
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  BooleanVectorProperty(Graph *g, std::string n="") :AbstractProperty<BooleanVectorType, BooleanVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };

@@ -8,8 +8,8 @@ using namespace std;
 using namespace tlp;
 
 //==============================
-GraphProperty::GraphProperty (Graph *sg) : 
-  AbstractProperty<GraphType, EdgeSetType>(sg) {
+GraphProperty::GraphProperty (Graph *sg, std::string n) : 
+  AbstractProperty<GraphType, EdgeSetType>(sg, n) {
   setAllNodeValue(0);
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
@@ -118,7 +118,7 @@ void GraphProperty::destroy(Graph *sg) {
   }
 }
 //============================================================
-PropertyInterface* GraphProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   GraphProperty * p = g->getLocalProperty<GraphProperty>( n );

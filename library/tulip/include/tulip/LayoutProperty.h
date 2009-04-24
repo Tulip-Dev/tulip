@@ -22,9 +22,9 @@ class Graph;
   friend class LayoutAlgorithm;
 
 public:
-  LayoutProperty (Graph *);
+  LayoutProperty (Graph *, std::string n="");
 
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 
@@ -108,8 +108,8 @@ private:
 
 class TLP_SCOPE CoordVectorProperty:public AbstractProperty<CoordVectorType,CoordVectorType> { 
 public :
-  CoordVectorProperty(Graph *g):AbstractProperty<CoordVectorType, CoordVectorType>(g) {}
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  CoordVectorProperty(Graph *g, std::string n=""):AbstractProperty<CoordVectorType, CoordVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };

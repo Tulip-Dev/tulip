@@ -35,6 +35,10 @@ namespace tlp {
 /*@{*/
 //=============================================================
 class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
+protected:
+  // name field
+  std::string name;
+
 public:
   virtual ~PropertyInterface();
 
@@ -42,12 +46,17 @@ public:
   virtual void erase(const edge) =0;
   virtual void copy(const node, const node, PropertyInterface *) =0;
   virtual void copy(const edge, const edge, PropertyInterface *) =0;
-  virtual PropertyInterface* clonePrototype(Graph *, std::string) =0;
+  virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
   //=================================================================================
   // Returns a string describing the type of the property.
   // i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
   virtual std::string getTypename() = 0;
   static  std::string getTypename( PropertyInterface * );
+
+  // name management
+  const std::string& getName() {
+    return name;
+  }
 
   // Untyped accessors
   virtual std::string getNodeDefaultStringValue() = 0;
@@ -103,7 +112,7 @@ public:
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
     }
   }
-  AbstractProperty(Graph *);
+  AbstractProperty(Graph *, std::string n = "");
   /** 
    * Returns the node default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory

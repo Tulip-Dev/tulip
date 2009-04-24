@@ -11,10 +11,6 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================================
-BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(sg) {
-  //  propertyProxy=this;
-}
-//=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it = 0;
@@ -67,7 +63,7 @@ void BooleanProperty::reverseEdgeDirection() {
   } delete itE;
 }
 //=================================================================================
-PropertyInterface* BooleanProperty::clonePrototype(Graph * g, std::string n)
+PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n)
 {
 	if( !g )
 		return 0;
@@ -95,7 +91,7 @@ void BooleanProperty::copy( const edge e0, const edge e1, PropertyInterface * p 
 	setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=================================================================================
-PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   BooleanVectorProperty * p = g->getLocalProperty<BooleanVectorProperty>( n );

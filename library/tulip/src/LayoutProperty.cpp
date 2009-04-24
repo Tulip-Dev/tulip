@@ -11,7 +11,7 @@ using namespace tlp;
 inline double sqr(double x){return (x*x);}
 
 //======================================================
-LayoutProperty::LayoutProperty (Graph *sg):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg) {
+LayoutProperty::LayoutProperty (Graph *sg, std::string n):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg, n) {
   minMaxOk[(unsigned long)graph]=false;
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
@@ -493,7 +493,7 @@ unsigned int LayoutProperty::crossingNumber() {
   return 0;
 }
 //=================================================================================
-PropertyInterface* LayoutProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   LayoutProperty * p = g->getLocalProperty<LayoutProperty>( n );
@@ -518,7 +518,7 @@ void LayoutProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=================================================================================
-PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   CoordVectorProperty * p = g->getLocalProperty<CoordVectorProperty>( n );

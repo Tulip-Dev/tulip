@@ -11,8 +11,8 @@ using namespace std;
 using namespace tlp;
 
 //==============================
-SizeProperty::SizeProperty (Graph *sg):
-  AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg) {
+SizeProperty::SizeProperty (Graph *sg, std::string n):
+  AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg, n) {
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
 }
@@ -108,7 +108,7 @@ void SizeProperty::beforeSetAllEdgeValue(PropertyInterface*) {
   resetMinMax();
 }
 //=============================================================================
-PropertyInterface* SizeProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   SizeProperty * p = g->getLocalProperty<SizeProperty>( n );
@@ -133,7 +133,7 @@ void SizeProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=============================================================================
-PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   SizeVectorProperty * p = g->getLocalProperty<SizeVectorProperty>( n );

@@ -20,9 +20,9 @@ class GraphAbstract;
   friend class GraphAbstract;
 
 public :
-  GraphProperty (Graph *);
+  GraphProperty (Graph *, std::string n="");
   virtual ~GraphProperty();
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void destroy(Graph *);

@@ -9,12 +9,8 @@
 using namespace std;
 using namespace tlp;
 
-StringProperty::StringProperty (Graph *sg):AbstractProperty<StringType,StringType, StringAlgorithm>(sg) {
-  //  propertyProxy=this;
-}
-  
 //=================================================================================
-PropertyInterface* StringProperty::clonePrototype(Graph * g, std::string n)
+PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n)
 {
 	if( !g )
 		return 0;
@@ -41,7 +37,7 @@ void StringProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
 	setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=================================================================================
-PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   StringVectorProperty * p = g->getLocalProperty<StringVectorProperty>( n );

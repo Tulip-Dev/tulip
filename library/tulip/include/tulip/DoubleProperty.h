@@ -21,12 +21,12 @@ class PropertyContext;
   friend class DoubleAlgorithm;
 
 public :
-  DoubleProperty (Graph *);
+  DoubleProperty (Graph *, std::string n="");
   DoubleType::RealType  getNodeMin(Graph *sg=0);
   DoubleType::RealType  getNodeMax(Graph *sg=0);
   DoubleType::RealType  getEdgeMin(Graph *sg=0);
   DoubleType::RealType  getEdgeMax(Graph *sg=0);
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void uniformQuantification(unsigned int);
@@ -49,8 +49,8 @@ private:
 
 class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<DoubleVectorType,DoubleVectorType> { 
 public :
-  DoubleVectorProperty(Graph *g):AbstractProperty<DoubleVectorType, DoubleVectorType>(g) {}
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  DoubleVectorProperty(Graph *g, std::string n=""):AbstractProperty<DoubleVectorType, DoubleVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };

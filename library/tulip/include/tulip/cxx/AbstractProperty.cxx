@@ -21,8 +21,9 @@
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > AbstractProperty<Tnode,Tedge,TPROPERTY>::factory;*/
 
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg):
+tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n):
   graph(sg) {
+  name = n;
   circularCall = false;
   nodeDefaultValue = Tnode::defaultValue();
   edgeDefaultValue = Tedge::defaultValue();
