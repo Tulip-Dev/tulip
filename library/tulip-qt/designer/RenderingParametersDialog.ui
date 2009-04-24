@@ -484,7 +484,7 @@
    <sender>edge3D</sender>
    <signal>stateChanged(int)</signal>
    <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateview()</slot>
+   <slot>updateView()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>238</x>
@@ -500,7 +500,7 @@
    <sender>fonts</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateview()</slot>
+   <slot>updateView()</slot>
    <hints>
     <hint type="sourcelabel" >
      <x>111</x>
