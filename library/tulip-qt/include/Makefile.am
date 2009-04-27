@@ -48,9 +48,12 @@ nobase_include_HEADERS = \
 	tulip/AbstractView.h \
 	tulip/GraphPropertiesSelectionWidget.h \
 	tulip/ItemsListWidget.h \
-	tulip/StringListSelectionWidget.h \
+	tulip/StringsListSelectionWidget.h \
 	tulip/ViewPluginsManager.h \
-	tulip/ColorScaleConfigDialog.h
+	tulip/ColorScaleConfigDialog.h \
+	tulip/StringsListSelectionWidgetInterface.h \
+	tulip/SimpleStringsListSelectionWidget.h \
+	tulip/DoubleStringsListSelectionWidget.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h
@@ -69,8 +72,9 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
-	tulip/StringListSelectionWidgetData.h \
-	tulip/ColorScaleConfigDialogData.h
+	tulip/ColorScaleConfigDialogData.h \
+	tulip/SimpleStringsListSelectionWidgetData.h \
+	tulip/DoubleStringsListSelectionWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -84,8 +88,9 @@ BUILT_SOURCES = \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
-	tulip/StringListSelectionWidgetData.h \
 	tulip/ColorScaleConfigDialogData.h \
+	tulip/SimpleStringsListSelectionWidgetData.h \
+	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \

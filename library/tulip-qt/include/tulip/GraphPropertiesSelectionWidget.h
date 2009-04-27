@@ -10,7 +10,7 @@
 
 #include <tulip/AbstractProperty.h>
 
-#include "StringListSelectionWidget.h"
+#include "StringsListSelectionWidget.h"
 
 namespace tlp {
 
@@ -19,14 +19,15 @@ namespace tlp {
  *  This widget allows the user to select a subset of graph properties. The properties
  *  to select can be filtered according to their datatypes.
  */
-class TLP_QT_SCOPE GraphPropertiesSelectionWidget : public StringListSelectionWidget {
+class TLP_QT_SCOPE GraphPropertiesSelectionWidget : public StringsListSelectionWidget {
 
 public :
 
 	/**
 	 * Default Constructor (usefull for qt designer)
 	 */
-	GraphPropertiesSelectionWidget(QWidget *parent = 0);
+	GraphPropertiesSelectionWidget(QWidget *parent = 0, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
+								   const unsigned int maxNbSelectedProperties = 0);
 
 	/**
 	 *  Constructor which creates a GraphPropertiesSelectionWidget for a given graph
@@ -35,7 +36,9 @@ public :
 	 *  \param propertiesType To select properties with particular datatypes, fill a vector of string with the wanted datatypes name and passed it as parameter of this constructor. The datatypes name must be the same as those returned by the getTypename method of the PropertyInterface class (e.g. "int", "double", "string"). If the vector is empty, there is no restriction on property datatypes.
 	 *  \param includeViewProperties If true, the view properties (e.g. "viewLabel", "viewMetric") will be selectable
 	 */
-	GraphPropertiesSelectionWidget(Graph *graph, const std::vector<std::string> &propertiesTypes = std::vector<std::string>(), const bool includeViewProperties = false, QWidget *parent = 0);
+	GraphPropertiesSelectionWidget(Graph *graph, QWidget *parent = 0, const StringsListSelectionWidget::ListType &listType = StringsListSelectionWidget::SIMPLE_LIST,
+								   const unsigned int maxNbSelectedProperties = 0, const std::vector<std::string> &propertiesTypes = std::vector<std::string>(),
+								   const bool includeViewProperties = false);
 
 	/**
 	 * Method to set the widget parameters

@@ -10,6 +10,8 @@ dist_noinst_DATA = FindSelection.ui \
 	GridOptions.ui \
 	QtProgress.ui \
 	ColorScaleConfigDialog.ui \
+	SimpleStringsListSelectionWidget.ui \
+	DoubleStringsListSelectionWidget.ui \
 	i_addedge.png \
 	i_addnode.png \
 	i_bends.png \

@@ -53,6 +53,7 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
   // Method which sets the maximum size of the list
   // if 0, there is no size restriction
   void setMaxListSize(const unsigned int maxListSize) {this->maxListSize = maxListSize;}
+  unsigned int getMaxListSize() const {return maxListSize;}
 
  protected:
 

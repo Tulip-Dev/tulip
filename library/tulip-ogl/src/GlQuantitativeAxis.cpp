@@ -80,7 +80,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 			maxV = maxLog = log(max) / log(logBase);
 		} else {
 			minV = minLog = 0;
-			maxV = maxLog = log(max - min + 1) / log(logBase);
+			maxV = maxLog = log(max - min) / log(logBase);
 		}
 	}
 

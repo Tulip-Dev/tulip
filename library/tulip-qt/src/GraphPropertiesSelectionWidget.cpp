@@ -11,7 +11,7 @@ using namespace std;
 
 const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewLabel",
 									 "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph",
-									 "viewMetric", "viewRotation", "viewSelection", "viewShape", "viewSize",
+									 "viewRotation", "viewSelection", "viewShape", "viewSize",
 									 "viewTexture"};
 
 const unsigned int nbViewProperties = sizeof(viewPropertiesName) / sizeof(string);
@@ -20,10 +20,13 @@ const vector<string> graphViewProperties(viewPropertiesName, viewPropertiesName 
 
 namespace tlp {
 
-GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(QWidget *parent) : StringListSelectionWidget(parent) {}
+GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(QWidget *parent, const StringsListSelectionWidget::ListType &listType, const unsigned int maxNbSelectedProperties) :
+	StringsListSelectionWidget(parent, listType, maxNbSelectedProperties) {}
 
-GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(Graph *graph, const std::vector<std::string> &propertiesTypes, const bool includeViewProperties, QWidget *parent)  :
-	StringListSelectionWidget(parent), graph(graph), propertiesTypes(propertiesTypes), includeViewProperties(includeViewProperties) {
+GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(Graph *graph, QWidget *parent, const StringsListSelectionWidget::ListType &listType,
+															   const unsigned int maxNbSelectedProperties, const std::vector<std::string> &propertiesTypes,
+															   const bool includeViewProperties)  :
+	StringsListSelectionWidget(parent, listType, maxNbSelectedProperties), graph(graph), propertiesTypes(propertiesTypes), includeViewProperties(includeViewProperties) {
 	initWidget();
 }
 
@@ -39,8 +42,8 @@ void GraphPropertiesSelectionWidget::initWidget() {
 	string propertyName;
 	vector<string> inputProperties;
 
-	setInputStringListLabel("Available properties");
-	setOutputStringListLabel("Selected properties");
+	setUnselectedStringsListLabel("Available properties");
+	setSelectedStringsListLabel("Selected properties");
 
 	while (it->hasNext()) {
 		propertyName = it->next();
@@ -49,7 +52,7 @@ void GraphPropertiesSelectionWidget::initWidget() {
 	    }
 	}
 
-	setInputStringList(inputProperties);
+	setUnselectedStringsList(inputProperties);
 }
 
 bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &propertyName) {
@@ -76,7 +79,7 @@ void GraphPropertiesSelectionWidget::setInputPropertiesList(vector<string> &inpu
 			inputPropertiesListFiltered.push_back(inputPropertiesList[i]);
 		}
 	}
-	setInputStringList(inputPropertiesListFiltered);
+	setUnselectedStringsList(inputPropertiesListFiltered);
 }
 
 void GraphPropertiesSelectionWidget::setOutputPropertiesList(vector<string> &outputPropertiesList) {
@@ -86,16 +89,16 @@ void GraphPropertiesSelectionWidget::setOutputPropertiesList(vector<string> &out
 			outputPropertiesListFiltered.push_back(outputPropertiesList[i]);
 		}
 	}
-	setOutputStringList(outputPropertiesListFiltered);
+	setSelectedStringsList(outputPropertiesListFiltered);
 }
 
 vector<string> GraphPropertiesSelectionWidget::getSelectedProperties() const {
-	return getOutputStringList();
+	return getSelectedStringsList();
 }
 
 void GraphPropertiesSelectionWidget::clearLists() {
-	clearInputStringList();
-	clearOutputStringList();
+	clearSelectedStringsList();
+	clearUnselectedStringsList();
 }
 
 }

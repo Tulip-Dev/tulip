@@ -76,7 +76,10 @@ BUILT_SOURCES = \
 	moc_AbstractView.cpp \
 	moc_GraphPropertiesSelectionWidget.cpp \
 	moc_ItemsListWidget.cpp \
-	moc_StringListSelectionWidget.cpp  \
+	moc_StringsListSelectionWidgetInterface.cpp \
+	moc_StringsListSelectionWidget.cpp  \
+	moc_SimpleStringsListSelectionWidget.cpp \
+	moc_DoubleStringsListSelectionWidget.cpp \
 	moc_ColorScaleConfigDialog.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
@@ -127,7 +130,9 @@ dist_libtulip_qt4_la_SOURCES = \
 	GridOptionsWidget.cpp \
 	GraphPropertiesSelectionWidget.cpp \
 	ItemsListWidget.cpp \
-	StringListSelectionWidget.cpp \
+	StringsListSelectionWidget.cpp \
+	SimpleStringsListSelectionWidget.cpp \
+	DoubleStringsListSelectionWidget.cpp \
 	ColorScaleConfigDialog.cpp
 
 CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
