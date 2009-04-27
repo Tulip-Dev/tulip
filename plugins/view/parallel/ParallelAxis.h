@@ -17,8 +17,8 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/GlAxis.h>
+#include <tulip/GlRect.h>
 
 #include <vector>
 #include <set>
@@ -39,7 +39,7 @@ class ParallelAxis : public GlSimpleEntity {
 
   virtual ~ParallelAxis();
 
-  BoundingBox getBoundingBox() {return glAxis->getBoundingBox();}
+  BoundingBox getBoundingBox();
   void setStencil(int stencil) {glAxis->setStencil(stencil);}
   void draw(float lod,Camera *camera);
   void translate(const Coord &c);
@@ -50,7 +50,9 @@ class ParallelAxis : public GlSimpleEntity {
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;
   virtual void showConfigDialog() = 0;
 
-  Coord getBaseCoord() const {return glAxis->getAxisBaseCoord();}
+  void setBaseCoord(const Coord &baseCoord);
+  Coord getBaseCoord() const;
+  Coord getTopCoord() const;
   std::string getAxisName() const {return glAxis->getAxisName();}
   float getAxisHeight() const {return glAxis->getAxisLength();}
   float getAxisGradsWidth() {return glAxis->getAxisGradsWidth();}
@@ -59,6 +61,7 @@ class ParallelAxis : public GlSimpleEntity {
   Color getAxisColor() const {return glAxis->getAxisColor();}
   void setAxisColor(const Color &axisColor) {glAxis->setAxisColor(axisColor);}
   void setMaxCaptionWidth(const float maxCaptionWidth) {glAxis->setMaxCaptionWidth(maxCaptionWidth);}
+  void setCaptionPosition(const GlAxis::LabelPosition captionPosition);
 
   void setSlidersActivated(const bool slidersActivated) {this->slidersActivated = slidersActivated;}
   bool isSlidersActivated() {return slidersActivated;}
@@ -77,15 +80,26 @@ class ParallelAxis : public GlSimpleEntity {
   virtual std::set<unsigned int> getDataInSlidersRange() = 0;
   virtual void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
 
+  void enableTrickForSelection();
+  void disableTrickForSelection();
+
+  void setRotationAngle(const float rotationAngle);
+  float getRotationAngle() const {return rotationAngle;}
+  Vector<Coord, 4> getBoundingPolygonCoords() const;
+
+
  protected :
 
-  ParallelAxis(GlAxis *glAxis, const float 	axisAreaWidth);
+  ParallelAxis(GlAxis *glAxis, const float 	axisAreaWidth, const float rotationAngle, const GlAxis::LabelPosition captionPosition = GlAxis::LEFT_OR_BELOW);
 
   GlAxis *glAxis;
+  GlRect *emptyRect;
 
+  float axisAreaWidth;
   bool slidersActivated;
   Coord topSliderCoord;
   Coord bottomSliderCoord;
+  float rotationAngle;
   bool hidden;
 
 };

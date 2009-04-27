@@ -29,13 +29,16 @@
 
 #include "ParallelAxis.h"
 #include "ParallelCoordinatesGraphProxy.h"
-#include "ParallelTools.h"
 
 namespace tlp {
 
 class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
 
 public :
+
+	enum LayoutType {PARALLEL, CIRCULAR};
+
+	enum LinesType {STRAIGHT, SPLINE};
 
   ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
@@ -47,7 +50,6 @@ public :
   unsigned int nbParallelAxis() const;
   const std::vector<std::string>& getAxisNames() const;
   void swapAxis(ParallelAxis *axis1, ParallelAxis *axis2);
-  ParallelAxis *getAxisUnderPoint(const Coord &coord);
   void removeAxis(ParallelAxis *axis);
   void addAxis(ParallelAxis *axis);
 
@@ -58,9 +60,9 @@ public :
   void setDrawPointsOnAxis(const bool drawPointsOnAxis) {this->drawPointsOnAxis = drawPointsOnAxis;}
   void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {this->linesColorAlphaValue = linesColorAlphaValue;}
   void setLineTextureFilename(std::string lineTextureFilename) {this->lineTextureFilename = lineTextureFilename;}
-  void setViewType(const viewType vType) {this->vType = vType;}
   void setBackgroundColor(const Color &backgroundColor) {this->backgroundColor = backgroundColor;}
-  const viewType getViewType() const {return vType;}
+  void setLayoutType(const LayoutType layoutType) {this->layoutType = layoutType;}
+  void setLinesType(const LinesType linesType) {this->linesType = linesType;}
   std::vector<ParallelAxis *> getAllAxis();
 
   void update();
@@ -80,6 +82,7 @@ public :
 
   void computeResizeFactor();
   void createAxis();
+  void destroyAxisIfNeeded();
   void plotAllData();
   void plotData(const unsigned int dataIdx, const Color &color);
 
@@ -105,7 +108,6 @@ public :
 
   ParallelCoordinatesGraphProxy *graphProxy;
 
-  viewType vType;
   Color backgroundColor;
   std::string lineTextureFilename;
   Size axisPointMinSize;
@@ -126,6 +128,9 @@ public :
   StringProperty *axisPointsGraphLabels;
   ColorProperty *axisPointsGraphColors;
   BooleanProperty *axisPointsGraphSelection;
+
+  LayoutType layoutType;
+  LinesType linesType;
 };
 
 }

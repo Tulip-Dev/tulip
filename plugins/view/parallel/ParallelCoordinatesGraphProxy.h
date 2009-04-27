@@ -26,7 +26,6 @@
 #include <tulip/Size.h>
 #include <tulip/StableIterator.h>
 
-#include "ParallelTools.h"
 
 namespace tlp {
 

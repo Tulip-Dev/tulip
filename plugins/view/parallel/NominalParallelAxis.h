@@ -30,7 +30,7 @@ class NominalParallelAxis : public ParallelAxis {
 
  public :
 
-  NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const Color &axisColor);
+  NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const Color &axisColor, const float rotationAngle = 0, const GlAxis::LabelPosition captionPosition = GlAxis::LEFT_OR_BELOW);
 
   Coord getLabelCoord(const std::string &label);
 
@@ -45,8 +45,8 @@ class NominalParallelAxis : public ParallelAxis {
   const std::vector<std::string> &getLabelsOrder() const {return labelsOrder;}
   void setLabelsOrder(const std::vector<std::string> &labelsOrder) {this->labelsOrder = labelsOrder;}
 
-  std::string getTopSliderTextValue() {return "";}
-  std::string getBottomSliderTextValue() {return "";}
+  std::string getTopSliderTextValue() {return " ";}
+  std::string getBottomSliderTextValue() {return " ";}
 
   std::set<unsigned int> getDataInSlidersRange();
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);

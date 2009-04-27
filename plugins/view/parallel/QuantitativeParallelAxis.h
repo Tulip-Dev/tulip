@@ -44,7 +44,9 @@ class QuantitativeParallelAxis : public ParallelAxis {
 
 public :
 
-  QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0));
+  QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
+						  const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0),
+						  const float rotationAngle = 0, const GlAxis::LabelPosition captionPosition = GlAxis::LEFT_OR_BELOW);
 
   void setNbAxisGrad(const unsigned int nbAxisGrad) {this->nbAxisGrad = nbAxisGrad;}
   unsigned int getNbAxisGrad() const {return nbAxisGrad;}
@@ -107,9 +109,10 @@ public :
   void setAxisLabels();
 
   GlQuantitativeAxis *glQuantitativeAxis;
-  double axisMinValue, axisMaxValue;
 
   unsigned int nbAxisGrad;
+  double axisMinValue, axisMaxValue;
+
   ParallelCoordinatesGraphProxy *graphProxy;
   bool log10Scale;
 

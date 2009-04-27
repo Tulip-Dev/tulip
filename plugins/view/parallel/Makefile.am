@@ -38,16 +38,32 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelCoordsAxisSwapper.cpp \
 			ParallelCoordsAxisSliders.cpp \
 			ParallelCoordsAxisBoxPlot.cpp \
-			ParallelCoordinatesInteractors.cpp
+			ParallelCoordinatesInteractors.cpp \
+			ParallelTools.cpp \
+			ParallelCoordsDataConfigWidget.cpp \
+			ParallelCoordsDataConfigWidget.h \
+			ParallelCoordsDrawConfigWidget.cpp \
+			ParallelCoordsDrawConfigWidget.h \
+			GlBezierCurve.h \
+			GlBezierCurve.cpp \
+			FastBezier.h \
+			FastBezier.cpp \
+			GlSmoothCurve.h \
+			GlSmoothCurve.cpp \
+			CurveUtils.h \
+			CurveUtils.cpp
 
 nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelResource.cpp \
 			moc_ParallelCoordinatesView.cpp \
 			moc_ParallelCoordinatesConfigDialog.cpp \
-			moc_AxisConfigDialogs.cpp
+			moc_AxisConfigDialogs.cpp \
+			moc_ParallelCoordsDrawConfigWidget.cpp
 			
 
-BUILT_SOURCES = ParallelCoordinatesConfigDialogData.h
+BUILT_SOURCES = ParallelCoordinatesConfigDialogData.h \
+				ParallelCoordsDataConfigWidgetData.h  \
+				ParallelCoordsDrawConfigWidgetData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

@@ -8,8 +8,8 @@ using namespace std;
 
 namespace tlp {
 
-NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor) :
-  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth), graphProxy(graph) {
+NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor, const float rotationAngle, const GlAxis::LabelPosition captionPosition) :
+  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth, rotationAngle, captionPosition), graphProxy(graph) {
 	glNominativeAxis = dynamic_cast<GlNominativeAxis *>(glAxis);
   setLabels();
   ParallelAxis::redraw();
@@ -38,7 +38,11 @@ NominalParallelAxis::setLabels() {
 
 Coord NominalParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
   string propertyValue = graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataIdx);
-  return glNominativeAxis->getAxisPointCoordForValue(propertyValue);
+  Coord axisPointCoord = glNominativeAxis->getAxisPointCoordForValue(propertyValue);
+  if (rotationAngle != 0) {
+	  rotateVector(axisPointCoord, rotationAngle, Z_ROT);
+  }
+  return axisPointCoord;
 }
 
 void NominalParallelAxis::showConfigDialog() {
@@ -72,6 +76,8 @@ set<unsigned int> NominalParallelAxis::getDataInSlidersRange() {
 }
 
 void NominalParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {
+	float rotAngleBak = rotationAngle;
+	rotationAngle = 0;
 	set<unsigned int>::iterator it;
 	Coord max = getBaseCoord();
 	Coord min = getBaseCoord() + Coord(0, getAxisHeight());
@@ -87,6 +93,7 @@ void NominalParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &d
 	}
 	bottomSliderCoord = min;
 	topSliderCoord = max;
+	rotationAngle = rotAngleBak;
 }
 
 void NominalParallelAxis::redraw() {

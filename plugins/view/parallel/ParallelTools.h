@@ -25,8 +25,6 @@
 
 namespace tlp {
 
-enum viewType {VIEW_2D, VIEW_2D_SPLINE};
-
 const std::string DEFAULT_TEXTURE_FILE = "parallel_texture.png";
 
 const std::string SLIDER_TEXTURE_NAME = "parallel_sliders_texture.png";
@@ -64,6 +62,13 @@ std::string getStringFromNumber(T number) {
   oss << number;
   return oss.str();
 }
+
+const int X_ROT = 0;
+const int Y_ROT = 1;
+const int Z_ROT = 2;
+void rotateVector(Coord &vec, double alpha, int rot);
+
+Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]);
 
 }
 

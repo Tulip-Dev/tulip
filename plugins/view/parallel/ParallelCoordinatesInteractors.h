@@ -37,40 +37,6 @@ namespace tlp {
     }
 
   };
-  /*
-    interactorsMap["Navigate in graph"].push_back(InteractorManager::getInst().getInteractor("MouseNKeysNavigator"));
-    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));
-    interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementShowInfos"));
-    interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementsSelector"));
-    interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementDeleter"));
-    interactorsMap["Delete nodes or edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-
-    interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsElementHighlighter"));
-    interactorsMap["Highlight elements"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSwapper"));
-    interactorsMap["Axis Swapper"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisSliders"));
-    interactorsMap["Axis Sliders"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("ParallelCoordsAxisBoxPlot"));
-    interactorsMap["Axis Box Plot"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-  }
-  //==================================================
-  void ParallelCoordinatesView::constructInteractorsActionList() {
-    interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"), "Zoom on rectangle", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
-
-    interactorsActionList.push_back(new QAction(QIcon(":/i_element_highlighter.png"), "Highlight elements",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_axis_swapper.png"),"Axis Swapper",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_axis_sliders.png"),"Axis Sliders",this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_axis_boxplot.png"),"Axis Box Plot",this));
-  }
-   */
 
   /** \brief Parallel coordinates interactor to select elements
     *
@@ -94,14 +60,14 @@ namespace tlp {
   /** \brief Parallel coordinates interactor to highlite elements
    *
    */
-  class InteractorHighLiter  : public ParallelCoordinatesInteractor {
+  class InteractorHighLighter  : public ParallelCoordinatesInteractor {
 
   public:
 
     /**
      * Default constructor
      */
-    InteractorHighLiter();
+    InteractorHighLighter();
 
     /**
      * Construct chain of responsibility
@@ -164,6 +130,25 @@ namespace tlp {
      * Construct chain of responsibility
      */
     void construct();
+
+  };
+
+  /** \brief Parallel coordinates interactor to show element properties when clicking on it
+     *
+     */
+  class InteractorShowElementInfos : public ParallelCoordinatesInteractor {
+
+  public :
+
+	  /**
+	   * Default constructor
+	   */
+	  InteractorShowElementInfos();
+
+	  /**
+	   * Construct chain of responsibility
+	   */
+	  void construct();
 
   };
 

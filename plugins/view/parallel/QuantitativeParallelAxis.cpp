@@ -11,9 +11,9 @@ using namespace std;
 namespace tlp {
 
 QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
-													const string &graphPropertyName, const bool ascendingOrder, const Color &axisColor) :
-  ParallelAxis(new GlQuantitativeAxis(graphPropertyName, baseCoord, height, GlAxis::VERTICAL_AXIS, axisColor, true, ascendingOrder), axisAreaWidth),
-  nbAxisGrad(DEFAULT_NB_AXIS_GRAD), graphProxy(graphProxy), log10Scale(false) {
+													const string &graphPropertyName, const bool ascendingOrder, const Color &axisColor, const float rotationAngle, const GlAxis::LabelPosition captionPosition) :
+  ParallelAxis(new GlQuantitativeAxis(graphPropertyName, baseCoord, height, GlAxis::VERTICAL_AXIS, axisColor, true, ascendingOrder), axisAreaWidth, rotationAngle, captionPosition),
+  nbAxisGrad(DEFAULT_NB_AXIS_GRAD), axisMinValue(DBL_MAX), axisMaxValue(DBL_MIN), graphProxy(graphProxy),  log10Scale(false)  {
   glQuantitativeAxis = dynamic_cast<GlQuantitativeAxis *>(glAxis);
   boxPlotValuesCoord.resize(5);
   boxPlotStringValues.resize(5);
@@ -21,8 +21,14 @@ QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const
 }
 
 void QuantitativeParallelAxis::setAxisLabels() {
-	axisMinValue = getAssociatedPropertyMinValue();
-	axisMaxValue = getAssociatedPropertyMaxValue();
+	double propertyMin = getAssociatedPropertyMinValue();
+	double propertyMax = getAssociatedPropertyMaxValue();
+	if (axisMinValue > propertyMin || propertyMin == propertyMax) {
+		axisMinValue = propertyMin;
+	}
+	if (axisMaxValue < propertyMax || propertyMin == propertyMax) {
+		axisMaxValue = propertyMax;
+	}
 	glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
 	glQuantitativeAxis->setLogScale(log10Scale);
 }
@@ -103,8 +109,6 @@ void QuantitativeParallelAxis::computeBoxPlotCoords() {
 				break;
 			}
 		}
-
-
 
 		boxPlotValuesCoord[BOTTOM_OUTLIER] = getAxisCoordForValue(bottomOutlier);
 		boxPlotValuesCoord[FIRST_QUARTILE] = getAxisCoordForValue(firstQuartile);
@@ -207,7 +211,11 @@ Coord QuantitativeParallelAxis::getPointCoordOnAxisForData(const unsigned int da
 	} else if (getAxisDataTypeName() == "int") {
 		value = (double) graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>(getAxisName(), dataIdx);
 	}
-	return glQuantitativeAxis->getAxisPointCoordForValue(value);
+	Coord axisPointCoord = glQuantitativeAxis->getAxisPointCoordForValue(value);
+	if (rotationAngle != 0) {
+		rotateVector(axisPointCoord, rotationAngle, Z_ROT);
+	}
+	return axisPointCoord;
 }
 
 Coord QuantitativeParallelAxis::getAxisCoordForValue(double value) {
@@ -229,7 +237,6 @@ void QuantitativeParallelAxis::showConfigDialog() {
 string QuantitativeParallelAxis::getAxisDataTypeName() const {
 	return graphProxy->getProperty(getAxisName())->getTypename();
 }
-
 
 double QuantitativeParallelAxis::getValueForAxisCoord(const Coord &axisCoord) {
 	return glQuantitativeAxis->getValueForAxisPoint(axisCoord);
@@ -257,6 +264,8 @@ std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
 
 set<unsigned int> QuantitativeParallelAxis::getDataInRange(float yLowBound, float yHighBound) {
 	set<unsigned int> dataSubset;
+	float rotAngleBak = rotationAngle;
+	rotationAngle = 0;
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
@@ -266,6 +275,7 @@ set<unsigned int> QuantitativeParallelAxis::getDataInRange(float yLowBound, floa
 		}
 	}
 	delete dataIt;
+	rotationAngle = rotAngleBak;
 	return dataSubset;
 }
 
@@ -282,6 +292,8 @@ set<unsigned int> QuantitativeParallelAxis::getDataBetweenBoxPlotBounds() {
 }
 
 void QuantitativeParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {
+	float rotAngleBak = rotationAngle;
+	rotationAngle = 0;
 	set<unsigned int>::iterator it;
 	Coord max = getBaseCoord();
 	Coord min = getBaseCoord() + Coord(0, getAxisHeight());
@@ -297,6 +309,7 @@ void QuantitativeParallelAxis::updateSlidersWithDataSubset(const set<unsigned in
 	}
 	bottomSliderCoord = min;
 	topSliderCoord = max;
+	rotationAngle = rotAngleBak;
 }
 
 void QuantitativeParallelAxis::setAscendingOrder(const bool ascendingOrder) {

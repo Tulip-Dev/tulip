@@ -49,23 +49,24 @@ namespace tlp {
   	  string propertyName;
   	  graphPropertiesSelectionWidget->clearLists();
 
-  	  while (properties->hasNext()) {
-  		  propertyName = properties->next();
-  		  if (std::find(selectedProperties.begin(), selectedProperties.end(), propertyName) == selectedProperties.end()) {
-  			  stringList.push_back(propertyName);
-  		  }
-  	  }
-  	  delete properties;
+  	for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
+  		stringList.push_back(*it);
+  	}
+  	graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
-  	  graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+    stringList.clear();
 
-  	  stringList.clear();
-  	  for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
-  		  stringList.push_back(*it);
-  	  }
-  	  graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+  	while (properties->hasNext()) {
+  		propertyName = properties->next();
+  		if (std::find(selectedProperties.begin(), selectedProperties.end(), propertyName) == selectedProperties.end()) {
+  			stringList.push_back(propertyName);
+  		}
+  	}
+  	delete properties;
 
-    }
+  	graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+
+  }
 
   vector<string> ParallelCoordinatesConfigDialog::getSelectedProperties()  const {
     return selectedProperties;

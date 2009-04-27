@@ -1,5 +1,3 @@
-#include <tulip/GlCircle.h>
-#include <tulip/GlCurve.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -8,16 +6,18 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlPolyQuad.h>
+#include <tulip/GlCurve.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
 #include "ParallelTools.h"
+#include "GlBezierCurve.h"
+#include "GlSmoothCurve.h"
 
 #include <sstream>
 #include <climits>
 #include <algorithm>
-#include <ctime>
 
 const int CIRCLE_GLYPH_ID = 14;
 
@@ -25,7 +25,7 @@ namespace tlp {
 
 ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph, Graph *axisPointsGraph) :
 	firstAxisPos(Coord(0,0,0)), height(DEFAULT_AXIS_HEIGHT), spaceBetweenAxis(height/2), linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE), drawPointsOnAxis(true),
-	graphProxy(graph), vType(VIEW_2D), backgroundColor(Color(255,255,255)), createAxisFlag(true), axisPointsGraph(axisPointsGraph) {
+	graphProxy(graph), backgroundColor(Color(255,255,255)), createAxisFlag(true), axisPointsGraph(axisPointsGraph), layoutType(PARALLEL) {
 
 	axisPointsGraphLayout = axisPointsGraph->getProperty<LayoutProperty>("viewLayout");
 	axisPointsGraphSize = axisPointsGraph->getProperty<SizeProperty>("viewSize");
@@ -49,8 +49,9 @@ void ParallelCoordinatesDrawing::createAxis() {
 
 	string propertyName;
 	unsigned int pos = 0;
-	vector<string> l = graphProxy->getSelectedProperties();
+	vector<string> selectedProperties = graphProxy->getSelectedProperties();
 	vector<string>::iterator it;
+	GlAxis::LabelPosition captionPosition;
 
 	map<string, ParallelAxis *>::iterator it2;
 	for (it2 = parallelAxis.begin() ; it2 != parallelAxis.end() ; ++it2) {
@@ -65,6 +66,8 @@ void ParallelCoordinatesDrawing::createAxis() {
 		width = spaceBetweenAxis;
 	}
 
+	float circleLayoutYOffset = (nbAxis * 100.) / 4.;
+
 	Color axisColor;
 	int bgV = backgroundColor.getV();
 	if (bgV < 128) {
@@ -75,20 +78,45 @@ void ParallelCoordinatesDrawing::createAxis() {
 
 	double maxCaptionWidth = (8./10.) * spaceBetweenAxis;
 
-	for (it = l.begin(); it != l.end() ; ++it) {
+	if (selectedProperties.size() < 3) {
+		layoutType = PARALLEL;
+	}
+
+	float rotationAngleBase = 0;
+	if (layoutType == CIRCULAR) {
+		rotationAngleBase = -(2. * M_PI) / selectedProperties.size();
+		captionPosition = GlAxis::RIGHT_OR_ABOVE;
+	} else {
+		captionPosition = GlAxis::LEFT_OR_BELOW;
+	}
+
+	unsigned int cpt = 0;
+	for (it = selectedProperties.begin(); it != selectedProperties.end() ; ++it) {
 
 		ParallelAxis *axis = NULL;
-
+		float rotationAngle = (cpt++ * rotationAngleBase) * (180. / M_PI);
 		Coord coord;
-		if (nbAxis!=1) {
-			coord = Coord(firstAxisPos.getX() + pos * (width/(nbAxis - 1)),firstAxisPos.getY());
+
+		if (layoutType == PARALLEL) {
+			if (nbAxis!=1) {
+				coord = Coord(firstAxisPos.getX() + pos * (width/(nbAxis - 1)),firstAxisPos.getY());
+			} else {
+				coord = Coord(firstAxisPos.getX() + (width/2), firstAxisPos.getY());
+			}
 		} else {
-			coord = Coord(firstAxisPos.getX() + (width/2), firstAxisPos.getY());
+			coord = Coord(0, circleLayoutYOffset, 0);
 		}
 
 		if (parallelAxis.find(*it) != parallelAxis.end()) {
 			axis = (parallelAxis.find(*it))->second;
-			axis->translate(coord - axis->getBaseCoord());
+			if (layoutType == PARALLEL) {
+				axis->setRotationAngle(0);
+				axis->translate(coord - axis->getBaseCoord());
+			} else {
+				axis->setBaseCoord(coord);
+				axis->setRotationAngle(rotationAngle);
+			}
+			axis->setCaptionPosition(captionPosition);
 			axis->setAxisHeight(height);
 			axis->setMaxCaptionWidth(maxCaptionWidth);
 			axis->setAxisColor(axisColor);
@@ -96,10 +124,11 @@ void ParallelCoordinatesDrawing::createAxis() {
 			axis->setHidden(false);
 		} else {
 			string typeName = (graphProxy->getProperty(*it))->getTypename();
+
 			if (typeName == "string") {
-				axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, axisColor);
+				axis = new NominalParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, axisColor, rotationAngle, captionPosition);
 			} else if (typeName == "int" || typeName == "double") {
-				axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, true, axisColor);
+				axis = new QuantitativeParallelAxis(coord, height, maxCaptionWidth, graphProxy, *it, true, axisColor, rotationAngle, captionPosition);
 			}
 		}
 
@@ -108,6 +137,16 @@ void ParallelCoordinatesDrawing::createAxis() {
 			axisOrder.push_back(*it);
 			parallelAxis[*it] = axis;
 			++pos;
+		}
+	}
+}
+
+void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
+	map<string, ParallelAxis *>::iterator it;
+	for (it = parallelAxis.begin() ; it != parallelAxis.end() ; ++it) {
+		if (!graphProxy->existProperty(it->first)) {
+			delete it->second;
+			parallelAxis.erase(it->first);
 		}
 	}
 }
@@ -123,7 +162,7 @@ void ParallelCoordinatesDrawing::plotAllData() {
 		if (!graphProxy->isDataSelected(dataId)) {
 			color = graphProxy->getDataColor(dataId);
 			if (linesColorAlphaValue <= 255 &&
-				((graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId)) || (!graphProxy->highlightedEltsSet()))) {
+					((graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId)) || (!graphProxy->highlightedEltsSet()))) {
 				color.setA(linesColorAlphaValue);
 			}
 		} else {
@@ -144,16 +183,20 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 	float pointRadius =((adjustedViewSize[0] + adjustedViewSize[1] + adjustedViewSize[2]) / 3.) / 2;
 	double lineHalfWidth = pointRadius - (1./10) * pointRadius;
 
-	vector<Coord> lineCoords;
+
+	vector<Coord> quadCoords;
+	vector<Coord> splineCurvePassPoints;
+
 	for (unsigned int j = 0; j < axisOrder.size() ; j++) {
 
 		Coord pointCoord = parallelAxis[axisOrder[j]]->getPointCoordOnAxisForData(dataId);
+		float axisRotAngle = parallelAxis[axisOrder[j]]->getRotationAngle();
 		ostringstream oss;
 		oss << "data " << dataId << " var " << axisOrder[j];
 
 		if (drawPointsOnAxis) {
 
-			if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId))) {
+			if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(dataId)) || graphProxy->isDataSelected(dataId)) {
 				node n = axisPointsGraph->addNode();
 				axisPointsDataMap[n] = dataId;
 				axisPointsGraphLayout->setNodeValue(n, pointCoord);
@@ -171,49 +214,42 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 			}
 		}
 
-		if ((vType == VIEW_2D_SPLINE) && (j != (axisOrder.size() - 1))) {
-			Coord endLineCoord = parallelAxis[axisOrder[j + 1]]->getPointCoordOnAxisForData(dataId);
-			double dx = (endLineCoord.getX() - pointCoord.getX()) / 4.;
-			lineCoords.push_back(pointCoord);
-			lineCoords.push_back(Coord(pointCoord.getX() + dx, pointCoord.getY(), 0));
-			lineCoords.push_back(Coord(endLineCoord.getX() - dx, endLineCoord.getY(), 0));
-			lineCoords.push_back(endLineCoord);
-			GlSimpleEntity *line = new GlCurve(lineCoords, color, color, lineHalfWidth, lineHalfWidth);
-			if (lineTextureFilename != "") {
-				((GlCurve *)line)->setTexture(lineTextureFilename);
+		if (linesType == STRAIGHT) {
+			Coord vec1(0, - lineHalfWidth);
+			Coord vec2(0, lineHalfWidth);
+			if (axisRotAngle != 0) {
+				rotateVector(vec1, axisRotAngle, Z_ROT);
+				rotateVector(vec2, axisRotAngle, Z_ROT);
 			}
-			if (graphProxy->isDataHighlighted(dataId)) {
-				line->setStencil(4);
-			}
-			if (graphProxy->isDataSelected(dataId)) {
-					line->setStencil(3);
-			}
+			quadCoords.push_back(pointCoord + vec1);
+			quadCoords.push_back(pointCoord + vec2);
 
-			ostringstream oss2;
-			oss2 << "data " << dataId << " line " << parallelAxis[axisOrder[j]]->getAxisName() << " -> " << parallelAxis[axisOrder[j+1]]->getAxisName();
-			dataPlotComposite->addGlEntity(line, oss2.str());
-			glEntitiesDataMap[line] = dataId;
-			lineCoords.clear();
-
-		} else if (vType == VIEW_2D) {
-			lineCoords.push_back(pointCoord + Coord(0, - lineHalfWidth));
-			lineCoords.push_back(pointCoord + Coord(0, lineHalfWidth));
+		} else {
+			splineCurvePassPoints.push_back(pointCoord);
 		}
 	}
 
-	if (vType == VIEW_2D) {
-		GlSimpleEntity *line = new GlPolyQuad(lineCoords, color, lineTextureFilename, true, 1, color);
-		if (graphProxy->isDataHighlighted(dataId)) {
-			line->setStencil(4);
+	GlSimpleEntity *line;
+	if (linesType == STRAIGHT) {
+		if (layoutType == CIRCULAR) {
+			quadCoords.push_back(quadCoords[0]);
+			quadCoords.push_back(quadCoords[1]);
 		}
-		if (graphProxy->isDataSelected(dataId)) {
-			line->setStencil(3);
-		}
-		ostringstream oss2;
-		oss2 << "data " << dataId << " line ";
-		dataPlotComposite->addGlEntity(line, oss2.str());
-		glEntitiesDataMap[line] = dataId;
+		line = new GlPolyQuad(quadCoords, color, lineTextureFilename, true, 1, color);
+	} else {
+		bool closeSpline = (layoutType == CIRCULAR);
+		line = new GlSmoothCurve(splineCurvePassPoints, color, pointRadius, lineTextureFilename, closeSpline);
 	}
+	if (graphProxy->isDataHighlighted(dataId)) {
+		line->setStencil(4);
+	}
+	if (graphProxy->isDataSelected(dataId)) {
+		line->setStencil(3);
+	}
+	ostringstream oss2;
+	oss2 << "data " << dataId << " line ";
+	dataPlotComposite->addGlEntity(line, oss2.str());
+	glEntitiesDataMap[line] = dataId;
 }
 
 unsigned int ParallelCoordinatesDrawing::nbParallelAxis() const {
@@ -238,11 +274,20 @@ void ParallelCoordinatesDrawing::swapAxis(ParallelAxis *axis1, ParallelAxis *axi
 	axisOrder[pi] = axisOrder[pj];
 	axisOrder[pj] = tmp;
 
-	Coord ci = parallelAxis[axis1->getAxisName()]->getBaseCoord();
-	Coord cj = parallelAxis[axis2->getAxisName()]->getBaseCoord();
+	if (layoutType == PARALLEL) {
 
-	parallelAxis[axis1->getAxisName()]->translate(cj - ci);
-	parallelAxis[axis2->getAxisName()]->translate(ci - cj);
+		Coord ci = parallelAxis[axis1->getAxisName()]->getBaseCoord();
+		Coord cj = parallelAxis[axis2->getAxisName()]->getBaseCoord();
+
+		parallelAxis[axis1->getAxisName()]->translate(cj - ci);
+		parallelAxis[axis2->getAxisName()]->translate(ci - cj);
+
+	} else {
+
+		float axis1RotAngle = parallelAxis[axis1->getAxisName()]->getRotationAngle();
+		parallelAxis[axis1->getAxisName()]->setRotationAngle(parallelAxis[axis2->getAxisName()]->getRotationAngle());
+		parallelAxis[axis2->getAxisName()]->setRotationAngle(axis1RotAngle);
+	}
 
 	graphProxy->setSelectedProperties(axisOrder);
 
@@ -272,12 +317,15 @@ bool ParallelCoordinatesDrawing::getDataIdFromAxisPoint(node axisPoint, unsigned
 }
 
 void ParallelCoordinatesDrawing::update() {
+	destroyAxisIfNeeded();
 	if (createAxisFlag) {
 		axisPlotComposite->reset(false);
 		createAxis();
 	}
+
 	eraseDataPlot();
 	plotAllData();
+
 	createAxisFlag = true;
 }
 
@@ -319,21 +367,6 @@ const vector<string> & ParallelCoordinatesDrawing::getAxisNames() const {
 	return axisOrder;
 }
 
-ParallelAxis *ParallelCoordinatesDrawing::getAxisUnderPoint(const Coord &coord) {
-	map<string, ParallelAxis *>::iterator it;
-	ParallelAxis *axis = NULL;
-	for (it = parallelAxis.begin() ; it != parallelAxis.end() ; ++it) {
-		if (!(it->second)->isHidden()) {
-			BoundingBox axisBB = (it->second)->getBoundingBox();
-			if (coord.getX() >= axisBB.first.getX() && coord.getX() <= axisBB.second.getX()) { //&& coord.getY() >= axisBB.first.getY() && coord.getY() <= axisBB.second.getY()) {
-				axis = it->second;
-				break;
-			}
-		}
-	}
-	return axis;
-}
-
 void ParallelCoordinatesDrawing::computeResizeFactor() {
 	Size eltMinSize = ((SizeProperty*)(graphProxy->getProperty("viewSize")))->getMin();
 	Size eltMaxSize = ((SizeProperty*)(graphProxy->getProperty("viewSize")))->getMax();
@@ -367,8 +400,8 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(ParallelAxis *axis, 
 		unsigned int size = eltsInSlidersRange.size() > currentHighlightedElts.size() ? eltsInSlidersRange.size() : currentHighlightedElts.size();
 		vector<unsigned int> intersection(size);
 		vector<unsigned int>::iterator intersectionEnd = std::set_intersection(eltsInSlidersRange.begin(), eltsInSlidersRange.end(),
-																			   currentHighlightedElts.begin(), currentHighlightedElts.end(),
-																			   intersection.begin());
+				currentHighlightedElts.begin(), currentHighlightedElts.end(),
+				intersection.begin());
 		dataSubset = set<unsigned int>(intersection.begin(), intersectionEnd);
 	} else {
 		dataSubset = axis->getDataInSlidersRange();

@@ -8,6 +8,7 @@
 
 
 #include "ParallelCoordinatesGraphProxy.h"
+#include "ParallelTools.h"
 
 using namespace std;
 
