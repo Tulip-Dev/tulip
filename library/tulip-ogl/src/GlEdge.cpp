@@ -258,7 +258,7 @@ namespace tlp {
     float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix, camera->getViewport());
 
     //draw Edge
-    drawEdge(srcCoord, viewArrow ? tgtAnchor : tgtCoord, srcAnchor, endLineAnchor, bends, *srcCol, *tgtCol,edgeSize, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
+    drawEdge(srcCoord, viewArrow ? tgtAnchor : tgtCoord, srcAnchor, endLineAnchor, bends, *srcCol, *tgtCol,edgeSize*.5, data->elementShape->getEdgeValue(e),data->parameters->isEdge3D(),lodSize);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_EDGE);
