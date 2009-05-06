@@ -47,7 +47,8 @@ nobase_include_HEADERS = \
 	tulip/GlXMLTools.h \
 	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlLines.h \
-	tulip/GlColorScale.h
+	tulip/GlColorScale.h \
+	tulip/GlTools.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
@@ -64,7 +65,6 @@ noinst_HEADERS = \
 	tulip/FLayout.h \
 	tulip/Frame.h \
 	tulip/Renderer.h \
-	tulip/GlTools.h\
 	tulip/GlXMLTools.h \
 	tulip/Curves.h\
 	tulip/TextRenderer.h \

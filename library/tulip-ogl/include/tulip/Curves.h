@@ -3,7 +3,9 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
+#include "tulip/GlTools.h"
 #include <vector>
+
 
 
 
@@ -85,6 +87,14 @@ namespace tlp {
 		  const Color &,          /* start color */
 		  const Color &);          /* end color */
   //====================================================================
+  std::vector<Color> getColors(const std::vector<Coord> &line, const Color &c1, const Color &c2);
+  std::vector<float> getSizes(const std::vector<Coord> &line, float s1, float s2);
+  GLfloat* buildCurvePoints (const std::vector<Coord> &vertices,
+      const std::vector<float> &sizes,
+      const Coord &startN,
+      const Coord &endN,
+      unsigned int &resultSize,
+      std::vector<unsigned int> *dec=NULL);
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
