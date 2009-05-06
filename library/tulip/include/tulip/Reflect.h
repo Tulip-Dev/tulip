@@ -46,11 +46,15 @@ struct TLP_SIMPLE_SCOPE DataSet {
      The data is removed after the call. */
   template<typename T> bool getAndFree(const std::string &str, T& value);
   /** Set the value of the variable str.*/
-  template<typename T> void set(const std::string &str,const T& value);
+  template<typename T> void set(const std::string &str, const T& value);
   /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
   /** remove a named pair */
   void remove(const std::string &str);
+  /** return an untyped value if any */
+  DataType* getData(const std::string &str) const;
+  /** set from an untyped value */
+  void setData(const std::string &str, DataType* value);
   /** Return an iterator on all values */
   Iterator< std::pair<std::string, DataType*> > *getValues() const;
 private:

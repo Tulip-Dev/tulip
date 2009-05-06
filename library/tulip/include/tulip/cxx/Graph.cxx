@@ -2,7 +2,7 @@
 //================================================================================
 template<typename ATTRIBUTETYPE>
 ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) {
-  tlp::DataSet &data=getAttributes();
+  tlp::DataSet &data=getNonConstAttributes();
   ATTRIBUTETYPE tmp;
   data.get(name,tmp);
   return tmp;
@@ -10,13 +10,15 @@ ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) {
 //================================================================================
 template<typename ATTRIBUTETYPE>
 bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) {
-  return getAttributes().get(name, value);
+  return getNonConstAttributes().get(name, value);
 }
 //================================================================================
 template<typename ATTRIBUTETYPE>
 void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value) {
-  tlp::DataSet &data=getAttributes();
+  tlp::DataSet &data=getNonConstAttributes();
+  notifyBeforeSetAttribute(this, name);
   data.set(name,value);
+  notifyAfterSetAttribute(this, name);
 }
 //================================================================================
 template<typename Proxytype>

@@ -138,3 +138,42 @@ void ObservableGraph::notifyDelLocalProperty(Graph *g, const std::string& name) 
     observer->delLocalProperty(g, name);
   }
 }
+
+void ObservableGraph::notifyBeforeSetAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetAttribute(g, name);
+  }
+}
+
+void ObservableGraph::notifyAfterSetAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetAttribute(g, name);
+  }
+}
+
+void ObservableGraph::notifyRemoveAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->removeAttribute(g, name);
+  }
+}

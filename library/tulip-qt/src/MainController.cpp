@@ -1211,32 +1211,37 @@ namespace tlp {
 
     string erreurMsg;
     bool   resultBool=true;
-    DataSet *dataSet =0;
-    dataSet = new DataSet();
+    DataSet dataSet;
     if (query) {
       StructDef *params = getPluginParameters(PROPERTY::factory, name);
       StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
-      params->buildDefaultDataSet( *dataSet, graph );
-      resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet,
+      params->buildDefaultDataSet(dataSet, graph );
+      resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
 					  "Tulip Parameter Editor", graph, mainWindowFacade.getParentWidget());
     }
 
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
-      if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram view") {
-          graph->setAttribute("viewLayout", tmp);
-          ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-        }
-      }
-
       PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
       tmp->setAllNodeValue(dest->getNodeDefaultValue());
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
       graph->push();
-      resultBool = currentGraph->computeProperty(name, tmp, erreurMsg, myProgress, dataSet);
+      bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) &&
+			   viewNames[currentView]=="Node Link Diagram view");
+      if (updateLayout) {
+	graph->setAttribute("viewLayout", tmp);
+	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
+      resultBool = currentGraph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
+      bool hasNdldc = false;
+      DataSet nodeLinkDiagramComponentDataSet;
+      if ((typeid(PROPERTY) == typeid(ColorProperty) &&
+	   viewNames[currentView]=="Node Link Diagram view"))
+	hasNdldc = graph->getAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
       graph->pop();
-
+      if (updateLayout) {
+	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
       if (!resultBool) {
         QMessageBox::critical(mainWindowFacade.getParentWidget(), "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
       }
@@ -1249,24 +1254,16 @@ namespace tlp {
             undoAction->setEnabled(true);
             editUndoAction->setEnabled(true);
           }
-          *dest = *tmp;
+	  if (hasNdldc)
+	    graph->setAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
+	  *dest = *tmp;
 
           break;
         case TLP_CANCEL:
           resultBool=false;
         };
-        delete tmp;
-      if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram view") {
-          graph->removeAttribute("viewLayout");
-          ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-        }
-      }
+      delete tmp;
     }
-
-
-
-    if (dataSet!=0) delete dataSet;
 
     propertiesWidget->setGraph(graph);
     /*overviewWidget->setObservedView(glWidget);*/

@@ -35,10 +35,11 @@ DataSet & DataSet::operator=(const DataSet &set) {
 }
 
 DataSet::~DataSet() {
-   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {
-     delete (*it).second;
-   }
+    if (it->second)
+      delete it->second;
+  }
 }
 
 bool DataSet::exist(const string &str) const {
@@ -54,11 +55,35 @@ void DataSet::remove(const string &str) {
   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {
     if ((*it).first == str) {
-      delete (*it).second;
+      if (it->second)
+	delete it->second;
       data.erase(it);
       break;
     }
   }
+}
+
+DataType* DataSet::getData(const string &str) const {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    if ((*it).first == str)
+      return it->second ? it->second->clone() : NULL;
+  }
+  return NULL;
+}
+
+void DataSet::setData(const std::string &str, DataType* value) {
+  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
+	 data.begin(); it != data.end(); ++it) {
+    std::pair<std::string, tlp::DataType*> &p = *it;
+    if (p.first == str) {
+      if (p.second)
+	delete p.second;
+      p.second = value;
+      return;
+    }
+  }
+  data.push_back(std::pair<std::string, tlp::DataType*>(str, value));
 }
 
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {

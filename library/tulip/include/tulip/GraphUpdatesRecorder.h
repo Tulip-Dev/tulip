@@ -109,6 +109,11 @@ namespace tlp {
     stdext::hash_map<unsigned long,  std::set<PropertyRecord> > addedProperties;
     // one set of deleted properties per graph
     stdext::hash_map<unsigned long,  std::set<PropertyRecord> > deletedProperties;
+    // one set of old attribute values per graph
+    stdext::hash_map<unsigned long, DataSet> oldAttributeValues;
+    // one set of new attribute values per graph
+    stdext::hash_map<unsigned long, DataSet> newAttributeValues;
+    
     // one set of updated addNodes per property
     stdext::hash_map<unsigned long, std::set<node> > updatedPropsAddedNodes;
 
@@ -209,7 +214,13 @@ namespace tlp {
             
     // oldEdgeDefaultValues
     void beforeSetAllEdgeValue(PropertyInterface* p);
-  };
+
+    // beforeSetAttribute
+    void beforeSetAttribute(Graph* g, const std::string& name);
+
+    // removeAttribute
+    void removeAttribute(Graph* g, const std::string& name);
+};
 }
 
 

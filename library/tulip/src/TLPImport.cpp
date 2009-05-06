@@ -512,7 +512,7 @@ struct TLPDataBuilder : public TLPFalse
     if (dataSetBuilder->dataSetName || dataSetBuilder->dataSetNameStr!="")
       dataSet = &(dataSetBuilder->dataSet);
     else
-      dataSet = &(dataSetBuilder->graphBuilder->_graph->getAttributes());
+      dataSet = (DataSet *) &(dataSetBuilder->graphBuilder->_graph->getAttributes());
   }
 
   ~TLPDataBuilder(){}

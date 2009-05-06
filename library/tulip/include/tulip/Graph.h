@@ -98,6 +98,7 @@ template<class C>class Iterator;
   class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
   friend class GraphUpdatesRecorder;
+  friend class GraphDecorator;
 
 public:
   Graph();
@@ -293,7 +294,9 @@ public:
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
   ///Return graph attributes
-  virtual DataSet & getAttributes() =0;
+  const DataSet & getAttributes() {
+    return getNonConstAttributes();
+  }
   ///Get an attribute of the graph; returns true if a value was found
   ///false if not
   template<typename ATTRIBUTETYPE>
@@ -306,7 +309,8 @@ public:
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /// remove an existing attribute
   void removeAttribute(const std::string &name) {
-    getAttributes().remove(name);
+    notifyRemoveAttribute(this, name);
+    getNonConstAttributes().remove(name);
   }
   /// return if the attribute exist
   bool attributeExist(const std::string &name) {
@@ -386,9 +390,11 @@ public:
   virtual void pop()=0;
   virtual void unpop()=0;
   virtual bool canPop()=0;
-    virtual bool canUnpop()=0;
+  virtual bool canUnpop()=0;
 
 protected:
+  // to allow attributes modification
+  virtual DataSet &getNonConstAttributes()=0;
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node)=0;

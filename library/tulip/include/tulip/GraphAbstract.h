@@ -48,7 +48,6 @@ public:
   virtual edge getOneEdge() const;
   virtual unsigned int numberOfNodes() const;
   virtual unsigned int numberOfEdges() const;
-  DataSet & getAttributes() {return attributes;}
   //========================================
   bool existProperty(const std::string&);
   bool existLocalProperty(const std::string&);
@@ -60,6 +59,7 @@ public:
   PropertyInterface* getProperty(const std::string &);
 
 protected:
+  DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);
   PropertyManager *propertyContainer;
   PropertyManager *getPropertyManager() {

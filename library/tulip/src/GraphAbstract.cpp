@@ -293,6 +293,10 @@ unsigned int GraphAbstract::numberOfEdges() const {
   } delete it;
   return result;
 }
+//=========================================================================
+DataSet& GraphAbstract::getNonConstAttributes() {
+  return attributes;
+}
 //----------------------------------------------------------------
 bool GraphAbstract::isMetaNode(const node n) const {
   assert(isElement(n));

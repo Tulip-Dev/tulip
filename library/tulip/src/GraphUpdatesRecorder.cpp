@@ -251,6 +251,20 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       }
       iten++;
     }
+    // record graph attribute new values
+    hash_map<unsigned long, DataSet>::iterator itav =
+      oldAttributeValues.begin();
+    while (itav != oldAttributeValues.end()) {
+      Graph* g = (Graph *) (*itav).first;
+      Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+      const DataSet& gAttValues = g->getAttributes();
+      DataSet& nAttValues = newAttributeValues[(unsigned long) g];
+      while(itv->hasNext()) {
+      pair<string, DataType*> pval = itv->next();
+      nAttValues.setData(pval.first, gAttValues.getData(pval.first));
+    } delete itv;
+    ++itav;
+    }
   }
 }
 
@@ -567,18 +581,34 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   // loop on edgeValues
   hash_map<unsigned long, MutableContainer<DataMem*>* >& edgeValues =
     undo ? oldEdgeValues : newEdgeValues;
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itne =
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itev =
     edgeValues.begin();
-  while(itne != edgeValues.end()) {
-    PropertyInterface* prop = (PropertyInterface *) (*itne).first;
-    IteratorValue* itv = (*itne).second->findAll(NULL, false);
+  while(itev != edgeValues.end()) {
+    PropertyInterface* prop = (PropertyInterface *) (*itev).first;
+    IteratorValue* itv = (*itev).second->findAll(NULL, false);
     while(itv->hasNext()) {
       TypedValueContainer<DataMem*> tVal;
       edge e(itv->nextValue(tVal));
       prop->setEdgeDataMemValue(e, tVal.value);
     }
     delete itv;
-    ++itne;
+    ++itev;
+  }
+  // loop on attribute values to restore
+  hash_map<unsigned long, DataSet>& attValues =
+    undo ? oldAttributeValues : newAttributeValues;
+  hash_map<unsigned long, DataSet>::iterator itav = attValues.begin();
+  while (itav != attValues.end()) {
+    Graph* g = (Graph *) (*itav).first;
+    Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+    while(itv->hasNext()) {
+      pair<string, DataType*> pval = itv->next();
+      if (pval.second)
+	g->getNonConstAttributes().setData(pval.first, pval.second->clone());
+      else
+	g->getNonConstAttributes().remove(pval.first);
+    } delete itv;
+    ++itav;
   }
   Observable::unholdObservers();
 }
@@ -817,4 +847,20 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
     forEach(e, p->getNonDefaultValuatedEdges())
       beforeSetEdgeValue(p, e);
   }
+}
+
+void GraphUpdatesRecorder::beforeSetAttribute(Graph* g,
+					      const std::string& name) {
+  stdext::hash_map<unsigned long, DataSet>::iterator it =
+    oldAttributeValues.find((unsigned long) g);
+  if (it != oldAttributeValues.end() && it->second.exist(name))
+    return;
+  // save the previously existing value
+  DataType* valType = g->getAttributes().getData(name);
+  oldAttributeValues[(unsigned long) g].setData(name, valType);
+}
+
+void GraphUpdatesRecorder::removeAttribute(Graph* g,
+					   const std::string& name) {
+  beforeSetAttribute(g, name);
 }

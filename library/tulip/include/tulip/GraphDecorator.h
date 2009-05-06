@@ -78,7 +78,6 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<edge>* getInEdges(const node n) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
-  virtual DataSet & getAttributes();
   virtual PropertyInterface* getProperty(const std::string &name);
   virtual bool existProperty(const std::string&name);
   virtual bool existLocalProperty(const std::string&name);
@@ -96,6 +95,7 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   //============================================================
 
 protected:
+  virtual DataSet & getNonConstAttributes();
   Graph* graph_component;
   // designed to reassign an id to a previously deleted elt
   // called by GraphUpdatesRecorder

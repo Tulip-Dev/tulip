@@ -189,7 +189,7 @@ public:
     }
   }
   //=====================================================
-  void saveDataSet(ostream &os, DataSet &data) {
+  void saveDataSet(ostream &os, const DataSet &data) {
     initTypeNames();
     // get iterator over pair attribute/value
     Iterator< pair<string, DataType*> > *it = data.getValues();

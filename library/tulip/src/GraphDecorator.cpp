@@ -273,10 +273,9 @@ Iterator<edge>* GraphDecorator::getEdgeMetaInfo(const edge e) const {
 }
 
 //============================================================
-DataSet & GraphDecorator::getAttributes(){
-  return graph_component->getAttributes();
+DataSet& GraphDecorator::getNonConstAttributes(){
+  return graph_component->getNonConstAttributes();
 }
-
 //============================================================
 PropertyInterface* GraphDecorator::getProperty(const std::string &name){
   return graph_component->getProperty(name);

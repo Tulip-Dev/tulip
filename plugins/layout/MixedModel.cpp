@@ -298,10 +298,12 @@ bool MixedModel::run() {
 
   // if in tulip gui, keep node size updates
   // the test below indicates if we are invoked from the tulip gui
-  // cf viewGl.cpp & GlGraphInputData.cpp
+  // cf MainController.cpp & GlGraphInputData.cpp
   LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout))
+  if (graph->getAttribute("viewLayout", elementLayout)) {
+    graph->removeAttribute("viewLayout");
     graph->push();
+  }
 
   return true;
 }
@@ -990,12 +992,3 @@ node MixedModel::rightV(unsigned int k){
   return (carte->source(er) == V[k][p-1])?carte->target(er):carte->source(er);
 }
 //====================================================
-
-
-
-
-
-
-
-
-
