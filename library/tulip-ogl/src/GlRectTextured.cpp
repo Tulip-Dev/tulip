@@ -107,6 +107,13 @@ namespace tlp {
     return textureName;
   }
   //===========================================================
+  void GlRectTextured::setCoordinates(float bottom, float left, float height,float width){
+    this->top=bottom;
+    this->left=left;
+    this->bottom=top+height;
+    this->right=left+width;
+  }
+  //===========================================================
   void GlRectTextured::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
