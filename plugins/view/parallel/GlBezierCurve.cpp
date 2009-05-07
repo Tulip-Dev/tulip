@@ -12,6 +12,8 @@
 
  */
 
+#include <ctime>
+
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlPolyQuad.h>
 

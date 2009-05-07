@@ -22,10 +22,7 @@
 #include "ParallelCoordsDataConfigWidget.h"
 #include "ParallelCoordsDrawConfigWidget.h"
 
-#include <QtGui/QMainWindow>
-
 #include <tulip/GlMainView.h>
-#include <tulip/ObservableGraph.h>
 
 #include <set>
 

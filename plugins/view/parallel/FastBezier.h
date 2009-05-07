@@ -1,5 +1,5 @@
-#ifndef BEZIER_H
-#define BEZIER_H
+#ifndef FAST_BEZIER_H
+#define FAST_BEZIER_H
 
 #include <tulip/Coord.h>
 
@@ -8,7 +8,7 @@
 namespace tlp {
 
 // This class contains a set of static functions for computing a set of points approximating a bezier curve
-// The computation of the points is optimized by the use of the "forward difference" algorithm which greatly reduces the number of multiplications besides the "brute-force" bezier algorithm.
+// The computation of the points is optimized by the use of the "forward difference" algorithm (for quadratic and cubic curves) which greatly reduces the number of multiplications besides the "brute-force" bezier algorithm.
 class FastBezier {
 
 public :

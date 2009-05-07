@@ -104,6 +104,16 @@ void FastBezier::computeCubicBezierPoints(const Coord &p0, const Coord &p1, cons
 	curvePoints[nbCurvePoints - 1] = p3;
 }
 
+Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
+	vector<Coord> internalControlPoints = controlPoints;
+	for (unsigned int i = controlPoints.size() - 1 ; i > 0 ; --i) {
+		for (unsigned int j = 0 ; j < i ; ++j) {
+			internalControlPoints[j] = internalControlPoints[j] + t * (internalControlPoints[j+1] - internalControlPoints[j]);
+		}
+	}
+	return internalControlPoints[0];
+}
+
 void FastBezier::computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
 	if (controlPoints.size() == 2) {
 		computeLinearBezierPoints(controlPoints[0], controlPoints[1], curvePoints, nbCurvePoints);
@@ -111,26 +121,13 @@ void FastBezier::computeBezierPoints(const vector<Coord> &controlPoints, vector<
 		computeQuadraticBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], curvePoints, nbCurvePoints);
 	} else if (controlPoints.size() == 4) {
 		computeCubicBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3], curvePoints, nbCurvePoints);
+
 	} else {
-
-		// A bezier curve of degree n can be expressed as a linear interpolation of two bezier curves of degree (n - 1)
-		// So use this property to approximate a bezier curve of degree > 4
-		vector<Coord> controlPoints1 = controlPoints;
-		controlPoints1.pop_back();
-		vector<Coord> controlPoints2;
-		for (unsigned int i = 1 ; i < controlPoints.size() ; ++i) {
-			controlPoints2.push_back(controlPoints[i]);
-		}
-
-		vector<Coord> curve1Points, curve2Points;
-		computeBezierPoints(controlPoints1, curve1Points, nbCurvePoints);
-		computeBezierPoints(controlPoints2, curve2Points, nbCurvePoints);
-
 		curvePoints.resize(nbCurvePoints);
 		float h = 1.0 / (float) (nbCurvePoints - 1);
 		for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
 			float curStep = i * h;
-			curvePoints[i] = (1 - curStep) * curve1Points[i] + curStep * curve2Points[i];
+			curvePoints[i] = computeBezierPoint(controlPoints, curStep);
 		}
 	}
 }

@@ -12,7 +12,6 @@
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
 #include "ParallelTools.h"
-#include "GlBezierCurve.h"
 #include "GlSmoothCurve.h"
 
 #include <sstream>

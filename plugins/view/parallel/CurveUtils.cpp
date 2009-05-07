@@ -7,6 +7,7 @@
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/Curves.h>
+#include <tulip/GlTools.h>
 
 #include "CurveUtils.h"
 #include "FastBezier.h"
