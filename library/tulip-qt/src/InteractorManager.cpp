@@ -54,17 +54,6 @@ namespace tlp
     } delete itS;
   }
   //====================================================
-  /*void InteractorManager::initInteractorList(MutableContainer<Interactor *>& interactors) {
-    InteractorContext ic;
-    interactors.setAll(0);
-
-    Iterator<string> *itS = InteractorFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string interactorName=itS->next();
-      Interactor *newInteractor = InteractorFactory::factory->getPluginObject(interactorName, &ic);
-    } delete itS;
-  }*/
-  //====================================================
   Interactor *InteractorManager::getInteractor(const string &name){
     InteractorContext ic;
     return InteractorFactory::factory->getPluginObject(name, &ic);
