@@ -228,7 +228,10 @@ namespace tlp {
      * Get property name for elementLayout
      */
     std::string getElementLayoutPropName(){
-      return elementLayoutPropName;
+      if(elementLayoutPropName=="")
+        return "viewLayout";
+      else
+        return elementLayoutPropName;
     }
 
   protected :
