@@ -91,7 +91,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     if (started) {
       glMainWidget->setMouseTracking(false);
       Observable::holdObservers();
-      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>("viewSelection");
+      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelectedPropName());
       bool revertSelection = false; // add to selection
       bool boolVal = true;
       bool needPush = true; // undo management

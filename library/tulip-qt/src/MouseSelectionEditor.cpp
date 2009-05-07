@@ -305,11 +305,12 @@ void MouseSelectionEditor::stopEdition() {
 }
 //========================================================================================
 void MouseSelectionEditor::initProxies(GlMainWidget *glMainWidget) {
-  _graph     = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  _layout    = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getLayoutProperty();
-  _selection = _graph->getProperty<BooleanProperty>("viewSelection");
-  _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
-  _sizes     = _graph->getProperty<SizeProperty>("viewSize");
+  GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+  _graph     = inputData->getGraph();
+  _layout    = inputData->getLayoutProperty();
+  _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
+  _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
+  _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
 }
 //========================================================================================
 void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {

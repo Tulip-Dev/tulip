@@ -30,7 +30,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     node tmpNode;
     edge tmpEdge;
     Graph * _graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-    LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>("viewLayout");
+    LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
     if (qMouseEv->buttons()==Qt::LeftButton) {
       if (!started) {
         bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);

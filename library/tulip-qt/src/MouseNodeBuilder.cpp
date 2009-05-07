@@ -26,7 +26,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       GlMainWidget *glw = (GlMainWidget *) widget;
 
       Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
+      LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glw->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
       // allow to undo
       _graph->push();
       Observable::holdObservers();

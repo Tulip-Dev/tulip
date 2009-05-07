@@ -215,11 +215,12 @@ void MouseEdgeBendEditor::stopEdition() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
-  _graph     = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  _layout    = _graph->getProperty<LayoutProperty>("viewLayout");
-  _selection = _graph->getProperty<BooleanProperty>("viewSelection");
-  _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
-  _sizes     = _graph->getProperty<SizeProperty>("viewSize");
+  GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+  _graph     = inputData->getGraph();
+  _layout    = _graph->getProperty<LayoutProperty>(inputData->getElementLayoutPropName());
+  _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
+  _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
+  _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
 }
 //========================================================================================
 //Does the point p belong to the segment [u,v]?
