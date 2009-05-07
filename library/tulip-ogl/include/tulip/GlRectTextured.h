@@ -75,6 +75,11 @@ namespace tlp {
     virtual std::string getTexture();
 
     /**
+     * Set coordinates of rectangle
+     */
+    virtual void setCoordinates(float bottom, float left, float width, float height);
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);
