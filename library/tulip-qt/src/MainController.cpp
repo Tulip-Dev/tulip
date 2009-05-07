@@ -380,9 +380,20 @@ namespace tlp {
     if(graphToReload){
       Graph *graph=graphToReload;
       graphToReload=NULL;
+      //Update view of this graph
       for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
         if((*it).second==graph){
           (*it).first->setGraph(graph);
+        }
+      }
+      //Update children of this graph
+      for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+        Graph *parentGraph=(*it).second;
+        while(parentGraph!=parentGraph->getRoot() && parentGraph!=graph){
+          parentGraph=parentGraph->getSuperGraph();
+          if(parentGraph==graph){
+            (*it).first->setGraph((*it).second);
+          }
         }
       }
     }else{
@@ -472,11 +483,12 @@ namespace tlp {
   }
   //**********************************************************************
   void  MainController::addLocalProperty(Graph *graph, const std::string&){
-    for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+    graphToReload=graph;
+    /*for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
       if((*it).second==graph){
         (*it).first->setGraph(graph);
       }
-    }
+    }*/
   }
   //**********************************************************************
   void  MainController::delLocalProperty(Graph *graph, const std::string&){
@@ -1068,9 +1080,9 @@ namespace tlp {
       haveToChangeGraph=true;
     }
     node metaNode = tlp::createMetaNode(graphToAddTo, tmp);
-    Observable::unholdObservers();
     if(haveToChangeGraph)
       changeGraph(graphToAddTo);
+    Observable::unholdObservers();
     clusterTreeWidget->update();
   }
   //==============================================================
