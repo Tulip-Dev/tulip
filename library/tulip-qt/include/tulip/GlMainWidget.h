@@ -23,7 +23,7 @@
 #include <QtCore/qpoint.h>
 #include <QtGui/qaction.h>
 
-#include "tulip/GlMainView.h"
+#include "tulip/AbstractView.h"
 #include "tulip/ForegroundEntity.h"
 #include <tulip/GlHierarchyConvexHulls.h>
 
@@ -40,7 +40,7 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    /**
     * Construct the GlMainWidget
     */
-  GlMainWidget(QWidget *parent,GlMainView *view=NULL);
+  GlMainWidget(QWidget *parent,AbstractView *view=NULL);
   ~GlMainWidget();
 
   /**
@@ -160,7 +160,7 @@ private:
   tlp::GlHierarchyConvexHulls hulls;
   bool _firstStepOfIncrementalRendering;
   QRegion _visibleArea;
-  GlMainView *view;
+  AbstractView *view;
   char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
 
