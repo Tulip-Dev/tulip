@@ -30,6 +30,10 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual void setSuperGraph(Graph* s);
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *> * getSubGraphs() const;
+  virtual bool isSubGraph(Graph* sg) const;
+  virtual bool isDescendantGraph(Graph* sg) const;
+  virtual Graph* getSubGraph(int id) const;
+  virtual Graph* getDescendantGraph(int id) const;
 
   //============================================================
   virtual node source(const edge e)const;

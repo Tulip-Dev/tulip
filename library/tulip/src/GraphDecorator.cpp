@@ -62,6 +62,23 @@ Iterator<Graph *> * GraphDecorator::getSubGraphs() const{
   return graph_component->getSubGraphs();
 }
 
+//=========================================================================
+bool GraphDecorator::isSubGraph(Graph* sg) const {
+  return graph_component->isSubGraph(sg);
+}
+//=========================================================================
+bool GraphDecorator::isDescendantGraph(Graph* sg) const {
+  return graph_component->isDescendantGraph(sg);
+}
+//=========================================================================
+Graph* GraphDecorator::getSubGraph(int sgId) const {
+  return graph_component->getSubGraph(sgId);
+}
+//=========================================================================
+Graph* GraphDecorator::getDescendantGraph(int sgId) const {
+  return graph_component->getDescendantGraph(sgId);
+}
+
 //============================================================
 node GraphDecorator::source(const edge e)const{
   return graph_component->source(e);

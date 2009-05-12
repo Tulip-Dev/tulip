@@ -138,6 +138,51 @@ Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
   return new StlIterator<Graph *, GRAPH_SEQ::const_iterator >(subgraphs.begin(),subgraphs.end());
 }
 //=========================================================================
+bool GraphAbstract::isSubGraph(Graph* sg) const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if (*it == sg)
+      return true;
+    it++;
+  }
+  return false;
+}
+//=========================================================================
+bool GraphAbstract::isDescendantGraph(Graph* sg) const {
+  if (isSubGraph(sg))
+    return true;
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if ((*it)->isDescendantGraph(sg))
+      return true;
+    it++;
+  }
+  return false;
+}
+//=========================================================================
+Graph* GraphAbstract::getSubGraph(int sgId) const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if ((*it)->getId() == sgId)
+      return *it;
+    it++;
+  }
+  return NULL;
+}
+//=========================================================================
+Graph* GraphAbstract::getDescendantGraph(int sgId) const {
+  Graph* sg = getSubGraph(sgId);
+  if (sg)
+    return sg;
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if (sg = (*it)->getDescendantGraph(sgId))
+      return sg;
+    it++;
+  }
+  return NULL;
+}
+//=========================================================================
 node GraphAbstract::getOneNode() const {
   node result;
   Iterator<node> *it = getNodes();

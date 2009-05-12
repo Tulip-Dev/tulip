@@ -157,6 +157,24 @@ public:
    * Returns an iterator on all the SubGraphs of the graph
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
+  /**
+   * indicates if the graph argument is a direct subgraph
+   */
+  virtual bool isSubGraph(Graph* sg) const=0;
+  /**
+   * indicates if the graph argument is a descendant of this graph
+   */
+  virtual bool isDescendantGraph(Graph* sg) const=0;
+  /**
+   * Returns a pointer on the subgraph with the corresponding id
+   * or NULL if there is no subgraph with that id
+   */
+  virtual Graph* getSubGraph(int id) const=0;
+  /**
+   * Returns a pointer of the descendant with the corresponding id
+   * or NULL if there is no descendant  with that id
+   */
+  virtual Graph* getDescendantGraph(int id) const=0;
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
