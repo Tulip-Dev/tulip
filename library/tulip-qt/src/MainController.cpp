@@ -1593,33 +1593,70 @@ namespace tlp {
     editRedoAction->setEnabled(currentGraph->canUnpop());
   }
   //**********************************************************************
+  map<View *,list<int> > MainController::saveViewsHierarchiesBeforePop() {
+    map<View *,list<int> > hierarchies;
+    for(map<View *,Graph* >::iterator itView=viewGraph.begin();itView!=viewGraph.end();++itView){
+      hierarchies[(*itView).first]=list<int>();
+      Graph *father=(*itView).second;
+      while(father!=father->getSuperGraph()){
+        hierarchies[(*itView).first].push_back(father->getId());
+        father=father->getSuperGraph();
+      }
+      hierarchies[(*itView).first].push_back(father->getId());
+    }
+    return hierarchies;
+  }
+  //**********************************************************************
+  void MainController::checkViewsHierarchiesAfterPop(map<View *,list<int> > &hierarchies){
+    for(map<View *,Graph* >::iterator itView=viewGraph.begin();itView!=viewGraph.end();++itView){
+      Graph *newGraph;
+      for(list<int>::iterator it=hierarchies[(*itView).first].begin();it!=hierarchies[(*itView).first].end();++it){
+        newGraph=currentGraph->getRoot()->getDescendantGraph(*it);
+        if(!newGraph && (currentGraph->getRoot()->getId()==(*it)))
+          newGraph=currentGraph->getRoot();
+        if(newGraph)
+          break;
+      }
+
+      if(newGraph!=(*itView).second){
+        (*itView).first->setGraph(newGraph);
+        viewGraph[(*itView).first]=newGraph;
+      }
+    }
+  }
+  //**********************************************************************
   void MainController::undo() {
+    map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
+
     Graph *root=currentGraph->getRoot();
     root->pop();
-    changeGraph(root);
+
+    checkViewsHierarchiesAfterPop(hierarchies);
+    Graph *newGraph=viewGraph[currentView];
+
+    changeGraph(newGraph);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
-    propertiesWidget->setGraph(root);
-    eltProperties->setGraph(root,false);
+    propertiesWidget->setGraph(newGraph);
+    eltProperties->setGraph(newGraph,false);
     updateUndoRedoInfos();
-    // forget previous/next graphs
-    /*glWidget->prevGraphs.clear();
-      glWidget->nextGraphs.clear();*/
 
   }
   //**********************************************************************
   void MainController::redo() {
+    map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
+
     Graph* root = currentGraph->getRoot();
     root->unpop();
-    changeGraph(root);
+
+    checkViewsHierarchiesAfterPop(hierarchies);
+    Graph *newGraph=viewGraph[currentView];
+    changeGraph(newGraph);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
-    propertiesWidget->setGraph(root);
-    eltProperties->setGraph(root,false);
+    propertiesWidget->setGraph(newGraph);
+    eltProperties->setGraph(newGraph,false);
     updateUndoRedoInfos();
-    // forget previous/next graphs
-    /*glWidget->prevGraphs.clear();
-      glWidget->nextGraphs.clear();*/
   }
   //**********************************************************************
   View *MainController::getView(QWidget *widget) {

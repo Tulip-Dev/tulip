@@ -173,6 +173,16 @@ namespace tlp {
      */
     template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false , bool = true);
 
+    /**
+     * Save graph hierarchy for views before undo/redo
+     */
+    std::map<View *,std::list<int> > saveViewsHierarchiesBeforePop();
+
+    /**
+     * Check views graph after undo/redo
+     */
+    void checkViewsHierarchiesAfterPop(std::map<View *,std::list<int> > &hierarchies);
+
 
     Graph *currentGraph;
     View *currentView;
