@@ -3,8 +3,8 @@
  Author: Morgan Mathiaut and Samuel Carruesco, Mickael Melas, Laurent Peyronnet, Michael Roche, Sabrina Wons
  Email : mathiaut@labri.fr
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -20,16 +20,17 @@
 #include <QtGui/QGroupBox>
 #include <QtGui/QProgressBar>
 
+#include "InstallPluginDialogData.h"
 #include "InstallExitDialog.h"
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE InstallPluginDialog : public QDialog{
+  class TLP_PLUGINSMANAGER_SCOPE InstallPluginDialog : public QDialog, public Ui::InstallPluginDialogData  {
     Q_OBJECT
-    
+
   public:
     InstallPluginDialog(const std::vector<std::string> &namePluginsInstall,const std::vector<std::string> &namePluginsRemove,QWidget *parent=0);
-    
+
     void installStart(const std::string &name);
     void installFinished(const std::string &name, bool loadCheckOK);
 
@@ -38,41 +39,27 @@ namespace tlp {
 
   private:
 
-    QVBoxLayout *mainBox;
-    QVBoxLayout *installBox;
-    QVBoxLayout *removeBox;
-    QVBoxLayout *installLabelBox;
-    QVBoxLayout *installBarBox;
-    std::vector<QProgressBar *> installPluginBars;
-    QVBoxLayout *removeLabelBox;
-    QVBoxLayout *removeBarBox;
-    std::vector<QProgressBar *> removePluginBars;
-    QHBoxLayout *buttonBox;
-
     std::map<std::string, unsigned int> pluginsInstallIndex;
     std::map<std::string, unsigned int> pluginsRemoveIndex;
-    
-    QLabel* labelTitle;
-    QPushButton* ok;
-    QPushButton* cancel;
-     
+
     InstallExitDialog *exitDialog;
 
     unsigned int processNumber;
+    unsigned int totalProcess;
     std::string installErrors;
-    
+
     void closeEvent(QCloseEvent *e);
     void terminated();
-		
+
   public slots:
 
-    void installPart(const std::string&, float);
-			    
+    void installPart(const std::string&, int,int);
+
   private slots:
     void cancelInstall();
-   
+
   };
-  
+
 }
 
 #endif

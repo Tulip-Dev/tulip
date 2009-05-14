@@ -80,6 +80,7 @@
 #include <tulip/TabWidget.h>
 #include <tulip/MainController.h>
 
+#include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
 #include <UpdatePlugin.h>
 
@@ -187,7 +188,6 @@ void viewGl::startTulip() {
   enableElements(false);
 
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
-  connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 
   /*QWidget *centralwidget = new QWidget(this);
@@ -782,6 +782,8 @@ void viewGl::closeEvent(QCloseEvent *e) {
 }
 //==============================================================
 void viewGl::plugins() {
+  PluginsHelp::checkViewHelp();
+
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
 
   /*QDialog dialog;
@@ -805,7 +807,6 @@ void viewGl::plugins() {
 }
 //==============================================================
 void viewGl::deletePluginsUpdateChecker(){
-  disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   delete pluginsUpdateChecker;
   plugins();
 }
@@ -944,6 +945,8 @@ void viewGl::helpAbout() {
 }
 //==============================================================
 void viewGl::helpIndex() {
+  PluginsHelp::checkViewHelp();
+
   QStringList cmdList;
   cmdList << "-profile"
 	  << QString( (tlp::TulipDocProfile).c_str());

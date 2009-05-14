@@ -3,8 +3,8 @@
  Author: Morgan Mathiaut and Samuel Carruesco, Mickael Melas, Laurent Peyronnet, Michael Roche, Sabrina Wons
  Email : mathiaut@labri.fr
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -20,29 +20,40 @@
 
 namespace tlp {
 
+  class MultiServerManager;
+  class InstallPluginDialog;
+
   class TLP_PLUGINSMANAGER_SCOPE UpdatePlugin : public QObject {
-  
+
     Q_OBJECT
 
     Server *serverWS;
     Server *serverGet;
     DistPluginInfo distPluginInfo;
     LocalPluginInfo localPluginInfo;
+    InstallPluginDialog *pluginDialog;
+    QList<UpdatePlugin*> pluginUpdaters;
+    MultiServerManager *msm;
+    bool openDialog;
     std::string version;
     std::string installPath;
     int partNumber;
     int currentPart;
-    
+
     UpdatePlugin(UpdatePlugin &);
 
   public :
-  
+
     virtual void endInstallation();
     virtual void endUninstallation(){
       emit pluginUninstalled(this,localPluginInfo);
     }
 
     UpdatePlugin(QObject *parent=0);
+
+    int pluginsCheckAndUpdate(MultiServerManager *msm,std::set<DistPluginInfo,PluginCmp> &pluginsToInstall, std::set<LocalPluginInfo,PluginCmp> &pluginsToRemove,QWidget *parent);
+    static void windowToDisplayError(std::string pluginName,QWidget *parent);
+    std::string getAddr(std::string name);
 
     void install(const std::string &serverAddr,const DistPluginInfo &pluginInfo); // Asynchronous
     void updatePartNumber();
@@ -53,20 +64,27 @@ namespace tlp {
     static bool isInstallDirWritable();
     static bool pluginUpdatesPending();
 
+  protected slots:
+
+    void terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &);
+    void terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &);
+
   signals :
 
+    void pluginInstalled();
+    void pluginUninstalled();
     void pluginInstalled(UpdatePlugin*,const DistPluginInfo &);
-    void installPart(const std::string&,float);
+    void installPart(const std::string&,int,int);
     void pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &);
 
   };
 
   class TLP_PLUGINSMANAGER_SCOPE PluginDownloadFinish : public RequestFinish {
     UpdatePlugin* up;
-  
+
   public :
     PluginDownloadFinish(UpdatePlugin* up) : up(up){};
-  
+
     void operator()(){
       up->updatePartNumber();
     }
@@ -74,10 +92,10 @@ namespace tlp {
 
   class TLP_PLUGINSMANAGER_SCOPE EndPluginDownloadFinish : public RequestFinish {
     UpdatePlugin* up;
-  
+
   public :
     EndPluginDownloadFinish(UpdatePlugin* up) : up(up){};
-  
+
     void operator()(){
       up->updatePartNumber();
       up->endInstallation();

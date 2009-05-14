@@ -1,6 +1,7 @@
 #include "PluginsUpdateChecker.h"
 
 #include "MultiServerManager.h"
+#include "UpdatePluginsDialog.h"
 
 #include <iostream>
 #include <QtCore/QSettings>
@@ -9,7 +10,7 @@
 using namespace std;
 
 namespace tlp {
-  PluginsUpdateChecker::PluginsUpdateChecker(vector<LocalPluginInfo> &pluginsList,QWidget *parent):parent(parent) {
+  PluginsUpdateChecker::PluginsUpdateChecker(vector<LocalPluginInfo> &pluginsList,QWidget *parent):parent(parent),updatePlugin(NULL) {
     msm = new MultiServerManager(pluginsList);
 
     QSettings settings("TulipSoftware","Tulip");
@@ -30,14 +31,80 @@ namespace tlp {
     connect(msm,SIGNAL(newPluginList()),this,SLOT(getResponse()));
   }
 
+  PluginsUpdateChecker::~PluginsUpdateChecker() {
+    if(updatePlugin)
+      delete updatePlugin;
+  }
+
   MultiServerManager *PluginsUpdateChecker::getMultiServerManager(){
     return msm;
   }
 
   void PluginsUpdateChecker::displayPopup(const vector<DistPluginInfo*> &pluginsOutOfDate) {
-    QMessageBox messageBox(QMessageBox::Information,"Update avalaible","Update available for plugins",QMessageBox::Ok,parent);
-    messageBox.exec();
-    emit checkFinished();
+    vector<DistPluginInfo*> plugins;
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("UpdatePlugins");
+    QStringList keys = settings.allKeys();
+    settings.endGroup();
+
+    for(vector<DistPluginInfo*>::const_iterator it=pluginsOutOfDate.begin();it!=pluginsOutOfDate.end();++it){
+      if(!keys.contains((*it)->name.c_str()))
+        plugins.push_back(*it);
+    }
+
+    settings.beginGroup("UpdatePlugins");
+    for(QStringList::iterator it=keys.begin();it!=keys.end();++it) {
+      bool find=false;
+      for(vector<DistPluginInfo*>::const_iterator it2=pluginsOutOfDate.begin();it2!=pluginsOutOfDate.end();++it2){
+        if((*it2)->name==(*it).toStdString()){
+          find=true;
+          break;
+        }
+      }
+      if(!find){
+        settings.remove(*it);
+      }
+    }
+    settings.endGroup();
+
+    if(plugins.size()==0){
+      emit checkFinished(false);
+      return;
+    }
+
+    UpdatePluginsDialog dialog(plugins,parent);
+    if(dialog.exec()==QDialog::Rejected){
+      emit checkFinished(false);
+      return;
+    }
+
+    set<DistPluginInfo,PluginCmp> pluginsToUpdate;
+    set<LocalPluginInfo,PluginCmp> pluginsToRemove;
+    dialog.getPluginsToUpdate(pluginsToUpdate);
+
+    if(pluginsToUpdate.size()==0){
+      emit checkFinished(false);
+      return;
+    }
+
+    updatePlugin = new UpdatePlugin();
+    connect(updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalled()));
+    connect(updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalled()));
+    numberOfPluginsToUpdate=updatePlugin->pluginsCheckAndUpdate(msm,pluginsToUpdate, pluginsToRemove,parent);
+    if(numberOfPluginsToUpdate==0){
+      emit checkFinished(false);
+    }
+  }
+
+  void PluginsUpdateChecker::pluginInstalled(){
+    numberOfPluginsToUpdate--;
+    if(numberOfPluginsToUpdate==0){
+      emit checkFinished(true);
+    }
+  }
+
+  void PluginsUpdateChecker::pluginUninstalled(){
+    pluginInstalled();
   }
 
   void PluginsUpdateChecker::getResponse() {
@@ -55,9 +122,7 @@ namespace tlp {
 	}
       }
 
-      if(pluginsOutOfDate.size()!=0) {
-        displayPopup(pluginsOutOfDate);
-      }
+      displayPopup(pluginsOutOfDate);
     }
   }
 }

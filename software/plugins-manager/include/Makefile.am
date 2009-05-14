@@ -15,8 +15,10 @@ BUILT_SOURCES = \
 	PluginsListManager.h \
 	TPWFonctor.h \
 	PluginsInfoWidget.h \
+	PluginsInfoWidgetData.h \
 	UpdatePlugin.h \
 	InstallPluginDialog.h \
+	InstallPluginDialogData.h \
 	InstallExitDialog.h \
 	AuthorizationInstallDependencies.h \
 	ChooseServerDialog.h \
@@ -25,7 +27,10 @@ BUILT_SOURCES = \
 	CheckUpdate.h \
 	PluginsUpdateChecker.h \
 	ProxyConfigurationDialog.h \
-	ProxyConfigurationDialogData.h
+	ProxyConfigurationDialogData.h \
+	UpdatePluginsDialog.h \
+	UpdatePluginsDialogData.h \
+	PluginsHelp.h
 
 noinst_HEADERS = $(BUILT_SOURCES)
 
