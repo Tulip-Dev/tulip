@@ -35,8 +35,8 @@ enum ObjectType {SHADER, PROGRAM};
 // Print out the information log for a shader object or a program object
 static void printInfoLog(GLuint obj, ObjectType objectType)
 {
-  int infoLogLength = 0;
-  int charsWritten  = 0;
+  GLint infoLogLength = 0;
+  GLint charsWritten  = 0;
   GLchar *infoLog;
 
   if (objectType == SHADER) {
