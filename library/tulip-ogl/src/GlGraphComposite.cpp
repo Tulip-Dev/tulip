@@ -11,7 +11,7 @@ using namespace std;
 
 namespace tlp {
 
-  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true) {
+  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true),nodesModified(true) {
     graph->addGraphObserver(this);
 
     Iterator<node>* nodesIterator = graph->getNodes();
@@ -20,6 +20,11 @@ namespace tlp {
       if(graph->getNodeMetaInfo(n))
         metaNodes.insert(n);
     }
+    delete nodesIterator;
+  }
+
+  GlGraphComposite::~GlGraphComposite(){
+    inputData.getGraph()->removeGraphObserver(this);
   }
 
   void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
@@ -40,6 +45,7 @@ namespace tlp {
             glNode.acceptVisitor(visitor);
           }
         }
+        delete nodesIterator;
       }
 
       if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
@@ -49,6 +55,7 @@ namespace tlp {
           glEdge.id=edgesIterator->next().id;
           glEdge.acceptVisitor(visitor);
         }
+        delete edgesIterator;
       }
     }else{
       if(haveToSort)
@@ -77,8 +84,6 @@ namespace tlp {
     }
   }
 
-  GlGraphComposite::~GlGraphComposite(){
-  }
   void GlGraphComposite::buildSortedList() {
     haveToSort=false;
 

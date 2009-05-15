@@ -54,7 +54,7 @@ namespace tlp {
      * Function use by the GraphObserver when a node is create in the graph
      */
     virtual void addNode(Graph *graph,const node n){
-      nodesToCheck.insert(n);
+      nodesModified=true;
       haveToSort=true;
     }
     /**
@@ -67,10 +67,7 @@ namespace tlp {
      * Function use by the GraphObserver when a node is delete in the graph
      */
     virtual void delNode(Graph *graph,const node n){
-      if(nodesToCheck.count(n)!=0)
-        nodesToCheck.erase(n);
-      else
-        metaNodes.erase(n);
+      nodesModified=true;
       haveToSort=true;
     }
     /**
@@ -88,13 +85,20 @@ namespace tlp {
      * Return set of metaNodes
      */
     std::set<node> &getMetaNodes() {
-      if(!nodesToCheck.empty()){
-        for(std::set<node>::iterator it=nodesToCheck.begin();it!=nodesToCheck.end();++it){
-          if(inputData.getGraph()->getNodeMetaInfo(*it))
-            metaNodes.insert(*it);
+      if(nodesModified){
+        metaNodes.clear();
+
+        Graph *graph=inputData.getGraph();
+        Iterator<node>* nodesIterator = graph->getNodes();
+        while (nodesIterator->hasNext()){
+          node n=nodesIterator->next();
+          if(graph->getNodeMetaInfo(n))
+            metaNodes.insert(n);
         }
+        delete nodesIterator;
+
+        nodesModified=false;
       }
-      nodesToCheck.clear();
       return metaNodes;
     }
 
@@ -149,9 +153,9 @@ namespace tlp {
     GlGraphInputData inputData;
 
     bool haveToSort;
+    bool nodesModified;
     std::list<node> sortedNodes;
     std::list<edge> sortedEdges;
-    std::set<node> nodesToCheck;
     std::set<node> metaNodes;
   };
 }
