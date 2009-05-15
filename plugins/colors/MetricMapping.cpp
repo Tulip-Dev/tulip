@@ -293,14 +293,8 @@ public:
     }
 
     DataSet nodeLinkDiagramComponentDataSet;
-    DataSet oldNodeLinkDiagramComponentDataSet;
     DataSet infoDataSet;
     string infoName="MetricMapping";
-    if(graph->attributeExist("NodeLinkDiagramComponent")){
-      graph->getAttribute("NodeLinkDiagramComponent",oldNodeLinkDiagramComponentDataSet);
-      if(oldNodeLinkDiagramComponentDataSet.exist("Enum Color Values Mapping"))
-        nodeLinkDiagramComponentDataSet.set<string>("Enum Color Values Mapping","toRemove");
-    }
 
     infoDataSet.set<long>("composite",(long)composite);
     infoDataSet.set<string>("layer","Foreground");

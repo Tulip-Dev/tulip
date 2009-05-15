@@ -298,9 +298,70 @@ namespace tlp {
       DataSet nodeLinkDiagramComponentDataSet;
       graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
 
-      vector<string> toRemove;
+      //remove old info
+      list<string> toRemove;
+      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+        if(!nodeLinkDiagramComponentDataSet.exist((*it).first)){
+          DataSet layerAndCompositeDataSet=(*it).second;
+          toRemove.push_back((*it).first);
+          string layerName;
+          long compositeLong;
+          layerAndCompositeDataSet.get("layer",layerName);
+          layerAndCompositeDataSet.get("composite",compositeLong);
+          mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+        }
+      }
+      for(list<string>::iterator it=toRemove.begin();it!=toRemove.end();++it)
+        algorithmInfoDataSet.erase(*it);
 
       Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
+      while(infoDataSetIt->hasNext()) {
+        pair<string, DataType*> infoData;
+        infoData = infoDataSetIt->next();
+
+        DataSet newLayerAndCompositeDataSet=*((DataSet*)(infoData.second->value));
+        string newLayerName;
+        long newCompositeLong;
+        newLayerAndCompositeDataSet.get("layer",newLayerName);
+        newLayerAndCompositeDataSet.get("composite",newCompositeLong);
+
+        map<string,DataSet>::iterator it=algorithmInfoDataSet.find(infoData.first);
+        if(it==algorithmInfoDataSet.end()){
+          //add new info
+          algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
+
+          GlComposite *composite;
+          composite=(GlComposite*)newCompositeLong;
+          mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+        }else{
+          //check integrity
+          DataSet oldLayerAndCompositeDataSet=(*it).second;
+          string oldLayerName;
+          long oldCompositeLong;
+          oldLayerAndCompositeDataSet.get("layer",oldLayerName);
+          oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
+
+          if(oldCompositeLong!=newCompositeLong){
+            mainWidget->getScene()->getLayer(oldLayerName)->deleteGlEntity((GlSimpleEntity*)oldCompositeLong);
+            algorithmInfoDataSet.erase(it);
+
+            algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
+            GlComposite *composite;
+            composite=(GlComposite*)newCompositeLong;
+            mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+          }
+        }
+      }
+      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+        DataSet oldLayerAndCompositeDataSet=(*it).second;
+        string oldLayerName;
+        long oldCompositeLong;
+        oldLayerAndCompositeDataSet.get("layer",oldLayerName);
+        oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
+
+
+      }
+      /*Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
       while(infoDataSetIt->hasNext()) {
         pair<string, DataType*> infoData;
         infoData = infoDataSetIt->next();
@@ -336,7 +397,17 @@ namespace tlp {
       for(vector<string>::iterator it=toRemove.begin();it!=toRemove.end();++it){
         nodeLinkDiagramComponentDataSet.remove(*it);
       }
-      graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
+      graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);*/
+    }else{
+      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+        DataSet layerAndCompositeDataSet=(*it).second;
+        string layerName;
+        long compositeLong;
+        layerAndCompositeDataSet.get("layer",layerName);
+        layerAndCompositeDataSet.get("composite",compositeLong);
+        mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+      }
+      algorithmInfoDataSet.clear();
     }
   }
   //==================================================
