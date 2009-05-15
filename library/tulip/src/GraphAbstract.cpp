@@ -53,8 +53,7 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg){
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
   Graph *tmp = new GraphView(this, selection);
   subgraphs.push_back(tmp);
-  notifyAddSubGraph(this, tmp);
-  notifyObservers();
+  notifyAddSubGraph(tmp);
   return tmp;
 }
 //=========================================================================
@@ -81,7 +80,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   removeSubGraph(toRemove);
   if (toRemove != subGraphToKeep) {
     delete toRemove;
-  }
+  } else
+    toRemove->notifyDestroy();
   notifyObservers();
 }
 //=========================================================================
@@ -108,7 +108,8 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
   if (deleteSubGraphs) {
     ((GraphAbstract *)toRemove)->clearSubGraphs();
     delete toRemove;
-  }
+  } else
+    toRemove->notifyDestroy();
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
@@ -160,7 +161,7 @@ bool GraphAbstract::isDescendantGraph(Graph* sg) const {
   return false;
 }
 //=========================================================================
-Graph* GraphAbstract::getSubGraph(int sgId) const {
+Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   while(it != subgraphs.end()) {
     if ((*it)->getId() == sgId)
@@ -170,13 +171,13 @@ Graph* GraphAbstract::getSubGraph(int sgId) const {
   return NULL;
 }
 //=========================================================================
-Graph* GraphAbstract::getDescendantGraph(int sgId) const {
+Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
   Graph* sg = getSubGraph(sgId);
   if (sg)
     return sg;
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   while(it != subgraphs.end()) {
-    if (sg = (*it)->getDescendantGraph(sgId))
+    if ((sg = (*it)->getDescendantGraph(sgId)))
       return sg;
     it++;
   }

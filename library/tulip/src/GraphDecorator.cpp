@@ -71,11 +71,11 @@ bool GraphDecorator::isDescendantGraph(Graph* sg) const {
   return graph_component->isDescendantGraph(sg);
 }
 //=========================================================================
-Graph* GraphDecorator::getSubGraph(int sgId) const {
+Graph* GraphDecorator::getSubGraph(unsigned int sgId) const {
   return graph_component->getSubGraph(sgId);
 }
 //=========================================================================
-Graph* GraphDecorator::getDescendantGraph(int sgId) const {
+Graph* GraphDecorator::getDescendantGraph(unsigned int sgId) const {
   return graph_component->getDescendantGraph(sgId);
 }
 

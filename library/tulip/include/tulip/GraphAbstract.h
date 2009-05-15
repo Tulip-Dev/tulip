@@ -29,8 +29,8 @@ public:
   virtual Iterator<Graph *>* getSubGraphs() const;
   virtual bool isSubGraph(Graph* sg) const;
   virtual bool isDescendantGraph(Graph* sg) const;
-  virtual Graph* getSubGraph(int id) const;
-  virtual Graph* getDescendantGraph(int id) const;
+  virtual Graph* getSubGraph(unsigned int id) const;
+  virtual Graph* getDescendantGraph(unsigned int id) const;
   //=======================================
   virtual unsigned int deg(const node) const;
   virtual unsigned int indeg(const node) const;

@@ -91,7 +91,6 @@ GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0) {
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
-  delPreviousRecorders();
   unobserveUpdates();
   // delete recorders
   if (!recorders.empty()) {
@@ -103,9 +102,9 @@ GraphImpl::~GraphImpl() {
     }
     recorders.clear();
   }
+  delPreviousRecorders();
 
-  ObservableGraph::notifyDestroy(this);
-  Observable::notifyDestroy();
+  notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);

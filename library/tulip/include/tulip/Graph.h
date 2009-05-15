@@ -97,6 +97,7 @@ template<class C>class Iterator;
  */
   class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
+  friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
   friend class GraphDecorator;
 
@@ -169,12 +170,12 @@ public:
    * Returns a pointer on the subgraph with the corresponding id
    * or NULL if there is no subgraph with that id
    */
-  virtual Graph* getSubGraph(int id) const=0;
+  virtual Graph* getSubGraph(unsigned int id) const=0;
   /**
    * Returns a pointer of the descendant with the corresponding id
    * or NULL if there is no descendant  with that id
    */
-  virtual Graph* getDescendantGraph(int id) const=0;
+  virtual Graph* getDescendantGraph(unsigned int id) const=0;
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
@@ -278,7 +279,7 @@ public:
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
   /// Return the graph's id, this id is unique.
-  int getId() const {return id;}
+  unsigned int getId() const {return id;}
   /// Return the number of nodes in the graph
   virtual unsigned int numberOfNodes()const =0;
   /// Return the number of edges in the graph
@@ -428,6 +429,10 @@ protected:
   // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*, bool restoreSubGraphs = false)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
+  // overload of inherited methods
+  // used to manage push/pop
+  void notifyDestroy();
+  void notifyAddSubGraph(Graph*);
 
 private:
 

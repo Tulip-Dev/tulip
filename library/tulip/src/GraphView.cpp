@@ -58,8 +58,7 @@ GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
-  ObservableGraph::notifyDestroy(this);
-  Observable::notifyDestroy();
+  notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);
