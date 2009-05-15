@@ -353,7 +353,6 @@ namespace tlp {
   }
   //==================================================
   void NodeLinkDiagramComponent::draw() {
-	cout << "NodeLinkDiagramComponent::draw()" << endl;
     checkAlgorithmResult();
 
     GlMainView::draw();
