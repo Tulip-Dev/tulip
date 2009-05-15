@@ -22,6 +22,7 @@
 #include "tulip/GridOptionsWidget.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"
+#include "tulip/TlpQtTools.h"
 
 using namespace std;
 
@@ -69,7 +70,13 @@ namespace tlp {
   	actionAntialiasingOptions->setChecked(true);
   	actionTrueMetaNodeOptions=optionsMenu->addAction("Textured meta node");
   	actionTrueMetaNodeOptions->setCheckable(true);
-  	actionTrueMetaNodeOptions->setChecked(true);
+  	if(canUseQGLPixelBuffer()){
+  	  actionTrueMetaNodeOptions->setChecked(true);
+  	}else{
+  	  actionTrueMetaNodeOptions->setEnabled(false);
+  	  actionTrueMetaNodeOptions->setChecked(false);
+  	  qtMetaNode=false;
+  	}
 
   	//Export Menu
   	exportImageMenu=new QMenu("&Save Picture as ");

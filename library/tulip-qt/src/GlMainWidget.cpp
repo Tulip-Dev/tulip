@@ -483,7 +483,7 @@ namespace tlp {
   void GlMainWidget::getTextureShift(int width, int height, float &xTextureShift, float &yTextureShift){
     int textureRealWidth;
     int textureRealHeight;
-	
+
 	getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
 
     scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
@@ -493,25 +493,25 @@ namespace tlp {
     scene.prerenderMetaNodes();
 
 	QGLPixelBuffer *glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
-	while(!glFrameBuf->isValid()){
+	while(!glFrameBuf->isValid() && width>1 && height>1 ){
 		width=width/2;
 		height=height/2;
 		delete glFrameBuf;
 		glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
 	}
-	
+
     scene.setViewport(0,0,width,height);
-	
+
 	glFrameBuf->makeCurrent();
-	
+
 	GLuint textureId=glFrameBuf->generateDynamicTexture();
-	
+
 	scene.ajustSceneToSize(width,height);
 	scene.draw();
 	glFrameBuf->updateDynamicTexture(textureId);
 	delete glFrameBuf;
 	GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
-	
+
 	return NULL;
   }
 

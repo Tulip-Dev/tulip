@@ -2,6 +2,8 @@
 #include <config.h>
 #endif
 
+#include <QtOpenGL/QGLPixelBuffer>
+
 #include "tulip/TlpQtTools.h"
 
 #include <tulip/Reflect.h>
@@ -46,6 +48,10 @@ namespace tlp {
   void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader) {
     ControllerFactory::initFactory();
     loadPluginsFromDir(dir, "Controller", loader);
+  }
+  bool canUseQGLPixelBuffer() {
+    QGLPixelBuffer glFrameBuf(2,2);
+    return glFrameBuf.isValid();
   }
 
 }
