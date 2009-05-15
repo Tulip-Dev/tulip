@@ -70,7 +70,7 @@ dist_libtulip_pluginsmanager_la_SOURCES = \
 	ModifyServerDialog.cpp \
 	PluginsUpdateChecker.cpp \
 	ProxyConfigurationDialog.cpp \
-	UpdatePluginsDialog.cpp  \
+	UpdatePluginsDialog.cpp \
 	PluginsHelp.cpp
 
 dist_tulip_check_pl_SOURCES = TulipCheckPluginLoad.cpp
