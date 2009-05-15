@@ -106,8 +106,8 @@ namespace tlp {
     }
 
     if(render){
-	  if(!glMainWidget){
-		glMainWidget=new GlMainWidget(NULL,NULL);
+      if(!glMainWidget){
+	glMainWidget=new GlMainWidget(NULL,NULL);
         glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
       }
       //clear QGLFramebufferObject
@@ -120,8 +120,8 @@ namespace tlp {
 
       GlGraphRenderingParameters param=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
       Vector<int,4> viewport;
-      glGetIntegerv(GL_VIEWPORT,&viewport[0]);
-	  QGLContext *context=(QGLContext *)(QGLContext::currentContext());
+      glGetIntegerv(GL_VIEWPORT, (GLint *) &viewport[0]);
+      QGLContext *context=(QGLContext *)(QGLContext::currentContext());
 
       Matrix<float, 4> modelviewMatrix;
       glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
@@ -134,10 +134,10 @@ namespace tlp {
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
       glMainWidget->setData(metaGraph,DataSet());
-	  glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
-	  glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
+      glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 
-	  glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
+      glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
       textureName.push_back(str.str());
 
       glMatrixMode(GL_PROJECTION);
