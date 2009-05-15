@@ -53,7 +53,8 @@ namespace tlp {
     /**
      * Function use by the GraphObserver when a node is create in the graph
      */
-    virtual void addNode(Graph *,const node ){
+    virtual void addNode(Graph *graph,const node n){
+      nodesToCheck.insert(n);
       haveToSort=true;
     }
     /**
@@ -65,7 +66,11 @@ namespace tlp {
     /**
      * Function use by the GraphObserver when a node is delete in the graph
      */
-    virtual void delNode(Graph *,const node ){
+    virtual void delNode(Graph *graph,const node n){
+      if(nodesToCheck.count(n)!=0)
+        nodesToCheck.erase(n);
+      else
+        metaNodes.erase(n);
       haveToSort=true;
     }
     /**
@@ -78,6 +83,20 @@ namespace tlp {
      * Function use by the GraphObserver when the graph is delete
      */
     virtual void destroy(Graph *) {}
+
+    /**
+     * Return set of metaNodes
+     */
+    std::set<node> &getMetaNodes() {
+      if(!nodesToCheck.empty()){
+        for(std::set<node>::iterator it=nodesToCheck.begin();it!=nodesToCheck.end();++it){
+          if(inputData.getGraph()->getNodeMetaInfo(*it))
+            metaNodes.insert(*it);
+        }
+      }
+      nodesToCheck.clear();
+      return metaNodes;
+    }
 
     /**
      * Get the data in XML form
@@ -132,6 +151,8 @@ namespace tlp {
     bool haveToSort;
     std::list<node> sortedNodes;
     std::list<edge> sortedEdges;
+    std::set<node> nodesToCheck;
+    std::set<node> metaNodes;
   };
 }
 

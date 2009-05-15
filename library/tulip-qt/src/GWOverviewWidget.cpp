@@ -143,7 +143,14 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       _view->getScene()->setCamera(&cam);
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
+  	GlMetaNodeRenderer *oldMetaNodeRenderer;
+  	if(_view->getScene()->getGlGraphComposite()){
+  	  oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
+  	  _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer);
+  	}
     _view->draw();
+    if(_view->getScene()->getGlGraphComposite())
+      _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer);
   }
 }
 //=============================================================================

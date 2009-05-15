@@ -27,6 +27,8 @@
 #include "tulip/ForegroundEntity.h"
 #include <tulip/GlHierarchyConvexHulls.h>
 
+class QGLFramebufferObject;
+
 namespace tlp {
 
 //class QTextView;
@@ -98,6 +100,7 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
 		tlp::ElementType &type,
 		tlp::node &,tlp::edge &,
 		tlp::GlLayer* layer=NULL);
+
   /**
    *  Take a snapshot of the Widget
    *  \return an array of dimension width*height*3 char (8bits per color RGB).
@@ -108,6 +111,21 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   bool outputEPS(int size, int doSort, const char *filename);
   // SVG output of a GlGraph
   bool outputSVG(int size, const char* filename);
+
+  /**
+   * Compute real texture size with given height and width
+   */
+  static void getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight);
+  
+  /**
+   *
+   */
+  void getTextureShift(int width, int height,float &xTextureShift, float &yTextureShift);
+  
+  /**
+   * Take a snapshot of the Widget and put it in an OpenGl texture
+   */
+  QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
 
   /**
    * Function to do picking on entities.  It just calls

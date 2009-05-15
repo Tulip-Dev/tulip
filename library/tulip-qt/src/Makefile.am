@@ -133,7 +133,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	StringsListSelectionWidget.cpp \
 	SimpleStringsListSelectionWidget.cpp \
 	DoubleStringsListSelectionWidget.cpp \
-	ColorScaleConfigDialog.cpp
+	ColorScaleConfigDialog.cpp \
+	QtMetaNodeRenderer.cpp
 
 CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
 

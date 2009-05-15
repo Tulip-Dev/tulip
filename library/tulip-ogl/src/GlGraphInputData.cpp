@@ -7,15 +7,20 @@
 
 namespace tlp {
 
-  GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters):
+  GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
     elementColorPropName("viewColor"),elementLabelColorPropName("viewLabelColor"),elementSizePropName("viewSize"),elementLabelPositionPropName("viewLabelPosition"),
     elementShapePropName("viewShape"),elementRotationPropName("viewRotation"),elementSelectedPropName("viewSelection"),elementLabelPropName("viewLabel"),
     elementTexturePropName("viewTexture"),elementBorderColorPropName("viewBorderColor"),elementBorderWidthPropName("viewBorderWidth"),
     elementLayoutPropName(""),
-    graph(graph),parameters(parameters) {
-    reloadAllProperties();
+    graph(graph),parameters(parameters){
 
+    reloadAllProperties();
     GlyphManager::getInst().initGlyphList(&this->graph,this,glyphs);
+
+    if(renderer)
+      metaNodeRenderer=renderer;
+    else
+      metaNodeRenderer=new GlMetaNodeRenderer();
   }
 
   GlGraphInputData::~GlGraphInputData() {
@@ -24,8 +29,7 @@ namespace tlp {
 
   void GlGraphInputData::reloadLayoutProperty() {
     if(elementLayoutPropName==""){
-      if (!graph->getAttribute("viewLayout", elementLayout))
-        elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
+      elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
     }else{
       elementLayout = graph->getProperty<LayoutProperty>(elementLayoutPropName);
     }

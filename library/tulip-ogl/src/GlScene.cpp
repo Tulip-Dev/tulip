@@ -116,7 +116,7 @@ namespace tlp {
     glColorMask(1, 1, 1, 1);
     glEnable(GL_BLEND);
     glIndexMask(UINT_MAX);
-    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), 1.0);
+    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
     glClearStencil(0xFFFF);
     glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -125,6 +125,29 @@ namespace tlp {
     GLenum error = glGetError();
     if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+  }
+
+  void GlScene::prerenderMetaNodes(){
+    if(!glGraphComposite)
+      return;
+    //prerender metanodes if need
+    set<node> metaNodes=glGraphComposite->getMetaNodes();
+    if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()){
+      lodCalculator->beginNewCamera(getLayer("Main")->getCamera());
+      GlNode glNode(0);
+      for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
+        glNode.id=(*it).id;
+        lodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
+      }
+      lodCalculator->compute(viewport,viewport);
+      VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
+
+      assert(nodesVector->size()!=0);
+      for(vector<LODResultComplexEntity>::iterator it=(*nodesVector)[0].begin();it!=(*nodesVector)[0].end();++it) {
+        glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).first),(*it).second,getLayer("Main")->getCamera());
+      }
+      lodCalculator->clear();
+    }
   }
 
   void GlScene::draw() {
@@ -361,14 +384,97 @@ namespace tlp {
       camera->setCenter((maxC + minC) / 2.0);
 
       if ((dx==0) && (dy==0) && (dz==0))
-	dx = dy = dz = 10.0;
+        dx = dy = dz = 10.0;
 
-      camera->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.0); //radius of the sphere hull of the layer bounding box
+      camera->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.);
 
       camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
       camera->setEyes(camera->getEyes() + camera->getCenter());
       camera->setUp(Coord(0, 1., 0));
       camera->setZoomFactor(0.5);
+    }
+  }
+
+  void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor){
+    if(xWhiteFactor)
+      *xWhiteFactor=0.;
+    if(yWhiteFactor)
+      *yWhiteFactor=0.;
+    GlBoundingBoxSceneVisitor visitor(glGraphComposite->getInputData());
+
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      if((*it).second->getCamera()->is3D())
+        (*it).second->acceptVisitor(&visitor);
+    }
+
+    Coord maxC = visitor.getBoundingBox().second;
+    Coord minC = visitor.getBoundingBox().first;
+
+    double dx = maxC[0] - minC[0];
+    double dy = maxC[1] - minC[1];
+    double dz = maxC[2] - minC[2];
+
+    Coord centerTmp=(maxC + minC)/2.;
+    if(center)
+      *center=centerTmp;
+
+    if ((dx==0) && (dy==0) && (dz==0))
+      dx = dy = dz = 10.0;
+
+    double wdx=width/dx;
+    double hdy=height/dy;
+
+    float sceneRadiusTmp;
+    if(dx<dy){
+      if(wdx<hdy){
+        sceneRadiusTmp=dx;
+        if(yWhiteFactor)
+          *yWhiteFactor=(1.-(dy/(sceneRadiusTmp*(height/width))))/2.;
+      }else{
+        sceneRadiusTmp=dx*wdx/hdy;
+        if(xWhiteFactor){
+          *xWhiteFactor=(1.-(dx/sceneRadiusTmp))/2.;
+        }
+      }
+    }else{
+      if(wdx>hdy){
+        sceneRadiusTmp=dy;
+        if(xWhiteFactor)
+          *xWhiteFactor=(1.-(dx/(sceneRadiusTmp*(width/height))))/2.;
+      }else{
+        sceneRadiusTmp=dy*hdy/wdx;
+        if(yWhiteFactor)
+          *yWhiteFactor=(1.-(dy/sceneRadiusTmp))/2.;
+      }
+    }
+
+    if(sceneRadius)
+      *sceneRadius=sceneRadiusTmp;
+
+    if(eye){
+      *eye=Coord(0, 0, sceneRadiusTmp);
+      *eye=*eye + centerTmp;
+    }
+
+  }
+
+  void GlScene::ajustSceneToSize(int width, int height){
+
+    Coord center;
+    Coord eye;
+    float sceneRadius;
+
+    computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL);
+
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      Camera* camera=(*it).second->getCamera();
+      camera->setCenter(center);
+
+      camera->setSceneRadius(sceneRadius);
+
+      camera->setEyes(eye);
+      camera->setUp(Coord(0, 1., 0));
+      camera->setZoomFactor(1.);
     }
   }
 

@@ -64,6 +64,11 @@ namespace tlp {
     void initGlParameters();
 
     /**
+     * Prerender meta nodes
+     */
+    void prerenderMetaNodes();
+
+    /**
      * Draw the scene
      */
     void draw();
@@ -72,6 +77,16 @@ namespace tlp {
      * Center scene
      */
     void centerScene();
+
+    /**
+     * Compute informations for ajustSceneToSize
+     */
+    void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor);
+
+    /**
+     * Ajust camera to have entities near borders
+     */
+    void ajustSceneToSize(int width, int height);
 
     /**
      * Zoom to x,y

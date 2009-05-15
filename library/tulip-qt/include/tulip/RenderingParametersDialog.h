@@ -48,6 +48,10 @@ namespace tlp {
     void backColor();
     void setBackgroundColor(QColor tmp);
 
+  signals :
+
+    void viewNeedDraw();
+
   };
 
 }

@@ -48,7 +48,9 @@ nobase_include_HEADERS = \
 	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlLines.h \
 	tulip/GlColorScale.h \
-	tulip/GlTools.h
+	tulip/GlMetaNodeRenderer.h \
+	tulip/GlMetaNodeTrueRenderer.h \
+	tulip/GlTools.h 
 
 noinst_HEADERS = \
 	tulip/Bezier.h \

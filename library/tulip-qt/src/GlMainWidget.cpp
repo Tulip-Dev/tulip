@@ -5,6 +5,9 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtooltip.h>
+#include <QtOpenGL/QGLFramebufferObject>
+#include <QtOpenGL/QGLPixelBuffer>
+
 
 #include "tulip/GlMainWidget.h"
 
@@ -279,6 +282,7 @@ namespace tlp {
       if(scene.getGlGraphComposite()) {
 	hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
       }
+      scene.prerenderMetaNodes();
       scene.draw();
       drawInteractors();
 
@@ -455,6 +459,60 @@ namespace tlp {
     scene.outputSVG(size, filename);
     return true;
   }
+  //=====================================================
+  void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight){
+    textureRealWidth=1;
+    textureRealHeight=1;
+
+    while(textureRealWidth<=width)
+      textureRealWidth*=2;
+    while(textureRealHeight<=height)
+      textureRealHeight*=2;
+
+    if(textureRealWidth>4096){
+      textureRealHeight=textureRealHeight/(textureRealWidth/8192);
+      textureRealWidth=4096;
+    }
+    if(textureRealHeight>4096){
+      textureRealWidth=textureRealWidth/(textureRealHeight/8192);
+      textureRealHeight=4096;
+    }
+
+  }
+  //=====================================================
+  void GlMainWidget::getTextureShift(int width, int height, float &xTextureShift, float &yTextureShift){
+    int textureRealWidth;
+    int textureRealHeight;
+	
+	getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
+
+    scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
+  }
+  //=====================================================
+  QGLFramebufferObject *GlMainWidget::createTexture(const string &textureName, int width, int height){
+    scene.prerenderMetaNodes();
+
+	QGLPixelBuffer *glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
+	while(!glFrameBuf->isValid()){
+		width=width/2;
+		height=height/2;
+		delete glFrameBuf;
+		glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
+	}
+	
+    scene.setViewport(0,0,width,height);
+	
+	glFrameBuf->makeCurrent();
+	
+	GLuint textureId=glFrameBuf->generateDynamicTexture();
+	
+	scene.ajustSceneToSize(width,height);
+	scene.draw();
+	glFrameBuf->updateDynamicTexture(textureId);
+	delete glFrameBuf;
+	GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
+	
+	return NULL;
+  }
 
 }
-

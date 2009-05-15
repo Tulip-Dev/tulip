@@ -13,12 +13,15 @@
 #include <tulip/StableIterator.h>
 #include <tulip/StringProperty.h>
 
+#include <tulip/GlMetaNodeTrueRenderer.h>
+
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"
 #include "tulip/LayerManagerWidget.h"
 #include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
 #include "tulip/InteractorManager.h"
+#include "tulip/QtMetaNodeRenderer.h"
 
 using namespace std;
 
@@ -27,7 +30,7 @@ namespace tlp {
   VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
 
   //==================================================
-  NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView() {
+  NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),currentMetaNodeRenderer(NULL) {
   }
   //==================================================
   NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -47,6 +50,7 @@ namespace tlp {
   	overviewAction->setCheckable(true);
   	overviewAction->setChecked(true);
   	renderingParametersDialog=new RenderingParametersDialog();
+  	connect(renderingParametersDialog,SIGNAL(viewNeedDraw()),this, SLOT(drawAfterRenderingParametersChange()));
   	layerManagerWidget=new LayerManagerWidget();
   	augmentedDisplayDialogAction = dialogMenu->addAction("Augmented Display");
   	//Options Menu
@@ -63,6 +67,9 @@ namespace tlp {
   	actionAntialiasingOptions=optionsMenu->addAction("Antialiasing");
   	actionAntialiasingOptions->setCheckable(true);
   	actionAntialiasingOptions->setChecked(true);
+  	actionTrueMetaNodeOptions=optionsMenu->addAction("Textured meta node");
+  	actionTrueMetaNodeOptions->setCheckable(true);
+  	actionTrueMetaNodeOptions->setChecked(true);
 
   	//Export Menu
   	exportImageMenu=new QMenu("&Save Picture as ");
@@ -102,6 +109,13 @@ namespace tlp {
       data=dataSet;
     }
     mainWidget->setData(graph,data);
+    if(currentMetaNodeRenderer)
+      delete currentMetaNodeRenderer;
+    if(qtMetaNode)
+      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+    else
+      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+    mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     renderingParametersDialog->setGlMainView(this);
     layerManagerWidget->setGlMainView(this);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
@@ -116,6 +130,14 @@ namespace tlp {
   void NodeLinkDiagramComponent::setGraph(Graph *graph) {
     mainWidget->setGraph(graph);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
+    if(currentMetaNodeRenderer)
+      delete currentMetaNodeRenderer;
+    if(qtMetaNode)
+      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+    else
+      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+
+    mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     init();
   }
   //==================================================
@@ -125,35 +147,6 @@ namespace tlp {
     widgetList.push_back(pair<QWidget*,string>(layerManagerWidget,"Layer Manager"));
     return widgetList;
   }
-
-
-    /*
-    interactorsMap["Selection of reachable elements with equal value"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Selection of reachable elements with equal value"].push_back(InteractorManager::getInst().getInteractor("MouseMagicSelector"));
-    interactorsMap["Move/Reshape selection"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Move/Reshape selection"].push_back(InteractorManager::getInst().getInteractor("MouseSelector"));
-    interactorsMap["Move/Reshape selection"].push_back(InteractorManager::getInst().getInteractor("MouseSelectionEditor"));
-    interactorsMap["Edit edge bends"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Edit edge bends"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeSelector"));
-    interactorsMap["Edit edge bends"].push_back(InteractorManager::getInst().getInteractor("MouseEdgeBendEditor"));
-    interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Get information on nodes/edges"].push_back(InteractorManager::getInst().getInteractor("MouseShowElementInfos"));
-    interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Select nodes/edges in a rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseSelector"));
-    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MousePanNZoomNavigator"));
-    interactorsMap["Zoom on rectangle"].push_back(InteractorManager::getInst().getInteractor("MouseBoxZoomer"));*/
-
-    /*interactorsActionList.push_back(new QAction(QIcon(":/i_navigation.png"), "Navigate in graph", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_select.png"), "Get information on nodes/edges", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_selection.png"), "Select nodes/edges in a rectangle", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_move.png"), "Move/Reshape selection", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_magic.png"), "Selection of reachable elements with equal value", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_zoom.png"), "Zoom on rectangle", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_del.png"), "Delete nodes or edges", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_addnode.png"), "Add nodes", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_addedge.png"),"Add edges", this));
-    interactorsActionList.push_back(new QAction(QIcon(":/i_bends.png"), "Edit edge bends", this));*/
-
 
   void NodeLinkDiagramComponent::specificEventFilter(QObject *object,QEvent *event) {
     if (event->type() == QEvent::KeyPress){
@@ -232,8 +225,8 @@ namespace tlp {
   	goAction = NULL;
   	ungroupAction = NULL;
   	if (isNode) {
-  		GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-  		if (meta->getNodeValue(tmpNode)!=0) {
+  	  Graph *metaGraph=graph->getNodeMetaInfo(tmpNode);
+  		if (metaGraph) {
   			goAction = contextMenu->addAction(tr("Go inside"));
   			ungroupAction = contextMenu->addAction(tr("Ungroup"));
   		}
@@ -257,8 +250,8 @@ namespace tlp {
     } else if (action == propAction) { // Properties
       emit elementSelected(itemId, isNode);
     }else if (action == goAction) { // Go inside
-      GraphProperty *meta = graph->getProperty<GraphProperty>("viewMetaGraph");
-      emit requestChangeGraph(this,meta->getNodeValue(node(itemId)));
+      Graph *metaGraph=graph->getNodeMetaInfo(node(itemId));
+      emit requestChangeGraph(this,metaGraph);
     } else if (action == ungroupAction) { // Ungroup
       tlp::openMetaNode(graph, node(itemId));
     } else if(action == selectAction || action == addRemoveAction) {
@@ -277,6 +270,22 @@ namespace tlp {
     GlGraphRenderingParameters param=mainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setElementZOrdered(actionZOrderingOptions->isChecked());
     param.setAntialiasing(actionAntialiasingOptions->isChecked());
+    if(!actionTrueMetaNodeOptions->isChecked() && qtMetaNode){
+      qtMetaNode=false;
+      if(currentMetaNodeRenderer)
+        delete currentMetaNodeRenderer;
+      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
+      draw();
+    }
+    if(actionTrueMetaNodeOptions->isChecked() && !qtMetaNode){
+      qtMetaNode=true;
+      if(currentMetaNodeRenderer)
+        delete currentMetaNodeRenderer;
+      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
+      draw();
+    }
     mainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     Observable::unholdObservers();
   }
@@ -333,7 +342,18 @@ namespace tlp {
   //==================================================
   // GUI functions
   //==================================================
+  void NodeLinkDiagramComponent::drawAfterRenderingParametersChange(){
+    if(currentMetaNodeRenderer)
+      delete currentMetaNodeRenderer;
+    if(qtMetaNode){
+      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
+    }
+    draw();
+  }
+  //==================================================
   void NodeLinkDiagramComponent::draw() {
+	cout << "NodeLinkDiagramComponent::draw()" << endl;
     checkAlgorithmResult();
 
     GlMainView::draw();

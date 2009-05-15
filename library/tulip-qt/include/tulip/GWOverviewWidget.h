@@ -6,6 +6,7 @@
 #include "tulip/RenderingParametersDialogData.h"
 #include <tulip/Camera.h>
 #include <tulip/ObservableGraph.h>
+#include <tulip/GlMetaNodeRenderer.h>
 #include <QtGui/qcolor.h>
 #include <string>
 #include <QtCore/qstring.h>
@@ -58,6 +59,7 @@ private :
   bool _synchronizing;
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
+  GlMetaNodeRenderer metaNodeRenderer;
   //void setBackgroundColor(QColor);
 };
 

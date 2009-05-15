@@ -51,6 +51,7 @@ nobase_include_HEADERS = \
 	tulip/StringsListSelectionWidget.h \
 	tulip/ViewPluginsManager.h \
 	tulip/ColorScaleConfigDialog.h \
+	tulip/QtMetaNodeRenderer.h
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h

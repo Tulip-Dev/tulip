@@ -22,6 +22,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 
+#include "tulip/GlMetaNodeRenderer.h"
 #include "tulip/GlGraphRenderingParameters.h"
 
 namespace tlp {
@@ -47,7 +48,7 @@ namespace tlp {
     /**
      * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
      */
-    GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters);
+    GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer=NULL);
 
     ~GlGraphInputData();
 
@@ -234,6 +235,20 @@ namespace tlp {
         return elementLayoutPropName;
     }
 
+    /**
+     * Set metaNode renderer
+     */
+    void setMetaNodeRenderer(GlMetaNodeRenderer *renderer){
+      metaNodeRenderer=renderer;
+    }
+
+    /**
+     * Return metaNode renderer
+     */
+    GlMetaNodeRenderer *getMetaNodeRenderer() {
+      return metaNodeRenderer;
+    }
+
   protected :
 
     std::string elementColorPropName;
@@ -248,6 +263,8 @@ namespace tlp {
     std::string elementBorderColorPropName;
     std::string elementBorderWidthPropName;
     std::string elementLayoutPropName;
+
+    GlMetaNodeRenderer *metaNodeRenderer;
 
   public:
 

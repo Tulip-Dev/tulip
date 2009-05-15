@@ -13,6 +13,13 @@ namespace tlp {
 
   GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true) {
     graph->addGraphObserver(this);
+
+    Iterator<node>* nodesIterator = graph->getNodes();
+    while (nodesIterator->hasNext()){
+      node n=nodesIterator->next();
+      if(graph->getNodeMetaInfo(n))
+        metaNodes.insert(n);
+    }
   }
 
   void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
