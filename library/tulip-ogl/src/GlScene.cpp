@@ -153,12 +153,17 @@ namespace tlp {
   void GlScene::draw() {
     initGlParameters();
 
-    GlLODSceneVisitor lodVisitor(lodCalculator,glGraphComposite->getInputData());
+    GlLODSceneVisitor *lodVisitor;
+    if(glGraphComposite)
+      lodVisitor=new GlLODSceneVisitor(lodCalculator,glGraphComposite->getInputData());
+    else
+      lodVisitor=new GlLODSceneVisitor(lodCalculator,NULL);
+
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      (*it).second->acceptVisitor(&lodVisitor);
+      (*it).second->acceptVisitor(lodVisitor);
       if((*it).first=="Main")
-        selectionLayer->acceptVisitor(&lodVisitor);
+        selectionLayer->acceptVisitor(lodVisitor);
     }
 
     lodCalculator->compute(viewport,viewport);
@@ -198,19 +203,21 @@ namespace tlp {
             ((GlSimpleEntity*)((*it).first))->draw((*it).second,camera);
           }
 
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            assert(graph);
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.draw((*it).second,glGraphComposite->getInputData(),camera);
-            }else{
-              glMetaNode.id=(*it).first;
-              glMetaNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+          if(glGraphComposite){
+            for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+              assert(graph);
+              if(!graph->isMetaNode(node((*it).first))){
+                glNode.id=(*it).first;
+                glNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+              }else{
+                glMetaNode.id=(*it).first;
+                glMetaNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+              }
             }
-          }
-          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-            glEdge.id=(*it).first;
-            glEdge.draw((*it).second,glGraphComposite->getInputData(),camera);
+            for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+              glEdge.id=(*it).first;
+              glEdge.draw((*it).second,glGraphComposite->getInputData(),camera);
+            }
           }
       }else{
         entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
@@ -229,25 +236,27 @@ namespace tlp {
           entitiesVector.push_back(EntityWithDistance(dist,&(*it)));
         }
 
-        GlNode glNode(0);
-        for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-          glNode.id=(*it).first;
-          bb=glNode.getBoundingBox(glGraphComposite->getInputData());
-          middle=bb.first+(bb.second-bb.first)/2;
-          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-          entitiesVector.push_back(EntityWithDistance(dist,&(*it),true));
-        }
-        GlEdge glEdge(0);
-        for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-          glEdge.id=(*it).first;
-          bb=glEdge.getBoundingBox(glGraphComposite->getInputData());
-          middle=bb.first+(bb.second-bb.first)/2;
-          dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
-          dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-          entitiesVector.push_back(EntityWithDistance(dist,&(*it),false));
+        if(glGraphComposite){
+          GlNode glNode(0);
+          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
+            glNode.id=(*it).first;
+            bb=glNode.getBoundingBox(glGraphComposite->getInputData());
+            middle=bb.first+(bb.second-bb.first)/2;
+            dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+            dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+            dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+            entitiesVector.push_back(EntityWithDistance(dist,&(*it),true));
+          }
+          GlEdge glEdge(0);
+          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
+            glEdge.id=(*it).first;
+            bb=glEdge.getBoundingBox(glGraphComposite->getInputData());
+            middle=bb.first+(bb.second-bb.first)/2;
+            dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+            dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+            dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+            entitiesVector.push_back(EntityWithDistance(dist,&(*it),false));
+          }
         }
 
         sort(entitiesVector.begin(),entitiesVector.end(),entityWithDistanceCompare::compare);
@@ -275,7 +284,7 @@ namespace tlp {
 
       GlPointManager::getInst().endRendering();
 
-      if(viewLabel) {
+      if(viewLabel && glGraphComposite) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_LIGHTING);
         glDepthFunc(GL_ALWAYS );
@@ -356,6 +365,7 @@ namespace tlp {
     }
 
     lodCalculator->clear();
+    delete lodVisitor;
   }
 
   void GlScene::addLayer(GlLayer *layer) {
@@ -365,15 +375,22 @@ namespace tlp {
   }
 
   void GlScene::centerScene() {
-    GlBoundingBoxSceneVisitor visitor(glGraphComposite->getInputData());
+    GlBoundingBoxSceneVisitor *visitor;
+
+    if(glGraphComposite)
+      visitor=new GlBoundingBoxSceneVisitor(glGraphComposite->getInputData());
+    else
+      visitor=new GlBoundingBoxSceneVisitor(NULL);
 
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D())
-	(*it).second->acceptVisitor(&visitor);
+	(*it).second->acceptVisitor(visitor);
     }
 
-    Coord maxC = visitor.getBoundingBox().second;
-    Coord minC = visitor.getBoundingBox().first;
+    Coord maxC = visitor->getBoundingBox().second;
+    Coord minC = visitor->getBoundingBox().first;
+
+    delete visitor;
 
     double dx = maxC[0] - minC[0];
     double dy = maxC[1] - minC[1];
@@ -400,15 +417,22 @@ namespace tlp {
       *xWhiteFactor=0.;
     if(yWhiteFactor)
       *yWhiteFactor=0.;
-    GlBoundingBoxSceneVisitor visitor(glGraphComposite->getInputData());
+
+    GlBoundingBoxSceneVisitor *visitor;
+    if(glGraphComposite)
+      visitor=new GlBoundingBoxSceneVisitor(glGraphComposite->getInputData());
+    else
+      visitor=new GlBoundingBoxSceneVisitor(NULL);
 
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D())
-        (*it).second->acceptVisitor(&visitor);
+        (*it).second->acceptVisitor(visitor);
     }
 
-    Coord maxC = visitor.getBoundingBox().second;
-    Coord minC = visitor.getBoundingBox().first;
+    Coord maxC = visitor->getBoundingBox().second;
+    Coord minC = visitor->getBoundingBox().first;
+
+    delete visitor;
 
     double dx = maxC[0] - minC[0];
     double dy = maxC[1] - minC[1];
@@ -536,18 +560,23 @@ namespace tlp {
       w=1;
     if(h==0)
       h=1;
-    GlSelectSceneVisitor visitor(type,glGraphComposite->getInputData(),lodCalculator);
+    GlSelectSceneVisitor *visitor;
+    if(glGraphComposite)
+      visitor=new GlSelectSceneVisitor(type,glGraphComposite->getInputData(),lodCalculator);
+    else
+      visitor=new GlSelectSceneVisitor(type,NULL,lodCalculator);
 
     if(layer) {
-      layer->acceptVisitor(&visitor);
+      layer->acceptVisitor(visitor);
     }else {
       if(type==SelectSimpleEntities)
-        selectionLayer->acceptVisitor(&visitor);
+        selectionLayer->acceptVisitor(visitor);
 
       for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-        (*it).second->acceptVisitor(&visitor);
+        (*it).second->acceptVisitor(visitor);
       }
     }
+    delete visitor;
 
     Vector<int,4> selectionViewport;
     selectionViewport[0]=x;
@@ -634,22 +663,26 @@ namespace tlp {
           ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
         }
       }else if(type==SelectNodes){
-        GlNode glNode(0);
-        for(vector<LODResultComplexEntity>::iterator itE=(*itNodes).begin();itE!=(*itNodes).end();++itE){
-          idToEntity[id]=(*itE).first;
-          glLoadName(id);
-          id++;
-          glNode.id=(*itE).first;
-          glNode.draw(20.,glGraphComposite->getInputData(),camera);
+        if(glGraphComposite){
+          GlNode glNode(0);
+          for(vector<LODResultComplexEntity>::iterator itE=(*itNodes).begin();itE!=(*itNodes).end();++itE){
+            idToEntity[id]=(*itE).first;
+            glLoadName(id);
+            id++;
+            glNode.id=(*itE).first;
+            glNode.draw(20.,glGraphComposite->getInputData(),camera);
+          }
         }
       }else{
-        GlEdge glEdge(0);
-        for(vector<LODResultComplexEntity>::iterator itE=(*itEdges).begin();itE!=(*itEdges).end();++itE){
-          idToEntity[id]=(*itE).first;
-          glLoadName(id);
-          id++;
-          glEdge.id=(*itE).first;
-          glEdge.draw(20.,glGraphComposite->getInputData(),camera);
+        if(glGraphComposite){
+          GlEdge glEdge(0);
+          for(vector<LODResultComplexEntity>::iterator itE=(*itEdges).begin();itE!=(*itEdges).end();++itE){
+            idToEntity[id]=(*itE).first;
+            glLoadName(id);
+            id++;
+            glEdge.id=(*itE).first;
+            glEdge.draw(20.,glGraphComposite->getInputData(),camera);
+          }
         }
       }
 
@@ -682,6 +715,9 @@ namespace tlp {
   }
   //====================================================
   void GlScene::outputSVG(unsigned int size,const string& filename) {
+    if(!glGraphComposite)
+      return;
+
     GLint returned;
     GLfloat clearColor[4];
     GLfloat lineWidth;
@@ -719,6 +755,9 @@ namespace tlp {
   }
   //====================================================
   void GlScene::outputEPS(unsigned int size,const string& filename) {
+    if(!glGraphComposite)
+      return;
+
     GLint returned;
     GLfloat clearColor[4];
     GLfloat lineWidth;
