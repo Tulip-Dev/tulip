@@ -87,5 +87,9 @@ libtulip_ogl_la_SOURCES = \
 	GlProgressBar.cpp \
 	GlXMLTools.cpp \
 	GlColorScale.cpp \
-	GlPointManager.cpp
+	GlPointManager.cpp \
+	FastBezier.cpp \
+	GlBezierCurve.cpp \
+	GlCatmullRomCurve.cpp \
+	GlShaderManager.cpp
 

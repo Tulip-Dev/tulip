@@ -6,13 +6,12 @@
 #include <tulip/BoundingBox.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlPolyQuad.h>
-#include <tulip/GlCurve.h>
+#include <tulip/GlCatmullRomCurve.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
 #include "QuantitativeParallelAxis.h"
 #include "ParallelTools.h"
-#include "GlSmoothCurve.h"
 
 #include <sstream>
 #include <climits>
@@ -237,7 +236,12 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 		line = new GlPolyQuad(quadCoords, color, lineTextureFilename, true, 1, color);
 	} else {
 		bool closeSpline = (layoutType == CIRCULAR);
-		line = new GlSmoothCurve(splineCurvePassPoints, color, pointRadius, lineTextureFilename, closeSpline);
+		line = new GlCatmullRomCurve(splineCurvePassPoints, color, color, pointRadius, pointRadius, lineTextureFilename, closeSpline);
+		map<string, GlSimpleEntity*> *glEntities = ((GlComposite *)line)->getDisplays();
+		map<string, GlSimpleEntity*>::iterator it;
+		for (it = glEntities->begin(); it != glEntities->end() ; ++it) {
+			glEntitiesDataMap[it->second] = dataId;
+		}
 	}
 	if (graphProxy->isDataHighlighted(dataId)) {
 		line->setStencil(4);

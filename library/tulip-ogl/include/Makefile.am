@@ -50,7 +50,11 @@ nobase_include_HEADERS = \
 	tulip/GlColorScale.h \
 	tulip/GlMetaNodeRenderer.h \
 	tulip/GlMetaNodeTrueRenderer.h \
-	tulip/GlTools.h 
+	tulip/GlTools.h \
+	tulip/FastBezier.h \
+	tulip/GlBezierCurve.h \
+	tulip/GlCatmullRomCurve.h \
+	tulip/GlShaderManager.h 
 
 noinst_HEADERS = \
 	tulip/Bezier.h \

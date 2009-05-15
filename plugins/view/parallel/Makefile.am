@@ -43,15 +43,8 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelCoordsDataConfigWidget.cpp \
 			ParallelCoordsDataConfigWidget.h \
 			ParallelCoordsDrawConfigWidget.cpp \
-			ParallelCoordsDrawConfigWidget.h \
-			GlBezierCurve.h \
-			GlBezierCurve.cpp \
-			FastBezier.h \
-			FastBezier.cpp \
-			GlSmoothCurve.h \
-			GlSmoothCurve.cpp \
-			CurveUtils.h \
-			CurveUtils.cpp
+			ParallelCoordsDrawConfigWidget.h 
+
 
 nodist_libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelResource.cpp \
