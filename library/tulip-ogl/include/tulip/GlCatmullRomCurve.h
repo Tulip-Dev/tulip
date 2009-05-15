@@ -28,7 +28,7 @@ namespace tlp {
 /**
  * This class allow to draw a smooth curve which passes through all the points passes as parameters
  */
-class GlCatmullRomCurve : public GlComposite {
+class  TLP_GL_SCOPE GlCatmullRomCurve : public GlComposite {
 
 public :
 
