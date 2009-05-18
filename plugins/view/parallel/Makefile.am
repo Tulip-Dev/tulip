@@ -43,6 +43,7 @@ libParallelCoordinates_@VERSION@_la_SOURCES = \
 			ParallelCoordsAxisSwapper.cpp \
 			ParallelCoordsAxisSliders.h \
 			ParallelCoordsAxisSliders.cpp \
+			ParallelCoordsAxisBoxPlot.h \
 			ParallelCoordsAxisBoxPlot.cpp \
 			ParallelCoordinatesInteractors.cpp \
 			ParallelCoordinatesInteractors.h \
