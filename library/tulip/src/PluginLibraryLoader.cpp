@@ -5,6 +5,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #else
+#include <stdlib.h>
 #include <dlfcn.h>
 #include <dirent.h>
 #endif
@@ -167,15 +168,19 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     struct dirent **namelist = (struct dirent **) infos;
     std::string tmpStr;
     n--;
-    tmpStr= pluginPath +"/"+ std::string(namelist[n]->d_name);  
     std::string lib(namelist[n]->d_name);
+    free(namelist[n]);
+    if (n == 0)
+      free(infos);
+    tmpStr = pluginPath +"/"+ lib; 
     // looking for a suffix matching -A.B.C
     unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
       if (lib.find(tulip_release, idx) == idx + 1) {
-	if (loader!=0) loader->loading(std::string(namelist[n]->d_name));
+	if (loader!=0)
+	  loader->loading(lib);
 	loadPluginLibrary(tmpStr, loader);
 	return n > 0;
       }
