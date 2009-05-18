@@ -49,7 +49,7 @@ class IteratorVector : public IteratorValue {
      vData(vData),
      it(vData->begin()) {
      while (it!=(*vData).end() &&
-	    StoredValueType<TYPE>::equal((*it),_value) != _equal) {
+	    StoredValueType<TYPE>::equal((*it), _value) != _equal) {
        ++it;
        ++_pos;
      }
@@ -63,7 +63,7 @@ class IteratorVector : public IteratorValue {
       ++it;
       ++_pos;
     } while (it!=(*vData).end() &&
-	     StoredValueType<TYPE>::equal((*it),_value) != _equal);
+	     StoredValueType<TYPE>::equal((*it), _value) != _equal);
     return tmp;
   }
   unsigned int nextValue(AnyValueContainer& val) {
@@ -73,7 +73,7 @@ class IteratorVector : public IteratorValue {
       ++it;
       ++_pos;
     } while (it!=(*vData).end() &&
-	     StoredValueType<TYPE>::equal((*it),_value) != _equal);
+	     StoredValueType<TYPE>::equal((*it), _value) != _equal);
     return pos;
   }
  private:
@@ -159,7 +159,7 @@ private:
   std::deque<typename StoredValueType<TYPE>::Value> *vData;
   stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
   unsigned int minIndex,maxIndex;
-  TYPE defaultValue;
+  typename StoredValueType<TYPE>::Value defaultValue;
   State state;
   unsigned int elementInserted;
   double ratio;
@@ -202,7 +202,7 @@ DECL_DEFAULT_TYPE_VALUE(long double)
 //===================================================================
 template<typename TYPE> 
   MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredValueType<TYPE>::Value>()),
-   hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(defaultTypeValue<TYPE>()), state(VECT), elementInserted(0),
+  hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredValueType<TYPE>::copy(defaultTypeValue<TYPE>())), state(VECT), elementInserted(0),
    ratio(double(sizeof(TYPE)) / (3.0*double(sizeof(void *))+double(sizeof(TYPE)))),
    compressing(false)
      {
@@ -229,7 +229,7 @@ MutableContainer<TYPE>::~MutableContainer() {
       typename std::deque<typename StoredValueType<TYPE>::Value>::const_iterator it =
 	vData->begin();
       while (it!= vData->end()) {
-	if (!StoredValueType<TYPE>::equal((*it), defaultValue))
+	if ((*it) != defaultValue)
 	  StoredValueType<TYPE>::destroy(*it);
 	++it;
       }
@@ -252,6 +252,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;  
   }
+  StoredValueType<TYPE>::destroy(defaultValue);
 }
 //===================================================================
 template <typename TYPE> 
@@ -264,7 +265,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
       typename std::deque<typename StoredValueType<TYPE>::Value>::const_iterator it =
 	vData->begin();
       while (it!= vData->end()) {
-	if (!StoredValueType<TYPE>::equal((*it), defaultValue))
+	if ((*it) != defaultValue)
 	  StoredValueType<TYPE>::destroy(*it);
 	++it;
       }
@@ -288,7 +289,8 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break; 
   }
-  defaultValue = value;
+  StoredValueType<TYPE>::destroy(defaultValue);
+  defaultValue = StoredValueType<TYPE>::copy(value);
   state = VECT;
   maxIndex = UINT_MAX;
   minIndex = UINT_MAX;
@@ -298,7 +300,8 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
 template <typename TYPE> 
   IteratorValue* MutableContainer<TYPE>::findAll(const TYPE &value,
 						 bool equal) const {
-  if (equal && value == defaultValue)
+  if (equal &&
+      StoredValueType<TYPE>::equal(defaultValue, value))
     // error
     return NULL;
   else {
@@ -323,20 +326,21 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
 
   //Test if after insertion we need to resize
-  if (!compressing && value != defaultValue) {
+  if (!compressing &&
+      !StoredValueType<TYPE>::equal(defaultValue, value)) {
     compressing = true;
     compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
     compressing = false;
   }
   
-  if (value == defaultValue) {
+  if (StoredValueType<TYPE>::equal(defaultValue, value)) {
     typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
     switch (state) {
     case VECT : 
       if (i<=maxIndex && i>=minIndex) {
 	typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
-	if (!StoredValueType<TYPE>::equal(val, defaultValue)) {
-	  (*vData)[i - minIndex]= StoredValueType<TYPE>::copyDefault(defaultValue);
+	if (val != defaultValue) {
+	  (*vData)[i - minIndex]= defaultValue;
 	  StoredValueType<TYPE>::destroy(val);
 	  --elementInserted;
 	}
@@ -371,16 +375,16 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 	  maxIndex = i;
 	  }*/
 	while ( i > maxIndex ) {
-	  (*vData).push_back(StoredValueType<TYPE>::copyDefault(defaultValue));
+	  (*vData).push_back(defaultValue);
 	  ++maxIndex;
 	}
 	while ( i < minIndex ) {
-	  (*vData).push_front(StoredValueType<TYPE>::copyDefault(defaultValue));
+	  (*vData).push_front(defaultValue);
 	  --minIndex;
 	}
 	typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
 	(*vData)[i - minIndex] = StoredValueType<TYPE>::copy(value);
-	if (!StoredValueType<TYPE>::equal(val, defaultValue))
+	if (val != defaultValue)
 	  StoredValueType<TYPE>::destroy(val);
 	else
 	  ++elementInserted;
@@ -406,7 +410,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 template <typename TYPE> 
 void MutableContainer<TYPE>::vectset(const unsigned int i,
 				     typename StoredValueType<TYPE>::Value value) {
-  assert(!StoredValueType<TYPE>::equal(value, defaultValue));
+  assert(value != defaultValue);
 
   if (minIndex == UINT_MAX) {
     minIndex = i;
@@ -416,16 +420,16 @@ void MutableContainer<TYPE>::vectset(const unsigned int i,
   }
   else {
     while ( i > maxIndex ) {
-      (*vData).push_back(StoredValueType<TYPE>::copyDefault(defaultValue));
+      (*vData).push_back(defaultValue);
       ++maxIndex;
     }
     while ( i < minIndex ) {
-      (*vData).push_front(StoredValueType<TYPE>::copyDefault(defaultValue));
+      (*vData).push_front(defaultValue);
       --minIndex;
     }
     typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
     (*vData)[i - minIndex] = value;
-    if (!StoredValueType<TYPE>::equal(val, defaultValue))
+    if (val != defaultValue)
       StoredValueType<TYPE>::destroy(val);
     else
       ++elementInserted;
@@ -438,12 +442,12 @@ void MutableContainer<TYPE>::vectset(const unsigned int i,
 template <typename TYPE>   
 typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (maxIndex == UINT_MAX) return defaultValue;
+  if (maxIndex == UINT_MAX) return StoredValueType<TYPE>::get(defaultValue);
   typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) 
-      return defaultValue;
+      return StoredValueType<TYPE>::get(defaultValue);
     else 
       return StoredValueType<TYPE>::get((*vData)[i - minIndex]);
     break;
@@ -451,12 +455,12 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
     if ((it=hData->find(i))!=hData->end())
       return StoredValueType<TYPE>::get((*it).second);
     else
-      return defaultValue;
+      return StoredValueType<TYPE>::get(defaultValue);
     break;
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
-    return defaultValue;
+    return StoredValueType<TYPE>::get(defaultValue);
     break;
   }
 }
@@ -466,14 +470,14 @@ template <typename TYPE>
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) {
     notDefault = false;
-    return defaultValue;
+    return StoredValueType<TYPE>::get(defaultValue);
   }
   typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) {
       notDefault = false;
-      return defaultValue;
+      return StoredValueType<TYPE>::get(defaultValue);
     } else {
       notDefault = true;
       return StoredValueType<TYPE>::get((*vData)[i - minIndex]);
@@ -484,13 +488,13 @@ template <typename TYPE>
       return StoredValueType<TYPE>::get((*it).second);
     } else {
       notDefault = false;
-      return defaultValue;
+      return StoredValueType<TYPE>::get(defaultValue);
     }
   default:
     assert(false);
     notDefault = false;
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
-    return defaultValue;
+    return StoredValueType<TYPE>::get(defaultValue);
   }
 }
 //===================================================================
@@ -503,7 +507,7 @@ void MutableContainer<TYPE>::vecttohash() {
   unsigned int newMinIndex = UINT_MAX;
   elementInserted = 0;
   for (unsigned int i=minIndex; i<=maxIndex; ++i) {
-    if (!StoredValueType<TYPE>::equal((*vData)[i - minIndex], defaultValue)) {
+    if ((*vData)[i - minIndex] != defaultValue) {
       (*hData)[i] = (*vData)[i - minIndex];
       newMaxIndex = std::max(newMaxIndex, i);
       newMinIndex = std::min(newMinIndex, i);
@@ -526,7 +530,7 @@ void MutableContainer<TYPE>::hashtovect() {
   state=VECT;
   typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
   for (it=hData->begin(); it!=hData->end(); ++it) {
-    if (!StoredValueType<TYPE>::equal(it->second, defaultValue))
+    if (it->second  != defaultValue)
       vectset(it->first, it->second);
   }
   delete hData; hData = 0;

@@ -50,10 +50,6 @@ namespace tlp {
 	return val;
       }
 
-      inline static TYPE copyDefault(const TYPE& val) {
-	return val;
-      }
-
       inline static void destroy(TYPE) {}
     };
 
@@ -75,10 +71,6 @@ namespace tlp {
 								\
     inline static Value copy(const T& val) {			\
       return new T(val);					\
-    }								\
-								\
-    inline static Value copyDefault(T& val) {			\
-      return &val;						\
     }								\
 								\
     inline static void destroy(Value val) {			\
