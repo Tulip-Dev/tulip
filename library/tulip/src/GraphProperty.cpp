@@ -111,10 +111,13 @@ void GraphProperty::destroy(Graph *sg) {
       setNodeValue(n, backup.get(n.id));
     } delete it;
   }
-  set<node> refs = referencedGraph.get(sg->getId());
+  const set<node>& refs = referencedGraph.get(sg->getId());
   set<node>::const_iterator it = refs.begin();
-  for (; it!=refs.end(); ++it) {
-    setNodeValue(*it, 0);
+  if (it != refs.end()) {
+    for (; it!=refs.end(); ++it)
+      nodeProperties.set((*it).id, 0);
+    referencedGraph.set(sg->getId(), set<node>());
+    sg->removeGraphObserver(this);
   }
 }
 //============================================================
