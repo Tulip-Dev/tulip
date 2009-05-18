@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <tulip/ForEach.h>
+#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlDisplayListManager.h"
@@ -13,6 +14,7 @@ namespace tlp {
 
   GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true),nodesModified(true) {
     graph->addGraphObserver(this);
+    graph->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
     Iterator<node>* nodesIterator = graph->getNodes();
     while (nodesIterator->hasNext()){
@@ -25,6 +27,7 @@ namespace tlp {
 
   GlGraphComposite::~GlGraphComposite(){
     inputData.getGraph()->removeGraphObserver(this);
+    inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
   }
 
   void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)

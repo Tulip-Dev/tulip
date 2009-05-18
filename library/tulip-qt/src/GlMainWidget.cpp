@@ -105,6 +105,12 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
+    if(scene.getLayer("Main")){
+      GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
+      if(oldGraphComposite)
+        delete oldGraphComposite;
+    }
+
     string sceneInput="";
     if(dataSet.exist("scene")) {
       dataSet.get("scene",sceneInput);
@@ -191,6 +197,7 @@ namespace tlp {
     graphComposite->setRenderingParameters(param);
     scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+    delete oldGraphComposite;
   }
   //==================================================
   Graph *GlMainWidget::getGraph() {

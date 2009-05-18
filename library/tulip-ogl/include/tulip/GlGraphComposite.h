@@ -20,7 +20,7 @@ namespace tlp {
    *
    * GlComposite use to represent a graph with nodes, metanodes and edges
    */
-  class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver {
+  class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver, public PropertyObserver {
 
 
   public:
@@ -75,6 +75,9 @@ namespace tlp {
      */
     virtual void delEdge(Graph *,const edge ){
       haveToSort=true;
+    }
+    virtual void afterSetNodeValue(PropertyInterface*, const node){
+      nodesModified=true;
     }
     /**
      * Function use by the GraphObserver when the graph is delete
