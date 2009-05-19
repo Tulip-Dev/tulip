@@ -336,6 +336,8 @@ void viewGl::fileCloseTab(){
     currentTabIndex=-1;
 
     tabWidget->removeTab(index);
+    if(tabWidget->count()==0)
+      tabWidget->setCurrentIndex(-1);
   }
 }
 //**********************************************************************
