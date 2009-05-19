@@ -30,9 +30,11 @@ namespace tlp {
 
     Q_OBJECT
 
-  protected:
+  public :
 
     void run();
+
+  protected:
 
     BoundingBox *boundingBoxTab;
     float *resultTab;

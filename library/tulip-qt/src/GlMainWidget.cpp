@@ -93,7 +93,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator()),view(view){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);
@@ -497,29 +497,29 @@ namespace tlp {
   }
   //=====================================================
   QGLFramebufferObject *GlMainWidget::createTexture(const string &textureName, int width, int height){
+    scene.setViewport(0,0,width,height);
+    scene.ajustSceneToSize(width,height);
+
     scene.prerenderMetaNodes();
 
-	QGLPixelBuffer *glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
-	while(!glFrameBuf->isValid() && width>1 && height>1 ){
-		width=width/2;
-		height=height/2;
-		delete glFrameBuf;
-		glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
-	}
+    QGLPixelBuffer *glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
+    while(!glFrameBuf->isValid() && width>1 && height>1 ){
+      width=width/2;
+      height=height/2;
+      delete glFrameBuf;
+      glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
+    }
 
-    scene.setViewport(0,0,width,height);
+    glFrameBuf->makeCurrent();
 
-	glFrameBuf->makeCurrent();
+    GLuint textureId=glFrameBuf->generateDynamicTexture();
 
-	GLuint textureId=glFrameBuf->generateDynamicTexture();
+    scene.draw();
+    glFrameBuf->updateDynamicTexture(textureId);
+    delete glFrameBuf;
+    GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 
-	scene.ajustSceneToSize(width,height);
-	scene.draw();
-	glFrameBuf->updateDynamicTexture(textureId);
-	delete glFrameBuf;
-	GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
-
-	return NULL;
+    return NULL;
   }
 
 }

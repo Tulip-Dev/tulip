@@ -133,6 +133,9 @@ namespace tlp {
     //prerender metanodes if need
     set<node> metaNodes=glGraphComposite->getMetaNodes();
     if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()){
+
+      initGlParameters();
+
       lodCalculator->beginNewCamera(getLayer("Main")->getCamera());
       GlNode glNode(0);
       for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){

@@ -38,14 +38,19 @@ namespace tlp {
       ++index;
     }
 
-    QtCPULODCalculatorThread thread1(boundingBoxTab,resultTab,index/2,eye,transformMatrix,globalViewport,currentViewport);
-    QtCPULODCalculatorThread thread2(boundingBoxTab+index/2,resultTab+index/2,index-(index/2),eye,transformMatrix,globalViewport,currentViewport);
+    if(index>1000){
+      QtCPULODCalculatorThread thread1(boundingBoxTab,resultTab,index/2,eye,transformMatrix,globalViewport,currentViewport);
+      QtCPULODCalculatorThread thread2(boundingBoxTab+index/2,resultTab+index/2,index-(index/2),eye,transformMatrix,globalViewport,currentViewport);
 
-    thread1.start();
-    thread2.start();
+      thread1.start();
+      thread2.start();
 
-    thread1.wait();
-    thread2.wait();
+      thread1.wait();
+      thread2.wait();
+    }else{
+      QtCPULODCalculatorThread thread1(boundingBoxTab,resultTab,index,eye,transformMatrix,globalViewport,currentViewport);
+      thread1.run();
+    }
 
     index=0;
     for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){

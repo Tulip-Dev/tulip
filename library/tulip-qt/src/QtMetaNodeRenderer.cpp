@@ -82,7 +82,7 @@ namespace tlp {
     float diagonal=sqrt(nodeSize[0]*nodeSize[0]+nodeSize[1]*nodeSize[1]);
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
     int newHeight=(int)(nodeSize[1]*(lod/diagonal));
-	
+
     if(newWidth<128)
       newWidth=128;
     if(newHeight<128)
@@ -107,7 +107,7 @@ namespace tlp {
 
     if(render){
       if(!glMainWidget){
-	glMainWidget=new GlMainWidget(NULL,NULL);
+        glMainWidget=new GlMainWidget(NULL,NULL);
         glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
       }
       //clear QGLFramebufferObject
@@ -127,7 +127,7 @@ namespace tlp {
       glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
       Matrix<float, 4> projectionMatrix;
       glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-	  
+
       //glMainWidget->makeCurrent();
       Graph *graph=inputData->getGraph();
 
@@ -174,7 +174,7 @@ namespace tlp {
 
     float diagonal=sqrt(nodeSize[0]*nodeSize[0]+nodeSize[1]*nodeSize[1]);
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
-    int newHeight=(int)(nodeSize[1]*(lod/diagonal));  
+    int newHeight=(int)(nodeSize[1]*(lod/diagonal));
 	if(newWidth<128)
       newWidth=128;
     if(newHeight<128)
