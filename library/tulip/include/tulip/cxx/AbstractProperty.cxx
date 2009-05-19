@@ -58,6 +58,13 @@ bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compute(const std::string &al
 #endif
     return false;
   }
+
+  // nothing to do if the graph is empty
+  if (this->graph->numberOfNodes() == 0) {
+    msg= "The graph is empty";
+    return false;
+  }
+
   tlp::Observable::holdObservers();
   circularCall = true;
   tlp::PropertyContext tmpContext(context);
