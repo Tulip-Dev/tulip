@@ -405,8 +405,9 @@ public:
   virtual Iterator<std::string>* getProperties()=0;
 
   // updates management
-  virtual void push()=0;
-  virtual void pop()=0;
+  virtual void push(bool unpopAllowed = true)=0;
+  virtual void pop(bool unpopAllowed = true)=0;
+  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop)=0;
   virtual void unpop()=0;
   virtual bool canPop()=0;
   virtual bool canUnpop()=0;

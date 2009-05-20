@@ -69,6 +69,9 @@ double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
 bool TreeMap::run() {
   metric=graph->getProperty<DoubleProperty>("viewMetric");
   size=graph->getLocalProperty<SizeProperty>("viewSize");
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(size);
+
   stdext::hash_map<node,double> value(graph->numberOfNodes());
 
   Iterator<node> *itN=graph->getNodes();
@@ -81,15 +84,6 @@ bool TreeMap::run() {
     }
   } delete itN;
  
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
-  LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
-
   return true;
 }
 

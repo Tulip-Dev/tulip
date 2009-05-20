@@ -260,10 +260,10 @@ BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) 
 BubbleTree::~BubbleTree() {}
 
 bool BubbleTree::run() {
-  if (!getNodeSizePropertyParameter(dataSet,nodeSize)) {
-    if (graph->existProperty("viewSize"))
-      nodeSize = graph->getProperty<SizeProperty>("viewSize");    
-    else {
+  if (!getNodeSizePropertyParameter(dataSet, nodeSize)) {
+    if (graph->existProperty("viewSize")) {
+      nodeSize = graph->getProperty<SizeProperty>("viewSize");
+    } else {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");  
       nodeSize->setAllNodeValue(Size(1.0,1.0,1.0));
     }
@@ -271,6 +271,8 @@ bool BubbleTree::run() {
   if (dataSet==0 || !dataSet->get("complexity",nAlgo))
     nAlgo = true;
 
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(nodeSize);
   layoutResult->setAllEdgeValue(vector<Coord>(0));
 
   if (pluginProgress)
@@ -285,16 +287,10 @@ bool BubbleTree::run() {
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
 
-   TreeTest::cleanComputedTree(graph, tree);
-
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
+  // if not in tulip gui, ensure cleanup
   LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
+  if (!graph->getAttribute("viewLayout", elementLayout))
+    TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }

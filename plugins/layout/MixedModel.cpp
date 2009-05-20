@@ -69,6 +69,9 @@ bool MixedModel::run() {
     dataSet->get("y node-node spacing",spacing);
     dataSet->get("x node-node and edge-node spacing",edgeNodeSpacing);
   }
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(size);
+
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
@@ -80,6 +83,8 @@ bool MixedModel::run() {
   }
   //===========================================================
   IntegerProperty * intProxy = graph->getProperty<IntegerProperty>("viewShape");
+  // ensure shape updates will be kept after a pop
+  preservePropertyUpdates(intProxy);
   intProxy->setAllEdgeValue(0);
   
   // give some empirical feedback of what we are doing 1 %
@@ -295,15 +300,6 @@ bool MixedModel::run() {
   }
 
   dataSet->set("planar_edges",edge_planar);
-
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
-  LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
 
   return true;
 }

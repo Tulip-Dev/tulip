@@ -477,7 +477,7 @@ void GraphImpl::unobserveUpdates() {
 }  
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
-void GraphImpl::push(/*bool unpopAllowed*/) {
+void GraphImpl::push(bool unpopAllowed) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them
@@ -488,7 +488,7 @@ void GraphImpl::push(/*bool unpopAllowed*/) {
   if (!recorders.empty())
     // stop recording for current recorder
     recorders.front()->stopRecording(this);
-  GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder(/*unpopAllowed*/);
+  GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder(unpopAllowed);
   recorder->startRecording(this);
   recorders.push_front(recorder);
 
@@ -507,20 +507,20 @@ void GraphImpl::push(/*bool unpopAllowed*/) {
   }
 }
 //----------------------------------------------------------------
-void GraphImpl::pop() {
+void GraphImpl::pop(bool unpopAllowed) {
   // save the front recorder
   // to allow unpop
   if (!recorders.empty()) {
     //if (!previousRecorders.empty())
       unobserveUpdates();
     GraphUpdatesRecorder* prevRecorder = recorders.front();
-    if (prevRecorder->restartAllowed)
+    if (unpopAllowed && prevRecorder->restartAllowed)
       prevRecorder->recordNewValues(this);
     prevRecorder->stopRecording(this);
     // undo all recorded updates
     prevRecorder->doUpdates(this, true);
     // push it
-    if (prevRecorder->restartAllowed) {
+    if (unpopAllowed && prevRecorder->restartAllowed) {
       previousRecorders.push_front(prevRecorder);
       // observe any updates
       // in order to remove previous recorders if needed
@@ -553,4 +553,20 @@ void GraphImpl::unpop() {
     if (nbPrev > 1)
       observeUpdates(this);
   }
+}
+//----------------------------------------------------------------
+bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
+  if (!recorders.empty()) {
+    if (recorders.front()->dontObserveProperty(prop)) {
+      stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+      if (++it != recorders.end())
+	prop->addPropertyObserver((*it));
+      return true;
+    } else {
+      assert(true);
+      cerr << __PRETTY_FUNCTION__ << " the observation of Property " << prop->getName()  << " cannot be stopped " << endl;
+      return false;
+    }
+  }
+  return false;
 }

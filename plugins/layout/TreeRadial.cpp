@@ -127,6 +127,8 @@ public:
     if (!getNodeSizePropertyParameter(dataSet, sizes))
       sizes = graph->getProperty<SizeProperty>("viewSize");
     getSpacingParameters(dataSet, nSpacing, lSpacing);
+    // ensure size updates will be kept after a pop
+    preservePropertyUpdates(sizes);
 
     LayoutProperty tmpLayout(graph);
   
@@ -153,17 +155,13 @@ public:
     doLayout(root, 0, 0., 2 * M_PI, &angles);
 
     graph->delLocalProperty("bounding circle sizes");
-    TreeTest::cleanComputedTree(graph, tree);
 
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
-  LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
-  return true;
+    // if not in tulip gui, ensure cleanup
+    LayoutProperty* elementLayout;
+    if (!graph->getAttribute("viewLayout", elementLayout))
+      TreeTest::cleanComputedTree(graph, tree);
+
+    return true;
   }
 };
 /*@}*/

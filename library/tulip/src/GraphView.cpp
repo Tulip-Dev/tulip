@@ -298,12 +298,16 @@ bool GraphView::canUnpop() {
   return getRoot()->canUnpop();
 }
 //----------------------------------------------------------------
-void GraphView::push() {
-  getRoot()->push();
+void GraphView::push(bool unpopAllowed) {
+  getRoot()->push(unpopAllowed);
 }
 //----------------------------------------------------------------
-void GraphView::pop() {
-  getRoot()->pop();
+void GraphView::pop(bool unpopAllowed) {
+  getRoot()->pop(unpopAllowed);
+}
+//----------------------------------------------------------------
+bool GraphView::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
+  return getRoot()->nextPopKeepPropertyUpdates(prop);
 }
 //----------------------------------------------------------------
 void GraphView::unpop() {

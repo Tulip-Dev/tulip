@@ -345,6 +345,8 @@ bool HierarchicalGraph::run() {
       orientation = tmp.getCurrentString();
     }
   }
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(nodeSize);
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
@@ -516,15 +518,6 @@ bool HierarchicalGraph::run() {
       }
       layoutResult->setEdgeValue(e, tmp2);
     }
-  }
-
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
-  LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
   }
 
   return true;

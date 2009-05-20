@@ -1237,7 +1237,9 @@ namespace tlp {
       PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
       tmp->setAllNodeValue(dest->getNodeDefaultValue());
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
-      graph->push();
+      if (push)
+	graph->push();
+      graph->push(false);
       bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) &&
 			   viewNames[currentView]=="Node Link Diagram view");
       if (updateLayout) {
@@ -1256,14 +1258,14 @@ namespace tlp {
       }
       if (!resultBool) {
         QMessageBox::critical(mainWindowFacade.getParentWidget(), "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
+	graph->pop();
       }
       else
         switch(myProgress->state()){
         case TLP_CONTINUE:
         case TLP_STOP:
           if (push) {
-            graph->push();
-            undoAction->setEnabled(true);
+	    undoAction->setEnabled(true);
             editUndoAction->setEnabled(true);
           }
 	  if (hasNdldc)

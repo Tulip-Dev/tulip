@@ -534,8 +534,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   hash_map<unsigned long, DataMem*>::iterator itdv =
     nodeDefaultValues.begin();
   while(itdv != nodeDefaultValues.end()) {
-    ((PropertyInterface *) (*itdv).first)->
-      setAllNodeDataMemValue((*itdv).second);
+    PropertyInterface* prop = (PropertyInterface *) (*itdv).first;
+    prop->setAllNodeDataMemValue((*itdv).second);
     ++itdv;
   }
   // loop on edgeDefaultValues
@@ -543,8 +543,8 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     undo ? oldEdgeDefaultValues : newEdgeDefaultValues;
   itdv = edgeDefaultValues.begin();
   while(itdv != edgeDefaultValues.end()) {
-    ((PropertyInterface *) (*itdv).first)->
-      setAllEdgeDataMemValue((*itdv).second);
+    PropertyInterface* prop = (PropertyInterface *) (*itdv).first;
+    prop->setAllEdgeDataMemValue((*itdv).second);
     ++itdv;
   }
 
@@ -611,6 +611,24 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itav;
   }
   Observable::unholdObservers();
+}
+
+bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
+  if (!restartAllowed) {
+    // check if nothing is yet recorded for prop
+    unsigned long p = (unsigned long) prop;
+    if ((oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) &&
+	(oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) &&
+	(oldNodeValues.find(p) == oldNodeValues.end()) &&
+	(oldEdgeValues.find(p) == oldEdgeValues.end()) &&
+	(updatedPropsAddedNodes.find(p) == updatedPropsAddedNodes.end()) &&
+	(updatedPropsAddedEdges.find(p) == updatedPropsAddedEdges.end())) {
+      // prop is no longer observed
+      prop->removePropertyObserver(this);
+      return true;
+    }
+  }
+  return false;
 }
 
 void GraphUpdatesRecorder::addNode(Graph* g, node n) {
@@ -839,7 +857,7 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
 }
             
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
-  if  (oldEdgeDefaultValues.find((unsigned long) p) ==
+  if (oldEdgeDefaultValues.find((unsigned long) p) ==
        oldEdgeDefaultValues.end()) {
     oldEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultDataMemValue();
     // save the already existing value for all non default valuated edges

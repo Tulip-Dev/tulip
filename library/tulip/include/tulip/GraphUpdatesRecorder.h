@@ -169,6 +169,9 @@ namespace tlp {
     void restartRecording(Graph*); 
     // perform undo/redo updates
     void doUpdates(GraphImpl*, bool undo);
+    // remove a property from the observed ones
+    // only if nothing is yet recorded for that property
+    bool dontObserveProperty(PropertyInterface *);
 
   public:
     GraphUpdatesRecorder(bool allowRestart = true);

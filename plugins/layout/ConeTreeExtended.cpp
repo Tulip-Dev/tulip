@@ -147,6 +147,8 @@ bool ConeTreeExtended::run() {
       orientation = tmp.getCurrentString();
     }
   }
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(nodeSize);
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
@@ -182,16 +184,11 @@ bool ConeTreeExtended::run() {
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
-  TreeTest::cleanComputedTree(graph, tree);
 
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
+  // if not in tulip gui, ensure cleanup
   LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
+  if (!graph->getAttribute("viewLayout", elementLayout))
+    TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }

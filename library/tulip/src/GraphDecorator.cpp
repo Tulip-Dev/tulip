@@ -9,12 +9,16 @@ void GraphDecorator::clear(){
 
 //============================================================
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection){
-  return graph_component->addSubGraph(selection);
+  Graph* sg = graph_component->addSubGraph(selection);
+  notifyAddSubGraph(sg);
+  return sg;
 }
 
 //============================================================
-void GraphDecorator::delSubGraph(Graph * s){
+void GraphDecorator::delSubGraph(Graph *s){
+  notifyDelSubGraph(this, s);
   graph_component->delSubGraph(s);
+  notifyObservers();
 }
 
 //============================================================
@@ -38,8 +42,10 @@ void GraphDecorator::clearSubGraphs(){
 }
 
 //============================================================
-void GraphDecorator::delAllSubGraphs(Graph *s){
+void GraphDecorator::delAllSubGraphs(Graph *s) {
+  notifyDelSubGraph(this, s);
   graph_component->delAllSubGraphs(s);
+  notifyObservers();
 }
 
 //============================================================
@@ -101,6 +107,7 @@ edge GraphDecorator::existEdge(const node n, const node m)const {
 
 //============================================================
 void GraphDecorator::reverse(const edge e){
+  notifyReverseEdge(this, e);
   graph_component->reverse(e);
 }
 
@@ -175,12 +182,15 @@ bool GraphDecorator::isMetaEdge(const edge e) const{
 
 //============================================================
 node GraphDecorator::addNode(){
-  return graph_component->addNode();
+  node newNode = graph_component->addNode();
+  notifyAddNode(this, newNode);
+  notifyObservers();
+  return newNode;
 }
 
 //============================================================
 void GraphDecorator::addNode(const node n){
-  graph_component->addNode(n);
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -196,12 +206,15 @@ void GraphDecorator::removeNode(const node){
 
 //============================================================
 edge GraphDecorator::addEdge(const node n, const node n2){
-  return graph_component->addEdge(n, n2);
+  edge newEdge = graph_component->addEdge(n, n2);
+  notifyAddEdge(this, newEdge);
+  notifyObservers();
+  return newEdge;
 }
 
 //============================================================
 void GraphDecorator::addEdge(const edge e){
-  graph_component->addEdge(e);
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -217,22 +230,30 @@ void GraphDecorator::removeEdge(const edge, const node){
 
 //============================================================
 void GraphDecorator::delNode(const node n){
+  notifyDelNode(this, n);
   graph_component->delNode(n);
+  notifyObservers();
 }
 
 //============================================================ 
 void GraphDecorator::delAllNode(const node n){
+  notifyDelNode(this, n);
   graph_component->delAllNode(n);
+  notifyObservers();
 }
 
 //============================================================
 void GraphDecorator::delEdge(const edge e){
+  notifyDelEdge(this,e);
   graph_component->delEdge(e);
+  notifyObservers();
 }
 
 //============================================================
 void GraphDecorator::delAllEdge(const edge e){
+  notifyDelEdge(this,e);
   graph_component->delAllEdge(e);
+  notifyObservers();
 }
 
 //============================================================
@@ -310,12 +331,16 @@ bool GraphDecorator::existLocalProperty(const std::string&name){
 
 //============================================================
 void GraphDecorator::delLocalProperty(const std::string&name){
-  return graph_component->delLocalProperty(name);
+  notifyDelLocalProperty(this, name);
+  graph_component->delLocalProperty(name);
+  notifyObservers();
 }
 
 //============================================================
 void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   graph_component->addLocalProperty(name, prop);
+  notifyAddLocalProperty(this, name);
+  notifyObservers();
 }
 
 //============================================================
@@ -340,12 +365,16 @@ bool GraphDecorator::canUnpop() {
   return graph_component->canUnpop();
 }
 //----------------------------------------------------------------
-void GraphDecorator::push() {
-  return graph_component->push();
+void GraphDecorator::push(bool unpopAllowed) {
+  return graph_component->push(unpopAllowed);
 }
 //----------------------------------------------------------------
-void GraphDecorator::pop() {
-  return graph_component->pop();
+void GraphDecorator::pop(bool unpopAllowed) {
+  return graph_component->pop(unpopAllowed);
+}
+//----------------------------------------------------------------
+bool GraphDecorator::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
+  return graph_component->nextPopKeepPropertyUpdates(prop);
 }
 //----------------------------------------------------------------
 void GraphDecorator::unpop() {

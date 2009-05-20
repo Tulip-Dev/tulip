@@ -159,8 +159,6 @@ bool Circular::run() {
   if ( dataSet != 0 )
     dataSet->get("search cycle", searchCycle);
   
-  Size resultSize;
-
   //compute the sum of radii and the max radius of the graph
   double sumOfRad = 0;
   double maxRad = 0;
@@ -235,15 +233,6 @@ bool Circular::run() {
       gamma += halfAngle;
     }//end while
   }//end else
-
-  // if in tulip gui, keep node size updates
-  // the test below indicates if we are invoked from the tulip gui
-  // cf MainController.cpp & GlGraphInputData.cpp
-  LayoutProperty* elementLayout;
-  if (graph->getAttribute("viewLayout", elementLayout)) {
-    graph->removeAttribute("viewLayout");
-    graph->push();
-  }
    
   return true;
 } //end run
