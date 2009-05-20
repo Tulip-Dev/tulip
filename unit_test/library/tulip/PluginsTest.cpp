@@ -44,6 +44,8 @@ void PluginsTest::testloadPlugin() {
 void PluginsTest::testCircularPlugin() {
   string name = "Test";
   string err = "Error";
+  // ensure graph is not empty
+  graph->addNode();
   tlp::BooleanProperty sel(graph);
   CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
 }
@@ -54,7 +56,11 @@ void PluginsTest::testAncestorGraph() {
   tlp::loadPlugin("testPlugin2.so");
   Graph *child = graph->addSubGraph();
   Graph *child2 = graph->addSubGraph();
+  // ensure child2 is not empty
+  child2->addNode();
   Graph *child3 = child->addSubGraph();
+  // ensure child3 is not empty
+  child3->addNode();
   BooleanProperty sel(child);
   CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
   CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
