@@ -361,12 +361,14 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   }
   else {
     typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+    typename StoredValueType<TYPE>::Value newVal =
+      StoredValueType<TYPE>::copy(value);
    switch (state) {
     case VECT :
       if (minIndex == UINT_MAX) {
 	minIndex = i;
 	maxIndex = i;
-	(*vData).push_back(StoredValueType<TYPE>::copy(value));
+	(*vData).push_back(newVal);
 	++elementInserted;
       }
       else {
@@ -383,7 +385,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 	  --minIndex;
 	}
 	typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
-	(*vData)[i - minIndex] = StoredValueType<TYPE>::copy(value);
+	(*vData)[i - minIndex] = newVal;
 	if (val != defaultValue)
 	  StoredValueType<TYPE>::destroy(val);
 	else
@@ -395,7 +397,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 	StoredValueType<TYPE>::destroy((*it).second);
       else
 	++elementInserted;
-      (*hData)[i]= StoredValueType<TYPE>::copy(value);
+      (*hData)[i]= newVal;
       break;
     default:
       assert(false);
