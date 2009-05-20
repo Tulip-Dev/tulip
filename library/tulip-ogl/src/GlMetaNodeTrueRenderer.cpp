@@ -35,11 +35,12 @@ namespace tlp {
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
     // We remove nodeSize[N]/100. to be sure that includes nodes are in meta node
-    glScalef(nodeSize[0]-nodeSize[0]/100., nodeSize[1]-nodeSize[1]/100., nodeSize[2]-nodeSize[2]/100.);
+    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
+    metaData.setMetaNodeRenderer(inputData->getMetaNodeRenderer());
     pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
     Coord maxC = bboxes.first;
     Coord minC = bboxes.second;
