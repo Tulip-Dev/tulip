@@ -1,7 +1,7 @@
 #include <sstream>
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
-#include "PluginsTest.h">
+#include "PluginsTest.h"
 #include <tulip/TlpTools.h>
 #include <tulip/ForEach.h>
 #include <tulip/BooleanProperty.h>
