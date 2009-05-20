@@ -88,6 +88,8 @@ namespace tlp {
       QString fileName;
       fileName=QString(inArrayTmp.left(fileNameSize));
       inArrayTmp=inArrayTmp.mid(fileNameSize,-1);
+      QDir baseDir(baseDirectory);
+      baseDir.mkpath(fileName.left(fileName.lastIndexOf('/')));
       fileName.replace("./",baseDirectory);
 
       qint64 fileSize;
@@ -97,7 +99,7 @@ namespace tlp {
       file.open(QIODevice::WriteOnly);
       file.write(inArrayTmp.left(fileSize));
       file.close();
-      inArrayTmp.mid(fileSize,-1);
+      inArrayTmp=inArrayTmp.mid(fileSize,-1);
     }
 
     return true;
@@ -140,6 +142,7 @@ namespace tlp {
     QString baseText(file.readAll());
     baseText.remove(textToRemove);
     file.reset();
+    file.resize(0);
     file.write(baseText.toLatin1());
     file.close();
   }
@@ -204,10 +207,10 @@ namespace tlp {
     partFiles(byteArray,helpBaseDirectory+dirName+"/");
 
     if(pluginType=="View"){
-      QString str="<dl><dt><span class=\"chapter\"><a href=\""+dirName+"/index.html"+"\">"+dirName+"</a></span></dt></dl>";
+      QString str="<dl><dt><span class=\"chapter\"><a href=\""+dirName+"/html/index.html"+"\">"+dirName+"</a></span></dt></dl>";
       addInFile(helpBaseDirectory+"/index.html",str,"</div></body>");
 
-      QFile typeFile(helpDirName+dirName+".type");
+      QFile typeFile(QDir::homePath()+"/"+helpDirName+dirName+".type");
       typeFile.open(QIODevice::WriteOnly);
       typeFile.write(QString("View").toLatin1());
       typeFile.close();
@@ -217,8 +220,9 @@ namespace tlp {
 
   void PluginsHelp::removeHelpDoc(const QString &fileName){
     QString dirName=fileName.left(fileName.lastIndexOf('.'));
+    dirName=dirName.right(dirName.size()-dirName.lastIndexOf('/')-1);
 
-    QFile typeFile(helpDirName+dirName+".type");
+    QFile typeFile(QDir::homePath()+"/"+helpDirName+dirName+".type");
     typeFile.open(QIODevice::ReadOnly);
     QString pluginType(typeFile.readAll());
     typeFile.close();
@@ -230,7 +234,7 @@ namespace tlp {
     }
 
     if(pluginType=="View"){
-      QString str="<dl><dt><span class=\"chapter\"><a href=\""+dirName+"/index.html"+"\">"+dirName+"</a></span></dt></dl>";
+      QString str="<dl><dt><span class=\"chapter\"><a href=\""+dirName+"/html/index.html"+"\">"+dirName+"</a></span></dt></dl>";
       removeInFile(helpBaseDirectory+"/index.html",str);
     }
 
