@@ -184,7 +184,8 @@ namespace tlp {
   void PluginsHelp::installHelpDoc(const QString &fileName){
     QString dirName=fileName.left(fileName.lastIndexOf('.'));
     QFile file(QString(tlp::TulipLibDir.c_str())+"tlp/toInstall/"+fileName);
-    assert(file.open(QIODevice::ReadOnly));
+    bool isOpen=file.open(QIODevice::ReadOnly);
+    assert(isOpen);
     QByteArray byteArray=file.readAll();
     file.close();
 
