@@ -71,7 +71,7 @@ class TLP_SCOPE Observable {
   void notifyObservers();
   /**
    * Notify all the observers that the object will be destroyed. 
-   * Need to be call into the dstructor of the observable.
+   * Need to be called into the destructor of the observable.
    */
   void notifyDestroy();
   /**
@@ -89,10 +89,6 @@ class TLP_SCOPE Observable {
   stdext::slist<Observer*> observersList;
 };
 
-
-inline void Observable::addObserver(Observer *obs) {
-  observersList.push_front(obs);
-}
 
 inline unsigned int Observable::countObservers() { 
   return observersList.size(); 

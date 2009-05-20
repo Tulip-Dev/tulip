@@ -9,6 +9,18 @@
 using namespace stdext;
 using namespace tlp;
 
+void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
+  // ensure obs does not already exists in observers
+  slist<PropertyObserver*>::iterator itObs = observers.begin();
+  slist<PropertyObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    if (obs == (*itObs))
+      return;
+    ++itObs;
+  }
+  observers.push_front(obs); 
+}
+
 void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
 						  const node n) {
   slist<PropertyObserver*>::iterator itObs = observers.begin();
@@ -52,7 +64,7 @@ void ObservableProperty::notifyBeforeSetEdgeValue(PropertyInterface* p,
 }
 
 void ObservableProperty::notifyAfterSetEdgeValue(PropertyInterface* p,
-					    const edge e) {
+						 const edge e) {
   slist<PropertyObserver*>::iterator itObs = observers.begin();
   slist<PropertyObserver*>::iterator ite = observers.end();
   while (itObs != ite) {
@@ -118,15 +130,14 @@ void ObservableProperty::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
 }
 
 void ObservableProperty::notifyDestroy(PropertyInterface* p) {
-  slist<PropertyObserver*>::iterator itObs = observers.begin();
-  slist<PropertyObserver*>::iterator ite = observers.end();
+  // use a copy to avoid the invalidation of the iterator
+  // when an observer remove itself from the list
+  slist<PropertyObserver*> copy(observers);
+  slist<PropertyObserver*>::iterator itObs = copy.begin();
+  slist<PropertyObserver*>::iterator ite = copy.end();
   while (itObs != ite) {
-    PropertyObserver* observer = *itObs;
-    // iterator is incremented before
-    // to ensure it will not be invalidated
-    // during the call to the method on the observer
+    (*itObs)->destroy(p);
     ++itObs;
-    observer->destroy(p);
   }
 }
 

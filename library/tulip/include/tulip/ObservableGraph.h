@@ -95,10 +95,6 @@ class  TLP_SCOPE ObservableGraph {
 };
 /*@}*/
 
-inline void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
-  observers.push_front(obs); 
-}
-
 inline unsigned int ObservableGraph::countGraphObservers() { 
   return observers.size(); 
 }
