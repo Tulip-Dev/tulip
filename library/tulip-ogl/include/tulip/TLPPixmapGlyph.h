@@ -6,12 +6,7 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <FTGL.h>
-#ifdef _WIN32
-#include "../../../thirdparty/ftgl/FTGlyph.h"
-#else
-#include <FTGlyph.h>
-#endif
+#include <FTGL/ftgl.h>
 
 namespace tlp {
 
@@ -39,10 +34,25 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
          * Renders this glyph at the current pen position.
          *
          * @param pen   The current pen position.
+         * @param mode  Render mode to display
          * @return      The advance distance for this glyph.
          */
-        virtual FTPoint& Render( const FTPoint& pen);
+        virtual FTPoint& Render( const FTPoint& pen, int mode);
         
+        /**
+         * Return the advance width for this glyph.
+         *
+         * @return  advance width.
+         */
+        virtual float Advance() const;
+
+        /**
+         * Return the bounding box for this glyph.
+         *
+         * @return  bounding box.
+         */
+        virtual const FTBBox& BBox() const;
+
         // attributes
 
     private:
@@ -65,6 +75,15 @@ class  FTGL_EXPORT TLPPixmapGlyph : public FTGlyph {
          * Pointer to the 'image' data
          */
         unsigned char* data;
+        /**
+         * The advance distance for this glyph
+         */
+        FTPoint advance;
+
+        /**
+         * The bounding box of this glyph.
+         */
+        FTBBox bBox;
 };
 
 }

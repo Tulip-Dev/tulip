@@ -11,12 +11,12 @@
 #include <GL/gl.h>
 #endif
 
-#include <FTGLExtrdFont.h>
-#include <FTGLOutlineFont.h>
-#include <FTGLPolygonFont.h>
-#include <FTGLTextureFont.h>
-#include <FTGLPixmapFont.h>
-#include <FTGLBitmapFont.h>
+#include <FTGL/ftgl.h>
+#include <FTGL/FTGLOutlineFont.h>
+#include <FTGL/FTGLPolygonFont.h>
+#include <FTGL/FTGLTextureFont.h>
+#include <FTGL/FTGLPixmapFont.h>
+#include <FTGL/FTGLBitmapFont.h>
 #include "tulip/GlTools.h"
 #include "tulip/TLPPixmapFont.h"
 #include "tulip/GlRenderer.h"

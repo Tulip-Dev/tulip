@@ -2,8 +2,8 @@
 #define     __TLPPixmapFont__
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <FTGL.h>
-#include <FTFont.h>
+#include <FTGL/ftgl.h>
+#include <FTGL/FTFont.h>
 
 class FTGlyph;
 
@@ -56,10 +56,10 @@ class FTGL_EXPORT TLPPixmapFont : public FTFont
         /**
          * Construct a FTPixmapGlyph.
          *
-         * @param g The glyph index NOT the char code.
+         * @param slot  A FreeType glyph slot
          * @return  An FTPixmapGlyph or <code>null</code> on failure.
          */
-        inline virtual FTGlyph* MakeGlyph( unsigned int g);
+        inline virtual FTGlyph* MakeGlyph(FT_GlyphSlot slot);
         
 };
 
