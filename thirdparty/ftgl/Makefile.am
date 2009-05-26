@@ -36,8 +36,33 @@ libftgl_la_SOURCES = \
     $(ftgl_headers) \
     $(NULL)
 
-libftgl_la_CPPFLAGS = @GL_INCLUDES@ ${FREETYPE_INCLUDE}
-libftgl_la_LDFLAGS = ${FREETYPELDFLAGS} @GL_LDFLAGS@ @LIB_GL@
+INCLUDES = @GL_INCLUDES@ ${FREETYPE_INCLUDE}
+AM_LDFLAGS = ${FREETYPELDFLAGS} @GL_LDFLAGS@ @LIB_GL@
+
+ftgl_headers = \
+    FTGL/ftgl.h \
+    FTGL/FTBBox.h \
+    FTGL/FTBuffer.h \
+    FTGL/FTPoint.h \
+    FTGL/FTGlyph.h \
+    FTGL/FTBitmapGlyph.h \
+    FTGL/FTBufferGlyph.h \
+    FTGL/FTExtrdGlyph.h \
+    FTGL/FTOutlineGlyph.h \
+    FTGL/FTPixmapGlyph.h \
+    FTGL/FTPolyGlyph.h \
+    FTGL/FTTextureGlyph.h \
+    FTGL/FTFont.h \
+    FTGL/FTGLBitmapFont.h \
+    FTGL/FTBufferFont.h \
+    FTGL/FTGLExtrdFont.h \
+    FTGL/FTGLOutlineFont.h \
+    FTGL/FTGLPixmapFont.h \
+    FTGL/FTGLPolygonFont.h \
+    FTGL/FTGLTextureFont.h \
+    FTGL/FTLayout.h \
+    FTGL/FTSimpleLayout.h \
+    ${NULL}
 
 ftglyph_sources = \
     FTGlyph/FTGlyph.cpp \
