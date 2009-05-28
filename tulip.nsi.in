@@ -92,6 +92,7 @@ FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 File @prefix@\bin\tulip.exe
 File @prefix@\bin\tulip_check_pl.exe
 File @prefix@\bin\tulip-config
+File @prefix@\bin\tulip.exe.manifest
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
 File "@MINDIR@\bin\freetype*.dll"
