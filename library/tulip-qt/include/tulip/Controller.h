@@ -75,6 +75,13 @@ namespace tlp {
 			mainWindow->addDockWidget(area,dockWidget);
 		}
 
+		/**
+		 * Moves second dock widget on top of first dock widget, creating a tabbed docked area
+		 */
+		void tabifyDockWidget ( QDockWidget * first, QDockWidget * second ){
+		  mainWindow->tabifyDockWidget(first,second);
+		}
+
 	private:
 
 		QMainWindow *mainWindow;

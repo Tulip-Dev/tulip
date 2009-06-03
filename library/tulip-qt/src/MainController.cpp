@@ -559,6 +559,8 @@ namespace tlp {
     configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
 
+    mainWindowFacade.tabifyDockWidget(tabWidgetDock,configWidgetDock);
+
     buildMenu();
 
     //+++++++++++++++++++++++++++
@@ -1663,6 +1665,10 @@ namespace tlp {
   //**********************************************************************
   View *MainController::getView(QWidget *widget) {
     return viewWidget[widget];
+  }
+  //**********************************************************************
+  View *MainController::getCurrentView() {
+    return currentView;
   }
 
 }

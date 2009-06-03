@@ -312,6 +312,7 @@ namespace tlp {
   public :
 
     View *getView(QWidget *);
+    View *getCurrentView();
 
   };
 
