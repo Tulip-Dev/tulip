@@ -338,6 +338,8 @@ void viewGl::fileCloseTab(){
     tabWidget->removeTab(index);
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
+
+    delete controller;
   }
 }
 //**********************************************************************
@@ -770,6 +772,12 @@ bool viewGl::closeWin() {
         bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
         if(canceled)
           return false;
+      }
+    }
+
+    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+      if((*it).second){
+        delete (*it).second;
       }
     }
   }
