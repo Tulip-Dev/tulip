@@ -92,7 +92,15 @@ namespace tlp {
 
     QAction* overviewAction;
 
-  protected slots:
+  public slots:
+    /**
+     * Draw the OpenGl widget
+     */
+    void draw();
+    /**
+     * Refresh the OpenGl widget
+     */
+    void refresh();
     /**
      * Save image of GlMainWidget
      * QAction::text is the format of output (EPS,SVG or traditional image format)
@@ -103,16 +111,6 @@ namespace tlp {
      * Hide the overview
      */
     void hideOverview(bool);
-
-  public slots:
-    /**
-     * Draw the OpenGl widget
-     */
-    void draw();
-    /**
-     * Refresh the OpenGl widget
-     */
-    void refresh();
 
   };
 
