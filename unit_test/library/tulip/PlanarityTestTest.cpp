@@ -102,16 +102,16 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   Iterator<node> * itn = g->getNodes();
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
-  node meta = tlp::createMetaNode(g,toGroup);
+  node meta = g->createMetaNode(toGroup);
   toGroup.clear();
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
-  node meta2 = tlp::createMetaNode(g,toGroup);
+  node meta2 = g->createMetaNode(toGroup);
   toGroup.clear();
   toGroup.insert(meta2);
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
-  node meta3 = tlp::createMetaNode(g,toGroup);
+  node meta3 = g->createMetaNode(toGroup);
   toGroup.clear();
 
   PlanarConMap *graphMap = new PlanarConMap(g);

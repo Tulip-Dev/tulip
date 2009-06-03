@@ -498,7 +498,7 @@ namespace tlp {
 	  graph->delSubGraph(sg);
 	  // create new subgraphs with same name
 	  for (unsigned int i = 0; i < components.size(); ++i) {
-	    sg = tlp::inducedSubGraph(graph, components[i]);
+	    sg = graph->inducedSubGraph(components[i]);
 	    stringstream sstr;
 	    sstr << name << " [" << i << ']';
 	    sg->setAttribute("name", sstr.str());

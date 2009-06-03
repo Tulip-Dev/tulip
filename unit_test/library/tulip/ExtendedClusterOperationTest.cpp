@@ -3,7 +3,6 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/TestCaller.h>
 #include <tulip/ExtendedClusterOperation.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/ForEach.h>
 
 #include "ExtendedClusterOperationTest.h"
@@ -42,7 +41,7 @@ void ExtendedClusterOperationTest::tearDown() {
 //==========================================================
 void ExtendedClusterOperationTest::testCreateMetaNode() {
   cerr << __PRETTY_FUNCTION__ << endl;
-  meta = createMetaNode(quotient, group);
+  meta = quotient->createMetaNode(group);
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(nodes[0]));
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(nodes[1]));
   CPPUNIT_ASSERT_EQUAL(true, quotient->existEdge(meta, nodes[4]).isValid());
@@ -79,7 +78,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   //open all meta nodes
   node n;
   stableForEach(n, subgraph->getNodes()) {
-    tlp::openMetaNode(subgraph, n);
+    subgraph->openMetaNode(n);
   }
   CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(5u, subgraph->numberOfEdges());
@@ -88,8 +87,8 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
 //==========================================================
 void ExtendedClusterOperationTest::testOpenMetaNode() {
 
-  meta = createMetaNode(quotient, group);
-  openMetaNode(quotient, meta);
+  meta = quotient->createMetaNode(group);
+  quotient->openMetaNode(meta);
   
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta));
   CPPUNIT_ASSERT_EQUAL(false, graph->isElement(meta));

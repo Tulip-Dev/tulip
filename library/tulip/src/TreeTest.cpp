@@ -139,7 +139,7 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(rGraph, components);
   for (unsigned int i = 0; i < components.size(); ++i) {
-    tlp::inducedSubGraph(rGraph, components[i]);
+    rGraph->inducedSubGraph(components[i]);
   }
 
   // create a new subgraph for the tree

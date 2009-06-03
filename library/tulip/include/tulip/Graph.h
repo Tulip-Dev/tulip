@@ -18,11 +18,6 @@
 #include <iostream>
 #include <string>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <climits>
 #include "tulip/tulipconf.h"
 #include "tulip/Reflect.h"
@@ -79,7 +74,7 @@ template<class C>class Iterator;
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void copyToGraph( Graph * outG, Graph *	inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+  TLP_SCOPE void copyToGraph( Graph *outG, Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
   /**
    * Remove the selected part of the graph ioG (properties, nodes & edges).
    * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
@@ -112,13 +107,17 @@ public:
    */
   virtual  void clear()=0;
   /**
-   * Create and return a new SubGraph of the graph
+   * Creates and returns a new SubGraph of the graph
    * The elements of the new SubGraph is those selected in the selection
    * if there is no selection an empty SubGraph is return.
    */
   virtual Graph *addSubGraph(BooleanProperty *selection=0)=0;
   /**
-   * Del a SubGraph of this graph.
+   *  Creates and returns the subgraph induced by a set of nodes
+   */
+  Graph *inducedSubGraph(const std::set<node>& nodeSet);
+  /**
+   * Delete a SubGraph of this graph.
    * The SubGraph's SubGraphs become SubGraphs of the graph.
    */
   virtual void delSubGraph(Graph *)=0;
@@ -411,6 +410,44 @@ public:
   virtual void unpop()=0;
   virtual bool canPop()=0;
   virtual bool canUnpop()=0;
+
+  // meta nodes management
+  /**
+   * method to close a set of existing nodes into a metanode.  Edges from nodes
+   * in the subgraph to nodes outside the subgraph are replaced with
+   * edges from the metanode to the nodes outside the subgraph.
+   *
+   * \param nodeSet: a set of existing nodes
+   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
+   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   */
+  node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  /**
+   * method to populate a quotient graph with one meta node
+   * for each iterated graph
+   *
+   * \param itS: an Graph iterator, (typically a subgraph iterator)
+   * \param quotientGraph: the graph containing the meta nodes
+   * \param metaNodes: will contains all the added meta nodes after the call
+   *
+   */
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
+		       std::vector<node>& metaNodes);
+  /**
+   * Method to close an existing subgraph into a metanode.  Edges from nodes
+   * in the subgraph to nodes outside the subgraph are replaced with
+   * edges from the metanode to the nodes outside the subgraph.
+   *
+   * \param subGraph: an existing subgraph
+   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
+   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   */
+  node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
+  /**
+   * Method to open a metanode and replace all edges between that
+   * meta node and other nodes in the graph.
+   */
+  void openMetaNode(node n);
 
 protected:
   // to allow attributes modification

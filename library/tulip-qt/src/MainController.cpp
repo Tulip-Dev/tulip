@@ -16,7 +16,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -1081,7 +1080,7 @@ namespace tlp {
       graphToAddTo = tlp::newCloneSubGraph(graphToAddTo, "groups");
       haveToChangeGraph=true;
     }
-    node metaNode = tlp::createMetaNode(graphToAddTo, tmp);
+    node metaNode = graphToAddTo->createMetaNode(tmp);
     if(haveToChangeGraph)
       changeGraph(graphToAddTo);
     Observable::unholdObservers();

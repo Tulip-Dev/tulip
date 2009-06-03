@@ -260,7 +260,7 @@ namespace tlp {
       Graph *metaGraph=graph->getNodeMetaInfo(node(itemId));
       emit requestChangeGraph(this,metaGraph);
     } else if (action == ungroupAction) { // Ungroup
-      tlp::openMetaNode(graph, node(itemId));
+      graph->openMetaNode(node(itemId));
     } else if(action == selectAction || action == addRemoveAction) {
       BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
       if (action == selectAction) { // Select

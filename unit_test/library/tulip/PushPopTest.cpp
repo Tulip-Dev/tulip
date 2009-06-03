@@ -431,7 +431,7 @@ void PushPopTest::testMetaNode() {
   Graph* clone = tlp::newCloneSubGraph(graph, "groups");
 
   // create meta node
-  node metaNode = tlp::createMetaNode(clone, tmp);
+  node metaNode = clone->createMetaNode(tmp);
   Color mColor(255, 255, 255, 127);
   ColorProperty* color = graph->getProperty<ColorProperty>("viewColor");
   color->setNodeValue(metaNode, mColor);
