@@ -231,6 +231,15 @@
       </figure>
     </sect2>
   </sect1>
+  <sect1 id="configuration"><title>Configuration</title>
+    <para>
+      This subwindow is accessible by clicking on the "Configuration" tab at the bottom left corner.
+    </para>
+    <para>
+      On this subwindow you can found interactor configuration and view configuration. When we change the active view this window also changes.
+      For example when you are on Node Link Diagram View, you can find Rendering parameters dialog on this configuration window.
+    </para>
+  </sect1> 
   <sect1 id="Main-views"><title>Standards views</title>
     <sect2 id="NodeLinkDiagramComponent"><title>Node Link Diagram view</title>
       <sect3 id="mouse"><title>Mouse Interaction Toolbar</title>
@@ -312,8 +321,6 @@
               </listitem>
               <listitem><para><code>Dialog -> 3D Overview</code> : display/hide top left overview,</para>
               </listitem>
-              <listitem><para><code>Dialog -> Rendering parameters</code> : open a dialog where you can modified graph rendering parameters,</para>
-              </listitem>
               <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
               </listitem>
               <listitem><para><code>Options -> Grid</code> : shows the grid configuration dialog.</para>
@@ -345,7 +352,7 @@
         <sect4 id="renderingparams_parameters"><title>Parameters</title>
           <para>All actions in this dialog are just performed for the current view window.
             <graphic fileref="images/renderingparams.png"/>
-            This dialog is displayed when clicking on the <code>Dialogs->Rendering Parameters</code>(<keycap>Ctrl+R</keycap>). Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
+            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
             <itemizedlist>
               <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
                   <itemizedlist>
@@ -383,7 +390,7 @@
         <sect4 id="layermanager"><title>Layer Manager</title>
         <para>All actions in this dialog are just performed for the current view window.
                 <graphic fileref="images/layermanager.png"/>
-            This dialog is displayed when clicking on the <code>Dialogs->Layer Manager</code>. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
+            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
             <itemizedlist>
               <listitem><para><code>Visible</code> : Visibility of the entity
                 </para></listitem>
