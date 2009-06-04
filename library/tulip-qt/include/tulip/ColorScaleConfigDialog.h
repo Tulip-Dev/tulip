@@ -31,8 +31,6 @@ public :
 
 	ColorScaleConfigDialog(ColorScale *colorScale, QWidget *parent = 0);
 
-	void setPredefinedGradientsDirectory(const std::string &gradientsDir);
-
 	void setColorScale(ColorScale *colorScale);
 
 protected :
@@ -48,12 +46,16 @@ private slots :
 	void pressButtonBrowse();
 	void nbColorsValueChanged(int value);
 	void colorTableItemDoubleClicked(QTableWidgetItem *item);
-	void displayImageGradientPreview();
+	void displaySavedGradientPreview();
 	void displayUserGradientPreview();
+	void saveCurrentColorScale();
+	void deleteSavedColorScale();
 
 private :
 
 	void setColorScaleFromImage(const QString &imageFilePath);
+	void loadUserSavedColorScales();
+	void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
 
 	ColorScale *colorScale;
 	std::string gradientsImageDirectory;

@@ -21,14 +21,15 @@
 #include "tulip/GlBezierCurve.h"
 #include "tulip/FastBezier.h"
 #include "tulip/GlShaderManager.h"
+#include "tulip/GlCatmullRomCurve.h"
 
 #include <sstream>
 
 using namespace std;
 
 static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
-					  const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
-					  const string &texture) {
+		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
+		const string &texture) {
 
 	unsigned int size;
 	GLfloat *points = tlp::buildCurvePoints(curvePoints, tlp::getSizes(curvePoints, startSize, endSize), startN, endN ,size);
@@ -355,6 +356,7 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 		const float &beginSize,
 		const float &endSize,
 		const string &texture):
+			controlPoints(controlPoints),
 			beginColor(beginColor),
 			endColor(endColor),
 			beginSize(beginSize),
@@ -370,23 +372,30 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 	oss << nbControlPoints;
 
 	shaderProgramName = "bezier" + oss.str();
-	shaderProgramOk = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName) != 0 ||
-					  GlShaderManager::getInstance()->registerShaderProgramFromStrings(shaderProgramName, generateBezierVertexShaderSrc(nbControlPoints), "");
 
-
-	if (shaderProgramOk) {
-		controlPointsArray = new GLfloat[nbControlPoints * 3];
-		for (int i = 0 ; i < nbControlPoints ; ++i) {
-			controlPointsArray[3 * i] = controlPoints[i][0];
-			controlPointsArray[3 * i + 1] = controlPoints[i][1];
-			controlPointsArray[3 * i + 2] = controlPoints[i][2];
-		}
-	} else {
-		this->controlPoints = controlPoints;
-		controlPointsArray = NULL;
+	controlPointsArray = new GLfloat[nbControlPoints * 3];
+	for (int i = 0 ; i < nbControlPoints ; ++i) {
+		controlPointsArray[3 * i] = controlPoints[i][0];
+		controlPointsArray[3 * i + 1] = controlPoints[i][1];
+		controlPointsArray[3 * i + 2] = controlPoints[i][2];
 	}
 
-	vboOk = checkVboSupport();
+}
+//=====================================================
+GlBezierCurve::~GlBezierCurve() {
+	if (controlPointsArray != NULL) {
+		delete [] controlPointsArray;
+	}
+}
+//=====================================================
+void GlBezierCurve::draw(float lod, Camera *camera) {
+
+	bool shaderProgramOk = false;
+	if (controlPoints.size() <= 8)
+		shaderProgramOk = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName) != 0 ||
+		GlShaderManager::getInstance()->registerShaderProgramFromStrings(shaderProgramName, generateBezierVertexShaderSrc(nbControlPoints), "");
+
+	bool vboOk = checkVboSupport();
 	if (shaderProgramOk && vboOk && vboId[0] == 0) {
 		glGenBuffers(4, vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
@@ -398,84 +407,81 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 		glBindBuffer(GL_ARRAY_BUFFER, vboId[3]);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(curveQuadBottomOutlineVertexData), curveQuadBottomOutlineVertexData, GL_STATIC_DRAW);
 	}
-}
-//=====================================================
-GlBezierCurve::~GlBezierCurve() {
-	if (controlPointsArray != NULL) {
-		delete [] controlPointsArray;
-	}
-}
-//=====================================================
-void GlBezierCurve::draw(float lod, Camera *camera) {
 
 	if (texture != "") {
 		GlTextureManager::getInst().activateTexture(texture);
 	}
 
-	if (shaderProgramOk) {
+	if (controlPoints.size() <= 8) {
+		if (shaderProgramOk) {
+			GLuint shaderId = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName);
+			GlShaderManager::getInstance()->activateShaderProgram(shaderProgramName);
 
-		GLuint shaderId = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName);
-		GlShaderManager::getInstance()->activateShaderProgram(shaderProgramName);
+			GLint controlPointsArrayloc = glGetUniformLocation(shaderId, "controlPoints");
+			GLint startWidthLoc = glGetUniformLocation(shaderId, "startWidth");
+			GLint endWidthLoc = glGetUniformLocation(shaderId, "endWidth");
+			GLint startColorLoc = glGetUniformLocation(shaderId, "startColor");
+			GLint endColorLoc = glGetUniformLocation(shaderId, "endColor");
 
-		GLint controlPointsArrayloc = glGetUniformLocation(shaderId, "controlPoints");
-		GLint startWidthLoc = glGetUniformLocation(shaderId, "startWidth");
-		GLint endWidthLoc = glGetUniformLocation(shaderId, "endWidth");
-		GLint startColorLoc = glGetUniformLocation(shaderId, "startColor");
-		GLint endColorLoc = glGetUniformLocation(shaderId, "endColor");
+			glUniform3fv(controlPointsArrayloc, nbControlPoints, controlPointsArray);
+			glUniform1f(startWidthLoc, beginSize);
+			glUniform1f(endWidthLoc, endSize);
+			glUniform4f(startColorLoc, beginColor[0] / 255.0f, beginColor[1] / 255.0f, beginColor[2] / 255.0f, beginColor[3] / 255.0f);
+			glUniform4f(endColorLoc, endColor[0] / 255.0f, endColor[1] / 255.0f, endColor[2] / 255.0f, endColor[3] / 255.0f);
 
-		glUniform3fv(controlPointsArrayloc, nbControlPoints, controlPointsArray);
-		glUniform1f(startWidthLoc, beginSize);
-		glUniform1f(endWidthLoc, endSize);
-		glUniform4f(startColorLoc, beginColor[0] / 255.0f, beginColor[1] / 255.0f, beginColor[2] / 255.0f, beginColor[3] / 255.0f);
-		glUniform4f(endColorLoc, endColor[0] / 255.0f, endColor[1] / 255.0f, endColor[2] / 255.0f, endColor[3] / 255.0f);
+			glEnableClientState(GL_VERTEX_ARRAY);
 
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		if (vboOk) {
-			if (beginSize == 1 && endSize == 1) {
-				glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
-			} else {
-				glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-			}
-			glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-		} else {
-			if (beginSize == 1 && endSize == 1) {
-				glVertexPointer(2, GL_FLOAT, 0, curveVertexData);
-			} else {
-				glVertexPointer(2, GL_FLOAT, 0, curveQuadVertexData);
-			}
-		}
-
-		if (beginSize == 1 && endSize == 1) {
-			glDrawArrays(GL_LINE_STRIP, 0, 40);
-		} else {
-			glDrawArrays(GL_QUAD_STRIP, 0, 80);
-			glEnable(GL_BLEND);
-			glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			if (vboOk) {
-				glBindBuffer(GL_ARRAY_BUFFER, vboId[2]);
+				if (beginSize == 1 && endSize == 1) {
+					glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
+				} else {
+					glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
+				}
+				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
+			} else {
+				if (beginSize == 1 && endSize == 1) {
+					glVertexPointer(2, GL_FLOAT, 0, curveVertexData);
+				} else {
+					glVertexPointer(2, GL_FLOAT, 0, curveQuadVertexData);
+				}
 			}
-			glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-			glDrawArrays(GL_LINE_STRIP, 0, 40);
+
+			if (beginSize == 1 && endSize == 1) {
+				glDrawArrays(GL_LINE_STRIP, 0, 40);
+			} else {
+				glDrawArrays(GL_QUAD_STRIP, 0, 80);
+				glEnable(GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				if (vboOk) {
+					glBindBuffer(GL_ARRAY_BUFFER, vboId[2]);
+				}
+				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
+				glDrawArrays(GL_LINE_STRIP, 0, 40);
+				if (vboOk) {
+					glBindBuffer(GL_ARRAY_BUFFER, vboId[3]);
+				}
+				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
+				glDrawArrays(GL_LINE_STRIP, 0, 40);
+			}
+
 			if (vboOk) {
-				glBindBuffer(GL_ARRAY_BUFFER, vboId[3]);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
-			glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-			glDrawArrays(GL_LINE_STRIP, 0, 40);
+
+			glDisableClientState(GL_VERTEX_ARRAY);
+
+			GlShaderManager::getInstance()->desactivateShaderProgram();
+
+		} else {
+			vector<Coord> curvePoints;
+			FastBezier::computeBezierPoints(controlPoints,curvePoints,40);
+			drawCurve(curvePoints, beginColor, endColor, beginSize, endSize, curvePoints[0] - Coord(1,0,0), curvePoints[curvePoints.size() - 1] + Coord(1,0,0), texture);
 		}
-
-		if (vboOk) {
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		GlShaderManager::getInstance()->desactivateShaderProgram();
-
 	} else {
 		vector<Coord> curvePoints;
-		FastBezier::computeBezierPoints(controlPoints,curvePoints);
-		drawCurve(curvePoints, beginColor, endColor, beginSize, endSize, curvePoints[0] - Coord(1,0,0), curvePoints[curvePoints.size() - 1] + Coord(1,0,0), texture);
+		FastBezier::computeBezierPoints(controlPoints,curvePoints,10);
+		GlCatmullRomCurve curve(curvePoints, beginColor, endColor, beginSize, endSize);
+		curve.draw(0,0);
 	}
 
 	if(texture != "") {

@@ -68,15 +68,26 @@ void GlCatmullRomCurve::computeBezierSegments(const vector<Coord> &curvePassPoin
 			computeBezierSegmentControlPoints(curvePassPoints[i-1], curvePassPoints[i], curvePassPoints[i+1], curvePassPoints[i+1], bezierSegmentControlPoints);
 		} else if (i == curvePassPoints.size() - 2 && closedCurve) {
 			computeBezierSegmentControlPoints(curvePassPoints[i-1], curvePassPoints[i], curvePassPoints[i+1], curvePassPoints[0], bezierSegmentControlPoints);
-		} else if (i == curvePassPoints.size() -1) {
-			if (closedCurve) {
-				computeBezierSegmentControlPoints(curvePassPoints[i-1], curvePassPoints[i], curvePassPoints[0], curvePassPoints[1], bezierSegmentControlPoints);
-			}
-		} else {
+		} else if (i == curvePassPoints.size() -1 && closedCurve) {
+			computeBezierSegmentControlPoints(curvePassPoints[i-1], curvePassPoints[i], curvePassPoints[0], curvePassPoints[1], bezierSegmentControlPoints);
+		} else if (i != curvePassPoints.size() - 1) {
 			computeBezierSegmentControlPoints(curvePassPoints[i-1], curvePassPoints[i], curvePassPoints[i+1], curvePassPoints[i+2], bezierSegmentControlPoints);
 		}
 		if (bezierSegmentControlPoints.size() > 0) {
-			GlBezierCurve *curve = new GlBezierCurve(bezierSegmentControlPoints, colors[i], colors[i+1], sizes[i], sizes[i+1], texture);
+			float beginSize, endSize;
+			Color beginColor, endColor;
+			if (i != curvePassPoints.size() - 1) {
+				beginSize = sizes[i];
+				endSize = sizes[i+1];
+				beginColor = colors[i];
+				endColor = colors[i+1];
+			} else {
+				beginSize = sizes[i];
+				endSize = sizes[0];
+				beginColor = colors[i];
+				endColor = colors[0];
+			}
+			GlBezierCurve *curve = new GlBezierCurve(bezierSegmentControlPoints, beginColor, endColor, beginSize, endSize, texture);
 			oss.str("");
 			oss << curve;
 			addGlEntity(curve, oss.str());

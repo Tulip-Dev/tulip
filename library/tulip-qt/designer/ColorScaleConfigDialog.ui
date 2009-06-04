@@ -1,48 +1,49 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ColorScaleDialog</class>
- <widget class="QDialog" name="ColorScaleDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="ColorScaleDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>433</width>
-    <height>373</height>
+    <width>463</width>
+    <height>413</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Color Scale Configuration</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="minimumSize" >
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="minimumSize">
       <size>
        <width>400</width>
        <height>300</height>
       </size>
      </property>
-     <property name="currentIndex" >
+     <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab_2" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
        <string>Color scale creation</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_6" >
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7" >
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5" >
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QLabel" name="label" >
-             <property name="text" >
+            <widget class="QLabel" name="label">
+             <property name="text">
               <string>Number of colors :</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="nbColors" >
-             <property name="minimum" >
+            <widget class="QSpinBox" name="nbColors">
+             <property name="minimum">
               <number>2</number>
              </property>
             </widget>
@@ -50,33 +51,33 @@
           </layout>
          </item>
          <item>
-          <widget class="QCheckBox" name="gradientCB" >
-           <property name="text" >
+          <widget class="QCheckBox" name="gradientCB">
+           <property name="text">
             <string>gradient scale</string>
            </property>
-           <property name="checked" >
+           <property name="checked">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="colorsTable" >
-           <property name="horizontalScrollBarPolicy" >
+          <widget class="QTableWidget" name="colorsTable">
+           <property name="horizontalScrollBarPolicy">
             <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
-           <property name="selectionMode" >
+           <property name="selectionMode">
             <enum>QAbstractItemView::NoSelection</enum>
            </property>
-           <property name="showGrid" >
+           <property name="showGrid">
             <bool>true</bool>
            </property>
-           <property name="gridStyle" >
+           <property name="gridStyle">
             <enum>Qt::SolidLine</enum>
            </property>
-           <property name="rowCount" >
+           <property name="rowCount">
             <number>2</number>
            </property>
-           <property name="columnCount" >
+           <property name="columnCount">
             <number>1</number>
            </property>
            <row/>
@@ -84,30 +85,67 @@
            <column/>
           </widget>
          </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="saveColorScaleButton">
+             <property name="text">
+              <string>Save color scale</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5" >
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QGroupBox" name="groupBox_2" >
-           <property name="minimumSize" >
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="minimumSize">
             <size>
              <width>30</width>
              <height>200</height>
             </size>
            </property>
-           <property name="title" >
+           <property name="title">
             <string>Color scale preview</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6" >
+           <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4" >
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <spacer name="horizontalSpacer1" >
-                <property name="orientation" >
+               <spacer name="horizontalSpacer1">
+                <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
                   <height>20</height>
@@ -116,30 +154,30 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLabel" name="userGradientPreview" >
-                <property name="minimumSize" >
+               <widget class="QLabel" name="userGradientPreview">
+                <property name="minimumSize">
                  <size>
                   <width>30</width>
                   <height>200</height>
                  </size>
                 </property>
-                <property name="maximumSize" >
+                <property name="maximumSize">
                  <size>
                   <width>30</width>
                   <height>16777215</height>
                  </size>
                 </property>
-                <property name="text" >
+                <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_21" >
-                <property name="orientation" >
+               <spacer name="horizontalSpacer_21">
+                <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
                   <height>20</height>
@@ -156,52 +194,89 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
-       <string>Color scale from image file</string>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Predefined color scale</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" >
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" >
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QRadioButton" name="predefinedColorScaleRb" >
-           <property name="text" >
-            <string>Use predefined color scale</string>
+          <widget class="QRadioButton" name="savedColorScaleRb">
+           <property name="text">
+            <string>Saved color scales</string>
            </property>
-           <property name="checked" >
+           <property name="checked">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="predefinedGradientsList" />
+          <widget class="QListWidget" name="savedColorScalesList"/>
          </item>
          <item>
-          <widget class="QRadioButton" name="userColorScaleImageRb" >
-           <property name="text" >
-            <string>Load color scale from image file :</string>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="deleteColorScaleButton">
+             <property name="text">
+              <string>Delete color scale</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="userColorScaleImageRb">
+           <property name="text">
+            <string>Color scale from image file :</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout" >
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="userGradientFile" >
-             <property name="enabled" >
+            <widget class="QLineEdit" name="userGradientFile">
+             <property name="enabled">
               <bool>false</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="browseButton" >
-             <property name="enabled" >
+            <widget class="QPushButton" name="browseButton">
+             <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="text" >
+             <property name="text">
               <string/>
              </property>
-             <property name="icon" >
-              <iconset resource="../../../software/tulip/designer/TulipResource.qrc" >
+             <property name="icon">
+              <iconset resource="../../../software/tulip/designer/TulipResource.qrc">
                <normaloff>:/i_open.png</normaloff>:/i_open.png</iconset>
              </property>
             </widget>
@@ -211,27 +286,27 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4" >
+        <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QGroupBox" name="groupBox" >
-           <property name="minimumSize" >
+          <widget class="QGroupBox" name="groupBox">
+           <property name="minimumSize">
             <size>
              <width>30</width>
              <height>200</height>
             </size>
            </property>
-           <property name="title" >
+           <property name="title">
             <string>Color scale preview</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3" >
+           <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3" >
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <spacer name="horizontalSpacer" >
-                <property name="orientation" >
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
                   <height>20</height>
@@ -240,30 +315,30 @@
                </spacer>
               </item>
               <item>
-               <widget class="QLabel" name="imageGradientPreview" >
-                <property name="minimumSize" >
+               <widget class="QLabel" name="imageGradientPreview">
+                <property name="minimumSize">
                  <size>
                   <width>30</width>
                   <height>200</height>
                  </size>
                 </property>
-                <property name="maximumSize" >
+                <property name="maximumSize">
                  <size>
                   <width>30</width>
                   <height>16777215</height>
                  </size>
                 </property>
-                <property name="text" >
+                <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_2" >
-                <property name="orientation" >
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="sizeHint" stdset="0" >
+                <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
                   <height>20</height>
@@ -283,11 +358,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox" >
-     <property name="orientation" >
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButtons" >
+     <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
@@ -295,7 +370,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../software/tulip/designer/TulipResource.qrc" />
+  <include location="../../../software/tulip/designer/TulipResource.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -304,11 +379,11 @@
    <receiver>ColorScaleDialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -320,11 +395,11 @@
    <receiver>ColorScaleDialog</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>
