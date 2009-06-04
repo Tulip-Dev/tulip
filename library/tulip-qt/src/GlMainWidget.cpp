@@ -5,8 +5,8 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtooltip.h>
-#include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLPixelBuffer>
+#include <QtCore/QTime>
 
 
 #include "tulip/GlMainWidget.h"
@@ -22,6 +22,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlRectTextured.h>
 
+#include "tulip/QGlPixelBufferManager.h"
 #include "tulip/QtCPULODCalculator.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
@@ -502,21 +503,16 @@ namespace tlp {
 
     scene.prerenderMetaNodes();
 
-    QGLPixelBuffer *glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
-    while(!glFrameBuf->isValid() && width>1 && height>1 ){
-      width=width/2;
-      height=height/2;
-      delete glFrameBuf;
-      glFrameBuf=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),getFirstQGLWidget());
-    }
+    QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
 
     glFrameBuf->makeCurrent();
 
     GLuint textureId=glFrameBuf->generateDynamicTexture();
 
     scene.draw();
+
     glFrameBuf->updateDynamicTexture(textureId);
-    delete glFrameBuf;
+
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 
     return NULL;

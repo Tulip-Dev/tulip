@@ -54,7 +54,8 @@ nobase_include_HEADERS = \
 	tulip/QtMetaNodeRenderer.h \
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
-	tulip/DoubleStringsListSelectionWidget.h
+	tulip/DoubleStringsListSelectionWidget.h \
+	tulip/QGlPixelBufferManager.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h
