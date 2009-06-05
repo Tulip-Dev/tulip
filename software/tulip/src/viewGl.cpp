@@ -916,9 +916,10 @@ void viewGl::loadInterface(int index){
 
   if(controllerToDockWidget.count(controller)!=0){
     vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
-    for(vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.begin();it!=tmp.end();++it){
-      addDockWidget((*it).first,(*it).second);
-      (*it).second->show();
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
+    while(it!=tmp.begin()){
+      --it;
+      restoreDockWidget((*it).second);
     }
   }
 
