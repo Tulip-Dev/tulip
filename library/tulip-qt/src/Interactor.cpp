@@ -19,7 +19,9 @@ namespace tlp {
     if(configurationWidgetText=="")
       return NULL;
 
-    return new QTextEdit(configurationWidgetText);
+    QTextEdit *textEdit=new QTextEdit(configurationWidgetText);
+    textEdit->setReadOnly(true);
+    return textEdit;
   }
 
 }
