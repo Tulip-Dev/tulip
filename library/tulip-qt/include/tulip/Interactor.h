@@ -44,6 +44,8 @@ namespace tlp {
   protected :
 
     int priority;
+    
+    QString configurationWidgetText;
 
   public:
     /**
@@ -72,9 +74,15 @@ namespace tlp {
     virtual void remove() = 0;
 
     /**
-     * return widget of configuration of this interactor
+     * set html text displayed by configuration widget
      */
-    virtual QWidget *getConfigurationWidget() {return NULL;}
+    virtual void setConfigurationWidgetText(const QString &text);
+
+    /**
+     * return widget of configuration of this interactor
+     * if you previouly call setHtmlText, getConfigurationWidget return a QTextEdit with this text
+     */
+    virtual QWidget *getConfigurationWidget();
 
     /**
      * return if this interactor is compatible with given View
