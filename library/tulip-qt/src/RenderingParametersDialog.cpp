@@ -67,15 +67,33 @@ namespace tlp {
 
   void RenderingParametersDialog::setBackgroundColor(QColor tmp) {
     if (tmp.isValid()) {
-      QPalette palette;
-      palette.setColor(QPalette::Button, tmp);
+      QString colorStr;
+      QString str;
+
+      str.setNum(tmp.red(),16);
+      if(str.size()!=2)
+        str.insert(0,"0");
+      colorStr.append(str);
+
+      str.setNum(tmp.green(),16);
+      if(str.size()!=2)
+        str.insert(0,"0");
+      colorStr.append(str);
+
+      str.setNum(tmp.blue(),16);
+      if(str.size()!=2)
+        str.insert(0,"0");
+      colorStr.append(str);
+
+      QString textColor;
       int h,s,v;
       tmp.getHsv(&h, &s, &v);
       if (v < 128)
-	palette.setColor(QPalette::ButtonText, QColor(255, 255, 255));
+        textColor="ffffff";
       else
-	palette.setColor(QPalette::ButtonText, QColor(0, 0, 0));
-      background->setPalette(palette);
+        textColor="000000";
+
+      background->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
     }
   }
 }

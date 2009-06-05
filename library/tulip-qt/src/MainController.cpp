@@ -504,7 +504,7 @@ namespace tlp {
     tabWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
     tabWidgetDock->hide();
     tabWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    tabWidgetDock->setWindowTitle("Info Editor");
+    tabWidgetDock->setWindowTitle("Graph Editor");
     tabWidgetDock->setFeatures(QDockWidget::DockWidgetClosable |
 			    QDockWidget::DockWidgetMovable |
 			    QDockWidget::DockWidgetFloatable);
@@ -554,7 +554,7 @@ namespace tlp {
     configWidgetTab->setTabPosition(QTabWidget::West);
     configWidgetDock->setWidget(configWidgetTab);
     configWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    configWidgetDock->setWindowTitle("Configuration");
+    configWidgetDock->setWindowTitle("View Editor");
     configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
 

@@ -50,7 +50,7 @@
         <item row="0" column="0" >
          <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -237,7 +237,7 @@
         <item row="0" column="0" >
          <layout class="QVBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -340,7 +340,7 @@
         <item row="0" column="0" >
          <layout class="QHBoxLayout" >
           <property name="margin" >
-           <number>0</number>
+           <number>2</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -370,6 +370,9 @@
             </property>
             <property name="focusPolicy" >
              <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
             </property>
             <property name="text" >
              <string>Background color</string>
