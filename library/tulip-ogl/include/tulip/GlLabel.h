@@ -87,6 +87,11 @@ namespace tlp {
     virtual void translate(const Coord& mouvement);
 
     /**
+     * Rotate Label
+     */
+    virtual void rotate(float xRot, float yRot, float zRot);
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);
@@ -96,7 +101,6 @@ namespace tlp {
      */
     virtual void setWithXML(xmlNodePtr rootNode);
 
-
   private :
 
     std::string text;
@@ -105,6 +109,9 @@ namespace tlp {
     Coord size;
     Color color;
     bool leftAlign;
+    float xRot;
+    float yRot;
+    float zRot;
   };
 }
 #endif
