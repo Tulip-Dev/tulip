@@ -144,6 +144,7 @@ namespace tlp {
       GlGraphComposite* graphComposite=new GlGraphComposite(graph);
       scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
       scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+      scene.centerScene();
     }else{
       size_t pos=sceneInput.find("TulipBitmapDir/");
       while(pos!=string::npos){

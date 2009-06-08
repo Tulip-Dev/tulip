@@ -126,7 +126,7 @@ namespace tlp {
     renderingParametersDialog->setGlMainView(this);
     layerManagerWidget->setGlMainView(this);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
-    init();
+    draw();
   }
   //==================================================
   void NodeLinkDiagramComponent::getData(Graph **graph,DataSet *dataSet) {
