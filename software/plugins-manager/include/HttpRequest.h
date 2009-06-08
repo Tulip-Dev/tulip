@@ -18,6 +18,7 @@
 #include <tulip/tulipconf.h>
 
 #include <QtNetwork/QHttp>
+#include <QtNetwork/QNetworkProxy>
 #include <QtCore/QFile>
 
 namespace tlp {

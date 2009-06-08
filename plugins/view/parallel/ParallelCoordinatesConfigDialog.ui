@@ -425,7 +425,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2" >
-          <property name="verticalSpacing" >
+          <property name="spacing" >
            <number>0</number>
           </property>
           <property name="margin" >

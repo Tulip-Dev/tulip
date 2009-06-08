@@ -17,19 +17,10 @@
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
     <property name="spacing" >
-     <number>0</number>
-    </property>
-    <property name="leftMargin" >
- 	 <number>0</number>
-    </property>
- 	<property name="topMargin" >
- 	 <number>0</number>
- 	</property>
-    <property name="rightMargin" >
-     <number>0</number>
-    </property>
-    <property name="bottomMargin" >
      <number>0</number>
     </property>
     <item>
@@ -109,7 +100,7 @@
   </widget>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset>:/i_open.png</iconset>
+    <iconset>../../../../../../../:/i_open.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -131,7 +122,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset>:/i_save.png</iconset>
+    <iconset>../../../../../../../:/i_save.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -156,7 +147,7 @@
   </action>
   <action name="filePrintAction" >
    <property name="icon" >
-    <iconset>:/i_print.png</iconset>
+    <iconset>../../../../../../../:/i_print.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Print...</string>
@@ -181,7 +172,7 @@
   </action>
   <action name="editUndoAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image7</iconset>
+    <iconset>image7</iconset>
    </property>
    <property name="text" >
     <string>&amp;Undo</string>
@@ -195,7 +186,7 @@
   </action>
   <action name="editRedoAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image8</iconset>
+    <iconset>image8</iconset>
    </property>
    <property name="text" >
     <string>&amp;Redo</string>
@@ -209,7 +200,7 @@
   </action>
   <action name="editCutAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image9</iconset>
+    <iconset>image9</iconset>
    </property>
    <property name="text" >
     <string>&amp;Cut</string>
@@ -223,7 +214,7 @@
   </action>
   <action name="editCopyAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image10</iconset>
+    <iconset>image10</iconset>
    </property>
    <property name="text" >
     <string>C&amp;opy</string>
@@ -237,7 +228,7 @@
   </action>
   <action name="editPasteAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image11</iconset>
+    <iconset>image11</iconset>
    </property>
    <property name="text" >
     <string>&amp;Paste</string>
@@ -251,7 +242,7 @@
   </action>
   <action name="editFindAction" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer/image12</iconset>
+    <iconset>image12</iconset>
    </property>
    <property name="text" >
     <string>&amp;Find...</string>
@@ -496,7 +487,7 @@
   </action>
   <action name="is_connected" >
    <property name="icon" >
-    <iconset>../../../../tulip/software/tulip/designer</iconset>
+    <iconset/>
    </property>
    <property name="text" >
     <string>Connected</string>

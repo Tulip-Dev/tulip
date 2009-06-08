@@ -876,9 +876,9 @@ void viewGl::loadInterface(int index){
   if(tabIndexToController.count(index)==0)
       return;
 
-  clearInterface();
-
   Controller *controller=tabIndexToController[index];
+
+  clearInterface();
 
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
@@ -919,7 +919,15 @@ void viewGl::loadInterface(int index){
     vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
     while(it!=tmp.begin()){
       --it;
-      restoreDockWidget((*it).second);
+      addDockWidget((*it).first,(*it).second);
+      (*it).second->show();
+    }
+    
+    if(controller) {
+      vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
+      for(vector<pair<QDockWidget *,QDockWidget*> >::iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
+	tabifyDockWidget((*it).first,(*it).second);
+      }
     }
   }
 

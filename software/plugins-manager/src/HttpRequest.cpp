@@ -24,7 +24,8 @@ namespace tlp {
     header.setValue( "Host", url.host() );
 
     http.setHost( url.host() );
-    http.setProxy(getProxy());
+    QNetworkProxy proxy=getProxy();
+    http.setProxy(proxy.hostName(), proxy.port(), proxy.user(), proxy.password());
 
     QByteArray bamsg(msg.c_str());
     http.request( header, bamsg );
@@ -78,7 +79,7 @@ namespace tlp {
     settings.endGroup();
 
     if(proxyEnable){
-      return QNetworkProxy(QNetworkProxy::HttpProxy,proxyAddress,proxyPort,proxyUsername,proxyPassword);
+      return QNetworkProxy(QNetworkProxy::Socks5Proxy,proxyAddress,proxyPort,proxyUsername,proxyPassword);
     }else{
       return QNetworkProxy();
     }
