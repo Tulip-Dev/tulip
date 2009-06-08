@@ -343,6 +343,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	if (mainLayer->findGlEntity("Parallel Coordinates") != NULL) {
 		mainLayer->deleteGlEntity(parallelCoordsDrawing);
 		mainLayer->deleteGlEntity(glGraphComposite);
+		mainWidget->getScene()->addGlGraphCompositeInfo(NULL, NULL);
 		overviewWidget->setObservedView(NULL, NULL);
 	}
 
@@ -392,6 +393,7 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	// add updated drawing to main layer
 	mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
 	mainLayer->addGlEntity(glGraphComposite, "graph");
+	mainWidget->getScene()->addGlGraphCompositeInfo(mainLayer, glGraphComposite);
 	overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
 
 	// restore original camera parameters
@@ -420,7 +422,7 @@ void ParallelCoordinatesView::draw() {
 }
 
 void ParallelCoordinatesView::centerView() {
-	mainWidget->getScene()->centerScene();
+	mainWidget->getScene()->ajustSceneToSize(mainWidget->width(), mainWidget->height());
 }
 
 void ParallelCoordinatesView::refresh() {
@@ -711,6 +713,7 @@ ParallelAxis *ParallelCoordinatesView::getAxisUnderPointer(const int x, const in
 
 void ParallelCoordinatesView::swapAxis(ParallelAxis *firstAxis, ParallelAxis *secondAxis) {
 	parallelCoordsDrawing->swapAxis(firstAxis, secondAxis);
+	dataConfigWidget->updateSelectedProperties();
 }
 
 void ParallelCoordinatesView::removeAxis(ParallelAxis *axis) {

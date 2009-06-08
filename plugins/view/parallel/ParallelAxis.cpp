@@ -1,4 +1,5 @@
 #include <tulip/GlTools.h>
+#include <tulip/GlLabel.h>
 
 #include "ParallelAxis.h"
 
@@ -66,6 +67,19 @@ void ParallelAxis::draw(float lod,Camera *camera) {
 	if (rotationAngle != 0) {
 		glPushMatrix();
 		glRotatef(rotationAngle, 0.0,0.0,1.0);
+		GlLabel *captionLabel = NULL;
+		GlComposite *axisCaptionComposite = dynamic_cast<GlComposite *>(glAxis->findGlEntity("caption composite"));
+		if (axisCaptionComposite != NULL) {
+			string captionLabelId = glAxis->getAxisName() + " axis caption";
+			captionLabel = dynamic_cast<GlLabel *>(axisCaptionComposite->findGlEntity(captionLabelId));
+		}
+		if (captionLabel != NULL) {
+			if (rotationAngle > -270 && rotationAngle < -90) {
+				captionLabel->rotate(0,0,-180);
+			} else {
+				captionLabel->rotate(0,0,0);
+			}
+		}
 	}
 	drawComposite(glAxis, lod, camera);
 	if (rotationAngle != 0) {

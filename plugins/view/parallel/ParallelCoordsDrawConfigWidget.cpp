@@ -135,17 +135,31 @@ Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
 }
 
 void ParallelCoordsDrawConfigWidget::setBackgroundColor(const Color &color) {
-	QPalette palette;
-	palette.setColor(QPalette::Button, QColor(color.getR(), color.getG(), color.getB(), color.getA()));
-	bgColorButton->setPalette(palette);
+	QString colorStr;
+	QString str;
+
+	str.setNum(color.getR(),16);
+	if(str.size()!=2)
+		str.insert(0,"0");
+	colorStr.append(str);
+
+	str.setNum(color.getG(),16);
+	if(str.size()!=2)
+		str.insert(0,"0");
+	colorStr.append(str);
+
+	str.setNum(color.getB(),16);
+	if(str.size()!=2)
+		str.insert(0,"0");
+	colorStr.append(str);
+
+	bgColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void ParallelCoordsDrawConfigWidget::pressColorButton() {
 	QColor newColor = QColorDialog::getColor(bgColorButton->palette().color(QPalette::Button), this);
 	if (newColor.isValid()) {
-		QPalette palette;
-		palette.setColor(QPalette::Button, newColor);
-		bgColorButton->setPalette(palette);
+		setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
 	}
 }
 

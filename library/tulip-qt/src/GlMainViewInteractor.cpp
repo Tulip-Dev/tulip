@@ -31,7 +31,7 @@ INTERACTORPLUGIN(InteractorEditEdgeBends, "InteractorEditEdgeBends", "Tulip Team
 
 InteractorNavigation::InteractorNavigation():NodeLinkDiagramComponentInteractor(":/i_navigation.png","Navigate in graph"){
   setPriority(5);
-  setConfigurationWidgetText(QString("<b>Navigation interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
 			     "Navigate in the graph<br><br>"+
 			     "<b>Ctrl + Mouse up/down</b> : zoom<br>"+
 			     "<b>Ctrl + Mouse left/right</b> : z rotation<br>"+
@@ -48,7 +48,7 @@ void InteractorNavigation::construct(){
 
 InteractorGetInformation::InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/i_select.png","Get information on nodes/edges"){
   setPriority(4);
-  setConfigurationWidgetText(QString("<b>Get information interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
 			     "Click on an element to display properties of this element");
 }
 
@@ -59,7 +59,7 @@ void InteractorGetInformation::construct(){
 
 InteractorSelection::InteractorSelection():NodeLinkDiagramComponentInteractor(":/i_selection.png","Select nodes/edges in a rectangle"){
   setPriority(3);
-  setConfigurationWidgetText(QString("<b>Selection interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
 			     "Select on rectangle<br><br>"+
 			     "<b>Ctrl + Mouse</b> : remove from selection<br>"+
 			     "<b>Shift + Mouse</b> : add to selection");
@@ -72,7 +72,7 @@ void InteractorSelection::construct(){
 
 InteractorSelectionModifier::InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/i_move.png","Move/Reshape selection"){
   setPriority(3);
-  setConfigurationWidgetText(QString("<b>Selection modifier interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
 			     "Modify selection<br><br>"+
 			     "<b>Circle</b> : rotation<br>"+
 			     "<b>Square</b> : scale<br>"+
@@ -88,7 +88,7 @@ void InteractorSelectionModifier::construct(){
 
 InteractorMagicSelection::InteractorMagicSelection():NodeLinkDiagramComponentInteractor(":/i_magic.png","Selection of reachable elements with equal value"){
   setPriority(3);
-  setConfigurationWidgetText(QString("<b>Magic selection interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
 			     "Select neighbour elements with same metric");
 }
 
@@ -99,7 +99,7 @@ void InteractorMagicSelection::construct(){
 
 InteractorRectangleZoom::InteractorRectangleZoom():NodeLinkDiagramComponentInteractor(":/i_zoom.png","Zoom on rectangle"){
   setPriority(2);
-  setConfigurationWidgetText(QString("<b>Rectangle zoom interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Rectangle zoom interactor</h3>")+
 			     "Zoom on rectangle");
 }
 
@@ -110,7 +110,7 @@ void InteractorRectangleZoom::construct(){
 
 InteractorDeleteElement::InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/i_del.png","Delete nodes or edges"){
   setPriority(1);
-  setConfigurationWidgetText(QString("<b>Delete interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Delete interactor</h3>")+
 			     "Delete graph element");
 }
 
@@ -121,7 +121,7 @@ void InteractorDeleteElement::construct(){
 
 InteractorAddNode::InteractorAddNode():NodeLinkDiagramComponentInteractor(":/i_addnode.png","Add nodes"){
   setPriority(1);
-  setConfigurationWidgetText(QString("<b>Add node interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
 			     "Add a node in the graph");
 }
 
@@ -132,7 +132,7 @@ void InteractorAddNode::construct(){
 
 InteractorAddEdge::InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/i_addedge.png","Add edges"){
   setPriority(1);
-  setConfigurationWidgetText(QString("<b>Add edge interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Add edge interactor</h3>")+
 			     "Add an edge in the graph. If you don't click on a node, an edge bend is create");
 }
 
@@ -144,7 +144,7 @@ void InteractorAddEdge::construct(){
 
 InteractorEditEdgeBends::InteractorEditEdgeBends():NodeLinkDiagramComponentInteractor(":/i_bends.png","Edit edge bends"){
   setPriority(1);
-  setConfigurationWidgetText(QString("<b>Edit edge bends interactor</b><br>")+
+  setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
 			     "Modify edge bends<br><br>"+
 			     "<b>Shift</b> : add bend<br>"+
 			     "<b>Ctrl</b> : delete bend");

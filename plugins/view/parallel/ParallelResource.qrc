@@ -4,5 +4,6 @@
 	<file>i_axis_sliders.png</file>
 	<file>i_element_highlighter.png</file>
 	<file>i_axis_boxplot.png</file>
+	<file>boxplot_legend.png</file>
     </qresource>
 </RCC>

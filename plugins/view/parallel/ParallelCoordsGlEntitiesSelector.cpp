@@ -67,12 +67,12 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 			Observable::holdObservers();
 			bool boolVal = true; // add to selection
 
-			if (qMouseEv->modifiers() != Qt::ShiftModifier) {
+			if (qMouseEv->modifiers() != Qt::ControlModifier) {
 				if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
 						Qt::AltModifier
 #else
-						Qt::ControlModifier
+						Qt::ShiftModifier
 #endif
 				) {
 
@@ -80,7 +80,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
 				} else
 					boolVal = false; // remove from selection
-				}
+			}
 
 			if ((w == 0) && (h == 0)) {
 
