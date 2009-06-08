@@ -3,7 +3,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/MouseInteractors.h>
+#include <tulip/GlMainViewInteractor.h>
 #include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
@@ -49,7 +49,7 @@ int main(int argc,char ** argv ){
   }
 
   MainWin.init();
-  MouseNKeysNavigator m;
-  MainWin.pushInteractor(&m);
+  InteractorNavigation interactor;
+  MainWin.setActiveInteractor(&interactor);
   return MainApp.exec();
 }
