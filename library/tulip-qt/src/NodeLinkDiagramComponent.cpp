@@ -163,8 +163,7 @@ namespace tlp {
       if((keyEvent->key()==Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
         centerView();
     }
-    if (object->inherits("tlp::GlMainView") &&
-        event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
+    if (event->type() == QEvent::ToolTip && actionTooltips->isChecked()) {
       node tmpNode;
       edge tmpEdge;
       ElementType type;
