@@ -201,7 +201,11 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 		}
 	}
 
-	return value;
+	if (!integerScale) {
+		return value;
+	} else {
+		return ceil(value);
+	}
 }
 
 void GlQuantitativeAxis::addArrowDrawing() {

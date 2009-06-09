@@ -3,6 +3,7 @@
 
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/ForEach.h>
 
 #include <cmath>
 
@@ -23,13 +24,31 @@ QuantitativeParallelAxis::QuantitativeParallelAxis(const Coord &baseCoord, const
 void QuantitativeParallelAxis::setAxisLabels() {
 	double propertyMin = getAssociatedPropertyMinValue();
 	double propertyMax = getAssociatedPropertyMaxValue();
+	bool realScale = false;
+	unsigned int n;
+	if (getAxisDataTypeName() == "double") {
+		forEach(n, graphProxy->getDataIterator()) {
+			double val = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), n);
+			double intpart, fracpart;
+			fracpart = modf(val, &intpart);
+			realScale = realScale || (fracpart != 0);
+		}
+	}
 	if (axisMinValue > propertyMin || propertyMin == propertyMax) {
 		axisMinValue = propertyMin;
 	}
 	if (axisMaxValue < propertyMax || propertyMin == propertyMax) {
 		axisMaxValue = propertyMax;
 	}
-	glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
+	if (getAxisDataTypeName() == "double" && realScale) {
+		glQuantitativeAxis->setAxisParameters(axisMinValue, axisMaxValue, nbAxisGrad, GlAxis::RIGHT_OR_ABOVE, true);
+	} else {
+		int min = (int) axisMinValue;
+		int max = (int) axisMaxValue;
+		int incrementStep = (max - min) / DEFAULT_NB_AXIS_GRAD;
+		if (incrementStep <1) incrementStep = 1;
+		glQuantitativeAxis->setAxisParameters(min, max, incrementStep, GlAxis::RIGHT_OR_ABOVE, true);
+	}
 	glQuantitativeAxis->setLogScale(log10Scale);
 }
 
@@ -244,7 +263,12 @@ double QuantitativeParallelAxis::getValueForAxisCoord(const Coord &axisCoord) {
 
 std::string QuantitativeParallelAxis::getTopSliderTextValue() {
 	if (getAxisDataTypeName() == "int") {
-		return getStringFromNumber(getValueForAxisCoord(topSliderCoord));
+		int val = (int) getValueForAxisCoord(topSliderCoord);
+		if (glQuantitativeAxis->hasAscendingOrder()) {
+			return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
+		} else {
+			return getStringFromNumber(val);
+		}
 	} else if (getAxisDataTypeName() == "double") {
 		return getStringFromNumber(getValueForAxisCoord(topSliderCoord));
 	} else {
@@ -254,6 +278,12 @@ std::string QuantitativeParallelAxis::getTopSliderTextValue() {
 
 std::string QuantitativeParallelAxis::getBottomSliderTextValue() {
 	if (getAxisDataTypeName() == "int") {
+		int val = (int) getValueForAxisCoord(bottomSliderCoord);
+		if (!glQuantitativeAxis->hasAscendingOrder()) {
+			return getStringFromNumber(val == glQuantitativeAxis->getAxisMaxValue() ? val : val - 1);
+		} else {
+			return getStringFromNumber(val);
+		}
 		return getStringFromNumber(getValueForAxisCoord(bottomSliderCoord));
 	} else if (getAxisDataTypeName() == "double") {
 		return getStringFromNumber(getValueForAxisCoord(bottomSliderCoord));
