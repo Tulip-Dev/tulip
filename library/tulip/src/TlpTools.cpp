@@ -1,6 +1,12 @@
 #include <dirent.h>
 #include <string.h>
 
+#ifndef _WIN32
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
@@ -56,11 +62,15 @@ void tlp::initTulipLib(char* appDirPath) {
       // one dir up to initialize the lib dir
       char *last = strrchr(appDirPath, '/');
       last[1] = 0;
-#ifdef I64     
-      TulipLibDir = std::string(appDirPath) + "lib64";
-#else
-      TulipLibDir = std::string(appDirPath) + "lib";
+#ifdef I64
+      // check for lib64
+      string tlpPath64 = std::string(appDirPath) + "lib64/tlp";
+      struct stat statInfo;
+      if (stat(tlpPath64.c_str(), &statInfo) == 0)
+	TulipLibDir = std::string(appDirPath) + "lib64";
+      else
 #endif
+      TulipLibDir = std::string(appDirPath) + "lib";
 #endif
     } else
       TulipLibDir=string(_TULIP_LIB_DIR);
