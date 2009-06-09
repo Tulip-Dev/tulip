@@ -61,8 +61,8 @@ InteractorSelection::InteractorSelection():NodeLinkDiagramComponentInteractor(":
   setPriority(3);
   setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
 			     "Select on rectangle<br><br>"+
-			     "<b>Ctrl + Mouse</b> : remove from selection<br>"+
-			     "<b>Shift + Mouse</b> : add to selection");
+			     "<b>Ctrl + Mouse</b> : add/remove from selection<br>"+
+			     "<b>Shift + Mouse</b> : remove to selection");
 }
 
 void InteractorSelection::construct(){
