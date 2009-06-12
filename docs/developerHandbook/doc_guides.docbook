@@ -94,10 +94,10 @@ export CLASSPATH
 
 	<para>For each document, a set of XML files should be created. To help the editing of the handbook, it is possible to use general editors like kate, emacs, quanta. See <ulink  url="http://i18n.kde.org/doc/doc-primer/docbook-editors.html"> Docbook Editors</ulink>. To configure Kate, select <filename>Configure Kate</filename> -> <filename>Settings</filename> -> <filename>Configure Kate</filename>. Select the plugin item from the application tree and check the <filename>Kate XML Completion</filename>, and the <filename>Kate XML Validation</filename> boxes. </para>
     
-        <para>To compile the handbooks, you just have to type <code>make html</code>. If you want to test the validation of the sources of the handbooks, type <code>make check</code>. The lsat command is <code>make pdf</code>, it produces the printable output.</para>
+        <para>To compile the handbooks, you just have to type <code>make html</code>. If you want to test the validation of the sources of the handbooks, type <code>make check</code>. The last command is <code>make pdf</code>, it produces the printable output.</para>
 
 	<orderedlist>
-		<listitem id="dsssl">DSSSL: Document Style Semantics and Specification Language. For more informations, you can visit the web site: <ulink url="http://www.jclark.com/dsssl/"/></listitem>
+		<listitem id="dsssl"><para>DSSSL: Document Style Semantics and Specification Language. For more informations, you can visit the web site: <ulink url="http://www.jclark.com/dsssl/"/></para></listitem>
 	</orderedlist>
 
 

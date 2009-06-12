@@ -1,5 +1,6 @@
 <chapter id="tulip-library"><title>Tulip Library</title>
-<para>Efficient visualization of graphs and their usage for data analysis implies
+<sect1 id="tulip-library-intro"><title>Introduction</title>
+  <para>Efficient visualization of graphs and their usage for data analysis implies
     <itemizedlist>
     <listitem><para>the manipulation of the structure of the graph</para></listitem>
     <listitem><para>the extraction of parts of it</para></listitem>
@@ -16,7 +17,7 @@ This chapter describes the Tulip data structure that takes into account all the 
 of a graph visualization system. For each part we describe the general principle and
 then we give examples explaining how to do it with the Tulip library.
 </para>
-
+</sect1>
 <sect1 id="graphs"><title>Graphs</title>
     <para>The core of the Tulip library provides an interface for the manipulation of graphs. It enables one 
 to access and modify the structure of a graph. The aim of this library is to be as general 
@@ -120,12 +121,12 @@ are not persistent and thus, if the hierarchy is modified, the iterators are inv
 		Attributes can be added and accessed with those three following member functions :
 	</para>
 	<itemizedlist>
-		<listitem> <code>DataSet  getAttributes ()</code> : Returns the attributes of a graph.
-		</listitem>
-		<listitem> <code>template&lt;typename ATTRIBUTETYPE&gt; ATTRIBUTETYPE getAttribute (const std::string name) </code> : Get an attribute.
-		</listitem>
-		<listitem> <code> template&lt;typename ATTRIBUTETYPE&gt; void setAttribute (const std::string name, const ATTRIBUTETYPE value) </code> : sets a new attribute for the graphs.
-		</listitem>
+		<listitem><para><code>DataSet  getAttributes ()</code> : Returns the attributes of a graph.
+		</para></listitem>
+		<listitem><para><code>template&lt;typename ATTRIBUTETYPE&gt; ATTRIBUTETYPE getAttribute (const std::string name) </code> : Get an attribute.
+		</para></listitem>
+		<listitem><para><code> template&lt;typename ATTRIBUTETYPE&gt; void setAttribute (const std::string name, const ATTRIBUTETYPE value) </code> : sets a new attribute for the graphs.
+		</para></listitem>
 	</itemizedlist>
 </sect1>
 
@@ -194,15 +195,15 @@ In order to facilitate the navigation/edition of properties, a set of function i
 <para> Before doing any of the tutorials please read the following warnings :
 </para>
 <itemizedlist>
-	<listitem>
+	<listitem><para>
 		Follow the tutorials, one by one, from the first one to the last one.
-	</listitem>
-	<listitem>
+	</para></listitem>
+	<listitem><para>
 		You can find at the end of each tutorial, the integral source code that we used.
-	</listitem>
-	<listitem>
+	</para></listitem>
+	<listitem><para>
 		If you want more details on a specific function or class please read the Doxygen Documentation. 
-	</listitem>	
+	</para></listitem>	
 </itemizedlist>
 </sect1>
     <sect1 id="code-examples-graphs"><title>TUTORIAL 001 : Graphs creation, adding and deleting nodes or edges.</title>
@@ -211,25 +212,25 @@ In order to facilitate the navigation/edition of properties, a set of function i
         </para>
         <graphic fileref="images/tuto_001_graphcreated_3.png"/>
         <sect2 id="code-examples-graphs-headfile"><title>1. Header files</title>
-        Let's start with the files we need to include :
-        <para>  <programlisting>
+        <para>Let's start with the files we need to include :
+        <programlisting>
 <![CDATA[#include <iostream>
 #include <tulip/Graph.h>]]>
 		</programlisting>
         </para>
         <itemizedlist>
-        	<listitem> <code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
-        	</listitem>
-        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
-        	</listitem>
+        	<listitem><para><code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
+        	</para></listitem>
+        	<listitem><para><code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
+        	</para></listitem>
         </itemizedlist>
 
 	
-	<para>The namespaces usage declarations, so that we can omit namespace prefixe.</para>
+	<para>The namespaces usage declarations, so that we can omit namespace prefix.
 	<programlisting>
 <![CDATA[using namespace std;
 using namespace tlp;]]>
-  	</programlisting>
+  	</programlisting></para>
   	</sect2>
   	<sect2 id="code-examples-graphs-create"><title>2. Creation of a Graph</title>
 	<para>Create an empty graph with the function <code> Graph* tlp::newGraph( )</code>. This function returns a pointer on a empty Graph.</para>
@@ -265,35 +266,31 @@ using namespace tlp;]]>
   edge e2 = graph->addEdge(n1,n2);
   edge e3 = graph->addEdge(n3,n1);]]>
   	</programlisting>
-  	</sect2>
   	<para>Following is a picture of the graph that we just have created. It is being displayed with tulip.</para>
   	<graphic fileref="images/tuto_001_graphcreated_1.png"/>
-  	
+  	</sect2>
   	<sect2 id="code-examples-graphs-delEdgeNode"><title>5. Delete an edge and a node</title>
   	
-  	<para> The Graph class provides function to delete edges and nodes. </para>
+  	<para> The Graph class provides member functions to delete edges and nodes.
   	<itemizedlist>
-  		<listitem> <code>  void tlp::Graph::delEdge (const edge) </code> :
-  			<para> Delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
-			</para>
-  		</listitem>
-  		<listitem> <code>  void tlp::Graph::delNode ( const node ) </code> :
-  			<para> Delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
-  			</para> 
-  		</listitem>
-  	</itemizedlist>
-  	Note that the class Graph implements member functions like <code> void delAllNode (const node)</code>, and, <code>  void delAllEdge (const edge) </code>. 
+  		<listitem><para><code>  void tlp::Graph::delEdge (const edge) </code> :
+  			Delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+  		</para></listitem>
+  		<listitem><para><code>  void tlp::Graph::delNode ( const node ) </code> :
+  			Delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
+  		</para></listitem>
+  	</itemizedlist></para>
+  	<para>Note that the class Graph implements member functions like <code> void delAllNode (const node)</code>, and, <code>  void delAllEdge (const edge) </code>. 
   	<programlisting>
 <![CDATA[  //delete an edge
   graph->delEdge(e1);
 
   //delete a node
   graph->delNode(n2);]]>
-  	</programlisting>
-  	
-  	</sect2>
+  	</programlisting></para>
   	<para>Following is our graph with node n2 deleted.</para>
   	<graphic fileref="images/tuto_001_graphcreated_2.png"/>
+  	</sect2>
   	<sect2 id="code-examples-graphs-print"><title>6. Printing the graph</title>
   	<para>The class graph has a friend function which is an overload of the stream operator &lt;&lt;. This function will print the graph (only nodes and edges) in an out stream (here, the standard output, "cout"), in the tulip format.</para>
   	<programlisting>
@@ -302,14 +299,14 @@ using namespace tlp;]]>
         </programlisting>
 
 	</sect2>
-	<sect2 id="code-examples-graphs-exit"><title>7. Saving a graph</title>
+	<sect2 id="code-examples-graphs-save"><title>7. Saving a graph</title>
 	<para>Instead of having our graph printed on the standard output, we can save it in a .tlp (tulip format) suffixed file that can be read by tulip :</para>
         <programlisting>
 <![CDATA[  //Save  the graph :
   tlp::saveGraph(graph,"tuto1.tlp");]]>
         </programlisting>
         </sect2>
-	<sect2 id="code-examples-graphs-exit"><title>8. Graph deletion</title>
+	<sect2 id="code-examples-graphs-del"><title>8. Graph deletion</title>
 	<para>Before exiting the main function, do not forget memory leaks, and delete the graph to free memory usages.</para>
 	<programlisting>
 <![CDATA[  //delete the graph
@@ -318,7 +315,7 @@ using namespace tlp;]]>
 }]]>
         </programlisting>
         </sect2>
-        <sect2 id="code-examples-graphs-exit2"><title>9. Compiling and running the program.</title>
+        <sect2 id="code-examples-graphs-run"><title>9. Compiling and running the program.</title>
         <para>
         Compile this program with this command :  <code> g++ `tulip-config --libs --cxxflags` tutorial.cpp -o tutorial001 </code>
         </para>
@@ -375,14 +372,14 @@ int main() {
   return EXIT_SUCCESS;
 }]]>
         </programlisting>
+	<para>
+	</para>
+	<para>
+	</para>
+	<para>
+	</para>
         </sect2>
     </sect1>
-	<para>
-	</para>
-	<para>
-	</para>
-	<para>
-	</para>
     <sect1 id="code-examples-iterator-foreach"><title>TUTORIAL 002 : Iterating over a graph (class Iterator and the macro forEach)</title>
     	<para>
     		In this tutorial, we will, display on the standard output, all the structure using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
@@ -394,17 +391,17 @@ int main() {
     	<graphic fileref="images/tuto_001_graphcreated_1.png"/>
     	
     	<sect2 id="code-examples-iterator-headfile"><title>1. Header files (Same as Tutorial 1)</title>
-        Let's start with the files we need to include :
-        <para>  <programlisting>
+        <para>Let's start with the files we need to include :
+        <programlisting>
 <![CDATA[#include <iostream>
 #include <tulip/Graph.h>]]>
 		</programlisting>
         </para>
         <itemizedlist>
-        	<listitem> <code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
-        	</listitem>
-        	<listitem> <code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
-        	</listitem>
+        	<listitem><para><code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
+        	</para></listitem>
+        	<listitem><para><code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
+        	</para></listitem>
         </itemizedlist>
 	<para>As you can see, we just need the "Graph.h" header file to create a graph and iterate over its nodes, even though the declaration of the abstract class "Iterator" is in Iterator.h</para>    	
     	</sect2>
@@ -450,7 +447,7 @@ node: 2
  out-degree: 1]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-example-graphit"><title>3. Iterating through a node predecessors</title>
+    	<sect2 id="code-example-graphit-pred"><title>3. Iterating through a node predecessors</title>
     		<para>To iterate through predecessors of node, we use the same type of Iterator, but, instead of using the function getNodes() of the class Graph, we will use the function <code> Iterator&lt;node&gt;* getInNodes (const node) const</code> that will return an iterator on the predecessors of a node. </para>
     		
     		<programlisting>
@@ -465,7 +462,7 @@ node: 2
     cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-example-graphit"><title>4. Iterating through a node successors</title>
+    	<sect2 id="code-example-graphit_succs"><title>4. Iterating through a node successors</title>
     		<para>To iterate through successors of a node, we just need to use the function <code>Iterator&lt;node&gt;* Graph::getOutNodes (const node) const</code> to have an Iterator on its successors.</para>
     		
     		<programlisting>
@@ -480,7 +477,7 @@ node: 2
     cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-example-graphit"><title>5. Iterating through a node neighbors (predecessors and successors)</title>
+    	<sect2 id="code-example-graphit-all"><title>5. Iterating through a node neighbors (predecessors and successors)</title>
     		<para>For neighbors, we will use the function <code> Iterator&lt;node&gt;* Graph::getInOutNodes (const node) const </code> to have an Iterator on its neighbors.</para>
     		
     		<programlisting>
@@ -495,7 +492,7 @@ node: 2
     cout << "}" << endl;]]>
         	</programlisting>
     	</sect2>
-        <sect2 id="code-example-graphit"><title>6. Iterating through a node incoming edges</title>
+        <sect2 id="code-example-graphit-inedges"><title>6. Iterating through a node incoming edges</title>
     		<para>For incoming edges, we will use an Iterator on edges with the member function <code>Iterator&lt;edge&gt;* Graph::getInEdges (const node) const</code>.</para>
     		
     		<programlisting>
@@ -511,7 +508,7 @@ node: 2
     cout << " outcoming edges: {";]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-example-graphit"><title>7. Iterating through a node outgoing edges</title>
+    	<sect2 id="code-example-graphit-outedges"><title>7. Iterating through a node outgoing edges</title>
     		<para>For outgoing edges, we will use the function <code>Iterator&lt;edge&gt;* Graph::getOutEdges (const node) const</code>.</para>
     		
     		<programlisting>
@@ -548,7 +545,7 @@ node: 2
 delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]>
         	</programlisting>
     	</sect2>
-    	<sect2 id="code-example-endwhile"><title>9. Iterating on edges (all edges).</title>
+    	<sect2 id="code-example-graphit-edges"><title>9. Iterating on edges (all edges).</title>
     		 <para>Some times it can be useful to iterate on edges, for example in the algorithm of Kruskal. That is why the graph class owns the function <code>Iterator&lt;edge&gt;* Graph::getEdges (const node) const</code>, that return a pointer on an Iterator of type edge. Following is an exemple of its use. </para>
     		 
     		 <programlisting>
@@ -567,22 +564,22 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]
     	<sect2 id="code-example-foreach"><title>10. The forEach Macro </title>
     		<para>To simplify all this process of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters :</para>
     		<itemizedlist>
-    			<listitem> A variable :
-    			</listitem>
-    			<listitem>
+    			<listitem><para> A variable :
+    			</para></listitem>
+    			<listitem><para>
     				An Iterator for the same type as the variable, for example : Variable of type node, Graph::getNodes().
-    			</listitem>
+    			</para></listitem>
     		</itemizedlist>
-    		<para><code>Warning !</code> :</para>
+    		<para><code>Warning !</code> :
     		<itemizedlist>
-    			<listitem>
+    			<listitem><para>
     				Must use breakForEach to break iteration
-    			</listitem>
-    			<listitem> Must use returnForEach to return during iteration
-    			</listitem>
+    			</para></listitem>
+    			<listitem><para> Must use returnForEach to return during iteration
+    			</para></listitem>
     		</itemizedlist>
-    		This macro function is defined in the header file : tulip/ForEach.h
-    		<para>Following is a small example of its use.</para>
+    		This macro function is defined in the header file : tulip/ForEach.h</para>
+    		<para>Following is a small example of its use.
     		<programlisting>
 <![CDATA[#include <tulip/ForEach.h>
 
@@ -600,7 +597,7 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]
   }
   
   //...]]>
-        	</programlisting>
+        	</programlisting></para>
     	</sect2>
     	<sect2 id="code-example-tuto002"><title>Source Code</title>
     		<programlisting>
@@ -735,33 +732,33 @@ int main() {
         	<para> In tulip API, every type of property is declared in its own header file. Following is a list of those header files and the type of value which can be associated to an element of the graph:
         	</para>
         	<itemizedlist>
-        		<listitem>DoubleProperty : tulip/DoubleProperty.h /
+        		<listitem><para>DoubleProperty : tulip/DoubleProperty.h /
         			value type for edge = double, node = double
-        		</listitem>
-        		<listitem>BooleanProperty : tulip/BooleanProperty.h /
+        		</para></listitem>
+        		<listitem><para>BooleanProperty : tulip/BooleanProperty.h /
         			value type for edge = bool, node = bool
-        		</listitem>
-        		<listitem>IntegerProperty: tulip/IntegerProperty.h /
+        		</para></listitem>
+        		<listitem><para>IntegerProperty: tulip/IntegerProperty.h /
         			value type for edge = int, node = int
-        		</listitem>
-        		<listitem>LayoutProperty : tulip/LayoutProperty.h /
+        		</para></listitem>
+        		<listitem><para>LayoutProperty : tulip/LayoutProperty.h /
         			value type for edge = Coord(), node = vector&lt;Coord&gt;()
-        		</listitem>
-        		<listitem>ColorProperty : tulip/ColorProperty.h /
+        		</para></listitem>
+        		<listitem><para>ColorProperty : tulip/ColorProperty.h /
         			value type for edge = Color(), node = Color()
-        		</listitem>
-        		<listitem>SizeProperty : tulip/SizeProperty.h /
+        		</para></listitem>
+        		<listitem><para>SizeProperty : tulip/SizeProperty.h /
         			value type for edge = Size(), node = Size()
-        		</listitem>
-        		<listitem>StringProperty : tulip/StringProperty.h /
+        		</para></listitem>
+        		<listitem><para>StringProperty : tulip/StringProperty.h /
         			value type for edge = string, node = string
-        		</listitem> 
-        		<listitem>GraphProperty : tulip/GraphProperty.h /
+        		</para></listitem> 
+        		<listitem><para>GraphProperty : tulip/GraphProperty.h /
         			value type for edge = graph, node = graph
-        		</listitem>
+        		</para></listitem>
         	</itemizedlist>
         </sect2>
-        <sect2 id="code-example-headfiles"><title>2. Creation of a property.</title>
+        <sect2 id="code-example-create-prop"><title>2. Creation of a property.</title>
         	<para>
         		The creation of a property is accomplished by the function <code> Graph::getLocalProperty&lt;TypeProperty&gt;("name of the property")</code>. This function returns a pointer to a property. The real type of the property is given with the template parameter. If the property of the given name does not yet exists, a new one is created and returned. 
         	</para>
@@ -782,7 +779,7 @@ int main() {
   StringProperty *strings = graph->getLocalProperty<StringProperty>("firstString");]]>
         	</programlisting>
         </sect2>
-        <sect2 id="code-example-headfiles"><title>3. Initialize all properties.</title>
+        <sect2 id="code-example-init-props"><title>3. Initialize all properties.</title>
         	<para>
         		One property has to be initialized for both edges and nodes. It is done with the functions setAllNodeValue(value) and setAllEdgeValue(value) which are both member functions of the property. Following is an example : 
         	</para>
@@ -808,7 +805,7 @@ int main() {
         	<para>Following is the display (in the tulip GUI) of the list of a node associated values for the properties previously created :</para>
         	<graphic fileref="images/tuto_003_properties_1.png"/>
         </sect2>
-        <sect2 id="code-example-headfiles"><title>4. Iterating over properties.</title>
+        <sect2 id="code-example-iter-props"><title>4. Iterating over properties.</title>
         	<para>Once again, iteration is made with Iterators. The class graph has a member function <code>Iterator&lt; std::string &gt;* getLocalProperties ()</code> that returns an iterator on the local properties.</para>
         	
         	<para>Following is an example :</para>
@@ -1362,33 +1359,33 @@ int main() {
 		    	
 		    </sect2>
     </sect1>
-     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 007 : Mutable Collection</title>
+     <sect1 id="code-examples-mutablecont"><title>TUTORIAL 007 : Mutable Collection</title>
      		<para>In this small tutorial, we will learn how to use the Mutable Container (an efficient associative container) of the tulip API that enables :</para>
      		<itemizedlist>
-     			<listitem>
+     			<listitem><para>
      				A tradeoff between speed and memory.
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				To manage fragmented index
-     			</listitem>
+     			</para></listitem>
      		</itemizedlist>
      		<para>The direct access in this container is forbidden, but it exist a getter and a setter :</para>
      		<itemizedlist>
-     			<listitem> <code>const ReturnType&lt; TYPE
+     			<listitem><para> <code>const ReturnType&lt; TYPE
 &gt; MutableContainer&lt;type&gt;::get( const unsigned int i) const</code> that returns a reference instead of a copy in order to minimize the number copy of objects, user must be aware that calling the set function can devalidate this reference
-			</listitem>
-			<listitem>
+			</para></listitem>
+			<listitem><para>
 			 <code> void MutableContainer&lt;type&gt;::set( const unsigned int i,const TYPE value).</code>
-			 </listitem>
+			 </para></listitem>
 		</itemizedlist>
      		<para>The MutableContainer has two more methods :</para>
      		<itemizedlist>
-     			<listitem>
+     			<listitem><para>
      				<code> void setAll (const TYPE value) </code>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				<code> Iterator&lt; unsigned int &gt; * findAll (const TYPE value) const throw (ImpossibleOperation) </code> 
-     			</listitem>
+     			</para></listitem>
      		</itemizedlist>
      		<para>Following is a small example of its use :</para>
      		<programlisting>
@@ -1404,54 +1401,54 @@ int main() {
   cout << t.get(1) << "and" << t.get(2) << endl;]]>
         	    </programlisting>
      </sect1>
-     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 008 : Graph Tests</title>
+     <sect1 id="code-examples-graphs-tests"><title>TUTORIAL 008 : Graph Tests</title>
      		<para>The tulip API has special functions to test if a graph is element of a specific class of graph. Moreover results are buffered and automatically updated if it is possible in constant time. </para>
      		<para>Specific functions are available for each test.</para>
      		<para>Each class of graph has its own header file. Following is a list of those header files and an example of their use :</para>
      		<itemizedlist>
-     			<listitem>
+     			<listitem><para>
      				tulip/AcyclicTest.h
      				<programlisting> <![CDATA[AcyclicTest::isAcyclic(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/BiconnectedTest.h
      				<programlisting> <![CDATA[BiconnectedTest::isBiconnected(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/ConnectedTest.h
      				<programlisting> <![CDATA[ConnectedTest::isConnected(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/OuterPlanarTest.h
      				<programlisting> <![CDATA[PlanarityTest::isOuterPlanar(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/PlanarityTest.h
      				<programlisting> <![CDATA[PlanarityTest::isPlanar(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/SimpleTest.h
      				<programlisting> <![CDATA[SimpleTest::isSimple(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/TreeTest.h
      				<programlisting> <![CDATA[ TreeTest::isTree(graph);]]>
         	    		</programlisting>
-     			</listitem>
-     			<listitem>
+     			</para></listitem>
+     			<listitem><para>
      				tulip/TriconnectedTest.h
      				<programlisting> <![CDATA[TriconnectedTest::isTriconnected(graph);]]>
         	    		</programlisting>
-     			</listitem>
+     			</para></listitem>
      		</itemizedlist>
      </sect1>
-     <sect1 id="code-examples-propertiessub"><title>TUTORIAL 009 : ObservableGraph</title>
+     <sect1 id="code-examples-observablegraph"><title>TUTORIAL 009 : ObservableGraph</title>
      	<para>
      		In this tutorial, we will show you how to use the class ObservableGraph that enables to receive notification when a graph is updated.
      	</para>
