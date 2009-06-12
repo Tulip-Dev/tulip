@@ -78,7 +78,7 @@ in order to manage a hierarchy of subgraphs
 
 <sect1 id="hierarchy-graphs"><title>Hierarchy of graphs</title>
     <para> The Tulip library can also manage subgraphs. By definition a subgraph G' of a graph G is part (subset) 
-of the elements of G such that G' is also a graph (all sources and targets of the edges of G' must be in G). 
+of the elements of G such that G' is also a graph (all sources and targets of the edges of G' must be in G'). 
 As a subgraph is also a graph it can itself contain subgraphs. In such a hierarchy,  
 if a graph G" is a descendant of a graph G, G" is also a subgraph of G.
     </para>
@@ -121,11 +121,11 @@ are not persistent and thus, if the hierarchy is modified, the iterators are inv
 		Attributes can be added and accessed with those three following member functions :
 	</para>
 	<itemizedlist>
-		<listitem><para><code>DataSet  getAttributes ()</code> : Returns the attributes of a graph.
+		<listitem><para><code>const DataSet getAttributes()</code> : returns the attributes of a graph.
 		</para></listitem>
-		<listitem><para><code>template&lt;typename ATTRIBUTETYPE&gt; ATTRIBUTETYPE getAttribute (const std::string name) </code> : Get an attribute.
+		<listitem><para><code>template&lt;typename ATTRIBUTETYPE&gt;bool getAttribute(const std::string &amp;name, ATTRIBUTETYPE &amp;value)</code> : get an attribute.
 		</para></listitem>
-		<listitem><para><code> template&lt;typename ATTRIBUTETYPE&gt; void setAttribute (const std::string name, const ATTRIBUTETYPE value) </code> : sets a new attribute for the graphs.
+		<listitem><para><code> template&lt;typename ATTRIBUTETYPE&gt;void setAttribute (const std::string &amp;name, const ATTRIBUTETYPE &amp;value) </code> : set a new attribute value.
 		</para></listitem>
 	</itemizedlist>
 </sect1>
@@ -157,7 +157,7 @@ operations of a property are:
     </itemizedlist>
     </para>
     <para> For each property type there is a specific implementation (subclass) that allows operations which
-    are specific to the property type (see developer documentation). For instance, it is possible to obtain 
+    are specific to the property type (see Tulip libraries documentation). For instance, it is possible to obtain 
     the maximum value of a property if the property type is <code>double</code>. 
     </para>
     <para> A graph includes a set of functions that enables to obtain/create/delete a property. Because
@@ -202,7 +202,7 @@ In order to facilitate the navigation/edition of properties, a set of function i
 		You can find at the end of each tutorial, the integral source code that we used.
 	</para></listitem>
 	<listitem><para>
-		If you want more details on a specific function or class please read the Doxygen Documentation. 
+		If you want more details on a specific function or class please read the Tulip Graph library <ulink url="../../doxygen/tulip.html">documentation</ulink>. 
 	</para></listitem>	
 </itemizedlist>
 </sect1>
@@ -221,7 +221,7 @@ In order to facilitate the navigation/edition of properties, a set of function i
         <itemizedlist>
         	<listitem><para><code>iostream :</code> This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
         	</para></listitem>
-        	<listitem><para><code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the doxygen <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
+        	<listitem><para><code>tulip/Graph.h :</code> This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library <ulink url="../../doxygen/tulip-lib/Graph_8h.html">documentation</ulink>.
         	</para></listitem>
         </itemizedlist>
 
@@ -242,7 +242,7 @@ using namespace tlp;]]>
   	</programlisting>
   	</sect2>
   	<sect2 id="code-examples-graphs-addnodes"><title>3. Add nodes</title>
-  	<para>In the following, we are adding three nodes with the member function <code>  node Graph::addNode () </code> that will, create an instance of a 'node', add it to the graph, and return it. Note that using this function, the node is also added in all the graph ancestors to maintain the sub-graph relation between graphs.
+  	<para>In the following, we are adding three nodes with the member function <code>  node Graph::addNode () </code> that will, create an instance of a 'node', add it to the graph, and return it.<note><para>Using this function, the node is also added in all the graph ancestors to maintain the sub-graph relation between graphs.</para></note>
   	</para>
   	
   	
@@ -254,7 +254,7 @@ using namespace tlp;]]>
   	</programlisting>
   	</sect2>
   	<sect2 id="code-examples-graphs-addedges"><title>4. Add edges</title>
-  	<para>Now that nodes are created, we can create the edges. To do so, we can use the function <code>  edge Graph::addEdge  ( const node, const node ) </code> that will, add a new edge in the graph and return it. Note that, the edge is also added in all the super-graph of the graph to maintain the sub-graph relation between graphs. 
+  	<para>Now that nodes are created, we can create the edges. To do so, we can use the function <code>  edge Graph::addEdge  ( const node, const node ) </code> that will, add a new edge in the graph and return it.<note><para>The edge is also added in all the super-graph of the graph to maintain the sub-graph relation between graphs.</para></note>
   	 </para>
   	 <para>
   	 	The first parameter is the "source node", and, of course, the second is the "target node" (in tulip, every edge are oriented but you can choose not to consider the orientation). We will see later (TUTORIAL 005) that the edges enumeration order is the one in which they are added. 
@@ -274,25 +274,25 @@ using namespace tlp;]]>
   	<para> The Graph class provides member functions to delete edges and nodes.
   	<itemizedlist>
   		<listitem><para><code>  void tlp::Graph::delEdge (const edge) </code> :
-  			Delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+  			delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
   		</para></listitem>
   		<listitem><para><code>  void tlp::Graph::delNode ( const node ) </code> :
-  			Delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
+  			delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
   		</para></listitem>
   	</itemizedlist></para>
-  	<para>Note that the class Graph implements member functions like <code> void delAllNode (const node)</code>, and, <code>  void delAllEdge (const edge) </code>. 
+  	<note><para>The class Graph implements member functions like <code>void delAllNode (const node)</code>, and, <code>void delAllEdge (const edge)</code>.</para></note> 
   	<programlisting>
 <![CDATA[  //delete an edge
   graph->delEdge(e1);
 
   //delete a node
   graph->delNode(n2);]]>
-  	</programlisting></para>
+  	</programlisting>
   	<para>Following is our graph with node n2 deleted.</para>
   	<graphic fileref="images/tuto_001_graphcreated_2.png"/>
   	</sect2>
   	<sect2 id="code-examples-graphs-print"><title>6. Printing the graph</title>
-  	<para>The class graph has a friend function which is an overload of the stream operator &lt;&lt;. This function will print the graph (only nodes and edges) in an out stream (here, the standard output, "cout"), in the tulip format.</para>
+  	<para>The class graph has a friend function which is an overload of the stream operator &lt;&lt;. This function will print the graph (only nodes and edges) in an output stream (here, the standard output, "cout"), in the tulip format.</para>
   	<programlisting>
 <![CDATA[  //print the result on the standard output
   cout << graph << flush;]]>
@@ -317,9 +317,11 @@ using namespace tlp;]]>
         </sect2>
         <sect2 id="code-examples-graphs-run"><title>9. Compiling and running the program.</title>
         <para>
-        Compile this program with this command :  <code> g++ `tulip-config --libs --cxxflags` tutorial.cpp -o tutorial001 </code>
+        Compile this program with this command :</para>
+	<para><code>g++ `tulip-config --libs --cxxflags` tutorial.cpp -o tutorial001 </code>
         </para>
-        <para>Run it to have a look : <code> ./tutorial001 </code> </para>
+        <para>Run it to have a look :</para>
+	 <para><code> ./tutorial001 </code> </para>
         <graphic fileref="images/tuto_001_graphcreated_3.png"/>
         </sect2>
         <sect2 id="code-examples-graphs-exit"><title>10. Source Code</title>
@@ -562,7 +564,7 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]
         	</programlisting>
     	</sect2>
     	<sect2 id="code-example-foreach"><title>10. The forEach Macro </title>
-    		<para>To simplify all this process of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters :</para>
+    		<para>To simplify the use of Iterators, the API of tulip provides a macro forEach which is quite similar to the foreach of C# or Java. It takes two parameters :</para>
     		<itemizedlist>
     			<listitem><para> A variable :
     			</para></listitem>
@@ -570,15 +572,14 @@ delete itNodes; //!!!Warning : do not forget to delete iterators (memory leak)]]
     				An Iterator for the same type as the variable, for example : Variable of type node, Graph::getNodes().
     			</para></listitem>
     		</itemizedlist>
-    		<para><code>Warning !</code> :
-    		<itemizedlist>
+    		<warning><itemizedlist>
     			<listitem><para>
     				Must use breakForEach to break iteration
     			</para></listitem>
     			<listitem><para> Must use returnForEach to return during iteration
     			</para></listitem>
-    		</itemizedlist>
-    		This macro function is defined in the header file : tulip/ForEach.h</para>
+    		</itemizedlist></warning>
+    		<para>This macro function is defined in the header file : tulip/ForEach.h</para>
     		<para>Following is a small example of its use.
     		<programlisting>
 <![CDATA[#include <tulip/ForEach.h>
@@ -762,9 +763,8 @@ int main() {
         	<para>
         		The creation of a property is accomplished by the function <code> Graph::getLocalProperty&lt;TypeProperty&gt;("name of the property")</code>. This function returns a pointer to a property. The real type of the property is given with the template parameter. If the property of the given name does not yet exists, a new one is created and returned. 
         	</para>
-        	<para><code>Warning !</code></para>
-        	<para>Using of delete on that property will cause a segmentation violation (use delLocalProperty instead).
-        	</para>
+        	<warning><para>Using of delete on that property will cause a segmentation violation (use delLocalProperty instead).
+        	</para></warning>
         	<para> Following is a sample of code that creates 8 properties :
         	</para>
         	<programlisting>
@@ -781,9 +781,8 @@ int main() {
         </sect2>
         <sect2 id="code-example-init-props"><title>3. Initialize all properties.</title>
         	<para>
-        		One property has to be initialized for both edges and nodes. It is done with the functions setAllNodeValue(value) and setAllEdgeValue(value) which are both member functions of the property. Following is an example : 
-        	</para>
-        
+        		One property has to be initialized for both edges and nodes. It is done with the functions <code>setAllNodeValue(value)</code> and <code>setAllEdgeValue(value)</code> which are both member functions of the property.</para>
+		<para>Following is an example :</para>
         	<programlisting>
 <![CDATA[  //initialize all the properties
   metric->setAllNodeValue(0.0);
@@ -1023,7 +1022,7 @@ int main() {
   select->setAllNodeValue(true);
   select->setAllEdgeValue(true);]]>
         		</programlisting>
-        		<para>Note that the function <code>void buildGraph(Graph *g)</code>, is the one implemented in Tutorial 004.</para>
+        		<note><para>The function <code>void buildGraph(Graph *g)</code>, is the one implemented in Tutorial 004.</para></note>
         		<para>In the sample of code above, we create a graph with 3 properties : firstSelection (select), fisrtColors and firstMetric. We then set all nodes and edges "firstSelection" associated value to true which means that all nodes and edges are selected.</para>
         		<para>We, then, create two subgraphs out of our selection (the entire graph) : </para>
         		
@@ -1371,8 +1370,8 @@ int main() {
      		</itemizedlist>
      		<para>The direct access in this container is forbidden, but it exist a getter and a setter :</para>
      		<itemizedlist>
-     			<listitem><para> <code>const ReturnType&lt; TYPE
-&gt; MutableContainer&lt;type&gt;::get( const unsigned int i) const</code> that returns a reference instead of a copy in order to minimize the number copy of objects, user must be aware that calling the set function can devalidate this reference
+     			<listitem><para> <code>const ReturnType&lt;TYPE
+&gt;::ConstValue MutableContainer&lt;type&gt;::get(const unsigned int i) const</code> that returns a reference instead of a copy in order to minimize the number copy of objects, user must be aware that calling the set function can devalidate this reference
 			</para></listitem>
 			<listitem><para>
 			 <code> void MutableContainer&lt;type&gt;::set( const unsigned int i,const TYPE value).</code>
@@ -1381,10 +1380,10 @@ int main() {
      		<para>The MutableContainer has two more methods :</para>
      		<itemizedlist>
      			<listitem><para>
-     				<code> void setAll (const TYPE value) </code>
+     				<code>void setAll (const TYPE value)</code>
      			</para></listitem>
      			<listitem><para>
-     				<code> Iterator&lt; unsigned int &gt; * findAll (const TYPE value) const throw (ImpossibleOperation) </code> 
+     				<code>IteratorValue* findAll(const TYPE &amp;value, bool equal = true) const</code> 
      			</para></listitem>
      		</itemizedlist>
      		<para>Following is a small example of its use :</para>
