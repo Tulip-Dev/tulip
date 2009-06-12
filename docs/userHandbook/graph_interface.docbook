@@ -132,19 +132,22 @@
         <listitem>
           <para><code>Windows</code>: this menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
         </listitem>
-        <listitem><para><code>Options</code>: this menu allows to enable/disable the display options:
-          <itemizedlist>
-            <listitem><para>Force ratio : Tries to keep a good Height/Width ratio for the layout of the graph.
-            </para></listitem> 
-            <listitem><para>Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
-            </para></listitem> 
-            <listitem><para>Antialiasing : Enables a smoother but costly drawing of the graph.
-            </para></listitem> 
-            <listitem><para>Morphing : Enables the Morphing from a layout to an other.
-            </para></listitem> 
-          </itemizedlist>
-        </para></listitem>
-        <listitem>
+        <listitem><para><code>Options</code>: this menu allows to enable/disable the display options and show Graph/View editor widget:
+	  <itemizedlist>
+            <listitem><para>Display options :
+	      <itemizedlist>
+		<listitem><para>Force ratio : Tries to keep a good Height/Width ratio for the layout of the graph.
+		</para></listitem> 
+		<listitem><para>Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
+		</para></listitem> 
+		<listitem><para>Morphing : Enables the Morphing from a layout to an other.
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>Show Graph/View editor : if you close Graph/View editor tab on left dock widget, you can show it by this menu</para></listitem>
+	  </itemizedlist>
+	</para></listitem>
+	<listitem>
           <para><code>Help</code>: in this menu, you can find informations about the software and the way to make your first steps.</para>
         </listitem>
       </itemizedlist>
@@ -178,7 +181,7 @@
       </itemizedlist>
    	</para>
   </sect1>
-  <sect1 id="infoeditor"><title>Info Editor</title>
+  <sect1 id="infoeditor"><title>Graph Editor</title>
     <para>
       This subwindow is divided in four tabs : Property, Element, Hierarchy, Statistics (not displayed in the standard version).
     </para>
@@ -230,7 +233,7 @@
       </figure>
     </sect2>
   </sect1>
-  <sect1 id="configuration"><title>Configuration</title>
+  <sect1 id="configuration"><title>View Editor</title>
     <para>
       This subwindow is accessible by clicking on the "Configuration" tab at the bottom left corner.
     </para>
@@ -320,9 +323,17 @@
               </listitem>
               <listitem><para><code>Dialog -> 3D Overview</code> : display/hide top left overview,</para>
               </listitem>
-              <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
+              <listitem><para><code>Dialog -> Augmented Display</code> : manage augmented display of the graph (for example : caption when we apply a color algorithm),</para>
+              </listitem>
+	      <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
               </listitem>
               <listitem><para><code>Options -> Grid</code> : shows the grid configuration dialog.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Z Ordering</code> : Use this option when you have graph with transparent nodes/edges.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Antialiasing</code> : enable/disable antialiasing.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Textured meta node</code> : enable/disable meta node texture rendering.</para>
               </listitem>
               <listitem><para><code>Save picture as -> ...</code> : to save the graph picture in multiple format.</para>
               </listitem>

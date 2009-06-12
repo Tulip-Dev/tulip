@@ -716,9 +716,9 @@ namespace tlp {
     morphingAction->setCheckable(true);
     morphingAction->setChecked(false);
     optionsMenu->addSeparator();
-    QAction *propertiesDockAction = optionsMenu->addAction("Show properties dock");
+    QAction *propertiesDockAction = optionsMenu->addAction("Show graph editor");
     connect(propertiesDockAction,SIGNAL(triggered()),tabWidgetDock,SLOT(show()));
-    QAction *configurationDockAction = optionsMenu->addAction("Show configuration dock");
+    QAction *configurationDockAction = optionsMenu->addAction("Show view editor");
     connect(configurationDockAction,SIGNAL(triggered()),configWidgetDock,SLOT(show()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 

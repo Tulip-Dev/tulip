@@ -49,7 +49,7 @@ void InteractorNavigation::construct(){
 InteractorGetInformation::InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/i_select.png","Get information on nodes/edges"){
   setPriority(4);
   setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-			     "Click on an element to display its property");
+			     "Click on an element to display its properties");
 }
 
 void InteractorGetInformation::construct(){
