@@ -103,6 +103,9 @@ namespace tlp {
 
 	void cleanup();
 
+	void addEmptyViewLabel();
+	void removeEmptyViewLabel();
+
     QMenu *viewSetupMenu;
     QMenu *optionsMenu;
     QMenu *exportImageMenu;
@@ -134,6 +137,8 @@ namespace tlp {
     bool firstSet;
     unsigned int lastNbSelectedProperties;
     bool center;
+
+    int lastViewWindowWidth, lastViewWindowHeight;
 
   };
 

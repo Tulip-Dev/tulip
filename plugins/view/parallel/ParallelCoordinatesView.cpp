@@ -43,7 +43,8 @@ VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates view", "Tulip Team", "
 
 
 ParallelCoordinatesView::ParallelCoordinatesView() :
-	GlMainView(), graphProxy(NULL), parallelCoordsDrawing(NULL) , firstSet(true), lastNbSelectedProperties(0), center(false) {}
+	GlMainView(), graphProxy(NULL), parallelCoordsDrawing(NULL) , firstSet(true),
+	lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0) {}
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
 	cleanup();
@@ -83,22 +84,22 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 	foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
 		char* tmp = format.data();
 		for (int i = strlen(tmp) - 1; i >= 0; --i)
-	 	tmp[i] = toupper(tmp[i]);
+			tmp[i] = toupper(tmp[i]);
 		formats.push_back(QString(tmp));
-	 }
-	 // sort before inserting in exportImageMenu
-	 formats.sort();
-	 foreach(QString str, formats)
-	 exportImageMenu->addAction(str);
+	}
+	// sort before inserting in exportImageMenu
+	formats.sort();
+	foreach(QString str, formats)
+	exportImageMenu->addAction(str);
 
-	 connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
+	connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
 
-	 dataConfigWidget = new ParallelCoordsDataConfigWidget();
-	 connect(dataConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(setupAndDrawView()));
-	 drawConfigWidget = new ParallelCoordsDrawConfigWidget();
-	 connect(drawConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(setupAndDrawView()));
+	dataConfigWidget = new ParallelCoordsDataConfigWidget();
+	connect(dataConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(setupAndDrawView()));
+	drawConfigWidget = new ParallelCoordsDrawConfigWidget();
+	connect(drawConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(setupAndDrawView()));
 
-	 return widget;
+	return widget;
 }
 
 void ParallelCoordinatesView::initGlWidget() {
@@ -153,10 +154,10 @@ void ParallelCoordinatesView::buildMenuEntries() {
 }
 
 list<pair<QWidget *,string> > ParallelCoordinatesView::getConfigurationWidget() {
-    list<pair<QWidget *,string> > widgetList;
-    widgetList.push_back(pair<QWidget*,string>(dataConfigWidget,"Data Configuration"));
-    widgetList.push_back(pair<QWidget*,string>(drawConfigWidget,"Draw Configuration"));
-    return widgetList;
+	list<pair<QWidget *,string> > widgetList;
+	widgetList.push_back(pair<QWidget*,string>(dataConfigWidget,"Data Configuration"));
+	widgetList.push_back(pair<QWidget*,string>(drawConfigWidget,"Draw Configuration"));
+	return widgetList;
 }
 
 void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
@@ -190,21 +191,6 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		graphProxy->setSelectedProperties(selectedPropertiesBak);
 	}
 
-	dataConfigWidget->setGraphProxy(graphProxy);
-	dataConfigWidget->updateSelectedProperties();
-
-	if (parallelCoordsDrawing == NULL) {
-		parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy, axisPointsGraph);
-		graphProxy->addGraphObserver(parallelCoordsDrawing);
-		mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
-		overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
-	}
-
-
-	unsigned int axisHeight = DEFAULT_AXIS_HEIGHT;
-	unsigned int spaceBetweenAxis = DEFAULT_AXIS_HEIGHT / 2;
-	unsigned int linesColorAlphaValue = DEFAULT_LINES_COLOR_ALPHA_VALUE;
-
 	if (dataSet.exist("selectedProperties")) {
 		vector<string> selectedProperties;
 		DataSet items;
@@ -223,14 +209,26 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		graphProxy->setSelectedProperties(selectedProperties);
 	}
 
+	dataConfigWidget->setGraphProxy(graphProxy);
+	dataConfigWidget->updateSelectedProperties();
+
+	if (parallelCoordsDrawing == NULL) {
+		parallelCoordsDrawing = new ParallelCoordinatesDrawing(graphProxy, axisPointsGraph);
+		graphProxy->addGraphObserver(parallelCoordsDrawing);
+		mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
+		overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
+	}
+
+
+	unsigned int axisHeight = DEFAULT_AXIS_HEIGHT;
+	unsigned int spaceBetweenAxis = DEFAULT_AXIS_HEIGHT / 2;
+	unsigned int linesColorAlphaValue = DEFAULT_LINES_COLOR_ALPHA_VALUE;
+
+
 	if (dataSet.exist("dataLocation")) {
-		string dataLocation;
+		int dataLocation;
 		dataSet.get("dataLocation", dataLocation);
-		if (dataLocation == "node") {
-			dataConfigWidget->setDataLocation(NODE);
-		} else {
-			dataConfigWidget->setDataLocation(EDGE);
-		}
+		dataConfigWidget->setDataLocation((ElementType) dataLocation);
 	}
 
 	if (dataSet.exist("backgroundColor")) {
@@ -275,16 +273,44 @@ void ParallelCoordinatesView::setData(Graph *graph, DataSet dataSet) {
 		dataSet.get("linesColorAlphaValue", linesColorAlphaValue);
 	}
 
+	if (dataSet.exist("non highlighted alpha value")) {
+		unsigned int nonHighlightedAlphaValue;
+		dataSet.get("non highlighted alpha value", nonHighlightedAlphaValue);
+		drawConfigWidget->setUnhighlightedEltsColorsAlphaValue(nonHighlightedAlphaValue);
+	}
+
+	if (dataSet.exist("linesType")) {
+		int linesType;
+		dataSet.get("linesType", linesType);
+		if (linesType == ParallelCoordinatesDrawing::STRAIGHT) {
+			straightLinesType->setChecked(true);
+			splineLinesType->setChecked(false);
+		} else {
+			straightLinesType->setChecked(false);
+			splineLinesType->setChecked(true);
+		}
+	}
+
+	if (dataSet.exist("layoutType")) {
+		int layoutType;
+		dataSet.get("layoutType", layoutType);
+		if (layoutType == ParallelCoordinatesDrawing::PARALLEL) {
+			classicLayout->setChecked(true);
+			circularLayout->setChecked(false);
+		} else {
+			classicLayout->setChecked(false);
+			circularLayout->setChecked(true);
+		}
+	}
+
 	drawConfigWidget->setAxisHeight(axisHeight);
 	drawConfigWidget->setSpaceBetweenAxis(spaceBetweenAxis);
 	drawConfigWidget->setLinesColorAlphaValue(linesColorAlphaValue);
 
+	dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
+	dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
 
-	if (!firstSet) {
-		setupAndDrawView();
-	} else {
-		firstSet = false;
-	}
+	setupAndDrawView();
 
 }
 
@@ -294,20 +320,14 @@ void ParallelCoordinatesView::getData(Graph **graph, DataSet *dataSet) {
 	DataSet selectedPropertiesData;
 	int i=0;
 	for (vector<string>::iterator it=selectedProperties.begin(); it
-			!=selectedProperties.end(); ++it) {
+	!=selectedProperties.end(); ++it) {
 		std::stringstream s;
 		s << i;
 		selectedPropertiesData.set<string>(s.str(), *it);
 		i++;
 	}
 	dataSet->set("selectedProperties", selectedPropertiesData);
-
-	if (graphProxy->getDataLocation() == NODE) {
-		dataSet->set<string>("dataLocation", "node");
-	} else {
-		dataSet->set<string>("dataLocation", "edge");
-	}
-
+	dataSet->set("dataLocation", (int) graphProxy->getDataLocation());
 	dataSet->set("backgroundColor", drawConfigWidget->getBackgroundColor());
 	dataSet->set("axisHeight", drawConfigWidget->getAxisHeight());
 	dataSet->set("spaceBetweenAxis", drawConfigWidget->getSpaceBetweenAxis());
@@ -318,6 +338,11 @@ void ParallelCoordinatesView::getData(Graph **graph, DataSet *dataSet) {
 	dataSet->set("drawPointsOnAxis", drawConfigWidget->drawPointOnAxis());
 	dataSet->set("linesTextureFileName", drawConfigWidget->getLinesTextureFilename());
 	dataSet->set("linesColorAlphaValue", drawConfigWidget->getLinesColorAlphaValue());
+	dataSet->set("non highlighted alpha value", drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
+	dataSet->set("layoutType", (int) getLayoutType());
+	dataSet->set("linesType", (int) getLinesType());
+	dataSet->set("lastViewWindowWidth",  mainWidget->width());
+	dataSet->set("lastViewWindowHeight",  mainWidget->height());
 
 	*graph = graphProxy->getGraph();
 }
@@ -404,14 +429,55 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	mainWidget->getScene()->getCamera()->setUp(upBak);
 }
 
+void ParallelCoordinatesView::addEmptyViewLabel() {
+	Color backgroundColor = drawConfigWidget->getBackgroundColor();
+	mainWidget->getScene()->setBackgroundColor(backgroundColor);
+
+	Color foregroundColor;
+	int bgV = backgroundColor.getV();
+	if (bgV < 128) {
+		foregroundColor = Color(255,255,255);
+	} else {
+		foregroundColor = Color(0,0,0);
+	}
+
+	GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Coord(400,200), foregroundColor);
+	noDimsLabel->setText("No graph properties selected.");
+	mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+	GlLabel *noDimsLabel2 = new GlLabel(Coord(0,-100,0), Coord(700,200), foregroundColor);
+	noDimsLabel2->setText("Go to the \"Data configuration\" tab in the \"View editor\" panel to init the view.");
+	mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
+	mainLayer->deleteGlEntity(parallelCoordsDrawing);
+	mainLayer->deleteGlEntity(glGraphComposite);
+}
+
+void ParallelCoordinatesView::removeEmptyViewLabel() {
+	GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+	GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
+	if (noDimsLabel != NULL) {
+		mainLayer->deleteGlEntity(noDimsLabel);
+		delete noDimsLabel;
+		mainLayer->deleteGlEntity(noDimsLabel2);
+		delete noDimsLabel2;
+		mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
+		mainLayer->addGlEntity(glGraphComposite, "graph");
+	}
+}
+
 void ParallelCoordinatesView::draw() {
 	if (graphProxy->getNumberOfSelectedProperties() == 0) {
+		removeEmptyViewLabel();
+		addEmptyViewLabel();
+		mainWidget->getScene()->centerScene();
+		GlMainView::draw();
 		return;
-	}
-	if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
-		updateWithProgressBar();
 	} else {
-		updateWithoutProgressBar();
+		removeEmptyViewLabel();
+		if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
+			updateWithProgressBar();
+		} else {
+			updateWithoutProgressBar();
+		}
 	}
 	if (lastNbSelectedProperties != graphProxy->getNumberOfSelectedProperties() || center) {
 		centerView();
@@ -422,7 +488,15 @@ void ParallelCoordinatesView::draw() {
 }
 
 void ParallelCoordinatesView::centerView() {
-	mainWidget->getScene()->ajustSceneToSize(mainWidget->width(), mainWidget->height());
+	if (!mainWidget->isVisible()) {
+		if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
+			mainWidget->getScene()->ajustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
+		} else {
+			mainWidget->getScene()->centerScene();
+		}
+	} else {
+		mainWidget->getScene()->ajustSceneToSize(mainWidget->width(), mainWidget->height());
+	}
 }
 
 void ParallelCoordinatesView::refresh() {
@@ -590,11 +664,11 @@ set<unsigned int> ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int
 	if (result) {
 		vector<GlEntity *>::iterator it;
 		for (it = selectedEntities.begin(); it != selectedEntities.end(); ++it) {
-		    GlEntity *entity = *it;
-		    unsigned int selectedEltId;
-		    if (parallelCoordsDrawing->getDataIdFromGlEntity(entity, selectedEltId)) {
-		    	mappedData.insert(selectedEltId);
-		    }
+			GlEntity *entity = *it;
+			unsigned int selectedEltId;
+			if (parallelCoordsDrawing->getDataIdFromGlEntity(entity, selectedEltId)) {
+				mappedData.insert(selectedEltId);
+			}
 		}
 	}
 
@@ -616,7 +690,7 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
 	set<unsigned int>::iterator it;
 	for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
 		if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
-		graphProxy->setDataSelected(*it, selectFlag);
+			graphProxy->setDataSelected(*it, selectFlag);
 	}
 }
 

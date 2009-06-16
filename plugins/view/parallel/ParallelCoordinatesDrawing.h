@@ -36,9 +36,9 @@ class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
 
 public :
 
-	enum LayoutType {PARALLEL, CIRCULAR};
+	enum LayoutType {PARALLEL=0, CIRCULAR};
 
-	enum LinesType {STRAIGHT, SPLINE};
+	enum LinesType {STRAIGHT=0, SPLINE};
 
   ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 

@@ -27,6 +27,7 @@ namespace tlp {
 
 ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) : QWidget(parent) {
 	setupUi(this);
+	setBackgroundColor(Color(255,255,255));
 	connect(browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
 	connect(userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
 	connect(minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
@@ -118,7 +119,14 @@ void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(int newValue) 
 }
 
 void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(unsigned int value) {
-	viewColorAlphaValue->setValue(value);
+	if (value > 255) {
+		viewColorAlphaRb->setChecked(true);
+		userAlphaRb->setChecked(false);
+	} else {
+		viewColorAlphaRb->setChecked(false);
+		userAlphaRb->setChecked(true);
+		viewColorAlphaValue->setValue(value);
+	}
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
@@ -130,8 +138,12 @@ unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
 }
 
 Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
-	QColor bgColor = bgColorButton->palette().color(QPalette::Button);
-	return Color(bgColor.red(), bgColor.green(), bgColor.blue());
+	QString buttonStyleSheet = bgColorButton->styleSheet();
+	QString backgroundColorCodeHex = buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6);
+	bool ok;
+	return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
+				 backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
+				 backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
 }
 
 void ParallelCoordsDrawConfigWidget::setBackgroundColor(const Color &color) {
