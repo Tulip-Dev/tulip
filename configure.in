@@ -118,7 +118,6 @@ esac
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
-	 AC_LIBTOOL_WIN32_DLL
 	 WIN_VERSION=`echo ${MAJOR_VERSION}-${MINOR_VERSION}`
 	 WIN_EXE_VERSION=`echo ${VERSION} | tr . _`
 	 AC_SUBST(WIN_VERSION)
@@ -147,6 +146,7 @@ dnl
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_PICMODE(no)
 AC_DISABLE_STATIC
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 dnl Checks for header files.
