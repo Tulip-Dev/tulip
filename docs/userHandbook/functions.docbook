@@ -34,7 +34,7 @@
 
         <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout... They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
-	<sect2 id="list-properties"><title>Rendering Properties></title>
+	<sect2 id="list-properties"><title>Rendering Properties</title>
 	<para> Following is the list of rendering properties :</para>
 	<itemizedlist>
 		<listitem><para><code>viewBorderColor :</code>

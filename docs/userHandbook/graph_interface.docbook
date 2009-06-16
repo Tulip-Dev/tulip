@@ -5,7 +5,7 @@
       The main window of Tulip software is composed of several subwindows and a menu bar :
       <itemizedlist>
         <listitem>
-          <para><code>File</code>: this menu is used for usual file operations : New(<keycap>Ctrl+N</keycap>), Open(<keycap>Ctrl+O</keycap>), Save(<keycap>Ctrl+S</keycap>), Save As(<keycap>Ctrl+Shift+S</keycap>), Print(<keycap>Ctrl+P</keycap>) and Exit(<keycap>Ctrl+Q</keycap>). Others are added:
+          <para><code>File</code>: this menu is used for usual file operations : New(<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap>), Open(<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac), Save(<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac), Save As(<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac), Print(<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac) and Exit(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac). Others are added:
             <itemizedlist>
               <listitem>
                 <para><code>Import</code>: this submenu is populated by import plugins. 
@@ -36,7 +36,7 @@
           </para>
         </listitem>
         <listitem>
-          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>), Copy(<keycap>Ctrl+C</keycap>), Paste(<keycap>Ctrl+V</keycap>), and Find(<keycap>Ctrl+F</keycap>), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>), Invert Selection(<keycap>Ctrl+I</keycap>), Create group(<keycap>Ctrl+G</keycap>), Create subgraph(<keycap>Ctrl+Shift+G</keycap>), Undo(<keycap>Ctrl+U</keycap>), Redo(<keycap>Ctrl+R</keycap>).</para>
+          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac), Copy(<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac), Paste(<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac), and Find(<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac), Invert Selection(<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac), Create group(<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac), Create subgraph(<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac), Undo(<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac), Redo(<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
           <para>More details on the <code>Find</code> tool : The find tool has 4 options :</para>
           <itemizedlist>
             <listitem><para>Replace : Replace the current selection (nodes or edges already selected).
