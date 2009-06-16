@@ -70,6 +70,14 @@ namespace tlp {
   	actionAntialiasingOptions->setChecked(true);
   	actionTrueMetaNodeOptions=optionsMenu->addAction("Textured meta node");
   	actionTrueMetaNodeOptions->setCheckable(true);
+
+#if defined(__APPLE__)
+	actionTrueMetaNodeOptions->setChecked(false);
+	qtMetaNode=false;
+	if(canUseQGLPixelBuffer()){
+	  actionTrueMetaNodeOptions->setEnabled(false);
+	}
+#else
   	if(canUseQGLPixelBuffer()){
   	  actionTrueMetaNodeOptions->setChecked(true);
   	}else{
@@ -77,6 +85,7 @@ namespace tlp {
   	  actionTrueMetaNodeOptions->setChecked(false);
   	  qtMetaNode=false;
   	}
+#endif
 
   	//Export Menu
   	exportImageMenu=new QMenu("&Save Picture as ");
