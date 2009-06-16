@@ -1,5 +1,7 @@
 #include "tulip/MainController.h"
 
+#include <stdio.h>
+
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>

@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 
 struct X11Color
 {
