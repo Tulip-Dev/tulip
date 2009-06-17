@@ -68,8 +68,8 @@ public :
 
   void setAxisMinMaxValues(const double min, const double max) {axisMinValue = min ; axisMaxValue = max;}
 
-  double getAxisMinValue() const {return axisMinValue;}
-  double getAxisMaxValue() const {return axisMaxValue;}
+  double getAxisMinValue() const {return glQuantitativeAxis->getAxisMinValue();}
+  double getAxisMaxValue() const {return glQuantitativeAxis->getAxisMaxValue();}
 
   double getValueForAxisCoord(const Coord &axisCoord);
   Coord getAxisCoordForValue(double value);
@@ -119,6 +119,7 @@ public :
   std::vector<Coord> boxPlotValuesCoord;
   std::vector<std::string> boxPlotStringValues;
   BoxPlotValue boxPlotLowBound, boxPlotHighBound;
+  bool integerScale;
 
 };
 
