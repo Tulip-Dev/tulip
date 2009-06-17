@@ -228,7 +228,7 @@ void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
 		GlDisplayListManager::getInst().callDisplayList("arrow");
 		glPopMatrix();
 		if (selected) {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glPushMatrix();
 			glMultMatrixf((GLfloat *)&matrix);
 			glScalef(sizeT+0.1, sizeT+0.1, sizeT+0.1);
@@ -236,7 +236,7 @@ void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
 			//tlp::solidCone();
 			GlDisplayListManager::getInst().callDisplayList("arrow");
 			glPopMatrix();
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		endLineAnchor = tmpAnchor - tgtAnchor;
 		float nrm = endLineAnchor.norm();
