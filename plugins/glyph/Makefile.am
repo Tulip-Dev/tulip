@@ -4,6 +4,8 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
+if HAVE_TULIP_OGL
+
 plugins_LTLIBRARIES = \
 	libCube-@VERSION@.la \
 	libCubeOutlinedTransparent-@VERSION@.la \
@@ -43,3 +45,5 @@ libChristmasTree_@VERSION@_la_SOURCES = christmastree.cpp
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@
+
+endif
