@@ -192,6 +192,11 @@ namespace tlp {
     std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {return &layersList;}
 
     /**
+     * Clear layers list
+     */
+    void clearLayersList() { layersList.clear();}
+
+    /**
      * Get XML description of the scene and children and store it in out string
      */
     void getXML(std::string &out);

@@ -112,6 +112,8 @@ namespace tlp {
         delete oldGraphComposite;
     }
 
+    scene.clearLayersList();
+
     string sceneInput="";
     if(dataSet.exist("scene")) {
       dataSet.get("scene",sceneInput);
@@ -515,6 +517,8 @@ namespace tlp {
     glFrameBuf->updateDynamicTexture(textureId);
 
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
+    
+    glFlush();
 
     return NULL;
   }
