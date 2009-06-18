@@ -191,19 +191,26 @@ namespace tlp {
 
     GlTextureManager::getInst().desactivateTexture();
 
-    if(lod>20) {
+    DoubleProperty *borderWidth = 0;
+    double lineWidth;
+    if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
+      borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
+    if (borderWidth == 0) 
+      lineWidth=2.;
+    else {
+      const double& lineWidthTmp = borderWidth->getNodeValue (n);
+      if (lineWidthTmp < 1e-6) 
+	lineWidth=1e-6; //no negative borders
+      else 
+	lineWidth=lineWidthTmp;
+    }
+
+
+    if((lineWidth<1 && lod>20) || (lod>(20/lineWidth))) {
       ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
-      DoubleProperty *borderWidth = 0;
-      if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
-        borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
       const Color& c = borderColor->getNodeValue(n);
       //  setMaterial(c);
-      if (borderWidth == 0) glLineWidth(2);
-      else {
-        const double& lineWidth = borderWidth->getNodeValue (n);
-        if (lineWidth < 1e-6) glLineWidth (1e-6); //no negative borders
-        else glLineWidth (lineWidth);
-      }
+      glLineWidth(lineWidth);
       glDisable(GL_LIGHTING);
       glColor3ub(c[0],c[1],c[2]);
       if(canUseGlew){
