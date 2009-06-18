@@ -47,7 +47,7 @@ void SizeProperty::scale( const tlp::Vector<float,3>& v, Graph *sg ) {
 //=============================================================================
 Size SizeProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned sgi=(unsigned long)sg;
+  unsigned long sgi=(unsigned long)sg;
   if (minMaxOk.find(sgi)==minMaxOk.end()) minMaxOk[sgi]=false;
   if (!minMaxOk[sgi]) computeMinMax(sg);
   return max[sgi];
