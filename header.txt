@@ -1,17 +1,23 @@
 /**
-
- This file is part of Tulip.
-
- Authors: David Auber, Patrick Mary, Morgan Mathiaut
- from the LaBRI Visualization Team
- Last modification : dd/mm/yyyy
-
- Tulip is free software; you can redistribute it and/or modify
- it under the terms of the:
- - GNU General Public License
-   for the parts in the 'software' directory,
- - Lesser GNU General Public License
-   for the parts in the 'library' or 'plugins' directories,
- as published by the Free Software Foundation, either version 3
- of the Licenses, or (at your option) any later version.
-*/
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber, Patrick Mary, Morgan Mathiaut
+ * from the LaBRI Visualization Team
+ * Last modification : dd/mm/yyyy
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the:
+ * - GNU General Public License
+ *   for the parts in the 'software' directory,
+ * - Lesser GNU General Public License
+ *   for the parts in the 'library' or 'plugins' directories,
+ * as published by the Free Software Foundation, either version 3
+ * of the Licenses, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
