@@ -4,7 +4,16 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
+plugins_LTLIBRARIES = \
+		libAutoSize-@VERSION@.la \
+		libMetricSizeMapping-@VERSION@.la
+
 pluginsdir = $(libdir)/tlp
+
+libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
+libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
+
+INCLUDES = @TULIP_INCLUDE@
 
 if HAVE_TULIP_OGL
 
@@ -14,19 +23,11 @@ else
 ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
-plugins_LTLIBRARIES = \
-		libAutoSize-@VERSION@.la \
-		libFitToLabels-@VERSION@.la \
-		libMetricSizeMapping-@VERSION@.la
-
+pluginsogl_LTLIBRARIES = libFitToLabels-@VERSION@.la
+pluginsogldir = $(libdir)/tlp
 libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
-else
-plugins_LTLIBRARIES = \
-		libAutoSize-@VERSION@.la \
-		libMetricSizeMapping-@VERSION@.la
+
+INCLUDES += @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
 endif
 
-libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
-libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}

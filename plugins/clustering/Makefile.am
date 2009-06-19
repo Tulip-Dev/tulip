@@ -4,13 +4,25 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
-if HAVE_TULIP_QT
 plugins_LTLIBRARIES = \
 	libStrengthClustering-@VERSION@.la \
 	libHierarchicalClustering-@VERSION@.la \
-	libConvolutionClustering-@VERSION@.la \
 	libEqualValueClustering-@VERSION@.la \
 	libQuotientClustering-@VERSION@.la
+
+pluginsdir = $(libdir)/tlp
+
+libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
+libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
+libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
+libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
+
+INCLUDES = @TULIP_INCLUDE@
+
+if HAVE_TULIP_QT
+pluginsqt_LTLIBRARIES = libConvolutionClustering-@VERSION@.la
+
+pluginsqtdir = $(libdir)/tlp
 
 EXTRA_DIST = ConvolutionClusteringSetup.ui
 
@@ -26,6 +38,9 @@ libConvolutionClustering_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TUL
 
 BUILT_SOURCES = ConvolutionClusteringSetupData.h moc_ConvolutionClusteringSetup.cpp 
 
+AM_CPPFLAGS= @QT_CPPFLAGS@
+INCLUDES += @QT_INCLUDES@
+
 moc_%.cpp: %.h 
 	$(MOC) -o $@ $<
 
@@ -34,21 +49,6 @@ moc_%.cpp: %.h
 
 clean-generic:
 	rm -f moc_* *Data.*
-else
-plugins_LTLIBRARIES = \
-	libStrengthClustering-@VERSION@.la \
-	libHierarchicalClustering-@VERSION@.la \
-	libEqualValueClustering-@VERSION@.la \
-	libQuotientClustering-@VERSION@.la
 endif
 
-pluginsdir = $(libdir)/tlp
-
-libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
-libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
-libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
-libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
-
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@

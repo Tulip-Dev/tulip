@@ -4,39 +4,6 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
-if HAVE_TULIP_QT
-plugins_LTLIBRARIES = \
-	libPlanarGraph-@VERSION@.la \
-	libGrid-@VERSION@.la \
-	libDotImport-@VERSION@.la \
-	libGMLImport-@VERSION@.la \
-	libFileSystem-@VERSION@.la \
-	libWebImport-@VERSION@.la \
-	libRandomGraph-@VERSION@.la \
-	libRandomSimpleGraph-@VERSION@.la \
-	libAdjacencyMatrixImport-@VERSION@.la \
-	libCompleteGraph-@VERSION@.la \
-	libRandomTree-@VERSION@.la \
-	libRandomTreeGeneral-@VERSION@.la \
-	libCompleteTree-@VERSION@.la \
-	libSmallWorldGraph-@VERSION@.la 
-
-libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
-libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
-nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
-
-libFileSystem_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-libWebImport_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-
-BUILT_SOURCES =  moc_WebImport.cpp
-
-moc_%.cpp: %.h 
-	$(MOC) -o $@ $<
-
-clean-generic:
-	rm -f moc_*
-
-else
 plugins_LTLIBRARIES = \
 	libPlanarGraph-@VERSION@.la \
 	libGrid-@VERSION@.la \
@@ -50,7 +17,6 @@ plugins_LTLIBRARIES = \
 	libRandomTreeGeneral-@VERSION@.la \
 	libCompleteTree-@VERSION@.la \
 	libSmallWorldGraph-@VERSION@.la
-endif
 
 pluginsdir = $(libdir)/tlp
 
@@ -67,6 +33,32 @@ libRandomTreeGeneral_@VERSION@_la_SOURCES = RandomTreeGeneral.cpp
 libCompleteTree_@VERSION@_la_SOURCES = CompleteTree.cpp
 libSmallWorldGraph_@VERSION@_la_SOURCES = SmallWorldGraph.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+INCLUDES = @TULIP_INCLUDE@
+
+if HAVE_TULIP_QT
+pluginsqt_LTLIBRARIES = libFileSystem-@VERSION@.la libWebImport-@VERSION@.la
+
+pluginsqtdir = $(libdir)/tlp
+
+libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
+libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
+nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
+
+libFileSystem_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+libWebImport_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+
 AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
+INCLUDES += @QT_INCLUDES@
+
+
+BUILT_SOURCES =  moc_WebImport.cpp
+
+moc_%.cpp: %.h
+	$(MOC) -o $@ $<
+
+clean-generic:
+	rm -f moc_*
+
+endif
+
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
