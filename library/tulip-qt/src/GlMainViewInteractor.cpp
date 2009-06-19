@@ -40,7 +40,7 @@ InteractorNavigation::InteractorNavigation():NodeLinkDiagramComponentInteractor(
 			     "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #else
 			     "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
-			     "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves<li></li> or <b>Pg up/Pg down</b> keys</li></ul>"
+			     "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
 );
 }
@@ -157,9 +157,9 @@ InteractorEditEdgeBends::InteractorEditEdgeBends():NodeLinkDiagramComponentInter
 			     "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
 			     "Add bend: <ul><li><b>Shift + Mouse left</b> click on the selected edge</li></ul>"+
 #if !defined(__APPLE__) 
-			     "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click</li></ul>"
+			     "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click on a selected bend</li></ul>"
 #else
-			     "Delete bend: <ul><li><b>Alt + Mouse left</b> click</li></ul>"
+			     "Delete bend: <ul><li><b>Alt + Mouse left</b> click on a selected bend</li></ul>"
 #endif
 			     );
 }
