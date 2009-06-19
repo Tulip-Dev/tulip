@@ -13,8 +13,6 @@ pluginsdir = $(libdir)/tlp
 libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
 libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
 
-INCLUDES = @TULIP_INCLUDE@
-
 if HAVE_TULIP_OGL
 
 if WIN32
@@ -27,7 +25,9 @@ pluginsogl_LTLIBRARIES = libFitToLabels-@VERSION@.la
 pluginsogldir = $(libdir)/tlp
 libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
 
-INCLUDES += @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
+INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
+else
+INCLUDES = @TULIP_INCLUDE@
 endif
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@

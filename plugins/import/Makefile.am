@@ -33,8 +33,6 @@ libRandomTreeGeneral_@VERSION@_la_SOURCES = RandomTreeGeneral.cpp
 libCompleteTree_@VERSION@_la_SOURCES = CompleteTree.cpp
 libSmallWorldGraph_@VERSION@_la_SOURCES = SmallWorldGraph.cpp
 
-INCLUDES = @TULIP_INCLUDE@
-
 if HAVE_TULIP_QT
 pluginsqt_LTLIBRARIES = libFileSystem-@VERSION@.la libWebImport-@VERSION@.la
 
@@ -48,7 +46,7 @@ libFileSystem_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
 libWebImport_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 
 AM_CPPFLAGS= @QT_CPPFLAGS@
-INCLUDES += @QT_INCLUDES@
+INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 
 
 BUILT_SOURCES =  moc_WebImport.cpp
@@ -59,6 +57,8 @@ moc_%.cpp: %.h
 clean-generic:
 	rm -f moc_*
 
+else
+INCLUDES = @TULIP_INCLUDE@
 endif
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
