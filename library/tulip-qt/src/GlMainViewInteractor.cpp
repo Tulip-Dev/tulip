@@ -32,14 +32,17 @@ INTERACTORPLUGIN(InteractorEditEdgeBends, "InteractorEditEdgeBends", "Tulip Team
 InteractorNavigation::InteractorNavigation():NodeLinkDiagramComponentInteractor(":/i_navigation.png","Navigate in graph"){
   setPriority(5);
   setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
-			     "Navigate in the graph<br><br>"+
-			     "<b>Ctrl + Mouse up/down</b> : zoom<br>"+
-			     "<b>Ctrl + Mouse left/right</b> : z rotation<br>"+
-			     "<b>Shift + Mouse</b> : rotation<br>"+
-			     "<b>Key up/down</b> : up/down<br>"+
-			     "<b>Key left/right</b> : left/right<br>"+
-			     "<b>Key page up/down</b> : zoom<br>"+
-			     "<b>Key insert</b> : rotate<br>");
+			     "3D Navigation in the graph<br><br>"+
+			     "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys down</li></ul>" +
+			     "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right moves</li></ul>" +
+#if !defined(__APPLE__) 
+			     "Z rotation: <ul><li><b>Ctrl + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
+			     "Zoom/Unzoom: <ul><li><b>Ctrl + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
+#else
+			     "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
+			     "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves<li></li> or <b>Pg up/Pg down</b> keys</li></ul>"
+#endif
+);
 }
 
 void InteractorNavigation::construct(){
@@ -49,7 +52,7 @@ void InteractorNavigation::construct(){
 InteractorGetInformation::InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/i_select.png","Get information on nodes/edges"){
   setPriority(4);
   setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-			     "Click on an element to display its properties");
+			     "<b>Mouse left</b> click on an element to display its properties");
 }
 
 void InteractorGetInformation::construct(){
@@ -60,9 +63,13 @@ void InteractorGetInformation::construct(){
 InteractorSelection::InteractorSelection():NodeLinkDiagramComponentInteractor(":/i_selection.png","Select nodes/edges in a rectangle"){
   setPriority(3);
   setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
-			     "Select on rectangle<br><br>"+
-			     "<b>Ctrl + Mouse</b> : add/remove from selection<br>"+
-			     "<b>Shift + Mouse</b> : remove to selection");
+			     "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
+#if !defined(__APPLE__) 
+			     "Add/Remove from selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
+#else
+			     "Add/Remove from selection: <ul><li><b>Alt + Mouse left</b> click</li></ul>"+
+#endif
+			     "Remove from selection: <ul><li><b>Shift + Mouse</b> click</li></ul>");
 }
 
 void InteractorSelection::construct(){
@@ -73,11 +80,11 @@ void InteractorSelection::construct(){
 InteractorSelectionModifier::InteractorSelectionModifier():NodeLinkDiagramComponentInteractor(":/i_move.png","Move/Reshape selection"){
   setPriority(3);
   setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
-			     "Modify selection<br><br>"+
-			     "<b>Circle</b> : rotation<br>"+
-			     "<b>Square</b> : scale<br>"+
-			     "<b>Arrow</b> : scale<br>"+
-			     "<b>Click on center</b> : translation");
+			     "Modify selection<br/><br/>"+
+			     "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
+			     "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+			     "Resize & Rotate: <ul><li><b>Mouse left</b> down on suqare + moves</li></ul>" +
+			     "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>");
 }
 
 void InteractorSelectionModifier::construct(){
@@ -100,7 +107,7 @@ void InteractorMagicSelection::construct(){
 InteractorRectangleZoom::InteractorRectangleZoom():NodeLinkDiagramComponentInteractor(":/i_zoom.png","Zoom on rectangle"){
   setPriority(2);
   setConfigurationWidgetText(QString("<h3>Rectangle zoom interactor</h3>")+
-			     "Zoom on rectangle");
+			     "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.");
 }
 
 void InteractorRectangleZoom::construct(){
@@ -111,7 +118,7 @@ void InteractorRectangleZoom::construct(){
 InteractorDeleteElement::InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/i_del.png","Delete nodes or edges"){
   setPriority(1);
   setConfigurationWidgetText(QString("<h3>Delete interactor</h3>")+
-			     "Delete graph element");
+			     "<b>Mouse left</b> click on an element to delete it");
 }
 
 void InteractorDeleteElement::construct(){
@@ -122,7 +129,7 @@ void InteractorDeleteElement::construct(){
 InteractorAddNode::InteractorAddNode():NodeLinkDiagramComponentInteractor(":/i_addnode.png","Add nodes"){
   setPriority(1);
   setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
-			     "Add a node in the graph");
+			     "<b>Mouse left</b> click to add a node in the graph");
 }
 
 void InteractorAddNode::construct(){
@@ -133,7 +140,7 @@ void InteractorAddNode::construct(){
 InteractorAddEdge::InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/i_addedge.png","Add edges"){
   setPriority(1);
   setConfigurationWidgetText(QString("<h3>Add edge interactor</h3>")+
-			     "Add an edge in the graph. If you don't click on a node, an edge bend is create");
+			     "<b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.");
 }
 
 void InteractorAddEdge::construct(){
@@ -145,9 +152,16 @@ void InteractorAddEdge::construct(){
 InteractorEditEdgeBends::InteractorEditEdgeBends():NodeLinkDiagramComponentInteractor(":/i_bends.png","Edit edge bends"){
   setPriority(1);
   setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
-			     "Modify edge bends<br><br>"+
-			     "<b>Shift</b> : add bend<br>"+
-			     "<b>Ctrl</b> : delete bend");
+			     "Modify edge bends<br/><br/>"+
+			     "Select edge: <ul><li>use rectangle selection</li></ul>" +
+			     "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +
+			     "Add bend: <ul><li><b>Shift + Mouse left</b> click on the selected edge</li></ul>"+
+#if !defined(__APPLE__) 
+			     "Delete bend: <ul><li><b>Ctrl + Mouse left</b> click</li></ul>"
+#else
+			     "Delete bend: <ul><li><b>Alt + Mouse left</b> click</li></ul>"
+#endif
+			     );
 }
 
 void InteractorEditEdgeBends::construct(){
