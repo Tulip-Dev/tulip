@@ -1,7 +1,6 @@
 #include <fstream>
 #include <string>
 #include <errno.h>
-#include <locale.h>
 #include <sys/stat.h>
 #include <string.h>
 
@@ -786,10 +785,6 @@ public:
   }
   ~TLPImport(){}
   bool import(const string &dummy) {
-    // first we must ensure that parsing of float or double
-    // doest not depend of locale
-    setlocale(LC_NUMERIC, "C");
-
     string filename;
     string data;
     stringstream *tmpss=NULL;

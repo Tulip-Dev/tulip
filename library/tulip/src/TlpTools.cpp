@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <string.h>
+#include <locale.h>
 
 #ifndef _WIN32
 #include <sys/types.h>
@@ -48,6 +49,10 @@ const char tlp::PATH_DELIMITER = ':';
 #endif
 //=========================================================
 void tlp::initTulipLib(char* appDirPath) {
+  // first we must ensure that the parsing of float or double
+  // doest not depend on locale
+  setlocale(LC_NUMERIC, "C");
+
   char *getEnvTlp;
   std::string tulipDocDir;
   string::size_type pos;
