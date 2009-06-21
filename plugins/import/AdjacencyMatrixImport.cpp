@@ -126,40 +126,41 @@ public:
       in.getline(line,MAX_SIZE);
       stringstream lines(line);
       unsigned int curNode = 0;
-      int itemFound = 0;
       edge e;
+      bool itemFound = false;
+      bool andFound = false;
       while (lines.good()) {
 	string valString;
 	ValType type;
 	if ( lines >> valString) {
 	  const char *start= valString.c_str();
 	  char *res;
-	  double valDouble = strtod(start,&res);
+	  double valDouble = strtod(start, &res);
 	  if (res!=start) {
 	    type = TLP_DOUBLE;
-	    itemFound = (itemFound == 2) ? 0 : itemFound + 1;
+	    itemFound = true;
 	  } else if (valString == "&") {
-	    if (itemFound != 1)
+	    if (!itemFound)
 	      return formatError(valString.c_str(), curLine);
 	    type = TLP_AND;
 	    curNode--;
-	    ++itemFound;
+	    andFound = true;
+	    itemFound = false;
 	    continue;
 	  } else if (valString == "@") {
-	    if (itemFound && type == TLP_AND)
+	    if (andFound)
 	      return formatError(valString.c_str(), curLine);
 	    type = TLP_NOVAL;
-	    itemFound = 0;
+	    itemFound = false;
 	  } else if (valString == "#") {
-	    if (itemFound && type == TLP_AND)
+	    if (andFound)
 	      return formatError(valString.c_str(), curLine);
-	    itemFound = 0;
 	    type = TLP_NOTHING;
+	    itemFound = false;
 	  } else {
-	    itemFound = (itemFound == 2) ? 0 : itemFound + 1;
 	    type = TLP_STRING;
+	    itemFound = true;
 	  }
-
 	  if ( curNode >= nodes.size() || curLine >= nodes.size()) {
 	    nodes.push_back(graph->addNode());
 	  }
@@ -179,12 +180,12 @@ public:
 	  else {
 	    switch (type) {
 	    case TLP_DOUBLE:
-	      if (itemFound)
+	      if (!andFound)
 		e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      metric->setEdgeValue(e,valDouble);
 	      break;
 	    case TLP_STRING:
-	      if (itemFound)
+	      if (!andFound)
 		e=graph->addEdge(nodes[curLine],nodes[curNode]);
 	      stringP->setEdgeValue(e,valString);
 	      break;
@@ -199,13 +200,14 @@ public:
 	  }
 	  curNode++;
 	}
+	andFound = false;
       }
-      if (itemFound == 2)
-	formatError("&", curLine);
+      if (andFound)
+	return formatError("&", curLine);
       curLine++;
     }
     return true;
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(AdjacencyMatrixImport, "Adjacency Matrix", "Auber David", "05/09/2008","","1.1","File")
+IMPORTPLUGINOFGROUP(AdjacencyMatrixImport, "Adjacency Matrix", "Auber David", "05/09/2008","","1.2","File")
