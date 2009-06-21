@@ -172,11 +172,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
     _observedView = 0;
   }
   if (glWidget)
-#if defined(__APPLE__)
-    _view->setToolTip(QString("Click+Alt show rendering parameters"));
-#else
-  _view->setToolTip(QString("Click Left+Ctrl to show rendering parameters"));
-#endif
+    _view->setToolTip(QString("Click Left to center the view on the selected point"));
   else
     _view->setToolTip(QString());
   _observedView = glWidget;
