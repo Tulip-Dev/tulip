@@ -26,8 +26,8 @@ pluginsogldir = $(libdir)/tlp
 libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
 
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 else
 INCLUDES = @TULIP_INCLUDE@
-endif
-
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+endif
