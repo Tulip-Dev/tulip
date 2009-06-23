@@ -4,13 +4,21 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <tulip/TlpTools.h>
+#ifndef NDEBUG
+#include <tulip/PluginLoaderTxt.h>
+#endif
 
 int main( int argc, char** argv ) {
   std::string tlpdir("@prefix@");
   tlpdir += "/lib";
   setenv("TLP_DIR", tlpdir.c_str(), 1);
   tlp::initTulipLib();
-  tlp::loadPlugins();   // library side plugins  
+  tlp::PluginLoader* pLoader = NULL;
+#ifndef NDEBUG
+  tlp::PluginLoaderTxt loader;
+  pLoader = &loader;
+#endif
+  tlp::loadPlugins(pLoader);   // library side plugins  
 
   //CPPUNIT_NS::QtUi::TestRunner runner;
   CPPUNIT_NS::TextUi::TestRunner runner;
