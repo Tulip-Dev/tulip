@@ -29,9 +29,6 @@
                 <para><code>Export</code>: this submenu is populated by export plugins allowing to save a tulip graph accordingly to a specified format. By default Tulip is able to export in GML and TLP formats.
                 </para>
               </listitem>
-              <listitem>
-                <para><code>Save as picture</code>: this last menu gives the choice between different picture formats (BMP, EPS, JPEG, PBM, PGM, PNG, PPM, SVG, XBM, XPM) in wich graphs can be exported to.</para>
-              </listitem>
             </itemizedlist>
           </para>
         </listitem>
