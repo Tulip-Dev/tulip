@@ -41,6 +41,7 @@
 #include "FTGlyphContainer.h"
 #include "FTFace.h"
 
+#include <iostream>
 
 //
 //  FTFont
@@ -388,6 +389,11 @@ inline FTBBox FTFontImpl::BBoxI(const T* string, const int len,
         unsigned int thisChar = *ustr++;
         unsigned int nextChar = *ustr;
 
+	if(thisChar>65535)
+	  thisChar=0;
+	if(nextChar>65535)
+	  nextChar=0;
+
         if(CheckGlyph(thisChar))
         {
             totalBBox = glyphList->BBox(thisChar);
@@ -447,6 +453,11 @@ inline float FTFontImpl::AdvanceI(const T* string, const int len,
         unsigned int thisChar = *ustr++;
         unsigned int nextChar = *ustr;
 
+	if(thisChar>65535)
+	  thisChar=0;
+	if(nextChar>65535)
+	  nextChar=0;
+
         if(CheckGlyph(thisChar))
         {
             advance += glyphList->Advance(thisChar, nextChar);
@@ -487,6 +498,11 @@ inline FTPoint FTFontImpl::RenderI(const T* string, const int len,
     {
         unsigned int thisChar = *ustr++;
         unsigned int nextChar = *ustr;
+
+	if(thisChar>(65535))
+	  thisChar=0;
+	if(nextChar>65535)
+	  nextChar=0;
 
         if(CheckGlyph(thisChar))
         {

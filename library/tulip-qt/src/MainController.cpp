@@ -400,6 +400,13 @@ namespace tlp {
     }else{
       redrawViews();
     }
+
+    if(currentGraph){
+      currentGraphNbNodes=currentGraph->numberOfNodes();
+      currentGraphNbEdges=currentGraph->numberOfEdges();
+      updateCurrentGraphInfos();
+    }
+
     updateUndoRedoInfos();
   }
   //**********************************************************************
@@ -455,41 +462,8 @@ namespace tlp {
     }
   }
   //**********************************************************************
-  void MainController::addNode (Graph *graph, const node) {
-    if(currentGraph!=graph)
-      return;
-    ++currentGraphNbNodes;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
-  void  MainController::addEdge (Graph *graph, const edge) {
-    if(currentGraph!=graph)
-      return;
-    ++currentGraphNbEdges;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
-  void  MainController::delNode (Graph *graph, const node) {
-    if(currentGraph!=graph)
-      return;
-    --currentGraphNbNodes;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
-  void  MainController::delEdge (Graph *graph, const edge) {
-    if(currentGraph!=graph)
-      return;
-    --currentGraphNbEdges;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
   void  MainController::addLocalProperty(Graph *graph, const std::string&){
     graphToReload=graph;
-    /*for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
-      if((*it).second==graph){
-        (*it).first->setGraph(graph);
-      }
-    }*/
   }
   //**********************************************************************
   void  MainController::delLocalProperty(Graph *graph, const std::string&){
@@ -1260,6 +1234,7 @@ namespace tlp {
 	hasNdldc = graph->getAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
       graph->pop();
       if (updateLayout) {
+	graph->removeAttribute("viewLayout");
 	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
       }
       if (!resultBool) {

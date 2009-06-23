@@ -28,10 +28,14 @@ namespace tlp {
   }
 
   void GlGraphInputData::reloadLayoutProperty() {
-    if(elementLayoutPropName==""){
-      elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
+    if(!graph->attributeExist("viewLayout")){
+      if(elementLayoutPropName==""){
+	elementLayout = graph->getProperty<LayoutProperty>("viewLayout");
+      }else{
+	elementLayout = graph->getProperty<LayoutProperty>(elementLayoutPropName);
+      }
     }else{
-      elementLayout = graph->getProperty<LayoutProperty>(elementLayoutPropName);
+      graph->getAttribute("viewLayout",elementLayout);
     }
   }
 

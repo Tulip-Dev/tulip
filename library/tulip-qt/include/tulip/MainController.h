@@ -140,22 +140,6 @@ namespace tlp {
      */
     void delSubGraph(Graph*, Graph*);
     /**
-     * Call when a node is add
-     */
-    void addNode(Graph *graph, const node);
-    /**
-     * Call when an edge is add
-     */
-    void addEdge(Graph *graph, const edge);
-    /**
-     * Call when a node is delete
-     */
-    void delNode(Graph *graph, const node);
-    /**
-     * Call when an edge is delete
-     */
-    void delEdge(Graph *graph, const edge);
-    /**
      * Call when a local property is add
      */
     void addLocalProperty(Graph*, const std::string&);
