@@ -25,6 +25,36 @@
 using namespace std;
 using namespace tlp;
 
+#define         MASKBITS                0x3F
+#define         MASKBYTE                0x80
+#define         MASK2BYTES              0xC0
+#define         MASK3BYTES              0xE0
+#define         MASK4BYTES              0xF0
+#define         MASK5BYTES              0xF8
+#define         MASK6BYTES              0xFC
+
+static string stringToUtf8(const string &input){
+  string output;
+  for(unsigned int i=0; i < input.size(); i++){
+    // 0xxxxxxx
+    if((unsigned char)(input[i]) < 0x80){
+      output.push_back(input[i]);
+    }
+    // 110xxxxx 10xxxxxx
+    else if((unsigned char)(input[i]) < 0x800){
+      output.push_back((MASK2BYTES | ((unsigned char)(input[i]) >> 6)));
+      output.push_back((MASKBYTE | ((unsigned char)(input[i]) & MASKBITS)));
+    }
+    // 1110xxxx 10xxxxxx 10xxxxxx
+    else if((unsigned char)(input[i]) < 0x10000){
+      output.push_back((MASK3BYTES | ((unsigned char)(input[i]) >> 12)));
+      output.push_back((MASKBYTE | (((unsigned char)(input[i]) >> 6) & MASKBITS)));
+      output.push_back((MASKBYTE | ((unsigned char)(input[i]) & MASKBITS)));
+    }
+  }
+  return output;
+}
+
 
 //***************************************************************************
 // CLASSE t_GlFonts
@@ -123,12 +153,12 @@ bool _GlFonts::operator< (const _GlFonts &dest) const {
 void GlRenderer::drawString(const string &str, int index) const{
   if(index == -1){
     if(active)
-      ftfonts[current_font].font->Render(str.c_str());
+      ftfonts[current_font].font->Render(stringToUtf8(str).c_str());
     else
       cerr<<" GlRenderer warning : drawString, font non active"<<endl;
   }
   else{
-    ftfonts[index].font->Render(str.c_str());
+    ftfonts[index].font->Render(stringToUtf8(str).c_str());
   }
 }
 //---------------------------------------------------------------------------
@@ -140,14 +170,14 @@ float GlRenderer::getAdvance(const string &str, int index) const{
   //  cerr << __PRETTY_FUNCTION__ << " " << index << " " << str << endl;
   if(index == -1){
     if(active)
-      return ftfonts[current_font].font->Advance(str.c_str());
+      return ftfonts[current_font].font->Advance(stringToUtf8(str).c_str());
     else{
       cerr<<" GlRenderer error : getAdvance, probleme d'indice "<<endl;
       return 0;
     }
   }
   else
-    return ftfonts[index].font->Advance(str.c_str());
+    return ftfonts[index].font->Advance(stringToUtf8(str).c_str());
 }
 //---------------------------------------------------------------------------
 float GlRenderer::getAscender(int index) const{
