@@ -38,7 +38,6 @@ namespace tlp {
     QMenu *viewMenu;
     QMenu *dialogMenu;
     QMenu *optionsMenu;
-    QMenu *exportImageMenu;
     QAction *actionTooltips;
     QAction *actionsGridOptions;
     QAction *actionZOrderingOptions;

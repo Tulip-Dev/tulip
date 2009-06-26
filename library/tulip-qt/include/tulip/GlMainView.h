@@ -26,6 +26,7 @@
 #include <QtGui/QDockWidget>
 
 class QFrame;
+class QMenu;
 
 namespace tlp {
 
@@ -73,6 +74,12 @@ namespace tlp {
      * \return the GlMainWidget use in this view
      */
     GlMainWidget *getGlMainWidget();
+    /**
+     * Take a snapshot of the view and put it in a picture
+     */
+    virtual void createPicture(const std::string &pictureName,int width, int height);
+
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
 
   protected :
 
@@ -89,6 +96,7 @@ namespace tlp {
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
     QFrame *overviewFrame;
+    QMenu *exportImageMenu;
 
     QAction* overviewAction;
 

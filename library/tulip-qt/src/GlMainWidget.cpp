@@ -517,10 +517,26 @@ namespace tlp {
     glFrameBuf->updateDynamicTexture(textureId);
 
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
-    
+
+    glFlush();
+    glFrameBuf->toImage().save(textureName.c_str());
+    return NULL;
+  }
+  //=====================================================
+  void GlMainWidget::createPicture(const string &textureName, int width, int height){
+    scene.setViewport(0,0,width,height);
+
+    scene.prerenderMetaNodes();
+
+    QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
+
+    glFrameBuf->makeCurrent();
+
+    scene.draw();
+
     glFlush();
 
-    return NULL;
+    glFrameBuf->toImage().save(textureName.c_str());
   }
 
 }

@@ -47,6 +47,10 @@ namespace tlp {
     draw();
   }
 
+  void SpreadView::createPicture(const string &pictureName,int width, int height){
+    cout << "createPicture not implement yet for SpreadView" << endl;
+  }
+
   VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0");
 
 }

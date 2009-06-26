@@ -79,31 +79,6 @@ namespace tlp {
   	  qtMetaNode=false;
   	}
 
-  	//Export Menu
-  	exportImageMenu=new QMenu("&Save Picture as ");
-  	// Tulip known formats (see GlGraph)
-  	// formats are sorted, "~" is just an end marker
-  	char *tlpFormats[] = {"EPS", "SVG", "~"};
-  	unsigned int i = 0;
-  	//Image PopuMenu
-  	// int Qt 4, output formats are not yet sorted and uppercased
-  	list<QString> formats;
-  	// first add Tulip known formats
-  	while (strcmp(tlpFormats[i], "~") != 0)
-  		formats.push_back(tlpFormats[i++]);
-  	// uppercase and insert all Qt formats
-  	foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-  		char* tmp = format.data();
-  		for (int i = strlen(tmp) - 1; i >= 0; --i)
-  			tmp[i] = toupper(tmp[i]);
-  		formats.push_back(QString(tmp));
-  	}
-  	// sort before inserting in exportImageMenu
-  	formats.sort();
-  	foreach(QString str, formats)
-  	exportImageMenu->addAction(str);
-
-  	connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
   	return widget;
   }
   //==================================================
@@ -112,6 +87,7 @@ namespace tlp {
   void NodeLinkDiagramComponent::setData(Graph *graph,DataSet dataSet) {
     DataSet data;
     if(dataSet.exist("data")){
+      cout << "find data" << endl;
       dataSet.get("data",data);
     }else{
       data=dataSet;
@@ -204,7 +180,8 @@ namespace tlp {
   	contextMenu->addMenu(viewMenu);
   	contextMenu->addMenu(dialogMenu);
   	contextMenu->addMenu(optionsMenu);
-  	contextMenu->addMenu(exportImageMenu);
+
+  	GlMainView::buildContextMenu(object,event,contextMenu);
 
   	node tmpNode;
   	edge tmpEdge;

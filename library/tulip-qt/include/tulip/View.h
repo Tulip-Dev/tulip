@@ -65,6 +65,10 @@ namespace tlp {
      * Set active interactor on this view
      */
     virtual void setActiveInteractor(Interactor *interactor) = 0;
+    /**
+     * Take a snapshot of the view and put it in a picture
+     */
+    virtual void createPicture(const std::string &pictureName,int width, int height) = 0;
 
   public slots:
 

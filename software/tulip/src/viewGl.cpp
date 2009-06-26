@@ -917,6 +917,14 @@ void viewGl::loadInterface(int index){
   if(controllerToDockWidget.count(controller)!=0){
     vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
     vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
+
+#if QT_MINOR_REL > 3
+    it=tmp.begin();
+    while(it!=tmp.end()){
+      restoreDockWidget((*it).second);
+      ++it;
+    }
+#else
     while(it!=tmp.begin()){
       --it;
       addDockWidget((*it).first,(*it).second);
@@ -929,6 +937,7 @@ void viewGl::loadInterface(int index){
 	tabifyDockWidget((*it).first,(*it).second);
       }
     }
+#endif
   }
 
   if(controllerToStatusBar.count(controller)!=0){

@@ -2,6 +2,8 @@
 
 #include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
+#include <QtGui/QMenu>
+#include <QtGui/QImageWriter>
 
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/TabWidget.h"
@@ -39,7 +41,39 @@ namespace tlp {
   	overviewWidget = new GWOverviewWidget(overviewFrame);
   	gridLayout_2->addWidget(overviewWidget, 0, 0, 1, 1);
   	connect(overviewWidget,SIGNAL(hideOverview(bool)),this,SLOT(hideOverview(bool)));
+
+
+  	//Export Menu
+  	exportImageMenu=new QMenu("&Save Picture as ");
+  	// Tulip known formats (see GlGraph)
+  	// formats are sorted, "~" is just an end marker
+  	char *tlpFormats[] = {"EPS", "SVG", "~"};
+  	unsigned int i = 0;
+  	//Image PopuMenu
+  	// int Qt 4, output formats are not yet sorted and uppercased
+  	list<QString> formats;
+  	// first add Tulip known formats
+  	while (strcmp(tlpFormats[i], "~") != 0)
+  	  formats.push_back(tlpFormats[i++]);
+  	// uppercase and insert all Qt formats
+  	foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
+  	  char* tmp = format.data();
+  	  for (int i = strlen(tmp) - 1; i >= 0; --i)
+  	    tmp[i] = toupper(tmp[i]);
+  	  formats.push_back(QString(tmp));
+  	}
+  	// sort before inserting in exportImageMenu
+  	formats.sort();
+  	foreach(QString str, formats)
+  	exportImageMenu->addAction(str);
+
+  	connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
+
   	return widget;
+  }
+  //==================================================
+  void GlMainView::createPicture(const std::string &pictureName,int width, int height){
+    mainWidget->createPicture(pictureName,width,height);
   }
 
   //==================================================
@@ -51,6 +85,10 @@ namespace tlp {
   //==================================================
   GlMainWidget *GlMainView::getGlMainWidget() {
     return mainWidget;
+  }
+  //==================================================
+  void GlMainView::buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {
+    contextMenu->addMenu(exportImageMenu);
   }
 
   //==================================================
@@ -69,10 +107,11 @@ namespace tlp {
 			       "The file has not been saved.");
       return;
     }
+
     int width,height;
     width = mainWidget->width();
     height = mainWidget->height();
-    unsigned char* image= mainWidget->getImage();
+    /*unsigned char* image= mainWidget->getImage();
     QPixmap pm(width,height);
     QPainter painter;
     painter.begin(&pm);
@@ -85,7 +124,8 @@ namespace tlp {
       }
     painter.end();
     free(image);
-    pm.save( s, name.c_str());
+    pm.save( s, name.c_str());*/
+    mainWidget->createPicture(s.toAscii().data(),width,height);
   }
   //==================================================
   // GUI functions

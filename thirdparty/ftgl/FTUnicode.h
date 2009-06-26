@@ -33,6 +33,8 @@
 #ifndef    __FTUnicode__
 #define    __FTUnicode__
 
+#include <iostream>
+
 /**
  * Provides a way to easily walk multibyte unicode strings in the various
  * Unicode encodings (UTF-8, UTF-16, UTF-32, UCS-2, and UCS-4).  Encodings

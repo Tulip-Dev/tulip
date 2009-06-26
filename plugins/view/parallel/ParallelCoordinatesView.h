@@ -108,7 +108,6 @@ namespace tlp {
 
     QMenu *viewSetupMenu;
     QMenu *optionsMenu;
-    QMenu *exportImageMenu;
     QAction *classicLayout;
     QAction *circularLayout;
     QAction *straightLinesType;

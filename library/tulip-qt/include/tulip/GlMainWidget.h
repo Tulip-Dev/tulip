@@ -116,16 +116,20 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    * Compute real texture size with given height and width
    */
   static void getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight);
-  
+
   /**
    *
    */
   void getTextureShift(int width, int height,float &xTextureShift, float &yTextureShift);
-  
+
   /**
    * Take a snapshot of the Widget and put it in an OpenGl texture
    */
   QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
+  /**
+   * Take a snapshot of the Widget and put it in a picture
+   */
+  void createPicture(const std::string &pictureName,int width, int height);
 
   /**
    * Function to do picking on entities.  It just calls

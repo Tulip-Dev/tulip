@@ -4,28 +4,11 @@ else
 ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
 endif
 
-bin_PROGRAMS = tlprender
+bin_PROGRAMS = @CONFIGURE_tlprender@
 EXTRA_PROGRAMS = tlprender
-INCLUDES = -I$(srcdir)../include @GL_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
+INCLUDES = -I$(srcdir)../include @GL_INCLUDES@ @QT_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@
 
-tlprender_LDFLAGS =  $(top_builddir)/library/tulip-ogl/src/libtulip-ogl.la  @FTGL_LDFLAGS@ @LIBGLE_LDFLAGS@ `ls $(top_builddir)/thirdparty/libgpugraph/*.lo` @TULIP_LDFLAGS@ @GL_LDFLAGS@ -lOSMesa @LIB_GL@ ${ADDLDFLAGS} @LIB_IMAGES_LDFLAGS@
-
-if PNG
-PNG = PNGWriter.h PNGWriter.cpp
-else
-PNG = 
-endif
-if JPEG
-JPEG = JPEGWriter.h JPEGWriter.cpp
-else
-JPEG =
-endif
+tlprender_LDFLAGS = @FTGL_LDFLAGS@ @LIBGLE_LDFLAGS@ `ls $(top_builddir)/thirdparty/libgpugraph/*.lo` @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @GL_LDFLAGS@ @LIB_GL@  @LIB_QT@ ${ADDLDFLAGS} @LIB_IMAGES_LDFLAGS@
 
 tlprender_SOURCES = \
-	tlprender.cpp \
-	Shape.h \
-	Shape.cpp \
-	GlHTMLFeedBackBuilder.h \
-	GlHTMLFeedBackBuilder.cpp \
-	ImageWriter.h \
-	ImageWriter.cpp $(PNG) $(JPEG)
+	tlprender.cpp

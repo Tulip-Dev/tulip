@@ -68,32 +68,6 @@ QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 	initGlWidget();
 	buildMenuEntries();
 
-	//Export Menu
-	exportImageMenu=new QMenu("&Save Picture as ");
-	// Tulip known formats (see GlGraph)
-	// formats are sorted, "~" is just an end marker
-	const char *tlpFormats[] = {"EPS", "SVG", "~"};
-	unsigned int i = 0;
-	//Image PopuMenu
-	// int Qt 4, output formats are not yet sorted and uppercased
-	list<QString> formats;
-	// first add Tulip known formats
-	while (strcmp(tlpFormats[i], "~") != 0)
-		formats.push_back(tlpFormats[i++]);
-	// uppercase and insert all Qt formats
-	foreach (QByteArray format, QImageWriter::supportedImageFormats()) {
-		char* tmp = format.data();
-		for (int i = strlen(tmp) - 1; i >= 0; --i)
-			tmp[i] = toupper(tmp[i]);
-		formats.push_back(QString(tmp));
-	}
-	// sort before inserting in exportImageMenu
-	formats.sort();
-	foreach(QString str, formats)
-	exportImageMenu->addAction(str);
-
-	connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
-
 	dataConfigWidget = new ParallelCoordsDataConfigWidget();
 	connect(dataConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(setupAndDrawView()));
 	drawConfigWidget = new ParallelCoordsDrawConfigWidget();
@@ -532,9 +506,10 @@ void ParallelCoordinatesView::specificEventFilter(QObject *object,QEvent *event)
 }
 
 void ParallelCoordinatesView::buildContextMenu(QObject *object, QMouseEvent *event, QMenu *contextMenu) {
-	contextMenu->addMenu(viewSetupMenu);
+  contextMenu->addMenu(viewSetupMenu);
 	contextMenu->addMenu(optionsMenu);
-	contextMenu->addMenu(exportImageMenu);
+
+	SpreadView::buildContextMenu(object,event,contextMenu);
 
 	axisUnderPointer = getAxisUnderPointer(event->x(), event->y());
 	if (axisUnderPointer != NULL) {
