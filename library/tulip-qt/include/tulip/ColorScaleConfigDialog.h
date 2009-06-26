@@ -50,6 +50,7 @@ private slots :
 	void displayUserGradientPreview();
 	void saveCurrentColorScale();
 	void deleteSavedColorScale();
+	void reeditSaveColorScale(QListWidgetItem *savedColorScaleItem);
 
 private :
 

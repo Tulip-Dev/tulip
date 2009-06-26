@@ -509,7 +509,7 @@ void ParallelCoordinatesView::buildContextMenu(QObject *object, QMouseEvent *eve
   contextMenu->addMenu(viewSetupMenu);
 	contextMenu->addMenu(optionsMenu);
 
-	SpreadView::buildContextMenu(object,event,contextMenu);
+	GlMainView::buildContextMenu(object,event,contextMenu);
 
 	axisUnderPointer = getAxisUnderPointer(event->x(), event->y());
 	if (axisUnderPointer != NULL) {

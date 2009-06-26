@@ -176,8 +176,9 @@ void ParallelCoordinatesDrawing::plotAllData() {
 
 void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color &color) {
 
+	Size eltMinSize = ((SizeProperty*)(graphProxy->getProperty("viewSize")))->getMin();
 	Size dataViewSize = graphProxy->getDataViewSize(dataId);
-	Size adjustedViewSize = axisPointMinSize + resizeFactor * (dataViewSize + Size(-1,-1,-1));
+	Size adjustedViewSize = axisPointMinSize + resizeFactor * (dataViewSize - eltMinSize);
 	float pointRadius =((adjustedViewSize[0] + adjustedViewSize[1] + adjustedViewSize[2]) / 3.) / 2;
 	double lineHalfWidth = pointRadius - (1./10) * pointRadius;
 

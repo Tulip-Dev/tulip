@@ -42,6 +42,7 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(ColorScale *colorScale,
 	imageGradientPreview->setAutoFillBackground(true);
 	userGradientPreview->setAutoFillBackground(true);
 	connect(savedColorScalesList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(displaySavedGradientPreview()));
+	connect(savedColorScalesList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(reeditSaveColorScale(QListWidgetItem *)));
 	connect(savedColorScaleRb, SIGNAL(toggled(bool)), this, SLOT(predefinedColorScaleRbToggled(bool)));
 	connect(userColorScaleImageRb, SIGNAL(toggled(bool)), this, SLOT(userColorScaleImageRbToggled(bool)));
 	connect(browseButton, SIGNAL(clicked()), this, SLOT(pressButtonBrowse()));
@@ -215,11 +216,16 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
 
 void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item) {
 	QColor itemBgColor = item->backgroundColor();
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
+	QColor newColor = QColorDialog::getColor(itemBgColor, this, "Select Color", QColorDialog::ShowAlphaChannel);
+	item->setBackgroundColor(newColor);
+#else
 	bool ok = true;
 	QRgb newColor = QColorDialog::getRgba(qRgba(itemBgColor.red(),
 			itemBgColor.green(), itemBgColor.blue(), itemBgColor.alpha()), &ok, this);
 	item->setBackgroundColor(QColor(qRed(newColor), qGreen(newColor), qBlue(
 			newColor), qAlpha(newColor)));
+#endif
 	displayUserGradientPreview();
 }
 
@@ -289,6 +295,25 @@ void ColorScaleConfigDialog::showEvent(QShowEvent * event) {
 	colorsTable->setColumnWidth(0, colorsTable->width());
 }
 
+void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorScaleItem) {
+	QString savedColorScaleId = savedColorScaleItem->text();
+	QSettings settings("TulipSoftware","Tulip");
+	settings.beginGroup("ColorScales");
+	QList<QVariant> colorsListv = settings.value(savedColorScaleId).toList();
+	QString gradientScaleId = savedColorScaleId + "_gradient?";
+	bool gradient = settings.value(gradientScaleId).toBool();
+	settings.endGroup();
+	vector<Color> colorsList;
+	for (int i = 0 ; i < colorsListv.size() ; ++i) {
+		QColor color = colorsListv.at(i).value<QColor>();
+		colorsList.push_back(Color(color.red(), color.green(), color.blue(), color.alpha()));
+	}
+	reverse(colorsList.begin(), colorsList.end());
+	colorScale->setColorScale(colorsList, gradient);
+	setColorScale(colorScale);
+	tabWidget->setCurrentIndex(0);
+}
+
 void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 	this->colorScale = colorScale;
 
@@ -315,6 +340,7 @@ void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 		for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
 		!= colorMap.end();) {
 			QTableWidgetItem *item = new QTableWidgetItem();
+			item->setFlags(Qt::ItemIsEnabled);
 			item->setBackgroundColor(QColor(it->second.getR(), it->second.getG(),
 					it->second.getB(), it->second.getA()));
 			colorsTable->setItem(row, 0, item);
@@ -329,16 +355,28 @@ void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 
 	} else {
 		//init dialog with default colors
-		colorsTable->setRowCount(2);
+		colorsTable->setRowCount(5);
 		QTableWidgetItem *item1 = new QTableWidgetItem();
-		item1->setBackgroundColor(QColor(255, 255, 0, 255));
+		item1->setBackgroundColor(QColor(0, 255, 0, 40));
 		item1->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item2 = new QTableWidgetItem();
-		item2->setBackgroundColor(QColor(0, 0, 255, 255));
+		item2->setBackgroundColor(QColor(0, 0, 255, 40));
 		item2->setFlags(Qt::ItemIsEnabled);
+		QTableWidgetItem *item3 = new QTableWidgetItem();
+		item3->setBackgroundColor(QColor(255, 255, 0, 40));
+		item3->setFlags(Qt::ItemIsEnabled);
+		QTableWidgetItem *item4 = new QTableWidgetItem();
+		item4->setBackgroundColor(QColor(255, 0, 0, 40));
+		item4->setFlags(Qt::ItemIsEnabled);
+		QTableWidgetItem *item5 = new QTableWidgetItem();
+		item5->setBackgroundColor(QColor(85, 0, 0, 40));
+		item5->setFlags(Qt::ItemIsEnabled);
 		colorsTable->setItem(0, 0, item1);
 		colorsTable->setItem(1, 0, item2);
-		nbColors->setValue(2);
+		colorsTable->setItem(2, 0, item3);
+		colorsTable->setItem(3, 0, item4);
+		colorsTable->setItem(4, 0, item5);
+		nbColors->setValue(5);
 		gradientCB->setChecked(true);
 	}
 	connect(nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
