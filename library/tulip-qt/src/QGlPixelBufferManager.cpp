@@ -22,11 +22,13 @@ namespace tlp
 
   QGLPixelBuffer *QGlPixelBufferManager::getPixelBuffer(int width, int height){
     map<pair<int,int>,QGLPixelBuffer *>::iterator it=widthHeightToBuffer.find(pair<int,int>(width,height));
-    
+
     if(it!=widthHeightToBuffer.end())
       return (*it).second;
-    
-    QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),GlMainWidget::getFirstQGLWidget());
+
+    QGLFormat format=QGLFormat::defaultFormat();
+    format.setAlpha(true);
+    QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
     if(!glPixelBuffer->isValid()){
       while(!glPixelBuffer->isValid() && bufferToWidthHeight.size()>0) {
 	int widthToRemove=0;
@@ -52,7 +54,7 @@ namespace tlp
       while(!glPixelBuffer->isValid() && width>0 && height>0) {
 	width=width/2;
 	height=height/2;
-	
+
 	delete glPixelBuffer;
 	glPixelBuffer=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),GlMainWidget::getFirstQGLWidget());
       }
@@ -60,7 +62,7 @@ namespace tlp
 
     widthHeightToBuffer[pair<int,int>(width,height)]=glPixelBuffer;
     bufferToWidthHeight[glPixelBuffer]=pair<int,int>(width,height);
-    
+
     return glPixelBuffer;
   }
 
