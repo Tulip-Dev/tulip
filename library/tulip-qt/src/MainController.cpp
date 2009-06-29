@@ -464,10 +464,20 @@ namespace tlp {
   //**********************************************************************
   void  MainController::addLocalProperty(Graph *graph, const std::string&){
     graphToReload=graph;
+
+    if(graph==currentGraph){
+      eltProperties->setGraph(graph);
+      propertiesWidget->setGraph(graph);
+    }
   }
   //**********************************************************************
   void  MainController::delLocalProperty(Graph *graph, const std::string&){
     graphToReload=graph;
+
+    if(graph==currentGraph){
+      eltProperties->setGraph(graph);
+      propertiesWidget->setGraph(graph);
+    }
   }
   //**********************************************************************
   void MainController::loadGUI() {
@@ -780,9 +790,9 @@ namespace tlp {
 	configWidgetTab->removeTab(0);
 	configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
       }
-      
+
       View *view=(*it).second;
-      
+
       currentView=view;
       currentGraph=currentView->getGraph();
       installInteractors(view);
@@ -790,14 +800,14 @@ namespace tlp {
       clusterTreeWidget->setGraph(currentGraph);
       eltProperties->setGraph(currentGraph);
       propertiesWidget->setGraph(currentGraph);
-      
+
       list<pair<QWidget *,string> > configWidgetsList=view->getConfigurationWidget();
       for(list<pair<QWidget *,string> >::iterator it=configWidgetsList.begin();it!=configWidgetsList.end();++it){
 	configWidgetTab->addTab((*it).first,(*it).second.c_str());
       }
       if(lastConfigTabIndexOnView.count(currentView)!=0)
 	configWidgetTab->setCurrentIndex(lastConfigTabIndexOnView[currentView]);
-      
+
       //Remove observer (nothing if this not observe)
       currentGraph->removeGraphObserver(this);
       currentGraph->removeObserver(this);
