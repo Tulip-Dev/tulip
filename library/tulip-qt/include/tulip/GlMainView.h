@@ -77,7 +77,7 @@ namespace tlp {
     /**
      * Take a snapshot of the view and put it in a picture
      */
-    virtual void createPicture(const std::string &pictureName,int width, int height);
+    virtual void createPicture(const std::string &pictureName,int width=0, int height=0);
 
     virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
 
@@ -96,7 +96,6 @@ namespace tlp {
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
     QFrame *overviewFrame;
-    QMenu *exportImageMenu;
 
     QAction* overviewAction;
 
@@ -109,12 +108,7 @@ namespace tlp {
      * Refresh the OpenGl widget
      */
     void refresh();
-    /**
-     * Save image of GlMainWidget
-     * QAction::text is the format of output (EPS,SVG or traditional image format)
-     * A QDialog is open to ask the output file name
-     */
-    void exportImage(QAction*);
+
     /**
      * Hide the overview
      */

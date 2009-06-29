@@ -64,7 +64,9 @@ namespace tlp {
     /**
      * empty function : implement this function if you want a context menu when you right click the mouse
      */
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) ;
+
+    virtual void buildOutputImagesFormatsList(std::set<std::string>& outputFormats);
     /**
      * empty function : implement this function if you have implement buildContextMenu()
      */
@@ -82,6 +84,8 @@ namespace tlp {
     std::list<Interactor *> interactors;
     Interactor *activeInteractor;
 
+    QMenu *exportImageMenu;
+
   public slots:
 
     /**
@@ -89,6 +93,8 @@ namespace tlp {
      * this function call specificEventFilter, buildContextMenu and computeContextMenu
      */
     bool eventFilter(QObject *object, QEvent *event);
+
+    virtual void exportImage(QAction* action);
 
   };
 

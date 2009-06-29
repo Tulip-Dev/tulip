@@ -68,7 +68,7 @@ namespace tlp {
     /**
      * Take a snapshot of the view and put it in a picture
      */
-    virtual void createPicture(const std::string &pictureName,int width, int height) = 0;
+    virtual void createPicture(const std::string &pictureName,int width=0, int height=0) = 0;
 
   public slots:
 
