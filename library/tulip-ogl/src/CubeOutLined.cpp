@@ -195,18 +195,18 @@ namespace tlp {
     double lineWidth;
     if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth"))
       borderWidth = glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth");
-    if (borderWidth == 0) 
+    if (borderWidth == 0)
       lineWidth=2.;
     else {
       const double& lineWidthTmp = borderWidth->getNodeValue (n);
-      if (lineWidthTmp < 1e-6) 
+      if (lineWidthTmp < 1e-6)
 	lineWidth=1e-6; //no negative borders
-      else 
+      else
 	lineWidth=lineWidthTmp;
     }
 
 
-    if((lineWidth<1 && lod>20) || (lod>(20/lineWidth))) {
+    if((lineWidth<1 && lod>=20) || (lod>(20/lineWidth))) {
       ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor");
       const Color& c = borderColor->getNodeValue(n);
       //  setMaterial(c);

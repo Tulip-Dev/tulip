@@ -35,14 +35,14 @@ namespace tlp {
 
   void GlMetaNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
     node n=node(id);
-    if(((data->elementColor->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)){
+
+    if(!(((data->elementColor->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
+      data->getMetaNodeRenderer()->render(n,lod,camera);
+
+    if(lod>=20)
       GlNode::draw(lod,data,camera);
-      return;
-    }
-
-    data->getMetaNodeRenderer()->render(n,lod,camera);
-
-    GlNode::draw(lod,data,camera);
+    else
+      GlNode::draw(20,data,camera);
   }
 
   void GlMetaNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
