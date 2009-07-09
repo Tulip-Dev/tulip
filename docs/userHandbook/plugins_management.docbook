@@ -2,7 +2,7 @@
   <para>
     To open plugins management click on Plugins in Help menu.
   </para>
-  <sect1 id="interface"><title>Interface</title>
+  <sect1 id="plugin-management-interface"><title>Interface</title>
     <para>
       Main window :
       <graphic fileref="images/plugins_main.png"/>
@@ -10,12 +10,12 @@
     <para>
       The main window is divided in two sides :
       <itemizedlist>
-        <listitem>
+        <listitem><para>
 	  Left side : Plugins list view
-	</listitem>
-	<listitem>
+	</para></listitem>
+	<listitem><para>
 	  Right side : Documentation
-	</listitem>
+	</para></listitem>
       </itemizedlist>
     </para>
     <sect2 id="plugins_list"><title>Plugins List</title>
@@ -25,15 +25,15 @@
       <para>
 	At the version level you can see the status of the plugin : nothing, version or installed.
 	<itemizedlist>
-          <listitem>
+          <listitem><para>
 	    Nothing : Plugin is not installed.
-	  </listitem>
-	  <listitem>
+	  </para></listitem>
+	  <listitem><para>
 	    Version number : Plugin is installed, the version number you can see is the locally installed version. 
-	  </listitem>
-	  <listitem>
+	  </para></listitem>
+	  <listitem><para>
 	    Installed : Plugin is installed and its version is the same on the server. 
-	  </listitem>
+	  </para></listitem>
 	</itemizedlist>
       </para>
     </sect2>
@@ -44,12 +44,12 @@
       <para>
 	Documentation is composed in two groups :
 	<itemizedlist>
-          <listitem>
+          <listitem><para>
 	    On the top : brief description of the plugin (version, author, info ...) 
-	  </listitem>
-	  <listitem>
+	  </para></listitem>
+	  <listitem><para>
 	    At the bottom : detailed description of the plugin.
-	  </listitem>
+	  </para></listitem>
 	</itemizedlist>
       </para>
     </sect2>

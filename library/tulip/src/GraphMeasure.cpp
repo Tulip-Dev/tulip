@@ -196,8 +196,8 @@ static void clusterBuildSubGraph(Graph *graph, node n, node startNode,
 static double clusterGetEdgeValue(Graph *graph, DoubleProperty *prop, const edge e ) {
   node src = graph->source(e);
   node tgt = graph->target(e);
-  double v1 = prop->getNodeValue(src);
-  double v2 = prop->getNodeValue(tgt);
+  const double& v1 = prop->getNodeValue(src);
+  const double& v2 = prop->getNodeValue(tgt);
   if (v1*v1 + v2*v2 > 0)
     return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
   return 0.;

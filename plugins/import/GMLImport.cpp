@@ -1,3 +1,6 @@
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 #include <fstream>
 #include <tulip/TulipPlugin.h>
 #include <tulip/AbstractProperty.h>
@@ -272,11 +275,12 @@ struct GMLEdgeBuilder:public GMLTrue {
     if (st==SOURCE) source=id;
     if (st==TARGET) target=id;
     if ((!edgeOk) && (source!=-1) && (target!=-1)) {edgeOk=true;curEdge=graphBuilder->addEdge(source,target);}
-    if ((st!=SOURCE) && (st!=TARGET))
+    if ((st!=SOURCE) && (st!=TARGET)) {
       if (edgeOk && curEdge.isValid())
 	result=graphBuilder->setEdgeValue(curEdge, st, id);
       else
 	edgeAttributeError();
+    }
     return result;
   }
   bool addDouble(const string &st,const double real) {
@@ -447,7 +451,20 @@ public:
   ~GMLImport(){}
   bool import(const string &dummy) {
     string filename;
-    dataSet->get<string>("file::filename", filename);
+    if (!dataSet->get<string>("file::filename", filename))
+      return false;
+
+    struct stat infoEntry;
+    int result;
+    #ifdef _WIN32
+    result = stat(filename.c_str(),&infoEntry);
+    #else
+    result = lstat(filename.c_str(),&infoEntry);
+    #endif
+    if (result == -1) {
+      pluginProgress->setError(strerror(errno));
+      return false;
+    }
     ifstream myFile(filename.c_str());
     GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();

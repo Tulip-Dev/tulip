@@ -8,135 +8,134 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMenuBar>
+#include <QtGui/QImageWriter>
+#include <QtGui/QFileDialog>
+
+#include "tulip/Interactor.h"
 
 using namespace std;
 
 namespace tlp {
 
-  AbstractView::AbstractView() :View(),_id(Interactor::invalidID),centralWidget(NULL)  {
+AbstractView::AbstractView() :
+	View(), centralWidget(NULL), activeInteractor(NULL) {
 
-  }
+}
 
-  AbstractView::~AbstractView() {
-    for (unsigned int i = 0; i > _interactors.size(); ++i)
-      delete _interactors[i];
-    for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it){
-      delete *it;
-    }
-  }
-
-  QWidget *AbstractView::construct(QWidget *parent) {
-  	widget=new QWidget(parent);
-  	QGridLayout *gridLayout = new QGridLayout(widget);
-  	gridLayout->setSpacing(0);
-  	gridLayout->setMargin(0);
-
-  	mainLayout=new QVBoxLayout;
-
-  	gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
-
-  	// Add this to by-pass a bug in Qt 4.4.1
-  	// In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
-  	QFrame *frame = new QFrame(widget);
-  	frame->setGeometry(QRect(0, 0, 0, 0));
-  	QGridLayout *gridLayout_2 = new QGridLayout(frame);
-  	QWidget *widget_2 = new QGLWidget(frame);
-
-  	widget->installEventFilter(this);
-
-  	constructInteractorsMap();
-  	constructInteractorsActionList();
-  	return widget;
-  }
-
-  void AbstractView::setCentralWidget(QWidget *widget) {
-    widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    mainLayout->addWidget(widget);
-    centralWidget=widget;
-  }
-
-  bool AbstractView::eventFilter(QObject *object, QEvent *event) {
-    specificEventFilter(object,event);
-
-    if(event->type() == QEvent::MouseButtonPress) {
-      QMouseEvent *me = (QMouseEvent *) event;
-      if(me->button() ==Qt::RightButton) {
-	QMenu contextMenu(getWidget());
-	buildContextMenu(object,me,&contextMenu);
-	if(!contextMenu.actions().isEmpty()) {
-	  QAction* menuAction=contextMenu.exec(me->globalPos());
-	  if(menuAction)
-	    computeContextMenuAction(menuAction);
+AbstractView::~AbstractView() {
+	for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
+		delete (*it);
 	}
-      }
-    }
-    return false;
-  }
-  //==================================================
-  std::list<QAction *> *AbstractView::getInteractorsActionList(){
-    return &interactorsActionList;
-  }
-  //==================================================
-  Iterator<Interactor *> *AbstractView::getInteractors() const {
-    return new StlIterator<Interactor *, vector<Interactor *>::const_iterator>(_interactors.begin(), _interactors.end());
-  }
-  //==================================================
-  Interactor::ID AbstractView::pushInteractor(Interactor* interactor) {
-    if (interactor) {
-      interactor = interactor->clone();
-      interactor->setView(this);
-      interactor->setID(++_id);
-      _interactors.push_back(interactor);
-      centralWidget->installEventFilter(interactor);
-      //interactor->compute(centralWidget);
-      //updateGL();
-    }
-    return _id;
-  }
-  //==================================================
-  void AbstractView::popInteractor() {
-    if (_interactors.size()) {
-      Interactor *interactor = _interactors[_interactors.size() - 1];
-      _interactors.pop_back();
-      centralWidget->removeEventFilter(interactor);
-      delete interactor;
-    }
-  }
-  //==================================================
-  void AbstractView::removeInteractor(Interactor::ID i) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      if ((*it)->getID() == i) {
-	removeEventFilter(*it);
-	delete *it;
-	_interactors.erase(it);
-	break;
-      }
-    }
-  }
-  //==================================================
-  Interactor::ID AbstractView::resetInteractors(Interactor *interactor) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    return pushInteractor(interactor);
-  }
-  //==================================================
-  std::vector<tlp::Interactor::ID> AbstractView::resetInteractors(const std::vector<Interactor *> &new_interactors) {
-    for(vector<Interactor *>::iterator it =
-	  _interactors.begin(); it != _interactors.end(); ++it) {
-      removeEventFilter(*it);
-      delete *it;
-    }
-    _interactors.clear();
-    vector<Interactor::ID> ids;
-    for (vector<Interactor *>::const_iterator it =
-	   new_interactors.begin(); it != new_interactors.end(); ++it)
-      ids.push_back(pushInteractor(*it));
-    return ids;
-  }
+}
+
+QWidget *AbstractView::construct(QWidget *parent) {
+	widget = new QWidget(parent);
+	QGridLayout *gridLayout = new QGridLayout(widget);
+	gridLayout->setSpacing(0);
+	gridLayout->setMargin(0);
+
+	mainLayout = new QVBoxLayout;
+
+	gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
+
+	// Add this to by-pass a bug in Qt 4.4.1
+	// In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
+	QFrame *frame = new QFrame(widget);
+	frame->setGeometry(QRect(0, 0, 0, 0));
+	QGridLayout *gridLayout_2 = new QGridLayout(frame);
+	QWidget *widget_2 = new QGLWidget(frame);
+
+	//Build output image list
+	exportImageMenu = new QMenu("&Save Picture as ");
+
+	set<string> imgFormats;
+	buildOutputImagesFormatsList(imgFormats);
+
+	for (set<string>::iterator it = imgFormats.begin(); it != imgFormats.end(); ++it) {
+		exportImageMenu->addAction(QString::fromStdString(*it));
+	}
+
+	connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
+
+	widget->installEventFilter(this);
+
+	return widget;
+}
+
+void AbstractView::setInteractors(const std::list<Interactor *> &interactorsList) {
+	interactors = interactorsList;
+	for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
+		(*it)->setView(this);
+	}
+}
+
+list<Interactor *> AbstractView::getInteractors() {
+	return interactors;
+}
+
+void AbstractView::setActiveInteractor(Interactor *interactor) {
+	if (activeInteractor)
+		activeInteractor->remove();
+	interactor->install(centralWidget);
+	activeInteractor = interactor;
+}
+
+void AbstractView::setCentralWidget(QWidget *widget) {
+	widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	mainLayout->addWidget(widget);
+	centralWidget = widget;
+}
+
+bool AbstractView::eventFilter(QObject *object, QEvent *event) {
+	specificEventFilter(object, event);
+
+	if (event->type() == QEvent::MouseButtonPress) {
+		QMouseEvent *me = (QMouseEvent *) event;
+		if (me->button() == Qt::RightButton) {
+			QMenu contextMenu(getWidget());
+			buildContextMenu(object, me, &contextMenu);
+			if (!contextMenu.actions().isEmpty()) {
+				QAction* menuAction = contextMenu.exec(me->globalPos());
+				if (menuAction)
+					computeContextMenuAction(menuAction);
+			}
+		}
+	}
+	return false;
+}
+
+void AbstractView::buildOutputImagesFormatsList(set<string>& outputFormats) {
+	// Tulip known formats (see GlGraph)
+	// formats are sorted, "~" is just an end marker
+	//Image PopuMenu
+	// int Qt 4, output formats are not yet sorted and uppercased
+	// first add Tulip known formats
+	outputFormats.insert("EPS");
+	outputFormats.insert("SVG");
+	// uppercase and insert all Qt formats
+	foreach (QByteArray format, QImageWriter::supportedImageFormats())
+		{
+			char* tmp = format.data();
+			for (int i = strlen(tmp) - 1; i >= 0; --i)
+				tmp[i] = toupper(tmp[i]);
+			outputFormats.insert(tmp);
+		}
+	// sort before inserting in exportImageMenu
+}
+
+void AbstractView::exportImage(QAction* action) {
+	string name = action->text().toStdString();
+	QString s(QFileDialog::getSaveFileName());
+
+	if (s.isNull())
+		return;
+
+	createPicture(s.toStdString());
+}
+
+void AbstractView::buildContextMenu(QObject *object, QMouseEvent *event, QMenu *contextMenu) {
+	if (!exportImageMenu->isEmpty())
+		contextMenu->addMenu(exportImageMenu);
+}
 
 }

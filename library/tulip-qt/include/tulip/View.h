@@ -9,7 +9,6 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
-#include "GWInteractor.h"
 
 class QMenuBar;
 class QVBoxLayout;
@@ -50,15 +49,26 @@ namespace tlp {
      */
     virtual Graph *getGraph() = 0;
     /**
-     * Get Interactors action (in MainController actions will be add to graphToolBar)
-     * \warning : QAction* must be the same at each call
+     * Return configuration widget used, this widget will be add on left of the MainController
      */
-    virtual std::list<QAction *> *getInteractorsActionList() = 0;
+    virtual std::list<std::pair<QWidget *,std::string> > getConfigurationWidget() {return std::list<std::pair<QWidget *,std::string> >();}
     /**
-     * Install a specific interactor to the view
-     * \param QAction must be an element of list<QAction *> of getInteractorsActionList(...)
+     * Set all interactors available forthis view
+     * Interactors are create (allocate) but now view have responsibility of her destruction
      */
-    virtual void installInteractor(QAction *) = 0;
+    virtual void setInteractors(const std::list<Interactor *> &interactors) = 0;
+    /**
+     * Return interactors of this view
+     */
+    virtual std::list<Interactor *> getInteractors() = 0;
+    /**
+     * Set active interactor on this view
+     */
+    virtual void setActiveInteractor(Interactor *interactor) = 0;
+    /**
+     * Take a snapshot of the view and put it in a picture
+     */
+    virtual void createPicture(const std::string &pictureName,int width=0, int height=0) = 0;
 
   public slots:
 

@@ -42,7 +42,7 @@ namespace tlp
     GridSubZ->setValidator(intValidator);
 
     QDoubleValidator *doubleValidator = new QDoubleValidator( this );
-    doubleValidator->setBottom(0); 
+    doubleValidator->setBottom(0);
 
     GridSizeX->setValidator(doubleValidator);
     GridSizeY->setValidator(doubleValidator);
@@ -70,18 +70,18 @@ namespace tlp
 	  glMainWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
 	}
-	    
+
 	bool display[3] = {DisplayXCB->isChecked(), DisplayYCB->isChecked(), DisplayZCB->isChecked()};
-	    
+
 	Coord min, max;
-	    
+
 	// We get the min and the max of the Layout to display the grid
 	LayoutProperty *layout = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<LayoutProperty>("viewLayout");
 	SizeProperty *sizes = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<SizeProperty>("viewSize");
 	DoubleProperty *rotation = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<DoubleProperty>("viewRotation");
-	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout, 
+	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout,
 							    sizes, rotation);
-	max = bboxes.first;	
+	max = bboxes.first;
 	min = bboxes.second;
 
 
@@ -89,21 +89,21 @@ namespace tlp
 	  min[i] = min[i] - 0.5f;
 	  max[i] = max[i] + 0.5f;
 	}
-	    
+
 	// Building of the cell :
 	Size cell;
 	if (SubdivisionsRB->isChecked()) {
 	  double sub[3] = {GridSubX->text().toDouble(), GridSubY->text().toDouble(), GridSubZ->text().toDouble()};
-		
+
 	  if (GridSubX->text() == "")
 	    sub[0] = 0;
-		
+
 	  if (GridSubY->text() == "")
 	    sub[1] = 0;
-		
+
 	  if (GridSubZ->text() == "")
 	    sub[2] = 0;
-		
+
 	  for(int i=0; i < 3; i++)  {
 	    if (sub[i] == 0)
 	      cell[i] = 0;
@@ -117,17 +117,17 @@ namespace tlp
 	    cell[i] = cellsize[i];
 	}
 	grid = new GlGrid(min, max, cell, Color(0, 0, 0, 255), display);
-	glMainWidget->getScene()->getLayer("Main")->addGlEntity(grid, "Layout Grid");   
-	paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
+	glMainWidget->getScene()->getLayer("Main")->addGlEntity(grid, "Layout Grid");
+	//paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
       }
       else {
 	if (grid != NULL) {
 	  glMainWidget->getScene()->getLayer("Main")->deleteGlEntity(grid);
 	  grid = NULL;
-	  paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
+	  //paramDialog->updateLayer("Main",glMainWidget->getScene()->getLayer("Main"));
 	}
       }
-      glMainWidget->draw();   
+      glMainWidget->draw();
       close();
     }
   }
@@ -135,10 +135,10 @@ namespace tlp
   void GridOptionsWidget::chGridSubdivisions() {
     SubdivisionsRB->setChecked(true);
     SizeRB->setChecked(false);
-    
+
     SubdivisionsFrame->setEnabled(true);
     SizeFrame->setEnabled(false);
-    
+
     GridSubX->setEnabled(true);
     GridSubY->setEnabled(true);
     GridSubZ->setEnabled(true);
@@ -147,10 +147,10 @@ namespace tlp
   void GridOptionsWidget::chGridSize() {
     SubdivisionsRB->setChecked(false);
     SizeRB->setChecked(true);
-    
+
     SubdivisionsFrame->setEnabled(false);
     SizeFrame->setEnabled(true);
-    
+
     GridSizeX->setEnabled(true);
     GridSizeY->setEnabled(true);
     GridSizeZ->setEnabled(true);

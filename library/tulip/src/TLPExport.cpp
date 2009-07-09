@@ -189,7 +189,7 @@ public:
     }
   }
   //=====================================================
-  void saveDataSet(ostream &os, DataSet &data) {
+  void saveDataSet(ostream &os, const DataSet &data) {
     initTypeNames();
     // get iterator over pair attribute/value
     Iterator< pair<string, DataType*> > *it = data.getValues();
@@ -197,30 +197,27 @@ public:
       pair<string, DataType*> p;
       p = it->next();
       const string tn = p.second->typeName;
-      char *otn = 0;
-      // get output type name
+       // get output type name
       if (tn == boolTN)
-	otn = "bool";
+	os << '(' << "bool";
       else if (tn == colorTN)
-	otn = "color";
+	os << '(' << "color";
       else if (tn == coordTN)
-	otn = "coord";
+	os << '(' << "coord";
       else if (tn == doubleTN)
-	otn = "double";
+	os << '(' << "double";
       else if (tn == floatTN)
-	otn = "float";
+	os << '(' << "float";
       else if (tn == intTN)
-	otn = "int";
+	os << '(' << "int";
       else if (tn == stringTN)
-	otn = "string";
+	os << '(' << "string";
       else if (tn == uintTN)
-	otn = "uint";
+	os << '(' << "uint";
       else if (tn == DataSetTN)
-	otn = "DataSet";
+	os << '(' << "DataSet";
       // general case do nothing
       else continue;
-      // output opened parenthesis and otn
-      os << '(' << otn;
       // output attribute name
       os << " \"" << p.first << "\" ";
       // output value

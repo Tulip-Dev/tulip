@@ -380,7 +380,7 @@ void PlanarityTestImpl::updateLabelB(node n) {
       break;
 
     // v became sibling of n;
-    childrenInT0[n].remove(childrenInT0[n].front());
+    childrenInT0[n].pop_front();
     if (!childrenInT0[n].empty())
       v = childrenInT0[n].front();
     else v = NULL_NODE;

@@ -2,7 +2,7 @@
 #ifndef MOUSEEDGESELECTION_H
 #define MOUSEEDGESELECTION_H
 
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -10,9 +10,9 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeSelector:public Interactor
+class TLP_QT_SCOPE MouseEdgeSelector:public InteractorComponent
 {
 private:
   unsigned int x,y;
@@ -24,7 +24,7 @@ public:
   ~MouseEdgeSelector(){}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseEdgeSelector(); }
+  InteractorComponent *clone() { return new MouseEdgeSelector(); }
 };
 /*@}*/
 

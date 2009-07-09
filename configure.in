@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
 AC_REVISION($Revision: 1.48 $)
 AC_PREREQ(2.53)
-AC_INIT(tulip, 3.1.1)
+AC_INIT(tulip, 3.2.0)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)
@@ -118,7 +118,6 @@ esac
 case "`uname -s`" in
     *win32* | *WIN32* | *mingw* | *MINGW32*)
 	 VAR_WIN32=1
-	 AC_LIBTOOL_WIN32_DLL
 	 WIN_VERSION=`echo ${MAJOR_VERSION}-${MINOR_VERSION}`
 	 WIN_EXE_VERSION=`echo ${VERSION} | tr . _`
 	 AC_SUBST(WIN_VERSION)
@@ -147,6 +146,7 @@ dnl
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_PICMODE(no)
 AC_DISABLE_STATIC
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 dnl Checks for header files.
@@ -184,29 +184,6 @@ AC_CHECK_HEADERS(sstream,[],
 		]
 )
 
-dnl Checks for X11, OpenGL, Qt
-if test ${VAR_WIN32} != 1
-then
-AC_PATH_X
-fi
-AC_PATH_QT
-AC_PATH_QT_MOC
-AC_PATH_QT_UIC
-AC_PATH_QT_RCC
-if test ${VAR_MACOSX} = 0
-then
-AC_PATH_GL
-fi
-
-dnl 2.5.4 is libxml2 shipped with RedHat 9.0
-dnl import plugin XML needs libxml/xmlreader.h, not present in redhat 8 libxml2
-
-if test ${VAR_WIN32} != 1
-then
-AM_PATH_XML2(2.5.4)
-fi
-AM_CONDITIONAL(LIBXML2, test "x$XML_LIBS" != "x")
-
 dnl debug flag
 AC_ARG_ENABLE(debug,
 [  --enable-debug          Compilation flags to allow debugging],
@@ -219,25 +196,36 @@ then
   CPPFLAGS="$CPPFLAGS -DI64"
 fi
 
-dnl statistics flag
-AC_ARG_ENABLE(stats-gui,
-[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface],
-   CPPFLAGS="$CPPFLAGS -DSTATS_UI")
-
-dnl check if we build tlprender, option and presence of OSMesa
-AC_ARG_ENABLE(tlprender,
-[  --enable-tlprender      Enable compilation of tlprender (tlprender requires OSMesa)],
-  CONFIGURE_tlprender="tlprender", CONFIGURE_tlprender=""
+dnl check if we build tulip-ogl
+AC_ARG_ENABLE(tulip-ogl,
+[  --disable-tulip-ogl     Disable build of tulip-ogl library (will force disable-tulip-qt)],
+  CONFIGURE_tulipogl="", CONFIGURE_tulipogl="tulip-ogl"
 )
 
-if test ${VAR_MACOSX} = 0
-then
-  if test "${x_includes}" != "NONE" -a "${x_includes}" != ""
-  then
-    CPPFLAGS="${CPP_FLAGS} -I${x_includes}"
-    LDFLAGS="${LD_FLAGS} -L${x_libraries}"
-  fi
-fi
+AC_SUBST(CONFIGURE_tulipogl)
+
+dnl Checks for X11, OpenGL, Qt
+if test "${CONFIGURE_tulipogl}" != ""
+ then
+   if test ${VAR_WIN32} != 1
+   then
+     AC_PATH_X
+     AM_PATH_XML2(2.5.4)
+   fi
+   if test ${VAR_MACOSX} = 0
+     then
+       if test "${x_includes}" != "NONE" -a "${x_includes}" != ""
+       then
+         CPPFLAGS="${CPP_FLAGS} -I${x_includes}"
+         LDFLAGS="${LD_FLAGS} -L${x_libraries}"
+       fi
+   fi
+AC_PATH_GL
+
+AC_ARG_ENABLE(tlprender,
+[  --enable-tlprender      Enable build of tlprender (tlprender requires OSMesa)],
+  CONFIGURE_tlprender="tlprender", CONFIGURE_tlprender=""
+)
 
 if test "${CONFIGURE_tlprender}" != ""
  then
@@ -245,9 +233,6 @@ if test "${CONFIGURE_tlprender}" != ""
                    [CONFIGURE_tlprender=""
                     AC_MSG_WARN([OSMesa header not found, will not build tlprender])
                    ])
-fi
-if test "${CONFIGURE_tlprender}" != ""
-then
   AC_CHECK_LIB(OSMesa, OSMesaCreateContext,
                [AC_DEFINE(HAVE_LIBOSMESA, 1, [libOSMesa present])],
                [CONFIGURE_tlprender=""
@@ -255,7 +240,43 @@ then
                [${GL_INCLUDES} ${GL_LDFLAGS} ${LIB_GL}])
 fi
 
+AC_ARG_ENABLE(tulip-qt,
+[  --disable-tulip-qt     Disable build of tulip-qt library (will force disable-tulip-gui)],
+  CONFIGURE_tulipqt="", CONFIGURE_tulipqt="tulip-qt"
+)
+else
+  CONFIGURE_tulipqt=""
+  CONFIGURE_tulipgui=""
+  CONFIGURE_tlprender=""
+fi
+
+AC_SUBST(CONFIGURE_tulipogl)
 AC_SUBST(CONFIGURE_tlprender)
+AM_CONDITIONAL(HAVE_TULIP_OGL, test "${CONFIGURE_tulipogl}" != "")
+AM_CONDITIONAL(LIBXML2, test "x$XML_LIBS" != "x")
+
+if test "${CONFIGURE_tulipqt}" != ""
+ then
+AC_PATH_QT
+AC_PATH_QT_MOC
+AC_PATH_QT_UIC
+AC_PATH_QT_RCC
+
+AC_ARG_ENABLE(stats-gui,
+[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface],
+   CPPFLAGS="$CPPFLAGS -DSTATS_UI")
+
+AC_ARG_ENABLE(tulip-gui,
+[  --disable-tulip-gui     Disable build of tulip gui],
+  CONFIGURE_tulipgui="", CONFIGURE_tulipgui="plugins-manager tulip"
+)
+else
+  CONFIGURE_tulipgui=""
+fi
+
+AC_SUBST(CONFIGURE_tulipqt)
+AC_SUBST(CONFIGURE_tulipgui)
+AM_CONDITIONAL(HAVE_TULIP_QT, test "${CONFIGURE_tulipqt}" != "")
 
 # define TLP_INCLUDE, TLP_LDFLAGS, ...
 # it is *very* important to use top_srcdir for INCLUDE and top_builddir for LDFLAGS,
@@ -324,7 +345,7 @@ AC_SUBST(GZSTREAM_LDFLAGS)
 AC_ARG_WITH([ftgl-includes],AS_HELP_STRING([--with-ftgl-includes=FLAGS],[cppflags for libftgl]),
  [FTGL_INCLUDE=$withval],
  [FTGL_INCLUDE='-I$(top_srcdir)/thirdparty/ftgl'])
-AC_ARG_WITH([ftgl-lib],AS_HELP_STRING([--with-ftgl-lib=FLAGS],[ldflags to link with gzstream]),
+AC_ARG_WITH([ftgl-lib],AS_HELP_STRING([--with-ftgl-lib=FLAGS],[ldflags to link with libftgl]),
  [FTGL_LDFLAGS=$withval],
  [FTGL_LDFLAGS='$(top_builddir)/thirdparty/ftgl/libftgl.la'])
 AC_SUBST(FTGL_INCLUDE)
@@ -397,6 +418,7 @@ plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
 plugins/view/parallel/Makefile
 plugins/controller/Makefile
+unit_test/library/tulip/tuliplibtest.cpp
 docs/Makefile
 docs/devTeamDoxygen/Makefile
 docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in

@@ -19,6 +19,13 @@ std::string PropertyInterface::getTypename( PropertyInterface * propertyName ) {
   if (typeid((*propertyName)) == typeid(ColorProperty)) return "color";
   if (typeid((*propertyName)) == typeid(SizeProperty)) return "size";
   if (typeid((*propertyName)) == typeid(BooleanProperty)) return "bool";
+  if (typeid((*propertyName)) == typeid(DoubleVectorProperty)) return "vector<double>";
+  if (typeid((*propertyName)) == typeid(StringVectorProperty)) return "vector<string>";
+  if (typeid((*propertyName)) == typeid(IntegerVectorProperty)) return "vector<int>";
+  if (typeid((*propertyName)) == typeid(CoordVectorProperty)) return "vector<coord>";
+  if (typeid((*propertyName)) == typeid(ColorVectorProperty)) return "vector<color>";
+  if (typeid((*propertyName)) == typeid(SizeVectorProperty)) return "vector<size>";
+  if (typeid((*propertyName)) == typeid(BooleanVectorProperty)) return "vector<bool>";
   return "unknown";
 }
 

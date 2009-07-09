@@ -3,8 +3,8 @@
  Author: Morgan Mathiaut
  Email : mathiaut@labri.fr
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -22,11 +22,12 @@
 #include <vector>
 
 #include "PluginInfo.h"
+#include "UpdatePlugin.h"
 
 namespace tlp {
 
   class MultiServerManager;
- 
+
   class TLP_PLUGINSMANAGER_SCOPE PluginsUpdateChecker : public QObject {
 
     Q_OBJECT
@@ -34,26 +35,31 @@ namespace tlp {
     QWidget *parent;
     MultiServerManager *msm;
     int serverNumber;
- 
-  public : 
-    
+    UpdatePlugin *updatePlugin;
+    int numberOfPluginsToUpdate;
+
+  public :
+
     PluginsUpdateChecker(std::vector<LocalPluginInfo> &pluginsList,QWidget *parent);
-    MultiServerManager *getMultiServerManager();										   
+    ~PluginsUpdateChecker();
+    MultiServerManager *getMultiServerManager();
 
   private slots :
 
     void getResponse();
+    void pluginInstalled();
+    void pluginUninstalled();
 
   private :
-    
+
     void displayPopup(const std::vector<DistPluginInfo*> &pluginsOutOfDate);
 
   signals :
 
-    void checkFinished();
+    void checkFinished(bool);
 
   };
-  
+
 }
 #endif //_Tulip_PLUGINSUPDATECHECKER_H_
 

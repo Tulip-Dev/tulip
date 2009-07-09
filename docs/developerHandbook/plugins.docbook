@@ -103,23 +103,23 @@
 	    	    			Following is a list of all public members :
 	    	    	</para>
 	    		<itemizedlist>
-	    			<listitem>
-	    				<methodname>PropertyAlgorithm (const PropertyContext&amp; context)</methodname> :  
+	    			<listitem><para>
+	    				<methodname>PropertyAlgorithm (const PropertyContext&amp; context)</methodname> :</para>
 	    					<para>The constructor is the right place to declare the parameters needed by the algorithm.</para>
 	    					<para><code> addParameter&lt;DoubleProperty&gt;("metric", paramHelp[0], 0, false);</code></para>
 	    					<para> And to declare the algorithm dependencies.</para> <para><code>addDependency&lt;Algorithm&gt;("Quotient Clustering", "1.0");</code></para>
 	    			</listitem>
-	    			<listitem>
+	    			<listitem><para>
 	    				<methodname>~PropertyAlgorithm () </methodname> : Destructor of the class.
-	    			</listitem>
-	    			<listitem>
-	    				<methodname>bool run ()</methodname> :<para> This is the main method :</para>
+	    			</para></listitem>
+	    			<listitem><para>
+	    				<methodname>bool run ()</methodname> :</para><para> This is the main method :</para>
 	    				<para>  - It will be called out if the pre-condition method (bool check (..)) returned true.</para>
 					<para>  - It is the starting point of your algorithm.</para>
 					<para> The returned value must be true if your algorithm succeeded.</para>
 	    			</listitem>
-	    			<listitem>
-	    				<methodname>bool check (std::string&amp; errMsg)</methodname> : <para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
+	    			<listitem><para>
+	    				<methodname>bool check (std::string&amp; errMsg)</methodname> :</para><para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
 	    			</listitem>
 	    		</itemizedlist>
 	    	</sect3>
@@ -128,21 +128,21 @@
 	    	    			Following is a list of all protected members :
 	    	    		</para>
 	    	    		<itemizedlist>
-	    	    			<listitem>
-	    	    				<methodname>Graph* graph </methodname> :  
+	    	    			<listitem><para>
+	    	    				<methodname>Graph* graph </methodname> :</para>  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    			<listitem><para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :</para>
 	    	    				<para> This instance of the class PluginProgress can be used to have an interaction between the user and our algorithm. See the next section for more details.</para>
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    			<listitem><para>
+	    	    				<methodname>DataSet* dataSet </methodname> :</para><para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
-	    	    </sect3>
 	    
 		<para>The methods of the <emphasis>TypeName</emphasis>Algorithm class, will be redefined in your plug-in as shown in <xref linkend="algoprop-example" />.</para>
+	    	    </sect3>
 	    </sect2>
 	    <sect2 id="dataset-class"><title>Parameters :</title>
 	    
@@ -152,14 +152,14 @@
 	    		<para>The class PropertyAlgorithm inherits from a class called WithParameters that has a member function named <methodname>template&lt;typename Type&gt; void addParameter (const char *name, const char *inHelp=0, const char *inDefValue=0, bool isMandatory=true)</methodname> which is capable of adding a parameter. This method has to be called in the constructor of your class.</para>
 	    		<para>Following is a description of its parameters :</para>
 	    		<itemizedlist>
-	    			<listitem> name : Name of the new parameter.
-	    			</listitem>
-	    			<listitem> inHelp : This parameter can be used to add a documentation to the parameter (See example below).
-	    			</listitem> 
-	    			<listitem> inDefValue : Default value. 
-	    			</listitem>
-	    			<listitem> isMandatory : If false, the user must give a value. 
-	    			</listitem>
+	    			<listitem><para> name : Name of the new parameter.
+	    			</para></listitem>
+	    			<listitem><para> inHelp : This parameter can be used to add a documentation to the parameter (See example below).
+	    			</para></listitem> 
+	    			<listitem><para> inDefValue : Default value. 
+	    			</para></listitem>
+	    			<listitem><para> isMandatory : If false, the user must give a value. 
+	    			</para></listitem>
 	    		</itemizedlist>
 	    		<para>On the following example, we declare a character buffer that will contain the documentation of our parameters. </para>
 	    		<programlisting role="C">
@@ -223,27 +223,27 @@ namespace {
     	    		<graphic fileref="images/plugin_doc_add_parameter_1.png" />
 	        </sect3>
 	       
-	       <sect3 id="dataset-class"><title>Accessing a parameter</title>
+	       <sect3 id="dataset-param"><title>Accessing a parameter</title>
 	    	<para>The class PropertyAlgorithm has a protected member called <emphasis>dataSet</emphasis> that contains all the parameters value.The DataSet class implements a container which allows insertion of values of different types and implements the following methods :</para>
     		<itemizedlist>
-    			<listitem>
-    				<methodname>template&lt;typename T&gt; bool get (const std::string&amp; name, T value) const</methodname> :  
+    			<listitem><para>
+    				<methodname>template&lt;typename T&gt; bool get (const std::string&amp; name, T value) const</methodname> :</para>  
     					<para>Returns a copy of the value of the variable with name name. If the variable name doesn't exist return false else true. </para>				
     			</listitem>
-    			<listitem>
-    				<methodname>template&lt;typename T&gt; bool getAndFree (const std::string&amp; name, T value)</methodname> :
+    			<listitem><para>
+    				<methodname>template&lt;typename T&gt; bool getAndFree (const std::string&amp; name, T value)</methodname> :</para>
     				<para> Returns a copy of the value of the variable with name name. If the variable name doesn't exist return false else true. The data is removed after the call. </para> 
     			</listitem>
-    			<listitem>
-    				<methodname>template&lt;typename T&gt; void set (const std::string&amp; name, const T value)</methodname> :
+    			<listitem><para>
+    				<methodname>template&lt;typename T&gt; void set (const std::string&amp; name, const T value)</methodname> :</para>
     				<para>Set the value of the variable name.</para>
     			</listitem>
-    			<listitem>
-    			    	<methodname>bool exist (const std::string&amp; name) const</methodname> :
+    			<listitem><para>
+    			    	<methodname>bool exist (const std::string&amp; name) const</methodname> :</para>
     				<para>Returns true if name exists else false.</para>
     			</listitem>
-    			<listitem>
-    			    	<methodname>Iterator&lt;std::pair&lt;std::string, DataType&gt; &gt;* getValues () const</methodname> :
+    			<listitem><para>
+    			    	<methodname>Iterator&lt;std::pair&lt;std::string, DataType&gt; &gt;* getValues () const</methodname> :</para>
     				<para>Returns an iterator on all values </para>
     			</listitem>
     		</itemizedlist>
@@ -286,29 +286,29 @@ namespace {
     	    			!-->
     	    			
     	    			
-    	    			<listitem>
-    	    				<methodname>ProgressState progress (int step, int max_step)</methodname> :<para> This method can be used to know the global progress of or algorithm, the number of steps accomplished.</para>
+    	    			<listitem><para>
+    	    				<methodname>ProgressState progress (int step, int max_step)</methodname> :</para><para> This method can be used to know the global progress of or algorithm, the number of steps accomplished.</para>
     	    			</listitem>
     	    			
     	    			 
-    	    			<listitem>
-    	    				<methodname> void showPreview (bool)</methodname> :
+    	    			<listitem><para>
+    	    				<methodname> void showPreview (bool)</methodname> :</para>
     	    				<para> Enables to specify if the preview check box has to be visible or not. </para> 
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname> bool isPreviewMode ()</methodname> :
+    	    			<listitem><para>
+    	    				<methodname> bool isPreviewMode ()</methodname> :</para>
     	    				<para> Enables to know if the user has checked the preview box. </para> 
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname>ProgressState state () const </methodname> :
+    	    			<listitem><para>
+    	    				<methodname>ProgressState state () const </methodname> :</para>
     	    				<para> Indicates the state of the 'Cancel', 'Stop' buttons of the dialog</para> 
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname>void setError (std::string error)</methodname> :
+    	    			<listitem><para>
+    	    				<methodname>void setError (std::string error)</methodname> :</para>
     	    				<para>Shows an error message to the user</para> 
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname>void setComment (std::string msg)</methodname> :
+    	    			<listitem><para>
+    	    				<methodname>void setComment (std::string msg)</methodname> :</para>
     	    				<para>Shows a comment message to the user </para> 
     	    			</listitem>
     	    		</itemizedlist>
@@ -420,23 +420,23 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     			Following is a list of all public members :
     		</para>
     		<itemizedlist>
-    			<listitem>
-    				<methodname>Algorithm (AlgorithmContext context)</methodname> :  
+    			<listitem><para>
+    				<methodname>Algorithm (AlgorithmContext context)</methodname> :</para>  
     					<para>The constructor is the right place to declare the parameters needed by the algorithm.</para>
     					<para><code> addParameter&lt;DoubleProperty&gt;("metric", paramHelp[0], 0, false);</code></para>
     					<para> And to declare the algorithm dependencies.</para> <para><code>addDependency&lt;Algorithm&gt;("Quotient Clustering", "1.0");</code></para>
     			</listitem>
-    			<listitem>
-    				<methodname>~Algorithm () </methodname> : Destructor of the class.
+    			<listitem><para>
+    				<methodname>~Algorithm () </methodname> :</para><para>Destructor of the class.</para>
     			</listitem>
-    			<listitem>
-    				<methodname>bool run ()</methodname> :<para> This is the main method :</para>
+    			<listitem><para>
+    				<methodname>bool run ()</methodname> :</para><para> This is the main method :</para>
     				<para>  - It will be called out if the pre-condition method (bool check (..)) returned true.</para>
 				<para>     - It is the starting point of your algorithm.</para>
 				<para> The returned value must be true if your algorithm succeeded.</para>
     			</listitem>
-    			<listitem>
-    				<methodname>bool check (std::string)</methodname> : <para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
+    			<listitem><para>
+    				<methodname>bool check (std::string)</methodname> :</para><para> This method can be used to check what you need about topological properties of the graph, metric properties on graph elements or anything else.</para>
     			</listitem>
     		</itemizedlist>
     		<para>The methods below, will be redefined in our plugin (See section plug-in skeleton).</para>
@@ -446,16 +446,16 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
     	    			Following is a list of all protected members :
     	    		</para>
     	    		<itemizedlist>
-    	    			<listitem>
-    	    				<methodname>Graph* graph </methodname> :  
+    	    			<listitem><para>
+    	    				<methodname>Graph* graph </methodname> :</para>  
     	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+    	    			<listitem><para>
+    	    				<methodname>PluginProgress* pluginProgress </methodname> :</para>
     	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
     	    			</listitem>
-    	    			<listitem>
-    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+    	    			<listitem><para>
+    	    				<methodname>DataSet* dataSet </methodname> :</para><para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
     	    			</listitem>
     	    		</itemizedlist>
     	    	</sect2>
@@ -473,17 +473,17 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
 		    			Following is a list of all public members :
 		    		</para>
 		    		<itemizedlist>
-		    			<listitem>
-		    				<methodname>ImportModule (AlgorithmContext context)</methodname> :  
+		    			<listitem><para>
+		    				<methodname>ImportModule (AlgorithmContext context)</methodname> :</para>  
 		    					<para>The constructor is the right place to declare the parameters needed by the algorithm.</para>
 		    					<para><code> addParameter&lt;DoubleProperty&gt;("metric", paramHelp[0], 0, false);</code></para>
 		    					<para> And to declare the algorithm dependencies.</para> <para><code>addDependency&lt;Algorithm&gt;("Quotient Clustering", "1.0");</code></para>
 		    			</listitem>
-		    			<listitem>
-		    				<methodname>~ImportModule () </methodname> : Destructor of the class.
+		    			<listitem><para>
+		    				<methodname>~ImportModule () </methodname> :</para><para>Destructor of the class.</para>
 		    			</listitem>
-		    			<listitem>
-		    				<methodname>bool import (const std::string name)</methodname> :<para> This is the main method, the starting point of your algorithm.</para>
+		    			<listitem><para>
+		    				<methodname>bool import (const std::string name)</methodname> :</para><para> This is the main method, the starting point of your algorithm.</para>
 						<para> The returned value must be true if your algorithm succeeds.</para>
 		    			</listitem>
 		    		</itemizedlist>
@@ -494,16 +494,16 @@ COLORPLUGIN(MyColorAlgorithm, "My Color Algorithm", "Authors", "07/07/07", "Comm
 	    	    			Following is a list of all protected members :
 	    	    		</para>
 	    	    		<itemizedlist>
-	    	    			<listitem>
-	    	    				<methodname>Graph* graph </methodname> :  
+	    	    			<listitem><para>
+	    	    				<methodname>Graph* graph </methodname> :</para>  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    			<listitem><para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :</para>
 	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    			<listitem><para>
+	    	    				<methodname>DataSet* dataSet </methodname> :</para><para>This member contains all the parameters needed to run the algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
                         </sect2>
@@ -563,17 +563,17 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 		    			Following is a list of all public members :
 		    		</para>
 		    		<itemizedlist>
-		    			<listitem>
-		    				<methodname>ExportModule (AlgorithmContext context)</methodname> :  
+		    			<listitem><para>
+		    				<methodname>ExportModule (AlgorithmContext context)</methodname> :</para>  
 		    					<para>The constructor is the right place to declare the parameters needed by the algorithm.</para>
 		    					<para><code> addParameter&lt;DoubleProperty&gt;("metric", paramHelp[0], 0, false);</code></para>
 		    					<para> And to declare the algorithm dependencies.</para> <para><code>addDependency&lt;Algorithm&gt;("Quotient Clustering", "1.0");</code></para>
 		    			</listitem>
-		    			<listitem>
-		    				<methodname>~ExportModule () </methodname> : Destructor of the class.
+		    			<listitem><para>
+		    				<methodname>~ExportModule () </methodname> :</para><para>Destructor of the class.</para>
 		    			</listitem>
-		    			<listitem>
-		    				<methodname>bool import (const std::string name)</methodname> :<para> This is the main method, the starting point of your algorithm.</para>
+		    			<listitem><para>
+		    				<methodname>bool import (const std::string name)</methodname> :</para><para> This is the main method, the starting point of your algorithm.</para>
 						<para> The returned value must be true if your algorithm succeeded.</para>
 		    			</listitem>
 		    		</itemizedlist>
@@ -584,16 +584,16 @@ IMPORTPLUGIN(MyImportModule, "My Import Module", "Authors", "07/07/07", "Comment
 	    	    			Following is a list of all protected members :
 	    	    		</para>
 	    	    		<itemizedlist>
-	    	    			<listitem>
-	    	    				<methodname>Graph* graph </methodname> :  
+	    	    			<listitem><para>
+	    	    				<methodname>Graph* graph </methodname> :</para>  
 	    	    					<para>This graph is the one given in parameters, the one on which the algorithm will be applied.</para>				
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>PluginProgress* pluginProgress </methodname> :
+	    	    			<listitem><para>
+	    	    				<methodname>PluginProgress* pluginProgress </methodname> :</para>
 	    	    				<para> The class PluginProgress can be used to have an interaction between the user and our algorithm. See <xref linkend="pluginprogress-class" /> for more details. </para>
 	    	    			</listitem>
-	    	    			<listitem>
-	    	    				<methodname>DataSet* dataSet </methodname> :<para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
+	    	    			<listitem><para>
+	    	    				<methodname>DataSet* dataSet </methodname> :</para><para>This member contains all the parameters needed to run the Algorithm. The class DataSet is a container which allows insertion of values of different types. The inserted data must have a copy-constructor well done. See the section called DataSet for more details.</para>
 	    	    			</listitem>
 	    	    		</itemizedlist>
 	    	    	</sect2>
@@ -698,17 +698,17 @@ install: all
 	<step> 
 		<screen><prompt>[user@localhost ]$ </prompt><userinput>make</userinput>
 		</screen>
-		Type make in a terminal.
+		<para>Type make in a terminal.</para>
 	</step>
 	<step> 
 		<screen><prompt> [user@localhost ]$ </prompt><userinput>make install</userinput>
 		</screen>
-		Type make install in a terminal. Be careful that you may need root privileges to do this.
+		<para>Type make install in a terminal. Be careful that you may need root privileges to do this.</para>
 	</step>
 	<step> 
 		<screen><prompt>[user@localhost ]$ </prompt><userinput>make clean</userinput>
 		</screen>
-		'make clean', will remove all generated files (libraries, *.o , ...)
+		<para>'make clean', will remove all generated files (libraries, *.o , ...)</para>
 	</step>
 	</procedure>
       </sect1>

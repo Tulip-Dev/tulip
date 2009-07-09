@@ -4,15 +4,15 @@
 #include <vector>
 #include <tulip/GlCircle.h>
 #include <tulip/Observable.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
 
   /// This interactor allows to move/add/delete EdgeBends
-  class TLP_QT_SCOPE MouseEdgeBendEditor:public Interactor {
+  class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
 
   public:
 
@@ -21,7 +21,7 @@ namespace tlp {
     bool compute(GlMainWidget *glMainWidget);
     bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
-    Interactor *clone() { return new MouseEdgeBendEditor(); }
+    InteractorComponent *clone() { return new MouseEdgeBendEditor(); }
 
   private:
     enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
@@ -48,7 +48,7 @@ namespace tlp {
     OperationTarget mode;
 
     Coord editPosition;
-    
+
     std::vector<tlp::GlCircle> circles;
     std::vector<Coord> coordinates;
     tlp::GlCircle basicCircle;

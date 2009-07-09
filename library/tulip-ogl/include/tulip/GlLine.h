@@ -31,7 +31,7 @@ namespace tlp {
     /**
      * Enpty constructor
      */
-    GlLine() {}
+    GlLine():width(1.0),factor(1),pattern(0) {}
     /**
      * Constructor with a list of coord and a list of color
      */
@@ -72,6 +72,14 @@ namespace tlp {
      * return the ith color used for draw the line
      */
     virtual Color& color(const unsigned int i);
+    /**
+     * Set line width
+     */
+    virtual void setLineWidth(float width);
+    /**
+     * Set the style of the line (documentation can be found in OpenGL manuel of fuction glLineStipple)
+     */
+    virtual void setLineStipple(unsigned char factor,unsigned int pattern);
 
     /**
      * Translate entity
@@ -91,6 +99,9 @@ namespace tlp {
   protected:
     std::vector<Coord> _points;
     std::vector<Color> _colors;
+    float width;
+    unsigned char factor;
+    unsigned int pattern;
   };
 }
 

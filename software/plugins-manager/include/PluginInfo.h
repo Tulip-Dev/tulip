@@ -3,8 +3,8 @@
  Author: Morgan Mathiaut and Samuel Carruesco, Mickael Melas, Laurent Peyronnet, Michael Roche, Sabrina Wons
  Email : mathiaut@labri.fr
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -30,18 +30,18 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/Interactor.h>
 #include <tulip/View.h>
 #include <tulip/Controller.h>
 
 namespace tlp {
 
   struct PluginDependency {
-    
+
     std::string name;
     std::string type;
     std::string version;
-    
+
     PluginDependency(const std::string &name,const std::string &type,const std::string& version):name(name),version(version){
       if(type=="Glyph")
 	this->type="Glyph";
@@ -54,11 +54,11 @@ namespace tlp {
       else
 	this->type="Algorithm";
     };
-    
+
   };
-  
+
   class TLP_PLUGINSMANAGER_SCOPE PluginInfo {
-    
+
   public :
     std::string name;
     std::string type;
@@ -69,26 +69,26 @@ namespace tlp {
     bool local;
 
     virtual ~PluginInfo() {};
- 
+
   protected :
     PluginInfo(bool local):local(local){};
-    PluginInfo(const std::string& name, 
+    PluginInfo(const std::string& name,
 	       const std::string& type,
 	       const std::string &displayType,
 	       const std::string& server,
 	       const std::string& version,
 	       const std::vector<PluginDependency> &dependencies,
 	       bool local)
-      :name(name), 
-      type(type), 
-      displayType(displayType), 
-      server(server), 
-      version(version), 
+      :name(name),
+      type(type),
+      displayType(displayType),
+      server(server),
+      version(version),
       dependencies(dependencies),
       local(local){};
 
   public :
-    
+
     static std::string getPluginDisplayType(const std::string &name) {
       if(SizeProperty::factory && SizeProperty::factory->pluginExists(name))
 	return "Size";
@@ -127,7 +127,7 @@ namespace tlp {
       if (ControllerFactory::factory &&
 	  ControllerFactory::factory->pluginExists(name))
 	return "Controller";
-      
+
       return "Glyph";
     }
   };
@@ -137,7 +137,7 @@ namespace tlp {
 #define TLP_CHECK_PL_RETURN_SUCCESS 222
 
   class TLP_PLUGINSMANAGER_SCOPE DistPluginInfo : public PluginInfo{
-    
+
   public :
     std::string fileName;
     std::string localVersion;
@@ -148,9 +148,9 @@ namespace tlp {
     bool installIsOK;
 
     virtual ~DistPluginInfo() {};
-    
+
     DistPluginInfo():PluginInfo(false){};
-    DistPluginInfo(const std::string& name, 
+    DistPluginInfo(const std::string& name,
 		   const std::string& type,
 		   const std::string& displayType,
 		   const std::string& server,
@@ -163,7 +163,7 @@ namespace tlp {
 		   bool windowsVersion,
 		   bool i64Version)
       : PluginInfo(name,type,displayType,server,version,dependencies,false),
-      fileName(fileName), 
+      fileName(fileName),
       localVersion(localVersion),
       linuxVersion(linuxVersion),
       macVersion(macVersion),
@@ -171,9 +171,9 @@ namespace tlp {
       i64Version(i64Version){
 	local=false;};
   };
-  
+
   class TLP_PLUGINSMANAGER_SCOPE LocalPluginInfo : public PluginInfo{
-    
+
   public :
     std::string fileName;
     std::string author;
@@ -181,9 +181,9 @@ namespace tlp {
     std::string info;
 
     virtual ~LocalPluginInfo() {};
-    
+
     LocalPluginInfo():PluginInfo(true){};
-    LocalPluginInfo(const std::string& name, 
+    LocalPluginInfo(const std::string& name,
 	       const std::string& type,
 	       const std::string& displayType,
 	       const std::string& server,
@@ -194,8 +194,8 @@ namespace tlp {
 	       const std::string& info,
 	       const std::vector<PluginDependency> &dependencies)
       :PluginInfo(name,type,displayType,server,version,dependencies,true),
-      fileName(fileName), 
-      author(author), 
+      fileName(fileName),
+      author(author),
       date(date),
       info(info){
 	local=true;};
@@ -217,7 +217,24 @@ namespace tlp {
       return false;
     }
   };
-  
+
+  class TLP_PLUGINSMANAGER_SCOPE PluginTypeCmp {
+    public :
+      bool operator()(const PluginInfo& p1,const PluginInfo &p2) {
+        if(p1.type!=p2.type)
+          return p1.type.compare(p2.type) < 0;
+        if(p1.name!=p2.name)
+          return p1.name.compare(p2.name) < 0;
+        if(p1.server!=p2.server)
+          return p1.server.compare(p2.server) < 0;
+        if(p1.version!=p2.version)
+          return p1.version.compare(p2.version) < 0;
+        if(p1.server!=p2.server)
+          return p1.server.compare(p2.server) < 0;
+        return false;
+      }
+    };
+
   class TLP_PLUGINSMANAGER_SCOPE PluginDependencyCmp {
     public :
     bool operator()(const PluginDependency& p1,const PluginDependency &p2) {

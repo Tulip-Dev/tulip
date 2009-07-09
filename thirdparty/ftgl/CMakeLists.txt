@@ -1,62 +1,101 @@
-set(ftgl_STAT_SRCS
-    FTBBox.h
-    FTBitmapGlyph.h
-    FTCharmap.h
-    FTCharToGlyphIndexMap.h
-    FTContour.h
-    FTExtrdGlyph.h
-    FTFace.h
-    FTFont.h
-    FTGLBitmapFont.h
-    FTGLExtrdFont.h
-    FTGL.h
-    FTGLOutlineFont.h
-    FTGLPixmapFont.h
-    FTGLPolygonFont.h
-    FTGLTextureFont.h
-    FTGlyphContainer.h
-    FTGlyph.h
-    FTLibrary.h
-    FTList.h
-    FTOutlineGlyph.h
-    FTPixmapGlyph.h
-    FTPoint.h
-    FTPolyGlyph.h
-    FTSize.h
-    FTTextureGlyph.h
-    FTVector.h
-    FTVectoriser.h
-    FTBitmapGlyph.cpp
-    FTCharmap.cpp
-    FTContour.cpp
-    FTExtrdGlyph.cpp
-    FTFace.cpp
-    FTFont.cpp
-    FTGLBitmapFont.cpp
-    FTGLExtrdFont.cpp
-    FTGLOutlineFont.cpp
-    FTGLPixmapFont.cpp
-    FTGLPolygonFont.cpp
-    FTGLTextureFont.cpp
-    FTGlyph.cpp
-    FTGlyphContainer.cpp
-    FTLibrary.cpp
-    FTOutlineGlyph.cpp
-    FTPixmapGlyph.cpp
-    FTPoint.cpp
-    FTPolyGlyph.cpp
-    FTSize.cpp
-    FTTextureGlyph.cpp
-    FTVectoriser.cpp)
+SET(ftgl_SRCS
+    FTBuffer.cpp 
+    FTCharmap.cpp 
+    FTCharmap.h 
+    FTCharToGlyphIndexMap.h 
+    FTContour.cpp 
+    FTContour.h 
+    FTFace.cpp 
+    FTFace.h 
+    FTGlyphContainer.cpp 
+    FTGlyphContainer.h 
+    FTInternals.h 
+    FTLibrary.cpp 
+    FTLibrary.h 
+    FTList.h 
+    FTPoint.cpp 
+    FTSize.cpp 
+    FTSize.h 
+    FTVector.h 
+    FTVectoriser.cpp 
+    FTVectoriser.h 
+    FTUnicode.h 
+)
 
+SET(ftgl_headers_SRCS
+    FTGL/ftgl.h 
+    FTGL/FTBBox.h 
+    FTGL/FTBuffer.h 
+    FTGL/FTPoint.h 
+    FTGL/FTGlyph.h 
+    FTGL/FTBitmapGlyph.h 
+    FTGL/FTBufferGlyph.h 
+    FTGL/FTExtrdGlyph.h 
+    FTGL/FTOutlineGlyph.h 
+    FTGL/FTPixmapGlyph.h 
+    FTGL/FTPolyGlyph.h 
+    FTGL/FTTextureGlyph.h 
+    FTGL/FTFont.h 
+    FTGL/FTGLBitmapFont.h 
+    FTGL/FTBufferFont.h 
+    FTGL/FTGLExtrdFont.h 
+    FTGL/FTGLOutlineFont.h 
+    FTGL/FTGLPixmapFont.h 
+    FTGL/FTGLPolygonFont.h 
+    FTGL/FTGLTextureFont.h 
+    FTGL/FTLayout.h 
+    FTGL/FTSimpleLayout.h
+)
+
+SET(ftglyph_SRCS
+    FTGlyph/FTGlyph.cpp 
+    FTGlyph/FTGlyphImpl.h 
+    FTGlyph/FTGlyphGlue.cpp 
+    FTGlyph/FTBitmapGlyph.cpp 
+    FTGlyph/FTBitmapGlyphImpl.h 
+    FTGlyph/FTBufferGlyph.cpp 
+    FTGlyph/FTBufferGlyphImpl.h 
+    FTGlyph/FTExtrudeGlyph.cpp 
+    FTGlyph/FTExtrudeGlyphImpl.h 
+    FTGlyph/FTOutlineGlyph.cpp 
+    FTGlyph/FTOutlineGlyphImpl.h 
+    FTGlyph/FTPixmapGlyph.cpp 
+    FTGlyph/FTPixmapGlyphImpl.h 
+    FTGlyph/FTPolygonGlyph.cpp 
+    FTGlyph/FTPolygonGlyphImpl.h 
+    FTGlyph/FTTextureGlyph.cpp 
+    FTGlyph/FTTextureGlyphImpl.h 
+)
+
+SET(ftfont_SRCS
+    FTFont/FTFont.cpp 
+    FTFont/FTFontImpl.h 
+    FTFont/FTFontGlue.cpp 
+    FTFont/FTBitmapFont.cpp 
+    FTFont/FTBitmapFontImpl.h 
+    FTFont/FTBufferFont.cpp 
+    FTFont/FTBufferFontImpl.h 
+    FTFont/FTExtrudeFont.cpp 
+    FTFont/FTExtrudeFontImpl.h 
+    FTFont/FTOutlineFont.cpp 
+    FTFont/FTOutlineFontImpl.h 
+    FTFont/FTPixmapFont.cpp 
+    FTFont/FTPixmapFontImpl.h 
+    FTFont/FTPolygonFont.cpp 
+    FTFont/FTPolygonFontImpl.h 
+    FTFont/FTTextureFont.cpp 
+    FTFont/FTTextureFontImpl.h 
+)
+
+SET(ftlayout_SRCS
+    FTLayout/FTLayout.cpp 
+    FTLayout/FTLayoutImpl.h 
+    FTLayout/FTLayoutGlue.cpp 
+    FTLayout/FTSimpleLayout.cpp 
+    FTLayout/FTSimpleLayoutImpl.h 
+)
+
+INCLUDE_DIRECTORIES(./)
 INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIR_freetype2})
 
-ADD_LIBRARY(ftgl STATIC ${ftgl_STAT_SRCS})
-
-#			   
-#EXTRA_DIST = 	COPYING.txt \
-#		README.txt \
-#		TODO.txt \
-#		license.txt \
-#		HISTORY.txt
-#
+ADD_LIBRARY(ftgl STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS})

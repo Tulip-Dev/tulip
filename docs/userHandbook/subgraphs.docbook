@@ -24,12 +24,12 @@
 	</sect3>
 </sect2>
 <sect2 id="hierarchy-create"><title>Creating subgraphs or Groups :</title>
-	<sect3 id="hierarchy-create-sub graph"><title>Creating a subgraph :</title>
+	<sect3 id="hierarchy-create-subgraph"><title>Creating a subgraph :</title>
 	<para>To create a subgraph follow these steps :</para>
 		<itemizedlist>
-			<listitem><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
+			<listitem><para><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
 				      To select the edges that are between the selected nodes use the "Induced Sub-graph" algorithm.
-			</listitem>
+			</para></listitem>
 			<listitem>
 				<para>
 				<code>2 .</code> Create a subgraph : from the menu <code>Edit->Create Subgraph</code>, or from the keyboard, <keycap>Ctrl + Shift + G</keycap>. Give it a name.
@@ -41,9 +41,9 @@
 	<sect3 id="hierarchy-create-group"><title>Creating a group :</title>
 	<para>To create a group follow these steps :</para>
 		<itemizedlist>
-			<listitem><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
+			<listitem><para><code>1 .</code> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
 				      To select the edges that are between the selected nodes use the "Induced Sub-graph" algorithm.
-			</listitem>
+			</para></listitem>
 			<listitem>
 				<para>
 				<code>2 .</code> Create a group  : From the menu <code>Edit->Create group</code>, or from the keyboard <keycap>Control + G</keycap>. A warning saying "Grouping can not be done on the root graph a subgraph will be created" may pop up, if it does, just click <code>OK</code>.
@@ -60,19 +60,19 @@
 	</sect3>
 </sect2>
 <sect2 id="hierarchy-del"><title>Deleting / Ungrouping a subgraph or a Group :</title>
-	 <sect3 id="hierarchy-del-group"><title>Groups :</title>
+	 <sect3 id="hierarchy-delgroup"><title>Groups :</title>
 	 	<sect4 id="hierarchy-del-group"><title>Delete .</title>
-	 	<para>To delete a group, left click on its name (in the Info editor) => delete </para>
-	 	<note>By deleting a group, all nodes in this group will be deleted as well, whereas the meta-node will still exist.</note>
+	 	<para>To delete a group, left click on its name (in the Hierachy tab of Graph editor) => delete </para>
+	 	<remark>By deleting a group, all nodes in this group will be deleted as well, whereas the meta-node will still exist.</remark>
 	 	</sect4>
 	 	<sect4 id="hierarchy-ungroup-group"><title>Ungroup .</title>
 	 	<para>To ungroup a group, select it, Left click => Ungroup </para>
-	 	<note>By ungrouping a group, all the layouts properties of the group's nodes will be applied to the root graph. The subgraphs created with the group wont be deleted.</note>
+	 	<remark>By ungrouping a group, all the layouts properties of the group's nodes will be applied to the root graph. The subgraphs created with the group wont be deleted.</remark>
 	 	</sect4>
 	 </sect3>
-	  <sect3 id="hierarchy-del-group"><title>Subgraphs :</title>
+	  <sect3 id="hierarchy-del-subgraph"><title>Subgraphs :</title>
 	 	<para>To delete a subgraph, left click on its name (in the Info editor) => delete.</para>
-	 	<note>Deleting a subgraph has no effects on the root graph.</note>
+	 	<remark>Deleting a subgraph has no effects on the root graph.</remark>
 	 	
 	 </sect3>
 </sect2> 
@@ -87,15 +87,15 @@
 	</sect4>
 	</sect3>
 	<sect3 id="hierarchy-uses-groups"><title>Groups :</title>
-		Changes on groups, wont be applied to the root graph unless you ungroup the group.
+		<para>Changes on groups, wont be applied to the root graph unless you ungroup the group.</para>
 	</sect3>
 </sect2>
 <sect2 id="hierarchy-algos"><title>Algorithms that creates subgraphs :</title>
-	You can find those algorithms in the menu Algorithm => General.
+	<para>You can find those algorithms in the menu Algorithm => General.
 	<itemizedlist>
-		<listitem>Equal Value.<xref linkend="equal-value"/></listitem>
-		<listitem>Hierarchical.<xref linkend="hierarchical-general"/></listitem>
-		<listitem>Quotient Clustering.<xref linkend="quotient-clustering"/></listitem>
-		<listitem>Strength Clustering.<xref linkend="strength-general"/></listitem>
-	</itemizedlist>
+		<listitem><para>Equal Value.<xref linkend="equal-value"/></para></listitem>
+		<listitem><para>Hierarchical.<xref linkend="hierarchical-general"/></para></listitem>
+		<listitem><para>Quotient Clustering.<xref linkend="quotient-clustering"/></para></listitem>
+		<listitem><para>Strength Clustering.<xref linkend="strength-general"/></para></listitem>
+	</itemizedlist></para>
 </sect2>

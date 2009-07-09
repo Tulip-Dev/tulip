@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <tulip/ForEach.h>
+#include <tulip/GraphProperty.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlDisplayListManager.h"
@@ -11,81 +12,100 @@ using namespace std;
 
 namespace tlp {
 
-  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters) {
+  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true),nodesModified(true) {
     graph->addGraphObserver(this);
+    graph->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
-    buildLists();
+    Iterator<node>* nodesIterator = graph->getNodes();
+    while (nodesIterator->hasNext()){
+      node n=nodesIterator->next();
+      if(graph->getNodeMetaInfo(n))
+        metaNodes.insert(n);
+    }
+    delete nodesIterator;
   }
 
   GlGraphComposite::~GlGraphComposite(){
-    if(inputData.graph)
-      inputData.graph->removeGraphObserver(this);
+    inputData.getGraph()->removeGraphObserver(this);
+    inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
   }
 
-  void GlGraphComposite::buildLists() {
-    if(!nodes.empty())
-      nodes.clear();
-    if(!metaNodes.empty())
-      metaNodes.clear();
-    if(!edges.empty())
-      edges.clear();
-
+  void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
+  {
     Graph *graph=inputData.getGraph();
-    if (parameters.isElementOrdered()) {
-      list<node> orderedNode;
-      list<edge> orderedEdge;
-      DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
-      node n;
-      forEach(n, graph->getNodes())
-	orderedNode.push_back(n);
-      LessThanNode comp;
-      comp.metric=metric;
-      orderedNode.sort(comp);
-      edge e;
-      forEach(e, graph->getEdges())
-	orderedEdge.push_back(e);
-      LessThanEdge comp2;
-      comp2.metric = metric;
-      comp2.sp = graph;
-      orderedEdge.sort(comp2);
 
-      for(list<node>::iterator itN=orderedNode.begin();itN!=orderedNode.end();++itN) {
-	if(inputData.getGraph()->isMetaNode(*itN)){
-	  metaNodes.insert(GlMetaNode((*itN).id));
-	}else{
-	  nodes.insert(GlNode((*itN).id));
-	}
+    if(!parameters.isElementOrdered()){
+      if(isDisplayNodes() || isDisplayMetaNodes()){
+        GlNode glNode(0);
+        bool isMetaNode;
+
+        Iterator<node>* nodesIterator = graph->getNodes();
+        while (nodesIterator->hasNext()){
+          node n=nodesIterator->next();
+          isMetaNode = inputData.getGraph()->isMetaNode(n);
+          if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)){
+            glNode.id=n.id;
+            glNode.acceptVisitor(visitor);
+          }
+        }
+        delete nodesIterator;
       }
 
-      for(list<edge>::iterator itE=orderedEdge.begin();itE!=orderedEdge.end();++itE) {
-	edges.insert(GlEdge((*itE).id));
+      if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
+        GlEdge glEdge(0);
+        Iterator<edge>* edgesIterator = graph->getEdges();
+        while (edgesIterator->hasNext()){
+          glEdge.id=edgesIterator->next().id;
+          glEdge.acceptVisitor(visitor);
+        }
+        delete edgesIterator;
+      }
+    }else{
+      if(haveToSort)
+        buildSortedList();
+
+      if(isDisplayNodes() || isDisplayMetaNodes()){
+        GlNode glNode(0);
+        bool isMetaNode;
+
+        for(list<node>::iterator it=sortedNodes.begin();it!=sortedNodes.end();++it){
+          isMetaNode = inputData.getGraph()->isMetaNode(*it);
+          if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)){
+            glNode.id=(*it).id;
+            glNode.acceptVisitor(visitor);
+          }
+        }
       }
 
-    } else {
-      Iterator<node>* drawNodesIterator = graph->getNodes();
-      Iterator<edge>* drawEdgesIterator = graph->getEdges();
-
-      if (!drawNodesIterator->hasNext() || graph->numberOfNodes()==0) return;
-
-      unsigned int number = graph->numberOfNodes();
-
-      while ((drawNodesIterator->hasNext()) && (number >0)) {
-	--number;
-	unsigned int id=drawNodesIterator->next().id;
-	if(inputData.getGraph()->isMetaNode(node(id))){
-	  metaNodes.insert(GlMetaNode(id));
-	}else{
-	  nodes.insert(GlNode(id));
-	}
-      }
-
-      number = graph->numberOfEdges();
-
-      while ((drawEdgesIterator->hasNext()) && (number >0)) {
-	--number;
-	edges.insert(GlEdge(drawEdgesIterator->next().id));
+      if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
+        GlEdge glEdge(0);
+        for(list<edge>::iterator it=sortedEdges.begin();it!=sortedEdges.end();++it){
+          glEdge.id=(*it).id;
+          glEdge.acceptVisitor(visitor);
+        }
       }
     }
+  }
+
+  void GlGraphComposite::buildSortedList() {
+    haveToSort=false;
+
+    sortedNodes.clear();
+    sortedEdges.clear();
+    DoubleProperty *metric = inputData.getGraph()->getProperty<DoubleProperty>("viewMetric");
+    node n;
+    forEach(n, inputData.getGraph()->getNodes())
+      sortedNodes.push_back(n);
+    LessThanNode comp;
+    comp.metric=metric;
+    sortedNodes.sort(comp);
+    edge e;
+    forEach(e, inputData.getGraph()->getEdges())
+      sortedEdges.push_back(e);
+    LessThanEdge comp2;
+    comp2.metric = metric;
+    comp2.sp = inputData.getGraph();
+    sortedEdges.sort(comp2);
   }
   //===================================================================
   const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
@@ -95,7 +115,7 @@ namespace tlp {
   void GlGraphComposite::setRenderingParameters(const GlGraphRenderingParameters &parameter) {
     if(parameters.isElementOrdered() != parameter.isElementOrdered()) {
       parameters = parameter;
-      buildLists();
+      haveToSort=true;
     }else{
       parameters = parameter;
     }
@@ -103,55 +123,6 @@ namespace tlp {
   //===================================================================
   GlGraphInputData* GlGraphComposite::getInputData() {
     return &inputData;
-  }
-  //===================================================================
-  void GlGraphComposite::addNode(Graph *graph,const node n) {
-    nodesToAdd.push_back(n.id);
-  }
-  //===================================================================
-  void GlGraphComposite::addEdge(Graph *graph,const edge e) {
-    edges.insert(GlEdge(e.id));
-  }
-  //===================================================================
-  void GlGraphComposite::delNode(Graph *graph,const node n) {
-    set<GlMetaNode>::iterator it1=metaNodes.find(GlMetaNode(n.id));
-    if(it1!=metaNodes.end())
-      metaNodes.erase(it1);
-
-    set<GlNode>::iterator it2=nodes.find(GlNode(n.id));
-    if(it2!=nodes.end())
-      nodes.erase(it2);
-
-    for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
-      if((*it)==n.id) {
-        nodesToAdd.erase(it);
-        break;
-      }
-    }
-  }
-  //===================================================================
-  void GlGraphComposite::delEdge(Graph *graph,const edge e) {
-    edges.erase(GlEdge(e.id));
-  }
-  //===================================================================
-  void GlGraphComposite::destroy(Graph *graph) {
-    nodes.clear();
-    edges.clear();
-    inputData.graph=NULL;
-  }
-  //===================================================================
-  void GlGraphComposite::addNodes() {
-    if(!nodesToAdd.empty()) {
-      for(vector<unsigned int>::iterator it=nodesToAdd.begin();it!=nodesToAdd.end();++it) {
-	if(inputData.getGraph()->isMetaNode(node(*it))){
-	  metaNodes.insert(GlMetaNode(*it));
-	}
-	else{
-	  nodes.insert(GlNode(*it));
-	}
-      }
-      nodesToAdd.clear();
-    }
   }
   //====================================================
   void GlGraphComposite::getXML(xmlNodePtr rootNode){

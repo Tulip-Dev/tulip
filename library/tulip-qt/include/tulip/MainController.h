@@ -31,6 +31,7 @@
 
 class QAction;
 class QMenu;
+class QTabWidget;
 
 namespace tlp {
 
@@ -139,21 +140,13 @@ namespace tlp {
      */
     void delSubGraph(Graph*, Graph*);
     /**
-     * Call when a node is add
+     * Call when a local property is add
      */
-    void addNode(Graph *graph, const node);
+    void addLocalProperty(Graph*, const std::string&);
     /**
-     * Call when an edge is add
+     * Call when a local property is delete
      */
-    void addEdge(Graph *graph, const edge);
-    /**
-     * Call when a node is delete
-     */
-    void delNode(Graph *graph, const node);
-    /**
-     * Call when an edge is delete
-     */
-    void delEdge(Graph *graph, const edge);
+    void delLocalProperty(Graph*, const std::string&);
     /**
      * Call to update number of nodes/edges
      */
@@ -164,6 +157,16 @@ namespace tlp {
      */
     template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false , bool = true);
 
+    /**
+     * Save graph hierarchy for views before undo/redo
+     */
+    std::map<View *,std::list<int> > saveViewsHierarchiesBeforePop();
+
+    /**
+     * Check views graph after undo/redo
+     */
+    void checkViewsHierarchiesAfterPop(std::map<View *,std::list<int> > &hierarchies);
+
 
     Graph *currentGraph;
     View *currentView;
@@ -171,14 +174,18 @@ namespace tlp {
     std::map<View *,std::string> viewNames;
     std::map<QWidget *,View*> viewWidget;
     std::map<View *, QAction *> lastInteractorOnView;
+    std::map<View *, int> lastConfigTabIndexOnView;
     std::map<View *,Graph* > viewGraph;
-    QWidget *lastWidget;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
+    Graph *graphToReload;
 
     Morphing *morph;
 
     QDockWidget *tabWidgetDock;
+    QDockWidget *configWidgetDock;
+    QTabWidget *configWidgetTab;
+    QWidget *noInteractorConfigWidget;
     SGHierarchyWidget *clusterTreeWidget;
     PropertyDialog *propertiesWidget;
     ElementPropertiesWidget *eltProperties;
@@ -245,18 +252,6 @@ namespace tlp {
      */
     void widgetWillBeClosed(QObject *object);
 
-    void editCut();
-    void editCopy();
-    void editPaste();
-    void editFind();
-    void editCreateGroup();
-    void editCreateSubgraph();
-    void editDelSelection();
-    void editReverseSelection();
-    void editSelectAll();
-    void editDeselectAll();
-
-
     void isAcyclic();
     void isSimple();
     void isConnected();
@@ -286,9 +281,22 @@ namespace tlp {
     void undo();
     void redo();
 
+  public slots :
+      void editCut();
+      void editCopy();
+      void editPaste();
+      void editFind();
+      void editCreateGroup();
+      void editCreateSubgraph();
+      void editDelSelection();
+      void editReverseSelection();
+      void editSelectAll();
+      void editDeselectAll();
+
   public :
 
     View *getView(QWidget *);
+    View *getCurrentView();
 
   };
 

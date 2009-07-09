@@ -8,56 +8,41 @@ using namespace std;
 
 namespace tlp {
 
-NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor) :
-  ParallelAxis(base_coord, height, axisAreaWidth, propertyName, axisColor), graphProxy(graph) {
+NominalParallelAxis::NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graph, const std::string &propertyName, const Color &axisColor, const float rotationAngle, const GlAxis::LabelPosition captionPosition) :
+  ParallelAxis(new GlNominativeAxis(propertyName, base_coord, height, GlAxis::VERTICAL_AXIS, axisColor), axisAreaWidth, rotationAngle, captionPosition), graphProxy(graph) {
+	glNominativeAxis = dynamic_cast<GlNominativeAxis *>(glAxis);
   setLabels();
+  ParallelAxis::redraw();
 }
 
 void
 NominalParallelAxis::setLabels() {
 
+	vector<string> labels;
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
-		string labelName = graphProxy->getPropertyValueForData<StringProperty,StringType> (axisName, dataId);
-		if (labelsCoords.find(labelName) == labelsCoords.end()) {
-			labelsCoords[labelName] = Coord(0, 0, 0);
-			labelsOrder.push_back(labelName);
+		string labelName = graphProxy->getPropertyValueForData<StringProperty,StringType> (getAxisName(), dataId);
+		if (std::find(labels.begin(), labels.end(), labelName) == labels.end()) {
+			labels.push_back(labelName);
 		}
 	}
 	delete dataIt;
 
-	spaceBetweenAxisGrads = axisHeight / (labelsOrder.size() + 1);
-
-	unsigned int idx = 1;
-	unsigned int nbLabs = labelsOrder.size();
-	float ySpace = axisHeight / (nbLabs + 1);
-	vector<string>::iterator it2;
-	for (it2 = labelsOrder.begin(); it2 != labelsOrder.end(); ++it2) {
-		float xCoord = baseCoord.getX();
-		float yCoord = (baseCoord.getY() + axisHeight) - (idx++) * ySpace;
-		addLabelDrawing(*it2, yCoord);
-		labelsCoords[*it2] = Coord(xCoord, yCoord);
+	if (labelsOrder.size() == 0 || (labelsOrder.size() > 0 && labelsOrder.size() != labels.size())) {
+		labelsOrder = labels;
 	}
+
+	glNominativeAxis->setAxisGraduationsLabels(labelsOrder, GlAxis::RIGHT_OR_ABOVE);
 }
 
 Coord NominalParallelAxis::getPointCoordOnAxisForData(const unsigned int dataIdx) {
-  string propertyValue = graphProxy->getPropertyValueForData<StringProperty, StringType>(axisName, dataIdx);
-  return labelsCoords[propertyValue];
-}
-
-void NominalParallelAxis::translate(const Coord &c) {
-	ParallelAxis::translate(c);
-	map<string, Coord>::iterator it;
-	for (it = labelsCoords.begin() ; it !=labelsCoords.end() ; ++it) {
-		it->second += c;
-	}
-}
-
-void NominalParallelAxis::redraw() {
-	drawAxisLine();
-	setLabels();
-	addCaption(axisName);
+  string propertyValue = graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataIdx);
+  Coord axisPointCoord = glNominativeAxis->getAxisPointCoordForValue(propertyValue);
+  if (rotationAngle != 0) {
+	  rotateVector(axisPointCoord, rotationAngle, Z_ROT);
+  }
+  return axisPointCoord;
 }
 
 void NominalParallelAxis::showConfigDialog() {
@@ -68,10 +53,11 @@ void NominalParallelAxis::showConfigDialog() {
 set<unsigned int> NominalParallelAxis::getDataInSlidersRange() {
 
 	map<string, unsigned int> labelsInRange;
-	std::map<std::string, Coord>::iterator it;
-	for (it = labelsCoords.begin() ; it != labelsCoords.end() ; ++it) {
-		if ((it->second).getY() >= bottomSliderCoord.getY() && (it->second).getY() <= topSliderCoord.getY()) {
-			labelsInRange[it->first] = 1;
+	vector<string>::iterator it;
+	for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+		Coord labelCoord = glNominativeAxis->getAxisPointCoordForValue(*it);
+		if (labelCoord.getY() >= bottomSliderCoord.getY() && labelCoord.getY() <= topSliderCoord.getY()) {
+			labelsInRange[*it] = 1;
 		}
 	}
 
@@ -79,7 +65,7 @@ set<unsigned int> NominalParallelAxis::getDataInSlidersRange() {
 	Iterator<unsigned int> *dataIt = graphProxy->getDataIterator();
 	while (dataIt->hasNext()) {
 		unsigned int dataId = dataIt->next();
-		string labelName = graphProxy->getPropertyValueForData<StringProperty, StringType>(axisName, dataId);
+		string labelName = graphProxy->getPropertyValueForData<StringProperty, StringType>(getAxisName(), dataId);
 		if (labelsInRange.find(labelName) != labelsInRange.end()) {
 			dataInSlidersRange.insert(dataId);
 		}
@@ -90,21 +76,29 @@ set<unsigned int> NominalParallelAxis::getDataInSlidersRange() {
 }
 
 void NominalParallelAxis::updateSlidersWithDataSubset(const set<unsigned int> &dataSubset) {
+	float rotAngleBak = rotationAngle;
+	rotationAngle = 0;
 	set<unsigned int>::iterator it;
-	Coord max = baseCoord;
-	Coord min = baseCoord + Coord(0, axisHeight);
+	Coord max = getBaseCoord();
+	Coord min = getBaseCoord() + Coord(0, getAxisHeight());
 	for (it = dataSubset.begin() ; it != dataSubset.end() ; ++it) {
-		string labelName = graphProxy->getPropertyValueForData<StringProperty, StringType>(axisName, *it);
-		if (labelsCoords[labelName].getY() < min.getY()) {
-			min = labelsCoords[labelName];
+		Coord labelCoord = getPointCoordOnAxisForData(*it);
+		if (labelCoord.getY() < min.getY()) {
+			min = labelCoord;
 		}
 
-		if (labelsCoords[labelName].getY() > max.getY()) {
-			max = labelsCoords[labelName];
+		if (labelCoord.getY() > max.getY()) {
+			max = labelCoord;
 		}
 	}
 	bottomSliderCoord = min;
 	topSliderCoord = max;
+	rotationAngle = rotAngleBak;
+}
+
+void NominalParallelAxis::redraw() {
+	setLabels();
+	ParallelAxis::redraw();
 }
 
 }

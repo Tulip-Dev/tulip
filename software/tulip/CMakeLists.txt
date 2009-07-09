@@ -1,12 +1,3 @@
-add_subdirectory(src)
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(bitmaps)
 
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = designer include src bitmaps
-#DIST_SUBDIRS = bitmaps designer include src
-#EXTRA_DIST = mainpage.dox

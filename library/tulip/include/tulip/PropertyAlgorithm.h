@@ -44,6 +44,10 @@ public :
   virtual bool run() {return true;}
   ///
   virtual bool check(std::string &) {return true;}
+  ///
+  bool preservePropertyUpdates(PropertyInterface* prop) {
+    return graph->nextPopKeepPropertyUpdates(prop);
+  }
 
 protected:
   Graph *graph;

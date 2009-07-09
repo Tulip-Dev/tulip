@@ -1,5 +1,10 @@
-#include    <FTBitmapGlyph.h>
-#include    "tulip/TLPPixmapGlyph.h"
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+#include <FTGL/ftgl.h>
+#include "tulip/TLPPixmapGlyph.h"
 
 using namespace tlp;
 
@@ -32,7 +37,12 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
    destWidth(0),
    destHeight(0),
    data(0) {
-  err = FT_Render_Glyph(glyphSlot, FT_RENDER_MODE_NORMAL);
+  if(glyphSlot) {
+    bBox = FTBBox(glyphSlot);
+    advance = FTPoint(glyphSlot->advance.x / 64.0f,
+		      glyphSlot->advance.y / 64.0f);
+  }
+  FT_Error err = FT_Render_Glyph(glyphSlot, FT_RENDER_MODE_NORMAL);
   if( err || ft_glyph_format_bitmap != glyphSlot->format) {
     return;
   }
@@ -115,10 +125,11 @@ TLPPixmapGlyph::TLPPixmapGlyph(FT_GlyphSlot glyphSlot)
     }
   pos.X(glyphSlot->bitmap_left - 2);
   pos.Y(srcHeight - glyphSlot->bitmap_top - 2);
-  bBox.lowerX-=2;
-  bBox.lowerY-=2;
-  bBox.upperX+=2;
-  bBox.upperY+=2;
+  FTPoint lower = bBox.Lower();
+  lower -= FTPoint(2, 2, 0);
+  FTPoint upper = bBox.Upper();
+  upper += FTPoint(2, 2, 0);
+  bBox = FTBBox(lower, upper);
   advance += FTPoint(4, 0, 0); //advance+=4;
 }
 
@@ -129,7 +140,7 @@ TLPPixmapGlyph::~TLPPixmapGlyph()
 }
 
 
-FTPoint& TLPPixmapGlyph::Render( const FTPoint& pen)
+FTPoint& TLPPixmapGlyph::Render( const FTPoint& pen, int /*renderMode*/)
 {
     if( data)
     {
@@ -146,3 +157,15 @@ FTPoint& TLPPixmapGlyph::Render( const FTPoint& pen)
 
     return advance;
 }
+
+float TLPPixmapGlyph::Advance() const
+{
+    return advance.Xf();
+}
+
+
+const FTBBox& TLPPixmapGlyph::BBox() const
+{
+    return bBox;
+}
+

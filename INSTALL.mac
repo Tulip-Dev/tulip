@@ -28,7 +28,7 @@ then
 Ease your installation in downloading the MacOS X ports of these libraries
 from http://ethan.tira-thompson.com/Mac%20OS%20X%20Ports.html
 
-5- Configure Tulip
+4- Configure Tulip
 ------------------
 Change the current directory to the tulip directory
 then run

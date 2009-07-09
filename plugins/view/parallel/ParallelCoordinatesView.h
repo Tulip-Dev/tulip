@@ -18,13 +18,11 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "ParallelCoordinatesDrawing.h"
-#include "ParallelCoordinatesConfigDialog.h"
 #include "QuantitativeParallelAxis.h"
-
-#include <QtGui/QMainWindow>
+#include "ParallelCoordsDataConfigWidget.h"
+#include "ParallelCoordsDrawConfigWidget.h"
 
 #include <tulip/GlMainView.h>
-#include <tulip/ObservableGraph.h>
 
 #include <set>
 
@@ -35,7 +33,7 @@ namespace tlp {
   // Parallel Coordinates main class which acts as a mediator between :
   //    -> the data (the nodes or the edges of a graph),
   //    -> the parallel coordinates drawing (updated each times the data and their properties changed or when the drawing parameters are modified by the user)
-  //    -> the view config dialog
+  //    -> the view config widgets
   //    -> the OpenGL rendering widget
   class ParallelCoordinatesView : public GlMainView {
 
@@ -51,12 +49,10 @@ namespace tlp {
     void setData(Graph *graph, DataSet dataSet);
     void getData(Graph **graph, DataSet *dataSet);
     Graph *getGraph();
-    void installInteractor(QAction *);
-    void constructInteractorsMap();
-    void constructInteractorsActionList();
     void specificEventFilter(QObject *object,QEvent *event);
     void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
     void computeContextMenuAction(QAction *action);
+    std::list<std::pair<QWidget *,std::string> > getConfigurationWidget();
 
     // methods called by interactors
     void setDataUnderPointerSelectFlag(const int x, const int y, const bool selectFlag);
@@ -74,11 +70,13 @@ namespace tlp {
     void addAxis(ParallelAxis *axis);
     std::vector<ParallelAxis *> getAllAxis();
 
-    void updateWithAxisSlidersRange(ParallelAxis *axis);
+    void updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering);
     void updateAxisSlidersPosition();
-
+    bool hasHighlightedElts() const {return graphProxy->highlightedEltsSet();}
     void highlightDataInAxisBoxPlotRange(QuantitativeParallelAxis *axis);
 
+    ParallelCoordinatesDrawing::LayoutType getLayoutType() const;
+    ParallelCoordinatesDrawing::LinesType getLinesType() const;
 
   public slots:
 
@@ -90,30 +88,30 @@ namespace tlp {
     void elementSelectedSlot(unsigned int id, bool isNode) {
           emit elementSelected(id,isNode);
     }
+    void setupAndDrawView();
 
   private :
 
 	std::set<unsigned int> mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width, const unsigned int height);
 	void initGlWidget();
 	void buildMenuEntries();
-	void showConfigDialog();
 	void showAxisConfigDialog(ParallelAxis *axis);
 
-	void setUpAndDrawView();
+	void toggleGraphView(const bool displayGraph);
 	void updateWithProgressBar();
 	void updateWithoutProgressBar();
 
-	viewType getViewType() const;
-	void setViewType(const viewType vType);
-
 	void cleanup();
 
-    QMenu *dialogMenu;
+	void addEmptyViewLabel();
+	void removeEmptyViewLabel();
+
     QMenu *viewSetupMenu;
     QMenu *optionsMenu;
-    QMenu *exportImageMenu;
-    QAction *view2d;
-    QAction *view2dSpline;
+    QAction *classicLayout;
+    QAction *circularLayout;
+    QAction *straightLinesType;
+    QAction *splineLinesType;
     QAction *showToolTips;
     QAction *addRemoveDataFromSelection;
     QAction *selectData;
@@ -122,16 +120,25 @@ namespace tlp {
 
     unsigned int dataUnderMousePointer;
     GlLayer *mainLayer;
+    GlLayer *axisSelectionLayer;
 
     GlGraphComposite *glGraphComposite;
+    Graph *axisPointsGraph;
     DataSet *dataSet;
 
-    ParallelCoordinatesConfigDialog *configDialog;
     ParallelCoordinatesGraphProxy *graphProxy;
     ParallelCoordinatesDrawing *parallelCoordsDrawing;
     ParallelAxis *axisUnderPointer;
 
+    ParallelCoordsDataConfigWidget *dataConfigWidget;
+    ParallelCoordsDrawConfigWidget *drawConfigWidget;
+
+    bool firstSet;
+    unsigned int lastNbSelectedProperties;
     bool center;
+
+    int lastViewWindowWidth, lastViewWindowHeight;
+
   };
 
 }

@@ -20,9 +20,18 @@ class TLP_SCOPE StringProperty:public AbstractProperty<StringType,StringType, St
   friend class StringAlgorithm;
 
 public :
-  StringProperty (Graph *);
+  StringProperty (Graph *g, std::string n="") :AbstractProperty<StringType,StringType, StringAlgorithm>(g, n) {}
 
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
+
+class TLP_SCOPE StringVectorProperty:public AbstractProperty<StringVectorType,StringVectorType>{ 
+public :
+  StringVectorProperty(Graph *g, std::string n=""):AbstractProperty<StringVectorType, StringVectorType>(g, n) {}
+
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };

@@ -18,8 +18,16 @@ class PropertyContext;
 class TLP_SCOPE ColorProperty:public AbstractProperty<ColorType,ColorType, ColorAlgorithm> { 
   friend class ColorAlgorithm;
 public :
-  ColorProperty (Graph *);
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  ColorProperty (Graph *g, std::string n="") :AbstractProperty<ColorType,ColorType, ColorAlgorithm>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
+
+class TLP_SCOPE ColorVectorProperty:public AbstractProperty<ColorVectorType,ColorVectorType> { 
+public :
+  ColorVectorProperty(Graph *g, std::string n="") :AbstractProperty<ColorVectorType, ColorVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 };

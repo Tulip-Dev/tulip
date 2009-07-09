@@ -6,6 +6,8 @@
 
 namespace tlp {
 
+  class GlMetaNodeRenderer;
+
   /** \brief Main view of old Tulip
    *
    * This class provide a graph view based to nodes and links
@@ -18,30 +20,29 @@ namespace tlp {
   public:
 
     NodeLinkDiagramComponent();
-    ~NodeLinkDiagramComponent();
+    virtual ~NodeLinkDiagramComponent();
 
-    QWidget *construct(QWidget *parent);
+    virtual QWidget *construct(QWidget *parent);
 
-    void setData(Graph *graph,DataSet dataSet);
-    void getData(Graph **graph,DataSet *dataSet);
+    virtual void setData(Graph *graph,DataSet dataSet);
+    virtual void getData(Graph **graph,DataSet *dataSet);
 
-    void installInteractor(QAction *);
+    virtual std::list<std::pair<QWidget *,std::string> > getConfigurationWidget();
 
-    void specificEventFilter(QObject *object,QEvent *event);
-    void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
-    void computeContextMenuAction(QAction *action);
+    virtual void specificEventFilter(QObject *object,QEvent *event);
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+    virtual void computeContextMenuAction(QAction *action);
 
   protected :
 
     QMenu *viewMenu;
     QMenu *dialogMenu;
     QMenu *optionsMenu;
-    QMenu *exportImageMenu;
     QAction *actionTooltips;
     QAction *actionsGridOptions;
     QAction *actionZOrderingOptions;
     QAction *actionAntialiasingOptions;
-    QAction *renderingParametersDialogAction;
+    QAction *actionTrueMetaNodeOptions;
     QAction *augmentedDisplayDialogAction;
     QAction* addRemoveAction;
     QAction* selectAction;
@@ -50,16 +51,17 @@ namespace tlp {
     QAction* ungroupAction;
     QAction* propAction;
     bool isNode;
+    bool qtMetaNode;
     int itemId;
 
     GridOptionsWidget *gridOptionsWidget;
     RenderingParametersDialog *renderingParametersDialog;
-    LayerManagerWidget *layerWidget;
+    LayerManagerWidget *layerManagerWidget;
 
     std::map<std::string,DataSet> algorithmInfoDataSet;
 
-    void constructInteractorsActionList();
-    void constructInteractorsMap();
+    GlMetaNodeRenderer *currentMetaNodeRenderer;
+
     void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void checkAlgorithmResult();
@@ -70,6 +72,7 @@ namespace tlp {
 
   public slots:
     void centerView();
+    void drawAfterRenderingParametersChange();
     void draw();
     void refresh();
     void init();

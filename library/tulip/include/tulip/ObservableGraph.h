@@ -32,6 +32,9 @@ class  TLP_SCOPE GraphObserver {
   virtual void delSubGraph(Graph*, Graph*){}
   virtual void addLocalProperty(Graph*, const std::string&){}
   virtual void delLocalProperty(Graph*, const std::string&){}
+  virtual void beforeSetAttribute(Graph*, const std::string&) {}
+  virtual void afterSetAttribute(Graph*, const std::string&) {}
+  virtual void removeAttribute(Graph*, const std::string&) {}
 };
 /*@}*/
 }
@@ -84,14 +87,13 @@ class  TLP_SCOPE ObservableGraph {
   void notifyDelSubGraph(Graph*, Graph*);
   void notifyAddLocalProperty(Graph*, const std::string&);
   void notifyDelLocalProperty(Graph*, const std::string&);
+  void notifyBeforeSetAttribute(Graph*, const std::string&);
+  void notifyAfterSetAttribute(Graph*, const std::string&);
+  void notifyRemoveAttribute(Graph*, const std::string&);
   void notifyDestroy(Graph*);
   mutable stdext::slist<GraphObserver*> observers;
 };
 /*@}*/
-
-inline void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
-  observers.push_front(obs); 
-}
 
 inline unsigned int ObservableGraph::countGraphObservers() { 
   return observers.size(); 

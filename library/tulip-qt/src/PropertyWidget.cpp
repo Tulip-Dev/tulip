@@ -488,8 +488,7 @@ void PropertyWidget::connectNotify ( const char * signal ) {
 void PropertyWidget::showContextMenu(const QPoint & pos) {
   QModelIndex index = indexAt(pos);
   int row = index.row();
-  int col = index.column();
-  if (row < nbElement) {
+  if ((unsigned int) row < nbElement) {
     std::string textId(item(row, 0)->text().toAscii().data());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);

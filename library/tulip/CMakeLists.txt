@@ -1,3 +1,3 @@
-add_subdirectory(include)
-add_subdirectory(src)
+ADD_SUBDIRECTORY(include)
+ADD_SUBDIRECTORY(src)
 

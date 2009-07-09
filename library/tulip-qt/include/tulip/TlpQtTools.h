@@ -41,6 +41,8 @@ namespace tlp {
   TLP_QT_SCOPE void loadViewPluginsFromDir(std::string dir,PluginLoader *loader=0);
   TLP_QT_SCOPE void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader=0);
 
+  TLP_QT_SCOPE bool canUseQGLPixelBuffer();
+
 }
 
 #endif

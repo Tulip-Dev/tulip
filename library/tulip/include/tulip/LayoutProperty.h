@@ -22,9 +22,9 @@ class Graph;
   friend class LayoutAlgorithm;
 
 public:
-  LayoutProperty (Graph *);
+  LayoutProperty (Graph *, std::string n="");
 
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 
@@ -105,6 +105,15 @@ private:
   void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
+
+class TLP_SCOPE CoordVectorProperty:public AbstractProperty<CoordVectorType,CoordVectorType> { 
+public :
+  CoordVectorProperty(Graph *g, std::string n=""):AbstractProperty<CoordVectorType, CoordVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
+};
+
 /*@}*/
 
 }

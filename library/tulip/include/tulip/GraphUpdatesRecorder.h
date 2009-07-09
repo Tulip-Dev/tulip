@@ -73,6 +73,8 @@ namespace tlp {
     bool recordingStopped;
 #endif
     bool updatesReverted;
+    bool restartAllowed;
+    bool newValuesRecorded;
 
     // one set of Graph* par added node
     stdext::hash_map<node, std::set<Graph*> > addedNodes;
@@ -105,48 +107,58 @@ namespace tlp {
 
     // one set of added properties per graph
     stdext::hash_map<unsigned long,  std::set<PropertyRecord> > addedProperties;
-    // pne set of deleted properties per graph
+    // one set of deleted properties per graph
     stdext::hash_map<unsigned long,  std::set<PropertyRecord> > deletedProperties;
+    // one set of old attribute values per graph
+    stdext::hash_map<unsigned long, DataSet> oldAttributeValues;
+    // one set of new attribute values per graph
+    stdext::hash_map<unsigned long, DataSet> newAttributeValues;
+    
+    // one set of updated addNodes per property
+    stdext::hash_map<unsigned long, std::set<node> > updatedPropsAddedNodes;
+
+    // one set of updated addEdges per property
+    stdext::hash_map<unsigned long, std::set<edge> > updatedPropsAddedEdges;
+
     // the old default node value for each updated property
-    stdext::hash_map<unsigned long, std::string> oldNodeDefaultValues;
+    stdext::hash_map<unsigned long, DataMem*> oldNodeDefaultValues;
     // the new default node value for each updated property
-    stdext::hash_map<unsigned long, std::string> newNodeDefaultValues;
+    stdext::hash_map<unsigned long, DataMem*> newNodeDefaultValues;
     // the old default edge value for each updated property
-    stdext::hash_map<unsigned long, std::string> oldEdgeDefaultValues;
+    stdext::hash_map<unsigned long, DataMem*> oldEdgeDefaultValues;
     // the new default edge value for each updated property
-    stdext::hash_map<unsigned long, std::string> newEdgeDefaultValues;
+    stdext::hash_map<unsigned long, DataMem*> newEdgeDefaultValues;
 
     // the old node values for each updated property
-    stdext::hash_map<unsigned long, stdext::hash_map<node, std::string> > oldNodeValues;
+    stdext::hash_map<unsigned long, MutableContainer<DataMem*>* > oldNodeValues;
     // the new node value for each updated property
-    stdext::hash_map<unsigned long, stdext::hash_map<node, std::string> >  newNodeValues;
+    stdext::hash_map<unsigned long, MutableContainer<DataMem*>* >  newNodeValues;
 
     // the old edge values for each updated property
-    stdext::hash_map<unsigned long, stdext::hash_map<edge, std::string> > oldEdgeValues;
+    stdext::hash_map<unsigned long, MutableContainer<DataMem*>* > oldEdgeValues;
     // the new edge value for each property
-    stdext::hash_map<unsigned long, stdext::hash_map<edge, std::string> > newEdgeValues;
+    stdext::hash_map<unsigned long, MutableContainer<DataMem*>* > newEdgeValues;
 
     // real deletion of deleted objects (properties, sub graphs)
     // during the recording of updates thes objects are removed from graph
     // structures but not really 'deleted'
     void deleteDeletedObjects();
+    // deletion of recorded DataMem
+    void deleteValues(stdext::hash_map<unsigned long,
+		      MutableContainer<DataMem*>* >& values);
+    void deleteValues(MutableContainer<DataMem*>* values);
+    void deleteDefaultValues(stdext::hash_map<unsigned long, DataMem*>& values);
     // record of a node's edges container before/after modification
     void recordEdgeContainer(stdext::hash_map<node, std::vector<edge> >&,
 			     GraphImpl*, node);
     // remove an edge from a node's edges container
     void removeFromEdgeContainer(stdext::hash_map<node, std::vector<edge> >& containers, edge e, node n);
 
-    // record a node value in a node values container
-    void recordNodeValue(PropertyInterface*, const node,
-			 stdext::hash_map<unsigned long,
-			 stdext::hash_map<node, std::string> >&,
-			 bool);
-
-    // same for edge
-    void recordEdgeValue(PropertyInterface*, const edge,
-			 stdext::hash_map<unsigned long,
-			 stdext::hash_map<edge, std::string> >&,
-			 bool);
+    // record new values for all updated properties
+    // restartAllowed must be true
+    void recordNewValues(GraphImpl*);
+    void recordNewNodeValues(PropertyInterface* p);
+    void recordNewEdgeValues(PropertyInterface* p);
 
     // start of recording (push)
     void startRecording(GraphImpl*); 
@@ -157,9 +169,12 @@ namespace tlp {
     void restartRecording(Graph*); 
     // perform undo/redo updates
     void doUpdates(GraphImpl*, bool undo);
+    // remove a property from the observed ones
+    // only if nothing is yet recorded for that property
+    bool dontObserveProperty(PropertyInterface *);
 
   public:
-    GraphUpdatesRecorder();
+    GraphUpdatesRecorder(bool allowRestart = true);
     ~GraphUpdatesRecorder();
 
     // GraphObserver interface
@@ -194,27 +209,21 @@ namespace tlp {
     // oldNodeValues
     void beforeSetNodeValue(PropertyInterface* p, const node n);
             
-    // newNodeValues
-    void afterSetNodeValue(PropertyInterface* p, const node n);
-
     // oldNodeDefaultValues
     void beforeSetAllNodeValue(PropertyInterface* p);
             
-    // newNodeDefaultValues
-    void afterSetAllNodeValue(PropertyInterface* p);
-
     // oldEdgeValues
     void beforeSetEdgeValue(PropertyInterface* p, const edge e);
             
-    // newEdgeValues
-    void afterSetEdgeValue(PropertyInterface* p, const edge e);
-
     // oldEdgeDefaultValues
     void beforeSetAllEdgeValue(PropertyInterface* p);
-            
-    // newEdgeDefaultValues
-    void afterSetAllEdgeValue(PropertyInterface* p);
-  };
+
+    // beforeSetAttribute
+    void beforeSetAttribute(Graph* g, const std::string& name);
+
+    // removeAttribute
+    void removeAttribute(Graph* g, const std::string& name);
+};
 }
 
 

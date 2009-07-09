@@ -5,7 +5,7 @@
       The main window of Tulip software is composed of several subwindows and a menu bar :
       <itemizedlist>
         <listitem>
-          <para><code>File</code>: this menu is used for usual file operations : New(<keycap>Ctrl+N</keycap>), Open(<keycap>Ctrl+O</keycap>), Save(<keycap>Ctrl+S</keycap>), Save As(<keycap>Ctrl+Shift+S</keycap>), Print(<keycap>Ctrl+P</keycap>) and Exit(<keycap>Ctrl+Q</keycap>). Others are added:
+          <para><code>File</code>: this menu is used for usual file operations : New(<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap> on Mac), Open(<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac), Save(<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac), Save As(<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac), Print(<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac) and Exit(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac). Others are added:
             <itemizedlist>
               <listitem>
                 <para><code>Import</code>: this submenu is populated by import plugins. 
@@ -29,24 +29,21 @@
                 <para><code>Export</code>: this submenu is populated by export plugins allowing to save a tulip graph accordingly to a specified format. By default Tulip is able to export in GML and TLP formats.
                 </para>
               </listitem>
-              <listitem>
-                <para><code>Save as picture</code>: this last menu gives the choice between different picture formats (BMP, EPS, JPEG, PBM, PGM, PNG, PPM, SVG, XBM, XPM) in wich graphs can be exported to.</para>
-              </listitem>
             </itemizedlist>
           </para>
         </listitem>
         <listitem>
-          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>), Copy(<keycap>Ctrl+C</keycap>), Paste(<keycap>Ctrl+V</keycap>), and Find(<keycap>Ctrl+F</keycap>), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>), Invert Selection(<keycap>Ctrl+I</keycap>), Create group(<keycap>Ctrl+G</keycap>), Create subgraph(<keycap>Ctrl+Shift+G</keycap>), Undo(<keycap>Ctrl+U</keycap>), Redo(<keycap>Ctrl+R</keycap>).</para>
+          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac), Copy(<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac), Paste(<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac), and Find(<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac), Invert Selection(<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac), Create group(<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac), Create subgraph(<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac), Undo(<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac), Redo(<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
           <para>More details on the <code>Find</code> tool : The find tool has 4 options :</para>
           <itemizedlist>
-            <listitem>Replace : Replace the current selection (nodes or edges already selected).
-            </listitem>
-            <listitem>Add : Add the nodes (or edges) to be selected to the current selection.
-            </listitem>
-            <listitem>Remove : Remove nodes (or edges) from the current selection.
-            </listitem>
-            <listitem>Intersect : Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
-            </listitem>
+            <listitem><para>Replace : Replace the current selection (nodes or edges already selected).
+            </para></listitem>
+            <listitem><para>Add : Add the nodes (or edges) to be selected to the current selection.
+            </para></listitem>
+            <listitem><para>Remove : Remove nodes (or edges) from the current selection.
+            </para></listitem>
+            <listitem><para>Intersect : Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
+            </para></listitem>
           </itemizedlist>
         </listitem>
         <listitem>
@@ -87,45 +84,44 @@
           <para><code>Graph </code> :
             This menu is composed of 2 sub menus :
             <itemizedlist>
-              <listitem> <code>Tests</code>: This sub menu contains tools able to say if the graph obey some constraints :
+              <listitem><para><code>Tests</code>: This sub menu contains tools able to say if the graph obey some constraints :
                 <itemizedlist>
-                  <listitem> <code>Simple </code>:
-                    <para> Is the Graph Simple ? </para> <para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
+                  <listitem><para><code>Simple </code>: Is the Graph Simple ? For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
                   </listitem>
-                  <listitem> <code>Directed Tree </code>: <para> A directed tree is a directed graph which would be a tree if the directions on the edges were ignored. Some authors restrict the phrase to the case where the edges are all directed towards a particular vertex, or all directed away from a particular vertex.</para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
+                  <listitem><para><code>Directed Tree </code>: A directed tree is a directed graph which would be a tree if the directions on the edges were ignored. Some authors restrict the phrase to the case where the edges are all directed towards a particular vertex, or all directed away from a particular vertex.</para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
                   </listitem>
-                  <listitem> <code>Free Tree</code>: <para> A tree without any designated root is called a free tree. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Free_tree">Wikipedia: Simple graphs</ulink></para>
+                  <listitem><para><code>Free Tree</code>: A tree without any designated root is called a free tree. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Free_tree">Wikipedia: Simple graphs</ulink></para>
                   </listitem>
-                  <listitem> <code>Acyclic</code> : <para> A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
+                  <listitem><para><code>Acyclic</code> : A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
                   </listitem>
-                  <listitem> <code>Connected</code> : <para>A graph is called connected if every pair of vertices in the graph is connected. For more information please visit : </para> <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
+                  <listitem><para><code>Connected</code> : A graph is called connected if every pair of vertices in the graph is connected. For more information please visit : </para> <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
                   </listitem>
-                  <listitem> <code>Bi-connected </code>: <para>A connected graph is biconnected if the removal of any single node and his out edges can not disconnect the graph. </para><para> For more information please visit :<ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
+                  <listitem><para><code>Bi-connected </code>: A connected graph is biconnected if the removal of any single node and his out edges can not disconnect the graph. </para><para> For more information please visit :<ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
                   </listitem>
-                  <listitem> <code>Tri-connected </code> : <para>If it is always possible to establish a path from any node to an other one even after removing any 2 nodes, then the graph is said to be Tri-connected. </para><para>For more information please visit : <ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
+                  <listitem><para><code>Tri-connected </code> : If it is always possible to establish a path from any node to an other one even after removing any 2 nodes, then the graph is said to be Tri-connected. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
                   </listitem>
-                  <listitem> <code>Planar </code>: A  graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. <para>  <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
+                  <listitem><para><code>Planar </code>: A  graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
                   </listitem>
-            					<listitem> <code>Outer Planar </code>: A graph is said to be outer planar if it has an embedding in the plane such that its nodes lie on a fixed circle and its edges lie inside the disk without any crossing. <para>  <ulink url="http://en.wikipedia.org/wiki/Planar_graph#Outerplanar_graphs">Wikipedia : Outerplanar Graphs</ulink></para>
-            					</listitem>
+            	  <listitem><para><code>Outer Planar </code>: A graph is said to be outer planar if it has an embedding in the plane such that its nodes lie on a fixed circle and its edges lie inside the disk without any crossing. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Planar_graph#Outerplanar_graphs">Wikipedia : Outerplanar Graphs</ulink></para>
+            	  </listitem>
                 </itemizedlist>
-              </listitem>
-              <listitem> <code>Modify </code>: Those operations will modify the entire structure of a graph .
+              </para></listitem>
+              <listitem><para><code>Modify </code>: Those operations will modify the entire structure of a graph .
                 <itemizedlist>
-                  <listitem> <code>Make Simple </code>: This algorithm will change the graph to make it a simple graph. <para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
+                  <listitem><para><code>Make Simple </code>: This algorithm will change the graph to make it a simple graph. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
                   </listitem>
-                  <listitem> <code>Make Acyclic</code> : A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. <para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
+                  <listitem><para><code>Make Acyclic</code> : A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
                   </listitem>
-                  <listitem> <code>Make Connected</code> : A graph is said to be connected if every pair of vertices in the graph is connected. <para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
+                  <listitem><para><code>Make Connected</code> : A graph is said to be connected if every pair of vertices in the graph is connected. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
                   </listitem>
-                  <listitem> <code>Make Bi-connected </code>: <para>For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
+                  <listitem><para><code>Make Bi-connected </code>: For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
                   </listitem>
-                  <listitem> <code>Make directed </code>: If the graph is a free tree, make it directed. If only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <para><ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
+                  <listitem><para><code>Make directed </code>: If the graph is a free tree, make it directed. If only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
                   </listitem>
-                  <listitem> Reverse selected edges : Exchange source and target of an edge.
-                  </listitem>
+                  <listitem><para>Reverse selected edges : Exchange source and target of an edge.
+                  </para></listitem>
                 </itemizedlist>
-              </listitem>
+              </para></listitem>
             </itemizedlist>
           </para>
           <para><code>View</code>: this menu display all available view types. Click on one and a new view on the current graph will be created (<xref linkend="Main-views" /> )</para>
@@ -133,19 +129,22 @@
         <listitem>
           <para><code>Windows</code>: this menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
         </listitem>
-        <listitem><code>Options</code>: this menu allows to enable/disable the display options:
-          <itemizedlist>
-            <listitem>  Force ratio : Tries to keep a good Height/Width ratio for the layout of the graph.
-            </listitem> 
-            <listitem> Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
-            </listitem> 
-                	<listitem> Antialiasing : Enables a smoother but costly drawing of the graph.
-                	</listitem> 
-            <listitem>Morphing : Enables the Morphing from a layout to an other.
-            </listitem> 
-          </itemizedlist>
-        </listitem>
-        <listitem>
+        <listitem><para><code>Options</code>: this menu allows to enable/disable the display options and show Graph/View editor widget:
+	  <itemizedlist>
+            <listitem><para>Display options :
+	      <itemizedlist>
+		<listitem><para>Force ratio : Tries to keep a good Height/Width ratio for the layout of the graph.
+		</para></listitem> 
+		<listitem><para>Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
+		</para></listitem> 
+		<listitem><para>Morphing : Enables the Morphing from a layout to an other.
+		</para></listitem>
+	      </itemizedlist>
+	    </para></listitem>
+	    <listitem><para>Show Graph/View editor : if you close Graph/View editor tab on left dock widget, you can show it by this menu</para></listitem>
+	  </itemizedlist>
+	</para></listitem>
+	<listitem>
           <para><code>Help</code>: in this menu, you can find informations about the software and the way to make your first steps.</para>
         </listitem>
       </itemizedlist>
@@ -179,7 +178,7 @@
       </itemizedlist>
    	</para>
   </sect1>
-  <sect1 id="infoeditor"><title>Info Editor</title>
+  <sect1 id="infoeditor"><title>Graph Editor</title>
     <para>
       This subwindow is divided in four tabs : Property, Element, Hierarchy, Statistics (not displayed in the standard version).
     </para>
@@ -199,8 +198,8 @@
           <listitem><para><code>Properties</code> : this shows the element properties in the <quote>Element</quote> tab (see after).</para>
           </listitem>
         </itemizedlist>
-      </para>
       For more details please visit : <xref linkend="graph-properties"/>
+      </para>
     </sect2>
     <sect2 id="element"><title>Element</title>
       <para>
@@ -231,6 +230,15 @@
       </figure>
     </sect2>
   </sect1>
+  <sect1 id="configuration"><title>View Editor</title>
+    <para>
+      This subwindow is accessible by clicking on the "Configuration" tab at the bottom left corner.
+    </para>
+    <para>
+      On this subwindow you can found interactor configuration and view configuration. When we change the active view this window also changes.
+      For example when you are on Node Link Diagram View, you can find Rendering parameters dialog on this configuration window.
+    </para>
+  </sect1> 
   <sect1 id="Main-views"><title>Standards views</title>
     <sect2 id="NodeLinkDiagramComponent"><title>Node Link Diagram view</title>
       <sect3 id="mouse"><title>Mouse Interaction Toolbar</title>
@@ -238,14 +246,14 @@
           <graphic fileref="images/mouse-tool.png"/>
           This toolbar allows to select the mouse operation you want to perform. Operations are listed and explained, from left to right of the toolbar :
           <itemizedlist>
-            <listitem id="3dnavigator" xreflabel="Node Link Diagram 3D Navigator">
-              <para><inlinegraphic fileref="images/i_navigation.png"/><code>3D Navigation</code> : This tool enables the 3D navigation on a graph using the mouse movements (left button pressed); the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>Shift</keycap> key, zoom is activated using <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
+            <listitem id="navigator3D" xreflabel="Node Link Diagram 3D Navigator">
+              <para><inlinegraphic fileref="images/i_navigation.png"/><code>3D Navigation</code> : This tool enables the 3D navigation in a graph using the mouse movements (left button pressed); the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>Shift</keycap> key, zoom is activated using <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
               </para>
             </listitem>
             <listitem>
               <para><inlinegraphic fileref="images/i_select.png"/><code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window (see <xref linkend="infoeditor"/>).</para>
             </listitem>
-            <listitem id="rectangle selection" xreflabel="Node Link Diagram Rectangle Selection">
+            <listitem id="rectangleSelection" xreflabel="Node Link Diagram Rectangle Selection">
               <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code> : Allows multiple elements selection. Elements within the selection box are selected. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
               </para>
             </listitem>
@@ -278,7 +286,7 @@
               <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : It enables to zoom on a defined rectangle area. The first corner of the rectangle is defined when pressing the mouse left button, the opposite corner is defined when moving the mouse and the zoom operation is performed on the desired rectangle when the button is released.
               </para>
             </listitem>
-            <listitem id="zoom box" xreflabel="Node Link Diagram Zoom Box">
+            <listitem id="zoomBox" xreflabel="Node Link Diagram Zoom Box">
               <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a single left click. The deleted node or edge is the one under the mouse when you click.
               </para>
             </listitem>
@@ -312,11 +320,17 @@
               </listitem>
               <listitem><para><code>Dialog -> 3D Overview</code> : display/hide top left overview,</para>
               </listitem>
-              <listitem><para><code>Dialog -> Rendering parameters</code> : open a dialog where you can modified graph rendering parameters,</para>
+              <listitem><para><code>Dialog -> Augmented Display</code> : manage augmented display of the graph (for example : caption when we apply a color algorithm),</para>
               </listitem>
-              <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
+	      <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
               </listitem>
               <listitem><para><code>Options -> Grid</code> : shows the grid configuration dialog.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Z Ordering</code> : Use this option when you have graph with transparent nodes/edges.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Antialiasing</code> : enable/disable antialiasing.</para>
+              </listitem>
+	      <listitem><para><code>Options -> Textured meta node</code> : enable/disable meta node texture rendering.</para>
               </listitem>
               <listitem><para><code>Save picture as -> ...</code> : to save the graph picture in multiple format.</para>
               </listitem>
@@ -345,7 +359,7 @@
         <sect4 id="renderingparams_parameters"><title>Parameters</title>
           <para>All actions in this dialog are just performed for the current view window.
             <graphic fileref="images/renderingparams.png"/>
-            This dialog is displayed when clicking on the <code>Dialogs->Rendering Parameters</code>(<keycap>Ctrl+R</keycap>). Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
+            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
             <itemizedlist>
               <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
                   <itemizedlist>
@@ -383,7 +397,7 @@
         <sect4 id="layermanager"><title>Layer Manager</title>
         <para>All actions in this dialog are just performed for the current view window.
                 <graphic fileref="images/layermanager.png"/>
-            This dialog is displayed when clicking on the <code>Dialogs->Layer Manager</code>. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
+            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
             <itemizedlist>
               <listitem><para><code>Visible</code> : Visibility of the entity
                 </para></listitem>
@@ -398,9 +412,9 @@
     </sect2>
     <sect2 id="ParallelCoordinatesComponent"><title>Parallel Coordinates view</title>
     
-      <sect3 id="parallel coordinates intro"><title>Introduction to Parallel Coordinates</title>
+      <sect3 id="parallelCoordinatesIntro"><title>Introduction to Parallel Coordinates</title>
 
-	<sect4 id="parallel coordinates concept"><title>Concept</title>
+	<sect4 id="parallelCoordinatesConcept"><title>Concept</title>
 	  <para>Parallel coordinates is a common way of visualizing high-dimensional geometry and analyzing multivariate data.
 
 	  The idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point. The image below shows an example of a parallel coordinates plot for visualizing a set of 5-dimensions data.
@@ -415,7 +429,7 @@
 	 </para>
 	</sect4>
 
-	<sect4 id="parallel coordinates concept"><title>History</title>
+	<sect4 id="parallelCoordinatesHistory"><title>History</title>
 	  <para>
 	  Parallel Coordinates were firstly studied by Maurice d'Ocagne in 1885 <citation>Ocagne1885</citation> (mostly for 2-D use in Nomography) and were popularised by Al Inselberg <citation>Inselberg85</citation>. The first Multidimensional Coordinate System was developed by this last one in 1977 based on his independent rediscovery in 1959. 
 
@@ -450,7 +464,7 @@
 		<publishername>Springer Berlin / Heidelberg</publishername>
 	      </publisher>
 	      <copyright><year>1985</year></copyright>
-	      <volumenum>1</volumenum><issuenum>4</issuenum>.
+	      <volumenum>1</volumenum><issuenum>4</issuenum>
 	    </biblioset>
 	    <biblioset relation='article'>
 	      <title>The Plane with Parallel Coordinates</title>
@@ -470,7 +484,7 @@
 		<publishername>American Statistical Association</publishername>
 	      </publisher>
 	      <copyright><year>1990</year></copyright>
-	      <volumenum>85</volumenum><issuenum>411</issuenum>.
+	      <volumenum>85</volumenum><issuenum>411</issuenum>
 	    </biblioset>
 	    <biblioset relation='article'>
 	      <title>Hyperdimensional data analysis using parallel coordinates</title>
@@ -487,7 +501,7 @@
       </sect3>
       
 	
-	<sect3 id="parallel coordinates view window"><title>The Parallel Coordinates View main window</title>
+	<sect3 id="parallelCoordinatesViewWindow"><title>The Parallel Coordinates View main window</title>
 	  <para> This is the main window of the view where the parallel coordinates drawing is displayed. It is created as soon as the parallel coordinates view is requested via the Tulip main menu bar. After the view creation, the content of this window is empty and the view has to be setup via the configuration dialog.
 	  
 	  
@@ -500,7 +514,7 @@
 	  
 	</sect3>
 
-	<sect3 id="parallel coordinates view config dialog"><title>The Parallel Coordinates View Configuration Dialog</title>
+	<sect3 id="parallelCoordinatesViewConfigDialog"><title>The Parallel Coordinates View Configuration Dialog</title>
 	  <para> The view configuration dialog is reachable via the view popup menu. To display it, do a right-click in the view window and select <code>Dialog -> Configuration</code> in the popup menu which appears. The configuration dialog is composed of two tabs entitled:
 	    <itemizedlist>
               <listitem><para><code>Data Configuration</code></para>
@@ -510,7 +524,7 @@
             </itemizedlist>
 	  </para>
 	  
-	  <sect4 id="data configuration tab"><title>The Data Configuration tab</title>
+	  <sect4 id="dataConfigurationTab"><title>The Data Configuration tab</title>
 	  
 	    <mediaobject>
 	      <imageobject>
@@ -523,7 +537,7 @@
 	    
 	  </sect4>
 	  
-	  <sect4 id="draw configuration tab"><title>The Draw Configuration tab</title>
+	  <sect4 id="drawConfigurationTab"><title>The Draw Configuration tab</title>
 	    
 	    <mediaobject>
 	      <imageobject>
@@ -550,7 +564,7 @@
 		<para> If this group box is checked, points corresponding to dimensions values on axis will be drawn. This option is desactivated by default when the number of data to plot is greater than 5000 in order to speed up the rendering process. The size of points on axis is proportionnal to the "viewSize" property value. The minimum and maximum point size can be set freely by using the spinbox contained in the group box. The minimum "viewSize" value will be mapped to the minimum point size and the maximum "viewSize" value will be mapped to the maximum point size.
 		</para>
               </listitem>
-	      <listitem><para><code>Apply texture on lines</code></para>
+	      <listitem><para><code>Apply texture on lines</code>
 		If this group box is checked, a texture will be applied on the lines representing data. Two choices are proposed :
 		  <itemizedlist>
 		    <listitem><para><code>Use Tulip default texture</code> : use the default parallel coordinates view texture proposed by Tulip. This texture is applied on the alpha channel of the lines colors.</para>
@@ -558,7 +572,7 @@
 		    <listitem><para><code>Use texture from file</code> : apply a personnal texture from an image file (width and height of the image must be a power of 2)</para>
 		    </listitem>
 		  </itemizedlist>
-              </listitem>
+              </para></listitem>
             </itemizedlist>
 	      
 	    </para>
@@ -567,7 +581,7 @@
 	  
 	</sect3>
 
-	<sect3 id="parallel coordinates view interactors"><title>Tulip Parallel Coordinates View Interactors</title>
+	<sect3 id="parallelCoordinatesViewInteractors"><title>Tulip Parallel Coordinates View Interactors</title>
 	
 	  <para>To play with the view, a few number of interactors can be found in the following toolbar :
 	      <mediaobject>
@@ -580,11 +594,11 @@
 	      
 	      <itemizedlist>
 		<listitem>
-		  <para><inlinegraphic fileref="images/i_navigation.png"/><code>View Navigator</code> : This interactor enables the 3D navigation on the view using the mouse movements (left button pressed). Its working is the same as the <code>3D Navigator</code> interactor from the Node Link Diagram Component (see <xref linkend="3dnavigator"/>).
+		  <para><inlinegraphic fileref="images/i_navigation.png"/><code>View Navigator</code> : This interactor enables the 3D navigation on the view using the mouse movements (left button pressed). Its working is the same as the <code>3D Navigator</code> interactor from the Node Link Diagram Component (see <xref linkend="navigator3D"/>).
 		  </para>
 		</listitem>
 		<listitem>
-		  <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : This interactor enables to define a zoom area with the mouse. Its working is the same as the <code>Zoom Box</code> interactor from the Node Link Diagram Component (see <xref linkend="zoom box"/>).
+		  <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : This interactor enables to define a zoom area with the mouse. Its working is the same as the <code>Zoom Box</code> interactor from the Node Link Diagram Component (see <xref linkend="zoomBox"/>).
 		  </para>
 		</listitem>
 		<listitem>
@@ -592,7 +606,7 @@
 		  </para>
 		</listitem>
 		<listitem>
-		  <para><inlinegraphic fileref="images/i_selection.png"/><code>Elements Selector</code> : This interactor allows to select elements in the parallel coordinates view. Its working is the same as the <code>Rectangle Selection</code> interactor from the Node Link Diagram Component (see <xref linkend="rectangle selection"/>).
+		  <para><inlinegraphic fileref="images/i_selection.png"/><code>Elements Selector</code> : This interactor allows to select elements in the parallel coordinates view. Its working is the same as the <code>Rectangle Selection</code> interactor from the Node Link Diagram Component (see <xref linkend="rectangleSelection"/>).
 		  </para>
 		</listitem>
 		<listitem>
@@ -687,7 +701,7 @@
 	
 	</sect3>
 
-	<sect3 id="parallel coordinates view popup menu"><title>The Parallel Coordinates View popup menu</title>  
+	<sect3 id="parallelCoordinatesViewPopupMenu"><title>The Parallel Coordinates View popup menu</title>  
 	
 	  <para>By right-clicking in the parallel coordinates main window, a popup menu will be displayed. The content of it depends on the location of the mouse pointer. By default, the following menu is displayed :
 	    <mediaobject>

@@ -7,7 +7,7 @@ using namespace std;
 namespace tlp {
 
 #define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower) */
-  
+
   //====================================================
   static char *gouraudtriangleEPS[] =
     {
@@ -43,7 +43,7 @@ namespace tlp {
   {
     float x, y, z, r, g, b, a;
   };
-  
+
   void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearColor,GLfloat pointSize,GLfloat lineWidth) {
     /* Emit EPS header. */
     stream_out << "%%!PS-Adobe-2.0 EPSF-2.0" << endl;
@@ -52,7 +52,7 @@ namespace tlp {
     stream_out << "%%%%BoundingBox: " << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << endl;
     stream_out << "%%EndComments" << endl << endl;
     stream_out << "gsave" << endl << endl;
-    
+
     /* Output Frederic Delhoume's "gouraudtriangle" PostScript
        fragment. */
     stream_out << "%% the gouraudtriangle PostScript fragement below is free" << endl;
@@ -61,9 +61,9 @@ namespace tlp {
     for (int i = 0; gouraudtriangleEPS[i]; i++) {
       stream_out << gouraudtriangleEPS[i] << endl;
     }
-    
+
     stream_out << endl << lineWidth << " setlinewidth" << endl;
-  
+
     /* Clear the background like OpenGL had it. */
     //  fprintf(file, "%g %g %g setrgbcolor\n",
     //	  clearColor[0], clearColor[1], clearColor[2]);
@@ -71,9 +71,9 @@ namespace tlp {
     stream_out << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << " rectfill" << endl << endl;
   }
   void GlEPSFeedBackBuilder::colorInfo(GLfloat* data) {
-    fillColor[0]=data[0];fillColor[1]=data[1];fillColor[2]=data[2];
-    strokeColor[0]=data[3];strokeColor[1]=data[4];strokeColor[2]=data[5];
-    textColor[0]=data[6];textColor[1]=data[7];textColor[2]=data[8];
+    fillColor[0]=(unsigned char)data[0];fillColor[1]=(unsigned char)data[1];fillColor[2]=(unsigned char)data[2];fillColor[3]=(unsigned char)data[3];
+    strokeColor[0]=(unsigned char)data[4];strokeColor[1]=(unsigned char)data[5];strokeColor[2]=(unsigned char)data[6];strokeColor[3]=(unsigned char)data[7];
+    textColor[0]=(unsigned char)data[8];textColor[1]=(unsigned char)data[9];textColor[2]=(unsigned char)data[10];textColor[3]=(unsigned char)data[11];
   }
   void GlEPSFeedBackBuilder::beginGlGraph(GLfloat data) {
   }
@@ -114,31 +114,31 @@ namespace tlp {
       dx = vertex[1].x - vertex[0].x;
       dy = vertex[1].y - vertex[0].y;
       distance = sqrt(dx * dx + dy * dy);
-      
+
       absR = fabs(dr);
       absG = fabs(dg);
       absB = fabs(db);
-      
+
 #define Max(a,b) (((a)>(b))?(a):(b))
-      
-#define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth 
+
+#define EPS_SMOOTH_LINE_FACTOR 1  /* Upper for better smooth
 					 lines. */
       colormax = Max(absR, Max(absG, absB));
       steps =(int) rint(Max(1.0, colormax * distance * EPS_SMOOTH_LINE_FACTOR));
 
       xstep = dx / steps;
       ystep = dy / steps;
-      
+
       rstep = dr / steps;
       gstep = dg / steps;
       bstep = db / steps;
-      
+
       xnext = vertex[0].x;
       ynext = vertex[0].y;
       rnext = vertex[0].red;
       gnext = vertex[0].green;
       bnext = vertex[0].blue;
-      
+
       /* Back up half a step; we want the end points to be
 	 exactly the their endpoint colors. */
       xnext -= xstep / 2.0;
@@ -222,5 +222,5 @@ namespace tlp {
   void GlEPSFeedBackBuilder::getResult(string* str) {
     *str=stream_out.str();
   }
- 
+
 }

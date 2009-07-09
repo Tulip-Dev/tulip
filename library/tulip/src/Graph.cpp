@@ -333,3 +333,12 @@ void tlp::copyToGraph (	Graph *outG, Graph *	inG, BooleanProperty *inSel, Boolea
   }
 }
 
+void Graph::notifyDestroy() {
+  ObservableGraph::notifyDestroy(this);
+  Observable::notifyDestroy();
+}
+
+void Graph::notifyAddSubGraph(Graph* sg) {
+  ObservableGraph::notifyAddSubGraph(this, sg);
+  Observable::notifyObservers();
+}

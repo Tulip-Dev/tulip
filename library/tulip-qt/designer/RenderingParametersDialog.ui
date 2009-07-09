@@ -1,19 +1,16 @@
 <ui version="4.0" >
  <class>RenderingParametersDialogData</class>
- <widget class="QDialog" name="RenderingParametersDialogData" >
+ <widget class="QWidget" name="RenderingParametersDialogData" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>439</width>
-    <height>321</height>
+    <width>326</width>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Rendering Parameters</string>
-  </property>
-  <property name="sizeGripEnabled" >
-   <bool>false</bool>
+   <string>Form</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -23,50 +20,80 @@
     <number>6</number>
    </property>
    <item row="0" column="0" >
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="currentIndex" >
-      <number>1</number>
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
-       <string>Parameters</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="labels" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="title" >
+        <string>Labels</string>
        </property>
-       <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="labels" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title" >
-            <string>Labels</string>
-           </property>
-           <layout class="QGridLayout" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>2</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" >
             <property name="margin" >
              <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="0" column="0" >
+            <item>
+             <widget class="QLabel" name="fontType" >
+              <property name="text" >
+               <string>Type: </string>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelDensity" >
+              <property name="text" >
+               <string>Density: </string>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
              <layout class="QHBoxLayout" >
               <property name="margin" >
                <number>0</number>
@@ -83,23 +110,33 @@
                  <number>6</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="fontType" >
-                  <property name="text" >
-                   <string>Type: </string>
+                 <widget class="QComboBox" name="fonts" >
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <property name="wordWrap" >
-                   <bool>false</bool>
+                  <property name="currentIndex" >
+                   <number>0</number>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="labelDensity" >
-                  <property name="text" >
-                   <string>Density: </string>
-                  </property>
-                  <property name="wordWrap" >
-                   <bool>false</bool>
-                  </property>
+                  <item>
+                   <property name="text" >
+                    <string>3D</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text" >
+                    <string>Bitmap</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text" >
+                    <string>Texture</string>
+                   </property>
+                  </item>
                  </widget>
                 </item>
                </layout>
@@ -121,442 +158,265 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <layout class="QVBoxLayout" >
-                    <property name="margin" >
-                     <number>0</number>
+                   <widget class="QCheckBox" name="ordering" >
+                    <property name="focusPolicy" >
+                     <enum>Qt::StrongFocus</enum>
                     </property>
-                    <property name="spacing" >
-                     <number>6</number>
+                    <property name="toolTip" >
+                     <string>Use viewMetric decreasing order as display order</string>
                     </property>
-                    <item>
-                     <widget class="QComboBox" name="fonts" >
-                      <property name="sizePolicy" >
-                       <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="currentIndex" >
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <property name="text" >
-                        <string>3D</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text" >
-                        <string>Bitmap</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text" >
-                        <string>Texture</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                   </layout>
+                    <property name="text" >
+                     <string>metric ordering</string>
+                    </property>
+                   </widget>
                   </item>
                   <item>
-                   <layout class="QVBoxLayout" >
-                    <property name="margin" >
-                     <number>0</number>
+                   <spacer>
+                    <property name="orientation" >
+                     <enum>Qt::Horizontal</enum>
                     </property>
-                    <property name="spacing" >
-                     <number>6</number>
+                    <property name="sizeType" >
+                     <enum>QSizePolicy::Expanding</enum>
                     </property>
-                    <item>
-                     <layout class="QHBoxLayout" >
-                      <property name="margin" >
-                       <number>0</number>
-                      </property>
-                      <property name="spacing" >
-                       <number>6</number>
-                      </property>
-                      <item>
-                       <widget class="QCheckBox" name="ordering" >
-                        <property name="focusPolicy" >
-                         <enum>Qt::StrongFocus</enum>
-                        </property>
-                        <property name="toolTip" >
-                         <string>Use viewMetric decreasing order as display order</string>
-                        </property>
-                        <property name="text" >
-                         <string>metric ordering</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <spacer>
-                        <property name="orientation" >
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeType" >
-                         <enum>QSizePolicy::Expanding</enum>
-                        </property>
-                        <property name="sizeHint" >
-                         <size>
-                          <width>18</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
+                    <property name="sizeHint" >
+                     <size>
+                      <width>18</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
                   </item>
                  </layout>
                 </item>
-                <item>
-                 <widget class="QSlider" name="density" >
-                  <property name="sizePolicy" >
-                   <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="orientation" >
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </item>
              </layout>
             </item>
+            <item>
+             <widget class="QSlider" name="density" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="edgesGroup" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title" >
-            <string>Edges</string>
-           </property>
-           <layout class="QGridLayout" >
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="edgesGroup" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title" >
+        <string>Edges</string>
+       </property>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>2</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
             <property name="margin" >
              <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="0" column="0" >
-             <layout class="QVBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
+            <item>
+             <widget class="QCheckBox" name="arrows" >
+              <property name="focusPolicy" >
+               <enum>Qt::StrongFocus</enum>
               </property>
-              <property name="spacing" >
-               <number>6</number>
+              <property name="toolTip" >
+               <string>show/hide arrow on edges</string>
               </property>
-              <item>
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QCheckBox" name="arrows" >
-                  <property name="focusPolicy" >
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="toolTip" >
-                   <string>show/hide arrow on edges</string>
-                  </property>
-                  <property name="text" >
-                   <string>arrows</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="edge3D" >
-                  <property name="focusPolicy" >
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="toolTip" >
-                   <string>enable/disable 3D rendering of edges</string>
-                  </property>
-                  <property name="text" >
-                   <string>3D</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" >
-                <property name="margin" >
-                 <number>0</number>
-                </property>
-                <property name="spacing" >
-                 <number>6</number>
-                </property>
-                <item>
-                 <widget class="QCheckBox" name="colorInterpolation" >
-                  <property name="focusPolicy" >
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="toolTip" >
-                   <string>Interpolate edge color from the colors of its nodes</string>
-                  </property>
-                  <property name="text" >
-                   <string>Color interpolation</string>
-                  </property>
-                  <property name="checked" >
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="sizeInterpolation" >
-                  <property name="focusPolicy" >
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="toolTip" >
-                   <string>Interpolate edge size from the sizes of its nodes</string>
-                  </property>
-                  <property name="text" >
-                   <string>Size interpolation</string>
-                  </property>
-                  <property name="checked" >
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
+              <property name="text" >
+               <string>arrows</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="edge3D" >
+              <property name="focusPolicy" >
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="toolTip" >
+               <string>enable/disable 3D rendering of edges</string>
+              </property>
+              <property name="text" >
+               <string>3D</string>
+              </property>
+             </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox" >
-           <property name="title" >
-            <string>Others</string>
-           </property>
-           <layout class="QGridLayout" >
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
             <property name="margin" >
              <number>0</number>
             </property>
             <property name="spacing" >
              <number>6</number>
             </property>
-            <item row="0" column="0" >
-             <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
+            <item>
+             <widget class="QCheckBox" name="colorInterpolation" >
+              <property name="focusPolicy" >
+               <enum>Qt::StrongFocus</enum>
               </property>
-              <property name="spacing" >
-               <number>6</number>
+              <property name="toolTip" >
+               <string>Interpolate edge color from the colors of its nodes</string>
               </property>
-              <item>
-               <widget class="QCheckBox" name="orthogonal" >
-                <property name="focusPolicy" >
-                 <enum>Qt::StrongFocus</enum>
-                </property>
-                <property name="text" >
-                 <string>Orthogonal projection</string>
-                </property>
-                <property name="checked" >
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="background" >
-                <property name="sizePolicy" >
-                 <sizepolicy>
-                  <hsizetype>0</hsizetype>
-                  <vsizetype>0</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="focusPolicy" >
-                 <enum>Qt::StrongFocus</enum>
-                </property>
-                <property name="text" >
-                 <string>Background color</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer>
-                <property name="orientation" >
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeType" >
-                 <enum>QSizePolicy::Expanding</enum>
-                </property>
-                <property name="sizeHint" >
-                 <size>
-                  <width>31</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+              <property name="text" >
+               <string>Color interpolation</string>
+              </property>
+              <property name="checked" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sizeInterpolation" >
+              <property name="focusPolicy" >
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="toolTip" >
+               <string>Interpolate edge size from the sizes of its nodes</string>
+              </property>
+              <property name="text" >
+               <string>Size interpolation</string>
+              </property>
+              <property name="checked" >
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2" >
-      <attribute name="title" >
-       <string>Layers</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="title" >
+        <string>Others</string>
        </property>
-       <property name="spacing" >
-        <number>0</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="QTreeWidget" name="treeWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>5</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="columnCount" >
-          <number>3</number>
-         </property>
-         <column>
-          <property name="text" >
-           <string/>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>2</number>
           </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Visibility</string>
+          <property name="spacing" >
+           <number>6</number>
           </property>
-         </column>
-         <column>
-          <property name="text" >
-           <string>Stencil</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>0</number>
-         </property>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="applyButton" >
-           <property name="text" >
-            <string>Apply</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
+          <item>
+           <widget class="QCheckBox" name="orthogonal" >
+            <property name="focusPolicy" >
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="text" >
+             <string>Orthogonal projection</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="background" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="focusPolicy" >
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
+            <property name="text" >
+             <string>Background color</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType" >
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>31</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item>
       <spacer>
        <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" >
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonClose" >
-       <property name="text" >
-        <string>Close</string>
-       </property>
-       <property name="default" >
-        <bool>true</bool>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
  <resources/>
  <connections>
   <connection>
@@ -566,108 +426,12 @@
    <slot>updateView()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>86</x>
+     <y>126</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>edge3D</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorInterpolation</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sizeInterpolation</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>density</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>orthogonal</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fonts</sender>
-   <signal>activated(int)</signal>
-   <receiver>RenderingParametersDialogData</receiver>
-   <slot>updateView()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>162</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>
@@ -678,12 +442,76 @@
    <slot>backColor()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>232</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorInterpolation</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>86</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>density</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>192</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edge3D</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>238</x>
+     <y>126</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fonts</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>111</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>
@@ -694,28 +522,44 @@
    <slot>updateView()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>214</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
+     <x>162</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonClose</sender>
-   <signal>clicked()</signal>
+   <sender>orthogonal</sender>
+   <signal>stateChanged(int)</signal>
    <receiver>RenderingParametersDialogData</receiver>
-   <slot>accept()</slot>
+   <slot>updateView()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>386</x>
-     <y>568</y>
+     <x>90</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>216</x>
-     <y>295</y>
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeInterpolation</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>238</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
     </hint>
    </hints>
   </connection>

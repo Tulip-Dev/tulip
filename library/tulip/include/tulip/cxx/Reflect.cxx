@@ -62,16 +62,6 @@ struct DataTypeContainer :public tlp::DataType {
 };
 
 template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
-  DataTypeContainer<T> *tmp= new DataTypeContainer<T>(new T(value), typeid(T).name());
-  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
-	 data.begin(); it != data.end(); ++it) {
-    std::pair<std::string, tlp::DataType*> &p = *it;
-    if (p.first == str) {
-      delete p.second;
-      p.second = tmp;
-      return;
-    }
-  }
-  data.push_back(std::pair<std::string, tlp::DataType*>(str, tmp));
+  setData(str, new DataTypeContainer<T>(new T(value), typeid(T).name()));
 }
 //=======================================================================

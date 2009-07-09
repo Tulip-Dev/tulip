@@ -17,7 +17,7 @@ SRCS=   tuliplibtest.cpp \
 	ObservableGraphTest.cpp \
 	PushPopTest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp
-#	PlanarConMapTest.cpp 
+#	PlanarConMapTest.cpp
 
 
 

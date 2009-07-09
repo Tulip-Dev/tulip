@@ -27,7 +27,10 @@ public:
   virtual Graph* getSuperGraph()const;
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *>* getSubGraphs() const;
-
+  virtual bool isSubGraph(Graph* sg) const;
+  virtual bool isDescendantGraph(Graph* sg) const;
+  virtual Graph* getSubGraph(unsigned int id) const;
+  virtual Graph* getDescendantGraph(unsigned int id) const;
   //=======================================
   virtual unsigned int deg(const node) const;
   virtual unsigned int indeg(const node) const;
@@ -48,7 +51,6 @@ public:
   virtual edge getOneEdge() const;
   virtual unsigned int numberOfNodes() const;
   virtual unsigned int numberOfEdges() const;
-  DataSet & getAttributes() {return attributes;}
   //========================================
   bool existProperty(const std::string&);
   bool existLocalProperty(const std::string&);
@@ -60,6 +62,7 @@ public:
   PropertyInterface* getProperty(const std::string &);
 
 protected:
+  DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);
   PropertyManager *propertyContainer;
   PropertyManager *getPropertyManager() {

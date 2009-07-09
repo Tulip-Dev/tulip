@@ -15,12 +15,15 @@
 
 namespace tlp {
 
+  class GlMainWidget;
+
   /** \brief Abstract class use by entities who want to be displayed in foreground of GlMainWidget
    *
    * This class is use by entities who want to be displayed in foreground of GlMainWidget
    * \warning This entities are very special, this is reserved to entities who can't be in scene (for example rectangle on overview widget)
    */
   class TLP_QT_SCOPE ForegroundEntity {
+  
   public :
     virtual ~ForegroundEntity() {}
 

@@ -30,8 +30,6 @@
 using namespace std;
 using namespace tlp;
 
-INTERACTORPLUGIN(MouseMagicSelector, "MouseMagicSelector", "Tulip Team", "16/04/2008", "Mouse Magic Selector", "1.0");
-
 MouseMagicSelector::MouseMagicSelector():
   x(0),y(0),w(0),h(0),graph(0)
 {}
@@ -53,8 +51,9 @@ bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
 	return true;
       }
       Observable::holdObservers();
-      graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      BooleanProperty* selection=graph->getProperty<BooleanProperty>("viewSelection");
+      GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+      graph=inputData->getGraph();
+      BooleanProperty* selection=graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
       BooleanProperty* visited=graph->getProperty<BooleanProperty>("tmpVisited");
       DoubleProperty* metric=graph->getProperty<DoubleProperty>("viewMetric");
       visited->setAllNodeValue(false);

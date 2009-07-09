@@ -120,11 +120,11 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libEmbedder-%{version}.*
 %{prefix}/lib/tlp/libEqualValueClustering-%{version}.*
 %{prefix}/lib/tlp/libGemLayout-%{version}.*
-%{prefix}/lib/tlp/libGeneralGraph3D-%{version}.*
 %{prefix}/lib/tlp/libGMLExport-%{version}.*
 %{prefix}/lib/tlp/libGMLImport-%{version}.*
 %{prefix}/lib/tlp/libGrid-%{version}.*
 %{prefix}/lib/tlp/libHierarchicalClustering-%{version}.*
+%{prefix}/lib/tlp/libHierarchicalGraph-%{version}.*
 %{prefix}/lib/tlp/libIdMetric-%{version}.*
 %{prefix}/lib/tlp/libImprovedWalker-%{version}.*
 %{prefix}/lib/tlp/libInducedSubGraphSelection-%{version}.*

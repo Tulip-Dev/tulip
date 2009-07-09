@@ -70,7 +70,8 @@ bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
   node curNode;
   forEach (curNode, graph->getInOutNodes(curRoot)) { 
     if (curNode != cameFrom)
-      if (!isFreeTree (graph, curNode, curRoot, visited)) return false;
+      if (!isFreeTree (graph, curNode, curRoot, visited))
+	returnForEach(false);
   }//end forEach
   return true;
 }//end isFreeTree 
@@ -93,10 +94,10 @@ void TreeTest::makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
 //====================================================================
 Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
 			     PluginProgress *pluginProgress) {
-  // nothing todo if the graph is already a tree
+  // nothing todo if the graph is already
   if (TreeTest::isTree(graph))
     return graph;
-  
+
   // if needed, create a clone of the graph
   // as a working copy
   Graph *gClone = graph;
@@ -107,6 +108,13 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
     rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
     rGraph->setAttribute(CLONE_ROOT, node());
   }
+
+  // add a node for an empty graph
+  if (graph->numberOfNodes() == 0) {
+    rGraph->setAttribute(CLONE_ROOT, rGraph->addNode());
+    return rGraph;
+  }  
+
   // if the graph is topologically a tree, make it rooted
   // using a 'center' of the graph as root
   if (TreeTest::isFreeTree(gClone)) {
@@ -131,7 +139,7 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(rGraph, components);
   for (unsigned int i = 0; i < components.size(); ++i) {
-    tlp::inducedSubGraph(rGraph, components[i]);
+    rGraph->inducedSubGraph(components[i]);
   }
 
   // create a new subgraph for the tree

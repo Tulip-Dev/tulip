@@ -15,9 +15,6 @@
 #ifndef PARALLELCOORDSGLENTITIESSELECTOR_H_
 #define PARALLELCOORDSGLENTITIESSELECTOR_H_
 
-#include "ParallelTools.h"
-#include "ParallelCoordinatesView.h"
-
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -29,12 +26,9 @@
 #include <config.h>
 #endif
 
-#include <string>
-
-#include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/MouseSelector.h>
+
+#include "ParallelCoordinatesView.h"
 
 namespace tlp {
 

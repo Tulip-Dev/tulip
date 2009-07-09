@@ -12,5 +12,9 @@
         <file>i_zoom.png</file>
         <file>i_redo.png</file>
         <file>i_undo.png</file>
+        <file>up.png</file>
+    	<file>right.png</file>
+    	<file>left.png</file>
+    	<file>down.png</file>
     </qresource>
 </RCC>

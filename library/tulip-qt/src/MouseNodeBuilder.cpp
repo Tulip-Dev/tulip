@@ -19,8 +19,6 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseNodeBuilder, "MouseNodeBuilder", "Tulip Team", "16/04/2008", "Mouse Node Builder", "1.0");
-
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
@@ -28,9 +26,10 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       GlMainWidget *glw = (GlMainWidget *) widget;
 
       Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>("viewLayout");
+      LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glw->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
       // allow to undo
       _graph->push();
+      Observable::holdObservers();
       node newNode;
       newNode = _graph->addNode();
       Coord point((double) glw->width() - (double) qMouseEv->x(),
@@ -38,7 +37,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 		  0);
       point = glw->getScene()->getCamera()->screenTo3DWorld(point);
       mLayout->setNodeValue(newNode, point);
-      glw->redraw();
+      Observable::unholdObservers();
+      //glw->redraw();
       return true;
     }
   }

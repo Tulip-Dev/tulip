@@ -34,48 +34,47 @@
 
         <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout... They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
         </para>
-	<sect2 id="list-properties">
+	<sect2 id="list-properties"><title>Rendering Properties</title>
 	<para> Following is the list of rendering properties :</para>
 	<itemizedlist>
-		<listitem><code>viewBorderColor :</code>
-			Color of the border of an edge or a node.
-		</listitem>
-		<listitem><code>viewBorderWidth :</code>
+		<listitem><para><code>viewBorderColor :</code>
+		    Color of the border of an edge or a node.
+		</para></listitem>
+		<listitem><para><code>viewBorderWidth :</code>
 			Width of the border of an edge or a node.
-		</listitem>
-		<listitem><code>viewColor :</code>
-			Color of an edge or a node.
-		</listitem>
-		<listitem><code>viewLabel :</code>
+		</para></listitem>
+		<listitem><para>viewColor : color of an edge or a node.
+		</para></listitem>
+		<listitem><para><code>viewLabel :</code>
 			Label of an edge or a node.
-		</listitem>
-		<listitem><code>viewLabelColor :</code>
+		</para></listitem>
+		<listitem><para><code>viewLabelColor :</code>
 			Color label of an edge or a node.
-		</listitem>
-		<listitem><code>viewLabelPosition :</code>
+		</para></listitem>
+		<listitem><para><code>viewLabelPosition :</code>
 			Label position (x,y,z) of an edge or a node.
-		</listitem>
-		<listitem><code>viewLayout :</code>
+		</para></listitem>
+		<listitem><para><code>viewLayout :</code>
 			Position (x,y,z) of a node, or vector of the bends positions of the edges.
-		</listitem>
-		<listitem><code>viewMetric :</code>
+		</para></listitem>
+		<listitem><para><code>viewMetric :</code>
 			Result value of the last measure ( <xref linkend="Measure" /> ) algorithm applied.
-		</listitem>
-		<listitem><code>viewRotation :</code>
+		</para></listitem>
+		<listitem><para><code>viewRotation :</code>
 			Rotation (0 to 360) of a node or an edge
-		</listitem>
-		<listitem><code>viewSelection :</code>
+		</para></listitem>
+		<listitem><para><code>viewSelection :</code>
 			Selection equals true if the node or edge is selected. False if it is not.
-		</listitem>
-		<listitem><code>viewShape :</code>
+		</para></listitem>
+		<listitem><para><code>viewShape :</code>
 			Shape of a node or a graph.
-		</listitem>
-		<listitem><code>viewSize :</code>
+		</para></listitem>
+		<listitem><para><code>viewSize :</code>
 			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the arrow. 
-		</listitem>
-		<listitem><code>viewTexture :</code>
+		</para></listitem>
+		<listitem><para><code>viewTexture :</code>
 			Texture will replace the color background of the node.
-		</listitem>
+		</para></listitem>
 	</itemizedlist>
 	</sect2>
 	<sect2 id="using-props"><title>Using Properties</title>

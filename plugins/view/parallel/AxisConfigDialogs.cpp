@@ -18,6 +18,8 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
 	QVBoxLayout *dialogLayout = new QVBoxLayout();
 	QHBoxLayout *nbGradsLayout = new QHBoxLayout();
+	QHBoxLayout *axisMinLayout = new QHBoxLayout();
+	QHBoxLayout *axisMaxLayout = new QHBoxLayout();
 	QHBoxLayout *axisOrderLayout = new QHBoxLayout();
 	QHBoxLayout *okButtonLayout = new QHBoxLayout();
 
@@ -32,10 +34,40 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 	nbGradsLayout->addWidget(new QLabel("Number of graduations : "));
 	nbGradsLayout->addWidget(nbGrads);
 
+	axisMinLayout->addWidget(new QLabel("Axis min value : "));
+	if (axis->getAxisDataTypeName() == "int") {
+		intAxisMinValue = new QSpinBox();
+		intAxisMinValue->setMaximum((int)axis->getAssociatedPropertyMinValue());
+		intAxisMinValue->setMinimum(INT_MIN);
+		intAxisMinValue->setValue((int)axis->getAxisMinValue());
+		axisMinLayout->addWidget(intAxisMinValue);
+	} else {
+		doubleAxisMinValue = new QDoubleSpinBox();
+		doubleAxisMinValue->setMaximum(axis->getAssociatedPropertyMinValue());
+		doubleAxisMinValue->setMinimum(DBL_MIN);
+		doubleAxisMinValue->setValue(axis->getAxisMinValue());
+		axisMinLayout->addWidget(doubleAxisMinValue);
+	}
+
+	axisMaxLayout->addWidget(new QLabel("Axis max value : "));
+	if (axis->getAxisDataTypeName() == "int") {
+		intAxisMaxValue = new QSpinBox();
+		intAxisMaxValue->setMinimum((int)axis->getAssociatedPropertyMaxValue());
+		intAxisMaxValue->setMaximum(INT_MAX);
+		intAxisMaxValue->setValue((int)axis->getAxisMaxValue());
+		axisMaxLayout->addWidget(intAxisMaxValue);
+	} else {
+		doubleAxisMaxValue = new QDoubleSpinBox();
+		doubleAxisMaxValue->setMinimum(axis->getAssociatedPropertyMaxValue());
+		doubleAxisMaxValue->setMaximum(DBL_MAX);
+		doubleAxisMaxValue->setValue(axis->getAxisMaxValue());
+		axisMaxLayout->addWidget(doubleAxisMaxValue);
+	}
+
 	axisOrder->addItem("ascending");
 	axisOrder->addItem("descending");
 
-	if (axis->hasAscendindOrder()) {
+	if (axis->hasAscendingOrder()) {
 		axisOrder->setCurrentIndex(0);
 	} else {
 		axisOrder->setCurrentIndex(1);
@@ -45,6 +77,8 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 	axisOrderLayout->addWidget(axisOrder);
 
 	dialogLayout->addLayout(nbGradsLayout);
+	dialogLayout->addLayout(axisMinLayout);
+	dialogLayout->addLayout(axisMaxLayout);
 	dialogLayout->addLayout(axisOrderLayout);
 	dialogLayout->addWidget(log10Scale);
 	okButtonLayout->addStretch(1);
@@ -61,8 +95,13 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
 
 void QuantitativeAxisConfigDialog::closeEvent (QCloseEvent * event) {
 	axis->setNbAxisGrad(nbGrads->value());
-	axis->setAscendindOrder(axisOrder->currentText() == "ascending");
+	axis->setAscendingOrder(axisOrder->currentText() == "ascending");
 	axis->setLog10Scale(log10Scale->isChecked());
+	if (axis->getAxisDataTypeName() == "int") {
+		axis->setAxisMinMaxValues(intAxisMinValue->value(), intAxisMaxValue->value());
+	} else {
+		axis->setAxisMinMaxValues(doubleAxisMinValue->value(), doubleAxisMaxValue->value());
+	}
 	axis->redraw();
 }
 
@@ -76,11 +115,14 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	QHBoxLayout *okButtonLayout = new QHBoxLayout();
 
 	okButton = new QPushButton("OK");
-	axisLabelsOrder = new ItemsDialogList(this);
+	axisLabelsOrder = new ItemsListWidget(this);
 	QPushButton* up = new QPushButton(QIcon(":/up.png"),"");
+	QPushButton* lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +  QString("     order"));
 	QPushButton *down = new QPushButton(QIcon(":/down.png"),"");
 
+
 	buttonsUpDownLayout->addWidget(up);
+	buttonsUpDownLayout->addWidget(lexOrder);
 	buttonsUpDownLayout->addWidget(down);
 
 	labelsOrderLayout->addWidget(axisLabelsOrder);
@@ -94,8 +136,8 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	dialogLayout->addLayout(okButtonLayout);
 
 	vector<string> labelsOrder = axis->getLabelsOrder();
-	vector<string>::iterator it;
-	for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+	vector<string>::reverse_iterator it;
+	for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
 		axisLabelsOrder->addItem(QString((*it).c_str()));
 	}
 
@@ -104,6 +146,7 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 	connect(okButton,SIGNAL(clicked()),this,SLOT(close()));
 	connect(up,SIGNAL(clicked()),this,SLOT(pressButtonUp()));
 	connect(down,SIGNAL(clicked()),this,SLOT(pressButtonDown()));
+	connect(lexOrder,SIGNAL(clicked()),this,SLOT(pressButtonLexOrder()));
 }
 
 void NominalAxisConfigDialog::closeEvent (QCloseEvent * event) {
@@ -111,6 +154,7 @@ void NominalAxisConfigDialog::closeEvent (QCloseEvent * event) {
 	for	(int i = 0; i < axisLabelsOrder->count(); ++i) {
 		labelsOrder.push_back(axisLabelsOrder->item(i)->text().toStdString());
 	}
+	reverse(labelsOrder.begin(), labelsOrder.end());
 	axis->setLabelsOrder(labelsOrder);
 	axis->redraw();
 }
@@ -143,6 +187,25 @@ void NominalAxisConfigDialog::pressButtonDown() {
 			axisLabelsOrder->setCurrentRow(row + 1);
 		}
 	}
+}
+
+void NominalAxisConfigDialog::pressButtonLexOrder() {
+	axisLabelsOrder->clear();
+	static unsigned int clickCount = 0;
+	vector<string> labelsOrder = axis->getLabelsOrder();
+	std::sort(labelsOrder.begin(), labelsOrder.end());
+	if (++clickCount % 2 == 1) {
+		vector<string>::iterator it;
+		for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
+			axisLabelsOrder->addItem(QString((*it).c_str()));
+		}
+	} else {
+		vector<string>::reverse_iterator it;
+		for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
+			axisLabelsOrder->addItem(QString((*it).c_str()));
+		}
+	}
+
 }
 
 }

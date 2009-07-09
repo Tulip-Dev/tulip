@@ -334,15 +334,17 @@ void SuperGraphTest::testSubgraphId() {
   graph->clear();
   BooleanProperty sel(graph);
   Graph *g1 = graph->addSubGraph(&sel);
-  int id = g1->getId();
+  unsigned int id = g1->getId();
   for (unsigned int i = 1; i<1000; ++i) {
     g1 = graph->addSubGraph(&sel);
     CPPUNIT_ASSERT(g1->getId() == id + i);
+    CPPUNIT_ASSERT(graph->getSubGraph(id + i) == g1);
   }
   Graph *g;
   unsigned int i = 0; //if the graph are not ordered that test can fail.
   forEach(g, graph->getSubGraphs()) {
     CPPUNIT_ASSERT(g->getId() == id + i);
+    CPPUNIT_ASSERT(graph->getSubGraph(id + i) == g);
     ++i;
   }
 }
@@ -359,7 +361,32 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
   CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
   CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);  
+  CPPUNIT_ASSERT(graph->getSubGraph(g1->getId()) == g1);
+  CPPUNIT_ASSERT(graph->getSubGraph(g2->getId()) == g2);
+  CPPUNIT_ASSERT(graph->getSubGraph(g3->getId()) == NULL);
+  CPPUNIT_ASSERT(graph->getSubGraph(g4->getId()) == NULL);
+  CPPUNIT_ASSERT(g2->getSubGraph(g3->getId()) == g3);
+  CPPUNIT_ASSERT(g2->getSubGraph(g4->getId()) == g4);
+  CPPUNIT_ASSERT(graph->isSubGraph(g1));
+  CPPUNIT_ASSERT(graph->isSubGraph(g2));
+  CPPUNIT_ASSERT(graph->isSubGraph(g3) == false);
+  CPPUNIT_ASSERT(graph->isSubGraph(g4) == false);
+  CPPUNIT_ASSERT(g2->isSubGraph(g3));
+  CPPUNIT_ASSERT(g2->isSubGraph(g4));
+  CPPUNIT_ASSERT(graph->getDescendantGraph(g1->getId()) == g1);
+  CPPUNIT_ASSERT(graph->getDescendantGraph(g2->getId()) == g2);
+  CPPUNIT_ASSERT(graph->getDescendantGraph(g3->getId()) == g3);
+  CPPUNIT_ASSERT(graph->getDescendantGraph(g4->getId()) == g4);
+  CPPUNIT_ASSERT(g2->getDescendantGraph(g3->getId()) == g3);
+  CPPUNIT_ASSERT(g2->getDescendantGraph(g4->getId()) == g4);
+  CPPUNIT_ASSERT(graph->isDescendantGraph(g1));
+  CPPUNIT_ASSERT(graph->isDescendantGraph(g2));
+  CPPUNIT_ASSERT(graph->isDescendantGraph(g3));
+  CPPUNIT_ASSERT(graph->isDescendantGraph(g4));
+  CPPUNIT_ASSERT(g2->isDescendantGraph(g3));
+  CPPUNIT_ASSERT(g2->isDescendantGraph(g4));
+  
 
   CPPUNIT_ASSERT(graph->getRoot()==graph);
   CPPUNIT_ASSERT(g1->getRoot()==graph);

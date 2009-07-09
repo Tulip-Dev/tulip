@@ -38,9 +38,6 @@ public:
   Embedder(const PropertyContext &);
   ~Embedder();
   bool run();
-private:
-  hash_map<unsigned int, node> nodemap;
-  hash_map<node, unsigned int> rmap;
 };
 
 LAYOUTPLUGINOFGROUP(Embedder, "Embedder (HDE)", "Bertrand Mathieu", "27/05/2003", "Ok", "1.0", "Force Directed");
@@ -55,6 +52,9 @@ Embedder::Embedder(const PropertyContext &context) : LayoutAlgorithm(context) {
 Embedder::~Embedder() {}
 
 bool Embedder::run() {
+  hash_map<unsigned int, node> nodemap;
+  hash_map<node, unsigned int> rmap;
+
   unsigned int numberOfNodes = (unsigned int) graph->numberOfNodes();
   vtx_data *sg = new vtx_data[numberOfNodes];
   int *edges = new int[2 * graph->numberOfEdges() + numberOfNodes];

@@ -16,10 +16,6 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MousePanNZoomNavigator, "MousePanNZoomNavigator", "Tulip Team", "16/04/2008", "Mouse Pan N Zoom Navigator", "1.0");
-INTERACTORPLUGIN(MouseElementDeleter, "MouseElementDeleter", "Tulip Team", "16/04/2008", "Mouse Element Deleter", "1.0");
-INTERACTORPLUGIN(MouseNKeysNavigator, "MouseNKeysNavigator", "Tulip Team", "16/04/2008", "Mouse N Keys navigator", "1.0");
-
 //===============================================================
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 // according to Qt's doc, this constant has been defined by wheel mouse vendors
@@ -64,14 +60,14 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseRotXRotY:public Interactor
+class MouseRotXRotY:public InteractorComponent
 {
  public:
   MouseRotXRotY(){}
   ~MouseRotXRotY(){}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return this; }};
+  InteractorComponent *clone() { return this; }};
 
 bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -99,14 +95,14 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseZoomRotZ:public Interactor
+class MouseZoomRotZ:public InteractorComponent
 {
  public:
   MouseZoomRotZ(){}
   ~MouseZoomRotZ(){}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return this; }};
+  InteractorComponent *clone() { return this; }};
 
 bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -156,14 +152,14 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 //===============================================================
-class MouseMove:public Interactor
+class MouseMove:public InteractorComponent
 {
  public:
   int x,y;
   MouseMove(){}
   ~MouseMove(){}
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return this; }};
+  InteractorComponent *clone() { return this; }};
 
 bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -187,37 +183,42 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 }
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
+  if(currentSpecInteractorComponent){
+    if(currentSpecInteractorComponent->eventFilter(widget,e))
+      return true;
+  }
+
   GlMainWidget *mainWidget=(GlMainWidget *)widget;
   AbstractView *abstractView=(AbstractView *)mainWidget->getView();
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
-      Interactor *currentMouse;
+      InteractorComponent *currentMouse;
       // give focus so we can catch key events
       ((GlMainWidget *)widget)->setFocus();
       if (((QMouseEvent *) e)->modifiers() &
 #if defined(__APPLE__)
-	  Qt::AltModifier
+          Qt::AltModifier
 #else
-	  Qt::ControlModifier
+          Qt::ControlModifier
 #endif
-	  )
-	currentMouse = new MouseZoomRotZ();
+      )
+        currentMouse = new MouseZoomRotZ();
       else if (((QMouseEvent *) e)->modifiers() & Qt::ShiftModifier)
-	currentMouse = new MouseRotXRotY();
+        currentMouse = new MouseRotXRotY();
       else
-	currentMouse = new MouseMove();
+        currentMouse = new MouseMove();
       bool result = currentMouse->eventFilter(widget, e);
 
-      currentMouseID = abstractView->pushInteractor(currentMouse);
+      currentSpecInteractorComponent=currentMouse;
+
+      //currentMouseID = abstractView->pushInteractor(currentMouse);
       return result;
     }
-    currentMouseID = Interactor::invalidID;
     return false;
   }
-  if (e->type() == QEvent::MouseButtonRelease &&
-      currentMouseID != Interactor::invalidID) {
-    abstractView->removeInteractor(currentMouseID);
-    currentMouseID = Interactor::invalidID;
+  if (e->type() == QEvent::MouseButtonRelease) {
+    delete currentSpecInteractorComponent;
+    currentSpecInteractorComponent=NULL;
     return true;
   }
   if (e->type() == QEvent::KeyPress) {

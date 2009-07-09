@@ -28,18 +28,18 @@ namespace tlp {
     for(vector<LocalPluginInfo*>::iterator it=localPluginsList.begin();it!=localPluginsList.end();++it)
       this->pluginsList.push_back(*it);
   }
-  
+
   void PluginsListManager::addServerListRecursion(const string& serverName, const QDomElement& xmlElem){
     if(!xmlElem.isNull()){
       if(xmlElem.tagName() == "pluginsList"){
-	
+
 	QDomNodeList childrenList = xmlElem.childNodes();
 
 	for(unsigned int i=0;i<childrenList.length();++i){
 	  QDomElement childElement = childrenList.at(i).toElement();
 	  QDomNodeList dependenciesList=childElement.childNodes();
 	  vector<PluginDependency> newDependency;
-	  
+
 	  for(unsigned int j=0;j<dependenciesList.length();++j){
 	    QDomElement dependencyElement = dependenciesList.at(j).toElement();
 	    if(dependencyElement.tagName() == "dependency" ){
@@ -48,11 +48,11 @@ namespace tlp {
 						       dependencyElement.attribute("version").toStdString()));
 	    }
 	  }
-	  pluginsList.push_back(new DistPluginInfo(childElement.attribute("name").toStdString(), 
-						   childElement.attribute("type").toStdString(), 
-						   childElement.attribute("displayType").toStdString(), 
-						   serverName, 
-						   childElement.attribute("version").toStdString(), 
+	  pluginsList.push_back(new DistPluginInfo(childElement.attribute("name").toStdString(),
+						   childElement.attribute("type").toStdString(),
+						   childElement.attribute("displayType").toStdString(),
+						   serverName,
+						   childElement.attribute("version").toStdString(),
 						   childElement.attribute("fileName").toStdString(),
 						   "",
 						   newDependency,
@@ -64,20 +64,20 @@ namespace tlp {
       }
     }
   }
-  
+
   void PluginsListManager::modifyListWithInstalledPlugins(){
     pluginsList = for_each(pluginsList.begin(),pluginsList.end(),PluginsListClearLocalVersion()).getResult();
 
     ModifyPluginWithInstalledVersion mpwiv(&localPluginsList);
     for_each(pluginsList.begin(),pluginsList.end(),mpwiv);
   }
-  
+
   void PluginsListManager::addServerList(const string& serverName, const string& xml){
     QDomDocument xmlDoc;
     xmlDoc.setContent(QString(xml.c_str()));
-    
+
     QDomElement elem = xmlDoc.documentElement();
-    
+
     addServerListRecursion(serverName, elem);
     modifyListWithInstalledPlugins();
   }
@@ -147,7 +147,7 @@ namespace tlp {
   }
 
   void PluginsListManager::getPluginsList(CompletePluginsList &list){
-  
+
     switch(arrangementMethod){
     case ARRANGEMENT_METHOD_BY_SERVER :
       {
@@ -273,7 +273,7 @@ namespace tlp {
   bool PluginsListManager::pluginExist(const std::string &pluginName) {
     PluginMatchNamePred pred(pluginName);
     vector<PluginInfo*>::iterator it=find_if(pluginsList.begin(),pluginsList.end(),pred);
-    if(it!=pluginsList.end()) 
+    if(it!=pluginsList.end())
       return true;
     else
       return false;
@@ -314,7 +314,7 @@ namespace tlp {
     return true;
   }
 
-  bool PluginsListManager::getPluginDependenciesToInstall(const PluginInfo &plugin, set<DistPluginInfo,PluginCmp> &toInstall) {
+  bool PluginsListManager::getPluginDependenciesToInstall(const PluginInfo &plugin, set<DistPluginInfo,PluginCmp> &toInstall, set<LocalPluginInfo,PluginCmp> &toRemove) {
     set<PluginDependency,PluginDependencyCmp> dependenciesNotInstalled;
     if(!getPluginDependenciesNotInstalled(plugin,dependenciesNotInstalled))
       return false;
@@ -324,6 +324,12 @@ namespace tlp {
 	return false;
       assert(!nextPlugin->local);
       toInstall.insert(*(DistPluginInfo*)nextPlugin);
+      vector<const PluginInfo *> resultList;
+      getPluginsInformation(nextPlugin->name,nextPlugin->type,resultList);
+      for(vector<const PluginInfo *>::iterator it2=resultList.begin();it2!=resultList.end();++it2){
+        if((*it2)->local)
+          toRemove.insert(*(LocalPluginInfo*)(*it2));
+      }
     }
     return true;
   }

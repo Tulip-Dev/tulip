@@ -4,13 +4,13 @@
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Coord.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public Interactor
+class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent
 {
  private:
   node source;
@@ -23,7 +23,7 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public Interactor
   ~MouseEdgeBuilder(){}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseEdgeBuilder(); }
+  InteractorComponent *clone() { return new MouseEdgeBuilder(); }
 };
 /*@}*/
 

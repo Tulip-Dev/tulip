@@ -69,6 +69,9 @@ double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
 bool TreeMap::run() {
   metric=graph->getProperty<DoubleProperty>("viewMetric");
   size=graph->getLocalProperty<SizeProperty>("viewSize");
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(size);
+
   stdext::hash_map<node,double> value(graph->numberOfNodes());
 
   Iterator<node> *itN=graph->getNodes();
@@ -80,8 +83,7 @@ bool TreeMap::run() {
       break;
     }
   } delete itN;
-  // to ensure that modifs on viewSize will remain
-  graph->push();
+ 
   return true;
 }
 

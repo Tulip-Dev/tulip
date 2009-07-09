@@ -12,28 +12,16 @@
  (at your option) any later version.
 */
 
-#include "ParallelTools.h"
-#include "ParallelCoordinatesView.h"
-
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <string>
-
-#include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlCircle.h>
+#include <tulip/GlQuad.h>
+#include <tulip/GlMainWidget.h>
+
+#include "ParallelTools.h"
+#include "ParallelCoordinatesView.h"
+#include "ParallelCoordsAxisSwapper.h"
 
 using namespace std;
 
@@ -43,31 +31,26 @@ static Color axisHighlight(14,241,212,0);
 
 static Color axisToSwapHighlight(0,255,0,0);
 
-class ParallelCoordsAxisSwapper : public Interactor {
-public :
-	ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false) {}
-	~ParallelCoordsAxisSwapper() {}
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	Interactor *clone() { return new ParallelCoordsAxisSwapper(); }
+static inline float square(float x) {return x*x;}
 
-private :
-	ParallelAxis *selectedAxis;
-	ParallelAxis *otherAxisToSwap;
-	Coord initialSelectedAxisCoord;
-	bool dragStarted;
-	int x,y;
-	GlRect *axisHighlightRect;
-	bool mouseMove;
-	bool axisSwapStarted;
-};
+// Given a triangle ABC, this function compute the (AB, AC) angle in degree using Al Kashi theorem
+float computeABACAngleWithAlKashi(const Coord &A, const Coord &B, const Coord &C) {
+	float AB = A.dist(B);
+	float AC = A.dist(C);
+	float BC = B.dist(C);
+	return acos((square(AB)+square(AC)-square(BC)) / (2 * AB * AC)) * (180. / M_PI);
+}
 
-INTERACTORPLUGIN(ParallelCoordsAxisSwapper, "ParallelCoordsAxisSwapper", "Tulip Team", "16/10/2008", "Parallel Coordinates Axis Swapper", "1.0");
+ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {}
+
+void ParallelCoordsAxisSwapper::setView(View *view) {
+	InteractorComponent::setView(view);
+	parallelView = (ParallelCoordinatesView *) view;
+}
 
 bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 
 	GlMainWidget *glWidget = (GlMainWidget *) widget;
-	ParallelCoordinatesView *parallelView = (ParallelCoordinatesView *) view;
 
 	mouseMove = false;
 
@@ -81,10 +64,21 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 			y = me->y();
 			Coord screenCoords((double) x, (double) y, 0);
 			Coord sceneCoords = glWidget->getScene()->getCamera()->screenTo3DWorld(screenCoords);
-			Coord translationVector = sceneCoords - selectedAxis->getBaseCoord();
-			selectedAxis->translate(Coord(translationVector.getX(), 0, 0));
+			if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
+				float rotAngle = computeABACAngleWithAlKashi(Coord(0,0,0), Coord(0, 50, 0), sceneCoords);
+				if (sceneCoords.getX() < 0) {
+					selectedAxis->setRotationAngle(rotAngle);
+				} else {
+					selectedAxis->setRotationAngle(-rotAngle);
+				}
+
+			} else {
+				Coord translationVector = sceneCoords - selectedAxis->getBaseCoord();
+				selectedAxis->translate(Coord(translationVector.getX(), translationVector.getY(), 0));
+			}
 			otherAxisToSwap = parallelView->getAxisUnderPointer(me->x(), me->y());
 		}
+		drawInteractor = true;
 		parallelView->refresh();
 		return true;
 
@@ -92,6 +86,8 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 		if (selectedAxis != NULL && !dragStarted) {
 			dragStarted = true;
 			parallelView->removeAxis(selectedAxis);
+			initialSelectedAxisRotAngle = selectedAxis->getRotationAngle();
+			selectedAxis->setRotationAngle(0);
 			initialSelectedAxisCoord = selectedAxis->getBaseCoord();
 			parallelView->getGlMainWidget()->draw();
 		}
@@ -100,8 +96,10 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 	} else if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
 
 		if (selectedAxis != NULL && dragStarted) {
+			selectedAxis->setRotationAngle(0);
 			Coord translationVector = initialSelectedAxisCoord - selectedAxis->getBaseCoord();
-			selectedAxis->translate(Coord(translationVector.getX(), 0, 0));
+			selectedAxis->translate(Coord(translationVector.getX(), translationVector.getY(), 0));
+			selectedAxis->setRotationAngle(initialSelectedAxisRotAngle);
 			parallelView->addAxis(selectedAxis);
 
 			if (otherAxisToSwap != NULL && otherAxisToSwap != selectedAxis) {
@@ -117,28 +115,35 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 		return true;
 	}
 	selectedAxis = NULL;
+	drawInteractor = true;
 	return false;
 }
 
 bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
 
+	if (!drawInteractor) {
+		return false;
+	}
+
+	drawInteractor = false;
+
 	if (selectedAxis != NULL) {
 
-		GlRect *axisHighlightRect = NULL;
+		glMainWidget->getScene()->getLayer("Main")->getCamera()->initGl();
+
+		GlQuad *axisHighlightRect = NULL;
 		BoundingBox axisBB;
 
 		if (!dragStarted) {
-			axisBB = selectedAxis->getBoundingBox();
-			axisHighlightRect = new GlRect(Coord(axisBB.first.getX(), axisBB.second.getY(), 0),
-										   Coord(axisBB.second.getX(), axisBB.first.getY(), 0),
-										   axisHighlight, axisHighlight);
+			Vector<Coord, 4> axisBP = selectedAxis->getBoundingPolygonCoords();
+			Coord quadCoords[4] = {axisBP[0], axisBP[1], axisBP[2], axisBP[3]};
+			axisHighlightRect = new GlQuad(quadCoords, axisHighlight);
 
 		} else {
 			if (otherAxisToSwap != NULL && otherAxisToSwap != selectedAxis) {
-				axisBB = otherAxisToSwap->getBoundingBox();
-				axisHighlightRect = new GlRect(Coord(axisBB.first.getX(), axisBB.second.getY(), 0),
-											   Coord(axisBB.second.getX(), axisBB.first.getY(), 0),
-											   axisToSwapHighlight, axisToSwapHighlight);
+				Vector<Coord, 4> axisBP = otherAxisToSwap->getBoundingPolygonCoords();
+				Coord quadCoords[4] = {axisBP[0], axisBP[1], axisBP[2], axisBP[3]};
+				axisHighlightRect = new GlQuad(quadCoords, axisToSwapHighlight);
 			}
 		}
 
@@ -153,7 +158,9 @@ bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
 		}
 
 		if (dragStarted && mouseMove) {
+			selectedAxis->disableTrickForSelection();
 			selectedAxis->draw(0,0);
+			selectedAxis->enableTrickForSelection();
 		}
 		return true;
 	}

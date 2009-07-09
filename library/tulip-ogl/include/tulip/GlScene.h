@@ -32,13 +32,20 @@ namespace tlp {
    */
   struct EntityWithDistance {
 
-    EntityWithDistance(const double &dist,LODResultEntity *entity,bool complexEntity)
-      :distance(dist),entity(entity),complexEntity(complexEntity){
+    EntityWithDistance(const double &dist,LODResultSimpleEntity *entity)
+      :distance(dist),isComplexEntity(false){
+      simpleEntity=entity;
+    }
+    EntityWithDistance(const double &dist,LODResultComplexEntity *entity,bool isNode)
+      :distance(dist),isComplexEntity(true),isNode(isNode){
+      complexEntity=entity;
     }
 
     double distance;
-    LODResultEntity *entity;
-    bool complexEntity;
+    LODResultSimpleEntity *simpleEntity;
+    LODResultComplexEntity *complexEntity;
+    bool isComplexEntity;
+    bool isNode;
   };
 
   /** /brief Tulip scene class
@@ -57,6 +64,11 @@ namespace tlp {
     void initGlParameters();
 
     /**
+     * Prerender meta nodes
+     */
+    void prerenderMetaNodes();
+
+    /**
      * Draw the scene
      */
     void draw();
@@ -65,6 +77,16 @@ namespace tlp {
      * Center scene
      */
     void centerScene();
+
+    /**
+     * Compute informations for ajustSceneToSize
+     */
+    void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor);
+
+    /**
+     * Ajust camera to have entities near borders
+     */
+    void ajustSceneToSize(int width, int height);
 
     /**
      * Zoom to x,y
@@ -97,7 +119,7 @@ namespace tlp {
      * Select in GlLayer : layer
      * And store result in selectedEntities vector
      */
-    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<GlEntity *>& selectedEntities);
+    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<unsigned long>& selectedEntities);
 
     /**
      * Output the scene in SVG
@@ -168,6 +190,11 @@ namespace tlp {
      * Return the layer list
      */
     std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {return &layersList;}
+
+    /**
+     * Clear layers list
+     */
+    void clearLayersList() { layersList.clear();}
 
     /**
      * Get XML description of the scene and children and store it in out string

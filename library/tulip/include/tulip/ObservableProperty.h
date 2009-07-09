@@ -86,10 +86,6 @@ class  TLP_SCOPE ObservableProperty {
 };
 /*@}*/
 
-inline void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
-  observers.push_front(obs); 
-}
-
 inline unsigned int ObservableProperty::countPropertyObservers() { 
   return observers.size(); 
 }

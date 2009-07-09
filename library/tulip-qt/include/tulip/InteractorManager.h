@@ -15,13 +15,15 @@
 
 #include <string>
 #include <cassert>
+#include <map>
 
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/PluginLoader.h>
-#include <tulip/GWInteractor.h>
 
 namespace tlp {
+
+  class Interactor;
 
   /** \brief Interactor plugins manager
    *
@@ -43,18 +45,25 @@ namespace tlp {
     void loadPlugins(PluginLoader *plug=0);
 
     /**
-     * Get the list of available plugins
-     */
-    void initInteractorList(MutableContainer<Interactor *>& interactors);
-
-    /**
      * Get interactor with given name
      */
     Interactor* getInteractor(const std::string &name);
 
+    /**
+     * Return list of compatible interactor with give View
+     */
+    std::list<std::string> getCompatibleInteractors(const std::string &viewName);
+
+    /**
+     * Return priority sorted map of compatible interactor with give View
+     */
+    std::multimap<int,std::string> getSortedCompatibleInteractors(const std::string &viewName);
+
   private:
 
     InteractorManager();
+
+    std::map<std::string,Interactor *> interactorsMap;
 
     static InteractorManager* inst;
 

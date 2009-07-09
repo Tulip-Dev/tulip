@@ -1,2 +1,2 @@
-SUBDIRS = tulip tulip-ogl tulip-qt
-DIST_SUBDIRS = tulip tulip-ogl tulip-qt
+SUBDIRS = tulip @CONFIGURE_tulipogl@ @CONFIGURE_tulipqt@
+DIST_SUBDIRS = tulip @CONFIGURE_tulipogl@ @CONFIGURE_tulipqt@

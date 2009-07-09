@@ -1,221 +1,96 @@
+INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES 
+	tulip/Bfs.h
+	tulip/Ordering.h 
+	tulip/ConvexHull.h 
+	tulip/Delaunay.h 
+	tulip/tulipconf.h 
+	tulip/GraphTools.h 
+	tulip/hash_string.h 
+	tulip/Array.h
+	tulip/Vector.h
+	tulip/Matrix.h
+	tulip/Rectangle.h
+	tulip/Circle.h
+	tulip/SimpleTest.h 
+	tulip/TreeTest.h 
+	tulip/AcyclicTest.h 
+	tulip/ConnectedTest.h 
+	tulip/BiconnectedTest.h 
+	tulip/TriconnectedTest.h 
+	tulip/GraphProperty.h 
+	tulip/LayoutProperty.h 
+	tulip/Plugin.h 
+	tulip/Algorithm.h 
+	tulip/BooleanAlgorithm.h  
+	tulip/LayoutAlgorithm.h 
+	tulip/PluginLoader.h 
+	tulip/Size.h 
+	tulip/Node.h 
+	tulip/Edge.h 
+	tulip/Graph.h 
+	tulip/Types.h 
+	tulip/Color.h 
+	tulip/MethodFactory.h 
+	tulip/PluginLoaderTxt.h 
+	tulip/SizeProperty.h 
+	tulip/ColorProperty.h 
+	tulip/ImportModule.h 
+	tulip/DoubleProperty.h 
+	tulip/PropertyAlgorithm.h 
+	tulip/SizeAlgorithm.h 
+	tulip/ColorAlgorithm.h 
+	tulip/IntegerProperty.h 
+	tulip/DoubleAlgorithm.h 
+	tulip/StringProperty.h 
+	tulip/TemplateFactory.h 
+	tulip/Coord.h 
+	tulip/IntegerAlgorithm.h 
+	tulip/Observable.h 
+	tulip/ObservableGraph.h 
+	tulip/ObservableProperty.h 
+	tulip/AbstractProperty.h 
+	tulip/StringAlgorithm.h 
+	tulip/TlpTools.h 
+	tulip/PluginContext.h 
+	tulip/BooleanProperty.h 
+	tulip/TulipPlugin.h 
+	tulip/ExportModule.h 
+	tulip/Reflect.h 
+	tulip/WithParameter.h 
+	tulip/WithDependency.h 
+	tulip/PluginProgress.h 
+	tulip/Iterator.h 
+	tulip/StlIterator.h 
+	tulip/StableIterator.h 
+	tulip/SortIterator.h 
+	tulip/GraphMeasure.h 
+	tulip/ConcatIterator.h 
+	tulip/ReturnType.h 
+	tulip/MutableContainer.h 
+	tulip/PluginLibraryLoader.h 
+	tulip/StlFunctions.h 
+	tulip/ExtendedClusterOperation.h 
+	tulip/StringCollection.h 
+	tulip/DrawingTools.h 
+	tulip/Face.h 
+	tulip/PlanarityTest.h 
+	tulip/OuterPlanarTest.h 
+	tulip/FaceIterator.h 
+        tulip/PlanarConMap.h 
+        tulip/GraphDecorator.h 
+	tulip/ForEach.h 
+	tulip/MapIterator.h 
+	tulip/BoundingBox.h 
+	tulip/ColorScale.h
+)
 
-INSTALL_FILES(${TULIP_INCLUDE_INSTALL_DIR}/tulip/ FILES 
-  tulip/Bfs.h
-  tulip/Ordering.h
-  tulip/ConvexHull.h
-  tulip/Delaunay.h
-  tulip/tulipconf.h
-  tulip/GraphTools.h
-  tulip/hash_string.h
-  tulip/Array.h 
-  tulip/Vector.h
-  tulip/Matrix.h
-  tulip/Rectangle.h
-  tulip/Circle.h
-  tulip/SimpleTest.h
-  tulip/TreeTest.h
-  tulip/AcyclicTest.h
-  tulip/ConnectedTest.h
-  tulip/BiconnectedTest.h
-  tulip/TriconnectedTest.h
-  tulip/GraphProperty.h
-  tulip/LayoutProperty.h
-  tulip/Plugin.h
-  tulip/Algorithm.h
-  tulip/BooleanAlgorithm.h 
-  tulip/LayoutAlgorithm.h
-  tulip/PluginLoader.h
-  tulip/Size.h
-  tulip/Node.h
-  tulip/Edge.h
-  tulip/Graph.h
-  tulip/Types.h
-  tulip/Color.h
-  tulip/MethodFactory.h
-  tulip/PluginLoaderTxt.h
-  tulip/SizeProperty.h
-  tulip/ColorProperty.h
-  tulip/ImportModule.h
-  tulip/DoubleProperty.h
-  tulip/PropertyAlgorithm.h
-  tulip/SizeAlgorithm.h
-  tulip/ColorAlgorithm.h
-  tulip/IntegerProperty.h
-  tulip/DoubleAlgorithm.h
-  tulip/StringProperty.h
-  tulip/TemplateFactory.h
-  tulip/Coord.h
-  tulip/IntegerAlgorithm.h
-  tulip/Observable.h
-  tulip/ObservableGraph.h
-  tulip/ObservableProperty.h
-  tulip/AbstractProperty.h
-  tulip/StringAlgorithm.h
-  tulip/TlpTools.h
-  tulip/PluginContext.h
-  tulip/BooleanProperty.h
-  tulip/TulipPlugin.h
-  tulip/ExportModule.h
-  tulip/Reflect.h
-  tulip/WithParameter.h
-  tulip/WithDependency.h
-  tulip/PluginProgress.h
-  tulip/Iterator.h
-  tulip/StlIterator.h
-  tulip/StableIterator.h
-  tulip/SortIterator.h
-  tulip/GraphMeasure.h
-  tulip/ConcatIterator.h
-  tulip/ReturnType.h
-  tulip/MutableContainer.h
-  tulip/PluginLibraryLoader.h
-  tulip/StlFunctions.h
-  tulip/ExtendedClusterOperation.h
-  tulip/StringCollection.h
-  tulip/DrawingTools.h
-  tulip/Face.h
-  tulip/PlanarityTest.h
-  tulip/OuterPlanarTest.h
-  tulip/FaceIterator.h
-  tulip/PlanarConMap.h
-  tulip/GraphDecorator.h
-  tulip/ForEach.h
-  tulip/MapIterator.h
-  tulip/BoundingBox.h )
-
-INSTALL_FILES(${TULIP_INCLUDE_INSTALL_DIR}/tulip/cxx/ FILES
-  tulip/cxx/Array.cxx
-  tulip/cxx/Vector.cxx
-  tulip/cxx/Matrix.cxx
-  tulip/cxx/Circle.cxx
-  tulip/cxx/AbstractProperty.cxx
-  tulip/cxx/TemplateFactory.cxx
-  tulip/cxx/Reflect.cxx
-  tulip/cxx/Graph.cxx )
-
-########### install files ###############
-
-#install(FILES  tulip/TulipRelease.h DESTINATION )
-#install(FILES  tulip/TulipRelease.h.in DESTINATION )
-#install(FILES  tulip/Bfs.h  	tulip/Ordering.h  	tulip/ConvexHull.h  	tulip/Delaunay.h  	tulip/tulipconf.h  	tulip/GraphTools.h  	tulip/hash_string.h  	tulip/Array.h 	tulip/cxx/Array.cxx 	tulip/Vector.h 	tulip/cxx/Vector.cxx 	tulip/Matrix.h 	tulip/cxx/Matrix.cxx 	tulip/Rectangle.h 	tulip/Circle.h 	tulip/cxx/Circle.cxx  	tulip/SimpleTest.h  	tulip/TreeTest.h  	tulip/AcyclicTest.h  	tulip/ConnectedTest.h  	tulip/BiconnectedTest.h  	tulip/TriconnectedTest.h  	tulip/cxx/AbstractProperty.cxx  	tulip/cxx/TemplateFactory.cxx  	tulip/cxx/Reflect.cxx  	tulip/cxx/Graph.cxx  	tulip/GraphProperty.h  	tulip/LayoutProperty.h  	tulip/Plugin.h  	tulip/Algorithm.h  	tulip/BooleanAlgorithm.h   	tulip/LayoutAlgorithm.h  	tulip/PluginLoader.h  	tulip/Size.h  	tulip/Node.h  	tulip/Edge.h  	tulip/Graph.h  	tulip/Types.h  	tulip/Color.h  	tulip/MethodFactory.h  	tulip/PluginLoaderTxt.h  	tulip/SizeProperty.h  	tulip/ColorProperty.h  	tulip/ImportModule.h  	tulip/DoubleProperty.h  	tulip/PropertyAlgorithm.h  	tulip/SizeAlgorithm.h  	tulip/ColorAlgorithm.h  	tulip/IntegerProperty.h  	tulip/DoubleAlgorithm.h  	tulip/StringProperty.h  	tulip/TemplateFactory.h  	tulip/Coord.h  	tulip/IntegerAlgorithm.h  	tulip/Observable.h  	tulip/ObservableGraph.h  	tulip/ObservableProperty.h  	tulip/AbstractProperty.h  	tulip/StringAlgorithm.h  	tulip/TlpTools.h  	tulip/PluginContext.h  	tulip/BooleanProperty.h  	tulip/TulipPlugin.h  	tulip/ExportModule.h  	tulip/Reflect.h  	tulip/WithParameter.h  	tulip/WithDependency.h  	tulip/PluginProgress.h  	tulip/Iterator.h  	tulip/StlIterator.h  	tulip/StableIterator.h  	tulip/SortIterator.h  	tulip/GraphMeasure.h  	tulip/ConcatIterator.h  	tulip/ReturnType.h  	tulip/MutableContainer.h  	tulip/PluginLibraryLoader.h  	tulip/StlFunctions.h  	tulip/ExtendedClusterOperation.h  	tulip/StringCollection.h  	tulip/DrawingTools.h  	tulip/Face.h  	tulip/PlanarityTest.h  	tulip/OuterPlanarTest.h  	tulip/FaceIterator.h          tulip/PlanarConMap.h          tulip/GraphDecorator.h  	tulip/ForEach.h  	tulip/MapIterator.h  	tulip/BoundingBox.h DESTINATION )
-
-
-
-#original Makefile.am contents follow:
-
-#nobase_include_HEADERS = \
-#	tulip/Bfs.h \
-#	tulip/Ordering.h \
-#	tulip/ConvexHull.h \
-#	tulip/Delaunay.h \
-#	tulip/tulipconf.h \
-#	tulip/GraphTools.h \
-#	tulip/hash_string.h \
-#	tulip/Array.h\
-#	tulip/cxx/Array.cxx\
-#	tulip/Vector.h\
-#	tulip/cxx/Vector.cxx\
-#	tulip/Matrix.h\
-#	tulip/cxx/Matrix.cxx\
-#	tulip/Rectangle.h\
-#	tulip/Circle.h\
-#	tulip/cxx/Circle.cxx \
-#	tulip/SimpleTest.h \
-#	tulip/TreeTest.h \
-#	tulip/AcyclicTest.h \
-#	tulip/ConnectedTest.h \
-#	tulip/BiconnectedTest.h \
-#	tulip/TriconnectedTest.h \
-#	tulip/cxx/AbstractProperty.cxx \
-#	tulip/cxx/TemplateFactory.cxx \
-#	tulip/cxx/Reflect.cxx \
-#	tulip/cxx/Graph.cxx \
-#	tulip/GraphProperty.h \
-#	tulip/LayoutProperty.h \
-#	tulip/Plugin.h \
-#	tulip/Algorithm.h \
-#	tulip/BooleanAlgorithm.h  \
-#	tulip/LayoutAlgorithm.h \
-#	tulip/PluginLoader.h \
-#	tulip/Size.h \
-#	tulip/Node.h \
-#	tulip/Edge.h \
-#	tulip/Graph.h \
-#	tulip/Types.h \
-#	tulip/Color.h \
-#	tulip/MethodFactory.h \
-#	tulip/PluginLoaderTxt.h \
-#	tulip/SizeProperty.h \
-#	tulip/ColorProperty.h \
-#	tulip/ImportModule.h \
-#	tulip/DoubleProperty.h \
-#	tulip/PropertyAlgorithm.h \
-#	tulip/SizeAlgorithm.h \
-#	tulip/ColorAlgorithm.h \
-#	tulip/IntegerProperty.h \
-#	tulip/DoubleAlgorithm.h \
-#	tulip/StringProperty.h \
-#	tulip/TemplateFactory.h \
-#	tulip/Coord.h \
-#	tulip/IntegerAlgorithm.h \
-#	tulip/Observable.h \
-#	tulip/ObservableGraph.h \
-#	tulip/ObservableProperty.h \
-#	tulip/AbstractProperty.h \
-#	tulip/StringAlgorithm.h \
-#	tulip/TlpTools.h \
-#	tulip/PluginContext.h \
-#	tulip/BooleanProperty.h \
-#	tulip/TulipPlugin.h \
-#	tulip/ExportModule.h \
-#	tulip/Reflect.h \
-#	tulip/WithParameter.h \
-#	tulip/WithDependency.h \
-#	tulip/PluginProgress.h \
-#	tulip/Iterator.h \
-#	tulip/StlIterator.h \
-#	tulip/StableIterator.h \
-#	tulip/SortIterator.h \
-#	tulip/GraphMeasure.h \
-#	tulip/ConcatIterator.h \
-#	tulip/ReturnType.h \
-#	tulip/MutableContainer.h \
-#	tulip/PluginLibraryLoader.h \
-#	tulip/StlFunctions.h \
-#	tulip/ExtendedClusterOperation.h \
-#	tulip/StringCollection.h \
-#	tulip/DrawingTools.h \
-#	tulip/Face.h \
-#	tulip/PlanarityTest.h \
-#	tulip/OuterPlanarTest.h \
-#	tulip/FaceIterator.h \
-#        tulip/PlanarConMap.h \
-#        tulip/GraphDecorator.h \
-#	tulip/ForEach.h \
-#	tulip/MapIterator.h \
-#	tulip/BoundingBox.h
-#
-#nobase_nodist_include_HEADERS = tulip/TulipRelease.h
-#
-#nobase_dist_noinst_DATA = tulip/TulipRelease.h.in
-#
-#noinst_HEADERS = tulip/TLPParser.h \
-#	tulip/BmdLink.h \
-#	tulip/BmdList.h \
-#	tulip/cxx/BmdLink.cxx \
-#	tulip/cxx/BmdList.cxx \
-#	tulip/GraphAbstract.h   \
-#	tulip/GraphIterator.h \
-#	tulip/GraphImpl.h \
-#	tulip/GraphView.h \
-#	tulip/SimpleVector.h \
-#	tulip/IdManager.h \
-#	tulip/PropertyManager.h \
-#	tulip/PlanarityTestImpl.h \
-#	tulip/RectangleArea.h \
-#	tulip/Border.h \
-#	tulip/Plane.h \
-#	tulip/Polynome.h \
-#	tulip/PluginLibraryLoader.h \
-#	tulip/StatisticsNodeModule.h \
-#	tulip/GraphUpdatesRecorder.h
+INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES
+        tulip/cxx/Array.cxx
+  	tulip/cxx/Vector.cxx
+  	tulip/cxx/Matrix.cxx
+  	tulip/cxx/Circle.cxx
+  	tulip/cxx/AbstractProperty.cxx
+  	tulip/cxx/TemplateFactory.cxx
+  	tulip/cxx/Reflect.cxx
+  	tulip/cxx/Graph.cxx 
+)

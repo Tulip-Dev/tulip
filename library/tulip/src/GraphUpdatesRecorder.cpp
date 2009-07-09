@@ -7,15 +7,25 @@ using namespace std;
 using namespace stdext;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder() :
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) :
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
-  updatesReverted(false)
+  updatesReverted(false),
+  restartAllowed(allowRestart),
+  newValuesRecorded(false)
 {}
 
 GraphUpdatesRecorder::~GraphUpdatesRecorder() {
   deleteDeletedObjects();
+  deleteValues(oldNodeValues);
+  deleteValues(newNodeValues);
+  deleteValues(oldEdgeValues);
+  deleteValues(newEdgeValues);
+  deleteDefaultValues(oldNodeDefaultValues);
+  deleteDefaultValues(newNodeDefaultValues);
+  deleteDefaultValues(oldEdgeDefaultValues);
+  deleteDefaultValues(newEdgeDefaultValues);
 }
 
 // delete the objects collected as to be deleted
@@ -52,6 +62,42 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
   }
 }
 
+// clean up all the MutableContainers
+void GraphUpdatesRecorder::deleteValues(hash_map<unsigned long,
+					MutableContainer<DataMem*>* >& values) {
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+    values.begin();
+  while(itnv != values.end()) {
+    deleteValues((*itnv).second);
+    ++itnv;
+  }
+  values.clear();
+}
+
+// delete all the DataMem referenced by a MutableContainer
+void GraphUpdatesRecorder::deleteValues(MutableContainer<DataMem*>* values) {
+  IteratorValue* itv = values->findAll(NULL, false);
+  while(itv->hasNext()) {
+    TypedValueContainer<DataMem*> tVal;
+    itv->nextValue(tVal);
+    delete tVal.value;
+  }
+  delete itv;
+  delete values;
+}
+
+// delete all the DataMem referenced by a hash_map
+void GraphUpdatesRecorder::deleteDefaultValues(hash_map<unsigned long,
+					       DataMem*>& values) {
+  hash_map<unsigned long, DataMem*>::iterator itv = values.begin();
+  hash_map<unsigned long, DataMem*>::iterator itve = values.end();
+  while(itv != itve) {
+    delete itv->second;
+    ++itv;
+  }
+  values.clear();
+}
+
 void GraphUpdatesRecorder::recordEdgeContainer(hash_map<node, vector<edge> >& containers, GraphImpl* g, node n) {
   hash_map<node, vector<edge> >::iterator itc =
     containers.find(n);
@@ -79,7 +125,204 @@ void GraphUpdatesRecorder::removeFromEdgeContainer(hash_map<node, vector<edge> >
       ++it;
     }
   }
-} 
+}
+
+void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
+  assert(restartAllowed);
+  if (!newValuesRecorded) {
+    // from now on it will be done
+    newValuesRecorded = true;
+
+    // record nodeIds & edgeIds
+    GraphImpl* root = (GraphImpl*) g;
+    newNodeIdManager = root->nodeIds;
+    newEdgeIdManager = root->edgeIds;
+    // record new edges containers
+    hash_map<edge, EdgeRecord>::iterator itae = addedEdges.begin();
+    while(itae != addedEdges.end()) {
+      recordEdgeContainer(newContainers, root,(*itae).second.source);
+      recordEdgeContainer(newContainers, root,(*itae).second.target);
+      itae++;
+    }
+    // record new properties default values & new values
+    // loop on oldNodeDefaultValues
+    hash_map<unsigned long, DataMem*>::iterator itdv =
+      oldNodeDefaultValues.begin();
+    while(itdv != oldNodeDefaultValues.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*itdv).first;
+      newNodeDefaultValues[(unsigned long) p] =
+	p->getNodeDefaultDataMemValue();
+      recordNewNodeValues(p);
+      itdv++;
+    }
+    // loop on oldNodeValues
+    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itov =
+      oldNodeValues.begin();
+    while(itov != oldNodeValues.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*itov).first;
+      if (oldNodeDefaultValues.find((unsigned long) p) ==
+	  oldNodeDefaultValues.end())
+	recordNewNodeValues(p);
+      itov++;
+    }
+    // loop on updatedPropsAddedNodes
+    hash_map<unsigned long, std::set<node> >::iterator itan =
+      updatedPropsAddedNodes.begin();
+    while(itan != updatedPropsAddedNodes.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*itan).first;
+      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+	newNodeValues.find((unsigned long) p);
+      MutableContainer<DataMem*>*  nv;
+      bool created = itnv == newNodeValues.end();
+      bool hasNewValues = false;
+      if (created) {
+	nv = new MutableContainer<DataMem*>;
+	nv->setAll(NULL);
+      } else
+	nv = (*itnv).second;
+      set<node>::iterator itn = (*itan).second.begin();
+      set<node>::iterator itne = (*itan).second.end();
+      while(itn != itne) {
+	DataMem* value = p->getNonDefaultDataMemValue(*itn);
+	// record value only if it is not the default one
+	if (value) {
+	  nv->set((*itn).id, value);
+	  hasNewValues = true;
+	}
+	itn++;
+      }
+      if (created) {
+	if (hasNewValues)
+	  newNodeValues[(unsigned long) p] = nv;
+	else
+	  delete nv;
+      }
+      itan++;
+    }
+    // loop on oldEdgeDefaultValues
+    itdv = oldEdgeDefaultValues.begin();
+    while(itdv != oldNodeDefaultValues.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*itdv).first;
+      newEdgeDefaultValues[(unsigned long) p] =
+	p->getEdgeDefaultDataMemValue();
+      recordNewEdgeValues(p);
+      itdv++;
+    }
+    // loop on oldEdgeValues
+    itov = oldEdgeValues.begin();
+    while(itov != oldEdgeValues.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*itov).first;
+      if (oldEdgeDefaultValues.find((unsigned long) p) ==
+	  oldEdgeDefaultValues.end())
+	recordNewEdgeValues(p);
+      itov++;
+    }
+    // loop on updatedPropsAddedEdges
+    hash_map<unsigned long, std::set<edge> >::iterator iten =
+      updatedPropsAddedEdges.begin();
+    while(iten != updatedPropsAddedEdges.end()) {
+      PropertyInterface* p = (PropertyInterface *) (*iten).first;
+      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+	newEdgeValues.find((unsigned long) p);
+      MutableContainer<DataMem*>*  nv;
+      bool created = itnv == newEdgeValues.end();
+      bool hasNewValues = false;
+      if (created) {
+	nv = new MutableContainer<DataMem*>;
+	nv->setAll(NULL);
+      } else
+	nv = (*itnv).second;
+      set<edge>::iterator ite = (*iten).second.begin();
+      set<edge>::iterator itee = (*iten).second.end();
+      while(ite != itee) {
+	DataMem* value = p->getNonDefaultDataMemValue(*ite);
+	// record value only if it is not the default one
+	if (value) {
+	  nv->set((*ite).id, value);
+	  hasNewValues = true;
+	}
+	ite++;
+      }
+      if (created) {
+	if (hasNewValues)
+	  newEdgeValues[(unsigned long) p] = nv;
+	else
+	  delete nv;
+      }
+      iten++;
+    }
+    // record graph attribute new values
+    hash_map<unsigned long, DataSet>::iterator itav =
+      oldAttributeValues.begin();
+    while (itav != oldAttributeValues.end()) {
+      Graph* g = (Graph *) (*itav).first;
+      Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+      const DataSet& gAttValues = g->getAttributes();
+      DataSet& nAttValues = newAttributeValues[(unsigned long) g];
+      while(itv->hasNext()) {
+      pair<string, DataType*> pval = itv->next();
+      nAttValues.setData(pval.first, gAttValues.getData(pval.first));
+    } delete itv;
+    ++itav;
+    }
+  }
+}
+
+void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
+  assert(newNodeValues.find((unsigned long) p) == newNodeValues.end());
+  MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
+  nv->setAll(NULL);
+  bool hasNewValues = false;
+  // record updated nodes new values
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
+    oldNodeValues.find((unsigned long) p);
+  if (itp != oldNodeValues.end()) {
+    MutableContainer<DataMem*>* opv = (*itp).second;
+    IteratorValue* itov = opv->findAll(NULL, false);
+    while(itov->hasNext()) {
+      node n(itov->next());
+      DataMem* value = p->getNonDefaultDataMemValue(n);
+      // record value only if it is not the default one
+      if (value) {
+	nv->set(n.id, value);
+	hasNewValues = true;
+      }
+    }
+    delete itov;
+  }
+  if (hasNewValues)
+    newNodeValues[(unsigned long) p] = nv;
+  else
+    delete nv;
+}
+
+void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
+  assert(newEdgeValues.find((unsigned long) p) == newEdgeValues.end());
+  MutableContainer<DataMem*>*  nv = new MutableContainer<DataMem*>;
+  nv->setAll(NULL);
+  bool hasNewValues = false;
+  // record updated edges new values
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
+    oldEdgeValues.find((unsigned long) p);
+  if (itp != oldEdgeValues.end()) {
+    MutableContainer<DataMem*>* opv = (*itp).second;
+    IteratorValue* itov = opv->findAll(NULL, false);
+    while(itov->hasNext()) {
+      edge n(itov->next());
+      DataMem* value = p->getNonDefaultDataMemValue(n);
+      // record value only if it is not the default one
+      if (value) {
+	nv->set(n.id, value);
+	hasNewValues = true;
+      }
+    }
+    delete itov;
+  }
+  if (hasNewValues)
+    newEdgeValues[(unsigned long) p] = nv;
+  else
+    delete nv;
+}
 
 void GraphUpdatesRecorder::startRecording(GraphImpl* g) {
   if (g->getSuperGraph() == g) {
@@ -97,6 +340,14 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
     recordingStopped = false;
   }
 #endif
+  if (newValuesRecorded) {
+    deleteValues(newNodeValues);
+    deleteValues(newEdgeValues);
+    deleteDefaultValues(newNodeDefaultValues);
+    deleteDefaultValues(newEdgeDefaultValues);
+    newValuesRecorded = false;
+  }
+
   g->addGraphObserver(this);
   
   // add self as a PropertyObserver for all previously
@@ -144,19 +395,6 @@ void GraphUpdatesRecorder::stopRecording(Graph* g) {
   Graph* sg;
   forEach(sg, g->getSubGraphs())
     stopRecording(sg);  
-  if (g->getSuperGraph() == g) {
-    // record nodeIds & edgeIds
-    GraphImpl* root = (GraphImpl*) g;
-    newNodeIdManager = root->nodeIds;
-    newEdgeIdManager = root->edgeIds;
-    // record new edges containers
-    hash_map<edge, EdgeRecord>::iterator it = addedEdges.begin();
-    while(it != addedEdges.end()) {
-      recordEdgeContainer(newContainers, root,(*it).second.source);
-      recordEdgeContainer(newContainers, root,(*it).second.target);
-      ++it;
-    }
-  }
 }
 
 void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
@@ -290,23 +528,23 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     }
     ++itpg;
   }
-  // loop on nodesDefaultValues
-  hash_map<unsigned long, string>& nodeDefaultValues =
+  // loop on nodeDefaultValues
+  hash_map<unsigned long, DataMem*>& nodeDefaultValues =
     undo ? oldNodeDefaultValues : newNodeDefaultValues;
-  hash_map<unsigned long, string>::iterator itdv =
+  hash_map<unsigned long, DataMem*>::iterator itdv =
     nodeDefaultValues.begin();
   while(itdv != nodeDefaultValues.end()) {
-    ((PropertyInterface *) (*itdv).first)->
-      setAllNodeStringValue((*itdv).second);
+    PropertyInterface* prop = (PropertyInterface *) (*itdv).first;
+    prop->setAllNodeDataMemValue((*itdv).second);
     ++itdv;
   }
   // loop on edgeDefaultValues
-  hash_map<unsigned long, std::string>& edgeDefaultValues =
+  hash_map<unsigned long, DataMem*>& edgeDefaultValues =
     undo ? oldEdgeDefaultValues : newEdgeDefaultValues;
   itdv = edgeDefaultValues.begin();
   while(itdv != edgeDefaultValues.end()) {
-    ((PropertyInterface *) (*itdv).first)->
-      setAllEdgeStringValue((*itdv).second);
+    PropertyInterface* prop = (PropertyInterface *) (*itdv).first;
+    prop->setAllEdgeDataMemValue((*itdv).second);
     ++itdv;
   }
 
@@ -325,60 +563,72 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itc;
   }
   // loop on nodeValues
-  hash_map<unsigned long, hash_map<node, string> >& nodeValues =
+  hash_map<unsigned long, MutableContainer<DataMem*>* >& nodeValues =
     undo ? oldNodeValues : newNodeValues;
-  hash_map<unsigned long, hash_map<node, string> >::iterator itnv =
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
     nodeValues.begin();
   while(itnv != nodeValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itnv).first;
-    hash_map<node, string>::iterator itv = (*itnv).second.begin();
-    hash_map<node, string>::iterator itve = (*itnv).second.end();
-    if (typeid(*prop) == typeid(GraphProperty)) {
-      // GraphProperty dos not allow to set value as string
-      // see GraphProperty.cpp
-      GraphProperty* gProp = (GraphProperty *) prop;
-      GraphType::RealType val;
-      while(itv != itve) {
-	if (GraphType::fromString(val, (*itv).second))
-	  gProp->setNodeValue((*itv).first, val);
-	++itv;
-      }
-    } else {
-      while(itv != itve) {
-	prop->setNodeStringValue((*itv).first, (*itv).second);
-	++itv;
-      }
+    IteratorValue* itv = (*itnv).second->findAll(NULL, false);
+    while(itv->hasNext()) {
+      TypedValueContainer<DataMem*> tVal;
+      node n(itv->nextValue(tVal));
+      prop->setNodeDataMemValue(n, tVal.value);
     }
+    delete itv;
     ++itnv;
   }
   // loop on edgeValues
-  hash_map<unsigned long, hash_map<edge, string> >& edgeValues =
+  hash_map<unsigned long, MutableContainer<DataMem*>* >& edgeValues =
     undo ? oldEdgeValues : newEdgeValues;
-  hash_map<unsigned long, hash_map<edge, string> >::iterator itne =
+  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itev =
     edgeValues.begin();
-  while(itne != edgeValues.end()) {
-    PropertyInterface* prop = (PropertyInterface *) (*itne).first;
-    hash_map<edge, string>::iterator itv = (*itne).second.begin();
-    hash_map<edge, string>::iterator itve = (*itne).second.end();
-    if (typeid(*prop) == typeid(GraphProperty)) {
-      // GraphProperty does not allow to set value as string
-      // see GraphProperty.cpp
-      GraphProperty* gProp = (GraphProperty *) prop;
-      EdgeSetType::RealType val;
-      while(itv != itve) {
-	if (EdgeSetType::fromString(val, (*itv).second))
-	  gProp->setEdgeValue((*itv).first, val);
-	++itv;
-      }
-    } else {
-      while(itv != itve) {
-	prop->setEdgeStringValue((*itv).first, (*itv).second);
-	++itv;
-      }
+  while(itev != edgeValues.end()) {
+    PropertyInterface* prop = (PropertyInterface *) (*itev).first;
+    IteratorValue* itv = (*itev).second->findAll(NULL, false);
+    while(itv->hasNext()) {
+      TypedValueContainer<DataMem*> tVal;
+      edge e(itv->nextValue(tVal));
+      prop->setEdgeDataMemValue(e, tVal.value);
     }
-    ++itne;
+    delete itv;
+    ++itev;
+  }
+  // loop on attribute values to restore
+  hash_map<unsigned long, DataSet>& attValues =
+    undo ? oldAttributeValues : newAttributeValues;
+  hash_map<unsigned long, DataSet>::iterator itav = attValues.begin();
+  while (itav != attValues.end()) {
+    Graph* g = (Graph *) (*itav).first;
+    Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+    while(itv->hasNext()) {
+      pair<string, DataType*> pval = itv->next();
+      if (pval.second)
+	g->getNonConstAttributes().setData(pval.first, pval.second->clone());
+      else
+	g->getNonConstAttributes().remove(pval.first);
+    } delete itv;
+    ++itav;
   }
   Observable::unholdObservers();
+}
+
+bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
+  if (!restartAllowed) {
+    // check if nothing is yet recorded for prop
+    unsigned long p = (unsigned long) prop;
+    if ((oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) &&
+	(oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) &&
+	(oldNodeValues.find(p) == oldNodeValues.end()) &&
+	(oldEdgeValues.find(p) == oldEdgeValues.end()) &&
+	(updatedPropsAddedNodes.find(p) == updatedPropsAddedNodes.end()) &&
+	(updatedPropsAddedEdges.find(p) == updatedPropsAddedEdges.end())) {
+      // prop is no longer observed
+      prop->removePropertyObserver(this);
+      return true;
+    }
+  }
+  return false;
 }
 
 void GraphUpdatesRecorder::addNode(Graph* g, node n) {
@@ -551,55 +801,32 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   p.prop->removePropertyObserver(this);
 }
 
-void GraphUpdatesRecorder::recordNodeValue(PropertyInterface* p, node n,
-					   stdext::hash_map<unsigned long,
-					   stdext::hash_map<node,
-					   std::string> >& values,
-					   bool always) {
-  // create values[(unsigned long) p] if needed
-  hash_map<unsigned long, hash_map<node, string> >::iterator it = 
-    values.find((unsigned long) p);
-  if (it == values.end()) {
-    hash_map<node, string> pv;
-    if (typeid(*p) == typeid(GraphProperty)) {
-      // GraphProperty dos not allow to set value as string
-      // see GraphProperty.cpp
-      ostringstream oss;
-      oss << (unsigned long) ((GraphProperty *) p)->getNodeValue(n);
-      pv[n] = oss.str();
-    } else 
-      pv[n] = p->getNodeStringValue(n);
-    values[(unsigned long) p] = pv;
-  } else {
-    if (always || ((*it).second.find(n) == (*it).second.end())) {
-      if (typeid(*p) == typeid(GraphProperty)) {
-	// GraphProperty dos not allow to set value as string
-	// see GraphProperty.cpp
-	ostringstream oss;
-	oss << (unsigned long) ((GraphProperty *) p)->getNodeValue(n);
-	(*it).second[n] = oss.str();
-      } else
-	(*it).second[n] = p->getNodeStringValue(n);
-    }
-  }
-}
-
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
   hash_map<node, set<Graph*> >::iterator ita = addedNodes.find(n);
   // don't record old values for newly added nodes
-  if (ita != addedNodes.end())
-    return;
-  recordNodeValue(p, n, oldNodeValues, false);
+  if (ita != addedNodes.end()) {
+    if (!restartAllowed)
+      return;
+    updatedPropsAddedNodes[(unsigned long) p].insert(n);
+  } else {
+    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
+      oldNodeValues.find((unsigned long) p);
+    if (it == oldNodeValues.end()) {
+      MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
+      pv->setAll(NULL);
+      pv->set(n.id, p->getNodeDataMemValue(n));
+      oldNodeValues[(unsigned long) p] = pv;
+    } else {
+      if ((*it).second->get(n.id) == NULL)
+	(*it).second->set(n.id, p->getNodeDataMemValue(n));
+    }
+  }
 }
             
-void GraphUpdatesRecorder::afterSetNodeValue(PropertyInterface* p, node n) {
-  recordNodeValue(p, n, newNodeValues, true);
-}
-
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
   if  (oldNodeDefaultValues.find((unsigned long) p) ==
        oldNodeDefaultValues.end()) {
-    oldNodeDefaultValues[(unsigned long) p] = p->getNodeDefaultStringValue();
+    oldNodeDefaultValues[(unsigned long) p] = p->getNodeDefaultDataMemValue();
     // save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
@@ -607,63 +834,51 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
   }
 }
             
-void GraphUpdatesRecorder::afterSetAllNodeValue(PropertyInterface* p) {
-  hash_map<unsigned long, hash_map<node, string> >::iterator it = 
-    newNodeValues.find((unsigned long) p);
-  // if needed erase all new nodes values
-  if (it != newNodeValues.end())
-    newNodeValues.erase(it);
-  // record new default value
-  newNodeDefaultValues[(unsigned long) p] = p->getNodeDefaultStringValue();
-}
-
-void GraphUpdatesRecorder::recordEdgeValue(PropertyInterface* p, edge e,
-					   stdext::hash_map<unsigned long,
-					   stdext::hash_map<edge,
-					   std::string> >& values,
-					   bool always) {
-  hash_map<unsigned long, hash_map<edge, string> >::iterator it = 
-    values.find((unsigned long) p);
-  if (it == values.end()) {
-    hash_map<edge, string> pv;
-    pv[e] = p->getEdgeStringValue(e);
-    values[(unsigned long) p] = pv;
-  } else {
-    if (always || ((*it).second.find(e) == (*it).second.end()))
-      (*it).second[e]= p->getEdgeStringValue(e);
-  }
-}
-
 void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
   hash_map<edge, EdgeRecord>::iterator ita = addedEdges.find(e);
   // dont record old value for newly added edge
-  if (ita != addedEdges.end())
-    return;
-  recordEdgeValue(p, e, oldEdgeValues, false);
+  if (ita != addedEdges.end()) {
+    if (!restartAllowed)
+      return;
+    updatedPropsAddedEdges[(unsigned long) p].insert(e);
+  } else {
+    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
+      oldEdgeValues.find((unsigned long) p);
+    if (it == oldEdgeValues.end()) {
+      MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
+      pv->setAll(NULL);
+      pv->set(e.id, p->getEdgeDataMemValue(e));
+      oldEdgeValues[(unsigned long) p] = pv;
+    } else {
+      if ((*it).second->get(e.id) == NULL)
+	(*it).second->set(e.id, p->getEdgeDataMemValue(e));
+    }
+  }
 }
             
-void GraphUpdatesRecorder::afterSetEdgeValue(PropertyInterface* p, edge e) {
-  recordEdgeValue(p, e, newEdgeValues, true);
-}
-
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
-  if  (oldEdgeDefaultValues.find((unsigned long) p) ==
+  if (oldEdgeDefaultValues.find((unsigned long) p) ==
        oldEdgeDefaultValues.end()) {
-    oldEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultStringValue();
+    oldEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultDataMemValue();
     // save the already existing value for all non default valuated edges
     edge e;
     forEach(e, p->getNonDefaultValuatedEdges())
       beforeSetEdgeValue(p, e);
   }
 }
-            
-void GraphUpdatesRecorder::afterSetAllEdgeValue(PropertyInterface* p) {
-  hash_map<unsigned long, hash_map<edge, string> >::iterator it = 
-    newEdgeValues.find((unsigned long) p);
-  // if needed erase all new edges values
-  if (it != newEdgeValues.end())
-    newEdgeValues.erase(it);
-  // record new default value
-  newEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultStringValue();
+
+void GraphUpdatesRecorder::beforeSetAttribute(Graph* g,
+					      const std::string& name) {
+  stdext::hash_map<unsigned long, DataSet>::iterator it =
+    oldAttributeValues.find((unsigned long) g);
+  if (it != oldAttributeValues.end() && it->second.exist(name))
+    return;
+  // save the previously existing value
+  DataType* valType = g->getAttributes().getData(name);
+  oldAttributeValues[(unsigned long) g].setData(name, valType);
 }
-  
+
+void GraphUpdatesRecorder::removeAttribute(Graph* g,
+					   const std::string& name) {
+  beforeSetAttribute(g, name);
+}

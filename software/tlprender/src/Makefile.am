@@ -4,7 +4,7 @@ else
 ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
 endif
 
-bin_PROGRAMS = @CONFIGURE_tlprender@
+bin_PROGRAMS = tlprender
 EXTRA_PROGRAMS = tlprender
 INCLUDES = -I$(srcdir)../include @GL_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@
 

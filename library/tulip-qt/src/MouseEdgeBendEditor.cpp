@@ -21,8 +21,6 @@
 using namespace tlp;
 using namespace std;
 
-INTERACTORPLUGIN(MouseEdgeBendEditor, "MouseEdgeBendEditor", "Tulip Team", "16/04/2008", "Mouse Edge Bend Editor", "1.0");
-
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
   :glMainWidget(NULL){
@@ -67,47 +65,47 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 	breakForEach;
 	}*/
       if (!hasSelection) {
-	// event occurs outside the selection rectangle
-	// so from now we delegate the job to a MouseEdgeSelector object
-	// which should intercept the event
-	operation = NONE_OP;
-	return false;
+        // event occurs outside the selection rectangle
+        // so from now we delegate the job to a MouseEdgeSelector object
+        // which should intercept the event
+        operation = NONE_OP;
+        return false;
       }
       if (qMouseEv->modifiers() & Qt::ShiftModifier){//vérifier que le lieu du clic est sur l'arête
-	operation = NEW_OP;
-	//int newX = qMouseEv->x();
-	//int newY = qMouseEv->y();
-	//cout << "C R E A T E   C A L L : " << endl;
-	//cout << "===================================" << endl;
-	mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
+        operation = NEW_OP;
+        //int newX = qMouseEv->x();
+        //int newY = qMouseEv->y();
+        //cout << "C R E A T E   C A L L : " << endl;
+        //cout << "===================================" << endl;
+        mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
       } else {
-	bool circleSelected =
-	  glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, glMainWidget->getScene()->getSelectionLayer());
-	if (circleSelected) {
-	  theCircle=circleString.findKey((GlSimpleEntity*)(select[0]));
-	  //(&circles[i])->fcolor(0) = Color(40,255,40,200);
-	  //(&circles[i])->ocolor(0) = Color(20,128,20,200);
-	  if (qMouseEv->modifiers() &
+        bool circleSelected =
+          glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, glMainWidget->getScene()->getSelectionLayer());
+        if (circleSelected) {
+          theCircle=circleString.findKey((GlSimpleEntity*)(select[0]));
+          //(&circles[i])->fcolor(0) = Color(40,255,40,200);
+          //(&circles[i])->ocolor(0) = Color(20,128,20,200);
+          if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-	      Qt::AltModifier
+              Qt::AltModifier
 #else
-	      Qt::ControlModifier
+              Qt::ControlModifier
 #endif
-	      ){
-	    operation = DELETE_OP;
-	    mMouseDelete();
-	  }
-	  else
-	    {
-	      operation = TRANSLATE_OP;
-	      glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
-	      initEdition();
-	      mode = COORD;
-	    }
-	} else{
-	  operation = NONE_OP;
-	  return false;
-	}
+          ){
+            operation = DELETE_OP;
+            mMouseDelete();
+          }
+          else
+          {
+            operation = TRANSLATE_OP;
+            glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
+            initEdition();
+            mode = COORD;
+          }
+        } else{
+          operation = NONE_OP;
+          return false;
+        }
       }
       break;
     }
@@ -130,8 +128,8 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&
-       ((QMouseEvent *) e)->buttons() == Qt::LeftButton &&
-       operation != NONE_OP) {
+      ((QMouseEvent *) e)->buttons() == Qt::LeftButton &&
+      operation != NONE_OP) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     int newX = qMouseEv->x();
@@ -217,11 +215,12 @@ void MouseEdgeBendEditor::stopEdition() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
-  _graph     = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-  _layout    = _graph->getProperty<LayoutProperty>("viewLayout");
-  _selection = _graph->getProperty<BooleanProperty>("viewSelection");
-  _rotation  = _graph->getProperty<DoubleProperty>("viewRotation");
-  _sizes     = _graph->getProperty<SizeProperty>("viewSize");
+  GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+  _graph     = inputData->getGraph();
+  _layout    = _graph->getProperty<LayoutProperty>(inputData->getElementLayoutPropName());
+  _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
+  _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
+  _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
 }
 //========================================================================================
 //Does the point p belong to the segment [u,v]?
@@ -345,33 +344,51 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
 //========================================================================================
 bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
-  Coord tmp;
+
+  Iterator<edge> *itE;
+  edge ite;
   bool hasSelection=false;
+
+  //Verify if we have only one selected edge
+  //  if we have more than one selected : deselect all edges
+  itE =_graph->getEdges();
+  while (itE->hasNext()) {
+    ite=itE->next();
+    if(_selection->getEdgeValue(ite)){
+      if(hasSelection){
+        _selection->setAllEdgeValue(false);
+        hasSelection=false;
+        break;
+      }else{
+        hasSelection=true;
+      }
+    }
+  }
+
+  Coord tmp;
   coordinates.clear();
   circles.clear();
   select.clear();
-  edge ite;
   circleString.reset(false);
   //int W = glMainWidget->width();
   //int H = glMainWidget->height();
-  Iterator<edge> *itE=_graph->getEdges();
+  itE =_graph->getEdges();
   while (itE->hasNext()) {
     ite=itE->next();
     if (_selection->getEdgeValue(ite)) {
       mEdge=ite;
-      hasSelection=true;
       coordinates=_layout->getEdgeValue(ite);
       start=_layout->getNodeValue(_graph->source(mEdge));
       end=_layout->getNodeValue(_graph->target(mEdge));
       vector<Coord>::iterator CoordIt=coordinates.begin();
       while(CoordIt!=coordinates.end()) {
-	tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-	tmp=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
-	//tmp[1] = (double)H - tmp[1];
-	//tmp[0] = (double)W - tmp[0];
-	basicCircle.set(tmp, 5, 0.);
-	circles.push_back(basicCircle);
-	CoordIt++;
+        tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
+        tmp=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
+        //tmp[1] = (double)H - tmp[1];
+        //tmp[0] = (double)W - tmp[0];
+        basicCircle.set(tmp, 5, 0.);
+        circles.push_back(basicCircle);
+        CoordIt++;
       }
     }
   }

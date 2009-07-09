@@ -2,7 +2,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -42,7 +41,6 @@ int main() {
   IntegerProperty *integer=graph->getLocalProperty<IntegerProperty>("firstInteger");
   ColorProperty *colors=graph->getLocalProperty<ColorProperty>("firstColors");
   SizeProperty *sizes=graph->getLocalProperty<SizeProperty>("firstSizes");
-  GraphProperty *meta=graph->getLocalProperty<GraphProperty>("firstMeta");
   StringProperty *strings=graph->getLocalProperty<StringProperty>("firstString");
 
   //initialize all the properties
@@ -60,7 +58,6 @@ int main() {
   colors->setAllEdgeValue(Color(0,0,0,0));//Red, green, blue
   strings->setAllNodeValue("first");
   strings->setAllEdgeValue("first");
-  meta->setAllNodeValue(graph); //an existing graph
   cout << "List of the properties present in the graph:" << endl;
   Iterator<string> *it=graph->getLocalProperties();
   while (it->hasNext()) {

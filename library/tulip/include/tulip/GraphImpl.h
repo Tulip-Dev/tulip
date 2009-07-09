@@ -77,8 +77,9 @@ public:
   unsigned int numberOfNodes()const;
   //================================================================================
   // updates management
-  virtual void push();
-  virtual void pop();
+  virtual void push(bool unpopAllowed = true);
+  virtual void pop(bool unpopAllowed = true);
+  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop);
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();

@@ -227,9 +227,9 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	float bendsl = FLT_MAX;
 	forEach(n, graph->getNodes()) {
 	  // get node coordinates
-	  Coord point = layout->getNodeValue(n);
+	  const Coord& point = layout->getNodeValue(n);
 	  // get size of bounding box
-	  Size box = size->getNodeValue(n);
+	  const Size& box = size->getNodeValue(n);
 	  // get box rotation in degree
 	  double alpha = rot->getNodeValue(n);
 	  // convert in radian

@@ -50,7 +50,7 @@ namespace tlp {
       default :
 	assert(false);
 	break;
-      
+
       }
 
     }else{
@@ -67,7 +67,7 @@ namespace tlp {
 	}
       }else{
 	dataBuffer.push_back(*data);
-	if(dataBuffer.size()>=9) {
+	if(dataBuffer.size()>=12) {
 	  GLfloat tmp[dataBuffer.size()];
 	  for(unsigned int i=0;i<dataBuffer.size();i++)
 	    tmp[i]=dataBuffer[i];

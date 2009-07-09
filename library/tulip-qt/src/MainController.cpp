@@ -1,5 +1,7 @@
 #include "tulip/MainController.h"
 
+#include <stdio.h>
+
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>
@@ -8,6 +10,7 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QInputDialog>
 #include <QtGui/QClipboard>
+#include <QtGui/QTabWidget>
 
 #include <tulip/hash_string.h>
 #include <tulip/Graph.h>
@@ -15,7 +18,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -42,6 +44,7 @@
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/InteractorManager.h"
 
 using namespace std;
 
@@ -111,7 +114,6 @@ namespace tlp {
 	subMenu = groupMenu;
       }
     }
-    //cout << subMenu->name() << "->" << itemName << endl;
     subMenu->addAction(itemName.c_str());
   }
   //**********************************************************************
@@ -192,7 +194,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    clusterTreeWidget(NULL),currentGraph(NULL),currentView(NULL),lastWidget(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),copyCutPasteGraph(NULL) {
+    currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -255,7 +257,6 @@ namespace tlp {
           (*(DataSet*)p.second->value).get("y",y);
           (*(DataSet*)p.second->value).get("width",width);
           (*(DataSet*)p.second->value).get("height",height);
-          Graph *lastViewedGraph=newGraph;
           if(id!=0){
             lastViewedGraph=getCurrentSubGraph(newGraph, id);
             if(!lastViewedGraph)
@@ -267,7 +268,6 @@ namespace tlp {
       }
     }else{
       NodeLinkDiagramComponent *view;
-
       if(dataSet.exist("scene")) {
         view=(NodeLinkDiagramComponent*)initMainView(dataSet);
       }else{
@@ -302,7 +302,6 @@ namespace tlp {
           camera->setZoomFactor(cameraZoomFactor);
           camera->setSceneRadius(distCam);
         }
-
         // show current subgraph if any
         int id = 0;
         if (displayingData.get<int>("SupergraphId", id) && id) {
@@ -326,12 +325,9 @@ namespace tlp {
   void MainController::getData(Graph **graph,DataSet *dataSet) {
     DataSet views;
     QWidgetList widgetList;
-    if(lastWidget!=NULL){
-      widgetList.append(lastWidget);
-      lastWidget=NULL;
-    }else{
-      widgetList=mainWindowFacade.getWorkspace()->windowList();
-    }
+
+    widgetList=mainWindowFacade.getWorkspace()->windowList();
+
 
     for(int i=0;i<widgetList.size();++i) {
       QRect rect=((QWidget *)(widgetList[i]->parent()))->geometry();
@@ -382,7 +378,35 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::update ( ObserverIterator begin, ObserverIterator end) {
-    redrawViews();
+    if(graphToReload){
+      Graph *graph=graphToReload;
+      graphToReload=NULL;
+      //Update view of this graph
+      for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+        if((*it).second==graph){
+          (*it).first->setGraph(graph);
+        }
+      }
+      //Update children of this graph
+      for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+        Graph *parentGraph=(*it).second;
+        while(parentGraph!=parentGraph->getRoot() && parentGraph!=graph){
+          parentGraph=parentGraph->getSuperGraph();
+          if(parentGraph==graph){
+            (*it).first->setGraph((*it).second);
+          }
+        }
+      }
+    }else{
+      redrawViews();
+    }
+
+    if(currentGraph){
+      currentGraphNbNodes=currentGraph->numberOfNodes();
+      currentGraphNbEdges=currentGraph->numberOfEdges();
+      updateCurrentGraphInfos();
+    }
+
     updateUndoRedoInfos();
   }
   //**********************************************************************
@@ -416,10 +440,14 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::addSubGraph(Graph *g, Graph *sg){
+    if(currentGraph!=g)
+      return;
     sg->addObserver(this);
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
+    if(currentGraph!=g)
+      return;
     Iterator<Graph *> *itS=sg->getSubGraphs();
     while(itS->hasNext()) {
       Graph *subgraph = itS->next();
@@ -434,24 +462,22 @@ namespace tlp {
     }
   }
   //**********************************************************************
-  void MainController::addNode (Graph *graph, const node) {
-    ++currentGraphNbNodes;
-    updateCurrentGraphInfos();
+  void  MainController::addLocalProperty(Graph *graph, const std::string&){
+    graphToReload=graph;
+
+    if(graph==currentGraph){
+      eltProperties->setGraph(graph);
+      propertiesWidget->setGraph(graph);
+    }
   }
   //**********************************************************************
-  void  MainController::addEdge (Graph *graph, const edge) {
-    ++currentGraphNbEdges;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
-  void  MainController::delNode (Graph *graph, const node) {
-    --currentGraphNbNodes;
-    updateCurrentGraphInfos();
-  }
-  //**********************************************************************
-  void  MainController::delEdge (Graph *graph, const edge) {
-    --currentGraphNbEdges;
-    updateCurrentGraphInfos();
+  void  MainController::delLocalProperty(Graph *graph, const std::string&){
+    graphToReload=graph;
+
+    if(graph==currentGraph){
+      eltProperties->setGraph(graph);
+      propertiesWidget->setGraph(graph);
+    }
   }
   //**********************************************************************
   void MainController::loadGUI() {
@@ -464,7 +490,7 @@ namespace tlp {
     tabWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
     tabWidgetDock->hide();
     tabWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    tabWidgetDock->setWindowTitle("Info Editor");
+    tabWidgetDock->setWindowTitle("Graph Editor");
     tabWidgetDock->setFeatures(QDockWidget::DockWidgetClosable |
 			    QDockWidget::DockWidgetMovable |
 			    QDockWidget::DockWidgetFloatable);
@@ -498,6 +524,27 @@ namespace tlp {
     statsWidget = tabWidget->tulipStats;
     statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
 #endif
+
+    configWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
+    configWidgetTab = new QTabWidget(configWidgetDock);
+
+    //create no plugins configuration widget
+    noInteractorConfigWidget = new QWidget(configWidgetTab);
+    QGridLayout *gridLayout = new QGridLayout(noInteractorConfigWidget);
+    QLabel *label = new QLabel(noInteractorConfigWidget);
+    label->setAlignment(Qt::AlignCenter);
+    gridLayout->addWidget(label, 0, 0, 1, 1);
+    label->setText("No interactor configuration");
+
+    configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
+    configWidgetTab->setTabPosition(QTabWidget::West);
+    configWidgetDock->setWidget(configWidgetTab);
+    configWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    configWidgetDock->setWindowTitle("View Editor");
+    configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
+
+    mainWindowFacade.tabifyDockWidget(tabWidgetDock,configWidgetDock);
 
     buildMenu();
 
@@ -655,8 +702,10 @@ namespace tlp {
     morphingAction->setCheckable(true);
     morphingAction->setChecked(false);
     optionsMenu->addSeparator();
-    QAction *propertiesDockAction = optionsMenu->addAction("Show properties dock");
+    QAction *propertiesDockAction = optionsMenu->addAction("Show graph editor");
     connect(propertiesDockAction,SIGNAL(triggered()),tabWidgetDock,SLOT(show()));
+    QAction *configurationDockAction = optionsMenu->addAction("Show view editor");
+    connect(configurationDockAction,SIGNAL(triggered()),configWidgetDock,SLOT(show()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
@@ -675,12 +724,29 @@ namespace tlp {
   }
   //**********************************************************************
   View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,const QRect &rect){
-
+    string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
-    QWidget *widget=newView->construct(mainWindowFacade.getWorkspace());
-    viewNames[newView]=name;
+    QWidget *widget;
+    if(newView){
+      widget=newView->construct(mainWindowFacade.getWorkspace());
+      newView->setData(graph,dataSet);
+    }else{
+      verifiedName="Node Link Diagram view";
+      newView=ViewPluginsManager::getInst().createView("Node Link Diagram view");
+      widget=newView->construct(mainWindowFacade.getWorkspace());
+      newView->setData(graph,DataSet());
+    }
+    viewGraph[newView]=graph;
+    viewNames[newView]=verifiedName;
     viewWidget[widget]=newView;
-    //newView->setWindowFlags(Qt::Dialog);
+
+    multimap<int,string> interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+    list<Interactor *> interactorsList;
+    for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
+      interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
+      }
+    newView->setInteractors(interactorsList);
+
     widget->setAttribute(Qt::WA_DeleteOnClose,true);
     mainWindowFacade.getWorkspace()->addWindow(widget);
 
@@ -688,10 +754,7 @@ namespace tlp {
     connect(newView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
     connect(widget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
 
-    newView->setData(graph,dataSet);
-    viewGraph[newView]=graph;
-
-    string windowTitle=name +" : " + graph->getAttribute<string>("name");
+    string windowTitle=verifiedName +" : " + graph->getAttribute<string>("name");
     widget->setWindowTitle(windowTitle.c_str());
     if(rect.width()==0 && rect.height()==0){
       QRect newRect;
@@ -716,9 +779,19 @@ namespace tlp {
     //check if a view is close
     QWidgetList widgets=mainWindowFacade.getWorkspace()->windowList();
 
-  	std::map<QWidget *,View*>::iterator it=viewWidget.find(w);
-  	if(it!=viewWidget.end()) {
-  		View *view=(*it).second;
+    std::map<QWidget *,View*>::iterator it=viewWidget.find(w);
+    if(it!=viewWidget.end()) {
+
+      lastConfigTabIndexOnView[currentView]=configWidgetTab->currentIndex();
+      while(configWidgetTab->count()>1){
+	configWidgetTab->removeTab(1);
+      }
+      if(configWidgetTab->widget(0)!=noInteractorConfigWidget) {
+	configWidgetTab->removeTab(0);
+	configWidgetTab->addTab(noInteractorConfigWidget,"Interactor");
+      }
+
+      View *view=(*it).second;
 
       currentView=view;
       currentGraph=currentView->getGraph();
@@ -727,11 +800,27 @@ namespace tlp {
       clusterTreeWidget->setGraph(currentGraph);
       eltProperties->setGraph(currentGraph);
       propertiesWidget->setGraph(currentGraph);
+
+      list<pair<QWidget *,string> > configWidgetsList=view->getConfigurationWidget();
+      for(list<pair<QWidget *,string> >::iterator it=configWidgetsList.begin();it!=configWidgetsList.end();++it){
+	configWidgetTab->addTab((*it).first,(*it).second.c_str());
+      }
+      if(lastConfigTabIndexOnView.count(currentView)!=0)
+	configWidgetTab->setCurrentIndex(lastConfigTabIndexOnView[currentView]);
+
+      //Remove observer (nothing if this not observe)
+      currentGraph->removeGraphObserver(this);
+      currentGraph->removeObserver(this);
+      //Add observer
+      currentGraph->addGraphObserver(this);
+      currentGraph->addObserver(this);
     }
   }
   //**********************************************************************
   void MainController::changeGraph(Graph *graph) {
     if(currentGraph==graph)
+      return;
+    if(!currentView)
       return;
 
     clearObservers();
@@ -755,6 +844,12 @@ namespace tlp {
     updateUndoRedoInfos();
 
     initObservers();
+    //Remove observer (nothing if this not observe)
+    currentGraph->removeGraphObserver(this);
+    currentGraph->removeObserver(this);
+    //Add observer
+    currentGraph->addGraphObserver(this);
+    currentGraph->addObserver(this);
   }
   //**********************************************************************
    void MainController::graphAboutToBeRemove(Graph *graph){
@@ -764,15 +859,16 @@ namespace tlp {
   void MainController::installInteractors(View *view) {
     mainWindowFacade.getInteractorsToolBar()->clear();
 
-    list<QAction *> *interactorsList=view->getInteractorsActionList();
-    if(!interactorsList)
-      return;
+    list<Interactor *> interactorsList=view->getInteractors();
+    list<QAction *> interactorsActionList;
+    for(list<Interactor *>::iterator it=interactorsList.begin();it!=interactorsList.end();++it)
+      interactorsActionList.push_back((*it)->getAction());
 
-    for(list<QAction *>::iterator it=interactorsList->begin();it!=interactorsList->end();++it) {
+    for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it) {
       mainWindowFacade.getInteractorsToolBar()->addAction(*it);
     }
 
-    if(!interactorsList->empty()) {
+    if(!interactorsActionList.empty()) {
       map<View*,QAction *>::iterator it=lastInteractorOnView.find(view);
       if(it!=lastInteractorOnView.end()){
         if(mainWindowFacade.getInteractorsToolBar()->actions().contains((*it).second)){
@@ -781,7 +877,7 @@ namespace tlp {
         }
       }
 
-      changeInteractor(interactorsList->front());
+      changeInteractor(interactorsActionList.front());
     }
   }
   //**********************************************************************
@@ -789,12 +885,25 @@ namespace tlp {
     if(currentView){
       QList<QAction*> actions=mainWindowFacade.getInteractorsToolBar()->actions();
       for(QList<QAction*>::iterator it=actions.begin();it!=actions.end();++it) {
-	(*it)->setChecked(false);
+        (*it)->setChecked(false);
       }
       action->setCheckable(true);
       action->setChecked(true);
-      currentView->installInteractor(action);
+      InteractorAction *interactorAction=(InteractorAction *)action;
+      currentView->setActiveInteractor(interactorAction->getInteractor());
       lastInteractorOnView[currentView]=action;
+      QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
+      bool onInteractorConfigTab=configWidgetTab->currentIndex()==0;
+      configWidgetTab->removeTab(0);
+      if(interactorWidget){
+        configWidgetTab->insertTab(0,interactorWidget,"Interactor");
+      }else{
+        configWidgetTab->insertTab(0,noInteractorConfigWidget,"Interactor");
+      }
+      if(onInteractorConfigTab)
+        configWidgetTab->setCurrentIndex(0);
+
+      currentView->refresh();
     }
   }
   //**********************************************************************
@@ -820,9 +929,15 @@ namespace tlp {
   //==================================================
   void MainController::widgetWillBeClosed(QObject *object) {
     QWidget *widget=(QWidget*)object;
-    lastWidget = widget;
+    View *view=viewWidget[widget];
+    delete viewWidget[widget];
     viewWidget.erase(widget);
+    viewNames.erase(view);
+    lastInteractorOnView.erase(view);
+    viewGraph.erase(view);
     if(viewWidget.size()==0){
+      mainWindowFacade.getInteractorsToolBar()->clear();
+      currentView=NULL;
       emit willBeClosed();
     }
   }
@@ -947,11 +1062,16 @@ namespace tlp {
     if (tmp.empty()) return;
     currentGraph->push();
     Observable::holdObservers();
-    if (currentGraph == currentGraph->getRoot()) {
+    bool haveToChangeGraph=false;
+    Graph *graphToAddTo=currentGraph;
+    if (graphToAddTo == graphToAddTo->getRoot()) {
       QMessageBox::critical( 0, "Warning" ,"Grouping can't be done on the root graph, a subgraph will be created");
-      currentGraph = tlp::newCloneSubGraph(currentGraph, "groups");
+      graphToAddTo = tlp::newCloneSubGraph(graphToAddTo, "groups");
+      haveToChangeGraph=true;
     }
-    node metaNode = tlp::createMetaNode(currentGraph, tmp);
+    node metaNode = graphToAddTo->createMetaNode(tmp);
+    if(haveToChangeGraph)
+      changeGraph(graphToAddTo);
     Observable::unholdObservers();
     clusterTreeWidget->update();
   }
@@ -1007,13 +1127,13 @@ namespace tlp {
     while(itN.hasNext()) {
       node itv = itN.next();
       if (elementSelected->getNodeValue(itv)==true)
-	currentGraph->delNode(itv);
+        currentGraph->delNode(itv);
     }
     StableIterator<edge> itE(currentGraph->getEdges());
     while(itE.hasNext()) {
       edge ite=itE.next();
       if (elementSelected->getEdgeValue(ite)==true)
-	currentGraph->delEdge(ite);
+        currentGraph->delEdge(ite);
     }
     Observable::unholdObservers();
     currentGraph->addObserver(this);
@@ -1026,21 +1146,24 @@ namespace tlp {
   //==============================================================
   void MainController::editReverseSelection() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->reverse();
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->reverse();
     Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editSelectAll() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
-    currentGraph->getLocalProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+    currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
     Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editDeselectAll() {
     if (currentGraph==0) return;
+    currentGraph->push();
     Observable::holdObservers();
     currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(false);
     currentGraph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(false);
@@ -1073,6 +1196,7 @@ namespace tlp {
       clusterTreeWidget->setGraph(graph);
     }
     Observable::unholdObservers();
+    redrawViews(true);
   }
   //**********************************************************************
   //Management of properties
@@ -1089,62 +1213,62 @@ namespace tlp {
 
     string erreurMsg;
     bool   resultBool=true;
-    DataSet *dataSet =0;
-    dataSet = new DataSet();
+    DataSet dataSet;
     if (query) {
       StructDef *params = getPluginParameters(PROPERTY::factory, name);
       StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
-      params->buildDefaultDataSet( *dataSet, graph );
-      resultBool = tlp::openDataSetDialog(*dataSet, &sysDef, params, dataSet,
+      params->buildDefaultDataSet(dataSet, graph );
+      resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
 					  "Tulip Parameter Editor", graph, mainWindowFacade.getParentWidget());
     }
 
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
-      if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram view") {
-          graph->setAttribute("viewLayout", tmp);
-          ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-        }
-      }
-
       PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
       tmp->setAllNodeValue(dest->getNodeDefaultValue());
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
-      graph->push();
-      resultBool = currentGraph->computeProperty(name, tmp, erreurMsg, myProgress, dataSet);
+      if (push)
+	graph->push();
+      graph->push(false);
+      bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) &&
+			   viewNames[currentView]=="Node Link Diagram view");
+      if (updateLayout) {
+	graph->setAttribute("viewLayout", tmp);
+	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
+      resultBool = currentGraph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
+      bool hasNdldc = false;
+      DataSet nodeLinkDiagramComponentDataSet;
+      if ((typeid(PROPERTY) == typeid(ColorProperty) &&
+	   viewNames[currentView]=="Node Link Diagram view"))
+	hasNdldc = graph->getAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
       graph->pop();
-
+      if (updateLayout) {
+	graph->removeAttribute("viewLayout");
+	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+      }
       if (!resultBool) {
         QMessageBox::critical(mainWindowFacade.getParentWidget(), "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
+	graph->pop();
       }
       else
         switch(myProgress->state()){
         case TLP_CONTINUE:
         case TLP_STOP:
           if (push) {
-            graph->push();
-            undoAction->setEnabled(true);
+	    undoAction->setEnabled(true);
             editUndoAction->setEnabled(true);
           }
-          *dest = *tmp;
+	  if (hasNdldc)
+	    graph->setAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
+	  *dest = *tmp;
 
           break;
         case TLP_CANCEL:
           resultBool=false;
         };
-        delete tmp;
-      if (typeid(PROPERTY) == typeid(LayoutProperty)) {
-        if(viewNames[currentView]=="Node Link Diagram view") {
-          graph->removeAttribute("viewLayout");
-          ((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-        }
-      }
+      delete tmp;
     }
-
-
-
-    if (dataSet!=0) delete dataSet;
 
     propertiesWidget->setGraph(graph);
     /*overviewWidget->setObservedView(glWidget);*/
@@ -1156,7 +1280,7 @@ namespace tlp {
   void MainController::changeString(QAction* action) {
     string name = action->text().toStdString();
     if (changeProperty<StringProperty>(name,"viewLabel"))
-      redrawViews();
+      redrawViews(true);
   }
   //**********************************************************************
   void MainController::changeSelection(QAction* action) {
@@ -1171,7 +1295,7 @@ namespace tlp {
     bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
     if (result && mapMetricAction->isChecked()) {
       if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false,true, false))
-        redrawViews();
+        redrawViews(true);
     }
   }
   //**********************************************************************
@@ -1210,7 +1334,7 @@ namespace tlp {
   void MainController::changeInt(QAction* action) {
     string name = action->text().toStdString();
     changeProperty<IntegerProperty>(name, "viewInt");
-    redrawViews();
+    redrawViews(true);
   }
   //**********************************************************************
   void MainController::changeColors(QAction* action) {
@@ -1453,39 +1577,87 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::updateUndoRedoInfos() {
+    if(!currentGraph)
+      return;
+
     undoAction->setEnabled(currentGraph->canPop());
     redoAction->setEnabled(currentGraph->canUnpop());
     editUndoAction->setEnabled(currentGraph->canPop());
     editRedoAction->setEnabled(currentGraph->canUnpop());
   }
   //**********************************************************************
+  map<View *,list<int> > MainController::saveViewsHierarchiesBeforePop() {
+    map<View *,list<int> > hierarchies;
+    for(map<View *,Graph* >::iterator itView=viewGraph.begin();itView!=viewGraph.end();++itView){
+      hierarchies[(*itView).first]=list<int>();
+      Graph *father=(*itView).second;
+      while(father!=father->getSuperGraph()){
+        hierarchies[(*itView).first].push_back(father->getId());
+        father=father->getSuperGraph();
+      }
+      hierarchies[(*itView).first].push_back(father->getId());
+    }
+    return hierarchies;
+  }
+  //**********************************************************************
+  void MainController::checkViewsHierarchiesAfterPop(map<View *,list<int> > &hierarchies){
+    for(map<View *,Graph* >::iterator itView=viewGraph.begin();itView!=viewGraph.end();++itView){
+      Graph *newGraph;
+      for(list<int>::iterator it=hierarchies[(*itView).first].begin();it!=hierarchies[(*itView).first].end();++it){
+        newGraph=currentGraph->getRoot()->getDescendantGraph(*it);
+        if(!newGraph && (currentGraph->getRoot()->getId()==(*it)))
+          newGraph=currentGraph->getRoot();
+        if(newGraph)
+          break;
+      }
+
+      if(newGraph!=(*itView).second){
+        (*itView).first->setGraph(newGraph);
+        viewGraph[(*itView).first]=newGraph;
+      }
+    }
+  }
+  //**********************************************************************
   void MainController::undo() {
+    map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
+
     Graph *root=currentGraph->getRoot();
     root->pop();
-    changeGraph(root);
+
+    checkViewsHierarchiesAfterPop(hierarchies);
+    Graph *newGraph=viewGraph[currentView];
+
+    changeGraph(newGraph);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
+    propertiesWidget->setGraph(newGraph);
+    eltProperties->setGraph(newGraph,false);
     updateUndoRedoInfos();
-    // forget previous/next graphs
-    /*glWidget->prevGraphs.clear();
-      glWidget->nextGraphs.clear();*/
 
   }
   //**********************************************************************
   void MainController::redo() {
+    map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
+
     Graph* root = currentGraph->getRoot();
     root->unpop();
-    changeGraph(root);
+
+    checkViewsHierarchiesAfterPop(hierarchies);
+    Graph *newGraph=viewGraph[currentView];
+    changeGraph(newGraph);
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
+    propertiesWidget->setGraph(newGraph);
+    eltProperties->setGraph(newGraph,false);
     updateUndoRedoInfos();
-    // forget previous/next graphs
-    /*glWidget->prevGraphs.clear();
-      glWidget->nextGraphs.clear();*/
   }
   //**********************************************************************
   View *MainController::getView(QWidget *widget) {
     return viewWidget[widget];
+  }
+  //**********************************************************************
+  View *MainController::getCurrentView() {
+    return currentView;
   }
 
 }

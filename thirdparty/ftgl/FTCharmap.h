@@ -1,3 +1,28 @@
+/*
+ * FTGL - OpenGL font library
+ *
+ * Copyright (c) 2001-2004 Henry Maddocks <ftgl@opengl.geek.nz>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #ifndef     __FTCharmap__
 #define     __FTCharmap__
 
@@ -6,9 +31,8 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include "FTGL/ftgl.h"
 #include "FTCharToGlyphIndexMap.h"
-
-#include "FTGL.h"
 
 
 /**
@@ -20,19 +44,19 @@
  * freetype calls and will save significant amounts of memory when dealing
  * with unicode encoding
  *
- * @see "Freetype 2 Documentation" 
+ * @see "Freetype 2 Documentation"
  *
  */
 
 class FTFace;
 
-class FTGL_EXPORT FTCharmap
+class FTCharmap
 {
     public:
         /**
          * Constructor
          */
-        FTCharmap( FTFace* face);
+        FTCharmap(FTFace* face);
 
         /**
          * Destructor
@@ -44,10 +68,10 @@ class FTGL_EXPORT FTCharmap
          *
          * @return  The current character map code.
          */
-        FT_Encoding Encoding() const { return ftEncoding;}
-        
+        FT_Encoding Encoding() const { return ftEncoding; }
+
         /**
-         * Sets the character map for the face.
+         * Sets the character map for the face. If an error occurs the object is not modified.
          * Valid encodings as at Freetype 2.0.4
          *      ft_encoding_none
          *      ft_encoding_symbol
@@ -65,11 +89,10 @@ class FTGL_EXPORT FTCharmap
          *
          * @param encoding  the Freetype encoding symbol. See above.
          * @return          <code>true</code> if charmap was valid and set
-         *                  correctly. If the requested encoding is
-         *                  unavailable it will be set to ft_encoding_none.
+         *                  correctly.
          */
-        bool CharMap( FT_Encoding encoding);
-        
+        bool CharMap(FT_Encoding encoding);
+
         /**
          * Get the FTGlyphContainer index of the input character.
          *
@@ -78,7 +101,7 @@ class FTGL_EXPORT FTCharmap
          * @return      The FTGlyphContainer index for the character or zero
          *              if it wasn't found
          */
-        unsigned int GlyphListIndex( const unsigned int characterCode);
+        unsigned int GlyphListIndex(const unsigned int characterCode);
 
         /**
          * Get the font glyph index of the input character.
@@ -87,7 +110,7 @@ class FTGL_EXPORT FTCharmap
          *                      the current encoding eg apple roman.
          * @return      The glyph index for the character.
          */
-        unsigned int FontIndex( const unsigned int characterCode);
+        unsigned int FontIndex(const unsigned int characterCode);
 
         /**
          * Set the FTGlyphContainer index of the character code.
@@ -97,26 +120,27 @@ class FTGL_EXPORT FTCharmap
          * @param containerIndex The index into the FTGlyphContainer of the
          *                       character code.
          */
-        void InsertIndex( const unsigned int characterCode, const unsigned int containerIndex);
+        void InsertIndex(const unsigned int characterCode,
+                         const size_t containerIndex);
 
         /**
          * Queries for errors.
          *
          * @return  The current error code. Zero means no error.
          */
-        FT_Error Error() const { return err;}
-        
+        FT_Error Error() const { return err; }
+
     private:
         /**
          * Current character map code.
          */
         FT_Encoding ftEncoding;
-        
+
         /**
          * The current Freetype face.
          */
         const FT_Face ftFace;
-        
+
         /**
          * A structure that maps glyph indices to character codes
          *
@@ -124,12 +148,17 @@ class FTGL_EXPORT FTCharmap
          */
         typedef FTCharToGlyphIndexMap CharacterMap;
         CharacterMap charMap;
-        
+
+        /**
+         * Precomputed font indices.
+         */
+        static const unsigned int MAX_PRECOMPUTED = 128;
+        unsigned int charIndexCache[MAX_PRECOMPUTED];
+
         /**
          * Current error code.
          */
         FT_Error err;
-        
 };
 
 

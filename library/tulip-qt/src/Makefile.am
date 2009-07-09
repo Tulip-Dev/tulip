@@ -54,6 +54,7 @@ BUILT_SOURCES = \
 	moc_TulipStatsWidget.cpp \
 	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialog.cpp \
+	moc_LayerManagerWidget.cpp \
 	moc_AugmentedDisplayDialog.cpp \
 	moc_ElementPropertiesWidgetUI.cpp \
 	moc_ElementPropertiesWidget.cpp \
@@ -61,6 +62,7 @@ BUILT_SOURCES = \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
 	moc_QtCPULODCalculator.cpp \
+	moc_Interactor.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_CopyPropertyDialogData.cpp \
 	moc_TulipStatsData.cpp \
@@ -71,7 +73,14 @@ BUILT_SOURCES = \
 	moc_Controller.cpp \
 	moc_MainController.cpp \
 	moc_View.cpp \
-	moc_AbstractView.cpp
+	moc_AbstractView.cpp \
+	moc_GraphPropertiesSelectionWidget.cpp \
+	moc_ItemsListWidget.cpp \
+	moc_StringsListSelectionWidgetInterface.cpp \
+	moc_StringsListSelectionWidget.cpp  \
+	moc_SimpleStringsListSelectionWidget.cpp \
+	moc_DoubleStringsListSelectionWidget.cpp \
+	moc_ColorScaleConfigDialog.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -103,8 +112,10 @@ dist_libtulip_qt4_la_SOURCES = \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
 	QtCPULODCalculator.cpp \
-	GWInteractor.cpp \
 	InteractorManager.cpp \
+	Interactor.cpp \
+	InteractorChainOfResponsibility.cpp \
+	GlMainViewInteractor.cpp \
 	QtProgress.cpp \
 	Controller.cpp \
 	MainController.cpp \
@@ -114,10 +125,21 @@ dist_libtulip_qt4_la_SOURCES = \
 	ViewPluginsManager.cpp \
 	TulipStatsWidget.cpp \
 	RenderingParametersDialog.cpp \
+	LayerManagerWidget.cpp \
 	AugmentedDisplayDialog.cpp \
-	GridOptionsWidget.cpp
+	GridOptionsWidget.cpp \
+	GraphPropertiesSelectionWidget.cpp \
+	ItemsListWidget.cpp \
+	StringsListSelectionWidget.cpp \
+	SimpleStringsListSelectionWidget.cpp \
+	DoubleStringsListSelectionWidget.cpp \
+	ColorScaleConfigDialog.cpp \
+	QtMetaNodeRenderer.cpp \
+	QGlPixelBufferManager.cpp
 
-CLEANFILES = $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
+
+
 
 moc_%.cpp: $(srcdir)/../include/tulip/%.h 
 	$(MOC) ${AM_CPPFLAGS} ${INCLUDES} -o $@ $<

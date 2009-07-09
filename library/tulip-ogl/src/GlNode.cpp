@@ -1,3 +1,5 @@
+#include "tulip/GlewManager.h"
+
 #include "tulip/GlNode.h"
 
 #include <tulip/Coord.h>
@@ -17,6 +19,7 @@
 #include "tulip/GlTLPFeedBackBuilder.h"
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
+#include "tulip/GlPointManager.h"
 
 #include <iostream>
 
@@ -70,15 +73,15 @@ namespace tlp {
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size &nodeSize = data->elementSize->getNodeValue(n);
 
-    Color fillColor = data->elementColor->getNodeValue(n);
-    Color strokeColor = data->elementBorderColor->getNodeValue(n);
-    Color textColor = data->elementLabelColor->getNodeValue(n);
+    const Color& fillColor = data->elementColor->getNodeValue(n);
+    const Color& strokeColor = data->elementBorderColor->getNodeValue(n);
+    const Color& textColor = data->elementLabelColor->getNodeValue(n);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
-      glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);
-      glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);
-      glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);
+      glPassThrough(fillColor[0]);glPassThrough(fillColor[1]);glPassThrough(fillColor[2]);glPassThrough(fillColor[3]);
+      glPassThrough(strokeColor[0]);glPassThrough(strokeColor[1]);glPassThrough(strokeColor[2]);glPassThrough(strokeColor[3]);
+      glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);glPassThrough(textColor[3]);
 
       glPassThrough(TLP_FB_BEGIN_NODE);
       glPassThrough(id); //id of the node for the feed back mode
@@ -86,23 +89,31 @@ namespace tlp {
 
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
-      glDisable(GL_LIGHTING);
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
+      Color color;
+      int size=sqrt(lod);
       if (!data->elementSelected->getNodeValue(n)) {
-	setColor(fillColor);
-	glPointSize(sqrt(lod));
-	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
-	 glEnd();
+        color=fillColor;
+        if(size>2)
+          size=2;
+      }else{
+        color=colorSelect2;
+        if(size<5)
+          size=5;
       }
-      else {
-	setColor(colorSelect2);
-	glPointSize(sqrt(lod)+1);
-	glBegin(GL_POINTS);
-	  glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
-	glEnd();
+
+      if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
+        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]),color,size);
+      }else{
+        glDisable(GL_LIGHTING);
+        setColor(color);
+        glPointSize(size);
+        glBegin(GL_POINTS);
+        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
+        glEnd();
+        glEnable(GL_LIGHTING);
       }
-      glEnable(GL_LIGHTING);
+
     } else { //draw a glyph or make recursive call for meta nodes
       glPushMatrix();
       glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
@@ -112,8 +123,8 @@ namespace tlp {
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
 
       if (data->elementSelected->getNodeValue(n)) {
-	//glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
-	GlDisplayListManager::getInst().callDisplayList("selection");
+        //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+        GlDisplayListManager::getInst().callDisplayList("selection");
       }
       glPopMatrix();
     }
@@ -129,9 +140,7 @@ namespace tlp {
     cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
-  void GlNode::drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    if(!drawNodesLabel)
-      return;
+  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
 
     node n=node(id);
 
@@ -182,10 +191,10 @@ namespace tlp {
     }
     //if (elementSelected->getNodeValue(n) != mode) return;
 
-    Color fontColor = data->elementLabelColor->getNodeValue(n);
+    Color* fontColor = &((Color &)data->elementLabelColor->getNodeValue(n));
 
     if (select)
-      fontColor = colorSelect2;
+      fontColor = (Color *) &colorSelect2;
 
     float w_max = 300;
     float w,h;
@@ -195,7 +204,7 @@ namespace tlp {
     switch(data->parameters->getFontsType()){
     case 0:
       renderer->setMode(TLP_POLYGON);
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
       renderer->setString(tmp, VERBATIM);
       //      w_max = nodeSize.getW()*50.0;
       renderer->getBoundingBox(w_max, h, w);
@@ -217,13 +226,13 @@ namespace tlp {
       glPopMatrix();
       break;
     case 1:
-      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, data->elementSelected->getNodeValue(n), nodeSize.getW());
+      drawPixmapFont(test,renderer,data,tmp, *fontColor, nodePos, labelPos, data->elementSelected->getNodeValue(n), nodeSize.getW());
       break;
     case 2:
       //if (projectSize(nodeCoord, nodeSize, camera->projectionMatrix, camera->modelviewMatrix, camera->getViewport()) < 8.0) return;
 
       renderer->setMode(TLP_TEXTURE);
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
       renderer->setString(tmp, VERBATIM);
 
       //      w_max = nodeSize.getW();

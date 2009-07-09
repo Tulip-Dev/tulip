@@ -20,7 +20,9 @@ namespace tlp {
 class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
  public:
   GraphDecorator(Graph* s){assert(s); graph_component = s;}
-  virtual ~GraphDecorator(){}
+  virtual ~GraphDecorator(){
+    notifyDestroy();
+  }
 
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0);
@@ -30,6 +32,10 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual void setSuperGraph(Graph* s);
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *> * getSubGraphs() const;
+  virtual bool isSubGraph(Graph* sg) const;
+  virtual bool isDescendantGraph(Graph* sg) const;
+  virtual Graph* getSubGraph(unsigned int id) const;
+  virtual Graph* getDescendantGraph(unsigned int id) const;
 
   //============================================================
   virtual node source(const edge e)const;
@@ -78,7 +84,6 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<edge>* getInEdges(const node n) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
-  virtual DataSet & getAttributes();
   virtual PropertyInterface* getProperty(const std::string &name);
   virtual bool existProperty(const std::string&name);
   virtual bool existLocalProperty(const std::string&name);
@@ -88,14 +93,16 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<std::string>* getInheritedProperties();
   virtual Iterator<std::string>* getProperties();
   // updates management
-  virtual void push();
-  virtual void pop();
+  virtual void push(bool unpopAllowed = true);
+  virtual void pop(bool unpopAllowed = true);
+  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop);
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();
   //============================================================
 
 protected:
+  virtual DataSet & getNonConstAttributes();
   Graph* graph_component;
   // designed to reassign an id to a previously deleted elt
   // called by GraphUpdatesRecorder

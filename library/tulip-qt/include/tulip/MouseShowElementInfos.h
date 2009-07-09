@@ -4,9 +4,10 @@
 
 #include <QtGui/QMouseEvent>
 
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 #include <tulip/Graph.h>
 
+#include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
 
 /** \addtogroup Mouse_interactor */
@@ -17,7 +18,7 @@ namespace tlp {
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */
-class TLP_QT_SCOPE MouseShowElementInfos : public Interactor {
+class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 public:
   ~MouseShowElementInfos(){}
   bool eventFilter(QObject *widget, QEvent *e) {
@@ -39,7 +40,7 @@ public:
     }
     return false;
   }
-  Interactor *clone() { MouseShowElementInfos *interactor =new MouseShowElementInfos();return interactor;}
+  InteractorComponent *clone() { MouseShowElementInfos *interactor =new MouseShowElementInfos();return interactor;}
 };
 
 }

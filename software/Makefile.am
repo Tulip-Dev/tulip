@@ -1,2 +1,2 @@
-SUBDIRS = plugins-manager tulip tlprender
-DIST_SUBDIRS = plugins-manager tulip tlprender
+SUBDIRS = @CONFIGURE_tulipgui@ @CONFIGURE_tlprender@
+DIST_SUBDIRS = @CONFIGURE_tulipgui@ @CONFIGURE_tlprender@

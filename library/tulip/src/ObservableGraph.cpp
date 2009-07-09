@@ -9,6 +9,18 @@
 using namespace stdext;
 using namespace tlp;
 
+void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
+  // ensure obs does not already exists in observers
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    if (obs == (*itObs))
+      return;
+    ++itObs;
+  }
+  observers.push_front(obs); 
+}
+
 void ObservableGraph::notifyAddNode(Graph *sg, const node n) {
   slist<GraphObserver*>::iterator itObs = observers.begin();
   slist<GraphObserver*>::iterator ite = observers.end();
@@ -75,15 +87,14 @@ void ObservableGraph::notifyReverseEdge(Graph *sg, const edge e) {
 }
 
 void ObservableGraph::notifyDestroy(Graph *sg) {
-  slist<GraphObserver*>::iterator itObs = observers.begin();
-  slist<GraphObserver*>::iterator ite = observers.end();
+  // use a copy to avoid the invalidation of the iterator
+  // when an observer remove itself from the list
+  slist<GraphObserver*> copy(observers);
+  slist<GraphObserver*>::iterator itObs = copy.begin();
+  slist<GraphObserver*>::iterator ite = copy.end();
   while (itObs != ite) {
-    GraphObserver* observer = *itObs;
-    // iterator is incremented before
-    // to ensure it will not be invalidated
-    // during the call to the method on the observer
+    (*itObs)->destroy(sg);
     ++itObs;
-    observer->destroy(sg);
   }
 }
 
@@ -136,5 +147,44 @@ void ObservableGraph::notifyDelLocalProperty(Graph *g, const std::string& name) 
     // during the call to the method on the observer
     ++itObs;
     observer->delLocalProperty(g, name);
+  }
+}
+
+void ObservableGraph::notifyBeforeSetAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetAttribute(g, name);
+  }
+}
+
+void ObservableGraph::notifyAfterSetAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetAttribute(g, name);
+  }
+}
+
+void ObservableGraph::notifyRemoveAttribute(Graph *g, const std::string& name) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->removeAttribute(g, name);
   }
 }

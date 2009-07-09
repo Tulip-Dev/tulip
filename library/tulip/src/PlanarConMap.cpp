@@ -29,7 +29,9 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
 }
 
 //============================================================
-PlanarConMap::~PlanarConMap(){}
+PlanarConMap::~PlanarConMap(){
+  delete faceId;
+}
 
 //============================================================
 void PlanarConMap::clear(){
@@ -776,8 +778,11 @@ void PlanarConMap::mergeFaces(Face f, Face g){
 bool PlanarConMap::containNode(Face f, node v) {
   Iterator<Face> * it_f = getFacesAdj(v);
   while(it_f->hasNext())
-    if((it_f->next()) == f)
+    if((it_f->next()) == f) {
+      delete it_f;
       return true;
+    }
+  delete it_f;
   return false;
 }
 

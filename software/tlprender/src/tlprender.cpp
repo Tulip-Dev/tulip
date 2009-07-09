@@ -103,13 +103,13 @@ public:
       cerr << programName << ": OpenGL: CreateContext Failed!" << endl;
       exit(OPENGL_ERROR);
     }
-    
+
     if (!OSMesaMakeCurrent(osContext, buffer, GL_UNSIGNED_BYTE, width, height)) {
       cerr << programName << ": OpenGL: MakeCurrent Failed!" << endl;
       exit(OPENGL_ERROR);
     }
   }
-  
+
   virtual ~GLOffscreen(){
     OSMesaDestroyContext(osContext);
     delete [] buffer;
@@ -118,7 +118,7 @@ public:
     //    cerr << __PRETTY_FUNCTION__ << endl;
     OSMesaMakeCurrent(osContext, buffer, GL_UNSIGNED_BYTE, width, height);
   }
-  
+
   void updateGL() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
     glDrawBuffer(GL_FRONT_LEFT);
@@ -152,12 +152,12 @@ public:
   }
   virtual void loading(const std::string &filename) {}
   virtual void loaded(const std::string &name,
-		      const std::string &author,
-		      const std::string &date, 
-		      const std::string &info,
-		      const std::string &release,
-		      const std::string &version,
-		      const std::list <Dependency> &deps)
+          const std::string &author,
+          const std::string &date,
+          const std::string &info,
+          const std::string &release,
+          const std::string &version,
+          const std::list <Dependency> &deps)
   {
     cout << "[" << name << "]";
   }
@@ -174,7 +174,7 @@ public:
 static void loadGlyphPlugins(PluginLoader *plug)
 {
   string getEnvVar=tlp::TulipLibDir + "/tlp/";
-  
+
   tlp::loadPluginsFromDir(getEnvVar + "glyphs", "Glyph", plug);
 }
 
@@ -186,7 +186,7 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
   StructDef parameter=
     ImportModuleFactory::factory->getPluginParameters(importPluginName);
   Iterator<pair<string,string> > *itP=parameter.getField();
-  
+
   for (;itP->hasNext();) {
     pair<string,string> itp=itP->next();
     if (itp.first=="file::filename"){
@@ -194,7 +194,7 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
       continue;
     }
   }delete itP;
-  
+
   //Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
   //Graph *newGraph=tlp::loadGraph(filename);
   Graph *newGraph = tlp::newGraph();
@@ -208,8 +208,8 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
       string dir=TulipLibDir;
       string name="TulipLibDir";
       while(sceneData.find(name)!=-1) {
-	int pos=sceneData.find(name);
-	sceneData.replace(pos,name.length(),dir);
+  int pos=sceneData.find(name);
+  sceneData.replace(pos,name.length(),dir);
       }
       glScene->setWithXML(sceneData,newGraph);
     } else {
@@ -218,9 +218,9 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
       glScene->addLayer(layer);
       glScene->addGlGraphCompositeInfo(glScene->getLayer("Main"),glGraphComposite);
       glScene->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-      
+
       LayoutProperty *layout =
-	newGraph->getProperty<LayoutProperty>("viewLayout");
+  newGraph->getProperty<LayoutProperty>("viewLayout");
       layout->resetBoundingBox();
       layout->center();
       layout->notifyObservers();
@@ -240,7 +240,7 @@ int main (int argc, char **argv) {
   atexit(exitManager);
 
   parseCommandLine(argc, argv);
-  
+
   MyPluginLoader plug;
   tlp::initTulipLib();
   tlp::loadPlugins(&plug);   // library side plugins
@@ -249,7 +249,7 @@ int main (int argc, char **argv) {
   GLOffscreen glOffscreen(width, height);
 
   importGraph(graphFile, importPluginName, &glOffscreen.scene);
-  
+
   Graph *graph=glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph();
 
   if (layoutSpecified) {
@@ -274,7 +274,7 @@ int main (int argc, char **argv) {
       exit(LAYOUT_NOTFOUND);
     }
   }
-  
+
   glOffscreen.setupOpenGlContext();
   glOffscreen.updateGL();
 
@@ -305,7 +305,7 @@ int main (int argc, char **argv) {
     cerr << programName << ": No image written to disk: couldn't get a writer for format " << imageFormat << endl;
     exit(IMAGE_ERROR);
   }
-  
+
   //create HTML map
   if (outputMap) {
     ofstream of((filename+".html").c_str(), ios::out | ios::trunc);
@@ -314,7 +314,7 @@ int main (int argc, char **argv) {
     glRenderMode(GL_FEEDBACK);
     glOffscreen.scene.getGlGraphComposite()->getInputData()->parameters->setFeedbackRender(true);
     glOffscreen.scene.draw();
-    
+
     glFlush();
     glFinish();
 
@@ -334,14 +334,14 @@ int main (int argc, char **argv) {
       viewport[1] = 0;
       viewport[2] = width;
       viewport[3] = height;
-      
+
       builder.begin(viewport,NULL,0,0);
       recorder.record(false,size,buffer,viewport);
       string str;
       builder.getResult(&str);
       of << str ;
     }
-    
+
     of.close();
     delete[] buffer;
   }
@@ -359,7 +359,7 @@ int main (int argc, char **argv) {
       return EXIT_FAILURE;
     }
   }
-  
+
   return EXIT_SUCCESS;
 }
 
@@ -377,15 +377,15 @@ void parseCommandLine(int argc, char **argv)
 {
   static struct option long_options[] = {
     {"format", 1, 0, 'f'},
-    {"help", 0, 0, 'h'},	//shows help
-    {"height", 1, 0, 0},	//height, in pixel
-    {"layout", 1, 0, 'l'},	//a layout to apply
+    {"help", 0, 0, 'h'},  //shows help
+    {"height", 1, 0, 0},  //height, in pixel
+    {"layout", 1, 0, 'l'},  //a layout to apply
     {"no-htmlbody", 0 , 0, 0},          //do not ouput <html><body>, only <map>...</map>
     {"no-map", 0, 0, 0},        //produce only an image, no html map
-    {"output", 1, 0, 'o'},	//output File
+    {"output", 1, 0, 'o'},  //output File
     {"save", 1, 0, 's'},        //save graph in tlp FILE; required argument
-    {"type", 1, 0, 't'},	//format of imported file (tlp, GML, etc...)
-    {"width", 1, 0, 0},		//width, in pixels
+    {"type", 1, 0, 't'},  //format of imported file (tlp, GML, etc...)
+    {"width", 1, 0, 0},   //width, in pixels
     {0,0,0,0}
   };
 
@@ -393,28 +393,28 @@ void parseCommandLine(int argc, char **argv)
   programName = string(basename(argv[0]));
 
   if (argc < 2) help();
-  
+
   char *endptr;
   char c;
   int option_index=0;
-  
+
   while ((c=getopt_long(argc, argv, "f:hl:o:s:t:", long_options, &option_index)) != -1) {
     switch(c) {
     case 0: {
       string option = long_options[option_index].name;
       if (option == "width") {
-	width = strtol(optarg, &endptr, 10);
-	if ((*endptr != '\0') || (width < 1)) {
-	  cerr << programName << ": invalid width!" << endl;
-	  help();
-	}
+  width = strtol(optarg, &endptr, 10);
+  if ((*endptr != '\0') || (width < 1)) {
+    cerr << programName << ": invalid width!" << endl;
+    help();
+  }
       }
       else if (option == "height") {
-	height = strtol(optarg, &endptr, 10);
-	if ((*endptr != '\0') || (height < 1)) {
-	  cerr << programName << ": invalid height!" << endl;
-	  help();
-	}
+  height = strtol(optarg, &endptr, 10);
+  if ((*endptr != '\0') || (height < 1)) {
+    cerr << programName << ": invalid height!" << endl;
+    help();
+  }
       }
       else if (option == "no-htmlbody") outputHtmlBody = false;
       else if (option == "no-map") outputMap = false;
@@ -430,13 +430,13 @@ void parseCommandLine(int argc, char **argv)
       if (imageFormat == "jpeg");
       else
 #endif
-	{
-	  cerr << "Error: unsupported image format: " << imageFormat << endl;
-	  help();
-	}
+  {
+    cerr << "Error: unsupported image format: " << imageFormat << endl;
+    help();
+  }
       break;
-      
-    case 'h': 
+
+    case 'h':
     case ':': help(); break;
     case 'l': layoutSpecified = true; layoutName = optarg; break;
     case 'o': filename = optarg; break;
@@ -454,7 +454,7 @@ void parseCommandLine(int argc, char **argv)
     cerr << programName << ": no file specified!" << endl;
     help();
   }
-  
+
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": graphFile = " << graphFile << endl;
 #endif

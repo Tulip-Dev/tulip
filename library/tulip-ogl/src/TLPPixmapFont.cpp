@@ -1,3 +1,8 @@
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 #include    "tulip/TLPPixmapGlyph.h"
 #include    "tulip/TLPPixmapFont.h"
 
@@ -17,14 +22,12 @@ TLPPixmapFont::~TLPPixmapFont()
 {}
 
 
-FTGlyph* TLPPixmapFont::MakeGlyph( unsigned int g) {
-    FT_GlyphSlot ftGlyph = face.Glyph( g, FT_LOAD_NO_HINTING);
-    if( ftGlyph) {
-        TLPPixmapGlyph* tempGlyph = new TLPPixmapGlyph(ftGlyph);
-        return tempGlyph;
-    }
-    err = face.Error();
-    return NULL;
+FTGlyph* TLPPixmapFont::MakeGlyph(FT_GlyphSlot ftGlyph) {
+  if( ftGlyph) {
+    TLPPixmapGlyph* tempGlyph = new TLPPixmapGlyph(ftGlyph);
+    return tempGlyph;
+  }
+  return NULL;
 }
 
 #include <iostream>

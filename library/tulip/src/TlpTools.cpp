@@ -1,5 +1,12 @@
 #include <dirent.h>
 #include <string.h>
+#include <locale.h>
+
+#ifndef _WIN32
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 
 #include "thirdparty/gzstream/gzstream.h"
 
@@ -42,6 +49,10 @@ const char tlp::PATH_DELIMITER = ':';
 #endif
 //=========================================================
 void tlp::initTulipLib(char* appDirPath) {
+  // first we must ensure that the parsing of float or double
+  // doest not depend on locale
+  setlocale(LC_NUMERIC, "C");
+
   char *getEnvTlp;
   std::string tulipDocDir;
   string::size_type pos;
@@ -56,6 +67,14 @@ void tlp::initTulipLib(char* appDirPath) {
       // one dir up to initialize the lib dir
       char *last = strrchr(appDirPath, '/');
       last[1] = 0;
+#ifdef I64
+      // check for lib64
+      string tlpPath64 = std::string(appDirPath) + "lib64/tlp";
+      struct stat statInfo;
+      if (stat(tlpPath64.c_str(), &statInfo) == 0)
+	TulipLibDir = std::string(appDirPath) + "lib64";
+      else
+#endif
       TulipLibDir = std::string(appDirPath) + "lib";
 #endif
     } else

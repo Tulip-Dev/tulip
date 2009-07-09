@@ -61,7 +61,9 @@ public :
   unsigned int getLinesColorAlphaValue() const;
   Color getBackgroundColor() const;
   void setBackgroundColor(const Color &color);
-  void setGraphProxy(ParallelCoordinatesGraphProxy *graphProxy) {this->graphProxy = graphProxy;}
+  void setGraphProxy(ParallelCoordinatesGraphProxy *graphProxy);
+  unsigned int getUnhighlightedEltsColorsAlphaValue() const;
+  void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
 
   std::string getLinesTextureFilename() const;
   void setLinesTextureFilename(const std::string &linesTextureFileName);
@@ -72,10 +74,6 @@ public :
 
 public slots:
 
-  void pressButtonAdd();
-  void pressButtonRem();
-  void pressButtonUp();
-  void pressButtonDown();
   void pressButtonBrowse();
   void accept();
   void reject();
@@ -93,6 +91,7 @@ private :
   void restoreBackupConfiguration();
 
 
+  std::vector<std::string> propertyTypesFilter;
   ElementType dataLocationBak;
   Color bgColorBak;
   unsigned int axisHeightBak;
@@ -100,6 +99,7 @@ private :
   unsigned int minAxisPointSizeBak;
   unsigned int maxAxisPointSizeBak;
   unsigned int linesColorAlphaValueBak;
+  unsigned int unhighlightedEltsColorsAlphaValueBak;
   bool linesTextureBak;
   bool userTextureBak;
   std::string userTextureFileBak;

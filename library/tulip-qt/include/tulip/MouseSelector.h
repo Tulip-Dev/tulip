@@ -2,7 +2,7 @@
 #ifndef MOUSESELECTION_H
 #define MOUSESELECTION_H
 
-#include <tulip/GWInteractor.h>
+#include <tulip/InteractorComponent.h>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -10,9 +10,9 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */ 
+/** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseSelector:public Interactor
+class TLP_QT_SCOPE MouseSelector:public InteractorComponent
 {
 protected:
   Qt::MouseButton mButton;
@@ -27,7 +27,7 @@ public:
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  Interactor *clone() { return new MouseSelector(mButton, kModifier); }
+  InteractorComponent *clone() { return new MouseSelector(mButton, kModifier); }
 };
 /*@}*/
 

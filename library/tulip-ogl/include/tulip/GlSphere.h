@@ -49,6 +49,13 @@ namespace tlp {
     virtual void translate(const Coord& mouvement);
 
     /**
+     * Set the texture name
+     */
+    virtual void setTexture(const std::string &texture) {
+      textureFile=texture;
+    }
+
+    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);

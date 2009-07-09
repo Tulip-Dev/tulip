@@ -52,7 +52,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GraphProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
@@ -66,7 +65,7 @@
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
-#include <tulip/GWInteractor.h>
+#include <tulip/Interactor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>
@@ -81,6 +80,7 @@
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
 
+#include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
 #include <UpdatePlugin.h>
 
@@ -186,18 +186,7 @@ void viewGl::startTulip() {
   }
   enableElements(false);
 
-  int argc = qApp->argc();
-  if (argc>1) {
-    char ** argv = qApp->argv();
-    for (int i=1;i<argc;++i) {
-      QFileInfo info(argv[i]);
-      QString s = info.absoluteFilePath();
-      fileOpen(0, s);
-    }
-  }
-
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
-  connect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 
   /*QWidget *centralwidget = new QWidget(this);
@@ -233,9 +222,10 @@ void viewGl::startTulip() {
 #endif
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
 
-  saveActions(menuBar(),NULL,controllerToMenu);
-  saveActions(toolBar,NULL,controllerToToolBar);
+  /*saveActions(menuBar(),NULL,controllerToMenu);
+  saveActions(toolBar,NULL,controllerToToolBar);*/
   tabIndexToController[-1]=NULL;
+  saveInterface(-1);
 
   // if we have only one controller : auto load it
   MutableContainer<Controller *> controllers;
@@ -252,6 +242,16 @@ void viewGl::startTulip() {
   }else{
     controllerAutoLoad=false;
   }
+
+  int argc = qApp->argc();
+   if (argc>1) {
+     char ** argv = qApp->argv();
+     for (int i=1;i<argc;++i) {
+       QFileInfo info(argv[i]);
+       QString s = info.absoluteFilePath();
+       fileOpen(0, s);
+     }
+   }
 
 }
 //**********************************************************************
@@ -310,9 +310,11 @@ void viewGl::fileCloseTab(){
     return;
   int index=tabWidget->currentIndex();
   Graph *graph=tabIndexToController[index]->getGraph();
+  while(graph->getRoot()!=graph)
+    graph=graph->getRoot();
   bool cancle=askSaveGraph(graph->getAttribute<string>("name"),index);
   if(!cancle){
-    Controller *controller;
+    Controller *controller=tabIndexToController[index];
     tabWidget->setCurrentIndex(index-1);
 
     map<int,Controller *> newTabIndexToController;
@@ -333,6 +335,10 @@ void viewGl::fileCloseTab(){
     currentTabIndex=-1;
 
     tabWidget->removeTab(index);
+    if(tabWidget->count()==0)
+      tabWidget->setCurrentIndex(-1);
+
+    delete controller;
   }
 }
 //**********************************************************************
@@ -361,8 +367,6 @@ bool viewGl::createController(const string &name,const string &graphName) {
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;
     controllerToWorkspace[newController]=newWorkspace;
-    //todo
-    //connect(currentController,SIGNAL(willBeClosed()),this, SLOT(controllerWillBeClosed()));
 
   }else{
     controllerAutoLoad=false;
@@ -373,11 +377,11 @@ bool viewGl::createController(const string &name,const string &graphName) {
 //**********************************************************************
 bool viewGl::doFileSave(int index) {
   Controller *controller=tabIndexToController[index];
-  if (openFiles.find((unsigned long)controller)==openFiles.end() ||
-      (openFiles[(unsigned long)controller].name == "")) {
+  if (openFiles.find(controller)==openFiles.end() ||
+      (openFiles[controller].name == "")) {
     return doFileSaveAs();
   }
-  viewGlFile &vFile = openFiles[(unsigned long)controller];
+  FileInfo &vFile = openFiles[controller];
   return doFileSave(controller,"tlp", vFile.name, vFile.author, vFile.comments);
 }
 //**********************************************************************
@@ -390,6 +394,8 @@ bool viewGl::doFileSave(Controller *controllerToSave,string plugin, string filen
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
+  if(filename.length())
+    dataSet.set<string>("name", filename);
   if (author.length() > 0)
     dataSet.set<string>("author", author);
   if (comments.length() > 0)
@@ -431,7 +437,7 @@ bool viewGl::doFileSave(Controller *controllerToSave,string plugin, string filen
   }
 
   // keep trace of file infos
-  viewGlFile &vFile = openFiles[(unsigned long)controllerToSave];
+  FileInfo &vFile = openFiles[controllerToSave];
   vFile.name = filename;
   dataSet.get<string>("author", vFile.author);
   dataSet.get<string>("text::comments", vFile.comments);
@@ -592,12 +598,11 @@ void viewGl::fileOpen(string *plugin, QString &s) {
     }
 
     if(noPlugin) {
-      viewGlFile vFile;
+      FileInfo vFile;
       vFile.name = s.toAscii().data();
       dataSet.get<std::string>("author", vFile.author);
       dataSet.get<std::string>("text::comments", vFile.comments);
-      //todo
-      //openFiles[((unsigned long)currentController)] = vFile;
+      openFiles[tabIndexToController[tabWidget->currentIndex()]] = vFile;
     }
 
     enableElements(true);
@@ -722,6 +727,8 @@ void viewGl::windowsMenuActivated(QAction* action) {
 //**********************************************************************
 void viewGl::windowsMenuAboutToShow() {
   windowsMenu->clear();
+  if(tabWidget->currentIndex()==-1)
+    return;
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   QAction* cascadeAction = windowsMenu->addAction("&Cascade", currentWorkspace, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
@@ -759,9 +766,17 @@ bool viewGl::closeWin() {
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).second){
         Graph *graph=((*it).second)->getGraph();
+        while(graph->getRoot()!=graph)
+          graph=graph->getRoot();
         bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
         if(canceled)
           return false;
+      }
+    }
+
+    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+      if((*it).second){
+        delete (*it).second;
       }
     }
   }
@@ -776,6 +791,8 @@ void viewGl::closeEvent(QCloseEvent *e) {
 }
 //==============================================================
 void viewGl::plugins() {
+  PluginsHelp::checkViewHelp();
+
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
 
   /*QDialog dialog;
@@ -799,15 +816,8 @@ void viewGl::plugins() {
 }
 //==============================================================
 void viewGl::deletePluginsUpdateChecker(){
-  disconnect(pluginsUpdateChecker, SIGNAL(checkFinished()), this,SLOT(deletePluginsUpdateChecker()));
   delete pluginsUpdateChecker;
-}
-//==============================================================
-void viewGl::controllerWillBeClosed(){
-  //todo
-  /*if(!fileNew(true)){
-    currentController->setData(currentController->getGraph());
-  }*/
+  plugins();
 }
 //==============================================================
 void viewGl::saveActions(QWidget *widget,Controller *controller,map<Controller *,vector<QAction *> > &mapToSave){
@@ -863,9 +873,12 @@ void viewGl::saveInterface(int index) {
 }
 //==============================================================
 void viewGl::loadInterface(int index){
-  clearInterface();
+  if(tabIndexToController.count(index)==0)
+      return;
 
   Controller *controller=tabIndexToController[index];
+
+  clearInterface();
 
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
@@ -903,10 +916,28 @@ void viewGl::loadInterface(int index){
 
   if(controllerToDockWidget.count(controller)!=0){
     vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
-    for(vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.begin();it!=tmp.end();++it){
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
+
+#if QT_MINOR_REL > 3
+    it=tmp.begin();
+    while(it!=tmp.end()){
+      restoreDockWidget((*it).second);
+      ++it;
+    }
+#else
+    while(it!=tmp.begin()){
+      --it;
       addDockWidget((*it).first,(*it).second);
       (*it).second->show();
     }
+    
+    if(controller) {
+      vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
+      for(vector<pair<QDockWidget *,QDockWidget*> >::iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
+	tabifyDockWidget((*it).first,(*it).second);
+      }
+    }
+#endif
   }
 
   if(controllerToStatusBar.count(controller)!=0){
@@ -941,6 +972,8 @@ void viewGl::helpAbout() {
 }
 //==============================================================
 void viewGl::helpIndex() {
+  PluginsHelp::checkViewHelp();
+
   QStringList cmdList;
   cmdList << "-profile"
 	  << QString( (tlp::TulipDocProfile).c_str());

@@ -29,7 +29,6 @@
 
 #include "ParallelAxis.h"
 #include "ParallelCoordinatesGraphProxy.h"
-#include "ParallelTools.h"
 
 namespace tlp {
 
@@ -37,16 +36,20 @@ class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver {
 
 public :
 
-  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy);
+	enum LayoutType {PARALLEL=0, CIRCULAR};
+
+	enum LinesType {STRAIGHT=0, SPLINE};
+
+  ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
   ~ParallelCoordinatesDrawing();
 
   bool getDataIdFromGlEntity(GlEntity *glEntity, unsigned int &dataId);
+  bool getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId);
 
   unsigned int nbParallelAxis() const;
   const std::vector<std::string>& getAxisNames() const;
   void swapAxis(ParallelAxis *axis1, ParallelAxis *axis2);
-  ParallelAxis *getAxisUnderPoint(const Coord &coord);
   void removeAxis(ParallelAxis *axis);
   void addAxis(ParallelAxis *axis);
 
@@ -57,19 +60,18 @@ public :
   void setDrawPointsOnAxis(const bool drawPointsOnAxis) {this->drawPointsOnAxis = drawPointsOnAxis;}
   void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {this->linesColorAlphaValue = linesColorAlphaValue;}
   void setLineTextureFilename(std::string lineTextureFilename) {this->lineTextureFilename = lineTextureFilename;}
-  void setViewType(const viewType vType) {this->vType = vType;}
   void setBackgroundColor(const Color &backgroundColor) {this->backgroundColor = backgroundColor;}
-  const viewType getViewType() const {return vType;}
+  void setLayoutType(const LayoutType layoutType) {this->layoutType = layoutType;}
+  void setLinesType(const LinesType linesType) {this->linesType = linesType;}
   std::vector<ParallelAxis *> getAllAxis();
 
   void update();
-  void updateWithAxisSlidersRange(ParallelAxis *axis);
+  void updateWithAxisSlidersRange(ParallelAxis *axis, bool multiFiltering);
 
   void resetAxisSlidersPosition();
 
   unsigned int getNbDataProcessed() const {return nbDataProcessed;}
   void resetNbDataProcessed() {nbDataProcessed = 0;}
-  void deleteAxisGlEntities();
 
   void addNode(Graph *,const node ){}
   void addEdge(Graph *,const edge ){}
@@ -80,6 +82,7 @@ public :
 
   void computeResizeFactor();
   void createAxis();
+  void destroyAxisIfNeeded();
   void plotAllData();
   void plotData(const unsigned int dataIdx, const Color &color);
 
@@ -101,25 +104,33 @@ public :
   std::map<std::string, ParallelAxis *> parallelAxis;
 
   std::map<GlEntity *, unsigned int> glEntitiesDataMap;
+  std::map<node, unsigned int> axisPointsDataMap;
 
   ParallelCoordinatesGraphProxy *graphProxy;
 
-  viewType vType;
   Color backgroundColor;
   std::string lineTextureFilename;
   Size axisPointMinSize;
   Size axisPointMaxSize;
   Size resizeFactor;
 
-  GlGraphInputData *graphData;
-  GlGraphRenderingParameters graphRenderingParameters;
   GlComposite *dataPlotComposite;
   GlComposite *axisPlotComposite;
 
   unsigned int nbDataProcessed;
   bool createAxisFlag;
   std::set<unsigned int> lastHighlightedElements;
-  bool elementDeleted;
+
+  Graph *axisPointsGraph;
+  LayoutProperty *axisPointsGraphLayout;
+  SizeProperty *axisPointsGraphSize;
+  IntegerProperty *axisPointsGraphShape;
+  StringProperty *axisPointsGraphLabels;
+  ColorProperty *axisPointsGraphColors;
+  BooleanProperty *axisPointsGraphSelection;
+
+  LayoutType layoutType;
+  LinesType linesType;
 };
 
 }

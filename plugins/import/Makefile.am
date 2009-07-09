@@ -9,8 +9,6 @@ plugins_LTLIBRARIES = \
 	libGrid-@VERSION@.la \
 	libDotImport-@VERSION@.la \
 	libGMLImport-@VERSION@.la \
-	libFileSystem-@VERSION@.la \
-	libWebImport-@VERSION@.la \
 	libRandomGraph-@VERSION@.la \
 	libRandomSimpleGraph-@VERSION@.la \
 	libAdjacencyMatrixImport-@VERSION@.la \
@@ -18,11 +16,9 @@ plugins_LTLIBRARIES = \
 	libRandomTree-@VERSION@.la \
 	libRandomTreeGeneral-@VERSION@.la \
 	libCompleteTree-@VERSION@.la \
-	libSmallWorldGraph-@VERSION@.la 
+	libSmallWorldGraph-@VERSION@.la
 
 pluginsdir = $(libdir)/tlp
-
-BUILT_SOURCES =  moc_WebImport.cpp
 
 libPlanarGraph_@VERSION@_la_SOURCES = PlanarGraph.cpp
 libDotImport_@VERSION@_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
@@ -36,18 +32,33 @@ libRandomTree_@VERSION@_la_SOURCES = RandomTree.cpp
 libRandomTreeGeneral_@VERSION@_la_SOURCES = RandomTreeGeneral.cpp
 libCompleteTree_@VERSION@_la_SOURCES = CompleteTree.cpp
 libSmallWorldGraph_@VERSION@_la_SOURCES = SmallWorldGraph.cpp
+
+if HAVE_TULIP_QT
+pluginsqt_LTLIBRARIES = libFileSystem-@VERSION@.la libWebImport-@VERSION@.la
+
+pluginsqtdir = $(libdir)/tlp
+
 libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
 libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
 nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
 libFileSystem_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 libWebImport_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+
 AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 
-moc_%.cpp: %.h 
+
+BUILT_SOURCES =  moc_WebImport.cpp
+
+moc_%.cpp: %.h
 	$(MOC) -o $@ $<
 
 clean-generic:
 	rm -f moc_*
+
+else
+INCLUDES = @TULIP_INCLUDE@
+endif
+
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@

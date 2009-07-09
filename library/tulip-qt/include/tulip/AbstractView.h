@@ -39,37 +39,22 @@ namespace tlp {
     QWidget *getWidget(){return widget;}
 
     /**
-     * Get Interactors action (in MainController actions will be add to graphToolBar)
-     * \warning : QAction* must be the same at each call
+     * Set all interactors available forthis view
+     * Interactors are create (allocate) but now view have responsibility of her destruction
      */
-    virtual std::list<QAction *> *getInteractorsActionList();
-
+    virtual void setInteractors(const std::list<Interactor *> &interactorsList);
     /**
-     * get interactors of widget
-     * \return list of interactor installed on this widget
+     * Return interactors of this view
      */
-    virtual tlp::Iterator<tlp::Interactor *> *getInteractors() const;
-
+    virtual std::list<Interactor *> getInteractors();
     /**
-     * install a clone of the interactor as event filter and assign the returned id
+     * Set active interactor on this view
      */
-    tlp::Interactor::ID pushInteractor(tlp::Interactor *interactor);
+    virtual void setActiveInteractor(Interactor *interactor);
     /**
-     * remove the last added interactor from the event filters list and delete it
+     * return current interactor
      */
-    void popInteractor();
-    /**
-     * remove the interactor with id from the event filters list and delete it
-     */
-    void removeInteractor(tlp::Interactor::ID id);
-    /**
-     * remove all interactors and delete them, push a new one if any
-     */
-    tlp::Interactor::ID resetInteractors(tlp::Interactor *interactor = NULL);
-    /**
-     * remove all iteractors and delete them, then install clones of the interactors
-     */
-    std::vector<tlp::Interactor::ID> resetInteractors(const std::vector<tlp::Interactor *>&interactors);
+    Interactor *getActiveInteractor(){return activeInteractor;}
 
   protected:
     /**
@@ -79,21 +64,13 @@ namespace tlp {
     /**
      * empty function : implement this function if you want a context menu when you right click the mouse
      */
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {}
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) ;
+
+    virtual void buildOutputImagesFormatsList(std::set<std::string>& outputFormats);
     /**
      * empty function : implement this function if you have implement buildContextMenu()
      */
     virtual void computeContextMenuAction(QAction *action) {}
-
-    /**
-     * construct the storage of interactors
-     */
-    virtual void constructInteractorsMap() {}
-
-    /**
-     * construct the storage of interactors' action
-     */
-    virtual void constructInteractorsActionList() {}
 
     /**
      * set the central widget of the view
@@ -101,14 +78,13 @@ namespace tlp {
      */
     void setCentralWidget(QWidget *widget);
 
-    tlp::Interactor::ID _id;
-    std::vector<tlp::Interactor *> _interactors;
-    std::map<std::string,std::vector<Interactor *> > interactorsMap;
-    std::list<QAction *> interactorsActionList;
-
     QWidget *widget;
     QVBoxLayout *mainLayout;
     QWidget *centralWidget;
+    std::list<Interactor *> interactors;
+    Interactor *activeInteractor;
+
+    QMenu *exportImageMenu;
 
   public slots:
 
@@ -117,6 +93,8 @@ namespace tlp {
      * this function call specificEventFilter, buildContextMenu and computeContextMenu
      */
     bool eventFilter(QObject *object, QEvent *event);
+
+    virtual void exportImage(QAction* action);
 
   };
 

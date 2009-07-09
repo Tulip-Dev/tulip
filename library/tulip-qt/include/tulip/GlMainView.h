@@ -17,15 +17,16 @@
 #include <config.h>
 #endif
 
+#include "tulip/GlSceneObserver.h"
+
 #include "tulip/AbstractView.h"
 
 #include <QtGui/QMainWindow>
 
 #include <QtGui/QDockWidget>
 
-#include "tulip/GlMainWidget.h"
-
 class QFrame;
+class QMenu;
 
 namespace tlp {
 
@@ -39,6 +40,7 @@ namespace tlp {
   class TulipStats;
 #endif
   class GridOptionsWidget;
+  class GlMainWidget;
 
   /** \brief Provide an abstract view with OpenGl rendering
    *
@@ -72,6 +74,12 @@ namespace tlp {
      * \return the GlMainWidget use in this view
      */
     GlMainWidget *getGlMainWidget();
+    /**
+     * Take a snapshot of the view and put it in a picture
+     */
+    virtual void createPicture(const std::string &pictureName,int width=0, int height=0);
+
+    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
 
   protected :
 
@@ -91,18 +99,6 @@ namespace tlp {
 
     QAction* overviewAction;
 
-  protected slots:
-    /**
-     * Save image of GlMainWidget
-     * QAction::text is the format of output (EPS,SVG or traditional image format)
-     * A QDialog is open to ask the output file name
-     */
-    void exportImage(QAction*);
-    /**
-     * Hide the overview
-     */
-    void hideOverview(bool);
-
   public slots:
     /**
      * Draw the OpenGl widget
@@ -112,6 +108,11 @@ namespace tlp {
      * Refresh the OpenGl widget
      */
     void refresh();
+
+    /**
+     * Hide the overview
+     */
+    void hideOverview(bool);
 
   };
 

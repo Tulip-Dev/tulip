@@ -12,7 +12,7 @@
 
 namespace tlp {
 
-typedef enum Align{LEFT, RIGHT, CENTER, JUSTIFIED}; // défini l'alignement du texte
+enum Align{LEFT, RIGHT, CENTER, JUSTIFIED}; // défini l'alignement du texte
 
 class C_String{  // la classe utilisée pour le stockage un texte à afficher
   Context* c;

@@ -35,13 +35,13 @@ private:
 
     //Compute the minimal distance to one neighbour.
     Iterator<node> *itN=graph->getNodes();
-    Coord tmp1=entryLayout->getNodeValue(n);
+    const Coord& tmp1=entryLayout->getNodeValue(n);
     double dist=1000;
     if (itN->hasNext()) {
       node itn=itN->next();
       while ((itn==n) && itN->hasNext()) itn=itN->next();
       if (itn!=n) {
-	Coord tmp2=entryLayout->getNodeValue(itn);
+	const Coord& tmp2=entryLayout->getNodeValue(itn);
 	dist=sqrt((tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
 		  +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
 		  +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())
@@ -54,7 +54,7 @@ private:
     for (;itN->hasNext();) {
       node itn=itN->next();
       if (itn!=n) {
-	Coord tmp2=entryLayout->getNodeValue(itn);
+	const Coord& tmp2=entryLayout->getNodeValue(itn);
 	double tmpDist=sqrt( (tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
 			     +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
 			     +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())

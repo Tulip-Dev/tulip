@@ -9,7 +9,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TemplateFactory.h>
 #include <tulip/Vector.h>
-#include "GWInteractor.h"
+#include "Interactor.h"
 
 class QMenuBar;
 class QToolBar;
@@ -75,6 +75,21 @@ namespace tlp {
 			mainWindow->addDockWidget(area,dockWidget);
 		}
 
+		/**
+		 * Moves second dock widget on top of first dock widget, creating a tabbed docked area
+		 */
+		void tabifyDockWidget ( QDockWidget * first, QDockWidget * second ){
+		  mainWindow->tabifyDockWidget(first,second);
+		  tabifiedDockWidget.push_back(std::pair<QDockWidget *,QDockWidget *>(first,second));
+		}
+
+		/**
+		 * Return couple of tabified QDockWidget
+		 */
+		std::vector<std::pair<QDockWidget *,QDockWidget *> > getTabifiedDockWidget(){
+		  return tabifiedDockWidget;
+		}
+
 	private:
 
 		QMainWindow *mainWindow;
@@ -83,6 +98,7 @@ namespace tlp {
 		QToolBar *interactorsToolBar;
 		QWorkspace *workspace;
 		QStatusBar *statusBar;
+		std::vector<std::pair<QDockWidget *,QDockWidget *> > tabifiedDockWidget;
 
 	};
 
@@ -121,6 +137,12 @@ namespace tlp {
      * \return the graph
      */
     virtual Graph *getGraph() =0;
+    /**
+     * Return MainWindowFacade use with this controller
+     */
+    MainWindowFacade* getMainWindowFacade(){
+      return &mainWindowFacade;
+    }
 
   signals:
 

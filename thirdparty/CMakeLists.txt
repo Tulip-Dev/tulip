@@ -1,4 +1,4 @@
-add_subdirectory(gle)
-add_subdirectory(gzstream)
-add_subdirectory(ftgl)
+ADD_SUBDIRECTORY(gle)
+ADD_SUBDIRECTORY(gzstream)
+ADD_SUBDIRECTORY(ftgl)
 

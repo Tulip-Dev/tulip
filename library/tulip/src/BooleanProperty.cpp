@@ -11,40 +11,24 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================================
-BooleanProperty::BooleanProperty (Graph *sg):AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(sg) {
-  //  propertyProxy=this;
-}
-//=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it = 0;
-  if (sg == graph) {
-    try {
-      it = nodeProperties.findAll(val);
-    } catch (ImpossibleOperation &e) {
-      it=0;
-    }
-  }
-  if (it==0)
-    return (new SGraphNodeIterator(sg, nodeProperties));
-  else
-    return (new UINTIterator<node>(it));
+  if (sg == graph)
+    it = nodeProperties.findAll(val);
+  if (it == 0)
+    return new SGraphNodeIterator(sg, nodeProperties);
+  return (new UINTIterator<node>(it));
 }
 //=================================================================================
 Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;
   Iterator<unsigned int> *it=0;
-  if (sg == graph) {
-    try {
-      it = edgeProperties.findAll(val);
-    } catch (ImpossibleOperation &e) {
-      it=0;
-    }
-  }
-  if (it==0)
-    return (new SGraphEdgeIterator(sg, edgeProperties));
-  else
-    return (new UINTIterator<edge>(it));
+  if (sg == graph)
+    it = edgeProperties.findAll(val);
+  if (it == 0)
+    return new SGraphEdgeIterator(sg, edgeProperties);
+  return (new UINTIterator<edge>(it));
 }
 //=================================================================================
 //Fonctionnalit� suppl�mentaire ajout� au seletion 
@@ -79,7 +63,7 @@ void BooleanProperty::reverseEdgeDirection() {
   } delete itE;
 }
 //=================================================================================
-PropertyInterface* BooleanProperty::clonePrototype(Graph * g, std::string n)
+PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n)
 {
 	if( !g )
 		return 0;
@@ -105,6 +89,31 @@ void BooleanProperty::copy( const edge e0, const edge e1, PropertyInterface * p 
 	BooleanProperty * tp = dynamic_cast<BooleanProperty*>(p);
 	assert( tp );
 	setEdgeValue( e0, tp->getEdgeValue(e1) );
+}
+//=================================================================================
+PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+  if( !g )
+    return 0;
+  BooleanVectorProperty * p = g->getLocalProperty<BooleanVectorProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
+}
+//=============================================================
+void BooleanVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  BooleanVectorProperty * tp = dynamic_cast<BooleanVectorProperty*>(p);
+  assert( tp );
+  setNodeValue( n0, tp->getNodeValue(n1) );
+}
+//=============================================================
+void BooleanVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  BooleanVectorProperty * tp = dynamic_cast<BooleanVectorProperty*>(p);
+  assert( tp );
+  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 
 

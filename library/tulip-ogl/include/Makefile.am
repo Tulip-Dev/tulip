@@ -39,7 +39,22 @@ nobase_include_HEADERS = \
 	tulip/GlLine.h \
 	tulip/GlCurve.h \
 	tulip/GlQuad.h \
-	tulip/GlXMLTools.h
+	tulip/GlPolyQuad.h \
+	tulip/GlAxis.h \
+	tulip/GlQuantitativeAxis.h \
+	tulip/GlNominativeAxis.h \
+	tulip/GlProgressBar.h \
+	tulip/GlXMLTools.h \
+	tulip/GlBoundingBoxSceneVisitor.h \
+	tulip/GlLines.h \
+	tulip/GlColorScale.h \
+	tulip/GlMetaNodeRenderer.h \
+	tulip/GlMetaNodeTrueRenderer.h \
+	tulip/GlTools.h \
+	tulip/FastBezier.h \
+	tulip/GlBezierCurve.h \
+	tulip/GlCatmullRomCurve.h \
+	tulip/GlShaderManager.h 
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
@@ -56,7 +71,6 @@ noinst_HEADERS = \
 	tulip/FLayout.h \
 	tulip/Frame.h \
 	tulip/Renderer.h \
-	tulip/GlTools.h\
 	tulip/GlXMLTools.h \
 	tulip/Curves.h\
 	tulip/TextRenderer.h \
@@ -64,8 +78,8 @@ noinst_HEADERS = \
 	tulip/TLPPixmapGlyph.h\
 	tulip/GlCPULODCalculator.h \
 	tulip/GlLODSceneVisitor.h \
-	tulip/GlBoundingBoxSceneVisitor.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
 	tulip/OcclusionTest.h \
-	tulip/GlLines.h 
+	tulip/GlewManager.h \
+	tulip/GlPointManager.h

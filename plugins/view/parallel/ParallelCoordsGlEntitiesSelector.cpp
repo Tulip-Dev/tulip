@@ -1,4 +1,21 @@
+//-*-c++-*-
+/*
+ Author: Antoine Lambert
+
+ Email : antoine.lambert@labri.fr
+
+ Last modification : 12/08
+
+ This program is free software; you can redistribute it and/or modify  *
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+*/
+
+#include <tulip/GlMainWidget.h>
+
 #include "ParallelCoordsGlEntitiesSelector.h"
+
 
 using namespace std;
 
@@ -50,12 +67,12 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 			Observable::holdObservers();
 			bool boolVal = true; // add to selection
 
-			if (qMouseEv->modifiers() != Qt::ShiftModifier) {
+			if (qMouseEv->modifiers() != Qt::ControlModifier) {
 				if (qMouseEv->modifiers() !=
 #if defined(__APPLE__)
 						Qt::AltModifier
 #else
-						Qt::ControlModifier
+						Qt::ShiftModifier
 #endif
 				) {
 
@@ -63,7 +80,7 @@ bool ParallelCoordsGlEntitiesSelector::eventFilter(QObject *widget, QEvent *e) {
 
 				} else
 					boolVal = false; // remove from selection
-				}
+			}
 
 			if ((w == 0) && (h == 0)) {
 

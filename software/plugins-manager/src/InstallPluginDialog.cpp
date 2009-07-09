@@ -2,6 +2,7 @@
 #include <cassert>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QMessageBox>
+#include <QtGui/QHeaderView>
 
 #include "InstallPluginDialog.h"
 
@@ -9,205 +10,136 @@ using namespace std;
 
 namespace tlp {
 
-#define SET_PARENT_LAYOUT(child, parent) child->setParent(parent); parent->addItem(child)
-
   InstallPluginDialog::InstallPluginDialog(const std::vector<string> &namePluginsInstall,const std::vector<string> &namePluginsRemove,QWidget *parent)
     :QDialog(parent),processNumber(0){
+    setupUi(this);
 
-   
     exitDialog = new InstallExitDialog(this);
+    cancelButton->setEnabled(true);
+    okButton->setEnabled(false);
+    connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
+    connect(cancelButton,SIGNAL(clicked()),this,SLOT(cancelInstall()));
 
-    setWindowTitle("Plugins install/Remove");
-    setModal(true);
-    mainBox = new QVBoxLayout(this);
-    mainBox->setMargin(50);
-    mainBox->setSpacing(25);
-  
-    labelTitle = new QLabel("Requested operations",this);
-    labelTitle->setAlignment(Qt::AlignHCenter);
-    QPalette pal;
-    pal.setColor(labelTitle->foregroundRole(), Qt::magenta);
-    labelTitle->setAutoFillBackground(true);
-    labelTitle->setPalette(pal);
-    QFont titleFont;
-    titleFont.setBold(true);
-    titleFont.setPixelSize(18); 
-    labelTitle->setFont(titleFont);
-    QFont blodFont;
-    blodFont.setBold(true);
-
-    mainBox->addWidget(labelTitle);
-
-    installBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(installBox, mainBox);
-    removeBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(removeBox, mainBox);
-
-    QLabel *installLabel=new QLabel("Install : ",this);
-    installLabel->setFont(blodFont);
-    installBox->addWidget(installLabel);
-    QLabel *removeLabel=new QLabel("Remove : ",this);
-    removeLabel->setFont(blodFont);
-    removeBox->addWidget(removeLabel);
-
-    QHBoxLayout *subInstallBox= new QHBoxLayout();
-    SET_PARENT_LAYOUT(subInstallBox, installBox);
-    QHBoxLayout *subRemoveBox= new QHBoxLayout();
-    SET_PARENT_LAYOUT(subRemoveBox, removeBox);
-    installLabelBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(installLabelBox, subInstallBox);
-    installBarBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(installBarBox, subInstallBox);
-    removeLabelBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(removeLabelBox, subRemoveBox);
-    removeBarBox = new QVBoxLayout();
-    SET_PARENT_LAYOUT(removeBarBox, subRemoveBox);
-
-    buttonBox = new QHBoxLayout();
-    SET_PARENT_LAYOUT(buttonBox, mainBox);
-    cancel = new QPushButton("Cancel",this);
-    ok = new QPushButton("Ok",this);
-    buttonBox->addWidget(ok);
-    buttonBox->addWidget(cancel);
-    ok->setEnabled(false);
-    connect(cancel,SIGNAL(clicked()),this,SLOT(cancelInstall()));
-    connect(ok,SIGNAL(clicked()),this,SLOT(reject()));
-
-    setLayout(mainBox);
+    titleLabel->setText("Requested operations");
 
     // install
     unsigned int index=0;
     if(namePluginsInstall.size()==0) {
-      QLabel *newLabel=new QLabel("None",this);
-      installLabelBox->addWidget(newLabel);
+
     }else{
+      installTableWidget->setColumnCount(2);
       for(vector<string>::const_iterator it=namePluginsInstall.begin();it!=namePluginsInstall.end();++it) {
-	pluginsInstallIndex[*it]=index;
-	index++;
-	QLabel *newLabel=new QLabel(it->c_str(),this);
-	QProgressBar *newBar=new QProgressBar(this);
-	newBar->setMinimum(0);
-	newBar->setMaximum(100);
-	installLabelBox->addWidget(newLabel);
-	installBarBox->addWidget(newBar);
-	installPluginBars.push_back(newBar);
-	processNumber++;
+        installTableWidget->insertRow(index);
+
+        installTableWidget->setItem(index,0,new QTableWidgetItem((*it).c_str()));
+        installTableWidget->setItem(index,1,new QTableWidgetItem("in process"));
+
+        pluginsInstallIndex[*it]=index;
+        index++;
+        processNumber++;
       }
     }
 
     // remove
     index=0;
     if(namePluginsRemove.size()==0) {
-      QLabel *newLabel=new QLabel("None",this);
-      removeLabelBox->addWidget(newLabel);
+
     }else{
+      removeTableWidget->setColumnCount(2);
       for(vector<string>::const_iterator it=namePluginsRemove.begin();it!=namePluginsRemove.end();++it) {
-	pluginsRemoveIndex[*it]=index;
-	index++;
-	QLabel *newLabel=new QLabel(it->c_str(),this);
-	QProgressBar *newBar=new QProgressBar(this);
-	newBar->setMinimum(0);
-	newBar->setMaximum(100);
-	removeLabelBox->addWidget(newLabel);
-	removeBarBox->addWidget(newBar);
-	removePluginBars.push_back(newBar);
-	processNumber++;
+        removeTableWidget->insertRow(index);
+
+        removeTableWidget->setItem(index,0,new QTableWidgetItem((*it).c_str()));
+        removeTableWidget->setItem(index,1,new QTableWidgetItem("in process"));
+
+        pluginsRemoveIndex[*it]=index;
+        index++;
+        processNumber++;
       }
     }
-  
+    totalProcess=processNumber;
+
+    installTableWidget->resizeColumnsToContents();
+    installTableWidget->horizontalHeader()->setVisible(false);
+    installTableWidget->verticalHeader()->setVisible(false);
+    installTableWidget->setShowGrid(false);
+    removeTableWidget->resizeColumnsToContents();
+    removeTableWidget->horizontalHeader()->setVisible(false);
+    removeTableWidget->verticalHeader()->setVisible(false);
+    removeTableWidget->setShowGrid(false);
   }
 
   void InstallPluginDialog::installStart(const string &name){
-    /*for(unsigned int i=0;i<labelsInstall.size();i++){
-      if( name.compare(labelsInstall[i]->text().toStdString())==0 ){
-	statusInstall[i]->setText(inProgress.c_str());
-	break;
-      }
-      }  */
   }
-  
-  void InstallPluginDialog::installFinished(const string &name,
-					    bool loadCheckOK){
-    /*std::vector<string>::iterator it;
-    for(it=install.begin(); it!=install.end(); it++){
-      if( (*(it)).compare(name)==0 ){
-	install.erase(it);
-	break;
-      }
-      }*/
-    /*if(install.size()==0 && remove.size()==0 ){
-      terminated();
-      }*/
+
+  void InstallPluginDialog::installFinished(const string &name,bool loadCheckOK){
     if (!loadCheckOK) {
       installErrors += "The check of the '" + name + "' plugin loading failed,\n";
       installErrors += "the file has not be installed.";
     }
-    installPart(name,1.);
+    //installPart(name,1.);
     processNumber--;
     if(processNumber==0)
       terminated();
   }
 
   void InstallPluginDialog::stopInstall(){
-    //std::vector<string> nameStopInstall;
-    
-    /*for(unsigned int i=0;i<statusInstall.size();i++){
-      if( inProgress.compare(statusInstall[i]->text().toStdString())==0 ){
-	nameStopInstall.push_back(labelsInstall[i]->text().toStdString());
-      }
-      }*/
+
   }
 
   void InstallPluginDialog::addPlugin(bool install, const string &name){
+    QTableWidgetItem *itemWidget=new QTableWidgetItem(name.c_str());
+
     unsigned int index;
     if(install){
-      installBox->setEnabled(true);
-      index=installPluginBars.size();
-      pluginsInstallIndex[name]=index;
-      QLabel *newLabel=new QLabel(name.c_str(),this);
-      QProgressBar *newBar=new QProgressBar(this);
-      newBar->setMinimum(0);
-      newBar->setMaximum(100);
-      installLabelBox->addWidget(newLabel);
-      installBarBox->addWidget(newBar);
-      installPluginBars.push_back(newBar);
+      installTableWidget->setColumnCount(2);
+
+      index=installTableWidget->rowCount();
+      pluginsInstallIndex[name]=index+1;
+
+      installTableWidget->insertRow(installTableWidget->rowCount());
+      installTableWidget->setItem(installTableWidget->rowCount(),0,itemWidget);
+      installTableWidget->setItem(installTableWidget->rowCount(),1,new QTableWidgetItem("in process"));
     }else{
-      removeBox->setEnabled(true);
-      index=removePluginBars.size();
-      pluginsRemoveIndex[name]=index;
-      QLabel *newLabel=new QLabel(name.c_str(),this);
-      QProgressBar *newBar=new QProgressBar(this);
-      newBar->setMinimum(0);
-      newBar->setMaximum(100);
-      removeLabelBox->addWidget(newLabel);
-      removeBarBox->addWidget(newBar);
-      removePluginBars.push_back(newBar);
+      removeTableWidget->setColumnCount(2);
+
+      index=removeTableWidget->rowCount();
+      pluginsRemoveIndex[name]=index+1;
+
+      removeTableWidget->insertRow(removeTableWidget->rowCount());
+      removeTableWidget->setItem(removeTableWidget->rowCount(),0,itemWidget);
+      removeTableWidget->setItem(removeTableWidget->rowCount(),1,new QTableWidgetItem("in process"));
     }
     processNumber++;
+    totalProcess++;
+
+    installTableWidget->resizeColumnsToContents();
+    removeTableWidget->resizeColumnsToContents();
   }
 
   void InstallPluginDialog::closeEvent(QCloseEvent *e){
-    if(terminate==false){
+    /*if(terminate==false){
       e->ignore();
       cancelInstall();
     }
     else{
       reject();
-    }
+    }*/
   }
 
   void InstallPluginDialog::terminated(){
     if(exitDialog->isVisible()){
       exitDialog->reject();
     }
-    labelTitle->setText("Completed operations");
-    QPalette pal;
+
+    titleLabel->setText("Completed operations");
+    /*QPalette pal;
     pal.setColor(labelTitle->foregroundRole(), Qt::blue);
     labelTitle->setAutoFillBackground(true);
-    labelTitle->setPalette(pal);
+    labelTitle->setPalette(pal);*/
 
-    cancel->setEnabled(false);
-    ok->setEnabled(true);
+    cancelButton->setEnabled(false);
+    okButton->setEnabled(true);
 
     if (installErrors.size() > 0) {
       QMessageBox::critical(this,
@@ -216,28 +148,28 @@ namespace tlp {
     }
   }
 
-  void InstallPluginDialog::installPart(const std::string &name, float percent) {
+  void InstallPluginDialog::installPart(const std::string &name, int currentPart,int partNumber) {
+    progressBar->setValue(progressBar->value()+(int)(((100./(float)totalProcess)/(float)partNumber)));
+
     map<string, unsigned int>::iterator it;
     it=pluginsInstallIndex.find(name);
     if(it!=pluginsInstallIndex.end()){
       unsigned int index=(*it).second;
-      QProgressBar *bar=installPluginBars[index];
-      assert(bar);
-      bar->setValue((int)(percent*100));
+      if(currentPart==partNumber && installTableWidget->item(index,1)->text()!="complete")
+        installTableWidget->item(index,1)->setText("complete");
       return;
     }
     it=pluginsRemoveIndex.find(name);
     if(it!=pluginsRemoveIndex.end()){
       unsigned int index=(*it).second;
-      QProgressBar *bar=removePluginBars[index];
-      assert(bar);
-      bar->setValue((int)(percent*100));
+      if(currentPart==partNumber && removeTableWidget->item(index,1)->text()!="complete")
+        removeTableWidget->item(index,1)->setText("complete");
       return;
     }
     assert(false);
-  } 
+  }
 
-  
+
 
   void InstallPluginDialog::cancelInstall(){
     exitDialog->show();

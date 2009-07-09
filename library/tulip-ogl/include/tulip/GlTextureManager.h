@@ -72,6 +72,10 @@ namespace tlp {
      */
     GlTexture getTextureInfo(const std::string&);
     /**
+     * Load texture with textureName from Raw data
+     */
+    bool loadTextureFromRawData(const std::string &textureName, int width, int height, bool hasAlpha, unsigned char *data);
+    /**
      * Load texture with given name
      */
     bool loadTexture(const std::string&);
@@ -91,6 +95,8 @@ namespace tlp {
      * Disable texture with given name
      */
     void desactivateTexture();
+
+    void registerExternalTexture(const std::string &textureName, const GLuint textureId);
 
   private:
 

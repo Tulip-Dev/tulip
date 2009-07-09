@@ -19,6 +19,18 @@ ObserverMap Observable::holdMap;
 
 static bool unholdLock=false;
 
+void Observable::addObserver(Observer *obs) {
+  // ensure obs does not already exists in observersList
+  slist<Observer*>::iterator itlObs = observersList.begin();
+  slist<Observer*>::iterator itle = observersList.end();
+  while (itlObs != itle) {
+    if (obs == (*itlObs))
+      return;
+    ++itlObs;
+  }  
+  observersList.push_front(obs);
+}
+
 //===============================================================
 void Observable::notifyDestroy() {
   //  cerr << "Observable::notifyObservers" << endl;

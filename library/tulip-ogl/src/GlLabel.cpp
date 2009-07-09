@@ -20,21 +20,36 @@
 
 using namespace std;
 
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+tlp::TextRenderer* tlp::GlLabel::renderer=0;
+#endif
+#else
+tlp::TextRenderer *tlp::GlLabel::renderer=0;
+#endif
+
 namespace tlp {
 
-  GlLabel::GlLabel() :renderer(new TextRenderer) {
+  GlLabel::GlLabel() {
+    if(!renderer){
+      renderer=new TextRenderer;
+      renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
+      renderer->setMode(TLP_TEXTURE);
+    }
   }
-  GlLabel::GlLabel(const string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):renderer(new TextRenderer),centerPosition(centerPosition),size(size),color(fontColor),fontPath(fontPath),leftAlign(leftAlign) {
-    renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-    renderer->setMode(TLP_TEXTURE);
-    renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
+  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0) {
+    GlLabel();
   }
+
+  GlLabel::GlLabel(const string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0){
+    GlLabel();
+  }
+
   GlLabel::~GlLabel() {
-    delete renderer;
   }
   //============================================================
   void GlLabel::setText(const string& text) {
-    renderer->setString(text, VERBATIM);
     this->text=text;
   }
   //============================================================
@@ -50,6 +65,10 @@ namespace tlp {
   }
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
+
+    renderer->setColor(color[0], color[1], color[2]);
+    renderer->setString(text, VERBATIM);
+
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_LIGHTING);
@@ -78,6 +97,13 @@ namespace tlp {
       glScalef(div_w, div_h, 1);
     }
 
+    if(xRot!=0.)
+      glRotatef(xRot,1.,0.,0.);
+    if(yRot!=0.)
+      glRotatef(yRot,0.,1.,0.);
+    if(zRot!=0.)
+      glRotatef(zRot,0.,0.,1.);
+
     glEnable( GL_TEXTURE_2D);
     glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
     renderer->draw(w, w, 0);
@@ -90,6 +116,12 @@ namespace tlp {
     centerPosition+=mouvement;
   }
   //===========================================================
+  void GlLabel::rotate(float xRot, float yRot, float zRot) {
+    this->xRot=xRot;
+    this->yRot=yRot;
+    this->zRot=zRot;
+  }
+  //===========================================================
   void GlLabel::getXML(xmlNodePtr rootNode) {
     xmlNodePtr dataNode=NULL;
 
@@ -97,13 +129,14 @@ namespace tlp {
 
     GlXMLTools::getDataNode(rootNode,dataNode);
 
-    GlXMLTools::getXML(dataNode,"fontPath",fontPath);
     GlXMLTools::getXML(dataNode,"text",text);
     GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
     GlXMLTools::getXML(dataNode,"size",size);
     GlXMLTools::getXML(dataNode,"color",color);
     GlXMLTools::getXML(dataNode,"leftAlign",leftAlign);
-
+    GlXMLTools::getXML(dataNode,"xRot",xRot);
+    GlXMLTools::getXML(dataNode,"yRot",yRot);
+    GlXMLTools::getXML(dataNode,"zRot",zRot);
   }
   //============================================================
   void GlLabel::setWithXML(xmlNodePtr rootNode) {
@@ -113,17 +146,14 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      GlXMLTools::setWithXML(dataNode,"fontPath",fontPath);
       GlXMLTools::setWithXML(dataNode,"text",text);
       GlXMLTools::setWithXML(dataNode,"centerPosition",centerPosition);
       GlXMLTools::setWithXML(dataNode, "size", size);
       GlXMLTools::setWithXML(dataNode,"color",color);
       GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
-
-      renderer->setContext(fontPath + "font.ttf", 20, 0, 0, 255);
-      renderer->setMode(TLP_POLYGON);
-      renderer->setColor(color[0], color[1], color[2]);
-      renderer->setString(text, VERBATIM);
+      GlXMLTools::setWithXML(dataNode,"xRot",xRot);
+      GlXMLTools::setWithXML(dataNode,"yRot",yRot);
+      GlXMLTools::setWithXML(dataNode,"zRot",zRot);
     }
   }
 

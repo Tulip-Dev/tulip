@@ -12,32 +12,33 @@ using namespace std;
 
 namespace tlp {
 
-  PluginsInfoWidget::PluginsInfoWidget(QWidget *parent):QTextBrowser(parent) {
+  PluginsInfoWidget::PluginsInfoWidget(QWidget *parent) : QWidget(parent){
+    setupUi(this);
   }
 
   void PluginsInfoWidget::setPluginInfo(const PluginInfo *plugin, string addrWS){
-    //interrogation du ws pour recupérer infos plugin
-    if(plugin->local){ 
+    //interrogation du ws pour recupï¿½rer infos plugin
+    if(plugin->local){
       LocalPluginInfo *localPlugin=(LocalPluginInfo*)plugin;
       //probleme pluginName vide en local verif pluginInfo
       QString pluginFileNameQStr=localPlugin->fileName.c_str();
-      
+
       string pluginInfoPath(string(tlp::TulipLibDir+"tlp/")+pluginFileNameQStr.split("/").last().toStdString()+".doc");
       QFile pluginInfoFile(pluginInfoPath.c_str());
 
       if (!pluginInfoFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-	return;
+        return;
       }
-      
+
       vector<string> dependencies;
       for(vector<PluginDependency>::iterator it=localPlugin->dependencies.begin();it!=localPlugin->dependencies.end();++it) {
-	dependencies.push_back((*it).name);
+        dependencies.push_back((*it).name);
       }
 
       formatInfo(localPlugin->name,localPlugin->author,localPlugin->type,localPlugin->date,localPlugin->info,localPlugin->version,dependencies);
       addPluginDocXML(QString(pluginInfoFile.readAll()).toStdString());
-      
-      setText((htmlBegin+pluginInfoXML+pluginDocXML+htmlEnd).c_str());
+
+      textBrowser->setText((htmlBegin+pluginInfoXML+pluginDocXML+htmlEnd).c_str());
 
     }else{
       DistPluginInfo *distPlugin=(DistPluginInfo*)plugin;
@@ -45,13 +46,13 @@ namespace tlp {
 
       string versionStr=distPlugin->version;
       while(versionStr.find(" ")!=string::npos){
-	versionStr.replace(versionStr.find(" "),1,".");
+        versionStr.replace(versionStr.find(" "),1,".");
       }
 
       GetPluginInfoTreatment *infoTreat = new GetPluginInfoTreatment(this);
       GetPluginInfoRequest* infoReq = new GetPluginInfoRequest(distPlugin->fileName,versionStr,infoTreat);
       sm->send(infoReq);
-      
+
       GetPluginDocTreatment *docTreat = new GetPluginDocTreatment(this);
       GetPluginDocRequest* docReq = new GetPluginDocRequest(distPlugin->fileName,versionStr,docTreat);
       sm->send(docReq);
@@ -64,41 +65,40 @@ namespace tlp {
     else {
       LocalPluginInfo *localPlugin=(LocalPluginInfo*)plugin;
       QString pluginFileNameQStr=localPlugin->fileName.c_str();
-     
+
       string pluginInfoPath(string(tlp::TulipLibDir+"tlp/")+pluginFileNameQStr.split("/").last().toStdString()+".doc");
       QFile pluginInfoFile(pluginInfoPath.c_str());
-      
+
       return pluginInfoFile.exists();
     }
   }
-  
+
   string PluginsInfoWidget::formatXMLDoc(QDomElement elt){
-    
-    QString str; 
-    QDomNode n = elt.firstChild();//elt.firstChild(); 
+    QString str;
+    QDomNode n = elt.firstChild();//elt.firstChild();
 
     while(!n.isNull()) {
-      
-      QDomElement xmlElem = n.toElement(); 
+
+      QDomElement xmlElem = n.toElement();
       if(!xmlElem.isNull()) {
-	if(xmlElem.tagName() == "detaileddescription"){
-	  QTextStream stream(&str);
-	  xmlElem.save(stream,2);
-	  str.remove("<detaileddescription>");
-	  str.remove("</detaileddescription>");
-	  str.remove("\n");
-	  str.replace("<para>","<p>");
-	  str.replace("</para>","</p>");
-	  str.replace("<itemizedlist>","<ul>");
-	  str.replace("</itemizedlist>","</ul>");
-	  str.replace("<listitem>","<li>");
-	  str.replace("</listitem>","</li>");
-	  str.replace("<bold>","<b>");
-	  str.replace("</bold>","</b>");
-	  str.replace("<simplesect","<blockquote><");
-	  str.replace("</simplesect>","</blockquote><br>");
-	  str.replace("<linebreak/>", "<br>");
-	}
+        if(xmlElem.tagName() == "detaileddescription"){
+          QTextStream stream(&str);
+          xmlElem.save(stream,2);
+          str.remove("<detaileddescription>");
+          str.remove("</detaileddescription>");
+          str.remove("\n");
+          str.replace("<para>","<p>");
+          str.replace("</para>","</p>");
+          str.replace("<itemizedlist>","<ul>");
+          str.replace("</itemizedlist>","</ul>");
+          str.replace("<listitem>","<li>");
+          str.replace("</listitem>","</li>");
+          str.replace("<bold>","<b>");
+          str.replace("</bold>","</b>");
+          str.replace("<simplesect","<blockquote><");
+          str.replace("</simplesect>","</blockquote><br>");
+          str.replace("<linebreak/>", "<br>");
+        }
       }
       n = n.nextSibling();
     }
@@ -106,45 +106,51 @@ namespace tlp {
   }
 
   void PluginsInfoWidget::formatInfo(const string &name,const string &author,const string &type,const string &date,const string &info,const string &version,const vector<string> &dependencies){
+    nameLabel->setText(name.c_str());
+    authorLabel->setText(author.c_str());
+    typeLabel->setText(type.c_str());
+    dateLabel->setText(date.c_str());
+    versionInfoLabel->setText(info.c_str());
+    versionLabel->setText(version.c_str());
 
-    string pluginInfoStr("");
+    /*string pluginInfoStr("");
 
     pluginInfoStr += string("<table border='1'>");
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Name ");
     pluginInfoStr += string("</td><td>");
     pluginInfoStr += name;
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += string("</td></tr>");
 
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Author ");
     pluginInfoStr += string("</td><td>");
     pluginInfoStr += author;
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += string("</td></tr>");
 
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Type : ");
     pluginInfoStr += string("</td><td>");
     pluginInfoStr += type;
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += string("</td></tr>");
 
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Date : ");
     pluginInfoStr += string("</td><td>");
     pluginInfoStr += date;
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += string("</td></tr>");
 
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Info : ");
     pluginInfoStr += string("</td><td>");
     pluginInfoStr += info;
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += string("</td></tr>");
 
     pluginInfoStr += string("<tr><td>");
     pluginInfoStr += string(" Version : ");
     pluginInfoStr += string("</td><td>");
-    pluginInfoStr += version; 
-    pluginInfoStr += string("</td></tr>"); 
+    pluginInfoStr += version;
+    pluginInfoStr += string("</td></tr>");
 
     if(dependencies.size()!=0) {
       pluginInfoStr += string("<tr><td>");
@@ -153,26 +159,25 @@ namespace tlp {
 
       for(vector<string>::const_iterator it=dependencies.begin();it!=dependencies.end();++it) {
 	if(it!=dependencies.begin())
-	  pluginInfoStr += "<br>"; 
-	pluginInfoStr += (*it); 
+	  pluginInfoStr += "<br>";
+	pluginInfoStr += (*it);
       }
-      pluginInfoStr += string("</td></tr>"); 
+      pluginInfoStr += string("</td></tr>");
     }
 
-    pluginInfoStr += string("</table><br><br>"); 
+    pluginInfoStr += string("</table><br><br>");
 
-    pluginInfoXML = pluginInfoStr;
-  
+    pluginInfoXML = pluginInfoStr;*/
+
   }
 
   void PluginsInfoWidget::addPluginInfoXML(string xml){
-
-    //  doc.appendChild(pluginNode);  
+    //  doc.appendChild(pluginNode);
     QDomDocument pluginInfoXMLDom("PluginInfoXML");
     string pluginInfoXMLStr("");
 
     pluginInfoXMLDom.setContent(QString(xml.c_str()));
-  
+
     QDomElement pluginInfoXMLElem = pluginInfoXMLDom.documentElement();
 
     string name = pluginInfoXMLElem.attribute("name").toStdString();
@@ -180,43 +185,42 @@ namespace tlp {
     string type = pluginInfoXMLElem.attribute("type").toStdString();
     string date = pluginInfoXMLElem.attribute("date").toStdString();
     string info = pluginInfoXMLElem.attribute("info").toStdString();
-    string version = pluginInfoXMLElem.attribute("version").toStdString(); 
+    string version = pluginInfoXMLElem.attribute("version").toStdString();
 
     vector<string> dependencies;
-    
+
     QDomNode n = pluginInfoXMLElem.firstChild();
 
     while(!n.isNull()) {
-      QDomElement xmlElem = n.toElement(); 
+      QDomElement xmlElem = n.toElement();
       if(!xmlElem.isNull()) {
-	if(xmlElem.tagName() == "dependency"){
-	  dependencies.push_back(xmlElem.attribute("name").toStdString());
-	}
+        if(xmlElem.tagName() == "dependency"){
+          dependencies.push_back(xmlElem.attribute("name").toStdString());
+        }
       }
       n = n.nextSibling();
     }
-  
+
     formatInfo(name,author,type,date,info,version,dependencies);
   }
 
   void PluginsInfoWidget::addPluginDocXML(string xml){
 
-    //  doc.appendChild(pluginNode);  
+    //  doc.appendChild(pluginNode);
     QDomDocument pluginInfoXMLDom("PluginInfoXML");
     string pluginInfoXMLStr("");
 
     pluginInfoXMLDom.setContent(QString(xml.c_str()));
-  
+
     QDomElement pluginInfoXMLElem = pluginInfoXMLDom.documentElement();
 
     if(!pluginInfoXMLElem.isNull()) {
       if(pluginInfoXMLElem.tagName() == "doc"){
-	pluginInfoXMLStr += formatXMLDoc(pluginInfoXMLElem);
+        pluginInfoXMLStr += formatXMLDoc(pluginInfoXMLElem);
       }
     }
-  
+
     pluginDocXML = pluginInfoXMLStr;
-  
   }
 
 }

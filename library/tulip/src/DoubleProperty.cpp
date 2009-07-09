@@ -12,7 +12,7 @@ using namespace tlp;
 
 //==============================
 ///Constructeur d'un DoubleProperty
-DoubleProperty::DoubleProperty (Graph *sg):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg),
+DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
@@ -29,7 +29,7 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
     Iterator<node> *itN=graph->getNodes();
     while (itN->hasNext()) {
 	  node itn=itN->next();
-      double nodeValue=getNodeValue(itn);
+      const double& nodeValue=getNodeValue(itn);
       if (histogram.find(nodeValue)==histogram.end()) 
 	histogram[nodeValue]=1;
       else
@@ -54,7 +54,7 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
     Iterator<edge> *itE=graph->getEdges();
     while (itE->hasNext()) {
       edge ite=itE->next();
-      double value=getEdgeValue(ite);
+      const double& value=getEdgeValue(ite);
       if (histogram.find(value)==histogram.end()) 
 	histogram[value]=1;
       else
@@ -129,19 +129,18 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
-  double tmp;
   double maxN2,minN2;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
   if (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
+    const double& tmp=getNodeValue(itn);
     maxN2=tmp;
     minN2=tmp;
   }
   while (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
+    const double& tmp=getNodeValue(itn);
     if (tmp>maxN2) maxN2=tmp;
     if (tmp<minN2) minN2=tmp;
   } delete itN;
@@ -154,19 +153,18 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
-  double tmp;
   double maxE2,minE2;
   if (sg==0) sg=graph;
   Iterator<edge> *itE=sg->getEdges();
   if (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
+    const double& tmp=getEdgeValue(ite);
     maxE2=tmp;
     minE2=tmp;
   }
   while (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
+    const double& tmp=getEdgeValue(ite);
     if (tmp>maxE2) maxE2=tmp;
     if (tmp<minE2) minE2=tmp;
   } delete itE;
@@ -201,7 +199,7 @@ void DoubleProperty::beforeSetAllEdgeValue(PropertyInterface*) {
   minMaxOkEdge.clear();
 }
 //=================================================================================
-PropertyInterface* DoubleProperty::clonePrototype(Graph * g, std::string n) {
+PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
   DoubleProperty * p = g->getLocalProperty<DoubleProperty>( n );
@@ -222,6 +220,31 @@ void DoubleProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
   if( !p )
     return;
   DoubleProperty * tp = dynamic_cast<DoubleProperty*>(p);
+  assert( tp );
+  setEdgeValue( e0, tp->getEdgeValue(e1) );
+}
+//=================================================================================
+PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+  if( !g )
+    return 0;
+  DoubleVectorProperty * p = g->getLocalProperty<DoubleVectorProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
+}
+//=============================================================
+void DoubleVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  DoubleVectorProperty * tp = dynamic_cast<DoubleVectorProperty*>(p);
+  assert( tp );
+  setNodeValue( n0, tp->getNodeValue(n1) );
+}
+//=============================================================
+void DoubleVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
+  if( !p )
+    return;
+  DoubleVectorProperty * tp = dynamic_cast<DoubleVectorProperty*>(p);
   assert( tp );
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }

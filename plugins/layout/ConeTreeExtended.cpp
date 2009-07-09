@@ -45,7 +45,7 @@ double ConeTreeExtended::treePlace3D(node n,
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
   if (tree->outdeg(n)==0) {
-    Coord tmp = nodeSize->getNodeValue(n);
+    const Coord& tmp = nodeSize->getNodeValue(n);
     return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   
@@ -147,12 +147,14 @@ bool ConeTreeExtended::run() {
       orientation = tmp.getCurrentString();
     }
   }
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(nodeSize);
   //=========================================================
   //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size tmp = nodeSize->getNodeValue(n);
+      const Size& tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
@@ -176,13 +178,17 @@ bool ConeTreeExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      Size  tmp = nodeSize->getNodeValue(n);
+      const Size&  tmp = nodeSize->getNodeValue(n);
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      Coord tmpC = layoutResult->getNodeValue(n);
+      const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
-  TreeTest::cleanComputedTree(graph, tree);
+
+  // if not in tulip gui, ensure cleanup
+  LayoutProperty* elementLayout;
+  if (!graph->getAttribute("viewLayout", elementLayout))
+    TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }

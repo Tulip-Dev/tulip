@@ -39,9 +39,12 @@ namespace {
 #define EDGE_ELT 1
 
 char *defColors[12] = {
-  "(255,0,0,255)", "(0,255,0,255)", "(0,0,255,255)", "(255,255,0,255)",
-  "(0,255,255,255)", "(255,0,255,255)", "(96,159,191,255)", "(0,191,112,255)",
-  "(255,106,0,255)",  "(238,255,170,255)", "(255,205,205,255)", "(191,143,0,255)"};
+  (char *) "(255,0,0,255)", (char *) "(0,255,0,255)", (char *) "(0,0,255,255)",
+  (char *) "(255,255,0,255)", (char *) "(0,255,255,255)",
+  (char *) "(255,0,255,255)", (char *) "(96,159,191,255)",
+  (char *) "(0,191,112,255)", (char *) "(255,106,0,255)",
+  (char *) "(238,255,170,255)", (char *) "(255,205,205,255)",
+  (char *) "(191,143,0,255)"};
 
 class EnumColorValuesMapping: public ColorAlgorithm {
   // the property
@@ -109,7 +112,6 @@ public:
       if (maxSteps < 100)
 	maxSteps = 100;
       while(itE.hasNext()) {
-	edge ite = itE.next();
 	string tmp = property->getEdgeStringValue(itE.next());
 	if (partitions.find(tmp) == partitions.end()) {
 	  partitions.insert(tmp);
@@ -181,10 +183,10 @@ public:
     int xMax=0;
     for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
       GlRect *rect=new GlRect(Coord(15,25+i*15,0),Coord(25,15+i*15,0),(*it).second,(*it).second);
-      GlLabel *label=new GlLabel(TulipBitmapDir,Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
+      GlLabel *label=new GlLabel(Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
       label->setText((*it).first);
       if(30+label->getSize()[0]>xMax)
-	xMax=30+label->getSize()[0];
+	xMax=30+ (int) label->getSize()[0];
 
       rectVector.push_back(rect);
       labelVector.push_back(label);
@@ -203,19 +205,7 @@ public:
 
     DataSet nodeLinkDiagramComponentDataSet;
     DataSet infoDataSet;
-    string infoName="Enum Color Values Mapping 0";
-    if(graph->attributeExist("NodeLinkDiagramComponent")){
-      graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
-      int i=1;
-      while(nodeLinkDiagramComponentDataSet.exist(infoName)){
-        stringstream str;
-        str << "Enum Color Values Mapping " << i << endl;
-        infoName=str.str();
-        i++;
-      }
-    }else{
-
-    }
+    string infoName="Enum Color Values Mapping";
 
     infoDataSet.set<long>("composite",(long)composite);
     infoDataSet.set<string>("layer","Foreground");

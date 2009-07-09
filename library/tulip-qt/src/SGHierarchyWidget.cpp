@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 
+#include <stdio.h>
 #include <iostream>
 
 #include <QtGui/qinputdialog.h>

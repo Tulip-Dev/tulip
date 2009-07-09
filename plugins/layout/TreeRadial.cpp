@@ -99,7 +99,7 @@ public:
     } else
       layoutResult->setNodeValue(n, Coord(0, 0, 0));
     node on;
-    double nSpread = angles->getNodeValue(n);
+    const double& nSpread = angles->getNodeValue(n);
     checkAngle = false;
     forEach(on, tree->getOutNodes(n)) {
       endAngle = startAngle + (sAngle * (angles->getNodeValue(on)/nSpread));
@@ -124,9 +124,11 @@ public:
 
     float nSpacing, lSpacing;
     SizeProperty* sizes;
-    if (getNodeSizePropertyParameter(dataSet, sizes))
+    if (!getNodeSizePropertyParameter(dataSet, sizes))
       sizes = graph->getProperty<SizeProperty>("viewSize");
     getSpacingParameters(dataSet, nSpacing, lSpacing);
+    // ensure size updates will be kept after a pop
+    preservePropertyUpdates(sizes);
 
     LayoutProperty tmpLayout(graph);
   
@@ -134,7 +136,7 @@ public:
     SizeProperty *circleSizes = 
       graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
     forEach(n, tree->getNodes()) {
-      Size boundingBox = sizes->getNodeValue (n);
+      const Size& boundingBox = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
 			    boundingBox.getH() * boundingBox.getH()/4.0);
       circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
@@ -153,7 +155,12 @@ public:
     doLayout(root, 0, 0., 2 * M_PI, &angles);
 
     graph->delLocalProperty("bounding circle sizes");
-    TreeTest::cleanComputedTree(graph, tree);
+
+    // if not in tulip gui, ensure cleanup
+    LayoutProperty* elementLayout;
+    if (!graph->getAttribute("viewLayout", elementLayout))
+      TreeTest::cleanComputedTree(graph, tree);
+
     return true;
   }
 };

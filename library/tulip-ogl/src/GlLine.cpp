@@ -7,8 +7,7 @@ using namespace std;
 
 namespace tlp {
   GlLine::GlLine(const vector<Coord> &points, const vector<Color> &colors):
-    _points(points),
-    _colors(colors){
+    _points(points),_colors(colors),width(1.0),factor(1),pattern(0){
 
     for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
       boundingBox.check(*it);
@@ -50,6 +49,11 @@ namespace tlp {
   //=====================================================
   void GlLine::draw(float lod,Camera *camera) {
     glDisable(GL_LIGHTING);
+    glLineWidth(width);
+    if(pattern!=0){
+      glLineStipple(factor,pattern);
+      glEnable(GL_LINE_STIPPLE);
+    }
     glBegin(GL_LINE_STRIP);
 
     for(unsigned int i=0; i < _points.size(); ++i) {
@@ -60,8 +64,21 @@ namespace tlp {
     }
     glEnd();
 
+    if(pattern!=0)
+      glDisable(GL_LINE_STIPPLE);
+
+    glLineWidth(1.0);
     glEnable(GL_LIGHTING);
     glTest(__PRETTY_FUNCTION__);
+  }
+  //=====================================================
+  void GlLine::setLineWidth(float width){
+    this->width=width;
+  }
+  //=====================================================
+  void GlLine::setLineStipple(unsigned char factor,unsigned int pattern){
+    this->factor=factor;
+    this->pattern=pattern;
   }
   //=====================================================
   void GlLine::translate(const Coord& mouvement){
@@ -82,6 +99,9 @@ namespace tlp {
 
     GlXMLTools::getXML(dataNode,"points",_points);
     GlXMLTools::getXML(dataNode,"colors",_colors);
+    GlXMLTools::getXML(dataNode,"width",width);
+    GlXMLTools::getXML(dataNode,"factor",factor);
+    GlXMLTools::getXML(dataNode,"pattern",pattern);
 
   }
   //============================================================
@@ -95,6 +115,9 @@ namespace tlp {
 
       GlXMLTools::setWithXML(dataNode, "points", _points);
       GlXMLTools::setWithXML(dataNode, "colors", _colors);
+      GlXMLTools::setWithXML(dataNode,"width",width);
+      GlXMLTools::setWithXML(dataNode,"factor",factor);
+      GlXMLTools::setWithXML(dataNode,"pattern",pattern);
 
       for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
 	boundingBox.check(*it);

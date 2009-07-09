@@ -7,17 +7,23 @@ endif
 plugins_LTLIBRARIES = \
 	libStrengthClustering-@VERSION@.la \
 	libHierarchicalClustering-@VERSION@.la \
-	libConvolutionClustering-@VERSION@.la \
 	libEqualValueClustering-@VERSION@.la \
 	libQuotientClustering-@VERSION@.la
 
 pluginsdir = $(libdir)/tlp
 
-EXTRA_DIST = ConvolutionClusteringSetup.ui
-
 libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
 libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
-BUILT_SOURCES = ConvolutionClusteringSetupData.h moc_ConvolutionClusteringSetup.cpp 
+libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
+libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
+
+if HAVE_TULIP_QT
+pluginsqt_LTLIBRARIES = libConvolutionClustering-@VERSION@.la
+
+pluginsqtdir = $(libdir)/tlp
+
+EXTRA_DIST = ConvolutionClusteringSetup.ui
+
 libConvolutionClustering_@VERSION@_la_SOURCES = \
 			ConvolutionClustering.h \
 			ConvolutionClustering.cpp \
@@ -25,11 +31,11 @@ libConvolutionClustering_@VERSION@_la_SOURCES = \
 			ConvolutionClusteringSetup.h
 nodist_libConvolutionClustering_@VERSION@_la_SOURCES = \
 			moc_ConvolutionClusteringSetup.cpp
-libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
-libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
 libConvolutionClustering_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+
+BUILT_SOURCES = ConvolutionClusteringSetupData.h moc_ConvolutionClusteringSetup.cpp 
+
 AM_CPPFLAGS= @QT_CPPFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
 
@@ -41,3 +47,8 @@ moc_%.cpp: %.h
 
 clean-generic:
 	rm -f moc_* *Data.*
+else
+INCLUDES = @TULIP_INCLUDE@
+endif
+
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@

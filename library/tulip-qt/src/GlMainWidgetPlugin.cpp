@@ -28,11 +28,11 @@ QWidget* GlMainWidgetPlugin::createWidget(QWidget *parent) {
 }
 
 QString GlMainWidgetPlugin::name() const {
-  return "GlMainWidget";
+  return "tlp::GlMainWidget";
 }
-  
+
 QString GlMainWidgetPlugin::domXml() const {
-  return "<widget class=\"GlMainWidget\" name=\"glMainWidget\">\n"
+  return "<widget class=\"tlp::GlMainWidget\" name=\"glMainWidget\">\n"
 	 "</widget>\n";
 }
 

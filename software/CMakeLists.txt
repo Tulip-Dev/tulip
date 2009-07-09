@@ -1,14 +1,4 @@
-add_subdirectory(plugins-manager)
-add_subdirectory(tulip)
-#add_subdirectory(tlprender)
+ADD_SUBDIRECTORY(plugins-manager)
+ADD_SUBDIRECTORY(tulip)
+#ADD_SUBDIRECTORY(tlprender)
 
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = plugins-manager tulip tlprender
-#DIST_SUBDIRS = plugins-manager tulip tlprender

@@ -17,51 +17,45 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/GlComposite.h>
+#include <tulip/GlAxis.h>
 #include <tulip/GlRect.h>
 
 #include <vector>
 #include <set>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include "ParallelTools.h"
 
 namespace tlp {
 
-class ParallelAxis : public GlComposite {
+class ParallelAxis : public GlSimpleEntity {
 
  public:
 
-  ~ParallelAxis();
+  virtual ~ParallelAxis();
 
-  const Coord &getBaseCoord() const;
-  void setBaseCoord(const Coord &newCoord);
-
+  BoundingBox getBoundingBox();
+  void setStencil(int stencil) {glAxis->setStencil(stencil);}
+  void draw(float lod,Camera *camera);
   void translate(const Coord &c);
-  void computeBoundingBox();
+  void getXML(xmlNodePtr rootNode) {}
+  void setWithXML(xmlNodePtr rootNode) {}
 
-  const std::string &getAxisName() const {return axisName;}
-  void drawAxisLine();
-  void addCaption(const std::string &caption);
-
+  virtual void redraw();
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;
-  virtual void redraw() = 0;
   virtual void showConfigDialog() = 0;
 
-  void draw(float lod,Camera *camera);
-
-  float getAxisHeight() const {return axisHeight;}
-  float getAxisGradWidth() const {return gradsWidth;}
-  float getLabelHeight() const {return labelHeight;}
+  void setBaseCoord(const Coord &baseCoord);
+  Coord getBaseCoord() const;
+  Coord getTopCoord() const;
+  std::string getAxisName() const {return glAxis->getAxisName();}
+  float getAxisHeight() const {return glAxis->getAxisLength();}
+  float getAxisGradsWidth() {return glAxis->getAxisGradsWidth();}
+  float getLabelHeight() {return glAxis->getLabelHeight();}
   void setAxisHeight(const float axisHeight);
-  Color getAxisColor() const {return axisColor;}
-  void setAxisColor(const Color &axisColor) {this->axisColor = axisColor;}
-  void setAxisAreaWidth(const float axisAreaWidth) {this->axisAreaWidth = axisAreaWidth;}
+  Color getAxisColor() const {return glAxis->getAxisColor();}
+  void setAxisColor(const Color &axisColor) {glAxis->setAxisColor(axisColor);}
+  void setMaxCaptionWidth(const float maxCaptionWidth) {glAxis->setMaxCaptionWidth(maxCaptionWidth);}
+  void setCaptionPosition(const GlAxis::LabelPosition captionPosition);
 
   void setSlidersActivated(const bool slidersActivated) {this->slidersActivated = slidersActivated;}
   bool isSlidersActivated() {return slidersActivated;}
@@ -69,41 +63,38 @@ class ParallelAxis : public GlComposite {
   void setTopSliderCoord(const Coord &topSliderCoord) {this->topSliderCoord = topSliderCoord;}
   Coord getBottomSliderCoord() {return bottomSliderCoord;}
   void setBottomSliderCoord(const Coord &bottomSliderCoord) {this->bottomSliderCoord = bottomSliderCoord;}
+
   virtual std::string getTopSliderTextValue() = 0;
   virtual std::string getBottomSliderTextValue() = 0;
   void resetSlidersPosition();
 
-  void setVisible(const bool visible) {this->visible = visible;}
-  bool isVisible() const {return visible;}
+  void setHidden(const bool hidden) {this->hidden = hidden;}
+  bool isHidden() const {return hidden;}
 
   virtual std::set<unsigned int> getDataInSlidersRange() = 0;
   virtual void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
 
+  void enableTrickForSelection();
+  void disableTrickForSelection();
+
+  void setRotationAngle(const float rotationAngle);
+  float getRotationAngle() const {return rotationAngle;}
+  Vector<Coord, 4> getBoundingPolygonCoords() const;
+
+
  protected :
 
-  ParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, const std::string &name, const Color &axisColor);
+  ParallelAxis(GlAxis *glAxis, const float 	axisAreaWidth, const float rotationAngle, const GlAxis::LabelPosition captionPosition = GlAxis::LEFT_OR_BELOW);
 
-  void addLabelDrawing(const std::string &labelName, const float yCoord);
+  GlAxis *glAxis;
+  GlRect *emptyRect;
 
-  void computeLabelsHeight(const unsigned int dataCount);
-
-  std::string axisName;
-
-  Coord baseCoord;
-  float axisHeight;
   float axisAreaWidth;
-  float gradsWidth;
-  float gradsHeight;
-  float spaceBetweenAxisGrads;
-  float labelHeight;
-
-  Color axisColor;
-
   bool slidersActivated;
   Coord topSliderCoord;
   Coord bottomSliderCoord;
-
-  bool visible;
+  float rotationAngle;
+  bool hidden;
 
 };
 

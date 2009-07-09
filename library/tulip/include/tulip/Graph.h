@@ -18,11 +18,6 @@
 #include <iostream>
 #include <string>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <climits>
 #include "tulip/tulipconf.h"
 #include "tulip/Reflect.h"
@@ -79,7 +74,7 @@ template<class C>class Iterator;
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void copyToGraph( Graph * outG, Graph *	inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+  TLP_SCOPE void copyToGraph( Graph *outG, Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
   /**
    * Remove the selected part of the graph ioG (properties, nodes & edges).
    * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
@@ -97,7 +92,9 @@ template<class C>class Iterator;
  */
   class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
 
+  friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
+  friend class GraphDecorator;
 
 public:
   Graph();
@@ -110,13 +107,17 @@ public:
    */
   virtual  void clear()=0;
   /**
-   * Create and return a new SubGraph of the graph
+   * Creates and returns a new SubGraph of the graph
    * The elements of the new SubGraph is those selected in the selection
    * if there is no selection an empty SubGraph is return.
    */
   virtual Graph *addSubGraph(BooleanProperty *selection=0)=0;
   /**
-   * Del a SubGraph of this graph.
+   *  Creates and returns the subgraph induced by a set of nodes
+   */
+  Graph *inducedSubGraph(const std::set<node>& nodeSet);
+  /**
+   * Delete a SubGraph of this graph.
    * The SubGraph's SubGraphs become SubGraphs of the graph.
    */
   virtual void delSubGraph(Graph *)=0;
@@ -156,6 +157,24 @@ public:
    * Returns an iterator on all the SubGraphs of the graph
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
+  /**
+   * indicates if the graph argument is a direct subgraph
+   */
+  virtual bool isSubGraph(Graph* sg) const=0;
+  /**
+   * indicates if the graph argument is a descendant of this graph
+   */
+  virtual bool isDescendantGraph(Graph* sg) const=0;
+  /**
+   * Returns a pointer on the subgraph with the corresponding id
+   * or NULL if there is no subgraph with that id
+   */
+  virtual Graph* getSubGraph(unsigned int id) const=0;
+  /**
+   * Returns a pointer of the descendant with the corresponding id
+   * or NULL if there is no descendant  with that id
+   */
+  virtual Graph* getDescendantGraph(unsigned int id) const=0;
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
@@ -259,7 +278,7 @@ public:
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
   /// Return the graph's id, this id is unique.
-  int getId() const {return id;}
+  unsigned int getId() const {return id;}
   /// Return the number of nodes in the graph
   virtual unsigned int numberOfNodes()const =0;
   /// Return the number of edges in the graph
@@ -293,7 +312,9 @@ public:
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
   ///Return graph attributes
-  virtual DataSet & getAttributes() =0;
+  const DataSet & getAttributes() {
+    return getNonConstAttributes();
+  }
   ///Get an attribute of the graph; returns true if a value was found
   ///false if not
   template<typename ATTRIBUTETYPE>
@@ -306,7 +327,8 @@ public:
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
   /// remove an existing attribute
   void removeAttribute(const std::string &name) {
-    getAttributes().remove(name);
+    notifyRemoveAttribute(this, name);
+    getNonConstAttributes().remove(name);
   }
   /// return if the attribute exist
   bool attributeExist(const std::string &name) {
@@ -382,13 +404,54 @@ public:
   virtual Iterator<std::string>* getProperties()=0;
 
   // updates management
-  virtual void push()=0;
-  virtual void pop()=0;
+  virtual void push(bool unpopAllowed = true)=0;
+  virtual void pop(bool unpopAllowed = true)=0;
+  virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop)=0;
   virtual void unpop()=0;
   virtual bool canPop()=0;
-    virtual bool canUnpop()=0;
+  virtual bool canUnpop()=0;
+
+  // meta nodes management
+  /**
+   * method to close a set of existing nodes into a metanode.  Edges from nodes
+   * in the subgraph to nodes outside the subgraph are replaced with
+   * edges from the metanode to the nodes outside the subgraph.
+   *
+   * \param nodeSet: a set of existing nodes
+   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
+   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   */
+  node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  /**
+   * method to populate a quotient graph with one meta node
+   * for each iterated graph
+   *
+   * \param itS: an Graph iterator, (typically a subgraph iterator)
+   * \param quotientGraph: the graph containing the meta nodes
+   * \param metaNodes: will contains all the added meta nodes after the call
+   *
+   */
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
+		       std::vector<node>& metaNodes);
+  /**
+   * Method to close an existing subgraph into a metanode.  Edges from nodes
+   * in the subgraph to nodes outside the subgraph are replaced with
+   * edges from the metanode to the nodes outside the subgraph.
+   *
+   * \param subGraph: an existing subgraph
+   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
+   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   */
+  node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
+  /**
+   * Method to open a metanode and replace all edges between that
+   * meta node and other nodes in the graph.
+   */
+  void openMetaNode(node n);
 
 protected:
+  // to allow attributes modification
+  virtual DataSet &getNonConstAttributes()=0;
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node)=0;
@@ -404,6 +467,10 @@ protected:
   // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*, bool restoreSubGraphs = false)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
+  // overload of inherited methods
+  // used to manage push/pop
+  void notifyDestroy();
+  void notifyAddSubGraph(Graph*);
 
 private:
 

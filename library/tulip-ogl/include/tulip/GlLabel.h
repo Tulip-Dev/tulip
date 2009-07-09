@@ -37,7 +37,13 @@ namespace tlp {
     /**
      * Contructor with fontPath, centerPosition, size, fontColor and alignment
      */
-    GlLabel(const std::string& fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+    GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+
+    /**
+     * Contructor with fontPath, centerPosition, size, fontColor and alignment
+     * \deprecate this constructor will be remove on Tulip 4 version
+     */
+    GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
     ~GlLabel();
 
@@ -57,6 +63,20 @@ namespace tlp {
     virtual Coord getSize();
 
     /**
+     * Set color of label
+     */
+    virtual void setColor(const Color &color) {
+      this->color=color;
+    }
+
+    /**
+     * Get color use to render the label
+     */
+    virtual Color getColor() {
+      return color;
+    }
+
+    /**
      * Draw the Label
      */
     virtual void draw(float lod, Camera *camera);
@@ -65,6 +85,11 @@ namespace tlp {
      * Translate entity
      */
     virtual void translate(const Coord& mouvement);
+
+    /**
+     * Rotate Label
+     */
+    virtual void rotate(float xRot, float yRot, float zRot);
 
     /**
      * Function to export data in XML
@@ -76,16 +101,17 @@ namespace tlp {
      */
     virtual void setWithXML(xmlNodePtr rootNode);
 
-
   private :
 
     std::string text;
-    TextRenderer *renderer;
+    static TextRenderer *renderer;
     Coord centerPosition;
     Coord size;
     Color color;
-    std::string fontPath;
     bool leftAlign;
+    float xRot;
+    float yRot;
+    float zRot;
   };
 }
 #endif

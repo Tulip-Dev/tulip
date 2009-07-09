@@ -26,11 +26,10 @@
 #include <tulip/Size.h>
 #include <tulip/StableIterator.h>
 
-#include "ParallelTools.h"
 
 namespace tlp {
 
-class ParallelCoordinatesGraphProxy : public GraphDecorator {
+class ParallelCoordinatesGraphProxy : public GraphDecorator, public Observer {
 
 public :
 
@@ -46,8 +45,10 @@ public :
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location) {dataLocation = location;}
 
-  Iterator<unsigned int> *getDataIterator();
   unsigned int getDataCount() const;
+  Iterator<unsigned int> *getDataIterator();
+  Iterator<unsigned int> *getSelectedDataIterator();
+  Iterator<unsigned int> *getUnselectedDataIterator();
   Color getDataColor(const unsigned int dataId);
   std::string getDataTexture(const unsigned int dataId);
   Size getDataViewSize(const unsigned int dataId);
@@ -62,6 +63,8 @@ public :
 
   Graph * getGraph() const {return graph_component;}
 
+  void setUnhighlightedEltsColorAlphaValue(const unsigned int alpha) {unhighlightedEltsColorAlphaValue = alpha;}
+  unsigned int getUnhighlightedEltsColorAlphaValue() const {return unhighlightedEltsColorAlphaValue;}
   void addOrRemoveEltToHighlight(const unsigned int eltId);
   void unsetHighlightedElts();
   bool highlightedEltsSet() const;
@@ -70,65 +73,68 @@ public :
   const std::set<unsigned int> &getHighlightedElts() const {return highlightedElts;}
   void resetHighlightedElts(const std::set<unsigned int> &highlightedData);
   void removeHighlightedElement(const unsigned int dataId);
+  bool graphColorsModified() const {return graphColorsChanged;}
   void colorDataAccordingToHighlightedElts();
-  bool unhighlightedEltsColorOk();
+
+  void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
+  void observableDestroyed(Observable *) {}
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getPropertyValueForData(const std::string &propertyName, const unsigned int dataId) {
 	  if (getDataLocation() == NODE) {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getNodeValue(node(dataId));
+		  return ((PROPERTY *)getProperty(propertyName))->getNodeValue(node(dataId));
 	  } else {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getEdgeValue(edge(dataId));
+		  return ((PROPERTY *)getProperty(propertyName))->getEdgeValue(edge(dataId));
 	  }
   }
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   void setPropertyValueForData(const std::string &propertyName, const unsigned int dataId, const typename PROPERTYTYPE::RealType propertyValue) {
 	  if (getDataLocation() == NODE) {
-		  graph_component->getProperty<PROPERTY>(propertyName)->setNodeValue(node(dataId), propertyValue);
+		  ((PROPERTY *)getProperty(propertyName))->setNodeValue(node(dataId), propertyValue);
   	  } else {
-  		  graph_component->getProperty<PROPERTY>(propertyName)->setEdgeValue(edge(dataId), propertyValue);
+  		  ((PROPERTY *)getProperty(propertyName))->setEdgeValue(edge(dataId), propertyValue);
   	  }
   }
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   void setPropertyValueForAllData(const std::string &propertyName, const typename PROPERTYTYPE::RealType propertyValue) {
 	  if (getDataLocation() == NODE) {
-		  graph_component->getProperty<PROPERTY>(propertyName)->setAllNodeValue(propertyValue);
+		  ((PROPERTY *)getProperty(propertyName))->setAllNodeValue(propertyValue);
 	  } else {
-		  graph_component->getProperty<PROPERTY>(propertyName)->setAllEdgeValue(propertyValue);
+		  ((PROPERTY *)getProperty(propertyName))->setAllEdgeValue(propertyValue);
 	  }
   }
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getPropertyMinValue(const std::string &propertyName) {
 	  if (getDataLocation() == NODE) {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getNodeMin();
+		  return ((PROPERTY *)getProperty(propertyName))->getNodeMin();
 	  } else {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getEdgeMin();
+		  return ((PROPERTY *)getProperty(propertyName))->getEdgeMin();
 	  }
   }
 
   template<typename PROPERTY, typename PROPERTYTYPE>
   typename PROPERTYTYPE::RealType getPropertyMaxValue(const std::string &propertyName) {
 	  if (getDataLocation() == NODE) {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getNodeMax();
+		  return ((PROPERTY *)getProperty(propertyName))->getNodeMax();
 	  } else {
-		  return graph_component->getProperty<PROPERTY>(propertyName)->getEdgeMax();
+		  return ((PROPERTY *)getProperty(propertyName))->getEdgeMax();
 	  }
   }
 
 private:
 
-  void fillPropertiesVector();
   Color getOriginalDataColor(const unsigned int dataId);
 
+  bool graphColorsChanged;
   ColorProperty *dataColors;
   ColorProperty *originalDataColors;
   std::set<unsigned int> highlightedElts;
   std::vector<std::string> selectedProperties;
-  std::vector<std::string> propertiesList;
   ElementType dataLocation;
+  unsigned int unhighlightedEltsColorAlphaValue;
 };
 
 template <typename GraphDataSource>

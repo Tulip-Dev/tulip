@@ -5,6 +5,9 @@
 #include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
 #include <QtGui/qtooltip.h>
+#include <QtOpenGL/QGLPixelBuffer>
+#include <QtCore/QTime>
+
 
 #include "tulip/GlMainWidget.h"
 
@@ -19,7 +22,9 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlRectTextured.h>
 
+#include "tulip/QGlPixelBufferManager.h"
 #include "tulip/QtCPULODCalculator.h"
+#include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 
 using namespace std;
@@ -89,7 +94,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),view(view),scene(new QtCPULODCalculator()){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);
@@ -101,6 +106,14 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
+    if(scene.getLayer("Main")){
+      GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
+      if(oldGraphComposite)
+        delete oldGraphComposite;
+    }
+
+    scene.clearLayersList();
+
     string sceneInput="";
     if(dataSet.exist("scene")) {
       dataSet.get("scene",sceneInput);
@@ -119,7 +132,7 @@ namespace tlp {
       GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
       backgroundLayer->addGlEntity(background,"background");
 
-      GlRectTextured *labri=new GlRectTextured(5.,55.,5.,55.,dir + "logolabri.jpg");
+      GlRectTextured *labri=new GlRectTextured(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
       labri->setVisible(false);
       foregroundLayer->addGlEntity(labri,"labrilogo");
 
@@ -133,6 +146,7 @@ namespace tlp {
       GlGraphComposite* graphComposite=new GlGraphComposite(graph);
       scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
       scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+      scene.centerScene();
     }else{
       size_t pos=sceneInput.find("TulipBitmapDir/");
       while(pos!=string::npos){
@@ -170,12 +184,24 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setGraph(Graph *graph){
+    if(!scene.getLayer("Main")){
+      setData(graph,DataSet());
+      return;
+    }
+
     GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
+
+    if(!oldGraphComposite){
+      setData(graph,DataSet());
+      return;
+    }
+
     GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     graphComposite->setRenderingParameters(param);
     scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
+    delete oldGraphComposite;
   }
   //==================================================
   Graph *GlMainWidget::getGraph() {
@@ -267,6 +293,7 @@ namespace tlp {
       if(scene.getGlGraphComposite()) {
 	hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
       }
+      scene.prerenderMetaNodes();
       scene.draw();
       drawInteractors();
 
@@ -308,23 +335,23 @@ namespace tlp {
   void GlMainWidget::computeInteractors() {
     if(!view)
       return;
-    Iterator<Interactor *> *it=view->getInteractors();
-    while (it->hasNext()) {
-      Interactor *interactor=it->next();
-      if (interactor->compute(this))
-	break;
-    }
+
+    Interactor *interactor=view->getActiveInteractor();
+    if(!interactor)
+      return;
+
+    interactor->compute(this);
   }
   //==================================================
   void GlMainWidget::drawInteractors() {
     if(!view)
       return;
-    Iterator<Interactor *> *it=view->getInteractors();
-    while (it->hasNext()) {
-      Interactor *interactor=it->next();
-      if (interactor->draw(this))
-	break;
-    }
+
+    Interactor *interactor=view->getActiveInteractor();
+    if(!interactor)
+      return;
+
+    interactor->draw(this);
   }
   //==================================================
   void GlMainWidget::drawForegroundEntities() {
@@ -368,20 +395,21 @@ namespace tlp {
 				      std::vector<GlEntity *> &pickedEntities,
 				      GlLayer* layer) {
     makeCurrent();
-    return scene.selectEntities(SelectSimpleEntities,x, y,
+    vector<unsigned long> entities;
+    unsigned int number=scene.selectEntities(SelectSimpleEntities,x, y,
 				width, height,
 				layer,
-				pickedEntities);
+				entities);
+    for(vector<unsigned long>::iterator it=entities.begin();it!=entities.end();++it){
+      pickedEntities.push_back((GlEntity*)(*it));
+    }
+    return number;
   }
   //==================================================
   bool GlMainWidget::selectGlEntities(const int x, const int y,
 				      std::vector <GlEntity *> &pickedEntities,
 				      GlLayer* layer) {
-    makeCurrent();
-    return scene.selectEntities(SelectSimpleEntities,x, y,
-				2, 2,
-				layer,
-				pickedEntities);
+   return selectGlEntities(x,y,2,2,pickedEntities,layer);
   }
   //==================================================
   void GlMainWidget::doSelect(const int x, const int y,
@@ -392,15 +420,15 @@ namespace tlp {
     cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << endl;
 #endif
     makeCurrent();
-    vector<GlEntity*> selectedElements;
+    vector<unsigned long> selectedElements;
     scene.selectEntities(SelectNodes, x, y, width, height, layer, selectedElements);
-    for(vector<GlEntity*>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-      sNode.push_back(node( ((GlNode*)(*it))->id ));
+    for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+      sNode.push_back(node((unsigned int)(*it)));
     }
     selectedElements.clear();
     scene.selectEntities(SelectEdges, x, y, width, height, layer, selectedElements);
-    for(vector<GlEntity*>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-      sEdge.push_back(edge( ((GlEdge*)(*it))->id ));
+    for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+      sEdge.push_back(edge((unsigned int)(*it)));
     }
   }
   //=====================================================
@@ -409,17 +437,17 @@ namespace tlp {
     cerr << __PRETTY_FUNCTION__ << endl;
 #endif
     makeCurrent();
-    vector<GlEntity*> selectedElements;
+    vector<unsigned long> selectedElements;
     scene.selectEntities(SelectNodes, x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=NODE;
-      n=node(((GlNode*)selectedElements[0])->id);
+      n=node((unsigned int)(selectedElements[0]));
       return true;
     }
     scene.selectEntities(SelectEdges, x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=EDGE;
-      e=edge(((GlEdge*)selectedElements[0])->id);
+      e=edge((unsigned int)(selectedElements[0]));
       return true;
     }
     return false;
@@ -442,6 +470,73 @@ namespace tlp {
     scene.outputSVG(size, filename);
     return true;
   }
+  //=====================================================
+  void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight){
+    textureRealWidth=1;
+    textureRealHeight=1;
+
+    while(textureRealWidth<=width)
+      textureRealWidth*=2;
+    while(textureRealHeight<=height)
+      textureRealHeight*=2;
+
+    if(textureRealWidth>4096){
+      textureRealHeight=textureRealHeight/(textureRealWidth/8192);
+      textureRealWidth=4096;
+    }
+    if(textureRealHeight>4096){
+      textureRealWidth=textureRealWidth/(textureRealHeight/8192);
+      textureRealHeight=4096;
+    }
+
+  }
+  //=====================================================
+  void GlMainWidget::getTextureShift(int width, int height, float &xTextureShift, float &yTextureShift){
+    int textureRealWidth;
+    int textureRealHeight;
+
+	getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
+
+    scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
+  }
+  //=====================================================
+  QGLFramebufferObject *GlMainWidget::createTexture(const string &textureName, int width, int height){
+    scene.setViewport(0,0,width,height);
+    scene.ajustSceneToSize(width,height);
+
+    scene.prerenderMetaNodes();
+
+    QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
+
+    glFrameBuf->makeCurrent();
+
+    GLuint textureId=glFrameBuf->generateDynamicTexture();
+
+    scene.draw();
+
+    glFrameBuf->updateDynamicTexture(textureId);
+
+    GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
+
+    glFlush();
+    glFrameBuf->toImage().save(textureName.c_str());
+    return NULL;
+  }
+  //=====================================================
+  void GlMainWidget::createPicture(const string &textureName, int width, int height){
+    scene.setViewport(0,0,width,height);
+
+    scene.prerenderMetaNodes();
+
+    QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
+
+    glFrameBuf->makeCurrent();
+
+    scene.draw();
+
+    glFlush();
+
+    glFrameBuf->toImage().save(textureName.c_str());
+  }
 
 }
-

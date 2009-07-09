@@ -22,12 +22,12 @@ class TLP_SCOPE IntegerProperty:public AbstractProperty<IntegerType,IntegerType,
   friend class IntegerAlgorithm;
 
 public :
-  IntegerProperty (Graph *);
+  IntegerProperty (Graph *, std::string n = "");
   IntegerType::RealType  getNodeMin();
   IntegerType::RealType  getNodeMax();
   IntegerType::RealType  getEdgeMin();
   IntegerType::RealType  getEdgeMax();
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
 
@@ -44,6 +44,14 @@ private:
   int maxN,minN,maxE,minE;
   bool minMaxOk;
   void computeMinMax();
+};
+
+class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<IntegerVectorType,IntegerVectorType> { 
+public :
+  IntegerVectorProperty(Graph *g, std::string n =""):AbstractProperty<IntegerVectorType, IntegerVectorType>(g, n) {}
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
 

@@ -44,7 +44,7 @@ bool Dendrogram::run() {
   orientationType mask = getMask(dataSet);
   OrientableLayout oriLayout(layoutResult, mask);
   SizeProperty* size;
-  if (getNodeSizePropertyParameter(dataSet, size))
+  if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");
   OrientableSizeProxy oriSize(size, mask);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
@@ -111,7 +111,6 @@ float Dendrogram::setAllNodesCoordX(node n, float rightMargin,
 void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout,
 				   OrientableSizeProxy *oriSize) {
   float maxYLeaf         = -FLT_MAX;
-  float maxHeightLeaf    = -FLT_MAX;
   setCoordY(root, &maxYLeaf, oriLayout, oriSize);
     
   Iterator<node>* itNode = tree->getNodes();

@@ -42,7 +42,7 @@ void GraphAbstract::restoreSubGraph(Graph* sg, bool restoreSubGraphs){
       Graph* ssg = itS->next();
       removeSubGraph(ssg);
       ssg->setSuperGraph(sg);
-    }
+    } delete itS;
   }
 }
 //=========================================================================
@@ -53,8 +53,7 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg){
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
   Graph *tmp = new GraphView(this, selection);
   subgraphs.push_back(tmp);
-  notifyAddSubGraph(this, tmp);
-  notifyObservers();
+  notifyAddSubGraph(tmp);
   return tmp;
 }
 //=========================================================================
@@ -81,7 +80,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   removeSubGraph(toRemove);
   if (toRemove != subGraphToKeep) {
     delete toRemove;
-  }
+  } else
+    toRemove->notifyDestroy();
   notifyObservers();
 }
 //=========================================================================
@@ -108,7 +108,8 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
   if (deleteSubGraphs) {
     ((GraphAbstract *)toRemove)->clearSubGraphs();
     delete toRemove;
-  }
+  } else
+    toRemove->notifyDestroy();
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
@@ -136,6 +137,51 @@ void GraphAbstract::setSuperGraph(Graph *sg) {
 //=========================================================================
 Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
   return new StlIterator<Graph *, GRAPH_SEQ::const_iterator >(subgraphs.begin(),subgraphs.end());
+}
+//=========================================================================
+bool GraphAbstract::isSubGraph(Graph* sg) const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if (*it == sg)
+      return true;
+    it++;
+  }
+  return false;
+}
+//=========================================================================
+bool GraphAbstract::isDescendantGraph(Graph* sg) const {
+  if (isSubGraph(sg))
+    return true;
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if ((*it)->isDescendantGraph(sg))
+      return true;
+    it++;
+  }
+  return false;
+}
+//=========================================================================
+Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if ((*it)->getId() == sgId)
+      return *it;
+    it++;
+  }
+  return NULL;
+}
+//=========================================================================
+Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
+  Graph* sg = getSubGraph(sgId);
+  if (sg)
+    return sg;
+  GRAPH_SEQ::const_iterator it = subgraphs.begin();
+  while(it != subgraphs.end()) {
+    if ((sg = (*it)->getDescendantGraph(sgId)))
+      return sg;
+    it++;
+  }
+  return NULL;
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
@@ -292,6 +338,10 @@ unsigned int GraphAbstract::numberOfEdges() const {
     result++;
   } delete it;
   return result;
+}
+//=========================================================================
+DataSet& GraphAbstract::getNonConstAttributes() {
+  return attributes;
 }
 //----------------------------------------------------------------
 bool GraphAbstract::isMetaNode(const node n) const {

@@ -44,7 +44,7 @@
     </sect1>
     <sect1 id="improve-layout"><title>Improving a layout</title>
     	<sect2 id="improve-layout-intro"><title>Introduction</title>
-    		In this tutorial, we will show you how to use, layouts algorithms, and graph properties to obtain a nice an clear graph. To do so, we will first import a file-system structure, and then use the graph properties to find specific files. (*.cpp or *.hpp ...)
+    		<para>In this tutorial, we will show you how to use, layouts algorithms, and graph properties to obtain a nice an clear graph. To do so, we will first import a file-system structure, and then use the graph properties to find specific files. (*.cpp or *.hpp ...)</para>
     	</sect2>
     	<sect2 id="improve-layout-import"><title>File-system importation</title>
     		<para>To import a file-system we need to select the <code>File System Directory</code> importation tool which is in the menu <code>File->Import->Misc</code>.
@@ -55,8 +55,8 @@
     			The importation plug in will work for some time, and a tree graph will appear representing the file system chosen.
     		</para>
     		<graphic fileref="images/tutorials_improvelayout_1.png" />
+     	<remark>To follow the rest of this tutorial you need to download this tulip graph file : <ulink url="http://www.labri.fr/perso/auber/projects/tulip/samples/filesystem.tlp.gz">Graph</ulink>. Load this compressed tulip file into the software (<code>File->Open</code>).</remark>
      	</sect2>
-     	<para>To follow the rest of this tutorial you need to download this tulip graph file : <ulink url="http://www.labri.fr/perso/auber/projects/tulip/samples/filesystem.tlp.gz">Graph</ulink>. Load this compressed tulip file into the software (<code>File->Open</code>).</para>
      	<sect2 id="improve-layout-newlayout"><title>Using other Layouts :</title>
      		<sect3 id="tuto-Bubble-Tree-layout"><title><code>Bubble Tree Layout</code> :</title>
      			<para>This layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
@@ -85,8 +85,8 @@
 			<para>Following is what you should see :</para>
 			<graphic fileref="images/tutorials_improvelayout_bubble_2.png" />
      			
+     		<para>As you can see, the bubble tree layout can be quite useful.</para>
      		</sect3>
-     		As you can see, the bubble tree layout can be quite useful.
      		<sect3 id="improve-layout-treemap"><title><code>The Tree Map layout </code>:</title>
      		<para>This Layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
      		      The treemap layout is very useful to notice large disk usage files.
@@ -95,32 +95,31 @@
      		<para>Apply the layout algorithm <code>Algorithm->Layout->Tree->Squarified Tree Map</code> with the following parameters :
      		</para>
      			<itemizedlist>
-     				<listitem>Metric : set to "size".
-     				</listitem>
-     				<listitem>Aspect Ratio : set to 1
-     				</listitem>
-     				<listitem>Texture? : checked
-     				</listitem>
+     				<listitem><para>Metric : set to "size".
+     				</para></listitem>
+     				<listitem><para>Aspect Ratio : set to 1
+     				</para></listitem>
+     				<listitem><para>Texture? : checked
+     				</para></listitem>
      			</itemizedlist>
      		 <para>Do not forget to refresh the views (<keycap>Ctrl+Shift+R</keycap>). Following is what you should see :</para>
      		<graphic fileref="images/tutorials_improvelayout_treemap_1.png" />
      		<para>As you can see, we easily get a global information on the size of files. Which is the biggest, or, which is the smallest ? But, we can also see the structure of directories, since files and directories are nested nodes. See <ulink url="http://en.wikipedia.org/wiki/Tree_map">Wikipedia : Tree Maps </ulink> for more information. </para>
      		</sect3>
-     		An other layout can be useful, the Improved Walker.
      		<sect3 id="improve-layout-improvewalker"><title><code> Improved Walker layout </code>:</title>
      		<para> This layout can be find in the <code>Algorithm->Layout->Tree->Improve Walker</code>.</para>
      		<para>Use the following parameters :</para>
      		<itemizedlist>
-     			<listitem> Node Size : viewSize
-     			</listitem>
-     			<listitem>Orientation : Left to right.
-     			</listitem>
-     			<listitem>Orthogonal : Checked.
-     			</listitem>
-     			<listitem>Layer Spacing : Default value.
-     			</listitem>
-     			<listitem>Node Spacing : Default Value.
-     			</listitem>
+     			<listitem><para>Node Size : viewSize
+     			</para></listitem>
+     			<listitem><para>Orientation : Left to right.
+     			</para></listitem>
+     			<listitem><para>Orthogonal : Checked.
+     			</para></listitem>
+     			<listitem><para>Layer Spacing : Default value.
+     			</para></listitem>
+     			<listitem><para>Node Spacing : Default Value.
+     			</para></listitem>
      		</itemizedlist>
      		<para>You should see a tree looking like this :</para>
      		<graphic fileref="images/tutorials_improvelayout_2.png" />
@@ -145,12 +144,12 @@
      		<para>Now that our graph as a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
      		<para>Use the following parameters :</para>
      		<itemizedlist>
-     			<listitem> Input Property : name
-     			</listitem>
-     			<listitem> Filter :  filter function set to "=" and filter value set to ".*cpp or .*hpp". For more details on regular expressions, follow this link : <ulink url="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia : Regex </ulink>
-     			</listitem>
-     			<listitem> Options : check the <code>Replace</code> radio button and select <code>On nodes</code>.
-     			</listitem>
+     			<listitem><para>Input Property : name
+     			</para></listitem>
+     			<listitem><para>Filter :  filter function set to "=" and filter value set to ".*cpp or .*hpp". For more details on regular expressions, follow this link : <ulink url="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia : Regex </ulink>
+     			</para></listitem>
+     			<listitem><para>Options : check the <code>Replace</code> radio button and select <code>On nodes</code>.
+     			</para></listitem>
      		</itemizedlist>
      		<para>Now that our source files are selected, we will apply a different color to them.</para>
      		<para>In the info editor window, select the node property called "viewColor", check the <code>selected only</code> option. Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We choosed green)</para>
@@ -162,7 +161,7 @@
      		<para>As you could have seen, tulip implements powerful layouts and tools, to make a simple and understandable graph from a complex one.  </para>
      	</sect2>
     </sect1>
-    <sect1 id="people-in-infovis"><title>People in InfoVis</title>
+    <sect1 id="infovis"><title>People in InfoVis</title>
     	<sect2 id="people-in-infovis"><title>Analyzing an author.</title>
     		<para>Before anything, download, and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>. Click on the tab Hierarchy (in the info editor window) and select the subgraph GRCite. You need to delete the other sub graphs by doing a right click on there name, and then "remove". </para>
     		<para>This graph represent the relations between authors, conferences and papers. To distinguish paper, conferences and authors, we will re-color them : </para>
@@ -187,12 +186,12 @@
     		<graphic fileref="images/tutorials_peopleinfovis_4.png" />
     		<para>In the new subgraph, we then select the Robertson node. Again as above, use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm, pick a depth of 2 to find all papers that cite a paper written by Robertson, and save the resulting subgraph using the Edit->Create Subgraph menu. The final image shows the result of using the <code>Algorithm->Layout->Hierarchical Graph</code> layout.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_5.png" />
-    	</sect2>
-    	You can now close this graph since we are going to use an other one for the following of this tutorial.
+    	<para>You can now close this graph since we are going to use an other one for the following of this tutorial.
   	The next graph is similar to the this one but, has coauthorship edges linking authors who write papers together.
-  	You can download <ulink url="http://tulip.labri.fr/samples/GRSC.tlp.gz">it</ulink> and open it in tulip.
+  	You can download <ulink url="http://tulip.labri.fr/samples/GRSC.tlp.gz">it</ulink> and open it in tulip.</para>
   	<para></para>
   	<para></para>
+    	</sect2>
     	<sect2 id="sec"><title>What, if any, are the relationships between two or more or all researchers</title>
     		<sect3 id="FocusingonTwoAuthors"><title>Focusing on Two Authors</title>
     			<para>Here we focus on the relationship between two authors, in this case Robertson and Card.</para>
@@ -206,14 +205,14 @@
     		 	<para>You can repeat those operations for Robertson only and Card only :</para>
     		 	<graphic fileref="images/tutorials_peopleinfovis_8.png" />
     		 	<para> The similarity of these final three images shows the very strong ties between these two authors.</para>
-    		 </sect3>
-    		 You can now close this graph since we are going to use an other one for the following of this tutorial.
+    		 <remark>You can now close this graph since we are going to use an other one for the following of this tutorial.
   		 The next graph is similar to the old one but, has links between author and conference by following links from author to paper, and from paper to conference. Then, delete papers.
-  		 You can download <ulink url="http://tulip.labri.fr/samples/ConfAuth.tlp.gz">it</ulink> and open it in tulip.
+  		 You can download <ulink url="http://tulip.labri.fr/samples/ConfAuth.tlp.gz">it</ulink> and open it in tulip.</remark>
+    		 </sect3>
     		 <sect3 id="auth-conf"><title>Central Authors and Conferences: Overview</title>
     		       <para>To show the large-scale structure of this dataset, we colored Authors in green and conferences in blue with a GEM layout (<code>Algorithm->Layout->Force Directed->GEM</code>). We deleted all the papers nodes.</para>
     		       <graphic fileref="images/tutorials_peopleinfovis_9.png" />
-    		       By zooming in :
+    		       <para>By zooming in :</para>
     		       <graphic fileref="images/tutorials_peopleinfovis_10.png" />
     		       <para>We select only the large connected component (the big set of nodes) : Select a fiew nodes in the center of the component and run the "Reachable Subgraph" selection algorithm with distance set to 50. </para>  
     		       <para>Color the authors by the Strahler metric: Run the <code>Algorithm->Measure->Graph->Strahler</code> algorithm and then a <code>Algorithm->Color->Metric Mapping</code> algorithm.</para>
@@ -228,7 +227,7 @@
     		 	<para>It is very simple to see top conferences since they are the ones where the number of authors is high. The Metric Degree will help us to highlight them (<code>Algorithm->Measure->Graph->Degree </code>). </para>
     		 	<graphic fileref="images/tutorials_peopleinfovis_13.png" />
     		 </sect3>
-    		  <sect3 id="top-conf"><title>Central Authors and Conferences: Top Autors</title>
+    		  <sect3 id="top-auth"><title>Central Authors and Conferences: Top Authors</title>
     		 	<para>Run the <code>Algorithm->Measure->Graph->Strahler</code> algorithm to see strong ties between conferences and authors : </para>
     		 	<graphic fileref="images/tutorials_peopleinfovis_14.png" />
     		 	<para>Then run the <code>Algorithm->General->Convolution</code>, the value of the "discretization" parameter should be near 30 to obtain 5 clusters ) (Picture 1) to obtain the following clusters (Picture 2):</para>
@@ -236,8 +235,8 @@
     		 	<graphic fileref="images/tutorials_peopleinfovis_15.png" />
     		 	<para>The Strahler-Convolution clustering yields five clusters, according to increasing centrality. The first cluster is mostly yellow, and contains most of the data. The second cluster contains a next tier of 26 authors that have had a relatively strong impact. The third cluster contains a group of 7 influential authors (Chi, Bederson, Eick, Rao, Pirolli, Ward, and Brown), and the fourth cluster (Roth, Robertson, Keim, and Stasko) is yet more central. The fifth cluster is the single node of Mackinlay, and the last one is Card and Shneiderman. Our automatic clustering method clearly yields very believeable results in this case.
     		 	</para>
+    		 <remark>In the last section, we will use an other graph. Please download <ulink url="http://tulip.labri.fr/samples/ConfAuthRecSmallWorld.tlp.gz">it</ulink> and open it in tulip.</remark>
     		 </sect3>
-    		 In the last section, we will use an other graph. Please download <ulink url="http://tulip.labri.fr/samples/ConfAuthRecSmallWorld.tlp.gz">it</ulink> and open it in tulip.
     		 <sect3 id="interauthor-cons"><title>Hierarchical Structure of Interauthor Connections</title>
     		 	<para>To be able to see the labels within metanode check the "metanode label" visible box in the Layers tab in <code>Rendering Parameters</code> dialog.</para>
     		 	<para>The clusters have been computed using the <code>Algorithm->General->Strength</code> clustering algorithm.</para>

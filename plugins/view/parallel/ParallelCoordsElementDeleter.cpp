@@ -12,39 +12,12 @@
  (at your option) any later version.
 */
 
-#include "ParallelTools.h"
 #include "ParallelCoordinatesView.h"
-
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <string>
-
-#include <tulip/tulipconf.h>
-#include <tulip/GWInteractor.h>
-
+#include "ParallelCoordsElementDeleter.h"
 
 using namespace std;
 
 namespace tlp {
-
-class ParallelCoordsElementDeleter : public Interactor {
-public :
-	ParallelCoordsElementDeleter() {}
-	~ParallelCoordsElementDeleter() {}
-	bool eventFilter(QObject *, QEvent *);
-	Interactor *clone() { return new ParallelCoordsElementDeleter(); }
-};
-
-INTERACTORPLUGIN(ParallelCoordsElementDeleter, "ParallelCoordsElementDeleter", "Tulip Team", "16/10/2008", "Parallel Coordinates Element Deleter", "1.0");
 
 bool ParallelCoordsElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 

@@ -91,8 +91,20 @@ GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0) {
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
-  ObservableGraph::notifyDestroy(this);
-  Observable::notifyDestroy();
+  unobserveUpdates();
+  // delete recorders
+  if (!recorders.empty()) {
+    recorders.front()->stopRecording(this);
+    stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+    while(it != recorders.end()) {
+      delete (*it);
+      it++;
+    }
+    recorders.clear();
+  }
+  delPreviousRecorders();
+
+  notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);
@@ -418,15 +430,17 @@ void GraphImpl::delPreviousRecorders() {
 //----------------------------------------------------------------
 void GraphImpl::update(std::set<Observable *>::iterator,
 		       std::set<Observable *>::iterator) {
-  // an update occurs in the grap hierarchy
+  // an update occurs in the graph hierarchy
   // so delete the previous recorders
   delPreviousRecorders();
+  unobserveUpdates();
 }
 //----------------------------------------------------------------
 void GraphImpl::observableDestroyed(Observable*) {
   // a sub graph has been removed
   // so delete the previous recorders
   delPreviousRecorders();
+  unobserveUpdates();
 }
 //----------------------------------------------------------------
 void GraphImpl::observeUpdates(Graph *g) {
@@ -463,16 +477,18 @@ void GraphImpl::unobserveUpdates() {
 }  
 //----------------------------------------------------------------
 #define NB_MAX_RECORDERS 10
-void GraphImpl::push() {
+void GraphImpl::push(bool unpopAllowed) {
   // from now if previous recorders exist
   // they cannot be unpop
   // so delete them
   delPreviousRecorders();
+  // end any previous updates observation
+  unobserveUpdates();
 
   if (!recorders.empty())
     // stop recording for current recorder
     recorders.front()->stopRecording(this);
-  GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder();
+  GraphUpdatesRecorder* recorder = new GraphUpdatesRecorder(unpopAllowed);
   recorder->startRecording(this);
   recorders.push_front(recorder);
 
@@ -491,22 +507,28 @@ void GraphImpl::push() {
   }
 }
 //----------------------------------------------------------------
-void GraphImpl::pop() {
+void GraphImpl::pop(bool unpopAllowed) {
   // save the front recorder
   // to allow unpop
   if (!recorders.empty()) {
-    if (!previousRecorders.empty())
+    //if (!previousRecorders.empty())
       unobserveUpdates();
     GraphUpdatesRecorder* prevRecorder = recorders.front();
+    if (unpopAllowed && prevRecorder->restartAllowed)
+      prevRecorder->recordNewValues(this);
     prevRecorder->stopRecording(this);
     // undo all recorded updates
     prevRecorder->doUpdates(this, true);
     // push it
-    previousRecorders.push_front(prevRecorder);
+    if (unpopAllowed && prevRecorder->restartAllowed) {
+      previousRecorders.push_front(prevRecorder);
+      // observe any updates
+      // in order to remove previous recorders if needed
+      observeUpdates(this);
+    } else
+      delete prevRecorder;
+    // must be done here (see canPop, canUnpop)
     recorders.pop_front();
-    // observe any updates
-    // in order to remove previous recorders if needed
-    observeUpdates(this);
     // restart the front recorder
     if (!recorders.empty())
       recorders.front()->restartRecording(this);
@@ -531,4 +553,20 @@ void GraphImpl::unpop() {
     if (nbPrev > 1)
       observeUpdates(this);
   }
+}
+//----------------------------------------------------------------
+bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
+  if (!recorders.empty()) {
+    if (recorders.front()->dontObserveProperty(prop)) {
+      stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+      if (++it != recorders.end())
+	prop->addPropertyObserver((*it));
+      return true;
+    } else {
+      assert(true);
+      cerr << __PRETTY_FUNCTION__ << " the observation of Property " << prop->getName()  << " cannot be stopped " << endl;
+      return false;
+    }
+  }
+  return false;
 }

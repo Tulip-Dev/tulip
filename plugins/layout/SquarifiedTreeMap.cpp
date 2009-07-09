@@ -98,17 +98,22 @@ bool SquarifiedTreeMap::run() {
   float aspectRatio  = DEFAULT_RATIO;
   bool glyphTextured = false;
     
-  size  = graph->getLocalProperty<SizeProperty>("viewSize");    
+  size  = graph->getProperty<SizeProperty>("viewSize");    
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(size);
 
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Texture?", glyphTextured);
   }
     
-  glyph = graph->getLocalProperty<IntegerProperty>("viewShape"); 
+  glyph = graph->getProperty<IntegerProperty>("viewShape"); 
     
-  if (glyphTextured)
+  if (glyphTextured) {
+    // ensure glyph updates will be kept after a pop
+    preservePropertyUpdates(glyph);
     glyph->setAllNodeValue(TEXTUREDGLYPHID);
+  }
 
   RectangleArea initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio,
 			     DEFAULT_HEIGHT);
@@ -122,9 +127,6 @@ bool SquarifiedTreeMap::run() {
   Size initialSpaceSize = initialSpace.getSize();
   size->setNodeValue(root, initialSpaceSize);
   squarify(root, initialSpace, 1);
-
-  // hach:to ensure that modifs on viewSize will remain
-  graph->push();
 
   return true;
 }

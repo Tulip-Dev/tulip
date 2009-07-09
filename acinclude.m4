@@ -368,10 +368,10 @@ if test ${VAR_WIN32} = 1
 then
 gl_libdirs="$GLDIR $ac_gl_libraries $GLLIB /usr/X11R6/lib /usr/lib /usr/local/lib $x_libraries "
 else
-gl_libdirs="$ac_gl_libraries $GLLIB /usr/X11R6/lib /usr/lib /usr/local/lib $x_libraries "
+gl_libdirs="$ac_gl_libraries $GLLIB /usr/X11R6/lib64 /usr/lib64 /usr/local/lib64/usr/X11R6/lib /usr/lib /usr/local/lib $x_libraries "
 fi
 
-test -n "$GLDIR" && gl_libdirs="$GLDIR/lib $GLDIR $gl_libdirs"
+test -n "$GLDIR" && gl_libdirs="$GLDIR/lib64 $GLDIR/lib $GLDIR $gl_libdirs"
 test=NONE
 gl_libdir=NONE
 for dir in $gl_libdirs; do
@@ -383,6 +383,12 @@ else
 fi
   if test=`eval $try 2> /dev/null`; then 
     gl_libdir=$dir
+    if test ${VAR_WIN32} = 0 ; then 	 
+      try="ls -1 $gl_libdir/libGLEW.*" 	 
+      if test=`eval $try 2> /dev/null`; then break; else AC_MSG_ERROR([ libGLEW not found , please install it in $gl_libdir ]); fi 	 
+    else 	 
+      break 	 
+    fi
   else 
     echo "tried $dir" >&AC_FD_CC
   fi
@@ -412,9 +418,12 @@ fi
 dnl MAC PORT
 if test ${VAR_MACOSX} = 1
 then
-  GL_INCLUDES="-I/usr/include/malloc"
+  GL_INCLUDES=""
   GL_LDFLAGS=""
+  gl_libraries=""
+  gl_includes=""
 fi
+
 AC_SUBST(gl_libraries)
 AC_SUBST(gl_includes)
 AC_SUBST(GL_INCLUDES)
@@ -422,13 +431,13 @@ AC_SUBST(GL_LDFLAGS)
 
 if test ${VAR_WIN32} = 1
 then
-  LIB_GL="-lglu32 -lopengl32"
+  LIB_GL="-lglew32 -lglu32 -lopengl32"
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="-framework OpenGL"
+    LIB_GL="/usr/local/lib/libGLEW.dylib -framework OpenGL"
   else
-    LIB_GL="-lGLU -lGL"
+    LIB_GL="-lGLEW -lGLU -lGL"
   fi
 fi
 AC_SUBST(LIB_GL)
@@ -484,8 +493,8 @@ fi
 dnl we add QT_NO_DEBUG to enable the widgets plugins integration in Qt designer
 QT_CPPFLAGS="$QT_CPPFLAGS -DQT_NO_DEBUG"
 
-qt_libdirs="$ac_qt_libraries ${QTDIR}/lib /usr/lib/qt4/lib /usr/local/lib/qt/lib /usr/lib/ /usr/lib64 /usr/local/lib/"
-test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib ${QTDIR} $qt_libdirs"
+qt_libdirs="$ac_qt_libraries ${QTDIR}/lib64 /usr/lib64/qt4/lib /usr/local/lib64/qt/lib /usr/lib64 /usr/local/lib64 ${QTDIR}/lib /usr/lib/qt4/lib /usr/local/lib/qt/lib /usr/lib/ /usr/lib64 /usr/local/lib/"
+test -n "${QTDIR}" && qt_libdirs="${QTDIR}/lib64 ${QTDIR}/lib ${QTDIR} $qt_libdirs"
 if test ! "$ac_qt_libraries" = "NO"; then
   qt_libdirs="$ac_qt_libraries $qt_libdirs"
 fi
@@ -558,7 +567,7 @@ else
       fi
     fi
   else
-    LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient"
+    LIB_QT_ASSISTANT="-L${QTDIR}/lib64 -L${QTDIR}/lib -lQtAssistantClient"
     LIB_QT="-lQtCore -lQtGui -lQtOpenGL -lQtXml -lQtNetwork"
   fi
 fi
@@ -613,7 +622,7 @@ dnl
 AC_DEFUN([AC_PATH_QT_MOC],
 [
    FIND_PATH(moc, MOC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc \
-	    /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin \
+	    /usr/bin /usr/X11R6/bin /usr/lib64/qt4/bin /usr/lib/qt4/bin \
 	    /usr/local/qt/bin], [MOC_ERROR_MESSAGE])
  
    if test -z "$MOC"; then
@@ -629,7 +638,7 @@ AC_DEFUN([AC_PATH_QT_MOC],
    else
      $MOC -v 2>&1 | grep 'Qt 4' > /dev/null
      if test $? -eq 1; then
-       qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
+       qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib64/qt4/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
        AC_FIND_FILE(moc-qt4, $qt_bin_dirs, qt_bin_dir)
        MOC=$qt_bin_dir/moc-qt4
        if test ! -x $MOC; then
@@ -650,7 +659,7 @@ dnl
 AC_DEFUN([AC_PATH_QT_RCC],
 [
    FIND_PATH(rcc, RCC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/rcc \
-	    /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin \
+	    /usr/bin /usr/X11R6/bin /usr/lib64/qt4/bin /usr/lib/qt4/bin \
 	    /usr/local/qt/bin], [RCC_ERROR_MESSAGE])
  
    if test -z "$RCC"; then
@@ -670,7 +679,7 @@ AC_DEFUN([AC_PATH_QT_RCC],
 AC_DEFUN([AC_PATH_QT_UIC],
 [
    FIND_PATH(uic, UIC, [$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/uic \
-             /usr/bin /usr/X11R6/bin /usr/lib/qt/bin /usr/lib/qt4/bin\
+             /usr/bin /usr/X11R6/bin /usr/lib64/qt/bin /usr/lib/qt/bin /usr/lib64/qt4/bin /usr/lib/qt4/bin\
 	     /usr/local/qt/bin], [UIC_ERROR_MESSAGE])
    if test -z "$UIC"; then
      if test -n "$ac_cv_path_uic"; then
@@ -685,7 +694,7 @@ AC_DEFUN([AC_PATH_QT_UIC],
    fi
    $UIC -version 2>&1 | grep "version 4" > /dev/null
    if test $? -eq 1; then
-     qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
+     qt_bin_dirs="$ac_qt_bindir ${QTDIR}/bin ${QTDIR}/src/moc /usr/bin /usr/X11R6/bin /usr/lib64/qt4/bin /usr/lib/qt4/bin /usr/local/qt/bin ";
      AC_FIND_FILE(uic-qt4, $qt_bin_dirs, qt_bin_dir)
      UIC=$qt_bin_dir/uic-qt4
      if test ! -x $UIC; then

@@ -4,23 +4,30 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
+plugins_LTLIBRARIES = \
+		libAutoSize-@VERSION@.la \
+		libMetricSizeMapping-@VERSION@.la
+
+pluginsdir = $(libdir)/tlp
+
+libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
+libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
+
+if HAVE_TULIP_OGL
+
 if WIN32
 ADD_INCLUDES = -I/mingw/include/freetype2
 else
 ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
-plugins_LTLIBRARIES = \
-		libAutoSize-@VERSION@.la \
-		libFitToLabels-@VERSION@.la \
-		libMetricSizeMapping-@VERSION@.la 
-
-pluginsdir = $(libdir)/tlp
-
-libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
-libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
+pluginsogl_LTLIBRARIES = libFitToLabels-@VERSION@.la
+pluginsogldir = $(libdir)/tlp
 libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
 
-AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-libFitToLabels_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
+else
+INCLUDES = @TULIP_INCLUDE@
+AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
+endif

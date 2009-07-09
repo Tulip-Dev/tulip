@@ -265,15 +265,15 @@ public:
       rect5=new GlRect(Coord(15,95,0),Coord(25,79,0),Color(255,0,0,255),Color(255,0,255,255));
     }
 
-    GlLabel *label1=new GlLabel(TulipBitmapDir,Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
+    GlLabel *label1=new GlLabel(Coord(30,15,0),Coord(5+12*sstr1.str().size(),15,0),Color(0,0,0,255),true);
     label1->setText(sstr1.str());
-    GlLabel *label2=new GlLabel(TulipBitmapDir,Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
+    GlLabel *label2=new GlLabel(Coord(30,95,0),Coord(5+12*sstr2.str().size(),15,0),Color(0,0,0,255),true);
     label2->setText(sstr2.str());
 
     if(sstr1.str().size()>sstr2.str().size()) {
-      xMax=30+label1->getSize()[0];
+      xMax=30 + (int) label1->getSize()[0];
     }else{
-      xMax=30+label2->getSize()[0];
+      xMax=30 + (int) label2->getSize()[0];
     }
 
     GlRect *backRect=new GlRect(Coord(5,105,0),Coord(xMax+5,5,0),Color(0,0,0,50),Color(0,0,0,50));
@@ -294,19 +294,7 @@ public:
 
     DataSet nodeLinkDiagramComponentDataSet;
     DataSet infoDataSet;
-    string infoName="MetricMapping 0";
-    if(graph->attributeExist("NodeLinkDiagramComponent")){
-      graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
-      int i=1;
-      while(nodeLinkDiagramComponentDataSet.exist(infoName)){
-        stringstream str;
-        str << "MetricMapping " << i ;
-        infoName=str.str();
-        i++;
-      }
-    }else{
-
-    }
+    string infoName="MetricMapping";
 
     infoDataSet.set<long>("composite",(long)composite);
     infoDataSet.set<string>("layer","Foreground");

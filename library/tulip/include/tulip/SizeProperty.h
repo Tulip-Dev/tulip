@@ -23,11 +23,11 @@ class PropertyContext;
   friend class SizeAlgorithm;
 
 public :
-  SizeProperty (Graph *);
+  SizeProperty (Graph *, std::string n="");
 
   Size getMax(Graph *sg=0);
   Size getMin(Graph *sg=0);
-  PropertyInterface* clonePrototype(Graph *, std::string );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
@@ -46,6 +46,15 @@ private:
   stdext::hash_map<unsigned long, Size> max,min;
   stdext::hash_map<unsigned long, bool> minMaxOk;
   void computeMinMax(Graph * sg=NULL);
+};
+
+class TLP_SCOPE SizeVectorProperty:public AbstractProperty<SizeVectorType,SizeVectorType> { 
+public :
+  SizeVectorProperty(Graph *g, std::string n=""):AbstractProperty<SizeVectorType, SizeVectorType>(g, n) {}
+
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  void copy( const node, const node, PropertyInterface * );
+  void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
 

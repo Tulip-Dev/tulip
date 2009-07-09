@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 09/11/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLEDGE_H
@@ -18,7 +18,7 @@
 #include "tulip/GlComplexeEntity.h"
 
 namespace tlp {
-  
+
   class OcclusionTest;
   class TextRenderer;
 
@@ -26,7 +26,7 @@ namespace tlp {
    * Class to represent an edge of a graph
    */
   class TLP_GL_SCOPE GlEdge : public GlComplexeEntity{
-  
+
   public:
 
     /**
@@ -54,7 +54,7 @@ namespace tlp {
      * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(bool drawSelect,bool drawNodesLabel,bool drawEdgesLabel,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
     unsigned int id;
 
@@ -65,9 +65,9 @@ namespace tlp {
     void drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 		  const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
 		  const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D, float lod);
-    
+
   };
-  
+
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

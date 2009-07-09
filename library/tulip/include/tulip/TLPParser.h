@@ -183,7 +183,8 @@ struct TLPParser {
   }
 
   bool parse() {
-    tokenParser=new TLPTokenParser(inputStream);
+    TLPTokenParser tParser(inputStream);
+    tokenParser= &tParser;
     TLPToken currentToken;
     TLPValue currentValue;
     while ((currentToken=tokenParser->nextToken(currentValue,curPos))!=ENDOFSTREAM) {

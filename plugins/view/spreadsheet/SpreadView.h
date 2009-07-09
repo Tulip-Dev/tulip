@@ -51,6 +51,8 @@ namespace tlp {
 
     void installInteractor(QAction*) {}
 
+    virtual void createPicture(const std::string&, int, int);
+
 
   protected :
 

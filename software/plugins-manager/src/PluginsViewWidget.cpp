@@ -37,7 +37,6 @@ namespace tlp {
     lastVersion = false;
     compatibleVersion = false;
     notInstalledVersion = false;
-    openDialog = false;
 
     connect(this,SIGNAL(itemSelectionChanged()),this,SLOT(getPluginInfoSlot()));
     connect(this,SIGNAL(itemChanged(QTreeWidgetItem*, int)),this,SLOT(changed(QTreeWidgetItem*)));
@@ -355,110 +354,27 @@ namespace tlp {
 
   void  PluginsViewWidget::applyChange(){
 
-    if(openDialog==true)delete pluginDialog;
-    std::vector<string>pluginsToInstallNames;
-    std::vector<string>pluginsToRemoveNames;
-
-    set<DistPluginInfo,PluginCmp> depNoInstalled;
-    set<LocalPluginInfo,PluginCmp> depToRemove;
-
-    for(set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
-      bool ok=_msm->getPluginDependenciesToInstall(*it,depNoInstalled);
-
-      if(ok==false){
-	windowToDisplayError((*it).name);
-	return;
-
-      }
-    }
-
-    for(set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
-      set<DistPluginInfo,PluginCmp>::iterator itD=depNoInstalled.find(*it);
-      if(itD!=depNoInstalled.end())
-	depNoInstalled.erase(itD);
-    }
-
-    if(depNoInstalled.size()>0){
-      // Ask the user if he wants to install all dependancy
-      AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depNoInstalled,&pluginsToInstall);
-      authoriz->exec();
-    }
-
-    for (set<LocalPluginInfo,PluginCmp>::iterator it = pluginsToRemove.begin(); it!=pluginsToRemove.end(); ++it) {
-      bool ok=_msm->getPluginDependenciesToRemove(*it,depToRemove);
-
-      if(ok==false){
-	windowToDisplayError((*it).name);
-	return;
-      }
-    }
-
-    for(set<LocalPluginInfo,PluginCmp>::iterator it = pluginsToRemove.begin(); it!=pluginsToRemove.end(); ++it) {
-      set<LocalPluginInfo,PluginCmp>::iterator itD=depToRemove.find(*it);
-      if(itD!=depToRemove.end())
-	depToRemove.erase(itD);
-    }
-
-    if(depToRemove.size()>0){
-      // Ask the user if he wants to install all dependancy
-      AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depToRemove,&pluginsToRemove);
-      authoriz->exec();
-    }
-
-    for(set<DistPluginInfo,PluginCmp>::iterator it=pluginsToInstall.begin();it!=pluginsToInstall.end();++it)
-      pluginsToInstallNames.push_back((*it).name);
-    for(set<LocalPluginInfo,PluginCmp>::iterator it=pluginsToRemove.begin();it!=pluginsToRemove.end();++it)
-      pluginsToRemoveNames.push_back((*it).name);
-
-    pluginDialog = new InstallPluginDialog(pluginsToInstallNames,pluginsToRemoveNames,this);
-    openDialog = true;
-    pluginDialog->show();
-
-    for (set<LocalPluginInfo,PluginCmp>::iterator it= pluginsToRemove.begin(); it!=pluginsToRemove.end(); ++it) {
-      UpdatePlugin *plug=new UpdatePlugin();
-      connect(plug, SIGNAL(pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &)), this, SLOT(terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &)));
-      //pluginDialog->addPlugin(false,(*it).name);
-      plug->uninstall((*it));
-    }
-
-    for (set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
-      // Installing current plugin
-      UpdatePlugin* plug = new UpdatePlugin(_msm);
-      pluginUpdaters.push_back(plug);
-      connect(plug, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
-      connect(plug, SIGNAL(installPart(const std::string&,float)), pluginDialog, SLOT(installPart(const std::string&, float)));
-
-      string serverAddr = getAddr((*it).server);
-      //pluginDialog->addPlugin(true,(*it).name);
-
-      plug->install(serverAddr,(*it));
-    }
+    connect(&updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalledSlot()));
+    connect(&updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalledSlot()));
+    updatePlugin.pluginsCheckAndUpdate(_msm,pluginsToInstall,pluginsToRemove,this);
 
     pluginsToInstall.clear();
     pluginsToRemove.clear();
+  }
+
+  void PluginsViewWidget::pluginInstalledSlot(){
+    changeList();
+    emit pluginInstalled();
+  }
+
+  void PluginsViewWidget::pluginUninstalledSlot() {
+    changeList();
   }
 
   void PluginsViewWidget::restore(){
     pluginsToInstall.clear();
     pluginsToRemove.clear();
     changeList();
-  }
-
-  string PluginsViewWidget::getAddr(string name){
-    vector<string> names;
-    vector<string> addrs;
-    _msm->getNames(names);
-    _msm->getAddrs(addrs);
-    vector<string>::iterator itNames=names.begin();
-    vector<string>::iterator itAddrs=addrs.begin();
-
-    for(;itNames!=names.end();++itNames) {
-      if((*itNames) == name)
-	return (*itAddrs);
-      ++itAddrs;
-    }
-
-    return "ERROR";
   }
 
   /*bool PluginsViewWidget::isInstalled(const string & type,const string & plugName){
@@ -476,44 +392,7 @@ namespace tlp {
     return ret;
     }*/
 
-  void PluginsViewWidget::terminatePluginInstall(UpdatePlugin* terminatedUpdater, const DistPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name, pluginInfo.installIsOK);
-    pluginUpdaters.removeAll(terminatedUpdater);
-    disconnect(terminatedUpdater, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
-    if (pluginInfo.installIsOK)
-      _msm->addLocalPlugin(&pluginInfo);
-    // in a distant future, we might like to pass the plugin's name to this signal
-    emit pluginInstalled();
-    delete terminatedUpdater;
-    changeList();
-  }
 
-  void PluginsViewWidget::terminatePluginUninstall(UpdatePlugin* terminatedUpdater,const LocalPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name, true);
-    disconnect(terminatedUpdater, SIGNAL(pluginUninstalled(UpdatePlugin*,const LocalPluginInfo &)), this, SLOT(terminatePluginUninstall(UpdatePlugin*,const LocalPluginInfo &)));
-    _msm->removeLocalPlugin(&pluginInfo);
-    delete terminatedUpdater;
-    changeList();
-  }
-
-
-
-  void PluginsViewWidget::windowToDisplayError(string pluginName){
-    QDialog* dia = new QDialog(this);
-    QVBoxLayout* box = new QVBoxLayout(dia);
-    QLabel* labelName = new QLabel(pluginName.c_str(),dia);
-    QLabel* label=new QLabel("Toutes les dependances n'ont pas �t� trouv�es\nAnnulation de l'installation",dia);
-    box->addWidget(labelName);
-    box->addWidget(label);
-
-    QPushButton* ok = new QPushButton("Yes",dia);
-    box->addWidget(ok);
-    connect(ok, SIGNAL(clicked()),dia, SLOT(reject()));
-
-    //dia->setLayout(box);
-    dia->exec();
-
-  }
 
   /*void PluginsViewWidget::installAllDependencies(vector<DistPluginInfo> depNoInstall){
 

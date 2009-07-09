@@ -6,11 +6,16 @@ nobase_include_HEADERS = \
 	tulip/CopyPropertyDialog.h \
 	tulip/TulipStatsWidget.h \
 	tulip/RenderingParametersDialog.h \
+	tulip/LayerManagerWidget.h \
 	tulip/AugmentedDisplayDialog.h \
 	tulip/GridOptionsWidget.h \
 	tulip/GlMainView.h \
 	tulip/NodeLinkDiagramComponent.h \
-	tulip/GWInteractor.h \
+	tulip/InteractorManager.h \
+	tulip/Interactor.h \
+	tulip/InteractorChainOfResponsibility.h \
+	tulip/InteractorComponent.h \
+	tulip/GlMainViewInteractor.h \
 	tulip/ForegroundEntity.h \
 	tulip/MouseSelector.h \
 	tulip/MouseBoxZoomer.h \
@@ -35,14 +40,22 @@ nobase_include_HEADERS = \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
 	tulip/QtCPULODCalculator.h \
-	tulip/InteractorManager.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/MainController.h \
 	tulip/ControllerPluginsManager.h \
 	tulip/View.h \
 	tulip/AbstractView.h \
-	tulip/ViewPluginsManager.h
+	tulip/GraphPropertiesSelectionWidget.h \
+	tulip/ItemsListWidget.h \
+	tulip/StringsListSelectionWidget.h \
+	tulip/ViewPluginsManager.h \
+	tulip/ColorScaleConfigDialog.h \
+	tulip/QtMetaNodeRenderer.h \
+	tulip/StringsListSelectionWidgetInterface.h \
+	tulip/SimpleStringsListSelectionWidget.h \
+	tulip/DoubleStringsListSelectionWidget.h \
+	tulip/QGlPixelBufferManager.h
 
 noinst_HEADERS = \
 	tulip/Morphing.h
@@ -56,10 +69,14 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
-	tulip/QtProgressData.h
+	tulip/QtProgressData.h \
+	tulip/ColorScaleConfigDialogData.h \
+	tulip/SimpleStringsListSelectionWidgetData.h \
+	tulip/DoubleStringsListSelectionWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -68,10 +85,14 @@ BUILT_SOURCES = \
 	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
+	tulip/LayerManagerWidgetData.h \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
 	tulip/GridOptionsData.h \
 	tulip/QtProgressData.h \
+	tulip/ColorScaleConfigDialogData.h \
+	tulip/SimpleStringsListSelectionWidgetData.h \
+	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/sghierarchywidget.h \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \

@@ -26,7 +26,9 @@ const int H4 =  5;
 
 const int DEFAULT_SIZE = 20;
 
-const string FONT_FILE(tlp::TulipLibDir + "tlp/bitmaps/" + "font.ttf");
+string getFontFile() {
+  return tlp::TulipLibDir + "tlp/bitmaps/" + "font.ttf";
+}
 
 struct Cell{
   bool new_context;  // si vrai : ordonne un dépilement de contexte du Document courant
@@ -39,7 +41,7 @@ typedef stack<Cell*> sCell; // pile
 // CLASSE TextRenderer
 //***************************************************************************
 //---------------------------------------------------------------------------
-TextRenderer::TextRenderer(): c(FONT_FILE, DEFAULT_SIZE, ROUGE, VERT, BLEU) {
+TextRenderer::TextRenderer(): c(getFontFile(), DEFAULT_SIZE, ROUGE, VERT, BLEU) {
   c.renderer = new GlRenderer();
   doc = 0;
 }

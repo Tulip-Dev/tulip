@@ -25,6 +25,7 @@
 #include "tulip/ReturnType.h"
 #include "tulip/tulipconf.h"
 #include "tulip/TemplateFactory.h"
+#include "tulip/Reflect.h"
 
 namespace tlp {
 
@@ -34,6 +35,10 @@ namespace tlp {
 /*@{*/
 //=============================================================
 class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
+protected:
+  // name field
+  std::string name;
+
 public:
   virtual ~PropertyInterface();
 
@@ -41,12 +46,17 @@ public:
   virtual void erase(const edge) =0;
   virtual void copy(const node, const node, PropertyInterface *) =0;
   virtual void copy(const edge, const edge, PropertyInterface *) =0;
-  virtual PropertyInterface* clonePrototype(Graph *, std::string) =0;
+  virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
   //=================================================================================
   // Returns a string describing the type of the property.
   // i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
   virtual std::string getTypename() = 0;
   static  std::string getTypename( PropertyInterface * );
+
+  // name management
+  const std::string& getName() {
+    return name;
+  }
 
   // Untyped accessors
   virtual std::string getNodeDefaultStringValue() = 0;
@@ -57,9 +67,19 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
+  // the ones below are used by GraphUpdatesRecorder
   virtual Iterator<node>* getNonDefaultValuatedNodes()=0;
   virtual Iterator<edge>* getNonDefaultValuatedEdges()=0;
-
+  virtual DataMem* getNodeDefaultDataMemValue() = 0;
+  virtual DataMem* getEdgeDefaultDataMemValue() = 0;
+  virtual DataMem* getNodeDataMemValue( const node n ) = 0;
+  virtual DataMem* getEdgeDataMemValue( const edge e ) = 0;
+  virtual DataMem* getNonDefaultDataMemValue( const node n ) = 0;
+  virtual DataMem* getNonDefaultDataMemValue( const edge e ) = 0;
+  virtual void setNodeDataMemValue( const node n, const DataMem* v) = 0;
+  virtual void setEdgeDataMemValue( const edge e, const DataMem* v) = 0;
+  virtual void setAllNodeDataMemValue(const DataMem* v ) = 0;
+  virtual void setAllEdgeDataMemValue(const DataMem* v ) = 0;
 
  protected:
   // redefinitions of ObservableProperty methods
@@ -92,7 +112,7 @@ public:
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
     }
   }
-  AbstractProperty(Graph *);
+  AbstractProperty(Graph *, std::string n = "");
   /** 
    * Returns the node default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory
@@ -112,7 +132,7 @@ public:
    * If there is no value and no algorithms it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tnode::RealType>::Value getNodeValue(const node n );
+  typename ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n );
   /**
    * Returns the value associated to the node n in this property.
    * If the value is already fixed it is done in constant time.
@@ -120,7 +140,7 @@ public:
    * If there is no value and no algorithms it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tedge::RealType>::Value getEdgeValue(const edge e);
+  typename ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e);
   /**
    * Set the value of a node n and notify the observers of a modification.
    * Warning : When using computed property (plug-in), if one sets the value of
@@ -224,6 +244,17 @@ public:
   // returns an iterator on all edges whose value is different
   // from the default value
   virtual Iterator<edge>* getNonDefaultValuatedEdges();
+  // for performance reason and use in GraphUpdatesRecorder
+  virtual DataMem* getNodeDefaultDataMemValue();
+  virtual DataMem* getEdgeDefaultDataMemValue();
+  virtual DataMem* getNodeDataMemValue(const node n);
+  virtual DataMem* getEdgeDataMemValue(const edge e);
+  virtual DataMem* getNonDefaultDataMemValue( const node n );
+  virtual DataMem* getNonDefaultDataMemValue( const edge e );
+  virtual void setNodeDataMemValue( const node n, const DataMem* v);
+  virtual void setEdgeDataMemValue( const edge e, const DataMem* v);
+  virtual void setAllNodeDataMemValue(const DataMem* v);
+  virtual void setAllEdgeDataMemValue(const DataMem* v);
 
 protected:
   //=================================================================================

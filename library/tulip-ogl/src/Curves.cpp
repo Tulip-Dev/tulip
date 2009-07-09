@@ -4,14 +4,13 @@
 #include <tulip/Vector.h>
 #include <tulip/Size.h>
 #include "tulip/Curves.h"
-#include "tulip/GlTools.h"
 #include "tulip/GlTextureManager.h"
 
 
 using namespace std;
 using namespace tlp;
 
-namespace {
+namespace tlp {
   //================================================
   inline float sqrnorm(const Coord &v) {
     return v[0]*v[0] + v[1]*v[1] + v[2]*v[2];
@@ -39,7 +38,7 @@ namespace {
     for (unsigned int i = 1; i < line.size() - 1; ++i) {
       float delta = sqrnorm(line[i-1] - line[i]);
       _c1 += _c2 * delta;
-      result[i] = Color((unsigned char)_c1[0], (unsigned char)_c1[1], (unsigned char)_c1[2], (unsigned char)_c1[3]); 
+      result[i] = Color((unsigned char)_c1[0], (unsigned char)_c1[1], (unsigned char)_c1[2], (unsigned char)_c1[3]);
     }
     return result;
   }
@@ -77,18 +76,18 @@ namespace {
     }
   };
   //================================================
-  GLfloat* buildCurvePoints (const vector<Coord> &vertices, 
+  GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 			     const vector<float> &sizes,
 			     const Coord &startN,
 			     const Coord &endN,
 			     unsigned int &resultSize,
-			     vector<unsigned int> *dec=NULL){
+			     vector<unsigned int> *dec){
     unsigned int resultDec=0;
     bool inversion=false;
     CurvePoints result(vertices.size());
     //start point
     Coord xu = startN - vertices[0];
-    xu /= xu.norm(); 
+    xu /= xu.norm();
     Coord xv = Coord(0,0,1.);
     Coord dir = xu^xv;
     if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
@@ -213,9 +212,7 @@ namespace {
       return true;
     return false;
   }
-}
 
-namespace tlp {
   vector<Coord> computeCleanVertices(const vector<Coord> &bends,
 				     const Coord &startPoint, const Coord& endPoint,
 				     Coord &startN, Coord &endN) {
@@ -300,7 +297,7 @@ namespace tlp {
   //=============================================
   void polyQuad(const vector<Coord> &vertices,
 		const vector<Color> &colors,
-		const vector<float> &sizes,	
+		const vector<float> &sizes,
 		const Coord & startN, const Coord &endN,
 		const string &textureName) {
     unsigned int size;

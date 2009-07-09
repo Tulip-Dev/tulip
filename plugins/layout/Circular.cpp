@@ -159,8 +159,6 @@ bool Circular::run() {
   if ( dataSet != 0 )
     dataSet->get("search cycle", searchCycle);
   
-  Size resultSize;
-
   //compute the sum of radii and the max radius of the graph
   double sumOfRad = 0;
   double maxRad = 0;
@@ -215,12 +213,9 @@ bool Circular::run() {
     vector<node>::const_iterator it = cycleOrdering.begin();
     for(; it!=cycleOrdering.end(); ++it) {
       node itn = *it;
-      //get the node and its size
-      Size curNodeSize = nodeSize->getNodeValue(itn);
-      
       //compute the radius to ensure non overlap.  If adjustment to 
       //ensure no angle greater than pi done, detect it.
-      double nodeRad = computeRadius(curNodeSize);
+      double nodeRad = computeRadius(nodeSize->getNodeValue(itn));
       double halfAngle = 
 	(nodeRad/sumOfRad)*((angleAdjust) ? M_PI/2.0 : M_PI);
       double rayon = nodeRad/sin(halfAngle);
@@ -238,5 +233,6 @@ bool Circular::run() {
       gamma += halfAngle;
     }//end while
   }//end else
+   
   return true;
 } //end run

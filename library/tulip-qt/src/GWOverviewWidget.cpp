@@ -96,8 +96,13 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       middle = _view->getScene()->getCamera()->worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       float dx, dy, dz;
-      dx = (middle[0] - mouseClicX) * viewport[2] * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
-      dy = (middle[1] - (widgetHeight - mouseClicY)) * viewport[3] * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
+      int resultViewport;
+      if(viewport[2]<viewport[3])
+        resultViewport=viewport[2];
+      else
+        resultViewport=viewport[3];
+      dx = (middle[0] - mouseClicX) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
+      dy = (middle[1] - (widgetHeight - mouseClicY)) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
       dz = 0;
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
       _observedView->getScene()->translateCamera((int) dx, (int) dy, 0);
@@ -143,7 +148,14 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       _view->getScene()->setCamera(&cam);
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
+  	GlMetaNodeRenderer *oldMetaNodeRenderer;
+  	if(_view->getScene()->getGlGraphComposite()){
+  	  oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
+  	  _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer);
+  	}
     _view->draw();
+    if(_view->getScene()->getGlGraphComposite())
+      _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer);
   }
 }
 //=============================================================================
@@ -160,11 +172,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
     _observedView = 0;
   }
   if (glWidget)
-#if defined(__APPLE__)
-    _view->setToolTip(QString("Click+Alt show rendering parameters"));
-#else
-  _view->setToolTip(QString("Click Left+Ctrl to show rendering parameters"));
-#endif
+    _view->setToolTip(QString("Click Left to center the view on the selected point"));
   else
     _view->setToolTip(QString());
   _observedView = glWidget;

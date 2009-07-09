@@ -12,24 +12,11 @@
  (at your option) any later version.
 */
 
-#include "ParallelCoordsGlEntitiesSelector.h"
+#include "ParallelCoordsElementHighlighter.h"
 
 using namespace std;
 
 namespace tlp {
-
-class ParallelCoordsElementHighlighter : public ParallelCoordsGlEntitiesSelector {
-	public :
-		ParallelCoordsElementHighlighter(Qt::MouseButton button = Qt::LeftButton,
-									   Qt::KeyboardModifier modifier = Qt::NoModifier) : ParallelCoordsGlEntitiesSelector(button, modifier) {}
-		~ParallelCoordsElementHighlighter(){}
-		Interactor *clone() { return new ParallelCoordsElementHighlighter(mButton, kModifier); }
-		void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView);
-		void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, bool addToSelection);
-		void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection);
-};
-
-INTERACTORPLUGIN(ParallelCoordsElementHighlighter, "ParallelCoordsElementHighlighter", "Tulip Team", "17/10/2008", "Parallel Coordinates Element Highlighter", "1.0");
 
 void ParallelCoordsElementHighlighter::unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) {
 	parallelView->resetHighlightedElements();
