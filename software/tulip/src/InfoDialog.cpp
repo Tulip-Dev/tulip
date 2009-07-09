@@ -4,6 +4,7 @@
 
 #include <string>
 #include <QtGui/qlabel.h>
+#include <tulip/TulipRelease.h>
 #include "InfoDialog.h"
 
 using namespace std;
@@ -18,7 +19,7 @@ InfoDialog::InfoDialog( QWidget* parent)
     : QDialog( parent) {
   setupUi(this);
   string tmp="Tulip ";
-  tmp+=VERSION;
+  tmp+=TULIP_RELEASE;
   TextLabel2->setText(tmp.c_str());
 }
 

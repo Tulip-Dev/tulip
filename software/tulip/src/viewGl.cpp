@@ -79,13 +79,13 @@
 #include <tulip/hash_string.h>
 #include <tulip/TabWidget.h>
 #include <tulip/MainController.h>
+#include <tulip/QtProgress.h>
 
 #include <PluginsManagerDialog.h>
 #include <UpdatePlugin.h>
 
 #include "viewGl.h"
 #include "Application.h"
-#include "QtProgress.h"
 #include "ElementInfoToolTip.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"

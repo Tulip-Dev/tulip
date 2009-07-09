@@ -69,7 +69,7 @@ AppStartUp::AppStartUp( QWidget* parent)
     currentFrame(0){
   setupUi(this);
   string tmp="Tulip ";
-  tmp+=VERSION;
+  tmp+=TULIP_RELEASE;
   tulipVersion->setText(tmp.c_str());
   string dir=TulipLibDir;
   dir += "tlp/bitmaps/";
