@@ -25,7 +25,7 @@ SET(tulip_RCC
     ../designer/TulipResource.qrc
 )
 
-TULIP_QT4_WRAP_UI(tulip_UI_SRCS ${tulip_UI})
+TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip_UI_SRCS ${tulip_UI})
 TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC})
 QT4_ADD_RESOURCES(tulip_RCC_SRCS ${tulip_RCC})
 
@@ -42,12 +42,11 @@ TARGET_LINK_LIBRARIES( tulip-exe ${QT_QTOPENGL_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe ${OPENGL_glu_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe ${OPENGL_gl_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe ${LIBXML2_LIBRARIES} )
+TARGET_LINK_LIBRARIES( tulip-exe ${JPEG_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe tulip )
 TARGET_LINK_LIBRARIES( tulip-exe tulip-ogl )
 TARGET_LINK_LIBRARIES( tulip-exe tulip-qt )
 TARGET_LINK_LIBRARIES( tulip-exe tulip-pluginsmanager )
-
-########### install files ###############
 
 INSTALL(PROGRAMS tulip-exe 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 

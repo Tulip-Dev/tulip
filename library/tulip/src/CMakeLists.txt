@@ -73,9 +73,6 @@ SET(tulip_LIB_SRCS
 
 INCLUDE_DIRECTORIES(../include/ ${PROJECT_SOURCE_DIR} ${GZStreamInclude})
 
-SET(TULIP_RELEASE "${TulipVersion}")
-CONFIGURE_FILE("../include/tulip/TulipRelease.h.in" "../include/tulip/TulipRelease.h")
-
 ADD_LIBRARY (tulip SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES( tulip gzstream )
 
