@@ -1,3 +1,3 @@
 #ifndef TULIP_RELEASE
-#define TULIP_RELEASE "3.1.1"
+#define TULIP_RELEASE @TULIP_RELEASE@
 #endif
