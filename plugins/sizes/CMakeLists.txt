@@ -1,37 +1,13 @@
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude} ${LIBXML2_INCLUDE_DIR})
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+SET(MetricSizeMapping_SRCS MetricMapping.cpp )
+ADD_LIBRARY(MetricSizeMapping-${TulipVersion} SHARED ${MetricSizeMapping_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ MetricSizeMapping-${TulipVersion})
 
+SET(AutoSize_SRCS AutoSize.cpp)
+ADD_LIBRARY(AutoSize-${TulipVersion} SHARED ${AutoSize_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ AutoSize-${TulipVersion})
 
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#if WIN32
-#ADD_INCLUDES = -I/mingw/include/freetype2
-#else
-#ADD_INCLUDES = `xml2-config --cflags` 
-#endif
-#
-#plugins_LTLIBRARIES = \
-#		libAutoSize-@VERSION@.la \
-#		libFitToLabels-@VERSION@.la \
-#		libMetricSizeMapping-@VERSION@.la 
-#
-#pluginsdir = $(libdir)/tlp
-#
-#libMetricSizeMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
-#libAutoSize_@VERSION@_la_SOURCES = AutoSize.cpp 
-#libFitToLabels_@VERSION@_la_SOURCES = FitToLabel.cpp 
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-#libFitToLabels_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
-#INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ ${ADD_INCLUDES}
+SET(FitToLabels_SRCS FitToLabel.cpp)
+ADD_LIBRARY(FitToLabels-${TulipVersion} SHARED ${FitToLabels_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ FitToLabels-${TulipVersion})

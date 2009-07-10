@@ -25,8 +25,6 @@
 
 #include <QtGui/QWidget>
 
-#include <tulipconf.h>
-
 #include <tulip/View.h>
 
 #include "SpreadTable.h"

@@ -1,64 +1,64 @@
+FIND_PACKAGE( Qt4 REQUIRED )
+INCLUDE( ${QT_USE_FILE} )
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
 
+INCLUDE_DIRECTORIES(./ ${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
-########### install files ###############
+SET(PlanarGraph_SRCS PlanarGraph.cpp)
+ADD_LIBRARY(PlanarGraph-${TulipVersion} SHARED ${PlanarGraph_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ PlanarGraph-${TulipVersion})
 
+SET(DotImport_SRCS dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h)
+ADD_LIBRARY(DotImport-${TulipVersion} SHARED ${DotImport_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ DotImport-${TulipVersion})
 
+SET(Grid_SRCS Grid.cpp)
+ADD_LIBRARY(Grid-${TulipVersion} SHARED ${Grid_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Grid-${TulipVersion})
 
+SET(GMLImport_SRCS GMLImport.cpp GMLParser.h)
+ADD_LIBRARY(GMLImport-${TulipVersion} SHARED ${GMLImport_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ GMLImport-${TulipVersion})
 
-#original Makefile.am contents follow:
+SET(RandomGraph_SRCS RandomGraph.cpp)
+ADD_LIBRARY(RandomGraph-${TulipVersion} SHARED ${RandomGraph_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ RandomGraph-${TulipVersion})
 
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = \
-#	libPlanarGraph-@VERSION@.la \
-#	libGrid-@VERSION@.la \
-#	libDotImport-@VERSION@.la \
-#	libGMLImport-@VERSION@.la \
-#	libFileSystem-@VERSION@.la \
-#	libWebImport-@VERSION@.la \
-#	libRandomGraph-@VERSION@.la \
-#	libRandomSimpleGraph-@VERSION@.la \
-#	libAdjacencyMatrixImport-@VERSION@.la \
-#	libCompleteGraph-@VERSION@.la \
-#	libRandomTree-@VERSION@.la \
-#	libRandomTreeGeneral-@VERSION@.la \
-#	libCompleteTree-@VERSION@.la \
-#	libSmallWorldGraph-@VERSION@.la 
-#
-#pluginsdir = $(libdir)/tlp
-#
-#BUILT_SOURCES =  moc_WebImport.cpp
-#
-#libPlanarGraph_@VERSION@_la_SOURCES = PlanarGraph.cpp
-#libDotImport_@VERSION@_la_SOURCES = dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h 
-#libGrid_@VERSION@_la_SOURCES = Grid.cpp
-#libGMLImport_@VERSION@_la_SOURCES = GMLImport.cpp GMLParser.h
-#libRandomGraph_@VERSION@_la_SOURCES = RandomGraph.cpp
-#libRandomSimpleGraph_@VERSION@_la_SOURCES = RandomSimpleGraph.cpp
-#libAdjacencyMatrixImport_@VERSION@_la_SOURCES = AdjacencyMatrixImport.cpp
-#libCompleteGraph_@VERSION@_la_SOURCES = CompleteGraph.cpp
-#libRandomTree_@VERSION@_la_SOURCES = RandomTree.cpp
-#libRandomTreeGeneral_@VERSION@_la_SOURCES = RandomTreeGeneral.cpp
-#libCompleteTree_@VERSION@_la_SOURCES = CompleteTree.cpp
-#libSmallWorldGraph_@VERSION@_la_SOURCES = SmallWorldGraph.cpp
-#libFileSystem_@VERSION@_la_SOURCES = FileSystem.cpp
-#libWebImport_@VERSION@_la_SOURCES = WebImport.cpp WebImport.h
-#nodist_libWebImport_@VERSION@_la_SOURCES = moc_WebImport.cpp
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-#libFileSystem_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-#libWebImport_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-#AM_CPPFLAGS= @QT_CPPFLAGS@
-#INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
-#
-#moc_%.cpp: %.h 
-#	$(MOC) -o $@ $<
-#
-#clean-generic:
-#	rm -f moc_*
+SET(RandomSimpleGraph_SRCS RandomSimpleGraph.cpp)
+ADD_LIBRARY(RandomSimpleGraph-${TulipVersion} SHARED ${RandomSimpleGraph_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ RandomSimpleGraph-${TulipVersion})
+
+SET(AdjacencyMatrixImport_SRCS AdjacencyMatrixImport.cpp)
+ADD_LIBRARY(AdjacencyMatrixImport-${TulipVersion} SHARED ${AdjacencyMatrixImport_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ AdjacencyMatrixImport-${TulipVersion})
+
+SET(CompleteGraph_SRCS CompleteGraph.cpp)
+ADD_LIBRARY(CompleteGraph-${TulipVersion} SHARED ${CompleteGraph_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ CompleteGraph-${TulipVersion})
+
+SET(RandomTree_SRCS RandomTree.cpp)
+ADD_LIBRARY(RandomTree-${TulipVersion} SHARED ${RandomTree_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ RandomTree-${TulipVersion})
+
+SET(RandomTreeGeneral_SRCS RandomTreeGeneral.cpp)
+ADD_LIBRARY(RandomTreeGeneral-${TulipVersion} SHARED ${RandomTreeGeneral_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ RandomTreeGeneral-${TulipVersion})
+
+SET(CompleteTree_SRCS CompleteTree.cpp)
+ADD_LIBRARY(CompleteTree-${TulipVersion} SHARED ${CompleteTree_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ CompleteTree-${TulipVersion})
+
+SET(SmallWorldGraph_SRCS SmallWorldGraph.cpp)
+ADD_LIBRARY(SmallWorldGraph-${TulipVersion} SHARED ${SmallWorldGraph_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ SmallWorldGraph-${TulipVersion})
+
+SET(FileSystem_SRCS FileSystem.cpp)
+ADD_LIBRARY(FileSystem-${TulipVersion} SHARED ${FileSystem_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ FileSystem-${TulipVersion})
+
+SET(WebImport_SRCS WebImport.cpp WebImport.h)
+SET(WebImport_MOC WebImport.h)
+TULIP_QT4_WRAP_CPP(WebImport_MOC_SRCS ${WebImport_MOC})
+ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ WebImport-${TulipVersion})

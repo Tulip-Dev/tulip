@@ -103,7 +103,6 @@ set(tulip-qt_MOC
     ../include/tulip/Interactor.h
     ../include/tulip/PropertyDialogData.h
     ../include/tulip/CopyPropertyDialogData.h
-    ../include/tulip/TulipStatsData.h
     ../include/tulip/RenderingParametersDialogData.h
     ../include/tulip/GridOptionsWidget.h
     ../include/tulip/GridOptionsData.h

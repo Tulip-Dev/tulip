@@ -1,30 +1,15 @@
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+SET(MetricColorMapping_SRCS
+    MetricMapping.cpp
+)
 
+ADD_LIBRARY(MetricColorMapping-${TulipVersion} SHARED ${MetricColorMapping_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ MetricColorMapping-${TulipVersion})
 
-########### install files ###############
+SET(EnumColorValuesMapping_SRCS
+    EnumColorValuesMapping.cpp
+)
 
-
-
-
-#original Makefile.am contents follow:
-
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = \
-#	libMetricColorMapping-@VERSION@.la \
-#	libEnumColorValuesMapping-@VERSION@.la
-#
-#pluginsdir = $(libdir)/tlp
-#
-#libMetricColorMapping_@VERSION@_la_SOURCES = MetricMapping.cpp 
-#libEnumColorValuesMapping_@VERSION@_la_SOURCES = EnumColorValuesMapping.cpp
-#
-#INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@ @QT_INCLUDES@ @GL_INCLUDES@
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ 
-#libEnumColorValuesMapping_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-#AM_CPPFLAGS= @QT_CPPFLAGS@
+ADD_LIBRARY(EnumColorValuesMapping-${TulipVersion} SHARED ${EnumColorValuesMapping_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ EnumColorValuesMapping-${TulipVersion})

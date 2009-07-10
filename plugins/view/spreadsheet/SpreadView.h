@@ -25,8 +25,6 @@
 
 #include <QtGui/QWidget>
 
-#include <tulipconf.h>
-
 #include <tulip/AbstractView.h>
 
 #include "SpreadWidget.h"

@@ -53,8 +53,6 @@
 #include <QtGui/QTableWidget>
 #include <QtGui/QTableWidgetSelectionRange>
 
-#include <tulipconf.h>
-
 #include "SpreadInsertColumnDialogData.h"
 
 class QUndoStack;

@@ -1,54 +1,59 @@
+FIND_PACKAGE( Qt4 REQUIRED )
+INCLUDE( ${QT_USE_FILE} )
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
 
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
-########### install files ###############
+SET(StrengthClustering_SRCS
+    StrengthClustering.h
+    StrengthClustering.cpp
+)
 
+ADD_LIBRARY(StrengthClustering-${TulipVersion} SHARED ${StrengthClustering_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ StrengthClustering-${TulipVersion})
 
+SET(HierarchicalClustering_SRCS
+    HierarchicalClustering.cpp  
+    HierarchicalClustering.h
+)
 
+ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClustering_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ HierarchicalClustering-${TulipVersion})
 
-#original Makefile.am contents follow:
+SET(ConvolutionClustering_UI
+    ConvolutionClusteringSetup.ui
+)
 
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = \
-#	libStrengthClustering-@VERSION@.la \
-#	libHierarchicalClustering-@VERSION@.la \
-#	libConvolutionClustering-@VERSION@.la \
-#	libEqualValueClustering-@VERSION@.la \
-#	libQuotientClustering-@VERSION@.la
-#
-#pluginsdir = $(libdir)/tlp
-#
-#EXTRA_DIST = ConvolutionClusteringSetup.ui
-#
-#libStrengthClustering_@VERSION@_la_SOURCES = StrengthClustering.h StrengthClustering.cpp
-#libHierarchicalClustering_@VERSION@_la_SOURCES = HierarchicalClustering.cpp  HierarchicalClustering.h
-#BUILT_SOURCES = ConvolutionClusteringSetupData.h moc_ConvolutionClusteringSetup.cpp 
-#libConvolutionClustering_@VERSION@_la_SOURCES = \
-#			ConvolutionClustering.h \
-#			ConvolutionClustering.cpp \
-#			ConvolutionClusteringSetup.cpp \
-#			ConvolutionClusteringSetup.h
-#nodist_libConvolutionClustering_@VERSION@_la_SOURCES = \
-#			moc_ConvolutionClusteringSetup.cpp
-#libEqualValueClustering_@VERSION@_la_SOURCES = EqualValueClustering.h EqualValueClustering.cpp
-#libQuotientClustering_@VERSION@_la_SOURCES = QuotientClustering.h QuotientClustering.cpp
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-#libConvolutionClustering_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
-#AM_CPPFLAGS= @QT_CPPFLAGS@
-#INCLUDES = @TULIP_INCLUDE@ @QT_INCLUDES@
-#
-#moc_%.cpp: %.h 
-#	$(MOC) -o $@ $<
-#
-#%Data.h: %.ui
-#	$(UIC) -o $@ $<
-#
-#clean-generic:
-#	rm -f moc_* *Data.*
+SET(ConvolutionClustering_MOC
+    ConvolutionClusteringSetup.h
+)
+
+SET(ConvolutionClustering_SRCS
+    ConvolutionClustering.h
+    ConvolutionClustering.cpp
+    ConvolutionClusteringSetup.cpp
+    ConvolutionClusteringSetup.h
+)
+
+TULIP_QT4_WRAP_UI(ConvolutionClustering_UI_SRCS ${ConvolutionClustering_UI})
+TULIP_QT4_WRAP_CPP(ConvolutionClustering_MOC_SRCS ${ConvolutionClustering_MOC})
+
+ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConvolutionClustering-${TulipVersion})
+
+SET(EqualValueClustering_SRCS
+    EqualValueClustering.h
+    EqualValueClustering.cpp
+)
+
+ADD_LIBRARY(EqualValueClustering-${TulipVersion} SHARED ${EqualValueClustering_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ EqualValueClustering-${TulipVersion})
+
+SET(QuotientClustering_SRCS
+    QuotientClustering.h
+    QuotientClustering.cpp
+)
+
+ADD_LIBRARY(QuotientClustering-${TulipVersion} SHARED ${QuotientClustering_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ QuotientClustering-${TulipVersion})

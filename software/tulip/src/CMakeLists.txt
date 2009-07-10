@@ -21,16 +21,17 @@ set(tulip_SRCS
     AppStartUp.cpp
     main.cpp)
 
-set(tulip_RCC
-    ../designer/TulipResource.qrc )
+SET(tulip_RCC
+    ../designer/TulipResource.qrc
+)
 
-TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip_UI_SRCS ${tulip_UI})
+TULIP_QT4_WRAP_UI(tulip_UI_SRCS ${tulip_UI})
 TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC})
 QT4_ADD_RESOURCES(tulip_RCC_SRCS ${tulip_RCC})
 
 INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
 
-ADD_EXECUTABLE( tulip-exe ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_RCC_SRCS} ${tulip_SRCS} )
+ADD_EXECUTABLE( tulip-exe ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
 SET_TARGET_PROPERTIES(tulip-exe PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
 TARGET_LINK_LIBRARIES( tulip-exe ${FREETYPE_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe ${GZStreamLibrary} )
@@ -48,5 +49,9 @@ TARGET_LINK_LIBRARIES( tulip-exe tulip-pluginsmanager )
 
 ########### install files ###############
 
-INSTALL_TARGETS(${TulipBinInstallDir} tulip-exe)
+INSTALL(PROGRAMS tulip-exe 
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
+	RENAME tulip
+)
+
 

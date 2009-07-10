@@ -1,56 +1,61 @@
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+SET(Circle_SRCS circle.cpp)
+ADD_LIBRARY(Circle-${TulipVersion} SHARED ${Circle_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Circle-${TulipVersion})
 
+SET(Hexagone_SRCS hexagone.cpp)
+ADD_LIBRARY(Hexagone-${TulipVersion} SHARED ${Hexagone_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Hexagone-${TulipVersion})
 
-########### install files ###############
+SET(Triangle_SRCS triangle.cpp)
+ADD_LIBRARY(Triangle-${TulipVersion} SHARED ${Triangle_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Triangle-${TulipVersion})
 
+SET(Pentagone_SRCS pentagone.cpp)
+ADD_LIBRARY(Pentagone-${TulipVersion} SHARED ${Pentagone_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Pentagone-${TulipVersion})
 
+SET(Square_SRCS square.cpp)
+ADD_LIBRARY(Square-${TulipVersion} SHARED ${Square_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Square-${TulipVersion})
 
+SET(Ring_SRCS ring.cpp)
+ADD_LIBRARY(Ring-${TulipVersion} SHARED ${Ring_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Ring-${TulipVersion})
 
-#original Makefile.am contents follow:
+SET(Billboard_SRCS billboard.cpp)
+ADD_LIBRARY(Billboard-${TulipVersion} SHARED ${Billboard_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Billboard-${TulipVersion})
 
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = \
-#	libCube-@VERSION@.la \
-#	libCubeOutlinedTransparent-@VERSION@.la \
-#	libSphere-@VERSION@.la \
-#	libCone-@VERSION@.la \
-#	libSquare-@VERSION@.la \
-#	libTriangle-@VERSION@.la \
-#	libRing-@VERSION@.la \
-#	libCircle-@VERSION@.la \
-#	libPentagone-@VERSION@.la \
-#	libHexagone-@VERSION@.la \
-#	libBillboard-@VERSION@.la \
-#	libCylinder-@VERSION@.la \
-#	libHalfCylinder-@VERSION@.la \
-#	libSquareBorderTextured-@VERSION@.la \
-#	libChristmasTree-@VERSION@.la
-##	libSquareBorder-@VERSION@.la
-#
-#pluginsdir = $(libdir)/tlp/glyphs
-#
-#libCircle_@VERSION@_la_SOURCES = circle.cpp
-#libHexagone_@VERSION@_la_SOURCES = hexagone.cpp
-#libTriangle_@VERSION@_la_SOURCES = triangle.cpp
-#libPentagone_@VERSION@_la_SOURCES = pentagone.cpp
-#libSquare_@VERSION@_la_SOURCES = square.cpp
-#libRing_@VERSION@_la_SOURCES = ring.cpp
-#libBillboard_@VERSION@_la_SOURCES = billboard.cpp
-#libCube_@VERSION@_la_SOURCES = cube.cpp 
-#libCubeOutlinedTransparent_@VERSION@_la_SOURCES = cubeoutlinedtransparent.cpp 
-#libSphere_@VERSION@_la_SOURCES = sphere.cpp 
-#libCone_@VERSION@_la_SOURCES = cone.cpp 
-#libCylinder_@VERSION@_la_SOURCES = cylinder.cpp 
-#libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp 
-#libSquareBorderTextured_@VERSION@_la_SOURCES = squarebordertextured.cpp
-#libChristmasTree_@VERSION@_la_SOURCES = christmastree.cpp
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
-#
-#INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @GL_INCLUDES@ @LIBGLE_INCLUDE@
+SET(Cube_SRCS cube.cpp)
+ADD_LIBRARY(Cube-${TulipVersion} SHARED ${Cube_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Cube-${TulipVersion})
+
+SET(CubeOutlinedTransparent_SRCS cubeoutlinedtransparent.cpp)
+ADD_LIBRARY(CubeOutlinedTransparent-${TulipVersion} SHARED ${CubeOutlinedTransparent_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ CubeOutlinedTransparent-${TulipVersion})
+
+SET(Sphere_SRCS sphere.cpp)
+ADD_LIBRARY(Sphere-${TulipVersion} SHARED ${Sphere_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Sphere-${TulipVersion})
+
+SET(Cone_SRCS cone.cpp)
+ADD_LIBRARY(Cone-${TulipVersion} SHARED ${Cone_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Cone-${TulipVersion})
+
+SET(Cylinder_SRCS cylinder.cpp)
+ADD_LIBRARY(Cylinder-${TulipVersion} SHARED ${Cylinder_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Cylinder-${TulipVersion})
+
+SET(HalfCylinder_SRCS halfcylinder.cpp)
+ADD_LIBRARY(HalfCylinder-${TulipVersion} SHARED ${HalfCylinder_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ HalfCylinder-${TulipVersion})
+
+SET(SquareBorderTextured_SRCS squarebordertextured.cpp)
+ADD_LIBRARY(SquareBorderTextured-${TulipVersion} SHARED ${SquareBorderTextured_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ SquareBorderTextured-${TulipVersion})
+
+SET(ChristmasTree_SRCS christmastree.cpp)
+ADD_LIBRARY(ChristmasTree-${TulipVersion} SHARED ${ChristmasTree_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ChristmasTree-${TulipVersion})

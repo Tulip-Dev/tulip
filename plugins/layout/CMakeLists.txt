@@ -1,58 +1,138 @@
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+SET(MixedModel_SRCS MixedModel.h MixedModel.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(MixedModel-${TulipVersion} SHARED ${MixedModel_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ MixedModel-${TulipVersion})
 
+SET(ConnectedComponentPacking_SRCS 
+    ConnectedComponentPacking.h 
+    ConnectedComponentPacking.cpp 
+    Number.h 
+    Number.cpp 
+    RectanglePacking.h 
+    RectanglePacking.cpp 
+    rectanglePackingFonctions.h 
+    rectanglePackingFonctions.cpp 
+    RectangleRelativePositionList.h 
+    RectangleRelativePositionList.cpp 
+    DatasetTools.h 
+    DatasetTools.cpp
+)
+ADD_LIBRARY(ConnectedComponentPacking-${TulipVersion} SHARED ${ConnectedComponentPacking_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConnectedComponentPacking-${TulipVersion})
 
-########### install files ###############
+SET(Random_SRCS Random.h Random.cpp)
+ADD_LIBRARY(Random-${TulipVersion} SHARED ${Random_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Random-${TulipVersion})
 
+SET(GemLayout_SRCS GEMLayout.h GEMLayout.cpp)
+ADD_LIBRARY(GemLayout-${TulipVersion} SHARED ${GemLayout_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ GemLayout-${TulipVersion})
 
+SET(TreeReingoldAndTilforExtended_SRCS 
+    TreeReingoldAndTilfordExtended.h 
+    TreeReingoldAndTilfordExtended.cpp 
+    DatasetTools.h 
+    DatasetTools.cpp)
+ADD_LIBRARY(TreeReingoldAndTilforExtended-${TulipVersion} SHARED ${TreeReingoldAndTilforExtended_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeReingoldAndTilforExtended-${TulipVersion})
 
+SET(ConeTreeExtended_SRCS ConeTreeExtended.h ConeTreeExtended.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(ConeTreeExtended-${TulipVersion} SHARED ${ConeTreeExtended_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConeTreeExtended-${TulipVersion})
 
-#original Makefile.am contents follow:
+SET(TreeMap_SRCS TreeMap.h TreeMap.cpp)
+ADD_LIBRARY(TreeMap-${TulipVersion} SHARED ${TreeMap_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeMap-${TulipVersion})
 
-#if !MACOSX
-#DLL_FLAGS = -no-undefined
-#else
-#DLL_FLAGS = -Wl,-headerpad_max_install_names
-#endif
-#
-#plugins_LTLIBRARIES = \
-#	libMixedModel-@VERSION@.la \
-#	libConnectedComponentPacking-@VERSION@.la \
-#	libRandom-@VERSION@.la \
-#	libGemLayout-@VERSION@.la \
-#	libTreeReingoldAndTilforExtended-@VERSION@.la \
-#	libTreeMap-@VERSION@.la \
-#	libConeTreeExtended-@VERSION@.la\
-#	libCircular-@VERSION@.la \
-#	libTreeLeaf-@VERSION@.la \
-#	libTreeRadial-@VERSION@.la \
-#	libGeneralGraph3D-@VERSION@.la \
-#	libBubbleTree-@VERSION@.la \
-#	libEmbedder-@VERSION@.la \
-#	libTutte-@VERSION@.la \
-#	libDendrogram-@VERSION@.la \
-#	libImprovedWalker-@VERSION@.la \
-#	libSquarifiedTreeMap-@VERSION@.la
-#
-#pluginsdir = $(libdir)/tlp
-#
-#libMixedModel_@VERSION@_la_SOURCES = MixedModel.h MixedModel.cpp DatasetTools.h DatasetTools.cpp
-#libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.h ConnectedComponentPacking.cpp Number.h Number.cpp RectanglePacking.h RectanglePacking.cpp rectanglePackingFonctions.h rectanglePackingFonctions.cpp RectangleRelativePositionList.h RectangleRelativePositionList.cpp DatasetTools.h DatasetTools.cpp
-#libRandom_@VERSION@_la_SOURCES = Random.h Random.cpp
-#libGemLayout_@VERSION@_la_SOURCES = GEMLayout.h GEMLayout.cpp
-#libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.h TreeReingoldAndTilfordExtended.cpp DatasetTools.h DatasetTools.cpp
-#libConeTreeExtended_@VERSION@_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp DatasetTools.h DatasetTools.cpp
-#libTreeMap_@VERSION@_la_SOURCES = TreeMap.h TreeMap.cpp 
-#libTreeRadial_@VERSION@_la_SOURCES = TreeRadial.cpp DatasetTools.h DatasetTools.cpp
-#libTreeLeaf_@VERSION@_la_SOURCES = TreeLeaf.h TreeLeaf.cpp DatasetTools.h DatasetTools.cpp OrientableCoord.h OrientableLayout.h OrientableSize.h OrientableSizeProxy.h OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp
-#libBubbleTree_@VERSION@_la_SOURCES = BubbleTree.h BubbleTree.cpp DatasetTools.h DatasetTools.cpp
-#libCircular_@VERSION@_la_SOURCES = Circular.h Circular.cpp DatasetTools.h DatasetTools.cpp
-#libGeneralGraph3D_@VERSION@_la_SOURCES = GeneralGraph3D.h GeneralGraph3D.cpp DatasetTools.h DatasetTools.cpp
-#libTutte_@VERSION@_la_SOURCES = Tutte.h Tutte.cpp
-#libEmbedder_@VERSION@_la_SOURCES = Embedder.cpp EmbedderEmbedGraph.h EmbedderEmbedGraph.cpp EmbedderDefs.h EmbedderDijkstra.h EmbedderDijkstra.cpp EmbedderBfs.h EmbedderBfs.cpp EmbedderParameters.h EmbedderParameters.cpp EmbedderPowerIterationDense.cpp
-#libDendrogram_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.h EdgeTools.cpp OrientableCoord.h OrientableConstants.h OrientableLayout.h OrientableLayoutInterface.h OrientableSize.h OrientableSizeProxy.h Orientation.h Dendrogram.h OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp Orientation.cpp TreeTools.h Dendrogram.cpp
-#libImprovedWalker_@VERSION@_la_SOURCES = DatasetTools.h DatasetTools.cpp EdgeTools.cpp ImprovedWalker.h ImprovedWalker.cpp OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp Orientation.cpp
-#libSquarifiedTreeMap_@VERSION@_la_SOURCES = SquarifiedTreeMap.h SquarifiedTreeMap.cpp
-#
-#AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@
-#INCLUDES = @TULIP_INCLUDE@
+SET(TreeRadial_SRCS TreeRadial.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(TreeRadial-${TulipVersion} SHARED ${TreeRadial_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeRadial-${TulipVersion})
+
+SET(TreeLeaf_SRCS 
+    TreeLeaf.h 
+    TreeLeaf.cpp 
+    DatasetTools.h 
+    DatasetTools.cpp 
+    OrientableCoord.h 
+    OrientableLayout.h 
+    OrientableSize.h 
+    OrientableSizeProxy.h 
+    OrientableCoord.cpp 
+    OrientableLayout.cpp 
+    OrientableSize.cpp 
+    OrientableSizeProxy.cpp
+)
+ADD_LIBRARY(TreeLeaf-${TulipVersion} SHARED ${TreeLeaf_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeLeaf-${TulipVersion})
+
+SET(BubbleTree_SRCS BubbleTree.h BubbleTree.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(BubbleTree-${TulipVersion} SHARED ${BubbleTree_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ BubbleTree-${TulipVersion})
+
+SET(Circular_SRCS Circular.h Circular.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(Circular-${TulipVersion} SHARED ${Circular_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Circular-${TulipVersion})
+
+SET(Tutte_SRCS Tutte.h Tutte.cpp)
+ADD_LIBRARY(Tutte-${TulipVersion} SHARED ${Tutte_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Tutte-${TulipVersion})
+
+SET(Embedder_SRCS 
+    Embedder.cpp 
+    EmbedderEmbedGraph.h 
+    EmbedderEmbedGraph.cpp 
+    EmbedderDefs.h 
+    EmbedderDijkstra.h 
+    EmbedderDijkstra.cpp 
+    EmbedderBfs.h 
+    EmbedderBfs.cpp 
+    EmbedderParameters.h 
+    EmbedderParameters.cpp 
+    EmbedderPowerIterationDense.cpp
+)
+ADD_LIBRARY(Embedder-${TulipVersion} SHARED ${Embedder_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Embedder-${TulipVersion})
+
+SET(Dendrogram_SRCS 
+    DatasetTools.h 
+    DatasetTools.cpp 
+    EdgeTools.h 
+    EdgeTools.cpp 
+    OrientableCoord.h 
+    OrientableConstants.h 
+    OrientableLayout.h 
+    OrientableLayoutInterface.h 
+    OrientableSize.h 
+    OrientableSizeProxy.h 
+    Orientation.h 
+    Dendrogram.h 
+    OrientableCoord.cpp 
+    OrientableLayout.cpp 
+    OrientableSize.cpp 
+    OrientableSizeProxy.cpp 
+    Orientation.cpp 
+    TreeTools.h 
+    Dendrogram.cpp
+)
+ADD_LIBRARY(Dendrogram-${TulipVersion} SHARED ${Dendrogram_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Dendrogram-${TulipVersion})
+
+SET(ImprovedWalker_SRCS 
+    DatasetTools.h 
+    DatasetTools.cpp 
+    EdgeTools.cpp 
+    ImprovedWalker.h 
+    ImprovedWalker.cpp 
+    OrientableCoord.cpp 
+    OrientableLayout.cpp 
+    OrientableSize.cpp 
+    OrientableSizeProxy.cpp 
+    Orientation.cpp    
+)
+ADD_LIBRARY(ImprovedWalker-${TulipVersion} SHARED ${ImprovedWalker_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ImprovedWalker-${TulipVersion})
+
+SET(SquarifiedTreeMap_SRCS SquarifiedTreeMap.h SquarifiedTreeMap.cpp)
+ADD_LIBRARY(SquarifiedTreeMap-${TulipVersion} SHARED ${SquarifiedTreeMap_SRCS})
+INSTALL_TARGETS(${TulipLibInstallDir}tlp/ SquarifiedTreeMap-${TulipVersion})
