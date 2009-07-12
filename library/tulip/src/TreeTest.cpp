@@ -189,7 +189,7 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   node root = sg->getAttribute<node>(CLONE_ROOT);
   // delete it if needed
   if (root.isValid())
-    graph->delNode(root);
+    graph->getRoot()->delNode(root);
   // delete the clone
   graph->delAllSubGraphs(sg);
 }
