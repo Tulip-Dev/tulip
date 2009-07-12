@@ -562,11 +562,13 @@ bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
       if (++it != recorders.end())
 	prop->addPropertyObserver((*it));
       return true;
-    } else {
-      assert(true);
+    } 
+#ifndef NDEBUG
+      else {
       cerr << __PRETTY_FUNCTION__ << " the observation of Property " << prop->getName()  << " cannot be stopped " << endl;
       return false;
     }
+#endif
   }
   return false;
 }
