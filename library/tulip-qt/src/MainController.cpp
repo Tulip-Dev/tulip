@@ -1224,11 +1224,14 @@ namespace tlp {
 
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
+      if (push)
+	graph->push();
+      // must be done after push because destination property
+      // may not exist and thus the getLocalProperty call may create it
+      // and so it must be deleted at pop time
       PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
       tmp->setAllNodeValue(dest->getNodeDefaultValue());
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
-      if (push)
-	graph->push();
       graph->push(false);
       bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) &&
 			   viewNames[currentView]=="Node Link Diagram view");
