@@ -64,5 +64,11 @@ TULIP_QT4_WRAP_CPP(tulip-pluginsmanager_MOC_SRCS ${tulip-pluginsmanager_MOC})
 INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipQtInclude})
 
 ADD_LIBRARY(tulip-pluginsmanager SHARED ${tulip-pluginsmanager_UI_SRCS} ${tulip-pluginsmanager_MOC_SRCS} ${tulip-pluginsmanager_LIB_SRCS})
-
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTCORE_LIBRARY})
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTXML_LIBRARY})
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTNETWORK_LIBRARY})
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip)
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip-ogl)
+TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip-qt)
 INSTALL_TARGETS(${TulipLibInstallDir} tulip-pluginsmanager)

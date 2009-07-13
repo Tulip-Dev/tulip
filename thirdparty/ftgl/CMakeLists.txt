@@ -95,7 +95,7 @@ SET(ftlayout_SRCS
     FTLayout/FTSimpleLayoutImpl.h 
 )
 
-INCLUDE_DIRECTORIES(./)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIR_freetype2})
 
 ADD_LIBRARY(ftgl STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS})
