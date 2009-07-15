@@ -12,7 +12,6 @@ SET(StrengthClustering_SRCS
 
 ADD_LIBRARY(StrengthClustering-${TulipVersion} SHARED ${StrengthClustering_SRCS})
 TARGET_LINK_LIBRARIES(StrengthClustering-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ StrengthClustering-${TulipVersion})
 
 SET(HierarchicalClustering_SRCS
     HierarchicalClustering.cpp  
@@ -21,7 +20,7 @@ SET(HierarchicalClustering_SRCS
 
 ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClustering_SRCS})
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ HierarchicalClustering-${TulipVersion})
+
 
 SET(ConvolutionClustering_UI
     ConvolutionClusteringSetup.ui
@@ -45,7 +44,6 @@ ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} tulip )
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTGUI_LIBRARY})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConvolutionClustering-${TulipVersion})
 
 SET(EqualValueClustering_SRCS
     EqualValueClustering.h
@@ -54,7 +52,6 @@ SET(EqualValueClustering_SRCS
 
 ADD_LIBRARY(EqualValueClustering-${TulipVersion} SHARED ${EqualValueClustering_SRCS})
 TARGET_LINK_LIBRARIES(EqualValueClustering-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ EqualValueClustering-${TulipVersion})
 
 SET(QuotientClustering_SRCS
     QuotientClustering.h
@@ -63,4 +60,10 @@ SET(QuotientClustering_SRCS
 
 ADD_LIBRARY(QuotientClustering-${TulipVersion} SHARED ${QuotientClustering_SRCS})
 TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ QuotientClustering-${TulipVersion})
+
+INSTALL(TARGETS StrengthClustering-${TulipVersion} 
+			    HierarchicalClustering-${TulipVersion}
+				ConvolutionClustering-${TulipVersion}
+				EqualValueClustering-${TulipVersion}
+				QuotientClustering-${TulipVersion}
+		DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
