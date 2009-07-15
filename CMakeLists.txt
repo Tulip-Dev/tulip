@@ -42,8 +42,11 @@ if (DEFINED NO_DEPRECATED)
 endif (DEFINED NO_DEPRECATED)
 
 IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
 ENDIF(WIN32)
+IF(APPLE)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
+ENDIF(APPLE)
 
 SET(TULIP_RELEASE "${TulipVersion}")
 CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")

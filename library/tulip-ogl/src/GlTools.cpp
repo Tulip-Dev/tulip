@@ -348,7 +348,7 @@ namespace tlp {
     gluDeleteQuadric(quadratic);
   }
   //====================================================
-  void cube(GLenum type) {
+  void cube(unsigned int type) {
     //  GLenum type = GL_LINE_LOOP;
     /* front face */
     glBegin(type);

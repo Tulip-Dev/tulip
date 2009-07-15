@@ -21,7 +21,7 @@ namespace tlp {
     }
   }
   
-  void GlFeedBackRecorder::record(bool doSort,GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport) {
+  void GlFeedBackRecorder::record(bool doSort,unsigned int size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport) {
     feedBackBuilder->begin(viewport);
     
     if(doSort)

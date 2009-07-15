@@ -42,7 +42,7 @@ namespace tlp {
      * \param feedBackBuffer : the feedback buffer
      * \param viewport : the viewport of the scene
      */
-    void record(bool doSort, GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport);
+    void record(bool doSort, unsigned int size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport);
     
   private:
 

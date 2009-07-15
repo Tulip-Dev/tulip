@@ -48,7 +48,7 @@ namespace tlp {
       glDepthFunc(GL_LEQUAL);
       glLineWidth(3);
       setColor(colorSelect2);
-      tlp::cube(GL_LINE_LOOP);
+      cube(GL_LINE_LOOP);
       glPopAttrib();
       GlDisplayListManager::getInst().endNewDisplayList();
     }
