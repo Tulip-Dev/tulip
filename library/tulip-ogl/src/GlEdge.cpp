@@ -88,6 +88,13 @@ void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
 
 void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
 	edge e=edge(id);
+
+  if(data->parameters->isElementZOrdered()){
+    if(data->elementColor->getEdgeValue(e)[3]!=255){
+      GlPointManager::getInst().endRendering();
+      GlPointManager::getInst().beginRendering();
+    }
+  }
 	bool selected = data->elementSelected->getEdgeValue(e);
 
 	if(selected) {
