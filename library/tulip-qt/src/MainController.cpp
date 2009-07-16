@@ -64,6 +64,19 @@ namespace tlp {
     return (Graph *) 0;
   }
   //**********************************************************************
+  static Graph* getCurrentSubGraph(Graph *graph,const string &name) {
+    if(graph->getAttribute<string>("name")==name)
+      return graph;
+
+    Graph *sg;
+    forEach(sg, graph->getSubGraphs()) {
+      Graph *csg = getCurrentSubGraph(sg, name);
+      if (csg)
+        returnForEach(csg);
+    }
+    return (Graph *) 0;
+  }
+  //**********************************************************************
   // we use a hash_map to store plugin parameters
   static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
     static stdext::hash_map<unsigned long, stdext::hash_map<std::string, StructDef * > > paramMaps;
@@ -251,17 +264,31 @@ namespace tlp {
           p = it->next();
           Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
           pair<string, DataType*> v=it2->next();
-          int id,x,y,width,height;
-          (*(DataSet*)p.second->value).get("id",id);
+          int x,y,width,height;
+
+          if((*(DataSet*)p.second->value).exist("id")){
+            int id;
+            (*(DataSet*)p.second->value).get("id",id);
+            if(id!=0){
+              lastViewedGraph=getCurrentSubGraph(newGraph, id);
+              if(!lastViewedGraph)
+                lastViewedGraph=newGraph;
+            }
+          }
+
+          if((*(DataSet*)p.second->value).exist("graphName")){
+            string graphName;
+            (*(DataSet*)p.second->value).get("graphName",graphName);
+            lastViewedGraph=getCurrentSubGraph(newGraph, graphName);
+            if(!lastViewedGraph)
+              lastViewedGraph=newGraph;
+          }
+
           (*(DataSet*)p.second->value).get("x",x);
           (*(DataSet*)p.second->value).get("y",y);
           (*(DataSet*)p.second->value).get("width",width);
           (*(DataSet*)p.second->value).get("height",height);
-          if(id!=0){
-            lastViewedGraph=getCurrentSubGraph(newGraph, id);
-            if(!lastViewedGraph)
-              lastViewedGraph=newGraph;
-          }
+
           createView(v.first,lastViewedGraph,*(DataSet*)v.second->value,QRect(x,y,width,height));
 
         }
@@ -340,7 +367,7 @@ namespace tlp {
       if(view){
         view->getData(&graph,&viewData);
         tmp.set<DataSet>(viewNames[view],viewData);
-        tmp.set<int>("id",graph->getId());
+        tmp.set<string>("graphName",graph->getAttribute<string>("name"));
         tmp.set<int>("x",rect.left());
         tmp.set<int>("y",rect.top());
         tmp.set<int>("width",rect.width());
