@@ -46,8 +46,9 @@ TARGET_LINK_LIBRARIES( tulip-exe ${LIBXML2_LIBRARIES} )
 TARGET_LINK_LIBRARIES( tulip-exe ${JPEG_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip-exe tulip )
 TARGET_LINK_LIBRARIES( tulip-exe tulip-ogl )
-TARGET_LINK_LIBRARIES( tulip-exe tulip-qt )
+TARGET_LINK_LIBRARIES( tulip-exe tulip-qt4 )
 TARGET_LINK_LIBRARIES( tulip-exe tulip-pluginsmanager )
+ADD_DEPENDENCIES(tulip-exe tulip tulip-ogl tulip-qt4 tulip-pluginsmanager)
 
 INSTALL(PROGRAMS tulip-exe 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 

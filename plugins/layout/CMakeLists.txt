@@ -1,10 +1,12 @@
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(MixedModel_SRCS MixedModel.h MixedModel.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(MixedModel-${TulipVersion} SHARED ${MixedModel_SRCS})
 TARGET_LINK_LIBRARIES(MixedModel-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ MixedModel-${TulipVersion})
+ADD_DEPENDENCIES(MixedModel-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(ConnectedComponentPacking_SRCS 
     ConnectedComponentPacking.h 
     ConnectedComponentPacking.cpp 
@@ -21,18 +23,21 @@ SET(ConnectedComponentPacking_SRCS
 )
 ADD_LIBRARY(ConnectedComponentPacking-${TulipVersion} SHARED ${ConnectedComponentPacking_SRCS})
 TARGET_LINK_LIBRARIES(ConnectedComponentPacking-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConnectedComponentPacking-${TulipVersion})
+ADD_DEPENDENCIES(ConnectedComponentPacking-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Random_SRCS Random.h Random.cpp)
 ADD_LIBRARY(Random-${TulipVersion} SHARED ${Random_SRCS})
 TARGET_LINK_LIBRARIES(Random-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Random-${TulipVersion})
+ADD_DEPENDENCIES(Random-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(GemLayout_SRCS GEMLayout.h GEMLayout.cpp)
 ADD_LIBRARY(GemLayout-${TulipVersion} SHARED ${GemLayout_SRCS})
 TARGET_LINK_LIBRARIES(GemLayout-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ GemLayout-${TulipVersion})
+ADD_DEPENDENCIES(GemLayout-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(TreeReingoldAndTilforExtended_SRCS 
     TreeReingoldAndTilfordExtended.h 
     TreeReingoldAndTilfordExtended.cpp 
@@ -40,23 +45,27 @@ SET(TreeReingoldAndTilforExtended_SRCS
     DatasetTools.cpp)
 ADD_LIBRARY(TreeReingoldAndTilforExtended-${TulipVersion} SHARED ${TreeReingoldAndTilforExtended_SRCS})
 TARGET_LINK_LIBRARIES(TreeReingoldAndTilforExtended-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeReingoldAndTilforExtended-${TulipVersion})
+ADD_DEPENDENCIES(TreeReingoldAndTilforExtended-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(ConeTreeExtended_SRCS ConeTreeExtended.h ConeTreeExtended.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(ConeTreeExtended-${TulipVersion} SHARED ${ConeTreeExtended_SRCS})
 TARGET_LINK_LIBRARIES(ConeTreeExtended-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ConeTreeExtended-${TulipVersion})
+ADD_DEPENDENCIES(ConeTreeExtended-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(TreeMap_SRCS TreeMap.h TreeMap.cpp)
 ADD_LIBRARY(TreeMap-${TulipVersion} SHARED ${TreeMap_SRCS})
 TARGET_LINK_LIBRARIES(TreeMap-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeMap-${TulipVersion})
+ADD_DEPENDENCIES(TreeMap-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(TreeRadial_SRCS TreeRadial.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(TreeRadial-${TulipVersion} SHARED ${TreeRadial_SRCS})
 TARGET_LINK_LIBRARIES(TreeRadial-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeRadial-${TulipVersion})
+ADD_DEPENDENCIES(TreeRadial-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(TreeLeaf_SRCS 
     TreeLeaf.h 
     TreeLeaf.cpp 
@@ -73,23 +82,27 @@ SET(TreeLeaf_SRCS
 )
 ADD_LIBRARY(TreeLeaf-${TulipVersion} SHARED ${TreeLeaf_SRCS})
 TARGET_LINK_LIBRARIES(TreeLeaf-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ TreeLeaf-${TulipVersion})
+ADD_DEPENDENCIES(TreeLeaf-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(BubbleTree_SRCS BubbleTree.h BubbleTree.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(BubbleTree-${TulipVersion} SHARED ${BubbleTree_SRCS})
 TARGET_LINK_LIBRARIES(BubbleTree-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ BubbleTree-${TulipVersion})
+ADD_DEPENDENCIES(BubbleTree-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Circular_SRCS Circular.h Circular.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(Circular-${TulipVersion} SHARED ${Circular_SRCS})
 TARGET_LINK_LIBRARIES(Circular-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Circular-${TulipVersion})
+ADD_DEPENDENCIES(Circular-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Tutte_SRCS Tutte.h Tutte.cpp)
 ADD_LIBRARY(Tutte-${TulipVersion} SHARED ${Tutte_SRCS})
 TARGET_LINK_LIBRARIES(Tutte-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Tutte-${TulipVersion})
+ADD_DEPENDENCIES(Tutte-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Embedder_SRCS 
     Embedder.cpp 
     EmbedderEmbedGraph.h 
@@ -105,8 +118,9 @@ SET(Embedder_SRCS
 )
 ADD_LIBRARY(Embedder-${TulipVersion} SHARED ${Embedder_SRCS})
 TARGET_LINK_LIBRARIES(Embedder-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Embedder-${TulipVersion})
+ADD_DEPENDENCIES(Embedder-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Dendrogram_SRCS 
     DatasetTools.h 
     DatasetTools.cpp 
@@ -130,8 +144,9 @@ SET(Dendrogram_SRCS
 )
 ADD_LIBRARY(Dendrogram-${TulipVersion} SHARED ${Dendrogram_SRCS})
 TARGET_LINK_LIBRARIES(Dendrogram-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Dendrogram-${TulipVersion})
+ADD_DEPENDENCIES(Dendrogram-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(ImprovedWalker_SRCS 
     DatasetTools.h 
     DatasetTools.cpp 
@@ -146,9 +161,30 @@ SET(ImprovedWalker_SRCS
 )
 ADD_LIBRARY(ImprovedWalker-${TulipVersion} SHARED ${ImprovedWalker_SRCS})
 TARGET_LINK_LIBRARIES(ImprovedWalker-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ImprovedWalker-${TulipVersion})
+ADD_DEPENDENCIES(ImprovedWalker-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(SquarifiedTreeMap_SRCS SquarifiedTreeMap.h SquarifiedTreeMap.cpp)
 ADD_LIBRARY(SquarifiedTreeMap-${TulipVersion} SHARED ${SquarifiedTreeMap_SRCS})
 TARGET_LINK_LIBRARIES(SquarifiedTreeMap-${TulipVersion} tulip)
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ SquarifiedTreeMap-${TulipVersion})
+ADD_DEPENDENCIES(SquarifiedTreeMap-${TulipVersion} tulip)
+
+##----------------------------------------------------------------------------------------------------------------------------
+INSTALL(TARGETS 
+	MixedModel-${TulipVersion}
+	ConnectedComponentPacking-${TulipVersion}
+	Random-${TulipVersion}
+	GemLayout-${TulipVersion}
+	TreeReingoldAndTilforExtended-${TulipVersion}
+	ConeTreeExtended-${TulipVersion}
+	TreeMap-${TulipVersion}
+	TreeRadial-${TulipVersion}
+	TreeLeaf-${TulipVersion}
+	BubbleTree-${TulipVersion}
+	Circular-${TulipVersion}
+	Tutte-${TulipVersion}
+	Embedder-${TulipVersion}
+	Dendrogram-${TulipVersion}
+	ImprovedWalker-${TulipVersion}
+	SquarifiedTreeMap-${TulipVersion}
+	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)

@@ -5,6 +5,7 @@ INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(StrengthClustering_SRCS
     StrengthClustering.h
     StrengthClustering.cpp
@@ -12,7 +13,9 @@ SET(StrengthClustering_SRCS
 
 ADD_LIBRARY(StrengthClustering-${TulipVersion} SHARED ${StrengthClustering_SRCS})
 TARGET_LINK_LIBRARIES(StrengthClustering-${TulipVersion} tulip)
+ADD_DEPENDENCIES(StrengthClustering-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(HierarchicalClustering_SRCS
     HierarchicalClustering.cpp  
     HierarchicalClustering.h
@@ -20,8 +23,9 @@ SET(HierarchicalClustering_SRCS
 
 ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClustering_SRCS})
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} tulip)
+ADD_DEPENDENCIES(HierarchicalClustering-${TulipVersion} tulip)
 
-
+##----------------------------------------------------------------------------------------------------------------------------
 SET(ConvolutionClustering_UI
     ConvolutionClusteringSetup.ui
 )
@@ -44,7 +48,9 @@ ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} tulip )
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTGUI_LIBRARY})
+ADD_DEPENDENCIES(ConvolutionClustering-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
     EqualValueClustering.h
     EqualValueClustering.cpp
@@ -52,7 +58,9 @@ SET(EqualValueClustering_SRCS
 
 ADD_LIBRARY(EqualValueClustering-${TulipVersion} SHARED ${EqualValueClustering_SRCS})
 TARGET_LINK_LIBRARIES(EqualValueClustering-${TulipVersion} tulip)
+ADD_DEPENDENCIES(EqualValueClustering-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 SET(QuotientClustering_SRCS
     QuotientClustering.h
     QuotientClustering.cpp
@@ -60,10 +68,12 @@ SET(QuotientClustering_SRCS
 
 ADD_LIBRARY(QuotientClustering-${TulipVersion} SHARED ${QuotientClustering_SRCS})
 TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} tulip)
+ADD_DEPENDENCIES(QuotientClustering-${TulipVersion} tulip)
 
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS StrengthClustering-${TulipVersion} 
-			    HierarchicalClustering-${TulipVersion}
-				ConvolutionClustering-${TulipVersion}
-				EqualValueClustering-${TulipVersion}
-				QuotientClustering-${TulipVersion}
+		HierarchicalClustering-${TulipVersion}
+		ConvolutionClustering-${TulipVersion}
+		EqualValueClustering-${TulipVersion}
+		QuotientClustering-${TulipVersion}
 		DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)

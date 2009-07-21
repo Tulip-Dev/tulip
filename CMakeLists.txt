@@ -17,7 +17,9 @@ FIND_PACKAGE(PNG)
 IF(PNG_FOUND)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_LIBPNG")
 ENDIF(PNG_FOUND)
+
 INCLUDE(FindGLEW.cmake)
+INCLUDE(FindXML2.cmake)
 
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GLEInclude ${PROJECT_SOURCE_DIR}/thirdparty/gle/)
@@ -33,9 +35,6 @@ SET(TulipIncludeInstallDir /include/)
 SET(TulipBitmapInstallDir /lib/tlp/bitmaps/)
 
 SET(TulipUseFile /UseTulip.cmake)
-
-INCLUDE(FindXML2.cmake)
-INCLUDE(FindGLEW.cmake)
 
 if (DEFINED NO_DEPRECATED)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
