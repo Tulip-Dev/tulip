@@ -12,9 +12,11 @@ using namespace std;
 #if defined(_WIN32)
 static const QString viewPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
 static const QString helpDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/";
+static const QString installPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
 #else
 static const QString viewPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
 static const QString helpDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/";
+static const QString installPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
 #endif
 
 static QByteArray toByteArray(const qint64 &number){
@@ -183,7 +185,7 @@ namespace tlp {
 
   void PluginsHelp::installHelpDoc(const QString &fileName){
     QString dirName=fileName.left(fileName.lastIndexOf('.'));
-    QFile file(QString(tlp::TulipLibDir.c_str())+"tlp/toInstall/"+fileName);
+    QFile file(QDir::homePath()+"/"+installPluginsDirName+"toInstall/"+fileName);
     bool isOpen=file.open(QIODevice::ReadOnly);
     assert(isOpen);
     QByteArray byteArray=file.readAll();

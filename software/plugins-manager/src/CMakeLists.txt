@@ -56,6 +56,7 @@ set(tulip-pluginsmanager_LIB_SRCS
     ProxyConfigurationDialog.cpp 
     UpdatePluginsDialog.cpp 
     PluginsHelp.cpp
+    PluginInfo.cpp
 )
 
 TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip-pluginsmanager_UI_SRCS ${tulip-pluginsmanager_UI})

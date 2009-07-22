@@ -60,6 +60,12 @@ namespace tlp {
   class TLP_PLUGINSMANAGER_SCOPE PluginInfo {
 
   public :
+
+    static const std::string pluginsDirName;
+    static std::string getInstallationSubDir(const std::string &str);
+
+    virtual bool isInstalledInHome() {return false;}
+
     std::string name;
     std::string type;
     std::string displayType;
@@ -199,6 +205,7 @@ namespace tlp {
       date(date),
       info(info){
 	local=true;};
+      virtual bool isInstalledInHome();
   };
 
   class TLP_PLUGINSMANAGER_SCOPE PluginCmp {

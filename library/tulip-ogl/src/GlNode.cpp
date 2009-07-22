@@ -54,6 +54,13 @@ namespace tlp {
     }
 
     node n=node(id);
+    if(data->parameters->isElementZOrdered()){
+      if(data->elementColor->getNodeValue(n)[3]!=255){
+        GlPointManager::getInst().endRendering();
+        GlPointManager::getInst().beginRendering();
+      }
+    }
+
     if (data->elementSelected->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
       if(data->getGraph()->isMetaNode(n)) {

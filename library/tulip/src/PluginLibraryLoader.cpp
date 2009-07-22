@@ -1,6 +1,7 @@
 #include "tulip/PluginLibraryLoader.h"
 #include "tulip/TulipRelease.h"
 #include <string.h>
+#include <set>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -12,30 +13,42 @@
 
 using namespace tlp;
 
+static std::set<std::string> previouslyLoadedLib;
+
+static bool isPreviouslyLoaded(const std::string &lib){
+  unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
+  std::string libName=lib.substr(0,idx);
+  if(previouslyLoadedLib.count(libName)!=0)
+    return true;
+
+  previouslyLoadedLib.insert(libName);
+  return false;
+}
+
 #ifdef _WIN32
 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
-  if (hDLL == NULL) { 
+  if (hDLL == NULL) {
     if (loader!=0) {
       char *msg;
       DWORD dwErrCode = GetLastError();
       FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		    FORMAT_MESSAGE_FROM_SYSTEM,
-		    NULL,               // no source buffer needed
-		    dwErrCode,          // error code for this message
-		    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		    (LPTSTR)&msg,       // allocated by fcn
-		    0,               // minimum size of buffer
-		    NULL);              // no inserts
+        FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,               // no source buffer needed
+        dwErrCode,          // error code for this message
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR)&msg,       // allocated by fcn
+        0,               // minimum size of buffer
+        NULL);              // no inserts
       if (!msg) {
-	char scode[128];
-	sprintf(scode, "%s: unable to load(error %d)",
-		filename.c_str(), (int) dwErrCode);
-	loader->aborted(filename, std::string(scode));
+  char scode[128];
+  sprintf(scode, "%s: unable to load(error %d)",
+    filename.c_str(), (int) dwErrCode);
+  loader->aborted(filename, std::string(scode));
       } else {
-	loader->aborted(filename, filename + ": " + msg);
-	LocalFree(msg);
+  loader->aborted(filename, filename + ": " + msg);
+  LocalFree(msg);
       }
     }
     return false;
@@ -46,7 +59,7 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, Plugin
 struct IteratorInfos {
 #define BUFSIZE 256
   HANDLE hFind;
-  WIN32_FIND_DATA FindData; 
+  WIN32_FIND_DATA FindData;
   TCHAR currentDirectory[BUFSIZE];
 };
 
@@ -69,9 +82,9 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *
       // count files loop
       unsigned long nbFiles = 0;
       if (_infos->hFind != INVALID_HANDLE_VALUE)
-	nbFiles = 1;
+  nbFiles = 1;
       while (FindNextFile (_infos->hFind, &_infos->FindData)) {
-	++nbFiles;
+  ++nbFiles;
       }
       loader->numberOfFiles(nbFiles);
       _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
@@ -93,13 +106,15 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
       if (lib.find(tulip_release, idx) == idx + 1) {
-	if (loader)
-	  loader->loading(_infos->FindData.cFileName);
-	loadPluginLibrary(tmpStr, loader);
+        if(!isPreviouslyLoaded(lib)){
+          if (loader)
+            loader->loading(_infos->FindData.cFileName);
+          loadPluginLibrary(tmpStr, loader);
+        }
       }
       else if (loader)
-	loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip "
-			+ TULIP_RELEASE);
+        loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip "
+            + TULIP_RELEASE);
     }
     else if (loader)
       loader->aborted(tmpStr, tmpStr + " is not a Tulip plugin library");
@@ -117,8 +132,8 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginLoader *loader) {
   void *handle = dlopen (filename.c_str() , RTLD_NOW);
-  if (!handle) { 
-    if (loader!=0) 
+  if (!handle) {
+    if (loader!=0)
       loader->aborted(filename, std::string(dlerror()));
     return false;
   }
@@ -136,7 +151,7 @@ int __tulip_select_libs(struct dirent *ent) {
 #endif
   int idx = strlen(ent->d_name) - suffix_len;
   if (idx < 0) return 0;
-  
+
   for (unsigned long i=0; i < suffix_len; ++i) {
     if ((ent->d_name[idx + i]) != suffix[i]) return 0;
   }
@@ -144,15 +159,15 @@ int __tulip_select_libs(struct dirent *ent) {
 }
 
 PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath,
-					 PluginLoader *loader) {
+           PluginLoader *loader) {
   struct dirent **namelist;
   n = scandir((const char *) _pluginPath.c_str(),
-	      &namelist,
+        &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__))
-	      (int (*) (const dirent *))
+        (int (*) (const dirent *))
 #endif
-	      __tulip_select_libs,
-	      alphasort);
+        __tulip_select_libs,
+        alphasort);
   pluginPath = _pluginPath;
   if (loader!=0)
     loader->numberOfFiles(n);
@@ -172,44 +187,46 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     free(namelist[n]);
     if (n == 0)
       free(infos);
-    tmpStr = pluginPath +"/"+ lib; 
+    tmpStr = pluginPath +"/"+ lib;
     // looking for a suffix matching -A.B.C
     unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
       if (lib.find(tulip_release, idx) == idx + 1) {
-	if (loader!=0)
-	  loader->loading(lib);
-	loadPluginLibrary(tmpStr, loader);
-	return n > 0;
+        if(!isPreviouslyLoaded(lib)){
+          if (loader!=0)
+            loader->loading(lib);
+          loadPluginLibrary(tmpStr, loader);
+        }
+        return n > 0;
       }
       std::string suffix = lib.substr(idx + 1);
       idx = suffix.find('.');
       if (idx != std::string::npos) {
-	bool isNumber = true;
-	for (unsigned long i = 0; i < idx; ++i) {
-	  if (!isdigit(suffix[i])) {
-	    isNumber = false;
-	    break;
-	  }
-	}
-	if (isNumber && suffix.size() > idx + 1) {
-	  suffix = suffix.substr(idx + 1);
-	  idx = suffix.find('.');
-	  if (idx != std::string::npos) {
-	    for (unsigned long i = 0; i < idx; ++i) {
-	      if (!isdigit(suffix[i])) {
-		isNumber = false;
-		break;
-	      }
-	    }
-	    if (isNumber && loader) {
-	      loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip " + TULIP_RELEASE);
-	      return n > 0;
-	    }
-	  }
-	}
+        bool isNumber = true;
+        for (unsigned long i = 0; i < idx; ++i) {
+          if (!isdigit(suffix[i])) {
+            isNumber = false;
+            break;
+          }
+        }
+        if (isNumber && suffix.size() > idx + 1) {
+          suffix = suffix.substr(idx + 1);
+          idx = suffix.find('.');
+          if (idx != std::string::npos) {
+            for (unsigned long i = 0; i < idx; ++i) {
+              if (!isdigit(suffix[i])) {
+                isNumber = false;
+                break;
+              }
+            }
+            if (isNumber && loader) {
+              loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip " + TULIP_RELEASE);
+              return n > 0;
+            }
+          }
+        }
       }
     }
     if (loader)

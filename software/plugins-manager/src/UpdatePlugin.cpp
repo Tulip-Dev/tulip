@@ -3,6 +3,7 @@
 #include "AuthorizationInstallDependencies.h"
 #include "InstallPluginDialog.h"
 #include "PluginsHelp.h"
+#include "PluginInfo.h"
 
 #include <iostream>
 
@@ -15,21 +16,9 @@ using namespace std;
 
 namespace tlp {
 
-  static QString getSubDir(const string &str) {
-    if(str=="Glyph")
-      return "glyphs/";
-    if(str=="Interactor")
-      return "interactors/" ;
-    if(str=="View")
-      return "view/" ;
-    if(str=="Controller")
-      return "controller/" ;
-    return "";
-  }
-
   UpdatePlugin::UpdatePlugin(QObject *parent):QObject(parent),openDialog(false),partNumber(0),currentPart(0){
-    std::string installPathStr(tlp::TulipLibDir);
-    installPathStr+="tlp/toInstall/";
+    string installPathStr=PluginInfo::pluginsDirName;
+    installPathStr+="toInstall/";
     installPath = QDir::toNativeSeparators(installPathStr.c_str()).toStdString();
     QDir tmp(installPath.c_str());
     tmp.mkpath(installPath.c_str());
@@ -179,6 +168,7 @@ namespace tlp {
   }
 
   void UpdatePlugin::install(const string &serverAddr,const DistPluginInfo &pluginInfo){
+    cout << installPath << endl;
     distPluginInfo=pluginInfo;
     version=pluginInfo.version;
     while(version.find(" ")!=string::npos) {
@@ -234,7 +224,7 @@ namespace tlp {
 	return;
       QTextStream out(&installFile);
       out.readAll();
-      QString subDir=getSubDir(distPluginInfo.type);
+      QString subDir=PluginInfo::getInstallationSubDir(distPluginInfo.type).c_str();
 
       out << subDir << distPluginInfo.fileName.c_str() << ".helpdoc" << "\n" ;
       out << subDir << distPluginInfo.fileName.c_str() << ".doc" << "\n" ;
@@ -265,7 +255,7 @@ namespace tlp {
     if(!removeFile.open(QIODevice::ReadWrite | QIODevice::Text))
       return 1;
     QTextStream out(&removeFile);
-    QString subDir = getSubDir(pluginInfo.type);
+    QString subDir = PluginInfo::getInstallationSubDir(pluginInfo.type).c_str();
     out.readAll();
     out << subDir << pluginInfo.fileName.c_str() << ".doc" << "\n" ;
     out << subDir << pluginInfo.fileName.c_str() << ".helpdoc" << "\n" ;
@@ -299,8 +289,8 @@ namespace tlp {
   }
 
   void UpdatePlugin::installWhenRestartTulip() {
-    string srcPath = QDir::toNativeSeparators((tlp::TulipLibDir+"tlp/toInstall/").c_str()).toStdString();
-    string dstPath = QDir::toNativeSeparators((tlp::TulipLibDir+"tlp/").c_str()).toStdString();
+    string srcPath = QDir::toNativeSeparators((PluginInfo::pluginsDirName+"toInstall/").c_str()).toStdString();
+    string dstPath = QDir::toNativeSeparators((PluginInfo::pluginsDirName).c_str()).toStdString();
 
     QDir srcDir(srcPath.c_str());
     QDir dstDir(dstPath.c_str());
@@ -319,6 +309,13 @@ namespace tlp {
       srcDir.remove("toRemove.dat");
     }
 
+    if(!dstDir.exists()){
+      QDir homeDir(QDir::homePath());
+      string newPath=PluginInfo::pluginsDirName;
+      newPath.erase(0,QDir::homePath().size());
+      homeDir.mkpath(newPath.c_str());
+    }
+
     QFile installFile(QString(srcPath.c_str())+"toInstall.dat");
     if(installFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
       QTextStream installStream(&installFile);
@@ -327,6 +324,8 @@ namespace tlp {
         if(!line.contains(".helpdoc")){
           if(line.contains("/")){
             QDir tmpDir=dstDir.absolutePath()+"/"+line.split("/").first();
+            if(!tmpDir.exists())
+              dstDir.mkpath(line.split("/").first());
             copyFile(srcDir,line.split("/").last(),tmpDir,line.split("/").last());
           }else{
             copyFile(srcDir,line,dstDir,line);
@@ -344,14 +343,13 @@ namespace tlp {
   }
 
   bool UpdatePlugin::isInstallDirWritable() {
-    std::string installDir(tlp::TulipLibDir);
-    installDir += "/tlp";
+    std::string installDir(PluginInfo::pluginsDirName);
     return QFileInfo(installDir.c_str()).isWritable();
   }
 
   bool UpdatePlugin::pluginUpdatesPending() {
-    std::string installChangeDir(tlp::TulipLibDir);
-    installChangeDir += "/tlp/toInstall/";
+    std::string installChangeDir(PluginInfo::pluginsDirName);
+    installChangeDir += "/toInstall/";
     return QFileInfo(QString(installChangeDir.c_str()) + "toInstall.dat").exists()
       || QFileInfo(QString(installChangeDir.c_str()) + "toRemove.dat").exists();
   }
