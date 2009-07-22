@@ -168,7 +168,6 @@ namespace tlp {
   }
 
   void UpdatePlugin::install(const string &serverAddr,const DistPluginInfo &pluginInfo){
-    cout << installPath << endl;
     distPluginInfo=pluginInfo;
     version=pluginInfo.version;
     while(version.find(" ")!=string::npos) {
