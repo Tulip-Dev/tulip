@@ -3,6 +3,8 @@
 #endif
 
 #include <tulip/TlpTools.h>
+#include <tulip/TulipRelease.h>
+#include <PluginInfo.h>
 #include "Application.h"
 
 #include <qdir.h>
@@ -10,26 +12,31 @@
 using namespace std;
 
 //**********************************************************************
-Application::Application(int& argc, char ** argv): QApplication(argc,argv) 
+Application::Application(int& argc, char ** argv): QApplication(argc,argv)
 {
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
   tlp::initTulipLib((char *) QApplication::applicationDirPath().toAscii().data());
+
+  //add local plugins installation path
+  QString localPluginsDir=tlp::PluginInfo::pluginsDirName.c_str();
+  tlp::TulipPluginsPath=localPluginsDir.toStdString()+tlp::PATH_DELIMITER+tlp::TulipPluginsPath;
+
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
   while (end!=tlp::TulipPluginsPath.end())
     if ((*end)==tlp::PATH_DELIMITER) {
       if (begin!=end) {
-	string path = string(begin,end) + "/bitmaps/";
-	QDir *bitmapsDir= new QDir(path.c_str());
-	if(bitmapsDir->exists()) {
-	  bitmapPath = path.c_str();
-	  delete bitmapsDir;
-	  return;
-	}
-	delete bitmapsDir;
+        string path = string(begin,end) + "/bitmaps/";
+        QDir *bitmapsDir= new QDir(path.c_str());
+        if(bitmapsDir->exists()) {
+          bitmapPath = path.c_str();
+          delete bitmapsDir;
+          return;
+        }
+        delete bitmapsDir;
       }
       ++end;
       begin=end;
@@ -46,7 +53,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
     }
     delete bitmapsDir;
   }
-} 
+}
 
 //**********************************************************************
 Application::~Application() {

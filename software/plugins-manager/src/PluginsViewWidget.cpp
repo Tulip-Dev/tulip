@@ -184,31 +184,40 @@ namespace tlp {
       return;
     }
     if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
+      cout << "Dist" << endl;
       bool havePlugin=false;
 
-      #if defined(__APPLE__)
-        havePlugin=((DistPluginInfo*)pluginInfo)->macVersion;
-      #elif defined(_WIN32)
-	havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
-      #elif defined(I64)
-	havePlugin=((DistPluginInfo*)pluginInfo)->i64Version;
-      #else
-	havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
-      #endif
+#if defined(__APPLE__)
+      havePlugin=((DistPluginInfo*)pluginInfo)->macVersion;
+#elif defined(_WIN32)
+      havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
+#elif defined(I64)
+      havePlugin=((DistPluginInfo*)pluginInfo)->i64Version;
+#else
+      havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
+#endif
 
       if(created) {
-	if(havePlugin) {
-	  twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
-	}else{
-	  twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
-	}
+        if(havePlugin) {
+          twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+        }else{
+          twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+        }
       }else{
-	if(havePlugin) {
-	  twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
-	}
+        if(havePlugin) {
+          twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+        }
       }
     }else{
-      twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+      cout << "Local" << endl;
+      if(pluginInfo->local){
+        if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome())
+          twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+        else
+          twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+      }else{
+        twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+      }
     }
   }
 
@@ -219,69 +228,69 @@ namespace tlp {
     while (*it) {
       if ((*it)->type() == 1){ //We are on a version Number
 
-	//Filter only compatibles versions
-	if(compatibleVersion){
-	  if(!isCompatible((*it)->text(0).toStdString())){
-	    (*it)->setHidden(true);  //if the version is not compatible hide it
+        //Filter only compatibles versions
+        if(compatibleVersion){
+          if(!isCompatible((*it)->text(0).toStdString())){
+            (*it)->setHidden(true);  //if the version is not compatible hide it
 
-	    bool removeParent = true;
-	    for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
-	      if (!((*it)->parent()->child(i)->isHidden())){
-		removeParent = false;
-	      }
-	    }
-	    if(removeParent){
-	      (*it)->parent()->setHidden(true);
-	    }
-	  }
-	}else{
-	  if(!isCompatible((*it)->text(0).toStdString())){
-	    (*it)->setFlags((*it)->flags()&(!Qt::ItemIsUserCheckable));
-	  }
-	}
+            bool removeParent = true;
+            for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
+              if (!((*it)->parent()->child(i)->isHidden())){
+                removeParent = false;
+              }
+            }
+            if(removeParent){
+              (*it)->parent()->setHidden(true);
+            }
+          }
+        }else{
+          if(!isCompatible((*it)->text(0).toStdString())){
+            (*it)->setFlags((*it)->flags()&(!Qt::ItemIsUserCheckable));
+          }
+        }
 
-	//Filter only compatibles versions
-	/*if(compatibleVersion){
+        //Filter only compatibles versions
+        /*if(compatibleVersion){
 	  if(!isCompatible((*it)->text(0).toStdString())){
 	    (*it)->setHidden(true);  //if the version is not compatible hide it
 	  }
 	  }*/
 
-	// Filter only last version
-	if(lastVersion){
-	  string version = "0.0.0 0.0";
-	  for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
-	    if (isMoreRecent((*it)->parent()->child(i)->text(0).toStdString(), version)){
-	      version = (*it)->parent()->child(i)->text(0).toStdString();
-	    }
-	  }
-	  for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
-	    if((*it)->parent()->child(i)->text(0).toStdString() != version){
-	      (*it)->parent()->child(i)->setHidden(true);
-	    }
-	  }
-	}
+        // Filter only last version
+        if(lastVersion){
+          string version = "0.0.0 0.0";
+          for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
+            if (isMoreRecent((*it)->parent()->child(i)->text(0).toStdString(), version)){
+              version = (*it)->parent()->child(i)->text(0).toStdString();
+            }
+          }
+          for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
+            if((*it)->parent()->child(i)->text(0).toStdString() != version){
+              (*it)->parent()->child(i)->setHidden(true);
+            }
+          }
+        }
 
-	// Filter not installed
-	if(notInstalledVersion) {
-	  if((*it)->checkState(0)!=Qt::Unchecked) {
-	    (*it)->setHidden(true);
-	  }
-	}
+        // Filter not installed
+        if(notInstalledVersion) {
+          if((*it)->checkState(0)!=Qt::Unchecked) {
+            (*it)->setHidden(true);
+          }
+        }
 
-	bool removeParent = true;
-	for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
-	  if (!((*it)->parent()->child(i)->isHidden())){
-	    removeParent = false;
-	  }
-	}
-	if(removeParent){
-	  (*it)->parent()->setHidden(true);
-	}
+        bool removeParent = true;
+        for (int i=0 ; i < (*it)->parent()->childCount() ; ++i){
+          if (!((*it)->parent()->child(i)->isHidden())){
+            removeParent = false;
+          }
+        }
+        if(removeParent){
+          (*it)->parent()->setHidden(true);
+        }
 
       }
       ++it;
-      }
+    }
   };
 
 
