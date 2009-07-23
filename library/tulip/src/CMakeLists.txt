@@ -73,7 +73,7 @@ SET(tulip_LIB_SRCS
 
 INCLUDE_DIRECTORIES(../include/ ${PROJECT_SOURCE_DIR} ${GZStreamInclude})
 
-ADD_LIBRARY (tulip SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
-TARGET_LINK_LIBRARIES( tulip gzstream )
+ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
+TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )
 
-INSTALL_TARGETS(${TulipLibInstallDir} tulip)
+INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipName})

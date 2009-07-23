@@ -3,14 +3,14 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-set(tulip-pluginsmanager_UI
+set(${LibTulipPluginsManagerName}_UI
      ../designer/PluginsInfoWidget.ui
      ../designer/InstallPluginDialog.ui
      ../designer/ProxyConfigurationDialog.ui
      ../designer/UpdatePluginsDialog.ui
 )
 
-set(tulip-pluginsmanager_MOC
+set(${LibTulipPluginsManagerName}_MOC
     ../include/PluginsManagerMainWindow.h
     ../include/PluginsManagerDialog.h
     ../include/PluginsWidget.h
@@ -32,7 +32,7 @@ set(tulip-pluginsmanager_MOC
     ../include/UpdatePluginsDialog.h
 )
 
-set(tulip-pluginsmanager_LIB_SRCS 
+set(${LibTulipPluginsManagerName}_LIB_SRCS 
     PluginsManagerMainWindow.cpp 
     PluginsManagerDialog.cpp 
     PluginsWidget.cpp 
@@ -59,18 +59,34 @@ set(tulip-pluginsmanager_LIB_SRCS
     PluginInfo.cpp
 )
 
-TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip-pluginsmanager_UI_SRCS ${tulip-pluginsmanager_UI})
-TULIP_QT4_WRAP_CPP(tulip-pluginsmanager_MOC_SRCS ${tulip-pluginsmanager_MOC})
+set(tulip_check_pl_SRCS TulipCheckPluginLoad.cpp)
+
+TULIP_QT4_WRAP_UI_IN_INCLUDE(${LibTulipPluginsManagerName}_UI_SRCS ${${LibTulipPluginsManagerName}_UI})
+TULIP_QT4_WRAP_CPP(${LibTulipPluginsManagerName}_MOC_SRCS ${${LibTulipPluginsManagerName}_MOC})
 
 INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipQtInclude})
 
-ADD_LIBRARY(tulip-pluginsmanager SHARED ${tulip-pluginsmanager_UI_SRCS} ${tulip-pluginsmanager_MOC_SRCS} ${tulip-pluginsmanager_LIB_SRCS})
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTXML_LIBRARY})
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager ${QT_QTNETWORK_LIBRARY})
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip)
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip-ogl)
-TARGET_LINK_LIBRARIES(tulip-pluginsmanager tulip-qt4)
-ADD_DEPENDENCIES(tulip-pluginsmanager tulip tulip-ogl tulip-qt4)
-INSTALL_TARGETS(${TulipLibInstallDir} tulip-pluginsmanager)
+ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName})
+ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
+
+ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTCORE_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTXML_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTNETWORK_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipName})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipQtName})
+ADD_DEPENDENCIES(${LibTulipPluginsManagerName} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
+
+IF(WIN32)
+INSTALL(PROGRAMS tulip_check_pl.exe 
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
+)
+ELSE(WIN32)
+INSTALL(PROGRAMS tulip_check_pl
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
+)
+ENDIF(WIN32)
+INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipPluginsManagerName})

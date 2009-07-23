@@ -4,6 +4,11 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 2)
 SET(TulipReleaseVersion 0)
 SET(TulipVersion "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
+SET(TulipMMVersion "${TulipMajorVersion}.${TulipMinorVersion}")
+SET(LibTulipName "tulip-${TulipMMVersion}")
+SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
+SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
+SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 
 FIND_PACKAGE(Freetype)
 FIND_PACKAGE(Qt4  REQUIRED)
@@ -62,6 +67,9 @@ SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} -l${OPENGL_glu_LIBRARY} -l${GLEW_LIBRARY}
 SET(QT_LDFLAGS "-l${QT_QTCORE_LIBRARY_RELEASE} -l${QT_QTGUI_LIBRARY_RELEASE} -l${QT_QTNETWORK_LIBRARY_RELEASE} -l${QT_QTOPENGL_LIBRARY_RELEASE} -l${QT_QTXML_LIBRARY_RELEASE}")
 SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
 CONFIGURE_FILE("tulip-config.in" "tulip-config")
+EXEC_PROGRAM(grep ARGS "mingw /etc/fstab" OUTPUT_VARIABLE MINDIR)
+STRING(REPLACE " /mingw" "" MINDIR ${MINDIR})
+CONFIGURE_FILE("tulip_cmake.nsi.in" "tulip.nsi" @ONLY)
 
 INSTALL(PROGRAMS tulip-config
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 

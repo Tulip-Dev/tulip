@@ -6,10 +6,10 @@ SET(MetricColorMapping_SRCS
 )
 
 ADD_LIBRARY(MetricColorMapping-${TulipVersion} SHARED ${MetricColorMapping_SRCS})
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} tulip)
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} tulip-ogl)
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} tulip-qt4)
-ADD_DEPENDENCIES(MetricColorMapping-${TulipVersion} tulip tulip-ogl tulip-qt4)
+TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipQtName})
+ADD_DEPENDENCIES(MetricColorMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EnumColorValuesMapping_SRCS
@@ -17,10 +17,10 @@ SET(EnumColorValuesMapping_SRCS
 )
 
 ADD_LIBRARY(EnumColorValuesMapping-${TulipVersion} SHARED ${EnumColorValuesMapping_SRCS})
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} tulip)
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} tulip-ogl)
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} tulip-qt4)
-ADD_DEPENDENCIES(EnumColorValuesMapping-${TulipVersion} tulip tulip-ogl tulip-qt4)
+TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipQtName})
+ADD_DEPENDENCIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
