@@ -149,7 +149,13 @@ static GLuint getShaderObjectFromString(const std::string &shaderSource, ShaderT
 
 namespace tlp {
 
-GlShaderManager* GlShaderManager::instance(NULL);
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+tlp::GlShaderManager* tlp::GlShaderManager::inst=0;
+#endif
+#else
+tlp::GlShaderManager* tlp::GlShaderManager::inst=0;
+#endif
 
 GlShaderManager::GlShaderManager() {
 	shaderProgramsSupported = checkShaderProgramsSupport();

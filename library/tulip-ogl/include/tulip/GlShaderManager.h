@@ -21,6 +21,8 @@
 #include <GL/gl.h>
 #endif
 
+#include "tulipconf.h"
+
 #include <string>
 #include <map>
 
