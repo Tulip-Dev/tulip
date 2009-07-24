@@ -1,15 +1,40 @@
+## -----------------------------------------------------------------------------------------------
+## ***********************************************************************************************
+## -----------------------------------------------------------------------------------------------
+##
+## Options for cmake (use -D):
+## CMAKE_INSTALL_PREFIX=directory_where_tulip_will_be_installed
+## NO_DEPRECATE=1 disable display of deprecated warning
+##
+## -----------------------------------------------------------------------------------------------
+## ***********************************************************************************************
+## -----------------------------------------------------------------------------------------------
+
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
+## -----------------------------------------------------------------------------------------------
+## Tulip version numbers
+## TulipVersion : Ma.Mi.Re
+## TulipMMVersion : Ma.Mi
+## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 2)
 SET(TulipReleaseVersion 0)
 SET(TulipVersion "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}.${TulipMinorVersion}")
+
+## -----------------------------------------------------------------------------------------------
+## Lib names
+## -----------------------------------------------------------------------------------------------
 SET(LibTulipName "tulip-${TulipMMVersion}")
 SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
 SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 
+## -----------------------------------------------------------------------------------------------
+## Find need packages
+## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype)
 FIND_PACKAGE(Qt4  REQUIRED)
 INCLUDE(${QT_USE_FILE})
@@ -26,6 +51,9 @@ ENDIF(PNG_FOUND)
 INCLUDE(FindGLEW.cmake)
 INCLUDE(FindXML2.cmake)
 
+## -----------------------------------------------------------------------------------------------
+## Include file paths
+## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GLEInclude ${PROJECT_SOURCE_DIR}/thirdparty/gle/)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
@@ -34,18 +62,30 @@ SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipQtInclude ${PROJECT_SOURCE_DIR}/library/tulip-qt/include/)
 SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
 
+## -----------------------------------------------------------------------------------------------
+## Install paths
+## -----------------------------------------------------------------------------------------------
 SET(TulipLibInstallDir /lib/)
 SET(TulipBinInstallDir /bin/)
 SET(TulipIncludeInstallDir /include/)
 SET(TulipShareInstallDir /share/)
 SET(TulipBitmapInstallDir /lib/tlp/bitmaps/)
 
-SET(TulipUseFile /UseTulip.cmake)
+## -----------------------------------------------------------------------------------------------
+## Set UseTulip file name
+## -----------------------------------------------------------------------------------------------
+SET(TulipUseFile UseTulip.cmake)
 
+## -----------------------------------------------------------------------------------------------
+## Disable deprecated compilation output
+## -----------------------------------------------------------------------------------------------
 if (DEFINED NO_DEPRECATED)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
 endif (DEFINED NO_DEPRECATED)
 
+## -----------------------------------------------------------------------------------------------
+## Qt assistant config
+## -----------------------------------------------------------------------------------------------
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
 ENDIF(WIN32)
@@ -53,9 +93,23 @@ IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
 ENDIF(APPLE)
 
+## -----------------------------------------------------------------------------------------------
+## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
+## -----------------------------------------------------------------------------------------------
 SET(TULIP_RELEASE "${TulipVersion}")
 CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")
 
+## -----------------------------------------------------------------------------------------------
+## Sub dir (no comment)
+## -----------------------------------------------------------------------------------------------
+ADD_SUBDIRECTORY(thirdparty)
+ADD_SUBDIRECTORY(library)
+ADD_SUBDIRECTORY(software)
+ADD_SUBDIRECTORY(plugins)
+
+## -----------------------------------------------------------------------------------------------
+## Set var to create tulip-config script
+## -----------------------------------------------------------------------------------------------
 SET(prefix "${CMAKE_INSTALL_PREFIX}")
 SET(exec_prefix "\${prefix}")
 SET(includedir "\${prefix}${TulipIncludeInstallDir}")
@@ -68,24 +122,27 @@ SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
 SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} -l${OPENGL_glu_LIBRARY} -l${GLEW_LIBRARY}")
 SET(QT_LDFLAGS "-l${QT_QTCORE_LIBRARY_RELEASE} -l${QT_QTGUI_LIBRARY_RELEASE} -l${QT_QTNETWORK_LIBRARY_RELEASE} -l${QT_QTOPENGL_LIBRARY_RELEASE} -l${QT_QTXML_LIBRARY_RELEASE}")
 SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
+GET_TARGET_PROPERTY(CMakeTulipLib ${LibTulipName} LOCATION)
+GET_TARGET_PROPERTY(CMakeTulipOglLib ${LibTulipOglName} LOCATION)
+GET_TARGET_PROPERTY(CMakeTulipQtLib ${LibTulipQtName} LOCATION)
 CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
+## -----------------------------------------------------------------------------------------------
+## Create tulip.nsi script
+## -----------------------------------------------------------------------------------------------
 IF(WIN32)
   EXEC_PROGRAM(grep ARGS "mingw /etc/fstab" OUTPUT_VARIABLE MINDIR)
   STRING(REPLACE " /mingw" "" MINDIR ${MINDIR})
   CONFIGURE_FILE("tulip_cmake.nsi.in" "tulip.nsi" @ONLY)
 ENDIF(WIN32)
 
+## -----------------------------------------------------------------------------------------------
+## Installation of files
+## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS tulip-config
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
-)
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
 INSTALL(FILES UseTulip.cmake 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
 INSTALL(FILES UseTulipPlugins.cmake 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
 
-
-ADD_SUBDIRECTORY(thirdparty)
-ADD_SUBDIRECTORY(library)
-ADD_SUBDIRECTORY(software)
-ADD_SUBDIRECTORY(plugins)
