@@ -37,6 +37,7 @@ SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/in
 SET(TulipLibInstallDir /lib/)
 SET(TulipBinInstallDir /bin/)
 SET(TulipIncludeInstallDir /include/)
+SET(TulipShareInstallDir /share/)
 SET(TulipBitmapInstallDir /lib/tlp/bitmaps/)
 
 SET(TulipUseFile /UseTulip.cmake)
@@ -59,6 +60,7 @@ SET(prefix "${CMAKE_INSTALL_PREFIX}")
 SET(exec_prefix "\${prefix}")
 SET(includedir "\${prefix}${TulipIncludeInstallDir}")
 SET(libdir "\${prefix}${TulipLibInstallDir}")
+SET(sharedir "\${prefix}${TulipShareInstallDir}")
 SET(VERSION "${TulipVersion}")
 SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
 SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
@@ -66,7 +68,7 @@ SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
 SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} -l${OPENGL_glu_LIBRARY} -l${GLEW_LIBRARY}")
 SET(QT_LDFLAGS "-l${QT_QTCORE_LIBRARY_RELEASE} -l${QT_QTGUI_LIBRARY_RELEASE} -l${QT_QTNETWORK_LIBRARY_RELEASE} -l${QT_QTOPENGL_LIBRARY_RELEASE} -l${QT_QTXML_LIBRARY_RELEASE}")
 SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
-CONFIGURE_FILE("tulip-config.in" "tulip-config")
+CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
 IF(WIN32)
   EXEC_PROGRAM(grep ARGS "mingw /etc/fstab" OUTPUT_VARIABLE MINDIR)
@@ -77,6 +79,11 @@ ENDIF(WIN32)
 INSTALL(PROGRAMS tulip-config
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
 )
+INSTALL(FILES UseTulip.cmake 
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
+INSTALL(FILES UseTulipPlugins.cmake 
+        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
+
 
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)

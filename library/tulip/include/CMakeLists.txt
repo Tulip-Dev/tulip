@@ -82,6 +82,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/MapIterator.h 
 	tulip/BoundingBox.h 
 	tulip/ColorScale.h
+	tulip/TulipRelease.h
 )
 
 INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES

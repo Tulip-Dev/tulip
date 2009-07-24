@@ -141,3 +141,4 @@ TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipOglName})
 ADD_DEPENDENCIES(${LibTulipQtName} ${LibTulipName} ${LibTulipOglName})
 
 INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipQtName})
+INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES ${tulip-qt_UI_SRCS})

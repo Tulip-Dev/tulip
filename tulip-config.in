@@ -8,6 +8,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
+sharedir=@sharedir@
 libversion=
 libextension=so
 plugincxxflags="-fPIC -DPIC"
@@ -64,6 +65,7 @@ Options:
         --pluginpath (return the path for installation of Tulip plugins)
         --qtincludes (return the Qt includes)
         --qtlibs (return the Qt libs needed by Tulip)
+        --sharepath (return the path where share data are installed)
 	
 EOF
     exit $1
@@ -118,6 +120,9 @@ while test $# -gt 0; do
       ;;
     --qtincludes)
       echo @QT_INCLUDES@
+      ;;
+    --sharepath)
+      echo ${sharedir}
       ;;
     *)
       usage
