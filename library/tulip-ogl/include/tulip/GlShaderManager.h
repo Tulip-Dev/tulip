@@ -29,7 +29,7 @@ void printOGLError(const char *file, int line);
 
 namespace tlp {
 
-class GlShaderManager {
+class TLP_GL_SCOPE GlShaderManager {
 
 public :
 
