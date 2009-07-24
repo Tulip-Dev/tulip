@@ -1,4 +1,4 @@
-INSTALL_FILES(${TULIP_INCLUDE_INSTALL_DIR}/tulip/ FILES
+INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/TulipTableWidget.h 
 	tulip/GlMainWidget.h 
 	tulip/TabWidget.h 

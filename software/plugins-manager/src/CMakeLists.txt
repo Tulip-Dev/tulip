@@ -67,7 +67,7 @@ TULIP_QT4_WRAP_CPP(${LibTulipPluginsManagerName}_MOC_SRCS ${${LibTulipPluginsMan
 INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipQtInclude})
 
 ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName})
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
 ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
 
 ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
