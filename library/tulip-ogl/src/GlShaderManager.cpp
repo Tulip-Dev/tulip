@@ -151,10 +151,10 @@ namespace tlp {
 
 #ifdef _WIN32
 #ifdef DLL_EXPORT
-tlp::GlShaderManager* tlp::GlShaderManager::inst=0;
+tlp::GlShaderManager* tlp::GlShaderManager::instance=0;
 #endif
 #else
-tlp::GlShaderManager* tlp::GlShaderManager::inst=0;
+tlp::GlShaderManager* tlp::GlShaderManager::instance=0;
 #endif
 
 GlShaderManager::GlShaderManager() {
