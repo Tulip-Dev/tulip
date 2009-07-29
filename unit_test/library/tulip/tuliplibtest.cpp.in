@@ -9,8 +9,7 @@
 #endif
 
 int main( int argc, char** argv ) {
-  std::string tlpdir("@prefix@");
-  tlpdir += "/lib";
+  std::string tlpdir("@libdir@");
   setenv("TLP_DIR", tlpdir.c_str(), 1);
   tlp::initTulipLib();
   tlp::PluginLoader* pLoader = NULL;
