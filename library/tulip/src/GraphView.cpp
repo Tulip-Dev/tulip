@@ -15,15 +15,18 @@
 #include "tulip/BooleanProperty.h"
 #include "tulip/Graph.h"
 #include "tulip/GraphIterator.h"
+#include "tulip/GraphImpl.h"
 #include "tulip/StableIterator.h"
 
 using namespace std;
 using namespace tlp;
 //----------------------------------------------------------------
-GraphView::GraphView(Graph *supergraph,BooleanProperty *filter):
+GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
+		     unsigned int sgId):
   GraphAbstract(supergraph),
   nNodes(0),
   nEdges(0) {
+  id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
   nodeAdaptativeFilter.setAll(false);
   edgeAdaptativeFilter.setAll(false);
   //  inDegree.setAll(0);
@@ -65,6 +68,7 @@ GraphView::~GraphView() {
   delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeGraphObservers();
   removeObservers();
+  ((GraphImpl *) getRoot())->freeSubGraphId(id);
 }
 //----------------------------------------------------------------
 bool GraphView::isElement(const node n) const {

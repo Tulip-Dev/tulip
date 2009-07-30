@@ -87,6 +87,8 @@ static bool integrityTest(Graph *graph) {
 */
 //----------------------------------------------------------------
 GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0) {
+  // id 0 is for the root
+  graphIds.get();
   outDegree.setAll(0);
 }
 //----------------------------------------------------------------
@@ -129,6 +131,17 @@ bool GraphImpl::isElement(const node n) const {
 //----------------------------------------------------------------
 bool GraphImpl::isElement(const edge e) const {
   return !edgeIds.is_free(e.id);
+}
+//----------------------------------------------------------------
+unsigned int GraphImpl::getSubGraphId(unsigned int id) {
+  if (id == 0)
+    return graphIds.get();
+  graphIds.getFreeId(id);
+  return id;
+}
+//----------------------------------------------------------------
+void GraphImpl::freeSubGraphId(unsigned int id) {
+  graphIds.free(id);
 }
 //----------------------------------------------------------------
 node GraphImpl::restoreNode(node newNode) {

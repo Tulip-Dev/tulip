@@ -88,6 +88,10 @@ public:
   void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
   void observableDestroyed(Observable*);
 
+  // for subgraph id management
+  unsigned int getSubGraphId(unsigned int id);
+  void freeSubGraphId(unsigned int id);
+
 protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
@@ -105,6 +109,7 @@ private :
   MutableContainer<unsigned int> outDegree;
   mutable Edges edges;
   mutable Nodes nodes;
+  IdManager graphIds;
   IdManager nodeIds;
   IdManager edgeIds;
   unsigned int nbNodes;

@@ -16,7 +16,8 @@ using namespace tlp;
 const string metaGraphProperty = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph),subGraphToKeep(NULL){
+GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph),
+						subGraphToKeep(NULL) {
   if (supergraph==0) supergraph=this;
   propertyContainer=new PropertyManagerImpl(this);
 }
@@ -50,8 +51,8 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg){
   subGraphToKeep = sg;
 }
 //=========================================================================
-Graph *GraphAbstract::addSubGraph(BooleanProperty *selection){
-  Graph *tmp = new GraphView(this, selection);
+Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id){
+  Graph *tmp = new GraphView(this, selection, id);
   subgraphs.push_back(tmp);
   notifyAddSubGraph(tmp);
   return tmp;

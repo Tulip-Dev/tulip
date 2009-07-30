@@ -8,8 +8,9 @@ void GraphDecorator::clear(){
 }
 
 //============================================================
-Graph *GraphDecorator::addSubGraph(BooleanProperty *selection){
-  Graph* sg = graph_component->addSubGraph(selection);
+Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
+				   unsigned int id){
+  Graph* sg = graph_component->addSubGraph(selection, id);
   notifyAddSubGraph(sg);
   return sg;
 }

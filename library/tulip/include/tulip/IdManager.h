@@ -40,6 +40,12 @@ public:
    */
   unsigned int get();
   /**
+   * assuming the given id is free.
+   * remove it from free ids
+   * (used to ensure the same id when loading a graph with subgraphs)
+   */
+  void getFreeId(unsigned int id);
+  /**
    * Returns an iterator on all the used ids. Warning, if
    * the idManager is modified (free, get) this iterator 
    * will be invalidate.

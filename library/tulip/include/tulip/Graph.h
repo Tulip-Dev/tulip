@@ -97,8 +97,8 @@ template<class C>class Iterator;
   friend class GraphDecorator;
 
 public:
-  Graph();
-  virtual ~Graph();
+  Graph():id(0) {}
+  virtual ~Graph() {}
   //=========================================================================
   // Graph hierarchy acces and building
   //=========================================================================
@@ -108,10 +108,11 @@ public:
   virtual  void clear()=0;
   /**
    * Creates and returns a new SubGraph of the graph
-   * The elements of the new SubGraph is those selected in the selection
+   * The elements of the new SubGraph are those selected in the selection
    * if there is no selection an empty SubGraph is return.
    */
-  virtual Graph *addSubGraph(BooleanProperty *selection=0)=0;
+  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+			     unsigned int id = 0)=0;
   /**
    *  Creates and returns the subgraph induced by a set of nodes
    */
@@ -472,7 +473,7 @@ protected:
   void notifyDestroy();
   void notifyAddSubGraph(Graph*);
 
-private:
+protected:
 
   unsigned int id;
 };

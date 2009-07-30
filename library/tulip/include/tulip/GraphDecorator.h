@@ -25,7 +25,8 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   }
 
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection=0);
+  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+			     unsigned int id = 0);
   virtual void delSubGraph(Graph * s);
   virtual void delAllSubGraphs(Graph *s);
   virtual Graph* getSuperGraph()const;

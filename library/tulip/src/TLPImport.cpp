@@ -309,7 +309,7 @@ struct TLPGraphBuilder:public TLPTrue {
       BooleanProperty sel(clusterIndex[supergraphId]);
       sel.setAllNodeValue(false);
       sel.setAllEdgeValue(false);
-      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel);
+      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel, id);
       clusterIndex[id]->setAttribute("name", name);
       return true;
     }

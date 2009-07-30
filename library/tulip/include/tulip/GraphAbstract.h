@@ -21,7 +21,8 @@ public:
   GraphAbstract(Graph *supergraph=0);
   virtual ~GraphAbstract();
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection=0);
+  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+			     unsigned int id = 0);
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
   virtual Graph* getSuperGraph()const;
