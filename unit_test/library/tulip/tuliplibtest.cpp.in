@@ -1,4 +1,6 @@
 //#include <cppunit/ui/qt/TestRunner.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
 #include <cppunit/ui/text/TestRunner.h>
@@ -9,7 +11,14 @@
 #endif
 
 int main( int argc, char** argv ) {
-  std::string tlpdir("@libdir@");
+  std::string tlpdir("@prefix@");
+  // check for lib64
+  std::string tlpdir64 = tlpdir + "/lib64/tlp";
+  struct stat statInfo;
+  if (stat(tlpdir64.c_str(), &statInfo) == 0)
+    tlpdir += "/lib64";
+  else
+    tlpdir += "/lib";
   setenv("TLP_DIR", tlpdir.c_str(), 1);
   tlp::initTulipLib();
   tlp::PluginLoader* pLoader = NULL;
