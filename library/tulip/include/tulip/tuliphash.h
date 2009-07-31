@@ -1,5 +1,6 @@
 #ifndef TLP_HASH_H
 #define TLP_HASH_H
+#include "tulip/tulipconf.h"
 #if  (__GNUC__ < 4 || __GNUC_MINOR__ < 1)
 #  if (__GNUC__ < 3)
 #    include <hash_map>
@@ -12,6 +13,9 @@
 #  define TLP_HASH_SET stdext::hash_set
 #  define TLP_BEGIN_HASH_NAMESPACE namespace stdext
 #  define TLP_END_HASH_NAMESPACE
+
+#  include <string>
+
 namespace stdext {
   template<> struct hash<const std::string>{
     size_t operator()(const std::string &s) const {return hash<const char *>()(s.c_str()); }
