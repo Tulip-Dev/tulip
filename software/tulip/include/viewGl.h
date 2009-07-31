@@ -4,12 +4,6 @@
 #define viewGl_included
 #include <map>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <vector>
 #include <QtGui/qdockwidget.h>
 #include <QtGui/qsplitter.h>

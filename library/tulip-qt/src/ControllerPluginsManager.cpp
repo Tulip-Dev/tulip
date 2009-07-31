@@ -1,8 +1,4 @@
 #include "tulip/ControllerPluginsManager.h"
-
-#include <tulip/hash_string.h>
-#include <ext/hash_map>
-
 #include "tulip/TlpQtTools.h"
 
 //====================================================

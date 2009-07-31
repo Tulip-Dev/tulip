@@ -1,6 +1,6 @@
 #include "tulip/GlyphManager.h"
 
-#include <tulip/hash_string.h>
+#include <tulip/tuliphash.h>
 
 #include "tulip/Glyph.h"
 
@@ -17,8 +17,8 @@ using namespace std;
 
 namespace tlp
 {
-  static stdext::hash_map<int,std::string>   glyphIdToName;
-  static stdext::hash_map<std::string, int>  nameToGlyphId;
+  static TLP_HASH_MAP<int,std::string>   glyphIdToName;
+  static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
 
   GlyphManager::GlyphManager() {
     GlyphFactory::initFactory();

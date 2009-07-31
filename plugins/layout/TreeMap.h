@@ -2,12 +2,7 @@
 #ifndef _TREELEAFLAYOUT_H
 #define _TREELEAFLAYOUT_H
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
 /** \addtogroup layout */
@@ -50,8 +45,8 @@ public:
 
 private:
   void dfsPlacement(tlp::node n, int depth, double x, double y, double width, double height,
-		    bool direction, stdext::hash_map<tlp::node,double> &value);
-  double initVal(tlp::node n, stdext::hash_map<tlp::node,double> &value);
+		    bool direction, TLP_HASH_MAP<tlp::node,double> &value);
+  double initVal(tlp::node n, TLP_HASH_MAP<tlp::node,double> &value);
   tlp::SizeProperty *size;
   tlp::DoubleProperty *metric;
   tlp::ColorProperty *color;

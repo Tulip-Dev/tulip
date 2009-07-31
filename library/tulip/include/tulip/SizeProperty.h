@@ -6,6 +6,7 @@
 #include <config.h>
 #endif
 
+#include "tulip/tuliphash.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/SizeAlgorithm.h"
@@ -43,8 +44,8 @@ protected:
   void resetMinMax();
 
 private:
-  stdext::hash_map<unsigned long, Size> max,min;
-  stdext::hash_map<unsigned long, bool> minMaxOk;
+  TLP_HASH_MAP<unsigned long, Size> max,min;
+  TLP_HASH_MAP<unsigned long, bool> minMaxOk;
   void computeMinMax(Graph * sg=NULL);
 };
 

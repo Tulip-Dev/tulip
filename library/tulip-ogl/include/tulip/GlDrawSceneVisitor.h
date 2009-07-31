@@ -11,13 +11,8 @@
 #ifndef Tulip_GLDRAWSCENEVISITOR_H
 #define Tulip_GLDRAWSCENEVISITOR_H
 
+#include "tulip/tuliphash.h"
 #include "tulip/GlSceneVisitor.h"
-
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 
 namespace tlp {
   
@@ -27,7 +22,7 @@ namespace tlp {
 
   public:
 
-    GlDrawSceneVisitor(stdext::hash_map<unsigned int,float>* lod,GlGraphInputData* inputData):inputData(inputData) {lodMap=lod;}
+    GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int,float>* lod,GlGraphInputData* inputData):inputData(inputData) {lodMap=lod;}
 
     virtual void visit(GlSimpleEntity *entity);
     virtual void visit(GlComplexeEntity *entity);
@@ -35,7 +30,7 @@ namespace tlp {
 
   private:
     
-    stdext::hash_map<unsigned int,float>* lodMap;
+    TLP_HASH_MAP<unsigned int,float>* lodMap;
     GlGraphInputData *inputData;
 
   };

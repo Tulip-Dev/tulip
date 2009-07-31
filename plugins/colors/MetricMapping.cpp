@@ -1,12 +1,6 @@
 //-*-c++-*-
 #include <cmath>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <tulip/TulipPlugin.h>
 #include <tulip/Color.h>
 #include <tulip/Vector.h>

@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <climits>
 #include "tulip/tulipconf.h"
@@ -488,7 +489,7 @@ TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 //================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-namespace stdext {
+TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct TLP_SCOPE hash<const tlp::Graph *> {
     size_t operator()(const tlp::Graph *s) const {return size_t(s->getId());}
@@ -497,7 +498,7 @@ namespace stdext {
   struct TLP_SCOPE hash<tlp::Graph *> {
     size_t operator()(tlp::Graph *s) const {return size_t(s->getId());}
   };
-}
+} TLP_END_HASH_NAMESPACE
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 //include the template code

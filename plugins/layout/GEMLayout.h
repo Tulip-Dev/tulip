@@ -3,11 +3,6 @@
 
 #include <queue>
 #include <vector>
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 
 #include <tulip/TulipPlugin.h>
 using namespace tlp;

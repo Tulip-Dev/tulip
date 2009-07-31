@@ -12,6 +12,7 @@
 #define Tulip_QTMETANODERENDERER_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/GlMetaNodeRenderer.h>
 
 #include <tulip/ObservableGraph.h>
@@ -102,7 +103,7 @@ namespace tlp {
 
     std::map<Graph *,std::list<Graph *> > parentGraphToGraph;
     std::multimap<PropertyInterface *, Graph*> propertyToGraph;
-    stdext::hash_map<Graph *,bool> haveToRenderGraph;
+    TLP_HASH_MAP<Graph *,bool> haveToRenderGraph;
 
     GlMainWidget *glMainWidget;
     GlGraphInputData *inputData;

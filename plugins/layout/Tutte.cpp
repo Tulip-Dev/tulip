@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <set>
+#include <tulip/tuliphash.h>
 #include <tulip/TriconnectedTest.h>
 #include "Tutte.h"
 
@@ -15,8 +16,8 @@ Tutte::Tutte(const PropertyContext &context):LayoutAlgorithm(context)
 Tutte::~Tutte() {}
 //====================================================
 list<node> findCycle(Graph *sg) {
-  stdext::hash_map<node,node> father;
-  stdext::hash_map<node,bool> visited;
+  TLP_HASH_MAP<node,node> father;
+  TLP_HASH_MAP<node,bool> visited;
   std::list<node> bfs;
   Iterator<node> *it=sg->getNodes();
   node itn=it->next();

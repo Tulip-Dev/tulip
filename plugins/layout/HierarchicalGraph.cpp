@@ -222,14 +222,14 @@ void HierarchicalGraph::DagLevelSpanningTree(Graph* sg, DoubleProperty *embeddin
 }
 //==============================================================================================================
 void HierarchicalGraph::computeEdgeBends(const Graph *mySGraph, LayoutProperty &tmpLayout, 
-					 const stdext::hash_map<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
+					 const TLP_HASH_MAP<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
   for (vector<edge>::const_iterator it = reversedEdges.begin(); it != reversedEdges.end(); ++it)
     isReversed.set((*it).id, true);
   
-  for (stdext::hash_map<edge,edge>::const_iterator it = replacedEdges.begin(); it!=replacedEdges.end(); ++it) {
+  for (TLP_HASH_MAP<edge,edge>::const_iterator it = replacedEdges.begin(); it!=replacedEdges.end(); ++it) {
     edge toUpdate = (*it).first;
     edge start = (*it).second;
     edge end = start;
@@ -368,7 +368,7 @@ bool HierarchicalGraph::run() {
   
   //========================================================================
   list<node> properAddedNodes;
-  stdext::hash_map<edge,edge> replacedEdges;
+  TLP_HASH_MAP<edge,edge> replacedEdges;
   IntegerProperty *edgeLength = 0;
   if (!TreeTest::isTree(mySGraph)) {
     //We transform the dag in a proper dag

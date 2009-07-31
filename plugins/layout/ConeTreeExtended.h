@@ -2,6 +2,7 @@
 #ifndef _TREE3DLAYOUT_H
 #define _TREE3DLAYOUT_H
 
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 /** \addtogroup layout */
 /*@{*/
@@ -35,8 +36,10 @@ public:
   ~ConeTreeExtended();
   bool run();
 private:
-  double treePlace3D(tlp::node n, stdext::hash_map<tlp::node,double> *posRelX, stdext::hash_map<tlp::node,double> *posRelY);
-  void calcLayout(tlp::node n, stdext::hash_map<tlp::node,double> *px, stdext::hash_map<tlp::node,double> *py,
+  double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node,double> *posRelX,
+		     TLP_HASH_MAP<tlp::node,double> *posRelY);
+  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
+		  TLP_HASH_MAP<tlp::node,double> *py,
 		  double x, double y, int level);
   void computeLayerSize(tlp::node , unsigned int);
   void computeYCoodinates(tlp::node);

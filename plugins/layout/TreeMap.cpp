@@ -8,7 +8,7 @@ using namespace std;
 using namespace tlp;
 
 void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, double height,
-			   bool direction, stdext::hash_map<node,double> &value) {
+			   bool direction, TLP_HASH_MAP<node,double> &value) {
   //Affecte la valeur du noeud courant
   layoutResult->setNodeValue(n,Coord(x+(double)width/2,y+(double)height/2,depth));
   size->setNodeValue(n,Size(width,height,1));
@@ -51,7 +51,7 @@ TreeMap::TreeMap(const PropertyContext &context):LayoutAlgorithm(context){}
 
 TreeMap::~TreeMap() {}
 
-double TreeMap::initVal(node n, stdext::hash_map<node,double> &value) {
+double TreeMap::initVal(node n, TLP_HASH_MAP<node,double> &value) {
   if (graph->outdeg(n)==0) { 
     if (!(value[n]=metric->getNodeValue(n)>0)) value[n]=1;
     return value[n];
@@ -72,7 +72,7 @@ bool TreeMap::run() {
   // ensure size updates will be kept after a pop
   preservePropertyUpdates(size);
 
-  stdext::hash_map<node,double> value(graph->numberOfNodes());
+  TLP_HASH_MAP<node,double> value(graph->numberOfNodes());
 
   Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {

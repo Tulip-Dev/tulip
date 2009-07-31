@@ -5,7 +5,6 @@
 #include <list>
 #include <map>
 #include <iostream>
-#include <ext/hash_map>
 #include <tulip/StableIterator.h>
 #include "StrengthClustering.h"
 

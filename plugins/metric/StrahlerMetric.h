@@ -2,6 +2,7 @@
 #ifndef _STRAHLERGRAPH2METRIC_H
 #define _STRAHLERGRAPH2METRIC_H
 
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 struct Strahler {
   Strahler(int stra=1,int sta=0,int used=0):strahler(stra),stacks(sta),usedStack(used){}
@@ -61,9 +62,12 @@ public:
   bool check(std::string &);
 
 private:
-  Strahler topSortStrahler(tlp::node n,int &curPref, stdext::hash_map<tlp::node,int> &tofree, stdext::hash_map<tlp::node,int> &prefix,
-			   stdext::hash_map<tlp::node,bool> &visited, stdext::hash_map<tlp::node,bool> &finished,
-			   stdext::hash_map<tlp::node,Strahler> &cachedValues);
+  Strahler topSortStrahler(tlp::node n,int &curPref,
+			   TLP_HASH_MAP<tlp::node,int> &tofree,
+			   TLP_HASH_MAP<tlp::node,int> &prefix,
+			   TLP_HASH_MAP<tlp::node,bool> &visited,
+			   TLP_HASH_MAP<tlp::node,bool> &finished,
+			   TLP_HASH_MAP<tlp::node,Strahler> &cachedValues);
   bool allNodes;
 };
 /*@}*/

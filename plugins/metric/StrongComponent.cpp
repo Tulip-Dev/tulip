@@ -8,9 +8,9 @@ using namespace std;
 using namespace tlp;
 
 int StrongComponent::attachNumerotation(node n,
-					stdext::hash_map<node,bool> &visited,
-					stdext::hash_map<node,bool> &finished,
-					stdext::hash_map<node,int> &minAttach,
+					TLP_HASH_MAP<node,bool> &visited,
+					TLP_HASH_MAP<node,bool> &finished,
+					TLP_HASH_MAP<node,int> &minAttach,
 					int &id,
 					stack<node> &renum,
 					int &curComponent
@@ -53,10 +53,10 @@ StrongComponent::StrongComponent(const PropertyContext &context):DoubleAlgorithm
 StrongComponent::~StrongComponent() {}
 
 bool StrongComponent::run() {
-  stdext::hash_map<node,bool> visited(graph->numberOfNodes());
-  stdext::hash_map<node,bool> finished(graph->numberOfNodes());
+  TLP_HASH_MAP<node,bool> visited(graph->numberOfNodes());
+  TLP_HASH_MAP<node,bool> finished(graph->numberOfNodes());
   stack<node> renum;
-  stdext::hash_map<node,int> cachedValues(graph->numberOfNodes());
+  TLP_HASH_MAP<node,int> cachedValues(graph->numberOfNodes());
   int id=1;
   int curComponent=0;
   Iterator<node> *itN=graph->getNodes();

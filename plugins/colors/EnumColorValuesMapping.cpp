@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <sstream>
 
+#include <tulip/tuliphash.h>
 #include <tulip/Graph.h>
-#include <tulip/hash_string.h>
 #include <tulip/StableIterator.h>
 #include <tulip/TulipPlugin.h>
 #include <tulip/Color.h>
@@ -52,7 +52,7 @@ class EnumColorValuesMapping: public ColorAlgorithm {
   // flag for element type
   bool onNodes;
   // user choosen colors
-  stdext::hash_map<string, Color> colors;
+  TLP_HASH_MAP<string, Color> colors;
 
 public:
   //================================================================================
@@ -181,7 +181,7 @@ public:
     vector<GlLabel *> labelVector;
     int i=0;
     int xMax=0;
-    for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
+    for(TLP_HASH_MAP<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
       GlRect *rect=new GlRect(Coord(15,25+i*15,0),Coord(25,15+i*15,0),(*it).second,(*it).second);
       GlLabel *label=new GlLabel(Coord(30,20+i*15,0),Coord(5+12*(*it).first.size(),15,0),Color(0,0,0,255),true);
       label->setText((*it).first);
@@ -195,7 +195,7 @@ public:
     GlRect *rect=new GlRect(Coord(10,15+i*15,0),Coord(xMax+5,10,0),Color(0,0,0,50),Color(0,0,0,50));
     composite->addGlEntity(rect,"rect");
     i=0;
-    for(stdext::hash_map<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
+    for(TLP_HASH_MAP<string, Color>::iterator it=colors.begin();it!=colors.end();++it) {
       stringstream sstr;
       sstr << i ;
       composite->addGlEntity(rectVector[i],"color"+sstr.str());

@@ -14,12 +14,6 @@
 
 #include <tulip/tulipconf.h>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <tulip/Matrix.h>
 #include <tulip/Vector.h>
 

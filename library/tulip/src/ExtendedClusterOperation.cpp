@@ -2,7 +2,6 @@
 #include <climits>
 #include <sstream>
 #include <iomanip>
-#include <ext/hash_set>
 #include <tulip/Graph.h>
 #include <tulip/Node.h>
 #include <tulip/GraphProperty.h>
@@ -64,7 +63,7 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   double vMax = DBL_MIN;
   double vAvg = 0;
   DoubleProperty *graphMetric = graph->getProperty<DoubleProperty>("viewMetric");
-  while (itN->hasNext()) {
+  while (itN->hasNext()){
     nbNodes++;
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
@@ -76,29 +75,26 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
     }
     vAvg += value;
   } delete itN;
-
-  if (nbNodes) {
-    // set metanode label to label of viewMetric max corresponding node
-    cluster->getProperty<StringProperty>("viewLabel")->setNodeValue(metanode, graph->getProperty<StringProperty>("viewLabel")->getNodeValue(viewMetricMaxNode));
-    // set metanode viewMetric to average value
-    cluster->getProperty<DoubleProperty>("viewMetric")->setNodeValue(metanode, vAvg/nbNodes);
-    // compute other metrics average value
-    string pName;
-    forEach(pName, graph->getProperties()) {
-      PropertyInterface *property = graph->getProperty(pName);
-      if (dynamic_cast<DoubleProperty *>(property) &&
-	  // try to avoid view... properties
-	  pName.find("view") != 0) {
-	graphMetric = graph->getProperty<DoubleProperty>(pName);
-	itN = cluster->getNodes();
-	vAvg = 0;
-	while (itN->hasNext()) {
-	  vAvg += graphMetric->getNodeValue(itN->next());
-	} delete itN;
-	// set metanode value to average value
-	cluster->getProperty<DoubleProperty>(pName)->setNodeValue(metanode,
-								  vAvg/nbNodes);
-      }
+  // set metanode label to label of viewMetric max corresponding node
+  cluster->getProperty<StringProperty>("viewLabel")->setNodeValue(metanode, graph->getProperty<StringProperty>("viewLabel")->getNodeValue(viewMetricMaxNode));
+  // set metanode viewMetric to average value
+  cluster->getProperty<DoubleProperty>("viewMetric")->setNodeValue(metanode, vAvg/nbNodes);
+  // compute other metrics average value
+  string pName;
+  forEach(pName, graph->getProperties()) {
+    PropertyInterface *property = graph->getProperty(pName);
+    if (dynamic_cast<DoubleProperty *>(property) &&
+	// try to avoid view... properties
+	pName.find("view") != 0) {
+      graphMetric = graph->getProperty<DoubleProperty>(pName);
+      itN = cluster->getNodes();
+      vAvg = 0;
+      while (itN->hasNext()) {
+	vAvg += graphMetric->getNodeValue(itN->next());
+      } delete itN;
+      // set metanode value to average value
+      cluster->getProperty<DoubleProperty>(pName)->setNodeValue(metanode,
+								vAvg/nbNodes);
     }
   }
   Iterator<edge> *itE= cluster->getEdges();
@@ -137,9 +133,9 @@ node createMNode (Graph *graph, Graph* subGraph,
   //create new meta edges from nodes to metanode
   Graph* super = graph->getSuperGraph();
   colors = super->getProperty<ColorProperty> (colorProperty);
-  hash_map<node, hash_set<node> > edges;
-  hash_map<node, edge> metaEdges;
-  hash_map<edge, set<edge> > subEdges;
+  TLP_HASH_MAP<node, hash_set<node> > edges;
+  TLP_HASH_MAP<node, edge> metaEdges;
+  TLP_HASH_MAP<edge, set<edge> > subEdges;
   Iterator<node> *subGraphNodes = subGraph->getNodes();
   while (subGraphNodes->hasNext()) {
     node n = subGraphNodes->next();
@@ -209,7 +205,7 @@ node createMNode (Graph *graph, Graph* subGraph,
     }
   } delete subGraphNodes;
   // update metaInfo of new meta edges
-  hash_map<edge, set<edge> >::const_iterator it;
+  TLP_HASH_MAP<edge, set<edge> >::const_iterator it;
   for(it = subEdges.begin(); it != subEdges.end(); ++it)
     metaInfo->setEdgeValue((*it).first, (*it).second);
 
@@ -342,7 +338,7 @@ void tlp::openMetaNode(Graph *graph, node metaNode,
     buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node() );
     buildMapping(metaGraph->getNodes() , mappingN, metaInfo, node() );
 
-    hash_map<node, Color> metaEdgeToColor;
+    TLP_HASH_MAP<node, Color> metaEdgeToColor;
     while (metaEdges->hasNext()) {
       edge metaEdge = metaEdges->next();
       metaEdgeToColor[graph->opposite (metaEdge, metaNode)] =
@@ -350,7 +346,7 @@ void tlp::openMetaNode(Graph *graph, node metaNode,
     }
     //Remove the metagraph from the hierarchy and remove the metanode
     root->delAllNode(metaNode);
-    hash_map<node, hash_set<node> > edges;
+    TLP_HASH_MAP<node, hash_set<node> > edges;
     //=================================
     //StableIterator<node> metaGraphNodes (metaGraph->getNodes());
     //while (metaGraphNodes.hasNext()) {
@@ -464,9 +460,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   //create new meta edges from nodes to metanode
   Graph* super = getSuperGraph();
   colors = super->getProperty<ColorProperty> (colorProperty);
-  hash_map<node, hash_set<node> > edges;
-  hash_map<node, edge> metaEdges;
-  hash_map<edge, set<edge> > subEdges;
+  TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
+  TLP_HASH_MAP<node, edge> metaEdges;
+  TLP_HASH_MAP<edge, set<edge> > subEdges;
   Iterator<node> *subGraphNodes = subGraph->getNodes();
   while (subGraphNodes->hasNext()) {
     node n = subGraphNodes->next();
@@ -538,7 +534,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     }
   } delete subGraphNodes;
   // update metaInfo of new meta edges
-  hash_map<edge, set<edge> >::const_iterator it;
+  TLP_HASH_MAP<edge, set<edge> >::const_iterator it;
   for(it = subEdges.begin(); it != subEdges.end(); ++it)
     metaInfo->setEdgeValue((*it).first, (*it).second);
 
@@ -603,7 +599,7 @@ void Graph::openMetaNode(node metaNode) {
     buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node() );
     buildMapping(metaGraph->getNodes() , mappingN, metaInfo, node() );
 
-    hash_map<node, Color> metaEdgeToColor;
+    TLP_HASH_MAP<node, Color> metaEdgeToColor;
     while (metaEdges->hasNext()) {
       edge metaEdge = metaEdges->next();
       metaEdgeToColor[opposite (metaEdge, metaNode)] =
@@ -611,7 +607,7 @@ void Graph::openMetaNode(node metaNode) {
     }
     //Remove the metagraph from the hierarchy and remove the metanode
     root->delAllNode(metaNode);
-    hash_map<node, hash_set<node> > edges;
+    TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
     //=================================
     //StableIterator<node> metaGraphNodes (metaGraph->getNodes());
     //while (metaGraphNodes.hasNext()) {

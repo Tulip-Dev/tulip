@@ -12,9 +12,9 @@
 #ifndef TULIP_PLANARITYTESTX_H
 #define TULIP_PLANARITYTESTX_H
 
-#include <tulip/tulipconf.h>
-#include <ext/hash_map>
 #include <list>
+#include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h> 
 
@@ -47,7 +47,7 @@ private:
   bool compute(Graph *graph);
   PlanarityTest(){}
   static PlanarityTest * instance;
-  stdext::hash_map<unsigned long,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 /*@}*/
 

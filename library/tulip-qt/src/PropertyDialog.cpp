@@ -34,7 +34,6 @@
 #include <tulip/SGHierarchyWidget.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
-#include <tulip/hash_string.h>
 
 #include "tulip/PropertyDialog.h"
 #include "tulip/CopyPropertyDialog.h"

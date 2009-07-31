@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 #include <algorithm>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 #include <tulip/Glyph.h>
 #include <tulip/TreeTest.h>
@@ -9,12 +10,6 @@
 #include "tulip/Border.h"
 #include <tulip/GlTextureManager.h>
 
-
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 
 using namespace std;
 using namespace tlp;
@@ -61,7 +56,7 @@ public:
     virtual Coord getAnchor(const Coord& vector) const;
 
 protected:
-    typedef stdext::hash_map<node, int> mapNodeLevel_t;
+    typedef TLP_HASH_MAP<node, int> mapNodeLevel_t;
 
     struct TreeCache {
         bool           isTree;
@@ -76,7 +71,7 @@ protected:
         TreeCache():texObj(0){
         }
     };
-    typedef stdext::hash_map<Graph*, TreeCache> mapGraphCache_t;
+    typedef TLP_HASH_MAP<Graph*, TreeCache> mapGraphCache_t;
     mapGraphCache_t mapTree;
 
     inline node findRoot(node n);

@@ -11,8 +11,8 @@
 
 #include <cmath>
 #include <stdio.h>
-#include "StrahlerMetric.h"
 #include <tulip/StringProperty.h>
+#include "StrahlerMetric.h"
 
 DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","1.0","Graph");
 
@@ -68,11 +68,11 @@ struct GreaterStackEval {
 };
 
 Strahler StrahlerMetric::topSortStrahler(node n, int &curPref,
-					 stdext::hash_map<node,int> &tofree,
-					 stdext::hash_map<node,int> &prefix,
-					 stdext::hash_map<node,bool> &visited,
-					 stdext::hash_map<node,bool> &finished,
-					 stdext::hash_map<node,Strahler> &cachedValues)
+					 TLP_HASH_MAP<node,int> &tofree,
+					 TLP_HASH_MAP<node,int> &prefix,
+					 TLP_HASH_MAP<node,bool> &visited,
+					 TLP_HASH_MAP<node,bool> &finished,
+					 TLP_HASH_MAP<node,Strahler> &cachedValues)
 {
   visited[n]=true;
   Strahler result;
@@ -202,11 +202,11 @@ bool StrahlerMetric::run() {
     dataSet->get("All nodes", allNodes);
     dataSet->get(COMPUTATION_TYPE, computationTypes);
   }
-  stdext::hash_map<node,bool> visited;
-  stdext::hash_map<node,bool> finished;
-  stdext::hash_map<node,int> prefix;
-  stdext::hash_map<node,int> tofree;
-  stdext::hash_map<node,Strahler> cachedValues;
+  TLP_HASH_MAP<node,bool> visited;
+  TLP_HASH_MAP<node,bool> finished;
+  TLP_HASH_MAP<node,int> prefix;
+  TLP_HASH_MAP<node,int> tofree;
+  TLP_HASH_MAP<node,Strahler> cachedValues;
   int curPref=0;
   /*
     Selection *parameter=graph->getProperty<BooleanProperty>("viewSelection");

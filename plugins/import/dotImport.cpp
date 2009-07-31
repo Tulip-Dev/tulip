@@ -1,7 +1,7 @@
 #include <string.h>
 #include <errno.h>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
-#include <tulip/hash_string.h>
 #include <dotImportCLUT.h>
 
 using namespace std;

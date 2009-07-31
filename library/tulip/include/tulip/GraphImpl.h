@@ -6,12 +6,6 @@
 
 #include <set>
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
-
 #include <vector>
 #include <ext/slist>
 #include "tulip/GraphAbstract.h"

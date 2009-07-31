@@ -1,3 +1,4 @@
+#include "tulip/tuliphash.h"
 #include "tulip/GraphTools.h"
 #include "tulip/GraphMeasure.h"
 #include "tulip/AcyclicTest.h"
@@ -11,24 +12,16 @@
 #include "tulip/ConnectedTest.h"
 #include "tulip/ExtendedClusterOperation.h"
 #include "tulip/Ordering.h"
-#include "tulip/hash_string.h"
 
 #include <math.h>
 
 using namespace std;
 
-namespace stdext {
-  template<>
-  struct hash<double> {
-    size_t operator()(const double s) const { return (size_t) s; }
-  };
-};
-
 namespace tlp {
   
   //======================================================================
   void makeProperDag(Graph* graph,list<node> &addedNodes, 
-		     stdext::hash_map<edge,edge> &replacedEdges, 
+		     TLP_HASH_MAP<edge,edge> &replacedEdges, 
 		     IntegerProperty *edgeLength) {
     if (TreeTest::isTree(graph)) return;
     assert(AcyclicTest::isAcyclic(graph));
@@ -68,7 +61,7 @@ namespace tlp {
 	graph->addEdge(tmp1,graph->target(ite));
       }
     }
-    for (stdext::hash_map<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it)
+    for (TLP_HASH_MAP<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it)
       graph->delEdge((*it).first);
     assert(AcyclicTest::isAcyclic(graph));
   }
@@ -358,7 +351,7 @@ namespace tlp {
 
     // try to work with double value if it's a DoubleProperty
     if (typeid(*property) == typeid(DoubleProperty)) {
-      stdext::hash_map<double, Graph *> partitions;
+      TLP_HASH_MAP<double, Graph *> partitions;
       DoubleProperty *metric = (DoubleProperty *) property;
       if (onNodes) {
 	while (itN.hasNext()) {
@@ -424,7 +417,7 @@ namespace tlp {
 	}
       }
     } else {
-      stdext::hash_map<string, Graph *> partitions;
+      TLP_HASH_MAP<string, Graph *> partitions;
       if (onNodes) {
 	while (itN.hasNext()) {
 	  Graph *sg;

@@ -4,8 +4,8 @@ nobase_include_HEADERS = \
 	tulip/ConvexHull.h \
 	tulip/Delaunay.h \
 	tulip/tulipconf.h \
+	tulip/tuliphash.h \
 	tulip/GraphTools.h \
-	tulip/hash_string.h \
 	tulip/Array.h\
 	tulip/cxx/Array.cxx\
 	tulip/Vector.h\

@@ -5,11 +5,6 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <string>
 
 #include <QtGui/qwidget.h>
@@ -21,7 +16,7 @@
 
 namespace tlp {
 
-typedef stdext::hash_map<int, std::string> GlyphTableString;
+typedef TLP_HASH_MAP<int, std::string> GlyphTableString;
 class PropertyInterface;
 
 }

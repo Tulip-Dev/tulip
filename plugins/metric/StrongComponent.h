@@ -12,6 +12,7 @@
 #ifndef _StrongComponent_H
 #define _StrongComponent_H
 #include <stack>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 struct NodeInfo{
   NodeInfo(int stra=0,int sta=0):prefixOrder(stra),minAttach(sta){}
@@ -49,8 +50,10 @@ public:
   void reset();
   
 private:
-  int  attachNumerotation(tlp::node, stdext::hash_map<tlp::node,bool> &, stdext::hash_map<tlp::node,bool> &,
-			  stdext::hash_map<tlp::node,int> &, int &, std::stack<tlp::node> &, int &);
+  int  attachNumerotation(tlp::node, TLP_HASH_MAP<tlp::node,bool> &,
+			  TLP_HASH_MAP<tlp::node,bool> &,
+			  TLP_HASH_MAP<tlp::node,int> &, int &,
+			  std::stack<tlp::node> &, int &);
 };
 
 #endif
