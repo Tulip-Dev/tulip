@@ -59,7 +59,7 @@ private:
   void destroy(Graph *);
   AcyclicTest();
   static AcyclicTest * instance;
-  TLP_HASH_MAP<unsigned int,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 }
 /*@}*/
