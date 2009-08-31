@@ -295,7 +295,6 @@ namespace tlp {
       }
       scene.prerenderMetaNodes();
       scene.draw();
-      drawInteractors();
 
       glDisable(GL_TEXTURE_2D);
       glDisable(GL_DEPTH_TEST);
@@ -326,6 +325,7 @@ namespace tlp {
       glEnable(GL_BLEND);
       glEnable(GL_LIGHTING);
       drawForegroundEntities();
+      drawInteractors();
 
       swapBuffers();
       emit graphRedrawn(this,graphChanged);
