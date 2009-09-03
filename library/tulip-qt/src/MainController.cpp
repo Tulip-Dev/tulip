@@ -367,7 +367,7 @@ namespace tlp {
       if(view){
         view->getData(&graph,&viewData);
         tmp.set<DataSet>(viewNames[view],viewData);
-        tmp.set<string>("graphName",graph->getAttribute<string>("name"));
+        tmp.set<unsigned int>("id",graph->getId());
         tmp.set<int>("x",rect.left());
         tmp.set<int>("y",rect.top());
         tmp.set<int>("width",rect.width());
