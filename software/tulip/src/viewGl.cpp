@@ -187,6 +187,7 @@ void viewGl::startTulip() {
   enableElements(false);
 
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
+  connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 
   /*QWidget *centralwidget = new QWidget(this);
@@ -795,27 +796,24 @@ void viewGl::plugins() {
 
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
 
-  /*QDialog dialog;
-  QVBoxLayout layout;
-  layout.setContentsMargins(0,0,0,0);
-  PluginsManagerMainWindow pluginsManager(pluginLoader.pluginsList);
-
-  layout.addWidget(&pluginsManager);
-
-  dialog.setLayout(&layout);*/
   pluginsManager->exec();
   if (pluginsManager->pluginUpdatesPending()) {
-    int result = QMessageBox::warning(this,
-				      tr("Update plugins"),
-				      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
-				      QMessageBox::Yes | QMessageBox::Default,
-				      QMessageBox::No);
-    if(result == QMessageBox::Yes)
-      fileExit();
+    displayRestartForPlugins();
   }
 }
 //==============================================================
+void viewGl::displayRestartForPlugins() {
+  int result = QMessageBox::warning(this,
+      tr("Update plugins"),
+      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+      QMessageBox::Yes | QMessageBox::Default,
+      QMessageBox::No);
+  if(result == QMessageBox::Yes)
+    fileExit();
+}
+//==============================================================
 void viewGl::deletePluginsUpdateChecker(){
+  disconnect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
   delete pluginsUpdateChecker;
   plugins();
 }

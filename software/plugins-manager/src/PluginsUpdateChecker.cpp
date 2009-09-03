@@ -68,13 +68,11 @@ namespace tlp {
     settings.endGroup();
 
     if(plugins.size()==0){
-      emit checkFinished(false);
       return;
     }
 
     UpdatePluginsDialog dialog(plugins,parent);
     if(dialog.exec()==QDialog::Rejected){
-      emit checkFinished(false);
       return;
     }
 
@@ -83,7 +81,6 @@ namespace tlp {
     dialog.getPluginsToUpdate(pluginsToUpdate);
 
     if(pluginsToUpdate.size()==0){
-      emit checkFinished(false);
       return;
     }
 
@@ -91,15 +88,12 @@ namespace tlp {
     connect(updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalled()));
     connect(updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalled()));
     numberOfPluginsToUpdate=updatePlugin->pluginsCheckAndUpdate(msm,pluginsToUpdate, pluginsToRemove,parent);
-    if(numberOfPluginsToUpdate==0){
-      emit checkFinished(false);
-    }
   }
 
   void PluginsUpdateChecker::pluginInstalled(){
     numberOfPluginsToUpdate--;
     if(numberOfPluginsToUpdate==0){
-      emit checkFinished(true);
+      emit updateFinished();
     }
   }
 
@@ -114,12 +108,22 @@ namespace tlp {
       CompletePluginsList pluginsList;
       msm->getPluginsList(pluginsList);
       for(CompletePluginsList::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
-	if(!(*it).first->local) {
-	  DistPluginInfo *pluginInfo=(DistPluginInfo*)((*it).first);
-	  if(pluginInfo->version.compare(pluginInfo->localVersion)>0 && pluginInfo->localVersion!="") {
-	    pluginsOutOfDate.push_back(pluginInfo);
-	  }
-	}
+        if(!(*it).first->local) {
+          DistPluginInfo *pluginInfo=(DistPluginInfo*)((*it).first);
+          if(pluginInfo->version.compare(pluginInfo->localVersion)>0 && pluginInfo->localVersion!="") {
+#if defined(__APPLE__)
+            if(pluginInfo->macVersion){
+#elif defined(_WIN32)
+            if(pluginInfo->windowsVersion){
+#elif defined(I64)
+            if(pluginInfo->i64Version){
+#else
+            if(pluginInfo->linuxVersion){
+#endif
+              pluginsOutOfDate.push_back(pluginInfo);
+            }
+          }
+        }
       }
 
       displayPopup(pluginsOutOfDate);
