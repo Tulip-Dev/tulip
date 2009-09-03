@@ -209,6 +209,8 @@ void GlEdge::draw(float lod,GlGraphInputData* data,Camera* camera) {
 	}
 	else {
 		edgeSize = data->elementSize->getEdgeValue(e);
+		edgeSize[0]=edgeSize[0]/2.;
+		edgeSize[1]=edgeSize[1]/2.;
 	}
 
 	if (selected) {
