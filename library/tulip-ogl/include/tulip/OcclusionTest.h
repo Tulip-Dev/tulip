@@ -5,7 +5,7 @@
 
 namespace tlp {
 
-struct RectangleInt2D : public tlp::Rectangle<int> {
+struct TLP_GL_SCOPE RectangleInt2D : public tlp::Rectangle<int> {
   RectangleInt2D(int x,int y,int x1,int y1) {
     (*this)[0][0]=x;
     (*this)[0][1]=y;
@@ -15,7 +15,7 @@ struct RectangleInt2D : public tlp::Rectangle<int> {
   RectangleInt2D(const RectangleInt2D &r):tlp::Rectangle<int>(r){}
 };
 
-struct OcclusionTest {
+struct TLP_GL_SCOPE OcclusionTest {
   std::vector<RectangleInt2D> data;
   void reset() {
     data.clear();

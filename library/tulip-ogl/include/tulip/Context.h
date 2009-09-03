@@ -3,11 +3,14 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
+
+#include <tulip/tulipconf.h>
+
 namespace tlp {
 
 class Renderer;
 
-class Context {
+class TLP_GL_SCOPE Context {
   friend class TextRenderer;
   std::string font_name;
   int size;
