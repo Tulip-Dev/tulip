@@ -9,9 +9,9 @@ namespace tlp {
 
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
     elementColorPropName("viewColor"),elementLabelColorPropName("viewLabelColor"),elementSizePropName("viewSize"),elementLabelPositionPropName("viewLabelPosition"),
-    elementShapePropName("viewShape"),elementRotationPropName("viewRotation"),elementSelectedPropName("viewSelection"),elementLabelPropName("viewLabel"),
-    elementTexturePropName("viewTexture"),elementBorderColorPropName("viewBorderColor"),elementBorderWidthPropName("viewBorderWidth"),
-    elementLayoutPropName(""),
+    elementShapePropName("viewShape"),elementRotationPropName("viewRotation"),elementSelectedPropName("viewSelection"),elementFontPropName("viewFont"),
+    elementFontSizePropName("viewFontSize"),elementLabelPropName("viewLabel"),elementTexturePropName("viewTexture"),elementBorderColorPropName("viewBorderColor"),
+    elementBorderWidthPropName("viewBorderWidth"),elementLayoutPropName(""),
     graph(graph),parameters(parameters){
 
     reloadAllProperties();
@@ -44,6 +44,8 @@ namespace tlp {
 
     elementRotation = graph->getProperty<DoubleProperty>(elementRotationPropName);
     elementSelected = graph->getProperty<BooleanProperty>(elementSelectedPropName);
+    elementFont = graph->getProperty<StringProperty>(elementFontPropName);
+    elementFontSize = graph->getProperty<IntegerProperty>(elementFontSizePropName);
     elementLabel = graph->getProperty<StringProperty>(elementLabelPropName);
     elementLabelColor = graph->getProperty<ColorProperty>(elementLabelColorPropName);
     elementLabelPosition = graph->getProperty<IntegerProperty>(elementLabelPositionPropName);

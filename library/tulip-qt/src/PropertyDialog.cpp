@@ -53,6 +53,9 @@ namespace tlp {
     connect(removeButton , SIGNAL(clicked()) , SLOT(removeProperty()) );
     connect(newButton,SIGNAL(clicked()),SLOT(newProperty()));
     connect(cloneButton,SIGNAL(clicked()),SLOT(cloneProperty()));
+    connect(radioAll,SIGNAL(clicked()),SLOT(populatePropertiesList()));
+    connect(radioWork,SIGNAL(clicked()),SLOT(populatePropertiesList()));
+    connect(radioView,SIGNAL(clicked()),SLOT(populatePropertiesList()));
 
   }
   //=================================================
@@ -113,8 +116,7 @@ namespace tlp {
     this->graph=graph;
     editedProperty=0;
 
-    localProperties->clear();
-    inheritedProperties->clear();
+
     //Build the property list
     tableNodes->selectNodeOrEdge(true);
     tableEdges->selectNodeOrEdge(false);
@@ -122,17 +124,37 @@ namespace tlp {
     tableEdges->setGraph(graph);
     tableEdges->filterSelection(_filterSelection);
     tableNodes->filterSelection(_filterSelection);
-    if (graph==0) return;
+
+    populatePropertiesList();
+  }
+  //=================================================
+  void PropertyDialog::populatePropertiesList(){
+    localProperties->clear();
+    inheritedProperties->clear();
+
+    if(graph==0) return;
 
     Iterator<string> *it=graph->getLocalProperties();
     while (it->hasNext()) {
       string tmp=it->next();
+
+      if(radioView->isChecked() && tmp.substr(0,4)!="view")
+        continue;
+      if(radioWork->isChecked() && tmp.substr(0,4)=="view")
+        continue;
+
       QListWidgetItem* tmpItem = new QListWidgetItem(localProperties);
       tmpItem->setText(QString(tmp.c_str()));
     } delete it;
     it=graph->getInheritedProperties();
     while (it->hasNext()) {
       string tmp=it->next();
+
+      if(radioView->isChecked() && tmp.substr(0,4)!="view")
+        continue;
+      if(radioWork->isChecked() && tmp.substr(0,4)=="view")
+        continue;
+
       QListWidgetItem *tmpItem = new QListWidgetItem(inheritedProperties);
       tmpItem->setText(QString(tmp.c_str()));
     } delete it;

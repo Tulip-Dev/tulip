@@ -20,6 +20,7 @@
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/GlPointManager.h"
+#include "tulip/GlRenderer.h"
 
 #include <iostream>
 
@@ -172,10 +173,17 @@ namespace tlp {
         glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
     }
 
+    string fontName=data->elementFont->getNodeValue(n);
+    int fontSize=data->elementFontSize->getNodeValue(n);
+    if(!GlRenderer::checkFont(fontName))
+        fontName=data->parameters->getFontsPath()+"font.ttf";
+    if(fontSize==0)
+      fontSize=18;
+
     if(select)
-      renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
+      renderer->setContext(fontName, fontSize+2, 0, 0, 255);
     else
-      renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 18, 255, 255, 255);
+      renderer->setContext(fontName, fontSize, 255, 255, 255);
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size  &nodeSize  = data->elementSize->getNodeValue(n);

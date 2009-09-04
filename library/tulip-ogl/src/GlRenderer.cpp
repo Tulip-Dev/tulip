@@ -55,6 +55,15 @@ static string stringToUtf8(const string &input){
   return output;
 }
 
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+map<string,bool> GlRenderer::checkedFonts=map<string,bool>();
+#endif
+#else
+map<string,bool> GlRenderer::checkedFonts=map<string,bool>();
+#endif
+
 
 //***************************************************************************
 // CLASSE t_GlFonts
@@ -333,6 +342,18 @@ void GlRenderer::drawLine(float x1, float y1, float z1, float x2, float y2, floa
     glVertex3f(x2, y2, z2);
     glEnd();
     glEnable(GL_BLEND);
+  }
+}
+
+bool GlRenderer::checkFont(const std::string &font){
+  map<string,bool>::iterator it=checkedFonts.find(font);
+  if(it!=checkedFonts.end()){
+    return (*it).second;
+  }else{
+    FTGLBitmapFont btFont(font.c_str());
+    bool isOk=!btFont.Error();
+    checkedFonts.insert(pair<string,bool>(font,isOk));
+    return isOk;
   }
 }
 

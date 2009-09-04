@@ -36,6 +36,7 @@ namespace tlp {
     void updateNbElements();
 
   public slots:
+    void populatePropertiesList();
     ///Manages observers change notification.
     void update();
     void selectNode(node);

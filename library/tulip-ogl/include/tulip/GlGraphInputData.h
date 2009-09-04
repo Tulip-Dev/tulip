@@ -167,6 +167,32 @@ namespace tlp {
       return elementSelectedPropName;
     }
     /**
+     * Set property name for elementFont
+     */
+    void setElementFontPropName(const std::string &name){
+      elementFontPropName=name;
+      elementFont = graph->getProperty<StringProperty>(elementFontPropName);
+    }
+    /**
+     * Get property name for elementFont
+     */
+    std::string getElementFontPropName(){
+      return elementFontPropName;
+    }
+    /**
+     * Set property name for elementFontSize
+     */
+    void setElementFontSizePropName(const std::string &name){
+      elementFontSizePropName=name;
+      elementFontSize = graph->getProperty<IntegerProperty>(elementFontSizePropName);
+    }
+    /**
+     * Get property name for elementFontSize
+     */
+    std::string getElementFontSizePropName(){
+      return elementFontSizePropName;
+    }
+    /**
      * Set property name for elementLabel
      */
     void setElementLabelPropName(const std::string &name){
@@ -258,6 +284,8 @@ namespace tlp {
     std::string elementShapePropName;
     std::string elementRotationPropName;
     std::string elementSelectedPropName;
+    std::string elementFontPropName;
+    std::string elementFontSizePropName;
     std::string elementLabelPropName;
     std::string elementTexturePropName;
     std::string elementBorderColorPropName;
@@ -275,6 +303,8 @@ namespace tlp {
     IntegerProperty  *elementShape;
     DoubleProperty   *elementRotation;
     BooleanProperty  *elementSelected;
+    StringProperty   *elementFont;
+    IntegerProperty  *elementFontSize;
     StringProperty   *elementLabel;
     LayoutProperty   *elementLayout;
     StringProperty   *elementTexture;

@@ -25,6 +25,7 @@
 #include "tulip/GlPointManager.h"
 #include "tulip/GlBezierCurve.h"
 #include "tulip/GlCatmullRomCurve.h"
+#include "tulip/GlRenderer.h"
 
 #include <iostream>
 
@@ -368,10 +369,17 @@ void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* rendere
 	if(drawSelect!=select)
 		return;
 
+	string fontName=data->elementFont->getEdgeValue(e);
+	int fontSize=data->elementFontSize->getEdgeValue(e);
+	if(!GlRenderer::checkFont(fontName))
+	  fontName=data->parameters->getFontsPath()+"font.ttf";
+	if(fontSize==0)
+	  fontSize=18;
+
 	if(select)
-		renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
+		renderer->setContext(fontName, fontSize+2, 0, 0, 255);
 	else
-		renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 18, 255, 255, 255);
+		renderer->setContext(fontName, fontSize, 255, 255, 255);
 
 	const Coord & srcCoord = data->elementLayout->getNodeValue(data->graph->source(e));
 	const Coord & tgtCoord = data->elementLayout->getNodeValue(data->graph->target(e));
