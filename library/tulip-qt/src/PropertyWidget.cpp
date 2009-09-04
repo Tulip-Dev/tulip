@@ -337,6 +337,24 @@ void PropertyWidget::setAllNodeValue() {
       ss << GlyphManager::getInst().glyphId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
+  } else if (editedPropertyName == "viewFont") {
+    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
+        QString(),
+        QString("Font (*.ttf)"));
+    if(viewFontName!="")
+      ok=true;
+    if (ok) {
+      tmpStr = viewFontName.toStdString();
+    }
+  } else if (editedPropertyName == "viewTexture") {
+    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
+        QString(),
+        QString("Images (*.png *.jpeg *.jpg *.bmp)"));
+    if(viewFontName!="")
+      ok=true;
+    if (ok) {
+      tmpStr = viewFontName.toStdString();
+    }
   } else if (editedPropertyName == "viewLabelPosition") {
     QStringList tmp;
     for (int i = 0; i < 5; i++)
