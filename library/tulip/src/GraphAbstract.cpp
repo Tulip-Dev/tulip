@@ -16,9 +16,16 @@ using namespace tlp;
 const string metaGraphProperty = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph):supergraph(supergraph),
-						subGraphToKeep(NULL) {
-  if (supergraph==0) supergraph=this;
+GraphAbstract::GraphAbstract(Graph *supergraph)
+ :supergraph(supergraph ? supergraph : this),
+  root((supergraph == this) ? this : supergraph->getRoot()),
+  subGraphToKeep(NULL) {
+  /*if (supergraph == 0)
+    supergraph = this;
+  if (supergraph == this)
+    root = this;
+  else
+    root = supergraph->getRoot();*/
   propertyContainer=new PropertyManagerImpl(this);
 }
 //=========================================================================
@@ -125,11 +132,8 @@ Graph* GraphAbstract::getSuperGraph()const {
   return supergraph;
 }
 //=========================================================================
-Graph* GraphAbstract::getRoot()const {
-  Graph *result=getSuperGraph();
-  while (result!=result->getSuperGraph()) 
-    result=result->getSuperGraph();
-  return result;
+Graph* GraphAbstract::getRoot() const {
+  return root;
 }
 //=========================================================================
 void GraphAbstract::setSuperGraph(Graph *sg) {
@@ -254,15 +258,19 @@ unsigned int GraphAbstract::outdeg(const node n) const {
 }
 //=========================================================================
 node GraphAbstract::source(const edge e) const {
-  return getSuperGraph()->source(e);
+  return root->source(e);
 }
 //=========================================================================
 node GraphAbstract::target(const edge e) const {
-  return getSuperGraph()->target(e);
+  return root->target(e);
 }
 //=========================================================================
-node GraphAbstract::opposite(const edge e, const node n)const {
-  return ( (source(e)==n) ? target(e):source(e) );
+const std::pair<node, node>& GraphAbstract::ends(const edge e) const {
+  return root->ends(e);
+}
+//=========================================================================
+node GraphAbstract::opposite(const edge e, const node n) const {
+  return root->opposite(e, n);
 }
 //=========================================================================
 void GraphAbstract::reverse(const edge e) {
@@ -270,8 +278,13 @@ void GraphAbstract::reverse(const edge e) {
   getSuperGraph()->reverse(e);
 }
 //=========================================================================
-edge GraphAbstract::existEdge(const node n1, const node n2)const {
-  Iterator<edge> *it = getOutEdges(n1);
+edge GraphAbstract::existEdge(const node n1, const node n2,
+			      bool directed) const {
+  Iterator<edge> *it;
+  if (directed)
+    it = getOutEdges(n1);
+  else
+    it = getInOutEdges(n1);
   while (it->hasNext()) {
     edge e(it->next());
     if (opposite(e, n1) == n2) {

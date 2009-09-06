@@ -349,14 +349,26 @@ unsigned int GraphImpl::outdeg(const node n) const {
   return outDegree.get(n.id);
 }
 //----------------------------------------------------------------
-node GraphImpl::source(const edge e)const{
+node GraphImpl::source(const edge e)const {
   assert(isElement(e));
   return edges[e.id].first;
 }
 //----------------------------------------------------------------
-node GraphImpl::target(const edge e)const{
+node GraphImpl::target(const edge e)const {
   assert(isElement(e));
   return edges[e.id].second;
+}
+//=========================================================================
+const std::pair<node, node>& GraphImpl::ends(const edge e) const {
+  assert(isElement(e));
+  return edges[e.id];
+}
+//=========================================================================
+node GraphImpl::opposite(const edge e, const node n) const {
+  assert(isElement(e));
+  const std::pair<node, node>& eEnds = edges[e.id];
+  assert((eEnds.first == n) || (eEnds.second == n));
+  return (eEnds.first == n) ? eEnds.second : eEnds.first;
 }
 //----------------------------------------------------------------
 const string layoutProperty = "viewLayout";

@@ -65,6 +65,8 @@ public:
   //================================================================================
   virtual node source(const edge) const;
   virtual node target(const edge) const;
+  virtual node opposite(const edge, const node n) const;
+  virtual const std::pair<node, node>& ends(const edge e) const;
   virtual void reverse(const edge);
   //================================================================================
   unsigned int numberOfEdges()const;

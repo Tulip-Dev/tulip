@@ -102,10 +102,15 @@ node GraphDecorator::opposite(const edge e, const node n)const {
 }
 
 //============================================================
-edge GraphDecorator::existEdge(const node n, const node m)const {
-  return graph_component->existEdge(n,m);
+edge GraphDecorator::existEdge(const node n, const node m,
+			       bool directed) const {
+  return graph_component->existEdge(n, m, directed);
 }
 
+//============================================================
+const std::pair<node, node>& GraphDecorator::ends(const edge e) const {
+  return graph_component->ends(e);
+}
 //============================================================
 void GraphDecorator::reverse(const edge e){
   notifyReverseEdge(this, e);

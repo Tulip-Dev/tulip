@@ -40,8 +40,9 @@ public:
   virtual Graph* getNodeMetaInfo(const node) const;
   virtual node source(const edge) const;
   virtual node target(const edge) const;
+  virtual const std::pair<node, node>& ends(const edge) const;
   virtual node opposite(const edge, const node)const;
-  virtual edge existEdge(const node , const node)const;
+  virtual edge existEdge(const node , const node, bool)const;
   virtual void reverse(const edge);
   virtual bool isMetaEdge(const edge) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
@@ -83,6 +84,7 @@ protected:
 private:
   DataSet attributes;
   Graph *supergraph;
+  Graph* const root;
   GRAPH_SEQ subgraphs;
   Graph* subGraphToKeep;
 };

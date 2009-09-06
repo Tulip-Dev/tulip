@@ -295,6 +295,9 @@ public:
   virtual node source(const edge)const =0;
   /// Return the target of the edge.
   virtual node target(const edge)const =0;
+  /// Return the source and target of the edge
+  /// as the first and second of the returned pair
+  virtual const std::pair<node, node>& ends(const edge)const=0;
   /// Return the opposite node for s in the edge e
   virtual node opposite(const edge, const node)const =0;
   /// Return true if the node is element of the graph.
@@ -305,11 +308,13 @@ public:
   virtual bool isElement(const edge ) const =0;
   /// Return true if the edge is a meta edge.
   virtual bool isMetaEdge(const edge ) const =0;
-  /** Returns the edge if it exists an edge between two node
-   *  sens of the edge is not taken into account)
+  /** Returns the edge if it exists an edge between two nodes
+   *  the 'directed' flag indicates if the direction of the edge
+   *  (from source to target) must be taken in to account).
    *  If no edge is found return an invalid edge.
    */
-  virtual edge existEdge(const node , const node) const =0;
+  virtual edge existEdge(const node source, const node target,
+			 bool directed = true) const =0;
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
