@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <sstream>
 #include <tulip/TulipPlugin.h>
 
 #ifdef _WIN32
@@ -39,6 +40,8 @@ public:
   DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
   IntegerProperty *type;
   StringProperty *label;
+  StringProperty *url,*path;
+
   LayoutProperty *layout;
   int progress;
 
@@ -88,6 +91,12 @@ public:
       node newNode=graph->addNode();
       graph->addEdge(n,newNode);
       label->setNodeValue(newNode,entryName);
+      stringstream strTmp;
+      strTmp << "file://";
+      strTmp << pathEntry;
+      url->setNodeValue(newNode, strTmp.str());
+      path->setNodeValue(newNode,pathEntry);
+
       if (infoEntry.st_size<1)
 	size->setNodeValue(newNode,1);
       else
@@ -148,6 +157,8 @@ public:
     type=graph->getProperty<IntegerProperty>("viewShape");
     layout=graph->getProperty<LayoutProperty>("viewLayout");
     label=graph->getProperty<StringProperty>("name");
+    url=graph->getProperty<StringProperty>("url");
+	path=graph->getProperty<StringProperty>("path");
     type->setAllNodeValue(0);
     layout->setAllNodeValue(Coord(0,0,0));
     node newNode=graph->addNode();
