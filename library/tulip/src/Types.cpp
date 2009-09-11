@@ -566,6 +566,7 @@ bool StringVectorType::fromString( RealType & v, const string & s ) {
     return false;
 
   istringstream iss;
+  iss.unsetf(ios_base::skipws);
   iss.str(s.substr(pos));
   char c;
   if(!(iss >> c) || c!='(')
