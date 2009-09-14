@@ -235,19 +235,19 @@ void GraphView::delEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphView::delAllNode(const node n){
-  getSuperGraph()->delAllNode(n);
+  getRoot()->delAllNode(n);
 }
 //----------------------------------------------------------------
 void GraphView::delAllEdge(const edge e){
-  getSuperGraph()->delAllEdge(e);
+  getRoot()->delAllEdge(e);
 }
 //----------------------------------------------------------------
 void GraphView::setEdgeOrder(const node n,const std::vector<edge> &v ) {
-  getSuperGraph()->setEdgeOrder(n,v);
+  getRoot()->setEdgeOrder(n,v);
 }
 //----------------------------------------------------------------
 void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
-  getSuperGraph()->swapEdgeOrder(n,e1,e2);
+  getRoot()->swapEdgeOrder(n,e1,e2);
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
