@@ -29,7 +29,7 @@ TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip_UI_SRCS ${tulip_UI})
 TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC})
 QT4_ADD_RESOURCES(tulip_RCC_SRCS ${tulip_RCC})
 
-INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
+INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
 
 ADD_EXECUTABLE( tulip ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
 SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
@@ -51,11 +51,11 @@ TARGET_LINK_LIBRARIES( tulip ${LibTulipPluginsManagerName})
 ADD_DEPENDENCIES(tulip ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(WIN32)
-INSTALL(PROGRAMS tulip.exe 
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
 )
 ELSE(WIN32)
-INSTALL(PROGRAMS tulip
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
 )
 ENDIF(WIN32)

@@ -1,3 +1,5 @@
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tulip)
+
 INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/TulipTableWidget.h 
 	tulip/GlMainWidget.h 

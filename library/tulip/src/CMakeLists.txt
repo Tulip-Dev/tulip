@@ -71,7 +71,7 @@ SET(tulip_LIB_SRCS
 	ColorScale.cpp
 )
 
-INCLUDE_DIRECTORIES(../include/ ${PROJECT_SOURCE_DIR} ${GZStreamInclude})
+INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR})
 
 ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )

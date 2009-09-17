@@ -72,7 +72,7 @@ set(tulip-ogl_LIB_SRCS
 	GlShaderManager.cpp
 )
 
-INCLUDE_DIRECTORIES( ${TulipInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GZStreamInclude} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2})
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
 
 ADD_LIBRARY (${LibTulipOglName} SHARED ${tulip-ogl_LIB_SRCS})

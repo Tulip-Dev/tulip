@@ -58,8 +58,10 @@ SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GLEInclude ${PROJECT_SOURCE_DIR}/thirdparty/gle/)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
+SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipQtInclude ${PROJECT_SOURCE_DIR}/library/tulip-qt/include/)
+SET(TulipQtBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-qt/include/)
 SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
 
 ## -----------------------------------------------------------------------------------------------
@@ -139,7 +141,7 @@ ENDIF(WIN32)
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
-INSTALL(PROGRAMS tulip-config
+INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
 INSTALL(FILES UseTulip.cmake 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")

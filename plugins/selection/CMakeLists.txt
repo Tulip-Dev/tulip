@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(SpanningDagSelection_SRCS SpanningDagSelection.cpp SpanningDagSelection.h)

@@ -90,7 +90,7 @@ set(tulip-qt_MOC
     ../include/tulip/PropertyDialog.h
     ../include/tulip/CopyPropertyDialog.h
     ../include/tulip/TulipStatsWidget.h
-    ../include/tulip/TulipStatsData.h
+    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/TulipStatsData.h
     ../include/tulip/RenderingParametersDialog.h
     ../include/tulip/LayerManagerWidget.h
     ../include/tulip/AugmentedDisplayDialog.h
@@ -101,11 +101,11 @@ set(tulip-qt_MOC
     ../include/tulip/GWOverviewWidget.h
     ../include/tulip/QtCPULODCalculator.h
     ../include/tulip/Interactor.h
-    ../include/tulip/PropertyDialogData.h
-    ../include/tulip/CopyPropertyDialogData.h
-    ../include/tulip/RenderingParametersDialogData.h
+    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/PropertyDialogData.h
+    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/CopyPropertyDialogData.h
+    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/RenderingParametersDialogData.h
     ../include/tulip/GridOptionsWidget.h
-    ../include/tulip/GridOptionsData.h
+    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/GridOptionsData.h
     ../include/tulip/QtProgress.h
     ../include/tulip/Controller.h
     ../include/tulip/MainController.h
@@ -131,7 +131,7 @@ QT4_ADD_RESOURCES(tulip-qt_RCC_SRCS ${tulip-qt_RCC})
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipOGLInclude})
+INCLUDE_DIRECTORIES(../include/ ../include/tulip ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip/)
 ADD_LIBRARY(${LibTulipQtName} SHARED ${tulip-qt_PLUGINS_SRCS} ${tulip-qt_UI_SRCS} ${tulip-qt_MOC_SRCS} ${tulip-qt_RCC_SRCS} ${tulip-qt_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTGUI_LIBRARY})

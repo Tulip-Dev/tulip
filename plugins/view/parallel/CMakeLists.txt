@@ -1,6 +1,6 @@
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})	
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${TulipQtBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})	
 
 SET(parallel_LIB_SRCS
     ParallelCoordinatesView.h 

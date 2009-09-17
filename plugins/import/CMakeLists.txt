@@ -3,7 +3,7 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
 
-INCLUDE_DIRECTORIES(./ ${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})
+INCLUDE_DIRECTORIES(./ ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(PlanarGraph_SRCS PlanarGraph.cpp)

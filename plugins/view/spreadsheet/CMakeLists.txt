@@ -1,6 +1,6 @@
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipOGLInclude} ${TulipQtInclude})	
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${CMAKE_CURRENT_BINARY_DIR} .)	
 
 SET(spreadsheet_LIB_SRCS
     SpreadView.h
