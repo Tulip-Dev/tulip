@@ -76,7 +76,8 @@ BUILT_SOURCES = \
 	tulip/QtProgressData.h \
 	tulip/ColorScaleConfigDialogData.h \
 	tulip/SimpleStringsListSelectionWidgetData.h \
-	tulip/DoubleStringsListSelectionWidgetData.h
+	tulip/DoubleStringsListSelectionWidgetData.h \
+	tulip/ListPropertyWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
