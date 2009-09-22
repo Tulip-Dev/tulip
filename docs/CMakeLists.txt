@@ -1,11 +1,10 @@
 
 include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
-add_subdirectory(developerHandbook)
-add_subdirectory(userHandbook)
+add_subdirectory(common)
 add_subdirectory(doxygen)
-add_subdirectory(devTeamDoxygen)
-
+add_subdirectory(userHandbook)
+add_subdirectory(developerHandbook)
 
 ########### install files ###############
 
