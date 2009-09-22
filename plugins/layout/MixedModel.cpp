@@ -263,7 +263,7 @@ bool MixedModel::run() {
     LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", layoutResult);
-    graph->computeProperty<LayoutProperty *>(string("Connected Component Packing"),&layout,err,NULL,&tmp);
+    graph->computeProperty(string("Connected Component Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()){
       node n = itN->next();
