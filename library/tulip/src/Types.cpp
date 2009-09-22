@@ -136,7 +136,7 @@ string EdgeSetType::toString( const RealType & v ) {
   oss << '(';
   set<edge>::const_iterator it;
   for(it = v.begin() ; it != v.end() ; ++it)
-    oss << (*it).id;
+    oss << (*it).id << ' ';
   oss << ')';
   return oss.str();
 }
