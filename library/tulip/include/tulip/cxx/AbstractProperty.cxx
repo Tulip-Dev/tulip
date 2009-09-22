@@ -21,71 +21,13 @@
   TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > AbstractProperty<Tnode,Tedge,TPROPERTY>::factory;*/
 
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n):
-  graph(sg) {
+tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n) {
+  graph = sg;
   name = n;
-  circularCall = false;
   nodeDefaultValue = Tnode::defaultValue();
   edgeDefaultValue = Tedge::defaultValue();
   nodeProperties.setAll(Tnode::defaultValue());
   edgeProperties.setAll(Tedge::defaultValue());
-}
-//=============================================================
-static bool isAncestor(tlp::Graph *g1, tlp::Graph *g2) {
-  if(g1 == g2->getRoot())
-    return true;
-  tlp::Graph *currentGraph = g2;
-  while(currentGraph->getSuperGraph() != currentGraph) {
-    if(currentGraph == g1)
-      return true;
-    currentGraph = currentGraph->getSuperGraph();
-  }
-  return false;
-}
-//=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compute(const std::string &algorithm, std::string &msg, const PropertyContext& context) {
-
-  if(!isAncestor(this->graph, context.graph))
-    return false;
-
-#ifndef NDEBUG
-  std::cerr << __PRETTY_FUNCTION__ << std::endl;
-#endif
-  if(circularCall) {
-#ifndef NDEBUG
-    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
-#endif
-    return false;
-  }
-
-  // nothing to do if the graph is empty
-  if (this->graph->numberOfNodes() == 0) {
-    msg= "The graph is empty";
-    return false;
-  }
-
-  tlp::Observable::holdObservers();
-  circularCall = true;
-  tlp::PropertyContext tmpContext(context);
-  tmpContext.propertyProxy = this;
-  tlp::PropertyAlgorithm *tmpAlgo = factory->getPluginObject(algorithm, tmpContext);
-  bool result;
-  if (tmpAlgo != 0) {
-    result = tmpAlgo->check(msg);
-    if (result) {
-      tmpAlgo->run();
-    }
-    delete tmpAlgo;
-  }
-  else {
-    msg = "No algorithm available with this name";
-    result=false;
-  }
-  circularCall = false;
-  notifyObservers();
-  tlp::Observable::unholdObservers();
-  return result;
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>

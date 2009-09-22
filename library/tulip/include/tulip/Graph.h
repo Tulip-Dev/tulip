@@ -355,8 +355,8 @@ public:
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
-  template<typename Proxytype>
-  Proxytype* getLocalProperty(const std::string &name);
+  template<typename PropertyType>
+  PropertyType* getLocalProperty(const std::string &name);
   /**
    * Compute a property on this graph using an external algorithm (plug-in)
    * The result is stored in result, Warning all information in result will be deleted
@@ -366,8 +366,8 @@ public:
    * using the DataSet. In some cases algorithms can use this DataSet in order
    * to give as result external information (not stored in result).
    */
-  template<typename Proxytype>
-  bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg,
+  template<typename PropertyType>
+  bool computeProperty(const std::string &algorithm, PropertyType* result, std::string &msg,
 		       PluginProgress *progress=0, DataSet *data=0);
   /**
    * Returns a pointer to a PropertyInterface which is in the pool or in the pool of an ascendant
@@ -376,8 +376,8 @@ public:
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
-  template<typename Proxytype>
-  Proxytype* getProperty(const std::string &name);
+  template<typename PropertyType>
+  PropertyType* getProperty(const std::string &name);
   /**
    * Returns a pointer on an existing property. If the property does not
    * exist return NULL.
@@ -482,6 +482,7 @@ protected:
 protected:
 
   unsigned int id;
+  std::set<tlp::PropertyInterface*> circularCalls;
 };
 
 }

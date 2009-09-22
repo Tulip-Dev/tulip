@@ -47,11 +47,24 @@ Proxytype* tlp::Graph::getProperty(const std::string &name) {
     return getLocalProperty<Proxytype>(name);
   }
 }
+//=============================================================
+static bool isAncestor(tlp::Graph *g1, tlp::Graph *g2) {
+  if(g1 == g2->getRoot())
+    return true;
+  tlp::Graph *currentGraph = g2;
+  while(currentGraph->getSuperGraph() != currentGraph) {
+    if(currentGraph == g1)
+      return true;
+    currentGraph = currentGraph->getSuperGraph();
+  }
+  return false;
+}
 //====================================================================================
-template<typename Proxytype>
-bool tlp::Graph::computeProperty(const std::string &algorithm, Proxytype result, std::string &msg, 
-				 tlp::PluginProgress *progress, tlp::DataSet *data) {
-  bool resultBool;
+template<typename PropertyType>
+bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* prop,
+				 std::string &msg,  tlp::PluginProgress *progress,
+				 tlp::DataSet *data) {
+  bool result;
   tlp::PropertyContext context;
 
   tlp::PluginProgress *tmpProgress;
@@ -64,9 +77,50 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, Proxytype result,
   context.graph = this;
   context.dataSet = data;
   
-  resultBool = result->compute(algorithm, msg, context);
+  //resultBool = result->compute(algorithm, msg, context);
+  
+  if(!isAncestor(prop->graph, this))
+    return false;
+
+#ifndef NDEBUG
+  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+#endif
+  if(circularCalls.find(prop) != circularCalls.end()) {
+#ifndef NDEBUG
+    std::cerr << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg << std::endl;
+#endif
+    return false;
+  }
+
+  // nothing to do if the graph is empty
+  if (numberOfNodes() == 0) {
+    msg= "The graph is empty";
+    return false;
+  }
+
+  tlp::Observable::holdObservers();
+  circularCalls.insert(prop);
+  tlp::PropertyContext tmpContext(context);
+  tmpContext.propertyProxy = prop;
+  typename PropertyType::PAlgorithm *tmpAlgo =
+    PropertyType::factory->getPluginObject(algorithm, tmpContext);
+  if (tmpAlgo != 0) {
+    result = tmpAlgo->check(msg);
+    if (result) {
+      tmpAlgo->run();
+    }
+    delete tmpAlgo;
+  }
+  else {
+    msg = "No algorithm available with this name";
+    result=false;
+  }
+  circularCalls.erase(prop);
+  notifyObservers();
+  tlp::Observable::unholdObservers();
+
   if (progress==0) delete tmpProgress;
   
-  return resultBool;
+  return result;
 }
 //====================================================================================
