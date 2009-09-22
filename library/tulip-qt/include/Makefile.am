@@ -97,7 +97,8 @@ BUILT_SOURCES = \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
-	tulip/propertywidget.h
+	tulip/propertywidget.h \
+	tulip/ListPropertyWidgetData.h
 
 tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@

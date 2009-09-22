@@ -144,12 +144,10 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
 }
 
 void PropertyWidget::changePropertyNodeValue(int i, int j) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
   string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
-  //cout << "value = " << str << endl;
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<node> *it=graph->getNodes();
   node tmp;
