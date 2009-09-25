@@ -216,8 +216,8 @@ if test "${CONFIGURE_tulipogl}" != ""
      then
        if test "${x_includes}" != "NONE" -a "${x_includes}" != ""
        then
-         CPPFLAGS="${CPP_FLAGS} -I${x_includes}"
-         LDFLAGS="${LD_FLAGS} -L${x_libraries}"
+         CPPFLAGS="${CPPFLAGS} -I${x_includes}"
+         LDFLAGS="${LDFLAGS} -L${x_libraries}"
        fi
    fi
 AC_PATH_GL
