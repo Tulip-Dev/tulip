@@ -27,5 +27,11 @@ namespace tlp {
     for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
       (*itlObs)->modifyLayer(scene, name, layer);
   }
+
+  void GlObservableScene::notifyModifyEntity(GlScene *scene, GlSimpleEntity *entity) {
+    set<GlSceneObserver *> copy(observers); //Used to preserve iteratros
+    for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+      (*itlObs)->modifyEntity(scene, entity);
+  }
 }
 

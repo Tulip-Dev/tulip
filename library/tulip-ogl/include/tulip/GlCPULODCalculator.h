@@ -40,6 +40,7 @@ namespace tlp {
   public:
 
     virtual ~GlCPULODCalculator();
+    virtual GlLODCalculator *clone(){return new GlCPULODCalculator;}
 
     /**
      * Begin a new camera (use to render next entities)
@@ -61,7 +62,7 @@ namespace tlp {
     /**
      * Compute all bounding boxs with the given viewport
      */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type);
 
     virtual void computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
         SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
@@ -111,6 +112,8 @@ namespace tlp {
     VectorOfSimpleLODResultVector simpleResultVector;
     VectorOfComplexLODResultVector nodesResultVector;
     VectorOfComplexLODResultVector edgesResultVector;
+
+    RenderingEntitiesFlag type;
 
   };
 

@@ -113,6 +113,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
 	QtCPULODCalculator.cpp \
+	QtQuadTreeLODCalculator.cpp \
 	InteractorManager.cpp \
 	Interactor.cpp \
 	InteractorChainOfResponsibility.cpp \

@@ -21,6 +21,16 @@ namespace tlp {
 
   class Camera;
   class GlEntity;
+  class GlScene;
+  class GlGraphInputData;
+
+  enum RenderingEntitiesFlag {
+    RenderingSimpleEntities=1,
+    RenderingNodes=2,
+    RenderingEdges=4,
+    RenderingAll=7,
+    RenderingWithoutRemove=8
+  };
 
   typedef std::pair<unsigned long, float> LODResultSimpleEntity;
   typedef std::pair<unsigned int, float> LODResultComplexEntity;
@@ -38,7 +48,22 @@ namespace tlp {
   public:
 
     virtual ~GlLODCalculator() {}
+    virtual GlLODCalculator *clone()=0;
 
+    /**
+     * Set scene use by this LOD calculator
+     */
+    virtual void setScene(GlScene *scene){}
+
+    /**
+     * Set input data use to render
+     */
+    virtual void setInputData(GlGraphInputData *inputData) {}
+
+    /**
+     * Return if the LODCalculator need to have entities to compute
+     */
+    virtual bool needEntities() {return true;}
     /**
      * Begin a new camera
      */
@@ -59,7 +84,7 @@ namespace tlp {
     /**
      * Compute all lod
      */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport)=0;
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type)=0;
 
     /**
      * Return lod result for simple entities

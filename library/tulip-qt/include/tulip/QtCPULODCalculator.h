@@ -57,6 +57,7 @@ namespace tlp {
 
   public:
 
+    virtual GlLODCalculator *clone(){return new QtCPULODCalculator;}
     virtual void computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
         SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
         const Coord &eye,

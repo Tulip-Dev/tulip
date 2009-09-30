@@ -4,8 +4,8 @@
  Email : mathiaut@labri.fr
  Last modification : 23/10/2007
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 #ifndef Tulip_GLSIMPLEENTITY_H
@@ -21,6 +21,8 @@
 
 namespace tlp {
 
+  class GlComposite;
+
   /**
    * Base class for all simple entity (entity who not need GraphInputData
    */
@@ -34,7 +36,7 @@ namespace tlp {
      * Draw function
      */
     virtual void draw(float lod,Camera* camera) = 0;
-    
+
     /**
      * Accept visitor function
      */
@@ -45,7 +47,7 @@ namespace tlp {
     /**
      * Set if entity is visible
      */
-    void setVisible(bool visible) {this->visible=visible;}
+    void setVisible(bool visible);
     /**
      * Return if entity is visible
      */
@@ -68,17 +70,22 @@ namespace tlp {
     bool isCheckByBoundingBoxVisitor() {return checkByBoundingBoxVisitor;}
 
     /**
-     * Return the entity boundingbox 
+     * Return the entity boundingbox
      */
     virtual BoundingBox getBoundingBox() {return boundingBox;}
 
     /**
-     * Add a parent to this entity
+     * Add a layer parent to this entity
      */
-    void addParent(GlLayer *layer) {parents.push_back(layer);}
+    virtual void addLayerParent(GlLayer *layer) {}
 
     /**
-     * virtual fucntion : Translate entity 
+     * Add a parent to this entity
+     */
+    void addParent(GlComposite *composite) {parents.push_back(composite);}
+
+    /**
+     * virtual fucntion : Translate entity
      */
     virtual void translate(const Coord &mouvement){};
 
@@ -86,24 +93,24 @@ namespace tlp {
      * Save the entity in Xml
      */
     virtual void getXML(xmlNodePtr rootNode) =0;
-    
+
     /**
      * Load entity with Xml
      */
     virtual void setWithXML(xmlNodePtr rootNode) =0;
 
   protected:
-    
+
     bool visible;
     int stencil;
     bool checkByBoundingBoxVisitor;
 
     BoundingBox boundingBox;
 
-    std::vector<GlLayer*> parents;
+    std::vector<GlComposite*> parents;
 
   };
-  
+
 }
 
 #endif // Tulip_GLSIMPLEENTITY_H

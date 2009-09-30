@@ -38,7 +38,8 @@ namespace tlp {
     actualEdgesBoundingBoxVector->push_back(ComplexBoundingBoxUnit(id,bb));
   }
 
-  void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport) {
+  void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type) {
+    this->type=type;
     assert(cameraVector.size()==simpleBoundingBoxVector.size());
     assert(cameraVector.size()==nodesBoundingBoxVector.size());
     assert(cameraVector.size()==edgesBoundingBoxVector.size());
@@ -79,20 +80,26 @@ namespace tlp {
       const Vector<int,4>& currentViewport) {
 
     float lod;
-    for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-      lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-      if(lod>=0)
-        outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
+    if((type & RenderingSimpleEntities)!=0){
+      for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
+        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
+        if(lod>=0)
+          outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
-      lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-      if(lod>=0)
-        outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
+    if((type & RenderingNodes)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
+        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
+        if(lod>=0)
+          outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
-      lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-      if(lod>=0)
-        outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
+    if((type & RenderingEdges)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
+        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
+        if(lod>=0)
+          outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
+      }
     }
   }
 
@@ -102,20 +109,26 @@ namespace tlp {
       const Vector<int,4>& currentViewport) {
 
     float lod;
-    for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-      lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-      if(lod>=0)
-        outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
+    if((type & RenderingSimpleEntities)!=0){
+      for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
+        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
+        if(lod>=0)
+          outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
-      lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-      if(lod>=0)
-        outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
+    if((type & RenderingNodes)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
+        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
+        if(lod>=0)
+          outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
-      lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-      if(lod>=0)
-        outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
+    if((type & RenderingEdges)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
+        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
+        if(lod>=0)
+          outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
+      }
     }
   }
 

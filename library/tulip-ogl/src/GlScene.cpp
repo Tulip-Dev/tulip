@@ -81,6 +81,7 @@ GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255
 		lodCalculator=calculator;
 	else
 		lodCalculator=new GlCPULODCalculator();
+    lodCalculator->setScene(this);
 }
 
 void GlScene::initGlParameters() {
@@ -136,40 +137,43 @@ void GlScene::prerenderMetaNodes(){
 
 		initGlParameters();
 
-		lodCalculator->beginNewCamera(getLayer("Main")->getCamera());
+      GlLODCalculator *newLodCalculator=lodCalculator->clone();
+      newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
 		GlNode glNode(0);
 		for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
 			glNode.id=(*it).id;
-			lodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
+        newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
 		}
-		lodCalculator->compute(viewport,viewport);
-		VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
+      newLodCalculator->compute(viewport,viewport,RenderingAll);
+      VectorOfComplexLODResultVector* nodesVector=newLodCalculator->getResultForNodes();
 
 		assert(nodesVector->size()!=0);
 		for(vector<LODResultComplexEntity>::iterator it=(*nodesVector)[0].begin();it!=(*nodesVector)[0].end();++it) {
 			glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).first),(*it).second,getLayer("Main")->getCamera());
 		}
-		lodCalculator->clear();
+      delete newLodCalculator;
 	}
 }
 
 void GlScene::draw() {
 	initGlParameters();
 
-	GlLODSceneVisitor *lodVisitor;
-	if(glGraphComposite)
-		lodVisitor=new GlLODSceneVisitor(lodCalculator,glGraphComposite->getInputData());
-	else
-		lodVisitor=new GlLODSceneVisitor(lodCalculator,NULL);
+    if(lodCalculator->needEntities()){
+      GlLODSceneVisitor *lodVisitor;
+      if(glGraphComposite)
+        lodVisitor=new GlLODSceneVisitor(lodCalculator,glGraphComposite->getInputData());
+      else
+        lodVisitor=new GlLODSceneVisitor(lodCalculator,NULL);
 
+      for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+        (*it).second->acceptVisitor(lodVisitor);
+        if((*it).first=="Main")
+          selectionLayer->acceptVisitor(lodVisitor);
+      }
+      delete lodVisitor;
+    }
 
-	for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-		(*it).second->acceptVisitor(lodVisitor);
-		if((*it).first=="Main")
-			selectionLayer->acceptVisitor(lodVisitor);
-	}
-
-	lodCalculator->compute(viewport,viewport);
+    lodCalculator->compute(viewport,viewport,RenderingAll);
 
 	TextRenderer fontRenderer;
 	OcclusionTest occlusionTest;
@@ -346,29 +350,12 @@ void GlScene::draw() {
 			glPopAttrib();
 		}
 
-		/*
-      if((*it).first=="Main") {
-        if((*it).second->isVisible()) {
-          camera=selectionLayer->getCamera();
-          if((Camera*)((*itSE).first)==camera) {
-            camera->initGl();
-            for(vector<LODResultEntity>::iterator itE=(*itSE).second.begin();itE!=(*itSE).second.end();++itE) {
-              if((*itE).second>=0) {
-                ((GlSimpleEntity*)((*itE).first))->draw((*itE).second,camera);
-              }
-            }
-          }
-        }
-        ++itSE;
-        ++itCE;
-      }*/
 		++itSimple;
 		++itNodes;
 		++itEdges;
 	}
 
 	lodCalculator->clear();
-	delete lodVisitor;
 }
 
 void GlScene::addLayer(GlLayer *layer) {
@@ -564,28 +551,48 @@ void GlScene::rotateScene(const int x, const int y, const int z) {
 	}
 }
 
-bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLayer* layer, vector<unsigned long>& selectedEntities) {
+  bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int h, GlLayer* layer, vector<unsigned long>& selectedEntities) {
 	if(w==0)
 		w=1;
 	if(h==0)
 		h=1;
-	GlSelectSceneVisitor *visitor;
-	if(glGraphComposite)
-		visitor=new GlSelectSceneVisitor(type,glGraphComposite->getInputData(),lodCalculator);
-	else
-		visitor=new GlSelectSceneVisitor(type,NULL,lodCalculator);
 
-	if(layer) {
-		layer->acceptVisitor(visitor);
-	}else {
-		if(type==SelectSimpleEntities)
-			selectionLayer->acceptVisitor(visitor);
+    GlLODCalculator *selectLODCalculator;
 
-		for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-			(*it).second->acceptVisitor(visitor);
-		}
-	}
-	delete visitor;
+    //check if the layer is in scene
+    bool layerInScene=true;
+    if(layer){
+      layerInScene=false;
+      for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end() && layerInScene;++it){
+        if((*it).second==layer)
+          layerInScene=true;
+      }
+    }
+    if(layerInScene){
+      selectLODCalculator=lodCalculator;
+    }else{
+      selectLODCalculator=lodCalculator->clone();
+    }
+
+    //Collect entities if need
+    GlLODSceneVisitor *lodVisitor;
+    if(glGraphComposite)
+      lodVisitor=new GlLODSceneVisitor(selectLODCalculator,glGraphComposite->getInputData());
+    else
+      lodVisitor=new GlLODSceneVisitor(selectLODCalculator,NULL);
+
+    if(layerInScene){
+      if(selectLODCalculator->needEntities()){
+        for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+          (*it).second->acceptVisitor(lodVisitor);
+          if((*it).first=="Main")
+            selectionLayer->acceptVisitor(lodVisitor);
+        }
+      }
+    }else{
+      layer->acceptVisitor(lodVisitor);
+    }
+    delete lodVisitor;
 
 	Vector<int,4> selectionViewport;
 	selectionViewport[0]=x;
@@ -595,13 +602,13 @@ bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLa
 
 	glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
 
-	lodCalculator->compute(viewport,selectionViewport);
+    selectLODCalculator->compute(viewport,selectionViewport,type);
 	//lodCalculator->compute();
 
-	VectorOfCamera* cameraVector=lodCalculator->getVectorOfCamera();
-	VectorOfSimpleLODResultVector* simpleVector=lodCalculator->getResultForSimpleEntities();
-	VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
-	VectorOfComplexLODResultVector* edgesVector=lodCalculator->getResultForEdges();
+    VectorOfCamera* cameraVector=selectLODCalculator->getVectorOfCamera();
+    VectorOfSimpleLODResultVector* simpleVector=selectLODCalculator->getResultForSimpleEntities();
+    VectorOfComplexLODResultVector* nodesVector=selectLODCalculator->getResultForNodes();
+    VectorOfComplexLODResultVector* edgesVector=selectLODCalculator->getResultForEdges();
 	VectorOfSimpleLODResultVector::iterator itSimple=simpleVector->begin();
 	VectorOfComplexLODResultVector::iterator itNodes=nodesVector->begin();
 	VectorOfComplexLODResultVector::iterator itEdges=edgesVector->begin();
@@ -613,9 +620,9 @@ bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLa
 		Vector<int, 4> viewport = camera->getViewport();
 
 		unsigned int size;
-		if(type==SelectSimpleEntities) {
+      if((type & RenderingSimpleEntities)!=0) {
 			size=(*itSimple).size();
-		}else if(type==SelectNodes){
+      }else if((type & RenderingNodes)!=0){
 			size=(*itNodes).size();
 		}else{
 			size=(*itEdges).size();
@@ -664,14 +671,14 @@ bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLa
 		map<unsigned int, unsigned long> idToEntity;
 		unsigned int id=1;
 
-		if(type==SelectSimpleEntities) {
+      if((type&RenderingSimpleEntities)!=0) {
 			for(vector<LODResultSimpleEntity>::iterator itE=(*itSimple).begin();itE!=(*itSimple).end();++itE){
 				idToEntity[id]=(*itE).first;
 				glLoadName(id);
 				id++;
 				((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
 			}
-		}else if(type==SelectNodes){
+      }else if((type&RenderingNodes)!=0){
 			if(glGraphComposite){
 				GlNode glNode(0);
 				for(vector<LODResultComplexEntity>::iterator itE=(*itNodes).begin();itE!=(*itNodes).end();++itE){
@@ -718,7 +725,9 @@ bool GlScene::selectEntities(SelectionFlag type,int x, int y, int w, int h, GlLa
 		itEdges++;
 	}
 
-	lodCalculator->clear();
+    selectLODCalculator->clear();
+    if(selectLODCalculator!=lodCalculator)
+      delete selectLODCalculator;
 	glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 	return (selectedEntities.size()!=0);
 }
@@ -785,7 +794,6 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
 	glFlush();
 	glFinish();
 	returned = glRenderMode(GL_RENDER);
-	//cout << returned << endl;
 	GlEPSFeedBackBuilder builder;
 	GlFeedBackRecorder recorder(&builder);
 	builder.begin(viewport,clearColor,pointSize,lineWidth);

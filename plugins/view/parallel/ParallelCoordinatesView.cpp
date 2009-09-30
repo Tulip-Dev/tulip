@@ -16,6 +16,7 @@
 #include <tulip/GlProgressBar.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Interactor.h>
+#include <tulip/QtQuadTreeLODCalculator.h>
 
 
 using namespace std;
@@ -332,6 +333,9 @@ void ParallelCoordinatesView::setGraph(Graph *graph) {
 }
 
 void ParallelCoordinatesView::updateWithoutProgressBar() {
+  //This line is here to say recompute to calculator
+  mainWidget->getScene()->getCalculator()->setScene(mainWidget->getScene());
+
 	parallelCoordsDrawing->resetNbDataProcessed();
 	parallelCoordsDrawing->update();
 }

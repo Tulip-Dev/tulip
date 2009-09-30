@@ -13,7 +13,7 @@ namespace tlp {
 
   GlLayer::GlLayer(const std::string& name)
     :name(name),scene(0),camera(0){
-    composite.addParent(this);
+    composite.addLayerParent(this);
   }
 
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {

@@ -40,6 +40,7 @@ nobase_include_HEADERS = \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
 	tulip/QtCPULODCalculator.h \
+	tulip/QtQuadTreeLODCalculator.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/MainController.h \
@@ -58,7 +59,8 @@ nobase_include_HEADERS = \
 	tulip/QGlPixelBufferManager.h
 
 noinst_HEADERS = \
-	tulip/Morphing.h
+	tulip/Morphing.h \
+	tulip/QuadTree.h
 
 
 if WIN32 

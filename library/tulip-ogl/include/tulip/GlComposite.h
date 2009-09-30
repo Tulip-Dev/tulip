@@ -24,6 +24,11 @@ namespace tlp {
     ~GlComposite();
 
     /**
+     * Add a layer parent to this entity
+     */
+    virtual void addLayerParent(GlLayer *layer);
+
+    /**
      * Clear the composite, if deleteElems is true, composite's entities are delete
      */
     void reset(bool deleteElems);
@@ -54,6 +59,10 @@ namespace tlp {
       getDisplays () {
       return &elements;
     }
+    /**
+     * Call when a child of the composite is modified
+     */
+    void notifyModified(GlSimpleEntity *entity);
 
     /**
      * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
@@ -100,6 +109,7 @@ namespace tlp {
 
     std::map<std::string, GlSimpleEntity*> elements;
     std::list<GlSimpleEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
+    std::vector<GlLayer *> layerParents;
   };
 }
 #endif

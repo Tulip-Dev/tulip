@@ -91,5 +91,6 @@ libtulip_ogl_la_SOURCES = \
 	FastBezier.cpp \
 	GlBezierCurve.cpp \
 	GlCatmullRomCurve.cpp \
-	GlShaderManager.cpp
+	GlShaderManager.cpp \
+	GlSimpleEntity.cpp
 
