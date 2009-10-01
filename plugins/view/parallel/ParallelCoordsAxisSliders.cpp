@@ -172,7 +172,7 @@ void AxisSlider::translate(const Coord &move) {
 
 ParallelCoordsAxisSliders::ParallelCoordsAxisSliders() :
 	currentGraph(NULL), selectedAxis(NULL), selectedSlider(NULL),
-	axisSliderDragStarted(false), drawSliders(false), slidersRangeDragStarted(false),
+	axisSliderDragStarted(false), slidersRangeDragStarted(false),
 	lastAxisHeight(0), lastNbAxis(0), multiFilteringActivated(false), selectionLayer(new GlLayer("sliders selection layer")) {}
 
 ParallelCoordsAxisSliders::~ParallelCoordsAxisSliders() {
@@ -197,7 +197,6 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
 	if (axisSlidersMap.size() == 0) {
 		parallelView->updateAxisSlidersPosition();
 		buildGlSliders(allAxis);
-		drawSliders = true;
 		parallelView->refresh();
 		return;
 	}
@@ -212,7 +211,6 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
 			}
 		}
 		buildGlSliders(allAxis);
-		drawSliders = true;
 		selectedSlider = NULL;
 		selectedAxis = NULL;
 		lastSelectedAxis.clear();
@@ -316,13 +314,11 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 			yClick = y;
 			xClick = x;
 		}
-		drawSliders = true;
 		parallelView->refresh();
 		return true;
 	} else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
 		if (selectedSlider != NULL && !axisSliderDragStarted) {
 			axisSliderDragStarted = true;
-			drawSliders = true;
 			parallelView->refresh();
 			return true;
 		} else if (selectedAxis != NULL && pointerBetweenSliders && !multiFilteringActivated && !slidersRangeDragStarted) {
@@ -347,18 +343,15 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 			}
 			lastSelectedAxis.push_back(selectedAxis);;
 			selectedAxis = NULL;
-			drawSliders = true;
 			parallelView->refresh();
 			return true;
 		}
 	} else if (e->type() == QEvent::KeyPress && ((QKeyEvent *) e)->key() == Qt::Key_Control) {
 		multiFilteringActivated = true;
 		updateSlidersYBoundaries();
-		drawSliders = true;
 		parallelView->refresh();
 	} else if (e->type() == QEvent::KeyRelease && ((QKeyEvent *) e)->key() == Qt::Key_Control) {
 		multiFilteringActivated = false;
-		drawSliders = true;
 		parallelView->refresh();
 	}
 
@@ -423,10 +416,6 @@ void ParallelCoordsAxisSliders::updateOtherAxisSliders() {
 }
 
 bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
-
-	if (!drawSliders) {
-		return false;
-	}
 
 	Camera *camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
 	camera->initGl();
@@ -494,7 +483,6 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
 		glDisable(GL_LIGHTING);
 	}
 
-	drawSliders = false;
 	return true;
 }
 

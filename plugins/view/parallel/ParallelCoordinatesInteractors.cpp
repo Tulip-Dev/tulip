@@ -9,17 +9,20 @@
 #include "ParallelCoordsAxisBoxPlot.h"
 #include "ParallelCoordsElementsSelector.h"
 #include "ParallelCoordsElementShowInfos.h"
+#include "ParallelCoordinatesView.h"
 
 using namespace std;
 using namespace tlp;
 
 
-ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(const QString &iconPath, const QString &text):InteractorChainOfResponsibility(iconPath,text){
+ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(const QString &iconPath, const QString &text):InteractorChainOfResponsibility(iconPath,text){}
 
+bool ParallelCoordinatesInteractor::isCompatible(const string &viewName) {
+	return (viewName == ParallelCoordinatesView::viewName);
 }
 
-INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesInteractorNavigation,"ParallelCoordinatesNavigationInteractor","InteractorNavigation","Parallel Coordinates view", "Tulip Team" ,"02/04/09","Parallel coordinates navigation interactor","1.0")
-INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesInteractorZoom,"ParallelCoordinatesZoomInteractor","InteractorRectangleZoom","Parallel Coordinates view", "Tulip Team" ,"02/04/09","Parallel coordinates rectangle zoom interactor","1.0")
+INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesInteractorNavigation,"ParallelCoordinatesNavigationInteractor","InteractorNavigation",ParallelCoordinatesView::viewName, "Tulip Team" ,"02/04/09","Parallel coordinates navigation interactor","1.0")
+INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesInteractorZoom,"ParallelCoordinatesZoomInteractor","InteractorRectangleZoom",ParallelCoordinatesView::viewName, "Tulip Team" ,"02/04/09","Parallel coordinates rectangle zoom interactor","1.0")
 
 INTERACTORPLUGIN(InteractorHighLighter, "InteractorHighLiter", "Tulip Team", "02/04/2009", "Element Highliter Interactor", "1.0");
 INTERACTORPLUGIN(InteractorAxisSwapper, "InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor", "1.0");

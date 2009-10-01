@@ -257,6 +257,7 @@ void GlAxisBoxPlot::drawLabel(Coord position, string labelName) {
 	labelToDraw.draw(0, 0);
 }
 
+ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot() : currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
 
 ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
 	deleteGlAxisPlot();
@@ -278,7 +279,6 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
 
 	if (axisBoxPlotMap.size() == 0) {
 		buildGlAxisPlot(allAxis);
-		drawAxisBoxPlot = true;
 		lastNbAxis = allAxis.size();
 		parallelView->refresh();
 		return;
@@ -287,7 +287,6 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
 	if ((lastNbAxis != 0 && lastNbAxis != allAxis.size()) || (currentGraph != parallelView->getGraph())) {
 		deleteGlAxisPlot();
 		buildGlAxisPlot(allAxis);
-		drawAxisBoxPlot = true;
 		selectedAxis = NULL;
 		parallelView->refresh();
 	}
@@ -334,9 +333,8 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 				}
 				axisBoxPlotMap[(QuantitativeParallelAxis *)selectedAxis]->setHighlightRangeIfAny(sceneCoords);
 		}
-		drawAxisBoxPlot = true;
 		parallelView->refresh();
-		return true;
+		//return true;
 	}
 
 	if (e->type() == QEvent::MouseButtonPress) {
@@ -350,21 +348,15 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
 				parallelView->highlightDataInAxisBoxPlotRange((QuantitativeParallelAxis *) selectedAxis);
 			Observable::unholdObservers();
 			selectedAxis = NULL;
-			drawAxisBoxPlot = true;
 			parallelView->refresh();
-			return true;
+			//return true;
 		}
 	}
 
-	drawAxisBoxPlot = true;
 	return false;
 }
 
 bool ParallelCoordsAxisBoxPlot::draw(GlMainWidget *glMainWidget) {
-
-	if (!drawAxisBoxPlot) {
-		return false;
-	}
 
 	Camera *camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
 	camera->initGl();
@@ -374,7 +366,6 @@ bool ParallelCoordsAxisBoxPlot::draw(GlMainWidget *glMainWidget) {
 		(it->second)->draw(0,0);
 	}
 
-	drawAxisBoxPlot = false;
 	return true;
 }
 

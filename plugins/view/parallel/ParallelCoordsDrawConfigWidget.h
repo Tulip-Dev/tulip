@@ -42,6 +42,7 @@ public :
 	void setAxisPointMinSize(const unsigned int axisPointMinSize);
 	Size getAxisPointMaxSize() const;
 	void setAxisPointMaxSize(const unsigned int axisPointMaxSize);
+	bool displayNodesLabels() const;
 	void setLinesColorAlphaValue(unsigned int value);
 	unsigned int getLinesColorAlphaValue() const;
 	Color getBackgroundColor() const;

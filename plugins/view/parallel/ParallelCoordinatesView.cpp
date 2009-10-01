@@ -40,7 +40,9 @@ private :
 	ParallelCoordinatesDrawing *parallelDrawing;
 };
 
-VIEWPLUGIN(ParallelCoordinatesView, "Parallel Coordinates view", "Tulip Team", "16/04/2008", "Parallel Coordinates View", "1.0");
+const string ParallelCoordinatesView::viewName("Parallel Coordinates view");
+
+VIEWPLUGIN(ParallelCoordinatesView, ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel Coordinates View", "1.0");
 
 
 ParallelCoordinatesView::ParallelCoordinatesView() :
@@ -66,6 +68,7 @@ void ParallelCoordinatesView::cleanup() {
 
 QWidget *ParallelCoordinatesView::construct(QWidget *parent) {
 	QWidget *widget=GlMainView::construct(parent);
+	overviewAction = new QAction("overview", this);
 	initGlWidget();
 	buildMenuEntries();
 
@@ -89,10 +92,12 @@ void ParallelCoordinatesView::initGlWidget() {
 	GlGraphRenderingParameters param = mainWidget->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
 	param.setAntialiasing (true);
 	param.setNodesStencil(2);
+	param.setNodesLabelStencil(1);
 	param.setSelectedNodesStencil(1);
 	param.setDisplayEdges(false);
 	param.setDisplayNodes(true);
 	param.setViewNodeLabel(false);
+	param.setFontsType(2);
 	mainWidget->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
 	mainWidget->setMouseTracking(true);
 }
@@ -105,7 +110,8 @@ void ParallelCoordinatesView::toggleGraphView(const bool displayGraph) {
 
 void ParallelCoordinatesView::buildMenuEntries() {
 	viewSetupMenu = new QMenu(tr("View Setup"));
-	viewSetupMenu->addAction(tr("Center View"));
+	viewSetupMenu->addAction("&Redraw View", this, SLOT(draw()), tr("Ctrl+Shift+R"));
+	viewSetupMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
 	viewSetupMenu->addSeparator();
 	viewSetupMenu->addAction(tr("Layout Type"))->setEnabled(false);
 	classicLayout = viewSetupMenu->addAction(tr("Classic Layout"));
@@ -486,6 +492,13 @@ void ParallelCoordinatesView::init() {
 }
 
 void ParallelCoordinatesView::specificEventFilter(QObject *object,QEvent *event) {
+	if (event->type() == QEvent::KeyPress){
+		QKeyEvent *keyEvent=(QKeyEvent*)event;
+		if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+			draw();
+		if((keyEvent->key()==Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+			centerView();
+	}
 	if (event->type() == QEvent::ToolTip && showToolTips->isChecked()) {
 		QHelpEvent *he = static_cast<QHelpEvent *>(event);
 		if (parallelCoordsDrawing != NULL) {
@@ -605,6 +618,9 @@ void ParallelCoordinatesView::setupAndDrawView() {
 	parallelCoordsDrawing->setLinesColorAlphaValue(drawConfigWidget->getLinesColorAlphaValue());
 	parallelCoordsDrawing->setLayoutType(getLayoutType());
 	parallelCoordsDrawing->setLinesType(getLinesType());
+	GlGraphRenderingParameters param = mainWidget->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
+	param.setViewNodeLabel(drawConfigWidget->displayNodesLabels());
+	mainWidget->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
 	if (graphProxy->getUnhighlightedEltsColorAlphaValue() != drawConfigWidget->getUnhighlightedEltsColorsAlphaValue()) {
 		graphProxy->setUnhighlightedEltsColorAlphaValue(drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
 		Observable::holdObservers();

@@ -104,7 +104,6 @@ private :
 	std::vector<ParallelAxis *> lastSelectedAxis;
 	AxisSlider *selectedSlider;
 	bool axisSliderDragStarted;
-	bool drawSliders;
 	bool pointerBetweenSliders;
 	bool slidersRangeDragStarted;
 	int slidersRangeLength;
