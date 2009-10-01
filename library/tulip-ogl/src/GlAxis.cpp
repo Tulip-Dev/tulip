@@ -102,10 +102,16 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 void GlAxis::buildAxisLine() {
 	GlLine *axisLine = new GlLine();
 	axisLine->addPoint(axisBaseCoord, axisColor);
+	const unsigned int nbLineSegments = 30;
+	float step = axisLength / nbLineSegments;
 	if (axisOrientation == VERTICAL_AXIS) {
-		axisLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength), axisColor);
+		for (unsigned int i = 1 ; i <= nbLineSegments ; ++i) {
+			axisLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + i * step), axisColor);
+		}
 	} else if (axisOrientation == HORIZONTAL_AXIS) {
-		axisLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()), axisColor);
+		for (unsigned int i = 1 ; i <= nbLineSegments ; ++i) {
+			axisLine->addPoint(Coord(axisBaseCoord.getX() + i * step, axisBaseCoord.getY()), axisColor);
+		}
 	}
 	axisLine->setStencil(1);
 	axisLine->setLineWidth(2.0);

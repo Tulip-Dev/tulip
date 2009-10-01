@@ -17,15 +17,18 @@
 
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlShaderManager.h>
 
 namespace tlp {
 
-class  GlBezierCurve : public GlSimpleEntity {
+class TLP_GL_SCOPE GlBezierCurve : public GlSimpleEntity {
+
 public:
 
 	GlBezierCurve(const std::vector<Coord> &controlPoints,
 				  const Color &beginColor, const Color &endColor,
 				  const float &beginSize, const float &endSize,
+				  const unsigned int nbCurvePoints = 100,
 				  const std::string &texture = "");
 
 	~GlBezierCurve();
@@ -42,7 +45,8 @@ public:
 
 protected:
 
-	bool vboOk, shaderProgramOk;
+	GlShaderProgram *bezierVertexShader;
+	bool vboOk;
 	std::string shaderProgramName;
 	std::vector<Coord> controlPoints;
 	GLfloat *controlPointsArray;
@@ -52,6 +56,16 @@ protected:
 	float beginSize;
 	float endSize;
 	std::string texture;
+	unsigned int nbCurvePoints;
+
+private :
+
+	void buildBezierVertexBuffers(const unsigned int nbCurvePoints);
+
+	static std::map<unsigned int, GLfloat *> bezierVertexBuffersData;
+	static std::map<unsigned int, std::vector<GLushort *> > bezierVertexBuffersIndices;
+	static std::map<unsigned int, GLuint* > bezierVertexBuffersObject;
+	static std::map<unsigned int, std::vector<GLfloat *> > bezierVertexBuffersDataNoVbo;
 };
 
 }

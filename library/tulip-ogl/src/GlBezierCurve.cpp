@@ -31,8 +31,11 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
 		const string &texture) {
 
-	unsigned int size;
-	GLfloat *points = tlp::buildCurvePoints(curvePoints, tlp::getSizes(curvePoints, startSize, endSize), startN, endN ,size);
+	unsigned int size = curvePoints.size();
+	GLfloat *points = NULL;
+	if (startSize != 1 && endSize != 1) {
+		points = tlp::buildCurvePoints(curvePoints, tlp::getSizes(curvePoints, startSize, endSize), startN, endN ,size);
+	}
 	vector<tlp::Color> curveColors = tlp::getColors(curvePoints, startColor, endColor);
 	if(texture != "") {
 		tlp::GlTextureManager::getInst().activateTexture(texture);
@@ -41,18 +44,27 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_LIGHTING);
 
-	glBegin(GL_QUAD_STRIP);
-	for (unsigned int i = 0; i < size; ++i) {
-		tlp::setMaterial(curveColors[i]);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3fv(&points[i*3]);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3fv(&points[i*3 + size*3]);
+	if (startSize != 1 && endSize != 1) {
+		glBegin(GL_TRIANGLE_STRIP);
+		for (unsigned int i = 0; i < size; ++i) {
+			tlp::setMaterial(curveColors[i]);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3fv(&points[i*3]);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3fv(&points[i*3 + size*3]);
+		}
+		glEnd();
+	} else {
+		glBegin(GL_LINE_STRIP);
+		for (unsigned int i = 0; i < size; ++i) {
+			tlp::setMaterial(curveColors[i]);
+			glVertex3fv((float *) &curvePoints[i]);
+		}
+		glEnd();
 	}
-	glEnd();
 
 	// if no texture set, draw the curve outline for anti-aliasing
-	if(texture == "") {
+	if(texture == "" && points != NULL) {
 		glEnable(GL_BLEND);
 		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBegin(GL_LINE_STRIP);
@@ -75,7 +87,9 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);
 
-	delete [] points;
+	if (points != NULL) {
+		delete [] points;
+	}
 }
 
 static bool checkVboSupport() {
@@ -84,7 +98,7 @@ static bool checkVboSupport() {
 	((void*)(glBufferData)!=NULL);
 }
 
-static string generateBezierVertexShaderSrc(const unsigned int nbControlPoints) {
+static string genBezierVertexShaderCasteljauSrc(const unsigned int nbControlPoints) {
 	ostringstream oss;
 	oss << "#version 120" << endl;
 	oss << "uniform vec3 controlPoints[" << nbControlPoints << "];" << endl;
@@ -93,6 +107,11 @@ static string generateBezierVertexShaderSrc(const unsigned int nbControlPoints) 
 	oss << "uniform vec4 startColor;" << endl;
 	oss << "uniform vec4 endColor;" << endl;
 	oss << "vec3 controlPointsCp[" << nbControlPoints << "];" << endl;
+	oss << "uniform bool fisheye;" << endl;
+	oss << "uniform vec4 center;" << endl;
+	oss << "uniform float radius;" << endl;
+	oss << "uniform float height;" << endl;
+	oss << "uniform int fisheyeType;" << endl;
 	oss << "// compute Bezier Point and its tangent associated to parameter t (0 <= t <= 1)" << endl;
 	oss << "// using  de Casteljau 's algorithm" << endl;
 	oss << "// return value is an array containing two vector of 3 float :" << endl;
@@ -121,9 +140,33 @@ static string generateBezierVertexShaderSrc(const unsigned int nbControlPoints) 
 	oss << "  	normal.x = - tangent.y;" << endl;
 	oss << " 	normal.y = tangent.x;" << endl;
 	oss << "    float width = startWidth + gl_Vertex.x * (endWidth - startWidth);" << endl;
-	oss <<"	    // the orientation of the quad vertiex to generate is stored in the y coordinates of te incoming vertex" << endl;
+	oss <<"	    // the orientation of the quad vertex to generate is stored in the y coordinates of the incoming vertex" << endl;
 	oss <<"	    vec3 finalVertex = bezierVertex + gl_Vertex.y * (normal * width);" << endl;
-	oss <<"  	gl_Position = gl_ModelViewProjectionMatrix * vec4(finalVertex, 1.0);" << endl;
+	oss <<"     if (!fisheye) {" << endl;
+	oss <<"  		gl_Position = gl_ModelViewProjectionMatrix * vec4(finalVertex, 1.0);" << endl;
+	oss <<"		} else {" << endl;
+	oss <<"			gl_Position = gl_ModelViewMatrix * vec4(finalVertex, 1.0);" << endl;
+	oss <<"			float dist = distance(center, gl_Position);" << endl;
+	oss <<"			if (fisheyeType == 1) {" << endl;
+	oss <<"				if (dist < radius) {" << endl;
+	oss <<"					float coeff = (height + 1.0) * dist / (height * dist/ radius + 1.0);" << endl;
+	oss <<"					vec4 dir = normalize(gl_Position - center) * coeff;" << endl;
+	oss <<"					gl_Position = gl_ProjectionMatrix * (center + dir);" << endl;
+	oss <<"				} else {" << endl;
+	oss <<"					gl_Position = gl_ProjectionMatrix * gl_Position;" << endl;
+	oss <<"				}" << endl;
+	oss <<"			} else if (fisheyeType == 2) {" << endl;
+	oss <<"				float coeff = dist+dist*radius/(dist*dist+1.0+radius/height);" << endl;
+	oss <<"				vec4 dir = normalize(gl_Position - center) * coeff;" << endl;
+	oss <<"				gl_Position = gl_ProjectionMatrix * (center + dir);" << endl;
+	oss <<"			} else {" << endl;
+	oss <<"				if (dist < radius) {" << endl;
+	oss <<"					gl_Position = gl_ProjectionMatrix * (center + height * (gl_Position - center));" << endl;
+	oss <<"				} else {" << endl;
+	oss <<"					gl_Position = gl_ProjectionMatrix * (center + (1.0 + radius * (height - 1.0) / dist) * (gl_Position - center));" << endl;
+	oss <<"				}" << endl;
+	oss <<"			}" << endl;
+	oss <<"		}" << endl;
 	oss <<"  	gl_FrontColor = startColor + gl_Vertex.x * (endColor - startColor);" << endl;
 	oss <<"     if (gl_Vertex.y > 0.0)" << endl;
 	oss <<"     	gl_TexCoord[0].st = vec2(0.,0.);" << endl;
@@ -131,237 +174,170 @@ static string generateBezierVertexShaderSrc(const unsigned int nbControlPoints) 
 	oss << "    	gl_TexCoord[0].st = vec2(1.,1.);" << endl;
 	oss <<"}" << endl;
 
+	cout << oss.str() << endl;
+
 	return oss.str();
 }
 
-static GLfloat curveQuadVertexData[160] = {
-		0.0f, 1.0f,
-		0.0f, -1.0f,
-		1.0f / 39.0f, 1.0f,
-		1.0f / 39.0f, -1.0f,
-		2.0f / 39.0f, 1.0f,
-		2.0f / 39.0f, -1.0f,
-		3.0f / 39.0f, 1.0f,
-		3.0f / 39.0f, -1.0f,
-		4.0f / 39.0f, 1.0f,
-		4.0f / 39.0f, -1.0f,
-		5.0f / 39.0f, 1.0f,
-		5.0f / 39.0f, -1.0f,
-		6.0f / 39.0f, 1.0f,
-		6.0f / 39.0f, -1.0f,
-		7.0f / 39.0f, 1.0f,
-		7.0f / 39.0f, -1.0f,
-		8.0f / 39.0f, 1.0f,
-		8.0f / 39.0f, -1.0f,
-		9.0f / 39.0f, 1.0f,
-		9.0f / 39.0f, -1.0f,
-		10.0f / 39.0f, 1.0f,
-		10.0f / 39.0f, -1.0f,
-		11.0f / 39.0f, 1.0f,
-		11.0f / 39.0f, -1.0f,
-		12.0f / 39.0f, 1.0f,
-		12.0f / 39.0f, -1.0f,
-		13.0f / 39.0f, 1.0f,
-		13.0f / 39.0f, -1.0f,
-		14.0f / 39.0f, 1.0f,
-		14.0f / 39.0f, -1.0f,
-		15.0f / 39.0f, 1.0f,
-		15.0f / 39.0f, -1.0f,
-		16.0f / 39.0f, 1.0f,
-		16.0f / 39.0f, -1.0f,
-		17.0f / 39.0f, 1.0f,
-		17.0f / 39.0f, -1.0f,
-		18.0f / 39.0f, 1.0f,
-		18.0f / 39.0f, -1.0f,
-		19.0f / 39.0f, 1.0f,
-		19.0f / 39.0f, -1.0f,
-		20.0f / 39.0f, 1.0f,
-		20.0f / 39.0f, -1.0f,
-		21.0f / 39.0f, 1.0f,
-		21.0f / 39.0f, -1.0f,
-		22.0f / 39.0f, 1.0f,
-		22.0f / 39.0f, -1.0f,
-		23.0f / 39.0f, 1.0f,
-		23.0f / 39.0f, -1.0f,
-		24.0f / 39.0f, 1.0f,
-		24.0f / 39.0f, -1.0f,
-		25.0f / 39.0f, 1.0f,
-		25.0f / 39.0f, -1.0f,
-		26.0f / 39.0f, 1.0f,
-		26.0f / 39.0f, -1.0f,
-		27.0f / 39.0f, 1.0f,
-		27.0f / 39.0f, -1.0f,
-		28.0f / 39.0f, 1.0f,
-		28.0f / 39.0f, -1.0f,
-		29.0f / 39.0f, 1.0f,
-		29.0f / 39.0f, -1.0f,
-		30.0f / 39.0f, 1.0f,
-		30.0f / 39.0f, -1.0f,
-		31.0f / 39.0f, 1.0f,
-		31.0f / 39.0f, -1.0f,
-		32.0f / 39.0f, 1.0f,
-		32.0f / 39.0f, -1.0f,
-		33.0f / 39.0f, 1.0f,
-		33.0f / 39.0f, -1.0f,
-		34.0f / 39.0f, 1.0f,
-		34.0f / 39.0f, -1.0f,
-		35.0f / 39.0f, 1.0f,
-		35.0f / 39.0f, -1.0f,
-		36.0f / 39.0f, 1.0f,
-		36.0f / 39.0f, -1.0f,
-		37.0f / 39.0f, 1.0f,
-		37.0f / 39.0f, -1.0f,
-		38.0f / 39.0f, 1.0f,
-		38.0f / 39.0f, -1.0f,
-		1.0f, 1.0f,
-		1.0f, -1.0f
-};
+vector<vector<unsigned long long> > buildPascalTriangle(unsigned int n) {
 
-static GLfloat curveQuadTopOutlineVertexData[80] = {
-		0.0f, 1.0f,
-		1.0f / 39.0f, 1.0f,
-		2.0f / 39.0f, 1.0f,
-		3.0f / 39.0f, 1.0f,
-		4.0f / 39.0f, 1.0f,
-		5.0f / 39.0f, 1.0f,
-		6.0f / 39.0f, 1.0f,
-		7.0f / 39.0f, 1.0f,
-		8.0f / 39.0f, 1.0f,
-		9.0f / 39.0f, 1.0f,
-		10.0f / 39.0f, 1.0f,
-		11.0f / 39.0f, 1.0f,
-		12.0f / 39.0f, 1.0f,
-		13.0f / 39.0f, 1.0f,
-		14.0f / 39.0f, 1.0f,
-		15.0f / 39.0f, 1.0f,
-		16.0f / 39.0f, 1.0f,
-		17.0f / 39.0f, 1.0f,
-		18.0f / 39.0f, 1.0f,
-		19.0f / 39.0f, 1.0f,
-		20.0f / 39.0f, 1.0f,
-		21.0f / 39.0f, 1.0f,
-		22.0f / 39.0f, 1.0f,
-		23.0f / 39.0f, 1.0f,
-		24.0f / 39.0f, 1.0f,
-		25.0f / 39.0f, 1.0f,
-		26.0f / 39.0f, 1.0f,
-		27.0f / 39.0f, 1.0f,
-		28.0f / 39.0f, 1.0f,
-		29.0f / 39.0f, 1.0f,
-		30.0f / 39.0f, 1.0f,
-		31.0f / 39.0f, 1.0f,
-		32.0f / 39.0f, 1.0f,
-		33.0f / 39.0f, 1.0f,
-		34.0f / 39.0f, 1.0f,
-		35.0f / 39.0f, 1.0f,
-		36.0f / 39.0f, 1.0f,
-		37.0f / 39.0f, 1.0f,
-		38.0f / 39.0f, 1.0f,
-		1.0f, 1.0f,
-};
+	vector<vector<unsigned long long> > pascalTriangle;
+	pascalTriangle.resize(n);
+	for (unsigned int i = 0; i < n; ++i) {
+		pascalTriangle[i].resize(i+1);
+	}
 
-static GLfloat curveQuadBottomOutlineVertexData[80] = {
-		0.0f, -1.0f,
-		1.0f / 39.0f, -1.0f,
-		2.0f / 39.0f, -1.0f,
-		3.0f / 39.0f, -1.0f,
-		4.0f / 39.0f, -1.0f,
-		5.0f / 39.0f, -1.0f,
-		6.0f / 39.0f, -1.0f,
-		7.0f / 39.0f, -1.0f,
-		8.0f / 39.0f, -1.0f,
-		9.0f / 39.0f, -1.0f,
-		10.0f / 39.0f, -1.0f,
-		11.0f / 39.0f, -1.0f,
-		12.0f / 39.0f, -1.0f,
-		13.0f / 39.0f, -1.0f,
-		14.0f / 39.0f, -1.0f,
-		15.0f / 39.0f, -1.0f,
-		16.0f / 39.0f, -1.0f,
-		17.0f / 39.0f, -1.0f,
-		18.0f / 39.0f, -1.0f,
-		19.0f / 39.0f, -1.0f,
-		20.0f / 39.0f, -1.0f,
-		21.0f / 39.0f, -1.0f,
-		22.0f / 39.0f, -1.0f,
-		23.0f / 39.0f, -1.0f,
-		24.0f / 39.0f, -1.0f,
-		25.0f / 39.0f, -1.0f,
-		26.0f / 39.0f, -1.0f,
-		27.0f / 39.0f, -1.0f,
-		28.0f / 39.0f, -1.0f,
-		29.0f / 39.0f, -1.0f,
-		30.0f / 39.0f, -1.0f,
-		31.0f / 39.0f, -1.0f,
-		32.0f / 39.0f, -1.0f,
-		33.0f / 39.0f, -1.0f,
-		34.0f / 39.0f, -1.0f,
-		35.0f / 39.0f, -1.0f,
-		36.0f / 39.0f, -1.0f,
-		37.0f / 39.0f, -1.0f,
-		38.0f / 39.0f, -1.0f,
-		1.0f, -1.0f,
-};
+	pascalTriangle[0][0] = 1;
+	for (unsigned int i = 1; i < n; i++) {
+		pascalTriangle[i][0] = 1;
+		pascalTriangle[i][i] = 1;
+		for (unsigned int j = 1; j < i; ++j) {
+			pascalTriangle[i][j] = pascalTriangle[i-1][j-1] + pascalTriangle[i-1][j];
+		}
+	}
+	return pascalTriangle;
+}
 
-static GLfloat curveVertexData[80] = {
-		0.0f, 0.0f,
-		1.0f / 39.0f, 0.0f,
-		2.0f / 39.0f, 0.0f,
-		3.0f / 39.0f, 0.0f,
-		4.0f / 39.0f, 0.0f,
-		5.0f / 39.0f, 0.0f,
-		6.0f / 39.0f, 0.0f,
-		7.0f / 39.0f, 0.0f,
-		8.0f / 39.0f, 0.0f,
-		9.0f / 39.0f, 0.0f,
-		10.0f / 39.0f, 0.0f,
-		11.0f / 39.0f, 0.0f,
-		12.0f / 39.0f, 0.0f,
-		13.0f / 39.0f, 0.0f,
-		14.0f / 39.0f, 0.0f,
-		15.0f / 39.0f, 0.0f,
-		16.0f / 39.0f, 0.0f,
-		17.0f / 39.0f, 0.0f,
-		18.0f / 39.0f, 0.0f,
-		19.0f / 39.0f, 0.0f,
-		20.0f / 39.0f, 0.0f,
-		21.0f / 39.0f, 0.0f,
-		22.0f / 39.0f, 0.0f,
-		23.0f / 39.0f, 0.0f,
-		24.0f / 39.0f, 0.0f,
-		25.0f / 39.0f, 0.0f,
-		26.0f / 39.0f, 0.0f,
-		27.0f / 39.0f, 0.0f,
-		28.0f / 39.0f, 0.0f,
-		29.0f / 39.0f, 0.0f,
-		30.0f / 39.0f, 0.0f,
-		31.0f / 39.0f, 0.0f,
-		32.0f / 39.0f, 0.0f,
-		33.0f / 39.0f, 0.0f,
-		34.0f / 39.0f, 0.0f,
-		35.0f / 39.0f, 0.0f,
-		36.0f / 39.0f, 0.0f,
-		37.0f / 39.0f, 0.0f,
-		38.0f / 39.0f, 0.0f,
-		1.0f, 0.0f,
-};
+string genBezierEquation(unsigned int n) {
+	vector<vector<unsigned long long> > pascalTriangle = buildPascalTriangle(n+1);
 
-static GLuint vboId[4] = {0, 0, 0, 0};
+	ostringstream oss;
+	for (unsigned int i = 0 ; i <= n ; ++i) {
+		oss << "controlPoints[" << i << "] ";
+		if (i != 0 && i != n) {
+			oss << "* " << pascalTriangle[n][i] << ".0 ";
+		}
+		if (i >= 1) {
+			if (i == 1) {
+				oss << "* t ";
+			} else {
+				oss << "* t" << i << " ";
+			}
+		}
+		if (i < n) {
+			if (i == n-1) {
+				oss << "* s ";
+			} else {
+				oss << "* s" << (n-i) << " ";
+			}
+		}
+		//	oss << "* pow(t, " << i << ".0) * pow(s, " << (n-i) << ".0) ";
+		if (i != n) {
+			oss << "+ ";
+		}
+	}
+	return oss.str();
+}
+
+string genBezierVertexShaderPolynomEvalSrc(unsigned int nbControlPoints) {
+
+	ostringstream oss;
+	oss << "uniform vec3 controlPoints[" << nbControlPoints << "];" << endl;
+	oss << "uniform float startWidth;" << endl;
+	oss << "uniform float endWidth;" << endl;
+	oss << "uniform vec4 startColor;" << endl;
+	oss << "uniform vec4 endColor;" << endl;
+	oss << "uniform float step;" << endl;
+	oss << "uniform bool fisheye;" << endl;
+	oss << "uniform vec4 center;" << endl;
+	oss << "uniform float radius;" << endl;
+	oss << "uniform float height;" << endl;
+	oss << "uniform int fisheyeType;" << endl;
+	oss << "void" << endl;
+	oss << "main (void) {" << endl;
+	oss << "float t = gl_Vertex.x;" << endl;
+	oss << "float t2 = t * t;" << endl;
+	for (unsigned int i = 3 ; i <= nbControlPoints - 1 ; ++i) {
+		oss << "float t" << i << " = t * t" << (i-1) << ";" << endl;
+	}
+	oss << "float s = (1.0 - t);" << endl;
+	oss << "float s2 = s * s;" << endl;
+	for (unsigned int i = 3 ; i <= nbControlPoints - 1 ; ++i) {
+		oss << "float s" << i << " = s * s" << (i-1) << ";" << endl;
+	}
+	oss << "vec3 currentBezierVertex = " << genBezierEquation(nbControlPoints-1) << ";" << endl;
+	oss << "if (gl_Vertex.y != 0.0) {" << endl;
+	oss << "t += step;" << endl;
+	oss << "t2 = t * t;" << endl;
+	for (unsigned int i = 3 ; i <= nbControlPoints - 1 ; ++i) {
+		oss << "t" << i << " = t * t" << (i-1) << ";" << endl;
+	}
+	oss << "s = (1.0 - t);" << endl;
+	oss << "s2 = s * s;" << endl;
+	for (unsigned int i = 3 ; i <= nbControlPoints - 1 ; ++i) {
+		oss << "s" << i << " = s * s" << (i-1) << ";" << endl;
+	}
+	oss << "vec3 nextBezierVertex = " + genBezierEquation(nbControlPoints-1) << ";" << endl;
+	oss <<  "vec3 tangent = normalize(nextBezierVertex - currentBezierVertex);" << endl;
+	oss <<  "vec3 normal = tangent;" << endl;
+	oss << "normal.x = - tangent.y;" << endl;
+	oss << "normal.y = tangent.x;" << endl;
+	oss << "float width = mix(startWidth, endWidth, t);" << endl;
+	oss << "currentBezierVertex += normal * (gl_Vertex.y * width);" << endl;
+	oss << "}" << endl;
+	oss <<"if (!fisheye) {" << endl;
+	oss <<"	gl_Position = gl_ModelViewProjectionMatrix * vec4(currentBezierVertex, 1.0);" << endl;
+	oss <<"} else {" << endl;
+	oss <<"	gl_Position = gl_ModelViewMatrix * vec4(currentBezierVertex, 1.0);" << endl;
+	oss <<"	float dist = distance(center, gl_Position);" << endl;
+	oss <<"	if (fisheyeType == 1) {" << endl;
+	oss <<"		if (dist < radius) {" << endl;
+	oss <<"			float coeff = (height + 1.) * dist / (height * dist/ radius + 1.);" << endl;
+	oss <<"			vec4 dir = normalize(gl_Position - center) * coeff;" << endl;
+	oss <<"			gl_Position = gl_ProjectionMatrix * (center + dir);" << endl;
+	oss <<"		} else {" << endl;
+	oss <<"			gl_Position = gl_ProjectionMatrix * gl_Position;" << endl;
+	oss <<"		}" << endl;
+	oss <<"	} else if (fisheyeType == 2) {" << endl;
+	oss <<"		float coeff = dist+dist*radius/(dist*dist+1.0+radius/height);" << endl;
+	oss <<"		vec4 dir = normalize(gl_Position - center) * coeff;" << endl;
+	oss <<"		gl_Position = gl_ProjectionMatrix * (center + dir);" << endl;
+	oss <<"	} else {" << endl;
+	oss <<"		if (dist < radius) {" << endl;
+	oss <<"			gl_Position = gl_ProjectionMatrix * (center + height * (gl_Position - center));" << endl;
+	oss <<"		} else {" << endl;
+	oss <<"			gl_Position = gl_ProjectionMatrix * (center + (1. + radius * (height - 1.) / dist) * (gl_Position - center));" << endl;
+	oss <<"		}" << endl;
+	oss <<"	}" << endl;
+	oss <<"}" << endl;
+	oss << "gl_FrontColor = mix(startColor, endColor, t);" << endl;
+	oss << "if (gl_Vertex.y > 0.0)" << endl;
+	oss << "	gl_TexCoord[0].st = vec2(0.,0.);" << endl;
+	oss << "else" << endl;
+	oss << "	gl_TexCoord[0].st = vec2(1.,1.);" << endl;
+	oss << "}" << endl;
+	return oss.str();
+}
+
+static const unsigned int CONTROL_POINTS_LIMIT = 70;
 
 namespace tlp {
+
+map<unsigned int, GLfloat *> GlBezierCurve::bezierVertexBuffersData = map<unsigned int, GLfloat * >();
+map<unsigned int, vector<GLushort *> > GlBezierCurve::bezierVertexBuffersIndices = map<unsigned int, vector<GLushort * > >();
+map<unsigned int, GLuint *> GlBezierCurve::bezierVertexBuffersObject = map<unsigned int, GLuint*>();
+map<unsigned int, std::vector<GLfloat *> > GlBezierCurve::bezierVertexBuffersDataNoVbo = map<unsigned int, std::vector<GLfloat *> >();
+
+
 //=============================================
 GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 		const Color &beginColor,
 		const Color &endColor,
 		const float &beginSize,
 		const float &endSize,
+		const unsigned int nbCurvePoints,
 		const string &texture):
+			bezierVertexShader(NULL),
 			controlPoints(controlPoints),
 			beginColor(beginColor),
 			endColor(endColor),
 			beginSize(beginSize),
 			endSize(endSize),
-			texture(texture) {
+			texture(texture),
+			nbCurvePoints(nbCurvePoints)
+			{
+
+	vboOk = checkVboSupport();
 
 	nbControlPoints = controlPoints.size();
 	for (int i = 0 ; i < nbControlPoints ; ++i) {
@@ -380,6 +356,33 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 		controlPointsArray[3 * i + 2] = controlPoints[i][2];
 	}
 
+
+	if ((vboOk && bezierVertexBuffersData.find(nbCurvePoints) == bezierVertexBuffersData.end()) ||
+	    (!vboOk && bezierVertexBuffersDataNoVbo.find(nbCurvePoints) == bezierVertexBuffersDataNoVbo.end())) {
+		buildBezierVertexBuffers(nbCurvePoints);
+
+		if (vboOk) {
+			glGenBuffers(5, bezierVertexBuffersObject[nbCurvePoints]);
+			glBindBuffer(GL_ARRAY_BUFFER, bezierVertexBuffersObject[nbCurvePoints][0]);
+			glBufferData(GL_ARRAY_BUFFER, 6 * nbCurvePoints * sizeof(GLfloat), bezierVertexBuffersData[nbCurvePoints], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bezierVertexBuffersObject[nbCurvePoints][1]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * nbCurvePoints * sizeof(GLushort), bezierVertexBuffersIndices[nbCurvePoints][0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bezierVertexBuffersObject[nbCurvePoints][2]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), bezierVertexBuffersIndices[nbCurvePoints][1], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bezierVertexBuffersObject[nbCurvePoints][3]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), bezierVertexBuffersIndices[nbCurvePoints][2], GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bezierVertexBuffersObject[nbCurvePoints][4]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), bezierVertexBuffersIndices[nbCurvePoints][3], GL_STATIC_DRAW);
+		}
+	}
+
+	if (GlShaderManager::getInstance()->isShaderProgramsSupported() && controlPoints.size() <= CONTROL_POINTS_LIMIT) {
+		if (!GlShaderManager::getInstance()->shaderProgramAlreadyCompiled(shaderProgramName)) {
+			bezierVertexShader = GlShaderManager::getInstance()->createVertexShaderFromString(shaderProgramName, genBezierVertexShaderPolynomEvalSrc(nbControlPoints));
+		} else {
+			bezierVertexShader = GlShaderManager::getInstance()->getShaderProgram(shaderProgramName);
+		}
+	}
 }
 //=====================================================
 GlBezierCurve::~GlBezierCurve() {
@@ -387,100 +390,165 @@ GlBezierCurve::~GlBezierCurve() {
 		delete [] controlPointsArray;
 	}
 }
+void GlBezierCurve::buildBezierVertexBuffers(const unsigned int nbCurvePoints) {
+
+	if (vboOk) {
+		bezierVertexBuffersObject[nbCurvePoints] = new GLuint[5];
+		bezierVertexBuffersData[nbCurvePoints] = new GLfloat[nbCurvePoints * 6];
+		bezierVertexBuffersIndices[nbCurvePoints].resize(4);
+		bezierVertexBuffersIndices[nbCurvePoints][0] = new GLushort[nbCurvePoints * 2];
+		bezierVertexBuffersIndices[nbCurvePoints][1] = new GLushort[nbCurvePoints];
+		bezierVertexBuffersIndices[nbCurvePoints][2] = new GLushort[nbCurvePoints];
+		bezierVertexBuffersIndices[nbCurvePoints][3] = new GLushort[nbCurvePoints];
+	} else {
+		bezierVertexBuffersDataNoVbo[nbCurvePoints].resize(4);
+		bezierVertexBuffersDataNoVbo[nbCurvePoints][0] = new GLfloat[nbCurvePoints * 4];
+		bezierVertexBuffersDataNoVbo[nbCurvePoints][1] = new GLfloat[nbCurvePoints * 2];
+		bezierVertexBuffersDataNoVbo[nbCurvePoints][2] = new GLfloat[nbCurvePoints * 2];
+		bezierVertexBuffersDataNoVbo[nbCurvePoints][3] = new GLfloat[nbCurvePoints * 2];
+	}
+
+	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+		float t = (float) i / (float) (nbCurvePoints - 1);
+		if (vboOk) {
+			bezierVertexBuffersData[nbCurvePoints][6*i] = t;
+			bezierVertexBuffersData[nbCurvePoints][6*i+1] = 1.0f;
+			bezierVertexBuffersData[nbCurvePoints][6*i+2] = t;
+			bezierVertexBuffersData[nbCurvePoints][6*i+3] = 0.0f;
+			bezierVertexBuffersData[nbCurvePoints][6*i+4] = t;
+			bezierVertexBuffersData[nbCurvePoints][6*i+5] = -1.0f;
+
+			bezierVertexBuffersIndices[nbCurvePoints][0][2*i] = 3*i;
+			bezierVertexBuffersIndices[nbCurvePoints][0][2*i+1] = 3*i+2;
+			bezierVertexBuffersIndices[nbCurvePoints][1][i] = 3*i+1;
+			bezierVertexBuffersIndices[nbCurvePoints][2][i] = 3*i;
+			bezierVertexBuffersIndices[nbCurvePoints][3][i] = 3*i+2;
+		} else {
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][0][4*i] = t;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][0][4*i+1] = 1.0f;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][0][4*i+2] = t;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][0][4*i+3] = -1.0f;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][1][2*i] = t;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][1][2*i+1] = 0.0f;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][2][2*i] = t;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][2][2*i+1] = 1.0f;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][3][2*i] = t;
+			bezierVertexBuffersDataNoVbo[nbCurvePoints][3][2*i+1] = -1.0f;
+		}
+	}
+
+}
 //=====================================================
 void GlBezierCurve::draw(float lod, Camera *camera) {
-
-	bool shaderProgramOk = false;
-	if (controlPoints.size() <= 8)
-		shaderProgramOk = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName) != 0 ||
-		GlShaderManager::getInstance()->registerShaderProgramFromStrings(shaderProgramName, generateBezierVertexShaderSrc(nbControlPoints), "");
-
-	bool vboOk = checkVboSupport();
-	if (shaderProgramOk && vboOk && vboId[0] == 0) {
-		glGenBuffers(4, vboId);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(curveQuadVertexData), curveQuadVertexData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(curveVertexData), curveVertexData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId[2]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(curveQuadTopOutlineVertexData), curveQuadTopOutlineVertexData, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId[3]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(curveQuadBottomOutlineVertexData), curveQuadBottomOutlineVertexData, GL_STATIC_DRAW);
-	}
 
 	if (texture != "") {
 		GlTextureManager::getInst().activateTexture(texture);
 	}
 
-	if (controlPoints.size() <= 8) {
-		if (shaderProgramOk) {
-			GLuint shaderId = GlShaderManager::getInstance()->getShaderProgramId(shaderProgramName);
-			GlShaderManager::getInstance()->activateShaderProgram(shaderProgramName);
+	GLuint *vbo = bezierVertexBuffersObject[nbCurvePoints];
 
-			GLint controlPointsArrayloc = glGetUniformLocation(shaderId, "controlPoints");
-			GLint startWidthLoc = glGetUniformLocation(shaderId, "startWidth");
-			GLint endWidthLoc = glGetUniformLocation(shaderId, "endWidth");
-			GLint startColorLoc = glGetUniformLocation(shaderId, "startColor");
-			GLint endColorLoc = glGetUniformLocation(shaderId, "endColor");
+	if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
 
-			glUniform3fv(controlPointsArrayloc, nbControlPoints, controlPointsArray);
-			glUniform1f(startWidthLoc, beginSize);
-			glUniform1f(endWidthLoc, endSize);
-			glUniform4f(startColorLoc, beginColor[0] / 255.0f, beginColor[1] / 255.0f, beginColor[2] / 255.0f, beginColor[3] / 255.0f);
-			glUniform4f(endColorLoc, endColor[0] / 255.0f, endColor[1] / 255.0f, endColor[2] / 255.0f, endColor[3] / 255.0f);
+		if (bezierVertexShader != NULL) {
+			bool fisheyeActivated = GlShaderManager::getInstance()->getCurrentShaderProgramName() == "fisheye";
+			GLfloat fisheyeCenter[4];
+			GLfloat fisheyeRadius;
+			GLfloat fisheyeHeight;
+			GLint   fisheyeType;
+			if (fisheyeActivated) {
+				GlShaderProgram *fisheyeShader = GlShaderManager::getInstance()->getShaderProgram("fisheye");
+				fisheyeShader->getUniformFloatVariableValue("center", fisheyeCenter);
+				fisheyeShader->getUniformFloatVariableValue("radius", &fisheyeRadius);
+				fisheyeShader->getUniformFloatVariableValue("height", &fisheyeHeight);
+				fisheyeShader->getUniformIntVariableValue("fisheyeType", &fisheyeType);
+			}
+
+			GlShaderManager::getInstance()->activateShaderProgram(bezierVertexShader);
+
+			bezierVertexShader->setUniformVec3FloatArray("controlPoints", nbControlPoints, controlPointsArray);
+			bezierVertexShader->setUniformFloat("startWidth", beginSize);
+			bezierVertexShader->setUniformFloat("endWidth", endSize);
+			bezierVertexShader->setUniformColor("startColor", beginColor);
+			bezierVertexShader->setUniformColor("endColor", endColor);
+			bezierVertexShader->setUniformFloat("step", 1.0 / (nbCurvePoints - 1.0));
+
+			bezierVertexShader->setUniformBool("fisheye", fisheyeActivated);
+			if (fisheyeActivated) {
+				bezierVertexShader->setUniformVec4Float("center", fisheyeCenter[0], fisheyeCenter[1], fisheyeCenter[2], fisheyeCenter[3]);
+				bezierVertexShader->setUniformFloat("radius", fisheyeRadius);
+				bezierVertexShader->setUniformFloat("height", fisheyeHeight);
+				bezierVertexShader->setUniformInt("fisheyeType", fisheyeType);
+			}
+
 
 			glEnableClientState(GL_VERTEX_ARRAY);
 
 			if (vboOk) {
-				if (beginSize == 1 && endSize == 1) {
-					glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
-				} else {
-					glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-				}
-				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-			} else {
-				if (beginSize == 1 && endSize == 1) {
-					glVertexPointer(2, GL_FLOAT, 0, curveVertexData);
-				} else {
-					glVertexPointer(2, GL_FLOAT, 0, curveQuadVertexData);
-				}
+				glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+				glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), 0);
 			}
 
 			if (beginSize == 1 && endSize == 1) {
-				glDrawArrays(GL_LINE_STRIP, 0, 40);
+				if (vboOk) {
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+				} else {
+					glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), bezierVertexBuffersDataNoVbo[nbCurvePoints][1]);
+					glDrawArrays(GL_LINE_STRIP, 0, nbCurvePoints);
+				}
+
 			} else {
-				glDrawArrays(GL_QUAD_STRIP, 0, 80);
-				glEnable(GL_BLEND);
-				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				if (vboOk) {
-					glBindBuffer(GL_ARRAY_BUFFER, vboId[2]);
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
+					glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
+				} else {
+					glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), bezierVertexBuffersDataNoVbo[nbCurvePoints][0]);
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, nbCurvePoints * 2);
 				}
-				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-				glDrawArrays(GL_LINE_STRIP, 0, 40);
-				if (vboOk) {
-					glBindBuffer(GL_ARRAY_BUFFER, vboId[3]);
+
+				if (texture == "") {
+					glEnable(GL_BLEND);
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					if (vboOk) {
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+					} else {
+						glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), bezierVertexBuffersDataNoVbo[nbCurvePoints][1]);
+						glDrawArrays(GL_LINE_STRIP, 0, nbCurvePoints);
+					}
+
+					if (vboOk) {
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
+						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+					} else {
+						glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), bezierVertexBuffersDataNoVbo[nbCurvePoints][1]);
+						glDrawArrays(GL_LINE_STRIP, 0, nbCurvePoints);
+					}
 				}
-				glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), 0);
-				glDrawArrays(GL_LINE_STRIP, 0, 40);
 			}
 
 			if (vboOk) {
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			}
 
 			glDisableClientState(GL_VERTEX_ARRAY);
 
 			GlShaderManager::getInstance()->desactivateShaderProgram();
 
+			if (fisheyeActivated) {
+				GlShaderManager::getInstance()->activateShaderProgram(GlShaderManager::getInstance()->getShaderProgram("fisheye"));
+			}
 		} else {
 			vector<Coord> curvePoints;
-			FastBezier::computeBezierPoints(controlPoints,curvePoints,40);
+			FastBezier::computeBezierPoints(controlPoints,curvePoints,nbCurvePoints);
 			drawCurve(curvePoints, beginColor, endColor, beginSize, endSize, curvePoints[0] - Coord(1,0,0), curvePoints[curvePoints.size() - 1] + Coord(1,0,0), texture);
 		}
 	} else {
 		vector<Coord> curvePoints;
-		FastBezier::computeBezierPoints(controlPoints,curvePoints,10);
-		GlCatmullRomCurve curve(curvePoints, beginColor, endColor, beginSize, endSize);
+		vector<Coord> splinePoints;
+		FastBezier::computeBezierPoints(controlPoints,curvePoints, 20);
+		GlCatmullRomCurve curve(curvePoints, beginColor, endColor, beginSize, endSize, "", false, 20);
 		curve.draw(0,0);
 	}
 
