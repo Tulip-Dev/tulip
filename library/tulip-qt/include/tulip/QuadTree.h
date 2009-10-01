@@ -166,7 +166,7 @@ class QuadTreeNode {
     if (children[i] == 0) {
       BBox box=getChildBox(i);
       if(box.first==_box.first && box.second==_box.second)
-        exit(0);
+        assert(false);
       children[i] = new QuadTreeNode(box);
     }
     return children[i];

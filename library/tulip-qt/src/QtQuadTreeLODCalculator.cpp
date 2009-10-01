@@ -214,6 +214,9 @@ namespace tlp {
       float aZ=atan(eyeCenter[0]/eyeCenter[2]);
 
       for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
+        if((*it).second.first==(*it).second.second)
+          continue;
+
         if(aX==0 && aZ==0){
           entitiesQuadTree->insert((*it).second,(*it).first);
         }else{
@@ -221,6 +224,9 @@ namespace tlp {
         }
       }
       for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
+        if((*it).second.first==(*it).second.second)
+          continue;
+
         assert(selectedProperty);
         QuadTreeNode *quadTree;
         if(selectedProperty->getNodeValue(node((*it).first)))
@@ -235,6 +241,9 @@ namespace tlp {
         }
       }
       for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
+        if((*it).second.first==(*it).second.second)
+          continue;
+
         assert(selectedProperty);
         QuadTreeNode *quadTree;
         if(selectedProperty->getEdgeValue(edge((*it).first)))
