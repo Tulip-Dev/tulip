@@ -279,6 +279,10 @@ void viewGl::initializeGraph(Graph *graph) {
   graph->getProperty<StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipLibDir + "tlp/bitmaps/font.ttf");
   graph->getProperty<IntegerProperty>("viewFontSize")->setAllNodeValue(18);
   graph->getProperty<IntegerProperty>("viewFontSize")->setAllEdgeValue(18);
+  graph->getProperty<IntegerProperty>("viewSrcAnchorShape")->setAllEdgeValue(0);
+  graph->getProperty<SizeProperty>("viewSrcAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
+  graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(0);
+  graph->getProperty<SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
 }
 //**********************************************************************
 void viewGl::fileNew(QAction *action) {

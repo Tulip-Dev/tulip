@@ -16,6 +16,7 @@
 #include <tulip/Types.h>
 
 #include "tulip/GlComplexeEntity.h"
+#include "tulip/EdgeExtremityGlyph.h"
 
 namespace tlp {
 
@@ -65,6 +66,12 @@ namespace tlp {
     void drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 		  const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
 		  const Color &startColor, const Color &endColor, const Size &size, int shape, bool edge3D, float lod);
+
+    /**
+     * Function used to compute bounding box for edge extremity.
+     */
+    BoundingBox eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, float glyphNrm,
+    		const Matrix<float, 4>& transformation, const Matrix<float, 4>& size);
 
   };
 

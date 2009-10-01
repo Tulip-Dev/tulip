@@ -91,6 +91,8 @@ libtulip_ogl_la_SOURCES = \
 	FastBezier.cpp \
 	GlBezierCurve.cpp \
 	GlCatmullRomCurve.cpp \
+	EdgeExtremityGlyph.cpp \
+	EdgeExtremityGlyphManager.cpp \
 	GlShaderManager.cpp \
 	GlSimpleEntity.cpp
 

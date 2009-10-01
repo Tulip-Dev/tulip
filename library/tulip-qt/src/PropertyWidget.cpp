@@ -32,6 +32,8 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 #include "tulip/PropertyWidget.h"
 
@@ -455,6 +457,24 @@ void  PropertyWidget::setAllEdgeValue() {
       ss << GlGraphStaticData::edgeShapeId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
+  }
+  else if(editedPropertyName == "viewSrcAnchorShape" || editedPropertyName == "viewTgtAnchorShape"){
+	  QStringList tmp;
+	  tmp.append("NONE");
+	  EdgeExtremityGlyphFactory::initFactory();
+	  Iterator<string> *itS=EdgeExtremityGlyphFactory::factory->availablePlugins();
+	  while (itS->hasNext()){
+		  tmp.append(QString(itS->next().c_str()));
+	  }delete itS;
+
+	  QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
+	                                                "Please choose a shape",
+	                                                tmp, 0, false, &ok);
+	  if(ok){
+		  stringstream ss;
+		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toAscii().data());
+		  tmpStr = ss.str();
+	  }
   }
   else {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
