@@ -37,6 +37,9 @@ class QuadTreeNode {
   //======================================
   //insert an element with id id in the Quadtree
   void insert(const BBox &box, const unsigned int id) {
+    if(box.first[0]==box.second[0] && box.first[1]==box.second[1])
+      return;
+
     for (int i=0; i<4; ++i) {
       if (isInside(box, getChildBox(i))) {
         getChild(i)->insert(box, id);
@@ -54,6 +57,9 @@ class QuadTreeNode {
   //======================================
   //insert an element with address address in the Quadtree
   void insert(const BBox &box, const unsigned long address) {
+    if(box.first[0]==box.second[0] && box.first[1]==box.second[1])
+          return;
+
     for (int i=0; i<4; ++i) {
       if (isInside(box, getChildBox(i))) {
         getChild(i)->insert(box, address);
