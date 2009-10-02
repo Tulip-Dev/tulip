@@ -56,7 +56,7 @@ namespace tlp {
 
   signals :
 
-    void checkFinished(bool);
+    void updateFinished();
 
   };
 

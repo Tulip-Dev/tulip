@@ -44,6 +44,7 @@
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
 
+#include <tulip/tuliphash.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
 #include <tulip/GlMainWidget.h>
@@ -75,7 +76,6 @@
 #include <tulip/ControllerPluginsManager.h>
 #include <tulip/GraphView.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/hash_string.h>
 #include <tulip/TabWidget.h>
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
@@ -98,8 +98,8 @@ using namespace tlp;
 //**********************************************************************
 // we use a hash_map to store plugin parameters
 static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-  static stdext::hash_map<unsigned long, stdext::hash_map<std::string, StructDef * > > paramMaps;
-  stdext::hash_map<std::string, StructDef *>::const_iterator it;
+  static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
+  TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
   if (it == paramMaps[(unsigned long) factory].end())
     paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
@@ -187,6 +187,7 @@ void viewGl::startTulip() {
   enableElements(false);
 
   pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
+  connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
   multiServerManager = pluginsUpdateChecker->getMultiServerManager();
 
   /*QWidget *centralwidget = new QWidget(this);
@@ -274,6 +275,14 @@ void viewGl::initializeGraph(Graph *graph) {
   graph->getProperty<ColorProperty>("viewColor")->setAllEdgeValue(Color(0,0,0));
   graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
+  graph->getProperty<StringProperty>("viewFont")->setAllNodeValue(tlp::TulipLibDir + "tlp/bitmaps/font.ttf");
+  graph->getProperty<StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipLibDir + "tlp/bitmaps/font.ttf");
+  graph->getProperty<IntegerProperty>("viewFontSize")->setAllNodeValue(18);
+  graph->getProperty<IntegerProperty>("viewFontSize")->setAllEdgeValue(18);
+  graph->getProperty<IntegerProperty>("viewSrcAnchorShape")->setAllEdgeValue(0);
+  graph->getProperty<SizeProperty>("viewSrcAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
+  graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(0);
+  graph->getProperty<SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
 }
 //**********************************************************************
 void viewGl::fileNew(QAction *action) {
@@ -795,27 +804,24 @@ void viewGl::plugins() {
 
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
 
-  /*QDialog dialog;
-  QVBoxLayout layout;
-  layout.setContentsMargins(0,0,0,0);
-  PluginsManagerMainWindow pluginsManager(pluginLoader.pluginsList);
-
-  layout.addWidget(&pluginsManager);
-
-  dialog.setLayout(&layout);*/
   pluginsManager->exec();
   if (pluginsManager->pluginUpdatesPending()) {
-    int result = QMessageBox::warning(this,
-				      tr("Update plugins"),
-				      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
-				      QMessageBox::Yes | QMessageBox::Default,
-				      QMessageBox::No);
-    if(result == QMessageBox::Yes)
-      fileExit();
+    displayRestartForPlugins();
   }
 }
 //==============================================================
+void viewGl::displayRestartForPlugins() {
+  int result = QMessageBox::warning(this,
+      tr("Update plugins"),
+      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+      QMessageBox::Yes | QMessageBox::Default,
+      QMessageBox::No);
+  if(result == QMessageBox::Yes)
+    fileExit();
+}
+//==============================================================
 void viewGl::deletePluginsUpdateChecker(){
+  disconnect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
   delete pluginsUpdateChecker;
   plugins();
 }

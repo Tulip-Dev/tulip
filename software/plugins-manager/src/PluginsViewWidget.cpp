@@ -184,7 +184,6 @@ namespace tlp {
       return;
     }
     if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
-      cout << "Dist" << endl;
       bool havePlugin=false;
 
 #if defined(__APPLE__)
@@ -209,7 +208,6 @@ namespace tlp {
         }
       }
     }else{
-      cout << "Local" << endl;
       if(pluginInfo->local){
         if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome())
           twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);

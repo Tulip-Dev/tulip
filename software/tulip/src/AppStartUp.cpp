@@ -16,6 +16,7 @@
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/ControllerPluginsManager.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 #include <QtGui/qapplication.h>
 #include "AppStartUp.h"
 
@@ -45,6 +46,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader,std::string &errors) {
   //tlp::initTulipLib(); already done in Application.cpp
   tlp::loadPlugins(loader);   // library side plugins
   GlyphManager::getInst().loadPlugins(loader);   // software side plugins, i.e. glyphs
+  EdgeExtremityGlyphManager::getInst().loadPlugins(loader);
   InteractorManager::getInst().loadPlugins(loader); // interactors plugins
   ViewPluginsManager::getInst().loadPlugins(loader); // view plugins
   ControllerPluginsManager::getInst().loadPlugins(loader); // controller plugins
