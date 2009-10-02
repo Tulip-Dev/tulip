@@ -103,7 +103,7 @@
  extern char * yytext;
 extern int yylen;
 
-typedef stdext::hash_map<std::string,node> NodeMap;
+typedef TLP_HASH_MAP<std::string,node> NodeMap;
 typedef std::vector<node> NodeA;
 typedef std::vector<edge> EdgeA;
 

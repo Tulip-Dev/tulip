@@ -5,7 +5,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/Delaunay.h 
 	tulip/tulipconf.h 
 	tulip/GraphTools.h 
-	tulip/hash_string.h 
+	tulip/tuliphash.h 
 	tulip/Array.h
 	tulip/Vector.h
 	tulip/Matrix.h

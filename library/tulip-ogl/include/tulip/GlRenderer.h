@@ -62,6 +62,7 @@ class GlRenderer : public Renderer {
   int current_font; // indice du tableau
   bool active;
   t_GlFonts ftfonts; // contient les différentes polices chargées
+  static std::map<std::string,bool> checkedFonts;
 
  public: 
   // constructeurs et destructeurs
@@ -82,6 +83,8 @@ class GlRenderer : public Renderer {
   void translate(float x, float y, float z) const;
   void setColor(unsigned char r, unsigned char v, unsigned char b) const;
   void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
+
+  static bool checkFont(const std::string &str);
 };
 
 }

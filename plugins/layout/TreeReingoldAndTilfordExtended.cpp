@@ -167,7 +167,7 @@ list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L, list<LR>*R, d
   return L;
 }
 //=============================================================================
-list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, stdext::hash_map<node,double> *p) {
+list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, TLP_HASH_MAP<node,double> *p) {
   //cerr << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
   if (tree->outdeg(n)==0){
     list<LR> *result = new list<LR>();
@@ -273,7 +273,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &ma
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,double> *p,
+void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double> *p,
 						double x, double y, int level,
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
@@ -306,7 +306,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, stdext::hash_map<node,do
 }
 //===============================================================
 bool TreeReingoldAndTilfordExtended::run() {
-  stdext::hash_map<node,double> posRelative;
+  TLP_HASH_MAP<node,double> posRelative;
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   if (!getNodeSizePropertyParameter(dataSet, sizes))

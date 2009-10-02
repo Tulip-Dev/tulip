@@ -16,14 +16,9 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
+#include <list>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h>
-#include <list>
 #include <tulip/MutableContainer.h>
 #include <tulip/BmdList.h>
 #include <tulip/Graph.h>

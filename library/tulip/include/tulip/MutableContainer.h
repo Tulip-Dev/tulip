@@ -2,17 +2,13 @@
 #define _TLPMUTABLECONTAINER_
 
 #include <iostream>
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <deque>
 #include <exception>
 #include <iostream>
 #include <string.h>
 #include <assert.h>
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <tulip/ReturnType.h>
 #include <tulip/Iterator.h>
 
@@ -87,7 +83,7 @@ class IteratorVector : public IteratorValue {
 template <typename TYPE> 
 class IteratorHash : public IteratorValue {
  public:
-  IteratorHash(const TYPE &value, bool equal, stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value> *hData):
+  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData):
     _value(value),
     _equal(equal),
     hData(hData) {
@@ -120,8 +116,8 @@ class IteratorHash : public IteratorValue {
  private:
   const TYPE _value;
   bool _equal;
-  stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
-  typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
+  TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
+  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
 };
 #endif
 //===================================================================
@@ -157,7 +153,7 @@ private:
   void vectset(const unsigned int i, typename StoredValueType<TYPE>::Value value);
  private:
   std::deque<typename StoredValueType<TYPE>::Value> *vData;
-  stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
+  TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
   unsigned int minIndex,maxIndex;
   typename StoredValueType<TYPE>::Value defaultValue;
   State state;
@@ -239,7 +235,7 @@ MutableContainer<TYPE>::~MutableContainer() {
   case HASH:
     if (StoredValueType<TYPE>::isPointer) {
       // delete stored values
-      typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
+      typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
       while (it!= hData->end()) {
 	StoredValueType<TYPE>::destroy((*it).second);
 	++it;
@@ -275,7 +271,7 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
   case HASH:
     if (StoredValueType<TYPE>::isPointer) {
       // delete stored values
-      typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
+      typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
       while (it!= hData->end()) {
 	StoredValueType<TYPE>::destroy((*it).second);
 	++it;
@@ -334,7 +330,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   }
   
   if (StoredValueType<TYPE>::equal(defaultValue, value)) {
-    typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+    typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
     switch (state) {
     case VECT : 
       if (i<=maxIndex && i>=minIndex) {
@@ -360,7 +356,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     }
   }
   else {
-    typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+    typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
     typename StoredValueType<TYPE>::Value newVal =
       StoredValueType<TYPE>::copy(value);
    switch (state) {
@@ -445,7 +441,7 @@ template <typename TYPE>
 typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) return StoredValueType<TYPE>::get(defaultValue);
-  typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) 
@@ -474,7 +470,7 @@ template <typename TYPE>
     notDefault = false;
     return StoredValueType<TYPE>::get(defaultValue);
   }
-  typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) {
@@ -503,7 +499,7 @@ template <typename TYPE>
 template <typename TYPE> 
 void MutableContainer<TYPE>::vecttohash() {
   //  std::cerr << __FUNCTION__ << std::endl << std::flush;
-  hData=new stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>(elementInserted);
+  hData=new TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
@@ -530,7 +526,7 @@ void MutableContainer<TYPE>::hashtovect() {
   maxIndex = UINT_MAX;
   elementInserted = 0;
   state=VECT;
-  typename stdext::hash_map<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
+  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
   for (it=hData->begin(); it!=hData->end(); ++it) {
     if (it->second  != defaultValue)
       vectset(it->first, it->second);

@@ -6,12 +6,6 @@
 
 #include <set>
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
-
 #include <vector>
 #include <ext/slist>
 #include "tulip/GraphAbstract.h"
@@ -71,6 +65,8 @@ public:
   //================================================================================
   virtual node source(const edge) const;
   virtual node target(const edge) const;
+  virtual node opposite(const edge, const node n) const;
+  virtual const std::pair<node, node>& ends(const edge e) const;
   virtual void reverse(const edge);
   //================================================================================
   unsigned int numberOfEdges()const;
@@ -87,6 +83,10 @@ public:
   // observer interface
   void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
   void observableDestroyed(Observable*);
+
+  // for subgraph id management
+  unsigned int getSubGraphId(unsigned int id);
+  void freeSubGraphId(unsigned int id);
 
 protected:
   // designed to reassign an id to a previously deleted elt
@@ -105,6 +105,7 @@ private :
   MutableContainer<unsigned int> outDegree;
   mutable Edges edges;
   mutable Nodes nodes;
+  IdManager graphIds;
   IdManager nodeIds;
   IdManager edgeIds;
   unsigned int nbNodes;

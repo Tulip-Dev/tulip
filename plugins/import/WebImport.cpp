@@ -43,7 +43,7 @@ private:
   bool isRedirected() {
     return context && context->redirected;
   }
- 
+
   UrlElement getRedirection() {
     return parseUrl(context->newLocation);
   }
@@ -160,7 +160,7 @@ bool UrlElement::isHtmlPage() {
   return context->isHtml;
 }
 
-bool UrlElement::siteconnect(const string &server, const string &url,const int serverport, bool headonly) {  
+bool UrlElement::siteconnect(const string &server, const string &url,const int serverport, bool headonly) {
   // check that we actually got data..
   if (server.empty()) return -1;
 
@@ -359,6 +359,7 @@ struct WebImport:public ImportModule {
   std::set<UrlElement> visited;
   std::map<UrlElement, tlp::node> nodes;
   tlp::StringProperty *labels;
+  tlp::StringProperty *urls;
   tlp::ColorProperty *colors;
   tlp::Color *redirectionColor;
   unsigned int maxSize;
@@ -388,6 +389,12 @@ struct WebImport:public ImportModule {
 	str << "/";
       str << url.getUrl();
       labels->setNodeValue(n, str.str());
+      ostringstream oss;
+      if(url.is_http){
+    	  oss<<"http://";
+      }
+      oss << str.str();
+      urls->setNodeValue(n,oss.str());
       nodes[url] = n;
       return true;
     }
@@ -548,7 +555,7 @@ struct WebImport:public ImportModule {
     return true;
   }
 
-  
+
   bool import(const string &name) {
     string server = "www.labri.fr";
     string url;
@@ -570,15 +577,16 @@ struct WebImport:public ImportModule {
       dataSet->get("link color", lColor);
       dataSet->get("redirection color", rColor);
     }
-    
+
     UrlElement mySite;
     mySite.server = server;
     mySite.setUrl(string("/") + url);
     mySite.serverport = 80;
     mySite.data = "";
-    
+
     labels = graph->getProperty<StringProperty>("viewLabel");
     labels->setAllEdgeValue(string("link"));
+    urls = graph->getProperty<StringProperty>("url");
     colors = graph->getProperty<ColorProperty>("viewColor");
     colors->setAllNodeValue(pColor);
     colors->setAllEdgeValue(lColor);

@@ -32,6 +32,8 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/Glyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 #include "tulip/PropertyWidget.h"
 
@@ -144,12 +146,10 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
 }
 
 void PropertyWidget::changePropertyNodeValue(int i, int j) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
   string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
-  //cout << "value = " << str << endl;
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<node> *it=graph->getNodes();
   node tmp;
@@ -337,6 +337,24 @@ void PropertyWidget::setAllNodeValue() {
       ss << GlyphManager::getInst().glyphId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
+  } else if (editedPropertyName == "viewFont") {
+    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
+        QString(),
+        QString("Font (*.ttf)"));
+    if(viewFontName!="")
+      ok=true;
+    if (ok) {
+      tmpStr = viewFontName.toStdString();
+    }
+  } else if (editedPropertyName == "viewTexture") {
+    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
+        QString(),
+        QString("Images (*.png *.jpeg *.jpg *.bmp)"));
+    if(viewFontName!="")
+      ok=true;
+    if (ok) {
+      tmpStr = viewFontName.toStdString();
+    }
   } else if (editedPropertyName == "viewLabelPosition") {
     QStringList tmp;
     for (int i = 0; i < 5; i++)
@@ -439,6 +457,24 @@ void  PropertyWidget::setAllEdgeValue() {
       ss << GlGraphStaticData::edgeShapeId(shapeName.toAscii().data());
       tmpStr = ss.str();
     }
+  }
+  else if(editedPropertyName == "viewSrcAnchorShape" || editedPropertyName == "viewTgtAnchorShape"){
+	  QStringList tmp;
+	  tmp.append("NONE");
+	  EdgeExtremityGlyphFactory::initFactory();
+	  Iterator<string> *itS=EdgeExtremityGlyphFactory::factory->availablePlugins();
+	  while (itS->hasNext()){
+		  tmp.append(QString(itS->next().c_str()));
+	  }delete itS;
+
+	  QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
+	                                                "Please choose a shape",
+	                                                tmp, 0, false, &ok);
+	  if(ok){
+		  stringstream ss;
+		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toAscii().data());
+		  tmpStr = ss.str();
+	  }
   }
   else {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),

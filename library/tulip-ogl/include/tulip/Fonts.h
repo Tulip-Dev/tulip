@@ -4,11 +4,13 @@
 
 #include <string>
 
+#include <tulip/tulipconf.h>
+
 namespace tlp {
 
 enum FontMode{TLP_BITMAP, TLP_PIXMAP, TLP_OUTLINE, TLP_POLYGON, TLP_EXTRUDE, TLP_TEXTURE, TLP_TLPPIXMAP};
 
-class Fonts {
+class TLP_GL_SCOPE Fonts {
   friend class TextRenderer;
 
  public:

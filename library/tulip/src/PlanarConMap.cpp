@@ -73,7 +73,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
 
 
   Graph * supergraph = getSuperGraph();
-  edge e = ((supergraph->existEdge(v,w)).isValid() ? supergraph->existEdge(v,w) : supergraph->existEdge(w,v));
+  edge e = supergraph->existEdge(v,w, false);
   if(!e.isValid()){
     e = supergraph->addEdge(v,w); 
     graph_component->addEdge(e);
@@ -796,8 +796,8 @@ bool PlanarConMap::containEdge(Face f, edge e) {
 
 //============================================================
 Face PlanarConMap::getFaceContaining(node v, node w) {
-  assert(existEdge(v,w).isValid() || existEdge(w,v).isValid());
-  edge e = existEdge(v,w).isValid() ? existEdge(v,w) : existEdge(w,v);
+  assert(existEdge(v,w, false).isValid());
+  edge e = existEdge(v, w, false);
   Face f1 = edgesFaces[e][0];
   Face f2 = edgesFaces[e][1];
   if( f1 == f2)

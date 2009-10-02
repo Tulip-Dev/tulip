@@ -55,7 +55,9 @@ class MixedModel : public tlp::LayoutAlgorithm {
   void computeCoords();
   void placeNodesEdges();
 
-  tlp::edge existEdge(tlp::node n, tlp::node v);
+  tlp::edge existEdge(tlp::node n, tlp::node v) {
+    return carte->existEdge(n , v, false);
+  }
   
   tlp::node rightV(unsigned int k);
   tlp::node leftV(unsigned int k);

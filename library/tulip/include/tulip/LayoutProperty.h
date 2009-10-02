@@ -6,6 +6,7 @@
 #include <config.h>
 #endif
 
+#include "tulip/tuliphash.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/LayoutAlgorithm.h"
@@ -100,8 +101,8 @@ protected:
   void clone_handler(AbstractProperty<PointType,LineType> &);
 
 private:
-  stdext::hash_map<unsigned long,Coord> max,min;
-  stdext::hash_map<unsigned long,bool> minMaxOk;
+  TLP_HASH_MAP<unsigned long,Coord> max,min;
+  TLP_HASH_MAP<unsigned long,bool> minMaxOk;
   void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };

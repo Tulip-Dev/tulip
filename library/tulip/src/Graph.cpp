@@ -14,16 +14,6 @@
 using namespace std;
 using namespace tlp;
 
-static IdManager graphIdManager;
-
-Graph::Graph() {
-  id = graphIdManager.get();
-}
-
-Graph::~Graph() {
-  graphIdManager.free(id);
-}
-
 ostream & operator << (ostream &os,const Graph *sp) {
   os << ";(nodes <node_id> <node_id> ...)" << endl;
   os << "(nodes ";

@@ -1,7 +1,7 @@
 //-*-c++-*-
 #ifndef _STRENGTHMETRIC_H
 #define _STRENGTHMETRIC_H
-#include <ext/hash_set>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
 /** \addtogroup metric */
@@ -40,10 +40,10 @@ public:
   double getEdgeValue(const tlp::edge n);
   bool run();
 private:
-  double e(const stdext::hash_set<tlp::node> &U);
-  double e(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
-  double s(stdext::hash_set<tlp::node> &U, stdext::hash_set<tlp::node> &V);
-  double s(const stdext::hash_set<tlp::node> &U);
+  double e(const TLP_HASH_SET<tlp::node> &U);
+  double e(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);
+  double s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);
+  double s(const TLP_HASH_SET<tlp::node> &U);
 };
 /*@}*/
 #endif

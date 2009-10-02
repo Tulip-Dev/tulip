@@ -12,8 +12,9 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef Tulip_PlanarConMap_H
 #define Tulip_PlanarConMap_H
-#include <tulip/Face.h>
 #include <vector>
+#include <tulip/tuliphash.h>
+#include <tulip/Face.h>
 #include <tulip/GraphDecorator.h>
 
 namespace tlp {
@@ -159,11 +160,11 @@ private:
    */
   void delEdgeMap(edge, Face = Face());
   
-  typedef stdext::hash_map<Face , std::vector<edge> > faceMap;
+  typedef TLP_HASH_MAP<Face , std::vector<edge> > faceMap;
   typedef faceMap::value_type faceMapEntry;
-  typedef stdext::hash_map<edge, std::vector<Face> > edgeMap;
+  typedef TLP_HASH_MAP<edge, std::vector<Face> > edgeMap;
   typedef edgeMap::value_type edgeMapEntry;
-  typedef stdext::hash_map<node, std::vector<Face> > nodeMap;
+  typedef TLP_HASH_MAP<node, std::vector<Face> > nodeMap;
   typedef nodeMap::value_type nodeMapEntry;
   
   /** storage of faces */

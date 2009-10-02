@@ -435,7 +435,7 @@ node Ordering::getLastOfQ(Face f, node pred, node n, edge e){
   q.push_back(tmp);
   while(!done){
     for(unsigned int l = 0 ; l < q.size()-1 ; ++l)
-      if(Gp->existEdge(q[l],tmp2).isValid() || Gp->existEdge(tmp2, q[l]).isValid()){
+      if(Gp->existEdge(q[l],tmp2, false).isValid()){
 	done = true;
 	break;
       }
@@ -468,7 +468,7 @@ node Ordering::getLastOfP(Face f,node pred, node n, edge e){
   p.push_back(tmp);    
   while(!done) {
     for(unsigned int l = 0 ; l < p.size()-1 ; ++l)
-      if(Gp->existEdge(p[l],tmp2).isValid() || Gp->existEdge(tmp2, p[l]).isValid()){
+      if(Gp->existEdge(p[l], tmp2, false).isValid()){
 	done = true;
 	break;
       }
@@ -496,7 +496,7 @@ vector<node> Ordering::getPathFrom(vector<node> fn, int from){
     res.push_back(fn[i]);
     i=(l+i-1)%l;
   }
-  if(res.size()==1 || (!Gp->existEdge(res[0],fn[i]).isValid() && !Gp->existEdge(fn[i],res[0]).isValid()))
+  if (res.size()==1 || !Gp->existEdge(res[0],fn[i], false).isValid())
     res.push_back(fn[i]);
   return res;
 }
@@ -522,8 +522,12 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
   n_n = n;
   l_pred = pred_last;
   n_last = last;
-  e1 = (Gp->existEdge(n_pred,n_n).isValid() ? Gp->existEdge(n_pred,n_n) : Gp->existEdge(n_n,n_pred));
-  e2 = (Gp->existEdge(l_pred,n_last).isValid() ? Gp->existEdge(l_pred,n_last) : Gp->existEdge(n_last,l_pred));
+  e1 = Gp->existEdge(n_pred, n_n);
+  if (!e1.isValid())
+  e1 = Gp->existEdge(n_n, n_pred);
+  e2 = Gp->existEdge(l_pred, n_last);
+  if (!e2.isValid())
+    e2 = Gp->existEdge(n_last,l_pred);
   e1 = Gp->predCycleEdge(e1, n_n);
   n_pred = n_n;
   n_n = Gp->opposite(e1, n_pred);
@@ -555,7 +559,9 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
     tmp = n_last;
     node lastQ = getLastOfQ(f, tmp, tmp2,e_tmp);
     newFace = Gp->splitFace(f,lastP,lastQ,n_pred);
-    edge dummy=(Gp->existEdge(lastP,lastQ).isValid() ? Gp->existEdge(lastP,lastQ): Gp->existEdge(lastQ,lastP));
+    edge dummy= Gp->existEdge(lastP,lastQ);
+    if (!dummy.isValid())
+      dummy = Gp->existEdge(lastQ,lastP);
     dummy_edge.push_back(dummy);
     newFaces.push_back(f);
     if(visited)
@@ -596,7 +602,9 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
     node lastQ = getLastOfQ(f,tmp,tmp2,e_tmp);
 
     newFace = Gp->splitFace(f,lastP,lastQ,n_pred);
-    edge dummy=(Gp->existEdge(lastP,lastQ).isValid() ? Gp->existEdge(lastP,lastQ): Gp->existEdge(lastQ,lastP));
+    edge dummy= Gp->existEdge(lastP,lastQ);
+    if (!dummy.isValid())
+      dummy = Gp->existEdge(lastQ,lastP);
     dummy_edge.push_back(dummy);
     newFaces.push_back(f);
     newFaces.push_back(newFace);
@@ -706,7 +714,9 @@ void Ordering::selectAndUpdate(node n) {
   faces.push_back(Gp->getFaceContaining(n1,n));
   noeuds.push_back(n1);
   visitedNodes.set(n1.id,true);
-  edge e_first = (Gp->existEdge(n1,n).isValid()?Gp->existEdge(n1,n):Gp->existEdge(n,n1));
+  edge e_first = Gp->existEdge(n1,n);
+  if (!e_first.isValid())
+    e_first = Gp->existEdge(n,n1);
   edge e = Gp->succCycleEdge(e_first,n);
   n1=Gp->opposite(e,n);
   while(n1 != v) {                                                       
@@ -782,11 +792,15 @@ void Ordering::selectAndUpdate(node n) {
       if(on_cont.get(n2.id) || contour.get(n2.id)) {
 	spli=true;
 	Face  f1 = Gp->splitFace(faces[i],n1,noeuds[i+1],n2);
-	edge dummy=(Gp->existEdge(n1,noeuds[i+1]).isValid()?Gp->existEdge(n1,noeuds[i+1]):Gp->existEdge(noeuds[i+1],n1));
+	edge dummy= Gp->existEdge(n1,noeuds[i+1]);
+	if (!dummy.isValid())
+	  dummy = Gp->existEdge(noeuds[i+1],n1);
 	dummy_edge.push_back(dummy);
 	Gp->mergeFaces(ext,f1);
 	n2=noeuds[i+1];
-	e = (Gp->existEdge(n1,n2).isValid()?Gp->existEdge(n1,n2):Gp->existEdge(n2,n1));
+	e = Gp->existEdge(n1,n2);
+	if (!e.isValid())
+	  e = Gp->existEdge(n2,n1);
       }
       else {
 	on_cont.set(n2.id,true);
@@ -825,7 +839,9 @@ void Ordering::selectAndUpdate(node n) {
 
   Face  derniere = Gp->getFaceContaining(v1[0],v1[1]);
   //
-  e_tmp = (Gp->existEdge(node_f,no_tmp).isValid() ? Gp->existEdge(node_f,no_tmp) : Gp->existEdge(no_tmp,node_f));
+  e_tmp = Gp->existEdge(node_f,no_tmp);
+  if (!e_tmp.isValid())
+    e_tmp = Gp->existEdge(no_tmp,node_f);
   e_tmp = Gp->predCycleEdge(e_tmp,node_f); 
   no_tmp = Gp->opposite(e_tmp,node_f);
   edge ed_tmp = e_tmp;
@@ -935,7 +951,9 @@ void Ordering::selectAndUpdate(Face f){
   vector<node> noeuds;
   node n1 = pred;
   node n2 = n;
-  edge edge_pred = (Gp->existEdge(n1,n2).isValid()?Gp->existEdge(n1,n2):Gp->existEdge(n2,n1));
+  edge edge_pred = Gp->existEdge(n1,n2);
+  if (!edge_pred.isValid())
+    edge_pred = Gp->existEdge(n2,n1);
   edge_pred = Gp->succCycleEdge(edge_pred,pred);
   bool marked_face = false;
   bool min_markded_face = false;
@@ -1100,8 +1118,12 @@ bool Ordering::isSelectable(node n) {
       
       if( out_vertex>=3 || (out_vertex==2 && out_edge==0)) {
 	sepf++;
-	edge e1= (Gp->existEdge(n_predCont,n).isValid()?Gp->existEdge(n_predCont,n):Gp->existEdge(n,n_predCont));
-	edge e2 =(Gp->existEdge(n_succCont,n).isValid()?Gp->existEdge(n_succCont,n):Gp->existEdge(n,n_succCont));
+	edge e1= Gp->existEdge(n_predCont,n);
+	if (!e1.isValid())
+	  e1 = Gp->existEdge(n,n_predCont);
+	edge e2 = Gp->existEdge(n_succCont,n);
+	if (!e2.isValid())
+	  e2 = Gp->existEdge(n,n_succCont);
 	if((Gp->containNode(faces,n_succCont) && !(Gp->containEdge(faces,e2))) || (Gp->containNode(faces,n_predCont) && !(Gp->containEdge(faces,e1)))) {
 	  int seq = seqP.get((faces).id);
 	  if(faces == derniere){
@@ -1273,7 +1295,7 @@ void Ordering::init_v1( vector<node> fn) {
       cpt2++;
       i = (l+i-1)%l;
     }
-    if(v1.size() == 1 || !Gp->existEdge(v1[0],fn[i]).isValid() && !Gp->existEdge(fn[i],v1[0]).isValid()){
+    if (v1.size() == 1 || !Gp->existEdge(v1[0],fn[i], false).isValid()) {
       v1.push_back(fn[i]);
       cpt2++;
     }

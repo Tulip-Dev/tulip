@@ -4,6 +4,7 @@
 
 #include "tulip/IdManager.h"
 #include <limits.h>
+#include <assert.h>
 using namespace std;
 using namespace tlp;
 IdManager::IdManager():
@@ -38,6 +39,22 @@ void IdManager::free(const unsigned int id) {
 //-----------------------------------------------------------
 unsigned int IdManager::get() {
   return nextId++;
+}
+//-----------------------------------------------------------
+void IdManager::getFreeId(unsigned int id) {
+  assert(id > firstId);
+  if (id >= nextId) {
+    if (firstId == nextId)
+      firstId = id;
+    else {
+      for (; nextId < id; ++nextId)
+	freeIds.insert(nextId);
+    }
+    nextId = id + 1;
+  } else {
+    assert(freeIds.find(id) != freeIds.end());
+    freeIds.erase(freeIds.find(id));
+  }
 }
 //-----------------------------------------------------------
 Iterator<unsigned int>* IdManager::getIds() const{

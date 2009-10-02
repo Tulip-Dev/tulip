@@ -16,14 +16,16 @@ GraphProperty::GraphProperty (Graph *sg, std::string n) :
 }
 //==============================
 GraphProperty::~GraphProperty() {
-  Iterator<node> *it = graph->getNodes();
-  while(it->hasNext()) {
-    node n = it->next();
-    if (getNodeValue(n) != 0)
-      getNodeValue(n)->removeGraphObserver(this);
-  } delete it;
-  if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->removeGraphObserver(this);
+  if (graph) {
+    Iterator<node> *it = graph->getNodes();
+    while(it->hasNext()) {
+      node n = it->next();
+      if (getNodeValue(n) != 0)
+	getNodeValue(n)->removeGraphObserver(this);
+    } delete it;
+    if (getNodeDefaultValue() != 0) {
+      getNodeDefaultValue()->removeGraphObserver(this);
+    }
   }
   notifyDestroy(this);
 }

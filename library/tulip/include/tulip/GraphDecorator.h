@@ -25,7 +25,8 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   }
 
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection=0);
+  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+			     unsigned int id = 0);
   virtual void delSubGraph(Graph * s);
   virtual void delAllSubGraphs(Graph *s);
   virtual Graph* getSuperGraph()const;
@@ -41,7 +42,8 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual node source(const edge e)const;
   virtual node target(const edge e)const;
   virtual node opposite(const edge e, const node n)const;
-  virtual edge existEdge(const node n, const node m)const;
+  virtual edge existEdge(const node n, const node m, bool directed = true)const;
+  virtual const std::pair<node, node>& ends(const edge e) const;
   virtual void reverse(const edge e);
   virtual unsigned int deg(const node n)const;
   virtual unsigned int indeg(const node n)const;

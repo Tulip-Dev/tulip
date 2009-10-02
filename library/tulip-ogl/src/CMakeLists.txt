@@ -69,7 +69,10 @@ set(tulip-ogl_LIB_SRCS
 	FastBezier.cpp 
 	GlBezierCurve.cpp 
 	GlCatmullRomCurve.cpp 
-	GlShaderManager.cpp
+	EdgeExtremityGlyph.cpp 
+	EdgeExtremityGlyphManager.cpp
+	GlShaderManager.cpp 
+	GlSimpleEntity.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR_freetype2})

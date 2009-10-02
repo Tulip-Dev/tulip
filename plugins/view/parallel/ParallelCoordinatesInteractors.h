@@ -30,11 +30,7 @@ namespace tlp {
     /**
      * return if this interactor is compatible with given View
      */
-    virtual bool isCompatible(const std::string &viewName) {
-      if(viewName=="Parallel Coordinates view")
-        return true;
-      return false;
-    }
+    bool isCompatible(const std::string &viewName);
 
   };
 

@@ -35,9 +35,12 @@ namespace tlp {
 /*@{*/
 //=============================================================
 class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
+  friend class PropertyManagerImpl;
 protected:
-  // name field
+  // name of the property when registered as a property of a graph
   std::string name;
+  // the graph for whom the properety is registered
+  Graph *graph;
 
 public:
   virtual ~PropertyInterface();
@@ -103,6 +106,7 @@ public:
  */
 template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm > 
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
+  friend class Graph;
   friend class GraphView;
 
 public:
@@ -113,6 +117,7 @@ public:
     }
   }
   AbstractProperty(Graph *, std::string n = "");
+
   /** 
    * Returns the node default value of the property proxy
    * warnning: If the type is a pointer it can produce big memory
@@ -226,8 +231,6 @@ public:
   return *this;
   }
   //=================================================================================
-  bool compute(const std::string &algorithm, std::string &msg, const PropertyContext&);
-  //=================================================================================
   virtual std::string getTypename();
   // Untyped accessors
   virtual std::string getNodeDefaultStringValue();
@@ -257,6 +260,7 @@ public:
   virtual void setAllEdgeDataMemValue(const DataMem* v);
 
 protected:
+  typedef PropertyAlgorithm PAlgorithm;
   //=================================================================================
   ///Enable to clone part of sub_class
   virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &){};
@@ -264,8 +268,6 @@ protected:
 protected:
   MutableContainer<typename Tnode::RealType> nodeProperties;
   MutableContainer<typename Tedge::RealType> edgeProperties;
-  Graph *graph;
-  bool circularCall;
   typename Tnode::RealType nodeDefaultValue;
   typename Tedge::RealType edgeDefaultValue;
 };

@@ -96,6 +96,10 @@ void ParallelCoordsDrawConfigWidget::setAxisPointMaxSize(const unsigned int axis
 	maxAxisPointSize->setValue(axisPointMaxSize);
 }
 
+bool ParallelCoordsDrawConfigWidget::displayNodesLabels() const {
+	return displayLabelsCB->isChecked();
+}
+
 void ParallelCoordsDrawConfigWidget::userTextureRbToggled(bool checked) {
 	if (checked) {
 		userTextureFile->setEnabled(true);

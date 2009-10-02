@@ -22,6 +22,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlRectTextured.h>
 
+#include "tulip/QtQuadTreeLODCalculator.h"
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/QtCPULODCalculator.h"
 #include "tulip/Interactor.h"
@@ -53,9 +54,9 @@ namespace tlp {
       done = true;
 #ifndef NDEBUG
       if (_glAuxBufferAvailable)
-	cerr << "Auxillary Buffer Available" << endl;
+  cerr << "Auxillary Buffer Available" << endl;
       else
-	cerr << "Auxillary Buffer Not Available" << endl;
+  cerr << "Auxillary Buffer Not Available" << endl;
 #endif
     }
   }
@@ -86,15 +87,15 @@ namespace tlp {
   }
 
   QGLWidget* GlMainWidget::getFirstQGLWidget() {
- 		if(!GlMainWidget::firstQGLWidget) {
- 			GlMainWidget::firstQGLWidget=new QGLWidget(GlInit());
- 		}
- 		return GlMainWidget::firstQGLWidget;
- 	}
+    if(!GlMainWidget::firstQGLWidget) {
+      GlMainWidget::firstQGLWidget=new QGLWidget(GlInit());
+    }
+    return GlMainWidget::firstQGLWidget;
+  }
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtCPULODCalculator),view(view){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtQuadTreeLODCalculator),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);
@@ -291,11 +292,10 @@ namespace tlp {
 
       computeInteractors();
       if(scene.getGlGraphComposite()) {
-	hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
+  hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
       }
       scene.prerenderMetaNodes();
       scene.draw();
-      drawInteractors();
 
       glDisable(GL_TEXTURE_2D);
       glDisable(GL_DEPTH_TEST);
@@ -306,19 +306,19 @@ namespace tlp {
       //save the drawing of the graph in order to prevent redrawing during
       //Interactor draw
       if (_glAuxBufferAvailable) {
-	glReadBuffer(GL_BACK);
-	glDrawBuffer(GL_AUX0);
-	glClear(GL_COLOR_BUFFER_BIT);
-	setRasterPosition(0,0);
-	glCopyPixels(0,0,width(), height(), GL_COLOR);
-	glFlush();
-	glDrawBuffer(GL_BACK);
+  glReadBuffer(GL_BACK);
+  glDrawBuffer(GL_AUX0);
+  glClear(GL_COLOR_BUFFER_BIT);
+  setRasterPosition(0,0);
+  glCopyPixels(0,0,width(), height(), GL_COLOR);
+  glFlush();
+  glDrawBuffer(GL_BACK);
       }else{
         glReadBuffer(GL_BACK);
-	if(!renderingStore)
-	  renderingStore=new char[4*height()*width()];
-	glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-	glFlush();
+  if(!renderingStore)
+    renderingStore=new char[4*height()*width()];
+  glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+  glFlush();
       }
       glTest(__PRETTY_FUNCTION__);
 
@@ -326,6 +326,7 @@ namespace tlp {
       glEnable(GL_BLEND);
       glEnable(GL_LIGHTING);
       drawForegroundEntities();
+      drawInteractors();
 
       swapBuffers();
       emit graphRedrawn(this,graphChanged);
@@ -391,15 +392,15 @@ namespace tlp {
   }
   //==================================================
   bool GlMainWidget::selectGlEntities(const int x, const int y,
-				      const int width, const int height,
-				      std::vector<GlEntity *> &pickedEntities,
-				      GlLayer* layer) {
+              const int width, const int height,
+              std::vector<GlEntity *> &pickedEntities,
+              GlLayer* layer) {
     makeCurrent();
     vector<unsigned long> entities;
-    unsigned int number=scene.selectEntities(SelectSimpleEntities,x, y,
-				width, height,
-				layer,
-				entities);
+    unsigned int number=scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
+        width, height,
+        layer,
+        entities);
     for(vector<unsigned long>::iterator it=entities.begin();it!=entities.end();++it){
       pickedEntities.push_back((GlEntity*)(*it));
     }
@@ -407,26 +408,26 @@ namespace tlp {
   }
   //==================================================
   bool GlMainWidget::selectGlEntities(const int x, const int y,
-				      std::vector <GlEntity *> &pickedEntities,
-				      GlLayer* layer) {
+              std::vector <GlEntity *> &pickedEntities,
+              GlLayer* layer) {
    return selectGlEntities(x,y,2,2,pickedEntities,layer);
   }
   //==================================================
   void GlMainWidget::doSelect(const int x, const int y,
-			      const int width ,const int height,
-			      vector<node> &sNode, vector<edge> &sEdge,
-			      GlLayer* layer) {
+            const int width ,const int height,
+            vector<node> &sNode, vector<edge> &sEdge,
+            GlLayer* layer) {
 #ifndef NDEBUG
     cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << endl;
 #endif
     makeCurrent();
     vector<unsigned long> selectedElements;
-    scene.selectEntities(SelectNodes, x, y, width, height, layer, selectedElements);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
     for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
       sNode.push_back(node((unsigned int)(*it)));
     }
     selectedElements.clear();
-    scene.selectEntities(SelectEdges, x, y, width, height, layer, selectedElements);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
     for(vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
       sEdge.push_back(edge((unsigned int)(*it)));
     }
@@ -438,13 +439,13 @@ namespace tlp {
 #endif
     makeCurrent();
     vector<unsigned long> selectedElements;
-    scene.selectEntities(SelectNodes, x-1, y-1, 3, 3, layer, selectedElements);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=NODE;
       n=node((unsigned int)(selectedElements[0]));
       return true;
     }
-    scene.selectEntities(SelectEdges, x-1, y-1, 3, 3, layer, selectedElements);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
     if(selectedElements.size()!=0) {
       type=EDGE;
       e=edge((unsigned int)(selectedElements[0]));
@@ -495,7 +496,7 @@ namespace tlp {
     int textureRealWidth;
     int textureRealHeight;
 
-	getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
+  getTextureRealSize(width,height,textureRealWidth,textureRealHeight);
 
     scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
   }
@@ -518,13 +519,12 @@ namespace tlp {
 
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 
-    glFlush();
-    glFrameBuf->toImage().save(textureName.c_str());
     return NULL;
   }
   //=====================================================
-  void GlMainWidget::createPicture(const string &textureName, int width, int height){
+  void GlMainWidget::createPicture(const string &pictureName, int width, int height){
     scene.setViewport(0,0,width,height);
+    scene.ajustSceneToSize(width,height);
 
     scene.prerenderMetaNodes();
 
@@ -534,9 +534,7 @@ namespace tlp {
 
     scene.draw();
 
-    glFlush();
-
-    glFrameBuf->toImage().save(textureName.c_str());
+    glFrameBuf->toImage().save(pictureName.c_str());
   }
 
 }

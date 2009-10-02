@@ -1,8 +1,3 @@
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <iostream>
 #include <time.h>
 #include <string.h>

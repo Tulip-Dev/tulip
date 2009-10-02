@@ -14,7 +14,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/hash_string.h>
 
 using namespace tlp;
 using namespace std;

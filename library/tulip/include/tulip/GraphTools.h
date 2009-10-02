@@ -6,10 +6,11 @@
 #include <config.h>
 #endif
 
-#include <tulip/Node.h>
-#include <tulip/Edge.h>
 #include <set>
 #include <list>
+#include <tulip/tuliphash.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 #include <tulip/PlanarConMap.h>
 
@@ -49,7 +50,7 @@ class IntegerProperty;
   TLP_SCOPE node makeSimpleSource(Graph* graph);
 
   TLP_SCOPE void makeProperDag(Graph* graph,std::list<node> &addedNodes, 
-			       stdext::hash_map<edge,edge> &replacedEdges,
+			       TLP_HASH_MAP<edge,edge> &replacedEdges,
 			       IntegerProperty* edgeLength = 0);
 
   /**

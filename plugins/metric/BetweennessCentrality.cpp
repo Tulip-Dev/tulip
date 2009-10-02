@@ -1,14 +1,13 @@
 #include <iostream>
 #include <stack>
 #include <queue>
-#include <ext/hash_map>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
 
 
 using namespace std;
 using namespace tlp;
-using namespace stdext;
 
 
 /** \addtogroup metric */
@@ -46,7 +45,7 @@ public:
       if (pluginProgress->progress(count++,graph->numberOfNodes())!=TLP_CONTINUE) break;
       node s = it->next();
       stack<node> S;
-      hash_map<node, list<node> > P;
+      TLP_HASH_MAP<node, list<node> > P;
       MutableContainer<int> sigma;
       sigma.setAll(0);
       sigma.set(s.id,1);

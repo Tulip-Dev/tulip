@@ -112,7 +112,7 @@ namespace tlp {
       delete itE;
     }
 
-    calculator.compute(camera->getViewport(),camera->getViewport());
+    calculator.compute(camera->getViewport(),camera->getViewport(),RenderingAll);
 
     ComplexLODResultVector* nodesResult=&((calculator.getResultForNodes())->front());
     ComplexLODResultVector* edgesResult=&((calculator.getResultForEdges())->front());

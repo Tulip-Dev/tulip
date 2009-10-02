@@ -1,19 +1,14 @@
 #ifndef SQUARIFIEDTREEMAP_H
 #define SQUARIFIEDTREEMAP_h
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <vector>
 #include <utility>
+#include <tulip/tuliphash.h>
 #include "tulip/TulipPlugin.h"
 #include "tulip/RectangleArea.h"
 
 typedef std::vector<tlp::node> vecNode;
-typedef stdext::hash_map<tlp::node, float> mapNode;
+typedef TLP_HASH_MAP<tlp::node, float> mapNode;
 typedef std::pair<tlp::node, float> pairNodeF;
 typedef std::vector<pairNodeF> pairVector;
 typedef pairVector::iterator pairIterator;

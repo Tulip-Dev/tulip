@@ -16,11 +16,7 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
+#include "tulip/tuliphash.h"
 #include "tulip/ObservableGraph.h"
 #include "tulip/MutableContainer.h"
 #include "tulip/PluginProgress.h"
@@ -78,7 +74,7 @@ private:
   bool isFreeTree (Graph *graph, node curRoot, node cameFrom,
 		   MutableContainer<bool> &visited);
   void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
-  stdext::hash_map<unsigned long,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 /*@}*/
 

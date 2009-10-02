@@ -30,13 +30,13 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
 
 // delete the objects collected as to be deleted
 void GraphUpdatesRecorder::deleteDeletedObjects() {
-  hash_map<unsigned long, set<Graph *> >& subGraphsToDelete =
+  TLP_HASH_MAP<unsigned long, set<Graph *> >& subGraphsToDelete =
     updatesReverted ? addedSubGraphs : deletedSubGraphs;
-  hash_map<unsigned long, set<PropertyRecord> >& propertiesToDelete =
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >& propertiesToDelete =
     updatesReverted ? addedProperties : deletedProperties;
 
   // loop on sub graphs
-  hash_map<unsigned long, set<Graph *> >::iterator itds =
+  TLP_HASH_MAP<unsigned long, set<Graph *> >::iterator itds =
      subGraphsToDelete.begin();
   while(itds != subGraphsToDelete.end()) {
     set<Graph*>::iterator its = (*itds).second.begin();
@@ -49,7 +49,7 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
   }
 
   // loop on properties
-  hash_map<unsigned long, set<PropertyRecord> >::iterator itdp =
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator itdp =
     propertiesToDelete.begin();
   while(itdp != propertiesToDelete.end()) {
     set<PropertyRecord>::iterator itp =  (*itdp).second.begin();
@@ -63,9 +63,9 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
 }
 
 // clean up all the MutableContainers
-void GraphUpdatesRecorder::deleteValues(hash_map<unsigned long,
+void GraphUpdatesRecorder::deleteValues(TLP_HASH_MAP<unsigned long,
 					MutableContainer<DataMem*>* >& values) {
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
     values.begin();
   while(itnv != values.end()) {
     deleteValues((*itnv).second);
@@ -86,11 +86,11 @@ void GraphUpdatesRecorder::deleteValues(MutableContainer<DataMem*>* values) {
   delete values;
 }
 
-// delete all the DataMem referenced by a hash_map
-void GraphUpdatesRecorder::deleteDefaultValues(hash_map<unsigned long,
+// delete all the DataMem referenced by a TLP_HASH_MAP
+void GraphUpdatesRecorder::deleteDefaultValues(TLP_HASH_MAP<unsigned long,
 					       DataMem*>& values) {
-  hash_map<unsigned long, DataMem*>::iterator itv = values.begin();
-  hash_map<unsigned long, DataMem*>::iterator itve = values.end();
+  TLP_HASH_MAP<unsigned long, DataMem*>::iterator itv = values.begin();
+  TLP_HASH_MAP<unsigned long, DataMem*>::iterator itve = values.end();
   while(itv != itve) {
     delete itv->second;
     ++itv;
@@ -98,8 +98,8 @@ void GraphUpdatesRecorder::deleteDefaultValues(hash_map<unsigned long,
   values.clear();
 }
 
-void GraphUpdatesRecorder::recordEdgeContainer(hash_map<node, vector<edge> >& containers, GraphImpl* g, node n) {
-  hash_map<node, vector<edge> >::iterator itc =
+void GraphUpdatesRecorder::recordEdgeContainer(TLP_HASH_MAP<node, vector<edge> >& containers, GraphImpl* g, node n) {
+  TLP_HASH_MAP<node, vector<edge> >::iterator itc =
     containers.find(n);
   if (itc == containers.end()) {
     // record edges container of n
@@ -111,8 +111,8 @@ void GraphUpdatesRecorder::recordEdgeContainer(hash_map<node, vector<edge> >& co
   }
 }
 
-void GraphUpdatesRecorder::removeFromEdgeContainer(hash_map<node, vector<edge> >& containers, edge e, node n) {
-  hash_map<node, vector<edge> >::iterator itc =
+void GraphUpdatesRecorder::removeFromEdgeContainer(TLP_HASH_MAP<node, vector<edge> >& containers, edge e, node n) {
+  TLP_HASH_MAP<node, vector<edge> >::iterator itc =
     containers.find(n);
   if (itc != containers.end()) {
     vector<edge>::iterator it = (*itc).second.begin();
@@ -138,7 +138,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     newNodeIdManager = root->nodeIds;
     newEdgeIdManager = root->edgeIds;
     // record new edges containers
-    hash_map<edge, EdgeRecord>::iterator itae = addedEdges.begin();
+    TLP_HASH_MAP<edge, EdgeRecord>::iterator itae = addedEdges.begin();
     while(itae != addedEdges.end()) {
       recordEdgeContainer(newContainers, root,(*itae).second.source);
       recordEdgeContainer(newContainers, root,(*itae).second.target);
@@ -146,7 +146,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     }
     // record new properties default values & new values
     // loop on oldNodeDefaultValues
-    hash_map<unsigned long, DataMem*>::iterator itdv =
+    TLP_HASH_MAP<unsigned long, DataMem*>::iterator itdv =
       oldNodeDefaultValues.begin();
     while(itdv != oldNodeDefaultValues.end()) {
       PropertyInterface* p = (PropertyInterface *) (*itdv).first;
@@ -156,7 +156,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       itdv++;
     }
     // loop on oldNodeValues
-    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itov =
+    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itov =
       oldNodeValues.begin();
     while(itov != oldNodeValues.end()) {
       PropertyInterface* p = (PropertyInterface *) (*itov).first;
@@ -166,11 +166,11 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       itov++;
     }
     // loop on updatedPropsAddedNodes
-    hash_map<unsigned long, std::set<node> >::iterator itan =
+    TLP_HASH_MAP<unsigned long, std::set<node> >::iterator itan =
       updatedPropsAddedNodes.begin();
     while(itan != updatedPropsAddedNodes.end()) {
       PropertyInterface* p = (PropertyInterface *) (*itan).first;
-      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+      TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
 	newNodeValues.find((unsigned long) p);
       MutableContainer<DataMem*>*  nv;
       bool created = itnv == newNodeValues.end();
@@ -218,11 +218,11 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       itov++;
     }
     // loop on updatedPropsAddedEdges
-    hash_map<unsigned long, std::set<edge> >::iterator iten =
+    TLP_HASH_MAP<unsigned long, std::set<edge> >::iterator iten =
       updatedPropsAddedEdges.begin();
     while(iten != updatedPropsAddedEdges.end()) {
       PropertyInterface* p = (PropertyInterface *) (*iten).first;
-      hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+      TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
 	newEdgeValues.find((unsigned long) p);
       MutableContainer<DataMem*>*  nv;
       bool created = itnv == newEdgeValues.end();
@@ -252,7 +252,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       iten++;
     }
     // record graph attribute new values
-    hash_map<unsigned long, DataSet>::iterator itav =
+    TLP_HASH_MAP<unsigned long, DataSet>::iterator itav =
       oldAttributeValues.begin();
     while (itav != oldAttributeValues.end()) {
       Graph* g = (Graph *) (*itav).first;
@@ -274,7 +274,7 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
   nv->setAll(NULL);
   bool hasNewValues = false;
   // record updated nodes new values
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
     oldNodeValues.find((unsigned long) p);
   if (itp != oldNodeValues.end()) {
     MutableContainer<DataMem*>* opv = (*itp).second;
@@ -302,7 +302,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
   nv->setAll(NULL);
   bool hasNewValues = false;
   // record updated edges new values
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itp = 
     oldEdgeValues.find((unsigned long) p);
   if (itp != oldEdgeValues.end()) {
     MutableContainer<DataMem*>* opv = (*itp).second;
@@ -352,7 +352,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
   
   // add self as a PropertyObserver for all previously
   // existing properties
-  hash_map<unsigned long, set<PropertyRecord> >::iterator itp =
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator itp =
     addedProperties.find((unsigned long) g);
   set<PropertyRecord>*  newProps = NULL;
   if (itp != addedProperties.end())
@@ -369,7 +369,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
 
   // add self as a GraphObserver for all previously
   // existing subgraphs
-  hash_map<unsigned long, set<Graph*> >::iterator itg =
+  TLP_HASH_MAP<unsigned long, set<Graph*> >::iterator itg =
     addedSubGraphs.find((unsigned long) g);
   set<Graph*>* newSubGraphs = NULL;
   if (itg != addedSubGraphs.end())
@@ -403,9 +403,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
   Observable::holdObservers();
   // loop on subGraphsToDel
-  hash_map<unsigned long, std::set<Graph*> >& subGraphsToDel =
+  TLP_HASH_MAP<unsigned long, std::set<Graph*> >& subGraphsToDel =
     undo ? addedSubGraphs : deletedSubGraphs; 
-  hash_map<unsigned long, std::set<Graph*> >::iterator its =
+  TLP_HASH_MAP<unsigned long, std::set<Graph*> >::iterator its =
     subGraphsToDel.begin();
   while(its != subGraphsToDel.end()) {
     Graph* g = (Graph*) (*its).first;
@@ -418,9 +418,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++its;
   }
   // loop on propsToDel
-  hash_map<unsigned long,  set<PropertyRecord> >& propsToDel =
+  TLP_HASH_MAP<unsigned long,  set<PropertyRecord> >& propsToDel =
     undo ? addedProperties : deletedProperties; 
-  hash_map<unsigned long,  set<PropertyRecord> >::iterator itpg =
+  TLP_HASH_MAP<unsigned long,  set<PropertyRecord> >::iterator itpg =
     propsToDel.begin();
   while(itpg != propsToDel.end()) {
     Graph* g = (Graph*) (*itpg).first;
@@ -433,9 +433,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itpg;
   }
   // loop on edgesToDel
-  hash_map<edge, EdgeRecord>& edgesToDel =
+  TLP_HASH_MAP<edge, EdgeRecord>& edgesToDel =
     undo ? addedEdges : deletedEdges;
-  hash_map<edge, EdgeRecord>::iterator ite = edgesToDel.begin();
+  TLP_HASH_MAP<edge, EdgeRecord>::iterator ite = edgesToDel.begin();
   while(ite != edgesToDel.end()) {
     edge e = (*ite).first;
     set<Graph*>::iterator itg = (*ite).second.graphs.begin();
@@ -448,9 +448,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++ite;
   }
   // loop on nodesToDel
-  hash_map<node, set<Graph*> >& nodesToDel =
+  TLP_HASH_MAP<node, set<Graph*> >& nodesToDel =
     undo ? addedNodes : deletedNodes;
-  hash_map<node, set<Graph*> >::iterator itn = nodesToDel.begin();
+  TLP_HASH_MAP<node, set<Graph*> >::iterator itn = nodesToDel.begin();
   while(itn != nodesToDel.end()) {
     node n = (*itn).first;
     set<Graph*>::iterator itg = (*itn).second.begin();
@@ -462,7 +462,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itn;
   }
   // loop on subGraphsToAdd
-  hash_map<unsigned long, std::set<Graph*> >& subGraphsToAdd =
+  TLP_HASH_MAP<unsigned long, std::set<Graph*> >& subGraphsToAdd =
     undo ? deletedSubGraphs : addedSubGraphs; 
   its = subGraphsToAdd.begin();
   while(its != subGraphsToAdd.end()) {
@@ -476,7 +476,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++its;
   }
   // loop on nodesToAdd
-  hash_map<node, set<Graph*> >& nodesToAdd =
+  TLP_HASH_MAP<node, set<Graph*> >& nodesToAdd =
     undo ? deletedNodes : addedNodes;
   itn = nodesToAdd.begin();
   while(itn != nodesToAdd.end()) {
@@ -498,7 +498,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   g->edgeIds = undo ? oldEdgeIdManager : newEdgeIdManager;
 
   // loop on edgesToAdd
-  hash_map<edge, EdgeRecord>& edgesToAdd =
+  TLP_HASH_MAP<edge, EdgeRecord>& edgesToAdd =
     undo ? deletedEdges : addedEdges;
   ite = edgesToAdd.begin();
   while(ite != edgesToAdd.end()) {
@@ -515,7 +515,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   }
 
   // loop on propsToAdd
-  hash_map<unsigned long,  set<PropertyRecord> >& propsToAdd =
+  TLP_HASH_MAP<unsigned long,  set<PropertyRecord> >& propsToAdd =
     undo ? deletedProperties : addedProperties; 
   itpg = propsToAdd.begin();
   while(itpg != propsToAdd.end()) {
@@ -529,9 +529,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itpg;
   }
   // loop on nodeDefaultValues
-  hash_map<unsigned long, DataMem*>& nodeDefaultValues =
+  TLP_HASH_MAP<unsigned long, DataMem*>& nodeDefaultValues =
     undo ? oldNodeDefaultValues : newNodeDefaultValues;
-  hash_map<unsigned long, DataMem*>::iterator itdv =
+  TLP_HASH_MAP<unsigned long, DataMem*>::iterator itdv =
     nodeDefaultValues.begin();
   while(itdv != nodeDefaultValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itdv).first;
@@ -539,7 +539,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itdv;
   }
   // loop on edgeDefaultValues
-  hash_map<unsigned long, DataMem*>& edgeDefaultValues =
+  TLP_HASH_MAP<unsigned long, DataMem*>& edgeDefaultValues =
     undo ? oldEdgeDefaultValues : newEdgeDefaultValues;
   itdv = edgeDefaultValues.begin();
   while(itdv != edgeDefaultValues.end()) {
@@ -555,17 +555,17 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itre;
   }
   // loop on containers
-  hash_map<node, vector<edge> >& containers =
+  TLP_HASH_MAP<node, vector<edge> >& containers =
     undo ? oldContainers : newContainers;
-  hash_map<node, vector<edge> >::iterator itc = containers.begin();
+  TLP_HASH_MAP<node, vector<edge> >::iterator itc = containers.begin();
   while(itc != containers.end()) {
     g->restoreContainer((*itc).first, (*itc).second);
     ++itc;
   }
   // loop on nodeValues
-  hash_map<unsigned long, MutableContainer<DataMem*>* >& nodeValues =
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >& nodeValues =
     undo ? oldNodeValues : newNodeValues;
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itnv =
     nodeValues.begin();
   while(itnv != nodeValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itnv).first;
@@ -579,9 +579,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itnv;
   }
   // loop on edgeValues
-  hash_map<unsigned long, MutableContainer<DataMem*>* >& edgeValues =
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >& edgeValues =
     undo ? oldEdgeValues : newEdgeValues;
-  hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator itev =
+  TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itev =
     edgeValues.begin();
   while(itev != edgeValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itev).first;
@@ -595,9 +595,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itev;
   }
   // loop on attribute values to restore
-  hash_map<unsigned long, DataSet>& attValues =
+  TLP_HASH_MAP<unsigned long, DataSet>& attValues =
     undo ? oldAttributeValues : newAttributeValues;
-  hash_map<unsigned long, DataSet>::iterator itav = attValues.begin();
+  TLP_HASH_MAP<unsigned long, DataSet>::iterator itav = attValues.begin();
   while (itav != attValues.end()) {
     Graph* g = (Graph *) (*itav).first;
     Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
@@ -632,7 +632,7 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
 }
 
 void GraphUpdatesRecorder::addNode(Graph* g, node n) {
-  hash_map<node, set<Graph*> >::iterator it =
+  TLP_HASH_MAP<node, set<Graph*> >::iterator it =
     addedNodes.find(n);
   if (it == addedNodes.end()) {
     set<Graph*> graphs;
@@ -643,7 +643,7 @@ void GraphUpdatesRecorder::addNode(Graph* g, node n) {
 }
 
 void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
-  hash_map<edge, EdgeRecord>::iterator it =
+  TLP_HASH_MAP<edge, EdgeRecord>::iterator it =
     addedEdges.find(e);
   if (it == addedEdges.end())
     addedEdges[e] = EdgeRecord(g, g->source(e), g->target(e));
@@ -652,10 +652,13 @@ void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
 }
 
 void GraphUpdatesRecorder::delNode(Graph* g, node n) {
-  hash_map<node, set<Graph*> >::iterator it = addedNodes.find(n);
+  TLP_HASH_MAP<node, set<Graph*> >::iterator it = addedNodes.find(n);
   // remove n from addedNodes if it is a newly added node
   if (it != addedNodes.end()) {
-    addedNodes.erase(it);
+    set<Graph*>& graphs = (*it).second;
+    graphs.erase(g);
+    if (graphs.empty())
+      addedNodes.erase(it);
     return;
   }
   // insert n into deletedNodes
@@ -677,15 +680,13 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
 }
 
 void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
-  hash_map<edge, EdgeRecord>::iterator it = addedEdges.find(e);
+  TLP_HASH_MAP<edge, EdgeRecord>::iterator it = addedEdges.find(e);
   // remove e from addedEdges if it is a newly added edge
   if (it != addedEdges.end()) {
     set<Graph*>& graphs = (*it).second.graphs;
-    if (graphs.size() == 1) {
-      assert(graphs.find(g) != graphs.end());
+    graphs.erase(g);
+    if (graphs.empty())
       addedEdges.erase(it);
-    } else
-      graphs.erase(g);
     // remove from revertedEdges if needed
     set<edge>::iterator it = revertedEdges.find(e);
     if (it != revertedEdges.end())
@@ -731,7 +732,7 @@ void GraphUpdatesRecorder::reverseEdge(Graph* g,  edge e) {
 }
 
 void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
-  hash_map<unsigned long, set<Graph*> >::iterator it =
+  TLP_HASH_MAP<unsigned long, set<Graph*> >::iterator it =
     addedSubGraphs.find((unsigned long) g);
   if (it == addedSubGraphs.end()) {
     set<Graph*> subgraphs;
@@ -743,7 +744,7 @@ void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
 }
 
 void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
-  hash_map<unsigned long, set<Graph*> >::iterator it =
+  TLP_HASH_MAP<unsigned long, set<Graph*> >::iterator it =
     addedSubGraphs.find((unsigned long) g);
   // remove sg from addedSubGraphs if it is a newly added subgraph
   if (it != addedSubGraphs.end() &&
@@ -767,7 +768,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
 
 void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
   PropertyRecord p(g->getProperty(name),  name);
-  hash_map<unsigned long, set<PropertyRecord> >::iterator it =
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
     addedProperties.find((unsigned long) g);
   if (it == addedProperties.end()) {
     set<PropertyRecord>  props;
@@ -780,7 +781,7 @@ void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
 
 void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   PropertyRecord p(g->getProperty(name),  name);
-  hash_map<unsigned long, set<PropertyRecord> >::iterator it =
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
     addedProperties.find((unsigned long) g);
   // remove p from addedProperties if it is a newly added node
   if (it != addedProperties.end() && ((*it).second.find(p) != (*it).second.end())) {
@@ -802,14 +803,14 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
-  hash_map<node, set<Graph*> >::iterator ita = addedNodes.find(n);
+  TLP_HASH_MAP<node, set<Graph*> >::iterator ita = addedNodes.find(n);
   // don't record old values for newly added nodes
   if (ita != addedNodes.end()) {
     if (!restartAllowed)
       return;
     updatedPropsAddedNodes[(unsigned long) p].insert(n);
   } else {
-    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
+    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
       oldNodeValues.find((unsigned long) p);
     if (it == oldNodeValues.end()) {
       MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
@@ -835,14 +836,14 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
 }
             
 void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
-  hash_map<edge, EdgeRecord>::iterator ita = addedEdges.find(e);
+  TLP_HASH_MAP<edge, EdgeRecord>::iterator ita = addedEdges.find(e);
   // dont record old value for newly added edge
   if (ita != addedEdges.end()) {
     if (!restartAllowed)
       return;
     updatedPropsAddedEdges[(unsigned long) p].insert(e);
   } else {
-    hash_map<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
+    TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator it = 
       oldEdgeValues.find((unsigned long) p);
     if (it == oldEdgeValues.end()) {
       MutableContainer<DataMem*>* pv = new MutableContainer<DataMem*>;
@@ -869,7 +870,7 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
 
 void GraphUpdatesRecorder::beforeSetAttribute(Graph* g,
 					      const std::string& name) {
-  stdext::hash_map<unsigned long, DataSet>::iterator it =
+  TLP_HASH_MAP<unsigned long, DataSet>::iterator it =
     oldAttributeValues.find((unsigned long) g);
   if (it != oldAttributeValues.end() && it->second.exist(name))
     return;

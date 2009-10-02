@@ -4,12 +4,6 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <tulip/TulipPlugin.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/Types.h>
@@ -309,7 +303,7 @@ struct TLPGraphBuilder:public TLPTrue {
       BooleanProperty sel(clusterIndex[supergraphId]);
       sel.setAllNodeValue(false);
       sel.setAllEdgeValue(false);
-      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel);
+      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel, id);
       clusterIndex[id]->setAttribute("name", name);
       return true;
     }

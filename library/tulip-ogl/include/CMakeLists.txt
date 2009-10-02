@@ -55,4 +55,10 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/GlBezierCurve.h 
 	tulip/GlCatmullRomCurve.h 
 	tulip/GlShaderManager.h 
+	tulip/EdgeExtremityGlyph.h
+	tulip/EdgeExtremityGlyphManager.h
+	tulip/OcclusionTest.h
+	tulip/TextRenderer.h	
+	tulip/Context.h
+	tulip/Fonts.h
 )

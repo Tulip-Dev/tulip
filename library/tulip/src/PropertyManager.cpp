@@ -24,9 +24,11 @@ PropertyManagerImpl::PropertyManagerImpl(Graph *spGr) {
 }
 //==============================================================
 PropertyManagerImpl::~PropertyManagerImpl() {
-  map<string,PropertyInterface*>::iterator itP;
+  map<string,PropertyInterface*>::const_iterator itP;
   for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
-    delete (*itP).second;
+    PropertyInterface *prop = (*itP).second;
+    prop->graph = NULL;
+    delete prop;
   }
 }
 //==============================================================

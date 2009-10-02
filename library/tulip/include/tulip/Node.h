@@ -1,11 +1,7 @@
 #ifndef Tulip_NODE_H
 #define Tulip_NODE_H
 #include "tulip/tulipconf.h"
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
+#include "tulip/tuliphash.h"
 #include <climits>
 
 /**
@@ -28,11 +24,12 @@ struct node {
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-namespace stdext {
+TLP_BEGIN_HASH_NAMESPACE {
   template<> struct hash<tlp::node> {
     size_t operator()(const tlp::node n) const {return n.id;}
   };
-}
+} TLP_END_HASH_NAMESPACE
+
 
 namespace std {
   template<> struct equal_to<tlp::node> {

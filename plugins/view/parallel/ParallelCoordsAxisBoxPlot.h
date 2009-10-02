@@ -80,7 +80,7 @@ class ParallelCoordsAxisBoxPlot : public InteractorComponent {
 
 public :
 
-	ParallelCoordsAxisBoxPlot() : currentGraph(NULL), drawAxisBoxPlot(false), selectedAxis(NULL), lastNbAxis(0) {}
+	ParallelCoordsAxisBoxPlot();
 	~ParallelCoordsAxisBoxPlot();
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
@@ -98,7 +98,6 @@ private :
 	ParallelCoordinatesView *parallelView;
 	Graph *currentGraph;
 	std::map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
-	bool drawAxisBoxPlot;
 	ParallelAxis *selectedAxis;
 	unsigned int lastNbAxis;
 

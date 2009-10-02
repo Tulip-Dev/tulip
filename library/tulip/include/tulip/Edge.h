@@ -1,11 +1,7 @@
 #ifndef Tulip_EDGE_H
 #define Tulip_EDGE_H
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 #include <climits>
+#include "tulip/tuliphash.h"
 /**
  * \addtogroup graphs
  */ 
@@ -26,12 +22,12 @@ struct edge {
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-namespace stdext {
+TLP_BEGIN_HASH_NAMESPACE {
   template<>
   struct hash<tlp::edge>{
     size_t operator()(const tlp::edge e) const {return e.id;}
   };
-}
+} TLP_END_HASH_NAMESPACE
 
 namespace std {
   template<>

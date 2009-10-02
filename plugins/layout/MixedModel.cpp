@@ -127,7 +127,7 @@ bool MixedModel::run() {
 	node n3 = itn->next();
 	const Coord& c3 = currentGraph->getProperty<SizeProperty>("viewSize")->getNodeValue(n2);
 	layoutResult->setNodeValue(n3, Coord(2. * spacing + c.getX()/2 + c2.getX()+c3.getX()/2,0,0));
-	edge e = currentGraph->existEdge(n,n3).isValid() ? currentGraph->existEdge(n,n3) :currentGraph->existEdge(n3,n);
+	edge e = currentGraph->existEdge(n,n3, false);
 	if(e.isValid()){
 	  vector<Coord> bends(2);
 	  bends.clear();
@@ -263,7 +263,7 @@ bool MixedModel::run() {
     LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", layoutResult);
-    graph->computeProperty<LayoutProperty *>(string("Connected Component Packing"),&layout,err,NULL,&tmp);
+    graph->computeProperty(string("Connected Component Packing"),&layout,err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();
     while(itN->hasNext()){
       node n = itN->next();
@@ -964,14 +964,6 @@ void MixedModel::computeCoords(){
   }
 }
 
-//====================================================
-edge MixedModel::existEdge(node n, node v){
-  edge e = carte->existEdge(n, v);
-  if(!e.isValid())
-    e = carte->existEdge(v, n);
-  return e;
-}
- 
 //====================================================
 node MixedModel::leftV(unsigned int k){
   assert( (0<k) && (k<V.size()) );

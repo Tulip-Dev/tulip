@@ -12,11 +12,8 @@
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
 #include "tulip/tulipconf.h"
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
+#include "tulip/tuliphash.h"
+
 #include <climits>
 
 /**
@@ -39,11 +36,12 @@ struct Face {
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-namespace stdext {
+TLP_BEGIN_HASH_NAMESPACE {
   template<> struct hash<tlp::Face> {
     size_t operator()(const tlp::Face f) const {return f.id;}
   };
 }
+TLP_END_HASH_NAMESPACE
 
 namespace std {
   template<> struct equal_to<tlp::Face> {

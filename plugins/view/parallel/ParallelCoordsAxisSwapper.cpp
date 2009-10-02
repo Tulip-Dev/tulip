@@ -41,6 +41,8 @@ float computeABACAngleWithAlKashi(const Coord &A, const Coord &B, const Coord &C
 	return acos((square(AB)+square(AC)-square(BC)) / (2 * AB * AC)) * (180. / M_PI);
 }
 
+ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false) {}
+
 ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {}
 
 void ParallelCoordsAxisSwapper::setView(View *view) {
@@ -78,7 +80,6 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 			}
 			otherAxisToSwap = parallelView->getAxisUnderPointer(me->x(), me->y());
 		}
-		drawInteractor = true;
 		parallelView->refresh();
 		return true;
 
@@ -115,17 +116,10 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
 		return true;
 	}
 	selectedAxis = NULL;
-	drawInteractor = true;
 	return false;
 }
 
 bool ParallelCoordsAxisSwapper::draw(GlMainWidget *glMainWidget) {
-
-	if (!drawInteractor) {
-		return false;
-	}
-
-	drawInteractor = false;
 
 	if (selectedAxis != NULL) {
 

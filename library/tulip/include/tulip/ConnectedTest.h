@@ -17,6 +17,8 @@
 #endif
 
 #include <set>
+#include <vector>
+#include "tulip/tuliphash.h"
 #include "tulip/ObservableGraph.h"
 
 namespace tlp {
@@ -58,7 +60,7 @@ private:
   void destroy(Graph *);
   ConnectedTest();
   static ConnectedTest * instance;
-  stdext::hash_map<unsigned long,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 
 }

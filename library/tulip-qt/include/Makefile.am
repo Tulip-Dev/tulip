@@ -40,6 +40,7 @@ nobase_include_HEADERS = \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
 	tulip/QtCPULODCalculator.h \
+	tulip/QtQuadTreeLODCalculator.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/MainController.h \
@@ -58,7 +59,8 @@ nobase_include_HEADERS = \
 	tulip/QGlPixelBufferManager.h
 
 noinst_HEADERS = \
-	tulip/Morphing.h
+	tulip/Morphing.h \
+	tulip/QuadTree.h
 
 
 if WIN32 
@@ -76,7 +78,8 @@ BUILT_SOURCES = \
 	tulip/QtProgressData.h \
 	tulip/ColorScaleConfigDialogData.h \
 	tulip/SimpleStringsListSelectionWidgetData.h \
-	tulip/DoubleStringsListSelectionWidgetData.h
+	tulip/DoubleStringsListSelectionWidgetData.h \
+	tulip/ListPropertyWidgetData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -97,7 +100,8 @@ BUILT_SOURCES = \
 	tulip/glmainwidget.h \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
-	tulip/propertywidget.h
+	tulip/propertywidget.h \
+	tulip/ListPropertyWidgetData.h
 
 tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@

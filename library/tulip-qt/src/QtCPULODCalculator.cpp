@@ -25,17 +25,25 @@ namespace tlp {
     float *resultTab=new float[entitiesNumber];
     unsigned int index=0;
 
-    for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-      boundingBoxTab[index]=(*it).second;
-      ++index;
+    if((type & RenderingSimpleEntities)!=0){
+      for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
+        if(((GlSimpleEntity*)(*it).first)->isVisible()){
+          boundingBoxTab[index]=(*it).second;
+          ++index;
+        }
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
-      boundingBoxTab[index]=(*it).second;
-      ++index;
+    if((type & RenderingNodes)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
+        boundingBoxTab[index]=(*it).second;
+        ++index;
+      }
     }
-    for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
-      boundingBoxTab[index]=(*it).second;
-      ++index;
+    if((type & RenderingEdges)!=0){
+      for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
+        boundingBoxTab[index]=(*it).second;
+        ++index;
+      }
     }
 
     if(index>1000){
@@ -68,6 +76,8 @@ namespace tlp {
         outputEdges->push_back(pair<unsigned int,float>((*it).first,resultTab[index]));
       index++;
     }
+
+    //cout << "end elements number : " << outputSimple->size()+outputNodes->size()+outputEdges->size() << endl;
 
     delete[] boundingBoxTab;
     delete[] resultTab;

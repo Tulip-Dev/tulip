@@ -7,7 +7,6 @@ LAYOUTPLUGINOFGROUP(ConeTreeExtended,"Cone Tree","David Auber","01/04/2001","Sta
 
 using namespace std;
 using namespace tlp;
-using namespace stdext;
 
 //===============================================================
 float sqr(float x) {
@@ -40,8 +39,8 @@ void ConeTreeExtended::computeYCoodinates(node root) {
 }
 //===============================================================
 double ConeTreeExtended::treePlace3D(node n, 
-				     hash_map<node,double> *posRelX, 
-				     hash_map<node,double> *posRelY) {
+				     TLP_HASH_MAP<node,double> *posRelX, 
+				     TLP_HASH_MAP<node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
   if (tree->outdeg(n)==0) {
@@ -108,7 +107,8 @@ double ConeTreeExtended::treePlace3D(node n,
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(node n, hash_map<node,double> *px, hash_map<node,double> *py,
+void ConeTreeExtended::calcLayout(node n, TLP_HASH_MAP<node,double> *px,
+				  TLP_HASH_MAP<node,double> *py,
 			double x, double y, int level) {
   layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
@@ -169,8 +169,8 @@ bool ConeTreeExtended::run() {
 
   node root;
   tlp::getSource(tree, root);
-  hash_map<node,double> posX;
-  hash_map<node,double> posY;
+  TLP_HASH_MAP<node,double> posX;
+  TLP_HASH_MAP<node,double> posY;
   treePlace3D(root,&posX,&posY);
   computeYCoodinates(root);
   calcLayout(root,&posX,&posY,0,0,0);

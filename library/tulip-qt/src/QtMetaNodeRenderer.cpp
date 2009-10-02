@@ -187,25 +187,28 @@ namespace tlp {
     Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
     glMainWidget->setData(metaGraph,DataSet());
     GlMainWidget::getTextureRealSize(newWidth, newHeight, textureWidth,textureHeight);
-	glMainWidget->getTextureShift(newWidth, newHeight, xTextureDec, yTextureDec);
+    glMainWidget->getTextureShift(newWidth, newHeight, xTextureDec, yTextureDec);
 
     setMaterial(Color(255,255,255,255));
     GlTextureManager::getInst().activateTexture(str.str());
-
+    glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
+    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
     glDisable(GL_LIGHTING);
     glBegin(GL_QUADS);
     glTexCoord2f(xTextureDec, yTextureDec);
-    glVertex3f(newCenter[0]-newSize[0]/2.,newCenter[1]-newSize[1]/2.,newCenter[2]);
+    glVertex3f(-newSize[0]/2.,-newSize[1]/2.,0);
     glTexCoord2f(1.0-xTextureDec, yTextureDec);
-    glVertex3f(newCenter[0]+newSize[0]/2.,newCenter[1]-newSize[1]/2.,newCenter[2]);
+    glVertex3f(newSize[0]/2.,-newSize[1]/2.,0);
     glTexCoord2f(1.0-xTextureDec, 1.0-yTextureDec);
-    glVertex3f(newCenter[0]+newSize[0]/2.,newCenter[1]+newSize[1]/2.,newCenter[2]);
+    glVertex3f(newSize[0]/2.,newSize[1]/2.,0);
     glTexCoord2f(xTextureDec, 1.0-yTextureDec);
-    glVertex3f(newCenter[0]-newSize[0]/2.,newCenter[1]+newSize[1]/2.,newCenter[2]);
+    glVertex3f(-newSize[0]/2.,newSize[1]/2.,0);
     glEnd();
     glEnable(GL_LIGHTING);
 
     GlTextureManager::getInst().desactivateTexture();
+    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., -1.);
+    glTranslatef(-newCenter[0],-newCenter[1],-newCenter[2]);
   }
 
 }

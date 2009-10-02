@@ -3,6 +3,7 @@
 #define _TreeReingoldAndTilfordExtended_H
 #include <string>
 #include <math.h> 
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
 struct LR {
@@ -52,10 +53,10 @@ public:
   bool run();
 
 private:
-  void calcLayout(tlp::node, stdext::hash_map<tlp::node,double> *,double, double, int ,std::map<int,double> &);
+  void calcLayout(tlp::node, TLP_HASH_MAP<tlp::node,double> *,double, double, int ,std::map<int,double> &);
   double  calcDecal(const std::list<LR>& , const std::list<LR>&);
   std::list<LR>* mergeLRList(std::list<LR>*,std::list<LR>*,double decal);
-  std::list<LR>* TreePlace(tlp::node, stdext::hash_map<tlp::node,double>*);
+  std::list<LR>* TreePlace(tlp::node, TLP_HASH_MAP<tlp::node,double>*);
   void TreeLevelSizing(tlp::node ,std::map<int,double> &,int , std::map<tlp::node,int> &levels);
 
   tlp::Graph *tree;

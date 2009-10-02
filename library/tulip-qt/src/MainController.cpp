@@ -12,7 +12,7 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QTabWidget>
 
-#include <tulip/hash_string.h>
+#include <tulip/tuliphash.h>
 #include <tulip/Graph.h>
 #include <tulip/Algorithm.h>
 #include <tulip/BooleanProperty.h>
@@ -79,8 +79,8 @@ namespace tlp {
   //**********************************************************************
   // we use a hash_map to store plugin parameters
   static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-    static stdext::hash_map<unsigned long, stdext::hash_map<std::string, StructDef * > > paramMaps;
-    stdext::hash_map<std::string, StructDef *>::const_iterator it;
+    static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
+    TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
     it = paramMaps[(unsigned long) factory].find(name);
     if (it == paramMaps[(unsigned long) factory].end())
       paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
@@ -367,7 +367,7 @@ namespace tlp {
       if(view){
         view->getData(&graph,&viewData);
         tmp.set<DataSet>(viewNames[view],viewData);
-        tmp.set<string>("graphName",graph->getAttribute<string>("name"));
+        tmp.set<unsigned int>("id",graph->getId());
         tmp.set<int>("x",rect.left());
         tmp.set<int>("y",rect.top());
         tmp.set<int>("width",rect.width());

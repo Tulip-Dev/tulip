@@ -104,6 +104,12 @@ ADD_LIBRARY(ChristmasTree-${TulipVersion} SHARED ${ChristmasTree_SRCS})
 TARGET_LINK_LIBRARIES(ChristmasTree-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(ChristmasTree-${TulipVersion} ${LibTulipOglName})
 ADD_DEPENDENCIES(ChristmasTree-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
+##----------------------------------------------------------------------------------------------------------------------------
+SET(EdgeExtremityArrow_SRCS edgeExtremityArrow.cpp)
+ADD_LIBRARY(EdgeExtremityArrow-${TulipVersion} SHARED ${EdgeExtremityArrow_SRCS})
+TARGET_LINK_LIBRARIES(EdgeExtremityArrow-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(EdgeExtremityArrow-${TulipVersion} ${LibTulipOglName})
+ADD_DEPENDENCIES(EdgeExtremityArrow-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
@@ -122,5 +128,6 @@ INSTALL(TARGETS
 	HalfCylinder-${TulipVersion}
 	SquareBorderTextured-${TulipVersion}
 	ChristmasTree-${TulipVersion}
+	EdgeExtremityArrow-${TulipVersion}
 	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/glyphs/)
 

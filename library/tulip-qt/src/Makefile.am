@@ -80,7 +80,8 @@ BUILT_SOURCES = \
 	moc_StringsListSelectionWidget.cpp  \
 	moc_SimpleStringsListSelectionWidget.cpp \
 	moc_DoubleStringsListSelectionWidget.cpp \
-	moc_ColorScaleConfigDialog.cpp
+	moc_ColorScaleConfigDialog.cpp \
+	moc_ListPropertyWidget.cpp
 
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 
@@ -112,6 +113,7 @@ dist_libtulip_qt4_la_SOURCES = \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
 	QtCPULODCalculator.cpp \
+	QtQuadTreeLODCalculator.cpp \
 	InteractorManager.cpp \
 	Interactor.cpp \
 	InteractorChainOfResponsibility.cpp \
@@ -135,7 +137,8 @@ dist_libtulip_qt4_la_SOURCES = \
 	DoubleStringsListSelectionWidget.cpp \
 	ColorScaleConfigDialog.cpp \
 	QtMetaNodeRenderer.cpp \
-	QGlPixelBufferManager.cpp
+	QGlPixelBufferManager.cpp \
+	ListPropertyWidget.cpp
 
 CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
 

@@ -55,6 +55,8 @@ SET(tulip-qt_LIB_SRCS
     ColorScaleConfigDialog.cpp 
     QtMetaNodeRenderer.cpp 
     QGlPixelBufferManager.cpp
+    QtQuadTreeLODCalculator.cpp
+    ListPropertyWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -72,6 +74,7 @@ set(tulip-qt_UI
      ../designer/ColorScaleConfigDialog.ui
      ../designer/SimpleStringsListSelectionWidget.ui
      ../designer/DoubleStringsListSelectionWidget.ui
+     ../designer/ListPropertyWidget.ui
 )
 
 set(tulip-qt_PLUGINS
@@ -118,6 +121,7 @@ set(tulip-qt_MOC
     ../include/tulip/SimpleStringsListSelectionWidget.h
     ../include/tulip/DoubleStringsListSelectionWidget.h
     ../include/tulip/ColorScaleConfigDialog.h
+    ../include/tulip/ListPropertyWidget.h
 )
 
 set(tulip-qt_RCC

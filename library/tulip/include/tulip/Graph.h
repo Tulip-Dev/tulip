@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <climits>
 #include "tulip/tulipconf.h"
@@ -97,8 +98,8 @@ template<class C>class Iterator;
   friend class GraphDecorator;
 
 public:
-  Graph();
-  virtual ~Graph();
+  Graph():id(0) {}
+  virtual ~Graph() {}
   //=========================================================================
   // Graph hierarchy acces and building
   //=========================================================================
@@ -108,10 +109,11 @@ public:
   virtual  void clear()=0;
   /**
    * Creates and returns a new SubGraph of the graph
-   * The elements of the new SubGraph is those selected in the selection
+   * The elements of the new SubGraph are those selected in the selection
    * if there is no selection an empty SubGraph is return.
    */
-  virtual Graph *addSubGraph(BooleanProperty *selection=0)=0;
+  virtual Graph *addSubGraph(BooleanProperty *selection=0,
+			     unsigned int id = 0)=0;
   /**
    *  Creates and returns the subgraph induced by a set of nodes
    */
@@ -293,6 +295,9 @@ public:
   virtual node source(const edge)const =0;
   /// Return the target of the edge.
   virtual node target(const edge)const =0;
+  /// Return the source and target of the edge
+  /// as the first and second of the returned pair
+  virtual const std::pair<node, node>& ends(const edge)const=0;
   /// Return the opposite node for s in the edge e
   virtual node opposite(const edge, const node)const =0;
   /// Return true if the node is element of the graph.
@@ -303,11 +308,13 @@ public:
   virtual bool isElement(const edge ) const =0;
   /// Return true if the edge is a meta edge.
   virtual bool isMetaEdge(const edge ) const =0;
-  /** Returns the edge if it exists an edge between two node
-   *  sens of the edge is not taken into account)
+  /** Returns the edge if it exists an edge between two nodes
+   *  the 'directed' flag indicates if the direction of the edge
+   *  (from source to target) must be taken in to account).
    *  If no edge is found return an invalid edge.
    */
-  virtual edge existEdge(const node , const node) const =0;
+  virtual edge existEdge(const node source, const node target,
+			 bool directed = true) const =0;
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
@@ -348,8 +355,8 @@ public:
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
-  template<typename Proxytype>
-  Proxytype* getLocalProperty(const std::string &name);
+  template<typename PropertyType>
+  PropertyType* getLocalProperty(const std::string &name);
   /**
    * Compute a property on this graph using an external algorithm (plug-in)
    * The result is stored in result, Warning all information in result will be deleted
@@ -359,8 +366,8 @@ public:
    * using the DataSet. In some cases algorithms can use this DataSet in order
    * to give as result external information (not stored in result).
    */
-  template<typename Proxytype>
-  bool computeProperty(const std::string &algorithm, Proxytype result, std::string &msg,
+  template<typename PropertyType>
+  bool computeProperty(const std::string &algorithm, PropertyType* result, std::string &msg,
 		       PluginProgress *progress=0, DataSet *data=0);
   /**
    * Returns a pointer to a PropertyInterface which is in the pool or in the pool of an ascendant
@@ -369,8 +376,8 @@ public:
    * Using of delete on that property will cause a segmentation violation
    * (use delLocalProperty instead).
    */
-  template<typename Proxytype>
-  Proxytype* getProperty(const std::string &name);
+  template<typename PropertyType>
+  PropertyType* getProperty(const std::string &name);
   /**
    * Returns a pointer on an existing property. If the property does not
    * exist return NULL.
@@ -472,9 +479,10 @@ protected:
   void notifyDestroy();
   void notifyAddSubGraph(Graph*);
 
-private:
+protected:
 
   unsigned int id;
+  std::set<tlp::PropertyInterface*> circularCalls;
 };
 
 }
@@ -487,7 +495,7 @@ TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 //================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-namespace stdext {
+TLP_BEGIN_HASH_NAMESPACE {
   template <>
   struct TLP_SCOPE hash<const tlp::Graph *> {
     size_t operator()(const tlp::Graph *s) const {return size_t(s->getId());}
@@ -496,7 +504,7 @@ namespace stdext {
   struct TLP_SCOPE hash<tlp::Graph *> {
     size_t operator()(tlp::Graph *s) const {return size_t(s->getId());}
   };
-}
+} TLP_END_HASH_NAMESPACE
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 //include the template code

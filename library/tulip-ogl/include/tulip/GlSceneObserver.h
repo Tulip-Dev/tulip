@@ -25,6 +25,7 @@ namespace tlp {
 
   class GlLayer;
   class GlScene;
+  class GlSimpleEntity;
 
   /** \brief An observer to the scene
    * An observer to the scene who observe layers
@@ -44,6 +45,10 @@ namespace tlp {
      * This function is call when we add an entity to the layer
      */
     virtual void modifyLayer(GlScene*, const std::string&, GlLayer*){}
+    /**
+     * This function is call when we modify an entity
+     */
+    virtual void modifyEntity(GlScene *,GlSimpleEntity *){}
   };
 
   /**
@@ -72,6 +77,7 @@ namespace tlp {
     void notifyAddLayer(GlScene *scene,const std::string& name, GlLayer* layer);
     void notifyDelLayer(GlScene *scene,const std::string& name, GlLayer* layer);
     void notifyModifyLayer(GlScene *scene,const std::string& name, GlLayer* layer);
+    void notifyModifyEntity(GlScene *,GlSimpleEntity *entity);
 
   protected:
 

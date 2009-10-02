@@ -2,6 +2,7 @@
 #ifndef _BUBBLETREELAYOUT_H
 #define _BUBBLETREELAYOUT_H
 
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
 /** \addtogroup layout */
@@ -39,9 +40,9 @@ public:
   ~BubbleTree();
   bool run();
 private:
-  double computeRelativePosition(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
-  void calcLayout2(tlp::node n, stdext::hash_map<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
+  double computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  void calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);
   tlp::Graph *tree;
   tlp::SizeProperty *nodeSize;

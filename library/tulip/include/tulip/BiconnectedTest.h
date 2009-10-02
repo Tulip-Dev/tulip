@@ -16,11 +16,7 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
+#include "tulip/tuliphash.h"
 #include "tulip/ObservableGraph.h"
 
 namespace tlp {
@@ -53,7 +49,7 @@ private:
   void destroy(Graph *);
   BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
-  stdext::hash_map<unsigned long,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 }
 /*@}*/

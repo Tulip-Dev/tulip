@@ -2,17 +2,11 @@
 #include <config.h>
 #endif
 
+#include <tulip/tuliphash.h>
 #include <tulip/Graph.h>
 #include <tulip/TulipPlugin.h>
 
 #include "EmbedderEmbedGraph.h"
-
-#if (__GNUC__ < 3)
-#  include <hash_map>
-#else
-#  include <ext/hash_map>
-   using stdext::hash_map;
-#endif
 
 using namespace tlp;
 
@@ -52,18 +46,13 @@ Embedder::Embedder(const PropertyContext &context) : LayoutAlgorithm(context) {
 Embedder::~Embedder() {}
 
 bool Embedder::run() {
-  hash_map<unsigned int, node> nodemap;
-  hash_map<node, unsigned int> rmap;
+  TLP_HASH_MAP<unsigned int, node> nodemap;
+  TLP_HASH_MAP<node, unsigned int> rmap;
 
   unsigned int numberOfNodes = (unsigned int) graph->numberOfNodes();
   vtx_data *sg = new vtx_data[numberOfNodes];
   int *edges = new int[2 * graph->numberOfEdges() + numberOfNodes];
   float *ewgts = new float[2 * graph->numberOfEdges() + numberOfNodes];
-
-  nodemap.clear();
-  nodemap.resize(numberOfNodes);
-  rmap.clear();
-  rmap.resize(numberOfNodes);
 
   Iterator<node> *it = graph->getNodes();
   for (unsigned int i=0; i < numberOfNodes; ++i) {
@@ -105,7 +94,8 @@ bool Embedder::run() {
   delete [] coords[0];
   delete [] coords;
 
-  for (hash_map<node, unsigned int>::const_iterator it = rmap.begin(); it != rmap.end(); ++it) {
+  for (TLP_HASH_MAP<node, unsigned int>::const_iterator it = rmap.begin();
+       it != rmap.end(); ++it) {
     unsigned int index = it->second;
     layoutResult->setNodeValue(it->first, Coord(dcoords[0][index], dcoords[1][index]));
   }

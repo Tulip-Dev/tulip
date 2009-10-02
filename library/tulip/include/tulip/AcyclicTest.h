@@ -16,11 +16,7 @@
 #include <config.h>
 #endif
 
-#if (__GNUC__ < 3)
-#include <hash_set>
-#else
-#include <ext/hash_set>
-#endif
+#include "tulip/tuliphash.h"
 #include "tulip/ObservableGraph.h"
 #include <list>
 #include <tulip/MutableContainer.h>
@@ -63,7 +59,7 @@ private:
   void destroy(Graph *);
   AcyclicTest();
   static AcyclicTest * instance;
-  stdext::hash_map<unsigned int,bool> resultsBuffer;
+  TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 }
 /*@}*/

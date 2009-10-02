@@ -5,7 +5,6 @@
 LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree");
 
 using namespace std;
-using namespace stdext;
 using namespace tlp;
 
 struct greaterRadius {
@@ -16,7 +15,7 @@ struct greaterRadius {
   }
 };
 
-double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 5 > > *relativePosition) {
+double BubbleTree::computeRelativePosition(node n, TLP_HASH_MAP<node,Vector<double, 5 > > *relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0; //remove z-coordiantes because the drawing is 2D
@@ -150,7 +149,7 @@ double BubbleTree::computeRelativePosition(node n, hash_map<node,Vector<double, 
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativePosition,
+void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<node,Vector<double, 5 > > *relativePosition,
 				 const Vector<double,3> &enclosingCircleCenter, 
 				 const Vector<double,3> &originNodePosition) {
   /*
@@ -220,7 +219,7 @@ void BubbleTree::calcLayout2(node n, hash_map<node,Vector<double, 5 > > *relativ
   } delete it;
 }
 
-void BubbleTree::calcLayout(node n, hash_map<node, Vector<double, 5 > > *relativePosition) {
+void BubbleTree::calcLayout(node n, TLP_HASH_MAP<node, Vector<double, 5 > > *relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -283,7 +282,7 @@ bool BubbleTree::run() {
 
   node startNode;
   tlp::getSource(tree, startNode);
-  stdext::hash_map<node,Vector<double,5> > relativePosition;
+  TLP_HASH_MAP<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
 

@@ -176,7 +176,7 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     glMainWidget->getScene()->translateCamera(0,y-qMouseEv->y(),0);
     x = qMouseEv->x();
     y = qMouseEv->y();
-    glMainWidget->draw();
+    glMainWidget->draw(false);
     return true;
   }
   return false;

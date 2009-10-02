@@ -58,4 +58,5 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/SimpleStringsListSelectionWidget.h 
 	tulip/DoubleStringsListSelectionWidget.h 
 	tulip/QGlPixelBufferManager.h
+	tulip/QtQuadTreeLODCalculator.h
 )

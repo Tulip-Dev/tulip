@@ -234,15 +234,29 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 			quadCoords.push_back(quadCoords[0]);
 			quadCoords.push_back(quadCoords[1]);
 		}
-		line = new GlPolyQuad(quadCoords, color, lineTextureFilename, true, 1, color);
+		vector<Coord> newQuadCoords;
+		for (unsigned int i = 0 ; i < quadCoords.size() - 2 ; i = i+2) {
+			newQuadCoords.push_back(quadCoords[i]);
+			newQuadCoords.push_back(quadCoords[i+1]);
+			const unsigned int nbLineSegments = 20;
+			Coord step1 = (quadCoords[i+2] - quadCoords[i]) / nbLineSegments;
+			Coord step2 = (quadCoords[i+3] - quadCoords[i+1]) / nbLineSegments;
+			for (unsigned int j = 1 ; j <= nbLineSegments ; ++j) {
+				newQuadCoords.push_back(quadCoords[i] + j * step1);
+				newQuadCoords.push_back(quadCoords[i+1] + j * step2);
+			}
+		}
+		newQuadCoords.push_back(quadCoords[quadCoords.size() - 2]);
+		newQuadCoords.push_back(quadCoords[quadCoords.size() - 1]);
+		line = new GlPolyQuad(newQuadCoords, color, lineTextureFilename, true, 1, color);
 	} else {
 		bool closeSpline = (layoutType == CIRCULAR);
 		line = new GlCatmullRomCurve(splineCurvePassPoints, color, color, pointRadius, pointRadius, lineTextureFilename, closeSpline);
-		map<string, GlSimpleEntity*> *glEntities = ((GlComposite *)line)->getDisplays();
-		map<string, GlSimpleEntity*>::iterator it;
-		for (it = glEntities->begin(); it != glEntities->end() ; ++it) {
-			glEntitiesDataMap[it->second] = dataId;
-		}
+//		map<string, GlSimpleEntity*> *glEntities = ((GlComposite *)line)->getDisplays();
+//		map<string, GlSimpleEntity*>::iterator it;
+//		for (it = glEntities->begin(); it != glEntities->end() ; ++it) {
+//			glEntitiesDataMap[it->second] = dataId;
+//		}
 	}
 	if (graphProxy->isDataHighlighted(dataId)) {
 		line->setStencil(4);

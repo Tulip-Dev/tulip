@@ -1,3 +1,5 @@
+#include <iostream>
+#include <stdlib.h>
 #include "tulip/AbstractProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/StringProperty.h"
@@ -30,7 +32,14 @@ std::string PropertyInterface::getTypename( PropertyInterface * propertyName ) {
 }
 
 PropertyInterface::~PropertyInterface() {
-    notifyDestroy(this);
+  // check if the current property is not registered
+  // as a property of a graph
+  if (graph && !name.empty() &&
+      graph->existLocalProperty(name)) {
+    std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
+    abort();
+  }
+  notifyDestroy(this);
 }
 
 void PropertyInterface::notifyAfterSetNodeValue(PropertyInterface* p,

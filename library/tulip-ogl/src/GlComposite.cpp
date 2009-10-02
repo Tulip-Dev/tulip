@@ -18,44 +18,70 @@ namespace tlp {
     reset(false);
   }
   //============================================================
+  void GlComposite::addLayerParent(GlLayer *layer){
+    layerParents.push_back(layer);
+
+    for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
+      (*it)->addLayerParent(layer);
+    }
+  }
+  //============================================================
   void GlComposite::reset(bool deleteElems) {
     if (deleteElems)
       for(ITM i = elements.begin(); i != elements.end(); ++i)
-	delete (*i).second;
+        delete (*i).second;
     elements.clear();
     _sortedElements.clear();
+
+    for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
+      if((*it)->getScene())
+        (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+    }
   }
   //============================================================
   void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
     if(elements.find(key)==elements.end()) {
       elements[key] = entity;
       _sortedElements.push_back(entity);
-      
-      for(vector<GlLayer*>::iterator it=parents.begin();it!=parents.end();++it) {
-	entity->addParent(*it);
-	if((*it)->getScene())
-	  (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+
+      entity->addParent(this);
+      for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
+        entity->addLayerParent(*it);
+        if((*it)->getScene())
+          (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
       }
+
     }else{
       if(elements[key]!=entity) {
-	_sortedElements.remove(elements[key]);
-	_sortedElements.push_back(entity);
-	elements[key] = entity;
-      } 
+        _sortedElements.remove(elements[key]);
+        _sortedElements.push_back(entity);
+        elements[key] = entity;
+      }
     }
   }
   //============================================================
   void GlComposite::deleteGlEntity(const string &key) {
     _sortedElements.remove(elements[key]);
     elements.erase(key);
+
+    for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
+      if((*it)->getScene())
+        (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+    }
   }
   //============================================================
   void GlComposite::deleteGlEntity(GlSimpleEntity *entity) {
     for(ITM i = elements.begin(); i != elements.end(); ++i) {
       if(entity == (*i).second) {
-	_sortedElements.remove((*i).second);
-	elements.erase(i->first);
-	return;
+        _sortedElements.remove((*i).second);
+        elements.erase(i->first);
+
+        for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
+          if((*it)->getScene())
+            (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+        }
+
+        return;
       }
     }
   }
@@ -80,6 +106,11 @@ namespace tlp {
     for(ITM it = elements.begin(); it != elements.end(); ++it) {
       (*it).second->translate(mouvement);
     }
+  }
+  //============================================================
+  void GlComposite::notifyModified(GlSimpleEntity *entity) {
+    if(layerParents.size()!=0)
+      layerParents[0]->getScene()->notifyModifyEntity(layerParents[0]->getScene(),entity);
   }
   //============================================================
   void GlComposite::getXML(xmlNodePtr rootNode) {
@@ -129,10 +160,10 @@ namespace tlp {
 	  if(entity) {
 	    bool visible;
 	    int stencil;
-	    
+
 	    entity->setWithXML(node);
 	    GlXMLTools::getDataNode(node,dataNode);
-	      
+
 	    GlXMLTools::setWithXML(dataNode, "visible", visible);
 	    GlXMLTools::setWithXML(dataNode, "stencil", stencil);
 	    entity->setVisible(visible);

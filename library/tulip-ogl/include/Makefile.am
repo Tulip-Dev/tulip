@@ -54,16 +54,20 @@ nobase_include_HEADERS = \
 	tulip/FastBezier.h \
 	tulip/GlBezierCurve.h \
 	tulip/GlCatmullRomCurve.h \
-	tulip/GlShaderManager.h 
+	tulip/GlShaderManager.h \
+	tulip/EdgeExtremityGlyph.h \
+	tulip/EdgeExtremityGlyphManager.h \
+	tulip/OcclusionTest.h \
+	tulip/TextRenderer.h \	
+	tulip/Context.h \
+	tulip/Fonts.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
 	tulip/Spline.h \
-	tulip/Fonts.h \
 	tulip/Document.h \
-	tulip/Context.h \
 	tulip/Hline.h \
 	tulip/Table.h \
 	tulip/Parser.h \
@@ -73,13 +77,11 @@ noinst_HEADERS = \
 	tulip/Renderer.h \
 	tulip/GlXMLTools.h \
 	tulip/Curves.h\
-	tulip/TextRenderer.h \
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\
 	tulip/GlCPULODCalculator.h \
 	tulip/GlLODSceneVisitor.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
-	tulip/OcclusionTest.h \
 	tulip/GlewManager.h \
 	tulip/GlPointManager.h

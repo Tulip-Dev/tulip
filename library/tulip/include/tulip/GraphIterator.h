@@ -14,11 +14,6 @@
 #include "tulip/Graph.h"
 #include "tulip/GraphImpl.h"
 #include <set>
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 
 #include "tulip/tulipconf.h"
 #include <iostream>

@@ -41,6 +41,8 @@ namespace tlp {
 
   public :
 
+    static const std::string viewName;
+
     ParallelCoordinatesView();
     ~ParallelCoordinatesView();
 

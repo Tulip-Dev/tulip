@@ -4,16 +4,15 @@ DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha"
 
 using namespace std;
 using namespace tlp;
-using namespace stdext;
 
 StrengthMetric::StrengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
-double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
-  hash_set<node>::const_iterator itU;
+double StrengthMetric::e(TLP_HASH_SET<node> &U,TLP_HASH_SET<node> &V) {
+  TLP_HASH_SET<node>::const_iterator itU;
   double result=0;
-  hash_set<node> *A, *B;
+  TLP_HASH_SET<node> *A, *B;
   if (U.size()<V.size()) {
     A = &U; B=&V;
   }
@@ -30,8 +29,8 @@ double StrengthMetric::e(hash_set<node> &U,hash_set<node> &V) {
   return result;
 }
 //=============================================================
-double StrengthMetric::e(const hash_set<node> &U) {
-  hash_set<node>::const_iterator itU;
+double StrengthMetric::e(const TLP_HASH_SET<node> &U) {
+  TLP_HASH_SET<node>::const_iterator itU;
   double result=0.0;
   for (itU=U.begin();itU!=U.end();++itU) {
     Iterator<node> *itN=graph->getInOutNodes(*itU);
@@ -43,12 +42,12 @@ double StrengthMetric::e(const hash_set<node> &U) {
   return result/2.0;
 }
 //=============================================================
-double StrengthMetric::s(hash_set<node> &U, hash_set<node> &V) {
+double StrengthMetric::s(TLP_HASH_SET<node> &U, TLP_HASH_SET<node> &V) {
   if ((U.size()==0) || (V.size()==0)) return 0;
   return (e(U,V) / double(U.size()*V.size()));
 }
 //=============================================================
-double StrengthMetric::s(const hash_set<node> &U) {
+double StrengthMetric::s(const TLP_HASH_SET<node> &U) {
   if (U.size()<2) return 0.0;
   return  (e(U)) * 2.0 / double(U.size()*(U.size()-1));
 }
@@ -56,7 +55,7 @@ double StrengthMetric::s(const hash_set<node> &U) {
 double StrengthMetric::getEdgeValue(const edge ee ) {
   node u=graph->source(ee);
   node v=graph->target(ee);
-  hash_set<node> Nu,Nv,Wuv;
+  TLP_HASH_SET<node> Nu,Nv,Wuv;
 
   //Compute Nu
   Iterator<node> *itN = graph->getInOutNodes(u);
@@ -75,20 +74,20 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
   if (Nv.size()==0) return 0;
 
   //Compute Wuv, choose the minimum set to minimize operation
-  hash_set<node> *A, *B;
+  TLP_HASH_SET<node> *A, *B;
   if (Nu.size()<Nv.size()) {
     A = &Nu; B=&Nv;
   }
   else {
     A = &Nv; B=&Nu;
   }
-  hash_set<node>::const_iterator itNu;
+  TLP_HASH_SET<node>::const_iterator itNu;
   for (itNu=A->begin();itNu!=A->end();++itNu) {
     if (B->find(*itNu)!=B->end()) Wuv.insert(*itNu);
   }
 
-  hash_set<node> &Mu = Nu;
-  hash_set<node> &Mv = Nv;
+  TLP_HASH_SET<node> &Mu = Nu;
+  TLP_HASH_SET<node> &Mv = Nv;
   /* Compute Mu and Mv, we do not need Nu and Nv anymore,
      thus we modify them to speed up computation
   */

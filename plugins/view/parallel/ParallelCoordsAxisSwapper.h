@@ -36,7 +36,7 @@ namespace tlp {
 class ParallelCoordsAxisSwapper : public InteractorComponent {
 
 public :
-	ParallelCoordsAxisSwapper() : selectedAxis(NULL), otherAxisToSwap(NULL), dragStarted(false), axisHighlightRect(NULL), axisSwapStarted(false), drawInteractor(false) {}
+	ParallelCoordsAxisSwapper();
 	~ParallelCoordsAxisSwapper();
 	bool eventFilter(QObject *, QEvent *);
 	bool draw(GlMainWidget *glMainWidget);
@@ -55,7 +55,6 @@ private :
 	GlRect *axisHighlightRect;
 	bool mouseMove;
 	bool axisSwapStarted;
-	bool drawInteractor;
 };
 
 }

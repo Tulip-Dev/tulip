@@ -2,6 +2,7 @@
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
+#include "tulip/tuliphash.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/DoubleAlgorithm.h"
@@ -40,9 +41,9 @@ public :
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
 
 private:
-  stdext::hash_map<unsigned long, double> maxN,minN,maxE,minE;
-  stdext::hash_map<unsigned long, bool> minMaxOkNode;
-  stdext::hash_map<unsigned long, bool> minMaxOkEdge;
+  TLP_HASH_MAP<unsigned long, double> maxN,minN,maxE,minE;
+  TLP_HASH_MAP<unsigned long, bool> minMaxOkNode;
+  TLP_HASH_MAP<unsigned long, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
 };

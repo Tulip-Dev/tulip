@@ -87,7 +87,6 @@ namespace tlp {
   void NodeLinkDiagramComponent::setData(Graph *graph,DataSet dataSet) {
     DataSet data;
     if(dataSet.exist("data")){
-      cout << "find data" << endl;
       dataSet.get("data",data);
     }else{
       data=dataSet;

@@ -20,6 +20,7 @@
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/GlPointManager.h"
+#include "tulip/GlRenderer.h"
 
 #include <iostream>
 
@@ -31,8 +32,26 @@ namespace tlp {
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
-    //cout << data->elementLayout->getNodeValue(n) << endl;
-    return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2);
+    if(data->elementRotation->getNodeValue(n)==0)
+      return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2);
+    else{
+      float cosAngle=cos((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
+      float sinAngle=sin((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
+      Coord tmp1=data->elementSize->getNodeValue(n)/2;
+      Coord tmp2=Coord(tmp1[0],-tmp1[1],tmp1[2]);
+      Coord tmp3=Coord(-tmp1[0],-tmp1[1],-tmp1[2]);
+      Coord tmp4=Coord(-tmp1[0],tmp1[1],-tmp1[2]);
+      tmp1=Coord(tmp1[0]*cosAngle-tmp1[1]*sinAngle,tmp1[0]*sinAngle+tmp1[1]*cosAngle,tmp1[2]);
+      tmp2=Coord(tmp2[0]*cosAngle-tmp2[1]*sinAngle,tmp2[0]*sinAngle+tmp2[1]*cosAngle,tmp2[2]);
+      tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
+      tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
+      BoundingBox bb;
+      bb.check(data->elementLayout->getNodeValue(n)+tmp1);
+      bb.check(data->elementLayout->getNodeValue(n)+tmp2);
+      bb.check(data->elementLayout->getNodeValue(n)+tmp3);
+      bb.check(data->elementLayout->getNodeValue(n)+tmp4);
+      return bb;
+    }
   }
 
   void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
@@ -172,10 +191,17 @@ namespace tlp {
         glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
     }
 
+    string fontName=data->elementFont->getNodeValue(n);
+    int fontSize=data->elementFontSize->getNodeValue(n);
+    if(!GlRenderer::checkFont(fontName))
+        fontName=data->parameters->getFontsPath()+"font.ttf";
+    if(fontSize==0)
+      fontSize=18;
+
     if(select)
-      renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 20, 0, 0, 255);
+      renderer->setContext(fontName, fontSize+2, 0, 0, 255);
     else
-      renderer->setContext(data->parameters->getFontsPath() + "font.ttf", 18, 255, 255, 255);
+      renderer->setContext(fontName, fontSize, 255, 255, 255);
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size  &nodeSize  = data->elementSize->getNodeValue(n);

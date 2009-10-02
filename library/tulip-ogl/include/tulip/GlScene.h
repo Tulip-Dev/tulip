@@ -119,7 +119,7 @@ namespace tlp {
      * Select in GlLayer : layer
      * And store result in selectedEntities vector
      */
-    bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<unsigned long>& selectedEntities);
+    bool selectEntities(RenderingEntitiesFlag type, int x, int y, int h, int w,GlLayer *layer,std::vector<unsigned long>& selectedEntities);
 
     /**
      * Output the scene in SVG
@@ -206,9 +206,21 @@ namespace tlp {
      */
     void setWithXML(std::string &in,Graph *graph);
 
+    /**
+     * Return lod calculator used to render this scene
+     */
+    GlLODCalculator *getCalculator() {
+      return lodCalculator;
+    }
+
     //************************************************************
     /* To Remove */
-    void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {this->graphLayer=layer;this->glGraphComposite=glGraphComposite;}
+    void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
+      this->graphLayer=layer;
+      this->glGraphComposite=glGraphComposite;
+      if(glGraphComposite)
+        lodCalculator->setInputData(glGraphComposite->getInputData());
+    }
     GlGraphComposite* getGlGraphComposite() {return glGraphComposite;}
     GlLayer* getGraphLayer() {return graphLayer;}
 
