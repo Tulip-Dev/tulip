@@ -655,7 +655,10 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
   hash_map<node, set<Graph*> >::iterator it = addedNodes.find(n);
   // remove n from addedNodes if it is a newly added node
   if (it != addedNodes.end()) {
-    addedNodes.erase(it);
+    set<Graph*>& graphs = (*it).second;
+    graphs.erase(g);
+    if (graphs.empty())
+      addedNodes.erase(it);
     return;
   }
   // insert n into deletedNodes
@@ -681,11 +684,9 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   // remove e from addedEdges if it is a newly added edge
   if (it != addedEdges.end()) {
     set<Graph*>& graphs = (*it).second.graphs;
-    if (graphs.size() == 1) {
-      assert(graphs.find(g) != graphs.end());
+    graphs.erase(g);
+    if (graphs.empty())
       addedEdges.erase(it);
-    } else
-      graphs.erase(g);
     // remove from revertedEdges if needed
     set<edge>::iterator it = revertedEdges.find(e);
     if (it != revertedEdges.end())

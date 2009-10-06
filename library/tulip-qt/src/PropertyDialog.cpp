@@ -34,7 +34,6 @@
 #include <tulip/SGHierarchyWidget.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
-#include <tulip/hash_string.h>
 
 #include "tulip/PropertyDialog.h"
 #include "tulip/CopyPropertyDialog.h"
@@ -221,6 +220,10 @@ namespace tlp {
   //=================================================
   void PropertyDialog::cloneProperty() {
     if (!graph || !editedProperty) return;
+    // save editedProperty in local variable
+    // to avoid any reset due to a setGraph call
+    // from a addLocalProperty observer
+    PropertyInterface *editedProp = editedProperty;
     CopyPropertyDialog dialog(parentWidget());
     vector<string> localProps;
     vector<string> inheritedProps;
@@ -229,7 +232,7 @@ namespace tlp {
     if (parent == graph)
       parent = 0;
     forEach(prop, graph->getLocalProperties()) {
-      if (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)) {
+      if (typeid(*graph->getProperty(prop)) == typeid(*editedProp)) {
         if (prop != editedPropertyName)
           localProps.push_back(prop);
         if (parent && parent->existProperty(prop))
@@ -238,7 +241,7 @@ namespace tlp {
     }
     forEach(prop, graph->getInheritedProperties()) {
       if ((prop != editedPropertyName) &&
-          (typeid(*graph->getProperty(prop)) == typeid(*editedProperty)))
+          (typeid(*graph->getProperty(prop)) == typeid(*editedProp)))
         inheritedProps.push_back(prop);
     }
     dialog.setProperties(editedPropertyName, localProps, inheritedProps);
@@ -247,7 +250,7 @@ namespace tlp {
     if (text.size() > 0) {
       if (type != CopyPropertyDialog::INHERITED) {
         if (graph->existProperty(text)) {
-          if (typeid(*graph->getProperty(text))!=typeid(*editedProperty)) {
+          if (typeid(*graph->getProperty(text))!=typeid(*editedProp)) {
             QMessageBox::critical(parentWidget(), "Tulip Warning" ,"Properties are not of the same type.");
             return;
           }
@@ -268,67 +271,67 @@ namespace tlp {
         }
         Observable::holdObservers();
         graph->push();
-        if (typeid((*editedProperty)) == typeid(DoubleProperty))
-        {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(LayoutProperty))
-        {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(StringProperty))
-        {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(BooleanProperty))
-        {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(IntegerProperty))
-        {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(ColorProperty))
-        {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(SizeProperty))
-        {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(DoubleVectorProperty))
-        {*graph->getLocalProperty<DoubleVectorProperty>(text)=*((DoubleVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(CoordVectorProperty))
-        {*graph->getLocalProperty<CoordVectorProperty>(text)=*((CoordVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(StringVectorProperty))
-        {*graph->getLocalProperty<StringVectorProperty>(text)=*((StringVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(BooleanVectorProperty))
-        {*graph->getLocalProperty<BooleanVectorProperty>(text)=*((BooleanVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(IntegerVectorProperty))
-        {*graph->getLocalProperty<IntegerVectorProperty>(text)=*((IntegerVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(ColorVectorProperty))
-        {*graph->getLocalProperty<ColorVectorProperty>(text)=*((ColorVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(SizeVectorProperty))
-        {*graph->getLocalProperty<SizeVectorProperty>(text)=*((SizeVectorProperty*)editedProperty);}
+        if (typeid((*editedProp)) == typeid(DoubleProperty))
+        {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(LayoutProperty))
+        {*graph->getLocalProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(StringProperty))
+        {*graph->getLocalProperty<StringProperty>(text)=*((StringProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(BooleanProperty))
+        {*graph->getLocalProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(IntegerProperty))
+        {*graph->getLocalProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(ColorProperty))
+        {*graph->getLocalProperty<ColorProperty>(text)=*((ColorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(SizeProperty))
+        {*graph->getLocalProperty<SizeProperty>(text)=*((SizeProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(DoubleVectorProperty))
+        {*graph->getLocalProperty<DoubleVectorProperty>(text)=*((DoubleVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(CoordVectorProperty))
+        {*graph->getLocalProperty<CoordVectorProperty>(text)=*((CoordVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(StringVectorProperty))
+        {*graph->getLocalProperty<StringVectorProperty>(text)=*((StringVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(BooleanVectorProperty))
+        {*graph->getLocalProperty<BooleanVectorProperty>(text)=*((BooleanVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(IntegerVectorProperty))
+        {*graph->getLocalProperty<IntegerVectorProperty>(text)=*((IntegerVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(ColorVectorProperty))
+        {*graph->getLocalProperty<ColorVectorProperty>(text)=*((ColorVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(SizeVectorProperty))
+        {*graph->getLocalProperty<SizeVectorProperty>(text)=*((SizeVectorProperty*)editedProp);}
         //}
       } else {
         Graph *parent = graph->getSuperGraph();
         Observable::holdObservers();
         parent->push();
-        if (typeid((*editedProperty)) == typeid(DoubleProperty))
-        {*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(LayoutProperty))
-        {*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(StringProperty))
-        {*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(BooleanProperty))
-        {*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(IntegerProperty))
-        {*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(ColorProperty))
-        {*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(SizeProperty))
-        {*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(DoubleVectorProperty))
-        {*parent->getProperty<DoubleVectorProperty>(text)=*((DoubleVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(CoordVectorProperty))
-        {*parent->getProperty<CoordVectorProperty>(text)=*((CoordVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(StringVectorProperty))
-        {*parent->getProperty<StringVectorProperty>(text)=*((StringVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(BooleanVectorProperty))
-        {*parent->getProperty<BooleanVectorProperty>(text)=*((BooleanVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(IntegerVectorProperty))
-        {*parent->getProperty<IntegerVectorProperty>(text)=*((IntegerVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(ColorVectorProperty))
-        {*parent->getProperty<ColorVectorProperty>(text)=*((ColorVectorProperty*)editedProperty);}
-        if (typeid((*editedProperty)) == typeid(SizeVectorProperty))
-        {*parent->getProperty<SizeVectorProperty>(text)=*((SizeVectorProperty*)editedProperty);}
+        if (typeid((*editedProp)) == typeid(DoubleProperty))
+        {*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(LayoutProperty))
+        {*parent->getProperty<LayoutProperty>(text)=*((LayoutProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(StringProperty))
+        {*parent->getProperty<StringProperty>(text)=*((StringProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(BooleanProperty))
+        {*parent->getProperty<BooleanProperty>(text)=*((BooleanProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(IntegerProperty))
+        {*parent->getProperty<IntegerProperty>(text)=*((IntegerProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(ColorProperty))
+        {*parent->getProperty<ColorProperty>(text)=*((ColorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(SizeProperty))
+        {*parent->getProperty<SizeProperty>(text)=*((SizeProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(DoubleVectorProperty))
+        {*parent->getProperty<DoubleVectorProperty>(text)=*((DoubleVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(CoordVectorProperty))
+        {*parent->getProperty<CoordVectorProperty>(text)=*((CoordVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(StringVectorProperty))
+        {*parent->getProperty<StringVectorProperty>(text)=*((StringVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(BooleanVectorProperty))
+        {*parent->getProperty<BooleanVectorProperty>(text)=*((BooleanVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(IntegerVectorProperty))
+        {*parent->getProperty<IntegerVectorProperty>(text)=*((IntegerVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(ColorVectorProperty))
+        {*parent->getProperty<ColorVectorProperty>(text)=*((ColorVectorProperty*)editedProp);}
+        if (typeid((*editedProp)) == typeid(SizeVectorProperty))
+        {*parent->getProperty<SizeVectorProperty>(text)=*((SizeVectorProperty*)editedProp);}
       }
       setGraph(graph);
       Observable::unholdObservers();

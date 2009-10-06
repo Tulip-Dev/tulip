@@ -146,10 +146,12 @@ namespace tlp {
       static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value) {
       xmlNodePtr node;
       GlXMLTools::getData(name, rootNode, node);
-      std::string tmp;
-      getContent(node,tmp);
-      std::stringstream str(tmp);
-      str >> value;
+      if (node) {
+	std::string tmp;
+	getContent(node,tmp);
+	std::stringstream str(tmp);
+	str >> value;
+      }
     }
 
   };
