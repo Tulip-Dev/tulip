@@ -52,8 +52,6 @@
 #include <QtGui/QTableWidgetItem>
 #include <QtCore/QDataStream>
 
-#include <tulipconf.h>
-
 namespace tlp {
 
   class SpreadCell : public QTableWidgetItem

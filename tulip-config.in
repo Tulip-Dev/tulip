@@ -8,6 +8,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
+sharedir=@sharedir@
 libversion=
 libextension=so
 plugincxxflags="-fPIC -DPIC"
@@ -36,7 +37,7 @@ if [ $WINNT -eq 0 ] ; then
   if [ -f "$thisdir/uninst-Tulip.exe" ] ; then
 #   Windows installation
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
-    thisdir=${thisdir/\/$drive\//$drive:/}
+    thisdir=$(thisdir/\/$drive\//$drive:/)
     includedir=${thisdir}/include
     libdir=${thisdir}
     pluginpath=${libdir}/lib/tlp
@@ -53,8 +54,12 @@ Usage: tulip-config [OPTIONS]
 Options:
 	--version (return the current version of Tulip)
 	--libs (return the whole Tulip libs)
+	--cmakelibs (return the whole Tulip libs in cmake style)
 	--lib_tulip (return the Tulip core lib)
-        --lib_ogl (return the Tulip OpenGL lib)
+	--cmakelib_tulip (return the Tulip core lib in cmake style)
+    --lib_ogl (return the Tulip OpenGL lib)
+	--cmakelib_ogl (return the Tulip OpenGL lib in cmake style)
+	--cmakelib_qt (return the Tulip Qt lib in cmake style)
 	--cxxflags (return the Tulip needed cxx flags)
 	--glincludes (return the OpenGL includes)
 	--gllibs (return the OpenGL libs)
@@ -62,8 +67,10 @@ Options:
 	--pluginextension (return the plugin file extension)
 	--pluginldflags (return the plugin loader flags)
         --pluginpath (return the path for installation of Tulip plugins)
+		--cmakepluginpath (return the path for installation of Tulip plugins with cmake)
         --qtincludes (return the Qt includes)
         --qtlibs (return the Qt libs needed by Tulip)
+        --sharepath (return the path where share data are installed)
 	
 EOF
     exit $1
@@ -95,12 +102,24 @@ while test $# -gt 0; do
     --libs)
       echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt4${libversion}
       ;;
+	--cmakelibs)
+      echo @CMakeTulipLib@ @CMakeTulipOglLib@ @CMakeTulipQtLib@
+      ;;
     --lib_tulip)
       echo -L${libdir} -ltulip${libversion}
+      ;;
+	--cmakelib_tulip)
+      echo @CMakeTulipLib@
       ;;
     --lib_ogl)
       echo -L${libdir} -ltulip-ogl${libversion}
       ;;
+	--cmakelib_ogl)
+      echo @CMakeTulipOglLib@
+      ;;  
+	--cmakelib_qt)
+      echo @CMakeTulipQtLib@
+      ;;  
     --plugincxxflags)
       echo ${plugincxxflags}
       ;;
@@ -113,11 +132,17 @@ while test $# -gt 0; do
     --pluginpath)
       echo ${pluginpath}
       ;;
+	--cmakepluginpath)
+      echo @libdir@/tlp
+      ;;
     --qtlibs)
       echo @QT_LDFLAGS@ @LIB_QT@
       ;;
     --qtincludes)
       echo @QT_INCLUDES@
+      ;;
+    --sharepath)
+      echo ${sharedir}
       ;;
     *)
       usage

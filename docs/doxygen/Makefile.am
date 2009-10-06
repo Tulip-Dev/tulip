@@ -3,7 +3,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : 
 
-html: tulip-lib tulip-libogl tulip-libqt tulipdoc.html profile.dcf allPlugins.html tulipPlugins.html man
+html: tulip-lib tulip-ogl-lib tulip-qt-lib tulipdoc.html profile.dcf allPlugins.html tulipPlugins.html man
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -20,27 +20,27 @@ tulip-lib.doxygen: general general-html
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
-tulip-libogl: tulip-libogl.doxygen header.html footer.html 
-	$(DOXYGEN) tulip-libogl.doxygen
+tulip-ogl-lib: tulip-ogl-lib.doxygen header.html footer.html 
+	$(DOXYGEN) tulip-ogl-lib.doxygen
 
-tulip-libogl.doxygen: general general-html
+tulip-ogl-lib.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip Open GL Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-ogl/include/tulip " >> $@
-	echo "HTML_OUTPUT = tulip-libogl" >> $@
+	echo "HTML_OUTPUT = tulip-ogl-lib" >> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
-tulip-libqt: tulip-libqt.doxygen header.html footer.html 
-	$(DOXYGEN) tulip-libqt.doxygen
+tulip-qt-lib: tulip-qt-lib.doxygen header.html footer.html 
+	$(DOXYGEN) tulip-qt-lib.doxygen
 
-tulip-libqt.doxygen: general general-html
+tulip-qt-lib.doxygen: general general-html
 	echo "PROJECT_NAME = \"Tulip QT Library\"" > $@
 	echo "PROJECT_NUMBER = $(VERSION)" >> $@
 	cat general >> $@
 	echo "INPUT = $(top_srcdir)/library/tulip-qt/include/tulip " >> $@
-	echo "HTML_OUTPUT = tulip-libqt">> $@
+	echo "HTML_OUTPUT = tulip-qt-lib">> $@
 	cat general-html >> $@
 	echo "DOT_PATH = "`dirname $(DOT)`>> $@
 
@@ -133,11 +133,11 @@ install-data-am :
 	if test -d tulip-lib ; then \
 		cp -r tulip-lib $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
-	if test -d tulip-libogl ; then\
-		cp -r tulip-libogl $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
+	if test -d tulip-ogl-lib ; then\
+		cp -r tulip-ogl-lib $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
-	if test -d tulip-libqt ; then\
-		cp -r tulip-libqt $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
+	if test -d tulip-qt-lib ; then\
+		cp -r tulip-qt-lib $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 	if test -d tulip-man ; then\
 		cp -r tulip-man/* $(DESTDIR)$(pkgdatadir)/man/. ;\

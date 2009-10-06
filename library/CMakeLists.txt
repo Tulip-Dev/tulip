@@ -1,0 +1,3 @@
+ADD_SUBDIRECTORY(tulip)
+ADD_SUBDIRECTORY(tulip-ogl)
+ADD_SUBDIRECTORY(tulip-qt)

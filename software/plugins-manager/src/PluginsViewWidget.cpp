@@ -294,7 +294,7 @@ namespace tlp {
 
   bool PluginsViewWidget::isCompatible(const string & version){
     QStringList list = QString(version.c_str()).split(' ');
-    QString tulipCompatibilityNumber(VERSION);
+    QString tulipCompatibilityNumber(TULIP_RELEASE);
     tulipCompatibilityNumber = tulipCompatibilityNumber.left(tulipCompatibilityNumber.lastIndexOf("."));
     return (list[0].startsWith(tulipCompatibilityNumber));
   };

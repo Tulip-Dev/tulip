@@ -17,8 +17,7 @@
 
 #include <tulip/Observable.h>
 #include <tulip/GlPolyQuad.h>
-
-#include "ColorScale.h"
+#include <tulip/ColorScale.h>
 
 namespace tlp {
 

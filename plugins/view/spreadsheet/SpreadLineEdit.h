@@ -25,8 +25,6 @@
 
 #include <QtGui/QLineEdit>
 
-#include <tulipconf.h>
-
 namespace tlp {
 
   class SpreadLineEdit : public QLineEdit 

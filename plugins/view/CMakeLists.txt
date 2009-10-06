@@ -1,0 +1,3 @@
+ADD_SUBDIRECTORY(spreadsheet)
+ADD_SUBDIRECTORY(parallel)
+

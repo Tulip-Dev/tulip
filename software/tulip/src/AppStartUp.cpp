@@ -17,6 +17,7 @@
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/ControllerPluginsManager.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 #include <QtGui/qapplication.h>
 #include "AppStartUp.h"
 
@@ -68,7 +69,7 @@ AppStartUp::AppStartUp(QWidget* parent) :
 	QDialog(parent), currentFrame(0) {
 	setupUi(this);
 	string tmp = "Tulip ";
-	tmp += VERSION;
+  tmp+=TULIP_RELEASE;
 	tulipVersion->setText(tmp.c_str());
 	string dir = TulipLibDir;
 	dir += "tlp/bitmaps/";
