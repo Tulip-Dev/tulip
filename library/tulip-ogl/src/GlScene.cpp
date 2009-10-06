@@ -84,6 +84,10 @@ GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255
     lodCalculator->setScene(this);
 }
 
+GlScene::~GlScene(){
+  delete lodCalculator;
+}
+
 void GlScene::initGlParameters() {
 	if(!GlewManager::getInst().glewIsInit())
 		GlewManager::getInst().initGlew();

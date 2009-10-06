@@ -58,6 +58,8 @@ namespace tlp {
 
     GlScene(GlLODCalculator *calculator=NULL);
 
+    ~GlScene();
+
     /**
      * Init scene's OpenGL parameters
      */
