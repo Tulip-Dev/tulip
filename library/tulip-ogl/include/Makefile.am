@@ -58,7 +58,7 @@ nobase_include_HEADERS = \
 	tulip/EdgeExtremityGlyph.h \
 	tulip/EdgeExtremityGlyphManager.h \
 	tulip/OcclusionTest.h \
-	tulip/TextRenderer.h \	
+	tulip/TextRenderer.h \
 	tulip/Context.h \
 	tulip/Fonts.h
 

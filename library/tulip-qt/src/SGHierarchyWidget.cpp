@@ -120,7 +120,6 @@ namespace tlp {
       buildTreeView(_currentGraph->getRoot());
       currentGraphChanged(_currentGraph);
     }
-    show();
   }
   //=======================================================
   void SGHierarchyWidget::updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges) {
