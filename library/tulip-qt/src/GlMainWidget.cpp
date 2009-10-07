@@ -519,7 +519,6 @@ namespace tlp {
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 
     glFlush();
-    glFrameBuf->toImage().save(textureName.c_str());
     return NULL;
   }
   //=====================================================
