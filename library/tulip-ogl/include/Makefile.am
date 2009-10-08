@@ -60,6 +60,7 @@ nobase_include_HEADERS = \
 	tulip/OcclusionTest.h \
 	tulip/TextRenderer.h \
 	tulip/Context.h \
+	tulip/Curves.h\
 	tulip/Fonts.h
 
 noinst_HEADERS = \
@@ -76,7 +77,6 @@ noinst_HEADERS = \
 	tulip/Frame.h \
 	tulip/Renderer.h \
 	tulip/GlXMLTools.h \
-	tulip/Curves.h\
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\
 	tulip/GlCPULODCalculator.h \
