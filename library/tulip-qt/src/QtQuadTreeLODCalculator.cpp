@@ -61,6 +61,11 @@ namespace tlp {
     return false;
   }
 
+  void QtQuadTreeLODCalculator::setNeedEntities(bool need){
+    haveToCompute=true;
+    removeObservers();
+  }
+
   void QtQuadTreeLODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     QtCPULODCalculator::addSimpleEntityBoundingBox(entity,bb);
     entitiesGlobalBoundingBox.check(bb.first);

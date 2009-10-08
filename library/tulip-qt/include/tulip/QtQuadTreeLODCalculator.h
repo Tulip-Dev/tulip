@@ -41,6 +41,7 @@ namespace tlp {
     void setScene(GlScene *scene);
 
     bool needEntities();
+    void setNeedEntities(bool);
 
     void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb);
     void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);

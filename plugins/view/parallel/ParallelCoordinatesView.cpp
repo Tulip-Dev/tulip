@@ -375,6 +375,9 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 	progressBar->progress(0, nbData);
 	// add the progress bar to main layer, center scene on it and draw
 	mainLayer->addGlEntity(progressBar, "progress bar");
+	// when we have progress bar : use CPU lod calculator
+	delete mainWidget->getScene()->getCalculator();
+	mainWidget->getScene()->setCalculator(new GlCPULODCalculator());
 	centerView();
 	GlMainView::draw();
 
@@ -391,6 +394,8 @@ void ParallelCoordinatesView::updateWithProgressBar() {
 
 	progressBar->progress(nbData, nbData);
 	GlMainView::draw();
+	delete mainWidget->getScene()->getCalculator();
+	mainWidget->getScene()->setCalculator(new QtQuadTreeLODCalculator());
 
 	// join the drawing update thread to main process
 	drawingUpdateThread.wait();

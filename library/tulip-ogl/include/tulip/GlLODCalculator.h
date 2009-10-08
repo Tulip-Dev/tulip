@@ -65,6 +65,10 @@ namespace tlp {
      */
     virtual bool needEntities() {return true;}
     /**
+     * Set if the LODCalculator need to have entities to compute
+     */
+    virtual void setNeedEntities(bool) {}
+    /**
      * Begin a new camera
      */
     virtual void beginNewCamera(Camera* camera)=0;

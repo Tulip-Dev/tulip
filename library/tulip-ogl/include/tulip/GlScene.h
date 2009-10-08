@@ -215,6 +215,14 @@ namespace tlp {
       return lodCalculator;
     }
 
+    /**
+     * Set a new lod calculator used to render this scene
+     */
+    void setCalculator(GlLODCalculator *calculator) {
+      lodCalculator=calculator;
+      calculator->setScene(this);
+    }
+
     //************************************************************
     /* To Remove */
     void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
